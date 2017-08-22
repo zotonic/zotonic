@@ -45,27 +45,25 @@ usage() ->
     io:format("Options: ~n"),
     io:format("  -v : Prints Zotonic version ~n~n").
 
+main([]) ->
+    usage();
+
 main([Command|T]) ->
     SecCmd = lists:flatten(T),
     load_mod_paths(),
-    case string:is_empty(Command) of
-        true ->
-            usage();
+    case string:equal(Command, "-v") of
+        true  ->
+            zotonic_release:run();
         false ->
-            case string:equal(Command, "-v") of
+            CmdName = string:concat("zotonic_cmd_", Command),
+            SubScript = string:concat(CmdName, ".erl"),
+            ScriptFile = string:concat(?ZOTONIC_SCRIPTS, "/" ++ SubScript),
+
+            case filelib:is_file(ScriptFile) of
                 true  ->
-                    zotonic_release:run();
+                    apply(list_to_atom(CmdName), run, [SecCmd]);
                 false ->
-                    CmdName = string:concat("zotonic_cmd_", Command),
-                    SubScript = string:concat(CmdName, ".erl"),
-                    ScriptFile = string:concat(?ZOTONIC_SCRIPTS, "/" ++ SubScript),
-
-                    case filelib:is_file(ScriptFile) of
-                        true  ->
-                            apply(list_to_atom(CmdName), run, [SecCmd]);
-                        false ->
-                            io:format("Command not found: ~s~n", [Command])
-                    end
-
+                    io:format("Command not found: ~s~n", [Command])
             end
+
     end.

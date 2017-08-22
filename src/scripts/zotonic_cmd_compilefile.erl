@@ -18,17 +18,14 @@ usage() ->
     io:format("Usage: compilefile [files...] ~n"),
     halt().
 
+run([]) ->
+    usage();
+
 run(File) ->
     FileName = list_to_atom(File),
+    net_kernel:start([zotonic_compilefile, shortnames]),
+    erlang:set_cookie(node(), erlang:get_cookie()),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
 
-    case string:is_empty(File) of
-        true  ->
-            usage();
-        false ->
-            net_kernel:start([zotonic_compilefile, shortnames]),
-            erlang:set_cookie(node(), erlang:get_cookie()),
-            Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
-            Res = rpc:call(Target, zotonic_compile, compile_options, [FileName]),
-            io:format("~p~n", [Res])
-    end.
+    Res = rpc:call(Target, zotonic_compile, compile_options, [FileName]),
+    io:format("~p~n", [Res]).

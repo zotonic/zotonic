@@ -14,19 +14,15 @@
 
 -include("zotonic_escript_helper.hrl").
 
+run([]) ->
+    io:format("USAGE: stopsite [site_name] ~n"),
+    halt();
 
 run(Site) ->
     SiteName = list_to_atom(Site),
-
-    case string:is_empty(Site) of
-        true  ->
-            io:format("USAGE: ~p [site_name] ~n", [list_to_atom(escript:script_name())]),
-            halt();
-        false ->
-            net_kernel:start([zotonic_stopsite, shortnames]),
-            erlang:set_cookie(node(), erlang:get_cookie()),
-            Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-            io:format("Stopping site ~p on zotonic ~p~n", [SiteName, Target]),
-            rpc:call(Target, z, shell_stopsite, [SiteName]),
-            io:format("~n")
-    end.
+    net_kernel:start([zotonic_stopsite, shortnames]),
+    erlang:set_cookie(node(), erlang:get_cookie()),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+    io:format("Stopping site ~p on zotonic ~p~n", [SiteName, Target]),
+    rpc:call(Target, z, shell_stopsite, [SiteName]),
+    io:format("~n").

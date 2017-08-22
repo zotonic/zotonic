@@ -14,19 +14,15 @@
 
 -include("zotonic_escript_helper.hrl").
 
+run([]) ->
+    io:format("USAGE: dropschema ~s"),
+    io:format("USAGE: See ZotonicCommands.txt ~n");
 
 run(Site) ->
     SiteName = list_to_atom(Site),
+    net_kernel:start([zotonic_dropschema, shortnames]),
+    erlang:set_cookie(node(), erlang:get_cookie()),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
 
-    case string:is_empty(Site) of
-        true  ->
-            io:format("USAGE: ~s", [list_to_atom(escript:script_name())]),
-            io:format("USAGE: See ZotonicCommands.txt");
-        false ->
-            net_kernel:start([zotonic_dropschema, shortnames]),
-            erlang:set_cookie(node(), erlang:get_cookie()),
-            Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
-            Res = rpc:call(Target, z_db, flush, [SiteName]),
-            io:format("~p~n", [Res])
-    end.
+    Res = rpc:call(Target, z_db, flush, [SiteName]),
+    io:format("~p~n", [Res]).
