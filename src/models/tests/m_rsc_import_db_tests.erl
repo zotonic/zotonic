@@ -25,7 +25,7 @@ modify_rsc_test() ->
     ?assertEqual(Id, m_rsc:uri_lookup("http://foo.com/id/333", C)),
     ?assertEqual(Id, m_rsc:uri_lookup(<<"http://foo.com/id/333">>, C)),
 
-    ?assertThrow({{error, duplicate_uri}, _Trace}, m_rsc_import:create_empty("http://foo.com/id/333", AdminC)),
+    ?assertThrow({{error, {duplicate_uri, _}}, _Trace}, m_rsc_import:create_empty("http://foo.com/id/333", AdminC)),
 
     %% Existence check
     ?assertEqual(true, m_rsc:exists(Id, AdminC)),

@@ -290,7 +290,7 @@ update_editable_check(#rscupd{id=Id, is_acl_check=true} = RscUpd, Props, Context
             update_normalize_props(RscUpd, Props, Context);
         false ->
             E = case m_rsc:p(Id, is_authoritative, Context) of
-                false -> {error, non_authoritative};
+                false -> {error, {non_authoritative, Id}};
                 true -> {error, eacces}
             end,
             throw(E)
@@ -559,7 +559,8 @@ is_equal(A,B) -> z_utils:are_equal(A, B).
 
 
 %% @doc Check if all props are acceptable. Examples are unique name, uri etc.
-%% @spec preflight_check(Id, Props, Context) -> ok | {error, Reason}
+-spec preflight_check(insert_rsc | m_rsc:resource_id(), proplists:proplist(), z:context()) ->
+    ok | {error, term()}.
 preflight_check(insert_rsc, Props, Context) ->
     preflight_check(-1, Props, Context);
 preflight_check(_Id, [], _Context) ->
@@ -571,7 +572,7 @@ preflight_check(Id, [{name, Name}|T], Context) when Name =/= undefined ->
         _N ->
             lager:warning("Trying to insert duplicate name ~p",
                           [Name]),
-            throw({error, duplicate_name})
+            throw({error, {duplicate_name, Name}})
     end;
 preflight_check(Id, [{page_path, Path}|T], Context) when Path =/= undefined ->
     case z_db:q1("select count(*) from rsc where page_path = $1 and id <> $2", [Path, Id], Context) of
@@ -579,7 +580,7 @@ preflight_check(Id, [{page_path, Path}|T], Context) when Path =/= undefined ->
             preflight_check(Id, T, Context);
         _N ->
             lager:warning("Trying to insert duplicate page_path ~p", [Path]),
-            throw({error, duplicate_page_path})
+            throw({error, {duplicate_page_path, Path}})
     end;
 preflight_check(Id, [{uri, Uri}|T], Context) when Uri =/= undefined ->
     case z_db:q1("select count(*) from rsc where uri = $1 and id <> $2", [Uri, Id], Context) of
@@ -587,7 +588,7 @@ preflight_check(Id, [{uri, Uri}|T], Context) when Uri =/= undefined ->
             preflight_check(Id, T, Context);
         _N ->
             lager:warning("Trying to insert duplicate uri ~p", [Uri]),
-            throw({error, duplicate_uri})
+            throw({error, duplicate_uri, Uri})
     end;
 preflight_check(Id, [{'query', Query}|T], Context) ->
     Valid = case m_rsc:is_a(Id, 'query', Context) of
@@ -603,7 +604,7 @@ preflight_check(Id, [{'query', Query}|T], Context) ->
             end,
     case Valid of
         true -> preflight_check(Id, T, Context);
-        false -> throw({error, invalid_query})
+        false -> throw({error, {invalid_query, Id}})
     end;
 preflight_check(Id, [_H|T], Context) ->
     preflight_check(Id, T, Context).
@@ -782,7 +783,7 @@ props_filter([{Location, P}|T], Acc, Context)
 props_filter([{pref_language, Lang}|T], Acc, Context) ->
     Lang1 = case z_trans:to_language_atom(Lang) of
                 {ok, LangAtom} -> LangAtom;
-                {error, not_a_language} -> undefined
+                {error, {not_a_language, Lang}} -> undefined
             end,
     props_filter(T, [{pref_language, Lang1} | Acc], Context);
 
@@ -819,7 +820,7 @@ filter_languages([L|_] = Langs) when is_list(L); is_binary(L); is_atom(L) ->
             fun(Lang, Acc) ->
                 case z_trans:to_language_atom(Lang) of
                     {ok, LangAtom} -> [LangAtom|Acc];
-                    {error, not_a_language} -> Acc
+                    {error, {not_a_language, Lang}} -> Acc
                 end
             end,
             [],
