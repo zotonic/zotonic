@@ -14,12 +14,8 @@
 
 -include("zotonic_escript_helper.hrl").
 
-get_zotonic_dir() ->
-    {ok, CurrentDir} = file:get_cwd(),
-    _Dir = CurrentDir.
-
 run(_) ->
-    ZotonicApp = string:concat(get_zotonic_dir(), "/_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
+    ZotonicApp = string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
     case filelib:is_file(ZotonicApp) of
         true ->
@@ -32,7 +28,7 @@ run(_) ->
                     io:format("OK ~n");
                 pang ->
                     io:format("Something went wrong while starting Zotonic. Please check the log files ~s~n",
-                        [string:concat(get_zotonic_dir(), "/priv/log")])
+                        [string:concat(?ZOTONIC, "/priv/log")])
             end;
         false ->
             io:format("Building Zotonic for the first time.~n")
