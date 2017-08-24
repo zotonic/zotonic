@@ -1,6 +1,8 @@
-#!/usr/bin/env escript
+%%%-------------------------------------------------------------------
+%%% @author M <tantemelki@gmail.com>
+%%% @copyright (C) 2017, <COMPANY>
+%%% @doc
 %%
-%% @author M, <tantemelki@gmail.com>
 %% @copyright 2017
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +16,15 @@
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
-
+%%
 %%
 %% usage zotonic generate-edoc
 %%
+%%% @end
+%%% Created : 18. Aug 2017 10:37 PM
+%%%-------------------------------------------------------------------
+-module(zotonic_cmd_addsite).
+-author("Melki").
 
--export([main/1]).
-
-main(_) ->
-    erlang:error(not_implemented).
+%% API
+-export([]).
