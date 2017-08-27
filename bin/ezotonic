@@ -1,5 +1,5 @@
 #!/usr/bin/env escript
-%%
+%%! -pz _build/default/bin
 %% @author M, <tantemelki@gmail.com>
 %% @copyright 2017
 %%
@@ -18,7 +18,7 @@
 -export([main/1]).
 
 -define(ZOTONIC, get_zotonic_path()).
--define(ZOTONIC_SCRIPTS, ?ZOTONIC ++ "/src/scripts").
+-define(ZOTONIC_COMMANDS, ?ZOTONIC ++ "/apps/zotonic_launcher/src/commands").
 
 get_zotonic_path() ->
     {ok, CurrentDir} = file:get_cwd(),
@@ -32,7 +32,7 @@ load_mod_paths() ->
     code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
 
 usage() ->
-    {ok, ListItems} = file:list_dir(?ZOTONIC_SCRIPTS),
+    {ok, ListItems} = file:list_dir(?ZOTONIC_COMMANDS),
     FileNames = [ListItem || ListItem <- ListItems, string:length(ListItem) > 12],
     Names1 = string:split(FileNames, "zotonic_cmd_", all),
     Names = string:split(Names1, ".erl", all),
@@ -57,7 +57,7 @@ main([Command|T]) ->
         false ->
             CmdName = string:concat("zotonic_cmd_", Command),
             SubScript = string:concat(CmdName, ".erl"),
-            ScriptFile = string:concat(?ZOTONIC_SCRIPTS, "/" ++ SubScript),
+            ScriptFile = string:concat(?ZOTONIC_COMMANDS, "/" ++ SubScript),
 
             case filelib:is_file(ScriptFile) of
                 true  ->
