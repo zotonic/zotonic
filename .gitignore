@@ -39,12 +39,10 @@ apps/*/priv/translations/template/*.pot
 _build
 _checkouts
 /log/
-<<<<<<< HEAD
-compile_commands.json
 .idea/
 zotonic.iml
-=======
 
 .DS_Store
 zotonic.tmproj
->>>>>>> upstream/master
+
+modules/*
