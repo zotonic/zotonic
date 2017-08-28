@@ -296,8 +296,8 @@ update_editable_check(#rscupd{id = Id, is_acl_check = true} = RscUpd, Props, Con
 update_editable_check(RscUpd, Props, Context) ->
     update_normalize_props(RscUpd, Props, Context).
 
-update_normalize_props(#rscupd{id = Id} = RscUpd, Props, Context) when is_list(Props) ->
-    AtomProps = normalize_props(Id, Props, Context),
+update_normalize_props(#rscupd{id = Id, is_import = IsImport} = RscUpd, Props, Context) when is_list(Props) ->
+    AtomProps = normalize_props(Id, Props, [{is_import, IsImport}], Context),
     update_transaction(RscUpd, fun(_, _, _) -> {ok, AtomProps} end, Context);
 update_normalize_props(RscUpd, Func, Context) when is_function(Func) ->
     update_transaction(RscUpd, Func, Context).
