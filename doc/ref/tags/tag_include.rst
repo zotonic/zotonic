@@ -73,6 +73,11 @@ Caching is enabled by defining one of the caching arguments:
 |            |care.                                                   |                       |
 |            |                                                        |                       |
 +------------+--------------------------------------------------------+-----------------------+
+|anondo      |Include the template as an anonymous user.              |``anondo``             |
+|            |Any :ref:`ACL checks <model-acl>` in the included       |                       |
+|            |template will be executed as if the visitor was         |                       |
+|            |not logged in.                                          |                       |
++------------+--------------------------------------------------------+-----------------------+
 |runtime     |If supplied then the included template is not inlined   |``runtime``            |
 |            |but included during evaluation of the calling template. |                       |
 |            |Only the supplied arguments are available as variables  |                       |
