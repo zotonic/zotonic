@@ -15,7 +15,7 @@
 						}
 		%}
 	{% else %}
-		<a href="{% url logon_service service='linkedin' is_connect=is_connect  %}" class="btn z-btn-social do_popupwindow" style="background-color: #0077B5"><span class="z-icon z-icon-linkedin"></span> {% if is_connect %}{_ Connect with LinkedIn _}{% else %}{_ Log in with LinkedIn _}{% endif %}</a>
+		<a href="{% url logon_service service='linkedin' is_connect=is_connect  %}" target="_blank" class="btn z-btn-social do_popupwindow" style="background-color: #0077B5"><span class="z-icon z-icon-linkedin"></span> {% if is_connect %}{_ Connect with LinkedIn _}{% else %}{_ Log in with LinkedIn _}{% endif %}</a>
 	{% endif %}
 </li>
 {% endif %}
