@@ -619,10 +619,5 @@ string2filter("mediaclass", Arg) ->
     [MediaClass|Checksum] = string:tokens(Arg, "."),
     {mediaclass, {MediaClass, iolist_to_binary(Checksum)}}.
 
-
-% simple ceil for positive numbers
-ceil(A)  -> round(A + 0.499999).
-%floor(A) -> round(A - 0.499999).
-
 ensure_integer(A) ->
     integer_to_list(list_to_integer(A)).
