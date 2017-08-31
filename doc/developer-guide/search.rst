@@ -253,12 +253,27 @@ directly refers to the SQL join that is being used. If you specify a
 dash (``-``) in front of the field, the order is descending. Leaving
 this out or specifying a ``+`` means ascending.
 
-As all search terms are sorted, the ``asort`` will be the first sort
-term, and the ``zsort`` will be the last sort term.
+The sort terms are added in the order: ``asort``, ``sort``, and ``zsort``.
+
+This is useful for e.g. text search. Text search will add a ``sort`` term on
+relevance. This relevance sort term is appended *after* any existing sort term.
+By using ``zsort`` you can force sub-sorting in case of the same relevance or no
+text for the query. Example::
+
+    {query cat='news' text=q.qsort zsort="-rsc.created"}
+
+If ``q.qsort`` is empty, this will return the newest *news* items. If ``q.qsort``
+is not empty then it will search for the text and return the best matches where
+equally matching news items will have the newest on top. Use ``asort`` instead
+of ``zsort`` to show the newest matching news, regardless on how well they match
+the search term::
+
+    {query cat='news' text=q.qsort asort="-rsc.created"}
 
 Some sort fields:
 
 - ``rsc.modified`` - date of last modification
+- ``rsc.publication_start`` - publication date
 - ``rsc.pivot_date_start`` - the start date specified in the admin
 - ``rsc.pivot_date_end`` - the end date specified in the admin
 - ``rsc.pivot_title`` - the title of the page. For
