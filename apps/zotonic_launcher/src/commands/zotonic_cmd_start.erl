@@ -20,9 +20,13 @@ run(_) ->
     case filelib:is_file(ZotonicApp) of
         true ->
             io:format("Starting Zotonic ~s..", [Target]),
-            zotonic_launcher_config:load_configs(),
             net_kernel:start([Target, shortnames]),
+            zotonic_launcher_config:load_configs(),
             zotonic:start(),
+            receive
+                {'EXIT', _, _} ->
+                    ok
+            end,
             case zotonic:ping() of
                 pong ->
                     io:format("OK ~n");
@@ -31,5 +35,6 @@ run(_) ->
                         [string:concat(?ZOTONIC, "/priv/log")])
             end;
         false ->
-            io:format("Building Zotonic for the first time.~n")
+            io:format("Building Zotonic for the first time.~n"),
+            make:all()
     end.

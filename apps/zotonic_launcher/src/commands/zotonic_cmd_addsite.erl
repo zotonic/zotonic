@@ -27,4 +27,35 @@
 -author("Melki").
 
 %% API
--export([]).
+-export([run/1]).
+
+-include("zotonic_escript_helper.hrl").
+
+-define(SKEL, blog).
+-define(DBHOST, "127.0.0.1").
+-define(DBPORT, 5432).
+-define(DBUSER, zotonic).
+-define(DBPASSWORD, zotonic).
+-define(DBDATABASE, zotonic).
+-define(DBSCHEMA, public).
+-define(ADMINPASSWORD, admin).
+
+usage() ->
+    io:format("Usage: zotonic-addsite [options] <site_name> ~n~n"),
+    io:format(" -s <skel>     Skeleton site (one of 'blog', 'basesite', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
+    io:format(" -H <host>     Site's hostname (default: <sitename.dev>) ~n"),
+    io:format(" -L            Create the site in the current directory and symlink it into ~n"),
+    io:format(" -g <remote>   Create a git repository in the site and push it to the given remote ~n~n"),
+    io:format(" -h <host>     Database host (default: ~s) ~n", [?DBHOST]),
+    io:format(" -p <port>     Database port (default: ~p) ~n", [?DBPORT]),
+    io:format(" -u <user>     Database user (default: ~s) ~n", [?DBUSER]),
+    io:format(" -P <pass>     Database password (default: ~s) ~n", [?DBPASSWORD]),
+    io:format(" -d <name>     Database name (default: ~s) ~n", [?DBDATABASE]),
+    io:format(" -n <schema>   Database schema (default: ~s) ~n", [?DBSCHEMA]),
+    io:format(" -a <pass>     Admin password (default: ~s) ~n", [?ADMINPASSWORD]).
+
+run([]) ->
+    usage();
+
+run(_Arg0) ->
+    erlang:error(not_implemented).

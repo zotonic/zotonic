@@ -14,7 +14,6 @@
 
 -include("zotonic_escript_helper.hrl").
 
-
 run(_) ->
     net_kernel:start([zotonic_update, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),

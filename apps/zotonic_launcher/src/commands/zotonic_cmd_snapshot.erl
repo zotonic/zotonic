@@ -12,6 +12,18 @@
 %% API
 -export([run/1]).
 
+-include("zotonic_escript_helper.hrl").
 
-run(_Arg0) ->
-    erlang:error(not_implemented).
+run([]) ->
+    io:format("USAGE: snapshot [site_name] ~n"),
+    io:format("USAGE: See ZotonicCommands.txt ~n~n");
+
+run(Site) ->
+    os:cmd("mkdir -p " ++Site ++ "/" ++ Site ++ "/files/snapshot
+	pg_dump zotonic_" ++ Site ++ "\
+			> " ++ Site ++ "/" ++ Site ++ "/files/snapshot/zotonic_" ++ Site ++ ".sql
+	pushd " ++ Site ++ "/" ++ Site ++ " > /dev/null
+	hg init
+	hg add
+	hg commit -m 'Content Snapshot'
+	popd > /dev/null").

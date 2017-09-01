@@ -1,5 +1,4 @@
 #!/usr/bin/env escript
-%%! -pz _build/default/bin
 %% @author M, <tantemelki@gmail.com>
 %% @copyright 2017
 %%
@@ -25,11 +24,15 @@ get_zotonic_path() ->
     _Dir = CurrentDir.
 
 load_mod_paths() ->
-    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic/ebin")),
-    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_launcher/ebin")),
-    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin")),
-    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/zotonic_stdlib/ebin")),
-    code:add_pathz(string:concat(?ZOTONIC, "/_build/default/lib/lager/ebin")).
+    EbinPath = string:concat(?ZOTONIC, "/_build/default/lib"),
+    case file:list_dir(EbinPath) of
+        {ok, FileNames}  ->
+            lists:foreach(fun(Name) ->
+                code:add_pathz(EbinPath ++ "/" ++ Name ++ "/ebin")
+                          end, FileNames);
+        {error, enoent} ->
+            halt()
+    end.
 
 usage() ->
     {ok, ListItems} = file:list_dir(?ZOTONIC_COMMANDS),
