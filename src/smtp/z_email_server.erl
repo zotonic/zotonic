@@ -669,6 +669,8 @@ send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
             send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
         {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
             send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
+        {error, retries_exceeded, {_FailureType, _Host, {error, timeout}}} ->
+            send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
         Other ->
             Other
     end.
