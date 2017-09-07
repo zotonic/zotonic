@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2015 Maximonster Interactive Things
+%% @copyright 2010-2017 Maximonster Interactive Things
 %% @doc Email server. Queues, renders and sends e-mails.
 
-%% Copyright 2010-2015 Maximonster Interactive Things
+%% Copyright 2010-2017 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -530,7 +530,8 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
     SmtpOpts = [
         {no_mx_lookups, State#state.smtp_no_mx_lookups},
         {hostname, z_convert:to_list(z_email:email_domain(Context))},
-        {timeout, ?SMTP_CONNECT_TIMEOUT}
+        {timeout, ?SMTP_CONNECT_TIMEOUT},
+        {tls_options, [{versions, ['tlsv1.2']}]}
         | case State#state.smtp_relay of
             true -> State#state.smtp_relay_opts;
             false -> [{relay, z_convert:to_list(RecipientDomain)}]
@@ -545,7 +546,8 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                             [
                                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
                                 {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                                {timeout, ?SMTP_CONNECT_TIMEOUT}
+                                {timeout, ?SMTP_CONNECT_TIMEOUT},
+                                {tls_options, [{versions, ['tlsv1.2']}]}
                                 | case State#state.smtp_relay of
                                     true -> State#state.smtp_relay_opts;
                                     false -> [{relay, z_convert:to_list(BccDomain)}]
@@ -604,7 +606,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                        [RecipientEmail, Id, Relay]),
 
             %% use the unique id as 'envelope sender' (VERP)
-            case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+            case send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
                 {error, retries_exceeded, {_FailureType, Host, Message}} ->
                     %% do nothing, it will retry later
                     z_notifier:notify(#email_failed{
@@ -690,6 +692,27 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     end
             end
     end.
+
+send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
+    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+        {error, no_more_hosts, {permanent_failure, _Host, <<105,103,110,32,82,111,111,116,32, _/binary>>}} ->
+            send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
+        {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
+            send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
+        {error, retries_exceeded, {_FailureType, _Host, {error, timeout}}} ->
+            send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
+        Other ->
+            Other
+    end.
+
+send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
+    lager:info("Bounce error for ~p, retrying without TLS", [RecipientEmail]),
+    SmtpOpts1 = [
+        {tls, never}
+        | proplists:delete(tls, SmtpOpts)
+    ],
+    gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1).
+
 
 to_binary({error, Reason}) ->
     to_binary(Reason);
@@ -1100,7 +1123,7 @@ re() ->
 email_max_domain(Domain) ->
     email_max_domain_1(lists:reverse(binary:split(z_convert:to_binary(Domain), <<".">>, [global]))).
 
-%% Some mail providers 
+%% Some mail providers
 email_max_domain_1([<<"net">>, <<"upcmail">> | _]) -> 2;
 email_max_domain_1([<<"nl">>, <<"timing">> | _]) -> 2;
 email_max_domain_1(_) -> ?EMAIL_MAX_DOMAIN.
@@ -1119,8 +1142,8 @@ encode_header({Header, [V|_] = Vs}) when is_list(V); is_binary(V); is_tuple(V) -
                     Vs),
     [ Header, ": ", z_utils:combine(";\r\n  ", Hdr) ];
 encode_header({Header, Value})
-    when Header =:= <<"To">>; 
-         Header =:= <<"From">>; 
+    when Header =:= <<"To">>;
+         Header =:= <<"From">>;
          Header =:= <<"Reply-To">>;
          Header =:= <<"Cc">>;
          Header =:= <<"Bcc">>;
