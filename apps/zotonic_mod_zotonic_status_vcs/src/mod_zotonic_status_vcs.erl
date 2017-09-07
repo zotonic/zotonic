@@ -41,13 +41,13 @@ event(#postback{message={vcs_up, Args}}, Context) ->
         true ->
             case has_vcs() of
                 undefined ->
-                    notice('Zotonic', "Zotonic hasn’t been checked out using version control.", Context);
+                    notice('Zotonic', <<"Zotonic hasn’t been checked out using version control."/utf8>>, Context);
                 {hg, Path} ->
-                    show_notice('Zotonic', "Fetching updates…", Context),
+                    show_notice('Zotonic', <<"Fetching updates…"/utf8>>, Context),
                     Command = lists:flatten(["(cd \"", Path, "\"; hg pull -u)"]),
                     notice('Zotonic', os:cmd(Command), Context);
                 {git, Path} ->
-                    show_notice('Zotonic', "Fetching updates…", Context),
+                    show_notice('Zotonic', <<"Fetching updates…"/utf8>>, Context),
                     Command = lists:flatten(["(cd \"", Path, "\"; git pull)"]),
                     notice('Zotonic', os:cmd(Command), Context)
             end;
@@ -55,24 +55,24 @@ event(#postback{message={vcs_up, Args}}, Context) ->
             Site = proplists:get_value(site, Args),
             case has_vcs(Site) of
                 {hg, Path} ->
-                    show_notice(Site, "Fetching updates…", Context),
+                    show_notice(Site, <<"Fetching updates…"/utf8>>, Context),
                     Command = lists:flatten(["(cd \"", Path, "\"; hg pull -u)"]),
                     notice(Site, os:cmd(Command), Context);
                 {git, Path} ->
-                    show_notice(Site, "Fetching updates…", Context),
+                    show_notice(Site, <<"Fetching updates…"/utf8>>, Context),
                     Command = lists:flatten(["(cd \"", Path, "\"; git pull)"]),
                     show_notice(Site, os:cmd(Command), Context);
                 undefined ->
-                    notice(Site, "Unknown site or nor mercurial/git folder present.", Context)
+                    notice(Site, <<"Unknown site or nor mercurial/git folder present.">>, Context)
             end
     end;
 event(#postback{message=make}, Context) ->
     true = z_auth:is_auth(Context),
     spawn(fun() ->
                 z:m(),
-                show_notice('Zotonic', "Finished rebuilding Zotonic.", Context)
+                show_notice('Zotonic', <<"Finished rebuilding Zotonic.">>, Context)
               end),
-    notice('Zotonic', "Building Zotonic in the background…", Context).
+    notice('Zotonic', <<"Building Zotonic in the background…"/utf8>>, Context).
 
 
 % @doc Show a notice on the current webpage.

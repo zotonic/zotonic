@@ -19,6 +19,13 @@
 -module(filter_linebreaksbr).
 -export([linebreaksbr/2]).
 
-linebreaksbr(S, Context) -> 
-    z_html:nl2br(z_convert:to_binary(S, Context)).
+linebreaksbr(S, Context) ->
+    z_html:nl2br(to_binary(S, Context)).
 
+to_binary(S, Context) ->
+    try
+        z_convert:to_binary(S, Context)
+    catch
+        _:_ ->
+            unicode:characters_to_binary(S)
+    end.

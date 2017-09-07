@@ -64,6 +64,12 @@
             .template-error td:nth-child(2) {
                 font-weight: bold;
             }
+            td span,
+            .template-error td span {
+                font-size: 90%;
+                font-weight: normal;
+                color: #666;
+            }
       </style>
 
       <table class="tablex table-striped" style="border-collapse: transparent; border-spacing: 0;">
@@ -79,17 +85,30 @@
                 {% for is_template,mod,func,arg,file in error_table %}
                     {% if is_template %}
                     <tr class="template-error">
-                        <td>{{ mod|escape }}</td>
+                        <td>
+                            {{ mod[2]|escape }}
+                            {% if mod[1] %}
+                              <br><span>{{ mod[1]|escape }}</span>
+                            {% endif %}
+                        </td>
                         <td>{{ func|escape }}</td>
                         <td>{{ arg|escape }}</td>
-                        <td>{{ file|escape}}</td>
+                        <td>
+                          {% if file[1] %}
+                              <a href="file://{{ file[1]|escape }}">{{ file[1]|escape}}</a>{% if file[2] %}<span>:{{ file[2] }}</span>{% endif %}
+                          {% endif %}
+                        </td>
                     </tr>
                     {% else %}
                     <tr>
                         <td>{{ mod|escape }}</td>
                         <td>{{ func|escape }}</td>
                         <td>{{ arg|escape }}</td>
-                        <td>{{ file|escape}}</td>
+                        <td>
+                          {% if file[1] %}
+                              <a href="file://{{ file[1]|escape }}">{{ file[1]|escape}}</a>{% if file[2] %}<span>:{{ file[2] }}</span>{% endif %}
+                          {% endif %}
+                        </td>
                     </tr>
                     {% endif %}
                 {% endfor %}
