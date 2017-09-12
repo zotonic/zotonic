@@ -552,20 +552,24 @@ mail_result(SurveyId, PrepAnswers, Attachments, Context) ->
         undefined ->
             skip;
         Email ->
-            Vars = [
-                {is_result_email, true},
-                {id, SurveyId},
-                {answers, PrepAnswers}
-            ],
-            E = #email{
-                to=Email,
-                html_tpl="email_survey_result.tpl",
-                vars=Vars,
-                attachments=Attachments
-            },
+            Es = z_email_utils:extract_emails(Email),
             ContextLang = z_context:set_language(z_language:default_language(Context), Context),
-            z_email:send(E, ContextLang),
-            ok
+            lists:foreach(
+                fun(E) ->
+                    Vars = [
+                        {is_result_email, true},
+                        {id, SurveyId},
+                        {answers, PrepAnswers}
+                    ],
+                    E = #email{
+                        to=Email,
+                        html_tpl="email_survey_result.tpl",
+                        vars=Vars,
+                        attachments=Attachments
+                    },
+                    z_email:send(E, ContextLang)
+                end,
+                Es)
     end.
 
 mail_respondent(SurveyId, Answers, PrepAnswers, Context) ->
