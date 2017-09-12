@@ -214,7 +214,7 @@ insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
     of
         undefined ->
             F = fun(Ctx) ->
-                case z_convert:to_bool(proplists:get_value(no_touch, Opts, false)) of
+                case z_convert:to_bool(proplists:get_value(no_pivot, Opts, false)) of
                     true -> skip;
                     false -> pivot_resources([SubjectId, ObjectId], Ctx)
                 end,
@@ -293,9 +293,9 @@ delete(SubjectId, Pred, ObjectId, Options, Context) ->
     ) of
         true ->
             F = fun(Ctx) ->
-                case proplists:get_value(no_touch, Options) of
+                case z_convert:to_bool(proplists:get_value(no_pivot, Options)) of
                     true -> ok;
-                    _ -> pivot_resources([SubjectId, ObjectId], Ctx)
+                    false -> pivot_resources([SubjectId, ObjectId], Ctx)
                 end,
                 z_db:q(
                     "delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",
