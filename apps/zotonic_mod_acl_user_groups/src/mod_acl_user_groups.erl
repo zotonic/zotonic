@@ -175,7 +175,7 @@ unlink_all([{UGId, UserIds}|Ids], N, Total, Context) ->
 unlink_users(_UGId, [], N, _Total, _Context) ->
     {ok, N};
 unlink_users(UGId, [UserId|UserIds], N, Total, Context) ->
-    case m_edge:delete(UserId, hasusergroup, UGId, [no_touch], Context) of
+    case m_edge:delete(UserId, hasusergroup, UGId, [], Context) of
         ok ->
             maybe_progress(N, N+1, Total, Context),
             unlink_users(UGId, UserIds, N+1, Total, Context);
@@ -196,9 +196,9 @@ move_all([{UGId, UserIds}|Ids], ToUGId, N, Total, Context) ->
 move_link_users(_OldUGId, _UGId, [], N, _Total, _Context) ->
     {ok, N};
 move_link_users(OldUGId, UGId, [UserId|UserIds], N, Total, Context) ->
-    case m_edge:insert(UserId, hasusergroup, UGId, [no_touch], Context) of
+    case m_edge:insert(UserId, hasusergroup, UGId, [], Context) of
         {ok, _} ->
-            case m_edge:delete(UserId, hasusergroup, OldUGId, [no_touch], Context) of
+            case m_edge:delete(UserId, hasusergroup, OldUGId, [], Context) of
                 ok ->
                     maybe_progress(N, N+1, Total, Context),
                     move_link_users(OldUGId, UGId, UserIds, N+1, Total, Context);

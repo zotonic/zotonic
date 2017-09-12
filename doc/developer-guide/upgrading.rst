@@ -135,6 +135,9 @@ Resources
 
     {ok, Id} = m_rsc:name_to_id(Value, Context).
 
+* Inserting or deleting an edge no longer modifies the last modified and
+  modifier properties of the edge’s subject resource.
+
 Sites and modules
 ^^^^^^^^^^^^^^^^^
 
