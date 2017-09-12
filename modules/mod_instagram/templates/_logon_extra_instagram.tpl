@@ -15,7 +15,7 @@
 						}
 		%}
 	{% else %}
-		<a href="{% url logon_service service='instagram' is_connect=is_connect %}" class="btn z-btn-social do_popupwindow" style="background-color: #517fa4"><span class="z-icon z-icon-instagram"></span> {% if is_connect %}{_ Connect with Instagram _}{% else %}{_ Log in with Instagram _}{% endif %}</a>
+		<a href="{% url logon_service service='instagram' is_connect=is_connect %}" target="_blank" class="btn z-btn-social do_popupwindow" style="background-color: #517fa4"><span class="z-icon z-icon-instagram"></span> {% if is_connect %}{_ Connect with Instagram _}{% else %}{_ Log in with Instagram _}{% endif %}</a>
 	{% endif %}
 </li>
 {% endif %}
