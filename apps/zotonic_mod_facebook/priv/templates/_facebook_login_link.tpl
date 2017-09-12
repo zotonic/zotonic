@@ -13,6 +13,6 @@
 					}
 	%}
 {% else %}
-	<a href="{% url logon_service service='facebook' is_connect=is_connect %}" class="btn z-btn-social do_popupwindow" data-popupwindow="height:300" style="background-color: {{ brand_color }}"><span class="z-icon z-icon-facebook"></span> {% if is_connect %}{_ Connect with Facebook _}{% else %}{_ Log in with Facebook _}{% endif %}</a>
+	<a href="{% url logon_service service='facebook' is_connect=is_connect %}"  target="_blank" class="btn z-btn-social do_popupwindow" data-popupwindow="height:300" style="background-color: {{ brand_color }}"><span class="z-icon z-icon-facebook"></span> {% if is_connect %}{_ Connect with Facebook _}{% else %}{_ Log in with Facebook _}{% endif %}</a>
 {% endif %}
 {% endwith %}

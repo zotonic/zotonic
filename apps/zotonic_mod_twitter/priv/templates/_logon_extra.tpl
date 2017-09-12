@@ -15,7 +15,7 @@
 						}
 		%}
 	{% else %}
-		<a href="{% url logon_service service='twitter' is_connect=is_connect %}" class="btn z-btn-social do_popupwindow" style="background-color: #55acee"><span class="z-icon z-icon-twitter"></span> {% if is_connect %}{_ Connect with Twitter _}{% else %}{_ Log in with Twitter _}{% endif %}</a>
+		<a href="{% url logon_service service='twitter' is_connect=is_connect %}" target="_blank" class="btn z-btn-social do_popupwindow" style="background-color: #55acee"><span class="z-icon z-icon-twitter"></span> {% if is_connect %}{_ Connect with Twitter _}{% else %}{_ Log in with Twitter _}{% endif %}</a>
 	{% endif %}
 </li>
 {% endif %}
