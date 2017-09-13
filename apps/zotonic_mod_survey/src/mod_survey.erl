@@ -561,13 +561,13 @@ mail_result(SurveyId, PrepAnswers, Attachments, Context) ->
                         {id, SurveyId},
                         {answers, PrepAnswers}
                     ],
-                    E = #email{
-                        to=Email,
+                    EmailRec = #email{
+                        to=E,
                         html_tpl="email_survey_result.tpl",
                         vars=Vars,
                         attachments=Attachments
                     },
-                    z_email:send(E, ContextLang)
+                    z_email:send(EmailRec, ContextLang)
                 end,
                 Es)
     end.
