@@ -31,77 +31,85 @@ sort(Input, Context) when is_record(Input, rsc_list) ->
 
 sort(undefined, _Arg, _Context) ->
     undefined;
-sort(Input, Arg, _Context) when is_list(Input) ->
-    case is_opt(Arg) of 
-        false -> Input;
-        ascending -> lists:sort(Input);
-        descending -> lists:reverse(lists:sort(Input))
-    end;
-sort(#rsc_list{ list=Rscs }, Args, Context) when is_list(Args) ->
-    Args1 = case z_string:is_string(Args) of
-                true -> [Args];
-                false -> Args
+sort(Input, undefined, _Context) ->
+    Input;
+sort(Input, SortArg, Context) ->
+    InputList = make_input_list(Input),
+    SortArgs = make_args_list(SortArg),
+    SortArgs1 = map_args(SortArgs),
+    SortArgs2 = lists:filter(
+            fun
+                (asc) -> false;
+                (desc) -> false;
+                (_) -> true
             end,
-    sort_list({0, Rscs}, {ascending, Args1}, Context);
-sort(Input, Arg, Context) when is_record(Input, rsc_list) ->
-    sort(Input, [Arg], Context).
+            SortArgs1),
+    List1 = fetch_props(SortArgs2, InputList, Context),
+    Sorted = lists:sort(List1),
+    SortedInput = [ P || {_,P} <- Sorted ],
+    case lists:member(desc, SortArgs1) of
+        true -> lists:reverse(SortedInput);
+        false -> SortedInput
+    end.
 
+
+make_args_list(Args) when is_list(Args) ->
+    case z_string:is_string(Args) of
+        true -> [Args];
+        false -> Args
+    end;
+make_args_list(Arg) ->
+    [Arg].
+
+make_input_list(L) when is_list(L) -> L;
+make_input_list(#rsc_list{ list = L }) -> L;
+make_input_list(X) -> [X].
 
 %% Internal functions
 
-sort_list({_, Result}, {_, []}, _Context) ->
-    #rsc_list{ list=lists:flatten(Result) };
-sort_list(Input, {DefaultOpt, Args}, Context) ->
-    {Opt, [Prop|Rest]} = split_opt(Args, DefaultOpt),
-    Output = do_sort(Input, Opt, Prop, Context),
-    sort_list(Output, {Opt, Rest}, Context).
+fetch_props([], List, _Context) ->
+    [ {A,A} || A <- List ];
+fetch_props(Ps, List, Context) ->
+    lists:map(
+        fun(A) ->
+            PVals = [ fetch_prop(A, P, Context) || P <- Ps ],
+            {PVals, A}
+        end,
+        List).
 
-do_sort({0, Rscs}, Opt, Prop, Context) ->
-    Tagged = [{get_prop(Id, Prop, Context), Id} || Id <- Rscs],
-    Sorted = lists:keysort(1, Tagged),
-    Fold = case Opt of
-               ascending -> fun lists:foldr/3;
-               descending -> fun lists:foldl/3
-           end,
-    Grouped = Fold(
-                fun({V, _}=This, [[{V, _}|_]=Group|Tail]) ->
-                        [[This|Group]|Tail];
-                   (This, Acc) ->
-                        [[This]|Acc]
-                end,
-                [],
-                Sorted),
-    {1, [[Id || {_, Id} <- Group] || Group <- Grouped]};
-do_sort({Lvl, RscGrps}, Opt, Prop, Context) ->
-    Sorted = [do_sort({Lvl - 1, Group}, Opt, Prop, Context) || Group <- RscGrps],
-    {Lvl + 1, [Group || {_, Group} <- Sorted]}.
+fetch_prop(A, P, Context) when is_integer(A); is_atom(A); is_binary(A) ->
+    case m_rsc:p(A, P, Context) of
+        {trans, _} = Tr ->
+            z_string:to_lower(z_trans:lookup_fallback(Tr, Context));
+        B when is_binary(B) ->
+            z_string:to_lower(B);
+        V ->
+            V
+    end;
+fetch_prop(L, P, _Context) when is_list(L) ->
+    proplists:get_value(P, L);
+fetch_prop(_, _, _Context) ->
+    undefined.
 
-get_prop(Id, Prop, Context) ->
-    case m_rsc:p(Id, Prop, Context) of
-        {trans, _} = T -> z_trans:lookup(T, Context);
-        Value -> Value
+
+map_args(Args) ->
+    lists:map(fun map_arg/1, Args).
+
+map_arg(L) when is_list(L) -> map_arg(list_to_binary(L));
+map_arg(<<"asc">>) -> asc;
+map_arg(<<"ascending">>) -> asc;
+map_arg(<<"+">>) -> asc;
+map_arg(ascending) -> asc;
+map_arg('+') -> asc;
+map_arg(<<"desc">>) -> desc;
+map_arg(<<"descending">>) -> desc;
+map_arg(<<"-">>) -> desc;
+map_arg(descending) -> desc;
+map_arg('-') -> desc;
+map_arg(A) when is_atom(A) -> A;
+map_arg(B) ->
+    try
+        erlang:binary_to_existing_atom(B, utf8)
+    catch
+        _:_ -> undefined
     end.
-
-split_opt([CheckOpt|Tail]=Args, Default) ->
-    case is_opt(CheckOpt) of
-        false ->
-            {Default, Args};
-        Opt ->
-            {Opt, Tail}
-    end.
-
-is_opt(Opt) ->
-    %% work-around for `lists:member` not being legal to use in if guards... bah !
-    %% and I don't want to use nested case statments, so this was the most concise
-    %% I could come up with... :p
-    proplists:get_value(
-      true, 
-      [{lists:member(Opt, ascending_keywords()), ascending},
-       {lists:member(Opt, descending_keywords()), descending}],
-      false).
-
-ascending_keywords() ->
-    [ascending, asc, '+', "+", "ascending", "asc"].
-
-descending_keywords() ->
-    [descending, desc, '-', "-", "descending", "desc"].
