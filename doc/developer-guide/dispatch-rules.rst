@@ -125,7 +125,7 @@ The possible path elements are:
 
 - Strings: fixed parts that must match with the request url
 - atoms: bind to the text at that position
--  ``'*'``: a special atom binding to the remaining part of the request URL.
+- ``'*'``: a special atom binding to the remaining part of the request URL.
   This must be the last element of the path.
 
 URL matching using regular expressions
