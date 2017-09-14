@@ -246,6 +246,13 @@
 %% @doc Foldr for an resource insert, modify the insertion properties.
 -record(rsc_insert, {}).
 
+%% @doc Map to signal merging two resources. Move any information from the looser to the
+%%      winner. The looser will be deleted.
+-record(rsc_merge, {
+        winner_id :: integer(),
+        looser_id :: integer()
+    }).
+
 %% @doc Foldr for an resource update, modify the insertion properties.
 %% The props are the resource's props _before_ the update.
 %% The folded value is {IsChanged, UpdateProps} for the update itself.

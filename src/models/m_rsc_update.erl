@@ -27,6 +27,7 @@
     update/3,
     update/4,
     duplicate/3,
+    merge_delete/3,
 
     flush/2,
     
@@ -81,16 +82,18 @@ delete(Id, Context) when is_integer(Id), Id /= 1 ->
 %% @throws {error, Reason}
 -spec delete_nocheck(integer(), #context{}) -> ok.
 delete_nocheck(Id, Context) ->
+    delete_nocheck(m_rsc:rid(Id, Context), undefined, Context).
+
+delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
     Referrers = m_edge:subjects(Id, Context),
     CatList = m_rsc:is_a(Id, Context),
     Props = m_rsc:get(Id, Context),
-    
+
     F = fun(Ctx) ->
-        z_notifier:notify(#rsc_delete{id=Id, is_a=CatList}, Ctx),
-        m_rsc_gone:gone(Id, Ctx),
+        z_notifier:notify_sync(#rsc_delete{id=Id, is_a=CatList}, Ctx),
+        m_rsc_gone:gone(Id, OptFollowUpId, Ctx),
         z_db:delete(rsc, Id, Ctx)
     end,
-
     {ok, _RowsDeleted} = z_db:transaction(F, Context),
     %% After inserting a category we need to renumber the categories
     case lists:member(category, CatList) of
@@ -101,7 +104,8 @@ delete_nocheck(Id, Context) ->
     [ z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers ],
     flush(Id, CatList, Context),
     %% Notify all modules that the rsc has been deleted
-    z_notifier:notify(#rsc_update_done{
+    z_notifier:notify_sync(
+                    #rsc_update_done{
                         action=delete,
                         id=Id,
                         pre_is_a=CatList,
@@ -111,6 +115,92 @@ delete_nocheck(Id, Context) ->
                     }, Context),
     z_edge_log_server:check(Context),
     ok.
+
+
+%% @doc Merge two resources, delete the losing resource.
+-spec merge_delete(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok | {error, term()}.
+merge_delete(WinnerId, WinnerId, _Context) ->
+    ok;
+merge_delete(_WinnerId, 1, _Context) ->
+    throw({error, eacces});
+merge_delete(_WinnerId, admin, _Context) ->
+    throw({error, eacces});
+merge_delete(WinnerId, LoserId, Context) ->
+    case z_acl:rsc_deletable(LoserId, Context)
+        andalso z_acl:rsc_editable(WinnerId, Context)
+    of
+        true ->
+            case m_rsc:is_a(WinnerId, category, Context) of
+                true ->
+                    m_category:delete(LoserId, WinnerId, Context);
+                false ->
+                    merge_delete_nocheck(m_rsc:rid(WinnerId, Context), m_rsc:rid(LoserId, Context), Context)
+            end;
+        false ->
+            throw({error, eacces})
+    end.
+
+%% @doc Merge two resources, delete the 'loser'
+-spec merge_delete_nocheck(integer(), integer(), #context{}) -> ok.
+merge_delete_nocheck(WinnerId, LoserId, Context) ->
+    z_notifier:map(#rsc_merge{winner_id=WinnerId, looser_id=LoserId}, Context),
+    ok = m_edge:merge(WinnerId, LoserId, Context),
+    m_media:merge(WinnerId, LoserId, Context),
+    m_identity:merge(WinnerId, LoserId, Context),
+    move_creator_modifier_ids(WinnerId, LoserId, Context),
+    PropsLooser = m_rsc:get(LoserId, Context),
+    ok = delete_nocheck(LoserId, Context),
+    case merge_copy_props(WinnerId, PropsLooser, Context) of
+        [] ->
+            ok;
+        UpdProps ->
+            {ok, _} = update(WinnerId, UpdProps, [{escape_texts, false}], Context)
+    end,
+    ok.
+
+move_creator_modifier_ids(WinnerId, LoserId, Context) ->
+    Ids = z_db:q("select id
+                  from rsc
+                  where (creator_id = $1 or modifier_id = $1)
+                    and id <> $1",
+                 [LoserId],
+                 Context),
+    z_db:q("update rsc set creator_id = $1 where creator_id = $2",
+           [WinnerId, LoserId],
+           Context,
+           1200000),
+    z_db:q("update rsc set modifier_id = $1 where modifier_id = $2",
+           [WinnerId, LoserId],
+           Context,
+           1200000),
+    lists:foreach(
+            fun(Id) ->
+                flush(Id, [], Context)
+            end,
+            Ids).
+
+merge_copy_props(WinnerId, Props, Context) ->
+    merge_copy_props(WinnerId, Props, [], Context).
+
+merge_copy_props(_WinnerId, [], Acc, _Context) ->
+    lists:reverse(Acc);
+merge_copy_props(WinnerId, [{P,_}|Ps], Acc, Context)
+    when P =:= creator; P =:= creator_id; P =:= modifier; P =:= modifier_id;
+         P =:= created; P =:= modified; P =:= version;
+         P =:= id; P =:= is_published; P =:= is_protected; P =:= is_dependent;
+         P =:= is_authoritative; P =:= pivot_geocode; P =:= pivot_geocode_qhash;
+         P =:= category_id ->
+    merge_copy_props(WinnerId, Ps, Acc, Context);
+merge_copy_props(WinnerId, [{_,Empty}|Ps], Acc, Context)
+    when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
+    merge_copy_props(WinnerId, Ps, Acc, Context);
+merge_copy_props(WinnerId, [{P,_} = PV|Ps], Acc, Context) ->
+    case m_rsc:p_no_acl(WinnerId, P, Context) of
+        Empty when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
+            merge_copy_props(WinnerId, Ps, [PV|Acc], Context);
+        _Value ->
+            merge_copy_props(WinnerId, Ps, Acc, Context)
+    end.
 
 
 %% Flush all cached entries depending on this entry, one of its subjects or its categories.

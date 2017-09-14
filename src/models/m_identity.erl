@@ -70,7 +70,8 @@
     set_verified/4,
     is_verified/2,
     
-    delete/2
+    delete/2,
+    merge/3
 ]).
 
 -export([
@@ -625,6 +626,50 @@ delete(IdnId, Context) ->
                     {error, eacces}
             end
     end.
+
+%% @doc Move the identities of two resources, the identities are removed from the source id.
+-spec merge(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok | {error, term()}.
+merge(WinnerId, LooserId, Context) ->
+    case z_acl:rsc_editable(WinnerId, Context) andalso z_acl:rsc_editable(LooserId, Context) of
+        true ->
+            F = fun(Ctx) ->
+                % Move all identities to the winner, except for duplicate type+key combinations
+                LooserIdns = z_db:q("select type, key, id from identity where rsc_id = $1", [m_rsc:rid(LooserId, Context)], Ctx),
+                WinIdns = z_db:q("select type, key from identity where rsc_id = $1", [m_rsc:rid(WinnerId, Context)], Ctx),
+                AddIdns = lists:filter(
+                                fun({Type, Key, _Id}) ->
+                                    case is_unique_identity_type(Type) of
+                                        true ->
+                                            not proplists:is_defined(Type, WinIdns);
+                                        false ->
+                                            not lists:member({Type, Key}, WinIdns)
+                                    end
+                                end,
+                                LooserIdns),
+                lists:foreach(
+                            fun({_Type, _Key, Id}) ->
+                                z_db:q("update identity set rsc_id = $1 where id = $2",
+                                       [m_rsc:rid(WinnerId, Context), Id],
+                                       Ctx)
+                            end,
+                            AddIdns),
+                case proplists:is_defined(<<"username_pw">>, AddIdns) of
+                    true ->
+                        z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [m_rsc:rid(WinnerId, Context)], Context);
+                    false ->
+                        ok
+                end
+            end,
+            z_db:transaction(F, Context),
+            z_mqtt:publish(["~site", "rsc", m_rsc:rid(LooserId, Context), "identity"], {identity, all}, Context),
+            z_mqtt:publish(["~site", "rsc", m_rsc:rid(WinnerId, Context), "identity"], {identity, all}, Context),
+            ok;
+        false ->
+            {error, eacces}
+    end.
+
+is_unique_identity_type(<<"username_pw">>) -> true;
+is_unique_identity_type(_) -> false.
 
 %% @doc If an email identity is deleted, then ensure that the 'email' property is reset accordingly.
 maybe_reset_email_property(Id, <<"email">>, Email, Context) when is_binary(Email) ->

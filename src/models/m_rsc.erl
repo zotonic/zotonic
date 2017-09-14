@@ -41,6 +41,7 @@
     get_acl_props/2,
     insert/2,
     delete/2,
+    merge_delete/3,
     update/3,
     update/4,
     duplicate/3,
@@ -349,6 +350,10 @@ insert(Props, Context) ->
 delete(Id, Context) when is_integer(Id) ->
     m_rsc_update:delete(Id, Context).
 
+%% @doc Merge a resource with another, delete the loser.
+-spec merge_delete(integer(), integer(), #context{}) -> ok | {error, term()}.
+merge_delete(WinnerId, LoserId, Context) ->
+    m_rsc_update:merge_delete(WinnerId, LoserId, Context).
 
 %% @doc Update a resource
 -spec update(integer(), list(), #context{}) -> {ok, integer()} | {error, term()}.

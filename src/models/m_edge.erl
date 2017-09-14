@@ -39,6 +39,7 @@
     delete_multiple/4,
     replace/4,
     duplicate/3,
+    merge/3,
     update_nth/5,
     object/4,
     subject/4,
@@ -332,7 +333,86 @@ duplicate(Id, ToId, Context) ->
         false ->
             {error, {eacces, Id}}
     end.
-    
+
+%% @doc Move all edges from one id to another id, part of m_rsc:merge_delete/3
+merge(WinnerId, LooserId, Context) ->
+    case {z_acl:rsc_editable(WinnerId, Context), z_acl:rsc_deletable(LooserId, Context)} of
+        {true, true} ->
+            F = fun(Ctx) ->
+                %% Edges outgoing from the looser
+                LooserOutEdges = z_db:q("select predicate_id, object_id, id
+                                         from edge
+                                         where subject_id = $1",
+                                        [LooserId],
+                                        Ctx),
+                WinnerOutEdges = z_db:q("select predicate_id, object_id
+                                         from edge
+                                         where subject_id = $1",
+                                        [WinnerId],
+                                        Ctx),
+                LooserOutEdges1 = lists:filter(
+                                fun({PredId, ObjectId, _EdgeId}) ->
+                                    not lists:member({PredId, ObjectId}, WinnerOutEdges)
+                                end,
+                                LooserOutEdges),
+                % TODO: discuss if we should enact these extra ACL checks
+                % LooserOutEdges2 = lists:filter(
+                %                 fun({PredId, ObjectId, _EdgeId}) ->
+                %                     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
+                %                     z_acl:is_allowed(
+                %                         insert,
+                %                         #acl_edge{subject_id=WinnerId, predicate=PredName, object_id=ObjectId},
+                %                         Context)
+                %                 end,
+                %                 LooserOutEdges1),
+                lists:foreach(
+                        fun({_PredId, _ObjId, EdgeId}) ->
+                            z_db:q("update edge
+                                    set subject_id = $1
+                                    where id = $2",
+                                   [WinnerId, EdgeId],
+                                   Context)
+                        end,
+                        LooserOutEdges1),
+
+                %% Edges incoming to the looser
+                LooserInEdges = z_db:q("select predicate_id, subject_id, id
+                                        from edge
+                                        where object_id = $1",
+                                       [LooserId],
+                                       Ctx),
+                WinnerInEdges = z_db:q("select predicate_id, subject_id
+                                        from edge
+                                        where object_id = $1",
+                                       [WinnerId],
+                                       Ctx),
+                LooserInEdges1 = lists:filter(
+                                    fun({PredId, SubjectId, _EdgeId}) ->
+                                        not lists:member({PredId, SubjectId}, WinnerInEdges)
+                                    end,
+                                    LooserInEdges),
+                lists:foreach(
+                        fun({_PredId, _SubjId, EdgeId}) ->
+                            z_db:q("update edge
+                                    set object_id = $1
+                                    where id = $2",
+                                   [WinnerId, EdgeId],
+                                   Context)
+                        end,
+                        LooserInEdges1),
+
+                z_db:q("update edge set creator_id = $1 where creator_id = $2",
+                       [WinnerId, LooserId],
+                       Context)
+            end,
+            z_db:transaction(F, Context),
+            z_edge_log_server:check(Context),
+            ok;
+        {false, _} ->
+            {error, {eacces, WinnerId}};
+        {_, false} ->
+            {error, {eacces, WinnerId}}
+    end.
 
 %% @doc Update the nth edge of a subject.  Set a new object, keep the predicate.
 %% When there are not enough edges then an error is returned. The first edge is nr 1.

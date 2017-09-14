@@ -665,7 +665,8 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
 
 send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
     case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
-        {error, no_more_hosts, {permanent_failure, _Host, <<105,103,110,32,82,111,111,116,32, _/binary>>}} ->
+        {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}} ->
+            % Don't ask ...
             send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
         {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
             send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
