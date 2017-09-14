@@ -1,6 +1,6 @@
 <div class="merge-results">
     {% with m.search.paged[{query text=text cat=cat page=1 pagelen=(12*3) id_exclude=id}] as result %}
-        <div id="merge_loop_results" class="thumbnails">
+        <div id="merge_loop_results">
             {% include "_merge_find_results_loop.tpl" result=result %}
         </div>
         {% lazy

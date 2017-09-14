@@ -2,25 +2,21 @@
         type="submit"
         action={script script=""}
 %}
-<form id="dialog-merge-find" class="row form form-horizontal">
+<form id="dialog-merge-find" class="form form-horizontal">
     <input type="hidden" name="id" value="{{ id }}" />
 
-    <div class="col-md-8">
-        <input name="find_text" type="text" value="{{ text|default:'' }}" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
-    </div>
-    <div class="col-md-4">
-        {% block category_select %}
-            <select class="form-control" name="find_category">
-                <option value="">{_ Any category _}</option>
-                <option value="" disabled></option>
-                {% for c in m.category.tree_flat %}
-                    <option value="{{ c.id }}" {% if c.id == cat %}selected="selected" {% endif %}>
-                        {{ c.indent }}{{ c.id.title|default:c.id.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        {% endblock %}
-    </div>
+    <input name="find_text" type="text" value="{{ text|default:'' }}" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
+    {% block category_select %}
+        <select class="form-control" name="find_category">
+            <option value="">{_ Any category _}</option>
+            <option value="" disabled></option>
+            {% for c in m.category.tree_flat %}
+                <option value="{{ c.id }}" {% if c.id == cat %}selected="selected" {% endif %}>
+                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
+                </option>
+            {% endfor %}
+        </select>
+    {% endblock %}
 </form>
 
 <p><br/></p>

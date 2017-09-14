@@ -37,6 +37,7 @@
     detach_all/2,
     get_observers/2,
     notify/2, 
+    notify_sync/2,
     notify1/2, 
     first/2, 
     map/2, 
@@ -165,6 +166,15 @@ notify(Msg, Context) ->
             end,
             spawn(F),
             ok
+    end.
+
+%% @doc Cast the event to all observers. The prototype of the observer is: f(Msg, Context) -> void
+notify_sync(Msg, Context) ->
+    case get_observers(Msg, Context) of
+        [] ->
+            ok;
+        Observers ->
+            lists:foreach(fun(Obs) -> notify_observer(Msg, Obs, false, Context) end, Observers)
     end.
 
 %% @doc Cast the event to the first observer. The prototype of the observer is: f(Msg, Context) -> void
