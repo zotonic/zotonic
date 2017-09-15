@@ -4,6 +4,8 @@ Params
 - loser_id
 - left
 - right
+- left_id
+- right_id
 #}
 {% wire id="merge-form" type="submit" postback={merge winner_id=winner_id loser_id=loser_id} delegate=`mod_admin_merge` %}
 <form id="merge-form" method="post" action="postback">
@@ -26,7 +28,7 @@ Params
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        {{ loser_id.title|truncate_html:80 }}
+                        {{ left_id.title|truncate_html:80 }}
                     </div>
                 </div>
             </div>
@@ -40,7 +42,7 @@ Params
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        {{ winner_id.title|truncate_html:80 }}
+                        {{ right_id.title|truncate_html:80 }}
                     </div>
                 </div>
             </div>
@@ -70,7 +72,7 @@ Params
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        {{ loser_id.title|truncate_html:80 }}
+                        {{ left_id.title|truncate_html:80 }}
                     </div>
                 </div>
             </div>
@@ -84,7 +86,7 @@ Params
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        {{ winner_id.title|truncate_html:80 }}
+                        {{ right_id.title|truncate_html:80 }}
                     </div>
                 </div>
             </div>
@@ -97,7 +99,7 @@ Params
                 {% if right %}
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <s>{{ loser_id.title }}</s>
+                            <s>{{ left_id.title }}</s>
                         </div>
                     </div>
                 {% endif %}
@@ -111,7 +113,7 @@ Params
                 {% if left %}
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <s>{{ winner_id.title }}</s>
+                            <s>{{ right_id.title }}</s>
                         </div>
                     </div>
                 {% endif %}

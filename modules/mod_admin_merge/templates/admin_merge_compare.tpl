@@ -127,6 +127,8 @@
             winner_id=id
             loser_id=id2
             left=1
+            left_id=id
+            right_id=id2
         }
     %}
     {% wire
@@ -137,6 +139,8 @@
             winner_id=id2
             loser_id=id
             right=1
+            left_id=id
+            right_id=id2
         }
     %}
 {% endwith %}
