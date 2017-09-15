@@ -51,7 +51,8 @@
     lookup_by_type_and_key/3,
     lookup_by_type_and_key_multi/3,
 
-    lookup_user_by_type_and_key/3,
+    lookup_users_by_type_and_key/3,
+    lookup_users_by_verified_type_and_key/3,
 
     lookup_by_rememberme_token/2,
     get_rememberme_token/2,
@@ -716,15 +717,28 @@ lookup_by_type_and_key_multi(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
     z_db:assoc("select * from identity where type = $1 and key = $2", [Type, Key1], Context).
 
-lookup_user_by_type_and_key(Type, Key, Context) ->
+lookup_users_by_type_and_key(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
-    z_db:assoc_row(
+    z_db:assoc(
         "select usr.*
          from identity tp, identity usr
          where tp.rsc_id = usr.rsc_id
            and usr.type = 'username_pw'
            and tp.type = $1
            and tp.key = $2",
+        [Type, Key1],
+        Context).
+
+lookup_users_by_verified_type_and_key(Type, Key, Context) ->
+    Key1 = normalize_key(Type, Key),
+    z_db:assoc(
+        "select usr.*
+         from identity tp, identity usr
+         where tp.rsc_id = usr.rsc_id
+           and usr.type = 'username_pw'
+           and tp.type = $1
+           and tp.key = $2
+           and tp.is_verified",
         [Type, Key1],
         Context).
 

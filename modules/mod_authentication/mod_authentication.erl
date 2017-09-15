@@ -187,9 +187,15 @@ try_signup(Auth, Context) ->
 is_user_email_exists(undefined, _Context) ->
     false;
 is_user_email_exists(Email, Context) ->
-    case m_identity:lookup_user_by_type_and_key(email, Email, Context) of
-        undefined -> false;
-        _ -> true
+    case m_identity:lookup_users_by_verified_type_and_key(email, Email, Context) of
+        undefined ->
+            false;
+        Idns ->
+            lists:any(
+                fun(Idn) ->
+                    proplists:get_value(is_verified, Idn)
+                end,
+                Idns)
     end.
 
 maybe_email_identity(Props) ->
