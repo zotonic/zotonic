@@ -10,9 +10,9 @@
         <select class="form-control" name="find_category">
             <option value="">{_ Any category _}</option>
             <option value="" disabled></option>
-            {% for c in m.category.tree_flat %}
-                <option value="{{ c.id }}" {% if c.id == cat %}selected="selected" {% endif %}>
-                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
+            {% for c_id,_depth,indent,name in m.category.all_flat %}
+                <option value="{{ c_id }}" {% if c_id == cat %}selected="selected" {% endif %}>
+                    {{ indent }}{{ c_id.title|default:name }}
                 </option>
             {% endfor %}
         </select>

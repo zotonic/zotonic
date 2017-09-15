@@ -126,6 +126,8 @@
             template="_confirm_merge.tpl"
             winner_id=id
             loser_id=id2
+            left_id=id
+            right_id=id2
             left=1
         }
     %}
@@ -136,6 +138,8 @@
             template="_confirm_merge.tpl"
             winner_id=id2
             loser_id=id
+            left_id=id
+            right_id=id2
             right=1
         }
     %}
