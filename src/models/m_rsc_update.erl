@@ -175,7 +175,7 @@ move_creator_modifier_ids(WinnerId, LoserId, Context) ->
            1200000),
     lists:foreach(
             fun(Id) ->
-                flush(Id, [], Context)
+                z_depcache:flush(Id, Context)
             end,
             Ids).
 

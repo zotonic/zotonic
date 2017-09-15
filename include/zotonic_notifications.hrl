@@ -359,7 +359,8 @@
         service_uid :: binary(),
         service_props = [] :: list(),
         props  = []:: list({atom(), any()}),
-        is_connect = false :: boolean()
+        is_connect = false :: boolean(),
+        is_signup_confirm = false :: boolean()
     }).
 
 %% @doc Check if an user is enabled (first)

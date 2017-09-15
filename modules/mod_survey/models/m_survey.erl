@@ -49,7 +49,9 @@
     delete_result/3,
     delete_result/4,
     delete_results/2,
-    get_questions/2
+    get_questions/2,
+
+    rsc_merge/3
    ]).
 
 -include_lib("zotonic.hrl").
@@ -740,6 +742,15 @@ delete_result(SurveyId, UserId, PersistentId, Context) ->
     publish(SurveyId, UserId, PersistentId, Context),
     Result.
 
+%% @doc Move all answers of a to-be-deleted user to another user.
+rsc_merge(WinnerId, LoserId, Context) ->
+    z_db:q("
+        update survey_answers
+        set user_id = $1
+        where user_id = $2",
+        [WinnerId, LoserId],
+        Context).
+
 
 %% @private
 survey_captions(Id, Context) ->
@@ -792,4 +803,3 @@ survey_totals(Id, Context) ->
             []
     end.
 
-                

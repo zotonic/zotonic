@@ -51,6 +51,8 @@
     lookup_by_type_and_key/3,
     lookup_by_type_and_key_multi/3,
 
+    lookup_user_by_type_and_key/3,
+
     lookup_by_rememberme_token/2,
     get_rememberme_token/2,
     reset_rememberme_token/2,
@@ -518,12 +520,12 @@ is_valid_key(email, Key, _Context) ->
 is_valid_key(_Type, _Key, _Context) ->
     true.
 
-normalize_key(_Type, undefined) ->
-    undefined;
+normalize_key(_Type, undefined) -> undefined;
 normalize_key(email, Key) ->
     z_convert:to_binary(z_string:trim(z_string:to_lower(Key)));
-normalize_key(_Type, Key) ->
-    Key.
+normalize_key("email", Key) -> normalize_key(email, Key);
+normalize_key(<<"email">>, Key) -> normalize_key(email, Key);
+normalize_key(_Type, Key) -> Key.
 
 
 %% @doc Create an unique identity record.
@@ -707,10 +709,25 @@ lookup_by_username(Key, Context) ->
 	lookup_by_type_and_key("username_pw", z_string:to_lower(Key), Context).
 
 lookup_by_type_and_key(Type, Key, Context) ->
-    z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key], Context).
+    Key1 = normalize_key(Type, Key),
+    z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key1], Context).
 
 lookup_by_type_and_key_multi(Type, Key, Context) ->
-    z_db:assoc("select * from identity where type = $1 and key = $2", [Type, Key], Context).
+    Key1 = normalize_key(Type, Key),
+    z_db:assoc("select * from identity where type = $1 and key = $2", [Type, Key1], Context).
+
+lookup_user_by_type_and_key(Type, Key, Context) ->
+    Key1 = normalize_key(Type, Key),
+    z_db:assoc_row(
+        "select usr.*
+         from identity tp, identity usr
+         where tp.rsc_id = usr.rsc_id
+           and usr.type = 'username_pw'
+           and tp.type = $1
+           and tp.key = $2",
+        [Type, Key1],
+        Context).
+
 
 lookup_by_verify_key(Key, Context) ->
     z_db:assoc_row("select * from identity where verify_key = $1", [Key], Context).

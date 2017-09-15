@@ -53,31 +53,44 @@ access_token({error, _Reason}, Context) ->
     html_error(access_token, Context).
 
 user_data({ok, UserProps}, AccessToken, Context) ->
-    case auth_user(UserProps, AccessToken, Context) of
-        undefined ->
-            % No handler for signups, or signup not accepted
-            lager:warning("[twitter] Undefined auth_user return for user with props ~p", [UserProps]),
-            html_error(auth_user_undefined, Context);
-        {error, duplicate} ->
-            lager:info("[twitter] Duplicate connection for user with props ~p", [UserProps]),
-            html_error(duplicate, Context);
-        {error, _} = Err ->
-            lager:warning("[twitter] Error return ~p for user with props ~p", [Err, UserProps]),
-            html_error(auth_user_error, Context);
-        {ok, Context1} ->
-            html_ok(Context1)
-    end;
+    Auth = auth_user(UserProps, AccessToken, Context),
+    do_auth_user(Auth, Context);
 user_data({error, _}, _AccessToken, Context) ->
     html_error(user_props, Context).
 
+do_auth_user(Auth, Context) ->
+    case z_notifier:first(Auth, Context) of
+        undefined ->
+            % No handler for signups, or signup not accepted
+            lager:warning("[twitter] Undefined auth_user return for user with props ~p", [Auth]),
+            html_error(auth_user_undefined, Context);
+        {error, duplicate} ->
+            lager:info("[twitter] Duplicate connection for user with props ~p", [Auth]),
+            html_error(duplicate, Context);
+        {error, {duplicate_email, Email}} ->
+            lager:info("[facebook] User with email \"~s\" already exists", [Email]),
+            html_error(duplicate_email, Email, Context);
+        {error, signup_confirm} ->
+            % We need a confirmation from the user before we add a new account
+            html_error(signup_confirm, {auth, Auth}, Context);
+        {error, _} = Err ->
+            lager:warning("[twitter] Error return ~p for user with props ~p", [Err, Auth]),
+            html_error(auth_user_error, Context);
+        {ok, Context1} ->
+            html_ok(Context1)
+    end.
 
 html_ok(Context) ->
     Html = z_template:render("logon_service_done.tpl", [{service, "Twitter"} | z_context:get_all(Context)], Context),
     z_context:output(Html, Context).
 
 html_error(Error, Context) ->
+    html_error(Error, undefined, Context).
+
+html_error(Error, What, Context) ->
     Vars = [
-        {service, "Twitter"}, 
+        {service, "Twitter"},
+        {what, What},
         {error, Error}
     ],
     Html = z_template:render("logon_service_error.tpl", Vars, Context),
@@ -101,14 +114,13 @@ auth_user(TWProps, AccessToken, Context) ->
         {screen_name, TwitterUserName}
     ],
     Args = controller_twitter_authorize:get_args(Context),
-    z_notifier:first(#auth_validated{
-            service=twitter,
-            service_uid=TwitterUserId,
-            service_props=AccessTokenData,
-            props=PersonProps,
-            is_connect=z_convert:to_bool(proplists:get_value("is_connect", Args))
-        },
-        Context).
+    #auth_validated{
+        service=twitter,
+        service_uid=TwitterUserId,
+        service_props=AccessTokenData,
+        props=PersonProps,
+        is_connect=z_convert:to_bool(proplists:get_value("is_connect", Args))
+    }.
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken, Context) ->

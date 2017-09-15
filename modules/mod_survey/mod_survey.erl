@@ -34,6 +34,8 @@
     observe_admin_rscform/3,
     observe_survey_is_submit/2,
 
+    observe_rsc_merge/2,
+
     observe_export_resource_filename/2,
     observe_export_resource_header/2,
     observe_export_resource_data/2,
@@ -186,6 +188,9 @@ observe_survey_is_submit(#survey_is_submit{block=Q}, _Context) ->
         _ -> undefined
     end.
 
+%% @doc Rename the answers of the loser to the winner
+observe_rsc_merge(#rsc_merge{winner_id=WinnerId, looser_id=LoserId}, Context) ->
+    m_survey:rsc_merge(WinnerId, LoserId, Context).
 
 %% @doc Fetch the filename for the export
 observe_export_resource_filename(#export_resource_filename{dispatch=survey_results_download, id=Id}, Context) ->
