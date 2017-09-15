@@ -188,14 +188,9 @@ is_user_email_exists(undefined, _Context) ->
     false;
 is_user_email_exists(Email, Context) ->
     case m_identity:lookup_users_by_verified_type_and_key(email, Email, Context) of
-        undefined ->
-            false;
-        Idns ->
-            lists:any(
-                fun(Idn) ->
-                    proplists:get_value(is_verified, Idn)
-                end,
-                Idns)
+        undefined -> false;
+        [] -> false;
+        _ -> true
     end.
 
 maybe_email_identity(Props) ->
