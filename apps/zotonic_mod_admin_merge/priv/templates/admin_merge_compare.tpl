@@ -73,18 +73,20 @@
             {% endif %}
         </thead>
         <tbody>
+
         {% with m.identity[id].username,
                 m.identity[id2].username as username1, username2 %}
             {% if username1 or username2 %}
                 <tr>
                     <th>{_ Username _}</th>
-                    <td class="{% if not selectable1 %}unpublished{% endif %}">{{ username1|escape }}</td>
-                    <td class="{% if not selectable2 %}unpublished{% endif %}">{{ username2|escape }}</td>
+                    <td class="{% if not selectable1 %}unpublished{% endif %}"><strong>{{ username1|escape }}</strong></td>
+                    <td class="{% if not selectable2 %}unpublished{% endif %}"><strong>{{ username2|escape }}</strong></td>
                 </tr>
             {% endif %}
         {% endwith %}
+
         {% for prop, p1, p2 in id|admin_merge_diff:id2 %}
-            {% if not prop|member:[`id`, `creator_id`, `modifier_id`, `modified`, `created`, `summary_html`, `version`] %}
+            {% if not prop|member:[`creator_id`, `modifier_id`, `modified`, `created`, `summary_html`, `version`] %}
                 <tr>
                     <th>{{ prop }}</th>
                     <td class="{% if not selectable1 %}unpublished{% endif %}">{{ p1|linebreaksbr }}</td>
@@ -92,17 +94,32 @@
                 </tr>
             {% endif %}
         {% endfor %}
-        {% if id.medium or id2.medium %}
+
+        {% if id.depiction or id2.depiction %}
             <tr>
-                <th>{_ Media _}</th>
+                <th>{_ Depiction _} / {_ Media _}</th>
                 <td>
-                    {% media id mediaclass="admin-rsc-edge-media" %}
+                    {% if id.medium %}
+                        <p>{_ Media _}</p>
+                        {% media id.medium mediaclass="admin-rsc-edge-media" %}
+                        }
+                    {% elseif id.depiction %}
+                        <p>{_ Depiction _}</p>
+                        {% media id.depiction mediaclass="admin-rsc-edge-media" %}
+                    {% endif %}
                 </td>
                 <td>
-                    {% media id2 mediaclass="admin-rsc-edge-media" %}
+                    {% if id2.medium %}
+                        <p>{_ Media _}</p>
+                        {% media id2.medium mediaclass="admin-rsc-edge-media" %}
+                    {% elseif id2.depiction %}
+                        <p>{_ Depiction _}</p>
+                        {% media id2.depiction mediaclass="admin-rsc-edge-media" %}
+                    {% endif %}
                 </td>
             </tr>
         {% endif %}
+
         </tbody>
         <tfoot>
             <tr>
