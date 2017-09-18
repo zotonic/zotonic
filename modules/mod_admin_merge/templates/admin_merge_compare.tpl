@@ -100,7 +100,7 @@
                 <th>{_ Depiction _} / {_ Media _}</th>
                 <td>
                     {% if id.medium %}
-                        <p>{_ Medium _}</p>
+                        <p>{_ Media _}</p>
                         {% media id.medium mediaclass="admin-rsc-edge-media" %}
                         }
                     {% else %}
@@ -110,7 +110,7 @@
                 </td>
                 <td>
                     {% if id2.medium %}
-                        <p>{_ Medium _}</p>
+                        <p>{_ Media _}</p>
                         {% media id2.medium mediaclass="admin-rsc-edge-media" %}
                     {% else %}
                         <p>{_ Depiction _}</p>
