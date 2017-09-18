@@ -97,7 +97,7 @@
 
         {% if id.depiction or id2.depiction %}
             <tr>
-                <th>{_ Depiction _} / {_ Medium _}</th>
+                <th>{_ Depiction _} / {_ Media _}</th>
                 <td>
                     {% if id.medium %}
                         <p>{_ Medium _}</p>
