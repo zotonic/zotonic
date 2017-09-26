@@ -29,7 +29,12 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/0]).
 
--record(state, {port, executable, timers=[]}).
+-record(state, {
+    pid,
+    port,
+    executable,
+    timers=[]
+}).
 
 %% interface functions
 -export([
@@ -65,15 +70,17 @@ is_installed() ->
 %% @doc Initiates the server.
 init([Executable]) ->
     process_flag(trap_exit, true),
-    State = #state{executable=Executable},
-    os:cmd("killall fswatch"),
-    {ok, State, 0}.
-
+    State = #state{
+        executable = Executable,
+        port = undefined,
+        pid = undefined
+    },
+    timer:send_after(10, start),
+    {ok, State}.
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
-
 
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
@@ -82,9 +89,8 @@ handle_call(Message, _From, State) ->
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
-
 %% @doc Reading a line from the fswatch program.
-handle_info({Port, {data, FilenameFlags}}, State=#state{port=Port, timers=Timers}) ->
+handle_info({stdout, Port, FilenameFlags}, #state{port = Port, timers = Timers} = State) ->
     Fs = extract_filename_verb(FilenameFlags),
     {Timers1,_N1} = lists:foldl(
                         fun({Filename, Verb}, {TimersAcc,N}) ->
@@ -99,18 +105,21 @@ handle_info({filechange, Verb, Filename}, State=#state{timers=Timers}) ->
     z_filewatcher_handler:file_changed(Verb, Filename),
     {noreply, State#state{timers=lists:keydelete(Filename, 1, Timers)}};
 
-handle_info({Port,{exit_status,Status}}, State=#state{port=Port}) ->
-    lager:error("[fswatch] fswatch port closed with ~p, restarting in 5 seconds.", [Status]),
-    {noreply, State, 5000};
+handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
+    lager:error("[fswatch] fswatch port closed with ~p, restarting in 5 seconds.", [Reason]),
+    State1 = State#state{
+        pid = undefined,
+        port = undefined
+    },
+    timer:send_after(5000, start),
+    {noreply, State1};
 
-handle_info({'EXIT', Port, _}, State=#state{port=Port}) ->
-    lager:error("[fswatch] fswatch port closed, restarting in 5 seconds."),
-    {noreply, State, 5000};
+handle_info({'EXIT', _Pid, _Reason}, State) ->
+    {noreply, State};
 
-handle_info(timeout, #state{port=undefined} = State) ->
-    lager:info("[fswatch] Starting fswatch file monitor."),
+handle_info(start, #state{port = undefined} = State) ->
     {noreply, start_fswatch(State)};
-handle_info(timeout, State) ->
+handle_info(start, State) ->
     {noreply, State};
 
 handle_info(_Info, State) ->
@@ -123,11 +132,10 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, #state{port=undefined}) ->
+terminate(_Reason, #state{pid = undefined}) ->
     ok;
-terminate(_Reason, #state{port=Port}) ->
-    catch erlang:port_close(Port),
-    os:cmd("killall fswatch"),
+terminate(_Reason, #state{pid = Pid}) ->
+    catch exec:stop(Pid),
     ok.
 
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
@@ -140,11 +148,20 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-start_fswatch(State=#state{executable=Executable}) ->
-    % os:cmd("killall fswatch"),
-    Args = ["-0", "-x", "-r", "-L" | z_filewatcher_sup:watch_dirs() ],
-    Port = erlang:open_port({spawn_executable, Executable}, [{args, Args}, stream, exit_status, binary]),
-    State#state{port=Port}.
+start_fswatch(State=#state{executable = Executable, port = undefined}) ->
+    lager:info("[fswatch] Starting fswatch file monitor."),
+    Args = [
+        Executable,
+        "-0", "-x", "-r", "-L"
+        | z_filewatcher_sup:watch_dirs()
+    ],
+    {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
+    State#state{
+        port = Port,
+        pid = Pid
+    };
+start_fswatch(State) ->
+    State.
 
 extract_filename_verb(Line) ->
     Lines = binary:split(Line, <<0>>, [global]),

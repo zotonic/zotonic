@@ -51,7 +51,7 @@ init([]) ->
     ZotonicConfig = application:get_all_env(zotonic),
     {ok, { {one_for_one, 1, 5}, [
 
-        %% Launch the zotonic core supervisor (uses the the read configs)
+        %% Launch the zotonic core supervisor (uses the read configs)
         {zotonic_core,
             {zotonic_core_sup, start_link, [ZotonicConfig]},
             permanent, 5000, supervisor, dynamic},

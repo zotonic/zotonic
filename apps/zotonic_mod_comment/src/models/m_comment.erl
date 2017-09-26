@@ -192,13 +192,13 @@ gravatar_code(Email) ->
 
 %% @doc Move all comments from one resource to another
 -spec merge(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok.
-merge(WinnerId, LooserId, Context) ->
+merge(WinnerId, LoserId, Context) ->
     z_db:q("update comment
             set rsc_id = $1
             where rsc_id = $2",
-           [m_rsc:rid(WinnerId, Context), m_rsc:rid(LooserId, Context)],
+           [m_rsc:rid(WinnerId, Context), m_rsc:rid(LoserId, Context)],
            Context),
-    z_depcache:flush({comment_rsc, m_rsc:rid(LooserId, Context)}, Context),
+    z_depcache:flush({comment_rsc, m_rsc:rid(LoserId, Context)}, Context),
     z_depcache:flush({comment_rsc, m_rsc:rid(WinnerId, Context)}, Context),
     ok.
 

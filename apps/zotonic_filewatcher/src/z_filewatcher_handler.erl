@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2014-2015 Arjan Scherpenisse
+%% @copyright 2014-2017 Arjan Scherpenisse
 %%
 %% @doc Handle changed files
 
-%% Copyright 2014-20115 Arjan Scherpenisse
+%% Copyright 2014-2017 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,9 +34,15 @@
 
 %% Which files do we not consider at all in the file_changed handler
 -define(FILENAME_BLACKLIST_RE,
-        "_flymake|\\.#|/priv/files/"
-        "|/\\.git/|/\\.gitignore|\\.hg/"
-        "|/log/|\\.log$"
+        "_flymake"
+        "|\\.#"
+        "|/priv/files/"
+        "|/\\.git/"
+        "|/\\.gitignore"
+        "|\\.hg/"
+        "|/log/"
+        "|\\.log$"
+        "|\\.dump$"
         "|/mnesia/"
         "|/\\.rebar3").
 
@@ -118,7 +124,7 @@ set_timer(Filename, Verb, Timers, Offset) ->
 -spec handle_file(verb(), string(), string(), string()) -> string() | undefined.
 handle_file(_Verb, _Basename, ".bea#", _F) ->
     undefined;
-
+    
 handle_file(_Verb, _Basename, ".beam", F) ->
     Module = z_convert:to_atom(filename:rootname(filename:basename(F))),
     zotonic_compile:ld(Module),

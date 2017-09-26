@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_code_reloader).
+-module(z_filewatcher_beam_reloader).
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
 

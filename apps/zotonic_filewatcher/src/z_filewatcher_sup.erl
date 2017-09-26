@@ -49,9 +49,9 @@ children(true) ->
 children(false) ->
     lager:error("FILEWATCHER: disabled"),
     [
-        {z_code_reloader,
-          {z_code_reloader, start_link, [false]},
-          permanent, 5000, worker, [z_code_reloader]}
+        {z_filewatcher_beam_reloader,
+          {z_filewatcher_beam_reloader, start_link, [false]},
+          permanent, 5000, worker, [z_filewatcher_beam_reloader]}
     ].
 
 which_watcher([]) ->
@@ -66,17 +66,17 @@ which_watcher([]) ->
         {z_filewatcher_monitor,
           {z_filewatcher_monitor, start_link, []},
           permanent, 5000, worker, [z_filewatcher_monitor]},
-        {z_code_reloader,
-          {z_code_reloader, start_link, [IsScannerEnabled]},
-          permanent, 5000, worker, [z_code_reloader]}
+        {z_filewatcher_beam_reloader,
+          {z_filewatcher_beam_reloader, start_link, [IsScannerEnabled]},
+          permanent, 5000, worker, [z_filewatcher_beam_reloader]}
     ];
 which_watcher([M|Ms]) ->
     case M:is_installed() of
         true ->
             [
-                {z_code_reloader,
-                  {z_code_reloader, start_link, [false]},
-                  permanent, 5000, worker, [z_code_reloader]},
+                {z_filewatcher_beam_reloader,
+                  {z_filewatcher_beam_reloader, start_link, [false]},
+                  permanent, 5000, worker, [z_filewatcher_beam_reloader]},
                 {M,
                   {M, start_link, []},
                   permanent, 5000, worker, [M]}
