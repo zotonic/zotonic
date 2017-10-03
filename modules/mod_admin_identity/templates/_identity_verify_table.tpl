@@ -10,29 +10,53 @@
 				{{ idn.key|escape }}
 			</label>
 			</td>
-			<td>
-				{% if idn.is_verified %}
-					<span class="icon-ok" title="{_ Verified _}"></span> {_ Verfied _}
-				{% else %}
-					<a id="{{ #verify.idn_id }}"  href="#" class="btn btn-small" title="{_ Send verification e-mail _}">{_ Verify _}</a>		
-					{% wire id=#verify.idn_id 
-							postback={identity_verify_confirm id=id idn_id=idn_id list_element=#listemail}
+
+			{% if m.modules.active.mod_email_status %}
+				{% with m.email_status[idn.key] as status %}
+				<td>
+					{% if status.is_blocked %}
+						<span class="text-error"><span class="icon-ban-circle"></span> {_ Blocked _}</span>
+					{% elseif idn.is_verified %}
+						<span class="icon-ok" title="{_ Verified _}"></span> {_ Verfied _}
+					{% else %}
+						<a id="{{ #verify.idn_id }}"  href="#" class="btn btn-small" title="{_ Send verification e-mail _}">{_ Verify _}</a>		
+						{% wire id=#verify.idn_id 
+								postback={identity_verify_confirm id=id idn_id=idn_id list_element=#listemail}
+								delegate=`mod_admin_identity`
+						%}
+					{% endif %}
+				</td>
+				<td>
+					<a id="{{ #del.idn_id }}" href="#" class="btn btn-small" title="{_ Delete this e-mail address _}">{_ Delete _}</a>
+					{% wire id=#del.idn_id 
+							postback={identity_delete_confirm id=id idn_id=idn_id list_element=#listemail}
 							delegate=`mod_admin_identity`
 					%}
-				{% endif %}
-			</td>
-			<td>
-				<a id="{{ #del.idn_id }}" href="#" class="btn btn-small" title="{_ Delete this e-mail address _}">{_ Delete _}</a>
-				{% wire id=#del.idn_id 
-						postback={identity_delete_confirm id=id idn_id=idn_id list_element=#listemail}
-						delegate=`mod_admin_identity`
-				%}
-			</td>
-			{% if m.modules.active.mod_email_status %}
-			<td>
-				<a id="{{ #status.idn_id }}" href="#" class="btn btn-small" title="{_ View email status _}">{_ Status _}</a>
-				{% wire id=#status.idn_id action={dialog_open title=_"Email Status" template="_dialog_email_status.tpl" email=idn.key} %}
-			</td>
+				</td>
+				<td>
+					<a id="{{ #status.idn_id }}" href="#" class="btn btn-small" title="{_ View email status _}">{_ Status _}</a>
+					{% wire id=#status.idn_id action={dialog_open title=_"Email Status" template="_dialog_email_status.tpl" email=idn.key} %}
+				</td>
+				{% endwith %}
+			{% else %}
+				<td>
+					{% if idn.is_verified %}
+						<span class="icon-ok" title="{_ Verified _}"></span> {_ Verfied _}
+					{% else %}
+						<a id="{{ #verify.idn_id }}"  href="#" class="btn btn-small" title="{_ Send verification e-mail _}">{_ Verify _}</a>		
+						{% wire id=#verify.idn_id 
+								postback={identity_verify_confirm id=id idn_id=idn_id list_element=#listemail}
+								delegate=`mod_admin_identity`
+						%}
+					{% endif %}
+				</td>
+				<td>
+					<a id="{{ #del.idn_id }}" href="#" class="btn btn-small" title="{_ Delete this e-mail address _}">{_ Delete _}</a>
+					{% wire id=#del.idn_id 
+							postback={identity_delete_confirm id=id idn_id=idn_id list_element=#listemail}
+							delegate=`mod_admin_identity`
+					%}
+				</td>
 			{% endif %}
 		</tr>
 	{% endwith %}
