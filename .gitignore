@@ -41,6 +41,10 @@ apps/*/priv/translations/template/*.pot
 _build
 _checkouts
 /log/
+.idea/
+zotonic.iml
 
 .DS_Store
 zotonic.tmproj
+
+modules/*

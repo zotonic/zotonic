@@ -1,0 +1,72 @@
+#!/usr/bin/env escript
+%% @author M, <tantemelki@gmail.com>
+%% @copyright 2017
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%	 http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+-export([main/1]).
+
+-define(ZOTONIC, get_zotonic_path()).
+-define(ZOTONIC_COMMANDS, ?ZOTONIC ++ "/apps/zotonic_launcher/src/commands").
+
+get_zotonic_path() ->
+    {ok, CurrentDir} = file:get_cwd(),
+    _Dir = CurrentDir.
+
+load_mod_paths() ->
+    EbinPath = string:concat(?ZOTONIC, "/_build/default/lib"),
+    case file:list_dir(EbinPath) of
+        {ok, FileNames}  ->
+            lists:foreach(fun(Name) ->
+                code:add_pathz(EbinPath ++ "/" ++ Name ++ "/ebin")
+                          end, FileNames);
+        {error, enoent} ->
+            halt()
+    end.
+
+usage() ->
+    {ok, ListItems} = file:list_dir(?ZOTONIC_COMMANDS),
+    FileNames = [ListItem || ListItem <- ListItems, string:length(ListItem) > 12],
+    Names1 = string:split(FileNames, "zotonic_cmd_", all),
+    Names = string:split(Names1, ".erl", all),
+    [_|CommandNames] = Names,
+
+    io:format("Usage: ~s (options) [command] ~n~n", [escript:script_name()]),
+    io:format("Where [command] is one of: ~n"),
+    io:format("~n~s ~n~n", [CommandNames]),
+    io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n~n"),
+    io:format("Options: ~n"),
+    io:format("  -v : Prints Zotonic version ~n~n").
+
+main([]) ->
+    usage();
+
+main([Command|T]) ->
+    SecCmd = lists:flatten(T),
+    load_mod_paths(),
+    case string:equal(Command, "-v") of
+        true  ->
+            zotonic_release:run();
+        false ->
+            CmdName = string:concat("zotonic_cmd_", Command),
+            SubScript = string:concat(CmdName, ".erl"),
+            ScriptFile = string:concat(?ZOTONIC_COMMANDS, "/" ++ SubScript),
+
+            case filelib:is_file(ScriptFile) of
+                true  ->
+                    apply(list_to_atom(CmdName), run, [SecCmd]);
+                false ->
+                    io:format("Command not found: ~s~n", [Command])
+            end
+
+    end.
