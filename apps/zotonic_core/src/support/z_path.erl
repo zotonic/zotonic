@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2014 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Defines all paths for files and directories of a site.
 
-%% Copyright 2009-2014 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 
 -export([
          site_dir/1,
-         module_dir/2,
+         module_dir/1,
          media_preview/1,
          media_archive/1,
          abspath/2,
@@ -38,52 +38,51 @@
 -include("zotonic.hrl").
 
 %% @doc Return the path to the site folder of the given context.
--spec site_dir(z:context()) -> file:filename().
-site_dir(Context=#context{site=Site}) ->
-    F = fun() -> site_dir(Site) end,
-    z_depcache:memo(F, {site_dir, Site}, ?HOUR, Context);
+%%      The site must have been compiled.
+-spec site_dir(z:context()) -> file:filename() | {error, bad_name}.
+site_dir(#context{ site = Site }) ->
+    site_dir(Site);
 site_dir(Site) when is_atom(Site) ->
-    find_first_path([
-        code:lib_dir(Site),
-        filename:join([z_path:user_sites_dir(), Site])
-    ]).
+    code:lib_dir(Site).
+
 
 %% @doc Return the path to the given module in the given context.
--spec module_dir(atom(), z:context()) -> file:filename().
-module_dir(Module, Context=#context{site=Site}) ->
-    F = fun() -> module_dir(Module, Site) end,
-    z_depcache:memo(F, {module_dir, Module}, ?HOUR, Context);
-module_dir(Module, Site) when is_atom(Site) ->
-    find_first_path([
-        code:lib_dir(Module),
-        filename:join([user_sites_dir(), Site, "modules", Module]),
-        filename:join([user_modules_dir(), Module]),
-        filename:join([z_utils:lib_dir(modules), Module])
-    ]).
+%%      The module must have been compiled, so it is present in the code
+%%      path.
+-spec module_dir(atom()) -> file:filename() | {error, bad_name}.
+module_dir(Module) ->
+    code:lib_dir(Module).
+
+    % find_first_path([
+    %     code:lib_dir(Module),
+    %     filename:join([user_sites_dir(), Site, "modules", Module]),
+    %     filename:join([user_modules_dir(), Module]),
+    %     filename:join([z_utils:lib_dir(modules), Module])
+    % ]).
 
 
-find_first_path(Paths) ->
-    lists:foldl(
-        fun
-            (undefined, Acc) -> Acc;
-            ({error, _}, Acc) -> Acc;
-            (Dir, undefined) ->
-                case filelib:is_dir(Dir) of
-                    true -> Dir;
-                    false -> undefined
-                end;
-            (_, Acc) -> Acc
-        end,
-        undefined,
-        Paths).
+% find_first_path(Paths) ->
+%     lists:foldl(
+%         fun
+%             (undefined, Acc) -> Acc;
+%             ({error, _}, Acc) -> Acc;
+%             (Dir, undefined) ->
+%                 case filelib:is_dir(Dir) of
+%                     true -> Dir;
+%                     false -> undefined
+%                 end;
+%             (_, Acc) -> Acc
+%         end,
+%         undefined,
+%         Paths).
 
 %% @doc Return the path to the media preview directory
--spec media_preview(z:context()) -> file:filename().
+-spec media_preview(z:context()) -> file:filename() | {error, bad_name}.
 media_preview(Context) ->
     files_subdir("preview", Context).
 
 %% @doc Return the path to the media archive directory
--spec media_archive(z:context()) -> file:filename().
+-spec media_archive(z:context()) -> file:filename() | {error, bad_name}.
 media_archive(Context) ->
     files_subdir("archive", Context).
 
@@ -92,16 +91,25 @@ abspath(Path, Context) ->
     files_subdir(Path, Context).
 
 %% @doc Return the path to a files subdirectory
--spec files_subdir(file:filename(), z:context()) -> file:filename().
+-spec files_subdir(file:filename(), z:context()) -> file:filename() | {error, bad_name}.
 files_subdir(SubDir, #context{site=Site}) ->
-    filename:join([site_dir(Site), "priv", "files", SubDir]).
+    case site_dir(Site) of
+        {error, _} = Error -> Error;
+        Dir -> filename:join([Dir, "priv", "files", SubDir])
+    end.
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
--spec files_subdir_ensure(file:filename(), z:context()) -> file:filename().
+-spec files_subdir_ensure(file:filename(), z:context()) -> file:filename() | {error, bad_name}.
 files_subdir_ensure(SubDir, Context) ->
-    Dir = files_subdir(SubDir, Context),
-    ok = z_filelib:ensure_dir(filename:join([Dir, ".empty"])),
-    Dir.
+    case files_subdir(SubDir, Context) of
+        {error, _} = Error ->
+            Error;
+        Dir ->
+            case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
+                ok -> Dir;
+                {eror, _} = Error -> Error
+            end
+    end.
 
 zotonic_sites_dir() ->
     filename:join([get_path(), "apps"]).
@@ -117,6 +125,8 @@ user_sites_dir() ->
 user_modules_dir() ->
     z_config:get(user_modules_dir).
 
+%% @doc Get the path to the root dir of the Zotonic install.
+%%      If the env var 'ZOTONIC' is not set, then return the current working dir.
 -spec get_path() -> file:filename().
 get_path() ->
     case os:getenv("ZOTONIC") of

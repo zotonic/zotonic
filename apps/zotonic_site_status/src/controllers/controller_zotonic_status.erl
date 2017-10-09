@@ -163,7 +163,12 @@ notice(SiteName, Text, Context) ->
 
 
 site_configs() ->
-    [ {Site, site_config(Site)} || Site <- get_sites() ].
+    maps:fold(
+        fun(Site, _Status, Acc) ->
+            [ {Site, site_config(Site)} | Acc ]
+        end,
+        [],
+        get_sites()).
 
 site_config(Site) ->
     case z_sites_manager:get_site_config(Site) of
@@ -201,14 +206,16 @@ get_protocol_port() ->
     end.
 
 get_sites() ->
-    lists:filter(fun(Site) ->
-                    not lists:member(Site, z_sites_manager:get_builtin_sites())
-                 end,
-                 z_sites_manager:get_sites_all()).
+    maps:filter(
+        fun(Site,_Status) ->
+            not lists:member(Site, z_sites_manager:get_builtin_sites())
+         end,
+         z_sites_manager:get_sites()).
 
 get_sites_status() ->
-    SitesStatus = z_sites_manager:get_sites_status(),
-    lists:filter(fun(Status) ->
-                    not lists:member(hd(Status), z_sites_manager:get_builtin_sites())
-                 end,
-                 SitesStatus).
+    Status1 = maps:filter(
+        fun(Site, _Status) ->
+            not lists:member(Site, z_sites_manager:get_builtin_sites())
+        end,
+        z_sites_manager:get_sites()),
+    lists:sort(maps:to_list(Status1)).

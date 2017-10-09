@@ -376,8 +376,8 @@ is_bind_language(Match, _Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    gen_server:cast(self(), update_hosts),
-    gen_server:cast(self(), update_dispatchinfo),
+    % gen_server:cast(self(), update_hosts),
+    % gen_server:cast(self(), update_dispatchinfo),
     ets:new(?MODULE, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
     {ok, #state{}}.
 
@@ -708,6 +708,7 @@ language_from_bindings_1(false) ->
 %% @doc Try to find a site which says it can handle the host.
 %%      This enables to have special (short) urls for deep pages.
 find_no_host_match(DispReq, OptReq) ->
+    % TODO: optimize this, as this involves gen_server call in the z_sites_manager.
     Sites = z_sites_manager:get_sites(),
     DispHost = #dispatch_host{
                     host=DispReq#dispatch.host,
@@ -728,25 +729,36 @@ find_dispatch_fallback() ->
         Site -> {ok, Site}
     end.
 
+first_site_match(Sites, DispHost, OptReq) ->
+    maps:fold(
+        fun
+            (Site, running, no_host_match) ->
+                case catch z_notifier:first(DispHost, z_context:set_reqdata(OptReq, z_context:new(Site))) of
+                    {ok, #dispatch_redirect{location=PathOrURI, is_permanent=IsPermanent}} ->
+                        {redirect, Site, PathOrURI, IsPermanent};
+                    undefined ->
+                        no_host_match;
+                    Unexpected ->
+                        lager:error("dispatch_host for ~p returned ~p on ~p", [Site, Unexpected, DispHost]),
+                        no_host_match
+                end;
+            (_Site, _Status, Found) ->
+                Found
+        end,
+        no_host_match,
+        Sites).
 
-first_site_match([], _DispHost, _OptReq) ->
-    no_host_match;
-first_site_match([Site|Sites], DispHost, OptReq) ->
-    case catch z_notifier:first(DispHost, z_context:set_reqdata(OptReq, z_context:new(Site))) of
-        {ok, #dispatch_redirect{location=PathOrURI, is_permanent=IsPermanent}} ->
-            {redirect, Site, PathOrURI, IsPermanent};
-        undefined ->
-            first_site_match(Sites, DispHost, OptReq);
-        Unexpected ->
-            lager:error("dispatch_host for ~p returned ~p on ~p", [Site, Unexpected, DispHost]),
-            first_site_match(Sites, DispHost, OptReq)
-    end.
-
-
-
-%% @doc Collect all dispatch rules for all sites, normalize and filter them.
+%% @doc Collect all dispatch rules for all running sites, normalize and filter them.
 collect_dispatchrules() ->
-    [ collect_dispatchrules(Site) || Site <- z_sites_manager:get_sites() ].
+    maps:fold(
+        fun
+            (Site, running, Acc) ->
+                [ collect_dispatchrules(Site) | Acc ];
+            (_Site, _Status, Acc) ->
+                Acc
+        end,
+        [],
+        z_sites_manager:get_sites()).
 
 %% @doc Collect all dispatch rules for all sites, normalize and filter them.
 collect_dispatchrules(Site) ->

@@ -1,8 +1,8 @@
-%% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2012 Maas-Maarten Zeeman
-%% @doc Supervisor for sites dispatcher and manager
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2017 Marc Worrell
+%% @doc Supervisor for sites supervisors
 
-%% Copyright 2012 Maas-Maarten Zeeman
+%% Copyright 2017 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,12 +17,16 @@
 %% limitations under the License.
 
 -module(z_sites_sup).
--author('Maas-Maarten Zeeman <mmzeeman@xs4all.nl>').
+-author('Marc Worrell <marc@worrell.nl>').
 
 -behaviour(supervisor).
 
 %% External exports
--export([start_link/0]).
+-export([
+    start_link/0,
+    start_site/1,
+    stop_site/1
+]).
 
 %% supervisor callbacks
 -export([init/1]).
@@ -34,18 +38,31 @@
 start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
+-spec start_site(Site::atom()) -> {ok, pid()} | {error, {already_started, pid()}} | {error, term()}.
+start_site(Site) ->
+    supervisor:start_child(?MODULE, [Site]).
+
+-spec stop_site(pid()) -> ok | {error, not_found}.
+stop_site(Pid) ->
+    supervisor:terminate_child(?MODULE, Pid).
+
+-spec init(list()) -> {ok, {supervisor:sup_flags(), supervisor:child_spec()}}.
 init([]) ->
-    % Sites supervisor, starts all enabled sites
-    SitesManager = {z_sites_manager,
-                {z_sites_manager, start_link, []},
-                permanent, 5000, worker, dynamic},
+    {ok, {
+        #{
+            strategy => simple_one_for_one,
+            intensity => 5000,
+            period => 1
+        },
+        [
+            #{
+                id => none,
+                start => {z_site_sup, start_link, []},
+                restart => temporary,
+                type => supervisor,
+                modules => [z_site_sup]
+            }
+        ]
+    }}.
 
-    % Sites disapatcher, matches hosts and paths to sites and resources.
-    Dispatcher = {z_sites_dispatcher,
-                  {z_sites_dispatcher, start_link, []},
-                  permanent, 5000, worker, dynamic},
-
-    % The dispatcher and sites manager have dependencies.
-    % Both should be restarted when one of them fails.
-    {ok, {{one_for_all, 10, 3600}, [SitesManager, Dispatcher]}}.
 

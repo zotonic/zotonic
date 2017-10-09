@@ -28,7 +28,10 @@
 -export([init/1]).
 
 %% Called when the installer is done for a certain Site.
--export([install_done/1]).
+-export([
+    install_phase1/1,
+    install_done/1
+]).
 
 -include_lib("zotonic.hrl").
 
@@ -38,7 +41,6 @@ start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     supervisor:start_link({local, Name}, ?MODULE, Site).
 
-
 %% @doc Supervisor callback, returns the supervisor tree for a zotonic site
 -spec init(atom()) -> {ok, {{one_for_all, integer(), integer()}, list()}}.
 init(Site) ->
@@ -46,10 +48,14 @@ init(Site) ->
         {site, Site},
         {module, ?MODULE}
       ]),
+    z_sites_manager:set_site_status(Site, starting),
+    timer:apply_after(1, ?MODULE, install_phase1, [Site]),
+    {ok, {{one_for_all, 2, 1}, []}}.
+
+install_phase1(Site) ->
     ok = m_site:load_config(Site),
     ok = z_stats:init_site(Site),
     SiteProps = m_site:all(Site),
-
     Notifier = {z_notifier,
                 {z_notifier, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
@@ -71,12 +77,19 @@ init(Site) ->
     Processes = [
         Notifier, Depcache, Translation, Installer
     ],
+
     Processes1 = case z_db_pool:child_spec(Site, SiteProps) of
                      undefined -> Processes;
                      DbSpec when is_tuple(DbSpec) ->
                          [DbSpec | Processes ]
                  end,
-    {ok, {{one_for_all, 2, 1}, Processes1}}.
+    {site, Site} = proplists:lookup(site, SiteProps),
+    Name = z_utils:name_for_site(?MODULE, Site),
+    lists:foreach(
+            fun(Child) ->
+                supervisor:start_child(Name, Child)
+            end,
+            Processes1).
 
 %% @doc Called when the site installation is done, we can not add all other processes.
 -spec install_done(list()) -> ok.

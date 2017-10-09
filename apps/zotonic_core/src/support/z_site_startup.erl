@@ -85,4 +85,5 @@ do_startup(Context) ->
 
             %% Make sure all modules are started
             z_module_manager:upgrade(Context)
-    end.
+    end,
+    z_sites_manager:set_site_status(z_context:site(Context), running).
