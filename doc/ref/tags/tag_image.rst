@@ -5,11 +5,9 @@
 image
 =====
 
-Show a still image using a ``<img />`` element.
-
-The ``{% image %}`` tag is used to generate an HTML ``<img />`` element for a
-media resource. The image will be automatically resized to the desired size and
-filters. For video, use the :ref:`tag-media` tag instead.
+Show a still image using an ``<img />`` element. The image will be automatically
+resized to the desired size and filters. For video, use the :ref:`tag-media` tag
+instead.
 
 For example::
 
@@ -30,7 +28,14 @@ The file argument can be one of the following:
 
 * resource id of a resource with attached file (mostly of the category “media”)
 
-* property list of a resource’s medium record
+* property list of a resource’s medium record.
+
+So, to render a resource’s depiction::
+
+    {% image id width=200 height=200 %}
+
+Please note that even if you supply no arguments, the image will be processed to
+be scaled, based on the :ref:`image-quality` argument’s default value.
 
 .. _tag-image-arguments:
 
@@ -92,11 +97,17 @@ described in the ``width`` and ``height`` arguments (see above).
 The ``crop`` argument determines the cropping center. It either has the form
 ``+x+y`` (a set of coordinates in the image) or one of ``north``,
 ``north_east``, ``east``, ``south_east``, ``south``, ``south_west``, ``west``,
-``north_west`` and ``center`` (the default). Examples::
+``north_west`` and ``center`` (the default). To define the cropping in your
+template::
 
-    crop
     crop="south"
     crop="+100+100"
+
+The cropping center can also be determined by editors on the media item’s admin
+page. Without any argument, the image will be cropped to that user-defined
+cropping center::
+
+    crop
 
 extent
 ^^^^^^
@@ -142,13 +153,16 @@ mono
 
 Make the image black and white.
 
+.. _image-quality:
+
 quality
 ^^^^^^^
 
 Set the quality of the resulting JPEG. An integer between 0 and 100, where 100
-is best quality. The deafult quality depends on the resulting image size.
-Smaller images will have a higher quality setting than bigger images. Note that
-images smaller than 400x400 are sharpened before JPEG compression.
+is best quality. The default quality is inversely proportional to the output
+image resolution: higher-resolution images still look good even with a limited
+quality. Note that images smaller than 400x400 are sharpened before JPEG
+compression.
 
 Example::
 
