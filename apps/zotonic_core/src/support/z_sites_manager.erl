@@ -634,9 +634,14 @@ do_cleanup_crash_state(#state{ sites = Sites } = State) ->
 % ----------------------------------------------------------------------------
 
 %% @doc Get the file path of the config file for a site.
--spec get_site_config_file( atom() ) -> filename:filename().
+-spec get_site_config_file( atom() ) -> filename:filename() | {error, bad_name}.
 get_site_config_file(Site) ->
-    filename:join([z_path:get_site_dir(Site), "priv", ?CONFIG_FILE]).
+    case z_path:site_dir(Site) of
+        {error, bad_name} ->
+            {error, bad_name};
+        SiteDir ->
+            filename:join([SiteDir, "priv", ?CONFIG_FILE])
+    end.
 
 
 %% @doc Rescan all sites, add new sites to the sites map
