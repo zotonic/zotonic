@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Supervisor for a zotonic server. Starts webmachine, all base zotonic processes and the site supervisor.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,9 +37,21 @@
 
 %% @spec start_link(Site) -> ServerRet
 %% @doc API for starting the site supervisor.
+-spec start_link(Site :: atom()) -> {ok, pid()} | {error, term()}.
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
-    supervisor:start_link({local, Name}, ?MODULE, Site).
+    case supervisor:start_link({local, Name}, ?MODULE, Site) of
+        {ok, Pid} ->
+            % TODO: replace this with something more robust, problem
+            % is that phase1 calls z_sites_manager for the site config, and
+            % that this module is called by z_sites_manager. So blocking the
+            % call. A solution is to decouple the config scanning from
+            % the sites supervisor.
+            erlang:spawn(fun() -> install_phase1(Site) end),
+            {ok, Pid};
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Supervisor callback, returns the supervisor tree for a zotonic site
 -spec init(atom()) -> {ok, {{one_for_all, integer(), integer()}, list()}}.
@@ -49,41 +61,40 @@ init(Site) ->
         {module, ?MODULE}
       ]),
     z_sites_manager:set_site_status(Site, starting),
-    timer:apply_after(1, ?MODULE, install_phase1, [Site]),
-    {ok, {{one_for_all, 2, 1}, []}}.
+    {ok, {{one_for_all, 2, 1}, [
+        {z_notifier,
+            {z_notifier, start_link, [Site]},
+            permanent, 5000, worker, dynamic},
+        {z_trans_server,
+            {z_trans_server, start_link, [Site]},
+            permanent, 5000, worker, dynamic},
+        {z_module_sup,
+            {z_module_sup, start_link, [Site]},
+            permanent, 5000, supervisor, dynamic}
+    ]}}.
 
 install_phase1(Site) ->
     ok = m_site:load_config(Site),
     ok = z_stats:init_site(Site),
     SiteProps = m_site:all(Site),
-    Notifier = {z_notifier,
-                {z_notifier, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    Depcache = {z_depcache,
-                {z_depcache, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    Translation = {z_trans_server,
-                {z_trans_server, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
 
     % The installer needs the database pool, depcache and translation.
     InstallerModule = proplists:get_value(installer, SiteProps, z_installer),
-    Installer = {z_installer,
-                {InstallerModule, start_link, [SiteProps]},
-                permanent, 1, worker, dynamic},
-
     Processes = [
-        Notifier, Depcache, Translation, Installer
+        {z_depcache,
+            {z_depcache, start_link, [SiteProps]},
+            permanent, 5000, worker, dynamic},
+        {z_installer,
+            {InstallerModule, start_link, [SiteProps]},
+            permanent, 1, worker, dynamic}
     ],
 
     Processes1 = case z_db_pool:child_spec(Site, SiteProps) of
-                     undefined -> Processes;
-                     DbSpec when is_tuple(DbSpec) ->
-                         [DbSpec | Processes ]
-                 end,
-    {site, Site} = proplists:lookup(site, SiteProps),
+        undefined ->
+            Processes;
+        DbSpec when is_tuple(DbSpec) ->
+            [ DbSpec | Processes ]
+    end,
     Name = z_utils:name_for_site(?MODULE, Site),
     lists:foreach(
             fun(Child) ->
@@ -94,6 +105,7 @@ install_phase1(Site) ->
 %% @doc Called when the site installation is done, we can not add all other processes.
 -spec install_done(list()) -> ok.
 install_done(SiteProps) when is_list(SiteProps) ->
+    {site, Site} = proplists:lookup(site, SiteProps),
     Session = {z_session_manager,
                 {z_session_manager, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
@@ -130,23 +142,22 @@ install_done(SiteProps) when is_list(SiteProps) ->
                 {z_module_indexer, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
 
-    Modules = {z_module_manager,
+    ModuleManager = {z_module_manager,
                 {z_module_manager, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
 
     PostStartup = {z_site_startup,
-                    {z_site_startup, start_link, [SiteProps]},
+                    {z_site_startup, start_link, [Site]},
                     permanent, 5000, worker, dynamic},
 
     Processes = [
             Session,
             Dispatcher, Template, MediaClass, Pivot, DropBox,
             MediaCleanup, EdgeLog,
-            ModuleIndexer, Modules,
+            ModuleIndexer, ModuleManager,
             PostStartup
         ],
 
-    {site, Site} = proplists:lookup(site, SiteProps),
     Name = z_utils:name_for_site(?MODULE, Site),
     lists:foreach(
             fun(Child) ->

@@ -99,6 +99,10 @@
 % Every second, check if any site needs a (re)start
 -define(PERIODIC_START, 1000).
 
+% Seconds after we declare a site as non-crashed and clear the backoff
+% (Defaults to 5 minutes)
+-define(PERIOD_CLEAR_CRASH, 300).
+
 % Number of sites that can be started in parallel
 -define(MAX_PARALLEL_START, 5).
 
@@ -220,7 +224,7 @@ await_startup(Site) when is_atom(Site) ->
         {ok, running} ->
             % Now wait for the sites modules to be started
             Context = z_context:new(Site),
-            z_module_manager:await_upgrade(Context);
+            z_module_manager:upgrade_await(Context);
         {ok, starting} ->
             timer:sleep(1000),
             await_startup(Site);
@@ -332,11 +336,17 @@ handle_cast({set_site_status, Site, Status}, #state{ sites = Sites } = State) ->
             Sites;
         {ok, #site_status{ status = starting } = S} when Status =:= running ->
             z_sites_dispatcher:update_dispatchinfo(),
-            S1 = S#site_status{ status = running },
+            S1 = S#site_status{
+                status = running,
+                start_time = z_datetime:timestamp()
+            },
             Sites#{ Site => S1 };
-        {ok, #site_status{ status = retrying } = S} when Status =:= running ->
+        {ok, #site_status{ status = retrying } = S} when Status =:= running; Status =:= starting ->
             z_sites_dispatcher:update_dispatchinfo(),
-            S1 = S#site_status{ status = running },
+            S1 = S#site_status{
+                status = running,
+                start_time = z_datetime:timestamp()
+            },
             Sites#{ Site => S1 };
         {ok, #site_status{ status = CurStatus }} ->
             lager:info("Site status change of ~p from ~p to ~p ignored.",
@@ -369,9 +379,9 @@ handle_info(periodic_upgrade, #state{ sites = Sites } = State) ->
 
 handle_info(periodic_start, State) ->
     State1 = do_start_sites(State),
+    State2 = do_cleanup_crash_state(State1),
     timer:send_after(?PERIODIC_START, periodic_start),
-    {noreply, State1};
-
+    {noreply, State2};
 
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
@@ -472,6 +482,7 @@ do_start(Site, #state{ sites = Sites } = State) ->
 do_start_site(#site_status{ site = Site } = SiteStatus) ->
     case site_is_startable(SiteStatus) of
         {true, StartState} ->
+            lager:info("Starting site ~p", [Site]),
             case z_sites_sup:start_site(Site) of
                 {ok, Pid} ->
                     {ok, SiteStatus#site_status{
@@ -486,6 +497,8 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
                         pid = Pid
                     }};
                 {error, _} = Error ->
+                    lager:error("Site start of ~p failed: ~p",
+                                [Site, Error]),
                     Error
             end;
         false ->
@@ -578,10 +591,6 @@ do_site_down(Site, Reason, Sites) ->
 
 new_status_after_down(_Site, stopping, shutdown) ->
     stopped;
-new_status_after_down(Site, Status, shutdown) ->
-    lager:info("Site ~p in state ~p is down with reason ~p",
-               [Site, Status, shutdown]),
-    stopped;
 new_status_after_down(Site, Status, Reason) ->
     lager:error("Site ~p in state ~p is down with reason ~p",
                 [Site, Status, Reason]),
@@ -603,6 +612,24 @@ start_backoff(N) when N < 10 ->
     z_datetime:timestamp() + ?BACKOFF_SHORT;
 start_backoff(_N) ->
     z_datetime:timestamp() + ?BACKOFF_LONG.
+
+
+% ----------------------------------------------------------------------------
+
+%% @doc If a site is running longer than ?PERIOD_CLEAR_CRASH seconds, then
+%%      clear the crash count, assuming previous crashes are gone.
+do_cleanup_crash_state(#state{ sites = Sites } = State) ->
+    ClearTime = z_datetime:timestamp() - ?PERIOD_CLEAR_CRASH,
+    Sites1 = maps:map(
+        fun
+            (_, #site_status{status = running, crash_count = N, start_time = T } = S)
+                when N > 0, T < ClearTime ->
+                S#site_status{ crash_count = 0 };
+            (_, S) ->
+                S
+        end,
+        Sites),
+    State#state{ sites = Sites1 }.
 
 % ----------------------------------------------------------------------------
 
