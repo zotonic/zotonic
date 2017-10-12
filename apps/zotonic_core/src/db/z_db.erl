@@ -169,7 +169,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                     Result
             end;
         false ->
-            {rollback, {no_database_connection, erlang:get_stacktrace()}}
+            {rollback, {no_database_connection, []}}
     end;
 transaction1(Function, Context) ->
     % Nested transaction, only keep the outermost transaction
