@@ -207,6 +207,9 @@ get_site_for_hostname(Hostname) ->
 %% Internal functions
 %%====================================================================
 
+set_server_header(Req) ->
+    cowboy_req:set_resp_header(<<"server">>, cowmachine_response:server_header(), Req).
+
 raw_path(Req) ->
     Path = cowboy_req:path(Req),
     case cowboy_req:qs(Req) of
@@ -215,13 +218,12 @@ raw_path(Req) ->
     end.
 
 redirect(Uri, IsPermanent, Req) ->
-    Req1 = cowboy_req:set_resp_header(<<"location">>, Uri, Req),
+    Req1 = cowboy_req:set_resp_header(<<"location">>, Uri, set_server_header(Req)),
     {stop, cowboy_req:reply(case IsPermanent of true -> 301; false -> 302 end, Req1)}.
-
 
 handle_404(_Method, undefined, Req, _Env, _Bindings, _Context) ->
     % Host not found (maybe return 503 if we are booting?)
-    {stop, cowboy_req:reply(400, Req)};
+    {stop, cowboy_req:reply(400, set_server_header(Req))};
 handle_404(Method, Site, Req, Env, Bindings, Context) when Method =:= <<"GET">>; Method =:= <<"POST">> ->
     %% @todo Pass bindings from rewrites (especially z_language)
     {ok, Req#{
@@ -235,9 +237,9 @@ handle_404(Method, Site, Req, Env, Bindings, Context) when Method =:= <<"GET">>;
         context => Context
     }};
 handle_404(<<"CONNECT">>, _Site, Req, _Env, _Bindings, _Context) ->
-    {stop, cowboy_req:reply(400, Req)};
+    {stop, cowboy_req:reply(400, set_server_header(Req))};
 handle_404(_Method, _Site, Req, _Env, _Bindings, _Context) ->
-    {stop, cowboy_req:reply(404, Req)}.
+    {stop, cowboy_req:reply(404, set_server_header(Req))}.
 
 
 
