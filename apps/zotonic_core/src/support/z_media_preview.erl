@@ -528,8 +528,8 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
     case CropPar of
         none ->
             case Aspect > ImageAspect of
-                true  -> {ceil(ImageAspect * Height), Height, none};
-                false -> {Width, ceil(Width / ImageAspect), none}
+                true  -> {s_ceil(ImageAspect * Height), Height, none};
+                false -> {Width, s_ceil(Width / ImageAspect), none}
             end;
         _ ->
         %% When we are doing a crop then we have to calculate the
@@ -547,21 +547,21 @@ calc_size(Width, Height, ImageWidth, ImageHeight, CropPar, _Orientation, _IsUpsc
 
         CropL = case CropPar of
         X when X == north_west; X == west; X == south_west -> 0;
-        X when X == north_east; X == east; X == south_east -> ceil(W - Width);
-        [X,_] when is_integer(X) -> ceil(erlang:max(0, erlang:min(W-Width, X / Scale - Width/2)));
-        _ -> ceil((W - Width) / 2)
+        X when X == north_east; X == east; X == south_east -> s_ceil(W - Width);
+        [X,_] when is_integer(X) -> s_ceil(erlang:max(0, erlang:min(W-Width, X / Scale - Width/2)));
+        _ -> s_ceil((W - Width) / 2)
         end,
 
             CropT = case CropPar of
         Y when Y == north_west; Y == north; Y == north_east -> 0;
-        Y when Y == south_west; Y == south; Y == south_east -> ceil(H - Height);
-        [_,Y] when is_integer(Y) -> ceil(erlang:max(0, erlang:min(H-Height, Y / Scale - Height/2)));
-        _ -> ceil((H - Height) / 2)
+        Y when Y == south_west; Y == south; Y == south_east -> s_ceil(H - Height);
+        [_,Y] when is_integer(Y) -> s_ceil(erlang:max(0, erlang:min(H-Height, Y / Scale - Height/2)));
+        _ -> s_ceil((H - Height) / 2)
         end,
 
         %% @todo Prevent scaleup of the image, but preserve the result size
         %% The crop is relative to the original image
-        {ceil(W), ceil(H), {CropL, CropT, Width, Height}}
+        {s_ceil(W), s_ceil(H), {CropL, CropT, Width, Height}}
     end.
 
 
@@ -621,7 +621,7 @@ string2filter("mediaclass", Arg) ->
 
 
 % simple ceil for positive numbers
-ceil(A)  -> round(A + 0.499999).
+s_ceil(A)  -> round(A + 0.499999).
 %floor(A) -> round(A - 0.499999).
 
 ensure_integer(A) ->
