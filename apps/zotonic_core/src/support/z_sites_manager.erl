@@ -36,6 +36,7 @@
     get_site_config/1,
     get_fallback_site/0,
     get_builtin_sites/0,
+    get_sites_hosts/0,
     module_loaded/1,
     info/0,
 
@@ -43,6 +44,8 @@
     start/1,
     restart/1,
     await_startup/1,
+
+    wait_for_running/1,
 
     get_site_config_overrides/1,
     put_site_config_overrides/2
@@ -106,6 +109,12 @@
 % Number of sites that can be started in parallel
 -define(MAX_PARALLEL_START, 5).
 
+% Ets table holding a quick lookup of a site's status
+-define(SITES_STATUS_TABLE, sites_manager_sites_status).
+
+% Timeout when waiting for a site to become available
+-define(MAX_WAIT_FOR_RUNNING, 30).
+
 
 %%====================================================================
 %% API
@@ -120,19 +129,26 @@ start_link() ->
 upgrade() ->
     gen_server:cast(?MODULE, upgrade).
 
-%% @doc Return a list of all sites and their cuurent running status.
+%% @doc Return a list of all sites and their current running status.
+%%      This is coming from the ets table, so might be a bit delayed.
 -spec get_sites() -> #{ atom() => site_status() }.
 get_sites() ->
-    gen_server:call(?MODULE, get_sites_status).
+    List = ets:tab2list(?SITES_STATUS_TABLE),
+    maps:from_list(List).
+
+%% @doc Return a list of all sites, their current running status and their hosts configs
+-spec get_sites_hosts() -> #{ atom() => {site_status(), [ {Host::binary(), Prio :: pos_integer()} ]} }.
+get_sites_hosts() ->
+    gen_server:call(?MODULE, get_sites_hosts, infinity).
 
 %% @doc Get the status of a particular site
 -spec get_site_status(z:context()|atom()) -> {ok, site_status()} | {error, bad_name}.
 get_site_status(#context{site=Site}) ->
     get_site_status(Site);
 get_site_status(Site) when is_atom(Site) ->
-    case maps:find(Site, get_sites()) of
-        {ok, _} = Ret -> Ret;
-        error -> {error, bad_name}
+    case ets:lookup(?SITES_STATUS_TABLE, Site) of
+        [] -> {error, bad_name};
+        [{Site, Status}] -> {ok, Status}
     end.
 
 %% @doc Set the status of a site, called by the site supervisor
@@ -141,7 +157,7 @@ set_site_status(Site, Status) when is_atom(Site) ->
     gen_server:cast(?MODULE, {set_site_status, Site, Status}).
 
 %% @doc Return information on all running sites.
--spec info() -> #{ atom() => #site_status{}}.
+-spec info() -> {ok, #{ atom() => #site_status{}} }.
 info() ->
     gen_server:call(?MODULE, info).
 
@@ -208,7 +224,23 @@ start(Site) ->
 restart([Node, Site]) ->
     rpc:call(Node, ?MODULE, restart, [Site]);
 restart(Site) ->
-    gen_server:cast(?MODULE, {restart, Site}).
+    case get_site_status(Site) of
+        {ok, running} ->
+            gen_server:call(?MODULE, {stop, Site}),
+            restart(Site);
+        {ok, stopping} ->
+            timer:sleep(100),
+            restart(Site);
+        {ok, starting} ->
+            await_startup(Site);
+        {ok, S} when S =:= failed; S =:= new; S =:= stopped ->
+            start(Site),
+            await_startup(Site);
+        {ok, Status} ->
+            {error, Status};
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Tell the sites manager that a module was loaded, check
 %%      changes to observers, schema.
@@ -241,6 +273,60 @@ await_startup(Site) when is_atom(Site) ->
     end.
 
 
+%% @doc Wait for a site to be running, max 30 secs.
+-spec wait_for_running(atom()) -> ok | {error, bad_name | timeout | term()}.
+wait_for_running(Site) ->
+    wait_for_running(Site, ?MAX_WAIT_FOR_RUNNING).
+
+% running -> ok
+% new -> request start
+% starting -> wait max 30 secs, otherwise 503
+% retrying -> wait max 30 secs, otherwise 503
+% failing -> wait max 30 secs, otherwise 503
+% failed -> check scheduled retry time, maybe wait, otherwise 503
+% stopping -> status site
+% stopped -> status site
+% removing -> status site
+
+-spec wait_for_running(atom(), Secs::integer()) -> ok | {error, bad_name | timeout | term()}.
+wait_for_running(Site, Timeout) ->
+    case ets:lookup(?SITES_STATUS_TABLE, Site) of
+        [] -> {error, bad_name};
+        [{Site, running}] -> ok;
+        [{Site, stopped}] -> {error, stopped};
+        [{Site, stopping}] -> {error, stopping};
+        [{Site, removing}] -> {error, removing};
+        [{Site, Status}] -> wait_for_running_1(Site, Status, Timeout)
+    end.
+
+wait_for_running_1(_Site, running, _Timeout) ->
+    ok;
+wait_for_running_1(Site, new, Timeout) when Timeout >= 0 ->
+    start(Site),
+    timer:sleep(1000),
+    wait_for_running(Site, Timeout-1);
+wait_for_running_1(_Site, _Status, Timeout) when Timeout =< 0 ->
+    {error, timeout};
+wait_for_running_1(Site, failed, Timeout) ->
+    Now = z_datetime:timestamp(),
+    case gen_server:call(?MODULE, {get_status_start, Site}) of
+        {ok, {failed, RestartTime}} when RestartTime =< Now + Timeout ->
+            Sleep = erlang:max(1, RestartTime - Now + 1),
+            timer:sleep(Sleep*1000),
+            wait_for_running(Site, Timeout - Sleep);
+        {ok, {failed, _RestartTime}} ->
+            % Backoff - we need to wait longer than our max timeout
+            {error, timeout};
+        {ok, {OtherState, _RestartTime}} ->
+            % Status changed between ets lookup and the gen_server call
+            wait_for_running_1(Site, OtherState, Timeout);
+        {error, _} = Error ->
+            Error
+    end;
+wait_for_running_1(Site, _State, Timeout) ->
+    timer:sleep(1000),
+    wait_for_running(Site, Timeout - 1).
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -253,6 +339,7 @@ await_startup(Site) when is_atom(Site) ->
 init([]) ->
     ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]),
     ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]),
+    ets:new(?SITES_STATUS_TABLE, [set, public, named_table, {keypos, 1}]),
     ok = gen_server:cast(self(), upgrade),
     timer:send_after(?PERIODIC_UPGRADE, periodic_upgrade),
     timer:send_after(?PERIODIC_START, periodic_start),
@@ -279,9 +366,11 @@ handle_call(get_sites_status, _From, #state{ sites = Sites } = State) ->
     {reply, SiteStatus, State};
 
 %% @doc Start a site.
+%% TODO: queue sites if too many are starting
 handle_call({start, Site}, _From, State) ->
     case do_start(Site, State) of
         {ok, StateStarting} ->
+            do_sync_status(StateStarting#state.sites),
             {reply, ok, StateStarting};
         {error, _} = Error ->
             {reply, Error, State}
@@ -291,6 +380,7 @@ handle_call({start, Site}, _From, State) ->
 handle_call({stop, Site}, _From, State) ->
     case do_stop(Site, State) of
         {ok, StateStopping} ->
+            do_sync_status(StateStopping#state.sites),
             {reply, ok, StateStopping};
         {error, _} = Error ->
             {reply, Error, State}
@@ -304,8 +394,23 @@ handle_call({get_site_config, Site}, _From, #state{ sites = Sites } = State) ->
             {reply, {error, bad_name}, State}
     end;
 
+handle_call({get_status_start, Site}, _From, #state{ sites = Sites } = State) ->
+    Reply = case maps:find(Site, Sites) of
+        {ok, #site_status{ status = Status, start_time = StartTime }} ->
+            {ok, {Status, StartTime}};
+        error ->
+            {error, bad_name}
+    end,
+    {reply, Reply, State};
+
+handle_call(get_sites_hosts, _From, #state{ sites = Sites } = State) ->
+    {reply, {ok, do_get_sites_hosts(Sites)}, State};
+
 handle_call(get_fallback_site, _From, #state{ sites = Sites } = State) ->
     {reply, do_get_fallback_site(Sites), State};
+
+handle_call(info, _From, #state{ sites = Sites } = State) ->
+    {reply, {ok, Sites}, State};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
@@ -318,11 +423,13 @@ handle_call(Message, _From, State) ->
 
 handle_cast(scan_sites, State) ->
     State1 = rescan_sites(State),
+    do_sync_status(State1#state.sites),
     {noreply, State1};
 
 %% @doc Sync known sites with loaded sites
 handle_cast(upgrade, #state{ sites = Sites } = State) ->
     UpgradedSites = do_upgrade(Sites),
+    do_sync_status(UpgradedSites),
     {noreply, State#state{ sites = UpgradedSites }};
 
 %% @doc Handle load of a module, check observers and schema
@@ -357,6 +464,7 @@ handle_cast({set_site_status, Site, Status}, #state{ sites = Sites } = State) ->
                        [Site, Status]),
             Sites
     end,
+    do_sync_status(Sites1),
     {noreply, State#state{ sites = Sites1 }};
 
 %% @doc Trap unknown casts
@@ -370,17 +478,20 @@ handle_cast(Message, State) ->
 
 handle_info({'DOWN', MRef, process, Pid, Reason}, State) ->
     State1 = handle_down(MRef, Pid, Reason, State),
+    do_sync_status(State1#state.sites),
     {noreply, State1};
 
 handle_info(periodic_upgrade, #state{ sites = Sites } = State) ->
     UpgradedSites = do_upgrade(Sites),
     timer:send_after(?PERIODIC_UPGRADE, periodic_upgrade),
+    do_sync_status(UpgradedSites),
     {noreply, State#state{ sites = UpgradedSites }};
 
 handle_info(periodic_start, State) ->
     State1 = do_start_sites(State),
     State2 = do_cleanup_crash_state(State1),
     timer:send_after(?PERIODIC_START, periodic_start),
+    do_sync_status(State2#state.sites),
     {noreply, State2};
 
 %% @doc Handling all non call/cast messages
@@ -404,6 +515,36 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+%% @doc Sync the status of all sites to the SITES_STATUS_TABLE ets table.
+do_sync_status(Sites) ->
+    % Update existing, remove unknown
+    lists:map(
+        fun({Site, Status}) ->
+            case maps:find(Site, Sites) of
+                {ok, #site_status{ status = Status }} ->
+                    ok;
+                {ok, #site_status{ status = NewStatus }} ->
+                    ets:insert(?SITES_STATUS_TABLE, {Site, NewStatus});
+                error ->
+                    ets:delete(?SITES_STATUS_TABLE, Site)
+            end
+        end,
+        ets:tab2list(?SITES_STATUS_TABLE)),
+    % Insert new
+    maps:map(
+        fun(Site, #site_status{ status = Status }) ->
+            case ets:lookup(?SITES_STATUS_TABLE, Site) of
+                [] ->
+                    ets:insert(?SITES_STATUS_TABLE, {Site, Status});
+                _ ->
+                    ok
+            end
+        end,
+        Sites).
+
+
+% ----------------------------------------------------------------------------
 
 do_start_sites(#state{ sites = Sites } = State) ->
     Now = z_datetime:timestamp(),
@@ -476,7 +617,7 @@ do_start(Site, #state{ sites = Sites } = State) ->
             end;
         error ->
             lager:info("Requested to start unknown site ~p", [Site]),
-            {error, unknown_site}
+            {error, bad_name}
     end.
 
 do_start_site(#site_status{ site = Site } = SiteStatus) ->
@@ -535,7 +676,7 @@ do_stop(Site, #state{ sites = Sites } = State) ->
                     Error
             end;
         error ->
-            {error, unknown_site}
+            {error, bad_name}
     end.
 
 do_stop_site(#site_status{ pid = Pid } = SiteStatus) ->
@@ -637,10 +778,8 @@ do_cleanup_crash_state(#state{ sites = Sites } = State) ->
 -spec get_site_config_file( atom() ) -> filename:filename() | {error, bad_name}.
 get_site_config_file(Site) ->
     case z_path:site_dir(Site) of
-        {error, bad_name} ->
-            {error, bad_name};
-        SiteDir ->
-            filename:join([SiteDir, "priv", ?CONFIG_FILE])
+        {error, _} = Error -> Error;
+        SiteDir -> filename:join([SiteDir, "priv", ?CONFIG_FILE])
     end.
 
 
@@ -771,6 +910,53 @@ config_d_files(SitePath) ->
                       hd(filename:basename(F)) =/= $.,
                       lists:last(filename:basename(F)) =/= $~ ]).
 
+do_get_sites_hosts(Sites) ->
+    FallbackSite = do_get_fallback_site(Sites),
+    maps:map(
+        fun(Site, SiteStatus) ->
+            do_get_sites_hosts_1(SiteStatus, Site =:= FallbackSite)
+        end,
+        Sites).
+
+do_get_sites_hosts_1(#site_status{ status = Status, config = Cfg }, IsFallback) ->
+    HostPrioList = hosts_from_config(Cfg),
+    case IsFallback of
+        true ->
+            {Status, HostPrioList ++ [{<<"*">>, 99}], do_is_site_redirect(Cfg)};
+        false ->
+            {Status, HostPrioList, do_is_site_redirect(Cfg)}
+    end.
+
+hosts_from_config(Config) ->
+    Hostname = proplists:get_value(hostname, Config),
+    HostAlias = case proplists:get_value(hostalias, Config, []) of
+        List when is_list(List) -> ensure_alias_list(List);
+        _ -> []
+    end,
+    HostSmtp = proplists:get_value(smtphost, Config),
+    Hs = [{Hostname, 1}]
+        ++ [ {Alias, 2} || Alias <- HostAlias ]
+        ++ [ {HostSmtp, 3} ],
+    lists:filtermap(
+        fun
+            ({undefined, _}) -> false;
+            ({none, _}) -> false;
+            ({"", _}) -> false;
+            ({<<"">>, _}) -> false;
+            ({Host, Prio}) -> {true, {z_convert:to_binary(Host), Prio}}
+        end,
+        Hs).
+
+do_is_site_redirect(Cfg) ->
+    case proplists:get_value(redirect, Cfg, true) of
+        true -> true;
+        false -> false;
+        undefined -> true
+    end.
+
+% Handle the case where an user just gives a single hostname.
+ensure_alias_list([C|_] = Alias) when is_integer(C) -> [Alias];
+ensure_alias_list(Alias) -> Alias.
 
 %% @spec Check which site will act as fallback site
 do_get_fallback_site(Sites) ->

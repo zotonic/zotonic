@@ -48,6 +48,7 @@
 
     pickle/1,
     depickle/1,
+    depickle_site/1,
 
     combine_results/2,
 
@@ -163,9 +164,10 @@ new(#context{} = C) ->
         translation_table=C#context.translation_table
     };
 new(undefined) ->
+    % TODO: check if the fallback site is running
     case z_sites_dispatcher:get_fallback_site() of
-        undefined -> throw({error, no_site_enabled});
-        Site -> new(Site)
+        {ok, Site} -> new(Site);
+        undefined -> throw({error, no_site_enabled})
     end;
 new(Site) when is_atom(Site) ->
     set_default_language_tz(
@@ -257,8 +259,11 @@ site(#context{site=Site}) ->
     Site;
 site(Req) when is_map(Req) ->
     case maps:get(cowmachine_site, Req, undefined) of
-        undefined -> z_sites_dispatcher:get_fallback_site();
-        Site when is_atom(Site) -> Site
+        undefined ->
+            {ok, Site} = z_sites_dispatcher:get_fallback_site(),
+            Site;
+        Site when is_atom(Site) ->
+            Site
     end.
 
 
@@ -512,7 +517,6 @@ is_ssl_site(Context) ->
     end.
 
 %% @doc Pickle a context for storing in the database
-%% @todo pickle/depickle the visitor id (when any)
 -spec pickle( z:context() ) -> tuple().
 pickle(Context) ->
     {pickled_context,
@@ -523,7 +527,6 @@ pickle(Context) ->
         undefined}.
 
 %% @doc Depickle a context for restoring from a database
-%% @todo pickle/depickle the visitor id (when any)
 -spec depickle( tuple() ) -> z:context().
 depickle({pickled_context, Site, UserId, Language, _VisitorId}) ->
     depickle({pickled_context, Site, UserId, Language, 0, _VisitorId});
@@ -533,6 +536,13 @@ depickle({pickled_context, Site, UserId, Language, Tz, _VisitorId}) ->
         undefined -> Context;
         _ -> z_acl:logon(UserId, Context)
     end.
+
+%% @doc Depickle a context, return the site name.
+-spec depickle_site( tuple() ) -> z:context().
+depickle_site({pickled_context, Site, _UserId, _Language, _VisitorId}) ->
+    Site;
+depickle_site({pickled_context, Site, _UserId, _Language, _Tz, _VisitorId}) ->
+    Site.
 
 %% @spec output(list(), Context) -> {io_list(), Context}
 %% @doc Replace the contexts in the output with their rendered content and collect all scripts

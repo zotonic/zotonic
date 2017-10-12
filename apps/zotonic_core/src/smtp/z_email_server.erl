@@ -973,104 +973,152 @@ delete_emailq(Id) ->
 %% QUEUEING related functions
 %%
 
-%% @doc Fetch a new batch of queued e-mails. Deletes failed messages.
-poll_queued(State) ->
-    %% delete sent messages
+%% Delete sent messages - notify that they were succesful
+delete_sent_messages(StatusSites, State) ->
     Now = os:timestamp(),
     DelTransFun = fun() ->
-                          DelQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
-                                                      QEmail#email_queue.sent =/= undefined andalso
-                                                        timer:now_diff(
-                                                            inc_timestamp(QEmail#email_queue.sent, State#state.delete_sent_after),
-                                                            Now) < 0
-                                            ]),
-                          DelQueryRes = qlc:e(DelQuery),
-                          [ begin
-                                mnesia:delete_object(QEmail),
-                                {QEmail#email_queue.id,
-                                 QEmail#email_queue.recipient,
-                                 QEmail#email_queue.pickled_context}
-                            end || QEmail <- DelQueryRes ]
-                  end,
-    {atomic, NotifyList1} = mnesia:transaction(DelTransFun),
-    %% notify the system that these emails were sucessfully sent and (probably) received
-    lists:foreach(fun({Id, Recipient, PickledContext}) ->
-                        z_notifier:notify(#email_sent{
-                                    message_nr=Id,
-                                    recipient=Recipient,
-                                    is_final=true
-                                }, z_context:depickle(PickledContext))
-                  end,
-                  NotifyList1),
+        DelQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
+                                  QEmail#email_queue.sent =/= undefined andalso
+                                    timer:now_diff(
+                                        inc_timestamp(QEmail#email_queue.sent, State#state.delete_sent_after),
+                                        Now) < 0
+                        ]),
+        DelQueryRes = qlc:e(DelQuery),
+        [
+            begin
+                Site = z_context:depickle_site(QEmail#email_queue.pickled_context),
+                case maps:find(Site, StatusSites) of
+                    {ok, running} ->
+                        mnesia:delete_object(QEmail),
+                        {QEmail#email_queue.id,
+                         QEmail#email_queue.recipient,
+                         QEmail#email_queue.pickled_context};
+                    {ok, _} ->
+                        false;
+                    error ->
+                        mnesia:delete_object(QEmail),
+                        false
+                end
+            end
+            || QEmail <- DelQueryRes
+        ]
+    end,
+    {atomic, NotifyList} = mnesia:transaction(DelTransFun),
+    lists:foreach(
+        fun
+            ({Id, Recipient, PickledContext}) ->
+                z_notifier:notify(#email_sent{
+                    message_nr=Id,
+                    recipient=Recipient,
+                    is_final=true
+                }, z_context:depickle(PickledContext));
+            (false) ->
+                ok
+        end,
+        NotifyList).
 
-    %% delete all messages with too high retry count
+%% Delete all messages with too high retry count - notify that they failed
+delete_failed_messages(StatusSites) ->
     SetFailTransFun = fun() ->
-                              PollQuery = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
-                                                 QEmail#email_queue.sent =:= undefined,
-                                                 QEmail#email_queue.retry > ?MAX_RETRY]),
-                              PollQueryRes = qlc:e(PollQuery),
-                              [ begin
-                                    mnesia:delete_object(QEmail),
-                                    {QEmail#email_queue.id,
-                                     QEmail#email_queue.recipient,
-                                     QEmail#email_queue.retry,
-                                     QEmail#email_queue.pickled_context}
-                                end || QEmail <- PollQueryRes ]
-                      end,
-    {atomic, NotifyList2} = mnesia:transaction(SetFailTransFun),
-    %% notify the system that these emails were failed to be sent
-    lists:foreach(fun({Id, Recipient, RetryCt, PickledContext}) ->
-                      z_notifier:first(#email_failed{
-                                message_nr=Id,
-                                recipient=Recipient,
-                                is_final=true,
-                                reason=retry,
-                                retry_ct=RetryCt,
-                                status= <<"Retries exceeded">>
-                            }, z_context:depickle(PickledContext))
-                  end,
-                  NotifyList2),
+        PollQuery = qlc:q([
+            QEmail || QEmail <- mnesia:table(email_queue),
+                        QEmail#email_queue.sent =:= undefined,
+                        QEmail#email_queue.retry > ?MAX_RETRY
+        ]),
+        PollQueryRes = qlc:e(PollQuery),
+        [
+            begin
+                Site = z_context:depickle_site(QEmail#email_queue.pickled_context),
+                case maps:find(Site, StatusSites) of
+                    {ok, running} ->
+                        mnesia:delete_object(QEmail),
+                        {QEmail#email_queue.id,
+                         QEmail#email_queue.recipient,
+                         QEmail#email_queue.retry,
+                         QEmail#email_queue.pickled_context};
+                    {ok, _} ->
+                        false;
+                    error ->
+                        mnesia:delete_object(QEmail),
+                        false
+                end
+            end
+            || QEmail <- PollQueryRes
+        ]
+    end,
+    {atomic, NotifyList} = mnesia:transaction(SetFailTransFun),
+    lists:foreach(
+        fun
+            ({Id, Recipient, RetryCt, PickledContext}) ->
+                z_notifier:first(#email_failed{
+                    message_nr=Id,
+                    recipient=Recipient,
+                    is_final=true,
+                    reason=retry,
+                    retry_ct=RetryCt,
+                    status= <<"Retries exceeded">>
+                }, z_context:depickle(PickledContext));
+            (false) ->
+                ok
+        end,
+        NotifyList).
 
-    MaxListSize = ?EMAIL_MAX_SENDING - length(State#state.sending),
-    case MaxListSize > 0 of
-        true ->
-            %% fetch a batch of messages for sending
-            FetchTransFun =
-                fun() ->
-                        Q = qlc:q([QEmail || QEmail <- mnesia:table(email_queue),
-                                   %% Should not already have been sent
-                                   QEmail#email_queue.sent =:= undefined,
-                                   %% Should not be currently sending
-                                   proplists:get_value(QEmail#email_queue.id, State#state.sending) =:= undefined,
-                                   %% Eligible for retry
-                                   timer:now_diff(QEmail#email_queue.retry_on, Now) < 0]),
-                        QCursor = qlc:cursor(Q),
-                        QFound = qlc:next_answers(QCursor, MaxListSize),
-                        ok = qlc:delete_cursor(QCursor),
-                        QFound
-                end,
-            {atomic, Ms} = mnesia:transaction(FetchTransFun),
-            %% send the fetched messages
-            case Ms of
-                [] ->
-                    State;
-                _  ->
-                    State2 = update_config(State),
-                    lists:foldl(
-                      fun(QEmail, St) ->
-                          update_retry(QEmail),
-                          spawn_send(QEmail#email_queue.id,
-                                     QEmail#email_queue.recipient,
-                                     QEmail#email_queue.email,
-                                     QEmail#email_queue.retry,
-                                     z_context:depickle(QEmail#email_queue.pickled_context),
-                                     St)
-                      end,
-                      State2, Ms)
-            end;
-        false ->
-            State
+%% Fetch a batch of messages for sending
+send_next_batch(MaxListSize, _StatusSites, State) when MaxListSize =< 0 ->
+    State;
+send_next_batch(MaxListSize, StatusSites, State) ->
+    Now = os:timestamp(),
+    FetchTransFun =
+        fun() ->
+            Q = qlc:q([
+                QEmail || QEmail <- mnesia:table(email_queue),
+
+                        % 1. Not sent yet
+                        QEmail#email_queue.sent =:= undefined,
+
+                        % 2. Not currently sending
+                        proplists:get_value(QEmail#email_queue.id, State#state.sending) =:= undefined,
+
+                        % 3. Eligible for retry
+                        timer:now_diff(QEmail#email_queue.retry_on, Now) < 0,
+
+                        % 4. With a running site
+                        maps:find(
+                            z_context:depickle_site(QEmail#email_queue.pickled_context),
+                            StatusSites) =:= {ok, running}
+            ]),
+            QCursor = qlc:cursor(Q),
+            QFound = qlc:next_answers(QCursor, MaxListSize),
+            ok = qlc:delete_cursor(QCursor),
+            QFound
+        end,
+    {atomic, Ms} = mnesia:transaction(FetchTransFun),
+    %% send the fetched messages
+    case Ms of
+        [] ->
+            State;
+        _  ->
+            State2 = update_config(State),
+            lists:foldl(
+              fun(QEmail, St) ->
+                  update_retry(QEmail),
+                  spawn_send(QEmail#email_queue.id,
+                             QEmail#email_queue.recipient,
+                             QEmail#email_queue.email,
+                             QEmail#email_queue.retry,
+                             z_context:depickle(QEmail#email_queue.pickled_context),
+                             St)
+              end,
+              State2, Ms)
     end.
+
+
+%% @doc Fetch a new batch of queued e-mails. Deletes failed messages.
+poll_queued(State) ->
+    StatusSites = z_sites_manager:get_sites(),
+    delete_sent_messages(StatusSites, State),
+    delete_failed_messages(StatusSites),
+    send_next_batch(?EMAIL_MAX_SENDING - length(State#state.sending), StatusSites, State).
 
 
 %% @doc Sets the next retry time for an e-mail.
