@@ -1,9 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009 Arjan Scherpenisse
-%% Date: 2009-10-03
+%% @copyright 2009-2017 Arjan Scherpenisse
 %% @doc Retrieve a full dump of an object.
 
-%% Copyright 2009 Arjan Scherpenisse
+%% Copyright 2009-2017 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,7 +27,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 process_get(_Context) ->
-    {struct, [{status, result(z_sites_manager:all_sites_running())}]}.
+    {struct, [{status, result(z_sites_manager:is_sites_running())}]}.
 
 result(true) -> ok;
 result(false) -> fail.

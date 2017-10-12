@@ -94,7 +94,7 @@ start_modules(Context) ->
     ok = z_module_manager:activate_await(mod_authentication, Context),
     ok = z_module_manager:activate_await(mod_admin, Context),
     ok = z_module_manager:activate_await(mod_admin_identity, Context),
-    ok = z_module_manager:await_upgrade(Context).
+    ok = z_module_manager:upgrade_await(Context).
 
 
 %% Old hash algorithm copied from m_identity before the change to bcrypt.

@@ -205,29 +205,27 @@ handle_file(modify, "mediaclass.config", ".config", F) ->
 
 %% @doc Translations
 handle_file(_Verb, _Basename, ".po", F) ->
-    case re:run(F, "/sites/([^/]+).*?/translations/(.*)", [{capture, all_but_first, list}]) of
+    case re:run(F, "/([^/]+).*?/priv/translations/(.*)", [{capture, all_but_first, list}]) of
         nomatch ->
-            %% Flush the cache when a new zotonic-wide .po file is changed
-            case re:run(F, ".*?/translations/(.*)", [{capture, all_but_first, list}]) of
-                nomatch ->
-                    undefined;
-                {match, [TranslationFile]} ->
-                    z_sites_manager:foreach(
-                                        fun(Ctx) ->
-                                            z_trans_server:load_translations(Ctx)
-                                        end),
-                    "Reload translations of all sites due to: " ++ TranslationFile
-            end;
-        {match, [Site, TranslationFile]} ->
+            undefined;
+        {match, [Application, TranslationFile]} ->
             %% Flush a site cache when a new .po file is changed within a site
-            SiteAtom = list_to_atom(Site),
-            case lists:member(SiteAtom, z_sites_manager:get_sites()) of
-                true ->
+            SiteAtom = list_to_atom(Application),
+            case maps:find(SiteAtom, z_sites_manager:get_sites()) of
+                {ok, running} ->
                     Ctx = z_context:new(SiteAtom),
                     z_trans_server:load_translations(Ctx),
-                    "Reload translations of " ++ Site ++ " due to: " ++ TranslationFile;
-                false ->
-                    undefined
+                    "Reload translations of " ++ Application ++ " due to: " ++ TranslationFile;
+                {ok, _} ->
+                    undefined;
+                error ->
+                    % Assume a system wide po file is updated
+                    lists:foreach(
+                        fun(Ctx) ->
+                            z_trans_server:load_translations(Ctx)
+                        end,
+                        z_sites_manager:get_site_contexts()),
+                    "Reload translations of all sites due to: " ++ TranslationFile
             end
     end;
 
@@ -273,10 +271,11 @@ maybe_handle_lib(F) ->
         nomatch ->
             undefined;
         {match, _} ->
-            z_sites_manager:foreach(
-                                fun(Ctx) ->
-                                    z_module_indexer:reindex(Ctx)
-                                end),
+            lists:foreach(
+                fun(Ctx) ->
+                    z_module_indexer:reindex(Ctx)
+                end,
+                z_sites_manager:get_site_contexts()),
             "Reindexed sites due to changed lib file."
     end.
 
@@ -285,10 +284,11 @@ maybe_handle_dispatch(F) ->
         nomatch ->
             undefined;
         {match, _} ->
-            z_sites_manager:foreach(
-                                fun(Ctx) ->
-                                    z_dispatcher:reload(Ctx)
-                                end),
+            lists:foreach(
+                fun(Ctx) ->
+                    z_dispatcher:reload(Ctx)
+                end,
+                z_sites_manager:get_site_contexts()),
             z_sites_dispatcher:update_dispatchinfo(),
             "Reindex sites due to file change: " ++ F
     end.
@@ -302,10 +302,11 @@ reindex_templates(F) ->
                 nomatch ->
                     undefined;
                 {match, [TemplateFile]} ->
-                    z_sites_manager:foreach(
-                                        fun(Ctx) ->
-                                            z_module_indexer:reindex(Ctx)
-                                        end),
+                    lists:foreach(
+                        fun(Ctx) ->
+                            z_module_indexer:reindex(Ctx)
+                        end,
+                        z_sites_manager:get_site_contexts()),
                     "Reindexed sites due to template: " ++ TemplateFile
             end;
         {match, [Site, TemplateFile]} ->

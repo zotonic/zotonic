@@ -193,12 +193,24 @@ new(Req, Module) when is_map(Req) ->
 
 -spec set_default_language_tz(z:context()) -> z:context().
 set_default_language_tz(Context) ->
-    F = fun() -> {z_language:default_language(Context), tz_config(Context)} end,
-    {DefaultLang, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
-    Context#context{
-        language= [DefaultLang],
-        tz= TzConfig
-    }.
+    try
+        F = fun() ->
+            {z_language:default_language(Context), tz_config(Context)}
+        end,
+        {DefaultLang, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
+        Context#context{
+            language = [DefaultLang],
+            tz = TzConfig
+        }
+    catch
+        error:badarg ->
+            % The depache is gone, happens during race conditions on site shutdown.
+            % Silently return a default.
+            Context#context{
+                language = [ en ],
+                tz = z_config:get(timezone)
+            }
+    end.
 
 % @doc Create a new context used when testing parts of zotonic
 new_tests() ->

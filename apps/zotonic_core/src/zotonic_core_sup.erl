@@ -65,8 +65,8 @@ init([]) ->
             permanent, 5000, supervisor, dynamic},
 
         % Sites supervisor, starts all enabled sites
-        {z_sites_sup,
-            {z_sites_sup, start_link, []},
+        {z_sites_manager_sup,
+            {z_sites_manager_sup, start_link, []},
             permanent, 10100, supervisor, dynamic},
 
         % File watcher, keep track of changed files for modules, templates etc.
@@ -78,22 +78,26 @@ init([]) ->
 
 spawn_delayed_status() ->
     erlang:spawn(fun() ->
-            timer:sleep(4000),
-            lager:info("================"),
-            lager:info("Sites Status"),
-            lager:info("================"),
-            lists:map(
-                fun
-                  ([Site, running|_]) when Site =/= zotonic_site_status ->
-                      Ctx = z_context:new(Site),
-                      lager:info("~p ~s ~-40s~n",
-                                 [Site, running, z_context:abs_url(<<"/">>, Ctx)]);
-                  ([Site, Status|_]) ->
-                      lager:info("~p - ~s~n", [Site, Status])
-                end,
-                z_sites_manager:get_sites_status()),
-            lager:info("================")
-        end).
+        timer:sleep(4000),
+        lager:info("================"),
+        lager:info("Sites Status"),
+        lager:info("================"),
+        SitesStatus = maps:to_list(z_sites_manager:get_sites()),
+        {Running, Other} = lists:partition(
+            fun({_Site, Status}) -> Status =:= running end,
+            SitesStatus),
+        lists:map(
+            fun
+              ({Site, running}) when Site =/= zotonic_site_status ->
+                  Ctx = z_context:new(Site),
+                  lager:info("~p ~s ~-40s~n",
+                             [Site, running, z_context:abs_url(<<"/">>, Ctx)]);
+              ({Site, Status}) ->
+                  lager:info("~p - ~s~n", [Site, Status])
+            end,
+            Running ++ Other),
+        lager:info("================")
+    end).
 
 %% @doc Ensure all job queues
 ensure_job_queues() ->

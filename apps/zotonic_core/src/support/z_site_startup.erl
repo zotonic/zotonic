@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-05-18
+%% @copyright 2010-2017 Marc Worrell
 %% @doc This module is started after the complete site_sup has been booted.
 %% This is the moment for system wide initializations.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,24 +28,21 @@
 
 -include_lib("zotonic.hrl").
 
--record(state, {context}).
+-record(state, { site :: atom() }).
 
-%% @spec start_link(SiteProps::proplist()) -> ignore
 %% @doc Perform all site startup routines.
-start_link(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+-spec start_link(Site :: atom()) -> {ok, pid()} | {error, term()}.
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
-    gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
+    gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
 
-init(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+init(Site) ->
     lager:md([
         {site, Site},
         {module, ?MODULE}
       ]),
-    Context = z_context:new(Site),
-    {ok, #state{context=Context}, 0}.
+    {ok, #state{ site = Site }, 0}.
 
 handle_call(_Msg, _From, State) ->
     {noreply, State}.
@@ -54,8 +50,8 @@ handle_call(_Msg, _From, State) ->
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
-handle_info(timeout, State) ->
-    do_startup(State#state.context),
+handle_info(timeout, #state{ site = Site } = State) ->
+    do_startup(z_context:new(Site)),
     {noreply, State};
 handle_info(_Msg, State) ->
     {noreply, State}.
@@ -72,17 +68,12 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 do_startup(Context) ->
-    case z_db:has_connection(Context) of
-        true ->
-            z_install_data:install_modules(Context),
+    do_startup(z_db:has_connection(Context), Context),
+    z_module_manager:upgrade_await(Context),
+    z_sites_manager:set_site_status(z_context:site(Context), running).
 
-            %% Make sure all modules are started
-            z_module_manager:upgrade(Context),
-
-            m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context);
-
-        false ->
-
-            %% Make sure all modules are started
-            z_module_manager:upgrade(Context)
-    end.
+do_startup(true, Context) ->
+    z_install_data:install_modules(Context),
+    m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context);
+do_startup(false, _Context) ->
+    ok.

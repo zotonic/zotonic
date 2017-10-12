@@ -74,8 +74,8 @@
 %%====================================================================
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the notification server
-start_link(SiteProps) when is_list(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+-spec start_link(Site :: atom()) -> {ok, pid()} | {error, term()}.
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
 
     %% If the notifier crashes the supervisor gets ownership
@@ -83,7 +83,7 @@ start_link(SiteProps) when is_list(SiteProps) ->
     %% it will give ownership back to the notifier.
     ObserverTable = ensure_observer_table(Site),
 
-    case gen_server:start_link({local, Name}, ?MODULE, SiteProps, []) of
+    case gen_server:start_link({local, Name}, ?MODULE, Site, []) of
         {ok, P} ->
             ets:give_away(ObserverTable, P, observer_table),
             {ok, P};
@@ -330,8 +330,7 @@ await_exact(Msg, Timeout, Context) ->
 %%====================================================================
 
 %% @doc Initiates the server, creates a new observer list
-init(Args) ->
-    {site, Site} = proplists:lookup(site, Args),
+init(Site) ->
     lager:md([
         {site, Site},
         {module, ?MODULE}

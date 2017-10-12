@@ -109,12 +109,12 @@ ld(Module) ->
 %% @doc Shell commands: start a site
 shell_startsite(Site) ->
     case z_sites_manager:get_site_status(Site) of
-        {ok, stopped} ->
+        {ok, running} ->
+            running;
+        {ok, _Status} ->
             z_sites_manager:start(Site);
-        {ok, Status} ->
-            Status;
-        {error, notfound} ->
-            notfound
+        {error, bad_name} ->
+            bad_name
     end.
 
 %% @doc Shell commands: stop a site
@@ -124,8 +124,8 @@ shell_stopsite(Site) ->
             stopped;
         {ok, _Status} ->
             z_sites_manager:stop(Site);
-        {error, notfound} ->
-            notfound
+        {error, bad_name} ->
+            bad_name
     end.
 
 %% @doc Shell commands: stop a site

@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2015 Marc Worrell
-%% Date: 2010-05-18
+%% @copyright 2010-2017 Marc Worrell
 %% @doc Simple server to manage the translations, owns the ets table containing all translations.
 %% When new translations are read then the previous table is kept and the one before the previous is deleted.
 
-%% Copyright 2010-2015 Marc Worrell
+%% Copyright 2010-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,10 +45,9 @@ start_tests() ->
     io:format("Starting trans server.~n"),
     gen_server:start_link({local, 'z_trans_server$test'}, ?MODULE, test, []).
 
-%% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
-start_link(SiteProps) ->
-    {site, Site} = proplists:lookup(site, SiteProps),
+-spec start_link(Site :: atom()) -> {ok, pid()} | {error, term()}.
+start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, [Site, Name], []).
 

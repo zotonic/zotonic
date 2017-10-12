@@ -7,7 +7,7 @@ oauth_request_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_context:new(zotonic_site_testsandbox),
     ok = z_module_manager:activate_await(mod_oauth, Context),
-    ok = z_module_manager:await_upgrade(Context),
+    ok = z_module_manager:upgrade_await(Context),
 
     % 1. Drop all OAuth apps
     ok = m_oauth_app:delete_consumers(Context),

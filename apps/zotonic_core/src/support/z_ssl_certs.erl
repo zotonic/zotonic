@@ -124,7 +124,7 @@ get_ssl_options(Hostname, Context) ->
 %% @doc Fetch the paths of all self-signed certificates
 -spec get_self_signed_files(Site :: atom()) -> {ok, list(ssl:ssl_option())}.
 get_self_signed_files(Site) ->
-    SSLDir = filename:join([z_sites_manager:get_site_dir(Site), "priv", "ssl", "self-signed"]),
+    SSLDir = filename:join([z_path:site_dir(Site), "priv", "ssl", "self-signed"]),
     Options = [
         {certfile, filename:join(SSLDir, "self-signed"++?BITS++".crt")},
         {keyfile, filename:join(SSLDir, "self-signed"++?BITS++".pem")}
