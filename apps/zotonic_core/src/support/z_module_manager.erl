@@ -768,6 +768,12 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = stopping } = Ms
         status = stopped
     },
     Modules#{ Mod => Ms1 };
+do_module_down_1(Modules, #module_status{ module = Mod, status = running } = Ms, normal) ->
+    Ms1 = Ms#module_status{
+        pid = undefined,
+        status = stopped
+    },
+    Modules#{ Mod => Ms1 };
 do_module_down_1(Modules, #module_status{ module = Mod, status = Status } = Ms, Reason) ->
     lager:error("Module ~p in state ~p stopped with reason ~p",
                 [Mod, Status, Reason]),
@@ -1240,8 +1246,8 @@ refresh_module_schema(Module, #state{module_schema=Schemas} = State) ->
 manage_schema_if_db(true, Module, Current, Target, Context) ->
     manage_schema(Module, Current, Target, Context);
 manage_schema_if_db(false, Module, _Current, _Target, Context) ->
-    lager:error("[~p] Skipping schema for ~p as there is no database connection.",
-                [z_context:site(Context), Module]),
+    lager:info("[~p] Skipping schema for ~p as there is no database connection.",
+               [z_context:site(Context), Module]),
     ok.
 
 %% @doc Optionally upgrade the schema.

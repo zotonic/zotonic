@@ -342,12 +342,12 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Reload the dispatch list and send it to the webmachine dispatcher.
 reload_dispatch_list(#state{context=Context} = State) ->
     DispatchList = try
-                       collect_dispatch_lists(Context)
-                   catch
-                       _:{error, Msg} ->
-                           z_session_manager:broadcast(#broadcast{type="error", message="Dispatch error! " ++ Msg, title="Dispatcher", stay=false}, Context),
-                           State#state.dispatchlist
-                   end,
+        collect_dispatch_lists(Context)
+    catch
+        _:{error, Msg} ->
+           z_session_manager:broadcast(#broadcast{type="error", message="Dispatch error! " ++ Msg, title="Dispatcher", stay=false}, Context),
+           State#state.dispatchlist
+    end,
     LookupDict = dispatch_for_uri_lookup(DispatchList),
     State#state{dispatchlist=DispatchList, lookup=LookupDict}.
 
@@ -357,7 +357,17 @@ collect_dispatch_lists(Context) ->
     Files      = z_utils:wildcard(filename:join([z_path:site_dir(Context), "priv", "dispatch", "*"])),
     Modules    = z_module_manager:active(Context),
     ModuleDirs = z_module_manager:scan(),
-    ModDisp    = [ {M, z_utils:wildcard(filename:join([proplists:get_value(M, ModuleDirs), "priv", "dispatch", "*"]))} || M <- Modules ],
+    ModDisp    = lists:foldl(
+        fun(M, Acc) ->
+            case lists:keyfind(M, 1, ModuleDirs) of
+                {M, _App, Dir} ->
+                    [ {M, z_utils:wildcard(filename:join([Dir, "priv", "dispatch", "*"]))} | Acc ];
+                false ->
+                    Acc
+            end
+        end,
+        [],
+        Modules),
     ModDispOnPrio = lists:concat([ ModFiles || {_Mod, ModFiles} <- z_module_manager:prio_sort(ModDisp) ]),
     Dispatch   = lists:map(fun get_file_dispatch/1, ModDispOnPrio++Files),
     lists:flatten(Dispatch).
