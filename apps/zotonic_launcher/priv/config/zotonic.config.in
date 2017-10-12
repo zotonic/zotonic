@@ -49,6 +49,9 @@
    %% {dbcreate, false},
    %% {dbinstall, false},
 
+%%% Server header returned by Cowboy, defaults to "Zotonic"
+   %% {server_header, "Zotonic"},
+
 %%% IP address on which Zotonic will listen for HTTP requests.
 %%% Always overridden by the ZOTONIC_IP environment variable.
 %%% This can be a tuple, or a (domain) string ("localhost" or "127.0.0.1")

@@ -108,8 +108,7 @@ stop_http_listeners() ->
 -spec start_http_listeners() -> ok.
 start_http_listeners() ->
     z_ssl_certs:ensure_dhfile(),
-    application:set_env(cowmachine, server_header,
-        <<"Zotonic/", (z_convert:to_binary(?ZOTONIC_VERSION))/binary>>),
+    application:set_env(cowmachine, server_header, z_config:get(server_header)),
     start_http_listeners_ip4(z_config:get(listen_ip), z_config:get(listen_port)),
     start_https_listeners_ip4(z_config:get(listen_ip), z_config:get(ssl_listen_port)),
     case ipv6_supported() of

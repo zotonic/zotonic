@@ -226,4 +226,5 @@ default(proxy_whitelist) -> local;
 default(ip_whitelist) -> local;
 default(sessionjobs_limit) -> erlang:max(erlang:system_info(process_limit) div 10, 10000);
 default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 50000);
+default(server_header) -> "Zotonic";
 default(_) -> undefined.
