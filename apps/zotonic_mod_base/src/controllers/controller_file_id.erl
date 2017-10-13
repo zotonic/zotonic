@@ -123,7 +123,7 @@ do_redirect(_Id, Medium, Context) ->
                                     proplists:delete(K, Acc)
                                 end,
                                 Args1,
-                                [ id, star | z_dispatcher:dispatcher_args() ]),
+                                [ id, star, ?MODULE | z_dispatcher:dispatcher_args() ]),
             Location = z_dispatcher:url_for(Dispatch, [{star, Filename}|Args2], Context),
             {{true, z_context:abs_url(Location, Context)}, Context}
     end.

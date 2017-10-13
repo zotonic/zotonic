@@ -33,7 +33,7 @@
  %% Key used for signing postbacks - this _must_ be a hard to guess key, otherwise your system is insecure.
  %% Must be defined here because otherwise Zotonic will try to generate a new key and store it
  %% in the database, which will fail since this skeleton assumes no DB access.
- {sign_key, "%%SIGKEY%%"},
+ {sign_key, "%%SIGNKEY%%"},
  {sign_key_simple, "%%SIGNKEYSIMPLE%%"},
 
  %% What skeleton site this site is based on; for installing the initial data.
