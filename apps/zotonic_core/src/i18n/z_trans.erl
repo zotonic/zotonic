@@ -63,41 +63,44 @@ merge_trs([{Lang,_} = LT|Rest], Acc) ->
     end.
 
 %% @doc Prepare a translations table based on all .po files in the active modules.
+%%      Returns a map of english sentences with all their translations
+-spec parse_translations(z:context()) -> map().
 parse_translations(Context) ->
     Mods = z_module_indexer:translations(Context),
-    build_index(parse_mod_trans(Mods, []), dict:new()).
+    ParsePOFiles = parse_mod_pofiles(Mods, []),
+    build_index(ParsePOFiles, #{}).
 
-    %% @doc Parse all .po files. Results in a dict {label, [iso_code,trans]}
-    parse_mod_trans([], Acc) ->
-        lists:reverse(Acc);
-    parse_mod_trans([{_Module, POList}|Rest], Acc) ->
-        Acc1 = parse_trans(POList, Acc),
-        parse_mod_trans(Rest, Acc1).
+%% @doc Parse all .po files. Results in a dict {label, [iso_code,trans]}
+parse_mod_pofiles([], Acc) ->
+    lists:reverse(Acc);
+parse_mod_pofiles([{_Module, POFiles}|Rest], Acc) ->
+    Acc1 = parse_pofiles(POFiles, Acc),
+    parse_mod_pofiles(Rest, Acc1).
 
-    parse_trans([], Acc) ->
-        Acc;
-    parse_trans([{Lang,File}|Rest], Acc) ->
-        parse_trans(Rest, [{Lang, z_gettext:parse_po(File)}|Acc]).
+parse_pofiles([], Acc) ->
+    Acc;
+parse_pofiles([{Lang,File}|POFiles], Acc) ->
+    parse_pofiles(POFiles, [{Lang, z_gettext:parse_po(File)}|Acc]).
 
-    build_index([], Dict) ->
-        Dict;
-    build_index([{Lang, Labels}|Rest], Dict) ->
-        build_index(Rest, add_labels(Lang, Labels, Dict)).
+build_index([], Acc) ->
+    Acc;
+build_index([{Lang, Labels}|Rest], Acc) ->
+    build_index(Rest, add_labels(Lang, Labels, Acc)).
 
-    add_labels(_Lang, [], Dict) ->
-        Dict;
-    add_labels(Lang, [{header,_}|Rest],Dict) ->
-        add_labels(Lang, Rest,Dict);
-    add_labels(Lang, [{Label,Trans}|Rest], Dict) when is_binary(Trans), is_binary(Label) ->
-        case dict:find(Label, Dict) of
-            {ok, Ts} ->
-                case proplists:get_value(Lang, Ts) of
-                    undefined -> add_labels(Lang, Rest, dict:store(Label, [{Lang,Trans}|Ts], Dict));
-                    _PrevTrans -> add_labels(Lang, Rest, Dict)
-                end;
-            error ->
-                add_labels(Lang, Rest, dict:store(Label,[{Lang,Trans}],Dict))
-        end.
+add_labels(_Lang, [], Acc) ->
+    Acc;
+add_labels(Lang, [{header,_}|Rest], Acc) ->
+    add_labels(Lang, Rest, Acc);
+add_labels(Lang, [{Label,Trans}|Rest], Acc) when is_binary(Trans), is_binary(Label) ->
+    case maps:find(Label, Acc) of
+        {ok, Ts} ->
+            case proplists:is_defined(Lang, Ts) of
+                false -> add_labels(Lang, Rest, Acc#{ Label => [{Lang,Trans}|Ts]});
+                true -> add_labels(Lang, Rest, Acc)
+            end;
+        error ->
+            add_labels(Lang, Rest, Acc#{ Label => [{Lang,Trans}] })
+    end.
 
 %% @doc Strict translation lookup of a language version
 -spec lookup({trans, list()}|binary()|string(), #context{}) -> binary() | string() | undefined.

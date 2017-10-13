@@ -289,10 +289,10 @@ code_change(_OldVsn, State, _Extra) ->
 
 translations1(Context) ->
     Dirs = [
-        {priv, z_utils:lib_dir(priv)}          %% core modules translations
+        {zotonic_core, code:lib_dir(zotonic_core)}          %% core modules translations
         | z_module_manager:active_dir(Context) %% other module translations
     ],
-    POs = [{M,F} || #mfile{filepath=F, module=M} <- scan_subdir(translation, "priv/translations", "", ".po", Dirs) ],
+    POs = [ {M,F} || #mfile{filepath=F, module=M} <- scan_subdir(translation, "priv/translations", "", ".po", Dirs) ],
 
     ByModule = lists:foldl(fun({M,F}, Acc) ->
                                 dict:append(M, F, Acc)

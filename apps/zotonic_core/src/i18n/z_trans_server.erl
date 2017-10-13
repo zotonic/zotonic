@@ -41,6 +41,7 @@
 %% API
 %%====================================================================
 
+-spec start_tests() -> {ok, pid()} | {error, term()}.
 start_tests() ->
     io:format("Starting trans server.~n"),
     gen_server:start_link({local, 'z_trans_server$test'}, ?MODULE, test, []).
@@ -53,27 +54,32 @@ start_link(Site) ->
 
 
 %% @doc Parse all .po files and reload the found translations in the trans server
+-spec load_translations(z:context()) -> ok.
 load_translations(Context) ->
     Ts = z_trans:parse_translations(Context),
     load_translations(Ts, Context).
 
 %% @doc Take a proplist with dicts and reload the translations table.
 %% After reloading the the template server is flushed.
+-spec load_translations(map(), z:context()) -> ok.
 load_translations(Trans, Context) ->
     Name = z_utils:name_for_site(?MODULE, z_context:site(Context)),
     gen_server:cast(Name, {load_translations, Trans}).
 
 %% @doc Return the name of the ets table holding all translations
+-spec table(atom()|z:context()) -> atom().
 table(Site) when is_atom(Site) ->
     z_utils:name_for_site(?MODULE, Site);
 table(#context{} = Context) ->
     Context#context.translation_table.
 
 %% @doc Set the table id in the context to the newest table id
+-spec set_context_table(z:context()) -> z:context().
 set_context_table(#context{} = Context) ->
     Context#context{translation_table=table(z_context:site(Context))}.
 
 %% @doc Reload the translations when modules are changed.
+-spec observe_module_ready(module_ready, z:context()) -> ok.
 observe_module_ready(module_ready, Context) ->
     load_translations(Context).
 
@@ -112,16 +118,16 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Rebuild the translations table. Call the template flush routines afterwards.
-%% Trans is a dict with all translations per translatable string.
+%% Trans is a map with all translations per translatable string.
 handle_cast({load_translations, Trans}, State) ->
-    F = fun(Key,Value,Acc) ->
+    F = fun(Key, Value, Acc) ->
             Value1 = case proplists:get_value(en, Value) of
-                        undefined -> [{en,Key}|Value];
-                        _ -> Value
-                    end,
+                undefined -> [{en,Key}|Value];
+                _ -> Value
+            end,
             [{Key,Value1}|Acc]
         end,
-    List = dict:fold(F, [], Trans),
+    List = maps:fold(F, [], Trans),
     sync_to_table(List, State#state.table),
     z_template:reset(State#state.site),
     {noreply, State};
