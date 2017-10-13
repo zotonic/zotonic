@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2017 Marc Worrell
 %% @doc Track email bounces and other status of email recipients.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 -mod_title("Email Status").
 -mod_description("Track bounce and receive status of email recipients.").
 -mod_prio(10).
--mod_schema(2).
+-mod_schema(3).
 
 -export([
     event/2,
@@ -52,6 +52,20 @@ event(#postback{message={email_status_reset, Args}}, Context) ->
             end;
         false ->
             z_render:growl(?__("Sorry, you are not allowed to reset this email address.", Context), Context)
+    end;
+event(#postback{message={email_status_block, Args}}, Context) ->
+    Email = proplists:get_value(email, Args),
+    case z_acl:is_admin(Context) of
+        true ->
+            ok = m_email_status:block(Email, Context),
+            case proplists:get_all_values(on_success, Args) of
+                [] ->
+                    z_render:growl(?__("The email address has been blocked.", Context), Context);
+                OnSuccess ->
+                    z_render:wire(OnSuccess, Context)
+            end;
+        false ->
+            z_render:growl(?__("Sorry, you are not allowed to block this email address.", Context), Context)
     end.
 
 is_allowed(undefined, Context) ->
