@@ -62,12 +62,12 @@ ssl_listener_options() ->
 sni_fun(Hostname) ->
     NormalizedHostname = normalize_hostname(Hostname),
     NormalizedHostnameBin = z_convert:to_binary(NormalizedHostname),
-    case z_sites_dispatcher:get_site_for_hostname(NormalizedHostnameBin) of
+    case get_site_for_hostname(NormalizedHostnameBin) of
+        {ok, Site} ->
+            get_ssl_options(NormalizedHostnameBin, z_context:new(Site));
         undefined ->
             %% @todo Serve the correct cert for sites that are down or disabled
-            sni_self_signed(zotonic_site_status, z_context:new(zotonic_site_status));
-        {ok, Site} ->
-            get_ssl_options(NormalizedHostnameBin, z_context:new(Site))
+            undefined
     end.
 
 -spec sni_self_signed(z:context()) -> list(ssl:ssl_option()) | undefined.
@@ -102,6 +102,31 @@ sign(Data, Context) ->
             {ok, public_key:sign(Data, sha256, PemKey)};
         undefined ->
             {error, nocerts}
+    end.
+
+%% @doc Find the site or fallback site that will handle the request
+-spec get_site_for_hostname(binary()) -> {ok, atom()} | undefined.
+get_site_for_hostname(Hostname) ->
+    case z_sites_dispatcher:get_site_for_hostname(Hostname) of
+        {ok, Site} ->
+            case z_sites_manager:wait_for_running(Site) of
+                ok -> {ok, Site};
+                {error, _} -> get_fallback_site()
+            end;
+        undefined ->
+            get_fallback_site()
+    end.
+
+-spec get_fallback_site() -> {ok, atom()} | undefined.
+get_fallback_site() ->
+    case z_sites_dispatcher:get_fallback_site() of
+        {ok, Site} ->
+            case z_sites_manager:wait_for_running(Site) of
+                ok -> {ok, Site};
+                {error, _} -> undefined
+            end;
+        undefined ->
+            undefined
     end.
 
 %% @doc Fetch the ssi options for the site context.

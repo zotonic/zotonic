@@ -1,39 +1,36 @@
 {% extends "base.tpl" %}
 
-{% block title %}Zotonic {_ Sites _}{% endblock %}
+{% block title %}Zotonic{% endblock %}
+{% block navbar %}{% endblock %}
 
 {% block content %}
-<div class="col-md-8">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">{_ Sites on this Zotonic server _}</h3>
-        </div>
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table id="sites" class="table sites-overview">
-                    {% include "_sites.tpl" %}
-                </table>
-            </div>
-        </div>
+<div class="col-md-6 col-md-offset-3">
+    <div class="jumbotron">
+        <h1>{_ Powered by _} <span class="zotonic-logo"><em>Zotonic</em></span></h1>
+        <p>
+            {_ Welcome, visitor! The page you are
+            currently looking at is the default page for a
+            Zotonic web server. The fact that you are seeing
+            this page could mean that the website you are
+            trying to visit has not been configured
+            correctly. _}
+        </p>
+        <p>
+            {_ If you feel that you are here by mistake,
+            please hit the "back" button in your browser or
+            try a different address. If you are here to manage
+            this server, please enter the password below. _}
+        </p>
     </div>
 </div>
-{% endblock %}
 
-
-{% block sidebar %}
-<div class="col-md-4">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">{_ Commands _}</h3>
-        </div>
+<div class="col-md-6 col-md-offset-3">
+   <div class="panel panel-default">
         <div class="panel-body">
-            <div class="list-group">
-                {% all include "_z_system_button.tpl" %}
-                {% all include "_z_trace_button.tpl" %}
-            </div>
+            <p style="text-align: center">
+                <a href="{% url zotonic_status %}" class="btn btn-default">{_ Manage this server _}</a>
+            </p>
         </div>
     </div>
-
-    <div id="notices"></div>
 </div>
 {% endblock %}

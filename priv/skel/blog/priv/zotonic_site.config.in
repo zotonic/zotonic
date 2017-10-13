@@ -27,7 +27,7 @@
  {skeleton, %%SKEL%%},
  
  %% Keys used to request
- {sign_key, "%%SIGKEY%%"},
+ {sign_key, "%%SIGNKEY%%"},
  {sign_key_simple, "%%SIGNKEYSIMPLE%%"},
 
  %% Uncomment to override skeleton defaults

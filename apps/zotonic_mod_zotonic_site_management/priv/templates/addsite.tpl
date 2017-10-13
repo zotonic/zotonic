@@ -187,7 +187,7 @@
                 <div class="form-group">
                     <div class="col-sm-7 col-sm-offset-3">
                         <button type="submit" class="btn btn-primary">{_ Add Site _}</button>
-                        <a href="{% url home %}" class="btn btn-default">{_ Cancel _}</a>
+                        <a href="{% url zotonic_status %}" class="btn btn-default">{_ Cancel _}</a>
                     </div>
                 </div>
             </form>

@@ -2,7 +2,7 @@
 <html lang="{{ z_language|default:"en"|escape }}">
     <head>
         <meta charset="utf-8">
-        <title>{% block title %}{% endblock %}</title>
+        <title>{% block title %}{% endblock %}{% if error_code /= 200 %} ({{ error_code }} Error){% endif %}</title>
 
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -37,9 +37,11 @@
                 </div>
             </div>
         </div>
-        <div class="footer">
-            {% include "_footer.tpl" %}
-        </div>
+        {#
+            <div class="footer">
+                {% include "_footer.tpl" %}
+            </div>
+        #}
 	{% include "_js_include.tpl" %}
 </body>
 </html>

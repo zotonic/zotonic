@@ -79,7 +79,7 @@ init(Hostname, SessionCount, PeerName, Options) ->
     case SessionCount > 20 of
         false ->
             State = #state{options = Options, peer=PeerName, hostname=Hostname},
-            Banner = io_lib:format("~s ESMTP Zotonic ~s", [State#state.hostname, ?ZOTONIC_VERSION]),
+            Banner = io_lib:format("~s ESMTP Zotonic", [State#state.hostname]),
             {ok, Banner, State};
         true ->
             lager:warning("SMTP Connection limit exceeded (~p)", [SessionCount]),
@@ -132,13 +132,25 @@ handle_MAIL_extension(_Extension, State) ->
     {ok, State}.
 
 -spec handle_RCPT(To :: binary(), State :: #state{}) -> {'ok', #state{}} | {'error', string(), #state{}}.
-handle_RCPT(_To, State) ->
+handle_RCPT(To, State) ->
     % Check if the "To" address exists
     % Check domain, check addressee in domain.
     % For bounces:
     % - To = <noreply+MSGID@example.org>
     % - Return-Path header should be present and contains <>
-    {ok, State}.
+    case zotonic_listen_smtp_receive:get_host(To) of
+        {ok, _} ->
+            {ok, State};
+        {error, unknown_host} ->
+            lager:info("SMTP not accepting mail for ~p: unknown host", [To]),
+            {error, "551 User not local. Relay denied.", State};
+        {error, not_running} ->
+            lager:info("SMTP not accepting mail for ~p: site not running", [To]),
+            {error, "453 System not accepting network messages.", State};
+        {error, Reason} ->
+            lager:info("SMTP not accepting mail for ~p: ~p", [Reason]),
+            {error, "451 Server error. Please try again later.", State}
+    end.
 
 -spec handle_RCPT_extension(Extension :: binary(), State :: #state{}) -> {'ok', #state{}} | 'error'.
 handle_RCPT_extension(_Extension, State) ->
@@ -221,18 +233,39 @@ receive_data({error, Reason}, Decoded, MsgId, From, To, DataRcvd, State) ->
     lager:debug("SMTP receive: passing erronous spam check (~p) as ham for msg-id ~p", [Reason, MsgId]),
     receive_data({ok, {ham, [], []}}, Decoded, MsgId, From, To, DataRcvd, State).
 
-
 reply_handled_status(Received, MsgId, State) ->
-    KnownHosts = [ X || X <- Received, X =/= {error, unknown_host} ],
-    Handled    = [ X || X <- KnownHosts, X =/= undefined ],
-    case {KnownHosts, Handled} of
-        {[], _} ->
+    IsUnknownHost = is_unknown_host(Received),
+    IsUnknownUser = is_unknown_user(Received),
+    IsSiteDown = is_site_not_running(Received),
+    IsAnyError = is_any_error(Received),
+    case {IsSiteDown, IsUnknownHost, IsUnknownUser, IsAnyError} of
+        {_Down, true, _User, IsAnyError} ->
             {error, "551 User not local. Relay denied.", State};
-        {_, []} ->
-            {error, "550 No such user here", State};
-        {_, _} ->
+        {_Down, _Host, true, IsAnyError} ->
+            {error, "550 No such user here.", State};
+        {true, _Host, _User, IsAnyError} ->
+            {error, "453 System not accepting network messages.", State};
+        {_Down, _Host, _User, true} ->
+            {error, "451 Server error. Please try again later.", State};
+        {false, false, false, false} ->
             {ok, MsgId, State}
     end.
+
+is_unknown_host([]) -> false;
+is_unknown_host([ {error, unknown_host} | _ ]) -> true;
+is_unknown_host([ _ | Rs ]) -> is_unknown_host(Rs).
+
+is_unknown_user([]) -> false;
+is_unknown_user([ {error, unknown_recipient} | _ ]) -> true;
+is_unknown_user([ _ | Rs ]) -> is_unknown_user(Rs).
+
+is_site_not_running([]) -> false;
+is_site_not_running([ {error, not_running} | _ ]) -> true;
+is_site_not_running([ _ | Rs ]) -> is_site_not_running(Rs).
+
+is_any_error([]) -> false;
+is_any_error([ {error, _} | _ ]) -> true;
+is_any_error([ _ | Rs ]) -> is_any_error(Rs).
 
 
 %%% If the message is a {<<"multipart">>,<<"report">>} then here is also
@@ -279,7 +312,7 @@ add_received_header(Data, MsgId, State) ->
     iolist_to_binary([
         <<"Received:">>,
         <<" from [">>, inet_parse:ntoa(State#state.peer), <<"] (helo=">>, filter_string(State#state.helo), <<")">>,
-        <<"\r\n\tby ">>, State#state.hostname, <<" with ESMTP (Zotonic ">>, ?ZOTONIC_VERSION, <<")">>,
+        <<"\r\n\tby ">>, State#state.hostname, <<" with ESMTP (Zotonic)">>,
         <<"\r\n\t(envelope-from <">>, filter_string(State#state.from), <<">)">>,
         <<"\r\n\tid ">>, MsgId,
         <<"; ">>, z_dateformat:format(calendar:local_time(), "r", []),

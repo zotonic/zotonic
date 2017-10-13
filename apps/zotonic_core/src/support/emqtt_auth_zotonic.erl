@@ -110,7 +110,7 @@ map_user_site(Username) when is_binary(Username) ->
     end.
 
 fallback_site(Username) ->
-    {ok, Username, z_context:new(z_sites_dispatcher:get_fallback_site())}.
+    {ok, Username, z_context:new(undefined)}.
 
 local_username(Parts) ->
     UserParts = lists:reverse(tl(lists:reverse(Parts))),
@@ -119,7 +119,7 @@ local_username(Parts) ->
 
 
 test() ->
-    Fallback = z_sites_dispatcher:get_fallback_site(),
+    {ok, Fallback} = z_sites_dispatcher:get_fallback_site(),
     {ok, <<"admin">>, #context{site = Fallback}} = map_user_site(<<"admin">>),
     {ok, <<"admin@foo.bar.not.exist">>, #context{site = Fallback}} = map_user_site(<<"admin@foo.bar.not.exist">>),
     ok.

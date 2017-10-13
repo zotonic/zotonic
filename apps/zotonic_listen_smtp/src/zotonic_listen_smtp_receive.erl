@@ -20,13 +20,13 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-         received/9,
-         get_host/1
-        ]).
+    received/9,
+    get_host/1
+]).
 
 -export([
-      parse_file/1
-    ]).
+    parse_file/1
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -35,62 +35,91 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
     ParsedEmail = parse_email({Type, Subtype}, Headers, Params, Body),
     ParsedEmail1 = generate_text(generate_html(ParsedEmail)),
     ParsedEmail2 = ParsedEmail1#email{
-                     subject=sanitize_utf8(proplists:get_value(<<"Subject">>, Headers)),
-                     to=Recipients,
-                     from=sanitize_utf8(From),
-                     html=sanitize_utf8(ParsedEmail1#email.html),
-                     text=sanitize_utf8(ParsedEmail1#email.text)
-                    },
-    [
-     case get_host(Recipient) of
-         {ok, LocalPart, LocalTags, Domain, Host} ->
-             Context = z_context:new(Host),
-             z_notifier:notify(#zlog{
-                                  props=#log_email{
-                                      severity = ?LOG_INFO,
-                                      mailer_status = received,
-                                      mailer_host = z_convert:ip_to_list(Peer),
-                                      message_nr = Reference,
-                                      envelop_to = Recipient,
-                                      envelop_from = From,
-                                      props = [
-                                               {headers, Headers}
-                                              ]
-                                  }
-                              },
-                              Context),
-             Email = #email_received{
-                         localpart=LocalPart,
-                         localtags=LocalTags,
-                         domain=Domain,
-                         to=Recipient,
-                         from=From,
-                         reference=Reference,
-                         email=ParsedEmail2,
-                         headers=lowercase_headers(Headers),
-                         decoded={Type, Subtype, Headers, Params, Body},
-                         raw=Data
-                     },
-             Email1 = Email#email_received{
-                        is_bulk = zotonic_listen_smtp_check:is_bulk(Email),
-                        is_auto = zotonic_listen_smtp_check:is_auto(Email)
-                      },
-             z_notifier:first(Email1, Context);
-         undefined ->
-             lager:info("SMTP Dropping message, unknown host for recipient: ~p", [Recipient]),
-             {error, unknown_host}
-     end
-     || Recipient <- Recipients
-    ].
+        subject = sanitize_utf8(proplists:get_value(<<"Subject">>, Headers)),
+        to = Recipients,
+        from = sanitize_utf8(From),
+        html = sanitize_utf8(ParsedEmail1#email.html),
+        text = sanitize_utf8(ParsedEmail1#email.text)
+    },
+    lists:map(
+        fun(Recipient) ->
+            received(
+                Recipient, ParsedEmail2,
+                From, Peer, Reference,
+                {Type, Subtype}, Headers, Params,
+                Body, Data)
+        end,
+        Recipients).
+
+received(Recipient, ParsedEmail,
+         From, Peer, Reference,
+         {Type, Subtype}, Headers, Params,
+         Body, Data) ->
+    case get_host(Recipient) of
+        {ok, {LocalPart, LocalTags, Domain, Host}} ->
+            Context = z_context:new(Host),
+            z_notifier:notify(
+                #zlog{
+                    props=#log_email{
+                        severity = ?LOG_INFO,
+                        mailer_status = received,
+                        mailer_host = z_convert:ip_to_list(Peer),
+                        message_nr = Reference,
+                        envelop_to = Recipient,
+                        envelop_from = From,
+                        props = [
+                            {headers, Headers}
+                        ]
+                    }
+                },
+                Context),
+            Email = #email_received{
+                localpart = LocalPart,
+                localtags = LocalTags,
+                domain = Domain,
+                to = Recipient,
+                from = From,
+                reference = Reference,
+                email = ParsedEmail,
+                headers = lowercase_headers(Headers),
+                decoded = {Type, Subtype, Headers, Params, Body},
+                raw = Data
+            },
+            Email1 = Email#email_received{
+                    is_bulk = zotonic_listen_smtp_check:is_bulk(Email),
+                    is_auto = zotonic_listen_smtp_check:is_auto(Email)
+                  },
+            case z_notifier:first(Email1, Context) of
+                {ok, MsgId} when is_binary(MsgId) -> {ok, MsgId};
+                {ok, _} -> {ok, undefined};
+                ok -> {ok, undefined};
+                {error, _} = Error -> Error;
+                undefined -> {error, unknown_recipient};
+                Other -> {ok, Other}
+            end;
+        {error, unkown_host} ->
+            lager:info("SMTP dropping message, unknown host for recipient: ~p", [Recipient]),
+            {error, unknown_host};
+        {error, _} = Error ->
+            lager:info("SMTP delaying message, host for recipient is not up: ~p", [Recipient]),
+            Error
+    end.
 
 get_host(Recipient) ->
     [Username, Domain] = binstr:split(Recipient, <<"@">>, 2),
     [LocalPart|LocalTags] = binstr:split(Username, <<"+">>),
-    case z_sites_dispatcher:get_site_for_hostname(Domain) of
+    case z_sites_dispatcher:get_site_for_hostname(z_string:to_lower(Domain)) of
         {ok, Host} ->
-            {ok, LocalPart, LocalTags, Domain, Host};
+            case z_sites_manager:wait_for_running(Host) of
+                ok ->
+                    {ok, {LocalPart, LocalTags, Domain, Host}};
+                {error, bad_name} ->
+                    {error, unknown_host};
+                {error, _Reason} ->
+                    {error, not_running}
+            end;
         undefined ->
-            undefined
+            {error, unknown_host}
     end.
 
 lowercase_headers(Hs) ->

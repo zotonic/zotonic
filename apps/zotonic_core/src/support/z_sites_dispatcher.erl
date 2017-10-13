@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2016 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Server for matching the request path to correct site and dispatch rule.
 
-%% Copyright 2009-2016 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@
     dispatch/5,
     get_fallback_site/0,
     get_site_for_hostname/1,
+    update_hosts/0,
     update_dispatchinfo/0
 ]).
 
@@ -80,7 +81,6 @@
 
 -type dispatch() :: #dispatch_controller{}
                     | #dispatch_nomatch{}
-                    | {redirect, Site :: atom()}
                     | {redirect, Site :: atom(), NewPathOrURI :: binary(), IsPermanent :: boolean()}
                     | {redirect_protocol, http|https, Site :: atom(), IsPermanent :: boolean()}
                     | {stop_request, pos_integer()}.
@@ -104,11 +104,16 @@ start_link(Args) when is_list(Args) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, Args, []).
 
 
-%% @doc Update the webmachine dispatch information. Collects dispatch
-%% information from all sites and recompiles the dispatch rules.
+%% @doc Collect dispatch information from all sites and recompiles the dispatch rules.
+-spec update_dispatchinfo() -> ok.
 update_dispatchinfo() ->
     gen_server:cast(?MODULE, update_dispatchinfo).
 
+
+%% @doc Update the host/site mappings
+-spec update_hosts() -> ok.
+update_hosts() ->
+    gen_server:cast(?MODULE, update_hosts).
 
 
 %% @doc Cowboy middleware, route the new request. Continue with the cowmachine,
@@ -132,22 +137,32 @@ execute(Req, Env) ->
                 context => Context
             }};
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
-            handle_404(cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
-        {redirect, Site} ->
-            Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
-            redirect(Uri, true, Req);
+            handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
+        {redirect, Site, undefined, IsPermanent} ->
+            case z_sites_manager:wait_for_running(Site) of
+                ok ->
+                    Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
+                    redirect(Uri, IsPermanent, Req);
+                {error, _} ->
+                    {stop_request, 503}
+            end;
         {redirect, Site, NewPathOrURI, IsPermanent} ->
-            Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
-            redirect(Uri, IsPermanent, Req);
-        {stop_request, RespCode} ->
-            {stop, cowboy_req:reply(RespCode, Req)};
+            case z_sites_manager:wait_for_running(Site) of
+                ok ->
+                    Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
+                    redirect(Uri, IsPermanent, Req);
+                {error, _} ->
+                    {stop_request, 503}
+            end;
         {redirect_protocol, Protocol, Host, IsPermanent} ->
             Uri = iolist_to_binary([
                         z_convert:to_binary(Protocol),
                         <<"://">>,
                         Host,
                         raw_path(Req)]),
-            redirect(Uri, IsPermanent, Req)
+            redirect(Uri, IsPermanent, Req);
+        {stop_request, RespCode} ->
+            stop_request(RespCode, Req, Env)
     end.
 
 %% @doc Match the host and path to a dispatch rule.
@@ -184,21 +199,17 @@ dispatch(Method, Host, Path, IsSsl, TracerPid) when is_boolean(IsSsl) ->
 
 
 %% @doc Retrieve the fallback site.
+-spec get_fallback_site() -> {ok, atom()} | undefined.
 get_fallback_site() ->
-    case ets:lookup(?MODULE, <<"*">>) of
-        [] -> undefined;
-        [{_,Site}] -> Site;
-        [{_,Site, _}] -> Site
-    end.
+    get_site_for_hostname('*').
 
 %% @doc Fetch the site handling the given hostname (with optional port) (debug function)
--spec get_site_for_hostname(string()|binary()) -> {ok, atom()} | undefined.
+-spec get_site_for_hostname(string()|binary()|'*') -> {ok, atom()} | undefined.
 get_site_for_hostname(Hostname) when is_list(Hostname) ->
     get_site_for_hostname(list_to_binary(Hostname));
 get_site_for_hostname(Hostname) ->
     case ets:lookup(?MODULE, strip_port(Hostname)) of
-        [{_,Site}] -> {ok, Site};
-        [{_,Site,_Redirect}] -> {ok, Site};
+        [{_, Site, _Redirect}] -> {ok, Site};
         [] -> undefined
     end.
 
@@ -221,56 +232,107 @@ redirect(Uri, IsPermanent, Req) ->
     Req1 = cowboy_req:set_resp_header(<<"location">>, Uri, set_server_header(Req)),
     {stop, cowboy_req:reply(case IsPermanent of true -> 301; false -> 302 end, Req1)}.
 
-handle_404(_Method, undefined, Req, _Env, _Bindings, _Context) ->
-    % Host not found (maybe return 503 if we are booting?)
+%% ---------------------------------------------------------------------------------------
+
+stop_request(RespCode, Req, Env) ->
+    Method = cowboy_req:method(Req),
+    case ets:lookup(?MODULE, '*') of
+        [] ->
+            handle_error(RespCode, Method, undefined, Req, Env, [], undefined);
+        [{_, Site, _}] ->
+            case z_sites_manager:wait_for_running(Site, 1) of
+                ok ->
+                    Context = z_context:set_reqdata(Req, z_context:new(Site)),
+                    handle_error(RespCode, Method, Site, Req, Env, [], Context);
+                {error, _} ->
+                    handle_error(RespCode, Method, undefined, Req, Env, [], undefined)
+            end
+    end.
+
+
+handle_error(RespCode, <<"GET">>, undefined, Req, _Env, _Bindings, _Context) ->
+    send_static_response(RespCode, Req);
+handle_error(RespCode, _Method, undefined, Req, _Env, _Bindings, _Context) ->
+    {stop, cowboy_req:reply(RespCode, set_server_header(Req))};
+handle_error(_RespCode, <<"CONNECT">>, _Site, Req, _Env, _Bindings, _Context) ->
     {stop, cowboy_req:reply(400, set_server_header(Req))};
-handle_404(Method, Site, Req, Env, Bindings, Context) when Method =:= <<"GET">>; Method =:= <<"POST">> ->
-    %% @todo Pass bindings from rewrites (especially z_language)
+handle_error(RespCode, Method, Site, Req, Env, Bindings, Context) when Method =:= <<"GET">>; Method =:= <<"POST">> ->
     {ok, Req#{
         bindings => Bindings
     }, Env#{
         site => Site,
         controller => controller_http_error,
-        controller_options => [ {http_status_code, 404} ],
+        controller_options => [ {http_status_code, RespCode} ],
         path_tokens => [],
         bindings => Bindings,
         context => Context
     }};
-handle_404(<<"CONNECT">>, _Site, Req, _Env, _Bindings, _Context) ->
-    {stop, cowboy_req:reply(400, set_server_header(Req))};
-handle_404(_Method, _Site, Req, _Env, _Bindings, _Context) ->
-    {stop, cowboy_req:reply(404, set_server_header(Req))}.
+handle_error(RespCode, _Method, _Site, Req, _Env, _Bindings, _Context) ->
+    {stop, cowboy_req:reply(RespCode, set_server_header(Req))}.
 
+send_static_response(RespCode, Req) ->
+    ErrorFile = filename:join(z_config:get(html_error_path), integer_to_list(RespCode)++".html"),
+    case filelib:is_regular(ErrorFile) of
+        true ->
+            {ok, Html} = file:read_file(ErrorFile),
+            Req1 = cowboy_req:set_resp_header(<<"content-type">>, <<"text/html; charset=utf8">>, Req),
+            Req2 = cowboy_req:set_resp_body(Html, Req1),
+            {stop, cowboy_req:reply(RespCode, set_server_header(Req2))};
+        false ->
+            {stop, cowboy_req:reply(RespCode, set_server_header(Req))}
+    end.
 
+%% ---------------------------------------------------------------------------------------
 
 dispatch_1(DispReq, OptReq) ->
     case ets:lookup(?MODULE, DispReq#dispatch.host) of
         [] ->
-            % TODO: maybe lowercase the host and recheck
             % Check for fallback sites or other site handling this hostname
             case find_no_host_match(DispReq, OptReq) of
                 {ok, Site} ->
-                    Context = z_context:set_reqdata(OptReq, z_context:new(Site)),
-                    dispatch_site(DispReq, Context);
+                    dispatch_site_if_running(DispReq, OptReq, Site, []);
+                {fallback, Site} ->
+                    dispatch_site_if_running(DispReq, OptReq, Site, [{http_status_code, 400}]);
                 Other ->
                     Other
             end;
-        [{_,Site}] ->
-            Context = z_context:set_reqdata(OptReq, z_context:new(Site)),
-            dispatch_site(DispReq, Context);
-        [{_,Site,_Redirect}] ->
+        [{_, Site, undefined}] ->
+            dispatch_site_if_running(DispReq, OptReq, Site, []);
+        [{_, Site, _Redirect}] ->
             case DispReq#dispatch.path of
                 <<"/.well-known/", _/binary>> ->
-                    Context = z_context:set_reqdata(OptReq, z_context:new(Site)),
-                    dispatch_site(DispReq, Context);
+                    dispatch_site_if_running(DispReq, OptReq, Site, []);
                 _ ->
-                    {redirect, Site}
+                    {redirect, Site, undefined, true}
             end
     end.
 
--spec dispatch_site(#dispatch{}, #context{}) -> dispatch().
-dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context) ->
-    % {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, Site, ReqData),
+dispatch_site_if_running(DispReq, OptReq, Site, ExtraBindings) ->
+    case z_sites_manager:wait_for_running(Site) of
+        ok ->
+            Context = z_context:set_reqdata(OptReq, z_context:new(Site)),
+            dispatch_site(DispReq, Context, ExtraBindings);
+        {error, timeout} ->
+            {stop_request, 503};
+        {error, _} ->
+            case ets:lookup(?MODULE, '*') of
+                [] ->
+                    {stop_request, 400};
+                [{_Host, Site, _Redirect}] ->
+                    {stop_request, 503};
+                [{_Host, FallbackSite, undefined}] ->
+                    ExtraBindings1 = [
+                        {http_status_code, 400}
+                        | proplists:delete(http_status_code, ExtraBindings)
+                    ],
+                    dispatch_site_if_running(DispReq, OptReq, FallbackSite, ExtraBindings1);
+                [{_Host, FallbackSite, _Redirect}] ->
+                    {redirect, FallbackSite, undefined, true}
+            end
+    end.
+
+-spec dispatch_site(#dispatch{}, #context{}, list()) -> dispatch().
+dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context, ExtraBindings) ->
     count_request(z_context:site(Context)),
     try
         {Tokens, IsDir} = split_path(Path),
@@ -280,16 +342,18 @@ dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = 
             {zotonic_site, z_context:site(Context)}
             | Bindings
         ],
-        trace(TracerPid, TokensRewritten, try_match, [{bindings, Bindings1}]),
+        Bindings2 = ExtraBindings ++ Bindings1,
+        trace(TracerPid, TokensRewritten, try_match, [{bindings, Bindings2}]),
         case dispatch_match(TokensRewritten, Context) of
             {ok, {DispatchRule, MatchBindings}} ->
+                Bindings3 = Bindings2++fix_match_bindings(MatchBindings, IsDir),
                 trace_final(
                         TracerPid,
-                        do_dispatch_rule(DispatchRule, Bindings1++fix_match_bindings(MatchBindings, IsDir), TokensRewritten, IsDir, DispReq, Context));
+                        do_dispatch_rule(DispatchRule, Bindings3, TokensRewritten, IsDir, DispReq, Context));
             fail ->
                 trace_final(
                         TracerPid,
-                        do_dispatch_fail(Bindings1, TokensRewritten, IsDir, DispReq, Context))
+                        do_dispatch_fail(Bindings2, TokensRewritten, IsDir, DispReq, Context))
         end
     catch
         throw:{stop_request, RespCode} ->
@@ -378,8 +442,6 @@ is_bind_language(Match, _Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    % gen_server:cast(self(), update_hosts),
-    % gen_server:cast(self(), update_dispatchinfo),
     ets:new(?MODULE, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
     {ok, #state{}}.
 
@@ -399,20 +461,17 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 %% @doc Load all dispatch rules, if anything changed then recompile the dispatcher(s)
 handle_cast(update_dispatchinfo, State) ->
-    FallbackSite = z_sites_manager:get_fallback_site(),
-    do_update_hosts(FallbackSite),
+    do_update_hosts(),
     NewRules = collect_dispatchrules(),
     do_compile_modified(State#state.rules, NewRules),
     {noreply, State#state{
-                rules=NewRules,
-                fallback_site=FallbackSite
-            }};
+        rules=NewRules
+    }};
 
 %% @doc Fetch all active hostnames
 handle_cast(update_hosts, State) ->
-    FallbackSite = z_sites_manager:get_fallback_site(),
-    do_update_hosts(FallbackSite),
-    {noreply, State#state{fallback_site=FallbackSite}};
+    do_update_hosts(),
+    {noreply, State};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -442,75 +501,61 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 %% @doc Update the ets table with all host/site mappings
-do_update_hosts(FallbackSite) ->
-    Cs = z_sites_manager:get_site_contexts(),
-    Hs = lists:flatten([ get_site_hosts(Context) || Context <- Cs ]),
-    Hs1 = [ {strip_port(Host), Prio, Site} || {Host, Prio, Site} <- Hs ],
-    Hs2 = lists:sort([ {<<"*">>, 99, FallbackSite} | Hs1 ]),
+do_update_hosts() ->
+    {ok, SitesHosts} = z_sites_manager:get_sites_hosts(),
+    Hosts = maps:fold(
+        fun
+            (_Site, {stopped, _Hs, _IsRedirect}, Acc) ->
+                Acc;
+            (_Site, {removing, _Hs, _IsRedirect}, Acc) ->
+                Acc;
+            (_Site, {_State, [], _IsRedirect}, Acc) ->
+                Acc;
+            (Site, {_State, [{PrimaryHost, _} | _] = Hs, IsRedirect}, Acc) ->
+                PrimaryHost1 = strip_port(PrimaryHost),
+                Hs1 = lists:map(
+                    fun
+                        ({H, Prio}) when H =:= PrimaryHost ->
+                            {Prio, strip_port(H), Site, undefined};
+                        ({H, Prio}) when IsRedirect ->
+                            {Prio, strip_port(H), Site, PrimaryHost1};
+                        ({H, Prio}) ->
+                            {Prio, strip_port(H), Site, undefined}
+                    end,
+                    Hs),
+                Hs1 ++ Acc
+        end,
+        [],
+        SitesHosts),
+    % Keep the highest prio definition per hostname
     Dict = lists:foldr(
-                fun({Host, _, Site}, Acc) ->
-                    dict:store(Host, Site, Acc)
-                end,
-                dict:new(),
-                Hs2),
-    Redirects = [
-        {z_context:site(Context), is_site_redirect(Context), z_context:hostname(Context), z_context:hostname_port(Context)}
-        || Context <- Cs
-    ],
+        fun({_Prio, Host, Site, Redirect}, Acc) ->
+            H1 = map_generic(Host),
+            dict:store(H1, {H1, Site, Redirect}, Acc)
+        end,
+        dict:new(),
+        lists:sort(Hosts)),
+    HostList = [ HSR || {_,HSR} <- dict:to_list(Dict) ],
     % Fetch current list from ets
-    HostSiteNew = lists:sort(add_redirects(dict:to_list(Dict), Redirects)),
+    HostSiteNew = lists:sort(HostList),
     HostSiteOld = lists:sort(ets:tab2list(?MODULE)),
-    % Insert/delete the diff
-    lists:foreach(fun(HostSite) ->
-                     ets:delete_object(?MODULE, HostSite)
-                  end,
-                  HostSiteOld -- HostSiteNew),
+    % Insert/delete the changed host definitions
+    lists:foreach(
+        fun(HostSite) ->
+            ets:delete_object(?MODULE, HostSite)
+        end,
+        HostSiteOld -- HostSiteNew),
     ets:insert(?MODULE, HostSiteNew -- HostSiteOld),
     ok.
 
-is_site_redirect(Context) ->
-    case m_site:get(redirect, Context) of
-        true -> true;
-        false -> false;
-        undefined -> true
-    end.
+map_generic("*") -> '*';
+map_generic(<<"*">>) -> '*';
+map_generic(H) -> H.
 
-add_redirects(HostSites, Redirects) ->
-    [ add_redirect({Host, Site}, lists:keyfind(Site, 1, Redirects)) || {Host, Site} <- HostSites ].
-
-add_redirect(HS, false) -> HS;
-add_redirect(HS, {_, false, _, _}) -> HS;
-add_redirect({Host, Site}, {Site, true, Host, _Redirect}) -> {Host, Site};
-add_redirect({Host, Site}, {Site, true, _Host, undefined}) -> {Host, Site};
-add_redirect({Host, Site}, {Site, true, _Host, Redirect}) -> {Host, Site, Redirect}.
-
+strip_port('*') -> '*';
 strip_port(H) ->
     {H1, _} = split_host(H),
     H1.
-
-get_site_hosts(#context{} = Context) ->
-    Site = z_context:site(Context),
-    Hostname = z_context:hostname(Context),
-    HostAlias = case m_site:get(hostalias, Context) of
-                    undefined -> [];
-                    List when is_list(List) -> ensure_alias_list(List);
-                    _ -> []
-                end,
-    HostSmtp = m_site:get(smtphost, Context),
-    Hs = [{Hostname, 1, Site}]
-        ++ [ {Alias, 2, Site} || Alias <- HostAlias ]
-        ++ [ {HostSmtp, 2, Site} ],
-    lists:filter(
-                fun
-                    ({undefined, _, _}) -> false;
-                    ({[], _, _}) -> false;
-                    ({<<>>, _, _}) -> false;
-                    (_) -> true
-                end,
-                Hs).
-
-ensure_alias_list([C|_] = Alias) when is_integer(C) -> [Alias];
-ensure_alias_list(Alias) -> Alias.
 
 do_compile_modified(OldDs, NewDs) ->
     Ds = NewDs -- OldDs,
@@ -710,7 +755,6 @@ language_from_bindings_1(false) ->
 %% @doc Try to find a site which says it can handle the host.
 %%      This enables to have special (short) urls for deep pages.
 find_no_host_match(DispReq, OptReq) ->
-    % TODO: optimize this, as this involves gen_server call in the z_sites_manager.
     Sites = z_sites_manager:get_sites(),
     DispHost = #dispatch_host{
                     host=DispReq#dispatch.host,
@@ -719,16 +763,18 @@ find_no_host_match(DispReq, OptReq) ->
                     protocol=DispReq#dispatch.protocol
                 },
     case first_site_match(Sites, DispHost, OptReq) of
-        no_host_match -> find_dispatch_fallback();
-        Redirect-> Redirect
-    end.
-
-
-%% @doc Try to find the fallback site (usually zotonic_site_status).
-find_dispatch_fallback() ->
-    case get_fallback_site() of
-        undefined -> #dispatch_nomatch{};
-        Site -> {ok, Site}
+        no_host_match ->
+            % See if there is a site handling wildcard domains
+            case ets:lookup(?MODULE, '*') of
+                [] ->
+                    {stop_request, 400};
+                [{_, FallbackSite, undefined}] ->
+                    {fallback, FallbackSite};
+                [{_, FallbackSite, _Redirect}] ->
+                    {redirect, FallbackSite, undefined, true}
+            end;
+        Redirect->
+            Redirect
     end.
 
 first_site_match(Sites, DispHost, OptReq) ->

@@ -10,10 +10,17 @@
                     <span class="icon-bar"></span>
                 </button>
             {% endif %}
-            <a class="navbar-brand" href="/">
-                <span class="zotonic-logo"><em>Zotonic</em></span>
-                {_ Status _}
-            </a>
+
+            {% if m.acl.user %}
+                <a class="navbar-brand" href="{% url zotonic_status %}">
+                    <span class="zotonic-logo"><em>Zotonic</em></span>
+                    {_ Status _}
+                </a>
+            {% else %}
+                <span class="navbar-brand">
+                    <span class="zotonic-logo"><em>Zotonic</em></span>
+                </span>
+            {% endif %}
         </div><!-- /.navbar-header -->
 
         {% if m.acl.user %}
