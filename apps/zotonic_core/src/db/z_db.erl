@@ -87,7 +87,7 @@
 
 -compile([{parse_transform, lager_transform}]).
 
--type transaction_fun() :: function((z:context()) -> term()).
+-type transaction_fun() :: fun((z:context()) -> term()).
 -type table_name() :: atom() | string().
 -type parameters() :: list(tuple() | atom() | string() | binary() | integer()).
 -type sql() :: string() | iodata().
@@ -639,7 +639,7 @@ flush(Context) ->
 
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
 %% @todo Make the steps of the sequence bigger, and try to keep the old sequence numbers in tact (needs a diff routine)
--spec update_sequence(table_name(), list( integer() ), z:context() -> any().
+-spec update_sequence(table_name(), list( integer() ), z:context()) -> any().
 update_sequence(Table, Ids, Context) when is_atom(Table) ->
     update_sequence(atom_to_list(Table), Ids, Context);
 update_sequence(Table, Ids, Context) ->
