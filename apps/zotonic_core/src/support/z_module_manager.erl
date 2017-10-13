@@ -1088,7 +1088,7 @@ handle_start_child_result(Module, Result, #state{ site = Site, module_monitors =
                         [Module, Reason]),
             Modules = State1#state.modules,
             State1#state{
-                modules = do_module_down(Modules, maps:get(Module, Modules), undefined, Reason),
+                modules = do_module_down(maps:get(Module, Modules), State, undefined, Reason),
                 start_error = [
                     {Module, Error} | lists:keydelete(Module, 1, State1#state.start_error)
                 ]
