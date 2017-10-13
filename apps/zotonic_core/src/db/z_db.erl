@@ -87,6 +87,7 @@
 
 -compile([{parse_transform, lager_transform}]).
 
+-type transaction_fun() :: function((z:context()) -> term()).
 -type table_name() :: atom() | string().
 -type parameters() :: list(tuple() | atom() | string() | binary() | integer()).
 -type sql() :: string() | iodata().
@@ -94,11 +95,12 @@
 -type id() :: pos_integer().
 
 %% @doc Perform a function inside a transaction, do a rollback on exceptions
-%% @spec transaction(Function, Context) -> FunctionResult | {error, Reason}
+-spec transaction(transaction_fun(), z:context()) -> any() | {error, term()}.
 transaction(Function, Context) ->
     transaction(Function, [], Context).
 
 % @doc Perform a transaction with extra options. Default retry on deadlock
+-spec transaction(transaction_fun(), list(), z:context()) -> any() | {error, term()}.
 transaction(Function, Options, Context) ->
     Result = case transaction1(Function, Context) of
                 {rollback, {{error, {error, error, <<"40P01">>, _, _}}, Trace1}} ->
@@ -576,7 +578,7 @@ split_props(Props, Cols) ->
 
 
 %% @doc Return a property list with all columns of the table. (example: [{id,int4,modifier},...])
-%% @spec columns(Table, Context) -> [ #column_def{} ]
+-spec columns(atom()|string(), z:context()) -> list( #column_def{} ).
 columns(Table, Context) when is_atom(Table) ->
     columns(atom_to_list(Table), Context);
 columns(Table, Context) ->
@@ -622,7 +624,7 @@ columns(Table, Context) ->
 
 
 %% @doc Return a list with the column names of a table.  The names are sorted.
-%% @spec column_names(Table, Context) -> [ atom() ]
+-spec column_names(table_name(), z:context()) -> list( atom() ).
 column_names(Table, Context) ->
     Names = [ C#column_def.name || C <- columns(Table, Context)],
     lists:sort(Names).
@@ -636,19 +638,20 @@ flush(Context) ->
 
 
 %% @doc Update the sequence of the ids in the table. They will be renumbered according to their position in the id list.
-%% @spec update_sequence(Table, IdList, Context) -> void()
 %% @todo Make the steps of the sequence bigger, and try to keep the old sequence numbers in tact (needs a diff routine)
+-spec update_sequence(table_name(), list( integer() ), z:context() -> any().
 update_sequence(Table, Ids, Context) when is_atom(Table) ->
     update_sequence(atom_to_list(Table), Ids, Context);
 update_sequence(Table, Ids, Context) ->
     assert_table_name(Table),
     DbDriver = z_context:db_driver(Context),
     Args = lists:zip(Ids, lists:seq(1, length(Ids))),
-    F = fun(C) when C =:= none ->
-        [];
-       (C) ->
-        [ {ok, _} = equery1(DbDriver, C, "update \""++Table++"\" set seq = $2 where id = $1", tuple_to_list(Arg)) || Arg <- Args ]
-       end,
+    F = fun
+        (none) ->
+            [];
+        (C) ->
+            [ {ok, _} = equery1(DbDriver, C, "update \""++Table++"\" set seq = $2 where id = $1", tuple_to_list(Arg)) || Arg <- Args ]
+    end,
     with_connection(F, Context).
 
 %% @doc Create database and schema if they do not yet exist
@@ -843,7 +846,7 @@ column_spec_unique(false) -> "";
 column_spec_unique(true) -> " UNIQUE".
 
 %% @doc Check if a name is a valid SQL table name. Crashes when invalid
-%% @spec assert_table_name(String) -> true
+-spec assert_table_name(string()) -> true.
 assert_table_name([H|T]) when (H >= $a andalso H =< $z) orelse H == $_ ->
     assert_table_name1(T).
 assert_table_name1([]) ->

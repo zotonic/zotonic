@@ -47,7 +47,7 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Install the database for the given host.
-%% @spec install(Host) -> ok
+-spec install(z:context()) -> ok.
 install(Context) ->
     ok = z_db:transaction(
            fun(Context1) ->

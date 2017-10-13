@@ -34,7 +34,7 @@
 
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
+-spec m_find_value( term(), #m{}, z:context()) -> term().
 m_find_value(user, #m{value=undefined}, Context) ->
     z_acl:user(Context);
 m_find_value(is_admin, #m{value=undefined}, Context) ->
@@ -79,11 +79,11 @@ m_find_value(Object, #m{value={is_allowed, Action, undefined}}, Context) ->
 
 
 %% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
+-spec m_to_list( #m{}, z:context() ) -> list().
 m_to_list(_, _Context) ->
     [].
 
 %% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
+-spec m_value( #m{}, z:context() ) -> term().
 m_value(#m{value=undefined}, _Context) ->
     undefined.

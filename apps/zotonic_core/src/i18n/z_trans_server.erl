@@ -50,7 +50,7 @@ start_tests() ->
 -spec start_link(Site :: atom()) -> {ok, pid()} | {error, term()}.
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
-    gen_server:start_link({local, Name}, ?MODULE, [Site, Name], []).
+    gen_server:start_link({local, Name}, ?MODULE, {Site, Name}, []).
 
 
 %% @doc Parse all .po files and reload the found translations in the trans server
@@ -88,12 +88,9 @@ observe_module_ready(module_ready, Context) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
-init([Site, Name]) ->
+-spec init({ Site :: atom(), Name :: atom() }) -> {ok, #state{}}.
+init({Site, Name}) ->
     lager:md([
         {site, Site},
         {module, ?MODULE}
@@ -103,20 +100,11 @@ init([Site, Name]) ->
     Table = ets:new(Name, [named_table, set, protected, {read_concurrency, true}]),
     {ok, #state{table=Table, site=Site}}.
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 %% @doc Rebuild the translations table. Call the template flush routines afterwards.
 %% Trans is a map with all translations per translatable string.
 handle_cast({load_translations, Trans}, State) ->
@@ -136,14 +124,10 @@ handle_cast({load_translations, Trans}, State) ->
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -152,9 +136,7 @@ terminate(_Reason, State) ->
     z_notifier:detach(module_ready, {?MODULE, observe_module_ready}, State#state.site),
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
-
 code_change(_OldVsn, State, _Extra) ->
 	case State of
 		{state, Table, _OldTable} ->
