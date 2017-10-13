@@ -16,7 +16,7 @@
 				{% with m.email_status[idn.key] as status %}
 				<td class="text-right">
 					{% if status.is_blocked %}
-						<span class="text-error"><span class="icon-ban-circle"></span> {_ Blocked _}</span>
+						<span class="text-error"><span class="glyphicon glyphicon-ban-circle"></span> {_ Blocked _}</span>
 					{% elseif idn.is_verified %}
 						<span class="glyphicon glyphicon-ok" title="{_ Verified _}"></span> {_ Verfied _}
 					{% else %}

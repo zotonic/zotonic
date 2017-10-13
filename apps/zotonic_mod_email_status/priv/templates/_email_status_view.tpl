@@ -16,7 +16,7 @@
 			%}
 
 			<p class="alert alert-danger" id="{{ #didblock }}" style="display:none">
-				<span class="icon-envelope"></span>
+				<span class="glyphicon glyphicon-envelope"></span>
 				<strong>
 					{_ Blocked _}
 				</strong>
@@ -50,8 +50,8 @@
 
 	{% if status or email|is_valid_email %}
 		{% if status.is_blocked %}
-			<p class="alert alert-error" style="margin: 20px 0" id="{{ #isblocked }}">
-				<span class="icon-envelope"></span>
+			<p class="alert alert-danger" style="margin: 20px 0" id="{{ #isblocked }}">
+				<span class="glyphicon glyphicon-envelope"></span>
 				<strong>
 					{_ Blocked _}
 				</strong>
@@ -61,19 +61,19 @@
 		{% elseif not status or status.is_valid %}
 			{% if status.error_ct or status.bounce_ct %}
 				<p class="alert alert-info" style="margin: 20px 0">
-					<span class="icon-envelope"></span>
+					<span class="glyphicon glyphicon-envelope"></span>
 					<strong>{_ This email address is now ok. _}</strong>
 					{_ There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully. _}
 				</p>
 			{% else %}
 				<p class="alert alert-success" id="{{ #isok }}" style="margin: 20px 0">
-					<span class="icon-ok"></span>
+					<span class="glyphicon glyphicon-ok"></span>
 					<strong>{_ This email address is ok. _}</strong>
 				</p>
 			{% endif %}
 		{% else %}
 			<p class="alert {% if status.error_is_final %}alert-error{% else %}alert-warning{% endif %}" style="margin: 20px 0">
-				<span class="icon-envelope"></span>
+				<span class="glyphicon glyphicon-envelope"></span>
 				<strong>
 					{_ There are problems with this email address. _}
 					{% if not status.error_is_final or status.recent_error_ct < 5  %}
