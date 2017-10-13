@@ -79,7 +79,7 @@ init(Hostname, SessionCount, PeerName, Options) ->
     case SessionCount > 20 of
         false ->
             State = #state{options = Options, peer=PeerName, hostname=Hostname},
-            Banner = io_lib:format("~s ESMTP Zotonic ~s", [State#state.hostname, ?ZOTONIC_VERSION]),
+            Banner = io_lib:format("~s ESMTP Zotonic", [State#state.hostname]),
             {ok, Banner, State};
         true ->
             lager:warning("SMTP Connection limit exceeded (~p)", [SessionCount]),
@@ -312,7 +312,7 @@ add_received_header(Data, MsgId, State) ->
     iolist_to_binary([
         <<"Received:">>,
         <<" from [">>, inet_parse:ntoa(State#state.peer), <<"] (helo=">>, filter_string(State#state.helo), <<")">>,
-        <<"\r\n\tby ">>, State#state.hostname, <<" with ESMTP (Zotonic ">>, ?ZOTONIC_VERSION, <<")">>,
+        <<"\r\n\tby ">>, State#state.hostname, <<" with ESMTP (Zotonic)">>,
         <<"\r\n\t(envelope-from <">>, filter_string(State#state.from), <<">)">>,
         <<"\r\n\tid ">>, MsgId,
         <<"; ">>, z_dateformat:format(calendar:local_time(), "r", []),
