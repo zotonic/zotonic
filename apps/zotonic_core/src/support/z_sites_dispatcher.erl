@@ -193,7 +193,7 @@ dispatch(Method, Host, Path, IsSsl, TracerPid) when is_boolean(IsSsl) ->
 %% @doc Retrieve the fallback site.
 -spec get_fallback_site() -> {ok, atom()} | undefined.
 get_fallback_site() ->
-    get_site_for_hostname(<<"*">>).
+    get_site_for_hostname('*').
 
 %% @doc Fetch the site handling the given hostname (with optional port) (debug function)
 -spec get_site_for_hostname(string()|binary()) -> {ok, atom()} | undefined.
@@ -275,7 +275,7 @@ dispatch_site_if_running(DispReq, OptReq, Site) ->
         {error, timeout} ->
             {stop_request, 503};
         {error, _} ->
-            case ets:lookup(?MODULE, <<"*">>) of
+            case ets:lookup(?MODULE, '*') of
                 [] ->
                     #dispatch_nomatch{};
                 [{_Host, Site, _Redirect}] ->
@@ -485,7 +485,8 @@ do_update_hosts() ->
     % Keep the highest prio definition per hostname
     Dict = lists:foldr(
         fun({_Prio, Host, Site, Redirect}, Acc) ->
-            dict:store(Host, {Host, Site, Redirect}, Acc)
+            H1 = map_generic(Host),
+            dict:store(H1, {H1, Site, Redirect}, Acc)
         end,
         dict:new(),
         lists:sort(Hosts)),
@@ -501,6 +502,10 @@ do_update_hosts() ->
         HostSiteOld -- HostSiteNew),
     ets:insert(?MODULE, HostSiteNew -- HostSiteOld),
     ok.
+
+map_generic("*") -> '*';
+map_generic(<<"*">>) -> '*';
+map_generic(H) -> H.
 
 strip_port(H) ->
     {H1, _} = split_host(H),
@@ -714,7 +719,7 @@ find_no_host_match(DispReq, OptReq) ->
                 },
     case first_site_match(Sites, DispHost, OptReq) of
         no_host_match ->
-            case ets:lookup(?MODULE, <<"*">>) of
+            case ets:lookup(?MODULE, '*') of
                 [] ->
                     #dispatch_nomatch{};
                 [{_, FallbackSite, undefined}] ->
