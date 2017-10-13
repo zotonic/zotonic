@@ -227,4 +227,5 @@ default(ip_whitelist) -> local;
 default(sessionjobs_limit) -> erlang:max(erlang:system_info(process_limit) div 10, 10000);
 default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 50000);
 default(server_header) -> "Zotonic";
+default(html_error_path) -> filename:join(code:priv_dir(zotonic_core), "htmlerrors");
 default(_) -> undefined.

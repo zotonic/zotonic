@@ -51,11 +51,18 @@ provide_content(Context) ->
     end.
 
 logon_page(Context) ->
+    StatusCode = resp_code(Context),
     Rendered = z_template:render("logon.tpl", z_context:get_all(Context), Context),
     {Output, OutputContext} = z_context:output(Rendered, Context),
-    Context1 = cowmachine_req:set_response_code(503, OutputContext),
+    Context1 = cowmachine_req:set_response_code(StatusCode, OutputContext),
     Context2 = cowmachine_req:set_resp_body(Output, Context1),
-    {{halt, 503}, Context2}.
+    {{halt, StatusCode}, Context2}.
+
+resp_code(Context) ->
+    case z_context:get(http_status_code, Context) of
+        undefined -> 200;
+        StatusCode when is_integer(StatusCode) -> StatusCode
+    end.
 
 status_page(Context) ->
     Template = z_context:get(template, Context),

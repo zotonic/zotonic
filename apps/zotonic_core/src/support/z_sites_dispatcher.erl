@@ -137,7 +137,7 @@ execute(Req, Env) ->
                 context => Context
             }};
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
-            handle_404(cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
+            handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
         {redirect, Site, undefined, IsPermanent} ->
             case z_sites_manager:wait_for_running(Site) of
                 ok ->
@@ -162,7 +162,7 @@ execute(Req, Env) ->
                         raw_path(Req)]),
             redirect(Uri, IsPermanent, Req);
         {stop_request, RespCode} ->
-            {stop, cowboy_req:reply(RespCode, set_server_header(Req))}
+            stop_request(RespCode, Req, Env)
     end.
 
 %% @doc Match the host and path to a dispatch rule.
@@ -232,27 +232,57 @@ redirect(Uri, IsPermanent, Req) ->
     Req1 = cowboy_req:set_resp_header(<<"location">>, Uri, set_server_header(Req)),
     {stop, cowboy_req:reply(case IsPermanent of true -> 301; false -> 302 end, Req1)}.
 
-handle_404(_Method, undefined, Req, _Env, _Bindings, _Context) ->
-    % Host not found (maybe return 503 if we are booting?)
+%% ---------------------------------------------------------------------------------------
+
+stop_request(RespCode, Req, Env) ->
+    Method = cowboy_req:method(Req),
+    case ets:lookup(?MODULE, '*') of
+        [] ->
+            handle_error(RespCode, Method, undefined, Req, Env, [], undefined);
+        [{_, Site, _}] ->
+            case z_sites_manager:wait_for_running(Site, 1) of
+                ok ->
+                    Context = z_context:set_reqdata(Req, z_context:new(Site)),
+                    handle_error(RespCode, Method, Site, Req, Env, [], Context);
+                {error, _} ->
+                    handle_error(RespCode, Method, undefined, Req, Env, [], undefined)
+            end
+    end.
+
+
+handle_error(RespCode, <<"GET">>, undefined, Req, _Env, _Bindings, _Context) ->
+    send_static_response(RespCode, Req);
+handle_error(RespCode, _Method, undefined, Req, _Env, _Bindings, _Context) ->
+    {stop, cowboy_req:reply(RespCode, set_server_header(Req))};
+handle_error(_RespCode, <<"CONNECT">>, _Site, Req, _Env, _Bindings, _Context) ->
     {stop, cowboy_req:reply(400, set_server_header(Req))};
-handle_404(Method, Site, Req, Env, Bindings, Context) when Method =:= <<"GET">>; Method =:= <<"POST">> ->
-    %% @todo Pass bindings from rewrites (especially z_language)
+handle_error(RespCode, Method, Site, Req, Env, Bindings, Context) when Method =:= <<"GET">>; Method =:= <<"POST">> ->
     {ok, Req#{
         bindings => Bindings
     }, Env#{
         site => Site,
         controller => controller_http_error,
-        controller_options => [ {http_status_code, 404} ],
+        controller_options => [ {http_status_code, RespCode} ],
         path_tokens => [],
         bindings => Bindings,
         context => Context
     }};
-handle_404(<<"CONNECT">>, _Site, Req, _Env, _Bindings, _Context) ->
-    {stop, cowboy_req:reply(400, set_server_header(Req))};
-handle_404(_Method, _Site, Req, _Env, _Bindings, _Context) ->
-    {stop, cowboy_req:reply(404, set_server_header(Req))}.
+handle_error(RespCode, _Method, _Site, Req, _Env, _Bindings, _Context) ->
+    {stop, cowboy_req:reply(RespCode, set_server_header(Req))}.
 
+send_static_response(RespCode, Req) ->
+    ErrorFile = filename:join(z_config:get(html_error_path), integer_to_list(RespCode)++".html"),
+    case filelib:is_regular(ErrorFile) of
+        true ->
+            {ok, Html} = file:read_file(ErrorFile),
+            Req1 = cowboy_req:set_resp_header(<<"content-type">>, <<"text/html; charset=utf8">>, Req),
+            Req2 = cowboy_req:set_resp_body(Html, Req1),
+            {stop, cowboy_req:reply(RespCode, set_server_header(Req2))};
+        false ->
+            {stop, cowboy_req:reply(RespCode, set_server_header(Req))}
+    end.
 
+%% ---------------------------------------------------------------------------------------
 
 dispatch_1(DispReq, OptReq) ->
     case ets:lookup(?MODULE, DispReq#dispatch.host) of
@@ -716,7 +746,6 @@ language_from_bindings_1(false) ->
 %% @doc Try to find a site which says it can handle the host.
 %%      This enables to have special (short) urls for deep pages.
 find_no_host_match(DispReq, OptReq) ->
-    % TODO: optimize this, as this involves gen_server call in the z_sites_manager.
     Sites = z_sites_manager:get_sites(),
     DispHost = #dispatch_host{
                     host=DispReq#dispatch.host,
@@ -726,9 +755,10 @@ find_no_host_match(DispReq, OptReq) ->
                 },
     case first_site_match(Sites, DispHost, OptReq) of
         no_host_match ->
+            % See if there is a site handling wildcard domains
             case ets:lookup(?MODULE, '*') of
                 [] ->
-                    #dispatch_nomatch{};
+                    {stop_request, 400};
                 [{_, FallbackSite, undefined}] ->
                     {ok, FallbackSite};
                 [{_, FallbackSite, _Redirect}] ->
