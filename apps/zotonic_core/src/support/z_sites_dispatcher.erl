@@ -204,7 +204,7 @@ get_fallback_site() ->
     get_site_for_hostname('*').
 
 %% @doc Fetch the site handling the given hostname (with optional port) (debug function)
--spec get_site_for_hostname(string()|binary()) -> {ok, atom()} | undefined.
+-spec get_site_for_hostname(string()|binary()|'*') -> {ok, atom()} | undefined.
 get_site_for_hostname(Hostname) when is_list(Hostname) ->
     get_site_for_hostname(list_to_binary(Hostname));
 get_site_for_hostname(Hostname) ->
@@ -552,6 +552,7 @@ map_generic("*") -> '*';
 map_generic(<<"*">>) -> '*';
 map_generic(H) -> H.
 
+strip_port('*') -> '*';
 strip_port(H) ->
     {H1, _} = split_host(H),
     H1.
