@@ -81,7 +81,6 @@
 
 -type dispatch() :: #dispatch_controller{}
                     | #dispatch_nomatch{}
-                    | {redirect_hostname, Site :: atom(), Hostname :: binary()}
                     | {redirect, Site :: atom(), NewPathOrURI :: binary(), IsPermanent :: boolean()}
                     | {redirect_protocol, http|https, Site :: atom(), IsPermanent :: boolean()}
                     | {stop_request, pos_integer()}.
@@ -139,22 +138,31 @@ execute(Req, Env) ->
             }};
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
             handle_404(cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
-        {redirect_hostname, Site, _Hostname} ->
-            % TODO: directly use the Hostname, instead of z_context calls.
-            Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
-            redirect(Uri, true, Req);
+        {redirect, Site, undefined, IsPermanent} ->
+            case z_sites_manager:wait_for_running(Site) of
+                ok ->
+                    Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
+                    redirect(Uri, IsPermanent, Req);
+                {error, _} ->
+                    {stop_request, 503}
+            end;
         {redirect, Site, NewPathOrURI, IsPermanent} ->
-            Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
-            redirect(Uri, IsPermanent, Req);
-        {stop_request, RespCode} ->
-            {stop, cowboy_req:reply(RespCode, set_server_header(Req))};
+            case z_sites_manager:wait_for_running(Site) of
+                ok ->
+                    Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
+                    redirect(Uri, IsPermanent, Req);
+                {error, _} ->
+                    {stop_request, 503}
+            end;
         {redirect_protocol, Protocol, Host, IsPermanent} ->
             Uri = iolist_to_binary([
                         z_convert:to_binary(Protocol),
                         <<"://">>,
                         Host,
                         raw_path(Req)]),
-            redirect(Uri, IsPermanent, Req)
+            redirect(Uri, IsPermanent, Req);
+        {stop_request, RespCode} ->
+            {stop, cowboy_req:reply(RespCode, set_server_header(Req))}
     end.
 
 %% @doc Match the host and path to a dispatch rule.
@@ -258,12 +266,12 @@ dispatch_1(DispReq, OptReq) ->
             end;
         [{_, Site, undefined}] ->
             dispatch_site_if_running(DispReq, OptReq, Site);
-        [{_, Site, Redirect}] ->
+        [{_, Site, _Redirect}] ->
             case DispReq#dispatch.path of
                 <<"/.well-known/", _/binary>> ->
                     dispatch_site_if_running(DispReq, OptReq, Site);
                 _ ->
-                    {redirect_hostname, Site, Redirect}
+                    {redirect, Site, undefined, true}
             end
     end.
 
@@ -282,14 +290,13 @@ dispatch_site_if_running(DispReq, OptReq, Site) ->
                     {stop_request, 503};
                 [{_Host, FallbackSite, undefined}] ->
                     dispatch_site_if_running(DispReq, OptReq, FallbackSite);
-                [{_Host, FallbackSite, Redirect}] ->
-                    {redirect_hostname, FallbackSite, Redirect}
+                [{_Host, FallbackSite, _Redirect}] ->
+                    {redirect, FallbackSite, undefined, true}
             end
     end.
 
 -spec dispatch_site(#dispatch{}, #context{}) -> dispatch().
 dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context) ->
-    % {ok, ReqDataHost} = webmachine_request:set_metadata(zotonic_host, Site, ReqData),
     count_request(z_context:site(Context)),
     try
         {Tokens, IsDir} = split_path(Path),
@@ -724,8 +731,8 @@ find_no_host_match(DispReq, OptReq) ->
                     #dispatch_nomatch{};
                 [{_, FallbackSite, undefined}] ->
                     {ok, FallbackSite};
-                [{_, FallbackSite, Redirect}] ->
-                    {redirect_hostname, FallbackSite, Redirect}
+                [{_, FallbackSite, _Redirect}] ->
+                    {redirect, FallbackSite, undefined, true}
             end;
         Redirect->
             Redirect
