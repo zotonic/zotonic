@@ -168,9 +168,10 @@ map_extension(Context) ->
 
 do_html(Context0) ->
     Context = set_headers(Context0),
-    ContextQs = z_context:ensure_all(z_context:ensure_qs(Context)),
+    ContextQs = z_context:continue_all(z_context:ensure_qs(Context)),
+    ErrorCode = error_code(Context),
     Vars = [
-        {error_code, cowmachine_req:get_metadata(http_status_code, Context)}
+        {error_code, ErrorCode}
         | z_context:get_all(ContextQs)
     ],
     Vars1 = case bt_simplify(cowmachine_req:get_metadata(error_reason, Context)) of
@@ -188,12 +189,20 @@ do_html(Context0) ->
                 undefined ->
                     Vars
             end,
-    StatusTpl = <<"error.", (z_convert:to_binary(cowmachine_req:get_metadata(http_status_code, Context)))/binary, ".tpl">>,
+    StatusTpl = <<"error.", (z_convert:to_binary(ErrorCode))/binary, ".tpl">>,
     Rendered = case z_module_indexer:find(template, StatusTpl, ContextQs) of
                     {ok, ModuleIndex} -> z_template:render(ModuleIndex, Vars1, ContextQs);
                     {error, enoent} -> z_template:render(<<"error.tpl">>, Vars1, ContextQs)
                end,
     z_context:output(Rendered, ContextQs).
+
+error_code(Context) ->
+    case z_context:get_q(http_status_code, Context) of
+        StatusCode when is_integer(StatusCode) ->
+            StatusCode;
+        _ ->
+            cowmachine_req:get_metadata(http_status_code, Context)
+    end.
 
 do_text(Context0) ->
     Context = set_headers(Context0),

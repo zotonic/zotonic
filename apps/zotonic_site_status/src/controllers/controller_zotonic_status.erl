@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2017 Marc Worrell
 %% @doc Resource to serve the zotonic fallback site templates.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -42,26 +42,47 @@ content_types_provided(Context) ->
     end.
 
 provide_content(Context) ->
-    Context2 = z_context:ensure_all(Context),
-    case z_acl:user(Context2) of
-        undefined ->
-            logon_page(Context2);
+    case z_context:get(is_fallback_template, Context) of
+        true ->
+            Context2 = z_context:continue_all(Context),
+            Template = z_context:get(template, Context2),
+            render_page(Template, Context2);
         _ ->
-            status_page(Context2)
+            Context2 = z_context:ensure_all(Context),
+            case z_acl:user(Context2) of
+                undefined ->
+                    render_page("logon.tpl", Context2);
+                _ ->
+                    status_page(Context2)
+            end
     end.
 
-logon_page(Context) ->
+render_page(Template, Context) ->
     StatusCode = resp_code(Context),
-    Rendered = z_template:render("logon.tpl", z_context:get_all(Context), Context),
+    Vars = [
+        {error_code, StatusCode}
+        | z_context:get_all(Context)
+    ],
+    Rendered = z_template:render(Template, Vars, Context),
     {Output, OutputContext} = z_context:output(Rendered, Context),
     Context1 = cowmachine_req:set_response_code(StatusCode, OutputContext),
     Context2 = cowmachine_req:set_resp_body(Output, Context1),
     {{halt, StatusCode}, Context2}.
 
 resp_code(Context) ->
-    case z_context:get(http_status_code, Context) of
-        undefined -> 200;
-        StatusCode when is_integer(StatusCode) -> StatusCode
+    case z_context:get(is_fallback_template, Context) of
+        true ->
+            case z_context:get_q(http_status_code, Context) of
+                StatusCode when is_integer(StatusCode) ->
+                    StatusCode;
+                _ ->
+                    case cowmachine_req:get_metadata(http_status_code, Context) of
+                        undefined -> 200;
+                        StatusCode -> StatusCode
+                    end
+            end;
+        undefined ->
+            200
     end.
 
 status_page(Context) ->

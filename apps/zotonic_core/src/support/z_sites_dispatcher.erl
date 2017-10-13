@@ -290,43 +290,49 @@ dispatch_1(DispReq, OptReq) ->
             % Check for fallback sites or other site handling this hostname
             case find_no_host_match(DispReq, OptReq) of
                 {ok, Site} ->
-                    dispatch_site_if_running(DispReq, OptReq, Site);
+                    dispatch_site_if_running(DispReq, OptReq, Site, []);
+                {fallback, Site} ->
+                    dispatch_site_if_running(DispReq, OptReq, Site, [{http_status_code, 400}]);
                 Other ->
                     Other
             end;
         [{_, Site, undefined}] ->
-            dispatch_site_if_running(DispReq, OptReq, Site);
+            dispatch_site_if_running(DispReq, OptReq, Site, []);
         [{_, Site, _Redirect}] ->
             case DispReq#dispatch.path of
                 <<"/.well-known/", _/binary>> ->
-                    dispatch_site_if_running(DispReq, OptReq, Site);
+                    dispatch_site_if_running(DispReq, OptReq, Site, []);
                 _ ->
                     {redirect, Site, undefined, true}
             end
     end.
 
-dispatch_site_if_running(DispReq, OptReq, Site) ->
+dispatch_site_if_running(DispReq, OptReq, Site, ExtraBindings) ->
     case z_sites_manager:wait_for_running(Site) of
         ok ->
             Context = z_context:set_reqdata(OptReq, z_context:new(Site)),
-            dispatch_site(DispReq, Context);
+            dispatch_site(DispReq, Context, ExtraBindings);
         {error, timeout} ->
             {stop_request, 503};
         {error, _} ->
             case ets:lookup(?MODULE, '*') of
                 [] ->
-                    #dispatch_nomatch{};
+                    {stop_request, 400};
                 [{_Host, Site, _Redirect}] ->
                     {stop_request, 503};
                 [{_Host, FallbackSite, undefined}] ->
-                    dispatch_site_if_running(DispReq, OptReq, FallbackSite);
+                    ExtraBindings1 = [
+                        {http_status_code, 400}
+                        | proplists:delete(http_status_code, ExtraBindings)
+                    ],
+                    dispatch_site_if_running(DispReq, OptReq, FallbackSite, ExtraBindings1);
                 [{_Host, FallbackSite, _Redirect}] ->
                     {redirect, FallbackSite, undefined, true}
             end
     end.
 
--spec dispatch_site(#dispatch{}, #context{}) -> dispatch().
-dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context) ->
+-spec dispatch_site(#dispatch{}, #context{}, list()) -> dispatch().
+dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context, ExtraBindings) ->
     count_request(z_context:site(Context)),
     try
         {Tokens, IsDir} = split_path(Path),
@@ -336,16 +342,18 @@ dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = 
             {zotonic_site, z_context:site(Context)}
             | Bindings
         ],
-        trace(TracerPid, TokensRewritten, try_match, [{bindings, Bindings1}]),
+        Bindings2 = ExtraBindings ++ Bindings1,
+        trace(TracerPid, TokensRewritten, try_match, [{bindings, Bindings2}]),
         case dispatch_match(TokensRewritten, Context) of
             {ok, {DispatchRule, MatchBindings}} ->
+                Bindings3 = Bindings2++fix_match_bindings(MatchBindings, IsDir),
                 trace_final(
                         TracerPid,
-                        do_dispatch_rule(DispatchRule, Bindings1++fix_match_bindings(MatchBindings, IsDir), TokensRewritten, IsDir, DispReq, Context));
+                        do_dispatch_rule(DispatchRule, Bindings3, TokensRewritten, IsDir, DispReq, Context));
             fail ->
                 trace_final(
                         TracerPid,
-                        do_dispatch_fail(Bindings1, TokensRewritten, IsDir, DispReq, Context))
+                        do_dispatch_fail(Bindings2, TokensRewritten, IsDir, DispReq, Context))
         end
     catch
         throw:{stop_request, RespCode} ->
@@ -760,7 +768,7 @@ find_no_host_match(DispReq, OptReq) ->
                 [] ->
                     {stop_request, 400};
                 [{_, FallbackSite, undefined}] ->
-                    {ok, FallbackSite};
+                    {fallback, FallbackSite};
                 [{_, FallbackSite, _Redirect}] ->
                     {redirect, FallbackSite, undefined, true}
             end;

@@ -46,6 +46,7 @@
     await_startup/1,
 
     wait_for_running/1,
+    wait_for_running/2,
 
     get_site_config_overrides/1,
     put_site_config_overrides/2

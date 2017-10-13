@@ -1046,8 +1046,11 @@ set(Key, Value, Context) ->
 %% @doc Set the value of the context variables to all {Key, Value} properties.
 set(PropList, Context) when is_list(PropList) ->
     NewProps = lists:foldl(
-        fun ({Key,Value}, Props) ->
-            z_utils:prop_replace(Key, Value, Props)
+        fun
+            ({Key,Value}, Props) ->
+                z_utils:prop_replace(Key, Value, Props);
+            (Key, Props) ->
+                z_utils:prop_replace(Key, true, Props)
         end, Context#context.props, PropList),
     Context#context{props = NewProps}.
 
