@@ -519,29 +519,38 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Sync the status of all sites to the SITES_STATUS_TABLE ets table.
 do_sync_status(Sites) ->
     % Update existing, remove unknown
-    lists:map(
-        fun({Site, Status}) ->
+    IsChanged = lists:foldl(
+        fun({Site, Status}, AccChanged) ->
             case maps:find(Site, Sites) of
                 {ok, #site_status{ status = Status }} ->
-                    ok;
+                    AccChanged;
                 {ok, #site_status{ status = NewStatus }} ->
-                    ets:insert(?SITES_STATUS_TABLE, {Site, NewStatus});
+                    ets:insert(?SITES_STATUS_TABLE, {Site, NewStatus}),
+                    true;
                 error ->
-                    ets:delete(?SITES_STATUS_TABLE, Site)
+                    ets:delete(?SITES_STATUS_TABLE, Site),
+                    true
             end
         end,
+        false,
         ets:tab2list(?SITES_STATUS_TABLE)),
     % Insert new
-    maps:map(
-        fun(Site, #site_status{ status = Status }) ->
+    IsChanged1 = maps:fold(
+        fun(Site, #site_status{ status = Status }, AccChanged) ->
             case ets:lookup(?SITES_STATUS_TABLE, Site) of
                 [] ->
-                    ets:insert(?SITES_STATUS_TABLE, {Site, Status});
+                    ets:insert(?SITES_STATUS_TABLE, {Site, Status}),
+                    true;
                 _ ->
-                    ok
+                    AccChanged
             end
         end,
-        Sites).
+        IsChanged,
+        Sites),
+    case IsChanged1 of
+        true -> z_sites_dispatcher:update_hosts();
+        false -> ok
+    end.
 
 
 % ----------------------------------------------------------------------------

@@ -36,6 +36,7 @@
     dispatch/5,
     get_fallback_site/0,
     get_site_for_hostname/1,
+    update_hosts/0,
     update_dispatchinfo/0
 ]).
 
@@ -105,8 +106,15 @@ start_link(Args) when is_list(Args) ->
 
 
 %% @doc Collect dispatch information from all sites and recompiles the dispatch rules.
+-spec update_dispatchinfo() -> ok.
 update_dispatchinfo() ->
     gen_server:cast(?MODULE, update_dispatchinfo).
+
+
+%% @doc Update the host/site mappings
+-spec update_hosts() -> ok.
+update_hosts() ->
+    gen_server:cast(?MODULE, update_hosts).
 
 
 %% @doc Cowboy middleware, route the new request. Continue with the cowmachine,
@@ -389,8 +397,6 @@ is_bind_language(Match, _Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    % gen_server:cast(self(), update_hosts),
-    % gen_server:cast(self(), update_dispatchinfo),
     ets:new(?MODULE, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
     {ok, #state{}}.
 
