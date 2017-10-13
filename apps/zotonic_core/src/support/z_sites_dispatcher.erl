@@ -460,7 +460,7 @@ do_update_hosts() ->
                 Acc;
             (_Site, {_State, [], _IsRedirect}, Acc) ->
                 Acc;
-            (Site, {_State, [{PrimaryHost, _} | Hs], IsRedirect}, Acc) ->
+            (Site, {_State, [{PrimaryHost, _} | _] = Hs, IsRedirect}, Acc) ->
                 PrimaryHost1 = strip_port(PrimaryHost),
                 Hs1 = lists:map(
                     fun
@@ -476,15 +476,16 @@ do_update_hosts() ->
         end,
         [],
         SitesHosts),
-    % Per hostname, keep the highest prio definition
+    % Keep the highest prio definition per hostname
     Dict = lists:foldr(
         fun({_Prio, Host, Site, Redirect}, Acc) ->
-            dict:store(Host, {Site, Redirect}, Acc)
+            dict:store(Host, {Host, Site, Redirect}, Acc)
         end,
         dict:new(),
         lists:sort(Hosts)),
+    HostList = [ HSR || {_,HSR} <- dict:to_list(Dict) ],
     % Fetch current list from ets
-    HostSiteNew = lists:sort(dict:to_list(Dict)),
+    HostSiteNew = lists:sort(HostList),
     HostSiteOld = lists:sort(ets:tab2list(?MODULE)),
     % Insert/delete the changed host definitions
     lists:foreach(
