@@ -47,7 +47,7 @@
                         <optgroup label="{_ Collaboration groups _}">
                             {% for cid in cmgr ++ (cmbr -- cmgr) %}
                                 {% if cid.is_visible %}
-                                    <option value="{{ cid }}" {% if cid == content_group %}selected{% endi%}>{{ cid.title }}</option>
+                                    <option value="{{ cid }}" {% if cid == content_group %}selected{% endif %}>{{ cid.title }}</option>
                                 {% endif %}
                             {% endfor %}
                         </optgroup>
@@ -55,7 +55,7 @@
                     <optgroup label="{_ Content groups _}">
                         {% for c in m.hierarchy.content_group.tree_flat %}
                             {% if c.id.is_visible %}
-                                <option value="{{ c.id }}"  {% if c.id == content_group %}selected{% endif}>
+                                <option value="{{ c.id }}"  {% if c.id == content_group %}selected{% endif %}>
                                     {{ c.indent }} {{ c.id.title }}
                                 </option>
                             {% endif %}
