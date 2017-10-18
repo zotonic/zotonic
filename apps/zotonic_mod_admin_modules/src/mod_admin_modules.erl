@@ -36,22 +36,32 @@
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 
-%% @spec all(context()) -> ModuleDescriptions
 %% @doc Fetch a list of all modules available, including their description as a propertylist. The module list is sorted
 %% on the name of the module.
+-spec all(z:context()) -> list({{boolean(), 1|2, binary()}, list()}).
 all(Context) ->
     Active  = z_module_manager:active(Context),
     Modules = z_module_manager:scan(),
-    Descrs  = [ add_sort_key({z_module_manager:prio(M), M, [{is_active, lists:member(M, Active)}, {path, Path} | descr(M)]}) || {M, Path} <- Modules ],
+    Descrs  = lists:map(
+        fun({Module, App, Path}) ->
+            ModProps = [
+                {is_active, lists:member(Module, Active)},
+                {path, Path},
+                {app, App}
+                | descr(Module)
+            ],
+            add_sort_key({z_module_manager:prio(Module), Module, ModProps})
+        end,
+        Modules),
     lists:sort(Descrs).
 
 
-    add_sort_key({Prio, M, Props}) ->
-        SortKey = case atom_to_list(M) of
-                    "mod_" ++ _ -> {not proplists:get_value(is_active, Props), 2, z_string:to_name(proplists:get_value(mod_title, Props))};
-                    _ -> {not proplists:get_value(is_active, Props), 1, proplists:get_value(mod_title, Props)}
-                  end,
-        {SortKey, Prio, M, Props}.
+add_sort_key({Prio, M, Props}) ->
+    SortKey = case atom_to_list(M) of
+                "mod_" ++ _ -> {not proplists:get_value(is_active, Props), 2, z_string:to_name(proplists:get_value(mod_title, Props))};
+                _ -> {not proplists:get_value(is_active, Props), 1, proplists:get_value(mod_title, Props)}
+              end,
+    {SortKey, Prio, M, Props}.
 
 
 %% @spec descr(ModuleName) -> proplist()
