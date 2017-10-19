@@ -376,6 +376,11 @@
 % 'session_init'    - Notification that a new session has been initialized (session_pid is in the context)
 % 'session_init_fold' - foldl over the context containing a new session (after session_init)
 
+%% @doc Foldl over the #context after a logon error before the logon error page is shown.
+-record(auth_logon_error, {
+        reason = [] :: list()
+    }).
+
 %% @doc Authentication against some (external or internal) service was validated
 -record(auth_validated, {
         service :: atom(),

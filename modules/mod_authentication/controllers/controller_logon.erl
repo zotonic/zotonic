@@ -272,9 +272,10 @@ reset(Args, Context) ->
 
 
 logon_error(Reason, Context) ->
-    Context1 = z_render:set_value("password", "", Context),
-    Context2 = z_render:wire({add_class, [{target, "signup_logon_box"}, {class, "z-logon-error"}]}, Context1),
-    z_render:update("logon_error", z_template:render("_logon_error.tpl", [{reason, Reason}], Context2), Context2).
+    Context1 = z_notifier:foldl(#auth_logon_error{reason=Reason}, Context, Context),
+    Context2 = z_render:set_value("password", "", Context1),
+    Context3 = z_render:wire({add_class, [{target, "signup_logon_box"}, {class, "z-logon-error"}]}, Context2),
+    z_render:update("logon_error", z_template:render("_logon_error.tpl", [{reason, Reason}], Context3), Context3).
 
 
 remove_logon_error(Context) ->
