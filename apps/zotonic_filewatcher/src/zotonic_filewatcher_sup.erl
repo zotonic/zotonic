@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
-%% @doc Check for changed files, notify sites of any changes.
+%% @copyright 2015-2017 Marc Worrell
+%% @doc Check for changed files, notify the zotonic_filehandler of any changes
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_filewatcher_sup).
+-module(zotonic_filewatcher_sup).
 -author('Marc Worrell <marc@worrell.nl>').
 -behaviour(supervisor).
 
@@ -42,41 +42,50 @@ init([]) ->
 
 children(true) ->
     Watchers = [
-        z_filewatcher_fswatch,
-        z_filewatcher_inotify
+        zotonic_filewatcher_fswatch,
+        zotonic_filewatcher_inotify
     ],
     which_watcher(Watchers);
 children(false) ->
-    lager:error("FILEWATCHER: disabled"),
+    lager:debug("zotonic_filewatcher: disabled"),
     [
-        {z_filewatcher_beam_reloader,
-          {z_filewatcher_beam_reloader, start_link, [false]},
-          permanent, 5000, worker, [z_filewatcher_beam_reloader]}
+        {zotonic_filewatcher_handler,
+          {zotonic_filewatcher_handler, start_link, []},
+          permanent, 5000, worker, [zotonic_filewatcher_handler]},
+        {zotonic_filewatcher_beam_reloader,
+          {zotonic_filewatcher_beam_reloader, start_link, [false]},
+          permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]}
     ].
 
 which_watcher([]) ->
     IsScannerEnabled = z_config:get(filewatcher_scanner_enabled, false),
     case IsScannerEnabled of
         true ->
-            lager:error("FILEWATCHER: please install fswatch or inotify-tools to improve automatic loading of changed files");
+            lager:warning("zotonic_filewatcher: please install fswatch or inotify-tools to improve automatic loading of changed files");
         false ->
-            lager:error("FILEWATCHER: please install fswatch or inotify-tools to automatically load changed files")
+            lager:warning("zotonic_filewatcher: please install fswatch or inotify-tools to automatically load changed files")
     end,
     [
-        {z_filewatcher_monitor,
-          {z_filewatcher_monitor, start_link, []},
-          permanent, 5000, worker, [z_filewatcher_monitor]},
-        {z_filewatcher_beam_reloader,
-          {z_filewatcher_beam_reloader, start_link, [IsScannerEnabled]},
-          permanent, 5000, worker, [z_filewatcher_beam_reloader]}
+        {zotonic_filewatcher_handler,
+          {zotonic_filewatcher_handler, start_link, []},
+          permanent, 5000, worker, [zotonic_filewatcher_handler]},
+        {zotonic_filewatcher_monitor,
+          {zotonic_filewatcher_monitor, start_link, []},
+          permanent, 5000, worker, [zotonic_filewatcher_monitor]},
+        {zotonic_filewatcher_beam_reloader,
+          {zotonic_filewatcher_beam_reloader, start_link, [IsScannerEnabled]},
+          permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]}
     ];
 which_watcher([M|Ms]) ->
     case M:is_installed() of
         true ->
             [
-                {z_filewatcher_beam_reloader,
-                  {z_filewatcher_beam_reloader, start_link, [false]},
-                  permanent, 5000, worker, [z_filewatcher_beam_reloader]},
+                {zotonic_filewatcher_handler,
+                  {zotonic_filewatcher_handler, start_link, []},
+                  permanent, 5000, worker, [zotonic_filewatcher_handler]},
+                {zotonic_filewatcher_beam_reloader,
+                  {zotonic_filewatcher_beam_reloader, start_link, [false]},
+                  permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]},
                 {M,
                   {M, start_link, []},
                   permanent, 5000, worker, [M]}

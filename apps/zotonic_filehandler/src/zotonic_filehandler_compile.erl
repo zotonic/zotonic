@@ -15,14 +15,17 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(zotonic_compile).
+-module(zotonic_filehandler_compile).
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
 -export([
     all/0,
     recompile/1,
     compile_options/1,
-    ld/0, ld/1
+    run_cmd/1,
+    run_cmd/2,
+    ld/0,
+    ld/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -51,42 +54,79 @@ ld(Module) when is_atom(Module) ->
 %% @doc Compile all files
 -spec all() -> ok.
 all() ->
-    Ret = case os:getenv("ZOTONIC") of
+    Cmd = case os:getenv("ZOTONIC") of
         false ->
-            os:cmd("./rebar3 compile");
+            "./rebar3 compile";
         ZotonicDir ->
-            Cmd = [
+            lists:flatten([
                 "cd ", z_utils:os_filename(ZotonicDir),
                 "; ./rebar3 compile"
-            ],
-            os:cmd(lists:flatten(Cmd))
+            ])
     end,
-    lager:debug("rebar3 compile returns '~s'", [Ret]),
-    ok.
+    zotonic_filehandler:terminal_notifier("Compile all"),
+    run_cmd(Cmd).
+
+run_cmd(Cmd) ->
+    run_cmd(Cmd, []).
+
+run_cmd(Cmd, Opts) when is_binary(Cmd) ->
+    run_cmd(unicode:characters_to_list(Cmd, utf8), Opts);
+run_cmd(Cmd, Opts) ->
+    case exec:run(lists:flatten(Cmd), [ sync, stdout, stderr ] ++ Opts) of
+        {ok, Out} ->
+            case proplists:get_value(stderr, Out, []) of
+                [] ->
+                    ok;
+                StdErr ->
+                    lager:error("Running '~s' returned ~p", [Cmd, StdErr]),
+                    ok
+            end;
+        {error, Args} = Error when is_list(Args) ->
+            case proplists:get_value(stderr, Args, <<>>) of
+                <<>> ->
+                    lager:error("Running '~s' returned ~p", [Cmd, Error]);
+                StdErr ->
+                    lager:error("Running '~s' returned '~s'", [Cmd, StdErr])
+            end,
+            Error
+    end.
 
 %% @todo When "./rebar3 compile" runs, then all .../test/*.erl file are touched.
 %%       This forces a recompile of all these files. We might not want to
 %%       automatically recompile these files during a rebar3 run. Of course
 %%       problem is to known if rebar3 is running...
--spec recompile(file:filename_all()) -> ok | error.
+-spec recompile(file:filename_all()) -> ok | {error, term()}.
+recompile(File) when is_binary(File) ->
+    recompile(unicode:characters_to_list(File, utf8));
 recompile(File) ->
     case compile_options(File) of
         {ok, Options} ->
             lager:debug("Recompiling '~s' using make", [File]),
+            zotonic_filehandler:terminal_notifier("Compiling: " ++ filename:basename(File)),
             case make:files([File], Options) of
                 up_to_date -> ok;
-                Other -> Other
+                Other -> {error, Other}
             end;
         false ->
             % Might be some new OTP app, recompile with rebar3
             % Output can be anything ... no error checking for now :(
             lager:debug("Recompile all files due to '~s'", [File]),
-            _ = all(),
-            ok
+            all()
     end.
 
 -spec compile_options(file:filename_all()) -> {ok, list()} | false.
+compile_options(File) when is_binary(File) ->
+    compile_options(unicode:characters_to_list(File, utf8));
 compile_options(Filename) ->
+    case compile_options_1(Filename) of
+        {ok, Options} ->
+            Options1 = [ Opt || Opt <- Options, Opt =/= error_summary ],
+            {ok, Options1};
+        {error, _} = Error ->
+            Error
+    end.
+
+compile_options_1(Filename) ->
     case previous_compile_options(Filename) of
         false ->
             % Guess the options based on other ebin files

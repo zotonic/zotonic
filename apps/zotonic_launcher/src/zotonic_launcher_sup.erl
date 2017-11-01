@@ -57,8 +57,8 @@ init([]) ->
             permanent, 5000, supervisor, dynamic},
 
         %% File watcher, keep track of changed files for modules, templates etc.
-        {z_filewatcher_sup,
-            {z_filewatcher_sup, start_link, []},
+        {zotonic_filewatcher_sup,
+            {zotonic_filewatcher_sup, start_link, []},
             permanent, 10100, supervisor, dynamic},
 
         %% HTTP listener

@@ -82,7 +82,7 @@ scan_file(".tpl", File) ->
           lager:error("POT generation, erlang error in \"~s\": ~p~n", [File, Reason])
     end;
 scan_file(".erl", File) ->
-    IncludeDirs = case zotonic_compile:compile_options(File) of
+    IncludeDirs = case zotonic_filehandler:compile_options(File) of
         {ok, Options} -> proplists:get_all_values(i, Options);
         false -> []
     end,

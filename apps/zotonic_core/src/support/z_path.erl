@@ -107,7 +107,7 @@ files_subdir_ensure(SubDir, Context) ->
         Dir ->
             case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
                 ok -> Dir;
-                {eror, _} = Error -> Error
+                {error, _} = Error -> Error
             end
     end.
 

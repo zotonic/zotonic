@@ -1,8 +1,0 @@
-%% Less config for Zotonic's file watcher
-%% Params 'from' and 'to' are mandatory.
-%% Path values are local to this config file.
-[
-    {from, "zotonic-admin.less"},
-    {to, "../css/zotonic-admin.css"},
-    {params, "--include-path='../../../../zotonic_mod_artwork/priv/lib/font-awesome-4/less:../../../../zotonic_mod_artwork/priv/lib/material-design/less'"}
-].

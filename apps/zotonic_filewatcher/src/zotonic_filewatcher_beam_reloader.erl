@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_filewatcher_beam_reloader).
+-module(zotonic_filewatcher_beam_reloader).
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
 
@@ -127,26 +127,26 @@ handle_info(reload_beams, State) ->
     {noreply, State};
 
 %% @doc Handling all non call/cast messages
-handle_info({z_filewatcher_monitor, _Ref, {changed, Path, file, _FileInfo, _Diff}}, State) ->
-    z_filewatcher_handler:file_changed(modify, Path),
+handle_info({zotonic_filewatcher_monitor, _Ref, {changed, Path, file, _FileInfo, _Diff}}, State) ->
+    zotonic_filewatcher_handler:file_changed(modify, Path),
     {noreply, State};
 
-handle_info({z_filewatcher_monitor, _Ref, {found, Path, file, FileInfo, _Diff}}, #state{start_time=StartTime} = State) ->
+handle_info({zotonic_filewatcher_monitor, _Ref, {found, Path, file, FileInfo, _Diff}}, #state{start_time=StartTime} = State) ->
     case StartTime < FileInfo#file_info.mtime of
-        true -> z_filewatcher_handler:file_changed(create, Path);
+        true -> zotonic_filewatcher_handler:file_changed(create, Path);
         false -> ok
     end,
     {noreply, State};
 
-handle_info({z_filewatcher_monitor, _Ref, {changed, Path, directory, _FileInfo, Diff}}, State) ->
+handle_info({zotonic_filewatcher_monitor, _Ref, {changed, Path, directory, _FileInfo, Diff}}, State) ->
     lists:foreach(
             fun
                 ({deleted, File}) ->
                     FilePath = filename:join([Path, File]),
-                    z_filewatcher_handler:file_changed(delete, FilePath);
+                    zotonic_filewatcher_handler:file_changed(delete, FilePath);
                 ({added, File}) ->
                     FilePath = filename:join([Path, File]),
-                    z_filewatcher_handler:file_changed(create, FilePath)
+                    zotonic_filewatcher_handler:file_changed(create, FilePath)
             end,
             Diff),
     {noreply, State};
@@ -231,9 +231,9 @@ module_changed(Module, BeamFile) ->
 
 %% @doc Initialize the filewatcher monitor, this one uses polling
 init_scanner(true) ->
-    Dirs = z_filewatcher_sup:watch_dirs(),
+    Dirs = zotonic_filewatcher_sup:watch_dirs(),
     lists:foreach(fun(Dir) ->
-                    _ = z_filewatcher_monitor:automonitor(Dir)
+                    _ = zotonic_filewatcher_monitor:automonitor(Dir)
                   end,
                   Dirs),
     ok;
