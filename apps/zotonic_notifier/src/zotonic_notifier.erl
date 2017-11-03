@@ -39,7 +39,7 @@
     map/3, map/4,
     foldl/4,  foldl/5,
     foldr/4, foldr/5,
-    await/1, await/2, await/3,
+    await/1, await/2, await/3, await/4,
     await_exact/2, await_exact/3, await_exact/4
 ]).
 
