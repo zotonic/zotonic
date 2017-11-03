@@ -41,6 +41,7 @@
 -spec mappers() -> [ function() ].
 mappers() ->
     [
+        fun drop_dirs/7,
         fun temp_beam/7,
         fun beam_file/7,
         fun header_file/7,
@@ -60,6 +61,14 @@ mappers() ->
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% ------------------------------ Map files to actions ------------------------------
+
+drop_dirs(delete, _Application, _What, _Ext, _Root, _Split, _Filename) ->
+    false;
+drop_dirs(_Verb, _Application, _What, _Ext, _Root, _Split, Filename) ->
+    case filelib:is_dir(Filename) of
+        true -> ok;
+        false -> false
+    end.
 
 %% @doc Recompile Erlang files on the fly
 temp_beam(_Verb, _Application, _What, <<".bea#">>, _Root, _Split, _Filename) ->
@@ -115,6 +124,8 @@ lib_src_build(_Verb, Application, {priv, <<"lib-src">>, Path}, _Ext, _Root, _Spl
             {ok, [
                 {?MODULE, run_build, [Application, BuildCmd]}
             ]};
+        ok ->
+            ok;
         false ->
             false
     end;

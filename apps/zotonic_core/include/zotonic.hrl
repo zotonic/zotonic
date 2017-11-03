@@ -38,7 +38,6 @@
 
         %% Servers and supervisors for the site
         depcache            :: pid() | atom(),
-        notifier            :: pid() | atom(),
         session_manager     :: pid() | atom(),
         dispatcher          :: pid() | atom(),
         template_server     :: pid() | atom(),

@@ -152,7 +152,6 @@ new(#context{} = C) ->
         language=C#context.language,
         tz=C#context.tz,
         depcache=C#context.depcache,
-        notifier=C#context.notifier,
         session_manager=C#context.session_manager,
         dispatcher=C#context.dispatcher,
         template_server=C#context.template_server,
@@ -220,8 +219,7 @@ new_tests() ->
             #context{
                 site=test,
                 language=[en],
-                tz= <<"UTC">>,
-                notifier='z_notifier$test'
+                tz= <<"UTC">>
             }),
     case ets:info(Context#context.translation_table) of
         undefined ->
@@ -240,7 +238,6 @@ set_server_names(#context{site=Site} = Context) ->
     Depcache = list_to_atom("z_depcache"++SiteAsList),
     Context#context{
         depcache=Depcache,
-        notifier=list_to_atom("z_notifier"++SiteAsList),
         session_manager=list_to_atom("z_session_manager"++SiteAsList),
         dispatcher=list_to_atom("z_dispatcher"++SiteAsList),
         template_server=list_to_atom("z_template"++SiteAsList),
@@ -329,7 +326,6 @@ prune_for_async(#context{} = Context) ->
         acl=Context#context.acl,
         props=Context#context.props,
         depcache=Context#context.depcache,
-        notifier=Context#context.notifier,
         session_manager=Context#context.session_manager,
         dispatcher=Context#context.dispatcher,
         template_server=Context#context.template_server,
@@ -368,7 +364,6 @@ prune_for_database(Context) ->
         site=Context#context.site,
         dbc=Context#context.dbc,
         depcache=Context#context.depcache,
-        notifier=Context#context.notifier,
         session_manager=Context#context.session_manager,
         dispatcher=Context#context.dispatcher,
         template_server=Context#context.template_server,

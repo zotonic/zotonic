@@ -56,7 +56,8 @@
         "|\\.log$"
         "|\\.dump$"
         "|/mnesia/"
-        "|/\\.rebar3").
+        "|/\\.rebar3"
+        "|\\.DS_Store").
 
 
 -define(TIMER_DELAY, 300).

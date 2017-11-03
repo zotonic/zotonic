@@ -62,9 +62,6 @@ init(Site) ->
       ]),
     z_sites_manager:set_site_status(Site, starting),
     {ok, {{one_for_all, 2, 1}, [
-        {z_notifier,
-            {z_notifier, start_link, [Site]},
-            permanent, 5000, worker, dynamic},
         {z_trans_server,
             {z_trans_server, start_link, [Site]},
             permanent, 5000, worker, dynamic},

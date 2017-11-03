@@ -23,20 +23,20 @@ attach_detach_test() ->
     z_notifier:observe(test_blaat, {?MODULE, observer1}, Context),
     ?assertEqual([{?NOTIFIER_DEFAULT_PRIORITY, {?MODULE, observer1}}],
                  z_notifier:get_observers(test_blaat, Context)),
-    z_notifier:detach(test_blaat, {?MODULE, observer1}, Context),
+    z_notifier:detach(test_blaat, Context),
     ?assertEqual([], z_notifier:get_observers(test_blaat, Context)).
 
 
 %% @doc Test z_notifier:detach_all/2
-detach_all_test() ->
-    Context = z_context:new(zotonic_site_testsandbox),
-    ?assertEqual([], z_notifier:get_observers(test_blaat, Context)),
-    z_notifier:observe(test_blaat, {?MODULE, observer1}, Context),
-    z_notifier:observe(test_blaat, {?MODULE, observer2}, Context),
-    ?assertEqual([{?NOTIFIER_DEFAULT_PRIORITY, {?MODULE, observer1}}, {?NOTIFIER_DEFAULT_PRIORITY, {?MODULE, observer2}}],
-                 z_notifier:get_observers(test_blaat, Context)),
-    z_notifier:detach_all(test_blaat, Context),
-    ?assertEqual([], z_notifier:get_observers(test_blaat, Context)).
+% detach_all_test() ->
+%     Context = z_context:new(zotonic_site_testsandbox),
+%     ?assertEqual([], z_notifier:get_observers(test_blaat, Context)),
+%     z_notifier:observe(test_blaat, {?MODULE, observer1}, Context),
+%     z_notifier:observe(test_blaat, {?MODULE, observer2}, Context),
+%     ?assertEqual([{?NOTIFIER_DEFAULT_PRIORITY, {?MODULE, observer1}}, {?NOTIFIER_DEFAULT_PRIORITY, {?MODULE, observer2}}],
+%                  z_notifier:get_observers(test_blaat, Context)),
+%     z_notifier:detach_all(test_blaat, Context),
+%     ?assertEqual([], z_notifier:get_observers(test_blaat, Context)).
 
 
 %% @doc Test receiving a message using z_notifer:first

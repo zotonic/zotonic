@@ -8,13 +8,15 @@
   {applications, [kernel, stdlib, crypto, public_key, ssl, inets, lager,
                   mimetypes, mnesia, emqtt, gproc, jobs, sidejob,
                   bert, dh_date, eiconv, exometer_core,
-                  epgsql, depcache, zotonic_stdlib,
+                  epgsql,
+                  depcache, zotonic_stdlib,
                   cowboy, cowmachine,
                   poolboy,
                   filezcache, s3filez,
                   template_compiler,
                   qdate, syslog,
                   bcrypt, erlpass,
-                  letsencrypt
+                  letsencrypt,
+                  zotonic_notifier
   ]}
  ]}.

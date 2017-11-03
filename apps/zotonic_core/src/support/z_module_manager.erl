@@ -1300,20 +1300,15 @@ manage_schema(_, Current, Target, _) ->
 %% @doc Add the observers for a module, called after module has been activated
 add_observers(Module, Pid, #state{ site = Site } = State) ->
     {Module, Exports} = lists:keyfind(Module, 1, State#state.module_exports),
-    Context = z_acl:sudo(z_context:new(Site)),
     lists:foreach(fun({Message, Handler}) ->
-                      z_notifier:observe(Message, Handler, Context)
+                      z_notifier:observe(Message, Handler, Pid, Site)
                   end,
                   observes(Module, Exports,Pid)).
 
 %% @doc Remove the observers for a module, called before module is deactivated
-remove_observers(Module, Pid, #state{ site = Site } = State) ->
-    {Module, Exports} = lists:keyfind(Module, 1, State#state.module_exports),
-    Context = z_acl:sudo(z_context:new(Site)),
-    lists:foreach(fun({Message, Handler}) ->
-                      z_notifier:detach(Message, Handler, Context)
-                  end,
-                  lists:reverse(observes(Module, Exports, Pid))).
+remove_observers(_Module, Pid, #state{ site = Site }) ->
+    % {Module, Exports} = lists:keyfind(Module, 1, State#state.module_exports),
+    z_notifier:detach_all(Pid, Site).
 
 
 %% @doc Get the list of events the module observes.
