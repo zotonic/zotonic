@@ -254,7 +254,7 @@
 %% The name of the persistent data cookie
 -define(PERSIST_COOKIE, <<"z_pid">>).
 
-%% Max age of the person cookie, 10 years or so.
+%% Max age of the persistent cookie, 10 years or so.
 -define(PERSIST_COOKIE_MAX_AGE, 3600*24*3650).
 
 %% Millisecs of no activity before the visitor process is stopped (if there are no attached sessions).
@@ -269,9 +269,6 @@
 
 %% Our default WWW-Authenticate header
 -define(WWW_AUTHENTICATE, <<"OAuth-1.0">>).
-
-%% Notifier defines
--define(NOTIFIER_DEFAULT_PRIORITY, 500).
 
 %% Wrapper macro to put Erlang terms in a bytea database column.
 %% Extraction is automatic, based on a magic marker prefixed to the serialized term.

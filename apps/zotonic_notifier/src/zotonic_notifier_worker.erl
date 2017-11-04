@@ -88,18 +88,18 @@ start_tests() ->
 -spec observe(zotonic_notifier:event(), zotonic_notifier:observer(), pid(), integer(),
               zotonic_notifier:notifier()) -> {ok, zotonic_notifier:id()} | {error, term()}.
 observe(Notifier, Event, Observer, OwnerPid, Prio) ->
-    gen_server:call(Notifier, {observe, Event, Observer, OwnerPid, Prio}).
+    gen_server:call(Notifier, {observe, Event, Observer, OwnerPid, Prio}, infinity).
 
 
 %% @doc Detach all observers for the owner
 -spec detach_all(zotonic_notifier:notifier(), pid()) -> ok | {error, term()}.
 detach_all(Notifier, OwnerPid) when is_pid(OwnerPid) ->
-    gen_server:call(Notifier, {detach_all, OwnerPid}).
+    gen_server:call(Notifier, {detach_all, OwnerPid}, infinity).
 
 %% @doc Unsubscribe an owner-pid from an event.
 -spec detach(zotonic_notifier:notifier(), zotonic_notifier:event(), pid()) -> ok | {error, term()}.
 detach(Notifier, Event, OwnerPid) ->
-    gen_server:call(Notifier, {detach, Event, OwnerPid}).
+    gen_server:call(Notifier, {detach, Event, OwnerPid}, infinity).
 
 %% @doc Return all observers for a particular event
 -spec get_observers(zotonic_notifier:notifier(), zotonic_notifier:event()) -> list().
