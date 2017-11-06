@@ -95,21 +95,29 @@ which_watcher([M|Ms]) ->
     end.
 
 %% @doc Return the list of all directories to watch
-%% @todo do not watch the 'priv/files' directories
-%% @todo check if need to follow softlinks in the _checkouts directory
+%% @todo check if need to follow softlinks
 -spec watch_dirs() -> list(string()).
 watch_dirs() ->
     ZotonicDirs = [
-        filename:join(z_path:get_path(), "apps"),
-        filename:join(z_path:get_path(), "_checkouts"),
-        filename:join(z_path:get_path(), "priv/translations"),
-        z_path:build_lib_dir()
-
-        % These we have to scan to pick up any new apps, so that they can be linked in _checkouts
-        % Actually, we might hold off of scanning, as _checkouts will need to change (and the compiled
-        % files if rebar3 has been run)
-        %
-        % z_path:user_sites_dir(),
-        % z_path:user_modules_dir()
+        filename:join(get_path(), "apps"),
+        filename:join(get_path(), "_checkouts"),
+        build_lib_dir()
     ],
     lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs).
+
+%% @doc Return the _build/default/lib directory
+-spec build_lib_dir() -> file:filename().
+build_lib_dir() ->
+    filename:dirname(code:lib_dir(zotonic_filewatcher)).
+
+%% @doc Get the path to the root dir of the Zotonic install.
+%%      If the env var 'ZOTONIC' is not set, then return the current working dir.
+-spec get_path() -> file:filename().
+get_path() ->
+    case os:getenv("ZOTONIC") of
+        false ->
+            {ok, Cwd} = file:get_cwd(),
+            Cwd;
+        ZotonicDir ->
+            ZotonicDir
+    end.

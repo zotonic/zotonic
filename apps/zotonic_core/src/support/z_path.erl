@@ -140,5 +140,5 @@ get_path() ->
 %% @doc Return the _build/default/lib directory
 -spec build_lib_dir() -> file:filename().
 build_lib_dir() ->
-    filename:dirname(filename:dirname(code:priv_dir(zotonic))).
+    filename:dirname(code:lib_dir(zotonic_core)).
 
