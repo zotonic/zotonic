@@ -342,16 +342,16 @@ reload_dispatch() ->
         z_sites_manager:get_site_contexts()).
 
 %% @doc Run the build command in a lib-src directory
-run_build(Application, BuildCmd) ->
-    zotonic_filehandler:terminal_notifier("Build: " ++ app_path(Application, BuildCmd)),
+run_build(Application, {make, Makefile}) ->
+    zotonic_filehandler:terminal_notifier("Make: " ++ app_path(Application, Makefile)),
     CmdOpts = [
         {env, [
             {"APP_DIR", code:lib_dir(Application)}
         ]}
     ],
-    BuildDir = filename:dirname(BuildCmd),
-    BuildCmd1 = "cd " ++ z_utils:os_escape(BuildDir) ++ "; sh -c " ++ z_utils:os_escape(BuildCmd),
-    zotonic_filehandler_compile:run_cmd(BuildCmd1, CmdOpts).
+    BuildDir = filename:dirname(Makefile),
+    MakeCmd = "cd " ++ z_utils:os_escape(BuildDir) ++ "; sh -c make " ++ z_utils:os_escape(Makefile),
+    zotonic_filehandler_compile:run_cmd(MakeCmd, CmdOpts).
 
 %% @doc Mark a file as modified in the mtime index
 mark_modified(Filename) ->
@@ -380,24 +380,15 @@ is_newer_1(A, B) -> A > B.
 
 
 %% @doc Find a build commmand on the path to the changed lib-src file.
-%%      We look for the following files:
-%%          - build.sh
-%%          - build-watcher.sh
-%%          - build-targets
-%%      The build-targets file contains a list of files, relative to the "lib" directory.
-%%      It is used to check if the build command should be called or not
+%%      We look for a Makefile to build the targets in 'priv/lib'. This Makefile will
+%%      be executed in the next step.
 %%      TODO: The build-watcher.sh is a background process that is started and kept running.
 build_command(Application, SrcPath) ->
     LibSrcDir = filename:join([code:priv_dir(Application), "lib-src"]),
-    LibDir = filename:join([code:priv_dir(Application), "lib"]),
+    % LibDir = filename:join([code:priv_dir(Application), "lib"]),
     case find_build(LibSrcDir, filename:split(filename:dirname(SrcPath))) of
-        {ok, BuildCmd} ->
-            case is_build_needed(BuildCmd, LibDir, filename:join(LibSrcDir, SrcPath)) of
-                true ->
-                    {ok, BuildCmd};
-                false ->
-                    ok
-            end;
+        {ok, {make, _Makefile} = BuildCmd} ->
+            {ok, BuildCmd};
         false ->
             false
     end.
@@ -406,38 +397,39 @@ find_build(_LibSrcDir, []) ->
     false;
 find_build(LibSrcDir, Dir) ->
     Dirname = filename:join([LibSrcDir] ++ Dir),
-    BuildCmd = filename:join(Dirname, "build.sh"),
-    case filelib:is_file(BuildCmd) of
+    Makefile = filename:join(Dirname, "Makefile"),
+    case filelib:is_file(Makefile) of
         true ->
-            {ok, BuildCmd};
+            {ok, {make, Makefile}};
         false ->
             Up = lists:reverse(tl(lists:reverse(Dir))),
             find_build(LibSrcDir, Up)
     end.
 
-is_build_needed(BuildCmd, LibDir, SrcFilename) ->
-    case filelib:is_file(SrcFilename) of
-        false ->
-            true;
-        true ->
-            Targets = filename:join(filename:dirname(BuildCmd), "build-targets"),
-            case file:read_file(Targets) of
-                {ok, Bin} ->
-                    Lines = binary:split(Bin, <<10>>, [global]),
-                    Lines1 = [ z_string:trim(Line) || Line <- Lines ],
-                    not lists:all(
-                        fun
-                            (<<>>) -> true;
-                            (<<"#", _/binary>>) -> true;
-                            (Tgt) ->
-                                TgtFile = filename:join(LibDir, Tgt),
-                                not is_newer(SrcFilename, TgtFile)
-                        end,
-                        Lines1);
-                {error, _} ->
-                    true
-            end
-    end.
+%% @doc This will be needed for supporting the build-watcher
+% is_build_needed(BuildCmd, LibDir, SrcFilename) ->
+%     case filelib:is_file(SrcFilename) of
+%         false ->
+%             true;
+%         true ->
+%             Targets = filename:join(filename:dirname(BuildCmd), "build-targets"),
+%             case file:read_file(Targets) of
+%                 {ok, Bin} ->
+%                     Lines = binary:split(Bin, <<10>>, [global]),
+%                     Lines1 = [ z_string:trim(Line) || Line <- Lines ],
+%                     not lists:all(
+%                         fun
+%                             (<<>>) -> true;
+%                             (<<"#", _/binary>>) -> true;
+%                             (Tgt) ->
+%                                 TgtFile = filename:join(LibDir, Tgt),
+%                                 not is_newer(SrcFilename, TgtFile)
+%                         end,
+%                         Lines1);
+%                 {error, _} ->
+%                     true
+%             end
+%     end.
 
 
 % check_run_sitetest(Basename, F) ->
