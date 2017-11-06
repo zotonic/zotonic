@@ -28,4 +28,4 @@ fi
 
 require_zotonic_not_running
 
-$ERL -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -sasl errlog_type error -s zotonic
+$ERL -smp enable -env ERL_MAX_PORTS $MAX_PORTS +P $MAX_PROCESSES +K $KERNEL_POLL -pa $PA $NAME_ARG $NODENAME@$NODEHOST -boot start_sasl $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -sasl errlog_type error -s zotonic

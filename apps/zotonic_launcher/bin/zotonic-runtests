@@ -48,5 +48,5 @@ echo $ALL
 echo
 
 # Run the tests
-$ERL +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$NODEHOST $(find_config_arg zotonic.config) -boot start_sasl -sasl errlog_type error -s zotonic -eval "zotonic:await_startup(),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
+$ERL -smp enable +P 10000000 +K true -pa $PA $NAME_ARG ${NODENAME}_testsandbox@$NODEHOST $(find_config_arg zotonic.config) -boot start_sasl -sasl errlog_type error -s zotonic -eval "zotonic:await_startup(),init:stop(case eunit:test([$ALL],[]) of error -> 1; ok -> 0 end)"
 EXIT=$?

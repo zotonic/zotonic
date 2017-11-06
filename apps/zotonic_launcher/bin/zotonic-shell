@@ -22,4 +22,4 @@
 
 require_zotonic_running
 
-$ERL $NAME_ARG ${NODENAME}_shell_$$@$NODEHOST -remsh $NODENAME@$NODEHOST
+$ERL -smp enable $NAME_ARG ${NODENAME}_shell_$$@$NODEHOST -remsh $NODENAME@$NODEHOST
