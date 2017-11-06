@@ -50,7 +50,7 @@
 -define(TIMEOUT, 60000).
 
 %% Default priority for notifiers. Normal module priorities are 1..1000.
--define(NOTIFIER_DEFAULT_PRIORITY, 500).
+-define(DEFAULT_PRIORITY, 500).
 
 
 %% @doc Subscribe to an event. Observer is a MFA or pid()
@@ -76,7 +76,7 @@ detach_all(Context) ->
     detach_all(self(), Context).
 
 detach_all(OwnerPid, Site) when is_atom(Site), is_pid(OwnerPid) ->
-    zotonic_notifier:detach_all(zotonic_notifier, OwnerPid);
+    zotonic_notifier:detach_all(OwnerPid);
 detach_all(OwnerPid, Context) ->
     detach_all(OwnerPid, z_context:site(Context)).
 
@@ -208,5 +208,5 @@ delay_notification(Msg) ->
 
 prio({M, _F, _A}) -> z_module_manager:prio(M);
 prio({M, _F}) -> z_module_manager:prio(M);
-prio(Pid) when is_pid(Pid) -> ?NOTIFIER_DEFAULT_PRIORITY.
+prio(Pid) when is_pid(Pid) -> ?DEFAULT_PRIORITY.
 
