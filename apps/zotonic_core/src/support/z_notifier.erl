@@ -46,19 +46,8 @@
 
 -include_lib("zotonic.hrl").
 
+%% Timeout for gen_server:call for observers.
 -define(TIMEOUT, 60000).
-
-
-%% move this zotonic_mod_cron
--define(TIMER_INTERVAL, [ {1, tick_1s},
-                          {60, tick_1m},
-                          {600, tick_10m},
-                          {3600, tick_1h},
-                          {7200, tick_2h},
-                          {21600, tick_6h},
-                          {43200, tick_12h},
-                          {86400, tick_24h} ]).
-
 
 %% Default priority for notifiers. Normal module priorities are 1..1000.
 -define(NOTIFIER_DEFAULT_PRIORITY, 500).

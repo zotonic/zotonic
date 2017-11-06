@@ -22,7 +22,7 @@
 -mod_title("SSL - Let's Encrypt").
 -mod_description("Use SSL Certificate from Let's Encrypt.").
 -mod_provides([]).
--mod_depends([]).
+-mod_depends([cron]).
 -mod_prio(200).
 
 -behaviour(gen_server).
