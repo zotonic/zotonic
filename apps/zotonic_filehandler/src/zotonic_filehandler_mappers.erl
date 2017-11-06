@@ -379,13 +379,12 @@ is_newer_1(_, 0) -> true;
 is_newer_1(A, B) -> A > B.
 
 
-%% @doc Find a build commmand on the path to the changed lib-src file.
+%% @doc Find a Makefile on the path to the changed lib-src file.
 %%      We look for a Makefile to build the targets in 'priv/lib'. This Makefile will
-%%      be executed in the next step.
-%%      TODO: The build-watcher.sh is a background process that is started and kept running.
+%%      be executed in the next step (after deduplication).
+%%      TODO: Support buildwatchers, maybe with "make watcher"
 build_command(Application, SrcPath) ->
     LibSrcDir = filename:join([code:priv_dir(Application), "lib-src"]),
-    % LibDir = filename:join([code:priv_dir(Application), "lib"]),
     case find_build(LibSrcDir, filename:split(filename:dirname(SrcPath))) of
         {ok, {make, _Makefile} = BuildCmd} ->
             {ok, BuildCmd};
@@ -405,48 +404,3 @@ find_build(LibSrcDir, Dir) ->
             Up = lists:reverse(tl(lists:reverse(Dir))),
             find_build(LibSrcDir, Up)
     end.
-
-%% @doc This will be needed for supporting the build-watcher
-% is_build_needed(BuildCmd, LibDir, SrcFilename) ->
-%     case filelib:is_file(SrcFilename) of
-%         false ->
-%             true;
-%         true ->
-%             Targets = filename:join(filename:dirname(BuildCmd), "build-targets"),
-%             case file:read_file(Targets) of
-%                 {ok, Bin} ->
-%                     Lines = binary:split(Bin, <<10>>, [global]),
-%                     Lines1 = [ z_string:trim(Line) || Line <- Lines ],
-%                     not lists:all(
-%                         fun
-%                             (<<>>) -> true;
-%                             (<<"#", _/binary>>) -> true;
-%                             (Tgt) ->
-%                                 TgtFile = filename:join(LibDir, Tgt),
-%                                 not is_newer(SrcFilename, TgtFile)
-%                         end,
-%                         Lines1);
-%                 {error, _} ->
-%                     true
-%             end
-%     end.
-
-
-% check_run_sitetest(Basename, F) ->
-%     %% check run individual test
-%     case re:run(Basename, "^((.+)_.*_sitetest).erl$", [{capture, [1, 2], list}]) of
-%         {match, [Module, SiteStr]} ->
-%             zotonic_filehandler_compile:ld(z_convert:to_atom(Module)),
-%             z_sitetest:run(z_convert:to_atom(SiteStr), [z_convert:to_atom(Module)]);
-%         nomatch ->
-%             %% check whether compiled file is part of a site; if so, run its sitetests when we're watching it.
-%             case re:run(F, "/sites/([^/]+).*?/", [{capture, all_but_first, list}]) of
-%                 nomatch ->
-%                     nop;
-%                 {match, [SiteStr]} ->
-%                     Module = z_convert:to_atom(filename:basename(Basename, ".erl")),
-%                     zotonic_filehandler_compile:ld(z_convert:to_atom(Module)),
-%                     Site = z_convert:to_atom(SiteStr),
-%                     z_sitetest:is_watching(Site) andalso z_sitetest:run(Site)
-%             end
-%     end.
