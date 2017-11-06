@@ -136,21 +136,33 @@ notify_async(Notifier, Event, Msg, ContextArg) ->
         [] ->
             ok;
         Observers ->
-            erlang:spawn(
-                fun() ->
+            case lists:all(fun is_pid_observer/1, Observers) of
+                true ->
                     lists:foreach(
                         fun(Obs) ->
                             notify_observer(Msg, Obs, false, ContextArg)
                         end,
-                        Observers)
-                end)
+                        Observers);
+                false ->
+                    erlang:spawn(
+                        fun() ->
+                            lists:foreach(
+                                fun(Obs) ->
+                                    notify_observer(Msg, Obs, false, ContextArg)
+                                end,
+                                Observers)
+                        end),
+                    ok
+            end
     end.
 
 %% @doc Cast the event to the first observer. The prototype of the observer is: f(Msg, Context) -> void
 notify1(Notifier, Event, Msg, ContextArg) ->
     case get_observers(Event, Notifier) of
         [] -> ok;
-        [Obs|_] ->
+        [ {_, Pid, _} = Obs | _ ] when is_pid(Pid) ->
+            notify_observer(Msg, Obs, false, ContextArg);
+        [ Obs | _ ] ->
             erlang:spawn(
                 fun() ->
                     notify_observer(Msg, Obs, false, ContextArg)
@@ -161,15 +173,15 @@ notify1(Notifier, Event, Msg, ContextArg) ->
 %% The prototype of the observer is: f(Msg, Context)
 first(Notifier, Event, Msg, ContextArg) ->
     Observers = get_observers(Notifier, Event),
-    first1(Observers, Msg, ContextArg).
+    first_1(Observers, Msg, ContextArg).
 
-first1([], _Msg, _ContextArgs) ->
+first_1([], _Msg, _ContextArgs) ->
     undefined;
-first1([Obs|Rest], Msg, ContextArg) ->
+first_1([Obs|Rest], Msg, ContextArg) ->
     case notify_observer(Msg, Obs, true, ContextArg) of
-        undefined -> first1(Rest, Msg, ContextArg);
-        continue -> first1(Rest, Msg, ContextArg);
-        {continue, Msg1} -> first1(Rest, Msg1, ContextArg);
+        undefined -> first_1(Rest, Msg, ContextArg);
+        continue -> first_1(Rest, Msg, ContextArg);
+        {continue, Msg1} -> first_1(Rest, Msg1, ContextArg);
         Result -> Result
     end.
 
@@ -323,6 +335,9 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+is_pid_observer({_Prio, Observer, _OwnerPid}) ->
+    is_pid(Observer).
 
 do_detach_all(OwnerPid, #state{ observers = Table, pid2event = Ps, monitors = Ms } = State) ->
     case maps:find(OwnerPid, Ps) of

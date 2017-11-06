@@ -103,6 +103,10 @@ erlang_file(_Verb, _Application, {src, _Path}, <<".erl">>, _Root, _Split, Filena
     {ok, [
         {zotonic_filehandler_compile, recompile, [Filename]}
     ]};
+erlang_file(_Verb, _Application, {test, _Path}, <<".erl">>, _Root, _Split, Filename) ->
+    {ok, [
+        {zotonic_filehandler_compile, recompile, [Filename]}
+    ]};
 erlang_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
 

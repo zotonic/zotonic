@@ -30,10 +30,10 @@
 
     observe/2, observe/3, observe/4, observe/5,
     detach/2, detach/3,
-    detach_all/2,
+    detach_all/1, detach_all/2,
     get_observers/1, get_observers/2,
     notify_sync/3, notify_sync/4,
-    notify_async/3, notify_async/4,
+    notify/3, notify/4,
     notify1/3, notify1/4,
     first/3, first/4,
     map/3, map/4,
@@ -115,6 +115,11 @@ detach(Notifier, Event, OwnerPid) when is_pid(OwnerPid) ->
     zotonic_notifier_worker:detach(Notifier, Event, OwnerPid).
 
 %% @doc Detach all observers owned by the pid
+-spec detach_all(pid()) -> ok.
+detach_all(OwnerPid) ->
+    detach_all(zotonic_notifier, OwnerPid).
+
+%% @doc Detach all observers owned by the pid
 -spec detach_all(notifier(), pid()) -> ok.
 detach_all(Notifier, OwnerPid) when is_pid(OwnerPid) ->
     zotonic_notifier_worker:detach_all(Notifier, OwnerPid).
@@ -140,14 +145,14 @@ notify_sync(Notifier, Event, Msg, ContextArg) ->
     zotonic_notifier_worker:notify_sync(Notifier, Event, Msg, ContextArg).
 
 
-%% @doc Notify observers aync. Start separate process for the notification.
--spec notify_async(event(), term(), term()) -> ok | {error, term()}.
-notify_async(Event, Msg, ContextArg) ->
-    notify_async(zotonic_notifier, Event, Msg, ContextArg).
+%% @doc Notify observers async. Start separate process for the notification.
+-spec notify(event(), term(), term()) -> ok | {error, term()}.
+notify(Event, Msg, ContextArg) ->
+    notify(zotonic_notifier, Event, Msg, ContextArg).
 
-%% @doc Notify observers aync. Start separate process for the notification.
--spec notify_async(notifier(), event(), term(), term()) -> ok | {error, term()}.
-notify_async(Notifier, Event, Msg, ContextArg) ->
+%% @doc Notify observers async. Start separate process for the notification.
+-spec notify(notifier(), event(), term(), term()) -> ok | {error, term()}.
+notify(Notifier, Event, Msg, ContextArg) ->
     zotonic_notifier_worker:notify_async(Notifier, Event, Msg, ContextArg).
 
 

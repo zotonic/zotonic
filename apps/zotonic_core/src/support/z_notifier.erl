@@ -60,6 +60,9 @@
                           {86400, tick_24h} ]).
 
 
+%% Default priority for notifiers. Normal module priorities are 1..1000.
+-define(NOTIFIER_DEFAULT_PRIORITY, 500).
+
 
 %% @doc Subscribe to an event. Observer is a MFA or pid()
 observe(Event, {Module, Function}, Context) ->
@@ -112,7 +115,7 @@ get_observers(Event, Context) ->
 
 %% @doc Async cast the event to all observers. The prototype of the observer is: f(Msg, Context) -> void
 notify(Msg, #context{dbc = undefined} = Context) ->
-    zotonic_notifier:notify_async({z_context:site(Context), msg_event(Msg)}, Msg, Context);
+    zotonic_notifier:notify({z_context:site(Context), msg_event(Msg)}, Msg, Context);
 notify(Msg, _Context) ->
     delay_notification({notify, Msg}).
 
