@@ -23,6 +23,9 @@
     map_change/2
 ]).
 
+-include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
+-include_lib("zotonic_filehandler/include/zotonic_filehandler.hrl").
+
 -spec map_change(zotonic_filehandler:verb(), Filename::binary()) ->
     {ok, [Action]} | {error, term()} | false
     when Action :: zotonic_filehandler:action().
@@ -34,9 +37,27 @@ map_change(Verb, Filename) ->
     map_categorized(Verb, Application, What, Ext, Root, Split, Filename).
 
 map_categorized(Verb, Application, What, Ext, Root, Split, Filename) ->
-    % Todo: fetch configured mappers from application env.
-    Try = zotonic_filehandler_mappers:mappers(),
-    map_categorized(Try, Verb, Application, What, Ext, Root, Split, Filename).
+    case map_notifier(Verb, Application, What, Ext, Root, Split, Filename) of
+        {ok, _Mappings} = Ok ->
+            Ok;
+        undefined ->
+            Try = zotonic_filehandler_mappers:mappers(),
+            map_categorized(Try, Verb, Application, What, Ext, Root, Split, Filename)
+    end.
+
+map_notifier(Verb, Application, What, Ext, Root, Split, Filename) ->
+    Msg = #zotonic_filehandler_map{
+        verb = Verb,
+        application = Application,
+        what = What,
+        extension = Ext,
+        root = Root,
+        split = Split,
+        filename = Filename
+    },
+    zotonic_notifier:first(
+        ?SYSTEM_NOTIFIER, zotonic_filehandler_map,
+        Msg, undefined).
 
 map_categorized([], Verb, _Application, _What, _Ext, _Root, _Split, Filename) ->
     case binary:match(Filename, <<"/test/">>) of
@@ -59,16 +80,29 @@ map_categorized([Fun|Other], Verb, Application, What, Ext, Root, Split, Filename
 
 
 categorize(Filename) ->
-    Try = [
-        fun config_dir_file/1,
-        fun config_file/1,
-        fun priv_file/1,
-        fun src_file/1,
-        fun include_file/1,
-        fun ebin_file/1,
-        fun test_file/1
-    ],
-    categorize_1(Try, Filename).
+    case categorize_notifier(Filename) of
+        {ok, {_,_} = Cat} ->
+            Cat;
+        undefined ->
+            Try = [
+                fun config_dir_file/1,
+                fun config_file/1,
+                fun priv_file/1,
+                fun src_file/1,
+                fun include_file/1,
+                fun ebin_file/1,
+                fun test_file/1
+            ],
+            categorize_1(Try, Filename)
+    end.
+
+categorize_notifier(Filename) ->
+    Msg = #zotonic_filehandler_categorize{
+        filename = Filename
+    },
+    zotonic_notifier:first(
+        ?SYSTEM_NOTIFIER, zotonic_filehandler_categorize,
+        Msg, undefined).
 
 categorize_1([], _Filename) ->
     {undefined, undefined};

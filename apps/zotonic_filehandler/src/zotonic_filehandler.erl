@@ -25,7 +25,6 @@
     reload_modules/0,
     reload_module/1,
     compile_options/1,
-    handle_changes/1,
     terminal_notifier/1
 ]).
 
@@ -35,58 +34,23 @@
 
 -spec compile_all() -> ok | {error, term()}.
 compile_all() ->
-    zotonic_filehandler_compile:all().
+    zotonic_filehandler_handler:compile_all().
 
 -spec reload_modules() -> ok | {error, term()}.
 reload_modules() ->
-    zotonic_filehandler_compile:ld().
+    zotonic_filehandler_handler:reload_modules().
 
 -spec reload_module(module()) -> ok | {error, term()}.
 reload_module(Module) ->
-    zotonic_filehandler_compile:ld(Module).
+    zotonic_filehandler_handler:reload_module(Module).
 
 -spec compile_options(file:filename_all()) -> {ok, list()} | {error, term()}.
 compile_options(ErlangFile) ->
     zotonic_filehandler_compile:compile_options(ErlangFile).
 
--spec handle_changes( map() ) -> ok.
-handle_changes(Es) ->
-    Actions = maps:fold(
-        fun(F, Verb, Acc) ->
-            case zotonic_filehandler_mapper:map_change(Verb, F) of
-                {ok, Actions} ->
-                    (Acc -- Actions) ++ Actions;
-                {error, _} ->
-                    Acc;
-                false ->
-                    Acc
-            end
-        end,
-        [],
-        Es),
-    perform(Actions).
-
-perform(Actions) ->
-    lists:map(
-        fun( {M, F, A} ) ->
-            erlang:apply(M, F, A)
-        end,
-        Actions).
 
 %% @doc Send a message to the user as a system notification
-terminal_notifier(undefined) ->
-    undefined;
-terminal_notifier("") ->
-    undefined;
-terminal_notifier(Message) ->
-    terminal_notifier(os:type(), z_string:trim(Message)).
+terminal_notifier(Msg) ->
+    zotonic_filehandler_terminal:notify(Msg).
 
-%% @doc send message to the user
-terminal_notifier(_OS, "") ->
-    undefined;
-terminal_notifier({unix, darwin}, Msg) ->
-    os:cmd("which terminal-notifier && terminal-notifier -title Zotonic  -message " ++ z_utils:os_escape(Msg));
-terminal_notifier({unix, _Arch}, Msg) ->
-    os:cmd("which notify-send && notify-send \"Zotonic\" " ++ z_utils:os_escape(Msg));
-terminal_notifier(_OS, _Msg) ->
-    undefined.
+

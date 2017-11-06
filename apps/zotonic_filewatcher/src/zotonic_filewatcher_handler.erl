@@ -36,6 +36,9 @@
     terminate/2
 ]).
 
+-include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
+-include_lib("zotonic_filewatcher.hrl").
+
 -record(state, {
     events = [] :: map(),  % binary() => verb()
     startline = undefined :: undefined | pos_integer(),
@@ -133,7 +136,10 @@ terminate(_Reason, _State) ->
 
 -spec send_changes(map()) -> ok.
 send_changes(Es) ->
-    zotonic_filehandler:handle_changes(Es).
+    Msg = #filewatcher_changes{
+        changes = Es
+    },
+    zotonic_notifier:first(?SYSTEM_NOTIFIER, filewatcher_changes, Msg, undefined).
 
 -spec add_event(map(), zotonic_filehandler:verb(), binary()) -> map().
 add_event(Es, Verb, Filename) ->

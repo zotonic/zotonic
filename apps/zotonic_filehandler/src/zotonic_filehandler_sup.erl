@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2017 Marc Worrell
-%% @doc Supervisor for the notifier
+%% @doc Supervisor for the file handler
 
 %% Copyright 2017 Marc Worrell
 %%
@@ -16,39 +16,32 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(zotonic_notifier_sup).
+-module(zotonic_filehandler_sup).
 -author('Marc Worrell <marc@worrell.nl>').
 -behaviour(supervisor).
 
 %% External exports
 -export([
     start_link/0,
-    start_notifier/1,
-    stop_notifier/1,
     init/1
 ]).
 
--include("zotonic_notifier.hrl").
-
-%% @doc API for starting the site supervisor.
 start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
-%% @doc Return the notifier gen_server(s) to be used.
 init([]) ->
+    Children = children(),
     RestartStrategy = {one_for_one, 5, 10},
-    {ok, {RestartStrategy, [
-        spec(?DEFAULT_NOTIFIER),
-        spec(?SYSTEM_NOTIFIER)
-    ]}}.
+    {ok, {RestartStrategy, Children}}.
 
-start_notifier(Name) when is_atom(Name) ->
-    supervisor:start_child(?MODULE, spec(Name)).
 
-stop_notifier(Name) when is_atom(Name) ->
-    supervisor:delete_child(?MODULE, Name).
+children() ->
+    [
+        {zotonic_filehandler_terminal,
+          {zotonic_filehandler_terminal, start_link, []},
+          permanent, 5000, worker, [zotonic_filehandler_terminal]},
+        {zotonic_filehandler_handler,
+          {zotonic_filehandler_handler, start_link, []},
+          permanent, 5000, worker, [zotonic_filehandler_handler]}
+    ].
 
-spec(Name) ->
-    {Name,
-        {zotonic_notifier_worker, start_link, [Name]},
-        permanent, 5000, worker, [zotonic_notifier_worker]}.

@@ -57,7 +57,7 @@
     notifier/0
 ]).
 
--define(NOTIFIER_DEFAULT_PRIORITY, 500).
+-include_lib("zotonic_notifier.hrl").
 
 %%====================================================================
 %% API
@@ -92,12 +92,12 @@ observe(Event, ObserverPid) when is_pid(ObserverPid) ->
 %% @doc Register an observer with an owner pid.
 -spec observe(event(), observer(), pid()) -> ok | {error, term()}.
 observe(Event, Observer, OwnerPid) ->
-    observe(zotonic_notifier, Event, Observer, OwnerPid, prio(Observer)).
+    observe(?DEFAULT_NOTIFIER, Event, Observer, OwnerPid, prio(Observer)).
 
 %% @doc Register an observer with the default notifier. Higher prio (lower nr) gets called earlier.
 -spec observe(event(), observer(), pid(), integer()) -> ok | {error, term()}.
 observe(Event, Observer, OwnerPid, Prio) ->
-    observe(zotonic_notifier, Event, Observer, OwnerPid, Prio).
+    observe(?DEFAULT_NOTIFIER, Event, Observer, OwnerPid, Prio).
 
 %% @doc Register an observer. Higher prio (lower nr) gets called earlier.
 -spec observe(notifier(), event(), observer(), pid(), integer()) -> ok | {error, term()}.
@@ -107,7 +107,7 @@ observe(Notifier, Event, Observer, OwnerPid, Prio) when is_pid(OwnerPid), is_int
 %% @doc Unsubscribe an owner from an event
 -spec detach(event(), pid()) -> ok | {error, term()}.
 detach(Event, OwnerPid) when is_pid(OwnerPid) ->
-    detach(zotonic_notifier, Event, OwnerPid).
+    detach(?DEFAULT_NOTIFIER, Event, OwnerPid).
 
 %% @doc Unsubscribe an owner from an event
 -spec detach(notifier(), event(), pid()) -> ok | {error, term()}.
@@ -117,7 +117,7 @@ detach(Notifier, Event, OwnerPid) when is_pid(OwnerPid) ->
 %% @doc Detach all observers owned by the pid
 -spec detach_all(pid()) -> ok.
 detach_all(OwnerPid) ->
-    detach_all(zotonic_notifier, OwnerPid).
+    detach_all(?DEFAULT_NOTIFIER, OwnerPid).
 
 %% @doc Detach all observers owned by the pid
 -spec detach_all(notifier(), pid()) -> ok.
@@ -127,7 +127,7 @@ detach_all(Notifier, OwnerPid) when is_pid(OwnerPid) ->
 %% @doc Return the list of all observers for a specific event
 -spec get_observers(event()) -> list().
 get_observers(Event) ->
-    get_observers(zotonic_notifier, Event).
+    get_observers(?DEFAULT_NOTIFIER, Event).
 
 -spec get_observers(notifier(), event()) -> list().
 get_observers(Notifier, Event) ->
@@ -137,7 +137,7 @@ get_observers(Notifier, Event) ->
 %% @doc Notify observers. Pids async, M:F sync.
 -spec notify_sync(event(), term(), term()) -> ok | {error, term()}.
 notify_sync(Event, Msg, ContextArg) ->
-    notify_sync(zotonic_notifier, Event, Msg, ContextArg).
+    notify_sync(?DEFAULT_NOTIFIER, Event, Msg, ContextArg).
 
 %% @doc Notify observers. Pids async, M:F sync.
 -spec notify_sync(notifier(), event(), term(), term()) -> ok | {error, term()}.
@@ -148,7 +148,7 @@ notify_sync(Notifier, Event, Msg, ContextArg) ->
 %% @doc Notify observers async. Start separate process for the notification.
 -spec notify(event(), term(), term()) -> ok | {error, term()}.
 notify(Event, Msg, ContextArg) ->
-    notify(zotonic_notifier, Event, Msg, ContextArg).
+    notify(?DEFAULT_NOTIFIER, Event, Msg, ContextArg).
 
 %% @doc Notify observers async. Start separate process for the notification.
 -spec notify(notifier(), event(), term(), term()) -> ok | {error, term()}.
@@ -159,7 +159,7 @@ notify(Notifier, Event, Msg, ContextArg) ->
 %% @doc Notify the first observer. Pids async, M:F sync.
 -spec notify1(event(), term(), term()) -> ok | {error, term()}.
 notify1(Event, Msg, ContextArg) ->
-    notify1(zotonic_notifier, Event, Msg, ContextArg).
+    notify1(?DEFAULT_NOTIFIER, Event, Msg, ContextArg).
 
 %% @doc Notify the first observer. Pids async, M:F sync.
 -spec notify1(notifier(), event(), term(), term()) -> ok | {error, term()}.
@@ -170,7 +170,7 @@ notify1(Notifier, Event, Msg, ContextArg) ->
 %%      Return 'undefined' if none.
 -spec first(event(), term(), term()) -> term() | undefined.
 first(Event, Msg, ContextArg) ->
-    first(zotonic_notifier, Event, Msg, ContextArg).
+    first(?DEFAULT_NOTIFIER, Event, Msg, ContextArg).
 
 %% @doc Return the result of the first observer returning something else than 'undefined'.
 %%      Return 'undefined' if none.
@@ -182,7 +182,7 @@ first(Notifier, Event, Msg, ContextArg) ->
 %% @doc Call all observers, return a list of all return values.
 -spec map(event(), term(), term()) -> list( term() ).
 map(Event, Msg, ContextArg) ->
-    map(zotonic_notifier, Event, Msg, ContextArg).
+    map(?DEFAULT_NOTIFIER, Event, Msg, ContextArg).
 
 -spec map(notifier(), event(), term(), term()) -> list( term() ).
 map(Notifier, Event, Msg, ContextArg) ->
@@ -191,7 +191,7 @@ map(Notifier, Event, Msg, ContextArg) ->
 
 -spec foldl(event(), term(), term(), term()) -> term().
 foldl(Event, Msg, Value, ContextArg) ->
-    foldl(zotonic_notifier, Event, Msg, Value, ContextArg).
+    foldl(?DEFAULT_NOTIFIER, Event, Msg, Value, ContextArg).
 
 -spec foldl(notifier(), event(), term(), term(), term()) -> term().
 foldl(Notifier, Event, Msg, Value, ContextArg) ->
@@ -199,7 +199,7 @@ foldl(Notifier, Event, Msg, Value, ContextArg) ->
 
 -spec foldr(event(), term(), term(), term()) -> term().
 foldr(Event, Msg, Value, ContextArg) ->
-    foldr(zotonic_notifier, Event, Msg, Value, ContextArg).
+    foldr(?DEFAULT_NOTIFIER, Event, Msg, Value, ContextArg).
 
 -spec foldr(notifier(), event(), term(), term(), term()) -> term().
 foldr(Notifier, Event, Msg, Value, ContextArg) ->
@@ -211,21 +211,21 @@ foldr(Notifier, Event, Msg, Value, ContextArg) ->
         {ok, {pid(), reference()}, tuple()|atom()} |
         {error, timeout}.
 await(Event) ->
-    await(zotonic_notifier, Event, Event, 5000).
+    await(?DEFAULT_NOTIFIER, Event, Event, 5000).
 
 -spec await(term(), atom()|tuple()) ->
         {ok, tuple()|atom()} |
         {ok, {pid(), reference()}, tuple()|atom()} |
         {error, timeout}.
 await(Event, Msg) ->
-    await(zotonic_notifier, Event, Msg, 5000).
+    await(?DEFAULT_NOTIFIER, Event, Msg, 5000).
 
 -spec await(term(), atom()|tuple(), pos_integer()) ->
         {ok, tuple()|atom()} |
         {ok, {pid(), reference()}, tuple()|atom()} |
         {error, timeout}.
 await(Event, Msg, Timeout) ->
-    await(zotonic_notifier, Event, Msg, Timeout).
+    await(?DEFAULT_NOTIFIER, Event, Msg, Timeout).
 
 -spec await(notifier(), term(), atom()|tuple(), pos_integer()) ->
         {ok, tuple()|atom()} |
@@ -240,14 +240,14 @@ await(Notifier, Event, Msg, Timeout) when is_atom(Event); is_tuple(Event) ->
         {ok, {pid(), reference()}, term()} |
         {error, timeout}.
 await_exact(Event, Msg) ->
-    await_exact(zotonic_notifier, Event, Msg, 5000).
+    await_exact(?DEFAULT_NOTIFIER, Event, Msg, 5000).
 
 -spec await_exact(event(), term(), pos_integer()) ->
         {ok, term()} |
         {ok, {pid(), reference()}, term()} |
         {error, timeout}.
 await_exact(Event, Msg, Timeout) ->
-    await_exact(zotonic_notifier, Event, Msg, Timeout).
+    await_exact(?DEFAULT_NOTIFIER, Event, Msg, Timeout).
 
 -spec await_exact(notifier(), event(), term(), pos_integer()) ->
         {ok, term()} |

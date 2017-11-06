@@ -74,19 +74,24 @@ run_cmd(Cmd, Opts) when is_binary(Cmd) ->
 run_cmd(Cmd, Opts) ->
     case exec:run(lists:flatten(Cmd), [ sync, stdout, stderr ] ++ Opts) of
         {ok, Out} ->
-            case proplists:get_value(stderr, Out, []) of
+            StdErr = proplists:get_value(stderr, Out, []),
+            case StdErr of
                 [] ->
                     ok;
                 StdErr ->
-                    lager:error("Running '~s' returned ~p", [Cmd, StdErr]),
+                    lager:error("Running '~s' returned '~s'", [Cmd, iolist_to_binary(StdErr)]),
                     ok
             end;
         {error, Args} = Error when is_list(Args) ->
-            case proplists:get_value(stderr, Args, <<>>) of
-                <<>> ->
-                    lager:error("Running '~s' returned ~p", [Cmd, Error]);
-                StdErr ->
-                    lager:error("Running '~s' returned '~s'", [Cmd, StdErr])
+            StdErr = proplists:get_value(stderr, Args, []),
+            StdOut = proplists:get_value(stdout, Args, []),
+            case {StdErr, StdOut} of
+                {[], []} ->
+                    lager:error("Error running '~s': ~p", [Cmd, Error]);
+                {StdErr, _} when StdErr =/= [] ->
+                    lager:error("Error running '~s':~n~s", [Cmd, iolist_to_binary(StdErr)]);
+                {_, StdOut} ->
+                    lager:error("Error running '~s':~n~s", [Cmd, iolist_to_binary(StdOut)])
             end,
             Error
     end.
