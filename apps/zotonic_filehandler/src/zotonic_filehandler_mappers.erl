@@ -30,17 +30,17 @@
     compile_sass/2,
     compile_coffee/2,
     compile_less/2,
-    reindex_modules/0,
-    reload_translations/0,
-    reload_dispatch/0,
-    mark_modified/1,
     run_build/2
 ]).
 
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
+
+
 -spec mappers() -> [ function() ].
 mappers() ->
-    [
+    Builtin = [
         fun drop_dirs/7,
         fun temp_beam/7,
         fun beam_file/7,
@@ -50,15 +50,13 @@ mappers() ->
         fun lib_src_build/7,
         fun sass_file/7,
         fun coffee_file/7,
-        fun less_file/7,
-        fun template_file/7,
-        fun mediaclass_file/7,
-        fun po_file/7,
-        fun lib_file/7,
-        fun dispatch_file/7
-    ].
+        fun less_file/7
+    ],
+    zotonic_notifier:foldl(
+        ?SYSTEM_NOTIFIER, zotonic_filehandler_mappers,
+        zotonic_filehandler_mappers, Builtin,
+        undefined).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 
 %% ------------------------------ Map files to actions ------------------------------
 
@@ -171,48 +169,6 @@ coffee_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
 
 
-template_file(_Verb, _Application, {priv, <<"template">>, _Path}, <<".tpl">>, _Root, _Split, Filename) ->
-    {ok, [
-        {?MODULE, mark_modified, [Filename]},
-        {?MODULE, reindex_modules, []}
-    ]};
-template_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
-    false.
-
-
-mediaclass_file(_Verb, _Application, {priv, <<"template">>, _Path}, <<".config">>, <<"mediaclass">>, _Split, Filename) ->
-    {ok, [
-        {?MODULE, mark_modified, [Filename]},
-        {?MODULE, reindex_modules, []}
-    ]};
-mediaclass_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
-    false.
-
-
-po_file(_Verb, _Application, {priv, <<"translations">>, _Path}, <<".po">>, _Root, _Split, _Filename) ->
-    {ok, [
-        {?MODULE, reload_translations, []}
-    ]};
-po_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
-    false.
-
-
-lib_file(_Verb, _Application, {priv, <<"lib">>, _Path}, _Ext, _Root, _Split, Filename) ->
-    {ok, [
-        {?MODULE, mark_modified, [Filename]},
-        {?MODULE, reindex_modules, []}
-    ]};
-lib_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
-    false.
-
-dispatch_file(_Verb, _Application, {priv, <<"dispatch">>, _Path}, _Ext, _Root, _Split, Filename) ->
-    {ok, [
-        {?MODULE, mark_modified, [Filename]},
-        {?MODULE, reload_dispatch, []}
-    ]};
-dispatch_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
-    false.
-
 %% ------------------------------ Action callbacks -----------------------------------
 
 compile_yecc(Filename) ->
@@ -314,33 +270,6 @@ compile_coffee(Application, SrcPath) ->
             ok
     end.
 
-%% @doc A Zotonic template changed
-%% @todo This should be handled by a module indexer, which can make a small reindex of
-%%       the affected application templates.
-reindex_modules() ->
-    lists:foreach(
-        fun(Ctx) ->
-            z_module_indexer:reindex(Ctx)
-        end,
-        z_sites_manager:get_site_contexts()).
-
-%% @doc Reload translations
-%% @todo This should be handled incrementally, passing the changed po file.
-reload_translations() ->
-    lists:foreach(
-        fun(Ctx) ->
-            z_trans_server:load_translations(Ctx)
-        end,
-        z_sites_manager:get_site_contexts()).
-
-%% @doc Reload all dispatch rules
-reload_dispatch() ->
-    lists:foreach(
-        fun(Ctx) ->
-            z_dispatcher:reload(Ctx)
-        end,
-        z_sites_manager:get_site_contexts()).
-
 %% @doc Run the build command in a lib-src directory
 run_build(Application, {make, Makefile}) ->
     zotonic_filehandler:terminal_notifier("Make: " ++ app_path(Application, Makefile)),
@@ -352,11 +281,6 @@ run_build(Application, {make, Makefile}) ->
     BuildDir = filename:dirname(Makefile),
     MakeCmd = "cd " ++ z_utils:os_escape(BuildDir) ++ "; sh -c make " ++ z_utils:os_escape(Makefile),
     zotonic_filehandler_compile:run_cmd(MakeCmd, CmdOpts).
-
-%% @doc Mark a file as modified in the mtime index
-mark_modified(Filename) ->
-    z_file_mtime:modified(Filename),
-    ok.
 
 %% ---------------------------------------- Support routines ------------------------------
 

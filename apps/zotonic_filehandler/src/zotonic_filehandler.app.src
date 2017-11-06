@@ -7,7 +7,6 @@
   {modules, []},
   {applications, [
     erlexec,
-    zotonic_core,
     zotonic_notifier,
     zotonic_filewatcher
   ]}
