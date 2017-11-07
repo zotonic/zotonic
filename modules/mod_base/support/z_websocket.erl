@@ -76,6 +76,8 @@ websocket_info(_ReqData, ping, #context{}=Context) ->
     %% Send a ping to see if the UA is still listening
     erlang:send_after(?PING_TIMEOUT, self(), ping),
     {reply, {ping, <<"Zzz?">>}, Context};
+websocket_info(_ReqData, shutdown, #context{}=Context) ->
+    {shutdown, Context};
 websocket_info(_ReqData, {send_data, Message}, #context{}=Context) ->
     {reply, {text, Message}, Context};
 websocket_info(_ReqData, Msg, #context{}=Context) ->
