@@ -27,6 +27,7 @@
 -export([start_link/1]).
 
 -include_lib("zotonic.hrl").
+-include("zotonic_release.hrl").
 
 -record(state, { site :: atom() }).
 

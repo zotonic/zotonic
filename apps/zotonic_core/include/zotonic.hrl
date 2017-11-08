@@ -16,9 +16,6 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-%% The release information
--include("zotonic_release.hrl").
-
 %% @doc The request context, session information and other
 -record(context, {
         %% Cowboy request data (only set when this context is used because of a request)
