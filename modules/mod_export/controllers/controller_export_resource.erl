@@ -111,29 +111,25 @@ set_filename(Id, ContentType, Dispatch, Context) ->
                     undefined -> "bin";
                     Exts -> binary_to_list(hd(Exts))
                 end,
-    case z_notifier:first(#export_resource_filename{
-                                id=Id,
-                                dispatch=Dispatch,
-                                content_type=ContentType}, Context)
-    of
+    {ok, Disposition} = z_notifier:first(#export_resource_content_disposition{id=Id, dispatch=Dispatch, content_type=ContentType}, Context),
+    case z_notifier:first(#export_resource_filename{id=Id, dispatch=Dispatch, content_type=ContentType}, Context) of
         undefined ->
             Cat = m_rsc:p_no_acl(Id, category, Context),
-            Filename = "export-"
+            Filename2 = "export-"
                         ++z_convert:to_list(proplists:get_value(name, Cat))
                         ++"-"
                         ++z_convert:to_list(Id)
                         ++"."
-                        ++Extension,
-            z_context:set_resp_header("Content-Disposition", "attachment; filename="++Filename, Context);
+                        ++Extension;
         {ok, Filename} ->
             Filename1 = z_convert:to_list(Filename),
             Filename2 = case filename:extension(Filename1) of
                             "." ++ Extension -> Filename1;
                             "" -> Filename1 ++ [$.|Extension];
                             _Ext -> filename:rootname(Filename1) ++ [$.|Extension]
-                        end,
-            z_context:set_resp_header("Content-Disposition", "attachment; filename="++Filename2, Context)
-    end.
+                        end
+    end,
+    z_context:set_resp_header("Content-Disposition", Disposition++"; filename="++Filename2, Context).
 
 %% @doc Fetch the content type being served
 get_content_type(Id, Dispatch, Context) ->
