@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2011 Marc Worrell
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Main definitions for zotonic
 
-%% Copyright 2009-2011 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-%% The release information
--include("zotonic_release.hrl").
 -include("zotonic_notifications.hrl").
 -include("zotonic_events.hrl").
 -include("zotonic_log.hrl").

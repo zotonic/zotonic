@@ -26,7 +26,7 @@
 -export([process_get/2]).
 
 -include_lib("zotonic.hrl").
-
+-include_lib("zotonic_release.hrl").
 
 process_get(_ReqData, Context) ->
     Result = case z_auth:is_auth(Context) of
