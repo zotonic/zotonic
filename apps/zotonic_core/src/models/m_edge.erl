@@ -454,28 +454,28 @@ duplicate(Id, ToId, Context) ->
     end.
 
 %% @doc Move all edges from one id to another id, part of m_rsc:merge_delete/3
-merge(WinnerId, LooserId, Context) ->
-    case {z_acl:rsc_editable(WinnerId, Context), z_acl:rsc_deletable(LooserId, Context)} of
+merge(WinnerId, LoserId, Context) ->
+    case {z_acl:rsc_editable(WinnerId, Context), z_acl:rsc_deletable(LoserId, Context)} of
         {true, true} ->
             F = fun(Ctx) ->
                 %% Edges outgoing from the looser
-                LooserOutEdges = z_db:q("select predicate_id, object_id, id
+                LoserOutEdges = z_db:q("select predicate_id, object_id, id
                                          from edge
                                          where subject_id = $1",
-                    [LooserId],
+                    [LoserId],
                     Ctx),
                 WinnerOutEdges = z_db:q("select predicate_id, object_id
                                          from edge
                                          where subject_id = $1",
                     [WinnerId],
                     Ctx),
-                LooserOutEdges1 = lists:filter(
+                LoserOutEdges1 = lists:filter(
                                 fun({PredId, ObjectId, _EdgeId}) ->
                                     not lists:member({PredId, ObjectId}, WinnerOutEdges)
                                 end,
-                                LooserOutEdges),
+                                LoserOutEdges),
                 % TODO: discuss if we should enact these extra ACL checks
-                % LooserOutEdges2 = lists:filter(
+                % LoserOutEdges2 = lists:filter(
                 % fun({PredId, ObjectId, _EdgeId}) ->
                     % {ok, PredName} = m_predicate:id_to_name(PredId, Context),
                     % z_acl:is_allowed(
@@ -483,7 +483,7 @@ merge(WinnerId, LooserId, Context) ->
                         % #acl_edge{subject_id=WinnerId, predicate=PredName, object_id=ObjectId},
                         % Context)
                 % end,
-                % LooserOutEdges1),
+                % LoserOutEdges1),
                 lists:foreach(
                     fun({_PredId, _ObjId, EdgeId}) ->
                         z_db:q("update edge
@@ -492,24 +492,24 @@ merge(WinnerId, LooserId, Context) ->
                             [WinnerId, EdgeId],
                             Context)
                     end,
-                    LooserOutEdges1),
+                    LoserOutEdges1),
 
                 %% Edges incoming to the looser
-                LooserInEdges = z_db:q("select predicate_id, subject_id, id
+                LoserInEdges = z_db:q("select predicate_id, subject_id, id
                                         from edge
                                         where object_id = $1",
-                                       [LooserId],
+                                       [LoserId],
                                        Ctx),
                 WinnerInEdges = z_db:q("select predicate_id, subject_id
                                         from edge
                                         where object_id = $1",
                                        [WinnerId],
                                        Ctx),
-                LooserInEdges1 = lists:filter(
+                LoserInEdges1 = lists:filter(
                                     fun({PredId, SubjectId, _EdgeId}) ->
                                         not lists:member({PredId, SubjectId}, WinnerInEdges)
                                     end,
-                                    LooserInEdges),
+                                    LoserInEdges),
                 lists:foreach(
                         fun({_PredId, _SubjId, EdgeId}) ->
                             z_db:q("update edge
@@ -518,10 +518,10 @@ merge(WinnerId, LooserId, Context) ->
                                    [WinnerId, EdgeId],
                                    Context)
                         end,
-                        LooserInEdges1),
+                        LoserInEdges1),
 
                 z_db:q("update edge set creator_id = $1 where creator_id = $2",
-                       [WinnerId, LooserId],
+                       [WinnerId, LoserId],
                        Context)
             end,
             z_db:transaction(F, Context),

@@ -1,0 +1,13 @@
+%% -*- mode: erlang -*-
+{application, zotonic_filewatcher,
+ [{description, "Zotonic File Watcher"},
+  {vsn, "git"},
+  {registered, []},
+  {env, []},
+  {modules, []},
+  {applications, [
+    erlexec,
+    zotonic_core,
+    zotonic_notifier
+  ]}
+ ]}.

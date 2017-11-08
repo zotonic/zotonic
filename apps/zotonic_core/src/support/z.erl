@@ -75,7 +75,7 @@ m() ->
 %% @doc (Re)make all erlang source modules with the supplied compile
 %% options. Do not reset the caches.
 compile() ->
-    zotonic_compile:all().
+    zotonic_filehandler:compile_all().
 
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
 flush() ->
@@ -100,11 +100,11 @@ restart(Site) ->
 
 %% @doc Reload all changed Erlang modules
 ld() ->
-    zotonic_compile:ld().
+    zotonic_filehandler:reload_modules().
 
 %% @doc Reload an Erlang module
 ld(Module) ->
-    zotonic_compile:ld(Module).
+    zotonic_filehandler:reload_module(Module).
 
 %% @doc Shell commands: start a site
 shell_startsite(Site) ->

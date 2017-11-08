@@ -5,14 +5,13 @@
   {registered, []},
   {mod, {zotonic_launcher_app, []}},
   {applications, [
-      kernel, stdlib, crypto, public_key, ssl, inets,
-      lager, zotonic_core, 
+      kernel, stdlib, crypto, public_key, ssl, inets, lager,
+      zotonic_core, zotonic_filewatcher,
       zotonic_listen_http, zotonic_listen_smtp
   ]},
   {env, []},
   {modules,
    [
-    zotonic_launcher,
     zotonic_launcher_app,
     zotonic_launcher_sup
    ]}

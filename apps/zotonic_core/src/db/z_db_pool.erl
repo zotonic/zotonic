@@ -87,7 +87,7 @@ db_pool_name(Site) ->
 
 db_driver(SiteProps) when is_list(SiteProps) ->
     proplists:get_value(dbdriver, SiteProps, ?DEFAULT_DB_DRIVER);
-db_driver(Context=#context{}) ->
+db_driver(Context = #context{}) ->
     case m_site:get(dbdriver, Context) of
         undefined -> ?DEFAULT_DB_DRIVER;
         Driver -> Driver

@@ -137,14 +137,14 @@ merge_delete(WinnerId, LoserId, Context) ->
 %% @doc Merge two resources, delete the 'loser'
 -spec merge_delete_nocheck(integer(), integer(), #context{}) -> ok.
 merge_delete_nocheck(WinnerId, LoserId, Context) ->
-    z_notifier:map(#rsc_merge{winner_id = WinnerId, looser_id = LoserId}, Context),
+    z_notifier:map(#rsc_merge{winner_id = WinnerId, loser_id = LoserId}, Context),
     ok = m_edge:merge(WinnerId, LoserId, Context),
     m_media:merge(WinnerId, LoserId, Context),
     m_identity:merge(WinnerId, LoserId, Context),
     move_creator_modifier_ids(WinnerId, LoserId, Context),
-    PropsLooser = m_rsc:get(LoserId, Context),
+    PropsLoser = m_rsc:get(LoserId, Context),
     ok = delete_nocheck(LoserId, WinnerId, Context),
-    case merge_copy_props(WinnerId, PropsLooser, Context) of
+    case merge_copy_props(WinnerId, PropsLoser, Context) of
         [] ->
             ok;
         UpdProps ->

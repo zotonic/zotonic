@@ -776,13 +776,13 @@ delete(IdnId, Context) ->
 
 %% @doc Move the identities of two resources, the identities are removed from the source id.
 -spec merge(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok | {error, term()}.
-merge(WinnerId, LooserId, Context) ->
-    case z_acl:rsc_editable(WinnerId, Context) andalso z_acl:rsc_editable(LooserId, Context) of
+merge(WinnerId, LoserId, Context) ->
+    case z_acl:rsc_editable(WinnerId, Context) andalso z_acl:rsc_editable(LoserId, Context) of
         true ->
             F = fun(Ctx) ->
                 % Move all identities to the winner, except for duplicate type+key combinations
-                LooserIdns = z_db:q("select type, key, id from identity where rsc_id = $1",
-                    [m_rsc:rid(LooserId, Context)], Ctx),
+                LoserIdns = z_db:q("select type, key, id from identity where rsc_id = $1",
+                    [m_rsc:rid(LoserId, Context)], Ctx),
                 WinIdns = z_db:q("select type, key from identity where rsc_id = $1",
                     [m_rsc:rid(WinnerId, Context)], Ctx),
                 AddIdns = lists:filter(
@@ -794,7 +794,7 @@ merge(WinnerId, LooserId, Context) ->
                                 not lists:member({Type, Key}, WinIdns)
                         end
                     end,
-                    LooserIdns),
+                    LoserIdns),
                 lists:foreach(
                     fun({_Type, _Key, Id}) ->
                         z_db:q("update identity set rsc_id = $1 where id = $2",
@@ -811,7 +811,7 @@ merge(WinnerId, LooserId, Context) ->
                 end
             end,
             z_db:transaction(F, Context),
-            z_mqtt:publish(["~site", "rsc", m_rsc:rid(LooserId, Context), "identity"], {identity, all},
+            z_mqtt:publish(["~site", "rsc", m_rsc:rid(LoserId, Context), "identity"], {identity, all},
                 Context),
             z_mqtt:publish(["~site", "rsc", m_rsc:rid(WinnerId, Context), "identity"], {identity, all},
                 Context),

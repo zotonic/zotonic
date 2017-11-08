@@ -24,6 +24,7 @@
 -mod_prio(500).
 -mod_schema(1).
 -mod_provides([filestore]).
+-mod_depends([cron]).
 
 -behaviour(supervisor).
 

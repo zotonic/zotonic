@@ -119,11 +119,11 @@ handle_call(Message, _From, State) ->
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 handle_cast(development_reload, State) ->
-    z_code_reloader:reload(),
+    zotonic_filewatcher_beam_reloader:reload(),
     {noreply, State};
 
 handle_cast(development_make, State) ->
-    z_code_reloader:make(),
+    zotonic_filewatcher_beam_reloader:make(),
     {noreply, State};
 
 %% @doc Trap unknown casts

@@ -3,8 +3,8 @@ See: http://zotonic.com/docs/latest/manuals/templates/icons.html
 */
 @font-face {
   font-family: 'Zotonic';
-  src: url('/lib/css/z.icons/fonts/icomoon.eot?v=1');
-  src: url('/lib/css/z.icons/fonts/icomoon.eot?#iefix&v=1') format('embedded-opentype'), url('/lib/css/z.icons/fonts/icomoon.woff?v=1') format('woff'), url('/lib/css/z.icons/fonts/icomoon.ttf?v=1') format('truetype'), url('/lib/css/z.icons/fonts/icomoon.svg?v=1#icomoon') format('svg');
+  src: url('/lib/css/z.icons/fonts/icomoon.eot?v=3');
+  src: url('/lib/css/z.icons/fonts/icomoon.eot?#iefix&v=3') format('embedded-opentype'), url('/lib/css/z.icons/fonts/icomoon.woff?v=3') format('woff'), url('/lib/css/z.icons/fonts/icomoon.ttf?v=3') format('truetype'), url('/lib/css/z.icons/fonts/icomoon.svg?v=3#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -184,6 +184,9 @@ button.close > em {
 }
 .z-icon-facebook:before {
   content: "\e614";
+}
+.z-icon-github:before {
+  content: "\eab0";
 }
 .z-icon-google-plus:before {
   content: "\e610";

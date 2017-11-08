@@ -107,7 +107,7 @@ files_subdir_ensure(SubDir, Context) ->
         Dir ->
             case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
                 ok -> Dir;
-                {eror, _} = Error -> Error
+                {error, _} = Error -> Error
             end
     end.
 
@@ -140,5 +140,5 @@ get_path() ->
 %% @doc Return the _build/default/lib directory
 -spec build_lib_dir() -> file:filename().
 build_lib_dir() ->
-    filename:dirname(filename:dirname(code:priv_dir(zotonic))).
+    filename:dirname(code:lib_dir(zotonic_core)).
 

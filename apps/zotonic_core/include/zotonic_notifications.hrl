@@ -399,11 +399,11 @@
     props :: list()
 }).
 
-%% @doc Map to signal merging two resources. Move any information from the looser to the
-%% winner. The looser will be deleted.
+%% @doc Map to signal merging two resources. Move any information from the loser to the
+%% winner. The loser will be deleted.
 -record(rsc_merge, {
     winner_id :: integer(),
-    looser_id :: integer()
+    loser_id :: integer()
 }).
 
 %% @doc An updated resource is about to be persisted.

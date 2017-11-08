@@ -51,14 +51,19 @@ init([]) ->
     ZotonicConfig = application:get_all_env(zotonic),
     {ok, { {one_for_one, 1, 5}, [
 
-        %% Launch the zotonic core supervisor (uses the the read configs)
+        %% Launch the zotonic core supervisor (uses the read configs)
         {zotonic_core,
             {zotonic_core_sup, start_link, [ZotonicConfig]},
             permanent, 5000, supervisor, dynamic},
 
+        %% File handler, handles filechange notifications sent by filewatcher
+        {zotonic_filehandler_sup,
+            {zotonic_filehandler_sup, start_link, []},
+            permanent, 5000, supervisor, dynamic},
+
         %% File watcher, keep track of changed files for modules, templates etc.
-        {z_filewatcher_sup,
-            {z_filewatcher_sup, start_link, []},
+        {zotonic_filewatcher_sup,
+            {zotonic_filewatcher_sup, start_link, []},
             permanent, 10100, supervisor, dynamic},
 
         %% HTTP listener

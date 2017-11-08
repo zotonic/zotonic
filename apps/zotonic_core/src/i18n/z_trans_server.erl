@@ -133,7 +133,7 @@ handle_info(_Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 terminate(_Reason, State) ->
-    z_notifier:detach(module_ready, {?MODULE, observe_module_ready}, State#state.site),
+    z_notifier:detach(module_ready, State#state.site),
     ok.
 
 %% @doc Convert process state when code is changed

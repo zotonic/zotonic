@@ -49,6 +49,7 @@ start_link(Options) ->
 %% @doc supervisor callback.
 init([]) ->
     spawn_delayed_status(),
+    z_filehandler:start_observers(),
     Processes = [
         % Access Logger
         {z_access_syslog,
