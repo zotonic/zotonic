@@ -48,7 +48,8 @@
     trace_block/4
     ]).
 
--include("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic_release.hrl").
 -include_lib("template_compiler/include/template_compiler.hrl").
 
 

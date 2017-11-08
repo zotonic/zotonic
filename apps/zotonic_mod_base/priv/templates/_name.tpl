@@ -1,0 +1,1 @@
+{% if id.name_first or id.name_surname %}{{ id.name_first }}{% if id.name_surname_prefix %} {{ id.name_surname_prefix }}{% endif %}{% if id.name_surname %} {{ id.name_surname }}{% endif %}{% else %}{{ id.title }}{% endif %}

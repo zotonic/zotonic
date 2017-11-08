@@ -788,7 +788,7 @@ date(Context) ->
     iolist_to_binary(z_datetime:format("r", z_context:set_language(en, Context))).
 
 x_mailer() ->
-    iolist_to_binary(["Zotonic ", ?ZOTONIC_VERSION, " (http://zotonic.com)"]).
+    <<"Zotonic (http://zotonic.com)">>.
 
 add_cc(#email{cc = undefined}, Headers) -> Headers;
 add_cc(#email{cc = []}, Headers) -> Headers;

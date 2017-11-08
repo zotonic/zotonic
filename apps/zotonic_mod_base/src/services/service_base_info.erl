@@ -1,9 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009 Arjan Scherpenisse
-%% Date: 2009-10-03
+%% @copyright 2009-2017 Arjan Scherpenisse
 %% @doc Get information about the system.
 
-%% Copyright 2009 Arjan Scherpenisse
+%% Copyright 2009-2017 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,26 +20,38 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -svc_title("Basic information about the system.").
--svc_needauth(true).
+-svc_needauth(false).
 
 -export([process_get/1]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic_release.hrl").
 
 
 process_get(Context) ->
-    Result = case z_auth:is_auth(Context) of
-                 true ->
-                     z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(Context#context.user_id, title, Context), Context));
-                 false ->
-                     "Anonymous"
-    end,
-    {struct, [{"user", {struct, [{"user_name", z_convert:to_atom(Result)},
-                                 {"user_id",   Context#context.user_id}]}},
-              {"site", {struct, [{"zotonic_version", ?ZOTONIC_VERSION},
-                                 {"language",        cfg(i18n, language, Context)}]}}
-             ]
-    }.
+    {struct, [
+        {"user", {struct, user_info(z_acl:user(Context), Context)} },
+        {"site", {struct, site_info(z_acl:is_admin(Context), Context)} }
+    ]}.
 
-cfg(Key, Value, Context) ->
-    z_convert:to_atom(m_config:get_value(Key, Value, Context)).
+user_info(UserId, Context) when is_integer(UserId) ->
+    {Name, _Context} = z_template:render_to_iolist("_name.tpl", [{id, UserId}], Context),
+    [
+        {"user_name", iolist_to_binary(Name)},
+        {"user_id",   UserId}
+    ];
+user_info(undefined, _Context) ->
+    [
+        {"user_name", null},
+        {"user_id", null}
+    ].
+
+site_info(true, Context) ->
+    [
+        {"zotonic_version", ?ZOTONIC_VERSION},
+        {"language", z_language:default_language(Context)}
+    ];
+site_info(false, Context) ->
+    [
+        {"language", z_language:default_language(Context)}
+    ].
