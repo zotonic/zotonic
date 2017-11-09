@@ -21,23 +21,18 @@
 -behaviour(gen_model).
 
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2
-    ]).
+    m_get/2
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_find_value(list_backups, #m{}, Context) ->
-    mod_backup:list_backups(Context);
-m_find_value(is_backup_in_progress, #m{}, Context) ->
-    mod_backup:backup_in_progress(Context);
-m_find_value(_, #m{}, _Context) ->
-    undefined.
-
-m_to_list(#m{}, _Context) ->
-    [].
-
-m_value(#m{}, _Context) ->
-    undefined.
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ list_backups | Rest ], Context) ->
+    {mod_backup:list_backups(Context), Rest};
+m_get([ is_backup_in_progress | Rest ], Context) ->
+    {mod_backup:backup_in_progress(Context), Rest};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 

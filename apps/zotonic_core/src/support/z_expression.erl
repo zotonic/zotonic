@@ -100,7 +100,5 @@ eval1({apply_filter, Mod, Func, Expr, Args}, Vars, Context) ->
     EvalArgs = [ eval1(Arg, Vars, Context) || Arg <- Args],
     EvalExpr = eval1(Expr, Vars, Context),
     erlang:apply(Mod, Func, [EvalExpr | EvalArgs] ++[Context]);
-eval1(m, _Vars, _Context) ->
-    #m{};
 eval1(Val, _Vars, _Context) ->
     Val.

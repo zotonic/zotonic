@@ -23,9 +23,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     get/2,
     get_triple/2,
@@ -64,67 +62,31 @@
 
 
 %% @doc Fetch all object/edge ids for a subject/predicate
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(o, #m{value = undefined}, _Context) ->
-    fun(Id, _IdContext) ->
-        fun(Pred, PredContext) ->
-            object_edge_ids(Id, Pred, PredContext)
-        end
-    end;
-
-m_find_value(o_props, #m{value = undefined}, _Context) ->
-    fun(Id, _IdContext) ->
-        fun(Pred, PredContext) ->
-            object_edge_props(Id, Pred, PredContext)
-        end
-    end;
-
-m_find_value(s, #m{value = undefined}, _Context) ->
-    fun(Id, _IdContext) ->
-        fun(Pred, PredContext) ->
-            subject_edge_ids(Id, Pred, PredContext)
-        end
-    end;
-
-m_find_value(s_props, #m{value = undefined}, _Context) ->
-    fun(Id, _IdContext) ->
-        fun(Pred, PredContext) ->
-            subject_edge_props(Id, Pred, PredContext)
-        end
-    end;
-
-m_find_value(edges, #m{value = undefined}, _Context) ->
-    fun(Id, IdContext) ->
-        get_edges(Id, IdContext)
-    end;
-
-%% m.edge.id[subject_id].predicatename[object_id] returns the
-%% corresponding edge id or undefined.
-m_find_value(id, #m{value = undefined}, _Context) ->
-    fun(SubjectId, _IdContext) ->
-        fun(Pred, _PredContext) ->
-            fun(ObjectId, Context) ->
-                z_depcache:memo(
-                    fun() ->
-                        get_id(SubjectId, Pred, ObjectId, Context)
-                    end,
-                    {get_id, SubjectId, Pred, ObjectId}, ?DAY, [SubjectId], Context)
-            end
-        end
-    end;
-
-m_find_value(_Key, #m{}, _Context) ->
-    undefined.
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{}, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{}, _Context) ->
-    undefined.
+-spec m_get( list(), z:context()) -> {term(), list()}.
+m_get([ o, Id, Pred | Rest ], Context) ->
+    {object_edge_ids(Id, Pred, Context), Rest};
+m_get([ o_props, Id, Pred | Rest ], Context) ->
+    {object_edge_props(Id, Pred, Context), Rest};
+m_get([ s, Id, Pred | Rest ], Context) ->
+    {subject_edge_ids(Id, Pred, Context), Rest};
+m_get([ s_props, Id, Pred | Rest ], Context) ->
+    {subject_edge_props(Id, Pred, Context), Rest};
+m_get([ edges, Id | Rest ], Context) ->
+    {get_edges(Id, Context), Rest};
+m_get([ id, SubjectId, Pred, ObjectId | Rest ], Context) ->
+    % m.edge.id[subject_id].predicatename[object_id] returns the
+    % corresponding edge id or undefined.
+    Id = z_depcache:memo(
+        fun() ->
+            get_id(SubjectId, Pred, ObjectId, Context)
+        end,
+        {get_id, SubjectId, Pred, ObjectId}, ?DAY, [SubjectId], Context),
+    {Id, Rest};
+m_get([Id], Context) ->
+    {get_edges(Id, Context), []};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc Get the complete edge with the id

@@ -12,26 +12,24 @@
 {% block widget_content %}
 <p><a class="btn btn-default btn-xs" href="{% url admin_mailinglist_recipients id=id %}">{_ Show all recipients &raquo; _}</a></p>
 
-{% with m.rsc[id] as r %}
-
 <div class="form-group">
     <label class="control-label" for="{{ #sender }}">{_ Sender name for e-mails (optional) _}</label>
     <div>
-        <input class="form-control" id="{{ #sender }}" type="text" name="mailinglist_sender_name" value="{{ r.mailinglist_sender_name }}" />
+        <input class="form-control" id="{{ #sender }}" type="text" name="mailinglist_sender_name" value="{{ id.mailinglist_sender_name }}" />
     </div>
 </div>
 
 <div class="form-group">
     <label class="control-label" for="{{ #addr }}">{_ Sender address for e-mails (optional) _}</label>
     <div>
-	<input class="form-control" id="{{ #addr }}" type="text" id="mailinglist_reply_to" name="mailinglist_reply_to" value="{{ r.mailinglist_reply_to }}" />
+	<input class="form-control" id="{{ #addr }}" type="text" id="mailinglist_reply_to" name="mailinglist_reply_to" value="{{ id.mailinglist_reply_to }}" />
 	{% validate id="mailinglist_reply_to" type={email} %}
     </div>
 </div>
 
 <div class="form-group">
     <label class="checkbox-inline">
-        <input type="checkbox" id="mailinglist_private" name="mailinglist_private" value="1" {% if r.mailinglist_private %}checked="checked"{% endif %}/>
+        <input type="checkbox" id="mailinglist_private" name="mailinglist_private" value="1" {% if id.mailinglist_private %}checked="checked"{% endif %}/>
         {_ Externally managed list &mdash; no (un)subscribe links _}
     </label>
 </div>
@@ -41,9 +39,8 @@
 <div class="form-group">
     <label for="{{ #dropbox }}" class="control-label">{_ Dropbox filename (optional) _}</label>
     <div>
-	<input class="form-control" id="{{ #dropbox }}" type="text" name="mailinglist_dropbox_filename" value="{{ r.mailinglist_dropbox_filename }}" />
+	<input class="form-control" id="{{ #dropbox }}" type="text" name="mailinglist_dropbox_filename" value="{{ id.mailinglist_dropbox_filename }}" />
     </div>
 </div>
 
-{% endwith %}
 {% endblock %}

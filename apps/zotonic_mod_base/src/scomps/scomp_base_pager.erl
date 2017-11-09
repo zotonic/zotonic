@@ -47,12 +47,7 @@ render(Params, _Vars, Context) ->
         Params,
         [dispatch, result, hide_single_page, template]),
 
-    Result1 = case Result of
-        #m{model=m_search, value=MResult} -> MResult;
-        _ -> Result
-    end,
-
-    case Result1 of
+    case Result of
         #m_search_result{result=[]} ->
             {ok, ""};
         #m_search_result{result=undefined} ->

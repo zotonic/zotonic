@@ -29,22 +29,22 @@
 
 <div class="form-group">
     <label for="is_published" class="checkbox-inline">
-        <input type="checkbox" id="is_published" name="is_published" value="1" {% if r.is_published %}checked="checked"{% endif %}/>
+        <input type="checkbox" id="is_published" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}/>
         {_ Published _}
     </label>
 
     <label for="is_featured" class="checkbox-inline">
-        <input type="checkbox" id="is_featured" name="is_featured" value="1" {% if r.is_featured %}checked="checked"{% endif %}/>
+        <input type="checkbox" id="is_featured" name="is_featured" value="1" {% if id.is_featured %}checked="checked"{% endif %}/>
         {_ Featured _}
     </label>
 
     <label for="is_protected" class="checkbox-inline" title="{_ Protect from deletion _}">
-        <input type="checkbox" id="is_protected" name="is_protected" value="1" {% if r.is_protected %}checked="checked"{% endif %} {% if id == 1 %}disabled="disabled"{% endif %} />
+        <input type="checkbox" id="is_protected" name="is_protected" value="1" {% if id.is_protected %}checked="checked"{% endif %} {% if id == 1 %}disabled="disabled"{% endif %} />
         {_ Protect _}
     </label>
 
     <label for="is_dependent" class="checkbox-inline" title="{_ Delete if no other page is connected to this page. _}">
-        <input type="checkbox" id="is_dependent" name="is_dependent" value="1" {% if r.is_dependent %}checked="checked"{% endif %} {% if id == 1 or id.is_protected %}disabled="disabled"{% endif %} />
+        <input type="checkbox" id="is_dependent" name="is_dependent" value="1" {% if id.is_dependent %}checked="checked"{% endif %} {% if id == 1 or id.is_protected %}disabled="disabled"{% endif %} />
         {_ Dependent _}
     </label>
 </div>
@@ -77,7 +77,7 @@
     </div>
 
     {% ifnotequal id 1 %}
-        {% button class="btn btn-default btn-sm" disabled=(r.is_protected or not m.rsc[id].is_deletable) id="delete-button" text=_"Delete" action={dialog_delete_rsc id=r.id on_success={redirect back}} title=_"Delete this page." %}
+        {% button class="btn btn-default btn-sm" disabled=(r.is_protected or not m.rsc[id].is_deletable) id="delete-button" text=_"Delete" action={dialog_delete_rsc id=id on_success={redirect back}} title=_"Delete this page." %}
     {% endifnotequal %}
 
     {% if is_editable %}

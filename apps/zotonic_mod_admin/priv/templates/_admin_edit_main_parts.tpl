@@ -9,7 +9,7 @@
     {% optional include "_geomap_admin_location.tpl" %}
 {% endif %}
 
-{% if r.is_a.media or r.medium %}
+{% if id.is_a.media or id.medium %}
     {% include "_admin_edit_content_media.tpl" %}
 {% endif %}
 

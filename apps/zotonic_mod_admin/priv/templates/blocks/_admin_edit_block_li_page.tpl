@@ -5,7 +5,6 @@
 {% block widget_id %}edit-block-{{ #block }}{% endblock %}
 
 {% block widget_content %}
-{% with m.rsc[id] as r %}
 <fieldset class="block-page">
     <a class="btn btn-default page-connect pull-right" href="#connect">{_ Connect a page _}</a>
     <div class="rsc-item-wrapper" id="{{ #wrap }}">
@@ -15,7 +14,6 @@
 	</div>
 	<input type="hidden" id="block-{{name}}-rsc_id" name="block-{{name}}-rsc_id" value="{{ blk.rsc_id }}" />
 </fieldset>
-{% endwith %}
 
 {% include "_admin_edit_block_show_as.tpl" is_page_block %}
 

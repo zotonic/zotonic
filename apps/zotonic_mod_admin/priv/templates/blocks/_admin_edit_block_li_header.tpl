@@ -10,7 +10,6 @@
 {% block widget_header %}{% endblock %}
 
 {% block widget_content %}
-{% with m.rsc[id] as r %}
 <fieldset class="form-vertical">
     <div class="form-group">
     {% if is_editable %}
@@ -21,5 +20,4 @@
     {% endif %}
     </div>
 </fieldset>
-{% endwith %}
 {% endblock %}

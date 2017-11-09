@@ -10,7 +10,6 @@
 {% block widget_header %}{% endblock %}
 
 {% block widget_content %}
-{% with m.rsc[id] as r %}
     <p class="alert view-expanded">
         {_ This block show a file upload field. This can only be used as the last question of a survey. The default survey routines can’t handle file upload, you will need to add your own survey handler to your site or module. _}
     </p>
@@ -23,7 +22,6 @@
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
     {% endif %}
-{% endwith %}
 {% endblock %}
 
 {% block widget_content_nolang %}

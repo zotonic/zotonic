@@ -11,8 +11,7 @@
 
 {% block widget_content %}
 	<p class="help-block">{_ This text is shown after the survey has been submitted. _}</p>
-	{% with m.rsc[id] as r %}
-	{% with r.blocks.survey_feedback as blk %}
+	{% with id.blocks.survey_feedback as blk %}
 		<fieldset class="admin-form">
 			<div>
 				{% if is_editable %}

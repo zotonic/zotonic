@@ -25,9 +25,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
 	get_stats/2,
 	get_enabled_recipients/2,
@@ -64,49 +62,24 @@
 
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(stats, #m{value=undefined} = M, _Context) ->
-   M#m{value=stats};
-m_find_value(Id, #m{value=stats}, Context) ->
-   get_stats(Id, Context);
-m_find_value(rsc_stats, #m{value=undefined} = M, _Context) ->
-   M#m{value=rsc_stats};
-m_find_value(Id, #m{value=rsc_stats}, Context) ->
-   get_rsc_stats(Id, Context);
-m_find_value(recipient, #m{value=undefined} = M, _Context) ->
-   M#m{value=recipient};
-m_find_value(Id, #m{value=recipient}, Context) ->
-   recipient_get(Id, Context);
-m_find_value(scheduled, #m{value=undefined} = M, _Context) ->
-   M#m{value=scheduled};
-m_find_value(Id, #m{value=scheduled}, Context) ->
-   get_scheduled(Id, Context);
-m_find_value(confirm_key, #m{value=undefined} = M, _Context) ->
-   M#m{value=confirm_key};
-m_find_value(ConfirmKey, #m{value=confirm_key}, Context) ->
-   get_confirm_key(ConfirmKey, Context);
-m_find_value(subscription, #m{value=undefined} = M, _Context) ->
-   M#m{value=subscription};
-m_find_value(ListId, #m{value=subscription} = M, _Context) ->
-   M#m{value={subscription, ListId}};
-m_find_value(Email, #m{value={subscription, ListId}}, Context) ->
-   recipient_get(ListId, Email, Context);
-m_find_value(bounce_reason, #m{value=undefined} = M, _Context) ->
-   M#m{value=bounce_reason};
-m_find_value(Email, #m{value=bounce_reason}, Context) ->
-    bounce_reason(Email, Context);
-m_find_value(_Key, #m{value=undefined}, _Context) ->
-   undefined.
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> list()
-m_to_list(_, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ stats, Id | Rest ], Context) ->
+    {get_stats(Id, Context), Rest};
+m_get([ rsc_stats, Id | Rest ], Context) ->
+    {get_rsc_stats(Id, Context), Rest};
+m_get([ recipient, Id | Rest ], Context) ->
+    {recipient_get(Id, Context), Rest};
+m_get([ scheduled, Id | Rest ], Context) ->
+    {get_scheduled(Id, Context), Rest};
+m_get([ confirm_key, ConfirmKey | Rest ], Context) ->
+    {get_confirm_key(ConfirmKey, Context), Rest};
+m_get([ subscription, ListId, Email | Rest ], Context) ->
+    {recipient_get(ListId, Email, Context), Rest};
+m_get([ bounce_reason, Email | Rest ], Context) ->
+    {bounce_reason(Email, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc Get the stats for the mailing. Number of recipients and list of scheduled resources.

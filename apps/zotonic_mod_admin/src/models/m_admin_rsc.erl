@@ -24,20 +24,13 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2
+    m_get/2
 ]).
 
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(pivot_queue_count, #m{value=undefined}, Context) ->
-    z_pivot_rsc:queue_count(Context).
-
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(_, _Context) ->
-    undefined.
-
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
-
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ pivot_queue_count | Rest ], Context) ->
+    {z_pivot_rsc:queue_count(Context), Rest};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.

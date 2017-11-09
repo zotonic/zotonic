@@ -29,9 +29,7 @@
 -type hash() :: bcrypt_hash() | sha1_salted_hash().
 
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     is_user/2,
     get_username/1,
@@ -90,39 +88,24 @@
 
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(Id, #m{value = undefined} = M, _Context) ->
-    M#m{value = Id};
-m_find_value(is_user, #m{value = RscId}, Context) ->
-    is_user(RscId, Context);
-m_find_value(username, #m{value = RscId}, Context) ->
-    get_username(RscId, Context);
-m_find_value(all, #m{value = RscId} = M, _Context) ->
-    M#m{value = {all, RscId}};
-m_find_value(all_types, #m{value = RscId}, Context) ->
-    get_rsc_types(RscId, Context);
-m_find_value(Type, #m{value = {all, RscId}}, Context) ->
-    get_rsc_by_type(RscId, Type, Context);
-m_find_value(get, #m{value = undefined} = M, _Context) ->
-    M#m{value = get};
-m_find_value(IdnId, #m{value = get}, Context) ->
-    get(IdnId, Context);
-m_find_value(Type, #m{value = RscId}, Context) ->
-    get_rsc(RscId, Type, Context).
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value = {all, RscId}}, Context) ->
-    get_rsc(RscId, Context);
-m_to_list(#m{}, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value = undefined}, _Context) ->
-    undefined;
-m_value(#m{value = V}, _Context) ->
-    V.
+-spec m_get( list(), z:context()) -> {term(), list()}.
+m_get([ Id, is_user | Rest ], Context) ->
+    {is_user(Id, Context), Rest};
+m_get([ Id, username | Rest ], Context) ->
+    {get_username(Id, Context), Rest};
+m_get([ Id, all_types | Rest ], Context) ->
+    {get_rsc_types(Id, Context), Rest};
+m_get([ Id, all ], Context) ->
+    {get_rsc(Id, Context), []};
+m_get([ Id, all, Type | Rest ], Context) ->
+    {get_rsc_by_type(Id, Type, Context), Rest};
+m_get([ get, IdnId | Rest ], Context) ->
+    {get(IdnId, Context), Rest};
+m_get([ Id, Type | Rest ], Context) ->
+    {get_rsc(Id, Type, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc Check if the resource has any credentials that will make him/her an user

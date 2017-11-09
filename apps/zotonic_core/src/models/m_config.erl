@@ -26,9 +26,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
     all/1,
     get/2,
     get/3,
@@ -43,25 +41,16 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(Module, #m{value = undefined} = M, _Context) ->
-    M#m{value = Module};
-m_find_value(Key, #m{value = Module}, Context) ->
-    get(Module, Key, Context).
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value = undefined}, Context) ->
-    all(Context);
-m_to_list(#m{value = Module}, Context) ->
-    get(Module, Context).
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value = undefined}, Context) ->
-    all(Context);
-m_value(#m{value = Module}, Context) ->
-    get(Module, Context).
+-spec m_get( list(), z:context()) -> {term(), list()}.
+m_get([], Context) ->
+    {all(Context), []};
+m_get([ Module ], Context) ->
+    {get(Module, Context), []};
+m_get([ Module, Key | Rest ], Context) ->
+    {get(Module, Key, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc Return all configurations from the configuration table. Returns a nested proplist (module, key)

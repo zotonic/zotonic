@@ -23,9 +23,7 @@
 -behaviour(gen_model).
 
 -export([
-    m_find_value/3,
-    m_value/2,
-    m_to_list/2,
+    m_get/2,
 
     countries/1,
     country_name/2,
@@ -37,21 +35,18 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("erlang_localtime/include/tz_database.hrl").
 
-% @doc Return a list of countries in the current language
-m_find_value(countries, #m{value=undefined}, Context) ->
-    countries(Context);
-m_find_value(country_name, #m{value=undefined} = M, _Context) ->
-    M#m{value=country_name};
-m_find_value(Code, #m{value=country_name}, Context) ->
-    country_name(Code, Context);
-m_find_value(timezones, #m{value=undefined}, _Context) ->
-    timezones().
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ countries | Rest ], Context) ->
+    {countries(Context), Rest};
+m_get([ country_name, Code | Rest ], Context) ->
+    {country_name(Code, Context), Rest};
+m_get([ timezones | Rest ], _Context) ->
+    {timezones(), Rest};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
-m_value(#m{}, _Context) ->
-    undefined.
-
-m_to_list(#m{}, _Context) ->
-    [].
 
 
 %% @doc Return a sorted list of country names in the language of the context

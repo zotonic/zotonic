@@ -5,8 +5,7 @@
 {% block bodyclass %}edit-page{% endblock %}
 
 {% block content %}
-{% with m.rsc[id] as r %}
-{% with r.is_editable as is_editable %}
+{% with id.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
 
 {% if not is_editable %}
@@ -55,7 +54,6 @@
 
 </div>
 
-{% endwith %}
 {% endwith %}
 {% endwith %}
 

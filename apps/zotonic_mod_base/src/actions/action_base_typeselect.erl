@@ -50,12 +50,13 @@ event(#postback{message={typeselect, Cats, Template, Actions, ActionsWithId, Oth
     Text = z_context:get_q("triggervalue", Context),
     Props = [{cat,Cats}, {text, Text}],
     Result = z_search:search({autocomplete, Props}, {1,20}, Context),
-    M = #m{
-        model=m_search,
-        value=#m_search_result{result=Result, total=20, search_name=autocomplete, search_props=Props}
-    },
     Vars = [
-        {result, M},
+        {result, #m_search_result{
+            result = Result,
+            total = 20,
+            search_name = autocomplete,
+            search_props = Props
+        }},
         {action, Actions},
         {action_with_id, ActionsWithId}
         | OtherArgs

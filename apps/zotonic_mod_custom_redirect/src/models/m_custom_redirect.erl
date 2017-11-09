@@ -22,9 +22,7 @@
 -behaviour(gen_model).
 
 -export([
-    m_find_value/3,
-    m_value/2,
-    m_to_list/2,
+    m_get/2,
 
     get/2,
     get/3,
@@ -41,17 +39,14 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_find_value(Id, #m{value=undefined}, Context) when is_integer(Id) ->
-    get(Id, Context);
-m_find_value(list, #m{value=undefined}, Context) ->
-    list(Context).
 
-
-m_value(#m{}, _Context) ->
-    undefined.
-
-m_to_list(#m{}, _Context) ->
-    [].
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ Id | Rest ], Context) ->
+    {get(Id, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 get(Id, Context) ->

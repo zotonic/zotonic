@@ -24,11 +24,8 @@
 -behaviour(gen_model).
 
 %% interface functions
--export(
-   [
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+-export([
+    m_get/2,
 
     is_valid_code/2,
 
@@ -46,7 +43,7 @@
 
     import_rules/4,
     ids_to_names/2
-   ]).
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -55,59 +52,42 @@
 
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(is_valid_code, #m{value=undefined} = M, _Context) ->
-    M#m{value=is_valid_code};
-m_find_value(Code, #m{value=is_valid_code}, Context) ->
-    is_valid_code(Code, Context);
-m_find_value(generate_code, #m{value=undefined}, Context) ->
-    generate_code(Context);
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ is_valid_code, Code | Rest ], Context) ->
+    {is_valid_code(Code, Context), Rest};
+m_get([ generate_code | Rest ], Context) ->
+    {generate_code(Context), Rest};
 
-m_find_value(default_upload_size, #m{value=undefined}, _Context) ->
-    acl_user_groups_checks:max_upload_size_default();
-m_find_value(upload_size, #m{value=undefined}, Context) ->
-    acl_user_groups_checks:max_upload_size(Context);
+m_get([ default_upload_size | Rest ], _Context) ->
+    {acl_user_groups_checks:max_upload_size_default(), Rest};
+m_get([ upload_size | Rest ], Context) ->
+    {acl_user_groups_checks:max_upload_size(Context), Rest};
 
-m_find_value(can_insert, #m{value=undefined} = M, _Context) ->
-    M#m{value=can_insert};
-m_find_value(ContentGroupId, #m{value=can_insert} = M, _Context) ->
-    M#m{value={can_insert, ContentGroupId}};
-m_find_value(CategoryId, #m{value={can_insert, none}}, Context) ->
-    acl_user_groups_checks:can_insert_category(CategoryId, Context);
-m_find_value(CategoryId, #m{value={can_insert, acl_collaboration_group}}, Context) ->
-    acl_user_groups_checks:can_insert_category_collab(CategoryId, Context);
-m_find_value(CategoryId, #m{value={can_insert, ContentGroupId}}, Context) ->
-    acl_user_groups_checks:can_insert_category(ContentGroupId, CategoryId, Context);
+m_get([ can_insert, none, CategoryId | Rest ], Context) ->
+    {acl_user_groups_checks:can_insert_category(CategoryId, Context), Rest};
+m_get([ can_insert, acl_collaboration_group, CategoryId | Rest ], Context) ->
+    {acl_user_groups_checks:can_insert_category_collab(CategoryId, Context), Rest};
+m_get([ can_insert, ContentGroupId, CategoryId | Rest ], Context) ->
+    {acl_user_groups_checks:can_insert_category(ContentGroupId, CategoryId, Context), Rest};
 
-m_find_value(can_move, #m{value=undefined} = M, _Context) ->
-    M#m{value=can_move};
-m_find_value(ContentGroupId, #m{value=can_move} = M, _Context) ->
-    M#m{value={can_move, ContentGroupId}};
-m_find_value(RscId, #m{value={can_move, ContentGroupId}}, Context) ->
-    acl_user_groups_checks:can_move(ContentGroupId, RscId, Context);
+m_get([ can_move, ContentGroupId, RscId | Rest ], Context) ->
+    {acl_user_groups_checks:can_move(ContentGroupId, RscId, Context), Rest};
 
-m_find_value(T, M=#m{value=undefined}, _Context) when ?valid_acl_kind(T) ->
-    M#m{value=T};
-m_find_value(actions, #m{value=T}, Context) when ?valid_acl_kind(T) ->
-    actions(T, Context);
-m_find_value(S, M=#m{value=T}, _) when ?valid_acl_kind(T), ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    M#m{value={list, T, S}};
-m_find_value(Id, #m{value=T}, Context) when ?valid_acl_kind(T), is_integer(Id) ->
+m_get([ T, actions | Rest ], Context) when ?valid_acl_kind(T) ->
+    {actions(T, Context), Rest};
+m_get([ T, S, {all, Opts} | Rest ], Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
+    {all_rules(T, S, Opts, Context), Rest};
+m_get([ T, S | Rest ], Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
+    {all_rules(T, S, [], Context), Rest};
+m_get([ T, Id | Rest ], Context) when ?valid_acl_kind(T), is_integer(Id) ->
     {ok, Props} = get(T, Id, Context),
-    Props;
-m_find_value(undefined, #m{value=T}, _Context) when ?valid_acl_kind(T) ->
-    undefined;
-m_find_value({all, Opts}, #m{value={list, T, S}}, Context) ->
-    all_rules(T, S, Opts, Context).
+    {Props, Rest};
+m_get([ T, undefined | Rest ], _Context) when ?valid_acl_kind(T) ->
+    {undefined, Rest};
 
-
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(_, _Context) ->
-    [].
-
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc Generate a code for testing out the 'test' acl rules

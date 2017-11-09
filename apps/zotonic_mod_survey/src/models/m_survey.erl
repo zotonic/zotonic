@@ -23,11 +23,8 @@
 -behaviour(gen_model).
 
 %% interface functions
--export(
-   [
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+-export([
+    m_get/2,
 
     is_allowed_results_download/2,
     get_handlers/1,
@@ -41,47 +38,28 @@
     single_result/4,
     delete_result/4,
     get_questions/2
-   ]).
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
-%% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(questions, #m{value=undefined} = M, _Context) ->
-    M#m{value=questions};
-m_find_value(results, #m{value=undefined} = M, _Context) ->
-    M#m{value=results};
-m_find_value(all_results, #m{value=undefined} = M, _Context) ->
-    M#m{value=all_results};
-m_find_value(captions, #m{value=undefined} = M, _Context) ->
-    M#m{value=captions};
-m_find_value(totals, #m{value=undefined} = M, _Context) ->
-    M#m{value=totals};
-m_find_value(did_survey, #m{value=undefined} = M, _Context) ->
-    M#m{value=did_survey};
-m_find_value(did_survey_results, #m{value=undefined} = M, _Context) ->
-    M#m{value=did_survey_results};
-m_find_value(did_survey_results_readable, #m{value=undefined} = M, _Context) ->
-    M#m{value=did_survey_results_readable};
-m_find_value(is_allowed_results_download, #m{value=undefined} = M, _Context) ->
-    M#m{value=is_allowed_results_download};
-m_find_value(handlers, #m{value=undefined}, Context) ->
-    get_handlers(Context);
 
-m_find_value(Id, #m{value=results}, Context) ->
-    prepare_results(Id, Context);
-m_find_value([Id, SortColumn], #m{value=all_results}, Context) ->
-    survey_results_sorted(Id, SortColumn, Context);
-m_find_value(Id, #m{value=all_results}, Context) ->
-    survey_results(Id, Context);
-m_find_value(Id, #m{value=captions}, Context) ->
-    survey_captions(Id, Context);
-m_find_value(Id, #m{value=totals}, Context) ->
-    survey_totals(Id, Context);
-m_find_value(Id, #m{value=did_survey}, Context) ->
-    did_survey(Id, Context);
-m_find_value(Id, #m{value=did_survey_results}, Context) ->
+
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ results, Id | Rest ], Context) ->
+    {prepare_results(Id, Context), Rest};
+m_get([ all_results, [Id, SortColumn] | Rest ], Context) ->
+    {survey_results_sorted(Id, SortColumn, Context), Rest};
+m_get([ all_results, Id | Rest ], Context) ->
+    {survey_results(Id, Context), Rest};
+m_get([ captions, Id | Rest ], Context) ->
+    {survey_captions(Id, Context), Rest};
+m_get([ totals, Id | Rest ], Context) ->
+    {survey_totals(Id, Context), Rest};
+m_get([ did_survey, Id | Rest ], Context) ->
+    {did_survey(Id, Context), Rest};
+m_get([ did_survey_results, Id | Rest ], Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
                                     {undefined, z_session:persistent_id(Context)};
@@ -89,8 +67,9 @@ m_find_value(Id, #m{value=did_survey_results}, Context) ->
                                     {UId, undefined}
                             end,
     Answers = m_survey:single_result(Id, UserId, PersistentId, Context),
-    lists:flatten([ Vs || {_,Vs} <- Answers ]);
-m_find_value(Id, #m{value=did_survey_results_readable}, Context) ->
+    As = lists:flatten([ Vs || {_,Vs} <- Answers ]),
+    {As, Rest};
+m_get([ did_survey_results_readable, Id | Rest ], Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
                                     {undefined, z_session:persistent_id(Context)};
@@ -99,20 +78,15 @@ m_find_value(Id, #m{value=did_survey_results_readable}, Context) ->
                             end,
     Answers = m_survey:single_result(Id, UserId, PersistentId, Context),
     Answers1 = lists:flatten([ Vs || {_,Vs} <- Answers ]),
-    survey_answer_prep:readable(Id, Answers1, Context);
-m_find_value(Id, #m{value=is_allowed_results_download}, Context) ->
-    is_allowed_results_download(Id, Context).
+    {survey_answer_prep:readable(Id, Answers1, Context), Rest};
+m_get([ is_allowed_results_download, Id | Rest ], Context) ->
+    {is_allowed_results_download(Id, Context), Rest};
+m_get([ handlers | Rest ], Context) ->
+    {get_handlers(Context), Rest};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> list()
-m_to_list(#m{value=undefined}, _Context) ->
-	[].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-	undefined.
 
 
 is_allowed_results_download(Id, Context) ->

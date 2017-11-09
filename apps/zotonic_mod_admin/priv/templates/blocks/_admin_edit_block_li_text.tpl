@@ -10,7 +10,6 @@
 {% block widget_header %}{% endblock %}
 
 {% block widget_content %}
-{% with m.rsc[id] as r %}
 <fieldset>
 	<div>
 		{% if is_editable %}
@@ -24,7 +23,6 @@
 		{% endif %}
 	</div>
 </fieldset>
-{% endwith %}
 {% endblock %}
 
 {% block widget_content_nolang %}

@@ -23,9 +23,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
     identify/2,
     get/2,
     get_file_data/2,
@@ -66,22 +64,14 @@
 -define(MEDIA_MAX_LENGTH_DOWNLOAD, 500 * 1024 * 1024).
 -define(MEDIA_TIMEOUT_DOWNLOAD, 60 * 1000).
 
+
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(Id, #m{value = undefined}, Context) ->
-    get(Id, Context);
-m_find_value(_Key, #m{}, _Context) ->
-    undefined.
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{}, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{}, _Context) ->
-    undefined.
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ Id | Rest ], Context) ->
+    {get(Id, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc Return the identification of a medium. Used by z_media_identify:identify()
