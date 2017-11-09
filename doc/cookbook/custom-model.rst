@@ -268,7 +268,7 @@ Which (after a search on the title "Alien") returns:
 
     {SomeSearchResultList, [ year ]}.
 
-The [``year``] will then be used to lookup the year property of the found result.
+The ``[ year ]`` will then be used to lookup the year property of the found result.
 
 We won't do any validity checking on the parameter here, but for most modules it makes sense to limit the possibilities. See for instance how ``m_search:get_result`` is done.
 
