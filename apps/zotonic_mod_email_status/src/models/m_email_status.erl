@@ -20,9 +20,7 @@
 -module(m_email_status).
 
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     is_valid/2,
     is_ok_to_send/2,
@@ -45,20 +43,16 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_find_value(is_valid, #m{value=undefined} = M, _Context) ->
-    M#m{value=is_valid};
-m_find_value(Email, #m{value=is_valid}, Context) when is_binary(Email); is_list(Email) ->
-    is_valid(Email, Context);
-m_find_value(Email, #m{value=undefined}, Context) when is_binary(Email); is_list(Email) ->
-    get(Email, Context);
-m_find_value(_X, #m{}, _Context) ->
-    undefined.
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ is_valid, Email | Rest ], Context) ->
+    {is_valid(Email, Context), Rest};
+m_get([ Email | Rest ], Context) ->
+    {get(Email, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
-m_to_list(_m, _Context) ->
-    [].
-
-m_value(_m, _Context) ->
-    undefined.
 
 -spec block(binary(), #context{}) -> ok.
 block(Email0, Context) ->

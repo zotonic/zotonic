@@ -4,9 +4,7 @@
 			<input id="{{ #typeselect }}" type="hidden" name="typeselect_id" />
 		{% endif %}
 
-		{% with m.rsc[id] as r %}
-		<a id="{{ #connect.id }}" href="#add-connection">{{ r.title }} (in <span>{{ r.category.title|default:r.category.name }})</span></a>
-		{% endwith %}
+		<a id="{{ #connect.id }}" href="#add-connection">{{ id.title }} (in <span>{{ id.category.title|default:id.category.name }})</span></a>
 	</li>
 
 	{% wire id=#connect.id

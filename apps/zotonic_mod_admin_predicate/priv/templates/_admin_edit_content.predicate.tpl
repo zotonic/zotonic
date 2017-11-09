@@ -51,13 +51,13 @@
 
     <div class="form-group">
         <label class="checkbox-inline">
-            <input id="field-reversed" type="checkbox" class="do_fieldreplace" name="reversed" {% if r.reversed %}checked="checked"{% endif %} value="1" />{_ The direction (from/to) of this predicate is reversed from the normal definition. _}
+            <input id="field-reversed" type="checkbox" class="do_fieldreplace" name="reversed" {% if id.reversed %}checked="checked"{% endif %} value="1" />{_ The direction (from/to) of this predicate is reversed from the normal definition. _}
         </label>
     </div>
 
     <div class="form-group">
         <label class="checkbox-inline">
-            <input id="field-reversed" type="checkbox" class="do_fieldreplace" name="is_object_noindex" {% if r.is_object_noindex %}checked="checked"{% endif %} value="1" />{_ Do not find subjects using this predicate’s object titles. _}
+            <input id="field-reversed" type="checkbox" class="do_fieldreplace" name="is_object_noindex" {% if id.is_object_noindex %}checked="checked"{% endif %} value="1" />{_ Do not find subjects using this predicate’s object titles. _}
         </label>
     </div>
 </fieldset>

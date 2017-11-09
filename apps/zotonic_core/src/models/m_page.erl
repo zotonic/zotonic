@@ -25,23 +25,16 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2
+    m_get/2
 ]).
 
 -include_lib("zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_find_value(Key::term(), Source::#m{}, Context::#context{}) -> term().
-m_find_value(Key, #m{value=undefined}, Context) ->
-    z_context:get_page(Key, Context).
-
--spec m_to_list(#m{}, #context{}) -> [].
-m_to_list(#m{value=undefined}, _Context) ->
-    [].
-
--spec m_value(#m{}, #context{}) -> [].
-m_value(#m{value=undefined}, _Context) ->
-    [].
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ Key | Rest ], Context) ->
+    {z_context:get_page(Key, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 

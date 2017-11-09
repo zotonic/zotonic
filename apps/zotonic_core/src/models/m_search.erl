@@ -36,9 +36,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     search/2,
     search_pager/2,
@@ -48,31 +46,14 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(paged, #m{value=undefined} = M, _Context) ->
-    M#m{value=paged};
-m_find_value(SearchProps, #m{value=paged} = M, Context) ->
-    M#m{value=search_pager(SearchProps, Context)};
-m_find_value(SearchProps, #m{value=undefined} = M, Context) ->
-    M#m{value=search(SearchProps, Context)};
-m_find_value(Key, #m{value=#m_search_result{}} = M, Context) ->
-    get_result(Key, M#m.value, Context).
-
-%% @doc Transform a model value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value=#m_search_result{result=undefined}}, _Context) ->
-    [];
-m_to_list(#m{value=#m_search_result{result=Result}}, _Context) ->
-    Result#search_result.result;
-m_to_list(#m{}, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined;
-m_value(#m{value=#m_search_result{result=Result}}, _Context) ->
-    Result#search_result.result.
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ paged, SearchProps | Rest ], Context) ->
+    {search_pager(SearchProps, Context), Rest};
+m_get([ SearchProps | Rest ], Context) ->
+    {search(SearchProps, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc Perform a search, wrap the result in a m_search_result record

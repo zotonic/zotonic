@@ -13,9 +13,8 @@
 {% block widget_id %}sidebar-connections{% endblock %}
 
 {% block widget_content %}
-{% with m.rsc[id] as r %}
 <div id="unlink-undo-message"></div>
-{% with predicate_ids|default:r.predicates_edit as pred_shown %}
+{% with predicate_ids|default:id.predicates_edit as pred_shown %}
     {% for name, p in m.predicate %}
         {% if p.id|member:pred_shown %}
            {% ifnotequal name "depiction" %}
@@ -46,5 +45,4 @@
        <a class="btn btn-default btn-sm" href="{% url admin_referrers id=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all referrers _}</a>
     </div>
 {% endif %}
-{% endwith %}
 {% endblock %}

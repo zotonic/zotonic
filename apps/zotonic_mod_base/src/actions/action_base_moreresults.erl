@@ -22,9 +22,8 @@
 
 render_action(TriggerId, TargetId, Args, Context) ->
     Result = case proplists:get_value(result, Args) of
-                #m{model=m_search, value=V} -> V;
-                #m_search_result{} = M -> M
-             end,
+        #m_search_result{} = M -> M
+    end,
     SearchName = Result#m_search_result.search_name,
     SearchResult = Result#m_search_result.result,
     PageLen = pagelen(SearchResult, Result#m_search_result.search_props),

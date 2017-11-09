@@ -9,38 +9,36 @@
 </div>
 {% endblock %}
 
-{% block widget_show_minimized %}{{ r.publication_start|in_past and r.publication_end|in_future }}{% endblock %}
+{% block widget_show_minimized %}{{ id.publication_start|in_past and id.publication_end|in_future }}{% endblock %}
 {% block widget_id %}sidebar-pub-period{% endblock %}
 
 {% block widget_content %}
 <fieldset>
-    {% with m.rsc[id] as r %}
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label">{_ Visible from _}</label>
-                    <div>
-                        {% include "_edit_date.tpl" date=r.publication_start name="publication_start" is_end=0 %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label">{_ Visible till _}</label>
-                    <div>
-                        {% include "_edit_date.tpl" date=r.publication_end name="publication_end" is_end=1 %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label class="control-label">{_ Publication date of original article _}</label>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">{_ Visible from _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=r.org_pubdate name="org_pubdate" is_end=0 %}
+                    {% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 %}
                 </div>
             </div>
         </div>
-    {% endwith %}
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">{_ Visible till _}</label>
+                <div>
+                    {% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label class="control-label">{_ Publication date of original article _}</label>
+            <div>
+                {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 %}
+            </div>
+        </div>
+    </div>
 </fieldset>
 {% endblock %}

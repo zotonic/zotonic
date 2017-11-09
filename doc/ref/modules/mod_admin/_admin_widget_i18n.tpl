@@ -35,7 +35,6 @@
    See variables in doc/tpl/admin/README.i18n for i18n variables description.
    Tags inside this block should be ready for using in i18n and non-i18n enviroments. #}
 {% block widget_content %}
-    {% with m.rsc[id] as r %}
 	<fieldset class="admin-form">
 	    <div>
 		{# Then i18n is disabled, variables "lang_code", "lang_code_with_dollar" and others are undefined,
@@ -44,11 +43,10 @@
 
 		{# INPUT-tag: Look at name and value attributes: value is rendered using "if" filter: #}
 		<input class="form-control" type="text" id="{{ #field }}{{ lang_code_with_dollar }}" name="title{{ lang_code_with_dollar }}"
-			value="{{ is_i18n|if : r.translation[lang_code].title : r.title }}"
+			value="{{ is_i18n|if : id.translation[lang_code].title : id.title }}"
 			{% if not is_editable %}disabled="disabled"{% endif %}/>
 	    </div>
 	</fieldset>
-    {% endwith %}
 {% endblock %}
 
 

@@ -25,9 +25,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
     load_config/1,
     load_config/2,
     all/1,
@@ -38,27 +36,23 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(hostname, #m{value=undefined}, Context) ->
-    z_context:hostname(Context);
-m_find_value(hostname_port, #m{value=undefined}, Context) ->
-    z_context:hostname_port(Context);
-m_find_value(hostname_ssl_port, #m{value=undefined}, Context) ->
-    z_context:hostname_ssl_port(Context);
-m_find_value(protocol, #m{value=undefined}, Context) ->
-    z_context:site_protocol(Context);
-m_find_value(Key, #m{value=undefined}, Context) ->
-    get(Key, Context).
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ hostname | Rest ], Context) ->
+    {z_context:hostname(Context), Rest};
+m_get([ hostname_port | Rest ], Context) ->
+    {z_context:hostname_port(Context), Rest};
+m_get([ hostname_ssl_port | Rest ], Context) ->
+    {z_context:hostname_ssl_port(Context), Rest};
+m_get([ protocol | Rest ], Context) ->
+    {z_context:site_protocol(Context), Rest};
+m_get([ Key | Rest ], Context) ->
+    {get(Key, Context), Rest};
+m_get([], Context) ->
+    {all(Context), []};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> All
-m_to_list(#m{value=undefined}, Context) ->
-    all(Context).
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, Context) ->
-    all(Context).
 
 -spec load_config(atom()|z:context()) -> ok | {error, term()}.
 load_config(#context{} = Context) ->

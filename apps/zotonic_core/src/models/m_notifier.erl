@@ -25,31 +25,19 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2
+    m_get/2
 ]).
 
 -include_lib("zotonic.hrl").
 
+
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(first, #m{value=undefined}=M, _Context) ->
-    M#m{value=first};
-m_find_value(map, #m{value=undefined}=M, _Context) ->
-    M#m{value=map};
-m_find_value(Message, #m{value=first}, Context) ->
-    z_notifier:first(Message, Context);
-m_find_value(Message, #m{value=map}, Context) ->
-    z_notifier:map(Message, Context).
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value=undefined}, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ first, Message | Rest ], Context) ->
+    {z_notifier:first(Message, Context), Rest};
+m_get([ map, Message | Rest ], Context) ->
+    {z_notifier:map(Message, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 

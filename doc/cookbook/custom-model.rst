@@ -13,14 +13,12 @@ Model modules
 
 Models are Erlang modules that are prefixed with ``m_`` and stored in your main module's subdirectory `models`. For example, the model to access Zotonic resources (syntax ``m.rsc.property``) is written in ``models/m_rsc.erl``.
 
-Each model module is required to implement 3 functions (as defined behavior in ``gen_model.erl``):
+Each model module is required to implement one function (as defined behavior in ``gen_model.erl``):
 
-* m_find_value/3
-* m_to_list/2
-* m_value/2
+* m_get/2
 
-m_find_value
-^^^^^^^^^^^^
+m_get
+^^^^^
 
 This function fetches a value from a model. Because there are quite some different variation how to use this function, it is good to understand a bit more about the inner workings of data lookup.
 
@@ -32,76 +30,27 @@ If you have done some work with Zotonic, you will be familiar with this syntax w
 
 This expression contains 4 parts (separated by dots).
 
-At the very start, the template parser resolves ``m.rsc`` to module ``m_rsc``. The parser then calls ``m_rsc:m_find_value(Key, Source, Context)`` to fetch the value (where Key in our expression has the value of "1").
+At the very start, the template parser resolves ``m.rsc`` to module ``m_rsc``. The parser then calls ``m_rsc:m_get(Keys, Context)`` to fetch the value (where Keys in our expression has the value of ``[ 1, is_cat, person ]``).
 
-This is the function specification of ``m_find_value``::
+This is the function specification of ``m_get``::
 
-    -spec m_find_value(Key, Source, Context) -> #m{} | undefined | any() when
-        Key:: integer() | atom() | string(),
-        Source:: #m{},
-        Context:: #context{}.
+    -spec m_get(Keys, Context) -> { term(), RestKeys } when
+        Keys :: list(),
+        RestKeys :: list(),
+        Context:: z:context().
 
-It takes a Key and a data Source - a simple record containing 2 entities, model and value::
+It takes the dotted expression list and returns the looked up value and the unprocessed part of the dotted list (if any).
 
-    -record(m, {model, value}).
+In this example, the `m_get` is called as::
 
-``m_find_value`` often simply returns a value, but it may also return a (modified) data source record for the next call to ``m_find_value``. ``m_rsc.erl`` resolves our expression in 3 different calls to ``m_find_value``, where the data source record ("m" record) is used for pattern matching.
+    m_get([ 1, is_cat, person ], Context)
 
-* Step 1: The m record does not contain a value yet. The key (Id) is checked for visibility, and stored in the m record::
+And will return:
 
-    m_find_value(Id, #m{value=undefined} = M, Context) ->
-        ...
-        M#m{value=RId};
+    {true, []}
 
-* Step 2: With the m record now containing an Id value, the key ``is_cat`` is found. Again the key is stored in the m record::
-
-    m_find_value(is_cat, #m{value=Id} = M, _Context) when is_integer(Id) ->
-        M#m{value={is_cat, Id}};
-
-* Step 3: The next key to parse is ``person``. Since this could have been any category name, a generic ``Key`` variable is used instead of an atom. The result is calculated in a function call, and returned for further manipulation (e.g. filters) or as string to the page::
-
-    m_find_value(Key, #m{value={is_cat, Id}}, Context) ->
-        is_cat(Id, Key, Context);
-
-
-m_to_list
-^^^^^^^^^
-
-The second mandatory function transforms a value to a list::
-
-    -spec m_to_list(Source, Context) -> list() when
-        Source:: #m{},
-        Context:: #context{}.
-
-Not all data models will need to handle lists - in that case the return value is simply the empty list.
-
-Search results are a good example when to apply this function::
-
-    m_to_list(#m{value=#m_search_result{result=undefined}}, _Context) ->
-        [];
-    m_to_list(#m{value=#m_search_result{result=Result}}, _Context) ->
-        Result#search_result.result;
-    m_to_list(#m{}, _Context) ->
-        [].
-
-Empty models or undefined results return the empty list; valid results are lifted from its record wrapper and returned as a list.
-
-For example, the ``length`` filter makes use of this. It calls ``erlydtl_runtime:to_list`` that calls the model's ``m_to_list``::
-
-    length(Input, Context) ->
-        erlang:length(erlydtl_runtime:to_list(Input, Context)).
-
-
-m_value
-^^^^^^^
-
-The final mandatory function specification::
-
-    -spec m_value(Source, Context) -> undefined | any() when
-        Source:: #m{},
-        Context:: #context{}.
-
-The intended use is to normalize a value to something printable, but you can safely ignore this and return ``undefined``.
+Where `true` is returned because rescource id 1 is indeed a person, and `[]` is returned because the call consumed all
+parts of the dotted expression.
 
 
 Example: Setting up m_omdb
@@ -149,27 +98,17 @@ We will write our model in module ``models/m_omdb.erl``. Let's first get the man
     -behaviour(gen_model).
 
     -export([
-        m_find_value/3,
-        m_to_list/2,
-        m_value/2
+        m_get/2
     ]).
 
     -include_lib("zotonic_core/include/zotonic.hrl").
 
-    % ... We will add our m_find_value functions here
-
-    % ... Before ending with the final fallback:
-    m_find_value(_, _, _Context) ->
-        undefined.
-
-    % This is the default m_to_list if we don't have any list values.
-    % We will come back to this in a minute
-    m_to_list(_, _Context) ->
-        [].
-
-    % The function that we can ignore
-    m_value(_, _Context) ->
-        undefined.
+    % ... We will add our m_get functions here
+    -spec m_get( list(), z:context() ) -> { term(), list() }.
+    m_get([ _ | Rest ], _Context) ->
+        {undefined, Rest};
+    m_get(_, _Context) ->
+        {undefined, []}.
 
 
 Querying the API
@@ -177,7 +116,7 @@ Querying the API
 
 Before diving into the lookup functions, let's see what we want to achieve as result.
 
-1. Using ``m_find_value`` we will generate a list of query parameters, for example ``[{type, "series"}, {title, "Dollhouse"}]``
+1. Using ``m_get`` we will generate a list of query parameters, for example ``[{type, "series"}, {title, "Dollhouse"}]``
 2. And pass this list to a "fetch data" function
 3. That creates a URL from the parameters,
 4. loads JSON data from the URL,
@@ -219,13 +158,13 @@ It is important to know that we will pass a list, and get a list as result (for 
 Lookup functions
 ^^^^^^^^^^^^^^^^
 
-To illustrate the simplest ``m_find_value`` function, we add one to get the API url::
+To illustrate the simplest ``m_get`` function, we add one to get the API url::
 
     -define(API_URL, "http://www.omdbapi.com/?").
 
     % Syntax: m.omdb.api_url
-    m_find_value(api_url, _, _Context) ->
-        ?API_URL;
+    m_get([ api_url | Rest ], _Context) ->
+        {?API_URL, Rest};
 
 The functions that will deliver our template interface are a bit more involved. From the template expressions we can discern 2 different patterns:
 
@@ -244,22 +183,31 @@ When an expression is parsed from left to right, each parsed part needs to be pa
 To parse the type, we add these functions to our module::
 
     % Syntax: m.omdb.movie[QueryString]
-    m_find_value(movie, #m{value=undefined} = M, _Context) ->
-        M#m{value=[{type, "movie"}]};
+    m_get([ movie, QueryString | Rest ], Context) when is_binary(QueryString) ->
+        Query = [ {type, movie}, {title, QueryString} ],
+        {fetch_data(Query), []};
 
     % Syntax: m.omdb.series[QueryString]
-    m_find_value(series, #m{value=undefined} = M, _Context) ->
-        M#m{value=[{type, "series"}]};
+    m_get([ series, QueryString | Rest ], Context) when is_binary(QueryString) ->
+        Query = [ {type, series}, {title, QueryString} ],
+        {fetch_data(Query), []};
 
     % Syntax: m.omdb.episode[QueryString]
-    m_find_value(episode, #m{value=undefined} = M, _Context) ->
-        M#m{value=[{type, "episode"}]};
+    m_get([ episode, QueryString | Rest ], Context) when is_binary(QueryString) ->
+        Query = [ {type, episode}, {title, QueryString} ],
+        {fetch_data(Query), []};
 
-Notice ``value=undefined`` - this is the case when nothing else has been parsed yet.
 
-The m record now contains a value that will passed to next calls to ``m_find_value``, where we deal with the second part of the expression - let's call that the "query" part.
+Notice the ``| Rest`` in the patterns. This is needed for expressions like::
 
-We can either pass:
+    m.omdb.series["Dollhouse"].title
+
+Which calls our ``m_get`` function as::
+
+    m_get([ series, <<"Dollhouse">>, title ], Context)
+
+
+We can also pass:
 
 1. The movie ID: ``m.omdb["tt1135300"]``
 2. The title: ``m.omdb["Alien"]``
@@ -270,22 +218,16 @@ Luckily, the movie IDs all start with "tt", so we can use pattern matching to di
 For the ID we recognize 2 situations - with or without a previously found value::
 
     % Syntax: m.omdb["tt1135300"]
-    m_find_value("tt" ++ _Number = Id, #m{value=undefined} = M, _Context) ->
-        M#m{value=[{id, Id}]};
+    m_get([ <<"tt", _/binary>> = Id | Rest ], Context) ->
+        Query = [ {id, Id} ],
+        {fetch_data(Query), []};
 
     % Syntax: m.omdb.sometype["tt1135300"]
-    m_find_value("tt" ++ _Number = Id, #m{value=Query} = M, _Context) when is_list(Query) ->
-        M#m{value=[{id, Id}] ++ Query};
+    m_get([ sometype, <<"tt", _/binary>> = Id | Rest ], _Context) ->
+        Query = [ {type, sometype}, {id, Id} ],
+        {fetch_data(Query), []}.
 
-In both cases we are passing the modified m record. Because we are retrieving a list, we can leave the processing to ``m_to_list``. For this we need to update our function::
-
-    -spec m_to_list(Source, Context) -> list() when
-        Source:: #m{},
-        Context:: #context{}.
-    m_to_list(#m{value=undefined} = _M, _Context) ->
-        [];
-    m_to_list(#m{value=Query} = _M, _Context) ->
-        fetch_data(Query).
+We need to place these two patterns above the title searches we already wrote
 
 ``fetch_data`` will return a property list, so we can write this to get all values::
 
@@ -296,39 +238,37 @@ In both cases we are passing the modified m record. Because we are retrieving a 
 Handling the title is similar to the ID. Title must be a string, otherwise it would be a property key (atom)::
 
     % Syntax: m.omdb["some title"]
-    m_find_value(Title, #m{value=undefined} = M, _Context) when is_list(Title) ->
-        M#m{value=[{title, Title}]};
-
-    % Syntax: m.omdb.sometype["some title"]
     % If no atom is passed it must be a title (string)
-    m_find_value(Title, #m{value=Query} = M, _Context) when is_list(Title) ->
-        M#m{value=[{title, Title}] ++ Query};
-
+    m_get([ Title | Rest ], _Context) when is_binary(Title) ->
+        Query = [ {title, Title} ],
+        {fetch_data(Query), []};
 
 To parse the search expression, we can simply use the readymade property list::
 
     % Syntax: m.omdb[{query QueryParams}]
     % For m.omdb[{query title="Dollhouse"}], Query is: [{title,"Dollhouse"}]
-    m_find_value({query, Query}, #m{value=undefined} = M, _Context) ->
-        M#m{value=Query};
+    m_get([ {query, Query} | Rest ], _Context) ->
+        {fetch_data(Query), []};
 
     % Syntax: m.omdb.sometype[{query QueryParams}]
     % For m.omdb.series[{query title="Dollhouse"}],
     % Query is: [{title,"Dollhouse"}] and Q is: [{type,"series"}]
-    m_find_value({query, Query}, #m{value=Q} = M, _Context) when is_list(Q) ->
-        M#m{value=Query ++ Q};
+    m_get([ series, {query, Query} | Rest ], _Context) ->
+        {fetch_data([{type, series} | Query), []};
 
-
-Finally, to handle properties like::
+If we want to fetch the year of the first result we use::
 
     m.omdb["Alien"].year
 
-... we can no longer pass around the m record; we must resolve it to a value and get the property value::
+... we get called as::
 
-    % Syntax: m.omdb[QueryString].title or m.omdb.sometype[QueryString].title
-    % Key is in this case 'title'
-    m_find_value(Key, #m{value=Query} = _M, _Context) when is_atom(Key) ->
-        proplists:get_value(Key, fetch_data(Query));
+    m_get([ <<"Alien">>, year ], Context).
+
+Which (after a search on the title "Alien") returns:
+
+    {SomeSearchResultList, [ year ]}.
+
+The ``[ year ]`` will then be used to lookup the year property of the found result.
 
 We won't do any validity checking on the parameter here, but for most modules it makes sense to limit the possibilities. See for instance how ``m_search:get_result`` is done.
 
@@ -336,7 +276,7 @@ We won't do any validity checking on the parameter here, but for most modules it
 Full source code
 ^^^^^^^^^^^^^^^^
 
-The source code of the documentation so far can be found in this gist: `Zotonic template model for the OMDB movie database - source code to accompany the documentation <https://gist.github.com/ArthurClemens/11be71e7fb1b0af31f05>`_.
+The source code of the documentation so far can be found in this gist: `Zotonic 1.0 - Template model for the OMDB movie database - source code to accompany the documentation <https://gist.github.com/mworrell/08a9f2115c2df7a3f3068b500564314d>`_.
 
 
 Possible enhancements

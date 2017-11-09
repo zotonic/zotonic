@@ -199,7 +199,7 @@ is_modified(Filename, Mtime, _Context) ->
 -spec compile_map_nested_value(Tokens :: list(), ContextVar :: string(), Context :: term()) -> NewTokens :: list().
 compile_map_nested_value([{identifier, _, <<"m">>}, {identifier, _, Model}|Rest], _ContextVar, _Context) ->
     Module = binary_to_atom(<<"m_", Model/binary>>, 'utf8'),
-    [{ast, erl_syntax:abstract(#m{model=Module})} | Rest];
+    [{mfa, Module, m_get, Rest}];
 compile_map_nested_value([{identifier, _, <<"q">>}, {identifier, _, QArg}|Rest], ContextVar, _Context) ->
     Ast = erl_syntax:application(
                 erl_syntax:atom(z_context),
@@ -239,8 +239,6 @@ get_z_context(Var, ContextVar) ->
 
 %% @doc Find a list of values at once, easier and more efficient than a nested find_value/4
 %%      Add pattern matching here for nested lookups.
-find_nested_value([#m{} = M|Ks], TplVars, Context) ->
-    find_nested_value_1(M, Ks, TplVars, Context);
 find_nested_value([K|Ks], TplVars, Context) ->
     find_nested_value_1(find_value(K, TplVars, TplVars, Context), Ks, TplVars, Context).
 
@@ -298,6 +296,7 @@ find_value(Key, #m_search_result{} = S, _TplVars, _Context) when is_atom(Key) ->
         search_name -> S#m_search_result.search_name;
         search_props -> S#m_search_result.search_props;
         result -> S#m_search_result.result;
+        total -> S#m_search_result.total;
         page -> S#m_search_result.page;
         pages -> S#m_search_result.pages;
         pagelen -> S#m_search_result.pagelen;
@@ -312,8 +311,6 @@ find_value(Key, #rsc_list{list=[H|_T]}, TplVars, Context) ->
     find_value(Key, H, TplVars, Context);
 find_value(_Key, #rsc_list{list=[]}, _TplVars, _Context) ->
     undefined;
-find_value(Name, #m{model=Module} = M, _TplVars, Context) ->
-    Module:m_find_value(Name, M, Context);
 find_value(IsoAtom, Text, _TplVars, _Context) when is_atom(IsoAtom), is_binary(Text) ->
     case z_language:is_valid(atom_to_list(IsoAtom)) of
         true -> Text;
@@ -448,8 +445,6 @@ to_bool({trans, _} = Tr, Context) ->
         <<>> -> false;
         _ -> true
     end;
-to_bool(#m{model=Model} = M, Context) ->
-    to_bool(Model:m_value(M, Context), Context);
 to_bool(#search_result{result=L}, Context) ->
     to_bool(L, Context);
 to_bool(#m_search_result{result=L}, Context) ->
@@ -460,7 +455,6 @@ to_bool(Value, _Context) ->
 %% @doc Convert a value to a list.
 -spec to_list(Value :: term(), Context :: term()) -> list().
 to_list(undefined, _Context) -> [];
-to_list(#m{model=Model} = M, Context) -> Model:m_to_list(M, Context);
 to_list(#rsc_list{list=L}, _Context) -> L;
 to_list(#search_result{result=L}, _Context) -> L;
 to_list(#m_search_result{result=Result}, Context) -> to_list(Result, Context);
@@ -477,8 +471,6 @@ to_simple_values(Args, Context) when is_list(Args) ->
 
 %% @doc Convert a value to something that can be handled as an argument to scomps.
 -spec to_simple_value(Value::term(), Context::term()) -> term().
-to_simple_value(#m{model=Model} = M, Context) ->
-    Model:m_value(M, Context);
 to_simple_value(#m_search_result{result=#search_result{result=Result}}, _Context) ->
     Result;
 to_simple_value(#rsc_list{list=L}, _Context) ->
@@ -497,8 +489,6 @@ to_render_result({{Y,M,D},{H,I,S}} = Date, TplVars, Context)
     when is_integer(Y), is_integer(M), is_integer(D),
          is_integer(H), is_integer(I), is_integer(S) ->
     z_datetime:format(Date, "Y-m-d H:i:s", set_context_vars(TplVars, Context));
-to_render_result(#m{model=Model} = M, TplVars, Context) ->
-    to_render_result(Model:m_value(M, Context), TplVars, Context);
 to_render_result(#m_search_result{result=#search_result{result=Result}}, _TplVars, _Context) ->
     io_lib:format("~p", [Result]);
 to_render_result(#rsc_list{list=L}, _TplVars, _Context) ->

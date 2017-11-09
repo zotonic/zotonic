@@ -25,9 +25,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     list_rsc/2,
     get/2,
@@ -47,34 +45,16 @@
 
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(rsc, #m{value=undefined} = M, _Context) ->
-    M#m{value=rsc};
-m_find_value(Id, #m{value=rsc}, Context) ->
-    % All comments of the resource.
-    list_rsc(Id, Context);
-m_find_value(count, #m{value=undefined} = M, _Context) ->
-    M#m{value=count};
-m_find_value(Id, #m{value=count}, Context) ->
-    count_rsc(Id, Context);
-m_find_value(get, #m{value=undefined} = M, _Context) ->
-    M#m{value=get};
-m_find_value(CommentId, #m{value=get}, Context) ->
-    % Specific comment of the resource.
-    get(CommentId, Context);
-m_find_value(_Key, #m{value=undefined}, _Context) ->
-   undefined.
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> []
-m_to_list(_, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
-
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ rsc, Id | Rest ], Context) ->
+    {list_rsc(Id, Context), Rest};
+m_get([ count, Id | Rest ], Context) ->
+    {count_rsc(Id, Context), Rest};
+m_get([ get, CommentId | Rest ], Context) ->
+    {get(CommentId, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc List all comments of the resource.

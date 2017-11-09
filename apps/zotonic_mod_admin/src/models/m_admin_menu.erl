@@ -29,40 +29,20 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     menu/1
 ]).
 
-
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(user, #m{value=undefined}, Context) ->
-    z_acl:user(Context);
-m_find_value(is_admin, #m{value=undefined}, Context) ->
-    z_acl:is_allowed(use, mod_admin_config, Context);
-m_find_value(Action, #m{value=undefined} = M, _Context)
-    when Action == use orelse Action == admin orelse Action == view
-    orelse Action == delete orelse Action == update orelse Action == insert ->
-    M#m{value={is_allowed, Action}};
-m_find_value(is_allowed, #m{value=undefined} = M, _Context) ->
-    M#m{value=is_allowed};
-m_find_value(Action, #m{value=is_allowed} = M, _Context) ->
-    M#m{value={is_allowed, Action}};
-m_find_value(Object, #m{value={is_allowed, Action}}, Context) when is_binary(Object) ->
-    z_acl:is_allowed(Action, z_convert:to_atom(Object), Context);
-m_find_value(Object, #m{value={is_allowed, Action}}, Context) ->
-    z_acl:is_allowed(Action, Object, Context).
-
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(_, Context) ->
-    menu(Context).
-
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
-
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([], Context) ->
+    {menu(Context), []};
+m_get([ menu | Rest ], Context) ->
+    {menu(Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 menu(Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of

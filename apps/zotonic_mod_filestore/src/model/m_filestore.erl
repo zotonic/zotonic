@@ -19,7 +19,7 @@
 -module(m_filestore).
 
 -export([
-    m_find_value/3,
+    m_get/2,
 
     queue/3,
     fetch_queue/1,
@@ -50,8 +50,13 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_find_value(stats, #m{}, Context) ->
-    stats(Context).
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ stats | Rest ], Context) ->
+    {stats(Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 queue(Path, Props, Context) ->

@@ -5,7 +5,6 @@
 {% block widget_id %}edit-block-{{ name }}{% endblock %}
 
 {% block widget_content %}
-{% with m.rsc[id] as r %}
     {% if is_editable %}
     <div class="row">
         <div class="col-lg-6 col-md-6">
@@ -34,5 +33,4 @@
         {_ Multiple page break blocks are merged into one. _}
     </p>
     {% endif %}
-{% endwith %}
 {% endblock %}

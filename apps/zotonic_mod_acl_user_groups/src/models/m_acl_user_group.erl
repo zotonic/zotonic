@@ -24,9 +24,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     is_used/2
 ]).
@@ -34,21 +32,15 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_find_value(has_collaboration_groups, #m{value=undefined}, Context) ->
-    acl_user_groups_checks:has_collab_groups(Context);
-m_find_value(is_used, #m{value=undefined} = M, _Context) ->
-    M#m{value=is_used};
-m_find_value(Cat, #m{value=is_used}, Context) ->
-    is_used(Cat, Context);
-m_find_value(_Key, _Value, _Context) ->
-    undefined.
-
-m_to_list(#m{value=undefined}, _Context) ->
-    [].
-
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
-
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ has_collaboration_groups | Rest ], Context) ->
+    {acl_user_groups_checks:has_collab_groups(Context), Rest};
+m_get([ is_used, Cat | Rest ], Context) ->
+    {is_used(Cat, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 %% @doc Check if a user group is actually in use.
 is_used(UserGroup, Context) ->

@@ -22,33 +22,21 @@
 
 -behaviour(gen_model).
 
--export([m_find_value/3,
-	 m_to_list/2,
-	 m_value/2]).
+-export([
+    m_get/2
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-%
-%
-m_find_value({SignalType, SignalProps}, #m{value=undefined}=M, _Context) when is_atom(SignalType) ->
-    M#m{value={SignalType, SignalProps}};
-m_find_value(Name, #m{value={_SignalType, SignalProps}}, _Context) ->
-    proplists:get_value(Name, SignalProps);
 
-m_find_value(type, #m{value=undefined}=M, _Context) ->
-    M#m{value=type};
-m_find_value(props, #m{value=undefined}=M, _Context) ->
-    M#m{value=props};
-m_find_value({SignalType, _SignalProps}, #m{value=type}, _Context) ->
-    SignalType;
-m_find_value({_SignalType, SignalProps}, #m{value=props}, _Context) ->
-    SignalProps.
-
-%
-m_to_list(_Value, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(_Value, _Context) ->
-    undefined.
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ {SignalType, SignalProps}, Name | Rest ], _Context) when is_atom(SignalType) ->
+    {proplists:get_value(Name, SignalProps), Rest};
+m_get([ type, {SignalType, _SignalProps} | Rest ], _Context) ->
+    {SignalType, Rest};
+m_get([ props, {_SignalType, SignalProps} | Rest ], _Context) ->
+    {SignalProps, Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.

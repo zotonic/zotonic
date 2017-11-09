@@ -24,21 +24,14 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2
+    m_get/2
 ]).
 
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(list, #m{value=undefined} = M, _Context) ->
-    M#m{value=list};
-m_find_value(Id, #m{value=list}, Context) ->
-    lists:sort(z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context)).
 
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(_, _Context) ->
-    undefined.
-
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ list, Id | Rest ], Context) ->
+    {lists:sort(z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context)), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.

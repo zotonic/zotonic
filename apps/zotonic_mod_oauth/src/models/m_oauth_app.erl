@@ -27,67 +27,56 @@
 
 
 -export([
-         m_find_value/3,
-         m_to_list/2,
-         m_value/2,
+    m_get/2,
 
-         consumer_tokens/2,
-         consumer_access_tokens/2,
-         delete_consumer_token/2,
+    consumer_tokens/2,
+    consumer_access_tokens/2,
+    delete_consumer_token/2,
 
-         consumer_lookup/2,
-         secrets_for_verify/4,
-         check_nonce/5,
-         request_token/2,
-         authorize_request_token/3,
-         exchange_request_for_access/2,
+    consumer_lookup/2,
+    secrets_for_verify/4,
+    check_nonce/5,
+    request_token/2,
+    authorize_request_token/3,
+    exchange_request_for_access/2,
 
-         ensure_anonymous_token/2,
+    ensure_anonymous_token/2,
 
-         get_request_token/2,
+    get_request_token/2,
 
-         create_app/2,
-         create_app/3,
+    create_app/2,
+    create_app/3,
 
-         get_app_tokens/2,
+    get_app_tokens/2,
 
-         create_consumer/2,
-         create_consumer/5,
-         update_consumer/3,
-         get_consumer/2,
-         delete_consumer/2,
-         delete_consumers/1,
-         reset_consumer_secret/2
-         ]).
+    create_consumer/2,
+    create_consumer/5,
+    update_consumer/3,
+    get_consumer/2,
+    delete_consumer/2,
+    delete_consumers/1,
+    reset_consumer_secret/2
+ ]).
 
 -define(TS_SKEW, 600).
 
 
 %% gen_model
 
+
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(info, #m{value=undefined} = M, _Context) ->
-    M#m{value=info};
-m_find_value(Id, #m{value=info}, Context) ->
-    get_consumer(Id, Context);
-
-m_find_value(tokens, #m{value=undefined} = M, _Context) ->
-    M#m{value=tokens};
-m_find_value(Id, #m{value=tokens}, Context) ->
-    consumer_tokens(Id, Context);
-m_find_value(Id, #m{value=access_tokens}, Context) ->
-    consumer_access_tokens(Id, Context).
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> list()
-m_to_list(#m{value=undefined}, Context) ->
-    all_apps(Context).
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=_}, _Context) ->
-    undefined.
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([], Context) ->
+    {all_apps(Context), []};
+m_get([ info, Id | Rest ], Context) ->
+    {get_consumer(Id, Context), Rest};
+m_get([ tokens, Id | Rest ], Context) ->
+    {consumer_tokens(Id, Context), Rest};
+m_get([ access_tokens, Id | Rest ], Context) ->
+    {consumer_access_tokens(Id, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 all_apps(Context) ->

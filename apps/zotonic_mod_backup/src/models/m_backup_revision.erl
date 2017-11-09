@@ -21,9 +21,7 @@
 -behaviour(gen_model).
 
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     save_revision/3,
     get_revision/2,
@@ -36,19 +34,13 @@
 
 -define(BACKUP_TYPE_PROPS, $P).
 
-m_find_value(list, #m{value=undefined} = M, _Context) ->
-    M#m{value=list};
-m_find_value(Id, #m{value=list}, Context) when is_integer(Id) ->
-    list_revisions_assoc(Id, Context);
-m_find_value(_X, #m{}, _Context) ->
-    undefined.
-
-m_to_list(_m, _Context) ->
-    [].
-
-m_value(_m, _Context) ->
-    undefined.
-
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ list, Id | Rest ], Context) ->
+    {list_revisions_assoc(Id, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 save_revision(Id, Props, Context) ->

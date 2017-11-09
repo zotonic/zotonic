@@ -25,9 +25,8 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
+
     get/3,
     put/4,
     delete/3,
@@ -39,21 +38,12 @@
 
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(Type, #m{value=undefined} = M, _Context) ->
-    M#m{value=Type};
-m_find_value(Key, #m{value=Type}, Context) ->
-    get(Type, Key, Context).
-
-%% @doc Transform a value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> list()
-m_to_list(_, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{}, _Context) ->
-    undefined.
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ Type, Key | Rest ], Context) ->
+    {get(Type, Key, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc Fetch a value from the store

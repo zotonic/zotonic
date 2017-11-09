@@ -117,9 +117,6 @@
         result :: any()
     }).
 
-%% Model value interface for templates
--record(m, {model, value}).
-
 %% Used for specifying resource id lists, as returned by object/subject lookup
 -record(rsc_list, {list}).
 

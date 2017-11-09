@@ -10,7 +10,6 @@
 {% block widget_header %}{% endblock %}
 
 {% block widget_content %}
-{% with m.rsc[id] as r %}
     {% if id.is_editable %}
     <div class="form-group">
         <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
@@ -37,7 +36,6 @@
     {% else %}
         <p>{{ blk.prompt[lang_code]  }}</p>
     {% endif %}
-{% endwith %}
 {% endblock %}
 
 {% block widget_content_nolang %}

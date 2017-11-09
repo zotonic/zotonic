@@ -90,42 +90,40 @@
 
                             <tbody>
                                 {% for id in result %}
-                                    {% if m.rsc[id].is_visible %}
-                                        {% with m.rsc[id] as r %}
-                                            {% with r.medium as medium %}
-                                                <tr id="{{ #li.id }}" {% if not m.rsc[id].is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
-                                                    <td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
-                                                    <td>
-                                                        <strong>{{ r.title|striptags|default:"<em>untitled</em>" }}</strong><br />
-                                                        <span class="text-muted">{{ medium.filename|default:"-" }}</span>
-                                                    </td>
-                                                    <td>
-                                                        <p class="help-block">
-                                                            {{ medium.mime|default:"&nbsp;" }}<br />
-                                                            {{ medium.width }}&times;{{ medium.height }}
-                                                        </p>
-                                                    </td>
-                                                    <td>
-                                                        {{ medium.created|date:"M d, H:i"|default:"&nbsp;" }}
-                                                        <div class="pull-right buttons">
-                                                            {% button
-                                                                class="btn btn-default btn-xs"
-                                                                text=_"delete"
-                                                                disabled=r.is_protected
-                                                                action={
-                                                                    dialog_delete_rsc
-                                                                    id=id
-                                                                    on_success={
-                                                                        slide_fade_out
-                                                                        target=#li.id
-                                                                    }
+                                    {% id.is_visible %}
+                                        {% with id.medium as medium %}
+                                            <tr id="{{ #li.id }}" {% if not id.is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
+                                                <td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
+                                                <td>
+                                                    <strong>{{ id.title|striptags|default:"<em>untitled</em>" }}</strong><br />
+                                                    <span class="text-muted">{{ medium.filename|default:"-" }}</span>
+                                                </td>
+                                                <td>
+                                                    <p class="help-block">
+                                                        {{ medium.mime|default:"&nbsp;" }}<br />
+                                                        {{ medium.width }}&times;{{ medium.height }}
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    {{ medium.created|date:"M d, H:i"|default:"&nbsp;" }}
+                                                    <div class="pull-right buttons">
+                                                        {% button
+                                                            class="btn btn-default btn-xs"
+                                                            text=_"delete"
+                                                            disabled=id.is_protected
+                                                            action={
+                                                                dialog_delete_rsc
+                                                                id=id
+                                                                on_success={
+                                                                    slide_fade_out
+                                                                    target=#li.id
                                                                 }
-                                                            %}
-                                                            <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            {% endwith %}
+                                                            }
+                                                        %}
+                                                        <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         {% endwith %}
                                     {% endif %}
                                 {% empty %}

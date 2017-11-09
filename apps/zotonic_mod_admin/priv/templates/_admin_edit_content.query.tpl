@@ -12,7 +12,6 @@
 
 
 {% block widget_content %}
-{% with m.rsc[id] as r %}
 <fieldset>
 	<p class="notification notice">
 		{_ Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href="http://zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments">documentation on the query arguments</a> on the Zotonic website. _}
@@ -22,7 +21,7 @@
     	<label class="control-label" for="query">{_ Query _}</label>
     	<div>
     	    {% with "cat='text'" as placeholder %}
-    	    <textarea class="form-control" id="{{ #query }}" name="query" rows="15" placeholder="{{ placeholder }}">{{ r.query }}</textarea>
+    	    <textarea class="form-control" id="{{ #query }}" name="query" rows="15" placeholder="{{ placeholder }}">{{ id.query }}</textarea>
     	    {% endwith %}
     		{% wire id=#query type="change" postback={query_preview rsc_id=id div_id=#querypreview target_id=#query} delegate="controller_admin_edit" %}
     	</div>
@@ -34,7 +33,7 @@
 
     <div class="form-group">
     	<div class="checkbox"><label>
-    	    <input type="checkbox" id="is_query_live" name="is_query_live" {% if r.is_query_live %}checked{% endif %}/>
+    	    <input type="checkbox" id="is_query_live" name="is_query_live" {% if id.is_query_live %}checked{% endif %}/>
     	    {_ Live query, send notifications when matching items are updated or inserted. _}
     	</label></div>
     </div>
@@ -45,5 +44,4 @@
 		{% include "_admin_query_preview.tpl" result=m.search[{query query_id=id pagelen=20}] %}
 	</div>
 </fieldset>
-{% endwith %}
 {% endblock %}

@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-12
-%%
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Model behaviour
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +21,4 @@
 
 -include_lib("zotonic.hrl").
 
--callback m_find_value(Value :: term(), #m{}, Context :: #context{}) -> term().
--callback m_value(Model :: #m{}, Context :: #context{}) -> term().
--callback m_to_list(Model :: #m{}, Context :: #context{}) -> list().
+-callback m_get(Vs :: list(), z:context()) -> {term(), list()}.

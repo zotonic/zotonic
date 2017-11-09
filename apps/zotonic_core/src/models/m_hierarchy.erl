@@ -18,9 +18,7 @@
 -module(m_hierarchy).
 
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
     tree/2,
     tree1/2,
     tree_flat/2,
@@ -50,37 +48,48 @@
 -define(DELTA_MAX, 2000000000). % ~ 1^31
 
 
-m_find_value(Name, #m{value = undefined} = M, _Context) ->
-    M#m{value = Name};
-m_find_value(tree, #m{value = Name}, Context) ->
-    tree(Name, Context);
-m_find_value(tree1, #m{value = Name}, Context) ->
-    tree1(Name, Context);
-m_find_value(tree_flat, #m{value = Name}, Context) ->
-    tree_flat(Name, Context);
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context()) -> {term(), list()}.
+m_get([ Name, tree | Rest ], Context) -> {tree(Name, Context), Rest};
+m_get([ Name, tree1 | Rest ], Context) -> {tree1(Name, Context), Rest};
+m_get([ Name, tree_flat | Rest ], Context) -> {tree_flat(Name, Context), Rest};
+m_get([ Name, menu | Rest ], Context) -> {menu(Name, Context), Rest};
 
-m_find_value(menu_ensured, #m{value = Name}, Context) ->
+m_get([ Name, menu_ensured | Rest ], Context) ->
     {ok, _} = ensure(Name, Context),
-    menu(Name, Context);
-m_find_value(menu, #m{value = Name}, Context) ->
-    menu(Name, Context);
-m_find_value(Id, #m{value = Name} = M, Context) ->
-    case m_rsc:rid(Id, Context) of
+    m_get([ Name, menu | Rest ], Context);
+m_get([ Name, Id, menu_ensured | Rest ], Context) ->
+    {ok, _} = ensure(Name, Context),
+    m_get([ Name, Id, menu | Rest ], Context);
+
+m_get([ Name, Id, tree | Rest ], Context) ->
+    V = case m_rsc:rid(Id, Context) of
         undefined -> undefined;
-        RId -> M#m{value = {sub, Name, RId}}
-    end;
-m_find_value(_Key, _Value, _Context) ->
-    undefined.
+        RId -> tree({sub, Name, RId}, Context)
+    end,
+    {V, Rest};
+m_get([ Name, Id, tree1 | Rest ], Context) ->
+    V = case m_rsc:rid(Id, Context) of
+        undefined -> undefined;
+        RId -> tree1({sub, Name, RId}, Context)
+    end,
+    {V, Rest};
+m_get([ Name, Id, tree_flat | Rest ], Context) ->
+    V = case m_rsc:rid(Id, Context) of
+        undefined -> undefined;
+        RId -> tree_flat({sub, Name, RId}, Context)
+    end,
+    {V, Rest};
+m_get([ Name, Id, menu | Rest ], Context) ->
+    V = case m_rsc:rid(Id, Context) of
+        undefined -> undefined;
+        RId -> menu({sub, Name, RId}, Context)
+    end,
+    {V, Rest};
 
-m_to_list(#m{value = undefined}, _Context) ->
-    [];
-m_to_list(#m{value = Category}, Context) ->
-    tree(Category, Context);
-m_to_list(_, _Context) ->
-    [].
-
-m_value(#m{value = #m{value = Name}}, Context) ->
-    tree(Name, Context).
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 %% @doc Fetch a named tree

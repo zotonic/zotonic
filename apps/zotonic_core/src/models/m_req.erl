@@ -25,29 +25,20 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     get/2
 ]).
 
 -include_lib("zotonic.hrl").
 
+
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(Key, #m{value=undefined}, Context) ->
-    get(Key, Context).
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value=undefined}, Context) ->
-    values(Context).
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, Context) ->
-    values(Context).
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ Key | Rest ], Context) ->
+    {get(Key, Context), Rest};
+m_get([], Context) ->
+    {values(Context), []}.
 
 
 %% @doc Fetch the field from the cowmachine_req interface.

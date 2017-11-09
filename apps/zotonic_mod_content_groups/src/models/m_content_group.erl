@@ -24,9 +24,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     is_used/2
 ]).
@@ -34,18 +32,13 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_find_value(is_used, #m{value=undefined} = M, _Context) ->
-    M#m{value=is_used};
-m_find_value(CGId, #m{value=is_used}, Context) ->
-    is_used(CGId, Context);
-m_find_value(_Key, _Value, _Context) ->
-    undefined.
-
-m_to_list(#m{value=undefined}, _Context) ->
-    [].
-
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ is_used, CGId | Rest ], Context) ->
+    {is_used(CGId, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 %% @doc Check if a content group is actually in use.
 is_used(ContentGroup, Context) ->

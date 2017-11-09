@@ -23,8 +23,6 @@
 
 stringify([], _Context) ->
     <<>>;
-stringify(#m{} = M, Context) ->
-    z_template_compiler_runtime:to_simple_value(M, Context);
 stringify(N, _Context) when is_integer(N) ->
 	z_convert:to_binary(N);
 stringify(L, Context) when is_list(L) ->
@@ -37,8 +35,6 @@ stringify_1(undefined, _Context) ->
     <<>>;
 stringify_1({{_Y,_M,_D},{_H,_I,_S}} = Date, Context) ->
 	z_datetime:format(Date, "Y-m-d H:i:s", Context);
-stringify_1(#m{} = M, Context) ->
-    z_template_compiler_runtime:to_simple_value(M, Context);
 stringify_1(B, _Context) when is_binary(B) ->
     B;
 stringify_1(C, _Context) when is_integer(C), C >= 0, C =< 255 ->

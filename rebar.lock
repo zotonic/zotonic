@@ -94,7 +94,7 @@
   {git,"https://github.com/Vagabond/erlang-syslog.git",
        {ref,"4a6c6f2c996483e86c1320e9553f91d337bcb6aa"}},
   0},
- {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.0.0-alpha5">>},0},
+ {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.0.0-alpha6">>},0},
  {<<"twerl">>,
   {git,"https://github.com/mworrell/twerl.git",
        {ref,"511187da785903d64f5b284ae1d2888b07199e2f"}},
@@ -138,7 +138,7 @@
  {<<"setup">>, <<"15DF8E57C6DF9755E22BFB1AEF0C640BD97E9889396FDFB2A85A5536A9043674">>},
  {<<"shotgun">>, <<"54EA3C243B65A935A3491A079A573C9D119A5EAF28BC2673893F8EEF66FDC053">>},
  {<<"sidejob">>, <<"5D6A7C9C620778CB1908E46B552D767DF2ED4D77070BB7B5B8773D4FF18D1D37">>},
- {<<"template_compiler">>, <<"35075B04569469E9E626195F2160A56E8925124E746663A99567BB5B36E4895D">>},
+ {<<"template_compiler">>, <<"8F76B64C248548629A6F0707FD71907F5D2AA3855AE511E238564E50B9FCEBCA">>},
  {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>},
  {<<"zotonic_stdlib">>, <<"0E06C40721BC0EC536E0B104C0FE11C5B5E57DFD450B520EA64BE9FB453BC3D1">>}]}
 ].

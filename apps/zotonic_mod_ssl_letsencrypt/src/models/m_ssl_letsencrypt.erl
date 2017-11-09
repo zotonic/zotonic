@@ -25,28 +25,24 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     status/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_find_value(status, #m{}, Context) ->
-    case status(Context) of
-        {ok, Status} -> Status;
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ status | Rest ], Context) ->
+    Status = case status(Context) of
+        {ok, S} -> S;
         {error, _} -> undefined
-    end;
-m_find_value(_, #m{}, _Context) ->
-    undefined.
-
-m_to_list(#m{}, _Context) ->
-    [].
-
-m_value(#m{}, _Context) ->
-    undefined.
+    end,
+    {Status, Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 status(Context) ->

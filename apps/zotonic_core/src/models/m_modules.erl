@@ -25,46 +25,52 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
     all/1
 ]).
 
 -include_lib("zotonic.hrl").
 
+
+
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(all, #m{value=undefined}, Context) ->
-    all(Context);
-m_find_value(enabled, #m{value=undefined}, Context) ->
-    enabled(Context);
-m_find_value(active, #m{value=undefined} = M, _Context) ->
-    M#m{value=active};
-m_find_value(Module, #m{value=active}, Context) ->
-    lists:member(Module, active(Context));
-m_find_value(disabled, #m{value=undefined}, Context) ->
-    disabled(Context);
-m_find_value(info, #m{value=undefined} = M, _Context) ->
-    M#m{value=info};
-m_find_value(Module, #m{value=info}, Context) ->
-    M = z_convert:to_atom(Module),
-    [{enabled, lists:member(M, enabled(Context))},
-     {active, z_module_manager:active(M, Context)},
-     {title, z_module_manager:title(M)},
-     {prio, z_module_manager:prio(M)}].
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ all | Rest ], Context) ->
+    {all(Context), Rest};
+m_get([ enabled | Rest ], Context) ->
+    {enabled(Context), Rest};
+m_get([ disabled | Rest ], Context) ->
+    {disabled(Context), Rest};
+m_get([ active, Module | Rest ], Context) ->
+    IsActive = lists:member(safe_to_atom(Module), active(Context)),
+    {IsActive, Rest};
+m_get([ info, Module | Rest ], Context) ->
+    M = safe_to_atom(Module),
+    Info = [
+        {enabled, lists:member(M, enabled(Context))},
+        {active, z_module_manager:active(M, Context)},
+        {title, z_module_manager:title(M)},
+        {prio, z_module_manager:prio(M)}
+    ],
+    {Info, Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value=undefined}, Context) ->
-    all(Context).
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, Context) ->
-    all(Context).
-
+safe_to_atom(M) when is_atom(M) ->
+    M;
+safe_to_atom(B) when is_binary(B) ->
+    try
+        erlang:binary_to_existing_atom(B, utf8)
+    catch
+        error:badarg -> undefined
+    end;
+safe_to_atom(L) when is_list(L) ->
+    try
+        erlang:list_to_existing_atom(L)
+    catch
+        error:badarg -> undefined
+    end.
 
 %% @doc Return the list of modules
 all(Context) ->

@@ -25,9 +25,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     is_predicate/2,
     is_used/2,
@@ -48,27 +46,23 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(all, #m{value = undefined}, Context) -> all(Context);
-m_find_value(is_used, #m{value = undefined} = M, _Context) -> M#m{value = is_used};
-m_find_value(Pred, #m{value = is_used}, Context) -> is_used(Pred, Context);
-m_find_value(object_category, #m{value = undefined} = M, _Context) ->
-    M#m{value = object_category};
-m_find_value(subject_category, #m{value = undefined} = M, _Context) ->
-    M#m{value = subject_category};
-m_find_value(Key, #m{value = object_category}, Context) -> object_category(Key, Context);
-m_find_value(Key, #m{value = subject_category}, Context) ->
-    subject_category(Key, Context);
-m_find_value(Key, #m{value = undefined}, Context) -> get(Key, Context).
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([], Context) ->
+    {all(Context), []};
+m_get([ all | Rest ], Context) ->
+    {all(Context), Rest};
+m_get([ is_used, Pred | Rest ], Context) ->
+    {is_used(Pred, Context), Rest};
+m_get([ object_category, Key | Rest ], Context) ->
+    {object_category(Key, Context), Rest};
+m_get([ subject_category, Key | Rest ], Context) ->
+    {subject_category(Key, Context), Rest};
+m_get([ Key | Rest ], Context) ->
+    {get(Key, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
-%% @doc Transform a model value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value = undefined}, Context) -> all(Context);
-m_to_list(#m{}, _Context) -> [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{}, Context) -> all(Context).
 
 %% @doc Test if the property is the name of a predicate
 %% @spec is_predicate(Pred, Context) -> bool()

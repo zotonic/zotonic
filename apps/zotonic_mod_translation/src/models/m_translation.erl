@@ -24,35 +24,31 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     language_list_enabled/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_find_value(language, #m{value=undefined}, Context) ->
-	z_context:language(Context);
-%% mod_translation lookups
-m_find_value(language_list_configured, #m{value=undefined}, Context) ->
-	language_list_configured(Context);
-m_find_value(language_list_enabled, #m{value=undefined}, Context) ->
-	language_list_enabled(Context);
-%% z_language lookups
-m_find_value(default_language, #m{value=undefined}, Context) ->
-	default_language(Context);
-m_find_value(main_languages, #m{value=undefined}, _Context) ->
-	main_languages();
-m_find_value(all_languages, #m{value=undefined}, _Context) ->
-	all_languages().
 
-m_to_list(#m{}, _Context) ->
-	[].
-
-m_value(#m{}, _Context) ->
-	undefined.
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ language | Rest ], Context) ->
+    {z_context:language(Context), Rest};
+m_get([ language_list_configured | Rest ], Context) ->
+    {language_list_configured(Context), Rest};
+m_get([ language_list_enabled | Rest ], Context) ->
+    {language_list_enabled(Context), Rest};
+m_get([ default_language | Rest ], Context) ->
+    {default_language(Context), Rest};
+m_get([ main_languages | Rest ], _Context) ->
+    {main_languages(), Rest};
+m_get([ all_languages | Rest ], _Context) ->
+    {all_languages(), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 default_language(Context) ->

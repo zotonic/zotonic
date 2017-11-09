@@ -24,9 +24,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     flush/1,
 
@@ -75,65 +73,71 @@
 
 -include_lib("zotonic.hrl").
 
-
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(tree, #m{value = undefined}, Context) ->
-    tree(Context);
-m_find_value(tree2, #m{value = undefined}, Context) ->
-    tree2(Context);
-m_find_value(menu, #m{value = undefined}, Context) ->
-    menu(Context);
-m_find_value(tree_flat, #m{value = undefined}, Context) ->
-    tree_flat(Context);
-m_find_value(tree_flat_meta, #m{value = undefined}, Context) ->
-    tree_flat_meta(Context);
-
-m_find_value(is_used, #m{value = undefined} = M, _Context) ->
-    M#m{value = is_used};
-m_find_value(Cat, #m{value = is_used}, Context) ->
-    is_used(Cat, Context);
-
-m_find_value(Index, #m{value = undefined} = M, Context) ->
-    case name_to_id(Index, Context) of
-        {ok, Id} -> M#m{value = {cat, Id}};
+-spec m_get( list(), z:context()) -> {term(), list()}.
+m_get([ tree | Rest ], Context) ->
+    {tree(Context), Rest};
+m_get([ tree2 | Rest ], Context) ->
+    {tree2(Context), Rest};
+m_get([ menu | Rest ], Context) ->
+    {menu(Context), Rest};
+m_get([ tree_flat | Rest ], Context) ->
+    {tree_flat(Context), Rest};
+m_get([ tree_flat_meta | Rest ], Context) ->
+    {tree_flat_meta(Context), Rest};
+m_get([ is_used, Cat | Rest ], Context) ->
+    {is_used(Cat, Context), Rest};
+m_get([ Cat, path | Rest ], Context) ->
+    V = case name_to_id(Cat, Context) of
+        {ok, Id} -> get_path(Id, Context);
         {error, _} -> undefined
-    end;
-
-m_find_value(path, #m{value = {cat, Id}}, Context) ->
-    get_path(Id, Context);
-m_find_value(is_a, #m{value = {cat, Id}}, Context) ->
-    is_a(Id, Context);
-m_find_value(tree, #m{value = {cat, Id}}, Context) ->
-    tree(Id, Context);
-m_find_value(tree_flat, #m{value = {cat, Id}}, Context) ->
-    tree_flat(Id, Context);
-m_find_value(tree1, #m{value = {cat, Id}}, Context) ->
-    tree1(Id, Context);
-m_find_value(tree2, #m{value = {cat, Id}}, Context) ->
-    tree2(Id, Context);
-m_find_value(image, #m{value = {cat, Id}}, Context) ->
-    image(Id, Context);
-m_find_value(Key, #m{value = {cat, Id}}, Context) ->
-    proplists:get_value(Key, get(Id, Context));
-m_find_value(_Key, _Value, _Context) ->
-    undefined.
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> List
-m_to_list(#m{value = undefined}, Context) ->
-    tree(Context);
-m_to_list(#m{value = {cat, Id}}, Context) ->
-    get(Id, Context);
-m_to_list(_, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value = undefined}, Context) ->
-    tree(Context);
-m_value(#m{value = {cat, Id}}, Context) ->
-    get(Id, Context).
+    end,
+    {V, Rest};
+m_get([ Cat, is_a | Rest ], Context) ->
+    V = case name_to_id(Cat, Context) of
+        {ok, Id} -> is_a(Id, Context);
+        {error, _} -> undefined
+    end,
+    {V, Rest};
+m_get([ Cat, tree | Rest ], Context) ->
+    V = case name_to_id(Cat, Context) of
+        {ok, Id} -> tree(Id, Context);
+        {error, _} -> undefined
+    end,
+    {V, Rest};
+m_get([ Cat, tree_flat | Rest ], Context) ->
+    V = case name_to_id(Cat, Context) of
+        {ok, Id} -> tree_flat(Id, Context);
+        {error, _} -> undefined
+    end,
+    {V, Rest};
+m_get([ Cat, tree1 | Rest ], Context) ->
+    V = case name_to_id(Cat, Context) of
+        {ok, Id} -> tree1(Id, Context);
+        {error, _} -> undefined
+    end,
+    {V, Rest};
+m_get([ Cat, tree2 | Rest ], Context) ->
+    V = case name_to_id(Cat, Context) of
+        {ok, Id} -> tree2(Id, Context);
+        {error, _} -> undefined
+    end,
+    {V, Rest};
+m_get([ Cat, image | Rest ], Context) ->
+    V = case name_to_id(Cat, Context) of
+        {ok, Id} -> image(Id, Context);
+        {error, _} -> undefined
+    end,
+    {V, Rest};
+m_get([ Cat | Rest ], Context) ->
+    V = case name_to_id(Cat, Context) of
+        {ok, Id} -> get(Id, Context);
+        {error, _} -> undefined
+    end,
+    {V, Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 
 % ======================================== API =======================================

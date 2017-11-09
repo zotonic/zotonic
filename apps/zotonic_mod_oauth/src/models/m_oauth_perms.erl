@@ -26,42 +26,31 @@
 
 
 -export([
-         m_find_value/3,
-         m_to_list/2,
-         m_value/2,
-         get/2,
-         get_all/2,
-         set/3,
+    m_get/2,
 
-         all_services_for/2,
-         humanreadable/2
-         ]).
+     get/2,
+     get_all/2,
+     set/3,
+
+     all_services_for/2,
+     humanreadable/2
+]).
 
 
 %% gen_model
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-
-
-m_find_value(X, #m{value=undefined} = M, _Context) ->
-    M#m{value=X};
-m_find_value(Id, #m{value=selected}, Context) ->
-    get(Id, Context);
-m_find_value(Id, #m{value=humanreadable}, Context) ->
-    humanreadable(Id, Context).
-
-
-
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> list()
-m_to_list(#m{value=undefined}, Context) ->
-    [ [{value, Val}, {title, Title}] || {Val, Title} <- z_service:all(authvalues, Context)].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=_}, _Context) ->
-    undefined.
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([], Context) ->
+    All = [ [{value, Val}, {title, Title}] || {Val, Title} <- z_service:all(authvalues, Context)],
+    {All, []};
+m_get([ selected, Id | Rest ], Context) ->
+    {get(Id, Context), Rest};
+m_get([ humanreadable, Id | Rest ], Context) ->
+    {humanreadable(Id, Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 %%
 %% Get permissions for consumer <Id>.

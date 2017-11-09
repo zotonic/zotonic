@@ -24,9 +24,7 @@
 
 %% interface functions
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     search/3,
 
@@ -36,41 +34,31 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
-m_find_value(CT, M=#m{value=undefined}, _Context)
-  when CT == friends;
-       CT == home;
-       CT == feed;
-       CT == likes;
-       CT == movies;
-       CT == music;
-       CT == books;
-       CT == notes;
-       CT == permissions;
-       CT == picture;
-       CT == photos;
-       CT == albums;
-       CT == videos;
-       CT == events;
-       CT == groups;
-       CT == checkins ->
-    M#m{value=CT};
-m_find_value(Key, #m{value=picture}, Context) ->
-    %% Getting the picture is strangely enough different from all other fields.
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ picture, Key | Rest ], Context) ->
     P = do_graph_call(get, Key, undefined, [{fields, "picture"}], Context),
-    proplists:get_value(picture, P);
-m_find_value(Key, #m{value=ConnectionType}, Context) ->
-    do_graph_call(get, Key, ConnectionType, [], Context).
+    {proplists:get_value(picture, P), Rest};
+m_get([ CT, Key | Rest ], Context)
+  when CT =:= friends;
+       CT =:= home;
+       CT =:= feed;
+       CT =:= likes;
+       CT =:= movies;
+       CT =:= music;
+       CT =:= books;
+       CT =:= notes;
+       CT =:= permissions;
+       CT =:= photos;
+       CT =:= albums;
+       CT =:= videos;
+       CT =:= events;
+       CT =:= groups;
+       CT =:= checkins ->
+    {do_graph_call(get, Key, CT, [], Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
-%% @doc Transform a m_config value to a list, used for template loops
-%% @spec m_to_list(Source, Context) -> []
-m_to_list(_, _Context) ->
-    [].
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
-%% @spec m_value(Source, Context) -> term()
-m_value(#m{value=undefined}, _Context) ->
-    undefined.
 
 %% @doc Return the search as used by z_search and the search model.
 search({fql, Args}, _OfffsetLimit, _Context) ->

@@ -21,25 +21,19 @@
 -behaviour(gen_model).
 
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2
-    ]).
-
--export([
+    m_get/2,
     ssl_certificates/1
-    ]).
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_find_value(ssl_certificates, #m{}, Context) ->
-    ssl_certificates(Context).
-
-m_to_list(#m{}, _Context) ->
-    [].
-
-m_value(#m{}, _Context) ->
-    undefined.
+%% @doc Fetch the value for the key from a model source
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ ssl_certificates | Rest ], Context) ->
+    {ssl_certificates(Context), Rest};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
 ssl_certificates(Context) ->
     Observers = z_notifier:get_observers(ssl_options, Context),

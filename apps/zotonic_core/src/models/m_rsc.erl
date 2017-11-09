@@ -23,9 +23,7 @@
 -behaviour(gen_model).
 
 -export([
-    m_find_value/3,
-    m_to_list/2,
-    m_value/2,
+    m_get/2,
 
     name_to_id/2,
     name_to_id_cat/3,
@@ -82,41 +80,19 @@
 -type props() :: proplists:proplist().
 -type digits() :: 16#30..16#39.
 
+
 %% @doc Fetch the value for the key from a model source
-%% @spec m_find_value(Key, Source, Context) -> term()
--spec m_find_value(resource()|atom(), #m{}, #context{}) -> #m{} | undefined | any().
-m_find_value(Id, #m{value = undefined} = M, Context) ->
-    case rid(Id, Context) of
-        undefined -> undefined;
-        RId -> M#m{value = RId}
-    end;
-m_find_value(is_cat, #m{value = Id} = M, _Context) when is_integer(Id) ->
-    M#m{value = {is_cat, Id}};
-m_find_value(Key, #m{value = {is_cat, Id}}, Context) ->
-    is_cat(Id, Key, Context);
-m_find_value(Key, #m{value = Id}, Context) when is_integer(Id) ->
-    p(Id, Key, Context).
+-spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ Id, is_cat, Key | Rest ], Context) ->
+    {is_cat(Id, Key, Context), Rest};
+m_get([ Id, Key | Rest ], Context) ->
+    {p(Id, Key, Context), Rest};
+m_get([ Id ], Context) ->
+    {get_visible(Id, Context), []};
+m_get(Vs, _Context) ->
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {undefined, []}.
 
-%% @doc Transform a m_config value to a list, used for template loops
--spec m_to_list(#m{}, #context{}) -> list().
-m_to_list(#m{value = #rsc_list{list = List}}, _Context) ->
-    List;
-m_to_list(#m{value = undefined}, _Context) ->
-    [];
-m_to_list(#m{value = Id}, Context) ->
-    case get_visible(Id, Context) of
-        undefined ->
-            [];
-        L when is_list(L) ->
-            L
-    end.
-
-%% @doc Transform a model value so that it can be formatted or piped through filters
--spec m_value(#m{}, #context{}) -> undefined | any().
-m_value(#m{value = undefined}, _Context) ->
-    undefined;
-m_value(#m{value = Id}, Context) ->
-    get_visible(Id, Context).
 
 %% @doc Return the id of the resource with the name
 -spec name_to_id(resource_name(), #context{}) -> {ok, resource_id()} | {error, string()}.
