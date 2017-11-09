@@ -67,7 +67,7 @@ safe_to_atom(B) when is_binary(B) ->
     end;
 safe_to_atom(L) when is_list(L) ->
     try
-        erlang:list_to_existing_atom(L, utf8)
+        erlang:list_to_existing_atom(L)
     catch
         error:badarg -> undefined
     end.
