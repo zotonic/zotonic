@@ -50,7 +50,7 @@ m_get([ is_valid, Email | Rest ], Context) ->
 m_get([ Email | Rest ], Context) ->
     {get(Email, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

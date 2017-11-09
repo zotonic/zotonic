@@ -84,7 +84,7 @@ m_get([ is_allowed_results_download, Id | Rest ], Context) ->
 m_get([ handlers | Rest ], Context) ->
     {get_handlers(Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

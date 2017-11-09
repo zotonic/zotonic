@@ -39,7 +39,7 @@
 m_get([ list, Id | Rest ], Context) ->
     {list_revisions_assoc(Id, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

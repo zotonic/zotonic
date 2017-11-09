@@ -88,7 +88,7 @@ m_get([ Name, Id, menu | Rest ], Context) ->
     {V, Rest};
 
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

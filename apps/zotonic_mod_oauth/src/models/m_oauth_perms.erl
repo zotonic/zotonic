@@ -49,7 +49,7 @@ m_get([ selected, Id | Rest ], Context) ->
 m_get([ humanreadable, Id | Rest ], Context) ->
     {humanreadable(Id, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 %%

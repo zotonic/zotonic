@@ -60,7 +60,7 @@ m_get([ subject_category, Key | Rest ], Context) ->
 m_get([ Key | Rest ], Context) ->
     {get(Key, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

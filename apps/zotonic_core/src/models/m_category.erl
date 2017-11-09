@@ -136,7 +136,7 @@ m_get([ Cat | Rest ], Context) ->
     end,
     {V, Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

@@ -37,7 +37,7 @@
 m_get([ is_used, CGId | Rest ], Context) ->
     {is_used(CGId, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 %% @doc Check if a content group is actually in use.

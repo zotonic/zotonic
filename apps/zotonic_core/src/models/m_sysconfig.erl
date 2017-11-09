@@ -34,6 +34,6 @@
 m_get([ Key | Rest ], _Context) ->
     {z_config:get(Key), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 

@@ -47,7 +47,7 @@ m_get([ main_languages | Rest ], _Context) ->
 m_get([ all_languages | Rest ], _Context) ->
     {all_languages(), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

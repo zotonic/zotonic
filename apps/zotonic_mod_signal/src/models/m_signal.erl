@@ -38,5 +38,5 @@ m_get([ type, {SignalType, _SignalProps} | Rest ], _Context) ->
 m_get([ props, {_SignalType, SignalProps} | Rest ], _Context) ->
     {SignalProps, Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

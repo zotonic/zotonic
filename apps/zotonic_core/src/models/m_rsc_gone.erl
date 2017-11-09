@@ -45,7 +45,7 @@ m_get([ Id, is_gone | Rest ], Context) when is_integer(Id) ->
 m_get([ Id | Rest ], Context) when is_integer(Id) ->
     {get(Id, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 %% @doc Get the possible 'rsc_gone' resource for the id.

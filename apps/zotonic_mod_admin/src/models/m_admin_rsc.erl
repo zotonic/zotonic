@@ -32,5 +32,5 @@
 m_get([ pivot_queue_count | Rest ], Context) ->
     {z_pivot_rsc:queue_count(Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

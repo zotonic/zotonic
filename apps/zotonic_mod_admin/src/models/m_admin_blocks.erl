@@ -33,5 +33,5 @@
 m_get([ list, Id | Rest ], Context) ->
     {lists:sort(z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context)), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

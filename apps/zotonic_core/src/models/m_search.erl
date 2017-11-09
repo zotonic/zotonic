@@ -52,7 +52,7 @@ m_get([ paged, SearchProps | Rest ], Context) ->
 m_get([ SearchProps | Rest ], Context) ->
     {search(SearchProps, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

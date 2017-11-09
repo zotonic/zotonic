@@ -54,7 +54,7 @@ m_get([ info, Module | Rest ], Context) ->
     ],
     {Info, Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 safe_to_atom(M) when is_atom(M) ->

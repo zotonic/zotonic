@@ -38,6 +38,6 @@ m_get([ first, Message | Rest ], Context) ->
 m_get([ map, Message | Rest ], Context) ->
     {z_notifier:map(Message, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 

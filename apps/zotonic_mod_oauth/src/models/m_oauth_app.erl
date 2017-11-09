@@ -75,7 +75,7 @@ m_get([ tokens, Id | Rest ], Context) ->
 m_get([ access_tokens, Id | Rest ], Context) ->
     {consumer_access_tokens(Id, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

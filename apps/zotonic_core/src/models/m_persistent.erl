@@ -43,7 +43,7 @@ m_get([ persistent_id | Rest ], Context) ->
 m_get([ Key | Rest ], Context) ->
     {z_context:get_persistent(Key, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

@@ -39,7 +39,7 @@ m_get([ has_collaboration_groups | Rest ], Context) ->
 m_get([ is_used, Cat | Rest ], Context) ->
     {is_used(Cat, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 %% @doc Check if a user group is actually in use.

@@ -104,7 +104,7 @@ m_get([ get, IdnId | Rest ], Context) ->
 m_get([ Id, Type | Rest ], Context) ->
     {get_rsc(Id, Type, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

@@ -66,7 +66,7 @@ m_get([ authenticated, is_allowed, Action, Object | Rest ], Context) when ?is_ac
 
 % Error, unknown lookup.
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

@@ -33,6 +33,6 @@ m_get([ list_backups | Rest ], Context) ->
 m_get([ is_backup_in_progress | Rest ], Context) ->
     {mod_backup:backup_in_progress(Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 

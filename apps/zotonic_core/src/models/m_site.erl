@@ -50,7 +50,7 @@ m_get([ Key | Rest ], Context) ->
 m_get([], Context) ->
     {all(Context), []};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

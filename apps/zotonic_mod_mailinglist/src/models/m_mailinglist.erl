@@ -78,7 +78,7 @@ m_get([ subscription, ListId, Email | Rest ], Context) ->
 m_get([ bounce_reason, Email | Rest ], Context) ->
     {bounce_reason(Email, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

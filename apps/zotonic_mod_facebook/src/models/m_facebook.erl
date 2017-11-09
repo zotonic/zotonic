@@ -56,7 +56,7 @@ m_get([ CT, Key | Rest ], Context)
        CT =:= checkins ->
     {do_graph_call(get, Key, CT, [], Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

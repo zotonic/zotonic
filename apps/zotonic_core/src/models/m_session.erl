@@ -40,5 +40,5 @@ m_get([ page_id | Rest ], Context) ->
 m_get([ Key | Rest ], Context) ->
     {z_context:get_session(Key, Context), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

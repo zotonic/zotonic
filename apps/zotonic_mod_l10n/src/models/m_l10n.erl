@@ -44,7 +44,7 @@ m_get([ country_name, Code | Rest ], Context) ->
 m_get([ timezones | Rest ], _Context) ->
     {timezones(), Rest};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

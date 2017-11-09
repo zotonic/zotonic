@@ -90,7 +90,7 @@ m_get([ Id, Key | Rest ], Context) ->
 m_get([ Id ], Context) ->
     {get_visible(Id, Context), []};
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 

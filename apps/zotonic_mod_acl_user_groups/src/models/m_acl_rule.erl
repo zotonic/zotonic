@@ -86,7 +86,7 @@ m_get([ T, undefined | Rest ], _Context) when ?valid_acl_kind(T) ->
     {undefined, Rest};
 
 m_get(Vs, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 
