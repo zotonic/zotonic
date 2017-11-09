@@ -112,24 +112,26 @@ set_filename(Id, ContentType, Dispatch, Context) ->
                     Exts -> binary_to_list(hd(Exts))
                 end,
     {ok, Disposition} = z_notifier:first(#export_resource_content_disposition{id=Id, dispatch=Dispatch, content_type=ContentType}, Context),
-    case z_notifier:first(#export_resource_filename{id=Id, dispatch=Dispatch, content_type=ContentType}, Context) of
+
+    Filename = case z_notifier:first(#export_resource_filename{id=Id, dispatch=Dispatch, content_type=ContentType}, Context) of
         undefined ->
             Cat = m_rsc:p_no_acl(Id, category, Context),
-            Filename2 = "export-"
-                        ++z_convert:to_list(proplists:get_value(name, Cat))
-                        ++"-"
-                        ++z_convert:to_list(Id)
-                        ++"."
-                        ++Extension;
-        {ok, Filename} ->
-            Filename1 = z_convert:to_list(Filename),
-            Filename2 = case filename:extension(Filename1) of
-                            "." ++ Extension -> Filename1;
-                            "" -> Filename1 ++ [$.|Extension];
-                            _Ext -> filename:rootname(Filename1) ++ [$.|Extension]
-                        end
+            "export-"
+            ++z_convert:to_list(proplists:get_value(name, Cat))
+            ++"-"
+            ++z_convert:to_list(Id)
+            ++"."
+            ++Extension;
+        {ok, F} ->
+            F1 = z_convert:to_list(F),
+            case filename:extension(F1) of
+                "." ++ Extension -> F1;
+                "" -> F1 ++ [$.|Extension];
+                _Ext -> filename:rootname(F1) ++ [$.|Extension]
+            end
     end,
-    z_context:set_resp_header("Content-Disposition", Disposition++"; filename="++Filename2, Context).
+
+    z_context:set_resp_header("Content-Disposition", Disposition++"; filename="++Filename, Context).
 
 %% @doc Fetch the content type being served
 get_content_type(Id, Dispatch, Context) ->

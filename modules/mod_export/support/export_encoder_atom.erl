@@ -54,7 +54,7 @@ header(Header, #state{id=Id} = State, Context) ->
     {ok, iolist_to_binary(Bin), State}.
 
 row(Row, #state{} = State, Context) when is_integer(Row) ->
-    case m_rsc:p(Row, is_published, Context) of
+    case m_rsc:is_visible(Row, Context) of
         true ->
             Vars = [
                 {id, Row}
