@@ -46,7 +46,11 @@ filehandler_mappers_observer(zotonic_filehandler_mappers, Mappers, _Ctx) ->
         fun dispatch_file/7
     ].
 
-template_file(_Verb, _Application, {priv, <<"template">>, _Path}, <<".tpl">>, _Root, _Split, Filename) ->
+template_file(modify, _Application, {priv, <<"templates">>, _Path}, <<".tpl">>, _Root, _Split, Filename) ->
+    {ok, [
+        {?MODULE, mark_modified, [Filename]}
+    ]};
+template_file(_Verb, _Application, {priv, <<"templates">>, _Path}, <<".tpl">>, _Root, _Split, Filename) ->
     {ok, [
         {?MODULE, mark_modified, [Filename]},
         {?MODULE, reindex_modules, []}
@@ -55,7 +59,11 @@ template_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
 
 
-mediaclass_file(_Verb, _Application, {priv, <<"template">>, _Path}, <<".config">>, <<"mediaclass">>, _Split, Filename) ->
+mediaclass_file(modify, _Application, {priv, <<"templates">>, _Path}, <<".config">>, <<"mediaclass">>, _Split, Filename) ->
+    {ok, [
+        {?MODULE, mark_modified, [Filename]}
+    ]};
+mediaclass_file(_Verb, _Application, {priv, <<"templates">>, _Path}, <<".config">>, <<"mediaclass">>, _Split, Filename) ->
     {ok, [
         {?MODULE, mark_modified, [Filename]},
         {?MODULE, reindex_modules, []}
@@ -72,6 +80,10 @@ po_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
 
 
+lib_file(modify, _Application, {priv, <<"lib">>, _Path}, _Ext, _Root, _Split, Filename) ->
+    {ok, [
+        {?MODULE, mark_modified, [Filename]}
+    ]};
 lib_file(_Verb, _Application, {priv, <<"lib">>, _Path}, _Ext, _Root, _Split, Filename) ->
     {ok, [
         {?MODULE, mark_modified, [Filename]},
