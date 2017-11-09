@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-11-20
-%%
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Model for accessing the persistent variables from a template.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -43,7 +41,7 @@
 m_get([ persistent_id | Rest ], Context) ->
     {z_context:persistent_id(Context), Rest};
 m_get([ Key | Rest ], Context) ->
-    {z_context:persistent(Key, Context), Rest};
+    {z_context:get_persistent(Key, Context), Rest};
 m_get(Vs, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
