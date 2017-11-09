@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2013 Marc Worrell
+%% @copyright 2010-2017 Marc Worrell
 %% @doc Access control for Zotonic.  Interfaces to modules implementing the ACL events.
 
-%% Copyright 2010-2013 Marc Worrell
+%% Copyright 2010-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -44,17 +44,36 @@
          wm_is_authorized/3
         ]).
 
--export_type([acl/0]).
-
 -include_lib("zotonic.hrl").
 
--type acl() :: list(operationrequest()).
+-type acl() :: list( operationrequest() ).
 -type operationrequest() :: {action(), object()}.
--type action() :: use | admin | view | insert | update | delete | link | atom().
--type object() :: m_rsc:resource().
+-type action() :: use
+                | admin
+                | view
+                | insert
+                | update
+                | delete
+                | link
+                | atom().
+-type object() :: m_rsc:resource()
+                | #acl_rsc{}
+                | #acl_edge{}
+                | #acl_media{}
+                | any().
+-type maybe_boolean() :: undefined
+                       | boolean().
+
+-export_type([
+    acl/0,
+    operationrequest/0,
+    action/0,
+    object/0,
+    maybe_boolean/0
+]).
 
 %% @doc Check if an action is allowed for the current actor.
--spec is_allowed(term(), term(), #context{}) -> true | false.
+-spec is_allowed(action(), object(), z:context()) -> boolean().
 is_allowed(_Action, _Object, #context{acl=admin}) ->
     true;
 is_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
@@ -68,16 +87,16 @@ is_allowed(Action, Object, Context) ->
         false -> false
     end.
 
--spec maybe_allowed(term(), term(), #context{}) -> true | false | undefined.
-maybe_allowed(_Action, _Object, #context{acl=admin}) ->
+-spec maybe_allowed(action(), object(), z:context()) -> maybe_boolean().
+maybe_allowed(_Action, _Object, #context{acl = admin}) ->
     true;
-maybe_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
+maybe_allowed(_Action, _Object, #context{user_id = ?ACL_ADMIN_USER_ID}) ->
     true;
 maybe_allowed(Action, Object, Context) ->
     z_notifier:first(#acl_is_allowed{action=Action, object=Object}, Context).
 
 %% @doc Check if an action on a property of a resource is allowed for the current actor.
--spec is_allowed_prop(term(), term(), atom(), #context{}) -> true | false | undefined.
+-spec is_allowed_prop(action(), object(), atom(), z:context()) -> true | false | undefined.
 is_allowed_prop(_Action, _Object, _Property, #context{acl=admin}) ->
     true;
 is_allowed_prop(_Action, _Object, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
@@ -90,9 +109,10 @@ is_allowed_prop(Action, Object, Property, Context) ->
 
 
 %% @doc Check if the resource is visible for the current user
+-spec rsc_visible( m_rsc:resource(), z:context() ) -> boolean().
 rsc_visible(undefined, _Context) ->
     true;
-rsc_visible(Id, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
+rsc_visible(Id, #context{user_id = UserId}) when Id =:= UserId andalso is_integer(UserId) ->
     %% Can always see myself
     true;
 rsc_visible(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
@@ -121,6 +141,7 @@ rsc_visible(RscName, Context) ->
 
 
 %% @doc Check if a property of the resource is visible for the current user
+-spec rsc_prop_visible(m_rsc:resource(), atom(), z:context()) -> boolean().
 rsc_prop_visible(undefined, _Property, _Context) ->
     true;
 rsc_prop_visible(Id, _Property, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
@@ -150,6 +171,7 @@ rsc_prop_visible(RscName, Property, Context) ->
     end.
 
 %% @doc Check if the resource is editable by the current user
+-spec rsc_editable(m_rsc:resource(), z:context()) -> boolean().
 rsc_editable(undefined, _Context) ->
     false;
 rsc_editable(Id, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
@@ -166,6 +188,7 @@ rsc_editable(RscName, Context) ->
     end.
 
 %% @doc Check if the resource is deletable by the current user
+-spec rsc_deletable(m_rsc:resource(), z:context()) -> boolean().
 rsc_deletable(undefined, _Context) ->
     false;
 rsc_deletable(_Id, #context{user_id=undefined}) ->
@@ -182,9 +205,10 @@ rsc_deletable(RscName, Context) ->
     end.
 
 %% @doc Check if the resource is connected to another resource by the current user
+-spec rsc_linkable(m_rsc:resource(), z:context()) -> boolean().
 rsc_linkable(undefined, _Context) ->
     false;
-rsc_linkable(_Id, #context{acl=admin}) ->
+rsc_linkable(_Id, #context{ acl = admin }) ->
     true;
 rsc_linkable(Id, Context) when is_integer(Id) ->
     is_allowed(link, Id, Context);
@@ -196,18 +220,22 @@ rsc_linkable(RscName, Context) ->
 
 
 %% @doc Return a term that can be used as the ACL part of cache key.
-%% @spec cache_key(Context) -> term()
+-spec cache_key( z:context() ) -> { m_rsc:resource_id() | undefined, any()}.
 cache_key(Context) ->
     {Context#context.user_id, Context#context.acl}.
 
 
 %% @doc Return the id of the current user.
-user(#context{user_id=UserId}) ->
+-spec user(z:context()) -> m_rsc:resource_id() | undefined.
+user(#context{user_id = UserId}) ->
     UserId.
 
 
 %% @doc Call a function with admin privileges.
-%% @spec sudo(FuncDef, #context{}) -> FuncResult
+-spec sudo( Fun, z:context() ) -> any()
+    when Fun :: { module(), atom() }
+             | mfa()
+             | fun( (z:context()) -> any() ).
 sudo({M,F}, Context) ->
     erlang:apply(M, F, [set_admin(Context)]);
 sudo({M,F,A}, Context) ->
@@ -215,24 +243,29 @@ sudo({M,F,A}, Context) ->
 sudo(F, Context) when is_function(F, 1) ->
     F(set_admin(Context)).
 
+-spec sudo(z:context()) -> z:context().
 sudo(Context) ->
     set_admin(Context).
 
-set_admin(#context{acl=undefined} = Context) ->
-    Context#context{acl=admin, user_id=?ACL_ADMIN_USER_ID};
+-spec set_admin(z:context()) -> z:context().
+set_admin(#context{ acl = undefined } = Context) ->
+    Context#context{acl = admin, user_id = ?ACL_ADMIN_USER_ID};
 set_admin(Context) ->
-    Context#context{acl=admin}.
+    Context#context{acl = admin}.
 
 
 %% @doc Check if the current user is an admin or a sudo action
+-spec is_admin(z:context()) -> boolean().
 is_admin(#context{user_id=?ACL_ADMIN_USER_ID}) -> true;
 is_admin(#context{acl=admin}) -> true;
 is_admin(Context) -> is_allowed(use, mod_admin_config, Context).
 
 
 %% @doc Call a function as the anonymous user.
-%% @spec anondo(FuncDef, #context{}) -> FuncResult
--spec anondo({atom(),atom()}|{atom(),atom(),list()}|function(), #context{}) -> any().
+-spec anondo(Fun, z:context()) -> any()
+    when Fun :: { module(), atom() }
+             | mfa()
+             | fun( (z:context()) -> any() ).
 anondo({M,F}, Context) ->
     erlang:apply(M, F, [set_anonymous(Context)]);
 anondo({M,F,A}, Context) ->
@@ -240,16 +273,17 @@ anondo({M,F,A}, Context) ->
 anondo(F, Context) when is_function(F, 1) ->
     F(set_anonymous(Context)).
 
+-spec anondo( z:context() ) -> z:context().
 anondo(Context) ->
     set_anonymous(Context).
 
--spec set_anonymous(#context{}) -> #context{}.
+-spec set_anonymous( z:context() ) -> z:context().
 set_anonymous(Context) ->
     Context#context{acl=undefined, user_id=undefined}.
 
 
 %% @doc Log the user with the id on, fill the acl field of the context
--spec logon(m_rsc:resource(), #context{}) -> #context{}.
+-spec logon(m_rsc:resource(), z:context()) -> z:context().
 logon(Id, Context) ->
     UserId = m_rsc:rid(Id, Context),
     case z_notifier:first(#acl_logon{id = UserId}, Context) of
@@ -258,25 +292,25 @@ logon(Id, Context) ->
     end.
 
 %% @doc Log the user with the id on, fill acl and set all user preferences (like timezone and language)
--spec logon_prefs(pos_integer(), #context{}) -> #context{}.
+-spec logon_prefs(m_rsc:resource_id(), z:context()) -> z:context().
 logon_prefs(Id, Context) ->
     z_notifier:foldl(#user_context{id=Id}, logon(Id, Context), Context).
 
 
 %% @doc Log off, reset the acl field of the context
--spec logoff(#context{}) -> #context{}.
-logoff(#context{user_id=undefined, acl=undefined} = Context) ->
+-spec logoff( z:context() ) -> z:context().
+logoff(#context{ user_id = undefined, acl = undefined} = Context) ->
     Context;
 logoff(Context) ->
     case z_notifier:first(#acl_logoff{}, Context) of
-        undefined -> Context#context{user_id=undefined, acl=undefined};
+        undefined -> Context#context{ user_id = undefined, acl = undefined};
         #context{} = NewContext -> NewContext
     end.
 
 
 %% @doc Convenience function, check if the current user has enough permissions, if not then
 %% redirect to the logon page.
--spec wm_is_authorized(boolean() | acl(), #context{}) -> cowmachine:reply().
+-spec wm_is_authorized(boolean() | acl(), z:context()) -> cowmachine:reply().
 wm_is_authorized(true, Context) ->
     {true, Context};
 wm_is_authorized(false, Context) ->
@@ -284,7 +318,7 @@ wm_is_authorized(false, Context) ->
 wm_is_authorized(ACLs, Context) when is_list(ACLs) ->
     wm_is_authorized(ACLs, undefined, Context).
 
--spec wm_is_authorized(boolean() | acl(), Redirect, #context{}) -> cowmachine:reply() when
+-spec wm_is_authorized(boolean() | acl(), Redirect, z:context()) -> cowmachine:reply() when
       Redirect :: atom() | undefined.
 wm_is_authorized(true, _Redirect, Context) ->
     wm_is_authorized(true, Context);
@@ -298,7 +332,7 @@ wm_is_authorized(ACLs, Redirect, Context) when is_list(ACLs), is_atom(Redirect) 
 wm_is_authorized(Action, Object, Context) ->
     wm_is_authorized([{Action, Object}], Context).
 
--spec wm_set_location(Redirect::atom(), #context{}) -> #context{}.
+-spec wm_set_location(Redirect::atom(), z:context()) -> z:context().
 wm_set_location(Redirect, Context) ->
     RequestPath = m_req:get(raw_path, Context),
     Location = z_context:abs_url(
@@ -307,7 +341,7 @@ wm_set_location(Redirect, Context) ->
     z_context:set_resp_header(<<"location">>, Location, Context).
 
 %% Check list of {Action,Object} ACL pairs
--spec wm_is_allowed(acl(), #context{}) -> boolean().
+-spec wm_is_allowed(acl(), z:context()) -> boolean().
 wm_is_allowed([], _Context) ->
     true;
 wm_is_allowed([{Action,Object}|ACLs], Context) ->

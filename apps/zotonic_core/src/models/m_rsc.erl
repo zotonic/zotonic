@@ -76,8 +76,8 @@
 
 -include_lib("zotonic.hrl").
 
--type resource() :: resource_id() | resource_name().
--type resource_id() :: integer() | list(digits()).
+-type resource() :: resource_id() | list(digits()) | resource_name().
+-type resource_id() :: integer().
 -type resource_name() :: string() | binary() | atom().
 -type props() :: proplists:proplist().
 -type digits() :: 16#30..16#39.
