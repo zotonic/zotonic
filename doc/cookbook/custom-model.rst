@@ -49,7 +49,7 @@ And will return:
 
     {true, []}
 
-Where `true` is returned because rescource id 1 is indeed a person, and `[]` is returned because the call consumed all 
+Where `true` is returned because rescource id 1 is indeed a person, and `[]` is returned because the call consumed all
 parts of the dotted expression.
 
 
@@ -258,17 +258,17 @@ To parse the search expression, we can simply use the readymade property list::
 
 If we want to fetch the year of the first result we use::
 
-    m.omdb["Alien"][1].year
+    m.omdb["Alien"].year
 
 ... we get called as::
 
-    m_get([ <<"Alien">>, 1, year ], Context).
+    m_get([ <<"Alien">>, year ], Context).
 
 Which (after a search on the title "Alien") returns:
 
-    {SomeSearchResultList, [ 1, year ]}.
+    {SomeSearchResultList, [ year ]}.
 
-The ``1`` wil return the first search result, the ``year` will then lookup year of that result.
+The [``year``] will then be used to lookup the year property of the found result.
 
 We won't do any validity checking on the parameter here, but for most modules it makes sense to limit the possibilities. See for instance how ``m_search:get_result`` is done.
 
@@ -276,7 +276,7 @@ We won't do any validity checking on the parameter here, but for most modules it
 Full source code
 ^^^^^^^^^^^^^^^^
 
-The source code of the documentation so far can be found in this gist: `Zotonic template model for the OMDB movie database - source code to accompany the documentation <https://gist.github.com/mworrell/08a9f2115c2df7a3f3068b500564314d>`_.
+The source code of the documentation so far can be found in this gist: `Zotonic 1.0 - Template model for the OMDB movie database - source code to accompany the documentation <https://gist.github.com/mworrell/08a9f2115c2df7a3f3068b500564314d>`_.
 
 
 Possible enhancements
