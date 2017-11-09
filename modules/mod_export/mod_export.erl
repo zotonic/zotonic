@@ -39,11 +39,15 @@ observe_content_types_dispatch(#content_types_dispatch{id=Id}, Acc, Context) ->
 rsc_props(Context) ->
     m_rsc:common_properties(Context) ++ [page_url_abs].
 
+
 %% @doc Get the content-disposition for the export
-observe_export_resource_content_disposition(#export_resource_content_disposition{dispatch=export_rsc_query, id=_Id, content_type=ContentType}, _Context) ->
-    case ContentType of
-        "application/atom+xml" ->
-            {ok, "inline"};
-        _ ->
-            {ok, "attachment"}
-    end.
+observe_export_resource_content_disposition(
+        #export_resource_content_disposition{
+            dispatch = export_rsc_query,
+            content_type = "application/atom+xml" ++ _
+        },
+        _Context) ->
+    {ok, "inline"};
+observe_export_resource_content_disposition(#export_resource_content_disposition{}, _Context) ->
+    {ok, "attachment"}.
+
