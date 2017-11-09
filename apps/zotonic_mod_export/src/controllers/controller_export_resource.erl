@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell <marc@worrell.nl>
+%% @copyright 2013-2017 Marc Worrell <marc@worrell.nl>
 %% @doc Export a (list of) resource(s) in the given format, uses notifiers for fetching and encoding data.
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -94,37 +94,44 @@ set_filename(Id, ContentType, Dispatch, Context) ->
                     undefined -> <<"bin">>;
                     Exts -> hd(Exts)
                 end,
-    case z_notifier:first(#export_resource_filename{
-                                id=Id,
-                                dispatch=Dispatch,
-                                content_type=ContentType}, Context)
+    {ok, Disposition} = z_notifier:first(
+            #export_resource_content_disposition{
+                id = Id,
+                dispatch = Dispatch,
+                content_type = ContentType
+            },
+            Context),
+    Filename = case z_notifier:first(
+            #export_resource_filename{
+                id = Id,
+                dispatch = Dispatch,
+                content_type = ContentType
+            },
+            Context)
     of
         undefined ->
             Cat = m_rsc:p_no_acl(Id, category, Context),
-            Filename = iolist_to_binary([
+            iolist_to_binary([
                         "export-",
                         z_convert:to_binary(proplists:get_value(name, Cat)),
                         "-",
                         z_convert:to_binary(Id),
                         ".",
                         Extension
-                    ]),
-            z_context:set_resp_header(
-                    <<"content-disposition">>,
-                    <<"attachment; filename=", Filename/binary>>,
-                    Context);
-        {ok, Filename} ->
-            Filename1 = z_convert:to_binary(Filename),
-            Filename2 = case filename:extension(Filename1) of
-                            <<".", Extension/binary>> -> Filename1;
-                            <<>> -> <<Filename1/binary, $., Extension/binary>>;
-                            _Ext -> <<(filename:rootname(Filename1))/binary, $., Extension/binary>>
-                        end,
-            z_context:set_resp_header(
-                    <<"content-disposition">>,
-                    <<"attachment; filename=", Filename2/binary>>,
-                    Context)
-    end.
+                    ]);
+        {ok, FN} ->
+            FN1 = z_convert:to_binary(FN),
+            case filename:extension(FN1) of
+                <<".", Extension/binary>> -> FN1;
+                <<>> -> <<FN1/binary, $., Extension/binary>>;
+                _Ext -> <<(filename:rootname(FN1))/binary, $., Extension/binary>>
+            end
+    end,
+    z_context:set_resp_header(
+        <<"content-disposition">>,
+        <<(z_convert:to_binary(Disposition))/binary, "; filename=", Filename/binary>>,
+        Context).
+
 
 %% @doc Fetch the content type being served
 get_content_type(Id, Dispatch, Context) ->

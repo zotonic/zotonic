@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2016 Marc Worrell
+%% @copyright 2011-2017 Marc Worrell
 %% @doc Notifications used in Zotonic core
 
-%% Copyright 2011-2016 Marc Worrell
+%% Copyright 2011-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -888,6 +888,15 @@
     urls :: list(),
     media_urls :: list(),
     data :: any()
+}).
+
+%% @doc mod_export - return the {ok, Disposition} for the content disposition.
+%% Type: first
+%% Return: {ok, <<"inline">>} or {ok, <<"attachment">>}
+-record(export_resource_content_disposition, {
+    dispatch :: atom(),
+    id :: integer(),
+    content_type :: string()
 }).
 
 %% @doc mod_export - Check if the resource or dispatch is visible for export.

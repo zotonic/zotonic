@@ -54,11 +54,16 @@ header(Header, #state{id=Id} = State, Context) ->
     {ok, iolist_to_binary(Bin), State}.
 
 row(Row, #state{} = State, Context) when is_integer(Row) ->
-    Vars = [
-        {id, Row}
-    ],
-    {Bin, _Context} = z_template:render_to_iolist({cat, "atom/entry.tpl"}, Vars, Context),
-    {ok, iolist_to_binary(Bin), State};
+    case m_rsc:is_visible(Row, Context) of
+        true ->
+            Vars = [
+                {id, Row}
+            ],
+            {Bin, _Context} = z_template:render_to_iolist({cat, "atom/entry.tpl"}, Vars, Context),
+            {ok, iolist_to_binary(Bin), State};
+        false ->
+            {ok, <<>>, State}
+    end;
 row(Row, #state{} = State, Context) ->
     Vars = [
         {id, Row}

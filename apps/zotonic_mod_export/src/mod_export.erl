@@ -26,14 +26,27 @@
 
 -export([
     observe_content_types_dispatch/3,
+    observe_export_resource_content_disposition/2,
     rsc_props/1
-    ]).
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Add an extra content-type to the 'id' controller.
 observe_content_types_dispatch(#content_types_dispatch{id=Id}, Acc, Context) ->
     Acc ++ export_encoder:content_types_dispatch(Id, Context).
+
+
+%% @doc Get the content-disposition for the export
+observe_export_resource_content_disposition(
+        #export_resource_content_disposition{
+            dispatch = export_rsc_query,
+            content_type = <<"application/atom+xml", _/binary>>
+        },
+        _Context) ->
+    {ok, <<"inline">>};
+observe_export_resource_content_disposition(#export_resource_content_disposition{}, _Context) ->
+    {ok, <<"attachment">>}.
 
 rsc_props(Context) ->
     m_rsc:common_properties(Context) ++ [page_url_abs].
