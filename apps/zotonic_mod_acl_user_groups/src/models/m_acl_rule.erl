@@ -270,7 +270,11 @@ delete(Kind, Id, Context) ->
 
 replace_managed(Rules, Module, Context) ->
     delete_managed(Module, Context),
-    [manage_acl_rule(Rule, Module, Context) || Rule <- Rules],
+    lists:foreach(
+        fun(Rule) ->
+            manage_acl_rule(Rule, Module, Context)
+        end,
+        Rules),
     m_acl_rule:publish(rsc, Context),
     m_acl_rule:publish(module, Context),
     m_acl_rule:publish(collab, Context).

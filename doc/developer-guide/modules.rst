@@ -361,6 +361,13 @@ integer number, denoting the current module’s version. On module
 initialization, ``Module:manage_schema/2`` is called which handles
 installation and upgrade of data. You can define:
 
+After the ``manage_schema/2`` function is called, the optional
+``manage_data/2`` function is called.
+
+Note that ``manage_schema/2`` is called inside a transaction, so that any
+installation errors are rolled back. ``manage_data/2`` is called outside
+a transaction, and after all resources, predicated etc. are installed.
+
 - categories
 - predicates
 - resources
@@ -377,7 +384,8 @@ For example:
     -mod_schema(3).  %% we are currently at revision 3
 
     -export([
-        manage_schema/2
+        manage_schema/2,
+        manage_data/2
     ]).
 
     %% ...
@@ -460,19 +468,17 @@ For example:
             ]
         }.
 
+    manage_data(_Version, Context) ->
+        %% Whatever data needs to be installed after the datamodel
+        %% has been installed.
+        ok.
+
 Note that the install function should always be kept up-to-date
 according to the latest schema version. When you install a module for
 the first time, no upgrade functions are called, but only the
 ``install`` clause. The upgrade functions exist for migrating old
 data, not for newly installing a module.
 
-Data model notification
-^^^^^^^^^^^^^^^^^^^^^^^
-
-In the ``#datamodel`` record you can manage categories, predicates, resources,
-media and edges. You can also set the ``data`` property, which will send out
-a :ref:`manage_data` notification. To subscribe to that notification, export
-``observe_manage_data/2`` in your site or module.
 
 Using categories defined by other modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
