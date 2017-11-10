@@ -520,8 +520,8 @@ gen_server based modules
 
 When you need a running process, i.e., a module that does something in the
 background, then it is possible to implement your module as a
-`gen_server`_. A gen_server is a standard way to implement a reliable
-Erlang worker process.
+`gen_server`_ (or supervisor). A gen_server is a standard way to implement
+a reliable Erlang worker process.
 
 In that case you will need to add the behaviour and gen_server
 functions. You also need to change the ``init/1`` function to accept
