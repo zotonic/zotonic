@@ -209,6 +209,10 @@ returns ``ok``. Otherwise the ``manage_data/2`` function will not be called.
 
     %% yoursite.erl
     -module(yoursite).
+
+    -mod_title("Your Site").
+    -mod_description("An example module for the docs").
+    -mod_depends([ mod_acl_user_groups ]).
     -mod_schema(1).
 
     -export([
@@ -224,7 +228,7 @@ returns ``ok``. Otherwise the ``manage_data/2`` function will not be called.
         };
     manage_schema({upgrade, 2}, Context) ->
         %% code to upgrade from version 1 to 2
-        ok;
+        ok.
 
     manage_data(install, Context) ->
         Rules = [
