@@ -30,12 +30,15 @@
 
 -export([
     event/2,
+
     observe_rsc_get/3,
     observe_rsc_delete/2,
     observe_rsc_update_done/2,
     observe_admin_menu/3,
-    manage_schema/2
-    ]).
+
+    manage_schema/2,
+    manage_data/2
+]).
 
 event(#submit{message={delete_move, Args}}, Context) ->
     ToGroupId = z_convert:to_integer(z_context:get_q_validated(<<"content_group_id">>, Context)),
@@ -188,25 +191,24 @@ observe_rsc_update_done(#rsc_update_done{pre_is_a=PreIsA, post_is_a=PostIsA}, Co
         false -> ok
     end.
 
-manage_schema(_Version, Context) ->
-    z_datamodel:manage(
-              ?MODULE,
-              #datamodel{
-                categories=[
-                    {content_group, meta, [
-                        {title, {trans, [{en, <<"Content Group">>}, {nl, <<"Paginagroep">>}]}}
-                    ]}
-                ],
-                resources=[
-                    {system_content_group, content_group, [
-                        {title, {trans, [{en, <<"System Content">>}, {nl, <<"Systeempagina’s"/utf8>>}]}}
-                    ]},
-                    {default_content_group, content_group, [
-                        {title, {trans, [{en, <<"Default Content Group">>}, {nl, <<"Standaard paginagroep">>}]}}
-                    ]}
-                ]
-              },
-              Context),
+manage_schema(_Version, _Context) ->
+    #datamodel{
+        categories=[
+            {content_group, meta, [
+                {title, {trans, [{en, <<"Content Group">>}, {nl, <<"Paginagroep">>}]}}
+            ]}
+        ],
+        resources=[
+            {system_content_group, content_group, [
+                {title, {trans, [{en, <<"System Content">>}, {nl, <<"Systeempagina’s"/utf8>>}]}}
+            ]},
+            {default_content_group, content_group, [
+                {title, {trans, [{en, <<"Default Content Group">>}, {nl, <<"Standaard paginagroep">>}]}}
+            ]}
+        ]
+    }.
+
+manage_data(install, Context) ->
     m_hierarchy:ensure(content_group, Context),
     SysId = m_rsc:rid(system_content_group, Context),
     {MetaFrom, MetaTo} = m_category:get_range(meta, Context),
@@ -219,5 +221,7 @@ manage_schema(_Version, Context) ->
         ",
         [SysId, MetaFrom, MetaTo],
         Context),
+    ok;
+manage_data(_Version, Context) ->
+    m_hierarchy:ensure(content_group, Context),
     ok.
-
