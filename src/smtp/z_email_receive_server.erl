@@ -26,6 +26,7 @@
 -compile([{parse_transform, lager_transform}]).
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_release.hrl").
 
 -export([start_link/0]).
 

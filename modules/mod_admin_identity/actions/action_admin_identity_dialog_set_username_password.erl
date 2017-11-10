@@ -28,7 +28,7 @@
 
 -include("zotonic.hrl").
 
--define(PASSWORD_DOTS, "••••••").
+-define(PASSWORD_DOTS, <<"••••••"/utf8>>).
 
 render_action(TriggerId, TargetId, Args, Context) ->
     Id = z_convert:to_integer(proplists:get_value(id, Args)),
@@ -57,7 +57,7 @@ event(#postback{message={set_username_password, Id, OnDelete}}, Context) ->
 event(#submit{message=set_username_password}, Context) ->
     Id = z_convert:to_integer(z_context:get_q("id", Context)),
     Username = z_context:get_q_validated("new_username", Context),
-    Password = z_context:get_q_validated("new_password", Context),
+    Password = z_convert:to_binary(z_context:get_q_validated("new_password", Context)),
 
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->

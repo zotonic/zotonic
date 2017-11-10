@@ -1,0 +1,3 @@
+name	title$nl	title$en	category	block.a.type	block.a.header	> relation	< author
+nr1	testje	small test-2	article	header	Hello Title		nr2
+nr2	test 2	test nr 2	text	header	Nr2-Header	nr1

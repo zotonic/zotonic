@@ -346,7 +346,7 @@ check_username_pw("admin", Empty, _Context) when Empty =:= []; Empty =:= <<>> ->
 check_username_pw("admin", Password, Context) ->
     Password1 = z_convert:to_list(Password),
     case z_convert:to_list(m_site:get(admin_password, Context)) of
-        "admin" ->
+        "admin" when Password1 =:= "admin" ->
             % Only allow default password from whitelisted ip addresses
             case is_peer_whitelisted(Context) of
                 true ->

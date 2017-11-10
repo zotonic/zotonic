@@ -244,6 +244,7 @@ function z_dialog_overlay_open(options)
     if ($overlay.length > 0) {
         $overlay
             .html(options.html)
+            .attr('class', 'modal-overlay')
             .show();
     } else {
         html = '<div class="modal-overlay">' +
@@ -251,6 +252,9 @@ function z_dialog_overlay_open(options)
                options.html +
                '</div>';
         $('body').append(html);
+    }
+    if (options.class) {
+        $('.modal-overlay').addClass(options.class);
     }
 }
 

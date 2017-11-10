@@ -273,6 +273,7 @@ parse_line([C|Rest], Sep, Col, Cols) ->
 %% @doc Map column names to names that can be handled by the import routines and m_rsc:update/3
 cols2importdef(Cols) ->
     ImportDefMap = [ cols2importdef_map(Col) || Col <- unique(Cols,[]) ],
+    EdgeDefMap = [ cols2edgedef_map(Col) || Col <- unique(Cols,[]) ],
     [
         {
             % Field mapping
@@ -284,7 +285,10 @@ cols2importdef(Cols) ->
                             ImportDefMap)
             ],
             % Edges
-            []
+            lists:filter(fun(X) ->
+                            X =/= undefined
+                         end,
+                         EdgeDefMap)
         }
     ].
 
@@ -303,6 +307,8 @@ unique([C|Cs], Acc) ->
 
 %% @doc Maps well-known column names to an import definition.
 cols2importdef_map("")                  -> undefined;
+cols2importdef_map(">" ++ _)            -> undefined;
+cols2importdef_map("<" ++ _)            -> undefined;
 cols2importdef_map("name")              -> undefined;
 cols2importdef_map("name_prefix")       -> undefined;
 cols2importdef_map("date_start")        -> {"date_start", {datetime, "date_start"}};
@@ -310,3 +316,9 @@ cols2importdef_map("date_end")          -> {"date_end", {datetime, "date_end"}};
 cols2importdef_map("publication_start") -> {"publication_start", {datetime, "publication_start"}};
 cols2importdef_map("publication_end")   -> {"publication_end", {datetime, "publication_end"}};
 cols2importdef_map(X) -> {X, X}.
+
+cols2edgedef_map(">" ++ Predicate = Col) -> {object, z_string:trim(Predicate), {undefined, Col}};
+cols2edgedef_map("<" ++ Predicate = Col) -> {subject, z_string:trim(Predicate), {undefined, Col}};
+cols2edgedef_map(_) -> undefined.
+
+

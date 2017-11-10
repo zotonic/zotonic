@@ -56,16 +56,20 @@ moved_temporarily(ReqData, Context) ->
     ?WM_REPLY({true, Location}, Context1).
 
 redirect_location(Context) ->
+    State = z_convert:to_list(z_ids:id()),
+    z_context:set_session(facebook_state, State, Context),
     {AppId, _AppSecret, Scope} = mod_facebook:get_config(Context),
     RedirectUrl = z_convert:to_list(
                         z_context:abs_url(
                             z_dispatcher:url_for(facebook_redirect, Context),
                             Context)),
-    "https://www.facebook.com/v2.3/dialog/oauth?client_id="
+    "https://www.facebook.com/v2.9/dialog/oauth?client_id="
         ++ z_utils:url_encode(AppId)
         ++ "&redirect_uri=" ++ z_utils:url_encode(RedirectUrl)
         ++ "&display=popup"
-        ++ "&scope=" ++ z_utils:url_encode(Scope).
+        ++ "&response_type=code"
+        ++ "&scope=" ++ z_utils:url_encode(Scope)
+        ++ "&state=" ++ z_utils:url_encode(State).
 
 save_args(Context) ->
     z_context:set_session(?MODULE, z_context:get_q_all_noz(Context), Context).

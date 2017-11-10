@@ -490,6 +490,7 @@ handle_info(_, State) ->
 %% @spec terminate(Reason, State) -> void()
 %% @doc Terminate all processes coupled to the page.
 terminate(_Reason, State) ->
+    opt_close_websocket(State#page_state.websocket_pid),
     lists:foreach(fun(Pid) -> exit(Pid, 'EXIT') end, State#page_state.linked),
     ok.
 
@@ -515,7 +516,7 @@ opt_demonitor(MRef) ->
 opt_close_websocket(undefined) ->
     ok;
 opt_close_websocket(Pid) ->
-    erlang:exit(Pid, kill).
+    Pid ! shutdown.
 
 
 %% @doc Trigger sending a check_timeout message.

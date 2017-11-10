@@ -28,6 +28,7 @@
 -export([start_link/1]).
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_release.hrl").
 
 -record(state, {context}).
 

@@ -80,7 +80,6 @@
 
             {% block search %}
                 <form class="navbar-right navbar-form form-inline" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
-                    <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
                     <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
                     <input type="hidden" name="qquery" value="{{ q.qquery|escape }}" />
                     <input class="search-query form-control" type="text" name="qs" value="{{q.qs|escape}}" placeholder="{% block search_placeholder %}{_ Search... _}{% endblock %}" />

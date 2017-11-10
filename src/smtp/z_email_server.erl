@@ -43,6 +43,7 @@
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_release.hrl").
 -include_lib("stdlib/include/qlc.hrl").
 
 % Maximum times we retry to send a message before we mark it as failed.

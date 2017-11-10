@@ -263,7 +263,7 @@ reset(Args, Context) ->
                 Username ->
                     ContextLoggedon = logon_user(UserId, [], Context),
                     delete_reminder_secret(UserId, ContextLoggedon),
-                    m_identity:set_username_pw(UserId, Username, Password1, ContextLoggedon),
+                    m_identity:set_username_pw(UserId, Username, Password1, z_acl:sudo(ContextLoggedon)),
                     ContextLoggedon
             end;
         {_,_} ->
@@ -272,9 +272,10 @@ reset(Args, Context) ->
 
 
 logon_error(Reason, Context) ->
-    Context1 = z_render:set_value("password", "", Context),
-    Context2 = z_render:wire({add_class, [{target, "signup_logon_box"}, {class, "z-logon-error"}]}, Context1),
-    z_render:update("logon_error", z_template:render("_logon_error.tpl", [{reason, Reason}], Context2), Context2).
+    Context1 = z_notifier:foldl(#auth_logon_error{reason=Reason}, Context, Context),
+    Context2 = z_render:set_value("password", "", Context1),
+    Context3 = z_render:wire({add_class, [{target, "signup_logon_box"}, {class, "z-logon-error"}]}, Context2),
+    z_render:update("logon_error", z_template:render("_logon_error.tpl", [{reason, Reason}], Context3), Context3).
 
 
 remove_logon_error(Context) ->

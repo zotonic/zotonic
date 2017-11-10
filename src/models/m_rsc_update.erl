@@ -298,8 +298,8 @@ update_editable_check(#rscupd{id=Id, is_acl_check=true} = RscUpd, Props, Context
 update_editable_check(RscUpd, Props, Context) ->
     update_normalize_props(RscUpd, Props, Context).
 
-update_normalize_props(#rscupd{id=Id} = RscUpd, Props, Context) when is_list(Props) ->
-    AtomProps = normalize_props(Id, Props, Context),
+update_normalize_props(#rscupd{id = Id, is_import = IsImport} = RscUpd, Props, Context) when is_list(Props) ->
+    AtomProps = normalize_props(Id, Props, [{is_import, IsImport}], Context),
     update_transaction(RscUpd, fun(_, _, _) -> {ok, AtomProps} end, Context);
 update_normalize_props(RscUpd, Func, Context) when is_function(Func) ->
     update_transaction(RscUpd, Func, Context).
@@ -1031,6 +1031,11 @@ recombine_dates_1([H|T], Dates, Acc) ->
     recombine_date_part({{Y,M,D},_Time}, "his", {_,_,_} = V) -> {{Y,M,D},V};
     recombine_date_part({_Date,{H,I,S}}, "ymd", {_,_,_} = V) -> {V,{H,I,S}}.
 
+    to_date_value(Part, "-" ++ V) when Part == "ymd" ->
+        case to_date_value(Part, V) of
+            {Y, M, D} when is_integer(Y) -> {-Y, M, D};
+            YMD -> YMD
+        end;
     to_date_value(Part, V) when Part == "ymd" orelse Part == "his"->
         case string:tokens(V, "-/: ") of
             [] -> {undefined, undefined, undefined};
