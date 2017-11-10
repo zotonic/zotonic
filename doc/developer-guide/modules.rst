@@ -361,18 +361,24 @@ integer number, denoting the current module’s version. On module
 initialization, ``Module:manage_schema/2`` is called which handles
 installation and upgrade of data. You can define:
 
-After the ``manage_schema/2`` function is called, the optional
-``manage_data/2`` function is called.
-
-Note that ``manage_schema/2`` is called inside a transaction, so that any
-installation errors are rolled back. ``manage_data/2`` is called outside
-a transaction, and after all resources, predicated etc. are installed.
-
 - categories
 - predicates
 - resources
 - edges
 - :ref:`ACL rules <managed rules>`.
+
+After the ``manage_schema/2`` function is called, the optional
+``manage_data/2`` function is called. The function ``manage_data/2`` is
+called if and only if the ``manage_schema/2`` is called. If you only want
+a ``manage_data/2`` function, then add a dummy ``manage_schema/2`` function
+that returns `ok` and does nothing else.
+
+.. note::
+
+    The function ``manage_schema/2`` is called inside a transaction, so that any
+    installation errors are rolled back. ``manage_data/2`` Is called outside
+    a transaction, and after all resources, predicated etc. are installed, but
+    before the current module version number is updated.
 
 For example:
 
