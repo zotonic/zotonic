@@ -251,7 +251,7 @@ find_answer_id(SurveyId, UserId, _PersistendId, Context) ->
 
 insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
-    z_db:insert(
+    Result = z_db:insert(
         survey_answers,
         [
             {survey_id, SurveyId},
@@ -261,10 +261,12 @@ insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) 
             {points, Points},
             {answers, AnswersPoints}
         ],
-        Context);
+        Context),
+    publish(SurveyId, undefined, PersistentId, Context),
+    Result;
 insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
-    z_db:insert(
+    Result = z_db:insert(
         survey_answers,
         [
             {survey_id, SurveyId},
@@ -274,8 +276,9 @@ insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
             {points, Points},
             {answers, AnswersPoints}
         ],
-        Context).
-
+        Context),
+    publish(SurveyId, UserId, undefined, Context),
+    Result.
 
 %% @private
 prepare_results(SurveyId, Context) ->
@@ -760,7 +763,6 @@ survey_totals(Id, Context) ->
                 end,
                 true,
                 All),
-            AllEmpty = lists:foldl(fun(Total, Acc) -> z_utils:is_empty(Total) and Acc end, true, All),
             case AllEmpty of
                 true -> undefined;
                 false -> [ A || A <- All, A =/= undefined ]
