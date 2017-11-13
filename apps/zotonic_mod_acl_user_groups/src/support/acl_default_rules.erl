@@ -59,26 +59,33 @@ use_module(UserGroup, Module) ->
 get_modules(acl_user_group_managers) ->
     [
           mod_admin
-        , mod_menu
-        , mod_admin_statistics
-        , mod_email_status
-
-        , mod_admin_config
-        , mod_admin_category
-        , mod_admin_identity
-        , mod_content_groups
         , mod_acl_user_groups
+        , mod_admin_category
+        , mod_admin_config
+        , mod_admin_identity
         , mod_admin_modules
+        , mod_admin_statistics
         , mod_backup
+        , mod_content_groups
         , mod_custom_redirect
         , mod_development
+        , mod_email_status
+        , mod_menu
+        , mod_rest
+        , mod_seo
+        , mod_translation
     ];
 get_modules(acl_user_group_editors) ->
     [
           mod_admin
-        , mod_menu
         , mod_admin_statistics
         , mod_email_status
+        , mod_menu
+        , mod_rest
+    ];
+get_modules(acl_user_group_member) ->
+    [
+        mod_rest
     ];
 get_modules(_) ->
     [
