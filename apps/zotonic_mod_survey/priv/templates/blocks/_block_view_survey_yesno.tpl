@@ -1,4 +1,16 @@
 {% include "_survey_block_name_check.tpl" %}
+
+{% if is_survey_answer_view %}
+    <div class="control-group survey-yesno">
+        <label class="control-label">{{ blk.prompt }}</label>
+        <b>
+            {% if result.answers[blk.name].answer == 'yes' %}{{ blk.yes|default:_"True" }}
+            {% elseif result.answers[blk.name].answer == 'no' %}{{ blk.no|default:_"False" }}
+            {% else %}-
+            {% endif %}
+        </b>
+    </div>
+{% else %}
 <div class="form-group survey-yesno question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
 {% if blk.explanation %}
@@ -25,3 +37,4 @@
 {% endif %}
     </div>
 </div>
+{% endif %}

@@ -43,12 +43,22 @@
     </div>
 </div>
 
-<div class="form-group view-expanded">
+<div class="form-group view-expanded question-options">
     <label class="control-label" for="block-{{name}}-target">{_ question _}</label>
     <div>
       <input class="form-control" type="text" id="block-{{name}}-target" name="block-{{name}}-target" value="{{ blk.target }}" placeholder="{_ Jump target _}" />
       <p class="help-block">{_ Jump to a question on a next page. _}</p>
     </div>
 </div>
+
+<div class="form-group question-options">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" id="block-{{name}}-is_hide_result" name="block-{{name}}-is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
+            {_ Hide from results _}
+        </label>
+    </div>
+</div>
+
 {% endblock %}
 

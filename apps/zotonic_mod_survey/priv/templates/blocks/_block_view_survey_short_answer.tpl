@@ -1,5 +1,11 @@
 {% include "_survey_block_name_check.tpl" %}
 
+{% if is_survey_answer_view %}
+    <div class="control-group survey-short-answer">
+        <label class="control-label">{{ blk.prompt }}</label>
+        <blockquote>{{ result.answers[blk.name].answer|escape }}</blockquote>
+    </div>
+{% else %}
 <div class="form-group survey-short-answer question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label" for="{{ #id }}">{{ blk.prompt }}</label>
 {% if blk.explanation %}
@@ -38,3 +44,4 @@
     {% endif %}
     </div>
 </div>
+{% endif %}

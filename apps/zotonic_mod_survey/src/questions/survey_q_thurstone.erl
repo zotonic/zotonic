@@ -22,8 +22,11 @@
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
+    prep_answer_score/3,
     prep_block/2,
-    to_block/1
+    to_block/1,
+    is_multiple/1,
+    test_max_points/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -32,32 +35,38 @@
 
 answer(Block, Answers, Context) ->
     Name = proplists:get_value(name, Block),
-    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
+    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
     Options = proplists:get_value(answers, Props),
     case proplists:get_value(Name, Answers) of
         undefined ->
             {error, missing};
         Label when is_binary(Label) ->
-            case proplists:is_defined(Label, Options) of
-                true -> {ok, [{Name, Label}]};
+            case is_defined_value(Label, Options) of
+                true -> {ok, [{Name, [Label]}]};
                 false -> {error, missing}
             end;
         Value when is_list(Value) ->
-            Defined = lists:filter(fun(Lab) -> proplists:is_defined(Lab, Options) end, Value),
-            Flattened = string:join([ z_convert:to_list(V) || V <- Defined ], "#"),
-            {ok, [{Name, {text, list_to_binary(Flattened)}}]}
+            Defined = lists:filter(fun(V) -> is_defined_value(V, Options) end, Value),
+            {ok, [{Name, Defined}]}
     end.
 
+is_defined_value(_Val, []) -> false;
+is_defined_value(Val, [Opt|Options]) ->
+    case proplists:get_value(value, Opt) of
+        Val -> true;
+        _ -> is_defined_value(Val, Options)
+    end.
 
 prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, [{Name, {text, Vals0}}], Context) ->
     prep_chart(Block, [{Name, Vals0}], Context);
 prep_chart(Block, [{_, Vals}], Context) ->
-    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
+    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
     Answers = proplists:get_value(answers, Props),
-    Labels = [ Lab || {Lab,_} <- Answers ],
-    Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
+    Labels = [ proplists:get_value(option, Ans) || Ans <- Answers ],
+    ValueLabels = [ proplists:get_value(value, Ans) || Ans <- Answers ],
+    Values = [ proplists:get_value(C, Vals, 0) || C <- ValueLabels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
     [
@@ -71,19 +80,22 @@ prep_chart(Block, [{_, Vals}], Context) ->
 prep_answer_header(Q, _Context) ->
     Name = proplists:get_value(name, Q),
     case is_multiple(Q) of
-        true -> [ <<Name/binary, $:, K/binary>> || {K,_} <- proplists:get_value(answers, Q) ];
+        true -> [
+                <<Name/binary, $:, (proplists:get_value(value, Ans))/binary>>
+                || Ans <- proplists:get_value(answers, Q)
+            ];
         false -> Name
     end.
 
-prep_answer(Q, [], _Context) ->
-    prep(Q, []);
-prep_answer(Q, [{_Name, {undefined, Text}}|_], _Context) ->
-    prep(Q, binary:split(Text, <<$#>>, [global]));
-prep_answer(Q, [{_Name, {Value, _Text}}|_], _Context) ->
-    prep(Q, [Value]).
+prep_answer(PreppedBlock, [], Context) ->
+    prep(PreppedBlock, [], Context);
+prep_answer(PreppedBlock, [{_Name, Ans}|_], Context) when is_list(Ans) ->
+    prep(PreppedBlock, Ans, Context);
+prep_answer(PreppedBlock, [{_Name, Value}|_], Context) ->
+    prep(PreppedBlock, [Value], Context).
 
-prep(Q, Vs) ->
-    case is_multiple(Q) of
+prep(PreppedBlock, Vs, _Context) ->
+    case is_multiple(PreppedBlock) of
         false ->
             case Vs of
                 [V|_] -> V;
@@ -91,13 +103,51 @@ prep(Q, Vs) ->
             end;
         true ->
             [
-                case lists:member(K, Vs) of
-                    true -> K;
-                    false -> <<>>
+                begin
+                    K = proplists:get_value(value, Ans),
+                    case lists:member(K, Vs) of
+                        true -> K;
+                        false -> <<>>
+                    end
                 end
-                || {K, _} <- proplists:get_value(answers, Q)
+                || Ans <- proplists:get_value(answers, PreppedBlock, [])
             ]
     end.
+
+prep_answer_score(PreppedBlock, [], Context) ->
+    prep_score(PreppedBlock, [], Context);
+prep_answer_score(PreppedBlock, [{_Name,Ans}|_], Context) when is_list(Ans) ->
+    prep_score(PreppedBlock, Ans, Context).
+
+prep_score(PreppedBlock, StoredAnswer, _Context) ->
+    Answer = ensure_list(proplists:get_value(answer, StoredAnswer, [])),
+    Points = ensure_list(proplists:get_value(answer_points, StoredAnswer, [])),
+    case is_multiple(PreppedBlock) of
+        false ->
+            K = case Answer of
+                [Ans|_] -> Ans;
+                Ans when is_binary(Ans) -> Ans;
+                _ -> <<>>
+            end,
+            [K, proplists:get_value(K, Points, 0)];
+        true ->
+            lists:flatten([
+                begin
+                    K = proplists:get_value(value, Ans),
+                    case lists:member(K, Answer) of
+                        true ->
+                            [K, proplists:get_value(K, Points, 0)];
+                        false ->
+                            [<<>>, proplists:get_value(K, Points, 0)]
+                    end
+                end
+                || Ans <- proplists:get_value(answers, PreppedBlock, [])
+            ])
+    end.
+
+ensure_list(L) when is_list(L) -> L;
+ensure_list(V) -> [V].
+
 
 is_multiple(Q) ->
     case proplists:get_value(input_type, Q) of
@@ -112,7 +162,7 @@ is_multiple(Q) ->
 
 
 prep_block(Block, Context) ->
-    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, Context),
+    Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
     Props ++ Block.
 
 
@@ -126,3 +176,32 @@ to_block(Q) ->
         {answers, z_convert:to_binary(Q#survey_question.text)}
     ].
 
+test_max_points(Block) ->
+    IsCountAll = is_multiple(Block)
+            andalso z_convert:to_bool(proplists:get_value(is_test_neg, Block, false)),
+    case survey_test_results:block_test_points(Block) of
+        undefined -> 0;
+        Points when not IsCountAll ->
+           OkAnswers = lists:filter(
+                fun is_ok_answer/1,
+                thurstone_options(Block)),
+           length(OkAnswers) * Points;
+        Points when IsCountAll ->
+            Options = thurstone_options(Block),
+            Options1 = [ z_string:trim(Opt) || Opt <- Options ],
+            length([ Opt || Opt <- Options1, Opt /= <<>> ]) * Points
+    end.
+
+is_ok_answer(<<"*", _/binary>>) -> true;
+is_ok_answer(<<" ", Rest/binary>>) -> is_ok_answer(Rest);
+is_ok_answer(_) -> false.
+
+
+thurstone_options(Block) ->
+    case proplists:get_value(answers, Block, <<>>) of
+        {trans, [{_,Text}|_]} ->
+            binary:split(Text, <<"\n">>, [global]);
+        Text when is_binary(Text) ->
+            binary:split(Text, <<"\n">>, [global]);
+        _ -> []
+    end.

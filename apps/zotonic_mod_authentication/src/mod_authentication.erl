@@ -29,6 +29,7 @@
 -export([
     init/1,
     event/2,
+
     observe_logon_submit/2,
     observe_auth_autologon/2,
     observe_auth_validated/2,
@@ -62,7 +63,20 @@ event(#submit{message={expired, _Args}}, Context) ->
 event(#submit{message={reset, _Args}}, Context) ->
     lager:info("reset"),
     Args = z_context:get_q_all(Context),
-    controller_logon:reset(Args, Context).
+    controller_logon:reset(Args, Context);
+event(#submit{ message={signup_confirm, Props} }, Context) ->
+    {auth, Auth} = proplists:get_value(auth, Props),
+    Auth1 = Auth#auth_validated{ is_signup_confirm = true },
+    case z_notifier:first(Auth1, Context) of
+        undefined ->
+            lager:warning("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
+            z_render:wire({show, [{target, "signup_error"}]}, Context);
+        {error, _} = Err ->
+            lager:warning("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+            z_render:wire({show, [{target, "signup_error"}]}, Context);
+        {ok, Context1} ->
+            z_render:wire({script, [{script, "window.close()"}]}, Context1)
+    end.
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
@@ -157,25 +171,50 @@ logon_identity(Auth, IdnPs, Context) ->
 
 
 maybe_signup(Auth, Context) ->
-    Signup = #signup{
-        id = undefined,
-        signup_props = maybe_email_identity(Auth#auth_validated.props),
-        props = Auth#auth_validated.props,
-        request_confirm = false
-    },
-    case z_notifier:first(Signup, Context) of
-        {ok, NewUserId} ->
-            case auth_identity(Auth, Context) of
-                undefined -> insert_identity(NewUserId, Auth, Context);
-                _ -> nop
-            end,
-            ok = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
-            z_auth:logon(NewUserId, Context);
-        {error, _Reason} = Error ->
-            Error;
-        undefined ->
-            % No signup accepted
-            undefined
+    Email = proplists:get_value(email, Auth#auth_validated.props),
+    case not Auth#auth_validated.is_connect
+        andalso is_user_email_exists(Email, Context)
+    of
+        true -> {error, {duplicate_email, Email}};
+        false -> try_signup(Auth, Context)
+    end.
+
+try_signup(Auth, Context) ->
+    case not Auth#auth_validated.is_signup_confirm
+        andalso z_convert:to_bool(m_config:get_value(mod_authentication, is_signup_confirm, Context))
+    of
+        true ->
+            {error, signup_confirm};
+        false ->
+            Signup = #signup{
+                id = undefined,
+                signup_props = maybe_email_identity(Auth#auth_validated.props),
+                props = Auth#auth_validated.props,
+                request_confirm = false
+            },
+            case z_notifier:first(Signup, Context) of
+                {ok, NewUserId} ->
+                    case auth_identity(Auth, Context) of
+                        undefined -> insert_identity(NewUserId, Auth, Context);
+                        _ -> nop
+                    end,
+                    _ = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
+                    z_auth:logon(NewUserId, Context);
+                {error, _Reason} = Error ->
+                    Error;
+                undefined ->
+                    % No signup accepted
+                    undefined
+            end
+    end.
+
+is_user_email_exists(undefined, _Context) ->
+    false;
+is_user_email_exists(Email, Context) ->
+    case m_identity:lookup_users_by_verified_type_and_key(email, Email, Context) of
+        undefined -> false;
+        [] -> false;
+        _ -> true
     end.
 
 maybe_email_identity(Props) ->

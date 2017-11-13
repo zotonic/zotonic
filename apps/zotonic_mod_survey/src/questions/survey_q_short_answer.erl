@@ -17,8 +17,6 @@
 
 -module(survey_q_short_answer).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 -export([
     answer/3,
     prep_chart/3,
@@ -28,6 +26,7 @@
     to_block/1
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 answer(Block, Answers, _Context) ->
@@ -38,7 +37,7 @@ answer(Block, Answers, _Context) ->
         Value ->
             case z_string:trim(Value) of
                 [] -> {error, missing};
-                V -> {ok, [{Name, {text, z_convert:to_binary(V)}}]}
+                V -> {ok, [{Name, z_convert:to_binary(V)}]}
             end
     end.
 
@@ -50,8 +49,8 @@ prep_answer_header(Q, _Context) ->
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
-prep_answer(_Q, [{_Name, {_Value, Text}}|_], _Context) ->
-    z_convert:to_binary(Text).
+prep_answer(_Q, [{_Name, Ans}|_], _Context) ->
+    z_convert:to_binary(Ans).
 
 prep_block(B, _Context) ->
     B.

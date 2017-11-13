@@ -10,7 +10,9 @@
 {% block widget_header %}{% endblock %}
 
 {% block widget_content %}
-	<p class="help-block">{_ This text is shown after the survey has been submitted. _}</p>
+	<p class="help-block">
+		{_ Thank you text. _} {_ This text is shown after the survey has been submitted. _}
+	</p>
 	{% with id.blocks.survey_feedback as blk %}
 		<fieldset class="admin-form">
 			<div>

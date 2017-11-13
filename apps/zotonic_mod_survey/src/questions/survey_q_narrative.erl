@@ -47,15 +47,17 @@ answer(Block, Answers, Context) ->
 
 answer_inputs([], _Answers, Acc) ->
     {ok, Acc};
-answer_inputs([{IsSelect,Name}|Rest], Answers, Acc) ->
-    case proplists:get_value(z_convert:to_binary(Name), Answers) of
+answer_inputs([{_IsSelect,Name}|Rest], Answers, Acc) ->
+    NameB = z_convert:to_binary(Name),
+    case proplists:get_value(NameB, Answers) of
         undefined -> {error, missing};
-        Value -> case z_string:trim(Value) of
-                    [] -> {error, missing};
-                    V ->
-                        V1 = case IsSelect of true -> V; false -> {text, V} end,
-                        answer_inputs(Rest, Answers, [{Name,V1}|Acc])
-                 end
+        Value ->
+            case z_string:trim(Value) of
+                [] -> {error, missing};
+                <<>> -> {error, missing};
+                V ->
+                    answer_inputs(Rest, Answers, [{NameB,z_convert:to_binary(V)}|Acc])
+            end
     end.
 
 

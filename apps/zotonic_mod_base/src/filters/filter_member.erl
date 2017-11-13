@@ -22,11 +22,19 @@
 
 member(_S, undefined, _Context) ->
     false;
-member(S, [H|_] = L, _Context) when is_list(S) andalso is_binary(H) ->
+member(B, B, _Context) when is_binary(B); is_integer(B) ->
+    true;
+member(S, [H|_] = L, _Context) when is_list(S) and is_binary(H) ->
     lists:member(list_to_binary(S), L);
-member(S, [H|_] = L, _Context) when is_list(S) andalso is_integer(H) ->
+member(S, [H|_] = L, _Context) when (is_list(S) or is_binary(S)) and is_integer(H) ->
     try
-        lists:member(list_to_integer(S), L)
+        lists:member(z_convert:to_integer(S), L)
+    catch
+        _:_ -> false
+    end;
+member(S, [H|_] = L, _Context) when is_integer(S) and is_binary(H) ->
+    try
+        lists:member(z_convert:to_binary(S), L)
     catch
         _:_ -> false
     end;

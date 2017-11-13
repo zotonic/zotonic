@@ -34,11 +34,11 @@ answer(Block, Answers, _Context) ->
     case proplists:get_value(Name, Answers) of
         undefined ->
             {error, missing};
-        CatId when is_binary(CatId) ->
-            {ok, [{Name, CatId}]};
+        RscId when is_binary(RscId) ->
+            {ok, [{Name, [RscId]}]};
         List when is_list(List) ->
-            Flattened = string:join([ z_convert:to_list(V) || V <- List, V /= <<>> ], "#"),
-            {ok, [{Name, {text, list_to_binary(Flattened)}}]}
+            Flattened = [ V || V <- List, V /= <<>> ],
+            {ok, [{Name, Flattened}]}
     end.
 
 
@@ -75,24 +75,24 @@ prep_answer_header(Q, Context) ->
 
 prep_answer(Q, [], _Context) ->
     prep(Q, []);
-prep_answer(Q, [{_Name, {undefined, Text}}|_], _Context) ->
-    prep(Q, binary:split(Text, <<$#>>, [global]));
-prep_answer(Q, [{_Name, {Value, _Text}}|_], _Context) ->
+prep_answer(Q, [{_Name, Value}|_], _Context) when is_list(Value) ->
+    prep(Q, Value);
+prep_answer(Q, [{_Name, Value}|_], _Context) ->
     prep(Q, [Value]).
 
-    prep(Q, Vs) ->
-        case z_convert:to_bool(proplists:get_value(is_multiple, Q)) of
-            false ->
-                hd(Vs);
-            true ->
-                [
-                    case lists:member(K, Vs) of
-                        true -> K;
-                        false -> <<>>
-                    end
-                    || {K, _} <- proplists:get_value(answers, Q)
-                ]
-        end.
+prep(Q, Vs) ->
+    case z_convert:to_bool(proplists:get_value(is_multiple, Q)) of
+        false ->
+            hd(Vs);
+        true ->
+            [
+                case lists:member(K, Vs) of
+                    true -> K;
+                    false -> <<>>
+                end
+                || {K, _} <- proplists:get_value(answers, Q)
+            ]
+    end.
 
 
 prep_block(Block, _Context) ->

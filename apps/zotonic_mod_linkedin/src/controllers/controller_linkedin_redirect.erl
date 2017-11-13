@@ -58,22 +58,32 @@ access_token({error, _Reason}, Context) ->
     html_error(access_token, Context).
 
 user_data({ok, UserProps}, AccessData, Context) ->
-    case auth_user(UserProps, AccessData, Context) of
+    Auth = auth_user(UserProps, AccessData, Context),
+    do_auth_user(Auth, Context);
+user_data({error, _Reason}, _AccessData, Context) ->
+    html_error(service_user_data, Context).
+
+do_auth_user(Auth, Context) ->
+    case z_notifier:first(Auth, Context) of
         undefined ->
             % No handler for signups, or signup not accepted
-            lager:warning("[linkedin] Undefined auth_user return for user with props ~p", [UserProps]),
+            lager:warning("[linkedin] Undefined auth_user return for user with props ~p", [Auth]),
             html_error(auth_user_undefined, Context);
         {error, duplicate} ->
-            lager:info("[linkedin] Duplicate connection for user with props ~p", [UserProps]),
+            lager:info("[linkedin] Duplicate connection for user with props ~p", [Auth]),
             html_error(duplicate, Context);
+        {error, {duplicate_email, Email}} ->
+            lager:info("[facebook] User with email \"~s\" already exists", [Email]),
+            html_error(duplicate_email, Email, Context);
+        {error, signup_confirm} ->
+            % We need a confirmation from the user before we add a new account
+            html_error(signup_confirm, {auth, Auth}, Context);
         {error, _} = Err ->
-            lager:warning("[linkedin] Error return ~p for user with props ~p", [Err, UserProps]),
+            lager:warning("[linkedin] Error return ~p for user with props ~p", [Err, Auth]),
             html_error(auth_user_error, Context);
         {ok, Context1} ->
             html_ok(Context1)
-    end;
-user_data({error, _Reason}, _AccessData, Context) ->
-    html_error(service_user_data, Context).
+    end.
 
 
 html_ok(Context) ->
@@ -81,9 +91,13 @@ html_ok(Context) ->
     z_context:output(Html, Context).
 
 html_error(Error, Context) ->
+    html_error(Error, undefined, Context).
+
+html_error(Error, What, Context) ->
     Vars = [
         {service, "LinkedIn"},
         {is_safari8problem, is_safari8problem(Context)},
+        {what, What},
         {error, Error}
     ],
     Html = z_template:render("logon_service_error.tpl", Vars, Context),
@@ -94,10 +108,10 @@ html_error(Error, Context) ->
 %%      See also this issue: https://github.com/drone/drone/issues/663#issuecomment-61565820
 is_safari8problem(Context) ->
     Hs = m_req:get(headers, Context),
-    HasCookies = proplists:is_defined("cookie", Hs),
+    HasCookies = proplists:is_defined(<<"cookie">>, Hs),
     UA = m_req:get(user_agent, Context),
-    IsVersion8 = string:str(UA, "Version/8.0.") > 0,
-    IsSafari = string:str(UA, "Safari/6") > 0,
+    IsVersion8 = binary:match(UA, <<"Version/8.0.">>) =/= nomatch,
+    IsSafari = binary:match(UA, <<"Safari/6">>) =/= nomatch,
     not HasCookies andalso IsVersion8 andalso IsSafari.
 
 
@@ -107,27 +121,27 @@ auth_user(Profile, AccessTokenData, Context) ->
     {struct, Location} = proplists:get_value(<<"location">>, Profile),
     {struct, Country} = proplists:get_value(<<"country">>, Location),
     PersonProps = [
-            {title, proplists:get_value(<<"formattedName">>, Profile)},
-            {name_first, proplists:get_value(<<"firstName">>, Profile)},
-            {name_surname, proplists:get_value(<<"lastName">>, Profile)},
-            {summary, proplists:get_value(<<"headline">>, Profile)},
-            {body, z_html:escape_link(proplists:get_value(<<"summary">>, Profile))},
-            {website, proplists:get_value(<<"publicProfileUrl">>, Profile)},
-            {linkedin_url, proplists:get_value(<<"publicProfileUrl">>, Profile)},
-            {email, proplists:get_value(<<"emailAddress">>, Profile, [])},
-            {address_country, proplists:get_value(<<"code">>, Country)},
-            {address_line_1, proplists:get_value(<<"name">>, Location)},
-            {depiction_url, picture_url(proplists:get_value(<<"pictureUrls">>, Profile))}
-        ] ++ company_info(Profile),
+        {title, proplists:get_value(<<"formattedName">>, Profile)},
+        {name_first, proplists:get_value(<<"firstName">>, Profile)},
+        {name_surname, proplists:get_value(<<"lastName">>, Profile)},
+        {summary, proplists:get_value(<<"headline">>, Profile)},
+        {body, z_html:escape_link(proplists:get_value(<<"summary">>, Profile))},
+        {website, proplists:get_value(<<"publicProfileUrl">>, Profile)},
+        {linkedin_url, proplists:get_value(<<"publicProfileUrl">>, Profile)},
+        {email, proplists:get_value(<<"emailAddress">>, Profile, [])},
+        {address_country, proplists:get_value(<<"code">>, Country)},
+        {address_line_1, proplists:get_value(<<"name">>, Location)},
+        {depiction_url, picture_url(proplists:get_value(<<"pictureUrls">>, Profile))}
+    ] ++ company_info(Profile),
     Args = controller_linkedin_authorize:get_args(Context),
-    z_notifier:first(#auth_validated{
-            service=linkedin,
-            service_uid=LinkedInUserId,
-            service_props=AccessTokenData,
-            props=PersonProps,
-            is_connect=z_convert:to_bool(proplists:get_value("is_connect", Args))
-        },
-        Context).
+    #auth_validated{
+        service=linkedin,
+        service_uid=LinkedInUserId,
+        service_props=AccessTokenData,
+        props=PersonProps,
+        is_connect=z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
+    }.
+
 
 company_info(Profile) ->
     case proplists:get_value(<<"positions">>, Profile) of

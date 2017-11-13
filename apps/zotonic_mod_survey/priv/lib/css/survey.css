@@ -45,3 +45,20 @@ form.z_form_invalid .alert.z_invalid {
 .form-survey .form-actions {
 	margin-top: 12px;
 }
+
+.survey-q-ok .survey-test-feedback-icon {
+    color: green !important;
+}
+.survey-q-not-ok .survey-test-feedback-icon  {
+    color: red !important;
+}
+.do_survey_test_feedback .survey-test-feedback-correct,
+.do_survey_test_feedback .survey-test-feedback-wrong {
+    display: none;
+}
+.do_survey_test_feedback.survey-test-correct .survey-test-feedback-correct {
+    display: block;
+}
+.do_survey_test_feedback.survey-test-wrong .survey-test-feedback-wrong {
+    display: block;
+}
