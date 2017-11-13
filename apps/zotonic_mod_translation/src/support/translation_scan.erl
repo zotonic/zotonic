@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2015 Marc Worrell
+%% @copyright 2010-2017 Marc Worrell
 %% @doc Parse templates / erlang files in modules, extract all translations.
 
-%% Copyright 2010-2015 Marc Worrell
+%% Copyright 2010-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([scan/1, scan_file/2]).
--export([parse_data/1, parse_file/1]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -72,29 +71,6 @@ merge_args([{Lang,Text}|Rest], Args) ->
         undefined -> merge_args(Rest, [{Lang,Text}|Args]);
         _ -> merge_args(Rest, Args)
     end.
-
-
-parse_file(File) ->
-    case catch file:read_file(File) of
-        {ok, Data} ->
-            case parse_data(Data) of
-                {ok, Val} ->
-                    {ok, Val};
-                Err ->
-                    Err
-            end;
-        Error ->
-            {error, io_lib:format("reading ~p failed (~p)", [File, Error])}
-    end.
-
-parse_data(Data) when is_binary(Data) ->
-    case erlydtl_scanner:scan(binary_to_list(Data)) of
-        {ok, Tokens} ->
-            erlydtl_parser:parse(Tokens);
-        Err ->
-            Err
-    end.
-
 
 %% @doc Parse the template or Erlang module. Extract all translation tags.
 scan_file(".tpl", File) ->
