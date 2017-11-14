@@ -205,7 +205,7 @@ If you haven’t yet done so, set up
 ``m_acl_rule:replace_managed/3`` function to add your new ACL rules.
 
 Note that you always to need a ``manage_schema/2`` function, even if it only
-returns ``ok``. Otherwise the ``manage_data/2`` function will not be called.
+returns ``ok``. Otherwise the ``manage_data/2`` function will not be called::
 
     %% yoursite.erl
     -module(yoursite).
@@ -221,7 +221,6 @@ returns ``ok``. Otherwise the ``manage_data/2`` function will not be called.
     ]).
 
     %% .... more code here...
-
     manage_schema(install, Context) ->
         #datamodel{
             %% your resources...
