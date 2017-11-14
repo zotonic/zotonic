@@ -213,7 +213,9 @@ of
         F = fun(Ctx) ->
                 case z_convert:to_bool(proplists:get_value(no_touch, Opts, false)) of
                     true -> skip;
-                    false -> m_rsc:touch(SubjectId, Ctx)
+                    false ->
+                        pivot_resources([ObjectId], Ctx),
+                        m_rsc:touch(SubjectId, Ctx)
                 end,
                 SeqOpt = case proplists:get_value(seq, Opts) of
                             S when is_integer(S) -> [{seq, S}];
@@ -259,6 +261,7 @@ delete(Id, Context) ->
     case z_acl:is_allowed(delete, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId}, Context) of
         true ->
             F = fun(Ctx) ->
+                pivot_resources([ObjectId], Ctx),
                 m_rsc:touch(SubjectId, Ctx),
                 z_db:delete(edge, Id, Ctx)
             end,
@@ -283,7 +286,9 @@ delete(SubjectId, Pred, ObjectId, Options, Context) ->
             F = fun(Ctx) ->
                 case proplists:get_value(no_touch, Options) of
                     true -> ok;
-                    _ -> m_rsc:touch(SubjectId, Ctx)
+                    _ ->
+                        pivot_resources([ObjectId], Ctx),
+                        m_rsc:touch(SubjectId, Ctx)
                 end,
                 z_db:q("delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",  [SubjectId, ObjectId, PredId], Ctx)
             end,
@@ -306,6 +311,7 @@ delete_multiple(SubjectId, Preds, ObjectId, Context) ->
         true ->
             F = fun(Ctx) ->
                 m_rsc:touch(SubjectId, Ctx),
+                pivot_resources([ObjectId], Ctx),
                 z_db:q("delete
                         from edge
                         where subject_id = $1
@@ -524,6 +530,7 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
                                    [ObjectId,EdgeId,z_acl:user(Ctx)],
                                    Ctx),
                         m_rsc:touch(SubjectId, Ctx),
+                        pivot_resources([ObjectId], Ctx),
                         {ok, EdgeId};
                     false ->
                         {error, eacces}
@@ -720,6 +727,7 @@ update_sequence(Id, Pred, ObjectIds, Context) ->
                 SortedEdgeIds = [ proplists:get_value(OId, All, -1) || OId <- SortedIds ],
                 z_db:update_sequence(edge, SortedEdgeIds, Ctx),
                 m_rsc:touch(Id, Ctx),
+                pivot_resources(SortedEdgeIds, Ctx),
                 ok
             end,
 
@@ -758,6 +766,7 @@ set_sequence(Id, Pred, ObjectIds, Context) ->
                         SortedEdgeIds = [ proplists:get_value(OId, AllEdges, -1) || OId <- ObjectIds ],
                         z_db:update_sequence(edge, SortedEdgeIds, Ctx),
                         m_rsc:touch(Id, Ctx),
+                        pivot_resources(SortedEdgeIds, Ctx),
                         ok
                 end,
 
@@ -840,6 +849,7 @@ update_sequence_edge_ids(Id, Pred, EdgeIds, Context) ->
                 SortedEdgeIds = EdgeIds ++ lists:reverse(AppendToEnd),
                 z_db:update_sequence(edge, SortedEdgeIds, Ctx),
                 m_rsc:touch(Id, Ctx),
+                pivot_resources(SortedEdgeIds, Ctx),
                 ok
             end,
 
@@ -880,3 +890,8 @@ object_predicate_ids(Id, Context) ->
 subject_predicate_ids(Id, Context) ->
     Ps = z_db:q("select distinct predicate_id from edge where object_id = $1", [Id], Context),
     [ P || {P} <- Ps ].
+
+%% @doc Request re-pivot of all the resource ids.
+pivot_resources(Ids, Context) ->
+    [z_pivot_rsc:pivot(Id, Context) || Id <- Ids].
+
