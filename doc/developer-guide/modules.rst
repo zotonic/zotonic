@@ -367,6 +367,19 @@ installation and upgrade of data. You can define:
 - edges
 - :ref:`ACL rules <managed rules>`.
 
+After the ``manage_schema/2`` function is called, the optional
+``manage_data/2`` function is called. The function ``manage_data/2`` is
+called if and only if the ``manage_schema/2`` is called. If you only want
+a ``manage_data/2`` function, then add a dummy ``manage_schema/2`` function
+that returns `ok` and does nothing else.
+
+.. note::
+
+    The function ``manage_schema/2`` is called inside a transaction, so that any
+    installation errors are rolled back. ``manage_data/2`` Is called outside
+    a transaction, and after all resources, predicates etc. are installed, but
+    before the current module version number is updated.
+
 For example:
 
 .. code-block:: erlang
@@ -377,7 +390,8 @@ For example:
     -mod_schema(3).  %% we are currently at revision 3
 
     -export([
-        manage_schema/2
+        manage_schema/2,
+        manage_data/2
     ]).
 
     %% ...
@@ -460,19 +474,17 @@ For example:
             ]
         }.
 
+    manage_data(_Version, Context) ->
+        %% Whatever data needs to be installed after the datamodel
+        %% has been installed.
+        ok.
+
 Note that the install function should always be kept up-to-date
 according to the latest schema version. When you install a module for
 the first time, no upgrade functions are called, but only the
 ``install`` clause. The upgrade functions exist for migrating old
 data, not for newly installing a module.
 
-Data model notification
-^^^^^^^^^^^^^^^^^^^^^^^
-
-In the ``#datamodel`` record you can manage categories, predicates, resources,
-media and edges. You can also set the ``data`` property, which will send out
-a :ref:`manage_data` notification. To subscribe to that notification, export
-``observe_manage_data/2`` in your site or module.
 
 Using categories defined by other modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -508,8 +520,8 @@ gen_server based modules
 
 When you need a running process, i.e., a module that does something in the
 background, then it is possible to implement your module as a
-`gen_server`_. A gen_server is a standard way to implement a reliable
-Erlang worker process.
+`gen_server`_ (or supervisor). A gen_server is a standard way to implement
+a reliable Erlang worker process.
 
 In that case you will need to add the behaviour and gen_server
 functions. You also need to change the ``init/1`` function to accept

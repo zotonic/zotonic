@@ -89,7 +89,7 @@ file_exists(File, Context) ->
 
 %% @doc Callback for controller_file_readonly.  Check if access is allowed.
 file_forbidden(_File, Context) ->
-    not z_acl:is_allowed(use, mod_admin_backup, Context).
+    not z_acl:is_allowed(use, mod_backup, Context).
 
 
 %% @doc Start a backup

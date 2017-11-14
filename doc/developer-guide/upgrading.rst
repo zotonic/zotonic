@@ -60,6 +60,7 @@ Authentication
 
     observe_auth_logon(#auth_logon{}, Context, _Context) ->
 
+
 Configuration
 ^^^^^^^^^^^^^
 
@@ -170,6 +171,23 @@ Sites and modules
             yoursite.app.src
             ...
         rebar.config
+
+
+Module schema and data initialization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The `#datamodel.data` field has been removed.
+The notifier `#manage_data` has also been removed.
+
+Now the call to (the optional) `manage_schema/2` will be followed by a call
+to `manage_data/2`. Note that `manage_data` will be called if and only if
+you have a `manage_schema/2` function exported (and the `-mod_schema(..)`
+version changes or the module is installed).
+
+The `manage_schema/2` function is called inside a transaction. The
+`manage_data/2` function is called after that transaction and also after
+all (optional) `#datamodel` changes are applied.
+
 
 Templates
 ^^^^^^^^^

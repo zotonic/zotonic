@@ -971,11 +971,10 @@ handle_start_next(#state{site=Site, start_queue=Starting, modules=Modules} = Sta
                 });
         [ Module | _ ] ->
             State1 = refresh_module_exports(Module, refresh_module_schema(Module, State)),
-            {Module, Exports} = lists:keyfind(Module, 1, State1#state.module_exports),
             #{ Module := ModuleStatus } = State1#state.modules,
             case start_child(
                     self(), Module, ModuleStatus#module_status.application,
-                    module_spec(Module, Site), Exports, Site)
+                    module_spec(Module, Site), Site)
             of
                 {ok, StartHelperPid} ->
                     State1#state{
@@ -1034,12 +1033,12 @@ is_module(Module) ->
 
 %% @doc Try to add and start the child, do not crash on missing modules. Run as a separate process.
 %% @todo Add some preflight tests
--spec start_child(pid(), atom(), atom(), supervisor:child_spec(), list(), atom()) -> {ok, pid()} | {error, string()}.
-start_child(ManagerPid, Module, App, ChildSpec, Exports, Site) ->
+-spec start_child(pid(), atom(), atom(), supervisor:child_spec(), atom()) -> {ok, pid()} | {error, string()}.
+start_child(ManagerPid, Module, App, ChildSpec, Site) ->
     StartPid = spawn(
         fun() ->
             Context = z_acl:sudo(z_context:new(Site)),
-            Result = case manage_schema(Module, Exports, Context) of
+            Result = case manage_schema(Module, Context) of
                 ok ->
                     z_module_sup:start_module(App, ChildSpec, Site);
                 Error ->
@@ -1213,15 +1212,16 @@ has_behaviour(M, Behaviour) ->
 
 
 %% @doc Manage the upgrade/install of this module.
-manage_schema(Module, Exports, Context) ->
+manage_schema(Module, Context) ->
     Target = mod_schema(Module),
     Current = db_schema_version(Module, Context),
-    case {proplists:get_value(manage_schema, Exports), Target =/= undefined} of
-        {undefined, false} ->
+    HasManageSchema = erlang:function_exported(Module, manage_schema, 2),
+    case {HasManageSchema, Target =/= undefined} of
+        {false, false} ->
             ok; %% No manage_schema function, and no target schema
-        {undefined, true} ->
+        {false, true} ->
             {error, {"Schema version defined in module but no manage_schema/2 function.", Module}};
-        {2, _} ->
+        {true, _} ->
             %% Module has manage_schema function
             manage_schema_if_db(z_db:has_connection(Context), Module, Current, Target, Context)
     end.
@@ -1244,22 +1244,22 @@ refresh_module_schema(Module, #state{module_schema=Schemas} = State) ->
     }.
 
 manage_schema_if_db(true, Module, Current, Target, Context) ->
-    manage_schema(Module, Current, Target, Context);
+    call_manage_schema(Module, Current, Target, Context);
 manage_schema_if_db(false, Module, _Current, _Target, Context) ->
     lager:info("[~p] Skipping schema for ~p as there is no database connection.",
                [z_context:site(Context), Module]),
     ok.
 
 %% @doc Optionally upgrade the schema.
-manage_schema(_Module, Version, Version, _Context) ->
+call_manage_schema(_Module, Version, Version, _Context) ->
     ok;
-manage_schema(_Module, _Current, undefined, _Context) ->
+call_manage_schema(_Module, _Current, undefined, _Context) ->
     ok;
-manage_schema(Module, Current, Target, _Context)
+call_manage_schema(Module, Current, Target, _Context)
     when is_integer(Current), is_integer(Target), Target < Current ->
     % Downgrade
     {error, {"Module downgrades currently not supported.", Module}};
-manage_schema(Module, undefined, Target, Context) ->
+call_manage_schema(Module, undefined, Target, Context) ->
     % New install
     SchemaRet = z_db:transaction(
                     fun(C) ->
@@ -1272,10 +1272,11 @@ manage_schema(Module, undefined, Target, Context) ->
         ok ->
             ok
     end,
-    ok = set_db_schema_version(Module, Target, Context),
     z_db:flush(Context),
+    maybe_manage_data(Module, install, Context),
+    ok = set_db_schema_version(Module, Target, Context),
     ok;
-manage_schema(Module, Current, Target, Context)
+call_manage_schema(Module, Current, Target, Context)
     when is_integer(Current), is_integer(Target), Target > Current ->
     % Upgrade
     SchemaRet = z_db:transaction(
@@ -1289,12 +1290,20 @@ manage_schema(Module, Current, Target, Context)
         ok ->
             ok
     end,
-    ok = set_db_schema_version(Module, Current+1, Context),
     z_db:flush(Context),
-    manage_schema(Module, Current+1, Target, Context);
-manage_schema(_, Current, Target, _) ->
+    maybe_manage_data(Module, {upgrade, Current+1}, Context),
+    ok = set_db_schema_version(Module, Current+1, Context),
+    call_manage_schema(Module, Current+1, Target, Context);
+call_manage_schema(Module, Current, Target, _) ->
     % Should be an integer (or undefined)
-    {error, {"Invalid schema version numbering", Current, Target}}.
+    {error, {"Invalid schema version numbering for "++atom_to_list(Module), Current, Target}}.
+
+%% @doc After the manage_schema we can optionally install or modify data.
+maybe_manage_data(Module, Version, Context) ->
+    case erlang:function_exported(Module, manage_data, 2) of
+        true -> Module:manage_data(Version, Context);
+        false -> ok
+    end.
 
 
 %% @doc Add the observers for a module, called after module has been activated

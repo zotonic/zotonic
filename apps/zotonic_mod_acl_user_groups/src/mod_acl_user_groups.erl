@@ -42,13 +42,13 @@
     await_lookup/2,
     rebuild/2,
     observe_admin_menu/3,
-    observe_manage_data/2,
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
     observe_rsc_insert/3,
     observe_rsc_get/3,
     name/1,
-    manage_schema/2
+    manage_schema/2,
+    manage_data/2
 ]).
 
 % Access control hooks
@@ -260,11 +260,6 @@ observe_hierarchy_updated(#hierarchy_updated{root_id= <<"acl_user_group">>, pred
     rebuild(Context);
 observe_hierarchy_updated(#hierarchy_updated{}, _Context) ->
     ok.
-
-observe_manage_data(#manage_data{module = Module, props = {acl_rules, Rules}}, Context) ->
-    m_acl_rule:replace_managed(Rules, Module, Context);
-observe_manage_data(#manage_data{}, _Context) ->
-    undefined.
 
 %% @doc Add default content group when resource is inserted without one
 -spec observe_rsc_insert(#rsc_insert{}, list(), #context{}) -> list().
@@ -595,87 +590,69 @@ drop_old_ets([]) ->
 %%====================================================================
 
 manage_schema(Version, Context) ->
-    % Perform the next outside the transaction
-    ContextDb = z_context:prune_for_spawn(Context),
-    m_acl_rule:manage_schema(Version, ContextDb),
-    case m_rsc:is_a(acl_user_group_managers, acl_user_group, ContextDb) of
-        true ->
-            % Basic groups are known, assume hierarchy is ok.
-            manage_datamodel(z_context:prune_for_database(ContextDb)),
-            m_hierarchy:ensure(acl_user_group, ContextDb),
-            ok;
-        false ->
-            % Initial install - create a simple user group hierarchy to start with
-            manage_datamodel(z_context:prune_for_database(ContextDb)),
+    m_acl_rule:manage_schema(Version, Context),
+    #datamodel{
+        categories = [
+            {acl_user_group, meta, [
+                    {title, {trans, [{en, <<"User Group">>}, {nl, <<"Gebruikersgroep">>}]}}
+                ]},
+            {acl_collaboration_group, meta, [
+                    {title, {trans, [{en, <<"Collaboration Group">>}, {nl, <<"Samenwerkingsgroep">>}]}}
+                ]}
+        ],
+        resources = [
+            {acl_user_group_anonymous,
+                acl_user_group,
+                [{title, {trans, [{en, <<"Anonymous">>}, {nl, <<"Anoniem">>}]}}]},
+            {acl_user_group_members,
+                acl_user_group,
+                [{title, {trans, [{en, <<"Members">>}, {nl, <<"Gebruikers">>}]}}]},
+            {acl_user_group_editors,
+                acl_user_group,
+                [{title, {trans, [{en, <<"Editors">>}, {nl, <<"Redactie">>}]}}]},
+            {acl_user_group_managers,
+                acl_user_group,
+                [{title, {trans, [{en, <<"Managers">>}, {nl, <<"Beheerders">>}]}}]}
+        ],
+        predicates = [
+            {hasusergroup,
+                [{title, {trans, [{en, <<"In User Group">>},{nl, <<"In gebruikersgroep">>}]}}],
+                [{person, acl_user_group}]
+            },
+            {hascollabmember,
+                [{title, {trans, [{en, <<"Member">>},{nl, <<"Lid">>}]}}],
+                [{acl_collaboration_group, person}]
+            },
+            {hascollabmanager,
+                [{title, {trans, [{en, <<"Manager">>},{nl, <<"Beheerder">>}]}}],
+                [{acl_collaboration_group, person}]
+            }
+        ]
+    }.
 
-            % TODO: remove the above ACL groups from the Tree
-            R = fun(N) -> m_rsc:rid(N, ContextDb) end,
-            Tree = m_hierarchy:menu(acl_user_group, ContextDb),
-            NewTree = [ {R(acl_user_group_anonymous),
-                         [ {R(acl_user_group_members),
-                            [ {R(acl_user_group_editors),
-                               [ {R(acl_user_group_managers),
-                                  []
-                                 } ]
-                              } ]
-                           } ]
-                        } | Tree ],
-            m_hierarchy:save(acl_user_group, NewTree, ContextDb)
-    end,
+manage_data(install, Context) ->
+    case m_hierarchy:tree(acl_user_group, Context) of
+        [] ->
+            R = fun(N) -> m_rsc:rid(N, Context) end,
+            NewTree = [
+                {R(acl_user_group_anonymous), [
+                    {R(acl_user_group_members), [
+                        {R(acl_user_group_editors), [
+                            {R(acl_user_group_managers), []}
+                        ]}
+                    ]}
+                ]}
+            ],
+            m_hierarchy:save(acl_user_group, NewTree, Context),
+            Rules = acl_default_rules:get_default_rules(),
+            m_acl_rule:replace_managed(Rules, ?MODULE, Context),
+            ok;
+        _ ->
+            ok
+    end;
+manage_data(_Version, _Context) ->
     ok.
 
-manage_datamodel(Context) ->
-    z_datamodel:manage(
-        ?MODULE,
-        #datamodel{
-            categories=
-                [
-                    {acl_user_group, meta,
-                        [
-                            {title, {trans, [{en, "User Group"}, {nl, "Gebruikersgroep"}]}}
-                        ]},
-                    {acl_collaboration_group, meta,
-                        [
-                            {title, {trans, [{en, "Collaboration Group"}, {nl, "Samenwerkingsgroep"}]}}
-                        ]}
-                ],
-
-            resources=
-                [
-                    {acl_user_group_anonymous,
-                        acl_user_group,
-                        [{title, {trans, [{en, "Anonymous"}, {nl, "Anoniem"}]}}]},
-                    {acl_user_group_members,
-                        acl_user_group,
-                        [{title, {trans, [{en, "Members"}, {nl, "Gebruikers"}]}}]},
-                    {acl_user_group_editors,
-                        acl_user_group,
-                        [{title, {trans, [{en, "Editors"}, {nl, "Redactie"}]}}]},
-                    {acl_user_group_managers,
-                        acl_user_group,
-                        [{title, {trans, [{en, "Managers"}, {nl, "Beheerders"}]}}]}
-                ],
-
-            predicates=
-                [
-                    {hasusergroup,
-                        [{title, {trans, [{en, <<"In User Group">>},{nl, <<"In gebruikersgroep">>}]}}],
-                        [{person, acl_user_group}]
-                    },
-                    {hascollabmember,
-                        [{title, {trans, [{en, <<"Member">>},{nl, <<"Lid">>}]}}],
-                        [{acl_collaboration_group, person}]
-                    },
-                    {hascollabmanager,
-                        [{title, {trans, [{en, <<"Manager">>},{nl, <<"Beheerder">>}]}}],
-                        [{acl_collaboration_group, person}]
-                    }
-                ],
-            data = [
-                {acl_rules, acl_default_rules:get_default_rules()}
-            ]
-        },
-        Context).
 
 check_hasusergroup(UserId, P, Context) ->
     HasUserGroup = proplists:get_all_values(hasusergroup, P),
@@ -684,8 +661,9 @@ check_hasusergroup(UserId, P, Context) ->
             %% not submitted, do nothing
             ok;
         _ ->
-            GroupIds = lists:map(fun z_convert:to_integer/1, lists:filter(fun(<<>>) -> false; (_) -> true end,
-                                                                          HasUserGroup)),
+            GroupIds = lists:map(
+                fun z_convert:to_integer/1,
+                lists:filter(fun(<<>>) -> false; (_) -> true end, HasUserGroup)),
             {ok, PredId} = m_predicate:name_to_id(hasusergroup, Context),
             m_edge:replace(UserId, PredId, GroupIds, Context)
     end.

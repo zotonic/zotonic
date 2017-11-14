@@ -439,30 +439,27 @@ menu_subtree(Menu, BelowId, AddSiblings, Context) ->
 
 %% @doc The datamodel for the menu routines.
 manage_schema(install, Context) ->
-    z_datamodel:manage(
-      mod_menu,
-      #datamodel{
+    #datamodel{
         categories = [
               {menu, categorization,
                [{title, <<"Page menu">>}]
               }
         ],
         resources = [
-              {main_menu,
-                   menu,
-                   [{title, <<"Main menu">>},
+            {main_menu,
+                menu,
+                [
+                    {title, <<"Main menu">>},
                     {menu, case z_install_defaultdata:default_menu(Context) of
-                                undefined -> [];
-                                Menu -> Menu
-                           end}
-                   ]
-              }
+                            undefined -> [];
+                            Menu -> Menu
+                       end}
+                ]
+            }
         ]
-      },
-      Context);
+    };
 manage_schema(_Version, _Context) ->
     ok.
-
 
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->

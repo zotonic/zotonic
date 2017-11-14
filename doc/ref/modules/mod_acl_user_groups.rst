@@ -201,63 +201,70 @@ have two important advantages:
 
 If you haven’t yet done so, set up
 :ref:`module versioning <guide-modules-versioning>` in ``yoursite.erl`` or
-``mod_your_module.erl``. Then, in the ``manage_schema/2`` function, add an
-``acl_rules`` section under the ``data`` property in the ``#datamodel{}``
-record::
+``mod_your_module.erl``. Then, in the ``manage_data/2`` function, call the
+``m_acl_rule:replace_managed/3`` function to add your new ACL rules.
+
+Note that you always to need a ``manage_schema/2`` function, even if it only
+returns ``ok``. Otherwise the ``manage_data/2`` function will not be called::
 
     %% yoursite.erl
     -module(yoursite).
+
+    -mod_title("Your Site").
+    -mod_description("An example module for the docs").
+    -mod_depends([ mod_acl_user_groups ]).
     -mod_schema(1).
 
     -export([
-        manage_schema/2
+        manage_schema/2,
+        manage_data/2
     ]).
 
     %% .... more code here...
-
     manage_schema(install, Context) ->
         #datamodel{
             %% your resources...
-            data = [
-                {acl_rules, [
-                    %% A resource ACL rule is defined as {rsc, Properties}
-                    {rsc, [
-                        {acl_user_group_id, acl_user_group_members},
-                        {actions, [view, link]},
-                        {is_owner, true},
-                        {category_id, person}
-                    ]},
-
-                    %% A module rule is defined as {module, Properties}
-                    {module, [
-                            {acl_user_group_id, acl_user_group_editors},
-                            {actions, [use]},
-                            {module, mod_ginger_base}
-                        ]
-                    },
-
-                    %% A collaboration group rule is defined as {collab, Properties}
-                    {collab, [
-                        {is_owner, true},
-                        {actions, [view, insert, update, link]},
-                        {category_id, text]
-                    ]}
-                ]
-            ]
-        }.
-
+        };
     manage_schema({upgrade, 2}, Context) ->
         %% code to upgrade from version 1 to 2
-        ok;
+        ok.
+
+    manage_data(install, Context) ->
+        Rules = [
+            %% A resource ACL rule is defined as {rsc, Properties}
+            {rsc, [
+                {acl_user_group_id, acl_user_group_members},
+                {actions, [view, link]},
+                {is_owner, true},
+                {category_id, person}
+            ]},
+            %% A module rule is defined as {module, Properties}
+            {module, [
+                {acl_user_group_id, acl_user_group_editors},
+                {actions, [use]},
+                {module, mod_ginger_base}
+            ]},
+            %% A collaboration group rule is defined as {collab, Properties}
+            {collab, [
+                {is_owner, true},
+                {actions, [view, insert, update, link]},
+                {category_id, text]
+            ]}
+        ],
+        m_acl_rule:replace_managed(Rules, ?MODULE, Context);
+    manage_data(_Upgrade, Context) ->
+        ok.
+
 
 Compile the code and restart your module to load the managed rules. They will be
 added and immediately :ref:`published <publishing rules>`.
 
-The set of rules defined in ``manage_schema/2`` is *declarative* and *complete*.
+The set of rules added with ``m_acl:replace_managed/3`` is *declarative* and *complete*.
 That is to say, you declare the full set of rules that you wish to define. Any
 changes or deletions that you make to the rules in your code, will propagate to
 the site’s rules. To protect the set’s completeness, managed rules cannot be
 altered in the web interface.
+
 
 Exporting and importing rules
 -----------------------------

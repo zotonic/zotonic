@@ -21,7 +21,6 @@ Other notifications
 .. include:: includes/m_config_update_prop.rst
 .. include:: includes/mailinglist_mailing.rst
 .. include:: includes/mailinglist_message.rst
-.. include:: includes/manage_data.rst
 .. include:: includes/menu_rsc.rst
 .. include:: includes/menu_save.rst
 .. include:: includes/module_activate.rst

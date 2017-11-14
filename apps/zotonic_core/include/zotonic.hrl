@@ -184,14 +184,26 @@
 -record(column_def, {name, type, length, is_nullable=true, default, primary_key, unique=false}).
 
 %% For the datamodel: default resources to create.
--record(datamodel, {categories=[], predicates=[], resources=[], media=[], edges=[], data=[]}).
+-record(datamodel, {
+    categories = [] :: list(),
+    predicates = [] :: list(),
+    resources = [] :: list(),
+    media = [] :: list(),
+    edges = [] :: list()
+}).
 
 %% ACL administrator user id
 -define(ACL_ADMIN_USER_ID, 1).
 -define(ACL_ANY_USER_ID, -1).
 
 %% ACL objects
--record(acl_rsc, {category, mime, size, props}).
+-record(acl_rsc, {
+    category :: atom(),
+    mime :: binary(),
+    size :: non_neg_integer(),
+    props :: list()
+}).
+
 -record(acl_edge, {
     subject_id :: m_rsc:resource(),
     predicate :: pos_integer() | atom(),

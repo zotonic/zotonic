@@ -965,13 +965,6 @@
     state :: term()
 }).
 
-%% @doc Notify modules of a data model entry defined in manage_schema
-%% Type: first
-%% Return: ``ok`` or ``undefined``
--record(manage_data, {
-    module :: atom(),
-    props :: tuple() | list()
-}).
 
 % Simple mod_development notifications:
 % development_reload - Reload all template, modules etc
