@@ -1171,7 +1171,7 @@ recombine_languages(Props, Context) ->
         [] ->
             Props;
         L ->
-            Cfg = [atom_to_binary(Code, utf8) || Code <- z_language:enabled_languages(Context)],
+            Cfg = [atom_to_binary(Code, utf8) || Code <- z_language:enabled_language_codes(Context)],
             L1 = filter_langs(edited_languages(Props, L), Cfg),
             {LangProps, OtherProps} = comb_lang(Props, L1, [], []),
             LangProps ++ [{language, [binary_to_atom(Lang, 'utf8') || Lang <- L1]} | proplists:delete(
