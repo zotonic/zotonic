@@ -31,8 +31,8 @@
 -spec m_get( list(), z:context() ) -> {term(), list()}.
 m_get([ ssl_certificates | Rest ], Context) ->
     case z_acl:is_admin(Context) of
-        true -> {[], Rest};
-        false -> {ssl_certificates(Context), Rest}
+        true -> {ssl_certificates(Context), Rest};
+        false -> {[], Rest}
     end;
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
