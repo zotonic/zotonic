@@ -198,6 +198,24 @@ Templates
   :file:`yoursite/templates/`.
 * The ``maxage`` caching argument was renamed to ``max-age``.
 
+
+Templates and models
+^^^^^^^^^^^^^^^^^^^^
+
+The models have now extra ACL checks.
+
+The ``m.config``, ``m.site`` and ``m.sysconfig`` models are only accessible
+as administrator. Use the models *owning* the various settings to access the
+configurations.
+
+Examples:
+
+ * ``m.config.site.title.value`` is now ``m.site.title``
+ * ``m.config.mod_editor_tinymce.version.value`` is now ``m.editor_tinymce.version``
+
+Check the various models of the modules for the new lookups.
+
+
 Port, proxies and SSL certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
