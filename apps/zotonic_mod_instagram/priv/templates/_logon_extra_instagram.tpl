@@ -3,7 +3,7 @@
     as
     brand_color
 %}
-{% if m.config.mod_instagram.consumer_key.value %}
+{% if m.instagram.useauth %}
 <li id="logon_instagram">
 	{% if is_connect and 'instagram'|member:identity_types %}
 		<a id="{{ #twdis }}" href="#disconnect" class="btn z-btn-social" style="background-color: #517fa4"><span class="z-icon z-icon-instagram"></span> {_ Disconnect from Instagram _}</a>

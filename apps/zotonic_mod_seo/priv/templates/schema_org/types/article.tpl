@@ -25,6 +25,6 @@
         "name": "{{ id.author.title }}"
     },
     {% endif %}
-    "publisher": {% include "schema_org/types/_organization.tpl" logo="lib/images/logo.png" title=m.config.site.title.value url=m.site.protocol ++ "://" ++ m.site.hostname %}
+    "publisher": {% include "schema_org/types/_organization.tpl" logo="lib/images/logo.png" title=m.site.title url=m.site.protocol ++ "://" ++ m.site.hostname %}
 }
 </script>

@@ -44,7 +44,10 @@
     properties/1,
     sort_properties/2,
     all_languages/0,
-    main_languages/0
+    main_languages/0,
+    language_list/1,
+    is_language_enabled/2,
+    enabled_language_codes/1
 ]).
 
 -include("zotonic.hrl").
@@ -57,7 +60,6 @@
 default_language(undefined) -> ?DEFAULT_LANGUAGE;
 default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, ?DEFAULT_LANGUAGE, Context)).
-
 
 %% @doc Check if the language code code is a valid language.
 -spec is_valid(Code::binary() | any()) -> boolean().
@@ -189,6 +191,31 @@ main_languages() ->
     lists:foldl(fun({Code, Data}, Acc) ->
         [{Code, properties(Code, Data)}|Acc]
     end, [], languages()).
+
+
+%% @doc Return the currently configured list of languages
+-spec language_list(z:context()) -> list( {atom(), list()} ).
+language_list(Context) ->
+    case m_config:get(i18n, language_list, Context) of
+        undefined ->
+            [ {default_language(Context), []} ];
+        Cfg ->
+            case proplists:get_value(list, Cfg, []) of
+                [] -> [ {default_language(Context), []} ];
+                L when is_list(L) -> L
+            end
+    end.
+
+-spec is_language_enabled( Code :: atom() | binary() | any(), z:context()) -> boolean().
+is_language_enabled(Code, Context) ->
+    lists:member(to_language_atom(Code), enabled_language_codes(Context)).
+
+-spec enabled_language_codes(z:context()) -> list( atom() ).
+enabled_language_codes(Context) ->
+    case m_config:get(i18n, language_list, Context) of
+        undefined -> [ default_language(Context) ];
+        Cfg -> [Code || {Code, _} <- proplists:get_value(list, Cfg, [{en, []}])]
+    end.
 
 
 %% @private

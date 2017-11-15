@@ -31,8 +31,11 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ Key | Rest ], _Context) ->
-    {z_config:get(Key), Rest};
+m_get([ Key | Rest ], Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {z_config:get(Key), Rest};
+        false -> {undefined, Rest}
+    end;
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

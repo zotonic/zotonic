@@ -3,8 +3,8 @@
 {# Widget with main rsc controls: publish, delete, duplicate, etc  #}
 
 {% block widget_title %}
-{_ Publish this page _}
-<div class="widget-header-tools"></div>
+    {_ Publish this page _}
+    <div class="widget-header-tools"></div>
 {% endblock %}
 
 {% block show_opened %}true{% endblock %}
@@ -17,9 +17,9 @@
     <div class="pull-right">
         {% button class="btn btn-default" text=_"Cancel" action={redirect back} title=_"Go back." tag="a" %}
     </div>
-    {% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
+    {% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
     {% if id.page_url as page_url %}
-        {% if is_editable %}
+        {% if id.is_editable %}
             {% button type="submit" id="save_view" class="btn btn-default" text=_"Save and View" title=_"Save and view the page." %}
         {% endif %}
 
@@ -52,11 +52,11 @@
 <div class="form-group">
     <div class="pull-right">
         {% with
-           m.search[{previous id=id cat=m.rsc[id].category.name pagelen=1}],
-           m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}]
+               m.search[{previous id=id cat=m.rsc[id].category.name pagelen=1}],
+               m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}]
            as
-           previous_items,
-           next_items
+               previous_items,
+               next_items
         %}
             {% if previous_items or next_items %}
                 <div class="btn-group">
@@ -76,11 +76,12 @@
         {% endwith %}
     </div>
 
-    {% ifnotequal id 1 %}
-        {% button class="btn btn-default btn-sm" disabled=(r.is_protected or not m.rsc[id].is_deletable) id="delete-button" text=_"Delete" action={dialog_delete_rsc id=id on_success={redirect back}} title=_"Delete this page." %}
-    {% endifnotequal %}
+    {% if id /= 1 %}
+        {% button class="btn btn-default btn-sm" disabled=(id.is_protected or not id.is_deletable) id="delete-button" text=_"Delete"
+                  action={dialog_delete_rsc id=id on_success={redirect back}} title=_"Delete this page." %}
+    {% endif %}
 
-    {% if is_editable %}
+    {% if id.is_editable %}
         {% button type="submit" id="save_duplicate" class="btn btn-default btn-sm" text=_"Duplicate" title=_"Duplicate this page." %}
     {% else %}
         {% button class="btn btn-default btn-sm"

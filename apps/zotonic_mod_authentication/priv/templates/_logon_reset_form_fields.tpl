@@ -1,8 +1,4 @@
-{% with
-    (m.config.mod_authentication.password_min_length.value|default:"6")|to_integer
-    as
-    min_length
-%}
+{% with m.authentication.password_min_length.value as min_length %}
 <div class="form-group">
     <label class="control-label" for="password_reset1">{_ New password _}</label>
     <input class="do_autofocus form-control" type="password" id="password_reset1" name="password_reset1" value="" autocomplete="off" />

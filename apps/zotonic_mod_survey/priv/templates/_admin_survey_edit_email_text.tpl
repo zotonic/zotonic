@@ -8,7 +8,7 @@
 	<p class="help-block">{_ Introduction for confirmation email _}</p>
 	<fieldset class="admin-form">
 		<div class="form-item clearfix">
-			{% if is_editable %}
+			{% if id.is_editable %}
 				<textarea rows="10"
 				    id="email_text_html{{ lang_code_for_id }}"
 				    name="email_text_html{{ lang_code_with_dollar }}"

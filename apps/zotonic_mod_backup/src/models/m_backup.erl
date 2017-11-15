@@ -28,10 +28,20 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ admin_panel | Rest ], Context) ->
+    {m_config:get_value(mod_backup, admin_panel, Context), Rest};
+m_get([ daily_dump | Rest ], Context) ->
+    {m_config:get_value(mod_backup, daily_dump, Context), Rest};
 m_get([ list_backups | Rest ], Context) ->
-    {mod_backup:list_backups(Context), Rest};
+    case z_acl:is_allowed(use, mod_backup, Context) of
+        true -> {mod_backup:list_backups(Context), Rest};
+        false -> {[], Rest}
+    end;
 m_get([ is_backup_in_progress | Rest ], Context) ->
-    {mod_backup:backup_in_progress(Context), Rest};
+    case z_acl:is_allowed(use, mod_backup, Context) of
+        true -> {mod_backup:backup_in_progress(Context), Rest};
+        false -> {[], Rest}
+    end;
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

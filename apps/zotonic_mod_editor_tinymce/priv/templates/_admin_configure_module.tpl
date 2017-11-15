@@ -8,7 +8,7 @@
             ] %}
                 <div class="radio">
                     <label>
-                        <input type="radio" name="version" id="{{ #config.id }}" value="{{ version|escape }}" {% if m.config.mod_editor_tinymce.version.value|escape==version%} checked{% endif %} /> {{ version_txt }} <span class="text-muted">{{ date_txt }}</span>
+                        <input type="radio" name="version" id="{{ #config.id }}" value="{{ version|escape }}" {% if m.editor_tinymce.version|escape==version%} checked{% endif %} /> {{ version_txt }} <span class="text-muted">{{ date_txt }}</span>
                     </label>
                     {% wire
                         id=#config.id

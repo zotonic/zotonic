@@ -4,11 +4,7 @@
     <p>{_ You'll need to create a new one. _}</p>
     <input type="hidden" id="logon_password_expired_secret" name="secret" value="{{ secret|escape }}" />
 
-    {% with
-    (m.config.mod_authentication.password_min_length.value|default:"6")|to_integer
-    as
-    min_length
-%}
+    {% with m_authentication.password_min_length as min_length %}
     <div class="form-group">
         <label class="control-label" for="password_reset1">{_ New password _}</label>
         <input type="password" id="password_reset1" class="do_autofocus form-control" name="password_reset1" value="" autocomplete="off" />

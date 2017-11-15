@@ -1,11 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-09
-%%
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Model for the zotonic config table. Performs a fallback to the site configuration when
 %% a key is not defined in the configuration table.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,8 +30,13 @@
     get/3,
     get_value/3,
     get_value/4,
+
+    get_boolean/3,
+    get_boolean/4,
+
     set_value/4,
     set_prop/5,
+
     delete/3,
     get_id/3
 ]).
@@ -43,11 +46,20 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context()) -> {term(), list()}.
 m_get([], Context) ->
-    {all(Context), []};
+    case z_acl:is_admin(Context) of
+        true -> {all(Context), []};
+        false -> {[], []}
+    end;
 m_get([ Module ], Context) ->
-    {get(Module, Context), []};
+    case z_acl:is_admin(Context) of
+        true -> {get(Module, Context), []};
+        false -> {[], []}
+    end;
 m_get([ Module, Key | Rest ], Context) ->
-    {get(Module, Key, Context), Rest};
+    case z_acl:is_admin(Context) of
+        true -> {get(Module, Key, Context), Rest};
+        false -> {[], Rest}
+    end;
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
@@ -142,6 +154,11 @@ get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Ke
         Value -> Value
     end.
 
+get_boolean(Module, Key, Context) ->
+    z_convert:to_bool(get_value(Module, Key, Context)).
+
+get_boolean(Module, Key, Default, Context) ->
+    z_convert:to_bool(get_value(Module, Key, Default, Context)).
 
 %% @doc Set a "simple" config value.
 -spec set_value(atom(), atom(), term(), #context{}) -> ok.

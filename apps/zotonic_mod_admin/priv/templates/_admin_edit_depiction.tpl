@@ -9,18 +9,18 @@
 {% block widget_id %}edit-depiction{% endblock %}
 
 {% block widget_content %}
-    {% if is_editable or m.rsc[id].depiction %}
+    {% if id.is_editable or id.depiction %}
         <div id="links-{{ id }}-depiction" data-reload-template="_edit_media.tpl">
 	        {% include "_edit_media.tpl" id=id %}
         </div>
-        {% if is_editable %}
+        {% if id.is_editable %}
             <div class="form-group clearfix">
                 <div class="pull-right">
                     <a class="btn btn-default" id="{{ #connect }}" href="#connect"><i class="icon glyphicon glyphicon-camera"></i> {_ add media item _}</a>
                     {% wire id=#connect
                         action={dialog_open
                             template="_action_dialog_connect.tpl"
-                            title=[_"Add a connection: ", m.rsc.depiction.title]
+                            title=[_"Add a connection: ", id.depiction.title]
                             subject_id=id
                             edge_template="_rsc_edge_media.tpl"
                             predicate=`depiction`

@@ -35,6 +35,13 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ useauth | Rest ], Context) ->
+    UseAuth = case m_config:get_value(mod_facebook, appid, Context) of
+        undefined -> false;
+        <<>> -> false;
+        _ -> m_config:get_boolean(mod_facebook, useauth, Context)
+    end,
+    {UseAuth, Rest};
 m_get([ picture, Key | Rest ], Context) ->
     P = do_graph_call(get, Key, undefined, [{fields, "picture"}], Context),
     {proplists:get_value(picture, P), Rest};

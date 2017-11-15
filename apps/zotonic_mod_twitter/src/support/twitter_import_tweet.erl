@@ -128,7 +128,7 @@ extract_import_rsc(TweetId, UniqueName, User, Tweet, Context) ->
 first_link([Url|_], _) -> Url;
 first_link(_, Url) -> Url.
 
--spec first_media_props([#url_metadata{} | string() | binary()], #context{}) -> {error, nomedia} | {ok, pos_integer()}.
+-spec first_media_props([#url_metadata{} | string() | binary()], z:context()) -> {error, nomedia} | {ok, pos_integer()}.
 first_media_props([], _Context) ->
     {error, nomedia};
 first_media_props([Url|Urls], Context) ->
@@ -149,8 +149,7 @@ extract_language(Tweet, Context) ->
             [LanguageCode|_] = binary:split(Lang, <<"-">>),
             case z_language:to_language_atom(LanguageCode) of
                 {ok, Code} ->
-                    Enabled = m_translation:language_list_enabled(Context),
-                    case proplists:is_defined(LanguageCode, Enabled) of
+                    case z_language:is_language_enabled(Code, Context) of
                         true -> Code;
                         false -> z_context:language(Context)
                     end;

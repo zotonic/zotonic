@@ -49,16 +49,16 @@
                         <label>{_ Edit the collaboration group _}</label>
                         <select class="form-control" name="collab_group_update" id="{{ #cgedit }}">
                             <option value=""></option>
-                            <option value="manager" {% if m.config.mod_acl_user_groups.collab_group_update.value == 'manager' %}selected{% endif %}>{_ Group managers can edit _}</option>
-                            <option value="member" {% if m.config.mod_acl_user_groups.collab_group_update.value == 'member' %}selected{% endif %}>{_ Group members and managers can edit _}</option>
+                            <option value="manager" {% if m.acl_user_group.collab_group_update == 'manager' %}selected{% endif %}>{_ Group managers can edit _}</option>
+                            <option value="member" {% if m.acl_user_group.collab_group_update == 'member' %}selected{% endif %}>{_ Group members and managers can edit _}</option>
                         </select>
                     </div>
                     <div class="col-md-4 col-sm-6">
                         <label>{_ Add links to the collaboration group _}</label>
                         <select class="form-control" name="collab_group_link" id="{{ #cglink }}">
                             <option value=""></option>
-                            <option value="manager" {% if m.config.mod_acl_user_groups.collab_group_link.value == 'manager' %}selected{% endif %}>{_ Group managers can link _}</option>
-                            <option value="member" {% if m.config.mod_acl_user_groups.collab_group_link.value == 'member' %}selected{% endif %}>{_ Group members and managers can link _}</option>
+                            <option value="manager" {% if m.acl_user_group.collab_group_link == 'manager' %}selected{% endif %}>{_ Group managers can link _}</option>
+                            <option value="member" {% if m.acl_user_group.collab_group_link == 'member' %}selected{% endif %}>{_ Group members and managers can link _}</option>
                         </select>
                     </div>
                     <div class="col-md-2">
