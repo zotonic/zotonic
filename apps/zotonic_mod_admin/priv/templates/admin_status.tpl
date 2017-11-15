@@ -35,7 +35,7 @@
                             }
                         %}
                         <span id="pivot-queue-count">
-                            {% if m.admin_rsc.pivot_queue_count %}
+                            {% if m.admin.pivot_queue_count %}
                                 {% javascript %}
                                     queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices');
                                 {% endjavascript %}

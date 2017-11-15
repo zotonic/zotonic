@@ -20,6 +20,11 @@
 
 -export([ m_get/2 ]).
 
+m_get([ pivot_queue_count | Rest ], Context) ->
+    case z_acl:is_allowed(use, mod_admin, Context) of
+        true -> {z_pivot_rsc:queue_count(Context), Rest};
+        false -> {undefined, Rest}
+    end;
 m_get([ rsc_dialog_is_published | Rest ], Context) ->
     {m_config:get_boolean(mod_admin, rsc_dialog_is_published, Context), Rest}.
 
