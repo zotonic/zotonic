@@ -90,7 +90,7 @@
 
                             <tbody>
                                 {% for id in result %}
-                                    {% id.is_visible %}
+                                    {% if id.is_visible %}
                                         {% with id.medium as medium %}
                                             <tr id="{{ #li.id }}" {% if not id.is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
                                                 <td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
