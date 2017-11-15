@@ -68,7 +68,11 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context() ) -> {term(), list()}.
 m_get([ Id | Rest ], Context) ->
-    {get(Id, Context), Rest};
+    Media = case z_acl:rsc_visible(Id, Context) of
+        true -> get(Id, Context);
+        false -> undefined
+    end,
+    {Media, Rest};
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

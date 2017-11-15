@@ -90,19 +90,52 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context()) -> {term(), list()}.
 m_get([ Id, is_user | Rest ], Context) ->
-    {is_user(Id, Context), Rest};
+    IsUser = case z_acl:rsc_visible(Id, Context) of
+        true -> is_user(Id, Context);
+        false -> undefined
+    end,
+    {IsUser, Rest};
 m_get([ Id, username | Rest ], Context) ->
-    {get_username(Id, Context), Rest};
+    Username = case z_acl:rsc_editable(Id, Context) of
+        true -> get_username(Id, Context);
+        false -> undefined
+    end,
+    {Username, Rest};
 m_get([ Id, all_types | Rest ], Context) ->
-    {get_rsc_types(Id, Context), Rest};
+    Idns = case z_acl:rsc_editable(Id, Context) of
+        true -> get_rsc_types(Id, Context);
+        false -> []
+    end,
+    {Idns, Rest};
 m_get([ Id, all ], Context) ->
-    {get_rsc(Id, Context), []};
+    IdnRsc = case z_acl:rsc_editable(Id, Context) of
+        true -> get_rsc(Id, Context);
+        false -> []
+    end,
+    {IdnRsc, []};
 m_get([ Id, all, Type | Rest ], Context) ->
-    {get_rsc_by_type(Id, Type, Context), Rest};
+    IdnRsc = case z_acl:rsc_editable(Id, Context) of
+        true -> get_rsc_by_type(Id, Type, Context);
+        false -> []
+    end,
+    {IdnRsc, Rest};
 m_get([ get, IdnId | Rest ], Context) ->
-    {get(IdnId, Context), Rest};
+    Idn1 = case get(IdnId, Context) of
+        undefined -> undefined;
+        Idn ->
+            RscId = proplists:get_value(rsc_id, Idn),
+            case z_acl:rsc_editable(RscId, Context) of
+                true -> Idn;
+                false -> undefined
+            end
+    end,
+    {Idn1, Rest};
 m_get([ Id, Type | Rest ], Context) ->
-    {get_rsc(Id, Type, Context), Rest};
+    Idn = case z_acl:rsc_editable(Id, Context) of
+        true -> get_rsc(Id, Type, Context);
+        false -> undefined
+    end,
+    {Idn, Rest};
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
