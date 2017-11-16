@@ -101,7 +101,7 @@ observe_email_bounced(B=#email_bounced{}, Context) ->
 
 %% @doc Request confirmation of canceling this mailing.
 event(#postback{message={dialog_mailing_cancel_confirm, Args}}, Context) ->
-	{list_id, MailingId} = proplists:loookup(list_id, Args),
+	{list_id, MailingId} = proplists:lookup(list_id, Args),
 	case is_allowed_mailing(MailingId, Context) of
 		true ->
 			z_render:dialog(
