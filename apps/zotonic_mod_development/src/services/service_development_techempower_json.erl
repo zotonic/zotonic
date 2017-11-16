@@ -24,4 +24,4 @@
 -export([process_get/1]).
 
 process_get(_Context) ->
-    {struct, [{message, <<"Hello, World!">>}]}.
+    #{<<"message">> => <<"Hello, World!">>}.

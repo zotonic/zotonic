@@ -36,7 +36,7 @@ process_get(Context) ->
 
 check_auth(Context) ->
     case z_acl:user(Context) of
-        undefined -> {struct, [ {user, <<"anon">>} ]};
-        _UserId -> {struct, [ {user, <<"auth">>} ]}
+        undefined -> #{<<"user">> => <<"anon">>};
+        _UserId -> #{<<"user">> => <<"auth">>}
     end.
 

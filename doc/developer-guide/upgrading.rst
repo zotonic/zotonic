@@ -112,6 +112,15 @@ Export
 * Modules mod_atom and mod_atom_feed were removed. You can export data in a
   variety of formats using :ref:`mod_export`.
 
+JSON
+^^^^
+
+* Mochijson structures replaced with Erlang maps.
+* All JSON encoding/decoding now relies on JSX and goes through
+  ``z_json:encode/1`` and ``z_json:decode/1``.
+* ``{trans, _}`` tuples should now be unpacked by the client, before calling
+  ``z_json:encode/1`` (previously ``z_json:to_mochijson/2``).
+
 Removed deprecated functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

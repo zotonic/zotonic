@@ -122,7 +122,7 @@ delete_resource(Context) ->
 
 get_json(Context) ->
     {ok, Id} = get_id(Context),
-    Data = mochijson:binary_encode(z_json:to_mochijson(get_rsc(Id, Context), Context)),
+    Data = z_json:encode(get_rsc(Id, Context)),
     do_get(Id, Data, <<".json">>, Context).
 
 get_bert(Context) ->
@@ -150,7 +150,7 @@ do_get(Id, Data, Extension, Context) ->
 %% @todo Handle update errors
 put_json(Context) ->
     {Body, Context1} = cowmachine_req:req_body(Context),
-    Parsed = z_json:from_mochijson(mochijson:binary_decode(Body), Context1),
+    Parsed = z_json:decode(Body),
     do_update(Parsed, Context1).
 
 put_bert(Context) ->

@@ -124,9 +124,12 @@ fetch_access_token(Code, Context) ->
                        httpc_http_options(), httpc_options())
     of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
-            {struct, Props} = mochijson:binary_decode(Payload),
-            {struct, UserProps} = proplists:get_value(<<"user">>, Props),
-            {ok, proplists:get_value(<<"access_token">>, Props), UserProps};
+            #{
+                <<"user">> := #{
+                    <<"access_token">> := AccessToken
+                }
+            } = z_json:decode(Payload),
+            {ok, AccessToken};
         Other ->
             lager:error("[instagram] error fetching access token [code ~p] ~p", [Code, Other]),
             {error, {http_error, InstagramUrl, Other}}
@@ -136,15 +139,6 @@ fetch_access_token(Code, Context) ->
 % Given the access token, fetch data about the user
 fetch_user_data(_AccessToken, UserData) ->
     {ok, UserData}.
-    % FacebookUrl = "https://graph.facebook.com/v2.0/me?access_token=" ++ z_url:url_encode(AccessToken),
-    % case httpc:request(FacebookUrl) of
-    %     {ok, {{_, 200, _}, _Headers, Payload}} ->
-    %         {struct, Props} = mochijson:binary_decode(Payload),
-    %         {ok, Props};
-    %     Other ->
-    %         lager:error("[facebook] error fetching user data [token ~p] ~p", [AccessToken, Other]),
-    %         {error, {http_error, FacebookUrl, Other}}
-    % end.
 
 httpc_options() ->
     [

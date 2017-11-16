@@ -36,7 +36,7 @@ process_get(Context) ->
             <<>>;
         _UserId ->
             Stats = [{metric_to_name(Metric), Value} || {Metric, Value} <- exometer:get_values([])],
-            erlang:iolist_to_binary(mochijson2:encode(Stats))
+            z_json:encode(Stats)
     end.
 
 

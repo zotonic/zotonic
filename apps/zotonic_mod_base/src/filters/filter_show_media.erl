@@ -67,7 +67,7 @@ show_media1_id(Input, Index, Context) ->
 show_media1_opts(Id, Input, Index, Context) ->
     case Input of
         <<Opts:Index/binary, "} -->", Post/binary>> ->
-            Opts2 = mochijson:binary_decode(<<"{", Opts/binary, "}">>),
+            Opts2 = z_json:decode(<<"{", Opts/binary, "}">>),
             Html = show_media_html(Id, Opts2, Context),
             process_binary_match(<<>>, Html, size(Post), show_media1(Post, 0, Context));
         <<_:Index/binary, _/binary>> ->

@@ -19,11 +19,21 @@
 -module(z_json).
 -include("zotonic.hrl").
 
--export ([
-    json_escape/1,
-    to_mochijson/2,
-    from_mochijson/2
+-export([
+    encode/1,
+    decode/1,
+    json_escape/1
 ]).
+
+%% @doc Encode an Erlang term to JSON.
+-spec encode(binary() | map()) -> binary().
+encode(Erlang) ->
+    jsx:encode(Erlang).
+
+%% @doc Decode a JSON binary to an Erlang term.
+-spec decode(binary()) -> jsx:json_term().
+decode(Json) ->
+    jsx:decode(Json, [return_maps]).
 
 %%% ESCAPE JSON %%%
 
@@ -51,30 +61,3 @@ json_escape([H|T], Acc) when is_integer(H) ->
 json_escape([H|T], Acc) ->
     H1 = json_escape(H),
     json_escape(T, [H1|Acc]).
-
-
-
-%% @doc Convert a (nested) property to mochijson:encode/1 format.
-%%      Select the language in the context for {trans, _} values.
-to_mochijson([{_,_}|_] = PS, Context) -> {struct, [ {K, to_mochijson(V, Context)} || {K,V} <- PS ]};
-to_mochijson(L, Context) when is_list(L) -> {array, [ to_mochijson(V, Context) || V <- L]};
-to_mochijson({trans, _} = Tr, Context) -> z_trans:lookup_fallback(Tr, Context);
-to_mochijson({{_,_,_},{_,_,_}} = Date, Context) -> z_datetime:format(Date, "c", Context);
-to_mochijson(B, _Context) when is_binary(B) -> B;
-to_mochijson(B, _Context) when is_number(B) -> B;
-to_mochijson(undefined, _Context) -> null;
-to_mochijson(B, _Context) when is_atom(B) -> B;
-to_mochijson(_, _Context) -> unmappable.
-
-
-%% @doc Convert a (nested) JSON document to nested property lists
-%%      Properties are not converted to
-%% @todo Translate
-from_mochijson({struct, Props}, Context) -> [ opt_convert({K,from_mochijson(V, Context)}) || {K,V} <- Props ];
-from_mochijson({array, Values}, Context) -> [ from_mochijson(V, Context) || V <- Values ];
-from_mochijson(N, _Context) when is_number(N) -> N;
-from_mochijson(null, _Context) -> undefined;
-from_mochijson(Atom, _Context) when is_atom(Atom) -> Atom;
-from_mochijson(V, _Context) -> V.
-
-    opt_convert(X) -> X.

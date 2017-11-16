@@ -20,8 +20,10 @@ process_get(Context) ->
         X when X =:= undefined orelse X =:= <<>> ->
             {error, missing_arg, "key"};
         Key ->
-            R = [{key, Key}, {value, z_context:get_persistent(Key, Context)}],
-            z_convert:to_json(R)
+            #{
+                <<"key">> => Key,
+                <<"value">> => z_context:get_persistent(Key, Context)
+            }
     end.
 
 

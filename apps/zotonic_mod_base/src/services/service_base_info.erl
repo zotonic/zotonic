@@ -29,29 +29,29 @@
 
 
 process_get(Context) ->
-    {struct, [
-        {"user", {struct, user_info(z_acl:user(Context), Context)} },
-        {"site", {struct, site_info(z_acl:is_admin(Context), Context)} }
-    ]}.
+    #{
+        "user" => user_info(z_acl:user(Context), Context),
+        "site" => site_info(z_acl:is_admin(Context), Context)
+    }.
 
 user_info(UserId, Context) when is_integer(UserId) ->
     {Name, _Context} = z_template:render_to_iolist("_name.tpl", [{id, UserId}], Context),
-    [
-        {"user_name", iolist_to_binary(Name)},
-        {"user_id",   UserId}
-    ];
+    #{
+        "user_name" => iolist_to_binary(Name),
+        "user_id" => UserId
+    };
 user_info(undefined, _Context) ->
-    [
-        {"user_name", null},
-        {"user_id", null}
-    ].
+    #{
+        "user_name" => null,
+        "user_id" => null
+    }.
 
 site_info(true, Context) ->
-    [
-        {"zotonic_version", ?ZOTONIC_VERSION},
-        {"language", z_language:default_language(Context)}
-    ];
+    #{
+        "zotonic_version" => ?ZOTONIC_VERSION,
+        "language" => z_language:default_language(Context)
+    };
 site_info(false, Context) ->
-    [
-        {"language", z_language:default_language(Context)}
-    ].
+    #{
+        "language" => z_language:default_language(Context)
+    }.
