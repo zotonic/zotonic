@@ -158,8 +158,13 @@ to_values(A, B) when is_number(A), is_number(B) ->
     {A,B};
 to_values(A, B) when is_boolean(A); is_boolean(B) -> 
     {z_convert:to_bool(A), z_convert:to_bool(B)};
-to_values(A, B) when is_integer(A); is_integer(B) -> 
-    {z_convert:to_integer(A), z_convert:to_integer(B)};
+to_values(A, B) when is_integer(A); is_integer(B) ->
+    try
+        {z_convert:to_integer(A), z_convert:to_integer(B)}
+    catch
+        _:_ ->
+            {z_convert:to_binary(A), z_convert:to_binary(B)}
+    end;
 to_values(A, B) when is_float(A); is_float(B) -> 
     {z_convert:to_float(A), z_convert:to_float(B)};
 to_values(A, B) when is_binary(A), is_binary(B) -> 
