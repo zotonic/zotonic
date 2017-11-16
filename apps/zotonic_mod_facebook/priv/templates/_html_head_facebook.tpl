@@ -1,5 +1,5 @@
-{% if m.config.site.title.value %}
-	<meta property="og:site_name" content="{{ m.config.site.title.value }}"/>
+{% if m.site.title %}
+	<meta property="og:site_name" content="{{ m.site.title }}"/>
 {% endif %}
 {% if id %}
 	<meta property="og:title" content="{{ id.title }}"/>

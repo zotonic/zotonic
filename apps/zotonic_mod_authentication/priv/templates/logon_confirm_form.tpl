@@ -5,7 +5,7 @@
 	delegate="controller_logon"
 %}
 <form id="logon_confirm_form" method="post" action="postback">
-	<h1 class="z-logon-title">{_ Please confirm your _} <span>{{ m.config.site.title.value|default:"Zotonic" }} password</span></h1>
+	<h1 class="z-logon-title">{_ Please confirm your _} <span>{{ m.site.title|default:"Zotonic" }} password</span></h1>
 
 	<input type="hidden" name="page" value="{{ page|escape }}" />
 	<input type="hidden" name="handler" value="username" />

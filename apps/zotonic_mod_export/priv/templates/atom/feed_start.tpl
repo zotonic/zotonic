@@ -4,4 +4,4 @@
     <logo />
     {# <link rel="self" type="application/atom+xml" href="{% url atom_feed cat=cat %}" /> #}
     <id>{% url home absolute_url %}</id>
-    <title>{{ m.config.site.title.value|escapexml }}{% if title %} - {{ title|escapexml }}{% endif %}</title>
+    <title>{{ m.site.title|escapexml }}{% if title %} - {{ title|escapexml }}{% endif %}</title>

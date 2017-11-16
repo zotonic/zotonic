@@ -23,14 +23,14 @@
                         {# TODO: make this a mod_admin_config scomp/include #}
                         <div class="checkbox">
                             <label>
-                                <input id="backup_panel" name="backup_panel" type="checkbox" value="1" {% if m.config.mod_backup.admin_panel.value %}checked="checked"{% endif %} /> {_ Show import/export panel in the admin. _}
+                                <input id="backup_panel" name="backup_panel" type="checkbox" value="1" {% if m.backup.admin_panel %}checked="checked"{% endif %} /> {_ Show import/export panel in the admin. _}
                             </label>
                         </div>
                         {% wire id="backup_panel" postback=`config_backup_panel` %}
 
                         <div class="checkbox">
                             <label>
-                                <input id="backup_daily" name="backup_daily" type="checkbox" value="1" {% if m.config.mod_backup.daily_dump.value %}checked="checked"{% endif %}/> {_ Make a daily backup of the database and uploaded files. _}
+                                <input id="backup_daily" name="backup_daily" type="checkbox" value="1" {% if m.backup.daily_dump %}checked="checked"{% endif %}/> {_ Make a daily backup of the database and uploaded files. _}
                             </label>
                         </div>
                         {% wire id="backup_daily" postback=`config_backup_daily` %}

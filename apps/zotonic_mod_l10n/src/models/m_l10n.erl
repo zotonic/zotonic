@@ -43,6 +43,10 @@ m_get([ country_name, Code | Rest ], Context) ->
     {country_name(Code, Context), Rest};
 m_get([ timezones | Rest ], _Context) ->
     {timezones(), Rest};
+m_get([ default_timezone | Rest ], Context) ->
+    {m_config:get_value(mod_l10n, timezone, Context), Rest};
+m_get([ timezone_is_fixed | Rest ], Context) ->
+    {m_config:get_boolean(mod_l10n, timezone_is_fixed, Context), Rest};
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

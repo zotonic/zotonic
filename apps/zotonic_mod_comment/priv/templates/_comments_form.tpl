@@ -1,7 +1,7 @@
 {% with m.acl.user as user_id %}
-    {% if user_id or m.config.mod_comment.anonymous.value|default_if_undefined:1 %}
+    {% if user_id or m.comment.anonymous %}
 
-        {% if m.config.comments.moderate.value %}
+        {% if m.comment.moderate %}
             <div id='comments-moderation-notice' style='display: none'>
     	        <h2>Your comment</h2>
                 <p>{_ Your comment has been saved and will be subject to moderation before it is displayed on the website _}</p>
@@ -13,7 +13,7 @@
 
         <div id="comments-area">
             <h2>{_ Leave a comment _}</h2>
-            {% if m.config.comments.moderate.value %}
+            {% if m.comment.moderate %}
                 <p>({_ Note: Comments are moderated _})</p>
             {% endif %}
             <form id="comments-form" method="post" action="postback" class="{% block form_class %}{% endblock %}">

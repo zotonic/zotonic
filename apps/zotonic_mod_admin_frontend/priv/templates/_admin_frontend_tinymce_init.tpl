@@ -1,4 +1,4 @@
-{% if m.config.mod_editor_tinymce.version.value < '4.0' %}
+{% if m.editor_tinymce.version < '4.0' %}
 {% javascript %}
 	window.tinyInit = {
 		mode: "none",

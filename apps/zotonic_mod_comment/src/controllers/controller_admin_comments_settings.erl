@@ -49,7 +49,7 @@ save_settings(Context) ->
     lists:foreach(
         fun({Key, Value}) ->
             case is_setting(Key) of
-                true -> m_config:set_value(comments, z_convert:to_atom(Key), Value, Context);
+                true -> m_config:set_value(mod_comment, z_convert:to_atom(Key), Value, Context);
                 false -> ok
             end
         end,

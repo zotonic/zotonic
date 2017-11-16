@@ -3,7 +3,7 @@
     as
     brand_color
 %}
-{% if m.config.mod_twitter.consumer_key.value and m.config.mod_twitter.useauth.value %}
+{% if m.twitter.useauth %}
 <li id="logon_twitter">
 	{% if is_connect and 'twitter'|member:identity_types %}
 		<a id="{{ #twdis }}" href="#disconnect" class="btn z-btn-social" style="background-color: #55acee"><span class="z-icon z-icon-twitter"></span> {_ Disconnect from Twitter _}</a>

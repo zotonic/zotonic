@@ -14,7 +14,7 @@
 	{% with id.blocks.survey_feedback as blk %}
 		<fieldset class="admin-form">
 			<div>
-				{% if is_editable %}
+				{% if id.is_editable %}
 					<textarea rows="10"
 					    id="block-{{ #s }}-body{{ lang_code_for_id }}"
 					    name="block-{{ #s }}-body{{ lang_code_with_dollar }}"

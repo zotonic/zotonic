@@ -1,7 +1,6 @@
 {#
 Params:
 id
-is_editable
 cat_id
 #}
 <p class="text-muted">{_ Category name: _} {{ cat_id.name }}</p>
@@ -14,7 +13,7 @@ cat_id
     {% button class="btn btn-default" action={redirect dispatch="admin_overview_rsc" qcat=cat_id} text=_"View all pages from this category" %}
 </div>
 
-{% if is_editable %}
+{% if id.is_editable %}
     {% wire id=#form type="submit" postback="rscform" action={dialog_close} delegate="controller_admin_edit" %}
     <form id="{{ #form }}" method="POST" action="postback" class="form">
         <fieldset class="form-horizontal">

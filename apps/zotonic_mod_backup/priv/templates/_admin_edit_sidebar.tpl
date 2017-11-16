@@ -2,8 +2,8 @@
 
 {# Make the widget conditional, based on the config value #}
 {% block widget_wrapper %}
-    {% if m.config.mod_backup.admin_panel.value %}
-    {% inherit %}
+    {% if m.backup.admin_panel %}
+        {% inherit %}
     {% endif %}
 {% endblock %}
 

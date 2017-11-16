@@ -1,7 +1,7 @@
 {% with m.rsc[id].language as r_lang %}
 <div class="form-group">
     <div id="admin-translation-checkboxes">
-        {% for code, lang in languages %}
+        {% for code, lang in m.translation.language_list_configured %}
             {% if lang.is_enabled %}
             <label class="checkbox-inline">
     	    <input type="checkbox" id="{{ #language.code }}" name="language" value="{{ code }}"

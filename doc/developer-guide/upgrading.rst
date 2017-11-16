@@ -196,7 +196,23 @@ Templates
   was renamed to ``absolute_url``.
 * Templates are now stored in :file:`yoursite/templates/priv/` instead of
   :file:`yoursite/templates/`.
-* The ``maxage`` caching argument was renamed to ``max-age``.
+* The ``maxage`` caching argument was renamed to ``max_age``.
+* The models have now extra ACL checks.
+
+  The ``m.config``, ``m.site`` and ``m.sysconfig`` models are only accessible
+  as administrator. Use the models *owning* the various settings to access the
+  configurations.
+
+  Exception is that the hostname and site-title information is publicly accessible
+  using ``m.site``.
+
+  Examples:
+
+   * ``m.config.site.title.value`` is now ``m.site.title``
+   * ``m.config.mod_editor_tinymce.version.value`` is now ``m.editor_tinymce.version``
+
+  Check the various models of the modules for the new lookups.
+
 
 Port, proxies and SSL certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

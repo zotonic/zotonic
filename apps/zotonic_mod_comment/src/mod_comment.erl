@@ -52,7 +52,7 @@ event(#submit{message={newcomment, Args}, form=FormId}, Context) ->
             Email = <<"">>
     end,
     Message = z_context:get_q_validated(<<"message">>, Context),
-    Is_visible = case m_config:get_value(comments, moderate, Context) of <<"1">> -> false; _Else -> true end,
+    Is_visible = case m_config:get_value(?MODULE, moderate, Context) of <<"1">> -> false; _Else -> true end,
     case m_comment:insert(Id, Name, Email, Message, Is_visible, Context) of
         {ok, CommentId} ->
             CommentsListElt = proplists:get_value(comments_list, Args, "comments-list"),

@@ -1,11 +1,11 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}{_ Please verify your e-mail address _} [{{ m.config.site.title.value }}]{% endblock %}
+{% block title %}{_ Please verify your e-mail address _} [{{ m.site.title }}]{% endblock %}
 
 {% block body %}
 <p>{_ Hello _} {{ m.rsc[id].name_first|default:m.rsc[id].title }},</p>
 
-<p>{_ This e-mail address was added to your personal information on _} {{ m.config.site.title.value }}: {{ idn.key }}.</p>
+<p>{_ This e-mail address was added to your personal information on _} {{ m.site.title }}: {{ idn.key }}.</p>
 
 {% with m.identity[id].username as username %}
 {% if username %}

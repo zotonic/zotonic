@@ -38,6 +38,10 @@ m_get([ has_collaboration_groups | Rest ], Context) ->
     {acl_user_groups_checks:has_collab_groups(Context), Rest};
 m_get([ is_used, Cat | Rest ], Context) ->
     {is_used(Cat, Context), Rest};
+m_get([ collab_group_update | Rest ], Context) ->
+    {m_config:get_value(mod_acl_user_groups, collab_group_update, Context), Rest};
+m_get([ collab_group_link | Rest ], Context) ->
+    {m_config:get_value(mod_acl_user_groups, collab_group_link, Context), Rest};
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

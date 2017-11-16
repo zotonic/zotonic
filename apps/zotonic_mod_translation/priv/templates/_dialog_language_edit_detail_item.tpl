@@ -54,12 +54,12 @@ languages
                         <td>
                             {% if fallback_language != code %}
                                 {{ fallback_language }}
-                                {% if not fallback_language|member:(m.translation.language_list_enabled|element:1) %}
+                                {% if not fallback_language|member:m.translation.enabled_language_codes %}
                                     <em class="mod_translation-warning">{_ not enabled _}</em>, {{ default_language }}
                                 {% endif %}
                             {% else %}
                                 {{ default_language }}
-                                {% if not default_language|member:(m.translation.language_list_enabled|element:1) %}
+                                {% if not default_language|member:m.translation.enabled_language_codes %}
                                     <em class="mod_translation-warning">{_ not enabled _}</em>
                                 {% endif %}
                             {% endif %}

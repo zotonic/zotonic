@@ -20,7 +20,7 @@
 				{% endblock %}
 				{% block closing %}
 					<p>{_ Kind regards, _}</p>
-					<p><a href="http://{{ m.site.hostname }}/">{{ m.config.site.title.value }}</a></p>
+					<p><a href="http://{{ m.site.hostname }}/">{{ m.site.title }}</a></p>
 				{% endblock %}
 				{% block disclaimer %}
 				{% endblock %}

@@ -8,6 +8,12 @@ Zotonic has two places where a site’s configuration is kept:
 - the site’s ``config`` database table. Entries in the config table overrule
   any module settings from the config file.
 
+.. note::
+
+    Configuration keys are only accessible from templates using ``{{ m.config }}``
+    for users with administrator rights. To access other configs, use or add
+    specific models.
+
 All m_config keys can be thought of as tuples ``{Module, Key,
 Value}``, where Value is a complex value that can have a text value
 but also any other properties. Only configuration with text values can

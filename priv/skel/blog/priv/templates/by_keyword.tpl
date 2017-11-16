@@ -8,7 +8,7 @@
 
 {% block content %}
 
-	{% with m.search.paged[{referrers id=q.id page=q.page pagelen=m.config.site.pagelen.value}] as result %}
+	{% with m.search.paged[{referrers id=q.id page=q.page}] as result %}
 
 		{% for id, predicate in result %}
 			{% include "_article_summary.tpl" id=id %}
