@@ -11,7 +11,7 @@ Zotonic has two places where a site’s configuration is kept:
 .. note::
 
     Configuration keys are only accessible from templates using ``{{ m.config }}``
-    for users with administrator rights. To acces other configs, use or add
+    for users with administrator rights. To access other configs, use or add
     specific models.
 
 All m_config keys can be thought of as tuples ``{Module, Key,
