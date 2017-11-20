@@ -151,34 +151,30 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
     insert_task_after(undefined, Module, Function, UniqueKey, Args, Context).
 
 %% @doc Insert a slow running pivot task with unique key and arguments that should start after Seconds seconds.
+%%      Always delete any existing transaction, to prevent race conditions when the task is running
+%%      during this insert.
 insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
-    z_db:transaction(fun(Ctx) -> insert_transaction(SecondsOrDate, Module, Function, UniqueKey, Args, Ctx) end, Context).
-
-    insert_transaction(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
-        Due = to_utc_date(SecondsOrDate),
-        UniqueKeyBin = z_convert:to_binary(UniqueKey), 
-        Fields = [
-            {module, Module},
-            {function, Function},
-            {key, UniqueKeyBin},
-            {args, Args},
-            {due, Due}
-        ],
-        case z_db:q1("select id 
-                      from pivot_task_queue 
-                      where module = $1 and function = $2 and key = $3", 
-                     [Module, Function, UniqueKeyBin], 
-                     Context) 
-        of
-            undefined -> 
-                z_db:insert(pivot_task_queue, Fields, Context);
-            Id when is_integer(Id) -> 
-                case Due of
-                    undefined -> nop;
-                    _ -> z_db:update(pivot_task_queue, Id, Fields, Context)
-                end,
-                {ok, Id}
-        end.
+    Due = to_utc_date(SecondsOrDate),
+    UniqueKeyBin = z_convert:to_binary(UniqueKey),
+    z_db:transaction(
+        fun(Ctx) ->
+            _ = z_db:q("
+                delete from pivot_task_queue
+                where module = $1
+                  and function = $2
+                  and key = $3",
+                [ Module, Function, UniqueKeyBin ],
+                Ctx),
+            Fields = [
+                {module, Module},
+                {function, Function},
+                {key, UniqueKeyBin},
+                {args, Args},
+                {due, Due}
+            ],
+            z_db:insert(pivot_task_queue, Fields, Ctx)
+        end,
+        Context).
 
 to_utc_date(undefined) ->
     undefined;
