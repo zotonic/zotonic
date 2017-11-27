@@ -115,24 +115,23 @@ is_safari8problem(Context) ->
     not HasCookies andalso IsVersion8 andalso IsSafari.
 
 
-auth_user(Profile, AccessTokenData, Context) ->
-    LinkedInUserId = proplists:get_value(<<"id">>, Profile),
+auth_user(#{<<"id">> := LinkedInUserId} = Profile, AccessTokenData, Context) ->
     lager:debug("[linkedin] Authenticating ~p ~p", [LinkedInUserId, Profile]),
-    {struct, Location} = proplists:get_value(<<"location">>, Profile),
-    {struct, Country} = proplists:get_value(<<"country">>, Location),
+    Location = maps:get(<<"location">>, Profile),
+    Country = maps:get(<<"country">>, Location),
     PersonProps = [
-        {title, proplists:get_value(<<"formattedName">>, Profile)},
-        {name_first, proplists:get_value(<<"firstName">>, Profile)},
-        {name_surname, proplists:get_value(<<"lastName">>, Profile)},
-        {summary, proplists:get_value(<<"headline">>, Profile)},
-        {body, z_html:escape_link(proplists:get_value(<<"summary">>, Profile))},
-        {website, proplists:get_value(<<"publicProfileUrl">>, Profile)},
-        {linkedin_url, proplists:get_value(<<"publicProfileUrl">>, Profile)},
-        {email, proplists:get_value(<<"emailAddress">>, Profile, [])},
-        {address_country, proplists:get_value(<<"code">>, Country)},
-        {address_line_1, proplists:get_value(<<"name">>, Location)},
-        {depiction_url, picture_url(proplists:get_value(<<"pictureUrls">>, Profile))}
-    ] ++ company_info(Profile),
+            {title, maps:get(<<"formattedName">>, Profile, undefined)},
+            {name_first, maps:get(<<"firstName">>, Profile, undefined)},
+            {name_surname, maps:get(<<"lastName">>, Profile, undefined)},
+            {summary, maps:get(<<"headline">>, Profile, undefined)},
+            {body, z_html:escape_link(maps:get(<<"summary">>, Profile, undefined))},
+            {website, maps:get(<<"publicProfileUrl">>, Profile, undefined)},
+            {linkedin_url, maps:get(<<"publicProfileUrl">>, Profile, undefined)},
+            {email, maps:get(<<"emailAddress">>, Profile, undefined)},
+            {address_country, maps:get(<<"code">>, Country, undefined)},
+            {address_line_1, maps:get(<<"name">>, Location, undefined)},
+            {depiction_url, picture_url(maps:get(<<"pictureUrls">>, Profile, undefined))}
+        ] ++ company_info(Profile),
     Args = controller_linkedin_authorize:get_args(Context),
     #auth_validated{
         service=linkedin,
@@ -143,31 +142,24 @@ auth_user(Profile, AccessTokenData, Context) ->
     }.
 
 
-company_info(Profile) ->
-    case proplists:get_value(<<"positions">>, Profile) of
-        {struct, Ps} ->
-            case proplists:get_value(<<"values">>, Ps) of
-                [{struct, Qs}|_] ->
-                    {struct, Company} = proplists:get_value(<<"company">>, Qs),
-                    [
-                        {company_name, proplists:get_value(<<"name">>, Company)},
-                        {company_role, proplists:get_value(<<"title">>, Qs)}
-                    ];
-                [] ->
-                    []
-            end;
-        undefined ->
-            []
-    end.
+company_info(#{<<"positions">> := #{<<"values">> := Qs}}) ->
+    #{
+        <<"company">> := #{
+            <<"name">> := Company
+        },
+        <<"title">> := Title
+    } = Qs,
+    [
+        {company_name, Company},
+        {company_role, Title}
+    ];
+company_info(_) ->
+    [].
 
-
-picture_url(undefined) ->
-    undefined;
-picture_url({struct, Ps}) ->
-    case proplists:get_value(<<"values">>, Ps) of
-        [Url|_] -> Url;
-        _ -> undefined
-    end.
+picture_url(#{<<"values">> := [Url | _]}) ->
+    Url;
+picture_url(_) ->
+    undefined.
 
 % Exchange the code for an access token
 fetch_access_token(Code, Context) ->
@@ -184,9 +176,10 @@ fetch_access_token(Code, Context) ->
         ]),
     case httpc:request(post, {LinkedInUrl, [], "application/x-www-form-urlencoded", Body}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
-            {struct, Json} = mochijson:binary_decode(Payload),
-            {<<"access_token">>, AccessToken} = proplists:lookup(<<"access_token">>, Json),
-            {<<"expires_in">>, ExpiresIn} = proplists:lookup(<<"expires_in">>, Json),
+            #{
+                <<"access_token">> := AccessToken,
+                <<"expires_in">> := ExpiresIn
+            } = z_json:decode(Payload),
             {ok, AccessToken, ExpiresIn};
         Other ->
             lager:error("[linkedin] error fetching access token [code ~p] ~p", [Code, Other]),
@@ -201,8 +194,7 @@ fetch_user_data(AccessToken) ->
                 ++z_convert:to_list(AccessToken),
     case httpc:request(get, {LinkedInUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
-            {struct, Props} = mochijson:binary_decode(Payload),
-            {ok, Props};
+            {ok, z_json:decode(Payload)};
         {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
             lager:error("[linkedin] 401 error fetching user data [token ~p] will not retry ~p", [AccessToken, Payload]),
             {error, {http_error, LinkedInUrl, Other}};

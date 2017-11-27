@@ -180,7 +180,7 @@ tuple from the ``process_get/1`` and ``process_post/1`` calls::
 
     process_get(Context) ->
         Stats = mod_something:stats_data(Context),
-        Result = {struct, [{count, 100}]},
+        Result = #{<<"count">> => 100},
         Context1 = z_context:set_resp_header(<<"cache-control">>, <<"max-age=3600">>, Context),
         {Result, Context1}.
 

@@ -39,7 +39,7 @@ process_get(Context) ->
                 true ->
                     case m_rsc:is_visible(Id, Context) of
                         true ->
-                            z_convert:to_json(m_rsc_export:full(Id, Context));
+                            m_rsc_export:full(Id, Context);
                         false ->
                             {error, access_denied, undefined}
                     end;

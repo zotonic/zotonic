@@ -45,7 +45,7 @@
 	    <label class="control-label col-md-3" for="{{ #category }}">{_ Category _}</label>
         <div class="col-md-9">
             <select class="form-control" id="{{ #category }}" name="category">
-                {% with m.config.mod_admin_identity.new_user_category.value as default_category %}
+                {% with m.admin_identity.new_user_category as default_category %}
                     {% for category in m.category.person.tree_flat %}
                         {% if m.acl.is_allowed.insert[category] %}
                             <option value="{{ category.id.name }}" {% if category.id.name == default_category %}selected{% endif %}>

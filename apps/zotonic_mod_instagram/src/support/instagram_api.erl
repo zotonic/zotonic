@@ -42,7 +42,7 @@ subscriptions(Context) ->
             ++ "&client_id=" ++ z_url:url_encode(ConsumerKey),
     case httpc:request(get, {Url, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_Version, 200, _OK}, _Hs, Data}} ->
-            {struct, MD} = mochijson:binary_decode(Data),
+            #{<<"data">> := Data} = z_json:decode(Data),
             {ok, [
                 [
                     {id, v(<<"id">>, D)},
@@ -52,8 +52,8 @@ subscriptions(Context) ->
                     {callback_url, v(<<"callback_url">>, D)},
                     {type, v(<<"type">>, D)}
                 ]
-                || {struct, D} <- proplists:get_value(<<"data">>, MD)
-            ]};
+                || D <- Data]
+            };
         {ok, Other} ->
             {error, Other};
         {error, _} = Error ->
@@ -61,7 +61,7 @@ subscriptions(Context) ->
     end.
 
 v(K, Props) ->
-    case proplists:get_value(K, Props) of
+    case maps:get(K, Props, undefined) of
         null -> undefined;
         V -> V
     end.
@@ -124,10 +124,12 @@ tagged_nexturl(NextUrl, _Context) ->
 
 
 tagged_1({ok, {{_, 200, _}, _Hs, Body}}) ->
-    {struct, Props} = mochijson:binary_decode(Body),
-    {struct, Pagination} = proplists:get_value(<<"pagination">>, Props),
-    NextUrl = proplists:get_value(<<"next_url">>, Pagination),
-    Data = proplists:get_value(<<"data">>, Props),
+    #{
+        <<"pagination">> := #{
+            <<"next_url">> := NextUrl
+        },
+        <<"data">> := Data
+    } = z_json:decode(Body),
     {ok, {NextUrl, Data}};
 tagged_1({ok, _} = Result) ->
     {error, Result};

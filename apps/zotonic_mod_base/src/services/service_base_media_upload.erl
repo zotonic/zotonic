@@ -45,7 +45,7 @@ process_post(Context) ->
 
     case m_media:insert_file(Upload, Props, Context) of
         {ok, Id} ->
-            z_convert:to_json([{rsc_id, Id}]);
+            #{<<"rsc_id">> => Id};
         {error, R} ->
             {error, R, <<>>}
     end.

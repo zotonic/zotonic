@@ -1,5 +1,5 @@
 <input type="hidden" class="block-type" name="block-{{#s}}-type" value="{{ blk.type|default:block_type }}" />
-{% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_editable=is_editable is_new=is_new %}
+{% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_new=is_new %}
 
 {% if is_new %}
 {% javascript %}

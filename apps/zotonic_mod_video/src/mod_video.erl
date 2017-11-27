@@ -270,7 +270,7 @@ video_info(Path, Context) ->
     lager:debug("Video info: ~p", [FfprobeCmd]),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
     try
-        {struct, Ps} = decode_json(JSONText),
+        Ps = decode_json(JSONText),
         {Width, Height, Orientation} = fetch_size(Ps),
         [
          {duration, fetch_duration(Ps)},
@@ -285,31 +285,25 @@ video_info(Path, Context) ->
     end.
 
 decode_json(JSONText) ->
-    try
-        mochijson2:decode(JSONText)
-    catch
-        throw:invalid_utf8 ->
-            decode_json(list_to_binary([ C band 127 || C <- binary_to_list(JSONText) ]))
-    end.
+    z_json:decode(JSONText).
 
-fetch_duration(Ps) ->
-    case proplists:get_value(<<"format">>, Ps) of
-        {struct, Fs} ->
-            Duration = proplists:get_value(<<"duration">>, Fs),
-            round(z_convert:to_float(Duration));
-        undefined ->
-            0
-    end.
+fetch_duration(#{<<"format">> := #{<<"duration">> := Duration}}) ->
+    round(z_convert:to_float(Duration));
+fetch_duration(_) ->
+    0.
 
-fetch_size(Ps) ->
-    Streams = proplists:get_value(<<"streams">>, Ps),
-    [{struct, Video}|_] = lists:dropwhile(
-                            fun({struct,S}) ->
-                                    proplists:get_value(<<"codec_type">>, S) =/= <<"video">>
+fetch_size(#{<<"streams">> := Streams}) ->
+    [Video | _] = lists:dropwhile(
+                            fun({#{<<"codec_type">> := CodecType}}) ->
+                                    CodecType =/= <<"video">>
                             end, Streams),
-    {<<"width">>, Width} = proplists:lookup(<<"width">>, Video),
-    {<<"height">>, Height} = proplists:lookup(<<"height">>, Video),
-    Orientation = orientation(proplists:get_value(<<"tags">>, Video)),
+    #{
+        <<"width">> := Width,
+        <<"height">> := Height,
+        <<"tags">> := Tags
+    } = Video,
+
+    Orientation = orientation(Tags),
     case Orientation of
         6 -> {Height, Width, Orientation};
         8 -> {Height, Width, Orientation};
@@ -317,22 +311,17 @@ fetch_size(Ps) ->
     end.
 
 
-orientation({struct, Tags}) ->
-    case proplists:get_value(<<"rotate">>, Tags) of
-        undefined ->
-            1;
-        Angle ->
-            try
-                case z_convert:to_integer(Angle) of
-                    90 -> 6;
-                    180 -> 3;
-                    270 -> 8;
-                    _ -> 1
-                end
-            catch
-                _:_ ->
-                    1
-            end
+orientation(#{<<"rotate">> := Angle}) ->
+    try
+        case z_convert:to_integer(Angle) of
+            90 -> 6;
+            180 -> 3;
+            270 -> 8;
+            _ -> 1
+        end
+    catch
+        _:_ ->
+            1
     end;
 orientation(_) ->
     1.

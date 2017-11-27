@@ -57,7 +57,7 @@
                 <label>
                     <input type="checkbox" id="field-is-website=redirect" name="is_website_redirect" value="1"
                         {% if id.is_website_redirect %}checked{% endif %}
-                        {% if not is_editable %}disabled="disabled"{% endif %}
+                        {% if not id.is_editable %}disabled="disabled"{% endif %}
                     />
                     {_ Redirect to website on page view _}
                 </label>

@@ -1,8 +1,6 @@
 {#
 Params:
 id
-cat_id
-languages
 #}
 <div class="admin-header">
     <div class="admin-header-meta">
@@ -35,7 +33,10 @@ languages
                     template="_action_dialog_change_category.tpl"
                     id=id
                     cat_id=id.category_id
-                    is_editable = is_editable and m.acl.insert[id.category.name|as_atom] and not id.is_a.category and not id.is_a.predicate
+                    is_editable = id.is_editable
+                                    and m.acl.insert[id.category.name|as_atom]
+                                    and not id.is_a.category
+                                    and not id.is_a.predicate
                 }
             %}
         </div>

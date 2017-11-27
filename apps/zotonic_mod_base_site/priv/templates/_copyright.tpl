@@ -1,1 +1,1 @@
-&copy; {{ now|date:"Y" }} {{  m.config.site.title.value }}
+&copy; {{ now|date:"Y" }} {{  m.site.title }}

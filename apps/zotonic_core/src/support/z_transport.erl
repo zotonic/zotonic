@@ -485,7 +485,7 @@ decode_data(ubf, Data) ->
 decode_data(form, Data) when is_binary(Data) ->
     mochiweb_util:parse_qs(Data);
 decode_data(json, Data) when is_binary(Data) ->
-    mochijson2:decode(Data);
+    z_json:decode(Data);
 decode_data(_Other, Data) ->
     Data.
 

@@ -23,11 +23,7 @@ show_signup_password2
     {% endif %}
 
     {% if show_signup_password %}
-        {% with
-            (m.config.mod_authentication.password_min_length.value|default:"6")|to_integer
-            as
-            min_length
-        %}
+        {% with m.authentication.password_min_length as min_length %}
             <div class="form-group" id="signup_password1">
                 <label for="password1" class="control-label">{_ Password _}</label>
                 <input class="form-control" id="password1" name="password1" type="password" value="" autocomplete="off" />

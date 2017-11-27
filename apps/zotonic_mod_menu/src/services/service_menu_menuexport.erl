@@ -49,7 +49,7 @@ process_get(Context) ->
     end.
 
 menu_export(Menu, Context) ->
-    {array, menu_export(Menu, Context, [])}.
+    menu_export(Menu, Context, []).
 
 menu_export([], _, Acc) ->
     lists:reverse(Acc);
@@ -58,16 +58,14 @@ menu_export([{ItemId, Children} | Rest], Context, Acc) ->
 
 
 menu_item(Id, Children, Context) ->
-    {struct,
-     [
-      {title, z_trans:trans(m_rsc:p(Id, title, Context), Context)},
+      [{title, z_trans:trans(m_rsc:p(Id, title, Context), Context)},
       {url, m_rsc:p(Id, page_url, Context)},
       {id, Id}]
      ++ case Children of
             [] -> [];
             _ -> [{children, menu_export(Children, Context)}]
-        end
-    }.
+        end.
+
 
 
 

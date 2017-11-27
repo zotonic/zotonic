@@ -18,7 +18,7 @@
             action={admin_tasks task='flush'}
         %}
         <label class="checkbox-inline">
-            <input type="checkbox" id="tpldbg" value="1" {% if m.config.mod_development.debug_includes.value %}checked="checked"{% endif %} />
+            <input type="checkbox" id="tpldbg" value="1" {% if m.development.debug_includes %}checked="checked"{% endif %} />
             {_ Show paths to included template files in generated templates _}
         </label>
     </div>
@@ -29,7 +29,7 @@
             action={admin_tasks task='flush'}
         %}
         <label class="checkbox-inline">
-            <input type="checkbox" id="blkdbg" value="1" {% if m.config.mod_development.debug_blocks.value %}checked="checked"{% endif %} />
+            <input type="checkbox" id="blkdbg" value="1" {% if m.development.debug_blocks %}checked="checked"{% endif %} />
             {_ Show defined blocks in generated templates _}
         </label>
     </div>
@@ -40,7 +40,7 @@
             action={admin_tasks task='flush'}
         %}
         <label class="checkbox-inline">
-            <input type="checkbox" id="libsep" value="1" {% if m.config.mod_development.libsep.value %}checked="checked"{% endif %} />
+            <input type="checkbox" id="libsep" value="1" {% if m.development.libsep %}checked="checked"{% endif %} />
             {_ Download CSS and JavaScript files as separate files. Don’t combine them in one URL. _}
         </label>
     </div>
@@ -50,7 +50,7 @@
             action={config_toggle module="mod_development" key="enable_api"}
         %}
         <label class="checkbox-inline">
-            <input type="checkbox" id="devapi" value="1" {% if m.config.mod_development.enable_api.value %}checked="checked"{% endif %} />
+            <input type="checkbox" id="devapi" value="1" {% if m.development.enable_api %}checked="checked"{% endif %} />
             {_ Enable API to recompile and build Zotonic _}
         </label>
     </div>

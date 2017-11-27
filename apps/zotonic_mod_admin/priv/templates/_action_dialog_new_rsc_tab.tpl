@@ -65,7 +65,7 @@
 	    <div class="checkbox col-md-9">
 		    <label>
 		        <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
-				    {% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked="checked"{% endif %} />
+				    {% if subject_id or m.admin.rsc_dialog_is_published %}checked="checked"{% endif %} />
 		    </label>
 	    </div>
 	</div>

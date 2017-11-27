@@ -193,18 +193,19 @@ set_cors_header(false, Context) ->
 
 
 api_error(HttpCode, ErrCode, Message, ErrData, Context) ->
-    GeneralError = [{error, {struct, [{code, ErrCode}, {message, Message}]}}],
-    CombinedError = case ErrData of
-        [] -> GeneralError;
-        {struct, Data} -> GeneralError ++ Data;
-        Data -> GeneralError ++ Data
-    end,
-    Body = mochijson2:encode({struct, CombinedError}),
+    Error = #{
+        <<"error">> => #{
+            <<"code">> => ErrCode,
+            <<"message">> => Message,
+            <<"data">> => ErrData
+        }
+    },
+    Body = z_json:encode(Error),
     {{halt, HttpCode}, cowmachine_req:set_resp_body(Body, Context)}.
 
 
 api_result({error, Err, Arg}, Context) ->
-    api_result({error, Err, Arg, []}, Context);
+    api_result({error, Err, Arg, #{}}, Context);
 api_result({error, Err, Arg, ErrData}, Context) when is_list(Arg) ->
     api_result({error, Err, list_to_binary(Arg), ErrData}, Context);
 api_result({error, Err=missing_arg, Arg, ErrData}, Context) ->
@@ -240,8 +241,7 @@ api_result(Result, Context) ->
     end.
 
 result_to_json(B) when is_binary(B) -> B;
-result_to_json({binary_json, R}) -> iolist_to_binary(mochijson2:encode(R));
-result_to_json(R) -> iolist_to_binary(mochijson2:encode(R)).
+result_to_json(R) -> z_json:encode(R).
 
 
 %% @doc Handle JSON request bodies.
@@ -263,22 +263,22 @@ decode_json_body(Context0) ->
             {ok, Context};
         NonEmptyBody ->
             try
-                case mochijson2:decode(NonEmptyBody) of
+                case z_json:decode(NonEmptyBody) of
                     {error, Error} ->
                         {error, Error, Context};
-                    {struct, JsonStruct} ->
+                    Json when is_list(Json) ->
+                        %% A JSON list: don't alter context
+                        {ok, Context};
+                    Json ->
                         %% A JSON object: set key/value pairs in the context
-                        Context1 = lists:foldl(
-                            fun({Key, Value}, Context2) ->
+                        Context1 = maps:fold(
+                            fun(Key, Value, Context2) ->
                                 z_context:set_q(Key, Value, Context2)
                             end,
                             Context,
-                            JsonStruct
+                            Json
                         ),
-                        {ok, Context1};
-                    _ ->
-                        %% A JSON list: don't alter context
-                        {ok, Context}
+                        {ok, Context1}
                 end
             catch
                 Type:Reason ->

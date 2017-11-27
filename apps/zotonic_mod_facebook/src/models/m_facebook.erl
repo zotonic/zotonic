@@ -35,6 +35,13 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ useauth | Rest ], Context) ->
+    UseAuth = case m_config:get_value(mod_facebook, appid, Context) of
+        undefined -> false;
+        <<>> -> false;
+        _ -> m_config:get_boolean(mod_facebook, useauth, Context)
+    end,
+    {UseAuth, Rest};
 m_get([ picture, Key | Rest ], Context) ->
     P = do_graph_call(get, Key, undefined, [{fields, "picture"}], Context),
     {proplists:get_value(picture, P), Rest};
@@ -72,21 +79,20 @@ facebook_q(_Q, _Sql, Args, Context) ->
     %%
     Payload = case httpc:request(FqlUrl) of
         {ok, {{_, 200, _}, _Headers, Body}} ->
-            mochijson2:decode(Body);
+            z_json:decode(Body);
         Other ->
             ?DEBUG({error, {http_error, FqlUrl, Other}}),
-            []
+            #{}
     end,
 
     %%
     Rows = case Payload of
-	       {struct, [{<<"error_code">>, _ErrorCode} | _T]} ->
-		   ?DEBUG(Payload),
-		   [];
-	       _ ->
-		   ?DEBUG(Payload),
-		   z_convert:convert_json(Payload)
-    end,
+               #{<<"error_code">> := _ErrorCode} ->
+                   ?DEBUG(Payload),
+                   #{};
+               _ ->
+                   ?DEBUG(Payload)
+           end,
 
     #search_result{result=Rows}.
 
@@ -104,15 +110,13 @@ do_graph_call(Method, Id, Connection, Args, Context)
 
     Request = make_httpc_request(Method, "https", "graph.facebook.com", Path, Query),
 
-    Payload = case httpc:request(Method, Request, [], []) of
+    case httpc:request(Method, Request, [], []) of
 		  {ok, {{_, 200, _}, _Headers, Body}} ->
-		      mochijson2:decode(Body);
+		      z_json:decode(Body);
 		  Other ->
 		      ?DEBUG({error, {http_error, element(1, Request), Other}}),
-		      []
-	      end,
-
-    z_convert:convert_json(Payload).
+		      #{}
+	      end.
 
 %% Create a http request for the inets httpc api.
 %%

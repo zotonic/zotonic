@@ -37,7 +37,7 @@ process_get(Context) ->
             z_acl:rsc_visible(Id, Context)
         end,
         Ids),
-    z_convert:to_json({array, Ids1}).
+    Ids1.
 
 get_ids(true, PageNr, Context) ->
     Ids = z_db:q("SELECT id

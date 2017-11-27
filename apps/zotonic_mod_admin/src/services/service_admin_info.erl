@@ -28,6 +28,4 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 process_get(Context) ->
-    {struct, [
-        {pivot_queue_count, z_db:q1("SELECT COUNT(*) FROM rsc_pivot_queue", Context)}
-    ]}.
+    #{<<"pivot_queue_count">> => z_db:q1("SELECT COUNT(*) FROM rsc_pivot_queue", Context)}.

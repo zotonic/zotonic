@@ -31,7 +31,7 @@
         </thead>
 
         <tbody>
-            {% with m.config.i18n.language.value as default_code %}
+            {% with m.translation.default_language as default_code %}
                 {% for code, lang in m.translation.language_list_configured %}
                     <tr id="{{ #li.code }}" class="{% if not lang.is_enabled %}unpublished{% endif %}">
                         <td>
@@ -103,8 +103,7 @@
                     %}
                     <label class="checkbox-inline">
                         <input type="checkbox" id="{{ #redir }}" value="1"
-                        {% if m.config.mod_translation.rewrite_url.value
-                            or m.config.mod_translation.rewrite_url.value|is_undefined %}checked="checked"{% endif %}
+                        {% if m.translation.rewrite_url %}checked="checked"{% endif %}
                         />
                         <span>{_ Show the language in the URL _} (<tt>/en/page/...</tt>).</span>
                     </label>
@@ -116,9 +115,11 @@
                     %}
                     <label class="checkbox-inline">
                         <input type="checkbox" id="{{ #force }}" value="1"
-                        {% if m.config.mod_translation.force_default.value %}checked="checked"{% endif %}
+                        {% if m.translation.force_default %}checked="checked"{% endif %}
                         />
-                        <span>{_ For new visitors, set the language to the default language _} {% with m.translation.default_language as code %}({{ m.translation.language_list_configured[code].name }}){% endwith %}
+                        <span>
+                            {_ For new visitors, set the language to the default language _}
+                            ({{ m.translation.language_list_configured[m.translation.default_language].name }})
                         </span>
                     </label>
                 </div>
@@ -133,7 +134,7 @@
                     {% wire id=#stemmer type="change"
                         action={config_toggle module="i18n" key="language_stemmer"}
                     %}
-                    {% with m.config.i18n.language_stemmer.value|default:m.config.i18n.language.value as stm %}
+                    {% with m.translation.language_stemmer as stm %}
                     <select id="{{ #stemmer }}">
                         <option></option>
                         {% for lang, text in [

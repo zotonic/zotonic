@@ -15,7 +15,6 @@
          <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
                  placeholder="{_ Match which answer fits best. _} ({{ lang_code }})" />
       </div>
-
       <div class="form-group view-expanded">
          <textarea class="form-control" id="block-{{name}}-matching{{ lang_code_for_id }}" name="block-{{name}}-matching{{ lang_code_with_dollar }}" rows="4"
                 placeholder="{_ Apple = Red _} ({{ lang_code }})" >{{ blk.matching[lang_code]  }}</textarea>

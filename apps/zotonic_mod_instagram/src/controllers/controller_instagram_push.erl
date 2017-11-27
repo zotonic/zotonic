@@ -79,14 +79,15 @@ hmac_sha(Key, Data) ->
 
 
 handle_push(Data, Context) ->
-    Updates = mochijson:binary_decode(Data),
-    lists:foreach(fun({struct, Update}) -> update(Update, Context) end, Updates).
+    Updates = z_json:decode(Data),
+    lists:foreach(fun(Update) -> update(Update, Context) end, Updates).
 
 update(Update, Context) ->
-    case proplists:get_value(<<"object">>, Update) of
-        <<"tag">> ->
-            Tag = proplists:get_value(<<"object_id">>, Update),
-            Time = proplists:get_value(<<"time">>, Update),
+    case maps:get(<<"object">>, Update, undefined) of
+        #{
+            <<"object_id">> := Tag,
+            <<"time">> := Time
+        } ->
             mod_instagram:poll(Tag, Time, Context);
         Other ->
             lager:info("[instagram] Dropping push update for object ~p", [Other])

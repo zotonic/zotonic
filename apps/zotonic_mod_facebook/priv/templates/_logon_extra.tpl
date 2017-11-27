@@ -1,4 +1,4 @@
-{% if m.config.mod_facebook.useauth.value and m.config.mod_facebook.appid.value %}
+{% if m.facebook.useauth %}
 <li id="logon_facebook">
 	{% include "_facebook_login_link.tpl" %}
 </li>

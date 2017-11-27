@@ -2,7 +2,7 @@
 Custom settings to override tiny-init.js.
 */
 if (!tinyInit.language) {
-    {% if m.config.mod_editor_tinymce.version.value < '4.0' %}
+    {% if m.editor_tinymce.version < '4.0' %}
         tinyInit.language="en";
     {% elseif z_language != `en` and z_language != `nl` and z_language != `ru` %}
         tinyInit.language="en";

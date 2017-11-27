@@ -10,8 +10,6 @@
 
 {% block rscform %}
 
-{% with not id or id.is_editable as is_editable %}
-{% with m.config.i18n.language_list.list as languages %}
 {% with id.is_a|default:(m.category[cat].is_a) as cats %}
 {% wire id="rscform"
 		type="submit"
@@ -25,6 +23,7 @@
 	<div class="meta-data row">
 		<div class="col-lg-10 col-md-10">
 			{% block meta_data_first %}{% endblock %}
+
 			<div>
 				<h3>
 					{% if id %}
@@ -33,7 +32,6 @@
 						{{ m.rsc[cat].title }}
 					{% endif %}
 				</h3>
-				
 				<span class="publication-dates">
 					<label for="is_published" class="checkbox-inline">
 			    		<input type="checkbox" id="is_published" name="is_published" value="1" {% if not id or id.is_published %}checked="checked"{% endif %}/>
@@ -41,7 +39,7 @@
 				    </label>
 
 					{% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 %}
-					{% if is_editable or id.publication_end %}
+					{% if id.is_editable or id.publication_end %}
 						{_ till _}
 						{% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 %}
 					{% endif %}
@@ -66,21 +64,21 @@
 		<div class="tab-pane active" id="poststuff">
 			{% optional include "_translation_init_languages.tpl" %}
 			{% block edit_blocks %}
-				{% catinclude "_admin_edit_basics.tpl" cats is_editable=is_editable languages=languages %}
+				{% catinclude "_admin_edit_basics.tpl" cats %}
 
 				{% if id.category_id.feature_show_address %}
-					{% catinclude "_admin_edit_content_address.tpl" cats is_editable=is_editable languages=languages %}
+					{% catinclude "_admin_edit_content_address.tpl" cats %}
 				{% endif %}
 
-				{% all catinclude "_admin_edit_content.tpl" cats is_editable=is_editable languages=languages %}
+				{% all catinclude "_admin_edit_content.tpl" cats %}
 
 				{% if `media`|member:cats or id.medium %}
 					{% include "_admin_edit_content_media.tpl" %}
 				{% endif %}
 
-				{% catinclude "_admin_edit_body.tpl" cats is_editable=is_editable languages=languages %}
-				{% catinclude "_admin_edit_blocks.tpl" cats is_editable=is_editable languages=languages %}
-				{% catinclude "_admin_edit_depiction.tpl" cats is_editable=is_editable languages=languages %}
+				{% catinclude "_admin_edit_body.tpl" cats %}
+				{% catinclude "_admin_edit_blocks.tpl" cats %}
+				{% catinclude "_admin_edit_depiction.tpl" cats %}
 			{% endblock %}
 		</div>
 		{% block meta_panels %}{% endblock %}
@@ -96,18 +94,14 @@
 	<div style="display: none">
 		<span id="button-prompt">
 			{% block nav_prompt %}
-				{% if id %}
-					{{ id.category_id.title }}
-				{% else %}
-					{{ m.rsc[cat].title }}
-				{% endif %}
+				{{ id.category_id.title }}
 			{% endblock %}
 		</span>
 
 		{% block buttons %}
-			{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not is_editable %}
+			{% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
 
-			{% if is_editable %}
+			{% if id.is_editable %}
 				{% button type="submit" id="save_view" class="btn btn-default" text=_"Save &amp; view" title=_"Save and view the page." %}
 			{% elseif id %}
 				{% button id="save_view" class="btn btn-primary" text=_"View" title=_"View this page." action={redirect id=id} %}
@@ -115,8 +109,6 @@
 		{% endblock %}
 	</div>
 </form>
-{% endwith %}
-{% endwith %}
 {% endwith %}
 
 {% javascript %}
