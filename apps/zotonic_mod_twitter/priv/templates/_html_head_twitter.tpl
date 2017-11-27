@@ -1,6 +1,6 @@
 {% block title %}
-    {% if m.config.site.title.value %}
-        <meta name="twitter:site" content="{{ m.config.site.title.value }}">
+    {% if m.site.title %}
+        <meta name="twitter:site" content="{{ m.site.title }}">
     {% endif %}
 {% endblock %}
 {% if id %}

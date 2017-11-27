@@ -1,4 +1,9 @@
 
 .. include:: meta-sysconfig.rst
 
-.. todo:: Not yet documented.
+Gives access to the Zotonic system configuration from the ``zotonic.config`` file(s).
+
+.. note::
+
+    System configurations are only accessible from templates, using ``m.sysconfig``,
+    for users with administrator rights.

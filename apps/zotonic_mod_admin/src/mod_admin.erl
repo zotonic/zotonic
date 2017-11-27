@@ -78,7 +78,7 @@ class_to_opts(Class) ->
             [];
         {match, Ms} ->
             [
-                mochijson:encode({struct, [{A,V} || [A,V] <- Ms]}),
+                z_json:encode([{A,V} || [A,V] <- Ms]),
                 32
             ]
     end.

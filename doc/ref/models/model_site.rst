@@ -5,6 +5,12 @@ Retrieve information that is stored in the
 :ref:`site configuration <ref-site-configuration>`. If you want to query
 values from the config table instead, you should use :ref:`model-config`.
 
+.. note::
+
+   In general the site configurarion is only accessible via the ``m.site``
+   template model for users with administrator rights. Exceptions are
+   ``{{ m.site.title }}``, hostname configurations and the *paglen*.
+
 Fetch a site configuration key
 ------------------------------
 

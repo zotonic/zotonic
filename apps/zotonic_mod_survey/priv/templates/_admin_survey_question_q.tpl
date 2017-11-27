@@ -8,7 +8,7 @@
 			<div class="block-options">
 			{% if blk and blk.type %}
 				<input type="hidden" class="block-type" name="block-{{#s}}-type" value="{{ blk.type }}" />
-				{% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_editable=is_editable is_new=is_new %}
+				{% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_new=is_new %}
 			{% endif %}
 			</div>
 		</div>

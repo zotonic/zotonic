@@ -15,7 +15,7 @@
 
 	{% endif %}
 
-	{% with m.search[{query cat='article' sort='-publication_start' pagelen=m.config.site.pagelen.value}] as result %}
+	{% with m.search[{query cat='article' sort='-publication_start'}] as result %}
 
 		<div id="list-articles">
 			{% for id in result %}
@@ -23,7 +23,7 @@
 			{% endfor %}
 		</div>
 
-		{% ifequal m.config.site.pagelen.value result|length %}
+		{% ifequal m.site.pagelen result|length %}
 			{% wire id="more-results" action={moreresults result=result target="list-articles" template="_article_summary.tpl"} %}
 			<p><a href="javascript:void(0);" id="more-results">More results...</a></p>
 		{% endifequal %}

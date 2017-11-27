@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-11-23
+%% @copyright 2009-2017 Marc Worrell
 %% @doc Mailinglist implementation. Enables to send pages to a list of recipients.
 
-%% Copyright 2009-2011 Marc Worrell
+%% Copyright 2009-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -102,66 +101,83 @@ observe_email_bounced(B=#email_bounced{}, Context) ->
 
 %% @doc Request confirmation of canceling this mailing.
 event(#postback{message={dialog_mailing_cancel_confirm, Args}}, Context) ->
-	MailingId = proplists:get_value(list_id, Args),
-	case z_acl:rsc_editable(MailingId, Context) of
+	{list_id, MailingId} = proplists:lookup(list_id, Args),
+	case is_allowed_mailing(MailingId, Context) of
 		true ->
-			z_render:dialog("Confirm mailing cancelation.", "_dialog_mailing_cancel_confirm.tpl", Args, Context);
+			z_render:dialog(
+                ?__("Confirm mailing cancelation.", Context),
+                "_dialog_mailing_cancel_confirm.tpl",
+                Args,
+                Context);
 		false ->
-			z_render:growl_error("You are not allowed to cancel this mailing.", Context)
+			z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
 	end;
 event(#postback{message={mailing_cancel, Args}}, Context) ->
 	MailingId = proplists:get_value(list_id, Args),
 	PageId = proplists:get_value(page_id, Args),
-	case z_acl:rsc_editable(MailingId, Context) of
+	case is_allowed_mailing(MailingId, Context) and z_acl:rsc_visible(MailingId, Context) of
 		true ->
 			m_mailinglist:delete_scheduled(MailingId, PageId, Context),
             mod_signal:emit({update_mailinglist_scheduled, [{id, PageId}]}, Context),
-			z_render:growl("The mailing has been canceled.", Context);
+			z_render:growl(?__("The mailing has been canceled.", Context), Context);
 		false ->
-			z_render:growl_error("You are not allowed to cancel this mailing.", Context)
+			z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
 	end;
 event(#postback{message={mailinglist_reset, Args}}, Context) ->
 	MailingId = proplists:get_value(list_id, Args),
 	PageId = proplists:get_value(page_id, Args),
-	case z_acl:rsc_editable(MailingId, Context) of
+	case is_allowed_mailing(MailingId, Context) of
 		true ->
 			m_mailinglist:reset_log_email(MailingId, PageId, Context),
             mod_signal:emit({update_mailinglist_scheduled, [{id, PageId}]}, Context),
-			z_render:growl("The statistics have been cleared.", Context);
+			z_render:growl(?__("The statistics have been cleared.", Context), Context);
 		false ->
-			z_render:growl_error("You are not allowed to reset this mailing.", Context)
+			z_render:growl_error(?__("You are not allowed to reset this mailing.", Context), Context)
 	end;
 
 %% @doc Handle upload of a new recipients list
-event(#submit{message={mailinglist_upload,[{id,Id}]}}, Context) ->
-    #upload{tmpfile=TmpFile} = z_context:get_q_validated(<<"file">>, Context),
-    IsTruncate = z_convert:to_bool(z_context:get_q(<<"truncate">>, Context)),
-    case import_file(TmpFile, IsTruncate, Id, Context) of
-        ok ->
-            z_render:wire([{dialog_close, []}, {reload, []}], Context);
-        {error, Msg} ->
-            z_render:growl(Msg, "error", true, Context)
+event(#submit{message={mailinglist_upload,[{id,MailingId}]}}, Context) ->
+    case is_allowed_mailing(MailingId, Context) of
+        true ->
+            #upload{tmpfile=TmpFile} = z_context:get_q_validated(<<"file">>, Context),
+            IsTruncate = z_convert:to_bool(z_context:get_q(<<"truncate">>, Context)),
+            case import_file(TmpFile, IsTruncate, MailingId, Context) of
+                ok ->
+                    z_render:wire([{dialog_close, []}, {reload, []}], Context);
+                {error, Msg} ->
+                    z_render:growl(Msg, "error", true, Context)
+            end;
+        false ->
+            z_render:growl_error(?__("You are not allowed to reset this mailing.", Context), Context)
     end;
 
 %% @doc Handle the test-sending of a page to a single address.
 event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
-    Email = z_context:get_q_validated(<<"email">>, Context),
-    z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
-    Context1 = z_render:growl([?__("Sending the page to", Context), " ", Email, "..."], Context),
-    z_render:wire([{dialog_close, []}], Context1);
-
+    case z_acl:is_allowed(use, mod_mailinglist, Context) andalso z_acl:rsc_visible(PageId, Context) of
+        true ->
+            Email = z_context:get_q_validated(<<"email">>, Context),
+            z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
+            Context1 = z_render:growl([?__("Sending the page to", Context), " ", Email, "..."], Context),
+            z_render:wire([{dialog_close, []}], Context1);
+        false ->
+            z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
+    end;
 
 %% @doc Handle the test-sending of a page to a single address.
 event(#postback{message={resend_bounced, [{list_id, ListId}, {id, PageId}]}}, Context) ->
-    z_notifier:notify(#mailinglist_mailing{list_id={resend_bounced, ListId}, page_id=PageId}, Context),
-    case length(m_mailinglist:get_bounced_recipients(ListId, Context)) of
-        0 ->
-            z_render:growl_error(?__("No addresses selected", Context), Context);
-        _ ->
-            Context1 = z_render:growl(?__("Resending bounced addresses...", Context), Context),
-            z_render:wire([{dialog_close, []}], Context1)
+    case is_allowed_mailing(ListId, Context) of
+        true ->
+            z_notifier:notify(#mailinglist_mailing{list_id={resend_bounced, ListId}, page_id=PageId}, Context),
+            case length(m_mailinglist:get_bounced_recipients(ListId, Context)) of
+                0 ->
+                    z_render:growl_error(?__("No addresses selected", Context), Context);
+                _ ->
+                    Context1 = z_render:growl(?__("Resending bounced addresses...", Context), Context),
+                    z_render:wire([{dialog_close, []}], Context1)
+            end;
+        false ->
+            z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
     end;
-
 
 %% @doc Combine lists
 event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
@@ -178,6 +194,10 @@ event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
 operation(<<"union">>) -> union;
 operation(<<"subtract">>) -> subtract;
 operation(<<"intersection">>) -> intersection.
+
+is_allowed_mailing(MailingId, Context) ->
+    z_acl:rsc_editable(MailingId, Context)
+    andalso z_acl:is_allowed(use, mod_mailinglist, Context).
 
 %%====================================================================
 %% API

@@ -36,7 +36,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
 
 {% with
     "4.5.5",
-    m.config.mod_editor_tinymce.version.value
+    m.editor_tinymce.version
     as
     newest,
     config

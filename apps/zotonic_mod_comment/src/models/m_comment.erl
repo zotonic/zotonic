@@ -46,12 +46,40 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ anonymous | Rest ], Context) ->
+    Anon = case m_config:get_value(mod_comment, anonymous, Context) of
+        undefined -> true;
+        V -> z_convert:to_bool(V)
+    end,
+    {Anon, Rest};
+m_get([ moderate | Rest ], Context) ->
+    Mod = case m_config:get_value(mod_comment, moderate, Context) of
+        undefined -> false;
+        <<>> -> false;
+        V -> z_convert:to_bool(V)
+    end,
+    {Mod, Rest};
 m_get([ rsc, Id | Rest ], Context) ->
-    {list_rsc(Id, Context), Rest};
+    case z_acl:rsc_visible(Id, Context) of
+        true -> {list_rsc(Id, Context), Rest};
+        false -> {[], Rest}
+    end;
 m_get([ count, Id | Rest ], Context) ->
-    {count_rsc(Id, Context), Rest};
+    case z_acl:rsc_visible(Id, Context) of
+        true -> {count_rsc(Id, Context), Rest};
+        false -> {undefined, Rest}
+    end;
 m_get([ get, CommentId | Rest ], Context) ->
-    {get(CommentId, Context), Rest};
+    Cmt = case get(CommentId, Context) of
+        undefined -> undefined;
+        Comment ->
+            RscId = proplists:get_value(rsc_id, Comment),
+            case z_acl:rsc_visible(RscId, Context) of
+                true -> Comment;
+                false -> undefined
+            end
+    end,
+    {Cmt, Rest};
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.

@@ -2,7 +2,7 @@
 <html lang="{{ z_language|default:"en"|escape }}">
 	<head>
 		<meta charset="utf-8" />
-		<title>{% block title %}{% endblock %} &mdash; {{ m.config.site.title.value }}</title>
+		<title>{% block title %}{% endblock %} &mdash; {{ m.site.title }}</title>
 
 		<!--
 			Website built by:
@@ -32,8 +32,8 @@
 
 			<div class="container">
 				<div class="navbar-header">
-				    <a class="navbar-brand" href="/">{{ m.config.site.title.value|default:"Your Zotonic Site" }} {% if m.config.site.subtitle.value %}{% endif %}</a>
-					{# <span>{{ m.config.site.subtitle.value }}</span> #}
+				    <a class="navbar-brand" href="/">{{ m.site.title|default:"Your Zotonic Site" }} {% if m.site.subtitle %}{% endif %}</a>
+					{# <span>{{ m.site.subtitle }}</span> #}
 				</div>
 				{% menu id=id %}
 			</div>

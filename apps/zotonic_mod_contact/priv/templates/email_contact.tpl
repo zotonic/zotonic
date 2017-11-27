@@ -1,9 +1,9 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}{{ name|escape }} - {_ contact form on _} {{ m.config.site.title.value|default:m.site.hostname }}{% endblock %}
+{% block title %}{{ name|escape }} - {_ contact form on _} {{ m.site.title|default:m.site.hostname }}{% endblock %}
 
 {% block body %}
-<p>{_ Hello, the contact form of _} “{{m.config.site.title.value|default:m.site.hostname}}” {_ has been submitted. _}</p>
+<p>{_ Hello, the contact form of _} “{{m.site.title|default:m.site.hostname}}” {_ has been submitted. _}</p>
 
 <table>
 <tr>

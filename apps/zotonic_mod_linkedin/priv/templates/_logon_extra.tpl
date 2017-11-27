@@ -3,7 +3,7 @@
     as
     brand_color
 %}
-{% if m.config.mod_linkedin.useauth.value and m.config.mod_linkedin.appid.value %}
+{% if m.linkedin.useauth %}
 <li id="logon_linkedin">
 	{% if is_connect and 'linkedin'|member:identity_types %}
 		<a id="{{ #lnkddis }}" href="#disconnect" class="btn z-btn-social" style="background-color: #0077B5"><span class="z-icon z-icon-linkedin"></span> {_ Disconnect from LinkedIn _}</a>

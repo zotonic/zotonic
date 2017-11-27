@@ -3,7 +3,7 @@
 <html lang="{{ z_language|default:"en"|escape }}">
 <head>
 	<meta charset="utf-8" />
-	<title>{% block title %}{{ id.title }}{% endblock %} &mdash; {{ m.config.site.title.value }}</title>
+	<title>{% block title %}{{ id.title }}{% endblock %} &mdash; {{ m.site.title }}</title>
 
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />

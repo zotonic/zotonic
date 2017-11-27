@@ -49,10 +49,10 @@ process_get(Context) ->
 
 
 convert_result(<<"ids">>, Ids, _Context) ->
-    {array, Ids};
+    Ids;
 
 convert_result(<<"simple">>, Ids, Context) ->
-    {array, [format_simple(Id, Context) || Id <- Ids]};
+    [format_simple(Id, Context) || Id <- Ids];
 
 convert_result(F, _, _) ->
     {error, unknown_arg, "format=" ++ F}.
@@ -63,10 +63,8 @@ format_simple(Id, Context) ->
                   {ok, P} -> [{preview_url, P}];
                   _ -> []
               end,
-    z_convert:to_json(
       [{id, Id},
        {title, m_rsc:p(Id, title, Context)},
        {category, m_rsc:is_a(Id, Context)},
        {summary, m_rsc:p(Id, summary, Context)} | Preview
-      ]
-     ).
+      ].

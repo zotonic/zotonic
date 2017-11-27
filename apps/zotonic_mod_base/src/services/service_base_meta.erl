@@ -29,5 +29,4 @@
 
 
 process_get(Context) ->
-    M = z_service:all(info, Context),
-    {array, [ {struct, [ {Key, z_convert:to_atom(Value)} || {Key, Value} <- L] } || L <- M]}.
+    z_service:all(info, Context).

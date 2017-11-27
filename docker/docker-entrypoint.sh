@@ -9,15 +9,15 @@ if [ -x "/opt/zotonic/apps/zotonic_launcher/bin/zotonic-$1" ] || [ -n "$FORCE_ZO
     HOME=/tmp
     ZOTONIC_PIDFILE=/tmp/zotonic.pid
     ZOTONIC_CONFIG_DIR=/etc/zotonic
+    SHELL=/bin/sh
 
-    export HOME ZOTONIC_PIDFILE ZOTONIC_CONFIG_DIR
+    export HOME ZOTONIC_PIDFILE ZOTONIC_CONFIG_DIR SHELL
 
     # Create the pid file and enable zotonic to write to it
     touch /run/zotonic.pid && chown zotonic /run/zotonic.pid
 
     # Allow zotonic to write some state
-    mkdir /opt/zotonic/priv && \ 
-    chown -R zotonic /opt/zotonic/priv
+    mkdir /opt/zotonic/priv && chown -R zotonic /opt/zotonic/priv
 
     # The mimetypes app writes here on startup
     chown -R zotonic /opt/zotonic/_build/default/lib/mimetypes/ebin

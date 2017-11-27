@@ -34,6 +34,10 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context() ) -> {term(), list()}.
+m_get([ rewrite_url | Rest ], Context) ->
+    {m_config:get_boolean(mod_translation, rewrite_url, true, Context), Rest};
+m_get([ force_default | Rest ], Context) ->
+    {m_config:get_boolean(mod_translation, rewrite_url, false, Context), Rest};
 m_get([ language | Rest ], Context) ->
     {z_context:language(Context), Rest};
 m_get([ language_list_configured | Rest ], Context) ->
@@ -46,10 +50,20 @@ m_get([ main_languages | Rest ], _Context) ->
     {main_languages(), Rest};
 m_get([ all_languages | Rest ], _Context) ->
     {all_languages(), Rest};
+m_get([ enabled_language_codes | Rest ], Context) ->
+    {z_language:enabled_language_codes(Context), Rest};
+m_get([ language_list | Rest ], Context) ->
+    {z_language:language_list(Context), Rest};
+m_get([ language_stemmer | Rest ], Context) ->
+    Stemmer = case m_config:get_value(i18n, language_stemmer, Context) of
+        undefined -> default_language(Context);
+        <<>> -> default_language(Context);
+        St -> St
+    end,
+    {Stemmer, Rest};
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
-
 
 default_language(Context) ->
     z_language:default_language(Context).

@@ -1171,7 +1171,7 @@ recombine_languages(Props, Context) ->
         [] ->
             Props;
         L ->
-            Cfg = [atom_to_binary(Code, utf8) || Code <- config_langs(Context)],
+            Cfg = [atom_to_binary(Code, utf8) || Code <- z_language:enabled_language_codes(Context)],
             L1 = filter_langs(edited_languages(Props, L), Cfg),
             {LangProps, OtherProps} = comb_lang(Props, L1, [], []),
             LangProps ++ [{language, [binary_to_atom(Lang, 'utf8') || Lang <- L1]} | proplists:delete(
@@ -1332,15 +1332,6 @@ filter_langs(L, Cfg) ->
         lists:member(LangS, Cfg)
     end,
     L).
-
-
-
-config_langs(Context) ->
-    case m_config:get(i18n, language_list, Context) of
-        undefined -> [en];
-        Cfg -> [Code || {Code, _} <- proplists:get_value(list, Cfg, [{en, []}])]
-    end.
-
 
 update_page_path_log(RscId, OldProps, NewProps, Context) ->
     Old = proplists:get_value(page_path, OldProps),

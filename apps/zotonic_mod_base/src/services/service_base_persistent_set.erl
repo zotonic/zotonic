@@ -25,7 +25,10 @@ process_get(Context) ->
                     {error, missing_arg, "value"};
                 Value ->
                     z_context:set_persistent(Key, Value, Context),
-                    z_convert:to_json([{key, Key}, {value, Value}])
+                    #{
+                        <<"key">> => Key,
+                        <<"value">> => Value
+                    }
             end
     end.
 

@@ -2,7 +2,7 @@
 <html lang="{{ z_language }}">
     <head>
         <meta charset="utf-8" />
-        <title>{% block title %}{_ Admin _}{% endblock %} &mdash; {{ m.config.site.title.value|default:"Zotonic" }} Admin</title>
+        <title>{% block title %}{_ Admin _}{% endblock %} &mdash; {{ m.site.title|default:"Zotonic" }} Admin</title>
 
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">

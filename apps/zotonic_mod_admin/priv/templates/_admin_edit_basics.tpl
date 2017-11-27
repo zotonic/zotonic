@@ -10,5 +10,13 @@
 {% block widget_id %}edit-basics{% endblock %}
 
 {% block widget_content %}
-{% catinclude "_admin_edit_basics_form.tpl" id lang_code_with_brackets=lang_code_with_brackets lang_code_with_dollar=lang_code_with_dollar lang_code_for_id=lang_code_for_id r_language=r_language is_i18n=is_i18n lang_code=lang_code lang=lang %}
+    {% catinclude "_admin_edit_basics_form.tpl" id
+                  r_language=r_language
+                  is_i18n=is_i18n
+                  lang=lang
+                  lang_code=lang_code
+                  lang_code_with_brackets=lang_code_with_brackets
+                  lang_code_with_dollar=lang_code_with_dollar
+                  lang_code_for_id=lang_code_for_id
+    %}
 {% endblock %}

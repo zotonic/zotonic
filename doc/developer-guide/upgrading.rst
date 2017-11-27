@@ -112,6 +112,15 @@ Export
 * Modules mod_atom and mod_atom_feed were removed. You can export data in a
   variety of formats using :ref:`mod_export`.
 
+JSON
+^^^^
+
+* Mochijson structures replaced with Erlang maps.
+* All JSON encoding/decoding now relies on JSX and goes through
+  ``z_json:encode/1`` and ``z_json:decode/1``.
+* ``{trans, _}`` tuples should now be unpacked by the client, before calling
+  ``z_json:encode/1`` (previously ``z_json:to_mochijson/2``).
+
 Removed deprecated functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -196,7 +205,23 @@ Templates
   was renamed to ``absolute_url``.
 * Templates are now stored in :file:`yoursite/templates/priv/` instead of
   :file:`yoursite/templates/`.
-* The ``maxage`` caching argument was renamed to ``max-age``.
+* The ``maxage`` caching argument was renamed to ``max_age``.
+* The models have now extra ACL checks.
+
+  The ``m.config``, ``m.site`` and ``m.sysconfig`` models are only accessible
+  as administrator. Use the models *owning* the various settings to access the
+  configurations.
+
+  Exception is that the hostname and site-title information is publicly accessible
+  using ``m.site``.
+
+  Examples:
+
+   * ``m.config.site.title.value`` is now ``m.site.title``
+   * ``m.config.mod_editor_tinymce.version.value`` is now ``m.editor_tinymce.version``
+
+  Check the various models of the modules for the new lookups.
+
 
 Port, proxies and SSL certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

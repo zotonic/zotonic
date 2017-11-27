@@ -31,7 +31,7 @@
 
 answer(Block, Answers, _Context) ->
     Name = proplists:get_value(name, Block),
-    case proplists:get_value(Name, Answers) of
+    case maps:get(Name, Answers, undefined) of
         undefined ->
             {error, missing};
         Value ->

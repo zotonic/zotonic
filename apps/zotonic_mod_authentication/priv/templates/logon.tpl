@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block title %}
-{{ m.rsc.page_logon.title|default:[_"Sign in to", " ", m.config.site.title.value|default:"Zotonic"] }}
+{{ m.rsc.page_logon.title|default:[_"Sign in to", " ", m.site.title|default:"Zotonic"] }}
 {% endblock %}
 
 {% block content_area %}

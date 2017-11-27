@@ -34,7 +34,7 @@ process_post(Context) ->
         IdStr ->
             case m_rsc:rid(IdStr, Context) of
                 SurveyId when is_integer(SurveyId) ->
-                    {struct, Answers} = mochijson2:decode(B),
+                    Answers = z_json:decode(B),
 
                     case m_rsc:p(SurveyId, blocks, Context) of
                         Questions when is_list(Questions) ->
@@ -57,12 +57,15 @@ process_post(Context) ->
     end.
 
 handle_survey_result(ok, _Context) ->
-    {struct, [{result, "submitted"}]};
+    #{<<"result">> => <<"submitted">>};
 handle_survey_result({ok, _}, _Context) ->
-    {struct, [{result, "submitted"}]};
+    #{<<"result">> => <<"submitted">>};
 handle_survey_result({error, Reason}, _) ->
     R = lists:flatten(io_lib:format("~p", [Reason])),
-    {struct, [{result, "error"}, {reason, R}]}.
+    #{
+        <<"result">> => <<"error">>,
+        <<"reason">> => R
+    }.
 
 
 
