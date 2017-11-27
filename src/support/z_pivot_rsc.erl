@@ -153,6 +153,54 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
 %% @doc Insert a slow running pivot task with unique key and arguments that should start after Seconds seconds.
 %%      Always delete any existing transaction, to prevent race conditions when the task is running
 %%      during this insert.
+insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) when is_function(ArgsFun) ->
+    Due = to_utc_date(SecondsOrDate),
+    UniqueKeyBin = z_convert:to_binary(UniqueKey),
+    z_db:transaction(
+        fun(Ctx) ->
+            OldTask = z_db:q_row("
+                select props, due
+                from pivot_task_queue
+                where module = $1
+                  and function = $2
+                  and key = $3
+                limit 1
+                for update",
+                [ Module, Function, UniqueKeyBin ],
+                Ctx),
+            New = case OldTask of
+                {OldProps, OldDue} ->
+                    {args, OldArgs} = proplists:lookup(args, OldProps),
+                    ArgsFun(OldDue, OldArgs, Due, Ctx);
+                undefined ->
+                    ArgsFun(undefined, undefined, Due, Ctx)
+            end,
+            case New of
+                {ok, {NewDue, NewArgs}} ->
+                    case OldTask of
+                        undefined -> ok;
+                        {_, _} ->
+                            _ = z_db:q("
+                                delete from pivot_task_queue
+                                where module = $1
+                                  and function = $2
+                                  and key = $3",
+                                [ Module, Function, UniqueKeyBin ],
+                                Ctx)
+                    end,
+                    Fields = [
+                        {module, Module},
+                        {function, Function},
+                        {key, UniqueKeyBin},
+                        {args, NewArgs},
+                        {due, NewDue}
+                    ],
+                    z_db:insert(pivot_task_queue, Fields, Ctx);
+                {error, _} = Error ->
+                    Error
+            end
+        end,
+        Context);
 insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
     Due = to_utc_date(SecondsOrDate),
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
