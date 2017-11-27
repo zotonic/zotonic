@@ -9,8 +9,8 @@
                 </span>
                 &nbsp;
                 {% for a in [1,2,3,4,5] %}
-                    {% if ans == a %}<span class="fa fa-check-circle"></span>
-                    {% else %}<span class="fa fa-circle-o"></span>
+                    {% if ans == a %}<span>&#x25C9;</span>
+                    {% else %}<span>&#x25EF;</span>
                     {% endif %}
                     &nbsp;
                 {% endfor %}
