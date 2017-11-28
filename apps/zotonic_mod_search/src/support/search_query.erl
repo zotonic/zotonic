@@ -137,6 +137,7 @@ request_arg(<<"asort">>)               -> asort;
 request_arg(<<"zsort">>)               -> zsort;
 request_arg(<<"text">>)                -> text;
 request_arg(<<"match_objects">>)       -> match_objects;
+request_arg(<<"match_object_ids">>)    -> match_object_ids;
 request_arg(<<"upcoming">>)            -> upcoming;
 request_arg(<<"ongoing">>)             -> ongoing;
 request_arg(<<"finished">>)            -> finished;
@@ -501,20 +502,23 @@ parse_query([{match_objects, RId}|Rest], Context, Result) ->
             #search_result{};
         Id ->
             ObjectIds = m_edge:objects(Id, Context),
-            MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds ],
-            TsQuery = lists:flatten(z_utils:combine("|", MatchTerms)),
-            case TsQuery of
-                [] ->
-                    #search_result{};
-                _ ->
-                    {QArg, Result1} = add_arg(TsQuery, Result),
-                    Result2 = Result1#search_sql{
-                                from=Result1#search_sql.from ++ ", to_tsquery(" ++ QArg ++ ") matchquery"
-                               },
-                    Result3 = add_where("matchquery @@ rsc.pivot_rtsv", Result2),
-                    Result4 = add_order_unsafe("ts_rank(rsc.pivot_rtsv, matchquery) desc", Result3),
-                    parse_query([{id_exclude, Id}|Rest], Context, Result4)
-            end
+            parse_query([{match_object_ids, ObjectIds}, {id_exclude, Id}|Rest], Context, Result)
+    end;
+parse_query([{match_object_ids, ObjectIds} | Rest], Context, Result) ->
+    ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- ObjectIds ],
+    MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, is_integer(ObjId) ],
+    TsQuery = lists:flatten(z_utils:combine("|", MatchTerms)),
+    case TsQuery of
+        [] ->
+            #search_result{};
+        _ ->
+            {QArg, Result1} = add_arg(TsQuery, Result),
+            Result2 = Result1#search_sql{
+                        from=Result1#search_sql.from ++ ", to_tsquery(" ++ QArg ++ ") matchquery"
+                       },
+            Result3 = add_where("matchquery @@ rsc.pivot_rtsv", Result2),
+            Result4 = add_order_unsafe("ts_rank(rsc.pivot_rtsv, matchquery) desc", Result3),
+            parse_query(Rest, Context, Result4)
     end;
 
 %% date_start_after=date

@@ -180,6 +180,15 @@ objects ids will be returned first::
 
 An ``id_exlude=...`` is automatically added for the resource in the argument.
 
+match_object_ids
+^^^^^^^^^^^^^^^^
+
+Find the resources that have similar object edges to the given resources.
+This is done using a full text query. The resource with most overlapping
+objects ids will be returned first::
+
+    match_object_ids=[108, 238, 1234]
+
 is_authoritative
 ^^^^^^^^^^^^^^^^
 
