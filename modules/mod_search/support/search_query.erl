@@ -521,7 +521,8 @@ parse_query([{match_objects, RId}|Rest], Context, Result) ->
             parse_query([{match_object_ids, ObjectIds}, {id_exclude, Id}|Rest], Context, Result)
     end;
 parse_query([{match_object_ids, ObjectIds} | Rest], Context, Result) ->
-    MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds ],
+    ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- ObjectIds ],
+    MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, is_integer(ObjId) ],
     TsQuery = lists:flatten(z_utils:combine("|", MatchTerms)),
     case TsQuery of
         [] ->
