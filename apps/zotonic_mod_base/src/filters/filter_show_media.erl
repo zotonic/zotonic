@@ -79,7 +79,7 @@ show_media1_opts(Id, Input, Index, Context) ->
 show_media_html(Id, Context) ->
     show_media_html(Id, {struct, []}, Context).
 
-show_media_html(Id, {struct, Args}, Context) ->
+show_media_html(Id, Args, Context) when is_map(Args) ->
     case m_rsc:rid(Id, Context) of
         undefined -> <<>>;
         RscId ->
@@ -90,7 +90,7 @@ show_media_html(Id, {struct, Args}, Context) ->
     end.
 
 show_media_html_1(Id, Args, Context) ->
-    Args2 = [ {to_atom(A), B} || {A,B} <- Args],
+    Args2 = [ {to_atom(A), B} || {A,B} <- maps:to_list(Args)],
     Args3 = filter_args(Args2, []),
     Args4 = filter_defaults(Args3),
     Tpl = z_context:get(show_media_template, Context),
@@ -100,6 +100,7 @@ to_atom(<<"size">>) -> size;
 to_atom(<<"caption">>) -> caption;
 to_atom(<<"crop">>) -> crop;
 to_atom(<<"link">>) -> link;
+to_atom(<<"link_url">>) -> link_url;
 to_atom(<<"align">>) -> align;
 to_atom(A) -> binary_to_existing_atom(A, 'utf8').
 
@@ -113,9 +114,22 @@ filter_defaults(Args) ->
         true ->
             Args
     end,
-    case proplists:is_defined(align, Args1) of
+    Args2 = case proplists:is_defined(align, Args1) of
         false -> [ {align, <<"middle">>} | Args1 ];
         true -> Args1
+    end,
+    case proplists:get_value(link, Args2, false) of
+        false -> Args2;
+        true ->
+            LinkUrl = proplists:get_value(link_url, Args2),
+            case z_utils:is_empty(LinkUrl) of
+                true -> Args2;
+                false ->
+                    [
+                        {link, LinkUrl}
+                        | proplists:delete(link, Args2)
+                    ]
+            end
     end.
 
 filter_args([], Acc) ->
@@ -151,6 +165,8 @@ filter_args([{link, _}|Args], Acc) ->
     filter_args(Args, Acc);
 filter_args([{caption, Caption}|Args], Acc) ->
     filter_args(Args, [{caption,z_html:escape(Caption)}|Acc]);
+filter_args([{link_url, LinkUrl}|Args], Acc) ->
+    filter_args(Args, [{link_url,z_html:escape(LinkUrl)}|Acc]);
 filter_args([{K, V}|Args], Acc) when is_binary(V) ->
     % Escape unknown arguments
     filter_args(Args, [{K,z_html:escape_check(V)}|Acc]);
