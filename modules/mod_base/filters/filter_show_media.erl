@@ -79,9 +79,39 @@ show_media_html(Id, Context) ->
 show_media_html(Id, {struct, Args}, Context) ->
     Args2 = [ {to_atom(A), B} || {A,B} <- Args],
     Args3 = filter_args(Args2, false, [], Context),
+    Args4 = filter_defaults(Args3),
     Id1 = try z_convert:to_integer(Id) catch _:_ -> z_html:escape(Id) end,
     Tpl = z_context:get(show_media_template, Context),
-    z_template:render({cat, Tpl}, [ {id, Id1} | Args3 ++ z_context:get_all(Context) ], Context).
+    z_template:render({cat, Tpl}, [ {id, Id1} | Args4 ++ z_context:get_all(Context) ], Context).
+
+filter_defaults(Args) ->
+    Args1 = case proplists:is_defined(size, Args) of
+        false ->
+            [   {mediaclass, <<"body-media-large">>},
+                {size, <<"large">>}
+                |Args
+            ];
+        true ->
+            Args
+    end,
+    Args2 = case proplists:is_defined(align, Args1) of
+        false -> [ {align, <<"middle">>} | Args1 ];
+        true -> Args1
+    end,
+    case proplists:get_value(link, Args2, false) of
+        undefined -> Args2;
+        false -> Args2;
+        true ->
+            LinkUrl = proplists:get_value(link_url, Args2),
+            case z_utils:is_empty(LinkUrl) of
+                true -> Args2;
+                false ->
+                    [
+                        {link, LinkUrl}
+                        | proplists:delete(link, Args2)
+                    ]
+            end
+    end.
 
 to_atom(<<"id">>) -> id;
 to_atom(<<"size">>) -> size;
@@ -89,6 +119,7 @@ to_atom(<<"sizename">>) -> sizename;
 to_atom(<<"caption">>) -> caption;
 to_atom(<<"crop">>) -> crop;
 to_atom(<<"link">>) -> link;
+to_atom(<<"link_url">>) -> link_url;
 to_atom(<<"align">>) -> align;
 to_atom(A) -> binary_to_existing_atom(A, 'utf8'). 
 
@@ -107,12 +138,18 @@ filter_args([{size,Size}|Args], _, Acc, Context) ->
     filter_args(Args, true, [{size,P},{sizename,SizeName}|Acc], Context);
 filter_args([{crop, <<"crop">>}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{crop,true}|Acc], Context);
+filter_args([{crop, true}|Args], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [{crop,true}|Acc], Context);
 filter_args([{crop, _}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{crop,undefined}|Acc], Context);
 filter_args([{link, <<"link">>}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{link,true}|Acc], Context);
+filter_args([{link, true}|Args], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [{link,true}|Acc], Context);
 filter_args([{link, _}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{link,undefined}|Acc], Context);
+    filter_args(Args, HasSize, Acc, Context);
+filter_args([{link_url, LinkUrl}|Args], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [{link_url,z_html:escape(LinkUrl)}|Acc], Context);
 filter_args([{caption, Caption}|Args], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [{caption,z_html:escape(Caption)}|Acc], Context);
 filter_args([P|Args], HasSize, Acc, Context) ->

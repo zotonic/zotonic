@@ -190,6 +190,8 @@ sanitize_z_media_arg({<<"align">>, <<"right">>} = S) -> S;
 sanitize_z_media_arg({<<"align">>, _}) -> {<<"align">>, <<"block">>};
 sanitize_z_media_arg({<<"crop">>, Crop}) -> {<<"crop">>, z_convert:to_bool(Crop)};
 sanitize_z_media_arg({<<"link">>, Link}) -> {<<"link">>, z_convert:to_bool(Link)};
+sanitize_z_media_arg({<<"link_url">>, LinkUrl}) ->
+    {<<"link_url">>, z_html:sanitize_uri(z_string:trim(LinkUrl))};
 sanitize_z_media_arg({<<"caption">>, Caption}) ->
     Caption1 = binary:replace(Caption, <<"-->">>, <<226,134,146>>, [global]),
     {<<"caption">>, Caption1};

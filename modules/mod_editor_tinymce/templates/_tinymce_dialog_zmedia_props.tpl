@@ -1,7 +1,18 @@
 <form id="zmedia-props-form" class="form">
      <div class="form-group row">
           <div class="col-md-6">
-               <img style="width: 100%" src="{% url admin_media_preview id=id %}" class="z-tinymce-media-left" />
+               <div class="form-group">
+                    <img style="width: 100%" src="{% url admin_media_preview id=id %}" class="z-tinymce-media-left" />
+               </div>
+               <div class="form-group">
+                    <label class="control-label">{_ Caption _}</label>
+                    <div class="controls">
+                         <textarea class="form-control" name="caption" id="a-caption">{{ options.caption|escape }}</textarea>
+                         <p class="help-block">
+                              {_ Defaults to the summary of the media. Enter a single “-” to not display a caption. _}
+                         </p>
+                    </div>
+               </div>
           </div>
           <div class="col-md-6">
                <div class="row">
@@ -64,25 +75,20 @@
                                    </div>
                               </div>
                          </div>
-                         <div class="form-group">
-                              <label class="control-label">{_ Link _}</label>
-                              <div class="controls">
-                                   <div class="checkbox">
-                                        <label>
-                                             <input type="checkbox" name="link" {% if options.link %}checked{% endif %} value="link" id="a-link">
-                                             {_ Make link _}
-                                        </label>
-                                   </div>
-                              </div>
-                         </div>
                     </div>
                </div>
                <div class="row">
                     <div class="col-md-12">
                          <div class="form-group">
-                              <label class="control-label">{_ Caption _}</label>
-                              <div class="controls">
-                                   <textarea class="form-control" name="caption" id="a-caption">{{ options.caption|escape }}</textarea>
+                              <label class="control-label">{_ Link _}</label>
+                              <div class="checkbox">
+                                   <label>
+                                        <input type="checkbox" name="link" {% if options.link %}checked{% endif %} value="link" id="a-link">
+                                        {_ Link to media or url below _}
+                                   </label>
+                              </div>
+                              <div class="checkbox">
+                                   <input type="text" class="form-control" name="link_url" id="a-link_url" placeholder="{_ Website. Leave empty for media link _}" value="{{ options.link_url|escape }}">
                               </div>
                          </div>
                     </div>
