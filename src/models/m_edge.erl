@@ -727,7 +727,6 @@ update_sequence(Id, Pred, ObjectIds, Context) ->
                 SortedEdgeIds = [ proplists:get_value(OId, All, -1) || OId <- SortedIds ],
                 z_db:update_sequence(edge, SortedEdgeIds, Ctx),
                 m_rsc:touch(Id, Ctx),
-                pivot_resources(SortedEdgeIds, Ctx),
                 ok
             end,
 
@@ -766,7 +765,6 @@ set_sequence(Id, Pred, ObjectIds, Context) ->
                         SortedEdgeIds = [ proplists:get_value(OId, AllEdges, -1) || OId <- ObjectIds ],
                         z_db:update_sequence(edge, SortedEdgeIds, Ctx),
                         m_rsc:touch(Id, Ctx),
-                        pivot_resources(SortedEdgeIds, Ctx),
                         ok
                 end,
 
@@ -849,7 +847,6 @@ update_sequence_edge_ids(Id, Pred, EdgeIds, Context) ->
                 SortedEdgeIds = EdgeIds ++ lists:reverse(AppendToEnd),
                 z_db:update_sequence(edge, SortedEdgeIds, Ctx),
                 m_rsc:touch(Id, Ctx),
-                pivot_resources(SortedEdgeIds, Ctx),
                 ok
             end,
 
