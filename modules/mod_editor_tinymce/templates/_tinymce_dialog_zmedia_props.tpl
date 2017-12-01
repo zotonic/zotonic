@@ -99,6 +99,6 @@
           <button class="btn btn-primary" type="submit">{_ Save _}</button>
           <button class="btn btn-default" id="{{ #cancel }}">{_ Cancel _}</button>
      </div>
-</form>'
+</form>
 
 {% wire id=#cancel action={dialog_close} %}
