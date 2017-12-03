@@ -22,8 +22,10 @@ Create (and export!) an ``init/1`` function in your site where you define a cust
         z_pivot_rsc:define_custom_pivot(pivotname, [{requestor, "varchar(80)"}], Context),
         ok.
 
-The new table will be called ``pivot_<pivotname>``. To fill the pivot
-table with data when a resource gets saved, create a notification
+The new table will be called ``pivot_<pivotname>``. When you change the column
+names in the table definition, the table will be recreated and **the data inside will be lost**.
+
+To fill the pivot table with data when a resource gets saved, create a notification
 listener function ``observe_custom_pivot/2``::
 
     observe_custom_pivot({custom_pivot, Id}, Context) ->
