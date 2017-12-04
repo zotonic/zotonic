@@ -14,7 +14,7 @@ Main changes are:
 * Fixed bug on non-SMP systems by enabling SMP by default (:issue:`1490`).
 * Fixed WebSocket error messages by correctly closing WebSocket connections
   (:issue:`1840`).
-* Fixed inconsistent data by re-pivoting both subject when edge is
+* Fixed inconsistent data by re-pivoting both subject and object when edge is
   inserted/deleted (:issue:`1756`).
 
 Commits since 0.34.0
