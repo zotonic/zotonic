@@ -17,37 +17,31 @@
 {% endblock %}
 
 {% block widget_content %}
-<fieldset class="form-horizontal">
-    <div class="form-group row">
+<fieldset>
+    <div class="row">
 	    <div class="col-lg-6 col-md-6">
-            <div class="form-group">
-                <div class="checkbox">
-                	<label>
-    		            <input type="checkbox" name="survey_is_autostart" id="survey_is_autostart" value="1" {% if id.survey_is_autostart or (id.survey_is_autostart|is_undefined and id.is_a.poll) %}checked="checked"{% endif %} />
-    		            {_ Immediately start with the questions, no “Start” button _}
-    	            </label>
-    	        </div>
-                <div class="checkbox">
-                	<label>
-    		            <input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent %}checked="checked"{% endif %} />
-    		            {_ Send confirmation to respondent (please add a question named <i>email</i>) _}
-    	            </label>
-    	        </div>
+            <div class="form-group checkbox">
+            	<label>
+		            <input type="checkbox" name="survey_is_autostart" id="survey_is_autostart" value="1" {% if id.survey_is_autostart or (id.survey_is_autostart|is_undefined and id.is_a.poll) %}checked="checked"{% endif %} />
+		            {_ Immediately start with the questions, no “Start” button _}
+	            </label>
+            	<label>
+		            <input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent %}checked="checked"{% endif %} />
+		            {_ Send confirmation to respondent (please add a question named <i>email</i>) _}
+	            </label>
             </div>
 
             <div class="form-group">
                 <label class="control-label">{_ Fill in _}</label>
-                <div class="controls">
-                    <select name="survey_multiple" id="survey_multiple">
-                        <option value="0">{_ Once only per user/browser _}</option>
-                        <option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
-                            {_ Multiple entries per user/browser _}
-                        </option>
-                        <option value="2" {% if id.survey_multiple == 2 %}selected{% endif %}>
-                            {_ Once and allow editing afterwards _}
-                        </option>
-                    </select>
-                </div>
+                <select name="survey_multiple" id="survey_multiple">
+                    <option value="0">{_ Once only per user/browser _}</option>
+                    <option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
+                        {_ Multiple entries per user/browser _}
+                    </option>
+                    <option value="2" {% if id.survey_multiple == 2 %}selected{% endif %}>
+                        {_ Once and allow editing afterwards _}
+                    </option>
+                </select>
             </div>
 	    </div>
 
@@ -69,7 +63,7 @@
 
     {% if not id.is_a.poll %}
         <div class="form-group row">
-            <label class="control-label col-md-6">{_ When finished show _}</label>
+            <label class="control-label col-md-3">{_ When finished show _}</label>
             <div class="col-md-6">
                 <select class="form-control" name="survey_show_results" id="survey_show_results">
                     <option value="">{_ Thank you text only _}</option>
@@ -82,11 +76,15 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-6">{_ Test pass percentage _}</label>
+        <div class="form-group row">
+            <label class="control-label col-md-3">{_ Test pass percentage _}</label>
             <div class="col-md-6">
-                <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}"
-                       class="input-small form-control" value="{{ id.survey_test_percentage }}" placeholder="" /> %
+                <div class="input-group">
+                    <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}"
+                           class="input-small form-control" value="{{ id.survey_test_percentage }}"
+                           placeholder="" />
+                    <div class="input-group-addon">%</div>
+                </div>
                 {% validate id=#survey_test_percentage name="survey_test_percentage"
                             type={numericality minimum=0 maximum=100}
                 %}
@@ -98,15 +96,16 @@
     {% endif %}
 
     <div class="form-group row">
-	    <label class="control-label col-md-6">{_ Mail filled in surveys to _}</label>
+	    <label class="control-label col-md-3">{_ Mail filled in surveys to _}</label>
 	    <div class="col-md-6">
 		    <input type="text" class="form-control" name="survey_email" id="survey_email" value="{{ id.survey_email }}" />
+            <p class="help-block muted">{_ Separate multiple email addresses with a comma. _}</p>
 	    </div>
     </div>
 
     {% if m.survey.handlers|length %}
         <div class="form-group row">
-	        <label class="control-label col-md-6">{_ Handle this survey with _}</label>
+	        <label class="control-label col-md-3">{_ Handle this survey with _}</label>
 	        <div class="col-md-6">
 		        <select class="form-control" name="survey_handler" id="survey_handler">
 			        <option value=""></option>

@@ -10,7 +10,7 @@
 {% block widget_header %}{% endblock %}
 
 {% block widget_content %}
-    <p class="alert view-expanded">
+    <p class="alert alert-info view-expanded">
         {_ This block show a file upload field. This can only be used as the last question of a survey. The default survey routines can’t handle file upload, you will need to add your own survey handler to your site or module. _}
     </p>
 

@@ -1,7 +1,7 @@
 {% include "_survey_block_name_check.tpl" %}
 
 {% if is_survey_answer_view %}
-    <div class="control-group survey-truefalse">
+    <div class="form-group survey-truefalse">
         <label class="control-label">{{ blk.prompt }}</label>
         <b>
             {% if result.answers[blk.name].answer == 'true' %}{{ blk.yes|default:_"True" }}

@@ -28,7 +28,7 @@
 
 {% block widget_content_nolang %}
     <div class="form-group view-expanded">
-        <label for="block-{{name}}-choices">{_ Choices _} ({_ one per line _})</label>
+        <label for="block-{{name}}-choices" class="control-label">{_ Choices _} ({_ one per line _})</label>
         <textarea class="form-control" id="block-{{name}}-choices" name="block-{{name}}-choices" rows="4">{{ blk.choices }}</textarea>
     </div>
 

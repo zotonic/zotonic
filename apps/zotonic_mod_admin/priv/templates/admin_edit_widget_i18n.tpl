@@ -12,6 +12,7 @@
 	<div class="widget {% if in_dialog %}dialog-widget{% endif %} translations tabbable {% if show_header %}do_adminwidget{% endif %}{% block widget_class %}{% endblock %}"
 		 data-adminwidget="minifiedOnInit: {% block widget_show_minimized %}false{% endblock %}, minifier: {% if show_opened or in_dialog %}false{% else %}true{% endif %}"
 		 id="{% block widget_id %}{% endblock %}">
+
 		{% if not in_dialog and not noheader %}
             {% block widget_header %}
                 {% if show_header %}
@@ -21,10 +22,13 @@
                 {% endif %}
             {% endblock %}
         {% endif %}
+
 		{% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
+
 		<div class="tab-content widget-content nolang_before">
             {% block widget_content_nolang_before %}{% endblock %}
         </div>
+
 		<div class="tab-content widget-content">
 			{% for lang_code,lang in m.translation.language_list_enabled %}
     			{# to define some helper vars that will be useful in widget_content: #}
@@ -41,6 +45,7 @@
     			{% endwith %}
 			{% endfor %}
 		</div>
+
 		<div class="tab-content widget-content nolang">
             {% block widget_content_nolang %}{% endblock %}
         </div>

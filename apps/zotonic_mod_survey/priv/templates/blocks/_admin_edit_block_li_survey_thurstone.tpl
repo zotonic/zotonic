@@ -10,7 +10,7 @@
 {% block widget_header %}{% endblock %}
 
 {% block widget_content %}
-    {% if is_editable %}
+    {% if id.is_editable %}
       <div class="form-group">
           <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
                  placeholder="{_ Prompt _} ({{ lang_code }})" />
@@ -22,7 +22,7 @@
       </div>
 
       <div class="form-group view-expanded">
-         <label>
+         <label class="control-label">
               {_ List of possible answers, one per line. Use <em>value#answer</em> to store “value” but to show “answer”. E.g.  “2029#The year 2029”. _}
               <span class="test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
                   {_ For quiz or test, mark correct answers with a “*””. E.g. “*value#answer” _}
@@ -51,20 +51,26 @@
                 </select>
             </div>
             <div class="form-group view-expanded">
-                <label class="checkbox">
-                    <input type="checkbox" id="block-{{name}}-is_random" name="block-{{name}}-is_random" value="1" {% if blk.is_random %}checked="checked"{% endif %} />
-                    {_ Randomize answers _}
-                </label>
-
-                <div class="question-options">
-                    <label class="checkbox">
-                        <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
-                        {_ Required, this question must be answered. _}
-                    </label>
+                <div class="checkbox">
                     <label>
-                        <input type="checkbox" id="block-{{name}}-is_hide_result" name="block-{{name}}-is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
-                        {_ Hide from results _}
+                        <input type="checkbox" id="block-{{name}}-is_random" name="block-{{name}}-is_random" value="1" {% if blk.is_random %}checked="checked"{% endif %} />
+                        {_ Randomize answers _}
                     </label>
+                </div>
+                <div class="question-options">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
+                            {_ Required, this question must be answered. _}
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="block-{{name}}-is_hide_result" name="block-{{name}}-is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
+                            {_ Hide from results _}
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>

@@ -28,7 +28,6 @@
 			</div>
 		</fieldset>
 	{% endwith %}
-	{% endwith %}
 {% endblock %}
 
 {% block widget_content_nolang %}
