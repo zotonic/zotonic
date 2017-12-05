@@ -285,14 +285,16 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
             case Next of
                 {L,NewPageNr} when is_list(L) ->
                     % A new list of questions, PageNr might be another than expected
-                    Vars = [ {id, Id},
-                             {q, As},
-                             {page_nr, NewPageNr},
-                             {questions, L},
-                             {pages, count_pages(Questions)},
-                             {answers, Answers2},
-                             {history, [NewPageNr|History]},
-                             {editing, Editing}],
+                    Vars = [
+                        {id, Id},
+                        {q, As},
+                        {page_nr, NewPageNr},
+                        {questions, L},
+                        {pages, count_pages(Questions)},
+                        {answers, Answers2},
+                        {history, [NewPageNr|History]},
+                        {editing, Editing}
+                    ],
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
                 {error, {not_found, Name} = Reason} ->
