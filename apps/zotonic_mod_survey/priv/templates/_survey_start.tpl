@@ -21,6 +21,7 @@
                 {_ You already filled this in. _}
             </p>
 		{% endif %}
+    {% endwith %}
 {% endif %}
 
 {% if m.survey.is_allowed_results_download[id] %}

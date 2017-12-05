@@ -102,9 +102,7 @@ m_get([ did_survey_results, Id | Rest ], Context) ->
                                 UId ->
                                     {UId, undefined}
                             end,
-    Answers = m_survey:single_result(Id, UserId, PersistentId, Context),
-    As = lists:flatten([ Vs || {_,Vs} <- Answers ]),
-    {As, Rest};
+    {m_survey:single_result(Id, UserId, PersistentId, Context), Rest};
 m_get([ did_survey_results_readable, Id | Rest ], Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
