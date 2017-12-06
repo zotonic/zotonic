@@ -53,13 +53,13 @@ CONFIG1 = case proplists:get_value(zotonic, Config) of
         CONFIG;
     ZCfg ->
         AppDir = proplists:get_value(project_app_dirs, CONFIG, []),
-        AppDir1 = case proplists:get_value(user_sites_dir, ZCfg) of
+        AppDir1 = case proplists:get_value(user_sites_dir, ZCfg, "user/sites") of
             undefined -> AppDir;
             "" -> AppDir;
             UserSitesDir ->
                 [ UserSitesDir ++ "/*" | AppDir ]
         end,
-        AppDir2 = case proplists:get_value(user_modules_dir, ZCfg) of
+        AppDir2 = case proplists:get_value(user_modules_dir, ZCfg, "user/modules") of
             undefined -> AppDir1;
             "" -> AppDir1;
             UserModulesDir ->
