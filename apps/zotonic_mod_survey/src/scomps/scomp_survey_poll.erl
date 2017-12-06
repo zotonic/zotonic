@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2017 Marc Worrell
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 -behaviour(gen_scomp).
 -export([vary/2, render/3]).
+-export([single_result/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
@@ -28,17 +29,30 @@ vary(_,_) -> nocache.
 render(Args, _Vars, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     ElementId = proplists:get_value(element_id, Args, "survey-question"),
-    UserId = z_convert:to_integer(proplists:get_value(user_id, Args)),
-    PersistentId = proplists:get_value(persistent_id, Args),
+    AnswerId = proplists:get_value(answer_id, Args),
     Actions = proplists:get_all_values(action, Args),
     Actions1 = [ Action || Action <- Actions, Action =/= undefined ],
-    Render = case {UserId, PersistentId, z_acl:rsc_editable(SurveyId, Context)} of
-                {UserId, PersistentId, true} when is_integer(UserId); is_binary(PersistentId) ->
-                    Answers = m_survey:single_result(SurveyId, UserId, PersistentId, Context),
-                    Answers1 = lists:flatten([ Vs || {_,Vs} <- Answers ]),
-                    Editing = {editing, UserId, PersistentId, Actions1},
-                    mod_survey:render_next_page(SurveyId, 1, exact, Answers1, [], Editing, Context);
-                _ ->
-                    mod_survey:render_next_page(SurveyId, 1, exact, [], [], undefined, Context)
-             end,
+    Render = case z_acl:rsc_editable(SurveyId, Context) of
+        true when is_integer(AnswerId) ->
+            Answers = single_result(SurveyId, AnswerId, Context),
+            Editing = {editing, AnswerId, Actions1},
+            mod_survey:render_next_page(SurveyId, 1, exact, Answers, [], Editing, Context);
+        _NotEditing ->
+            mod_survey:render_next_page(SurveyId, 1, exact, [], [], undefined, Context)
+    end,
     {ok, z_template:render(Render#render{vars=[{element_id, ElementId}|Render#render.vars]}, Context)}.
+
+single_result(SurveyId, AnswerId, Context) ->
+    case m_survey:single_result(SurveyId, AnswerId, Context) of
+        None when None =:= undefined; None =:= [] ->
+            [];
+        Result ->
+            Answers = proplists:get_value(answers, Result, []),
+            lists:map(
+                fun({_QName, Ans}) ->
+                    Block = proplists:get_value(block, Ans),
+                    Answer = proplists:get_value(answer, Ans),
+                    {Block, Answer}
+                end,
+                Answers)
+    end.

@@ -32,7 +32,9 @@ $.widget("ui.clickable",
 					break;
 				default:
 					var target = $(this).find("a").attr("href");
-					if($(this).find("a").attr("rel") == "external"){
+					if (target == '#') {
+						$(this).find("a").click();
+					} else if ($(this).find("a").attr("rel") == "external"){
 						window.open(target);
 					} else {
 						window.location=target;

@@ -105,11 +105,11 @@ prep_answer(Block, Answers, _Context) ->
     ItemNames = [ iolist_to_binary([Name, $_, KI]) || {KI,_} <- Items ],
     [ prep_answer1(Item, Answers) || Item <- ItemNames ].
 
-    prep_answer1(Item, Answers) ->
-        case proplists:get_value(Item, Answers) of
-            {V, _Text} -> V;
-            undefined -> <<>>
-        end.
+prep_answer1(Item, Answers) ->
+    case proplists:get_value(Item, Answers) of
+        undefined -> <<>>;
+        V -> V
+    end.
 
 prep_block(Block, Context) ->
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),

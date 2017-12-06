@@ -61,11 +61,11 @@ prep_chart(Block, [{_, Vals}], Context) ->
         DisAg -> DisAg
     end,
     LabelsDisplay = [
-        z_trans:lookup_fallback(Agree, Context),
+        [<<"5 ">>, z_trans:lookup_fallback(Agree, Context)],
         <<"4">>,
         <<"3">>,
         <<"2">>,
-        z_trans:lookup_fallback(DisAgree, Context)
+        [<<"1 ">>, z_trans:lookup_fallback(DisAgree, Context)]
     ],
     Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
@@ -82,7 +82,7 @@ prep_answer_header(Block, _Context) ->
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
-prep_answer(_Q, [{_Name, {Value, _Text}}|_], _Context) ->
+prep_answer(_Q, [{_Name, Value}|_], _Context) ->
     Value.
 
 prep_block(B, _Context) ->

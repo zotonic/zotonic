@@ -572,7 +572,8 @@
     service_uid :: binary(),
     service_props = [] :: list(),
     props = [] :: list({atom(), any()}),
-    is_connect = false :: boolean()
+    is_connect = false :: boolean(),
+    is_signup_confirm = false :: boolean()
 }).
 
 %% @doc Called after parsing the query arguments

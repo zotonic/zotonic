@@ -1,3 +1,3 @@
-<div id="survey-question">
-    {% poll id=id user_id=user_id persistent_id=persistent_id action=action %}
+<div id="survey-question" style="padding: 0 20px 20px 20px;">
+    {% poll id=id answer_id=answer_id action=action is_dialog %}
 </div>

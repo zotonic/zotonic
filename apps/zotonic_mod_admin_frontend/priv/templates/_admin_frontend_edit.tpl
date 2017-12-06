@@ -23,9 +23,15 @@
 	<div class="meta-data row">
 		<div class="col-lg-10 col-md-10">
 			{% block meta_data_first %}{% endblock %}
-			<p>
-				{{ id.category_id.title }}
 
+			<div>
+				<h3>
+					{% if id %}
+						{{ id.category_id.title }}
+					{% else %}
+						{{ m.rsc[cat].title }}
+					{% endif %}
+				</h3>
 				<span class="publication-dates">
 					<label for="is_published" class="checkbox-inline">
 			    		<input type="checkbox" id="is_published" name="is_published" value="1" {% if not id or id.is_published %}checked="checked"{% endif %}/>
@@ -39,7 +45,7 @@
 					{% endif %}
 					{{ m.req.timezone }}
 				</span>
-			</p>
+			</div>
 		</div>
 	</div>
 

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2015 Marc Worrell
+%% @copyright 2010-2017 Marc Worrell
 %% @doc Parse templates / erlang files in modules, extract all translations.
 
-%% Copyright 2010-2015 Marc Worrell
+%% Copyright 2010-2017 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -71,7 +71,6 @@ merge_args([{Lang,Text}|Rest], Args) ->
         undefined -> merge_args(Rest, [{Lang,Text}|Args]);
         _ -> merge_args(Rest, Args)
     end.
-
 
 %% @doc Parse the template or Erlang module. Extract all translation tags.
 scan_file(".tpl", File) ->

@@ -77,7 +77,7 @@ is_allowed(subscribe, _Topic, [<<"user">>], _Site, Context) ->
     z_auth:is_auth(Context);
 is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"user">>], Site, Context) ->
     z_auth:is_auth(Context);
-is_allowed(_Action, _Topic, [<<"site">>, Site, <<"user">>, User], Site, Context) ->
+is_allowed(_Action, _Topic, [<<"site">>, Site, <<"user">>, User | _], Site, Context) ->
     case z_convert:to_binary(z_acl:user(Context)) of
         User ->
             true;

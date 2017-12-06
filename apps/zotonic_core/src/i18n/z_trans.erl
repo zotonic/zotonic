@@ -51,6 +51,8 @@ translations(From, Context) when is_binary(From) ->
         [{_, Trans}] ->
 			{trans, Trans}
     end;
+translations(From, Context) when is_list(From) ->
+    translations(unicode:characters_to_binary(From), Context);
 translations(From, Context) ->
     translations(z_convert:to_binary(From), Context).
 

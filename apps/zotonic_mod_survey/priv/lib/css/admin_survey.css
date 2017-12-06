@@ -46,6 +46,7 @@ ol.pages > li:before {
     position: absolute;
     left: -0.5em;
     background-color: white;
+    color: #0F93D5;
     font-size: 3em;
 }
 
@@ -55,6 +56,8 @@ ol.pages > li:before {
 
 .page-header {
     cursor: move;
+    border-color: #0F93D5;
+    border-width: 3px;
 }
 
 .page-header:hover {

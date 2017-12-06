@@ -5,9 +5,9 @@
 
  {survey_results_printable, ["survey", "results", "printable", id],  controller_page, [ {acl_action, update}, {is_canonical, false}, {template, "survey_results_printable.tpl"} ]},
  
- {survey_results, ["survey", "results", id],       controller_page, [ {is_canonical, false}, {template, "survey_results.tpl"} ]},
- {survey_results, ["survey", "results", id, slug], controller_page, [ {is_canonical, false}, {template, "survey_results.tpl"} ]},
- 
+ {survey_results, ["survey", "results", id],       controller_page, [ {is_canonical, false}, {template, "survey_results.tpl"}, {is_aggregated, true} ]},
+ {survey_results, ["survey", "results", id, slug], controller_page, [ {is_canonical, false}, {template, "survey_results.tpl"}, {is_aggregated, true} ]},
+  
  {survey, ["survey", id],       controller_page, [ {template, "survey.tpl"} ]},
  {survey, ["survey", id, slug], controller_page, [ {template, "survey.tpl"} ]},
  

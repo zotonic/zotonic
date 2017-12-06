@@ -1,28 +1,33 @@
 <html>
 {% with m.rsc[q.id].id|default:id as id %}
-{% with m.survey.all_results[[id, q.sort|default:"name_surname"]] as r %}
-{% with r|first as columns %}
-{% with r|tail as results %}
+{% with m.survey.all_results[[id, q.sort|default:"name_surname"]] as rs %}
+{% with rs[1] as headers %}
+{% with rs|tail as rows %}
 <head>
     <title>{{ id.title }}</title>
 
     <style type="text/css">
     body {
-        font-family: Helvetica, Arial, Sans-Serif;
-        font-size: 0.8em;
+        font-family: Arial, Helvetica, Sans-Serif;
+        font-size: 12px;
     }
     table {
+        font-size: 12px;
+        border-spacing: 1px;
         border-collapse: collapse;
     }
     th {
-        text-align: left;
+        text-align: center;
         font-weight: 400;
         border-bottom: 1px solid #ccc;
-        padding: 0.1em;
+        border-right: 1px solid #ccc;
+        padding: 4px;
     }
     td {
         text-align: right;
-        padding: 0.1em;
+        border-bottom: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        padding: 2px 4px;
     }
     .totals td {
         border-top: 1px solid #ccc;
@@ -36,20 +41,20 @@
 
     <p>{_ All survey entries up until _} <strong>{{ now|date:"Y-m-d H:i" }}</strong> ({{ results|length }} {_ Results _})</p>
 
-    <table width="100%">
+    <table>
         {% with m.survey.captions[id] as captions %}
         <tr class="header">
             <th>&nbsp;</th>
-            {% for name in columns|tail|tail|tail %}
+            {% for name in headers %}
                 <th>{{ captions[name]|default:name|capfirst }}</th>
             {% endfor %}
         </tr>
         {% endwith %}
 
-        {% for r in results %}
-        <tr id="survey-result-{{ r[1] }}-{{ r[2] }}">
-            <td>{{ forloop.counter }}.&nbsp;&nbsp;</td>
-            {% for value in r|tail|tail|tail %}
+        {% for ans_id,ans in rows %}
+        <tr id="survey-result-{{ ans_id }}">
+            <td>{{ forloop.counter }}.</td>
+            {% for value in ans %}
                 <td>{{ value|escape }}</td>
             {% endfor %}
         </tr>
@@ -59,7 +64,7 @@
             {% if totals %}
                 <tr class="totals">
                     <td align="right">{_ Totals _}&nbsp;</td>
-                    {% for name in columns|tail|tail|tail %}
+                    {% for name in headers %}
                         <td align="left">{{ totals[name]|default:"&nbsp;" }}</td>
                     {% endfor %}
                 </tr>

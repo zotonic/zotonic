@@ -28,20 +28,31 @@
 
 {% block widget_content_nolang %}
     <div class="form-group view-expanded">
-        <label for="block-{{name}}-choices">{_ Choices _} ({_ one per line _})</label>
+        <label for="block-{{name}}-choices" class="control-label">{_ Choices _} ({_ one per line _})</label>
         <textarea class="form-control" id="block-{{name}}-choices" name="block-{{name}}-choices" rows="4">{{ blk.choices }}</textarea>
     </div>
 
-    <div class="form-group view-expanded">
-        <div class="checkbox"><label>
-            <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
-            {_ Required, this question must be answered. _}
-        </label></div>
+    <div class="form-group view-expanded question-options">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="block-{{name}}-is_required" name="block-{{name}}-is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
+                {_ Required, this question must be answered. _}
+            </label>
+        </div>
 
-        <div class="checkbox"><label>
-            <input type="checkbox" id="block-{{name}}-is_numeric" name="block-{{name}}-is_numeric" value="1" {% if blk.is_numeric %}checked="checked"{% endif %} />
-            {_ Numeric input, show totals for this field in the survey results. _}
-        </label></div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="block-{{name}}-is_numeric" name="block-{{name}}-is_numeric" value="1" {% if blk.is_numeric %}checked="checked"{% endif %} />
+                {_ Numeric input, show totals for this field in the survey results. _}
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="block-{{name}}-is_hide_result" name="block-{{name}}-is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
+                {_ Hide from results _}
+            </label>
+        </div>
     </div>
 {% endblock %}
 

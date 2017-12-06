@@ -2,9 +2,34 @@
 
 {# Template shown in popup window when redirecting to an external identity service #}
 
-{% block title %}{_ Error _}{% endblock %}
+{% block title %}{% if error == `signup_confirm` %}{_ Confirm _}{% else %}{_ Error _}{% endif %}{% endblock %}
 
 {% block content %}
+{% if error == `signup_confirm` %}
+	<div class="container">
+		<h1>{_ You are about to create a new account. _}</h1>
+
+		<p>{_ Close this window and log in if you are already a user of _} {{ m.config.site.title.value }}</p>
+
+		{% wire id="signup_confirm"
+				type="submit"
+			  	postback={signup_confirm auth=what}
+				delegate=`mod_authentication`
+		%}
+		<form id="signup_confirm" class="z_cookie_form" action="postback">
+			<button class="btn btn-primary" type="submit">{_ I want to create a new account _}</button>
+
+			{% button tag="a" class="btn btn-default" text=_"Close Window" action={script script="window.close();"} %}
+		</form>
+
+		<div class="padding alert alert-danger" style="display:none" id="signup_error">
+			<p>
+				<b>{_ Something went wrong _}</b>
+				{_ Please try again later. _}
+			</p>
+		</div>
+	</div>
+{% else %}
 	{% if error == `email_required` %}
 		<div class="container">
 			<h1>{_ Sorry _}</h1>
@@ -50,4 +75,5 @@
 	<p>
 		{% button class="btn" action={script script="window.close();"} text=_"Close Window" %}
 	</p>
+{% endif %}
 {% endblock %}

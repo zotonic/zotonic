@@ -1919,15 +1919,17 @@ function z_init_validator(id, args)
     var elt = $('#'+id);
     if (elt)
     {
-        if (elt.attr('type') == 'radio')
+        switch (elt.attr('type'))
         {
-            $('input[name="'+elt.attr('name')+'"]').each(function() {
-                addLiveValidation(this, args);
-            });
-        }
-        else
-        {
-            addLiveValidation(elt, args);
+            case 'radio':
+            case 'checkbox':
+                $('input[name="'+elt.attr('name')+'"]').each(function() {
+                    addLiveValidation(this, args);
+                });
+                break;
+            default:
+                addLiveValidation(elt, args);
+                break;
         }
     }
     else
@@ -1941,8 +1943,15 @@ function z_add_validator(id, type, args)
 {
     var elt = $('#'+id);
 
-    if (elt.attr('type') == 'radio')
-        elt = $('input[name="'+elt.attr('name')+'"]');
+    switch (elt.attr('type'))
+    {
+        case 'radio':
+        case 'checkbox':
+            elt = $('input[name="'+elt.attr('name')+'"]');
+            break;
+        default:
+            break;
+    }
 
     elt.each(function() {
         var v = getLiveValidation(this);
