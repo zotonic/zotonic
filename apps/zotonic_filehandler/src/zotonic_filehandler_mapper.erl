@@ -20,7 +20,8 @@
 -module(zotonic_filehandler_mapper).
 
 -export([
-    map_change/2
+    map_change/2,
+    is_application/1
 ]).
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
@@ -177,11 +178,23 @@ ebin_file(F) ->
 
 
 %% @doc Check if the directory name is the name of a (compiled) application
+is_application(AppName) when is_atom(AppName) ->
+    case code:lib_dir(AppName) of
+        {error, bad_name} -> is_application__app(AppName);
+        LibDir when is_list(LibDir) -> true
+    end;
 is_application(AppName) when is_binary(AppName) ->
     AppNameS = unicode:characters_to_list(AppName),
     case code:where_is_file(AppNameS ++ ".app") of
-        non_existing ->
-            false;
-        _Path ->
-            true
+        non_existing -> is_application__app(AppName);
+        _Path -> true
     end.
+
+is_application__app(AppName) ->
+    filelib:is_regular(
+        filename:join([
+            filename:dirname(code:lib_dir(zotonic_filehandler)),
+            AppName,
+            "ebin",
+            z_convert:to_list(AppName)++".app"
+        ])).
