@@ -1,15 +1,2 @@
 os:putenv("EXOMETER_PACKAGES", "-afunix -netlink -exo +setup"),
 CONFIG.
-
-% @TODO: re-add this - use the rebar.config files from user sites and modules
-%
-% [ConfigFile] = string:tokens(os:cmd("bin/zotonic configfile 2>/dev/null"), "\n"),
-% case filelib:is_regular(ConfigFile) of
-%     true ->
-%         {ok, [Terms]} = file:consult(ConfigFile),
-%         ExtraDeps = proplists:get_value(deps, proplists:get_value(zotonic_core, Terms, []), []),
-%         Deps = proplists:get_value(deps, CONFIG, []),
-%         lists:keystore(deps, 1, CONFIG, {deps, Deps ++ ExtraDeps});
-%     false ->
-%         CONFIG
-% end.
