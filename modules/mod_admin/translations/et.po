@@ -196,7 +196,7 @@ msgstr ""
 msgid ""
 "Customize page slug"
 msgstr ""
-"Kohalda lehe h�lkutsungit"
+"Kohalda lehe h?kutsungit"
 
 #: ./modules/mod_admin/templates/admin_base.tpl:67 ./modules/mod_admin/templates/admin.tpl:3 ./modules/mod_admin/templates/admin.tpl:9 
 msgid ""
@@ -291,7 +291,7 @@ msgstr ""
 #: ./modules/mod_admin/templates/_admin_edit_content_date_range.tpl:14 
 msgid ""
 "Every page can have a date range. For example if the page is an event or "
-"description of someone�s life."
+"description of someone?s life."
 msgstr ""
 "Iga leheküljega võib olla seotud kuupäevade vahemik. Näiteks juhul kui lehekülg on sündmuse"
 " või kellegi elu kirjelduse leheks."
@@ -939,7 +939,7 @@ msgstr ""
 msgid ""
 "There are no pages with a connection to the page"
 msgstr ""
-"Ei ole �htegi lehte seosega sellele lehele"
+"Ei ole ?tegi lehte seosega sellele lehele"
 
 #: ./modules/mod_admin/templates/_action_dialog_delete_media.tpl:5 
 msgid ""
@@ -1002,7 +1002,7 @@ msgid ""
 "connection” when the page does not yet exist."
 msgstr ""
 "Siseta lehe pealkiri millega tahad ühendada. Vajuta “Tee uus "
-"ühendus�� kui lehte veel ei ole olemas."
+"ühendus?? kui lehte veel ei ole olemas."
 
 #: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:5 
 msgid ""
@@ -1026,7 +1026,7 @@ msgstr ""
 msgid ""
 "Upload"
 msgstr ""
-"�Üleslaadimine"
+"??leslaadimine"
 
 #: ./modules/mod_admin/templates/_action_dialog_media_upload.tpl:11 
 msgid ""
