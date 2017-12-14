@@ -65,19 +65,16 @@ response(ReqData, Context) ->
         true ->
             mod_oauth:serve_oauth(ReqData, Context,
                           fun(URL, Params, Consumer, Signature) ->
-                                  %Token = m_oauth_app:secrets_for_verify(none, Consumer, mod_oauth:oauth_param("oauth_token", ReqData), Context),
-                                  SigMethod = mod_oauth:oauth_param("oauth_signature_method", ReqData),
-                                  case oauth:verify(Signature, atom_to_list(ReqData#wm_reqdata.method), URL,
-                                                    Params, mod_oauth:to_oauth_consumer(Consumer, SigMethod), "") of
-                                      true ->
-                                          {ok, Token} = m_oauth_app:request_token(Consumer, Context),
-                                          ReqData1 = wrq:set_resp_body(oauth:uri_params_encode(
-                                                                         [{"oauth_token", binary_to_list(proplists:get_value(token, Token))},
-                                                                          {"oauth_token_secret", binary_to_list(proplists:get_value(token_secret, Token))}]), ReqData),
-                                          {{halt, 200}, ReqData1, Context};
-                                      false ->
-                                          mod_oauth:authenticate("Signature verification failed.", ReqData, Context)
-                                  end
+                              case mod_oauth:verify(ReqData, URL, Params, Consumer, Signature, "") of
+                                  true ->
+                                      {ok, Token} = m_oauth_app:request_token(Consumer, Context),
+                                      ReqData1 = wrq:set_resp_body(oauth:uri_params_encode(
+                                                                     [{"oauth_token", binary_to_list(proplists:get_value(token, Token))},
+                                                                      {"oauth_token_secret", binary_to_list(proplists:get_value(token_secret, Token))}]), ReqData),
+                                      {{halt, 200}, ReqData1, Context};
+                                  false ->
+                                      mod_oauth:authenticate("Signature verification failed.", ReqData, Context)
+                              end
                           end
                          )
     end.

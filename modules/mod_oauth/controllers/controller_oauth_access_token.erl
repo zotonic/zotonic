@@ -65,7 +65,7 @@ response(ReqData, Context) ->
         true ->
             mod_oauth:serve_oauth(ReqData, Context,
                 fun(URL, Params, Consumer, Signature) ->
-                        case mod_oauth:oauth_param("oauth_token", ReqData) of
+                        case mod_oauth:str_value("oauth_token", Params) of
                             undefined ->
                                 mod_oauth:authenticate("Missing oauth_token.", ReqData, Context);
                             ParamToken ->
@@ -73,9 +73,7 @@ response(ReqData, Context) ->
                                     undefined ->
                                         mod_oauth:authenticate("Request token not found.", ReqData, Context);
                                     Token ->
-                                        SigMethod = mod_oauth:oauth_param("oauth_signature_method", ReqData),
-                                        case oauth:verify(Signature, atom_to_list(ReqData#wm_reqdata.method), URL,
-                                                          Params, mod_oauth:to_oauth_consumer(Consumer, SigMethod), mod_oauth:str_value(token_secret, Token)) of
+                                        case mod_oauth:verify(ReqData, URL, Params, Consumer, Signature, Token) of
                                             true ->
                                                 case m_oauth_app:exchange_request_for_access(Token, Context) of
                                                     {ok, NewToken} ->

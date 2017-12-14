@@ -34,8 +34,8 @@
 -export([
          serve_oauth/3,
          request_is_signed/1,
-         oauth_param/2,
          to_oauth_consumer/2,
+         verify/6,
          str_value/2,
          test/0,
          authenticate/3,
@@ -123,25 +123,23 @@ code_change(_OldVsn, State, _Extra) ->
 %%
 check_request_logon(ReqData, Context) ->
     % request is signed; verify it.
-    case request_is_signed(ReqData) of
+    case request_is_signed(Context) of
         false ->
             % Request was not signed.
             {none, Context};
         true ->
             case serve_oauth(ReqData, Context,
                 fun(URL, Params, Consumer, Signature) ->
-                        ParamToken = oauth_param("oauth_token", ReqData),
+                        ParamToken = proplists:get_value("oauth_token", Params),
                         case m_oauth_app:secrets_for_verify(access, Consumer, ParamToken, Context) of
                             undefined ->
                                 {false, authenticate("Access token not found.", ReqData, Context)};
                             Token ->
-                                case m_oauth_app:check_nonce(Consumer, Token, oauth_param("oauth_timestamp", ReqData), oauth_param("oauth_nonce", ReqData), Context) of
+                                case m_oauth_app:check_nonce(Consumer, Token, str_value("oauth_timestamp", Params), str_value("oauth_nonce", Params), Context) of
                                     {false, Reason} ->
                                         {false, authenticate(Reason, ReqData, Context)};
                                     true ->
-                                        SigMethod = oauth_param("oauth_signature_method", ReqData),
-                                        case oauth:verify(Signature, atom_to_list(ReqData#wm_reqdata.method), URL,
-                                                          Params, to_oauth_consumer(Consumer, SigMethod), str_value(token_secret, Token)) of
+                                        case verify(ReqData, URL, Params, Consumer, Signature, Token) of
                                             true ->
                                                 Context1 = case int_value(user_id, Token) of
                                                     undefined -> Context;
@@ -163,84 +161,70 @@ check_request_logon(ReqData, Context) ->
             end
     end.
 
+verify(ReqData, URL, Params, Consumer, Signature, Token) ->
+    SigMethod = str_value("oauth_signature_method", Params),
+    oauth:verify(
+        Signature,
+        z_convert:to_list(wrq:method(ReqData)),
+        URL,
+        Params,
+        to_oauth_consumer(Consumer, SigMethod),
+        str_value(token_secret, Token)).
+
 %%
 %% This triggers OAuth authentication.
 %%
-request_is_signed(ReqData) ->
-    HasSig = not(wrq:get_qs_value("oauth_signature", ReqData) == undefined),
-    Header = wrq:get_req_header_lc("authorization", ReqData),
-    HasSig orelse (not(Header == undefined) andalso lists:prefix("OAuth", Header)).
+request_is_signed(Context) ->
+    case z_context:get_q("oauth_signature", Context) of
+        undefined ->
+            case z_context:get_req_header("authorization", Context) of
+                "OAuth" ++ _ -> true;
+                _ -> false
+            end;
+        _ ->
+            true
+    end.
 
-
-%% Helper for to_oauth_params; remove unwanted params.
-strip_params([]) ->
-    [];
-strip_params([{"oauth_signature", _} | T]) ->
-    strip_params(T);
-strip_params([{"realm", _} | T]) ->
-    strip_params(T);
-strip_params([H|T]) ->
-    [H | strip_params(T)].
-
+is_base_string_param({"realm", _}) -> false;
+is_base_string_param({"oauth_signature", _}) -> false;
+is_base_string_param({"method", _}) -> false;
+is_base_string_param({"module", _}) -> false;
+is_base_string_param(_) -> true.
 
 %%
 %% Transform a webmachine reqdata structure into the parameters that
 %% are considered for OAuth signature verification.
 %%
-to_oauth_params(ReqData) ->
-    Req = wrq:req_qs(ReqData),
-    AuthHeader = wrq:get_req_header_lc("authorization", ReqData),
-    Params = case not(AuthHeader == undefined) andalso lists:prefix("OAuth", AuthHeader) of
-                 false ->
-                     Req;
-                 true ->
-                     H = string:substr(AuthHeader, 7),
-                     oauth:header_params_decode(H) ++ Req
-             end,
-    strip_params(Params).
-
-
+get_oauth_params(Context) ->
+    Qs = z_context:get_q_all_noz(Context),
+    All = case z_context:get_req_header("authorization", Context) of
+        "OAuth" ++ _ = AuthHeader ->
+            H = string:substr(AuthHeader, 7),
+            oauth:header_params_decode(H) ++ Qs;
+        _ ->
+            Qs
+    end,
+    [ {z_convert:to_list(K), z_convert:to_list(V)} || {K,V} <- All ].
 
 %%
 %% Get an argument from either the request or the Authorization: header
 %%
 
-oauth_param_auth_header(Param, AuthHeader) ->
-    case re:run(AuthHeader, Param ++ "=\"(.*?)\"", []) of
-        nomatch ->
-            undefined;
-        {match, [_All, {Start, Len}]} ->
-            z_url:url_decode(string:substr(AuthHeader, Start+1, Len))
-    end.
-
-oauth_param(Param, ReqData) ->
-    % check authorization header
-    AuthHeader = wrq:get_req_header_lc("authorization", ReqData),
-    case not(AuthHeader == undefined) andalso lists:prefix("OAuth", AuthHeader) of
-        false ->
-            wrq:get_qs_value(Param, ReqData);
-        true ->
-            % Check arguments
-            oauth_param_auth_header(Param, AuthHeader)
-    end.
-
-
-
 serve_oauth(ReqData, Context, Fun) ->
-    Version = oauth_param("oauth_version", ReqData),
-    case Version of
+    Params = get_oauth_params(Context),
+    case str_value("oauth_version", Params) of
         "1.0" ->
-            ConsumerKey = oauth_param("oauth_consumer_key", ReqData),
-            %SigMethod = oauth_param("oauth_signature_method", ReqData),
+            ConsumerKey = str_value("oauth_consumer_key", Params),
             case m_oauth_app:consumer_lookup(ConsumerKey, Context) of
                 undefined ->
                     authenticate("Consumer key not found.", ReqData, Context);
                 Consumer ->
-                    Signature = oauth_param("oauth_signature", ReqData),
+                    Signature = str_value("oauth_signature", Params),
+                    BaseStringParams = lists:filter( fun is_base_string_param/1, Params ),
                     URL = z_convert:to_list(z_context:abs_url(wrq:path(ReqData), Context)),
-                    Fun(URL, to_oauth_params(ReqData), Consumer, Signature)
+                    Fun(URL, BaseStringParams, Consumer, Signature)
             end;
-        _ ->
+        Version ->
             authenticate("Unsupported OAuth version: " ++ Version ++ "\n", ReqData, Context)
     end.
 
@@ -249,7 +233,7 @@ serve_oauth(ReqData, Context, Fun) ->
 %%
 
 str_value(Key, From) ->
-    binary_to_list(proplists:get_value(Key, From)).
+    z_convert:to_list(proplists:get_value(Key, From)).
 
 int_value(Key, From) ->
     z_convert:to_integer(proplists:get_value(Key, From)).
