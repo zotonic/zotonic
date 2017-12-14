@@ -189,6 +189,7 @@ is_base_string_param({"realm", _}) -> false;
 is_base_string_param({"oauth_signature", _}) -> false;
 is_base_string_param({"method", _}) -> false;
 is_base_string_param({"module", _}) -> false;
+is_base_string_param({"z_language", _}) -> false;
 is_base_string_param(_) -> true.
 
 %%
