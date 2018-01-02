@@ -61,7 +61,9 @@ main([Command|T]) ->
         false ->
             CommandName = string:concat("zotonic_cmd_", Command),
             CommandMod = string:concat(CommandName, ".erl"),
-            CommandFile = string:concat(?COMMANDS, "?" ++ CommandMod),
+            CommandFile = string:concat(?COMMANDS, "/" ++ CommandMod),
+
+            io:format(CommandFile),
 
             case filelib:is_file(CommandFile) of
                 true ->
