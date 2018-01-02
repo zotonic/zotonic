@@ -25,4 +25,22 @@
 -include("zotonic_command.hrl").
 
 run(_) ->
-    erlang:error(not_implemented).
+    ZotonicApp = string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+    case filelib:is_file(ZotonicApp) of
+        true ->
+            io:format("Starting Zotonic ~s..", [Target]),
+            Shell = user_drv:start(),
+            true = erlang:link(Shell),
+            net_kernel:start([Target, shortnames]),
+            zotonic_launcher_config:load_configs(),
+            zotonic:start(),
+
+            receive
+                {'EXIT', Shell, _} ->
+                    ok
+            end;
+        false ->
+            io:format("Building Zotonic for the first time. ~n"),
+            make:all()
+    end.
