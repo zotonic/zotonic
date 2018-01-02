@@ -22,7 +22,7 @@
 %% API
 -export([run/0]).
 
--include("zotonic_core/include/zotonic_release.hrl").
+-include_lib("zotonic_core/include/zotonic_release.hrl").
 
 run() ->
     io:format("Zotonic ~s~n", [?ZOTONIC_VERSION]).
