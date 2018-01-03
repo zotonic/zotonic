@@ -205,15 +205,6 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter
                     )
             ]),
 
-    TransTableFunctionAst = erl_syntax:function(
-        erl_syntax:atom(trans_table),
-            [ erl_syntax:clause(
-                    [],
-                    none,
-                    [erl_syntax:abstract(z_trans_server:table(Context#dtl_context.z_context))]
-                    )
-            ]),
-
     Function2 = erl_syntax:application(none, erl_syntax:atom(render2),
         [erl_syntax:variable("Variables"), erl_syntax:variable("ZpContext")]),
     ClauseOk = erl_syntax:clause([erl_syntax:variable("Val")], none,
@@ -284,12 +275,11 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter
     ExportAst = erl_syntax:attribute(erl_syntax:atom(export),
         [erl_syntax:list([
 		            erl_syntax:arity_qualifier(erl_syntax:atom(template_reset_counter), erl_syntax:integer(0)),
-		            erl_syntax:arity_qualifier(erl_syntax:atom(trans_table), erl_syntax:integer(0)),
 					erl_syntax:arity_qualifier(erl_syntax:atom(render), erl_syntax:integer(2)),
                     erl_syntax:arity_qualifier(erl_syntax:atom(source), erl_syntax:integer(0)),
                     erl_syntax:arity_qualifier(erl_syntax:atom(dependencies), erl_syntax:integer(0))])]),
 
-    [erl_syntax:revert(X) || X <- [ModuleAst, ExportAst, TemplateResetCounterFunctionAst, TransTableFunctionAst,
+    [erl_syntax:revert(X) || X <- [ModuleAst, ExportAst, TemplateResetCounterFunctionAst,
             Render2FunctionAst, SourceFunctionAst, DependenciesFunctionAst, RenderInternalFunctionAst
             | BodyInfo#ast_info.pre_render_asts]].
 

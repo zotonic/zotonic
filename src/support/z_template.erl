@@ -396,16 +396,8 @@ template_is_modified(Module, State) ->
             true;
         false ->
             case State#state.do_modified_check of
-                false ->
-                    false;
-                true ->
-                    case Module:trans_table() /= z_trans_server:table(State#state.host) of
-                        true ->
-                            true;
-                        false ->
-                            Deps = Module:dependencies(),
-                            is_modified(Deps)
-                    end
+                false -> false;
+                true -> is_modified( Module:dependencies() )
             end;
         _Error ->
             true
