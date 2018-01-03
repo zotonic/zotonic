@@ -22,6 +22,7 @@
 -author("Marc Worrell <marc@worrell.nl").
 
 -compile([{parse_transform, lager_transform}]).
+-compile({no_auto_import,[ceil/1]}).
 
 %% interface functions
 -export([

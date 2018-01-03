@@ -69,7 +69,7 @@ event(#submit{message={merge, Args}}, Context) ->
 
 merge(_WinnerId, LoserId, _MergeAction, Context) when LoserId =:= 1 ->
     z_render:wire({alert, [{text,?__("You cannot remove the admin user.", Context)}]}, Context);
-merge(WinnerId, LoserId, MergeAction, Context) when MergeAction =:= "merge_only" ->
+merge(WinnerId, _LoserId, MergeAction, Context) when MergeAction =:= "merge_only" ->
     case z_acl:rsc_editable(WinnerId, Context)
     of
         false ->
