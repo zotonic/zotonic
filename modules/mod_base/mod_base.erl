@@ -92,17 +92,22 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
                     mod=controller_redirect,
                     mod_opts=[{id, Id}, {is_permanent, true}]}};
         {error, _} ->
-            Last = last(Path),
+            SlashPath = case Path of
+                "" -> "/";
+                "/" ++ _ -> Path;
+                _ -> [ $/ | Path ]
+            end,
+            Last = last(SlashPath),
             Template= case Last of
-                         $/ -> "static/"++Path++"index.tpl";
-                         _ -> "static/"++Path++".tpl"
+                         $/ -> "static"++SlashPath++"index.tpl";
+                         _ -> "static"++SlashPath++".tpl"
                       end,
             case z_module_indexer:find(template, Template, Context) of
                 {ok, _} ->
                     {ok, #dispatch_match{
                         mod=controller_template,
                         mod_opts=[{template, Template}, {ssl, any}],
-                        bindings=[{path, Path}, {is_static, true}]
+                        bindings=[{path, SlashPath}, {is_static, true}]
                     }};
                 {error, _} ->
                     % Check again, assuming the path is a directory (without trailing $/)
@@ -112,13 +117,13 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
                         $. ->
                             undefined;
                         _ ->
-                            Template1 = "static/"++Path++"/index.tpl",
+                            Template1 = "static"++SlashPath++"/index.tpl",
                             case z_module_indexer:find(template, Template1, Context) of
                                 {ok, _} ->
                                     {ok, #dispatch_match{
                                         mod=controller_template,
                                         mod_opts=[{template, Template1}, {ssl, any}],
-                                        bindings=[{path, Path}, {is_static, true}]
+                                        bindings=[{path, SlashPath}, {is_static, true}]
                                     }};
                                 {error, _} ->
                                     undefined
