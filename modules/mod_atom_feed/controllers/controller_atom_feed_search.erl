@@ -71,7 +71,7 @@ expires(ReqData, State) ->
 
 
 provide_content(ReqData, Context) ->
-    Query0 = z_context:get_q_all(Context),
+    Query0 = z_context:get_q_all_noz(Context),
     try
         {FeedTitle, Query} = case proplists:get_value("feed_title", Query0) of
                                  undefined ->
