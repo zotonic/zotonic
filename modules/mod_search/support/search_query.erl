@@ -827,6 +827,8 @@ display_error(Msg, Context) ->
 
 
 %% Add filters
+add_filters(<<"[", _/binary>> = Filter, Result) ->
+    add_filters( maybe_split_list(Filter), Result );
 add_filters([ [Column|_] | _ ] = Filters, Result) when is_list(Column); is_binary(Column); is_atom(Column) ->
     add_filters_or(Filters, Result);
 add_filters({'or', Filters}, Result) ->
@@ -901,17 +903,19 @@ map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
 % Convert an expression like [123,hasdocument]
 maybe_split_list(Id) when is_integer(Id) ->
     [Id];
-maybe_split_list(<<"[", Rest/binary>>) ->
-    split_list(Rest);
+maybe_split_list(<<"[", _/binary>> = Term) ->
+    unquote_all(search_parse_list:parse(Term));
 maybe_split_list([$[|Rest]) ->
-    split_list(z_convert:to_binary(Rest));
+    unquote_all(search_parse_list:parse(z_convert:to_binary(Rest)));
 maybe_split_list(Other) ->
     [Other].
 
-split_list(Bin) ->
-    Bin1 = binary:replace(Bin, <<"]">>, <<>>, [global]),
-    Parts = binary:split(Bin1, <<",">>, [global]),
-    [ unquot(z_string:trim(P)) || P <- Parts ].
+unquote_all(L) when is_list(L) ->
+    lists:map(fun unquote_all/1, L);
+unquote_all(B) when is_binary(B) ->
+    unquot(z_string:trim(B));
+unquote_all(T) ->
+    T.
 
 unquot(<<C, Rest/binary>>) when C =:= $'; C =:= $"; C =:= $` ->
     binary:replace(Rest, <<C>>, <<>>);
@@ -929,7 +933,7 @@ expand_object_predicates(OPs, Context) ->
 map_rids({rsc_list, L}, Context) ->
     map_rids(L, Context);
 map_rids(L, Context) when is_list(L) ->
-    [ map_rid(unquot(X),Context) || X <- L, X =/= <<>> ];
+    [ map_rid(X, Context) || X <- L, X =/= <<>> ];
 map_rids(Id, Context) ->
     map_rid(Id, Context).
 
