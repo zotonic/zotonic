@@ -18,131 +18,176 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_l10n/support/l10n_date.erl:53
+#: modules/mod_l10n/support/l10n_date.erl:58
 #, fuzzy
 msgid "Apr"
 msgstr "avril"
 
-#: modules/mod_l10n/support/l10n_date.erl:38
+#: modules/mod_l10n/support/l10n_date.erl:43
 msgid "April"
 msgstr "avril"
 
-#: modules/mod_l10n/support/l10n_date.erl:57
+#: modules/mod_l10n/support/l10n_date.erl:62
 #, fuzzy
 msgid "Aug"
 msgstr "août"
 
-#: modules/mod_l10n/support/l10n_date.erl:42
+#: modules/mod_l10n/support/l10n_date.erl:47
 msgid "August"
 msgstr "août"
 
-#: modules/mod_l10n/support/l10n_date.erl:61
+#: modules/mod_l10n/support/l10n_date.erl:24
+msgid "BCE"
+msgstr "av. J.-C."
+
+#: modules/mod_l10n/support/l10n_date.erl:26
+msgid "CE"
+msgstr "apr. J.-C."
+
+#: modules/mod_l10n/templates/_admin_configure_module.tpl:8
+msgid "Close"
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:66
 msgid "Dec"
 msgstr "déc"
 
-#: modules/mod_l10n/support/l10n_date.erl:46
+#: modules/mod_l10n/support/l10n_date.erl:51
 msgid "December"
 msgstr "décembre"
 
-#: modules/mod_l10n/support/l10n_date.erl:51
+#: modules/mod_l10n/support/l10n_date.erl:56
 msgid "Feb"
 msgstr "févr"
 
-#: modules/mod_l10n/support/l10n_date.erl:36
+#: modules/mod_l10n/support/l10n_date.erl:41
 msgid "February"
 msgstr "février"
 
-#: modules/mod_l10n/support/l10n_date.erl:29
+#: modules/mod_l10n/templates/_admin_l10n_config.tpl:23
+msgid "Fix timezone, show all dates in the above timezone."
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:34
 msgid "Friday"
 msgstr "vendredi"
 
-#: modules/mod_l10n/support/l10n_date.erl:50
+#: modules/mod_l10n/templates/admin_l10n.tpl:8
+msgid "Here you can set the default localization configurations."
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:55
 #, fuzzy
 msgid "Jan"
 msgstr "janv"
 
-#: modules/mod_l10n/support/l10n_date.erl:35
+#: modules/mod_l10n/support/l10n_date.erl:40
 msgid "January"
 msgstr "janvier"
 
-#: modules/mod_l10n/support/l10n_date.erl:56
+#: modules/mod_l10n/support/l10n_date.erl:61
 #, fuzzy
 msgid "Jul"
 msgstr "juil"
 
-#: modules/mod_l10n/support/l10n_date.erl:41
+#: modules/mod_l10n/support/l10n_date.erl:46
 msgid "July"
 msgstr "juillet"
 
-#: modules/mod_l10n/support/l10n_date.erl:55
+#: modules/mod_l10n/support/l10n_date.erl:60
 #, fuzzy
 msgid "Jun"
 msgstr "juin"
 
-#: modules/mod_l10n/support/l10n_date.erl:40
+#: modules/mod_l10n/support/l10n_date.erl:45
 msgid "June"
 msgstr "juin"
 
-#: modules/mod_l10n/support/l10n_date.erl:52
+#: modules/mod_l10n/templates/admin_l10n.tpl:3
+msgid "L10N Configuration"
+msgstr ""
+
+#: modules/mod_l10n/templates/admin_l10n.tpl:7
+#: modules/mod_l10n/mod_l10n.erl:189
+msgid "Localization"
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:57
 #, fuzzy
 msgid "Mar"
 msgstr "mars"
 
-#: modules/mod_l10n/support/l10n_date.erl:37
+#: modules/mod_l10n/support/l10n_date.erl:42
 msgid "March"
 msgstr "mars"
 
-#: modules/mod_l10n/support/l10n_date.erl:39
-#: modules/mod_l10n/support/l10n_date.erl:54
+#: modules/mod_l10n/support/l10n_date.erl:44
+#: modules/mod_l10n/support/l10n_date.erl:59
 msgid "May"
 msgstr "mai"
 
-#: modules/mod_l10n/support/l10n_date.erl:25
+#: modules/mod_l10n/support/l10n_date.erl:30
 msgid "Monday"
 msgstr "lundi"
 
-#: modules/mod_l10n/support/l10n_date.erl:60
+#: modules/mod_l10n/support/l10n_date.erl:65
 msgid "Nov"
 msgstr "nov"
 
-#: modules/mod_l10n/support/l10n_date.erl:45
+#: modules/mod_l10n/support/l10n_date.erl:50
 msgid "November"
 msgstr "novembre"
 
-#: modules/mod_l10n/support/l10n_date.erl:59
+#: modules/mod_l10n/support/l10n_date.erl:64
 #, fuzzy
 msgid "Oct"
 msgstr "oct"
 
-#: modules/mod_l10n/support/l10n_date.erl:44
+#: modules/mod_l10n/support/l10n_date.erl:49
 msgid "October"
 msgstr "octobre"
 
-#: modules/mod_l10n/support/l10n_date.erl:30
+#: modules/mod_l10n/support/l10n_date.erl:35
 msgid "Saturday"
 msgstr "samedi"
 
-#: modules/mod_l10n/support/l10n_date.erl:58
+#: modules/mod_l10n/support/l10n_date.erl:63
 msgid "Sep"
 msgstr "sept"
 
-#: modules/mod_l10n/support/l10n_date.erl:43
+#: modules/mod_l10n/support/l10n_date.erl:48
 msgid "September"
 msgstr "septembre"
 
-#: modules/mod_l10n/support/l10n_date.erl:31
+#: modules/mod_l10n/support/l10n_date.erl:36
 msgid "Sunday"
 msgstr "dimanche"
 
-#: modules/mod_l10n/support/l10n_date.erl:28
+#: modules/mod_l10n/templates/_admin_l10n_config.tpl:31
+msgid ""
+"This forces the timezone to the configured timezone. Irrespective of the "
+"timezone selected by the user or user-agent."
+msgstr ""
+
+#: modules/mod_l10n/templates/_admin_l10n_config.tpl:12
+msgid ""
+"This sets the default timezone. This timezone is used for the initial "
+"request by an user-agent or when the timezone is not known."
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:33
 msgid "Thursday"
 msgstr "jeudi"
 
-#: modules/mod_l10n/support/l10n_date.erl:26
+#: modules/mod_l10n/templates/admin_l10n.tpl:14
+msgid "Timezone"
+msgstr ""
+
+#: modules/mod_l10n/support/l10n_date.erl:31
 msgid "Tuesday"
 msgstr "mardi"
 
-#: modules/mod_l10n/support/l10n_date.erl:27
+#: modules/mod_l10n/support/l10n_date.erl:32
 msgid "Wednesday"
 msgstr "mercredi"
 
