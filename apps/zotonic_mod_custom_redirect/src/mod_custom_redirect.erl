@@ -26,7 +26,7 @@
 -mod_schema(1).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include("modules/mod_admin/include/admin_menu.hrl").
+-include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 -export([
     observe_dispatch_host/2,

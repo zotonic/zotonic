@@ -1,5 +1,5 @@
-{application, zotonic_mod_custom_redirect, [
-    {description, "Categorize content into a hierarchical structure of content groups."},
+{application, zotonic_mod_contact, [
+    {description, "Simple contact form. Mails a contact form to the administrator user."},
     {vsn, "git"},
     {registered, []},
     {applications, [zotonic_core]},
