@@ -19,7 +19,11 @@
 label(midnight, Context) ->
     ?__("midnight", Context);
 label(noon, Context) ->
-    ?__("noon", Context).
+    ?__("noon", Context);
+label(bce, Context) ->
+    ?__("BCE", Context);
+label(ce, Context) ->
+    ?__("CE", Context).
 
 %% @doc Provide localized versions of the day of the week.
 dayname(1, Context) -> ?__("Monday", Context);
