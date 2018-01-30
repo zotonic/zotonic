@@ -55,7 +55,9 @@ display_property({_Prop, undefined}) ->
     [];
 display_property({Prop, V}) when is_atom(Prop) ->
     display_property({list_to_binary(atom_to_list(Prop)), V});
-display_property({_, []}) ->
+display_property({Prop, []}) when Prop =/= <<"alt">>, Prop =/= "alt" ->
+    [];
+display_property({Prop, <<>>}) when Prop =/= <<"alt">>, Prop =/= "alt" ->
     [];
 display_property({Prop, Value}) when is_integer(Value) ->
     [32, correct_data(Prop), $=, $', list_to_binary(integer_to_list(Value)), $'];
