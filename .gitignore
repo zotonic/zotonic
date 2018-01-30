@@ -28,7 +28,7 @@ priv/filezcache
 /priv/log/*
 !/priv/log/.empty
 priv/ssl/
-priv/mnesia/
+apps/zotonic_core/priv/mnesia/
 priv/translations/template/*.pot
 
 /apps/*/priv/files/archive/*
