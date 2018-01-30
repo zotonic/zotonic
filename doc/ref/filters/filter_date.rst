@@ -80,6 +80,11 @@ All supported formatting characters are listed below:
 |D         |Day of the week, textual, three letters|“Mon”, “Fri”               |
 |          |of which the first one uppercase.      |                           |
 +----------+---------------------------------------+---------------------------+
+|e         |Show era when date is BCE (Before      |“BCE”                      |
+|          |Common Era, so before the year 1).     |                           |
++----------+---------------------------------------+---------------------------+
+|E         |Always show era.                       |“BCE”, “CE”                |
++----------+---------------------------------------+---------------------------+
 |f         |If minutes is zero then show only the  |“2”, “3:01”                |
 |          |hour, otherwise the hour and the       |                           |
 |          |minutes. Hours are shown using the “g” |                           |
@@ -164,9 +169,14 @@ All supported formatting characters are listed below:
 |W         |ISO-8601 week number of the year,      |“22”                       |
 |          |starting on mondays.                   |                           |
 +----------+---------------------------------------+---------------------------+
+|x         |Year in (at least) four digits, in     |“0313”, “-0500”, “2010”    |
+|          |accordance with ISO 8601.              |                           |
++----------+---------------------------------------+---------------------------+
 |y         |Year in two digits.                    |“01”, “99”                 |
 +----------+---------------------------------------+---------------------------+
-|Y         |Year in four digits.                   |“1999”, “2010”             |
+|Y         |Full year. BCE years are shown as a    |“1999”, “2010”, “313”      |
+|          |positive number. Use ``e`` or ``E`` to |                           |
+|          |add the era.                           |                           |
 +----------+---------------------------------------+---------------------------+
 |z         |Day of the year, i.e. 1 to 366.        |“361”                      |
 +----------+---------------------------------------+---------------------------+
