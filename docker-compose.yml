@@ -11,6 +11,7 @@ services:
 
     zotonic:
         image: zotonic/zotonic-dev
+        user: zotonic
         privileged: true
         environment:
             ZOTONIC_PORT: 80
