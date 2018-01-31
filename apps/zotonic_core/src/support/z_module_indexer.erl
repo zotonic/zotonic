@@ -32,6 +32,7 @@
     reindex/1,
     index_ref/1,
     translations/1,
+    dispatch/1,
     find/3,
     find_all/3,
     all/2,
@@ -41,7 +42,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_fileindexer/include/zotonic_fileindexer.hrl").
 
--type key_type() :: template  | lib | filter | scomp | action | validator | model.
+-type key_type() :: template  | lib | filter | scomp | action | validator | model | dispatch.
 
 -record(state, {
     context :: z:context(),
@@ -85,6 +86,11 @@ index_ref(#context{} = Context) ->
 -spec translations(z:context()) -> [ {Module :: atom(), [{Language :: atom(), file:filename()}]}].
 translations(Context) ->
     translations1(Context).
+
+%% @doc Find all dispatch files in all modules and the active site.
+-spec dispatch(z:context()) -> [ file:filename() ].
+dispatch(Context) ->
+    dispatch1(Context).
 
 %% @doc Find a scomp, validator etc.
 -spec find( key_type(), binary()|atom(), z:context() ) -> {ok, #module_index{}} | {error, term()}.
@@ -304,6 +310,25 @@ translations1(Context) ->
         end,
         z_module_manager:prio_sort(dict:to_list(ByModule))).
 
+dispatch1(Context) ->
+    ActiveApps = [ zotonic_core | z_module_manager:active(Context) ],
+    POs = lists:map(
+        fun( #mfile{ filepath = F, module = M } ) ->
+            {M, F}
+        end,
+        scan_apps(dispatch, ActiveApps)),
+    ByModule = lists:foldl(
+        fun({M,F}, Acc) ->
+            dict:append(M, F, Acc)
+        end,
+        dict:new(),
+        POs),
+    lists:map(
+        fun({M, DispatchFiles}) ->
+            {M, DispatchFiles}
+        end,
+        z_module_manager:prio_sort(dict:to_list(ByModule))).
+
 tag_with_lang(POFiles) ->
     [ {pofile_to_lang(POFile), POFile} || POFile <- POFiles ].
 
@@ -362,6 +387,7 @@ scan_apps(What, Apps) ->
 
 subdir_pattern(template)   -> { "priv/templates",    "" };
 subdir_pattern(lib)        -> { "priv/lib",          "" };
+subdir_pattern(dispatch)   -> { "priv/dispatch",     "" };
 subdir_pattern(translation)-> { "priv/translations", "\\.po" };
 subdir_pattern(scomp)      -> { "src/scomps",        "^scomp_(.*)\\.erl$" };
 subdir_pattern(action)     -> { "src/actions",       "^action_(.*)\\.erl$" };
