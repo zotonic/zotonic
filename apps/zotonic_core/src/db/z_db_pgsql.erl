@@ -35,14 +35,15 @@
 
 %% z_db_worker callbacks
 -export([
-         test_connection/1,
-         squery/3,
-         equery/4,
-         get_raw_connection/1
-        ]).
+    test_connection/1,
+    squery/3,
+    equery/4,
+    get_raw_connection/1
+]).
 
 -define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
+-define(CONNECT_TIMEOUT, 5000).
 -define(IDLE_TIMEOUT, 60000).
 
 -define(CONNECT_RETRIES, 50).
@@ -60,6 +61,14 @@ start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
 test_connection(Args) ->
+    case try_connect_tcp(Args) of
+        ok ->
+            test_connection_1(Args);
+        {error, _} = Error ->
+            Error
+    end.
+
+test_connection_1(Args) ->
     case connect(Args) of
         {ok, Conn} ->
             case z_db:schema_exists_conn(Conn, proplists:get_value(dbschema, Args, "public")) of
@@ -98,10 +107,10 @@ init(Args) ->
     {ok, #state{conn=undefined, conn_args=Args}, ?IDLE_TIMEOUT}.
 
 
-handle_call(Cmd, _From, #state{conn=undefined, conn_args=Args}=State) ->
-    case connect(Args) of
+handle_call(Cmd, From, #state{conn=undefined, conn_args=Args}=State) ->
+    case connect(Args, From) of
         {ok, Conn} ->
-            handle_call(Cmd, _From, State#state{conn=Conn});
+            handle_call(Cmd, From, State#state{conn=Conn});
         {error, _} = E ->
             {reply, E, State}
     end;
@@ -154,12 +163,40 @@ code_change(_OldVsn, State, _Extra) ->
 %%
 %% Helper functions
 %%
-connect(Args) when is_list(Args) ->
-    connect(Args, 0).
+try_connect_tcp(Args) ->
+    Addr = get_arg(dbhost, Args),
+    Port = get_arg(dbport, Args),
+    SockOpts = [{active, false}, {packet, raw}, binary],
+    case gen_tcp:connect(Addr, Port, SockOpts, ?CONNECT_TIMEOUT) of
+        {ok, Sock} ->
+            gen_tcp:close(Sock),
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
 
-connect(_Args, RetryCt) when RetryCt >= ?CONNECT_RETRIES ->
+connect(Args) when is_list(Args) ->
+    connect(Args, 0, undefined).
+
+connect(Args, {Pid, _Ref}) when is_list(Args) ->
+    MRef = monitor(process, Pid),
+    Result = connect(Args, 0, MRef),
+    demonitor(MRef),
+    Result.
+
+connect(_Args, RetryCt, _MRef) when RetryCt >= ?CONNECT_RETRIES ->
     {error, econnrefused};
-connect(Args, RetryCt) ->
+connect(Args, RetryCt, undefined) ->
+    connect_1(Args, RetryCt, undefined);
+connect(Args, RetryCt, MRef) ->
+    receive
+        {'DOWN', MRef, process, _Pid, _Reson} ->
+            {error, caller_down}
+    after 0 ->
+        connect_1(Args, RetryCt, MRef)
+    end.
+
+connect_1(Args, RetryCt, MRef) ->
     Hostname = get_arg(dbhost, Args),
     Port = get_arg(dbport, Args),
     Database = get_arg(dbdatabase, Args),
@@ -170,22 +207,21 @@ connect(Args, RetryCt) ->
         case epgsql:connect(Hostname, Username, Password,
                            [{database, Database}, {port, Port}]) of
             {ok, Conn} ->
-                case epgsql:squery(Conn, "SET TIME ZONE 'UTC'; SET search_path TO " ++ Schema) of
-                    [{ok, [], []}, {ok, [], []}] ->
-                        {ok, Conn};
-                    Error ->
-                        catch epgsql:close(Conn),
-                        {error, Error}
-                end;
+                set_schema(Conn, Schema);
             {error, econnrefused} ->
-                lager:warning("psql connection to ~p:~p refused (econnrefused), retrying in ~p sec (~p)",
-                              [Hostname, Port, ?CONNECT_RETRY_SLEEP div 1000, self()]),
-                timer:sleep(?CONNECT_RETRY_SLEEP),
-                connect(Args, RetryCt+10);
-            {error, {error,fatal,<<"53300">>,_ErrorMsg,_ErrorArgs}} ->
-                too_many_connections(Args, RetryCt);
+                retry(Args, econnrefused, RetryCt, MRef);
+            {error, <<"53200">>} ->
+                retry(Args, out_of_memory, RetryCt, MRef);
             {error, <<"53300">>} ->
-                too_many_connections(Args, RetryCt);
+                retry(Args, too_many_connections, RetryCt, MRef);
+            {error, {error, fatal, <<"53300">>, _ErrorMsg, _ErrorArgs}} ->
+                retry(Args, too_many_connections, RetryCt, MRef);
+            {error, <<"57P01">>} ->
+                retry(Args, admin_shutdown, RetryCt, MRef);
+            {error, <<"57P02">>} ->
+                retry(Args, crash_shutdown, RetryCt, MRef);
+            {error, <<"57P03">>} ->
+                retry(Args, cannot_connect_now, RetryCt, MRef);
             {error, _} = E ->
                 lager:warning("psql connection to ~p:~p returned error ~p",
                               [Hostname, Port, E]),
@@ -193,21 +229,42 @@ connect(Args, RetryCt) ->
         end
     catch
         A:B ->
-            lager:error("psql connection to ~p:~p failed (exception ~p:~p), retrying in ~p sec (~p)",
-                        [Hostname, Port, A, B, ?CONNECT_RETRY_SLEEP div 1000, self()]),
-            timer:sleep(?CONNECT_RETRY_SLEEP),
-            connect(Args, RetryCt+1)
+            retry(Args, {A, B}, RetryCt, MRef)
     end.
 
-too_many_connections(Args, RetryCt) ->
+set_schema(Conn, Schema) ->
+    case epgsql:squery(Conn,"SET TIME ZONE 'UTC'; SET search_path TO \"" ++ Schema ++ "\"") of
+        [{ok, [], []}, {ok, [], []}] ->
+            {ok, Conn};
+        Error ->
+            catch epgsql:close(Conn),
+            {error, Error}
+    end.
+
+%% @doc Retry connection to PostgreSQL server.
+retry(Args, Reason, RetryCt, MRef) ->
     Hostname = get_arg(dbhost, Args),
     Port = get_arg(dbport, Args),
-    lager:warning("psql connection to ~p:~p refused (too many connections), retrying in ~p msec (~p)",
-                  [Hostname, Port, ?CONNECT_RETRY_SHORT, self()]),
-    z_db_pool:close_connections(),
-    timer:sleep(?CONNECT_RETRY_SHORT),
-    connect(Args, RetryCt+1).
+    Delay = retry_delay(Reason, RetryCt),
+    lager:warning("psql connection to ~p:~p failed: ~p, retrying in ~p ms (~p)",
+                  [Hostname, Port, Reason, Delay, self()]),
+    maybe_close_connections(Reason),
+    timer:sleep(Delay),
+    connect(Args, RetryCt + 1, MRef).
 
+maybe_close_connections(out_of_memory) ->
+    z_db_pool:close_connections();
+maybe_close_connections(too_many_connections) ->
+    z_db_pool:close_connections();
+maybe_close_connections(_) ->
+    nop.
+
+retry_delay(_, RetryCount) when RetryCount < 2 ->
+    ?CONNECT_RETRY_SHORT;
+retry_delay(too_many_connections, _) ->
+    ?CONNECT_RETRY_SHORT;
+retry_delay(_, _RetryCount)  ->
+    ?CONNECT_RETRY_SLEEP.
 
 disconnect(#state{conn=undefined} = State) ->
     State;

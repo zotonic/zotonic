@@ -86,11 +86,7 @@ install_check(SiteProps) ->
         {site, Site},
         {module, ?MODULE}
       ]),
-    Context = z_context:new(Site),
-    case z_db:has_connection(Context) of
-        true -> check_db_and_upgrade(Context, 1);
-        false -> ok
-    end.
+    check_db_and_upgrade(z_context:new(Site), 1).
 
 check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
     case z_db_pool:test_connection(Context) of
@@ -118,6 +114,12 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                            Context),
                     ok
             end;
+        {error, nodatabase} ->
+            % No database configured, this is ok, proceed as normal (without db)
+            ok;
+        {error, econnrefused} = Error ->
+            lager:warning("Database connection failure: econnrefused"),
+            Error;
         {error, Reason} ->
             lager:warning("Database connection failure: ~p", [Reason]),
             case z_config:get(dbcreate) of
