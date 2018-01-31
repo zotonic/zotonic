@@ -447,7 +447,7 @@ convert_name(_What, AppPrefix, Pattern, Basename, Rootname, _RelPath) ->
     end.
 
 drop_prefix(Prefix, Name) ->
-    case binary:split(Prefix, Name) of
+    case binary:split(Name, Prefix) of
         [<<>>, <<$_, Rest/binary>>] -> Rest;
         _ -> Name
     end.
