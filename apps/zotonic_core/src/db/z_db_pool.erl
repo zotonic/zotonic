@@ -94,9 +94,23 @@ db_driver(Context = #context{}) ->
     end.
 
 %% @doc Perform a connect to test whether the database is working.
+test_connection(SiteProps) when is_list(SiteProps) ->
+    case proplists:get_value(dbdatabase, SiteProps) of
+        none ->
+            {error, nodatabase};
+        _ ->
+            DbDriver = db_driver(SiteProps),
+            DbOpts = db_opts(SiteProps),
+            DbDriver:test_connection(DbOpts)
+    end;
 test_connection(Context) ->
-    DbDriver = db_driver(Context),
-    DbDriver:test_connection(get_database_options(Context)).
+    case m_site:get(dbdatabase, Context) of
+        none ->
+            {error, nodatabase};
+        _ ->
+            DbDriver = db_driver(Context),
+            DbDriver:test_connection(get_database_options(Context))
+    end.
 
 
 %% @doc Get all configuration options for this site which are related

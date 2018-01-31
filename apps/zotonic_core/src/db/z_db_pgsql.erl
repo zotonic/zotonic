@@ -43,6 +43,7 @@
 
 -define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
+-define(CONNECT_TIMEOUT, 5000).
 -define(IDLE_TIMEOUT, 60000).
 
 -define(CONNECT_RETRIES, 50).
@@ -60,6 +61,14 @@ start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
 test_connection(Args) ->
+    case try_connect_tcp(Args) of
+        ok ->
+            test_connection_1(Args);
+        {error, _} = Error ->
+            Error
+    end.
+
+test_connection_1(Args) ->
     case connect(Args) of
         {ok, Conn} ->
             case z_db:schema_exists_conn(Conn, proplists:get_value(dbschema, Args, "public")) of
@@ -154,6 +163,18 @@ code_change(_OldVsn, State, _Extra) ->
 %%
 %% Helper functions
 %%
+try_connect_tcp(Args) ->
+    Addr = get_arg(dbhost, Args),
+    Port = get_arg(dbport, Args),
+    SockOpts = [{active, false}, {packet, raw}, binary],
+    case gen_tcp:connect(Addr, Port, SockOpts, ?CONNECT_TIMEOUT) of
+        {ok, Sock} ->
+            gen_tcp:close(Sock),
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
+
 connect(Args) when is_list(Args) ->
     connect(Args, 0, undefined).
 
