@@ -166,7 +166,16 @@ split_line(Line, Acc) ->
 	Filepath = get_filepath(Line),
 	% extract a verb from the line, while ignoring strings that are not verbs
 	[_|Flags] = binary:split(Line, <<" ">>, [global]),
-	Verb = extract_verb(Flags),
+    Verb = case extract_verb(Flags) of
+        create ->
+            % Deletes and renames are sometimes seen as a create
+            case filelib:is_file(Filepath) of
+                true -> create;
+                false -> delete
+            end;
+        V ->
+            V
+    end,
     [{Filepath, Verb} | Acc].
 
 %% Remove verbs from line, preserve spaces

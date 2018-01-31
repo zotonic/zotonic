@@ -6,7 +6,7 @@
   {mod, {zotonic_launcher_app, []}},
   {applications, [
       kernel, stdlib, crypto, public_key, ssl, inets, lager,
-      zotonic_core, zotonic_filewatcher,
+      zotonic_core, zotonic_filewatcher, zotonic_fileindexer,
       zotonic_listen_http, zotonic_listen_smtp
   ]},
   {env, []},

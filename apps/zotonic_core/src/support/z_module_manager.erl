@@ -40,6 +40,7 @@
     active/2,
     active_dir/1,
     lib_dir/1,
+    module_to_app/1,
     get_provided/1,
     get_modules/1,
     get_modules_status/1,
@@ -313,11 +314,15 @@ active_dir(Context) ->
 
 -spec lib_dir(atom()) -> {error, bad_name} | file:filename().
 lib_dir(Module) when is_atom(Module) ->
+    code:lib_dir(module_to_app(Module)).
+
+-spec module_to_app(atom()) -> atom().
+module_to_app(Module) ->
     case atom_to_list(Module) of
         "mod_" ++ _ = M ->
-            code:lib_dir("zotonic_"++M);
+            list_to_atom("zotonic_"++M);
         _ ->
-            code:lib_dir(Module)
+            Module
     end.
 
 %% @doc Return the list of all modules running.
