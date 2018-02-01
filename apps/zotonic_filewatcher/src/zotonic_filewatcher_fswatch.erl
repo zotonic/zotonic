@@ -1,10 +1,11 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014-2015 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2014-2018 Arjan Scherpenisse <arjan@scherpenisse.net>
 
 %% @doc Watch for changed files using fswatch (MacOS X; brew install fswatch).
 %%      https://github.com/emcrisostomo/fswatch
 
-%% Copyright 2014-2015 Arjan Scherpenisse
+%% Copyright 2014-2018 Arjan Scherpenisse
+%% Copyright 2015-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -144,8 +145,8 @@ start_fswatch(State=#state{executable = Executable, port = undefined}) ->
     lager:info("[fswatch] Starting fswatch file monitor."),
     Args = [
         Executable,
-        "-0", "-x", "-r", "-L"
-        | zotonic_filewatcher_sup:watch_dirs()
+        "-0", "-x", "-Lr"
+        | zotonic_filewatcher_sup:watch_dirs_expanded()
     ],
     {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
     State#state{

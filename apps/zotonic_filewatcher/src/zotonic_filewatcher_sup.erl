@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2017 Marc Worrell
+%% @copyright 2015-2018 Marc Worrell
 %% @doc Check for changed files, notify the zotonic_filehandler of any changes
 
-%% Copyright 2015-2017 Marc Worrell
+%% Copyright 2015-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,9 +24,11 @@
 -export([
     start_link/0,
     init/1,
-    watch_dirs/0
+    watch_dirs/0,
+    watch_dirs_expanded/0
     ]).
 
+-include_lib("kernel/include/file.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc API for starting the site supervisor.
@@ -95,29 +97,53 @@ which_watcher([M|Ms]) ->
     end.
 
 %% @doc Return the list of all directories to watch
-%% @todo check if need to follow softlinks
+%% @todo Add a non recursive watch on user/sites, user/modules, and the lib dir.
+%%       To see if new applications are added (or removed).
 -spec watch_dirs() -> list(string()).
 watch_dirs() ->
     ZotonicDirs = [
-        filename:join(get_path(), "apps"),
-        filename:join(get_path(), "_checkouts"),
+        % filename:join(get_path(), "apps"),
+        % filename:join(get_path(), "_checkouts"),
         build_lib_dir()
     ],
     lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs).
+
+%% @doc We expand all watch dirs, so that symbolic links to src, include, and priv are followed
+-spec watch_dirs_expanded() -> list(string()).
+watch_dirs_expanded() ->
+    lists:foldl(
+        fun(Dir, Acc) ->
+            symlinks(Dir) ++ [ Dir | Acc ]
+        end,
+        [],
+        watch_dirs()).
+
+symlinks(Dir) ->
+    All =  filelib:wildcard(filename:join([ Dir, "*" ]))
+        ++ filelib:wildcard(filename:join([ Dir, "*", "{src,priv,include}" ])),
+    lists:filter(
+        fun(D) ->
+            case file:read_link_info(D) of
+                {ok, #file_info{ type = symlink }} -> true;
+                _ -> false
+            end
+        end,
+        All).
 
 %% @doc Return the _build/default/lib directory
 -spec build_lib_dir() -> file:filename().
 build_lib_dir() ->
     filename:dirname(code:lib_dir(zotonic_filewatcher)).
 
-%% @doc Get the path to the root dir of the Zotonic install.
-%%      If the env var 'ZOTONIC' is not set, then return the current working dir.
--spec get_path() -> file:filename().
-get_path() ->
-    case os:getenv("ZOTONIC") of
-        false ->
-            {ok, Cwd} = file:get_cwd(),
-            Cwd;
-        ZotonicDir ->
-            ZotonicDir
-    end.
+
+% %% @doc Get the path to the root dir of the Zotonic install.
+% %%      If the env var 'ZOTONIC' is not set, then return the current working dir.
+% -spec get_path() -> file:filename().
+% get_path() ->
+%     case os:getenv("ZOTONIC") of
+%         false ->
+%             {ok, Cwd} = file:get_cwd(),
+%             Cwd;
+%         ZotonicDir ->
+%             ZotonicDir
+%     end.
