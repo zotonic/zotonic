@@ -24,6 +24,7 @@
 -export([
     start_link/0,
     init/1,
+    restart_watchers/0,
     watch_dirs/0,
     watch_dirs_expanded/0
     ]).
@@ -41,6 +42,17 @@ init([]) ->
     RestartStrategy = {one_for_one, 5, 10},
     {ok, {RestartStrategy, Children}}.
 
+restart_watchers() ->
+    case z_config:get(filewatcher_enabled) of
+        true ->
+          lager:info("Restarting filewatchers"),
+            _ = supervisor:restart_child(?MODULE, zotonic_filewatcher_fswatch),
+            _ = supervisor:restart_child(?MODULE, zotonic_filewatcher_inotify),
+            _ = supervisor:restart_child(?MODULE, zotonic_filewatcher_monitor),
+            ok;
+        false ->
+            ok
+    end.
 
 children(true) ->
     Watchers = [

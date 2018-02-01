@@ -44,6 +44,7 @@ mappers() ->
         fun drop_dirs/7,
         fun temp_beam/7,
         fun beam_file/7,
+        fun app_file/7,
         fun header_file/7,
         fun erlang_file/7,
         fun yecc/7,
@@ -68,11 +69,13 @@ drop_dirs(_Verb, _Application, _What, _Ext, _Root, _Split, Filename) ->
         false -> false
     end.
 
+
 %% @doc Recompile Erlang files on the fly
 temp_beam(_Verb, _Application, _What, <<".bea#">>, _Root, _Split, _Filename) ->
     ok;
 temp_beam(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
+
 
 beam_file(delete, _Application, _What, <<".beam">>, _Root, _Split, _Filename) ->
     ok;
@@ -81,6 +84,15 @@ beam_file(_Verb, _Application, {ebin, _EbinFile}, <<".beam">>, Root, _Split, _Fi
         {zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]}
     ]};
 beam_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
+    false.
+
+
+%% @doc Check for newly created/added Erlang applications
+app_file(create, _Application, {app, _AppFile}, <<".app">>, _Root, _Split, Filename) ->
+    {ok, [
+        {zotonic_filehandler_compile, code_path_check, [Filename]}
+    ]};
+app_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
 
 

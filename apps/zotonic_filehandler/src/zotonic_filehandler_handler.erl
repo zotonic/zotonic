@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2018 Marc Worrell
 %%
 %% @doc Server process to handle file changes. Serializes build events.
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 -include_lib("zotonic_filewatcher/include/zotonic_filewatcher.hrl").
 
--record(state, {}).
+-record(state, { }).
 
 
 -spec handle_changes( map() ) -> ok.
@@ -81,7 +81,7 @@ init([]) ->
             ?SYSTEM_NOTIFIER, filewatcher_changes,
             {?MODULE, filewatcher_changes_observer},
             self(), 500),
-    {ok, #state{}}.
+    {ok, #state{ }}.
 
 handle_call({filewatcher_changes, Es}, _From, State) ->
     Actions = maps:fold(
@@ -132,4 +132,3 @@ perform(Actions) ->
             erlang:apply(M, F, A)
         end,
         Actions).
-
