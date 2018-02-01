@@ -1,11 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
-%% Date: 2009-06-06
+%% @copyright 2009-2018 Marc Worrell
 %%
 %% @doc Implements the module extension mechanisms for scomps, templates, actions etc.  Scans all active modules
 %% for scomps (etc) and maintains lookup lists for when the system tries to find a scomp (etc).
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,15 +32,17 @@
     reindex/1,
     index_ref/1,
     translations/1,
+    dispatch/1,
     find/3,
     find_all/3,
     all/2,
     all_files/2
 ]).
 
--include("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_fileindexer/include/zotonic_fileindexer.hrl").
 
--type key_type() :: template  | lib | filter | scomp | action | validator | model.
+-type key_type() :: template  | lib | filter | scomp | action | validator | model | dispatch | service.
 
 -record(state, {
     context :: z:context(),
@@ -82,12 +83,17 @@ index_ref(#context{} = Context) ->
 
 %% @doc Find all .po files in all modules and the active site.
 %% This is an active scan, not designed to be fast.
--spec translations(z:context()) -> [ {Module :: atom(), [{Language :: atom(), filelib:filename()}]}].
+-spec translations(z:context()) -> [ {Module :: atom(), [{Language :: atom(), file:filename()}]}].
 translations(Context) ->
     translations1(Context).
 
+%% @doc Find all dispatch files in all modules and the active site.
+-spec dispatch(z:context()) -> [ file:filename() ].
+dispatch(Context) ->
+    dispatch1(Context).
+
 %% @doc Find a scomp, validator etc.
-%% @spec find(What, Name, Context) -> {ok, #module_index{}} | {error, Reason}
+-spec find( key_type(), binary()|atom(), z:context() ) -> {ok, #module_index{}} | {error, term()}.
 find(What, Name, Context) when What =:= lib; What =:= template ->
     case ets:lookup(?MODULE_INDEX,
                     #module_index_key{
@@ -111,9 +117,8 @@ find(What, Name, Context) ->
         [#module_index{} = M|_] -> {ok, M}
     end.
 
-
 %% @doc Find a scomp, validator etc.
-%% @spec find_all(What, Name, Context) -> list()
+-spec find_all( key_type(), binary()|atom(), z:context() ) -> list( #module_index{} ).
 find_all(template, Name, Context) ->
     gen_server:call(Context#context.module_indexer, {find_all, template, z_convert:to_binary(Name)}, ?TIMEOUT);
 find_all(What, Name, Context) ->
@@ -121,32 +126,31 @@ find_all(What, Name, Context) ->
 
 %% @doc Return a list of all templates, scomps etc per module
 all(What, #context{} = Context) ->
-    ActiveDirs = z_module_manager:active_dir(Context),
+    ActiveApps = z_module_manager:active(Context),
     [
         #module_index{
-            key=#module_index_key{name=F#mfile.name},
-            module=F#mfile.module,
-            filepath=F#mfile.filepath,
-            erlang_module=F#mfile.erlang_module
+            key = #module_index_key{ name = F#mfile.name },
+            module = F#mfile.module,
+            filepath = F#mfile.filepath,
+            erlang_module = F#mfile.erlang_module
         }
-        || F <- scan_all(What, ActiveDirs)
+        || F <- scan_apps(What, ActiveApps)
     ].
 
-all_files(erlang, {Module, ModuleDir}) ->
+all_files(erlang, Module) ->
     Filename = <<(z_convert:to_binary(Module))/binary, ".erl">>,
     [
         #module_index{
             key = #module_index_key{name = Filename},
             module = Module,
-            filepath = filename:join(ModuleDir, Filename),
             erlang_module = Module
         }
-        | all_files1(erlang, {Module, ModuleDir})
+        | all_files1(erlang, Module)
     ];
-all_files(Type, {Module, ModuleDir}) ->
-    all_files1(Type, {Module, ModuleDir}).
+all_files(Type, Module) ->
+    all_files1(Type, Module).
 
-all_files1(Type, {Module, ModuleDir}) ->
+all_files1(Type, Module) ->
     [
         #module_index{
             key = #module_index_key{name = F#mfile.name},
@@ -154,7 +158,7 @@ all_files1(Type, {Module, ModuleDir}) ->
             filepath = F#mfile.filepath,
             erlang_module = F#mfile.erlang_module
         }
-        || F <- scan_all(Type, [{Module, ModuleDir}])
+        || F <- scan_apps(Type, [ Module ])
     ].
 
 
@@ -288,33 +292,57 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 translations1(Context) ->
-    Dirs = [
-        {zotonic_core, code:lib_dir(zotonic_core)}          %% core modules translations
-        | z_module_manager:active_dir(Context) %% other module translations
-    ],
-    POs = [ {M,F} || #mfile{filepath=F, module=M} <- scan_subdir(translation, "priv/translations", "", ".po", Dirs) ],
+    ActiveApps = [ zotonic_core | z_module_manager:active(Context) ],
+    POs = lists:map(
+        fun( #mfile{ filepath = F, module = M } ) ->
+            {M, F}
+        end,
+        scan_apps(translation, ActiveApps)),
+    ByModule = lists:foldl(
+        fun({M,F}, Acc) ->
+            dict:append(M, F, Acc)
+        end,
+        dict:new(),
+        POs),
+    lists:map(
+        fun({M, POFiles}) ->
+            {M, tag_with_lang(POFiles)}
+        end,
+        z_module_manager:prio_sort(dict:to_list(ByModule))).
 
-    ByModule = lists:foldl(fun({M,F}, Acc) ->
-                                dict:append(M, F, Acc)
-                           end,
-                           dict:new(),
-                           POs),
-    [{M,tag_with_lang(POFiles)} || {M,POFiles} <- z_module_manager:prio_sort(dict:to_list(ByModule))].
+dispatch1(Context) ->
+    ActiveApps = [ zotonic_core | z_module_manager:active(Context) ],
+    POs = lists:map(
+        fun( #mfile{ filepath = F, module = M } ) ->
+            {M, F}
+        end,
+        scan_apps(dispatch, ActiveApps)),
+    ByModule = lists:foldl(
+        fun({M,F}, Acc) ->
+            dict:append(M, F, Acc)
+        end,
+        dict:new(),
+        POs),
+    lists:map(
+        fun({M, DispatchFiles}) ->
+            {M, DispatchFiles}
+        end,
+        z_module_manager:prio_sort(dict:to_list(ByModule))).
 
 tag_with_lang(POFiles) ->
-    [{pofile_to_lang(POFile), POFile} || POFile <- POFiles].
+    [ {pofile_to_lang(POFile), POFile} || POFile <- POFiles ].
 
 pofile_to_lang(POFile) ->
-    binary_to_atom(hd(binary:split(filename:basename(POFile), <<".">>)), 'utf8').
+    erlang:binary_to_atom(hd(binary:split(filename:basename(POFile), <<".">>)), 'utf8').
 
 %% @doc Find all scomps etc in a lookup list
 lookup_all(true, List) ->
     [
         #module_index{
-            key=#module_index_key{name=F#mfile.name},
-            module=F#mfile.module,
-            filepath=F#mfile.filepath,
-            erlang_module=F#mfile.erlang_module
+            key = #module_index_key{ name = F#mfile.name },
+            module = F#mfile.module,
+            filepath = F#mfile.filepath,
+            erlang_module = F#mfile.erlang_module
         }
         || F <- List
     ];
@@ -323,15 +351,15 @@ lookup_all(Name, List) ->
 
 lookup_all1(_Name, [], Acc) ->
     lists:reverse(Acc);
-lookup_all1(Name, [#mfile{name=Name} = F|T], Acc) ->
+lookup_all1(Name, [ #mfile{ name=Name } = F | T ], Acc) ->
     M = #module_index{
-        key=#module_index_key{name=Name},
-        module=F#mfile.module,
-        filepath=F#mfile.filepath,
-        erlang_module=F#mfile.erlang_module
+        key = #module_index_key{name=Name},
+        module = F#mfile.module,
+        filepath = F#mfile.filepath,
+        erlang_module = F#mfile.erlang_module
     },
-    lookup_all1(Name, T, [M|Acc]);
-lookup_all1(Name, [_|T], Acc) ->
+    lookup_all1(Name, T, [ M | Acc ]);
+lookup_all1(Name, [ _ | T ], Acc) ->
     lookup_all1(Name, T, Acc).
 
 
@@ -346,112 +374,94 @@ lookup_first(Name, [_|T]) ->
 
 %% @doc Scan the module directories for scomps, actions etc.
 scan(Context) ->
-    ActiveDirs = z_module_manager:active_dir(Context),
-    [
-        {What, scan_subdir(What, ActiveDirs)}
-        || What <- [ template, lib, scomp, action, validator, model, service ]
-    ].
+    ActiveApps = [ zotonic_core | z_module_manager:active(Context) ],
+    lists:map(
+        fun(What) ->
+            {What, scan_apps(What, ActiveApps)}
+        end,
+        [ template, lib, scomp, action, validator, model, service ]).
+
+scan_apps(What, Apps) ->
+    {SubDir, FileRE} = subdir_pattern(What),
+    scan_apps_subdir(What, SubDir, FileRE, Apps).
+
+subdir_pattern(template)   -> { "priv/templates",    "" };
+subdir_pattern(lib)        -> { "priv/lib",          "" };
+subdir_pattern(dispatch)   -> { "priv/dispatch",     "" };
+subdir_pattern(translation)-> { "priv/translations", "\\.po" };
+subdir_pattern(scomp)      -> { "src/scomps",        "^scomp_(.*)\\.erl$" };
+subdir_pattern(action)     -> { "src/actions",       "^action_(.*)\\.erl$" };
+subdir_pattern(validator)  -> { "src/validators",    "^validator_(.*)\\.erl$" };
+subdir_pattern(service)    -> { "src/services",      "^service_(.*)\\.erl$" };
+subdir_pattern(model)      -> { "src/models",        "^m_.*\\.erl$" };
+subdir_pattern(erlang)     -> { "src/support",       "\\.erl" }.
 
 
-%% @doc Scan module directories for specific kinds of parts. Returns a lookup list [ {lookup-name, fullpath} ]
-scan_subdir(What, ActiveDirs) ->
-    {Subdir, Prefix, Extension} = subdir(What),
-    scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs).
+%% @doc Scan all apps for templates/scomps/etc.
+-spec scan_apps_subdir(atom(), file:filename_all(), string(), list( atom() )) -> list( #mfile{} ).
+scan_apps_subdir(What, Subdir, Pattern, Apps) ->
+    Found = lists:foldl(
+        fun(App, Acc) ->
+            [ scan_app(What, Subdir, Pattern, App) | Acc ]
+        end,
+        [],
+        Apps),
+    lists:sort(fun mfile_compare/2, lists:flatten( Found )).
 
-subdir(template)   -> { "priv/templates",   "",           "" };
-subdir(lib)        -> { "priv/lib",         "",           "" };
-subdir(translation)-> { "priv/translations","",           ".po" };
-subdir(scomp)      -> { "src/scomps",      "scomp_",     ".erl" };
-subdir(action)     -> { "src/actions",     "action_",    ".erl" };
-subdir(validator)  -> { "src/validators",  "validator_", ".erl" };
-subdir(model)      -> { "src/models",      "m_",         ".erl" };
-subdir(service)    -> { "src/services",    "service_",   ".erl" };
-subdir(erlang)     -> { "src/support",     "",           ".erl" }.
-
-
-%% @doc Find all files, for the all/2 function.
-scan_all(What, ActiveDirs) ->
-    {Subdir, Prefix, Extension} = subdir(What),
-    scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs).
-
-
-%% @doc Scan all module directories for templates/scomps/etc.  Example: scan(scomp, "scomps", "scomp_", ".erl", Context)
-%% @spec scan_subdir(What, Subdir, Prefix, Extension, context()) -> [ {ModuleAtom, {ModuleDir, [{Name, File}]}} ]
-scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs) ->
-    ExtensionRe = case Extension of
-                        "" -> "";
-                        "."++_ -> "\\" ++ Extension ++ "$"
-                  end,
-    Scan1 = fun({Module, Dir}, Acc) ->
-                scan_moddir(What, Module, Dir, Subdir, Prefix, Extension, ExtensionRe, Acc)
-            end,
-    lists:sort(fun mfile_compare/2, lists:flatten(lists:foldl(Scan1, [], ActiveDirs))).
-
-scan_moddir(What, Module, Dir, Subdir, _Prefix, _Extension, _ExtensionRe, Acc)
-    when What =:= template; What =:= lib ->
-    case z_utils:list_dir_recursive(filename:join(Dir, Subdir)) of
-        [] ->
-            Acc;
-        Files ->
-            Prio = z_module_manager:prio(Module),
-            [[
-                #mfile{
-                    filepath=iolist_to_binary(filename:join([Dir, Subdir, F])),
-                    name=convert_name(What, F),
-                    module=Module,
-                    erlang_module=undefined,
-                    prio=Prio
-                }
-                || F <- Files
-            ] | Acc ]
-    end;
-scan_moddir(What, Module, Dir, Subdir, Prefix, Extension, ExtensionRe, Acc) ->
-    {Dir1, Pattern, PrefixLen} =
-            case Prefix of
-                    [] ->
-                        {filename:join([Dir, Subdir]), ".*" ++ ExtensionRe, 0};
-                    _ ->
-                        Prefix1 = Prefix ++ module2prefix(Module) ++ "_",
-                        {filename:join([Dir, Subdir]), Prefix1 ++ ".*" ++ ExtensionRe, length(Prefix1)}
-            end,
-    Files = filelib:fold_files(Dir1, Pattern, true, fun(F1,Acc1) -> [F1 | Acc1] end, []),
-    case Files of
-        [] ->
-            Acc;
-        _  ->
-            [[
-                #mfile{
-                    filepath=iolist_to_binary(F),
-                    name=convert_name(What, scan_remove_prefix_ext(F, PrefixLen, Extension)),
-                    module=Module,
-                    erlang_module=opt_erlang_module(F, Extension),
-                    prio=z_module_manager:prio(Module)
-                }
-                || F <- Files
-            ] | Acc ]
+scan_app(What, Subdir, Pattern, App) ->
+    MApp = z_module_manager:module_to_app(App),
+    case zotonic_fileindexer:scan(MApp, Subdir, Pattern) of
+        {ok, Files} ->
+            AppPrefix = app2prefix(App),
+            AppPrio = z_module_manager:prio(App),
+            lists:map(
+                fun(#fileindex{} = F) ->
+                    #mfile{
+                        filepath = F#fileindex.path,
+                        name = convert_name(
+                                    What, AppPrefix, Pattern,
+                                    F#fileindex.basename, F#fileindex.rootname, F#fileindex.relpath),
+                        module = App,
+                        erlang_module = opt_erlang_module(What, F#fileindex.rootname),
+                        prio = AppPrio
+                    }
+                end,
+                Files);
+        {error, _} ->
+            []
     end.
 
+convert_name(template, _AppPrefix, _Pattern, _Basename, _Rootname, RelPath) ->
+    RelPath;
+convert_name(lib, _AppPrefix, _Pattern, _Basename, _Rootname, RelPath) ->
+    RelPath;
+convert_name(translation, _AppPrefix, _Pattern, _Basename, _Rootname, RelPath) ->
+    RelPath;
+convert_name(_What, AppPrefix, Pattern, Basename, Rootname, _RelPath) ->
+    case re:run(Basename, Pattern, [{capture, all_but_first, binary}]) of
+        {match, [Name]} ->
+            Name1 = drop_prefix(AppPrefix, Name),
+            erlang:binary_to_atom(Name1, utf8);
+        _ ->
+            erlang:binary_to_atom(Rootname, utf8)
+    end.
 
+drop_prefix(Prefix, Name) ->
+    case binary:split(Name, Prefix) of
+        [<<>>, <<$_, Rest/binary>>] -> Rest;
+        _ -> Name
+    end.
 
-convert_name(template, Name) -> z_convert:to_binary(Name);
-convert_name(lib, Name) -> z_convert:to_binary(Name);
-convert_name(_, Name) -> z_convert:to_atom(Name).
+opt_erlang_module(template, _) -> undefined;
+opt_erlang_module(lib, _) -> undefined;
+opt_erlang_module(translation, _) -> undefined;
+opt_erlang_module(_, Rootname) -> binary_to_atom(Rootname, utf8).
 
-module2prefix(Module) ->
-    case atom_to_list(Module) of
-        "mod_" ++ Rest -> Rest;
+app2prefix(App) ->
+    case atom_to_binary(App, utf8) of
+        <<"mod_", Rest/binary>> -> Rest;
         Name -> Name
     end.
-
-scan_remove_prefix_ext(Filename, PrefixLen, Ext) ->
-    Basename = filename:basename(Filename, Ext),
-    lists:nthtail(PrefixLen, Basename).
-
-opt_erlang_module(Filepath, ".erl") ->
-    list_to_atom(filename:basename(Filepath, ".erl"));
-opt_erlang_module(_Filepath, _Ext) ->
-    undefined.
-
 
 %% @doc Order function for #mfile records on module priority
 mfile_compare(#mfile{prio=A}, #mfile{prio=A}) -> true;
@@ -489,15 +499,15 @@ to_ets([], _Type, _Tag, _Site, _Acc) ->
     ok;
 to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], service, Tag, Site, Acc) ->
     K = #module_index{
-        key=#module_index_key{
-            site=Site,
-            type=service,
-            name=service_key(z_convert:to_binary(Mod), Name)
+        key = #module_index_key{
+            site = Site,
+            type = service,
+            name = service_key(z_convert:to_binary(Mod), Name)
         },
-        module=Mod,
-        erlang_module=ErlMod,
-        filepath=FP,
-        tag=Tag
+        module = Mod,
+        erlang_module = ErlMod,
+        filepath = FP,
+        tag = Tag
     },
     ets:insert(?MODULE_INDEX, K),
     to_ets(T, service, Tag, Site, [Name|Acc]);
@@ -507,15 +517,15 @@ to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Typ
             to_ets(T, Type, Tag, Site, Acc);
         false ->
             K = #module_index{
-                key=#module_index_key{
-                    site=Site,
-                    type=Type,
-                    name=Name
+                key = #module_index_key{
+                    site = Site,
+                    type = Type,
+                    name = Name
                 },
-                module=Mod,
-                erlang_module=ErlMod,
-                filepath=FP,
-                tag=Tag
+                module = Mod,
+                erlang_module = ErlMod,
+                filepath = FP,
+                tag = Tag
             },
             ets:insert(?MODULE_INDEX, K),
             to_ets(T, Type, Tag, Site, [Name|Acc])

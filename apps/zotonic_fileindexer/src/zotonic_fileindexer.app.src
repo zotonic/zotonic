@@ -1,0 +1,12 @@
+%% -*- mode: erlang -*-
+{application, zotonic_fileindexer,
+ [{description, "Zotonic File Indexer"},
+  {vsn, "git"},
+  {registered, []},
+  {mod, {zotonic_fileindexer, []}},
+  {env, []},
+  {modules, []},
+  {applications, [
+    zotonic_notifier
+  ]}
+ ]}.

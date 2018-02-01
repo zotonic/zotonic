@@ -354,22 +354,8 @@ reload_dispatch_list(#state{context=Context} = State) ->
 
 %% @doc Collect all dispatch lists.  Checks priv/dispatch for all dispatch list definitions.
 collect_dispatch_lists(Context) ->
-    Files      = z_utils:wildcard(filename:join([z_path:site_dir(Context), "priv", "dispatch", "*"])),
-    Modules    = z_module_manager:active(Context),
-    ModuleDirs = z_module_manager:scan(),
-    ModDisp    = lists:foldl(
-        fun(M, Acc) ->
-            case lists:keyfind(M, 1, ModuleDirs) of
-                {M, _App, Dir} ->
-                    [ {M, z_utils:wildcard(filename:join([Dir, "priv", "dispatch", "*"]))} | Acc ];
-                false ->
-                    Acc
-            end
-        end,
-        [],
-        Modules),
-    ModDispOnPrio = lists:concat([ ModFiles || {_Mod, ModFiles} <- z_module_manager:prio_sort(ModDisp) ]),
-    Dispatch   = lists:map(fun get_file_dispatch/1, ModDispOnPrio++Files),
+    ModDispOnPrio = lists:concat([ ModFiles || {_Mod, ModFiles} <- z_module_indexer:dispatch(Context) ]),
+    Dispatch   = lists:map(fun get_file_dispatch/1, ModDispOnPrio),
     lists:flatten(Dispatch).
 
 

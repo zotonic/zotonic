@@ -28,8 +28,7 @@
 -include_lib("zotonic_filehandler/include/zotonic_filehandler.hrl").
 
 -spec map_change(zotonic_filehandler:verb(), Filename::binary()) ->
-    {ok, [Action]} | {error, term()} | false
-    when Action :: zotonic_filehandler:action().
+    {ok, [ mfa() ]} | {error, term()} | false.
 map_change(Verb, Filename) ->
     {Application, What} = categorize(Filename),
     Ext = filename:extension(Filename),
