@@ -28,8 +28,9 @@ priv/filezcache
 /priv/log/*
 !/priv/log/.empty
 priv/ssl/
-apps/zotonic_core/priv/mnesia/
 priv/translations/template/*.pot
+priv/mnesia
+apps/zotonic_core/priv/mnesia/
 
 /apps/*/priv/files/archive/*
 !/apps/zotonic_site_testsandbox/priv/files/archive/koe.jpg
