@@ -23,7 +23,10 @@
 -behaviour(gen_server).
 
 -export([
-    file_changed/2
+    file_changed/2,
+    re_exclude/0,
+    is_file_blacklisted/1,
+    is_file_blacklisted/2
 ]).
 
 -export([
@@ -49,8 +52,9 @@
 
 %% Which files do we not consider at all in the file_changed handler
 -define(FILENAME_BLACKLIST_RE,
-        "_flymake"
+        "_flymake$"
         "|\\.#"
+        "|\\.bea#"
         "|/priv/files/"
         "|/\\.git/"
         "|/\\.gitignore"
@@ -85,6 +89,47 @@ file_changed(Verb, F) when is_binary(F) ->
         false ->
             gen_server:cast(?MODULE, {file_changed, Verb, F})
     end.
+
+-spec re_exclude() -> string().
+re_exclude() ->
+    ?FILENAME_BLACKLIST_RE.
+
+-spec is_file_blacklisted(binary()|string()) -> boolean().
+is_file_blacklisted(<<".", _/binary>>) ->
+    true;
+is_file_blacklisted(F) when is_binary(F) ->
+    case binary:last(F) of
+        $# -> true;
+        _ -> re:run(F, re_compiled()) =/= nomatch
+    end;
+is_file_blacklisted("." ++ _) ->
+    true;
+is_file_blacklisted(F) when is_list(F) ->
+    case lists:last(F) of
+        $# -> true;
+        _ -> re:run(F, re_compiled()) =/= nomatch
+    end.
+
+re_compiled() ->
+    case erlang:get(blacklist_re) of
+        undefined ->
+            {ok, RE} = re:compile(?FILENAME_BLACKLIST_RE),
+            erlang:put(blacklist_re, RE),
+            RE;
+        RE ->
+            RE
+    end.
+
+%% @doc Called by zotonic_filewatcher_handler
+is_file_blacklisted("priv", "files") -> true;
+is_file_blacklisted("priv", "mnesia") -> true;
+is_file_blacklisted("priv", "log") -> true;
+is_file_blacklisted(<<"priv">>, <<"files">>) -> true;
+is_file_blacklisted(<<"priv">>, <<"mnesia">>) -> true;
+is_file_blacklisted(<<"priv">>, <<"log">>) -> true;
+is_file_blacklisted(_Dir, "." ++ _) -> true;
+is_file_blacklisted(_Dir, <<".", _/binary>>) -> true;
+is_file_blacklisted(_Dir, File) -> is_file_blacklisted(File).
 
 
 %% ------------------------------ gen_server Callbacks -----------------------------
@@ -146,20 +191,6 @@ add_event(Es, Verb, Filename) ->
     OldVerb = maps:get(Filename, Es, undefined),
     Es#{ Filename => select_verb(Verb, OldVerb) }.
 
--spec is_file_blacklisted(binary()) -> boolean().
-is_file_blacklisted(<<".", _/binary>>) ->
-    true;
-is_file_blacklisted(F) when is_binary(F) ->
-    case binary:last(F) of
-        $# -> true;
-        _ ->
-            case re:run(F, ?FILENAME_BLACKLIST_RE) of
-                {match, _} ->
-                     true;
-                nomatch ->
-                    false
-            end
-    end.
 
 %% @doc Select the verb to be passed if there are multiple updates to a file.
 -spec select_verb(NewVerb, PrevVerb) -> Verb

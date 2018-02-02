@@ -39,16 +39,18 @@ start_link() ->
 %% @doc Return the filewatcher gen_server(s) to be used.
 init([]) ->
     Children = children(z_config:get(filewatcher_enabled)),
-    RestartStrategy = {one_for_one, 5, 10},
+    RestartStrategy = {one_for_all, 5, 10},
     {ok, {RestartStrategy, Children}}.
 
+%% @doc Restart watchers because of a new application. This is because of new
+%%      symlinks, the filewatcher_monitor resolves symlinks itself, so doesn't
+%%      need to be restarted.
 restart_watchers() ->
     case z_config:get(filewatcher_enabled) of
         true ->
-          lager:info("Restarting filewatchers"),
-            _ = supervisor:restart_child(?MODULE, zotonic_filewatcher_fswatch),
-            _ = supervisor:restart_child(?MODULE, zotonic_filewatcher_inotify),
-            _ = supervisor:restart_child(?MODULE, zotonic_filewatcher_monitor),
+            lager:info("Restarting filewatchers"),
+            zotonic_filewatcher_fswatch:restart(),
+            zotonic_filewatcher_inotify:restart(),
             ok;
         false ->
             ok

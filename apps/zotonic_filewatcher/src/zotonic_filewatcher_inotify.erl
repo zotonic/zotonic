@@ -38,7 +38,8 @@
 
 %% interface functions
 -export([
-    is_installed/0
+    is_installed/0,
+    restart/0
 ]).
 
 
@@ -58,6 +59,10 @@ start_link() ->
 -spec is_installed() -> boolean().
 is_installed() ->
     os:find_executable("inotifywait") =/= false.
+
+-spec restart() -> ok.
+restart() ->
+    gen_server:cast(?MODULE, restart).
 
 %%====================================================================
 %% gen_server callbacks
@@ -87,7 +92,13 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-%% @doc Trap unknown casts
+handle_cast(restart, #state{ pid = undefined } = State) ->
+    {noreply, State};
+handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
+    lager:info("[inotify] Stopping inotify file monitor."),
+    catch exec:stop(Pid),
+    {noreply, start_inotify(State#state{ port = undefined })};
+
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
@@ -95,7 +106,7 @@ handle_cast(Message, State) ->
 %% @doc Reading a line from the inotifywait program. Sets a timer to
 %% prevent duplicate file changed message for the same filename
 %% (e.g. if a editor saves a file twice for some reason).
-handle_info({stdout, Port, Data}, #state{ port = Port } = State) ->
+handle_info({stdout, _Port, Data}, #state{} = State) ->
     Lines = binary:split(
         binary:replace(Data, <<"\r\n">>, <<"\n">>, [global]),
         <<"\n">>,
@@ -157,11 +168,18 @@ code_change(_OldVsn, State, _Extra) ->
 
 start_inotify(#state{executable = Executable, port = undefined} = State) ->
     lager:info("[inotify] Starting inotify file monitor."),
+    REs = lists:foldl(
+        fun(RE, Acc) ->
+            [ "--exclude", RE | Acc ]
+        end,
+        [],
+        string:tokens(zotonic_filewatcher_handler:re_exclude(), "|")),
     Args = [
-        Executable,
-        "-q", "-e", "modify,create,delete", "-m", "-r"
-        | zotonic_filewatcher_sup:watch_dirs()
-    ],
+            Executable,
+            "-q", "-e", "modify,create,delete", "-m", "-r"
+        ]
+        ++ REs
+        ++ zotonic_filewatcher_sup:watch_dirs_expanded(),
     {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
     State#state{
         port = Port,
