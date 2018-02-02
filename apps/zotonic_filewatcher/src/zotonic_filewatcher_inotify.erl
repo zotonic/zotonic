@@ -113,7 +113,7 @@ handle_info({stdout, _Port, Data}, #state{} = State) ->
         [global]),
     lists:map(
         fun(Line) ->
-            case re:run(Line, "^(.+) (MODIFY|CREATE|DELETE) (.+)", [{capture, all_but_first, binary}]) of
+            case re:run(Line, "^(.+) (MODIFY|CREATE|DELETE|MOVED_TO|MOVED_FROM) (.+)", [{capture, all_but_first, binary}]) of
                 nomatch ->
                     ok;
                 {match, [Path, Verb, File]} ->
@@ -137,7 +137,6 @@ handle_info({'EXIT', _Pid, _Reason}, State) ->
     {noreply, State};
 
 handle_info(start, #state{ port = undefined } = State) ->
-    lager:info("[inotify] Starting inotify file monitor."),
     {noreply, start_inotify(State)};
 handle_info(start, State) ->
     {noreply, State};
@@ -168,17 +167,11 @@ code_change(_OldVsn, State, _Extra) ->
 
 start_inotify(#state{executable = Executable, port = undefined} = State) ->
     lager:info("[inotify] Starting inotify file monitor."),
-    REs = lists:foldl(
-        fun(RE, Acc) ->
-            [ "--exclude", RE | Acc ]
-        end,
-        [],
-        string:tokens(zotonic_filewatcher_handler:re_exclude(), "|")),
     Args = [
             Executable,
-            "-q", "-e", "modify,create,delete", "-m", "-r"
+            "-q", "-e", "modify,create,delete,moved_to,moved_from", "-m", "-r",
+            "--exclude", zotonic_filewatcher_handler:re_exclude()
         ]
-        ++ REs
         ++ zotonic_filewatcher_sup:watch_dirs_expanded(),
     {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
     State#state{
@@ -190,4 +183,6 @@ start_inotify(State) ->
 
 verb(<<"CREATE">>) -> create;
 verb(<<"MODIFY">>) -> modify;
-verb(<<"DELETE">>) -> delete.
+verb(<<"DELETE">>) -> delete;
+verb(<<"MOVED_FROM">>) -> delete;
+verb(<<"MOVED_TO">>) -> create.

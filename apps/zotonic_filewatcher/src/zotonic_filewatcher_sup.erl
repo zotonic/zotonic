@@ -137,9 +137,14 @@ symlinks(Dir) ->
         ++ filelib:wildcard(filename:join([ Dir, "*", "{src,priv,include}" ])),
     lists:filter(
         fun(D) ->
-            case file:read_link_info(D) of
-                {ok, #file_info{ type = symlink }} -> true;
-                _ -> false
+            case filelib:is_file(D) of
+                true ->
+                    case file:read_link_info(D) of
+                        {ok, #file_info{ type = symlink }} -> true;
+                        _ -> false
+                    end;
+                false ->
+                    false
             end
         end,
         All).
