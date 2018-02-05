@@ -42,6 +42,7 @@ The following arguments/filters can be specified:
 +--------------------+------------------------------------------------------------+--------------------+
 |removebg            |Removes the image background. Accepts an optional fuzziness |removebg            |
 |                    |parameter (range 0..100).                                   |removebg=50         |
+|                    |Optionally a combination of a color and fuzziness.          |removebg="black,50" |
 +--------------------+------------------------------------------------------------+--------------------+
 |blur                |Blur the image, making it less sharp. See ImageMagick blur  |blur="20x8"         |
 |                    |for valid argument values.                                  |                    |
