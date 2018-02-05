@@ -98,7 +98,7 @@
        {ref,"511187da785903d64f5b284ae1d2888b07199e2f"}},
   0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.4.0">>},1},
- {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.0.0-alpha3">>},0}]}.
+ {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.0.0-alpha4">>},0}]}.
 [
 {pkg_hash,[
  {<<"bcrypt">>, <<"1C0F76981D8A7B32E4DAA813408BFCA5BA8B1286196EB771F026D02C710F71C5">>},
@@ -140,5 +140,5 @@
  {<<"sidejob">>, <<"5D6A7C9C620778CB1908E46B552D767DF2ED4D77070BB7B5B8773D4FF18D1D37">>},
  {<<"template_compiler">>, <<"DF9117BC0233FAC1288813BA64A08E4B4EB62E4B001553C2908EBCF3A804AF9E">>},
  {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>},
- {<<"zotonic_stdlib">>, <<"0E06C40721BC0EC536E0B104C0FE11C5B5E57DFD450B520EA64BE9FB453BC3D1">>}]}
+ {<<"zotonic_stdlib">>, <<"7CD2098A7EA489072F9CAEF9B2316F3B66859C3E4C2D321372337200822D8277">>}]}
 ].
