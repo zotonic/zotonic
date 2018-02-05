@@ -425,11 +425,18 @@ filter2arg(lossless, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg({quality, Q}, Width, Height, _AllFilters) ->
     {Width,Height, ["-quality ",integer_to_list(Q)]};
-filter2arg({removebg, Fuzz}, Width, Height, AllFilters) ->
+filter2arg({removebg, MatteFuzz}, Width, Height, AllFilters) ->
+    % Check if this is also contains a matter color.
+    {Matte, Fuzz} = case binary:split(z_convert:to_binary(MatteFuzz), <<",">>) of
+        [ M, F ] ->
+            {"-mattecolor "++z_utils:os_escape(z_convert:to_list(M)), z_convert:to_integer(F)};
+        F ->
+            {"-matte", z_convert:to_integer(F)}
+    end,
     Filter = case lists:member(lossless, AllFilters) of
                  true ->
                      %% PNG images get the alpha channel flood-filled to remove the background.
-                     ["-matte -fill none -fuzz ", integer_to_list(Fuzz), "% ",
+                     [Matte ++ " -fill none -fuzz ", integer_to_list(Fuzz), "% ",
                       "-draw 'matte 0,0 floodfill' ",
                       "-draw 'matte 0,", integer_to_list(Height-1), " floodfill' ",
                       "-draw 'matte ", integer_to_list(Width-1), ",0 floodfill' ",
@@ -437,7 +444,7 @@ filter2arg({removebg, Fuzz}, Width, Height, AllFilters) ->
                      ];
                  false ->
                      %% JPEG images get flood-filled with white to remove the background.
-                     ["-matte -fill white -fuzz ", integer_to_list(Fuzz), "% ",
+                     [Matte ++ "-fill white -fuzz ", integer_to_list(Fuzz), "% ",
                       "-draw 'color 0,0 floodfill' ",
                       "-draw 'color 0,", integer_to_list(Height-1), " floodfill' ",
                       "-draw 'color ", integer_to_list(Width-1), ",0 floodfill' ",
