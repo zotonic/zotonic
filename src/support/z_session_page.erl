@@ -345,13 +345,13 @@ handle_cast(ping, State) ->
 %% The user of the session changed, signal any connected push connections, stop this page.
 handle_cast(auth_change, #page_state{comet_pid=CometPid, websocket_pid=WsPid} = State) ->
     Msg = z_transport:msg(page, <<"session">>, #auth_change{page_id=State#page_state.page_id}, []),
-    {ok, Data} = z_ubf:encode([Msg]),
     case WsPid of
         undefined when is_pid(CometPid) ->
-            CometPid ! {final, Data};
+            CometPid ! {final, [Msg]};
         undefined ->
             ok;
         _ ->
+            {ok, Data} = z_ubf:encode([Msg]),
             controller_websocket:websocket_send_data(WsPid, Data)
     end,
     {stop, normal, State};

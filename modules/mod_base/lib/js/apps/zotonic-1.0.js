@@ -897,13 +897,8 @@ function z_ajax(options, data)
         error: function(xmlHttpRequest, textStatus, errorThrown)
         {
             z_stop_spinner();
-
-            if (!z_page_unloading) {
-                $.misc.error("FAIL: " + textStatus);
-                z_unmask_error(options.trigger_id);
-            } else {
-                z_unmask(options.trigger_id);
-            }
+            $.misc.error("FAIL: " + textStatus);
+            z_unmask_error(options.trigger_id);
         }
     });
 }
