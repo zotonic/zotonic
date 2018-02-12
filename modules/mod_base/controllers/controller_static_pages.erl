@@ -220,9 +220,9 @@ cache_key(Path) ->
 
 check_resource(ReqData, #state{fullpath=undefined} = State) ->
     Context = z_context:set_noindex_header(z_context:new(ReqData, ?MODULE)),
-    case mochiweb_util:safe_relative_path(mochiweb_util:unquote(wrq:disp_path(ReqData))) of
+    case relative_path(wrq:disp_path(ReqData)) of
         undefined ->
-            {error, enoent};
+            {ReqData, State#state{fullpath=false, context=Context, mime="text/html"}};
         SafePath ->
             Cached = case State#state.use_cache of
                 true -> z_depcache:get(cache_key(SafePath), Context);
@@ -274,6 +274,11 @@ check_resource(ReqData, #state{fullpath=undefined} = State) ->
     end;
 check_resource(ReqData, State) ->
     {ReqData, State}.
+
+relative_path("/") ->
+    "";
+relative_path(Path) ->
+    mochiweb_util:safe_relative_path(mochiweb_util:unquote(Path)).
 
 last([]) -> undefined;
 last(L) -> lists:last(L).
