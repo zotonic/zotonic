@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+DIR=`dirname $0`
+
+cd $DIR/../apps/zotonic_core/priv/translations
+
+echo "Merging apps/zotonic_core/priv/translations/zotonic.pot into language files"
+echo
+
+for i in *.po
+do
+    echo "Updating: $i"
+    msgmerge -U $i zotonic.pot
+done
+
