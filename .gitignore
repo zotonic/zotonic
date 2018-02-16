@@ -25,16 +25,21 @@ compile_commands.json
 
 priv/*.config
 priv/filezcache
+
 /priv/log/*
 !/priv/log/.empty
-priv/ssl/
-apps/zotonic_core/priv/mnesia/
-priv/translations/template/*.pot
 
-/apps/*/priv/files/archive/*
-!/apps/zotonic_site_testsandbox/priv/files/archive/koe.jpg
+priv/ssl/
 apps/*/priv/ssl/
+
+priv/mnesia/
+apps/zotonic_core/priv/mnesia/
+
+apps/*/priv/files/archive/*
+!/apps/zotonic_site_testsandbox/priv/files/archive/koe.jpg
+
 apps/*/priv/translations/template/*.pot
+!apps/zotonic_core/priv/translations/zotonic.pot
 
 /user/*
 
