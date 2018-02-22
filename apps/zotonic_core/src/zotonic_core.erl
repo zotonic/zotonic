@@ -52,6 +52,7 @@ is_app_available(App) ->
 %% @doc Initial setup before starting Zotonic
 -spec setup() -> ok.
 setup() ->
+    io:setopts([{encoding, unicode}]),
     ensure_mnesia_schema().
 
 %% @doc Ensure that mnesia has created its schema in the configured priv/data/mnesia directory.
