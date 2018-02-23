@@ -70,6 +70,9 @@
 %% Minimum day, inserted for date start search ranges
 -define(EPOCH_START, {{-4000,1,1},{0,0,0}}).
 
+%% Max number of characters for a tsv vector.
+-define(MAX_TSV_LEN, 30000).
+
 
 -record(state, {site, is_initial_delay=true, is_pivot_delay = false}).
 
@@ -579,7 +582,9 @@ to_tsv(List, Level, Args, StemmingLanguage) ->
     {Sql1, Args1} = lists:foldl(
         fun ({_Lang,Text}, {Sql, As}) ->
             N   = length(As) + 1,
-            As1 = As ++ [cleanup_tsv_text(z_html:unescape(z_html:strip(Text)))],
+            CleanedText = cleanup_tsv_text(z_html:unescape(z_html:strip(Text))),
+            Truncated = z_string:truncate(CleanedText, ?MAX_TSV_LEN, <<>>),
+            As1 = As ++ [Truncated],
             {[["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"] | Sql], As1}
         end,
         {[], Args},
