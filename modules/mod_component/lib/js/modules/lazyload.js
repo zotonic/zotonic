@@ -39,27 +39,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 LazyLoad = (function (doc) {
   // -- Private Variables ------------------------------------------------------
 
-
   // Reference to the <head> element (populated lazily).
   var head = doc.head,
 
   // Requests currently in progress, if any.
   pending = {},
 
-  // Number of times we've polled to check whether a pending stylesheet has
-  // finished loading. If this gets too high, we're probably stalled.
-  pollCount = 0,
-
   // Cached requests.
   cache = {},
 
   // Queued requests.
   queue = {css: [], js: []},
-
-  // Reference to the browser's list of stylesheets.
-  styleSheets = doc.styleSheets,
-
-  finishCSS = finish.bind(doc, 'css'),
 
   ua = navigator.userAgent,
 
@@ -71,11 +61,7 @@ LazyLoad = (function (doc) {
     async: createNode('script').async === true
   };
 
-  (env.webkit = /AppleWebKit\//.test(ua))
-    || (env.ie = /Trident/.test(ua))
-    || (env.opera = /Opera/.test(ua))
-    || (env.gecko = /Gecko\//.test(ua))
-    || (env.unknown = true);
+  (env.opera = /Opera/.test(ua)) || (env.gecko = /Gecko\//.test(ua)) || (env.unknown = true);
   // -- Private Methods --------------------------------------------------------
 
   /**
@@ -121,7 +107,6 @@ LazyLoad = (function (doc) {
       urls     = p.urls;
 
       cache[urls.shift()] = true;
-      pollCount = 0;
 
       // If this is the last of the pending URLs, execute the callback and
       // start the next request in the queue (if any).
@@ -204,116 +189,16 @@ LazyLoad = (function (doc) {
         cache[url] = false;
       }
       if (isCSS) {
-        node = env.gecko ? createNode('style') : createNode('link', {
-          href: url,
-          rel : 'stylesheet'
-        });
+        node = createNode('link', {href: url, rel: 'stylesheet'});
       } else {
         node = createNode('script', {src: url});
         node.async = false;
       }
 
       node.charset = 'utf-8';
-
-      if (isCSS && (env.gecko || env.webkit)) {
-        // Gecko and WebKit don't support the onload event on link nodes.
-        if (env.webkit) {
-          // In WebKit, we can poll for changes to document.styleSheets to
-          // figure out when stylesheets have loaded.
-          p.urls[i] = node.href; // resolve relative URLs (or polling won't work)
-          pollWebKit();
-        } else {
-          // In Gecko, we can import the requested URL into a <style> node and
-          // poll for the existence of node.sheet.cssRules. Props to Zach
-          // Leatherman for calling my attention to this technique.
-          node.innerHTML = '@import "' + url + '";';
-          pollGecko(node);
-        }
-      } else {
-        node.onload = node.onerror = _finish;
-      }
+      node.onload = node.onerror = _finish;
 
       head.appendChild(node);
-    }
-  }
-
-  /**
-  Begins polling to determine when the specified stylesheet has finished loading
-  in Gecko. Polling stops when all pending stylesheets have loaded or after 10
-  seconds (to prevent stalls).
-
-  Thanks to Zach Leatherman for calling my attention to the @import-based
-  cross-domain technique used here, and to Oleg Slobodskoi for an earlier
-  same-domain implementation. See Zach's blog for more details:
-  http://www.zachleat.com/web/2010/07/29/load-css-dynamically/
-
-  @method pollGecko
-  @param {HTMLElement} node Style node to poll.
-  @private
-  */
-  function pollGecko(node) {
-    var hasRules;
-
-    try {
-      // We don't really need to store this value or ever refer to it again, but
-      // if we don't store it, Closure Compiler assumes the code is useless and
-      // removes it.
-      hasRules = !!node.sheet.cssRules;
-    } catch (ex) {
-      // An exception means the stylesheet is still loading.
-      ++pollCount;
-
-      if (pollCount < 200) {
-        setTimeout(pollGecko.bind(doc, node), 50);
-      } else {
-        // We've been polling for 10 seconds and nothing's happened. Stop
-        // polling and finish the pending requests to avoid blocking further
-        // requests.
-        hasRules && finishCSS();
-      }
-
-      return;
-    }
-
-    // If we get here, the stylesheet has loaded.
-    finishCSS();
-  }
-
-  /**
-  Begins polling to determine when pending stylesheets have finished loading
-  in WebKit. Polling stops when all pending stylesheets have loaded or after 10
-  seconds (to prevent stalls).
-
-  @method pollWebKit
-  @private
-  */
-  function pollWebKit() {
-    var css = pending.css, i;
-
-    if (css) {
-      i = styleSheets.length;
-
-      // Look for a stylesheet matching the pending URL.
-      while (--i >= 0) {
-        if (styleSheets[i].href === css.urls[0]) {
-          finishCSS();
-          break;
-        }
-      }
-
-      ++pollCount;
-
-      if (css) {
-        if (pollCount < 200) {
-          setTimeout(pollWebKit, 50);
-        } else {
-          // We've been polling for 10 seconds and nothing's happened, which may
-          // indicate that the stylesheet has been removed from the document
-          // before it had a chance to load. Stop polling and finish the pending
-          // request to prevent blocking further requests.
-          finishCSS();
-        }
-      }
     }
   }
 
