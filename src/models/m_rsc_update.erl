@@ -1105,8 +1105,8 @@ dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,Ie,Se}} ) ->
     {{{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,Ie,Se}}}.
 
 
-date_from_default( S, {{undefined,undefined,undefined},{undefined,undefined,undefined}} ) ->
-    S;
+date_from_default(_S, {{undefined, undefined, undefined}, {undefined, undefined, undefined}}) ->
+    ?ST_JUTTEMIS;
 date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{undefined,Me,De},{He,Ie,Se}} ) ->
     date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ys,Me,De},{He,Ie,Se}} );
 date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,undefined,De},{He,Ie,Se}} ) ->
