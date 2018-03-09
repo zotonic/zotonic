@@ -16,7 +16,7 @@
 
     <div class="control-group view-expanded">
        <label>
-            {_ List of possible answers, one per line. Use <em>value#answer</em> to store “value” but to show “answer”. E.g.  “2029#The year 2029”. _}
+            {_ If you want to store <i>value</i> but show <i>answer</i>i>, use value#answer. E.g. 2029#Graduated will store 2019 in the results. _}
             <span class="test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
                 {_ For quiz or test, mark correct answers with a “*””. E.g. “*value#answer” _}
             </span>
