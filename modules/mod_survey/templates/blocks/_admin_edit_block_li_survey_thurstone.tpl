@@ -16,7 +16,7 @@
 
     <div class="control-group view-expanded">
        <label>
-            {_ If you want to store <i>value</i> but show <i>answer</i>i>, use value#answer. E.g. 2029#Graduated will store 2019 in the results. _}
+            {_ If you want to store <i>value</i> but show <i>answer</i>i>, use value#answer. E.g. <i>2029#Graduated in 2019</i> will store 2029 in the results. _}
             <span class="test-controls" {% if not blk.is_test %}style="display:none"{% endif %}>
                 {_ For quiz or test, mark correct answers with a “*””. E.g. “*value#answer” _}
             </span>
