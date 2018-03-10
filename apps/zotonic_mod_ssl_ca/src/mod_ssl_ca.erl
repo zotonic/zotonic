@@ -64,7 +64,7 @@ ssl_options(Context) ->
     end.
 
 cert_files(Context) ->
-    SSLDir = filename:join([z_path:site_dir(Context), "ssl", "ca"]),
+    SSLDir = filename:join([z_path:site_dir(Context), "priv", "ssl", "ca"]),
     Sitename = z_convert:to_list(z_context:site(Context)),
     Files = [
         {certfile, filename:join(SSLDir, Sitename++".crt")},
