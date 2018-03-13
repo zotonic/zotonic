@@ -107,7 +107,7 @@ in_categories(Ids, Context) when is_list(Ids) ->
 
 delete_all([], _N, _Total, _Context) ->
     ok;
-delete_all([{Id}|Ids], N, Total, Context) ->
+delete_all([Id|Ids], N, Total, Context) ->
     case catch m_rsc:delete(Id, Context) of
         ok ->
             maybe_progress(N, N+1, Total, Context),
