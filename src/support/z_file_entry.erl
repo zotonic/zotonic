@@ -216,14 +216,14 @@ content_encoding_gzip(timeout, State) ->
     case is_compressable(State#state.mime) andalso State#state.size < ?MAX_GZIP_SIZE of
         true ->
             % Start compression in separate process
-            State1 = State#state{gzipper = start_link_gzip(State#state.parts)},
+            State1 = State#state{gzipper = start_link_gzip(State#state.parts, State#state.site)},
             {next_state, serving, State1, ?SERVING_TIMEOUT};
         false ->
             {next_state, serving, State, ?SERVING_TIMEOUT}
     end.
 
 serving(timeout, State) ->
-    unreg(State),
+    unreg(State), State#state.site,
     {next_state, stopping, State, ?STOP_TIMEOUT}.
 
 stopping(timeout, State) ->
@@ -401,11 +401,11 @@ is_compressable(<<"application/xhtml+xml">>) -> true;
 is_compressable(<<"application/xml">>) -> true;
 is_compressable(_Mime) -> false.
 
-start_link_gzip(Sources) ->
+start_link_gzip(Sources, Site) ->
     Self = self(),
     Ref = erlang:make_ref(),
     Pid = erlang:spawn_link(fun() ->
-                          Bin = gzip_compress(Sources),
+                          Bin = gzip_compress(Sources, Site),
                           Self ! {gzip, {Ref, self()}, Bin}
                       end),
     {Ref, Pid}.
@@ -413,44 +413,58 @@ start_link_gzip(Sources) ->
 % TODO: big files should be compressed to disk (tmpfile or filezcache should do)
 -define(MAX_WBITS, 15).
 
-gzip_compress(Sources) ->
+gzip_compress(Sources, Site) ->
+    Context = z_context:new(Site),
     Z = zlib:open(),
     zlib:deflateInit(Z, default, deflated, 16+?MAX_WBITS, 8, default),
-    Compressed = gzip_compress_1(Sources, Z, []),
+    Compressed = gzip_compress_1(Sources, Z, [], Context),
     Last = zlib:deflate(Z, <<>>, finish),
     ok = zlib:deflateEnd(Z),
     zlib:close(Z),
     iolist_to_binary([Compressed,Last]).
 
-gzip_compress_1([], _Z, Acc) ->
+gzip_compress_1([], _Z, Acc, _Context) ->
     lists:reverse(Acc);
-gzip_compress_1([#part_data{data=B}|Ps], Z, Acc) ->
+gzip_compress_1([#part_data{data=B}|Ps], Z, Acc, Context) ->
     Acc1 = [ zlib:deflate(Z, B) | Acc],
-    gzip_compress_1(Ps, Z, Acc1);
-gzip_compress_1([#part_file{filepath=Filename}|Ps], Z, Acc) ->
-    Acc1 = compress_file(Filename, Z, Acc),
-    gzip_compress_1(Ps, Z, Acc1);
-gzip_compress_1([#part_cache{cache_pid=Pid}|Ps], Z, Acc) ->
+    gzip_compress_1(Ps, Z, Acc1, Context);
+gzip_compress_1([#part_file{filepath=Filename}|Ps], Z, Acc, Context) ->
+    Acc1 = compress_file(Filename, Z, Acc, Context),
+    gzip_compress_1(Ps, Z, Acc1, Context);
+gzip_compress_1([#part_cache{cache_pid=Pid}|Ps], Z, Acc, Context) ->
     {ok, {file, _, Filename}} = filezcache:lookup_file(Pid),
-    Acc1 = compress_file(Filename, Z, Acc),
-    gzip_compress_1(Ps, Z, Acc1);
-gzip_compress_1([#part_missing{}|Ps], Z, Acc) ->
-    gzip_compress_1(Ps, Z, Acc).
+    Acc1 = compress_file(Filename, Z, Acc, Context),
+    gzip_compress_1(Ps, Z, Acc1, Context);
+gzip_compress_1([#part_missing{}|Ps], Z, Acc, Context) ->
+    gzip_compress_1(Ps, Z, Acc, Context).
 
 
 % We read 512K at once for compressing files.
 -define(BLOCK_SIZE, 512*1024).
 
-compress_file(Filename, Z, Acc) ->
+compress_file(Filename, Z, Acc, Context) ->
     {ok, IO} = file:open(Filename, [read,raw,binary]),
-    Compressed = compress_file_1(Z, IO, Acc),
+    Compressed = compress_file_1(Filename, Z, IO, Acc, Context),
     ok = file:close(IO),
     Compressed.
 
-compress_file_1(Z, IO, Acc) ->
+compress_file_1(Filename, Z, IO, Acc, Context) ->
     case file:read(IO, ?BLOCK_SIZE) of
         eof ->
             Acc;
         {ok, Data} ->
-            compress_file_1(Z, IO, [zlib:deflate(Z, Data)|Acc])
+            case size(Data) =< ?BLOCK_SIZE andalso Acc =:= [] of
+                true ->
+                    case z_notifier:first(
+                           #pre_file_compress{filename=Filename, 
+                                              extension=filename:extension(Filename),
+                                              data=Data}, Context) of
+                        undefined ->
+                            compress_file_1(Filename, Z, IO, [zlib:deflate(Z, Data)|Acc], Context);
+                        {ok, Data1} ->
+                            compress_file_1(Filename, Z, IO, [zlib:deflate(Z, Data1)|Acc], Context)
+                    end;
+                false ->
+                    compress_file_1(Filename, Z, IO, [zlib:deflate(Z, Data)|Acc], Context)
+            end
     end.
