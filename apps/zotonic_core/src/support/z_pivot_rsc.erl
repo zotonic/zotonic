@@ -768,8 +768,9 @@ to_integer(Text) ->
     end.
 
 cleanup_tsv_text(Text) when is_binary(Text) ->
-    Text1 = iolist_to_binary(re:replace(Text, <<"[ ",13,10,9,"/-]+">>, <<" ">>, [global])),
-    z_string:trim(Text1).
+    Text1 = z_string:sanitize_utf8(Text),
+    Text2 = iolist_to_binary(re:replace(Text1, <<"[ ",13,10,9,"/-]+">>, <<" ">>, [global])),
+    z_string:trim(Text2).
 
 truncate(undefined, _Len) -> undefined;
 truncate(S, Len) -> iolist_to_binary(
