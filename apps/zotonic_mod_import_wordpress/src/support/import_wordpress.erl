@@ -26,7 +26,7 @@
         ]).
 
 -include_lib("xmerl/include/xmerl.hrl").
--include("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 -define(RSS_NS, 'http://purl.org/rss/1.0/modules/content/').
 -define(WFW_NS, 'http://wellformedweb.org/CommentAPI/').
