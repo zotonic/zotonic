@@ -521,10 +521,14 @@ get_session_cookie_name(Context) ->
 set_session_cookie(SessionId, Context) ->
     Options = [{path, "/"},
                {http_only, true}],
+    Options1 = case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
+        <<"https">> -> [ {secure, true} | Options ];
+        _ -> Options
+    end,
     z_context:set_cookie(
                     get_session_cookie_name(Context),
                     SessionId,
-                    Options,
+                    Options1,
                     z_context:set(set_session_id, true, Context)).
 
 
