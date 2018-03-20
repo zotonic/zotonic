@@ -33,7 +33,6 @@
 -mod_title("Translation").
 -mod_description("Handle user’s language and generate .pot files with translatable texts.").
 -mod_prio(500).
--mod_depends([admin]).
 -mod_provides([translation]).
 
 -export([
@@ -66,7 +65,7 @@
 
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_mod_admin/include/admin_menu.hrl").
+-include("include/mod_translation.hrl").
 
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
