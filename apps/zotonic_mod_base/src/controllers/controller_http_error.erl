@@ -197,7 +197,7 @@ do_html(Context0) ->
     z_context:output(Rendered, ContextQs).
 
 error_code(Context) ->
-    case z_context:get_q(http_status_code, Context) of
+    case z_context:get(http_status_code, Context) of
         StatusCode when is_integer(StatusCode) ->
             StatusCode;
         _ ->
