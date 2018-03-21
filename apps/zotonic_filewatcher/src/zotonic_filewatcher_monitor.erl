@@ -1028,11 +1028,20 @@ get_file_info(Path) when is_list(Path) ->
 %% Listing the members of a directory; note that it yields the empty
 %% list if it fails - this is not the place for error detection.
 
-%% mw 20151023: patch to ignore Zotonic "files" directories containg all uploaded
+%% mw 20151023: patch to ignore Zotonic "files" directories containing all uploaded
 %%              and preview files. This speeds up the scanning considerably.
+list_dir("." ++ _) ->
+    [];
 list_dir(Path) when is_list(Path) ->
+    Dirname = filename:dirname(Path),
     Files = case file:list_dir(Path) of
-                {ok, Fs} -> [normalize_path(F) || F <- Fs, F =/= <<"files">>, F =/= "files"];
+                {ok, Fs} ->
+                    Fs1 = lists:filter(
+                        fun(F) ->
+                            not zotonic_filewatcher_handler:is_file_blacklisted(Dirname, F)
+                        end,
+                        Fs),
+                    lists:map( fun normalize_path/1, Fs1 );
                 {error, _} -> []
             end,
     lists:sort(Files).

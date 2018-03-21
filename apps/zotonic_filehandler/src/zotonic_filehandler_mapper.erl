@@ -90,6 +90,7 @@ categorize(Filename) ->
                 fun priv_file/1,
                 fun src_file/1,
                 fun include_file/1,
+                fun app_file/1,
                 fun ebin_file/1,
                 fun test_file/1
             ],
@@ -108,10 +109,10 @@ categorize_1([], _Filename) ->
     {undefined, undefined};
 categorize_1([Fun|Other], Filename) ->
     case Fun(Filename) of
-        {App, What} ->
-            case is_application(App) of
-                true ->
-                    {binary_to_atom(App, utf8), What};
+        {AppVsn, What} ->
+            case is_application(AppVsn) of
+                {true, AppName} ->
+                    {AppName, What};
                 false ->
                     categorize_1(Other, Filename)
             end;
@@ -123,77 +124,90 @@ config_dir_file(F) ->
     case re:run(F, "/([^/]+)/priv/config.d/", [{capture, all_but_first, binary}]) of
         nomatch ->
             false;
-        {match, [Application]} ->
-            {Application, config}
+        {match, [AppVsn]} ->
+            {AppVsn, config}
     end.
 
 config_file(F) ->
     case re:run(F, "/([^/]+)/priv/zotonic_site.config", [{capture, all_but_first, binary}]) of
         nomatch ->
             false;
-        {match, [Application]} ->
-            {Application, config}
+        {match, [AppVsn]} ->
+            {AppVsn, config}
     end.
 
 priv_file(F) ->
     case re:run(F, "/([^/]+)/priv/([^/]+)/(.*)", [{capture, all_but_first, binary}]) of
         nomatch ->
             false;
-        {match, [Application, What, Path]} ->
-            {Application, {priv, What, Path}}
+        {match, [AppVsn, What, Path]} ->
+            {AppVsn, {priv, What, Path}}
     end.
 
 src_file(F) ->
     case re:run(F, "/([^/]+)/src/(.*)", [{capture, all_but_first, binary}]) of
         nomatch ->
             false;
-        {match, [Application, Path]} ->
-            {Application, {src, Path}}
+        {match, [AppVsn, Path]} ->
+            {AppVsn, {src, Path}}
     end.
 
 test_file(F) ->
     case re:run(F, "/([^/]+)/test/(.*)", [{capture, all_but_first, binary}]) of
         nomatch ->
             false;
-        {match, [Application, Path]} ->
-            {Application, {test, Path}}
+        {match, [AppVsn, Path]} ->
+            {AppVsn, {test, Path}}
     end.
 
 include_file(F) ->
     case re:run(F, "/([^/]+)/include/(.*)", [{capture, all_but_first, binary}]) of
         nomatch ->
             false;
-        {match, [Application, Path]} ->
-            {Application, {src, Path}}
+        {match, [AppVsn, Path]} ->
+            {AppVsn, {src, Path}}
+    end.
+
+app_file(F) ->
+    case re:run(F, "/([^/]+)/ebin/(.*\\.app)", [{capture, all_but_first, binary}]) of
+        nomatch ->
+            false;
+        {match, [AppVsn, AppFile]} ->
+            {AppVsn, {app, AppFile}}
     end.
 
 ebin_file(F) ->
     case re:run(F, "/([^/]+)/ebin/(.*)", [{capture, all_but_first, binary}]) of
         nomatch ->
             false;
-        {match, [Application, EbinFile]} ->
-            {Application, {ebin, EbinFile}}
+        {match, [AppVsn, EbinFile]} ->
+            {AppVsn, {ebin, EbinFile}}
     end.
 
 
 %% @doc Check if the directory name is the name of a (compiled) application
 is_application(AppName) when is_atom(AppName) ->
     case code:lib_dir(AppName) of
-        {error, bad_name} -> is_application__app(AppName);
-        LibDir when is_list(LibDir) -> true
+        {error, bad_name} -> is_application__app(AppName, AppName);
+        LibDir when is_list(LibDir) -> {true, AppName}
     end;
-is_application(AppName) when is_binary(AppName) ->
+is_application(AppNameVsn) when is_binary(AppNameVsn) ->
+    [AppName|_] = binary:split(AppNameVsn, <<"-">>),
     AppNameS = unicode:characters_to_list(AppName),
     case code:where_is_file(AppNameS ++ ".app") of
-        non_existing -> is_application__app(AppName);
-        _Path -> true
+        non_existing -> is_application__app(AppNameVsn, AppName);
+        _Path -> {true, z_convert:to_atom(AppName)}
     end.
 
-is_application__app(AppName) ->
-    filelib:is_regular(
+is_application__app(AppNameVsn, AppName) ->
+    case filelib:is_regular(
         filename:join([
             filename:dirname(code:lib_dir(zotonic_filehandler)),
-            AppName,
+            AppNameVsn,
             "ebin",
             z_convert:to_list(AppName)++".app"
-        ])).
+        ]))
+    of
+        true -> {true, z_convert:to_atom(AppName)};
+        false -> false
+    end.

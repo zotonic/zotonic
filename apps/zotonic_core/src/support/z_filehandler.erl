@@ -21,6 +21,7 @@
 
     filehandler_mappers_observer/3,
 
+    app_file_check/1,
     reindex_modules/0,
     reload_translations/0,
     reload_dispatch/0,
@@ -38,13 +39,28 @@ start_observers() ->
         self(), ?NOTIFIER_DEFAULT_PRIORITY).
 
 filehandler_mappers_observer(zotonic_filehandler_mappers, Mappers, _Ctx) ->
-    Mappers ++ [
+    [
+        fun app_file/7
+    ] ++ Mappers ++ [
         fun template_file/7,
         fun mediaclass_file/7,
         fun po_file/7,
         fun lib_file/7,
         fun dispatch_file/7
     ].
+
+%% @doc Check for newly created/added Erlang applications
+app_file(create, _Application, {app, _AppFile}, <<".app">>, _Root, _Split, Filename) ->
+    {ok, [
+        {?MODULE, app_file_check, [Filename]}
+    ]};
+app_file(delete, _Application, {app, _AppFile}, <<".app">>, _Root, _Split, Filename) ->
+    {ok, [
+        {?MODULE, app_file_check, [Filename]}
+    ]};
+app_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
+    false.
+
 
 template_file(modify, _Application, {priv, <<"templates">>, _Path}, <<".tpl">>, _Root, _Split, Filename) ->
     {ok, [
@@ -99,6 +115,21 @@ dispatch_file(_Verb, _Application, {priv, <<"dispatch">>, _Path}, _Ext, _Root, _
     ]};
 dispatch_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
+
+
+%% @doc Check if an app file is added, if so we need to tell the module managers and sites to upgrade
+app_file_check(Filename) ->
+    case zotonic_filehandler_compile:code_path_check(Filename) of
+        true ->
+            z_sites_manager:upgrade(),
+            lists:foreach(
+                fun(Ctx) ->
+                    z_module_manager:upgrade(Ctx)
+                end,
+                z_sites_manager:get_site_contexts());
+        false ->
+            ok
+    end.
 
 
 %% @doc A Zotonic template changed

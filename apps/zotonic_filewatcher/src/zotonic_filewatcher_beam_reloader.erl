@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2018 Marc Worrell
 %%
 %% @doc Periodically loads modules whose beam file have been updated.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -79,10 +79,6 @@ make() ->
 %% @doc Initiates the server.
 init([IsPeriodic]) ->
     init_scanner(IsPeriodic),
-    % case IsPeriodic of
-    %      true -> timer:send_after(?DEV_POLL_INTERVAL, reload_beams);
-    %      _ -> nop
-    % end,
     {ok, #state{
             periodic=IsPeriodic,
             start_time=calendar:local_time()

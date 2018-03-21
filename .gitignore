@@ -29,15 +29,16 @@ priv/filezcache
 /priv/log/*
 !/priv/log/.empty
 
-priv/ssl/
 apps/*/priv/ssl/
+priv/ssl/
 
-priv/mnesia/
+priv/mnesia
 apps/zotonic_core/priv/mnesia/
 
 apps/*/priv/files/archive/*
 !/apps/zotonic_site_testsandbox/priv/files/archive/koe.jpg
 
+priv/translations/template/*.pot
 apps/*/priv/translations/template/*.pot
 !apps/zotonic_core/priv/translations/zotonic.pot
 

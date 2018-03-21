@@ -25,7 +25,8 @@
     run_cmd/1,
     run_cmd/2,
     ld/0,
-    ld/1
+    ld/1,
+    code_path_check/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -48,6 +49,44 @@ ld(Module) when is_atom(Module) ->
         {module, _} = Ok ->
             z_sites_manager:module_loaded(Module),
             Ok
+    end.
+
+%% @doc Check if the application is present in the current code path
+-spec code_path_check( binary() ) -> boolean().
+code_path_check(AppFilename) ->
+    Path = filename:dirname( filename:dirname( AppFilename )),
+    CurrentAppVsn = code_path_to_appvsn(),
+    case maybe_add_path(Path, CurrentAppVsn) of
+        {true, AppVsn} ->
+            zotonic_filewatcher_sup:restart_watchers(),
+            zotonic_filehandler:terminal_notifier("New application: "++z_convert:to_list(AppVsn)),
+            true;
+        false ->
+            % App (with this vsn) exists in the code path
+            false
+    end.
+
+%% @doc List all applications (with opt version number) as binaries.
+-spec code_path_to_appvsn() -> list( binary() ).
+code_path_to_appvsn() ->
+    lists:map(
+        fun(Path) ->
+            z_convert:to_binary(filename:basename(filename:dirname(Path)))
+        end,
+        code:get_path()).
+
+%% @doc Check if a new application (with optional vsn) directory needs to be added to the code path.
+%%      Return 'true' if the code path has been changed.
+-spec maybe_add_path( file:filename_all(), list( binary )) -> boolean().
+maybe_add_path(AppDir, Paths) ->
+    AppVsn = z_convert:to_binary(filename:basename(AppDir)),
+    case lists:member(AppVsn, Paths) of
+        true ->
+            false;
+        false ->
+            AppBeam = filename:join([ AppDir, "ebin" ]),
+            code:add_patha(unicode:characters_to_list(AppBeam)),
+            {true, AppVsn}
     end.
 
 

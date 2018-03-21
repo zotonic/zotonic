@@ -1,10 +1,11 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014-2015 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2014-2018 Arjan Scherpenisse <arjan@scherpenisse.net>
 
 %% @doc Watch for changed files using fswatch (MacOS X; brew install fswatch).
 %%      https://github.com/emcrisostomo/fswatch
 
-%% Copyright 2014-2015 Arjan Scherpenisse
+%% Copyright 2014-2018 Arjan Scherpenisse
+%% Copyright 2015-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,7 +38,8 @@
 
 %% interface functions
 -export([
-    is_installed/0
+    is_installed/0,
+    restart/0
 ]).
 
 
@@ -57,6 +59,10 @@ start_link() ->
 -spec is_installed() -> boolean().
 is_installed() ->
     os:find_executable("fswatch") =/= false.
+
+-spec restart() -> ok.
+restart() ->
+    gen_server:cast(?MODULE, restart).
 
 %%====================================================================
 %% gen_server callbacks
@@ -84,12 +90,18 @@ handle_call(Message, _From, State) ->
 %% @spec handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
-%% @doc Trap unknown casts
+handle_cast(restart, #state{ pid = undefined } = State) ->
+    {noreply, State};
+handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
+    lager:info("[inotify] Stopping fswatch file monitor."),
+    catch exec:stop(Pid),
+    {noreply, start_fswatch(State#state{ port = undefined })};
+
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 %% @doc Reading a line from the fswatch program.
-handle_info({stdout, Port, FilenameFlags}, #state{ port = Port } = State) ->
+handle_info({stdout, _Port, FilenameFlags}, #state{} = State) ->
     lists:map(
         fun({Filename, Verb}) ->
             zotonic_filewatcher_handler:file_changed(Verb, Filename)
@@ -142,11 +154,15 @@ code_change(_OldVsn, State, _Extra) ->
 
 start_fswatch(State=#state{executable = Executable, port = undefined}) ->
     lager:info("[fswatch] Starting fswatch file monitor."),
-    Args = [
-        Executable,
-        "-0", "-x", "-r", "-L"
-        | zotonic_filewatcher_sup:watch_dirs()
-    ],
+    REs = lists:foldl(
+        fun(RE, Acc) ->
+            [ "-e", RE | Acc ]
+        end,
+        [],
+        string:tokens(zotonic_filewatcher_handler:re_exclude(), "|")),
+    Args = [ Executable, "-0", "-x", "-Lr" ]
+        ++ REs
+        ++ zotonic_filewatcher_sup:watch_dirs_expanded(),
     {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
     State#state{
         port = Port,
