@@ -117,7 +117,7 @@ which_watcher([M|Ms]) ->
 watch_dirs() ->
     ZotonicDirs = [
         % filename:join(get_path(), "apps"),
-        % filename:join(get_path(), "_checkouts"),
+        filename:join(get_path(), "_checkouts"),
         build_lib_dir()
     ],
     lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs).
@@ -155,14 +155,14 @@ build_lib_dir() ->
     filename:dirname(code:lib_dir(zotonic_filewatcher)).
 
 
-% %% @doc Get the path to the root dir of the Zotonic install.
-% %%      If the env var 'ZOTONIC' is not set, then return the current working dir.
-% -spec get_path() -> file:filename().
-% get_path() ->
-%     case os:getenv("ZOTONIC") of
-%         false ->
-%             {ok, Cwd} = file:get_cwd(),
-%             Cwd;
-%         ZotonicDir ->
-%             ZotonicDir
-%     end.
+%% @doc Get the path to the root dir of the Zotonic install.
+%%      If the env var 'ZOTONIC' is not set, then return the current working dir.
+-spec get_path() -> file:filename().
+get_path() ->
+    case os:getenv("ZOTONIC") of
+        false ->
+            {ok, Cwd} = file:get_cwd(),
+            Cwd;
+        ZotonicDir ->
+            ZotonicDir
+    end.
