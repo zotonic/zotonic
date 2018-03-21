@@ -67,7 +67,7 @@ event(#postback{message={delete_all, Args}}, Context) ->
                     z_render:growl(?__("Sorry, you are not allowed to delete this.", Context), Context)
             end;
         false ->
-            z_render:wire({alert, [{message, ?__("Delete is canceled, there are pages in the category.", Context)}]}, Context)
+            z_render:wire({alert, [{text, ?__("Delete is canceled, there are pages in the category.", Context)}]}, Context)
     end.
 
 cat_delete(Ids, Context) ->
@@ -83,7 +83,7 @@ cat_delete(Ids, Context) ->
         {error, _} ->
             Context1 = z_render:wire([
                     {unmask, []},
-                    {alert, [{message, ?__("Not all resources could be deleted.", Context)}]}
+                    {alert, [{text, ?__("Not all resources could be deleted.", Context)}]}
                 ],
                 Context),
             z_session_page:add_script(Context1)
@@ -107,12 +107,14 @@ in_categories(Ids, Context) when is_list(Ids) ->
 
 delete_all([], _N, _Total, _Context) ->
     ok;
-delete_all([{Id}|Ids], N, Total, Context) ->
+delete_all([Id|Ids], N, Total, Context) ->
     case catch m_rsc:delete(Id, Context) of
         ok ->
             maybe_progress(N, N+1, Total, Context),
             delete_all(Ids, N+1, Total, Context);
         Error ->
+            lager:error("mod_admin_category: could not delete ~p: ~p",
+                        [Id, Error]),
             {error, Error}
     end.
 

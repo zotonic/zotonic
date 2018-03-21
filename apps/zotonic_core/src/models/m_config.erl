@@ -130,6 +130,7 @@ get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
         undefined ->
             case m_site:get(Module, Key, Context) of
                 undefined -> Value;
+                [H|_] = V when is_tuple(H) -> [{list, V}];
                 V -> [{value, V}]
             end;
         _ ->

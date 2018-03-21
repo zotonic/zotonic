@@ -1,4 +1,4 @@
-{% if menu %}
+{% if menu or menu_id.is_visible %}
 {% with id|menu_trail:menu_id as parents %}
     <ul id="{{ id_prefix }}navigation" class="{{ class }}">
     {% for mid, path, action in menu %}
@@ -18,8 +18,8 @@
         {% else %}
             </ul></li>
         {% endif %}
-    {% if forloop.last %}{% include "_menu_extra.tpl" %}{% endif %}
     {% endfor %}
+    {% include "_menu_extra.tpl" %}
     </ul>
 {% endwith %}
 {% endif %}

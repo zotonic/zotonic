@@ -52,6 +52,7 @@ is_app_available(App) ->
 %% @doc Initial setup before starting Zotonic
 -spec setup() -> ok.
 setup() ->
+    io:setopts([{encoding, unicode}]),
     ensure_mnesia_schema().
 
 %% @doc Ensure that mnesia has created its schema in the configured priv/data/mnesia directory.
@@ -83,20 +84,23 @@ mnesia_dir_config() ->
     case application:get_env(mnesia, dir) of
         {ok, none} -> undefined;
         {ok, ""} -> undefined;
-        {ok, Dir} -> {ok, Dir};
+        {ok, Dir} -> mnesia_dir_append_node(Dir);
         undefined ->
             PrivDir = case code:priv_dir(zotonic) of
                 {error, bad_name} -> code:priv_dir(zotonic_core);
                 ZotonicPrivDir when is_list(ZotonicPrivDir) -> ZotonicPrivDir
             end,
-            MnesiaDir = filename:join([ PrivDir, "mnesia", atom_to_list(node()) ]),
-            case z_filelib:ensure_dir(MnesiaDir) of
-                ok ->
-                    application:set_env(mnesia, dir, MnesiaDir),
-                    {ok, MnesiaDir};
-                {error, _} = Error ->
-                    lager:error("Could not create mnesia dir \"~s\": ~p",
-                                [MnesiaDir, Error]),
-                    undefined
-            end
+            mnesia_dir_append_node(filename:join([ PrivDir, "mnesia" ]))
+    end.
+
+mnesia_dir_append_node(Dir) ->
+    MnesiaDir = filename:join([ Dir, atom_to_list(node()) ]),
+    case z_filelib:ensure_dir(MnesiaDir) of
+        ok ->
+            application:set_env(mnesia, dir, MnesiaDir),
+            {ok, MnesiaDir};
+        {error, _} = Error ->
+            lager:error("Could not create mnesia dir \"~s\": ~p",
+                        [MnesiaDir, Error]),
+            undefined
     end.

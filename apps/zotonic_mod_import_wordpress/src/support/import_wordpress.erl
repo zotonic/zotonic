@@ -42,9 +42,8 @@ wxr_import(Filename, Context) ->
 %% @doc Import a .wxr wordpress file. The reset flag controls whether or not previously deleted resources will be recreated.
 wxr_import(Filename, Reset, Context) ->
     case Reset of
-	true ->
-	    z_datamodel:reset_deleted(mod_import_wordpress, Context);
-	_ -> ok
+        true -> z_datamodel:reset_deleted(mod_import_wordpress, Context);
+        _ -> ok
     end,
     z_datamodel:manage(mod_import_wordpress, wxr_to_datamodel(Filename, Context), Context).
 
@@ -107,7 +106,7 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
     PostParent = z_convert:to_integer(element_content("wp:post_parent", Item)),
 
     Props =
-        [{title, Title},
+        [{title, maybe_replace_underscore(Title)},
          {body, wp_embed_tags(Body)},
          {summary, Summary},
          {wp_link, Link},
@@ -119,9 +118,22 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
         ],
 
     Props1 = case xmerl_xpath:string("wp:attachment_url", Item) of
-                 [] -> Props;
-                 [U] -> [{media_url, z_convert:to_list(get_xmltext(U))} | Props]
-             end,
+        [] -> Props;
+        [U]->
+            UText = get_xmltext(U),
+            case binary:split(UText, <<"/wp-content/">>) of
+                [_, Upath] ->
+                    Filename = filename:join(z_path:files_subdir("wp-content", Context), Upath),
+                    case filelib:is_regular(Filename) of
+                        true ->
+                            [{media_file, z_convert:to_list(Filename)} | Props];
+                        false ->
+                            [{media_url, z_convert:to_list(UText)} | Props]
+                    end;
+                _ ->
+                    [{media_url, z_convert:to_list(UText)} | Props]
+            end
+    end,
 
     Props2 = case z_convert:to_datetime(z_convert:to_list(element_content("wp:post_date", Item))) of
                  {{0,0,0},{0,0,0}} -> Props1;
@@ -167,6 +179,20 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
             {Data2, Base, Context}
     end.
 
+maybe_replace_underscore(Title) ->
+    Ts = binary_to_list(Title),
+    case lists:any(fun(C) -> C == 32 end, Ts) of
+        true ->
+            Title;
+        false ->
+            list_to_binary(
+                lists:map(
+                    fun
+                        ($_) -> 32;
+                        (C) -> C
+                    end,
+                    Ts))
+    end.
 
 import_wxr_creator(Creator, {Data=#datamodel{resources=R}, Base, Context}) ->
     Person = {get_xmltext(Creator),
@@ -213,20 +239,26 @@ map_wp_status(<<"publish">>) -> true;
 map_wp_status(<<"inherit">>) -> true;
 map_wp_status(_) -> false.
 
-%% @doc Given an element, get its XML text.
-%% Text is stripped of (x)html constructs if type attribute is
+%% @doc Given an element, get its XML text. If "strip" attribute is
+%% set, text is stripped of (x)html constructs if type attribute is
 %% html or xhtml.
-get_xmltext(Element=#xmlElement{content=Content}) ->
+get_xmltext(El) ->
+    get_xmltext(El, true).
+get_xmltext(Element=#xmlElement{content=Content}, Strip) ->
     Text = collapse_xmltext(Content),
     %% See http://erlang.2086793.n4.nabble.com/xmerl-problem-td2121415.html
     Text2 = unicode:characters_to_binary(Text, unicode),
-    case xml_attrib(type, Element) of
-        B when B =:= <<"html">> orelse B =:= <<"xhtml">> ->
-            %% Strip tags
-            z_html:strip(Text2);
-        B2 when B2 =:= undefined orelse B2 =:= <<"text">> ->
-            %% Do not strip.
-            Text2
+    case Strip of
+        false -> Text2;
+        true ->
+            case xml_attrib(type, Element) of
+                B when B =:= <<"html">> orelse B =:= <<"xhtml">> ->
+                    %% Strip tags
+                    z_html:strip(Text2);
+                B2 when B2 =:= undefined orelse B2 =:= <<"text">> ->
+                    %% Do not strip.
+                    Text2
+            end
     end.
 
 
@@ -250,8 +282,9 @@ wp_embed_tags(B) when is_binary(B) ->
     list_to_binary(wp_embed_tags(binary_to_list(B)));
 
 wp_embed_tags(BodyText0) ->
-    BodyText = "<p>" ++ re:replace(BodyText0, "\r\n\r\n", "</p><p>", [{return, list}, global]) ++ "</p>",
-    Re = "(<a .*?>)?<img.*?class=\"(.*?wp-image-([0-9]+).*?)\".*?/>(</a>)?",
+    BodyText1 = re:replace(BodyText0, "\r\n\r\n", "<br/><br/>", [{return, list}, global]),
+    BodyText = re:replace(BodyText1, "(<a[^>]*>)<strong>(<img[^>]*>)</strong></a>", "\\1\\2</a>", [{return, list}, global]),
+    Re = "(<a [^>]*?>)?<img.*?class=\"([^\"]*?wp-image-([0-9]+)[^\"]*)\"[^>]*/>(</a>)?",
     case re:run(BodyText, Re, [{capture, all}]) of
         nomatch ->
             BodyText;
@@ -266,10 +299,14 @@ wp_embed_tags(BodyText0) ->
             Opts = class_to_embed_opts(Class, true),
             string:substr(BodyText, 1, Start)
                 ++ "<!-- z-media wordpress_" ++ string:substr(BodyText, IdStart+1, IdL) ++ " " ++ Opts ++ " -->"
+                ++ wp_embed_tags(string:substr(BodyText, Start+Len+1));
+        {match, [{Start, Len}, {HrefStart,HrefLen}, {CS, CL}, {IdStart,IdL}]} ->
+            Class = string:substr(BodyText, CS+1,CL),
+            Opts = class_to_embed_opts(Class, false),
+            string:substr(BodyText, 1, Start)
+                ++ string:substr(BodyText, HrefStart+1, HrefLen)
+                ++ "<!-- z-media wordpress_" ++ string:substr(BodyText, IdStart+1, IdL) ++ " " ++ Opts ++ " -->"
                 ++ wp_embed_tags(string:substr(BodyText, Start+Len+1))
-%%            ?DEBUG(F)
-%%            {match, [{Start, Len}, {X,Y}, {CS, CL}, {IdStart,IdL}]} ->
-
     end.
 
 
@@ -284,11 +321,16 @@ class_to_embed_opts(Class, Link) ->
 map_class_attr("alignnone") -> "\"align\":\"block\", ";
 map_class_attr("alignright") -> "\"align\":\"right\", ";
 map_class_attr("alignleft") -> "\"align\":\"left\", ";
+map_class_attr("aligncenter") -> "\"align\":\"center\", ";
 map_class_attr("size-full") -> "\"size\":\"large\", ";
 map_class_attr("size-medium") -> "\"size\":\"middle\", ";
 map_class_attr("size-thumbnail") -> "\"size\":\"small\", ";
 map_class_attr(_) -> [].
 
+
+% test() ->
+    % wp_embed_tags("<a href=\"http://kranten.delpher.nl/nl/view/index?image=ddd%3A010677933%3Ampeg21%3Aa0100#\"><img class=\"alignnone size-medium wp-image-188\" alt=\"Romance_in_Jazz_Delpher\" src=\"http://blog.muziekschatten.nl/wp-content/uploads/2014/10/Romance_in_Jazz_Delpher-300x168.png\" width=\"300\" height=\"168\" />Lees het artikel via Delpher</a>").
+    %wp_embed_tags("<a href=\"http://blog.muziekschatten.nl/wp-content/uploads/2014/05/Wessel_Dekker_Vrij_en_Blij_25_jaar_1949.jpg\"><strong><img class=\"alignright  wp-image-64\" style=\"width: 270px;\" alt=\"Wessel_Dekker_Vrij_en_Blij\" src=\"http://blog.muziekschatten.nl/wp-content/uploads/2014/05/Wessel_Dekker_Vrij_en_Blij_25_jaar_1949-300x245.jpg\" width=\"300\" height=\"228\" /></strong></a>").
 
 test() ->
     "<!-- z-media wordpress_29 {align:\"right\", size:\"large\"} -->" = wp_embed_tags("<img class=\"alignright size-full wp-image-29\" style=\"border: 0pt none; margin-left: 10px;\" title=\"Announcement Retroweek\" src=\"http://idum5.net/blog/wp-content/uploads/poster-klein.jpg\" alt=\"Announcement Retroweek\" width=\"217\" height=\"307\" />"),
@@ -302,5 +344,3 @@ test() ->
     "<!-- z-media wordpress_29 {align:\"right\", size:\"large\", link:true} -->" = wp_embed_tags("<a href=\"http://idum5.net/blog/wp-content/uploads/screenshot4.png\"><img class=\"alignright size-full wp-image-29\" style=\"border: 0pt none; margin-left: 10px;\" title=\"Announcement Retroweek\" src=\"http://idum5.net/blog/wp-content/uploads/poster-klein.jpg\" alt=\"Announcement Retroweek\" width=\"217\" height=\"307\" /></a>"),
 
     ok.
-
-

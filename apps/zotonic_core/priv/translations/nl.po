@@ -4019,7 +4019,7 @@ msgstr "Reacties"
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_bounces.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:48
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:26
 msgid "General Comment Form Settings"

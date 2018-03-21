@@ -75,6 +75,9 @@
 %% Minimum day, inserted for date start search ranges
 -define(EPOCH_START, {{-4000,1,1},{0,0,0}}).
 
+%% Max number of characters for a tsv vector.
+-define(MAX_TSV_LEN, 30000).
+
 
 -record(state, {site, is_initial_delay=true, is_pivot_delay = false}).
 
@@ -742,8 +745,9 @@ to_tsv(Text, Level, Args, StemmingLanguage) when is_binary(Text) ->
             {"tsvector('')", Args};
         TsvText ->
             N = length(Args) + 1,
-            Args1 = Args ++ [TsvText],
-        {["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"], Args1}
+            Truncated = z_string:truncate(TsvText, ?MAX_TSV_LEN, <<>>),
+            Args1 = Args ++ [Truncated],
+            {["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"], Args1}
     end.
 
 -spec to_float(term()) -> float().
@@ -764,8 +768,8 @@ to_integer(Text) ->
     end.
 
 cleanup_tsv_text(Text) when is_binary(Text) ->
-    Text1 = binary:replace(Text,  <<"-">>, <<" ">>, [global]),
-    Text2 = binary:replace(Text1, <<"/">>, <<" ">>, [global]),
+    Text1 = z_string:sanitize_utf8(Text),
+    Text2 = iolist_to_binary(re:replace(Text1, <<"[ ",13,10,9,"/-]+">>, <<" ">>, [global])),
     z_string:trim(Text2).
 
 truncate(undefined, _Len) -> undefined;

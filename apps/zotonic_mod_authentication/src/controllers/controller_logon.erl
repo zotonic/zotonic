@@ -240,7 +240,7 @@ reset(Args, Context) ->
                 Username ->
                     ContextLoggedon = logon_user(UserId, [], Context),
                     delete_reminder_secret(UserId, ContextLoggedon),
-                    m_identity:set_username_pw(UserId, Username, Password1, ContextLoggedon),
+                    m_identity:set_username_pw(UserId, Username, Password1, z_acl:sudo(ContextLoggedon)),
                     ContextLoggedon
             end;
         {_,_} ->

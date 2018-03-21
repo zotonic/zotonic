@@ -80,6 +80,10 @@ to 100). Examples::
     removebg
     removebg=50
 
+Optionally a background color can be given as well:
+
+    removebg="black,50"
+
 blur
 ^^^^
 
