@@ -64,7 +64,9 @@ Database password.
 dbdatabase
 """"""""""
 
-Database name.
+Database name. Use ``none`` to run Zotonic without a database:
+
+    {dbdatabase, none}
 
 dbschema
 """"""""
