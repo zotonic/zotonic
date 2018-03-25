@@ -65,7 +65,7 @@
 
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include("include/mod_translation.hrl").
+-include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
