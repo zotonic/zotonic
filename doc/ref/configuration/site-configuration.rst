@@ -77,6 +77,10 @@ The following options can be configured:
   various results of function calls and database queries in memory. This
   setting determines the maximum size of it, in megabytes.
 
+``{minification_enabled, false}``
+  When minification is enabled all javascript files will be automatically
+  minified. This defaults to false.
+
 ``{redirect, true}``
   Whether or not to redirect the host-aliases (listed by the
   ``hostalias`` directives) to the main hostname. This defaults to true.
