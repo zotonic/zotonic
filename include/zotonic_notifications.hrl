@@ -484,12 +484,6 @@
 -record(media_update_done, {action, id, pre_is_a, post_is_a, pre_props, post_props}).
 
 
-%% @doc A file is going to be compressed (first)
-%% Used before compressing a file, can be used to minify code before compressing.
-%% Must return undefined or {ok, Data}
--record(pre_file_compress, {filename, extension, data}).
-
-
 %% @doc Send a notification that the resource 'id' is added to the query query_id. (notify)
 -record(rsc_query_item, {query_id, match_id}).
 

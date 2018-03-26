@@ -32,8 +32,7 @@
 -export([
     observe_media_stillimage/2,
     observe_scomp_script_render/2,
-    observe_dispatch/2,
-    observe_pre_file_compress/2
+    observe_dispatch/2
 ]).
 
 %% @doc Return the filename of a still image to be used for image tags.
@@ -134,39 +133,10 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
     end.
 
 
-observe_pre_file_compress(#pre_file_compress{extension = <<".js">>, filename = Filename, data = Data}, Context) ->
-    case m_site:get(javascript_minification_enabled, Context) of
-        true -> minify_js(Filename, Data);
-        _ -> undefined
-    end;
-observe_pre_file_compress(#pre_file_compress{}, _Context) ->
-    undefined.
-
-
 %%====================================================================
 %% support functions
 %%====================================================================
 
 last([]) -> $/;
 last(Path) -> lists:last(Path).
-
-minify_js(Filename, Data) ->
-    case already_minified(filename:basename(Filename)) of
-        true ->
-            undefined;
-        false ->
-            case catch z_jsmin:minify(Data) of
-                Minified when is_binary(Data) ->
-                    {ok, <<Minified/binary, ";\n">>};
-                Reason ->
-                    error_logger:warning_msg("mod_base: Could not minify ~p. [Reason: ~p]~n", [Filename, Reason]),
-                    undefined
-            end
-    end.
-
-already_minified(<<>>) -> false;
-already_minified(<<Sep, "min", _/binary>>) when Sep =:= $. orelse Sep =:= $- -> true;
-already_minified(<<_C, Rest/binary>>) -> already_minified(Rest).
-
-
 

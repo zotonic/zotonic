@@ -30,6 +30,7 @@
  
  %% CSS, Javascript and images from the "lib" module folders. Possibly more than one file combined in a single request.
  {lib, ["lib",'*'], controller_file, [ {root,[lib]}, {ssl, any} ]},
+ {lib_min, ["lib-min",'*'], controller_file, [ {root,[lib]}, {minify, true}, {ssl, any} ]},
  
  {image, ["image",'*'], controller_file, [ {ssl, any} ]},
  

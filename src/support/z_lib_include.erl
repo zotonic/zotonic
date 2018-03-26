@@ -66,7 +66,14 @@ url(Files, Args, Context) ->
 
 url_for(_F, [], _Ext, _Args, _Context) -> [];
 url_for(F, P, Ext, Args, Context) ->
-    [z_dispatcher:url_for(lib, url_for_args(F, P, Ext, Args, Context), Context)].
+    [z_dispatcher:url_for(lib(Context), url_for_args(F, P, Ext, Args, Context), Context)].
+
+
+lib(Context) ->
+    case m_site:get(minification_enabled, Context) of
+        true -> lib_min;
+        _ -> lib
+    end.
 
 
 tag1(Files, Args, Context) ->
@@ -93,13 +100,13 @@ link_element(Css, CssPath, Args, Context) ->
            end,
     MediaAttr = [<<" media=\"">>, proplists:get_value(media, Args, "all"), $"],
     RelAttr = [<<" rel=\"">>, proplists:get_value(rel, Args, "stylesheet"), $"],
-    CssUrl = z_dispatcher:url_for(lib, url_for_args(Css, CssPath, <<".css">>, Args, Context), Context),
+    CssUrl = z_dispatcher:url_for(lib(Context), url_for_args(Css, CssPath, <<".css">>, Args, Context), Context),
     iolist_to_binary([<<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>, MediaAttr, TitleAttr, RelAttr, $/, $>]).
 
 script_element(_Js, [], _Args, _Context) ->
     [];
 script_element(Js, JsPath, Args, Context) ->
-    JsUrl = z_dispatcher:url_for(lib, url_for_args(Js, JsPath, <<".js">>, Args, Context), Context),
+    JsUrl = z_dispatcher:url_for(lib(Context), url_for_args(Js, JsPath, <<".js">>, Args, Context), Context),
     iolist_to_binary([<<"<script src=\"">>, JsUrl, <<"\" type=\"text/javascript\"></script>">>]).
 
 url_for_args(Files, JoinedPath, Extension, Args, Context) ->
