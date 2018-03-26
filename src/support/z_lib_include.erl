@@ -70,9 +70,9 @@ url_for(F, P, Ext, Args, Context) ->
 
 
 lib(Context) ->
-    case m_site:get(minification_enabled, Context) of
+    case z_convert:to_bool(m_site:get(minification_enabled, Context)) of
         true -> lib_min;
-        _ -> lib
+        false -> lib
     end.
 
 
