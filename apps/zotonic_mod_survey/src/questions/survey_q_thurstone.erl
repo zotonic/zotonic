@@ -177,25 +177,18 @@ to_block(Q) ->
     ].
 
 test_max_points(Block) ->
-    IsCountAll = is_multiple(Block)
-            andalso z_convert:to_bool(proplists:get_value(is_test_neg, Block, false)),
+    IsMultiple = is_multiple(Block),
     case survey_test_results:block_test_points(Block) of
         undefined -> 0;
-        Points when not IsCountAll ->
-           OkAnswers = lists:filter(
-                fun is_ok_answer/1,
-                thurstone_options(Block)),
-           length(OkAnswers) * Points;
-        Points when IsCountAll ->
+        Points when not IsMultiple ->
+            % Only a single correct answer possible
+            Points;
+        Points when IsMultiple ->
+            % Every answer is counted
             Options = thurstone_options(Block),
             Options1 = [ z_string:trim(Opt) || Opt <- Options ],
             length([ Opt || Opt <- Options1, Opt /= <<>> ]) * Points
     end.
-
-is_ok_answer(<<"*", _/binary>>) -> true;
-is_ok_answer(<<" ", Rest/binary>>) -> is_ok_answer(Rest);
-is_ok_answer(_) -> false.
-
 
 thurstone_options(Block) ->
     case proplists:get_value(answers, Block, <<>>) of
