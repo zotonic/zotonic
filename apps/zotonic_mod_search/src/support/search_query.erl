@@ -533,7 +533,7 @@ parse_query([Term|_], _Context, _Result) ->
 
 %% @doc Parse hassubject and hasobject edges.
 -spec parse_edges(hassubject | hasobject, binary() | list(), #search_sql{}, z:context()) -> #search_sql{}.
-parse_edges(Term, Edges, Result, Context) when is_binary(Edges) ->
+parse_edges(Term, Edges, Result, Context) when not is_list(Edges) ->
     parse_edges(Term, maybe_split_list(Edges), Result, Context);
 parse_edges(Term, [[Id, Predicate]], Result, Context) ->
     parse_edges(Term, [[Id, Predicate, "rsc"]], Result, Context);
@@ -865,8 +865,6 @@ map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
 
 
 % Convert an expression like [123,hasdocument]
-maybe_split_list(Id) when is_integer(Id) ->
-    [Id];
 maybe_split_list(<<"[", Rest/binary>>) ->
     split_list(Rest);
 maybe_split_list([$[|Rest]) ->
