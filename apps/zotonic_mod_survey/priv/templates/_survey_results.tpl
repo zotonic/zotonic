@@ -11,7 +11,7 @@
                 {% if max_points %}
                     <h2>
                         {{ (result.points / max_points * 100)|round }}% &ndash;
-                        {% if result.points > max_points * (id.survey_test_percentage / 100) %}
+                        {% if result.points >= max_points * (id.survey_test_percentage / 100) %}
                             {_ Passed _}
                         {% else %}
                             {_ Failed _}
