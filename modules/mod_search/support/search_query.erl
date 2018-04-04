@@ -549,11 +549,11 @@ parse_query([Term|_], _Context, _Result) ->
 
 %% @doc Parse hassubject and hasobject edges.
 -spec parse_edges(hassubject | hasobject, binary() | list(), #search_sql{}, z:context()) -> #search_sql{}.
-parse_edges(Term, Edges, Result, Context) when not is_list(Edges) ->
-    parse_edges(Term, maybe_split_list(Edges), Result, Context);
-parse_edges(Term, [[Id, Predicate]], Result, Context) ->
-    parse_edges(Term, [[Id, Predicate, "rsc"]], Result, Context);
-parse_edges(hassubject, [[Id, Predicate, Alias]], Result, Context) ->
+parse_edges(Term, Edges, Result, Context) when is_binary(Edges) ->
+    parse_edges(Term, hd(maybe_split_list(Edges)), Result, Context);
+parse_edges(Term, [Id, Predicate], Result, Context) ->
+    parse_edges(Term, [Id, Predicate, "rsc"], Result, Context);
+parse_edges(hassubject, [Id, Predicate, Alias], Result, Context) ->
     {A, Result1} = add_edge_join(Alias, "object_id", Result),
     Result2 = case Id of
                   undefined -> Result1;
@@ -563,11 +563,11 @@ parse_edges(hassubject, [[Id, Predicate, Alias]], Result, Context) ->
     PredicateId = predicate_to_id(Predicate, Context),
     {Arg2, Result3} = add_arg(PredicateId, Result2),
     add_where(A ++ ".predicate_id = " ++ Arg2, Result3);
-parse_edges(hassubject, [Id], Result, Context) ->
+parse_edges(hassubject, Id, Result, Context) ->
     {A, Result1} = add_edge_join("object_id", Result),
     {Arg, Result2} = add_arg(m_rsc:rid(Id, Context), Result1),
     add_where(A ++ ".subject_id = " ++ Arg, Result2);
-parse_edges(hasobject, [[Id, Predicate, Alias]], Result, Context) ->
+parse_edges(hasobject, [Id, Predicate, Alias], Result, Context) ->
     {A, Result1} = add_edge_join(Alias, "subject_id", Result),
     Result2 = case Id of
                   undefined -> Result1;
@@ -577,7 +577,7 @@ parse_edges(hasobject, [[Id, Predicate, Alias]], Result, Context) ->
     PredicateId = predicate_to_id(Predicate, Context),
     {Arg2, Result3} = add_arg(PredicateId, Result2),
     add_where(A ++ ".predicate_id = " ++ Arg2, Result3);
-parse_edges(hasobject, [Id], Result, Context) ->
+parse_edges(hasobject, Id, Result, Context) ->
     {A, Result1} = add_edge_join("subject_id", Result),
     {Arg, Result2} = add_arg(m_rsc:rid(Id, Context), Result1),
     add_where(A ++ ".object_id = " ++ Arg, Result2).
