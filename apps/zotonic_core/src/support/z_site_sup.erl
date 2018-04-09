@@ -103,6 +103,10 @@ install_phase1(Site) ->
 -spec install_done(list()) -> ok.
 install_done(SiteProps) when is_list(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
+    MQTT = {mqtt_sessions_pool_sup,
+                {mqtt_sessions_pool_sup, start_link, [Site]},
+                permanent, 5000, supervisor, dynamic},
+
     Session = {z_session_manager,
                 {z_session_manager, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
@@ -148,7 +152,7 @@ install_done(SiteProps) when is_list(SiteProps) ->
                     permanent, 5000, worker, dynamic},
 
     Processes = [
-            Session,
+            MQTT, Session,
             Dispatcher, Template, MediaClass, Pivot, DropBox,
             MediaCleanup, EdgeLog,
             ModuleIndexer, ModuleManager,
