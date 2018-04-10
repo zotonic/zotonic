@@ -219,10 +219,10 @@ parse_query([{id_exclude, _Id}|Rest], Context, Result)  ->
 
 
 parse_query([{hassubject, Id} | Rest], Context, Result) ->
-    Result1 = parse_edges(hassubject, Id, Result, Context),
+    Result1 = parse_edges(hassubject, maybe_split_list(Id), Result, Context),
     parse_query(Rest, Context, Result1);
 parse_query([{hasobject, Id} | Rest], Context, Result) ->
-    Result1 = parse_edges(hasobject, Id, Result, Context),
+    Result1 = parse_edges(hasobject, maybe_split_list(Id), Result, Context),
     parse_query(Rest, Context, Result1);
 
 %% hasanyobject=[[id,predicate]|id, ...]
@@ -578,9 +578,7 @@ parse_edges(hasobject, [[Id, Predicate, Alias]], Result, Context) ->
 parse_edges(hasobject, [Id], Result, Context) ->
     {A, Result1} = add_edge_join("subject_id", Result),
     {Arg, Result2} = add_arg(m_rsc:rid(Id, Context), Result1),
-    add_where(A ++ ".object_id = " ++ Arg, Result2);
-parse_edges(Term, Rsc, Result, Context) when is_binary(Rsc) ->
-    parse_edges(Term, maybe_split_list(Rsc), Result, Context).
+    add_where(A ++ ".object_id = " ++ Arg, Result2).
 
 %% Add a value to a proplist. If it is already there, the value is
 %% replaced by a list of values.
