@@ -23,9 +23,6 @@
 
 -export([start_link/1]).
 
--include_lib("template_compiler/include/template_compiler.hrl").
--include_lib("zotonic.hrl").
-
 %% External exports
 -export([
     reset/1,
@@ -40,6 +37,10 @@
 
     is_template_module/1
 ]).
+
+-include_lib("template_compiler/include/template_compiler.hrl").
+-include("../../include/zotonic.hrl").
+
 
 
 start_link(SiteProps) ->
@@ -146,16 +147,17 @@ props_to_map([K|Rest], Map) ->
     props_to_map(Rest, Map#{K => true}).
 
 
+%% @todo Remove these functions, templates should not have any javascript etc. (call z_render for old style templates)
 %% @doc Render a template to an iolist().  This removes all scomp state etc from the rendered html and appends the
 %% information in the scomp states to the context for later rendering.
 -spec render_to_iolist(template_compiler:template() | #module_index{},
-    list() | map(), #context{}) -> {iolist(), #context{}}.
+    list() | map(), #context{}) -> {iolist(), #render_state{}}.
 render_to_iolist(File, Vars, Context) ->
     Html = render(File, Vars, Context),
     z_render:render_to_iolist(Html, Context).
 
 %% @doc Render a block template to an iolist().
--spec render_block_to_iolist(atom(), template_compiler:template(), list()|map(), #context{}) -> {iolist(), #context{}}.
+-spec render_block_to_iolist(atom(), template_compiler:template(), list()|map(), #context{}) -> {iolist(), #render_state{}}.
 render_block_to_iolist(Block, File, Vars, Context) ->
     Html = render_block(Block, File, Vars, Context),
     z_render:render_to_iolist(Html, Context).

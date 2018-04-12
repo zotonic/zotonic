@@ -20,12 +20,12 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 
-render_validator(date, TriggerId, _TargetId, Args, Context)  ->
+render_validator(date, TriggerId, _TargetId, Args, _Context)  ->
     Format = proplists:get_value(format, Args, <<"l">>),
     Separator = proplists:get_value(separator, Args, <<"-">>),
     JsObject = z_utils:js_object(z_validation:rename_args(Args)),
     Script   = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"date\", ">>, JsObject, <<");\n">>],
-    {[Format, Separator], Script, Context}.
+    {[Format, Separator], Script}.
 
 is_valid(Day, Month, Year) ->
     calendar:valid_date(list_to_integer(Year), list_to_integer(Month), list_to_integer(Day)).

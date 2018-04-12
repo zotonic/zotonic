@@ -21,7 +21,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 
-render_validator(numericality, TriggerId, _TargetId, Args, Context)  ->
+render_validator(numericality, TriggerId, _TargetId, Args, _Context)  ->
     Is = proplists:get_value(is, Args),
     {Min,Max} = case Is of
                     undefined -> { proplists:get_value(minimum, Args), proplists:get_value(maximum, Args) };
@@ -34,7 +34,7 @@ render_validator(numericality, TriggerId, _TargetId, Args, Context)  ->
           end,
 	JsObject   = z_utils:js_object(Opt ++ z_validation:rename_args(Args)),
 	Script     = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"numericality\", ">>, JsObject, <<");\n">>],
-	{[IsFloat, to_number(Min),to_number(Max)], Script, Context}.
+	{[IsFloat, to_number(Min),to_number(Max)], Script}.
 
 
 %% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}

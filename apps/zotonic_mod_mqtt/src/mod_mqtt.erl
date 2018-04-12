@@ -155,20 +155,20 @@ init(Args) ->
 %% ==========================================================================
 
 
-handle_cmd(#z_mqtt_cmd{cmd= <<"lastwill">>, topic=undefined, extra=WillId}, Context) ->
-    del_lastwill(Context#context.page_pid, WillId, Context);
-handle_cmd(#z_mqtt_cmd{cmd= <<"lastwill">>, topic=Topic, payload=Data, extra=WillId}, Context) ->
-    Msg = msg_from_event(Topic, Data, Context),
-    add_lastwill(Context#context.page_pid, WillId, Msg, Context);
+% handle_cmd(#z_mqtt_cmd{cmd= <<"lastwill">>, topic=undefined, extra=WillId}, Context) ->
+%     del_lastwill(Context#context.page_pid, WillId, Context);
+% handle_cmd(#z_mqtt_cmd{cmd= <<"lastwill">>, topic=Topic, payload=Data, extra=WillId}, Context) ->
+%     Msg = msg_from_event(Topic, Data, Context),
+%     add_lastwill(Context#context.page_pid, WillId, Msg, Context);
 handle_cmd(#z_mqtt_cmd{cmd= <<"publish">>, topic=Topic, payload=Data}, Context) ->
     Msg = msg_from_event(Topic, Data, Context),
-    z_mqtt:publish(Msg, Context);
-handle_cmd(#z_mqtt_cmd{cmd= <<"subscribe">>, topic=Topic}, Context) ->
-    % ?DEBUG({subscribe, Topic, Context#context.page_pid}),
-    z_mqtt:subscribe(Topic, Context#context.page_pid, Context);
-handle_cmd(#z_mqtt_cmd{cmd= <<"unsubscribe">>, topic=Topic}, Context) ->
-    % ?DEBUG({unsubscribe, Topic, Context#context.page_pid}),
-    z_mqtt:unsubscribe(Topic, Context#context.page_pid, Context).
+    z_mqtt:publish(Msg, Context).
+% handle_cmd(#z_mqtt_cmd{cmd= <<"subscribe">>, topic=Topic}, Context) ->
+%     % ?DEBUG({subscribe, Topic, Context#context.page_pid}),
+%     z_mqtt:subscribe(Topic, Context#context.page_pid, Context);
+% handle_cmd(#z_mqtt_cmd{cmd= <<"unsubscribe">>, topic=Topic}, Context) ->
+%     % ?DEBUG({unsubscribe, Topic, Context#context.page_pid}),
+%     z_mqtt:unsubscribe(Topic, Context#context.page_pid, Context).
 
 
 msg_from_event(Topic, Data, Context) ->

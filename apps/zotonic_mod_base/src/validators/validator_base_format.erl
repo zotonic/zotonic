@@ -20,12 +20,12 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 
-render_validator(format, TriggerId, _TargetId, Args, Context)  ->
+render_validator(format, TriggerId, _TargetId, Args, _Context)  ->
     Pattern  = proplists:get_value(pattern, Args),
     Negate   = proplists:get_value(negate, Args, false),
     JsObject = z_utils:js_object(z_validation:rename_args(Args)),
     Script   = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"format\", ">>, JsObject, <<");\n">>],
-    {{z_utils:is_true(Negate),Pattern}, Script, Context}.
+    {{z_utils:is_true(Negate),Pattern}, Script}.
 
 
 %% @spec validate(Type, TriggerId, Value, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}

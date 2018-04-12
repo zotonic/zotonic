@@ -25,7 +25,7 @@ render_validator(name_unique, TriggerId, TargetId, Args, Context)  ->
     {_PostbackJS, PostbackInfo} = z_render:make_postback({validate, Args}, 'postback', TriggerId, TargetId, ?MODULE, Context),
     JsObject = z_utils:js_object(z_validation:rename_args([{z_postback, PostbackInfo} | Args])),
     Script = [<<"z_add_validator(\"">>, TriggerId, <<"\", \"postback\", ">>, JsObject, <<");\n">>],
-    {Args, Script, Context}.
+    {Args, Script}.
 
 -spec validate(name_unique, binary(), term(), list(), #context{}) ->
     {{ok, []}, #context{}} | {{error, m_rsc:resource(), atom() | binary()}, #context{}}.

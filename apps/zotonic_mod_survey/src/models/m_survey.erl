@@ -137,7 +137,7 @@ did_survey(SurveyId, Context) ->
     find_answer_id(SurveyId, z_acl:user(Context), persistent_id(Context), Context) /= undefined.
 
 
-persistent_id(#context{session_id = undefined}) -> undefined;
+% persistent_id(#context{session_id = undefined}) -> undefined;
 persistent_id(Context) -> z_context:persistent_id(Context).
 
 %% @doc Replace a survey answer

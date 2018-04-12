@@ -46,9 +46,9 @@ event(#submit{message={change_catcg, Args}}, Context) ->
             update(Id, CatId, CGId, Context, ContextError);
         {false, ContextError} ->
             ContextError
-    end;
-event(#z_msg_v1{data=Data}, Context) ->
-    handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
+    end.
+% event(#z_msg_v1{data=Data}, Context) ->
+%     handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
 
 handle_cmd(<<"reload_cgsel">>, Data, Context) ->
     CatId = m_rsc:rid(proplists:get_value(<<"cat_id">>, Data), Context),

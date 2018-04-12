@@ -53,7 +53,7 @@
         buffer :: binary(),
         next_chunk :: more | ok,
         form = #multipart_form{},
-        z_msg = undefined :: #z_msg_v1{},
+        % z_msg = undefined :: #z_msg_v1{},
         context :: #context{}
     }).
 
@@ -62,7 +62,7 @@
 %% The progress function should accept the parameters [Percentage, Context]
 -spec recv_parse(#context{}) -> {#multipart_form{}, #context{}}.
 recv_parse(Context) ->
-    {Form, _ZMsg, ContextParsed} = parse_multipart_request(Context),
+    {Form, ContextParsed} = parse_multipart_request(Context),
     if Form#multipart_form.file =/= undefined ->
         % Premature end
         file:close(Form#multipart_form.file);
@@ -119,14 +119,14 @@ feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
             Form1 = handle_data({body, Data}, Form),
             Form2 = handle_data(body_end, Form1),
             Form3 = handle_data(eof, Form2),
-            {Form3, State#mp.z_msg, State#mp.context};
+            {Form3, State#mp.context};
         {next_boundary, Start, Skip} ->
             <<Data:Start/binary, _:Skip/binary, Rest/binary>> = Buffer,
             Form1 = handle_data({body, Data}, Form),
             Form2 =handle_data(body_end, Form1),
             State1 = State#mp{form=Form2, buffer=Rest},
-            State2 = maybe_z_msg_context(State1),
-            feed_mp(headers, State2);
+            % State2 = maybe_z_msg_context(State1),
+            feed_mp(headers, State1);
         {maybe, 0} ->
             % Found a boundary, without an ending newline
             case read_more(State) of
@@ -148,7 +148,7 @@ feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
 
 feed_maybe_eof(#mp{buffer= <<>>, content_length=ContentLength, length=Length} = State) when ContentLength =:= Length; ContentLength =:= 0 ->
     Form1 = handle_data(eof, State#mp.form),
-    {Form1, State#mp.z_msg, State#mp.context};
+    {Form1, State#mp.context};
 feed_maybe_eof(#mp{buffer= <<>>}) ->
     lager:info("Could not decode multipart: unexpected end and missing end boundary"),
     throw({stop_request, 400});
@@ -156,43 +156,41 @@ feed_maybe_eof(#mp{} = State) ->
     feed_mp(body, State).
 
 
-maybe_z_msg_context(#mp{
-            z_msg=undefined,
-            form=#multipart_form{args=[{<<"z_msg">>,Data}|RestArgs]} = Form,
-            context=#context{page_pid=undefined} = Context
-        } = State) ->
-    {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
-    #z_msg_v1{page_id=PageId, session_id=SessionId} = ZMsg,
-    Context1 = z_transport:maybe_logon(
-                    z_transport:maybe_set_sessions(SessionId, PageId, Context)),
-    Form1 = Form#multipart_form{args=[{<<"z_msg">>, ZMsg}|RestArgs]},
-    State#mp{z_msg=ZMsg, form=Form1, context=Context1};
-maybe_z_msg_context(#mp{} = State) ->
-    State.
+% maybe_z_msg_context(#mp{
+%             z_msg=undefined,
+%             form=#multipart_form{args=[{<<"z_msg">>,Data}|RestArgs]} = Form,
+%             context=#context{page_pid=undefined} = Context
+%         } = State) ->
+%     {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
+%     #z_msg_v1{page_id=PageId, session_id=SessionId} = ZMsg,
+%     Context1 = z_transport:maybe_logon(
+%                     z_transport:maybe_set_sessions(SessionId, PageId, Context)),
+%     Form1 = Form#multipart_form{args=[{<<"z_msg">>, ZMsg}|RestArgs]},
+%     State#mp{z_msg=ZMsg, form=Form1, context=Context1};
+% maybe_z_msg_context(#mp{} = State) ->
+%     State.
 
 
 %% @doc Report progress back to the page.
-progress(0, _ContentLength, _ZMsg, _Context) ->
+progress(0, _ContentLength, _Context) ->
     ok;
-progress(Percentage, ContentLength,
-         #z_msg_v1{data=#postback_event{trigger=TriggerId}},
-         Context)
-    when ContentLength > ?CHUNKSIZE*5, TriggerId =/= undefined, TriggerId =/= "", TriggerId =/= <<>> ->
-    case is_push_attached(Context) of
-        true ->
-            JS = iolist_to_binary([
-                        "z_progress('", z_utils:js_escape(TriggerId),
-                            "',", integer_to_list(Percentage),");"
-                    ]),
-            z_transport:page(javascript, JS, Context);
-        false ->
-            ok
-    end;
-progress(_Percentage, _ContentLength, _ZMsg, _Context) ->
+% progress(Percentage, ContentLength, Context)
+%     when ContentLength > ?CHUNKSIZE*5, TriggerId =/= undefined, TriggerId =/= "", TriggerId =/= <<>> ->
+%     case is_push_attached(Context) of
+%         true ->
+%             JS = iolist_to_binary([
+%                         "z_progress('", z_utils:js_escape(TriggerId),
+%                             "',", integer_to_list(Percentage),");"
+%                     ]),
+%             z_transport:page(javascript, JS, Context);
+%         false ->
+%             ok
+%     end;
+progress(_Percentage, _ContentLength, _Context) ->
     ok.
 
-is_push_attached(Context) ->
-    z_session_page:get_attach_state(Context) =:= attached.
+% is_push_attached(Context) ->
+%     z_session_page:get_attach_state(Context) =:= attached.
 
 
 
@@ -294,7 +292,7 @@ read_more(State=#mp{length=Length, content_length=ContentLength,
                         _ -> (Length1 * 100) div ContentLength
                     end,
     case NewPercentage > Percentage of
-        true -> progress(NewPercentage, ContentLength, undefined, Context1);
+        true -> progress(NewPercentage, ContentLength, Context1);
         _ -> nop
     end,
     State#mp{length=Length1, buffer=Buffer1, next_chunk=Next1, percentage=NewPercentage, context=Context1}.

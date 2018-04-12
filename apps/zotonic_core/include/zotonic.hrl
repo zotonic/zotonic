@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2016 Marc Worrell
+%% @copyright 2009-2018 Marc Worrell
 %% @doc Main definitions for zotonic
 
-%% Copyright 2009-2016 Marc Worrell
+%% Copyright 2009-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,14 +28,17 @@
         controller_module = undefined :: atom() | undefined,
 
         %% The page and session processes associated with the current request
-        session_pid = undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)
-        session_id = undefined  :: binary() | undefined,
-        page_pid = undefined    :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
-        page_id = undefined     :: binary() | undefined,
+        client_id = undefined :: binary(),                      % MQTT client id
+        client_topic = undefined :: mqtt_sessions:topic(),      % Topic where the client can be reached
+
+        % session_pid = undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)
+        % session_id = undefined  :: binary() | undefined,
+        % page_pid = undefined    :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
+        % page_id = undefined     :: binary() | undefined,
 
         %% Servers and supervisors for the site
+        %% TODO: delete the following and replace with cached versions (smaller context)
         depcache            :: pid() | atom(),
-        session_manager     :: pid() | atom(),
         dispatcher          :: pid() | atom(),
         template_server     :: pid() | atom(),
         scomp_server        :: pid() | atom(),
@@ -43,6 +46,7 @@
         pivot_server        :: pid() | atom(),
         module_indexer      :: pid() | atom(),
         translation_table   :: pid() | atom(),
+        %% End TODO
 
         %% The database connection used for (nested) transactions, see z_db
         dbc = undefined     :: pid() | undefined,
@@ -61,9 +65,14 @@
         acl = undefined     :: term() | undefined,      %% opaque placeholder managed by the z_acl module
         user_id = undefined :: integer() | undefined,
 
-        %% The state below is the render state, can be cached and/or merged
+        %% Property list with context specific metadata
+        % props = []           :: proplists:proplist()
+        props = #{} :: map()
+    }).
 
-        %% State of the current rendered template/scomp/page
+%% The state below is the render state, can be cached and/or merged
+%% State of the current rendered template/scomp/page
+-record(render_state, {
         updates = []         :: list(),
         actions = []         :: list(),
         content_scripts = [] :: list(),
@@ -72,15 +81,14 @@
         validators = []      :: list(),
 
         %% nested list with the accumulated html, xml or whatever output (mixed values)
-        render = []          :: list(),
-
-        %% Property list with context specific metadata
-        props = []           :: proplists:proplist()
+        render = []          :: list()
     }).
 
 
--define(SITE(Context), Context#context.site).
--define(DBC(Context), Context#context.dbc).
+%% Wrapper macro to put Erlang terms in a bytea database column.
+%% Extraction is automatic, based on a magic marker prefixed to the serialized term.
+-define(DB_PROPS(N), {term, N}).
+
 
 %% A date in the far future which will never happen.
 %% This date is used as the "no end date" value.
@@ -90,32 +98,6 @@
 -record(multipart_form, {name, data, filename, tmpfile, content_type, content_length, file, files=[], args=[]}).
 -record(upload, {filename, tmpfile, data, mime}).
 
-%% Record used for transporting data between the user-agent and the server.
--record(z_msg_v1, {
-        qos = 0 :: 0 | 1 | 2,
-        dup = false :: boolean(),
-        msg_id :: binary(),
-        timestamp :: pos_integer(),
-        content_type = ubf :: text | javascript | json | form | ubf | atom() | binary(),
-        delegate = postback :: postback | mqtt | atom() | binary(),
-        push_queue = page :: page | session | user,
-
-        % Set by transports from user-agent to server
-        session_id :: binary(),
-        page_id :: binary(),
-
-        % Payload data
-        data :: any()
-    }).
-
--record(z_msg_ack, {
-        qos = 1 :: 1 | 2,
-        msg_id :: binary(),
-        push_queue = page :: page | session | user,
-        session_id :: binary(),
-        page_id :: binary(),
-        result :: any()
-    }).
 
 %% Used for specifying resource id lists, as returned by object/subject lookup
 -record(rsc_list, {list}).
@@ -245,26 +227,6 @@
 %% @doc Call the translate function, 2nd parameter is context
 -define(__(T,Context), z_trans:trans(T,Context)).
 
-%% Number of seconds between two comet polls before the page expires
--define(SESSION_PAGE_TIMEOUT, 30).
-
-%% Number of seconds between session expiration checks
--define(SESSION_CHECK_EXPIRE, 10).
-
-%% Default session expiration in seconds.
-%% The first keepalive message must be received before SESSION_EXPIRE_1 seconds
-%% Subsequent messages must be received before SESSION_EXPIRE_N
--define(SESSION_EXPIRE_1,   40).
--define(SESSION_EXPIRE_N, 3600).
-
-%% The name of the persistent data cookie
--define(PERSIST_COOKIE, <<"z_pid">>).
-
-%% Max age of the persistent cookie, 10 years or so.
--define(PERSIST_COOKIE_MAX_AGE, 3600*24*3650).
-
-%% Millisecs of no activity before the visitor process is stopped (if there are no attached sessions).
--define(VISITOR_TIMEOUT, 60 * 1000).
 
 %% Some standard periods in seconds
 -define(MINUTE,     60).
@@ -275,10 +237,6 @@
 
 %% Our default WWW-Authenticate header
 -define(WWW_AUTHENTICATE, <<"OAuth-1.0">>).
-
-%% Wrapper macro to put Erlang terms in a bytea database column.
-%% Extraction is automatic, based on a magic marker prefixed to the serialized term.
--define(DB_PROPS(N), {term, N}).
 
 -include("zotonic_notifications.hrl").
 -include("zotonic_events.hrl").

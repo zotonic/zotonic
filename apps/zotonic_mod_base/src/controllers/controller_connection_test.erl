@@ -63,17 +63,17 @@ event(#postback{message={session_info, []}, target=TargetId}, Context) ->
     PageIds = [z_session_page:page_id(Pid) || Pid <- Pages],
     Combi = lists:zip(PageIds, AttachStates),
     Vars1 = [{pages, Combi} | Vars],
-    z_render:update(TargetId, #render{template = <<"_session_info.tpl">>, vars = Vars1}, Context);
+    z_render:update(TargetId, #render{template = <<"_session_info.tpl">>, vars = Vars1}, Context).
 
 %% Test code for transport, should be moved somewhere else.
-event(#z_msg_v1{msg_id=MsgId, data=Data}, Context) ->
-    case proplists:get_value(<<"cmd">>, Data) of
-        <<"sleep">> ->
-            lager:debug("[~p] connection-test: sleeping 10 secs for msg ~p, session ~p",
-                        [z_context:site(Context), MsgId, Context#context.session_id]),
-            timer:sleep(10000);
-        UnknownCmd ->
-            lager:debug("[~p] Unknown connection-test command ~p",
-                        [z_context:site(Context), UnknownCmd])
-    end,
-    Context.
+% event(#z_msg_v1{msg_id=MsgId, data=Data}, Context) ->
+%     case proplists:get_value(<<"cmd">>, Data) of
+%         <<"sleep">> ->
+%             lager:debug("[~p] connection-test: sleeping 10 secs for msg ~p",
+%                         [z_context:site(Context), MsgId]),
+%             timer:sleep(10000);
+%         UnknownCmd ->
+%             lager:debug("[~p] Unknown connection-test command ~p",
+%                         [z_context:site(Context), UnknownCmd])
+%     end,
+%     Context.

@@ -40,28 +40,30 @@
 %%
 %% When everything is loaded, the init function is called.
 %%
-event(#z_msg_v1{data=#load_component{name=Name, loaded=LoadedResources}}, Context) ->
-    case z_notifier:first(#inject_component{name=Name}, Context) of
-        undefined ->
-            %% TODO send a nack to the page instead.
-            {Script, Ctx1} = z_script:split(z_render:growl("Component not found", Context)),
-            z_transport:page(javascript, Script, [{qos, 1}], Context),
-            Ctx1;
-        {ok, InitScript, Resources} ->
-            Required = unify(collect(Resources)),
-            Loaded = unify(uncollapse(collect(LoadedResources))),
+event(_, Context) ->
+    Context.
+% event(#z_msg_v1{data=#load_component{name=Name, loaded=LoadedResources}}, Context) ->
+%     case z_notifier:first(#inject_component{name=Name}, Context) of
+%         undefined ->
+%             %% TODO send a nack to the page instead.
+%             {Script, Ctx1} = z_script:split(z_render:growl("Component not found", Context)),
+%             z_transport:page(javascript, Script, [{qos, 1}], Context),
+%             Ctx1;
+%         {ok, InitScript, Resources} ->
+%             Required = unify(collect(Resources)),
+%             Loaded = unify(uncollapse(collect(LoadedResources))),
 
-            % Calculate which resources must be loaded.
-            Needed = subtract(Required, Loaded),
+%             % Calculate which resources must be loaded.
+%             Needed = subtract(Required, Loaded),
 
-            %% Wire an inject script.
-            Ctx1 = z_render:wire({inject, [{name, Name},
-                        {init_script, InitScript},
-                        {files, Needed}]}, Context),
-            {Script, CleanContext} = z_script:split(Ctx1),
-            z_transport:page(javascript, Script, [{qos, 1}], CleanContext),
-            CleanContext
-    end.
+%             %% Wire an inject script.
+%             Ctx1 = z_render:wire({inject, [{name, Name},
+%                         {init_script, InitScript},
+%                         {files, Needed}]}, Context),
+%             {Script, CleanContext} = z_script:split(Ctx1),
+%             z_transport:page(javascript, Script, [{qos, 1}], CleanContext),
+%             CleanContext
+%     end.
 
 %%
 %% Helpers

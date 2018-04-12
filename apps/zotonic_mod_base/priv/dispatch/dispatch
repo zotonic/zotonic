@@ -1,12 +1,7 @@
 %% -*- mode: erlang -*-
 %% Base dispatch rules for zotonic
 [
- %% Comet connection, used with long polls from the browser.
- {comet,     ["comet"],              controller_comet, [{ssl, any}, {no_session, true}]},
- 
- %% WebSocket connection.
- {websocket, ["websocket"],          controller_websocket, [{ssl, any}]},
- 
+
  %% Postback of events from the browser to the server, dispatched from the postback resource.
  {postback,  ["postback", "transport", z_transport], controller_postback, [{ssl, any}]},
  {postback,  ["postback", z_message, z_delegate],    controller_postback, [{ssl, any}]},

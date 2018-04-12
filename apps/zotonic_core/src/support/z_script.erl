@@ -1,7 +1,7 @@
 %% This is the MIT license.
 %%
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009-2016 Marc Worrell
+%% Copyright (c) 2009-2018 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -21,108 +21,145 @@
 %% OR OTHER DEALINGS IN THE SOFTWARE.
 
 -module(z_script).
--include("zotonic.hrl").
+
 -export ([
-    split/1,
-    add_script/2,
-    get_script/1,
-    get_page_startup_script/1,
-    get_stream_start_script/1,
+    combine/2,
+    merge/2,
+    copy/2,
+
+    clean/1,
+
     add_content_script/2,
-    clean/1
+    add_script/2,
+    get_script/2
+    % get_page_startup_script/1
+    % get_stream_start_script/1,
 ]).
 
 
-%% @doc Split the scripts from the context. Returns the scripts and a cleaned context.
-split(Context) ->
-    {iolist_to_binary(get_script(Context)), clean(Context)}.
+-include_lib("zotonic.hrl").
 
-add_content_script([], Context) ->
-    Context;
-add_content_script(<<>>, Context) ->
-    Context;
-add_content_script(Script, Context) ->
-    Context#context{content_scripts=[Script, "\n" | Context#context.content_scripts]}.
 
-add_script([], Context) ->
-    Context;
-add_script(<<>>, Context) ->
-    Context;
-add_script(Script, Context) ->
-    Context#context{scripts=[Script, "\n" | Context#context.scripts]}.
+%% @doc Merge the scripts and the rendered content of two contexts into Context1
+-spec combine(#render_state{}, #render_state{}) -> #render_state{}.
+combine(C1, C2) ->
+    Merged = merge(C2, C1),
+    Merged#render_state{
+        render = combine1(C1#render_state.render, C2#render_state.render)
+    }.
 
-get_page_startup_script(Context) ->
-    case Context#context.page_id of
-        undefined ->
-            %% No page id, so no comet loop started and generated random page id for postback loop
-            [ <<"z_set_page_id(\"\",">>, str_user_id(z_acl:user(Context)), <<");">> ];
-        PageId ->
-            [ <<"z_set_page_id(\"">>, PageId, $", $,, str_user_id(z_acl:user(Context)), $), $; ]
-    end.
+%% @doc Merge the scripts from context C into the context accumulator, used when collecting all scripts in an output stream
+-spec merge(#render_state{}, #render_state{}) -> #render_state{}.
+merge(C, Acc) ->
+    Acc#render_state{
+        updates = combine1(Acc#render_state.updates, C#render_state.updates),
+        actions = combine1(Acc#render_state.actions, C#render_state.actions),
+        content_scripts = combine1(Acc#render_state.content_scripts, C#render_state.content_scripts),
+        scripts = combine1(Acc#render_state.scripts, C#render_state.scripts),
+        wire = combine1(Acc#render_state.wire, C#render_state.wire),
+        validators = combine1(Acc#render_state.validators, C#render_state.validators)
+    }.
 
-str_user_id(undefined) ->
-    <<"undefined">>;
-str_user_id(UserId) ->
-    [ $", z_convert:to_binary(UserId), $" ].
+combine1([],X) -> X;
+combine1(X,[]) -> X;
+combine1(X,Y) -> [X,Y].
+
+%% @doc Overwrite the scripts in Context with the scripts in From
+-spec copy(#render_state{}, #render_state{}) -> #render_state{}.
+copy(From, To) ->
+    To#render_state{
+        updates = From#render_state.updates,
+        actions = From#render_state.actions,
+        content_scripts = From#render_state.content_scripts,
+        scripts = From#render_state.scripts,
+        wire = From#render_state.wire,
+        validators = From#render_state.validators
+    }.
+
+
+
+add_content_script([], RenderState) -> RenderState;
+add_content_script(<<>>, RenderState) -> RenderState;
+add_content_script(undefined, RenderState) -> RenderState;
+add_content_script(Script, RenderState) ->
+    RenderState#render_state{
+        content_scripts = [ Script, "\n" | RenderState#render_state.content_scripts ]
+    }.
+
+add_script([], RenderState) -> RenderState;
+add_script(<<>>, RenderState) -> RenderState;
+add_script(undefined, RenderState) -> RenderState;
+add_script(Script, RenderState) ->
+    RenderState#render_state{
+        scripts = [ Script, "\n" | RenderState#render_state.scripts
+    ]}.
+
+% str_user_id(undefined) -> <<"undefined">>;
+% str_user_id(UserId) -> [ $", z_convert:to_binary(UserId), $" ].
 
 %% @doc Remove all scripts from the context, resetting it back to a clean sheet.
-%% @spec clean(Context1) -> Context2
-clean(Context) ->
-    Context#context{scripts=[], content_scripts=[], updates=[], actions=[], validators=[]}.
+-spec clean(#render_state{}) -> #render_state{}.
+clean(RenderState) ->
+    RenderState#render_state{
+        scripts = [],
+        content_scripts = [],
+        updates = [],
+        actions = [],
+        validators = []
+    }.
 
 %% @doc Collect all scripts in the context, returns an iolist with javascript.
-%% @spec get_script(Context) -> iolist()
-get_script(Context) ->
-    get_script1(Context).
+-spec get_script( #render_state{}, z:context() ) -> iolist().
+get_script(RenderState, Context) ->
+    % Translate updates to content scripts
+    Update2Script = fun({TargetId, Terms, JSFormatString}, C) ->
+                            {Html,C1} = z_render:render_to_iolist(Terms, C),
+                            Script    = io_lib:format(JSFormatString, [TargetId, z_utils:js_escape(Html)]),
+                            add_content_script(Script, C1);
+                        ({Script}, C) ->
+                            add_content_script(Script, C)
+                    end,
+    RS2 = lists:foldl( Update2Script,
+                       RenderState#render_state{ updates=[], scripts=[], content_scripts=[] },
+                       lists:flatten(RenderState#render_state.updates)),
 
-    get_script1(Context) ->
-        % Translate updates to content scripts
-        Update2Script = fun({TargetId, Terms, JSFormatString}, C) ->
-                                {Html,C1} = z_render:render_to_iolist(Terms, C),
-                                Script    = io_lib:format(JSFormatString, [TargetId, z_utils:js_escape(Html)]),
-                                add_content_script(Script, C1);
-                            ({Script}, C) ->
-                                add_content_script(Script, C)
-                        end,
-        Context2 = lists:foldl( Update2Script,
-                                Context#context{updates=[], scripts=[], content_scripts=[]},
-                                lists:flatten(Context#context.updates)),
+    % Translate actions to scripts
+    Action2Script = fun({TriggerID, TargetID, Actions}, C) ->
+                        {Script,C1} = z_render:render_actions(TriggerID, TargetID, Actions, C),
+                        add_script(Script, C1)
+                    end,
+    RS3 = lists:foldl(Action2Script, RS2#render_state{actions=[]}, lists:flatten(RS2#render_state.actions)),
 
-        % Translate actions to scripts
-        Action2Script = fun({TriggerID, TargetID, Actions}, C) ->
-                            {Script,C1} = z_render:render_actions(TriggerID, TargetID, Actions, C),
+    % Translate validators to scripts
+    Validator2Script = fun({TriggerId, TargetId, Validator}, C) ->
+                            {Script,C1} = z_render:render_validator(TriggerId, TargetId, Validator, C),
                             add_script(Script, C1)
-                        end,
-        Context3 = lists:foldl(Action2Script, Context2#context{actions=[]}, lists:flatten(Context2#context.actions)),
+                       end,
+    RS4 = lists:foldl(Validator2Script, RS3#render_state{validators=[]}, lists:flatten(RS3#render_state.validators)),
 
-        % Translate validators to scripts
-        Validator2Script = fun({TriggerId, TargetId, Validator}, C) ->
-                                {Script,C1} = z_render:render_validator(TriggerId, TargetId, Validator, C),
-                                add_script(Script, C1)
-                           end,
-        Context4 = lists:foldl(Validator2Script, Context3#context{validators=[]}, lists:flatten(Context3#context.validators)),
+    case {RS4#render_state.updates, RS4#render_state.actions, RS4#render_state.validators} of
+        {[],[],[]} ->
+            % Final, we have rendered all content
+            [
+                lists:reverse(RenderState#render_state.content_scripts),
+                lists:reverse(RenderState#render_state.scripts),
+                lists:reverse(RS4#render_state.content_scripts),
+                lists:reverse(RS4#render_state.scripts)
+            ];
+        _NonEmpty ->
+            % Recurse, as the rendering delivered new scripts and/or content
+            [
+                lists:reverse(RenderState#render_state.content_scripts),
+                lists:reverse(RenderState#render_state.scripts),
+                get_script(RS4, Context)
+            ]
+    end.
 
-        case {Context4#context.updates, Context4#context.actions, Context4#context.validators} of
-            {[],[],[]} ->
-                [
-                    lists:reverse(Context#context.content_scripts),
-                    lists:reverse(Context#context.scripts),
-                    lists:reverse(Context4#context.content_scripts),
-                    lists:reverse(Context4#context.scripts)
-                ];
-            _NonEmpty ->
-                [
-                    lists:reverse(Context#context.content_scripts),
-                    lists:reverse(Context#context.scripts),
-                    get_script1(Context4)
-                ]
-        end.
+% get_stream_start_script(Context) ->
+%     get_stream_start_script(z_context:has_websockethost(Context), Context).
 
-get_stream_start_script(Context) ->
-    get_stream_start_script(z_context:has_websockethost(Context), Context).
-
-% Make the call of the start script.
-get_stream_start_script(false, _Context) ->
-    [<<"z_stream_start();">>];
-get_stream_start_script(true, Context) ->
-    [<<"z_stream_start('">>, z_context:websockethost(Context), <<"');">>].
+% % Make the call of the start script.
+% get_stream_start_script(false, _Context) ->
+%     [<<"z_stream_start();">>];
+% get_stream_start_script(true, Context) ->
+%     [<<"z_stream_start('">>, z_context:websockethost(Context), <<"');">>].

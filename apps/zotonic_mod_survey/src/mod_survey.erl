@@ -584,7 +584,7 @@ insert_survey_submission(SurveyId, StorageAnswers, Context) ->
                              end,
     m_survey:insert_survey_submission(SurveyId, UserId, PersistentId, StorageAnswers, Context).
 
-persistent_id(#context{session_id = undefined}) -> undefined;
+% persistent_id(#context{session_id = undefined}) -> undefined;
 persistent_id(Context) -> z_context:persistent_id(Context).
 
 maybe_mail(SurveyId, Answers, ResultId, Context) ->
