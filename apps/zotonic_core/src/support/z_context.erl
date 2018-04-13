@@ -91,6 +91,8 @@
     get_page/2,
     incr_page/3,
 
+    client_id/1,
+
     persistent_id/1,
     set_persistent/3,
     get_persistent/2,
@@ -522,51 +524,6 @@ depickle_site({pickled_context, Site, _UserId, _Language, _VisitorId}) ->
 depickle_site({pickled_context, Site, _UserId, _Language, _Tz, _VisitorId}) ->
     Site.
 
-%% @spec output(list(), Context) -> {io_list(), Context}
-
-% %% @doc Continue an existing session, if the session id is in the request.
-% continue_session(Context) ->
-%     case z_session_manager:continue_session(Context) of
-%         {ok, #context{session_pid=Pid} = Context1} when is_pid(Pid) ->
-%             maybe_logon_from_session(Context1);
-%         {ok, Context1} ->
-%             Context1;
-%         {error, _} ->
-%             Context
-%     end.
-
-
-% %% @doc Check if the current context has a session page attached
-% has_session_page(#context{page_pid=PagePid}) when is_pid(PagePid) ->
-%     true;
-% has_session_page(_) ->
-%     false.
-
-% %% @doc Check if the current context has a session attached
-% has_session(#context{session_pid=SessionPid}) when is_pid(SessionPid) ->
-%     true;
-% has_session(_) ->
-%     false.
-
-
-% %% @doc Ensure session and page session. Fetches and parses the query string.
-% ensure_all(Context) ->
-%     case get(no_session, Context, false) of
-%         false -> ensure_page_session(ensure_session(ensure_qs(Context)));
-%         true -> continue_all(Context)
-%     end.
-
-% continue_all(Context) ->
-%     ensure_page_session(continue_session(ensure_qs(Context))).
-
-
-% %% @doc Ensure that we have a session, start a new session process when needed
-% ensure_session(#context{session_pid=undefined}=Context) ->
-%     {ok, Context1} = z_session_manager:ensure_session(Context),
-%     maybe_logon_from_session(Context1);
-% ensure_session(Context) ->
-%     Context.
-
 
 % %% @doc After ensuring a session, try to log on from the user-id stored in the session
 % maybe_logon_from_session(#context{user_id=undefined} = Context) ->
@@ -576,28 +533,21 @@ depickle_site({pickled_context, Site, _UserId, _Language, _Tz, _VisitorId}) ->
 % maybe_logon_from_session(Context) ->
 %     Context.
 
-% %% @doc Ensure that we have a page session process for this request.
-% ensure_page_session(#context{session_pid=undefined} = Context) ->
-%     Context;
-
-% ensure_page_session(Context) ->
-%     z_session:ensure_page_session(Context).
-
 
 %% @doc Ensure that we have parsed the query string, fetch body if necessary.
 %%      If this is a POST then the session/page-session might be continued after this call.
-ensure_qs(Context) ->
-    case proplists:lookup('q', Context#context.props) of
-        {'q', _Qs} ->
+ensure_qs(#context{ props = Props } = Context) ->
+    case maps:find('q', Props) of
+        {ok, _Qs} ->
             Context;
-        none ->
+        error ->
             Query = cowmachine_req:req_qs(Context),
             PathInfo = cowmachine_req:path_info(Context),
             PathArgs = [ {z_convert:to_binary(T), V} || {T,V} <- PathInfo ],
-            QPropsUrl = z_utils:prop_replace('q', PathArgs++Query, Context#context.props),
-            {Body, ContextParsed} = parse_post_body(Context#context{props=QPropsUrl}),
-            QPropsAll = z_utils:prop_replace('q', PathArgs++Body++Query, ContextParsed#context.props),
-            ContextQs = ContextParsed#context{props=QPropsAll},
+            QPropsUrl = Props#{ q => PathArgs++Query },
+            {Body, ContextParsed} = parse_post_body(Context#context{ props = QPropsUrl }),
+            QPropsAll = (ContextParsed#context.props)#{ q => PathArgs++Body++Query },
+            ContextQs = ContextParsed#context{ props = QPropsAll },
             z_notifier:foldl(#request_context{}, ContextQs, ContextQs)
     end.
 
@@ -647,10 +597,10 @@ get_q(Key, Context) when is_list(Key) ->
         Value when is_binary(Value) -> binary_to_list(Value);
         Value -> Value
     end;
-get_q(Key, Context) ->
-    case proplists:lookup('q', Context#context.props) of
-        {'q', Qs} -> proplists:get_value(z_convert:to_binary(Key), Qs);
-        none -> undefined
+get_q(Key, #context{ props = Props } = Context) ->
+    case maps:find(q, Props) of
+        {ok, Qs} -> proplists:get_value(z_convert:to_binary(Key), Qs);
+        error -> undefined
     end.
 
 
@@ -661,19 +611,19 @@ get_q(Key, Context, Default) when is_list(Key) ->
         Value when is_binary(Value) -> binary_to_list(Value);
         Value -> Value
     end;
-get_q(Key, Context, Default) ->
-    case proplists:lookup('q', Context#context.props) of
-        {'q', Qs} -> proplists:get_value(z_convert:to_binary(Key), Qs, Default);
-        none -> Default
+get_q(Key, #context{ props = Props } = Context, Default) ->
+    case maps:find(q, Props) of
+        {ok, Qs} -> proplists:get_value(z_convert:to_binary(Key), Qs, Default);
+        error -> Default
     end.
 
 
 %% @doc Get all parameters.
 -spec get_q_all(z:context()) -> list({binary(), binary()|#upload{}}).
-get_q_all(Context) ->
-    case proplists:lookup('q', Context#context.props) of
-        {'q', Qs} -> Qs;
-        none -> []
+get_q_all(#context{ props = Props }) ->
+    case maps:find(q, Props) of
+        {ok, Qs} -> Qs;
+        error -> []
     end.
 
 
@@ -688,10 +638,10 @@ get_q_all(Key, Context) when is_list(Key) ->
         end
         || V <- Values
     ];
-get_q_all(Key, Context) ->
-    case proplists:lookup('q', Context#context.props) of
-        none -> [];
-        {'q', Qs} -> proplists:get_all_values(z_convert:to_binary(Key), Qs)
+get_q_all(Key, #context{ props = Props }) ->
+    case maps:find(q, Props) of
+        {ok, Qs} -> proplists:get_all_values(z_convert:to_binary(Key), Qs);
+        error -> []
     end.
 
 
@@ -737,13 +687,10 @@ get_q_validated(Key, Context) when is_list(Key) ->
         V when is_binary(V) -> binary_to_list(V);
         V -> V
     end;
-get_q_validated(Key, Context) ->
-    case proplists:lookup('q_validated', Context#context.props) of
-        {'q_validated', Qs} ->
-            case proplists:lookup(z_convert:to_binary(Key), Qs) of
-                {_Key, Value} -> Value;
-                none -> throw({not_validated, Key})
-            end
+get_q_validated(Key, #context{ props = #{ q_validated := Qs } }) ->
+    case proplists:lookup(z_convert:to_binary(Key), Qs) of
+        {_Key, Value} -> Value;
+        none -> throw({not_validated, Key})
     end.
 
 
@@ -840,6 +787,10 @@ get_value(Key, Context) ->
             Value
     end.
 
+%% @doc Return the current client id (if any)
+-spec client_id( z:context() ) -> binary() | undefined.
+client_id(#context{ client_id = ClientId }) ->
+    ClientId.
 
 %% @doc Ensure that we have an id for the visitor
 persistent_id(Context) ->

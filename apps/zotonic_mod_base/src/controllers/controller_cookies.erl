@@ -32,7 +32,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 resource_exists(Context) ->
-    Context1 = z_context:ensure_all(Context),
+    Context1 = z_context:ensure_qs(Context),
     z_context:lager_md(Context1),
     {true, Context1}.
 

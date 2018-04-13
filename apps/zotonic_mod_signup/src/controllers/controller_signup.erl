@@ -37,7 +37,7 @@ content_types_provided(Context) ->
 
 
 provide_content(Context) ->
-    Context2 = z_context:ensure_all(Context),
+    Context2 = z_context:ensure_qs(Context),
     z_context:lager_md(Context2),
     Vars = case z_context:get_q(<<"xs">>, Context2) of
                 undefined ->

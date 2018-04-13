@@ -34,7 +34,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 service_available(Context) ->
-    Context2 = z_context:ensure_all(Context),
+    Context2 = z_context:ensure_qs(Context),
     z_context:lager_md(Context2),
     {true, Context2}.
 

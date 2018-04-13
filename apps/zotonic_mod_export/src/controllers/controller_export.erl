@@ -30,7 +30,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 forbidden(Context) ->
-    Context2 = z_context:ensure_qs(z_context:continue_session(Context)),
+    Context2 = z_context:ensure_qs(Context),
     z_context:lager_md(Context2),
     Dispatch = z_context:get(zotonic_dispatch, Context2),
     case z_acl:is_allowed(use, mod_export, Context2) of

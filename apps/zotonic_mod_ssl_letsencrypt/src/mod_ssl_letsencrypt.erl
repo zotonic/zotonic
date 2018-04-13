@@ -215,7 +215,7 @@ handle_call({cert_request, _Hostname, _SANs}, _From, #state{request_letsencrypt_
 handle_call({cert_request, Hostname, SANs}, _From, State) ->
     case start_cert_request(Hostname, SANs, State) of
         {ok, State1} ->
-            z_mqtt:publish(<<"~site/letsencrypt">>, <<"started">>, z_acl:sudo(z_context:new(State#state.site))),
+            z_mqtt:publish(<<"module/mod_letsencrypt">>, <<"started">>, z_acl:sudo(z_context:new(State#state.site))),
             {reply, ok, State1};
         {error, Reason, State1} ->
             {reply, {error, Reason}, State1}
@@ -249,7 +249,7 @@ handle_call(Message, _From, State) ->
 
 handle_cast(load_cert, State) ->
     State1 = do_load_cert(State),
-    z_mqtt:publish(<<"~site/letsencrypt">>, <<"reload">>, z_acl:sudo(z_context:new(State#state.site))),
+    z_mqtt:publish(<<"module/mod_letsencrypt">>, <<"reload">>, z_acl:sudo(z_context:new(State#state.site))),
     {noreply, State1};
 handle_cast({complete, Ret, LetsPid}, #state{request_letsencrypt_pid = LetsPid} = State) ->
     State1 = handle_letsencrypt_result(Ret, State),
@@ -274,7 +274,7 @@ handle_cast(renewal_check, #state{cert_is_valid = true, cert_hostname = Hostname
             SANs1 = lists:usort(SANs) -- [Hostname],
             case start_cert_request(Hostname, SANs1, State) of
                 {ok, State1} ->
-                    z_mqtt:publish(<<"~site/letsencrypt">>, <<"started">>, z_acl:sudo(z_context:new(State#state.site))),
+                    z_mqtt:publish(<<"module/mod_letsencrypt">>, <<"started">>, z_acl:sudo(z_context:new(State#state.site))),
                     {noreply, State1};
                 {error, _Reason, State1} ->
                     {noreply, State1}

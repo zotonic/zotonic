@@ -37,7 +37,7 @@ content_types_provided(Context) ->
     {[{<<"text/html">>, provide_content}], Context}.
 
 provide_content(Context) ->
-    Context2 = z_context:ensure_all(Context),
+    Context2 = z_context:ensure_qs(Context),
     z_context:lager_md(Context2),
     Key = z_context:get_q(<<"key">>, Context2, <<>>),
     {Vars, ContextConfirm} = case Key of

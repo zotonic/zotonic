@@ -40,7 +40,7 @@ charsets_provided(Context) ->
     {[<<"utf-8">>], Context}.
 
 resource_exists(Context) ->
-    Context2 = z_context:ensure_all(Context),
+    Context2 = z_context:ensure_qs(Context),
     case z_convert:to_bool(z_context:get(is_only_anonymous, Context2)) of
         true -> check_auth(Context2);
         false -> {true, Context2}

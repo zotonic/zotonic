@@ -44,11 +44,11 @@ content_types_provided(Context) ->
 provide_content(Context) ->
     case z_context:get(is_fallback_template, Context) of
         true ->
-            Context2 = z_context:continue_all(Context),
+            Context2 = z_context:ensure_qs(Context),
             Template = z_context:get(template, Context2),
             render_page(Template, Context2);
         _ ->
-            Context2 = z_context:ensure_all(Context),
+            Context2 = z_context:ensure_qs(Context),
             case z_acl:user(Context2) of
                 undefined ->
                     render_page("logon.tpl", Context2);

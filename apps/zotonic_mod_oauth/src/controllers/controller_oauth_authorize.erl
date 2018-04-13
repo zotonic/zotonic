@@ -35,7 +35,7 @@ allowed_methods(Context) ->
 
 
 is_authorized(Context) ->
-    Context2 = z_context:ensure_all(Context),
+    Context2 = z_context:ensure_qs(Context),
     z_acl:wm_is_authorized(z_auth:is_auth(Context2), Context2).
 
 

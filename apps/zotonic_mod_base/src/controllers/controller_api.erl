@@ -45,7 +45,7 @@ options(Context) ->
 
 allowed_methods(Context) ->
     % Continue session for API calls from a web page
-    Context1 = z_context:ensure_qs(z_context:continue_session(Context)),
+    Context1 = z_context:ensure_qs(Context),
     z_context:lager_md(Context1),
     Module = case z_context:get_q(<<"api_module">>, Context1) of
                  undefined -> z_convert:to_binary(z_context:get(module, Context1));

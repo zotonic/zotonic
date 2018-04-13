@@ -472,8 +472,8 @@ handle_info({'DOWN', MRef, process, _Pid, normal}, #state{rebuilder_mref = MRef,
     State2 = maybe_rebuild(State1),
     Context = z_context:new(Site),
     z_mqtt:publish(
-        <<"~site/acl-rules/", (z_convert:to_binary(State#state.rebuilding))/binary, "-rebuild">>,
-        [],
+        <<"acl-rules/", (z_convert:to_binary(State#state.rebuilding))/binary, "-rebuild">>,
+        true,
         z_acl:sudo(Context)
     ),
     {noreply, State2};
@@ -496,13 +496,13 @@ handle_info({'ETS-TRANSFER', TId, _FromPid, publish}, State) ->
     lager:debug("[mod_acl_user_groups] 'ETS-TRANSFER' for 'publish' (~p)", [TId]),
     gproc_new_ets(TId, publish, State#state.site),
     State1 = store_new_ets(TId, publish, State),
-    z_mqtt:publish(<<"~site/acl-rules/publish">>, [], z_context:new(State#state.site)),
+    z_mqtt:publish(<<"acl-rules/publish">>, true, z_context:new(State#state.site)),
     {noreply, State1};
 handle_info({'ETS-TRANSFER', TId, _FromPid, edit}, State) ->
     lager:debug("[mod_acl_user_groups] 'ETS-TRANSFER' for 'edit' (~p)", [TId]),
     gproc_new_ets(TId, edit, State#state.site),
     State1 = store_new_ets(TId, edit, State),
-    z_mqtt:publish(<<"~site/acl-rules/edit">>, [], z_context:new(State#state.site)),
+    z_mqtt:publish(<<"acl-rules/edit">>, true, z_context:new(State#state.site)),
     {noreply, State1};
 
 handle_info({'EXIT', _Pid, normal}, State) ->

@@ -949,9 +949,9 @@ handle_start_next(#state{site=Site, start_queue=Starting, modules=Modules} = Sta
                             % TODO: remove the broadcast and publish to topic
                             StartErrorReason = get_start_error_reason(Reason),
                             Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
-                            z_session_manager:broadcast(
-                                #broadcast{type="error", message=Msg, title="Module manager", stay=false},
-                                z_acl:sudo(z_context:new(Site))),
+                            % z_session_manager:broadcast(
+                            %     #broadcast{type="error", message=Msg, title="Module manager", stay=false},
+                            %     z_acl:sudo(z_context:new(Site))),
                             lager:error("Could not start module ~p, reason ~s",
                                         [M, StartErrorReason])
                     end

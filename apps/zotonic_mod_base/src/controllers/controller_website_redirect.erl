@@ -30,8 +30,7 @@ resource_exists(Context) ->
     {false, Context}.
 
 previously_existed(Context) ->
-    ContextQs = z_context:ensure_qs(
-                    z_context:continue_session(Context)),
+    ContextQs = z_context:ensure_qs(Context),
     z_context:lager_md(ContextQs),
     Id = m_rsc:rid(z_context:get_q(<<"id">>, ContextQs), ContextQs),
     Exists = m_rsc:exists(Id, ContextQs)

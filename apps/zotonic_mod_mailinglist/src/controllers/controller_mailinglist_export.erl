@@ -32,7 +32,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 forbidden(Context) ->
-    Context2 = z_context:ensure_all(Context),
+    Context2 = z_context:ensure_qs(Context),
     z_context:lager_md(Context2),
 	Id = m_rsc:rid(z_context:get_q(<<"id">>, Context2), Context2),
 	{not z_acl:rsc_editable(Id, Context2), Context2}.

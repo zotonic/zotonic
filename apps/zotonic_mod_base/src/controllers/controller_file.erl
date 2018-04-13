@@ -46,7 +46,7 @@
 %% @doc Initialize the context for the request. Optionally continue the user's session.
 service_available(Context0) ->
     Context = z_context:set_noindex_header(Context0),
-    Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
+    Context1 = z_context:ensure_qs(Context),
     z_context:lager_md(Context1),
     case get_file_info(Context1) of
         {ok, Info} ->

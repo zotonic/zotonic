@@ -36,7 +36,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 resource_exists(Context) ->
-    {Id, ContextQs} = get_id(z_context:ensure_qs(z_context:continue_session(Context))),
+    {Id, ContextQs} = get_id(z_context:ensure_qs(Context)),
     z_context:lager_md(ContextQs),
     {m_rsc:exists(Id, ContextQs), ContextQs}.
 
@@ -45,7 +45,7 @@ previously_existed(Context) ->
     {m_rsc_gone:is_gone(Id, Context2), Context2}.
 
 forbidden(Context) ->
-    {Id, Context2} = get_id(z_context:ensure_qs(z_context:continue_session(Context))),
+    {Id, Context2} = get_id(z_context:ensure_qs(Context)),
     Dispatch = z_context:get(zotonic_dispatch, Context2),
     case z_acl:is_allowed(use, mod_export, Context2) of
         true ->
@@ -59,7 +59,7 @@ forbidden(Context) ->
     end.
 
 content_types_provided(Context) ->
-    {Id, Context1} = get_id(z_context:ensure_qs(z_context:continue_session(Context))),
+    {Id, Context1} = get_id(z_context:ensure_qs(Context)),
     Dispatch = z_context:get(zotonic_dispatch, Context1),
     case get_content_type(Id, Dispatch, Context1) of
         {ok, ContentType} ->

@@ -36,7 +36,7 @@
 
 
 service_available(Context) ->
-    Context1 = z_context:continue_session(Context),
+    Context1 = z_context:ensure_qs(Context),
     {true, Context1}.
 
 charsets_provided(Context) ->

@@ -345,7 +345,6 @@ reload_dispatch_list(#state{context=Context} = State) ->
         collect_dispatch_lists(Context)
     catch
         _:{error, Msg} ->
-           z_session_manager:broadcast(#broadcast{type="error", message="Dispatch error! " ++ Msg, title="Dispatcher", stay=false}, Context),
            State#state.dispatchlist
     end,
     LookupDict = dispatch_for_uri_lookup(DispatchList),

@@ -32,7 +32,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 resource_exists(Context) ->
-    {Id, ContextQs} = get_id(z_context:ensure_qs(z_context:continue_session(Context))),
+    {Id, ContextQs} = get_id(z_context:ensure_qs(Context)),
     z_context:lager_md(ContextQs),
     {m_rsc:exists(Id, ContextQs), ContextQs}.
 
@@ -60,7 +60,7 @@ see_other(Context) ->
     {Id, Context3} = get_id(Context2),
     {Location,Context4} = case proplists:get_value(Mime, CT) of
                             page_url ->
-                                ContextSession = z_context:continue_session(Context3),
+                                ContextSession = z_context:ensure_qs(Context3),
                                 {m_rsc:p_no_acl(Id, page_url, ContextSession), ContextSession};
                             {Dispatch, DispatchArgs} when is_list(DispatchArgs) ->
                                 {z_dispatcher:url_for(Dispatch, [{id,Id} | DispatchArgs], Context3), Context3};

@@ -146,7 +146,7 @@ provide_content(Context) ->
             case filelib:is_dir(FullPath) of
                 true ->
                     %% Render directory index
-                    Context1 = z_context:ensure_all(Context),
+                    Context1 = z_context:ensure_qs(Context),
                     Root = z_context:get(root, Context),
                     Vars = directory_index_vars(FullPath, Root, Context)
                             ++ z_context:get_all(Context),
@@ -165,7 +165,7 @@ provide_content(Context) ->
                     case filename:extension(FullPath) of
                         <<".tpl">> ->
                             %% Render template, prevent caching
-                            Context1 = z_context:ensure_all(Context),
+                            Context1 = z_context:ensure_qs(Context),
                             Vars = z_context:get_all(Context1),
                             Template = #template_file{
                                 filename = FullPath,

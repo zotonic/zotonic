@@ -31,6 +31,7 @@
     unsubscribe/2,
     unsubscribe/3,
 
+    map_topic/2,
     map_topic_filter/2
 ]).
 

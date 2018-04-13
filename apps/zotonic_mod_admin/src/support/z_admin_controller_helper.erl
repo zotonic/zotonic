@@ -24,7 +24,7 @@
 ]).
 
 init_session(Context) ->
-    Context1 = z_context:ensure_all(Context),
+    Context1 = z_context:ensure_qs(Context),
     z_context:lager_md(Context1),
     Context1.
 

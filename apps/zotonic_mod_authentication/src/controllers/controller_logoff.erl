@@ -40,7 +40,7 @@ resource_exists(Context) ->
     % TODO: when there is javascript in the context, then return the javascript
     % to be executed, together with a
     % redirect action.  This is the case when we have a Facebook connect log off.
-    Context2 = z_context:continue_session(Context),
+    Context2 = z_context:ensure_qs(Context),
     Context3 = reset_rememberme_cookie_and_logoff(Context2),
     case lists:flatten(z_script:get_script(Context3)) of
         [] -> {false, Context3};
