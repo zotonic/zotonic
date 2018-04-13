@@ -33,12 +33,14 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ session_id | Rest ], Context) ->
-    {Context#context.session_id, Rest};
-m_get([ page_id | Rest ], Context) ->
-    {Context#context.page_id, Rest};
-m_get([ Key | Rest ], Context) ->
-    {z_context:get_session(Key, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_, _Context) ->
     {undefined, []}.
+% m_get([ session_id | Rest ], Context) ->
+%     {Context#context.session_id, Rest};
+% m_get([ page_id | Rest ], Context) ->
+%     {Context#context.page_id, Rest};
+% m_get([ Key | Rest ], Context) ->
+%     {z_context:get_session(Key, Context), Rest};
+% m_get(Vs, _Context) ->
+%     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+%     {undefined, []}.

@@ -39,7 +39,7 @@ start_link({_Topic, _Qos, _MFA, _Pid, _Site} = Args) ->
 init({Topic, Qos, MFA, Pid, Site}) ->
     erlang:process_flag(trap_exit, true),
     maybe_link(Pid),
-    ok = emqtt_router:subscribe({Topic,Qos}, self()),
+    ok = mqtt_sessions:subscribe(Site, Topic, MFA, self(), #{ qos => Qos }, z_context:new(Site)),
     {ok, #state{
         topic=Topic,
         qos=Qos,
@@ -54,17 +54,6 @@ handle_call(_Msg, _From, State) ->
 handle_cast(_Msg, State) ->
     {reply, State}.
 
-handle_info({route, Message}, State) ->
-    case State#state.mfa of
-        {M,F} ->
-            case State#state.pid of
-                undefined -> _ = M:F(Message, z_context:new(State#state.site));
-                Pid -> _ = M:F(Message, Pid, z_context:new(State#state.site))
-            end;
-        {M,F,A} ->
-            _ = M:F(Message, A, z_context:new(State#state.site))
-    end,
-    {noreply, State};
 handle_info({'EXIT', _From, _Reason}, State) ->
     %% The module for which we handle the mqtt subscription has either crashed
     %% or stopped. Stop normally we don't have to route messages anymore.

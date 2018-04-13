@@ -27,15 +27,12 @@
     is_auth_recent/1,
 
     logon/2,
-    confirm/2,
+    % confirm/2,
     logon_pw/3,
     logoff/1,
-    logon_from_session/1,
+    % logon_from_session/1,
 
     switch_user/2,
-
-    user_from_page/1,
-    user_from_session/1,
 
     is_enabled/2
 ]).
@@ -55,13 +52,14 @@ is_auth(_) ->
 is_auth_recent(#context{user_id=undefined}) ->
     false;
 is_auth_recent(#context{}=Context) ->
-    case z_context:get_session(auth_confirm_timestamp, Context) of
-        undefined ->
-            false;
-        AuthConfirmTimestamp ->
-            CurrentTimestamp = z_utils:now(),
-            AuthConfirmTimestamp + ?AUTH_RECENT_TIMEOUT > CurrentTimestamp
-    end.
+    false.
+    % case z_context:get_session(auth_confirm_timestamp, Context) of
+    %     undefined ->
+    %         false;
+    %     AuthConfirmTimestamp ->
+    %         CurrentTimestamp = z_utils:now(),
+    %         AuthConfirmTimestamp + ?AUTH_RECENT_TIMEOUT > CurrentTimestamp
+    % end.
 
 %% @doc Logon a username/password combination, checks passwords with m_identity.
 %% @spec logon_pw(Username, Password, Context) -> {bool(), NewContext}
@@ -75,95 +73,99 @@ logon_pw(Username, Password, Context) ->
         {error, _Reason} -> {false, Context}
     end.
 
-confirm(UserId, Context) ->
-    % check if auth_user_id == userId??
-    case is_enabled(UserId, Context) of
-        true ->
-            Context1 = z_context:set_session(auth_confirm_timestamp, z_utils:now(), Context),
-            Context2 = z_notifier:foldl(#auth_confirm{}, Context1, Context1),
-            z_notifier:notify(#auth_confirm_done{}, Context2),
-            {ok, Context2};
-        false ->
-            {error, user_not_enabled}
-    end.
+% confirm(UserId, Context) ->
+%     % check if auth_user_id == userId??
+%     case is_enabled(UserId, Context) of
+%         true ->
+%             Context1 = z_context:set_session(auth_confirm_timestamp, z_utils:now(), Context),
+%             Context2 = z_notifier:foldl(#auth_confirm{}, Context1, Context1),
+%             z_notifier:notify(#auth_confirm_done{}, Context2),
+%             {ok, Context2};
+%         false ->
+%             {error, user_not_enabled}
+%     end.
 
 
 %% @doc Logon an user whose id we know, invalidate the current session id.
 %%      This sets a cookie with the new session id in the Context.
 logon(UserId, Context) ->
-    case is_enabled(UserId, Context) of
-        true ->
-            Context1 = z_acl:logon_prefs(UserId, Context),
-            {ok, Context2} = z_session_manager:rename_session(Context1),
-            z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
-            z_context:set_session(auth_user_id, UserId, Context2),
-            Context3 = z_session:ensure_page_session(Context2),
-            Context4 = z_notifier:foldl(#auth_logon{}, Context3, Context3),
-            z_notifier:notify(#auth_logon_done{}, Context4),
-            {ok, Context4};
-        false ->
-            {error, user_not_enabled}
-    end.
+    {error, todo}.
+    % case is_enabled(UserId, Context) of
+    %     true ->
+    %         Context1 = z_acl:logon_prefs(UserId, Context),
+    %         {ok, Context2} = z_session_manager:rename_session(Context1),
+    %         z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
+    %         z_context:set_session(auth_user_id, UserId, Context2),
+    %         Context3 = z_session:ensure_page_session(Context2),
+    %         Context4 = z_notifier:foldl(#auth_logon{}, Context3, Context3),
+    %         z_notifier:notify(#auth_logon_done{}, Context4),
+    %         {ok, Context4};
+    %     false ->
+    %         {error, user_not_enabled}
+    % end.
 
 
 %% @doc Continue the current session as a different user.
 switch_user(UserId, Context) ->
-    Context1 = z_acl:logon_prefs(UserId, Context),
-    z_context:set_session(auth_timestamp, calendar:universal_time(), Context1),
-    z_context:set_session(auth_user_id, UserId, Context1),
-    Context2 = z_session:ensure_page_session(Context1#context{page_pid=undefined, page_id=undefined}),
-    Context3 = z_notifier:foldl(#auth_logon{}, Context2, Context2),
-    z_notifier:notify(#auth_logon_done{}, Context3),
-    {ok, Context3}.
+    % Needs to change:
+    % - Create a onetime user token
+    % - Send to client
+    % - Client reattaches using this token
+    {error, todo}.
+
+    % Context1 = z_acl:logon_prefs(UserId, Context),
+    % z_context:set_session(auth_timestamp, calendar:universal_time(), Context1),
+    % z_context:set_session(auth_user_id, UserId, Context1),
+    % Context2 = z_session:ensure_page_session(Context1#context{page_pid=undefined, page_id=undefined}),
+    % Context3 = z_notifier:foldl(#auth_logon{}, Context2, Context2),
+    % z_notifier:notify(#auth_logon_done{}, Context3),
+    % {ok, Context3}.
 
 
 %% @doc Forget about the user being logged on.
-%% @spec logoff(Context) -> NewContext
+-spec logoff(z:context()) -> z:context().
 logoff(Context) ->
-    ContextLogOff = z_notifier:foldl(#auth_logoff{}, Context, Context),
-    z_context:set_session(auth_user_id, none, ContextLogOff),
-    z_notifier:notify(#auth_logoff_done{}, ContextLogOff),
-    ContextUser = z_acl:logoff(ContextLogOff),
-    z_session:ensure_page_session(ContextUser#context{page_pid=undefined, page_id=undefined}).
+    % Needs to change:
+    % - Client sends disconnect
+    % - Session is discarded
+    throw({todo, logoff}).
+    % ContextLogOff = z_notifier:foldl(#auth_logoff{}, Context, Context),
+    % z_context:set_session(auth_user_id, none, ContextLogOff),
+    % z_notifier:notify(#auth_logoff_done{}, ContextLogOff),
+    % ContextUser = z_acl:logoff(ContextLogOff),
+    % z_session:ensure_page_session(ContextUser#context{page_pid=undefined, page_id=undefined}).
 
-%% @doc Return the user_id from the session
-user_from_session(SessionPid) ->
-    z_session:get(auth_user_id, SessionPid).
 
-%% @doc Return the user_id from a page
-user_from_page(PagePid) ->
-    user_from_session(z_session_page:session_pid(PagePid)).
-
-%% @doc Called after z_context:ensure_session.
-%% Check if the session contains an authenticated user id.
-%% When found then the user_id of the context is set.
-%% Also checks any automatic logon methods like "remember me" cookies.
-%% @spec logon_from_session(#context{}) -> #context{}
-logon_from_session(Context) ->
-    case z_context:get_session(auth_user_id, Context) of
-        none ->
-            z_memo:set_userid(undefined),
-            z_acl:logoff(Context);
-        undefined ->
-            % New session, check if some module wants to log on
-            case z_notifier:first(#auth_autologon{}, Context) of
-                undefined ->
-                    z_memo:set_userid(undefined),
-                    z_context:set_session(auth_user_id, none, Context);
-                {ok, UserId} ->
-                    case logon(UserId, Context) of
-                        {ok, ContextLogon} ->
-                            z_memo:set_userid(UserId),
-                            ContextLogon;
-                        {error, _Reason} ->
-                            z_memo:set_userid(undefined),
-                            z_acl:logoff(Context)
-                    end
-            end;
-        UserId ->
-            z_memo:set_userid(UserId),
-            z_acl:logon_prefs(UserId, Context)
-    end.
+% %% @doc Called after z_context:ensure_session.
+% %% Check if the session contains an authenticated user id.
+% %% When found then the user_id of the context is set.
+% %% Also checks any automatic logon methods like "remember me" cookies.
+% -spec logon_from_session(#context{}) -> #context{}
+% logon_from_session(Context) ->
+%     case z_context:get_session(auth_user_id, Context) of
+%         none ->
+%             z_memo:set_userid(undefined),
+%             z_acl:logoff(Context);
+%         undefined ->
+%             % New session, check if some module wants to log on
+%             case z_notifier:first(#auth_autologon{}, Context) of
+%                 undefined ->
+%                     z_memo:set_userid(undefined),
+%                     z_context:set_session(auth_user_id, none, Context);
+%                 {ok, UserId} ->
+%                     case logon(UserId, Context) of
+%                         {ok, ContextLogon} ->
+%                             z_memo:set_userid(UserId),
+%                             ContextLogon;
+%                         {error, _Reason} ->
+%                             z_memo:set_userid(undefined),
+%                             z_acl:logoff(Context)
+%                     end
+%             end;
+%         UserId ->
+%             z_memo:set_userid(UserId),
+%             z_acl:logon_prefs(UserId, Context)
+%     end.
 
 
 %% @doc Check if the user is enabled, an user is enabled when the rsc is published and within its publication date range.

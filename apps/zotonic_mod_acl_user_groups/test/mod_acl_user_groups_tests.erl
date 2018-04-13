@@ -2,7 +2,6 @@
 -module(mod_acl_user_groups_tests).
 
 -include_lib("eunit/include/eunit.hrl").
--include_lib("emqtt/include/emqtt.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([is_allowed_always_true/2]).
@@ -113,7 +112,7 @@ is_allowed_always_true(#acl_is_allowed{}, _Context) ->
     true.
 
 replace_managed(Rules, Context) ->
-    z_mqtt:subscribe(<<"~site/acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
+    z_mqtt:subscribe(<<"acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
 
     m_acl_rule:replace_managed(
         Rules,
@@ -122,7 +121,7 @@ replace_managed(Rules, Context) ->
     ),
 
     receive
-        {route, #mqtt_msg{}} -> ok
+        {mqtt_msg, _Msg} -> ok
     end,
 
-    z_mqtt:unsubscribe(<<"~site/acl-rules/publish-rebuild">>, z_acl:sudo(Context)).
+    z_mqtt:unsubscribe(<<"acl-rules/publish-rebuild">>, z_acl:sudo(Context)).

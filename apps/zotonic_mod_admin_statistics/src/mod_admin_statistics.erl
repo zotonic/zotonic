@@ -40,8 +40,7 @@
 %% Observes
 %%
 
-observe_acl_is_allowed(#acl_is_allowed{action=subscribe,
-        object=#acl_mqtt{words=[<<"erlang">>, <<"stats">>| _Rest]}}, Context) ->
+observe_acl_is_allowed(#acl_is_allowed{ action = subscribe, object = #acl_mqtt{ topic = [ <<"erlang">>, <<"stats">>| _ ]}}, Context) ->
     z_acl:is_allowed(use, mod_admin_statistics, Context);
 observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.

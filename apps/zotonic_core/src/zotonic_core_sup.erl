@@ -43,6 +43,7 @@ start_link(Options) ->
     z_tempfile_cleanup:start(),
     ensure_job_queues(),
     ensure_sidejobs(),
+    mqtt_sessions_runtime(),
     inets:start(httpc, [{profile, zotonic}]),
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
@@ -134,3 +135,11 @@ ensure_sidejobs() ->
     sidejob:new_resource(zotonic_sessionjobs, sidejob_supervisor, z_config:get(sessionjobs_limit)),
     sidejob:new_resource(zotonic_sidejobs, sidejob_supervisor, z_config:get(sidejobs_limit)).
 
+
+mqtt_sessions_runtime() ->
+    case mqtt_sessions:runtime() of
+        mqtt_sessions_runtime ->
+            mqtt_sessions:set_runtime(z_mqtt_sessions_runtime);
+        _ ->
+            ok
+    end.

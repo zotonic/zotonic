@@ -860,23 +860,12 @@
 %% @doc Delete a value from the typed key/value store
 -record(tkvstore_delete, {type, key}).
 
-%% @doc Subscribe a function to an MQTT topic.
-%% The function will be called from a temporary process, and must be of the form:
-%% m:f(#emqtt_msg{}, A, Context)
--record(mqtt_subscribe, {topic, qos = 0 :: 0 | 1 | 2, mfa}).
-
-%% @doc Unsubscribe a function from an MQTT topic.
-%% The MFA _must_ match the one supplied with #mqtt_subscribe{}
--record(mqtt_unsubscribe, {topic, mfa}).
-
 %% @doc MQTT acl check, called via the normal acl notifications.
 %% Actions for these checks: subscribe, publish
 -record(acl_mqtt, {
-    type :: 'wildcard' | 'direct',
-    topic :: binary(),
-    words :: list(binary() | integer()),
-    site :: binary(),
-    page_id :: 'undefined' | binary()
+    topic :: list( binary() ),
+    is_wildcard :: boolean(),
+    packet :: mqtt_packet_map:mqtt_packet()
 }).
 
 %% @doc Broadcast notification.

@@ -33,7 +33,6 @@
 
 -include("zotonic.hrl").
 -include_lib("exometer_core/include/exometer.hrl").
--include_lib("emqtt/include/emqtt.hrl").
 
 exometer_init(_Opts) ->
     {ok, []}.
@@ -83,11 +82,11 @@ get_context(#context{}=Context) ->
     Context.
 
 make_topic([erlang|Metric], DataPoint) ->
-    Topic = [<<"erlang">>, <<"stats">>, [z_convert:to_binary(M) || M <- Metric],
+    Topic = [ <<"stats">>, <<"erlang">>, [z_convert:to_binary(M) || M <- Metric],
         z_convert:to_binary(DataPoint)],
     join_topic(Topic);
 make_topic(Metric, DataPoint) ->
-    Topic = [<<"~site">>, <<"stats">>, [z_convert:to_binary(M) || M <- Metric],
+    Topic = [ <<"stats">>, <<"site">>, [z_convert:to_binary(M) || M <- Metric],
         z_convert:to_binary(DataPoint)],
     join_topic(Topic).
 

@@ -6,7 +6,7 @@
   {registered, []},
   {env, []},
   {applications, [kernel, stdlib, crypto, public_key, ssl, inets, lager,
-                  mimetypes, mnesia, emqtt, gproc, jobs, sidejob,
+                  mimetypes, mnesia, gproc, jobs, sidejob,
                   bert, dh_date, eiconv, exometer_core,
                   epgsql,
                   depcache, zotonic_stdlib,

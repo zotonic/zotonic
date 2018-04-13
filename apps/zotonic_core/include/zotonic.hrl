@@ -30,6 +30,7 @@
         %% The page and session processes associated with the current request
         client_id = undefined :: binary(),                      % MQTT client id
         client_topic = undefined :: mqtt_sessions:topic(),      % Topic where the client can be reached
+        routing_id = undefined :: binary(),                     % Unique routing id
 
         % session_pid = undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)
         % session_id = undefined  :: binary() | undefined,

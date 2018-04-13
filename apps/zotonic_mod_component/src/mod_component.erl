@@ -25,7 +25,6 @@
 -mod_provides([component]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("emqtt/include/emqtt.hrl").
 -include("include/mod_component.hrl").
 
 -export([event/2]).
