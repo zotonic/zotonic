@@ -472,11 +472,12 @@ minify(_, _, Data) ->
     Data.
     
 minify_m(Filename, Data, MinifyModule) ->
-    case already_minified(filename:basename(Filename)) of
+    Basename = filename:basename(Filename),
+    case already_minified(Basename) of
         true -> Data;
         false ->
             case catch MinifyModule:minify(Data) of
-                Minified when is_binary(Data) ->
+                Minified when is_binary(Minified) ->
                     <<Minified/binary, ";\n">>;
                 Reason ->
                     error_logger:warning_msg("mod_base: Could not minify ~p. [Reason: ~p]~n", [Filename, Reason]),
