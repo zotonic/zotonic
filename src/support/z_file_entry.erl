@@ -465,16 +465,17 @@ compress_file_1(Minify, Filename, Z, IO, Acc) ->
     end.
 
 minify(Filename, <<".js">>, Data) ->
-    minify_js(Filename, Data);
+    minify_m(Filename, Data, z_jsmin);
+minify(Filename, <<".css">>, Data) ->
+    minify_m(Filename, Data, z_cssmin);
 minify(_, _, Data) ->
     Data.
     
-minify_js(Filename, Data) ->
+minify_m(Filename, Data, MinifyModule) ->
     case already_minified(filename:basename(Filename)) of
-        true ->
-            Data;
+        true -> Data;
         false ->
-            case catch z_jsmin:minify(Data) of
+            case catch MinifyModule:minify(Data) of
                 Minified when is_binary(Data) ->
                     <<Minified/binary, ";\n">>;
                 Reason ->
@@ -482,6 +483,7 @@ minify_js(Filename, Data) ->
                     Data 
             end
     end.
+    
 
 already_minified(<<>>) ->
     false;
