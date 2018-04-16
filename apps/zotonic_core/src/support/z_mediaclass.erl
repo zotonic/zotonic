@@ -28,6 +28,7 @@
 
 %% API exports
 -export([
+    new_ets/0,
     get/2,
 
     expand_mediaclass_checksum/1,
@@ -38,15 +39,40 @@
     module_reindexed/2
 ]).
 
--record(state, {context, last=[]}).
+-record(state, {
+    context :: z:context(),
+    last = []
+}).
+
+%% Index record for the mediaclass ets table.
+-record(mediaclass_index_key, {
+    site :: atom(),
+    mediaclass
+}).
+-record(mediaclass_index, {
+    key,
+    props = [],
+    checksum,
+    tag
+}).
+
 -define(MEDIACLASS_FILENAME, <<"mediaclass.config">>).
 -define(RESCAN_PERIOD, 10000).
+
+%% Name of the global mediaclass index table
+-define(MEDIACLASS_INDEX, 'zotonic$mediaclass_index').
 
 -include("zotonic.hrl").
 
 %%====================================================================
 %% API
 %%====================================================================
+
+-spec new_ets() -> ets:tid() | atom().
+new_ets() ->
+    ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]).
+
+
 %% @spec start_link(Props) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(SiteProps) ->

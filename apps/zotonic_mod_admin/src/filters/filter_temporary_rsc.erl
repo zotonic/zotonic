@@ -139,8 +139,6 @@ delete_if_unmodified(RscId, Context) ->
 
 
 %% If no user then limit to 1 temporary rsc per client
-find_existing(_ClientId, _CatId, Context) ->
-    {error, notfound};
 find_existing(undefined, _CatId, _Context) ->
     {error, nosession};
 find_existing(_ClientId, CatId, Context) ->

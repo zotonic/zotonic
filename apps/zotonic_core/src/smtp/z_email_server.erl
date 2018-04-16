@@ -937,7 +937,7 @@ optional_render(undefined, undefined, _Vars, _Context) ->
 optional_render(Text, undefined, _Vars, _Context) ->
     Text;
 optional_render(undefined, Template, Vars, Context) ->
-    {Output, _Context} = z_template:render_to_iolist(Template, Vars, Context),
+    {Output, _RenderState} = z_template:render_to_iolist(Template, Vars, Context),
     binary_to_list(iolist_to_binary(Output)).
 
 set_recipient_prefs(Vars, Context) ->

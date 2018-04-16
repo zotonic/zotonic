@@ -151,13 +151,14 @@ props_to_map([K|Rest], Map) ->
 %% @doc Render a template to an iolist().  This removes all scomp state etc from the rendered html and appends the
 %% information in the scomp states to the context for later rendering.
 -spec render_to_iolist(template_compiler:template() | #module_index{},
-    list() | map(), #context{}) -> {iolist(), #render_state{}}.
+    list() | map(), z:context()) -> {iolist(), z:context()}.
 render_to_iolist(File, Vars, Context) ->
     Html = render(File, Vars, Context),
     z_render:render_to_iolist(Html, Context).
 
 %% @doc Render a block template to an iolist().
--spec render_block_to_iolist(atom(), template_compiler:template(), list()|map(), #context{}) -> {iolist(), #render_state{}}.
+-spec render_block_to_iolist(atom(), template_compiler:template(), list()|map(), z:context()) ->
+    {iolist(), z:context()}.
 render_block_to_iolist(Block, File, Vars, Context) ->
     Html = render_block(Block, File, Vars, Context),
     z_render:render_to_iolist(Html, Context).

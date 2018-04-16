@@ -357,8 +357,8 @@ wait_for_running_1(Site, _State, Timeout) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init([]) ->
-    ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]),
-    ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]),
+    z_module_indexer:new_ets(),
+    z_mediaclas:new_ets(),
     ets:new(?SITES_STATUS_TABLE, [set, public, named_table, {keypos, 1}]),
     ok = gen_server:cast(self(), upgrade),
     timer:send_after(?PERIODIC_UPGRADE, periodic_upgrade),

@@ -29,6 +29,7 @@
 
 %% interface functions
 -export([
+    new_ets/0,
     reindex/1,
     index_ref/1,
     translations/1,
@@ -61,9 +62,17 @@
 
 -define(TIMEOUT, infinity).
 
+%% Name of the global module index table
+-define(MODULE_INDEX, 'zotonic$module_index').
+
 %%====================================================================
 %% API
 %%====================================================================
+
+-spec new_ets() -> ets:tid() | atom().
+new_ets() ->
+    ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]).
+
 %% @spec start_link(Props) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the server
 start_link(SiteProps) ->

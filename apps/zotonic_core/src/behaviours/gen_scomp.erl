@@ -17,7 +17,7 @@
 %%
 %% @doc Scomp behaviour definition.  A scomp is a screen component that can optionally be cached.
 %%
-%%      render(Params, Vars, Context) -> {ok, NewContext} | {ok, io_list()} | {error, Error}
+%%      render(Params, Vars, Context) -> {ok, NewContext} | {ok, iolist()} | {error, Error}
 %%
 %%      vary(Params, Context) -> {EssentialParams, MaxAge, Vary} | nocache | default
 %%

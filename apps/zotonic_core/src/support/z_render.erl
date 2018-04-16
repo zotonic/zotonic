@@ -1,13 +1,14 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Rusty Klophaus
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2018 Marc Worrell
 %%
-%% Based on Nitrogen, which is copyright (c) 2008-2009 Rusty Klophaus
+%% @doc Deprecated render routines using wires and actions.
+%%      Based on Nitrogen, which is copyright (c) 2008-2009 Rusty Klophaus
 
 %% This is the MIT license.
 %%
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009 Marc Worrell
+%% Copyright (c) 2009-2018 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -32,45 +33,46 @@
 -author("Rusty Klophaus").
 
 -export ([
-    output/3,
+    render_html/2,
+    output/2,
 
-    render/3,
+    render/2,
     render_actions/4,
+    render_to_iolist/2,
     render_to_iolist/3,
-    render_to_iolist/4,
 
     validator/4,
     render_validator/4,
 
-    update/4,
-    replace/4,
-    insert_top/4,
-    insert_bottom/4,
-    insert_before/4,
-    insert_after/4,
+    update/3,
+    replace/3,
+    insert_top/3,
+    insert_bottom/3,
+    insert_before/3,
+    insert_after/3,
 
-    update_iframe/4,
+    update_iframe/3,
 
-    appear/4,
-    appear_replace/4,
-    appear_top/4,
-    appear_bottom/4,
-    appear_before/4,
-    appear_after/4,
+    appear/3,
+    appear_replace/3,
+    appear_top/3,
+    appear_bottom/3,
+    appear_before/3,
+    appear_after/3,
 
-    update_selector/4,
-    replace_selector/4,
-    insert_top_selector/4,
-    insert_bottom_selector/4,
-    insert_before_selector/4,
-    insert_after_selector/4,
+    update_selector/3,
+    replace_selector/3,
+    insert_top_selector/3,
+    insert_bottom_selector/3,
+    insert_before_selector/3,
+    insert_after_selector/3,
 
-    appear_selector/4,
-    appear_replace_selector/4,
-    appear_top_selector/4,
-    appear_bottom_selector/4,
-    appear_before_selector/4,
-    appear_after_selector/4,
+    appear_selector/3,
+    appear_replace_selector/3,
+    appear_top_selector/3,
+    appear_bottom_selector/3,
+    appear_before_selector/3,
+    appear_after_selector/3,
 
     update_selector_js/2,
     replace_selector_js/2,
@@ -86,18 +88,18 @@
     appear_before_selector_js/2,
     appear_after_selector_js/2,
 
-    set_value/4,
-    set_value_selector/4,
+    set_value/3,
+    set_value_selector/3,
 
     css_selector/1,
     css_selector/2,
     quote_css_selector/1,
     render_css_selector/1,
 
-    dialog/5,
+    dialog/4,
     dialog_close/1,
 
-    overlay/4,
+    overlay/3,
     overlay_close/1,
 
     growl/2,
@@ -110,36 +112,82 @@
     make_validation_postback/2,
     make_validation_postback/3,
 
-    wire/2, wire/3, wire/4
+    wire/2, wire/3, wire/4,
+
+    % From script
+    add_script/2,
+    get_script/1,
+    clean/1
+
+    % script_combine/2,
+    % script_merge/2,
+    % script_copy/2,
+
+    % add_content_script/2,
 ]).
 
 
--include("../../include/zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
+-inlcude("z_render_state.hrl").
+
+%% The state below is the render state, can be cached and/or merged
+%% State of the current rendered template/scomp/page
+-record(render_state, {
+        updates = []         :: list(),
+        actions = []         :: list(),
+        content_scripts = [] :: list(),
+        scripts = []         :: list(),
+        wire = []            :: list(),
+        validators = []      :: list(),
+
+        %% nested list with the accumulated html, xml or whatever output (mixed values)
+        render = []          :: list()
+    }).
+
+-type html_element_id() :: binary() | string() | undefined.
+-type render_state() :: #render_state{}.
+-type ctx_rs() :: render_state() | z:context().
+
+-export_type([
+    render_state/0,
+    html_element_id/0,
+    ctx_rs/0
+]).
 
 
 
-%% @doc Replace the contexts in the output with their rendered content and collect all scripts
--spec output( term(), #render_state{}, z:context() ) -> { iolist(), #render_state{} }.
-output(<<>>, RenderState, _Context) ->
-    {[], RenderState};
-output(B, RenderState, _Context) when is_binary(B) ->
-    {B, RenderState};
+
+%% @doc Replace the placeholders with their rendered content and collect all scripts from the mixed html and context.
+%%      The result is a clean HTML tree and can be used for return by controllers.
+-spec output( term(), z:context() ) -> { iolist(), z:context() }.
+output(MixedHtml, Context) ->
+    RS = get_render_state(Context),
+    {Html, _RS1, Context1} = output(MixedHtml, RS, Context),
+    {Html, reset_render_state(Context1)}.
+
+
+%% @doc Replace the #render_state's in the output with their rendered content and collect all scripts
+-spec output( term(), #render_state{}, z:context() ) -> { iolist(), #render_state{}, z:context() }.
+output(<<>>, RenderState, Context) ->
+    {[], RenderState, Context};
+output(B, RenderState, Context) when is_binary(B) ->
+    {B, RenderState, Context};
 output(List, RenderState, Context) ->
     output1(List, RenderState, Context, []).
 
 %% @doc Recursively walk through the output, replacing all context placeholders with their rendered output
-output1(B, RenderState, _Context, Acc) when is_binary(B) ->
-    {[lists:reverse(Acc),B], RenderState};
-output1([], RenderState, _Context, Acc) ->
-    {lists:reverse(Acc), RenderState};
-output1([#render_state{}=C|Rest], RenderState, Context, Acc) ->
-    {Rendered, RS1} = output1(C#render_state.render, RenderState, Context, []),
-    output1(Rest, z_script:merge(C, RS1), Context, [Rendered|Acc]);
+output1(B, RenderState, Context, Acc) when is_binary(B) ->
+    {[lists:reverse(Acc),B], RenderState, Context};
+output1([], RenderState, Context, Acc) ->
+    {lists:reverse(Acc), RenderState, Context};
+output1([#render_state{}=RS0|Rest], RenderState, Context, Acc) ->
+    {Rendered, RS1, Context1} = output1(Context#render_state.render, RenderState, Context, []),
+    output1(Rest, merge_scripts(RS0, RS1), Context1, [Rendered|Acc]);
 output1([{script, Args}|Rest], RenderState, Context, Acc) ->
     output1(Rest, RenderState, Context, [render_script(Args, Context)|Acc]);
 output1([List|Rest], RenderState, Context, Acc) when is_list(List) ->
-    {Rendered, RS1} = output1(List, RenderState, Context, []),
-    output1(Rest, RS1, Context, [Rendered|Acc]);
+    {Rendered, RS1, Context1} = output1(List, RenderState, Context, []),
+    output1(Rest, RS1, Context1, [Rendered|Acc]);
 output1([undefined|Rest], RenderState, Context, Acc) ->
     output1(Rest, RenderState, Context, Acc);
 output1([C|Rest], RenderState, Context, Acc) when is_atom(C) ->
@@ -161,8 +209,15 @@ output1([C|Rest], RenderState, Context, Acc) ->
 render_script(Args, Context) ->
     NoStartup = z_convert:to_bool(z_utils:get_value(nostartup, Args, false)),
     % NoStream = z_convert:to_bool(z_utils:get_value(nostream, Args, false)),
-    Extra = [ S || S <- z_notifier:map(#scomp_script_render{is_nostartup=NoStartup, args=Args}, Context), S /= undefined ],
-    Script = [ z_script:get_script(Context), Extra ],
+    Extra = [ S || S <-
+        z_notifier:map(
+            #scomp_script_render{
+                is_nostartup = NoStartup,
+                args = Args
+            }, Context),
+        S =/= undefined
+    ],
+    Script = [ get_script(Context), Extra ],
     case z_utils:get_value(format, Args, <<"html">>) of
         <<"html">> ->
             [ <<"\n\n<script type='text/javascript'>\n$(function() {\n">>, Script, <<"\n});\n</script>\n">> ];
@@ -178,69 +233,78 @@ combine1(X,Y) -> [X,Y].
 
 
 
+%% @doc Render adds output to the render-state of the context. Makes sure that the added output is an iolist
+%%      The stored render state is later used in output/2
+-spec render( term(), z:context() ) -> z:context().
+render(Mixed, Context) ->
+    RS = get_render_state(Context),
+    RS1 = append_render_state(Mixed, RS, Context),
+    set_render_state(RS1, Context).
 
-
-%% @doc Render adds output to the render field of the render-state, makes sure that the added output is an iolist
-render(undefined, RenderState, _Context) ->
+append_render_state(undefined, RenderState, _Context) ->
     RenderState;
-render(<<>>, RenderState, _Context) ->
+append_render_state(<<>>, RenderState, _Context) ->
     RenderState;
-render([], RenderState, _Context) ->
+append_render_state([], RenderState, _Context) ->
     RenderState;
-render({script, _Args} = Script, RenderState, Context) ->
-    %% Renders the script tag - might not be correct as it adds everything collected in Context and not what was collected
-    %% in the added iolist().  So maybe we should just ignore the {script} tag here.
-    %% When the script tag should be rendered then it is better to call z_context:output/2 instead of z_render:render/2.
-    { Html, RS1 } = z_context:output([ Script ], Context),
-    RenderState#render_state{ render = [ RS1#render_state.render, Html ]};
-render(#render_state{} = RS, RenderState, _Context) ->
-    z_script:merge(RS, RenderState);
-render({javascript, Script}, RenderState, _Context) ->
-    z_script:add_content_script(Script, RenderState);
-render(B, RenderState, _Context) when is_binary(B) ->
+append_render_state({script, _Args}, RenderState, _Context) ->
+    %% Renders the script tag - this won't be correct as it adds everything collected in Context and not what was collected
+    %% in the added iolist().  So it is better to ignore the {script} tag here.
+    %% When the script tag should be rendered then it is better to call output/2 instead of render/2.
+    RenderState;
+append_render_state(#render_state{} = RS, RenderState, _Context) ->
+    merge_scripts(RS, RenderState);
+append_render_state({javascript, Script}, RenderState, _Context) ->
+    add_content_script(Script, RenderState);
+append_render_state(B, RenderState, _Context) when is_binary(B) ->
     RenderState#render_state{ render = [ RenderState#render_state.render, B ] };
-render(N, RenderState, _Context) when is_integer(N), N >= 0, N =< 255 ->
+append_render_state(N, RenderState, _Context) when is_integer(N), N >= 0, N =< 255 ->
     RenderState#render_state{ render= [ RenderState#render_state.render, N ] };
-render(N, RenderState, _Context) when is_integer(N) ->
+append_render_state(N, RenderState, _Context) when is_integer(N) ->
     RenderState#render_state{ render = [ RenderState#render_state.render, z_convert:to_binary(N) ] };
-render(A, RenderState, _Context) when is_atom(A) ->
+append_render_state(A, RenderState, _Context) when is_atom(A) ->
     RenderState#render_state{ render = [ RenderState#render_state.render, atom_to_list(A) ] };
-render(List=[H|_], RenderState, Context) when is_integer(H) orelse is_binary(H) ->
+append_render_state(List=[H|_], RenderState, Context) when is_integer(H) orelse is_binary(H) ->
     %% Optimization for rendering lists of characters, aka strings
     F = fun (C) ->
             is_integer(C) orelse is_binary(C)
         end,
     {String,Rest} = lists:splitwith(F, List),
     RS1 = RenderState#render_state{ render = [ RenderState#render_state.render, String ] },
-    render(Rest, RS1, Context);
-render({trans, _} = Tr, RenderState, Context) ->
-    render(z_trans:lookup_fallback(Tr, Context), RenderState, Context);
-render({{_,_,_},{_,_,_}} = D, RenderState, Context) ->
-    render(filter_stringify:stringify(D, Context), RenderState, Context);
-render(F, RenderState, Context) when is_float(F) ->
-    render(filter_stringify:stringify(F, Context), RenderState, Context);
-render(T, RenderState, Context) when is_tuple(T) ->
-    render(iolist_to_binary(io_lib:format("~p", [T])), RenderState, Context);
-render([H|T], RenderState, Context) ->
-    RS1 = render(H, RenderState, Context),
-    render(T, RS1, Context).
+    append_render_state(Rest, RS1, Context);
+append_render_state({trans, _} = Tr, RenderState, Context) ->
+    append_render_state(z_trans:lookup_fallback(Tr, Context), RenderState, Context);
+append_render_state({{_,_,_},{_,_,_}} = D, RenderState, Context) ->
+    append_render_state(filter_stringify:stringify(D, Context), RenderState, Context);
+append_render_state(F, RenderState, Context) when is_float(F) ->
+    append_render_state(filter_stringify:stringify(F, Context), RenderState, Context);
+append_render_state(T, RenderState, Context) when is_tuple(T) ->
+    append_render_state(iolist_to_binary(io_lib:format("~p", [T])), RenderState, Context);
+append_render_state([H|T], RenderState, Context) ->
+    RS1 = append_render_state(H, RenderState, Context),
+    append_render_state(T, RS1, Context).
 
 
 %% @doc Render adds output to the render field of the context state. Do update the context for
 %%      possible changes in scripts etc.
--spec render_to_iolist( Template::term(), #render_state{}, z:context() ) -> { iolist(), #render_state{} }.
-render_to_iolist(Ts, RenderState, Context) ->
-    RS1 = RenderState#render_state{ render = [] },
-    RS2 = render(Ts, RS1, Context),
-    { RS2#render_state.render, RS2#render_state{ render = RenderState#render_state.render }}.
+-spec render_to_iolist( MixedHtml::term(), z:context() ) -> { iolist(), z:context() }.
+render_to_iolist(MixedHtml, #context{} = Context) ->
+    RS = get_render_state(Context),
+    RS1 = append_render_state(MixedHtml, RS#render_state{ render = [] }, Context),
+    {
+        RS1#render_state.render,
+        set_render_state(RS1#render_state{ render = RS#render_state.render }, Context)
+    }.
 
--spec render_to_iolist( Template::term(), list(), #render_state{}, z:context() ) -> { iolist(), #render_state{} }.
-render_to_iolist(Template, Vars, RenderState, Context) ->
+-spec render_to_iolist( Template::term(), list(), z:context() ) -> { iolist(), z:context() }.
+render_to_iolist(Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
-    render_to_iolist(MixedHtml, RenderState, Context).
+    render_to_iolist(MixedHtml, Context).
 
 %%% RENDER ACTIONS %%%
 
+-spec render_actions( html_element_id(), html_element_id(), list(), z:context()) ->
+    { iolist(), z:context() }.
 render_actions(_, _, undefined, Context) ->
     {[], Context};
 render_actions(_, _, [], Context) ->
@@ -255,7 +319,7 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
             Trigger = proplists:get_value(trigger, Args, TriggerId),
             Target = proplists:get_value(target,  Args, TargetId),
             case z_module_indexer:find(action, Action, Context) of
-                {ok, #module_index{erlang_module=ActionModule}} ->
+                {ok, #module_index{ erlang_module = ActionModule }} ->
                     ActionModule:render_action(Trigger, Target, Args, Context);
                 {error, enoent} ->
                     lager:info("No action enabled for \"~p\"", [Action]),
@@ -296,7 +360,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
                     VMod = case proplists:get_value(delegate, VArgs) of
                                 undefined ->
                                     case z_module_indexer:find(validator, VType, Context) of
-                                        {ok, #module_index{erlang_module=Mod}} ->
+                                        {ok, #module_index{ erlang_module = Mod }} ->
                                             {ok, Mod};
                                         {error, enoent} ->
                                             lager:info("No validator found for \"~p\"", [VType])
@@ -329,56 +393,56 @@ render_validator(TriggerId, TargetId, Args, Context) ->
 %%% AJAX UPDATES %%%
 
 %% @doc Set the contents of an element to the the html fragment
--spec update(string(), #render{} | string(), #render_state{}, z:context()) -> z:context().
-update(TargetId, Html, RenderState, Context) ->
-    update_selector(css_selector(TargetId), Html, RenderState, Context).
+-spec update(string(), #render{} | string(), z:context()) -> z:context().
+update(TargetId, Html, Context) ->
+    update_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Replace an element to the the html fragment
-replace(TargetId, Html, RenderState, Context) ->
-    replace_selector(css_selector(TargetId), Html, RenderState, Context).
+replace(TargetId, Html, Context) ->
+    replace_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Insert a html fragment at the top of the contents of an element
-insert_top(TargetId, Html, RenderState, Context) ->
-    insert_top_selector(css_selector(TargetId), Html, RenderState, Context).
+insert_top(TargetId, Html, Context) ->
+    insert_top_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Append a html fragment at the bottom of the contents of an element
-insert_bottom(TargetId, Html, RenderState, Context) ->
-    insert_bottom_selector(css_selector(TargetId), Html, RenderState, Context).
+insert_bottom(TargetId, Html, Context) ->
+    insert_bottom_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Add a html before the target element
-insert_before(TargetId, Html, RenderState, Context) ->
-    insert_before_selector(css_selector(TargetId), Html, RenderState, Context).
+insert_before(TargetId, Html, Context) ->
+    insert_before_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Add a html after the target element
-insert_after(TargetId, Html, RenderState, Context) ->
-    insert_after_selector(css_selector(TargetId), Html, RenderState, Context).
+insert_after(TargetId, Html, Context) ->
+    insert_after_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Set the contents of an element to the the html fragment
-appear(TargetId, Html, RenderState, Context) ->
-    appear_selector(css_selector(TargetId), Html, RenderState, Context).
+appear(TargetId, Html, Context) ->
+    appear_selector(css_selector(TargetId), Html, Context).
 
-appear_replace(TargetId, Html, RenderState, Context) ->
-    appear_replace_selector(css_selector(TargetId), Html, RenderState, Context).
+appear_replace(TargetId, Html, Context) ->
+    appear_replace_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Insert a html fragment at the top of the contents of an element
-appear_top(TargetId, Html, RenderState, Context) ->
-    appear_top_selector(css_selector(TargetId), Html, RenderState, Context).
+appear_top(TargetId, Html, Context) ->
+    appear_top_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Append a html fragment at the bottom of the contents of an element
-appear_bottom(TargetId, Html, RenderState, Context) ->
-    appear_bottom_selector(css_selector(TargetId), Html, RenderState, Context).
+appear_bottom(TargetId, Html, Context) ->
+    appear_bottom_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Append a html fragment at the bottom of the contents of an element
-appear_before(TargetId, Html, RenderState, Context) ->
-    appear_before_selector(css_selector(TargetId), Html, RenderState, Context).
+appear_before(TargetId, Html, Context) ->
+    appear_before_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Add a html after the target element
-appear_after(TargetId, Html, RenderState, Context) ->
-    appear_after_selector(css_selector(TargetId), Html, RenderState, Context).
+appear_after(TargetId, Html, Context) ->
+    appear_after_selector(css_selector(TargetId), Html, Context).
 
 %% @doc Set the contents of an iframe to the generated html.
-update_iframe(IFrameId, Html, RenderState, Context) ->
-    {Html1, RS1} = render_html(Html, RenderState, Context),
+update_iframe(IFrameId, Html, Context) ->
+    {Html1, RS1} = render_html(Html, Context),
     Update = [
         <<"z_update_iframe('">>,IFrameId,
         <<"','">>, z_utils:js_escape(Html1), <<"');">>
@@ -386,58 +450,60 @@ update_iframe(IFrameId, Html, RenderState, Context) ->
     RS1#render_state{ updates = [ {Update} | RS1#render_state.updates ] }.
 
 %% @doc Set the contents of all elements matching the css selector to the the html fragment
-update_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"html">>, <<".widgetManager()">>, RenderState, Context).
+update_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"html">>, <<".widgetManager()">>, Context).
 
-insert_before_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"insertBefore">>, <<".widgetManager()">>, RenderState, Context).
+insert_before_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"insertBefore">>, <<".widgetManager()">>, Context).
 
-insert_after_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"insertAfter">>, <<".widgetManager()">>, RenderState, Context).
+insert_after_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"insertAfter">>, <<".widgetManager()">>, Context).
 
-replace_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"replaceWith">>, <<".widgetManager()">>, RenderState, Context).
+replace_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"replaceWith">>, <<".widgetManager()">>, Context).
 
-insert_top_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"prependTo">>, <<".widgetManager()">>, RenderState, Context).
+insert_top_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"prependTo">>, <<".widgetManager()">>, Context).
 
-insert_bottom_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"appendTo">>, <<".widgetManager()">>, RenderState, Context).
+insert_bottom_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"appendTo">>, <<".widgetManager()">>, Context).
 
-appear_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, RenderState, Context).
+appear_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, Context).
 
-appear_replace_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"replaceWith">>, <<".fadeIn().widgetManager()">>, RenderState, Context).
+appear_replace_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"replaceWith">>, <<".fadeIn().widgetManager()">>, Context).
 
-appear_top_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"prependTo">>, <<".fadeIn().widgetManager()">>, RenderState, Context).
+appear_top_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"prependTo">>, <<".fadeIn().widgetManager()">>, Context).
 
-appear_bottom_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"appendTo">>, <<".fadeIn().widgetManager()">>, RenderState, Context).
+appear_bottom_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"appendTo">>, <<".fadeIn().widgetManager()">>, Context).
 
-appear_before_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"insertBefore">>, <<".fadeIn().widgetManager()">>, RenderState, Context).
+appear_before_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"insertBefore">>, <<".fadeIn().widgetManager()">>, Context).
 
-appear_after_selector(CssSelector, Html, RenderState, Context) ->
-    update_render_state(CssSelector, Html, <<"insertAfter">>, <<".fadeIn().widgetManager()">>, RenderState, Context).
+appear_after_selector(CssSelector, Html, Context) ->
+    update_render_state(CssSelector, Html, <<"insertAfter">>, <<".fadeIn().widgetManager()">>, Context).
 
 
 %% @doc Set the value of an input element.
-set_value(TargetId, Value, RenderState, Context) ->
-    set_value_selector(css_selector(TargetId), Value, RenderState, Context).
+set_value(TargetId, Value, Context) ->
+    set_value_selector(css_selector(TargetId), Value, Context).
 
-set_value_selector(CssSelector, undefined, RenderState, Context) ->
-    set_value_selector(CssSelector, "", RenderState, Context);
-set_value_selector(CssSelector, Value, RenderState, Context) ->
-    update_render_state(CssSelector, Value, <<"val">>, "", RenderState, Context).
+set_value_selector(CssSelector, undefined, Context) ->
+    set_value_selector(CssSelector, "", Context);
+set_value_selector(CssSelector, Value, Context) ->
+    update_render_state(CssSelector, Value, <<"val">>, "", Context).
 
 
 %% @doc Render an update js as into the render state
-update_render_state(CssSelector, Html, Function, AfterEffects, RenderState, Context) ->
-    {Html1, RS1} = render_html(Html, RenderState, Context),
+update_render_state(CssSelector, Html, Function, AfterEffects, Context) ->
+    {Html1, Context1} = render_html(Html, Context),
     Update = update_js(CssSelector, Html1, Function, AfterEffects),
-    RS1#render_state{ updates = [ {Update} | RS1#render_state.updates ] }.
+    RS = get_render_state(Context1),
+    RS1 = RS#render_state{ updates = [ {Update} | RS#render_state.updates ] },
+    set_render_state(RS1, Context1).
 
 
 %% @doc Set the contents of all elements matching the css selector to the the html fragment
@@ -497,33 +563,36 @@ update_js_selector_first(CssSelector, Html, Function, AfterEffects) ->
       AfterEffects,
       $;].
 
-render_html(#render{template=Template, is_all=All, vars=Vars}, RenderState, Context) ->
-    render_html_opt_all(z_convert:to_bool(All), Template, Vars, RenderState, Context);
-render_html(undefined, RenderState, _Context) ->
-    {"", RenderState};
-render_html(Html, RenderState, _Context) when is_binary(Html) ->
-    {Html, RenderState};
-render_html(Html, RenderState, Context) ->
-    {Html1, RS1} = render_to_iolist(Html, RenderState, Context),
-    {iolist_to_binary(Html1), RS1}.
+render_html(#render{template=Template, is_all=All, vars=Vars}, Context) ->
+    render_html_opt_all(z_convert:to_bool(All), Template, Vars, Context);
+render_html(undefined, Context) ->
+    {<<>>, Context};
+render_html(Html, Context) when is_binary(Html) ->
+    {Html, Context};
+render_html(Html, Context) ->
+    {Html1, Context1} = render_to_iolist(Html, Context),
+    {iolist_to_binary(Html1), Context1}.
 
 
-render_html_opt_all(false, Template, Vars, RenderState, Context) ->
+render_html_opt_all(false, Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
-    {Html, RS1} = render_to_iolist(MixedHtml, RenderState, Context),
-    {iolist_to_binary(Html), RS1};
-render_html_opt_all(true, Template, Vars, RenderState, Context) ->
-    Templates = z_module_indexer:find_all(template, Template, RenderState, Context),
-    Html = [ z_template:render(Tpl, Vars, RenderState, Context) || Tpl <- Templates ],
-    render_html(Html, RenderState, Context).
+    {Html, Context1} = render_to_iolist(MixedHtml, Context),
+    {iolist_to_binary(Html), Context1};
+render_html_opt_all(true, Template, Vars, Context) ->
+    Templates = z_module_indexer:find_all(template, Template, Context),
+    Html = [ z_template:render(Tpl, Vars, Context) || Tpl <- Templates ],
+    render_html(Html, Context).
 
 
 %%% SIMPLE FUNCTION TO SHOW DIALOG OR GROWL (uses the dialog and growl actions) %%%
 
-dialog(Title, Template, Vars, RenderState, Context) ->
+dialog(Title, Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
-    {Html, RS1} = render_to_iolist(MixedHtml, RenderState, Context),
-    Args = [{title, z_trans:lookup_fallback(Title, Context)}, {text, Html}],
+    {Html, Context1} = render_to_iolist(MixedHtml, Context),
+    Args = [
+        {title, z_trans:lookup_fallback(Title, Context1)},
+        {text, Html}
+    ],
     Args1 = case proplists:get_value(width, Vars) of
                 undefined -> Args;
                 Width -> [{width, Width} | Args]
@@ -540,32 +609,32 @@ dialog(Title, Template, Vars, RenderState, Context) ->
                 undefined -> Args3;
                 Center -> [{center, Center} | Args3]
             end,
-    wire({dialog, Args4}, RS1).
+    wire({dialog, Args4}, Context1).
 
-dialog_close(RenderState) ->
-    wire({dialog_close, []}, RenderState).
+dialog_close(Context) ->
+    wire({dialog_close, []}, Context).
 
-overlay(Template, Vars, RenderState, Context) ->
+overlay(Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
-    {Html, RS1} = render_to_iolist(MixedHtml, RenderState, Context),
+    {Html, Context1} = render_to_iolist(MixedHtml, Context),
     OverlayArgs = [
         {html, Html},
         {class, proplists:get_value(class, Vars, <<>>)}
     ],
-    Script = [<<"z_dialog_overlay_open(">>, z_utils:js_object(OverlayArgs, Context), $), $; ],
-    z_render:wire({script, [{script, Script}]}, RS1, Context).
+    Script = [<<"z_dialog_overlay_open(">>, z_utils:js_object(OverlayArgs, Context1), $), $; ],
+    wire({script, [{script, Script}]}, Context1).
 
-overlay_close(RenderState) ->
-    z_render:wire({overlay_close, []}, RenderState).
+overlay_close(Context) ->
+    wire({overlay_close, []}, Context).
 
-growl(Text, RenderState) ->
-    z_render:wire({growl, [{text, Text}]}, RenderState).
+growl(Text, Context) ->
+    wire({growl, [{text, Text}]}, Context).
 
-growl_error(Text, RenderState) ->
-    z_render:wire({growl, [{text, Text}, {type, "error"}]}, RenderState).
+growl_error(Text, Context) ->
+    wire({growl, [{text, Text}, {type, "error"}]}, Context).
 
-growl(Text, Type, Stay, RenderState) ->
-    z_render:wire({growl, [{text, Text}, {type, Type}, {stay, Stay}]}, RenderState).
+growl(Text, Type, Stay, Context) ->
+    wire({growl, [{text, Text}, {type, Type}, {stay, Stay}]}, Context).
 
 
 
@@ -634,27 +703,29 @@ make_validation_postback(Validator, Args, Context) ->
 
 %% Add to the queue of wired actions. These will be rendered in get_script().
 
--spec wire(tuple() | [tuple()], #render_state{}) -> #render_state{}.
-wire(Actions, RenderState) ->
-    wire(<<>>, <<>>, Actions, RenderState).
+-spec wire(tuple() | [tuple()], ctx_rs()) -> ctx_rs().
+wire(Actions, Context) ->
+    wire(<<>>, <<>>, Actions, Context).
 
-wire(undefined, Actions, RenderState) ->
-    wire(<<>>, <<>>, Actions, RenderState);
-wire(TriggerId, Actions, RenderState) ->
-    wire(TriggerId, TriggerId, Actions, RenderState).
+wire(undefined, Actions, Context) ->
+    wire(<<>>, <<>>, Actions, Context);
+wire(TriggerId, Actions, Context) ->
+    wire(TriggerId, TriggerId, Actions, Context).
 
-wire(undefined, TargetId, Actions, RenderState) ->
-    wire(<<>>, TargetId, Actions, RenderState);
-wire(TriggerId, undefined, Actions, RenderState) ->
-    wire(TriggerId, <<>>, Actions, RenderState);
-wire(_TriggerId, _TargetId, [], RenderState) ->
-    RenderState;
-wire(TriggerId, TargetId, Actions, RenderState) ->
-    RenderState#render_state{
+wire(undefined, TargetId, Actions, Context) ->
+    wire(<<>>, TargetId, Actions, Context);
+wire(TriggerId, undefined, Actions, Context) ->
+    wire(TriggerId, <<>>, Actions, Context);
+wire(_TriggerId, _TargetId, [], Context) ->
+    Context;
+wire(TriggerId, TargetId, Actions, Context) ->
+    RS = get_render_state(Context),
+    RS1 = RS#render_state{
         actions = [
             {TriggerId, TargetId, flatten_list(Actions)}
-            | RenderState#render_state.actions
-        ]}.
+            | RS#render_state.actions
+        ]},
+    set_render_state(RS1, Context).
 
 flatten_list(L) when is_list(L) ->
     lists:flatten(L);
@@ -709,3 +780,145 @@ render_css_selector(Selector) ->
         CssSel -> [$$, $(, CssSel, $)]
     end.
 
+
+
+get_render_state(undefined) -> #render_state{};
+get_render_state(#render_state{} = RS) -> RS;
+get_render_state(Context) ->
+    case z_context:get_render_state(Context) of
+        undefined -> #render_state{};
+        #render_state{} = RS -> RS
+    end.
+
+set_render_state(RS, undefined) -> RS;
+set_render_state(RS, #render_state{})  -> RS;
+set_render_state(RS, #context{} = Context)  ->
+    z_context:set_render_state(RS, Context).
+
+reset_render_state(#render_state{}) -> #render_state{};
+reset_render_state(#context{} = Context)  ->
+    z_context:set_render_state(undefined, Context).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% scripts %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% @doc Merge the scripts and the rendered content of two contexts into Context1
+% -spec combine(#render_state{}, #render_state{}) -> #render_state{}.
+% combine_scripts(C1, C2) ->
+%     Merged = merge(C2, C1),
+%     Merged#render_state{
+%         render = combine1(C1#render_state.render, C2#render_state.render)
+%     }.
+
+%% @doc Merge the scripts from context C into the context accumulator, used when collecting all scripts in an output stream
+-spec merge_scripts(#render_state{}, #render_state{}) -> #render_state{}.
+merge_scripts(RS, Acc) ->
+    Acc#render_state{
+        updates = combine1(Acc#render_state.updates, RS#render_state.updates),
+        actions = combine1(Acc#render_state.actions, RS#render_state.actions),
+        content_scripts = combine1(Acc#render_state.content_scripts, RS#render_state.content_scripts),
+        scripts = combine1(Acc#render_state.scripts, RS#render_state.scripts),
+        wire = combine1(Acc#render_state.wire, RS#render_state.wire),
+        validators = combine1(Acc#render_state.validators, RS#render_state.validators)
+    }.
+
+add_content_script([], Context) -> Context;
+add_content_script(<<>>, Context) -> Context;
+add_content_script(undefined, Context) -> Context;
+add_content_script(Script, #context{} = Context) ->
+    RS = get_render_state(Context),
+    RS1 = RS#render_state{
+        content_scripts = [ Script, "\n" | RS#render_state.content_scripts ]
+    },
+    set_render_state(RS1, Context).
+
+add_script([], Context) -> Context;
+add_script(<<>>, Context) -> Context;
+add_script(undefined, Context) -> Context;
+add_script(Script, #context{} = Context) ->
+    RS = get_render_state(Context),
+    RS1 = RS#render_state{
+        scripts = [ Script, "\n" | RS#render_state.scripts
+    ]},
+    set_render_state(RS1, Context).
+
+%% @doc Remove all scripts from the context, resetting it back to a clean sheet.
+-spec clean( z:context() ) -> z:context().
+clean(Context) ->
+    Context#context{ render_state = undefined }.
+
+%% @doc Collect all scripts in the context, returns an iolist with javascript.
+-spec get_script( z:context() ) -> iolist().
+get_script(Context) ->
+    RenderState = get_render_state(Context),
+    RS1 = RenderState#render_state{
+        scripts = [],
+        content_scripts = []
+    },
+    % Translate updates to content scripts
+    RS2 = lists:foldl(
+        fun
+            ({TargetId, MixedHtml, JSFormatString}, RSAcc) ->
+                RSAcc1 = append_render_state(MixedHtml, RSAcc#render_state{ render = [] }, Context),
+                RSAcc2 = RSAcc1#render_state{ },
+                Script = io_lib:format(
+                    JSFormatString,
+                    [TargetId, z_utils:js_escape(RSAcc1#render_state.render)]),
+                RSAcc2#render_state{
+                    content_scripts = [ Script, "\n" | RSAcc2#render_state.content_scripts ],
+                    render = RSAcc#render_state.render
+                };
+            ({Script}, RSAcc) ->
+                RSAcc#render_state{
+                    content_scripts = [ Script, "\n" | RSAcc#render_state.content_scripts ]
+                }
+        end,
+        RS1#render_state{ updates = [] },
+        lists:flatten(RenderState#render_state.updates)),
+
+    % Translate actions to scripts
+    RS3 = lists:foldl(
+        fun
+            ({TriggerID, TargetID, Actions}, RSAcc) ->
+                C = set_render_state(RSAcc, Context),
+                {Script, C1} = render_actions(TriggerID, TargetID, Actions, C),
+                RSAcc1 = get_render_state(C1),
+                RSAcc1#render_state{
+                    scripts = [ Script, "\n" | RSAcc1#render_state.scripts ]
+                }
+        end,
+        RS2#render_state{ actions = [] },
+        lists:flatten(RS2#render_state.actions)),
+
+    % Translate validators to scripts
+    RS4 = lists:foldl(
+        fun
+            ({TriggerId, TargetId, Validator}, RSAcc) ->
+                C = set_render_state(RSAcc, Context),
+                {Script,C1} = render_validator(TriggerId, TargetId, Validator, C),
+                RSAcc1 = get_render_state(C1),
+                RSAcc1#render_state{
+                    scripts = [ Script, "\n" | RSAcc1#render_state.scripts ]
+                }
+        end,
+        RS3#render_state{ validators = [] },
+        lists:flatten(RS3#render_state.validators)),
+
+    case {RS4#render_state.updates, RS4#render_state.actions, RS4#render_state.validators} of
+        {[],[],[]} ->
+            % Final, we have rendered all content
+            [
+                lists:reverse(RenderState#render_state.content_scripts),
+                lists:reverse(RenderState#render_state.scripts),
+                lists:reverse(RS4#render_state.content_scripts),
+                lists:reverse(RS4#render_state.scripts)
+            ];
+        _NonEmpty ->
+            % Recurse, as the rendering delivered new scripts and/or content
+            [
+                lists:reverse(RenderState#render_state.content_scripts),
+                lists:reverse(RenderState#render_state.scripts),
+                get_script(set_render_state(RS4, Context))
+            ]
+    end.

@@ -40,7 +40,6 @@
 
     prune_for_spawn/1,
     prune_for_async/1,
-    prune_for_template/1,
     prune_for_database/1,
     prune_for_scomp/1,
 
@@ -56,6 +55,10 @@
     set_reqdata/2,
     get_controller_module/1,
     set_controller_module/2,
+    get_render_state/1,
+    set_render_state/2,
+
+    output/2,
 
     ensure_qs/1,
 
@@ -136,19 +139,19 @@
 -spec new( z:context() | atom() | cowboy_req:req() ) -> z:context().
 new(#context{} = C) ->
     #context{
-        site=C#context.site,
-        language=C#context.language,
-        tz=C#context.tz,
-        depcache=C#context.depcache,
+        site = C#context.site,
+        language = C#context.language,
+        tz = C#context.tz,
+        depcache = C#context.depcache,
         % session_manager=C#context.session_manager,
-        dispatcher=C#context.dispatcher,
-        template_server=C#context.template_server,
-        scomp_server=C#context.scomp_server,
-        dropbox_server=C#context.dropbox_server,
-        pivot_server=C#context.pivot_server,
-        module_indexer=C#context.module_indexer,
-        db=C#context.db,
-        translation_table=C#context.translation_table
+        dispatcher = C#context.dispatcher,
+        template_server = C#context.template_server,
+        scomp_server = C#context.scomp_server,
+        dropbox_server = C#context.dropbox_server,
+        pivot_server = C#context.pivot_server,
+        module_indexer = C#context.module_indexer,
+        db = C#context.db,
+        translation_table = C#context.translation_table
     };
 new(undefined) ->
     % TODO: check if the fallback site is running
@@ -158,26 +161,26 @@ new(undefined) ->
     end;
 new(Site) when is_atom(Site) ->
     set_default_language_tz(
-        set_server_names(#context{site=Site}));
+        set_server_names(#context{ site = Site }));
 new(Req) when is_map(Req) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
     z_depcache:in_process(true),
-    Context = set_server_names(#context{req=Req, site=site(Req)}),
+    Context = set_server_names(#context{ req = Req, site = site(Req)}),
     set_default_language_tz(Context).
 
 %% @doc Create a new context record for a site with a certain language
 -spec new( atom() | cowboy_req:req(), atom() ) -> z:context().
 new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
-    Context = set_server_names(#context{site=Site}),
+    Context = set_server_names(#context{ site = Site }),
     Context#context{
-        language=[Lang],
-        tz=tz_config(Context)
+        language = [ Lang ],
+        tz = tz_config(Context)
     };
 %% @doc Create a new context record for the current request and resource module
-new(Req, Module) when is_map(Req) ->
+new(Req, Module) when is_map(Req), is_atom(Module) ->
     Context = new(Req),
-    Context#context{controller_module=Module}.
+    Context#context{ controller_module = Module }.
 
 
 -spec set_default_language_tz(z:context()) -> z:context().
@@ -205,9 +208,9 @@ set_default_language_tz(Context) ->
 new_tests() ->
     Context = z_trans_server:set_context_table(
             #context{
-                site=test,
-                language=[en],
-                tz= <<"UTC">>
+                site = test,
+                language = [en],
+                tz = <<"UTC">>
             }),
     case ets:info(Context#context.translation_table) of
         undefined ->
@@ -221,20 +224,21 @@ new_tests() ->
 
 %% @doc Set all server names for the given site.
 -spec set_server_names( z:context() ) -> z:context().
-set_server_names(#context{site=Site} = Context) ->
-    SiteAsList = [$$ | atom_to_list(Site)],
-    Depcache = list_to_atom("z_depcache"++SiteAsList),
-    Context#context{
-        depcache=Depcache,
+set_server_names(#context{ site = Site } = Context) ->
+    SiteAsList = [ $$ | atom_to_list(Site) ],
+    Context1 = Context#context{
+        depcache = list_to_atom("z_depcache"++SiteAsList),
+        dispatcher = list_to_atom("z_dispatcher"++SiteAsList),
+        template_server = list_to_atom("z_template"++SiteAsList),
+        scomp_server = list_to_atom("z_scomp"++SiteAsList),
+        dropbox_server = list_to_atom("z_dropbox"++SiteAsList),
+        pivot_server = list_to_atom("z_pivot_rsc"++SiteAsList),
+        module_indexer = list_to_atom("z_module_indexer"++SiteAsList),
+        translation_table = z_trans_server:table(Site)
+    },
+    Context1#context{
         % session_manager=list_to_atom("z_session_manager"++SiteAsList),
-        dispatcher=list_to_atom("z_dispatcher"++SiteAsList),
-        template_server=list_to_atom("z_template"++SiteAsList),
-        scomp_server=list_to_atom("z_scomp"++SiteAsList),
-        dropbox_server=list_to_atom("z_dropbox"++SiteAsList),
-        pivot_server=list_to_atom("z_pivot_rsc"++SiteAsList),
-        module_indexer=list_to_atom("z_module_indexer"++SiteAsList),
-        db={z_db_pool:db_pool_name(Site), z_db_pool:db_driver(Context#context{depcache=Depcache})},
-        translation_table=z_trans_server:table(Site)
+        db = { z_db_pool:db_pool_name(Site), z_db_pool:db_driver(Context1) }
     }.
 
 
@@ -307,53 +311,20 @@ prune_for_spawn(#context{} = Context) ->
         dbc = undefined
     }.
 
-%% @doc Make the context safe to use in a async message. This removes buffers and the db transaction.
+%% @doc Make the context safe to use in a async message. This removes render_state and the db transaction.
 -spec prune_for_async( z:context() ) -> z:context().
 prune_for_async(#context{} = Context) ->
-    #context{
-        req = Context#context.req,
-        site = Context#context.site,
-        user_id = Context#context.user_id,
-        acl = Context#context.acl,
-        % session_pid=Context#context.session_pid,
-        % page_pid=Context#context.page_pid,
-        props = Context#context.props,
-        depcache = Context#context.depcache,
-        dispatcher = Context#context.dispatcher,
-        template_server = Context#context.template_server,
-        scomp_server = Context#context.scomp_server,
-        dropbox_server = Context#context.dropbox_server,
-        pivot_server = Context#context.pivot_server,
-        module_indexer = Context#context.module_indexer,
-        db = Context#context.db,
-        translation_table = Context#context.translation_table,
-        language = Context#context.language,
-        tz = Context#context.tz
+    Context#context{
+        dbc = undefined,
+        render_state = undefined
     }.
-
-
-%% @doc Cleanup a context for the output stream
--spec prune_for_template( z:context() ) -> z:context().
-prune_for_template(#context{}=Context) ->
-    #context{
-        req = undefined,
-        props = #{}
-        % updates=Context#context.updates,
-        % actions=Context#context.actions,
-        % content_scripts=Context#context.content_scripts,
-        % scripts=Context#context.scripts,
-        % wire=Context#context.wire,
-        % validators=Context#context.validators,
-        % render=Context#context.render
-    };
-prune_for_template(Output) -> Output.
-
 
 %% @doc Cleanup a context so that it can be used exclusively for database connections
 -spec prune_for_database( z:context() ) -> z:context().
 prune_for_database(Context) ->
     #context{
         site = Context#context.site,
+        db = Context#context.db,
         dbc = Context#context.dbc,
         depcache = Context#context.depcache,
         % session_manager=Context#context.session_manager,
@@ -362,25 +333,18 @@ prune_for_database(Context) ->
         scomp_server = Context#context.scomp_server,
         dropbox_server = Context#context.dropbox_server,
         pivot_server = Context#context.pivot_server,
-        module_indexer = Context#context.module_indexer,
-        db = Context#context.db
+        module_indexer = Context#context.module_indexer
     }.
 
 
-%% @doc Cleanup a context for cacheable scomp handling.  Resets most of the accumulators to prevent duplicating
+%% @doc Cleanup a context for cacheable scomp handling. Resets most the render_state to prevent duplicating
 %% between different (cached) renderings.
 -spec prune_for_scomp( z:context() ) -> z:context().
 prune_for_scomp(Context) ->
     Context#context{
         dbc = undefined,
-        req = prune_reqdata(Context#context.req)
-        % updates=[],
-        % actions=[],
-        % content_scripts=[],
-        % scripts=[],
-        % wire=[],
-        % validators=[],
-        % render=[]
+        req = prune_reqdata(Context#context.req),
+        render_state = undefined
     }.
 
 prune_reqdata(undefined) ->
@@ -533,6 +497,9 @@ depickle_site({pickled_context, Site, _UserId, _Language, _Tz, _VisitorId}) ->
 % maybe_logon_from_session(Context) ->
 %     Context.
 
+-spec output( MixedHtml::term(), z:context() ) -> {iolist(), z:context()}.
+output(MixedHtml, Context) ->
+    z_render:render_html(MixedHtml, Context).
 
 %% @doc Ensure that we have parsed the query string, fetch body if necessary.
 %%      If this is a POST then the session/page-session might be continued after this call.
@@ -572,6 +539,14 @@ get_controller_module(Context) ->
 set_controller_module(Module, Context) ->
     Context#context{controller_module=Module}.
 
+-spec get_render_state( z:context() ) -> term().
+get_render_state(#context{ render_state = RS }) ->
+    RS.
+
+-spec set_render_state( term(), z:context() ) -> z:contextC().
+set_render_state(RS, Context) ->
+    Context#context{ render_state = RS }.
+
 
 %% @doc Set the value of a request parameter argument
 -spec set_q(string(), any(), z:context()) -> z:context().
@@ -597,7 +572,7 @@ get_q(Key, Context) when is_list(Key) ->
         Value when is_binary(Value) -> binary_to_list(Value);
         Value -> Value
     end;
-get_q(Key, #context{ props = Props } = Context) ->
+get_q(Key, #context{ props = Props }) ->
     case maps:find(q, Props) of
         {ok, Qs} -> proplists:get_value(z_convert:to_binary(Key), Qs);
         error -> undefined
@@ -611,7 +586,7 @@ get_q(Key, Context, Default) when is_list(Key) ->
         Value when is_binary(Value) -> binary_to_list(Value);
         Value -> Value
     end;
-get_q(Key, #context{ props = Props } = Context, Default) ->
+get_q(Key, #context{ props = Props }, Default) ->
     case maps:find(q, Props) of
         {ok, Qs} -> proplists:get_value(z_convert:to_binary(Key), Qs, Default);
         error -> Default
@@ -691,7 +666,9 @@ get_q_validated(Key, #context{ props = #{ q_validated := Qs } }) ->
     case proplists:lookup(z_convert:to_binary(Key), Qs) of
         {_Key, Value} -> Value;
         none -> throw({not_validated, Key})
-    end.
+    end;
+get_q_validated(Key, _Context) ->
+    throw({not_validated, Key}).
 
 
 %% ------------------------------------------------------------------------------------

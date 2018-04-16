@@ -29,8 +29,6 @@
 %% supervisor callbacks
 -export([ init/1 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 %% @doc Start the main zotonic supervisor and some helpers
 -spec start_link(list()) -> {ok, pid()}.
 start_link(Options) ->

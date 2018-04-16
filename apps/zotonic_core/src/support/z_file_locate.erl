@@ -216,7 +216,7 @@ part_file(Filename, Opts) ->
 
 -spec render(#module_index{}, #context{}) -> #part_data{}.
 render(ModuleIndex, Context) ->
-    {Data, _Context} = z_template:render_to_iolist(ModuleIndex, [], Context),
+    {Data, _RenderState} = z_template:render_to_iolist(ModuleIndex, [], Context),
     #part_data{
         acl=undefined,
         modified=calendar:local_time(),

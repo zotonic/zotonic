@@ -63,19 +63,24 @@ render_scomp_module(ModuleName, Args, Vars, ScompContext, Context) ->
     case vary(ModuleName, Args, ScompContext) of
         nocache ->
             case ModuleName:render(Args, Vars, ScompContextWM) of
-                {ok, Result} -> z_context:prune_for_template(Result);
+                {ok, Result} -> render_state(Result);
                 {error, Reason} -> throw({error, Reason})
             end;
         {CachKeyArgs, MaxAge, Varies} ->
             Key = key(ModuleName, CachKeyArgs, ScompContextWM),
             RenderFun =  fun() ->
                             case ModuleName:render(Args, Vars, ScompContextWM) of
-                                {ok, Result} -> z_context:prune_for_template(Result);
+                                {ok, Result} -> render_state(Result);
                                 {error, Reason} -> throw({error, Reason})
                             end
                          end,
             z_depcache:memo(RenderFun, Key, MaxAge, Varies, Context)
     end.
+
+render_state(#context{} = Context) ->
+    z_context:get_render_state(Context);
+render_state(MixedHtml) ->
+    MixedHtml.
 
 %% @doc Create an unique key for the scomp and the visibility level it is rendered for
 %% @spec key(atom(), proplist(), context()) -> term()
