@@ -108,13 +108,14 @@ incoming_context_result(Context) ->
 
 
 incoming_postback_event(true, Module, Tag, Trigger, Target, Context) ->
-    case z_validation:validate_query_args(Context) of
+    Context1 = case z_validation:validate_query_args(Context) of
         {ok, ContextEval} ->
             Module:event(#submit{ message=Tag, form=Trigger, target=Target }, ContextEval);
         {error, ContextEval} ->
             %% TODO: Posted form did not validate, return any errors.
             ContextEval
-    end;
+    end,
+    z_render:wire({unmask, [{target, Trigger}]}, Context1);
 incoming_postback_event(false, Module, Tag, Trigger, Target, Context) ->
     Module:event(#postback{ message=Tag, trigger=Trigger, target=Target }, Context).
 
@@ -126,6 +127,15 @@ is_submit_event(_Type) -> false.
 
 maybe_set_q(form, Qs, Context) ->
     set_q(Qs, Context);
+maybe_set_q(_Type, #{ <<"q">> := Qs }, Context) ->
+    Qs1 = lists:foldr(
+        fun
+            (#{ <<"name">> := K, <<"value">> := V }, Acc) ->
+                [ {K, V} | Acc ]
+        end,
+        [],
+        Qs),
+    set_q(Qs1, Context);
 maybe_set_q(_Type, {q, Qs}, Context) ->
     set_q(Qs, Context);
 maybe_set_q(_Type, _Data, Context) ->

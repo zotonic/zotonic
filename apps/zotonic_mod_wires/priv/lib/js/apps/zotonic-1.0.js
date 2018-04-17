@@ -28,6 +28,7 @@ var z_language              = "en";
 var z_userid;
 var z_editor;
 var z_default_form_postback;
+var z_init_postback_forms_timeout = false;
 
 // Misc state
 var z_input_updater         = false;
@@ -49,13 +50,24 @@ $(function() {
             window.zotonicPageInit();
         }
     }, { wid: 'zotonicjs'});
+
+    // Handle data sent by the server
     cotonic.broker.subscribe("zotonic-transport/eval", function(msg) {
         try {
             eval(msg.payload);
+            if (z_init_postback_forms_timeout) {
+                clearTimeout(z_init_postback_forms_timeout);
+            }
+            z_init_postback_forms_timeout = setTimeout(function() {
+                    z_init_postback_forms_timeout = false;
+                    z_init_postback_forms();
+                }, 10);
         } catch(e) {
             console.log("Error on eval", e, msg.payload);
         }
     }, { wid: 'zotonicjs'});
+
+    // Start the client-server bridge
     cotonic.mqtt_bridge.newBridge('origin');
 });
 
@@ -247,105 +259,6 @@ function z_transport(delegate, content_type, data, options)
         "bridge/origin/zotonic-transport/" + delegate,
         data,
         { qos: 1 });
-
-    // return z_transport_do(msg_id, delegate, content_type, data, options);
-}
-
-function z_transport_do(msg_id, delegate, content_type, data, options)
-{
-    var timestamp = new Date().getTime();
-
-    options = options || {};
-    options.transport = options.transport || '';
-
-    if (typeof options.qos == 'undefined') {
-        options.qos = 1;
-    }
-    var msg = {
-            "_record": "z_msg_v1",
-            "qos": options.qos,
-            "dup": false,
-            "msg_id": msg_id,
-            "timestamp": timestamp,
-            "content_type": z_transport_content_type(content_type),
-            "delegate": z_transport_delegate(delegate),
-            "page_id": z_pageid,
-            "session_id": window.z_sid || undefined,
-            "data": data
-        };
-
-    options.timeout = options.timeout || TRANSPORT_TIMEOUT;
-    if (options.qos > 0) {
-        var t = setTimeout(function() {
-                    z_transport_timeout(msg_id);
-                }, options.timeout);
-        z_transport_acks[msg_id] = {
-            msg: msg,
-            msg_id: msg_id,
-            options: options,
-            timestamp: timestamp,
-            timeout_timer: t,
-            timeout_count: 0,
-            is_queued: true
-        };
-    }
-
-    if (options.transport == 'form') {
-        z_transport_form({
-            msg: msg,
-            msg_id: msg_id,
-            options: options
-        });
-    } else {
-        z_transport_queue.push({
-            msg: msg,
-            msg_id: msg_id,
-            options: options
-        });
-        z_transport_check();
-    }
-    return msg_id;
-}
-
-// Map some special content types to an atom
-function z_transport_content_type(content_type)
-{
-    switch (content_type || 'ubf')
-    {
-        case 'ubf':        return ubf.constant('ubf');
-        case 'json':       return ubf.constant('json');
-        case 'form':       return ubf.constant('form');
-        case 'javascript': return ubf.constant('javascript');
-        case 'text':       return ubf.constant('text');
-        default: return content_type;
-    }
-}
-
-// Map some special delegates to an atom
-function z_transport_delegate(delegate)
-{
-    switch (delegate)
-    {
-        case 'mqtt':     return ubf.constant('mqtt');
-        case 'notify':   return ubf.constant('notify');
-        case 'postback': return ubf.constant('postback');
-        // case 'session':  return ubf.constant('session');
-        // case '$ping':    return ubf.constant('$ping');
-        default: return delegate;
-    }
-}
-
-
-function z_transport_delegate_javascript(data, _msg)
-{
-    if (z_init_postback_forms_timeout) {
-        clearTimeout(z_init_postback_forms_timeout);
-    }
-    eval(data);
-    z_init_postback_forms_timeout = setTimeout(function() {
-            z_init_postback_forms_timeout = false;
-            z_init_postback_forms();
-        }, 10);
 }
 
 // TODO: Use WebWorker for uploading files.
@@ -411,72 +324,26 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
         trigger_id: trigger_id,
         post_form: optPostForm
     };
-    if (trigger_id) {
-        options.ack = function(_ack_msg, _options) {
-            z_unmask(trigger_id);
-        };
-    }
+    // if (trigger_id) {
+    //     options.ack = function(_ack_msg, _options) {
+    //         z_unmask(trigger_id);
+    //     };
+    // }
     z_transport('postback', 'ubf', pb_event, options);
 }
 
-function z_postback_opt_qs(extraParams)
-{
-    if (typeof extraParams == 'object' && extraParams instanceof Array) {
-        return {
-            _record: "q",
-            q: ensure_name_value(extraParams)
-        };
-    } else {
-        return extraParams;
-    }
-}
+// function z_postback_opt_qs(extraParams)
+// {
+//     if (typeof extraParams == 'object' && extraParams instanceof Array) {
+//         return {
+//             _record: "q",
+//             q: ensure_name_value(extraParams)
+//         };
+//     } else {
+//         return extraParams;
+//     }
+// }
 
-function z_do_transport(qmsg)
-{
-    var data = ubf.encode(qmsg.msg);
-    if (qmsg.options.transport == 'ajax' || !z_websocket_is_connected() || !z_pageid) {
-        z_ajax(qmsg.options, data);
-    } else {
-        z_ws.send(data);
-    }
-}
-
-function z_ajax(options, data)
-{
-    var url_transport = '';
-
-    if (typeof options.transport !== "undefined") {
-        url_transport = '/transport/'+options.transport;
-    }
-    $.ajax({
-        url: '/postback' + url_transport,
-        type: 'post',
-        data: data,
-        dataType: 'ubf text',
-        accepts: {ubf: 'text/x-ubf'},
-        converters: {"text ubf": window.String},
-        contentType: 'text/x-ubf',
-        async: !z_page_unloading, // Prevents requests from being cancelled during unloading of the page.
-        success: function(received_data, textStatus)
-        {
-            try
-            {
-                z_transport_incoming(received_data);
-                z_unmask(options.trigger_id);
-            }
-            catch(e)
-            {
-                $.misc.error("Error evaluating ajax return value: " + received_data, e);
-            }
-            setTimeout(function() { z_transport_check(); }, 0);
-        },
-        error: function(xmlHttpRequest, textStatus, errorThrown)
-        {
-            $.misc.error("FAIL: " + textStatus);
-            z_unmask_error(options.trigger_id);
-        }
-    });
-}
 
 
 function z_unmask(id)

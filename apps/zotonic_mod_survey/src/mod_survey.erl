@@ -23,8 +23,8 @@
 -mod_description("Create and publish questionnaires.").
 -mod_prio(400).
 -mod_schema(4).
--mod_depends([admin]).
--mod_provides([survey, poll]).
+-mod_depends([ admin, mod_wires ]).
+-mod_provides([ survey, poll ]).
 
 %% interface functions
 -export([
