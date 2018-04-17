@@ -34,6 +34,14 @@
 %% @doc Allow publish from clients to the transport topic
 observe_acl_is_allowed(#acl_is_allowed{ action = publish, object = #acl_mqtt{ topic = [ <<"zotonic-transport">>, _ ] } }, _Context) ->
     true;
+observe_acl_is_allowed(
+    #acl_is_allowed{
+        action = publish,
+        object = #acl_mqtt{
+            topic = [ <<"bridge">>, ClientId, <<"zotonic-transport">>, <<"eval">> ]
+        }
+    }, #context{ client_id = ClientId }) when is_binary(ClientId) ->
+    true;
 observe_acl_is_allowed(_, _Context) ->
     undefined.
 

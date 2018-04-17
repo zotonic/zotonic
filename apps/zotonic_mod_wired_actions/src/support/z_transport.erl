@@ -19,12 +19,20 @@
 -module(z_transport).
 
 -export([
-    transport/3
+    transport/3,
+    reply/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+%% @doc Send JS to the client, client will evaluate the JS.
+-spec reply(binary(), z:context()) -> ok | {error, term()}.
+reply(JavaScript, #context{ client_id = ClientId } = Context) when is_binary(ClientId), is_binary(JavaScript) ->
+    Topic = [ <<"bridge">>, ClientId, <<"zotonic-transport">>, <<"eval">> ],
+    z_mqtt:publish(Topic, JavaScript, #{ qos => 0 }, Context).
 
+%% @doc Handle incoming transport messages, call event handlers of delegates.
+-spec transport( binary() | undefined, map(), z:context()) -> ok | {error, term()}.
 transport(<<"postback">>, #{ <<"type">> := <<"postback_event">>, <<"postback">> := Postback } = Payload, Context) ->
     % submit or postback events
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context),
@@ -95,7 +103,7 @@ incoming_context_result(Context) ->
             ok;
         Script ->
             % Send the script back to the client for evaluation
-            ?DEBUG({todo, Script})
+            reply(Script, Context)
     end.
 
 

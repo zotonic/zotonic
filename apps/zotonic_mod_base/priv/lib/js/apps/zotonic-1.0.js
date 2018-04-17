@@ -49,6 +49,13 @@ $(function() {
             window.zotonicPageInit();
         }
     }, { wid: 'zotonicjs'});
+    cotonic.broker.subscribe("zotonic-transport/eval", function(msg) {
+        try {
+            eval(msg.payload);
+        } catch(e) {
+            console.log("Error on eval", e, msg.payload);
+        }
+    }, { wid: 'zotonicjs'});
     cotonic.mqtt_bridge.newBridge('origin');
 });
 
