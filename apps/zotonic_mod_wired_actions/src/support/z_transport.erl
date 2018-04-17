@@ -29,7 +29,7 @@
 -spec reply(binary(), z:context()) -> ok | {error, term()}.
 reply(JavaScript, #context{ client_id = ClientId } = Context) when is_binary(ClientId), is_binary(JavaScript) ->
     Topic = [ <<"bridge">>, ClientId, <<"zotonic-transport">>, <<"eval">> ],
-    z_mqtt:publish(Topic, JavaScript, #{ qos => 0 }, Context).
+    z_mqtt:publish(Topic, JavaScript, #{ qos => 1 }, Context).
 
 %% @doc Handle incoming transport messages, call event handlers of delegates.
 -spec transport( binary() | undefined, map(), z:context()) -> ok | {error, term()}.
