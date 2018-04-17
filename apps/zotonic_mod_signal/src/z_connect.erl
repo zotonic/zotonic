@@ -65,6 +65,6 @@ render_page_actions(Signal, Actions, Context) ->
     Options  = [{action, X} || X <- Actions1],
 
     %% What parameters should be used here?
-    Script = z_script:get_script(z_render:wire(undefined, undefined, {event, Options}, Context)),
+    Script = z_render:get_script(z_render:wire(undefined, undefined, {event, Options}, Context)),
 
     z_context:add_script_page(Script, Context).

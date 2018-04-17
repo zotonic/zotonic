@@ -73,8 +73,8 @@ emit(Signal, Context) ->
           end, Slots).
 
 emit_script(Signal, Context) ->
-    {Scripts, CleanContext} = z_script:split(Context),
-    emit_script(Signal, Scripts, CleanContext).
+    Scripts = z_render:get_script(Context),
+    emit_script(Signal, Scripts, z_render:clean(Context)).
 
 emit_script(Signal, Script, Context) ->
     Slots = slots(Signal, Context),

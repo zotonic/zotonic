@@ -27,6 +27,7 @@
     subscribe/2,
     subscribe/3,
     subscribe/4,
+    subscribe/5,
 
     unsubscribe/2,
     unsubscribe/3,
@@ -87,7 +88,12 @@ subscribe(TopicFilter, Callback, OwnerPid, Context) when is_pid(OwnerPid) ->
 
 -spec subscribe( topic(), callback(), pid(), mqtt_sessions:subscriber_options(), z:context() ) -> ok | {error, term()}.
 subscribe(TopicFilter, Callback, OwnerPid, Options, Context) when is_pid(OwnerPid) ->
-    mqtt_sessions:subscribe(z_context:site(Context), TopicFilter, Callback, OwnerPid, Options, Context).
+    case map_topic_filter(TopicFilter, Context) of
+        {ok, TopicFilter1} ->
+            mqtt_sessions:subscribe(z_context:site(Context), TopicFilter1, Callback, OwnerPid, Options, Context);
+        {error, _} = Error ->
+            Error
+    end.
 
 
 -spec unsubscribe( topic(), z:context() ) -> ok | {error, term()}.
@@ -96,14 +102,16 @@ unsubscribe(TopicFilter, Context) ->
 
 -spec unsubscribe( topic(), pid(), z:context() ) -> ok | {error, term()}.
 unsubscribe(TopicFilter, OwnerPid, Context) when is_pid(OwnerPid) ->
-    mqtt_sessions:unsubscribe(z_context:site(Context), TopicFilter, OwnerPid).
-
+    case map_topic_filter(TopicFilter, Context) of
+        {ok, TopicFilter1} ->
+            mqtt_sessions:unsubscribe(z_context:site(Context), TopicFilter1, OwnerPid);
+        {error, _} = Error ->
+            Error
+    end.
 
 -spec map_topic( mqtt_sessions:topic(), z:context() ) -> {ok, mqtt_sessions:topic()} | {error, no_client}.
-map_topic(<<"~client/", _/binary>>, #context{ client_topic = undefined }) ->
-    {error, no_client};
-map_topic(<<"~client/", T/binary>>, #context{ client_topic = Route }) ->
-    Route ++ binary:split(T, <<"/">>, [global]);
+map_topic(Topic, Context) when is_binary(Topic) ->
+    map_topic(binary:split(Topic, <<"/">>, [global]), Context);
 map_topic([ <<"~client">> | _ ], #context{ client_topic = undefined }) ->
     {error, no_client};
 map_topic([ <<"~client">> | T ], #context{ client_topic = Route }) ->
@@ -113,7 +121,7 @@ map_topic(Topic, _Context) ->
 
 
 %% @doc Map subscription topic to a topic filter.
--spec map_topic_filter( topic_any(), #context{}) -> topic().
+-spec map_topic_filter( topic_any(), z:context()) -> topic().
 map_topic_filter(Topic, Context) when is_list(Topic) ->
     map_topic(Topic, Context);
 map_topic_filter(Topic, Context) when is_binary(Topic) ->

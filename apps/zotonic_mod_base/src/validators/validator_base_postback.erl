@@ -59,4 +59,4 @@ event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
         {{error, Id, _} = Error, Context1} ->
             {<<"false">>, z_validation:report_errors([{Id,Error}], Context1)}
     end,
-    z_script:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).
+    z_render:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).

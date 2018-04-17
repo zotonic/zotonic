@@ -44,21 +44,20 @@
 ]).
 
 'mqtt:test/mod_mqtt'(_SubscriberContext, Message) ->
-    lager:debug("mqtt:test/mod_mqtt received: ~p", [ Message ]),
+    lager:info("mqtt:test/mod_mqtt received: ~p", [ Message ]),
     ok.
 
 
 observe_module_activate(#module_activate{ module = Module, pid = ModulePid }, Context) ->
     Exports = erlang:get_module_info(Module, exports),
-    Fs = [ {z_convert:to_binary(F), F} || {F, 3} <- Exports ],
+    Fs = [ {z_convert:to_binary(F), F} || {F, 2} <- Exports ],
     lists:foreach(fun(F) ->
                     maybe_subscribe(F, Module, ModulePid, Context)
                   end,
                   Fs).
 
-maybe_subscribe({<<"mqtt:", Topic/binary>>, F}, M, ModulePid, Context) ->
+maybe_subscribe({<<"mqtt:", TopicFilter/binary>>, F}, M, ModulePid, Context) ->
     SubscriberContext = z_acl:sudo( z_context:new( z_context:site(Context) ) ),
-    TopicFilter = z_mqtt:map_topic_filter(Topic, Context),
     Callback = {M, F, [ SubscriberContext ]},
     z_mqtt:subscribe(TopicFilter, Callback, ModulePid, #{ qos => 0 }, SubscriberContext);
 maybe_subscribe(_, _M, _Pid, _Context) ->

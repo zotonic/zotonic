@@ -29,7 +29,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
     PageLen = pagelen(SearchResult, Result#m_search_result.search_props),
     case total(SearchResult) < PageLen of
         true ->
-            {"", z_script:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
+            {"", z_render:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
         false ->
             Page = page(SearchResult, Result#m_search_result.search_props) + 1,
             MorePageLen = proplists:get_value(pagelen, Args, PageLen),
@@ -81,10 +81,10 @@ event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, Mo
                            _ ->
                                ["$(\"#", TriggerId, "\").unbind(\"click\").click(function(){", JS, "; return false; });"]
                         end,
-                        z_script:add_script(RebindJS, Ctx);
+                        z_render:add_script(RebindJS, Ctx);
                    true ->
                         RemoveJS = ["$(\"#", TriggerId, "\").remove();"],
-                        z_script:add_script(RemoveJS, Context)
+                        z_render:add_script(RemoveJS, Context)
                end,
 
     FirstRow = PageLen*(Page-1)+1,

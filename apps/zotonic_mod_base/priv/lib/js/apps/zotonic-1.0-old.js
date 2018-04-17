@@ -5,7 +5,7 @@
 @Author:    Tim Benniks <tim@timbenniks.nl>
 @Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2018 Tim Benniks, Marc Worrell
+Copyright 2009-2014 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,11 +25,45 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 // Client state
 var z_language              = "en";
+var z_pageid                = '';
 var z_userid;
 var z_editor;
-var z_default_form_postback;
+
+// Session state
+var z_session_valid         = false;
+var z_session_restart_count = 0;
+var z_session_reload_check  = false;
+
+// Transport to/from server
+var z_websocket_host;
+var z_ws                    = false;
+var z_ws_pong_count         = 0;
+var z_ws_ping_timeout;
+var z_ws_ping_interval;
+var z_comet;
+var z_comet_poll_timeout;
+var z_comet_reconnect_timeout = 1000;
+var z_comet_poll_count      = 0;
+var z_stream_starter;
+var z_stream_start_timeout;
+var z_default_form_postback = false;
+var z_page_unloading        = false;
+var z_transport_check_timer;
+var z_transport_queue       = [];
+var z_transport_acks        = [];
+var z_transport_delegates   = {
+    javascript: z_transport_delegate_javascript,
+    session: z_transport_session_status,
+    reload: z_session_invalid_dialog
+};
+var z_force_unload_beacon   = false;
+var z_init_postback_forms_timeout = false;
+
+var TRANSPORT_TIMEOUT       = 30000;
+var TRANSPORT_TRIES         = 3;
 
 // Misc state
+var z_spinner_show_ct       = 0;  // Set when performing an AJAX callback
 var z_input_updater         = false;
 var z_drag_tag              = [];
 var z_registered_events     = {};
@@ -38,20 +72,114 @@ var z_on_visible_timer;
 var z_unique_id_counter     = 0;
 
 
-/* Startup
----------------------------------------------------------- */
+function z_set_page_id( page_id, user_id )
+{
+    ubf.add_spec('z_msg_v1', [
+        "qos", "dup", "msg_id", "timestamp", "content_type", "delegate",
+        "push_queue", "session_id", "page_id",
+        "data"
+        ]);
+    ubf.add_spec('z_msg_ack', [
+        "qos", "msg_id", "push_queue", "session_id", "page_id", "result"
+        ]);
+    ubf.add_spec('postback_notify', [
+        "message", "trigger", "target", "data"
+        ]);
+    ubf.add_spec('postback_event', [
+        "postback", "trigger", "target",
+        "triggervalue", "data"
+        ]);
+    ubf.add_spec('session_state', [
+        "page_id", "user_id"
+        ]);
+    ubf.add_spec('auth_change', [
+        "page_id"
+        ]);
+    ubf.add_spec("unload_beacon", [
+        "session_id",
+        "page_id",
+        ]);
+    ubf.add_spec("rsc_update_done", [
+        "action", "id", "pre_is_a", "post_is_a",
+        "pre_props", "post_props" // Always empty
+        ]);
+    ubf.add_spec("media_replace_file", [
+        "id",
+        "medium" // Always empty
+        ]);
+    ubf.add_spec("edge_insert", [
+        "subject_id", "predicate", "object_id", "edge_id"
+        ]);
+    ubf.add_spec("edge_delete", [
+        "subject_id", "predicate", "object_id", "edge_id"
+        ]);
+    ubf.add_spec("edge_update", [
+        "subject_id", "predicate", "object_id", "edge_id"
+        ]);
+    ubf.add_spec('q', [
+        "q"
+        ]);
 
-$(function() {
-    // Initialize the wires if the bridge is starting up
-    cotonic.broker.subscribe("$bridge/origin/status", function() {
-        cotonic.broker.unsubscribe("$bridge/origin/status", { wid: 'zotonicjs' });
-        if (window.zotonicPageInit) {
-            window.zotonicPageInit();
+    if (z_pageid != page_id) {
+        z_session_valid = true;
+        z_pageid = page_id;
+        z_userid = user_id;
+
+        if (typeof pubzub == "object") {
+            setTimeout(function() { pubzub.publish("~pagesession/pageinit", page_id); }, 10);
         }
-    }, { wid: 'zotonicjs'});
-    cotonic.mqtt_bridge.newBridge('origin');
-});
+    }
+    $(window).bind("pageshow", function(event) {
+        // After back button on iOS / Safari
+        if (typeof event.originalEvent == 'object' && event.originalEvent.persisted) {
+            z_page_unloading = false;
+            setTimeout(function() {
+                z_stream_onreload();
+            }, 10);
+        }
+    });
+    $(window).bind('beforeunload', function() {
+        z_page_unloading = true;
 
+        // Close the websocket. This prevents a connection interrupted error.
+        if (z_ws) {
+            try { z_ws.close(); } catch (e) { }
+            z_ws = undefined;
+        }
+
+        // Abort an open comet connection
+        if (z_comet) {
+            try { z_comet.abort(); } catch(e) { }
+            z_comet = undefined;
+        }
+
+        setTimeout(function() {
+            z_page_unloading = false;
+        }, 10000);
+    });
+    $(window).bind('unload', function() {
+        var msg = {
+            "_record": "unload_beacon",
+            "page_id": z_pageid,
+            "session_id": window.z_sid || undefined
+        };
+
+        if(navigator.sendBeacon) {
+            navigator.sendBeacon("/beacon", ubf.encode(msg));
+            return;
+        }
+
+        // If the browser doesn't have the beacon api, and we are forced to send the
+        // unload beacon we have to send it via a synchronous ajax request.
+        if (z_force_unload_beacon) {
+            $.ajax({url: "/beacon",
+                type: "post",
+                data: ubf.encode(msg),
+                contentType: "text/x-ubf",
+                async: false});
+            }
+    });
+}
 
 /* Non modal dialogs
 ---------------------------------------------------------- */
@@ -219,30 +347,187 @@ function z_notify(message, extraParams)
 ---------------------------------------------------------- */
 
 
-// - checks pubzub registry for the local "session" topic
-// - if any handlers then publish the new user to the topic
-// - if no handlers then the default reload dialog is shown
-//
-// if (typeof pubzub == "object" && pubzub.subscribers("~pagesession/session").length > 0) {
-//     z_session_valid = true;
-//     pubzub.publish("~pagesession/session", status);
-//     z_stream_restart();
-// }
+function z_session_restart(invalid_page_id)
+{
+    if (z_session_valid) {
+        z_session_valid = false;
+        z_session_restart_count = 0;
+    }
+    setTimeout(function() { z_session_restart_check(invalid_page_id); }, 50);
+}
 
+function z_session_restart_check(invalid_page_id)
+{
+    if (z_pageid == invalid_page_id) {
+        if (z_spinner_show_ct === 0) {
+            if (z_session_restart_count == 3 || !z_pageid) {
+                z_session_invalid_reload(z_pageid);
+            } else {
+                z_session_restart_count++;
+                z_transport('session', 'ubf', 'ensure', {transport: "ajax"});
+            }
+        } else {
+            setTimeout(function() { z_session_restart_check(invalid_page_id); }, 200);
+        }
+    }
+}
+
+function z_session_status_ok(page_id, user_id)
+{
+    if (page_id != z_pageid || user_id != z_userid) {
+        var status = {
+            status: "restart",
+            user_id: user_id,
+            page_id: page_id,
+            prev_user_id: z_userid,
+            prev_page_id: z_pageid
+        };
+
+        z_pageid = page_id;
+        z_userid = user_id;
+
+        z_transport_queue = [];
+        z_transport_acks = [];
+
+        // checks pubzub registry for the local "session" topic
+        // if any handlers then publish the new user to the topic
+        // if no handlers then the default reload dialog is shown
+        if (typeof pubzub == "object" && pubzub.subscribers("~pagesession/session").length > 0) {
+            z_session_valid = true;
+            pubzub.publish("~pagesession/session", status);
+            z_stream_restart();
+        } else {
+            z_session_invalid_reload(z_pageid, status);
+        }
+    }
+}
+
+function z_session_invalid_reload(page_id, status)
+{
+    if (page_id == z_pageid) {
+        if (z_spinner_show_ct === 0 && !z_page_unloading) {
+            z_transport_delegates.reload(status);
+        } else {
+            setTimeout(function() {
+                z_session_invalid_reload(page_id, status);
+            }, 1000);
+        }
+    }
+}
+
+// Default action for delegates.reload
+function z_session_invalid_dialog()
+{
+    var is_editing = false;
+
+    z_editor_save($('body'));
+    $('textarea').each(function() {
+        is_editing = is_editing || ($(this).val() !== "");
+    });
+
+    if (is_editing) {
+        z_dialog_confirm({
+            title: z_translate("Reload"),
+            text: "<p>" +
+                z_translate("Your session has expired or is invalid. Reload the page to continue.") +
+                "</p>",
+            ok: z_translate("Reload"),
+            on_confirm: function() { z_reload(); }
+        });
+    } else {
+        z_reload();
+    }
+}
 
 /* Transport between user-agent and server
 ---------------------------------------------------------- */
 
+// Register a handler for incoming data (aka delegates)
+function z_transport_delegate_register(name, func)
+{
+    z_transport_delegates[name] = func;
+}
+
+// Called for 'session' transport delegates, handles the session status
+function z_transport_session_status(data, msg)
+{
+    switch (data)
+    {
+        case 'session_invalid':
+            if (window.z_sid) {
+                window.z_sid = undefined;
+            }
+            if (z_session_reload_check) {
+                z_reload();
+            } else {
+                z_session_reload_check = false;
+                z_session_restart(z_pageid);
+            }
+            break;
+        case 'page_invalid':
+            if (z_session_reload_check) {
+                z_reload();
+            } else {
+                z_session_reload_check = false;
+                z_session_restart(z_pageid);
+            }
+            break;
+        case 'ok':
+            z_session_valid = true;
+            if (z_session_reload_check) {
+                z_session_reload_check = false;
+                z_stream_restart();
+            }
+            break;
+        default:
+            if (typeof data == 'object') {
+                switch (data._record) {
+                    case 'session_state':
+                        z_session_status_ok(data.page_id, data.user_id);
+                        break;
+                    case 'auth_change':
+                        // The user-id of the session is changed.
+                        // A new session cookie might still be on its way, so wait a bit
+                        if (data.page_id == z_pageid) {
+                            z_session_restart(z_pageid);
+                        }
+                        break;
+                    default:
+                        $.misc.error("Transport, unknown session status ", data);
+                        break;
+                }
+            } else {
+                $.misc.error("Transport, unknown session status ", data);
+            }
+            break;
+    }
+}
+
+
 // Queue any data to be transported to the server
 function z_transport(delegate, content_type, data, options)
 {
-    cotonic.broker.publish(
-        "bridge/origin/zotonic-transport/" + delegate,
-        data,
-        { qos: 1 });
+    var msg_id = z_unique_id(true);
 
-    // return z_transport_do(msg_id, delegate, content_type, data, options);
+    if (!z_pageid) {
+        z_transport_wait(msg_id, delegate, content_type, data, options);
+        return msg_id;
+    } else {
+        return z_transport_do(msg_id, delegate, content_type, data, options);
+    }
 }
+
+function z_transport_wait(msg_id, delegate, content_type, data, options)
+{
+    if (!z_pageid) {
+        setTimeout(function() {
+                z_transport_wait(msg_id, delegate, content_type, data, options);
+            }, 100);
+    } else {
+        return z_transport_do(msg_id, delegate, content_type, data, options);
+    }
+}
+
 
 function z_transport_do(msg_id, delegate, content_type, data, options)
 {
@@ -322,12 +607,72 @@ function z_transport_delegate(delegate)
         case 'mqtt':     return ubf.constant('mqtt');
         case 'notify':   return ubf.constant('notify');
         case 'postback': return ubf.constant('postback');
-        // case 'session':  return ubf.constant('session');
-        // case '$ping':    return ubf.constant('$ping');
+        case 'session':  return ubf.constant('session');
+        case '$ping':    return ubf.constant('$ping');
         default: return delegate;
     }
 }
 
+// Ensure that a transport is scheduled for fetching data queued at the server
+function z_transport_ensure()
+{
+    if (z_transport_queue.length === 0 && !z_websocket_is_connected()) {
+        z_transport('$ping');
+    }
+}
+
+function z_transport_incoming(data)
+{
+    if (data !== undefined && data.length > 0) {
+        var msgs = ubf.decode(data);
+
+        if (typeof msgs == 'object' && msgs.ubf_type == ubf.LIST) {
+            for (i=0; i<msgs.length; i++) {
+                z_transport_incoming_msg(msgs[i]);
+            }
+        } else {
+            z_transport_incoming_msg(msgs);
+        }
+    }
+}
+
+function z_transport_incoming_msg(msg)
+{
+    switch (msg._record)
+    {
+        case 'z_msg_v1':
+            z_transport_maybe_ack(msg);
+            var data = z_transport_incoming_data_decode(msg.content_type.valueOf(), msg.data);
+            var fun = z_transport_delegates[msg.delegate.valueOf()];
+            if (typeof fun == 'function') {
+                fun(data, msg);
+            } else {
+                $.misc.error("No delegate registered for ",msg);
+            }
+            break;
+        case 'z_msg_ack':
+            if (!z_websocket_pong(msg) && typeof z_transport_acks[msg.msg_id] == 'object') {
+                var ack = z_transport_acks[msg.msg_id];
+                if (msg.result == 'overload') {
+                    clearTimeout(ack.timeout_timer);
+                    z_transport_requeue(msg.msg_id);
+                    z_transport_overload();
+                } else {
+                    delete z_transport_acks[msg.msg_id];
+                    clearTimeout(ack.timeout_timer);
+                    if (typeof ack.options.ack == 'function') {
+                        ack.options.ack(msg, ack.options);
+                    }
+                }
+            } else if (msg.result == 'overload') {
+                z_transport_overload();
+            }
+            break;
+        default:
+            $.misc.error("Don't know where to delegate incoming message ", msg);
+            break;
+    }
+}
 
 function z_transport_delegate_javascript(data, _msg)
 {
@@ -341,16 +686,93 @@ function z_transport_delegate_javascript(data, _msg)
         }, 10);
 }
 
-// TODO: Use WebWorker for uploading files.
-//       1. Fetch key/value pairs and file-inputs from form
-//       2. Start webworker
-//       3. Pass form and file-inputs, start upload.
-//
-// For the upload:
-//       1. Request server side upload handler (one per file)
-//       2. Send file data to upload handler using FileReader and MQTT
-//       3. Register upload handler ref in form post
-//
+function z_transport_maybe_ack(msg)
+{
+    if (msg.qos >= 1) {
+        var ack = {
+            "_record": "z_msg_ack",
+            "qos": msg.qos,
+            "msg_id": msg.msg_id,
+            "push_queue": msg.push_queue,
+            "session_id": window.z_sid || undefined,
+            "page_id": msg.page_id || z_pageid
+        };
+        z_transport_queue.push({
+            msg: ack,
+            msg_id: msg.msg_id,
+            options: {}
+        });
+        z_transport_check();
+    }
+}
+
+// If a transport times-out whilst in transit then it is reposted
+function z_transport_timeout(msg_id)
+{
+    if (typeof z_transport_acks[msg_id] == 'object') {
+        if (z_transport_acks[msg_id].timeout_count++ < TRANSPORT_TRIES) {
+            z_transport_requeue(msg_id);
+        } else {
+            // Final timeout, remove from all queues
+            if (z_transport_acks[msg_id].fail) {
+                z_transport_acks[msg_id].fail(msg_id, z_transport_acks[msg_id].options);
+            }
+            if (z_transport_acks[msg_id].is_queued) {
+                for (var i=0; i<z_transport_queue.length; i++) {
+                    if (z_transport_queue[i].msg_id == msg_id) {
+                        z_transport_queue.splice(i,i);
+                        break;
+                    }
+                }
+            }
+            delete z_transport_acks[msg_id];
+        }
+    }
+}
+
+function z_transport_requeue(msg_id)
+{
+    // Reset timeout for retransmission
+    clearTimeout(z_transport_acks[msg_id].timeout_timer);
+    z_transport_acks[msg_id].timeout_timer = setTimeout(function() {
+        z_transport_timeout(msg_id);
+    }, z_transport_acks[msg_id].options.timeout);
+
+    // Requeue the request (if it is not waiting in the queue)
+    if (!z_transport_acks[msg_id].is_queued) {
+        z_transport_acks[msg_id].msg.dup = true;
+        z_transport_acks[msg_id].is_queued = true;
+        z_transport_queue.push({
+            msg: z_transport_acks[msg_id].msg,
+            msg_id: msg_id,
+            options: z_transport_acks[msg_id].options || {}
+        });
+    }
+    z_transport_check();
+}
+
+function z_transport_incoming_data_decode(type, data)
+{
+    switch (type)
+    {
+        case 'ubf':
+            // Decoded by decoding the z_msg_v1 record
+            return data;
+        case 'json':
+            return $.parseJSON(data.valueOf());
+        case 'javascript':
+            return data.valueOf();
+        case 'form':
+            return $.parseQuery(data.valueOf());
+        case 'text':
+            return data.valueOf();
+        default:
+            $.misc.error("Unknown message data format: ", type, data);
+            return data;
+    }
+}
+
+
 // Queue form data to be transported to the server
 // This is called by the server generated javascript and jquery triggered postback events.
 // 'transport' is one of: '', 'ajax', 'form'
@@ -381,22 +803,22 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
     // extraParams.push({name: 'triggervalue', value: triggervalue});
 
     var pb_event = {
-        type: "postback_event",
+        _record: "postback_event",
         postback: postback,
         trigger: trigger_id,
         target: extraParams.target_id || undefined,
         triggervalue: triggervalue,
         data: {
-            type: 'q',
+            _record: 'q',
             q: ensure_name_value(extraParams) || []
         }
     };
 
-    // if (!transport) {
-    //     if ((trigger_id == "logon_form") || (trigger && $(trigger).hasClass("setcookie"))) {
-    //         transport = 'ajax';
-    //     }
-    // }
+    if (!transport) {
+        if ((trigger_id == "logon_form") || (trigger && $(trigger).hasClass("setcookie"))) {
+            transport = 'ajax';
+        }
+    }
 
     // logon_form and .setcookie forms are always posted, as they will set cookies.
     var options = {
@@ -424,6 +846,41 @@ function z_postback_opt_qs(extraParams)
     }
 }
 
+function z_transport_check()
+{
+    if (z_transport_queue.length > 0 && !z_transport_check_timer) {
+        // Delay transport messages till the z_pageid is initialized.
+        if (z_pageid !== '') {
+            var qmsg = z_transport_queue.shift();
+            if (z_transport_acks[qmsg.msg_id]) {
+                z_transport_acks[qmsg.msg_id].is_queued = false;
+            }
+            if (!qmsg.page_id) {
+                qmsg.page_id = z_pageid;
+            }
+            z_do_transport(qmsg);
+        } else if (!z_transport_check_timer) {
+            z_transport_check_timer_restart(50);
+        }
+    }
+}
+
+function z_transport_overload()
+{
+    z_transport_check_timer_restart(1000);
+}
+
+function z_transport_check_timer_restart(timeout)
+{
+    if (z_transport_check_timer) {
+        clearTimeout(z_transport_check_timer);
+    }
+    z_transport_check_timer = setTimeout(function() {
+        z_transport_check_timer = undefined;
+        z_transport_check();
+    }, timeout);
+}
+
 function z_do_transport(qmsg)
 {
     var data = ubf.encode(qmsg.msg);
@@ -438,6 +895,7 @@ function z_ajax(options, data)
 {
     var url_transport = '';
 
+    z_start_spinner();
     if (typeof options.transport !== "undefined") {
         url_transport = '/transport/'+options.transport;
     }
@@ -461,16 +919,25 @@ function z_ajax(options, data)
             {
                 $.misc.error("Error evaluating ajax return value: " + received_data, e);
             }
-            setTimeout(function() { z_transport_check(); }, 0);
+            setTimeout(function() { z_stop_spinner(); z_transport_check(); }, 0);
         },
         error: function(xmlHttpRequest, textStatus, errorThrown)
         {
+            z_stop_spinner();
             $.misc.error("FAIL: " + textStatus);
             z_unmask_error(options.trigger_id);
         }
     });
 }
 
+function z_fetch_cookies()
+{
+    $.ajax({
+        url: '/z_session/cookies',
+        type: 'post',
+        dataType: 'text'
+    });
+}
 
 function z_unmask(id)
 {
@@ -528,6 +995,7 @@ function z_reload(args)
         pathname,
         parts;
 
+    z_start_spinner();
     if (page.length > 0 && page.val() !== "" && page.val() !== '#reload') {
         window.location.href = window.location.protocol
             + "//"
@@ -680,6 +1148,233 @@ function z_tinymce_remove($element)
     z_editor_remove($element);
 }
 
+/* Comet long poll or WebSockets connection
+---------------------------------------------------------- */
+
+function z_stream_start(_host, websocket_host)
+{
+    if (!z_session_valid) {
+        setTimeout(function() {
+            z_stream_start(_host, websocket_host);
+        }, 100);
+    } else {
+        z_websocket_host = websocket_host || window.location.host;
+        z_stream_restart();
+    }
+}
+
+function z_stream_onreload()
+{
+    if (z_ws) {
+        try { z_ws.close(); } catch (e) { }
+        z_ws = undefined;
+    }
+    if (z_comet) {
+        try { z_comet.abort(); } catch(e) { }
+        z_comet = undefined;
+    }
+    z_session_reload_check = true;
+    z_page_unloading = false;
+    z_transport('session', 'ubf', 'check', { transport: 'ajax' });
+}
+
+function z_stream_restart()
+{
+    if (z_websocket_host) {
+        z_timeout_comet_poll_ajax(1000);
+        if ("WebSocket" in window) {
+            setTimeout(function() { z_websocket_start(); }, 200);
+        }
+    }
+}
+
+function z_stream_is_connected()
+{
+    return z_websocket_is_connected() || z_comet_is_connected();
+}
+
+function z_comet_poll_ajax()
+{
+    if (z_ws_pong_count === 0 && z_session_valid && !z_page_unloading)
+    {
+        z_comet_poll_count++;
+        var msg = ubf.encode({
+                "_record": "z_msg_v1",
+                "qos": 0,
+                "dup" : false,
+                "msg_id": '$comet-'+z_pageid+'-'+z_comet_poll_count,
+                "timestamp": new Date().getTime(),
+                "content_type": ubf.constant("ubf"),
+                "delegate": ubf.constant('$comet'),
+                "page_id": z_pageid,
+                "session_id": window.z_sid || undefined,
+                "data": z_comet_poll_count
+            });
+        z_comet = $.ajax({
+            url: window.location.protocol + '//' + window.location.host + '/comet',
+            type:'post',
+            data: msg,
+            dataType: 'ubf text',
+            accepts: {ubf: "text/x-ubf"},
+            converters: {"text ubf": window.String},
+            contentType: 'text/x-ubf',
+            statusCode: {
+                    /* Handle incoming data */
+                    200: function(data, _textStatus) {
+                        z_transport_handle_push_data(data);
+                        z_timeout_comet_poll_ajax(100);
+                    },
+                    204: function() {
+                        z_timeout_comet_poll_ajax(1000);
+                    }
+                },
+            error: function(xmlHttpRequest, textStatus, errorThrown) {
+                       setTimeout(function() { z_comet_poll_ajax(); }, z_comet_reconnect_timeout);
+                       if(z_comet_reconnect_timeout < 60000)
+                           z_comet_reconnect_timeout = z_comet_reconnect_timeout * 2;
+                   }
+        }).done(function() {
+            z_comet = undefined;
+        });
+    }
+    else
+    {
+        z_timeout_comet_poll_ajax(5000);
+    }
+}
+
+
+function z_comet_is_connected()
+{
+    return z_comet && z_comet.readyState != 0;
+}
+
+function z_timeout_comet_poll_ajax(timeout)
+{
+    if (z_comet_poll_timeout) {
+        clearTimeout(z_comet_poll_timeout);
+    }
+    z_comet_poll_timeout = setTimeout(function() {
+        z_comet_poll_timeout = false;
+        z_comet_reconnect_timeout = 1000;
+        z_comet_poll_ajax();
+    }, timeout);
+}
+
+
+function z_transport_handle_push_data(data)
+{
+    try
+    {
+        z_transport_incoming(data);
+    }
+    catch (e)
+    {
+        $.misc.error("Error evaluating push return value: " + data, e);
+    }
+}
+
+
+function z_websocket_start()
+{
+    var protocol = "ws:";
+    if (window.location.protocol == "https:") {
+        protocol = "wss:";
+    }
+
+    try {
+        z_ws = new WebSocket(protocol+"//"+z_websocket_host+"/websocket");
+    } catch (e) {
+        z_ws_pong_count = 0;
+    }
+
+    z_ws.onopen = function() { setTimeout(z_websocket_ping, 0); };
+    z_ws.onerror = z_websocket_restart;
+    z_ws.onclose = z_websocket_restart;
+
+    z_ws.onmessage = function (evt) {
+        z_transport_handle_push_data(evt.data);
+        setTimeout(z_transport_check, 0);
+    };
+}
+
+function z_websocket_ping()
+{
+    z_clear_ws_ping_timeout();
+    z_ws_ping_timeout = setTimeout(z_websocket_restart, 5000);
+
+    if (z_ws && z_ws.readyState == 1) {
+        var msg = ubf.encode({
+                    "_record": "z_msg_v1",
+                    "qos": 1,
+                    "dup" : false,
+                    "msg_id": '$ws-'+z_pageid,
+                    "timestamp": new Date().getTime(),
+                    "content_type": ubf.constant("ubf"),
+                    "delegate": ubf.constant('$ping'),
+                    "page_id": z_pageid,
+                    "session_id": window.z_sid || undefined,
+                    "data": z_ws_pong_count
+        });
+        z_ws.send(msg);
+    }
+}
+
+function z_clear_ws_ping_timeout()
+{
+    if (z_ws_ping_timeout) {
+        clearTimeout(z_ws_ping_timeout);
+        z_ws_ping_timeout = undefined;
+    }
+}
+
+function z_clear_ws_ping_interval()
+{
+    if (z_ws_ping_interval) {
+        clearTimeout(z_ws_ping_interval);
+        z_ws_ping_interval = undefined;
+    }
+}
+
+function z_websocket_pong( msg )
+{
+    if (msg.msg_id == '$ws-'+z_pageid) {
+        z_clear_ws_ping_timeout();
+
+        z_clear_ws_ping_interval();
+        z_ws_ping_interval = setTimeout(z_websocket_ping, 20000);
+
+        z_ws_pong_count++;
+
+        return true;
+    }
+
+    return false;
+}
+
+function z_websocket_is_connected()
+{
+    return z_ws && z_ws.readyState == 1 && z_ws_pong_count > 0;
+}
+
+function z_websocket_restart(e)
+{
+    z_clear_ws_ping_timeout();
+    z_clear_ws_ping_interval();
+
+    if (z_ws) {
+        z_ws.onclose = undefined;
+        z_ws.onerror = undefined;
+        try { z_ws.close(); } catch(e) {} // closing an already closed ws can raise exceptions.
+        z_ws = undefined;
+    }
+
+    if (z_ws_pong_count > 0 && z_session_valid && !z_page_unloading) {
+        z_ws_pong_count = 0;
+        z_websocket_start();
+    }
+}
+
 
 /* Utility functions
 ---------------------------------------------------------- */
@@ -708,6 +1403,25 @@ function z_is_enter_key(event)
     return (event && event.keyCode == 13);
 }
 
+
+function z_has_flash()
+{
+    if (navigator.plugins && navigator.plugins.length>0) {
+        var type = 'application/x-shockwave-flash';
+        var mimeTypes = navigator.mimeTypes;
+        return (mimeTypes && mimeTypes[type] && mimeTypes[type].enabledPlugin);
+    } else if(navigator.appVersion.indexOf("Mac")==-1 && window.execScript) {
+        try {
+            obj = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+    return false;
+}
+
+
 function z_ensure_id(elt)
 {
     var id = $(elt).attr('id');
@@ -725,6 +1439,31 @@ function z_unique_id(no_dom_check)
         id = '-z-' + z_unique_id_counter++;
     } while (!no_dom_check && $('#'+id).length > 0);
     return id;
+}
+
+
+/* Spinner, show when waiting for a postback
+---------------------------------------------------------- */
+
+function z_start_spinner()
+{
+    if (z_spinner_show_ct++ === 0)
+    {
+        $(document.body).addClass('wait');
+        $('#spinner').fadeIn(100);
+    }
+}
+
+function z_stop_spinner()
+{
+    if (--z_spinner_show_ct === 0)
+    {
+        $('#spinner').fadeOut(100);
+        $(document.body).removeClass('wait');
+    }
+    else if (z_spinner_show_ct < 0) {
+        z_spinner_show_ct = 0;
+    }
 }
 
 
@@ -1590,22 +2329,30 @@ $.fn.selected = function(select) {
     });
 };
 
-// function is_equal(x, y) {
-//     if ( x === y ) return true;
-//     if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
-//     if ( x.constructor !== y.constructor ) return false;
-//     for ( var p in x ) {
-//         if ( ! x.hasOwnProperty( p ) ) continue;
-//         if ( ! y.hasOwnProperty( p ) ) return false;
-//         if ( x[ p ] === y[ p ] ) continue;
-//         if ( typeof( x[ p ] ) !== "object" ) return false;
-//         if ( ! is_equal( x[ p ],  y[ p ] ) ) return false;
-//     }
-//     for ( p in y ) {
-//         if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) return false;
-//     }
-//     return true;
-// }
+// helper fn for console logging
+function log() {
+    if (window.console && window.console.log)
+        window.console.log('[jquery.form] ' + Array.prototype.join.call(arguments,''));
+}
+
+
+
+function is_equal(x, y) {
+    if ( x === y ) return true;
+    if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
+    if ( x.constructor !== y.constructor ) return false;
+    for ( var p in x ) {
+        if ( ! x.hasOwnProperty( p ) ) continue;
+        if ( ! y.hasOwnProperty( p ) ) return false;
+        if ( x[ p ] === y[ p ] ) continue;
+        if ( typeof( x[ p ] ) !== "object" ) return false;
+        if ( ! is_equal( x[ p ],  y[ p ] ) ) return false;
+    }
+    for ( p in y ) {
+        if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) return false;
+    }
+    return true;
+}
 
 $.extend({
     keys: function(obj){
@@ -1617,3 +2364,23 @@ $.extend({
     }
 });
 
+
+/**
+ * A simple querystring parser.
+ * Example usage: var q = $.parseQuery(); q.foo returns "bar" if query contains "?foo=bar"; multiple values are added to an array.
+ * Values are unescaped by default and plus signs replaced with spaces, or an alternate processing function can be passed in the params object .
+ * http://actingthemaggot.com/jquery
+ *
+ * Copyright (c) 2008 Michael Manning (http://actingthemaggot.com)
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ **/
+$.parseQuery = function(qs,options) {
+    var q = (typeof qs === 'string'?qs:window.location.search), o = {'f':function(v){return unescape(v).replace(/\+/g,' ');}}, options = (typeof qs === 'object' && typeof options === 'undefined')?qs:options, o = jQuery.extend({}, o, options), params = {};
+    jQuery.each(q.match(/^\??(.*)$/)[1].split('&'),function(i,p){
+        p = p.split('=');
+        p[1] = o.f(p[1]);
+        params[p[0]] = params[p[0]]?((params[p[0]] instanceof Array)?(params[p[0]].push(p[1]),params[p[0]]):[params[p[0]],p[1]]):p[1];
+    });
+    return params;
+};

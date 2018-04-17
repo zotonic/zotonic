@@ -833,7 +833,8 @@ handle_restart_module(Module, #state{ site = Site, modules = Modules } = State) 
                     z_module_sup:stop_module(Module, Site)
                 end),
             Ms1 = ModuleStatus#module_status{ status = restarting },
-            handle_upgrade(State#state{ modules = Ms1 });
+            Modules1 = Modules#{ Module => Ms1 },
+            handle_upgrade(State#state{ modules = Modules1 });
         {ok, _} ->
             handle_upgrade(State);
         error ->
@@ -1090,9 +1091,8 @@ handle_start_child_result(Module, Result, #state{ site = Site, module_monitors =
         {error, Reason} = Error ->
             lager:error("Could not start module ~p, reason ~p",
                         [Module, Reason]),
-            Modules = State1#state.modules,
-            State1#state{
-                modules = do_module_down(maps:get(Module, Modules), State, undefined, Reason),
+            State2 = do_module_down(Module, State1, undefined, Reason),
+            State2#state{
                 start_error = [
                     {Module, Error} | lists:keydelete(Module, 1, State1#state.start_error)
                 ]

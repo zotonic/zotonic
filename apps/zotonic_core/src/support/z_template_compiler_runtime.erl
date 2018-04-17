@@ -428,10 +428,10 @@ do_cache1(false, _Args, _Context) ->
 %% @doc Render a script block, for Zotonic this is added to the scripts in the Context
 -spec javascript_tag(template_compiler:render_result(), map(), term()) -> template_compiler:render_result().
 javascript_tag(Block, _TplVars, Context) when is_binary(Block) ->
-    z_render:wire({script, [{script, Block}]}, z_context:new(Context));
+    z_context:get_render_state(z_render:wire({script, [{script, Block}]}, z_context:new(Context)));
 javascript_tag(Block, _TplVars, Context) ->
     {Script, C} = z_render:render_to_iolist(Block, z_context:new(Context)),
-    z_render:wire({script, [{script, iolist_to_binary(Script)}]}, C).
+    z_context:get_render_state(z_render:wire({script, [{script, iolist_to_binary(Script)}]}, C)).
 
 
 %% @doc Remove spaces between HTML tags

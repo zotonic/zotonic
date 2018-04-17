@@ -43,6 +43,7 @@ apps/*/priv/translations/template/*.pot
 !apps/zotonic_core/priv/translations/zotonic.pot
 
 apps/*/priv/lib/cotonic/
+apps/*/priv/lib-src/cotonic/
 
 /user/*
 

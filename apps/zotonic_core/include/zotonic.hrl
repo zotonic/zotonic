@@ -214,9 +214,6 @@
     visible_for = 0 :: non_neg_integer()
 }).
 
-%% [Deprecated] Drag and drop event message -- used by scomps draggable and droppable
--record(dragdrop, {tag, delegate, id}).
-
 %% @doc Template definition for z_render:update/insert (and others)
 -record(render, {
     template :: string(),
@@ -250,6 +247,6 @@
 -define(WWW_AUTHENTICATE, <<"OAuth-1.0">>).
 
 -include("zotonic_notifications.hrl").
--include("zotonic_events.hrl").
 -include("zotonic_log.hrl").
+-include("zotonic_deprecated.hrl").
 

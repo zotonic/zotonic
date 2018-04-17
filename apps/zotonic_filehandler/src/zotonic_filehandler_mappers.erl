@@ -287,7 +287,8 @@ run_build(Application, {make, Makefile}) ->
     zotonic_filehandler:terminal_notifier("Make: " ++ app_path(Application, Makefile)),
     CmdOpts = [
         {env, [
-            {"APP_DIR", code:lib_dir(Application)}
+            {"APP_DIR", code:lib_dir(Application)},
+            {"ZOTONIC_LIB", "1"}
         ]}
     ],
     BuildDir = filename:dirname(Makefile),
@@ -331,12 +332,16 @@ build_command(Application, SrcPath) ->
 find_build(_LibSrcDir, []) ->
     false;
 find_build(LibSrcDir, Dir) ->
-    Dirname = filename:join([LibSrcDir] ++ Dir),
-    Makefile = filename:join(Dirname, "Makefile"),
-    case filelib:is_file(Makefile) of
-        true ->
-            {ok, {make, Makefile}};
-        false ->
-            Up = lists:reverse(tl(lists:reverse(Dir))),
-            find_build(LibSrcDir, Up)
+    case lists:last(Dir) of
+        <<"dist">> -> false;
+        _ ->
+            Dirname = filename:join([LibSrcDir] ++ Dir),
+            Makefile = filename:join(Dirname, "Makefile"),
+            case filelib:is_file(Makefile) of
+                true ->
+                    {ok, {make, Makefile}};
+                false ->
+                    Up = lists:reverse(tl(lists:reverse(Dir))),
+                    find_build(LibSrcDir, Up)
+            end
     end.

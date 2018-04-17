@@ -39,6 +39,6 @@ render(Params, _Vars, Context) ->
                                 end,
                                 z_context:new(Context),
                                 lists:flatten(OnInvalid)),
-            Script = iolist_to_binary(z_script:get_script(ContextWire)),
-            {ok, z_script:add_script(["z_validation_on_invalid('",Id,"', function() {",Script,"});"], Context)}
+            Script = iolist_to_binary(z_render:get_script(ContextWire)),
+            {ok, z_render:add_script(["z_validation_on_invalid('",Id,"', function() {",Script,"});"], Context)}
    end.

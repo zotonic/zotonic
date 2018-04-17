@@ -60,4 +60,4 @@ event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
             {<<"false">>, z_render:wire({fade_in, [{target, <<TriggerId/binary, "_email_unique_error">>}]},
                                     z_validation:report_errors([{Id,Error}], ContextScript))}
     end,
-    z_script:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).
+    z_render:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).

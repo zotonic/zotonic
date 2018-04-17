@@ -178,17 +178,6 @@
     id :: m_rsc:resource()
 }).
 
-
-%% @doc Handle a javascript notification from the postback handler. The 'message' is the z_msg argument of
-%% the request. (first), 'trigger' the id of the element which triggered the postback, and 'target' the
-%% id of the element which should receive possible updates. Note: postback_notify is also used as an event.
-%% Return: ``undefined`` or ``#context{}`` with the result of the postback
--record(postback_notify, {message, trigger, target, data}).
-
-%% @doc Message sent by a user-agent on a postback event. Encapsulates the encoded postback and any
-%% additional data. This is handled by z_transport.erl, which will call the correct event/2 functions.
--record(postback_event, {postback, trigger, target, triggervalue, data}).
-
 %% @doc Notification to signal an inserted comment.
 %% 'comment_id' is the id of the inserted comment, 'id' is the id of the resource commented on.
 %% Type: notify
@@ -242,6 +231,12 @@
 -record(menu_rsc, {
     id :: m_rsc:resource()
 }).
+
+%% @doc Fold for mapping non-iolist output to iolist values.
+%%      Used when outputting a rendered HTML tree.
+%%      Folded accumulator is: { MixedHtml, Context }
+-record(output_html, { html :: term() }).
+
 
 %% @doc An activity in Zotonic. When this is handled as a notification then return a list
 %% of patterns matching this activity.  These patterns are then used to find interested

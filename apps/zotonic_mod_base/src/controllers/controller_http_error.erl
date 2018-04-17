@@ -168,7 +168,7 @@ map_extension(Context) ->
 
 do_html(Context0) ->
     Context = set_headers(Context0),
-    ContextQs = z_context:continue_all(z_context:ensure_qs(Context)),
+    ContextQs = z_context:ensure_qs(Context),
     ErrorCode = error_code(Context),
     Vars = [
         {error_code, ErrorCode}

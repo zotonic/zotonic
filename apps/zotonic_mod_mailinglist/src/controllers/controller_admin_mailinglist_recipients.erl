@@ -52,7 +52,7 @@ event(#postback{message={dialog_recipient_edit, [{id,Id}, {recipient_id, RcptId}
 
 event(#postback{message={recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, target=TargetId}, Context) ->
 	m_mailinglist:recipient_is_enabled_toggle(RcptId, Context),
-	z_script:add_script(
+	z_render:add_script(
 		["$(\"#", TargetId, "\").parents(\"li:first\").toggleClass(\"unpublished\"); "],
 		Context);
 

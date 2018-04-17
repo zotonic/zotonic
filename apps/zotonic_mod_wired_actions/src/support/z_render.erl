@@ -180,11 +180,14 @@ output1(B, RenderState, Context, Acc) when is_binary(B) ->
     {[lists:reverse(Acc),B], RenderState, Context};
 output1([], RenderState, Context, Acc) ->
     {lists:reverse(Acc), RenderState, Context};
+output1([#context{} = C|Rest], RenderState, Context, Acc) ->
+    output1([z_context:get_render_state(C)|Rest], RenderState, Context, Acc);
 output1([#render_state{}=RS0|Rest], RenderState, Context, Acc) ->
-    {Rendered, RS1, Context1} = output1(Context#render_state.render, RenderState, Context, []),
+    {Rendered, RS1, Context1} = output1(RS0#render_state.render, RenderState, Context, []),
     output1(Rest, merge_scripts(RS0, RS1), Context1, [Rendered|Acc]);
 output1([{script, Args}|Rest], RenderState, Context, Acc) ->
-    output1(Rest, RenderState, Context, [render_script(Args, Context)|Acc]);
+    Context1 = set_render_state(RenderState, Context),
+    output1(Rest, #render_state{}, Context, [render_script(Args, Context1)|Acc]);
 output1([List|Rest], RenderState, Context, Acc) when is_list(List) ->
     {Rendered, RS1, Context1} = output1(List, RenderState, Context, []),
     output1(Rest, RS1, Context1, [Rendered|Acc]);
@@ -206,6 +209,9 @@ output1([T|Rest], RenderState, Context, Acc) when is_tuple(T) ->
 output1([C|Rest], RenderState, Context, Acc) ->
     output1(Rest, RenderState, Context, [C|Acc]).
 
+
+%% @doc Make the script that is included in the page and initializes all wires
+-spec render_script( list(), z:context() ) -> iolist().
 render_script(Args, Context) ->
     NoStartup = z_convert:to_bool(z_utils:get_value(nostartup, Args, false)),
     % NoStream = z_convert:to_bool(z_utils:get_value(nostream, Args, false)),
@@ -220,7 +226,12 @@ render_script(Args, Context) ->
     Script = [ get_script(Context), Extra ],
     case z_utils:get_value(format, Args, <<"html">>) of
         <<"html">> ->
-            [ <<"\n\n<script type='text/javascript'>\n$(function() {\n">>, Script, <<"\n});\n</script>\n">> ];
+            [
+                <<"\n\n<script type='text/javascript'>\n">>,
+                <<"window.zotonicPageInit = function() {\n">>,
+                        Script,
+                <<"\n};\n</script>\n">>
+            ];
         <<"js">> ->
             [ $\n, Script, $\n ];
         <<"escapejs">> ->
@@ -792,11 +803,11 @@ get_render_state(Context) ->
 
 set_render_state(RS, undefined) -> RS;
 set_render_state(RS, #render_state{})  -> RS;
-set_render_state(RS, #context{} = Context)  ->
+set_render_state(RS, Context)  ->
     z_context:set_render_state(RS, Context).
 
 reset_render_state(#render_state{}) -> #render_state{};
-reset_render_state(#context{} = Context)  ->
+reset_render_state(Context)  ->
     z_context:set_render_state(undefined, Context).
 
 
@@ -826,7 +837,7 @@ merge_scripts(RS, Acc) ->
 add_content_script([], Context) -> Context;
 add_content_script(<<>>, Context) -> Context;
 add_content_script(undefined, Context) -> Context;
-add_content_script(Script, #context{} = Context) ->
+add_content_script(Script, Context) ->
     RS = get_render_state(Context),
     RS1 = RS#render_state{
         content_scripts = [ Script, "\n" | RS#render_state.content_scripts ]
@@ -836,7 +847,7 @@ add_content_script(Script, #context{} = Context) ->
 add_script([], Context) -> Context;
 add_script(<<>>, Context) -> Context;
 add_script(undefined, Context) -> Context;
-add_script(Script, #context{} = Context) ->
+add_script(Script, Context) ->
     RS = get_render_state(Context),
     RS1 = RS#render_state{
         scripts = [ Script, "\n" | RS#render_state.scripts
@@ -846,7 +857,7 @@ add_script(Script, #context{} = Context) ->
 %% @doc Remove all scripts from the context, resetting it back to a clean sheet.
 -spec clean( z:context() ) -> z:context().
 clean(Context) ->
-    Context#context{ render_state = undefined }.
+    z_context:set_render_state(undefined, Context).
 
 %% @doc Collect all scripts in the context, returns an iolist with javascript.
 -spec get_script( z:context() ) -> iolist().

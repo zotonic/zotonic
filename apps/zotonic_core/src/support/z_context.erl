@@ -499,7 +499,8 @@ depickle_site({pickled_context, Site, _UserId, _Language, _Tz, _VisitorId}) ->
 
 -spec output( MixedHtml::term(), z:context() ) -> {iolist(), z:context()}.
 output(MixedHtml, Context) ->
-    z_render:render_html(MixedHtml, Context).
+    z_output_html:output(MixedHtml, Context).
+
 
 %% @doc Ensure that we have parsed the query string, fetch body if necessary.
 %%      If this is a POST then the session/page-session might be continued after this call.
@@ -677,13 +678,13 @@ get_q_validated(Key, _Context) ->
 
 % %% @doc Add the script from the context to all pages of the session.
 % add_script_session(Context) ->
-%     Script = z_script:get_script(Context),
+%     Script = z_render:get_script(Context),
 %     add_script_session(Script, Context).
 
 
 % %% @doc Add the script from the context to the page in the user agent.
 % add_script_page(Context) ->
-%     Script = z_script:get_script(Context),
+%     Script = z_render:get_script(Context),
 %     add_script_page(Script, Context).
 
 
@@ -864,7 +865,7 @@ get(Key, Context, Default) ->
 get_1(Key, #context{ props = Props } = Context, Default) ->
     case maps:find(Key, Props) of
         {ok, Value} -> Value;
-        false -> get_maybe_path_info(Key, Context, Default)
+        error -> get_maybe_path_info(Key, Context, Default)
     end.
 
 get_maybe_path_info(z_language, Context, _Default) ->
@@ -893,9 +894,9 @@ get_path_info(Key, Context, Default) ->
 
 
 %% @doc Return a proplist with all context variables.
--spec get_all( z:context() ) -> map().
+-spec get_all( z:context() ) -> list().
 get_all(Context) ->
-    Context#context.props.
+    maps:to_list(Context#context.props).
 
 
 %% @spec incr(Key, Increment, Context) -> {NewValue,NewContext}
