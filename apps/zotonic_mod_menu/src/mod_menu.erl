@@ -80,9 +80,9 @@ event(#postback_notify{message= <<"menuedit">>, trigger=TriggerId}, Context) ->
         edge ->
             % Hierarchy using edges between resources
             hierarchy_edge(m_rsc:rid(RootId, Context1), Predicate, Tree1, Context1)
-    end.
-% event(#z_msg_v1{data=Data}, Context) ->
-%     handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
+    end;
+event(#z_msg_v1{data=Data}, Context) ->
+    handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
 
 
 handle_cmd(<<"copy">>, Data, Context) ->

@@ -179,7 +179,6 @@ decode_incoming_data(Data, Context) ->
 
 %% Send the message to the attached MQTT session
 handle_message(Msg, Context) ->
-    ?DEBUG(Msg),
     OptSessionRef = z_context:get(session_ref, Context),
     MsgOptions = [
         {transport, self()}
@@ -190,7 +189,6 @@ handle_message(Msg, Context) ->
         {ok, OptSessionRef} ->
             {ok, Context};
         {ok, NewSessionRef} ->
-            ?DEBUG({session, NewSessionRef, ws, self()}),
             erlang:monitor(process, NewSessionRef),
             {ok, z_context:set(session_ref, NewSessionRef, Context)};
         {error, _} = Error ->

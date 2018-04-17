@@ -174,17 +174,17 @@ event(#submit{message={logon_confirm, Args}, form= <<"logon_confirm_form">>}, Co
 %%@doc Handle submit form post.
 event(#submit{message= <<>>}, Context) ->
     Args = z_context:get_q_all(Context),
-    logon(Args, Context).
+    logon(Args, Context);
 
-% event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
-%     case proplists:get_value(<<"msg">>, Data) of
-%         <<"logon_redirect">> ->
-%             Location = get_ready_page(proplists:get_value(<<"page">>, Data, []), Context),
-%             z_render:wire({redirect, [{location, cleanup_url(Location)}]}, Context);
-%         Msg ->
-%             lager:warning("controller_logon: unknown msg: ~p", [Msg]),
-%             Context
-%     end.
+event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
+    case proplists:get_value(<<"msg">>, Data) of
+        <<"logon_redirect">> ->
+            Location = get_ready_page(proplists:get_value(<<"page">>, Data, []), Context),
+            z_render:wire({redirect, [{location, cleanup_url(Location)}]}, Context);
+        Msg ->
+            lager:warning("controller_logon: unknown msg: ~p", [Msg]),
+            Context
+    end.
 
 %%@doc Handle submit data.
 logon(Args, Context) ->

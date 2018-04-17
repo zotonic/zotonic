@@ -30,10 +30,8 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-% event(#z_msg_v1{data=Data}, Context) ->
-event(_, Context) ->
-    Context.
-    % handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
+event(#z_msg_v1{data=Data}, Context) ->
+    handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
 
 handle_cmd(<<"zmedia-props">>, Data, Context) ->
     {<<"options">>, Options} = proplists:lookup(<<"options">>, Data),
