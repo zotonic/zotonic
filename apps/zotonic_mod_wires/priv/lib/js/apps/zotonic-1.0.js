@@ -324,11 +324,6 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
         trigger_id: trigger_id,
         post_form: optPostForm
     };
-    // if (trigger_id) {
-    //     options.ack = function(_ack_msg, _options) {
-    //         z_unmask(trigger_id);
-    //     };
-    // }
     z_transport('postback', 'ubf', pb_event, options);
 }
 

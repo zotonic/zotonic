@@ -17,7 +17,7 @@
 %% limitations under the License.
 
 -module(action_wires_unmask).
--include_lib("zotonic_core/include/zotonic.hrl").
+
 -export([render_action/4]).
 
 render_action(_TriggerId, TargetId, Args, Context) ->
@@ -25,9 +25,15 @@ render_action(_TriggerId, TargetId, Args, Context) ->
         true -> "body";
         _ ->
             case z_render:css_selector(TargetId, Args) of
-                [] -> "body";
+                <<>> -> "body";
                 S -> S
             end
     end,
-    Script = [ <<"try { ">>,z_render:render_css_selector(Selector),<<".unmask(); } catch (e) {};">>],
+    Script = case Selector of
+        undefined -> <<>>;
+        <<>> -> <<>>;
+        "" -> <<>>;
+        _ ->
+            [ <<"try { ">>,z_render:render_css_selector(Selector),<<".unmask(); } catch (e) {};">>]
+    end,
     {Script, Context}.

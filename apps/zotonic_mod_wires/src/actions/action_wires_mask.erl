@@ -25,7 +25,7 @@ render_action(_TriggerId, TargetId, Args, Context) ->
         true -> "body";
         _ ->
             case z_render:css_selector(TargetId, Args) of
-                [] -> "body";
+                <<>> -> "body";
                 S -> S
             end
     end,
