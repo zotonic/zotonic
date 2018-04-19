@@ -19,7 +19,7 @@
 -module(scomp_wires_validate).
 -author("Marc Worrell <marc@worrell.nl>").
 
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 -export([vary/2, render/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

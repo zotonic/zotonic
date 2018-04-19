@@ -16,9 +16,12 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(gen_model).
+-module(zotonic_model).
 -author("Marc Worrell <marc@worrell.nl").
 
--include_lib("zotonic.hrl").
+%% Called from templates
+-callback m_get(list(), z:context()) -> {term(), list()}.
 
--callback m_get(Vs :: list(), z:context()) -> {term(), list()}.
+%% Called from MQTT and API
+-callback m_get(list( binary() ), Payload::term(), z:context()) -> {ok, {term(), list()}} | {error, term()}.
+-callback m_post(list( binary() ), Payload::term(), z:context()) -> {ok, term()} | {error, term()}.

@@ -20,7 +20,7 @@
 -module(m_oauth_perms).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 

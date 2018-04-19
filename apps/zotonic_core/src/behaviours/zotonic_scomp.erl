@@ -27,7 +27,7 @@
 %%          Vary = TermList  (used as dependencies for the depcache)
 
 
--module(gen_scomp).
+-module(zotonic_scomp).
 
 -callback render(Params :: list(), Vars :: list(), Context :: z:context()) -> term().
 -callback vary(Params :: list(), Context :: z:context()) -> atom().

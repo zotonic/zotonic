@@ -9,11 +9,11 @@ $(function() {
 		}
 	});
 
-	if (typeof pubzub !== "undefined") {
-		pubzub.subscribe("~pagesession/menu/insert", function(topic,args) {
-			window.location.hash = "#edit_id="+args.id;
-		});
-	}
+	// if (typeof pubzub !== "undefined") {
+	// 	pubzub.subscribe("~pagesession/menu/insert", function(topic,args) {
+	// 		window.location.hash = "#edit_id="+args.id;
+	// 	});
+	// }
 
 	z_event_register("admin-menu-edit", function(args) {
 		for (var i in args) {

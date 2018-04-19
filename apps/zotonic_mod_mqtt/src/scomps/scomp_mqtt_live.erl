@@ -17,7 +17,7 @@
 %% limitations under the License.
 
 -module(scomp_mqtt_live).
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 
 -export([
         vary/2,

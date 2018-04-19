@@ -19,7 +19,7 @@
 -module(m_custom_redirect).
 -author("Marc Worrell <marc@worrell.nl>").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 -export([
     m_get/2,

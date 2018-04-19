@@ -695,7 +695,7 @@ handle_info(failed_restart, #state{ start_queue = [], modules = Modules } = Stat
             (_M, #module_status{}, false) ->
                 false
         end,
-        true,
+        false,
         Modules)
     of
         true -> self() ! upgrade;

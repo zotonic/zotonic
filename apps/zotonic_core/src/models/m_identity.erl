@@ -21,7 +21,7 @@
 -module(m_identity).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 -type password() :: iodata().
 -type bcrypt_hash() :: {bcrypt, binary()}.

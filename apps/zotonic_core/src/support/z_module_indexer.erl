@@ -402,7 +402,7 @@ subdir_pattern(scomp)      -> { "src/scomps",        "^scomp_(.*)\\.erl$" };
 subdir_pattern(action)     -> { "src/actions",       "^action_(.*)\\.erl$" };
 subdir_pattern(validator)  -> { "src/validators",    "^validator_(.*)\\.erl$" };
 subdir_pattern(service)    -> { "src/services",      "^service_(.*)\\.erl$" };
-subdir_pattern(model)      -> { "src/models",        "^m_.*\\.erl$" };
+subdir_pattern(model)      -> { "src/models",        "^m_(.*)\\.erl$" };
 subdir_pattern(erlang)     -> { "src/support",       "\\.erl" }.
 
 
@@ -497,16 +497,17 @@ reindex_ets_lookup(State) ->
     to_ets(State#state.actions, action, Tag, Site),
     to_ets(State#state.validators, validator, Tag, Site),
     to_ets(State#state.services, service, Tag, Site),
+    to_ets(State#state.models, model, Tag, Site),
     cleanup_ets(Tag, Site).
 
 
 %% @doc Re-index all non-templates
 to_ets(List, Type, Tag, Site) ->
-    to_ets(List, Type, Tag, Site, []).
+    to_ets(List, Type, Tag, Site, #{}).
 
-to_ets([], _Type, _Tag, _Site, _Acc) ->
+to_ets([], _Type, _Tag, _Site, _Done) ->
     ok;
-to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], service, Tag, Site, Acc) ->
+to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], service, Tag, Site, Done) ->
     K = #module_index{
         key = #module_index_key{
             site = Site,
@@ -519,17 +520,21 @@ to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], ser
         tag = Tag
     },
     ets:insert(?MODULE_INDEX, K),
-    to_ets(T, service, Tag, Site, [Name|Acc]);
-to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Type, Tag, Site, Acc) ->
-    case lists:member(Name, Acc) of
+    to_ets(T, service, Tag, Site, Done#{ Name => true });
+to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Type, Tag, Site, Done) ->
+    case maps:is_key(Name, Done) of
         true ->
-            to_ets(T, Type, Tag, Site, Acc);
+            to_ets(T, Type, Tag, Site, Done);
         false ->
+            Name1 = case Type of
+                model -> z_convert:to_binary(Name);
+                _ -> Name
+            end,
             K = #module_index{
                 key = #module_index_key{
                     site = Site,
                     type = Type,
-                    name = Name
+                    name = Name1
                 },
                 module = Mod,
                 erlang_module = ErlMod,
@@ -537,7 +542,7 @@ to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Typ
                 tag = Tag
             },
             ets:insert(?MODULE_INDEX, K),
-            to_ets(T, Type, Tag, Site, [Name|Acc])
+            to_ets(T, Type, Tag, Site, Done#{ Name => true })
     end.
 
 service_key(<<"mod_", Mod/binary>>, Name) ->

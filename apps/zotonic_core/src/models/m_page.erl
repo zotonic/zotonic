@@ -21,7 +21,7 @@
 -module(m_page).
 -author("Atilla Erdodi <atilla.erdodi@gmail.com").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([

@@ -18,7 +18,7 @@
 
 -module(m_admin_config).
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 -export([
     m_get/2,

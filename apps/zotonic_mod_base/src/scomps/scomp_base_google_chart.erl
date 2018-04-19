@@ -20,7 +20,7 @@
 %% limitations under the License.
 
 -module(scomp_base_google_chart).
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
 

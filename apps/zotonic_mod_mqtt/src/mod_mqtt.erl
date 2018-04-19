@@ -25,8 +25,10 @@
 -mod_prio(1000).
 
 -export([
+    'mqtt:model/+/get'/2,
+    'mqtt:model/+/post'/2,
+
     observe_module_activate/2
-    % observe_z_mqtt_cmd/2
 
     % observe_rsc_update_done/2,
     % observe_media_replace_file/2,
@@ -39,13 +41,67 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--export([
-    'mqtt:test/mod_mqtt'/2
-]).
 
-'mqtt:test/mod_mqtt'(_SubscriberContext, Message) ->
-    lager:info("mqtt:test/mod_mqtt received: ~p", [ Message ]),
+%% @doc Handle 'get' request for a model
+-spec 'mqtt:model/+/get'(z:context(), map()) -> ok.
+'mqtt:model/+/get'(_Ctx, #{
+        message := #{
+            type := publish,
+            topic := [ <<"model">>, Model, <<"get">> | Path ],
+            payload := Payload
+        } = Msg,
+        publisher_context := Context
+    }) ->
+    Res = case model_module(Model, Context) of
+        {ok, Mod} ->
+            maybe_resolve(Mod:m_get(Path, Payload, Context), Context);
+        {error, _} = Error ->
+            lager:info("Publish to unknown model ~p", [Model]),
+            Error
+    end,
+    publish_response(Msg, Res, Context).
+
+%% @doc Handle 'post' request for a model
+-spec 'mqtt:model/+/post'(z:context(), map()) -> ok.
+'mqtt:model/+/post'(_Ctx, #{
+        message := #{
+            type := publish,
+            topic := [ <<"model">>, Model, <<"post">> | Path ],
+            payload := Payload
+        } = Msg,
+        publisher_context := Context
+    }) ->
+    Res = case model_module(Model, Context) of
+        {ok, Mod} ->
+            Mod:m_post(Path, Payload, Context);
+        {error, _} = Error ->
+            lager:info("Publish to unknown model ~p", [Model]),
+            Error
+    end,
+    publish_response(Msg, Res, Context).
+
+maybe_resolve({ok, {Res, []}}, _Context) ->
+    {ok, Res};
+maybe_resolve({ok, {Res, Ks}}, Context) ->
+    Res1 = z_template_compiler_runtime:find_nested_value(Res, Ks, #{}, Context),
+    {ok, Res1};
+maybe_resolve({error, _} = Error, _Context) ->
+    Error.
+
+publish_response(#{ properties := #{ response_topic := Topic } }, {ok, Res}, Context) ->
+    z_mqtt:publish(Topic, #{ status => "ok", result => Res }, Context);
+publish_response(#{ properties := #{ response_topic := Topic } }, {error, Res}, Context) ->
+    z_mqtt:publish(Topic, #{ status => "error", message => Res }, Context);
+publish_response(#{}, _Res, _Context) ->
     ok.
+
+model_module(Name, Context) ->
+    case z_module_indexer:lookup(model, Name, Context) of
+        {ok, #module_index{ erlang_module = M }} ->
+            {ok, M};
+        {error, _} = Error ->
+            Error
+    end.
 
 
 observe_module_activate(#module_activate{ module = Module, pid = ModulePid }, Context) ->
@@ -111,16 +167,4 @@ maybe_subscribe(_, _M, _Pid, _Context) ->
 %     scomp_mqtt_live:event_type_mqtt(Ev, Context);
 % observe_action_event_type(_, _Context) ->
 %     undefined.
-
-
-
-%% ==========================================================================
-%% Internal functions.
-%% ==========================================================================
-
-
-% handle_cmd(#z_mqtt_cmd{cmd= <<"publish">>, topic=Topic, payload=Data}, Context) ->
-%     Msg = msg_from_event(Topic, Data, Context),
-%     z_mqtt:publish(Msg, Context).
-
 

@@ -21,7 +21,7 @@
 -module(m_log).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([

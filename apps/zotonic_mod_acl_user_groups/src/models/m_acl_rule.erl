@@ -21,7 +21,7 @@
 -module(m_acl_rule).
 -author("Arjan Scherpenisse <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([

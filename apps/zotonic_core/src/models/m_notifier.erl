@@ -21,7 +21,7 @@
 -module(m_notifier).
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([

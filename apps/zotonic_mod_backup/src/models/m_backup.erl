@@ -18,7 +18,7 @@
 
 -module(m_backup).
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 -export([
     m_get/2

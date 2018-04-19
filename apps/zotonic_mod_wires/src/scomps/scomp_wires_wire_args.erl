@@ -17,7 +17,7 @@
 %% limitations under the License.
 
 -module(scomp_wires_wire_args).
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
 

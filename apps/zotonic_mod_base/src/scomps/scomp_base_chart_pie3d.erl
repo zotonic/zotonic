@@ -21,7 +21,7 @@
 
 -module(scomp_base_chart_pie3d).
 -author("Marc Worrell <marc@worrell.nl").
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
 
