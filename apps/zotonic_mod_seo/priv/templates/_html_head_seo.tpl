@@ -37,6 +37,7 @@
         <script>
             window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
             ga('create', "{{ ga|escapejs }}", 'auto', {% include "_ga_params.tpl" %});
+            ga('set', 'anonymizeIp', true);
             ga('send', 'pageview');
         </script>
         <script async src='https://www.google-analytics.com/analytics.js'></script>
