@@ -596,7 +596,7 @@ cleanup_tsv_text(Text) when is_binary(Text) ->
         fun (R, Acc) ->
             binary:replace(Acc, R, <<" ">>, [global])
         end,
-        Text,
+        z_string:sanitize_utf8(Text),
         [<<"-">>, <<"/">>]).
 
 get_float(K, Ps) ->

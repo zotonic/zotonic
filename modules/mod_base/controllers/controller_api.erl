@@ -29,6 +29,7 @@
     process_post/2,
     is_authorized/2,
     content_types_provided/2,
+    delete_resource/2,
     to_json/2,
     get_q_all/1
 ]).
@@ -248,6 +249,9 @@ to_json(ReqData, Context) ->
         end,
     api_result(Context1, Result).
 
+
+delete_resource(ReqData, Context) ->
+    process_post(ReqData, Context).
 
 process_post(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
