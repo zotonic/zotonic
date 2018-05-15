@@ -929,8 +929,17 @@ recombine_dates(Id, Props, Context) ->
     {Dates1, DateGroups} = group_dates(Dates),
     {DateGroups1, DatesNull} = collect_empty_date_groups(DateGroups, [], []),
     {Dates2, DatesNull1} = collect_empty_dates(Dates1, [], DatesNull),
-    Dates3 = [ {Name, date_from_default(LocalNow, D)} || {Name, D} <- Dates2 ],
-    DateGroups2 = [ {Name, dategroup_fill_parts(date_from_default(LocalNow, S), E)} || {Name, {S,E}} <- DateGroups1 ],
+    Dates3 = [
+        {Name, date_from_default(default_date(Name, LocalNow), D)}
+        || {Name, D} <- Dates2
+    ],
+    DateGroups2 = [
+        {Name, dategroup_fill_parts(
+                    Name,
+                    date_from_default(default_date(Name, LocalNow), S),
+                    E)}
+        || {Name, {S,E}} <- DateGroups1
+    ],
     Dates4 = lists:foldl(
                     fun({Name, {S, E}}, Acc) ->
                         [
@@ -1086,39 +1095,61 @@ group_dates(Dates) ->
                 end
         end.
 
+default_date("date", _LocalNow) -> undefined;
+default_date("date_start", _LocalNow) -> undefined;
+default_date("date_end", _LocalNow) -> undefined;
+default_date("org_pubdate", _LocalNow) -> undefined;
+default_date(_, LocalNow) -> LocalNow.
 
-dategroup_fill_parts( S, {{undefined,undefined,undefined},{undefined,undefined,undefined}} ) ->
+dategroup_fill_parts( "date", S, {{undefined,undefined,undefined},{undefined,undefined,undefined}} ) ->
+    {S, undefined};
+dategroup_fill_parts( _Name, S, {{undefined,undefined,undefined},{undefined,undefined,undefined}} ) ->
     {S, ?ST_JUTTEMIS};
-dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{undefined,Me,De},{He,Ie,Se}} ) ->
-    dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ys,Me,De},{He,Ie,Se}} );
-dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,undefined,De},{He,Ie,Se}} ) ->
-    dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}} ,{{Ye,Ms,De},{He,Ie,Se}} );
-dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,undefined},{He,Ie,Se}} ) ->
-    dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,Ds},{He,Ie,Se}} );
-dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{undefined,Ie,Se}} ) ->
-    dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{23,Ie,Se}} );
-dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,undefined,Se}} ) ->
-    dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,59,Se}} );
-dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,Ie,undefined}} ) ->
-    dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,Ie,59}} );
-dategroup_fill_parts( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,Ie,Se}} ) ->
-    {{{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,Ie,Se}}}.
+dategroup_fill_parts( Name, {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{undefined,Me,De},{He,Ie,Se}} ) when is_integer(Ys) ->
+    dategroup_fill_parts( Name, {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ys,Me,De},{He,Ie,Se}} );
+dategroup_fill_parts( Name, {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ys,undefined,De},{He,Ie,Se}} ) when is_integer(Ms) ->
+    dategroup_fill_parts( Name, {{Ys,Ms,Ds},{Hs,Is,Ss}} ,{{Ys,Ms,De},{He,Ie,Se}} );
+dategroup_fill_parts( Name, {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ys,Ms,undefined},{He,Ie,Se}} ) when is_integer(Ds) ->
+    dategroup_fill_parts( Name, {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ys,Ms,Ds},{He,Ie,Se}} );
+dategroup_fill_parts( Name, S, {{undefined,Me,De},{He,Ie,Se}} ) ->
+    dategroup_fill_parts( Name, S, {{9999,Me,De},{He,Ie,Se}} );
+dategroup_fill_parts( Name, S, {{Ye,undefined,De},{He,Ie,Se}} ) ->
+    dategroup_fill_parts( Name, S ,{{Ye,12,De},{He,Ie,Se}} );
+dategroup_fill_parts( Name, S, {{Ye,Me,undefined},{He,Ie,Se}} ) ->
+    De = calendar:last_day_of_the_month(Ye,Me),
+    dategroup_fill_parts( Name, S, {{Ye,Me,De},{He,Ie,Se}} );
+dategroup_fill_parts( Name, S, {{Ye,Me,De},{undefined,Ie,Se}} ) ->
+    dategroup_fill_parts( Name, S, {{Ye,Me,De},{23,Ie,Se}} );
+dategroup_fill_parts( Name, S, {{Ye,Me,De},{He,undefined,Se}} ) ->
+    dategroup_fill_parts( Name, S, {{Ye,Me,De},{He,59,Se}} );
+dategroup_fill_parts( Name, S, {{Ye,Me,De},{He,Ie,undefined}} ) ->
+    dategroup_fill_parts( Name, S, {{Ye,Me,De},{He,Ie,59}} );
+dategroup_fill_parts( _Name, S, E ) ->
+    {S, E}.
 
 
-date_from_default(_S, {{undefined, undefined, undefined}, {undefined, undefined, undefined}}) ->
-    ?ST_JUTTEMIS;
-date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{undefined,Me,De},{He,Ie,Se}} ) ->
+date_from_default(S, {{undefined, undefined, undefined}, {undefined, undefined, undefined}}) ->
+    S;
+date_from_default(S, {{undefined, undefined, undefined}, {0, 0, 0}}) ->
+    S;
+date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{undefined,Me,De},{He,Ie,Se}} ) when is_integer(Ys) ->
     date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ys,Me,De},{He,Ie,Se}} );
-date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,undefined,De},{He,Ie,Se}} ) ->
+date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,undefined,De},{He,Ie,Se}} ) when is_integer(Ms) ->
     date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Ms,De},{He,Ie,Se}} );
-date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,undefined},{He,Ie,Se}} ) ->
+date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,undefined},{He,Ie,Se}} ) when is_integer(Ds) ->
     date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,Ds},{He,Ie,Se}} );
-date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{undefined,Ie,Se}} ) ->
-    date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{0,Ie,Se}} );
-date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,undefined,Se}} ) ->
-    date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,0,Se}} );
-date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,Ie,undefined}} ) ->
-    date_from_default( {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ye,Me,De},{He,Ie,0}} );
+date_from_default( S, {{undefined,Me,De},{He,Ie,Se}} ) ->
+    date_from_default( S, {{-4300,Me,De},{He,Ie,Se}} );
+date_from_default( S, {{Ye,undefined,De},{He,Ie,Se}} ) ->
+    date_from_default( S, {{Ye,1,De},{He,Ie,Se}} );
+date_from_default( S, {{Ye,Me,undefined},{He,Ie,Se}} ) ->
+    date_from_default( S, {{Ye,Me,1},{He,Ie,Se}} );
+date_from_default( S, {{Ye,Me,De},{undefined,Ie,Se}} ) ->
+    date_from_default( S, {{Ye,Me,De},{0,Ie,Se}} );
+date_from_default( S, {{Ye,Me,De},{He,undefined,Se}} ) ->
+    date_from_default( S, {{Ye,Me,De},{He,0,Se}} );
+date_from_default( S, {{Ye,Me,De},{He,Ie,undefined}} ) ->
+    date_from_default( S, {{Ye,Me,De},{He,Ie,0}} );
 date_from_default( _S, {{Ye,Me,De},{He,Ie,Se}} ) ->
     {{Ye,Me,De},{He,Ie,Se}}.
 
