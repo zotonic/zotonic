@@ -120,7 +120,7 @@ delete_all([Id|Ids], N, Total, Context) ->
 
 move_all([], _ToCatId, _N, _Total, _Context) ->
     ok;
-move_all([{Id}|Ids], ToCatId, N, Total, Context) ->
+move_all([ Id | Ids ], ToCatId, N, Total, Context) ->
     m_rsc_update:update(Id, [{category_id, ToCatId}], z_acl:sudo(Context)),
     maybe_progress(N, N+1, Total, Context),
     move_all(Ids, ToCatId, N+1, Total, Context).
