@@ -343,17 +343,22 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
 
 %% @spec validator(TriggerID::string(), TargetID::string(), Validator::#validator{}, Context::#context{}) -> #context{}
 %% @doc Add an input validator to the list of known validators, used when rendering custom validators
-validator(TriggerId, TargetId, Validator, RenderState) ->
+validator(TriggerId, TargetId, Validator, Context) ->
     V = {TriggerId, TargetId, Validator},
+    RenderState = get_render_state(Context),
     case lists:member(V, RenderState#render_state.validators) of
-        true -> RenderState;
-        false -> RenderState#render_state{ validators = [ V | RenderState#render_state.validators ]}
+        true ->
+            Context;
+        false ->
+            RS1= RenderState#render_state{ validators = [ V | RenderState#render_state.validators ]},
+            z_context:set_render_state(RS1, Context)
     end.
 
 
 %% @doc Render a validator to the correct javascript.  Args are all arguments of the validator scomp.
 %%      This renders an allocation of the initial validator and then appends all validations.
 %%      'type' holds multiple validations.  Validations are of the form:  {validator, [Args]}
+-spec render_validator( undefined | binary(), undefined | binary(), list(), z:context() ) -> iolist().
 render_validator(TriggerId, TargetId, Args, Context) ->
     Validations = proplists:get_all_values(type, Args),
     Trigger     = proplists:get_value(trigger, Args, TriggerId),
@@ -392,11 +397,11 @@ render_validator(TriggerId, TargetId, Args, Context) ->
     { Postback, Append } = lists:foldl(RValidation, {[], []}, Validations),
     case Postback of
         [] ->
-            {[VldScript|Append]};
+            [VldScript|Append];
         _ ->
             Pickled  = z_utils:pickle({Trigger,Name,Postback}, Context),
             PbScript = [<<"z_set_validator_postback('">>,Trigger,<<"', '">>, Pickled, <<"');\n">>],
-            {[PbScript,VldScript|Append]}
+            [PbScript,VldScript|Append]
     end.
 
 
@@ -893,10 +898,10 @@ get_script(Context) ->
         fun
             ({TriggerID, TargetID, Actions}, RSAcc) ->
                 C = set_render_state(RSAcc, Context),
-                {Script, C1} = render_actions(TriggerID, TargetID, Actions, C),
+                {Script3, C1} = render_actions(TriggerID, TargetID, Actions, C),
                 RSAcc1 = get_render_state(C1),
                 RSAcc1#render_state{
-                    scripts = [ Script, "\n" | RSAcc1#render_state.scripts ]
+                    scripts = [ Script3, "\n" | RSAcc1#render_state.scripts ]
                 }
         end,
         RS2#render_state{ actions = [] },
@@ -906,11 +911,10 @@ get_script(Context) ->
     RS4 = lists:foldl(
         fun
             ({TriggerId, TargetId, Validator}, RSAcc) ->
-                C = set_render_state(RSAcc, Context),
-                {Script,C1} = render_validator(TriggerId, TargetId, Validator, C),
-                RSAcc1 = get_render_state(C1),
-                RSAcc1#render_state{
-                    scripts = [ Script, "\n" | RSAcc1#render_state.scripts ]
+                Cx = set_render_state(RSAcc, Context),
+                ValidatorScript = render_validator(TriggerId, TargetId, Validator, Cx),
+                RSAcc#render_state{
+                    scripts = [ ValidatorScript, "\n" | RSAcc#render_state.scripts ]
                 }
         end,
         RS3#render_state{ validators = [] },
