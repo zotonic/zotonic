@@ -24,7 +24,7 @@
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     is_allowed_results_download/2,
     get_handlers/1,
@@ -57,24 +57,24 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ results, Id | Rest ], Context) ->
-    {prepare_results(m_rsc:rid(Id, Context), Context), Rest};
-m_get([ all_results, [Id, SortColumn] | Rest ], Context) ->
-    {survey_results_sorted(m_rsc:rid(Id, Context), SortColumn, Context), Rest};
-m_get([ all_results, Id | Rest ], Context) ->
-    {survey_results(m_rsc:rid(Id, Context), true, Context), Rest};
-m_get([ list_results, Id | Rest ], Context) ->
-    {list_results(m_rsc:rid(Id, Context), Context), Rest};
-m_get([ get_result, SurveyId, AnswerId | Rest ], Context) ->
-    {single_result(SurveyId, AnswerId, Context), Rest};
-m_get([ captions, Id | Rest ], Context) ->
-    {survey_captions(m_rsc:rid(Id, Context), Context), Rest};
-m_get([ totals, Id | Rest ], Context) ->
-    {survey_totals(m_rsc:rid(Id, Context), Context), Rest};
-m_get([ did_survey, Id | Rest ], Context) ->
-    {did_survey(m_rsc:rid(Id, Context), Context), Rest};
-m_get([ did_survey_answers, Id | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ results, Id | Rest ], _Msg, Context) ->
+    {ok, {prepare_results(m_rsc:rid(Id, Context), Context), Rest}};
+m_get([ all_results, [Id, SortColumn] | Rest ], _Msg, Context) ->
+    {ok, {survey_results_sorted(m_rsc:rid(Id, Context), SortColumn, Context), Rest}};
+m_get([ all_results, Id | Rest ], _Msg, Context) ->
+    {ok, {survey_results(m_rsc:rid(Id, Context), true, Context), Rest}};
+m_get([ list_results, Id | Rest ], _Msg, Context) ->
+    {ok, {list_results(m_rsc:rid(Id, Context), Context), Rest}};
+m_get([ get_result, SurveyId, AnswerId | Rest ], _Msg, Context) ->
+    {ok, {single_result(SurveyId, AnswerId, Context), Rest}};
+m_get([ captions, Id | Rest ], _Msg, Context) ->
+    {ok, {survey_captions(m_rsc:rid(Id, Context), Context), Rest}};
+m_get([ totals, Id | Rest ], _Msg, Context) ->
+    {ok, {survey_totals(m_rsc:rid(Id, Context), Context), Rest}};
+m_get([ did_survey, Id | Rest ], _Msg, Context) ->
+    {ok, {did_survey(m_rsc:rid(Id, Context), Context), Rest}};
+m_get([ did_survey_answers, Id | Rest ], _Msg, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
                                     {undefined, persistent_id(Context)};
@@ -94,16 +94,16 @@ m_get([ did_survey_answers, Id | Rest ], Context) ->
                 end,
                 Answers)
     end,
-    {As, Rest};
-m_get([ did_survey_results, Id | Rest ], Context) ->
+    {ok, {As, Rest}};
+m_get([ did_survey_results, Id | Rest ], _Msg, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
                                     {undefined, persistent_id(Context)};
                                 UId ->
                                     {UId, undefined}
                             end,
-    {m_survey:single_result(Id, UserId, PersistentId, Context), Rest};
-m_get([ did_survey_results_readable, Id | Rest ], Context) ->
+    {ok, {m_survey:single_result(Id, UserId, PersistentId, Context), Rest}};
+m_get([ did_survey_results_readable, Id | Rest ], _Msg, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
                                     {undefined, persistent_id(Context)};
@@ -111,14 +111,14 @@ m_get([ did_survey_results_readable, Id | Rest ], Context) ->
                                     {UId, undefined}
                             end,
     SurveyAnswer = m_survey:single_result(m_rsc:rid(Id, Context), UserId, PersistentId, Context),
-    {survey_answer_prep:readable_stored_result(Id, SurveyAnswer, Context), Rest};
-m_get([ is_allowed_results_download, Id | Rest ], Context) ->
-    {is_allowed_results_download(m_rsc:rid(Id, Context), Context), Rest};
-m_get([ handlers | Rest ], Context) ->
-    {get_handlers(Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+    {ok, {survey_answer_prep:readable_stored_result(Id, SurveyAnswer, Context), Rest}};
+m_get([ is_allowed_results_download, Id | Rest ], _Msg, Context) ->
+    {ok, {is_allowed_results_download(m_rsc:rid(Id, Context), Context), Rest}};
+m_get([ handlers | Rest ], _Msg, Context) ->
+    {ok, {get_handlers(Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 

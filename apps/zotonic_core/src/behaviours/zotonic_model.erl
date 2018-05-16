@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2018 Marc Worrell
 %% @doc Model behaviour
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,9 +19,18 @@
 -module(zotonic_model).
 -author("Marc Worrell <marc@worrell.nl").
 
-%% Called from templates
--callback m_get(list(), z:context()) -> {term(), list()}.
+-type opt_msg() :: mqtt_packet_map:mqtt_packet() | undefined.
+-type return() :: {ok, {term(), list()}} | {error, unknown_path | term()}.
 
-%% Called from MQTT and API
--callback m_get(list( binary() ), Payload::term(), z:context()) -> {ok, {term(), list()}} | {error, term()}.
--callback m_post(list( binary() ), Payload::term(), z:context()) -> {ok, term()} | {error, term()}.
+-export_type([ opt_msg/0, return/0 ]).
+
+%% Called from templates, MQTT and API
+-callback m_get( list(), opt_msg(), z:context() ) -> return().
+
+%% Routed from MQTT and API
+-callback m_post( list( binary() ), opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
+
+%% Routed from MQTT and API
+-callback m_delete( list( binary() ), opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
+
+-optional_callbacks([ m_post/3, m_delete/3 ]).

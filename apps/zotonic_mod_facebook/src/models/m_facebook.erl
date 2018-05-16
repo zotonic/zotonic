@@ -24,9 +24,10 @@
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     search/3,
+    is_useauth/1,
 
     do_graph_call/5
 ]).
@@ -34,18 +35,13 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ useauth | Rest ], Context) ->
-    UseAuth = case m_config:get_value(mod_facebook, appid, Context) of
-        undefined -> false;
-        <<>> -> false;
-        _ -> m_config:get_boolean(mod_facebook, useauth, Context)
-    end,
-    {UseAuth, Rest};
-m_get([ picture, Key | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ useauth | Rest ], _OptMsg, Context) ->
+    {ok, {is_useauth(Context), Rest}};
+m_get([ picture, Key | Rest ], _OptMsg, Context) ->
     P = do_graph_call(get, Key, undefined, [{fields, "picture"}], Context),
-    {proplists:get_value(picture, P), Rest};
-m_get([ CT, Key | Rest ], Context)
+    {ok, {proplists:get_value(picture, P), Rest}};
+m_get([ CT, Key | Rest ], _OptMsg, Context)
   when CT =:= friends;
        CT =:= home;
        CT =:= feed;
@@ -61,11 +57,19 @@ m_get([ CT, Key | Rest ], Context)
        CT =:= events;
        CT =:= groups;
        CT =:= checkins ->
-    {do_graph_call(get, Key, CT, [], Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+    {ok, {do_graph_call(get, Key, CT, [], Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
+
+-spec is_useauth( z:context() ) -> boolean().
+is_useauth(Context) ->
+    case m_config:get_value(mod_facebook, appid, Context) of
+        undefined -> false;
+        <<>> -> false;
+        _ -> m_config:get_boolean(mod_facebook, useauth, Context)
+    end.
 
 %% @doc Return the search as used by z_search and the search model.
 search({fql, Args}, _OfffsetLimit, _Context) ->

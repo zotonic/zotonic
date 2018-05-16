@@ -25,7 +25,7 @@
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
 	get_stats/2,
 	get_enabled_recipients/2,
@@ -62,47 +62,42 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ stats, MailingId | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ stats, MailingId | Rest ], _Msg, Context) ->
     case z_acl:rsc_editable(MailingId, Context) of
-        true -> {get_stats(MailingId, Context), Rest};
-        false -> {{undefined, undefined}, Rest}
+        true -> {ok, {get_stats(MailingId, Context), Rest}};
+        false -> {ok, {{undefined, undefined}, Rest}}
     end;
-m_get([ rsc_stats, RscId | Rest ], Context) ->
-    Stats = case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> get_rsc_stats(RscId, Context);
-        false -> undefined
-    end,
-    {Stats, Rest};
-m_get([ recipient, RecipientId | Rest ], Context) ->
-    Rcpt = case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> recipient_get(RecipientId, Context);
-        false -> undefined
-    end,
-    {Rcpt, Rest};
-m_get([ scheduled, RscId | Rest ], Context) ->
-    Scheduled = case z_acl:rsc_visible(RscId, Context) of
-        true -> get_scheduled(RscId, Context);
-        false -> undefined
-    end,
-    {Scheduled, Rest};
-m_get([ confirm_key, ConfirmKey | Rest ], Context) ->
-    {get_confirm_key(ConfirmKey, Context), Rest};
-m_get([ subscription, ListId, Email | Rest ], Context) ->
-    Sub = case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> recipient_get(ListId, Email, Context);
-        false -> undefined
-    end,
-    {Sub, Rest};
-m_get([ bounce_reason, Email | Rest ], Context) ->
-    Reason = case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> bounce_reason(Email, Context);
-        false -> undefined
-    end,
-    {Reason, Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+m_get([ rsc_stats, RscId | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true -> {ok, {get_rsc_stats(RscId, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ recipient, RecipientId | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true -> {ok, {recipient_get(RecipientId, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ scheduled, RscId | Rest ], _Msg, Context) ->
+    case z_acl:rsc_visible(RscId, Context) of
+        true -> {ok, {get_scheduled(RscId, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ confirm_key, ConfirmKey | Rest ], _Msg, Context) ->
+    {ok, {get_confirm_key(ConfirmKey, Context), Rest}};
+m_get([ subscription, ListId, Email | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true -> {ok, {recipient_get(ListId, Email, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ bounce_reason, Email | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true -> {ok, {bounce_reason(Email, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Get the stats for the mailing. Number of recipients and list of scheduled resources.

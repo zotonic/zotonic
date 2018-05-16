@@ -23,7 +23,7 @@
 -behaviour(zotonic_model).
 
 -export([
-    m_get/2,
+    m_get/3,
 
     countries/1,
     country_name/2,
@@ -36,20 +36,20 @@
 -include_lib("erlang_localtime/include/tz_database.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ countries | Rest ], Context) ->
-    {countries(Context), Rest};
-m_get([ country_name, Code | Rest ], Context) ->
-    {country_name(Code, Context), Rest};
-m_get([ timezones | Rest ], _Context) ->
-    {timezones(), Rest};
-m_get([ default_timezone | Rest ], Context) ->
-    {m_config:get_value(mod_l10n, timezone, Context), Rest};
-m_get([ timezone_is_fixed | Rest ], Context) ->
-    {m_config:get_boolean(mod_l10n, timezone_is_fixed, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ countries | Rest ], _Msg, Context) ->
+    {ok, {countries(Context), Rest}};
+m_get([ country_name, Code | Rest ], _Msg, Context) ->
+    {ok, {country_name(Code, Context), Rest}};
+m_get([ timezones | Rest ], _Msg, _Context) ->
+    {ok, {timezones(), Rest}};
+m_get([ default_timezone | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(mod_l10n, timezone, Context), Rest}};
+m_get([ timezone_is_fixed | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_l10n, timezone_is_fixed, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 

@@ -19,19 +19,22 @@
 -module(m_admin_blocks).
 -author("Marc Worrell <marc@worrell.nl>").
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-behaviour(zotonic_model).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% interface functions
 -export([
-    m_get/2
+    m_get/3
 ]).
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ list, Id | Rest ], Context) ->
-    {lists:sort(z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context)), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ list, Id | Rest ], _Msg, Context) ->
+    RscId = m_rsc:rid(Id, Context),
+    List = lists:sort( z_notifier:foldr(#admin_edit_blocks{ id = RscId }, [], Context) ),
+    {ok, {List, Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.

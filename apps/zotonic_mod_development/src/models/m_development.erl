@@ -18,13 +18,19 @@
 
 -module(m_development).
 
+-behaviour (zotonic_model).
+
 -export([
-    m_get/2
+    m_get/3
 ]).
 
-m_get([ Cfg | Rest ], Context)
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ Cfg | Rest ], _Msg, Context)
     when Cfg =:= debug_includes;
          Cfg =:= debug_blocks;
          Cfg =:= enable_api;
          Cfg =:= libsep ->
-    {m_config:get_boolean(mod_admin_identity, Cfg, Context), Rest}.
+    {ok, {m_config:get_boolean(mod_development, Cfg, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.

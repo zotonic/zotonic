@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2018 Marc Worrell
 %% @doc Model for registering the status per email recipient.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@
 
 -module(m_email_status).
 
+-behaviour (zotonic_model).
+
 -export([
-    m_get/2,
+    m_get/3,
 
     is_valid/2,
     is_ok_to_send/2,
@@ -44,14 +46,14 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ is_valid, Email | Rest ], Context) ->
-    {is_valid(Email, Context), Rest};
-m_get([ Email | Rest ], Context) ->
-    {get(Email, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ is_valid, Email | Rest ], _Msg, Context) ->
+    {ok, {is_valid(Email, Context), Rest}};
+m_get([ Email | Rest ], _Msg, Context) ->
+    {ok, {get(Email, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 -spec block(binary(), #context{}) -> ok.

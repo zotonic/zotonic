@@ -23,7 +23,7 @@
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     get/2,
     get_triple/2,
@@ -62,60 +62,54 @@
 
 
 %% @doc Fetch all object/edge ids for a subject/predicate
--spec m_get( list(), z:context()) -> {term(), list()}.
-m_get([ o, Id, Pred | Rest ], Context) ->
-    Es = case z_acl:rsc_visible(Id, Context) of
-        true -> object_edge_ids(Id, Pred, Context);
-        false -> []
-    end,
-    {Es, Rest};
-m_get([ o_props, Id, Pred | Rest ], Context) ->
-    Es = case z_acl:rsc_visible(Id, Context) of
-        true -> object_edge_props(Id, Pred, Context);
-        false -> []
-    end,
-    {Es, Rest};
-m_get([ s, Id, Pred | Rest ], Context) ->
-    Es = case z_acl:rsc_visible(Id, Context) of
-        true -> subject_edge_ids(Id, Pred, Context);
-        false -> []
-    end,
-    {Es, Rest};
-m_get([ s_props, Id, Pred | Rest ], Context) ->
-    Es = case z_acl:rsc_visible(Id, Context) of
-        true -> subject_edge_props(Id, Pred, Context);
-        false -> []
-    end,
-    {Es, Rest};
-m_get([ edges, Id | Rest ], Context) ->
-    Es = case z_acl:rsc_visible(Id, Context) of
-        true -> get_edges(Id, Context);
-        false -> []
-    end,
-    {Es, Rest};
-m_get([ id, SubjectId, Pred, ObjectId | Rest ], Context) ->
-    EdgeId = case z_acl:rsc_visible(SubjectId, Context) of
+-spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([ o, Id, Pred | Rest ], _Msg, Context) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true -> {ok, {object_edge_ids(Id, Pred, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ o_props, Id, Pred | Rest ], _Msg, Context) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true -> {ok, {object_edge_props(Id, Pred, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ s, Id, Pred | Rest ], _Msg, Context) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true -> {ok, {subject_edge_ids(Id, Pred, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ s_props, Id, Pred | Rest ], _Msg, Context) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true -> {ok, {subject_edge_props(Id, Pred, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ edges, Id | Rest ], _Msg, Context) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true -> {ok, {get_edges(Id, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ id, SubjectId, Pred, ObjectId | Rest ], _Msg, Context) ->
+    case z_acl:rsc_visible(SubjectId, Context) of
         true ->
             % m.edge.id[subject_id].predicatename[object_id] returns the
             % corresponding edge id or undefined.
-            z_depcache:memo(
+            V = z_depcache:memo(
                 fun() ->
                     get_id(SubjectId, Pred, ObjectId, Context)
                 end,
-                {get_id, SubjectId, Pred, ObjectId}, ?DAY, [SubjectId], Context);
+                {get_id, SubjectId, Pred, ObjectId}, ?DAY, [SubjectId], Context),
+            {ok, {V, Rest}};
         false ->
-            undefined
-    end,
-    {EdgeId, Rest};
-m_get([Id], Context) ->
-    Es = case z_acl:rsc_visible(Id, Context) of
-        true -> get_edges(Id, Context);
-        false -> []
-    end,
-    {Es, []};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+            {error, eacces}
+    end;
+m_get([Id], _Msg, Context) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true -> {ok, {get_edges(Id, Context), []}};
+        false -> {error, eacces}
+    end;
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Get the complete edge with the id

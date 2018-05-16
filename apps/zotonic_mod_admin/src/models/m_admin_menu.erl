@@ -21,28 +21,29 @@
 -module(m_admin_menu).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
+-behaviour(zotonic_model).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
+
+%% interface functions
+-export([
+    m_get/3,
+    menu/1
+]).
 
 -export([test/0]).
 
 
-%% interface functions
--export([
-    m_get/2,
-
-    menu/1
-]).
-
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([], Context) ->
-    {menu(Context), []};
-m_get([ menu | Rest ], Context) ->
-    {menu(Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([], _Msg, Context) ->
+    {ok, {menu(Context), []}};
+m_get([ menu | Rest ], _Msg, Context) ->
+    {ok, {menu(Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 menu(Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of

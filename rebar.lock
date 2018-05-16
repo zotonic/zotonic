@@ -51,7 +51,7 @@
   0},
  {<<"mqtt_sessions">>,
   {git,"git@github.com:zotonic/mqtt_sessions.git",
-       {ref,"c41625dc4434b4c31f8abdb91f2b6b5178eeddc3"}},
+       {ref,"915f2e69f0b127edd6cf77a9d6ee5a1e9915da2b"}},
   0},
  {<<"oauth">>,
   {git,"https://github.com/tim/erlang-oauth.git",
@@ -79,7 +79,7 @@
   {git,"https://github.com/Vagabond/erlang-syslog.git",
        {ref,"4a6c6f2c996483e86c1320e9553f91d337bcb6aa"}},
   0},
- {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.0.0-alpha7">>},0},
+ {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.0.0-alpha8">>},0},
  {<<"twerl">>,
   {git,"https://github.com/mworrell/twerl.git",
        {ref,"396c73497c2cdaa5d5bebbe4a6f52dd042a5bf2c"}},
@@ -131,7 +131,7 @@
  {<<"setup">>, <<"15DF8E57C6DF9755E22BFB1AEF0C640BD97E9889396FDFB2A85A5536A9043674">>},
  {<<"shotgun">>, <<"54EA3C243B65A935A3491A079A573C9D119A5EAF28BC2673893F8EEF66FDC053">>},
  {<<"sidejob">>, <<"5D6A7C9C620778CB1908E46B552D767DF2ED4D77070BB7B5B8773D4FF18D1D37">>},
- {<<"template_compiler">>, <<"DF9117BC0233FAC1288813BA64A08E4B4EB62E4B001553C2908EBCF3A804AF9E">>},
+ {<<"template_compiler">>, <<"2F84A081707F80C642DD2504A90C5E7B033410C76CFF77C2A3F4E0F95F691952">>},
  {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>},
  {<<"zotonic_stdlib">>, <<"28253FCEF01F1EFF395F6EAC77D62BB9FF4F45FF37ADD7FDCB1BD4976FCD2126">>}]}
 ].

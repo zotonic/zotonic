@@ -23,7 +23,8 @@
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
+
     identify/2,
     get/2,
     get_file_data/2,
@@ -66,16 +67,15 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ Id | Rest ], Context) ->
-    Media = case z_acl:rsc_visible(Id, Context) of
-        true -> get(Id, Context);
-        false -> undefined
-    end,
-    {Media, Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ Id | Rest ], _Msg, Context) ->
+    case z_acl:rsc_visible(Id, Context) of
+        true -> {ok, {get(Id, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Return the identification of a medium. Used by z_media_identify:identify()

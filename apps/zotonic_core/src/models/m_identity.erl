@@ -29,7 +29,7 @@
 -type hash() :: bcrypt_hash() | sha1_salted_hash().
 
 -export([
-    m_get/2,
+    m_get/3,
 
     is_user/2,
     get_username/1,
@@ -91,38 +91,38 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context()) -> {term(), list()}.
-m_get([ Id, is_user | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([ Id, is_user | Rest ], _Msg, Context) ->
     IsUser = case z_acl:rsc_visible(Id, Context) of
         true -> is_user(Id, Context);
         false -> undefined
     end,
-    {IsUser, Rest};
-m_get([ Id, username | Rest ], Context) ->
+    {ok, {IsUser, Rest}};
+m_get([ Id, username | Rest ], _Msg, Context) ->
     Username = case z_acl:rsc_editable(Id, Context) of
         true -> get_username(Id, Context);
         false -> undefined
     end,
-    {Username, Rest};
-m_get([ Id, all_types | Rest ], Context) ->
+    {ok, {Username, Rest}};
+m_get([ Id, all_types | Rest ], _Msg, Context) ->
     Idns = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc_types(Id, Context);
         false -> []
     end,
-    {Idns, Rest};
-m_get([ Id, all ], Context) ->
+    {ok, {Idns, Rest}};
+m_get([ Id, all ], _Msg, Context) ->
     IdnRsc = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc(Id, Context);
         false -> []
     end,
-    {IdnRsc, []};
-m_get([ Id, all, Type | Rest ], Context) ->
+    {ok, {IdnRsc, []}};
+m_get([ Id, all, Type | Rest ], _Msg, Context) ->
     IdnRsc = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc_by_type(Id, Type, Context);
         false -> []
     end,
-    {IdnRsc, Rest};
-m_get([ get, IdnId | Rest ], Context) ->
+    {ok, {IdnRsc, Rest}};
+m_get([ get, IdnId | Rest ], _Msg, Context) ->
     Idn1 = case get(IdnId, Context) of
         undefined -> undefined;
         Idn ->
@@ -132,16 +132,16 @@ m_get([ get, IdnId | Rest ], Context) ->
                 false -> undefined
             end
     end,
-    {Idn1, Rest};
-m_get([ Id, Type | Rest ], Context) ->
+    {ok, {Idn1, Rest}};
+m_get([ Id, Type | Rest ], _Msg, Context) ->
     Idn = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc(Id, Type, Context);
         false -> undefined
     end,
-    {Idn, Rest};
-m_get(Vs, _Context) ->
+    {ok, {Idn, Rest}};
+m_get(Vs, _Msg, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+    {error, unknown_path}.
 
 
 %% @doc Check if the resource has any credentials that will make him/her an user

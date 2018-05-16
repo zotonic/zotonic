@@ -124,6 +124,10 @@ is_allowed_acl(Action, Topic, Packet, Context) ->
 
 is_allowed(_Action, [ <<"test">> | _ ], _Context) -> true;
 is_allowed(_Action, [ <<"public">> | _ ], _Context) -> true;
+is_allowed(publish, [ <<"model">>, _Model, <<"get">> | _ ], _Context) -> true;
+is_allowed(publish, [ <<"model">>, _Model, <<"post">> | _ ], _Context) -> true;
+is_allowed(publish, [ <<"model">>, _Model, <<"delete">> | _ ], _Context) -> true;
+is_allowed(subscribe, [ <<"model">>, _Model, <<"event">> | _ ], _Context) -> true;
 is_allowed(publish, [ <<"bridge">>, _Remote, <<"reply">> | _ ], _Context) -> true;
 is_allowed(publish, [ <<"bridge">>, _Remote, <<"public">> | _ ], _Context) -> true;
 is_allowed(subscribe, [ <<"bridge">>, Remote | _ ], Context) ->

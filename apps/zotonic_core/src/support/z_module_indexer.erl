@@ -526,15 +526,11 @@ to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Typ
         true ->
             to_ets(T, Type, Tag, Site, Done);
         false ->
-            Name1 = case Type of
-                model -> z_convert:to_binary(Name);
-                _ -> Name
-            end,
             K = #module_index{
                 key = #module_index_key{
                     site = Site,
                     type = Type,
-                    name = Name1
+                    name = Name
                 },
                 module = Mod,
                 erlang_module = ErlMod,
@@ -542,6 +538,20 @@ to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Typ
                 tag = Tag
             },
             ets:insert(?MODULE_INDEX, K),
+            % Also index models as binaries, for quick lookup in mod_mqtt
+            case Type of
+                model ->
+                    K1 = K#module_index{
+                        key = #module_index_key{
+                            site = Site,
+                            type = Type,
+                            name = z_convert:to_binary(Name)
+                        }
+                    },
+                    ets:insert(?MODULE_INDEX, K1);
+                _ ->
+                    ok
+            end,
             to_ets(T, Type, Tag, Site, Done#{ Name => true })
     end.
 

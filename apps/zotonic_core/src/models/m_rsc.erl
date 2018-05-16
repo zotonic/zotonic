@@ -23,7 +23,9 @@
 -behaviour(zotonic_model).
 
 -export([
-    m_get/2,
+    m_get/3,
+    % m_post/3,
+    % m_delete/3,
 
     name_to_id/2,
     name_to_id_cat/3,
@@ -83,16 +85,16 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ Id, is_cat, Key | Rest ], Context) ->
-    {is_cat(Id, Key, Context), Rest};
-m_get([ Id, Key | Rest ], Context) ->
-    {p(Id, Key, Context), Rest};
-m_get([ Id ], Context) ->
-    {get_visible(Id, Context), []};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ Id, is_cat, Key | Rest ], _Msg, Context) ->
+    {ok, {is_cat(Id, Key, Context), Rest}};
+m_get([ Id, Key | Rest ], _Msg, Context) ->
+    {ok, {p(Id, Key, Context), Rest}};
+m_get([ Id ], _Msg, Context) ->
+    {ok, {get_visible(Id, Context), []}};
+m_get(Vs, _Msg, _Context) ->
+    lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Return the id of the resource with the name
@@ -427,7 +429,13 @@ is_published_date(Id, Context) ->
 %% exist or the user does not have access rights to the property then return 'undefined'.
 -spec p(resource(), atom(), #context{}) -> term() | undefined.
 p(Id, Property, Context) when is_list(Property); is_binary(Property) ->
-    p(Id, z_convert:to_atom(Property), Context);
+    try
+        P1 = binary_to_existing_atom(Property, utf8),
+        p(Id, P1, Context)
+    catch
+        error:badarg ->
+            p1(Id, Property, Context)
+    end;
 p(Id, Property, Context)
     when Property =:= category_id
     orelse Property =:= page_url
@@ -443,6 +451,9 @@ p(Id, Property, Context)
     orelse Property =:= default_page_url ->
     p_no_acl(rid(Id, Context), Property, Context);
 p(Id, Property, Context) ->
+    p1(Id, Property, Context).
+
+p1(Id, Property, Context) ->
     case rid(Id, Context) of
         undefined ->
             undefined;
@@ -551,21 +562,30 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
     p_cached(Id, Predicate, Context).
 
 
-p_cached(Id, Predicate, Context) ->
-    Value = case z_depcache:get(Id, Predicate, Context) of
+p_cached(Id, Property, Context) ->
+    Value = case z_depcache:get(Id, Property, Context) of
         {ok, V} ->
             V;
         undefined ->
             case get(Id, Context) of
                 undefined -> undefined;
-                PropList -> proplists:get_value(Predicate, PropList)
+                PropList when is_binary(Property) ->
+                    try
+                        P1 = binary_to_existing_atom(Property, utf8),
+                        proplists:get_value(P1, PropList)
+                    catch
+                        error:badarg ->
+                            undefined
+                    end;
+                PropList ->
+                    proplists:get_value(Property, PropList)
             end
     end,
     case Value of
         undefined ->
             % Unknown properties will be checked against the predicates, returns o(Predicate).
-            case m_predicate:is_predicate(Predicate, Context) of
-                true -> o(Id, Predicate, Context);
+            case m_predicate:is_predicate(Property, Context) of
+                true -> o(Id, Property, Context);
                 false ->
                     undefined % z_notifier:first(#rsc_property{id=Id, property=Predicate}, Context)
             end;

@@ -26,7 +26,7 @@
 
 
 -export([
-    m_get/2,
+    m_get/3,
 
      get/2,
      get_all/2,
@@ -40,17 +40,35 @@
 %% gen_model
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([], Context) ->
-    All = [ [{value, Val}, {title, Title}] || {Val, Title} <- z_service:all(authvalues, Context)],
-    {All, []};
-m_get([ selected, Id | Rest ], Context) ->
-    {get(Id, Context), Rest};
-m_get([ humanreadable, Id | Rest ], Context) ->
-    {humanreadable(Id, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            All = [
+                [ {value, Val}, {title, Title} ]
+                || {Val, Title} <- z_service:all(authvalues, Context)
+            ],
+            {ok, {All, []}};
+        false ->
+            {error, eacces}
+    end;
+m_get([ selected, Id | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {ok, {get(Id, Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
+m_get([ humanreadable, Id | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {ok, {humanreadable(Id, Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 %%
 %% Get permissions for consumer <Id>.

@@ -18,16 +18,22 @@
 
 -module(m_seo).
 
--export([ m_get/2 ]).
+-behaviour (zotonic_model).
 
-m_get([ noindex | Rest ], Context) ->
-    {m_config:get_boolean(mod_seo, noindex, Context), Rest};
-m_get([ description | Rest ], Context) ->
-    {m_config:get_value(mod_seo, description, Context), Rest};
-m_get([ bing, webmaster_verify | Rest ], Context) ->
-    {m_config:get_value(seo_bing, webmaster_verify, Context), Rest};
-m_get([ google, webmaster_verify | Rest ], Context) ->
-    {m_config:get_value(seo_google, webmaster_verify, Context), Rest};
-m_get([ google, analytics | Rest ], Context) ->
-    {m_config:get_value(seo_google, analytics, Context), Rest}.
+-export([ m_get/3 ]).
+
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ noindex | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_seo, noindex, Context), Rest}};
+m_get([ description | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(mod_seo, description, Context), Rest}};
+m_get([ bing, webmaster_verify | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(seo_bing, webmaster_verify, Context), Rest}};
+m_get([ google, webmaster_verify | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(seo_google, webmaster_verify, Context), Rest}};
+m_get([ google, analytics | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(seo_google, analytics, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 

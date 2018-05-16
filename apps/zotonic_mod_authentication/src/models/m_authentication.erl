@@ -18,12 +18,18 @@
 
 -module(m_authentication).
 
--export([ m_get/2 ]).
+-behaviour (zotonic_model).
 
-m_get([ password_min_length | Rest ], Context) ->
+-export([ m_get/3 ]).
+
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ password_min_length | Rest ], _Msg, Context) ->
     Len = case m_config:get_value(mod_authenticaton, password_min_length, Context) of
         undefined -> 6;
         <<>> -> 6;
         N -> z_convert:to_integer(N)
     end,
-    {Len, Rest}.
+    {ok, {Len, Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.

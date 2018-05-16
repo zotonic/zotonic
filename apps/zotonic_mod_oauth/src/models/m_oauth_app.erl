@@ -27,7 +27,7 @@
 
 
 -export([
-    m_get/2,
+    m_get/3,
 
     consumer_tokens/2,
     consumer_access_tokens/2,
@@ -65,18 +65,30 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([], Context) ->
-    {all_apps(Context), []};
-m_get([ info, Id | Rest ], Context) ->
-    {get_consumer(Id, Context), Rest};
-m_get([ tokens, Id | Rest ], Context) ->
-    {consumer_tokens(Id, Context), Rest};
-m_get([ access_tokens, Id | Rest ], Context) ->
-    {consumer_access_tokens(Id, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {all_apps(Context), []}};
+        false -> {error, eacces}
+    end;
+m_get([ info, Id | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {get_consumer(Id, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ tokens, Id | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {consumer_tokens(Id, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ access_tokens, Id | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {consumer_access_tokens(Id, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 all_apps(Context) ->

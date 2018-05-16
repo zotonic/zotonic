@@ -18,13 +18,16 @@
 
 -module(m_admin).
 
--export([ m_get/2 ]).
+-export([ m_get/3 ]).
 
-m_get([ pivot_queue_count | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ pivot_queue_count | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
-        true -> {z_pivot_rsc:queue_count(Context), Rest};
-        false -> {undefined, Rest}
+        true -> {ok, {z_pivot_rsc:queue_count(Context), Rest}};
+        false -> {error, eacces}
     end;
-m_get([ rsc_dialog_is_published | Rest ], Context) ->
-    {m_config:get_boolean(mod_admin, rsc_dialog_is_published, Context), Rest}.
-
+m_get([ rsc_dialog_is_published | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_admin, rsc_dialog_is_published, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
