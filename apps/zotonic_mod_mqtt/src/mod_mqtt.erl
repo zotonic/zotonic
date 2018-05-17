@@ -119,11 +119,10 @@ maybe_resolve({error, _} = Error, _Context) ->
     Error.
 
 publish_response(#{ properties := #{ response_topic := Topic } }, {ok, Res}, Context) ->
-    z_mqtt:publish(Topic, #{ status => "ok", result => Res }, Context);
+    z_mqtt:publish(Topic, #{ status => <<"ok">>, result => Res }, Context);
 publish_response(#{ properties := #{ response_topic := Topic } }, {error, Res}, Context) ->
-    z_mqtt:publish(Topic, #{ status => "error", message => Res }, Context);
+    z_mqtt:publish(Topic, #{ status => <<"error">>, message => Res }, Context);
 publish_response(#{}, _Res, _Context) ->
-    ?DEBUG(_Res),
     ok.
 
 model_module(Name, Context) ->
@@ -144,7 +143,6 @@ observe_module_activate(#module_activate{ module = Module, pid = ModulePid }, Co
                   Fs).
 
 maybe_subscribe({<<"mqtt:", TopicFilter/binary>>, Function}, Module, ModulePid, Context) ->
-    ?DEBUG(ModulePid),
     SubscriberContext = z_acl:sudo( z_context:new( z_context:site(Context) ) ),
     Callback = {?MODULE, module_callback, [ Module, Function ]},
     z_mqtt:subscribe(TopicFilter, Callback, ModulePid, #{ qos => 0 }, SubscriberContext);

@@ -53,7 +53,12 @@ is_app_available(App) ->
 -spec setup() -> ok.
 setup() ->
     io:setopts([{encoding, unicode}]),
+    jsxrecord_init(),
     ensure_mnesia_schema().
+
+%% @doc Let jsxrecord load the Zotonic record definitions from z.
+jsxrecord_init() ->
+    erlang:spawn( fun() -> jsxrecord:load_records([ z ]) end).
 
 %% @doc Ensure that mnesia has created its schema in the configured priv/data/mnesia directory.
 -spec ensure_mnesia_schema() -> ok.

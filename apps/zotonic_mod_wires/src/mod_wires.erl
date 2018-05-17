@@ -51,15 +51,10 @@ observe_output_html(#output_html{}, {MixedHtml, Context}, _Context) ->
     z_render:output(MixedHtml, Context).
 
 %% @doc Subscribe to transport events coming in from the client.
-'mqtt:zotonic-transport/+'(
-    _SubCtx,
-    #{
+'mqtt:zotonic-transport/+'( #{
         type := publish,
-        message := #{
-            type := publish,
-            payload := Payload,
-            topic := [ _, Delegate ]
-        },
-        publisher_context := Context
-    }) ->
+        payload := Payload,
+        topic := [ _, Delegate ]
+    },
+    Context) ->
     z_transport:transport(Delegate, Payload, Context).
