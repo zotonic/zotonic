@@ -597,7 +597,7 @@ cleanup_tsv_text(Text) when is_binary(Text) ->
             binary:replace(Acc, R, <<" ">>, [global])
         end,
         z_string:sanitize_utf8(Text),
-        [<<"-">>, <<"/">>]).
+        [<<0>>, <<"-">>, <<"/">>]).
 
 get_float(K, Ps) ->
     case proplists:get_value(K, Ps) of
