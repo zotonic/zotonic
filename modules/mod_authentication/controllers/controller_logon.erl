@@ -434,22 +434,27 @@ send_reminder(1, _Email, _Context) ->
 send_reminder(undefined, Email, Context) ->
     z_email:send_render(Email, "email_password_reset.tpl", [], Context);
 send_reminder(Id, Email, Context) ->
-    Email1 = case m_rsc:p_no_acl(Id, email_raw, Context) of
+    PrefEmail = case m_rsc:p_no_acl(Id, email_raw, Context) of
         undefined -> Email;
-        PrefEmail -> PrefEmail
+        <<>> -> Email;
+        E -> m_identity:normalize_key(email, E)
     end,
     case m_identity:get_username(Id, Context) of
         undefined ->
-            send_reminder(undefined, Email1, Context);
+            send_reminder(undefined, Email, Context);
         Username when Username =/= <<"admin">> ->
             Vars = [
                 {recipient_id, Id},
                 {id, Id},
                 {secret, set_reminder_secret(Id, Context)},
                 {username, Username},
-                {email, Email}
+                {email, PrefEmail}
             ],
-            z_email:send_render(Email, "email_password_reset.tpl", Vars, Context)
+            z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
+            case Email of
+                PrefEmail -> ok;
+                _ -> z_email:send_render(PrefEmail, "email_password_reset.tpl", Vars, Context)
+            end
     end.
 
 %% @doc Set the unique reminder code for the account.
