@@ -52,19 +52,22 @@ event(#submit{message={user_add, Props}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
             NameFirst = z_context:get_q_validated("name_first", Context),
-            NamePrefix = z_context:get_q("surprefix", Context),
+            NamePrefix = z_context:get_q("name_surname_prefix", Context, z_context:get_q("surprefix", Context)),
             NameSur = z_context:get_q_validated("name_surname", Context),
             Category = z_context:get_q(category, Context, person),
-            Title = case NamePrefix of
-                [] -> [ NameFirst, " ", NameSur ];
-                _ -> [ NameFirst, " ", NamePrefix, " ", NameSur ]
-            end,
-
+            Vs = [
+                {id, [
+                    {name_first, NameFirst},
+                    {name_surname_prefix, NamePrefix},
+                    {name_surname, NameSur}
+                ]}
+            ],
+            {Title, _} = z_template:render_to_iolist("_name.tpl", Vs, Context),
             Email = z_context:get_q_validated("email", Context),
             PersonProps = [
                 {is_published, true},
                 {category, Category},
-                {title, lists:flatten(Title)},
+                {title, iolist_to_binary(Title)},
                 {name_first, NameFirst},
                 {name_surname_prefix, NamePrefix},
                 {name_surname, NameSur},
