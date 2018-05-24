@@ -11,6 +11,7 @@
     {hostname, "localhost:8041"},
 
     {dbschema, "testsandboxdb"},
+    {dbdropschema, true},
     {skeleton, empty},
 
     %% Admin password, used during installation. You can change it later

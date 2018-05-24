@@ -143,7 +143,8 @@ db_opts(SiteProps) ->
                 {dbpassword, z_config:get(dbpassword, "")},
                 {dbuser, z_config:get(dbuser, "zotonic")},
                 {dbdatabase, z_config:get(dbdatabase, "zotonic")},
-                {dbschema, z_config:get(dbschema, "public")}],
+                {dbschema, z_config:get(dbschema, "public")},
+                {dbdropschema, false}],
     lists:foldl(fun({K, V}, Acc) ->
                         case proplists:lookup(K, Acc) of
                             {K, _} -> Acc;
