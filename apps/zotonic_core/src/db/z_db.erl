@@ -78,7 +78,8 @@
 
     ensure_database/2,
     ensure_schema/2,
-    schema_exists_conn/2
+    schema_exists_conn/2,
+    drop_schema/1
 ]).
 
 
@@ -700,6 +701,31 @@ ensure_schema(Site, Options) ->
     close_connection(DbConnection),
     Result.
 
+drop_schema(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    case open_connection("postgres", Options) of
+        {ok, DbConnection} ->
+            Schema = proplists:get_value(dbschema, Options),
+            Result = case schema_exists_conn(DbConnection, Schema) of
+                true ->
+                    case epgsql:equery(
+                        DbConnection,
+                        "DROP SCHEMA \"" ++ Schema ++ "\" CASCADE"
+                    ) of
+                        {ok, _, _} ->
+                            ok;
+                        {error, Reason} = Error ->
+                            lager:error("z_db error ~p when dropping schema ~p", [Reason, Schema]),
+                            Error
+                    end;
+                false ->
+                    ok
+            end,
+            close_connection(DbConnection),
+            Result;
+        {error, _} ->
+            ok
+    end.
 
 open_connection(DatabaseName, Options) ->
     epgsql:connect(

@@ -86,7 +86,14 @@ install_check(SiteProps) ->
         {site, Site},
         {module, ?MODULE}
       ]),
-    check_db_and_upgrade(z_context:new(Site), 1).
+    Context = z_context:new(Site),
+    case z_db:has_connection(Context) of
+        true ->
+            maybe_drop_db(Context),
+            check_db_and_upgrade(Context, 1);
+        false ->
+            ok
+    end.
 
 check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
     case z_db_pool:test_connection(Context) of
@@ -141,6 +148,21 @@ check_db_and_upgrade(_Context, _Tries) ->
     lager:error("Could not connect to database and db creation failed"),
     {error, database}.
 
+maybe_drop_db(Context) ->
+    DbOptions = z_db_pool:db_opts(m_site:all(Context)),
+    case proplists:get_value(dbdropschema, DbOptions, false) of
+        true ->
+            case z_db_pool:test_connection(Context) of
+                ok ->
+                    lager:info("[~p] Dropping schema ~p",
+                            [ z_context:site(Context), proplists:get_value(dbschema, DbOptions) ]),
+                    ok = z_db:drop_schema(Context);
+                {error, _} ->
+                    ok
+            end;
+        false ->
+            ok
+    end.
 
 has_table(C, Table, Database, Schema) ->
     {ok, _, [{HasTable}]} = epgsql:equery(C, "

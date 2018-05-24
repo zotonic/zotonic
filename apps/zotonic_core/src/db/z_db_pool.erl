@@ -157,7 +157,8 @@ db_opts(SiteProps) ->
                 {dbpassword, z_config:get(dbpassword, "")},
                 {dbuser, z_config:get(dbuser, "zotonic")},
                 {dbdatabase, z_config:get(dbdatabase, "zotonic")},
-                {dbschema, z_config:get(dbschema, "public")}],
+                {dbschema, z_config:get(dbschema, "public")},
+                {dbdropschema, false}],
     lists:ukeymerge(1, lists:sort(Kvs), lists:sort(Defaults)).
 
 get_connection(#context{db={Pool,_}}) ->
