@@ -37,6 +37,7 @@
     delete_nocheck/2,
     props_filter/3,
 
+    to_slug/1,
     test/0
 ]).
 
@@ -227,7 +228,7 @@ duplicate(Id, DupProps, Context) ->
                             SafeDupProps ++ [
                                 {name,undefined}, {uri,undefined}, {page_path,undefined},
                                 {is_authoritative,true}, {is_protected,false},
-                                {slug,undefined}
+                                {title_slug, undefined}, {slug, undefined}
                             ]),
             {ok, NewId} = insert(InsProps, false, Context),
             m_edge:duplicate(Id, NewId, Context),
@@ -691,22 +692,22 @@ props_filter([{page_path, Path}|T], Acc, Context) ->
         false ->
             props_filter(T, Acc, Context)
     end;
-props_filter([{slug, undefined}|T], Acc, Context) ->
-    props_filter(T, [{slug, []} | Acc], Context);
-props_filter([{slug, <<>>}|T], Acc, Context) ->
-    props_filter(T, [{slug, []} | Acc], Context);
-props_filter([{slug, ""}|T], Acc, Context) ->
-    props_filter(T, [{slug, []} | Acc], Context);
-props_filter([{slug, Slug}|T], Acc, Context) ->
-    props_filter(T, [{slug, to_slug(Slug, Context)} | Acc], Context);
-props_filter([{custom_slug, P}|T], Acc, Context) ->
-    props_filter(T, [{custom_slug, z_convert:to_bool(P)} | Acc], Context);
+props_filter([{title_slug, Slug}|T], Acc, Context) ->
+    case z_utils:is_empty(Slug) of
+        true ->
+            props_filter(T, [ {title_slug, <<>>}, {slug, <<>>} | Acc], Context);
+        false ->
+            Slug1 = to_slug(Slug),
+            SlugNoTr = z_trans:lookup_fallback(Slug1, en, Context),
+            props_filter(T, [ {title_slug, Slug1}, {slug, SlugNoTr} | Acc], Context)
+    end;
 
 props_filter([{B, P}|T], Acc, Context)
     when  B =:= is_published; B =:= is_featured; B=:= is_protected;
           B =:= is_dependent; B =:= is_query_live; B =:= date_is_all_day;
           B =:= is_website_redirect; B =:= is_page_path_multiple;
-          B =:= is_authoritative ->
+          B =:= is_authoritative;
+          B =:= custom_slug; B =:= seo_noindex ->
     props_filter(T, [{B, z_convert:to_bool(P)} | Acc], Context);
 
 props_filter([{P, DT}|T], Acc, Context)
@@ -837,7 +838,10 @@ props_autogenerate(Id, Props, Context) ->
                          {_, true} -> Props;
                          _X ->
                              %% Determine the slug from the title.
-                             [{slug, to_slug(Title, Context)} | proplists:delete(slug, Props)]
+                            Slug = to_slug(Title),
+                            SlugNoTr = z_trans:lookup_fallback(Slug, en, Context),
+                            PropsSlug = proplists:delete(slug, proplists:delete(title_slug, Props)),
+                            [ {title_slug, Slug}, {slug, SlugNoTr} | PropsSlug ]
                      end
              end,
     Props1.
@@ -847,17 +851,20 @@ props_autogenerate(Id, Props, Context) ->
 %% @spec props_defaults(Props1, Context) -> Props2
 props_defaults(Props, Context) ->
     % Generate slug from the title (when there is a title)
-    Props1 = case proplists:get_value(slug, Props) of
+    Props1 = case proplists:get_value(title_slug, Props) of
+        undefined ->
+            case proplists:get_value(title, Props) of
                 undefined ->
-                    case proplists:get_value(title, Props) of
-                        undefined ->
-                            Props;
-                        Title ->
-                            lists:keystore(slug, 1, Props, {slug, to_slug(Title, Context)})
-                    end;
-                _ ->
-                    Props
-             end,
+                    Props;
+                Title ->
+                    Slug = to_slug(Title),
+                    SlugNoTr = z_trans:lookup_fallback(Slug, en, Context),
+                    PropsSlug = lists:keystore(slug, 1, Props, {slug, SlugNoTr}),
+                    lists:keystore(title_slug, 1, PropsSlug, {title_slug, Slug})
+            end;
+        _ ->
+            Props
+    end,
     % Assume content is authoritative, unless stated otherwise
     case proplists:get_value(is_authoritative, Props1) of
         undefined -> [{is_authoritative, true}|Props1];
@@ -873,13 +880,42 @@ props_filter_protected(Props, RscUpd) ->
                  Props).
 
 
-to_slug(undefined, _Context) -> undefined;
-to_slug({trans, _} = Tr, Context) -> to_slug(z_trans:lookup_fallback(Tr, en, Context), Context);
-to_slug(B, _Context) when is_binary(B) -> truncate_slug(z_string:to_slug(B));
-to_slug(X, Context) -> to_slug(z_convert:to_binary(X), Context).
+to_slug(undefined) ->
+    undefined;
+to_slug({trans, Tr}) ->
+    Tr1 = lists:map(
+        fun({Lang, V}) -> {Lang, to_slug(V)} end,
+        Tr),
+    {trans, Tr1};
+to_slug(B) when is_binary(B) ->
+    B1 = z_string:to_lower( z_html:unescape(B) ),
+    truncate_slug( slugify(B1, false, <<>>) );
+to_slug(X) ->
+    to_slug( z_convert:to_binary(X) ).
 
-truncate_slug(<<Slug:78/binary, _/binary>>) -> Slug;
-truncate_slug(Slug) -> Slug.
+truncate_slug(Slug) ->
+    z_string:truncate(Slug, 70, <<>>).
+
+slugify(<<>>, _Last, Acc) ->
+    Acc;
+slugify(<<C/utf8, T/binary>>, $-, Acc) ->
+    case is_slugchar(C) of
+        false -> slugify(T, $-, Acc);
+        true when Acc =:= <<>> -> slugify(T, false, <<C/utf8>>);
+        true -> slugify(T, false, <<Acc/binary, $-, C/utf8>>)
+    end;
+slugify(<<C/utf8, T/binary>>, false, Acc) ->
+    case is_slugchar(C) of
+        false -> slugify(T, $-, Acc);
+        true -> slugify(T, false, <<Acc/binary, C/utf8>>)
+    end.
+
+is_slugchar(C) when C =< 32 -> false;
+is_slugchar(254) -> false;
+is_slugchar(255) -> false;
+is_slugchar(C) when C > 128 -> true;
+is_slugchar(C) -> z_url:url_unreserved_char(C).
+
 
 %% @doc Map property names to an atom, fold pivot and computed fields together for later filtering.
 map_property_name(IsImport, P) when not is_list(P) -> map_property_name(IsImport, z_convert:to_list(P));
@@ -916,7 +952,6 @@ is_trimmable(website, _)     -> true;
 is_trimmable(page_path, _)   -> true;
 is_trimmable(name, _)        -> true;
 is_trimmable(slug, _)        -> true;
-is_trimmable(custom_slug, _) -> true;
 is_trimmable(category, _)    -> true;
 is_trimmable(rsc_id, _)      -> true;
 is_trimmable(_, _)           -> false.
