@@ -25,7 +25,7 @@
     <p><a href="{% url logon_reset secret=secret use_absolute_url %}">{% url logon_reset secret=secret use_absolute_url %}</a></p>
 {% endif %}
 
-<p>{_ When you didn't request a password reset, you can ignore this email. Maybe someone made an error typing his or her email address. _}</p>
+<p>{_ If you didn't request a password reset, please ignore this email. Maybe someone made an error typing his or her email address. _}</p>
 
 {% endblock %}
 
