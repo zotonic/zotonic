@@ -8,7 +8,7 @@
 
     <p>{_ You've requested a new password for _} <a href="{{ m.site.protocol }}://{{ m.site.hostname }}/">{{ m.site.hostname }}</a>.</p>
 
-    <p>{_ However this email address is not on our database of registered users and therefore the attempted password change has failed. _}</p>
+    <p>{_ However this email address does not belong to one of our registered users so you will not be able to change the password. _}</p>
 
     <p>{_ If you think you have an account and were expecting this email, please try again using the email address you gave when signing up. _}</p>
 {% else %}
@@ -20,7 +20,7 @@
 
     {% all include "_logon_extra_email_reset.tpl" identity_types=m.identity[id].all_types %}
 
-    <p>{_ Click on the link below to enter a new password, when clicking doesn't work then you can copy and paste the complete address to your browser. _}</p>
+    <p>{_ Click on the link below to enter a new password. When clicking doesn't work, please copy and paste the whole link. _}</p>
 
     <p><a href="{% url logon_reset secret=secret use_absolute_url %}">{% url logon_reset secret=secret use_absolute_url %}</a></p>
 {% endif %}
