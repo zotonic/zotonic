@@ -9,8 +9,9 @@
 -export([init/1]).
 
 -export([
-    ensure_file/4
-    ]).
+    ensure_file/4,
+    force_all_stale/0
+]).
 
 -define(SERVER, ?MODULE).
 
@@ -30,6 +31,10 @@ ensure_file(Path, Root, OptFilters, Context) ->
 lookup_file(Pid) ->
     z_file_entry:lookup(Pid).
 
+force_all_stale() ->
+    Children = supervisor:which_children(?SERVER),
+    [z_file_entry:force_stale(Pid) || {_, Pid, _, _} <- Children],
+    ok.
 
 start_link() ->
     supervisor:start_link({local, ?SERVER}, ?MODULE, []).

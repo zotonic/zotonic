@@ -132,11 +132,11 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
             end
     end.
 
-last([]) -> $/;
-last(Path) -> lists:last(Path).
-
 
 %%====================================================================
 %% support functions
 %%====================================================================
+
+last([]) -> $/;
+last(Path) -> lists:last(Path).
 
