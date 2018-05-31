@@ -24,6 +24,10 @@ form_outside_tpl
             {_ Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended. _}
         </div>
 
+        <div id="signup_error_duplicate_username" class="alert alert-danger">
+            {_ Sorry, this username is already in use. Please try another one. _}
+        </div>
+
         {% if form_form_tpl %}
             {% include form_form_tpl
                 page=page
