@@ -128,7 +128,7 @@ msgstr "Vul het nieuwe wachtwoord van je account in"
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:14
 #, fuzzy
 msgid "Enter your email address"
-msgstr "Vul je e-mailadres of gebruikersnaam in"
+msgstr "Vul je e-mailadres in"
 
 #: modules/mod_authentication/templates/_logon_reminder_title.tpl:2
 msgid ""
@@ -204,6 +204,8 @@ msgid ""
 "However this email address does not belong to one of our registered users so "
 "you will not be able to change the password."
 msgstr ""
+"We hebben geen geregistreerde gebruiker gevonden met dit e-mailadres dus "
+"je kunt het wachtwoord niet veranderen."
 
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:22
 msgid "I forgot my password"
@@ -233,6 +235,8 @@ msgid ""
 "If you think you have an account and were expecting this email, please try "
 "again using the email address you gave when signing up."
 msgstr ""
+"Als je denkt dat je een account hebt, probeer het dan opnieuw met het "
+"e-mailadres dat je hebt gebruikt bij registratie."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:24
 msgid "In the email you will find instructions on how to confirm your account."
@@ -445,7 +449,7 @@ msgstr "We hebben geen geldig e-mailadres van je."
 #: modules/mod_authentication/templates/_logon_stage.tpl:4
 #, fuzzy
 msgid "We have sent an email with a link to reset your password to"
-msgstr "Volg de instructies in de e-mail."
+msgstr "We hebben een e-mail met verdere instructies gestuurd naar"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:12
 msgid "You have to share your email address to be able to sign in."
