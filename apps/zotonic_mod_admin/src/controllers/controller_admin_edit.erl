@@ -111,7 +111,7 @@ event(#submit{message={rscform, Args}}, Context) ->
                             Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context), Context1),
                             Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context), Context2),
                             Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
-                            Context4a = z_render:set_value("slug",  m_rsc:p(Id, slug, Context), Context4),
+                            Context4a = set_value_slug(m_rsc:p(Id, title_slug, Context), Context4),
                             Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context)) of
                                            true ->  z_render:wire("delete-button", {disable, []}, Context4a);
                                            false -> z_render:wire("delete-button", {enable, []}, Context4a)
@@ -168,6 +168,20 @@ event(#postback{message={query_preview, Opts}}, Context) ->
             z_render:growl_error(["There is an error in your query: ", Kind, " - ", Arg], Context)
     end.
 
+set_value_slug(undefined, Context) ->
+    set_value_slug(<<>>, Context);
+set_value_slug({trans, Tr}, Context) ->
+    lists:foldl(
+        fun({Lang, V}, Ctx) ->
+            z_render:set_value(
+                "title_slug--" ++ atom_to_list(Lang),
+                V,
+                Ctx)
+        end,
+        Context,
+        Tr);
+set_value_slug(Slug, Context) ->
+    z_render:set_value("title_slug", Slug, Context).
 
 %% @doc Remove some properties that are part of the postback
 filter_props(Fs) ->

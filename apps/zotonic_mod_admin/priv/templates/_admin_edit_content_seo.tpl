@@ -1,4 +1,4 @@
-{% extends "admin_edit_widget_std.tpl" %}
+{% extends "admin_edit_widget_i18n.tpl" %}
 
 {# Widget for editing SEO preferences #}
 
