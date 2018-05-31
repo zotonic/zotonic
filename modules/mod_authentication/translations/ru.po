@@ -40,14 +40,14 @@ msgstr ""
 msgid "Authorizing..."
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_reminder_support.tpl:4
-#: modules/mod_authentication/templates/_logon_reset_support.tpl:3
 #: modules/mod_authentication/templates/_logon_stage.tpl:7
 #: modules/mod_authentication/templates/_logon_stage.tpl:32
+#: modules/mod_authentication/templates/_logon_reminder_support.tpl:4
+#: modules/mod_authentication/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
 msgstr "Вернуться к форме входа"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:8
+#: modules/mod_authentication/templates/email_password_reset.tpl:17
 msgid "Below are your account details and a link to set a new password."
 msgstr ""
 "Ниже указаны реквизиты учетной записи и ссылка для установки нового пароля."
@@ -70,10 +70,11 @@ msgstr ""
 msgid "Check your email"
 msgstr "Проверьте свой e-mail!"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:14
+#: modules/mod_authentication/templates/email_password_reset.tpl:23
+#, fuzzy
 msgid ""
-"Click on the link below to enter a new password, when clicking doesn't work "
-"then you can copy and paste the complete address to your browser."
+"Click on the link below to enter a new password. When clicking doesn't work, "
+"please copy and paste the whole link."
 msgstr ""
 "Нажмите на эту ссылку, чтобы заменить пароль. Если это не работает, "
 "попробуйте скопировать и указать браузеру полный адрес."
@@ -96,6 +97,10 @@ msgid ""
 "entry and try again."
 msgstr ""
 
+#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:2
+msgid "Email"
+msgstr ""
+
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
 msgstr ""
@@ -110,14 +115,19 @@ msgid ""
 "authenticating via the services below."
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:16
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:16
 msgid "Enter a password"
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_reset_title.tpl:8
 msgid "Enter the new password for your account"
 msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:14
+#, fuzzy
+msgid "Enter your email address"
+msgstr "Проверьте свой e-mail!"
 
 #: modules/mod_authentication/templates/_logon_reminder_title.tpl:2
 msgid ""
@@ -126,7 +136,6 @@ msgid ""
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:14
-#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:14
 msgid "Enter your email address or username"
 msgstr ""
 
@@ -160,7 +169,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr ""
 
-#: modules/mod_authentication/templates/error.403.tpl:14
+#: modules/mod_authentication/templates/error.403.tpl:20
 msgid "Go back"
 msgstr ""
 
@@ -170,7 +179,8 @@ msgstr ""
 msgid "Go to Modules"
 msgstr ""
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:6
+#: modules/mod_authentication/templates/email_password_reset.tpl:7
+#: modules/mod_authentication/templates/email_password_reset.tpl:15
 msgid "Hello"
 msgstr "Добро пожаловать,"
 
@@ -184,9 +194,24 @@ msgstr ""
 msgid "How to reset your password"
 msgstr "Как сбросить пароль"
 
+#: modules/mod_authentication/templates/email_password_reset.tpl:11
+msgid ""
+"However this email address does not belong to one of our registered users so "
+"you will not be able to change the password."
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:22
 msgid "I forgot my password"
 msgstr "Забыл пароль"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:28
+#, fuzzy
+msgid ""
+"If you didn't request a password reset, you can safely ignore this email. "
+"Maybe someone made an error typing his or her email address."
+msgstr ""
+"Если вы не запрашивали смену пароля, вы можете проигнорировать это "
+"сообщение. Возможно, кто-то ошибся при наборе своего адреса e-mail."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:5
 #: modules/mod_authentication/templates/_logon_stage.tpl:25
@@ -195,19 +220,25 @@ msgid ""
 "folder."
 msgstr ""
 
+#: modules/mod_authentication/templates/email_password_reset.tpl:13
+msgid ""
+"If you think you have an account and were expecting this email, please try "
+"again using the email address you gave when signing up."
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_stage.tpl:24
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "В сообщении указаны инструкции по активации вашей учетной записи."
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:40
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:23
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:23
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:34
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:40
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:23
 msgid "Keep me signed in"
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
 msgid "Minimum characters: "
 msgstr ""
 
@@ -215,8 +246,8 @@ msgstr ""
 msgid "Need help signing in?"
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:13
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:7
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:13
 msgid "New password"
 msgstr "Новый пароль"
 
@@ -232,10 +263,10 @@ msgstr ""
 msgid "One moment please, signing out..."
 msgstr "Подождите, пожалуйста, выполняется выход…"
 
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:15
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:11
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:12
-#: modules/mod_authentication/templates/logon_confirm_form.tpl:15
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 msgid "Password"
 msgstr "Пароль"
 
@@ -252,13 +283,13 @@ msgstr "Пожалуйста, подтвердите ваш пароль для"
 msgid "Please try again later."
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:27
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:21
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:27
 msgid "Repeat password"
 msgstr "Повторите пароль"
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:30
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:24
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:30
 msgid "Repeat your password"
 msgstr ""
 
@@ -266,8 +297,8 @@ msgstr ""
 msgid "Reset password and Sign in"
 msgstr "Сбросить пароль и войти"
 
-#: modules/mod_authentication/templates/_logon_reminder_title.tpl:1
 #: modules/mod_authentication/templates/_logon_reset_title.tpl:6
+#: modules/mod_authentication/templates/_logon_reminder_title.tpl:1
 msgid "Reset your password"
 msgstr "Сброс пароля"
 
@@ -275,8 +306,8 @@ msgstr "Сброс пароля"
 msgid "Safari 8 has a known problem with handling external authentications."
 msgstr ""
 
+#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:21
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:20
-#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:20
 msgid "Send"
 msgstr ""
 
@@ -284,20 +315,20 @@ msgstr ""
 msgid "Send Verification Message"
 msgstr "Получить код проверки"
 
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_off.tpl:4
-#: modules/mod_authentication/templates/error.403.tpl:29
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
+#: modules/mod_authentication/templates/error.403.tpl:35
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
 msgid "Sign in"
 msgstr "Вход"
 
-#: modules/mod_authentication/templates/_logon_login_title.tpl:1
 #: modules/mod_authentication/templates/logon.tpl:11
+#: modules/mod_authentication/templates/_logon_login_title.tpl:1
 msgid "Sign in to"
 msgstr "Войти на"
 
-#: modules/mod_authentication/templates/_logon_off.tpl:2
 #: modules/mod_authentication/templates/logoff.tpl:3
+#: modules/mod_authentication/templates/_logon_off.tpl:2
 msgid "Sign out"
 msgstr "Выйти"
 
@@ -323,7 +354,7 @@ msgstr "Извините, не удалось отправить сообщен�
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Извините, ваш код для сброса пароля неверен или истек"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:10
+#: modules/mod_authentication/templates/email_password_reset.tpl:19
 msgid "The email address associated with your account is"
 msgstr "Адрес e-mail, соответствующий вашей учетной записи:"
 
@@ -359,11 +390,11 @@ msgstr ""
 "Чтобы определить вашу учетную запись,\tнужно указать имя пользователя или "
 "связанный с ней адрес e-mail."
 
-#: modules/mod_authentication/templates/error.403.tpl:23
+#: modules/mod_authentication/templates/error.403.tpl:29
 msgid "To view this page you must be signed in."
 msgstr ""
 
-#: modules/mod_authentication/templates/error.403.tpl:20
+#: modules/mod_authentication/templates/error.403.tpl:26
 msgid "To view this page, you need to have other access rights."
 msgstr ""
 
@@ -373,9 +404,9 @@ msgid ""
 "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "Используйте цифры или знаки препинания для большей надежности пароля."
 
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 msgid "Username"
 msgstr "Имя пользователя"
 
@@ -397,22 +428,16 @@ msgid ""
 msgstr "Ваш электронный адрес для обратной связи в системе не обнаружен."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:4
-msgid "We have sent you an email with a link to reset your password."
+#, fuzzy
+msgid "We have sent an email with a link to reset your password to"
 msgstr ""
-
-#: modules/mod_authentication/templates/email_password_reset.tpl:18
-msgid ""
-"When you didn't request a password reset, you can ignore this email. Maybe "
-"someone made an error typing his or her email address."
-msgstr ""
-"Если вы не запрашивали смену пароля, вы можете проигнорировать это "
-"сообщение. Возможно, кто-то ошибся при наборе своего адреса e-mail."
+"Ниже указаны реквизиты учетной записи и ссылка для установки нового пароля."
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:12
 msgid "You have to share your email address to be able to sign in."
 msgstr ""
 
-#: modules/mod_authentication/templates/error.403.tpl:21
+#: modules/mod_authentication/templates/error.403.tpl:27
 msgid "You may try to sign in as a different user."
 msgstr ""
 
@@ -422,7 +447,7 @@ msgid ""
 "the configured App Keys."
 msgstr ""
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:23
+#: modules/mod_authentication/templates/email_password_reset.tpl:34
 msgid ""
 "You receive this email because you or someone else requested a password "
 "reset for your account. You or the someone else either entered your username "
@@ -452,16 +477,16 @@ msgstr ""
 msgid "You've entered an unknown username or email address. Please try again."
 msgstr "Вы указали неверное имя пользователя или e-mail.  Попробуйте снова."
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:8
+#: modules/mod_authentication/templates/email_password_reset.tpl:9
+#: modules/mod_authentication/templates/email_password_reset.tpl:17
 msgid "You've requested a new password for"
 msgstr "Вы запросили смену пароля от"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:10
+#: modules/mod_authentication/templates/email_password_reset.tpl:19
 msgid "Your account name is"
 msgstr "Имя вашей учетной записи:"
 
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:2
-#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:2
 msgid "Your email or username"
 msgstr ""
 
@@ -473,8 +498,8 @@ msgstr "Вы указали слишком короткий пароль."
 msgid "Your password has expired"
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
 msgid "Your password is too short."
 msgstr ""
 
@@ -482,8 +507,8 @@ msgstr ""
 msgid "or"
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:8
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:8
+#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:8
 msgid "user@example.com"
 msgstr "user@example.com"
 
