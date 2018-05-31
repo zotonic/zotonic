@@ -403,15 +403,6 @@ make_rememberme_cookie_value(UserId, Context) ->
     {ok, Token} = m_identity:get_rememberme_token(UserId, Context),
     {ok, {v1, Token}}.
 
-
-% lookup_by_username("admin", _Context) ->
-%     [];
-% lookup_by_username(Handle, Context) ->
-%     case m_identity:lookup_by_username(Handle, Context) of
-%         undefined -> [];
-%         Row -> [ proplists:get_value(rsc_id, Row) ]
-%     end.
-
 %% @doc Find all users with a certain e-mail address
 lookup_identities(undefined, _Context) -> [];
 lookup_identities("", _Context) -> [];
