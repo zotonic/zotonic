@@ -101,6 +101,8 @@ unify(List) ->
 
 unify([], Acc) ->
     lists:reverse(Acc);
+unify([<<"/lib-min", Rest/binary>>|T], Acc) ->
+    unify(T, [Rest|Acc]);
 unify([<<"/lib", Rest/binary>>|T], Acc) ->
     unify(T, [Rest|Acc]);
 unify([H|T], Acc) ->

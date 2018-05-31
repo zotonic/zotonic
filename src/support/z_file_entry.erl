@@ -465,9 +465,9 @@ compress_file_1(Minify, Filename, Z, IO, Acc) ->
     end.
 
 minify(Filename, <<".js">>, Data) ->
-    minify_m(Filename, Data, z_jsmin);
+    <<(minify_m(Filename, Data, z_jsmin))/binary, ";\n">>;
 minify(Filename, <<".css">>, Data) ->
-    minify_m(Filename, Data, z_cssmin);
+    <<(minify_m(Filename, Data, z_cssmin))/binary, "\n">>;
 minify(_, _, Data) ->
     Data.
     
@@ -478,7 +478,7 @@ minify_m(Filename, Data, MinifyModule) ->
         false ->
             case catch MinifyModule:minify(Data) of
                 Minified when is_binary(Minified) ->
-                    <<Minified/binary, ";\n">>;
+                    Minified;
                 Reason ->
                     error_logger:warning_msg("mod_base: Could not minify ~p. [Reason: ~p]~n", [Filename, Reason]),
                     Data 
