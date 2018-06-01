@@ -518,20 +518,30 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
     PredId = m_predicate:name_to_id_check(Predicate, Context),
     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
     F = fun(Ctx) ->
-        case z_db:q("select id, object_id from edge where subject_id = $1 and predicate_id = $2 order by seq,id limit 1 offset $3",
+        case z_db:q("select id, object_id, seq from edge where subject_id = $1 and predicate_id = $2 order by seq,id limit 1 offset $3",
                     [SubjectId, PredId, Nth-1],
                     Ctx) of
             [] ->
                 {error, enoent};
-            [{EdgeId,OldObjectId}] ->
+            [ {EdgeId, OldObjectId, SeqNr} ] ->
                 case z_acl:is_allowed(delete, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=OldObjectId}, Ctx) of
-                    true ->
+                    true when OldObjectId =:= ObjectId ->
                         1 = z_db:q("update edge set object_id = $1, creator_id = $3, created = now() where id = $2",
                                    [ObjectId,EdgeId,z_acl:user(Ctx)],
                                    Ctx),
                         m_rsc:touch(SubjectId, Ctx),
-                        pivot_resources([ObjectId], Ctx),
                         {ok, EdgeId};
+                    true ->
+                        1 = z_db:q("delete from edge where id = $1", [EdgeId], Ctx),
+                        z_db:insert(
+                            edge,
+                            [
+                                {subject_id, SubjectId},
+                                {predicate_id, PredId},
+                                {object_id, ObjectId},
+                                {seq, SeqNr}
+                            ],
+                            Ctx);
                     false ->
                         {error, eacces}
                 end
