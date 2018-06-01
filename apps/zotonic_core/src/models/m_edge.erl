@@ -526,14 +526,15 @@ merge(WinnerId, LoserId, Context) ->
 
 
 %% @doc Update the nth edge of a subject.  Set a new object, keep the predicate.
-%% When there are not enough edges then an error is returned. The first edge is nr 1.
-%% @spec update_nth(int(), Predicate, int(), ObjectId, Context) -> {ok, EdgeId} | {error, Reason}
+%% If there are not enough edges then an error is returned. The first edge is nr 1.
+-spec update_nth( m_rsc:resource_id(), m_rsc:resource(), m_rsc:resource_id(), integer(), z:context() )
+    -> {ok, pos_integer()} | {error, eacces|enoent}.
 update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
     {ok, PredId} = m_predicate:name_to_id(Predicate, Context),
     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
     F = fun(Ctx) ->
         case z_db:q(
-            "select id, object_id from edge "
+            "select id, object_id, seq from edge "
             "where subject_id = $1 and predicate_id = $2 "
             "order by seq,id limit 1 offset $3",
             [SubjectId, PredId, Nth - 1],
@@ -541,19 +542,21 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
         ) of
             [] ->
                 {error, enoent};
-            [{EdgeId, OldObjectId}] ->
-                case z_acl:is_allowed(delete,
-                    #acl_edge{subject_id = SubjectId, predicate = PredName, object_id = OldObjectId}, Ctx) of
+            [ {EdgeId, ObjectId, _SeqNr}] ->
+                {ok, EdgeId};
+            [ {EdgeId, OldObjectId, SeqNr} ] ->
+                case z_acl:is_allowed(delete, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=OldObjectId}, Ctx) of
                     true ->
-                        1 = z_db:q(
-                            "update edge "
-                            "set object_id = $1, creator_id = $3, created = now() "
-                            "where id = $2",
-                            [ObjectId, EdgeId, z_acl:user(Ctx)],
-                            Ctx
-                        ),
-                        pivot_resources([SubjectId, ObjectId], Ctx),
-                        {ok, EdgeId};
+                        1 = z_db:q("delete from edge where id = $1", [EdgeId], Ctx),
+                        z_db:insert(
+                            edge,
+                            [
+                                {subject_id, SubjectId},
+                                {predicate_id, PredId},
+                                {object_id, ObjectId},
+                                {seq, SeqNr}
+                            ],
+                            Ctx);
                     false ->
                         {error, eacces}
                 end
