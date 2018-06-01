@@ -523,14 +523,10 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
                     Ctx) of
             [] ->
                 {error, enoent};
+            [ {EdgeId, ObjectId, _SeqNr} ] ->
+                {ok, EdgeId};
             [ {EdgeId, OldObjectId, SeqNr} ] ->
                 case z_acl:is_allowed(delete, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=OldObjectId}, Ctx) of
-                    true when OldObjectId =:= ObjectId ->
-                        1 = z_db:q("update edge set object_id = $1, creator_id = $3, created = now() where id = $2",
-                                   [ObjectId,EdgeId,z_acl:user(Ctx)],
-                                   Ctx),
-                        m_rsc:touch(SubjectId, Ctx),
-                        {ok, EdgeId};
                     true ->
                         1 = z_db:q("delete from edge where id = $1", [EdgeId], Ctx),
                         z_db:insert(
