@@ -545,8 +545,6 @@ move_day_if_undefined(Date, Fun) ->
 %% Copyright Ericsson AB 1996-2011. All Rights Reserved.
 %%
 %% The adaptation is to make the routines work for BCE.
-%% Note that the 10 days that were skipped in Oct 1582 are
-%% evenly spread over the years between 0 and 1582.
 
 -type year() :: integer().
 -type month() :: 1..12.
@@ -576,24 +574,13 @@ last_day_of_the_month1(Y, 2) ->
 last_day_of_the_month1(_, M) when is_integer(M), M > 0, M < 13 ->
     31.
 
-
 %% is_leap_year(Year) = true | false
 %%
 -spec is_leap_year(Year) -> boolean() when
       Year :: year().
-is_leap_year(Y) when is_integer(Y), Y > 1582 ->
-    is_leap_year_gregorian(Y);
-is_leap_year(Y) when is_integer(Y), Y =< 1582 ->
-    is_leap_year_julian(Y).
-
--spec is_leap_year_gregorian(year()) -> boolean().
-is_leap_year_gregorian(Year) when Year rem 4 =:= 0, Year rem 100 > 0 ->
+is_leap_year(Year) when Year rem 4 =:= 0, Year rem 100 =/= 0 ->
     true;
-is_leap_year_gregorian(Year) when Year rem 400 =:= 0 ->
+is_leap_year(Year) when Year rem 400 =:= 0 ->
     true;
-is_leap_year_gregorian(_) ->
+is_leap_year(_) ->
     false.
-
--spec is_leap_year_julian(year()) -> boolean().
-is_leap_year_julian(Year) ->
-    Year rem 4 =:= 0.
