@@ -1116,7 +1116,7 @@ dategroup_fill_parts( Name, S, {{undefined,Me,De},{He,Ie,Se}} ) ->
 dategroup_fill_parts( Name, S, {{Ye,undefined,De},{He,Ie,Se}} ) ->
     dategroup_fill_parts( Name, S ,{{Ye,12,De},{He,Ie,Se}} );
 dategroup_fill_parts( Name, S, {{Ye,Me,undefined},{He,Ie,Se}} ) ->
-    De = calendar:last_day_of_the_month(Ye,Me),
+    De = z_datetime:last_day_of_the_month(Ye,Me),
     dategroup_fill_parts( Name, S, {{Ye,Me,De},{He,Ie,Se}} );
 dategroup_fill_parts( Name, S, {{Ye,Me,De},{undefined,Ie,Se}} ) ->
     dategroup_fill_parts( Name, S, {{Ye,Me,De},{23,Ie,Se}} );
