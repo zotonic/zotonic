@@ -12,7 +12,7 @@
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #name_first }}">{_ First _}</label>
         <div class="col-md-6">
-	        <input type="text" id="{{ #name_first }}" name="name_first" value="" class="do_autofocus form-control" tabindex="1" />
+	        <input type="text" id="{{ #name_first }}" name="name_first" value="" class="form-control" tabindex="1" autofocus />
 	        {% validate id=#name_first name="name_first" type={presence} %}
 	    </div>
     </div>
@@ -20,8 +20,7 @@
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #name_surname_prefix }}">{_ Sur. prefix _}</label>
         <div class="col-md-9">
-	        {# below we do not use name_surename_prefix because it confuses the autofill of browsers #}
-	        <input class="form-control" type="text" id="{{ #name_surname_prefix }}" name="surprefix" value="" style="width: 50px" tabindex="2" />
+	        <input class="form-control" type="text" id="{{ #name_surname_prefix }}" name="name_surname_prefix" value="" style="width: 50px" tabindex="2" autocomplete="additional-name" />
 	    </div>
     </div>
 
@@ -83,7 +82,7 @@
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="new_password">{_ Password _}</label>
         <div class="col-md-9">
-	        <input class="form-control" type="password" id="new_password" name="new_password" value="" tabindex="6" />
+	        <input class="form-control" type="password" id="new_password" name="new_password" value="" tabindex="6" autocomplete="new-password" />
 	        {% validate id="new_password" type={presence} %}
 	    </div>
     </div>

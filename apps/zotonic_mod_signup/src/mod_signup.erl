@@ -232,14 +232,11 @@ props_to_rsc(Props, IsVerified, Context) ->
         true ->
             Props1;
         false ->
-            Name = [
-                z_convert:to_list(proplists:get_value(name_first, Props1)),
-                z_convert:to_list(proplists:get_value(name_surname_prefix, Props1)),
-                z_convert:to_list(proplists:get_value(name_surname, Props1))
+            Vs = [
+                {id, Props1}
             ],
-            Name1 = lists:filter(fun(S) -> not z_utils:is_empty(S) end, Name),
-            Name2 = string:join(Name1, " "),
-            [ {title, Name2} | Props1 ]
+            {Title, _} = z_template:render_to_iolist("_name.tpl", Vs, Context),
+            [ {title, iolist_to_binary(Title)} | Props1 ]
     end.
 
 
