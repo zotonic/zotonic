@@ -581,17 +581,19 @@ last_day_of_the_month1(_, M) when is_integer(M), M > 0, M < 13 ->
 %%
 -spec is_leap_year(Year) -> boolean() when
       Year :: year().
-is_leap_year(Y) when is_integer(Y) ->
-    is_leap_year1(Y).
+is_leap_year(Y) when is_integer(Y), Y > 1582 ->
+    is_leap_year_gregorian(Y);
+is_leap_year(Y) when is_integer(Y), Y =< 1582 ->
+    is_leap_year_julian(Y).
 
--spec is_leap_year1(year()) -> boolean().
-is_leap_year1(Year) when Year rem 4 =:= 0, Year rem 100 > 0 ->
-    % Julian and Gregorian calendar
+-spec is_leap_year_gregorian(year()) -> boolean().
+is_leap_year_gregorian(Year) when Year rem 4 =:= 0, Year rem 100 > 0 ->
     true;
-is_leap_year1(Year) when Year rem 400 =:= 0, Year > 1582 ->
-    % Gregorian calendar
+is_leap_year_gregorian(Year) when Year rem 400 =:= 0 ->
     true;
-is_leap_year1(_) ->
+is_leap_year_gregorian(_) ->
     false.
 
-
+-spec is_leap_year_julian(year()) -> boolean().
+is_leap_year_julian(Year) ->
+    Year rem 4 =:= 0.
