@@ -195,6 +195,10 @@ merge_copy_props_1(WinnerId, [{P,_}|Ps], IsMergeTrans, Acc, Context)
          P =:= is_authoritative; P =:= pivot_geocode; P =:= pivot_geocode_qhash;
          P =:= category_id ->
     merge_copy_props_1(WinnerId, Ps, IsMergeTrans, Acc, Context);
+merge_copy_props_1(WinnerId, [{blocks, LoserBs}|Ps], IsMergeTrans, Acc, Context) ->
+    WinnerBs = m_rsc:p_no_acl(WinnerId, blocks, Context),
+    NewBs = merge_copy_props_blocks(WinnerBs, LoserBs, IsMergeTrans, Context),
+    merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [ {blocks, NewBs} | Acc ], Context);
 merge_copy_props_1(WinnerId, [{_,Empty}|Ps], IsMergeTrans, Acc, Context)
     when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
     merge_copy_props_1(WinnerId, Ps, IsMergeTrans, Acc, Context);
@@ -241,6 +245,50 @@ merge_trans({trans, _} = Winner, Loser, Context) when is_binary(Loser) ->
 merge_trans(Winner, _Loser, _Context) ->
     Winner.
 
+
+% Merge the blocks.
+% Problem is that we don't know for sure if we want to merge blocks to a superset.
+% Merging might have some unintentional side effects (think of surveys, and randomly named blocks).
+% So for now we only merge the translations in the like-named blocks, and only if their type is the
+% same.
+merge_copy_props_blocks(WinnerBs, LoserBs, _IsMergeTrans, _Context) when not is_list(LoserBs) ->  WinnerBs;
+merge_copy_props_blocks(WinnerBs, LoserBs, _IsMergeTrans, _Context) when not is_list(WinnerBs) ->  LoserBs;
+merge_copy_props_blocks(WinnerBs, _LoserBs, false, _Context) -> WinnerBs;
+merge_copy_props_blocks(WinnerBs, LoserBs, true, Context) ->
+    lists:map(
+        fun(WB) ->
+            case find_block( proplists:get_value(name, WB), LoserBs ) of
+                undefined ->
+                    WB;
+                LB ->
+                    WT = proplists:get_value(type,WB),
+                    case proplists:get_value(type, LB) of
+                        WT -> merge_block_single(WB, LB, Context);
+                        _ -> WB
+                    end
+            end
+        end,
+        WinnerBs).
+
+find_block(_Name, []) -> undefined;
+find_block(Name, [ B | Bs ]) ->
+    case proplists:get_value(name, B) of
+        Name -> B;
+        _ -> find_block(Name, Bs)
+    end.
+
+merge_block_single(W, L, Context) ->
+    lists:map(
+        fun({K, WV}) ->
+            case proplists:get_value(K, L) of
+                undefined ->
+                    {K, WV};
+                LV ->
+                    WV1 = merge_trans(WV, LV, Context),
+                    {K, WV1}
+            end
+        end,
+        W).
 
 
 %% Flush all cached entries depending on this entry, one of its subjects or its categories.
