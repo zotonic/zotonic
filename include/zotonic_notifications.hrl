@@ -262,7 +262,8 @@
 %%      winner. The looser will be deleted.
 -record(rsc_merge, {
         winner_id :: integer(),
-        looser_id :: integer()
+        looser_id :: integer(),
+        is_merge_trans :: boolean()
     }).
 
 %% @doc Foldr for an resource update, modify the insertion properties.

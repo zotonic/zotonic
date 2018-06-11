@@ -27,7 +27,7 @@
     update/3,
     update/4,
     duplicate/3,
-    merge_delete/3,
+    merge_delete/4,
 
     flush/2,
 
@@ -115,14 +115,14 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
     ok.
 
 %% @doc Merge two resources, delete the losing resource.
--spec merge_delete(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok | {error, term()}.
-merge_delete(WinnerId, WinnerId, _Context) ->
+-spec merge_delete(m_rsc:resource(), m_rsc:resource(), list(), #context{}) -> ok | {error, term()}.
+merge_delete(WinnerId, WinnerId, _Options, _Context) ->
     ok;
-merge_delete(_WinnerId, 1, _Context) ->
+merge_delete(_WinnerId, 1, _Options, _Context) ->
     throw({error, eacces});
-merge_delete(_WinnerId, admin, _Context) ->
+merge_delete(_WinnerId, admin, _Options, _Context) ->
     throw({error, eacces});
-merge_delete(WinnerId, LoserId, Context) ->
+merge_delete(WinnerId, LoserId, Options, Context) ->
     case z_acl:rsc_deletable(LoserId, Context)
         andalso z_acl:rsc_editable(WinnerId, Context)
     of
@@ -131,23 +131,29 @@ merge_delete(WinnerId, LoserId, Context) ->
                 true ->
                     m_category:delete(LoserId, WinnerId, Context);
                 false ->
-                    merge_delete_nocheck(m_rsc:rid(WinnerId, Context), m_rsc:rid(LoserId, Context), Context)
+                    merge_delete_nocheck(m_rsc:rid(WinnerId, Context), m_rsc:rid(LoserId, Context), Options, Context)
             end;
         false ->
             throw({error, eacces})
     end.
 
 %% @doc Merge two resources, delete the 'loser'
--spec merge_delete_nocheck(integer(), integer(), #context{}) -> ok.
-merge_delete_nocheck(WinnerId, LoserId, Context) ->
-    z_notifier:map(#rsc_merge{winner_id=WinnerId, looser_id=LoserId}, Context),
+-spec merge_delete_nocheck(integer(), integer(), list(), #context{}) -> ok.
+merge_delete_nocheck(WinnerId, LoserId, Opts, Context) ->
+    IsMergeTrans = proplists:get_value(is_merge_trans, Opts, false),
+    z_notifier:map(#rsc_merge{
+            winner_id = WinnerId,
+            looser_id = LoserId,
+            is_merge_trans = IsMergeTrans
+        },
+        Context),
     ok = m_edge:merge(WinnerId, LoserId, Context),
     m_media:merge(WinnerId, LoserId, Context),
     m_identity:merge(WinnerId, LoserId, Context),
     move_creator_modifier_ids(WinnerId, LoserId, Context),
     PropsLooser = m_rsc:get(LoserId, Context),
     ok = delete_nocheck(LoserId, WinnerId, Context),
-    case merge_copy_props(WinnerId, PropsLooser, Context) of
+    case merge_copy_props(WinnerId, PropsLooser, IsMergeTrans, Context) of
         [] ->
             ok;
         UpdProps ->
@@ -176,28 +182,65 @@ move_creator_modifier_ids(WinnerId, LoserId, Context) ->
             end,
             Ids).
 
-merge_copy_props(WinnerId, Props, Context) ->
-    merge_copy_props(WinnerId, Props, [], Context).
+merge_copy_props(WinnerId, Props, IsMergeTrans, Context) ->
+    Props1 = ensure_merge_language(Props, Context),
+    merge_copy_props_1(WinnerId, Props1, IsMergeTrans, [], Context).
 
-merge_copy_props(_WinnerId, [], Acc, _Context) ->
+merge_copy_props_1(_WinnerId, [], _IsMergeTrans, Acc, _Context) ->
     lists:reverse(Acc);
-merge_copy_props(WinnerId, [{P,_}|Ps], Acc, Context)
+merge_copy_props_1(WinnerId, [{P,_}|Ps], IsMergeTrans, Acc, Context)
     when P =:= creator; P =:= creator_id; P =:= modifier; P =:= modifier_id;
          P =:= created; P =:= modified; P =:= version;
          P =:= id; P =:= is_published; P =:= is_protected; P =:= is_dependent;
          P =:= is_authoritative; P =:= pivot_geocode; P =:= pivot_geocode_qhash;
          P =:= category_id ->
-    merge_copy_props(WinnerId, Ps, Acc, Context);
-merge_copy_props(WinnerId, [{_,Empty}|Ps], Acc, Context)
+    merge_copy_props_1(WinnerId, Ps, IsMergeTrans, Acc, Context);
+merge_copy_props_1(WinnerId, [{_,Empty}|Ps], IsMergeTrans, Acc, Context)
     when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
-    merge_copy_props(WinnerId, Ps, Acc, Context);
-merge_copy_props(WinnerId, [{P,_} = PV|Ps], Acc, Context) ->
+    merge_copy_props_1(WinnerId, Ps, IsMergeTrans, Acc, Context);
+merge_copy_props_1(WinnerId, [{P,LoserValue} = PV|Ps], IsMergeTrans, Acc, Context) ->
     case m_rsc:p_no_acl(WinnerId, P, Context) of
+        undefined when IsMergeTrans, P =:= language, is_list(LoserValue) ->
+            V1 = lists:usort([ z_trans:default_language(Context) ] ++ LoserValue),
+            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [{P,V1}|Acc], Context);
         Empty when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
-            merge_copy_props(WinnerId, Ps, [PV|Acc], Context);
+            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [PV|Acc], Context);
+        Value when IsMergeTrans, P =:= language, is_list(Value), is_list(LoserValue) ->
+            V1 = lists:usort(Value ++ LoserValue),
+            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [{P,V1}|Acc], Context);
+        Value when IsMergeTrans ->
+            V1 = merge_trans(Value, LoserValue, Context),
+            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [{P,V1}|Acc], Context);
         _Value ->
-            merge_copy_props(WinnerId, Ps, Acc, Context)
+            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, Acc, Context)
     end.
+
+ensure_merge_language(Props, Context) ->
+    case proplists:get_value(language, Props) of
+        undefined -> [ {language, [ z_trans:default_language(Context) ]} | Props ];
+        _ -> Props
+    end.
+
+merge_trans({trans, Winner}, {trans, Loser}, _Context) ->
+    Tr = lists:foldl(
+        fun ({Lang,Text}, Acc) ->
+            case proplists:get_value(Lang, Acc) of
+                undefined -> [ {Lang,Text} | Acc ];
+                _ -> Acc
+            end
+        end,
+        Winner,
+        Loser),
+    {trans, Tr};
+merge_trans(Winner, {trans, _} = Loser, Context) when is_binary(Winner) ->
+    V1 = {trans, [ {z_trans:default_language(Context), Winner} ]},
+    merge_trans(V1, Loser, Context);
+merge_trans({trans, _} = Winner, Loser, Context) when is_binary(Loser) ->
+    V1 = {trans, [ {z_trans:default_language(Context), Loser} ]},
+    merge_trans(Winner, V1, Context);
+merge_trans(Winner, _Loser, _Context) ->
+    Winner.
+
 
 
 %% Flush all cached entries depending on this entry, one of its subjects or its categories.

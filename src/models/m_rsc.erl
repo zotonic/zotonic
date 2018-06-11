@@ -42,6 +42,7 @@
     insert/2,
     delete/2,
     merge_delete/3,
+    merge_delete/4,
     update/3,
     update/4,
     duplicate/3,
@@ -359,7 +360,12 @@ delete(Id, Context) ->
 %% @doc Merge a resource with another, delete the loser.
 -spec merge_delete(resource(), resource(), #context{}) -> ok | {error, term()}.
 merge_delete(WinnerId, LoserId, Context) ->
-    m_rsc_update:merge_delete(WinnerId, LoserId, Context).
+    m_rsc_update:merge_delete(WinnerId, LoserId, [ {is_merge_trans, false} ], Context).
+
+%% @doc Merge a resource with another, delete the loser.
+-spec merge_delete(resource(), resource(), list(), #context{}) -> ok | {error, term()}.
+merge_delete(WinnerId, LoserId, Options, Context) ->
+    m_rsc_update:merge_delete(WinnerId, LoserId, Options, Context).
 
 %% @doc Update a resource
 -spec update(resource(), list(), #context{}) -> {ok, resource()} | {error, term()}.
