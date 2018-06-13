@@ -248,7 +248,7 @@ returns ``ok``. Otherwise the ``manage_data/2`` function will not be called::
             {collab, [
                 {is_owner, true},
                 {actions, [view, insert, update, link]},
-                {category_id, text]
+                {category_id, text}
             ]}
         ],
         m_acl_rule:replace_managed(Rules, ?MODULE, Context);
