@@ -39,14 +39,14 @@ msgstr ""
 msgid "Authorizing..."
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_reminder_support.tpl:4
-#: modules/mod_authentication/templates/_logon_reset_support.tpl:3
 #: modules/mod_authentication/templates/_logon_stage.tpl:7
 #: modules/mod_authentication/templates/_logon_stage.tpl:32
+#: modules/mod_authentication/templates/_logon_reminder_support.tpl:4
+#: modules/mod_authentication/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
 msgstr "回到登录表单"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:8
+#: modules/mod_authentication/templates/email_password_reset.tpl:17
 msgid "Below are your account details and a link to set a new password."
 msgstr "下面是你的账户资料以及设置新密码的链接。"
 
@@ -68,10 +68,11 @@ msgstr ""
 msgid "Check your email"
 msgstr "检查你的 e-mail"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:14
+#: modules/mod_authentication/templates/email_password_reset.tpl:23
+#, fuzzy
 msgid ""
-"Click on the link below to enter a new password, when clicking doesn't work "
-"then you can copy and paste the complete address to your browser."
+"Click on the link below to enter a new password. When clicking doesn't work, "
+"please copy and paste the whole link."
 msgstr "点击下面链接来输入一个新密码，如果无法点击请复制完整地址到浏览器。"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:51
@@ -92,6 +93,10 @@ msgid ""
 "entry and try again."
 msgstr ""
 
+#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:2
+msgid "Email"
+msgstr ""
+
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
 msgstr ""
@@ -106,14 +111,19 @@ msgid ""
 "authenticating via the services below."
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:16
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:16
 msgid "Enter a password"
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_reset_title.tpl:8
 msgid "Enter the new password for your account"
 msgstr ""
+
+#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:14
+#, fuzzy
+msgid "Enter your email address"
+msgstr "检查你的 e-mail"
 
 #: modules/mod_authentication/templates/_logon_reminder_title.tpl:2
 msgid ""
@@ -122,7 +132,6 @@ msgid ""
 msgstr ""
 
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:14
-#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:14
 msgid "Enter your email address or username"
 msgstr ""
 
@@ -154,7 +163,7 @@ msgstr "为了确保安全，密码重设码只在有限时间内可用，而且
 msgid "Forgot your password?"
 msgstr ""
 
-#: modules/mod_authentication/templates/error.403.tpl:14
+#: modules/mod_authentication/templates/error.403.tpl:20
 msgid "Go back"
 msgstr ""
 
@@ -164,7 +173,8 @@ msgstr ""
 msgid "Go to Modules"
 msgstr ""
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:6
+#: modules/mod_authentication/templates/email_password_reset.tpl:7
+#: modules/mod_authentication/templates/email_password_reset.tpl:15
 msgid "Hello"
 msgstr "你好"
 
@@ -178,9 +188,22 @@ msgstr ""
 msgid "How to reset your password"
 msgstr "如何重设密码"
 
+#: modules/mod_authentication/templates/email_password_reset.tpl:11
+msgid ""
+"However this email address does not belong to one of our registered users so "
+"you will not be able to change the password."
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:22
 msgid "I forgot my password"
 msgstr "忘记密码"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:28
+#, fuzzy
+msgid ""
+"If you didn't request a password reset, you can safely ignore this email. "
+"Maybe someone made an error typing his or her email address."
+msgstr "如果你没有请求重置密码，请忽略本邮件。可能是有人输入了错误的地址。"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:5
 #: modules/mod_authentication/templates/_logon_stage.tpl:25
@@ -189,19 +212,25 @@ msgid ""
 "folder."
 msgstr ""
 
+#: modules/mod_authentication/templates/email_password_reset.tpl:13
+msgid ""
+"If you think you have an account and were expecting this email, please try "
+"again using the email address you gave when signing up."
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_stage.tpl:24
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:40
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:23
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:23
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:34
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:40
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:23
 msgid "Keep me signed in"
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
 msgid "Minimum characters: "
 msgstr ""
 
@@ -209,8 +238,8 @@ msgstr ""
 msgid "Need help signing in?"
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:13
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:7
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:13
 msgid "New password"
 msgstr "新密码"
 
@@ -226,10 +255,10 @@ msgstr ""
 msgid "One moment please, signing out..."
 msgstr "稍等，正在登出..."
 
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
+#: modules/mod_authentication/templates/logon_confirm_form.tpl:15
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:11
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:12
-#: modules/mod_authentication/templates/logon_confirm_form.tpl:15
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 msgid "Password"
 msgstr "密码"
 
@@ -246,13 +275,13 @@ msgstr "请确认你的"
 msgid "Please try again later."
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:27
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:21
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:27
 msgid "Repeat password"
 msgstr "重复密码"
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:30
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:24
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:30
 msgid "Repeat your password"
 msgstr ""
 
@@ -260,8 +289,8 @@ msgstr ""
 msgid "Reset password and Sign in"
 msgstr "重设密码并登录"
 
-#: modules/mod_authentication/templates/_logon_reminder_title.tpl:1
 #: modules/mod_authentication/templates/_logon_reset_title.tpl:6
+#: modules/mod_authentication/templates/_logon_reminder_title.tpl:1
 msgid "Reset your password"
 msgstr "重设密码"
 
@@ -269,8 +298,8 @@ msgstr "重设密码"
 msgid "Safari 8 has a known problem with handling external authentications."
 msgstr ""
 
+#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:21
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:20
-#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:20
 msgid "Send"
 msgstr ""
 
@@ -278,20 +307,20 @@ msgstr ""
 msgid "Send Verification Message"
 msgstr "发送验证信息"
 
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
 #: modules/mod_authentication/templates/_logon_off.tpl:4
-#: modules/mod_authentication/templates/error.403.tpl:29
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
+#: modules/mod_authentication/templates/error.403.tpl:35
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
 msgid "Sign in"
 msgstr "登录"
 
-#: modules/mod_authentication/templates/_logon_login_title.tpl:1
 #: modules/mod_authentication/templates/logon.tpl:11
+#: modules/mod_authentication/templates/_logon_login_title.tpl:1
 msgid "Sign in to"
 msgstr "登录到"
 
-#: modules/mod_authentication/templates/_logon_off.tpl:2
 #: modules/mod_authentication/templates/logoff.tpl:3
+#: modules/mod_authentication/templates/_logon_off.tpl:2
 msgid "Sign out"
 msgstr "登出"
 
@@ -317,7 +346,7 @@ msgstr "对不起，无法发送验证信息。"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "对不起，你的密码重设码无效。"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:10
+#: modules/mod_authentication/templates/email_password_reset.tpl:19
 msgid "The email address associated with your account is"
 msgstr "与你账户对应的 e-mail 地址是"
 
@@ -351,11 +380,11 @@ msgid ""
 "address we have received from you."
 msgstr "为了找回你的账户，你需要输入用户名或者 e-mail 地址。"
 
-#: modules/mod_authentication/templates/error.403.tpl:23
+#: modules/mod_authentication/templates/error.403.tpl:29
 msgid "To view this page you must be signed in."
 msgstr ""
 
-#: modules/mod_authentication/templates/error.403.tpl:20
+#: modules/mod_authentication/templates/error.403.tpl:26
 msgid "To view this page, you need to have other access rights."
 msgstr ""
 
@@ -365,9 +394,9 @@ msgid ""
 "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "请不要使用纯字母或者纯数字的密码。"
 
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 msgid "Username"
 msgstr "用户名"
 
@@ -387,20 +416,15 @@ msgid ""
 msgstr "没有找到任何关于你的可用 e-mail 地址信息或是其他电子联系方式。"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:4
-msgid "We have sent you an email with a link to reset your password."
-msgstr ""
-
-#: modules/mod_authentication/templates/email_password_reset.tpl:18
-msgid ""
-"When you didn't request a password reset, you can ignore this email. Maybe "
-"someone made an error typing his or her email address."
-msgstr "如果你没有请求重置密码，请忽略本邮件。可能是有人输入了错误的地址。"
+#, fuzzy
+msgid "We have sent an email with a link to reset your password to"
+msgstr "下面是你的账户资料以及设置新密码的链接。"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:12
 msgid "You have to share your email address to be able to sign in."
 msgstr ""
 
-#: modules/mod_authentication/templates/error.403.tpl:21
+#: modules/mod_authentication/templates/error.403.tpl:27
 msgid "You may try to sign in as a different user."
 msgstr ""
 
@@ -410,7 +434,7 @@ msgid ""
 "the configured App Keys."
 msgstr ""
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:23
+#: modules/mod_authentication/templates/email_password_reset.tpl:34
 msgid ""
 "You receive this email because you or someone else requested a password "
 "reset for your account. You or the someone else either entered your username "
@@ -438,16 +462,16 @@ msgstr ""
 msgid "You've entered an unknown username or email address. Please try again."
 msgstr "未知用户名/e-mail地址，请重试。"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:8
+#: modules/mod_authentication/templates/email_password_reset.tpl:9
+#: modules/mod_authentication/templates/email_password_reset.tpl:17
 msgid "You've requested a new password for"
 msgstr "需要你提供一个新密码为"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:10
+#: modules/mod_authentication/templates/email_password_reset.tpl:19
 msgid "Your account name is"
 msgstr "你的帐户名是"
 
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:2
-#: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:2
 msgid "Your email or username"
 msgstr ""
 
@@ -459,8 +483,8 @@ msgstr "你的新密码太短。"
 msgid "Your password has expired"
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
+#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
 msgid "Your password is too short."
 msgstr ""
 
@@ -468,8 +492,8 @@ msgstr ""
 msgid "or"
 msgstr ""
 
-#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:8
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:8
+#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:8
 msgid "user@example.com"
 msgstr "user@example.com"
 
