@@ -235,6 +235,8 @@
 %% @doc Call the translate function for a string
 -define(__(T,Context), z_trans:trans(T,Context)).
 
+%% @doc Extra trans record definition to ease JSON mapping of translatable strings
+-record(trans, { tr = [] :: list( {atom(), binary()} )}).
 
 %% Some standard periods in seconds
 -define(MINUTE,     60).
