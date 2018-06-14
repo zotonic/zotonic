@@ -155,7 +155,7 @@ event(#submit{message= <<>>, form= <<"password_reset">>}, Context) ->
 %%@doc Handle submit form post.
 event(#submit{message= <<>>, form= <<"password_reminder">>}, Context) ->
     Args = z_context:get_q_all(Context),
-    reminder(Args, Context);
+    reminder(z_context:get_q_validated("reminder_address", Context), Context);
 
 event(#submit{message={logon_confirm, Args}, form= <<"logon_confirm_form">>}, Context) ->
     LogonArgs = [{<<"username">>, m_identity:get_username(Context)}
@@ -204,21 +204,20 @@ logon(Args, WireArgs, Context) ->
             logon_error("pw", Context)
     end.
 
-%%@doc Handle submit data.
-reminder(Args, Context) ->
-    case z_string:trim(proplists:get_value(<<"reminder_address">>, Args, <<>>)) of
-        <<>> ->
-            logon_error("reminder", Context);
-        Reminder ->
-            case lookup_identities(Reminder, Context) of
-                [] ->
-                    logon_error("reminder", Context);
-                Identities ->
-                    % @todo TODO check if reminder could be sent (maybe there is no e-mail address)
-                    send_reminder(Identities, Context),
-                    logon_stage("reminder_sent", Context)
-            end
-    end.
+%% @doc Send password reminders to everybody with the given email address
+reminder(Email, Context) ->
+    EmailNorm = m_identity:normalize_key(email, Email),
+    case lookup_identities(EmailNorm, Context) of
+        [] ->
+           send_reminder(undefined, EmailNorm, Context);
+        Identities ->
+            lists:foreach(
+                fun(RscId) ->
+                    send_reminder(RscId, EmailNorm, Context)
+                end,
+                Identities)
+    end,
+    logon_stage("reminder_sent", [{email, EmailNorm}], Context).
 
 expired(Args, Context) ->
     reset(Args, Context).
@@ -374,75 +373,49 @@ make_rememberme_cookie_value(UserId, Context) ->
     {ok, Token} = m_identity:get_rememberme_token(UserId, Context),
     {ok, {v1, Token}}.
 
-% @doc Find all identities with the given handle.  The handle is either an e-mail address or an username.
-lookup_identities(Handle, Context) ->
-    Handle1 = z_string:trim(Handle),
-    Set = sets:from_list(lookup_by_username(Handle1, Context) ++ lookup_by_email(Handle1, Context)),
-    sets:to_list(Set).
-
-
-lookup_by_username(<<"admin">>, _Context) ->
-    [];
-lookup_by_username(Handle, Context) ->
-    case m_identity:lookup_by_username(Handle, Context) of
-        undefined -> [];
-        Row -> [ proplists:get_value(rsc_id, Row) ]
-    end.
-
-
 %% @doc Find all users with a certain e-mail address
-lookup_by_email(Handle, Context) ->
-    case z_email_utils:is_email(Handle) of
-        true ->
-            Rows = m_identity:lookup_by_type_and_key_multi(email, Handle, Context),
-            [ proplists:get_value(rsc_id, Row) || Row <- Rows ];
-        false ->
-            []
-    end.
+lookup_identities(undefined, _Context) -> [];
+lookup_identities("", _Context) -> [];
+lookup_identities(<<>>, _Context) -> [];
+lookup_identities(Email, Context) ->
+    Rows = m_identity:lookup_by_type_and_key_multi(email, Email, Context),
+    lists:usort([ proplists:get_value(rsc_id, Row) || Row <- Rows ]).
 
+%% @doc Exported convenience function to email password reminder to an user
+send_reminder(Id, Context) ->
+    Email = m_rsc:p_no_acl(Id, email_raw, Context),
+    send_reminder(Id, Email, Context).
 
-%% Send an e-mail reminder to the listed ids.
-send_reminder(Ids, Context) ->
-    case send_reminder(Ids, z_acl:sudo(Context), []) of
-        [] -> {error, no_email};
-        _ -> ok
-    end.
-
-send_reminder([], _Context, Acc) ->
-    Acc;
-send_reminder([Id|Ids], Context, Acc) ->
-    case find_email(Id, Context) of
+send_reminder(_Id, undefined, _Context) ->
+    {error, noemail};
+send_reminder(1, _Email, _Context) ->
+    lager:info("Ignoring password reminder request for 'admin' (user 1)"),
+    {error, admin};
+send_reminder(undefined, Email, Context) ->
+    z_email:send_render(Email, "email_password_reset.tpl", [], Context);
+send_reminder(Id, Email, Context) ->
+    PrefEmail = case m_rsc:p_no_acl(Id, email_raw, Context) of
+        undefined -> Email;
+        <<>> -> Email;
+        E -> m_identity:normalize_key(email, E)
+    end,
+    case m_identity:get_username(Id, Context) of
         undefined ->
-            send_reminder(Ids, Context, Acc);
-        Email ->
-            case m_identity:get_username(Id, Context) of
-                undefined ->
-                    send_reminder(Ids, Context, Acc);
-                <<"admin">> ->
-                    send_reminder(Ids, Context, Acc);
-                Username ->
-                    Vars = [
-                        {recipient_id, Id},
-                        {id, Id},
-                        {secret, set_reminder_secret(Id, Context)},
-                        {username, Username},
-                        {email, Email}
-                    ],
-                    send_email(Email, Vars, Context),
-                    send_reminder(Ids, Context, [Id|Acc])
+            send_reminder(undefined, Email, Context);
+        Username when Username =/= <<"admin">> ->
+            Vars = [
+                {recipient_id, Id},
+                {id, Id},
+                {secret, set_reminder_secret(Id, Context)},
+                {username, Username},
+                {email, PrefEmail}
+            ],
+            z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
+            case Email of
+                PrefEmail -> ok;
+                _ -> z_email:send_render(PrefEmail, "email_password_reset.tpl", Vars, Context)
             end
     end.
-
-
-%% @doc Find the preferred e-mail address of an user.
-find_email(Id, Context) ->
-    m_rsc:p_no_acl(Id, email_raw, Context).
-
-%% @doc Sent the reminder e-mail to the user.
-send_email(Email, Vars, Context) ->
-    z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
-    ok.
-
 
 %% @doc Set the unique reminder code for the account.
 set_reminder_secret(Id, Context) ->
