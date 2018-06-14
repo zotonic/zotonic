@@ -103,15 +103,16 @@
 %%% ------------------------------------------------------------------------------------
 
 start_link(RequestPath, Root, OptFilterProps, Context) when is_binary(RequestPath) ->
-    Args = [ RequestPath, Root, OptFilterProps,
- z_convert:to_bool(z_context:get(minify, Context)), z_context:site(Context) ],
-    gen_fsm:start_link({via, z_proc, {reg_name(RequestPath), Context}}, ?MODULE, Args, []).
+    Minify = z_convert:to_bool(z_context:get(minify, Context)),
+    Args = [ RequestPath, Root, OptFilterProps, Minify, z_context:site(Context) ],
+    gen_fsm:start_link({via, z_proc, {reg_name(RequestPath, Minify), Context}}, ?MODULE, Args, []).
 
-reg_name(RequestPath) ->
-    {?MODULE, RequestPath}.
+reg_name(RequestPath, Minify) ->
+    {?MODULE, RequestPath, Minify}.
 
 where(Path, Context) ->
-    z_proc:whereis(reg_name(Path), Context).
+    Minify = z_convert:to_bool(z_context:get(minify, Context)),
+    z_proc:whereis(reg_name(Path, Minify), Context).
 
 stop(Pid) when is_pid(Pid) ->
     gen_fsm:send_all_state_event(Pid, stop);
@@ -304,7 +305,7 @@ timeout(stopping, _IsFound) ->
     ?STOP_TIMEOUT.
 
 unreg(State) ->
-    z_proc:unregister(reg_name(State#state.request_path), State#state.site).
+    z_proc:unregister(reg_name(State#state.request_path, State#state.minify), State#state.site).
 
 is_mref_part(MRef, Parts) ->
     lists:any(fun(#part_cache{cache_monitor=Ref}) -> Ref =:= MRef ; (_) -> false end, Parts).
@@ -441,28 +442,15 @@ gzip_compress_1(M, [#part_missing{}|Ps], Z, Acc) ->
     gzip_compress_1(M, Ps, Z, Acc).
 
 
-% We read 512K at once for compressing files.
--define(BLOCK_SIZE, 512*1024).
-
 compress_file(Minify, Filename, Z, Acc) ->
-    {ok, IO} = file:open(Filename, [read,raw,binary]),
-    Compressed = compress_file_1(Minify, Filename, Z, IO, Acc),
-    ok = file:close(IO),
-    Compressed.
+    {ok, Data} = file:read_file(Filename),
+    Data1 = case Minify of
+        true -> minify(Filename, filename:extension(Filename), Data);
+        false -> Data
+    end,
+    CompressedData = zlib:deflate(Z, Data1),
+    [CompressedData | Acc].
 
-compress_file_1(Minify, Filename, Z, IO, Acc) ->
-    case file:read(IO, ?BLOCK_SIZE) of
-        eof ->
-            Acc;
-        {ok, Data} ->
-            case size(Data) =< ?BLOCK_SIZE andalso Acc =:= [] andalso Minify of
-                true ->
-                    MinifiedData = minify(Filename, filename:extension(Filename), Data),
-                    compress_file_1(Minify, Filename, Z, IO, [zlib:deflate(Z, MinifiedData)|Acc]);
-                false ->
-                    compress_file_1(Minify, Filename, Z, IO, [zlib:deflate(Z, Data)|Acc])
-            end
-    end.
 
 minify(Filename, <<".js">>, Data) ->
     <<(minify_m(Filename, Data, z_jsmin))/binary, ";\n">>;
