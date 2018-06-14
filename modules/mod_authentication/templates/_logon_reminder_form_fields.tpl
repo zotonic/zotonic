@@ -7,7 +7,7 @@
         autofocus
         placeholder="{_ user@example.com _}"
         name="reminder_address"
-        value="{% if q.email %}{{ q.email }}{% else %}{{ m.acl.user.email }}{% endif %}"
+        value="{% if q.email %}{{ q.email|escape }}{% else %}{{ m.acl.user.email }}{% endif %}"
         autocapitalize="off"
         autocomplete="email" />
         {% validate id="reminder_address"
