@@ -119,8 +119,8 @@ format(ListA, ListB, Context) ->
 fetch([], _ListA, _ListB, Acc, _Context) ->
     Acc;
 fetch([K|Ks], ListA, ListB, Acc, Context) ->
-    A = proplists:get_value(K, ListA),
-    B = proplists:get_value(K, ListB),
+    A = normalize(K, proplists:get_value(K, ListA)),
+    B = normalize(K, proplists:get_value(K, ListB)),
     case A of
         B ->
             fetch(Ks, ListA, ListB, Acc, Context);
@@ -135,6 +135,10 @@ fetch([K|Ks], ListA, ListB, Acc, Context) ->
                     fetch(Ks, ListA, ListB, Acc1, Context)
             end
     end.
+
+normalize(_K, {trans, Tr}) -> {trans, lists:sort(Tr)};
+normalize(language, L) when is_list(L) -> lists:sort(L);
+normalize(_K, V) -> V.
 
 format_value(_K, undefined, _Context) ->
     <<>>;

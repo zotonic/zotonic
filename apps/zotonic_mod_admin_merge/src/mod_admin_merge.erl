@@ -63,12 +63,14 @@ event(#submit{message={merge, Args}}, Context) ->
     {winner_id, WinnerId} = proplists:lookup(winner_id, Args),
     {loser_id, LoserId} = proplists:lookup(loser_id, Args),
     MergeAction = z_context:get_q(<<"merge_action">>, Context),
-    lager:info("MergeAction=~p WinnerId=~p LoserId=~p", [MergeAction, WinnerId, LoserId]),
-    merge(WinnerId, LoserId, MergeAction, Context).
+    IsMergeTrans = z_convert:to_bool(z_context:get_q("is_merge_trans", Context)),
+    lager:info("MergeAction=~p WinnerId=~p LoserId=~p IsMergeTrans=~p",
+               [MergeAction, WinnerId, LoserId, IsMergeTrans]),
+    merge(WinnerId, LoserId, MergeAction, IsMergeTrans, Context).
 
-merge(_WinnerId, _LoserId = 1, _MergeAction, Context) ->
+merge(_WinnerId, _LoserId = 1, _MergeAction, _IsMergeTrans, Context) ->
     z_render:wire({alert, [{text,?__("You cannot remove the admin user.", Context)}]}, Context);
-merge(WinnerId, _LoserId, <<"merge_only">>, Context)  ->
+merge(WinnerId, _LoserId, <<"merge_only">>, _IsMergeTrans, Context)  ->
     case z_acl:rsc_editable(WinnerId, Context) of
         false ->
             z_render:wire({alert, [{text,?__("You do not have permission to edit the winner.", Context)}]}, Context);
@@ -85,7 +87,7 @@ merge(WinnerId, _LoserId, <<"merge_only">>, Context)  ->
                     {dialog_close, []}
                 ], Context)
     end;
-merge(WinnerId, LoserId, <<"merge_delete">>, Context) ->
+merge(WinnerId, LoserId, <<"merge_delete">>, IsMergeTrans, Context) ->
     case {m_rsc:p_no_acl(LoserId, is_protected, Context),
           z_acl:rsc_deletable(LoserId, Context),
           z_acl:rsc_editable(WinnerId, Context)}
@@ -100,7 +102,7 @@ merge(WinnerId, LoserId, <<"merge_delete">>, Context) ->
             ContextSpawn = z_context:prune_for_spawn(Context),
             erlang:spawn(
                 fun() ->
-                    ok = m_rsc:merge_delete(WinnerId, LoserId, ContextSpawn),
+                    ok = m_rsc:merge_delete(WinnerId, LoserId, [ {is_merge_trans, IsMergeTrans} ], ContextSpawn),
                     z_session_page:add_script(
                         z_render:wire({redirect, [{dispatch, admin_edit_rsc}, {id, WinnerId}]}, ContextSpawn))
                 end),
@@ -109,5 +111,5 @@ merge(WinnerId, LoserId, <<"merge_delete">>, Context) ->
                     {dialog_close, []}
                 ], Context)
     end;
-merge(_WinnerId, _LoserId, _MergeAction, Context) ->
+merge(_WinnerId, _LoserId, _MergeAction, _IsMergeTrans, Context) ->
     z_render:wire({alert, [{text,?__("No merge action specified.", Context)}]}, Context).
