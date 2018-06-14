@@ -203,7 +203,7 @@ merge_copy_props_1(WinnerId, [{_,Empty}|Ps], IsMergeTrans, Acc, Context)
 merge_copy_props_1(WinnerId, [{P,LoserValue} = PV|Ps], IsMergeTrans, Acc, Context) ->
     case m_rsc:p_no_acl(WinnerId, P, Context) of
         undefined when IsMergeTrans, P =:= language, is_list(LoserValue) ->
-            V1 = lists:usort([ z_trans:default_language(Context) ] ++ LoserValue),
+            V1 = lists:usort([ z_language:default_language(Context) ] ++ LoserValue),
             merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [{P,V1}|Acc], Context);
         Empty when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
             merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [PV|Acc], Context);
@@ -219,7 +219,7 @@ merge_copy_props_1(WinnerId, [{P,LoserValue} = PV|Ps], IsMergeTrans, Acc, Contex
 
 ensure_merge_language(Props, Context) ->
     case proplists:get_value(language, Props) of
-        undefined -> [ {language, [ z_trans:default_language(Context) ]} | Props ];
+        undefined -> [ {language, [ z_language:default_language(Context) ]} | Props ];
         _ -> Props
     end.
 
@@ -235,10 +235,10 @@ merge_trans({trans, Winner}, {trans, Loser}, _Context) ->
         Loser),
     {trans, Tr};
 merge_trans(Winner, {trans, _} = Loser, Context) when is_binary(Winner) ->
-    V1 = {trans, [ {z_trans:default_language(Context), Winner} ]},
+    V1 = {trans, [ {z_language:default_language(Context), Winner} ]},
     merge_trans(V1, Loser, Context);
 merge_trans({trans, _} = Winner, Loser, Context) when is_binary(Loser) ->
-    V1 = {trans, [ {z_trans:default_language(Context), Loser} ]},
+    V1 = {trans, [ {z_language:default_language(Context), Loser} ]},
     merge_trans(Winner, V1, Context);
 merge_trans(Winner, _Loser, _Context) ->
     Winner.
