@@ -117,7 +117,7 @@ get_stats(ListId, Context) ->
 							join rsc on id = page_id
 					where mailinglist_id = $1
 					order by publication_start", [ListId], Context),
-	{Count + length(m_edge:subjects(ListId, subscriber_of, Context)), Scheduled}.
+	{Count + length(m_edge:subjects(ListId, subscriberof, Context)), Scheduled}.
 
 
 %% @doc Get the stats for all mailing lists which have been sent to a rsc (content_id)
