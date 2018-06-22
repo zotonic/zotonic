@@ -75,8 +75,8 @@ mimemail_options(Context) ->
         false ->
             [];
         true ->
-            {{Y,M,D},T} = Now = calendar:universal_time(),
-            Expires = {{Y+1,M,D},T},
+            Now = calendar:universal_time(),
+            Expires = z_datetime:next_year(Now),
             [{dkim, [{s, dkim_selector(Context)},
                      {d, z_convert:to_binary(z_email:email_domain(Context))},
                      {c, {simple, simple}},
