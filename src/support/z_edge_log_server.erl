@@ -26,6 +26,7 @@
 
 %% interface functions
 -export([
+    delete_if_unconnected/2,
     check/1
 ]).
 
@@ -188,9 +189,31 @@ fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId,_EdgeId}|Rs], Acc) ->
     fetch_ids(Rs, [SubjectId,ObjectId|Acc]).
 
 do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
-    z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context);
+    z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context),
+    maybe_delete_dependent(ObjectId, Context);
 do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
     z_notifier:notify(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context);
 do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
     z_notifier:notify(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context).
 
+maybe_delete_dependent(Id, Context) ->
+    case m_rsc:p_no_acl(Id, is_dependent, Context) of
+        true ->
+            Key = iolist_to_binary([<<"delete_if_unconnected-">>, integer_to_list(Id)]),
+            z_pivot_rsc:insert_task_after(20, ?MODULE, delete_if_unconnected, Key, [Id], Context);
+        _False ->
+            ok
+    end.
+
+delete_if_unconnected(Id, Context) ->
+    case z_db:q_row("select r.is_dependent, r.is_protected, e.object_id
+                     from rsc r
+                          left join edge e on e.object_id = r.id
+                     where r.is_dependent
+                       and r.id = $1
+                     limit 1",
+                    [Id], Context)
+    of
+        {true, false, undefined} -> m_rsc:delete(Id, z_acl:sudo(Context));
+        _ -> ok
+    end.

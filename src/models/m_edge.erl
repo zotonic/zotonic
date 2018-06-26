@@ -423,19 +423,33 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
     PredId = m_predicate:name_to_id_check(Predicate, Context),
     {ok, PredName} = m_predicate:id_to_name(PredId, Context),
     F = fun(Ctx) ->
-        case z_db:q("select id, object_id from edge where subject_id = $1 and predicate_id = $2 order by seq,id limit 1 offset $3", 
-                    [SubjectId, PredId, Nth-1], 
+        case z_db:q("select id, object_id, seq from edge where subject_id = $1 and predicate_id = $2 order by seq,id limit 1 offset $3",
+                    [SubjectId, PredId, Nth-1],
                     Ctx) of
-            [] -> 
+            [] ->
                 {error, enoent};
-            [{EdgeId,OldObjectId}] ->
+            [ {EdgeId, ObjectId, _SeqNr} ] ->
+                {ok, EdgeId};
+            [ {EdgeId, OldObjectId, SeqNr} ] ->
                 case z_acl:is_allowed(delete, #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=OldObjectId}, Ctx) of
                     true ->
-                        1 = z_db:q("update edge set object_id = $1, creator_id = $3, created = now() where id = $2", 
-                                   [ObjectId,EdgeId,z_acl:user(Ctx)], 
-                                   Ctx),
-                        m_rsc:touch(SubjectId, Ctx),
-                        {ok, EdgeId};
+                        1 = z_db:q("delete from edge where id = $1", [EdgeId], Ctx),
+                        NewSeqNr = case SeqNr of
+                            1000000 ->
+                                force_sequence(SubjectId, PredId, Nth, Ctx),
+                                Nth;
+                            _ ->
+                                SeqNr
+                        end,
+                        z_db:insert(
+                            edge,
+                            [
+                                {subject_id, SubjectId},
+                                {predicate_id, PredId},
+                                {object_id, ObjectId},
+                                {seq, NewSeqNr}
+                            ],
+                            Ctx);
                     false ->
                         {error, eacces}
                 end
@@ -453,6 +467,38 @@ update_nth(SubjectId, Predicate, Nth, ObjectId, Context) ->
         false ->
             {error, eacces}
     end.
+
+force_sequence(_SubjectId, _PredId, Nth, _Context) when Nth =< 1 ->
+    ok;
+force_sequence(SubjectId, PredId, Nth, Context) when Nth > 1 ->
+    IdSeq = z_db:q("
+        select id, seq
+        from edge
+        where subject_id = $1
+          and predicate_id = $2
+        order by seq, id
+        limit $3",
+        [ SubjectId, PredId, Nth-1 ],
+        Context),
+    case IdSeq of
+        [] -> ok;
+        _ ->
+            IdSeqNr = lists:zip(IdSeq, lists:seq(1, length(IdSeq))),
+            lists:foreach(
+                fun
+                    ({{_Id, Seq}, Seq}) ->
+                        ok;
+                    ({{Id, _Seq}, Nr}) ->
+                        z_db:q("
+                            update edge
+                            set seq = $1
+                            where id = $2",
+                            [ Nr, Id ],
+                            Context)
+                end,
+                IdSeqNr)
+    end.
+
 
 
 %% @doc Return the Nth object with a certain predicate of a subject.

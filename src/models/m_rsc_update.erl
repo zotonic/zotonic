@@ -673,21 +673,14 @@ props_filter([{slug, ""}|T], Acc, Context) ->
     props_filter(T, [{slug, []} | Acc], Context);
 props_filter([{slug, Slug}|T], Acc, Context) ->
     props_filter(T, [{slug, to_slug(Slug, Context)} | Acc], Context);
-props_filter([{custom_slug, P}|T], Acc, Context) ->
-    props_filter(T, [{custom_slug, z_convert:to_bool(P)} | Acc], Context);
 
 props_filter([{B, P}|T], Acc, Context) 
-    when  B =:= is_published; B =:= is_featured; B=:= is_protected; 
-          B =:= is_query_live; B =:= date_is_all_day ->
+    when  B =:= is_published; B =:= is_featured; B=:= is_protected;
+          B =:= is_dependent; B =:= is_query_live; B =:= date_is_all_day;
+          B =:= is_website_redirect; B =:= is_page_path_multiple;
+          B =:= is_authoritative;
+          B =:= custom_slug; B =:= seo_noindex ->
     props_filter(T, [{B, z_convert:to_bool(P)} | Acc], Context);
-
-props_filter([{is_authoritative, P}|T], Acc, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
-        true ->
-            props_filter(T, [{is_authoritative, z_convert:to_bool(P)} | Acc], Context);
-        false ->
-            props_filter(T, Acc, Context)
-    end;
 
 props_filter([{P, DT}|T], Acc, Context) 
     when P =:= created; P =:= modified; 

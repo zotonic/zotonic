@@ -128,5 +128,9 @@ get_base_props(NewRscTitle, Context) ->
         {name, Name},
         {category_id, CatId},
         {is_published, IsPublished}
-    ].
+    ]
+    ++ case z_convert:to_bool(z_context:get_q("is_dependent", Context)) of
+        true -> [ {is_dependent, true} ];
+        false -> []
+    end.
 

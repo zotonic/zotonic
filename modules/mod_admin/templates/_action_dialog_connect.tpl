@@ -83,7 +83,7 @@
                 {% include "_action_dialog_media_upload_tab_url.tpl" tab=#tab predicate=predicate subject_id=subject_id is_active=(tab == "url") title="" %}
             {% endif %}
 
-            {% all include "_media_upload_panel.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" delegate=delegate %}
+            {% all include "_media_upload_panel.tpl" tab=#tab predicate=predicate subject_id=subject_id title="" delegate=delegate in_sorter=in_sorter %}
 		{% endwith %}
 	{% endif %}
     {% endblock %}

@@ -40,6 +40,11 @@
             <input type="checkbox" id="is_protected" name="is_protected" value="1" {% if r.is_protected %}checked="checked"{% endif %} {% ifequal id 1 %}disabled="disabled"{% endifequal %} />
 	        {_ Protect _}
         </label>
+
+        <label for="is_dependent" class="checkbox inline" title="{_ Delete if no other page is connected to this page. _}">
+            <input type="checkbox" id="is_dependent" name="is_dependent" value="1" {% if r.is_dependent %}checked="checked"{% endif %} {% ifequal id 1 %}disabled="disabled"{% endifequal %} />
+            {_ Dependent _}
+        </label>
     </div>
 
     <div class="control-group">

@@ -51,14 +51,28 @@
     {% endif %}
 	
 	<div class="control-group">
-	    <label class="control-label" for="{{ #published }}">{_ Published _}</label>
+	    <label class="control-label"></label>
 	    <div class="controls">
-		<label class="checkbox">
-		    <input type="checkbox" id="{{ #published }}" name="is_published" value="1" 
-				{% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked="checked"{% endif %} />
-		</label>
+    		<label class="checkbox">
+	       	    <input type="checkbox" id="{{ #published }}" name="is_published" value="1" 
+			         {% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked="checked"{% endif %}
+                />
+                {_ Published _}
+    		</label>
+
+            {% if in_sorter|match:"^menu" or subject_id %}
+                <label class="checkbox">
+                    <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" checked />
+                    {% if depiction %}
+                        {_ Delete after disconnecting from _} {{ subject_id.title }}
+                    {% else %}
+                        {_ Delete after removal from menu _}
+                    {% endif %}
+                </label>
+            {% endif %}
 	    </div>
 	</div>
+
     </fieldset>
 
     <div class="modal-footer">

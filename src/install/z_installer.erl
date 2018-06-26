@@ -124,10 +124,14 @@ upgrade(C, Database, Schema) ->
     ok = install_rsc_gone(C, Database, Schema),
     ok = install_rsc_page_path_log(C, Database, Schema),
     ok = upgrade_config_schema(C, Database, Schema),
+    % 0.10.x
     ok = install_medium_log(C, Database, Schema),
     ok = install_pivot_location(C, Database, Schema),
+    % 0.12.x
     ok = install_edge_log(C, Database, Schema),
     ok = fix_timestamptz(C, Database, Schema),
+    % 0.12.5
+    ok = install_content_group_dependent(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -438,3 +442,20 @@ get_timestamp_without_timezone_columns(C, Database, Schema) ->
     Cols.
 
 
+%% 0.12.5: Add content groups for the content- and user-group based ACL modules
+install_content_group_dependent(C, Database, Schema) ->
+    case has_column(C, "rsc", "content_group_id", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            lager:info("[database: ~p ~p] Adding rsc.is_dependent and rsc.content_group_id", [Database, Schema]),
+            {ok, [], []} = pgsql:squery(C,
+                              "ALTER TABLE rsc "
+                              "ADD COLUMN is_dependent BOOLEAN NOT NULL DEFAULT false,"
+                              "ADD COLUMN content_group_id INT,"
+                              "ADD CONSTRAINT fk_rsc_content_group_id FOREIGN KEY (content_group_id) "
+                              "    REFERENCES rsc(id)"
+                              "    ON UPDATE CASCADE ON DELETE SET NULL"),
+            {ok, [], []} = pgsql:squery(C, "CREATE INDEX fki_rsc_content_group_id ON rsc (content_group_id)"),
+            ok
+    end.
