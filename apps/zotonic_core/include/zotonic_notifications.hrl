@@ -631,7 +631,9 @@
     }
 }).
 
-%% @doc An edge has been inserted
+%% @doc An edge has been inserted.
+%% Note that the Context for this notification does not have the user who
+%% created the edge.
 %% Type: notify
 %% Return: return value is ignored
 -record(edge_insert, {
@@ -642,6 +644,8 @@
 }).
 
 %% @doc An edge has been deleted
+%% Note that the Context for this notification does not have the user who
+%% deleted the edge.
 %% Type: notify
 %% Return: return value is ignored
 -record(edge_delete, {
@@ -652,6 +656,8 @@
 }).
 
 %% @doc An edge has been updated
+%% Note that the Context for this notification does not have the user who
+%% updated the edge.
 %% Type: notify
 %% Return: return value is ignored
 -record(edge_update, {
