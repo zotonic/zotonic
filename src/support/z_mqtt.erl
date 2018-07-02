@@ -86,6 +86,7 @@ publish(#mqtt_msg{} = Msg, Context) ->
     case z_mqtt_acl:is_allowed(publish, Msg1#mqtt_msg.topic, Context) of
         true ->
             opt_debug_pubsub("publish", Msg1#mqtt_msg.topic, Context),
+            handle_retain(Msg1),
             emqtt_router:publish(Msg1);
         false ->
             lager:debug("MQTT publish access denied to ~p", [Msg1#mqtt_msg.topic]),
@@ -115,6 +116,13 @@ publish(Topic, Data, Context) ->
         payload=Data
     },
     publish(Topic, Payload, Context).
+
+handle_retain(#mqtt_msg{topic = Topic, retain = true, payload = <<>>}) ->
+    emqtt_retained:delete(z_mqtt:flatten_topic(Topic));
+handle_retain(#mqtt_msg{topic = Topic, retain = true} = Msg) ->
+    emqtt_retained:insert(z_mqtt:flatten_topic(Topic), Msg);
+handle_retain(#mqtt_msg{}) ->
+    ok.
 
 subscribe(Topic, Context) ->
     subscribe(Topic, ?QOS_0, self(), Context).
