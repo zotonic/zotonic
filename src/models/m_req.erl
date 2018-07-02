@@ -52,11 +52,6 @@ m_value(#m{value=undefined}, Context) ->
 
 
 %% @doc Fetch the field from the wrq interface.
-get(ua_class, #context{} = Context) ->
-    z_user_agent:get_class(Context);
-get(ua_props, #context{} = Context) ->
-    z_user_agent:get_props(Context);
-
 get(timezone, #context{} = Context) ->
     z_context:tz(Context);
 

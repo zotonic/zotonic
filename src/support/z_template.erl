@@ -45,8 +45,7 @@
     reset/1,
     module_reindexed/2,
     is_template_module/1,
-    filename_to_modulename/2,
-    filename_to_modulename/3
+    filename_to_modulename/2
 ]).
 
 -record(state, {reset_counter, host, do_modified_check, compile_queue, compile_job, compile_job_pid}).
@@ -367,11 +366,8 @@ compile_job(Server, {compile, File, FoundFile, Module, Context}, ResetCounter) -
 %% @doc Translate a filename to a module name
 -spec filename_to_modulename(file:filename(), #context{}) -> string().
 filename_to_modulename(File, #context{} = Context) ->
-    filename_to_modulename(File, z_user_agent:get_class(Context), z_context:site(Context)).
-
--spec filename_to_modulename(file:filename(), ua_classifier:device_type(), atom()) -> string().
-filename_to_modulename(File, UAClass, Host) ->
-    list_to_atom(filename_to_modulename_1(File, Host, lists:reverse([$_|z_convert:to_list(UAClass)]))).
+    Host = z_context:site(Context),
+    list_to_atom(filename_to_modulename_1(File, Host, [])).
 
     filename_to_modulename_1([], Host, Acc) ->
         ?TEMPLATE_PREFIX ++ atom_to_list(Host) ++ [$_ | lists:reverse(Acc)];

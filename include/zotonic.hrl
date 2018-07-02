@@ -151,14 +151,14 @@
 
 
 %% Used for storing templates/scomps etc. in the lookup ets table
--record(module_index_key, {site, type, name, ua_class=generic}).
+-record(module_index_key, {site, type, name}).
 -record(module_index, {key, filepath, module, erlang_module, tag}).
 
 %% Name of the global module index table
 -define(MODULE_INDEX, 'zotonic$module_index').
 
 %% Index record for the mediaclass ets table.
--record(mediaclass_index_key, {site, mediaclass, ua_class=generic}).
+-record(mediaclass_index_key, {site, mediaclass}).
 -record(mediaclass_index, {key, props=[], checksum, tag}).
 
 %% Name of the global mediaclass index table

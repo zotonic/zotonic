@@ -75,18 +75,17 @@ dispatch(Host, Path, ReqData) ->
 
 dispatch(Host, Path, ReqData, TracerPid) ->
     % Classify the user agent
-    {ok, ReqDataUA} = z_user_agent:set_class(ReqData),
     Protocol = case wrq:is_ssl(ReqData) of true -> https; false -> http end,
     DispReq = #dispatch{
-                    host=Host, 
-                    path=Path, 
+                    host=Host,
+                    path=Path,
                     method=wrq:method(ReqData), 
                     protocol=Protocol,
                     tracer_pid=TracerPid
               },
     count_request(Host),
     try
-        trace_final(TracerPid, handle_dispatch(gen_server:call(?MODULE, DispReq), DispReq, ReqDataUA))
+        trace_final(TracerPid, handle_dispatch(gen_server:call(?MODULE, DispReq), DispReq, ReqData))
     catch
         throw:{stop_request, RespCode} ->
             {{stop_request, RespCode}, ReqData}

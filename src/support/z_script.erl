@@ -61,19 +61,18 @@ add_script(Script, Context) ->
     Context#context{scripts=[Script, "\n" | Context#context.scripts]}.
 
 get_page_startup_script(Context) ->
-    UAScript = [ ?SESSION_UA_CLASS_Q, $=, $", ua_class_to_script(z_user_agent:get_class(Context)), $", $;],
-    PageIdUAScript = case Context#context.page_id of
+    PageIdScript = case Context#context.page_id of
         undefined ->
             %% No page id, so no comet loop started and generated random page id for postback loop
-            [ <<"z_set_page_id(\"\",">>, str_user_id(z_acl:user(Context)), <<");">>, UAScript ];
+            [ <<"z_set_page_id(\"\",">>, str_user_id(z_acl:user(Context)), <<");">> ];
         PageId ->
-            [ <<"z_set_page_id(\"">>, PageId, $", $,, str_user_id(z_acl:user(Context)), $), $;, UAScript ]
+            [ <<"z_set_page_id(\"">>, PageId, $", $,, str_user_id(z_acl:user(Context)), $), $; ]
     end,
     case z_context:document_domain(Context) of
         undefined ->
-            PageIdUAScript;
+            PageIdScript;
         DocumentDomain ->
-            [ PageIdUAScript, <<"document.domain=\"">>, DocumentDomain, $", $; ]
+            [ PageIdScript, <<"document.domain=\"">>, DocumentDomain, $", $; ]
     end.
 
 str_user_id(undefined) ->

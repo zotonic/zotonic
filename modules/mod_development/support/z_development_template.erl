@@ -47,8 +47,7 @@ event(#submit{message=explain_tpl}, Context) ->
 
 find_templates(CatName, TplName, Context) ->
 	[
-		{UA, index_props(find_template(CatName, TplName, z_user_agent:set_class(UA, Context)))}
-		|| UA <- z_user_agent:classes()
+		{generic, index_props(find_template(CatName, TplName, Context))}
 	].
 
 find_template(NoCat, TplName, Context) when NoCat =:= ""; NoCat =:= <<>> ->

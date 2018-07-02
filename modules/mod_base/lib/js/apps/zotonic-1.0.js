@@ -25,7 +25,6 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 // Client state
 var z_language              = "en";
-var z_ua                    = "desktop";
 var z_pageid                = '';
 var z_userid;
 var z_editor;
@@ -424,7 +423,7 @@ function z_transport(delegate, content_type, data, options)
             "timestamp": timestamp,
             "content_type": z_transport_content_type(content_type),
             "delegate": z_transport_delegate(delegate),
-            "ua_class": ubf.constant(z_ua),
+            "ua_class": undefined,
             "page_id": z_pageid,
             "session_id": window.z_sid || undefined,
             "data": data
@@ -1073,7 +1072,7 @@ function z_websocket_ping()
                     "timestamp": new Date().getTime(),
                     "content_type": ubf.constant("ubf"),
                     "delegate": ubf.constant('$ping'),
-                    "ua_class": ubf.constant(z_ua),
+                    "ua_class": undefined,
                     "page_id": z_pageid,
                     "session_id": window.z_sid || undefined,
                     "data": z_ws_pong_count
@@ -1127,10 +1126,6 @@ function z_websocket_restart()
 function z_stream_args(stream_type)
 {
     var args = "z_pageid=" + urlencode(z_pageid);
-
-    // Set the z_ua because we can't derive it from the ws handshake.
-    if(stream_type == "websocket")
-        args += "&z_ua=" + urlencode(z_ua);
 
     // Set z_sid when it is available. Can be used if there are problems with cookies.
     if(window.z_sid)
@@ -1501,7 +1496,6 @@ $.fn.postbackFileForm = function(trigger_id, postback, validations)
     a.push({name: "postback",     value: postback});
     a.push({name: "z_trigger_id", value: trigger_id});
     a.push({name: "z_pageid",     value: z_pageid});
-    a.push({name: "z_ua",         value: z_ua});
     a.push({name: "z_comet",      value: typeof z_stream_host != 'undefined'});
 
     var $form = this;

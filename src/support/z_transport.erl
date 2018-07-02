@@ -177,9 +177,8 @@ incoming_msgs(#z_msg_v1{page_id=undefined}, #context{page_id=undefined} = Contex
               "Transport with 'undefined' page_id from ~p",
               [m_req:get(peer, Context)]),
     {ok, [msg(undefined, session, <<"page_invalid">>, [])], Context};
-incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_class=UA, content_type=CT} = Msg, Context) ->
-    Context1 = maybe_logon(maybe_set_sessions(SessionId, PageId, Context)),
-    Context2 = maybe_set_uaclass(UA, Context1),
+incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, content_type=CT} = Msg, Context) ->
+    Context2 = maybe_logon(maybe_set_sessions(SessionId, PageId, Context)),
     try
         maybe_auth_change(incoming_1(Msg#z_msg_v1{data=decode_data(CT,Data)}, Context2), Context2)
     catch
@@ -373,13 +372,6 @@ maybe_set_page_session(PageId, Context) ->
             lager:info("PageId without page session (session_id ~p)", [Context#context.session_id]),
             Context#context{session_pid=undefined}
     end.
-
-maybe_set_uaclass(undefined, Context) ->
-    Context;
-maybe_set_uaclass(UA, #context{ua_class=UA} = Context) ->
-    Context;
-maybe_set_uaclass(UA, Context) when is_atom(UA) ->
-    z_user_agent:set_class(UA, Context).
 
 maybe_set_q(form, Qs, Context) -> 
     set_q(Qs, Context);
