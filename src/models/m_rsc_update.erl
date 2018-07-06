@@ -790,7 +790,9 @@ props_filter([{title_slug, Slug}|T], Acc, Context) ->
         false ->
             Slug1 = to_slug(Slug),
             SlugNoTr = z_trans:lookup_fallback(Slug1, en, Context),
-            props_filter(T, [ {title_slug, Slug1}, {slug, SlugNoTr} | Acc], Context)
+            Acc1 = proplists:delete(slug, Acc),
+            T1 = proplists:delete(slug, T),
+            props_filter(T1, [ {title_slug, Slug1}, {slug, SlugNoTr} | Acc1 ], Context)
     end;
 
 props_filter([{B, P}|T], Acc, Context)
@@ -924,17 +926,17 @@ props_autogenerate(Id, Props, Context) ->
     Props1 = case proplists:get_value(title, Props) of
                  undefined -> Props;
                  Title ->
-                     case {proplists:get_value(custom_slug, Props), m_rsc:p(custom_slug, Id, Context)} of
+                    case {proplists:get_value(custom_slug, Props), m_rsc:p(Id, custom_slug, Context)} of
                          {true, _} -> Props;
                          {_, true} -> Props;
                          _X ->
-                             %% Determine the slug from the title.
+                            %% Determine the slug from the title.
                             Slug = to_slug(Title),
                             SlugNoTr = z_trans:lookup_fallback(Slug, en, Context),
                             PropsSlug = proplists:delete(slug, proplists:delete(title_slug, Props)),
                             [ {title_slug, Slug}, {slug, SlugNoTr} | PropsSlug ]
-                     end
-             end,
+                    end
+            end,
     Props1.
 
 
