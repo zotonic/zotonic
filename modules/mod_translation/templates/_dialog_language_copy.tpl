@@ -40,11 +40,18 @@ $('#{{ #copy }}').click(function(e) {
 
 		// Copy language to the active language
 		$('.tab-pane.language-'+active).each(function() {
+            var $form = $(this).closest("form");
 			$("input,textarea", this).each(function() {
 				if ($.trim($(this).val()) == '') {
-					var to_id = $(this).attr('id');
-					var from_id = to_id.split('--')[0] + '--' + from;
-					$('#'+to_id).val($('#'+from_id).val());
+                    var from_name = $(this).attr('name').split('$')[0] + '$' + from;
+                    var from_val = $form.find('[name="'+from_name+'"]').val();
+                    if ($(this).hasClass('z_editor-installed')) {
+                        z_editor_remove($(this));
+                        $(this).val(from_val);
+                        z_editor_add($(this));
+                    } else {
+                        $(this).val(from_val);
+                    }
 				}
 			});
 		});
