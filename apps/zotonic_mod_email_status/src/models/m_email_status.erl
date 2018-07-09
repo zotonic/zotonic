@@ -333,6 +333,7 @@ is_unrecoverable_error(<<"550", _/binary>> = Status) ->
     orelse binary:match(S, <<"unknown user">>) =/= nomatch
     orelse binary:match(S, <<"user unknown">>) =/= nomatch
     orelse binary:match(S, <<"no such user">>) =/= nomatch
+    orelse binary:match(S, <<"user invalid">>) =/= nomatch
     orelse binary:match(S, <<"recipient rejected">>) =/= nomatch;
 is_unrecoverable_error(_) ->
     false.
