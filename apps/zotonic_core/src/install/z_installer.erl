@@ -523,7 +523,7 @@ fix_timestamptz(C, Database, Schema) ->
 
 fix_timestamptz_column(C, Table, Col, Database, Schema) ->
     lager:info("[database: ~p ~p] Adding time zone to ~p ~p", [Database, Schema, Table, Col]),
-    {ok, [], []} = epgsql:squery(C, "alter table "++binary_to_list(Table)++" alter column "++binary_to_list(Col)++" type timestamp with time zone"),
+    {ok, [], []} = pgsql:squery(C, "alter table \""++binary_to_list(Table)++"\" alter column \""++binary_to_list(Col)++"\" type timestamp with time zone"),
     ok.
 
 get_timestamp_without_timezone_columns(C, Database, Schema) ->
