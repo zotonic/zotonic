@@ -32,15 +32,28 @@
                 {_ Show defined blocks in generated templates _}
             </label>
         </div>
-        
+
         <div>
-            {% wire id="libsep" 
+            {% wire id="libsep"
                 action={config_toggle module="mod_development" key="libsep"}
-                action={admin_tasks task='flush'} 
             %}
             <label class="checkbox inline">
                 <input type="checkbox" id="libsep" value="1" {% if m.config.mod_development.libsep.value %}checked="checked"{% endif %} />
                 {_ Download css and javascript files as separate files (ie. don’t combine them in one url). _}
+            </label>
+        </div>
+
+        <div>
+            {% wire id="livereload"
+                action={config_toggle module="mod_development" key="livereload"}
+                action={script script="
+                    if ($('#livereload').is(':checked') && !$('#libsep').is(':checked')) {
+                        $('#libsep').click();
+                    };" }
+            %}
+            <label class="checkbox inline">
+                <input type="checkbox" id="livereload" value="1" {% if m.config.mod_development.livereload.value %}checked="checked"{% endif %} />
+                {_ Live reload of changed CSS files. Reload page on change of templates or JavaScript. _}
             </label>
         </div>
 
