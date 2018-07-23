@@ -37,6 +37,7 @@
     make/1,
     debug_stream/3,
     observe_debug_stream/2,
+    observe_filewatcher/2,
     pid_observe_development_reload/3,
     pid_observe_development_make/3,
     observe_admin_menu/3,
@@ -77,6 +78,13 @@ debug_stream(TargetId, What, Context) ->
 %% @doc Stream all debug information of a certain kind to the target id on the user agent.
 observe_debug_stream(#debug_stream{target=TargetId, what=What}, Context) ->
     start_debug_stream(TargetId, What, Context).
+
+%% @doc Catch filewatcher file change events, reloads css or the open pages.
+observe_filewatcher(#filewatcher{ file = File, extension = Extension }, Context) ->
+    case z_convert:to_bool(m_config:get_value(mod_development, livereload, Context)) of
+        true -> maybe_livereload(Extension, File, Context);
+        false -> ok
+    end.
 
 pid_observe_development_reload(Pid, development_reload, _Context) ->
     gen_server:cast(Pid, development_reload).
@@ -156,6 +164,49 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+maybe_livereload(Ext, File, Context)
+    when Ext =:= <<".css">>;
+         Ext =:= <<".gif">>;
+         Ext =:= <<".jpg">>;
+         Ext =:= <<".png">>;
+         Ext =:= <<".svg">> ->
+    maybe_livereload_lib(File, Context);
+maybe_livereload(<<".js">>, File, Context) ->
+    case binary:split(File, <<"/lib/">>) of
+        [ _, _Path ] -> livereload_page(Context);
+        [ _ ] -> ok
+    end;
+maybe_livereload(<<".tpl">>, File, Context) ->
+    case binary:split(File, <<"/templates/">>) of
+        [ _, _Path ] -> livereload_page(Context);
+        [ _ ] ->
+            ok
+    end;
+maybe_livereload(_Ext, _File, _Context) ->
+    ok.
+
+maybe_livereload_lib(File, Context) ->
+    case binary:split(File, <<"/lib/">>) of
+        [ _, Path ] ->
+            Url = z_dispatcher:url_for(lib, [ {star, Path} ], z_context:set_language(undefined, Context)),
+            z_mqtt:publish(
+                <<"public/development/livereload">>,
+                [
+                    {is_page_reload, false},
+                    {path, Url}
+                ],
+                z_acl:sudo(Context));
+        [ _ ] ->
+            ok
+    end.
+
+livereload_page(Context) ->
+    z_mqtt:publish(
+        <<"public/development/livereload">>,
+        [
+            {is_page_reload, true}
+        ],
+        z_acl:sudo(Context)).
 
 %% @doc Start a listener for a certain kind of debug information, echo it to the target id on the current page.
 start_debug_stream(TargetId, What, Context) ->

@@ -63,14 +63,14 @@ is_allowed_acl(Action, Topic, Words, LocalSite, Context) ->
     end.
 
 
-is_allowed(_Action, _Topic, [<<"test">>], _Site, _Context) ->
+is_allowed(_Action, _Topic, [<<"test">> | _], _Site, _Context) ->
     true;
-is_allowed(_Action, _Topic, [<<"site">>, Site, <<"test">>], Site, _Context) ->
+is_allowed(_Action, _Topic, [<<"site">>, Site, <<"test">> | _], Site, _Context) ->
     true;
 
-is_allowed(subscribe, _Topic, [<<"public">>], _Site, _Context) ->
+is_allowed(subscribe, _Topic, [<<"public">> | _], _Site, _Context) ->
     true;
-is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"public">>], Site, _Context) ->
+is_allowed(subscribe, _Topic, [<<"site">>, Site, <<"public">> | _], Site, _Context) ->
     true;
 
 is_allowed(subscribe, _Topic, [<<"user">>], _Site, Context) ->
