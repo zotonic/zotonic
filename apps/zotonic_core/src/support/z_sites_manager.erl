@@ -39,6 +39,7 @@
     get_sites_hosts/0,
     module_loaded/1,
     info/0,
+    foreach/1,
 
     stop/1,
     start/1,
@@ -161,6 +162,24 @@ set_site_status(Site, Status) when is_atom(Site) ->
 -spec info() -> {ok, #{ atom() => #site_status{}} }.
 info() ->
     gen_server:call(?MODULE, info).
+
+%% @doc Do something for all sites that are currently running.
+-spec foreach( fun((z:context()) -> any()) ) -> ok.
+foreach(Fun) ->
+    maps:fold(
+        fun
+            (Site, running, _) ->
+                try
+                    Fun( z_context:new(Site) ),
+                    ok
+                catch
+                    _:_ -> ok
+                end;
+            (_Site, _Status, _) ->
+                ok
+        end,
+        ok,
+        get_sites()).
 
 
 %% @doc Return true iff all sites are running. Don't count sites manually stopped.
