@@ -53,7 +53,7 @@
 }).
 
 -record(dispatch_rules, {
-    rules :: #site_dispatch_list{} | undefined
+    rules :: z_sites_dispatcher:site_dispatch_list() | undefined
 }).
 
 
@@ -884,6 +884,14 @@
 %% @doc Push some information to the debug page in the user-agent.
 %% Will be displayed with io_lib:format("~p: ~p~n", [What, Arg]), be careful with escaping information!
 -record(debug, {what, arg = []}).
+
+%% @doc Broadcast some file changed, used for livereload by mod_development
+-record(filewatcher, {
+    verb :: modify | create | delete,
+    file :: binary(),
+    basename :: binary(),
+    extension :: binary()
+}).
 
 %% @doc An external feed delivered a resource. First handler can import it.
 -record(import_resource, {

@@ -37,11 +37,24 @@
     <div>
         {% wire id="libsep"
             action={config_toggle module="mod_development" key="libsep"}
-            action={admin_tasks task='flush'}
         %}
         <label class="checkbox-inline">
             <input type="checkbox" id="libsep" value="1" {% if m.development.libsep %}checked="checked"{% endif %} />
             {_ Download CSS and JavaScript files as separate files. Don’t combine them in one URL. _}
+        </label>
+    </div>
+
+    <div>
+        {% wire id="livereload"
+            action={config_toggle module="mod_development" key="livereload"}
+            action={script script="
+                if ($('#livereload').is(':checked') && !$('#libsep').is(':checked')) {
+                    $('#libsep').click();
+                };" }
+        %}
+        <label class="checkbox-inline">
+            <input type="checkbox" id="livereload" value="1" {% if m.config.mod_development.livereload.value %}checked="checked"{% endif %} />
+            {_ Live reload of changed CSS files. Reload page on change of templates or JavaScript. _}
         </label>
     </div>
 

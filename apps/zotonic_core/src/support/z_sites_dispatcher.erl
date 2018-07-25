@@ -54,6 +54,7 @@
 
 -include_lib("zotonic.hrl").
 
+-type site_dispatch_list() :: #site_dispatch_list{}.
 -type dispatch_rule() :: {atom(), list(binary()), list()}.
 -type hostname() :: binary() | string().
 
