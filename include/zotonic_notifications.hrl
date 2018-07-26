@@ -594,6 +594,15 @@
 % Will be displayed with io_lib:format("~p: ~p~n", [What, Arg]), be careful with escaping information!
 -record(debug, {what, arg=[]}).
 
+%% @doc Broadcast some file changed, used for livereload by mod_development
+-record(filewatcher, {
+    verb :: modify | create | delete,
+    file :: binary(),
+    basename :: binary(),
+    extension :: binary(),
+    message :: iolist()
+}).
+
 %% @doc An external feed delivered a resource. First handler can import it.
 -record(import_resource, {
         source :: atom() | binary(),

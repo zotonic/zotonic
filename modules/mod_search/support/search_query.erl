@@ -548,7 +548,7 @@ parse_query([Term|_], _Context, _Result) ->
 %%
 
 %% @doc Parse hassubject and hasobject edges.
--spec parse_edges(hassubject | hasobject, binary() | list(), #search_sql{}, z:context()) -> #search_sql{}.
+-spec parse_edges(hassubject | hasobject, list(), #search_sql{}, z:context()) -> #search_sql{}.
 parse_edges(Term, [[Id, Predicate]], Result, Context) ->
     parse_edges(Term, [[Id, Predicate, "rsc"]], Result, Context);
 parse_edges(hassubject, [[Id, Predicate, Alias]], Result, Context) ->

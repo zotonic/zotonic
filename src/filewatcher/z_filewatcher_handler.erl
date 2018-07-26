@@ -28,6 +28,8 @@
     set_timer/4
     ]).
 
+-include("zotonic.hrl").
+
 -type verb() :: create|modify|delete.
 
 %% Which files do we not consider at all in the file_changed handler
@@ -44,6 +46,19 @@ file_changed(Verb, F) ->
             nop;
         false ->
             Message = handle_file(Verb, filename:basename(F), filename:extension(F), F),
+            FilenameB = z_convert:to_binary(F),
+            Basename = filename:extension(FilenameB),
+            Extension = filename:extension(FilenameB),
+            z_sites_manager:foreach(
+                fun(Context) ->
+                    z_notifier:first(#filewatcher{
+                        verb = Verb,
+                        file = FilenameB,
+                        basename = Basename,
+                        extension = Extension,
+                        message = Message
+                        }, Context)
+                end),
             send_message(Message)
     end,
     ok.
@@ -229,7 +244,7 @@ handle_config_command(Path, ".less") ->
         {} -> undefined;
         {From, To, Params} ->
             Cmd = "cd " ++ z_utils:os_escape(Path) ++ "; lessc " ++ Params ++ " " ++ z_utils:os_escape(filename:join(Path, From)) ++ " " ++ z_utils:os_escape(filename:join(Path, To)),
-            os:cmd(Cmd),
+            ?DEBUG(os:cmd(Cmd)),
             "Compiled " ++ To
     end.
 
