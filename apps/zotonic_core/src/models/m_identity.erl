@@ -448,7 +448,7 @@ check_username_pw(Username, Password, Context) ->
 
 %% @doc Check if the tcp/ip peer address is a whitelisted ip address
 is_peer_whitelisted(Context) ->
-    z_ip_address:ip_match(m_req:get(peer, Context), ip_whitelist(Context)).
+    z_ip_address:ip_match(m_req:get(peer_ip, Context), ip_whitelist(Context)).
 
 ip_whitelist(Context) ->
     SiteWhitelist = m_config:get_value(site, ip_whitelist, Context),

@@ -180,9 +180,10 @@ decode_incoming_data(Data, Context) ->
 %% Send the message to the attached MQTT session
 handle_message(Msg, Context) ->
     OptSessionRef = z_context:get(session_ref, Context),
-    MsgOptions = [
-        {transport, self()}
-    ],
+    MsgOptions = #{
+        transport => self(),
+        peer_ip => m_req:get(peer_ip, Context)
+    },
     case mqtt_sessions:incoming_message(mqtt_session_pool(Context), OptSessionRef, Msg, MsgOptions) of
         {ok, undefined} ->
             {ok, Context};

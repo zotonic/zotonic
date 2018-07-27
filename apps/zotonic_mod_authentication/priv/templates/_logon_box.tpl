@@ -62,14 +62,19 @@ Params:
 
 </div>
 {# Use a real post for all forms on this page, and not AJAX or Websockets. This will enforce all cookies to be set correctly. #}
+{#
 {% javascript %}
 z_only_post_forms = true;
 {% endjavascript %}
+#}
 
 {# Set a listener on the session changes - needed for logon via external auth methods or via other pages #}
+{#
 {% javascript %}
     z_transport_delegate_register('reload', function(_status) {
         $('body').mask();
         z_transport("controller_logon", "ubf", { msg: "logon_redirect", page: '{{ page|default:q.p|escapejs }}' });
     });
 {% endjavascript %}
+#}
+

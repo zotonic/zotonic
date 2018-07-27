@@ -32,15 +32,7 @@
 
     observe_module_activate/2,
     module_callback/3
-
-    % observe_rsc_update_done/2,
-    % observe_media_replace_file/2,
-    % observe_edge_delete/2,
-    % observe_edge_insert/2,
-    % observe_edge_update/2,
-
-    % observe_action_event_type/2
-    ]).
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -55,7 +47,7 @@
             type := publish,
             topic := [ <<"model">>, Model, <<"get">> | Path ]
         } = Msg, Context) ->
-    handle_model_request(Model, m_get, Path, Msg, Context).
+    handle_model_request(Model, get, Path, Msg, Context).
 
 %% @doc Handle 'post' request for a model
 -spec 'mqtt:model/+/post/#'(mqtt_packet_map:mqtt_packet(), z:context()) -> ok | {error, term()}.
@@ -63,7 +55,7 @@
             type := publish,
             topic := [ <<"model">>, Model, <<"post">> | Path ]
         } = Msg, Context) ->
-    handle_model_request(Model, m_post, Path, Msg, Context).
+    handle_model_request(Model, post, Path, Msg, Context).
 
 %% @doc Handle 'delete' request for a model
 -spec 'mqtt:model/+/delete/#'(mqtt_packet_map:mqtt_packet(), z:context()) -> ok | {error, term()}.
@@ -71,52 +63,12 @@
             type := publish,
             topic := [ <<"model">>, Model, <<"delete">> | Path ]
         } = Msg, Context) ->
-    handle_model_request(Model, m_delete, Path, Msg, Context).
+    handle_model_request(Model, delete, Path, Msg, Context).
 
 %% @doc Call the module and publish the result back to the 'response_topic'
 handle_model_request(Model, Verb, Path, Msg, Context) ->
-    Res = case model_module(Model, Context) of
-        {ok, Mod} ->
-            maybe_resolve(model_call(Mod, Verb, Path, Msg, Context), Context);
-        {error, _} = Error ->
-            lager:info("Publish to unknown model ~p", [Model]),
-            Error
-    end,
+    Res = z_model:callback(Model, Verb, Path, Msg, Context),
     publish_response(Msg, Res, Context).
-
-model_call(Mod, m_get, Path, Msg, Context) ->
-    Mod:m_get(atomize(Path), Msg, Context);
-model_call(Mod, Callback, Path, Msg, Context) ->
-    try
-        Mod:Callback(atomize(Path), Msg, Context)
-    catch
-        error:undef ->
-            case erlang:function_exported(Mod, Callback, 3) of
-                false ->
-                    lager:info("Model ~p does not export ~p", [ Mod, Callback ]),
-                    {error, unacceptable};
-                true ->
-                    erlang:raise(error, undef, erlang:get_stacktrace())
-            end
-    end.
-
-atomize(Path) ->
-    [ maybe_atom(P) || P <- Path ].
-
-maybe_atom(P) ->
-    try binary_to_existing_atom(P, utf8)
-    catch error:badarg -> P
-    end.
-
-
-%% @doc Optionally dig deeper into the returned result if the path is not consumed completely.
-maybe_resolve({ok, {Res, []}}, _Context) ->
-    {ok, Res};
-maybe_resolve({ok, {Res, Ks}}, Context) when is_list(Ks) ->
-    Res1 = z_template_compiler_runtime:find_nested_value(Res, Ks, #{}, Context),
-    {ok, Res1};
-maybe_resolve({error, _} = Error, _Context) ->
-    Error.
 
 publish_response(#{ properties := #{ response_topic := Topic } }, {ok, Res}, Context) ->
     z_mqtt:publish(Topic, #{ status => <<"ok">>, result => Res }, Context);
@@ -124,15 +76,6 @@ publish_response(#{ properties := #{ response_topic := Topic } }, {error, Res}, 
     z_mqtt:publish(Topic, #{ status => <<"error">>, message => Res }, Context);
 publish_response(#{}, _Res, _Context) ->
     ok.
-
-model_module(Name, Context) ->
-    case z_module_indexer:find(model, Name, Context) of
-        {ok, #module_index{ erlang_module = M }} ->
-            {ok, M};
-        {error, _} = Error ->
-            Error
-    end.
-
 
 observe_module_activate(#module_activate{ module = Module, pid = ModulePid }, Context) ->
     Exports = erlang:get_module_info(Module, exports),

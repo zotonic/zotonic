@@ -1,14 +1,14 @@
+{% include "_js_include_jquery.tpl" %}
+
 {% lib
     "admin-bootstrap3/js/bootstrap.min.js"
 %}
 
 {% lib
+    "cotonic/zotonic-wired-bundle.js"
+
     "js/apps/zotonic-1.0.js"
     "js/apps/z.widgetmanager.js"
-
-    "js/modules/ubf.js"
-    "js/qlobber.js"
-    "js/pubzub.js"
 
     "js/modules/jquery.hotkeys.js"
 
@@ -33,6 +33,13 @@
     "js/modules/jquery.timepicker.min.js"
     "js/modules/jstz.min.js"
 %}
+
+{#
+    "js/modules/ubf.js"
+    "js/qlobber.js"
+    "js/pubzub.js"
+#}
+
 {% all include "_admin_lib_js.tpl" %}
 
 <script type="text/javascript">

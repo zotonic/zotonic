@@ -32,6 +32,10 @@
     unsubscribe/2,
     unsubscribe/3,
 
+    temp_response_topic/1,
+    await_response/1,
+    await_response/2,
+
     map_topic/2,
     map_topic_filter/2
 ]).
@@ -108,6 +112,21 @@ unsubscribe(TopicFilter, OwnerPid, Context) when is_pid(OwnerPid) ->
         {error, _} = Error ->
             Error
     end.
+
+
+-spec temp_response_topic( z:context() ) -> {ok, mqtt_sessions:topic()} | {error, term()}.
+temp_response_topic(Context) ->
+    mqtt_sessions:temp_response_topic(z_context:site(Context), Context).
+
+-spec await_response( mqtt_sessions:topic() ) -> {ok, mqtt_packet_map:mqtt_packet()} | {error, timeout}.
+await_response( Topic ) ->
+    mqtt_sessions:await_response(Topic).
+
+-spec await_response( mqtt_sessions:topic(), pos_integer() ) -> {ok, mqtt_packet_map:mqtt_packet()} | {error, timeout}.
+await_response( Topic, Timeout ) ->
+    mqtt_sessions:await_response(Topic, Timeout).
+
+
 
 -spec map_topic( mqtt_sessions:topic(), z:context() ) -> {ok, mqtt_sessions:topic()} | {error, no_client}.
 map_topic(Topic, Context) when is_binary(Topic) ->

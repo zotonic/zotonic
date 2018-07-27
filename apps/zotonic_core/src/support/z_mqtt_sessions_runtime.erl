@@ -44,6 +44,7 @@
     is_allowed/4
     ]).
 
+-behaviour(mqtt_sessions_runtime).
 
 -define(none(A), (A =:= undefined orelse A =:= <<>>)).
 
@@ -55,14 +56,15 @@
 % TODO: check authentication credentials
 % TODO: if reconnect, check against previous credentials (MUST be the same)
 
--spec new_user_context( atom(), binary(), binary() ) -> z:context().
-new_user_context( Site, ClientId, RoutingId ) ->
+-spec new_user_context( atom(), binary(), mqtt_sessions:session_options() ) -> z:context().
+new_user_context( Site, ClientId, Options ) ->
     Context = z_context:new(Site),
-    Context#context{
+    Context1 = Context#context{
         client_topic = [ <<"bridge">>, ClientId ],
         client_id = ClientId,
-        routing_id = RoutingId
-    }.
+        routing_id = maps:get(routing_id, Options)
+    },
+    z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context1).
 
 
 -spec connect( mqtt_packet_map:mqtt_packet(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
@@ -74,14 +76,36 @@ connect(#{ type := connect, username := U, password := P }, Context) when ?none(
     },
     {ok, ConnAck, Context#context{ user_id = undefined, acl = undefined }};
 connect(#{ type := connect, username := U, password := P }, Context) when not ?none(U), not ?none(P) ->
-    % User logs on using username/password
-    % ... check username/password
-    % ... log on user on UserContext
-    ConnAck = #{
-        type => connack,
-        reason_code => ?MQTT_RC_SUCCESS
-    },
-    {ok, ConnAck, Context};
+    LogonArgs = [
+        {<<"username">>, U},
+        {<<"password">>, P}
+    ],
+    case z_notifier:first(#logon_submit{ query_args = LogonArgs }, Context) of
+        {ok, UserId} when is_integer(UserId) ->
+            Context1 = z_acl:logon(UserId, Context),
+            ConnAck = #{
+                type => connack,
+                reason_code => ?MQTT_RC_SUCCESS,
+                properties => #{
+                    % TODO: also return a token that can be exchanged for a cookie
+                    % ... token ...
+                }
+            },
+            {ok, ConnAck, Context1};
+        {error, _Reason} ->
+            ConnAck = #{
+                type => connack,
+                reason_code => ?MQTT_RC_BAD_USERNAME_PASSWORD
+            },
+            {ok, ConnAck, Context};
+        undefined ->
+            lager:warning("Auth module error: #logon_submit{} returned undefined."),
+            ConnAck = #{
+                type => connack,
+                reason_code => ?MQTT_RC_ERROR
+            },
+            {ok, ConnAck, Context}
+    end;
 connect(#{ type := connect, properties := #{ authentication_method := AuthMethod } = Props }, Context) ->
     % User logs on using extended authentication method
     AuthData = maps:get(authentication_data, Props, undefined),
