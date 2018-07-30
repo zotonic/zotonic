@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
+%% @copyright 2016-2018 Marc Worrell
 %%
 %% @doc Middleware for cowmachine, extra Context based initializations.
 %% This starts the https request processing after the site and dispatch rule
 %% have been selected by the z_sites_dispatcher middleware.
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,12 +32,12 @@
 %%      metadata for lager and set the relevant Context arguments.
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req::cowboy_req:req(), Env::cowboy_middleware:env().
-execute(Req, #{controller := Controller, controller_options := ControllerOpts} = Env) ->
+execute(Req, #{ controller := Controller, controller_options := ControllerOpts } = Env) ->
     Context1 = z_context:set(ControllerOpts, maps:get(context, Env)),
     Context2 = z_context:set_controller_module(Controller, Context1),
     Context3 = z_context:set_reqdata(Req, Context2),
     Options = #{
         on_welformed => fun(Ctx) -> z_context:lager_md(Ctx), z_context:ensure_qs(Ctx) end
     },
-    cowmachine:request(Controller, ControllerOpts, Req, Env, Options, Context3).
+    cowmachine:request(Controller, Context3, Env, Options).
 

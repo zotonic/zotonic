@@ -57,7 +57,7 @@ pager(SearchResult, Page, Context) ->
 pager(#search_result{result = Result, total = undefined} = SearchResult, Page, PageLen, Context) ->
     pager(SearchResult#search_result{total = length(Result)}, Page, PageLen, Context);
 pager(#search_result{result = Result, total = Total} = SearchResult, Page, PageLen, _Context) ->
-    Pages = mochinum:int_ceil(Total / PageLen),
+    Pages = erlang:round(Total / PageLen),
     Offset = (Page-1) * PageLen + 1,
     OnPage = case Offset =< Total of
         true ->
