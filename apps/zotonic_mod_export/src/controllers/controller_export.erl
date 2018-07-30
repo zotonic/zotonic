@@ -22,9 +22,8 @@
 -export([
     forbidden/1,
     content_types_provided/1,
-    charsets_provided/1,
 
-    do_export/1
+    process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -48,28 +47,23 @@ content_types_provided(Context) ->
     Dispatch = z_context:get(zotonic_dispatch, Context),
     case controller_export_resource:get_content_type(undefined, Dispatch, Context) of
         {ok, ContentType} ->
-            {[{ContentType, do_export}], Context};
+            {[ ContentType ], Context};
         {error, Reason} = Error ->
             lager:error("mod_export error when fetching content type for ~p ~p", [Dispatch, Reason]),
             throw(Error)
     end.
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
-
-do_export(Context) ->
-    ContentType = cowmachine_req:resp_content_type(Context),
+process(_Method, _AcceptedCT, ProvidedCT, Context) ->
     Dispatch = z_context:get(zotonic_dispatch, Context),
     StreamOpts = [
         {dispatch, Dispatch},
         {is_query, z_convert:to_bool(z_context:get(is_query, Context))},
         {is_raw, z_convert:to_bool(z_context:get_q(raw, Context))}
     ],
-    Stream = export_encoder:stream(undefined, ContentType, StreamOpts, Context),
-    Context1 = set_filename(ContentType, Dispatch, Context),
+    Stream = export_encoder:stream(undefined, ProvidedCT, StreamOpts, Context),
+    Context1 = set_filename(ProvidedCT, Dispatch, Context),
     {Stream, Context1}.
 
-set_filename(ContentType, Dispatch, Context) ->
-    controller_export_resource:set_filename(undefined, ContentType, Dispatch, Context).
+set_filename(ProvidedCT, Dispatch, Context) ->
+    controller_export_resource:set_filename(undefined, ProvidedCT, Dispatch, Context).
 

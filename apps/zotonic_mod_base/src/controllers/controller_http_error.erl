@@ -20,20 +20,12 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
     content_types_provided/1,
-    do_html/1,
-    do_text/1,
-    do_json/1,
-    do_c_comment/1,
-    do_empty/1,
-    do_image/1
+    process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
 
 %% For the content type we perform multiple checks:
 %% * Original dispatch rule (think controller_file)
@@ -64,9 +56,9 @@ content_types_provided(Context) ->
                 provide_any();
             controller_api ->
                 [
-                    {<<"application/json">>, do_json},
-                    {<<"application/x-json">>, do_json},
-                    {<<"text/plain">>, do_text}
+                    <<"application/json">>,
+                    <<"application/x-json">>,
+                    <<"text/plain">>
                 ];
             % mod_authentication
             controller_logon ->
@@ -90,44 +82,43 @@ content_types_provided(Context) ->
 
 provide_any() ->
     [
-        {<<"text/html">>, do_html},
-        {<<"application/json">>, do_json},
-        {<<"application/x-json">>, do_json},
-        {<<"application/javascript">>, do_c_comment},
-        {<<"application/x-javascript">>, do_c_comment},
-        {<<"text/css">>, do_c_comment},
-        {<<"text/plain">>, do_text},
-        {<<"application/atom+xml">>, [{<<"type">>, <<"entry">>}], do_empty},
-        {<<"application/atom+xml">>, do_empty}
+        <<"text/html">>,
+        <<"application/json">>,
+        <<"application/x-json">>,
+        <<"application/javascript">>,
+        <<"application/x-javascript">>,
+        <<"text/css">>,
+        <<"text/plain">>,
+        <<"application/atom+xml">>
     ].
 
 provide_extension(Context, Default) ->
     case map_extension(Context) of
         html ->
             [
-                {<<"text/html">>, do_html},
-                {<<"text/plain">>, do_text}
+                <<"text/html">>,
+                <<"text/plain">>
             ];
         json ->
             [
-                {<<"application/json">>, do_json},
-                {<<"application/x-json">>, do_json},
-                {<<"text/plain">>, do_text}
+                <<"application/json">>,
+                <<"application/x-json">>,
+                <<"text/plain">>
             ];
         css ->
             [
-                {<<"text/css">>, do_c_comment},
-                {<<"text/plain">>, do_text}
+                <<"text/css">>,
+                <<"text/plain">>
             ];
         javascript ->
             [
-                {<<"application/javascript">>, do_c_comment},
-                {<<"application/x-javascript">>, do_c_comment},
-                {<<"text/plain">>, do_text}
+                <<"application/javascript">>,
+                <<"application/x-javascript">>,
+                <<"text/plain">>
             ];
         text ->
             [
-                {<<"text/plain">>, do_text}
+                <<"text/plain">>
             ];
         image ->
             provide_image();
@@ -137,18 +128,18 @@ provide_extension(Context, Default) ->
 
 provide_image() ->
     [
-        {<<"image/gif">>, do_image}
+        <<"image/gif">>
     ].
 
 provide_html() ->
     [
-        {<<"text/html">>, do_html},
-        {<<"text/plain">>, do_text}
+        <<"text/html">>,
+        <<"text/plain">>
     ].
 
 provide_text() ->
     [
-        {<<"text/plain">>, do_text}
+        <<"text/plain">>
     ].
 
 map_extension(Context) ->
@@ -165,6 +156,17 @@ map_extension(Context) ->
         <<".txt">> -> text;
         _ -> other
     end.
+
+process(_Method, _AcceptedCT, <<"text/html">>, Context) -> do_html(Context);
+process(_Method, _AcceptedCT, <<"application/json">>, Context) -> do_json(Context);
+process(_Method, _AcceptedCT, <<"application/x-json">>, Context) -> do_json(Context);
+process(_Method, _AcceptedCT, <<"application/javascript">>, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, <<"application/x-javascript">>, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, <<"text/css">>, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, <<"application/atom+xml">>, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, <<"image/", _/binary>>, Context) -> do_image(Context);
+process(_Method, _AcceptedCT, <<"text/", _/binary>>, Context) -> do_text(Context);
+process(_Method, _AcceptedCT, _CT, Context) -> do_empty(Context).
 
 do_html(Context0) ->
     Context = set_headers(Context0),

@@ -22,7 +22,6 @@
 
 -export([
     service_available/1,
-    charsets_provided/1,
     resource_exists/1,
     previously_existed/1,
     moved_temporarily/1
@@ -35,9 +34,6 @@
 service_available(Context) ->
     Context2 = z_context:ensure_qs(Context),
     {true, Context2}.
-
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
 
 resource_exists(Context) ->
     {false, Context}.

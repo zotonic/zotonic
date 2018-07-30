@@ -4,7 +4,7 @@
 -export([
          is_authorized/1,
          content_types_provided/1,
-         do_export/1
+         process/4
         ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -14,9 +14,9 @@ is_authorized(Context) ->
     z_acl:wm_is_authorized([{use, mod_acl_user_groups}], admin_logon, Context2).
 
 content_types_provided(Context) ->
-    {[{<<"application/octet-stream">>, do_export}], Context}.
+    {[ <<"application/octet-stream">> ], Context}.
 
-do_export(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Data = acl_user_groups_export:export(Context),
     Content = erlang:term_to_binary(Data, [compressed]),
     Context1 = set_filename(Context),

@@ -28,18 +28,8 @@
     allowed_methods/1,
     content_types_provided/1,
     content_types_accepted/1,
-    % process_post/1,
-    % delete_resource/1,
 
-    to_json/1,
-    to_bert/1,
-    to_ubf/1,
-
-    from_json/1,
-    from_bert/1,
-    from_ubf/1,
-    from_qs/1,
-    from_binary/1
+    process/4
 ]).
 
 % Default max body length (32MB) for API calls, this should be configurable.
@@ -64,112 +54,93 @@ resource_exists(Context) ->
 		_ServiceModule -> {true, Context}
     end.
 
-%% @doc Content types provided for 'GET' requests
-content_types_provided(Context) ->
-    {[
-        {<<"application/json">>, to_json},
-        {<<"application/javascript">>, to_json},
-        {<<"text/javascript">>, to_json},
-        {<<"text/x-ubf">>, to_ubf},
-        {<<"text/x-bert">>, to_bert}
-     ], Context}.
-
-%% @doc Content types accepted for 'POST' requests
+%% @doc Content types accepted for the post body
 content_types_accepted(Context) ->
     {[
-        {<<"application/json">>, from_json},
-        {<<"application/javascript">>, from_json},
-        {<<"text/javascript">>, from_json},
-        {<<"text/x-ubf">>, from_ubf},
-        {<<"text/x-bert">>, from_bert},
-        {<<"application/x-www-form-urlencoded">>, from_qs},
-        {<<"multipart/form-data">>, from_qs}
+        {<<"application">>, <<"json">>, []},
+        {<<"application">>, <<"javascript">>, []},
+        {<<"text">>, <<"javascript">>, []},
+        {<<"text">>, <<"x-ubf">>, []},
+        {<<"application">>, <<"x-bert">>, []},
+        {<<"application">>, <<"x-www-form-urlencoded">>, []},
+        {<<"multipart">>, <<"form-data">>, []}
     ], Context}.
 
+%% @doc Content types provided for the resulting body
+content_types_provided(Context) ->
+    {[
+        {<<"application">>, <<"json">>, []},
+        {<<"application">>, <<"javascript">>, []},
+        {<<"text">>, <<"javascript">>, []},
+        {<<"text">>, <<"x-ubf">>, []},
+        {<<"application">>, <<"x-bert">>, []}
+     ], Context}.
 
-%% @doc Encode the returned value.
-to_json(Context) ->
-    handle_get(fun jsxrecord:encode/1, Context).
+%% @doc Process the request, call MQTT and reply with the response
+process(Method, AcceptedCT, ProvidedCT, Context) ->
+    {Payload, Context1} = payload(AcceptedCT, Context),
+    {Model, Path} = request_model_path(Context),
+    Msg = #{
+        type => publish,
+        properties => #{
+            content_type => AcceptedCT
+        },
+        payload => Payload
+    },
+    case z_model:call(map_method(Method), Model, Path, Msg, Context) of
+        {ok, Resp} ->
+            Body = encode(ProvidedCT, Resp),
+            {Body, Context1};
+        {error, _} = Error ->
+            error_result(Error, ProvidedCT, Context)
+    end.
 
-%% @doc Encode the returned value.
-to_ubf(Context) ->
-    handle_get(fun z_ubf:encode/1, Context).
+map_method(<<"GET">>) -> get;
+map_method(<<"HEAD">>) -> get;
+map_method(<<"POST">>) -> post;
+map_method(<<"DELETE">>) -> delete.
 
-%% @doc Encode the returned value.
-to_bert(Context) ->
-    handle_get(fun erlang:term_to_binary/1, Context).
-
+payload(undefined, Context) ->
+    from_qs(Context);
+payload(<<"application/json">>, Context) ->
+    from_json(Context);
+payload(<<"application/javascript">>, Context) ->
+    from_json(Context);
+payload(<<"text/javascript">>, Context) ->
+    from_json(Context);
+payload(<<"text/x-ubf">>, Context) ->
+    {Body, Context1} = req_body(Context),
+    {Data, _Rest} = z_ubf:decode(Body),
+    {Data, Context1};
+payload(<<"application/x-www-form-urlencoded">>, Context) ->
+    from_qs(Context);
+payload(<<"multipart/form-data">>, Context) ->
+    from_qs(Context);
+payload(_CT, Context) ->
+    req_body(Context).
 
 %% @doc Decode the incoming body
 from_json(Context) ->
     {Body, Context1} = req_body(Context),
     Data = jsxrecord:decode(Body),
-    handle_post(Data, Context1).
-
-%% @doc Decode the incoming body
-from_ubf(Context) ->
-    {Body, Context1} = req_body(Context),
-    {Data, _Rest} = z_ubf:decode(Body),
-    handle_post(Data, Context1).
-
-%% @doc Decode the incoming body
-from_bert(Context) ->
-    {Body, Context1} = req_body(Context),
-    {Data, _Rest} = erlang:binary_to_term(Body, [safe]),
-    handle_post(Data, Context1).
+    {Data, Context1}.
 
 %% @doc Decode the incoming body
 from_qs(Context) ->
     Context1 = z_context:ensure_qs(Context),
     Qs = z_context:get_q_all_noz(Context1),
-    handle_post(Qs, Context).
+    {Qs, Context1}.
 
-%% @doc Decode the incoming body
-from_binary(Context) ->
-    {Body, Context1} = req_body(Context),
-    handle_post(Body, Context1).
-
-
-%% @doc Call the get handler of the model, use MQTT topics.
-handle_get(EncoderFun, Context) ->
-    Context1 = z_context:ensure_qs(Context),
-    Qs = z_context:get_q_all_noz(Context1),
-    Msg = #{
-        type => publish,
-        properties => #{
-            content_type => <<"application/x-www-form-urlencoded">>
-        },
-        payload => Qs
-    },
-    {Model, Path} = request_model_path(Context1),
-    case z_model:call(get, Model, Path, Msg, Context1) of
-        {ok, Resp} ->
-            {EncoderFun(Resp), Context1};
-        {error, _} = Error ->
-            error_result(Error, EncoderFun, Context1)
-    end.
-
-%% @doc Call the post handler of the model, use MQTT topics.
-handle_post(DecodedPayload, Context) ->
-    % @todo Match the provided content aganist the requested types for the encoderfun
-    EncoderFun = fun to_json/1,
-    ContentType = cowmachine_req:get_req_header(<<"content-type">>, Context),
-    {Model, Path} = request_model_path(Context),
-    Msg = #{
-        type => publish,
-        properties => #{
-            content_type => ContentType
-        },
-        payload => DecodedPayload
-    },
-    case z_model:call(post, Model, Path, Msg, Context) of
-        {ok, Resp} ->
-            Body = EncoderFun(Resp),
-            Context1 = cowmachine_req:set_resp_body(Body, Context),
-            {{halt, 200}, Context1};
-        {error, _} = Error ->
-            error_result(Error, EncoderFun, Context)
-    end.
+encode(<<"application/json">>, Data) ->
+    jsxrecord:encode(Data);
+encode(<<"application/javascript">>, Data) ->
+    jsxrecord:encode(Data);
+encode(<<"text/javascript">>, Data) ->
+    jsxrecord:encode(Data);
+encode(<<"text/x-ubf">>, Data) ->
+    z_ubf:encode(Data);
+encode(<<"application/x-bert">>, Data) ->
+    erlang:term_to_binary(Data).
 
 
 %% @doc Return the model and path to be called.
@@ -186,48 +157,48 @@ req_body(Context) ->
     cowmachine_req:req_body(?MAX_BODY_LENGTH, Context).
 
 
-error_result({error, eacces}, EncoderFun, Context) ->
-    RespBody = EncoderFun(#{
+error_result({error, eacces}, CT, Context) ->
+    RespBody = encode(CT, #{
             status => <<"error">>,
             error => <<"eacces">>,
             message => <<"Access Denied">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 403}, Context1};
-error_result({error, payload}, EncoderFun, Context) ->
-    RespBody = EncoderFun(#{
+error_result({error, payload}, CT, Context) ->
+    RespBody = encode(CT, #{
             status => <<"error">>,
             error => <<"payload">>,
             message => <<"Illegal Payload Encoding">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 400}, Context1};
-error_result({error, StatusCode}, EncoderFun, Context) when is_integer(StatusCode) ->
-    RespBody = EncoderFun(#{
+error_result({error, StatusCode}, CT, Context) when is_integer(StatusCode) ->
+    RespBody = encode(CT, #{
             status => <<"error">>,
             error => <<"error">>,
             message => <<"Error ", (integer_to_binary(StatusCode))/binary>>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
-error_result({error, {StatusCode, Reason, Message}}, EncoderFun, Context) when is_integer(StatusCode) ->
-    RespBody = EncoderFun(#{
+error_result({error, {StatusCode, Reason, Message}}, CT, Context) when is_integer(StatusCode) ->
+    RespBody = encode(CT, #{
             status => <<"error">>,
             error => z_convert:to_binary(Reason),
             message => z_convert:to_binary(Message)
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
-error_result({error, Reason}, EncoderFun, Context) ->
-    RespBody = EncoderFun(#{
+error_result({error, Reason}, CT, Context) ->
+    RespBody = encode(CT, #{
             status => <<"error">>,
             error => z_convert:to_binary(Reason),
             message => <<"Internal Error">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 500}, Context1};
-error_result(_, EncoderFun, Context) ->
-    RespBody = EncoderFun(#{
+error_result(_, CT, Context) ->
+    RespBody = encode(CT, #{
             status => <<"error">>,
             error => <<"error">>,
             message => <<"Internal Error">>

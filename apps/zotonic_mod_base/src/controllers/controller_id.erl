@@ -25,7 +25,7 @@
     previously_existed/1,
     moved_temporarily/1,
     content_types_provided/1,
-    see_other/1,
+    process/4,
     get_rsc_content_types/2
 ]).
 
@@ -50,15 +50,14 @@ redirect(Location, Context) ->
     {{true, Location}, Context}.
 
 content_types_provided(Context) ->
-    {CT,Context1} = get_content_types(Context),
-    CT1 = [{Mime, see_other} || {Mime, _Dispatch} <- CT],
-    {CT1, Context1}.
+    {CTs, Context1} = get_content_types(Context),
+    CTs1 = [ Mime || {Mime, _Dispatch} <- CTs],
+    {CTs1, Context1}.
 
-see_other(Context) ->
-    Mime = cowmachine_req:resp_content_type(Context),
-    {CT,Context2} = get_content_types(Context),
+process(_Method, _AcceptedCT, ProvidedCT, Context) ->
+    {CT, Context2} = get_content_types(Context),
     {Id, Context3} = get_id(Context2),
-    {Location,Context4} = case proplists:get_value(Mime, CT) of
+    {Location,Context4} = case proplists:get_value(ProvidedCT, CT) of
                             page_url ->
                                 ContextSession = z_context:ensure_qs(Context3),
                                 {m_rsc:p_no_acl(Id, page_url, ContextSession), ContextSession};
@@ -73,7 +72,7 @@ see_other(Context) ->
 
 %% @doc Fetch the list of content types provided, together with their dispatch rule name.
 %% text/html is moved to the front of the list as that is the default mime type to be returned.
--spec get_rsc_content_types(m_rsc:resource(), #context{}) -> list().
+-spec get_rsc_content_types(m_rsc:resource(), z:context()) -> list().
 get_rsc_content_types(Id, Context) ->
     z_notifier:foldr(#content_types_dispatch{id = Id}, [], Context).
 

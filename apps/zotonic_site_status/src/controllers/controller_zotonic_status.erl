@@ -20,9 +20,8 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
     content_types_provided/1,
-	provide_content/1,
+	process/4,
 	event/2,
 	updater/2
 ]).
@@ -30,18 +29,15 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
 content_types_provided(Context) ->
     case z_context:get(content_type, Context) of
         undefined ->
-            {[{<<"text/html">>, provide_content}], Context};
+            {[ <<"text/html">> ], Context};
         Mime ->
-            {[{z_convert:to_binary(Mime), provide_content}], Context}
+            {[ z_convert:to_binary(Mime) ], Context}
     end.
 
-provide_content(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     case z_context:get(is_fallback_template, Context) of
         true ->
             Context2 = z_context:ensure_qs(Context),

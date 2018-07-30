@@ -27,12 +27,8 @@
     resource_exists/1,
     content_types_provided/1,
     content_types_accepted/1,
-    charsets_provided/1,
     delete_resource/1,
-    put_json/1,
-    get_json/1,
-    put_bert/1,
-    get_bert/1
+    process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -83,31 +79,27 @@ resource_exists(Context) ->
 
 content_types_provided(Context) ->
     Provided = case z_context:get_q(<<"format">>, Context) of
-        <<"bert">> -> [ {<<"application/x-bert">>, get_bert} ];
-        <<"json">> -> [ {<<"application/json">>, get_json} ];
+        <<"bert">> -> [ <<"application/x-bert">> ];
+        <<"json">> -> [ <<"application/json">> ];
         _ ->
             [
-                {<<"application/json">>, get_json},
-                {<<"application/x-bert">>, get_bert}
+                <<"application/json">>,
+                <<"application/x-bert">>
             ]
     end,
     {Provided, Context}.
 
 content_types_accepted(Context) ->
     Accepted = case z_context:get_q(<<"format">>, Context) of
-        <<"bert">> -> [ {<<"application/x-bert">>, put_bert} ];
-        <<"json">> -> [ {<<"application/json">>, put_json} ];
+        <<"bert">> -> [ <<"application/x-bert">> ];
+        <<"json">> -> [ <<"application/json">> ];
         _ ->
             [
-                {<<"application/json">>, put_json},
-                {<<"application/x-bert">>, put_bert}
+                <<"application/json">>,
+                <<"application/x-bert">>
             ]
     end,
     {Accepted, Context}.
-
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
 
 delete_resource(Context) ->
     {ok, Id} = get_id(Context),
@@ -118,15 +110,25 @@ delete_resource(Context) ->
     end.
 
 
-get_json(Context) ->
+process(<<"GET">>, _AcceptedCT, <<"application/json">>, Context) ->
     {ok, Id} = get_id(Context),
     Data = z_json:encode(get_rsc(Id, Context)),
-    do_get(Id, Data, <<".json">>, Context).
-
-get_bert(Context) ->
+    do_get(Id, Data, <<".json">>, Context);
+process(<<"GET">>, _AcceptedCT, <<"application/x-bert">>, Context) ->
     {ok, Id} = get_id(Context),
     Data = bert:encode(get_rsc(Id, Context)),
-    do_get(Id, Data, <<".bert">>, Context).
+    do_get(Id, Data, <<".bert">>, Context);
+process(<<"PUT">>, _AcceptedCT, <<"application/json">>, Context) ->
+    {Body, Context1} = cowmachine_req:req_body(Context),
+    Parsed = z_json:decode(Body),
+    do_update(Parsed, Context1);
+process(<<"PUT">>, _AcceptedCT, <<"application/x-bert">>, Context) ->
+    {Body, Context1} = cowmachine_req:req_body(Context),
+    Parsed = bert:decode(Body),
+    do_update(Parsed, Context1);
+process(<<"DELETE">>, _AcceptedCT, _ProvidedCT, Context) ->
+    {true, Context}.
+
 
 do_get(Id, Data, Extension, Context) ->
     Modified = m_rsc:p(Id, modified, Context),
@@ -142,19 +144,6 @@ do_get(Id, Data, Extension, Context) ->
                 ]),
     Context1 = z_context:set_resp_header(<<"content-disposition">>, Disp, Context),
     {Data, Context1}.
-
-
-%% @doc Fetch the request body, translate to properties and hand to the update routines.
-%% @todo Handle update errors
-put_json(Context) ->
-    {Body, Context1} = cowmachine_req:req_body(Context),
-    Parsed = z_json:decode(Body),
-    do_update(Parsed, Context1).
-
-put_bert(Context) ->
-    {Body, Context1} = cowmachine_req:req_body(Context),
-    Parsed = bert:decode(Body),
-    do_update(Parsed, Context1).
 
 
 do_update(Props, Context) ->

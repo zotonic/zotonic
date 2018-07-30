@@ -20,23 +20,19 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
     content_types_provided/1,
     is_authorized/1,
-    provide_content/1
+    process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
 content_types_provided(Context) ->
     case z_context:get(content_type, Context) of
         undefined ->
-            {[{<<"text/html">>, provide_content}], Context};
+            {[ <<"text/html">> ], Context};
         Mime ->
-            {[{z_convert:to_binary(Mime), provide_content}], Context}
+            {[ z_convert:to_binary(Mime) ], Context}
     end.
 
 %% @doc Check if the current user is allowed to view the resource.
@@ -51,7 +47,7 @@ is_authorized(Context) ->
     end.
 
 
-provide_content(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context3 = z_context:set_noindex_header(Context),
     Context4 = set_optional_cache_header(Context3),
     Template = z_context:get(template, Context4),

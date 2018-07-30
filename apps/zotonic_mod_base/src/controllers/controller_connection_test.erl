@@ -22,10 +22,9 @@
 
 -export([
     service_available/1,
-    charsets_provided/1,
     content_types_provided/1,
     is_authorized/1,
-    provide_content/1
+    process/4
 ]).
 
 -export([
@@ -39,17 +38,14 @@ service_available(Context) ->
     Context1 = z_context:ensure_qs(Context),
     {true, Context1}.
 
-charsets_provided(Context) ->
-    controller_template:charsets_provided(Context).
-
 content_types_provided(Context) ->
     controller_template:content_types_provided(Context).
 
 is_authorized(Context) ->
     controller_template:is_authorized(Context).
 
-provide_content(Context) ->
-    controller_template:provide_content(Context).
+process(Method, AcceptedCT, ProvidedCT, Context) ->
+    controller_template:process(Method, AcceptedCT, ProvidedCT, Context).
 
 
 %%

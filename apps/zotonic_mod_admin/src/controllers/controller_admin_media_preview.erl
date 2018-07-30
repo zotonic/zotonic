@@ -21,7 +21,7 @@
 
 -export([resource_exists/1,
          content_types_provided/1,
-         to_image/1
+         process/4
         ]).
 
 resource_exists(Context) ->
@@ -47,9 +47,9 @@ resource_exists(Context) ->
     end.
 
 content_types_provided(Context) ->
-    {[{<<"image/jpeg">>, to_image}], Context}.
+    {[ <<"image/jpeg">> ], Context}.
 
-to_image(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Opts = [{mediaclass, <<"admin-editor">>}],
     case z_media_tag:url(z_context:get(id, Context), Opts, Context) of
         {ok, Url} ->

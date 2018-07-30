@@ -24,8 +24,7 @@
 -export([
          allowed_methods/1,
          content_types_provided/1,
-         process_post/1,
-         response/1
+         process/4
         ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -34,12 +33,9 @@ allowed_methods(Context) ->
     {[<<"POST">>, <<"GET">>, <<"HEAD">>], Context}.
 
 content_types_provided(Context) ->
-    {[{<<"text/html">>, response}], Context}.
+    {[ <<"text/html">> ], Context}.
 
-process_post(Context) ->
-    response(Context).
-
-response(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     case mod_oauth:request_is_signed(Context) of
         false ->
             % Request was not signed.

@@ -21,8 +21,8 @@
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl").
 
 -export([
-    to_html/1
+    process/4
 ]).
 
-to_html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     {<<"Hello, World!">>, Context}.

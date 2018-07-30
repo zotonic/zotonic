@@ -21,20 +21,12 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
-    content_types_provided/1,
     resource_exists/1,
     previously_existed/1,
     moved_temporarily/1,
-    provide_content/1
+    process/4
 ]).
 -export([reset_rememberme_cookie_and_logoff/1]).
-
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
-content_types_provided(Context) ->
-    {[{<<"text/html">>, provide_content}], Context}.
 
 resource_exists(Context) ->
     % TODO: when there is javascript in the context, then return the javascript
@@ -54,7 +46,7 @@ moved_temporarily(Context) ->
     Location = z_context:get_q(<<"p">>, Context, <<"/">>),
     {{true, Location}, Context}.
 
-provide_content(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context1 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Rendered = z_template:render("logoff.tpl", z_context:get_all(Context1), Context1),
     z_context:output(Rendered, Context1).

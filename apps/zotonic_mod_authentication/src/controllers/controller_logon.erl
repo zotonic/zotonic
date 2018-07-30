@@ -19,9 +19,8 @@
 -module(controller_logon).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([charsets_provided/1]).
 -export([resource_exists/1, previously_existed/1, moved_temporarily/1]).
--export([to_html/1]).
+-export([process/4]).
 -export([event/2]).
 -export([get_rememberme_cookie/1, set_rememberme_cookie/2, reset_rememberme_cookie/1]).
 
@@ -35,9 +34,6 @@
 
 -define(LOGON_REMEMBERME_COOKIE, <<"z_logon">>).
 -define(LOGON_REMEMBERME_DAYS, 365).
-
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
 
 resource_exists(Context) ->
     Context2 = z_context:ensure_qs(Context),
@@ -77,7 +73,7 @@ moved_temporarily(Context) ->
     {{true, Location}, Context}.
 
 
-to_html(Context) ->
+process(<<"GET">>, _, <<"text/html">>, Context) ->
     Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Secret = z_context:get_q(<<"secret">>, Context2),
     Vars = [

@@ -21,9 +21,7 @@
 
 -export([
     upgrades_provided/1,
-    charsets_provided/1,
-    content_types_provided/1,
-    provide_content/1,
+    process/4,
     websocket_start/1,
     websocket_send_data/2,
     is_websocket_request/1
@@ -46,14 +44,8 @@
 upgrades_provided(Context) ->
     {[{<<"WebSocket">>, websocket_start}], Context}.
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
-content_types_provided(Context) ->
-    {[{<<"text/html">>, provide_content}], Context}.
-
 % TODO: handle SSE
-provide_content(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Rendered = z_template:render("error_websocket.tpl", z_context:get_all(Context2), Context2),
     z_context:output(Rendered, Context2).

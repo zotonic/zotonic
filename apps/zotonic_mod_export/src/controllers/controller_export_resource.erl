@@ -24,9 +24,8 @@
     previously_existed/1,
     forbidden/1,
     content_types_provided/1,
-    charsets_provided/1,
 
-    do_export/1,
+    process/4,
 
     % Exports for controller_export
     get_content_type/3,
@@ -63,34 +62,29 @@ content_types_provided(Context) ->
     Dispatch = z_context:get(zotonic_dispatch, Context1),
     case get_content_type(Id, Dispatch, Context1) of
         {ok, ContentType} ->
-            {[{ContentType, do_export}], Context};
+            {[ ContentType ], Context};
         {error, no_content_type} ->
             ContentTypes = export_encoder:content_types(Context),
-            Accepted = [ {Mime, do_export} || Mime <- ContentTypes ],
-            {Accepted, Context};
+            {ContentTypes, Context};
         {error, Reason} = Error ->
             lager:error("mod_export error when fetching content type for ~p:~p: ~p", [Dispatch, Id, Reason]),
             throw(Error)
     end.
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
-do_export(Context) ->
+process(_Method, _AcceptedCT, ProvidedCT, Context) ->
     {Id, _} = get_id(Context),
-    ContentType = cowmachine_req:resp_content_type(Context),
     Dispatch = z_context:get(zotonic_dispatch, Context),
     StreamOpts = [
         {dispatch, Dispatch},
         {is_query, z_convert:to_bool(z_context:get(is_query, Context))},
         {is_raw, z_convert:to_bool(z_context:get_q(raw, Context))}
     ],
-    Stream = export_encoder:stream(Id, ContentType, StreamOpts, Context),
-    Context1 = set_filename(Id, ContentType, Dispatch, Context),
+    Stream = export_encoder:stream(Id, ProvidedCT, StreamOpts, Context),
+    Context1 = set_filename(Id, ProvidedCT, Dispatch, Context),
     {Stream, Context1}.
 
-set_filename(Id, ContentType, Dispatch, Context) ->
-    Extension = case mimetypes:mime_to_exts(ContentType) of
+set_filename(Id, ProvidedCT, Dispatch, Context) ->
+    Extension = case mimetypes:mime_to_exts(ProvidedCT) of
                     undefined -> <<"bin">>;
                     Exts -> hd(Exts)
                 end,
@@ -98,14 +92,14 @@ set_filename(Id, ContentType, Dispatch, Context) ->
             #export_resource_content_disposition{
                 id = Id,
                 dispatch = Dispatch,
-                content_type = ContentType
+                content_type = ProvidedCT
             },
             Context),
     Filename = case z_notifier:first(
             #export_resource_filename{
                 id = Id,
                 dispatch = Dispatch,
-                content_type = ContentType
+                content_type = ProvidedCT
             },
             Context)
     of
