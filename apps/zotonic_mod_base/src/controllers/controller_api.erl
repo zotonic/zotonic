@@ -24,7 +24,6 @@
 -export([
     service_available/1,
     options/1,
-    resource_exists/1,
     allowed_methods/1,
     content_types_provided/1,
     content_types_accepted/1,
@@ -47,12 +46,6 @@ options(Context) ->
 
 allowed_methods(Context) ->
     {[ <<"GET">>, <<"POST">>, <<"DELETE">> ], Context}.
-
-resource_exists(Context) ->
-    case z_context:get(service_module, Context) of
-		undefined -> {false, Context};
-		_ServiceModule -> {true, Context}
-    end.
 
 %% @doc Content types accepted for the post body
 content_types_accepted(Context) ->
@@ -87,7 +80,7 @@ process(Method, AcceptedCT, ProvidedCT, Context) ->
         },
         payload => Payload
     },
-    case z_model:call(map_method(Method), Model, Path, Msg, Context) of
+    case z_model:call(Model, map_method(Method), Path, Msg, Context) of
         {ok, Resp} ->
             Body = encode(ProvidedCT, Resp),
             {Body, Context1};
@@ -157,14 +150,6 @@ req_body(Context) ->
     cowmachine_req:req_body(?MAX_BODY_LENGTH, Context).
 
 
-error_result({error, eacces}, CT, Context) ->
-    RespBody = encode(CT, #{
-            status => <<"error">>,
-            error => <<"eacces">>,
-            message => <<"Access Denied">>
-        }),
-    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
-    {{halt, 403}, Context1};
 error_result({error, payload}, CT, Context) ->
     RespBody = encode(CT, #{
             status => <<"error">>,
@@ -173,6 +158,22 @@ error_result({error, payload}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 400}, Context1};
+error_result({error, eacces}, CT, Context) ->
+    RespBody = encode(CT, #{
+            status => <<"error">>,
+            error => <<"eacces">>,
+            message => <<"Access Denied">>
+        }),
+    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
+    {{halt, 403}, Context1};
+error_result({error, enoent}, CT, Context) ->
+    RespBody = encode(CT, #{
+            status => <<"error">>,
+            error => <<"enoent">>,
+            message => <<"Not Found">>
+        }),
+    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
+    {{halt, 404}, Context1};
 error_result({error, StatusCode}, CT, Context) when is_integer(StatusCode) ->
     RespBody = encode(CT, #{
             status => <<"error">>,

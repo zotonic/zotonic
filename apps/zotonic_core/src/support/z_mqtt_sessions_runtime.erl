@@ -146,18 +146,19 @@ is_allowed_acl(Action, Topic, Packet, Context) ->
         undefined -> is_allowed(Action, Topic, Context)
     end.
 
-is_allowed(_Action, [ <<"test">> | _ ], _Context) -> true;
-is_allowed(_Action, [ <<"public">> | _ ], _Context) -> true;
-is_allowed(publish, [ <<"model">>, _Model, <<"get">> | _ ], _Context) -> true;
-is_allowed(publish, [ <<"model">>, _Model, <<"post">> | _ ], _Context) -> true;
-is_allowed(publish, [ <<"model">>, _Model, <<"delete">> | _ ], _Context) -> true;
+is_allowed(_Action,   [ <<"test">> | _ ], _Context) -> true;
+is_allowed(_Action,   [ <<"public">> | _ ], _Context) -> true;
+is_allowed(_Action,   [ <<"reply">>, <<"call-", _/binary>>, _ ], _Context) -> true;
+is_allowed(publish,   [ <<"model">>, _Model, <<"get">> | _ ], _Context) -> true;
+is_allowed(publish,   [ <<"model">>, _Model, <<"post">> | _ ], _Context) -> true;
+is_allowed(publish,   [ <<"model">>, _Model, <<"delete">> | _ ], _Context) -> true;
 is_allowed(subscribe, [ <<"model">>, _Model, <<"event">> | _ ], _Context) -> true;
-is_allowed(publish, [ <<"bridge">>, _Remote, <<"reply">> | _ ], _Context) -> true;
-is_allowed(publish, [ <<"bridge">>, _Remote, <<"public">> | _ ], _Context) -> true;
+is_allowed(publish,   [ <<"bridge">>, _Remote, <<"reply">> | _ ], _Context) -> true;
+is_allowed(publish,   [ <<"bridge">>, _Remote, <<"public">> | _ ], _Context) -> true;
 is_allowed(subscribe, [ <<"bridge">>, Remote | _ ], Context) ->
     Context#context.routing_id =:= Remote orelse Context#context.client_id =:= Remote;
 is_allowed(subscribe, [ <<"user">> ], Context) -> z_auth:is_auth(Context);
-is_allowed(_Action, [ <<"user">>, User | _ ], Context) ->
+is_allowed(_Action,   [ <<"user">>, User | _ ], Context) ->
     try
         UserId = binary_to_integer(User),
         UserId =:= z_acl:user(Context)

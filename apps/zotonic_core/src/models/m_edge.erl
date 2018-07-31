@@ -149,20 +149,25 @@ get_id(SubjectId, Pred, Object, Context) when not is_integer(Object) ->
 
 %% @doc Return the full description of all edges from a subject, grouped by predicate
 get_edges(SubjectId, Context) ->
-    case z_depcache:get({edges, SubjectId}, Context) of
-        {ok, Edges} ->
-            Edges;
+    case m_rsc:rid(SubjectId, Context) of
         undefined ->
-            Edges = z_db:assoc("
-                select e.id, e.subject_id, e.predicate_id, p.name, e.object_id,
-                       e.seq, e.created, e.creator_id
-                from edge e join rsc p on p.id = e.predicate_id
-                where e.subject_id = $1
-                order by e.predicate_id, e.seq, e.id", [SubjectId], Context),
-            Edges1 = z_utils:group_proplists(name, Edges),
-            Edges2 = [ {z_convert:to_atom(Pred), Es} || {Pred, Es} <- Edges1 ],
-            z_depcache:set({edges, SubjectId}, Edges2, ?DAY, [SubjectId], Context),
-            Edges2
+            [];
+        SubjectId1 ->
+            case z_depcache:get({edges, SubjectId1}, Context) of
+                {ok, Edges} ->
+                    Edges;
+                undefined ->
+                    Edges = z_db:assoc("
+                        select e.id, e.subject_id, e.predicate_id, p.name, e.object_id,
+                               e.seq, e.created, e.creator_id
+                        from edge e join rsc p on p.id = e.predicate_id
+                        where e.subject_id = $1
+                        order by e.predicate_id, e.seq, e.id", [SubjectId1], Context),
+                    Edges1 = z_utils:group_proplists(name, Edges),
+                    Edges2 = [ {z_convert:to_atom(Pred), Es} || {Pred, Es} <- Edges1 ],
+                    z_depcache:set({edges, SubjectId1}, Edges2, ?DAY, [SubjectId1], Context),
+                    Edges2
+            end
     end.
 
 %% @doc Insert a new edge

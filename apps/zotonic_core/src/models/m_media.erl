@@ -69,9 +69,14 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ Id | Rest ], _Msg, Context) ->
-    case z_acl:rsc_visible(Id, Context) of
-        true -> {ok, {get(Id, Context), Rest}};
-        false -> {error, eacces}
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            case z_acl:rsc_visible(RscId, Context) of
+                true -> {ok, {get(RscId, Context), Rest}};
+                false -> {error, eacces}
+            end
     end;
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
@@ -128,7 +133,8 @@ exists(Id, Context) ->
 %% @spec get(RscId, Context) -> PropList
 get(Id, Context) ->
     F = fun() ->
-        z_db:assoc_props_row("select * from medium where id = $1", [Id], Context) end,
+        z_db:assoc_props_row("select * from medium where id = $1", [Id], Context)
+    end,
     z_depcache:memo(F, {medium, Id}, ?WEEK, [Id], Context).
 
 %% @doc Return the contents of the file belonging to the media resource

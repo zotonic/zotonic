@@ -82,7 +82,7 @@ publish(Model, Verb, Path, undefined, Context) ->
 publish(Model, Verb, Path, Msg, Context) ->
     ModelTopic = mqtt_topic(Model, Verb, Path),
     RespTopic = z_mqtt:temp_response_topic(Context),
-    Props = maps:get(Msg, path_element, #{}),
+    Props = maps:get(path_element, Msg, #{}),
     Msg1 = Msg#{
         topic => ModelTopic,
         properties => Props#{
@@ -129,6 +129,20 @@ get_module(rsc_gone, _Context)  -> {ok, m_rsc_gone};
 get_module(search, _Context)    -> {ok, m_search};
 get_module(site, _Context)      -> {ok, m_site};
 get_module(sysconfig, _Context) -> {ok, m_sysconfig};
+get_module(<<"rsc">>, _Context)       -> {ok, m_rsc};
+get_module(<<"acl">>, _Context)       -> {ok, m_acl};
+get_module(<<"config">>, _Context)    -> {ok, m_config};
+get_module(<<"edge">>, _Context)      -> {ok, m_edge};
+get_module(<<"hierarchy">>, _Context) -> {ok, m_hierarchy};
+get_module(<<"identity">>, _Context)  -> {ok, m_identity};
+get_module(<<"media">>, _Context)     -> {ok, m_media};
+get_module(<<"modules">>, _Context)   -> {ok, m_modules};
+get_module(<<"predicate">>, _Context) -> {ok, m_predicate};
+get_module(<<"req">>, _Context)       -> {ok, m_req};
+get_module(<<"rsc_gone">>, _Context)  -> {ok, m_rsc_gone};
+get_module(<<"search">>, _Context)    -> {ok, m_search};
+get_module(<<"site">>, _Context)      -> {ok, m_site};
+get_module(<<"sysconfig">>, _Context) -> {ok, m_sysconfig};
 get_module(Name, Context) ->
     case z_module_indexer:find(model, Name, Context) of
         {ok, #module_index{ erlang_module = M }} ->
@@ -148,7 +162,7 @@ mqtt_topic(Model, Method, Path) ->
     % Parts = binary:split(Path, <<"/">>, [global]),
     % Parts1 = lists:map( fun cow_qs:urldecode/1, Parts ),
     Path1 = [ z_convert:to_binary(P) || P <- Path ],
-    [ <<"m">>, z_convert:to_binary(Model), z_convert:to_binary(Method) | Path1 ].
+    [ <<"model">>, z_convert:to_binary(Model), z_convert:to_binary(Method) | Path1 ].
 
 
 

@@ -103,12 +103,10 @@ content_types_accepted(Context) ->
 
 delete_resource(Context) ->
     {ok, Id} = get_id(Context),
-    try m_rsc:delete(Id, Context) of
-        {ok, _} -> {true, Context}
-    catch
+    case m_rsc:delete(Id, Context) of
+        {ok, _} -> {true, Context};
         {error, _} -> {false, Context}
     end.
-
 
 process(<<"GET">>, _AcceptedCT, <<"application/json">>, Context) ->
     {ok, Id} = get_id(Context),
@@ -125,9 +123,7 @@ process(<<"PUT">>, _AcceptedCT, <<"application/json">>, Context) ->
 process(<<"PUT">>, _AcceptedCT, <<"application/x-bert">>, Context) ->
     {Body, Context1} = cowmachine_req:req_body(Context),
     Parsed = bert:decode(Body),
-    do_update(Parsed, Context1);
-process(<<"DELETE">>, _AcceptedCT, _ProvidedCT, Context) ->
-    {true, Context}.
+    do_update(Parsed, Context1).
 
 
 do_get(Id, Data, Extension, Context) ->

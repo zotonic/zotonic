@@ -24,6 +24,14 @@
 
 -include("zotonic.hrl").
 
+-compile(nowarn_unused_record).
+
+%% Used in EXIF
+-record(ratio, {
+        numerator :: integer(),
+        denominator :: integer()
+    }).
+
 %% @doc Let jsxrecord load the Zotonic record definitions from this module
 init() ->
     erlang:spawn( fun() -> jsxrecord:load_records([ ?MODULE ]) end),
