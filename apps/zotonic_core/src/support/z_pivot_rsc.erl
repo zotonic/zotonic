@@ -73,7 +73,7 @@
 -define(POLL_BATCH, 50).
 
 %% Minimum day, inserted for date start search ranges
--define(EPOCH_START, {{-4000,1,1},{0,0,0}}).
+-define(EPOCH_START, {{-4700,1,1},{0,0,0}}).
 
 %% Max number of characters for a tsv vector.
 -define(MAX_TSV_LEN, 30000).
