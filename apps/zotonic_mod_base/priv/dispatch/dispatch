@@ -13,7 +13,6 @@
  
  %% The id controller redirects depending on the accept header sent by the user agent.
  {id, ["id", id], controller_id, [ {ssl, any} ]},
- {id, ["id-accept", zotonic_http_accept, id], controller_id, [ {ssl, any} ]},
  
  %% CSS, Javascript and images from the "lib" module folders. Possibly more than one file combined in a single request.
  {lib, ["lib",'*'], controller_file, [ {root,[lib]}, {ssl, any} ]},
@@ -28,7 +27,6 @@
  
  %% API access
  {api, ["api", '*'], controller_api, [{ssl, any}]},
- {api, ["api-accept", zotonic_http_accept, '*' ], controller_api, [{ssl, any}]},
  
  %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
  {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}, {ssl, any} ]},

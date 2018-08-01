@@ -416,17 +416,25 @@ unescape(P) ->
         _ -> cow_qs:urldecode(P)
     end.
 
--spec dispatch_rewrite(binary(), binary(), list(), boolean(), pid(), #context{}) -> tuple().
-dispatch_rewrite(Hostname, Path, Tokens, IsDir, TracerPid, Context) ->
-    {Tokens1, Bindings} = z_notifier:foldl(
-                            #dispatch_rewrite{is_dir=IsDir, path=Path, host=Hostname},
-                            {Tokens, []},
+-spec dispatch_rewrite(binary(), binary(), list(), boolean(), pid(), z:context()) -> tuple().
+dispatch_rewrite(Hostname, Path, Tokens0, IsDir, TracerPid, Context) ->
+    {Tokens, Bindings} = rewrite_zotonic_accept(Tokens0, [], Path, TracerPid),
+    {Tokens1, Bindings1} = z_notifier:foldl(
+                            #dispatch_rewrite{is_dir = IsDir, path = Path, host = Hostname},
+                            {Tokens, Bindings},
                             Context),
     case Tokens1 of
-        Tokens -> ok;
-        _ -> trace(TracerPid, Path, dispatch_rewrite, [{path,Tokens1},{bindings,Bindings}])
+        Tokens -> nop;
+        _ -> trace(TracerPid, Path, dispatch_rewrite, [{path,Tokens1},{bindings,Bindings1}])
     end,
-    {Tokens1, Bindings}.
+    rewrite_zotonic_accept(Tokens1, Bindings1, Path, TracerPid).
+
+rewrite_zotonic_accept([ <<"http-accept">>, Mime | Tokens ], Bindings, Path, TracerPid) ->
+    Bindings1 = [ {zotonic_http_accept, Mime} | Bindings ],
+    trace(TracerPid, Path, dispatch_rewrite, [ {path, Tokens}, {bindings,Bindings} ]),
+    {Tokens, Bindings1};
+rewrite_zotonic_accept(Tokens, Bindings, _Path, _TracerPid) ->
+    {Tokens, Bindings}.
 
 %% @doc Callback for the dispatch compiler, try to bind a language
 is_bind_language(Match, _Context) ->

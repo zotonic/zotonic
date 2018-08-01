@@ -169,13 +169,27 @@ reload(module_ready, Context) ->
 %% Support routines, called outside the gen_server
 %%====================================================================
 
-%% @doc rewrite generated uris
-rewrite(#dispatch_url{url=undefined} = D, _Dispatch, _Args, _Context) ->
+%% @doc Rewrite the generated urls. Checks for zotonic_http_accept and checks modules.
+rewrite(#dispatch_url{url = undefined} = D, _Dispatch, _Args, _Context) ->
     D;
-rewrite(#dispatch_url{url=Url} = D, Dispatch, Args, Context) ->
+rewrite(#dispatch_url{url = Url} = D, Dispatch, Args, Context) ->
+    Url1 = iolist_to_binary(Url),
+    Url2 = check_http_options(Url1, Args),
     D#dispatch_url{
-        url=z_notifier:foldl(#url_rewrite{dispatch=Dispatch, args=Args}, iolist_to_binary(Url), Context)
+        url = z_notifier:foldl(#url_rewrite{dispatch = Dispatch, args = Args}, Url2, Context)
     }.
+
+check_http_options(Url, Args) ->
+    case lists:keyfind(zotonic_http_accept, 1, Args) of
+        {zotonic_http_accept, undefined} ->
+            Url;
+        {zotonic_http_accept, Mime} ->
+            Mime1 = cow_qs:urlencode(z_convert:to_binary(Mime)),
+            <<"/http-accept/", Mime1/binary, Url/binary>>;
+        false ->
+            Url
+    end.
+
 
 %% @doc Optionally make the url an absolute url
 opt_abs_url(#dispatch_url{url=undefined} = D, _Dispatch, _Args, _Context) ->
@@ -443,6 +457,7 @@ filter_empty_args(Args) ->
           ({_, undefined}) -> false;
           ({absolute_url, _}) -> false;
           (absolute_url) -> false;
+          ({zotonic_http_accept, _}) -> false;
           (_) -> true
       end, Args).
 
