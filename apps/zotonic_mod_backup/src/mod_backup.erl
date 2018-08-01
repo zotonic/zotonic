@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2012 Marc Worrell
-%% Date: 2010-02-11
 %% @doc Backup module. Creates backup of the database and files.  Allows downloading of the backup.
 %% Support creation of periodic backups.
 
@@ -26,7 +25,7 @@
 -mod_description("Make a backup of the database and files.").
 -mod_prio(600).
 -mod_provides([backup]).
--mod_depends([rest, admin]).
+-mod_depends([admin]).
 -mod_schema(1).
 
 %% gen_server exports
@@ -37,6 +36,7 @@
 -export([
     observe_admin_menu/3,
     observe_rsc_update/3,
+    observe_rsc_upload/2,
     start_backup/1,
     start_backup/2,
     list_backups/1,
@@ -57,6 +57,8 @@
 -define(BCK_POLL_INTERVAL, 3600 * 1000).
 
 
+observe_rsc_upload(Upload, Context) ->
+    backup_rsc_upload:rsc_upload(Upload, Context).
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [

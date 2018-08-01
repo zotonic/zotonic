@@ -344,7 +344,7 @@ reload_dispatch_list(#state{context=Context} = State) ->
     DispatchList = try
         collect_dispatch_lists(Context)
     catch
-        _:{error, Msg} ->
+        _:{error, _Msg} ->
            State#state.dispatchlist
     end,
     LookupDict = dispatch_for_uri_lookup(DispatchList),
@@ -452,10 +452,12 @@ make_url_for1(_Args, [], _Escape, undefined) ->
     #dispatch_url{};
 make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) ->
     ReplArgs =  fun
-                    ('*') -> proplists:get_value(star, Args);
-                    (V) when is_atom(V) -> mochiweb_util:quote_plus(proplists:get_value(V, Args));
-                    ({V, _Pattern}) when is_atom(V) -> mochiweb_util:quote_plus(proplists:get_value(V, Args));
-                    (S) -> S
+                    ('*') -> path_argval('*', Args);
+                    (V) when is_atom(V) -> path_argval(V, Args);
+                    ({V, _Pattern}) when is_atom(V) ->
+                        mochiweb_util:quote_plus(path_argval(V, Args));
+                    (S) ->
+                        S
                 end,
     UriParts = lists:map(ReplArgs, Pattern),
     Uri      = [$/ | z_utils:combine($/, UriParts)],
@@ -480,6 +482,18 @@ make_url_for1(Args, [Pattern|T], Escape, Best) ->
     Best1 = select_best_pattern(Args, Pattern, Best),
     make_url_for1(Args, T, Escape, Best1).
 
+path_argval('*', Args) ->
+    case proplists:get_value(star, Args) of
+        undefined -> <<>>;
+        L when is_list(L) ->
+            List1 = [ cow_qs:urlencode(z_convert:to_binary(B)) || B <- L ],
+            z_utils:combine($/, List1);
+        V ->
+            z_convert:to_binary(V)
+    end;
+path_argval(Arg, Args) ->
+    B = z_convert:to_binary(proplists:get_value(Arg, Args, <<"-">>)),
+    cow_qs:urlencode(B).
 
 select_best_pattern(Args, {PCount, PArgs, Pattern, DispOpts}, Best) ->
     if

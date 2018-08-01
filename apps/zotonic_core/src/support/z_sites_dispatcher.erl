@@ -371,7 +371,7 @@ dispatch_match(Tokens, Context) ->
     end.
 
 
-%% @doc Fix bindings: values should be lists and the '*' should be a binary
+%% @doc Fix bindings: values should be binaries and the '*' should be a binary
 %% @todo Allow a match for list, so that we don't need to split again in the controller
 fix_match_bindings(Ms, IsDir) ->
     [ fix_match_binding(M, IsDir) || M <- Ms ].

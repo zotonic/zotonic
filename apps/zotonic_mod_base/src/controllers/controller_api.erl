@@ -131,7 +131,8 @@ encode(<<"application/javascript">>, Data) ->
 encode(<<"text/javascript">>, Data) ->
     jsxrecord:encode(Data);
 encode(<<"text/x-ubf">>, Data) ->
-    z_ubf:encode(Data);
+    {ok, UBF} = z_ubf:encode(Data),
+    UBF;
 encode(<<"application/x-bert">>, Data) ->
     erlang:term_to_binary(Data).
 

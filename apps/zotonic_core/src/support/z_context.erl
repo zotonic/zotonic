@@ -631,6 +631,7 @@ is_zotonic_arg(<<"zotonic_site">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch_path">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch_path_rewrite">>) -> true;
+is_zotonic_arg(<<"zotonic_http_", _/binary>>) -> true;
 is_zotonic_arg(<<"postback">>) -> true;
 is_zotonic_arg(<<"triggervalue">>) -> true;
 is_zotonic_arg(<<"z_trigger_id">>) -> true;

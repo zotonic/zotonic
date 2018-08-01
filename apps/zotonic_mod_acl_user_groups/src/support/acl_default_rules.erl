@@ -71,7 +71,6 @@ get_modules(acl_user_group_managers) ->
         , mod_development
         , mod_email_status
         , mod_menu
-        , mod_rest
         , mod_seo
         , mod_translation
     ];
@@ -81,7 +80,6 @@ get_modules(acl_user_group_editors) ->
         , mod_admin_statistics
         , mod_email_status
         , mod_menu
-        , mod_rest
     ];
 get_modules(acl_user_group_member) ->
     [
