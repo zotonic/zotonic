@@ -8,7 +8,7 @@
  {<<"cowlib">>,{pkg,<<"cowlib">>,<<"2.2.1">>},2},
  {<<"cowmachine">>,
   {git,"git@github.com:zotonic/cowmachine.git",
-       {ref,"97f42033e6d1537c827c30024698d7810ed6b649"}},
+       {ref,"74583f68bf5c406735f94a3f1507550b49372847"}},
   0},
  {<<"depcache">>,{pkg,<<"depcache">>,<<"1.4.0">>},0},
  {<<"dh_date">>,{pkg,<<"dh_date">>,<<"1.0.0">>},0},
