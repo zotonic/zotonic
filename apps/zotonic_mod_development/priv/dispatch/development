@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 [
- {admin_development, ["admin", "development"], controller_admin, [{template, "admin_development.tpl"}, {selected, "development"}, {ssl,true}]},
+ {admin_development, ["admin", "development"], controller_admin, [{template, "admin_development.tpl"}, {selected, "development"}]},
  
- {admin_development_templates, ["admin", "development", "templates"], controller_admin, [{template, "admin_development_templates.tpl"}, {selected, "development"}, {ssl,true}]}
+ {admin_development_templates, ["admin", "development", "templates"], controller_admin, [{template, "admin_development_templates.tpl"}, {selected, "development"}]}
  
 ].

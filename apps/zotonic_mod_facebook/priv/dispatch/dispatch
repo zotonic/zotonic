@@ -1,5 +1,5 @@
 %% -*- mode: erlang -*-
 [
- {facebook_authorize, ["facebook", "authorize"], controller_facebook_authorize, [{ssl,any}]},
- {facebook_redirect,  ["facebook", "redirect"],  controller_facebook_redirect, [{ssl,any}]}
+ {facebook_authorize, ["facebook", "authorize"], controller_facebook_authorize, []},
+ {facebook_redirect,  ["facebook", "redirect"],  controller_facebook_redirect, []}
 ].

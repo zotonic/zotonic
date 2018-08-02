@@ -285,6 +285,10 @@ send_static_response(RespCode, Req) ->
 
 %% ---------------------------------------------------------------------------------------
 
+%% Always redirect to https
+dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, _OptReq) when Hostname =/= undefined ->
+    #dispatch{ tracer_pid = TracerPid } = DispReq,
+    redirect_protocol(https, Hostname, TracerPid, [], undefined);
 dispatch_1(DispReq, OptReq) ->
     case ets:lookup(?MODULE, DispReq#dispatch.host) of
         [] ->
@@ -586,9 +590,8 @@ map_z_language_2(X) -> X.
 
 -spec do_dispatch_rule(tuple(), any(), any(), any(), any(), any()) -> #dispatch_controller{}.
 do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, Context) ->
-    #dispatch{tracer_pid=TracerPid, host=Hostname, protocol=Protocol} = DispReq,
     Bindings1 = [ {zotonic_dispatch, DispatchName} | Bindings ],
-    trace(TracerPid,
+    trace(DispReq#dispatch.tracer_pid,
           Tokens,
           match,
           [ {dispatch, DispatchName},
@@ -596,41 +599,21 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
             {controller_options, Props},
             {bindings, Bindings1}
           ]),
-    SslPort = z_config:get(ssl_port),
-    % Maybe switch between http and https
-    case proplists:get_value(ssl, Props, any) of
-        false when Protocol =:= https, Hostname =/= undefined ->
-            redirect_protocol(http, Hostname, TracerPid, Tokens, Context);
-        true when Protocol =:= http, is_integer(SslPort), Hostname =/= undefined  ->
-            redirect_protocol(https, Hostname, TracerPid, Tokens, Context);
-        any when Protocol =:= http, is_integer(SslPort), Hostname =/= undefined   ->
-            case z_context:is_ssl_site(Context) of
-                true ->
-                    redirect_protocol(https, Hostname, TracerPid, Tokens, Context);
-                false ->
-                    #dispatch_controller{
-                        dispatch_rule=DispatchName,
-                        controller=Mod,
-                        controller_options=Props,
-                        path_tokens=Tokens,
-                        bindings=Bindings1,
-                        context=maybe_set_language(Bindings1, Context)
-                    }
-            end;
-        _ ->
-            % 'any', correct protocol, or no SSL port defined, or no host name
-            #dispatch_controller{
-                dispatch_rule=DispatchName,
-                controller=Mod,
-                controller_options=Props,
-                path_tokens=Tokens,
-                bindings=Bindings1,
-                context=maybe_set_language(Bindings1, Context)
-            }
-    end.
+    #dispatch_controller{
+        dispatch_rule = DispatchName,
+        controller = Mod,
+        controller_options = Props,
+        path_tokens = Tokens,
+        bindings = Bindings1,
+        context = maybe_set_language(Bindings1, Context)
+    }.
 
--spec redirect_protocol(https|http, binary()|undefined, pid()|undefined, list(), #context{}) ->
+-spec redirect_protocol(https|http, binary()|undefined, pid()|undefined, list(), #context{} | undefined) ->
             {redirect_protocol, http|https, binary()|undefined, boolean()}.
+redirect_protocol(https, Hostname, TracerPid, Tokens, undefined) ->
+    NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
+    trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
+    {redirect_protocol, https, NewHostname, true};
 redirect_protocol(https, Hostname, TracerPid, Tokens, Context) ->
     NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
     trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),

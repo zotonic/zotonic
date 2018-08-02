@@ -1,5 +1,5 @@
 %% -*- mode: erlang -*-
 [
-    {home, [], controller_zotonic_status, [ is_fallback_template, {template, "home.tpl"}, {ssl, any}]},
-    {zotonic_status, ["zotonic", "status"], controller_zotonic_status, [{template, "status.tpl"}, {ssl, true}]}
+    {home, [], controller_zotonic_status, [ is_fallback_template, {template, "home.tpl"}]},
+    {zotonic_status, ["zotonic", "status"], controller_zotonic_status, [{template, "status.tpl"}]}
 ].

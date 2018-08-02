@@ -1,11 +1,11 @@
 %% -*- mode: erlang -*-
 [
- {logon,  ["logon"],  controller_logon,  [{ssl, true}, {is_only_anonymous, true}]},
- {logoff, ["logoff"], controller_logoff, [{ssl, true}]},
- {logon_reminder, ["logon", "reminder"], controller_logon, [{ssl, true}]},
- {logon_reset, ["logon", "reset"], controller_logon, [{ssl, true}]},
+ {logon,  ["logon"],  controller_logon,  [{is_only_anonymous, true}]},
+ {logoff, ["logoff"], controller_logoff, []},
+ {logon_reminder, ["logon", "reminder"], controller_logon, []},
+ {logon_reset, ["logon", "reset"], controller_logon, []},
 
- {logon_service, ["logon", "service", service ], controller_template, [{ssl, true}, {template, "logon_service.tpl"}]},
+ {logon_service, ["logon", "service", service ], controller_template, [{template, "logon_service.tpl"}]},
 
- {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{ssl,true}, {template, "admin_authentication_services.tpl"}]}
+ {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{template, "admin_authentication_services.tpl"}]}
 ].

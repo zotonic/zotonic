@@ -242,7 +242,7 @@ filename_to_filepath(Filename, #context{} = Context) ->
 
 %% @doc Give the base url for the filename being served using the 'image' dispatch rule
 filename_to_urlpath(Filename, Context) ->
-    z_dispatcher:url_for(image, [{star, Filename}], z_context:set_language(undefined, Context)).
+    z_dispatcher:url_for(image, [{star, iolist_to_binary(Filename)}], z_context:set_language(undefined, Context)).
 
 
 %% @spec url(MediaRef, Options, Context) -> {ok, Url::binary()} | {error, Reason}
