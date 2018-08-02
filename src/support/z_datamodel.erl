@@ -61,14 +61,19 @@ manage(Module, Datamodel, Context) ->
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
 -spec manage(atom(), #datamodel{}, datamodel_options(), #context{}) -> ok.
 manage(Module, Datamodel, Options, Context) ->
-    AdminContext = z_acl:sudo(Context),
-    [manage_category(Module, Cat, Options, AdminContext) || Cat <- Datamodel#datamodel.categories],
-    [manage_predicate(Module, Pred, Options, AdminContext) || Pred <- Datamodel#datamodel.predicates],
-    [manage_resource(Module, R, Options, AdminContext) || R <- Datamodel#datamodel.resources],
-    [manage_medium(Module, Medium, Options, AdminContext) || Medium <- Datamodel#datamodel.media],
-    [manage_edge(Module, Edge, Options, AdminContext) || Edge <- Datamodel#datamodel.edges],
-    [manage_data(Module, Data, AdminContext) || Data <- Datamodel#datamodel.data],
-    ok.
+    F = fun(Ctx) ->
+		[manage_category(Module, Cat, Options, Ctx) || Cat <- Datamodel#datamodel.categories],
+		[manage_predicate(Module, Pred, Options, Ctx) || Pred <- Datamodel#datamodel.predicates],
+		[manage_resource(Module, R, Options, Ctx) || R <- Datamodel#datamodel.resources],
+		[manage_medium(Module, Medium, Options, Ctx) || Medium <- Datamodel#datamodel.media],
+		[manage_edge(Module, Edge, Options, Ctx) || Edge <- Datamodel#datamodel.edges],
+		[manage_data(Module, Data, Ctx) || Data <- Datamodel#datamodel.data],
+
+		%% And flush the cache to make sure everybody is going to read fresh data.
+		z_depcache:flush(Ctx),
+		ok
+	end,
+    ok = z_db:transaction(F, z_acl:sudo(Context)).
 
 manage_medium(Module, {Name, Props}, Options, Context) ->
     manage_resource(Module, {Name, media, Props}, Options, Context);
