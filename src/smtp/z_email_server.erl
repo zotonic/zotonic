@@ -820,7 +820,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
     end.
 
     encode_attachment(AttId, Context) when is_integer(AttId) ->
-        case m_rsc:rsc_visible(AttId, Context) of
+        case z_acl:rsc_visible(AttId, Context) of
             true ->
                 case m_media:get(AttId, Context) of
                     undefined ->
@@ -833,7 +833,8 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                                     {ok, FInfo} ->
                                         Upload = #upload{
                                             data = z_file_request:content_data(FInfo, identity),
-                                            mime = proplists:get_value(mime, Medium)
+                                            mime = proplists:get_value(mime, Medium),
+                                            filename = proplists:get_value(original_filename, Medium)
                                         },
                                         encode_attachment(Upload, Context);
                                     {error, _} = Error ->
