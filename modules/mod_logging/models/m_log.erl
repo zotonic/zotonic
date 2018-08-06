@@ -29,6 +29,7 @@
     m_to_list/2,
     m_value/2,
     get/2,
+    periodic_cleanup/1,
     install/1
 ]).
 
@@ -66,6 +67,19 @@ list(Context) ->
 merge_props(R) ->
     proplists:delete(props, R) ++ proplists:get_value(props, R, []).
 
+
+%% @doc Periodic cleanup of max 10K items older than 3 months
+periodic_cleanup(Context) ->
+    z_db:q("
+        delete from log
+        where id in (
+            select id
+            from log
+            where created < now() - interval '3 months'
+            limit 10000
+        )",
+        Context,
+        300000).
 
 install(Context) ->
     case z_db:table_exists(log, Context) of

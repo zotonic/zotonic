@@ -22,6 +22,7 @@
 
 -export([
     search/2,
+    periodic_cleanup/1,
     install/1
 ]).
 
@@ -99,6 +100,19 @@ search(Filter, Context) ->
         N = integer_to_list(length(As1)),
         {As1, N}.
 
+
+%% @doc Periodic cleanup of max 10K items older than 3 months
+periodic_cleanup(Context) ->
+    z_db:q("
+        delete from log_email
+        where id in (
+            select id
+            from log_email
+            where created < now() - interval '3 months'
+            limit 10000
+        )",
+        Context,
+        300000).
 
 install(Context) ->
     case z_db:table_exists(log_email, Context) of
