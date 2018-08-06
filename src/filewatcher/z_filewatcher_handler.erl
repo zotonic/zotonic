@@ -120,7 +120,7 @@ handle_file(_Verb, "erlydtl_parser.yrl", ".yrl", F) ->
     os:cmd("erlc -o "++z_utils:os_escape(TargetDir)++" "++z_utils:os_escape(F)),
     "Rebuilding yecc file: " ++ filename:basename(F);
 
-handle_file(_Verb, Basename, ".erl", F) ->
+handle_file(Verb, Basename, ".erl", F) when Verb =/= delete ->
     Libdir = z_utils:lib_dir(),
     L = length(Libdir),
     FileBase = case string:substr(F, 1, L) of
