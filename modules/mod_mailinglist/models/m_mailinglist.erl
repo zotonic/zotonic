@@ -486,7 +486,7 @@ periodic_cleanup(Context) ->
             m_email_status:is_ok_to_send(Email, Context)
         end,
         MaybeBouncing),
-    z_db:trans(
+    z_db:transaction(
         fun(Ctx) ->
             lists:foreach(
                 fun({Email}) ->

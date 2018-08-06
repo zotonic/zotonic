@@ -352,7 +352,7 @@ normalize(Email) ->
 periodic_cleanup(Context) ->
     z_db:q("
         delete from email_status
-        where modified < now() - interval '2 years',
+        where modified < now() - interval '2 years'
           and not is_blocked
           and (    bounce is null
                 or sent is null

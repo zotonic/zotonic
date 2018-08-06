@@ -27,8 +27,8 @@
 
 
 datamodel() ->
-    [
-        {categories, [
+    #datamodel{
+        categories = [
             {mailinglist, undefined, [
                             {title, {trans, [
                                 {en, <<"Mailing List">>},
@@ -39,10 +39,10 @@ datamodel() ->
                                 {nl, <<"Mailinglijsten worden gebruikt om pagina's naar groepen mensen te versturen.">>}
                             ]}}
                         ]}
-        ]},
+        ],
 
         % Any resource with an e-mail address can be a subscriber of a mailinglist
-        {predicates, [
+        predicates = [
             {subscriberof,
                 [
                     {title, {trans, [
@@ -67,21 +67,21 @@ datamodel() ->
                     ]}}
                 ],
                 [ {undefined, media} ]}
-        ]},
+        ],
 
-        {resources, [
+        resources = [
             {mailinglist_test, mailinglist, [
                 {is_published, false},
                 {title, "Test mailing list"},
                 {summary, "This list is used for testing. Anyone who can see this mailing list can post to it. It SHOULD NOT be visible for the world."}
             ]}
-        ]}
-    ].
+        ]
+    }.
 
 
 
 %% @doc Install the SQL tables to track recipients and scheduled mailings.
-manage_schema(install, Context) ->
+manage_schema(_What, Context) ->
     case z_db:table_exists(mailinglist_recipient, Context) of
         false ->
             do_install(Context);
@@ -98,8 +98,7 @@ manage_schema(install, Context) ->
                     ok
             end
     end,
-    z_datamodel:manage(mod_mailinglist, datamodel(), Context),
-    ok.
+    datamodel().
 
 
 do_install(Context) ->
