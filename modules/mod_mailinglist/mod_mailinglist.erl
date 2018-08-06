@@ -37,6 +37,7 @@
          manage_schema/2,
          observe_search_query/2,
          observe_mailinglist_message/2,
+         observe_tick_24h/2,
          event/2,
          page_attachments/2,
          observe_admin_menu/3
@@ -92,6 +93,9 @@ observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, r
 	z_email:send_render(proplists:get_value(email, Props), Template, [{list_id, ListId}, {recipient, Props}], Context),
 	ok.
 
+%% @doc Every 24h cleanup the mailinglists recipients.
+observe_tick_24h(tick_24h, Context) ->
+    m_mailinglist:periodic_cleanup(Context).
 
 %% @doc Request confirmation of canceling this mailing.
 event(#postback{message={dialog_mailing_cancel_confirm, Args}}, Context) ->

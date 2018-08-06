@@ -55,7 +55,9 @@
 	get_recipients_by_email/2,
     % reset_log_email/3,
 
-    recipient_set_operation/4
+    recipient_set_operation/4,
+
+    periodic_cleanup/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -207,7 +209,7 @@ recipient_confirm(ConfirmKey, Context) ->
 %% @doc Clear all recipients of the list
 %% @spec recipients_clear(ListId, Context) -> ok
 recipients_clear(ListId, Context) ->
-    %% TODO clear person edges to list
+    %% TODO clear person edges to list?
     z_db:q("delete from mailinglist_recipient where mailinglist_id = $1", [ListId], Context),
     ok.
 
@@ -223,7 +225,7 @@ insert_recipient(ListId, Email, WelcomeMessageType, Context) ->
 
 insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 	true = z_acl:rsc_visible(ListId, Context),
-	Email1 = z_string:to_lower(Email),
+	Email1 = m_identity:normalize_key(email, Email),
 	Rec = z_db:q_row("select id, is_enabled, confirm_key
 					  from mailinglist_recipient
 					  where mailinglist_id = $1
@@ -248,7 +250,8 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 				_ ->
 					z_db:q("update mailinglist_recipient
 							set is_enabled = true,
-							    confirm_key = $2
+							    confirm_key = $2,
+                                timestamp = now()
 							where id = $1", [RecipientId, NewConfirmKey], Context),
 					WelcomeMessageType
 			end;
@@ -277,7 +280,11 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 
 %% @doc Update a single recipient; changing e-mail address or name details.
 update_recipient(RcptId, Props, Context) ->
-    {ok, _} = z_db:update(mailinglist_recipient, RcptId, Props, Context),
+    Props1 = [
+        {timestamp, erlang:universaltime()}
+        | Props
+    ],
+    {ok, _} = z_db:update(mailinglist_recipient, RcptId, Props1, Context),
     ok.
 
 
@@ -320,9 +327,9 @@ replace_recipient(ListId, Recipient, Now, Context) ->
 
 
 replace_recipient(ListId, Email, Props, Now, Context) ->
-    case z_string:trim(z_string:to_lower(Email)) of
-        Empty when Empty =:= ""; Empty =:= <<>>; Empty =:= undefined ->
-            skip;
+    case m_identity:normalize_key(email, Email) of
+        <<>> -> skip;
+        undefined -> skip;
         Email1 ->
             case z_db:q1("select id from mailinglist_recipient where mailinglist_id = $1 and email = $2",
                          [ListId, Email1], Context) of
@@ -449,3 +456,47 @@ recipient_set_operation(Op, IdA, IdB, Context) when Op =:= union; Op =:= subtrac
 get_email_set(ListId, Context) ->
     sets:from_list([z_convert:to_binary(z_string:trim(z_string:to_lower(Email)))
                     || {Email} <- z_db:q("SELECT email FROM mailinglist_recipient WHERE mailinglist_id = $1", [ListId], Context)]).
+
+
+%% @doc Periodically remove bouncing and disabled addresses from the mailinglist
+-spec periodic_cleanup(z:context()) -> ok.
+periodic_cleanup(Context) ->
+    % Remove disabled entries that were not updated for more than 3 months
+    z_db:q("
+        delete from mailinglist_recipient
+        where not is_enabled
+          and timestamp < now() - interval '3 months'",
+        Context),
+    % Remove entries that are invalid, blocked or bouncing
+    MaybeBouncing = z_db:q("
+        select r.email
+        from mailinglist_recipient r
+             join email_status s
+             on r.email = s.email
+        where s.modified < now() - interval '3 months'
+            and (  not s.is_valid
+                or s.is_blocked
+                or s.bounce >= s.modified
+                or s.error >= s.modified)
+        ",
+        Context,
+        300000),
+    Invalid = lists:filter(
+        fun({Email}) ->
+            m_email_status:is_ok_to_send(Email, Context)
+        end,
+        MaybeBouncing),
+    z_db:trans(
+        fun(Ctx) ->
+            lists:foreach(
+                fun({Email}) ->
+                    z_db:q("
+                        delete from mailinglist_recipient
+                        where email = $1",
+                        [Email],
+                        Ctx)
+                end,
+                Invalid)
+        end,
+        Context).
+

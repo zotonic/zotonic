@@ -32,6 +32,8 @@
     observe_email_bounced/2,
     observe_email_received/2,
 
+    observe_tick_24h/2,
+
     manage_schema/2
 ]).
 
@@ -84,6 +86,10 @@ observe_email_bounced(#email_bounced{recipient=Recipient}, Context) ->
 observe_email_received(#email_received{from=From}, Context) when is_binary(From) ->
     m_email_status:mark_received(From, Context),
     undefined.
+
+
+observe_tick_24h(tick_24h, Context) ->
+    m_email_status:periodic_cleanup(Context).
 
 manage_schema(install, Context) ->
     m_email_status:install(Context).
