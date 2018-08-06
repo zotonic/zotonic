@@ -834,7 +834,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                                         Upload = #upload{
                                             data = z_file_request:content_data(FInfo, identity),
                                             mime = proplists:get_value(mime, Medium),
-                                            filename = proplists:get_value(original_filename, Medium)
+                                            filename = filename:basename(Filename)
                                         },
                                         encode_attachment(Upload, Context);
                                     {error, _} = Error ->
