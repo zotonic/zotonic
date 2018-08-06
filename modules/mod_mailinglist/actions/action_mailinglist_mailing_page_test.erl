@@ -41,7 +41,7 @@ event(#postback{message={mailing_page_test, PageId, OnSuccess}}, Context) ->
 			case z_acl:rsc_visible(ListId, Context) of
 				true ->
                     %% Reset the recepient stats for the test list
-                    m_mailinglist:reset_log_email(ListId, PageId, Context),
+                    % m_mailinglist:reset_log_email(ListId, PageId, Context),
                     %% And send.
 					z_notifier:notify(#mailinglist_mailing{list_id=ListId, page_id=PageId}, Context),
 					Context1 = z_render:growl(?__("Sending the page to the test mailing list...", Context), Context),

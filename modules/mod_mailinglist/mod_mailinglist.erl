@@ -24,8 +24,8 @@
 -mod_title("Mailing list").
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
--mod_schema(1).
--mod_depends([admin, mod_logging]).
+-mod_schema(2).
+-mod_depends([admin, mod_logging, mod_email_status]).
 -mod_provides([mailinglist]).
 
 %% gen_server exports
@@ -37,7 +37,6 @@
          manage_schema/2,
          observe_search_query/2,
          observe_mailinglist_message/2,
-         observe_email_bounced/2,
          event/2,
          page_attachments/2,
          observe_admin_menu/3
@@ -50,10 +49,11 @@
 
 %% @doc Install the tables needed for the mailinglist and return the rsc datamodel.
 manage_schema(What, Context) ->
-    mod_mailinglist_schema:manage_schema(What, Context).
+    z_mailinglist_schema:manage_schema(What, Context).
 
 
 observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->
+    % Return all recipients for this mailing list - should also add the subscriber edges
     #search_sql{
         select="id, email, is_enabled",
         from="mailinglist_recipient",
@@ -62,15 +62,16 @@ observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _Offset
         order="email",
         tables=[]
     };
-observe_search_query({search_query, {mailinglist_bounced, [{list_id,ListId}, {mailing_id, Id}]}, _OffsetLimit}, _Context) ->
-    #search_sql{
-        select="distinct r.id, r.email, r.is_enabled",
-        from="mailinglist_recipient r, log_email l",
-		where="r.mailinglist_id = l.other_id AND r.mailinglist_id = $1 AND l.content_id = $2 AND r.email = l.envelop_to AND mailer_status='bounce'",
-		args=[ListId, Id],
-        order="email",
-        tables=[]
-    };
+% observe_search_query({search_query, {mailinglist_bounced, [{list_id,ListId}, {mailing_id, Id}]}, _OffsetLimit}, _Context) ->
+%     % Search the mail log for bounces corresponding to this mailing list
+%     #search_sql{
+%         select="distinct r.id, r.email, r.is_enabled",
+%         from="mailinglist_recipient r, log_email l",
+% 		where="r.mailinglist_id = l.other_id AND r.mailinglist_id = $1 AND l.content_id = $2 AND r.email = l.envelop_to AND mailer_status='bounce'",
+% 		args=[ListId, Id],
+%         order="email",
+%         tables=[]
+%     };
 observe_search_query(_, _) ->
 	undefined.
 
@@ -90,13 +91,6 @@ observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, r
 	Props = m_mailinglist:recipient_get(RecipientId, Context),
 	z_email:send_render(proplists:get_value(email, Props), Template, [{list_id, ListId}, {recipient, Props}], Context),
 	ok.
-
-
-%% @doc When an e-mail bounces, disable the corresponding recipients and mark them as bounced.
-observe_email_bounced(B=#email_bounced{}, Context) ->
-    Recipients = m_mailinglist:get_recipients_by_email(B#email_bounced.recipient, Context),
-    lists:foreach(fun(Id) -> m_mailinglist:update_recipient(Id, [{is_enabled, false}, {is_bounced, true}, {bounce_time, calendar:universal_time()}], Context) end, Recipients),
-    undefined. %% Let other bounce handlers do their thing
 
 
 %% @doc Request confirmation of canceling this mailing.
@@ -124,7 +118,7 @@ event(#postback{message={mailinglist_reset, Args}}, Context) ->
 	PageId = proplists:get_value(page_id, Args),
 	case z_acl:rsc_editable(MailingId, Context) of
 		true ->
-			m_mailinglist:reset_log_email(MailingId, PageId, Context),
+			% m_mailinglist:reset_log_email(MailingId, PageId, Context),
             mod_signal:emit({update_mailinglist_scheduled, [{id, PageId}]}, Context),
 			z_render:growl("The statistics have been cleared.", Context);
 		false ->
@@ -133,13 +127,18 @@ event(#postback{message={mailinglist_reset, Args}}, Context) ->
 
 %% @doc Handle upload of a new recipients list
 event(#submit{message={mailinglist_upload,[{id,Id}]}}, Context) ->
-    #upload{tmpfile=TmpFile} = z_context:get_q_validated("file", Context),
-    IsTruncate = z_convert:to_bool(z_context:get_q("truncate", Context)),
-    case import_file(TmpFile, IsTruncate, Id, Context) of
-        ok ->
-            z_render:wire([{dialog_close, []}, {reload, []}], Context);
-        {error, Msg} ->
-            z_render:growl(Msg, "error", true, Context)
+    case z_acl:rsc_editable(Id, Context) of
+        true ->
+            #upload{tmpfile=TmpFile} = z_context:get_q_validated("file", Context),
+            IsTruncate = z_convert:to_bool(z_context:get_q("truncate", Context)),
+            case import_file(TmpFile, IsTruncate, Id, Context) of
+                ok ->
+                    z_render:wire([{dialog_close, []}, {reload, []}], Context);
+                {error, Msg} ->
+                    z_render:growl(Msg, "error", true, Context)
+            end;
+        false ->
+            z_render:growl_error("You are not allowed to change this mailing.", Context)
     end;
 
 %% @doc Handle the test-sending of a page to a single address.
@@ -149,30 +148,27 @@ event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
     Context1 = z_render:growl(?__("Sending the page to ", Context) ++ Email ++ "...", Context),
     z_render:wire([{dialog_close, []}], Context1);
 
-
-%% @doc Handle the test-sending of a page to a single address.
-event(#postback{message={resend_bounced, [{list_id, ListId}, {id, PageId}]}}, Context) ->
-    z_notifier:notify(#mailinglist_mailing{list_id={resend_bounced, ListId}, page_id=PageId}, Context),
-    case length(m_mailinglist:get_bounced_recipients(ListId, Context)) of
-        0 ->
-            z_render:growl_error(?__("No addresses selected", Context), Context);
-        _ ->
-            Context1 = z_render:growl(?__("Resending bounced addresses...", Context), Context),
-            z_render:wire([{dialog_close, []}], Context1)
-    end;
-
-
 %% @doc Combine lists
 event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
-    lager:warning("Id: ~p", [Id]),
     TargetId = z_convert:to_integer(z_context:get_q("list_id", Context)),
-    Operation = z_convert:to_atom(z_context:get_q("operation", Context)),
-    case m_mailinglist:recipient_set_operation(Operation, Id, TargetId, Context) of
-        ok ->
-            z_render:wire([{dialog_close, []}, {reload, []}], Context);
-        {error, Msg} ->
-            z_render:growl(Msg, "error", true, Context)
+    case z_acl:rsc_editable(TargetId, Context)
+        andalso z_acl:rsc_editable(Id, Context)
+    of
+        true ->
+            Operation = to_operation(z_context:get_q("operation", Context)),
+            case m_mailinglist:recipient_set_operation(Operation, Id, TargetId, Context) of
+                ok ->
+                    z_render:wire([{dialog_close, []}, {reload, []}], Context);
+                {error, Msg} ->
+                    z_render:growl(Msg, "error", true, Context)
+            end;
+        false ->
+            z_render:growl_error("You are not allowed to change these mailings.", Context)
     end.
+
+to_operation("union") -> union;
+to_operation("subtract") -> subtract;
+to_operation("intersection") -> intersection.
 
 %%====================================================================
 %% API
@@ -322,56 +318,52 @@ send_mailing_process({single_test_address, Email}, PageId, Context) ->
     {ok, ListId} = m_rsc:name_to_id(mailinglist_test, Context),
     send_mailing_process(ListId, [Email], PageId, Context);
 
-send_mailing_process({resend_bounced, ListId}, PageId, Context) ->
-    send_mailing_process(ListId, m_mailinglist:get_bounced_recipients(ListId, Context), PageId, Context);
-
 send_mailing_process(ListId, PageId, Context) ->
     Recipients = m_mailinglist:get_enabled_recipients(ListId, Context) ++ m_edge:subjects(ListId, subscriberof, Context),
     send_mailing_process(ListId, Recipients, PageId, Context).
 
 send_mailing_process(ListId, Recipients, PageId, Context) ->
-    m_mailinglist:reset_bounced(ListId, Context),
     From = m_mailinglist:get_email_from(ListId, Context),
     Options = [
         {id,PageId}, {list_id, ListId}, {email_from, From}
     ],
-    [ send(Email, From, Options, Context) || Email <- Recipients ],
-    ok.
+    lists:foreach(
+        fun(EmailOrId) ->
+            send(EmailOrId, From, Options, Context)
+        end,
+        Recipients).
 
+send(undefined, _From, _Options, _Context) ->
+    skip;
+send(Id, From, Options, Context) when is_integer(Id) ->
+    send(m_rsc:p_no_acl(Id, email_raw, Context), From, [{recipient_id,Id}|Options], Context);
+send(Email, From, Options, Context) ->
+    Email1 = z_string:trim(Email),
+    case is_valid_email(Email1, Context) of
+        true ->
+            Id = proplists:get_value(id, Options),
+            z_email_server:send(#email{
+                                    to = Email1,
+                                    from = From,
+                                    html_tpl = {cat, "mailing_page.tpl"},
+                                    vars = [ {email,Email1} | Options ],
+                                    attachments = page_attachments(Id, Context)
+                                },
+                                Context);
+        false ->
+            skip
+    end.
 
-    send(undefined, _From, _Options, _Context) ->
-        skip;
-    send(Id, From, Options, Context) when is_integer(Id) ->
-        send(m_rsc:p_no_acl(Id, email_raw, Context), From, [{recipient_id,Id}|Options], Context);
-    send(Email, From, Options, Context) ->
-        case z_convert:to_list(z_string:trim(Email)) of
-            [] ->
-                skip;
-            Email1 ->
-                Id = proplists:get_value(id, Options),
-                Attachments = mod_mailinglist:page_attachments(Id, Context),
-                z_email_server:send(#email{to=Email1,
-                                           from=From,
-                                           html_tpl={cat, "mailing_page.tpl"},
-                                           vars=[{email,Email1}|Options],
-                                           attachments=Attachments
-                                    },
-                                    Context)
-        end.
+is_valid_email([], _Context) -> false;
+is_valid_email(<<>>, _Context) -> false;
+is_valid_email(Email, Context) -> m_email_status:is_ok_to_send(Email, Context).
 
-%% @doc Return list of attachments for this page as a list of files. Attachments are outgoing 'hasdocument' edges.
 page_attachments(Id, Context) ->
-    AttIds = m_edge:objects(Id, hasdocument, Context),
-    [as_upload(AId, Context) || AId <- AttIds].
-
-
-as_upload(Id, Context) ->
-    M = m_media:get(Id, Context),
-    #upload{
-             tmpfile=z_media_archive:abspath(proplists:get_value(filename, M), Context),
-             mime=proplists:get_value(mime, M),
-             filename=proplists:get_value(original_filename, M)
-           }.
+    lists:filter(
+        fun(AttId) ->
+            z_acl:rsc_visible(AttId, Context)
+        end,
+        m_edge:objects(Id, hasattachment, Context)).
 
 observe_admin_menu(admin_menu, Acc, Context) ->
     [

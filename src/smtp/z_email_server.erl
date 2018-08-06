@@ -819,18 +819,35 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                             }, opt_dkim(Context))
     end.
 
-    encode_attachment(Att, Context) when is_integer(Att) ->
-        case m_media:get(Att, Context) of
-            undefined ->
-                {error, no_medium};
-            Props ->
-                Upload = #upload{
-                            tmpfile=filename:join(z_path:media_archive(Context),
-                                                   proplists:get_value(filename, Props)),
-                            mime=proplists:get_value(mime, Props)
-                        },
-                encode_attachment(Upload, Context)
+    encode_attachment(AttId, Context) when is_integer(AttId) ->
+        case m_rsc:rsc_visible(AttId, Context) of
+            true ->
+                case m_media:get(AttId, Context) of
+                    undefined ->
+                        {error, no_medium};
+                    Medium ->
+                        case proplists:get_value(filename, Medium) of
+                            undefined -> {error, enoent};
+                            Filename ->
+                                case z_file_request:lookup_file(Filename, Context) of
+                                    {ok, FInfo} ->
+                                        Upload = #upload{
+                                            data = z_file_request:content_data(FInfo, identity),
+                                            mime = proplists:get_value(mime, Medium)
+                                        },
+                                        encode_attachment(Upload, Context);
+                                    {error, _} = Error ->
+                                        Error
+                                end
+                        end
+                end;
+            false ->
+                {error, eacces}
         end;
+    encode_attachment(#upload{data = undefined, tmpfile = undefined}, _Context) ->
+        {error, no_medium};
+    encode_attachment(#upload{data = <<>>, tmpfile = undefined}, _Context) ->
+        {error, empty};
     encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=File, filename=Filename} = Att, Context) ->
         case z_media_identify:identify(File, Filename, Context) of
             {ok, Ps} ->
