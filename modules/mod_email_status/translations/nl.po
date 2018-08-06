@@ -129,7 +129,7 @@ msgstr ""
 msgid ""
 "Total send errors"
 msgstr ""
-"Totaal aantal foutent"
+"Totaal aantal fouten"
 
 #: ./modules/mod_email_status/templates/_email_status_view.tpl:55 
 msgid ""
