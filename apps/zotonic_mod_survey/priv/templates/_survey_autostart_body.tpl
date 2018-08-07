@@ -7,5 +7,5 @@
 {% endblock %}
 
 <div class="body">
-	{{ id.body }}
+	{{ id.body|show_media }}
 </div>
