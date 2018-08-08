@@ -37,13 +37,19 @@
 event_type_mqtt(#action_event_type{event={mqtt, Args}, postback_js = PostbackJS, action_js = ActionJS}, Context) ->
     Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, Args) ],
     Script = iolist_to_binary([
-        <<"pubzub.subscribe_multi(">>,
-            z_utils:js_array(Topics),$,,
-            <<"function(topic, msg, sub_id) { var zEvtArgs=pubzub.make_zEvtArgs(topic, msg, sub_id);">>,
+        <<"cotonic.broker.subscribe(">>,
+            z_utils:js_array(Topics),
+            <<", function(msg, _params, options) { ",
+                "var zEvtArgs = undefined; ",
+                "if (typeof msg == 'object') { ",
+                "    var zEvtArgs = ensure_name_value(msg); ",
+                "    zEvtArgs.unshift({name: 'topic', value: options.topic}); ",
+                "    zEvtArgs.unshift({name: 'wid', value: options.wid}); ",
+                "}">>,
                 PostbackJS,
                 ActionJS,
-              $},
-        $), $;
+            "}",
+        ");"
     ]),
     {ok, Script, Context}.
 

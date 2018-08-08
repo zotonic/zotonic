@@ -413,6 +413,8 @@ builtin_tag_1(url, Dispatch, Args, _Vars, Context) ->
     z_dispatcher:url_for(z_convert:to_atom(Dispatch), Args, Context);
 builtin_tag_1(lib, Libs, Args, _Vars, Context) ->
     z_lib_include:tag(Libs, Args, Context);
+builtin_tag_1(lib_url, Libs, Args, _Vars, Context) ->
+    z_lib_include:url(Libs, Args, Context);
 builtin_tag_1(image, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_tag(Expr, Args, Context);
 builtin_tag_1(image_url, Expr, Args, _Vars, Context) ->

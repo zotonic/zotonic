@@ -7,9 +7,11 @@ Add other login options
 </ul>
 
 {# Highlight the most recently used authentication method (if any) #}
+{#
 {% if m.persistent.auth_method %}
     {% javascript %}
         $('.z-logon-extra li').css('opacity', '0.6');
         $('#logon_{{ m.persistent.auth_method }}').css('opacity', '1');
     {% endjavascript %}
 {% endif %}
+#}

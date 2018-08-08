@@ -1,0 +1,26 @@
+digraph auth_worker {
+    start -> anonymous [label="session"];
+    start -> authenticated [label="session"];
+
+    start -> check_rememberme [label="no-session"];
+
+    check_rememberme -> authenticated [label="cookie-autologon-accept"];
+    check_rememberme -> cleanup [label="cookie-autologon-reject"];
+
+    anonymous -> authenticating [label="username/pw-form"];
+
+    authenticating -> exchanging [label="auth-accept"];
+    authenticating -> cleanup [label="auth-reject"];
+
+    exchanging -> cleanup [label="cookie-uri-reject"];
+    exchanging -> authenticated [label="cookie-uri-accept"];
+
+    authenticated -> cleanup [label="logoff"];
+    authenticated -> cleanup [label="mqtt-connack-reject"];
+
+    authenticated -> authenticating [label="username/pw-form"];
+    authenticated -> authenticated [label="cookie-extend-accept"];
+    authenticated -> cleanup [label="cookie-extend-reject"];
+
+    cleanup -> anonymous [label="cookie/session-removed"];
+}

@@ -2,9 +2,9 @@
 {% include "_js_include_jquery.tpl" %}
 
 {% lib
-	"js/apps/zotonic-1.0.js"
+    "cotonic/zotonic-wired-bundle.js"
+	"js/apps/zotonic.js"
 	"js/apps/z.widgetmanager.js"
-    "js/modules/ubf.js"
 	"js/modules/z.notice.js"
 	"js/modules/z.imageviewer.js"
 	"js/modules/z.dialog.js"
@@ -21,3 +21,6 @@
 	    $.widgetManager();
 	});
 </script>
+
+{% worker name="auth" src="js/zotonic.auth.worker.js" %}
+

@@ -7,7 +7,7 @@
 {% lib
     "cotonic/zotonic-wired-bundle.js"
 
-    "js/apps/zotonic-1.0.js"
+    "js/apps/zotonic.js"
     "js/apps/z.widgetmanager.js"
 
     "js/modules/jquery.hotkeys.js"
@@ -42,9 +42,12 @@
 
 {% all include "_admin_lib_js.tpl" %}
 
+{% worker name="auth" src="js/zotonic.auth.worker.js" %}
+
 <script type="text/javascript">
 $(function()
 {
 	$.widgetManager();
 });
 </script>
+

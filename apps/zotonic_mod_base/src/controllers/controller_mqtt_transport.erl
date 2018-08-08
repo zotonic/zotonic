@@ -111,6 +111,8 @@ websocket_handle({binary, <<255, 254, 42, _, _>> = Ping}, Context) ->
     end;
 websocket_handle({binary, Data}, Context) ->
     handle_incoming_data(Data, Context);
+websocket_handle({ping, Opaque}, Context) ->
+    {reply, {pong, Opaque}, Context};
 websocket_handle(Data, Context) ->
     lager:warning("MQTT websocket: non binary data received: ~p", [Data]),
     {ok, Context}.

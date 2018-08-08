@@ -35,7 +35,7 @@ render_action(_TriggerId, _TargetId, Args, Context) ->
             end
     end,
 
-    Script = iolist_to_binary([<<"pubzub.publish(">>, $", Topic, $", $,, Message, <<");">>]),
+    Script = iolist_to_binary([<<"cotonic.broker.publish('">>, Topic, <<"',">>, Message, <<");">>]),
     {Script, Context}.
 
 %%
