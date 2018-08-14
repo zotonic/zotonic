@@ -423,7 +423,13 @@ update_transaction_fun_insert(#rscupd{id=insert_rsc} = RscUpd, Props, _Raw, Upda
                     end,
                     Props,
                     InsProps),
-    update_transaction_fun_db(RscUpd, InsertId, Props1, InsProps, [], IsCatInsert, Context);
+    Props2 = case proplists:get_value(language, Props1) of
+        undefined ->
+            [ {language, z_context:language(Context)} | Props1 ];
+        L when is_list(L) ->
+            Props1
+    end,
+    update_transaction_fun_db(RscUpd, InsertId, Props2, InsProps, [], IsCatInsert, Context);
 update_transaction_fun_insert(#rscupd{id=Id} = RscUpd, Props, Raw, UpdateProps, Context) ->
     Props1 = case z_acl:is_admin(Context) of
                 true ->
