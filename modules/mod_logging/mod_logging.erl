@@ -29,6 +29,7 @@
 -export([start_link/1]).
 -export([
     observe_search_query/2,
+    observe_tick_1h/2,
     pid_observe_zlog/3,
     observe_admin_menu/3
 ]).
@@ -53,6 +54,9 @@ pid_observe_zlog(Pid, #zlog{props=#log_email{}=Msg}, _Context) ->
 pid_observe_zlog(_Pid, #zlog{}, _Context) ->
     undefined.
 
+observe_tick_1h(tick_1h, Context) ->
+    m_log:periodic_cleanup(Context),
+    m_log_email:periodic_cleanup(Context).
 
 
 %%====================================================================
