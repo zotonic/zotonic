@@ -7,5 +7,7 @@
 
  {logon_service,    ["logon", "service", service ], controller_template, [{template, "logon_service.tpl"}]},
 
+ {authentication_check, ["zotonic-auth", "check"], controller_authentication_check, []},
+
  {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{template, "admin_authentication_services.tpl"}]}
 ].

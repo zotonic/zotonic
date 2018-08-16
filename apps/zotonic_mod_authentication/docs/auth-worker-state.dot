@@ -1,11 +1,11 @@
 digraph auth_worker {
-    start -> anonymous [label="session"];
-    start -> authenticated [label="session"];
+    start -> check_sessionstate;
 
-    start -> check_rememberme [label="no-session"];
+    check_sessionstate -> anonymous [label="session(anon)"];
+    check_sessionstate -> authenticated [label="session(user)"];
+    check_sessionstate -> check_autologon [label="no-session"];
 
-    check_rememberme -> authenticated [label="cookie-autologon-accept"];
-    check_rememberme -> cleanup [label="cookie-autologon-reject"];
+    check_autologon -> authenticating [label="cookie-autologon"];
 
     anonymous -> authenticating [label="username/pw-form"];
 
