@@ -11,7 +11,14 @@
                             if (msg.payload.is_page_reload) {
                                 z_reload();
                             } else {
-                                zotonic_live_reloader.reload.apply(zotonic_live_reloader, [ msg.payload.path, { liveCSS: true } ]);
+                                setTimeout(
+                                    function() {
+                                        zotonic_live_reloader.reload.apply(zotonic_live_reloader, [ msg.payload.path, { liveCSS: true } ]);
+                                    }, 1000);
+                                setTimeout(
+                                    function() {
+                                        zotonic_live_reloader.reload.apply(zotonic_live_reloader, [ msg.payload.path, { liveCSS: true } ]);
+                                    }, 2000);
                             }
                         });
                     }, 100);
