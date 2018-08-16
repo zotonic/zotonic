@@ -146,10 +146,11 @@
 %% @doc Fetch the menu id belonging to a certain resource (first)
 -record(menu_rsc, {id}).
 
-%% @doc An activity in Zotonic. When this is handled as a notification then return a list
-%% of patterns matching this activity.  These patterns are then used to find interested
-%% subscribers. (map)
+%% @doc An activity in Zotonic. Emitted when an activity happened.
 -record(activity, {version=1, posted_time, actor, verb=post, object, target}).
+
+%% @doc Find the subscriber patterns matching to the activity (map)
+-record(activity_pattern, { activity :: #activity{} }).
 
 %% @doc Push a list of activities via a 'channel' (eg 'email') to a recipient. (first)
 %% The activities are a list of #activity{} records.

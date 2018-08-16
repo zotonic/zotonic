@@ -22,13 +22,13 @@
 
 length(undefined, _Context) ->
     undefined;
-length([], _Context) -> 
-    "0";
-length(<<>>, _Context) -> 
-    "0";
+length([], _Context) ->
+    0;
+length(<<>>, _Context) ->
+    0;
 length(Input, _Context) when is_list(Input) ->
-    integer_to_list(erlang:length(Input));
+    erlang:length(Input);
 length(Input, _Context) when is_binary(Input) ->
-    integer_to_list(size(Input));
+    size(Input);
 length(Input, Context) ->
     erlang:length(erlydtl_runtime:to_list(Input, Context)).

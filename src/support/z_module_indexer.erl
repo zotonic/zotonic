@@ -259,7 +259,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 translations1(Context) ->
     ActiveDirs = z_module_manager:active_dir(Context),
-    POs = [{M,F} || #mfile{filepath=F, module=M} <- scan_subdir("translations", "", ".po", ActiveDirs) ],
+    POs = [{M,F} || #mfile{filepath=F, module=M} <- scan_subdir(translation, "translations", "", ".po", ActiveDirs) ],
     ByModule = lists:foldl(fun({M,F}, Acc) ->
                                 dict:append(M, F, Acc)
                            end,
@@ -313,7 +313,7 @@ scan(Context) ->
 %% @doc Scan module directories for specific kinds of parts. Returns a lookup list [ {lookup-name, fullpath} ]
 scan_subdir(What, ActiveDirs) ->
     {Subdir, Prefix, Extension} = subdir(What),
-    scan_subdir(Subdir, Prefix, Extension, ActiveDirs).
+    scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs).
 
 subdir(lib)        -> { "lib",         "",           "" };
 subdir(template)   -> { "templates",   "",           "" };
@@ -328,12 +328,12 @@ subdir(erlang)     -> { "support",     "",           ".erl" }.
 %% @doc Find all files, for the all/2 function.
 scan_all(What, ActiveDirs) ->
     {Subdir, Prefix, Extension} = subdir(What),
-    scan_subdir(Subdir, Prefix, Extension, ActiveDirs).
+    scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs).
 
 
 %% @doc Scan all module directories for templates/scomps/etc.  Example: scan("scomps", "scomp_", ".erl", Context)
 %% @spec scan_subdir(Subdir, Prefix, Extension, context()) -> [ {ModuleAtom, {ModuleDir, [{Name, File}]}} ]
-scan_subdir(Subdir, Prefix, Extension, ActiveDirs) ->
+scan_subdir(What, Subdir, Prefix, Extension, ActiveDirs) ->
     ExtensionRe = case Extension of
         "" -> "";
         "."++_ -> "\\" ++ Extension ++ "$"
@@ -352,10 +352,11 @@ scan_subdir(Subdir, Prefix, Extension, ActiveDirs) ->
                     [] ->
                         Acc;
                     _  ->
+                        AppPrefix = module2prefix(Module),
                         [[
                             #mfile{
                                 filepath = F,
-                                name = z_convert:to_atom(scan_remove_prefix_ext(F, PrefixLen, Extension)),
+                                name = convert_name(What, AppPrefix, Pattern, F, Dir1, PrefixLen),
                                 module = Module,
                                 erlang_module = opt_erlang_module(F, Extension),
                                 prio = z_module_manager:prio(Module)
@@ -367,15 +368,41 @@ scan_subdir(Subdir, Prefix, Extension, ActiveDirs) ->
     lists:sort(fun mfile_compare/2, lists:flatten(lists:foldl(Scan1, [], ActiveDirs))).
 
 
+convert_name(template, _AppPrefix, _Pattern, Filename, Dir, _PrefixLen) ->
+    drop_dir(Filename, Dir);
+convert_name(lib, _AppPrefix, _Pattern, Filename, Dir, _PrefixLen) ->
+    drop_dir(Filename, Dir);
+convert_name(translation, _AppPrefix, _Pattern, Filename, Dir, _PrefixLen) ->
+    drop_dir(Filename, Dir);
+convert_name(_What, AppPrefix, Pattern, Filename, _Dir, PrefixLen) ->
+    Basename = scan_remove_prefix(Filename, PrefixLen),
+    case re:run(Basename, Pattern, [{capture, all_but_first, binary}]) of
+        {match, [Name]} ->
+            Name1 = drop_prefix(AppPrefix, Name),
+            erlang:list_to_atom(Name1);
+        _ ->
+            Rootname = filename:rootname(Basename),
+            erlang:list_to_atom(Rootname)
+    end.
+
+drop_prefix(Prefix, Name) ->
+    case binary:split(Name, Prefix) of
+        [<<>>, <<$_, Rest/binary>>] -> Rest;
+        _ -> Name
+    end.
+
 module2prefix(Module) ->
     case atom_to_list(Module) of
         "mod_" ++ Rest -> Rest;
         Name -> Name
     end.
 
-scan_remove_prefix_ext(Filename, PrefixLen, Ext) ->
-    Basename = filename:basename(Filename, Ext),
-    lists:nthtail(PrefixLen, Basename).
+scan_remove_prefix(Filename, PrefixLen) ->
+     Basename = filename:basename(Filename),
+     lists:nthtail(PrefixLen, Basename).
+
+drop_dir(Filename, Dir) ->
+    lists:nthtail(length(Dir)+1, Filename).
 
 opt_erlang_module(Filepath, ".erl") ->
     list_to_atom(filename:basename(Filepath, ".erl"));

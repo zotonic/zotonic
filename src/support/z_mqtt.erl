@@ -302,7 +302,7 @@ make_context_topic(<<"site/", Topic/binary>> = ST, Context) ->
         _ -> ST
     end; 
 make_context_topic(Topic, _Site) ->
-    <<"//", Topic/binary>>.
+    Topic.
 
 make_localsite(<<>>, _Context) ->
     <<"~site">>;

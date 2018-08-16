@@ -107,9 +107,10 @@ html(Context) ->
 	%% This does not take into account any query args and vary headers.
 	%% @todo Add the 'vary' headers to the cache key
 	RenderArgs = [ {id, Id} | z_context:get_all(Context1) ],
+    RenderArgs1 = z_notifier:foldl(template_vars, RenderArgs, Context),
 	RenderFunc = fun() ->
-		Template = z_context:get(template, Context1, "page.tpl"),
-	    z_template:render(Template, RenderArgs, Context1)
+		Template = z_context:get(template, Context1, {cat, "page.tpl"}),
+	    z_template:render(Template, RenderArgs1, Context1)
 	end,
 
 	MaxAge = z_context:get(cache_anonymous_maxage, Context1),

@@ -33,6 +33,7 @@
     get/2,
     insert/6,
     delete/2,
+    is_deletable/2,
     toggle/2,
     gravatar_code/1,
     
@@ -49,6 +50,8 @@
 %% @spec m_find_value(Key, Source, Context) -> term()
 m_find_value(rsc, #m{value=undefined} = M, _Context) ->
     M#m{value=rsc};
+m_find_value(is_deletable, #m{value=undefined} = M, _Context) ->
+    M#m{value=is_deletable};
 m_find_value(Id, #m{value=rsc}, Context) ->
     % All comments of the resource.
     list_rsc(Id, Context);
@@ -61,6 +64,9 @@ m_find_value(get, #m{value=undefined} = M, _Context) ->
 m_find_value(CommentId, #m{value=get}, Context) ->
     % Specific comment of the resource.
     get(CommentId, Context);
+m_find_value(CommentId, #m{value=is_deletable}, Context) ->
+    % Specific comment of the resource.
+    is_deletable(CommentId, Context);
 m_find_value(_Key, #m{value=undefined}, _Context) ->
    undefined.
 
@@ -155,6 +161,12 @@ delete(CommentId, Context) ->
             Error
     end.
 
+%% @doc Check if a comment can be deleted
+is_deletable(CommentId, Context) ->
+    case check_editable(CommentId, Context) of
+        {ok, _} -> true;
+        {error, _} -> false
+    end.
 
 %% @doc Toggle the visibility of a comment, return the new visibility
 toggle(CommentId, Context) ->

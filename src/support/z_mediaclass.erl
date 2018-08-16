@@ -238,11 +238,13 @@ reindex(#state{context=Context, last=Last} = State) ->
 
 collect_files(Context) ->
     case z_module_indexer:find_all(template, ?MEDIACLASS_FILENAME, Context) of
+        {error, _} = Error ->
+            Error;
         [] ->
-            [];
+            {ok, []};
         Ms ->
             Paths = [ {Module, Path} || #module_index{filepath=Path, module=Module} <- Ms ],
-            [ {Paths, lists:max([ filelib:last_modified(Path) || {_, _, Path} <- Paths ])} ]
+            {ok, [ {Paths, lists:max([ filelib:last_modified(Path) || {_, Path} <- Paths ])} ]}
     end.
 
 
