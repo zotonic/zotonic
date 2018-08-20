@@ -57,7 +57,7 @@ do_redirect(Context) ->
 		undefined ->
 			case z_context:get(dispatch, Context) of
 				undefined ->
-					case z_context:get(id, Context) of
+                    case z_controller_helper:get_configured_id(Context) of
 						undefined -> <<"/">>;
 						Id -> m_rsc:p(Id, page_url, Context)
 					end;
