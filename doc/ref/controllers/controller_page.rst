@@ -42,8 +42,8 @@ The following options can be given to the dispatch rule:
 +=====================+=====================================+========================+
 |id                   |Id or unique name of the resource to |{id, page_about}        |
 |                     |be shown. This overrules any id in   |                        |
-|                     |the query arguments.                 |                        |
-|                     |                                     |                        |
+|                     |the query arguments. Use ``user_id`` |                        |
+|                     |for the id of the current user.      |                        |
 +---------------------+-------------------------------------+------------------------+
 |template             |Name of the template to be           |{template, "about.tpl"} |
 |                     |rendered. Defaults to “page.tpl”     |                        |
