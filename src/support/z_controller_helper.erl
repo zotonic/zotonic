@@ -22,7 +22,8 @@
 
 -export([
     is_authorized/1,
-    get_id/1
+    get_id/1,
+    get_configured_id/1
  ]).
 
 
@@ -53,8 +54,13 @@ is_authorized(Context) ->
 %% @doc Fetch the id from the request or the dispatch configuration.
 %% @spec get_id(Context) -> int() | undefined
 get_id(Context) ->
-    case z_context:get(id, Context) of
+    case get_configured_id(Context) of
         undefined -> rid(z_context:get_q("id", Context), Context);
+        ConfId -> ConfId
+    end.
+
+get_configured_id(Context) ->
+    case z_context:get(id, Context) of
         user_id -> z_acl:user(Context);
         ConfId -> rid(ConfId, Context)
     end.

@@ -64,13 +64,12 @@ do_redirect(ReqData, Context) ->
 		undefined ->
 			case z_context:get(dispatch, Context) of
 				undefined ->
-					case z_context:get(id, Context) of
+                    case z_controller_helper:get_configured_id(Context) of
 						undefined -> "/";
 						Id -> m_rsc:p(Id, page_url, Context)
 					end;
 				Dispatch ->
                     Args = z_context:get_all(Context),
-
                     Args1 = case z_context:get(qargs, Context) of
                                 undefined -> Args;
                                 ArgList when is_list(ArgList) ->

@@ -32,7 +32,9 @@ It has the following dispatch options:
 |                 |controller will redirect to the     |                       |
 |                 |page_url of this id.  The id can be |                       |
 |                 |an integer or the name of the page  |                       |
-|                 |(use an atom or a binary).          |                       |
+|                 |(use an atom or a binary) or the    |                       |
+|                 |atom `user_id` for the id of the    |                       |
+|                 |current user.                       |                       |
 +-----------------+------------------------------------+-----------------------+
 |qargs            |A list with querystring arguments to|{qargs, [id, slug]}    |
 |                 |use in the new dispatch             |                       |
