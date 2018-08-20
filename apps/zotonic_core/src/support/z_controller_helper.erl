@@ -59,6 +59,8 @@ get_id(Context) ->
         ConfId -> ConfId
     end.
 
+%% @doc Fetch the id from the dispatch configuration.
+-spec get_configured_id(z:context()) -> m_rsc:resource_id() | undefined.
 get_configured_id(Context) ->
     case z_context:get(id, Context) of
         user_id -> z_acl:user(Context);
