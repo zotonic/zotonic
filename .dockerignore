@@ -10,3 +10,4 @@
 !GNUmakefile
 !Makefile
 !rebar*
+!USE_REBAR_LOCKED
