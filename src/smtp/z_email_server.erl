@@ -107,6 +107,12 @@ send(Id, #email{} = Email, Context) ->
 
 %% @doc Check if the sender is allowed to send email. If an user is disabled they are only
 %%      allowed to send mail to themselves or to the admin.
+%is_sender_enabled(#email{ to = <<"office@learningstone.com">>, html_tpl = <<"email_membership_accepted.tpl">>}, _Context) ->
+%    false;
+%is_sender_enabled(#email{ to = <<"office@learningstone.com">>, html_tpl = "email_membership_accepted.tpl"}, _Context) ->
+%    false;
+%is_sender_enabled(#email{ to = "office@learningstone.com", html_tpl = "email_membership_accepted.tpl"}, _Context) ->
+%    false;
 is_sender_enabled(#email{} = Email, Context) ->
     is_sender_enabled(z_acl:user(Context), Email#email.to, Context).
 
