@@ -172,9 +172,8 @@ set_content_policy(#z_file_info{acls = Acls, mime = <<"application/pdf">>}, ReqD
 set_content_policy(#z_file_info{acls=Acls}, ReqData) ->
     case lists:any(fun is_integer/1, Acls) of
         true ->
-            RD1 = wrq:set_resp_header("Content-Security-Policy", "sandbox", ReqData),
-            % IE11 needs the X- variant, see http://caniuse.com/#feat=contentsecuritypolicy
-            wrq:set_resp_header("X-Content-Security-Policy", "sandbox", RD1);
+            % Do not set the IE11 X-CSP with sandbox as that disables file downloading
+            wrq:set_resp_header("Content-Security-Policy", "sandbox", ReqData);
         false ->
             ReqData
     end.

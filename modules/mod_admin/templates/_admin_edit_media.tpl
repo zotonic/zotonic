@@ -31,7 +31,7 @@
         {% endif %}
 
         <div class="pull-right">
-            <a class="btn btn-default" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
+            <a target="_blank" class="btn btn-default" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
             {% button   text=_"Replace this media item"
                 class="btn btn-primary"
                 element="a"
