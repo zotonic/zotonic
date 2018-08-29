@@ -189,9 +189,8 @@ set_content_policy(#z_file_info{acls = Acls, mime = <<"application/pdf">>}, Cont
 set_content_policy(#z_file_info{acls=Acls}, Context) ->
     case lists:any(fun is_integer/1, Acls) of
         true ->
-            Context1 = z_context:set_resp_header(<<"content-security-policy">>, <<"sandbox">>, Context),
-            % IE11 needs the X- variant, see http://caniuse.com/#feat=contentsecuritypolicy
-            z_context:set_resp_header(<<"x-content-security-policy">>, <<"sandbox">>, Context1);
+            % Do not set the IE11 X-CSP with sandbox as that disables file downloading
+            z_context:set_resp_header(<<"content-security-policy">>, <<"sandbox">>, Context);
         false ->
             Context
     end.

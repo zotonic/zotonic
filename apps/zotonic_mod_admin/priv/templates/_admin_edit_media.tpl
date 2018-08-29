@@ -44,7 +44,7 @@
 
         <div class="pull-right">
             {% if medium.filename %}
-                <a class="btn btn-default" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
+                <a target="_blank" class="btn btn-default" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
             {% endif %}
             {% button
                 text=_"Replace this media item"
