@@ -57,8 +57,9 @@ event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
     {IsValid, ContextValidated} = case validate(email_unique, TriggerId, Value, Args, Context) of
         {{ok, _}, ContextOk} ->
             {"true", z_render:wire({fade_out, [{target, TriggerId ++ "_email_unique_error"}]}, ContextOk)};
-        {{error, Id, _} = Error, ContextScript} ->
+        {{error, Id, ErrorText}, ContextScript} ->
+            ErrorText2 = proplists:get_value(failure_message, Args, ErrorText),
             {"false", z_render:wire({fade_in, [{target, TriggerId ++ "_email_unique_error"}]},
-                                    z_validation:report_errors([{Id,Error}], ContextScript))}
+                                    z_validation:report_errors([{Id,{error, Id, ErrorText2}}], ContextScript))}
     end,
     z_script:add_script(["z_async_validation_result('",TriggerId,"', ",IsValid,", '",z_utils:js_escape(Value),"');"], ContextValidated).
