@@ -820,14 +820,24 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                         },
                 encode_attachment(Upload, Context)
         end;
-    encode_attachment(#upload{} = Att, _Context) ->
-        Data = case Att#upload.data of
-                    undefined ->
-                        {ok, FileData} = file:read_file(Att#upload.tmpfile),
-                        FileData;
-                    AttData ->
-                       AttData
-               end,
+    encode_attachment(#upload{ data = undefined, tmpfile = File } = Att, _Context) when File =/= undefined ->
+        case file:read_file(File) of
+            {ok, Data} ->
+                [Type, Subtype] = binstr:split(z_convert:to_binary(Att#upload.mime), <<"/">>, 2),
+                {
+                    Type, Subtype,
+                    [],
+                    [
+                        {<<"transfer-encoding">>, <<"base64">>},
+                        {<<"disposition">>, <<"attachment">>},
+                        {<<"disposition-params">>, [{<<"filename">>, filename(Att)}]}
+                    ],
+                    Data
+                };
+            {error, _} = Error ->
+                Error
+        end;
+    encode_attachment(#upload{ data = Data } = Att, _Context) when Data =/= undefined ->
         [Type, Subtype] = binstr:split(z_convert:to_binary(Att#upload.mime), <<"/">>, 2),
         {
             Type, Subtype,
@@ -839,7 +849,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
             ],
             Data
         }.
-        
+
         filename(#upload{filename=undefined, tmpfile=undefined}) ->
             <<"untitled">>;
         filename(#upload{filename=undefined, tmpfile=Tmpfile}) ->
