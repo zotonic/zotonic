@@ -287,7 +287,7 @@ map_prop(Value, _Context) ->
     Value.
 
 manage_edge(_Module, {SubjectName, PredicateName, ObjectName}, _Options, Context) ->
-    manage_edge(_Module, {SubjectName, PredicateName, ObjectName, []}, _Options, Context);
+    manage_edge(_Module, {SubjectName, PredicateName, ObjectName, [{no_touch, true}]}, _Options, Context);
 manage_edge(_Module, {SubjectName, PredicateName, ObjectName, EdgeOptions}, _Options, Context) ->
     Subject = m_rsc:name_to_id(SubjectName, Context),
     Predicate = m_predicate:name_to_id(PredicateName, Context),
