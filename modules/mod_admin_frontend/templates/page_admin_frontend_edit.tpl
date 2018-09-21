@@ -57,12 +57,20 @@
 	<div class="navbar-inner">
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<div class="span4">
-				{% block close_button %}
-					<a href="{{ id.page_url }}" class="btn">{_ Close _}</a>
-				{% endblock %}
-			</div>
-			<div class="span8" id="save-buttons" style="display:none">
+			{% if tree_id %}
+				<div class="span4">
+					{% block close_button %}
+						{% if id.is_temporary %}
+							<a href="{% url mx_resource_cleanup id=id %}" class="btn">{_ Close _}</a>
+						{% else %}
+							<a href="{{ id.page_url }}" class="btn">{_ Close _}</a>
+						{% endif %}
+					{% endblock %}
+				</div>
+				<div class="span8" id="save-buttons" style="display:none">
+			{% else %}
+				<div class="span12" id="save-buttons" style="display:none">
+			{% endif %}
 				<span class="brand visible-desktop">{_ This page _}</span>
 
 				{% button class="btn btn-primary" text=_"Save" title=_"Save this page." 
@@ -73,7 +81,13 @@
 						  action={script script="$('#save_view').click();"}
 				 %}
 
-				{% button class="btn pull-right" text=_"Cancel" action={redirect back} tag="a" %}
+				{% if id.is_temporary %}
+					<a href="{% url mx_resource_cleanup id=id %}" class="btn">{_ Cancel _}</a>
+				{% elseif not tree_id %}
+					<a href="{{ id.page_url }}" class="btn">{_ Cancel _}</a>
+				{% else %}
+					{% button class="btn pull-right" text=_"Cancel" action={redirect back} tag="a" %}
+				{% endif %}
 	    	</div>
 		</div>
 	</div>

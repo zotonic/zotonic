@@ -42,8 +42,12 @@ render(Params, _Vars, Context) ->
                         Dp -> Dp
                    end,
     HideSinglePage  = proplists:get_value(hide_single_page, Params),
-    CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(hide_single_page, Params))),
-    
+    Template     = proplists:get_value(template, Params, "_pager.tpl"),
+    CleanedArgs  = proplists:delete(dispatch,
+        proplists:delete(result,
+            proplists:delete(template,
+                proplists:delete(hide_single_page, Params)))),
+
     DispatchArgs = case proplists:is_defined(qargs, CleanedArgs) of
         true -> CleanedArgs;
         false -> [{qargs,true}|CleanedArgs]
@@ -66,23 +70,23 @@ render(Params, _Vars, Context) ->
                 true ->
                     {ok, []};
                 false ->
-                    {ok, build_html(Page, 1, Dispatch, DispatchArgs, Context)}
+                    {ok, build_html(Template, Page, 1, Dispatch, DispatchArgs, Context)}
             end;
         #m_search_result{result=#search_result{page=Page, pages=Pages}} ->
-            Html = build_html(Page, Pages, Dispatch, DispatchArgs, Context),
+            Html = build_html(Template, Page, Pages, Dispatch, DispatchArgs, Context),
             {ok, Html};
         #search_result{result=[]} ->
             {ok, ""};
         #search_result{pages=undefined} ->
             {ok, ""};
         #search_result{page=Page, pages=Pages} ->
-            Html = build_html(Page, Pages, Dispatch, DispatchArgs, Context),
+            Html = build_html(Template, Page, Pages, Dispatch, DispatchArgs, Context),
             {ok, Html};
         _ ->
             {error, "scomp_pager: search result is not a #search_result{}"}
     end.
 
-build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
+build_html(Template, Page, Pages, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
     Props = [
@@ -97,7 +101,7 @@ build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
         {pages, Urls},
         {page, Page}
     ],
-    {Html, _} = z_template:render_to_iolist("_pager.tpl", Props, Context),
+    {Html, _} = z_template:render_to_iolist(Template, Props, Context),
     Html.
 
 

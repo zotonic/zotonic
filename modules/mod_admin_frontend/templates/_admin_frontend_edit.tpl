@@ -13,9 +13,9 @@
 {% with not id or id.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
 {% with id.is_a|default:(m.category[cat].is_a) as cats %}
-{% wire id="rscform" 
-		type="submit" 
-		postback={rscform view_location=view_location cat=cat id=id} 
+{% wire id="rscform"
+		type="submit"
+		postback={rscform view_location=view_location cat=cat id=id}
 		delegate=`controller_admin_edit`
 %}
 <form id="rscform" method="post" action="postback" class="form-horizontal">
@@ -35,13 +35,18 @@
 
 				<span class="publication-dates">
 					<label for="is_published" class="checkbox inline">
-			    		<input type="checkbox" id="is_published" name="is_published" value="1" {% if not id or id.is_published %}checked="checked"{% endif %}/>
+			    		<input type="checkbox" id="is_published" name="is_published" value="1"
+			    			{% if not id or id.is_published or id.is_temporary %}checked="checked"{% endif %}/>
 			    	    {_ Published _}
 				    </label>
 
+				    {% if id.is_temporary %}
+				    	<input type="hidden" name="is_temporary" value="">
+				    {% endif %}
+
 					{% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 %}
 					{% if is_editable or id.publication_end %}
-						{_ till _} 
+						{_ till _}
 						{% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 %}
 					{% endif %}
 					{{ m.req.timezone }}

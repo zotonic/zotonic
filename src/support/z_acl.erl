@@ -379,6 +379,7 @@ wm_is_allowed([{Action,Object}|ACLs], Context) ->
                         true -> false;
                         false -> wm_is_allowed(ACLs, Context)
                     end;
-                _ -> false
+                _ ->
+                    false
             end
     end.

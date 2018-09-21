@@ -24,6 +24,7 @@
  
  %% CSS, Javascript and images from the "lib" module folders. Possibly more than one file combined in a single request.
  {lib, ["lib",'*'], controller_file, [ {root,[lib]}, {ssl, any} ]},
+ {lib_nocache, ["lib-nocache", '*'], controller_file, [ {root, [lib]}, {ssl, any}, {max_age, 1}]},
  
  {image, ["image",'*'], controller_file, [ {ssl, any} ]},
  

@@ -261,5 +261,6 @@ resource_languages(Rsc) ->
     case proplists:get_value(language, Rsc) of
         undefined -> [];
         <<>> -> [];
+        Atom when is_atom(Atom) -> [ Atom ];
         Langs -> [ z_convert:to_atom(Lang) || Lang <- Langs, Lang /= <<>> ]
     end.

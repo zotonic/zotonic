@@ -32,7 +32,7 @@ tinymce.PluginManager.requireLangPack('zmedia');
                 insert_dialog_enabled,
                 DEFAULT_ATTRIBUTES = {
                     align: "block",
-                    size: "middle",
+                    size: "large",
                     crop: "",
                     link: ""
                 };

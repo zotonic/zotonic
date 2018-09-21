@@ -1,4 +1,4 @@
-{% if m.config.mod_development.livereload.value %}
+{% if m.config.mod_development.livereload.value and m.acl.user == 1 %}
     {% lib "js/livereload.js" %}
 
     <script type="text/javascript">

@@ -132,14 +132,18 @@ function z_dialog_close()
 
 function z_dialog_confirm(options)
 {
+    var btn = 'btn-primary';
+    if (options.is_danger) {
+        btn = 'btn-danger';
+    }
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
-         + '<button class="btn z-dialog-cancel-button">'
-         + (options.cancel||z_translate('Cancel'))
-         + '</button>'
-         + '<button class="btn btn-primary z-dialog-ok-button">'
+         + '<button class="btn '+btn+' z-dialog-ok-button">'
          + (options.ok||z_translate('OK'))
          + '</button>'
+         + '<a href="#" class="btn z-dialog-cancel-button">'
+         + (options.cancel||z_translate('Cancel'))
+         + '</a>'
          + '</div>';
     $.dialogAdd({
         title: (options.title||z_translate('Confirm')),
