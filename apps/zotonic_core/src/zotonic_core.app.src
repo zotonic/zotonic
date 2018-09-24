@@ -17,6 +17,7 @@
                   qdate, syslog,
                   bcrypt, erlpass,
                   letsencrypt,
+		  keyserver,
                   mqtt_sessions,
                   zotonic_notifier
   ]}
