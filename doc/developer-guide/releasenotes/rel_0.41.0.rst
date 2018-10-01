@@ -36,7 +36,7 @@ Maas-Maarten Zeeman (5):
       Added 0.41.0 release notes with an extra note about jquery migrate
       core: Call z_datamodel:manage inside a transaction to prevent inconsistencies. See #1927
 
-Marc Worrell (16):
+Marc Worrell (17):
       mod_mailinglist: Fix typo in predicate name
       mod_admin_merge: add option to add missing translations to the winner. (#1915)
       mod_authentication: escape q arg
@@ -53,6 +53,7 @@ Marc Worrell (16):
       base: allow 'user_id' as configured id for controller_redirect.
       controller_file: fix a problem where IE11 could not download files.
       Prepare 0.41.0
+      Fix issue for jquery.find('#'), upgrade bs js. Issue #1934 (#1935)
 
 loetie (1):
       Support failure_message in email_unique validator (#1931)
