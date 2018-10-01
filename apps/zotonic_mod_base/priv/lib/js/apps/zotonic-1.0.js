@@ -2384,3 +2384,33 @@ $.parseQuery = function(qs,options) {
     });
     return params;
 };
+
+
+/**
+  * Patch jQuery.find to return [] on queries for '#'
+  * This fixes issue https://github.com/zotonic/zotonic/issues/1934
+  */
+ (function( jQuery, window, undefined ) {
+     var oldFind = jQuery.find;
+
+     jQuery.find = function( selector ) {
+         if (typeof selector == "string" && selector == '#') {
+             if (window.console) {
+                 window.console.log("Zotonic jQuery patch: returning [] for illegal selector '#'");
+             }
+             return $([]);
+         } else {
+             var args = Array.prototype.slice.call( arguments );
+             return oldFind.apply( this, args );
+         }
+     };
+
+     // Copy properties attached to original jQuery.find method (e.g. .attr, .isXML)
+     var findProp;
+     for ( findProp in oldFind ) {
+         if ( Object.prototype.hasOwnProperty.call( oldFind, findProp ) ) {
+             jQuery.find[ findProp ] = oldFind[ findProp ];
+         }
+     }
+ })( jQuery, window );
+ 
