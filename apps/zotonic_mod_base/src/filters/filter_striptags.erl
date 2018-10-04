@@ -22,12 +22,18 @@
 
 striptags(undefined, _Context) ->
     undefined;
+striptags(null, _Context) ->
+    undefined;
 striptags(In, _Context) when is_integer(In) ->
     In;
 striptags(In, _Context) when is_float(In) ->
     In;
+striptags(In, Context) when is_atom(In) ->
+    striptags(atom_to_binary(In, utf8), Context);
 striptags({trans, _} = Trans, Context) ->
     z_html:strip(z_trans:lookup_fallback(Trans, Context));
-striptags(In, _Context) ->
-    z_html:strip(In).
+striptags(In, _Context) when is_binary(In); is_list(In) ->
+    z_html:strip(In);
+striptags(_In, _Context) ->
+    undefined.
 
