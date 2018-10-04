@@ -8,7 +8,7 @@
 
     {% wire id=#form type="submit"
         postback={add_video_embed predicate=predicate actions=actions id=id
-                                subject_id=subject_id stay=stay callback=callback}
+                                subject_id=subject_id stay=stay content_group_id=content_group_id callback=callback}
         delegate="mod_oembed"
     %}
     <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
