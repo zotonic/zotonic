@@ -35,12 +35,15 @@
 	{% endwith %}
 	{% endwith %}
 {% endif %}
-{% with m.config.seo_bing.webmaster_verify.value as wmv %}{% if wmv %}
+{% if m.config.seo_bing.webmaster_verify.value as wmv %}
 	<meta name="msvalidate.01" content="{{ wmv }}" />
-{% endif %}{% endwith %}
-{% with m.config.seo_google.webmaster_verify.value as wmv %}{% if wmv %}
+{% endif %}
+{% if m.config.seo_google.webmaster_verify.value as wmv %}
 	<meta name="google-site-verification" content="{{ wmv }}" />
-{% endif %}{% endwith %}
+{% endif %}
+{% if m.config.seo_yandex.webmaster_verify.value as wmv %}
+    <meta name="yandex-verification" content="{{ wmv }}" />
+{% endif %}
 {% if not m.acl.is_admin and not notrack %}
     {% if m.config.seo_google.analytics.value as ga %}
         <script>

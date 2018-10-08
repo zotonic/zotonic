@@ -54,8 +54,8 @@ save_settings([], Context) ->
 save_settings([{"seo" ++ _ = Key, Value} | T], Context) ->
     Value1 = clean(string:strip(Value, both), []),
     [Key1, Key2] = string:tokens(Key, "-"),
-    m_config:set_value(list_to_atom(Key1), list_to_atom(Key2), Value1, Context),
-    m_config:set_prop(list_to_atom(Key1), list_to_atom(Key2), no_config_edit, true, Context),
+    m_config:set_value(list_to_existing_atom(Key1), list_to_existing_atom(Key2), Value1, Context),
+    m_config:set_prop(list_to_existing_atom(Key1), list_to_existing_atom(Key2), no_config_edit, true, Context),
     save_settings(T, Context);
 save_settings([_|T], Context) ->
     save_settings(T, Context).
