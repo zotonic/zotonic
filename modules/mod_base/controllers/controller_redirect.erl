@@ -37,7 +37,8 @@ init(DispatchArgs) -> {ok, DispatchArgs}.
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new(ReqData, ?MODULE),
     z_context:lager_md(Context),
-    Context1 = z_context:set(DispatchArgs, z_context:ensure_qs(Context)),
+    Context1 = z_context:continue_session(
+        z_context:set(DispatchArgs, z_context:ensure_qs(Context))),
     ?WM_REPLY(true, Context1).
 
 resource_exists(ReqData, Context) ->
@@ -69,7 +70,11 @@ do_redirect(ReqData, Context) ->
 						Id -> m_rsc:p(Id, page_url, Context)
 					end;
 				Dispatch ->
-                    Args = z_context:get_all(Context),
+                    Args0 = z_context:get_all(Context),
+                    Args = case z_controller_helper:get_configured_id(Context) of
+                        undefined -> Args0;
+                        Id -> [ {id, Id} | proplists:delete(id, Args0) ]
+                    end,
                     Args1 = case z_context:get(qargs, Context) of
                                 undefined -> Args;
                                 ArgList when is_list(ArgList) ->
