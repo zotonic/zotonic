@@ -2,6 +2,10 @@
 
 {% block title %}{_ Select language _}{% endblock %}
 
+{% block html_head_extra %}
+    <meta name="robots" value="noindex,nofollow">
+{% endblock %}
+
 {% block content %}
 
 <p>{_ Select your preferred language. _}</p>
