@@ -490,7 +490,11 @@ delete_queue(Id, Serial, Context) ->
 %% @todo Also add the property tag/values
 %% @spec pivot_resource(Id, Context) -> void()
 pivot_resource(Id, Context) ->
-    R = get_pivot_rsc(Id, Context),
+    pivot_resource_1(Id, get_pivot_rsc(Id, Context), Context).
+
+pivot_resource_1(_Id, {error, enoent}, _Context) ->
+    ok;
+pivot_resource_1(Id, {ok, R}, Context) ->
     {ObjIds, CatIds, [TA,TB,TC,TD]} = get_pivot_data(Id, R, Context),
 
     StemmerLanguage = stemmer_language(Context),
@@ -655,13 +659,20 @@ get_pivot_title(Props) ->
 
 %% @doc Return the data for the pivoter
 get_pivot_rsc(Id, Context) ->
-    FullRecord = z_db:assoc_props_row("select * from rsc where id = $1", [Id], Context),
-    z_notifier:foldl(pivot_rsc_data, FullRecord, Context).
+    case z_db:assoc_props_row("select * from rsc where id = $1", [Id], Context) of
+        undefined -> {error, enoent};
+        FullRecord -> {ok, z_notifier:foldl(pivot_rsc_data, FullRecord, Context)}
+    end.
 
 
 %% get_pivot_data {objids, catids, [ta,tb,tc,td]}
 get_pivot_data(Id, Context) ->
-    get_pivot_data(Id, get_pivot_rsc(Id, Context), Context).
+    case get_pivot_rsc(Id, Context) of
+        {ok, Rsc} ->
+            get_pivot_data(Id, Rsc, Context);
+        {error, _} ->
+            {[], [], []}
+    end.
 
 get_pivot_data(Id, Rsc, Context) ->
     R = z_notifier:foldr(#pivot_get{id=Id}, Rsc, Context),
