@@ -98,6 +98,8 @@ provide_content(ReqData, Context) ->
     Context2 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context1),
     Secret = z_context:get_q("secret", Context2),
     Vars = [
+        {noindex, true},
+        {notrack, true},
         {page, get_page(Context2)}
         | z_context:get_all(Context2)
     ],

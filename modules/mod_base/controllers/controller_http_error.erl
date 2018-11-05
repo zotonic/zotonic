@@ -193,6 +193,8 @@ do_html(ReqData, Context0) ->
     Context = set_headers(ReqData, Context0),
     ContextQs = z_context:ensure_all(z_context:ensure_qs(Context)),
     Vars = [
+        {noindex, true},
+        {notrack, true},
         {error_code, webmachine_request:get_metadata(http_status_code, ReqData)}
         | z_context:get_all(ContextQs)
     ],
