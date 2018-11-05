@@ -81,6 +81,8 @@ to_html(Context) ->
     Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Secret = z_context:get_q(<<"secret">>, Context2),
     Vars = [
+        {noindex, true},
+        {notrack, true},
         {page, get_page(Context2)}
         | z_context:get_all(Context2)
     ],
