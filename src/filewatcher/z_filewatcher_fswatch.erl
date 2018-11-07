@@ -142,7 +142,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 start_fswatch(State=#state{executable=Executable}) ->
     % os:cmd("killall fswatch"),
-    Args = ["-0", "-x", "-r", "-L" | z_filewatcher_sup:watch_dirs() ],
+    Args = ["-0", "-x", "-r", "-L", "--exclude=node_modules" | z_filewatcher_sup:watch_dirs() ],
     Port = erlang:open_port({spawn_executable, Executable}, [{args, Args}, stream, exit_status, binary]),
     State#state{port=Port}.
 
