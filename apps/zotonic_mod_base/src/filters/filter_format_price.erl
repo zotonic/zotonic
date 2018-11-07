@@ -28,16 +28,16 @@ insert_thousands_separator(Sep, Output, Input) when is_list(Input) ->
             case length(Input) rem 3 of
                 0 ->
                      [Head | Input2] = Input,
-                     insert_thousands_separator(Sep, lists:append(Output, [Head]), Input2);
+                     insert_thousands_separator(Sep, Output ++ [Head], Input2);
                 1 ->
                      [Head | Input2] = Input,
-                     Head1 = lists:append([Head], [Sep]),
-                     insert_thousands_separator(Sep, lists:append(Output, Head1), Input2);
+                     Head1 = [Head] ++ [Sep],
+                     insert_thousands_separator(Sep, Output ++ Head1, Input2);
                 2 ->
                      [Head | Input2] = Input,
-                     insert_thousands_separator(Sep, lists:append(Output, [Head]), Input2)
+                     insert_thousands_separator(Sep, Output ++ [Head], Input2)
             end;
-        false -> lists:append(Output, Input)
+        false -> Output ++ Input
     end.
 
 insert_thousands_separator(Sep, Input) when is_integer(Input) ->
