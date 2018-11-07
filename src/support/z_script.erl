@@ -99,9 +99,6 @@ clean(Context) ->
 %% @doc Collect all scripts in the context, returns an iolist with javascript.
 %% @spec get_script(Context) -> iolist()
 get_script(Context) ->
-    get_script1(Context).
-
-    get_script1(Context) ->
         % Translate updates to content scripts
         Update2Script = fun({TargetId, Terms, JSFormatString}, C) ->
                                 {Html,C1} = z_render:render_to_iolist(Terms, C),
@@ -140,7 +137,7 @@ get_script(Context) ->
                 [
                     lists:reverse(Context#context.content_scripts),
                     lists:reverse(Context#context.scripts),
-                    get_script1(Context4)
+                    get_script(Context4)
                 ]
         end.
 
