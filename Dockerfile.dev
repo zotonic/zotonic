@@ -1,4 +1,4 @@
-FROM zotonic/erlang:18.3
+FROM zotonic/erlang:19.3
 
 COPY docker/zotonic.config /etc/zotonic/zotonic.config
 COPY docker/erlang.config.sed /opt/zotonic/docker/erlang.config.sed
