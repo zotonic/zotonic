@@ -5,7 +5,7 @@ params:
 overrides_tpl: (optional) template location that contains JavaScript overrides for tinymce init
 #}
 {% with
-    "4.1.6",
+    "4.3.7",
     m.config.mod_editor_tinymce.version.value
     as
     newest,

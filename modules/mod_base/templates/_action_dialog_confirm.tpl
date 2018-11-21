@@ -3,7 +3,7 @@
 </div>
 
 <div class="modal-footer">
-    {% if is_dangerous_action %}
+    {% if is_dangerous_action or is_danger %}
         {% button class="btn" text=cancel|default:_"Cancel" action={dialog_close} action=on_cancel delegate=delegate %}
         {% button class="btn btn-danger" text=ok|default:_"OK" action={dialog_close} delegate=delegate postback=postback action=action tag="a" %}
     {% else %}

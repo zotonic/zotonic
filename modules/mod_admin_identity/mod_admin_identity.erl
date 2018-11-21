@@ -155,6 +155,7 @@ event(#postback{message={identity_delete_confirm, Args}}, Context) ->
     z_render:wire({confirm, [
                     {text, ?__("Are you sure you want to delete this entry?", Context)},
                     {ok, ?__("Delete", Context)},
+                    {is_danger, true},
                     {action, {postback, [
                                 {postback, {identity_delete, Args}},
                                 {delegate, ?MODULE}

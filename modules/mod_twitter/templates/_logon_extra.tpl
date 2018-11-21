@@ -10,7 +10,7 @@
 						}
 		%}
 	{% else %}
-		<a href="{% url logon_service service='twitter' is_connect=is_connect %}" class="btn social-login do_popupwindow" style="color: white; background-color: #55acee"><span class="icon-twitter-sign"></span> {% if is_connect %}{_ Connect with Twitter _}{% else %}{_ Log on with Twitter _}{% endif %}</a>
+		<a href="{% url logon_service service='twitter' is_connect=is_connect %}" class="btn social-login do_popupwindow" style="color: white; background-color: #55acee"><span class="fab fa-twitter"></span> {% if is_connect %}{_ Connect with Twitter _}{% else %}{_ Log on with Twitter _}{% endif %}</a>
 	{% endif %}
 </li>
 {% endif %}

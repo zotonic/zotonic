@@ -10,7 +10,7 @@
 						}
 		%}
 	{% else %}
-		<a href="{% url logon_service service='linkedin' is_connect=is_connect  %}" class="btn social-login do_popupwindow" style="color: white; background-color: #0077B5"><span class="icon-linkedin-sign"></span> {% if is_connect %}{_ Connect with LinkedIn _}{% else %}{_ Log on with LinkedIn _}{% endif %}</a>
+		<a href="{% url logon_service service='linkedin' is_connect=is_connect  %}" class="btn social-login do_popupwindow" style="color: white; background-color: #0077B5"><span class="fab fa-linkedin"></span> {% if is_connect %}{_ Connect with LinkedIn _}{% else %}{_ Log on with LinkedIn _}{% endif %}</a>
 	{% endif %}
 </li>
 {% endif %}

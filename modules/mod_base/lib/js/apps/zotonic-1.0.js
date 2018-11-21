@@ -176,6 +176,33 @@ function z_dialog_alert(options)
     });
 }
 
+function z_dialog_overlay_open(options)
+{
+    var $overlay = $('.modal-overlay');
+    if ($overlay.length > 0) {
+        $overlay
+            .html('<a href="#close" class="modal-overlay-close" onclick="z_dialog_overlay_close()">&times;</a>' + options.html)
+            .attr('class', 'modal-overlay')
+            .show();
+    } else {
+        html = '<div class="modal-overlay">' +
+               '<a href="#close" class="modal-overlay-close" onclick="z_dialog_overlay_close()">&times;</a>' +
+               options.html +
+               '</div>';
+        $('body').append(html);
+    }
+    if (options.class) {
+        $('.modal-overlay').addClass(options.class);
+    }
+    $('body').addClass('modal-open');
+}
+
+function z_dialog_overlay_close()
+{
+    $('body').removeClass('modal-open');
+    $('.modal-overlay').remove();
+}
+
 /* Growl messages
 ---------------------------------------------------------- */
 
@@ -1827,7 +1854,7 @@ function z_call_function_by_name(name, context)
     return context[func].apply(this, args);
 }
 
-// URL encode function that is more RFC compatible.      Also encodes +, *, / and @.
+/// URL encode function that is more RFC compatible.      Also encodes +, *, / and @.
 function urlencode(s)
 {
     s = escape(s);
@@ -1841,13 +1868,22 @@ function urlencode(s)
 // HTML escape a string so it is safe to concatenate when making tags.
 function html_escape(s)
 {
-    return s.replace(/&/, "&amp;")
-            .replace(/</, "&lt;")
-            .replace(/>/, "&gt;")
-            .replace(/"/, "&quot;")
-            .replace(/'/, "&#39;");
+    return s.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
 }
 
+// HTML unescape a string.
+function html_unescape(s)
+{
+    return s.replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&quot;/g, "\"")
+            .replace(/&#39;/g, "'")
+            .replace(/&amp;/g, "&");
+}
 
 // Convert an object to an array with {name: xxx, value: yyy} pairs
 function ensure_name_value(a)

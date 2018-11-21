@@ -6,7 +6,7 @@
         <select id="{{ #y }}" class="input-mini">
             <option></option>
             {% with now|date:"Y" as year %}
-            {% for i in year|range:(year-110):(0-1) %}
+            {% for i in (year+10)|range:(year-110):(0-1) %}
                 <option>{{ i }}</option>
             {% endfor %}
             {% endwith %}

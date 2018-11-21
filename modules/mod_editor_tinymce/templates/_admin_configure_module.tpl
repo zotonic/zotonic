@@ -4,6 +4,7 @@
         <div class="controls">
             {% for id, version, version_txt, date_txt in [
                 ["d", "newest",       "always use newest available", ""],
+                ["c", "4.3.7",  "4.3.7", "Mar 03 2016"],
                 ["c", "4.1.6",  "4.1.6", "Oct 08 2014"],
                 ["b", "4.0.26", "4.0.26", "May 06 2014"],
                 ["a", "3.5.0",  "3.5.0", "May 03 2012"]

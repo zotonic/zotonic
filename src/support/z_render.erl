@@ -96,6 +96,9 @@
     dialog/4,
     dialog_close/1,
 
+    overlay/3,
+    overlay_close/1,
+
     growl/2,
     growl_error/2,
     growl/4,
@@ -460,6 +463,18 @@ dialog(Title, Template, Vars, Context) ->
 
 dialog_close(Context) ->
     z_render:wire({dialog_close, []}, Context).
+
+overlay(Template, Vars, Context) ->
+    {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
+    OverlayArgs = [
+        {html, Html},
+        {class, proplists:get_value(class, Vars, <<>>)}
+    ],
+    Script = [<<"z_dialog_overlay_open(">>, z_utils:js_object(OverlayArgs, Context1), $), $; ],
+    z_render:wire({script, [{script, Script}]}, Context1).
+
+overlay_close(Context) ->
+    z_render:wire({overlay_close, []}, Context).
 
 growl(Text, Context) ->
     z_render:wire({growl, [{text, Text}]}, Context).

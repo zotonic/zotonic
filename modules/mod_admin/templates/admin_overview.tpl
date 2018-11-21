@@ -68,7 +68,7 @@
     <a class="btn" href="{% url admin_media %}">{_ All media _}</a>
 </div>
 
-{% with m.search.paged[{query authoritative=1 cat=q.qcat text=q.qs page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}] as result %}
+{% with m.search.paged[{query authoritative=1 cat=q.qcat text=q.qs is_published="all" page=q.page pagelen=qpagelen sort=q.qsort|default:"-modified"}] as result %}
 	{% catinclude "_admin_overview_list.tpl" m.category[q.qcat].is_a result=result %}
 	{% pager result=result dispatch="admin_overview_rsc" qargs hide_single_page=1 %}
 {% endwith %}
