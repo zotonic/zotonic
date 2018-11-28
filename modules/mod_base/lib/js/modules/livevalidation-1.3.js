@@ -552,7 +552,7 @@ LiveValidation.prototype = {
         if(!this.validationFailed){
             if(this.displayMessageWhenEmpty || this.element.value !== ''){
                 $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
-                    .closest('.control-group').addClass("success");
+                    .closest('.control-group,.form-group').addClass("success");
                 switch (this.elementType) {
                 case LiveValidation.RADIO:
                 case LiveValidation.CHECKBOX:
@@ -567,7 +567,7 @@ LiveValidation.prototype = {
             }
         }else{
             $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
-                    .closest('.control-group').removeClass("success").addClass("error");
+                    .closest('.control-group,.form-group').removeClass("success").addClass("error");
             switch (this.elementType) {
             case LiveValidation.RADIO:
             case LiveValidation.CHECKBOX:
@@ -604,7 +604,7 @@ LiveValidation.prototype = {
      */
     removeFieldClass: function(){
         $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
-                .closest('.control-group').removeClass("success").removeClass("error");
+                .closest('.control-group,.form-group').removeClass("success").removeClass("error");
         switch (this.elementType) {
         case LiveValidation.RADIO:
         case LiveValidation.CHECKBOX:

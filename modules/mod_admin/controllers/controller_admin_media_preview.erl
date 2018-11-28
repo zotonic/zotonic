@@ -61,10 +61,17 @@ resource_exists(ReqData, Context) ->
     end.
 
 content_types_provided(ReqData, Context) ->
-    {[{"image/jpeg", to_image}], ReqData, Context}.
+    {[
+        {"image/jpeg", to_image},
+        {"image/png",  to_image}
+    ], ReqData, Context}.
 
 to_image(ReqData, Context) ->
-    Opts = [{mediaclass, "admin-editor"}],
-    {ok, Url} = z_media_tag:url(z_context:get(id, Context), Opts, Context),
+    {ok, Url} = case z_context:get(id, Context) of
+        undefined ->
+            {ok, z_context:abs_url("/lib/images/cross.png", Context)};
+        Id ->
+            z_media_tag:url(Id, [ {mediaclass, "admin-editor"} ], Context)
+    end,
     ReqData1 = wrq:set_resp_header("Location", z_context:abs_url(Url, Context), ReqData),
     {{halt, 303}, ReqData1, Context}.
