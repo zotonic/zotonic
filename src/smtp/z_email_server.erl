@@ -438,7 +438,7 @@ spawn_send(Id, Recipient, Email, RetryCt, Context, State) ->
     end.
 
 spawn_send_check_email(Id, Recipient, #email{ html_tpl = "email_activity.tpl" } = Email, _RetryCt, Context, State) ->
-    delete_emailq(Id);
+    delete_emailq(Id),
     State;
 spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
     case is_sender_enabled(Email, Context) of
