@@ -168,33 +168,40 @@ size(InFile, Filters, Context) ->
         {error, Reason} ->
             {error, Reason}
     end.
-    
-    
-    size_props(FileProps, Filters) ->
-        {mime, Mime} = proplists:lookup(mime, FileProps),
-        case can_generate_preview(Mime) of
-            true ->
-                {width, ImageWidth}   = proplists:lookup(width, FileProps),
-                {height, ImageHeight} = proplists:lookup(height, FileProps),
-                Orientation = proplists:get_value(orientation, FileProps, 1),
-                
-                ReqWidth   = z_convert:to_integer(proplists:get_value(width, Filters)),
-                ReqHeight  = z_convert:to_integer(proplists:get_value(height, Filters)),
-                {CropPar,_Filters1} = fetch_crop(Filters),
-                {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation, is_enabled(upscale, Filters)),
-                case CropArgs of
-                    none -> 
-                        case is_enabled(extent, Filters) of
-                            true when is_integer(ReqWidth) andalso is_integer(ReqHeight) ->
-                                {size, ReqWidth, ReqHeight, "image/jpeg"};
-                            _ ->
-                                {size, ResizeWidth, ResizeHeight, "image/jpeg"}
-                        end;
-                    {_CropL, _CropT, CropWidth, CropHeight} -> {size, CropWidth, CropHeight, "image/jpeg"}
-                end;
-            false ->
-                {error, {no_preview_for_mimetype, Mime}}
-        end.
+
+
+size_props(FileProps, Filters) ->
+    {mime, Mime} = proplists:lookup(mime, FileProps),
+    case can_generate_preview(Mime) of
+        true ->
+            size_props_1(
+                proplists:lookup(width, FileProps),
+                proplists:lookup(height, FileProps),
+                FileProps,
+                Filters);
+        false ->
+            {error, {no_preview_for_mimetype, Mime}}
+    end.
+
+size_props_1({width, ImageWidth}, {height, ImageHeight}, FileProps, Filters) ->
+    Orientation = proplists:get_value(orientation, FileProps, 1),
+    ReqWidth   = z_convert:to_integer(proplists:get_value(width, Filters)),
+    ReqHeight  = z_convert:to_integer(proplists:get_value(height, Filters)),
+    {CropPar,_Filters1} = fetch_crop(Filters),
+    {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation, is_enabled(upscale, Filters)),
+    case CropArgs of
+        none ->
+            case is_enabled(extent, Filters) of
+                true when is_integer(ReqWidth) andalso is_integer(ReqHeight) ->
+                    {size, ReqWidth, ReqHeight, "image/jpeg"};
+                _ ->
+                    {size, ResizeWidth, ResizeHeight, "image/jpeg"}
+            end;
+        {_CropL, _CropT, CropWidth, CropHeight} ->
+            {size, CropWidth, CropHeight, "image/jpeg"}
+    end;
+size_props_1(_, _, _FileProps, _Filters) ->
+    {error, no_media_size}.
 
 
 %% @spec can_generate_preview(Mime) -> true | false
