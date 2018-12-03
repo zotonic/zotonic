@@ -232,7 +232,7 @@ tinymce.PluginManager.requireLangPack('zmedia');
         },
 
         _MediaHtmlToMarkers: function (html) {
-            var re = new RegExp("<img.*?/>", "g"),
+            var re = new RegExp("<img .*?data-zmedia-.*?/>", "g"),
                 m,
                 img,
                 idmatch,
