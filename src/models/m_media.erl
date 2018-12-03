@@ -51,6 +51,7 @@
     insert_url/4,
     replace_url/4,
     replace_url/5,
+    reupload/2,
     save_preview_url/3,
 	save_preview/4,
     make_preview_unique/3,
@@ -60,6 +61,7 @@
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_file.hrl").
 
 -define(MEDIA_MAX_LENGTH_PREVIEW, 10*1024*1024).
 -define(MEDIA_MAX_LENGTH_DOWNLOAD, 500*1024*1024).
@@ -108,7 +110,6 @@ identify_medium_filename(MediumFilename, Context) ->
         Props ->
             {ok, Props}
     end.
-
 
 %% @doc Check if a medium record exists
 exists(undefined, _Context) ->
@@ -637,6 +638,63 @@ replace_url(Url, RscId, Props, Options, Context) ->
         false ->
             {error, eacces}
     end.
+
+
+%% @doc Re-upload a file so that identify and previews are regenerated.
+reupload(Id, Context) ->
+    case z_acl:rsc_editable(Id, Context) of
+        true ->
+            case get(Id, Context) of
+                undefined ->
+                    {error, enoent};
+                Medium ->
+                    case proplists:get_value(size, Medium, 0) of
+                        undefined -> {error, nofile};
+                        0 -> {error, nofile};
+                        _ -> reupload_1(Id, Medium, Context)
+                    end
+            end;
+        false ->
+            {error, eacces}
+    end.
+
+reupload_1(Id, Medium, Context) ->
+    % Fetch all filenames being used.
+    case proplists:get_value(filename, Medium) of
+        undefined -> {error, nofile};
+        <<>> -> {error, nofile};
+        Filename ->
+            reupload_2(Id, Medium, Filename, z_file_request:lookup_file(Filename, Context), Context)
+    end.
+
+reupload_2(Id, Medium, Filename, {ok, #z_file_info{} = FInfo}, Context) ->
+    case z_file_request:content_file(FInfo, Context) of
+        {ok, MediaFile} ->
+            TmpFile = z_tempfile:new(),
+            % Copy file to temp file
+            Result = case file:copy(MediaFile, TmpFile) of
+                {ok, _} ->
+                    OrgFilename = case proplists:get_value(original_filename, Medium) of
+                        undefined -> filename:basename(Filename);
+                        <<>> -> filename:basename(Filename);
+                        Fn -> Fn
+                    end,
+                    Upload = #upload{
+                        filename = OrgFilename,
+                        tmpfile = TmpFile
+                    },
+                    replace_file(Upload, Id, Context);
+                {error, _} = Error ->
+                    Error
+            end,
+            file:delete(TmpFile),
+            Result;
+        {error, _} = Error ->
+            Error
+    end;
+reupload_2(_Id, _Medium, _Filename, {error, _} = Error, _Context) ->
+    Error.
+
 
 
 rsc_is_media_cat(Id, Context) ->
