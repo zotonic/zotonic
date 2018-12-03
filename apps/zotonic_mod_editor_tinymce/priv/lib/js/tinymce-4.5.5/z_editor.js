@@ -44,6 +44,7 @@ var z_editor = (function ($) {
 
     addEditor = function($el) {
         var id = $el.attr('id');
+        tinymce.remove('#'+id);
         if (id) {
             z_on_visible('#' + id, function() {
                 initEditor($el);
