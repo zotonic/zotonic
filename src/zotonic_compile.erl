@@ -21,12 +21,38 @@
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 
 -export([
+    start/0,
     all/0, all/1,
     compile_options/0,
     ld/0, ld/1
 ]).
 
 -include_lib("zotonic.hrl").
+
+%% @doc Compile all files. Called from zotonic-compile script
+start() ->
+    Node = get_node_argument(),
+    Result = case net_adm:ping(Node) of
+                 pang -> zotonic_compile:all();
+                 pong ->rpc:call(Node, zotonic_compile, all, [], infinity)
+             end,
+    halt_with_result(Result).
+
+halt_with_result(ok) -> halt(0);
+halt_with_result(error) -> halt(1);
+halt_with_result({badrpc, Reason}) ->
+    io:fwrite(standard_error, "Could not compile: ~p.~n", [Reason]),
+    halt(1).
+
+get_node_argument() ->
+    case init:get_argument(node) of
+        error ->
+            io:fwrite(standard_error, "No node option set.~n", []),
+            halt(1);
+        {ok, [[NodeArg]]} ->
+            list_to_atom(NodeArg)
+    end.
+
 
 %% @doc Load all changed beam files
 ld() ->
