@@ -12,7 +12,8 @@
         <div>
             <input type="text" id="twitter-id" name="twitter_id" class="zp-100 form-control" value="{{ m.rsc[id].twitter_id }}" />
             <p class="help-block">
-                {_ All tweets from this account will be automatically imported. _}
+                {_ Use <tt>@foobar</tt> or <tt>foobar</tt> to import all recent and future tweets from "foobar". _}
+                {_ Note that this user or organization must have <em>create</em> rights on the <em>Tweet</em> category. _}
             </p>
         </div>
     </div>
