@@ -2,9 +2,9 @@
 	{% if email and not m.email_status.is_valid[email] %}
 	{% with m.email_status[email] as status %}
 		{% if email_status_tag %}
-			<{{email_status_tag}} id="{{ #status }}" class="{% if status.error_is_final %}text-error{% else %}text-warning{% endif %} email-status-flag">
+			<{{email_status_tag}} id="{{ #status }}" class="{% if status.error_is_final %}text-error text-danger{% else %}text-warning{% endif %} email-status-flag">
 		{% else %}
-			<a href="#" id="{{ #status }}" class="{% if status.error_is_final %}text-error{% else %}text-warning{% endif %} email-status-flag" title="{_ There are problems with this email address. _}">
+			<a href="#" id="{{ #status }}" class="{% if status.error_is_final %}text-error text-danger{% else %}text-warning{% endif %} email-status-flag" title="{_ There are problems with this email address. _}">
 		{% endif %}
 				<span class="icon-envelope"></span>
 				<span class="text">{_ There are email problems. _}</span>
