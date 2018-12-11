@@ -71,7 +71,7 @@ do_import_rsc(TweetId, ImportRsc, AuthorId, Tweet, Context) ->
              end,
     % Find the author for the author edge
     maybe_author(Result, AuthorId, Tweet, AdminContext),
-    lager:info("Twitter: imported tweet ~p for user_id ~p as ~p", [TweetId, UserId, Result]),
+    lager:info("Twitter: imported tweet ~p for user_id ~p as ~p", [TweetId, z_acl:user(Context), Result]),
     Result.
 
 %% @doc If the importing user_id is defined, or if the Twitter user is coupled to an identity
@@ -272,5 +272,5 @@ test(Context) ->
 extract_test_tweet({Tweet}, Context) ->
     TweetId = proplists:get_value(<<"id">>, Tweet),
     UniqueName = <<"tweet_", (z_convert:to_binary(TweetId))/binary>>,
-    extract_import_rsc(TweetId, UniqueName, Tweet, <<"test">>, z_acl:logon(1, Context)).
+    extract_import_rsc(TweetId, UniqueName, Tweet, z_acl:logon(1, Context)).
     % import_tweet(Tweet, <<"test">>, Context).
