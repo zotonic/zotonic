@@ -29,9 +29,9 @@
 %%      Returns a list with the 'next' args for poll_next/2, the tweets found
 %%      and the max-id of all tweets. Retweets are filtered from the query but
 %%      not from the timeline.
-%%      Use <<"@username">>, or <<"@#userid">> for the timeline poll.
 -spec poll( binary(), integer() | undefined, z:context() ) -> {ok, list()} | {error, term()}.
 poll(<<"@", Username/binary>>, SinceId, Context) ->
+    % Use <<"@username">>, or <<"@#userid">> for the timeline poll.
     Args = [
         {"count", "200"},
         {"trim_user", "false"},         % Minimal 'user' info in Tweet?
