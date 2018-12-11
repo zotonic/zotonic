@@ -53,6 +53,7 @@
 -define(POLL_TASK_NAME, <<"twitter-subscription-poller">>).
 
 
+%% @doc Initialize or restart the poll task.
 init(Context) ->
     z_pivot_rsc:insert_task_after(?STARTUP_DELAY_SECS, twitter_poller, poll, ?POLL_TASK_NAME, [], Context).
 
@@ -69,6 +70,7 @@ event(#submit{message=admin_twitter}, Context) ->
         true ->
             save_settings(Context),
             m_twitter:update_config_subscriptions(Context),
+            init(Context),
             z_render:growl(?__("Saved the Twitter settings.", Context), Context);
         false ->
             z_render:growl(?__("You don't have permission to change the Twitter settings.", Context), Context)
@@ -109,19 +111,25 @@ observe_rsc_update_done(#rsc_update_done{ id = Id }, Context) ->
     end.
 
 save_identity(Id, TwitterId, Context) ->
-    case m_identity:get_rsc(Id, twitter_id, Context) of
+    IsChanged = case m_identity:get_rsc(Id, twitter_id, Context) of
         undefined ->
-            m_identity:insert(Id, twitter_id, TwitterId, Context);
-        L ->
-            case proplists:get_value(key, L) of
+            m_identity:insert(Id, twitter_id, TwitterId, Context),
+            true;
+        Idn ->
+            case proplists:get_value(key, Idn) of
                 TwitterId ->
-                    ok;
+                    false;
                 _Changed ->
-                    m_identity:delete(proplists:get_value(id, L), Context),
-                    m_identity:insert(Id, twitter_id, TwitterId, Context)
+                    m_identity:delete(proplists:get_value(id, Idn), Context),
+                    m_identity:insert(Id, twitter_id, TwitterId, Context),
+                    true
             end
     end,
-    m_twitter:update_identitiy_subscription(Id, Context).
+    m_twitter:update_identitiy_subscription(Id, Context),
+    case IsChanged of
+        true -> init(Context);
+        false -> ok
+    end.
 
 %%====================================================================
 %% Internal functions

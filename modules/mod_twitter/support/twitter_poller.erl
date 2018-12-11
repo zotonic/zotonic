@@ -32,6 +32,7 @@
 -define(DELAY_RATE_LIMIT, 15*60).
 -define(DELAY_5XX_ERROR, 10*60).
 -define(DELAY_EXCEPTION, 3600).
+-define(DELAY_MAXIMUM, 3600).
 
 % Delay between pages of the same feed
 -define(DELAY_NEXT_PAGE, 10).
@@ -238,11 +239,11 @@ is_allowed_insert_tweets(Sub, Context) ->
 determine_next_delay(ok, Context) ->
     case m_twitter:next_due(Context) of
         undefined ->
-            ok;
+            {delay, ?DELAY_MAXIMUM};
         DT ->
             Secs = z_datetime:datetime_to_timestamp(DT),
             Now = z_datetime:timestamp(),
-            {delay, min(?DELAY_MINIMUM, Secs - Now)}
+            {delay, max( min(?DELAY_MINIMUM, Secs - Now), ?DELAY_MAXIMUM )}
     end;
-determine_next_delay({delay, _} = D, _Context) ->
-    D.
+determine_next_delay({delay, Secs}, _Context) ->
+    {delay, max( Secs, ?DELAY_MAXIMUM )}.
