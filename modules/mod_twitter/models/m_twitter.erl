@@ -16,7 +16,7 @@
     update_identitiy_subscription/2,
     update_identitiy_subscriptions/1,
 
-    normalize_key/1
+    normalize_key/2
 ]).
 
 
@@ -145,7 +145,7 @@ update_identitiy_subscription(RscId, Context) ->
         undefined ->
             ok;
         {IdnId, Key} ->
-            Key1 = normalize_key(Key),
+            Key1 = normalize_key(Key, user),
             update_identitiy_subscription_1(IdnId, Key1, Context)
     end.
 
@@ -188,7 +188,7 @@ update_identitiy_subscriptions(Context) ->
         Context),
     Ks1 = lists:map(
         fun ({IdnId, K}) ->
-            {IdnId, normalize_key(K)}
+            {IdnId, normalize_key(K, user)}
         end,
         Ks),
     All = z_db:q("
@@ -223,7 +223,7 @@ update_config_subscriptions(Context) ->
 update_config_subscriptions(S, Context) when is_list(S) ->
     update_config_subscriptions(z_convert:to_binary(S), Context);
 update_config_subscriptions(S, Context) ->
-    Keys = lists:map( fun normalize_key/1, split(S) ),
+    Keys = lists:map( fun(K) -> normalize_key(K, any) end, split(S) ),
     All = z_db:q("
         select key
         from twitter_subscriptions
@@ -275,12 +275,26 @@ update_config_subscriptions(S, Context) ->
         end,
         All1 -- Keys).
 
--spec normalize_key( string() | binary() | undefined ) -> binary().
-normalize_key(undefined) ->
+-spec normalize_key( string() | binary() | undefined, user | any ) -> binary().
+normalize_key(undefined, _Type) ->
     <<>>;
-normalize_key(L) when is_list(L) ->
-    normalize_key(z_convert:to_binary(L));
-normalize_key(K) ->
+normalize_key(<<>>, _Type) ->
+    <<>>;
+normalize_key(K, Type) when not is_binary(K) ->
+    normalize_key(z_convert:to_binary(K), Type);
+normalize_key(K, user) when is_binary(K) ->
+    K1 = z_string:trim(K),
+    case z_utils:only_digits(K1) of
+        true ->
+            z_string:truncate(<<"@#", K1/binary>>, 126, <<>>);
+        false ->
+            K2 = case K1 of
+                <<"@", _/binary>> -> K1;
+                _ -> <<"@", K1/binary>>
+            end,
+            normalize_key(K2, any)
+    end;
+normalize_key(K, any) ->
     K1 = normalize_key_1( z_string:trim(K) ),
     K2 = z_string:to_lower(K1),
     z_string:truncate(K2, 126, <<>>).

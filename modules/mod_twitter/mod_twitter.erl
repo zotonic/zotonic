@@ -94,7 +94,7 @@ is_setting(_) -> false.
 
 observe_rsc_update_done(#rsc_update_done{ id = Id }, Context) ->
     TwId = m_rsc:p_no_acl(Id, twitter_id, Context),
-    case m_twitter:normalize_key(TwId) of
+    case m_twitter:normalize_key(TwId, user) of
         <<>> ->
             case m_identity:get_rsc(Id, twitter_id, Context) of
                 undefined ->

@@ -25,20 +25,32 @@
     get_tweet/2
 ]).
 
+%% @doc Fetch the timeline of an user or query for a phrase or tag.
+%%      Returns a list with the 'next' args for poll_next/2, the tweets found
+%%      and the max-id of all tweets. Retweets are filtered from the query but
+%%      not from the timeline.
+%%      Use <<"@username">>, or <<"@#userid">> for the timeline poll.
+-spec poll( binary(), integer() | undefined, z:context() ) -> {ok, list()} | {error, term()}.
 poll(<<"@", Username/binary>>, SinceId, Context) ->
     Args = [
-        {"screen_name", z_convert:to_list(Username)},
         {"count", "200"},
         {"trim_user", "false"},         % Minimal 'user' info in Tweet?
         {"include_rts", "true"},        % Retweets?
         {"exclude_replies", "true"},    % Exclude replies to other users?
         {"tweet_mode", "extended"}
     ],
-    Args1 = case SinceId of
-        0 -> Args;
-        _ -> [ {"since_id", z_convert:to_list(SinceId)} | Args ]
+    Args1 = case Username of
+        <<"#", TwUserId/binary>> ->
+            [ {"user_id", z_convert:to_list(TwUserId)} | Args ];
+        _ ->
+            [ {"screen_name", z_convert:to_list(Username)} | Args ]
     end,
-    case fetch("statuses/user_timeline", Args1, Context) of
+    Args2 = case SinceId of
+        0 -> Args;
+        undefined -> Args;
+        _ -> [ {"since_id", z_convert:to_list(SinceId)} | Args1 ]
+    end,
+    case fetch("statuses/user_timeline", Args2, Context) of
         {ok, Tweets} when is_list(Tweets) ->
             {ok, [
                 {next, undefined},
@@ -58,6 +70,7 @@ poll(TagOrPhrase, SinceId, Context) ->
     ],
     Args1 = case SinceId of
         0 -> Args;
+        undefined -> Args;
         _ -> [ {"since_id", z_convert:to_list(SinceId)} | Args ]
     end,
     case fetch("search/tweets", Args1, Context) of

@@ -104,17 +104,14 @@ poll_next(SubId, Next, Context) ->
 %% @doc Import all feed entries and set new due for the subscription
 import_result(Sub, Result, Context) ->
     {tweets, Tweets} = proplists:lookup(tweets, Result),
-    ContextUser = case proplists:get_value(user_id, Sub) of
+    AuthorId = proplists:get_value(user_id, Sub),
+    ContextUser = case AuthorId of
         undefined -> z_acl:sudo(Context);
         UserId -> z_acl:logon(UserId, Context)
     end,
-    DefaultScreenName = case proplists:get_value(key, Sub) of
-        <<"@", TwitterUsername/binary>> -> TwitterUsername;
-        _TagOrPhrase -> undefined
-    end,
     lists:foldl(
         fun(Tweet, Acc) ->
-            case twitter_import_tweet:import_tweet(Tweet, DefaultScreenName, ContextUser) of
+            case twitter_import_tweet:import_tweet(Tweet, AuthorId, ContextUser) of
                 {ok, _} ->
                     Acc + 1;
                 {error, _} ->
@@ -132,7 +129,7 @@ set_due(Sub, Result, ImportCount, Context) ->
     Delay = case MaxId of
         undefined ->
             % Check when the last import was
-            {last_import, LastImport} = proplists:get_value(last_import, Sub),
+            {last_import, LastImport} = proplists:lookup(last_import, Sub),
             Last = z_datetime:datetime_to_timestamp(LastImport),
             backoff(Now - Last);
         _MaxId ->
@@ -178,7 +175,7 @@ poll_feed(Sub, Context) ->
         true ->
             {key, FeedKey} = proplists:lookup(key, Sub),
             {last_id, LastId} = proplists:lookup(last_id, Sub),
-            case twitter_feed:poll(FeedKey, LastId, Context) of
+            case ?DEBUG(twitter_feed:poll(FeedKey, LastId, Context)) of
                 {ok, Result} ->
                     {ok, Result};
                 {error, unauthorized} ->
@@ -199,7 +196,7 @@ poll_feed(Sub, Context) ->
                     Error
             end;
         false ->
-            lager:debug("twitter_poller: disable because not allowd to insert tweets for ~p", [ Sub ]),
+            lager:info("twitter_poller: disable subscription because not allowd to insert tweets for ~p", [ Sub ]),
             m_twitter:disable(SubId, <<"acl">>, Context),
             {error, eacces}
     end.

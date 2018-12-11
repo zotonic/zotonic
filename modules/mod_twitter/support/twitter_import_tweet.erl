@@ -32,19 +32,19 @@
 
 -include("zotonic.hrl").
 
-import_tweet({Tweet}, DefaultScreenName, Context) when is_list(Tweet) ->
+import_tweet({Tweet}, AuthorId, Context) when is_list(Tweet) ->
     {<<"id">>, TweetId} = proplists:lookup(<<"id">>, Tweet),
     UniqueName = <<"tweet_", (z_convert:to_binary(TweetId))/binary>>,
-    import_rsc(m_rsc:rid(UniqueName, Context), TweetId, UniqueName, DefaultScreenName, Tweet, Context);
-import_tweet(Tweet, _DefaultScreenName, _Context) ->
+    import_rsc(m_rsc:rid(UniqueName, Context), TweetId, UniqueName, AuthorId, Tweet, Context);
+import_tweet(Tweet, _AuthorId, _Context) ->
     lager:info("Twitter: received unknown tweet data: ~p", [Tweet]),
     {error, tweet_format}.
 
-import_rsc(undefined, TweetId, UniqueName, DefaultScreenName, Tweet, Context) ->
-    {ok, ImportRsc} = extract_import_rsc(TweetId, UniqueName, Tweet, DefaultScreenName, Context),
+import_rsc(undefined, TweetId, UniqueName, AuthorId, Tweet, Context) ->
+    {ok, ImportRsc} = extract_import_rsc(TweetId, UniqueName, Tweet, Context),
     case z_notifier:first(ImportRsc, Context) of
         undefined ->
-            do_import_rsc(TweetId, ImportRsc, Context);
+            do_import_rsc(TweetId, ImportRsc, AuthorId, Tweet, Context);
         {ok, _} = OK ->
             OK;
         {error, _} = Error ->
@@ -52,11 +52,11 @@ import_rsc(undefined, TweetId, UniqueName, DefaultScreenName, Tweet, Context) ->
         Handled ->
             {ok, Handled}
     end;
-import_rsc(_RscId, TweetId, _UniqueName, _User, _Tweet, _Context) ->
+import_rsc(_RscId, TweetId, _UniqueName, _AuthorId, _Tweet, _Context) ->
     lager:debug("Twitter: ignored duplicate tweet ~p", [TweetId]),
     {error, duplicate}.
 
-do_import_rsc(TweetId, ImportRsc, Context) ->
+do_import_rsc(TweetId, ImportRsc, AuthorId, Tweet, Context) ->
     AdminContext = z_acl:sudo(Context),
     RscProps = [
         {category, tweet},
@@ -69,24 +69,49 @@ do_import_rsc(TweetId, ImportRsc, Context) ->
                 {error, _} ->
                     m_rsc:insert(RscProps, AdminContext)
              end,
-    UserId = ImportRsc#import_resource.user_id,
-    maybe_author(Result, UserId, AdminContext),
+    % Find the author for the author edge
+    maybe_author(Result, AuthorId, Tweet, AdminContext),
     lager:info("Twitter: imported tweet ~p for user_id ~p as ~p", [TweetId, UserId, Result]),
     Result.
 
-maybe_author({ok, _RscId}, 1, _Context) ->
-    ok;
-maybe_author({ok, _RscId}, undefined, _Context) ->
-    ok;
-maybe_author({ok, RscId}, UserId, Context) ->
-    _ = m_edge:insert(RscId, author, UserId, Context);
-maybe_author(_NotOk, _UserId, _Context) ->
+%% @doc If the importing user_id is defined, or if the Twitter user is coupled to an identity
+%%      then add an author edge.
+maybe_author({ok, RscId}, undefined, Tweet, Context) ->
+    {User} = proplists:get_value(<<"user">>, Tweet),
+    ScreenName = proplists:get_value(<<"screen_name">>, User),
+    {<<"id">>, TwitterUserId} = proplists:lookup(<<"id">>, User),
+    UIdBin = z_convert:to_binary(TwitterUserId),
+    Idns = [
+        <<"@", ScreenName/binary>>,
+        UIdBin,
+        <<"@#", UIdBin/binary>>
+    ],
+    AuthorId = lists:foldl(
+        fun
+            (Key, undefined) ->
+                case m_identity:lookup_by_type_and_key(twitter_id, Key, Context) of
+                    undefined -> undefined;
+                    Idn -> proplists:get_value(rsc_id, Idn)
+                end;
+            (_Key, UserId) ->
+                UserId
+        end,
+        undefined,
+        Idns),
+    case AuthorId of
+        undefined -> ok;
+        _ -> m_edge:insert(RscId, author, AuthorId, Context)
+    end;
+maybe_author({ok, RscId}, UserId, _Tweet, Context) ->
+    m_edge:insert(RscId, author, UserId, Context);
+maybe_author(_NotOk, _UserId, _Tweet, _Context) ->
     ok.
 
 
-extract_import_rsc(TweetId, UniqueName, Tweet, DefaultScreenName, Context) ->
+extract_import_rsc(TweetId, UniqueName, Tweet, Context) ->
     {User} = proplists:get_value(<<"user">>, Tweet),
-    ScreenName = proplists:get_value(<<"screen_name">>, User, DefaultScreenName),
+    ScreenName = proplists:get_value(<<"screen_name">>, User),
+    {<<"id">>, TwitterUserId} = proplists:lookup(<<"id">>, User),
     TweetText = case proplists:get_value(<<"full_text">>, Tweet) of
         undefined -> proplists:get_value(<<"text">>, Tweet);
         Txt -> Txt
@@ -122,7 +147,6 @@ extract_import_rsc(TweetId, UniqueName, Tweet, DefaultScreenName, Context) ->
         {org_pubdate, Created},
         {publication_start, Created}
     ],
-    TwitterUserId = proplists:get_value(id, User),
     {ok, #import_resource{
         source = twitter,
         source_id = TweetId,
