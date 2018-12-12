@@ -13,7 +13,10 @@
 	{% image props.preview_filename width=options.width height=options.height class=options.class %}
 {% elseif props.filename %}
 	<video id="{{ #video }}" style="max-width: 100%; height: auto;" poster="{% image_url props.id width=props.width height=props.height %}"
-			controls="controls" preload="none"
+			controls
+            {% if options.autoplay %}autoplay
+            {% else %}preload="none"
+            {% endif %}
 			width="{{ props.width }}" height="{{ props.height }}">
 		<source type="{{ props.mime }}" src="{% url media_inline star=props.filename %}" />
 		<object style="max-width: 100%; height: auto;" 
@@ -25,11 +28,5 @@
 			<img src="{% image_url props.id width=props.width height=props.height %}" width="{{ props.width }}" height="{{ props.height }}" title="{_ No video playback capabilities _}" />
 		</object>
 	</video>
-	{#
-		MW - mediaelementjs is confused by the video's size, disable for now.
-		{% javascript %}
-			$('#{{ #video }}').mediaelementplayer();
-		{% endjavascript %}
-	#}
 {% endif %}
 {% endwith %}
