@@ -107,13 +107,18 @@ maybe_author({ok, RscId}, UserId, _Tweet, Context) ->
 maybe_author(_NotOk, _UserId, _Tweet, _Context) ->
     ok.
 
+get_value(K, Props) ->
+    case proplists:get_value(K, Props) of
+        null -> undefined;
+        V -> V
+    end.
 
 extract_import_rsc(TweetId, UniqueName, Tweet, Context) ->
-    {User} = proplists:get_value(<<"user">>, Tweet),
-    ScreenName = proplists:get_value(<<"screen_name">>, User),
+    {User} = get_value(<<"user">>, Tweet),
+    ScreenName = get_value(<<"screen_name">>, User),
     {<<"id">>, TwitterUserId} = proplists:lookup(<<"id">>, User),
-    TweetText = case proplists:get_value(<<"full_text">>, Tweet) of
-        undefined -> proplists:get_value(<<"text">>, Tweet);
+    TweetText = case get_value(<<"full_text">>, Tweet) of
+        undefined -> get_value(<<"text">>, Tweet);
         Txt -> Txt
     end,
     LinkUrls = extract_urls(Tweet),
@@ -132,6 +137,25 @@ extract_import_rsc(TweetId, UniqueName, Tweet, Context) ->
     Language = extract_language(Tweet, Context),
     {Long, Lat} = extract_coordinates(Tweet),
     Created = qdate:parse(proplists:get_value(<<"created_at">>, Tweet)),
+    TweetProps = [
+        {tweet_id, TweetId},
+        {tweet_url, TweetUrl},
+        {user, [
+            {is_verified, z_convert:to_bool(get_value(<<"verified">>, User))},
+            {id, TwitterUserId},
+            {screen_name, ScreenName},
+            {name, get_value(<<"name">>, User)},
+            {image_url, get_value(<<"profile_image_url_https">>, User)},
+            {url, <<"https://twitter.com/", ScreenName/binary>>}
+        ]},
+        {in_reply_to_user_id, get_value(<<"in_reply_to_user_id">>, Tweet)},
+        {in_reply_to_screen_name, get_value(<<"in_reply_to_screen_name">>, Tweet)},
+        {in_reply_to_status_id, get_value(<<"in_reply_to_status_id">>, Tweet)},
+        {is_retweet_status, get_value(<<"retweeted_status">>, Tweet) =/= undefined},
+        {is_quote_status, z_convert:to_bool(get_value(<<"is_quote_status">>, Tweet))},
+        {quoted_status_url, quoted_status_url(Tweet)}
+    ],
+    TweetProps1 = [ {K, V} || {K, V} <- TweetProps, V =/= undefined ],
     Props = [
         {name, UniqueName},
         {language, [Language]},
@@ -145,7 +169,8 @@ extract_import_rsc(TweetId, UniqueName, Tweet, Context) ->
         {location_lat, Lat},
         {website, first_link(LinkUrls, TweetUrl)},
         {org_pubdate, Created},
-        {publication_start, Created}
+        {publication_start, Created},
+        {tweet, TweetProps1}
     ],
     {ok, #import_resource{
         source = twitter,
@@ -173,6 +198,12 @@ first_media_props([Url|Urls], Context) ->
             {ok, MI};
         {error, _} ->
             first_media_props(Urls, Context)
+    end.
+
+quoted_status_url(Tweet) ->
+    case get_value(<<"quoted_status_permalink">>, Tweet) of
+        {Qs} -> get_value(<<"expanded">>, Qs);
+        undefined -> undefined
     end.
 
 extract_language(Tweet, Context) ->
