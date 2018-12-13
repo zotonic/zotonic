@@ -42,5 +42,10 @@ stringify_1({trans, _Tr} = Tr, Context) ->
 stringify_1(N, _Context) when is_integer(N); is_float(N); is_atom(N) ->
     z_convert:to_binary(N);
 stringify_1(L, Context) when is_list(L) ->
-    [ stringify_1(X, Context) || X <- L ].
+    [ stringify_1(X, Context) || X <- L ];
+stringify_1(Other, _Context) ->
+    lager:info("stringify of ~p", [Other]),
+    S = erlang:get_stacktrace(),
+    lager:info("at ~p", [S]),
+    <<>>.
 
