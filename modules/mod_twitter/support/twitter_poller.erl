@@ -176,7 +176,7 @@ poll_feed(Sub, Context) ->
         true ->
             {key, FeedKey} = proplists:lookup(key, Sub),
             {last_id, LastId} = proplists:lookup(last_id, Sub),
-            case ?DEBUG(twitter_feed:poll(FeedKey, LastId, Context)) of
+            case twitter_feed:poll(FeedKey, LastId, Context) of
                 {ok, Result} ->
                     {ok, Result};
                 {error, unauthorized} ->
