@@ -152,6 +152,8 @@ extract_import_rsc(TweetId, UniqueName, Tweet, Context) ->
         {in_reply_to_screen_name, get_value(<<"in_reply_to_screen_name">>, Tweet)},
         {in_reply_to_status_id, get_value(<<"in_reply_to_status_id">>, Tweet)},
         {is_retweet_status, get_value(<<"retweeted_status">>, Tweet) =/= undefined},
+        {retweeted_status_url, retweeted_status_url(Tweet)},
+        {retweeted_status_id, retweeted_status_id(Tweet)},
         {is_quote_status, z_convert:to_bool(get_value(<<"is_quote_status">>, Tweet))},
         {quoted_status_url, quoted_status_url(Tweet)}
     ],
@@ -203,6 +205,27 @@ first_media_props([Url|Urls], Context) ->
 quoted_status_url(Tweet) ->
     case get_value(<<"quoted_status_permalink">>, Tweet) of
         {Qs} -> get_value(<<"expanded">>, Qs);
+        undefined -> undefined
+    end.
+
+retweeted_status_url(Tweet) ->
+    case get_value(<<"retweeted_status">>, Tweet) of
+        {RT} ->
+            case get_value(<<"id">>, RT) of
+                undefined -> undefined;
+                Id ->
+                    {RTUser} = get_value(<<"user">>, RT),
+                    RTScreenname = get_value(<<"screen_name">>, RTUser),
+                    <<"https://twitter.com/", RTScreenname/binary,
+                      "/status/", (z_convert:to_binary(Id))/binary>>
+            end;
+        undefined ->
+            undefined
+    end.
+
+retweeted_status_id(Tweet) ->
+    case get_value(<<"retweeted_status">>, Tweet) of
+        {RT} -> get_value(<<"id">>, RT);
         undefined -> undefined
     end.
 
