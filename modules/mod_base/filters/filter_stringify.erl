@@ -22,11 +22,11 @@
 stringify([], _Context) ->
     <<>>;
 stringify(N, _Context) when is_integer(N) ->
-	z_convert:to_binary(N); 
-stringify(L, Context) when is_list(L) ->
-    iolist_to_binary(stringify_1(L, Context));
-stringify(X, Context) ->
-	stringify_1(X, Context).
+	z_convert:to_binary(N);
+stringify(B, _Context) when is_binary(B) ->
+    B;
+stringify(L, Context) ->
+    stringify_1(L, Context).
 
 %% Recursive stringify - safe to be applied in lists (where integers are assumed to be characters)
 stringify_1(undefined, _Context) ->
@@ -44,8 +44,4 @@ stringify_1(N, _Context) when is_integer(N); is_float(N); is_atom(N) ->
 stringify_1(L, Context) when is_list(L) ->
     [ stringify_1(X, Context) || X <- L ];
 stringify_1(Other, _Context) ->
-    lager:info("stringify of ~p", [Other]),
-    S = erlang:get_stacktrace(),
-    lager:info("at ~p", [S]),
-    <<>>.
-
+    Other.

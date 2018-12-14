@@ -17,7 +17,10 @@
 %% limitations under the License.
 
 -module(filter_show_media).
--export([show_media/2, show_media/3]).
+-export([
+    show_media/2,
+    show_media/3
+]).
 
 -include_lib("zotonic.hrl").
 
@@ -26,92 +29,109 @@ show_media(Input, Context) ->
 
 show_media(undefined, _Template, _Context) ->
     undefined;
+show_media({trans, _} = Tr, Template, Context) ->
+    Text = z_trans:lookup_fallback(Tr, Context),
+    show_media(Text, Template, Context);
 show_media(Input, Template, Context) when is_binary(Input) ->
-    Context1 = z_context:set(show_media_template, Template, Context),
-    show_media1(Input, 0, Context1);
+    lists:reverse( show_media_1(Input, Template, [], Context) );
 show_media(Input, _Template, _Context) ->
     Input.
 
-
-% scanning for media start marker
-show_media1(Input, Index, Context) when is_binary(Input) ->
-    case Input of
-        <<Pre:Index/binary, "<!-- z-media ", Post/binary>> ->
-            process_binary_match(Pre, <<>>, size(Post), show_media1_id(Post, 0, Context));
-        <<_:Index/binary, _/binary>> ->
-            show_media1(Input, Index + 1, Context);
-        _ ->
-            Input
-    end.
-
-% scanning for media id
-show_media1_id(Input, Index, Context) ->
-    case Input of
-        <<Id:Index/binary, " -->", Post/binary>> ->
-            Html = show_media_html(Id, Context),
-            process_binary_match(<<>>, Html, size(Post), show_media1(Post, 0, Context));
-
-        <<Id:Index/binary, " {", Post/binary>> ->
-            process_binary_match(<<>>, <<>>, size(Post), show_media1_opts(Id, Post, 0, Context));
-        <<_:Index/binary, _/binary>> ->
-            show_media1_id(Input, Index + 1, Context);
-        _ ->
-            Input
-    end.
-
-% scanning for media id
-show_media1_opts(Id, Input, Index, Context) ->
-    case Input of
-        <<Opts:Index/binary, "} -->", Post/binary>> ->
-            Opts2 = mochijson:decode("{" ++ binary_to_list(Opts) ++ "}"),
-            Html = show_media_html(Id, Opts2, Context),
-            process_binary_match(<<>>, Html, size(Post), show_media1(Post, 0, Context));
-        <<_:Index/binary, _/binary>> ->
-            show_media1_opts(Id, Input, Index + 1, Context);
-        _ ->
-            Input
+show_media_1(Text, Template, Acc, Context) ->
+    case find_marker(Text) of
+        {Pre, Marker, Rest} ->
+            Html = render_marker(Marker, Template, Context),
+            Acc1 = [ Html, Pre | Acc ],
+            show_media_1(Rest, Template, Acc1, Context);
+        Text ->
+            [ Text | Acc ]
     end.
 
 
+-spec find_marker( binary() ) -> binary() | {binary(), binary(), binary()}.
+find_marker(Text) ->
+    case binary:match(Text, <<"<!-- z-media">>) of
+        {Offset, Length} ->
+            <<Pre:Offset/binary, _:Length/binary, MarkerRest/binary>> = Text,
+            case binary:match(MarkerRest, <<" -->">>) of
+                {EndOffset, EndLength} ->
+                    <<Marker:EndOffset/binary, _:EndLength/binary, Rest/binary>> = MarkerRest,
+                    {Pre, Marker, Rest};
+                nomatch ->
+                    Text
+            end;
+        nomatch ->
+            Text
+    end.
 
-show_media_html(Id, Context) ->
-    show_media_html(Id, {struct, []}, Context).
+render_marker(Marker, Template, Context) ->
+    case binary:match(Marker, <<" {">>) of
+        {Offset, _} ->
+            <<Id:Offset/binary, Args/binary>> = Marker,
+            Id1 = binary:replace(Id, <<" ">>, <<>>, [global]),
+            MediaId = m_rsc:rid(Id1, Context),
+            {struct, Opts} = mochijson:binary_decode(Args),
+            Opts1 = filter_args(Opts, Context),
+            render_media(MediaId, Template, Opts1, Context);
+        nomatch ->
+            Id1 = binary:replace(Marker, <<" ">>, <<>>, [global]),
+            MediaId = m_rsc:rid(Id1, Context),
+            render_media(MediaId, Template, [], Context)
+    end.
 
-show_media_html(Id, {struct, Args}, Context) ->
-    Args2 = [ {list_to_atom(A), B} || {A,B} <- Args],
-    Args3 = filter_args(Args2, false, [], Context),
-    Id1 = try 
-              list_to_integer(z_convert:to_list(Id))
-          catch
-              _:_ -> Id
-          end,
-    Tpl = z_context:get(show_media_template, Context),
-    z_template:render({cat, Tpl}, [ {id, Id1} | Args3 ++ z_context:get_all(Context) ], Context).
+render_media(undefined, _Template, _Opts, _Context) ->
+    <<>>;
+render_media(MediaId, {cat, _} = Template, Opts, Context) ->
+    case z_acl:rsc_visible(MediaId, Context) of
+        true ->
+            Opts1 = [ {id, MediaId} | Opts ] ++ z_context:get_all(Context),
+            z_template:render(Template, Opts1, Context);
+        false ->
+            <<>>
+    end;
+render_media(MediaId, Template, Opts, Context) when is_binary(Template); is_list(Template) ->
+    render_media(MediaId, {cat, Template}, Opts, Context);
+render_media(_MediaId, _Template, _Opts, _Context) ->
+    <<>>.
+
+
+filter_args(Args, Context) ->
+    Args1 = lists:filter( fun is_valid_arg/1, Args ),
+    filter_args(Args1, false, [], Context).
+
+% See _tinymce_dialog_zmedia_props.tpl
+is_valid_arg({<<"link">>, _}) -> true;
+is_valid_arg({<<"crop">>, _}) -> true;
+is_valid_arg({<<"caption">>, _}) -> true;
+is_valid_arg({<<"size">>, _}) -> true;
+is_valid_arg({<<"align">>, <<"right">>}) -> true;
+is_valid_arg({<<"align">>, <<"left">>}) -> true;
+is_valid_arg({<<"align">>, <<"block">>}) -> true;
+is_valid_arg(_) -> false.
 
 filter_args([], true, Acc, _Context) ->
     Acc;
 filter_args([], false, Acc, Context) ->
-    [_S,M,_L] = get_sizes(Context),
-    [{size,M},{sizename,"medium"}|Acc];
-filter_args([{size,Size}|Args], _, Acc, Context) ->
-    [S,M,L] = get_sizes(Context),
-    {P,SizeName} = case Size of
-                        "large" -> {L,"large"};
-                        "small" -> {S,"small"};
-                        _ -> {M,"medium"}
+    [ _S, _M, L ] = get_sizes(Context),
+    [ {size, L}, {sizename, <<"large">>} | Acc ];
+filter_args([ {<<"size">>, Size} | Args ], _, Acc, Context) ->
+    [ S, M, L ] = get_sizes(Context),
+    {P, SizeName} = case Size of
+                        <<"medium">> -> {M, <<"medium">>};
+                        <<"small">> -> {S, <<"small">>};
+                        _ -> {L, <<"large">>}
                    end,
-    filter_args(Args, true, [{size,P},{sizename,SizeName}|Acc], Context);
-filter_args([{crop,"crop"}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{crop,true}|Acc], Context);
-filter_args([{crop,_}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{crop,undefined}|Acc], Context);
-filter_args([{link,"link"}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{link,true}|Acc], Context);
-filter_args([{link,_}|Args], HasSize, Acc, Context) ->
-    filter_args(Args, HasSize, [{link,undefined}|Acc], Context);
-filter_args([P|Args], HasSize, Acc, Context) ->
+    filter_args(Args, true, [ {size, P}, {sizename, SizeName} | Acc ], Context);
+filter_args([ {<<"crop">>, <<"crop">>} | Args ], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [ {crop, true} | Acc], Context);
+filter_args([ {crop, _} | Args ], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [ {<<"crop">>, undefined} | Acc ], Context);
+filter_args([ {<<"link">>, <<"link">>} | Args ], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [ {link, true} | Acc ], Context);
+filter_args([ {<<"link">>, _} | Args ], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [ {link, undefined} | Acc ], Context);
+filter_args([ P | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [P|Acc], Context).
-
 
 
 get_sizes(Context) ->
@@ -121,11 +141,3 @@ get_sizes(Context) ->
     [   [{width, Int(W)}, {height, Int(H)}] ||
         [W,H] <- [string:tokens(P, "x") || P <- string:tokens(WidthHeightString, ",")] ].
 
-
-process_binary_match(Pre, Insertion, SizePost, Post) ->
-    case {size(Pre), SizePost} of
-        {0, 0} -> Insertion;
-        {0, _} -> [Insertion, Post];
-        {_, 0} -> [Pre, Insertion];
-        _ -> [Pre, Insertion, Post]
-    end.
