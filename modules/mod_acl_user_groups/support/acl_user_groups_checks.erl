@@ -79,7 +79,6 @@ max_upload_size(Context) ->
 max_upload_size_default() ->
     ?MAX_UPLOAD_SIZE_MB * 1024 * 1024.
 
-
 user_groups(#context{acl=#aclug{user_groups=Ids}}) ->
     Ids;
 user_groups(#context{user_id=UserId, acl=admin} = Context) ->
@@ -676,8 +675,8 @@ can_media(Mime, Size, Context) ->
     MaxSize = max_upload_size(Context) * 1024 * 1024,
     case MaxSize >= Size of
         true ->
-            Cat = m_media:mime_to_category(Mime),
-            can_insert_category(Cat, Context);
+            can_insert_category(m_media:mime_to_category(Mime), Context)
+            andalso acl_user_group_mime_check:is_acceptable(Mime, Context);
         false ->
             false
     end.

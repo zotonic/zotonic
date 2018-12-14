@@ -610,7 +610,7 @@ ensure_session(Context) ->
 maybe_logon_from_session(#context{user_id=undefined} = Context) ->
     Context1 = z_auth:logon_from_session(Context),
     Context2 = z_notifier:foldl(session_context, Context1, Context1),
-    set_nocache_headers(Context2);
+    maybe_set_security_headers( set_nocache_headers(Context2) );
 maybe_logon_from_session(Context) ->
     Context.
 
@@ -1137,7 +1137,23 @@ set_nocache_headers(Context = #context{wm_reqdata=ReqData}) ->
     RD2 = wrq:set_resp_header("Expires", httpd_util:rfc1123_date({{2008,12,10}, {15,30,0}}), RD1),
     % This let IE6 accept our cookies, basically we tell IE6 that our cookies do not contain any private data.
     RD3 = wrq:set_resp_header("P3P", "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", RD2),
-    Context#context{wm_reqdata=RD3}.
+    RD4 = wrq:set_resp_header("X-Content-Type-Options", "nosniff", RD3),
+    RD5 = wrq:set_resp_header("Pragma", "nocache", RD4),
+    Context#context{ wm_reqdata = RD5 }.
+
+maybe_set_security_headers(Context) ->
+    case z_config:get(security_headers) of
+        true -> set_security_headers(Context);
+        false -> Context
+    end.
+
+set_security_headers(Context = #context{wm_reqdata=ReqData}) ->
+    RD1 = wrq:set_resp_header("X-Frame-Options", "sameorigin", ReqData),
+    RD2 = wrq:set_resp_header("X-Xss-Protection", "1", RD1),
+    RD3 = wrq:set_resp_header("X-Content-Type-Options", "nosniff", RD2),
+    RD4 = wrq:set_resp_header("X-Permitted-Cross-Domain-Policies", "none", RD3),
+    RD5 = wrq:set_resp_header("Referrer-Policy", "origin-when-cross-origin", RD4),
+    Context#context{ wm_reqdata = RD5 }.
 
 %% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
 -spec set_noindex_header(#context{}) -> #context{}.

@@ -71,6 +71,7 @@ default(port) -> ?MODULE:get(listen_port);
 default(ssl_listen_port) -> 8443;
 default(ssl_port) -> ?MODULE:get(ssl_listen_port);
 default(listen_ip) -> any;
+default(security_headers) -> true;
 default(smtp_verp_as_from) -> false;
 default(smtp_no_mx_lookups) -> false;
 default(smtp_relay) -> false;

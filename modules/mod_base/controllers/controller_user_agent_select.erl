@@ -63,7 +63,7 @@ previously_existed(ReqData, Context) ->
 
 
 moved_temporarily(ReqData, Context) ->
-    C1 = z_context:set_nocache_headers(?WM_REQ(ReqData, Context)),
+    C1 = z_context:maybe_set_security_headers( z_context:set_nocache_headers(?WM_REQ(ReqData, Context)) ),
     Loc = case z_context:get_q("p", C1, []) of
             [] ->
                 case z_context:get_req_header("referer", C1) of

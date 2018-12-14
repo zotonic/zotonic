@@ -131,7 +131,8 @@ provide_content(ReqData,  {Info,Context} = State) ->
     RD2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context), MaxAge, RD1),
     RD3 = set_allow_origin(RD2),
     RD4 = set_content_policy(Info, RD3),
-    {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD4)), RD4, State}.
+    RD5 = set_security_headers(RD4),
+    {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD5)), RD5, State}.
 
 
 %%%%% -------------------------- Support functions ------------------------
@@ -177,6 +178,9 @@ set_content_policy(#z_file_info{acls=Acls}, ReqData) ->
         false ->
             ReqData
     end.
+
+set_security_headers(ReqData) ->
+    wrq:set_resp_header("X-Content-Type-Options", "nosniff", ReqData).
 
 set_cache_control_public(true, MaxAge, ReqData) ->
     wrq:set_resp_header("Cache-Control", "public, max-age="++z_convert:to_list(MaxAge), ReqData);

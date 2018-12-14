@@ -65,7 +65,7 @@ content_types_provided(ReqData, Context) ->
      ], ReqData, Context }.
 
 to_js(ReqData, Context) ->
-    CRD = z_context:set_nocache_headers(?WM_REQ(ReqData, Context)),
+    CRD = z_context:maybe_set_security_headers( z_context:set_nocache_headers(?WM_REQ(ReqData, Context)) ),
     case z_user_agent:ua_probe(z_context:get(ua_args, CRD), CRD) of
         {reload, CR} ->
             ?WM_REPLY(<<"window.location.href = window.location.protocol+'//'+window.location.host+page.val();">>, CR);

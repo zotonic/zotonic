@@ -70,35 +70,38 @@ start_link(SiteProps) ->
 %% @spec url_for(atom(), Context) -> iolist()
 %% @doc Construct an uri from a named dispatch, assuming no parameters. Use html escape.
 url_for(Name, #context{dispatcher=Dispatcher} = Context) ->
+    Name1 = maybe_map_name(Name, Context),
     return_url(
         opt_abs_url(
-            rewrite(gen_server:call(Dispatcher, {'url_for', Name, [], html}),
+            rewrite(gen_server:call(Dispatcher, {'url_for', Name1, [], html}),
                     Name, [], Context),
-            Name, [], Context)).
+            Name1, [], Context)).
 
 
 %% @spec url_for(atom(), Args, Context) -> iolist()
 %%    Args = proplist()
 %% @doc Construct an uri from a named dispatch and the parameters. Use html escape.
 url_for(Name, Args, #context{dispatcher=Dispatcher} = Context) ->
+    Name1 = maybe_map_name(Name, Context),
     Args1 = append_extra_args(Args, Context),
     return_url(
         opt_abs_url(
-            rewrite(gen_server:call(Dispatcher, {'url_for', Name, Args1, html}),
-                    Name, Args1, Context),
-            Name, Args1, Context)).
+            rewrite(gen_server:call(Dispatcher, {'url_for', Name1, Args1, html}),
+                    Name1, Args1, Context),
+            Name1, Args1, Context)).
 
 
 %% @spec url_for(atom(), Args, atom(), Context) -> iolist()
 %%        Args = proplist()
 %% @doc Construct an uri from a named dispatch and the parameters
 url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
+    Name1 = maybe_map_name(Name, Context),
     Args1 = append_extra_args(Args, Context),
     return_url(
         opt_abs_url(
-            rewrite(gen_server:call(Dispatcher, {'url_for', Name, Args1, Escape}),
+            rewrite(gen_server:call(Dispatcher, {'url_for', Name1, Args1, Escape}),
                     Name, Args1, Context),
-            Name, Args1, Context)).
+            Name1, Args1, Context)).
 
 
 %% @doc Fetch the preferred hostname for this site
@@ -157,6 +160,11 @@ reload(module_ready, Context) ->
 %%====================================================================
 %% Support routines, called outside the gen_server
 %%====================================================================
+
+maybe_map_name(zotonic_dispatch, Context) ->
+    z_context:get(zotonic_dispatch, Context);
+maybe_map_name(Name, _Context) ->
+    Name.
 
 %% @doc rewrite generated uris
 rewrite(#dispatch_url{url=undefined} = D, _Dispatch, _Args, _Context) ->
