@@ -26,13 +26,33 @@ without_embedded_media(undefined, _Id, _Context) ->
     undefined;
 without_embedded_media(Input, Id, Context) ->
     case erlydtl_runtime:to_list(Input, Context) of
-        [] -> [];
-        Ids ->
-            Body = z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(Id, body, Context), Context)),
-            case re:run(Body, "\<\!-- z-media ([0-9]+) ", [global, {capture, all_but_first, list}]) of
-                nomatch -> Ids;
-                {match, L} ->
-                    S = [z_convert:to_integer(I) || [I] <- L],
-                    lists:filter(fun(I) -> not(lists:member(I, S)) end, Ids)
-            end
+        [] ->
+            [];
+        InputIds ->
+            BodyIds = text_ids(m_rsc:p(Id, body, Context), Context),
+            BlockIds = block_ids(m_rsc:p(Id, blocks, Context), Context),
+            AllIds = lists:flatten([ BodyIds, BlockIds ]),
+            InputIds -- AllIds
     end.
+
+block_ids(undefined, _Context) ->
+    [];
+block_ids(Bs, Context) when is_list(Bs) ->
+    lists:map(
+        fun(B) ->
+            text_ids(proplists:get_value(body, B), Context)
+        end,
+        Bs).
+
+text_ids({trans, _} = Tr, Context) ->
+    text_ids(z_trans:lookup_fallback(Tr, Context), Context);
+text_ids(Text, _Context) when is_binary(Text) ->
+    case re:run(Text, <<"\<\!-- z-media ([0-9]+) ">>, [global, {capture, all_but_first, binary}]) of
+        nomatch ->
+            [];
+        {match, L} ->
+            [ binary_to_integer(I) || [I] <- L ]
+    end;
+text_ids(undefined, _Context) ->
+    [].
+
