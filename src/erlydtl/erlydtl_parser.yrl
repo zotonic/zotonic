@@ -420,7 +420,7 @@ ImageUrlTag -> open_tag image_url_keyword Value Args close_tag : {image_url, '$3
 
 MediaTag -> open_tag media_keyword E Args close_tag : {media, '$3', '$4' }.
 
-UrlTag -> open_tag url_keyword identifier Args close_tag : {url, '$3', '$4'}.
+UrlTag -> open_tag url_keyword E Args close_tag : {url, '$3', '$4'}.
 
 PrintTag -> open_tag print_keyword E close_tag : {print, '$3'}.
 

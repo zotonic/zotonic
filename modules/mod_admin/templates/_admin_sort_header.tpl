@@ -58,7 +58,7 @@
                 as
                 next_modifier_param_char
             %}
-                <a href="{% url zotonic_dispatch
+                <a href="{% url zotonic_dispatch|as_atom
                                     qsort=next_modifier_param_char++field
                                     qcustompivot=custompivot|default:q.qcustompivot|urlencode
                                     qcat=q.qcat

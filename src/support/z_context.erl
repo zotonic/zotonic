@@ -128,6 +128,9 @@
     set_noindex_header/1,
     set_noindex_header/2,
 
+    maybe_set_security_headers/1,
+    set_security_headers/1,
+
     set_cookie/3,
     set_cookie/4,
     get_cookie/2,
