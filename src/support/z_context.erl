@@ -183,7 +183,9 @@ new(ReqData) ->
                         wm_reqdata=ReqData,
                         ua_class=z_user_agent:get_class(ReqData)
                     }),
-    set_dispatch_from_path(set_default_language_tz(Context)).
+    set_security_headers(
+        set_dispatch_from_path(
+            set_default_language_tz(Context))).
 
 %% @doc Create a new context record for a host with a certain language.
 new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
@@ -197,9 +199,15 @@ new(ReqData, Module) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
     z_depcache:in_process(true),
-    Context = set_server_names(#context{wm_reqdata=ReqData, controller_module=Module, host=site(ReqData)}),
-    set_dispatch_from_path(
-        set_default_language_tz(Context)).
+    Context = set_server_names(
+                    #context{
+                        host=site(ReqData),
+                        wm_reqdata=ReqData,
+                        controller_module=Module
+                    }),
+    set_security_headers(
+        set_dispatch_from_path(
+            set_default_language_tz(Context))).
 
 
 set_default_language_tz(Context) ->
@@ -612,7 +620,7 @@ ensure_session(Context) ->
 maybe_logon_from_session(#context{user_id=undefined} = Context) ->
     Context1 = z_auth:logon_from_session(Context),
     Context2 = z_notifier:foldl(session_context, Context1, Context1),
-    set_security_headers( set_nocache_headers(Context2) );
+    set_nocache_headers(Context2);
 maybe_logon_from_session(Context) ->
     Context.
 
@@ -1139,7 +1147,6 @@ set_nocache_headers(Context = #context{ wm_reqdata = ReqData }) ->
             {"Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"},
             {"Expires", httpd_util:rfc1123_date({{2008,12,10}, {15,30,0}})},
             {"P3P", "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\""},
-            {"X-Content-Type-Options", "nosniff"},
             {"Pragma", "nocache"}
         ],
         ReqData),

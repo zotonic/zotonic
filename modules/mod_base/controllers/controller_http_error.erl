@@ -257,7 +257,7 @@ do_image(ReqData, Context0) ->
 set_headers(ReqData, Context) ->
     Context2 = ?WM_REQ(ReqData, Context),
     Context3 = z_context:set_noindex_header(Context2),
-    z_context:set_security_headers( z_context:set_nocache_headers(Context3) ).
+    z_context:set_nocache_headers(Context3).
 
 %% 1 pixel transparant gif
 trans_gif() ->
