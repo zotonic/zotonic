@@ -11,5 +11,5 @@
  {survey, ["survey", id],       controller_page, [ {template, "survey.tpl"} ]},
  {survey, ["survey", id, slug], controller_page, [ {template, "survey.tpl"} ]},
  
- {admin_survey_editor, ["admin", "survey", id], controller_admin, [{acl, {use, mod_survey}}, {template, "admin_survey_editor.tpl"}]}
+ {admin_survey_editor, ["admin", "survey", id], controller_admin, [{acl, {use, mod_survey}}, {template, "admin_survey_editor.tpl"}, seo_noindex]}
 ].

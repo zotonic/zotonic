@@ -944,8 +944,11 @@ set(Key, Value, Context) ->
 %% @doc Set the value of the context variables to all {Key, Value} properties.
 set(PropList, Context) when is_list(PropList) ->
     NewProps = lists:foldl(
-        fun ({Key,Value}, Props) ->
-            z_utils:prop_replace(Key, Value, Props)
+        fun
+            ({Key,Value}, Props) ->
+                z_utils:prop_replace(Key, Value, Props);
+            (Key, Props) when is_atom(Key) ->
+                z_utils:prop_replace(Key, true, Props)
         end, Context#context.props, PropList),
     Context#context{props = NewProps}.
 
@@ -1176,6 +1179,7 @@ set_noindex_header(Context) ->
 %% @doc Set the noindex header if the config is set, the webmachine resource opt is set or Force is set.
 -spec set_noindex_header(Force::term(), #context{}) -> #context{}.
 set_noindex_header(Force, Context) ->
+    ?DEBUG(x),
     case z_convert:to_bool(m_config:get_value(seo, noindex, Context))
          orelse get(seo_noindex, Context, false)
          orelse z_convert:to_bool(Force)

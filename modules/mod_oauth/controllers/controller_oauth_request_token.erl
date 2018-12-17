@@ -43,7 +43,8 @@ resource_exists(ReqData, _Context) ->
     Context  = z_context:new(ReqData, ?MODULE),
     z_context:lager_md(Context),
     Context1 = z_context:ensure_qs(Context),
-    {true, ReqData, Context1}.
+    Context2 = z_context:set_noindex_header(Context1),
+    {true, ReqData, Context2}.
 
 
 allowed_methods(ReqData, Context) ->
