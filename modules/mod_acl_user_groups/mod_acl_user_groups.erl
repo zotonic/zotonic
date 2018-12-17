@@ -32,6 +32,7 @@
 
 % API
 -export([
+    is_acl_admin/1,
     status/1,
     table/1,
     table/2,
@@ -79,6 +80,12 @@
             table_edit = [],
             table_publish = []
         }).
+
+
+%% @doc Check if the user is an administrator for the ACLs
+is_acl_admin(Context) ->
+    z_acl:is_allowed(use, mod_acl_user_groups, Context)
+    andalso z_acl:is_allowed(insert, acl_user_group, Context).
 
 
 event(#submit{message={delete_move, Args}}, Context) ->

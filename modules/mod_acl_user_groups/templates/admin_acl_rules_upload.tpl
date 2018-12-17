@@ -22,7 +22,7 @@
     		<label>{_ Maximum upload size _}</label>
     	</div>
     	<div class="col-md-7">
-    		<label>{_ Mime types allowed, separate with ',' — type 'none' if nothing allowed _}</label>
+    		<label>{_ Mime types allowed, separate with ',' — type 'none' if no extra mime types allowed _}</label>
     	</div>
     </div>
 
@@ -65,10 +65,10 @@
 		    {% endfor %}
 
 		    <div class="row">
-		    	<div class="col-md-2">
+		    	<div class="col-md-5">
 		    	</div>
 
-		    	<div class="col-md-8">
+		    	<div class="col-md-7">
 		    		<button type="submit" class="btn btn-primary">{_ Save Upload Permissions _}</button>
 		    		<button class="btn btn-default" id="{{ #cancel }}">{_ Cancel _}</button>
 		    		{% wire id=#cancel action={reload} %}

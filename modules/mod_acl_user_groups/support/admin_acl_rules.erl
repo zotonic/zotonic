@@ -51,9 +51,7 @@ event(Msg, Context) ->
 
 
 event_admin(Msg, Context) ->
-    case      z_acl:is_allowed(use, mod_acl_user_groups, Context)
-      andalso z_acl:is_allowed(insert, acl_user_group, Context)
-    of
+    case mod_acl_user_groups:is_acl_admin(Context) of
         true ->
             event1(Msg, Context);
         false ->

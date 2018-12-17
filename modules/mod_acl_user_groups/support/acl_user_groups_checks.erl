@@ -263,11 +263,21 @@ acl_rsc_update_check(#acl_rsc_update_check{id=Id}, Props, Context) when is_integ
         true ->
             Props1 = proplists:delete(category_id, Props),
             Props2 = proplists:delete(content_group_id, Props1),
-            [{category_id, CatId}, {content_group_id, CGId} | Props2];
+            maybe_filter_acl_props([{category_id, CatId}, {content_group_id, CGId} | Props2], Context);
         false ->
             lager:debug("[acl_user_group] denied user ~p insert/update on ~p of category ~p in content-group ~p",
                         [z_acl:user(Context), Id, CatId, CGId]),
             {error, eacces}
+    end.
+
+%% @doc Filter upload permissions from the user-group. Only "acl admins" are allowed to change these.
+maybe_filter_acl_props(Props, Context) ->
+    case mod_acl_user_groups:is_acl_admin(Context) of
+        true ->
+            Props;
+        false ->
+            Props1 = proplists:delete(acl_upload_size, Props),
+            proplists:delete(acl_mime_allowed, Props1)
     end.
 
 acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{acl=admin}) ->
