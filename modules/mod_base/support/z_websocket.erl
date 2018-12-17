@@ -48,7 +48,7 @@ websocket_init(_ReqData, #context{}=Context) ->
     ok = H:websocket_init(Context),
     {ok, [], Context}.
 
-websocket_handle(_ReqData, {text, Msg}, #context{}=Context) ->
+websocket_handle(_ReqData, {DT, Msg}, #context{}=Context) when DT =:= text orelse DT =:= binary ->
     H = z_context:get(ws_handler, Context),
     z_depcache:in_process(true),
     case H:websocket_message(Msg, self(), Context) of

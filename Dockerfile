@@ -1,4 +1,4 @@
-FROM zotonic/erlang:18.3
+FROM zotonic/erlang:19.3
 
 ADD . /opt/zotonic
 WORKDIR /opt/zotonic

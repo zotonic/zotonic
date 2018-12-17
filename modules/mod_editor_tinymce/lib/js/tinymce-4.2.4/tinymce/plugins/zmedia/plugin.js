@@ -225,7 +225,7 @@ tinymce.PluginManager.requireLangPack('zmedia');
         },
 
         _MediaHtmlToMarkers: function (html) {
-            var re = new RegExp("<img.*?/>", "g"),
+            var re = new RegExp("<img .*?data-zmedia-.*?/>", "g"),
                 m,
                 img,
                 idmatch,
@@ -241,12 +241,12 @@ tinymce.PluginManager.requireLangPack('zmedia');
                 img = m[0];
                 idmatch = (new RegExp('data-zmedia-id="([0-9]+)', "g")).exec(img);
                 if (!idmatch) {
-                    return html;
+                    break;
                 }
                 id = idmatch[1];
                 optsmatch = (new RegExp('data-zmedia-opts="(\\{.*?\\})"', "g")).exec(img);
                 if (!optsmatch) {
-                    return html;
+                    break;
                 }
                 opts = JSON.parse(optsmatch[1].replace(/&quot;/g, '"'));
                 newtag = this._zMediaMarker(id, opts);
