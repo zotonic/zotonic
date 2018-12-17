@@ -327,17 +327,18 @@ do_link_unlink(_IsUnlink, _SubjectId, Predicate, ObjectId, Callback, Context)
             {title, z_trans:lookup_fallback(Title, Context)}
            ],
     case Callback of
-        undefined ->
-            {ok, Context};
+        undefined -> {ok, Context};
+        "" -> {ok, Context};
+        <<>> -> {ok, Context};
         {CB, Args} ->
             {ok, z_render:wire({script, [{script, [
-                    z_convert:to_binary(CB), $(,
+                    z_sanitize:ensure_safe_js_callback(CB), $(,
                         z_utils:js_object(Vars++Args,Context),
                     $),$;
                 ]}]}, Context)};
-        _ ->
+        CB ->
             {ok, z_render:wire({script, [{script, [
-                    z_convert:to_binary(Callback), $(,
+                    z_sanitize:ensure_safe_js_callback(CB), $(,
                         z_utils:js_object(Vars,Context),
                     $),$;
                 ]}]}, Context)}
@@ -403,8 +404,9 @@ do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId,
             Context
     end,
     case Callback of
-        undefined ->
-            {ok, Context1};
+        undefined -> {ok, Context1};
+        "" -> {ok, Context1};
+        <<>> -> {ok, Context1};
         _ ->
             Vars = [
                     {is_new, IsNew},
@@ -420,13 +422,13 @@ do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId,
             case Callback of
                     {CB, Args} ->
                         {ok, z_render:wire({script, [{script, [
-                                z_convert:to_binary(CB), $(,
+                                z_sanitize:ensure_safe_js_callback(CB), $(,
                                     z_utils:js_object(Vars++Args,ContextP),
                                 $),$;
                             ]}]}, Context1)};
-                    _ ->
+                    CB ->
                         {ok, z_render:wire({script, [{script, [
-                                z_convert:to_binary(Callback), $(,
+                                z_sanitize:ensure_safe_js_callback(CB), $(,
                                     z_utils:js_object(Vars,ContextP),
                                 $),$;
                             ]}]}, Context1)}
