@@ -1179,7 +1179,6 @@ set_noindex_header(Context) ->
 %% @doc Set the noindex header if the config is set, the webmachine resource opt is set or Force is set.
 -spec set_noindex_header(Force::term(), #context{}) -> #context{}.
 set_noindex_header(Force, Context) ->
-    ?DEBUG(x),
     case z_convert:to_bool(m_config:get_value(seo, noindex, Context))
          orelse get(seo_noindex, Context, false)
          orelse z_convert:to_bool(Force)
