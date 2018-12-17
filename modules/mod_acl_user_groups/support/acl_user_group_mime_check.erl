@@ -27,7 +27,7 @@
 mime_allowed_default(Context) ->
     case m_config:get_value(site, acl_mime_allowed, Context) of
         None when None =:= undefined; None =:= <<>>; None =:= "" ->
-            <<"image/*, application/pdf, msoffice, openoffice, text/plain">>;
+            <<"image/*, video/*, audio/*, embed, .pdf, .txt, msoffice, openoffice">>;
         Allowed ->
             z_convert:to_binary(Allowed)
     end.
@@ -38,6 +38,7 @@ is_acceptable(Mime, Context) when is_list(Mime) ->
     is_acceptable( list_to_binary(Mime), Context );
 is_acceptable(Mime, Context) when is_binary(Mime) ->
     [Type, Sub] = binary:split(Mime, <<"/">>),
+    Ext = z_convert:to_binary( z_media_identify:extension(Mime, undefined, Context) ),
     Ids = acl_user_groups_checks:user_groups_all(Context),
     Default = split(mime_allowed_default(Context)),
     lists:any(
@@ -49,21 +50,21 @@ is_acceptable(Mime, Context) when is_binary(Mime) ->
             end,
             lists:any(
                 fun(Allow) ->
-                    match(Type, Sub, Allow)
+                    match(Type, Sub, Ext, Allow)
                 end,
                 Allowed)
         end,
         Ids).
 
-match(_Type, _Sub, <<"none">>) -> false;
-match(_Type, _Sub, {<<"*">>, <<"*">>}) -> true;
-match(Type,  _Sub, {Type, <<"*">>}) -> true;
-match(Type,  Sub,  {Type, Sub}) -> true;
-match(Type,  Sub,  <<"msoffice">>) ->
-    match_msoffice(Type, Sub);
-match(Type,  Sub,  <<"openoffice">>) ->
-    match_openoffice(Type, Sub);
-match(_Type, _Sub, _) ->
+match(_Type, _Sub, _Ext, <<"none">>) -> false;
+match(_Type, _Sub, Ext, <<".", _/binary>> = Ext) -> true;
+match(_Type, _Sub, _Ext, {<<"*">>, <<"*">>}) -> true;
+match(Type,  _Sub, _Ext, {Type, <<"*">>}) -> true;
+match(Type,  Sub,  _Ext, {Type, Sub}) -> true;
+match(Type,  Sub,  _Ext, <<"msoffice">>) -> match_msoffice(Type, Sub);
+match(Type,  Sub,  _Ext, <<"openoffice">>) -> match_openoffice(Type, Sub);
+match(Type,  Sub,  _Ext, <<"embed">>) -> match_embed(Type, Sub);
+match(_Type, _Sub, _Ext, _) ->
     false.
 
 match_msoffice(<<"application">>, <<"msword">>) -> true;
@@ -78,6 +79,9 @@ match_msoffice(_, _) -> false.
 match_openoffice(<<"application">>, <<"vnd.oasis.opendocument.", _/binary>>) -> true;
 match_openoffice(_, _) -> false.
 
+match_embed(<<"text">>, <<"html-oembed">>) -> true;         % mod_oembed
+match_embed(<<"text">>, <<"html-video-embed">>) -> true;    % mod_video_embed
+match_embed(_, _) -> false.
 
 split(Allowed) ->
     All = binary:split(Allowed, <<",">>, [global]),

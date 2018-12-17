@@ -7,7 +7,9 @@
 			{_ The default upload size is: _} <strong>{{ m.acl_rule.default_upload_size|filesizeformat }}</strong>
 		</p>
 		<p>
-			{_ Mime types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor. _}
+			{_ File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor. _}<br>
+            {_ Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of: _}
+            <tt>msoffice</tt>, <tt>openoffice</tt>, <tt>embed</tt>
 		</p>
 		<p>
 			<strong>{_ These settings come into effect immediately, no publish of rules is needed, _}</strong>
@@ -22,7 +24,7 @@
     		<label>{_ Maximum upload size _}</label>
     	</div>
     	<div class="col-md-7">
-    		<label>{_ Mime types allowed, separate with ',' — type 'none' if no extra mime types allowed _}</label>
+    		<label>{_ Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default _}</label>
     	</div>
     </div>
 
@@ -41,17 +43,19 @@
 				    		<input type="hidden" name="id" value="{{ id }}">
 				    	</div>
 				    	<div class="col-md-3">
+                            {% with id.acl_upload_size|default:m.acl_rule.default_upload_size as sz %}
 				    		<select "form-control" name="size-{{ id }}" id="{{ #size.id }}">
-				    			<option value="0"></option>
-				    			<option value="1" {% if id.acl_upload_size == 1 %}selected{% endif %}>1 MB</option>
-				    			<option value="10" {% if id.acl_upload_size == 10 %}selected{% endif %}>10 MB</option>
-				    			<option value="20" {% if id.acl_upload_size == 20 %}selected{% endif %}>20 MB</option>
-				    			<option value="50" {% if id.acl_upload_size == 50 %}selected{% endif %}>50 MB</option>
-				    			<option value="100" {% if id.acl_upload_size == 100 %}selected{% endif %}>100 MB</option>
-				    			<option value="200" {% if id.acl_upload_size == 200 %}selected{% endif %}>200 MB</option>
-				    			<option value="500" {% if id.acl_upload_size == 500 %}selected{% endif %}>500 MB</option>
-				    			<option value="1024" {% if id.acl_upload_size == 1024 %}selected{% endif %}>1 GB</option>
+				    			<option value="0">0</option>
+				    			<option value="1" {% if sz == 1 %}selected{% endif %}>1 MB</option>
+				    			<option value="10" {% if sz == 10 %}selected{% endif %}>10 MB</option>
+				    			<option value="20" {% if sz == 20 %}selected{% endif %}>20 MB</option>
+				    			<option value="50" {% if sz == 50 %}selected{% endif %}>50 MB</option>
+				    			<option value="100" {% if sz == 100 %}selected{% endif %}>100 MB</option>
+				    			<option value="200" {% if sz == 200 %}selected{% endif %}>200 MB</option>
+				    			<option value="500" {% if sz == 500 %}selected{% endif %}>500 MB</option>
+				    			<option value="1024" {% if sz == 1024 %}selected{% endif %}>1 GB</option>
 				    		</select>
+                            {% endwith %}
 				    	</div>
 				    	<div class="col-md-7">
 				    		<textarea class="form-control"
