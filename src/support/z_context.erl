@@ -1163,9 +1163,9 @@ set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
                 {"X-Content-Type-Options", "nosniff"},
                 {"X-Permitted-Cross-Domain-Policies", "none"},
                 {"Referrer-Policy", "origin-when-cross-origin"} ],
-    Default1 = case z_context:get(allow_frame, Context) of
+    Default1 = case z_context:get(allow_frame, Context, false) of
         true -> Default;
-        _ -> [ {"X-Frame-Options", "sameorigin"} | Default ]
+        false -> [ {"X-Frame-Options", "sameorigin"} | Default ]
     end,
     SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
         undefined -> Default;
