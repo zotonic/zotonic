@@ -1159,12 +1159,15 @@ set_nocache_headers(Context = #context{ wm_reqdata = ReqData }) ->
 %%      'security_headers' notification.
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
-    Default = [ {"X-Frame-Options", "sameorigin"},
-                {"X-Xss-Protection", "1"},
+    Default = [ {"X-Xss-Protection", "1"},
                 {"X-Content-Type-Options", "nosniff"},
                 {"X-Permitted-Cross-Domain-Policies", "none"},
                 {"Referrer-Policy", "origin-when-cross-origin"} ],
-    SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default }, Context) of
+    Default1 = case z_context:get(allow_frame, Context) of
+        true -> Default;
+        _ -> [ {"X-Frame-Options", "sameorigin"} | Default ]
+    end,
+    SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
         undefined -> Default;
         Custom -> Custom
     end,
