@@ -520,6 +520,7 @@ get_session_cookie_name(Context) ->
 -spec set_session_cookie( string(), #context{} ) -> #context{}.
 set_session_cookie(SessionId, Context) ->
     Options = [{path, "/"},
+               {same_site, lax},
                {http_only, true}],
     Options1 = case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
         <<"https">> -> [ {secure, true} | Options ];
@@ -537,6 +538,7 @@ set_session_cookie(SessionId, Context) ->
 clear_session_cookie(Context) ->
     Options = [{max_age, 0},
                {path, "/"},
+               {same_site, lax},
                {http_only, true}],
     Context1 = z_context:set_cookie(get_session_cookie_name(Context), "", Options, Context),
     Context1#context{session_id=undefined, session_pid=undefined}.
