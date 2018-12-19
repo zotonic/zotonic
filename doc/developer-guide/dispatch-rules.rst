@@ -224,6 +224,20 @@ directives for each host. See :ref:`guide-site-anatomy` for more
 details on this.
 
 
+Dispatch rule options
+.....................
+
+There is one dispatch rule option that is valid for all dispatch rules: ``allow_frame``
+
+Normally pages are not allowed to be displayed inside a frame on another domain than
+the domain of served frame.
+
+This is done by setting the HTTP header: ``X-Frame-Options: sameorigin``
+
+If this option is given then the ``X-Frame-Options`` header is omitted and the dispatch
+rule is allowed to be displayed inside a frame on any website.
+
+
 Unmatched hosts/domains
 -----------------------
 
