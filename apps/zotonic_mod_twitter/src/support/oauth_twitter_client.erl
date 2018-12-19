@@ -74,7 +74,7 @@ handle_result({ok, {{_, 200, _}, _Headers, Body}}) ->
 handle_result({ok, {{_, 401, _}, _Headers, _Body}}) ->
     {error, unauthorized};
 handle_result({ok, {{_, 404, _}, _Headers, _Body}}) ->
-    {error, notfound};
+    {error, not_found};
 handle_result({ok, {{_, 420, _}, _Headers, _Body}}) ->
     {error, connection_limit};
 handle_result({ok, {{_, 429, _}, _Headers, _Body}}) ->

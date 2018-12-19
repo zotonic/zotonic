@@ -69,42 +69,51 @@ twitter1_url(Pre, Input, Index, Opts, Context) ->
             Input
     end.
 
-    twitter1_url_anchor(Pre, <<>>, Post, Opts, Context) ->
+twitter1_url_anchor(Pre, <<>>, Post, Opts, Context) ->
         [Pre, twitter1(Post, 0, Opts, Context)];
-    twitter1_url_anchor(Pre, Url, Post, Opts, Context) ->
-        Length1 = size(Url) - 1,
-        <<Url1:Length1/binary,LastChar>> = Url,
-        Html = case is_url_truncatable(LastChar) of
-                  true -> [ twitter1_url_html(Pre, Url1, Opts), LastChar];
-                  false -> twitter1_url_html(Pre, Url, Opts)
-               end,
-        [Html, twitter1(Post, 0, Opts, Context)].
+twitter1_url_anchor(Pre, Url, Post, Opts, Context) ->
+    Length1 = size(Url) - 1,
+    <<Url1:Length1/binary,LastChar>> = Url,
+    Html = case is_url_truncatable(LastChar) of
+              true -> [ twitter1_url_html(Pre, Url1, Opts), LastChar];
+              false -> twitter1_url_html(Pre, Url, Opts)
+           end,
+    [Html, twitter1(Post, 0, Opts, Context)].
 
 
-    % Create the html link, follow the url to remove any url shortener.
-    twitter1_url_html(Pre, Url, Opts) ->
-        case proplists:get_value(url_location, Opts, false) of
-            true ->
-                Url2 = z_url:location(<<Pre/binary,Url/binary>>),
-                Text = z_string:truncate(z_url:remove_protocol(Url2), ?URL_TRUNCATE),
-                ["<a href=\"", Url2, "\">", Text, "</a>"];
-            false ->
-                ["<a href=\"", Pre, Url, "\">", Url, "</a>"]
-        end.
+% Create the html link, follow the url to remove any url shortener.
+twitter1_url_html(Pre, Url, Opts) ->
+    case proplists:get_value(url_location, Opts, false) of
+        true ->
+            DropUrls = proplists:get_value(drop_urls, Opts, []),
+            case lists:member(Url, DropUrls)
+                orelse lists:member(<<"https://", Url/binary>>, DropUrls)
+                orelse lists:member(<<"http://", Url/binary>>, DropUrls)
+            of
+                true ->
+                    [];
+                false ->
+                    Url2 = z_url:location(<<Pre/binary,Url/binary>>),
+                    Text = z_string:truncate(z_url:remove_protocol(Url2), ?URL_TRUNCATE),
+                    ["<a href=\"", Url2, "\">", Text, "</a>"]
+            end;
+        false ->
+            ["<a href=\"", Pre, Url, "\">", Url, "</a>"]
+    end.
 
 
-    is_url_truncatable($.) -> true;
-    is_url_truncatable($;) -> true;
-    is_url_truncatable($#) -> true;
-    is_url_truncatable($,) -> true;
-    is_url_truncatable($') -> true;
-    is_url_truncatable($") -> true;
-    is_url_truncatable($?) -> true;
-    is_url_truncatable($!) -> true;
-    is_url_truncatable($/) -> true;
-    is_url_truncatable($+) -> true;
-    is_url_truncatable($%) -> true;
-    is_url_truncatable(_) -> false.
+is_url_truncatable($.) -> true;
+is_url_truncatable($;) -> true;
+is_url_truncatable($#) -> true;
+is_url_truncatable($,) -> true;
+is_url_truncatable($') -> true;
+is_url_truncatable($") -> true;
+is_url_truncatable($?) -> true;
+is_url_truncatable($!) -> true;
+is_url_truncatable($/) -> true;
+is_url_truncatable($+) -> true;
+is_url_truncatable($%) -> true;
+is_url_truncatable(_) -> false.
 
 
 twitter1_at(Input, Index, Opts, Context) ->
