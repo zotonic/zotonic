@@ -28,7 +28,7 @@
 init_session(Context) ->
     Context1 = z_context:ensure_all(Context),
     z_context:lager_md(Context1),
-    Context1.
+    z_context:set_noindex_header(Context1).
 
 is_authorized(DefaultMod, ReqData, Context) ->
     ReqData1 = wrq:set_resp_header("X-Frame-Options", "SAMEORIGIN", ReqData),

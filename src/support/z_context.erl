@@ -128,6 +128,8 @@
     set_noindex_header/1,
     set_noindex_header/2,
 
+    set_security_headers/1,
+
     set_cookie/3,
     set_cookie/4,
     get_cookie/2,
@@ -181,7 +183,9 @@ new(ReqData) ->
                         wm_reqdata=ReqData,
                         ua_class=z_user_agent:get_class(ReqData)
                     }),
-    set_dispatch_from_path(set_default_language_tz(Context)).
+    set_security_headers(
+        set_dispatch_from_path(
+            set_default_language_tz(Context))).
 
 %% @doc Create a new context record for a host with a certain language.
 new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
@@ -195,9 +199,15 @@ new(ReqData, Module) ->
     %% This is the requesting thread, enable simple memo functionality.
     z_memo:enable(),
     z_depcache:in_process(true),
-    Context = set_server_names(#context{wm_reqdata=ReqData, controller_module=Module, host=site(ReqData)}),
-    set_dispatch_from_path(
-        set_default_language_tz(Context)).
+    Context = set_server_names(
+                    #context{
+                        host=site(ReqData),
+                        wm_reqdata=ReqData,
+                        controller_module=Module
+                    }),
+    set_security_headers(
+        set_dispatch_from_path(
+            set_default_language_tz(Context))).
 
 
 set_default_language_tz(Context) ->
@@ -934,8 +944,11 @@ set(Key, Value, Context) ->
 %% @doc Set the value of the context variables to all {Key, Value} properties.
 set(PropList, Context) when is_list(PropList) ->
     NewProps = lists:foldl(
-        fun ({Key,Value}, Props) ->
-            z_utils:prop_replace(Key, Value, Props)
+        fun
+            ({Key,Value}, Props) ->
+                z_utils:prop_replace(Key, Value, Props);
+            (Key, Props) when is_atom(Key) ->
+                z_utils:prop_replace(Key, true, Props)
         end, Context#context.props, PropList),
     Context#context{props = NewProps}.
 
@@ -1131,13 +1144,35 @@ parse_post_body(Context) ->
 %% the content generated has a session. You can prevent addition of
 %% these headers by not calling z_context:ensure_session/1, or
 %% z_context:ensure_all/1.
-%% @spec set_nocache_headers(#context{}) -> #context{}
-set_nocache_headers(Context = #context{wm_reqdata=ReqData}) ->
-    RD1 = wrq:set_resp_header("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0", ReqData),
-    RD2 = wrq:set_resp_header("Expires", httpd_util:rfc1123_date({{2008,12,10}, {15,30,0}}), RD1),
-    % This let IE6 accept our cookies, basically we tell IE6 that our cookies do not contain any private data.
-    RD3 = wrq:set_resp_header("P3P", "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", RD2),
-    Context#context{wm_reqdata=RD3}.
+-spec set_nocache_headers( z:context() ) -> z:context().
+set_nocache_headers(Context = #context{ wm_reqdata = ReqData }) ->
+    RD1 = wrq:set_resp_headers([
+            {"Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"},
+            {"Expires", httpd_util:rfc1123_date({{2008,12,10}, {15,30,0}})},
+            {"P3P", "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\""},
+            {"Pragma", "nocache"}
+        ],
+        ReqData),
+    Context#context{ wm_reqdata = RD1 }.
+
+%% @doc Set security related headers. This can be modified by observing the
+%%      'security_headers' notification.
+-spec set_security_headers( z:context() ) -> z:context().
+set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
+    Default = [ {"X-Xss-Protection", "1"},
+                {"X-Content-Type-Options", "nosniff"},
+                {"X-Permitted-Cross-Domain-Policies", "none"},
+                {"Referrer-Policy", "origin-when-cross-origin"} ],
+    Default1 = case z_context:get(allow_frame, Context, false) of
+        true -> Default;
+        false -> [ {"X-Frame-Options", "sameorigin"} | Default ]
+    end,
+    SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
+        undefined -> Default;
+        Custom -> Custom
+    end,
+    RD1 = wrq:set_resp_headers(SecurityHeaders, ReqData),
+    Context#context{ wm_reqdata = RD1 }.
 
 %% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
 -spec set_noindex_header(#context{}) -> #context{}.

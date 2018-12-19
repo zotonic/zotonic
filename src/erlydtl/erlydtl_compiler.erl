@@ -443,8 +443,8 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
                 image_ast(Variable, Args, Context, TreeWalkerAcc);
             ({'image_url', Variable, Args}, TreeWalkerAcc) ->
                 image_url_ast(Variable, Args, Context, TreeWalkerAcc);
-            ({'url', {'identifier', _, Name}, Args}, TreeWalkerAcc) ->
-                url_ast(Name, Args, Context, TreeWalkerAcc);
+            ({'url', Value, Args}, TreeWalkerAcc) ->
+                url_ast(Value, Args, Context, TreeWalkerAcc);
             ({'print', Value}, TreeWalkerAcc) ->
                 print_ast(Value, Context, TreeWalkerAcc);
             ({'lib', LibList, Args}, TreeWalkerAcc) ->
@@ -1521,13 +1521,24 @@ image_url_ast(FilenameValue, Args, Context, TreeWalker) ->
 
 
 %% Added by Marc Worrell - handle url generation using the url patterns
-url_ast(Name, Args, Context, TreeWalker) ->
-    % Check if the 'escape' argument is there
+url_ast({variable, {identifier, _, Ident}}, Args, Context, TreeWalker) ->
     {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
     AppAst = erl_syntax:application(
                 erl_syntax:atom(z_dispatcher),
                 erl_syntax:atom(url_for),
-                [   erl_syntax:atom(Name),
+                [   erl_syntax:atom(Ident),
+                    ArgsAst,
+                    z_context_ast(Context)
+                ]
+            ),
+    {{AppAst, #ast_info{}}, TreeWalker1};
+url_ast(Value, Args, Context, TreeWalker) ->
+    ValueAst = resolve_value_ast(Value, Context, TreeWalker),
+    {ArgsAst, TreeWalker1} = scomp_ast_list_args(Args, Context, TreeWalker),
+    AppAst = erl_syntax:application(
+                erl_syntax:atom(z_dispatcher),
+                erl_syntax:atom(url_for),
+                [   ValueAst,
                     ArgsAst,
                     z_context_ast(Context)
                 ]

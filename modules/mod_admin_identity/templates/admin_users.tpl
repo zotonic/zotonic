@@ -35,7 +35,7 @@
 
             <form method="GET" action="{% url admin_users %}">
                 <label style="font-weight: normal; margin: 0; margin: 0 0 20px 0">
-                    <input type="hidden" name="qs" value="{{ q.qs }}" />
+                    <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
                     <input type="checkbox" name="persons" value="1" {% if q.persons %}checked="checked"{% endif %}
                         onchange="this.form.submit()" />
                     {_ Also show persons without user account _}

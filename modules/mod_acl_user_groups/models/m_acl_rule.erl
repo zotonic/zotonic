@@ -65,6 +65,8 @@ m_find_value(generate_code, #m{value=undefined}, Context) ->
 
 m_find_value(default_upload_size, #m{value=undefined}, _Context) ->
     acl_user_groups_checks:max_upload_size_default();
+m_find_value(default_mime_allowed, #m{value=undefined}, Context) ->
+    acl_user_group_mime_check:mime_allowed_default(Context);
 m_find_value(upload_size, #m{value=undefined}, Context) ->
     acl_user_groups_checks:max_upload_size(Context);
 

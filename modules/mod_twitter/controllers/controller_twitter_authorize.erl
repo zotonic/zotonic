@@ -35,7 +35,8 @@ service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context1 = z_context:set(DispatchArgs, Context),
     Context2 = z_context:ensure_all(Context1),
     z_context:lager_md(Context2),
-    ?WM_REPLY(true, Context2).
+    Context3 = z_context:set_noindex_header(Context2),
+    ?WM_REPLY(true, Context3).
 
 charsets_provided(ReqData, Context) ->
     {[{"utf-8", fun(X) -> X end}], ReqData, Context}.

@@ -215,8 +215,7 @@ init_ua_classifier() ->
 %%      NOTE: This part has been removed from webmachine_mochiweb:start/2 to avoid
 %%      messing with application parameters when starting up a new wm-mochiweb process.
 init_webmachine() ->
-    ServerHeader = webmachine_request:server_header() ++ " Zotonic/" ++ ?ZOTONIC_VERSION,
-    application:set_env(webzmachine, server_header, ServerHeader),
+    application:set_env(webzmachine, server_header, "Zotonic"),
     set_webzmachine_default(webmachine_logger_module, z_stats),
     set_webzmachine_default(error_handler, controller),
     webmachine_sup:start_logger().

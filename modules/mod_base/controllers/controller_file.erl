@@ -54,14 +54,15 @@ service_available(ReqData, ConfigProps) ->
                     z_context:set(ConfigProps,
                         z_context:new(ReqData, ?MODULE))),
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
+    ReqData1 = z_context:get_reqdata(Context1),
     z_context:lager_md(Context1),
     case get_file_info(ConfigProps, Context1) of
         {ok, Info} ->
-            {true, ReqData, {Info, Context1}};
+            {true, ReqData1, {Info, Context1}};
         {error, enoent} = Error ->
-            {true, ReqData, {Error, Context1}};
+            {true, ReqData1, {Error, Context1}};
         {error, _} = Error ->
-            {false, ReqData, {Error, Context1}}
+            {false, ReqData1, {Error, Context1}}
     end.
 
 allowed_methods(ReqData, State) ->
