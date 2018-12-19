@@ -28,6 +28,8 @@
          rsc_deletable/2,
          rsc_linkable/2,
 
+         rsc_update_check/3,
+
          cache_key/1,
 
          user/1,
@@ -218,6 +220,9 @@ rsc_linkable(RscName, Context) ->
         RscId -> is_allowed(link, RscId, Context)
     end.
 
+%% @doc Filter the properties of an update.  This is before any escaping.
+rsc_update_check(Id, Props, Context) ->
+    z_notifier:foldl(#acl_rsc_update_check{id=Id}, Props, Context).
 
 %% @doc Return a term that can be used as the ACL part of cache key.
 -spec cache_key( z:context() ) -> { m_rsc:resource_id() | undefined, any()}.

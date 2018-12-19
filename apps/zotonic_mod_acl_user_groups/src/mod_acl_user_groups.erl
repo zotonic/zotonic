@@ -32,6 +32,7 @@
 
 % API
 -export([
+    is_acl_admin/1,
     status/1,
     table/1,
     table/2,
@@ -61,6 +62,7 @@
     observe_acl_logon/2,
     observe_acl_logoff/2,
     observe_acl_context_authenticated/2,
+    observe_acl_rsc_update_check/3,
     observe_acl_add_sql_check/2,
 
     observe_hierarchy_updated/2
@@ -81,6 +83,12 @@
             table_edit = [],
             table_publish = []
         }).
+
+
+%% @doc Check if the user is an administrator for the ACLs
+is_acl_admin(Context) ->
+    z_acl:is_allowed(use, mod_acl_user_groups, Context)
+    andalso z_acl:is_allowed(insert, acl_user_group, Context).
 
 
 event(#submit{message={delete_move, Args}}, Context) ->
@@ -248,6 +256,9 @@ observe_acl_logoff(AclLogoff, Context) ->
 
 observe_acl_context_authenticated(_AclAuthenticated, Context) ->
     acl_user_groups_checks:acl_context_authenticated(Context).
+
+observe_acl_rsc_update_check(AclRscUpdateCheck, Props, Context) ->
+    acl_user_groups_checks:acl_rsc_update_check(AclRscUpdateCheck, Props, Context).
 
 observe_acl_add_sql_check(AclAddSQLCheck, Context) ->
     acl_user_groups_checks:acl_add_sql_check(AclAddSQLCheck, Context).
