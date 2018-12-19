@@ -28,7 +28,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
     SearchName = Result#m_search_result.search_name,
     SearchResult = Result#m_search_result.result,
     PageLen = pagelen(SearchResult, Result#m_search_result.search_props),
-    case total(SearchResult) < PageLen of
+    case total(SearchResult) =< PageLen of
         true ->
             {"", z_script:add_script(["$(\"#", TriggerId, "\").remove();"], Context)};
         false ->
