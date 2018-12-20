@@ -252,7 +252,7 @@ extract_coordinates(Tweet) ->
         null ->
             {undefined, undefined};
         {Coordinates} ->
-            case proplists:get_value(type, Coordinates) of
+            case proplists:get_value(<<"type">>, Coordinates) of
                 <<"Point">> ->
                     [Longitude, Latitude] = proplists:get_value(<<"coordinates">>, Coordinates),
                     {Longitude, Latitude};
