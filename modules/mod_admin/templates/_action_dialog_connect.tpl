@@ -1,5 +1,5 @@
 {% with callback|default:q.callback|default:"window.zAdminConnectDone" as callback %}
-{% with language|default:q.language|default:z_language as language %}
+{% with language|default:(q.language|escape)|default:z_language as language %}
 {% with actions|default:[] as actions %}
 {% with stay or callback or subject_id as stay %}
 {% with tabs_enabled|default:(m.config.mod_admin.rsc_dialog_tabs.value|split:",") as tabs_enabled %}
