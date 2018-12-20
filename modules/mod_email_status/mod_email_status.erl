@@ -22,7 +22,7 @@
 -mod_title("Email Status").
 -mod_description("Track bounce and receive status of email recipients.").
 -mod_prio(10).
--mod_schema(2).
+-mod_schema(3).
 
 -export([
     event/2,

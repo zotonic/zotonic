@@ -446,7 +446,8 @@ install(Context) ->
             case lists:member(recent_error_ct, Names) of
                 false ->
                     z_db:q("alter table email_status
-                            add column recent_error_ct integer not null default 0",
+                            add column recent_error_ct integer not null default 0,
+                            add column recent_error timestamp with time zone",
                            Context),
                     z_db:flush(Context),
                     ok;
