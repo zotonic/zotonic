@@ -21,6 +21,8 @@
 
 -behaviour(gen_server).
 
+-include_lib("zotonic.hrl").
+
 -record(state, {
         topic,
         qos,
@@ -37,8 +39,7 @@ start_link({_Topic, _Qos, _MFA, _Pid, _Site} = Args) ->
 
 
 init({Topic, Qos, MFA, Pid, Site}) ->
-    erlang:process_flag(trap_exit, true),
-    maybe_link(Pid),
+    maybe_monitor(Pid),
     ok = emqtt_router:subscribe({Topic,Qos}, self()),
     {ok, #state{
         topic=Topic,
@@ -65,20 +66,25 @@ handle_info({route, Message}, State) ->
             _ = M:F(Message, A, z_context:new(State#state.site))
     end,
     {noreply, State};
-handle_info({'EXIT', _From, _Reason}, State) ->
+handle_info({'DOWN', _MRef, _Type, _Pid, _Info}, State) ->
     %% The module for which we handle the mqtt subscription has either crashed
     %% or stopped. Stop normally we don't have to route messages anymore.
     {stop, normal, State}.
 
-terminate(_Reason, _State) ->
+terminate(normal, _State) ->
+    ok;
+terminate(Reason, State) ->
+    lager:error("z_mqtt_module_subscriber for ~p terminated unexpectedly: ~p", [State#state.topic, Reason]),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
+%%
+%% Helpers
+%%
 
-
-maybe_link(undefined) ->
+maybe_monitor(undefined) ->
     true;
-maybe_link(Pid) ->
-    erlang:link(Pid).
+maybe_monitor(Pid) ->
+    erlang:monitor(process, Pid).
