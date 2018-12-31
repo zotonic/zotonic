@@ -484,7 +484,7 @@ msgstr "skala Likerta"
 #, fuzzy
 msgid ""
 "List of possible answers, one per line. Use <em>value#answer</em> to store "
-"“value” but to show “answer”. E.g.  “2029#The year 2029”."
+"“value” but to show “answer”. E.g.  “2019#The year 2019”."
 msgstr ""
 "Lista odpowiedzi, każda w osobnej linii. Użyj <em>value#answer</em> do "
 "wybrania wartości."

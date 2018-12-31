@@ -483,7 +483,7 @@ msgstr "Шкала Лайкерта"
 #, fuzzy
 msgid ""
 "List of possible answers, one per line. Use <em>value#answer</em> to store "
-"“value” but to show “answer”. E.g.  “2029#The year 2029”."
+"“value” but to show “answer”. E.g.  “2019#The year 2019”."
 msgstr ""
 "Список вариантов ответа, по одному на строку. Используйте <em>балл#ответ</"
 "em> для указания оценки."

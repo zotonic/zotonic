@@ -480,7 +480,7 @@ msgstr "Likert"
 #, fuzzy
 msgid ""
 "List of possible answers, one per line. Use <em>value#answer</em> to store "
-"“value” but to show “answer”. E.g.  “2029#The year 2029”."
+"“value” but to show “answer”. E.g.  “2019#The year 2019”."
 msgstr ""
 "Her satırda bir cevap. Değerleri seçmek için <em>value#answer</em> "
 "kullanınız."

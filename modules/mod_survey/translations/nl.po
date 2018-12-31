@@ -473,7 +473,7 @@ msgstr "Likert"
 #, fuzzy
 msgid ""
 "List of possible answers, one per line. Use <em>value#answer</em> to store "
-"“value” but to show “answer”. E.g.  “2029#The year 2029”."
+"“value” but to show “answer”. E.g.  “2019#The year 2019”."
 msgstr ""
 "Kies mogelijke antwoorden, één per regel. Gebruik <em>waarde#antwoord</em> "
 "om waardes te selecteren."
