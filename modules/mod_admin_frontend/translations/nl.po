@@ -6,18 +6,18 @@
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2018-12-31 12:23+0100\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:63
 msgid "Access control"
@@ -60,17 +60,17 @@ msgstr "Bewaren"
 #: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:74
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:109
 msgid "Save &amp; view"
-msgstr ""
+msgstr "Opslaan & weergeven"
 
 #: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:74
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:109
 msgid "Save and view the page."
-msgstr ""
+msgstr "Pagina opslaan en weergeven."
 
 #: modules/mod_admin_frontend/templates/page_admin_frontend_edit.tpl:70
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:106
 msgid "Save this page."
-msgstr ""
+msgstr "Sla deze pagina op."
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:103
 msgid "This"
@@ -82,12 +82,12 @@ msgstr "Deze pagina"
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:111
 msgid "View"
-msgstr ""
+msgstr "Weergeven"
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:111
 msgid "View this page."
-msgstr ""
+msgstr "Deze pagina weergeven."
 
 #: modules/mod_admin_frontend/templates/_admin_frontend_edit.tpl:32
 msgid "till"
-msgstr ""
+msgstr "tot"

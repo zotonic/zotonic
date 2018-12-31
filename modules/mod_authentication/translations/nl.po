@@ -10,13 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zotonic - authentication\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-11-13 09:32+0100\n"
+"PO-Revision-Date: 2018-12-31 12:18+0100\n"
 "Last-Translator: Joost Faber <joost@maxclass.com>\n"
 "Language-Team: \n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: modules/mod_authentication/templates/_logon_password_reset.tpl:48
 #: modules/mod_authentication/templates/_logon_stage.tpl:9
@@ -356,7 +357,7 @@ msgstr "Vraag een nieuw wachtwoord aan"
 
 #: modules/mod_authentication/templates/_logon_password_reminder.tpl:12
 msgid "user@example.com"
-msgstr ""
+msgstr "voor@beeld.nl"
 
 #~ msgid "Log on using your"
 #~ msgstr "Log in met je"
