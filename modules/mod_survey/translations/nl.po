@@ -589,7 +589,7 @@ msgstr "oktober"
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:40
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:35
 msgid "Once and allow editing afterwards"
-msgstr ""
+msgstr "Eenmaal"
 
 #: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:35
 #: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:30
