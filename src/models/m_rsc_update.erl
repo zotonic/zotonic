@@ -1150,11 +1150,11 @@ recombine_dates_1([H|T], Dates, Acc) ->
         recombine_date(Part, End, Name, "", Dates);
     recombine_date(Part, _End, Name, V, Dates) ->
         Date = case proplists:get_value(Name, Dates) of
-                   undefined ->
-                       {{undefined, undefined, undefined}, {undefined, undefined, undefined}};
-                   D ->
-                       D
-               end,
+            undefined ->
+                {{undefined, undefined, undefined}, {undefined, undefined, undefined}};
+            D ->
+                D
+        end,
         Date1 = case Part of
                     "dmy" ->
                         %% `to_date_value` will convert a date in dmy value into a regular Erlang ymd value
