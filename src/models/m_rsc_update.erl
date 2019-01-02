@@ -1150,12 +1150,20 @@ recombine_dates_1([H|T], Dates, Acc) ->
         recombine_date(Part, End, Name, "", Dates);
     recombine_date(Part, _End, Name, V, Dates) ->
         Date = case proplists:get_value(Name, Dates) of
-            undefined ->
-                {{undefined, undefined, undefined}, {undefined, undefined, undefined}};
-            D ->
-                D
-        end,
-        Date1 = recombine_date_part(Date, Part, to_date_value(Part, string:strip(V))),
+                   undefined ->
+                       {{undefined, undefined, undefined}, {undefined, undefined, undefined}};
+                   D ->
+                       D
+               end,
+        Date1 = case Part of
+                    "dmy" ->
+                        %% `to_date_value` will convert a date in dmy value into a regular Erlang ymd value
+                        %% so here we change the Part variable when calling `recombine_date_part` .
+                        YmdDate = to_date_value(Part, string:strip(V)),
+                        recombine_date_part(Date, "ymd", YmdDate);
+                    _ ->
+                        recombine_date_part(Date, Part, to_date_value(Part, string:strip(V)))
+                end,
         lists:keystore(Name, 1, Dates, {Name, Date1}).
 
     recombine_date_part({{_Y,M,D},{H,I,S}}, "y", V) -> {{V,M,D},{H,I,S}};
@@ -1168,6 +1176,12 @@ recombine_dates_1([H|T], Dates, Acc) ->
     recombine_date_part({{Y,M,D},_Time}, "his", {_,_,_} = V) -> {{Y,M,D},V};
     recombine_date_part({_Date,{H,I,S}}, "ymd", {_,_,_} = V) -> {V,{H,I,S}}.
 
+    to_date_value(Part, V) when Part == "dmy" ->
+        %% Convert a date in 'day-month-year' format to the regular Erlang year-month-day format
+        case string:tokens(V, "-/: ") of
+            [] -> {undefined, undefined, undefined};
+            [D,M,Y] -> {to_int(Y), to_int(M), to_int(D)}
+        end;
     to_date_value(Part, "-" ++ V) when Part == "ymd" ->
         case to_date_value(Part, V) of
             {Y, M, D} when is_integer(Y) -> {-Y, M, D};
