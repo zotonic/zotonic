@@ -356,33 +356,6 @@ acl_context_authenticated(#context{user_id=undefined} = Context) ->
 acl_context_authenticated(#context{} = Context) ->
     Context.
 
-fetch_content_group_id(Id, CatId, Props, Context) ->
-    case proplists:get_value(content_group_id, Props) of
-        N when is_integer(N) ->
-            N;
-        undefined ->
-            case Id of
-                insert_rsc ->
-                    default_content_group(CatId, Context);
-                Id when is_integer(Id) ->
-                    m_rsc:p_no_acl(Id, content_group_id, Context)
-            end
-    end.
-
-fetch_category_id(Id, Props, Context) ->
-    case proplists:get_value(category_id, Props) of
-        N when is_integer(N) ->
-            N;
-        undefined ->
-            case Id of
-                rsc_insert ->
-                    {ok, CatId} = m_category:name_to_id(other, Context),
-                    CatId;
-                Id ->
-                    m_rsc:p_no_acl(Id, category_id, Context)
-            end
-    end.
-
 default_content_group(CatId, Context) ->
     case m_category:is_a(CatId, meta, Context) of
         true ->
