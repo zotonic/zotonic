@@ -26,10 +26,10 @@
 ]).
 
 %% @doc Fetch the timeline of an user or query for a phrase or tag.
-%%      Returns a list with the 'next' args for poll_next/2, the tweets found
+%%      Returns a map with the 'next' args for poll_next/2, the tweets found
 %%      and the max-id of all tweets. Retweets are filtered from the query but
 %%      not from the timeline.
--spec poll( binary(), integer() | undefined, z:context() ) -> {ok, list()} | {error, term()}.
+-spec poll( binary(), integer() | undefined, z:context() ) -> {ok, map()} | {error, term()}.
 poll(<<"@", Username/binary>>, SinceId, Context) ->
     % Use <<"@username">>, or <<"@#userid">> for the timeline poll.
     Args = [
@@ -46,17 +46,17 @@ poll(<<"@", Username/binary>>, SinceId, Context) ->
             [ {"screen_name", z_convert:to_list(Username)} | Args ]
     end,
     Args2 = case SinceId of
-        0 -> Args;
-        undefined -> Args;
+        0 -> Args1;
+        undefined -> Args1;
         _ -> [ {"since_id", z_convert:to_list(SinceId)} | Args1 ]
     end,
     case fetch("statuses/user_timeline", Args2, Context) of
         {ok, Tweets} when is_list(Tweets) ->
-            {ok, [
-                {next, undefined},
-                {max_id, max_id(Tweets)},
-                {tweets, Tweets}
-            ]};
+            {ok, #{
+                next => undefined,
+                max_id => max_id(Tweets),
+                tweets => Tweets
+            }};
         {error, _} = Error ->
             Error
     end;
@@ -74,37 +74,46 @@ poll(TagOrPhrase, SinceId, Context) ->
         _ -> [ {"since_id", z_convert:to_list(SinceId)} | Args ]
     end,
     case fetch("search/tweets", Args1, Context) of
-        {ok, { Result }} ->
-            {<<"statuses">>, Tweets} = proplists:lookup(<<"statuses">>, Result),
-            {<<"search_metadata">>, {Meta}} = proplists:lookup(<<"search_metadata">>, Result),
-            {<<"max_id">>, MaxId} = proplists:lookup(<<"max_id">>, Meta),
-            Next = proplists:get_value(<<"next_results">>, Meta, null),
-            {ok, [
-                {next, {"search/tweets", parse_qs(Next)}},
-                {max_id, MaxId},
-                {tweets, filter_retweets(Tweets)}
-            ]};
+        {ok, Result} ->
+            #{
+                <<"statuses">> := Tweets,
+                <<"search_metadata">> := Meta
+            } = Result,
+            MaxId = maps:get(<<"max_id">>, Meta),
+            Next = maps:get(<<"next_results">>, Meta, null),
+            {ok, #{
+                next => {"search/tweets", parse_qs(Next)},
+                max_id => MaxId,
+                tweets => filter_retweets(Tweets)
+            }};
         {error, _} = Error ->
             Error
     end.
 
+poll_next(undefined, _Context) ->
+    {ok, #{
+        next => undefined,
+        tweets => []
+    }};
 poll_next({_API, undefined}, _Context) ->
-    {ok, [
-        {next, []},
-        {tweets, []}
-    ]};
+    {ok, #{
+        next => undefined,
+        tweets => []
+    }};
 poll_next({API, Args}, Context) ->
     case fetch(API, Args, Context) of
-        {ok, { Result }} ->
-            {<<"statuses">>, Tweets} = proplists:lookup(<<"statuses">>, Result),
-            {<<"search_metadata">>, {Meta}} = proplists:lookup(<<"search_metadata">>, Result),
-            {<<"max_id">>, MaxId} = proplists:lookup(<<"max_id">>, Meta),
-            Next = proplists:get_value(<<"next_results">>, Meta, null),
-            {ok, [
-                {next, {API, parse_qs(Next)}},
-                {max_id, MaxId},
-                {tweets, filter_retweets(Tweets)}
-            ]};
+        {ok, Result} ->
+            #{
+                <<"statuses">> := Tweets,
+                <<"search_metadata">> := Meta
+            } = Result,
+            MaxId = maps:get(<<"max_id">>, Meta),
+            Next = maps:get(<<"next_results">>, Meta, null),
+            {ok, #{
+                next => {API, parse_qs(Next)},
+                max_id => MaxId,
+                tweets => filter_retweets(Tweets)
+            }};
         {error, _} = Error ->
             Error
     end.
@@ -119,15 +128,15 @@ max_id(undefined) ->
 max_id([]) ->
     undefined;
 max_id(Tweets) ->
-    lists:max( [ proplists:get_value(<<"id">>, T) || {T} <- Tweets ] ).
+    lists:max( [ maps:get(<<"id">>, T) || T <- Tweets, is_map(T) ] ).
 
 
 %% @doc Remove all retweets from the list of tweets
 filter_retweets(Tweets) ->
     lists:filter(
-        fun( {Tweet} ) ->
-            TweetText = case proplists:get_value(<<"full_text">>, Tweet) of
-                undefined -> proplists:get_value(<<"text">>, Tweet);
+        fun( Tweet ) ->
+            TweetText = case maps:get(<<"full_text">>, Tweet, undefined) of
+                undefined -> maps:get(<<"text">>, Tweet);
                 Txt -> Txt
             end,
             case TweetText of

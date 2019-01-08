@@ -24,8 +24,6 @@
     poll_next/3
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 % Delays in seconds
 -define(DELAY_MINIMUM, 5).
 -define(DELAY_ACTIVE, 10).
@@ -37,6 +35,7 @@
 % Delay between pages of the same feed
 -define(DELAY_NEXT_PAGE, 10).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Periodic poll of due Twitter subscriptions
 poll(Context) ->
@@ -55,6 +54,7 @@ poll(Context) ->
                         ok ->
                             ok;
                         {error, _} = Error ->
+                            lager:error("Twitter poller error for ~p: ~p", [ Sub, Error ]),
                             Error;
                         {delay, _} = D ->
                             D
@@ -103,8 +103,7 @@ poll_next(SubId, Next, Context) ->
 
 
 %% @doc Import all feed entries and set new due for the subscription
-import_result(Sub, Result, Context) ->
-    {tweets, Tweets} = proplists:lookup(tweets, Result),
+import_result(Sub,  #{ tweets := Tweets }, Context) ->
     AuthorId = proplists:get_value(user_id, Sub),
     ContextUser = case AuthorId of
         undefined -> z_acl:sudo(Context);
@@ -123,9 +122,8 @@ import_result(Sub, Result, Context) ->
         Tweets).
 
 %% @doc Set the next due for the feed, backoff if no tweets fetched
-set_due(Sub, Result, ImportCount, Context) ->
+set_due(Sub, #{ max_id := MaxId}, ImportCount, Context) ->
     {id, SubId} = proplists:lookup(id, Sub),
-    {max_id, MaxId} = proplists:lookup(max_id, Result),
     Now = z_datetime:timestamp(),
     Delay = case MaxId of
         undefined ->
@@ -141,18 +139,17 @@ set_due(Sub, Result, ImportCount, Context) ->
 
 %% @doc Fetch the next page of the poll, this will be scheduled as separate task
 %%      so that the current task is not taking too long.
-maybe_poll_next(Sub, Result, Context) ->
-    case proplists:lookup(next, Result) of
-        {next, undefined} -> ok;
-        {next, {_API, undefined}} -> ok;
-        {next, {_API, _Args} = Next} ->
-            {id, SubId} = proplists:lookup(id, Sub),
-            Args = [
-                SubId,
-                Next
-            ],
-            z_pivot_rsc:insert_task_after(?DELAY_NEXT_PAGE, ?MODULE, poll_next, undefined, Args, Context)
-    end.
+maybe_poll_next(_Sub, #{ next := undefined }, _Context) ->
+    ok;
+maybe_poll_next(_Sub, #{ next := {_API, undefined} }, _Context) ->
+    ok;
+maybe_poll_next(Sub, #{ next := {_API, _Args} = Next }, Context) ->
+    {id, SubId} = proplists:lookup(id, Sub),
+    Args = [
+        SubId,
+        Next
+    ],
+    z_pivot_rsc:insert_task_after(?DELAY_NEXT_PAGE, ?MODULE, poll_next, undefined, Args, Context).
 
 
 

@@ -78,13 +78,14 @@ event(#submit{message=admin_twitter}, Context) ->
     end.
 
 save_settings(Context) ->
-    lists:foreach(fun ({Key, Value}) ->
-                        case is_setting(Key) of
-                            true -> m_config:set_value(mod_twitter, binary_to_atom(Key, 'utf8'), Value, Context);
-                            false -> ok
-                        end
-                  end,
-                  z_context:get_q_all_noz(Context)).
+    lists:foreach(
+        fun ({Key, Value}) ->
+            case is_setting(Key) of
+                true -> m_config:set_value(mod_twitter, binary_to_atom(Key, 'utf8'), Value, Context);
+                false -> ok
+            end
+        end,
+        z_context:get_q_all_noz(Context)).
 
 is_setting(<<"consumer_key">>) -> true;
 is_setting(<<"consumer_secret">>) -> true;

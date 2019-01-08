@@ -39,6 +39,7 @@
     normalize_key/2
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 m_get([ useauth | Rest ], Context) ->
     UseAuth = case m_config:get_value(mod_twitter, consumer_key, Context) of

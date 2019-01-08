@@ -33,8 +33,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
-import_tweet({Tweet}, AuthorId, Context) when is_list(Tweet) ->
-    {<<"id">>, TweetId} = proplists:lookup(<<"id">>, Tweet),
+import_tweet(#{ <<"id">> := TweetId } = Tweet, AuthorId, Context) ->
     UniqueName = <<"tweet_", (z_convert:to_binary(TweetId))/binary>>,
     import_rsc(m_rsc:rid(UniqueName, Context), TweetId, UniqueName, AuthorId, Tweet, Context);
 import_tweet(Tweet, _AuthorId, _Context) ->
@@ -77,10 +76,9 @@ do_import_rsc(TweetId, ImportRsc, AuthorId, Tweet, Context) ->
 
 %% @doc If the importing user_id is defined, or if the Twitter user is coupled to an identity
 %%      then add an author edge.
-maybe_author({ok, RscId}, undefined, Tweet, Context) ->
-    {User} = proplists:get_value(<<"user">>, Tweet),
-    ScreenName = proplists:get_value(<<"screen_name">>, User),
-    {<<"id">>, TwitterUserId} = proplists:lookup(<<"id">>, User),
+maybe_author({ok, RscId}, undefined, #{ <<"user">> := User }, Context) ->
+    ScreenName = maps:get(<<"screen_name">>, User, undefined),
+    #{ <<"id">> := TwitterUserId } = User,
     UIdBin = z_convert:to_binary(TwitterUserId),
     Idns = [
         <<"@", ScreenName/binary>>,
@@ -109,16 +107,15 @@ maybe_author(_NotOk, _UserId, _Tweet, _Context) ->
     ok.
 
 get_value(K, Props) ->
-    case proplists:get_value(K, Props) of
+    case maps:get(K, Props, null) of
         null -> undefined;
         V -> V
     end.
 
 
-extract_import_rsc(TweetId, UniqueName, Tweet, Context) ->
-    {User} = get_value(<<"user">>, Tweet),
+extract_import_rsc(TweetId, UniqueName, #{ <<"user">> := User } = Tweet, Context) ->
     ScreenName = get_value(<<"screen_name">>, User),
-    {<<"id">>, TwitterUserId} = proplists:lookup(<<"id">>, User),
+    #{ <<"id">> := TwitterUserId } = User,
     TweetText = case get_value(<<"full_text">>, Tweet) of
         undefined -> get_value(<<"text">>, Tweet);
         Txt -> Txt
@@ -138,7 +135,7 @@ extract_import_rsc(TweetId, UniqueName, Tweet, Context) ->
             ]),
     Language = extract_language(Tweet, Context),
     {Long, Lat} = extract_coordinates(Tweet),
-    Created = qdate:parse(proplists:get_value(<<"created_at">>, Tweet)),
+    Created = qdate:parse(maps:get(<<"created_at">>, Tweet)),
     TweetProps = [
         {tweet_id, TweetId},
         {tweet_url, TweetUrl},
@@ -195,118 +192,89 @@ first_link(_, Url) -> Url.
 -spec first_media_props([#url_metadata{} | string() | binary()], z:context()) -> {error, nomedia} | {ok, pos_integer()}.
 first_media_props([], _Context) ->
     {error, nomedia};
-first_media_props([Url|Urls], Context) ->
+first_media_props([ Url | Urls ], Context) ->
     case z_media_import:url_import_props(Url, Context) of
         {ok, []} ->
             first_media_props(Urls, Context);
-        {ok, [MI|_]} ->
+        {ok, [ MI | _ ]} ->
             {ok, MI};
         {error, _} ->
             first_media_props(Urls, Context)
     end.
 
-quoted_status_url(Tweet) ->
-    case get_value(<<"quoted_status_permalink">>, Tweet) of
-        {Qs} -> get_value(<<"expanded">>, Qs);
-        undefined -> undefined
-    end.
+quoted_status_url(#{ <<"quoted_status_permalink">> := Qs }) ->
+    get_value(<<"expanded">>, Qs);
+quoted_status_url(_Tweet) ->
+    undefined.
 
-retweeted_status_url(Tweet) ->
-    case get_value(<<"retweeted_status">>, Tweet) of
-        {RT} ->
-            case get_value(<<"id">>, RT) of
-                undefined -> undefined;
-                Id ->
-                    {RTUser} = get_value(<<"user">>, RT),
-                    RTScreenname = get_value(<<"screen_name">>, RTUser),
-                    <<"https://twitter.com/", RTScreenname/binary,
-                      "/status/", (z_convert:to_binary(Id))/binary>>
+retweeted_status_url(#{ <<"retweeted_status">> := RT }) ->
+    case get_value(<<"id">>, RT) of
+        undefined -> undefined;
+        Id ->
+            #{ <<"user">> := RTUser } = RT,
+            #{ <<"screen_name">> := RTScreenname } = RTUser,
+            <<"https://twitter.com/", RTScreenname/binary,
+              "/status/", (z_convert:to_binary(Id))/binary>>
+    end;
+retweeted_status_url(_Tweet) ->
+    undefined.
+
+retweeted_status_id(#{ <<"retweeted_status">> := RT }) ->
+    maps:get(<<"id">>, RT);
+retweeted_status_id(_Tweet) ->
+    undefined.
+
+extract_language(#{ <<"lang">> := Lang }, Context) when is_binary(Lang) ->
+    [LanguageCode|_] = binary:split(Lang, <<"-">>),
+    case z_language:to_language_atom(LanguageCode) of
+        {ok, Code} ->
+            case z_language:is_language_enabled(Code, Context) of
+                true -> Code;
+                false -> z_context:language(Context)
             end;
-        undefined ->
-            undefined
-    end.
+        {error, _} ->
+            z_context:language(Context)
+    end;
+extract_language(_Tweet, Context) ->
+    z_context:language(Context).
 
-retweeted_status_id(Tweet) ->
-    case get_value(<<"retweeted_status">>, Tweet) of
-        {RT} -> get_value(<<"id">>, RT);
-        undefined -> undefined
-    end.
-
-extract_language(Tweet, Context) ->
-    case proplists:get_value(<<"lang">>, Tweet, null) of
-        null ->
-            z_context:language(Context);
-        Lang ->
-            [LanguageCode|_] = binary:split(Lang, <<"-">>),
-            case z_language:to_language_atom(LanguageCode) of
-                {ok, Code} ->
-                    case z_language:is_language_enabled(Code, Context) of
-                        true -> Code;
-                        false -> z_context:language(Context)
-                    end;
-                {error, _} ->
-                    z_context:language(Context)
-            end
-    end.
-
-extract_coordinates(Tweet) ->
-    case proplists:get_value(<<"coordinates">>, Tweet, null) of
-        null ->
-            {undefined, undefined};
-        {Coordinates} ->
-            case proplists:get_value(<<"type">>, Coordinates) of
-                <<"Point">> ->
-                    [Longitude, Latitude] = proplists:get_value(<<"coordinates">>, Coordinates),
-                    {Longitude, Latitude};
-                _Other ->
-                    {undefined, undefined}
-            end;
-        undefined ->
+extract_coordinates(#{ <<"coordinates">> := Coordinates }) when is_map(Coordinates) ->
+    case maps:get(<<"type">>, Coordinates) of
+        <<"Point">> ->
+            [Longitude, Latitude] = maps:get(<<"coordinates">>, Coordinates),
+            {Longitude, Latitude};
+        _Other ->
             {undefined, undefined}
-    end.
+    end;
+extract_coordinates(_Tweet) ->
+    {undefined, undefined}.
 
 %% @doc Fetch urls and other links from the tweet, see: https://dev.twitter.com/overview/api/entities
-extract_urls(Tweet) ->
-    case proplists:get_value(<<"entities">>, Tweet, null) of
-        null ->
-            [];
-        {Entitites} ->
-            case proplists:get_value(<<"urls">>, Entitites) of
-                undefined -> [];
-                Urls -> [ url(Url) || Url <- Urls ]
-            end;
-        undefined ->
-            []
-    end.
+extract_urls(#{ <<"entities">> := Entitites }) when is_map(Entitites) ->
+    Urls = maps:get(<<"urls">>, Entitites, []),
+    [ url(Url) || Url <- Urls ];
+extract_urls(_Tweet) ->
+    [].
 
-extract_media_urls(Tweet) ->
-    case proplists:get_value(<<"entities">>, Tweet, null) of
-        null ->
-            [];
-        {Entitites} ->
-            Urls = extract_media_1(proplists:get_value(<<"media">>, Entitites, null), []),
-            lists:unzip(Urls)
-    end.
+extract_media_urls(#{ <<"entities">> := Entitites }) when is_map(Entitites) ->
+    Urls = extract_media_1(maps:get(<<"media">>, Entitites, null), []),
+    lists:unzip(Urls);
+extract_media_urls(_Tweet) ->
+    [].
 
 extract_media_1(null, Acc) ->
     lists:reverse(Acc);
 extract_media_1([], Acc) ->
     lists:reverse(Acc);
-extract_media_1([{M}|Ms], Acc) ->
-    case proplists:get_value(<<"type">>, M) of
-        <<"photo">> ->
-            case proplists:get_value(<<"media_url_https">>, M) of
-                undefined -> extract_media_1(Ms, Acc);
-                MediaUrl ->
-                    Url = proplists:get_value(<<"url">>, M),
-                    extract_media_1(Ms, [ {MediaUrl, Url} |Acc])
-            end;
-        _Other ->
-            extract_media_1(Ms, Acc)
-    end.
+extract_media_1([ #{ <<"type">> := <<"photo">>, <<"media_url_https">> := MediaUrl, <<"url">> := Url } | Ms ], Acc) ->
+    extract_media_1(Ms, [ {MediaUrl, Url} |Acc]);
+extract_media_1([ _ | Ms ], Acc) ->
+    extract_media_1(Ms, Acc).
 
-url({UrlProps}) when is_list(UrlProps) ->
-    proplists:get_value(<<"expanded_url">>, UrlProps).
+url(#{ <<"expanded_url">> := Url }) ->
+    Url;
+url(_) ->
+    undefined.
 
 
 %% Interactive test code
@@ -321,7 +289,7 @@ test(Context) ->
                         extract_test_tweet(Tweet, Context);
                     ".json" ->
                         {ok, Data} = file:read_file(Dir++F),
-                        [Tweet] = jiffy:decode(Data),
+                        Tweet = z_json:decode(Data),
                         extract_test_tweet(Tweet, Context);
                     _ ->
                         {ignored, F}
@@ -329,7 +297,7 @@ test(Context) ->
             end,
             Fs).
 
-extract_test_tweet({Tweet}, Context) ->
+extract_test_tweet(Tweet, Context) ->
     TweetId = proplists:get_value(<<"id">>, Tweet),
     UniqueName = <<"tweet_", (z_convert:to_binary(TweetId))/binary>>,
     extract_import_rsc(TweetId, UniqueName, Tweet, z_acl:logon(1, Context)).
