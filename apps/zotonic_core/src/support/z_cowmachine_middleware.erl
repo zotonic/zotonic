@@ -36,8 +36,9 @@ execute(Req, #{ controller := Controller, controller_options := ControllerOpts }
     Context1 = z_context:set(ControllerOpts, maps:get(context, Env)),
     Context2 = z_context:set_controller_module(Controller, Context1),
     Context3 = z_context:set_reqdata(Req, Context2),
+    Context4 = z_context:set_security_headers(Context3),
     Options = #{
         on_welformed => fun(Ctx) -> z_context:lager_md(Ctx), z_context:ensure_qs(Ctx) end
     },
-    cowmachine:request(Controller, Context3, Env, Options).
+    cowmachine:request(Controller, Context4, Env, Options).
 

@@ -191,7 +191,7 @@ new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
 %% @doc Create a new context record for the current request and resource module
 new(Req, Module) when is_map(Req) ->
     Context = new(Req),
-    set_security_headers( Context#context{ controller_module = Module } ).
+    Context#context{ controller_module = Module }.
 
 
 -spec set_default_language_tz(z:context()) -> z:context().
