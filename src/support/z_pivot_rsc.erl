@@ -47,7 +47,6 @@
     delete_task/3,
     delete_task/4,
 
-    pivot_resource/2,
     stemmer_language/1,
     cleanup_tsv_text/1,
     pg_lang/1,
