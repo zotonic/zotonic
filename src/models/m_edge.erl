@@ -896,5 +896,5 @@ subject_predicate_ids(Id, Context) ->
 
 %% @doc Request re-pivot of all the resource ids.
 pivot_resources(Ids, Context) ->
-    [z_pivot_rsc:pivot(Id, Context) || Id <- Ids].
+    [ z_pivot_rsc:insert_queue(Id, Context) || Id <- Ids ].
 
