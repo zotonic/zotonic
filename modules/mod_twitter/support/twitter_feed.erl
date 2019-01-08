@@ -46,8 +46,8 @@ poll(<<"@", Username/binary>>, SinceId, Context) ->
             [ {"screen_name", z_convert:to_list(Username)} | Args ]
     end,
     Args2 = case SinceId of
-        0 -> Args;
-        undefined -> Args;
+        0 -> Args1;
+        undefined -> Args1;
         _ -> [ {"since_id", z_convert:to_list(SinceId)} | Args1 ]
     end,
     case fetch("statuses/user_timeline", Args2, Context) of
