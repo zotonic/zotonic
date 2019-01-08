@@ -30,7 +30,6 @@
 
     page_path_to_id/2,
 
-    get_visible/2,
     get/2,
     get_raw/2,
     get_raw_lock/2,
@@ -89,14 +88,14 @@ m_get([ Id, is_cat, Key | Rest ], Context) ->
 m_get([ Id, Key | Rest ], Context) ->
     {p(Id, Key, Context), Rest};
 m_get([ Id ], Context) ->
-    {get_visible(Id, Context), []};
+    {get(Id, Context), []};
 m_get(Vs, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {undefined, []}.
 
 
 %% @doc Return the id of the resource with the name
--spec name_to_id(resource_name(), #context{}) -> {ok, resource_id()} | {error, string()}.
+-spec name_to_id(resource_name(), z:context()) -> {ok, resource_id()} | {error, string()}.
 name_to_id(Name, _Context) when is_integer(Name) ->
     {ok, Name};
 name_to_id(undefined, _Context) ->
@@ -151,66 +150,65 @@ page_path_to_id(Path, Context) ->
             {error, {illegal_page_path, Path1, Other}}
     end.
 
-
-%% @doc Read a whole resource, check all properties for access rights
--spec get_visible(resource(), #context{}) -> props() | undefined.
-get_visible(RId, Context) ->
-    case rid(RId, Context) of
-        undefined ->
-            undefined;
-        Id ->
-            case z_acl:rsc_visible(Id, Context) of
-                true ->
-                    case get(Id, Context) of
-                        undefined ->
-                            undefined;
-                        Props ->
-                            {id, Id} = proplists:lookup(id, Props),
-                            lists:filter(fun({K, _V}) ->
-                                            z_acl:rsc_prop_visible(Id, K, Context)
-                                         end,
-                                         Props)
-                    end;
-                false ->
-                    undefined
-            end
-    end.
-
 %% @doc Read a whole resource
--spec get(resource(), #context{}) -> props() | undefined.
+-spec get(resource(), z:context()) -> props() | undefined.
 get(Id, Context) ->
     case rid(Id, Context) of
         Rid when is_integer(Rid) ->
-            z_depcache:memo(fun() ->
-                                case get_raw(Rid, Context) of
-                                    undefined ->
-                                        undefined;
-                                    Props ->
-                                        z_notifier:foldr(#rsc_get{id=Rid}, Props, Context)
-                                end
-                            end,
-                            Rid,
-                            ?WEEK,
-                            Context);
+            case z_acl:rsc_visible(Id, Context) of
+                true -> filter_props(Rid, get_cached(Rid, Context), Context);
+                false -> undefined
+            end;
         undefined ->
             undefined
     end.
 
+-spec get_cached(resource_id(), z:context()) -> props() | undefined.
+get_cached(Id, Context) when is_integer(Id) ->
+    z_depcache:memo(
+        fun() ->
+            Props = get_raw(Id, false, Context),
+            z_notifier:foldr(#rsc_get{id=Id}, Props, Context)
+        end,
+        Id,
+        ?WEEK,
+        Context).
+
+-spec filter_props(resource(), props() | undefined, z:context()) -> props() | undefined.
+filter_props(_Id, undefined, _Context) ->
+    undefined;
+filter_props(Id, Props, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> Props;
+        false ->
+            case z_acl:rsc_visible(Id, Context) of
+                false ->
+                    [];
+                true ->
+                    lists:filter(
+                        fun({Property, _Val}) ->
+                            z_acl:rsc_prop_visible(Id, Property, Context)
+                        end,
+                        Props)
+            end
+    end.
+
 %% @doc Get the resource from the database, do not fetch the pivot fields.
--spec get_raw(resource(), #context{}) -> props().
+-spec get_raw(resource(), z:context()) -> props().
 get_raw(Id, Context) ->
-    get_raw(Id, false, Context).
+    Props = get_raw(Id, false, Context),
+    filter_props(Id, Props, Context).
 
 get_raw_lock(Id, Context) ->
-    get_raw(Id, true, Context).
-
+    Props = get_raw(Id, true, Context),
+    filter_props(Id, Props, Context).
 
 get_raw(Id, IsLock, Context) ->
     SQL = case z_memo:get(rsc_raw_sql) of
               undefined ->
                   AllCols = [z_convert:to_list(C) || C <- z_db:column_names(rsc, Context)],
                   DataCols = lists:filter(
-                      fun("pivot_geocode") -> true;
+                      fun ("pivot_geocode") -> true;
                           ("pivot_geocode_qhash") -> true;
                           ("pivot_location_lat") -> true;
                           ("pivot_location_lng") -> true;
@@ -229,10 +227,8 @@ get_raw(Id, IsLock, Context) ->
                false -> SQL
            end,
     case z_db:assoc_props_row(SQL1, [m_rsc:rid(Id, Context)], Context) of
-        undefined ->
-            [];
-        Raw ->
-            ensure_utc_dates(Raw, Context)
+        undefined -> [];
+        Raw -> ensure_utc_dates(Raw, Context)
     end.
 
 
@@ -279,7 +275,7 @@ ensure_utc_date_1(P, _IsAllDay) ->
 
 %% @doc Get the ACL fields for the resource with the id.
 %% Will always return a valid record, even if the resource does not exist.
--spec get_acl_props(Id :: resource(), #context{}) -> #acl_props{}.
+-spec get_acl_props(Id :: resource(), z:context()) -> #acl_props{}.
 get_acl_props(Id, Context) when is_integer(Id) ->
     F = fun() ->
         Result =
@@ -318,37 +314,37 @@ get_acl_props(Name, Context) ->
 
 
 %% @doc Insert a new resource
--spec insert(Props :: props(), #context{}) -> {ok, resource_id()} | {error, term()}.
+-spec insert(Props :: props(), z:context()) -> {ok, resource_id()} | {error, term()}.
 insert(Props, Context) ->
     m_rsc_update:insert(Props, Context).
 
 %% @doc Delete a resource
--spec delete(resource(), #context{}) -> ok | {error, term()}.
+-spec delete(resource(), z:context()) -> ok | {error, term()}.
 delete(Id, Context) ->
     m_rsc_update:delete(Id, Context).
 
 %% @doc Merge a resource with another, delete the loser.
--spec merge_delete(resource(), resource(), #context{}) -> ok | {error, term()}.
+-spec merge_delete(resource(), resource(), z:context()) -> ok | {error, term()}.
 merge_delete(WinnerId, LoserId, Context) ->
     m_rsc_update:merge_delete(WinnerId, LoserId, [ {is_merge_trans, false} ], Context).
 
 %% @doc Merge a resource with another, delete the loser.
--spec merge_delete(resource(), resource(), list(), #context{}) -> ok | {error, term()}.
+-spec merge_delete(resource(), resource(), list(), z:context()) -> ok | {error, term()}.
 merge_delete(WinnerId, LoserId, Options, Context) ->
     m_rsc_update:merge_delete(WinnerId, LoserId, Options, Context).
 
 %% @doc Update a resource
--spec update(resource(), props(), #context{}) -> {ok, resource()}.
+-spec update(resource(), props(), z:context()) -> {ok, resource()}.
 update(Id, Props, Context) ->
     m_rsc_update:update(Id, Props, Context).
 
--spec update(resource(), props(), list(), #context{}) -> {ok, resource()}.
+-spec update(resource(), props(), list(), z:context()) -> {ok, resource()}.
 update(Id, Props, Options, Context) ->
     m_rsc_update:update(Id, Props, Options, Context).
 
 
 %% @doc Duplicate a resource.
--spec duplicate(resource(), props(), #context{}) ->
+-spec duplicate(resource(), props(), z:context()) ->
     {ok, NewId :: resource_id()} | {error, Reason :: string()}.
 duplicate(Id, Props, Context) ->
     m_rsc_update:duplicate(Id, Props, Context).
@@ -357,7 +353,7 @@ duplicate(Id, Props, Context) ->
 %% @doc "Touch" the rsc, incrementing the version nr and the modification date/ modifier_id.
 %% This should be called as part of another update or transaction and does not resync the caches,
 %% and does not check the ACL.  After "touching" the resource will be re-pivoted.
--spec touch(resource(), #context{}) -> {ok, resource_id()} | {error, Reason :: string()}.
+-spec touch(resource(), z:context()) -> {ok, resource_id()} | {error, Reason :: string()}.
 touch(Id, Context) ->
     case z_db:q(
         "update rsc set version = version + 1, modifier_id = $1, modified = now() where id = $2",
@@ -369,7 +365,7 @@ touch(Id, Context) ->
     end.
 
 
--spec exists(resource(), #context{}) -> boolean().
+-spec exists(resource(), z:context()) -> boolean().
 exists(Id, Context) ->
     case rid(Id, Context) of
         Rid when is_integer(Rid) ->
@@ -380,23 +376,23 @@ exists(Id, Context) ->
         undefined -> false
     end.
 
--spec is_visible(resource(), #context{}) -> boolean().
+-spec is_visible(resource(), z:context()) -> boolean().
 is_visible(Id, Context) ->
     z_acl:rsc_visible(Id, Context).
 
--spec is_editable(resource(), #context{}) -> boolean().
+-spec is_editable(resource(), z:context()) -> boolean().
 is_editable(Id, Context) ->
     z_acl:rsc_editable(Id, Context).
 
--spec is_deletable(resource(), #context{}) -> boolean().
+-spec is_deletable(resource(), z:context()) -> boolean().
 is_deletable(Id, Context) ->
     z_acl:rsc_deletable(Id, Context).
 
--spec is_linkable(resource(), #context{}) -> boolean().
+-spec is_linkable(resource(), z:context()) -> boolean().
 is_linkable(Id, Context) ->
     z_acl:rsc_linkable(Id, Context).
 
--spec is_me(resource(), #context{}) -> boolean().
+-spec is_me(resource(), z:context()) -> boolean().
 is_me(Id, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
@@ -425,7 +421,7 @@ is_published_date(Id, Context) ->
 
 %% @doc Fetch a property from a resource. When the rsc does not exist, the property does not
 %% exist or the user does not have access rights to the property then return 'undefined'.
--spec p(resource(), atom(), #context{}) -> term() | undefined.
+-spec p(resource(), atom(), z:context()) -> term() | undefined.
 p(Id, Property, Context) when is_list(Property); is_binary(Property) ->
     p(Id, z_convert:to_atom(Property), Context);
 p(Id, Property, Context)
@@ -556,7 +552,7 @@ p_cached(Id, Predicate, Context) ->
         {ok, V} ->
             V;
         undefined ->
-            case get(Id, Context) of
+            case get_cached(Id, Context) of
                 undefined -> undefined;
                 PropList -> proplists:get_value(Predicate, PropList)
             end
@@ -584,7 +580,7 @@ non_informational_uri(Id, Context) ->
 
 
 %% Return a list of all edge predicates of this resource
--spec op(resource(), #context{}) -> list().
+-spec op(resource(), z:context()) -> list().
 op(Id, Context) when is_integer(Id) ->
     m_edge:object_predicates(Id, Context);
 op(undefined, _Context) ->
@@ -593,12 +589,12 @@ op(Id, Context) ->
     op(rid(Id, Context), Context).
 
 %% @doc Used for dereferencing object edges inside template expressions
--spec o(resource(), #context{}) -> fun().
+-spec o(resource(), z:context()) -> fun().
 o(Id, _Context) ->
     fun(P, Context) -> o(Id, P, Context) end.
 
 %% @doc Return the list of objects with a certain predicate
--spec o(resource(), atom(), #context{}) -> list().
+-spec o(resource(), atom(), z:context()) -> list().
 o(Id, Predicate, Context) when is_integer(Id) ->
     #rsc_list{list = m_edge:objects(Id, Predicate, Context)};
 o(undefined, _Predicate, _Context) ->
@@ -608,7 +604,7 @@ o(Id, Predicate, Context) ->
 
 
 %% Return the nth object in the predicate list
--spec o(resource(), atom(), pos_integer(), #context{}) -> resource_id().
+-spec o(resource(), atom(), pos_integer(), z:context()) -> resource_id().
 o(Id, Predicate, N, Context) when is_integer(Id) ->
     case m_edge:object(Id, Predicate, N, Context) of
         undefined -> undefined;
@@ -621,7 +617,7 @@ o(Id, Predicate, N, Context) ->
 
 
 %% Return a list of all edge predicates to this resource
--spec sp(resource(), #context{}) -> list().
+-spec sp(resource(), z:context()) -> list().
 sp(Id, Context) when is_integer(Id) ->
     m_edge:subject_predicates(Id, Context);
 sp(undefined, _Context) ->
@@ -630,12 +626,12 @@ sp(Id, Context) ->
     sp(rid(Id, Context), Context).
 
 %% Used for dereferencing subject edges inside template expressions
--spec s(resource(), #context{}) -> fun().
+-spec s(resource(), z:context()) -> fun().
 s(Id, _Context) ->
     fun(P, Context) -> s(Id, P, Context) end.
 
 %% Return the list of subjects with a certain predicate
--spec s(resource(), atom(), #context{}) -> list().
+-spec s(resource(), atom(), z:context()) -> list().
 s(Id, Predicate, Context) when is_integer(Id) ->
     #rsc_list{list = m_edge:subjects(Id, Predicate, Context)};
 s(undefined, _Predicate, _Context) ->
@@ -644,7 +640,7 @@ s(Id, Predicate, Context) ->
     s(rid(Id, Context), Predicate, Context).
 
 %% Return the nth object in the predicate list
--spec s(resource(), atom(), pos_integer(), #context{}) -> resource_id().
+-spec s(resource(), atom(), pos_integer(), z:context()) -> resource_id().
 s(Id, Predicate, N, Context) when is_integer(Id) ->
     case m_edge:subject(Id, Predicate, N, Context) of
         undefined -> undefined;
@@ -657,7 +653,7 @@ s(Id, Predicate, N, Context) ->
 
 
 %% Return the list of all media attached to the resource
--spec media(resource(), #context{}) -> list().
+-spec media(resource(), z:context()) -> list().
 media(Id, Context) when is_integer(Id) ->
     m_edge:objects(Id, depiction, Context);
 media(undefined, _Context) ->
@@ -667,7 +663,7 @@ media(Id, Context) ->
 
 
 %% @doc Fetch a resource id from any input
--spec rid(resource()|{trans, _}, #context{}) -> resource_id() | undefined.
+-spec rid(resource()|{trans, _}, z:context()) -> resource_id() | undefined.
 rid(Id, _Context) when is_integer(Id) ->
     Id;
 rid({Id}, _Context) when is_integer(Id) ->
@@ -692,7 +688,7 @@ rid(UniqueName, Context) ->
 
 
 %% @doc Return the id of the resource with a certain unique name.
--spec name_lookup(resource_name(), #context{}) -> resource_id() | undefined.
+-spec name_lookup(resource_name(), z:context()) -> resource_id() | undefined.
 name_lookup(Name, Context) ->
     Lower = z_string:to_name(Name),
     case z_depcache:get({rsc_name, Lower}, Context) of
@@ -729,7 +725,7 @@ uri_lookup(Uri, Context) ->
     end.
 
 %% @doc Check if the resource is exactly the category
--spec is_cat(resource(), atom(), #context{}) -> boolean().
+-spec is_cat(resource(), atom(), z:context()) -> boolean().
 is_cat(Id, Cat, Context) ->
     case m_category:name_to_id(Cat, Context) of
         {ok, CatId} ->
@@ -746,14 +742,14 @@ is_cat(Id, Cat, Context) ->
     end.
 
 %% @doc Return the categories and the inherited categories of the resource. Returns a list with category atoms
--spec is_a(resource(), #context{}) -> list(atom()).
+-spec is_a(resource(), z:context()) -> list(atom()).
 is_a(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     m_category:is_a(RscCatId, Context).
 
 %% @doc Return the categories and the inherited categories of the resource. Returns a list with
 %% category ids
--spec is_a_id(resource(), #context{}) -> list(pos_integer()).
+-spec is_a_id(resource(), z:context()) -> list(pos_integer()).
 is_a_id(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     [RscCatId | m_category:get_path(RscCatId, Context)].
@@ -837,7 +833,7 @@ predicates_edit(Id, Context) ->
 
 
 %% @doc Ensure that a resource has a name, caller must have update rights.
--spec ensure_name(integer(), #context{}) -> ok.
+-spec ensure_name(integer(), z:context()) -> ok.
 ensure_name(Id, Context) ->
     case m_rsc:p_no_acl(Id, name, Context) of
         undefined ->

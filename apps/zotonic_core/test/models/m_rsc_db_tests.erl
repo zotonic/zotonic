@@ -12,7 +12,12 @@ modify_rsc_test() ->
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     CatId = m_rsc:rid(text, C),
 
-    ?assertEqual({error, nocategory}, m_rsc:insert([{title, "Hello."}], C)),
+    ?assertEqual(eacces_or_nocategory,
+            case m_rsc:insert([{title, "Hello."}], C) of
+                {error, eacces} -> eacces_or_nocategory;
+                {error, nocategory} -> eacces_or_nocategory;
+                InsOther -> InsOther
+            end),
     ?assertEqual({error, eacces}, m_rsc:insert([{title, "Hello."}, {category_id, CatId}], C)),
 
     {ok, Id} = m_rsc:insert([{title, "Hello."}, {category_id, CatId}], AdminC),

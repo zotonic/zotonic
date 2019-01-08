@@ -35,6 +35,9 @@ hash_is_equal_old_hash_test() ->
     ok.
 
 check_password_no_user_test() ->
+    {timeout, 20, fun() -> check_password_no_user() end}.
+
+check_password_no_user() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_context:new(zotonic_site_testsandbox),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),

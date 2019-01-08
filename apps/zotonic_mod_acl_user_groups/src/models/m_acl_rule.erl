@@ -60,6 +60,8 @@ m_get([ generate_code | Rest ], Context) ->
 
 m_get([ default_upload_size | Rest ], _Context) ->
     {acl_user_groups_checks:max_upload_size_default(), Rest};
+m_get([ default_mime_allowed | Rest ], Context) ->
+    {acl_user_group_mime_check:mime_allowed_default(Context), Rest};
 m_get([ upload_size | Rest ], Context) ->
     {acl_user_groups_checks:max_upload_size(Context), Rest};
 

@@ -218,7 +218,6 @@ rsc_linkable(RscName, Context) ->
         RscId -> is_allowed(link, RscId, Context)
     end.
 
-
 %% @doc Return a term that can be used as the ACL part of cache key.
 -spec cache_key( z:context() ) -> { m_rsc:resource_id() | undefined, any()}.
 cache_key(Context) ->

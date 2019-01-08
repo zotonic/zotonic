@@ -132,6 +132,8 @@
     set_noindex_header/1,
     set_noindex_header/2,
 
+    set_security_headers/1,
+
     set_cookie/3,
     set_cookie/4,
     get_cookie/2,
@@ -189,7 +191,7 @@ new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
 %% @doc Create a new context record for the current request and resource module
 new(Req, Module) when is_map(Req) ->
     Context = new(Req),
-    Context#context{controller_module=Module}.
+    Context#context{ controller_module = Module }.
 
 
 -spec set_default_language_tz(z:context()) -> z:context().
@@ -1255,10 +1257,31 @@ parse_post_body(Context) ->
 %% z_context:ensure_all/1.
 -spec set_nocache_headers(z:context()) -> z:context().
 set_nocache_headers(Context = #context{req=Req}) when is_map(Req) ->
-    C1 = cowmachine_req:set_resp_header(<<"cache-control">>, <<"no-store, no-cache, must-revalidate, post-check=0, pre-check=0">>, Context),
-    C2 = cowmachine_req:set_resp_header(<<"expires">>, <<"Wed, 10 Dec 2008 14:30:00 GMT">>, C1),
-    % This let IE accept our cookies, basically we tell IE that our cookies do not contain any private data.
-    cowmachine_req:set_resp_header(<<"p3p">>, <<"CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"">>, C2).
+    cowmachine_req:set_resp_headers([
+            {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, post-check=0, pre-check=0">>},
+            {<<"expires">>, <<"Wed, 10 Dec 2008 14:30:00 GMT">>},
+            {<<"p3p">>, <<"CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"">>},
+            {<<"pragma">>, <<"nocache">>}
+        ],
+        Context).
+
+%% @doc Set security related headers. This can be modified by observing the
+%%      'security_headers' notification.
+-spec set_security_headers( z:context() ) -> z:context().
+set_security_headers(Context) ->
+    Default = [ {<<"x-xss-protection">>, <<"1">>},
+                {<<"x-content-type-options">>, <<"nosniff">>},
+                {<<"x-permitted-cross-domain-policies">>, <<"none">>},
+                {<<"referrer-policy">>, <<"origin-when-cross-origin">>} ],
+    Default1 = case z_context:get(allow_frame, Context, false) of
+        true -> Default;
+        false -> [ {<<"x-frame-options">>, <<"sameorigin">>} | Default ]
+    end,
+    SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
+        undefined -> Default;
+        Custom -> Custom
+    end,
+    cowmachine_req:set_resp_headers(SecurityHeaders, Context).
 
 %% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
 -spec set_noindex_header(z:context()) -> z:context().

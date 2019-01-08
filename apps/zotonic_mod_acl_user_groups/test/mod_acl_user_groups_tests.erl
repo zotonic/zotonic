@@ -75,7 +75,7 @@ acl_is_allowed_override_test() ->
     %% Priority (10) must be before mod_acl_user_group's acl_is_allowed observer.
     z_notifier:observe(acl_is_allowed, {?MODULE, is_allowed_always_true}, 10, Context),
     {ok, Id} = m_rsc:insert([{category_id, text}], Context),
-    ?assertEqual(m_rsc:rid(default_content_group, Context), m_rsc:p(Id, content_group_id, Context)),
+    ?assertEqual(m_rsc:rid(default_content_group, Context), m_rsc:p_no_acl(Id, content_group_id, Context)),
     z_notifier:detach(acl_is_allowed, Context).
 
 publish_test() ->

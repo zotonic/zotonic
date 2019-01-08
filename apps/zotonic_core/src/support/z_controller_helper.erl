@@ -55,7 +55,7 @@ is_authorized(Context) ->
 -spec get_id(z:context()) -> m_rsc:resource_id() | undefined.
 get_id(Context) ->
     case get_configured_id(Context) of
-        undefined -> rid(z_context:get_q("id", Context), Context);
+        undefined -> m_rsc:rid(z_context:get_q(<<"id">>, Context), Context);
         ConfId -> ConfId
     end.
 
@@ -64,17 +64,7 @@ get_id(Context) ->
 get_configured_id(Context) ->
     case z_context:get(id, Context) of
         user_id -> z_acl:user(Context);
-        ConfId -> rid(ConfId, Context)
-    end.
-
-rid(undefined, _Context) ->
-    undefined;
-rid(Id, _Context) when is_integer(Id) ->
-    Id;
-rid(ReqId, Context) ->
-    case m_rsc:name_to_id(ReqId, Context) of
-        {ok, RscId} -> RscId;
-        _ -> undefined
+        ConfId -> m_rsc:rid(ConfId, Context)
     end.
 
 %%

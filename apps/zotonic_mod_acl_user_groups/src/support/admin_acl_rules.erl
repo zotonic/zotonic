@@ -50,9 +50,7 @@ event(Msg, Context) ->
 
 
 event_admin(Msg, Context) ->
-    case      z_acl:is_allowed(use, mod_acl_user_groups, Context)
-      andalso z_acl:is_allowed(insert, acl_user_group, Context)
-    of
+    case mod_acl_user_groups:is_acl_admin(Context) of
         true ->
             event1(Msg, Context);
         false ->
@@ -107,15 +105,25 @@ event1(#postback{message={publish, _Args}}, Context) ->
     ok = m_acl_rule:publish(module, Context),
     z_render:growl(?__("Publish successful", Context), Context);
 
-event1(#postback{message={set_upload_size, [{id,Id}]}}, Context) ->
-    NewSize = z_convert:to_integer(z_context:get_q(<<"triggervalue">>, Context)),
-    case m_rsc:p(Id, acl_upload_size, Context) of
-        NewSize ->
-            Context;
-        _OldSize ->
-            {ok, _} = m_rsc:update(Id, [{acl_upload_size, NewSize}], Context),
-            Context
-    end;
+event1(#submit{ message = {set_upload_permissions, _Args} }, Context) ->
+    QIds = z_context:get_q_all("id", Context),
+    lists:foreach(
+        fun(QId) ->
+            case m_rsc:rid(QId, Context) of
+                undefined ->
+                    skip;
+                Id ->
+                    Size = z_convert:to_integer(z_context:get_q("size-"++QId, Context)),
+                    Mime = z_convert:to_binary(z_context:get_q("mime-"++QId, Context)),
+                    Props = [
+                        {acl_upload_size, Size},
+                        {acl_mime_allowed, z_string:trim(Mime)}
+                    ],
+                    m_rsc:update(Id, Props, Context)
+            end
+        end,
+        QIds),
+    z_render:growl(?__("Upload settings saved", Context), Context);
 
 event1(#submit{message={acl_rule_import, []}}, Context) ->
     #upload{tmpfile=TmpFile} = z_context:get_q_validated(<<"upload_file">>, Context),

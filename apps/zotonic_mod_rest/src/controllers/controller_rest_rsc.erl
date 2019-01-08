@@ -188,7 +188,7 @@ get_id(Context) ->
 %% @doc Make sure that we do an ACL check for all props before pushing them out.
 %% @todo Move this to the m_rsc module
 get_rsc(Id, Context) ->
-    Props = m_rsc:get_visible(Id, Context),
+    Props = m_rsc:get(Id, Context),
     IsA = m_rsc:is_a(Id, Context),
     Complete = [
         {category, hd(IsA)},

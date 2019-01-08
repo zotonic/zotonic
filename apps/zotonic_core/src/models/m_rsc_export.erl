@@ -66,7 +66,7 @@ full(Id, Context) when is_integer(Id) ->
     case m_rsc:exists(Id, Context) of
         false -> undefined;
         true ->
-            Rsc0 = m_rsc:get_visible(Id, Context),
+            Rsc0 = m_rsc:get(Id, Context),
             Rsc1 = filter_empty(Rsc0),
 
             Rsc = [
