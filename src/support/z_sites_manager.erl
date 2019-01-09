@@ -47,7 +47,10 @@
     await_startup/1,
 
     get_site_config_overrides/1,
-    put_site_config_overrides/2
+    put_site_config_overrides/2,
+
+    % Export this, in master this is moved to zotonic_core.erl
+    is_testsandbox/0
 ]).
 
 
