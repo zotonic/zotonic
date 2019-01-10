@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Driebit BV
 %% @doc Rate limiting of authentication tries and other types of requests
+%%      This follows https://www.owasp.org/index.php/Slow_Down_Online_Guessing_Attacks_with_Device_Cookies
 
 %% Copyright 2019 Driebit BV
 %%
