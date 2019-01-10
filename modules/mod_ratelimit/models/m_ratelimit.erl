@@ -88,7 +88,7 @@ is_event_limited( Type, Key, Device, Context ) ->
             andalso R#ratelimit_event.timestamp >= T
         end,
         List),
-    length(Filtered) > ratelimit_n(Context).
+    length(Filtered) >= ratelimit_n(Context).
 
 %% @doc Return all entries for an event
 -spec list_event( atom(), binary(), z:context() ) -> list().
