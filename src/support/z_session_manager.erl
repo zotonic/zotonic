@@ -37,6 +37,7 @@
     ensure_session/1,
     stop_session/1,
     stop_session/2,
+    stop_other_sessions/2,
     rename_session/1,
     whereis/2,
     whereis_user/2,
@@ -108,6 +109,20 @@ stop_session(SessionId, #context{session_manager=SessionManager} = Context) ->
                 ignore -> {error, notfound}
             end
     end.
+
+%% @doc Close all sessions of the user, except the requesting session
+-spec stop_other_sessions( m_rsc:resource_id(), z:context() ) -> ok.
+stop_other_sessions(UserId, #context{ session_pid = ContextSession } = Context) ->
+    Sessions = whereis_user(UserId, Context),
+    lists:foreach(
+        fun
+            (SessionPid) when SessionPid =:= ContextSession ->
+                ok;
+            (SessionPid) ->
+                z_session:stop(SessionPid)
+        end,
+        Sessions).
+
 
 %% @doc Rename the session id, only call this after ensure_session
 -spec rename_session(#context{}) -> {ok, #context{}} | {error, term()}.

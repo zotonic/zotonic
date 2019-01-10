@@ -214,6 +214,7 @@ set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
             reset_rememberme_token(Id, Context),
             z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
             z_depcache:flush(Id, Context),
+            z_session_manager:stop_other_sessions(Id, Context),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
             lager:error("set_username_pw error for ~p, setting username ~p: ~p",
