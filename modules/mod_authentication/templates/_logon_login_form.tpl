@@ -5,7 +5,7 @@
         Use a wired postback when we are not using the default logon page with
         its logon_controller.
     #}
-    {% wire id="logon_form" type="submit" postback={logon} delegate=`mod_authentication` %}
+    {% wire id="logon_form" type="submit" postback={logon} delegate=`controller_logon` %}
 {% endif %}
 <form id="logon_form" method="post" action="postback" class="z_logon_form" target="logonTarget">
     <input type="hidden" name="page" value="{{ page|escape }}" />

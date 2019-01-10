@@ -1195,6 +1195,8 @@ set_cookie(Key, Value, Context) ->
     set_cookie(Key, Value, [], Context).
 
 %% @doc Set a cookie value with cookie options.
+set_cookie(_Key, _Value, _Options, #context{ wm_reqdata = undefined } = Context) ->
+    Context;
 set_cookie(Key, Value, Options, Context) ->
     case controller_websocket:is_websocket_request(Context) of
         true ->
@@ -1218,10 +1220,14 @@ set_cookie(Key, Value, Options, Context) ->
 
 
 %% @doc Read a cookie value from the current request.
-get_cookie(Key, #context{wm_reqdata=RD}) ->
+get_cookie(Key, #context{ wm_reqdata = undefined }) ->
+    undefined;
+get_cookie(Key, #context{ wm_reqdata = RD }) ->
     wrq:get_cookie_value(Key, RD).
 
-get_cookies(Key, #context{wm_reqdata=RD}) ->
+get_cookies(Key, #context{ wm_reqdata = undefined }) ->
+    [];
+get_cookies(Key, #context{ wm_reqdata = RD }) ->
     case wrq:req_cookie(RD) of
         undefined -> [];
         Cookies -> proplists:get_all_values(Key, Cookies)
