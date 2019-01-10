@@ -217,8 +217,10 @@ incoming_msgs(#z_msg_ack{page_id=PageId, session_id=SessionId} = Ack, Context) -
 %%% ---------------------------------------------------------------------------------------
 
 incoming_1(#z_msg_v1{delegate='$ping'} = Msg, Context) ->
+    maybe_ping_session(Msg, Context),
     {ok, maybe_ack(pong, Msg, Context), Context};
 incoming_1(#z_msg_v1{delegate= <<"$ping">>} = Msg, Context) ->
+    maybe_ping_session(Msg, Context),
     {ok, maybe_ack(pong, Msg, Context), Context};
 incoming_1(#z_msg_v1{delegate=session, data= <<"check">>}, Context) ->
     {ok, session_status_message(Context), Context};
@@ -231,7 +233,8 @@ incoming_1(_Msg, Context) ->
     {ok, session_status_message(Context), Context}.
 
 
-incoming_with_session(#z_msg_v1{delegate='$comet'}, Context) ->
+incoming_with_session(#z_msg_v1{delegate='$comet'} = Msg, Context) ->
+    maybe_ping_session(Msg, Context),
     z_transport_comet:comet_delegate(Context);
 incoming_with_session(#z_msg_v1{delegate=postback, data=#postback_event{} = Pb} = Msg, Context) ->
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Pb#postback_event.postback, Context),
@@ -344,6 +347,15 @@ maybe_logon(Context) ->
             z_acl:logoff(Context#context{session_pid=undefined, page_pid=undefined})
     end.
 
+maybe_ping_session(#z_msg_v1{ data=Data }, Context) when is_list(Data) ->
+    case proplists:get_value(<<"is_active">>, Data) of
+        true ->
+            z_session:mark_active(Context);
+        false ->
+            ok
+    end;
+maybe_ping_session(#z_msg_v1{}, _Context) ->
+    ok.
 
 maybe_set_session(undefined, Context) ->
     Context;
