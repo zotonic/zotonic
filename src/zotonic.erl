@@ -114,19 +114,75 @@ update() ->
 %% @doc Ensure that mnesia has created its schema in the configured mnesia directory.
 ensure_mnesia_schema() ->
     application:load(mnesia),
-    case application:get_env(mnesia, dir) of
-        undefined ->
-            error_logger:info_msg("No mnesia directory defined, running without persistent email queue and filezcache.~n"
-                                  "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}~n~n"),
-            ok;
+    case mnesia_dir() of
         {ok, Dir} ->
-            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir,"schema.DAT")) of
-                true ->
-                    ok;
-                false ->
-                    ok = mnesia:create_schema([node()])
-            end
+            case filelib:is_dir(Dir) andalso filelib:is_regular(filename:join(Dir, "schema.DAT")) of
+                true -> ok;
+                false -> ok = mnesia:create_schema([node()])
+            end;
+        undefined ->
+            lager:info("No mnesia directory defined, running without persistent email queue and filezcache. "
+                       "To enable persistency, add to erlang.config: {mnesia,[{dir,\"priv/mnesia\"}]}"),
+            ok
     end.
+
+mnesia_dir() ->
+    application:load(mnesia),
+    case z_sites_manager:is_testsandbox() of
+        true ->
+            application:unset_env(mnesia, dir),
+            undefined;
+        false ->
+            mnesia_dir_config()
+    end.
+
+mnesia_dir_config() ->
+    case application:get_env(mnesia, dir) of
+        {ok, none} -> undefined;
+        {ok, ""} -> undefined;
+        {ok, Dir} -> mnesia_dir_append_node(Dir);
+        undefined ->
+            PrivDir = case code:priv_dir(zotonic) of
+                {error, bad_name} -> code:priv_dir(zotonic_core);
+                ZotonicPrivDir when is_list(ZotonicPrivDir) -> ZotonicPrivDir
+            end,
+            mnesia_dir_append_node(filename:join([ PrivDir, "mnesia" ]))
+    end.
+
+mnesia_dir_append_node(Dir) ->
+    MnesiaDir = filename:join([ Dir, atom_to_list(node()) ]),
+    case filelib:ensure_dir(filename:join(MnesiaDir, "x")) of
+        ok ->
+            maybe_move_mnesia(Dir, MnesiaDir),
+            application:set_env(mnesia, dir, MnesiaDir),
+            {ok, MnesiaDir};
+        {error, _} = Error ->
+            lager:error("Could not create mnesia dir \"~s\": ~p",
+                        [MnesiaDir, Error]),
+            undefined
+    end.
+
+maybe_move_mnesia(Dir, MnesiaDir) ->
+    case        filelib:is_regular(filename:join(Dir, "schema.DAT"))
+        and not filelib:is_regular(filename:join(MnesiaDir, "schema.DAT"))
+    of
+        true ->
+            lager:info("Moving existing mnesia files from ~p to ~p", [Dir, MnesiaDir]),
+            move_files(filename:join(Dir, "*.DAT"), MnesiaDir),
+            move_files(filename:join(Dir, "*.LOG"), MnesiaDir),
+            move_files(filename:join(Dir, "*.DCD"), MnesiaDir),
+            ok;
+        false ->
+            ok
+    end.
+
+move_files(Pattern, ToDir) ->
+    lists:foreach(
+        fun(F) ->
+            To = filename:join(ToDir, filename:basename(F)),
+            ok = file:rename(F, To)
+        end,
+        filelib:wildcard(Pattern)).
 
 %% @spec update([Node]) -> ok
 %% @doc Update the server on a specific node with new code on disk and flush the caches.
