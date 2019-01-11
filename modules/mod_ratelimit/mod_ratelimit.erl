@@ -24,7 +24,6 @@
 -mod_title("Rate Limiting").
 -mod_description("Rate limiting of authentication tries and other types of requests.").
 -mod_prio(500).
--mod_schema(1).
 
 -export([
     observe_auth_precheck/2,
@@ -32,7 +31,7 @@
     observe_auth_logon/3,
     observe_auth_reset/2,
     observe_tick_6h/2,
-    manage_schema/2
+    init/1
 ]).
 
 -include("zotonic.hrl").
@@ -51,6 +50,10 @@
         username :: binary(),
         device_id :: binary()
     }).
+
+%% @doc Setup the mnesia tables for registering the event counters.
+init(Context) ->
+    m_ratelimit:init(Context).
 
 %% @doc Check if rate limiting applies to this authentication request
 observe_auth_precheck( #auth_precheck{ username = Username }, Context ) ->
@@ -170,6 +173,3 @@ generate_device_secret(Context) ->
     m_config:set_value(mod_ratelimit, device_secret, Secret, Context),
     Secret.
 
-%% @doc Setup the mnesia tables for registering the event counters.
-manage_schema(_Version, Context) ->
-    m_ratelimit:init(Context).
