@@ -444,18 +444,20 @@ make_rememberme_cookie_value(UserId, Context) ->
     {ok, Token} = m_identity:get_rememberme_token(UserId, Context),
     {ok, {v1, Token}}.
 
-%% @doc Find all users with a certain e-mail address
+%% @doc Find all users with a certain e-mail address or username
 lookup_identities(undefined, _Context) -> [];
 lookup_identities("", _Context) -> [];
 lookup_identities(<<>>, _Context) -> [];
-lookup_identities(Email, Context) ->
-    Rows = m_identity:lookup_by_type_and_key_multi(email, Email, Context),
-    lists:usort([ proplists:get_value(rsc_id, Row) || Row <- Rows ]).
+lookup_identities(EmailOrUsername, Context) ->
+    Es = m_identity:lookup_by_type_and_key_multi(email, EmailOrUsername, Context),
+    Us = m_identity:lookup_by_type_and_key_multi(username_pw, EmailOrUsername, Context),
+    lists:usort([ proplists:get_value(rsc_id, Row) || Row <- Es ++ Us ]).
 
 
 %% @doc Exported convenience function to email password reminder to an user
 send_reminder(Id, Context) ->
     Email = m_rsc:p_no_acl(Id, email_raw, Context),
+    ?DEBUG({send_reminder, Email}),
     send_reminder(Id, Email, Context).
 
 send_reminder(_Id, undefined, _Context) ->
