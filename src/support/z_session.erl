@@ -49,6 +49,7 @@
 
     start_link/3,
     stop/1,
+    stop_sync/1,
     set/2,
     set/3,
     get/2,
@@ -75,6 +76,7 @@
     get_cookies/1,
     clear_cookies/1,
     check_expire/2,
+    session_info/1,
     dump/1,
     spawn_link/4
     ]).
@@ -90,6 +92,7 @@
             pages=[],
             linked=[],
             session_id = undefined,
+            session_nr = undefined,
             persist_id = undefined,
             persist_is_saved = false,
             persist_is_dirty = false,
@@ -128,11 +131,25 @@ start_link(SessionId, PersistId, Context) ->
 stop(SessionPid) when is_pid(SessionPid) ->
     gen_server:cast(SessionPid, stop).
 
+stop_sync(SessionPid) when is_pid(SessionPid) ->
+    gen_server:cast(SessionPid, stop),
+    timer:sleep(1),
+    wait_pid(SessionPid).
+
+wait_pid(SessionPid) ->
+    case erlang:is_process_alive(SessionPid) of
+        true ->
+            timer:sleep(10),
+            wait_pid(SessionPid);
+        false ->
+            ok
+    end.
+
 
 set(Props, #context{session_pid=Pid}) ->
     set(Props, Pid);
 set(Props, Pid) when is_pid(Pid) ->
-    gen_server:cast(Pid, {set, Props});
+    gen_server:cast(Pid, {set, Props, undefined});
 set(_Props, _) ->
     {error, no_session}.
 
@@ -285,6 +302,9 @@ lookup_page_session(PageId, Context) when is_binary(PageId) ->
 check_expire(Now, Pid) ->
     gen_server:cast(Pid, {check_expire, Now}).
 
+-spec session_info( pid() ) -> proplists:proplist().
+session_info(Pid) ->
+    gen_server:call(Pid, session_info).
 
 %% @spec get_attach_state(Context::#context{}) -> [States]
 %% @doc Check the state of all the attached pages.
@@ -549,6 +569,20 @@ handle_call(get_attach_state, _From, Session) ->
 handle_call(get_pages, _From, Session) ->
     {reply, [ Pid ||  #page{page_pid=Pid} <- Session#session.pages], Session};
 
+handle_call(session_info, _From, #session{ props = Props } = Session) ->
+    Info = [
+        {pid, self()},
+        {session_nr, Session#session.session_nr},
+        {auth_user_id, proplists:get_value(auth_user_id, Props)},
+        {auth_timestamp, proplists:get_value(auth_timestamp, Props)},
+        {peer, proplists:get_value(peer, Props)},
+        {user_agent, proplists:get_value(user_agent, Props)},
+        {page_count, length(Session#session.pages)},
+        {language, proplists:get_value(language, Props)},
+        {timezone, proplists:get_value(tz, Props)}
+    ],
+    {reply, {ok, Info}, Session};
+
 handle_call(Msg, _From, Session) ->
     {stop, {unknown_cast, Msg}, Session}.
 
@@ -611,7 +645,11 @@ maybe_auth_change(auth_user_id, UserId, Session, OldSession) ->
                               z_session_page:auth_change(PagePid)
                            end,
                            Session#session.pages),
-            Session#session{pages=[], transport=z_transport_queue:new()}
+            Session#session{
+                pages=[],
+                session_nr = z_convert:to_binary(z_ids:id()),
+                transport=z_transport_queue:new()
+            }
     end;
 maybe_auth_change(_K, _V, Session, _OldSession) ->
     Session.
@@ -697,6 +735,7 @@ new_session(Host, SessionId, PersistId) ->
             expire_n = ExpireN,
             expire_inactive = Now + ExpireInactive,
             session_id = SessionId,
+            session_nr = z_convert:to_binary(z_ids:id()),
             persist_id = PersistId,
             transport = z_transport_queue:new(),
             context = Context
