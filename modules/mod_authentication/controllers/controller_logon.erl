@@ -457,7 +457,6 @@ lookup_identities(EmailOrUsername, Context) ->
 %% @doc Exported convenience function to email password reminder to an user
 send_reminder(Id, Context) ->
     Email = m_rsc:p_no_acl(Id, email_raw, Context),
-    ?DEBUG({send_reminder, Email}),
     send_reminder(Id, Email, Context).
 
 send_reminder(_Id, undefined, _Context) ->
