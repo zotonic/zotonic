@@ -128,18 +128,18 @@ reminder_secrets(Secret, Username, Context) ->
             case get_by_reminder_secret(Secret, Context) of
                 {ok, UserId} ->
                     case m_identity:get_username(UserId, Context) of
-                        {ok, UsernameB} ->
+                        undefined ->
+                            {[], Context};
+                        UsernameB ->
                             Vs = [
                                 {user_id, UserId},
                                 {secret, Secret},
                                 {username, UsernameB}
                             ],
                             {Vs, Context};
-                        {ok, OtherUsername} ->
+                        OtherUsername ->
                             lager:error("Password reset with username mismatch: got \"~s\", expected \"~s\"",
                                         [ UsernameB, OtherUsername ]),
-                            {[], Context};
-                        {error, _} ->
                             {[], Context}
                     end;
                 undefined ->

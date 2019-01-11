@@ -99,10 +99,7 @@ observe_auth_logon(auth_logon, Context, _Context) ->
 auth_username(Context) ->
     case z_context:get_session(ratelimit_event_username, Context) of
         undefined ->
-            case m_identity:get_username(Context) of
-                {ok, Username} -> Username;
-                {error, _} -> undefined
-            end;
+            m_identity:get_username(Context);
         Username ->
             Username
     end.

@@ -23,7 +23,7 @@
 
         <p>{_ Click on the link below to enter a new password. When clicking doesn't work, please copy and paste the whole link. _}</p>
 
-        <p><a href="{% url logon_reset secret=secret u=username use_absolute_url %}">{% url logon_reset secret=secret use_absolute_url %}</a></p>
+        <p><a href="{% url logon_reset secret=secret u=username use_absolute_url %}">{% url logon_reset u=username secret=secret use_absolute_url %}</a></p>
     {% endwith %}
 {% endif %}
 
