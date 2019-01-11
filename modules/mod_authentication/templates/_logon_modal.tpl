@@ -23,14 +23,12 @@ Make sure that these CSS files are loaded:
 #}
 <div id="z_logon_or_signup">
 {% with
-        1,
         logon_state|if_undefined:"logon",
         logon_context,
         logon_context|if_undefined:"",
         "z_logon_or_signup",
         "_logon_modal.tpl"
     as
-        use_wire,
         logon_state,
         original_logon_context,
         logon_context,
@@ -45,7 +43,6 @@ Make sure that these CSS files are loaded:
         logon_context=logon_context
         update_target=update_target
         update_template=update_template
-        use_wire=use_wire
         style_boxed=style_boxed
         style_width=style_width
     %}
@@ -61,7 +58,6 @@ Make sure that these CSS files are loaded:
             logon_context=logon_context
             update_target=update_target
             update_template=update_template
-            use_wire=use_wire
             style_boxed=style_boxed
             style_width=style_width
         %}
@@ -75,7 +71,6 @@ Make sure that these CSS files are loaded:
             logon_context=logon_context
             update_target=update_target
             update_template=update_template
-            use_wire=use_wire
             style_boxed=style_boxed
             style_width=style_width
         %}
@@ -90,7 +85,6 @@ Make sure that these CSS files are loaded:
         logon_context=logon_context
         update_target=update_target
         update_template=update_template
-        use_wire=use_wire
         style_boxed=style_boxed
         style_width=style_width
     %}
@@ -118,7 +112,6 @@ Make sure that these CSS files are loaded:
             logon_context=logon_context
             update_target=update_target
             update_template=update_template
-            use_wire=use_wire
             style_boxed=style_boxed
             style_width=style_width
         %}

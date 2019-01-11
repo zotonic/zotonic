@@ -31,7 +31,6 @@ form_outside_tpl
         {% if form_form_tpl %}
             {% include form_form_tpl
                 page=page
-                use_wire=use_wire
                 signup_delegate=signup_delegate
                 form_fields_tpl=form_fields_tpl
                 show_signup_name_title=show_signup_name_title
