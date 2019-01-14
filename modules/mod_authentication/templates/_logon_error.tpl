@@ -5,6 +5,21 @@
 
     <p><a href="{% url logon_reminder %}" id="logon_error_link_reminder">{_ Need help signing in? _}</a></p>
 
+{% elseif reason == "ratelimit" %}
+
+    <p>
+        {_ Too many retries. _}
+        {_ Please try again in _}
+        {% with m.ratelimit.timeout as seconds %}
+            {% if seconds == 3600 %}{_ an hour _}.
+            {% elseif seconds > 3600 %}{{ ((seconds+3599)/3600)|round }} {_ hours _}.
+            {% else %}{{ (seconds / 60)|round }} {_ minutes _}.
+            {% endif %}
+        {% endwith %}
+    </p>
+
+    <p><a href="{% url logon_reminder %}" id="logon_error_link_reminder">{_ Need help signing in? _}</a></p>
+
 {% elseif reason == "reminder" %}
 
     <p>{_ You've entered an unknown username or email address. Please try again. _}</p>

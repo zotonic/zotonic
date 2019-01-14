@@ -338,12 +338,40 @@ nodash(S) ->
 
 %% @doc Return the rsc_id with the given username/password.
 %%      If succesful then updates the 'visited' timestamp of the entry.
--spec check_username_pw(binary() | string(), binary() | string(), #context{}) -> {ok, m_rsc:resource_id()} | {error, term()}.
-check_username_pw(<<"admin">>, Password, Context) ->
-    check_username_pw("admin", Password, Context);
-check_username_pw("admin", Empty, _Context) when Empty =:= []; Empty =:= <<>> ->
+-spec check_username_pw(binary() | string(), binary() | string(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+check_username_pw(Username, Password, Context) ->
+    NormalizedUsername = z_convert:to_binary( z_string:trim( z_string:to_lower(Username) ) ),
+    case z_notifier:first(#auth_precheck{ username =  NormalizedUsername }, Context) of
+        Ok when Ok =:= ok; Ok =:= undefined ->
+            case check_username_pw_1(NormalizedUsername, Password, Context) of
+                {ok, RscId} ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = RscId,
+                            username = NormalizedUsername,
+                            is_accepted = true
+                        },
+                        Context),
+                    {ok, RscId};
+                {error, _} = Error ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = undefined,
+                            username = NormalizedUsername,
+                            is_accepted = false
+                        },
+                        Context),
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+check_username_pw_1(<<"admin">>, "", _Context) ->
     {error, password};
-check_username_pw("admin", Password, Context) ->
+check_username_pw_1(<<"admin">>, <<>>, _Context) ->
+    {error, password};
+check_username_pw_1(<<"admin">>, Password, Context) ->
     Password1 = z_convert:to_list(Password),
     case z_convert:to_list(m_site:get(admin_password, Context)) of
         "admin" when Password1 =:= "admin" ->
@@ -365,14 +393,14 @@ check_username_pw("admin", Password, Context) ->
         _ ->
             {error, password}
     end;
-check_username_pw(Username, Password, Context) ->
+check_username_pw_1(Username, Password, Context) ->
     Username1 = z_string:trim(z_string:to_lower(Username)),
     Row = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", [Username1], Context),
     case Row of
         undefined ->
             % If the Username looks like an e-mail address, try by Email & Password
-            case z_email_utils:is_email(Username) of
-                true -> check_email_pw(Username, Password, Context);
+            case z_email_utils:is_email(Username1) of
+                true -> check_email_pw(Username1, Password, Context);
                 false -> {error, nouser}
             end;
         {RscId, Hash} ->
@@ -436,8 +464,7 @@ ip_whitelist(Context) ->
 %%      If succesful then updates the 'visited' timestamp of the entry.
 %% @spec check_email_pw(Email, Password, Context) -> {ok, Id} | {error, Reason}
 check_email_pw(Email, Password, Context) ->
-    EmailLower = z_string:trim(z_string:to_lower(Email)),
-    case lookup_by_type_and_key_multi(email, EmailLower, Context) of
+    case lookup_by_type_and_key_multi(email, Email, Context) of
         [] -> {error, nouser};
         Users -> check_email_pw_1(Users, Email, Password, Context)
     end.

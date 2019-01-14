@@ -30,7 +30,6 @@ Params:
         {% if form_form_tpl %}
             {% include form_form_tpl
                 page=page
-                use_wire=use_wire
                 form_fields_tpl=form_fields_tpl
                 style_boxed=style_boxed
                 style_width=style_width

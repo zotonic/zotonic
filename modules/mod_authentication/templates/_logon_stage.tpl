@@ -1,8 +1,17 @@
 {% if stage == "reminder_sent" %}
 
-    <h2 class="z-logon-title">{_ Check your email _}</h2>
-    <p>{_ We have sent an email with a link to reset your password to _}: <b>{{ email|escape }}</b></p>
-    <p>{_ If you do not receive the email within a few minutes, please check your spam folder. _}</p>
+    {% if not error %}
+        <h2 class="z-logon-title">{_ Check your email _}</h2>
+        <p>{_ We have sent an email with a link to reset your password to _}: <b>{{ email|escape }}</b></p>
+        <p>{_ If you do not receive the email within a few minutes, please check your spam folder. _}</p>
+    {% elseif error == `ratelimit` %}
+        <h2 class="z-logon-title">{_ Too many retries _}</h2>
+        <p>{_ Please try again later. _}</p>
+    {% else %}
+        <h2 class="z-logon-title">{_ Could not send email _}</h2>
+        <p>{_ Please try again later. _}</p>
+    {% endif %}
+
     {% if not m.acl.user %}
         <p><a class="btn btn-primary" href="{% url logon %}" id="back_to_logon">{_ Back to sign in _}</a></p>
     {% else %}
