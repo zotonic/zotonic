@@ -1,8 +1,7 @@
-{% wire id="password_expired" type="submit" postback={expired} delegate=`mod_authentication` %}
+{% wire id="password_expired" type="submit" postback={expired secret=secret username=username} delegate=`controller_logon` %}
 <form id="password_expired" method="post" action="postback">
     <h2 class="z-logon-title">{_ Your password has expired _}</h2>
     <p>{_ You'll need to create a new one. _}</p>
-    <input type="hidden" id="logon_password_expired_secret" name="secret" value="{{ secret|escape }}" />
 
     {% with
     (m.config.mod_authentication.password_min_length.value|default:"6")|to_integer

@@ -37,7 +37,7 @@
       </div>
 
       {% if is_show_login %}
-          {% with '#reload', 1 as page, use_wire %}
+          {% with '#reload' as page %}
               {% inherit %}
           {% endwith %}
       {% endif %}

@@ -381,6 +381,24 @@
 % 'session_init'    - Notification that a new session has been initialized (session_pid is in the context)
 % 'session_init_fold' - foldl over the context containing a new session (after session_init)
 
+%% @doc First for logon of user with username, check for ratelimit, blocks etc.
+%%      Returns: 'undefined' | ok | {error, Reason}
+-record(auth_precheck, {
+        username :: binary()
+    }).
+
+%% @doc Fold over the context after logon of user with username, communicates valid or invalid password
+-record(auth_checked, {
+        id :: undefined | m_rsc:resource_id(),
+        username :: binary(),
+        is_accepted :: boolean()
+    }).
+
+%% @doc First to check for password reset forms, return undefined, ok, or {error, Reason}.
+-record(auth_reset, {
+        username :: undefined | binary()
+    }).
+
 %% @doc Foldl over the #context after a logon error before the logon error page is shown.
 -record(auth_logon_error, {
         reason = [] :: list()

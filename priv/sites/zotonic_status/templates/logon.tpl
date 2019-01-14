@@ -29,7 +29,7 @@
             <h3 class="panel-title">{_ Enter your password to manage this server _}</h3>
         </div>
         <div class="panel-body">
-            <form id="logon_form" method="post" action="postback" class="form">
+            <form id="logon_form" method="post" action="postback" class="form z_logon_form">
                 <div class="form-group row">
                     <div class="col-md-8 col-md-offset-2">
                         <div class="input-group">
@@ -40,6 +40,10 @@
                         </div>
                         <div id="error-pw" class="has-error">
                             <p class="help-block help-block-error">{_ This password is not correct. _}</p>
+                            <p class="help-block">{_ You can find the password in ~/.zotonic/[version]/zotonic.config. _}</p>
+                        </div>
+                        <div id="error-ratelimit" class="has-error">
+                            <p class="help-block help-block-error">{_ Too many tries, try again in an hour. _}</p>
                             <p class="help-block">{_ You can find the password in ~/.zotonic/[version]/zotonic.config. _}</p>
                         </div>
                     </div>

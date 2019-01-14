@@ -3,18 +3,17 @@ Params:
 - username: set by controller_logon
 #}
 {% if username %}
-    {% wire id="password_reset" type="submit" postback={reset} delegate=`mod_authentication` %}
+    {% wire id="password_reset" type="submit" postback={reset secret=secret username=username} delegate=`controller_logon` %}
     <form id="password_reset" method="post" action="postback" class="z_logon_form">
-        <input type="hidden" name="secret" value="{{ secret|escape }}" />
-
         {% include form_fields_tpl username=username %}
-
         {% javascript %}
             setTimeout(function(){
                 z_init_postback_forms();
             }, 100);
         {% endjavascript %}
     </form>
+{% elseif error == `ratelimit` %}
+    <h2 class="z-logon-title">{_ Sorry, too many retries _}</h2>
 {% else %}
     <h2 class="z-logon-title">{_ Sorry, your password reset code is unknown or expired _}</h2>
     <p>{_ For security reasons, password reset codes are only kept for a limited amount of time and can only be used once. _}</p>

@@ -25,6 +25,7 @@
             zotonic_status,
             mod_base,
             mod_bootstrap,
+            mod_ratelimit,
             mod_zotonic_status_vcs,
             mod_zotonic_tracer
            ]},

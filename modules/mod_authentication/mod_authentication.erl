@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2014 Marc Worrell
+%% @copyright 2010-2019 Marc Worrell
 %% @doc Authentication and identification of users.
 
-%% Copyright 2010-2014 Marc Worrell
+%% Copyright 2010-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -47,7 +47,6 @@ init(Context) ->
         _ -> nop
     end,
     ok.
-
 
 event(#postback{ message = {session_alert, Args} }, Context) ->
     {session_nr, SessionNr} = proplists:lookup(session_nr, Args),
@@ -101,6 +100,7 @@ event(#submit{message={reset, _Args}}, Context) ->
     Args = z_context:get_q_all(Context),
     controller_logon:reset(Args, Context).
 
+%% @doc Add admin menu for external services
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
      #menu_item{id=admin_authentication_services,
