@@ -63,8 +63,11 @@ var z_init_postback_forms_timeout = false;
 var TRANSPORT_TIMEOUT       = 30000;
 var TRANSPORT_TRIES         = 3;
 
+var ACTIVITY_PERIOD         = 5;  // Inactive if silent for 5 seconds
+
 // Misc state
 var z_spinner_show_ct       = 0;  // Set when performing an AJAX callback
+var z_last_active           = 0;
 var z_input_updater         = false;
 var z_drag_tag              = [];
 var z_registered_events     = {};
@@ -120,6 +123,8 @@ function z_set_page_id( page_id, user_id )
     ubf.add_spec('q', [
         "q"
         ]);
+
+    z_activity_init();
 
     if (z_pageid != page_id) {
         z_session_valid = true;
@@ -198,6 +203,14 @@ function z_dialog_close()
 
 function z_dialog_confirm(options)
 {
+    var html,
+        backdrop;
+
+    if (typeof options.backdrop == 'undefined') {
+        backdrop = options.backdrop
+    } else {
+        backdrop = true;
+    }
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-default z-dialog-cancel-button">'
@@ -210,7 +223,8 @@ function z_dialog_confirm(options)
     $.dialogAdd({
         title: (options.title||z_translate('Confirm')),
         text: html,
-        width: (options.width)
+        width: (options.width),
+        backdrop: backdrop
     });
     $(".z-dialog-cancel-button").click(function() { z_dialog_close(); });
     $(".z-dialog-ok-button").click(function() {
@@ -221,6 +235,14 @@ function z_dialog_confirm(options)
 
 function z_dialog_alert(options)
 {
+    var html,
+        backdrop;
+
+    if (typeof options.backdrop == 'undefined') {
+        backdrop = options.backdrop
+    } else {
+        backdrop = true;
+    }
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-primary z-dialog-ok-button">'
@@ -230,7 +252,8 @@ function z_dialog_alert(options)
     $.dialogAdd({
         title: (options.title||z_translate('Alert')),
         text: html,
-        width: (options.width)
+        width: (options.width),
+        backdrop: backdrop
     });
     $(".z-dialog-ok-button").click(function() {
         z_dialog_close();
@@ -440,6 +463,39 @@ function z_session_invalid_dialog()
         z_reload();
     }
 }
+
+/* Track activity, for stopping inactive sessions
+---------------------------------------------------------- */
+
+function z_activity_init()
+{
+    z_activity_event();
+
+    document.addEventListener("visibilitychange", z_activity_event);
+    document.addEventListener("scroll", z_activity_event);
+    document.addEventListener("keydown", z_activity_event);
+    document.addEventListener("mousemove", z_activity_event);
+    document.addEventListener("click", z_activity_event);
+    document.addEventListener("focus", z_activity_event);
+}
+
+function z_activity_event()
+{
+    if (!document.hidden) {
+        z_last_active = Math.floor(Date.now() / 1000);
+    }
+}
+
+function z_is_active()
+{
+    if (document.hidden) {
+        return false;
+    } else {
+        var now = Math.floor(Date.now() / 1000);
+        return z_last_active > now - ACTIVITY_PERIOD;
+    }
+}
+
 
 /* Transport between user-agent and server
 ---------------------------------------------------------- */
@@ -1149,7 +1205,10 @@ function z_comet_poll_ajax()
                 "ua_class": ubf.constant(z_ua),
                 "page_id": z_pageid,
                 "session_id": window.z_sid || undefined,
-                "data": z_comet_poll_count
+                "data": {
+                    count: z_comet_poll_count,
+                    is_active: z_is_active()
+                }
             });
         z_comet = $.ajax({
             url: window.location.protocol + '//' + window.location.host + '/comet',
@@ -1257,7 +1316,10 @@ function z_websocket_ping()
                     "ua_class": ubf.constant(z_ua),
                     "page_id": z_pageid,
                     "session_id": window.z_sid || undefined,
-                    "data": z_ws_pong_count
+                    "data": {
+                        count: z_ws_pong_count,
+                        is_active: z_is_active()
+                    }
                 });
         z_ws.send(msg);
     }

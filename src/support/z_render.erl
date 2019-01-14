@@ -450,7 +450,10 @@ update_js_selector_first(CssSelector, Html, Function, AfterEffects) ->
 
 dialog(Title, Template, Vars, Context) ->
     {Html, Context1} = z_template:render_to_iolist(Template, Vars, Context),
-    Args = [{title, z_trans:lookup_fallback(Title, Context)}, {text, Html}],
+    Args = [
+        {title, z_trans:lookup_fallback(Title, Context)},
+        {text, Html}
+    ],
     Args1 = case proplists:get_value(width, Vars) of
                 undefined -> Args;
                 Width -> [{width, Width} | Args]
@@ -461,6 +464,11 @@ dialog(Title, Template, Vars, Context) ->
             end,
     Args3 = case proplists:get_value(backdrop, Vars) of
                 undefined -> Args2;
+                "true" -> [{backdrop, true} | Args2 ];
+                <<"true">> -> [{backdrop, true} | Args2 ];
+                "false" -> [{backdrop, false} | Args2 ];
+                <<"false">> -> [{backdrop, false} | Args2 ];
+                static -> [ {backdrop, <<"static">>} | Args2 ];
                 Backdrop -> [{backdrop, Backdrop} | Args2]
             end,
     Args4 = case proplists:get_value(center, Vars) of

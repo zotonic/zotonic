@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2014 Marc Worrell
+%% @copyright 2010-2019 Marc Worrell
 %% @doc Authentication and identification of users.
 
-%% Copyright 2010-2014 Marc Worrell
+%% Copyright 2010-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
 %% gen_server exports
 -export([
     init/1,
+    event/2,
     observe_logon_submit/2,
     observe_auth_autologon/2,
     observe_auth_validated/2,
@@ -47,6 +48,59 @@ init(Context) ->
     end,
     ok.
 
+event(#postback{ message = {session_alert, Args} }, Context) ->
+    {session_nr, SessionNr} = proplists:lookup(session_nr, Args),
+    UserId = z_acl:user(Context),
+    case z_session_manager:lookup_session_nr(UserId, SessionNr, Context) of
+        {ok, Pid} ->
+            ContextAlert = z_context:new(Context),
+            ContextAlert1 = ContextAlert#context{ session_pid = Pid, session_id = undefined },
+            ContextAlert2 = z_render:wire(
+                {alert, [
+                    {text, ?__("Session alert requested", Context)}
+                ]},
+                ContextAlert1),
+            z_session:add_script(ContextAlert2),
+            z_render:growl(?__("Sending the alert", Context), Context);
+        {error, _} ->
+            z_render:growl(?__("Could not find the session", Context), Context)
+    end;
+event(#postback{ message = {session_stop, Args} }, Context) ->
+    {session_nr, SessionNr} = proplists:lookup(session_nr, Args),
+    UserId = z_acl:user(Context),
+    case z_session_manager:lookup_session_nr(UserId, SessionNr, Context) of
+        {ok, Pid} ->
+            z_session:set(auth_user_id, none, Pid),
+            z_session:stop_sync(Pid),
+            z_render:wire([
+                {growl, [
+                    {text, ?__("Stopping the session", Context)}
+                ]},
+                {remove, [
+                    {target, proplists:get_value(element_id, Args)}
+                ]}
+            ], Context);
+        {error, _} ->
+            z_render:growl(?__("Could not find the session", Context), Context)
+    end;
+
+
+%% @doc Handle logon submits in case we cannot use controller_logon. Pass on the  data to the page controller.
+event(#submit{message={logon, WireArgs}}, Context) ->
+    Args = z_context:get_q_all(Context),
+    controller_logon:logon(Args, WireArgs, Context);
+event(#submit{message={reminder, _Args}}, Context) ->
+    Args = z_context:get_q_all(Context),
+    controller_logon:reminder(Args, Context);
+event(#submit{message={expired, _Args}}, Context) ->
+    Args = z_context:get_q_all(Context),
+    controller_logon:expired(Args, Context);
+event(#submit{message={reset, _Args}}, Context) ->
+    lager:info("reset"),
+    Args = z_context:get_q_all(Context),
+    controller_logon:reset(Args, Context).
+
+%% @doc Add admin menu for external services
 observe_admin_menu(admin_menu, Acc, Context) ->
     [
      #menu_item{id=admin_authentication_services,

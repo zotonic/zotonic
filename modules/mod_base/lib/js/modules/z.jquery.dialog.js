@@ -35,7 +35,7 @@ limitations under the License.
 			});
 				
 			$d = $('<div></div>').hide().html(options.text).dialog(settings);
-			$d.dialog('open');            
+			$d.dialog('open');
 		},
 
 		dialogClose: function() 

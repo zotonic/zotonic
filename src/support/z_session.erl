@@ -45,8 +45,11 @@
 
 %% session exports
 -export([
+    event/2,
+
     start_link/3,
     stop/1,
+    stop_sync/1,
     set/2,
     set/3,
     get/2,
@@ -60,6 +63,7 @@
     get_persistent/3,
     keepalive/1,
     keepalive/2,
+    mark_active/1,
     ensure_page_session/1,
     lookup_page_session/2,
     get_pages/1,
@@ -72,6 +76,7 @@
     get_cookies/1,
     clear_cookies/1,
     check_expire/2,
+    session_info/1,
     dump/1,
     spawn_link/4
     ]).
@@ -82,9 +87,12 @@
             expire,
             expire_1,
             expire_n,
+            expire_inactive,
+            is_expiry_notified = false,
             pages=[],
             linked=[],
             session_id = undefined,
+            session_nr = undefined,
             persist_id = undefined,
             persist_is_saved = false,
             persist_is_dirty = false,
@@ -101,11 +109,17 @@
             page_pid
             }).
 
+-define(INACTIVE_DIALOG_TIMEOUT, 20).
 
 %%====================================================================
 %% API
 %%====================================================================
 
+event(#postback{ message = continue_session }, #context{ session_pid = Pid } = Context) when is_pid(Pid) ->
+    gen_server:cast(Pid, event_continue_session),
+    Context;
+event(#postback{ message = continue_session }, Context) ->
+    Context.
 
 start_link(<<>>, PersistId, Context) ->
     start_link(undefined, PersistId, Context);
@@ -117,11 +131,25 @@ start_link(SessionId, PersistId, Context) ->
 stop(SessionPid) when is_pid(SessionPid) ->
     gen_server:cast(SessionPid, stop).
 
+stop_sync(SessionPid) when is_pid(SessionPid) ->
+    gen_server:cast(SessionPid, stop),
+    timer:sleep(1),
+    wait_pid(SessionPid).
+
+wait_pid(SessionPid) ->
+    case erlang:is_process_alive(SessionPid) of
+        true ->
+            timer:sleep(10),
+            wait_pid(SessionPid);
+        false ->
+            ok
+    end.
+
 
 set(Props, #context{session_pid=Pid}) ->
     set(Props, Pid);
 set(Props, Pid) when is_pid(Pid) ->
-    gen_server:cast(Pid, {set, Props});
+    gen_server:cast(Pid, {set, Props, undefined});
 set(_Props, _) ->
     {error, no_session}.
 
@@ -243,6 +271,12 @@ keepalive(PageId, Pid) ->
     gen_server:cast(Pid, {keepalive, PageId}).
 
 
+%% @doc Mark the page session active, called by transport on page activity
+mark_active(#context{ session_pid = Pid }) when is_pid(Pid) ->
+    gen_server:cast(Pid, mark_active);
+mark_active(#context{}) ->
+    ok.
+
 %% @doc Make sure that the request has a page session, when the page session was alive then
 %%      adjust the expiration of the page.  Returns a new context with the page id set.
 -spec ensure_page_session(#context{}) -> #context{}.
@@ -268,6 +302,9 @@ lookup_page_session(PageId, Context) when is_binary(PageId) ->
 check_expire(Now, Pid) ->
     gen_server:cast(Pid, {check_expire, Now}).
 
+-spec session_info( pid() ) -> proplists:proplist().
+session_info(Pid) ->
+    gen_server:call(Pid, session_info).
 
 %% @spec get_attach_state(Context::#context{}) -> [States]
 %% @doc Check the state of all the attached pages.
@@ -329,11 +366,35 @@ handle_cast({keepalive, PageId}, Session) ->
     end,
     {noreply, Session1};
 
+handle_cast(event_continue_session, Session) ->
+    Context = fresh_context(Session),
+    ExpireInactive = z_convert:to_integer(m_config:get_value(site, session_expire_inactive, ?SESSION_EXPIRE_INACTIVE, Context)),
+    Session1 = Session#session{
+        expire_inactive = z_utils:now() + ExpireInactive,
+        is_expiry_notified = false
+    },
+    erlang:spawn(
+        fun() ->
+            ContextScript = z_render:wire({dialog_close, []}, Context),
+            add_script(ContextScript)
+        end),
+    {noreply, Session1};
+
+handle_cast(mark_active, #session{ is_expiry_notified = true } = Session) ->
+    {noreply, Session};
+handle_cast(mark_active, #session{ context = Context } = Session) ->
+    ExpireInactive = z_convert:to_integer(m_config:get_value(site, session_expire_inactive, ?SESSION_EXPIRE_INACTIVE, Context)),
+    Session1 = Session#session{
+        expire_inactive = z_utils:now() + ExpireInactive,
+        is_expiry_notified = false
+    },
+    {noreply, Session1};
+
 %% @doc Check session expiration, stop when passed expiration.
 handle_cast({check_expire, Now}, Session) ->
     Session1 = Session#session{
-                    transport=z_transport_queue:periodic(Session#session.transport)
-                },
+        transport=z_transport_queue:periodic(Session#session.transport)
+    },
     case Session1#session.pages of
         [] ->
             if
@@ -343,10 +404,11 @@ handle_cast({check_expire, Now}, Session) ->
         _ ->
             Expire   = Now + ?SESSION_PAGE_TIMEOUT,
             Session2 = if
-                            Expire > Session1#session.expire -> Session1#session{expire=Expire};
-                            true -> Session1
-                       end,
-            {noreply, Session2}
+                Expire > Session1#session.expire -> Session1#session{expire=Expire};
+                true -> Session1
+            end,
+            Session3 = handle_check_activity(Now, Session2),
+            {noreply, Session3}
     end;
 
 %% @doc Add a script to a specific page's script queue
@@ -507,6 +569,20 @@ handle_call(get_attach_state, _From, Session) ->
 handle_call(get_pages, _From, Session) ->
     {reply, [ Pid ||  #page{page_pid=Pid} <- Session#session.pages], Session};
 
+handle_call(session_info, _From, #session{ props = Props } = Session) ->
+    Info = [
+        {pid, self()},
+        {session_nr, Session#session.session_nr},
+        {auth_user_id, proplists:get_value(auth_user_id, Props)},
+        {auth_timestamp, proplists:get_value(auth_timestamp, Props)},
+        {peer, proplists:get_value(peer, Props)},
+        {user_agent, proplists:get_value(user_agent, Props)},
+        {page_count, length(Session#session.pages)},
+        {language, proplists:get_value(language, Props)},
+        {timezone, proplists:get_value(tz, Props)}
+    ],
+    {reply, {ok, Info}, Session};
+
 handle_call(Msg, _From, Session) ->
     {stop, {unknown_cast, Msg}, Session}.
 
@@ -569,9 +645,56 @@ maybe_auth_change(auth_user_id, UserId, Session, OldSession) ->
                               z_session_page:auth_change(PagePid)
                            end,
                            Session#session.pages),
-            Session#session{pages=[], transport=z_transport_queue:new()}
+            Session#session{
+                pages=[],
+                session_nr = z_convert:to_binary(z_ids:id()),
+                transport=z_transport_queue:new()
+            }
     end;
 maybe_auth_change(_K, _V, Session, _OldSession) ->
+    Session.
+
+handle_check_activity(Now, #session{ expire_inactive = Inactive, is_expiry_notified = false } = Session) when Inactive < Now ->
+    case proplists:get_value(auth_user_id, Session#session.props) of
+        undefined ->
+            Session;
+        none ->
+            Session;
+        _UserId ->
+            % Send an alert to all open pages
+            Context = fresh_context(Session),
+            erlang:spawn(
+                fun() ->
+                    ContextScript = z_render:wire(
+                        {alert, [
+                            {title, ?__(<<"Session Timeout">>, Context)},
+                            {text, ?__(<<"Click ‘Continue’ to continue with your session."/utf8>>, Context)},
+                            {button, ?__(<<"Continue">>, Context)},
+                            {backdrop, static},
+                            {action, {postback, [
+                                {postback, continue_session},
+                                {delegate, ?MODULE}
+                            ]}}
+                        ]},
+                        Context),
+                    add_script(ContextScript)
+                end),
+            Session#session{
+                is_expiry_notified = true,
+                expire_inactive = Now + ?INACTIVE_DIALOG_TIMEOUT
+            }
+    end;
+handle_check_activity(Now, #session{ expire_inactive = Inactive, is_expiry_notified = true } = Session) when Inactive < Now ->
+    case proplists:get_value(auth_user_id, Session#session.props) of
+        undefined ->
+            Session;
+        none ->
+            Session;
+        _UserId ->
+            gen_server:cast(self(), stop),
+            Session
+    end;
+handle_check_activity(_Now, Session) ->
     Session.
 
 
@@ -604,14 +727,18 @@ new_session(Host, SessionId, PersistId) ->
     Context = z_context:new(Host),
     Expire1 = z_convert:to_integer(m_config:get_value(site, session_expire_1, ?SESSION_EXPIRE_1, Context)),
     ExpireN = z_convert:to_integer(m_config:get_value(site, session_expire_n, ?SESSION_EXPIRE_N, Context)),
+    ExpireInactive = z_convert:to_integer(m_config:get_value(site, session_expire_inactive, ?SESSION_EXPIRE_INACTIVE, Context)),
+    Now = z_utils:now(),
     load_persist(#session{
-            expire=z_utils:now() + Expire1,
+            expire = Now + Expire1,
             expire_1 = Expire1,
             expire_n = ExpireN,
+            expire_inactive = Now + ExpireInactive,
             session_id = SessionId,
+            session_nr = z_convert:to_binary(z_ids:id()),
             persist_id = PersistId,
-            transport=z_transport_queue:new(),
-            context=Context
+            transport = z_transport_queue:new(),
+            context = Context
             }).
 
 
@@ -710,3 +837,11 @@ new_id() ->
 
 to_binary(undefined) -> undefined;
 to_binary(A) -> z_convert:to_binary(A).
+
+fresh_context(#session{ context = Context, props = Props }) ->
+    NewContext = z_context:new(Context),
+    SessionContext = NewContext#context{ session_pid = self() },
+    case proplists:get_value(language, Props) of
+        undefined -> SessionContext;
+        Lang -> z_context:set_language(Lang, SessionContext)
+    end.

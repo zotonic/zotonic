@@ -7,5 +7,7 @@
 
  {logon_service, ["logon", "service", service ], controller_template, [{ssl, true}, {template, "logon_service.tpl"}]},
 
- {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{ssl,true}, {template, "admin_authentication_services.tpl"}]}
+ {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{ssl,true}, {template, "admin_authentication_services.tpl"}]},
+
+ {sessions_user, ["logon", "sessions"], controller_template, [ {ssl, true}, {acl,is_auth}, {template, "logon_sessions.tpl"}]}
 ].

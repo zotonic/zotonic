@@ -37,9 +37,12 @@
     ensure_session/1,
     stop_session/1,
     stop_session/2,
+    stop_other_sessions/2,
     rename_session/1,
     whereis/2,
     whereis_user/2,
+    list_sessions_user/2,
+    lookup_session_nr/3,
     add_script/1,
     add_script/2,
     count/1,
@@ -108,6 +111,20 @@ stop_session(SessionId, #context{session_manager=SessionManager} = Context) ->
                 ignore -> {error, notfound}
             end
     end.
+
+%% @doc Close all sessions of the user, except the requesting session
+-spec stop_other_sessions( m_rsc:resource_id(), z:context() ) -> ok.
+stop_other_sessions(UserId, #context{ session_pid = ContextSession } = Context) ->
+    Sessions = whereis_user(UserId, Context),
+    lists:foreach(
+        fun
+            (SessionPid) when SessionPid =:= ContextSession ->
+                ok;
+            (SessionPid) ->
+                z_session:stop(SessionPid)
+        end,
+        Sessions).
+
 
 %% @doc Rename the session id, only call this after ensure_session
 -spec rename_session(#context{}) -> {ok, #context{}} | {error, term()}.
@@ -183,6 +200,48 @@ whereis(SessionId, #context{session_manager=SessionManager}) when is_binary(Sess
 whereis_user(UserId, #context{host=Site}) ->
     gproc:lookup_pids({p, l, {Site, user_session, UserId}}).
 
+
+%% @doc Return a list of all sessions belonging to an user
+-spec list_sessions_user(m_rsc:resource_id(), z:context()) -> list().
+list_sessions_user(UserId, #context{ session_pid = SessionPid } = Context) ->
+    Pids = whereis_user(UserId, Context),
+    lists:foldl(
+        fun(Pid, Acc) ->
+            case z_session:session_info(Pid) of
+                {ok, Info} ->
+                    Props = [
+                        {pid, Pid},
+                        {is_current, Pid =:= SessionPid}
+                        | Info
+                    ],
+                    [ Props | Acc ];
+                {error, _} ->
+                    Acc
+            end
+        end,
+        [],
+        Pids).
+
+%% @doc Find a session by the unique session nr, which is changed on login
+-spec lookup_session_nr( m_rsc:resource_id(), binary(), z:context() ) -> {ok, pid()} | {error, notfound}.
+lookup_session_nr(UserId, SessionNr, Context) ->
+    Pids = whereis_user(UserId, Context),
+    lookup_session_nr_1(Pids, SessionNr).
+
+lookup_session_nr_1([], _SessionNr) ->
+    {error, notfound};
+lookup_session_nr_1([ Pid | Pids ], SessionNr) ->
+    case z_session:session_info(Pid) of
+        {ok, Info} ->
+            case proplists:get_value(session_nr, Info) of
+                SessionNr ->
+                    {ok, Pid};
+                _ ->
+                    lookup_session_nr_1(Pids, SessionNr)
+            end;
+        {error, _} ->
+            lookup_session_nr_1(Pids, SessionNr)
+    end.
 
 %% @spec tick(pid()) -> void()
 %% @doc Periodic tick used for cleaning up sessions
