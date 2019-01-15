@@ -14,6 +14,16 @@ Params:
     </form>
 {% elseif error == `ratelimit` %}
     <h2 class="z-logon-title">{_ Sorry, too many retries _}</h2>
+
+    <p>
+        {_ Please try again in _}
+        {% with m.ratelimit.timeout as seconds %}
+            {% if seconds == 3600 %}{_ an hour _}.
+            {% elseif seconds > 3600 %}{{ ((seconds+3599)/3600)|round }} {_ hours _}.
+            {% else %}{{ (seconds / 60)|round }} {_ minutes _}.
+            {% endif %}
+        {% endwith %}
+    </p>
 {% else %}
     <h2 class="z-logon-title">{_ Sorry, your password reset code is unknown or expired _}</h2>
     <p>{_ For security reasons, password reset codes are only kept for a limited amount of time and can only be used once. _}</p>

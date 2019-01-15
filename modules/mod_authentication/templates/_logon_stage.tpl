@@ -6,7 +6,15 @@
         <p>{_ If you do not receive the email within a few minutes, please check your spam folder. _}</p>
     {% elseif error == `ratelimit` %}
         <h2 class="z-logon-title">{_ Too many retries _}</h2>
-        <p>{_ Please try again later. _}</p>
+        <p>
+            {_ Please try again in _}
+            {% with m.ratelimit.timeout as seconds %}
+                {% if seconds == 3600 %}{_ an hour _}.
+                {% elseif seconds > 3600 %}{{ ((seconds+3599)/3600)|round }} {_ hours _}.
+                {% else %}{{ (seconds / 60)|round }} {_ minutes _}.
+                {% endif %}
+            {% endwith %}
+        </p>
     {% else %}
         <h2 class="z-logon-title">{_ Could not send email _}</h2>
         <p>{_ Please try again later. _}</p>
