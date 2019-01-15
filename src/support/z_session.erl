@@ -175,6 +175,7 @@ set_persistent(Key, Value, Context) ->
             Options = [
                  {max_age, ?PERSIST_COOKIE_MAX_AGE},
                  {path, "/"},
+                 {same_site, lax},
                  {http_only, true}],
              z_context:set_cookie(?PERSIST_COOKIE, NewPersistCookieId, Options, Context);
         ok -> 

@@ -298,7 +298,8 @@ ua_probe(SetManual, ProbePs, Context) ->
         Options = [
             {max_age, ?UA_COOKIE_MAX_AGE}, 
             {path, "/"},
-            {http_only, false}
+            {http_only, false},
+            {same_site, lax}
         ],
         z_context:set_cookie(?UA_COOKIE, mochiweb_util:quote_plus(V), Options, Context).
 

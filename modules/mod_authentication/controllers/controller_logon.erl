@@ -335,9 +335,14 @@ set_rememberme_cookie(UserId, Context) ->
         {max_age, ?LOGON_REMEMBERME_DAYS*3600*24},
         {path, "/"},
         {http_only, true},
+        {same_site, lax},
         {domain, z_context:cookie_domain(Context)}
     ],
-    Hdr = mochiweb_cookies:cookie(?LOGON_REMEMBERME_COOKIE, Value, Options),
+    Options1 = case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
+        <<"https">> -> [ {secure, true} | Options ];
+        _ -> Options
+    end,
+    Hdr = mochiweb_cookies:cookie(?LOGON_REMEMBERME_COOKIE, Value, Options1),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context).
 
