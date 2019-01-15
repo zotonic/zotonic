@@ -1168,7 +1168,7 @@ set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
         false -> [ {"X-Frame-Options", "sameorigin"} | Default ]
     end,
     SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
-        undefined -> Default;
+        undefined -> Default1;
         Custom -> Custom
     end,
     RD1 = wrq:set_resp_headers(SecurityHeaders, ReqData),
