@@ -1278,7 +1278,7 @@ set_security_headers(Context) ->
         false -> [ {<<"x-frame-options">>, <<"sameorigin">>} | Default ]
     end,
     SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
-        undefined -> Default;
+        undefined -> Default1;
         Custom -> Custom
     end,
     cowmachine_req:set_resp_headers(SecurityHeaders, Context).
