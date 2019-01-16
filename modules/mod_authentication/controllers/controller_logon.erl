@@ -226,9 +226,9 @@ event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context
     end;
 
 %%@doc Handle submit form post.
-event(#submit{message={logon, _Args}}, Context) ->
+event(#submit{message={logon, WireArgs}}, Context) ->
     Args = z_context:get_q_all(Context),
-    logon(Args, Context);
+    logon(Args, WireArgs, Context);
 
 event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
     case proplists:get_value(<<"msg">>, Data) of
