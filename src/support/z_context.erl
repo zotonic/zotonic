@@ -1220,12 +1220,12 @@ set_cookie(Key, Value, Options, Context) ->
 
 
 %% @doc Read a cookie value from the current request.
-get_cookie(Key, #context{ wm_reqdata = undefined }) ->
+get_cookie(_Key, #context{ wm_reqdata = undefined }) ->
     undefined;
 get_cookie(Key, #context{ wm_reqdata = RD }) ->
     wrq:get_cookie_value(Key, RD).
 
-get_cookies(Key, #context{ wm_reqdata = undefined }) ->
+get_cookies(_Key, #context{ wm_reqdata = undefined }) ->
     [];
 get_cookies(Key, #context{ wm_reqdata = RD }) ->
     case wrq:req_cookie(RD) of
