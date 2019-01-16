@@ -48,7 +48,19 @@
     {% if m.config.seo_google.analytics.value as ga %}
         <script>
             window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-            ga('create', "{{ ga|escapejs }}", 'auto', {% include "_ga_params.tpl" %});
+            if (window.localStorage) {
+              var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
+              ga('create', '{{ ga|escapejs }}', {
+                  'storage': 'none',
+                  'clientId': localStorage.getItem(GA_LOCAL_STORAGE_KEY)
+                }.merge({% include '_ga_params.tpl' %}));
+              ga(function(tracker) {
+                localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
+              });
+            }
+            else {
+              ga('create', '{{ ga|escapejs }}', 'auto', {% include '_ga_params.tpl' %});
+            }
             ga('set', 'anonymizeIp', true);
             ga('send', 'pageview');
         </script>
