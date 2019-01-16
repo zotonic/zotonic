@@ -38,6 +38,8 @@ m_find_value(session_id, #m{value=undefined}, Context) ->
     Context#context.session_id;
 m_find_value(page_id, #m{value=undefined}, Context) ->
     Context#context.page_id;
+m_find_value(list_sessions, #m{value=undefined}, Context) ->
+    z_session_manager:list_sessions_user( z_acl:user(Context), Context );
 m_find_value(Key, #m{value=undefined}, Context) ->
     z_context:get_session(Key, Context).
 
