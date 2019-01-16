@@ -459,7 +459,20 @@ dialog(Title, Template, Vars, Context) ->
                 undefined -> Args1;
                 Class -> [{addclass, Class} | Args1]
             end,
-    z_render:wire({dialog, Args2}, Context1).
+    Args3 = case proplists:get_value(backdrop, Vars) of
+                undefined -> Args2;
+                "true" -> [{backdrop, true} | Args2 ];
+                <<"true">> -> [{backdrop, true} | Args2 ];
+                "false" -> [{backdrop, false} | Args2 ];
+                <<"false">> -> [{backdrop, false} | Args2 ];
+                static -> [ {backdrop, <<"static">>} | Args2 ];
+                Backdrop -> [{backdrop, Backdrop} | Args2]
+            end,
+    Args4 = case proplists:get_value(center, Vars) of
+                undefined -> Args3;
+                Center -> [{center, Center} | Args3]
+            end,
+    z_render:wire({dialog, Args4}, Context1).
 
 dialog_close(Context) ->
     z_render:wire({dialog_close, []}, Context).

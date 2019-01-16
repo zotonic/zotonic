@@ -56,12 +56,25 @@ body {
 /* Logon
 ---------------------------------------------------------- */
 
-#error-pw {
-    display: none;
+form .has-error {
+  display: none;
+  text-align: center;
+  margin: 15px 0 0 0;
 }
-
 form.error-pw #error-pw {
-    display: block;
+  display: block;
+}
+form.error-ratelimit #error-ratelimit {
+  display: block;
+}
+form .has-error p {
+  margin-bottom: 0;
+}
+form .has-error .help-block {
+  color: #777777;
+}
+form .has-error .help-block-error {
+  color: #d84315;
 }
 
 

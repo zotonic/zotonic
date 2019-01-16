@@ -52,15 +52,23 @@
             options = $.extend({}, $.ui.dialog.defaults, options);
             width = options.width;
 
-            $title = $("<div>")
-              .addClass("modal-header")
-              .append($("<a>")
-              .addClass("close")
-              .attr("data-dismiss", "modal")
-              .html("&times;"))
-              .append($("<h4>")
-              .addClass("modal-title")
-              .html(options.title));
+            if (options.backdrop !== 'static') {
+                $title = $("<div>")
+                  .addClass("modal-header")
+                  .append($("<a>")
+                  .addClass("close")
+                  .attr("data-dismiss", "modal")
+                  .html("&times;"))
+                  .append($("<h4>")
+                  .addClass("modal-title")
+                  .html(options.title));
+            } else {
+                $title = $("<div>")
+                  .addClass("modal-header")
+                  .append($("<h4>")
+                  .addClass("modal-title")
+                  .html(options.title));
+            }
             $modalContent = $("<div>").addClass("modal-content");
             $text = $("<div>").html(options.text);
 
@@ -94,7 +102,7 @@
               .appendTo($("body"));
 
             $dialog
-              .modal({backdrop: true})
+              .modal({backdrop: options.backdrop})
               .css({"overflow-x": "hidden", "overflow-y": "auto"});
 
             if (width > 0) {
@@ -130,20 +138,16 @@
         }
     });
  
-     $.widget("ui.show_dialog", {
+    $.widget("ui.show_dialog", {
         _init: function() {
-            var title,
-                text,
-                width;
-            title = this.options.title;
-            text  = this.options.text;
-            width = this.options.width;
-
+            var self = this;
             this.element.click(function() {
                 $.dialogAdd({
-                    title: title,
-                    text: text,
-                    width: width
+                    title: self.options.title,
+                    text: self.options.text,
+                    width: self.options.width,
+                    addclass: self.options.addclass,
+                    backdrop: self.options.backdrop
                 });
             });
         }
@@ -151,6 +155,10 @@
  
     $.ui.dialog.defaults = {
         title: 'Title',
-        text: 'text'
+        text: 'text',
+        width: undefined,
+        addclass: undefined,
+        backdrop: 1,
+        center: 1
     };
 })(jQuery);

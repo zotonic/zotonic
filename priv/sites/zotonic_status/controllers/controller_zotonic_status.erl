@@ -29,6 +29,7 @@
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
 
+-define(USERNAME, <<"zotonic_status">>).
 
 init(DispatchArgs) -> {ok, DispatchArgs}.
 
@@ -85,15 +86,44 @@ status_page(Context) ->
 %% -----------------------------------------------------------------------------------------------
 
 event(#submit{message=[], form=FormId}, Context) ->
-    case z_context:get_q(password, Context) == z_config:get(password) of
-        true ->
-            {ok, ContextAuth} = z_auth:logon(1, Context),
-            z_render:wire({reload, []}, ContextAuth);
-        false ->
+    case z_notifier:first(#auth_precheck{ username = ?USERNAME }, Context) of
+        Ok when Ok =:= ok; Ok =:= undefined ->
+            case z_context:get_q("password", Context) == z_config:get(password) of
+                true ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = undefined,
+                            username = ?USERNAME,
+                            is_accepted = true
+                        },
+                        Context),
+                    {ok, ContextAuth} = z_auth:logon(1, Context),
+                    z_render:wire({reload, []}, ContextAuth);
+                false ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = undefined,
+                            username = ?USERNAME,
+                            is_accepted = false
+                        },
+                        Context),
+                    z_render:wire([
+                                {remove_class, [{target,FormId}, {class,"error-ratelimit"}]},
+                                {add_class, [{target,FormId}, {class,"error-pw"}]},
+                                {set_value, [{target,"password"},{value, ""}]}], Context)
+            end;
+        {error, ratelimit} ->
             z_render:wire([
-                        {set_class, [{target,FormId},{class,"error-pw form-inline"}]}, 
+                        {remove_class, [{target,FormId}, {class,"error-pw"}]},
+                        {add_class, [{target,FormId}, {class,"error-ratelimit"}]},
+                        {set_value, [{target,"password"},{value, ""}]}], Context);
+        {error, _} ->
+            z_render:wire([
+                        {remove_class, [{target,FormId}, {class,"error-ratelimit"}]},
+                        {add_class, [{target,FormId}, {class,"error-pw"}]},
                         {set_value, [{target,"password"},{value, ""}]}], Context)
     end;
+
 event(#postback{message={logoff, []}}, Context) ->
     z_render:wire({reload, []}, z_auth:logoff(Context));
 event(#postback{message={site_start, [{site, Site}]}}, Context) ->

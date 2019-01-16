@@ -1,5 +1,7 @@
 <iframe src="/lib/images/spinner.gif" id="logonTarget" name="logonTarget" style="display:none"></iframe>
-<form id="logon_form" method="post" action="postback" class="z_logon_form" target="logonTarget">
+
+{% wire id="logon_form_form" type="submit" postback={logon} delegate=`controller_logon` %}
+<form id="logon_form_form" method="post" action="postback" class="z_logon_form" target="logonTarget">
     {% if not hide_title %}
         {% if m.rsc.page_logon.title %}
             <h1 class="logon_header">{{ m.rsc.page_logon.title }}</h1>
@@ -7,7 +9,7 @@
             <h1 class="logon_header">{_ Log on to _} <span>{{ m.config.site.title.value|default:"Zotonic" }}</span></h1>
         {% endif %}
     {% endif %}
-    
+
     <input type="hidden" name="page" value="{{ page|escape }}" />
     <input type="hidden" name="handler" value="username" />
 

@@ -109,6 +109,9 @@
        {oauth,".*",
               {git,"https://github.com/tim/erlang-oauth.git",
                    "3ad509d487a72f9437fef31a379bf3cfeeb166a2"}},
+       {termit,".*",
+               {git,"https://github.com/erlangpack/termit",
+                    "c1d0dde3b184a48f8253f0f3fd4b73a2eba4905e"}},
        {twerl,".*",
               {git,"https://github.com/mworrell/twerl.git",
                    "511187da785903d64f5b284ae1d2888b07199e2f"}}]}.
