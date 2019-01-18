@@ -8,7 +8,7 @@ Welcome to Zotonic 0.44.0, released on 18 January, 2019.
 Main changes are:
 
  * New module ``mod_ratelimit``, which limits authentication requests and password resets
- * Automatic session timeout, configure with ``site.session_expire_inactive`` (default 3600 seconds)
+ * Automatic session timeout, configure with ``site.session_expire_inactive`` (default 14400 seconds)
  * See all your active sessions at ``/logon/sessions``
  * Mnesia files are now placed in a directory per node, e.g. ``priv/mnesia/zotonic001@foobar/``
 
