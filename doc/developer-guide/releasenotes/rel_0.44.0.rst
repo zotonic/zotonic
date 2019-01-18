@@ -12,6 +12,24 @@ Main changes are:
  * See all your active sessions at ``/logon/sessions``
  * Mnesia files are now placed in a directory per node, e.g. ``priv/mnesia/zotonic001@foobar/``
 
+BC breaks
+---------
+
+* The password reset dispatch rule was changed. If you override ``email_password_reset.tpl``,
+  you now need to pass the username too.
+
+  Before::
+
+    {% url logon_reset secret=secret use_absolute_url %}
+
+  After::
+
+    {% url logon_reset secret=secret u=username use_absolute_url %}
+
+ * The delegate and postbacks for authentication requests has been changed.
+   Use now `controller_logon` and check the logon and password reset templates for the
+   correct arguments. If you didn't add your own authentication templates then you
+   don't need to do anything.
 
 Commits since 0.43.0
 --------------------
