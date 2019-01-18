@@ -27,10 +27,14 @@
 -include("zotonic.hrl").
 
 
-%% @doc Sanitize uploaded media (SVG) files.
-sanitize(#media_upload_preprocess{mime="image/svg+xml"} = PP, _Context) ->
+%% @doc Sanitize uploaded media files.
+sanitize(#media_upload_preprocess{ mime = "image/svg+xml" } = PP, _Context) ->
     sanitize_svg(PP);
-sanitize(#media_upload_preprocess{mime=Mime} = PP, _Context) when is_list(Mime) ->
+sanitize(#media_upload_preprocess{ mime = "text/html" } = PP, Context) ->
+    sanitize_html(PP, Context);
+sanitize(#media_upload_preprocess{ mime = "application/xml+html" } = PP, Context) ->
+    sanitize_html(PP, Context);
+sanitize(#media_upload_preprocess{ mime = Mime } = PP, _Context) when is_list(Mime) ->
     PP.
 
 sanitize_svg(#media_upload_preprocess{file=File} = PP) ->
@@ -38,7 +42,14 @@ sanitize_svg(#media_upload_preprocess{file=File} = PP) ->
     Svg = z_svg:sanitize(Bin),
     TmpFile = z_tempfile:new(".svg"),
     ok = file:write_file(TmpFile, Svg),
-    PP#media_upload_preprocess{file=TmpFile}.
+    PP#media_upload_preprocess{ file = TmpFile }.
+
+sanitize_html(#media_upload_preprocess{file=File} = PP, Context) ->
+    {ok, Bin} = file:read_file(File),
+    Html = z_sanitize:html(Bin, Context),
+    TmpFile = z_tempfile:new(".html"),
+    ok = file:write_file(TmpFile, Html),
+    PP#media_upload_preprocess{ file = TmpFile, mime = "text/html" }.
 
 
 %% @doc Check the contents of an identified file, to see if it is acceptable for further processing.
