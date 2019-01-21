@@ -51,8 +51,7 @@ init(ConfigProps) ->
 %% @doc Initialize the context for the request. Optionally continue the user's session.
 service_available(ReqData, ConfigProps) ->
     Context = z_context:set_noindex_header(
-                    z_context:set(ConfigProps,
-                        z_context:new(ReqData, ?MODULE))),
+                z_context:new_request(ReqData, ConfigProps, ?MODULE)),
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
     ReqData1 = z_context:get_reqdata(Context1),
     z_context:lager_md(Context1),

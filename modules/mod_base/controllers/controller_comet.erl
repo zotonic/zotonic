@@ -35,9 +35,8 @@
 init(_Args) -> {ok, []}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:continue_session(z_context:set(DispatchArgs, Context)),
-    z_context:lager_md(Context1),
+    Context  = z_context:new_request(ReqData, DispatchArgs, ?MODULE),
+    Context1 = z_context:continue_session(Context),
     ?WM_REPLY(true, Context1).
 
 %% @doc Expect an UBF encoded #z_msg_v1 record in the POST

@@ -27,12 +27,10 @@
 
 init_session(Context) ->
     Context1 = z_context:ensure_all(Context),
-    z_context:lager_md(Context1),
     z_context:set_noindex_header(Context1).
 
 is_authorized(DefaultMod, ReqData, Context) ->
-    ReqData1 = wrq:set_resp_header("X-Frame-Options", "SAMEORIGIN", ReqData),
-    Context1 = ?WM_REQ(ReqData1, Context),
+    Context1 = ?WM_REQ(ReqData, Context),
     Context2 = init_session(Context1),
     z_acl:wm_is_authorized([{use, z_context:get(acl_module, Context, DefaultMod)}], admin_logon, Context2).
 

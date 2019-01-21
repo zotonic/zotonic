@@ -40,9 +40,7 @@
 init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
-    z_context:lager_md(Context1),
+    Context1 = z_context:new_request(ReqData, DispatchArgs, ?MODULE),
     ReqData1 = set_cors_header(ReqData, Context1),
     case wrq:method(ReqData1) of
         'OPTIONS' ->

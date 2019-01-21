@@ -34,11 +34,9 @@
 init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    ContextArgs = z_context:set(DispatchArgs, Context),
+    ContextArgs = z_context:new_request(ReqData, DispatchArgs, ?MODULE),
     ContextSession = z_context:continue_session(ContextArgs),
     ContextQs = z_context:ensure_qs(ContextSession),
-    z_context:lager_md(ContextQs),
     ?WM_REPLY(true, ContextQs).
 
 allowed_methods(ReqData, Context) ->

@@ -31,8 +31,7 @@
 init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
+    Context1 = z_context:new_request(ReqData, DispatchArgs, ?MODULE),
     Context2 = z_context:ensure_all(Context1),
     z_context:lager_md(Context2),
     Context3 = z_context:set_noindex_header(Context2),

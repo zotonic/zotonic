@@ -42,8 +42,7 @@
 init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
+    Context1 = z_context:new_request(ReqData, DispatchArgs, ?MODULE),
     ?WM_REPLY(true, Context1).
 
 charsets_provided(ReqData, Context) ->
