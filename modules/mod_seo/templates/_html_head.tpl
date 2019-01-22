@@ -47,19 +47,19 @@
 {% if not m.acl.is_admin and not notrack %}
     {% if m.config.seo_google.analytics.value as ga %}
         <script>
+            var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
+            var ga_options = {% include '_ga_params.tpl' %};
             window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
             if (window.localStorage) {
-              var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
-              ga('create', '{{ ga|escapejs }}', {
-                  'storage': 'none',
-                  'clientId': localStorage.getItem(GA_LOCAL_STORAGE_KEY)
-                }.merge({% include '_ga_params.tpl' %}));
+              ga_options.storage = 'none';
+              ga_options.clientId = localStorage.getItem(GA_LOCAL_STORAGE_KEY);
+              ga('create', '{{ ga|escapejs }}', ga_options);
               ga(function(tracker) {
                 localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
               });
             }
             else {
-              ga('create', '{{ ga|escapejs }}', 'auto', {% include '_ga_params.tpl' %});
+              ga('create', '{{ ga|escapejs }}', 'auto', ga_options);
             }
             ga('set', 'anonymizeIp', true);
             ga('send', 'pageview');
