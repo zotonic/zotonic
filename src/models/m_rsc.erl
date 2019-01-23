@@ -93,8 +93,10 @@ m_find_value(Id, #m{value=undefined} = M, Context) ->
                 true ->
                     M#m{value=RId};
                 false ->
-                    fun(is_a, C) -> is_a(RId, C);
-                       (_, _C) -> undefined
+                    fun
+                        (is_a, C) -> is_a(RId, C);
+                        (exists, C) -> exists(RId, C);
+                        (_, _C) -> undefined
                     end
             end
     end;
