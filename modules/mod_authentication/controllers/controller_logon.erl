@@ -254,7 +254,7 @@ logon(Args, WireArgs, Context) ->
         {error, _Reason} ->
             logon_error("pw", Context);
         {expired, UserId} when is_integer(UserId) ->
-            {ok, Username} = m_identity:get_username(UserId, Context),
+            Username = m_identity:get_username(UserId, Context),
             Vars = [
                 {user_id, UserId},
                 {secret, set_reminder_secret(UserId, Context)},
