@@ -254,13 +254,17 @@ logon(Args, WireArgs, Context) ->
         {error, _Reason} ->
             logon_error("pw", Context);
         {expired, UserId} when is_integer(UserId) ->
-            Username = m_identity:get_username(UserId, Context),
-            Vars = [
-                {user_id, UserId},
-                {secret, set_reminder_secret(UserId, Context)},
-                {username, Username}
-            ],
-            logon_stage("password_expired", Vars, Context);
+            case m_identity:get_username(UserId, Context) of
+                undefined ->
+                    logon_error("pw", Context);
+                Username ->
+                    Vars = [
+                        {user_id, UserId},
+                        {secret, set_reminder_secret(UserId, Context)},
+                        {username, Username}
+                    ],
+                    logon_stage("password_expired", Vars, Context)
+            end;
         undefined ->
             lager:warning("Auth module error: #logon_submit{} returned undefined."),
             logon_error("pw", Context)
