@@ -59,6 +59,7 @@
     receive_ack/3,
 
     get_transport_data/1,
+    get_transport_msgs/1,
     comet_attach/2,
     comet_detach/1,
     websocket_attach/2,
@@ -195,6 +196,18 @@ websocket_attach(_WsPid, #context{} = _Context) ->
 %% @doc Called by the comet process or the page request to fetch any queued transport messages
 get_transport_data(Pid) ->
     gen_server:call(Pid, get_transport_data).
+
+%% @doc Called by the postback process or the page request to fetch any queued transport messages
+get_transport_msgs(#context{page_pid=undefined}) ->
+    [];
+get_transport_msgs(#context{page_pid=PagePid}) ->
+    case is_process_alive(PagePid) of
+        true -> get_transport_msgs(PagePid);
+        false -> []
+    end;
+get_transport_msgs(Pid) when is_pid(Pid) ->
+    {ok, Msgs} = gen_server:call(Pid, get_transport_msgs),
+    Msgs.
 
 %% @doc Send a script to the user agent, will be queued and send when the comet process attaches
 add_script(Script, Context) ->
@@ -361,6 +374,10 @@ handle_call(get_transport_data, _From, State) ->
     {Data, State1} = do_transport_data(State),
     {reply, Data, State1};
 
+handle_call(get_transport_msgs, _From, State) ->
+    {Msgs, State1} = do_fetch_transport_msgs(State),
+    {reply, {ok, Msgs}, State1};
+
 handle_call({get, Key}, _From, State) ->
     Value = proplists:get_value(Key, State#page_state.vars),
     {reply, Value, State};
@@ -481,20 +498,23 @@ trigger_check_timeout() ->
 
 
 do_transport_data(State) ->
-    {Msgs,Transport1} = z_transport_queue:out_all(State#page_state.transport),
-    Transport2 = lists:foldl(fun(Msg,TQ) ->
-                                z_transport_queue:wait_ack(Msg, page, TQ)
-                             end,
-                             Transport1, 
-                             Msgs),
+    {Msgs, State1} = do_fetch_transport_msgs(State),
     case Msgs of
         [] ->
             {<<>>, State};
         _ ->
-            {ok, Data} = z_ubf:encode(Msgs), 
-            {Data, State#page_state{transport=Transport2}}
+            {ok, Data} = z_ubf:encode(Msgs),
+            {Data, State1}
     end.
 
+do_fetch_transport_msgs(State) ->
+    {Msgs,Transport1} = z_transport_queue:out_all(State#page_state.transport),
+    Transport2 = lists:foldl(fun(Msg,TQ) ->
+                                z_transport_queue:wait_ack(Msg, page, TQ)
+                             end,
+                             Transport1,
+                             Msgs),
+    {Msgs, State#page_state{transport=Transport2}}.
 
 %% @doc Ping the comet or ws process that we have a message queued
 ping_comet_ws(#page_state{websocket_pid=WsPid, comet_pid=CometPid} = State) when is_pid(WsPid), is_pid(CometPid) ->
