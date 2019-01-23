@@ -488,12 +488,8 @@ function z_activity_event()
 
 function z_is_active()
 {
-    if (document.hidden) {
-        return false;
-    } else {
-        var now = Math.floor(Date.now() / 1000);
-        return z_last_active > now - ACTIVITY_PERIOD;
-    }
+    var now = Math.floor(Date.now() / 1000);
+    return z_last_active > now - ACTIVITY_PERIOD;
 }
 
 
