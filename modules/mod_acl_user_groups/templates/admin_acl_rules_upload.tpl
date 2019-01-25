@@ -89,7 +89,11 @@
 		    		{{ (cg.id.acl_upload_size*1024*1024)|filesizeformat }}
 		    	</div>
 		    	<div class="col-md-4">
-		    		{{ cg.id.acl_mime_allowed }}
+                    {% if cg.id.acl_mime_allowed %}
+    		    		{{ cg.id.acl_mime_allowed }}
+                    {% else %}
+                        <span class="text-muted">{{ m.acl_rule.default_mime_allowed }}</span>
+                    {% endif %}
 		    	</div>
 		    </div>
 	    {% endfor %}
