@@ -89,7 +89,7 @@
 		    		{{ (cg.id.acl_upload_size*1024*1024)|filesizeformat }}
 		    	</div>
 		    	<div class="col-md-4">
-		    		{{ cg.id.mime_allowed|escape }}
+		    		{{ cg.id.acl_mime_allowed }}
 		    	</div>
 		    </div>
 	    {% endfor %}
