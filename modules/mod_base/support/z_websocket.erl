@@ -78,8 +78,10 @@ websocket_info(_ReqData, ping, #context{}=Context) ->
     {reply, {ping, <<"Zzz?">>}, Context};
 websocket_info(_ReqData, shutdown, #context{}=Context) ->
     {shutdown, Context};
-websocket_info(_ReqData, {send_data, Message}, #context{}=Context) ->
-    {reply, {text, Message}, Context};
+websocket_info(_ReqData, {send_data, {Type, Message}}, #context{}=Context) when Type =:= text orelse Type =:= binary ->
+    {reply, {Type, Message}, Context};
+websocket_info(ReqData, {send_data, Message}, #context{}=Context) ->
+    websocket_info(ReqData, {send_data, {text, Message}}, Context);
 websocket_info(_ReqData, Msg, #context{}=Context) ->
     H = z_context:get(ws_handler, Context),
     ok = H:websocket_info(Msg, self(), Context),
