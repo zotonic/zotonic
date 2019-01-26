@@ -38,8 +38,7 @@ init(DispatchArgs) ->
     {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    z_context:lager_md(Context),
+    Context = z_context:new_request(ReqData, DispatchArgs, ?MODULE),
     ?WM_REPLY(true, Context).
 
 allowed_methods(ReqData, Context) ->

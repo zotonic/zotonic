@@ -32,8 +32,7 @@
 init(_Args) -> {ok, []}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
-    Context  = z_context:new(ReqData, ?MODULE),
-    Context1 = z_context:set(DispatchArgs, Context),
+    Context1 = z_context:new_request(ReqData, DispatchArgs, ?MODULE),
     Context2 = z_admin_controller_helper:init_session(Context1),
     ?WM_REPLY(true, Context2).
 

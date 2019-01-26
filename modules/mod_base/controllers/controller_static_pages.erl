@@ -200,7 +200,7 @@ finish_request(ReqData, State) ->
                                         last_modified=State#state.last_modified,
                                         body=State#state.body
                                     },
-                            Context = z_context:new(ReqData, ?MODULE),
+                            Context = z_context:new_request(ReqData, [], ?MODULE),
                             z_depcache:set(cache_key(State#state.path), Cache, Context),
                             {ok, ReqData, State};
                         _ ->
@@ -219,7 +219,7 @@ cache_key(Path) ->
     {?MODULE, Path}.
 
 check_resource(ReqData, #state{fullpath=undefined} = State) ->
-    Context = z_context:set_noindex_header(z_context:new(ReqData, ?MODULE)),
+    Context = z_context:set_noindex_header(z_context:new_request(ReqData, [], ?MODULE)),
     case relative_path(wrq:disp_path(ReqData)) of
         undefined ->
             {ReqData, State#state{fullpath=false, context=Context, mime="text/html"}};

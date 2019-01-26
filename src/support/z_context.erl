@@ -23,6 +23,8 @@
     new/1,
     new/2,
 
+    new_request/3,
+
     new_tests/0,
 
     site/1,
@@ -173,19 +175,10 @@ new(undefined) ->
 new(Host) when is_atom(Host) ->
     set_default_language_tz(
         set_server_names(#context{host=Host}));
-new(ReqData) ->
-    %% This is the requesting thread, enable simple memo functionality.
-    z_memo:enable(),
-    z_depcache:in_process(true),
-    Context = set_server_names(
-                    #context{
-                        host=site(ReqData),
-                        wm_reqdata=ReqData,
-                        ua_class=z_user_agent:get_class(ReqData)
-                    }),
-    set_security_headers(
-        set_dispatch_from_path(
-            set_default_language_tz(Context))).
+
+new(#wm_reqdata{}=ReqData) ->
+    new_request(ReqData, [], undefined).
+
 
 %% @doc Create a new context record for a host with a certain language.
 new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
@@ -194,20 +187,34 @@ new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
         language=[Lang],
         tz=tz_config(Context)
     };
+
 %% @doc Create a new context record for the current request and resource module
-new(ReqData, Module) ->
-    %% This is the requesting thread, enable simple memo functionality.
+new(#wm_reqdata{}=ReqData, Module) ->
+    new_request(ReqData, [], Module).
+
+
+%% @doc Create a new context record for the current request and resource module
+new_request(#wm_reqdata{}=ReqData, DispatchArgs, Module) when is_list(DispatchArgs) andalso is_atom(Module) ->
     z_memo:enable(),
     z_depcache:in_process(true),
+
     Context = set_server_names(
                     #context{
                         host=site(ReqData),
                         wm_reqdata=ReqData,
+                        ua_class=z_user_agent:get_class(ReqData),
                         controller_module=Module
                     }),
-    set_security_headers(
+
+    Context1 = set(DispatchArgs, Context),
+
+    Context2 = set_security_headers(
         set_dispatch_from_path(
-            set_default_language_tz(Context))).
+            set_default_language_tz(Context1))),
+
+    lager_md(Context2),
+
+    Context2.
 
 
 set_default_language_tz(Context) ->
