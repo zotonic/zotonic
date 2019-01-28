@@ -315,7 +315,7 @@ to_whitelist_1([Proto,Loc], Context) when Proto =:= <<>>; Proto =:= <<"http:">>;
 to_whitelist_1(_, _Context) ->
     false.
 
-preferred_protocol(<<"www.youtube.", _/binary>>) -> <<>>;
+preferred_protocol(<<"www.youtube.", _/binary>>) -> <<"https:">>;
 preferred_protocol(<<"vimeo.", _/binary>>) -> <<>>;
 preferred_protocol(<<"www.vimeo.", _/binary>>) -> <<>>;
 preferred_protocol(<<"platform.instagram.com", _/binary>>) -> <<>>;
