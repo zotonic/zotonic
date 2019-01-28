@@ -354,7 +354,7 @@ check_username_pw(Username, Password, Context) ->
                         },
                         Context),
                     {ok, RscId};
-                {error, _} = Error ->
+                Error ->
                     z_notifier:notify_sync(
                         #auth_checked{
                             id = undefined,
