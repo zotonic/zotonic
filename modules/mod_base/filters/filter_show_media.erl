@@ -117,7 +117,7 @@ filter_args([], false, Acc, Context) ->
 filter_args([ {<<"size">>, Size} | Args ], _, Acc, Context) ->
     [ S, M, L ] = get_sizes(Context),
     {P, SizeName} = case Size of
-                        <<"medium">> -> {M, <<"medium">>};
+                        <<"middle">> -> {M, <<"middle">>};
                         <<"small">> -> {S, <<"small">>};
                         _ -> {L, <<"large">>}
                    end,
@@ -130,6 +130,8 @@ filter_args([ {<<"link">>, <<"link">>} | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [ {link, true} | Acc ], Context);
 filter_args([ {<<"link">>, _} | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [ {link, undefined} | Acc ], Context);
+filter_args([ {<<"align">>, Align} | Args ], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [ {align, Align} | Acc ], Context);
 filter_args([ P | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [P|Acc], Context).
 
