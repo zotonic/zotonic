@@ -90,8 +90,10 @@ is_websocket_request(Context) ->
 %% @doc Send Data over websocket Pid to the client.
 websocket_send_data(_Pid, <<>>) ->
     ok;
+websocket_send_data(Pid, {Type, Data}) when Type =:= text orelse Type =:= binary ->
+    Pid ! {send_data, {Type, Data}};
 websocket_send_data(Pid, Data) ->
-    Pid ! {send_data, Data}.
+    websocket_send_data(Pid, {text, Data}).
 
 %% Called during initialization of the websocket.
 websocket_init(_Context) ->
