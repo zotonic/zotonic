@@ -4,6 +4,8 @@
  
  {admin_development_templates, ["admin", "development", "templates"], controller_admin, [{template, "admin_development_templates.tpl"}, {selected, "development"}, {ssl,true}]},
  
+ {admin_development_observers, ["admin", "development", "observers"], controller_admin, [{template, "admin_development_observers.tpl"}, {selected, "development"}, {ssl,true}]},
+ 
  {wmtrace_conf, ["wmtrace_conf"], controller_wmtrace_conf, [{ssl,true}]},
  
  {wmtrace, ["wmtrace"],      controller_wmtrace, [{ssl,true}]},

@@ -1,9 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @author Bryan Fink <bryan@basho.com>
 %% @copyright 2009-2015 Marc Worrell
-%% Date: 2009-11-01
-%% @doc Development server.  Periodically performs a "make" and loads new files.
-%% When new files are loaded the caches are emptied.
+%% @doc Support functions for development.
 
 %% Copyright 2009-2015 Marc Worrell
 %%
