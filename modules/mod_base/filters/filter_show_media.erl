@@ -132,6 +132,8 @@ filter_args([ {<<"link">>, _} | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [ {link, undefined} | Acc ], Context);
 filter_args([ {<<"align">>, Align} | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [ {align, Align} | Acc ], Context);
+filter_args([ {<<"caption">>, Caption} | Args ], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [ {caption, Caption} | Acc ], Context);
 filter_args([ P | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [P|Acc], Context).
 
