@@ -26,7 +26,7 @@
 		       </tr>
 	        {% endfor %}
             {% if chart.has_totals %}
-                <tr><th>{_ Totals _}</th><td>{{ chart.totals }}</td></tr>
+                <tr><th>{#{_ Totals _}#}</th><td>{{ chart.totals }}</td></tr>
             {% endif %}
 	    </table>
     </div>

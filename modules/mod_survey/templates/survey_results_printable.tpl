@@ -63,7 +63,7 @@
         {% with m.survey.totals[id] as totals %}
             {% if totals %}
                 <tr class="totals">
-                    <td align="right">{_ Totals _}&nbsp;</td>
+                    <td align="right">{#{_ Totals _}&nbsp;#}</td>
                     {% for name in headers %}
                         <td align="left">{{ totals[name]|default:"&nbsp;" }}</td>
                     {% endfor %}
