@@ -23,7 +23,8 @@
 
     lookup_record/1,
     refresh_records/0,
-    refresh_records/1,
+    load_records/0,
+    load_records/1,
     extract_records/1
     ]).
 
@@ -85,24 +86,29 @@ lookup_record( Rec ) ->
         {ok, List} ->
             proplists:lookup(Rec, List);
         undefined ->
-            refresh_records(),
+            load_records(),
             lookup_record(Rec)
     end.
 
 
 -spec refresh_records() -> ok.
 refresh_records() ->
+    application:unset_env(zotonic, cached_record_defs).
+
+-spec load_records() -> ok.
+load_records() ->
     Mods = [ M || {M, _} <- code:all_loaded() ],
     ZMods = lists:filter(fun is_zotonic_module/1, Mods),
     Recs = lists:usort( lists:flatten([ extract_records(M) || M <- ZMods ]) ),
     application:set_env(zotonic, cached_record_defs, Recs).
 
+-spec is_zotonic_module( module() ) -> boolean().
 is_zotonic_module(Mod) ->
     Attrs = erlang:get_module_info(Mod, attributes),
     lists:keymember(mod_title, 1, Attrs).
 
--spec refresh_records( module() ) -> ok.
-refresh_records(Module) ->
+-spec load_records( module() ) -> ok.
+load_records(Module) ->
     Current = application:get_env(zotonic, cached_record_defs, []),
     Recs = extract_records(Module),
     New = lists:foldl(
