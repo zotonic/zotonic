@@ -17,6 +17,7 @@
     <thead>
         <th>{_ Event _}</th>
         <th>{_ Subscribers _}</th>
+        <th>{_ Info _}</th>
     </thead>
     <tbody>
         {% for event, observers in m.development.list_observers %}
@@ -26,6 +27,21 @@
                 {% for prio, handler in observers %}
                     <tt>{{ handler }}</tt> &nbsp; <span class="text-muted">{{ prio }}</span><br>
                 {% endfor %}
+            </td>
+            <td>
+                <tt>
+                {% with m.development.record_info[event] as recinfo %}
+                    {% if recinfo %}
+                        #{{ recinfo[1]|escape }}{<br>
+                            {% for name, val in recinfo[2] %}
+                                &nbsp;&nbsp;&nbsp;{{ name|escape }} = {{ val }}{% if not forloop.last %},{% endif %}<br>
+                            {% endfor %}
+                        }
+                    {% else %}
+                        {{ event|escape }}
+                    {% endif %}
+                {% endwith %}
+                </tt>
             </td>
         </tr>
         {% endfor %}
