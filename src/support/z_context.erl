@@ -127,6 +127,8 @@
     set_noindex_header/1,
     set_noindex_header/2,
 
+    set_security_headers/1,
+
     set_cookie/3,
     set_cookie/4,
     get_cookie/2,
@@ -179,7 +181,9 @@ new(ReqData) ->
                         host=site(ReqData),
                         wm_reqdata=ReqData
                     }),
-    set_dispatch_from_path(set_default_language_tz(Context)).
+    set_security_headers(
+        set_dispatch_from_path(
+            set_default_language_tz(Context))).
 
 %% @doc Create a new context record for a host with a certain language.
 new(Host, Lang) when is_atom(Host), is_atom(Lang) ->
@@ -194,8 +198,9 @@ new(ReqData, Module) ->
     z_memo:enable(),
     z_depcache:in_process(true),
     Context = set_server_names(#context{wm_reqdata=ReqData, controller_module=Module, host=site(ReqData)}),
-    set_dispatch_from_path(
-        set_default_language_tz(Context)).
+    set_security_headers(
+        set_dispatch_from_path(
+            set_default_language_tz(Context))).
 
 
 set_default_language_tz(Context) ->
@@ -1163,6 +1168,26 @@ set_nocache_headers(Context = #context{wm_reqdata=ReqData}) ->
     % This let IE6 accept our cookies, basically we tell IE6 that our cookies do not contain any private data.
     RD3 = wrq:set_resp_header("P3P", "CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"", RD2),
     Context#context{wm_reqdata=RD3}.
+
+%% @doc Set security related headers. This can be modified by observing the
+%%      'security_headers' notification.
+-spec set_security_headers( z:context() ) -> z:context().
+set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
+    Default = [ {"X-Xss-Protection", "1"},
+                {"X-Content-Type-Options", "nosniff"},
+                {"X-Permitted-Cross-Domain-Policies", "none"},
+                {"Referrer-Policy", "origin-when-cross-origin"} ],
+    Default1 = case z_context:get(allow_frame, Context, false) of
+        true -> Default;
+        false -> [ {"X-Frame-Options", "sameorigin"} | Default ]
+    end,
+    SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
+        undefined -> Default1;
+        Custom -> Custom
+    end,
+    RD1 = wrq:set_resp_headers(SecurityHeaders, ReqData),
+    Context#context{ wm_reqdata = RD1 }.
+
 
 %% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
 -spec set_noindex_header(#context{}) -> #context{}.

@@ -24,21 +24,26 @@
 <div class="well">
     <h2>{_ Log on to manage this server _}</h2>
     <p class="help-block">{_ To manage the sites on this server, please enter the main admin password. _}</p>
-    <form id="logon_form" action="postback" class="form-inline">
-	<p id="error-pw" class="alert alert-error">The password does not match.  Please retry.</p>
-	<div id="logon_password">
-	    <div style="display:none">
-		<input type="text" id="username" name="username" value="admin"  />
-	    </div>
-	    <p>
-		<label>{_ Password _}:&nbsp;</label>
-		<input type="password" id="password" name="password" value="" autofocus />
-	        <button class="btn btn-primary">{_ Log On _}</button>
-	    </p>
-	</div>
+    <form id="logon_form" action="postback" class="form-inline z_logon_form">
+    	<div id="logon_password">
+    	    <p>
+        		<label>{_ Password _}:&nbsp;</label>
+    	       	<input type="password" id="password" name="password" value="" autofocus />
+    	        <button class="btn btn-primary">{_ Log On _}</button>
+    	    </p>
 
-	<div id="logon_button">
-	</div>
+            <div id="error-pw" class="has-error">
+                <p class="help-block help-block-error">{_ This password is not correct. _}</p>
+                <p class="help-block">{_ You can find the password in ~/.zotonic/[version]/zotonic.config. _}</p>
+            </div>
+            <div id="error-ratelimit" class="has-error">
+                <p class="help-block help-block-error">{_ Too many tries, try again in an hour. _}</p>
+                <p class="help-block">{_ You can find the password in ~/.zotonic/[version]/zotonic.config. _}</p>
+            </div>
+    	</div>
+
+    	<div id="logon_button">
+    	</div>
     </form>
 </div>
 {% endblock %}	

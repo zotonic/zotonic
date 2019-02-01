@@ -37,6 +37,10 @@
 %% @doc Modify cookie options, used for setting http_only and secure options. (foldl)
 -record(cookie_options, {name, value}).
 
+%% @doc Check and possibly modify the http response security headers (first)
+%%      All headers are in lowercase.
+-record(security_headers, { headers :: list( {string(), string()} ) }).
+
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
 %% @doc A module has been activated and started. (notify)
@@ -56,6 +60,10 @@
 
 % @doc Check where to go after a user logs on. Return an URL or undefined (first)
 -record(logon_ready_page, {request_page=[]}).
+
+%% @doc Determine post-logon actions; args are the arguments passed to the logon
+%% submit wire
+-record(logon_actions, {args=[]}).
 
 %% @doc Handle an user logon. The posted query args are included. Return {ok, UserId} or {error, Reason} (first)
 -record(logon_submit, {query_args=[]}).
@@ -353,6 +361,29 @@
 %                     Called on every request with a session.
 % 'session_init'    - Notification that a new session has been initialized (session_pid is in the context)
 % 'session_init_fold' - foldl over the context containing a new session (after session_init)
+
+%% @doc First for logon of user with username, check for ratelimit, blocks etc.
+%%      Returns: 'undefined' | ok | {error, Reason}
+-record(auth_precheck, {
+        username :: binary()
+    }).
+
+%% @doc Fold over the context after logon of user with username, communicates valid or invalid password
+-record(auth_checked, {
+        id :: undefined | m_rsc:resource_id(),
+        username :: binary(),
+        is_accepted :: boolean()
+    }).
+
+%% @doc First to check for password reset forms, return undefined, ok, or {error, Reason}.
+-record(auth_reset, {
+        username :: undefined | binary()
+    }).
+
+%% @doc Foldl over the #context after a logon error before the logon error page is shown.
+-record(auth_logon_error, {
+        reason = [] :: list()
+    }).
 
 %% @doc Authentication against some (external or internal) service was validated
 -record(auth_validated, {

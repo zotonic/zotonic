@@ -9,6 +9,21 @@
 
 <p>{_ When you forgot your username or pasword then you can ask us to _} <a href="{% url logon_reminder %}">{_ e-mail a temporary password _}</a>.  {_ The e-mail will contain instructions how to reset your password. _}</p>
 
+{% elseif reason == "ratelimit" %}
+
+    <p>
+        {_ Too many retries. _}
+        {_ Please try again in _}
+        {% with m.ratelimit.timeout as seconds %}
+            {% if seconds == 3600 %}{_ an hour _}.
+            {% elseif seconds > 3600 %}{{ ((seconds+3599)/3600)|round }} {_ hours _}.
+            {% else %}{{ (seconds / 60)|round }} {_ minutes _}.
+            {% endif %}
+        {% endwith %}
+    </p>
+
+    <p><a href="{% url logon_reminder %}" id="logon_error_link_reminder">{_ Need help signing in? _}</a></p>
+
 {% elseif reason == "reminder" %}
 
 <h2>{_ You entered an unknown username or e-mail address.  Please try again. _}</h2>

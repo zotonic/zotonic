@@ -1,3 +1,4 @@
+{% wire id="password_reminder" type="submit" postback={reminder} delegate=`controller_logon` %}
 <form id="password_reminder" method="post" action="postback">
     <h1 class="logon_header">{_ Forgot your password? _}</h1>
 

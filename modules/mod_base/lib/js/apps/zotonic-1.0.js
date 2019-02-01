@@ -37,13 +37,17 @@ var z_session_restart_count = 0;
 var z_ws                    = false;
 var z_ws_pong_count         = 0;
 var z_ws_ping_timeout;
+var z_ws_ping_interval;
+var z_comet;
+var z_comet_poll_timeout;
+var z_comet_reconnect_timeout = 1000;
+var z_comet_poll_count      = 0;
 var z_stream_host;
 var z_stream_starter;
 var z_stream_start_timeout;
 var z_websocket_host;
 var z_default_form_postback = false;
 var z_page_unloading        = false;
-var z_comet_reconnect_timeout = 1000;
 var z_transport_check_timer;
 var z_transport_queue       = [];
 var z_transport_acks        = [];
@@ -56,8 +60,11 @@ var z_transport_delegates   = {
 var TRANSPORT_TIMEOUT       = 30000;
 var TRANSPORT_TRIES         = 3;
 
+var ACTIVITY_PERIOD         = 5;  // Inactive if silent for 5 seconds
+
 // Misc state
 var z_spinner_show_ct       = 0;  // Set when performing an AJAX callback
+var z_last_active           = 0;
 var z_input_updater         = false;
 var z_drag_tag              = [];
 var z_registered_events     = {};
@@ -93,6 +100,8 @@ function z_set_page_id( page_id, user_id )
         "q"
         ]);
 
+    z_activity_init();
+
     if (z_pageid != page_id) {
         z_session_valid = true;
         z_pageid = page_id;
@@ -102,6 +111,15 @@ function z_set_page_id( page_id, user_id )
             setTimeout(function() { pubzub.publish("~pagesession/pageinit", page_id); }, 10);
         }
     }
+    $(window).bind("pageshow", function(event) {
+        // After back button on iOS / Safari
+        if (typeof event.originalEvent == 'object' && event.originalEvent.persisted) {
+            z_page_unloading = false;
+            setTimeout(function() {
+                z_stream_onreload();
+            }, 10);
+        }
+    });
     $(window).bind('beforeunload', function() {
         z_page_unloading = true;
 
@@ -109,6 +127,12 @@ function z_set_page_id( page_id, user_id )
         if (z_ws) {
             try { z_ws.close(); } catch (e) { };
             z_ws = undefined;
+        }
+
+        // Abort an open comet connection
+        if (z_comet) {
+            try { z_comet.abort(); } catch(e) { }
+            z_comet = undefined;
         }
 
         setTimeout(function() {
@@ -133,22 +157,31 @@ function z_dialog_close()
 function z_dialog_confirm(options)
 {
     var btn = 'btn-primary';
+    var html,
+        backdrop;
+
     if (options.is_danger) {
         btn = 'btn-danger';
+    }
+    if (typeof options.backdrop == 'undefined') {
+        backdrop = options.backdrop
+    } else {
+        backdrop = true;
     }
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn '+btn+' z-dialog-ok-button">'
          + (options.ok||z_translate('OK'))
          + '</button>'
-         + '<a href="#" class="btn z-dialog-cancel-button">'
+         + '<button class="btn btn-default z-dialog-cancel-button">'
          + (options.cancel||z_translate('Cancel'))
-         + '</a>'
+         + '</button>'
          + '</div>';
     $.dialogAdd({
         title: (options.title||z_translate('Confirm')),
         text: html,
-        width: (options.width)
+        width: (options.width),
+        backdrop: backdrop
     });
     $(".z-dialog-cancel-button").click(function() { z_dialog_close(); });
     $(".z-dialog-ok-button").click(function() {
@@ -159,6 +192,14 @@ function z_dialog_confirm(options)
 
 function z_dialog_alert(options)
 {
+    var html,
+        backdrop;
+
+    if (typeof options.backdrop == 'undefined') {
+        backdrop = options.backdrop
+    } else {
+        backdrop = true;
+    }
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-primary z-dialog-ok-button">'
@@ -168,7 +209,8 @@ function z_dialog_alert(options)
     $.dialogAdd({
         title: (options.title||z_translate('Alert')),
         text: html,
-        width: (options.width)
+        width: (options.width),
+        backdrop: backdrop
     });
     $(".z-dialog-ok-button").click(function() {
         z_dialog_close();
@@ -401,6 +443,34 @@ function z_session_invalid_dialog()
     } else {
         z_reload();
     }
+}
+
+/* Track activity, for stopping inactive sessions
+---------------------------------------------------------- */
+
+function z_activity_init()
+{
+    z_activity_event();
+
+    document.addEventListener("visibilitychange", z_activity_event);
+    document.addEventListener("scroll", z_activity_event);
+    document.addEventListener("keydown", z_activity_event);
+    document.addEventListener("mousemove", z_activity_event);
+    document.addEventListener("click", z_activity_event);
+    document.addEventListener("focus", z_activity_event);
+}
+
+function z_activity_event()
+{
+    if (!document.hidden) {
+        z_last_active = Math.floor(Date.now() / 1000);
+    }
+}
+
+function z_is_active()
+{
+    var now = Math.floor(Date.now() / 1000);
+    return z_last_active > now - ACTIVITY_PERIOD;
 }
 
 /* Transport between user-agent and server
@@ -983,20 +1053,33 @@ function z_stream_start(host, websocket_host)
 {
     if (!z_session_valid) {
         setTimeout(function() {
-            z_stream_start(host, websocket_host);
+            z_stream_start(_host, websocket_host);
         }, 100);
     } else {
-        z_stream_host = host;
         z_websocket_host = websocket_host || window.location.host;
         z_stream_restart();
     }
 }
 
+function z_stream_onreload()
+{
+    if (z_ws) {
+        try { z_ws.close(); } catch (e) { }
+        z_ws = undefined;
+    }
+    if (z_comet) {
+        try { z_comet.abort(); } catch(e) { }
+        z_comet = undefined;
+    }
+    z_session_reload_check = true;
+    z_page_unloading = false;
+    z_transport('session', 'ubf', 'check', { transport: 'ajax' });
+}
+
 function z_stream_restart()
 {
     if (z_websocket_host) {
-        $('#z_comet_connection').remove();
-        setTimeout(function() { z_comet_start(); }, 1000);
+        z_timeout_comet_poll_ajax(1000);
         if ("WebSocket" in window)
         {
             setTimeout(function() { z_websocket_start(); }, 200);
@@ -1004,52 +1087,47 @@ function z_stream_restart()
     }
 }
 
-function z_comet_start()
+function z_stream_is_connected()
 {
-    if (z_stream_host != window.location.host && window.location.protocol == "http:")
-    {
-        var $zc = $('#z_comet_connection');
-        if ($zc.length > 0) {
-            $zc.attr('src', $zc.attr('src'));
-        } else {
-            var qs = z_stream_args('comet');
-            var url = window.location.protocol + '//' + z_stream_host + "/comet/subdomain?"+qs;
-            var comet = $('<iframe id="z_comet_connection" name="z_comet_connection" src="'+url+'" />');
-            comet.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
-            comet.appendTo("body");
-        }
-    }
-    else
-    {
-        z_comet_poll_ajax();
-    }
+    return z_websocket_is_connected() || z_comet_is_connected();
 }
 
 function z_comet_poll_ajax()
 {
-    if (z_ws_pong_count === 0 && z_session_valid)
+    if (z_ws_pong_count === 0 && z_session_valid && !z_page_unloading)
     {
-        $.ajax({
+        z_comet_poll_count++;
+        var msg = ubf.encode({
+                "_record": "z_msg_v1",
+                "qos": 0,
+                "dup" : false,
+                "msg_id": '$comet-'+z_pageid+'-'+z_comet_poll_count,
+                "timestamp": new Date().getTime(),
+                "content_type": ubf.constant("ubf"),
+                "delegate": ubf.constant('$comet'),
+                "page_id": z_pageid,
+                "session_id": window.z_sid || undefined,
+                "data": {
+                    count: z_comet_poll_count,
+                    is_active: z_is_active()
+                }
+            });
+        z_comet = $.ajax({
             url: window.location.protocol + '//' + window.location.host + '/comet',
             type:'post',
-            data: z_stream_args('comet'),
-            dataType: 'text',
+            data: msg,
+            dataType: 'ubf text',
+            accepts: {ubf: "text/x-ubf"},
+            converters: {"text ubf": window.String},
+            contentType: 'text/x-ubf',
             statusCode: {
                     /* Handle incoming data */
                     200: function(data, _textStatus) {
-                            z_comet_data(data);
-                            z_timeout_comet_poll_ajax(100);
+                        z_transport_handle_push_data(data);
+                        z_timeout_comet_poll_ajax(100);
                     },
                     204: function() {
                         z_timeout_comet_poll_ajax(1000);
-                    },
-
-                    /* Reload the page on forbidden/auth responses. */
-                    401: function() {
-                        z_transport_delegates.session("session_invalid");
-                    },
-                    403: function() {
-                        z_transport_delegates.session("session_invalid");
                     }
                 },
             error: function(xmlHttpRequest, textStatus, errorThrown) {
@@ -1057,6 +1135,8 @@ function z_comet_poll_ajax()
                        if(z_comet_reconnect_timeout < 60000)
                            z_comet_reconnect_timeout = z_comet_reconnect_timeout * 2;
                    }
+        }).done(function() {
+            z_comet = undefined;
         });
     }
     else
@@ -1066,16 +1146,24 @@ function z_comet_poll_ajax()
 }
 
 
+function z_comet_is_connected()
+{
+    return z_comet && z_comet.readyState != 0;
+}
+
 function z_timeout_comet_poll_ajax(timeout)
 {
-    setTimeout(function() {
+    if (z_comet_poll_timeout) {
+        clearTimeout(z_comet_poll_timeout);
+    }
+    z_comet_poll_timeout = setTimeout(function() {
+        z_comet_poll_timeout = false;
         z_comet_reconnect_timeout = 1000;
         z_comet_poll_ajax();
     }, timeout);
 }
 
-
-function z_comet_data(data)
+function z_transport_handle_push_data(data)
 {
     try
     {
@@ -1108,7 +1196,7 @@ function z_websocket_start()
     z_ws.onclose = z_websocket_restart;
 
     z_ws.onmessage = function (evt) {
-        z_comet_data(evt.data);
+        z_transport_handle_push_data(evt.data);
         setTimeout(function() { z_transport_check(); }, 0);
     };
 }
@@ -1128,7 +1216,10 @@ function z_websocket_ping()
                     "ua_class": undefined,
                     "page_id": z_pageid,
                     "session_id": window.z_sid || undefined,
-                    "data": z_ws_pong_count
+                    "data": {
+                        count: z_ws_pong_count,
+                        is_active: z_is_active()
+                    }
                 });
             z_ws.send(msg);
         }
@@ -1142,19 +1233,36 @@ function z_websocket_ping()
     }, 5000);
 }
 
+function z_clear_ws_ping_timeout()
+{
+    if (z_ws_ping_timeout) {
+        clearTimeout(z_ws_ping_timeout);
+        z_ws_ping_timeout = undefined;
+    }
+}
+
+function z_clear_ws_ping_interval()
+{
+    if (z_ws_ping_interval) {
+        clearTimeout(z_ws_ping_interval);
+        z_ws_ping_interval = undefined;
+    }
+}
+
 function z_websocket_pong( msg )
 {
     if (msg.msg_id == '$ws-'+z_pageid) {
-        if (typeof z_ws_ping_timeout !== 'undefined') {
-            clearTimeout(z_ws_ping_timeout);
-            z_ws_ping_timeout = undefined;
-        }
+        z_clear_ws_ping_timeout();
+
+        z_clear_ws_ping_interval();
+        z_ws_ping_interval = setTimeout(z_websocket_ping, 20000);
+
         z_ws_pong_count++;
-        setTimeout(function() { z_websocket_ping(); }, 20000);
+
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 function z_websocket_is_connected()
@@ -1164,28 +1272,22 @@ function z_websocket_is_connected()
 
 function z_websocket_restart()
 {
+    z_clear_ws_ping_timeout();
+    z_clear_ws_ping_interval();
+
     if (z_ws) {
         z_ws.onclose = undefined;
         z_ws.onerror = undefined;
         try { z_ws.close(); } catch(e) {} // closing an already closed ws can raise exceptions.
         z_ws = undefined;
     }
+
     if (z_ws_pong_count > 0 && z_session_valid && !z_page_unloading) {
         z_ws_pong_count = 0;
         z_websocket_start();
     }
 }
 
-function z_stream_args(stream_type)
-{
-    var args = "z_pageid=" + urlencode(z_pageid);
-
-    // Set z_sid when it is available. Can be used if there are problems with cookies.
-    if(window.z_sid)
-        args += "&z_sid=" + urlencode(z_sid);
-
-    return args;
-}
 
 /* Utility functions
 ---------------------------------------------------------- */

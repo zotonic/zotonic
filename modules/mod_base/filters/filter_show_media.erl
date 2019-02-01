@@ -101,6 +101,7 @@ filter_args(Args, Context) ->
 
 % See _tinymce_dialog_zmedia_props.tpl
 is_valid_arg({<<"link">>, _}) -> true;
+is_valid_arg({<<"link_url">>, _}) -> true;
 is_valid_arg({<<"crop">>, _}) -> true;
 is_valid_arg({<<"caption">>, _}) -> true;
 is_valid_arg({<<"size">>, _}) -> true;
@@ -117,7 +118,7 @@ filter_args([], false, Acc, Context) ->
 filter_args([ {<<"size">>, Size} | Args ], _, Acc, Context) ->
     [ S, M, L ] = get_sizes(Context),
     {P, SizeName} = case Size of
-                        <<"medium">> -> {M, <<"medium">>};
+                        <<"middle">> -> {M, <<"middle">>};
                         <<"small">> -> {S, <<"small">>};
                         _ -> {L, <<"large">>}
                    end,
@@ -130,6 +131,15 @@ filter_args([ {<<"link">>, <<"link">>} | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [ {link, true} | Acc ], Context);
 filter_args([ {<<"link">>, _} | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [ {link, undefined} | Acc ], Context);
+filter_args([ {<<"link_url">>, <<>>} | Args ], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [ {link_url, <<>>} | Acc ], Context);
+filter_args([ {<<"link_url">>, Url} | Args ], HasSize, Acc, Context) ->
+    Url1 = z_html:sanitize_uri(Url),
+    filter_args(Args, HasSize, [ {link_url, Url1} | Acc ], Context);
+filter_args([ {<<"align">>, Align} | Args ], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [ {align, Align} | Acc ], Context);
+filter_args([ {<<"caption">>, Caption} | Args ], HasSize, Acc, Context) ->
+    filter_args(Args, HasSize, [ {caption, Caption} | Acc ], Context);
 filter_args([ P | Args ], HasSize, Acc, Context) ->
     filter_args(Args, HasSize, [P|Acc], Context).
 

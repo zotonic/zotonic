@@ -299,35 +299,127 @@ nodash(S) ->
     end.
 
 
-
-%% @doc Return the rsc_id with the given username/password.  
+%% @doc Return the rsc_id with the given username/password.
 %%      If succesful then updates the 'visited' timestamp of the entry.
-%% @spec check_username_pw(Username, Password, Context) -> {ok, Id} | {error, Reason}
-check_username_pw(<<"admin">>, Password, Context) ->
-    check_username_pw("admin", Password, Context);
-check_username_pw("admin", Empty, _Context) when Empty =:= []; Empty =:= <<>> ->
+-spec check_username_pw(binary() | string(), binary() | string(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+check_username_pw(Username, Password, Context) ->
+    NormalizedUsername = z_convert:to_binary( z_string:trim( z_string:to_lower(Username) ) ),
+    case z_notifier:first(#auth_precheck{ username =  NormalizedUsername }, Context) of
+        Ok when Ok =:= ok; Ok =:= undefined ->
+            case check_username_pw_1(NormalizedUsername, Password, Context) of
+                {ok, RscId} ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = RscId,
+                            username = NormalizedUsername,
+                            is_accepted = true
+                        },
+                        Context),
+                    {ok, RscId};
+                {error, _} = Error ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = undefined,
+                            username = NormalizedUsername,
+                            is_accepted = false
+                        },
+                        Context),
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+check_username_pw_1(<<"admin">>, "", _Context) ->
     {error, password};
-check_username_pw("admin", Password, Context) ->
+check_username_pw_1(<<"admin">>, <<>>, _Context) ->
+    {error, password};
+check_username_pw_1(<<"admin">>, Password, Context) ->
     Password1 = z_convert:to_list(Password),
-    case m_site:get(admin_password, Context) of
+    case z_convert:to_list(m_site:get(admin_password, Context)) of
+        "admin" when Password1 =:= "admin" ->
+            % Only allow default password from whitelisted ip addresses
+            case is_peer_whitelisted(Context) of
+                true ->
+                    z_db:q("update identity set visited = now() where id = 1", Context),
+                    {ok, 1};
+                false ->
+                    lager:error(
+                        "admin login with default password from non whitelisted ip address ~p",
+                        [m_req:get(peer, Context)]
+                    ),
+                    {error, peer_not_whitelisted}
+            end;
         Password1 ->
             z_db:q("update identity set visited = now() where id = 1", Context),
             {ok, 1};
         _ ->
             {error, password}
     end;
-check_username_pw(Username, Password, Context) ->
+check_username_pw_1(Username, Password, Context) ->
     Username1 = z_string:trim(z_string:to_lower(Username)),
     Row = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", [Username1], Context),
     case Row of
         undefined ->
             % If the Username looks like an e-mail address, try by Email & Password
-            case z_email_utils:is_email(Username) of
-                true -> check_email_pw(Username, Password, Context);
+            case z_email_utils:is_email(Username1) of
+                true -> check_email_pw(Username1, Password, Context);
                 false -> {error, nouser}
             end;
         {RscId, Hash} ->
             check_hash(RscId, Username, Password, Hash, Context)
+    end.
+
+%% @doc Check if the tcp/ip peer address is a whitelisted ip address
+is_peer_whitelisted(Context) ->
+    Peer = z_convert:to_list(m_req:get(peer, Context)),
+    is_ip_whitelisted(Peer, Context).
+
+is_ip_whitelisted(IP, Context) ->
+    Whitelist = string:tokens(z_convert:to_list(ip_whitelist(Context)), ","),
+    ip_match(IP, Whitelist).
+
+ip_match(_Peer, []) ->
+    false;
+ip_match(Peer, [Peer|_IPs]) ->
+    true;
+ip_match(Peer, [IP|IPs]) ->
+    case string:tokens(IP, "/") of
+        [IPVal,Bits] ->
+            {ok, MatchAdr} = inet:parse_address(IPVal),
+            {ok, PeerAdr} = inet:parse_address(Peer),
+            BitsNr = z_convert:to_integer(Bits),
+            case ip_match_mask(PeerAdr, MatchAdr, BitsNr) of
+                true -> true;
+                false -> ip_match(Peer, IPs)
+            end;
+        _ ->
+            ip_match(Peer, IPs)
+    end.
+
+ip_match_mask({_,_,_,_} = Peer, {_,_,_,_} = Match, Bits) ->
+    ip_match_mask_1(Peer, Match, 32-Bits);
+ip_match_mask({_,_,_,_,_,_,_,_} = Peer, {_,_,_,_,_,_,_,_} = Match, Bits) ->
+    ip_match_mask_1(Peer, Match, 128-Bits);
+ip_match_mask(_, _, _) ->
+    false.
+
+ip_match_mask_1(PeerAdr, MatchAdr, MaskBits) ->
+    NetMask = ((1 bsl 128) - 1) bsl MaskBits,
+    (to_ip_number(MatchAdr) band NetMask) =:= (to_ip_number(PeerAdr) band NetMask).
+
+to_ip_number({A,B,C,D}) ->
+    ((((A * 256) + B) * 256) + C) * 256 + D;
+to_ip_number({A,B,C,D,E,F,G,H}) ->
+    (((((((((A * 65536) + B) * 65536) + C) * 65536 + D) * 65536 + E) * 65536 + F) * 65536) + G) * 65536 + H.
+
+ip_whitelist(Context) ->
+    SiteWhitelist = m_config:get_value(site, ip_whitelist, Context),
+    case z_utils:is_empty(SiteWhitelist) of
+        true ->
+            z_config:get(ip_whitelist);
+        false ->
+            SiteWhitelist
     end.
 
 %% @doc Check is the password belongs to an user with the given e-mail address.

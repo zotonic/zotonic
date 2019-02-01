@@ -39,6 +39,41 @@
 -include("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
+event(#postback{ message = {session_alert, Args} }, Context) ->
+    {session_nr, SessionNr} = proplists:lookup(session_nr, Args),
+    UserId = z_acl:user(Context),
+    case z_session_manager:lookup_session_nr(UserId, SessionNr, Context) of
+        {ok, Pid} ->
+            ContextAlert = z_context:new(Context),
+            ContextAlert1 = ContextAlert#context{ session_pid = Pid, session_id = undefined },
+            ContextAlert2 = z_render:wire(
+                {alert, [
+                    {text, ?__("Session alert requested", Context)}
+                ]},
+                ContextAlert1),
+            z_session:add_script(ContextAlert2),
+            z_render:growl(?__("Sending the alert", Context), Context);
+        {error, _} ->
+            z_render:growl(?__("Could not find the session", Context), Context)
+    end;
+event(#postback{ message = {session_stop, Args} }, Context) ->
+    {session_nr, SessionNr} = proplists:lookup(session_nr, Args),
+    UserId = z_acl:user(Context),
+    case z_session_manager:lookup_session_nr(UserId, SessionNr, Context) of
+        {ok, Pid} ->
+            z_session:set(auth_user_id, none, Pid),
+            z_session:stop_sync(Pid),
+            z_render:wire([
+                {growl, [
+                    {text, ?__("Stopping the session", Context)}
+                ]},
+                {remove, [
+                    {target, proplists:get_value(element_id, Args)}
+                ]}
+            ], Context);
+        {error, _} ->
+            z_render:growl(?__("Could not find the session", Context), Context)
+    end;
 event(#submit{ message={signup_confirm, Props} }, Context) ->
     {auth, Auth} = proplists:get_value(auth, Props),
     Auth1 = Auth#auth_validated{ is_signup_confirm = true },

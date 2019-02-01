@@ -1,16 +1,32 @@
 {% if stage == "reminder_sent" %}
 <div class="logon_message">
 
-    <h1 class="logon_header">{_ We've sent you an e-mail _}</h1>
+    {% if not error %}
+        <h1 class="logon_header">{_ We've sent you an e-mail _}</h1>
 
-    <p>{_ In the e-mail you will find instructions on how to reset the password of your account. _}</p>
-    <p>{_ When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders. _}</p>
+        <p>{_ In the e-mail you will find instructions on how to reset the password of your account. _}</p>
+        <p>{_ When you don’t receive the e-mail within a few minutes then be sure to check your spam filter and spam folders. _}</p>
 
-    {% if not m.acl.user %}
-        <p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
+        {% if not m.acl.user %}
+            <p><a class="btn" href="{% url logon %}">{_ Back to logon form _}</a></p>
+        {% else %}
+            <p><a id="{{ #cancel }}" class="btn" href="#">{_ Cancel _}</a></p>
+            {% wire id=#cancel action={redirect back} %}
+        {% endif %}
+    {% elseif error == `ratelimit` %}
+        <h1 class="z-logon-title logon_header">{_ Too many retries _}</h1>
+        <p>
+            {_ Please try again in _}
+            {% with m.ratelimit.timeout as seconds %}
+                {% if seconds == 3600 %}{_ an hour _}.
+                {% elseif seconds > 3600 %}{{ ((seconds+3599)/3600)|round }} {_ hours _}.
+                {% else %}{{ (seconds / 60)|round }} {_ minutes _}.
+                {% endif %}
+            {% endwith %}
+        </p>
     {% else %}
-        <p><a id="{{ #cancel }}" class="btn" href="#">{_ Cancel _}</a></p>
-        {% wire id=#cancel action={redirect back} %}
+        <h1 class="z-logon-title logon_header">{_ Could not send email _}</h1>
+        <p>{_ Please try again later. _}</p>
     {% endif %}
 
 </div>
@@ -53,6 +69,7 @@
 </div>
 {% elseif stage == "password_expired" %}
 <div>
+    {% wire id="password_expired" type="submit" postback={expired secret=secret username=username} delegate=`controller_logon` %}
     <form id="password_expired" method="post" action="postback">
         <h1 class="logon_header">{_ You need to change your password _}</h1>
 

@@ -1,5 +1,6 @@
 {% if username %}
-<form id="password_reset" class="setcookie" method="post" action="postback">
+{% wire id="password_reset" type="submit" postback={reset secret=secret username=username} delegate=`controller_logon` %}
+<form id="password_reset" method="post" action="postback" class="z_logon_form">
     <h1 class="logon_header">{_ Reset your password _}</h1>
 
     <p>{_ Below you can enter a new password for your account _} <strong>{{ username|escape }}</strong>.</p>
@@ -41,6 +42,18 @@
     {% javascript %}setTimeout(function(){$("#password_reset1").focus(); z_init_postback_forms();}, 100);{% endjavascript %}
 
 </form>
+{% elseif error == `ratelimit` %}
+    <h1 class="z-logon-title logon_header">{_ Sorry, too many retries _}</h1>
+
+    <p>
+        {_ Please try again in _}
+        {% with m.ratelimit.timeout as seconds %}
+            {% if seconds == 3600 %}{_ an hour _}.
+            {% elseif seconds > 3600 %}{{ ((seconds+3599)/3600)|round }} {_ hours _}.
+            {% else %}{{ (seconds / 60)|round }} {_ minutes _}.
+            {% endif %}
+        {% endwith %}
+    </p>
 {% else %}
 <h1 class="logon_header">{_ Sorry, your password reset code is unknown or expired _}</h1>
 

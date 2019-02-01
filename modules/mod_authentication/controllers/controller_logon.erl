@@ -25,6 +25,9 @@
 -export([event/2]).
 -export([get_rememberme_cookie/1, set_rememberme_cookie/2, reset_rememberme_cookie/1]).
 
+%% Convenience export for other modules.
+-export([logon/2, logon/3, reminder/2]).
+
 %% Convenience export for other auth implementations.
 -export([send_reminder/2, lookup_identities/2]).
 
@@ -95,27 +98,59 @@ provide_content(ReqData, Context) ->
     Context2 = z_context:set_resp_header("X-Robots-Tag", "noindex", Context1),
     Secret = z_context:get_q("secret", Context2),
     Vars = [
+        {noindex, true},
+        {notrack, true},
         {page, get_page(Context2)}
         | z_context:get_all(Context2)
     ],
-    Vars1 = case get_by_reminder_secret(Secret, Context2) of
-                {ok, UserId} -> 
-                    [ {user_id, UserId}, 
-                      {secret, Secret},
-                      {username, m_identity:get_username(UserId, Context2)}
-                      | Vars ];
-                undefined -> 
-                    Vars
-            end,
-    ErrorUId = z_context:get_q("error_uid", Context2),
+    Secret = z_context:get_q("secret", Context2),
+    Username = z_context:get_q("u", Context2),
+    {SecretVars, Context3} = reminder_secrets(Secret, Username, Context2),
+    Vars1 = SecretVars ++ Vars,
+    ErrorUId = z_context:get_q("error_uid", Context3),
     ContextVerify = case ErrorUId /= undefined andalso z_utils:only_digits(ErrorUId) of
-                        false -> Context2;
-                        true -> check_verified(list_to_integer(ErrorUId), Context2)
+                        false -> Context3;
+                        true -> check_verified(list_to_integer(ErrorUId), Context3)
                     end,
     Template = z_context:get(template, ContextVerify, "logon.tpl"),
     Rendered = z_template:render(Template, Vars1, ContextVerify),
     {Output, OutputContext} = z_context:output(Rendered, ContextVerify),
     ?WM_REPLY(Output, OutputContext).
+
+reminder_secrets(undefined, _Username, Context) ->
+    {[], Context};
+reminder_secrets(_Secret, undefined, Context) ->
+    {[], Context};
+reminder_secrets(Secret, Username, Context) ->
+    UsernameB = z_convert:to_binary(Username),
+    case z_notifier:first( #auth_reset{ username = UsernameB }, Context ) of
+        Ok when Ok =:= undefined; Ok =:= ok ->
+            case get_by_reminder_secret(Secret, Context) of
+                {ok, UserId} ->
+                    case m_identity:get_username(UserId, Context) of
+                        undefined ->
+                            {[], Context};
+                        UsernameB ->
+                            Vs = [
+                                {user_id, UserId},
+                                {secret, Secret},
+                                {username, UsernameB}
+                            ],
+                            {Vs, Context};
+                        OtherUsername ->
+                            lager:error("Password reset with username mismatch: got \"~s\", expected \"~s\"",
+                                        [ UsernameB, OtherUsername ]),
+                            {[], Context}
+                    end;
+                undefined ->
+                    {[], Context}
+            end;
+        {error, Reason} ->
+            Vs = [
+                {error, Reason}
+            ],
+            {Vs, Context}
+    end.
 
 
 %% @doc Get the page we should redirect to after a successful log on.
@@ -162,45 +197,18 @@ event(#postback{message={send_verification, [{user_id, UserId}]}}, Context) ->
         _Other -> logon_stage("verification_error", Context)
     end;
 
-event(#submit{message=[], form="password_expired"}=S, Context) ->
-    event(S#submit{form="password_reset"}, Context);
+event(#submit{message={expired, Args}, form="password_expired"}, Context) ->
+    {secret, Secret} = proplists:lookup(secret, Args),
+    {username, Username} = proplists:lookup(username, Args),
+    reset(Secret, Username, Context);
 
-event(#submit{message=[], form="password_reset"}, Context) ->
-    Secret = z_context:get_q("secret", Context),
-    Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
-    Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
-    case {Password1,Password2} of
-        {A,_} when length(A) < 6 ->
-            logon_error("tooshort", Context);
-        {P,P} ->
-            {ok, UserId} = get_by_reminder_secret(Secret, Context),
-            case m_identity:get_username(UserId, Context) of
-                undefined ->
-                    throw({error, "User does not have an username defined."});
-                Username ->
-                    ContextLoggedon = logon_user(UserId, Context),
-                    delete_reminder_secret(UserId, ContextLoggedon),
-                    m_identity:set_username_pw(UserId, Username, Password1, ContextLoggedon),
-                    ContextLoggedon
-            end;
-        {_,_} ->
-            logon_error("unequal", Context)
-    end;
+event(#submit{message={reset, Args}, form="password_reset"}, Context) ->
+    {secret, Secret} = proplists:lookup(secret, Args),
+    {username, Username} = proplists:lookup(username, Args),
+    reset(Secret, Username, Context);
 
-event(#submit{message=[], form="password_reminder"}, Context) ->
-    case z_string:trim(z_context:get_q("reminder_address", Context, [])) of
-        [] ->
-            logon_error("reminder", Context);
-        Reminder ->
-            case lookup_identities(Reminder, Context) of
-                [] -> 
-                    logon_error("reminder", Context);
-                Identities ->
-                    % @todo TODO check if reminder could be sent (maybe there is no e-mail address)
-                    send_reminder(Identities, Context),
-                    logon_stage("reminder_sent", Context)
-            end
-    end;
+event(#submit{message={reminder, _Args}, form="password_reminder"}, Context) ->
+    reminder(z_context:get_q_validated("reminder_address", Context), Context);
 
 event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context) ->
     LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
@@ -212,23 +220,13 @@ event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context
         {error, _Reason} ->
             z_render:wire({show, [{target, "logon_confirm_error"}]}, Context);
         undefined ->
-            ?zWarning("Auth module error: #logon_submit{} returned undefined.", Context),
+            lager:warning("Auth module error: #logon_submit{} returned undefined."),
             z_render:growl_error("Configuration error: please enable a module for #logon_submit{}", Context)
     end;
 
-event(#submit{message=[]}, Context) ->
+event(#submit{message={logon, WireArgs}}, Context) ->
     Args = z_context:get_q_all(Context),
-    case z_notifier:first(#logon_submit{query_args=Args}, Context) of
-        {ok, UserId} when is_integer(UserId) -> 
-            logon_user(UserId, Context);
-        {error, _Reason} -> 
-            logon_error("pw", Context);
-        {expired, UserId} when is_integer(UserId) ->
-            logon_stage("password_expired", [{user_id, UserId}, {secret, set_reminder_secret(UserId, Context)}], Context);
-        undefined -> 
-            ?zWarning("Auth module error: #logon_submit{} returned undefined.", Context),
-            logon_error("pw", Context)
-    end;
+    logon(Args, WireArgs, Context);
 
 event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
     case proplists:get_value(<<"msg">>, Data) of
@@ -238,6 +236,75 @@ event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
         Msg ->
             lager:warning("controller_logon: unknown msg: ~p", [Msg]),
             Context
+    end.
+
+%%@doc Handle submit data.
+logon(Args, Context) ->
+    logon(Args, [], Context).
+
+-spec logon(list(), list(), #context{}) -> #context{}.
+logon(Args, WireArgs, Context) ->
+    case z_notifier:first(#logon_submit{query_args=Args}, Context) of
+        {ok, UserId} when is_integer(UserId) ->
+            logon_user(UserId, WireArgs, Context);
+        {error, ratelimit} ->
+            logon_error("ratelimit", Context);
+        {error, _Reason} ->
+            logon_error("pw", Context);
+        {expired, UserId} when is_integer(UserId) ->
+            {ok, Username} = m_identity:get_username(UserId, Context),
+            Vars = [
+                {user_id, UserId},
+                {secret, set_reminder_secret(UserId, Context)},
+                {username, Username}
+            ],
+            logon_stage("password_expired", Vars, Context);
+        undefined ->
+            lager:warning("Auth module error: #logon_submit{} returned undefined."),
+            logon_error("pw", Context)
+    end.
+
+%% @doc Send password reminders to everybody with the given email address
+reminder(Email, Context) ->
+    EmailNorm = m_identity:normalize_key(email, Email),
+    case z_notifier:first( #auth_reset{ username = EmailNorm }, Context) of
+        Ok when Ok =:= undefined; Ok =:= ok ->
+            case lookup_identities(EmailNorm, Context) of
+                [] ->
+                    send_reminder(undefined, EmailNorm, Context);
+                Identities ->
+                    lists:foreach(
+                        fun(RscId) ->
+                            send_reminder(RscId, EmailNorm, Context)
+                        end,
+                        Identities)
+            end,
+            logon_stage("reminder_sent", [{email, EmailNorm}], Context);
+        {error, Reason} ->
+            logon_stage("reminder_sent", [{error, Reason}, {email, EmailNorm}], Context)
+    end.
+
+reset(Secret, Username, Context) ->
+    Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
+    Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
+    PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, "6", Context)),
+
+    case {Password1,Password2} of
+        {A,_} when length(A) < PasswordMinLength ->
+            logon_error("tooshort", Context);
+        {P,P} ->
+            {ok, UserId} = get_by_reminder_secret(Secret, Context),
+            case m_identity:get_username(UserId, Context) of
+                undefined ->
+                    throw({error, "User does not have an username defined."});
+                Username ->
+                    ContextLoggedon = logon_user(UserId, [], Context),
+                    m_identity:set_username_pw(UserId, Username, Password1, z_acl:sudo(ContextLoggedon)),
+                    delete_reminder_secret(UserId, ContextLoggedon),
+                    ContextLoggedon
+            end;
+        {_,_} ->
+            logon_error("unequal", Context)
     end.
 
 logon_error(Reason, Context) ->
@@ -258,16 +325,15 @@ logon_stage(Stage, Args, Context) ->
     z_render:update("logon_form", z_template:render("_logon_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
     
 
-logon_user(UserId, Context) ->
+logon_user(UserId, WireArgs, Context) ->
     case z_auth:logon(UserId, Context) of
         {ok, ContextUser} ->
             ContextRemember = case z_context:get_q("rememberme", ContextUser, []) of
                 [] -> ContextUser;
                 _ -> set_rememberme_cookie(UserId, ContextUser)
             end,
-            z_render:wire(
-                    {redirect, [{location, cleanup_url(get_ready_page(ContextRemember))}]}, 
-                    ContextRemember);
+            Actions = get_post_logon_actions(WireArgs, ContextRemember),
+            z_render:wire(Actions, ContextRemember);
         {error, user_not_enabled} ->
             check_verified(UserId, Context);
         {error, _Reason} ->
@@ -335,9 +401,14 @@ set_rememberme_cookie(UserId, Context) ->
         {max_age, ?LOGON_REMEMBERME_DAYS*3600*24},
         {path, "/"},
         {http_only, true},
+        {same_site, lax},
         {domain, z_context:cookie_domain(Context)}
     ],
-    Hdr = mochiweb_cookies:cookie(?LOGON_REMEMBERME_COOKIE, Value, Options),
+    Options1 = case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
+        <<"https">> -> [ {secure, true} | Options ];
+        _ -> Options
+    end,
+    Hdr = mochiweb_cookies:cookie(?LOGON_REMEMBERME_COOKIE, Value, Options1),
     RD1 = wrq:merge_resp_headers([Hdr], RD),
     z_context:set_reqdata(RD1, Context).
 
@@ -379,7 +450,7 @@ lookup_identities(Handle, Context) ->
     Handle1 = z_string:trim(Handle),
     Set = sets:from_list(lookup_by_username(Handle1, Context) ++ lookup_by_email(Handle1, Context)),
     sets:to_list(Set).
-    
+
 
 lookup_by_username("admin", _Context) ->
     [];
@@ -392,57 +463,50 @@ lookup_by_username(Handle, Context) ->
 
 %% @doc Find all users with a certain e-mail address
 lookup_by_email(Handle, Context) ->
-    case lists:member($@, Handle) of
-        true -> 
+    case binary:match(Handle, <<"@">>) of
+        nomatch ->
+            [];
+        _ ->
             Rows = m_identity:lookup_by_type_and_key_multi(email, Handle, Context),
-            [ proplists:get_value(rsc_id, Row) || Row <- Rows ];
-        false ->
-            []
+            [ proplists:get_value(rsc_id, Row) || Row <- Rows ]
     end.
 
 
-%% Send an e-mail reminder to the listed ids.
-send_reminder(Ids, Context) ->
-    case send_reminder(Ids, z_acl:sudo(Context), []) of
-        [] -> {error, no_email};
-        _ -> ok
-    end.
-    
-send_reminder([], _Context, Acc) ->
-    Acc;
-send_reminder([Id|Ids], Context, Acc) ->
-    case find_email(Id, Context) of
-        undefined -> 
-            send_reminder(Ids, Context, Acc);
-        Email -> 
-            case m_identity:get_username(Id, Context) of
-                undefined ->
-                    send_reminder(Ids, Context, Acc);
-                <<"admin">> ->
-                    send_reminder(Ids, Context, Acc);
-                Username ->
-                    Vars = [
-                        {recipient_id, Id},
-                        {id, Id},
-                        {secret, set_reminder_secret(Id, Context)},
-                        {username, Username},
-                        {email, Email}
-                    ],
-                    send_email(Email, Vars, Context),
-                    send_reminder(Ids, Context, [Id|Acc])
+%% @doc Exported convenience function to email password reminder to an user
+send_reminder(Id, Context) ->
+    Email = m_rsc:p_no_acl(Id, email_raw, Context),
+    send_reminder(Id, Email, Context).
+
+send_reminder(_Id, undefined, _Context) ->
+    {error, noemail};
+send_reminder(1, _Email, _Context) ->
+    lager:info("Ignoring password reminder request for 'admin' (user 1)"),
+    {error, admin};
+send_reminder(undefined, Email, Context) ->
+    z_email:send_render(Email, "email_password_reset.tpl", [], Context);
+send_reminder(Id, Email, Context) ->
+    PrefEmail = case m_rsc:p_no_acl(Id, email_raw, Context) of
+        undefined -> Email;
+        <<>> -> Email;
+        E -> m_identity:normalize_key(email, E)
+    end,
+    case m_identity:get_username(Id, Context) of
+        undefined ->
+            send_reminder(undefined, Email, Context);
+        Username when Username =/= <<"admin">> ->
+            Vars = [
+                {recipient_id, Id},
+                {id, Id},
+                {secret, set_reminder_secret(Id, Context)},
+                {username, Username},
+                {email, PrefEmail}
+            ],
+            z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
+            case Email of
+                PrefEmail -> ok;
+                _ -> z_email:send_render(PrefEmail, "email_password_reset.tpl", Vars, Context)
             end
     end.
-
-
-%% @doc Find the preferred e-mail address of an user.
-find_email(Id, Context) ->
-    m_rsc:p_no_acl(Id, email_raw, Context).
-
-%% @doc Sent the reminder e-mail to the user.
-send_email(Email, Vars, Context) ->
-    z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
-    ok.
-
 
 %% @doc Set the unique reminder code for the account.
 set_reminder_secret(Id, Context) ->
@@ -453,7 +517,7 @@ set_reminder_secret(Id, Context) ->
 %% @doc Delete the reminder secret of the user
 delete_reminder_secret(Id, Context) ->
     m_identity:delete_by_type(Id, "logon_reminder_secret", Context).
-    
+
 
 get_by_reminder_secret(Code, Context) ->
     case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
@@ -461,5 +525,18 @@ get_by_reminder_secret(Code, Context) ->
         Row -> {ok, proplists:get_value(rsc_id, Row)}
     end.
 
+
+%% @doc Get actions that should be wired after successful logon
+-spec get_post_logon_actions(list(), #context{}) -> list().
+get_post_logon_actions(WireArgs, Context) ->
+    case z_notifier:foldl(#logon_actions{args=WireArgs}, [], Context) of
+        [] ->
+            case cleanup_url(get_ready_page(Context)) of
+                "#reload" -> [{reload, []}];
+                Location -> [{redirect, [{location, Location}]}]
+            end;
+        Actions ->
+            Actions
+    end.
 
 

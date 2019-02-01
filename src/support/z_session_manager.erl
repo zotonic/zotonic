@@ -40,6 +40,8 @@
     rename_session/1, 
     whereis/2,
     whereis_user/2,
+    list_sessions_user/2,
+    lookup_session_nr/3,
     add_script/1,
     add_script/2,
     count/1, 
@@ -182,6 +184,48 @@ whereis(SessionId, #context{session_manager=SessionManager}) when is_binary(Sess
 -spec whereis_user(integer()|undefined, #context{}) -> [pid()].
 whereis_user(UserId, #context{host=Site}) ->
     gproc:lookup_pids({p, l, {Site, user_session, UserId}}).
+
+%% @doc Return a list of all sessions belonging to an user
+-spec list_sessions_user(m_rsc:resource_id(), z:context()) -> list().
+list_sessions_user(UserId, #context{ session_pid = SessionPid } = Context) ->
+    Pids = whereis_user(UserId, Context),
+    lists:foldl(
+        fun(Pid, Acc) ->
+            case z_session:session_info(Pid) of
+                {ok, Info} ->
+                    Props = [
+                        {pid, Pid},
+                        {is_current, Pid =:= SessionPid}
+                        | Info
+                    ],
+                    [ Props | Acc ];
+                {error, _} ->
+                    Acc
+            end
+        end,
+        [],
+        Pids).
+
+%% @doc Find a session by the unique session nr, which is changed on login
+-spec lookup_session_nr( m_rsc:resource_id(), binary(), z:context() ) -> {ok, pid()} | {error, notfound}.
+lookup_session_nr(UserId, SessionNr, Context) ->
+    Pids = whereis_user(UserId, Context),
+    lookup_session_nr_1(Pids, SessionNr).
+
+lookup_session_nr_1([], _SessionNr) ->
+    {error, notfound};
+lookup_session_nr_1([ Pid | Pids ], SessionNr) ->
+    case z_session:session_info(Pid) of
+        {ok, Info} ->
+            case proplists:get_value(session_nr, Info) of
+                SessionNr ->
+                    {ok, Pid};
+                _ ->
+                    lookup_session_nr_1(Pids, SessionNr)
+            end;
+        {error, _} ->
+            lookup_session_nr_1(Pids, SessionNr)
+    end.
 
 
 %% @spec tick(pid()) -> void()
@@ -516,19 +560,25 @@ get_session_cookie_name(Context) ->
 -spec set_session_cookie( string(), #context{} ) -> #context{}.
 set_session_cookie(SessionId, Context) ->
     Options = [{path, "/"},
+               {same_site, lax},
                {http_only, true}],
+    Options1 = case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
+        <<"https">> -> [ {secure, true} | Options ];
+        _ -> Options
+    end,
     z_context:set_cookie(
-                    get_session_cookie_name(Context), 
+                    get_session_cookie_name(Context),
                     SessionId,
-                    Options,
+                    Options1,
                     z_context:set(set_session_id, true, Context)).
 
 
 %% @doc Remove the session id from the user agent and clear the session pid in the context
 -spec clear_session_cookie( #context{} ) -> #context{}.
 clear_session_cookie(Context) ->
-    Options = [{max_age, 0}, 
-               {path, "/"}, 
+    Options = [{max_age, 0},
+               {path, "/"},
+               {same_site, lax},
                {http_only, true}],
     Context1 = z_context:set_cookie(get_session_cookie_name(Context), "", Options, Context),
     Context1#context{session_id=undefined, session_pid=undefined}.

@@ -44,8 +44,20 @@
 {% if m.acl.user /= 1 and not notrack %}
 	{% with m.config.seo_google.analytics.value as ga %}{% if ga %}
         <script>
+            var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
+            var ga_options = {};
             window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-            ga('create', "{{ ga|escapejs }}", 'auto', { });
+            if (window.localStorage) {
+              ga_options.storage = 'none';
+              ga_options.clientId = localStorage.getItem(GA_LOCAL_STORAGE_KEY);
+              ga('create', '{{ ga|escapejs }}', ga_options);
+              ga(function(tracker) {
+                localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
+              });
+            }
+            else {
+              ga('create', '{{ ga|escapejs }}', 'auto', ga_options);
+            }
             ga('set', 'anonymizeIp', true);
             ga('send', 'pageview');
         </script>

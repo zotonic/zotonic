@@ -44,21 +44,22 @@ var z_editor = (function ($) {
 
     addEditor = function($el) {
         var id = $el.attr('id');
-        tinymce.remove('#'+id);
         if (id) {
             z_on_visible('#' + id, function() {
+                tinymce.remove('#'+id);
                 initEditor($el);
             });
         } else {
             setTimeout(function () {
+                tinymce.remove('#'+id);
                 initEditor($el);
             }, 200);
         }
     };
 
     removeEditor = function($el) {
-        var mceId = '#' + $el.attr('id');
-        tinymce.remove(mceId);
+        var id = $el.attr('id');
+        tinymce.remove('#'+id);
         $el.removeClass(CLASS_EDITOR_INSTALLED);
     };
 
