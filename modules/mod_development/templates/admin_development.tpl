@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Development {% endblock %}
+{% block title %}{_ Development _}{% endblock %}
 
 {% block content %}
 <div class="admin-header">
@@ -119,6 +119,16 @@
     </form>
 
     <div id="explain-dispatch-output" style="display:none"></div>
+</div>
+
+
+<h3>{_ Introspection _}</h3>
+<div class="well">
+    <p>{_ Show internals of Zotonic and the modules _}</p>
+
+    <p>
+        <a href="{% url admin_development_observers %}">{_ Show an overview of all observers. _}</a>
+    </p>
 </div>
 
 {% endblock %}

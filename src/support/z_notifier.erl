@@ -35,6 +35,7 @@
     observe/4,
     detach/3,
     detach_all/2,
+    get_observers/1,
     get_observers/2,
     notify/2,
     notify_sync/2,
@@ -68,6 +69,13 @@
                           {86400, tick_24h} ]).
 
 -record(state, {observers, timers, host}).
+
+-type prio() :: integer().
+-type observer() :: pid()
+                  | function()
+                  | {module(), atom()}
+                  | {module(), atom(), [ pid() ]}
+                  | {module(), atom(), list()}.
 
 %%====================================================================
 %% API
@@ -143,6 +151,13 @@ detach(Event, Observer, #context{notifier=Notifier}) ->
 detach(Event, Observer, Host) when is_atom(Host) ->
     Notifier = z_utils:name_for_host(?MODULE, Host),
     gen_server:call(Notifier, {'detach', Event, Observer}).
+
+
+%% @doc List all observers for all events
+-spec get_observers( z:context() ) -> list( {atom(), list({prio(), observer()})} ).
+get_observers(Context) ->
+    Table = observer_table_name(z_context:site(Context)),
+    lists:sort( lists:flatten( ets:match(Table, '$1') )).
 
 %% @doc Return all observers for a particular event
 get_observers(Msg, Context) when is_tuple(Msg) ->

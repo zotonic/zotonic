@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %} Development {% endblock %}
+{% block title %}{_ Development _}{% endblock %}
 
 {% block content %}
 <ul class="breadcrumb">
