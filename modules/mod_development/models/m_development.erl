@@ -23,7 +23,8 @@
 
     lookup_record/1,
     refresh_records/0,
-    extract_records/0
+    refresh_records/1,
+    extract_records/1
     ]).
 
 -include("zotonic.hrl").
@@ -88,9 +89,33 @@ lookup_record( Rec ) ->
             lookup_record(Rec)
     end.
 
--spec extract_records() -> list( {atom(), list(atom())} ).
-extract_records() ->
-    case code:which(?MODULE) of
+
+-spec refresh_records() -> ok.
+refresh_records() ->
+    Mods = [ M || {M, _} <- code:all_loaded() ],
+    ZMods = lists:filter(fun is_zotonic_module/1, Mods),
+    Recs = lists:usort( lists:flatten([ extract_records(M) || M <- ZMods ]) ),
+    application:set_env(zotonic, cached_record_defs, Recs).
+
+is_zotonic_module(Mod) ->
+    Attrs = erlang:get_module_info(Mod, attributes),
+    lists:keymember(mod_title, 1, Attrs).
+
+-spec refresh_records( module() ) -> ok.
+refresh_records(Module) ->
+    Current = application:get_env(zotonic, cached_record_defs, []),
+    Recs = extract_records(Module),
+    New = lists:foldl(
+        fun({K, _} = Def, Acc) ->
+            lists:keyreplace(K, 1, Acc, Def)
+        end,
+        Current,
+        Recs),
+    application:set_env(zotonic, cached_record_defs, New).
+
+-spec extract_records( module() ) -> list( {atom(), list(atom())} ).
+extract_records(Module) ->
+    case code:which(Module) of
         BeamFile when is_list(BeamFile) ->
             case beam_lib:chunks(BeamFile, [ abstract_code ]) of
                 {ok, {_, [ {abstract_code, {_, AbstractCode }} ]} } ->
@@ -102,12 +127,6 @@ extract_records() ->
         _Other ->
             []
     end.
-
--spec refresh_records() -> ok.
-refresh_records() ->
-    Recs = extract_records(),
-    application:set_env(zotonic, cached_record_defs, Recs).
-
 
 %% @doc Extract all record definitions from the abstract code
 extract_records_abs( AbstractCode ) ->
@@ -134,6 +153,8 @@ concrete({call, _, {remote, _, {atom, _, Module}, {atom, _, Function}}, Args}) -
     readable_1({Module, Function, Args});
 concrete({atom, _, Atom}) ->
     z_html:escape( atom_to_binary(Atom, utf8) );
+concrete({record, _, Rec, _}) ->
+    z_html:escape( iolist_to_binary([ $#, atom_to_binary(Rec, utf8), "{}" ]) );
 concrete(Expr) ->
     z_html:escape(
         z_convert:to_binary(

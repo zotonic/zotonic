@@ -35,6 +35,7 @@
     debug_stream/3,
     observe_debug_stream/2,
     observe_filewatcher/2,
+    observe_module_ready/2,
     pid_observe_development_reload/3,
     pid_observe_development_make/3,
     observe_admin_menu/3,
@@ -82,6 +83,9 @@ observe_filewatcher(#filewatcher{ file = File, extension = Extension }, Context)
         true -> maybe_livereload(Extension, File, Context);
         false -> ok
     end.
+
+observe_module_ready(module_ready, _Context) ->
+    m_development:refresh_records().
 
 pid_observe_development_reload(Pid, development_reload, _Context) ->
     gen_server:cast(Pid, development_reload).
