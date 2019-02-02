@@ -15,7 +15,6 @@ RUN sed -f docker/erlang.config.sed apps/zotonic_launcher/priv/config/erlang.con
     && adduser -S -h /tmp -H -D zotonic \
     && chown -R zotonic /opt/zotonic/apps/zotonic_launcher/priv
 
-VOLUME /opt/zotonic
 VOLUME /etc/zotonic
 
 EXPOSE 8000 8443
