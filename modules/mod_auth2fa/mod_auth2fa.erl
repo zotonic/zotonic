@@ -21,7 +21,7 @@
 
 -mod_title("Authentication 2FA").
 -mod_description("Add 2FA authentication using TOTP").
--mod_prio(500).
+-mod_prio(600).
 -mod_depends([authentication]).
 
 -export([
@@ -34,7 +34,7 @@
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
 %% @doc Change the 2FA setting for the user group
-event(#postback{ message={auth_2fa_ug, Args} }, Context) ->
+event(#postback{ message={auth2fa_ug, Args} }, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             {id, Id} = proplists:lookup(id, Args),
@@ -43,6 +43,17 @@ event(#postback{ message={auth_2fa_ug, Args} }, Context) ->
             z_render:growl(?__("Changed the 2FA setting.", Context), Context);
         false ->
             z_render:growl(?__("Sorry, you are not allowed to change the 2FA settings.", Context), Context)
+    end;
+event(#postback{ message={auth2fa_remove, Args} }, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    case z_acl:is_allowed(use, mod_admin_identity, Context)
+        orelse Id =:= z_acl:user(Context)
+    of
+        true ->
+            ok = m_auth2fa:totp_disable(Id, Context),
+            Context;
+        false ->
+            z_render:growl(?__("Sorry, you are not allowed to remove the 2FA.", Context), Context)
     end.
 
 %% @doc Add admin menu for external services.

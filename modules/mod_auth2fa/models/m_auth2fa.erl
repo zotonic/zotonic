@@ -19,7 +19,7 @@
 -module(m_auth2fa).
 
 -export([
-    m_get_value/3,
+    m_find_value/3,
 
     is_totp_enabled/2,
     is_valid_totp/3,
@@ -34,16 +34,32 @@
 -define(TOTP_PERIOD, 30).
 -define(TOTP_IDENTITY_TYPE, <<"auth2fa_totp">>).
 
-m_get_value(totp_image_url, #m{ value = undefined }, Context) ->
+m_find_value(totp_image_url, #m{ value = undefined }, Context) ->
     case z_acl:user(Context) of
         undefined -> <<>>;
         UserId -> totp_image_url(UserId, Context)
     end;
-m_get_value(is_totp_enabled, #m{ value = undefined }, Context) ->
+m_find_value(is_totp_enabled, #m{ value = undefined }, Context) ->
     case z_acl:user(Context) of
         undefined -> false;
         UserId -> is_totp_enabled(UserId, Context)
-    end.
+    end;
+m_find_value(totp_image_url, #m{ value = UserId }, Context) ->
+    case z_acl:is_allowed(use, mod_admin_identity, Context)
+        orelse UserId =:= z_acl:user(Context)
+    of
+        true -> totp_image_url(UserId, Context);
+        false -> undefined
+    end;
+m_find_value(is_totp_enabled, #m{ value = UserId }, Context) ->
+    case z_acl:is_allowed(use, mod_admin_identity, Context) 
+        orelse UserId =:= z_acl:user(Context)
+    of
+        true -> is_totp_enabled(UserId, Context);
+        false -> undefined
+    end;
+m_find_value(UserId, #m{ value = undefined } = M, _Context) when is_integer(UserId) ->
+    M#m{ value = UserId }.
 
 %% @doc Check if totp is enabled for the given user
 -spec is_totp_enabled( m_rsc:resource_id(), z:context() ) -> boolean().

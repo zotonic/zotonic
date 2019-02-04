@@ -71,7 +71,7 @@
                             {{ cg_id.title }}
                         </label>
                         {% wire id=#cg.cg_id
-                                postback={auth_2fa_ug id=cg_id}
+                                postback={auth2fa_ug id=cg_id}
                                 delegate=`mod_auth2fa`
                         %}
                     </li>
