@@ -250,6 +250,10 @@ logon(Args, WireArgs, Context) ->
             logon_user(UserId, WireArgs, Context);
         {error, ratelimit} ->
             logon_error("ratelimit", Context);
+        {error, need_passcode} ->
+            logon_error("need_passcode", Context);
+        {error, passcode} ->
+            logon_error("passcode", Context);
         {error, _Reason} ->
             logon_error("pw", Context);
         {expired, UserId} when is_integer(UserId) ->
@@ -315,9 +319,24 @@ reset(Secret, Username, Context) ->
 
 logon_error(Reason, Context) ->
     Context1 = z_notifier:foldl(#auth_logon_error{reason=Reason}, Context, Context),
-    Context2 = z_render:set_value("password", "", Context1),
-    Context3 = z_render:wire({add_class, [{target, "signup_logon_box"}, {class, "z-logon-error"}]}, Context2),
+    Context2 = z_render:wire({add_class, [{target, "signup_logon_box"}, {class, "z-logon-error"}]}, Context1),
+    Context3 = case is_passcode_error(Reason) of
+        true ->
+            z_render:wire([
+                {add_class, [{target, "signup_logon_box"}, {class, "z-logon-passcode"}]},
+                {focus, [{target, "passcode"}]}
+            ], Context2);
+        false ->
+            z_render:wire([
+                {remove_class, [{target, "signup_logon_box"}, {class, "z-logon-passcode"}]},
+                {set_value, [{target, "password"}, {value, ""}]}
+            ], Context2)
+    end,
     z_render:update("logon_error", z_template:render("_logon_error.tpl", [{reason, Reason}], Context3), Context3).
+
+is_passcode_error("need_passcode") -> true;
+is_passcode_error("passcode") -> true;
+is_passcode_error(_) -> false.
 
 
 remove_logon_error(Context) ->

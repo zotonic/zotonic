@@ -21,6 +21,12 @@ body.err403 .z-logon-box {
   /* Supporting options */
   /* Sign up specific*/
 }
+.z-logon-box .passcode {
+  display: none;
+}
+.z-logon-box.z-logon-passcode .passcode {
+  display: block;
+}
 .z-logon-box ul {
   list-style-type: none;
   margin: 0;
