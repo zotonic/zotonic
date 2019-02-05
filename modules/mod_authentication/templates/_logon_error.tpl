@@ -8,13 +8,13 @@
 {% elseif reason == "need_passcode" %}
 
     <p>
-        {_ Please enter the two factor (2FA) passcode. _}
+        {_ Please enter the two-factor authentication passcode. _}
     </p>
 
 {% elseif reason == "passcode" %}
 
     <p>
-        {_ The two factor (2FA) passcode you entered did not match. Please check your entry and try again. _}
+        {_ The two-factor authentication passcode did not match. Please check your entry and try again. _}
     </p>
 
     <p><a href="{% url logon_reminder %}" id="logon_error_link_reminder">{_ Need help signing in? _}</a></p>
