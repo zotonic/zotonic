@@ -19,7 +19,7 @@
 
 <div class="form-group passcode">
     <label for="password" class="control-label">{_ Passcode _}</label>
-    <input class="form-control" type="text" id="passcode" name="passcode" value="" autocomplete="off" placeholder="{_ Passcode 2FA _}" />
+    <input class="form-control" type="number" id="passcode" name="passcode" value="" autocomplete="off" placeholder="{_ Passcode 2FA _}" />
 </div>
 
 <div class="form-group">

@@ -1,27 +1,27 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}2FA Configuration{% endblock %}
+{% block title %}Two-factor Authentication Configuration{% endblock %}
 
 {% block content %}
 <div class="admin-header">
-    <h2>{_ Two Factor Authentication Configuration (2FA) _}</h2>
+    <h2>{_ Two-factor authentication configuration _}</h2>
 
     {% if not m.acl.use.mod_admin_config %}
         <p class="alert alert-danger">
-            {_ You need to be allowed to edit the system configuration to view or change the 2FA configuration. _}
+            {_ You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration. _}
         </p>
     {% else %}
-        <p>{_ Here you can define which users need or should use 2FA authentication when signing in. _}</p>
+        <p>{_ Here you can define which users need or should use two-factor authentication when signing in. _}</p>
     {% endif %}
 
-    <p>{_ You can use 2FA applications that use TOTP, for example Google Authenticator and Duo Mobile. _}</p>
+    <p>{_ You can use two-factor authentication applications that use TOTP, examples are Google Authenticator and Duo Mobile. _}</p>
 </div>
 
 <div>
     {% if m.acl.use.mod_admin_config %}
         <h3>{_ Default configuration _}</h3>
 
-        <p>{_ Define who should use 2FA, this is the default 2FA setting for all users. _}</p>
+        <p>{_ Define who should use two-factor authentication, this is the default setting for all users. _}</p>
 
         <div class="form-group">
             <div>
@@ -30,7 +30,7 @@
                 %}
                 <label class="radio-inline">
                     <input name="2fa_mode" type="radio" id="opt2fa" value="0" {% if not m.config.mod_auth2fa.mode.value %}checked="checked"{% endif %} />
-                    {_ Optional 2FA _}
+                    {_ Optional _}
                 </label>
             </div>
 
@@ -40,7 +40,7 @@
                 %}
                 <label class="radio-inline">
                     <input name="2fa_mode" type="radio" id="ask2fa" value="1" {% if m.config.mod_auth2fa.mode.value  == '1' %}checked="checked"{% endif %} />
-                    {_ Always ask to set up 2FA _}
+                    {_ Ask after signing in _}
                 </label>
             </div>
 
@@ -50,7 +50,7 @@
                 %}
                 <label class="radio-inline">
                     <input name="2fa_mode" type="radio" id="force2fa" value="2" {% if m.config.mod_auth2fa.mode.value == '2' %}checked="checked"{% endif %} />
-                    {_ Force 2FA _}
+                    {_ Force two-factor authentication _}
                 </label>
             </div>
         </div>
@@ -58,8 +58,8 @@
         {% if m.modules.active.mod_acl_user_groups %}
             <h3>{_ User group configuration _}</h3>
 
-            <p>{_ It is possible to force 2FA for an user group, regardless of the setting above. _}</p>
-            <p>{_ Check the user groups for which 2FA should be forced. _}</p>
+            <p>{_ It is possible to force two-factor authenticartion for a specific user group, regardless of the setting above. _}</p>
+            <p>{_ Check the user groups for which two-factor authentication should be forced. _}</p>
 
             <ul class="list-unstyled">
                 {% for cg in m.hierarchy.acl_user_group.tree_flat %}

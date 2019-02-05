@@ -1,4 +1,4 @@
-<p>{_ Scan the barcode with your App _}</p>
+<p>{_ Scan the two-factor authentication barcode with your App _}</p>
 
 <p style="text-align: center">
     <img src="{{ m.auth2fa[id].totp_image_url }}" style="width: 128px; height: 128px; max-width: 90%">

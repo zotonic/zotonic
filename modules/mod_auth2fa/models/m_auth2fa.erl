@@ -128,9 +128,15 @@ totp_disable(UserId, Context) ->
 %% @doc Generate a new totp code and return the barcode
 -spec totp_image_url( m_rsc:resource_id(), z:context() ) -> binary().
 totp_image_url(UserId, Context) when is_integer(UserId) ->
-    Domain = z_convert:to_binary( z_context:hostname(Context) ),
+    Issuer = z_convert:to_binary( z_context:hostname(Context) ),
+    Username = m_identity:get_username(Context),
+    ServicePart = iolist_to_binary([
+            Issuer,
+            <<"%3A">>,
+            z_url:url_encode(Username), <<"%20%2F%20">>, Issuer
+        ]),
     {ok, Passcode} = regenerate_user_secret(UserId, Context),
-    {ok, Png} = generate_png(Domain, Passcode, ?TOTP_PERIOD),
+    {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
     encode_data_url(Png, <<"image/png">>).
 
 encode_data_url(Data, Mime) ->
@@ -166,15 +172,16 @@ regenerate_user_secret(UserId, Context) ->
     end,
     z_db:transaction(F, Context).
 
-
-% run() ->
-%   Passcode = crypto:hash(sha, <<"password">>),
-%   run(<<"demo@mydomain.com">>, Passcode, ?PERIOD).
-
-generate_png(Domain, Passcode, Seconds) ->
+% url format: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+generate_png(Domain, Issuer, Passcode, Seconds) ->
     PasscodeBase32 = z_auth2fa_base32:encode(Passcode),
     Period = integer_to_binary(Seconds),
-    Token = <<"otpauth://totp/", Domain/binary, "?period=", Period/binary, "&secret=", PasscodeBase32/binary>>,
+    Token = iolist_to_binary([
+        "otpauth://totp/", Domain,
+        "?period=", Period,
+        "&issuer=", z_url:url_encode(Issuer),
+        "&secret=", PasscodeBase32
+    ]),
     QRCode = z_auth2fa_qrcode:encode(Token),
     Image = simple_png_encode(QRCode),
     {ok, Image}.

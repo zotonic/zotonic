@@ -65,9 +65,9 @@ event(#postback{ message={request_2fa, _Args} }, Context) ->
                     Context;
                 false ->
                     z_render:wire({confirm, [
-                            {title, ?__("Add two factor authentication", Context)},
+                            {title, ?__("Add two-factor authentication", Context)},
                             {text, ?__(
-                                "You can add two factor authentication to your account."
+                                "You can add two-factor authentication to your account."
                                 "<br>You will need an App on your Phone to scan the barcode and generate passcodes.",
                                 Context)},
                             {ok, ?__("Enable 2FA", Context)},
@@ -86,7 +86,7 @@ event(#postback{ message={dialog_2fa, _Args} }, Context) ->
         UserId ->
             z_context:set_session(request_2fa_user_id, UserId, Context),
             z_render:dialog(
-                ?__("Scan 2FA Passcode", Context),
+                ?__("Scan two-factor authentication passcode", Context),
                 "_dialog_auth2fa_passcode.tpl",
                 [ {id, UserId}, {backdrop, static} ],
                 Context)
@@ -98,7 +98,7 @@ observe_admin_menu(admin_menu, Acc, Context) ->
     [
      #menu_item{id = admin_auth2fa_config,
                 parent = admin_auth,
-                label = ?__("2FA configuration", Context),
+                label = ?__("Two-factor authentication", Context),
                 url = {admin_auth2fa_config},
                 visiblecheck = {acl, use, mod_admin_config}}
 
