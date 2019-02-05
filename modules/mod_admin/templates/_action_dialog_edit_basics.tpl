@@ -27,7 +27,7 @@
 
 	                        {% catinclude "_admin_edit_basics.tpl" id in_dialog is_editable=id.is_editable languages=languages show_header %}
 
-	                        {% if id.is_a.category or id.is_a.predicate %}
+	                        {% if id.is_a.meta %}
 	                            <div class="form-group row">
 		                            <label class="control-label col-md-3" for="{{ #unique }}">{_ Unique name _}</label>
                                     <div class="col-md-9">
