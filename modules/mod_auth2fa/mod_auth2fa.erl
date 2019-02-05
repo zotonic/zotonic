@@ -39,7 +39,7 @@ event(#postback{ message={auth2fa_ug, Args} }, Context) ->
         true ->
             {id, Id} = proplists:lookup(id, Args),
             TV = z_convert:to_binary( z_context:get_q(triggervalue, Context) ),
-            {ok, _} = m_rsc:update(Id, [ {acl_force_2fa, TV} ], Context),
+            {ok, _} = m_rsc:update(Id, [ {acl_2fa, TV} ], Context),
             z_render:growl(?__("Changed the 2FA setting.", Context), Context);
         false ->
             z_render:growl(?__("Sorry, you are not allowed to change the 2FA settings.", Context), Context)
@@ -54,7 +54,44 @@ event(#postback{ message={auth2fa_remove, Args} }, Context) ->
             Context;
         false ->
             z_render:growl(?__("Sorry, you are not allowed to remove the 2FA.", Context), Context)
+    end;
+event(#postback{ message={request_2fa, _Args} }, Context) ->
+    case z_auth:is_auth(Context) of
+        true ->
+            UserId = z_acl:user(Context),
+            z_context:set_session(request_2fa_user_id, UserId, Context),
+            case m_auth2fa:is_totp_enabled(UserId, Context) of
+                true ->
+                    Context;
+                false ->
+                    z_render:wire({confirm, [
+                            {title, ?__("Add two factor authentication", Context)},
+                            {text, ?__(
+                                "You can add two factor authentication to your account."
+                                "<br>You will need an App on your Phone to scan the barcode and generate passcodes.",
+                                Context)},
+                            {ok, ?__("Enable 2FA", Context)},
+                            {postback, {dialog_2fa, []}},
+                            {delegate, ?MODULE}
+                        ]}, Context)
+            end;
+        false ->
+            z_context:set_session(request_2fa_user_id, undefined, Context),
+            Context
+    end;
+event(#postback{ message={dialog_2fa, _Args} }, Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            Context;
+        UserId ->
+            z_context:set_session(request_2fa_user_id, UserId, Context),
+            z_render:dialog(
+                ?__("Scan 2FA Passcode", Context),
+                "_dialog_auth2fa_passcode.tpl",
+                [ {id, UserId}, {backdrop, static} ],
+                Context)
     end.
+
 
 %% @doc Add admin menu for external services.
 observe_admin_menu(admin_menu, Acc, Context) ->

@@ -24,6 +24,8 @@
     is_totp_enabled/2,
     is_valid_totp/3,
 
+    user_mode/1,
+
     totp_image_url/2,
     totp_disable/2
 ]).
@@ -39,11 +41,6 @@ m_find_value(totp_image_url, #m{ value = undefined }, Context) ->
         undefined -> <<>>;
         UserId -> totp_image_url(UserId, Context)
     end;
-m_find_value(is_totp_enabled, #m{ value = undefined }, Context) ->
-    case z_acl:user(Context) of
-        undefined -> false;
-        UserId -> is_totp_enabled(UserId, Context)
-    end;
 m_find_value(totp_image_url, #m{ value = UserId }, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context)
         orelse UserId =:= z_acl:user(Context)
@@ -51,13 +48,35 @@ m_find_value(totp_image_url, #m{ value = UserId }, Context) ->
         true -> totp_image_url(UserId, Context);
         false -> undefined
     end;
+
+m_find_value(is_totp_enabled, #m{ value = undefined }, Context) ->
+    case z_acl:user(Context) of
+        undefined -> false;
+        UserId -> is_totp_enabled(UserId, Context)
+    end;
 m_find_value(is_totp_enabled, #m{ value = UserId }, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) 
+    case z_acl:is_allowed(use, mod_admin_identity, Context)
         orelse UserId =:= z_acl:user(Context)
     of
         true -> is_totp_enabled(UserId, Context);
         false -> undefined
     end;
+
+m_find_value(is_totp_requested, #m{ value = undefined }, Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            z_context:set_session(request_2fa_user_id, undefined, Context),
+            false;
+        UserId ->
+            case z_context:get_session(request_2fa_user_id, Context) of
+                UserId -> true;
+                _ -> false
+            end
+    end;
+
+m_find_value(user_mode, #m{ value = undefined }, Context) ->
+    user_mode(Context);
+
 m_find_value(UserId, #m{ value = undefined } = M, _Context) when is_integer(UserId) ->
     M#m{ value = UserId }.
 
@@ -67,6 +86,38 @@ is_totp_enabled(UserId, Context) ->
     case m_identity:get_rsc_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context) of
         [] -> false;
         [_] -> true
+    end.
+
+%% @doc Check the totp mode for the current user: 0 = optional, 1 = ask, 2 = required
+-spec user_mode( z:context() ) -> 0 | 1 | 2.
+user_mode(Context) ->
+    case z_auth:is_auth(Context) of
+        true ->
+            case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+                2 -> 2;
+                1 -> erlang:max( user_group_mode(Context), 1 );
+                _ -> erlang:max( user_group_mode(Context), 0 )
+            end;
+        false ->
+            0
+    end.
+
+user_group_mode(Context) ->
+    case z_module_manager:active(mod_acl_user_groups, Context) of
+        true ->
+            UGIds = m_acl_user_group:user_groups(Context),
+            Modes = lists:map(
+                fun(Id) ->
+                    case m_rsc:p_no_acl(Id, acl_2fa, Context) of
+                        undefined -> 0;
+                        <<>> -> 0;
+                        N -> z_convert:to_integer(N)
+                    end
+                end,
+                UGIds),
+            lists:max(Modes);
+        false ->
+            0
     end.
 
 %% @doc Remove the totp tokens and disable totp for the user

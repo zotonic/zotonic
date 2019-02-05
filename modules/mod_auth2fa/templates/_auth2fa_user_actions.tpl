@@ -1,10 +1,11 @@
-{% if id == m.auth2fa[id].is_totp_enabled %}
+{% if m.auth2fa[id].is_totp_enabled %}
     <p class="alert alert-info">{_ Two factor authentication is enabled for this user. _}</p>
 
     {% button class="btn btn-default"
               text=_"Remove 2FA..."
               action={confirm
                   text=_"This will disable the 2FA.<br>The old barcode will not be valid anymore."
+                  ok=_"Remove"
                   postback={auth2fa_remove id=id}
                   delegate=`mod_auth2fa`
               }
@@ -33,6 +34,7 @@
                         title=_"Scan 2FA Passcode"
                         template="_dialog_auth2fa_passcode.tpl"
                         id=id
+                        backdrop=`static`
                   }
                }
     %}

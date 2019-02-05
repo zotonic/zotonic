@@ -67,7 +67,7 @@
                     <li>
                         <label class="checkbox-inline">
                             {{ cg.indent }}
-                            <input type="checkbox" id="{{ #cg.cg_id }}" {% if cg_id.acl_force_2fa %}checked{% endif %} value="2" {% if not cg_id.is_editable %}disabled{% endif %}>
+                            <input type="checkbox" id="{{ #cg.cg_id }}" {% if cg_id.acl_2fa %}checked{% endif %} value="2" {% if not cg_id.is_editable %}disabled{% endif %}>
                             {{ cg_id.title }}
                         </label>
                         {% wire id=#cg.cg_id
