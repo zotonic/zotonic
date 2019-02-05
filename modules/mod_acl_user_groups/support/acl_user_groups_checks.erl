@@ -279,7 +279,7 @@ maybe_filter_acl_props(Props, Context) ->
             Props;
         false ->
             Props1 = proplists:delete(acl_upload_size, Props),
-            Props2 = proplists:delete(acl_mime_allowed, Props1)
+            Props2 = proplists:delete(acl_mime_allowed, Props1),
             proplists:delete(acl_2fa, Props2)
     end.
 
