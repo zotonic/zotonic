@@ -130,10 +130,15 @@ reminder_secrets(Secret, Username, Context) ->
                         undefined ->
                             {[], Context};
                         UsernameB ->
+                            NeedPasscode = case auth_postcheck(UserId, [], Context) of
+                                {error, need_passcode} -> true;
+                                _ -> false
+                            end,
                             Vs = [
                                 {user_id, UserId},
                                 {secret, Secret},
-                                {username, UsernameB}
+                                {username, UsernameB},
+                                {need_passcode, NeedPasscode}
                             ],
                             {Vs, Context};
                         OtherUsername ->
@@ -293,29 +298,68 @@ reminder(Email, Context) ->
             logon_stage("reminder_sent", [{error, Reason}, {email, EmailNorm}], Context)
     end.
 
-reset(Secret, Username, Context) ->
-    Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
-    Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
-    PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, "6", Context)),
+reset(Secret, Username, Context) when is_binary(Username) ->
+    case auth_precheck(Username, Context) of
+        ok ->
+            Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
+            Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
+            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, "6", Context)),
 
-    case {Password1,Password2} of
-        {A,_} when length(A) < PasswordMinLength ->
-            logon_error("tooshort", Context);
-        {P,P} ->
-            {ok, UserId} = get_by_reminder_secret(Secret, Context),
-            case m_identity:get_username(UserId, Context) of
-                undefined ->
-                    throw({error, "User does not have an username defined."});
-                Username ->
-                    ContextLoggedon = logon_user(UserId, [], Context),
-                    m_identity:set_username_pw(UserId, Username, Password1, z_acl:sudo(ContextLoggedon)),
-                    delete_reminder_secret(UserId, ContextLoggedon),
-                    ContextLoggedon
+            case {Password1,Password2} of
+                {A,_} when length(A) < PasswordMinLength ->
+                    logon_error("tooshort", Context);
+                {P,P} ->
+                    {ok, UserId} = get_by_reminder_secret(Secret, Context),
+                    case m_identity:get_username(UserId, Context) of
+                        undefined ->
+                            throw({error, "User does not have an username defined."});
+                        Username ->
+                            reset_1(UserId, Username, Password1, Context)
+                    end;
+                {_,_} ->
+                    logon_error("unequal", Context)
             end;
-        {_,_} ->
-            logon_error("unequal", Context)
+        {error, ratelimit} ->
+            logon_error("ratelimit", Context);
+        _ ->
+            logon_error("error", Context)
     end.
 
+reset_1(UserId, Username, Password, Context) ->
+    case auth_postcheck(UserId, z_context:get_q_all(Context), Context) of
+        ok ->
+            ContextLoggedon = logon_user(UserId, [], Context),
+            m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(ContextLoggedon)),
+            delete_reminder_secret(UserId, ContextLoggedon),
+            ContextLoggedon;
+        {error, need_passcode} ->
+            logon_error("need_passcode", Context);
+        {error, passcode} ->
+            z_notifier:notify_sync(
+                #auth_checked{
+                    id = UserId,
+                    username = Username,
+                    is_accepted = false
+                },
+                Context),
+            logon_error("passcode", Context);
+        _Error ->
+            logon_error("error", Context)
+    end.
+
+auth_precheck(Username, Context) when is_binary(Username) ->
+    case z_notifier:first(#auth_precheck{ username = Username }, Context) of
+        undefined -> ok;
+        ok -> ok;
+        Error -> Error
+    end.
+
+auth_postcheck(UserId, QueryArgs, Context) ->
+    case z_notifier:first(#auth_postcheck{ id = UserId, query_args = QueryArgs }, Context) of
+        undefined -> ok;
+        ok -> ok;
+        Error -> Error
+    end.
 
 logon_error(Reason, Context) ->
     Context1 = z_notifier:foldl(#auth_logon_error{reason=Reason}, Context, Context),
