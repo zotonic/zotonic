@@ -103,7 +103,7 @@ msgstr "Reset twee-factor..."
 
 #: modules/mod_auth2fa/templates/_dialog_auth2fa_passcode.tpl:1
 msgid "Scan the two-factor authentication barcode with your App"
-msgstr "Scan de twee-factor-authenticatie barcode met uw App"
+msgstr "Scan de twee-factor-authenticatie barcode met de app"
 
 #: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:19 modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:34
 msgid "Scan two-factor authentication barcode"
@@ -115,11 +115,11 @@ msgstr "Scan de twee-factor-authenticatie code"
 
 #: modules/mod_auth2fa/mod_auth2fa.erl:45
 msgid "Sorry, you are not allowed to change the 2FA settings."
-msgstr "Sorry, u mag de 2FA-instellingen niet wijzigen."
+msgstr "Sorry, de 2FA-instellingen kunnen niet worden aangepast."
 
 #: modules/mod_auth2fa/mod_auth2fa.erl:56
 msgid "Sorry, you are not allowed to remove the 2FA."
-msgstr "Sorry, u mag de 2FA niet verwijderen."
+msgstr "Sorry, de 2FA kan niet worden verwijdert."
 
 #: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:7
 msgid "This will disable the two-factor authentication.<br>The old barcode will not be valid anymore."
@@ -131,7 +131,7 @@ msgstr "Dit zal een nieuwe barcode genereren voor twee-factor-authenticatie.<br>
 
 #: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:31
 msgid "This will generate a new barcode.<br>From then on you will need to use a passcode to sign in."
-msgstr "Dit genereert een nieuwe barcode.<br>Vanaf dan moet u een extra code gebruiken om in te loggen."
+msgstr "Dit genereert een nieuwe barcode.<br>Hierna is een extra code nodig om in te loggen."
 
 #: modules/mod_auth2fa/templates/_admin_edit_sidebar.person.tpl:6 modules/mod_auth2fa/mod_auth2fa.erl:101
 msgid "Two-factor authentication"
@@ -143,7 +143,7 @@ msgid ""
 "on their telephone."
 msgstr ""
 "Twee-factor-authenticatie voegt een extra controle bij het aanmelden toe. De gebruiker moet een code invoeren die door een "
-"App op zijn telefoon wordt gegenereerd."
+"app op zijn telefoon wordt gegenereerd."
 
 #: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:7
 msgid "Two-factor authentication configuration"
@@ -166,18 +166,18 @@ msgid ""
 "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the barcode and "
 "generate passcodes."
 msgstr ""
-"U kunt twee-factor-authenticatie toevoegen aan uw account.<br>U heeft een App op uw telefoon nodig om de barcode te "
+"Voeg twee-factor-authenticatie toe.<br>Gebruik een app op een telefoon om de barcode te "
 "scannen en codes te genereren."
 
 #: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:17
 msgid "You can use two-factor authentication applications that use TOTP, examples are Google Authenticator and Duo Mobile."
 msgstr ""
-"U kunt twee-factor-authenticatie programma’s gebruiken die gebruik maken van TOTP, voorbeelden zijn Google Authenticator "
+"Gebruik een twee-factor-authenticatie programma dat werkt met TOTP, voorbeelden zijn Google Authenticator "
 "en Duo Mobile."
 
 #: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:11
 msgid ""
 "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr ""
-"U moet toestemming hebben om de systeemconfiguratie te bewerken om de twee-factor-authenticatie configuratie te bekijken "
+"Er is toestemming nodig om de systeemconfiguratie te bewerken om de twee-factor-authenticatie configuratie te bekijken "
 "of te wijzigen."
