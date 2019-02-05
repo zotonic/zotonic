@@ -52,15 +52,24 @@ provide_content(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Context2 = z_context:ensure_all(Context1),
 
-    case z_acl:user(Context2) of
-        undefined ->
-            logon_page(Context2);
-        _ ->
-            status_page(Context2)
+    case is_peer_whitelisted(Context2) of
+        false ->
+            logon_page(false, Context2);
+        true ->
+            case z_acl:user(Context2) of
+                undefined ->
+                    logon_page(true, Context2);
+                _ ->
+                    status_page(Context2)
+            end
     end.
 
-logon_page(Context) ->
-    Rendered = z_template:render("logon.tpl", z_context:get_all(Context), Context),
+logon_page(IsWhiteListed, Context) ->
+    Args = [
+        {is_peer_whitelisted, IsWhiteListed}
+        | z_context:get_all(Context)
+    ],
+    Rendered = z_template:render("logon.tpl", Args, Context),
     {Output, OutputContext} = z_context:output(Rendered, Context),
     ReqData = webmachine_request:set_response_code(503, Context#context.wm_reqdata),
     ReqData1 = webmachine_request:set_resp_body(Output, ReqData),
@@ -87,42 +96,49 @@ status_page(Context) ->
 %% -----------------------------------------------------------------------------------------------
 
 event(#submit{message=[], form=FormId}, Context) ->
-    case z_notifier:first(#auth_precheck{ username = ?USERNAME }, Context) of
-        Ok when Ok =:= ok; Ok =:= undefined ->
-            case z_context:get_q("password", Context) == z_config:get(password) of
-                true ->
-                    z_notifier:notify_sync(
-                        #auth_checked{
-                            id = undefined,
-                            username = ?USERNAME,
-                            is_accepted = true
-                        },
-                        Context),
-                    {ok, ContextAuth} = z_auth:logon(1, Context),
-                    z_render:wire({reload, []}, ContextAuth);
-                false ->
-                    z_notifier:notify_sync(
-                        #auth_checked{
-                            id = undefined,
-                            username = ?USERNAME,
-                            is_accepted = false
-                        },
-                        Context),
+    case is_peer_whitelisted(Context) of
+        false ->
+            lager:error("Zotonic status logon from non whitelisted IP address: ~p",
+                        [m_req:get(peer, Context)]),
+            Context;
+        true ->
+            case z_notifier:first(#auth_precheck{ username = ?USERNAME }, Context) of
+                Ok when Ok =:= ok; Ok =:= undefined ->
+                    case z_context:get_q("password", Context) == z_config:get(password) of
+                        true ->
+                            z_notifier:notify_sync(
+                                #auth_checked{
+                                    id = undefined,
+                                    username = ?USERNAME,
+                                    is_accepted = true
+                                },
+                                Context),
+                            {ok, ContextAuth} = z_auth:logon(1, Context),
+                            z_render:wire({reload, []}, ContextAuth);
+                        false ->
+                            z_notifier:notify_sync(
+                                #auth_checked{
+                                    id = undefined,
+                                    username = ?USERNAME,
+                                    is_accepted = false
+                                },
+                                Context),
+                            z_render:wire([
+                                        {remove_class, [{target,FormId}, {class,"error-ratelimit"}]},
+                                        {add_class, [{target,FormId}, {class,"error-pw"}]},
+                                        {set_value, [{target,"password"},{value, ""}]}], Context)
+                    end;
+                {error, ratelimit} ->
+                    z_render:wire([
+                                {remove_class, [{target,FormId}, {class,"error-pw"}]},
+                                {add_class, [{target,FormId}, {class,"error-ratelimit"}]},
+                                {set_value, [{target,"password"},{value, ""}]}], Context);
+                {error, _} ->
                     z_render:wire([
                                 {remove_class, [{target,FormId}, {class,"error-ratelimit"}]},
                                 {add_class, [{target,FormId}, {class,"error-pw"}]},
                                 {set_value, [{target,"password"},{value, ""}]}], Context)
-            end;
-        {error, ratelimit} ->
-            z_render:wire([
-                        {remove_class, [{target,FormId}, {class,"error-pw"}]},
-                        {add_class, [{target,FormId}, {class,"error-ratelimit"}]},
-                        {set_value, [{target,"password"},{value, ""}]}], Context);
-        {error, _} ->
-            z_render:wire([
-                        {remove_class, [{target,FormId}, {class,"error-ratelimit"}]},
-                        {add_class, [{target,FormId}, {class,"error-pw"}]},
-                        {set_value, [{target,"password"},{value, ""}]}], Context)
+            end
     end;
 
 event(#postback{message={logoff, []}}, Context) ->
@@ -144,6 +160,7 @@ event(#postback{message={site_flush, [{site, Site}]}}, Context) ->
     z:flush(z_context:new(Site)),
     notice(Site, "The cache is flushed and all dispatch rules are reloaded.", Context);
 event(#postback{message={site_admin, [{site,Site}]}}, Context) ->
+    true = z_auth:is_auth(Context),
     try
         SiteContext = z_context:new(Site),
         case z_dispatcher:url_for(admin, SiteContext) of
@@ -157,6 +174,13 @@ event(#postback{message={site_admin, [{site,Site}]}}, Context) ->
         _:_ -> z_render:growl_error("Could not fetch the admin url, the site might not be running.", Context)
     end.
 
+%% -----------------------------------------------------------------------------------------------
+%% Check peer address to the system management IP whitelist
+%% -----------------------------------------------------------------------------------------------
+
+is_peer_whitelisted(Context) ->
+    Peer = m_req:get(peer, Context),
+    z_ip_address:ip_match(Peer, z_config:get(ip_whitelist_system_management)).
 
 %% -----------------------------------------------------------------------------------------------
 %% Stream process to update the page when data changes

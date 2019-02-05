@@ -97,4 +97,5 @@ default(use_ua_classifier) -> true;
 default(filewatcher_enabled) -> true;
 default(filewatcher_scanner_enabled) -> false;
 default(ip_whitelist) -> "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,169.254.0.0/16,::1,fd00::/8,fe80::/10";
+default(ip_whitelist_system_management) -> "any";
 default(_) -> undefined.
