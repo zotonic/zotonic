@@ -9,8 +9,7 @@
 
 <div class="form-group">
     <label for="password" class="control-label">{_ Password _}</label>
-    <input class="form-control" type="password" id="password" name="password" value="" autocomplete="o
-    ff" placeholder="{_ Password _}" />
+    <input class="form-control" type="password" id="password" name="password" value="" autocomplete="off" placeholder="{_ Password _}" />
     {% validate id="password"
         type={presence failure_message=_"Enter your password"}
         only_on_submit
