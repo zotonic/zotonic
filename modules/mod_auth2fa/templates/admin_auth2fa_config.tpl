@@ -14,7 +14,7 @@
         <p>{_ Here you can define which users need or should use two-factor authentication when signing in. _}</p>
     {% endif %}
 
-    <p>{_ You can use two-factor authentication applications that use TOTP, examples are Google Authenticator and Duo Mobile. _}</p>
+    <p>{_ You can use two-factor authentication apps such as <a href="https://support.google.com/accounts/answer/1066447">Google Authenticator</a> or <a href="https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>." _}</p>
 </div>
 
 <div>

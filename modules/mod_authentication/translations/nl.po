@@ -121,6 +121,10 @@ msgstr "Kan geen e-mail versturen"
 msgid "Current"
 msgstr "Huidig"
 
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
+msgid "E-mail"
+msgstr ""
+
 #: modules/mod_authentication/templates/_logon_error.tpl:3
 msgid ""
 "Either the email or the password you entered is incorrect. Please check your "
@@ -174,11 +178,11 @@ msgstr ""
 msgid "Enter your email address or username"
 msgstr "Vul je e-mailadres of gebruikersnaam in"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:15
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:16
 msgid "Enter your password"
 msgstr "Vul je wachtwoord in"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:5
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:6
 msgid "Enter your username"
 msgstr "Vul je gebruikersnaam in"
 
@@ -277,7 +281,7 @@ msgstr ""
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "In de e-mail staan instructies om je account te bevestigen."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:30
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:41
 #: modules/mod_authentication/templates/_logon_expired_form.tpl:39
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:28
@@ -322,15 +326,15 @@ msgstr "OK"
 msgid "One moment please, signing out..."
 msgstr "Een moment alsjeblieft, aan het uitloggen..."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:21
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:22
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:32
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:20
 msgid "Passcode"
 msgstr "Code"
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:11
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:13
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:14
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 msgid "Password"
 msgstr "Wachtwoord"
@@ -346,7 +350,7 @@ msgstr "Bevestig je"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:11
 msgid "Please enter the two-factor authentication passcode."
-msgstr "Voer de twee-factor-authenticatie code in."
+msgstr "Voer de code in voor authenticatie in twee stappen."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:10
 #: modules/mod_authentication/templates/_logon_error.tpl:26
@@ -413,7 +417,7 @@ msgid "Show Alert"
 msgstr "Toon bericht"
 
 #: modules/mod_authentication/templates/_logon_off.tpl:4
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:35
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:36
 #: modules/mod_authentication/templates/error.403.tpl:35
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:34
 msgid "Sign in"
@@ -496,8 +500,8 @@ msgid ""
 "The two-factor authentication passcode did not match. Please check your "
 "entry and try again."
 msgstr ""
-"De twee-factor-authenticatie code was verkeerd. Controleer het en probeer "
-"opnieuw."
+"De code voor authenticatie in twee stappen was verkeerd. Controleer je "
+"invoer en probeer opnieuw."
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:44
 msgid "There was a problem authenticating with"
@@ -547,11 +551,11 @@ msgstr "Sorry, te veel pogingen"
 msgid "Too many retries."
 msgstr "Sorry, te veel pogingen."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:22
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:23
 #: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:33
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:21
 msgid "Two-factor passcode"
-msgstr "Twee-factor code"
+msgstr "Code voor authenticatie in twee stappen"
 
 #: modules/mod_authentication/templates/_logon_error.tpl:49
 #: modules/mod_authentication/templates/_logon_error.tpl:56
