@@ -131,6 +131,7 @@
     set_noindex_header/2,
 
     set_security_headers/1,
+    set_cors_headers/2,
 
     set_cookie/3,
     set_cookie/4,
@@ -1180,6 +1181,18 @@ set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
     end,
     RD1 = wrq:set_resp_headers(SecurityHeaders, ReqData),
     Context#context{ wm_reqdata = RD1 }.
+
+%% @doc Set Cross-Origin Resource Sharing (CORS) headers. The caller must
+%%      specify default headers to be used in case there are no observers for
+%%      the #cors_headers{} notification.
+-spec set_cors_headers([{string(), string()}], z:context()) -> z:context().
+set_cors_headers(Default, Context = #context{wm_reqdata = ReqData}) ->
+    CorsHeaders = case z_notifier:first(#cors_headers{headers = Default}, Context) of
+        undefined -> Default;
+        Custom -> Custom
+    end,
+    RD = wrq:set_resp_headers(CorsHeaders, ReqData),
+    Context#context{wm_reqdata = RD}.
 
 %% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
 -spec set_noindex_header(#context{}) -> #context{}.

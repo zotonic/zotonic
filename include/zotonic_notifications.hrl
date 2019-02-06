@@ -41,6 +41,9 @@
 %%      All headers are in lowercase.
 -record(security_headers, { headers :: list( {string(), string()} ) }).
 
+%% @doc Set CORS headers on the HTTP response.
+-record(cors_headers, {headers :: list({string(), string()})}).
+
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
 %% @doc A module has been activated and started. (notify)
