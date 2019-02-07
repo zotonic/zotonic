@@ -16,9 +16,6 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-
-%% TODO: check for clamav sending 'INSTREAM size limit exceeded' and closing the connection
-
 -module(z_clamav).
 
 -export([
