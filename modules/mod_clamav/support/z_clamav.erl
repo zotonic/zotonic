@@ -25,18 +25,27 @@
     ping/0,
     scan_file/1,
     scan/1,
-    ip_port/0
+    ip_port/0,
+    max_size/0
     ]).
 
 -define(CLAMAV_IP, "127.0.0.1").
 -define(CLAMAV_PORT, 3310).
+-define(CLAMAV_MAX_SIZE, 25*1024*1024).  % Default for StreamMaxLength clamav config
 -define(CLAMAV_CHUNK_SIZE, 65536).
+-define(CLAMAV_RECV_TIMEOUT, 30000).
+
+-include("zotonic.hrl").
 
 -spec ip_port() -> {string(), integer()}.
 ip_port() ->
     ClamIP = z_config:get(clamav_ip, ?CLAMAV_IP),
     ClamPort = z_config:get(clamav_port, ?CLAMAV_PORT),
     {ClamIP, ClamPort}.
+
+-spec max_size() -> integer().
+max_size() ->
+    z_config:get(clamav_max_size, ?CLAMAV_IP).
 
 -spec ping() -> pong | pang.
 ping() ->
@@ -47,22 +56,34 @@ ping() ->
 
 -spec scan_file( filename:filename() ) -> ok | {error, noclamav | infected | term() }.
 scan_file(Filename) ->
-    case file:open(Filename, [ read, raw, binary ]) of
-        {ok, Fd} ->
-            try
-                F = fun(Socket) -> send_file(Socket, Fd) end,
-                handle_result(do_clam(<<"zINSTREAM",0>>, F))
-            after
-                file:close(Fd)
+    MaxSize = max_size(),
+    case filelib:file_size(Filename) of
+        Size when Size < MaxSize ->
+            case file:open(Filename, [ read, raw, binary ]) of
+                {ok, Fd} ->
+                    try
+                        F = fun(Socket) -> send_file(Socket, Fd) end,
+                        handle_result(do_clam(<<"zINSTREAM",0>>, F))
+                    after
+                        file:close(Fd)
+                    end;
+                {error, _} = Error ->
+                    Error
             end;
-        {error, _} = Error ->
-            Error
+        true ->
+            {error, sizelimit}
     end.
 
 -spec scan( binary() ) -> ok | {error, noclamav | infected}.
-scan( Data ) ->
-    F = fun(Socket) -> send_chunks(Socket, chop(Data, [])) end,
-    handle_result(do_clam(<<"zINSTREAM",0>>, F)).
+scan( Data ) when is_binary(Data) ->
+    MaxSize = max_size(),
+    case size(Data) of
+        Size when Size < MaxSize ->
+            F = fun(Socket) -> send_chunks(Socket, chop(Data, [])) end,
+            handle_result(do_clam(<<"zINSTREAM",0>>, F));
+        true ->
+            {error, sizelimit}
+    end.
 
 %% @doc Send a command to clamd, return the reply.
 -spec do_clam( binary(), function() ) -> {ok, binary()} | {error, term()}.
@@ -71,12 +92,12 @@ do_clam(Command, DataFun) ->
     ConnectOptions = [
         binary,
         {packet, 0},
-        {active, false}
+        {active, true}
     ],
     case gen_tcp:connect(ClamIP, ClamPort, ConnectOptions) of
         {ok, Socket} ->
             ok = gen_tcp:send(Socket, Command),
-            DataFun(Socket),
+            _ = DataFun(Socket),
             Result = recv(Socket, <<>>),
             _ = gen_tcp:close(Socket),
             Result;
@@ -93,7 +114,7 @@ handle_result({ok, <<"stream: OK", _/binary>>}) ->
 handle_result({ok, <<"stream: ", Msg/binary>>}) ->
     case binary:match(Msg, <<" FOUND">>) of
         nomatch ->
-            lager:info("ClamAV returned unknown message: ~p", [ Msg ]),
+            lager:info("ClamAV: daemon returned unknown message: ~p", [ Msg ]),
             {error, unknown};
         {_, _} ->
             {error, infected}
@@ -102,36 +123,44 @@ handle_result({error, _} = Error) ->
     Error.
 
 recv(Socket, Acc) ->
-    case gen_tcp:recv(Socket, 0) of
-        {ok, B} ->
-            recv(Socket, <<Acc/binary, B/binary>>);
-        {error, closed} ->
-            {ok, Acc};
-        {error, _} = Error ->
-            Error
+    receive
+        {tcp, Socket, Data} ->
+            recv(Socket, <<Acc/binary, Data/binary>>);
+        {tcp_closed, Socket} when Acc =:= <<>> ->
+            {error, closed};
+        {tcp_closed, Socket} ->
+            {ok, Acc}
+    after ?CLAMAV_RECV_TIMEOUT ->
+        {error, timeout}
     end.
 
 send_file(Socket, Fd) ->
     case file:read(Fd, ?CLAMAV_CHUNK_SIZE) of
         {ok, Data} ->
             Size = size(Data),
-            ok = gen_tcp:send(Socket, <<Size:32/big, Data/binary>>),
-            case Size of
-                ?CLAMAV_CHUNK_SIZE ->
-                    send_file(Socket, Fd);
-                _ ->
-                    ok = gen_tcp:send(Socket, <<0:32/big>>)
+            case gen_tcp:send(Socket, <<Size:32/big, Data/binary>>) of
+                ok ->
+                    case Size of
+                        ?CLAMAV_CHUNK_SIZE ->
+                            send_file(Socket, Fd);
+                        _ ->
+                            gen_tcp:send(Socket, <<0:32/big>>)
+                    end;
+                {error, _} = Error ->
+                    Error
             end;
         {error, _} = Error ->
             Error
     end.
 
 send_chunks(Socket, []) ->
-    ok = gen_tcp:send(Socket, <<0:32/big>>);
+    gen_tcp:send(Socket, <<0:32/big>>);
 send_chunks(Socket, [ Data | Rest ]) ->
     Size = size(Data),
-    ok = gen_tcp:send(Socket, <<Size:32/big, Data/binary>>),
-    send_chunks(Socket, Rest).
+    case gen_tcp:send(Socket, <<Size:32/big, Data/binary>>) of
+        ok -> send_chunks(Socket, Rest);
+        {error, _} = Error -> Error
+    end.
 
 chop(<<>>, Acc) ->
     lists:reverse(Acc);
