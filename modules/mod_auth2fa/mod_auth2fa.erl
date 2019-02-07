@@ -19,8 +19,8 @@
 -module(mod_auth2fa).
 -author("Marc Worrell <marc@worrell.nl>").
 
--mod_title("Authentication 2FA").
--mod_description("Add 2FA authentication using TOTP").
+-mod_title("Two-Factor authentication").
+-mod_description("Add two-factor authentication using TOTP").
 -mod_prio(600).
 -mod_depends([authentication]).
 

@@ -58,7 +58,7 @@
         {% if m.modules.active.mod_acl_user_groups %}
             <h3>{_ User group configuration _}</h3>
 
-            <p>{_ It is possible to force two-factor authenticartion for a specific user group, regardless of the setting above. _}</p>
+            <p>{_ It is possible to force two-factor authentication for a specific user group, regardless of the setting above. _}</p>
             <p>{_ Check the user groups for which two-factor authentication should be forced. _}</p>
 
             <ul class="list-unstyled">

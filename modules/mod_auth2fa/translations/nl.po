@@ -85,7 +85,7 @@ msgstr ""
 
 #: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:61
 msgid ""
-"It is possible to force two-factor authenticartion for a specific user "
+"It is possible to force two-factor authentication for a specific user "
 "group, regardless of the setting above."
 msgstr ""
 "Het is mogelijk om inloggen in twee stappen te forceren voor een specifieke "
