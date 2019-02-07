@@ -13,14 +13,22 @@
 
 
 %% @doc Check the uploaded file with clamav
-observe_media_upload_preprocess(#media_upload_preprocess{ file = File } = Pre, _Context) ->
+observe_media_upload_preprocess(#media_upload_preprocess{ file = File } = Pre, Context) ->
     case z_clamav:scan_file(File) of
         ok ->
             % all ok, give the next preprocessor a try
+            lager:info("clamav: file ~p for user ~p is ok",
+                       [ Pre#media_upload_preprocess.original_filename,
+                         z_acl:user(Context)
+                       ]),
             undefined;
         {error, _} = Error ->
-            lager:error("clamav: error ~p whilst checking ~p",
-                        [ Error, Pre ]),
+            lager:error("clamav: error ~p checking ~p (~p) for user ~p",
+                        [ Error,
+                          Pre#media_upload_preprocess.original_filename,
+                          Pre#media_upload_preprocess.mime,
+                          z_acl:user(Context)
+                        ]),
             Error
     end.
 
