@@ -32,7 +32,6 @@
 -define(CLAMAV_CHUNK_SIZE, 65536).
 -define(CLAMAV_RECV_TIMEOUT, 30000).
 
--include("zotonic.hrl").
 
 -spec ip_port() -> {string(), integer()}.
 ip_port() ->
