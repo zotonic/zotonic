@@ -24,12 +24,19 @@
 -export([
     ping/0,
     scan_file/1,
-    scan/1
+    scan/1,
+    ip_port/0
     ]).
 
--define(CLAMAV_IP, "192.168.1.124").
+-define(CLAMAV_IP, "127.0.0.1").
 -define(CLAMAV_PORT, 3310).
 -define(CLAMAV_CHUNK_SIZE, 65536).
+
+-spec ip_port() -> {string(), integer()}.
+ip_port() ->
+    ClamIP = z_config:get(clamav_ip, ?CLAMAV_IP),
+    ClamPort = z_config:get(clamav_port, ?CLAMAV_PORT),
+    {ClamIP, ClamPort}.
 
 -spec ping() -> pong | pang.
 ping() ->
@@ -60,9 +67,13 @@ scan( Data ) ->
 %% @doc Send a command to clamd, return the reply.
 -spec do_clam( binary(), function() ) -> {ok, binary()} | {error, term()}.
 do_clam(Command, DataFun) ->
-    ClamIP = z_config:get(clamav_ip, ?CLAMAV_IP),
-    ClamPort = z_config:get(clamav_port, ?CLAMAV_PORT),
-    case gen_tcp:connect(ClamIP, ClamPort, [binary, {packet, 0}, {active, false}]) of
+    {ClamIP, ClamPort} = ip_port(),
+    ConnectOptions = [
+        binary,
+        {packet, 0},
+        {active, false}
+    ],
+    case gen_tcp:connect(ClamIP, ClamPort, ConnectOptions) of
         {ok, Socket} ->
             ok = gen_tcp:send(Socket, Command),
             DataFun(Socket),

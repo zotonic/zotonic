@@ -511,6 +511,7 @@ replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context) ->
             {error, eacces}
     end.
 
+%% @doc Preprocess the data, examples are virus scanning and video preprocessing
 replace_file_acl_ok(File, RscId, Props, Medium, Opts, Context) ->
     Mime = proplists:get_value(mime, Medium),
     PreProc = #media_upload_preprocess{
@@ -521,12 +522,19 @@ replace_file_acl_ok(File, RscId, Props, Medium, Opts, Context) ->
                                         proplists:get_value(original_filename, Medium, File)),
                     medium=Medium
                 },
-    NewPreProc = case z_notifier:first(PreProc, Context) of
-                    undefined -> PreProc;
-                    #media_upload_preprocess{} = Mapped -> Mapped
-                 end,
-    NewPreProc2 = z_media_sanitize:sanitize(NewPreProc, Context),
-    replace_file_db(RscId, NewPreProc2, Props, Opts, Context).
+    case z_notifier:first(PreProc, Context) of
+        undefined ->
+            replace_file_sanitize(RscId, PreProc, Props, Opts, Context);
+        #media_upload_preprocess{} = MappedPreProc ->
+            replace_file_sanitize(RscId, MappedPreProc, Props, Opts, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Clean up the uploaded data, removing bits that might be harmful.
+replace_file_sanitize(RscId, PreProc, Props, Opts, Context) ->
+    PreProc1 = z_media_sanitize:sanitize(PreProc, Context),
+    replace_file_db(RscId, PreProc1, Props, Opts, Context).
 
 replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     SafeRootName = z_string:to_rootname(PreProc#media_upload_preprocess.original_filename),
