@@ -1,0 +1,224 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# NB: Consider using poEdit <http://poedit.sourceforge.net>
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-02-05 14:59+0100\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+
+#: modules/mod_auth2fa/mod_auth2fa.erl:68
+msgid "Add two-factor authentication"
+msgstr "Voeg twee-factor-authenticatie toe"
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:43
+msgid "Ask after signing in"
+msgstr "Vraag na aanmelden"
+
+#: modules/mod_auth2fa/mod_auth2fa.erl:43
+msgid "Changed the 2FA setting."
+msgstr "De 2FA-instelling is gewijzigd."
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:62
+msgid "Check the user groups for which two-factor authentication should be forced."
+msgstr "Controleer de gebruikersgroepen waarvoor twee-factor-authenticatie moet worden geforceerd."
+
+#: modules/mod_auth2fa/templates/_dialog_auth2fa_passcode.tpl:12
+msgid "Close"
+msgstr "Sluit"
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:22
+msgid "Default configuration"
+msgstr "Standaard configuratie"
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:24
+msgid ""
+"Define who should use two-factor authentication, this is the default setting "
+"for all users."
+msgstr ""
+"Definieer wie authenticatie in twee stappen moet gebruiken; dit is de "
+"standaardinstelling voor alle gebruikers."
+
+#: modules/mod_auth2fa/mod_auth2fa.erl:73
+msgid "Enable 2FA"
+msgstr "Authenticatie in twee stappen inschakelen"
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:29
+msgid "Enable two-factor authentication..."
+msgstr "Activeer twee-factor-authenticatie..."
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:53
+msgid "Force two-factor authentication"
+msgstr "Dwing twee-factor-authenticatie af"
+
+#: modules/mod_auth2fa/templates/_dialog_auth2fa_passcode.tpl:8
+msgid "From now on an extra passcode is needed to sign in."
+msgstr "Vanaf nu is er een extra code nodig om in te loggen."
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:17
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:32
+msgid "Generate barcode"
+msgstr "Barcode genereren"
+
+#: modules/mod_auth2fa/templates/_admin_edit_sidebar.person.tpl:8
+msgid "Help about two-factor authentication"
+msgstr "Hulp bij twee-factor-authenticatie"
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:14
+msgid ""
+"Here you can define which users need or should use two-factor authentication "
+"when signing in."
+msgstr ""
+"Hier kun je bepalen welke gebruikers mogen of moeten inloggen in twee stappen. "
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:61
+msgid ""
+"It is possible to force two-factor authentication for a specific user "
+"group, regardless of the setting above."
+msgstr ""
+"Het is mogelijk om inloggen in twee stappen te forceren voor een specifieke "
+"gebruikersgroep, ongeacht de instelling hierboven."
+
+#: modules/mod_auth2fa/templates/_admin_edit_sidebar.person.tpl:8
+msgid "Need more help?"
+msgstr "Meer hulp nodig?"
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:33
+msgid "Optional"
+msgstr "Optioneel"
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:8
+msgid "Remove"
+msgstr "Verwijder"
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:5
+msgid "Remove two-factor..."
+msgstr "Verwijder twee-factor…"
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:14
+msgid "Reset two-factor..."
+msgstr "Reset twee-factor..."
+
+#: modules/mod_auth2fa/templates/_dialog_auth2fa_passcode.tpl:1
+msgid ""
+"Scan the two-factor authentication barcode with an app such as <a href="
+"\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</"
+"a> or <a href=\"https://duo.com/product/trusted-users/two-factor-"
+"authentication/duo-mobile\">Duo Mobile</a>."
+msgstr ""
+"Scan de barcode met een app zoals <a href=\"https://support.google.com/"
+"accounts/answer/1066447\">Google Authenticator</a> of <a href=\"https://duo."
+"com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</"
+"a>."
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:19
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:34
+msgid "Scan two-factor authentication barcode"
+msgstr "Scan barcode voor twee-factor-authenticatie"
+
+#: modules/mod_auth2fa/mod_auth2fa.erl:89
+msgid "Scan two-factor authentication passcode"
+msgstr "Scan de code voor authenticatie in twee stappen"
+
+#: modules/mod_auth2fa/mod_auth2fa.erl:45
+msgid "Sorry, you are not allowed to change the 2FA settings."
+msgstr "Sorry, de 2FA-instellingen kunnen niet worden aangepast."
+
+#: modules/mod_auth2fa/mod_auth2fa.erl:56
+msgid "Sorry, you are not allowed to remove the 2FA."
+msgstr "Sorry, de 2FA kan niet worden verwijderd."
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:7
+msgid ""
+"This will disable the two-factor authentication.<br>The old barcode will not "
+"be valid anymore."
+msgstr ""
+"Dit zal de authenticatie in twee stappen uitschakelen.<br>De oude barcode "
+"zal niet meer geldig zijn."
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:16
+msgid ""
+"This will generate a new barcode for two-factor authentication.<br>The old "
+"barcode will not be valid anymore."
+msgstr ""
+"Dit zal een nieuwe barcode genereren voor authenticatie in twee stappen."
+"<br>De oude barcode zal niet meer geldig zijn."
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:31
+msgid ""
+"This will generate a new barcode.<br>From then on you will need to use a "
+"passcode to sign in."
+msgstr ""
+"Dit genereert een nieuwe barcode.<br>Hierna is een extra code nodig om in te "
+"loggen."
+
+#: modules/mod_auth2fa/templates/_admin_edit_sidebar.person.tpl:6
+#: modules/mod_auth2fa/mod_auth2fa.erl:101
+msgid "Two-factor authentication"
+msgstr "Twee-factor authenticatie"
+
+#: modules/mod_auth2fa/templates/_admin_edit_sidebar.person.tpl:8
+msgid ""
+"Two-factor authentication adds an extra check on sign in. The user will need "
+"to enter a code which is generated by an App on their telephone."
+msgstr ""
+"Authenticatie in twee stappen voegt een extra controle bij het aanmelden "
+"toe. Gebruikers moeten een code invoeren die zij in een app op hun telefoon "
+"kunnen vinden."
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:7
+msgid "Two-factor authentication configuration"
+msgstr "Configuratie van de twee-factor-authenticatie"
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:2
+msgid "Two-factor authentication is enabled for this user."
+msgstr "Twee-factor-authenticatie is ingeschakeld voor deze gebruiker."
+
+#: modules/mod_auth2fa/templates/_auth2fa_user_actions.tpl:26
+msgid "Two-factor authentication is not enabled for this user."
+msgstr "Twee-factor-authenticatie is niet ingeschakeld voor deze gebruiker."
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:59
+msgid "User group configuration"
+msgstr "Configuratie van de gebruikersgroep"
+
+#: modules/mod_auth2fa/mod_auth2fa.erl:70
+msgid ""
+"You can add two-factor authentication to your account.<br>You will need an "
+"App on your Phone to scan the barcode and generate passcodes."
+msgstr ""
+"Voeg authenticatie in twee stappen toe.<br>Gebruik een app op een telefoon "
+"om de barcode te scannen en codes te genereren."
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:17
+msgid ""
+"You can use two-factor authentication apps such as <a href=\"https://support."
+"google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href="
+"\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile"
+"\\\">Duo Mobile</a>.\""
+msgstr ""
+"Je kunt een app voor authenticatie in twee stappen gebruiken zoals <a href=\"https://support."
+"google.com/accounts/answer/1066447\">Google Authenticator</a> of <a href="
+"\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile"
+"\\\">Duo Mobile</a>.\""
+
+
+#: modules/mod_auth2fa/templates/admin_auth2fa_config.tpl:11
+msgid ""
+"You need to be allowed to edit the system configuration to view or change "
+"the two-factor authentication configuration."
+msgstr ""
+"Er is toestemming nodig om de systeemconfiguratie te bewerken om de twee-"
+"factor-authenticatie configuratie te bekijken of te wijzigen."

@@ -5,6 +5,20 @@
 
     <p><a href="{% url logon_reminder %}" id="logon_error_link_reminder">{_ Need help signing in? _}</a></p>
 
+{% elseif reason == "need_passcode" %}
+
+    <p>
+        {_ Please enter the two-factor authentication passcode. _}
+    </p>
+
+{% elseif reason == "passcode" %}
+
+    <p>
+        {_ The two-factor authentication passcode did not match. Please check your entry and try again. _}
+    </p>
+
+    <p><a href="{% url logon_reminder %}" id="logon_error_link_reminder">{_ Need help signing in? _}</a></p>
+
 {% elseif reason == "ratelimit" %}
 
     <p>
@@ -40,5 +54,9 @@
 
     <p>{_ Passwords should have at least six characters. _}<p>
     <p>{_ Use some non alphabetical characters or digits to make it harder to guess. _}</p>
+
+{% elseif reason %}
+
+    <p>{_ Something went wrong, please try again later. _}</p>
 
 {% endif %}

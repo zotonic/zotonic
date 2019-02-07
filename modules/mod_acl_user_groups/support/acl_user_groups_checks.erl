@@ -46,9 +46,8 @@
         can_update_category/3,
         can_rsc_insert/3,
         can_move/3,
-        default_content_group/2
-
-    ,can_rsc/3
+        default_content_group/2,
+        can_rsc/3
     ]).
 
 -include_lib("zotonic.hrl").
@@ -79,6 +78,8 @@ max_upload_size(Context) ->
 max_upload_size_default() ->
     ?MAX_UPLOAD_SIZE_MB * 1024 * 1024.
 
+
+%% @doc Fetch the list if user groups the user is member of
 user_groups(#context{acl=#aclug{user_groups=Ids}}) ->
     Ids;
 user_groups(#context{user_id=UserId, acl=admin} = Context) ->
@@ -92,6 +93,7 @@ user_groups(#context{user_id=UserId, acl=admin} = Context) ->
 user_groups(#context{user_id=UserId} = Context) ->
     has_user_groups(UserId, Context).
 
+%% @doc Return all user groups the user is directly or indirectly member of.
 user_groups_all(Context) ->
     user_groups_expand(user_groups(Context), Context).
 
@@ -277,7 +279,8 @@ maybe_filter_acl_props(Props, Context) ->
             Props;
         false ->
             Props1 = proplists:delete(acl_upload_size, Props),
-            proplists:delete(acl_mime_allowed, Props1)
+            Props2 = proplists:delete(acl_mime_allowed, Props1),
+            proplists:delete(acl_2fa, Props2)
     end.
 
 acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{acl=admin}) ->

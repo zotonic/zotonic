@@ -62,6 +62,7 @@
 </div>
 
 {% include "_js_include.tpl" %}
+{% all include "_html_body.tpl" %}
 {% script %}
 
 {% block ua_probe %}
