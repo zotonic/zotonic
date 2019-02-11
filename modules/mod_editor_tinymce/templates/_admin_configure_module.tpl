@@ -3,7 +3,8 @@
         <label class="control-label">{_ Editor version _}</label>
         <div>
             {% for id, version, version_txt, date_txt in [
-                ["d", "newest", "always use newest available", ""],
+                ["e", "newest", "always use newest available", ""],
+                ["d", "4.9.3",  "4.9.3", "Jan 31 2019"],
                 ["c", "4.3.7",  "4.3.7", "Mar 03 2016"],
                 ["b", "4.2.4",  "4.2.4", "Aug 17 2015"],
                 ["a", "3.5.0",  "3.5.0", "May 03 2012"]
