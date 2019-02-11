@@ -55,6 +55,15 @@ annoted with comments about what each setting does. When in doubt,
 consult the stock ``zotonic.config`` file for explanation about all
 config settings.
 
+In the ``zotonic.config`` file you will find the password for the
+``zotonic_status`` site where you can manage the server.
+
+Zotonic configurations can also be fetched in the Erlang shell.
+For example, view the ``zotonic_status`` password::
+
+  z_config:get(password).
+
+
 `user_sites_dir`, `user_modules_dir` and `user_ebin_dir`
 .............................................................
 
