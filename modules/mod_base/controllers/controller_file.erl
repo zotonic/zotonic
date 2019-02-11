@@ -53,15 +53,16 @@ service_available(ReqData, ConfigProps) ->
     Context = z_context:set_noindex_header(
                 z_context:new_request(ReqData, ConfigProps, ?MODULE)),
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
-    ReqData1 = z_context:get_reqdata(Context1),
-    z_context:lager_md(Context1),
-    case get_file_info(ConfigProps, Context1) of
+    Context2 = z_context:set_cors_headers([{"Access-Control-Allow-Origin", "*"}], Context1),
+    ReqData1 = z_context:get_reqdata(Context2),
+    z_context:lager_md(Context2),
+    case get_file_info(ConfigProps, Context2) of
         {ok, Info} ->
-            {true, ReqData1, {Info, Context1}};
+            {true, ReqData1, {Info, Context2}};
         {error, enoent} = Error ->
-            {true, ReqData1, {Error, Context1}};
+            {true, ReqData1, {Error, Context2}};
         {error, _} = Error ->
-            {false, ReqData1, {Error, Context1}}
+            {false, ReqData1, {Error, Context2}}
     end.
 
 allowed_methods(ReqData, State) ->
@@ -129,9 +130,8 @@ provide_content(ReqData,  {Info,Context} = State) ->
     RD1 = set_content_dispostion(z_context:get(content_disposition, Context), ReqData),
     MaxAge = z_context:get(max_age, Context, ?MAX_AGE),
     RD2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context), MaxAge, RD1),
-    RD3 = set_allow_origin(RD2),
-    RD4 = set_content_policy(Info, RD3),
-    {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD4)), RD4, State}.
+    RD3 = set_content_policy(Info, RD2),
+    {z_file_request:content_stream(Info, wrq:resp_content_encoding(RD3)), RD3, State}.
 
 
 %%%%% -------------------------- Support functions ------------------------
@@ -155,13 +155,6 @@ is_public([{module, Mod}|T], Context, _Answer) ->
     is_public(T, Context, z_acl:is_allowed(use, Mod, Context));
 is_public([Id|T], Context, _Answer) ->
     is_public(T, Context, z_acl:rsc_visible(Id, Context)).
-
-
-%% @doc Allow any origin to fetch this data. We might want to make this
-%%      configurable per site or resource.
-set_allow_origin(ReqData) ->
-    wrq:set_resp_header("Access-Control-Allow-Origin", "*", ReqData).
-
 
 %% @doc Files that are uploaded get a strict content-security-policy.
 %%      Controlled files from the file system are not restricted.
