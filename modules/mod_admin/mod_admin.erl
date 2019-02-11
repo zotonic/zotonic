@@ -314,8 +314,11 @@ get_predicate(P, Context) when is_list(P) ->
 do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
     do_link_unlink(false, SubjectId, Predicate, ObjectId, Callback, Context).
 
-do_link_unlink(_IsUnlink, _SubjectId, Predicate, ObjectId, Callback, Context)
-    when Predicate =:= ""; Predicate =:= undefined ->
+do_link_unlink(_IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context)
+    when Predicate =:= "";
+         Predicate =:= undefined;
+         SubjectId =:= undefined;
+         ObjectId =:= undefined ->
     ContextP = context_language(Context),
     Title = m_rsc:p(ObjectId, title, Context),
     Vars = [
