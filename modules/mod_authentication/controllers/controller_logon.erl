@@ -285,7 +285,12 @@ reminder(Email, Context) ->
         Ok when Ok =:= undefined; Ok =:= ok ->
             case lookup_identities(EmailNorm, Context) of
                 [] ->
-                    send_reminder(undefined, EmailNorm, Context);
+                    case z_convert:to_bool(mod_authentication, email_reminder_if_nomatch, Context) of
+                        true ->
+                            send_reminder(undefined, EmailNorm, Context);
+                        false ->
+                            nop
+                    end;
                 Identities ->
                     lists:foreach(
                         fun(RscId) ->
