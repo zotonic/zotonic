@@ -38,7 +38,7 @@ msgstr "Nieuwe gebruiker toevoegen"
 msgid "Add e-mail address"
 msgstr "Naam en e-mailadres toevoegen"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:83
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:67
 msgid "Add user"
 msgstr "Gebruiker toevoegen"
 
@@ -50,13 +50,13 @@ msgstr "Toon ook gebruikers zonder account"
 msgid "Are you sure you want to delete the username from"
 msgstr "Weet je zeker dat je de gebruikersnaam wilt verwijderen van"
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:156
+#: modules/mod_admin_identity/mod_admin_identity.erl:161
 msgid "Are you sure you want to delete this entry?"
 msgstr "Weet je zeker dat je dit wilt verwijderen?"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:7
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:55
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:82
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:66
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:21
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -64,8 +64,8 @@ msgstr "Annuleren"
 msgid "Changed the username."
 msgstr "Gebruikersnaam veranderd."
 
-#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
 msgid ""
 "Click OK to log on as this user. You will be redirected to the home page if "
 "this user has no rights to access the admin system."
@@ -83,6 +83,7 @@ msgstr ""
 "Klik op de link hieronder om te bevestigen dat dit e-mailadres correct is. "
 "Wanneer je niet kan klikken kopieer dan het volledige adres in je browser."
 
+#: modules/mod_admin_identity/templates/_identity_password.tpl:5
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:10
 msgid ""
 "Click “delete” to remove any existing username/password from the person; "
@@ -95,29 +96,29 @@ msgstr ""
 msgid "Confirm user deletion"
 msgstr "Bevestig verwijderen van gebruiker"
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:110
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:114
 msgid "Could not create the user. Sorry."
 msgstr "Kan de gebruiker niet maken."
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:53
+#: modules/mod_admin_identity/templates/admin_users.tpl:52
 msgid "Created on"
 msgstr "Gemaakt op"
 
 #: modules/mod_admin_identity/templates/_action_dialog_delete_username.tpl:8
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:25
-#: modules/mod_admin_identity/mod_admin_identity.erl:157
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:26
+#: modules/mod_admin_identity/mod_admin_identity.erl:162
 msgid "Delete"
 msgstr "Verwijder"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:25
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:26
 msgid "Delete this e-mail address"
 msgstr "Naam en e-mailadres verwijderen"
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:105
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:109
 msgid "Duplicate username, please choose another username."
 msgstr "Gebruikersnaam bestaat al, kies a.u.b. een andere."
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:35
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:34
 msgid "E-mail"
 msgstr "E-mail"
 
@@ -125,7 +126,7 @@ msgstr "E-mail"
 msgid "E-mail address"
 msgstr "E-mailadres"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:35
 msgid "Email Status"
 msgstr "E-mail status"
 
@@ -137,7 +138,7 @@ msgstr ""
 "Voer een unieke gebruikersnaam in en een wachtwoord. Gebruikersnaam en "
 "wachtwoord zijn beiden hoofdlettergevoelig, let daar dus op bij het invoeren."
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:46
+#: modules/mod_admin_identity/templates/_identity_password.tpl:2
 msgid ""
 "Enter a unique username and a password. Usernames and passwords are case "
 "sensitive, so be careful when entering them."
@@ -196,8 +197,8 @@ msgstr ""
 msgid "Language"
 msgstr "Taal"
 
-#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:20
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:14
 msgid "Log on as this user"
 msgstr "Inloggen als deze gebruiker"
 
@@ -209,7 +210,7 @@ msgstr ""
 msgid "Make a new user"
 msgstr "Nieuwe gebruiker maken"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:52
+#: modules/mod_admin_identity/templates/admin_users.tpl:53
 msgid "Modified on"
 msgstr "Bewerkt op"
 
@@ -233,7 +234,7 @@ msgstr "Meer hulp nodig?"
 msgid "No users found."
 msgstr "Geen gebruikers gevonden."
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:42
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:44
 msgid "No verified e-mail addresses. Please add one below."
 msgstr "Geen bevestigd e-mail adres. Voeg deze hieronder toe."
 
@@ -242,7 +243,7 @@ msgid "One moment, please..."
 msgstr "Een ogenblik geduld"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:46
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:114
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:118
 msgid "Only administrators can add users."
 msgstr "Alleen administrators kunnen gebruikers toevoegen."
 
@@ -259,8 +260,7 @@ msgid "Only an administrator or the user him/herself can set a password."
 msgstr ""
 "Alleen de administrator of de gebruiker zelf kan het wachtwoord instellen."
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:33
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:64
+#: modules/mod_admin_identity/templates/_identity_password.tpl:24
 msgid "Password"
 msgstr "Wachtwoord"
 
@@ -268,7 +268,7 @@ msgstr "Wachtwoord"
 msgid "Please verify your e-mail address"
 msgstr "Bevestig je e-mailadres"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:57
+#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:22
 msgid "Save"
 msgstr "Opslaan"
 
@@ -276,26 +276,25 @@ msgstr "Opslaan"
 msgid "Search users"
 msgstr "Zoek gebruikers"
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:100
+#: modules/mod_admin_identity/mod_admin_identity.erl:105
 msgid "Send"
 msgstr "Versturen"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:18
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:19
 msgid "Send verification e-mail"
 msgstr "Stuur bevestigingsemail"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:48
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:75
+#: modules/mod_admin_identity/templates/_identity_password.tpl:39
 msgid "Send welcome e-mail"
 msgstr "Stuur welkomstemail"
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:117
+#: modules/mod_admin_identity/mod_admin_identity.erl:122
 msgid "Sent verification e-mail."
 msgstr "Bevestigingsemail is verstuurd."
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:55
-#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:9
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:18
+#: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:9
 msgid "Set username / password"
 msgstr "Gebruikersnaam / wachtwoord instellen"
 
@@ -308,7 +307,7 @@ msgstr "Sorry"
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Sorry, deze gebruikersnaam is al in gebruik. Probeer een andere."
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:33
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
 msgid "Status"
 msgstr "Status"
 
@@ -316,7 +315,7 @@ msgstr "Status"
 msgid "Sur. prefix"
 msgstr "Voorvoegsel"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:27
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:26
 msgid "Surname"
 msgstr "Achternaam"
 
@@ -355,9 +354,13 @@ msgstr ""
 msgid "This e-mail address was added to your personal information on"
 msgstr "Dit e-mailadres is toegevoegd aan je profiel op"
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:143
+#: modules/mod_admin_identity/mod_admin_identity.erl:148
 msgid "This is not a valid e-mail address."
 msgstr "Dit is geen geldig  e-mailadres"
+
+#: modules/mod_admin_identity/templates/_identity_password.tpl:28
+msgid "This password does not meet the security requirements"
+msgstr "Dit wachtwoord komt niet overeen met de veiligheidseisen"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:55
 msgid "This person is also a user."
@@ -372,7 +375,7 @@ msgstr "Deze persoon is nog geen gebruiker."
 msgid "This verification key is unknown."
 msgstr "Deze bevestigingssleutel is onbekend."
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:97
+#: modules/mod_admin_identity/mod_admin_identity.erl:102
 msgid "This will send a verification e-mail to "
 msgstr "Dit zal een bevestigingsemail sturen naar "
 
@@ -388,8 +391,7 @@ msgstr "Gebruikersaccount"
 msgid "User actions"
 msgstr "Gebruikersacties"
 
-#: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:25
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:56
+#: modules/mod_admin_identity/templates/_identity_password.tpl:16
 #: modules/mod_admin_identity/templates/admin_users.tpl:51
 #: modules/mod_admin_identity/templates/email_admin_new_user.tpl:19
 msgid "Username"
@@ -399,7 +401,7 @@ msgstr "Gebruikersnaam"
 msgid "Username / password"
 msgstr "Gebruikersnaam / wachtwoord"
 
-#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:44
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:61
 msgid "Username and password"
 msgstr "Gebruikersnaam en wachtwoord"
 
@@ -409,7 +411,7 @@ msgstr "Gebruikersnaam is verwijderd."
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:3
 #: modules/mod_admin_identity/templates/admin_users.tpl:15
-#: modules/mod_admin_identity/mod_admin_identity.erl:81
+#: modules/mod_admin_identity/mod_admin_identity.erl:86
 msgid "Users"
 msgstr "Gebruikers"
 
@@ -417,11 +419,11 @@ msgstr "Gebruikers"
 msgid "Users Overview"
 msgstr "Gebruikers"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:16
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:17
 msgid "Verified"
 msgstr "Bevestigd"
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:18
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:19
 msgid "Verify"
 msgstr "Bevestig"
 
@@ -433,7 +435,7 @@ msgstr "Bevestig adres |"
 msgid "Verifying..."
 msgstr "Bezig met bevestigen..."
 
-#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:33
+#: modules/mod_admin_identity/templates/_identity_verify_table.tpl:34
 msgid "View email status"
 msgstr "Bekijk e-mail status"
 
@@ -449,17 +451,17 @@ msgstr ""
 "uitvoeren op het Zotonic systeem.<br /><br />Wat een gebruiker precies kan "
 "doen hangt samen met de groepen waar de gebruiker lid van is."
 
-#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:107
+#: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:111
 msgid "You are not allowed to create the person page."
 msgstr "Je mag geen persoon-pagina maken."
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:150
-#: modules/mod_admin_identity/mod_admin_identity.erl:177
-#: modules/mod_admin_identity/mod_admin_identity.erl:206
+#: modules/mod_admin_identity/mod_admin_identity.erl:155
+#: modules/mod_admin_identity/mod_admin_identity.erl:182
+#: modules/mod_admin_identity/mod_admin_identity.erl:215
 msgid "You are not allowed to edit identities."
 msgstr "Je mag geen identiteiten toevoegen of verwijderen."
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:223
+#: modules/mod_admin_identity/mod_admin_identity.erl:232
 msgid "You are not allowed to switch users."
 msgstr "Je hebt niet genoeg rechten om als deze gebruiker in te loggen."
 
@@ -507,15 +509,15 @@ msgid "Your user details are:"
 msgstr "Je gebruikersgegevens zijn:"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:67
-#: modules/mod_admin_identity/templates/admin_users.tpl:75
-msgid "d M, H:i"
+#: modules/mod_admin_identity/templates/admin_users.tpl:69
+msgid "d M Y, H:i"
 msgstr ""
 
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
 msgid "delete username"
 msgstr "Verwijder gebruikersnaam"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:73
+#: modules/mod_admin_identity/templates/admin_users.tpl:74
 msgid "edit"
 msgstr "bewerk"
 
@@ -527,6 +529,6 @@ msgstr "als je het adminwachtwoord wilt wijzigen."
 msgid "matching"
 msgstr "die voldoen aan"
 
-#: modules/mod_admin_identity/templates/admin_users.tpl:71
+#: modules/mod_admin_identity/templates/admin_users.tpl:72
 msgid "set username / password"
 msgstr "gebruikersnaam / wachtwoord instellen"

@@ -112,19 +112,20 @@ observe_admin_menu(admin_menu, Acc, Context) ->
      |Acc].
 
 %% @doc Check the logon event for the Zotonic native username/password registration.
-observe_logon_submit(#logon_submit{query_args=Args}, Context) ->
-    Username = proplists:get_value("username", Args),
-    Password = proplists:get_value("password", Args),
+observe_logon_submit(#logon_submit{ query_args = QueryArgs }, Context) ->
+    Username = proplists:get_value("username", QueryArgs),
+    Password = proplists:get_value("password", QueryArgs),
     case Username /= undefined andalso Password /= undefined of
         true ->
-            case m_identity:check_username_pw(Username, Password, Context) of
+            case m_identity:check_username_pw(Username, Password, QueryArgs, Context) of
                 {ok, Id} ->
                     case Password of
                         [] ->
                             %% When empty password existed in identity table, prompt for a new password.
                             %% FIXME do real password expiration here.
                             {expired, Id};
-                        _ -> {ok, Id}
+                        _ ->
+                            {ok, Id}
                     end;
                 E -> E
             end;

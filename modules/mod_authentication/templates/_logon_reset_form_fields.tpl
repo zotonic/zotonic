@@ -27,6 +27,13 @@
     %}
 </div>
 
+{% if need_passcode %}
+    <div class="form-group">
+        <label for="password" class="control-label">{_ Passcode _}</label>
+        <input class="form-control" type="number" id="passcode" name="passcode" value="" autocomplete="off" placeholder="{_ Two-factor passcode _}" />
+    </div>
+{% endif %}
+
 <div class="form-group">
     <div class="checkbox">
         <label for="{{ #rememberme }}">

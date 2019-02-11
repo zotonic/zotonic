@@ -28,7 +28,8 @@
     m_to_list/2,
     m_value/2,
 
-    is_used/2
+    is_used/2,
+    user_groups/1
 ]).
 
 
@@ -48,6 +49,11 @@ m_to_list(#m{value=undefined}, _Context) ->
 
 m_value(#m{value=undefined}, _Context) ->
     undefined.
+
+
+%% @doc Return the user groups for the current user
+user_groups(Context) ->
+    acl_user_groups_checks:user_groups(Context).
 
 
 %% @doc Check if a user group is actually in use.

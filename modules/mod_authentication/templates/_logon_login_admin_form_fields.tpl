@@ -9,11 +9,16 @@
 
 <div class="form-group">
     <label for="password" class="control-label">{_ Password _}</label>
-    <input class="form-control" type="password" id="password" name="password" value="" autocomplete="on" />
+    <input class="form-control" type="password" id="password" name="password" value="" autocomplete="off" />
     {% validate id="password"
         type={presence}
         only_on_submit
     %}
+</div>
+
+<div class="form-group passcode">
+    <label for="password" class="control-label">{_ Passcode _}</label>
+    <input class="form-control" type="number" id="passcode" name="passcode" value="" autocomplete="off" placeholder="{_ Two-factor passcode _}" />
 </div>
 
 <div class="form-group">

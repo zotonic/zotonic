@@ -390,6 +390,13 @@
         username :: binary()
     }).
 
+%% @doc First for logon of user with username, called after successful password check.
+%%      Returns: 'undefined' | ok | {error, Reason}
+-record(auth_postcheck, {
+        id :: m_rsc:resource_id(),
+        query_args = [] :: list()
+    }).
+
 %% @doc Fold over the context after logon of user with username, communicates valid or invalid password
 -record(auth_checked, {
         id :: undefined | m_rsc:resource_id(),

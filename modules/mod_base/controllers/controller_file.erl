@@ -55,14 +55,14 @@ service_available(ReqData, ConfigProps) ->
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
     Context2 = z_context:set_cors_headers([{"Access-Control-Allow-Origin", "*"}], Context1),
     ReqData1 = z_context:get_reqdata(Context2),
-    z_context:lager_md(Context1),
-    case get_file_info(ConfigProps, Context1) of
+    z_context:lager_md(Context2),
+    case get_file_info(ConfigProps, Context2) of
         {ok, Info} ->
-            {true, ReqData1, {Info, Context1}};
+            {true, ReqData1, {Info, Context2}};
         {error, enoent} = Error ->
-            {true, ReqData1, {Error, Context1}};
+            {true, ReqData1, {Error, Context2}};
         {error, _} = Error ->
-            {false, ReqData1, {Error, Context1}}
+            {false, ReqData1, {Error, Context2}}
     end.
 
 allowed_methods(ReqData, State) ->
@@ -156,25 +156,26 @@ is_public([{module, Mod}|T], Context, _Answer) ->
 is_public([Id|T], Context, _Answer) ->
     is_public(T, Context, z_acl:rsc_visible(Id, Context)).
 
-set_content_policy(#z_file_info{acls=[]}, ReqData) ->
-    ReqData;
-set_content_policy(#z_file_info{acls = Acls, mime = <<"application/pdf">>}, ReqData) ->
-    case lists:any(fun is_integer/1, Acls) of
-        true ->
+%% @doc Files that are uploaded get a strict content-security-policy.
+%%      Controlled files from the file system are not restricted.
+set_content_policy(#z_file_info{ mime = Mime } = Info, ReqData) ->
+    case is_resource(Info) of
+        true when Mime =:= <<"application/pdf">> ->
             RD1 = wrq:set_resp_header("Content-Security-Policy", "object-src 'self'; plugin-types application/pdf", ReqData),
             wrq:set_resp_header("X-Content-Security-Policy", "plugin-types: application/pdf", RD1);
-        false ->
-            ReqData
-    end;
-set_content_policy(#z_file_info{acls=Acls}, ReqData) ->
-    case lists:any(fun is_integer/1, Acls) of
         true ->
             % Do not set the IE11 X-CSP with sandbox as that disables file downloading
+            % https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
             wrq:set_resp_header("Content-Security-Policy", "sandbox", ReqData);
         false ->
             ReqData
     end.
 
+%% @doc Check if the served file originated from an user-upload (ie. it is a resource)
+is_resource( #z_file_info{ acls = Acls }) ->
+    lists:any(fun is_integer/1, Acls).
+
+%% @doc Allow caching on public data, no caching on data that needs access control.
 set_cache_control_public(true, MaxAge, ReqData) ->
     wrq:set_resp_header("Cache-Control", "public, max-age="++z_convert:to_list(MaxAge), ReqData);
 set_cache_control_public(false, _MaxAge, ReqData) ->
