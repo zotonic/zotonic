@@ -21,7 +21,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 %% @doc Flush the caches of all sites.
 event(#postback{message={admin_tasks, [{task, "flush_all_sites"}]}}, Context) ->
-    do(fun z:flush/0, "Caches have been flushed.", Context);
+    do(fun z:flush/0, "All sites have been flushed.", Context);
 
 %% @doc Flush the caches of the site referred to in the supplied context.
 event(#postback{message={admin_tasks, [{task, "flush"}]}}, Context) ->
