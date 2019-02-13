@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-02-13 12:28+0100\n"
+"PO-Revision-Date: 2019-02-13 12:30+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -124,7 +124,7 @@ msgstr "Twitter-instellingen opgeslagen."
 
 #: modules/mod_twitter/templates/_admin_authentication_service.tpl:62
 msgid "Separate #tags, @usernames and phrases with commas or newlines."
-msgstr "Scheid #tags, @gebruikersnamen en zitten met komma’s of witregels."
+msgstr "Scheid #tags, @gebruikersnamen en zinnen met komma’s of witregels."
 
 #: modules/mod_twitter/templates/_admin_authentication_service.tpl:42
 msgid ""
