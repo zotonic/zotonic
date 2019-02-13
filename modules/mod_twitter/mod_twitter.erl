@@ -92,6 +92,7 @@ is_setting("useauth") -> true;
 is_setting("access_token") -> true;
 is_setting("access_token_secret") -> true;
 is_setting("follow") -> true;
+is_setting("max_feed_backoff") -> true;
 is_setting(_) -> false.
 
 observe_rsc_update_done(#rsc_update_done{ id = Id }, Context) ->
