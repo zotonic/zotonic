@@ -125,15 +125,31 @@ import_result(Sub, Result, Context) ->
 %% @doc Set the next due for the feed, backoff if no tweets fetched
 set_due(Sub, Result, ImportCount, Context) ->
     {id, SubId} = proplists:lookup(id, Sub),
+    {tweets, Tweets} = proplists:lookup(tweets, Result),
     {max_id, MaxId} = proplists:lookup(max_id, Result),
     Now = z_datetime:timestamp(),
-    Delay = case MaxId of
-        undefined ->
+    Delay = case Tweets of
+        [] ->
             % Check when the last import was
             {last_import, LastImport} = proplists:lookup(last_import, Sub),
-            Last = z_datetime:datetime_to_timestamp(LastImport),
-            backoff(Now - Last);
-        _MaxId ->
+            Last = case LastImport of
+                undefined -> 0;
+                _ -> z_datetime:datetime_to_timestamp(LastImport)
+            end,
+            BackOff = backoff(Now - Last),
+            case proplists:lookup(identity_id, Sub) of
+                {identity_id, undefined} ->
+                    case z_convert:to_integer( m_config:get_value(mod_twitter, max_feed_backoff, Context) ) of
+                        undefined ->
+                            BackOff;
+                        MaxBackoff ->
+                            BackOff1 = erlang:min(BackOff, MaxBackoff),
+                            erlang:max(BackOff1, ?DELAY_MINIMUM)
+                    end;
+                {identity_id, _} ->
+                    BackOff
+            end;
+        _ ->
             ?DELAY_ACTIVE
     end,
     Due = z_datetime:timestamp_to_datetime(Now + Delay),
@@ -176,6 +192,7 @@ poll_feed(Sub, Context) ->
         true ->
             {key, FeedKey} = proplists:lookup(key, Sub),
             {last_id, LastId} = proplists:lookup(last_id, Sub),
+            lager:debug("twitter_poller: polling feed for '~s'", [ z_context:site(Context), FeedKey ]),
             case twitter_feed:poll(FeedKey, LastId, Context) of
                 {ok, Result} ->
                     {ok, Result};
@@ -243,7 +260,7 @@ determine_next_delay(ok, Context) ->
         DT ->
             Secs = z_datetime:datetime_to_timestamp(DT),
             Now = z_datetime:timestamp(),
-            {delay, max( min(?DELAY_MINIMUM, Secs - Now), ?DELAY_MAXIMUM )}
+            {delay, min( max(?DELAY_MINIMUM, Secs - Now), ?DELAY_MAXIMUM )}
     end;
 determine_next_delay({delay, Secs}, _Context) ->
-    {delay, max( Secs, ?DELAY_MAXIMUM )}.
+    {delay, min( Secs, ?DELAY_MAXIMUM )}.
