@@ -176,7 +176,8 @@ handle_message(Msg, Context) ->
     OptSessionRef = z_context:get(session_ref, Context),
     MsgOptions = #{
         transport => self(),
-        peer_ip => m_req:get(peer_ip, Context)
+        peer_ip => m_req:get(peer_ip, Context),
+        auth_user_id => z_acl:user(Context)
     },
     case mqtt_sessions:incoming_message(mqtt_session_pool(Context), OptSessionRef, Msg, MsgOptions) of
         {ok, undefined} ->

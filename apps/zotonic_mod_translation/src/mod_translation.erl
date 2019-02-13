@@ -36,9 +36,9 @@
 -mod_provides([translation]).
 
 -export([
-    observe_session_init_fold/3,
-    observe_session_context/3,
-    observe_auth_logon/3,
+    % observe_session_init_fold/3,
+    % observe_session_context/3,
+    % observe_auth_logon/3,
     observe_user_context/3,
     observe_set_user_language/3,
     observe_url_rewrite/3,
@@ -114,12 +114,12 @@ default_languages() ->
 
 %% @doc Check if the user has a prefered language (in the user's persistent data). If not
 %%      then check the accept-language header (if any) against the available languages.
-observe_session_init_fold(#session_init_fold{}, Context, _Context) ->
-    case get_q_language(Context) of
-        undefined -> maybe_persistent(Context);
-        QsLang ->
-            set_language(QsLang, Context)
-    end.
+% observe_session_init_fold(#session_init_fold{}, Context, _Context) ->
+%     case get_q_language(Context) of
+%         undefined -> maybe_persistent(Context);
+%         QsLang ->
+%             set_language(QsLang, Context)
+%     end.
 
 
 maybe_persistent(Context) ->
@@ -190,18 +190,18 @@ get_q_language(Context) ->
     end.
 
 
-observe_session_context(#session_context{}, Context, _Context) ->
-    Context1 = case z_context:get_session(language, Context) of
-        undefined -> Context;
-        Language -> Context#context{language=Language}
-    end,
-    case get_q_language(Context1) of
-        undefined -> Context1;
-        QsLang -> set_language(QsLang, Context1)
-    end.
+% observe_session_context(#session_context{}, Context, _Context) ->
+%     Context1 = case z_context:get_session(language, Context) of
+%         undefined -> Context;
+%         Language -> Context#context{language=Language}
+%     end,
+%     case get_q_language(Context1) of
+%         undefined -> Context1;
+%         QsLang -> set_language(QsLang, Context1)
+%     end.
 
 
-observe_user_context(#user_context{id=UserId}, Context, _Context) ->
+observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
         Code when Code /= undefined ->
             set_language(Code, Context);
@@ -210,22 +210,21 @@ observe_user_context(#user_context{id=UserId}, Context, _Context) ->
     end.
 
 
-observe_auth_logon(#auth_logon{}, Context, _Context) ->
-    UserId = z_acl:user(Context),
-    case m_rsc:p_no_acl(UserId, pref_language, Context) of
-        undefined ->
-            % Ensure that the user has a default language
-            catch m_rsc:update(UserId, [{pref_language, z_context:language(Context)}], Context),
-            Context;
-        Code ->
-            % Switch the session to the default language of the user
-            Context1 = set_language(Code, Context),
-            z_context:set_persistent(language, z_context:language(Context1), Context1),
-            Context1
-    end.
+% observe_auth_logon(#auth_logon{ id = UserId }, Context, _Context) ->
+%     case m_rsc:p_no_acl(UserId, pref_language, Context) of
+%         undefined ->
+%             % Ensure that the user has a default language
+%             catch m_rsc:update(UserId, [{pref_language, z_context:language(Context)}], Context),
+%             Context;
+%         Code ->
+%             % Switch the session to the default language of the user
+%             Context1 = set_language(Code, Context),
+%             z_context:set_persistent(language, z_context:language(Context1), Context1),
+%             Context1
+%     end.
 
 
-observe_set_user_language(#set_user_language{id=UserId}, Context, _Context) when is_integer(UserId) ->
+observe_set_user_language(#set_user_language{ id = UserId }, Context, _Context) when is_integer(UserId) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
         Code when Code /= undefined -> set_language(Code, Context);
         _ -> Context

@@ -128,7 +128,6 @@
 
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--inlcude("z_render_state.hrl").
 
 %% The state below is the render state, can be cached and/or merged
 %% State of the current rendered template/scomp/page
@@ -261,7 +260,7 @@ append_render_state([], RenderState, _Context) ->
 append_render_state({script, _Args}, RenderState, _Context) ->
     %% Renders the script tag - this won't be correct as it adds everything collected in Context and not what was collected
     %% in the added iolist().  So it is better to ignore the {script} tag here.
-    %% When the script tag should be rendered then it is better to call output/2 instead of render/2.
+    %% If the script tag should be rendered then it is better to call output/2 instead of render/2.
     RenderState;
 append_render_state(#render_state{} = RS, RenderState, _Context) ->
     merge_scripts(RS, RenderState);
@@ -836,7 +835,8 @@ merge_scripts(RS, Acc) ->
         content_scripts = combine1(Acc#render_state.content_scripts, RS#render_state.content_scripts),
         scripts = combine1(Acc#render_state.scripts, RS#render_state.scripts),
         wire = combine1(Acc#render_state.wire, RS#render_state.wire),
-        validators = combine1(Acc#render_state.validators, RS#render_state.validators)
+        validators = combine1(Acc#render_state.validators, RS#render_state.validators),
+        render= combine1(Acc#render_state.render, RS#render_state.render)
     }.
 
 add_content_script([], Context) -> Context;

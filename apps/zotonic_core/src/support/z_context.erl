@@ -912,7 +912,7 @@ set_language(Lang, Context) ->
 
 %% @doc Return the selected timezone of the Context; defaults to the site's timezone
 -spec tz(z:context()) -> binary().
-tz(#context{tz=TZ}) when TZ =/= undefined; TZ =/= <<>> ->
+tz(#context{ tz = TZ }) when TZ =/= undefined; TZ =/= <<>> ->
     TZ;
 tz(Context) ->
     tz_config(Context).
@@ -928,15 +928,21 @@ tz_config(Context) ->
     end.
 
 %% @doc Set the timezone of the context.
--spec set_tz(string()|binary(), z:context()) -> z:context().
+-spec set_tz(string()|binary()|boolean(), z:context()) -> z:context().
 set_tz(Tz, Context) when is_list(Tz) ->
-    set_tz(z_convert:to_binary(Tz), Context);
+    set_tz(unicode:characters_to_binary(Tz, utf8), Context);
 set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
-    Context#context{tz=z_convert:to_binary(Tz)};
+    case m_l10n:is_timezone(Tz) of
+        true ->
+            Context#context{ tz = Tz };
+        false ->
+            lager:info("Dropping unknown timezone: ~p", [ Tz ]),
+            Context
+    end;
 set_tz(true, Context) ->
-    Context#context{tz= <<"UTC">>};
+    Context#context{ tz = <<"UTC">> };
 set_tz(1, Context) ->
-    Context#context{tz= <<"UTC">>};
+    Context#context{ tz = <<"UTC">> };
 set_tz(Tz, Context) ->
     lager:error("Unknown timezone ~p", [Tz]),
     Context.
@@ -1036,13 +1042,13 @@ set_cookie(Key, Value, Context) ->
 %% @doc Set a cookie value with cookie options.
 -spec set_cookie(binary(), binary(), list(), z:context()) -> z:context().
 set_cookie(Key, Value, Options, Context) ->
-    case controller_websocket:is_websocket_request(Context) of
-        true ->
-            % Store the cookie in the session and trigger an ajax cookie fetch.
-            z_session:add_cookie(Key, Value, Options, Context),
-            % add_script_page(<<"z_fetch_cookies();">>, Context),
-            Context;
-        false ->
+    % case controller_websocket:is_websocket_request(Context) of
+    %     true ->
+    %         % Store the cookie in the session and trigger an ajax cookie fetch.
+    %         z_session:add_cookie(Key, Value, Options, Context),
+    %         % add_script_page(<<"z_fetch_cookies();">>, Context),
+    %         Context;
+    %     false ->
             % Add domain to cookie if not set
             ValueBin = z_convert:to_binary(Value),
             Options1 = case proplists:lookup(domain, Options) of
@@ -1051,8 +1057,8 @@ set_cookie(Key, Value, Options, Context) ->
                        end,
             Options2 = [ {secure, true} | proplists:delete(secure, Options1) ],
             Options3 = z_notifier:foldl(#cookie_options{name=Key, value=ValueBin}, Options2, Context),
-            cowmachine_req:set_resp_cookie(Key, ValueBin, Options3, Context)
-    end.
+            cowmachine_req:set_resp_cookie(Key, ValueBin, Options3, Context).
+    % end.
 
 %% @doc Read a cookie value from the current request.
 -spec get_cookie(binary(), z:context()) -> binary() | undefined.

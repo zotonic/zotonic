@@ -89,7 +89,15 @@ logon_pw(Username, Password, Context) ->
 %% @doc Logon an user whose id we know, invalidate the current session id.
 %%      This sets a cookie with the new session id in the Context.
 logon(UserId, Context) ->
-    {error, todo}.
+    case is_enabled(UserId, Context) of
+        true ->
+            Context1 = z_acl:logon_prefs(UserId, Context),
+            Context2 = z_notifier:foldl(#auth_logon{ id = UserId }, Context1, Context1),
+            {ok, Context2};
+        false ->
+            {error, user_not_enabled}
+    end.
+
     % case is_enabled(UserId, Context) of
     %     true ->
     %         Context1 = z_acl:logon_prefs(UserId, Context),
@@ -125,10 +133,12 @@ switch_user(UserId, Context) ->
 %% @doc Forget about the user being logged on.
 -spec logoff(z:context()) -> z:context().
 logoff(Context) ->
+    Context1 = z_notifier:foldl(#auth_logoff{}, Context, Context),
+    z_acl:logoff(Context1).
+
     % Needs to change:
     % - Client sends disconnect
     % - Session is discarded
-    throw({todo, logoff}).
     % ContextLogOff = z_notifier:foldl(#auth_logoff{}, Context, Context),
     % z_context:set_session(auth_user_id, none, ContextLogOff),
     % z_notifier:notify(#auth_logoff_done{}, ContextLogOff),

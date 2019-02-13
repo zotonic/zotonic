@@ -1,26 +1,14 @@
 digraph auth_worker {
-    start -> check_sessionstate;
+    start -> origin_check;
 
-    check_sessionstate -> anonymous [label="session(anon)"];
-    check_sessionstate -> authenticated [label="session(user)"];
-    check_sessionstate -> check_autologon [label="no-session"];
+    origin_check -> user_known;
 
-    check_autologon -> authenticating [label="cookie-autologon"];
+    user_known -> origin_check [label="periodic"];
+    user_known -> logon;
+    user_known -> logoff;
+    user_known -> setautologon;
 
-    anonymous -> authenticating [label="username/pw-form"];
-
-    authenticating -> exchanging [label="auth-accept"];
-    authenticating -> cleanup [label="auth-reject"];
-
-    exchanging -> cleanup [label="cookie-uri-reject"];
-    exchanging -> authenticated [label="cookie-uri-accept"];
-
-    authenticated -> cleanup [label="logoff"];
-    authenticated -> cleanup [label="mqtt-connack-reject"];
-
-    authenticated -> authenticating [label="username/pw-form"];
-    authenticated -> authenticated [label="cookie-extend-accept"];
-    authenticated -> cleanup [label="cookie-extend-reject"];
-
-    cleanup -> anonymous [label="cookie/session-removed"];
+    logoff -> user_known;
+    logon -> user_known;
+    setautologon -> user_known;
 }

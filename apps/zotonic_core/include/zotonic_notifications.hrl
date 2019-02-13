@@ -107,7 +107,7 @@
 %% Type: first
 %% Return:: ``{ok, UserId}`` or ``{error, Reason}``
 -record(logon_submit, {
-    query_args = [] :: list()
+    payload = #{} :: map()
 }).
 
 %% @doc Request to send a verification to the user. Return ok or an error
@@ -519,55 +519,40 @@
 %% @doc Set the context to a typical authenticated uses. Used by m_acl.erl
 %% Type: first
 %% Return: authenticated ``#context{}`` or ``undefined``
--record(acl_context_authenticated, {
-
-}).
+-record(acl_context_authenticated, {}).
 
 %% @doc Initialize context with the access policy for the user.
 %% Type: first
-%% Return: updated ``#context`` or ``undefined``
+%% Return: updated ``z:context()`` or ``undefined``
 -record(acl_logon, {
     id :: m_rsc:resource_id()
 }).
 
 %% @doc Clear the associated access policy for the context.
 %% Type: first
-%% Return: updated ``#context{}`` or ``undefined``
+%% Return: updated ``z:context()`` or ``undefined``
 -record(acl_logoff, {}).
 
 %% @doc Confirm a user id.
 %% Type: foldl
-%% Return: ``context{}``
+%% Return: ``z:context()``
 -record(auth_confirm, {}).
 
 %% @doc A user id has been confirmed.
 %% Type: notify
 -record(auth_confirm_done, {}).
 
-%% @doc User logs on. Add user-related properties to the session.
+%% @doc User logs on. Add user-related properties to the logon request context.
 %% Type: foldl
-%% Return: ``context{}``
--record(auth_logon, {}).
+%% Return: ``z:context()``
+-record(auth_logon, { id :: m_rsc:resource_id() }).
 
-%% @doc User has logged on.
-%% Type: notify
--record(auth_logon_done, {}).
 
-%% @doc User is about to log off. Remove authentication from the current session.
+%% @doc User is about to log off. Modify (if needed) the logoff request context.
 %% Type: foldl
-%% Return: ``context{}``
--record(auth_logoff, {}).
+%% Return: ``z:context()``
+-record(auth_logoff, { id :: m_rsc:resource_id() }).
 
-%% @doc User has logged off.
-%% Type: notify
--record(auth_logoff_done, {}).
-
-%% @doc Check if automatic logon is enabled for this session. Sent for new
-%% sessions from ``z_auth:logon_from_session/1``. Please note this notification
-%% is sent for every single request.
-%% Type: first
-%% Return: ``{ok, UserId}`` when a user should be logged on.
--record(auth_autologon, {}).
 
 %% @doc Authentication against some (external or internal) service was validated
 -record(auth_validated, {
@@ -581,44 +566,44 @@
 
 %% @doc Called after parsing the query arguments
 %% Type: foldl
-%% Return: ``#context{}``
+%% Return: ``z:context()``
 -record(request_context, {}).
 
-%% @doc Initialize a context from the current session.
-%% Called for every request that has a session.
-%% Type: foldl
-%% Return: ``#context{}``
--record(session_context, {}).
+% %% @doc Initialize a context from the current session.
+% %% Called for every request that has a session.
+% %% Type: foldl
+% %% Return: ``#context{}``
+% -record(session_context, {}).
 
-%% @doc A new session has been intialized: session_pid is in the context.
-%% Called for every request that has a session.
-%% Type: notify
-%% Return: ``#context{}``
--record(session_init, {}).
+% %% @doc A new session has been intialized: session_pid is in the context.
+% %% Called for every request that has a session.
+% %% Type: notify
+% %% Return: ``#context{}``
+% -record(session_init, {}).
 
-%% @doc Foldl over the context containing a new session.
-%% Called for every request that has a session.
-%% Type: foldl
-%% Return: ``#context{}``
--record(session_init_fold, {}).
+% %% @doc Foldl over the context containing a new session.
+% %% Called for every request that has a session.
+% %% Type: foldl
+% %% Return: ``#context{}``
+% -record(session_init_fold, {}).
 
 %% @doc Check if a user is enabled. Enabled users are allowed to log in.
 %% Type: first
 %% Return ``true``, ``false`` or ``undefined``. If ``undefined`` is returned,
 %% the user is considered enabled if the user resource is published.
--record(user_is_enabled, {id}).
+-record(user_is_enabled, { id :: m_rsc:resource_id() }).
 
 %% @doc Set #context fields depending on the user and/or the preferences of the user.
 %% Type: foldl
--record(user_context, {id}).
+-record(user_context, { id :: m_rsc:resource_id() }).
 
 %% @doc Request API logon
--record(service_authorize, {service_module}).
+-record(service_authorize, { service_module }).
 
 %% @doc Fetch the url of a resource's html representation
 %% Type: first
 %% Return: ``{ok, Url}`` or ``undefined``
--record(page_url, {id, is_a}).
+-record(page_url, { id :: m_rsc:resource_id(), is_a :: list(atom()) }).
 
 %% @doc Handle custom named search queries in your function.
 %% Type: first

@@ -23,13 +23,13 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-    html/1
+    process/4
     ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     case z_utils:is_empty(z_context:get_q(<<"denied">>, Context)) of
         true ->
             RequestToken = z_context:get_session(twitter_request_token, Context),

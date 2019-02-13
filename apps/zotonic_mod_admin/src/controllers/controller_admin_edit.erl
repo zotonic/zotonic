@@ -25,18 +25,16 @@
          is_authorized/1,
          event/2,
          filter_props/1,
-         ensure_id/1
+         ensure_id/1,
+         process/4
         ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-%% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(Context) ->
     Context1 = z_context:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),
-    Context2 = z_admin_controller_helper:init_session(Context1),
-    {Context3, Id} = ensure_id(Context2),
-    z_acl:wm_is_authorized([{use, mod_admin}, {view, Id}], admin_logon, Context3).
-
+    {Context2, Id} = ensure_id(Context1),
+    z_controller_helper:is_authorized([ {use, mod_admin}, {view, Id} ], Context2).
 
 resource_exists(Context) ->
     {Context2, Id} = ensure_id(Context),
@@ -60,7 +58,7 @@ redirect(Location, Context) ->
     {{true, Location}, Context}.
 
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Id = z_context:get(id, Context),
     Blocks = z_notifier:foldr(#admin_edit_blocks{id=Id}, [], Context),
     Vars = [

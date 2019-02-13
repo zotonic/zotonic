@@ -20,15 +20,16 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    is_authorized/1
+    is_authorized/1,
+    process/4
 ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 is_authorized(Context) ->
-    z_admin_controller_helper:is_authorized(mod_admin_modules, Context).
+    z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_admin_modules)} ], Context).
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Status = z_module_manager:get_modules_status(Context),
     Selected = z_context:get(selected, Context, "modules"),
     Configurable = [{M#module_index.module, M} || M <- z_module_indexer:find_all(template, "_admin_configure_module.tpl", Context)],

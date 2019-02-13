@@ -135,6 +135,8 @@ map_topic([ <<"~client">> | _ ], #context{ client_topic = undefined }) ->
     {error, no_client};
 map_topic([ <<"~client">> | T ], #context{ client_topic = Route }) ->
     {ok, Route ++ T};
+map_topic(Topic, Context) when is_tuple(Topic) ->
+    {ok, map_topic_filter(Topic, Context)};
 map_topic(Topic, _Context) ->
     {ok, Topic}.
 

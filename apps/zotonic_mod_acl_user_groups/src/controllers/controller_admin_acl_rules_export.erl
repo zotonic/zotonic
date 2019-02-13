@@ -10,8 +10,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 is_authorized(Context) ->
-    Context2 = z_context:ensure_qs(Context),
-    z_acl:wm_is_authorized([{use, mod_acl_user_groups}], admin_logon, Context2).
+    z_controller_helper:is_authorized([ {use, mod_acl_user_groups} ], Context).
 
 content_types_provided(Context) ->
     {[ <<"application/octet-stream">> ], Context}.

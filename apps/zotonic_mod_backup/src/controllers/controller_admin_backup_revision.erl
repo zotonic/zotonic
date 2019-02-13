@@ -21,28 +21,28 @@
 
 -export([
     is_authorized/1,
+    process/4,
     event/2
 ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-is_authorized(Context0) ->
-    Context = z_admin_controller_helper:init_session(Context0),
+is_authorized(Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
             case m_rsc:exists(Id, Context) of
                 false ->
-                    z_acl:wm_is_authorized(true, Context);
+                    {true, Context};
                 true ->
-                    z_acl:wm_is_authorized(z_acl:rsc_editable(Id, Context), Context)
+                    {z_acl:rsc_editable(Id, Context), Context}
             end;
         false ->
-            z_acl:wm_is_authorized(true, Context)
+            {true, Context}
     end.
 
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Vars = [
         {id, m_rsc:rid(z_context:get_q(<<"id">>, Context), Context)},
         {page_admin_backup, true}

@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Marc Worrell <marc@worrell.nl>
+ * Copyright 2019 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,85 +16,191 @@
 
 "use strict";
 
-console.log("zotonic-auth-worker here");
+// TODO:
+// - recheck auth after ws connect and no recent auth check (or failed check)
+//   this could be due to browser wakeup or server down time.
 
 ////////////////////////////////////////////////////////////////////////////////
 // Model
 //
 
 var model = {
-        status: 'start'
-    } ;
-
-model.present = function(data) {
-    if (state.start(model)) {
-        if (data.check_session_state) {
-            model.status = "check_sessionstate";
-            self.call("model/sessionStorage/get/auth")
-                .then(function(msg) {
-                    actions.newSessionState({ auth: msg.payload });
-                });
-        }
-    }
-
-    if (state.checkSessionState(model)) {
-        if (data.received_session_state) {
-            if (!data.auth) {
-                // Unknown - check 'remember-me' cookie with server
-                model.status = "check_autologon";
-            } else if (data.auth.user_id) {
-                model.status = "authenticated";
-                model.user_id = data.auth.user_id;
-            } else {
-                model.status = "anonymous";
-                model.user_id = undefined;
+        status: 'start',
+        is_status_changed: false,
+        is_keep_alive: false,
+        authentication_error: null,
+        auth: {
+            status: 'pending',
+            is_authenticated: false,
+            user_id: null,
+            username: null,
+            preferences: {
             }
         }
+    };
+
+model.present = function(data) {
+    let previous_auth_user_id = model.auth.user_id;
+
+    if (state.start(model)) {
+        // Handle auth changes forced by changes of the session storage
+        self.subscribe("model/sessionStorage/event/auth-user-id", function(msg) {
+            actions.setUserId({ user_id: msg.payload });
+        });
+
+        // Synchronize tabs and windows of same user-agent
+        self.subscribe("model/serviceWorker/event/auth-sync", function(msg) {
+            actions.sync(msg.payload);
+        });
+
+        // Auth requests from the JS applications
+        self.subscribe("model/auth/post/logon", function(msg) {
+            actions.logon(msg.payload);
+        });
+        self.subscribe("model/auth/post/logoff", function(msg) {
+            actions.logoff(msg.payload);
+        });
+
+        self.subscribe("model/auth/post/logon/form", function(msg) {
+            actions.logonForm(msg.payload);
+        });
+
+        // Keep-alive ping for token refresh
+        self.subscribe("model/ui/event/recent-activity", function(msg) {
+            if (msg.payload.is_active) {
+                actions.keepAlive(msg.payload);
+            }
+        });
     }
 
-    if (state.checkAutoLogon(model)) {
-        if (data.check_autologon) {
-            // TODO: Check auth-uri on server for autologon token
-            //       Uri should return JSON for new connection details
-            //       Similar to authentication with username+password
-            //
-            // Autologin cookie:  <userid>:<series>
-            // In localStorage: <random>
-            // After every login, change the random token.
-            // If presented with illegal random token, remove the series.
-            // (Reuse might happen when cookie+token is stolen).
-            model.status = "authenticating";
-            self.call("model/localStorage/get/autologon")
-                .then((msg) => {
-                    if (msg.payload) {
-                        return fetch( self.abs_url("/zotonic-auth/check"), {
-                            method: "POST",
-                            cache: "no-cache",
-                            headers: {
-                                "Accept": "application/json; charset=utf-8"
-                            },
-                            body: ""
-                        } )
-                    } else {
-                        throw new Error("No autologon in localStorage");
-                    }
+    if (state.start(model) || ("user_id" in data && data.user_id !== model.auth.user_id)) {
+        model.state_change('auth_unknown');
+
+        // Refresh the current auth status by probing the server
+        fetch( self.abs_url("/zotonic-auth"), {
+            method: "POST",
+            cache: "no-cache",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ cmd: "status" })
+        })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authResponse(body); })
+        .catch((e) => { actions.authError(); });
+    }
+
+    if (data.is_auth_check && (state.authKnown(model) || state.authError(model))) {
+        let auth_check_cmd = 'status';
+        if (model.is_keep_alive && model.auth.is_authenticated) {
+            auth_check_cmd = 'refresh';
+        }
+        model.is_keep_alive = false;
+        fetch( self.abs_url("/zotonic-auth"), {
+            method: "POST",
+            cache: "no-cache",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ cmd: auth_check_cmd })
+        })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authResponse(body); })
+        .catch((e) => { actions.authError(); });
+    }
+
+    if (data.logon) {
+        model.authentication_error = null;
+        model.onauth = data.onauth || null;
+        model.state_change('authenticating');
+
+        fetch( self.abs_url("/zotonic-auth"), {
+            method: "POST",
+            cache: "no-cache",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                    cmd: "logon",
+                    username: data.username,
+                    password: data.password,
+                    passcode: data.passcode
                 })
-                .then((resp) => {
-                    console.log("jaaa", resp);
-                })
-                .catch((e) => {
-                    // Error - assume anonymous
-                    model.status = "anonymous";
-                });
+        })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authLogonResponse(body); })
+        .catch((e) => { actions.authError(); });
+    }
+
+    if (data.logoff) {
+        model.authentication_error = null;
+        model.onauth = data.onauth || null;
+        model.state_change('authenticating');
+
+        fetch( self.abs_url("/zotonic-auth"), {
+            method: "POST",
+            cache: "no-cache",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ cmd: "logoff" })
+        })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authResponse(body); })
+        .catch((e) => { actions.authError(); });
+    }
+
+    if ("auth_response" in data && data.auth_response.status == 'ok') {
+        model.auth = data.auth_response;
+        if (model.auth.user_id == previous_auth_user_id) {
+            model.state_change('auth_known');
+        } else {
+            model.state_change('auth_changing');
         }
     }
 
-    console.log("AUTH state", model);
+    if (data.is_auth_error && state.authenticating(model)) {
+        model.authentication_error = data.error;
+        model.state_change('auth_error');
+    }
 
-    // .. change state
+    if (data.is_auth_changed && state.authChanging(model)) {
+        model.state_change('auth_known');
+    }
+
+    if (data.is_keep_alive) {
+        model.is_keep_alive = true;
+    }
+
+    // console.log("AUTH state", model);
     state.render(model) ;
 }
 
+model.state_change = function(status) {
+    if (status != model.status) {
+        switch (status) {
+            case 'auth_changing':
+                self.publish('model/auth/event/auth-changing', {
+                    onauth: model.onauth,
+                    auth: model.auth
+                });
+                setTimeout(function() { actions.authChanged(); }, 20);
+                break;
+            case 'auth_known':
+                self.publish('model/auth/event/auth-user-id', model.auth.user_id);
+                self.publish('model/sessionStorage/post/auth-user-id', model.auth.user_id);
+                self.publish('model/serviceWorker/post/broadcast/auth-sync', model.auth);
+                break;
+            default:
+                break;
+        }
+        model.status = status;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // View
@@ -120,7 +226,6 @@ view.display = function(representation) {
 view.display(view.init(model)) ;
 
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // State
 //
@@ -130,6 +235,8 @@ model.state = state ;
 
 // Derive the state representation as a function of the systen control state
 state.representation = function(model) {
+    self.publish('model/auth/event/auth', model.auth);
+
     // var representation = 'oops... something went wrong, the system is in an invalid state' ;
     // if (state.ready(model)) {
     //     representation = state.view.ready(model) ;
@@ -140,49 +247,34 @@ state.representation = function(model) {
 
 // Derive the current state of the system
 state.start = function(model) {
-    return (model.status === 'start');
+    return model.status === 'start';
 }
 
-state.checkSessionState = function(model) {
-    return model.status === 'check_sessionstate';
+state.authKnown = function(model) {
+    return model.status === 'auth_known' || model.auth.status == 'ok';
 }
 
-state.anonymous = function(model) {
-    return (model.status === 'anonymous');
+state.authUnknown = function(model) {
+    return !state.authKnown(model);
+}
+
+state.authChanging = function(model) {
+    return model.status === 'auth_changing';
 }
 
 state.authenticating = function(model) {
-    return (model.status === 'authenticating');
+    return model.status === 'authenticating';
 }
 
-state.exchanging = function(model) {
-    return (model.status === 'exchanging');
+state.authError = function(model) {
+    return model.status === 'auth_error';
 }
-
-state.checkAutoLogon = function(model) {
-    return (model.status === 'check_autologon');
-}
-
-state.authenticated = function(model) {
-    return (model.status === 'authenticated');
-}
-
-state.cleanup = function(model) {
-    return (model.status === 'cleanup');
-}
-
 
 // Next action predicate, derives whether
 // the system is in a (control) state where
 // an action needs to be invoked
 
 state.nextAction = function (model) {
-    if (state.checkAutoLogon(model)) {
-        actions.checkAutoLogon();
-    }
-    if (state.cleanup(model)) {
-        // cleanup - and transfer to anonymous
-    }
 }
 
 state.render = function(model) {
@@ -197,24 +289,82 @@ state.render = function(model) {
 
 var actions = {} ;
 
-actions.start = function(data) {
-    data = data || {};
-    data.check_session_state = true ;
-    model.present(data);
+// On startup we continue with the previous page user-id
+// todo: check the returned html for any included user-id (from the cookie
+//       when generating the page, should be data attribute in html tag).
+actions.start = function() {
+    self.call("model/sessionStorage/get/auth-user-id")
+        .then((msg) => {
+            model.auth.user_id = msg.payload;
+            model.present({});
+        });
 }
 
-actions.newSessionState = function(data) {
+actions.setUserId = function(data) {
     data = data || {};
-    if ("auth" in data) {
-        data.received_session_state = true;
+    if ("user_id" in data) {
         model.present(data);
     }
 }
 
-actions.checkAutoLogon = function(data) {
+actions.authResponse = function(data) {
     data = data || {};
-    data.check_autologon = true;
-    model.present(data);
+    model.present({ auth_response: data });
+}
+
+actions.authLogonResponse = function(data) {
+    switch (data.status) {
+        case "ok":
+            model.present({ auth_response: data });
+            break;
+        case "error":
+            model.present({
+                    is_auth_error: true,
+                    error: data.error
+                });
+            break;
+    }
+}
+
+actions.authError = function(_data) {
+    model.present({ is_auth_error: true });
+}
+
+actions.authChanged = function(_data) {
+    model.present({ is_auth_changed: true });
+}
+
+actions.authCheck = function(_data) {
+    model.present({ is_auth_check: true });
+}
+
+actions.logon = function(data) {
+    let dataLogon = {
+        logon: true,
+        username: data.username,
+        password: data.password,
+        passcode: data.passcode
+    };
+    model.present(dataLogon)
+}
+
+actions.logonForm = function(data) {
+    let dataLogon = {
+        logon: true,
+        username: data.value.username,
+        password: data.value.password,
+        passcode: data.value.passcode,
+        onauth: data.value.onauth
+    }
+    model.present(dataLogon);
+}
+
+actions.logoff = function(data) {
+    model.present({ logoff: true });
+}
+
+actions.keepAlive = function(_date) {
+    model.present({ is_keep_alive: true });
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -222,18 +372,8 @@ actions.checkAutoLogon = function(data) {
 //
 
 self.on_connect = function() {
-    // self.call("model/sessionStorage/get/a")
-    //     .then(function(msg) {
-    //         console.log("1", msg.payload);
-    //     });
-    // self.publish("model/sessionStorage/post/a", "From the worker");
-    // self.call("model/sessionStorage/get/a")
-    //     .then(function(msg) {
-    //         console.log("2", msg.payload);
-    //     });
-    setTimeout(function() {
-        actions.start();
-    }, 0);
-};
+    setTimeout(function() { actions.start(); }, 0);
+    setInterval(function() { actions.authCheck(); }, 30000);
+}
 
 self.connect();

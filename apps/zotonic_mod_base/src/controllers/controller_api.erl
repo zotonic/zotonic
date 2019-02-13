@@ -71,7 +71,7 @@ content_types_provided(Context) ->
 
 %% @doc Process the request, call MQTT and reply with the response
 process(Method, AcceptedCT, ProvidedCT, Context) ->
-    {Payload, Context1} = payload(AcceptedCT, Context),
+    {Payload, Context1} = z_controller_helper:decode_request(AcceptedCT, Context),
     {Model, Path} = request_model_path(Context),
     Msg = #{
         type => publish,
@@ -82,59 +82,16 @@ process(Method, AcceptedCT, ProvidedCT, Context) ->
     },
     case z_model:call(Model, map_method(Method), Path, Msg, Context) of
         {ok, Resp} ->
-            Body = encode(ProvidedCT, Resp),
+            Body = z_controller_helper:encode_response(ProvidedCT, Resp),
             {Body, Context1};
         {error, _} = Error ->
-            error_result(Error, ProvidedCT, Context)
+            error_response(Error, ProvidedCT, Context)
     end.
 
 map_method(<<"GET">>) -> get;
 map_method(<<"HEAD">>) -> get;
 map_method(<<"POST">>) -> post;
 map_method(<<"DELETE">>) -> delete.
-
-payload(undefined, Context) ->
-    from_qs(Context);
-payload(<<"application/json">>, Context) ->
-    from_json(Context);
-payload(<<"application/javascript">>, Context) ->
-    from_json(Context);
-payload(<<"text/javascript">>, Context) ->
-    from_json(Context);
-payload(<<"text/x-ubf">>, Context) ->
-    {Body, Context1} = req_body(Context),
-    {Data, _Rest} = z_ubf:decode(Body),
-    {Data, Context1};
-payload(<<"application/x-www-form-urlencoded">>, Context) ->
-    from_qs(Context);
-payload(<<"multipart/form-data">>, Context) ->
-    from_qs(Context);
-payload(_CT, Context) ->
-    req_body(Context).
-
-%% @doc Decode the incoming body
-from_json(Context) ->
-    {Body, Context1} = req_body(Context),
-    Data = jsxrecord:decode(Body),
-    {Data, Context1}.
-
-%% @doc Decode the incoming body
-from_qs(Context) ->
-    Context1 = z_context:ensure_qs(Context),
-    Qs = z_context:get_q_all_noz(Context1),
-    {Qs, Context1}.
-
-encode(<<"application/json">>, Data) ->
-    jsxrecord:encode(Data);
-encode(<<"application/javascript">>, Data) ->
-    jsxrecord:encode(Data);
-encode(<<"text/javascript">>, Data) ->
-    jsxrecord:encode(Data);
-encode(<<"text/x-ubf">>, Data) ->
-    {ok, UBF} = z_ubf:encode(Data),
-    UBF;
-encode(<<"application/x-bert">>, Data) ->
-    erlang:term_to_binary(Data).
 
 
 %% @doc Return the model and path to be called.
@@ -146,61 +103,57 @@ request_model_path(Context) ->
     {hd(Parts1), tl(Parts1)}.
 
 
--spec req_body( z:context() ) -> binary().
-req_body(Context) ->
-    cowmachine_req:req_body(?MAX_BODY_LENGTH, Context).
-
-
-error_result({error, payload}, CT, Context) ->
-    RespBody = encode(CT, #{
+-spec error_response({error, term()}, binary(), z:context()) -> {{halt, HttpCode :: pos_integer()}, z:context()}.
+error_response({error, payload}, CT, Context) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
             error => <<"payload">>,
             message => <<"Illegal Payload Encoding">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 400}, Context1};
-error_result({error, eacces}, CT, Context) ->
-    RespBody = encode(CT, #{
+error_response({error, eacces}, CT, Context) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
             error => <<"eacces">>,
             message => <<"Access Denied">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 403}, Context1};
-error_result({error, enoent}, CT, Context) ->
-    RespBody = encode(CT, #{
+error_response({error, enoent}, CT, Context) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
             error => <<"enoent">>,
             message => <<"Not Found">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 404}, Context1};
-error_result({error, StatusCode}, CT, Context) when is_integer(StatusCode) ->
-    RespBody = encode(CT, #{
+error_response({error, StatusCode}, CT, Context) when is_integer(StatusCode) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
             error => <<"error">>,
             message => <<"Error ", (integer_to_binary(StatusCode))/binary>>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
-error_result({error, {StatusCode, Reason, Message}}, CT, Context) when is_integer(StatusCode) ->
-    RespBody = encode(CT, #{
+error_response({error, {StatusCode, Reason, Message}}, CT, Context) when is_integer(StatusCode) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
             error => z_convert:to_binary(Reason),
             message => z_convert:to_binary(Message)
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
-error_result({error, Reason}, CT, Context) ->
-    RespBody = encode(CT, #{
+error_response({error, Reason}, CT, Context) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
             error => z_convert:to_binary(Reason),
             message => <<"Internal Error">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 500}, Context1};
-error_result(_, CT, Context) ->
-    RespBody = encode(CT, #{
+error_response(_, CT, Context) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
             error => <<"error">>,
             message => <<"Internal Error">>

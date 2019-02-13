@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2019 Marc Worrell
 %% @doc Controller for http errors. Called for 4xx errors and serving some expected content.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

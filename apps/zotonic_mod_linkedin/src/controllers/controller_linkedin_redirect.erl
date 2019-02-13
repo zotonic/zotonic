@@ -21,13 +21,13 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    html/1,
+    process/4,
     fetch_user_data/1
     ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     QState = z_context:get_q("state", Context),
     case z_context:get_session(linkedin_state, Context) of
         undefined ->

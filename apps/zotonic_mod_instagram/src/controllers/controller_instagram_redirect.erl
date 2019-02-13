@@ -21,12 +21,12 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    html/1
+    process/4
     ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     case z_context:get_q("error", Context) of
         undefined ->
             case z_context:get_q("code", Context) of

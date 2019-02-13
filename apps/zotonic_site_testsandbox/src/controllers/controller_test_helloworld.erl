@@ -3,11 +3,15 @@
 %% @doc Example webmachine_controller.
 
 -module(controller_test_helloworld).
--export([event/2, periodic/2]).
+-export([
+    process/4,
+    event/2,
+    periodic/2
+]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     {Incr, Context2} = z_context:incr_session(helloworld_counter, 1, Context),
     Html = z_template:render("test_helloworld.tpl", [{helloworld_counter,Incr}], Context2),
     % Html = z_template:render("idtest.tpl", Context2),

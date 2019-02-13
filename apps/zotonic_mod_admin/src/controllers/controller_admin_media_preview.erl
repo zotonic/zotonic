@@ -25,23 +25,22 @@
         ]).
 
 resource_exists(Context) ->
-    Context2 = z_admin_controller_helper:init_session(Context),
-    case z_context:get_q(<<"id">>, Context2) of
+    case z_context:get_q(<<"id">>, Context) of
         undefined ->
-            {false, Context2};
+            {false, Context};
         <<>> ->
-            {false, Context2};
+            {false, Context};
         Id ->
-            case m_rsc:rid(Id, Context2) of
-                undefined -> 
-                    {false, Context2};
+            case m_rsc:rid(Id, Context) of
+                undefined ->
+                    {false, Context};
                 RscId ->
-                    case m_rsc:exists(RscId, Context2) andalso m_rsc:is_visible(RscId, Context2) of 
+                    case m_rsc:exists(RscId, Context) andalso m_rsc:is_visible(RscId, Context) of
                         true ->
-                            Context3 = z_context:set(id, RscId, Context2),
-                            {true, Context3};
+                            Context1 = z_context:set(id, RscId, Context),
+                            {true, Context1};
                         false ->
-                            {true, Context2}
+                            {true, Context}
                     end
             end
     end.

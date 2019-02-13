@@ -25,7 +25,7 @@
 -mod_prio(400).
 
 -export([
-    observe_auth_logoff/3,
+    % observe_auth_logoff/3,
     observe_search_query/2,
     event/2
 ]).
@@ -42,9 +42,9 @@
 
 
 %% @doc Reset the received facebook access token (as set in the session)
-observe_auth_logoff(#auth_logoff{}, AccContext, _Context) ->
-    z_context:set_session(facebook_logon, false, AccContext),
-    z_context:set_session(facebook_access_token, undefined, AccContext).
+% observe_auth_logoff(#auth_logoff{}, AccContext, _Context) ->
+%     z_context:set_session(facebook_logon, false, AccContext),
+%     z_context:set_session(facebook_access_token, undefined, AccContext).
 
 
 %% @doc Return the facebook appid, secret and scope

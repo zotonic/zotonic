@@ -144,9 +144,10 @@ script(Target, Where, LiveVars, TplVars, Context) ->
     Tag = {live, Where, proplists:get_value(template,LiveVars), TplVars},
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, ?MODULE, Context),
     Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, LiveVars) ],
+    Topics1 = [ T || {ok, T} <- Topics ],
     iolist_to_binary([
         <<"z_live.subscribe(">>,
-            z_utils:js_array(Topics),$,,
+            z_utils:js_array(Topics1),$,,
             $',z_utils:js_escape(Target), $',$,,
             $',Postback,$',
         $), $;

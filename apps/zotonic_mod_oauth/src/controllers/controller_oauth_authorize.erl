@@ -24,20 +24,17 @@
          is_authorized/1,
          resource_exists/1,
          allowed_methods/1,
-         process_post/1
+         process/4
 ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 
 allowed_methods(Context) ->
     {[<<"POST">>, <<"GET">>, <<"HEAD">>], Context}.
 
-
 is_authorized(Context) ->
-    Context2 = z_context:ensure_qs(Context),
-    z_acl:wm_is_authorized(z_auth:is_auth(Context2), Context2).
-
+    {z_auth:is_auth(Context), Context}.
 
 resource_exists(Context) ->
     Token = m_oauth_app:get_request_token(z_context:get_q(<<"oauth_token">>, Context), Context),
@@ -49,14 +46,7 @@ resource_exists(Context) ->
             {true, Context1}
     end.
 
-
-html(Context) ->
-    Vars = [ {token, z_context:get(token, Context)} ],
-    Html = z_template:render(<<"oauth_authorize.tpl">>, Vars, Context),
-	z_context:output(Html, Context).
-
-
-process_post(Context) ->
+process(<<"POST">>, _AcceptedCT, _ProvidedCT, Context) ->
     Token = z_context:get(token, Context),
     m_oauth_app:authorize_request_token(Token, z_acl:user(Context), Context),
     Redirect = case proplists:get_value(callback_uri, Token, <<>>) of
@@ -69,4 +59,9 @@ process_post(Context) ->
                     z_url:url_encode(proplists:get_value(token, Token))
                 ]),
     Context1 = z_context:set_resp_header(<<"location">>, Redirect1, Context),
-    {{halt, 301}, Context1}.
+    {{halt, 301}, Context1};
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    Vars = [ {token, z_context:get(token, Context)} ],
+    Html = z_template:render(<<"oauth_authorize.tpl">>, Vars, Context),
+    z_context:output(Html, Context).
+

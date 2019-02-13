@@ -22,17 +22,18 @@
 
 -export([
          is_authorized/1,
+         process/4,
          event/2
 ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 
 is_authorized(Context) ->
-    z_admin_controller_helper:is_authorized(mod_oauth, Context).
+    z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_oauth)} ], Context).
 
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     case z_convert:to_integer(z_context:get_q(<<"app_id">>, Context)) of
         undefined ->
             Html = z_template:render("oauth_apps.tpl", [{page_admin_oauth, true}], Context),

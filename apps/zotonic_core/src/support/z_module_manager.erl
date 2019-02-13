@@ -949,7 +949,7 @@ handle_start_next(#state{site=Site, start_queue=Starting, modules=Modules} = Sta
                         Reason ->
                             % TODO: remove the broadcast and publish to topic
                             StartErrorReason = get_start_error_reason(Reason),
-                            Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
+                            % Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
                             % z_session_manager:broadcast(
                             %     #broadcast{type="error", message=Msg, title="Module manager", stay=false},
                             %     z_acl:sudo(z_context:new(Site))),
@@ -1248,9 +1248,9 @@ refresh_module_schema(Module, #state{module_schema=Schemas} = State) ->
         module_schema=[{Module, mod_schema(Module)} | Schemas1]
     }.
 
-manage_schema_if_db(true, Module, Current, Target, Context) ->
+manage_schema_if_db(true, Module, Current, Target, #context{} = Context) ->
     call_manage_schema(Module, Current, Target, Context);
-manage_schema_if_db(false, Module, _Current, _Target, Context) ->
+manage_schema_if_db(false, Module, _Current, _Target, #context{} = Context) ->
     lager:info("[~p] Skipping schema for ~p as there is no database connection.",
                [z_context:site(Context), Module]),
     ok.
@@ -1320,8 +1320,9 @@ add_observers(Module, Pid, #state{ site = Site } = State) ->
                   observes(Module, Exports,Pid)).
 
 %% @doc Remove the observers for a module, called before module is deactivated
+remove_observers(_Module, undefined, #state{}) ->
+    ok;
 remove_observers(_Module, Pid, #state{ site = Site }) ->
-    % {Module, Exports} = lists:keyfind(Module, 1, State#state.module_exports),
     z_notifier:detach_all(Pid, Site).
 
 

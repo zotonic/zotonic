@@ -22,13 +22,12 @@
 -export([resource_exists/1,
          previously_existed/1,
          moved_temporarily/1,
-         is_authorized/1
+         is_authorized/1,
+         process/4
         ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
-
 is_authorized(Context) ->
-    z_admin_controller_helper:is_authorized(mod_admin, Context).
+    z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_admin)} ], Context).
 
 resource_exists(Context) ->
     Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
@@ -48,7 +47,7 @@ redirect(undefined, Context) ->
 redirect(Location, Context) ->
     {{true, Location}, Context}.
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Vars = [
             {id, z_context:get(id, Context)}
            ],

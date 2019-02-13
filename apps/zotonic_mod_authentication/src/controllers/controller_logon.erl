@@ -1,3 +1,5 @@
+%%% DEPRECATED - will be deleted
+
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc Log on an user. Set optional "rememberme" cookie.
@@ -153,19 +155,19 @@ event(#submit{message= <<>>, form= <<"password_reminder">>}, Context) ->
     Args = z_context:get_q_all(Context),
     reminder(z_context:get_q_validated("reminder_address", Context), Context);
 
-event(#submit{message={logon_confirm, Args}, form= <<"logon_confirm_form">>}, Context) ->
-    LogonArgs = [{<<"username">>, m_identity:get_username(Context)}
-                  | z_context:get_q_all(Context)],
-    case z_notifier:first(#logon_submit{query_args=LogonArgs}, Context) of
-        {ok, UserId} when is_integer(UserId) ->
-            z_auth:confirm(UserId, Context),
-            z_render:wire(proplists:get_all_values(on_success, Args), Context);
-        {error, _Reason} ->
-            z_render:wire({show, [{target, "logon_confirm_error"}]}, Context);
-        undefined ->
-            lager:warning("Auth module error: #logon_submit{} returned undefined."),
-            z_render:growl_error("Configuration error: please enable a module for #logon_submit{}", Context)
-    end;
+% event(#submit{message={logon_confirm, Args}, form= <<"logon_confirm_form">>}, Context) ->
+%     LogonArgs = [{<<"username">>, m_identity:get_username(Context)}
+%                   | z_context:get_q_all(Context)],
+%     case z_notifier:first(#logon_submit{query_args=LogonArgs}, Context) of
+%         {ok, UserId} when is_integer(UserId) ->
+%             z_auth:confirm(UserId, Context),
+%             z_render:wire(proplists:get_all_values(on_success, Args), Context);
+%         {error, _Reason} ->
+%             z_render:wire({show, [{target, "logon_confirm_error"}]}, Context);
+%         undefined ->
+%             lager:warning("Auth module error: #logon_submit{} returned undefined."),
+%             z_render:growl_error("Configuration error: please enable a module for #logon_submit{}", Context)
+%     end;
 
 %%@doc Handle submit form post.
 event(#submit{message= <<>>}, Context) ->
@@ -188,17 +190,18 @@ logon(Args, Context) ->
 
 -spec logon(list(), list(), #context{}) -> #context{}.
 logon(Args, WireArgs, Context) ->
-    case z_notifier:first(#logon_submit{query_args=Args}, Context) of
-        {ok, UserId} when is_integer(UserId) ->
-            logon_user(UserId, WireArgs, Context);
-        {error, _Reason} ->
-            logon_error("pw", Context);
-        {expired, UserId} when is_integer(UserId) ->
-            logon_stage("password_expired", [{user_id, UserId}, {secret, set_reminder_secret(UserId, Context)}], Context);
-        undefined ->
-            lager:warning("Auth module error: #logon_submit{} returned undefined."),
-            logon_error("pw", Context)
-    end.
+    Context.
+    % case z_notifier:first(#logon_submit{query_args=Args}, Context) of
+    %     {ok, UserId} when is_integer(UserId) ->
+    %         logon_user(UserId, WireArgs, Context);
+    %     {error, _Reason} ->
+    %         logon_error("pw", Context);
+    %     {expired, UserId} when is_integer(UserId) ->
+    %         logon_stage("password_expired", [{user_id, UserId}, {secret, set_reminder_secret(UserId, Context)}], Context);
+    %     undefined ->
+    %         lager:warning("Auth module error: #logon_submit{} returned undefined."),
+    %         logon_error("pw", Context)
+    % end.
 
 %% @doc Send password reminders to everybody with the given email address
 reminder(Email, Context) ->
