@@ -59,7 +59,7 @@ $.widget("z.adminwidget",
             var self = this;
             var id = self.element.attr("id");
             self.setVisible(!self.showing);
-            if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
+            // if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
             ev.stopPropagation();
         }
     },

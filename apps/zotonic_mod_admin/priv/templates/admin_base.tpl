@@ -38,8 +38,6 @@
     </head>
     <body class="{% block bodyclass %}{% endblock %}">
 
-	{% wire name="adminwidget_toggle" action={adminwidget_toggle} %}
-
     {% block navigation %}
         {% include "_admin_menu.tpl" %}
     {% endblock %}

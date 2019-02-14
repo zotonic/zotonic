@@ -19,7 +19,7 @@
             <div class="form-group">
                 <label class="control-label">{_ Visible from _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 %}
+                    {% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 is_editable=id.is_editable %}
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label class="control-label">{_ Visible till _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 %}
+                    {% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 is_editable=id.is_editable %}
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
         <div class="col-md-12">
             <label class="control-label">{_ Publication date of original article _}</label>
             <div>
-                {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 %}
+                {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 is_editable=id.is_editable %}
             </div>
         </div>
     </div>
