@@ -104,41 +104,6 @@ module_callback(Module, Function, #{ message := Msg, publisher_context := Contex
 %         UpdateDone#rsc_update_done{pre_props=[], post_props=[]},
 %         Context).
 
-% observe_media_replace_file(#media_replace_file{id=Id} = MediaReplace, Context) ->
-%     z_mqtt:publish(
-%         <<"~site/rsc/",(z_convert:to_binary(Id))/binary, "/medium">>,
-%         MediaReplace#media_replace_file{medium=[]},
-%         Context).
-
-% observe_edge_delete(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId} = EdgeDelete, Context) ->
-%     z_mqtt:publish(
-%         <<"~site/rsc/",(z_convert:to_binary(SubjectId))/binary, "/o/", (z_convert:to_binary(PredName))/binary>>,
-%         EdgeDelete,
-%         Context),
-%     z_mqtt:publish(
-%         <<"~site/rsc/",(z_convert:to_binary(ObjectId))/binary, "/s/", (z_convert:to_binary(PredName))/binary>>,
-%         EdgeDelete,
-%         Context).
-
-% observe_edge_insert(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId} = EdgeInsert, Context) ->
-%     z_mqtt:publish(
-%         <<"~site/rsc/",(z_convert:to_binary(SubjectId))/binary, "/o/", (z_convert:to_binary(PredName))/binary>>,
-%         EdgeInsert,
-%         Context),
-%     z_mqtt:publish(
-%         <<"~site/rsc/",(z_convert:to_binary(ObjectId))/binary, "/s/", (z_convert:to_binary(PredName))/binary>>,
-%         EdgeInsert,
-%         Context).
-
-% observe_edge_update(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId} = EdgeUpdate, Context) ->
-%     z_mqtt:publish(
-%         <<"~site/rsc/",(z_convert:to_binary(SubjectId))/binary, "/o/", (z_convert:to_binary(PredName))/binary>>,
-%         EdgeUpdate,
-%         Context),
-%     z_mqtt:publish(
-%         <<"~site/rsc/",(z_convert:to_binary(ObjectId))/binary, "/s/", (z_convert:to_binary(PredName))/binary>>,
-%         EdgeUpdate,
-%         Context).
 
 %% @doc Handle the <tt>{live ...}</tt> event type.
 % observe_action_event_type(#action_event_type{event={mqtt, _Args}} = Ev, Context) ->

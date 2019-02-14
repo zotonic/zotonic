@@ -156,6 +156,8 @@ map_topics(Ts, Context) ->
     Topics = [ z_mqtt:map_topic(T, Context) || T <- Ts ],
     [ bridge(T) || {ok, T} <- Topics ].
 
+bridge([ <<"bridge">>, <<"origin">> | _ ] = T) -> T;
+bridge(<<"bridge/origin/", _/binary>> = T) -> T;
 bridge(L) when is_list(L) -> iolist_to_binary(z_utils:combine($/, [ <<"bridge">>, <<"origin">> | L ]));
 bridge(T) when is_binary(T) -> <<"bridge/origin/", T/binary>>.
 

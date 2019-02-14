@@ -148,10 +148,7 @@ map_topic_filter(Topic, Context) when is_list(Topic) ->
 map_topic_filter(Topic, Context) when is_binary(Topic) ->
     map_topic(binary:split(Topic, <<"/">>, [global]), Context);
 map_topic_filter(RscId, _Context) when is_integer(RscId) ->
-    [
-        <<"model">>, <<"rsc">>, <<"event">>,
-        z_convert:to_binary(RscId)
-    ];
+    [ <<"model">>, <<"rsc">>, <<"event">>, z_convert:to_binary(RscId), <<"+">> ];
 map_topic_filter({object, Props}, Context) when is_list(Props) ->
     map_topic_edge(<<"o">>, Props, Context);
 map_topic_filter({subject, Props}, Context) when is_list(Props) ->

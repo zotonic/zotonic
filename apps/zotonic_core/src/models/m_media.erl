@@ -227,6 +227,10 @@ delete(Id, Context) ->
             [z_depcache:flush(DepictId, Context) || DepictId <- Depicts],
             z_depcache:flush(Id, Context),
             z_notifier:notify(#media_replace_file{id = Id, medium = []}, Context),
+            z_mqtt:publish(
+                <<"model/media/event/",(z_convert:to_binary(Id))/binary, "/delete">>,
+                #{ id => Id },
+                Context),
             ok;
         false ->
             {error, eacces}
@@ -252,7 +256,12 @@ replace(Id, Props, Context) ->
                 {ok, _} ->
                     [z_depcache:flush(DepictId, Context) || DepictId <- Depicts],
                     z_depcache:flush(Id, Context),
-                    z_notifier:notify(#media_replace_file{id = Id, medium = get(Id, Context)}, Context),
+                    Medium = get(Id, Context),
+                    z_notifier:notify(#media_replace_file{id = Id, medium = Medium}, Context),
+                    z_mqtt:publish(
+                        <<"model/media/event/",(z_convert:to_binary(Id))/binary, "/update">>,
+                        mqtt_event_info(Medium),
+                        Context),
                     ok;
                 {rollback, {Error, _Trace}} ->
                     {error, Error}
@@ -633,7 +642,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
             CatList = m_rsc:is_a(Id, Context),
             [z_depcache:flush(Cat, Context) || Cat <- CatList],
 
-            m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
+            _ = m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
 
             % Run possible post insertion function.
             case PreProc#media_upload_preprocess.post_insert_fun of
@@ -643,7 +652,12 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
             end,
 
             %% Pass the medium record along in the notification; this also fills the depcache (side effect).
-            z_notifier:notify(#media_replace_file{id = Id, medium = get(Id, Context)}, Context),
+            NewMedium = get(Id, Context),
+            z_notifier:notify(#media_replace_file{id = Id, medium = NewMedium}, Context),
+            z_mqtt:publish(
+                <<"model/media/event/",(z_convert:to_binary(Id))/binary, "/update">>,
+                mqtt_event_info(NewMedium),
+                Context),
             {ok, Id};
         {rollback, {{error, not_allowed}, _StackTrace}} ->
             {error, not_allowed}
@@ -918,3 +932,17 @@ check_medium_props(Ps) ->
 check_medium_prop({width, N}) when not is_integer(N) -> {width, 0};
 check_medium_prop({height, N}) when not is_integer(N) -> {height, 0};
 check_medium_prop(P) -> P.
+
+
+% Return a map with basic (not too sensitive) medium info for MQTT events
+-spec mqtt_event_info( proplists:proplist() ) -> map().
+mqtt_event_info(Medium) ->
+    #{
+        id => proplists:get_value(id, Medium),
+        size => proplists:get_value(size, Medium),
+        width => proplists:get_value(width, Medium),
+        height => proplists:get_value(height, Medium),
+        orientation => proplists:get_value(orientation, Medium),
+        mime => proplists:get_value(mime, Medium),
+        filename => proplists:get_value(filename, Medium)
+    }.

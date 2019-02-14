@@ -109,6 +109,13 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
             pre_props = Props,
             post_props = []
         }, Context),
+     z_mqtt:publish(
+         <<"model/rsc/event/",(z_convert:to_binary(Id))/binary, "/delete">>,
+         #{
+            id => Id,
+            pre_is_a => CatList
+         },
+         Context),
     z_edge_log_server:check(Context),
     ok.
 
@@ -437,6 +444,18 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
         post_props = NewProps
     },
     z_notifier:notify_sync(Note, Context),
+    Topic = case Id of
+        insert_rsc -> <<"model/rsc/event/",(z_convert:to_binary(Id))/binary, "/insert">>;
+        _ -> <<"model/rsc/event/",(z_convert:to_binary(Id))/binary, "/update">>
+    end,
+    z_mqtt:publish(
+        Topic,
+         #{
+            id => Id,
+            pre_is_a => OldCatList,
+            post_is_a => NewCatList
+         },
+         Context),
 
     % Return the updated or inserted id
     {ok, NewId};
