@@ -34,8 +34,8 @@ ZLive.prototype.subscribe = function(topics, target, postback) {
         var topic = topics[i];
         var wid = cotonic.broker.subscribe(
                             topic,
-                            function(_topic, msg, id) {
-                                self.update(topic, target, postback, msg, id);
+                            function(msg, _mapping, opts) {
+                                self.update(opts.topic, target, postback, msg, opts.wid);
                             });
 
         this._subscriptions.push({

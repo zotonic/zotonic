@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2019 Marc Worrell
 %% @doc Simple live updating events
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -110,7 +110,7 @@ render_postback(Params, Context) ->
     {delegate, Delegate} = proplists:lookup(delegate, Params),
     {target, Target} = proplists:lookup(target, Params),
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, Delegate, Context),
-    Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, Params) ],
+    Topics = map_topics(  proplists:get_all_values(topic, Params), Context ),
     Script = iolist_to_binary([
         <<"z_live.subscribe(">>,
             z_utils:js_array(Topics),$,,
@@ -143,15 +143,22 @@ opt_wrap_element(Element, Id, Html) ->
 script(Target, Where, LiveVars, TplVars, Context) ->
     Tag = {live, Where, proplists:get_value(template,LiveVars), TplVars},
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, ?MODULE, Context),
-    Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, LiveVars) ],
-    Topics1 = [ T || {ok, T} <- Topics ],
+    Topics = map_topics(  proplists:get_all_values(topic, LiveVars), Context ),
     iolist_to_binary([
         <<"z_live.subscribe(">>,
-            z_utils:js_array(Topics1),$,,
+            z_utils:js_array(Topics),$,,
             $',z_utils:js_escape(Target), $',$,,
             $',Postback,$',
         $), $;
     ]).
+
+map_topics(Ts, Context) ->
+    Topics = [ z_mqtt:map_topic(T, Context) || T <- Ts ],
+    [ bridge(T) || {ok, T} <- Topics ].
+
+bridge(L) when is_list(L) -> iolist_to_binary(z_utils:combine($/, [ <<"bridge">>, <<"origin">> | L ]));
+bridge(T) when is_binary(T) -> <<"bridge/origin/", T/binary>>.
+
 
 render(<<"top">>, Target, Render, Context) ->
     z_render:insert_top(Target, Render, Context);
