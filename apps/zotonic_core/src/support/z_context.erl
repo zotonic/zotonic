@@ -611,8 +611,8 @@ is_zotonic_arg(<<"z_pageid">>) -> true;
 is_zotonic_arg(<<"z_v">>) -> true;
 is_zotonic_arg(<<"z_msg">>) -> true;
 is_zotonic_arg(<<"z_comet">>) -> true;
+is_zotonic_arg(<<"z_submitter">>) -> true;
 is_zotonic_arg(_) -> false.
-
 
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
 %%      is thrown when there was no validator, when the validator is invalid or when the validation failed.

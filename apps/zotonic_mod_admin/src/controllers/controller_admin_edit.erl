@@ -90,11 +90,17 @@ event(#submit{message={rscform, Args}}, Context) ->
     Id = z_convert:to_integer(proplists:get_value(<<"id">>, Props)),
     Props1 = proplists:delete(<<"id">>, Props),
     CatBefore = m_rsc:p(Id, category_id, Context),
-    Props2 = z_notifier:foldl(#admin_rscform{id=Id, is_a=m_rsc:is_a(Id, Context)}, Props1, Context),
+    Props2 = z_notifier:foldl(
+        #admin_rscform{
+            id = Id,
+            is_a = m_rsc:is_a(Id, Context)
+        },
+        Props1,
+        Context),
     case m_rsc:update(Id, Props2, Context) of
         {ok, _} ->
-            case proplists:is_defined(<<"save_view">>, Post) of
-                true ->
+            case z_context:get_q(<<"z_submitter">>, Context) of
+                <<"save_view">> ->
                     case proplists:get_value(view_location, Args) of
                         undefined ->
                             PageUrl = m_rsc:p(Id, page_url, Context),
@@ -102,7 +108,7 @@ event(#submit{message={rscform, Args}}, Context) ->
                         Location ->
                             z_render:wire({redirect, [{location, Location}]}, Context)
                     end;
-                false ->
+                Submitter ->
                     case m_rsc:p(Id, category_id, Context) of
                         CatBefore ->
                             Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
@@ -116,10 +122,10 @@ event(#submit{message={rscform, Args}}, Context) ->
                                        end,
                             Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5),
                             Context6 = z_render:growl([<<"Saved \"">>, Title, <<"\".">>], Context5),
-                            case proplists:is_defined("save_duplicate", Post) of
-                                true ->
+                            case Submitter of
+                                <<"save_duplicate">> ->
                                     z_render:wire({dialog_duplicate_rsc, [{id, Id}]}, Context6);
-                                false ->
+                                _SaveStay ->
                                     Context6
                             end;
                         _CatOther ->
@@ -181,17 +187,11 @@ set_value_slug({trans, Tr}, Context) ->
 set_value_slug(Slug, Context) ->
     z_render:set_value("title_slug", Slug, Context).
 
-%% @doc Remove some properties that are part of the postback
+%% @doc Remove the submit buttons from the resource properties.
 filter_props(Fs) ->
     Remove = [
-              <<"triggervalue">>,
-              <<"postback">>,
-              <<"z_trigger_id">>,
-              <<"z_pageid">>,
-              <<"z_submitter">>,
-              <<"trigger_value">>,
-              <<"save_view">>,
-              <<"save_duplicate">>,
-              <<"save_stay">>
-             ],
+        <<"save_view">>,
+        <<"save_duplicate">>,
+        <<"save_stay">>
+    ],
     lists:foldl(fun(P, Acc) -> proplists:delete(P, Acc) end, Fs, Remove).
