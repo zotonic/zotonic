@@ -73,7 +73,6 @@ new_user_context( Site, ClientId, SessionOptions ) ->
             % No user on the transport - typical for a MQTT connection
             Context1
     end,
-    ?DEBUG(SessionOptions),
     z_context:set(peer_ip, maps:get(peer_ip, SessionOptions, undefined), Context2).
 
 

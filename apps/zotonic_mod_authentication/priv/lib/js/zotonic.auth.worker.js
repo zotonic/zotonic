@@ -28,6 +28,7 @@ var model = {
         status: 'start',
         is_status_changed: false,
         is_keep_alive: false,
+        is_fetch_error: false,
         authentication_error: null,
         auth: {
             status: 'pending',
@@ -49,8 +50,8 @@ model.present = function(data) {
         });
 
         // Synchronize tabs and windows of same user-agent
-        self.subscribe("model/serviceWorker/event/auth-sync", function(msg) {
-            actions.sync(msg.payload);
+        self.subscribe("model/serviceWorker/event/broadcast/auth-sync", function(msg) {
+            actions.authCheck();
         });
 
         // Auth requests from the JS applications
@@ -73,6 +74,10 @@ model.present = function(data) {
         });
     }
 
+    if ("is_fetch_error" in data) {
+        model.is_fetch_error = data.is_fetch_error;
+    }
+
     if (state.start(model) || ("user_id" in data && data.user_id !== model.auth.user_id)) {
         model.state_change('auth_unknown');
 
@@ -88,10 +93,10 @@ model.present = function(data) {
         })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authResponse(body); })
-        .catch((e) => { actions.authError(); });
+        .catch((e) => { actions.fetchError(); });
     }
 
-    if (data.is_auth_check && (state.authKnown(model) || state.authError(model))) {
+    if (data.is_auth_check && (state.authKnown(model) || state.fetchError(model))) {
         let auth_check_cmd = 'status';
         if (model.is_keep_alive && model.auth.is_authenticated) {
             auth_check_cmd = 'refresh';
@@ -108,7 +113,7 @@ model.present = function(data) {
         })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authResponse(body); })
-        .catch((e) => { actions.authError(); });
+        .catch((e) => { actions.fetchError(); });
     }
 
     if (data.logon) {
@@ -132,7 +137,7 @@ model.present = function(data) {
         })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
-        .catch((e) => { actions.authError(); });
+        .catch((e) => { actions.fetchError(); });
     }
 
     if (data.logoff) {
@@ -151,10 +156,13 @@ model.present = function(data) {
         })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authResponse(body); })
-        .catch((e) => { actions.authError(); });
+        .catch((e) => { actions.fetchError(); });
     }
 
     if ("auth_response" in data && data.auth_response.status == 'ok') {
+        if (data.is_auth_error === false) {
+            model.authentication_error = null;
+        }
         model.auth = data.auth_response;
         if (model.auth.user_id == previous_auth_user_id) {
             model.state_change('auth_known');
@@ -165,7 +173,11 @@ model.present = function(data) {
 
     if (data.is_auth_error && state.authenticating(model)) {
         model.authentication_error = data.error;
-        model.state_change('auth_error');
+        if (model.auth.status == 'ok') {
+            model.state_change('auth_known');
+        } else {
+            model.state_change('auth_unknown');
+        }
     }
 
     if (data.is_auth_changed && state.authChanging(model)) {
@@ -184,15 +196,17 @@ model.state_change = function(status) {
     if (status != model.status) {
         switch (status) {
             case 'auth_changing':
-                self.publish('model/auth/event/auth-changing', {
-                    onauth: model.onauth,
-                    auth: model.auth
-                });
+                self.call('model/sessionStorage/post/auth-user-id', model.auth.user_id)
+                    .then(function() {
+                        self.publish('model/auth/event/auth-changing', {
+                            onauth: model.onauth,
+                            auth: model.auth
+                        })
+                    });
                 setTimeout(function() { actions.authChanged(); }, 20);
                 break;
             case 'auth_known':
                 self.publish('model/auth/event/auth-user-id', model.auth.user_id);
-                self.publish('model/sessionStorage/post/auth-user-id', model.auth.user_id);
                 self.publish('model/serviceWorker/post/broadcast/auth-sync', model.auth);
                 break;
             default:
@@ -237,6 +251,30 @@ model.state = state ;
 state.representation = function(model) {
     self.publish('model/auth/event/auth', model.auth);
 
+    // Publish the model's UI status
+    let ui = {
+        classes: [],
+        status: {
+            'auth': model.auth.is_authenticated ? "user" : "anonymous"
+        }
+    }
+    if (state.authenticating(model)) {
+        ui.classes.push("authenticating");
+    }
+    if (model.authentication_error) {
+        ui.classes.push("error");
+        ui.classes.push("error-" + model.authentication_error);
+    }
+    if (model.is_fetch_error) {
+        ui.classes.push("error-fetch");
+    }
+    if (model.auth.is_authenticated) {
+        ui.classes.push("user");
+    } else {
+        ui.classes.push("anonymous");
+    }
+    self.publish("model/auth/event/ui-status", ui);
+
     // var representation = 'oops... something went wrong, the system is in an invalid state' ;
     // if (state.ready(model)) {
     //     representation = state.view.ready(model) ;
@@ -267,7 +305,11 @@ state.authenticating = function(model) {
 }
 
 state.authError = function(model) {
-    return model.status === 'auth_error';
+    return model.authentication_error !== null;
+}
+
+state.fetchError = function(model) {
+    return model.is_fetch_error;
 }
 
 // Next action predicate, derives whether
@@ -309,25 +351,36 @@ actions.setUserId = function(data) {
 
 actions.authResponse = function(data) {
     data = data || {};
-    model.present({ auth_response: data });
+    model.present({
+        is_fetch_error: false,
+        auth_response: data
+    });
 }
 
 actions.authLogonResponse = function(data) {
     switch (data.status) {
         case "ok":
-            model.present({ auth_response: data });
+            model.present({
+                is_auth_error: false,
+                is_fetch_error: false,
+                auth_response: data
+            });
             break;
         case "error":
             model.present({
+                    is_fetch_error: false,
                     is_auth_error: true,
                     error: data.error
                 });
             break;
+        default:
+            console.log("Unkown LogonResponse payload", data);
+            break;
     }
 }
 
-actions.authError = function(_data) {
-    model.present({ is_auth_error: true });
+actions.fetchError = function(_data) {
+    model.present({ is_fetch_error: true });
 }
 
 actions.authChanged = function(_data) {

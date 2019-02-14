@@ -2,7 +2,7 @@
 <form id="logon_form" class="z_logon_form" method="post" action="#" target="logonTarget"
       data-onsubmit-topic="model/auth/post/logon/form">
 
-    <input type="hidden" name="onauth" value="{{ page|escape }}" />
+    {#  <input type="hidden" name="onauth" value="{{ page|escape }}" /> #}
 
     {% include form_fields_tpl %}
 </form>
