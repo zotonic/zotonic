@@ -25,6 +25,10 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-type payload() :: map()
+                 | #postback_event{}
+                 | #postback_notify{}.
+
 %% @doc Send JS to the client, client will evaluate the JS.
 -spec reply(binary(), z:context()) -> ok | {error, term()}.
 reply(JavaScript, #context{ client_id = ClientId } = Context) when is_binary(ClientId), is_binary(JavaScript) ->
@@ -32,21 +36,21 @@ reply(JavaScript, #context{ client_id = ClientId } = Context) when is_binary(Cli
     z_mqtt:publish(Topic, JavaScript, #{ qos => 1 }, Context).
 
 %% @doc Handle incoming transport messages, call event handlers of delegates.
--spec transport( binary() | undefined, map(), z:context()) -> ok | {error, term()}.
-transport(<<"postback">>, #{ <<"type">> := <<"postback_event">>, <<"postback">> := Postback } = Payload, Context) ->
+-spec transport( binary() | undefined, payload(), z:context()) -> ok | {error, term()}.
+transport(<<"postback">>, #postback_event{ postback = Postback } = Event, Context) ->
     % submit or postback events
     {EventType, TriggerId, TargetId, Tag, Module} = z_utils:depickle(Postback, Context),
     TriggerId1 = case TriggerId of
-                    undefined -> maps:get(<<"trigger">>, Payload, undefined);
+                    undefined -> Event#postback_event.trigger;
                     _         -> TriggerId
                  end,
     TargetId1 =  case TargetId of
-                    undefined -> maps:get(<<"target">>, Payload, undefined);
+                    undefined -> Event#postback_event.target;
                     _         -> TargetId
                  end,
-    case maybe_set_q(mqtt, maps:get(<<"data">>, Payload, undefined), Context) of
+    case maybe_set_q(mqtt, Event#postback_event.data, Context) of
         {ok, Context1} ->
-            TriggerValue = maps:get(<<"triggervalue">>, Payload, undefined),
+            TriggerValue = Event#postback_event.triggervalue,
             Context2 = z_context:set_q(<<"triggervalue">>, TriggerValue, Context1),
             ContextRsc = z_context:set_controller_module(Module, Context2),
             ContextRes = incoming_postback_event(is_submit_event(EventType), Module, Tag, TriggerId1, TargetId1, ContextRsc),
@@ -54,16 +58,10 @@ transport(<<"postback">>, #{ <<"type">> := <<"postback_event">>, <<"postback">> 
         {error, ContextValidation} ->
             incoming_context_result(ContextValidation)
     end;
-transport(<<"notify">>, #{ <<"type">> := <<"postback_notify">>, <<"data">> := Data } = Payload, Context) ->
+transport(<<"notify">>, #postback_notify{ data = Data } = Notify, Context) ->
     % Notify for observer
     case maybe_set_q(mqtt, Data, Context) of
         {ok, Context1} ->
-            Notify = #postback_notify{
-                message = maps:get(<<"message">>, Payload, undefined),
-                data = Data,
-                trigger = maps:get(<<"trigger">>, Payload, undefined),
-                target = maps:get(<<"target">>, Payload, undefined)
-            },
             Context2 = case z_notifier:first(Notify, Context1) of
                             undefined -> Context1;
                             #context{} = ContextNotify -> ContextNotify
@@ -72,17 +70,11 @@ transport(<<"notify">>, #{ <<"type">> := <<"postback_notify">>, <<"data">> := Da
         {error, ContextValidation} ->
             incoming_context_result(ContextValidation)
     end;
-transport(Delegate, #{ <<"type">> := <<"postback_notify">>, <<"data">> := Data } = Payload, Context) ->
+transport(Delegate, #postback_notify{ data = Data } = Notify, Context) ->
     % Notify for delegate
     case maybe_set_q(mqtt, Data, Context) of
         {ok, Context1} ->
             {ok, Module} = z_utils:ensure_existing_module(Delegate),
-            Notify = #postback_notify{
-                message = maps:get(<<"message">>, Payload, undefined),
-                data = Data,
-                trigger = maps:get(<<"trigger">>, Payload, undefined),
-                target = maps:get(<<"target">>, Payload, undefined)
-            },
             incoming_context_result(Module:event(Notify, Context1));
         {error, ContextValidation} ->
             incoming_context_result(ContextValidation)
@@ -91,10 +83,14 @@ transport(Delegate, Payload, Context) ->
     % Event
     {ok, Module} = z_utils:ensure_existing_module(Delegate),
     Msg = #z_msg_v1{
-        data = Payload
+        data = map_to_list(Payload)
     },
     incoming_context_result(Module:event(Msg, Context)).
 
+map_to_list(Payload) when is_map(Payload) ->
+    maps:to_list(Payload);
+map_to_list(Payload) ->
+    Payload.
 
 %% @doc Send the accumulated actions (scripts) from the context back to the client.
 incoming_context_result(Context) ->
@@ -127,7 +123,7 @@ is_submit_event(_Type) -> false.
 
 maybe_set_q(form, Qs, Context) ->
     set_q(Qs, Context);
-maybe_set_q(_Type, #{ <<"q">> := Qs }, Context) ->
+maybe_set_q(_Type, #{ <<"q">> := Qs }, Context) when is_list(Qs) ->
     Qs1 = lists:foldr(
         fun
             (#{ <<"name">> := K, <<"value">> := V }, Acc) ->

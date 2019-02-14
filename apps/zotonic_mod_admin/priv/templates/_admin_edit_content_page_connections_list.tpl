@@ -32,7 +32,7 @@ Params:
        action={
           dialog_open
           template="_action_dialog_connect.tpl"
-          title=dialog_title_add|default:[_"Add a connection: ", predicate.title]
+          title=dialog_title_add|default:[_"Add a connection:", " ", predicate.title]
           subject_id=id
           predicate=predicate
           tabs_enabled=tabs_enabled

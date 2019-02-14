@@ -37,7 +37,7 @@ render(Params, Vars, Context) ->
             Params1 = [{id, Id}, {type, "visible"} | proplists:delete(id, Params)],
             Params2 = [ ensure_moreresults_visible(Param) || Param <- Params1 ],
             Html = [<<"<div id='">>, Id, <<"' class='">>, Class, <<"'><img src='">>, Image, <<"' alt='' /></div>">>],
-            case scomp_base_wire:render(Params2, Vars, Context) of
+            case scomp_wires_wire:render(Params2, Vars, Context) of
                 {ok, Result} -> {ok, [Html, render_state(Result)]};
                 {error, _Reason} = Error -> Error
             end;
@@ -51,7 +51,7 @@ render(Params, Vars, Context) ->
                     {Target, <<>>}
             end,
             Action = {update, [{target, TargetId}|Params]},
-            case scomp_base_wire:render([{id, TargetId}, {type, "visible"}, {action, Action}], Vars, Context) of
+            case scomp_wires_wire:render([{id, TargetId}, {type, "visible"}, {action, Action}], Vars, Context) of
                 {ok, Result} -> {ok, [Html, render_state(Result)]};
                 {error, _Reason} = Error -> Error
             end

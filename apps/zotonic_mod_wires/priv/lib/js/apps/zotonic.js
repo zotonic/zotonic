@@ -212,12 +212,11 @@ function z_notify(message, extraParams)
         delete params.z_trigger_id;
     }
     var notify = {
-        _record: "postback_notify",
+        _type: "postback_notify",
         message: message,
         trigger: trigger_id,
         target: params.z_target_id || undefined,
         data: {
-            _record: 'q',
             q: ensure_name_value(params) || []
         }
     };
@@ -301,13 +300,12 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
     // extraParams.push({name: 'triggervalue', value: triggervalue});
 
     var pb_event = {
-        type: "postback_event",
+        _type: "postback_event",
         postback: postback,
         trigger: trigger_id,
         target: extraParams.target_id || undefined,
         triggervalue: triggervalue,
         data: {
-            type: 'q',
             q: ensure_name_value(extraParams) || []
         }
     };
@@ -331,7 +329,7 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
 // {
 //     if (typeof extraParams == 'object' && extraParams instanceof Array) {
 //         return {
-//             _record: "q",
+//             _type: "q",
 //             q: ensure_name_value(extraParams)
 //         };
 //     } else {
