@@ -50,7 +50,7 @@
                       "42355894adeb1fef9ec7b31642a9707c86dd0f23"}},
        {webzmachine,".*",
                     {git,"git://github.com/zotonic/webzmachine.git",
-                         "59cab9216f0e56022374cf0c0bcc79954d4116bb"}},
+                         "6d01fd1bdd502b013a661483f12e4dcaabdd6888"}},
        {z_stdlib,".*",
                  {git,"git://github.com/zotonic/z_stdlib.git",
                       "1980e96c52dd53ad640d830b2552725990d3ac20"}},
