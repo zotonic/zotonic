@@ -154,12 +154,17 @@ script(Target, Where, LiveVars, TplVars, Context) ->
 
 map_topics(Ts, Context) ->
     Topics = [ z_mqtt:map_topic(T, Context) || T <- Ts ],
-    [ bridge(T) || {ok, T} <- Topics ].
+    [ to_binary(bridge(T)) || {ok, T} <- Topics ].
 
 bridge([ <<"bridge">>, <<"origin">> | _ ] = T) -> T;
 bridge(<<"bridge/origin/", _/binary>> = T) -> T;
-bridge(L) when is_list(L) -> iolist_to_binary(z_utils:combine($/, [ <<"bridge">>, <<"origin">> | L ]));
+bridge(L) when is_list(L) -> [ <<"bridge">>, <<"origin">> | L ];
 bridge(T) when is_binary(T) -> <<"bridge/origin/", T/binary>>.
+
+to_binary(B) when is_binary(B) -> B;
+to_binary(L) when is_list(L) ->
+    L1 = [ z_convert:to_binary(B) || B <- L ],
+    iolist_to_binary(z_utils:combine($/, L1)).
 
 
 render(<<"top">>, Target, Render, Context) ->

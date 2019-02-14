@@ -168,10 +168,10 @@ get_username(Context) ->
 %% @doc Return the username of the resource id, undefined if no username
 %% @spec get_username(ResourceId, Context) -> Username | undefined
 -spec get_username(m_rsc:resource(), #context{}) -> binary() | undefined.
-get_username(Id, Context) ->
+get_username(RscId, Context) when is_integer(RscId) ->
     z_db:q1(
         "select key from identity where rsc_id = $1 and type = 'username_pw'",
-        [m_rsc:rid(Id, Context)],
+        [m_rsc:rid(RscId, Context)],
         Context
     ).
 
@@ -180,15 +180,21 @@ get_username(Id, Context) ->
 -spec delete_username(m_rsc:resource(), #context{}) -> ok | {error, eacces}.
 delete_username(1, _Context) ->
     {error, admin_username_cannot_be_deleted};
-delete_username(Id, Context) ->
-    case z_acl:is_allowed(delete, Id, Context) orelse z_acl:is_allowed(update, Id, Context) of
+delete_username(RscId, Context) when is_integer(RscId) ->
+    case z_acl:is_allowed(delete, RscId, Context) orelse z_acl:is_allowed(update, RscId, Context) of
         true ->
             z_db:q(
                 "delete from identity where rsc_id = $1 and type = 'username_pw'",
-                [m_rsc:rid(Id, Context)],
+                [RscId],
                 Context
             ),
-            % z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
+            z_mqtt:publish(
+                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary>>,
+                #{
+                    id => RscId,
+                    type => <<"username_pw">>
+                },
+                Context),
             ok;
         false ->
             {error, eacces}
@@ -198,7 +204,7 @@ delete_username(Id, Context) ->
 %% @doc Change the username of the resource id, only possible if there is
 %% already an username/password set
 %% @spec set_username(ResourceId, Username, Context) -> ok | {error, Reason}
-set_username(Id, Username, Context) ->
+set_username(Id, Username, Context) when is_integer(Id) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
         true ->
             Username1 = z_string:to_lower(Username),
@@ -241,7 +247,7 @@ set_username(Id, Username, Context) ->
 -spec set_username_pw(m_rsc:resource(), string(), string(), #context{}) -> ok | {error, Reason :: term()}.
 set_username_pw(1, _, _, _) ->
     {error, admin_password_cannot_be_set};
-set_username_pw(Id, Username, Password, Context) ->
+set_username_pw(Id, Username, Password, Context)  when is_integer(Id) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
         true ->
             Username1 = z_string:trim(z_string:to_lower(Username)),
@@ -256,8 +262,14 @@ set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
         set_username_pw_trans(Id, Username, Hash, Ctx) end, Context) of
         ok ->
             reset_rememberme_token(Id, Context),
-            % z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
             z_depcache:flush(Id, Context),
+            z_mqtt:publish(
+                <<"model/identity/event/", (z_convert:to_binary(Id))/binary>>,
+                #{
+                    id => Id,
+                    type => <<"username_pw">>
+                },
+                Context),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
             lager:error("set_username_pw error for ~p, setting username ~p: ~p",
@@ -645,13 +657,25 @@ insert_1(Rsc, Type, Key, Props, Context) ->
         undefined ->
             Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
             Result = z_db:insert(identity, validate_is_unique(Props1), Context),
-            % z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
+            z_mqtt:publish(
+                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+                #{
+                    id => RscId,
+                    type => Type
+                },
+                Context),
             Result;
         IdnId ->
             case proplists:get_value(is_verified, Props, false) of
                 true ->
-                    set_verified_trans(RscId, Type, Key, Context);
-                    % z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context);
+                    set_verified_trans(RscId, Type, Key, Context),
+                    z_mqtt:publish(
+                        <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+                        #{
+                            id => RscId,
+                            type => Type
+                        },
+                        Context);
                 false ->
                     nop
             end,
@@ -712,7 +736,13 @@ set_verified(Id, Context) ->
                 Context)
             of
                 1 ->
-                    % z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
+                    z_mqtt:publish(
+                        <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+                        #{
+                            id => RscId,
+                            type => Type
+                        },
+                        Context),
                     ok;
                 0 ->
                     {error, notfound}
@@ -729,7 +759,13 @@ set_verified(RscId, Type, Key, Context)
          Type =/= undefined,
          Key =/= undefined, Key =/= <<>>, Key =/= [] ->
     Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context),
-    % z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
+    z_mqtt:publish(
+        <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+        #{
+            id => RscId,
+            type => Type
+        },
+        Context),
     Result;
 set_verified(_RscId, _Type, _Key, _Context) ->
     {error, badarg}.
@@ -783,7 +819,13 @@ delete(IdnId, Context) ->
                 true ->
                     case z_db:delete(identity, IdnId, Context) of
                         {ok, 1} ->
-                            % z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context),
+                            z_mqtt:publish(
+                                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+                                #{
+                                    id => RscId,
+                                    type => Type
+                                },
+                                Context),
                             maybe_reset_email_property(RscId, Type, Key, Context),
                             {ok, 1};
                         Other ->
@@ -831,10 +873,20 @@ merge(WinnerId, LoserId, Context) ->
                 end
             end,
             z_db:transaction(F, Context),
-            % z_mqtt:publish(["~site", "rsc", m_rsc:rid(LoserId, Context), "identity"], {identity, all},
-            %     Context),
-            % z_mqtt:publish(["~site", "rsc", m_rsc:rid(WinnerId, Context), "identity"], {identity, all},
-            %     Context),
+            z_mqtt:publish(
+                <<"model/identity/event/", (z_convert:to_binary(LoserId))/binary>>,
+                #{
+                    id => LoserId,
+                    type => all
+                },
+                Context),
+            z_mqtt:publish(
+                <<"model/identity/event/", (z_convert:to_binary(WinnerId))/binary>>,
+                #{
+                    id => WinnerId,
+                    type => all
+                },
+                Context),
             ok;
         false ->
             {error, eacces}
@@ -871,8 +923,15 @@ delete_by_type(RscId, Type, Context) ->
     case z_db:q("delete from identity where rsc_id = $1 and type = $2", [m_rsc:rid(RscId, Context), Type],
         Context) of
         0 -> ok;
-        _N -> ok
-            % z_mqtt:publish(["~site", "rsc", m_rsc:rid(RscId, Context), "identity"], {identity, Type}, Context)
+        _N ->
+            z_mqtt:publish(
+                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary>>,
+                #{
+                    id => RscId,
+                    type => Type
+                },
+                Context),
+            ok
     end.
 
 -spec delete_by_type_and_key(m_rsc:resource(), atom(), atom(), #context{}) -> ok.
@@ -880,8 +939,15 @@ delete_by_type_and_key(RscId, Type, Key, Context) ->
     case z_db:q("delete from identity where rsc_id = $1 and type = $2 and key = $3",
         [m_rsc:rid(RscId, Context), Type, Key], Context) of
         0 -> ok;
-        _N -> ok
-            % z_mqtt:publish(["~site", "rsc", RscId, "identity"], {identity, Type}, Context)
+        _N ->
+            z_mqtt:publish(
+                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary>>,
+                #{
+                    id => RscId,
+                    type => Type
+                },
+                Context),
+            ok
     end.
 
 lookup_by_username(Key, Context) ->
