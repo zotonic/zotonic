@@ -98,7 +98,7 @@ do_clam(Command, DataFun) ->
             _ = gen_tcp:close(Socket),
             Result;
         {error, _} = Error ->
-            lager:info("ClamAV: could not connect on ~p ~p", [ ClamIP, ClamPort, Error ]),
+            lager:info("ClamAV: could not connect on ~p:~p ~p", [ ClamIP, ClamPort, Error ]),
             Error
     end.
 
