@@ -39,7 +39,7 @@ allowed_methods(Context) ->
     {[<<"POST">>, <<"GET">>, <<"HEAD">>], Context}.
 
 content_types_provided(Context) ->
-    {[ <<"text/html">> ], Context}.
+    {[ {<<"text">>, <<"html">>, []} ], Context}.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Cookies = z_session:get_cookies(Context),

@@ -80,16 +80,23 @@ get_content_types(Context) ->
     case z_context:get(content_types_dispatch, Context) of
         undefined ->
             {Id, Context1} = get_id(Context),
-            CT = get_rsc_content_types(Id, Context),
-            CT1 = case proplists:get_value(<<"text/html">>, CT) of
-                    undefined -> [{<<"text/html">>, page_url}|CT];
-                    Prov -> [Prov|CT]
+            CTs = get_rsc_content_types(Id, Context),
+            CTs1 = case find_html(CTs) of
+                    undefined -> [ {{<<"text">>, <<"html">>, []}, page_url} | CTs ];
+                    Prov -> [ Prov | CTs ]
                   end,
-            Context2 = z_context:set(content_types_dispatch, CT1, Context1),
-            {CT1, Context2};
-        CT ->
-            {CT, Context}
+            Context2 = z_context:set(content_types_dispatch, CTs1, Context1),
+            {CTs1, Context2};
+        CTs ->
+            {CTs, Context}
     end.
+
+find_html([]) ->
+    undefined;
+find_html([ {{<<"text">>, <<"html">>, _}, _} = Prov | _CTs ]) ->
+    Prov;
+find_html([ _ | CTs ]) ->
+    find_html(CTs).
 
 get_id(Context) ->
     case z_context:get(id, Context) of

@@ -81,13 +81,13 @@ parse_multipart_request(Context) ->
     {Next, Chunk, Context1} = cowmachine_req:stream_req_body(?CHUNKSIZE, Context),
     case Chunk of
         <<"--", Boundary:BS/binary, "\r\n", Rest/binary>> ->
-            feed_mp(headers, #mp{boundary=Prefix,
-                                 length=size(Chunk),
-                                 content_length=Length,
-                                 buffer=Rest,
-                                 form=#multipart_form{},
-                                 next_chunk=Next,
-                                 context=Context1});
+            feed_mp(headers, #mp{boundary = Prefix,
+                                 length = size(Chunk),
+                                 content_length = Length,
+                                 buffer = Rest,
+                                 form = #multipart_form{},
+                                 next_chunk = Next,
+                                 context = Context1});
         _ ->
             lager:info(z_context:lager_md(Context), "Could not decode multipart (~p) chunk: ~p", [Boundary, Chunk]),
             throw({stop_request, 400})
@@ -172,21 +172,23 @@ feed_maybe_eof(#mp{} = State) ->
 
 
 %% @doc Report progress back to the page.
-progress(0, _ContentLength, _Context) ->
+progress(0, _ContentLength, _Form, _Context) ->
     ok;
-% progress(Percentage, ContentLength, Context)
-%     when ContentLength > ?CHUNKSIZE*5, TriggerId =/= undefined, TriggerId =/= "", TriggerId =/= <<>> ->
-%     case is_push_attached(Context) of
-%         true ->
-%             JS = iolist_to_binary([
-%                         "z_progress('", z_utils:js_escape(TriggerId),
-%                             "',", integer_to_list(Percentage),");"
-%                     ]),
-%             z_transport:page(javascript, JS, Context);
-%         false ->
-%             ok
-%     end;
-progress(_Percentage, _ContentLength, _Context) ->
+progress(Percentage, ContentLength, Form, Context) when ContentLength > ?CHUNKSIZE*5 ->
+    case proplists:get_value(<<"zotonic_topic_progress">>, Form#multipart_form.args) of
+        undefined ->
+            ok;
+        Topic ->
+            z_mqtt:publish(
+                Topic,
+                #{
+                    form_id => proplists:get_value(<<"z_trigger_id">>, Form#multipart_form.args),
+                    percentage => Percentage,
+                    content_length => ContentLength
+                },
+                Context)
+    end;
+progress(_Percentage, _ContentLength, _Form, _Context) ->
     ok.
 
 % is_push_attached(Context) ->
@@ -217,11 +219,13 @@ handle_data({headers, Headers}, Form) ->
                                         undefined -> undefined;
                                         {MimeA, MimeB, _Opts} -> <<MimeA/binary, $/, MimeB/binary>>
                                   end,
-                    Form#multipart_form{name=Name,
-                                        filename=Filename,
-                                        content_length=ContentLength,
-                                        content_type=ContentType,
-                                        tmpfile=z_tempfile:new()}
+                    {ok, {TmpPid, TmpFile}} = z_tempfile:monitored_new(),
+                    Form#multipart_form{name = Name,
+                                        filename = Filename,
+                                        content_length = ContentLength,
+                                        content_type = ContentType,
+                                        tmpfile = TmpFile,
+                                        tmpmonitor = TmpPid}
             end;
         _ ->
             Form
@@ -242,14 +246,14 @@ handle_data({body, Data}, #multipart_form{file=File} = Form) when File =/= undef
     Form;
 handle_data(body_end, #multipart_form{name=undefined} = Form) ->
     Form#multipart_form{
-        name=undefined,
-        data=undefined
+        name = undefined,
+        data = undefined
     };
 handle_data(body_end, #multipart_form{file=undefined, name=Name} = Form) when Name =/= undefined ->
     Form#multipart_form{
-        name=undefined,
-        data=undefined,
-        args=[
+        name = undefined,
+        data = undefined,
+        args = [
             {Name, Form#multipart_form.data}
             | Form#multipart_form.args
         ]
@@ -257,16 +261,16 @@ handle_data(body_end, #multipart_form{file=undefined, name=Name} = Form) when Na
 handle_data(body_end, #multipart_form{file=File, name=Name} = Form) when Name =/= undefined ->
     file:close(File),
     Form#multipart_form{
-        name=undefined,
-        data=undefined,
-        file=undefined,
-        tmpfile=undefined,
-        filename=undefined,
-        content_type=undefined,
-        content_length=undefined,
-        files=[
-            {Name, Form#multipart_form.filename, Form#multipart_form.tmpfile}
-            |Form#multipart_form.files
+        name = undefined,
+        data = undefined,
+        file = undefined,
+        tmpfile = undefined,
+        filename = undefined,
+        content_type = undefined,
+        content_length = undefined,
+        files = [
+            {Name, Form#multipart_form.filename, Form#multipart_form.tmpfile, Form#multipart_form.tmpmonitor}
+            | Form#multipart_form.files
         ]
     };
 handle_data(eof, Form) ->
@@ -292,7 +296,7 @@ read_more(State=#mp{length=Length, content_length=ContentLength,
                         _ -> (Length1 * 100) div ContentLength
                     end,
     case NewPercentage > Percentage of
-        true -> progress(NewPercentage, ContentLength, Context1);
+        true -> progress(NewPercentage, ContentLength, State#mp.form, Context1);
         _ -> nop
     end,
     State#mp{length=Length1, buffer=Buffer1, next_chunk=Next1, percentage=NewPercentage, context=Context1}.

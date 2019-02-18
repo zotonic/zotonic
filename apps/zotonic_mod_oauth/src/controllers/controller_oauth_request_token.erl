@@ -33,7 +33,7 @@ allowed_methods(Context) ->
     {[<<"POST">>, <<"GET">>, <<"HEAD">>], Context}.
 
 content_types_provided(Context) ->
-    {[ <<"text/html">> ], Context}.
+    {[ {<<"text">>, <<"html">>, []} ], Context}.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     case mod_oauth:request_is_signed(Context) of

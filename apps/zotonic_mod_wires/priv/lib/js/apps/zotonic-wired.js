@@ -5,7 +5,7 @@
 @Author:    Tim Benniks <tim@timbenniks.nl>
 @Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2018 Tim Benniks, Marc Worrell
+Copyright 2009-2019 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 // Client state
 var z_language              = "en";
-var z_userid;
+// var z_userid;
 var z_editor;
 var z_default_form_postback;
 var z_init_postback_forms_timeout = false;
@@ -66,6 +66,10 @@ $(function() {
             console.log("Error on eval", e, msg.payload);
         }
     }, { wid: 'zotonicjs'});
+
+    cotonic.broker.subscribe("zotonic-transport/progress", function(msg) {
+        z_progress(msg.payload.form_id, msg.payload.percentage);
+    }, { wid: 'zotonicprogress'});
 
     // Start the client-server bridge
     cotonic.mqtt_bridge.newBridge('origin');
@@ -254,10 +258,23 @@ function z_notify(message, extraParams)
 // Queue any data to be transported to the server
 function z_transport(delegate, content_type, data, options)
 {
-    cotonic.broker.publish(
-        "bridge/origin/zotonic-transport/" + delegate,
-        data,
-        { qos: 1 });
+    options = options || {};
+    if (options.transport == 'form') {
+        let prefix = window.sessionStorage.getItem("remoteRoutingPrefix");
+        prefix = JSON.parse(prefix);
+        z_transport_form({
+            url: "/mqtt-transport/zotonic-transport/" + delegate,
+            postback: data,
+            options: options,
+            progress_topic: prefix + "zotonic-transport/progress",
+            reply_topic: prefix + "zotonic-transport/eval"
+        });
+    } else {
+        cotonic.broker.publish(
+            "bridge/origin/zotonic-transport/" + delegate,
+            data,
+            { qos: 1 });
+    }
 }
 
 // TODO: Use WebWorker for uploading files.
@@ -798,7 +815,7 @@ function z_init_postback_forms()
                 if ($(theForm).hasClass("z_cookie_form") ||
                     $(theForm).hasClass("z_logon_form") ||
                     (typeof(z_only_post_forms) != "undefined" && z_only_post_forms)) {
-                    transport = 'ajax';
+                    transport = 'form';
                 }
                 args = validations.concat($(theForm).formToArray());
             }
@@ -871,7 +888,7 @@ function z_form_submit_validated_do(event)
 function z_transport_form(qmsg)
 {
     var options = {
-        url:  '/postback',
+        url:  qmsg.url,
         type: 'POST',
         dataType: 'text'
     };
@@ -930,7 +947,7 @@ function z_transport_form(qmsg)
         if (xhr.aborted)
             return;
 
-        var cbInvoked = 0;
+        // var cbInvoked = 0;
         var timedOut = 0;
 
         // take a breath so that pending repaints get some cpu time before the upload starts
@@ -961,8 +978,26 @@ function z_transport_form(qmsg)
 
             zmsgInput = $('<input />')
                             .attr('type', 'hidden')
-                            .attr('name', 'z_msg')
-                            .attr('value', ubf.encode(qmsg.msg))
+                            .attr('name', 'z_postback')
+                            .attr('value', JSON.stringify(qmsg.postback))
+                         .prependTo(form)[0];
+
+            zmsgReplyTopic = $('<input />')
+                            .attr('type', 'hidden')
+                            .attr('name', 'zotonic_topic_reply')
+                            .attr('value', qmsg.reply_topic)
+                         .prependTo(form)[0];
+
+            zmsgProgressTopic = $('<input />')
+                            .attr('type', 'hidden')
+                            .attr('name', 'zotonic_topic_progress')
+                            .attr('value', qmsg.progress_topic)
+                         .prependTo(form)[0];
+
+            zmsgTriggerId = $('<input />')
+                            .attr('type', 'hidden')
+                            .attr('name', 'z_trigger_id')
+                            .attr('value', $form.attr('id') || "")
                          .prependTo(form)[0];
 
             try {
@@ -984,6 +1019,9 @@ function z_transport_form(qmsg)
                     $form.removeAttr('target');
                 }
                 $(zmsgInput).remove();
+                $(zmsgReplyTopic).remove();
+                $(zmsgProgressTopic).remove();
+                $(zmsgTriggerId).remove();
             }
         }, 10);
 

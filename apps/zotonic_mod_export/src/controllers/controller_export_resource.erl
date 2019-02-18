@@ -61,7 +61,7 @@ content_types_provided(Context) ->
     {Id, Context1} = get_id(z_context:ensure_qs(Context)),
     Dispatch = z_context:get(zotonic_dispatch, Context1),
     case get_content_type(Id, Dispatch, Context1) of
-        {ok, ContentType} ->
+        {ok, ContentType} when is_binary(ContentType); is_tuple(ContentType) ->
             {[ ContentType ], Context};
         {error, no_content_type} ->
             ContentTypes = export_encoder:content_types(Context),

@@ -40,7 +40,7 @@ allowed_methods(Context) ->
     {[<<"GET">>, <<"HEAD">>], Context}.
 
 content_types_provided(Context) ->
-    { [ <<"text/csv">> ], Context }.
+    { [ {<<"text">>, <<"csv">>, []} ], Context }.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),

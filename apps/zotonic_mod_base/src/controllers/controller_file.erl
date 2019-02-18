@@ -127,9 +127,11 @@ content_encodings_provided(Context) ->
 content_types_provided(Context) ->
     case z_context:get(?MODULE, Context) of
         {error, _} ->
-            {[ <<"text/plain">> ], Context};
+            {[ {<<"text">>, <<"plain">>, []} ], Context};
+        #z_file_info{ mime = Mime } when is_list(Mime) ->
+            {[ z_convert:to_binary(Mime) ], Context};
         #z_file_info{ mime = Mime } ->
-            {[ z_convert:to_binary(Mime) ], Context}
+            {[ Mime ], Context}
     end.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->

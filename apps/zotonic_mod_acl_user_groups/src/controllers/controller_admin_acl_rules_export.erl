@@ -13,7 +13,7 @@ is_authorized(Context) ->
     z_controller_helper:is_authorized([ {use, mod_acl_user_groups} ], Context).
 
 content_types_provided(Context) ->
-    {[ <<"application/octet-stream">> ], Context}.
+    {[ {<<"application">>, <<"octet-stream">>, []} ], Context}.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Data = acl_user_groups_export:export(Context),

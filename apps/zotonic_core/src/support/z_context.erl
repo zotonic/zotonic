@@ -70,6 +70,8 @@
     get_q_all_noz/1,
     get_q_validated/2,
 
+    q_upload_keepalive/2,
+
     is_zotonic_arg/1,
 
     % add_script_session/1,
@@ -480,10 +482,13 @@ ensure_qs(#context{ props = Props } = Context) ->
             PathInfo = cowmachine_req:path_info(Context),
             PathArgs = [ {z_convert:to_binary(T), V} || {T,V} <- PathInfo ],
             QPropsUrl = Props#{ q => PathArgs++Query },
-            {Body, ContextParsed} = parse_post_body(Context#context{ props = QPropsUrl }),
+            ContextQs = Context#context{ props = QPropsUrl },
+            % Auth user via cookie
+            ContextReq = z_notifier:foldl(#request_context{}, ContextQs, ContextQs),
+            % Parse the POST body (if any)
+            {Body, ContextParsed} = parse_post_body(ContextReq),
             QPropsAll = (ContextParsed#context.props)#{ q => PathArgs++Body++Query },
-            ContextQs = ContextParsed#context{ props = QPropsAll },
-            z_notifier:foldl(#request_context{}, ContextQs, ContextQs)
+            ContextParsed#context{ props = QPropsAll }
     end.
 
 
@@ -599,6 +604,7 @@ is_zotonic_arg(<<"zotonic_dispatch">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch_path">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch_path_rewrite">>) -> true;
 is_zotonic_arg(<<"zotonic_http_", _/binary>>) -> true;
+is_zotonic_arg(<<"zotonic_topic_", _/binary>>) -> true;
 is_zotonic_arg(<<"postback">>) -> true;
 is_zotonic_arg(<<"triggervalue">>) -> true;
 is_zotonic_arg(<<"z_trigger_id">>) -> true;
@@ -638,6 +644,32 @@ get_q_validated(Key, #context{ props = #{ q_validated := Qs } }) ->
     end;
 get_q_validated(Key, _Context) ->
     throw({not_validated, Key}).
+
+
+%% @doc Keep the tempfiles alive by attaching the current process to its monitors
+-spec q_upload_keepalive( boolean(), z:context() ) -> ok.
+q_upload_keepalive(true, Context) ->
+    Qs = get_q_all(Context),
+    lists:map(
+        fun
+            (#upload{ tmpmonitor = Pid }) when is_pid(Pid) ->
+                z_tempfile:monitored_attach(Pid);
+            (_) ->
+                ok
+        end,
+        Qs),
+    ok;
+q_upload_keepalive(false, Context) ->
+    Qs = get_q_all(Context),
+    lists:map(
+        fun
+            (#upload{ tmpmonitor = Pid }) when is_pid(Pid) ->
+                z_tempfile:monitored_detach(Pid);
+            (_) ->
+                ok
+        end,
+        Qs),
+    ok.
 
 
 %% ------------------------------------------------------------------------------------
@@ -999,7 +1031,10 @@ parse_post_body(Context) ->
             end;
         <<"multipart/form-data", _/binary>> ->
             {Form, ContextRcv} = z_parse_multipart:recv_parse(Context),
-            FileArgs = [ {Name, #upload{filename=Filename, tmpfile=TmpFile}} || {Name, Filename, TmpFile} <- Form#multipart_form.files ],
+            FileArgs = [
+                {Name, #upload{filename=Filename, tmpfile=TmpFile, tmpmonitor=TmpPid}}
+                || {Name, Filename, TmpFile, TmpPid} <- Form#multipart_form.files
+            ],
             {Form#multipart_form.args ++ FileArgs, ContextRcv};
         _Other ->
             {[], Context}

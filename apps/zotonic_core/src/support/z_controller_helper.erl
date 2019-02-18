@@ -112,26 +112,26 @@ get_id(Context) ->
 
 
 %% @doc Decode the request data
--spec decode_request( undefined | binary(), z:context() ) -> { map() | binary(), z:context() }.
+-spec decode_request( undefined | cow_http_hd:media_type(), z:context() ) -> { map() | binary(), z:context() }.
 decode_request(undefined, Context) ->
     from_qs(Context);
-decode_request(<<"application/json">>, Context) ->
+decode_request({<<"application">>, <<"json">>, _}, Context) ->
     from_json(Context);
-decode_request(<<"application/javascript">>, Context) ->
+decode_request({<<"application">>, <<"javascript">>, _}, Context) ->
     from_json(Context);
-decode_request(<<"text/javascript">>, Context) ->
+decode_request({<<"text">>, <<"javascript">>, _}, Context) ->
     from_json(Context);
-decode_request(<<"text/x-ubf">>, Context) ->
+decode_request({<<"text">>, <<"x-ubf">>, _}, Context) ->
     {Body, Context1} = req_body(Context),
     {Data, _Rest} = z_ubf:decode(Body),
     {Data, Context1};
-decode_request(<<"application/x-bert">>, Context) ->
+decode_request({<<"application">>, <<"x-bert">>, _}, Context) ->
     {Body, Context1} = req_body(Context),
     Data = erlang:binary_to_term(Body, [safe]),
     {Data, Context1};
-decode_request(<<"application/x-www-form-urlencoded">>, Context) ->
+decode_request({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
     from_qs(Context);
-decode_request(<<"multipart/form-data">>, Context) ->
+decode_request({<<"multipart">>, <<"form-data">>, _}, Context) ->
     from_qs(Context);
 decode_request(_CT, Context) ->
     req_body(Context).
@@ -153,19 +153,19 @@ req_body(Context) ->
     cowmachine_req:req_body(?MAX_BODY_LENGTH, Context).
 
 %% @doc Encode the response data
--spec encode_response( Mime :: binary(), term() ) -> binary().
-encode_response(<<"application/json">>, Data) ->
+-spec encode_response( Mime :: cow_http_hd:media_type(), term() ) -> binary().
+encode_response({<<"application">>, <<"json">>, _}, Data) ->
     jsxrecord:encode(Data);
-encode_response(<<"application/javascript">>, Data) ->
+encode_response({<<"application">>, <<"javascript">>, _}, Data) ->
     jsxrecord:encode(Data);
-encode_response(<<"text/javascript">>, Data) ->
+encode_response({<<"text">>, <<"javascript">>, _}, Data) ->
     jsxrecord:encode(Data);
-encode_response(<<"text/x-ubf">>, Data) ->
+encode_response({<<"text">>, <<"x-ubf">>, _}, Data) ->
     {ok, UBF} = z_ubf:encode(Data),
     UBF;
-encode_response(<<"application/x-bert">>, Data) ->
+encode_response({<<"application">>, <<"x-bert">>, _}, Data) ->
     erlang:term_to_binary(Data);
-encode_response(<<"application/x-www-form-urlencoded">>, Data) ->
+encode_response({<<"application">>, <<"x-www-form-urlencoded">>, _}, Data) ->
     cow_qs:encode( encode_prep_qs(Data) ).
 
 encode_prep_qs(Map) when is_map(Map) ->

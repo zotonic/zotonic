@@ -8,7 +8,7 @@
  {<<"cowlib">>,{pkg,<<"cowlib">>,<<"2.2.1">>},2},
  {<<"cowmachine">>,
   {git,"git@github.com:zotonic/cowmachine.git",
-       {ref,"5a99eff53f9b052e8f37a4ce27055c1f5ab38d62"}},
+       {ref,"81220e6792dbba1f21689b1689285e0618aafa28"}},
   0},
  {<<"depcache">>,{pkg,<<"depcache">>,<<"1.4.0">>},0},
  {<<"dh_date">>,{pkg,<<"dh_date">>,<<"1.0.0">>},0},
@@ -59,7 +59,7 @@
   0},
  {<<"mqtt_sessions">>,
   {git,"git@github.com:zotonic/mqtt_sessions.git",
-       {ref,"b336d3736851f5f81de3544c0c0c93e93682701f"}},
+       {ref,"0a77439b3a16106646cfec0b098621751abcebc4"}},
   0},
  {<<"oauth">>,
   {git,"https://github.com/tim/erlang-oauth.git",
@@ -97,7 +97,10 @@
        {ref,"396c73497c2cdaa5d5bebbe4a6f52dd042a5bf2c"}},
   0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.4.0">>},1},
- {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.0.0">>},0}]}.
+ {<<"zotonic_stdlib">>,
+  {git,"git@github.com:zotonic/z_stdlib.git",
+       {ref,"bc4c2ede2d5779a166452512abec08083d0102f7"}},
+  0}]}.
 [
 {pkg_hash,[
  {<<"bcrypt">>, <<"1C0F76981D8A7B32E4DAA813408BFCA5BA8B1286196EB771F026D02C710F71C5">>},
@@ -145,6 +148,5 @@
  {<<"shotgun">>, <<"54EA3C243B65A935A3491A079A573C9D119A5EAF28BC2673893F8EEF66FDC053">>},
  {<<"sidejob">>, <<"5D6A7C9C620778CB1908E46B552D767DF2ED4D77070BB7B5B8773D4FF18D1D37">>},
  {<<"template_compiler">>, <<"2F84A081707F80C642DD2504A90C5E7B033410C76CFF77C2A3F4E0F95F691952">>},
- {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>},
- {<<"zotonic_stdlib">>, <<"28253FCEF01F1EFF395F6EAC77D62BB9FF4F45FF37ADD7FDCB1BD4976FCD2126">>}]}
+ {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>}]}
 ].

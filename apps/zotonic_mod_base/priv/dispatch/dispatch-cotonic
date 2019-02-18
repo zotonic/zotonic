@@ -1,5 +1,6 @@
 [
     {mqtt_transport, [ "mqtt-transport" ], controller_mqtt_transport, [] },
+    {mqtt_transport, [ "mqtt-transport", '*' ], controller_mqtt_transport, []},
 
     {service_worker,
             [ "service-worker.js" ],

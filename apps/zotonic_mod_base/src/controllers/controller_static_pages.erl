@@ -96,6 +96,8 @@ content_types_provided(Context) ->
             CT = z_media_identify:guess_mime(filename:basename(FullPath, <<".tpl">>)),
             Context2 = z_context:set(mime, CT, Context1),
             {[ CT ], Context2};
+        Mime when is_list(Mime) ->
+            {[ z_convert:to_binary(Mime) ], Context1};
         Mime ->
             {[ Mime ], Context1}
     end.

@@ -46,7 +46,7 @@ forbidden(Context) ->
 content_types_provided(Context) ->
     Dispatch = z_context:get(zotonic_dispatch, Context),
     case controller_export_resource:get_content_type(undefined, Dispatch, Context) of
-        {ok, ContentType} ->
+        {ok, ContentType} when is_binary(ContentType); is_tuple(ContentType) ->
             {[ ContentType ], Context};
         {error, Reason} = Error ->
             lager:error("mod_export error when fetching content type for ~p ~p", [Dispatch, Reason]),

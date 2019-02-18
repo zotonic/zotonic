@@ -30,9 +30,11 @@
 content_types_provided(Context) ->
     case z_context:get(content_type, Context) of
         undefined ->
-            {[ <<"text/html">> ], Context};
+            {[ {<<"text">>, <<"html">>, []} ], Context};
+        Mime when is_list(Mime) ->
+            {[ z_convert:to_binary(Mime) ], Context};
         Mime ->
-            {[ z_convert:to_binary(Mime) ], Context}
+            {[ Mime ], Context}
     end.
 
 %% @doc Check if the current user is allowed to view the resource.

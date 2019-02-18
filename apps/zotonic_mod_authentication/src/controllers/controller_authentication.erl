@@ -44,7 +44,7 @@ content_types_accepted(Context) ->
 
 content_types_provided(Context) ->
     {[
-        {<<"application">>, <<"json">>},
+        {<<"application">>, <<"json">>, []},
         {<<"text">>, <<"x-ubf">>, []},
         {<<"application">>, <<"x-bert">>, []}
     ], Context}.

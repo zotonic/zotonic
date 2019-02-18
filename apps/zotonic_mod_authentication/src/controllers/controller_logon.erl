@@ -75,7 +75,7 @@ moved_temporarily(Context) ->
     {{true, Location}, Context}.
 
 
-process(<<"GET">>, _, <<"text/html">>, Context) ->
+process(<<"GET">>, _, {<<"text">>, <<"html">>, _}, Context) ->
     Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Secret = z_context:get_q(<<"secret">>, Context2),
     Vars = [

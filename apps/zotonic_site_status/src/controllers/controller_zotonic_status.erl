@@ -32,9 +32,11 @@
 content_types_provided(Context) ->
     case z_context:get(content_type, Context) of
         undefined ->
-            {[ <<"text/html">> ], Context};
+            {[ {<<"text">>, <<"html">>, []} ], Context};
+        Mime when is_list(Mime) ->
+            {[ z_convert:to_binary(Mime) ], Context};
         Mime ->
-            {[ z_convert:to_binary(Mime) ], Context}
+            {[ Mime ], Context}
     end.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->

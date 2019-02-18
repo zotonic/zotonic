@@ -32,7 +32,7 @@ allowed_methods(Context) ->
     {[<<"POST">>, <<"GET">>], Context}.
 
 content_types_provided(Context) ->
-    {[ <<"text/plain">> ], Context}.
+    {[ {<<"text">>, <<"plain">>, []} ], Context}.
 
 process(<<"POST">>, _AcceptedCT, _ProvidedCT, Context0) ->
     {Body, Context} = cowmachine_req:req_body(Context0),

@@ -3,7 +3,7 @@
 
 {% lib
     "cotonic/zotonic-wired-bundle.js"
-	"js/apps/zotonic.js"
+	"js/apps/zotonic-wired.js"
 	"js/apps/z.widgetmanager.js"
 	"js/modules/z.notice.js"
 	"js/modules/z.imageviewer.js"

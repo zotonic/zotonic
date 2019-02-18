@@ -33,7 +33,14 @@
 -spec reply(binary(), z:context()) -> ok | {error, term()}.
 reply(JavaScript, #context{ client_id = ClientId } = Context) when is_binary(ClientId), is_binary(JavaScript) ->
     Topic = [ <<"bridge">>, ClientId, <<"zotonic-transport">>, <<"eval">> ],
-    z_mqtt:publish(Topic, JavaScript, #{ qos => 1 }, Context).
+    z_mqtt:publish(Topic, JavaScript, #{ qos => 1 }, Context);
+reply(JavaScript, Context) when is_binary(JavaScript) ->
+    case z_context:get_q(<<"zotonic_topic_reply">>, Context) of
+        undefined ->
+            {error, no_route};
+        Topic ->
+            z_mqtt:publish(Topic, JavaScript, #{ qos => 1 }, Context)
+    end.
 
 %% @doc Handle incoming transport messages, call event handlers of delegates.
 -spec transport( binary() | undefined, payload(), z:context()) -> ok | {error, term()}.
@@ -79,6 +86,12 @@ transport(Delegate, #postback_notify{ data = Data } = Notify, Context) ->
         {error, ContextValidation} ->
             incoming_context_result(ContextValidation)
     end;
+transport(<<"postback">>, Map, Context) when is_map(Map) ->
+    Postback = jsxrecord:decode( maps:get(<<"z_postback">>, Map) ),
+    transport(<<"postback">>, Postback, Context);
+transport(<<"notify">>, Map, Context) when is_map(Map) ->
+    Postback = jsxrecord:decode( maps:get(<<"z_postback">>, Map) ),
+    transport(<<"postback">>, Postback, Context);
 transport(Delegate, Payload, Context) ->
     % Event
     {ok, Module} = z_utils:ensure_existing_module(Delegate),

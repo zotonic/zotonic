@@ -20,6 +20,8 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    allowed_methods/1,
+    content_types_accepted/1,
     upgrades_provided/1,
     process/4,
     websocket_start/1,
@@ -44,8 +46,26 @@
 upgrades_provided(Context) ->
     {[{<<"WebSocket">>, websocket_start}], Context}.
 
-% TODO: handle SSE
-process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+content_types_accepted(Context) ->
+    {[
+        {<<"application">>, <<"json">>, []},
+        {<<"application">>, <<"javascript">>, []},
+        {<<"text">>, <<"javascript">>, []},
+        {<<"text">>, <<"x-ubf">>, []},
+        {<<"application">>, <<"x-bert">>, []},
+        {<<"application">>, <<"x-www-form-urlencoded">>, []},
+        {<<"multipart">>, <<"form-data">>, []}
+    ], Context}.
+
+allowed_methods(Context) ->
+    {[<<"GET">>, <<"POST">>], Context}.
+
+process(<<"POST">>, AcceptedCT, _ProvidedCT, Context) ->
+    Topic = z_context:get_q(<<"*">>, Context),
+    {Qs, Context1} = z_controller_helper:decode_request(AcceptedCT, Context),
+    z_mqtt:publish(Topic, Qs, Context1),
+    {true, Context1};
+process(<<"GET">>, _AcceptedCT, _ProvidedCT, Context) ->
     Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Rendered = z_template:render("error_websocket.tpl", z_context:get_all(Context2), Context2),
     z_context:output(Rendered, Context2).

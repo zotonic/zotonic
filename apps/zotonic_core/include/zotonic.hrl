@@ -85,6 +85,7 @@
     data,
     filename,
     tmpfile,
+    tmpmonitor,
     content_type,
     content_length,
     file,
@@ -96,6 +97,7 @@
 -record(upload, {
     filename :: binary(),
     tmpfile :: undefined | filename:filename_all(),
+    tmpmonitor :: pid(),
     data = undefined :: undefined | binary(),
     mime = undefined :: undefined | binary()
 }).

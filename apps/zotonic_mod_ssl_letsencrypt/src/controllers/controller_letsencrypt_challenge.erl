@@ -29,7 +29,7 @@ allowed_methods(Context) ->
     {[ <<"GET">> ], Context}.
 
 content_types_provided(Context) ->
-    {[ <<"text/plain">> ], Context}.
+    {[ {<<"text">>, <<"plain">>, []} ], Context}.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context0) ->
     Context = z_context:set_noindex_header(z_context:set_nocache_headers(Context0)),

@@ -27,7 +27,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 content_types_provided(Context) ->
-    {[ <<"application/javascript">> ], Context}.
+    {[ {<<"application">>, <<"javascript">>, []} ], Context}.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context1 = z_context:set_noindex_header(Context),

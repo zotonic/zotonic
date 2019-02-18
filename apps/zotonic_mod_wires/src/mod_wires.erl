@@ -57,4 +57,5 @@ observe_output_html(#output_html{}, {MixedHtml, Context}, _Context) ->
         topic := [ _, Delegate ]
     },
     Context) ->
+    z_context:q_upload_keepalive(true, Context),
     z_transport:transport(Delegate, Payload, Context).

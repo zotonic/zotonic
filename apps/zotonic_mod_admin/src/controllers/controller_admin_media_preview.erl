@@ -46,7 +46,7 @@ resource_exists(Context) ->
     end.
 
 content_types_provided(Context) ->
-    {[ <<"image/jpeg">> ], Context}.
+    {[ {<<"image">>, <<"jpeg">>, []} ], Context}.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Opts = [{mediaclass, <<"admin-editor">>}],

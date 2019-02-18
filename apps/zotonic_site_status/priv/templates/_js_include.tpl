@@ -2,7 +2,7 @@
 {% lib
     "cotonic/zotonic-wired-bundle.js"
 	"bootstrap/js/bootstrap.min.js"
-	"js/apps/zotonic.js"
+	"js/apps/zotonic-wired.js"
 	"js/apps/z.widgetmanager.js"
 
     "js/modules/z.live.js"

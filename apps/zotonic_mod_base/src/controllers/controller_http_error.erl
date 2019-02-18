@@ -56,9 +56,9 @@ content_types_provided(Context) ->
                 provide_any();
             controller_api ->
                 [
-                    <<"application/json">>,
-                    <<"application/x-json">>,
-                    <<"text/plain">>
+                    {<<"application">>, <<"json">>, []},
+                    {<<"application">>, <<"x-json">>, []},
+                    {<<"text">>, <<"plain">>, []}
                 ];
             % mod_authentication
             controller_logon ->
@@ -82,43 +82,43 @@ content_types_provided(Context) ->
 
 provide_any() ->
     [
-        <<"text/html">>,
-        <<"application/json">>,
-        <<"application/x-json">>,
-        <<"application/javascript">>,
-        <<"application/x-javascript">>,
-        <<"text/css">>,
-        <<"text/plain">>,
-        <<"application/atom+xml">>
+        {<<"text">>, <<"html">>, []},
+        {<<"application">>, <<"json">>, []},
+        {<<"application">>, <<"x-json">>, []},
+        {<<"application">>, <<"javascript">>, []},
+        {<<"application">>, <<"x-javascript">>, []},
+        {<<"text">>, <<"css">>, []},
+        {<<"text">>, <<"plain">>, []},
+        {<<"application">>, <<"atom+xml">>, []}
     ].
 
 provide_extension(Context, Default) ->
     case map_extension(Context) of
         html ->
             [
-                <<"text/html">>,
-                <<"text/plain">>
+                {<<"text">>, <<"html">>, []},
+                {<<"text">>, <<"plain">>, []}
             ];
         json ->
             [
-                <<"application/json">>,
-                <<"application/x-json">>,
-                <<"text/plain">>
+                {<<"application">>, <<"json">>, []},
+                {<<"application">>, <<"x-json">>, []},
+                {<<"text">>, <<"plain">>, []}
             ];
         css ->
             [
-                <<"text/css">>,
-                <<"text/plain">>
+                {<<"text">>, <<"css">>, []},
+                {<<"text">>, <<"plain">>, []}
             ];
         javascript ->
             [
-                <<"application/javascript">>,
-                <<"application/x-javascript">>,
-                <<"text/plain">>
+                {<<"application">>, <<"javascript">>, []},
+                {<<"application">>, <<"x-javascript">>, []},
+                {<<"text">>, <<"plain">>, []}
             ];
         text ->
             [
-                <<"text/plain">>
+                {<<"text">>, <<"plain">>, []}
             ];
         image ->
             provide_image();
@@ -128,18 +128,18 @@ provide_extension(Context, Default) ->
 
 provide_image() ->
     [
-        <<"image/gif">>
+        {<<"image">>, <<"gif">>, []}
     ].
 
 provide_html() ->
     [
-        <<"text/html">>,
-        <<"text/plain">>
+        {<<"text">>, <<"html">>, []},
+        {<<"text">>, <<"plain">>, []}
     ].
 
 provide_text() ->
     [
-        <<"text/plain">>
+        {<<"text">>, <<"plain">>, []}
     ].
 
 map_extension(Context) ->
@@ -157,15 +157,15 @@ map_extension(Context) ->
         _ -> other
     end.
 
-process(_Method, _AcceptedCT, <<"text/html">>, Context) -> do_html(Context);
-process(_Method, _AcceptedCT, <<"application/json">>, Context) -> do_json(Context);
-process(_Method, _AcceptedCT, <<"application/x-json">>, Context) -> do_json(Context);
-process(_Method, _AcceptedCT, <<"application/javascript">>, Context) -> do_c_comment(Context);
-process(_Method, _AcceptedCT, <<"application/x-javascript">>, Context) -> do_c_comment(Context);
-process(_Method, _AcceptedCT, <<"text/css">>, Context) -> do_c_comment(Context);
-process(_Method, _AcceptedCT, <<"application/atom+xml">>, Context) -> do_c_comment(Context);
-process(_Method, _AcceptedCT, <<"image/", _/binary>>, Context) -> do_image(Context);
-process(_Method, _AcceptedCT, <<"text/", _/binary>>, Context) -> do_text(Context);
+process(_Method, _AcceptedCT, {<<"text">>, <<"html">>, _}, Context) -> do_html(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"json">>, _}, Context) -> do_json(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"x-json">>, _}, Context) -> do_json(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"javascript">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"x-javascript">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"text">>, <<"css">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"atom+xml">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"image">>, _, _}, Context) -> do_image(Context);
+process(_Method, _AcceptedCT, {<<"text">>, _, _}, Context) -> do_text(Context);
 process(_Method, _AcceptedCT, _CT, Context) -> do_empty(Context).
 
 do_html(Context0) ->
