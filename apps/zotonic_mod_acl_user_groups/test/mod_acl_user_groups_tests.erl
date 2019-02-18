@@ -112,7 +112,7 @@ is_allowed_always_true(#acl_is_allowed{}, _Context) ->
     true.
 
 replace_managed(Rules, Context) ->
-    z_mqtt:subscribe(<<"acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
+    z_mqtt:subscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
 
     m_acl_rule:replace_managed(
         Rules,
@@ -124,4 +124,4 @@ replace_managed(Rules, Context) ->
         {mqtt_msg, _Msg} -> ok
     end,
 
-    z_mqtt:unsubscribe(<<"acl-rules/publish-rebuild">>, z_acl:sudo(Context)).
+    z_mqtt:unsubscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)).
