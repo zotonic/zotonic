@@ -189,7 +189,7 @@ delete_username(RscId, Context) when is_integer(RscId) ->
                 Context
             ),
             z_mqtt:publish(
-                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary>>,
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId ],
                 #{
                     id => RscId,
                     type => <<"username_pw">>
@@ -264,7 +264,7 @@ set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
             reset_rememberme_token(Id, Context),
             z_depcache:flush(Id, Context),
             z_mqtt:publish(
-                <<"model/identity/event/", (z_convert:to_binary(Id))/binary>>,
+                [ <<"model">>, <<"identity">>, <<"event">>, Id ],
                 #{
                     id => Id,
                     type => <<"username_pw">>
@@ -658,7 +658,7 @@ insert_1(Rsc, Type, Key, Props, Context) ->
             Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
             Result = z_db:insert(identity, validate_is_unique(Props1), Context),
             z_mqtt:publish(
-                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                 #{
                     id => RscId,
                     type => Type
@@ -670,7 +670,7 @@ insert_1(Rsc, Type, Key, Props, Context) ->
                 true ->
                     set_verified_trans(RscId, Type, Key, Context),
                     z_mqtt:publish(
-                        <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+                        [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                         #{
                             id => RscId,
                             type => Type
@@ -737,7 +737,7 @@ set_verified(Id, Context) ->
             of
                 1 ->
                     z_mqtt:publish(
-                        <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+                        [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                         #{
                             id => RscId,
                             type => Type
@@ -760,7 +760,7 @@ set_verified(RscId, Type, Key, Context)
          Key =/= undefined, Key =/= <<>>, Key =/= [] ->
     Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context),
     z_mqtt:publish(
-        <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+        [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
         #{
             id => RscId,
             type => Type
@@ -820,7 +820,7 @@ delete(IdnId, Context) ->
                     case z_db:delete(identity, IdnId, Context) of
                         {ok, 1} ->
                             z_mqtt:publish(
-                                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary, "/", (z_convert:to_binary(Type))/binary>>,
+                                [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                                 #{
                                     id => RscId,
                                     type => Type
@@ -874,14 +874,14 @@ merge(WinnerId, LoserId, Context) ->
             end,
             z_db:transaction(F, Context),
             z_mqtt:publish(
-                <<"model/identity/event/", (z_convert:to_binary(LoserId))/binary>>,
+                [ <<"model">>, <<"identity">>, <<"event">>, LoserId ],
                 #{
                     id => LoserId,
                     type => all
                 },
                 Context),
             z_mqtt:publish(
-                <<"model/identity/event/", (z_convert:to_binary(WinnerId))/binary>>,
+                [ <<"model">>, <<"identity">>, <<"event">>, WinnerId ],
                 #{
                     id => WinnerId,
                     type => all
@@ -925,7 +925,7 @@ delete_by_type(RscId, Type, Context) ->
         0 -> ok;
         _N ->
             z_mqtt:publish(
-                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary>>,
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId ],
                 #{
                     id => RscId,
                     type => Type
@@ -941,7 +941,7 @@ delete_by_type_and_key(RscId, Type, Key, Context) ->
         0 -> ok;
         _N ->
             z_mqtt:publish(
-                <<"model/identity/event/", (z_convert:to_binary(RscId))/binary>>,
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId ],
                 #{
                     id => RscId,
                     type => Type

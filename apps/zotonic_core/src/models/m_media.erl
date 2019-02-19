@@ -228,7 +228,7 @@ delete(Id, Context) ->
             z_depcache:flush(Id, Context),
             z_notifier:notify(#media_replace_file{id = Id, medium = []}, Context),
             z_mqtt:publish(
-                <<"model/media/event/",(z_convert:to_binary(Id))/binary, "/delete">>,
+                [ <<"model">>, <<"media">>, <<"event">>, Id, <<"delete">> ],
                 #{ id => Id },
                 Context),
             ok;
@@ -259,7 +259,7 @@ replace(Id, Props, Context) ->
                     Medium = get(Id, Context),
                     z_notifier:notify(#media_replace_file{id = Id, medium = Medium}, Context),
                     z_mqtt:publish(
-                        <<"model/media/event/",(z_convert:to_binary(Id))/binary, "/update">>,
+                        [ <<"model">>, <<"media">>, <<"event">>, Id, <<"update">> ],
                         mqtt_event_info(Medium),
                         Context),
                     ok;
@@ -655,7 +655,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
             NewMedium = get(Id, Context),
             z_notifier:notify(#media_replace_file{id = Id, medium = NewMedium}, Context),
             z_mqtt:publish(
-                <<"model/media/event/",(z_convert:to_binary(Id))/binary, "/update">>,
+                [ <<"model">>, <<"media">>, <<"event">>, Id, <<"update">> ],
                 mqtt_event_info(NewMedium),
                 Context),
             {ok, Id};

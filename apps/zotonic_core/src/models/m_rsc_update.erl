@@ -444,12 +444,14 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
         post_props = NewProps
     },
     z_notifier:notify_sync(Note, Context),
-    Topic = case Id of
-        insert_rsc -> <<"model/rsc/event/",(z_convert:to_binary(Id))/binary, "/insert">>;
-        _ -> <<"model/rsc/event/",(z_convert:to_binary(Id))/binary, "/update">>
-    end,
     z_mqtt:publish(
-        Topic,
+        [
+            <<"model">>, <<"rsc">>, <<"event">>, Id,
+            case Id of
+                insert_rsc -> <<"insert">>;
+                _ -> <<"update">>
+            end
+        ],
          #{
             id => Id,
             pre_is_a => OldCatList,
