@@ -151,12 +151,6 @@ maybe_set_q(_Type, _Data, Context) ->
     {ok, Context}.
 
 set_q(Qs, Context) ->
-    Qs0 = case z_context:get('q', Context) of
-             L when is_list(L) -> L;
-             _ -> []
-          end,
-    Qs1 = Qs ++ Qs0,
-    z_validation:validate_query_args(
-        z_context:set('q', Qs1, Context)).
-
+    Context1 = z_context:add_q(Qs, Context),
+    z_validation:validate_query_args(Context1).
 

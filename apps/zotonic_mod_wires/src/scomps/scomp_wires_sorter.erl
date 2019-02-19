@@ -104,13 +104,12 @@ render(Params, _Vars, Context) ->
 %% @doc Handle the drop of a sortable in a sorter
 event(#postback{message={SortTag,SortDelegate}, trigger=TriggerId}, Context) ->
 	SortItems = z_context:get_q(<<"sort_items">>, Context),
-
     UnpickleF = fun(X) ->
                     {DragTag,DragDelegate,DragId} = z_utils:depickle(X, Context),
                     #dragdrop{tag=DragTag, delegate=DragDelegate, id=DragId}
                 end,
 
-    Sorted = lists:map(UnpickleF, binary:split(SortItems, <<",">>, [global])),
+    Sorted = lists:map(UnpickleF, binary:split(SortItems, <<",">>, [global, trim_all])),
     Drop   = #dragdrop{tag=SortTag, delegate=SortDelegate, id=TriggerId},
 
 	try

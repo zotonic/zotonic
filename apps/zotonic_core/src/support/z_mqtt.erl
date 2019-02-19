@@ -37,7 +37,10 @@
     await_response/2,
 
     map_topic/2,
-    map_topic_filter/2
+    map_topic_filter/2,
+
+    origin_topic/1,
+    flatten_topic/1
 ]).
 
 -type topic() :: mqtt_session:topic().
@@ -174,3 +177,18 @@ to_predicate_name(Id, Context) when is_integer(Id) ->
 to_predicate_name(Pred, _Context) ->
     z_convert:to_binary(Pred).
 
+
+origin_topic(<<"bridge/origin/", _/binary>> = Topic) ->
+    Topic;
+origin_topic(Topic) when is_binary(Topic) ->
+    <<"bridge/origin/", Topic/binary>>;
+origin_topic([ <<"bridge">>, <<"origin">> | _ ] = Topic) ->
+    Topic;
+origin_topic(Topic) when is_list(Topic) ->
+    flatten_topic([ <<"bridge">>, <<"origin">> | Topic ]).
+
+flatten_topic(T) when is_binary(T) ->
+    T;
+flatten_topic(T) when is_list(T) ->
+    T1 = lists:map(fun z_convert:to_binary/1, T),
+    iolist_to_binary( z_utils:combine_defined($/, T1) ).

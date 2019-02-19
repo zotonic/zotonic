@@ -110,7 +110,7 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
             post_props = []
         }, Context),
      z_mqtt:publish(
-         <<"model/rsc/event/",(z_convert:to_binary(Id))/binary, "/delete">>,
+         [ <<"model">>, <<"rsc">>, <<"event">>, Id, <<"delete">> ],
          #{
             id => Id,
             pre_is_a => CatList

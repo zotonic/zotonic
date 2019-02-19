@@ -35,7 +35,7 @@
 
 %% @doc Special rendering for the {mqtt} wire event type
 event_type_mqtt(#action_event_type{event={mqtt, Args}, postback_js = PostbackJS, action_js = ActionJS}, Context) ->
-    Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, Args) ],
+    Topics = map_topics( proplists:get_all_values(topic, Args), Context ),
     Script = iolist_to_binary([
         <<"cotonic.broker.subscribe(">>,
             z_utils:js_array(Topics),
@@ -143,7 +143,7 @@ opt_wrap_element(Element, Id, Html) ->
 script(Target, Where, LiveVars, TplVars, Context) ->
     Tag = {live, Where, proplists:get_value(template,LiveVars), TplVars},
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, ?MODULE, Context),
-    Topics = map_topics(  proplists:get_all_values(topic, LiveVars), Context ),
+    Topics = map_topics( proplists:get_all_values(topic, LiveVars), Context ),
     iolist_to_binary([
         <<"z_live.subscribe(">>,
             z_utils:js_array(Topics),$,,
@@ -152,20 +152,17 @@ script(Target, Where, LiveVars, TplVars, Context) ->
         $), $;
     ]).
 
-map_topics(Ts, Context) ->
-    Topics = [ z_mqtt:map_topic(T, Context) || T <- Ts ],
-    [ to_binary(bridge(T)) || {ok, T} <- Topics ].
-
-bridge([ <<"bridge">>, <<"origin">> | _ ] = T) -> T;
-bridge(<<"bridge/origin/", _/binary>> = T) -> T;
-bridge(L) when is_list(L) -> [ <<"bridge">>, <<"origin">> | L ];
-bridge(T) when is_binary(T) -> <<"bridge/origin/", T/binary>>.
-
-to_binary(B) when is_binary(B) -> B;
-to_binary(L) when is_list(L) ->
-    L1 = [ z_convert:to_binary(B) || B <- L ],
-    iolist_to_binary(z_utils:combine($/, L1)).
-
+map_topics(Topics, Context) ->
+    lists:filtermap(
+        fun(T) ->
+            case z_mqtt:map_topic(T, Context) of
+                {ok, T1} ->
+                    {true, z_mqtt:origin_topic( z_mqtt:flatten_topic(T1) )};
+                {error, _} ->
+                    false
+            end
+        end,
+        Topics).
 
 render(<<"top">>, Target, Render, Context) ->
     z_render:insert_top(Target, Render, Context);
@@ -177,5 +174,3 @@ render(<<"before">>, Target, Render, Context) ->
     z_render:insert_before(Target, Render, Context);
 render(_Update, Target, Render, Context) ->
     z_render:update(Target, Render, Context).
-
-

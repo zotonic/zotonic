@@ -63,6 +63,9 @@
     ensure_qs/1,
 
     set_q/3,
+    set_q/2,
+    add_q/3,
+    add_q/2,
     get_q/2,
     get_q/3,
     get_q_all/1,
@@ -522,12 +525,47 @@ set_render_state(RS, Context) ->
 
 
 %% @doc Set the value of a request parameter argument
--spec set_q(string(), any(), z:context()) -> z:context().
-set_q(Key, Value, Context) ->
+%%      Always filter the #upload{} arguments to prevent upload of non-temp files.
+-spec set_q(binary() | string(), any(), z:context()) -> z:context().
+set_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
+    set_q(Key, Upload#upload{ tmpfile = undefined }, Context);
+set_q(Key, Value, Context) when is_binary(Key) ->
     Qs = get_q_all(Context),
-    Qs1 = proplists:delete(Key, Qs),
-    z_context:set('q', [{Key,Value}|Qs1], Context).
+    Qs1 = lists:keydelete(Key, 1, Qs),
+    z_context:set('q', [{Key,Value}|Qs1], Context);
+set_q(Key, Value, Context) ->
+    set_q(z_convert:to_binary(Key), Value, Context).
 
+%% @doc Set the value of multiple request parameter arguments
+-spec set_q( list(), z:context() ) -> z:context().
+set_q(KVs, Context) ->
+    lists:foldl(
+        fun({K, V}, Ctx) ->
+            set_q(K, V, Ctx)
+        end,
+        Context,
+        KVs).
+
+%% @doc Add the value of a request parameter argument
+%%      Always filter the #upload{} arguments to prevent upload of non-temp files.
+-spec add_q(binary() | string(), any(), z:context()) -> z:context().
+add_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
+    add_q(Key, Upload#upload{ tmpfile = undefined }, Context);
+add_q(Key, Value, Context) when is_binary(Key) ->
+    Qs = get_q_all(Context),
+    z_context:set('q', [{Key,Value}|Qs], Context);
+add_q(Key, Value, Context) ->
+    set_q(z_convert:to_binary(Key), Value, Context).
+
+%% @doc Add the value of multiple request parameter arguments
+-spec add_q( list(), z:context() ) -> z:context().
+add_q(KVs, Context) ->
+    lists:foldl(
+        fun({K, V}, Ctx) ->
+            set_q(K, V, Ctx)
+        end,
+        Context,
+        KVs).
 
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
 -spec get_q(string()|atom()|binary()|list(), z:context()) -> binary() | string() | #upload{} | undefined | list().

@@ -16,24 +16,6 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-%% @doc MQTT sessions runtime ACL interface.
-%% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018 Marc Worrell
-
-%% Copyright 2018 Marc Worrell
-%%
-%% Licensed under the Apache License, Version 2.0 (the "License");
-%% you may not use this file except in compliance with the License.
-%% You may obtain a copy of the License at
-%%
-%%     http://www.apache.org/licenses/LICENSE-2.0
-%%
-%% Unless required by applicable law or agreed to in writing, software
-%% distributed under the License is distributed on an "AS IS" BASIS,
-%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-%% See the License for the specific language governing permissions and
-%% limitations under the License.
-
 -module(z_mqtt_sessions_runtime).
 
 -export([
@@ -175,12 +157,29 @@ is_allowed(publish,   [ <<"model">>, _Model, <<"delete">> | _ ], _Context) -> tr
 is_allowed(subscribe, [ <<"model">>, _Model, <<"event">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"bridge">>, _Remote, <<"reply">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"bridge">>, _Remote, <<"public">> | _ ], _Context) -> true;
-is_allowed(subscribe, [ <<"bridge">>, Remote | _ ], Context) ->
-    Context#context.routing_id =:= Remote orelse Context#context.client_id =:= Remote;
+is_allowed(_Action,   [ <<"bridge">>, Remote | _ ], Context) ->
+    % User of the bridge session MUST be the same as the user publishing
+    case Context#context.routing_id =:= Remote orelse Context#context.client_id =:= Remote of
+        true ->
+            true;
+        false ->
+            case z_auth:is_auth(Context) of
+                true ->
+                    % Only works if remote is a client-id
+                    case z_mqtt_sessions:get_user_context(z_context:site(Context), Remote) of
+                        {ok, UserContext} ->
+                            z_acl:user(UserContext) =:= z_acl:user(Context);
+                        {error, _} ->
+                            false
+                    end;
+                false ->
+                    false
+            end
+    end;
 is_allowed(subscribe, [ <<"user">> ], Context) -> z_auth:is_auth(Context);
-is_allowed(_Action,   [ <<"user">>, User | _ ], Context) ->
+is_allowed(_Action,   [ <<"user">>, User | _ ], Context) when is_binary(User); is_integer(User) ->
     try
-        UserId = binary_to_integer(User),
+        UserId = z_convert:to_integer(User),
         UserId =:= z_acl:user(Context)
         orelse z_acl:rsc_editable(UserId, Context)
     catch
@@ -189,9 +188,12 @@ is_allowed(_Action,   [ <<"user">>, User | _ ], Context) ->
 is_allowed(_Action, _Topic, _Context) ->
     false.
 
+is_wildcard('+') -> true;
+is_wildcard('#') -> true;
 is_wildcard(<<"+">>) -> true;
 is_wildcard(<<"#">>) -> true;
-is_wildcard(B) when is_binary(B) -> false.
+is_wildcard(B) when is_binary(B) -> false;
+is_wildcard(B) when is_integer(B) -> false.
 
 
 %% @doc If the connection is authenticated, then the connection user MUST be the session user.

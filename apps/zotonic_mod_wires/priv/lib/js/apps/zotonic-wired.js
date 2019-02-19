@@ -260,7 +260,7 @@ function z_transport(delegate, content_type, data, options)
 {
     options = options || {};
     if (options.transport == 'form') {
-        let prefix = window.sessionStorage.getItem("remoteRoutingPrefix");
+        let prefix = window.sessionStorage.getItem("mqtt$clientBridgeTopic");
         prefix = JSON.parse(prefix);
         z_transport_form({
             url: "/mqtt-transport/zotonic-transport/" + delegate,

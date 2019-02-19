@@ -31,6 +31,7 @@
     'mqtt:model/+/delete/#'/2,
 
     observe_module_activate/2,
+    observe_action_event_type/2,
     module_callback/3
 ]).
 
@@ -97,17 +98,9 @@ maybe_subscribe(_, _M, _Pid, _Context) ->
 module_callback(Module, Function, #{ message := Msg, publisher_context := Context }) ->
     Module:Function(Msg, Context).
 
-
-% observe_rsc_update_done(#rsc_update_done{id=Id} = UpdateDone, Context) ->
-%     z_mqtt:publish(
-%         <<"~site/rsc/",(z_convert:to_binary(Id))/binary>>,
-%         UpdateDone#rsc_update_done{pre_props=[], post_props=[]},
-%         Context).
-
-
 %% @doc Handle the <tt>{live ...}</tt> event type.
-% observe_action_event_type(#action_event_type{event={mqtt, _Args}} = Ev, Context) ->
-%     scomp_mqtt_live:event_type_mqtt(Ev, Context);
-% observe_action_event_type(_, _Context) ->
-%     undefined.
+observe_action_event_type(#action_event_type{event={mqtt, _Args}} = Ev, Context) ->
+    scomp_mqtt_live:event_type_mqtt(Ev, Context);
+observe_action_event_type(_, _Context) ->
+    undefined.
 
