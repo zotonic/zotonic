@@ -33,7 +33,7 @@ Optional:
     {% endif %}
     <span class="caret"></span>
 </button>
-<input type="hidden" name="{{ select_name }}" id="{{ unique_id }}" value="{{ selected_value }}" />
+<input type="hidden" name="{{ select_name }}" id="{{ unique_id }}" value="{{ selected_value|escape }}" />
 <ul class="dropdown-menu{% ifequal align "right" %} dropdown-menu-right{% endifequal %}" role="menu">
     {% if header %}
         <li role="presentation" class="dropdown-header">

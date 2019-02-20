@@ -51,8 +51,8 @@
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
                                 select_name="qpagelen"
-                                selected_value=qpagelen
-                                selected_label=qpagelen
+                                selected_value=qpagelen|to_integer|default:default_pagelen
+                                selected_label=qpagelen|to_integer|default:default_pagelen
                                 default_value=default_pagelen
                                 default_label=default_pagelen_label
                                 form_id=#form
