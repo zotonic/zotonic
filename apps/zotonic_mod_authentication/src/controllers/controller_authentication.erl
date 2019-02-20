@@ -147,7 +147,7 @@ status(Payload, Context) ->
     Context1 = z_notifier:foldl(
         #request_context{
             phase = auth_status,
-            document = maps:get(<<"document">>, Payload)
+            document = maps:get(<<"document">>, Payload, #{})
         },
         Context,
         Context),
