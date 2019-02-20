@@ -24,7 +24,7 @@
                                 <div class="btn-group">
                                     {% include "_admin_button_dropdown.tpl"
                                         select_name="qgroup"
-                                        selected_value=qgroup
+                                        selected_qvalue=qgroup
                                         selected_label=m.rsc[qgroup].title
                                         default_value=""
                                         default_label=_"All Content"
@@ -39,7 +39,7 @@
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
                                 select_name="qpagelen"
-                                selected_value=qpagelen|to_integer|default:default_pagelen
+                                selected_qvalue=qpagelen|to_integer|default:default_pagelen
                                 selected_label=qpagelen|to_integer|default:default_pagelen
                                 default_value=default_pagelen
                                 default_label=default_pagelen_label

@@ -1,7 +1,7 @@
 {#
 Required params:
 - select_name
-- selected_value
+- selected_qvalue
 - selected_label
 - default_label
 - default_value
@@ -24,16 +24,16 @@ Optional:
    option_class
 %}
 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    {% if default_value2 and selected_value == default_value2 %}
+    {% if default_value2 and selected_qvalue == default_value2 %}
         {{ default_label2 }}
-    {% elseif selected_value %}
+    {% elseif selected_qvalue %}
         {{ selected_label }}
     {% else %}
         {{ default_label }}
     {% endif %}
     <span class="caret"></span>
 </button>
-<input type="hidden" name="{{ select_name }}" id="{{ unique_id }}" value="{{ selected_value|escape }}" />
+<input type="hidden" name="{{ select_name }}" id="{{ unique_id }}" value="{{ selected_qvalue|escape }}" />
 <ul class="dropdown-menu{% ifequal align "right" %} dropdown-menu-right{% endifequal %}" role="menu">
     {% if header %}
         <li role="presentation" class="dropdown-header">
@@ -41,14 +41,14 @@ Optional:
         </li>
     {% endif %}
     {% if default_label %}
-        <li class="{% if not selected_value %}active{% endif %}">
+        <li class="{% if not selected_qvalue %}active{% endif %}">
             <a href="#" class="{{ option_class }}" data-value="{{ default_value }}">
                 {{ default_label }}
             </a>
         </li>
     {% endif %}
     {% if default_label2 %}
-        <li class="{% if selected_value == default_value2 %}active{% endif %}">
+        <li class="{% if selected_qvalue == default_value2 %}active{% endif %}">
             <a href="#" class="{{ option_class }}" data-value="{{ default_value2 }}">
                 {{ default_label2 }}
             </a>
@@ -59,12 +59,12 @@ Optional:
     {% endif %}
     {% if option_template %}
         {% include option_template
-           selected_value=selected_value
+           selected_qvalue=selected_qvalue
            option_class=option_class
         %}
     {% elseif options %}
         {% for value, label in options %}
-            <li class="{% ifequal value selected_value %}active{% endifequal %}">
+            <li class="{% ifequal value selected_qvalue %}active{% endifequal %}">
             <a href="#" class="{{ option_class }}" data-value="{{ value }}">{{ label }}</a>
         </li>
         {% endfor %}
