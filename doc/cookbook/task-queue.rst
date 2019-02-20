@@ -16,7 +16,7 @@ Add a task to the queue
 
 To add a task to the queue, provide a module and function that should be called
 when the task is popped from the queue. So to add a task that will call the
-``external_api_client::update_external_rsc()`` function::
+``external_api_client:update_external_rsc()`` as a callback function::
 
     z_pivot_rsc:insert_task(
         external_api_client,
@@ -25,7 +25,7 @@ when the task is popped from the queue. So to add a task that will call the
     ).
 
 You can also supply arguments that will be passed to the function. So to have
-``external_api_client::update_external_rsc(RscId)`` called::
+``external_api_client:update_external_rsc(RscId)`` called::
 
     RscId = 123,
     z_pivot_rsc:insert_task(
@@ -58,7 +58,7 @@ to an :ref:`rsc_update_done` observer in your :ref:`site module <module-file>`::
 Execute queued tasks
 --------------------
 
-Add the function ``update_rsc`` referenced above to your module::
+Add the callback function ``update_external_rsc/2`` referenced above to your module::
 
     %% external_api_client.erl
     -module(external_api_client).
@@ -86,6 +86,12 @@ Add the function ``update_rsc`` referenced above to your module::
 
         %% Return anything to signal the task was executed successfully
         ok.
+
+.. note::
+
+    Your callback function receives an anonymous ``Context``, so if it performs actions that
+    depend on access checks, make sure to use either ``m_rsc:p_no_acl/3`` or
+    ``z_acl:sudo(Context)``.
 
 Handle failing tasks
 --------------------
