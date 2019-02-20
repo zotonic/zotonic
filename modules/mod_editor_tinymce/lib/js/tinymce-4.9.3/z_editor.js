@@ -35,6 +35,7 @@ var z_editor = (function ($) {
         id = $el.attr('id');
         options = $.extend({}, tinyInit || {});
         options.selector = '#' + id;
+        options.branding = false;
         if ($el.attr('dir')) {
             options.directionality = $el.attr('dir');
         }
