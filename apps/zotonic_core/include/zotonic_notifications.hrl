@@ -57,9 +57,6 @@
 }).
 
 
-%% @doc Modify cookie options, used for setting http_only and secure options. (foldl)
--record(cookie_options, {name, value}).
-
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
 %% @doc A module has been activated and started. (notify)

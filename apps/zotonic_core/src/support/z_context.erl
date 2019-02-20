@@ -1116,23 +1116,14 @@ set_cookie(Key, Value, Context) ->
 %% @doc Set a cookie value with cookie options.
 -spec set_cookie(binary(), binary(), list(), z:context()) -> z:context().
 set_cookie(Key, Value, Options, Context) ->
-    % case controller_websocket:is_websocket_request(Context) of
-    %     true ->
-    %         % Store the cookie in the session and trigger an ajax cookie fetch.
-    %         z_session:add_cookie(Key, Value, Options, Context),
-    %         % add_script_page(<<"z_fetch_cookies();">>, Context),
-    %         Context;
-    %     false ->
-            % Add domain to cookie if not set
-            ValueBin = z_convert:to_binary(Value),
-            Options1 = case proplists:lookup(domain, Options) of
-                           {domain, _} -> Options;
-                           none -> [{domain, z_context:cookie_domain(Context)}|Options]
-                       end,
-            Options2 = [ {secure, true} | proplists:delete(secure, Options1) ],
-            Options3 = z_notifier:foldl(#cookie_options{name=Key, value=ValueBin}, Options2, Context),
-            cowmachine_req:set_resp_cookie(Key, ValueBin, Options3, Context).
-    % end.
+    % Add domain to cookie if not set
+    ValueBin = z_convert:to_binary(Value),
+    Options1 = case proplists:lookup(domain, Options) of
+                   {domain, _} -> Options;
+                   none -> [{domain, z_context:cookie_domain(Context)}|Options]
+               end,
+    Options2 = [ {secure, true} | proplists:delete(secure, Options1) ],
+    cowmachine_req:set_resp_cookie(Key, ValueBin, Options2, Context).
 
 %% @doc Read a cookie value from the current request.
 -spec get_cookie(binary(), z:context()) -> binary() | undefined.
