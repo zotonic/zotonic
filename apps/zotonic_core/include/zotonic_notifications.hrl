@@ -564,10 +564,14 @@
     is_signup_confirm = false :: boolean()
 }).
 
+
 %% @doc Called after parsing the query arguments
 %% Type: foldl
 %% Return: ``z:context()``
--record(request_context, {}).
+-record(request_context, {
+        phase = init :: init | auth_status,
+        document = #{} :: map()
+    }).
 
 % %% @doc Initialize a context from the current session.
 % %% Called for every request that has a session.

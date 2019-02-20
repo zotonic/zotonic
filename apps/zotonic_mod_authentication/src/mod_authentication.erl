@@ -64,7 +64,7 @@ event(#submit{ message={signup_confirm, Props} }, Context) ->
 
 %% @doc Check for authentication cookies in the request.
 -spec observe_request_context( #request_context{}, z:context(), z:context() ) -> z:context().
-observe_request_context(#request_context{}, Context, _Context) ->
+observe_request_context(#request_context{ phase = init }, Context, _Context) ->
     case z_context:get(anonymous, Context, false) of
         true ->
             Context;
@@ -76,7 +76,9 @@ observe_request_context(#request_context{}, Context, _Context) ->
                 true ->
                     Context1
             end
-    end.
+    end;
+observe_request_context(#request_context{}, Context, _Context) ->
+    Context.
 
 %% @doc Check username/password against the identity tables.
 observe_logon_submit(#logon_submit{ payload = Args }, Context) ->

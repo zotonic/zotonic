@@ -486,7 +486,7 @@ ensure_qs(#context{ props = Props } = Context) ->
             PathArgs = [ {z_convert:to_binary(T), V} || {T,V} <- PathInfo ],
             QPropsUrl = Props#{ q => PathArgs++Query },
             ContextQs = Context#context{ props = QPropsUrl },
-            % Auth user via cookie
+            % Auth user via cookie - set language
             ContextReq = z_notifier:foldl(#request_context{}, ContextQs, ContextQs),
             % Parse the POST body (if any)
             {Body, ContextParsed} = parse_post_body(ContextReq),
@@ -973,7 +973,8 @@ set_language('x-default', Context) ->
 set_language(Lang, Context) when is_atom(Lang) ->
     Context#context{language=[Lang]};
 set_language(Langs, Context) when is_list(Langs) ->
-    Context#context{language=Langs};
+    Langs1 = lists:filter(fun z_language:is_valid/1, Langs),
+    Context#context{language=Langs1};
 set_language(Lang, Context) ->
     case z_language:is_valid(Lang) of
         true -> set_language(z_convert:to_atom(Lang), Context);

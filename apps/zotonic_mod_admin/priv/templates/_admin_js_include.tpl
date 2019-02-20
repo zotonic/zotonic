@@ -5,6 +5,8 @@
 %}
 
 {% lib
+    "js/modules/jstz.min.js"
+
     "cotonic/zotonic-wired-bundle.js"
 
     "js/apps/zotonic-wired.js"
@@ -31,7 +33,6 @@
     "js/modules/livevalidation-1.3.js"
     "js/modules/jquery.loadmask.js"
     "js/modules/jquery.timepicker.min.js"
-    "js/modules/jstz.min.js"
 %}
 
 {#

@@ -59,7 +59,7 @@
   0},
  {<<"mqtt_sessions">>,
   {git,"git@github.com:zotonic/mqtt_sessions.git",
-       {ref,"2807e128d834bb70b2149b4f32d128670de366ac"}},
+       {ref,"f2187c3da1c40fbc478cd3c3c445592938016729"}},
   0},
  {<<"oauth">>,
   {git,"https://github.com/tim/erlang-oauth.git",

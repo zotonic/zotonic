@@ -2,6 +2,7 @@
 {% include "_js_include_jquery.tpl" %}
 
 {% lib
+    "js/modules/jstz.min.js"
     "cotonic/zotonic-wired-bundle.js"
 	"js/apps/zotonic-wired.js"
 	"js/apps/z.widgetmanager.js"
@@ -9,7 +10,6 @@
 	"js/modules/z.imageviewer.js"
 	"js/modules/z.dialog.js"
 	"js/modules/livevalidation-1.3.js"
-	"js/modules/z.inputoverlay.js"
 	"js/modules/jquery.loadmask.js"
 %}
 

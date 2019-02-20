@@ -44,18 +44,27 @@ new_user_context( Site, ClientId, SessionOptions ) ->
         client_id = ClientId,
         routing_id = maps:get(routing_id, SessionOptions)
     },
-    Context2 = case SessionOptions of
-        #{ auth_user_id := undefined } ->
+    Prefs = maps:get(context_prefs, SessionOptions, #{}),
+    Context2 = case maps:get(language, Prefs, undefined) of
+        undefined -> Context1;
+        Language -> z_context:set_language(Language, Context1)
+    end,
+    Context3 = case maps:get(timezone, Prefs, undefined) of
+        undefined -> Context2;
+        Tz -> z_context:set_tz(Tz, Context2)
+    end,
+    Context4 = case Prefs of
+        #{ user_id := undefined } ->
             % Anonymous user on the transport -- typical for anonymous HTTP connection
-            Context1;
-        #{ auth_user_id := AuthUserId } ->
+            Context3;
+        #{ user_id := UserId } ->
             % User authenticated on the transport -- typical for HTTP connection with auth cookie
-            z_acl:logon_prefs(AuthUserId, Context1);
+            z_acl:logon_prefs(UserId, Context3);
         #{ } ->
             % No user on the transport - typical for a MQTT connection
-            Context1
+            Context3
     end,
-    z_context:set(peer_ip, maps:get(peer_ip, SessionOptions, undefined), Context2).
+    z_context:set(peer_ip, maps:get(peer_ip, SessionOptions, undefined), Context4).
 
 
 -spec connect( mqtt_packet_map:mqtt_packet(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.

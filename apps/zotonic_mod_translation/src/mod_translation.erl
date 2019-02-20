@@ -39,6 +39,7 @@
     % observe_session_init_fold/3,
     % observe_session_context/3,
     % observe_auth_logon/3,
+    observe_request_context/3,
     observe_user_context/3,
     observe_set_user_language/3,
     observe_url_rewrite/3,
@@ -67,6 +68,9 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
+
+-define(LANGUAGE_COOKIE, <<"z.lang">>).
+-define(LANGUAGE_COOKIE_MAX_AGE, 3600*24*365).
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
 init(Context) ->
@@ -121,15 +125,57 @@ default_languages() ->
 %             set_language(QsLang, Context)
 %     end.
 
+%% @doc Check if the user has a preferred language (in the user's config). If not
+%%      then check the accept-language header (if any) against the available languages.
+observe_request_context(#request_context{ phase = init }, Context, _Context) ->
+    maybe_set_cookie(
+        case get_q_language(Context) of
+            undefined ->
+                maybe_cookie(Context);
+            QsLang ->
+                set_language(QsLang, Context)
+        end);
+observe_request_context(#request_context{ phase = auth_status, document = #{ <<"language">> := _LangData } }, Context, _Context) ->
+    Context;
+observe_request_context(#request_context{}, Context, _Context) ->
+    Context.
 
-maybe_persistent(Context) ->
-    case z_context:get_persistent(language, Context) of
+maybe_set_cookie(Context) ->
+    Lang = atom_to_binary(z_context:language(Context), utf8),
+    case z_context:get_cookie(?LANGUAGE_COOKIE, Context) of
+        Lang ->
+            Context;
+        _ ->
+            z_context:set_cookie(
+                ?LANGUAGE_COOKIE,
+                Lang,
+                [
+                    {max_age, ?LANGUAGE_COOKIE_MAX_AGE},
+                    {path, <<"/">>},
+                    {secure, true}
+                ],
+                Context)
+    end.
+
+
+maybe_cookie(Context) ->
+    case z_context:get_cookie(?LANGUAGE_COOKIE, Context) of
         undefined ->
-            maybe_configuration(Context);
+            maybe_user(Context);
         Language ->
             set_language(Language, Context)
     end.
 
+maybe_user(Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            maybe_configuration(Context);
+        UserId ->
+            case m_rsc:p_no_acl(UserId, pref_language, Context) of
+                undefined -> maybe_configuration(Context);
+                Lang -> set_language(Lang, Context)
+            end
+    end.
 
 maybe_configuration(Context) ->
     case z_convert:to_bool(m_config:get_value(?MODULE, force_default, Context)) of
@@ -143,10 +189,10 @@ maybe_configuration(Context) ->
             maybe_accept_header(Context)
     end.
 
-
 maybe_accept_header(Context) ->
     case z_context:get_req_header(<<"accept-language">>, Context) of
-        undefined -> Context;
+        undefined ->
+            Context;
         AcceptHeader ->
             Enabled = acceptable_languages(Context),
             case cowmachine_accept_language:accept_header(Enabled, AcceptHeader) of
@@ -177,10 +223,11 @@ acceptable_languages(Context) ->
         Context).
 
 
--spec get_q_language(#context{}) -> atom().
+-spec get_q_language( z:context() ) -> atom().
 get_q_language(Context) ->
     case z_context:get_q_all(<<"z_language">>, Context) of
-        [] -> undefined;
+        [] ->
+            undefined;
         L ->
             Enabled = acceptable_languages(Context),
             case cowmachine_accept_language:accept_list(Enabled, [lists:last(L)]) of

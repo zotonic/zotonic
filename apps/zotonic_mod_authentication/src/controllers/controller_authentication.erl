@@ -143,22 +143,30 @@ setautologon(_Payload, Context) ->
 
 %% @doc Return information about the current user and request language/timezone
 -spec status( map(), z:context() ) -> { map(), z:context() }.
-status(_Payload, Context) ->
+status(Payload, Context) ->
+    Context1 = z_notifier:foldl(
+        #request_context{
+            phase = auth_status,
+            document = maps:get(<<"document">>, Payload)
+        },
+        Context,
+        Context),
     Status = #{
         status => ok,
-        is_authenticated => z_auth:is_auth(Context),
-        user_id => z_acl:user(Context),
-        username => m_identity:get_username(Context),
+        is_authenticated => z_auth:is_auth(Context1),
+        user_id => z_acl:user(Context1),
+        username => m_identity:get_username(Context1),
         preferences => #{
-            language => z_context:language(Context),
-            timezone => z_context:tz(Context)
+            language => z_context:language(Context1),
+            timezone => z_context:tz(Context1)
         }
     },
-    Status1 = case z_auth:is_auth(Context) of
+    Status1 = case z_auth:is_auth(Context1) of
         true ->
-            Status#{ expires => z_context:get(auth_expires, Context) };
+            Status#{ expires => z_context:get(auth_expires, Context1) };
         false ->
             Status
     end,
-    { Status1, Context }.
+    { Status1, Context1 }.
+
 

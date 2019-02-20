@@ -20,6 +20,22 @@
 // - recheck auth after ws connect and no recent auth check (or failed check)
 //   this could be due to browser wakeup or server down time.
 
+function fetchWithUA( body ) {
+    return self.call("model/document/get/all")
+        .then( function(msg) {
+            body.document = msg.payload
+            return fetch( self.abs_url("/zotonic-auth"), {
+                method: "POST",
+                cache: "no-cache",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            })
+        });
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Model
 //
@@ -82,15 +98,7 @@ model.present = function(data) {
         model.state_change('auth_unknown');
 
         // Refresh the current auth status by probing the server
-        fetch( self.abs_url("/zotonic-auth"), {
-            method: "POST",
-            cache: "no-cache",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ cmd: "status" })
-        })
+        fetchWithUA({ cmd: "status" })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authResponse(body); })
         .catch((e) => { actions.fetchError(); });
@@ -102,15 +110,7 @@ model.present = function(data) {
             auth_check_cmd = 'refresh';
         }
         model.is_keep_alive = false;
-        fetch( self.abs_url("/zotonic-auth"), {
-            method: "POST",
-            cache: "no-cache",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ cmd: auth_check_cmd })
-        })
+        fetchWithUA({ cmd: auth_check_cmd })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authResponse(body); })
         .catch((e) => { actions.fetchError(); });
@@ -121,20 +121,12 @@ model.present = function(data) {
         model.onauth = data.onauth || null;
         model.state_change('authenticating');
 
-        fetch( self.abs_url("/zotonic-auth"), {
-            method: "POST",
-            cache: "no-cache",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
+        fetchWithUA({
                     cmd: "logon",
                     username: data.username,
                     password: data.password,
                     passcode: data.passcode
                 })
-        })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
         .catch((e) => { actions.fetchError(); });
@@ -145,15 +137,7 @@ model.present = function(data) {
         model.onauth = data.onauth || null;
         model.state_change('authenticating');
 
-        fetch( self.abs_url("/zotonic-auth"), {
-            method: "POST",
-            cache: "no-cache",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ cmd: "logoff" })
-        })
+        fetchWithUA({ cmd: "logoff" })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authResponse(body); })
         .catch((e) => { actions.fetchError(); });
