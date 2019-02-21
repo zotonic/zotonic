@@ -59,29 +59,104 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ results, Id | Rest ], _Msg, Context) ->
-    {ok, {prepare_results(m_rsc:rid(Id, Context), Context), Rest}};
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RId ->
+            case z_convert:to_bool(m_rsc:p(RId, survey_show_results, Context))
+                 orelse is_allowed_results_download(RId, Context)
+            of
+                true ->
+                    {ok, {prepare_results(RId, Context), Rest}};
+                false ->
+                    {error, eacces}
+            end
+    end;
 m_get([ all_results, [Id, SortColumn] | Rest ], _Msg, Context) ->
-    {ok, {survey_results_sorted(m_rsc:rid(Id, Context), SortColumn, Context), Rest}};
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RId ->
+            case z_acl:rsc_editable(RId, Context) of
+                true ->
+                    {ok, {survey_results_sorted(RId, SortColumn, Context), Rest}};
+                false ->
+                    {error, eacces}
+            end
+    end;
 m_get([ all_results, Id | Rest ], _Msg, Context) ->
-    {ok, {survey_results(m_rsc:rid(Id, Context), true, Context), Rest}};
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RId ->
+            case z_acl:rsc_editable(RId, Context) of
+                true ->
+                    {ok, {survey_results(RId, true, Context), Rest}};
+                false ->
+                    {error, eacces}
+            end
+    end;
 m_get([ list_results, Id | Rest ], _Msg, Context) ->
-    {ok, {list_results(m_rsc:rid(Id, Context), Context), Rest}};
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RId ->
+            case z_acl:rsc_editable(RId, Context) of
+                true ->
+                    {ok, {list_results(RId, Context), Rest}};
+                false ->
+                    {error, eacces}
+            end
+    end;
 m_get([ get_result, SurveyId, AnswerId | Rest ], _Msg, Context) ->
-    {ok, {single_result(SurveyId, AnswerId, Context), Rest}};
-m_get([ captions, Id | Rest ], _Msg, Context) ->
-    {ok, {survey_captions(m_rsc:rid(Id, Context), Context), Rest}};
-m_get([ totals, Id | Rest ], _Msg, Context) ->
-    {ok, {survey_totals(m_rsc:rid(Id, Context), Context), Rest}};
-m_get([ did_survey, Id | Rest ], _Msg, Context) ->
-    {ok, {did_survey(m_rsc:rid(Id, Context), Context), Rest}};
-m_get([ did_survey_answers, Id | Rest ], _Msg, Context) ->
+    case m_rsc:rid(SurveyId, Context) of
+        undefined ->
+            {error, enoent};
+        RId ->
+            case single_result(SurveyId, AnswerId, Context) of
+                undefined ->
+                    {ok, {undefined, Rest}};
+                [] ->
+                    {ok, {[], Rest}};
+                Result ->
+                    UId = proplists:get_value(user_id, Result),
+                    case (is_integer(UId) andalso z_acl:user(Context) =:= UId)
+                        orelse z_acl:rsc_editable(RId, Context)
+                    of
+                        true -> {ok, {Result, Context}};
+                        false -> {error, eacces}
+                    end
+            end
+    end;
+m_get([ captions, SurveyId | Rest ], _Msg, Context) ->
+    case m_rsc:rid(SurveyId, Context) of
+        undefined ->
+            {error, enoent};
+        RId ->
+            {ok, {survey_captions(RId, Context), Rest}}
+    end;
+m_get([ totals, SurveyId | Rest ], _Msg, Context) ->
+    case m_rsc:rid(SurveyId, Context) of
+        undefined ->
+            {error, enoent};
+        RId ->
+            case z_acl:rsc_editable(RId, Context) of
+                true ->
+                    {ok, {survey_totals(RId, Context), Rest}};
+                false ->
+                    {error, eacces}
+            end
+    end;
+m_get([ did_survey, SurveyId | Rest ], _Msg, Context) ->
+    {ok, {did_survey(m_rsc:rid(SurveyId, Context), Context), Rest}};
+m_get([ did_survey_answers, SurveyId | Rest ], _Msg, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
                                     {undefined, persistent_id(Context)};
                                 UId ->
                                     {UId, undefined}
                             end,
-    As = case m_survey:single_result(m_rsc:rid(Id, Context), UserId, PersistentId, Context) of
+    As = case m_survey:single_result(m_rsc:rid(SurveyId, Context), UserId, PersistentId, Context) of
         None when None =:= undefined; None =:= [] ->
             [];
         Result ->
@@ -95,25 +170,26 @@ m_get([ did_survey_answers, Id | Rest ], _Msg, Context) ->
                 Answers)
     end,
     {ok, {As, Rest}};
-m_get([ did_survey_results, Id | Rest ], _Msg, Context) ->
+m_get([ did_survey_results, SurveyId | Rest ], _Msg, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
                                     {undefined, persistent_id(Context)};
                                 UId ->
                                     {UId, undefined}
                             end,
-    {ok, {m_survey:single_result(Id, UserId, PersistentId, Context), Rest}};
-m_get([ did_survey_results_readable, Id | Rest ], _Msg, Context) ->
+    {ok, {m_survey:single_result(SurveyId, UserId, PersistentId, Context), Rest}};
+m_get([ did_survey_results_readable, SurveyId | Rest ], _Msg, Context) ->
     {UserId, PersistentId} = case z_acl:user(Context) of
                                 undefined ->
                                     {undefined, persistent_id(Context)};
                                 UId ->
                                     {UId, undefined}
                             end,
-    SurveyAnswer = m_survey:single_result(m_rsc:rid(Id, Context), UserId, PersistentId, Context),
-    {ok, {survey_answer_prep:readable_stored_result(Id, SurveyAnswer, Context), Rest}};
-m_get([ is_allowed_results_download, Id | Rest ], _Msg, Context) ->
-    {ok, {is_allowed_results_download(m_rsc:rid(Id, Context), Context), Rest}};
+    RId = m_rsc:rid(SurveyId, Context),
+    SurveyAnswer = m_survey:single_result(RId, UserId, PersistentId, Context),
+    {ok, {survey_answer_prep:readable_stored_result(RId, SurveyAnswer, Context), Rest}};
+m_get([ is_allowed_results_download, SurveyId | Rest ], _Msg, Context) ->
+    {ok, {is_allowed_results_download(m_rsc:rid(SurveyId, Context), Context), Rest}};
 m_get([ handlers | Rest ], _Msg, Context) ->
     {ok, {get_handlers(Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
