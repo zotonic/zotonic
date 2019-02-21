@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2019 Marc Worrell
-%% @doc Log off an user, remove "rememberme" cookies
+%% @doc Log off an user, remove "autologon" cookies
 
 %% Copyright 2010-2019 Marc Worrell
 %%

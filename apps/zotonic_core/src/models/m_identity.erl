@@ -58,10 +58,6 @@
     lookup_users_by_type_and_key/3,
     lookup_users_by_verified_type_and_key/3,
 
-    lookup_by_rememberme_token/2,
-    get_rememberme_token/2,
-    reset_rememberme_token/2,
-
     set_by_type/4,
     set_by_type/5,
     delete_by_type/3,
@@ -69,6 +65,8 @@
 
     insert/4,
     insert/5,
+    insert_single/4,
+    insert_single/5,
     insert_unique/4,
     insert_unique/5,
 
@@ -261,10 +259,10 @@ set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
     case z_db:transaction(fun(Ctx) ->
         set_username_pw_trans(Id, Username, Hash, Ctx) end, Context) of
         ok ->
-            reset_rememberme_token(Id, Context),
+            reset_auth_tokens(Id, Context),
             z_depcache:flush(Id, Context),
             z_mqtt:publish(
-                [ <<"model">>, <<"identity">>, <<"event">>, Id ],
+                [ <<"model">>, <<"identity">>, <<"event">>, Id, <<"username_pw">> ],
                 #{
                     id => Id,
                     type => <<"username_pw">>
@@ -501,55 +499,17 @@ check_email_pw1([Idn | Rest], Email, Password, Context) ->
             end
     end.
 
-%% @doc Find the user id connected to the 'rememberme' cookie value.
--spec lookup_by_rememberme_token(binary(), #context{}) ->
-    {ok, pos_integer()} | {error, enoent}.
-lookup_by_rememberme_token(Token, Context) ->
-    case z_db:q1("select rsc_id from identity where key = $1", [Token], Context) of
-        undefined ->
-            {error, enoent};
-        Id when is_integer(Id) ->
-            {ok, Id}
-    end.
-
-%% @doc Find the 'rememberme' cookie value for the user, generate a new one if not found.
--spec get_rememberme_token(m_rsc:resource(), #context{}) -> {ok, binary()}.
-get_rememberme_token(UserId, Context) ->
-    case z_db:q1("select key from identity
-                  where type = 'rememberme'
-                    and rsc_id = $1", [m_rsc:rid(UserId, Context)], Context) of
-        undefined ->
-            reset_rememberme_token(UserId, Context);
-        Token ->
-            {ok, Token}
-    end.
-
-%% @doc Reset the 'rememberme' cookie value. Needed if an user's password is changed.
--spec reset_rememberme_token(m_rsc:resource(), #context{}) -> {ok, binary()}.
-reset_rememberme_token(UserId, Context) ->
+%% @doc Reset the user's auth tokens - done on password reset.
+%%      This invalidates all authentication cookies.
+-spec reset_auth_tokens( m_rsc:resource_id(), z:context() )  -> ok.
+reset_auth_tokens(UserId, Context) ->
     z_db:transaction(
         fun(Ctx) ->
-            delete_by_type(UserId, rememberme, Ctx),
-            Token = new_unique_key(rememberme, Ctx),
-            {ok, _} = insert_unique(UserId, rememberme, Token, Ctx),
-            {ok, Token}
+            delete_by_type(UserId, auth_autologon_secret, Ctx),
+            delete_by_type(UserId, auth_secret, Ctx),
+            ok
         end,
         Context).
-
-new_unique_key(Type, Context) ->
-    Key = z_ids:id(),
-    case z_db:q1("select id
-                  from identity
-                  where type = $1
-                    and key = $2",
-        [Type, Key],
-        Context)
-    of
-        undefined ->
-            Key;
-        _Id ->
-            new_unique_key(Type, Context)
-    end.
 
 
 %% @doc Fetch a specific identity entry.
@@ -632,11 +592,32 @@ needs_rehash({hash, _, _}) ->
     true.
 
 
+-spec insert_single(m_rsc:resource(), atom(), binary(), #context{}) ->
+    {ok, pos_integer()} | {error, invalid_key}.
+insert_single(Rsc, Type, Key, Context) ->
+    insert(Rsc, Type, Key, [], Context).
+
+insert_single(Rsc, Type, Key, Props, Context) ->
+    case insert(Rsc, Type, Key, Props, Context) of
+        {ok, IdnId} ->
+            z_db:q("
+                delete from identity
+                where rsc_id = $1
+                  and type = $2
+                  and id <> $3",
+                [ Rsc, Type, IdnId ],
+                Context),
+            {ok, IdnId};
+        {error, _} = Error ->
+            Error
+    end.
+
 %% @doc Create an identity record.
 -spec insert(m_rsc:resource(), atom(), binary(), #context{}) ->
     {ok, pos_integer()} | {error, invalid_key}.
 insert(Rsc, Type, Key, Context) ->
     insert(Rsc, Type, Key, [], Context).
+
 insert(Rsc, Type, Key, Props, Context) ->
     KeyNorm = normalize_key(Type, Key),
     case is_valid_key(Type, KeyNorm, Context) of
@@ -925,7 +906,7 @@ delete_by_type(RscId, Type, Context) ->
         0 -> ok;
         _N ->
             z_mqtt:publish(
-                [ <<"model">>, <<"identity">>, <<"event">>, RscId ],
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                 #{
                     id => RscId,
                     type => Type
@@ -941,7 +922,7 @@ delete_by_type_and_key(RscId, Type, Key, Context) ->
         0 -> ok;
         _N ->
             z_mqtt:publish(
-                [ <<"model">>, <<"identity">>, <<"event">>, RscId ],
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                 #{
                     id => RscId,
                     type => Type
