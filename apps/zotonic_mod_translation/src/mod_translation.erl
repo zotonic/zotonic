@@ -474,9 +474,16 @@ set_user_language(Code, Context) ->
         undefined ->
             nop;
         UserId ->
+            NewCode = z_context:language(Context1),
             case m_rsc:p_no_acl(UserId, pref_language, Context1) of
-                Code -> nop;
-                _ -> catch m_rsc:update(UserId, [{pref_language, z_context:language(Context1)}], Context1)
+                NewCode ->
+                    nop;
+                _ ->
+                    catch m_rsc:update(
+                            UserId,
+                            [ {pref_language, NewCode} ],
+                            [ no_touch ],
+                            Context1)
             end
     end,
     Context1.
