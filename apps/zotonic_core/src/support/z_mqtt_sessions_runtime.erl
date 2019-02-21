@@ -23,7 +23,9 @@
     connect/2,
     reauth/2,
     is_allowed/4,
-    is_valid_message/3
+    is_valid_message/3,
+
+    context_updates/3
     ]).
 
 -behaviour(mqtt_sessions_runtime).
@@ -64,7 +66,38 @@ new_user_context( Site, ClientId, SessionOptions ) ->
             % No user on the transport - typical for a MQTT connection
             Context3
     end,
+    mqtt_sessions:subscribe(
+        Site,
+        [ <<"client">>, ClientId, <<"config">> ],
+        {?MODULE, context_updates, [Site, ClientId]},
+        z_acl:sudo(Context4)),
     z_context:set(peer_ip, maps:get(peer_ip, SessionOptions, undefined), Context4).
+
+context_updates(Site, ClientId, #{ message := #{ payload := Payload} }) ->
+    mqtt_sessions:update_user_context(Site, ClientId, fun(Ctx) -> update_context_fun(Payload, Ctx) end).
+
+update_context_fun(Payload, Context) ->
+    Context1 = maybe_set_language(Payload, Context),
+    maybe_set_timezone(Payload, Context1).
+
+maybe_set_language(#{ <<"language">> := <<>> }, Context) ->
+    Context;
+maybe_set_language(#{ <<"language">> := Lang }, Context) when is_binary(Lang) ->
+    try
+        mod_translation:set_language(Lang, Context)
+    catch
+        error:undef ->
+            z_context:set_language(Lang, Context)
+    end;
+maybe_set_language(_Payload, Context) ->
+    Context.
+
+maybe_set_timezone(#{ <<"timezone">> := <<>> }, Context) ->
+    Context;
+maybe_set_timezone(#{ <<"timezone">> := Timezone }, Context) when is_binary(Timezone) ->
+    z_context:set_tz(Timezone, Context);
+maybe_set_timezone(_Payload, Context) ->
+    Context.
 
 
 -spec connect( mqtt_packet_map:mqtt_packet(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
@@ -185,6 +218,8 @@ is_allowed(_Action,   [ <<"bridge">>, Remote | _ ], Context) ->
                     false
             end
     end;
+is_allowed(_Action,   [ <<"client">>, ClientId | _ ], Context) ->
+    Context#context.client_id =:= ClientId;
 is_allowed(subscribe, [ <<"user">> ], Context) -> z_auth:is_auth(Context);
 is_allowed(_Action,   [ <<"user">>, User | _ ], Context) when is_binary(User); is_integer(User) ->
     try

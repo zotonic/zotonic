@@ -16,6 +16,9 @@
 
 "use strict";
 
+// Period between checking with the server if the authentication is still valid.
+var AUTH_CHECK_PERIOD = 30000;
+
 // TODO:
 // - recheck auth after ws connect and no recent auth check (or failed check)
 //   this could be due to browser wakeup or server down time.
@@ -410,7 +413,7 @@ actions.keepAlive = function(_date) {
 
 self.on_connect = function() {
     setTimeout(function() { actions.start(); }, 0);
-    setInterval(function() { actions.authCheck(); }, 30000);
+    setInterval(function() { actions.authCheck(); }, AUTH_CHECK_PERIOD);
 }
 
 self.connect();
