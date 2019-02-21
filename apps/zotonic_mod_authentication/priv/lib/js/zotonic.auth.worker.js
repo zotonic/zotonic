@@ -85,6 +85,10 @@ model.present = function(data) {
             actions.logonForm(msg.payload);
         });
 
+        self.subscribe("model/auth/post/switch-user", function(msg) {
+            actions.switchUser(msg.payload);
+        });
+
         // Keep-alive ping for token refresh
         self.subscribe("model/ui/event/recent-activity", function(msg) {
             if (msg.payload.is_active) {
@@ -129,6 +133,20 @@ model.present = function(data) {
                     username: data.username,
                     password: data.password,
                     passcode: data.passcode
+                })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authLogonResponse(body); })
+        .catch((e) => { actions.fetchError(); });
+    }
+
+    if (data.switch_user) {
+        model.authentication_error = null;
+        model.onauth = null;
+        model.state_change('authenticating');
+
+        fetchWithUA({
+                    cmd: "switch_user",
+                    user_id: data.user_id
                 })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
@@ -397,6 +415,14 @@ actions.logonForm = function(data) {
         onauth: data.value.onauth
     }
     model.present(dataLogon);
+}
+
+actions.switchUser = function(data) {
+    let dataSwitch = {
+        switch_user: true,
+        user_id: data.user_id
+    }
+    model.present(dataSwitch);
 }
 
 actions.logoff = function(data) {

@@ -27,6 +27,7 @@
     is_auth_recent/1,
 
     logon/2,
+    logon_switch/2,
     % confirm/2,
     logon_pw/3,
     logoff/1,
@@ -98,6 +99,17 @@ logon(UserId, Context) ->
             {error, user_not_enabled}
     end.
 
+%% @doc Switch user, same as logon, but
+logon_switch(UserId, Context) ->
+    case m_rsc:exists(UserId, Context) andalso z_acl:is_admin(Context) of
+        true ->
+            Context1 = z_acl:logon_prefs(UserId, Context),
+            Context2 = z_notifier:foldl(#auth_logon{ id = UserId }, Context1, Context1),
+            {ok, Context2};
+        false ->
+            {error, eacces}
+    end.
+
     % case is_enabled(UserId, Context) of
     %     true ->
     %         Context1 = z_acl:logon_prefs(UserId, Context),
@@ -113,21 +125,18 @@ logon(UserId, Context) ->
     % end.
 
 
-%% @doc Continue the current session as a different user.
-switch_user(UserId, Context) ->
-    % Needs to change:
-    % - Create a onetime user token
-    % - Send to client
-    % - Client reattaches using this token
-    {error, todo}.
-
-    % Context1 = z_acl:logon_prefs(UserId, Context),
-    % z_context:set_session(auth_timestamp, calendar:universal_time(), Context1),
-    % z_context:set_session(auth_user_id, UserId, Context1),
-    % Context2 = z_session:ensure_page_session(Context1#context{page_pid=undefined, page_id=undefined}),
-    % Context3 = z_notifier:foldl(#auth_logon{}, Context2, Context2),
-    % z_notifier:notify(#auth_logon_done{}, Context3),
-    % {ok, Context3}.
+%% @doc Request the client's auth worker to re-authenticate as a new user
+switch_user(UserId, Context) when is_integer(UserId) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            z_mqtt:publish(
+                    [ <<"~client">>, <<"model">>, <<"auth">>, <<"post">>, <<"switch-user">> ],
+                    #{ user_id => UserId },
+                    Context),
+            ok;
+        false ->
+            {error, eacces}
+    end.
 
 
 %% @doc Forget about the user being logged on.

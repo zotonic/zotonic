@@ -217,12 +217,11 @@ event(#postback{message={identity_add, Args}}, Context) ->
 
 %% Log on as this user
 event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
-    case z_acl:is_admin(Context) of
-        true ->
+    case z_auth:switch_user(Id, Context) of
+        ok ->
             % Changing the authenticated will force all connected pages to reload or change.
             % After this we can't send any replies any more, as the pages are disconnecting.
-            {ok, NewContext} = z_auth:switch_user(Id, Context),
-            NewContext;
+            Context;
         false ->
             z_render:growl_error(?__("You are not allowed to switch users.", Context), Context)
     end.

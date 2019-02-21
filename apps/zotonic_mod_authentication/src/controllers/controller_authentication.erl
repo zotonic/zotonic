@@ -57,6 +57,8 @@ process(<<"POST">>, AcceptedCT, ProvidedCT, Context) ->
 -spec handle_cmd( binary(), map(), z:context() ) -> { map(), z:context() }.
 handle_cmd(<<"logon">>, Payload, Context) ->
     logon(Payload, Context);
+handle_cmd(<<"switch_user">>, Payload, Context) ->
+    switch_user(Payload, Context);
 handle_cmd(<<"logoff">>, Payload, Context) ->
     logoff(Payload, Context);
 handle_cmd(<<"refresh">>, Payload, Context) ->
@@ -70,7 +72,7 @@ handle_cmd(_Cmd, _Payload, Context) ->
         #{
             status => error,
             error => <<"unknown_cmd">>,
-            message => <<"Unknown cmd, use one of 'logon', 'logoff', 'refresh', 'setautologon' or 'status'">>
+            message => <<"Unknown cmd, use one of 'logon', 'logoff', 'refresh', 'setautologon', 'switch_user' or 'status'">>
         },
         Context
     }.
@@ -94,7 +96,10 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
                     % The account has been disabled after verification, or
                     % verification flag not set, account didn't need verification
                     { #{ status => error, error => disabled, user_id => UserId }, Context }
-            end
+            end;
+        {error, _Reason} ->
+            % Hide other error codes, map to generic 'pw' error
+            { #{ status => error, error => pw }, Context }
     end;
 logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
     case m_identity:get_username(UserId, Context) of
@@ -111,9 +116,23 @@ logon_1({error, _Reason}, _Payload, Context) ->
     % Hide other error codes, map to generic 'pw' error
     { #{ status => error, error => pw }, Context };
 logon_1(undefined, _Payload, Context) ->
-    lager:warning("Auth module error: #logon_submit{} returned undefined."),
+    lager:warning("Authentication error: #logon_submit{} returned undefined."),
     { #{ status => error, error => pw }, Context }.
 
+
+-spec switch_user( map(), z:context() ) -> { map(), z:context() }.
+switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(UserId) ->
+    case z_auth:logon_switch(UserId, Context) of
+        {ok, Context1} ->
+            lager:warning("[~p] Authentication: user ~p is switching to user ~p",
+                          [ z_context:site(Context), z_acl:user(Context), UserId ]),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Context1),
+            status(Payload, Context2);
+        {error, _Reason} ->
+            { #{ status => error, error => eacces }, Context }
+    end;
+switch_user(_Payload, Context) ->
+    { #{ status => error, error => missing_user_id }, Context }.
 
 
 %% @doc Remove authentication cookie(s), signal user logoff

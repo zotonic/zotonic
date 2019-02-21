@@ -246,7 +246,7 @@ user_secret(UserId, Context) ->
 -spec generate_user_secret( m_rsc:resource_id(), z:context() ) -> binary().
 generate_user_secret(UserId, Context) ->
     Secret = z_ids:id(?AUTH_SECRET_LENGTH),
-    {ok, _} = m_identity:insert_unique(UserId, auth_secret, <<>>, [{prop1, Secret}], Context),
+    {ok, _} = m_identity:insert(UserId, auth_secret, <<>>, [{prop1, Secret}], Context),
     Secret.
 
 -spec autologon_secret( z:context() ) -> binary().
@@ -273,7 +273,7 @@ user_autologon_secret(UserId, Context) ->
 -spec generate_user_autologon_secret( m_rsc:resource_id(), z:context() ) -> binary().
 generate_user_autologon_secret(UserId, Context) ->
     Secret = z_ids:id(?AUTOLOGON_SECRET_LENGTH),
-    {ok, _} = m_identity:insert_unique(UserId, auth_autologon_secret, <<>>, [{prop1, Secret}], Context),
+    {ok, _} = m_identity:insert(UserId, auth_autologon_secret, <<>>, [{prop1, Secret}], Context),
     Secret.
 
 %% ---- Expirations
