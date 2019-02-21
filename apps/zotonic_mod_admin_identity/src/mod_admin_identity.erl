@@ -138,7 +138,7 @@ event(#postback{message={identity_verify_preferred, Args}}, Context) ->
     case m_rsc:is_editable(RscId, Context) of
         true ->
             case Type of
-                "email" ->
+                <<"email">> ->
                     case Key /= undefined andalso z_email_utils:is_email(Key) of
                         true ->
                             % Set the email property of the resource

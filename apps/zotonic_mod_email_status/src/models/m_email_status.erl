@@ -50,10 +50,39 @@
 m_get([ is_valid, Email | Rest ], _Msg, Context) ->
     {ok, {is_valid(Email, Context), Rest}};
 m_get([ Email | Rest ], _Msg, Context) ->
-    {ok, {get(Email, Context), Rest}};
+    case is_allowed(Email, Context) of
+        true ->
+            {ok, {get(Email, Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
+
+
+is_allowed(Email, Context) ->
+    z_acl:is_allowed(use, mod_email_status, Context)
+    orelse z_acl:is_admin(Context)
+    orelse is_user_email(Email, Context).
+
+is_user_email(Email, Context) ->
+    case z_acl:user(Context) of
+        undefined -> false;
+        UserId ->
+            m_rsc:p_no_acl(UserId, email, Context) =:= Email
+            orelse m_rsc:p_no_acl(UserId, email_raw, Context) =:= Email
+            orelse is_visible_email(Email, Context)
+    end.
+
+is_visible_email(Email, Context) -<
+    Idns = m_identity:lookup_by_type_and_key_multi(email, Email, Context),
+    lists:any(
+        fun(Idn) ->
+            RscId = proplists:get_value(rsc_id, Idn),
+            z_acl:rsc_editable(RscId, Context)
+        end,
+        Idns).
 
 
 -spec block(binary(), #context{}) -> ok.
