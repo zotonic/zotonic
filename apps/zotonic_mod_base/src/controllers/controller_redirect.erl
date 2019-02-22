@@ -30,7 +30,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 service_available(Context) ->
-    Context1 = z_context:ensure_qs(Context),
+    Context1 = z_context:continue_session( z_context:ensure_qs(Context) ),
     {true, Context1}.
 
 resource_exists(Context) ->
@@ -57,12 +57,16 @@ do_redirect(Context) ->
 		undefined ->
 			case z_context:get(dispatch, Context) of
 				undefined ->
-					case z_context:get(id, Context) of
+                    case z_controller_helper:get_configured_id(Context) of
 						undefined -> <<"/">>;
 						Id -> m_rsc:p(Id, page_url, Context)
 					end;
 				Dispatch ->
                     Args = z_context:get_all(Context),
+                    Args1 = case z_controller_helper:get_configured_id(Context) of
+                        undefined -> Args;
+                        Id -> [ {id, Id} | proplists:delete(id, Args) ]
+                    end,
                     QArgs = case z_context:get(qargs, Context) of
                                 undefined ->
                                     [];
@@ -72,7 +76,7 @@ do_redirect(Context) ->
 					Args2 = lists:foldl(fun(K, Acc) ->
 											proplists:delete(K, Acc)
 										end,
-										QArgs ++ Args,
+										QArgs ++ Args1,
 										z_dispatcher:dispatcher_args()),
 					z_dispatcher:url_for(Dispatch, Args2, Context)
 			end;

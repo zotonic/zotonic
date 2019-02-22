@@ -56,6 +56,10 @@
     rules :: z_sites_dispatcher:site_dispatch_list() | undefined
 }).
 
+%% @doc Check and possibly modify the http response security headers (first)
+%%      All headers are in lowercase.
+-record(security_headers, { headers :: list( {binary(), binary()} ) }).
+
 
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
@@ -516,7 +520,8 @@
 %% @doc Set the context to a typical authenticated uses. Used by m_acl.erl
 %% Type: first
 %% Return: authenticated ``#context{}`` or ``undefined``
--record(acl_context_authenticated, {}).
+-record(acl_context_authenticated, {
+}).
 
 %% @doc Initialize context with the access policy for the user.
 %% Type: first

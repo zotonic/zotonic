@@ -26,12 +26,15 @@
     {% endif %}
     {% catinclude "schema_org/schema.tpl" id %}
 {% endif %}
-{% with m.seo.bing.webmaster_verify as wmv %}{% if wmv %}
-	<meta name="msvalidate.01" content="{{ wmv }}" />
-{% endif %}{% endwith %}
-{% with m.seo.google.webmaster_verify as wmv %}{% if wmv %}
-	<meta name="google-site-verification" content="{{ wmv }}" />
-{% endif %}{% endwith %}
+{% if m.config.seo_bing.webmaster_verify.value as wmv %}
+    <meta name="msvalidate.01" content="{{ wmv }}" />
+{% endif %}
+{% if m.config.seo_google.webmaster_verify.value as wmv %}
+    <meta name="google-site-verification" content="{{ wmv }}" />
+{% endif %}
+{% if m.config.seo_yandex.webmaster_verify.value as wmv %}
+    <meta name="yandex-verification" content="{{ wmv }}" />
+{% endif %}
 {% if not m.acl.is_admin and not notrack %}
     {% if m.seo.google.analytics as ga %}
         <script>

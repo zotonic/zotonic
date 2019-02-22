@@ -53,7 +53,7 @@ save_settings([], Context) ->
     Context;
 save_settings([{<<"seo", _/binary>> = Key, Value} | T], Context) ->
     Value1 = z_string:trim(Value),
-    [Key1, Key2] = [z_convert:to_atom(K) || K <- binary:split(Key, <<"-">>)],
+    [Key1, Key2] = [binary_to_existing_atom(K, utf8) || K <- binary:split(Key, <<"-">>)],
     ok = m_config:set_value(Key1, Key2, Value1, Context),
     m_config:set_prop(Key1, Key2, no_config_edit, true, Context),
     save_settings(T, Context);

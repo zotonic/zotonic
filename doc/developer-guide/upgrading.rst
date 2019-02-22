@@ -148,6 +148,13 @@ Resources
 * Inserting or deleting an edge no longer modifies the last modified and
   modifier properties of the edge’s subject resource.
 
+* There are extra access controls on rsc properties. The ``privavy`` property
+  controls what is visible for whom.
+
+* The function ``m_rsc:get_visible/2`` has been removed. The function ``m_rsc:get/2``
+  now checks on visibility of properties. To fetch all properties, either  use ``m_rsc:get_raw/2``
+  or call ``m_rsc:get/2`` as a administrator level user.
+
 Sites and modules
 ^^^^^^^^^^^^^^^^^
 

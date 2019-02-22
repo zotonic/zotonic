@@ -32,6 +32,7 @@
 
 % API
 -export([
+    is_acl_admin/1,
     status/1,
     table/1,
     table/2,
@@ -45,6 +46,7 @@
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
     observe_rsc_insert/3,
+    observe_rsc_update/3,
     observe_rsc_get/3,
     name/1,
     manage_schema/2,
@@ -81,6 +83,12 @@
             table_edit = [],
             table_publish = []
         }).
+
+
+%% @doc Check if the user is an administrator for the ACLs
+is_acl_admin(Context) ->
+    z_acl:is_allowed(use, mod_acl_user_groups, Context)
+    andalso z_acl:is_allowed(insert, acl_user_group, Context).
 
 
 event(#submit{message={delete_move, Args}}, Context) ->
@@ -262,7 +270,7 @@ observe_hierarchy_updated(#hierarchy_updated{}, _Context) ->
     ok.
 
 %% @doc Add default content group when resource is inserted without one
--spec observe_rsc_insert(#rsc_insert{}, list(), #context{}) -> list().
+-spec observe_rsc_insert(#rsc_insert{}, m_rsc:props(), #context{}) -> m_rsc:props().
 observe_rsc_insert(#rsc_insert{props=RscProps}, InsertProps, Context) ->
     case proplists:get_value(content_group_id, RscProps,
             proplists:get_value(content_group_id, InsertProps))
@@ -274,6 +282,32 @@ observe_rsc_insert(#rsc_insert{props=RscProps}, InsertProps, Context) ->
         _ ->
             InsertProps
     end.
+
+-spec observe_rsc_update(#rsc_update{}, {boolean(), m_rsc:props()}, #context{}) -> m_rsc:props().
+observe_rsc_update(#rsc_update{ props = PrevProps }, {_IsChanged, NewProps} = Acc, Context) ->
+    case proplists:is_defined(acl_mime_allowed, NewProps)
+        orelse proplists:is_defined(acl_upload_size, NewProps)
+    of
+        true ->
+            case mod_acl_user_groups:is_acl_admin(Context) of
+                true ->
+                    Acc;
+                false ->
+                    P1 = force_copy_prop(acl_mime_allowed, PrevProps, NewProps),
+                    P2 = force_copy_prop(acl_upload_size, PrevProps, P1),
+                    {true, P2}
+            end;
+        false ->
+            Acc
+    end.
+
+force_copy_prop(P, PrevProps, NewProps) ->
+    Curr1 = proplists:delete(P, NewProps),
+    case proplists:lookup(P, PrevProps) of
+        none -> Curr1;
+        PV -> [ PV | NewProps ]
+    end.
+
 
 observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostIsA}=M, Context) ->
     check_hasusergroup(Id, M#rsc_update_done.post_props, Context),

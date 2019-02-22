@@ -58,7 +58,12 @@
                 as
                 next_modifier_param_char
             %}
-                <a href="?qs={{ q.qs }}&qcat={{ q.qcat }}&qsort={{next_modifier_param_char}}{{ field }}&qcustompivot={{ custompivot|default:q.qcustompivot }}{{ url_append }}">{{ caption }}{{ status_modifier_char }}</a>
+                <a href="{% url zotonic_dispatch|as_atom
+                                    qsort=next_modifier_param_char++field
+                                    qcustompivot=custompivot|default:q.qcustompivot|urlencode
+                                    qcat=q.qcat
+                                    qs=q.qs
+                         %}{{ url_append }}">{{ caption }}{{ status_modifier_char }}</a>
             {% endwith %}
         {% endwith %}
     {% endwith %}

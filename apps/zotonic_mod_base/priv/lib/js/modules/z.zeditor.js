@@ -26,7 +26,7 @@ $.widget("ui.zeditor",
 	{
 		var $elt = this.element;
 		setTimeout(function() {
-			z_editor.initElement($elt);
+            z_editor_add($elt);
 		}, 10);
 	}
 });

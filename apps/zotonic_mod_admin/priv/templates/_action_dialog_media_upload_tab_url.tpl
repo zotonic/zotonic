@@ -9,6 +9,7 @@
 						predicate=predicate  
 						id=id  
 						redirect=redirect|if_undefined:(not stay)
+						content_group_id=content_group_id
 						actions=actions callback=callback
 						discover_elt=#discover} 
 		delegate=`z_admin_media_discover` 

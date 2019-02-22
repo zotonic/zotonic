@@ -82,6 +82,22 @@
                     </div>
                 </div>
 
+                <div class="widget">
+                    <h3 class="widget-header">Yandex</h3>
+                    <div class="widget-content">
+                        <div class="form-group row">
+                            <label class="control-label col-md-4" for="seo_yandex-webmaster_verify">{_ Yandex Webmaster validation id _}</label>
+                            <div class="col-md-8">
+                                <input type="text" id="seo_yandex-webmaster_verify" name="seo_yandex-webmaster_verify" value="{{ m.config.seo_yandex.webmaster_verify.value|escape }}" class="form-control" />
+                                <p class="help-block">
+                                    {_ Enter here the verification code for _} <a href="https://webmaster.yandex.com/sites/?noRedirect=yes&hostnameFilter=">{_ Yandex Webmaster _}</a>.<br/>
+                                    {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>937800ae8c5a6cbf</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="col-md-5">

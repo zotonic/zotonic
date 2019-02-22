@@ -53,6 +53,7 @@
 %% Which files do we not consider at all in the file_changed handler
 -define(FILENAME_BLACKLIST_RE,
         "_flymake$"
+        "|node_modules"
         "|\\.#"
         "|\\.bea#"
         "|/priv/files/"

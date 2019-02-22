@@ -8,7 +8,7 @@
     <div class="form-group">
         <label class="control-label" for="password_reset1">{_ New password _}</label>
         <input type="password" id="password_reset1" class="do_autofocus form-control" name="password_reset1" value="" autocomplete="off" />
-        {% validate id="password1"
+        {% validate id="password_reset1"
             type={presence failure_message=_"Enter a password"}
             type={
                 length minimum=min_length

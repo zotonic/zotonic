@@ -79,6 +79,8 @@ process(<<"GET">>, _, {<<"text">>, <<"html">>, _}, Context) ->
     Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Secret = z_context:get_q(<<"secret">>, Context2),
     Vars = [
+        {noindex, true},
+        {notrack, true},
         {page, get_page(Context2)}
         | z_context:get_all(Context2)
     ],
@@ -338,9 +340,14 @@ set_rememberme_cookie(UserId, Context) ->
         {max_age, ?LOGON_REMEMBERME_DAYS*3600*24},
         {path, <<"/">>},
         {http_only, true},
+        {same_site, lax},
         {domain, z_context:cookie_domain(Context)}
     ],
-    z_context:set_cookie(?LOGON_REMEMBERME_COOKIE, z_convert:to_binary(Value), Options, Context).
+    Options1 = case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
+        <<"https">> -> [ {secure, true} | Options ];
+        _ -> Options
+    end,
+    z_context:set_cookie(?LOGON_REMEMBERME_COOKIE, z_convert:to_binary(Value), Options1, Context).
 
 add_days(N, Date) when N =< 0 ->
     Date;

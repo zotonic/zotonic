@@ -173,6 +173,8 @@ do_html(Context0) ->
     ContextQs = z_context:ensure_qs(Context),
     ErrorCode = error_code(Context),
     Vars = [
+        {noindex, true},
+        {notrack, true},
         {error_code, ErrorCode}
         | z_context:get_all(ContextQs)
     ],

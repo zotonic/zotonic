@@ -238,27 +238,51 @@ function z_dialog_alert(options)
 
 function z_dialog_overlay_open(options)
 {
-    var $overlay = $('.modal-overlay');
+    var overlay_id = 'modal-overlay';
+
+    if (typeof options.level !== 'undefined' && options.level > 0) {
+        overlay_id = overlay_id + "-level-" + options.level;
+        level = options.level;
+    } else {
+        level = 0;
+    }
+    var $overlay = $('#'+overlay_id);
     if ($overlay.length > 0) {
         $overlay
-            .html(options.html)
+            .html('<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' + options.html)
             .attr('class', 'modal-overlay')
             .show();
     } else {
-        html = '<div class="modal-overlay">' +
-               '<a href="#close" class="modal-overlay-close" onclick="z_dialog_overlay_close()">&times;</a>' +
+        html = '<div class="modal-overlay modal-overlay-level-' + level + '" id="' + overlay_id + '">' +
+               '<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' +
                options.html +
                '</div>';
         $('body').append(html);
+        $overlay = $('#'+overlay_id);
     }
     if (options.class) {
-        $('.modal-overlay').addClass(options.class);
+        $overlay.addClass(options.class);
     }
+    $('body').addClass('modal-open');
+    if (typeof($.widgetManager) != 'undefined') {
+        $overlay.widgetManager();
+    }
+    z_editor_add($overlay);
 }
 
-function z_dialog_overlay_close()
+function z_dialog_overlay_close( closeButton )
 {
-    $('.modal-overlay').remove();
+    var $overlay;
+
+    if (typeof closeButton !== 'undefined') {
+        $overlay = $(closeButton).closest(".modal-overlay");
+    } else {
+        $overlay = $('.modal-overlay');
+    }
+    $overlay.remove();
+    if ($('.modal-overlay').length == 0) {
+        $('body').removeClass('modal-open');
+    }
 }
 
 /* Growl messages
@@ -2384,3 +2408,33 @@ $.parseQuery = function(qs,options) {
     });
     return params;
 };
+
+
+/**
+  * Patch jQuery.find to return [] on queries for '#'
+  * This fixes issue https://github.com/zotonic/zotonic/issues/1934
+  */
+ (function( jQuery, window, undefined ) {
+     var oldFind = jQuery.find;
+
+     jQuery.find = function( selector ) {
+         if (typeof selector == "string" && selector == '#') {
+             if (window.console) {
+                 window.console.log("Zotonic jQuery patch: returning [] for illegal selector '#'");
+             }
+             return $([]);
+         } else {
+             var args = Array.prototype.slice.call( arguments );
+             return oldFind.apply( this, args );
+         }
+     };
+
+     // Copy properties attached to original jQuery.find method (e.g. .attr, .isXML)
+     var findProp;
+     for ( findProp in oldFind ) {
+         if ( Object.prototype.hasOwnProperty.call( oldFind, findProp ) ) {
+             jQuery.find[ findProp ] = oldFind[ findProp ];
+         }
+     }
+ })( jQuery, window );
+ 

@@ -67,15 +67,13 @@ m_get(Vs, _Msg, _Context) ->
 %% @doc Test if the property is the name of a predicate
 %% @spec is_predicate(Pred, Context) -> bool()
 is_predicate(Id, Context) when is_integer(Id) ->
-    case m_rsc:p(Id, category_id, Context) of
+    case m_rsc:p_no_acl(Id, category_id, Context) of
         undefined -> false;
-        CatId ->
-            m_category:is_a(CatId, predicate, Context)
+        CatId -> m_category:is_a(CatId, predicate, Context)
     end;
 is_predicate(Pred, Context) ->
     case m_rsc:name_to_id(Pred, Context) of
-        {ok, Id} ->
-            is_predicate(Id, Context);
+        {ok, Id} -> is_predicate(Id, Context);
         _ -> false
     end.
 

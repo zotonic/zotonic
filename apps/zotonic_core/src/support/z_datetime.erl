@@ -71,7 +71,10 @@
     timestamp_to_datetime/1,
     datetime_to_timestamp/1,
 
-    undefined_if_invalid_date/1
+    undefined_if_invalid_date/1,
+
+    last_day_of_the_month/2,
+    is_leap_year/1
 ]).
 
 
@@ -365,7 +368,7 @@ prev_week_1(DT, N) ->
 %% @doc Return the date one day earlier.
 prev_day({{_,_,1},_} = Date) ->
     {{Y1,M1,_},T1} = prev_month(Date),
-    {{Y1,M1,calendar:last_day_of_the_month(Y1,M1)}, T1};
+    {{Y1,M1,last_day_of_the_month(Y1,M1)}, T1};
 prev_day({{Y,M,D},T}) ->
     {{Y,M,D-1}, T};
 prev_day({_,_,_} = Date) ->
@@ -415,7 +418,7 @@ next_week_1(DT, N) ->
 
 %% @doc Return the date one day later.
 next_day({{Y,M,D},T} = Date) ->
-    case calendar:last_day_of_the_month(Y,M) of
+    case last_day_of_the_month(Y,M) of
         D1 when D1 =< D ->
             {{Y1,M1,_},T1} = next_month(Date),
             {{Y1,M1,1},T1};
@@ -471,7 +474,7 @@ diff({YMD1,{H1,I1,S1}}, {_,{H2,_,_}} = Date2) when H2 > H1 ->
     diff({YMD1,{H1+24,I1,S1}},NextDate2);
 diff({{Y1,M1,D1},T1}, {{Y2,M2,D2},_} = Date2) when D2 > D1 ->
     NextDate2 = next_month(Date2),
-    diff({{Y1,M1,D1+calendar:last_day_of_the_month(Y2,M2)},T1},NextDate2);
+    diff({{Y1,M1,D1+last_day_of_the_month(Y2,M2)},T1},NextDate2);
 diff({{Y1,M1,D1},T1}, {{_,M2,_},_} = Date2) when M2 > M1 ->
     NextDate2 = next_year(Date2),
     diff({{Y1,M1+12,D1},T1},NextDate2);
@@ -577,3 +580,49 @@ move_day_if_undefined(Date, Fun) ->
         undefined -> move_day_if_undefined(Fun(Date), Fun);
         _ -> Date
     end.
+
+
+%% Routines below are adapted from calendar.erl, which is:
+%%
+%% Copyright Ericsson AB 1996-2011. All Rights Reserved.
+%%
+%% The adaptation is to make the routines work for BCE.
+
+-type year() :: integer().
+-type month() :: 1..12.
+-type ldom() :: 28 | 29 | 30 | 31.
+
+%% last_day_of_the_month(Year, Month)
+%%
+%% Returns the number of days in a month.
+%%
+-spec last_day_of_the_month(Year, Month) -> LastDay when
+      Year :: year(),
+      Month :: month(),
+      LastDay :: ldom().
+last_day_of_the_month(Y, M) when is_integer(Y), is_integer(M) ->
+    last_day_of_the_month1(Y, M).
+
+-spec last_day_of_the_month1(year(),month()) -> ldom().
+last_day_of_the_month1(_, 4) -> 30;
+last_day_of_the_month1(_, 6) -> 30;
+last_day_of_the_month1(_, 9) -> 30;
+last_day_of_the_month1(_,11) -> 30;
+last_day_of_the_month1(Y, 2) ->
+   case is_leap_year(Y) of
+      true -> 29;
+      _    -> 28
+   end;
+last_day_of_the_month1(_, M) when is_integer(M), M > 0, M < 13 ->
+    31.
+
+%% is_leap_year(Year) = true | false
+%%
+-spec is_leap_year(Year) -> boolean() when
+      Year :: year().
+is_leap_year(Year) when Year rem 4 =:= 0, Year rem 100 =/= 0 ->
+    true;
+is_leap_year(Year) when Year rem 400 =:= 0 ->
+    true;
+is_leap_year(_) ->
+    false.

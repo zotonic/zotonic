@@ -1,6 +1,3 @@
-# Unset mnesia dir because we don't persist it, so don't spend time on writing it to disk.
-/mnesia/,/]}/d
-
 # Disbable access logs
 /{log_dir, "priv\/log\/access\/"}/d
 

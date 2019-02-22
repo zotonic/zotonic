@@ -817,7 +817,7 @@ rescan_sites(#state{ sites = Sites } = State) ->
     ScannedSites = do_scan_sites(),
     remove_unknown_sites(Sites, ScannedSites),
     NewSites = insert_new_sites(Sites, ScannedSites),
-    io:format("~p~n~n~n", [NewSites]),
+    % io:format("~p~n~n~n", [NewSites]),
     self() ! startup_check,
     State#state{ sites = NewSites }.
 

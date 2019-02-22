@@ -88,7 +88,7 @@ all(Context) ->
                 || {M, CMs} <- Indexed
             ],
             z_depcache:set(config, Indexed1, ?DAY, Context),
-            Indexed
+            Indexed1
     end.
 
 
@@ -159,7 +159,8 @@ get(Module, Key, Context) when is_binary(Module), is_binary(Key) ->
 get_value(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
     Value = case get(Module, Key, Context) of
         undefined -> undefined;
-        Cfg -> proplists:get_value(value, Cfg)
+        Cfg ->
+            proplists:get_value(value, Cfg)
     end,
     case Value of
         undefined -> m_site:get(Module, Key, Context);

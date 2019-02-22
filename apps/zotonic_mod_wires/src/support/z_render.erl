@@ -634,7 +634,8 @@ overlay(Template, Vars, Context) ->
     {Html, Context1} = render_to_iolist(MixedHtml, Context),
     OverlayArgs = [
         {html, Html},
-        {class, proplists:get_value(class, Vars, <<>>)}
+        {class, proplists:get_value(class, Vars, <<>>)},
+        {level, proplists:get_value(level, Vars, 0)}
     ],
     Script = [<<"z_dialog_overlay_open(">>, z_utils:js_object(OverlayArgs, Context1), $), $; ],
     wire({script, [{script, Script}]}, Context1).

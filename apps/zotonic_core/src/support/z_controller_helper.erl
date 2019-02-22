@@ -25,6 +25,7 @@
     is_authorized/2,
     is_authorized/3,
     get_id/1,
+    get_configured_id/1,
     decode_request/2,
     encode_response/2
  ]).
@@ -104,11 +105,18 @@ get_acl_action(Context) ->
 %% @doc Fetch the id from the request or the dispatch configuration.
 -spec get_id(z:context()) -> m_rsc:resource_id() | undefined.
 get_id(Context) ->
-    ReqId = case z_context:get(id, Context) of
-        undefined -> z_context:get_q(<<"id">>, Context);
+    case get_configured_id(Context) of
+        undefined -> m_rsc:rid(z_context:get_q(<<"id">>, Context), Context);
         ConfId -> ConfId
-    end,
-    m_rsc:rid(ReqId, Context).
+    end.
+
+%% @doc Fetch the id from the dispatch configuration.
+-spec get_configured_id(z:context()) -> m_rsc:resource_id() | undefined.
+get_configured_id(Context) ->
+    case z_context:get(id, Context) of
+        user_id -> z_acl:user(Context);
+        ConfId -> m_rsc:rid(ConfId, Context)
+    end.
 
 
 %% @doc Decode the request data
