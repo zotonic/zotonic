@@ -174,7 +174,7 @@ encode_response({<<"text">>, <<"x-ubf">>, _}, Data) ->
 encode_response({<<"application">>, <<"x-bert">>, _}, Data) ->
     erlang:term_to_binary(Data);
 encode_response({<<"application">>, <<"x-www-form-urlencoded">>, _}, Data) ->
-    cow_qs:encode( encode_prep_qs(Data) ).
+    cow_qs:urlencode( encode_prep_qs(Data) ).
 
 encode_prep_qs(Map) when is_map(Map) ->
     encode_prep_qs( maps:to_list(Map) );
@@ -184,7 +184,7 @@ encode_prep_qs(List) when is_list(List) ->
             ({K, undefined}) -> {z_convert:to_binary(K), <<>>};
             ({K, true}) -> {z_convert:to_binary(K), true};
             ({K, false}) -> {z_convert:to_binary(K), false};
-            ({K, V}) -> {z_convert:to_binary(K), z_conver:to_binary(V)};
+            ({K, V}) -> {z_convert:to_binary(K), z_convert:to_binary(V)};
             (K) when is_atom(K) -> {atom_to_binary(K, utf8), true};
             (K) when is_binary(K) -> {K, true}
         end,

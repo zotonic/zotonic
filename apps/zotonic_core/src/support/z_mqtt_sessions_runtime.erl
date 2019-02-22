@@ -208,7 +208,7 @@ is_allowed(_Action,   [ <<"bridge">>, Remote | _ ], Context) ->
             case z_auth:is_auth(Context) of
                 true ->
                     % Only works if remote is a client-id
-                    case z_mqtt_sessions:get_user_context(z_context:site(Context), Remote) of
+                    case mqtt_sessions:get_user_context(z_context:site(Context), Remote) of
                         {ok, UserContext} ->
                             z_acl:user(UserContext) =:= z_acl:user(Context);
                         {error, _} ->
