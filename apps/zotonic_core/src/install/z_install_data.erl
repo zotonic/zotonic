@@ -112,7 +112,6 @@ base_modules() ->
      mod_logging,
 
      mod_wires,
-     mod_signal,
      mod_mqtt,
 
      mod_translation,
