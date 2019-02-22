@@ -215,6 +215,7 @@ upgrade(C, Database, Schema) ->
     % 0.12.5
     ok = install_content_group_dependent(C, Database, Schema),
     ok = convert_category_hierarchy(C, Database, Schema),
+    ok = publication_start_nullable(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -561,3 +562,12 @@ convert_category_hierarchy(C, Database, Schema) ->
         true ->
             ok
     end.
+
+publication_start_nullable(C, _Database, _Schema) ->
+    {ok, [], []} = pgsql:squery(
+        C,
+        "ALTER TABLE rsc "
+            "ALTER COLUMN publication_start DROP NOT NULL, "
+            "ALTER COLUMN publication_start DROP DEFAULT"
+    ),
+    ok.

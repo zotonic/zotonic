@@ -75,13 +75,14 @@
     common_properties/1
 ]).
 
--export_type([resource/0, resource_id/0, resource_name/0]).
+-export_type([resource/0, resource_id/0, resource_name/0, properties/0]).
 
 -include_lib("zotonic.hrl").
 
 -type resource() :: resource_id() | resource_name().
 -type resource_id() :: integer() | list(digits()).
 -type resource_name() :: string() | binary() | atom().
+-type properties() :: proplists:proplist().
 -type digits() :: 16#30..16#39.
 
 %% @doc Fetch the value for the key from a model source

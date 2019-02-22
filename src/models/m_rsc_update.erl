@@ -602,7 +602,8 @@ normalize_props(Id, Props, Context) ->
 
 normalize_props(Id, Props, Options, Context) ->
     DateProps = recombine_dates(Id, Props, Context),
-    TextProps = recombine_languages(DateProps, Context),
+    DefaultProps = props_defaults(Id, DateProps, Context),
+    TextProps = recombine_languages(DefaultProps, Context),
     BlockProps = recombine_blocks(TextProps, Props, Context),
     IsImport = proplists:get_value(is_import, Options, false),
     [ {map_property_name(IsImport, P), V} || {P, V} <- BlockProps ].
@@ -964,6 +965,21 @@ props_defaults(Props, Context) ->
         _ -> Props
     end.
 
+%% @doc Set default properties during resource update.
+-spec props_defaults(m_rsc:resource(), m_rsc:properties(), z:context()) -> m_rsc:properties().
+props_defaults(_Id, Props, Context) ->
+    [{Key, prop_default(Key, Value, Props, Context)} || {Key, Value} <- Props].
+
+-spec prop_default(string(), any(), m_rsc:properties(), z:context()) -> any().
+prop_default("publication_start", undefined, Props, Context) ->
+    case z_convert:to_bool(proplists:get_value("is_published", Props)) of
+        true ->
+            local_now(Context);
+        false ->
+            undefined
+    end;
+prop_default(_Key, Value, _Props, _Context) ->
+    Value.
 
 props_filter_protected(Props, RscUpd) ->
     IsNormal = is_normal_update(RscUpd),
@@ -1052,7 +1068,7 @@ is_trimmable(_, _)           -> false.
 
 %% @doc Combine all textual date fields into real date. Convert them to UTC afterwards.
 recombine_dates(Id, Props, Context) ->
-    LocalNow = z_datetime:to_local(erlang:universaltime(), Context),
+    LocalNow = local_now(Context),
     {Dates, Props1} = recombine_dates_1(Props, [], []),
     {Dates1, DateGroups} = group_dates(Dates),
     {DateGroups1, DatesNull} = collect_empty_date_groups(DateGroups, [], []),
@@ -1226,6 +1242,7 @@ group_dates(Dates) ->
 default_date("date", _LocalNow) -> undefined;
 default_date("date_start", _LocalNow) -> undefined;
 default_date("date_end", _LocalNow) -> undefined;
+default_date("publication", _LocalNow) -> undefined;
 default_date("org_pubdate", _LocalNow) -> undefined;
 default_date(_, LocalNow) -> LocalNow.
 
@@ -1522,4 +1539,7 @@ test() ->
     ], z_context:new_tests()),
     ok.
 
+-spec local_now(z:context()) -> calendar:datetime().
+local_now(Context) ->
+    z_datetime:to_local(erlang:universaltime(), Context).
 
