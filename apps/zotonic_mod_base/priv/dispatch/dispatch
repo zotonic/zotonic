@@ -5,12 +5,6 @@
  %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
  {close_connection, ["close-connection"],  controller_close_connection, [{no_session, true}]},
 
- %% Used to get page unload beacons from open pages.
- {unload_beacon, ["beacon"],  controller_unload_beacon, [{no_session, true}]},
- 
- %% Test page for connection tests
- {connection_test, ["connection-test"], controller_connection_test, [{template, "connection_test.tpl"}]},
- 
  %% The id controller redirects depending on the accept header sent by the user agent.
  {id, ["id", id], controller_id, []},
  
@@ -30,9 +24,6 @@
  
  %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
  {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}]},
- 
- %% Session cookie retrieval. Collects cookies set in a websocket request.
- {session_cookies, ["z_session", "cookies"], controller_cookies, []},
  
  %% robots.txt - simple allow all file
  {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]}
