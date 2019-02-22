@@ -75,7 +75,7 @@ is_user_email(Email, Context) ->
             orelse is_visible_email(Email, Context)
     end.
 
-is_visible_email(Email, Context) -<
+is_visible_email(Email, Context) ->
     Idns = m_identity:lookup_by_type_and_key_multi(email, Email, Context),
     lists:any(
         fun(Idn) ->

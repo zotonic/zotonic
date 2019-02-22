@@ -21,7 +21,9 @@
 -behaviour (zotonic_model).
 
 -export([
-    m_get/2,
+    m_get/3,
+
+    is_useauth/1,
 
     install/2,
 
@@ -43,10 +45,6 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--export([
-    m_get/3,
-    is_useauth/1
-]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ useauth | Rest ], _Msg, Context) ->
