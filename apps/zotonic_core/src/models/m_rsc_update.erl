@@ -453,14 +453,14 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
     z_notifier:notify_sync(Note, Context),
     z_mqtt:publish(
         [
-            <<"model">>, <<"rsc">>, <<"event">>, Id,
+            <<"model">>, <<"rsc">>, <<"event">>, NewId,
             case Id of
                 insert_rsc -> <<"insert">>;
                 _ -> <<"update">>
             end
         ],
          #{
-            id => Id,
+            id => NewId,
             pre_is_a => OldCatList,
             post_is_a => NewCatList
          },
