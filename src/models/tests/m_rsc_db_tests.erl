@@ -28,6 +28,7 @@ modify_rsc_test() ->
     ?assertEqual(true, m_rsc:is_a(Id, text, AdminC)),
 
     ?assertEqual(false, m_rsc:p(Id, is_published, AdminC)),
+    ?assertEqual(undefined, m_rsc:p(Id, publication_start, AdminC)),
     ?assertEqual(undefined, m_rsc:p(Id, title, C)), %% not visible for anonymous yet
 
     %% Update
@@ -35,6 +36,7 @@ modify_rsc_test() ->
 
     {ok, Id} = m_rsc:update(Id, [{title, "Bye."}, {is_published, true}], AdminC),
     ?assertEqual(<<"Bye.">>, m_rsc:p(Id, title, AdminC)),
+    ?assertNotEqual(undefined, m_rsc:p(Id, publication_start, AdminC)),
 
     ?assertEqual(2, m_rsc:p(Id, version, AdminC)),
 
