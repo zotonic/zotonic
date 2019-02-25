@@ -93,11 +93,9 @@
     set_session/3,
     get_session/2,
     get_session/3,
-    incr_session/3,
 
     set_page/3,
     get_page/2,
-    incr_page/3,
 
     client_id/1,
 
@@ -109,7 +107,6 @@
     set/2,
     get/2,
     get/3,
-    incr/3,
     get_all/1,
 
     language/1,
@@ -812,32 +809,36 @@ client_id(#context{ client_id = ClientId }) ->
 
 %% @doc Ensure that we have an id for the visitor
 persistent_id(Context) ->
+    lager:error("persistent_id", []),
     undefined.
     % z_session:persistent_id(Context).
 
 %% @spec set_persistent(Key, Value, Context) -> Context
 %% @doc Set the value of the visitor variable Key to Value
 set_persistent(Key, Value, Context) ->
+    lager:error("set_persistent: ~p ~p", [Key, Value]),
     Context.
     % z_session:set_persistent(Key, Value, Context).
 
 
 %% @spec get_persistent(Key, Context) -> Value
 %% @doc Fetch the value of the visitor variable Key
-get_persistent(_Key, Context) ->
-    undefined.
+get_persistent(Key, Context) ->
+    lager:error("get_persistent: ~p", [Key]),
     % z_session:get_persistent(Key, Context).
-
+    undefined.
 
 %% @spec set_session(Key, Value, Context) -> Context
 %% @doc Set the value of the session variable Key to Value
 set_session(Key, Value, Context) ->
+    lager:error("set_session: ~p ~p", [Key, Value]),
     % z_session:set(Key, Value, Context#context.session_pid),
     Context.
 
 %% @spec get_session(Key, Context) -> Value
 %% @doc Fetch the value of the session variable Key
 get_session(Key, Context) ->
+    lager:error("get_session: ~p", [Key]),
     undefined.
     % z_session:get(Key, Context#context.session_pid).
 
@@ -848,11 +849,6 @@ get_session(_Key, Context, DefaultValue) ->
 % get_session(Key, Context, DefaultValue) ->
 %     z_session:get(Key, Context#context.session_pid, DefaultValue).
 
-%% @spec incr_session(Key, Increment, Context) -> {NewValue, NewContext}
-%% @doc Increment the session variable Key
-incr_session(Key, Value, Context) ->
-    {Value, Context}.
-    % {z_session:incr(Key, Value, Context#context.session_pid), Context}.
 
 %% @spec set_page(Key, Value, Context) -> Context
 %% @doc Set the value of the page variable Key to Value
@@ -864,13 +860,6 @@ set_page(Key, Value, Context) ->
 %% @doc Fetch the value of the page variable Key
 get_page(_Key, Context) ->
     undefined.
-
-
-%% @spec incr_page(Key, Increment, Context) -> {NewValue, NewContext}
-%% @doc Increment the page variable Key
-incr_page(Key, Value, Context) ->
-    {Value, Context}.
-    % {z_session_page:incr(Key, Value, Context#context.session_pid), Context}.
 
 
 %% @spec set(Key, Value, Context) -> Context
@@ -938,15 +927,6 @@ get_path_info(Key, Context, Default) ->
 get_all(Context) ->
     maps:to_list(Context#context.props).
 
-
-%% @spec incr(Key, Increment, Context) -> {NewValue,NewContext}
-%% @doc Increment the context variable Key
-incr(Key, Value, Context) ->
-    R = case z_convert:to_integer(get(Key, Context)) of
-	    undefined -> Value;
-	    N -> N + Value
-	end,
-    {R, set(Key, R, Context)}.
 
 %% @doc Return the selected language of the Context
 -spec language(z:context()) -> atom().

@@ -18,7 +18,7 @@
     <body>
 		{% wire type="unload" action={alert text="Bye"} %}
 		<div class="zp-wrapper">
-	        <h1>Hello, new world {{ helloworld_counter }}</h1>
+	        <h1>Hello, new world</h1>
 
 			<div class="zp-50 content">
 				<div class="padding">
