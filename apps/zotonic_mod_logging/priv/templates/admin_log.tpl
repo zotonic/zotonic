@@ -26,6 +26,12 @@
 {% button class="btn btn-primary" text="more..." action={moreresults result=result target="log-area" template="_admin_log_row.tpl"} %}
 {% endwith %}
 
-{% wire action={connect signal={log_message} action={addlog target="log-area"}} %}
+{% wire type={mqtt topic=[ "model", "logging", "event", "#" ]}
+        action={insert_top
+                    target="log-area"
+                    template="_admin_log_row.tpl"
+                    is_live
+                }
+%}
 
 {% endblock %}

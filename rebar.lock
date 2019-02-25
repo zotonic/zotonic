@@ -59,7 +59,7 @@
   0},
  {<<"mqtt_sessions">>,
   {git,"https://github.com/zotonic/mqtt_sessions.git",
-       {ref,"44fec538fa5866a5b8a00a3748e1be0b81019ab8"}},
+       {ref,"4262ecc6b826048e287880a7592c00d85a4972f8"}},
   0},
  {<<"oauth">>,
   {git,"https://github.com/tim/erlang-oauth.git",
@@ -87,7 +87,10 @@
   {git,"https://github.com/Vagabond/erlang-syslog.git",
        {ref,"4a6c6f2c996483e86c1320e9553f91d337bcb6aa"}},
   0},
- {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.0.0-alpha8">>},0},
+ {<<"template_compiler">>,
+  {git,"https://github.com/zotonic/template_compiler.git",
+       {ref,"da03739e76a89ea8bcaaf63e546d4e80f8447d29"}},
+  0},
  {<<"termit">>,
   {git,"https://github.com/erlangpack/termit",
        {ref,"c1d0dde3b184a48f8253f0f3fd4b73a2eba4905e"}},
@@ -147,6 +150,5 @@
  {<<"setup">>, <<"15DF8E57C6DF9755E22BFB1AEF0C640BD97E9889396FDFB2A85A5536A9043674">>},
  {<<"shotgun">>, <<"54EA3C243B65A935A3491A079A573C9D119A5EAF28BC2673893F8EEF66FDC053">>},
  {<<"sidejob">>, <<"5D6A7C9C620778CB1908E46B552D767DF2ED4D77070BB7B5B8773D4FF18D1D37">>},
- {<<"template_compiler">>, <<"2F84A081707F80C642DD2504A90C5E7B033410C76CFF77C2A3F4E0F95F691952">>},
  {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>}]}
 ].

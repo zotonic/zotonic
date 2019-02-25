@@ -140,7 +140,9 @@ maybe_set_q(_Type, #{ <<"q">> := Qs }, Context) when is_list(Qs) ->
     Qs1 = lists:foldr(
         fun
             (#{ <<"name">> := K, <<"value">> := V }, Acc) ->
-                [ {K, V} | Acc ]
+                [ {K, V} | Acc ];
+            (#{ <<"name">> := K }, Acc) ->
+                [ {K, undefined} | Acc ]
         end,
         [],
         Qs),

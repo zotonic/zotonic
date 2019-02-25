@@ -1,4 +1,4 @@
-{% with signal_props.log_id|default:id as id %}
+{% with is_live|if:q.payload.log_id:id|to_integer as id %}
     {% with m.log[id] as l %}
         <div class="alert alert-{{ l.type|default:"info" }}">
             <div class="pull-right">
