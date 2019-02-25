@@ -94,14 +94,9 @@
     get_session/2,
     get_session/3,
 
-    set_page/3,
-    get_page/2,
-
     client_id/1,
 
     persistent_id/1,
-    set_persistent/3,
-    get_persistent/2,
 
     set/3,
     set/2,
@@ -783,25 +778,6 @@ lager_md(MD, Req) when is_map(Req) ->
 %% ------------------------------------------------------------------------------------
 
 
-%% @spec get_value(Key::string(), Context) -> Value | undefined
-%% @doc Find a key in the context, page, session or persistent state.
-%% @todo Add page and user lookup
-get_value(Key, Context) ->
-    case get(Key, Context) of
-        undefined ->
-            case get_page(Key, Context) of
-                undefined ->
-                    case get_session(Key, Context) of
-                        undefined -> get_persistent(Key, Context);
-                        Value -> Value
-                    end;
-                Value ->
-                    Value
-            end;
-        Value ->
-            Value
-    end.
-
 %% @doc Return the current client id (if any)
 -spec client_id( z:context() ) -> binary() | undefined.
 client_id(#context{ client_id = ClientId }) ->
@@ -812,21 +788,6 @@ persistent_id(Context) ->
     lager:error("persistent_id", []),
     undefined.
     % z_session:persistent_id(Context).
-
-%% @spec set_persistent(Key, Value, Context) -> Context
-%% @doc Set the value of the visitor variable Key to Value
-set_persistent(Key, Value, Context) ->
-    lager:error("set_persistent: ~p ~p", [Key, Value]),
-    Context.
-    % z_session:set_persistent(Key, Value, Context).
-
-
-%% @spec get_persistent(Key, Context) -> Value
-%% @doc Fetch the value of the visitor variable Key
-get_persistent(Key, Context) ->
-    lager:error("get_persistent: ~p", [Key]),
-    % z_session:get_persistent(Key, Context).
-    undefined.
 
 %% @spec set_session(Key, Value, Context) -> Context
 %% @doc Set the value of the session variable Key to Value
@@ -848,18 +809,6 @@ get_session(_Key, Context, DefaultValue) ->
     DefaultValue.
 % get_session(Key, Context, DefaultValue) ->
 %     z_session:get(Key, Context#context.session_pid, DefaultValue).
-
-
-%% @spec set_page(Key, Value, Context) -> Context
-%% @doc Set the value of the page variable Key to Value
-set_page(Key, Value, Context) ->
-    Context.
-    % z_session_page:set(Key, Value, Context#context.page_pid),
-
-%% @spec get_page(Key, Context) -> Value
-%% @doc Fetch the value of the page variable Key
-get_page(_Key, Context) ->
-    undefined.
 
 
 %% @spec set(Key, Value, Context) -> Context

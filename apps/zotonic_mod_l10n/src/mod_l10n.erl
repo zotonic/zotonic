@@ -28,8 +28,6 @@
 -mod_description("Localization, timezones, translations for country names etc.").
 
 -export([
-    % observe_session_init_fold/3,
-    % observe_session_context/3,
     % observe_auth_logon/3,
     observe_request_context/3,
     observe_user_context/3,
@@ -47,23 +45,6 @@
 -define(TZ_COOKIE, <<"z.tz">>).
 -define(TZ_COOKIE_MAX_AGE, 3600*24*365).
 
-
-%% @doc Check if the user has a prefered timezone (in the user's persistent data).
-% observe_session_init_fold(#session_init_fold{}, Context, _Context) ->
-%     case is_fixed_timezone(Context) of
-%         true ->
-%             Context;
-%         false ->
-%             case get_q_timezone(Context) of
-%                 undefined ->
-%                     case z_context:get_persistent(tz, Context) of
-%                         undefined -> Context;
-%                         Tz -> set_timezone(Tz, Context)
-%                     end;
-%                 QTz ->
-%                     try_set_timezone(QTz, Context)
-%             end
-%     end.
 
 %% @doc Check if the user has a preferred timezone
 observe_request_context(#request_context{ phase = init }, Context, _Context) ->
@@ -155,39 +136,6 @@ set_cookie(Tz, Context) ->
         ],
         Context).
 
-% observe_session_context(#session_context{}, Context, _Context) ->
-%     case is_fixed_timezone(Context) of
-%         true ->
-%             Context;
-%         false ->
-%             Context1 = case z_context:get_session(tz, Context) of
-%                             undefined -> Context;
-%                             Tz -> z_context:set_tz(Tz, Context)
-%                        end,
-%             case get_q_timezone(Context1) of
-%                 undefined -> Context1;
-%                 QTz -> try_set_timezone(QTz, Context1)
-%             end
-%     end.
-
-% observe_auth_logon(#auth_logon{ id = UserId }, Context, _Context) ->
-%     case is_fixed_timezone(Context) of
-%         true ->
-%             Context;
-%         false ->
-%             case m_rsc:p_no_acl(UserId, pref_tz, Context) of
-%                 Tz when is_binary(Tz), Tz =/= <<>> ->
-%                     % Switch the session to the default timezone of the user
-%                     try_set_timezone(Tz, Context),
-%                     % z_context:set_persistent(tz, z_context:tz(Context1), Context1),
-%                     Context1;
-%                 _Undefined ->
-%                     % Ensure that the user has a default timezone
-%                     catch m_rsc:update(UserId, [{pref_tz, z_context:tz(Context)}], Context),
-%                     Context
-%             end
-%     end.
-
 observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
     case is_fixed_timezone(Context) of
         true ->
@@ -232,7 +180,6 @@ is_fixed_timezone(Context) ->
 %% @doc Set the timezone, as selected by the user. Persist this choice.
 set_user_timezone(Tz, Context) ->
     Context1 = try_set_timezone(Tz, Context),
-    % z_context:set_persistent(tz, z_context:tz(Context1), Context1),
     case z_acl:user(Context1) of
         undefined ->
             nop;
