@@ -190,6 +190,19 @@ get_column_type(C, Table, Column, Database, Schema) ->
               and column_name = $4", [Database, Schema, Table, Column]),
     ColumnType.
 
+is_column_nullable(C, Table, Column, Database, Schema) ->
+    {ok, _, [{IsNullable}]} = pgsql:equery(C, "
+            select is_nullable
+            from information_schema.columns
+            where table_catalog = $1
+              and table_schema = $2
+              and table_name = $3
+              and column_name = $4", [Database, Schema, Table, Column]),
+    case IsNullable of
+        <<"YES">> -> true;
+        <<"NO">> -> false
+    end.
+
 
 %% Upgrade older Zotonic versions.
 upgrade(C, Database, Schema) ->
@@ -563,11 +576,15 @@ convert_category_hierarchy(C, Database, Schema) ->
             ok
     end.
 
-publication_start_nullable(C, _Database, _Schema) ->
-    {ok, [], []} = pgsql:squery(
-        C,
-        "ALTER TABLE rsc "
-            "ALTER COLUMN publication_start DROP NOT NULL, "
-            "ALTER COLUMN publication_start DROP DEFAULT"
-    ),
-    ok.
+publication_start_nullable(C, Database, Schema) ->
+    case is_column_nullable(C, "rsc", "publication_start", Database, Schema) of
+        true -> ok;
+        false ->
+            {ok, [], []} = pgsql:squery(
+                C,
+                "ALTER TABLE rsc "
+                    "ALTER COLUMN publication_start DROP NOT NULL, "
+                    "ALTER COLUMN publication_start DROP DEFAULT"
+            ),
+            ok
+    end.
