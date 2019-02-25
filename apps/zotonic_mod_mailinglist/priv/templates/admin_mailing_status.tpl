@@ -19,11 +19,13 @@
 
     </div>
 
-    <div class="zp-100" id="mailing-status">
-        {% include "_admin_mailing_status_overview.tpl" %}
+    {# TODO: also reload if there is email activity for this mailinglist -- as stats table should be added #}
+    <div id="mailing-status">
+        {% live topic=["model", "mailinglist", "event", id, "+" ]
+                template="_admin_mailing_status_overview.tpl"
+                id=id
+        %}
     </div>
 
-    {% wire action={connect signal={log_email} action={update target="mailing-status" template="_admin_mailing_status_overview.tpl" id=id}} %}
-    {% wire action={connect signal={update_mailinglist_scheduled} action={update target="mailing-status" template="_admin_mailing_status_overview.tpl" id=id}} %}
 </div>
 {% endblock %}

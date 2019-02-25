@@ -247,11 +247,11 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 					  where mailinglist_id = $1
 					    and email = $2", [ListId, Email1], Context),
 	ConfirmKey = binary_to_list(z_ids:id(20)),
-	WelcomeMessageType1 = case Rec of
-		{RecipientId, true, _OldConfirmKey} ->
+	{RecipientId, WelcomeMessageType1} = case Rec of
+		{RcptId, true, _OldConfirmKey} ->
 			%% Present and enabled
-			silent;
-		{RecipientId, false, OldConfirmKey} ->
+			{RcptId, silent};
+		{RcptId, false, OldConfirmKey} ->
 			%% Present, but not enabled
 			NewConfirmKey = case OldConfirmKey of undefined -> ConfirmKey; _ -> OldConfirmKey end,
 			case WelcomeMessageType of
@@ -260,15 +260,15 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 						OldConfirmKey -> nop;
 						_ -> z_db:q("update mailinglist_recipient
 									 set confirm_key = $2
-									 where id = $1", [RecipientId, NewConfirmKey], Context)
+									 where id = $1", [RcptId, NewConfirmKey], Context)
 					end,
-					{send_confirm, NewConfirmKey};
+					{RcptId, {send_confirm, NewConfirmKey}};
 				_ ->
 					z_db:q("update mailinglist_recipient
 							set is_enabled = true,
 							    confirm_key = $2
-							where id = $1", [RecipientId, NewConfirmKey], Context),
-					WelcomeMessageType
+							where id = $1", [RcptId, NewConfirmKey], Context),
+					{RcptId, WelcomeMessageType}
 			end;
 		undefined ->
 			%% Not present
@@ -283,8 +283,8 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 				{email, Email1},
 				{confirm_key, ConfirmKey}
 			] ++ [ {K, case is_list(V) of true-> z_convert:to_binary(V); false -> V end} || {K,V} <- Props ],
-			{ok, RecipientId} = z_db:insert(mailinglist_recipient, Cols, Context),
-			WelcomeMessageType
+			{ok, RcptId} = z_db:insert(mailinglist_recipient, Cols, Context),
+			{RcptId, WelcomeMessageType}
 	end,
 	case WelcomeMessageType1 of
 		none -> nop;
@@ -388,6 +388,10 @@ insert_scheduled(ListId, PageId, Context) ->
 				where page_id = $1 and mailinglist_id = $2", [PageId,ListId], Context),
 	case Exists of
 		0 ->
+           z_mqtt:publish(
+                [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
+                #{ id => ListId, page_id => PageId, action => <<"insert">> },
+                Context),
 			z_db:q("insert into mailinglist_scheduled (page_id, mailinglist_id) values ($1,$2)",
 					[PageId, ListId], Context);
 		1 ->
@@ -397,7 +401,23 @@ insert_scheduled(ListId, PageId, Context) ->
 %% @doc Delete a scheduled mailing
 delete_scheduled(ListId, PageId, Context) ->
 	true = z_acl:rsc_editable(ListId, Context),
-	z_db:q("delete from mailinglist_scheduled where page_id = $1 and mailinglist_id = $2", [PageId,ListId], Context).
+	case z_db:q("
+            delete from mailinglist_scheduled
+            where page_id = $1
+              and mailinglist_id = $2",
+            [PageId,ListId],
+            Context)
+    of
+        0 ->
+            0;
+        N when N > 0 ->
+            z_mqtt:publish(
+                [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
+                #{ id => ListId, page_id => PageId, action => <<"delete">> },
+                Context),
+            N
+    end.
+
 
 %% @doc Get the list of scheduled mailings for a page.
 get_scheduled(Id, Context) ->
@@ -425,6 +445,10 @@ check_scheduled(Context) ->
 reset_log_email(ListId, PageId, Context) ->
     z_db:q("delete from log_email where other_id = $1 and content_id = $2", [ListId, PageId], Context),
     z_depcache:flush({mailinglist_stats, PageId}, Context),
+    z_mqtt:publish(
+        [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
+        #{ id => ListId, page_id => PageId, action => <<"reset">> },
+        Context),
     ok.
 
 
