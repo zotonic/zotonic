@@ -686,7 +686,7 @@ function z_transport_incoming(data)
         var msgs = ubf.decode(data);
 
         if (typeof msgs == 'object' && msgs.ubf_type == ubf.LIST) {
-            for (i=0; i<msgs.length; i++) {
+            for (var i=0; i<msgs.length; i++) {
                 z_transport_incoming_msg(msgs[i]);
             }
         } else {
