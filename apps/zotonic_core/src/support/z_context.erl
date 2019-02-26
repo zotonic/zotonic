@@ -77,25 +77,11 @@
 
     is_zotonic_arg/1,
 
-    % add_script_session/1,
-    % add_script_page/1,
-    % add_script_session/2,
-    % add_script_page/2,
-
-    % spawn_link_session/4,
-    % spawn_link_page/4,
-
     lager_md/1,
     lager_md/2,
 
-    set_session/3,
-    get_session/2,
-    get_session/3,
-
     client_id/1,
     client_topic/1,
-
-    persistent_id/1,
 
     set/3,
     set/2,
@@ -702,42 +688,6 @@ q_upload_keepalive(false, Context) ->
         Qs),
     ok.
 
-
-%% ------------------------------------------------------------------------------------
-%% Communicate with pages, session and user processes
-%% ------------------------------------------------------------------------------------
-
-% %% @doc Add the script from the context to all pages of the session.
-% add_script_session(Context) ->
-%     Script = z_render:get_script(Context),
-%     add_script_session(Script, Context).
-
-
-% %% @doc Add the script from the context to the page in the user agent.
-% add_script_page(Context) ->
-%     Script = z_render:get_script(Context),
-%     add_script_page(Script, Context).
-
-
-% %% @doc Add a script to the all pages of the session. Used for comet feeds.
-% add_script_session(Script, Context) ->
-%     z_session:add_script(Script, Context#context.session_pid).
-
-
-% %% @doc Add a script to the page in the user agent.  Used for comet feeds.
-% add_script_page(Script, Context) ->
-%     z_session_page:add_script(Script, Context#context.page_pid).
-
-
-% %% @doc Spawn a new process, link it to the session process.
-% spawn_link_session(Module, Func, Args, Context) ->
-%     z_session:spawn_link(Module, Func, Args, Context).
-
-% %% @doc Spawn a new process, link it to the page process.  Used for comet feeds.
-% spawn_link_page(Module, Func, Args, Context) ->
-%     z_session_page:spawn_link(Module, Func, Args, Context).
-
-
 %% ------------------------------------------------------------------------------------
 %% Set lager metadata for the current process
 %% ------------------------------------------------------------------------------------
@@ -787,39 +737,10 @@ client_id(#context{ client_id = ClientId }) ->
 client_topic(#context{ client_topic = ClientTopic }) ->
     ClientTopic.
 
-%% @doc Ensure that we have an id for the visitor
-persistent_id(Context) ->
-    lager:error("persistent_id", []),
-    undefined.
-    % z_session:persistent_id(Context).
-
-%% @spec set_session(Key, Value, Context) -> Context
-%% @doc Set the value of the session variable Key to Value
-set_session(Key, Value, Context) ->
-    lager:error("set_session: ~p ~p", [Key, Value]),
-    % z_session:set(Key, Value, Context#context.session_pid),
-    Context.
-
-%% @spec get_session(Key, Context) -> Value
-%% @doc Fetch the value of the session variable Key
-get_session(Key, Context) ->
-    lager:error("get_session: ~p", [Key]),
-    undefined.
-    % z_session:get(Key, Context#context.session_pid).
-
-%% @spec get_session(Key, Context, DefaultValue) -> Value
-%% @doc Fetch the value of the session variable Key, falling back to default.
-get_session(_Key, Context, DefaultValue) ->
-    DefaultValue.
-% get_session(Key, Context, DefaultValue) ->
-%     z_session:get(Key, Context#context.session_pid, DefaultValue).
-
-
 %% @spec set(Key, Value, Context) -> Context
 %% @doc Set the value of the context variable Key to Value
 set(Key, Value, #context{ props = Props } = Context) ->
     Context#context{ props = Props#{ Key => Value } }.
-
 
 %% @spec set(PropList, Context) -> Context
 %% @doc Set the value of the context variables to all {Key, Value} properties.
