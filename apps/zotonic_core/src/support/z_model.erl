@@ -81,7 +81,7 @@ publish(Model, Verb, Path, undefined, Context) ->
     publish(Model, Verb, Path, Msg, Context);
 publish(Model, Verb, Path, Msg, Context) ->
     ModelTopic = mqtt_topic(Model, Verb, Path),
-    RespTopic = z_mqtt:temp_response_topic(Context),
+    {ok, RespTopic} = z_mqtt:temp_response_topic(Context),
     Props = maps:get(path_element, Msg, #{}),
     Msg1 = Msg#{
         topic => ModelTopic,
@@ -92,8 +92,8 @@ publish(Model, Verb, Path, Msg, Context) ->
     case z_mqtt:publish(Msg1, Context) of
         ok ->
             case z_mqtt:await_response(RespTopic, ?MQTT_CALL_TIMEOUT) of
-                {ok, {mqtt_msg, #{ message := Msg}}} ->
-                    {ok, maps:get(payload, Msg, undefined)};
+                {ok, #{ message := ReplyMsg } } ->
+                    {ok, maps:get(payload, ReplyMsg, undefined)};
                 {error, _} = Error ->
                     Error
             end;

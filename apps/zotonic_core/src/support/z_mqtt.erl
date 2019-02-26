@@ -32,9 +32,11 @@
     unsubscribe/2,
     unsubscribe/3,
 
+    call/3,
+
     temp_response_topic/1,
-    await_response/1,
     await_response/2,
+    await_response/3,
 
     map_topic/2,
     map_topic_filter/2,
@@ -54,6 +56,10 @@
 -export_type([ topic/0, topic_any/0 ]).
 
 -include_lib("zotonic.hrl").
+
+
+-define(MQTT_CALL_TIMEOUT, 10000).
+
 
 -spec publish( topic(), term(), z:context()) -> ok | {error, term()}.
 publish(Topic, Payload, Context) ->
@@ -79,6 +85,33 @@ publish(#{ type := publish, topic := Topic } = Msg, Context) ->
         {error, _} = Error ->
             Error
     end.
+
+
+-spec call( topic(), term(), z:context() ) -> {ok, term()} | {error, term()}.
+call( Topic, Payload, Context ) ->
+    {ok, RespTopic} = temp_response_topic(Context),
+    Msg = #{
+        type => publish,
+        topic => Topic,
+        payload => Payload,
+        qos => 0,
+        retain => false,
+        properties => #{
+            response_topic => RespTopic
+        }
+    },
+    case publish(Msg, Context) of
+        ok ->
+            case await_response(RespTopic, ?MQTT_CALL_TIMEOUT, Context) of
+                {ok, #{ message := ReplyMsg } } ->
+                    {ok, maps:get(payload, ReplyMsg, undefined)};
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
 
 -spec subscribe( topic(), z:context() ) -> ok | {error, term()}.
 subscribe(TopicFilter, Context) ->
@@ -119,15 +152,15 @@ unsubscribe(TopicFilter, OwnerPid, Context) when is_pid(OwnerPid) ->
 
 -spec temp_response_topic( z:context() ) -> {ok, mqtt_sessions:topic()} | {error, term()}.
 temp_response_topic(Context) ->
-    mqtt_sessions:temp_response_topic(z_context:site(Context), Context).
+    mqtt_sessions:temp_response_topic(z_context:site(Context), z_context:prune_for_async(Context)).
 
--spec await_response( mqtt_sessions:topic() ) -> {ok, mqtt_packet_map:mqtt_packet()} | {error, timeout}.
-await_response( Topic ) ->
-    mqtt_sessions:await_response(Topic).
+-spec await_response( mqtt_sessions:topic(), z:context() ) -> {ok, mqtt_packet_map:mqtt_packet()} | {error, timeout}.
+await_response( Topic, Context ) ->
+    mqtt_sessions:await_response(z_context:site(Context), Topic).
 
--spec await_response( mqtt_sessions:topic(), pos_integer() ) -> {ok, mqtt_packet_map:mqtt_packet()} | {error, timeout}.
-await_response( Topic, Timeout ) ->
-    mqtt_sessions:await_response(Topic, Timeout).
+-spec await_response( mqtt_sessions:topic(), pos_integer(), z:context() ) -> {ok, mqtt_packet_map:mqtt_packet()} | {error, timeout}.
+await_response( Topic, Timeout, Context ) ->
+    mqtt_sessions:await_response(z_context:site(Context), Topic, Timeout).
 
 
 

@@ -5,17 +5,17 @@
 -module(controller_test_helloworld).
 -export([
     process/4,
-    event/2,
-    periodic/2
+    event/2
+    % periodic/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    Html = z_template:render("test_helloworld.tpl", [{helloworld_counter,Incr}], Context),
+    Html = z_template:render("test_helloworld.tpl", [], Context),
     % Html = z_template:render("idtest.tpl", Context2),
     % _Pid = z_context:spawn_link_page(?MODULE, periodic, [], Context3),
-    z_context:output(Html, Context2).
+    z_context:output(Html, Context).
 
 
 event(#postback{message=show_confirm}, Context) ->

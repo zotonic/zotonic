@@ -88,13 +88,12 @@
     lager_md/1,
     lager_md/2,
 
-    get_value/2,
-
     set_session/3,
     get_session/2,
     get_session/3,
 
     client_id/1,
+    client_topic/1,
 
     persistent_id/1,
 
@@ -782,6 +781,11 @@ lager_md(MD, Req) when is_map(Req) ->
 -spec client_id( z:context() ) -> binary() | undefined.
 client_id(#context{ client_id = ClientId }) ->
     ClientId.
+
+%% @doc Return the current client bridge topic (if any)
+-spec client_topic( z:context() ) -> mqtt_sessions:topic() | undefined.
+client_topic(#context{ client_topic = ClientTopic }) ->
+    ClientTopic.
 
 %% @doc Ensure that we have an id for the visitor
 persistent_id(Context) ->
