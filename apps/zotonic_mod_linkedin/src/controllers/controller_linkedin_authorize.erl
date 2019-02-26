@@ -21,18 +21,10 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    service_available/1,
     resource_exists/1,
     previously_existed/1,
     moved_temporarily/1
 ]).
--export([get_args/1]).
-
--include_lib("zotonic_core/include/zotonic.hrl").
-
-service_available(Context) ->
-    Context2 = z_context:ensure_qs(Context),
-    {true, Context2}.
 
 resource_exists(Context) ->
     {false, Context}.
@@ -41,13 +33,13 @@ previously_existed(Context) ->
     {true, Context}.
 
 moved_temporarily(Context) ->
-    Location = redirect_location(Context),
-    save_args(Context),
-    {{true, Location}, Context}.
+    StateId = z_ids:id(),
+    SecretData = {StateId, z_context:get_q_all_noz(Context)},
+    Context1 = z_context:set_state_cookie(SecretData, Context),
+    Location = redirect_location(StateId, Context1),
+    {{true, Location}, Context1}.
 
-redirect_location(Context) ->
-    LinkedInState = z_ids:id(),
-    z_context:set_session(linkedin_state, LinkedInState, Context),
+redirect_location(StateId, Context) ->
     {AppId, _AppSecret, Scope} = mod_linkedin:get_config(Context),
     RedirectUrl = z_context:abs_url(
                             z_dispatcher:url_for(linkedin_redirect, Context),
@@ -56,17 +48,6 @@ redirect_location(Context) ->
         <<"https://www.linkedin.com/uas/oauth2/authorization?response_type=code">>,
         "&client_id=", z_url:url_encode(AppId),
         "&redirect_uri=", z_url:url_encode(RedirectUrl),
-        "&state=", z_url:url_encode(LinkedInState),
+        "&state=", StateId,
         "&scope=", z_url:url_encode(Scope)
     ]).
-
-save_args(Context) ->
-    z_context:set_session(?MODULE, z_context:get_q_all_noz(Context), Context).
-
-get_args(Context) ->
-    Args = z_context:get_session(?MODULE, Context),
-    z_context:set_session(?MODULE, undefined, Context),
-    case Args of
-        L when is_list(L) -> L;
-        undefined -> []
-    end.

@@ -114,10 +114,17 @@
     get_cookie/2,
     get_cookies/2,
 
+    set_state_cookie/2,
+    get_state_cookie/1,
+    reset_state_cookie/1,
+
     cookie_domain/1
 ]).
 
 -include_lib("zotonic.hrl").
+
+-define(STATE_SECRET_COOKIE, <<"z.state">>).
+
 
 %% @doc Return a new empty context, no request is initialized.
 -spec new( z:context() | atom() | cowboy_req:req() ) -> z:context().
@@ -1011,3 +1018,54 @@ get_cookie(Key, #context{req=Req} = Context) when is_map(Req) ->
 -spec get_cookies(binary(), z:context()) -> [ binary() ].
 get_cookies(Key, #context{req=Req} = Context) when is_map(Req), is_binary(Key) ->
     proplists:get_all_values(Key, cowmachine_req:req_cookie(Context)).
+
+
+%% @doc Set a cookie on the user-agent, holding secret information.
+%%      The state cookie is used during OAuth key exchanges, against
+%%      csrf attacks.
+-spec set_state_cookie( term(), z:context() ) -> z:context().
+set_state_cookie( Data, Context ) ->
+    Secret = state_cookie_secret(Context),
+    Encoded = termit:encode_base64(Data, Secret),
+    Opts = [
+        {path, <<"/">>},
+        {http_only, true},
+        {secure, true},
+        {same_site, lax}
+    ],
+    set_cookie(?STATE_SECRET_COOKIE, Encoded, Opts, Context).
+
+%% @doc Get the state cookie and decode it.
+-spec get_state_cookie( z:context() ) -> {ok, term()} | {error, term()}.
+get_state_cookie(Context) ->
+    case get_cookie(?STATE_SECRET_COOKIE, Context) of
+        undefined ->
+            {error, enoent};
+        Cookie ->
+            Secret = state_cookie_secret(Context),
+            termit:decode_base64(Cookie, Secret)
+    end.
+
+%% @doc Delete the state cookie.
+-spec reset_state_cookie( z:context() ) -> z:context().
+reset_state_cookie(Context) ->
+    Opts = [
+        {max_age, 0},
+        {path, <<"/">>},
+        {http_only, true},
+        {secure, true},
+        {same_site, lax}
+    ],
+    set_cookie(?STATE_SECRET_COOKIE, <<>>, Opts, Context).
+
+%% @doc Return the secret used to encode the state cookie.
+-spec state_cookie_secret( z:context() ) -> binary().
+state_cookie_secret(Context) ->
+    case m_config:get_value(site, state_cookie_secret, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            Secret = z_ids:id(32),
+            m_config:set_value(site, state_cookie_secret, Secret, Context),
+            Secret;
+        Secret when is_binary(Secret) ->
+            Secret
+    end.

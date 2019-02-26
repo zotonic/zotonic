@@ -26,10 +26,7 @@
     previously_existed/1,
     moved_temporarily/1
 ]).
--export([get_args/1]).
--export([redirect_location/1]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 
 service_available(Context) ->
     Context2 = z_context:ensure_qs(Context),
@@ -42,18 +39,17 @@ previously_existed(Context) ->
     {true, Context}.
 
 moved_temporarily(Context) ->
-    Location = redirect_location(Context),
-    save_args(Context),
-    {{true, Location}, Context}.
+    StateId = z_ids:id(),
+    StateData = {StateId, z_context:get_q_all_noz(Context)},
+    Context1 = z_context:set_state_cookie(StateData, Context),
+    Location = redirect_location(StateId, Context),
+    {{true, Location}, Context1}.
 
-redirect_location(Context) ->
-    State = z_convert:to_list(z_ids:id()),
-    z_context:set_session(facebook_state, State, Context),
+redirect_location(StateId, Context) ->
     {AppId, _AppSecret, Scope} = mod_facebook:get_config(Context),
-    RedirectUrl = z_convert:to_list(
-                        z_context:abs_url(
+    RedirectUrl = z_context:abs_url(
                             z_dispatcher:url_for(facebook_redirect, Context),
-                            Context)),
+                            Context),
     iolist_to_binary([
         <<"https://www.facebook.com/v2.9/dialog/oauth?client_id=">>,
         z_url:url_encode(AppId),
@@ -61,16 +57,5 @@ redirect_location(Context) ->
         "&display=popup",
         "&response_type=code",
         "&scope=", z_url:url_encode(Scope),
-        "&state=", z_url:url_encode(State)
+        "&state=", StateId
     ]).
-
-save_args(Context) ->
-    z_context:set_session(?MODULE, z_context:get_q_all_noz(Context), Context).
-
-get_args(Context) ->
-    Args = z_context:get_session(?MODULE, Context),
-    z_context:set_session(?MODULE, undefined, Context),
-    case Args of
-        L when is_list(L) -> L;
-        undefined -> []
-    end.
