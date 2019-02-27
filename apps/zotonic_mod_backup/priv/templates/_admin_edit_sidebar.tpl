@@ -24,7 +24,7 @@
     </p>
 
     <div>
-    	<a href="{% url api zotonic_http_accept="bert" star=["rsc", id] %}" class="btn btn-default">{_ Download backup file _}</a>
+    	<a href="{% url id zotonic_http_accept="bert" id=id %}" class="btn btn-default">{_ Download backup file _}</a>
     	{% button
     	    text=_"Restore backup"
     	    class="btn btn-default"

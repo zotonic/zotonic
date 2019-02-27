@@ -35,16 +35,15 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 resource_exists(Context) ->
-    {Id, ContextQs} = get_id(z_context:ensure_qs(Context)),
-    z_context:lager_md(ContextQs),
-    {m_rsc:exists(Id, ContextQs), ContextQs}.
+    {Id, Context2} = get_id(Context),
+    {m_rsc:exists(Id, Context2), Context2}.
 
 previously_existed(Context) ->
     {Id, Context2} = get_id(Context),
     {m_rsc_gone:is_gone(Id, Context2), Context2}.
 
 forbidden(Context) ->
-    {Id, Context2} = get_id(z_context:ensure_qs(Context)),
+    {Id, Context2} = get_id(Context),
     Dispatch = z_context:get(zotonic_dispatch, Context2),
     case z_acl:is_allowed(use, mod_export, Context2) of
         true ->
@@ -58,7 +57,7 @@ forbidden(Context) ->
     end.
 
 content_types_provided(Context) ->
-    {Id, Context1} = get_id(z_context:ensure_qs(Context)),
+    {Id, Context1} = get_id(Context),
     Dispatch = z_context:get(zotonic_dispatch, Context1),
     case get_content_type(Id, Dispatch, Context1) of
         {ok, ContentType} when is_binary(ContentType); is_tuple(ContentType) ->
@@ -84,7 +83,8 @@ process(_Method, _AcceptedCT, ProvidedCT, Context) ->
     {Stream, Context1}.
 
 set_filename(Id, ProvidedCT, Dispatch, Context) ->
-    Extension = case mimetypes:mime_to_exts(ProvidedCT) of
+    Mime = cowmachine_util:format_content_type(ProvidedCT),
+    Extension = case mimetypes:mime_to_exts(Mime) of
                     undefined -> <<"bin">>;
                     Exts -> hd(Exts)
                 end,

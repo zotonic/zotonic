@@ -43,11 +43,14 @@ execute(Req, #{ controller := Controller, controller_options := ControllerOpts }
     Options = #{
         on_welformed => fun(Ctx) ->
             z_context:lager_md(Ctx),
-            z_context:ensure_qs(Ctx)
+            Ctx1 = z_context:ensure_qs(Ctx),
+            case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
+                undefined -> Ctx1;
+                HttpAccept -> set_accept_context(HttpAccept, Ctx1)
+            end
         end
     },
     cowmachine:request(Controller, Context4, Env, Options).
-
 
 maybe_overrule_req_headers(#{ bindings := Bindings } = Req) ->
     case proplists:get_value(zotonic_http_accept, Bindings) of
@@ -55,9 +58,15 @@ maybe_overrule_req_headers(#{ bindings := Bindings } = Req) ->
         Mime -> set_accept(map_mime(Mime), Req)
     end.
 
+set_accept_context(HttpAccept, Context) ->
+    Req = z_context:get_reqdata(Context),
+    Req1 = set_accept(map_mime(HttpAccept), Req),
+    z_context:set_reqdata(Req1, Context).
+
 set_accept(Value, #{ headers := Headers } = Req) ->
     Hs1 = Headers#{ <<"accept">> => Value },
     Req#{ headers => Hs1 }.
+
 
 map_mime(<<"bert">>) -> <<"application/x-bert">>;
 map_mime(<<"ubf">>)  -> <<"text/x-ubf">>;

@@ -16,11 +16,11 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(export_encoder_ics).
+-module(export_encoder_bert).
 -author("Marc Worrell <marc@worrell.nl>").
 
 -record(state, {
-    id
+    rows = [] :: list( m_rsc:resource_id() )
 }).
 
 -export([
@@ -35,36 +35,24 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 extension() ->
-    [ <<"ics">> ].
+    [ <<"bert">> ].
 
 mime() ->
-    [ {<<"text">>, <<"calendar">>, []} ].
+    [ {<<"application">>, <<"x-bert">>, []} ].
 
-init(Options, _Context) ->
-    {ok, #state{
-        id = proplists:get_value(id, Options)
-    }}.
+init(_Options, _Context) ->
+    {ok, #state{}}.
 
-header(Header, #state{id=Id} = State, Context) ->
-    Vars = [
-        {id, Id},
-        {title, Header}
-    ],
-    {Bin, _Context} = z_template:render_to_iolist("_vcalendar_header.tpl", Vars, Context),
-    {ok, iolist_to_binary(Bin), State}.
+header(_Header, #state{} = State, _Context) ->
+    {ok, <<>>, State}.
 
-row(Row, #state{} = State, Context) when is_integer(Row) ->
-    Vars = [
-        {id, Row}
-    ],
-    {Bin, _Context} = z_template:render_to_iolist({cat, "_vevent.tpl"}, Vars, Context),
-    {ok, iolist_to_binary(Bin), State};
-row(Row, #state{} = State, Context) ->
-    Vars = [
-        {id, Row}
-    ],
-    {Bin, _Context} = z_template:render_to_iolist("_vevent.tpl", Vars, Context),
-    {ok, iolist_to_binary(Bin), State}.
+row(Row, #state{} = State, _Context) when is_integer(Row) ->
+    {ok, <<>>, State#state{ rows = [ Row | State#state.rows ]}}.
 
-footer(_Data, #state{}, _Context) ->
-    {ok, <<"END:VCALENDAR\n">>}.
+footer(_Data, #state{} = State, Context) ->
+    Data = lists:map(
+        fun(Id) ->
+            m_rsc:get(Id, Context)
+        end,
+        State#state.rows),
+    {ok, erlang:term_to_binary(Data)}.
