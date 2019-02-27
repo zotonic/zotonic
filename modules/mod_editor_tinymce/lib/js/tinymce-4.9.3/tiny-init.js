@@ -3,7 +3,7 @@ if (typeof tinyInit !== 'object')
     selector: "textarea",
     mode: "none",
     theme: "modern",
-    plugins: "compat3x advlist code paste table link zlink zmedia autosave directionality autoresize",
+    plugins: "compat3x advlist code paste table link zlink zmedia autosave directionality autoresize lists",
     menubar: "edit format table tools insert",
     toolbar: [
         "styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | ltr rtl | removeformat",
