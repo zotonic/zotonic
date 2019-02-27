@@ -48,7 +48,9 @@
     delete_results/2,
     get_questions/2,
 
-    rsc_merge/3
+    rsc_merge/3,
+
+    persistent_id/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -150,13 +152,14 @@ m_get([ totals, SurveyId | Rest ], _Msg, Context) ->
 m_get([ did_survey, SurveyId | Rest ], _Msg, Context) ->
     {ok, {did_survey(m_rsc:rid(SurveyId, Context), Context), Rest}};
 m_get([ did_survey_answers, SurveyId | Rest ], _Msg, Context) ->
-    {UserId, PersistentId} = case z_acl:user(Context) of
+    {UserId, PersistentId, Context1} = case z_acl:user(Context) of
                                 undefined ->
-                                    {undefined, persistent_id(Context)};
+                                    {DId, C1} = persistent_id(Context),
+                                    {undefined, DId, C1};
                                 UId ->
-                                    {UId, undefined}
+                                    {UId, undefined, Context}
                             end,
-    As = case m_survey:single_result(m_rsc:rid(SurveyId, Context), UserId, PersistentId, Context) of
+    As = case m_survey:single_result(m_rsc:rid(SurveyId, Context1), UserId, PersistentId, Context1) of
         None when None =:= undefined; None =:= [] ->
             [];
         Result ->
@@ -171,22 +174,24 @@ m_get([ did_survey_answers, SurveyId | Rest ], _Msg, Context) ->
     end,
     {ok, {As, Rest}};
 m_get([ did_survey_results, SurveyId | Rest ], _Msg, Context) ->
-    {UserId, PersistentId} = case z_acl:user(Context) of
+    {UserId, PersistentId, Context1} = case z_acl:user(Context) of
                                 undefined ->
-                                    {undefined, persistent_id(Context)};
+                                    {DId, C1} = persistent_id(Context),
+                                    {undefined, DId, C1};
                                 UId ->
-                                    {UId, undefined}
+                                    {UId, undefined, Context}
                             end,
-    {ok, {m_survey:single_result(SurveyId, UserId, PersistentId, Context), Rest}};
+    {ok, {m_survey:single_result(SurveyId, UserId, PersistentId, Context1), Rest}};
 m_get([ did_survey_results_readable, SurveyId | Rest ], _Msg, Context) ->
-    {UserId, PersistentId} = case z_acl:user(Context) of
+    {UserId, PersistentId, Context1} = case z_acl:user(Context) of
                                 undefined ->
-                                    {undefined, persistent_id(Context)};
+                                    {DId, C1} = persistent_id(Context),
+                                    {undefined, DId, C1};
                                 UId ->
-                                    {UId, undefined}
+                                    {UId, undefined, Context}
                             end,
-    RId = m_rsc:rid(SurveyId, Context),
-    SurveyAnswer = m_survey:single_result(RId, UserId, PersistentId, Context),
+    RId = m_rsc:rid(SurveyId, Context1),
+    SurveyAnswer = m_survey:single_result(RId, UserId, PersistentId, Context1),
     {ok, {survey_answer_prep:readable_stored_result(RId, SurveyAnswer, Context), Rest}};
 m_get([ is_allowed_results_download, SurveyId | Rest ], _Msg, Context) ->
     {ok, {is_allowed_results_download(m_rsc:rid(SurveyId, Context), Context), Rest}};
@@ -196,11 +201,18 @@ m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
+-spec persistent_id( z:context() ) -> {binary() | undefined, z:context()}.
+persistent_id(Context) ->
+    {Result, Context1} = m_client_local_storage:device_id(Context),
+    case Result of
+        {ok, DeviceId} -> {DeviceId, Context1};
+        {error, _} -> {undefined, Context1}
+    end.
 
-
+-spec is_allowed_results_download(m_rsc:resource_id(), z:context()) -> boolean().
 is_allowed_results_download(Id, Context) ->
     z_acl:rsc_editable(Id, Context)
-    orelse z_notifier:first(#survey_is_allowed_results_download{id=Id}, Context) == true.
+    orelse z_notifier:first(#survey_is_allowed_results_download{id=Id}, Context) =:= true.
 
 %% @doc Return the list of known survey handlers
 -spec get_handlers(#context{}) -> list({atom(), binary()}).
@@ -209,12 +221,16 @@ get_handlers(Context) ->
 
 
 %% @doc Check if the current user/browser did the survey
+-spec did_survey(m_rsc:resource_id(), z:context()) -> boolean().
 did_survey(SurveyId, Context) ->
-    find_answer_id(SurveyId, z_acl:user(Context), persistent_id(Context), Context) /= undefined.
+    case z_acl:user(Context) of
+        undefined ->
+            {DId, Context1} = persistent_id(Context),
+            find_answer_id(SurveyId, undefined, DId, Context1) /= undefined;
+        UserId ->
+            find_answer_id(SurveyId, UserId, undefined, Context) /= undefined
+    end.
 
-
-% persistent_id(#context{session_id = undefined}) -> undefined;
-persistent_id(Context) -> z_context:persistent_id(Context).
 
 %% @doc Replace a survey answer
 replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
@@ -281,7 +297,8 @@ publish(SurveyId, UserId, _Persistent, Context) ->
 insert_survey_submission(SurveyId, Answers, Context) ->
     case z_acl:user(Context) of
         undefined ->
-            insert_survey_submission(SurveyId, undefined, persistent_id(Context), Answers, Context);
+            {DeviceId, Context1} = persistent_id(Context),
+            insert_survey_submission(SurveyId, undefined, DeviceId, Answers, Context1);
         UserId ->
             insert_survey_submission(SurveyId, UserId, undefined, Answers, Context)
     end.

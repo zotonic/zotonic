@@ -123,11 +123,20 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
             KeepInformed = z_convert:to_bool(z_context:get_q(<<"keep_informed">>, Context, false)),
             UserAgent = z_context:get_q(<<"user_agent">>, Context, <<>>),
             IPAddress = peer(z_context:get_reqdata(Context)),
+            {DeviceId, Context1} = case z_auth:is_auth(Context) of
+                true ->
+                    {undefined, Context};
+                false ->
+                    case m_client_local_storage:device_id(Context) of
+                        {{ok, CId}, Ctx} -> {CId, Ctx};
+                        {{error, _}, Ctx} -> {undefined, Ctx}
+                    end
+            end,
             Props = [
                 {rsc_id, m_rsc:rid(RscId, Context)},
                 {is_visible, Is_visible},
                 {user_id, z_acl:user(Context)},
-                {persistent_id, z_context:persistent_id(Context)},
+                {persistent_id, DeviceId},
                 {name, Name1},
                 {message, Message1},
                 {email, Email},
@@ -136,9 +145,9 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
                 {ip_address, IPAddress},
                 {user_agent, UserAgent}
             ],
-            {ok, CommentId} = Result = z_db:insert(comment, Props, Context),
-            z_depcache:flush({comment_rsc, RscId}, Context),
-            z_notifier:notify(#comment_insert{comment_id = CommentId, id = RscId}, Context),
+            {ok, CommentId} = Result = z_db:insert(comment, Props, Context1),
+            z_depcache:flush({comment_rsc, RscId}, Context1),
+            z_notifier:notify(#comment_insert{comment_id = CommentId, id = RscId}, Context1),
             Result;
         false ->
             {error, eacces}
