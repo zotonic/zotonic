@@ -27,7 +27,7 @@
 
     logon/2,
     logon_switch/2,
-    % confirm/2,
+    confirm/2,
     logon_pw/3,
     logoff/1,
 
@@ -42,13 +42,11 @@
 
 %% @doc Check if the visitor has been authenticated. Assumes a completely initalized context.
 -spec is_auth(z:context()) -> boolean().
-is_auth(#context{ user_id = undefined }) ->
-    false;
-is_auth(_) ->
-    true.
+is_auth(#context{ user_id = undefined }) -> false;
+is_auth(_) -> true.
 
 %% @doc Logon a username/password combination, checks passwords with m_identity.
-%% @spec logon_pw(Username, Password, Context) -> {bool(), NewContext}
+-spec logon_pw( binary(), binary(), z:context() ) -> {boolean(), z:context()}.
 logon_pw(Username, Password, Context) ->
     case m_identity:check_username_pw(Username, Password, Context) of
         {ok, Id} ->
@@ -59,21 +57,23 @@ logon_pw(Username, Password, Context) ->
         {error, _Reason} -> {false, Context}
     end.
 
-% confirm(UserId, Context) ->
-%     % check if auth_user_id == userId??
-%     case is_enabled(UserId, Context) of
-%         true ->
-%             Context1 = z_context:set_session(auth_confirm_timestamp, z_utils:now(), Context),
-%             Context2 = z_notifier:foldl(#auth_confirm{}, Context1, Context1),
-%             z_notifier:notify(#auth_confirm_done{}, Context2),
-%             {ok, Context2};
-%         false ->
-%             {error, user_not_enabled}
-%     end.
 
+%% @doc Set the user to 'confirmed'.
+-spec confirm( m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, user_not_enabled}.
+confirm(UserId, Context) ->
+    % check if auth_user_id == userId??
+    case is_enabled(UserId, Context) of
+        true ->
+            Context1 = z_notifier:foldl(#auth_confirm{}, Context, Context),
+            z_notifier:notify(#auth_confirm_done{}, Context1),
+            {ok, Context1};
+        false ->
+            {error, user_not_enabled}
+    end.
 
 %% @doc Logon an user whose id we know, invalidate the current session id.
 %%      This sets a cookie with the new session id in the Context.
+-spec logon( m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, user_not_enabled}.
 logon(UserId, Context) ->
     case is_enabled(UserId, Context) of
         true ->
@@ -84,7 +84,8 @@ logon(UserId, Context) ->
             {error, user_not_enabled}
     end.
 
-%% @doc Switch user, same as logon, but
+%% @doc Allow an admin user to switch to another user account.
+-spec logon_switch( m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, eacces}.
 logon_switch(UserId, Context) ->
     case m_rsc:exists(UserId, Context) andalso z_acl:is_admin(Context) of
         true ->
@@ -94,20 +95,6 @@ logon_switch(UserId, Context) ->
         false ->
             {error, eacces}
     end.
-
-    % case is_enabled(UserId, Context) of
-    %     true ->
-    %         Context1 = z_acl:logon_prefs(UserId, Context),
-    %         {ok, Context2} = z_session_manager:rename_session(Context1),
-    %         z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
-    %         z_context:set_session(auth_user_id, UserId, Context2),
-    %         Context3 = z_session:ensure_page_session(Context2),
-    %         Context4 = z_notifier:foldl(#auth_logon{}, Context3, Context3),
-    %         z_notifier:notify(#auth_logon_done{}, Context4),
-    %         {ok, Context4};
-    %     false ->
-    %         {error, user_not_enabled}
-    % end.
 
 
 %% @doc Request the client's auth worker to re-authenticate as a new user
@@ -132,6 +119,7 @@ logoff(Context) ->
 
 
 %% @doc Check if the user is enabled, an user is enabled when the rsc is published and within its publication date range.
+-spec is_enabled( m_rsc:resource_id(), z:context() ) -> boolean().
 is_enabled(UserId, Context) ->
     case z_notifier:first(#user_is_enabled{id=UserId}, Context) of
         undefined ->

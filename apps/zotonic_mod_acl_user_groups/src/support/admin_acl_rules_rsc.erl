@@ -25,16 +25,26 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 event(#postback{message={switch_rule_state, Args}}, Context) ->
-    {code, Code} = proplists:lookup(code, Args),
+    {code, SignedCode} = proplists:lookup(code, Args),
     {state, State} = proplists:lookup(state, Args),
-    case {m_acl_rule:is_valid_code(Code, Context), State} of
+    case {m_acl_rule:is_valid_code(SignedCode, Context), State} of
         {true, edit} ->
-            z_context:set_session(acl_user_groups_state, edit, Context);
-        {true, publish} ->
-            z_context:set_session(acl_user_groups_state, publish, Context);
+            z_mqtt:publish(
+                [ <<"~client">>, <<"model">>, <<"auth">>, <<"post">>, <<"refresh">> ],
+                #{
+                    acl_user_groups_code => SignedCode,
+                    acl_user_groups_state => <<"edit">>
+                },
+                Context);
         {_, _} ->
-            z_context:set_session(acl_user_groups_state, publish, Context)
+            z_mqtt:publish(
+                [ <<"~client">>, <<"model">>, <<"auth">>, <<"post">>, <<"refresh">> ],
+                #{
+                    acl_user_groups_state => undefined
+                },
+                Context)
     end,
+    timer:sleep(300),
     z_render:wire({reload, []}, Context);
 event(#submit{message={change_catcg, Args}}, Context) ->
     Id = proplists:get_value(id, Args),

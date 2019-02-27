@@ -25,7 +25,14 @@
     put/3,
     put/4,
     delete/2,
-    delete/3
+    delete/3,
+
+    get_subkey/3,
+    get_subkey/4,
+    put_subkey/4,
+    put_subkey/5,
+    delete_subkey/3,
+    delete_subkey/4   
 ]).
 
 -type key() :: binary() | atom().
@@ -70,4 +77,39 @@ delete(Key, Context) ->
 delete(Key, BridgeTopic, Context) ->
     BridgeTopic1 = mqtt_sessions:normalize_topic(BridgeTopic),
     Topic = BridgeTopic1 ++ [ <<"model">>, <<"sessionStorage">>, <<"delete">>, z_convert:to_binary(Key) ],
+    z_mqtt:publish(Topic, undefined, Context).
+
+
+
+-spec get_subkey( key(), key(), z:context() ) -> {ok, value()} | {error, error()}.
+get_subkey(Key, SubKey, Context) ->
+    get_subkey(Key, SubKey, z_context:client_topic(Context), Context).
+
+-spec get_subkey( key(), key(), mqtt_sessions:topic(), z:context() ) -> {ok, value()} | {error, error()}.
+get_subkey(_Key, _SubKey, undefined, _Context) ->
+    {error, no_client_id};
+get_subkey(Key, SubKey, BridgeTopic, Context) ->
+    BridgeTopic1 = mqtt_sessions:normalize_topic(BridgeTopic),
+    Topic = BridgeTopic1 ++ [ <<"model">>, <<"sessionStorage">>, <<"get">>, z_convert:to_binary(Key), z_convert:to_binary(SubKey) ],
+    z_mqtt:call(Topic, undefined, Context).
+
+-spec put_subkey( key(), key(), value(), z:context() ) -> ok | {error, error()}.
+put_subkey(Key, SubKey, Value, Context) ->
+    put_subkey(Key, SubKey, Value, z_context:client_topic(Context), Context).
+
+-spec put_subkey( key(), key(), value(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
+put_subkey(Key, SubKey, Value, BridgeTopic, Context) ->
+    BridgeTopic1 = mqtt_sessions:normalize_topic(BridgeTopic),
+    Topic = BridgeTopic1 ++ [ <<"model">>, <<"sessionStorage">>, <<"post">>, z_convert:to_binary(Key), z_convert:to_binary(SubKey) ],
+    z_mqtt:publish(Topic, Value, Context).
+
+
+-spec delete_subkey( key(), key(), z:context() ) -> ok | {error, error()}.
+delete_subkey(Key, SubKey, Context) ->
+    delete_subkey(Key, SubKey, z_context:client_topic(Context), Context).
+
+-spec delete_subkey( key(), key(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
+delete_subkey(Key, SubKey, BridgeTopic, Context) ->
+    BridgeTopic1 = mqtt_sessions:normalize_topic(BridgeTopic),
+    Topic = BridgeTopic1 ++ [ <<"model">>, <<"sessionStorage">>, <<"delete">>, z_convert:to_binary(Key), z_convert:to_binary(SubKey) ],
     z_mqtt:publish(Topic, undefined, Context).

@@ -102,8 +102,9 @@ facebook_q(_Q, _Sql, Args, Context) ->
 do_graph_call(Method, Id, Connection, Args, Context) when Method == get; Method == post; Method == delete ->
     case z_acl:is_allowed(use, mod_facebook, Context) of
         true ->
-            ReqArgs = case z_context:get_session(facebook_access_token, Context) of
+            ReqArgs = case m_config:get_value(mod_facebook, facebook_access_token, Context) of
                 undefined -> Args;
+                <<>> -> Args;
                 AccessToken -> [{access_token, AccessToken} | Args]
             end,
             Query = mochiweb_util:urlencode(ReqArgs),
@@ -132,7 +133,8 @@ make_httpc_request(Method, Scheme, Server, Path, Query) when Method == get; Meth
 %%
 fql_url(Query, Context) ->
     Fql = "https://api.facebook.com/method/fql.query?format=json&query=" ++ z_url:url_encode(Query),
-    case z_context:get_session(facebook_access_token, Context) of
+    case m_config:get_value(mod_facebook, facebook_access_token, Context) of
         undefined -> Fql;
+        <<>> -> Fql;
         AccessToken -> Fql ++ "&access_token=" ++ z_url:url_encode(AccessToken)
     end.

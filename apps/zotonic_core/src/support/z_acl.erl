@@ -37,7 +37,9 @@
          anondo/1,
          anondo/2,
          logon/2,
+         logon/3,
          logon_prefs/2,
+         logon_prefs/3,
          logoff/1
         ]).
 
@@ -281,16 +283,29 @@ set_anonymous(Context) ->
 %% @doc Log the user with the id on, fill the acl field of the context
 -spec logon(m_rsc:resource(), z:context()) -> z:context().
 logon(Id, Context) ->
+    logon(Id, #{}, Context).
+
+-spec logon(m_rsc:resource(), map(), z:context()) -> z:context().
+logon(Id, Options, Context) ->
     UserId = m_rsc:rid(Id, Context),
-    case z_notifier:first(#acl_logon{id = UserId}, Context) of
-        undefined -> Context#context{acl = undefined, user_id = UserId};
-        #context{} = NewContext -> NewContext
+    case z_notifier:first(#acl_logon{ id = UserId, options = Options }, Context) of
+        undefined ->
+            Context#context{
+                acl = undefined,
+                user_id = UserId
+            };
+        #context{} = NewContext ->
+            NewContext
     end.
 
 %% @doc Log the user with the id on, fill acl and set all user preferences (like timezone and language)
 -spec logon_prefs(m_rsc:resource_id(), z:context()) -> z:context().
 logon_prefs(Id, Context) ->
-    z_notifier:foldl(#user_context{ id = Id }, logon(Id, Context), Context).
+    logon_prefs(Id, #{}, Context).
+
+-spec logon_prefs(m_rsc:resource_id(), map(), z:context()) -> z:context().
+logon_prefs(Id, Options, Context) ->
+    z_notifier:foldl(#user_context{ id = Id }, logon(Id, Options, Context), Context).
 
 
 %% @doc Log off, reset the acl field of the context

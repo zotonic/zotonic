@@ -50,6 +50,10 @@
         can_rsc/3
     ]).
 
+-export([
+        session_state/1
+    ]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("acl_user_groups.hrl").
 
@@ -462,11 +466,12 @@ restrict_content_groups(Context) ->
         false -> lists:usort(CGs) ++ has_collab_groups(Context)
     end.
 
+-spec session_state( z:context() ) -> publish | edit.
 session_state(Context) ->
-    case z_context:get_session(acl_user_groups_state, Context) of
-        undefined -> publish;
-        publish -> publish;
-        edit -> edit
+    case z_context:get(auth_options, Context) of
+        #{ acl_user_groups_state := publish } -> publish;
+        #{ acl_user_groups_state := edit } -> edit;
+        _ -> publish
     end.
 
 

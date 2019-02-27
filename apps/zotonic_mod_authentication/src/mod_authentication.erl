@@ -31,6 +31,7 @@
     event/2,
 
     observe_request_context/3,
+    observe_auth_options_update/3,
     observe_logon_submit/2,
     observe_admin_menu/3,
     observe_auth_validated/2
@@ -79,6 +80,21 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
     end;
 observe_request_context(#request_context{}, Context, _Context) ->
     Context.
+
+
+observe_auth_options_update(#auth_options_update{ request_options = ROpts }, AccOpts, Context) ->
+    case ROpts of
+        #{ <<"acl_user_groups_state">> := undefined } ->
+            maps:remove(acl_user_groups_state, AccOpts);
+        #{ <<"acl_user_groups_code">> := SignedCode, <<"acl_user_groups_state">> := State } ->
+            case {m_acl_rule:is_valid_code(SignedCode, Context), State} of
+                {true, <<"edit">>} -> AccOpts#{ acl_user_groups_state => edit };
+                {true, <<"publish">>} -> maps:remove(acl_user_groups_state, AccOpts);
+                {error, _} -> AccOpts
+            end;
+        #{} ->
+            AccOpts
+    end.
 
 %% @doc Check username/password against the identity tables.
 observe_logon_submit(#logon_submit{ payload = Args }, Context) ->

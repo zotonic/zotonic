@@ -55,23 +55,25 @@ new_user_context( Site, ClientId, SessionOptions ) ->
         undefined -> Context2;
         Tz -> z_context:set_tz(Tz, Context2)
     end,
-    Context4 = case Prefs of
+    AuthOptions = maps:get(auth_options, Prefs, #{}),
+    Context4 = z_context:set(auth_options, Prefs, Context3),
+    Context5 = case Prefs of
         #{ user_id := undefined } ->
             % Anonymous user on the transport -- typical for anonymous HTTP connection
-            Context3;
+            Context4;
         #{ user_id := UserId } ->
             % User authenticated on the transport -- typical for HTTP connection with auth cookie
-            z_acl:logon_prefs(UserId, Context3);
+            z_acl:logon_prefs(UserId, AuthOptions, Context4);
         #{ } ->
             % No user on the transport - typical for a MQTT connection
-            Context3
+            Context4
     end,
     mqtt_sessions:subscribe(
         Site,
         [ <<"client">>, ClientId, <<"config">> ],
         {?MODULE, context_updates, [Site, ClientId]},
         z_acl:sudo(Context4)),
-    z_context:set(peer_ip, maps:get(peer_ip, SessionOptions, undefined), Context4).
+    z_context:set(peer_ip, maps:get(peer_ip, SessionOptions, undefined), Context5).
 
 context_updates(Site, ClientId, #{ message := #{ payload := Payload} }) ->
     mqtt_sessions:update_user_context(Site, ClientId, fun(Ctx) -> update_context_fun(Payload, Ctx) end).

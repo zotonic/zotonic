@@ -85,7 +85,8 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
     case z_auth:logon(UserId, Context) of
         {ok, Context1} ->
             % - (set cookie in handlers - like device-id) --> needs notification
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Context1),
+            Options = z_context:get(auth_options, Context, #{}),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
             status(Payload, Context2);
         {error, user_not_enabled} ->
             case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
@@ -122,11 +123,12 @@ logon_1(undefined, _Payload, Context) ->
 
 -spec switch_user( map(), z:context() ) -> { map(), z:context() }.
 switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(UserId) ->
-    case z_auth:logon_switch(UserId, Context) of
+    AuthOptions = z_context:get(auth_options, Context, #{}),
+    case z_auth:logon_switch(UserId, AuthOptions, Context) of
         {ok, Context1} ->
             lager:warning("[~p] Authentication: user ~p is switching to user ~p",
                           [ z_context:site(Context), z_acl:user(Context), UserId ]),
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Context1),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, AuthOptions, Context1),
             status(Payload, Context2);
         {error, _Reason} ->
             { #{ status => error, error => eacces }, Context }
@@ -145,7 +147,11 @@ logoff(Payload, Context) ->
 %% @doc Refresh the current authentication cookie
 -spec refresh( map(), z:context() ) -> { map(), z:context() }.
 refresh(Payload, Context) ->
-    Context1 = z_authentication_tokens:refresh_auth_cookie(Context),
+    Options = case maps:get(<<"options">>, Payload, #{}) of
+        V when is_map(V) -> V;
+        _ -> #{}
+    end,
+    Context1 = z_authentication_tokens:refresh_auth_cookie(Options, Context),
     status(Payload, Context1).
 
 %% @doc Set an autologon cookie for the current user
@@ -178,7 +184,8 @@ status(Payload, Context) ->
         preferences => #{
             language => z_context:language(Context1),
             timezone => z_context:tz(Context1)
-        }
+        },
+        options => z_context:get(auth_options, Context1, #{})
     },
     Status1 = case z_auth:is_auth(Context1) of
         true ->

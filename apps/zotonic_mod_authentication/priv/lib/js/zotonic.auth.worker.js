@@ -81,6 +81,10 @@ model.present = function(data) {
             actions.logoff(msg.payload);
         });
 
+        self.subscribe("model/auth/post/refresh", function(msg) {
+            actions.authRefresh(msg.payload);
+        });
+
         self.subscribe("model/auth/post/logon/form", function(msg) {
             actions.logonForm(msg.payload);
         });
@@ -118,6 +122,13 @@ model.present = function(data) {
         }
         model.is_keep_alive = false;
         fetchWithUA({ cmd: auth_check_cmd })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authResponse(body); })
+        .catch((e) => { actions.fetchError(); });
+    }
+
+    if (data.is_refresh && (state.authKnown(model) || state.fetchError(model))) {
+        fetchWithUA({ cmd: 'refresh', options: data.options || {} })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authResponse(body); })
         .catch((e) => { actions.fetchError(); });
@@ -394,6 +405,10 @@ actions.authChanged = function(_data) {
 
 actions.authCheck = function(_data) {
     model.present({ is_auth_check: true });
+}
+
+actions.authRefresh = function(data) {
+    model.present({ is_refresh: true, options: data });
 }
 
 actions.logon = function(data) {

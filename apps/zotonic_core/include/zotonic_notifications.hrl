@@ -527,7 +527,8 @@
 %% Type: first
 %% Return: updated ``z:context()`` or ``undefined``
 -record(acl_logon, {
-    id :: m_rsc:resource_id()
+    id :: m_rsc:resource_id(),
+    options :: map()
 }).
 
 %% @doc Clear the associated access policy for the context.
@@ -573,6 +574,14 @@
 -record(request_context, {
         phase = init :: init | auth_status,
         document = #{} :: map()
+    }).
+
+%% @doc Update the given (accumulator) authentication options with the request options.
+%%      Note that the request options are from the client and are unsafe.
+%% Type: foldl
+%% Return: ``map()``
+-record(auth_options_update, {
+        request_options = #{} :: map()
     }).
 
 % %% @doc Initialize a context from the current session.

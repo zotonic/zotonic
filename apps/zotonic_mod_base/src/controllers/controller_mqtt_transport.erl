@@ -200,7 +200,8 @@ handle_message(Msg, Context) ->
         context_prefs => #{
             user_id => z_acl:user(Context),
             language => z_context:language(Context),
-            timezone => z_context:tz(Context)
+            timezone => z_context:tz(Context),
+            auth_options => z_context:get(auth_options, Context, #{})
         }
     },
     case mqtt_sessions:incoming_message(mqtt_session_pool(Context), OptSessionRef, Msg, MsgOptions) of

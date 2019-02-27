@@ -165,8 +165,6 @@ observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
 %                             ok;
 %                         _NewTz ->
 %                             % TODO: push new prefs to all clients (publish on user topic)
-%                             z_context:set_session(tz, PostTz, Context),
-%                             z_context:set_persistent(tz, PostTz, Context)
 %                             ok
 %                     end;
 %                 _Other ->

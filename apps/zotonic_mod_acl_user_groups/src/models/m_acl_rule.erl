@@ -75,6 +75,9 @@ m_get([ can_insert, ContentGroupId, CategoryId | Rest ], _Msg, Context) ->
 m_get([ can_move, ContentGroupId, RscId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_move(ContentGroupId, RscId, Context), Rest}};
 
+m_get([ acl_user_groups_state | Rest ], _Msg, Context) ->
+    {ok, {acl_user_groups_checks:session_state(Context), Rest}};
+
 m_get([ T, actions | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
     {ok, {actions(T, Context), Rest}};
 m_get([ T, S, {all, Opts} | Rest ], _Msg, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
