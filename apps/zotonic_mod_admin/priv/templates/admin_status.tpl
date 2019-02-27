@@ -22,24 +22,16 @@
 	            <div class="form-group">
                     <div>
                         {% button
-                            class="btn btn-default"
                             id="btn-rebuild-indices"
+                            class="btn btn-default"
                             text=_"Rebuild search indices"
-                            action={
-                                admin_tasks
-                                task='pivot_all'
-                            }
-                            action={
-                                script
-                                script="queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices')"
-                            }
+                            action={admin_tasks task='pivot_all'}
+                            action={script script="queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices')"}
                         %}
                         <span id="pivot-queue-count">
-                            {% if m.admin.pivot_queue_count %}
-                                {% javascript %}
-                                    queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices');
-                                {% endjavascript %}
-                            {% endif %}
+                            {% javascript %}
+                                queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices');
+                            {% endjavascript %}
                         </span>
                         <span class="help-block">{_ Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time! _}</span>
                     </span>
