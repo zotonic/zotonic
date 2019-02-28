@@ -217,10 +217,7 @@ of
                         pivot_resources([ObjectId], Ctx),
                         m_rsc:touch(SubjectId, Ctx)
                 end,
-                SeqOpt = case proplists:get_value(seq, Opts) of
-                            S when is_integer(S) -> [{seq, S}];
-                            undefined -> []
-                         end,
+                SeqOpt = maybe_seq_opt(Opts, SubjectId, PredId, Ctx),
                 CreatedOpt = case proplists:get_value(created, Opts) of
                                 DT when is_tuple(DT) -> [{created,DT}];
                                 undefined -> []
@@ -253,6 +250,29 @@ of
         % Edge exists - skip
         {ok, EdgeId}
 end.
+
+maybe_seq_opt(Opts, SubjectId, PredId, Context) ->
+    case proplists:get_value(seq, Opts) of
+        S when is_integer(S) ->
+            [ {seq, S} ];
+        _ ->
+            case z_convert:to_bool( m_rsc:p_no_acl(PredId, is_insert_before, Context) ) of
+                true ->
+                    case z_db:q1("
+                        select min(seq)
+                        from edge
+                        where subject_id = $1
+                          and predicate_id = $2",
+                        [SubjectId, PredId],
+                        Context)
+                    of
+                        undefined -> [];
+                        N -> [ {seq, N-1} ]
+                    end;
+                false ->
+                    []
+            end
+    end.
 
 
 %% @doc Delete an edge by Id
