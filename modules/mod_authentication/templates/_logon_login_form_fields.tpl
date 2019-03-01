@@ -21,6 +21,8 @@
     <input class="form-control" type="number" id="passcode" name="passcode" value="" autocomplete="off" placeholder="{_ Two-factor passcode _}" />
 </div>
 
+{% include "_logon_login_form_field_tos_agree.tpl" %}
+
 <div class="form-group">
     <div class="checkbox">
         <label>

@@ -8,6 +8,4 @@
     {% include form_fields_tpl %}
 </form>
 
-{% javascript %}
-$("#logon_form form").unmask();
-{% endjavascript %}
+{% wire action={unmask target="logon_form"} %}

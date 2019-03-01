@@ -31,6 +31,9 @@
 %% Convenience export for other auth implementations.
 -export([send_reminder/2, lookup_identities/2]).
 
+%% Debugging
+-export([is_tos_agreed/2]).
+
 
 -include_lib("controller_webmachine_helper.hrl").
 -include_lib("include/zotonic.hrl").
@@ -211,7 +214,6 @@ event(#submit{message={reset, Args}, form="password_reset"}, Context) ->
     {username, Username} = proplists:lookup(username, Args),
     reset(Secret, Username, Context);
 
-%%@doc Handle submit form post.
 event(#submit{message={reminder, _Args}, form="password_reminder"}, Context) ->
     reminder(z_context:get_q_validated("reminder_address", Context), Context);
 
@@ -229,10 +231,17 @@ event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context
             z_render:growl_error("Configuration error: please enable a module for #logon_submit{}", Context)
     end;
 
-%%@doc Handle submit form post.
 event(#submit{message={logon, WireArgs}}, Context) ->
     Args = z_context:get_q_all(Context),
     logon(Args, WireArgs, Context);
+
+event(#submit{message={logon_tos_agree, WireArgs}}, Context) ->
+    case z_convert:to_bool( z_context:get_q_validated("tos_agree", Context) ) of
+        true ->
+            logon_tos_agreed(WireArgs, Context);
+        false ->
+            Context
+    end;
 
 event(#z_msg_v1{data=Data}, Context) when is_list(Data) ->
     case proplists:get_value(<<"msg">>, Data) of
@@ -259,6 +268,12 @@ logon(Args, WireArgs, Context) ->
             logon_error("need_passcode", Context);
         {error, passcode} ->
             logon_error("passcode", Context);
+        {error, password} ->
+            logon_error("pw", Context);
+        {error, nouser} ->
+            logon_error("pw", Context);
+        {error, Reason} when is_atom(Reason) ->
+            logon_error(z_convert:to_list(Reason), Context);
         {error, _Reason} ->
             logon_error("pw", Context);
         {expired, UserId} when is_integer(UserId) ->
@@ -401,19 +416,98 @@ logon_stage(Stage, Args, Context) ->
 
 
 logon_user(UserId, WireArgs, Context) ->
-    case z_auth:logon(UserId, Context) of
-        {ok, ContextUser} ->
-            ContextRemember = case z_context:get_q("rememberme", ContextUser, []) of
-                [] -> ContextUser;
-                _ -> set_rememberme_cookie(UserId, ContextUser)
+    case is_tos_agreed(UserId, Context) of
+        true ->
+            case z_auth:logon(UserId, Context) of
+                {ok, ContextUser} ->
+                    ContextRemember = case z_context:get_q("rememberme", ContextUser, []) of
+                        [] -> ContextUser;
+                        _ -> set_rememberme_cookie(UserId, ContextUser)
+                    end,
+                    Actions = get_post_logon_actions(WireArgs, ContextRemember),
+                    z_render:wire(Actions, ContextRemember);
+                {error, user_not_enabled} ->
+                    check_verified(UserId, Context);
+                {error, _Reason} ->
+                    % Could not log on, some error occured
+                    logon_error("unknown", Context)
+            end;
+        false ->
+            Secret = z_convert:to_binary( z_ids:id() ),
+            Encoded = termit:encode({user, UserId}, Secret),
+            z_context:set_session(logon_tos_secret, Secret, Context),
+            TosArgs = [
+                {user_id, UserId},
+                {secret, Encoded},
+                {wire_args, WireArgs}
+            ],
+            logon_stage("tos_agree", TosArgs, Context)
+    end.
+
+logon_tos_agreed(Args, Context) ->
+    case try_set_tos_agreed(Args, Context) of
+        true ->
+            {user_id, UserId} = proplists:lookup(user_id, Args),
+            WireArgs = proplists:get_value(wire_args, Args, []),
+            logon_user(UserId, WireArgs, Context);
+        false ->
+            z_render:wire({alert, [
+                    {text, ?__("Something went wrong, please retry.", Context)},
+                    {action, {reload, []}}
+                ]},
+                Context)
+    end.
+
+try_set_tos_agreed(Args, Context) when is_list(Args) ->
+    case z_context:get_session(logon_tos_secret, Context) of
+        undefined ->
+            lager:error("try_set_tos_agreed: no session secret"),
+            false;
+        Secret when is_binary(Secret) ->
+            {user_id, UserId} = proplists:lookup(user_id, Args),
+            case termit:decode(proplists:get_value(secret, Args), Secret) of
+                {ok, {user, UserId}} ->
+                    z_context:set_session(logon_tos_secret, undefined, Context),
+                    {ok, _} = m_rsc:update(
+                        UserId,
+                        [ {tos_agreed, calendar:universal_time()} ],
+                        [ no_touch ],
+                        z_acl:sudo(Context)),
+                    true;
+                {error, _} ->
+                    lager:error("try_set_tos_agreed: could not decode payload"),
+                    false
+            end
+    end.
+
+is_tos_agreed(UserId, Context) ->
+    case z_convert:to_bool( m_config:get_value(mod_authentication, tos_update_agree, Context) ) of
+        true ->
+            LastTC = case m_rsc:p_no_acl(UserId, tos_agreed, Context) of
+                undefined -> m_rsc:p_no_acl(UserId, created, Context);
+                DT -> DT
             end,
-            Actions = get_post_logon_actions(WireArgs, ContextRemember),
-            z_render:wire(Actions, ContextRemember);
-        {error, user_not_enabled} ->
-            check_verified(UserId, Context);
-        {error, _Reason} ->
-            % Could not log on, some error occured
-            logon_error("unknown", Context)
+            LastTC1 = case LastTC > calendar:universal_time() of
+                true -> undefined;
+                false -> LastTC
+            end,
+            is_tos_document_agreed(LastTC1, signup_tos, Context)
+            andalso is_tos_document_agreed(LastTC1, signup_privacy, Context);
+        false ->
+            true
+    end.
+
+is_tos_document_agreed(AgreeDate, DocId, Context) ->
+    case m_rsc:p_no_acl(DocId, is_published, Context) of
+        undefined -> true;
+        false -> true;
+        true ->
+            case m_rsc:p_no_acl(DocId, publication_start, Context) of
+                undefined -> true;
+                DT when DT =:= undefined -> false;
+                DT when DT > AgreeDate -> false;
+                _ -> true
+            end
     end.
 
 
@@ -445,7 +539,9 @@ get_rememberme_cookie(Context) ->
                     {ok, Cookie} ->
                         case check_rememberme_cookie_value(Cookie, Context) of
                             {ok, UserId} ->
-                                case z_auth:is_enabled(UserId, Context) of
+                                case z_auth:is_enabled(UserId, Context)
+                                    andalso is_tos_agreed(UserId, Context)
+                                of
                                     true -> {ok, UserId};
                                     false -> undefined
                                 end;
