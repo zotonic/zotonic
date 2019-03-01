@@ -147,11 +147,8 @@ function z_set_page_id( page_id, user_id )
     $(window).bind('beforeunload', function() {
         z_page_unloading = true;
 
-        // Close the websocket. This prevents a connection interrupted error.
-        if (z_ws) {
-            try { z_ws.close(); } catch (e) { }
-            z_ws = undefined;
-        }
+        // Stop the websocket. This prevents a connection interrupted error.
+        z_websocket_stop();
 
         // Abort an open comet connection
         if (z_comet) {
@@ -1157,10 +1154,8 @@ function z_stream_start(_host, websocket_host)
 
 function z_stream_onreload()
 {
-    if (z_ws) {
-        try { z_ws.close(); } catch (e) { }
-        z_ws = undefined;
-    }
+    z_websocket_stop();
+
     if (z_comet) {
         try { z_comet.abort(); } catch(e) { }
         z_comet = undefined;
@@ -1274,6 +1269,9 @@ function z_transport_handle_push_data(data)
 
 function z_websocket_start()
 {
+    // Do not start a new websocket when there is already a websocket.
+    if(z_ws) return; 
+
     var protocol = "ws:";
     if (window.location.protocol == "https:") {
         protocol = "wss:";
@@ -1293,6 +1291,23 @@ function z_websocket_start()
         z_transport_handle_push_data(evt.data);
         setTimeout(function() { z_transport_check(); }, 0);
     };
+}
+
+function z_websocket_stop()
+{
+    if (!z_ws) return;
+
+    z_ws.onclose = undefined;
+    z_ws.onerror = undefined;
+    z_ws.onmessage = undefined;
+
+    try {
+        z_ws.close();
+    } catch(e) {
+        // closing an already closed ws can raise exceptions.
+    } 
+
+    z_ws = undefined;
 }
 
 function z_websocket_ping()
@@ -1363,12 +1378,7 @@ function z_websocket_restart(e)
     z_clear_ws_ping_timeout();
     z_clear_ws_ping_interval();
 
-    if (z_ws) {
-        z_ws.onclose = undefined;
-        z_ws.onerror = undefined;
-        try { z_ws.close(); } catch(e) {} // closing an already closed ws can raise exceptions.
-        z_ws = undefined;
-    }
+    z_websocket_stop();
 
     if (z_ws_pong_count > 0 && z_session_valid && !z_page_unloading) {
         z_ws_pong_count = 0;
