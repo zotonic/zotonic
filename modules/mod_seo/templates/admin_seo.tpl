@@ -38,14 +38,21 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-8 col-md-offset-4">
-                                <label class="checkbox-inline" for="seo-noindex" title="{_ Add a noindex, nofollow element to all pages. _}">
-                                    <input type="checkbox" id="seo-noindex" name="seo-noindex" value="1" {% if m.config.seo.noindex.value %}checked="checked"{% endif %} />
-                                    {_ Exclude this site from search engines _}
-                                </label>
+                        {% if m.site.seo.noindex|is_defined %}
+                            <input type="hidden" value="{{ m.site.seo.noindex|escape }}" name="seo-noindex">
+                            <p class="alert alert-info">
+                                {_ This site is excluded from search engines by the site configuration file. _}
+                            </p>
+                        {% else %}
+                            <div class="form-group row">
+                                <div class="col-md-8 col-md-offset-4">
+                                    <label class="checkbox-inline" for="seo-noindex" title="{_ Add a noindex, nofollow element to all pages. _}">
+                                        <input type="checkbox" id="seo-noindex" name="seo-noindex" value="1" {% if m.config.seo.noindex.value %}checked="checked"{% endif %} />
+                                        {_ Exclude this site from search engines _}
+                                    </label>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
 
