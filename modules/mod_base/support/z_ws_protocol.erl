@@ -787,7 +787,9 @@ websocket_close(State=#state{socket=Socket},
 		{remote, Code, _} ->
 		 	mochiweb_socket:send(Socket, << 1:1, 0:3, 8:4, 0:1, 2:7, Code:16 >>)
 	end,
-	handler_terminate(State, Req, HandlerState, Reason).
+        mochiweb_socket:close(Socket),
+	handler_terminate(State, Req, HandlerState, Reason),
+        exit(normal).
 
 % -spec handler_terminate(#state{}, Req, any(), atom() | {atom(), atom()})
 % 	-> {ok, Req, cowboy_middleware:env()}
