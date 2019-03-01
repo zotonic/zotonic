@@ -1182,6 +1182,9 @@ function z_stream_is_connected()
 
 function z_comet_poll_ajax()
 {
+    // Do not start a new poll when there is already a poll running.
+    if (z_comet) return;
+
     if (z_ws_pong_count === 0 && z_session_valid && !z_page_unloading)
     {
         z_comet_poll_count++;
