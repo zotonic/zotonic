@@ -1,3 +1,6 @@
+{% block reset_form_fields_top %}
+{% endblock %}
+
 {% with
     (m.config.mod_authentication.password_min_length.value|default:"6")|to_integer
     as
