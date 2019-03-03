@@ -48,7 +48,10 @@ m_find_value(used, #m{value=memory}, _Context) ->
 m_find_value(allocated, #m{value=memory}, _Context) ->
     recon_alloc:memory(used);
 m_find_value(unused, #m{value=memory}, _Context) ->
-    recon_alloc:memory(unused).
+    recon_alloc:memory(unused);
+m_find_value(usage, #m{value=memory}, _Context) ->
+    recon_alloc:memory(usage).
+
 
 %% @spec m_to_list(Source, Context) -> List
 m_to_list(_, _Context) ->
