@@ -65,6 +65,10 @@
 
     <div class="col-md-6">
         <div class="well">
+            {% include "_admin_system_status.tpl" %}
+        </div>
+
+        <div class="well">
 	        {% all include "_admin_status.tpl" %}
         </div>
     </div>
