@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zotonic - authentication\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-02-05 15:13+0100\n"
+"PO-Revision-Date: 2019-03-04 10:48+0100\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -22,6 +22,10 @@ msgstr ""
 #: modules/mod_authentication/actions/action_authentication_auth_disconnect.erl:46
 msgid "Access denied"
 msgstr "Toegang geweigerd"
+
+#: modules/mod_authentication/templates/_logon_tos_agree_title.tpl:1
+msgid "Agree to the T&C"
+msgstr "Akkoord met de voorwaarden"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:24
 msgid "Already Connected"
@@ -75,10 +79,6 @@ msgstr "Browser"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:44
-msgid "Change password and Sign in"
-msgstr "Verander wachtwoord en login"
-
 #: modules/mod_authentication/templates/logon_service_error.tpl:15
 msgid "Change your permissions"
 msgstr "Verander je toegangsrechten"
@@ -108,6 +108,10 @@ msgstr "Bevestig"
 msgid "Confirmation failure"
 msgstr "Fout bij bevestiging"
 
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:17
+msgid "Continue"
+msgstr "Doorgaan"
+
 #: modules/mod_authentication/mod_authentication.erl:66
 #: modules/mod_authentication/mod_authentication.erl:84
 msgid "Could not find the session"
@@ -121,11 +125,7 @@ msgstr "Kan geen e-mail versturen"
 msgid "Current"
 msgstr "Huidig"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
-msgid "E-mail"
-msgstr ""
-
-#: modules/mod_authentication/templates/_logon_error.tpl:3
+#: modules/mod_authentication/templates/logon_error/message.pw.tpl:2
 msgid ""
 "Either the email or the password you entered is incorrect. Please check your "
 "entry and try again."
@@ -153,8 +153,7 @@ msgstr ""
 "Activeer de signup module om gebruikers automatisch aan te laten melden via "
 "de onderstaande diensten."
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:15
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:14
 msgid "Enter a password"
 msgstr "Vul een wachtwoord in"
 
@@ -178,7 +177,7 @@ msgstr ""
 msgid "Enter your email address or username"
 msgstr "Vul je e-mailadres of gebruikersnaam in"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:16
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:17
 msgid "Enter your password"
 msgstr "Vul je wachtwoord in"
 
@@ -247,6 +246,10 @@ msgstr ""
 "We hebben geen geregistreerde gebruiker gevonden met dit e-mailadres dus je "
 "kunt het wachtwoord niet veranderen."
 
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:6
+msgid "I agree to the"
+msgstr "Ik aanvaard de"
+
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:31
 msgid "I forgot my password"
 msgstr "Wachtwoord vergeten?"
@@ -281,9 +284,8 @@ msgstr ""
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "In de e-mail staan instructies om je account te bevestigen."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:30
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:41
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:39
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:32
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:48
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:28
 msgid "Keep me signed in"
 msgstr "Hou me ingelogd"
@@ -292,19 +294,17 @@ msgstr "Hou me ingelogd"
 msgid "Location Lookup"
 msgstr "Locatie opzoeken"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:18
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:17
 msgid "Minimum characters: "
 msgstr "Minimum aantal tekens: "
 
-#: modules/mod_authentication/templates/_logon_error.tpl:6
-#: modules/mod_authentication/templates/_logon_error.tpl:20
-#: modules/mod_authentication/templates/_logon_error.tpl:35
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:12
+#: modules/mod_authentication/templates/logon_error/message.passcode.tpl:5
+#: modules/mod_authentication/templates/logon_error/message.pw.tpl:5
 msgid "Need help signing in?"
 msgstr "Hulp nodig bij inloggen?"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:7
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:12
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
 msgid "New password"
 msgstr "Nieuw wachtwoord"
 
@@ -326,34 +326,29 @@ msgstr "OK"
 msgid "One moment please, signing out..."
 msgstr "Een moment alsjeblieft, aan het uitloggen..."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:22
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:32
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:24
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:39
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:20
 msgid "Passcode"
 msgstr "Code"
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:13
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:14
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:15
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 msgid "Password"
 msgstr "Wachtwoord"
-
-#: modules/mod_authentication/templates/_logon_error.tpl:48
-#: modules/mod_authentication/templates/_logon_error.tpl:55
-msgid "Passwords should have at least six characters."
-msgstr "Wachtwoord moet minstens zes karakters bevatten."
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
 msgstr "Bevestig je"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:11
+#: modules/mod_authentication/templates/logon_error/message.need_passcode.tpl:1
 msgid "Please enter the two-factor authentication passcode."
 msgstr "Voer de code in voor authenticatie in twee stappen."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:10
-#: modules/mod_authentication/templates/_logon_error.tpl:26
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:3
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:19
 msgid "Please try again in"
 msgstr "Probeer het opnieuw in"
@@ -363,21 +358,23 @@ msgstr "Probeer het opnieuw in"
 msgid "Please try again later."
 msgstr "Probeer het straks nog eens."
 
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:7
+msgid "Privacy policies"
+msgstr "Privacybeleid"
+
 #: modules/mod_authentication/templates/logon_sessions.tpl:27
 msgid "Refresh Now"
 msgstr "Nu verversen"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:21
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:26
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:26
 msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:24
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:29
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:30
 msgid "Repeat your password"
 msgstr "Herhaal je wachtwoord"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:48
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:55
 msgid "Reset password and Sign in"
 msgstr "Verander wachtwoord en login"
 
@@ -417,7 +414,7 @@ msgid "Show Alert"
 msgstr "Toon bericht"
 
 #: modules/mod_authentication/templates/_logon_off.tpl:4
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:36
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:38
 #: modules/mod_authentication/templates/error.403.tpl:35
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:34
 msgid "Sign in"
@@ -441,7 +438,7 @@ msgstr "Probeer het opnieuw:"
 msgid "Somebody else is already connected with this account on"
 msgstr "Iemand anders is al gelinkt met dit account op"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:60
+#: modules/mod_authentication/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
 msgstr "Er ging iets mis, probeer het straks nog eens."
 
@@ -479,6 +476,10 @@ msgstr "Stop sessie"
 msgid "Stopping the session"
 msgstr "De sessie wordt gestopt"
 
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:6
+msgid "Terms of Service"
+msgstr "Gebruiksvoorwaarden"
+
 #: modules/mod_authentication/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
 msgstr "Het e-mailadres verbonden aan je account is"
@@ -491,11 +492,11 @@ msgstr ""
 "De registratiemodule is actief. Gebruikers die inloggen via onderstaande "
 "diensten worden automatisch geregistreerd."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:53
+#: modules/mod_authentication/templates/logon_error/message.unequal.tpl:1
 msgid "The two passwords should be equal. Please retype them."
 msgstr "De twee wachtwoorden moeten hetzelfde zijn. Probeer het nogmaals."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:17
+#: modules/mod_authentication/templates/logon_error/message.passcode.tpl:2
 msgid ""
 "The two-factor authentication passcode did not match. Please check your "
 "entry and try again."
@@ -515,17 +516,17 @@ msgstr ""
 "Dit kan worden opgelost door het aanpassen van de instellingen van Cookies "
 "en website data in de Safari voorkeuren."
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:25
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:31
 msgid "This does not match the first password"
 msgstr "Dit komt niet overeen met het eerste wachtwoord"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:42
+#: modules/mod_authentication/templates/_logon_tos_agree_title.tpl:2
 msgid ""
-"To find your account you need to enter either your username or the email "
-"address we have received from you."
+"To continue you must agree with the updated Terms of Service and Privacy "
+"Policies."
 msgstr ""
-"Om je account te achterhalen moet je je gebruikersnaam invullen, of het e-"
-"mailadres dat we van je hebben ontvangen."
+"Om verder te kunnen gaan moet u akkoord gaan met de bijgewerkte "
+"Servicevoorwaarden en het Privacybeleid."
 
 #: modules/mod_authentication/templates/logon_sessions.tpl:13
 msgid ""
@@ -547,26 +548,26 @@ msgstr "Om deze pagina te bekijken heb je andere toegangsrechten nodig."
 msgid "Too many retries"
 msgstr "Sorry, te veel pogingen"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:25
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:2
 msgid "Too many retries."
 msgstr "Sorry, te veel pogingen."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:23
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:33
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:25
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:40
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:21
 msgid "Two-factor passcode"
 msgstr "Code voor authenticatie in twee stappen"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:49
-#: modules/mod_authentication/templates/_logon_error.tpl:56
+#: modules/mod_authentication/templates/logon_error/message.unequal.tpl:2
+#: modules/mod_authentication/templates/logon_error/message.tooshort.tpl:2
 msgid ""
 "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr ""
 "Gebruik bijzondere symbolen of cijfers om het moeilijker te maken om te "
 "raden."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:4
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 msgid "Username"
 msgstr "Gebruikersnaam"
@@ -574,13 +575,6 @@ msgstr "Gebruikersnaam"
 #: modules/mod_authentication/templates/_logon_stage.tpl:31
 msgid "Verify your account"
 msgstr "Bevestig je account"
-
-#: modules/mod_authentication/templates/_logon_error.tpl:41
-msgid ""
-"We can only send you an email when we have the email address of your account."
-msgstr ""
-"We kunnen je alleen per e-mail bereiken als we het e-mail adres hebben dat "
-"is verbonden aan je account."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:47
 msgid ""
@@ -608,6 +602,10 @@ msgstr "Je moet je e-mailadres delen om in te kunnen loggen."
 msgid "You may try to sign in as a different user."
 msgstr "Je kunt proberen om als een andere gebruiker in te loggen."
 
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:10
+msgid "You must agree to the Terms in order to continue."
+msgstr "U moet akkoord gaan met de Voorwaarden om verder te kunnen gaan."
+
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:11
 msgid ""
 "You need to be allowed to edit the system configuration to view or change "
@@ -632,7 +630,7 @@ msgstr ""
 msgid "You will be redirected to the home page."
 msgstr "Je wordt doorgestuurd naar de homepagina."
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:4
+#: modules/mod_authentication/templates/_logon_expired_form_title.tpl:2
 msgid "You'll need to create a new one."
 msgstr "Maak hier een nieuw wachtwoord aan."
 
@@ -643,12 +641,6 @@ msgid ""
 msgstr ""
 "Je bent bijna klaar! Om er zeker van te zijn dat jij echt jij bent, vragen "
 "we je om je account te bevestigen via je e-mailadres."
-
-#: modules/mod_authentication/templates/_logon_error.tpl:39
-msgid "You've entered an unknown username or email address. Please try again."
-msgstr ""
-"Je hebt een onbekende gebruikersnaam of e-mailadres ingevuld. Probeer het "
-"nogmaals."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:9
 #: modules/mod_authentication/templates/email_password_reset.tpl:17
@@ -667,33 +659,36 @@ msgstr "Uw huidige sessies"
 msgid "Your email or username"
 msgstr "Je e-mail of gebruikersnaam"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:46
+#: modules/mod_authentication/templates/logon_error/message.tooshort.tpl:1
 msgid "Your new password is too short."
 msgstr "Je nieuwe wachtwoord is te kort."
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:3
+#: modules/mod_authentication/templates/_logon_expired_form_title.tpl:1
 msgid "Your password has expired"
 msgstr "Je wachtwoord is niet langer geldig"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:18
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:17
 msgid "Your password is too short."
 msgstr "Je wachtwoord is te kort."
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:12
-#: modules/mod_authentication/templates/_logon_error.tpl:28
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:5
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:21
 msgid "an hour"
 msgstr "een uur"
 
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:7
+msgid "and the"
+msgstr "en de"
+
 #: modules/mod_authentication/templates/_logon_stage.tpl:13
-#: modules/mod_authentication/templates/_logon_error.tpl:29
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:6
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:22
 msgid "hours"
 msgstr "uren"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:14
-#: modules/mod_authentication/templates/_logon_error.tpl:30
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:7
 #: modules/mod_authentication/templates/_logon_reset_form.tpl:23
 msgid "minutes"
 msgstr "minuten"
@@ -706,3 +701,29 @@ msgstr "of"
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:8
 msgid "user@example.com"
 msgstr "gebruiker@voorbeeld.nl"
+
+#~ msgid "Change password and Sign in"
+#~ msgstr "Verander wachtwoord en login"
+
+#~ msgid "Passwords should have at least six characters."
+#~ msgstr "Wachtwoord moet minstens zes karakters bevatten."
+
+#~ msgid ""
+#~ "To find your account you need to enter either your username or the email "
+#~ "address we have received from you."
+#~ msgstr ""
+#~ "Om je account te achterhalen moet je je gebruikersnaam invullen, of het e-"
+#~ "mailadres dat we van je hebben ontvangen."
+
+#~ msgid ""
+#~ "We can only send you an email when we have the email address of your "
+#~ "account."
+#~ msgstr ""
+#~ "We kunnen je alleen per e-mail bereiken als we het e-mail adres hebben "
+#~ "dat is verbonden aan je account."
+
+#~ msgid ""
+#~ "You've entered an unknown username or email address. Please try again."
+#~ msgstr ""
+#~ "Je hebt een onbekende gebruikersnaam of e-mailadres ingevuld. Probeer het "
+#~ "nogmaals."

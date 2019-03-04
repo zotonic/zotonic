@@ -1,3 +1,4 @@
+{% block field_username %}
 <div class="form-group">
     <label for="username" class="control-label">{_ Username _}</label>
     <input class="form-control" type="text" id="username" name="username" value="" autofocus="autofocus" autocomplete="off" placeholder="{_ Username _}" />
@@ -6,7 +7,9 @@
         only_on_submit
     %}
 </div>
+{% endblock %}
 
+{% block field_password %}
 <div class="form-group">
     <label for="password" class="control-label">{_ Password _}</label>
     <input class="form-control" type="password" id="password" name="password" value="" autocomplete="off" placeholder="{_ Password _}" />
@@ -15,6 +18,7 @@
         only_on_submit
     %}
 </div>
+{% endblock %}
 
 <div class="form-group passcode">
     <label for="password" class="control-label">{_ Passcode _}</label>

@@ -26,6 +26,12 @@ state::
 |       |-- _logon_reset_form.tpl
 |       |   `-- _logon_reset_form_fields.tpl
 |       `-- _logon_reset_support.tpl // backlink to logon form
+|== logon_tos_agree:
+|   `-- _logon_tos_agree_form.tpl
+|       |-- _logon_tos_agree_title.tpl
+|       |-- _logon_reset_form.tpl
+|       |   `-- _logon_reset_form_fields.tpl
+|       `-- _logon_reset_support.tpl // backlink to logon form
 |== admin_logon:
 |   `-- _logon_form.tpl
 |       |-- _logon_error.tpl

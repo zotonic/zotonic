@@ -52,6 +52,11 @@
         {% wire id=#cancel action={redirect back} %}
     {% endif %}
 
+{% elseif stage == "tos_agree" %}
+
+    {% include "_logon_tos_agree_title.tpl" %}
+    {% include "_logon_tos_agree_form.tpl" %}
+
 {% elseif stage == "password_expired" %}
 
     {% include "_logon_expired_form.tpl" %}

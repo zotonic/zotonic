@@ -10,65 +10,93 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-12-28 12:36+0200\n"
-"Last-Translator: furiston <furiston@gmail.com>\n"
+"PO-Revision-Date: 2019-03-04 11:01+0100\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: Turkish <tr@zotonic.com>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: modules/mod_authentication/actions/action_authentication_auth_disconnect.erl:46
 msgid "Access denied"
-msgstr ""
+msgstr "Erişim reddedildi"
+
+#: modules/mod_authentication/templates/_logon_tos_agree_title.tpl:1
+#, fuzzy
+msgid "Agree to the T&C"
+msgstr "T &amp; C’yi Kabul Edin"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:24
+#, fuzzy
 msgid "Already Connected"
+msgstr "Zaten bağlı"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:48
+#, fuzzy
+msgid ""
+"Are you sure you want to close this session? All unsaved work will be lost."
 msgstr ""
+"Bu oturumu kapatmak istediğinize emin misiniz? Tüm kaydedilmemiş işler "
+"kaybedilecek."
 
 #: modules/mod_authentication/templates/logon_service_done.tpl:5
 msgid "Authenticated"
-msgstr ""
+msgstr "Doğrulanmış"
 
 #: modules/mod_authentication/templates/logon_service_done.tpl:9
+#, fuzzy
 msgid "Authentication has been done with"
-msgstr ""
+msgstr "İle kimlik doğrulaması yapıldı"
 
 #: modules/mod_authentication/templates/logon_service.tpl:5
+#, fuzzy
 msgid "Authorizing..."
-msgstr ""
+msgstr "Onaylanıyor ..."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:7
-#: modules/mod_authentication/templates/_logon_stage.tpl:32
+#: modules/mod_authentication/templates/logon_sessions.tpl:23
+#, fuzzy
+msgid "Automatically refreshed every 10 seconds."
+msgstr "Her 10 saniyede bir otomatik olarak yenilenir."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:24
+#: modules/mod_authentication/templates/_logon_stage.tpl:49
 #: modules/mod_authentication/templates/_logon_reminder_support.tpl:4
 #: modules/mod_authentication/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
 msgstr "Giriş formuna geri dön"
 
+#: modules/mod_authentication/templates/logon_sessions.tpl:9
+#, fuzzy
+msgid "Below are all your active sessions."
+msgstr "Aşağıda tüm aktif oturumlarınız."
+
 #: modules/mod_authentication/templates/email_password_reset.tpl:17
 msgid "Below are your account details and a link to set a new password."
 msgstr "Aşağıda hesap detaylarınız ve yeni bir şifre almak için link bulunuyor"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:34
+#: modules/mod_authentication/templates/_logon_sessions.tpl:28
+msgid "Browser"
+msgstr "Tarayıcı"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:51
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:28
 msgid "Cancel"
 msgstr "İptal"
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:45
-msgid "Change password and Sign in"
-msgstr "Şİfreyi değiştir ve giriş yap"
-
 #: modules/mod_authentication/templates/logon_service_error.tpl:15
+#, fuzzy
 msgid "Change your permissions"
-msgstr ""
+msgstr "İzinlerini değiştir"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:3
-#: modules/mod_authentication/templates/_logon_stage.tpl:23
+#: modules/mod_authentication/templates/_logon_stage.tpl:4
+#: modules/mod_authentication/templates/_logon_stage.tpl:40
 msgid "Check your email"
 msgstr "E-postanızı kontrol edin"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:23
+#: modules/mod_authentication/templates/email_password_reset.tpl:24
 #, fuzzy
 msgid ""
 "Click on the link below to enter a new password. When clicking doesn't work, "
@@ -80,7 +108,7 @@ msgstr ""
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:51
 msgid "Close Window"
-msgstr ""
+msgstr "Pencereyi kapat"
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:25
 msgid "Confirm"
@@ -90,73 +118,104 @@ msgstr "Onayla"
 msgid "Confirmation failure"
 msgstr "Onaylama hatası"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:3
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:17
+msgid "Continue"
+msgstr "Devam et"
+
+#: modules/mod_authentication/mod_authentication.erl:66
+#: modules/mod_authentication/mod_authentication.erl:84
+#, fuzzy
+msgid "Could not find the session"
+msgstr "Oturum bulunamadı"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:19
+#, fuzzy
+msgid "Could not send email"
+msgstr "E-posta gönderilemedi"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:10
+msgid "Current"
+msgstr "Şimdiki"
+
+#: modules/mod_authentication/templates/logon_error/message.pw.tpl:2
+#, fuzzy
 msgid ""
 "Either the email or the password you entered is incorrect. Please check your "
 "entry and try again."
 msgstr ""
+"Girdiğiniz e-posta veya şifre ya yanlış. Lütfen girişinizi kontrol edip "
+"tekrar deneyin."
 
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:2
 msgid "Email"
-msgstr ""
+msgstr "E-posta"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
+#, fuzzy
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
-msgstr ""
+msgstr "Facebook ayarlarını görmek için <em>mod_facebook'u</em> etkinleştirin."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:32
+#, fuzzy
 msgid "Enable <em>mod_twitter</em> to see Twitter settings."
-msgstr ""
+msgstr "Twitter ayarlarını görmek için <em>mod_twitter'ı</em> etkinleştirin."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:23
+#, fuzzy
 msgid ""
 "Enable the signup module to automatically sign up users that are "
 "authenticating via the services below."
 msgstr ""
+"Aşağıdaki hizmetler üzerinden kimlik doğrulaması yapan kullanıcıları "
+"otomatik olarak kaydettirmek için kayıt modülünü etkinleştirin."
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:16
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:14
+#, fuzzy
 msgid "Enter a password"
-msgstr ""
+msgstr "Bir parola girin"
 
 #: modules/mod_authentication/templates/_logon_reset_title.tpl:8
+#, fuzzy
 msgid "Enter the new password for your account"
-msgstr ""
+msgstr "Hesabınız için yeni şifrenizi girin"
 
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:14
-#, fuzzy
 msgid "Enter your email address"
-msgstr "E-postanızı kontrol edin"
+msgstr "Email adresinizi giriniz"
 
 #: modules/mod_authentication/templates/_logon_reminder_title.tpl:2
+#, fuzzy
 msgid ""
 "Enter your email address and we'll send you instructions how to reset your "
 "password."
 msgstr ""
+"E-posta adresinizi girin, şifrenizi nasıl sıfırlayacağınıza dair size "
+"talimatlar gönderelim."
 
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:14
+#, fuzzy
 msgid "Enter your email address or username"
-msgstr ""
+msgstr "E-posta adresinizi veya kullanıcı adınızı girin"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:14
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:17
 msgid "Enter your password"
-msgstr ""
+msgstr "Şifrenizi girin"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:5
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:6
 msgid "Enter your username"
-msgstr ""
+msgstr "Kullanıcı adınızı giriniz"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:5
 msgid "Error"
-msgstr ""
+msgstr "Hata"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:3
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:7
-#: modules/mod_authentication/mod_authentication.erl:71
+#: modules/mod_authentication/mod_authentication.erl:108
 msgid "External Services"
-msgstr ""
+msgstr "Dış Hizmetler"
 
-#: modules/mod_authentication/templates/_logon_reset_form.tpl:20
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:29
 msgid ""
 "For security reasons, password reset codes are only kept for a limited "
 "amount of time and can only be used once."
@@ -166,17 +225,22 @@ msgstr ""
 
 #: modules/mod_authentication/templates/_logon_login_support.tpl:3
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Şifrenizi mi unuttunuz?"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:15
+msgid "From"
+msgstr "Kimden"
 
 #: modules/mod_authentication/templates/error.403.tpl:20
 msgid "Go back"
-msgstr ""
+msgstr "Geri dön"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:23
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:32
+#, fuzzy
 msgid "Go to Modules"
-msgstr ""
+msgstr "Modüllere Git"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:7
 #: modules/mod_authentication/templates/email_password_reset.tpl:15
@@ -184,26 +248,37 @@ msgid "Hello"
 msgstr "Merhaba"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:14
+#, fuzzy
 msgid ""
 "Here you can set all the application keys, secrets and other configurations "
 "to integrate with external services like Facebook and Twitter."
 msgstr ""
+"Burada, Facebook ve Twitter gibi harici servislerle entegre olacak tüm "
+"uygulama tuşlarını, sırlarını ve diğer yapılandırmaları ayarlayabilirsiniz."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:3
 msgid "How to reset your password"
 msgstr "Şifrenizi nasıl sıfırlarsınız?"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:11
+#, fuzzy
 msgid ""
 "However this email address does not belong to one of our registered users so "
 "you will not be able to change the password."
 msgstr ""
+"Ancak bu e-posta adresi kayıtlı kullanıcılarımızdan birine ait değildir, bu "
+"yüzden şifreyi değiştiremezsiniz."
 
-#: modules/mod_authentication/templates/_logon_reset_form.tpl:22
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:6
+#, fuzzy
+msgid "I agree to the"
+msgstr "Katılıyorum"
+
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:31
 msgid "I forgot my password"
 msgstr "Şifremi unuttum"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:28
+#: modules/mod_authentication/templates/email_password_reset.tpl:30
 #, fuzzy
 msgid ""
 "If you didn't request a password reset, you can safely ignore this email. "
@@ -212,87 +287,131 @@ msgstr ""
 "Eğer şifre sıfırlama talebi yapmadıysanız bu e-postaya itibar etmeyin. Belki "
 "birileri kaza ile talep yapmış olabilir."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:5
-#: modules/mod_authentication/templates/_logon_stage.tpl:25
+#: modules/mod_authentication/templates/_logon_stage.tpl:6
+#: modules/mod_authentication/templates/_logon_stage.tpl:42
+#, fuzzy
 msgid ""
 "If you do not receive the email within a few minutes, please check your spam "
 "folder."
 msgstr ""
+"E-postayı birkaç dakika içinde almazsanız, lütfen spam klasörünüzü kontrol "
+"edin."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:13
+#, fuzzy
 msgid ""
 "If you think you have an account and were expecting this email, please try "
 "again using the email address you gave when signing up."
 msgstr ""
+"Bir hesabınız olduğunu düşünüyorsanız ve bu e-postayı bekliyorsanız, lütfen "
+"kaydolurken verdiğiniz e-posta adresini kullanarak tekrar deneyin."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:24
+#: modules/mod_authentication/templates/_logon_stage.tpl:41
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "Size e-posta gönderdik, talimatları takip edin"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:23
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:34
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:40
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:23
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:32
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:48
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:28
 msgid "Keep me signed in"
-msgstr ""
+msgstr "Oturum açık kalsın"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
+#: modules/mod_authentication/templates/_logon_sessions.tpl:20
+#, fuzzy
+msgid "Location Lookup"
+msgstr "Yer araması"
+
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:17
+#, fuzzy
 msgid "Minimum characters: "
-msgstr ""
+msgstr "Minimum karakter:"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:6
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:12
+#: modules/mod_authentication/templates/logon_error/message.passcode.tpl:5
+#: modules/mod_authentication/templates/logon_error/message.pw.tpl:5
+#, fuzzy
 msgid "Need help signing in?"
-msgstr ""
+msgstr "Oturum açarken yardıma mı ihtiyacınız var?"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:7
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:13
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
 msgid "New password"
 msgstr "Yeni şifre"
 
 #: modules/mod_authentication/templates/error.403.tpl:3
+#, fuzzy
 msgid "No Access"
-msgstr ""
+msgstr "Erişim yok"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:9
-msgid "OK"
+#: modules/mod_authentication/templates/logon_sessions.tpl:10
+#, fuzzy
+msgid ""
+"Note that if you close your browser a session stays active for some time."
 msgstr ""
+"Tarayıcınızı kapatırsanız, bir oturumun bir süre aktif kalacağını unutmayın."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:26
+msgid "OK"
+msgstr "Tamam"
 
 #: modules/mod_authentication/templates/logoff.tpl:10
 msgid "One moment please, signing out..."
 msgstr "Lütfen bekleyin, çıkış yapılıyor..."
 
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:24
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:39
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:20
+#, fuzzy
+msgid "Passcode"
+msgstr "Şifre"
+
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:11
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:12
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:14
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:15
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 msgid "Password"
 msgstr "Şifre"
-
-#: modules/mod_authentication/templates/_logon_error.tpl:19
-#: modules/mod_authentication/templates/_logon_error.tpl:26
-msgid "Passwords should have at least six characters."
-msgstr "Şifre en az 6 karakter olmalı"
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
 msgstr "Lütfen onaylayın"
 
+#: modules/mod_authentication/templates/logon_error/message.need_passcode.tpl:1
+#, fuzzy
+msgid "Please enter the two-factor authentication passcode."
+msgstr "Lütfen iki faktörlü kimlik doğrulama şifresini girin."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:10
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:3
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:19
+#, fuzzy
+msgid "Please try again in"
+msgstr "Lütfen tekrar deneyin"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:20
 #: modules/mod_authentication/templates/logon_service_error.tpl:46
 msgid "Please try again later."
-msgstr ""
+msgstr "Lütfen daha sonra tekrar deneyin."
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:21
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:27
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:7
+#, fuzzy
+msgid "Privacy policies"
+msgstr "Gizlilik politikaları"
+
+#: modules/mod_authentication/templates/logon_sessions.tpl:27
+#, fuzzy
+msgid "Refresh Now"
+msgstr "Şimdi yenile"
+
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:26
 msgid "Repeat password"
 msgstr "Şifreyi tekrarla"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:24
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:30
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:30
+#, fuzzy
 msgid "Repeat your password"
-msgstr ""
+msgstr "Şifrenizi tekrarlayın"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:41
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:55
 msgid "Reset password and Sign in"
 msgstr "Şİfreni sıfırla ve Giriş yap"
 
@@ -302,29 +421,46 @@ msgid "Reset your password"
 msgstr "Şifremi sıfırla"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:32
+#, fuzzy
 msgid "Safari 8 has a known problem with handling external authentications."
 msgstr ""
+"Safari 8'in harici kimlik doğrulama işlemleri ile ilgili bilinen bir sorunu "
+"var."
 
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:21
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:20
 msgid "Send"
-msgstr ""
+msgstr "Gönder"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:17
+#: modules/mod_authentication/templates/_logon_stage.tpl:34
 msgid "Send Verification Message"
 msgstr "Onay mesajı gönder"
 
-#: modules/mod_authentication/templates/_logon_off.tpl:4
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
-#: modules/mod_authentication/templates/error.403.tpl:35
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
+#: modules/mod_authentication/mod_authentication.erl:64
 #, fuzzy
+msgid "Sending the alert"
+msgstr "Uyarının gönderilmesi"
+
+#: modules/mod_authentication/mod_authentication.erl:60
+#, fuzzy
+msgid "Session alert requested"
+msgstr "Oturum uyarısı istendi"
+
+#: modules/mod_authentication/templates/logon_sessions.tpl:3
+msgid "Sessions"
+msgstr "Oturumlar"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:35
+#, fuzzy
+msgid "Show Alert"
+msgstr "Uyarıyı Göster"
+
+#: modules/mod_authentication/templates/_logon_off.tpl:4
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:38
+#: modules/mod_authentication/templates/error.403.tpl:35
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:34
 msgid "Sign in"
-msgstr ""
-"#-#-#-#-#  tr.po (Zotonic)  #-#-#-#-#\n"
-"Giriş\n"
-"#-#-#-#-#  tr.po (Zotonic)  #-#-#-#-#\n"
-"Giriş yap"
+msgstr "Giriş Yap"
 
 #: modules/mod_authentication/templates/logon.tpl:11
 #: modules/mod_authentication/templates/_logon_login_title.tpl:1
@@ -336,121 +472,214 @@ msgstr "Giriş yap"
 msgid "Sign out"
 msgstr "Çıkış"
 
-#: modules/mod_authentication/templates/_logon_reset_form.tpl:21
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:30
+#, fuzzy
 msgid "Simply try again:"
-msgstr ""
+msgstr "Basitçe tekrar deneyin:"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:26
+#, fuzzy
 msgid "Somebody else is already connected with this account on"
-msgstr ""
+msgstr "Tarihinde başka biri bu hesapla bağlı"
+
+#: modules/mod_authentication/templates/logon_error/message.tpl:3
+msgid "Something went wrong, please try again later."
+msgstr "Bir şeyler yanlış oldu. Lütfen sonra tekrar deneyiniz."
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:10
 #: modules/mod_authentication/templates/logon_service_error.tpl:30
 #: modules/mod_authentication/templates/logon_service_error.tpl:42
 msgid "Sorry"
-msgstr ""
+msgstr "Üzgünüm"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:29
+#: modules/mod_authentication/templates/_logon_stage.tpl:46
 msgid "Sorry, could not send the verification message."
 msgstr "Özür dileriz, onay mesajı gönderilemedi"
 
-#: modules/mod_authentication/templates/_logon_reset_form.tpl:19
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:16
+#, fuzzy
+msgid "Sorry, too many retries"
+msgstr "Üzgünüz, çok fazla sayıda deneme"
+
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:28
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Üzgünüz, şifre sıfırlama kodunuz yanlış ya da süresi dolmuş"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:19
+#: modules/mod_authentication/templates/_logon_sessions.tpl:6
+msgid "Started"
+msgstr "Başlangıç"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:43
+#: modules/mod_authentication/templates/_logon_sessions.tpl:47
+#: modules/mod_authentication/templates/_logon_sessions.tpl:49
+#, fuzzy
+msgid "Stop Session"
+msgstr "Oturumu Durdur"
+
+#: modules/mod_authentication/mod_authentication.erl:77
+#, fuzzy
+msgid "Stopping the session"
+msgstr "Oturumu durdurmak"
+
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:6
+msgid "Terms of Service"
+msgstr "Kullanım Şartları"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
 msgstr "Hesabınıza bağlı e-posta adresi"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:21
+#, fuzzy
 msgid ""
 "The signup module is enabled, users authenticating via the services below "
 "are automatically signed up."
 msgstr ""
+"Kayıt modülü etkindir, aşağıdaki hizmetler aracılığıyla kimlik doğrulaması "
+"yapan kullanıcılar otomatik olarak kaydolur."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:24
+#: modules/mod_authentication/templates/logon_error/message.unequal.tpl:1
 msgid "The two passwords should be equal. Please retype them."
 msgstr "İki şifre birbirinin aynı olmalı. Lütfen tekrar deneyin."
 
-#: modules/mod_authentication/templates/logon_service_error.tpl:44
-msgid "There was a problem authenticating with"
+#: modules/mod_authentication/templates/logon_error/message.passcode.tpl:2
+#, fuzzy
+msgid ""
+"The two-factor authentication passcode did not match. Please check your "
+"entry and try again."
 msgstr ""
+"İki faktörlü kimlik doğrulama şifresi eşleşmedi. Lütfen girişinizi kontrol "
+"edip tekrar deneyin."
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:44
+#, fuzzy
+msgid "There was a problem authenticating with"
+msgstr "İle kimlik doğrulaması yaparken bir sorun oluştu"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:34
+#, fuzzy
 msgid ""
 "This can be resolved by changing the Cookies and website data settings in "
 "the Safari preferences."
 msgstr ""
+"Bu, Safari tercihlerinde Çerezler ve web sitesi verileri ayarları "
+"değiştirilerek çözülebilir."
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:25
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:31
+#, fuzzy
 msgid "This does not match the first password"
-msgstr ""
+msgstr "Bu ilk şifre ile eşleşmiyor"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:13
+#: modules/mod_authentication/templates/_logon_tos_agree_title.tpl:2
+#, fuzzy
 msgid ""
-"To find your account you need to enter either your username or the email "
-"address we have received from you."
+"To continue you must agree with the updated Terms of Service and Privacy "
+"Policies."
 msgstr ""
-"Hesabınızı bulabilmek için kullanıcı adınızı ya da e-posta adresinizi "
-"bildirmeniz gerekli"
+"Devam etmek için güncellenmiş Hizmet Şartları ve Gizlilik Politikalarını "
+"kabul etmelisiniz."
+
+#: modules/mod_authentication/templates/logon_sessions.tpl:13
+#, fuzzy
+msgid ""
+"To stop a session, click on ”Stop Session” or log out from the browser with "
+"the session."
+msgstr ""
+"Bir oturumu durdurmak için, \"Oturumu Durdur\" üzerine tıklayın veya oturumu "
+"olan tarayıcıdan çıkın."
 
 #: modules/mod_authentication/templates/error.403.tpl:29
+#, fuzzy
 msgid "To view this page you must be signed in."
-msgstr ""
+msgstr "Bu sayfayı görebilmek için üye girişi yapmalısınız."
 
 #: modules/mod_authentication/templates/error.403.tpl:26
+#, fuzzy
 msgid "To view this page, you need to have other access rights."
 msgstr ""
+"Bu sayfayı görüntülemek için başka erişim haklarına sahip olmanız gerekir."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:20
-#: modules/mod_authentication/templates/_logon_error.tpl:27
+#: modules/mod_authentication/templates/_logon_stage.tpl:8
+#, fuzzy
+msgid "Too many retries"
+msgstr "Çok fazla deneme"
+
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:2
+#, fuzzy
+msgid "Too many retries."
+msgstr "Çok fazla deneme var."
+
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:25
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:40
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:21
+#, fuzzy
+msgid "Two-factor passcode"
+msgstr "İki faktörlü şifre"
+
+#: modules/mod_authentication/templates/logon_error/message.unequal.tpl:2
+#: modules/mod_authentication/templates/logon_error/message.tooshort.tpl:2
 msgid ""
 "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr ""
 "Tahmini zorlaştırmak için alfabe dışı karakterler ve sayı kombinasyonu "
 "kullanabilirsiniz"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:4
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 msgid "Username"
 msgstr "Kullanıcı adı"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:14
+#: modules/mod_authentication/templates/_logon_stage.tpl:31
+#, fuzzy
 msgid "Verify your account"
-msgstr ""
+msgstr "Hesabınızı doğrulayın"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:12
-msgid ""
-"We can only send you an email when we have the email address of your account."
-msgstr "E-posta hesabınız olmadan size e-posta gönderemeyiz"
-
-#: modules/mod_authentication/templates/_logon_stage.tpl:30
+#: modules/mod_authentication/templates/_logon_stage.tpl:47
 msgid ""
 "We don’t seem to have any valid email address or other electronic "
 "communication address of you."
 msgstr "Sistemde geçerli bir e-posta adresiniz kayıtlı değil."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:4
+#: modules/mod_authentication/templates/_logon_stage.tpl:5
 #, fuzzy
 msgid "We have sent an email with a link to reset your password to"
 msgstr "Aşağıda hesap detaylarınız ve yeni bir şifre almak için link bulunuyor"
 
+#: modules/mod_authentication/templates/_logon_sessions.tpl:21
+#, fuzzy
+msgid "Whois"
+msgstr "Kim"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:7
+msgid "Y-m-d H:i:s"
+msgstr "Y-m-d H:i:s"
+
 #: modules/mod_authentication/templates/logon_service_error.tpl:12
+#, fuzzy
 msgid "You have to share your email address to be able to sign in."
-msgstr ""
+msgstr "Oturum açabilmek için e-posta adresinizi paylaşmanız gerekir."
 
 #: modules/mod_authentication/templates/error.403.tpl:27
+#, fuzzy
 msgid "You may try to sign in as a different user."
-msgstr ""
+msgstr "Farklı bir kullanıcı olarak giriş yapmayı deneyebilirsiniz."
+
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:10
+#, fuzzy
+msgid "You must agree to the Terms in order to continue."
+msgstr "Devam etmek için Şartları kabul etmelisiniz."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:11
+#, fuzzy
 msgid ""
 "You need to be allowed to edit the system configuration to view or change "
 "the configured App Keys."
 msgstr ""
+"Yapılandırılmış Uygulama Anahtarlarını görüntülemek veya değiştirmek için "
+"sistem yapılandırmasını düzenlemenize izin verilir."
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:34
+#: modules/mod_authentication/templates/email_password_reset.tpl:36
 msgid ""
 "You receive this email because you or someone else requested a password "
 "reset for your account. You or the someone else either entered your username "
@@ -466,56 +695,107 @@ msgstr ""
 msgid "You will be redirected to the home page."
 msgstr "Ana sayfaya yönlendirileceksiniz."
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:4
+#: modules/mod_authentication/templates/_logon_expired_form_title.tpl:2
+#, fuzzy
 msgid "You'll need to create a new one."
-msgstr ""
+msgstr "Yeni bir tane oluşturmanız gerekecek."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:15
+#: modules/mod_authentication/templates/_logon_stage.tpl:32
+#, fuzzy
 msgid ""
 "You're almost done! To make sure you are really you, we ask you to confirm "
 "your account from your email address."
 msgstr ""
-
-#: modules/mod_authentication/templates/_logon_error.tpl:10
-msgid "You've entered an unknown username or email address. Please try again."
-msgstr ""
-"Bilinmeyen bir kullanıcı adı veya e-mail adresi girdiniz. Lütfen tekrar "
-"deneyiniz."
+"Neredeyse bitti! Gerçekten siz olduğunuzdan emin olmak için, hesabınızı e-"
+"posta adresinizden onaylamanızı rica ediyoruz."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:9
 #: modules/mod_authentication/templates/email_password_reset.tpl:17
 msgid "You've requested a new password for"
 msgstr "Yeni bir şifre isteğinde bulundunuz"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:19
+#: modules/mod_authentication/templates/email_password_reset.tpl:20
 msgid "Your account name is"
 msgstr "Hesap isminiz"
 
-#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:2
-msgid "Your email or username"
-msgstr ""
+#: modules/mod_authentication/templates/logon_sessions.tpl:6
+#, fuzzy
+msgid "Your current sessions"
+msgstr "Hesap isminiz"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:17
+#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:2
+#, fuzzy
+msgid "Your email or username"
+msgstr "E-posta adresiniz veya kullanıcı adınız"
+
+#: modules/mod_authentication/templates/logon_error/message.tooshort.tpl:1
 msgid "Your new password is too short."
 msgstr "Şifre çok kısa."
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:3
+#: modules/mod_authentication/templates/_logon_expired_form_title.tpl:1
+#, fuzzy
 msgid "Your password has expired"
-msgstr ""
+msgstr "Şifrenizin süresi doldu"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:17
 msgid "Your password is too short."
-msgstr ""
+msgstr "Şifre çok kısa."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:12
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:5
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:21
+msgid "an hour"
+msgstr "Bir Saat"
+
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:7
+#, fuzzy
+msgid "and the"
+msgstr "ve"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:13
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:6
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:22
+msgid "hours"
+msgstr "saat"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:14
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:7
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:23
+msgid "minutes"
+msgstr "dakika"
 
 #: modules/mod_authentication/templates/_logon_login_extra.tpl:6
 msgid "or"
-msgstr ""
+msgstr "veya"
 
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:8
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:8
 msgid "user@example.com"
 msgstr "ornek@orneksite.com"
+
+#~ msgid "Change password and Sign in"
+#~ msgstr "Şİfreyi değiştir ve giriş yap"
+
+#~ msgid "Passwords should have at least six characters."
+#~ msgstr "Şifre en az 6 karakter olmalı"
+
+#~ msgid ""
+#~ "To find your account you need to enter either your username or the email "
+#~ "address we have received from you."
+#~ msgstr ""
+#~ "Hesabınızı bulabilmek için kullanıcı adınızı ya da e-posta adresinizi "
+#~ "bildirmeniz gerekli"
+
+#~ msgid ""
+#~ "We can only send you an email when we have the email address of your "
+#~ "account."
+#~ msgstr "E-posta hesabınız olmadan size e-posta gönderemeyiz"
+
+#~ msgid ""
+#~ "You've entered an unknown username or email address. Please try again."
+#~ msgstr ""
+#~ "Bilinmeyen bir kullanıcı adı veya e-mail adresi girdiniz. Lütfen tekrar "
+#~ "deneyiniz."
 
 #~ msgid "Remember me"
 #~ msgstr "Beni hatırla"
