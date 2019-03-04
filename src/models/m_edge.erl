@@ -62,6 +62,18 @@
 
 -include_lib("zotonic.hrl").
 
+-type insert_options() :: [ insert_option() ].
+
+-type insert_option() :: is_insert_before
+                       | no_touch
+                       | {seq, integer()}
+                       | {creator_id, m_rsc:resource_id()}
+                       | {created, calendar:datetime()}.
+
+-export_type([
+    insert_options/0,
+    insert_option/0
+]).
 
 %% @doc Fetch all object/edge ids for a subject/predicate
 %% @spec m_find_value(Key, Source, Context) -> term()
@@ -183,6 +195,7 @@ get_edges(SubjectId, Context) ->
 insert(Subject, Pred, Object, Context) ->
     insert(Subject, Pred, Object, [], Context).
 
+-spec insert(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), insert_options(), #context{}) -> {ok, EdgeId :: pos_integer()} | {error, term()}.
 insert(SubjectId, PredId, ObjectId, Opts, Context)
   when is_integer(SubjectId), is_integer(PredId), is_integer(ObjectId) ->
     case m_predicate:is_predicate(PredId, Context) of
@@ -217,10 +230,7 @@ of
                         pivot_resources([ObjectId], Ctx),
                         m_rsc:touch(SubjectId, Ctx)
                 end,
-                SeqOpt = case proplists:get_value(seq, Opts) of
-                            S when is_integer(S) -> [{seq, S}];
-                            undefined -> []
-                         end,
+                SeqOpt = maybe_seq_opt(Opts, SubjectId, PredId, Ctx),
                 CreatedOpt = case proplists:get_value(created, Opts) of
                                 DT when is_tuple(DT) -> [{created,DT}];
                                 undefined -> []
@@ -253,6 +263,31 @@ of
         % Edge exists - skip
         {ok, EdgeId}
 end.
+
+maybe_seq_opt(Opts, SubjectId, PredId, Context) ->
+    case proplists:get_value(seq, Opts) of
+        S when is_integer(S) ->
+            [ {seq, S} ];
+        _ ->
+            case z_convert:to_bool( m_rsc:p_no_acl(PredId, is_insert_before, Context) )
+                orelse z_convert:to_bool( proplists:get_value(is_insert_before, Opts) )
+            of
+                true ->
+                    case z_db:q1("
+                        select min(seq)
+                        from edge
+                        where subject_id = $1
+                          and predicate_id = $2",
+                        [SubjectId, PredId],
+                        Context)
+                    of
+                        undefined -> [];
+                        N -> [ {seq, N-1} ]
+                    end;
+                false ->
+                    []
+            end
+    end.
 
 
 %% @doc Delete an edge by Id
