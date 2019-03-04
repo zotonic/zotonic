@@ -62,11 +62,18 @@
 
 -include_lib("zotonic.hrl").
 
--type insert_opts() :: is_insert_before
-                     | no_touch
-                     | {seq, integer()}
-                     | {creator_id, m_rsc:resource_id()}
-                     | {created, calendar:datetime()}.
+-type insert_options() :: [ insert_option() ].
+
+-type insert_option() :: is_insert_before
+                       | no_touch
+                       | {seq, integer()}
+                       | {creator_id, m_rsc:resource_id()}
+                       | {created, calendar:datetime()}.
+
+-export_type([
+    insert_options/0,
+    insert_option/0
+]).
 
 %% @doc Fetch all object/edge ids for a subject/predicate
 %% @spec m_find_value(Key, Source, Context) -> term()
@@ -188,7 +195,7 @@ get_edges(SubjectId, Context) ->
 insert(Subject, Pred, Object, Context) ->
     insert(Subject, Pred, Object, [], Context).
 
--spec insert(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), insert_opts(), #context{}) -> {ok, EdgeId :: pos_integer()} | {error, term()}.
+-spec insert(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), insert_options(), #context{}) -> {ok, EdgeId :: pos_integer()} | {error, term()}.
 insert(SubjectId, PredId, ObjectId, Opts, Context)
   when is_integer(SubjectId), is_integer(PredId), is_integer(ObjectId) ->
     case m_predicate:is_predicate(PredId, Context) of
