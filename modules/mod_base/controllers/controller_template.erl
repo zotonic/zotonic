@@ -69,8 +69,8 @@ provide_content(ReqData, Context) ->
     Context4 = set_optional_cache_header(Context3),
     Template = z_context:get(template, Context4),
     Vars = [
-        {id, z_controller_helper:get_id(Context3)}
-        | z_context:get_all(Context3)
+        {id, z_controller_helper:get_id(Context4)}
+        | z_context:get_all(Context4)
     ],
     Rendered = z_template:render(Template, Vars, Context4),
     {Output, OutputContext} = z_context:output(Rendered, Context4),
