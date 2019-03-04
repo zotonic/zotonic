@@ -95,7 +95,7 @@ page_count(Context) ->
 % Group open sockets per ip-address, returns a list of proplists.
 group_sockets() ->
     Dict = group_sockets(recon:tcp(), dict:new()),
-    [[{ip, inet:ntoa(IP)}, {ports, Ports}, {count, length(Ports)}] || {IP, Ports} <- dict:to_list(Dict)].
+    [[{count, length(Ports)}, {ip, inet:ntoa(IP)}, {ports, Ports}] || {IP, Ports} <- dict:to_list(Dict)].
 
 % Return a dict with as key the ip-address. 
 group_sockets([], Dict) ->

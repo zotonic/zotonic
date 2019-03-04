@@ -66,7 +66,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in m.admin_status.group_sockets | sort:[`count`, `ip`] | slice:[,10] %}
+            {% for item in m.admin_status.group_sockets | sort:'desc' | slice:[,10] %}
             <tr>
                 <td>{{ item.ip }}</td>
                 <td class="text-right">{{ item.count }}</td>
