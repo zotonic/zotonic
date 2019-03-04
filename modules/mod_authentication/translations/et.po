@@ -6,70 +6,99 @@
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2012-01-11 15:07+0200\n"
-"Last-Translator: Taavi Talvik <taavi@uninet.ee>\n"
+"PO-Revision-Date: 2019-03-04 11:05+0100\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: Zotonic Developers <zotonic-developers@googlegroups.com>\n"
-"Language: \n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: modules/mod_authentication/actions/action_authentication_auth_disconnect.erl:46
 msgid "Access denied"
-msgstr ""
+msgstr "Ligipääs keelatud"
+
+#: modules/mod_authentication/templates/_logon_tos_agree_title.tpl:1
+#, fuzzy
+msgid "Agree to the T&C"
+msgstr "Nõustuge T&amp;Cga"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:24
+#, fuzzy
 msgid "Already Connected"
+msgstr "Juba ühendatud"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:48
+#, fuzzy
+msgid ""
+"Are you sure you want to close this session? All unsaved work will be lost."
 msgstr ""
+"Kas olete kindel, et soovite selle seansi sulgeda? Kõik salvestamata tööd "
+"kaovad."
 
 #: modules/mod_authentication/templates/logon_service_done.tpl:5
+#, fuzzy
 msgid "Authenticated"
-msgstr ""
+msgstr "Autentitud"
 
 #: modules/mod_authentication/templates/logon_service_done.tpl:9
+#, fuzzy
 msgid "Authentication has been done with"
-msgstr ""
+msgstr "Autentimine on tehtud"
 
 #: modules/mod_authentication/templates/logon_service.tpl:5
+#, fuzzy
 msgid "Authorizing..."
-msgstr ""
+msgstr "Luba ..."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:7
-#: modules/mod_authentication/templates/_logon_stage.tpl:32
+#: modules/mod_authentication/templates/logon_sessions.tpl:23
+#, fuzzy
+msgid "Automatically refreshed every 10 seconds."
+msgstr "Värskendatakse automaatselt iga 10 sekundi järel."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:24
+#: modules/mod_authentication/templates/_logon_stage.tpl:49
 #: modules/mod_authentication/templates/_logon_reminder_support.tpl:4
 #: modules/mod_authentication/templates/_logon_reset_support.tpl:3
+#, fuzzy
 msgid "Back to sign in"
-msgstr ""
+msgstr "Tagasi sisselogimiseks"
+
+#: modules/mod_authentication/templates/logon_sessions.tpl:9
+#, fuzzy
+msgid "Below are all your active sessions."
+msgstr "Allpool on kõik teie aktiivsed sessioonid."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:17
 msgid "Below are your account details and a link to set a new password."
 msgstr ""
 "Allpool on sinu kasutajakonto detailid ja link uue parooli sisestamiseks."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:34
+#: modules/mod_authentication/templates/_logon_sessions.tpl:28
+msgid "Browser"
+msgstr "Lehitseja"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:51
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:28
 msgid "Cancel"
 msgstr "Katkesta"
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:45
-msgid "Change password and Sign in"
-msgstr "Muuda parool ja Logi sisse"
-
 #: modules/mod_authentication/templates/logon_service_error.tpl:15
+#, fuzzy
 msgid "Change your permissions"
-msgstr ""
+msgstr "Muutke oma õigusi"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:3
-#: modules/mod_authentication/templates/_logon_stage.tpl:23
+#: modules/mod_authentication/templates/_logon_stage.tpl:4
+#: modules/mod_authentication/templates/_logon_stage.tpl:40
 msgid "Check your email"
 msgstr "Kontrolli oma e-maili!"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:23
+#: modules/mod_authentication/templates/email_password_reset.tpl:24
 #, fuzzy
 msgid ""
 "Click on the link below to enter a new password. When clicking doesn't work, "
@@ -79,8 +108,9 @@ msgstr ""
 "siis lõika ja kleebi kogu aadress om veebirauserisse."
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:51
+#, fuzzy
 msgid "Close Window"
-msgstr ""
+msgstr "Sulge aken"
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:25
 msgid "Confirm"
@@ -90,73 +120,106 @@ msgstr "Kinnita"
 msgid "Confirmation failure"
 msgstr "Kinnitus ebaõnnstus"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:3
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:17
+msgid "Continue"
+msgstr "Jätka"
+
+#: modules/mod_authentication/mod_authentication.erl:66
+#: modules/mod_authentication/mod_authentication.erl:84
+#, fuzzy
+msgid "Could not find the session"
+msgstr "Seansi ei leitud"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:19
+#, fuzzy
+msgid "Could not send email"
+msgstr "E-kirja saatmine nurjus"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:10
+msgid "Current"
+msgstr "Praegune"
+
+#: modules/mod_authentication/templates/logon_error/message.pw.tpl:2
+#, fuzzy
 msgid ""
 "Either the email or the password you entered is incorrect. Please check your "
 "entry and try again."
 msgstr ""
+"Sisestatud e-kiri või parool on vale. Palun kontrollige oma sisestust ja "
+"proovige uuesti."
 
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:2
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
+#, fuzzy
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
-msgstr ""
+msgstr "Facebooki seadete nägemiseks lubage <em>mod_facebook</em> ."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:32
+#, fuzzy
 msgid "Enable <em>mod_twitter</em> to see Twitter settings."
-msgstr ""
+msgstr "Twitteri seadete nägemiseks lubage <em>mod_twitter</em> ."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:23
+#, fuzzy
 msgid ""
 "Enable the signup module to automatically sign up users that are "
 "authenticating via the services below."
 msgstr ""
+"Luba registreerimismoodul, et registreerida automaatselt allpool esitatud "
+"teenuste kaudu autentivad kasutajad."
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:16
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:14
+#, fuzzy
 msgid "Enter a password"
-msgstr ""
+msgstr "Sisesta salasõna"
 
 #: modules/mod_authentication/templates/_logon_reset_title.tpl:8
+#, fuzzy
 msgid "Enter the new password for your account"
-msgstr ""
+msgstr "Sisestage oma konto uus parool"
 
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:14
-#, fuzzy
 msgid "Enter your email address"
-msgstr "Kontrolli oma e-maili!"
+msgstr "Sisestage oma e-posti aadress"
 
 #: modules/mod_authentication/templates/_logon_reminder_title.tpl:2
+#, fuzzy
 msgid ""
 "Enter your email address and we'll send you instructions how to reset your "
 "password."
 msgstr ""
+"Sisestage oma e-posti aadress ja me saadame teile juhised parooli "
+"lähtestamiseks."
 
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:14
+#, fuzzy
 msgid "Enter your email address or username"
-msgstr ""
+msgstr "Sisestage oma e-posti aadress või kasutajanimi"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:14
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:17
 msgid "Enter your password"
-msgstr ""
+msgstr "Sisestage oma parool"
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:5
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:6
+#, fuzzy
 msgid "Enter your username"
-msgstr ""
+msgstr "Sisestage oma kasutajanimi"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:5
 msgid "Error"
-msgstr ""
+msgstr "Viga"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:3
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:7
-#: modules/mod_authentication/mod_authentication.erl:71
+#: modules/mod_authentication/mod_authentication.erl:108
+#, fuzzy
 msgid "External Services"
-msgstr ""
+msgstr "Välised teenused"
 
-#: modules/mod_authentication/templates/_logon_reset_form.tpl:20
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:29
 msgid ""
 "For security reasons, password reset codes are only kept for a limited "
 "amount of time and can only be used once."
@@ -166,17 +229,22 @@ msgstr ""
 
 #: modules/mod_authentication/templates/_logon_login_support.tpl:3
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Unustasid parooli?"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:15
+msgid "From"
+msgstr "Kellelt"
 
 #: modules/mod_authentication/templates/error.403.tpl:20
 msgid "Go back"
-msgstr ""
+msgstr "Mine tagasi"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:23
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:29
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:32
+#, fuzzy
 msgid "Go to Modules"
-msgstr ""
+msgstr "Mine moodulitele"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:7
 #: modules/mod_authentication/templates/email_password_reset.tpl:15
@@ -184,27 +252,38 @@ msgid "Hello"
 msgstr "Tere"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:14
+#, fuzzy
 msgid ""
 "Here you can set all the application keys, secrets and other configurations "
 "to integrate with external services like Facebook and Twitter."
 msgstr ""
+"Siin saab määrata kõik rakenduse võtmed, saladused ja muud "
+"konfiguratsioonid, et integreeruda väliste teenustega, nagu Facebook ja "
+"Twitter."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:3
 msgid "How to reset your password"
 msgstr "Kuidas parooli muuta"
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:11
+#, fuzzy
 msgid ""
 "However this email address does not belong to one of our registered users so "
 "you will not be able to change the password."
 msgstr ""
+"Kuid see e-posti aadress ei kuulu ühele meie registreeritud kasutajatest, "
+"nii et te ei saa parooli muuta."
 
-#: modules/mod_authentication/templates/_logon_reset_form.tpl:22
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:6
+msgid "I agree to the"
+msgstr "Nõustun järgnevaga"
+
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:31
 #, fuzzy
 msgid "I forgot my password"
 msgstr "Unustasid parooli?"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:28
+#: modules/mod_authentication/templates/email_password_reset.tpl:30
 #, fuzzy
 msgid ""
 "If you didn't request a password reset, you can safely ignore this email. "
@@ -213,87 +292,132 @@ msgstr ""
 "Kui sa ei ole tellinud parooli vahetamist, võid seda e-maili ignoreerida."
 "Võimalik, et keegi teine tegi näpuvea oma e-maili aadressi sisestades."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:5
-#: modules/mod_authentication/templates/_logon_stage.tpl:25
+#: modules/mod_authentication/templates/_logon_stage.tpl:6
+#: modules/mod_authentication/templates/_logon_stage.tpl:42
+#, fuzzy
 msgid ""
 "If you do not receive the email within a few minutes, please check your spam "
 "folder."
 msgstr ""
+"Kui te ei saa e-kirja mõne minuti jooksul, kontrollige oma rämpsposti kausta."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:13
+#, fuzzy
 msgid ""
 "If you think you have an account and were expecting this email, please try "
 "again using the email address you gave when signing up."
 msgstr ""
+"Kui arvate, et teil on konto ja oodate seda e-posti, proovige uuesti, "
+"kasutades e-posti aadressi, mille andsite registreerumisel."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:24
+#: modules/mod_authentication/templates/_logon_stage.tpl:41
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "Sealt leiad juhendid oma kasutajakonto kinnitamiseks."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:23
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:34
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:40
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:23
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:32
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:48
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:28
+#, fuzzy
 msgid "Keep me signed in"
-msgstr ""
+msgstr "Hoia mind sisselogituna"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
+#: modules/mod_authentication/templates/_logon_sessions.tpl:20
+#, fuzzy
+msgid "Location Lookup"
+msgstr "Asukohaotsing"
+
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:17
+#, fuzzy
 msgid "Minimum characters: "
-msgstr ""
+msgstr "Minimaalsed tähemärgid:"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:6
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:12
+#: modules/mod_authentication/templates/logon_error/message.passcode.tpl:5
+#: modules/mod_authentication/templates/logon_error/message.pw.tpl:5
+#, fuzzy
 msgid "Need help signing in?"
-msgstr ""
+msgstr "Kas vajate abi sisselogimisel?"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:7
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:13
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:10
 msgid "New password"
 msgstr "Uus parool"
 
 #: modules/mod_authentication/templates/error.403.tpl:3
+#, fuzzy
 msgid "No Access"
-msgstr ""
+msgstr "Juurdepääs puudub"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:9
-msgid "OK"
+#: modules/mod_authentication/templates/logon_sessions.tpl:10
+#, fuzzy
+msgid ""
+"Note that if you close your browser a session stays active for some time."
 msgstr ""
+"Pange tähele, et kui sulgete brauseri, jääb seanss mõnda aega aktiivseks."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:26
+msgid "OK"
+msgstr "OK"
 
 #: modules/mod_authentication/templates/logoff.tpl:10
 msgid "One moment please, signing out..."
 msgstr "Üks hetk palun, login välj…"
 
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:24
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:39
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:20
+#, fuzzy
+msgid "Passcode"
+msgstr "Parool"
+
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:15
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:11
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:12
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:14
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:15
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:11
 msgid "Password"
 msgstr "Parool"
-
-#: modules/mod_authentication/templates/_logon_error.tpl:19
-#: modules/mod_authentication/templates/_logon_error.tpl:26
-msgid "Passwords should have at least six characters."
-msgstr "Paroolis peab olema vähemalt 6 sümbolit."
 
 #: modules/mod_authentication/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
 msgstr "Palun kinnita oma"
 
-#: modules/mod_authentication/templates/logon_service_error.tpl:46
-msgid "Please try again later."
-msgstr ""
+#: modules/mod_authentication/templates/logon_error/message.need_passcode.tpl:1
+#, fuzzy
+msgid "Please enter the two-factor authentication passcode."
+msgstr "Palun sisestage kahekordse autentimise pääsukood."
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:21
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:27
+#: modules/mod_authentication/templates/_logon_stage.tpl:10
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:3
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:19
+#, fuzzy
+msgid "Please try again in"
+msgstr "Palun proovige uuesti"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:20
+#: modules/mod_authentication/templates/logon_service_error.tpl:46
+#, fuzzy
+msgid "Please try again later."
+msgstr "Palun proovi hiljem uuesti."
+
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:7
+#, fuzzy
+msgid "Privacy policies"
+msgstr "Privaatsuspoliitika"
+
+#: modules/mod_authentication/templates/logon_sessions.tpl:27
+#, fuzzy
+msgid "Refresh Now"
+msgstr "Värskenda kohe"
+
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:26
 msgid "Repeat password"
 msgstr "Korda parooli"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:24
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:30
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:30
+#, fuzzy
 msgid "Repeat your password"
-msgstr ""
+msgstr "Korrake parooli"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:41
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:55
 #, fuzzy
 msgid "Reset password and Sign in"
 msgstr "Vaheta parool ja Logi sisse"
@@ -304,22 +428,43 @@ msgid "Reset your password"
 msgstr "Vaheta parool"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:32
+#, fuzzy
 msgid "Safari 8 has a known problem with handling external authentications."
-msgstr ""
+msgstr "Safari 8-l on teadaolev probleem väliste autentimiste käsitlemisel."
 
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:21
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:20
 msgid "Send"
-msgstr ""
+msgstr "Saada"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:17
+#: modules/mod_authentication/templates/_logon_stage.tpl:34
 msgid "Send Verification Message"
 msgstr "Saada kontrollteade"
 
+#: modules/mod_authentication/mod_authentication.erl:64
+#, fuzzy
+msgid "Sending the alert"
+msgstr "Hoiatuse saatmine"
+
+#: modules/mod_authentication/mod_authentication.erl:60
+#, fuzzy
+msgid "Session alert requested"
+msgstr "Nõutud seansi hoiatus"
+
+#: modules/mod_authentication/templates/logon_sessions.tpl:3
+#, fuzzy
+msgid "Sessions"
+msgstr "Seansid"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:35
+#, fuzzy
+msgid "Show Alert"
+msgstr "Näita hoiatust"
+
 #: modules/mod_authentication/templates/_logon_off.tpl:4
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:29
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:38
 #: modules/mod_authentication/templates/error.403.tpl:35
-#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:29
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:34
 msgid "Sign in"
 msgstr "Logi sisse"
 
@@ -334,122 +479,214 @@ msgstr "Logi sisse"
 msgid "Sign out"
 msgstr "Logi välja"
 
-#: modules/mod_authentication/templates/_logon_reset_form.tpl:21
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:30
+#, fuzzy
 msgid "Simply try again:"
-msgstr ""
+msgstr "Lihtsalt proovige uuesti:"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:26
+#, fuzzy
 msgid "Somebody else is already connected with this account on"
-msgstr ""
+msgstr "Keegi teine on selle kontoga juba seotud"
+
+#: modules/mod_authentication/templates/logon_error/message.tpl:3
+msgid "Something went wrong, please try again later."
+msgstr "Midagi läks valesti, palun proovi hiljem uuesti."
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:10
 #: modules/mod_authentication/templates/logon_service_error.tpl:30
 #: modules/mod_authentication/templates/logon_service_error.tpl:42
+#, fuzzy
 msgid "Sorry"
-msgstr ""
+msgstr "Vabandust"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:29
+#: modules/mod_authentication/templates/_logon_stage.tpl:46
 msgid "Sorry, could not send the verification message."
 msgstr "Kahjuks ei õnestunud kontrollteate saatmine."
 
-#: modules/mod_authentication/templates/_logon_reset_form.tpl:19
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:16
+#, fuzzy
+msgid "Sorry, too many retries"
+msgstr "Kahjuks proovib liiga palju uuesti"
+
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:28
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Kahjuks on teie paroolivahetuse kood tundmatu või vananenud"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:19
+#: modules/mod_authentication/templates/_logon_sessions.tpl:6
+msgid "Started"
+msgstr "Alustatud"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:43
+#: modules/mod_authentication/templates/_logon_sessions.tpl:47
+#: modules/mod_authentication/templates/_logon_sessions.tpl:49
+#, fuzzy
+msgid "Stop Session"
+msgstr "Seansi peatamine"
+
+#: modules/mod_authentication/mod_authentication.erl:77
+#, fuzzy
+msgid "Stopping the session"
+msgstr "Seansi peatamine"
+
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:6
+msgid "Terms of Service"
+msgstr "Teenusetingimused"
+
+#: modules/mod_authentication/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
 msgstr "Sinu kontoga seotud e-mail on"
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:21
+#, fuzzy
 msgid ""
 "The signup module is enabled, users authenticating via the services below "
 "are automatically signed up."
 msgstr ""
+"Registreerimismoodul on lubatud, kasutajate autentimine allpool esitatud "
+"teenuste kaudu registreeritakse automaatselt."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:24
+#: modules/mod_authentication/templates/logon_error/message.unequal.tpl:1
 msgid "The two passwords should be equal. Please retype them."
 msgstr "Need kaks parooli peavad olema samad. Sisesta uuesti."
 
-#: modules/mod_authentication/templates/logon_service_error.tpl:44
-msgid "There was a problem authenticating with"
+#: modules/mod_authentication/templates/logon_error/message.passcode.tpl:2
+#, fuzzy
+msgid ""
+"The two-factor authentication passcode did not match. Please check your "
+"entry and try again."
 msgstr ""
+"Kahe teguri autentimise pääsukood ei vastanud. Palun kontrollige oma "
+"sisestust ja proovige uuesti."
+
+#: modules/mod_authentication/templates/logon_service_error.tpl:44
+#, fuzzy
+msgid "There was a problem authenticating with"
+msgstr "Autentimisega oli probleem"
 
 #: modules/mod_authentication/templates/logon_service_error.tpl:34
+#, fuzzy
 msgid ""
 "This can be resolved by changing the Cookies and website data settings in "
 "the Safari preferences."
 msgstr ""
+"Seda saab lahendada, muutes Safari eelistustes küpsised ja veebisaidi "
+"andmete seaded."
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:25
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:31
+#, fuzzy
 msgid "This does not match the first password"
-msgstr ""
+msgstr "See ei vasta esimesele paroolile"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:13
+#: modules/mod_authentication/templates/_logon_tos_agree_title.tpl:2
+#, fuzzy
 msgid ""
-"To find your account you need to enter either your username or the email "
-"address we have received from you."
+"To continue you must agree with the updated Terms of Service and Privacy "
+"Policies."
 msgstr ""
-"Oma konto leidmiseks pead sisestama kas kasutajanime või e-maili, mille oled "
-"meile andnud."
+"Jätkamiseks peate nõustuma uuendatud teenusetingimustega ja "
+"privaatsuspoliitikaga."
+
+#: modules/mod_authentication/templates/logon_sessions.tpl:13
+#, fuzzy
+msgid ""
+"To stop a session, click on ”Stop Session” or log out from the browser with "
+"the session."
+msgstr ""
+"Seansi peatamiseks klõpsa nupul „Stop Session” või logige seansiga "
+"brauserist välja."
 
 #: modules/mod_authentication/templates/error.403.tpl:29
+#, fuzzy
 msgid "To view this page you must be signed in."
-msgstr ""
+msgstr "Selle lehe vaatamiseks peate olema sisse logitud."
 
 #: modules/mod_authentication/templates/error.403.tpl:26
+#, fuzzy
 msgid "To view this page, you need to have other access rights."
-msgstr ""
+msgstr "Selle lehe vaatamiseks on teil vaja muid juurdepääsuõigusi."
 
-#: modules/mod_authentication/templates/_logon_error.tpl:20
-#: modules/mod_authentication/templates/_logon_error.tpl:27
+#: modules/mod_authentication/templates/_logon_stage.tpl:8
+#, fuzzy
+msgid "Too many retries"
+msgstr "Liiga palju proovib uuesti"
+
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:2
+#, fuzzy
+msgid "Too many retries."
+msgstr "Liiga palju proovib uuesti."
+
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:25
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:40
+#: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:21
+#, fuzzy
+msgid "Two-factor passcode"
+msgstr "Kahe teguri pääsukood"
+
+#: modules/mod_authentication/templates/logon_error/message.unequal.tpl:2
+#: modules/mod_authentication/templates/logon_error/message.tooshort.tpl:2
 msgid ""
 "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "Kasuta numbreid või erisümboleid, et oleks raskem ära arvata."
 
-#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:2
 #: modules/mod_authentication/templates/_logon_login_form_fields.tpl:3
+#: modules/mod_authentication/templates/_logon_login_form_fields.tpl:4
 #: modules/mod_authentication/templates/_logon_login_admin_form_fields.tpl:2
 msgid "Username"
 msgstr "Kasutajanimi"
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:14
+#: modules/mod_authentication/templates/_logon_stage.tpl:31
+#, fuzzy
 msgid "Verify your account"
-msgstr ""
+msgstr "Kinnita oma kasutaja"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:12
-msgid ""
-"We can only send you an email when we have the email address of your account."
-msgstr ""
-"Me saama saata e-maili ainult siis, kui meil on sinu konto jaoks e-maili "
-"aadress olemas."
-
-#: modules/mod_authentication/templates/_logon_stage.tpl:30
+#: modules/mod_authentication/templates/_logon_stage.tpl:47
 msgid ""
 "We don’t seem to have any valid email address or other electronic "
 "communication address of you."
 msgstr "Meil ei tundu olevat ühtegi sinutoimivat e-maili aadressi."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:4
+#: modules/mod_authentication/templates/_logon_stage.tpl:5
 #, fuzzy
 msgid "We have sent an email with a link to reset your password to"
 msgstr ""
 "Allpool on sinu kasutajakonto detailid ja link uue parooli sisestamiseks."
 
+#: modules/mod_authentication/templates/_logon_sessions.tpl:21
+#, fuzzy
+msgid "Whois"
+msgstr "Kes on"
+
+#: modules/mod_authentication/templates/_logon_sessions.tpl:7
+#, fuzzy
+msgid "Y-m-d H:i:s"
+msgstr "Ymd H: i: s"
+
 #: modules/mod_authentication/templates/logon_service_error.tpl:12
+#, fuzzy
 msgid "You have to share your email address to be able to sign in."
-msgstr ""
+msgstr "Sisselogimiseks peate jagama oma e-posti aadressi."
 
 #: modules/mod_authentication/templates/error.403.tpl:27
+#, fuzzy
 msgid "You may try to sign in as a different user."
-msgstr ""
+msgstr "Te võite proovida sisse logida teise kasutajana."
+
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:10
+#, fuzzy
+msgid "You must agree to the Terms in order to continue."
+msgstr "Jätkamiseks peate nõustuma Tingimustega."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:11
+#, fuzzy
 msgid ""
 "You need to be allowed to edit the system configuration to view or change "
 "the configured App Keys."
 msgstr ""
+"Konfigureeritud rakendusklahvide vaatamiseks või muutmiseks peate lubama "
+"muuta süsteemi konfiguratsiooni."
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:34
+#: modules/mod_authentication/templates/email_password_reset.tpl:36
 msgid ""
 "You receive this email because you or someone else requested a password "
 "reset for your account. You or the someone else either entered your username "
@@ -464,54 +701,111 @@ msgstr ""
 msgid "You will be redirected to the home page."
 msgstr "Sind suunatakse ümber kodulehele."
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:4
+#: modules/mod_authentication/templates/_logon_expired_form_title.tpl:2
+#, fuzzy
 msgid "You'll need to create a new one."
-msgstr ""
+msgstr "Peate looma uue."
 
-#: modules/mod_authentication/templates/_logon_stage.tpl:15
+#: modules/mod_authentication/templates/_logon_stage.tpl:32
+#, fuzzy
 msgid ""
 "You're almost done! To make sure you are really you, we ask you to confirm "
 "your account from your email address."
 msgstr ""
-
-#: modules/mod_authentication/templates/_logon_error.tpl:10
-msgid "You've entered an unknown username or email address. Please try again."
-msgstr "Sisestasid tundmatu kasutajanime või e-maili aadressi. Proovi uuesti."
+"Sa oled peaaegu valmis! Veendumaks, et olete tõesti teie, palume teil oma "
+"konto oma e-posti aadressilt kinnitada."
 
 #: modules/mod_authentication/templates/email_password_reset.tpl:9
 #: modules/mod_authentication/templates/email_password_reset.tpl:17
 msgid "You've requested a new password for"
 msgstr "Sa tellisid uue paroooli"
 
-#: modules/mod_authentication/templates/email_password_reset.tpl:19
+#: modules/mod_authentication/templates/email_password_reset.tpl:20
 msgid "Your account name is"
 msgstr "Sinu konto kasutajanimi on"
 
-#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:2
-msgid "Your email or username"
-msgstr ""
+#: modules/mod_authentication/templates/logon_sessions.tpl:6
+#, fuzzy
+msgid "Your current sessions"
+msgstr "Sinu konto kasutajanimi on"
 
-#: modules/mod_authentication/templates/_logon_error.tpl:17
+#: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:2
+#, fuzzy
+msgid "Your email or username"
+msgstr "Teie e-posti aadress või kasutajanimi"
+
+#: modules/mod_authentication/templates/logon_error/message.tooshort.tpl:1
 msgid "Your new password is too short."
 msgstr "Sinu uus parool on liiga lühike."
 
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:3
+#: modules/mod_authentication/templates/_logon_expired_form_title.tpl:1
+#, fuzzy
 msgid "Your password has expired"
-msgstr ""
+msgstr "Teie parool on aegunud"
 
-#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:13
-#: modules/mod_authentication/templates/_logon_expired_form.tpl:19
+#: modules/mod_authentication/templates/_logon_reset_form_fields.tpl:17
+#, fuzzy
 msgid "Your password is too short."
-msgstr ""
+msgstr "Teie parool on liiga lühike."
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:12
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:5
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:21
+#, fuzzy
+msgid "an hour"
+msgstr "tund"
+
+#: modules/mod_authentication/templates/_logon_tos_agree_form_fields.tpl:7
+#, fuzzy
+msgid "and the"
+msgstr "ja"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:13
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:6
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:22
+msgid "hours"
+msgstr "tundi"
+
+#: modules/mod_authentication/templates/_logon_stage.tpl:14
+#: modules/mod_authentication/templates/logon_error/message.ratelimit.tpl:7
+#: modules/mod_authentication/templates/_logon_reset_form.tpl:23
+msgid "minutes"
+msgstr "minutit"
 
 #: modules/mod_authentication/templates/_logon_login_extra.tpl:6
 msgid "or"
-msgstr ""
+msgstr "või"
 
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:8
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:8
+#, fuzzy
 msgid "user@example.com"
-msgstr ""
+msgstr "user@example.com"
+
+#~ msgid "Change password and Sign in"
+#~ msgstr "Muuda parool ja Logi sisse"
+
+#~ msgid "Passwords should have at least six characters."
+#~ msgstr "Paroolis peab olema vähemalt 6 sümbolit."
+
+#~ msgid ""
+#~ "To find your account you need to enter either your username or the email "
+#~ "address we have received from you."
+#~ msgstr ""
+#~ "Oma konto leidmiseks pead sisestama kas kasutajanime või e-maili, mille "
+#~ "oled meile andnud."
+
+#~ msgid ""
+#~ "We can only send you an email when we have the email address of your "
+#~ "account."
+#~ msgstr ""
+#~ "Me saama saata e-maili ainult siis, kui meil on sinu konto jaoks e-maili "
+#~ "aadress olemas."
+
+#~ msgid ""
+#~ "You've entered an unknown username or email address. Please try again."
+#~ msgstr ""
+#~ "Sisestasid tundmatu kasutajanime või e-maili aadressi. Proovi uuesti."
 
 #~ msgid "I forgot my username or password"
 #~ msgstr "Unustasin oma kasutajanime või paooli"
