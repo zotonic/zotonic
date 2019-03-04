@@ -977,10 +977,10 @@ props_defaults(_Id, Props, Context) ->
     ).
 
 -spec prop_default(atom(), any(), m_rsc:properties(), z:context()) -> m_rsc:properties().
-prop_default(publication_start, undefined, Props, Context) ->
+prop_default(publication_start, undefined, Props, _Context) ->
     case proplists:get_value(is_published, Props) of
         true ->
-            z_utils:prop_replace(publication_start, local_now(Context), Props);
+            z_utils:prop_replace(publication_start, erlang:universaltime(), Props);
         _ ->
             Props
     end;
