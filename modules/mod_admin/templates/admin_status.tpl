@@ -67,6 +67,10 @@
         <div class="well">
 	        {% all include "_admin_status.tpl" %}
         </div>
+
+        <div class="well">
+            {% all include "_admin_system_status.tpl" %}
+        </div>
     </div>
 </div>
 {% include "_admin_status_update_pivot_count.tpl" %}
