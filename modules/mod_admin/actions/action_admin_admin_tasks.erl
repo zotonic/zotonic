@@ -45,7 +45,12 @@ event(#postback{message={admin_tasks, [{task, "site_reinstall"}]}}, Context) ->
 %% @doc Renumber the category tree
 event(#postback{message={admin_tasks, [{task, "renumber_categories"}]}}, Context) ->
     do(fun() -> m_category:renumber(Context) end,
-       "The category tree is rebuilding. This can take a long time.", Context).
+       "The category tree is rebuilding. This can take a long time.", Context);
+
+%% @doc Renumber the category tree
+event(#postback{message={admin_tasks, [{task, "close_sockets"}]}}, Context) ->
+    do(fun() -> m_admin_status:close_sockets(250, Context) end,
+       "Closing sockets.", Context).
 
 
 do(Fun, OkMsg, Context) ->

@@ -9,15 +9,15 @@
         <tbody>
             <tr>
                 <th class="text-right">{_ Allocated _}</th>
-                <td class="text-right">{{ m.admin_status.memory.allocated | readable_bytes }}</td>
+                <td class="text-right">{{ m.admin_status.memory.allocated | filesizeformat }}</td>
             </tr>
             <tr>
                 <th class="text-right">{_ Used _}</th>
-                <td class="text-right">{{ m.admin_status.memory.used | readable_bytes }}</td>
+                <td class="text-right">{{ m.admin_status.memory.used | filesizeformat }}</td>
             </tr>
             <tr>
                 <th class="text-right">{_ Unused _}</th>
-                <td class="text-right">{{ m.admin_status.memory.unused | readable_bytes }}</td>
+                <td class="text-right">{{ m.admin_status.memory.unused | filesizeformat }}</td>
             </tr>
             <tr>
                 <th class="text-right">{_ Usage _}</th>
@@ -27,7 +27,7 @@
     </table>
 </div>
 
-<div class="container col-md-3">
+<div class="col-md-3">
     <table class="table table-sm">
         <thead>
             <tr>
@@ -50,5 +50,34 @@
         </tbody>
     </table>
 </div>
+</div>
 
+
+<div class="container">
+<div class="col-md-6">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th colspan="2">{_ Number of open sockets grouped per ip-address (top 10) _}</th>
+            </tr>
+            <tr>
+                <td>{_ IP Address _}</td>
+                <td class="text-right">{_ Count _}</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in m.admin_status.group_sockets | sort:`count` | slice:[,10] %}
+                <td>{{ item.ip }}</td>
+                <td class="text-right">{{ item.count }}</td>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+<div class="form-group">
+    <div>
+        {% button class="btn btn-default" text=_"Close Sockets" action={admin_tasks task='close_sockets'} %}
+        <span class="help-block">{_ Close all sockets from ip addresses which have over &gt; 250 open sockets. _}</span>
+    </div>
 </div>

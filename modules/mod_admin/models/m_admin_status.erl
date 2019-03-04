@@ -30,7 +30,9 @@
 
     session_count/1,
     page_count/1,
-    tcp_connection_count/0
+    tcp_connection_count/0,
+    group_sockets/0,
+    close_sockets/2
 ]).
 
 %% @spec m_find_value(Key, Source, Context) -> term()
@@ -40,6 +42,9 @@ m_find_value(page_count, #m{value=undefined}, Context) ->
     page_count(Context);
 m_find_value(tcp_connection_count, #m{value=undefined}, _Context) ->
     tcp_connection_count();
+
+m_find_value(group_sockets, #m{value=undefined}, _Context) ->
+    group_sockets();
 
 m_find_value(memory, #m{value=undefined} = M, _Context) ->
     M#m{value=memory};
@@ -64,12 +69,17 @@ m_value(#m{value=undefined}, _Context) ->
 %%
 %% Helpers
 %%
+
+% Return the total number of open tcp connections in the system.
+% This includes local sockets.
 tcp_connection_count() ->
     length(recon:tcp()).
 
+% Return the number of sessions of this site. 
 session_count(Context) ->
     z_session_manager:count(Context).
 
+% Return the number of page processes which are open.
 page_count(Context) ->
     z_session_manager:fold(
       fun(S, Acc) ->
@@ -82,4 +92,36 @@ page_count(Context) ->
       0,
       Context).
 
+% Group open sockets per ip-address, returns a list of proplists.
+group_sockets() ->
+    Dict = group_sockets(recon:tcp(), dict:new()),
+    [[{ip, inet:ntoa(IP)}, {ports, Ports}, {count, length(Ports)}] || {IP, Ports} <- dict:to_list(Dict)].
+
+% Return a dict with as key the ip-address. 
+group_sockets([], Dict) ->
+    Dict;
+group_sockets([Port|Rest], Dict) ->
+    case inet:peername(Port) of
+        {ok, {Addr, _}} ->
+            group_sockets(Rest, dict:append_list(Addr, [Port], Dict));
+        _ ->
+            group_sockets(Rest, Dict)
+    end.
+
+% Close sockets
+close_sockets(Max, _Context) ->
+    socket_reaper(Max).
+
+% Close sockets of ip-addresses which have 
+socket_reaper(Max) ->
+    Dict = group_sockets(recon:tcp(), dict:new()),
+    socket_reaper(dict:to_list(Dict), Max, 0).
+
+socket_reaper([], _Max, Acc) ->
+    Acc;
+socket_reaper([{_Ip, Ports}|Rest], Max, Acc) when length(Ports) >= Max ->
+    [inet:close(Port) || Port <- Ports],
+    socket_reaper(Rest, Max, length(Ports) + Acc);
+socket_reaper([_|Rest], Max, Acc) ->
+    socket_reaper(Rest, Max, Acc).
 
