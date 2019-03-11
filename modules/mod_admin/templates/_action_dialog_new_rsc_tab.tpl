@@ -1,3 +1,4 @@
+{% with m.rsc[cat].name|as_atom as cat %}
 {% wire
     id="dialog-new-rsc-tab"
     type="submit"
@@ -27,7 +28,7 @@
 		    </div>
 		</div>
 
-		{% if (not nocatselect or m.rsc[cat].name == "media")
+		{% if (not nocatselect or m.category[cat].is_a.media)
 			and (not predicate
 					or (subject_id and m.predicate.is_valid_object_subcategory[predicate][`media`])
 					or (object_id and m.predicate.is_valid_subject_subcategory[predicate][`media`]))
@@ -137,6 +138,7 @@
 								<option></option>
 					            {% for c in m.category.tree_flat %}
 					                {% if m.acl.insert[c.id.name|as_atom]
+					                	  and (not cat or m.category[c.id].is_a[cat])
 					                	  and (not subject_id or m.predicate.is_valid_object_category[predicate][c.id])
 					                	  and (not object_id or m.predicate.is_valid_subject_category[predicate][c.id])
 					                %}
@@ -196,7 +198,7 @@
         	<div class="col-xs-6">
 	        	<label class="checkbox-inline">
 	        		<input type="checkbox" class="nosubmit" name="find_category" value="p:{{ predicate }}" checked />
-	        		{_ Valid for: _} {{ m.rsc[predicate].title }}
+	        		{_ Any valid for: _} {{ m.rsc[predicate].title }}
 	        	</label>
 			</div>
         {% endif %}
@@ -278,4 +280,6 @@
 </div>
 
 </form>
+
+{% endwith %}
 

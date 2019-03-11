@@ -78,7 +78,7 @@ m_find_value(Predicate, #m{value={is_valid_object_category, IsSub}} = M, Context
     M#m{ value={cat_check, object_category(Predicate, Context), IsSub} };
 m_find_value(Predicate, #m{value={is_valid_subject_category, IsSub}} = M, Context) ->
     M#m{ value={cat_check, subject_category(Predicate, Context), IsSub} };
-m_find_value(_Category, #m{value={cat_check, []}}, _Context) ->
+m_find_value(_Category, #m{value={cat_check, [], _IsSub}}, _Context) ->
     true;
 m_find_value(Category, #m{value={cat_check, ValidCats, IsSub}}, Context) ->
     CatId = m_rsc:rid(Category, Context),
