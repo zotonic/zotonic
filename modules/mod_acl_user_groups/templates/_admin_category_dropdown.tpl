@@ -1,10 +1,9 @@
 {% with cat_id|default:id.category_id as category_id %}
-{% with m.rsc[category_id].name|as_atom as category_name %}
 	<select id="{{ catsel_id|default:#catid }}" name="category_id" class="col-lg-4 col-md-4 form-control">
 		<option></option>
 		{% for c in (m.acl.user == 1 or category_id.is_a.meta)|if:m.category.tree_flat_meta:m.category.tree_flat %}
 			{% if (m.acl_rule.can_insert.none[c.id] or c.id == category_id)
-            	  and (not category_name or m.category[c.id].is_a[category_name])
+            	  and (not cat_restrict or m.category[c.id].is_a[cat_restrict])
             	  and (not subject_id or m.predicate.is_valid_object_category[predicate][c.id])
             	  and (not object_id or m.predicate.is_valid_subject_category[predicate][c.id])
 			%}
@@ -15,5 +14,4 @@
 		{% endfor %}
 	</select>
 	{% validate id=catsel_id|default:#catid name="category_id" type={presence} %}
-{% endwith %}
 {% endwith %}

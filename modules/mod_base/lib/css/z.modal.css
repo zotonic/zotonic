@@ -43,3 +43,10 @@ div.modal-body div.modal-footer {
 .modal-overlay-close:hover {
     text-decoration: none;
 }
+
+.modal-overlay.overlay-top {
+    z-index: 1061;
+}
+.modal-overlay.overlay-top .modal-overlay-close {
+    z-index: 1062;
+}

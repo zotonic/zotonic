@@ -223,6 +223,44 @@
 		data-feedback="trigger: 'dialog-new-rsc-tab', delegate: 'mod_admin'">
 	</div>
 
+	{% wire name="dialog_new_rsc_preview"
+	    action={overlay_open
+	    	class="overlay-top"
+	    	template="_admin_overlay_preview.tpl"
+            id=id
+            subject_id=subject_id
+            object_id=object_id
+            predicate=predicate
+            callback=callback
+            language=language
+            action=action
+            actions=actions
+            autoclose=autoclose
+	    }
+	%}
+	{% javascript %}
+	    $("#dialog-rsc-new-found")
+		    .on('click', '.item .action-preview', function(e) {
+		    	e.preventDefault();
+		        z_event('dialog_new_rsc_preview', {
+		            select_id: $(this).closest(".item").data('id')
+		        });
+		    })
+		    .on('click', '.item', function(e) {
+				switch (e.target.nodeName)
+				{
+					case 'A':
+					case 'INPUT':
+						break;
+					default:
+				    	e.preventDefault();
+				        z_event('dialog_new_rsc_preview', {
+				            select_id: $(this).data('id')
+				        });
+				}
+			});
+	{% endjavascript %}
+
 	{% if subject_id or object_id %}
 		{% wire name="dialog_new_rsc_find"
 		    action={postback
@@ -242,10 +280,10 @@
 		%}
 		{% javascript %}
 		    $("#dialog-rsc-new-found")
-			    .on('click', '.thumbnail', function(e) {
+			    .on('click', '.item .action-connect', function(e) {
 			    	e.preventDefault();
 			        z_event('dialog_new_rsc_find', {
-			            select_id: $(this).data('id'),
+			            select_id: $(this).closest(".item").data('id'),
 			            is_connected: $(this).hasClass('thumbnail-connected')
 			        });
 			        $(this).effect("highlight").toggleClass("thumbnail-connected");
@@ -266,11 +304,11 @@
 		%}
 		{% javascript %}
 		    $("#dialog-rsc-new-found")
-			    .on('click', '.thumbnail', function(e) {
+			    .on('click', '.item .action-edit', function(e) {
 			    	e.preventDefault();
 			        z_dialog_close();
 			        z_event('dialog_new_rsc_find', {
-			            select_id: $(this).data('id'),
+			            select_id: $(this).closest(".item").data('id'),
 			        });
 			    })
 			    .change();

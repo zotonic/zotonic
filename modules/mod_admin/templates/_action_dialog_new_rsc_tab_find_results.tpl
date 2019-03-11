@@ -6,7 +6,7 @@
             }]
         as result
     %}
-        <div id="dialog_new_rsc_loop_results" class="thumbnails">
+        <div id="dialog_new_rsc_loop_results" class="items">
             {% include "_action_dialog_new_rsc_tab_find_results_loop.tpl"
                 id
                 result=result
