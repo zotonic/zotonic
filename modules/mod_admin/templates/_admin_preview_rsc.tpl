@@ -1,7 +1,16 @@
-<p class="meta">
-    {{ id.category_id.title }}
-    &mdash; {% include "_name.tpl" id=id.creator_id %}
-    &mdash; {{ id.created|date:"Y-m-d H:i" }}
+<p class="meta text-muted">
+    <span class="pull-right">{{ id.category_id.title }}</span>
+    {_ Created by _} <b>{% include "_name.tpl" id=id.creator_id %}</b>
+    {% if id.modifier_id and id.modifier_id != id.creator_id %}
+        {_ modified by _}
+        <b>{% include "_name.tpl" id=id.modifier_id %}</b>
+    {% endif %}
+    <br>
+    {_ Created on _} <b>{{ id.created|date:_"Y-m-d H:i" }}</b>
+    {% if id.content_group_id %}
+        <span>{_ in _}</span>
+        <b>{{ id.content_group_id.title }}</b>
+    {% endif %}
 </p>
 <h1>{{ id.title }}</h1>
 
