@@ -5,7 +5,7 @@
         action={
             dialog_new_rsc
             title=""
-            cat=q.qcat
+            cat=m.rsc[q.qcat].name
         }
     %}
     {% all include "_admin_make_page_buttons.tpl" %}

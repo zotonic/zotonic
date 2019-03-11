@@ -1,5 +1,5 @@
 {% wire
-    id="dialog-rsc-newfind"
+    id="dialog-new-rsc-tab"
     type="submit"
 	postback={new_page
 	    subject_id=subject_id
@@ -96,9 +96,12 @@
 	            			case 'video': new_cat = '{{ m.rsc.video.id }}'; break;
 	            			case 'document': new_cat = '{{ m.rsc.document.id }}'; break;
 	            		}
-	            		$('#{{ form }} select[name=category_id]')
-	            			.val(new_cat)
-	            			.change();
+
+	            		if ($('#{{ form }} select[name=category_id] option[value='+new_cat+']').length > 0) {
+		            		$('#{{ form }} select[name=category_id]')
+		            			.val(new_cat)
+		            			.change();
+	            		}
 
 	            		if ($('#new_rsc_title').val() == '' || $('#new_rsc_title').val() == window.z_upload_title) {
 	            			$('#new_rsc_title').val(basename).change();
