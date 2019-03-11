@@ -65,6 +65,50 @@ m_find_value(Key, #m{value=object_category}, Context) ->
     object_category(Key, Context);
 m_find_value(Key, #m{value=subject_category}, Context) ->
     subject_category(Key, Context);
+
+m_find_value(is_valid_object_subcategory, #m{value=undefined} = M, _Context) ->
+    M#m{value={is_valid_object_category, true}};
+m_find_value(is_valid_subject_subcategory, #m{value=undefined} = M, _Context) ->
+    M#m{value={is_valid_subject_category, true}};
+m_find_value(is_valid_object_category, #m{value=undefined} = M, _Context) ->
+    M#m{value={is_valid_object_category, false}};
+m_find_value(is_valid_subject_category, #m{value=undefined} = M, _Context) ->
+    M#m{value={is_valid_subject_category, false}};
+m_find_value(Predicate, #m{value={is_valid_object_category, IsSub}} = M, Context) ->
+    M#m{ value={cat_check, object_category(Predicate, Context), IsSub} };
+m_find_value(Predicate, #m{value={is_valid_subject_category, IsSub}} = M, Context) ->
+    M#m{ value={cat_check, subject_category(Predicate, Context), IsSub} };
+m_find_value(_Category, #m{value={cat_check, []}}, _Context) ->
+    true;
+m_find_value(Category, #m{value={cat_check, ValidCats, IsSub}}, Context) ->
+    CatId = m_rsc:rid(Category, Context),
+    case lists:member({CatId}, ValidCats) of
+        true ->
+            true;
+        false ->
+            IsA = m_category:is_a(CatId, Context),
+            case lists:any(
+                fun(IsACat) ->
+                    IsACatId = m_rsc:rid(IsACat, Context),
+                    lists:member({IsACatId}, ValidCats)
+                end,
+                IsA)
+            of
+                true ->
+                    true;
+                false when IsSub ->
+                    % Check subcategories
+                    SubCats = m_category:tree_flat(CatId, Context),
+                    SubCatIds = lists:map(
+                        fun(C) -> proplists:get_value(id, C) end,
+                        SubCats),
+                    lists:any(
+                        fun(CId) -> lists:member({CId}, ValidCats) end,
+                        SubCatIds);
+                false ->
+                    false
+            end
+    end;
 m_find_value(Key, #m{value=undefined}, Context) ->
     get(Key, Context).
 

@@ -381,6 +381,23 @@ fieldset[disabled] .btn-primary.active {
 .dashboard .table td {
   background: #fff;
 }
+#dialog_new_rsc_results {
+  max-height: 60vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  margin-top: 10px;
+}
+.connect-results {
+  max-height: 400px;
+  margin-top: 15px;
+  padding: 10px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.connect-results .row {
+  margin-left: -6px;
+  margin-right: -6px;
+}
 .block-add-block {
   margin: 0 0 9px 0;
 }
@@ -676,7 +693,7 @@ img.admin-list-overview {
 }
 @media (min-width: 720px) {
   .modal-dialog {
-    width: 700px;
+    min-width: 700px;
   }
 }
 div.modal div.tab-content {
@@ -1089,17 +1106,6 @@ th a:hover .arrow.down {
 .nav.nav-pills.nav-justified > li > a,
 .widget ul.nav-tabs.nav-justified > li > a {
   margin-bottom: -1px;
-}
-.connect-results {
-  max-height: 400px;
-  margin-top: 15px;
-  padding: 10px 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-.connect-results .row {
-  margin-left: -6px;
-  margin-right: -6px;
 }
 .thumbnails {
   list-style: none;

@@ -40,6 +40,23 @@ find params:
                     </li>
                 {% endif %}
             {% else %}
+                {% if not tabs_enabled or "new"|member:tabs_enabled %}
+                    <li class="active">
+                        <a data-toggle="tab" href="#{{ #tab }}-findnew">
+                            {% if predicate and (subject_id or object_id) %}
+                                {_ Find or Create Page _}
+                            {% else %}
+                                {_ Create Page _}
+                            {% endif %}
+                        </a>
+                    </li>
+                {% elseif tabs_enabled and "find"|member:tabs_enabled %}
+                    <li {% if tab == "find" %}class="active"{% endif %}>
+                        <a data-toggle="tab" href="#{{ #tab }}-find">{_ Find Page _}</a>
+                    </li>
+                {% endif %}
+
+{# OLD
                 {% if not tabs_enabled or "depiction"|member:tabs_enabled %}
                     {% if q.is_zmedia %}
                         <li {% if tab == "depiction" %}class="active"{% endif %}>
@@ -64,6 +81,8 @@ find params:
                         <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload File _}</a>
                     </li>
                 {% endif %}
+END OLD TABS #}
+
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
                     <li {% if tab == "url" %}class="active"{% endif %}>
                         <a data-toggle="tab" href="#{{ #tab }}-url">{_ Upload by URL _}</a>
@@ -103,6 +122,19 @@ find params:
                     autoclose
                 %}
         {% else %}
+            {% include "_action_dialog_connect_tab_findnew.tpl"
+                tab=#tab
+                predicate=predicate
+                delegate=delegate
+                subject_id=subject_id
+                object_id=object_id
+                is_active=`true`
+                title=""
+                cat=cat
+                content_group=content_group
+            %}
+
+{#
             {% if not tabs_enabled or "depiction"|member:tabs_enabled %}
                 {% if q.is_zmedia %}
                     {% include "_action_dialog_connect_tab_depictions.tpl"
@@ -143,7 +175,9 @@ find params:
                     %}
                 {% endif %}
             {% endif %}
+#}
             {% with "action_admin_dialog_media_upload" as delegate %}
+{#
                 {% if not tabs_enabled or "upload"|member:tabs_enabled %}
                     {% include "_action_dialog_media_upload_tab_upload.tpl"
                         tab=#tab
@@ -154,6 +188,7 @@ find params:
                         is_active=(tab == "upload")
                     %}
                 {% endif %}
+#}
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
                     {% include "_action_dialog_media_upload_tab_url.tpl"
                         tab=#tab

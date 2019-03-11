@@ -203,14 +203,20 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
         AfterId -> z_render:insert_after(AfterId, Render, Context)
     end;
 
-event(#postback_notify{message="feedback", trigger="dialog-connect-find", target=TargetId}, Context) ->
+event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Context)
+    when Trigger =:= "dialog-new-rsc-tab"; Trigger =:= "dialog-connect-find" ->
     % Find pages matching the search criteria.
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
-    Category = z_context:get_q(find_category, Context),
     Predicate = z_context:get_q(predicate, Context, ""),
-    Text = z_context:get_q(find_text, Context),
+    Text = z_context:get_q(title, Context, z_context:get_q(new_rsc_title, Context)),
+    Category = case z_context:get_q(find_category, Context) of
+        undefined -> z_context:get_q(category_id, Context);
+        "" -> z_context:get_q(category_id, Context);
+        Cat -> Cat
+    end,
     Cats = case Category of
+                undefined -> [];
                 "p:"++Predicate -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 "" -> [];
@@ -230,10 +236,18 @@ event(#postback_notify{message="feedback", trigger="dialog-connect-find", target
         "me" -> [ {creator_id, z_acl:user(Context)} ];
         CgId -> [ {content_group, m_rsc:rid(CgId, Context)}]
     end,
-    z_render:wire([
-        {remove_class, [{target, TargetId}, {class, "loading"}]},
-        {update, [{target, TargetId}, {template, "_action_dialog_connect_tab_find_results.tpl"} | Vars]}
-    ], Context);
+    case Trigger of
+        "dialog-connect-find" ->
+            z_render:wire([
+                {remove_class, [{target, TargetId}, {class, "loading"}]},
+                {update, [{target, TargetId}, {template, "_action_dialog_connect_tab_find_results.tpl"} | Vars]}
+            ], Context);
+        "dialog-new-rsc-tab" ->
+            z_render:wire([
+                {remove_class, [{target, TargetId}, {class, "loading"}]},
+                {update, [{target, TargetId}, {template, "_action_dialog_new_rsc_tab_find_results.tpl"} | Vars]}
+            ], Context)
+    end;
 
 event(#postback{message={admin_connect_select, Args}}, Context) ->
     SelectId = z_context:get_q("select_id", Context),
@@ -275,6 +289,16 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
         {error, Context1} ->
             Context1
     end;
+
+event(#postback{message = {admin_rsc_redirect, Args}}, Context) ->
+    SelectId = m_rsc:rid(z_context:get_q("select_id", Context), Context),
+    Dispatch = case proplists:get_value(redirect, Args) of
+        true -> admin_edit_rsc;
+        false -> admin_edit_rsc;
+        undefined -> admin_edit_rsc;
+        D when is_atom(D) -> D
+    end,
+    z_render:wire({redirect, [ {dispatch, Dispatch}, {id, SelectId} ]}, Context);
 
 %% Called when a block connection is done
 event(#postback_notify{message="update", target=TargetId}, Context) ->

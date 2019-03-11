@@ -75,7 +75,8 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
         {callback, Callback},
         {catname, CatName},
         {actions, Actions},
-        {objects, Objects}
+        {objects, Objects},
+        {width, <<"large">>}
     ],
     z_render:dialog(?__("Make a new page", Context), "_action_dialog_new_rsc.tpl", Vars, Context);
 
@@ -90,38 +91,71 @@ event(#submit{message={new_page, Args}}, Context) ->
     Objects = proplists:get_value(objects, Args, []),
 
     BaseProps = get_base_props(z_context:get_q("new_rsc_title", Context), Context),
-    {ok, Id} = m_rsc_update:insert(BaseProps, Context),
-
-    % Optionally add an edge from the subject to this new resource
-    {_,Context1} = case {is_integer(SubjectId), is_integer(ObjectId)} of
-        {true, _} ->
-            mod_admin:do_link(SubjectId, Predicate, Id, Callback, Context);
-        {_, true} ->
-            mod_admin:do_link(Id, Predicate, ObjectId, Callback, Context);
-        {false, false} when Callback =/= undefined ->
-            % Call the optional callback
-            mod_admin:do_link(undefined, undefined, Id, Callback, Context);
-        {false, false} ->
-            {ok, Context}
+    File = z_context:get_q(upload_file, Context),
+    Result = case File of
+        #upload{filename=OriginalFilename, tmpfile=TmpFile} ->
+            BaseProps1 = [
+                {original_filename, OriginalFilename}
+                | BaseProps
+            ],
+            m_media:insert_file(TmpFile, BaseProps1, Context);
+        undefined ->
+            m_rsc_update:insert(BaseProps, Context)
     end,
+    case Result of
+        {ok, Id} ->
+            % Optionally add an edge from the subject to this new resource
+            {_,Context1} = case {is_integer(SubjectId), is_integer(ObjectId)} of
+                {true, _} ->
+                    mod_admin:do_link(SubjectId, Predicate, Id, Callback, Context);
+                {_, true} ->
+                    mod_admin:do_link(Id, Predicate, ObjectId, Callback, Context);
+                {false, false} when Callback =/= undefined ->
+                    % Call the optional callback
+                    mod_admin:do_link(undefined, undefined, Id, Callback, Context);
+                {false, false} ->
+                    {ok, Context}
+            end,
 
-    %% Optionally add outgoing edges from this new rsc to the given resources (id / name, predicate pairs)
-    maybe_add_objects(Id, Objects, Context),
+            %% Optionally add outgoing edges from this new rsc to the given resources (id / name, predicate pairs)
+            maybe_add_objects(Id, Objects, Context),
 
-    % Close the dialog
-    Context2a = z_render:wire({dialog_close, []}, Context1),
+            % Close the dialog
+            Context2a = z_render:wire({dialog_close, []}, Context1),
 
-    % wire any custom actions
-    Context2 = z_render:wire([{Action, [{id, Id}|ActionArgs]}|| {Action, ActionArgs} <- Actions], Context2a),
+            % wire any custom actions
+            Context2 = z_render:wire([{Action, [{id, Id}|ActionArgs]}|| {Action, ActionArgs} <- Actions], Context2a),
 
-    % optionally redirect to the edit page of the new resource
-    case dispatch(Redirect) of
-        false ->
-            Context2;
-        Dispatch ->
-            Location = z_dispatcher:url_for(Dispatch, [{id, Id}], Context2),
-            z_render:wire({redirect, [{location, Location}]}, Context2)
-    end.
+            % optionally redirect to the edit page of the new resource
+            case dispatch(Redirect) of
+                false ->
+                    Context2;
+                Dispatch ->
+                    Location = z_dispatcher:url_for(Dispatch, [{id, Id}], Context2),
+                    z_render:wire({redirect, [{location, Location}]}, Context2)
+            end;
+        {error, Reason} ->
+            error_message(Reason, Context)
+    end;
+
+event(#postback{message={admin_connect_select, _Args}} = Postback, Context) ->
+    mod_admin:event(Postback, Context).
+
+
+error_message(eacces, Context) ->
+    ?__("You don't have permission to change this media item.", Context);
+error_message(file_not_allowed, Context) ->
+    ?__("You don't have the proper permissions to upload this type of file.", Context);
+error_message(download_failed, Context) ->
+    ?__("Failed to download the file.", Context);
+error_message(infected, Context) ->
+    ?__("This file is infected with a virus.", Context);
+error_message(sizelimit, Context) ->
+    ?__("This file is too large.", Context);
+error_message(_R, Context) ->
+    lager:warning("Unknown upload error: ~p", [_R]),
+    ?__("Error uploading the file.", Context).
+
 
 maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
     [m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects];
@@ -159,6 +193,10 @@ get_base_props(NewRscTitle, Context) ->
         | Props
     ].
 
+maybe_add_prop(_P, #upload{}, Acc) ->
+    Acc;
+maybe_add_prop(_P, undefined, Acc) ->
+    Acc;
 maybe_add_prop("new_rsc_title", _, Acc) ->
     Acc;
 maybe_add_prop("category_id", Cat, Acc) ->
