@@ -19,14 +19,16 @@
 <div class="col-md-6">
 	{% with 'dialog-new-rsc-tab' as form %}
 
-		{# The new resource title, also used for the feedback search #}
-		<div class="form-group row">
-		    <label class="control-label col-md-3" for="new_rsc_title">{_ Page title _}</label>
-		    <div class="col-md-9">
-			    <input type="text" id="new_rsc_title" name="title" value="{{ title|escape }}" class="do_autofocus form-control">
-			    {% validate id="new_rsc_title" name="title" type={presence} %}
-		    </div>
-		</div>
+		{% block rsc_props_title %}
+			{# The new resource title, also used for the feedback search #}
+			<div class="form-group row">
+			    <label class="control-label col-md-3" for="new_rsc_title">{_ Page title _}</label>
+			    <div class="col-md-9">
+				    <input type="text" id="new_rsc_title" name="title" value="{{ title|escape }}" class="do_autofocus form-control">
+				    {% validate id="new_rsc_title" name="title" type={presence} %}
+			    </div>
+			</div>
+		{% endblock %}
 
 		{% if (not nocatselect or m.category[cat].is_a.media)
 			and (not predicate
@@ -195,7 +197,9 @@
     <input type="hidden" class="nosubmit" name="cat_exclude" value="{{ cat_exclude }}">
 
 	<div class="row">
-        {% if predicate %}
+		{% if nocatselect and cat %}
+    		<input type="hidden" class="nosubmit" name="find_category" value="{{ cat }}">
+        {% elseif predicate %}
         	<div class="col-xs-6">
 	        	<label class="checkbox-inline">
 	        		<input type="checkbox" class="nosubmit" name="find_category" value="p:{{ predicate }}" checked>

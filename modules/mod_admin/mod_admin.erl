@@ -209,7 +209,20 @@ event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Co
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
     Predicate = z_context:get_q(predicate, Context, ""),
-    Text = z_context:get_q(title, Context, z_context:get_q(new_rsc_title, Context)),
+    TextL = lists:foldl(
+        fun(Q, Acc) ->
+            case z_context:get_q(Q, Context) of
+                <<>> -> Acc;
+                undefined -> Acc;
+                V -> case Acc of
+                        [] -> V;
+                        _ -> [ V, " ", Acc ]
+                     end
+            end
+        end,
+        [],
+        [ title, new_rsc_title, name_first, name_surname, email ]),
+    Text = iolist_to_binary(TextL),
     Category = case z_context:get_q(find_category, Context) of
         undefined -> z_context:get_q(category_id, Context);
         "" -> z_context:get_q(category_id, Context);

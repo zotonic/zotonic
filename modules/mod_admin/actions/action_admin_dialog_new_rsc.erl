@@ -90,7 +90,8 @@ event(#submit{message={new_page, Args}}, Context) ->
     Actions = proplists:get_value(actions, Args, []),
     Objects = proplists:get_value(objects, Args, []),
 
-    BaseProps = get_base_props(z_context:get_q("new_rsc_title", Context), Context),
+    Title = z_context:get_q("title", Context, z_context:get_q("new_rsc_title", Context)),
+    BaseProps = get_base_props(Title, Context),
     File = z_context:get_q(upload_file, Context),
     Result = case File of
         #upload{filename=OriginalFilename, tmpfile=TmpFile} ->
@@ -104,15 +105,20 @@ event(#submit{message={new_page, Args}}, Context) ->
     end,
     case Result of
         {ok, Id} ->
+            Callback1 = case dispatch(Redirect) of
+                false -> Callback;
+                _Dispatch -> undefined
+            end,
+
             % Optionally add an edge from the subject to this new resource
             {_,Context1} = case {is_integer(SubjectId), is_integer(ObjectId)} of
                 {true, _} ->
-                    mod_admin:do_link(SubjectId, Predicate, Id, Callback, Context);
+                    mod_admin:do_link(SubjectId, Predicate, Id, Callback1, Context);
                 {_, true} ->
-                    mod_admin:do_link(Id, Predicate, ObjectId, Callback, Context);
-                {false, false} when Callback =/= undefined ->
+                    mod_admin:do_link(Id, Predicate, ObjectId, Callback1, Context);
+                {false, false} when Callback1 =/= undefined ->
                     % Call the optional callback
-                    mod_admin:do_link(undefined, undefined, Id, Callback, Context);
+                    mod_admin:do_link(undefined, undefined, Id, Callback1, Context);
                 {false, false} ->
                     {ok, Context}
             end,
@@ -130,6 +136,8 @@ event(#submit{message={new_page, Args}}, Context) ->
             case dispatch(Redirect) of
                 false ->
                     Context2;
+                page ->
+                    z_render:wire({redirect, [{id, Id}]}, Context2);
                 Dispatch ->
                     Location = z_dispatcher:url_for(Dispatch, [{id, Id}], Context2),
                     z_render:wire({redirect, [{location, Location}]}, Context2)
@@ -165,21 +173,33 @@ maybe_add_objects(_Id, Objects, _Context) ->
     lager:warning("action_admin_dialog_new_rsc: objects are not a list: ~p", [Objects]),
     ok.
 
+dispatch(undefined) ->
+    false;
+dispatch("") ->
+    false;
+dispatch(<<>>) ->
+    false;
 dispatch(true) ->
     admin_edit_rsc;
 dispatch(false) ->
     false;
-dispatch(undefined) ->
-    false;
 dispatch(Dispatch) when is_atom(Dispatch) ->
     Dispatch;
+dispatch(Dispatch) when is_list(Dispatch) ->
+    dispatch(z_convert:to_atom(Dispatch));
+dispatch(Dispatch) when is_binary(Dispatch) ->
+    dispatch(z_convert:to_atom(Dispatch));
 dispatch(Cond) ->
     dispatch(z_convert:to_bool(Cond)).
 
 
 
 get_base_props(undefined, Context) ->
-    z_context:get_q_all_noz(Context);
+    lists:foldl(fun({Prop,Val}, Acc) ->
+                    maybe_add_prop(Prop, Val, Acc)
+                end,
+                [],
+                z_context:get_q_all_noz(Context));
 get_base_props(NewRscTitle, Context) ->
     Lang = z_context:language(Context),
     Props = lists:foldl(fun({Prop,Val}, Acc) ->
@@ -196,6 +216,8 @@ get_base_props(NewRscTitle, Context) ->
 maybe_add_prop(_P, #upload{}, Acc) ->
     Acc;
 maybe_add_prop(_P, undefined, Acc) ->
+    Acc;
+maybe_add_prop("title", _, Acc) ->
     Acc;
 maybe_add_prop("new_rsc_title", _, Acc) ->
     Acc;
