@@ -107,16 +107,12 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-%% Endpoint for embed.ly oembed service
--define(EMBEDLY_ENDPOINT, "http://api.embed.ly/1/oembed?format=json&url=").
+do_discover(Url, #state{ context = Context }) ->
+    UrlExtra = oembed_url_extra(Context),
+    fixup_html(discover_per_provider(Url, UrlExtra, oembed_providers:list(), Context)).
 
 
-do_discover(Url, State) ->
-    UrlExtra = oembed_url_extra(State#state.context),
-    fixup_html(discover_per_provider(Url, UrlExtra, oembed_providers:list())).
-
-
-discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest]) ->
+discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest], Context) ->
     case re:run(Url, Provider#oembed_provider.url_re) of
         {match, _} ->
             case Provider#oembed_provider.callback of
@@ -128,11 +124,22 @@ discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest]) ->
                     oembed_request(RequestUrl)
             end;
         nomatch ->
-            discover_per_provider(Url, UrlExtra, Rest)
+            discover_per_provider(Url, UrlExtra, Rest, Context)
     end;
-discover_per_provider(Url, UrlExtra, []) ->
-    lager:debug("Fallback embed.ly discovery for url: ~p~n", [Url]),
-    oembed_request(?EMBEDLY_ENDPOINT ++ z_utils:url_encode(Url) ++ UrlExtra).
+discover_per_provider(Url, UrlExtra, [], Context) ->
+    case m_config:get_value(mod_oembed, embedly_key, Context) of
+        undefined ->
+            {error, nomatch};
+        Key ->
+            lager:debug("Fallback embed.ly discovery for url: ~p~n", [Url]),
+            EmbedlyEndpoint = iolist_to_binary([
+                "http://api.embed.ly/1/oembed?format=json",
+                "&key=", z_url:url_encode(Key),
+                "&url=", z_url:url_encode(Url),
+                UrlExtra
+            ]),
+            oembed_request(binary_to_list(EmbedlyEndpoint))
+    end.
 
 
 find_providers(Url, _State) ->
