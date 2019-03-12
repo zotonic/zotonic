@@ -226,6 +226,7 @@ event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Co
     Vars = [
         {subject_id, SubjectId},
         {cat, Cats},
+        {cat_exclude, z_context:get_q(cat_exclude, Context)},
         {predicate, Predicate},
         {text, Text}
     ] ++ case z_context:get_q(find_cg, Context) of

@@ -23,7 +23,7 @@
 		<div class="form-group row">
 		    <label class="control-label col-md-3" for="new_rsc_title">{_ Page title _}</label>
 		    <div class="col-md-9">
-			    <input type="text" id="new_rsc_title" name="title" value="{{ title|escape }}" class="do_autofocus form-control" />
+			    <input type="text" id="new_rsc_title" name="title" value="{{ title|escape }}" class="do_autofocus form-control">
 			    {% validate id="new_rsc_title" name="title" type={presence} %}
 		    </div>
 		</div>
@@ -39,7 +39,7 @@
 					<div id="upload_file_preview" style="display: none;">
 						<img src="" class="thumbnail" style="max-height:200px">
 					</div>
-	                <input type="file" class="form-control" id="upload_file" name="upload_file" />
+	                <input type="file" class="form-control" id="upload_file" name="upload_file">
 	                <p class="help-block">
 	                	<span class="glyphicon glyphicon-info-sign"></span>
 	                	{_ Selecting a file will make the page a media item. _}
@@ -130,8 +130,8 @@
 			    <label class="control-label col-md-3" for="{{ #category }}">{_ Category _}</label>
 			    <div class="col-md-9">
 				    {% if cat and nocatselect %}
-					    <input class="form-control" type="text" readonly value="{{ m.rsc[cat].title }}" />
-					    <input type="hidden" name="category_id" value="{{ cat }}"/>
+					    <input class="form-control" type="text" readonly value="{{ m.rsc[cat].title }}">
+					    <input type="hidden" name="category_id" value="{{ cat }}">
 				    {% else %}
 					    {% block category_select %}
 					        <select class="form-control" id="{{ #category }}" name="category_id">
@@ -161,7 +161,7 @@
 		    <div class="form-group row">
 		        <label class="control-label col-md-3" for="{{ #name }}">{_ Name _}</label>
 		        <div class="col-md-9">
-			        <input class="form-control" type="text" id="{{ #name }}" name="name" value="" />
+			        <input class="form-control" type="text" id="{{ #name }}" name="name" value="">
 				    {% validate id=#name name="name" type={presence} %}
 		        </div>
 		    </div>
@@ -173,7 +173,7 @@
 			    <div class="checkbox col-md-9">
 				    <label>
 				        <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
-						    {% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked="checked"{% endif %} />
+						    {% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked="checked"{% endif %}>
 						{_ Published _}
 				    </label>
 			    </div>
@@ -189,22 +189,23 @@
 <div class="col-md-6">
 
 	{# following hidden fields are for the feedback #}
-	<input type="hidden" class="nosubmit" name="subject_id" value="{{ subject_id }}" />
-    <input type="hidden" class="nosubmit" name="object_id" value="{{ object_id }}" />
-	<input type="hidden" class="nosubmit" name="predicate" value="{{ predicate|default:'' }}" />
+	<input type="hidden" class="nosubmit" name="subject_id" value="{{ subject_id }}">
+    <input type="hidden" class="nosubmit" name="object_id" value="{{ object_id }}">
+	<input type="hidden" class="nosubmit" name="predicate" value="{{ predicate|default:'' }}">
+    <input type="hidden" class="nosubmit" name="cat_exclude" value="{{ cat_exclude }}">
 
 	<div class="row">
         {% if predicate %}
         	<div class="col-xs-6">
 	        	<label class="checkbox-inline">
-	        		<input type="checkbox" class="nosubmit" name="find_category" value="p:{{ predicate }}" checked />
+	        		<input type="checkbox" class="nosubmit" name="find_category" value="p:{{ predicate }}" checked>
 	        		{_ Any valid for: _} {{ m.rsc[predicate].title }}
 	        	</label>
 			</div>
         {% endif %}
     	<div class="col-xs-6">
         	<label class="checkbox-inline">
-        		<input type="checkbox" class="nosubmit" name="find_cg" value="me" />
+        		<input type="checkbox" class="nosubmit" name="find_cg" value="me" {% if content_group|to_binary == 'me' %}checked{% endif %}>
         		{_ My content _}
         	</label>
         </div>
