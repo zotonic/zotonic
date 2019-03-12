@@ -231,7 +231,7 @@
 	{% wire name="dialog_new_rsc_preview"
 	    action={overlay_open
 	    	class="overlay-top"
-	    	template="_admin_overlay_preview.tpl"
+	    	template="_rsc_preview_overlay.tpl"
             id=id
             subject_id=subject_id
             object_id=object_id
