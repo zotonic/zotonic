@@ -223,10 +223,21 @@ concat_where([W|Rest], Acc) ->
 %% @doc Process SQL from clause. We analyzing the input (it may be a string, list of #search_sql or/and other strings)
 %% @spec concat_sql_from(From) -> From1::string()
 concat_sql_from(From) ->
-    Froms = concat_sql_from1(From),
+    Froms = concat_sql_from1(unique(From, [])),
     string:join(Froms, ",").
 
-concat_sql_from1([H|_]=From) when is_integer(H) -> [From]; %% from is string?
+unique([], Acc) ->
+    lists:reverse(Acc);
+unique([ H | T ], Acc) when not is_integer(H) ->
+    case lists:member(H, Acc) of
+        true -> unique(T, Acc);
+        false -> unique(T, [ H | Acc ])
+    end;
+unique([ H | T ], Acc) ->
+    unique(T, [ H | Acc ]).
+
+concat_sql_from1([ H | _ ]=From) when is_integer(H) ->
+    [ From ]; %% from is string?
 concat_sql_from1([#search_sql{} = From | T]) ->
     Subquery = case concat_sql_query(From, undefined) of
 	{SQL, []} -> "(" ++ SQL ++ ") AS z_"++z_ids:id(); %% postgresql: alias for inner SELECT in FROM must be defined
@@ -234,13 +245,13 @@ concat_sql_from1([#search_sql{} = From | T]) ->
 	{_SQL, A} -> throw({badarg, "Use outer #search_sql.args to store args of inner #search_sql. Inner arg.list only can be equals to [] or to [{as, Alias=string()}] for aliasing innered select in FROM (e.g. FROM (SELECT...) AS Alias).", A})
     end,
     [Subquery | concat_sql_from1(T)];
-concat_sql_from1([{Source,Alias} | T]) ->
+concat_sql_from1([ {Source,Alias} | T ]) ->
     Alias2 = case z_utils:is_empty(Alias) of
 	false -> " AS " ++ z_convert:to_list(Alias);
 	_     -> []
     end,
     [concat_sql_from1(Source) ++ Alias2 | concat_sql_from1(T) ];
-concat_sql_from1([H|T]) ->
+concat_sql_from1([ H | T ]) ->
     [concat_sql_from1(H) | concat_sql_from1(T)];
 concat_sql_from1([]) ->
     [];
