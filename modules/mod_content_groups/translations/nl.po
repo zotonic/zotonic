@@ -8,31 +8,99 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2015-03-05 15:05+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2019-03-13 16:10+0100\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.2.1\n"
 
-#: ./modules/mod_content_groups/templates/_admin_edit_sidebar.tpl:3 
-msgid ""
-"Content Group"
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:1
+msgid "Are you sure you want to delete the following content groups:"
+msgstr ""
+"Weet je zeker dat je de volgende paginagroepen wilt verwijderen?"
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:36
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:50
+msgid "Cancel"
+msgstr "Annuleer"
+
+#: modules/mod_content_groups/templates/_admin_edit_sidebar_content_group.tpl:4
+msgid "Content Group"
 msgstr "Paginagroep"
 
-#: ./modules/mod_content_groups/mod_content_groups.erl:40 
-msgid ""
-"Content groups"
+#: modules/mod_content_groups/mod_content_groups.erl:189
+msgid "Content groups"
 msgstr "Paginagroepen"
 
-#: ./modules/mod_content_groups/templates/_admin_edit_sidebar.tpl:11 
-msgid ""
-"None"
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:51
+msgid "Delete"
+msgstr "Verwijder"
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:37
+msgid "Delete &amp; Move Pages"
+msgstr "Verwijder en verplaats pagina’s"
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:40
+msgid "Delete All Pages"
+msgstr "Verwijder alle pagina’s"
+
+#: modules/mod_content_groups/mod_content_groups.erl:72
+msgid "Delete is canceled, there are pages in this content group."
+msgstr ""
+"Verwijderen is afgebroken, want er zijn nog pagina’s in deze "
+"paginagroep."
+
+#: modules/mod_content_groups/mod_content_groups.erl:76
+#: modules/mod_content_groups/mod_content_groups.erl:106
+msgid "Deleting..."
+msgstr "Verwijderen..."
+
+#: modules/mod_content_groups/mod_content_groups.erl:96
+msgid "Edit Page"
+msgstr "Bewerk pagina"
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:15
+msgid "Move all pages in these content groups to:"
+msgstr "Verplaats alle pagina's in deze paginagroepen naar:"
+
+#: modules/mod_content_groups/templates/_admin_edit_sidebar_content_group.tpl:15
+msgid "None"
 msgstr "Geen"
 
-#: ./modules/mod_content_groups/templates/_admin_edit_sidebar.tpl:8 
+#: modules/mod_content_groups/mod_content_groups.erl:91
+msgid "Not all resources could be deleted."
+msgstr "Niet alle pagina’s konden worden verwijderd."
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:31
 msgid ""
-"This page is part of the group:"
+"Or click <strong>Delete All Pages</strong> to delete all pages in the "
+"content groups."
+msgstr ""
+"Of klik <strong>Verwijder alle pagina’s</strong> om alle pagina’s in "
+"de paginagroepen te verwijderen."
+
+#: modules/mod_content_groups/mod_content_groups.erl:53
+#: modules/mod_content_groups/mod_content_groups.erl:69
+msgid "Sorry, you are not allowed to delete this."
+msgstr "Sorry, je hebt geen rechten om dit te verwijderen."
+
+#: modules/mod_content_groups/mod_content_groups.erl:93
+msgid "Stopped at page:"
+msgstr "Gestopt op pagina:"
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:47
+msgid "There are no pages in these content groups."
+msgstr "Er zijn geen pagina’s in deze paginagroepen."
+
+#: modules/mod_content_groups/templates/_action_dialog_delete_rsc.content_group.tpl:33
+msgid "This can not be undone."
+msgstr "Dit kan niet ongedaan worden gemaakt."
+
+#: modules/mod_content_groups/templates/_admin_edit_sidebar_content_group.tpl:12
+msgid "This page is part of the group:"
 msgstr "Deze pagina maakt deel uit van de groep:"
