@@ -493,7 +493,7 @@ is_tos_agreed(UserId, Context) ->
 date_tos_agreed(UserId, Context) ->
     case m_rsc:p_no_acl(UserId, tos_agreed, Context) of
         undefined ->
-            AgreeOnCreate = case m_config:get_value(mod_authentication, tos_agree_on_create, Context) of
+            AgreeOnCreate = case m_config:get_value(mod_authentication, tos_agreed_on_create, Context) of
                 undefined -> true;
                 V -> z_convert:to_bool(V)
             end,
