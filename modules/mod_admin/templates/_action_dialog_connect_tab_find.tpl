@@ -3,6 +3,7 @@
 		<input type="hidden" name="subject_id" value="{{ subject_id }}" />
         <input type="hidden" name="object_id" value="{{ object_id }}" />
 		<input type="hidden" name="predicate" value="{{ predicate|default:'' }}" />
+        <input type="hidden" name="cat_exclude" id="cat_exclude" value="{{ cat_exclude }}">
 
         <div class="col-md-6">
 		    <input name="find_text" type="text" value="{{ text|default:'' }}" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
@@ -42,7 +43,7 @@
             {% with m.acl.user.s.hascollabmember as cmbr %}
                 <select class="form-control" name="find_cg">
                     <option value="">{_ Anybody’s _}</option>
-                    <option value="me"  {% if cid == 'me' %}selected{% endif %}>{_ Mine _}</option>
+                    <option value="me"  {% if content_group|to_binary == 'me' %}selected{% endif %}>{_ Mine _}</option>
                     {% if cmgr or cmbr %}
                         <optgroup label="{_ Collaboration groups _}">
                             {% for cid in cmgr ++ (cmbr -- cmgr) %}

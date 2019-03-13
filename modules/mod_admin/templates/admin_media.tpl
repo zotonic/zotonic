@@ -67,7 +67,7 @@
                 {% button
                     class="btn btn-primary"
                     text=_"Make a new media item"
-                    action={dialog_media_upload}
+                    action={dialog_new_rsc cat=`media`}
                 %}
                 <a class="btn btn-default" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
                 <a class="btn btn-default{% if not q.qcat %} disabled{% endif %}" href="{% url admin_media %}">{_ All media _}</a>

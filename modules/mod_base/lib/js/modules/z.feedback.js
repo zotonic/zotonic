@@ -50,7 +50,7 @@ $.widget("ui.feedback",
 				self.input_updater = undefined;
 			} else {
 				if (trigger.prop('tagName').toLowerCase() == 'form') {
-					args = trigger.formToArray();
+					args = trigger.formToArray({ all: true });
 				} else {
 					var v = $.fieldValue(trigger.get(0), true);
 					if (v && v.constructor == Array) {

@@ -66,16 +66,14 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
         #upload{filename=OriginalFilename, tmpfile=TmpFile} ->
             Props = case proplists:get_value(id, EventProps) of
                         undefined ->
-                            Lang = z_context:language(Context),
                             Title = z_context:get_q("new_media_title", Context),
                             NewTitle = case z_utils:is_empty(Title) of
                                            true -> OriginalFilename;
                                            false -> Title
                                        end,
                             Props0 = [
-                                {title, {trans, [{Lang,NewTitle}]}},
-                                {language, [Lang]},
                                 {original_filename, OriginalFilename}
+                                | get_base_props(NewTitle, Context)
                             ],
                             add_content_group(EventProps, Props0, Context);
                         _Id ->
@@ -94,10 +92,8 @@ event(#submit{message={media_url, EventProps}}, Context) ->
     Url = z_context:get_q("url", Context),
     Props = case proplists:get_value(id, EventProps) of
                 undefined ->
-                    Props0 = [
-                        {title, z_context:get_q_validated("new_media_title_url", Context)}
-                    ],
-                    add_content_group(EventProps, Props0, Context);
+                    Title = z_context:get_q_validated("new_media_title_url", Context),
+                    add_content_group(EventProps, get_base_props(Title, Context), Context);
                 _ ->
                     []
             end,
@@ -175,7 +171,7 @@ handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
 
 %% @doc Return a sane upload error message
 error_message(eacces, Context) ->
-    ?__("You don't have permission to change this media item.", Context);
+    ?__("You don't have permission to create this category of pages.", Context);
 error_message(file_not_allowed, Context) ->
     ?__("You don't have the proper permissions to upload this type of file.", Context);
 error_message(download_failed, Context) ->
@@ -184,12 +180,56 @@ error_message(infected, Context) ->
     ?__("This file is infected with a virus.", Context);
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
+error_message(duplicate_name, Context) ->
+    ?__("This unique name exists already.", Context);
+error_message(duplicate_page_path, Context) ->
+    ?__("This page path exists already.", Context);
+error_message(duplicate_uri, Context) ->
+    ?__("This resource uri exists already.", Context);
+error_message(nocategory, Context) ->
+    ?__("Please select a category.", Context);
 error_message(_R, Context) ->
     lager:warning("Unknown upload error: ~p", [_R]),
-    ?__("Error uploading the file.", Context).
+    ?__("Error inserting the page.", Context).
+
 
 % Add an extra argument to a postback / submit action.
 add_arg_to_action(Arg, {postback, [{postback, {Action, ArgList}} | Rest]}) ->
     {postback, [{postback, {Action, [Arg | ArgList]}} | Rest]};
 add_arg_to_action(_A, B) ->
     B.
+
+
+get_base_props(undefined, Context) ->
+    z_context:get_q_all_noz(Context);
+get_base_props(NewRscTitle, Context) ->
+    Lang = z_context:language(Context),
+    Props = lists:foldl(fun({Prop,Val}, Acc) ->
+                            maybe_add_prop(Prop, Val, Acc)
+                        end,
+                        [],
+                        z_context:get_q_all_noz(Context)),
+    [
+        {title, {trans, [{Lang, NewRscTitle}]}},
+        {language, [Lang]}
+        | Props
+    ].
+
+maybe_add_prop(_P, #upload{}, Acc) ->
+    Acc;
+maybe_add_prop(_P, undefined, Acc) ->
+    Acc;
+maybe_add_prop("new_media_title", _, Acc) ->
+    Acc;
+maybe_add_prop("new_media_title_url", _, Acc) ->
+    Acc;
+maybe_add_prop("upload_file", _, Acc) ->
+    Acc;
+maybe_add_prop("url", _, Acc) ->
+    Acc;
+maybe_add_prop("category_id", Cat, Acc) ->
+    [{category_id, z_convert:to_integer(Cat)} | Acc];
+maybe_add_prop("is_published", IsPublished, Acc) ->
+    [{is_published, z_convert:to_bool(IsPublished)} | Acc];
+maybe_add_prop(P, V, Acc) ->
+    [{P, V} | Acc].

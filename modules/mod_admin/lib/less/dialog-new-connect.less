@@ -1,0 +1,116 @@
+
+
+#dialog_new_rsc_results {
+    max-height: 60vh;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    margin-top: 10px;
+
+    // use smaller grid gutter
+    @_item_gutter: 6px;
+
+    .items {
+        padding: 0;
+
+        .item {
+            @_padding: 5px;
+            @_contentPartMargin: 0.25em;
+            @_contentHeight: @thumbImageHeight;
+            @_heigth: @_contentHeight + 2 * @_padding + 2px; // add border
+            @_contentMargin: 1.5 * @_padding;
+            @_fontSize: 12px;
+            @_lineHeight: 1.1em;
+
+            min-height: @_heigth;
+            // max-height: @_heigth;
+            overflow: hidden;
+            border: 1px solid @borderColorMedium;
+            border-radius: @border-radius-base;
+            cursor: pointer;
+            margin-bottom: 2 * @_item_gutter;
+            padding: @_padding;
+            font-size: @_fontSize;
+            line-height: @_lineHeight;
+            position: relative;
+            transition-duration: 0;
+            -webkit-transition-duration: 0;
+
+            // &,
+            // a:link, 
+            // a:visited {
+            //     color: @textColorDark;
+            // }
+
+            &:hover {
+                border-color: @borderColorSelection;
+            }
+
+            // fade out items that are connected to the page
+            // except when it is a depiction predicate
+            &.item-connected:not(.item-depiction) {
+                &,
+                h5, h6,
+                a:link, 
+                a:visited {
+                    color: @textColorLight;
+                }
+                img {
+                    opacity: .3;
+                }
+                background-color: @backgroundColorLightest;
+            }
+            
+            .z-item-text {
+                @_content_height: @_heigth - 2 * @_padding - 2; // subtract border too
+                // position: absolute;
+                left: @_padding;
+                top: @_padding;
+                margin-right: @_padding;
+                // height: @_content_height;
+                // max-height: @_content_height;
+                // overflow: hidden;
+            }
+            
+            img + .z-item-text {
+                left: @_padding + @thumbImageWidth + @_contentMargin;
+            }
+            
+            img {
+                padding: 0;
+                #3L > .border-radius(0);
+                #3L > .box-shadow(none);
+                margin: 0 @_contentMargin 0 0;
+            }
+            
+            h5, h6, p {
+                font-size: @_fontSize;
+                line-height: @_lineHeight;
+                font-weight: normal;
+                margin: 0;
+            }
+            h5, h6 {
+                &:extend(.admin-word-break);
+            }
+            h5 {
+                font-weight: bold;
+                margin-bottom: 2px;
+            }
+            h6 {
+                text-transform: lowercase;
+                color: @gray-light;
+            }
+            // p {
+            //     max-height: 2 * @_lineHeight;
+            //     overflow: hidden;
+            // }
+
+            .rsc-actions {
+                text-align: right;
+            }
+        }
+    }
+
+
+}

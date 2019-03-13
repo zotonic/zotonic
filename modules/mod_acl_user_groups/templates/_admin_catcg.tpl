@@ -11,27 +11,29 @@
 </div>
 
 <div class="form-group row">
-    <label class="control-label col-md-3" for="{{ #category }}">{_ Content group _}</label>
+    <label class="control-label col-md-3" for="{{ #category }}">{{ m.rsc.content_group.title }}</label>
     <div class="col-md-9" id="{{ #cgwrapper }}">
         {% include "_admin_content_group_dropdown.tpl" cgsel_id=#cgsel %}
 
-        <br/>
-        <a href="#" class="btn btn-default" id="{{ #collab_select }}">
-            {_ Move to another _} {{ m.rsc.acl_collaboration_group.title }} …
-        </a>
+        {% if id %}
+            <br/>
+            <a href="#" class="btn btn-default" id="{{ #collab_select }}">
+                {_ Move to another _} {{ m.rsc.acl_collaboration_group.title }} …
+            </a>
 
-        {% wire id=#collab_select
-                action={dialog_open
-                        subject_id=id
-                        template="_action_dialog_connect.tpl"
-                        title=[_"Move to another", " ", m.rsc.acl_collaboration_group.title]
-                        category=`acl_collaboration_group`
-                        tabs_enabled=["find"]
-                        delegate=`admin_acl_rules`
-                        nocatselect
-                        autoclose
-                    }
-        %}
+            {% wire id=#collab_select
+                    action={dialog_open
+                            subject_id=id
+                            template="_action_dialog_connect.tpl"
+                            title=[_"Move to another", " ", m.rsc.acl_collaboration_group.title]
+                            category=`acl_collaboration_group`
+                            tabs_enabled=["find"]
+                            delegate=`admin_acl_rules`
+                            nocatselect
+                            autoclose
+                        }
+            %}
+        {% endif %}
     </div>
 </div>
 

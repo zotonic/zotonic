@@ -84,7 +84,13 @@
 
             width = options.width;
             if (width) {
-                $modalDialog.css({'width': width + 'px'});
+                if (width === 'large') {
+                    $modalDialog.addClass('modal-lg');
+                } else if (width === 'small') {
+                    $modalDialog.addClass('modal-sm');
+                } else {
+                    $modalDialog.css({'width': width + 'px'});
+                }
             }
 
             $dialog = $('<div>')
@@ -101,7 +107,7 @@
             if (options.center) {
                 $modalDialog.hide();
                 setTimeout(function() {
-                    $.dialogCenter();
+                    // $.dialogCenter();
                     $modalDialog.show();
                 }, 0);
             }
@@ -143,9 +149,9 @@
         }
     });
 
-    $(window).on('resize', function() {
-        $.dialogCenter();
-    });
+    // $(window).on('resize', function() {
+    //     $.dialogCenter();
+    // });
 
     $.widget('ui.show_dialog', {
         _init: function() {

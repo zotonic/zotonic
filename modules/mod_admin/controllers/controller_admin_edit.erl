@@ -101,6 +101,7 @@ event(#submit{message={rscform, Args}}, Context) ->
         {ok, _} = m_rsc:update(Id, Props2, Context),
         case proplists:is_defined("save_view", Post) of
             true ->
+                % Save and proceed to the html representation of the page
                 case proplists:get_value(view_location, Args) of
                     undefined ->
                         PageUrl = m_rsc:p(Id, page_url, Context),
@@ -111,25 +112,43 @@ event(#submit{message={rscform, Args}}, Context) ->
             false ->
                 case m_rsc:p(Id, category_id, Context) of
                     CatBefore ->
+                        % Update some automatically generated or adapted fields
                         Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
                         Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context), Context1),
                         Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context), Context2),
                         Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
                         Context4a = set_value_slug(m_rsc:p(Id, title_slug, Context), Context4),
                         Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context)), Context4a),
+                        Context4c = case m_rsc:p(Id, publication_start, Context4b) of
+                            undefined ->
+                                Context4b;
+                            PubStart ->
+                                Ymd = filter_date:date(PubStart, "Y-m-d", Context4b),
+                                Hi = filter_date:date(PubStart, "H:i", Context4b),
+                                C4c = z_render:set_value(" input[name='dt:ymd:0:publication_start']", Ymd, Context4b),
+                                z_render:set_value(" input[name='dt:hi:0:publication_start']", Hi, C4c)
+                        end,
                         Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context)) of
-                                       true ->  z_render:wire("delete-button", {disable, []}, Context4b);
-                                       false -> z_render:wire("delete-button", {enable, []}, Context4b)
+                                       true ->  z_render:wire("delete-button", {disable, []}, Context4c);
+                                       false -> z_render:wire("delete-button", {enable, []}, Context4c)
                                    end,
                         Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5),
                         Context6 = z_render:growl([<<"Saved \"">>, Title, <<"\".">>], Context5),
                         case proplists:is_defined("save_duplicate", Post) of
                             true ->
+                                % Show dialog with new title for duplicated page
                                 z_render:wire({dialog_duplicate_rsc, [{id, Id}]}, Context6);
                             false ->
-                                Context6
+                                % Wire optional extra success actions
+                                case proplists:get_all_values(on_success, Args) of
+                                    [] ->
+                                        Context6;
+                                    OnSuccessActions->
+                                        z_render:wire(OnSuccessActions, Context6)
+                                end
                         end;
                     _CatOther ->
+                        % Category changed, so we need a different edit form
                         z_render:wire({reload, []}, Context)
                 end
         end

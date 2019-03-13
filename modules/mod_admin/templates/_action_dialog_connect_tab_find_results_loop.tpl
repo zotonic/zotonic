@@ -12,6 +12,6 @@
             </div>
         {% endfor %}
     {% endwith %}
-{% else %}
+{% elseif result.page == 1 %}
     {_ No pages found. _}
 {% endif %}
