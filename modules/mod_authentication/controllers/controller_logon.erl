@@ -483,16 +483,7 @@ try_set_tos_agreed(Args, Context) when is_list(Args) ->
 is_tos_agreed(UserId, Context) ->
     case z_convert:to_bool( m_config:get_value(mod_authentication, tos_update_agree, Context) ) of
         true ->
-            Now = calendar:universal_time(),
-            LastTC = case date_tos_agreed(UserId, Context) of
-                undefined ->
-                    undefined;
-                DT when DT > Now ->
-                    % Protect against dates in the future
-                    undefined;
-                DT ->
-                    DT
-            end,
+            LastTC = date_tos_agreed(UserId, Context),
             is_tos_document_agreed(LastTC, signup_tos, Context)
             andalso is_tos_document_agreed(LastTC, signup_privacy, Context);
         false ->
@@ -503,7 +494,6 @@ date_tos_agreed(UserId, Context) ->
     case m_rsc:p_no_acl(UserId, tos_agreed, Context) of
         undefined ->
             AgreeOnCreate = case m_config:get_value(mod_authentication, tos_agree_on_create, Context) of
-                <<>> -> true;
                 undefined -> true;
                 V -> z_convert:to_bool(V)
             end,
@@ -514,7 +504,13 @@ date_tos_agreed(UserId, Context) ->
                     undefined
             end;
         DT ->
-            DT
+            % Protect against dates in the future
+            case DT > calendar:universal_time() of
+                true ->
+                    undefined;
+                false ->
+                    DT
+            end
     end.
 
 is_tos_document_agreed(AgreeDate, DocId, Context) ->
