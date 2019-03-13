@@ -25,11 +25,11 @@
             {% block item_actions %}
             <p class="rsc-actions">
                 <a href="#" class="btn btn-default action-preview">{_ Preview _}</a>
+                {% if id.is_editable %}
+                    <a href="#" class="btn action-edit">{_ Edit _}</a>
+                {% endif %}
                 {% if predicate and is_linkable %}
                     <a href="#" class="btn btn-primary action-connect">{_ Connect _}</a>
-                {% endif %}
-                {% if id.is_editable %}
-                    <a href="#" class="btn btn-primary action-edit">{_ Edit _}</a>
                 {% endif %}
             </p>
             {% endblock %}
