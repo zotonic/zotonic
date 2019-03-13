@@ -483,18 +483,38 @@ try_set_tos_agreed(Args, Context) when is_list(Args) ->
 is_tos_agreed(UserId, Context) ->
     case z_convert:to_bool( m_config:get_value(mod_authentication, tos_update_agree, Context) ) of
         true ->
-            LastTC = case m_rsc:p_no_acl(UserId, tos_agreed, Context) of
-                undefined -> m_rsc:p_no_acl(UserId, created, Context);
-                DT -> DT
+            Now = calendar:universal_time(),
+            LastTC = case date_tos_agreed(UserId, Context) of
+                undefined ->
+                    undefined;
+                DT when DT > Now ->
+                    % Protect against dates in the future
+                    undefined;
+                DT ->
+                    DT
             end,
-            LastTC1 = case LastTC > calendar:universal_time() of
-                true -> undefined;
-                false -> LastTC
-            end,
-            is_tos_document_agreed(LastTC1, signup_tos, Context)
-            andalso is_tos_document_agreed(LastTC1, signup_privacy, Context);
+            is_tos_document_agreed(LastTC, signup_tos, Context)
+            andalso is_tos_document_agreed(LastTC, signup_privacy, Context);
         false ->
             true
+    end.
+
+date_tos_agreed(UserId, Context) ->
+    case m_rsc:p_no_acl(UserId, tos_agreed, Context) of
+        undefined ->
+            AgreeOnCreate = case m_config:get_value(mod_authentication, tos_agree_on_create, Context) of
+                <<>> -> true;
+                undefined -> true;
+                V -> z_convert:to_bool(V)
+            end,
+            case AgreeOnCreate of
+                true ->
+                    m_rsc:p_no_acl(UserId, created, Context);
+                false ->
+                    undefined
+            end;
+        DT ->
+            DT
     end.
 
 is_tos_document_agreed(AgreeDate, DocId, Context) ->
