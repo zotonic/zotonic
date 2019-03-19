@@ -41,7 +41,7 @@ ip_port() ->
 
 -spec max_size() -> integer().
 max_size() ->
-    z_config:get(clamav_max_size, ?CLAMAV_IP).
+    z_config:get(clamav_max_size, ?CLAMAV_MAX_SIZE).
 
 -spec ping() -> pong | pang.
 ping() ->
