@@ -7,18 +7,25 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--spec content_type_label(string(), #context{}) -> string().
-content_type_label("text/html", Context) ->
+-spec content_type_label(undefined | string() | binary() | tuple(), #context{}) -> binary().
+content_type_label(undefined, _Context) ->
+    undefined;
+content_type_label(ContentType, Context) when is_list(ContentType) ->
+    content_type_label(z_convert:to_binary(ContentType), Context);
+content_type_label(ContentType, Context) when is_tuple(ContentType) ->
+    ContentType1 = cowmachine_util:format_content_type(ContentType),
+    content_type_label(ContentType1, Context);
+content_type_label(<<"text/html">>, Context) ->
     ?__("page", Context);
-content_type_label("application/ld+json", Context) ->
+content_type_label(<<"application/ld+json">>, Context) ->
     ?__("JSON-LD", Context);
-content_type_label("application/json", Context) ->
+content_type_label(<<"application/json">>, Context) ->
     ?__("JSON", Context);
-content_type_label("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Context) ->
+content_type_label(<<"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">>, Context) ->
     ?__("Excel Workbook", Context);
-content_type_label("text/calendar", Context) ->
+content_type_label(<<"text/calendar">>, Context) ->
     ?__("iCalendar", Context);
-content_type_label("text/csv", Context) ->
+content_type_label(<<"text/csv">>, Context) ->
     ?__("CSV", Context);
 content_type_label(ContentType, Context) ->
     Label = case mimetypes:mime_to_exts(ContentType) of
