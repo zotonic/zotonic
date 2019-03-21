@@ -85,7 +85,7 @@ model.present = function(data) {
             actions.authRefresh(msg.payload);
         });
 
-        self.subscribe("model/auth/post/logon/form", function(msg) {
+        self.subscribe("model/auth/post/form/logon", function(msg) {
             actions.logonForm(msg.payload);
         });
 
@@ -194,6 +194,7 @@ model.present = function(data) {
         } else {
             model.state_change('auth_unknown');
         }
+        self.publish("model/auth/event/auth-error", { error: model.authentication_error });
     }
 
     if (data.is_auth_changed && state.authChanging(model)) {
@@ -384,8 +385,8 @@ actions.authLogonResponse = function(data) {
             break;
         case "error":
             model.present({
-                    is_fetch_error: false,
                     is_auth_error: true,
+                    is_fetch_error: false,
                     error: data.error
                 });
             break;

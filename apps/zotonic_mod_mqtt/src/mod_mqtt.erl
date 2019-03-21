@@ -71,10 +71,10 @@ handle_model_request(Model, Verb, Path, Msg, Context) ->
     Res = z_model:callback(Model, Verb, Path, Msg, Context),
     publish_response(Msg, Res, Context).
 
-publish_response(#{ properties := #{ response_topic := Topic } }, {ok, Res}, Context) ->
-    z_mqtt:publish(Topic, #{ status => <<"ok">>, result => Res }, Context);
-publish_response(#{ properties := #{ response_topic := Topic } }, {error, Res}, Context) ->
-    z_mqtt:publish(Topic, #{ status => <<"error">>, message => Res }, Context);
+publish_response(#{ properties := #{ response_topic := Topic }, qos := QoS }, {ok, Res}, Context) ->
+    z_mqtt:publish(Topic, #{ status => <<"ok">>, result => Res }, #{ qos => QoS }, Context);
+publish_response(#{ properties := #{ response_topic := Topic }, qos := QoS }, {error, Res}, Context) ->
+    z_mqtt:publish(Topic, #{ status => <<"error">>, message => Res }, #{ qos => QoS }, Context);
 publish_response(#{}, _Res, _Context) ->
     ok.
 

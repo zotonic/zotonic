@@ -27,7 +27,8 @@
     publish/5,
     callback/5,
 
-    get_module/2
+    get_module/2,
+    get_arg/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -67,7 +68,7 @@ payload_msg(Payload) ->
 call(Model, Verb, Path, Msg, Context) ->
     case get_module(Model, Context) of
         {ok, Mod} ->
-            maybe_resolve(model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
+            maybe_resolve(Verb, model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
         {error, _} ->
             publish(Model, Verb, Path, Msg, Context)
     end.
@@ -106,7 +107,7 @@ publish(Model, Verb, Path, Msg, Context) ->
 callback(Model, Verb, Path, Msg, Context) ->
     case get_module(Model, Context) of
         {ok, Mod} ->
-            maybe_resolve(model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
+            maybe_resolve(Verb, model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
         {error, _} = Error ->
             lager:info("Publish to unknown model ~p", [Model]),
             Error
@@ -129,6 +130,7 @@ get_module(rsc_gone, _Context)  -> {ok, m_rsc_gone};
 get_module(search, _Context)    -> {ok, m_search};
 get_module(site, _Context)      -> {ok, m_site};
 get_module(sysconfig, _Context) -> {ok, m_sysconfig};
+get_module(template, _Context)  -> {ok, m_template};
 get_module(<<"rsc">>, _Context)       -> {ok, m_rsc};
 get_module(<<"acl">>, _Context)       -> {ok, m_acl};
 get_module(<<"config">>, _Context)    -> {ok, m_config};
@@ -143,6 +145,7 @@ get_module(<<"rsc_gone">>, _Context)  -> {ok, m_rsc_gone};
 get_module(<<"search">>, _Context)    -> {ok, m_search};
 get_module(<<"site">>, _Context)      -> {ok, m_site};
 get_module(<<"sysconfig">>, _Context) -> {ok, m_sysconfig};
+get_module(<<"template">>, _Context)  -> {ok, m_template};
 get_module(Name, Context) ->
     case z_module_indexer:find(model, Name, Context) of
         {ok, #module_index{ erlang_module = M }} ->
@@ -150,6 +153,23 @@ get_module(Name, Context) ->
         {error, _} = Error ->
             Error
     end.
+
+-spec get_arg( atom(), map() | undefined, z:context() ) -> term() | undefined.
+get_arg(Prop, Map, _Context) when is_atom(Prop), is_map(Map) ->
+    case maps:find(payload, Map) of
+        {ok, Payload} when is_map(Payload) ->
+            case maps:find(Prop, Payload) of
+                {ok, V} -> V;
+                error -> maps:get(atom_to_binary(Prop, utf8), Payload, undefined)
+            end;
+        _ ->
+            case maps:find(Prop, Map) of
+                {ok, V} -> V;
+                error -> maps:get(atom_to_binary(Prop, utf8), Map, undefined)
+            end
+    end;
+get_arg(Prop, undefined, Context) when is_atom(Prop) ->
+    z_context:get_q(Prop, Context).
 
 
 %%% ------------------------------ Internal functions ---------------------------
@@ -201,10 +221,14 @@ maybe_atom(V) ->
     V.
 
 %% @doc Optionally dig deeper into the returned result if the path is not consumed completely.
-maybe_resolve({ok, {Res, []}}, _Context) ->
+maybe_resolve(get, {ok, {Res, []}}, _Context) ->
     {ok, Res};
-maybe_resolve({ok, {Res, Ks}}, Context) when is_list(Ks) ->
+maybe_resolve(get, {ok, {Res, Ks}}, Context) when is_list(Ks) ->
     Res1 = z_template_compiler_runtime:find_nested_value(Res, Ks, #{}, Context),
     {ok, Res1};
-maybe_resolve({error, _} = Error, _Context) ->
+maybe_resolve(_Verb, {ok, Res}, _Context) ->
+    {ok, Res};
+maybe_resolve(_Verb, ok, _Context) ->
+    {ok, success};
+maybe_resolve(_Verb, {error, _} = Error, _Context) ->
     Error.

@@ -6,7 +6,6 @@
  % Authentication API used by zotonic.auth.worker.js
  {logon_auth,       [ "zotonic-auth" ],     controller_authentication, []},
 
-
  % To be checked
  {logon_reminder,   ["logon", "reminder"],  controller_template, [{template, "logon.tpl"}]},
  {logon_reset,      ["logon", "reset"],     controller_template, [{template, "logon.tpl"}]},

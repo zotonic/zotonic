@@ -6,7 +6,7 @@
 {% if not id %}
     <p>{_ Hello _},</p>
 
-    <p>{_ You tried to reset your password for _}<a href="{% url home absolute_url %}">{{ m.site.hostname }}</a>.</p>
+    <p>{_ You tried to reset your password for _} <a href="{% url home absolute_url %}">{{ m.site.hostname }}</a>.</p>
 
     <p>{_ However, this email address does not belong to one of our registered users so you will not be able to change the password. _}</p>
 
@@ -14,7 +14,7 @@
 {% else %}
     <p>{_ Hello _} {{ m.rsc[id].name_first|default:m.rsc[id].title }},</p>
 
-    <p>{_ {_ You tried to reset your password for _} _} <a href="{%%}">{{ m.site.hostname }}</a>. {_ Below are your account details and a link to set a new password. _}</p>
+    <p>{_ You tried to reset your password for _} <a href="{% url home absolute_url %}">{{ m.site.hostname }}</a>. {_ Below are your account details and a link to set a new password. _}</p>
 
     <p>{_ Your account name is _} “<strong>{{ m.identity[id].username|escape }}</strong>”.{% if m.identity[id].username != email|default:(m.rsc[id].email_raw) %} {_ The email address associated with your account is _} “<strong>{{ email|default:(m.rsc[id].email_raw)|escape }}</strong>”.{% endif %}</p>
 

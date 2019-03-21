@@ -524,7 +524,14 @@ set_q(Key, Value, Context) ->
 
 %% @doc Set the value of multiple request parameter arguments
 -spec set_q( list(), z:context() ) -> z:context().
-set_q(KVs, Context) ->
+set_q(KVs, Context) when is_map(KVs) ->
+    maps:fold(
+        fun(K, V, Ctx) ->
+            set_q(K, V, Ctx)
+        end,
+        Context,
+        KVs);
+set_q(KVs, Context) when is_list(KVs) ->
     lists:foldl(
         fun({K, V}, Ctx) ->
             set_q(K, V, Ctx)

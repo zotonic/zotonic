@@ -5,7 +5,6 @@ logon.tpl // log on page
 |-- _logon_config.tpl // template and field configuration
 |   `-- _logon.tpl or _logon_modal.tpl // logon module
 |       `-- _logon_form.tpl
-|           `-- _logon_stage.tpl // feedback messages
 |               `-- _logon_expired_form.tpl
 `-- logoff.tpl // log off page, redirects to q.p or homepage
 
@@ -26,12 +25,6 @@ state::
 |       |-- _logon_reset_form.tpl
 |       |   `-- _logon_reset_form_fields.tpl
 |       `-- _logon_reset_support.tpl // backlink to logon form
-|== admin_logon:
-|   `-- _logon_form.tpl
-|       |-- _logon_error.tpl
-|       |-- _logon_login_form.tpl
-|       |   `-- logon_login_admin_form_fields.tpl // copy from logon_login_admin_fields.tpl so that the latter can be customized without messing up admin logon
-|       |-- _logon_login_support.tpl // link forgot password
 |== signup (logon_state only)
 |   `-- _logon_form.tpl
 |       |-- _signup_title.tpl

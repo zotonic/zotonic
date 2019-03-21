@@ -22,6 +22,9 @@
 
 -export([
     m_get/3,
+    m_post/3,
+
+    send_reminder/2,
 
     auth_token/2,
     cookie_token/2,
@@ -34,6 +37,8 @@
     auth_tokens/2,
     cookie_url/1
 ]).
+
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ authenticate, password | Rest ], #{ payload := Payload }, Context) when is_map(Payload) ->
@@ -51,6 +56,102 @@ m_get([ password_min_length | Rest ], _Msg, Context) ->
 m_get(Vs, _Msg, _Context) ->
     lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
+
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
+m_post([ 'request-reminder' ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    request_reminder(Payload, Context);
+m_post(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p post: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
+
+
+%% @doc Send password reminders to everybody with the given email address
+-spec request_reminder( map(), z:context() ) -> map().
+request_reminder(Payload, Context) ->
+    case maps:find(<<"email">>, Payload) of
+        {ok, Email} when is_binary(Email) ->
+            EmailNorm = m_identity:normalize_key(email, Email),
+            case z_email_utils:is_email(EmailNorm) of
+                true ->
+                    case z_notifier:first( #auth_reset{ username = EmailNorm }, Context) of
+                        Ok when Ok =:= undefined; Ok =:= ok ->
+                            case lookup_identities(EmailNorm, Context) of
+                                [] ->
+                                    case z_convert:to_bool(m_config:get_value(mod_authentication, email_reminder_if_nomatch, Context)) of
+                                        true ->
+                                            send_reminder(undefined, EmailNorm, Context);
+                                        false ->
+                                            nop
+                                    end;
+                                Identities ->
+                                    lists:foreach(
+                                        fun(RscId) ->
+                                            send_reminder(RscId, EmailNorm, Context)
+                                        end,
+                                        Identities)
+                            end,
+                            {ok, #{ email => EmailNorm }};
+                        {error, _Reason} = Error ->
+                            Error
+                    end;
+                false ->
+                    {error, email}
+            end;
+        _Other ->
+            {error, email}
+    end.
+
+%% @doc Find all users with a certain e-mail address or username
+lookup_identities(undefined, _Context) -> [];
+lookup_identities("", _Context) -> [];
+lookup_identities(<<>>, _Context) -> [];
+lookup_identities(EmailOrUsername, Context) ->
+    Es = m_identity:lookup_by_type_and_key_multi(email, EmailOrUsername, Context),
+    Us = m_identity:lookup_by_type_and_key_multi(username_pw, EmailOrUsername, Context),
+    lists:usort([ proplists:get_value(rsc_id, Row) || Row <- Es ++ Us ]).
+
+
+%% @doc Email a reset code to the user.
+send_reminder(Id, Context) ->
+    Email = m_rsc:p_no_acl(Id, email_raw, Context),
+    send_reminder(Id, Email, Context).
+
+send_reminder(_Id, undefined, _Context) ->
+    {error, noemail};
+send_reminder(1, _Email, _Context) ->
+    lager:info("Ignoring password reminder request for 'admin' (user 1)"),
+    {error, admin};
+send_reminder(undefined, Email, Context) ->
+    z_email:send_render(Email, "email_password_reset.tpl", [], Context);
+send_reminder(Id, Email, Context) ->
+    PrefEmail = case m_rsc:p_no_acl(Id, email_raw, Context) of
+        undefined -> Email;
+        <<>> -> Email;
+        E -> m_identity:normalize_key(email, E)
+    end,
+    case m_identity:get_username(Id, Context) of
+        undefined ->
+            send_reminder(undefined, Email, Context);
+        Username when Username =/= <<"admin">> ->
+            Vars = [
+                {recipient_id, Id},
+                {id, Id},
+                {secret, set_reminder_secret(Id, Context)},
+                {username, Username},
+                {email, PrefEmail}
+            ],
+            z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
+            case Email of
+                PrefEmail -> ok;
+                _ -> z_email:send_render(PrefEmail, "email_password_reset.tpl", Vars, Context)
+            end
+    end.
+
+%% @doc Set the unique reminder code for the account.
+set_reminder_secret(Id, Context) ->
+    Code = z_ids:id(),
+    m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),
+    Code.
 
 
 %% @doc If authentication was possible, then return auth tokens and cookie url.

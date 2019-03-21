@@ -37,12 +37,16 @@ render(Params, _Vars, Context) ->
             SrcUrl = z_lib_include:url([ Src ], Context1),
             BaseUrl = z_lib_include:url([ Base ], Context1),
             Name = proplists:get_value(name, Params, <<>>),
+            Spawn = [
+                <<"cotonic.spawn_named(\"">>,
+                    z_utils:js_escape(Name), "\", \"",
+                    SrcUrl, "\", \"",
+                    BaseUrl, "\");"
+            ],
             {ok, [
                 <<"<script type='text/javascript'>">>,
-                    <<"cotonic.spawn_named(\"">>,
-                        z_utils:js_escape(Name), "\", \"",
-                        SrcUrl, "\", \"",
-                        BaseUrl, "\");",
+                    <<"if (typeof cotonic === 'undefined') setTimeout(function() {">>, Spawn, <<"}, 10); ">>,
+                    <<"else ">>, Spawn,
                 <<"</script>">>
             ]}
     end.

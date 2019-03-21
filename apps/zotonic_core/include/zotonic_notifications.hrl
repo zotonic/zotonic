@@ -545,6 +545,11 @@
 %% Type: notify
 -record(auth_confirm_done, {}).
 
+%% @doc First to check for password reset forms, return undefined, ok, or {error, Reason}.
+-record(auth_reset, {
+        username :: undefined | binary()
+    }).
+
 %% @doc User logs on. Add user-related properties to the logon request context.
 %% Type: foldl
 %% Return: ``z:context()``

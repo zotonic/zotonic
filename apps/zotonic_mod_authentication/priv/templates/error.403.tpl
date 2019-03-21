@@ -6,11 +6,6 @@
 
 {% block content_area %}
 
-    {#
-      When ssl is enabled, only show the login form when the page is secure;
-      otherwise show a link to the logon page.
-    #}
-
     {% if m.req.referer %}
       <div class="z-logon-back">
           <a rel="nofollow" href="{{ m.req.referer|escape }}" />{_ Go back _}</a>
@@ -26,7 +21,7 @@
         {% endif %}
     </div>
 
-    {% with '#reload', 1 as page, use_wire %}
+    {% with '#reload' as page %}
         {% inherit %}
     {% endwith %}
 {% endblock %}

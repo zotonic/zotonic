@@ -7,7 +7,7 @@ body.err403 .z-logon-box {
 }
 .z-logon-prompt {
   text-align: center;
-  max-width: 300px;
+  max-width: 400px;
   margin: 40px auto;
 }
 .z-logon-back {
@@ -17,9 +17,17 @@ body.err403 .z-logon-box {
 .z-logon-box {
   float: none;
   margin: 15px auto;
+  width: 400px;
+  max-width: 100%;
   /* Extra login options */
   /* Supporting options */
   /* Sign up specific*/
+}
+.z-logon-box img.loading {
+  display: block;
+  margin: 0 auto;
+  opacity: 0.5;
+  height: 16px;
 }
 .z-logon-box ul {
   list-style-type: none;
@@ -88,17 +96,11 @@ body.err403 .z-logon-box {
 .z-logon-box .z-logon-support:empty {
   display: none;
 }
-.z-logon-box .alert {
-  display: none;
-}
 .z-logon-box .alert :first-child {
   margin-top: 0;
 }
 .z-logon-box .alert :last-child {
   margin-bottom: 0;
-}
-.z-logon-box.z-logon-error .alert {
-  display: block;
 }
 .z-logon-box.z-logon-box-boxed .z-logon-form {
   margin: 15px 0;

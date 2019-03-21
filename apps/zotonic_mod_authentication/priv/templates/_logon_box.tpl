@@ -1,80 +1,78 @@
 {#
-Params:
-- page
-- error_reason
-- style_boxed -- creates a colored background box
-- form_title_tpl
-- form_extra_tpl
-- form_form_tpl
-- form_support_tpl
-- form_outside_tpl
+    Render the logon_box contents with the correct sub-template.
+    This template is rendered by the zotonic.auth-ui.worker.js
 #}
-<div id="signup_logon_box" class="z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}" {% if style_width %}style="width: {{ style_width }};"{% endif %}>
-    {% if form_title_tpl %}
-        {% include form_title_tpl %}
+{% if zotonic_dispatch == `logon_reminder` or q.logon_view == 'reminder' %}
+
+    {% include "_logon_box_view.tpl"
+        form_title_tpl="_logon_reminder_title.tpl"
+        form_form_tpl="_logon_reminder_form.tpl"
+        form_fields_tpl="_logon_reminder_form_fields.tpl"
+        form_support_tpl="_logon_reminder_support.tpl"
+        style_boxed=style_boxed
+    %}
+
+{% elseif zotonic_dispatch == `logon_reset` or q.logon_view == 'reset' %}
+
+    {% include "_logon_box_view.tpl"
+        form_title_tpl="_logon_reset_title.tpl"
+        form_form_tpl="_logon_reset_form.tpl"
+        form_fields_tpl="_logon_reset_form_fields.tpl"
+        form_support_tpl="_logon_reset_support.tpl"
+        style_boxed=style_boxed
+    %}
+
+{% elseif q.logon_view == "reminder_sent" %}
+
+    <h2 class="z-logon-title">{_ Check your email _}</h2>
+    <p>{_ We have sent an email with a link to reset your password to _}: <b>{{ q.email|escape }}</b></p>
+    <p>{_ If you do not receive the email within a few minutes, please check your spam folder. _}</p>
+    {% if not m.acl.user %}
+        <p><a id="back_to_logon" class="btn btn-primary" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Back to sign in _}</a></p>
+    {% else %}
+        <p><a id="back_to_logon" class="btn btn-default" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ OK _}</a></p>
     {% endif %}
 
-    <div class="z-logon-form">
-        {% if m.rsc.page_logon.body %}
-            <div class="alert">{{ m.rsc.page_logon.body }}</div>
-        {% endif %}
+{% elseif q.logon_view == "verification_pending" %}
 
-        {% if form_extra_tpl %}
-            {% include form_extra_tpl %}
-        {% endif %}
+    <h2 class="z-logon-title">{_ Verify your account _}</h2>
+    <p>{_ You're almost done! To make sure you are really you, we ask you to confirm your account from your email address. _}</p>
+    <form id="verification_form" method="POST" action="postback">
+        <button class="btn btn-primary" type="submit">{_ Send Verification Message _}</button>
+    </form>
+    {% wire id="verification_form" postback={send_verification user_id=user_id} %}
 
-        <div id="logon_error" class="alert alert-danger">
-            {% include "_logon_error.tpl" reason=error_reason %}
-        </div>
+{% elseif q.logon_view == "verification_sent" %}
 
-        {% if form_form_tpl %}
-            {% include form_form_tpl
-                page=page
-                use_wire=use_wire
-                form_fields_tpl=form_fields_tpl
-                style_boxed=style_boxed
-                style_width=style_width
-            %}
-        {% endif %}
+    <h2 class="z-logon-title">{_ Check your email _}</h2>
+    <p>{_ In the email you will find instructions on how to confirm your account. _}</p>
+    <p>{_ If you do not receive the email within a few minutes, please check your spam folder. _}</p>
 
-        {% if form_support_tpl %}
-            {% include form_support_tpl
-                update_target=update_target
-                update_template=update_template
-                logon_state=logon_state
-                logon_context=logon_context
-                style_boxed=style_boxed
-                style_width=style_width
-            %}
-        {% endif %}
-    </div>
+{% elseif q.logon_view == "verification_error" %}
 
-    {% if form_outside_tpl %}
-        {% include form_outside_tpl
-            update_target=update_target
-            update_template=update_template
-            logon_state=logon_state
-            logon_context=logon_context
-            style_boxed=style_boxed
-            style_width=style_width
-        %}
+    <h2 class="z-logon-title error">{_ Sorry, could not send the verification message. _}</h2>
+    <p>{_ We don’t seem to have any valid email address or other electronic communication address of you. _}</p>
+    {% if not m.acl.user %}
+        <p><a class="btn btn-default" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Back to sign in _}</a></p>
+    {% else %}
+        <p><a id="{{ #cancel }}" class="btn btn-default" href="#">{_ Cancel _}</a></p>
+        {% wire id=#cancel action={redirect back} %}
     {% endif %}
 
-</div>
-{# Use a real post for all forms on this page, and not AJAX or Websockets. This will enforce all cookies to be set correctly. #}
-{#
-{% javascript %}
-z_only_post_forms = true;
-{% endjavascript %}
-#}
+{% elseif q.logon_view == "password_expired" %}
 
-{# Set a listener on the session changes - needed for logon via external auth methods or via other pages #}
-{#
-{% javascript %}
-    z_transport_delegate_register('reload', function(_status) {
-        $('body').mask();
-        z_transport("controller_logon", "ubf", { msg: "logon_redirect", page: '{{ page|default:q.p|escapejs }}' });
-    });
-{% endjavascript %}
-#}
+    {% include "_logon_expired_form.tpl" %}
 
+{% else %}
+
+    {% include "_logon_box_view.tpl"
+        form_title_tpl="_logon_login_title.tpl"
+        form_extra_tpl="_logon_login_extra.tpl"
+        form_form_tpl="_logon_login_form.tpl"
+        form_fields_tpl="_logon_login_form_fields.tpl"
+        form_support_tpl="_logon_login_support.tpl"
+        form_outside_tpl="_logon_login_outside.tpl"
+        style_boxed=style_boxed
+    %}
+
+{% endif %}
