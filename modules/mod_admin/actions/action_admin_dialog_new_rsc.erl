@@ -143,7 +143,8 @@ event(#submit{message={new_page, Args}}, Context) ->
                     z_render:wire({redirect, [{location, Location}]}, Context2)
             end;
         {error, Reason} ->
-            error_message(Reason, Context)
+            Msg = error_message(Reason, Context),
+            z_render:wire({growl, [{text, Msg}]}, Context)
     end;
 
 event(#postback{message={admin_connect_select, _Args}} = Postback, Context) ->
