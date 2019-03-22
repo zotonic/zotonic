@@ -229,7 +229,7 @@ totp(Key, Period) ->
     {hotp(Key, T - 1), hotp(Key, T), hotp(Key, T + 1)}.
 
 %% RFC-4226 "HOTP: An HMAC-Based One-Time Password Algorithm"
-%% @ref <http://tools.ietf.org/html/rfc4226>
+%% See <http://tools.ietf.org/html/rfc4226>
 -spec hotp( binary(), pos_integer() ) -> binary().
 hotp(Key, Count) when is_binary(Key), is_integer(Count) ->
     HS = crypto:hmac(sha, Key, <<Count:64>>),
