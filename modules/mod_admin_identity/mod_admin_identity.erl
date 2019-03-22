@@ -217,7 +217,10 @@ event(#postback{message={identity_add, Args}}, Context) ->
 
 %% Log on as this user
 event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin(Context)
+        andalso is_integer(Id)
+        andalso Id =/= 1
+    of
         true ->
             {ok, NewContext} = z_auth:switch_user(Id, Context),
             %% find out redirect URL, if we can stay in the admin or not.
