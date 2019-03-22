@@ -30,6 +30,10 @@ member(S, [H|_] = L, _Context) when is_list(S) andalso is_integer(H) ->
     catch
         _:_ -> false
     end;
+member(S, [ V | _ ] = L, Context) when is_list(S), is_binary(V) ->
+    member(z_convert:to_binary(S), L, Context);
+member(S, [ V | _ ] = L, Context) when is_binary(S), is_list(V) ->
+    member(z_convert:to_list(S), L, Context);
 member(S, L, _Context) when is_list(L) ->
     lists:member(S, L);
 member(S, Value, Context) ->
