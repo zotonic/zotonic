@@ -24,7 +24,7 @@
 ip2country(undefined, _Context) ->
     undefined;
 ip2country(IP, _Context) when is_binary(IP); is_list(IP); is_tuple(IP) ->
-    case locus:lookup(country, IP) of
+    case locus:lookup(city, IP) of
         {ok, #{ <<"country">> := Country }} ->
             z_string:to_lower(maps:get(<<"iso_code">>, Country, <<>>));
         {ok, _} ->
