@@ -195,8 +195,9 @@
     <input type="hidden" class="nosubmit" name="object_id" value="{{ object_id }}">
 	<input type="hidden" class="nosubmit" name="predicate" value="{{ predicate|default:'' }}">
     <input type="hidden" class="nosubmit" name="cat_exclude" value="{{ cat_exclude }}">
+    <input type="hidden" class="nosubmit" name="is_zlink" value="{{ is_zlink|if:'1':'' }}">
 
-	<div class="row">
+    <div class="row">
 		{% if nocatselect and cat %}
     		<input type="hidden" class="nosubmit" name="find_category" value="{{ cat }}">
         {% elseif predicate %}

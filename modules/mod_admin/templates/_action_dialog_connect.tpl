@@ -9,6 +9,7 @@ params:
 - tab (optional)
 - autoclose (optional - defaults to false)
 - nocatselect (optional - defaults to false)
+- is_zlink (optional) set by the tinyMCE 'internal link' plugin
 
 find params:
 - predicate (optional) (atom)

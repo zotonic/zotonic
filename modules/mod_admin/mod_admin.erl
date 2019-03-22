@@ -241,7 +241,8 @@ event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Co
         {cat, Cats},
         {cat_exclude, z_context:get_q(cat_exclude, Context)},
         {predicate, Predicate},
-        {text, Text}
+        {text, Text},
+        {is_zlink, z_convert:to_bool( z_context:get_q(is_zlink, Context) )}
     ] ++ case z_context:get_q(find_cg, Context) of
         <<>> -> [];
         "" -> [];
