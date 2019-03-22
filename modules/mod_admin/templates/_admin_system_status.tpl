@@ -52,7 +52,7 @@
 </div>
 </div>
 
-
+{% with m.modules.active.mod_geoip as is_ip2country %}
 <div class="container">
 <div class="col-md-6">
     <table class="table table-sm">
@@ -62,6 +62,9 @@
             </tr>
             <tr>
                 <td>{_ IP Address _}</td>
+                {% if is_ip2country %}
+                    <td>{_ Country _}</td>
+                {% endif %}
                 <td class="text-right">{_ Count _}</td>
             </tr>
         </thead>
@@ -69,6 +72,9 @@
             {% for item in m.admin_status.group_sockets | sort:'desc' | slice:[,10] %}
             <tr>
                 <td>{{ item.ip }}</td>
+                {% if is_ip2country %}
+                    <td>{{ m.l10n.country_name[ item.ip|ip2country ]|default:"-" }}</td>
+                {% endif %}
                 <td class="text-right">{{ item.count }}</td>
             </tr>
             {% endfor %}
@@ -76,6 +82,7 @@
     </table>
 </div>
 </div>
+{% endwith %}
 
 <div class="form-group">
     <div>

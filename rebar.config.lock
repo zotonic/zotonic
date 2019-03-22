@@ -15,6 +15,9 @@
        {rebar_lock_deps_plugin,".*",
                                {git,"git://github.com/seth/rebar_lock_deps_plugin.git",
                                     "8816f45ff38cd04d5c7741bd39166af58116dd44"}},
+       {certifi,".*",
+                {git,"https://github.com/certifi/erlang-certifi.git",
+                "e08b12e8993502240c25b78563993776f87ecd2a"}},
        {erlware_commons,".*",
                         {git,"git://github.com/erlware/erlware_commons.git",
                              "012bc2f7892305615cdf7d866bb1d7258985e68e"}},
@@ -134,7 +137,13 @@
                     "c2156fff699908e6087bdcd1255c26ffffeacfae"}},
        {erlpass,".*",
                 {git,"https://github.com/ferd/erlpass.git",
-                     "ca9beec86751930b788444d22f436089a6a9850c"}}]}.
+                     "ca9beec86751930b788444d22f436089a6a9850c"}},
+       {locus,".*",
+                {git,"https://github.com/g-andrade/locus.git",
+                      "0ea9079ce5686573e0e70e2b1311343dd25feef8"}},
+       {stacktrace_compat,".*",
+                {git,"https://github.com/g-andrade/stacktrace_compat.git",
+                      "188364dabe6e90a4ab90f10d90b5cea050cd0b56"}}]}.
 {plugin_dir,"deps/rebar_lock_deps_plugin/src"}.
 {plugins,[rebar_lock_deps_plugin]}.
 {xref_checks,[undefined_function_calls,locals_not_used,
