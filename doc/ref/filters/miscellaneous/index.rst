@@ -9,3 +9,4 @@ Miscellaneous
    ../filter_gravatar_code
    ../filter_twitter
    ../filter_ip2country
+   ../filter_ip2info

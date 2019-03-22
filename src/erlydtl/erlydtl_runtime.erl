@@ -19,6 +19,10 @@ find_value(Key, #m{model=Model} = M, Context) ->
 find_value(Key, [{Nr,_}|_] = L, _Context) when is_integer(Key), is_integer(Nr) ->
     proplists:get_value(Key, L);
 
+% Lookup a value in a map
+find_value(Key, Map, _Context) when is_map(Map) ->
+    find_map_value(Key, Map);
+
 % Index of list with an integer like "a[2]"
 find_value(Key, L, _Context) when is_integer(Key), is_list(L) ->
     try
@@ -170,12 +174,7 @@ find_value(Key, F, _Context) when is_function(F, 1) ->
 
 %% Any subvalue of a non-existant value is undefined
 find_value(_Key, undefined, _Context) ->
-    undefined;
-find_value(Key, Map, _Context) ->
-    case erlang:is_builtin(erlang, is_map, 1) andalso erlang:is_map(Map) of
-        true  -> find_map_value(Key, Map);
-        false -> undefined
-    end.
+    undefined.
 
 find_map_value(Key, Map) when is_atom(Key) ->
     case maps:find(Key, Map) of
