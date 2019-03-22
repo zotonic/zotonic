@@ -1,5 +1,3 @@
--module(filter_ip2country).
-
 %% @doc Map IP addresses to geo a country code.
 %% @author Marc Worrell <marc@worrell.nl>
 
@@ -16,6 +14,8 @@
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
+
+-module(filter_ip2country).
 
 -export([
     ip2country/2

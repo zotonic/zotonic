@@ -27,7 +27,7 @@
 %% Android: <https://market.android.com/details?id=com.google.android.apps.authenticator>
 
 %% Google Authenticator URL Specification
-% @ref <http://code.google.com/p/google-authenticator/wiki/KeyUriFormat>
+% ref <http://code.google.com/p/google-authenticator/wiki/KeyUriFormat>
 %  otpauth://TYPE/LABEL?PARAMETERS
 %  TYPE: hotp | totp
 %  LABEL: string() (usually email address)
