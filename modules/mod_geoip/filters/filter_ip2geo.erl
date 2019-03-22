@@ -15,7 +15,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_ip2info).
+-module(filter_ip2geo).
 
 -export([
     ip2info/2

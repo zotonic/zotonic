@@ -1,5 +1,5 @@
 
-.. include:: meta-ip2info.rst
+.. include:: meta-ip2geo.rst
 
 Maps an IP address to information about that country.
 
@@ -7,7 +7,7 @@ The module ``mod_geoip`` must be enabled to use this filter.
 
 Example, print the information for the current visitor::
 
-  {% print m.req.peer|ip2info %}
+  {% print m.req.peer|ip2geo %}
 
 Might print (depending on the visitor’s IP address)::
 
@@ -65,7 +65,7 @@ Might print (depending on the visitor’s IP address)::
 
 The ``trans`` records can be shown directly, Zotonic will select the correct language::
 
-    {% with m.req.peer|ip2info as info %}
+    {% with m.req.peer|ip2geo as info %}
         {{ info.country.name }} {% if info.city %} - {{ info.city }}{% endif %}
     {% endwith %}
 
