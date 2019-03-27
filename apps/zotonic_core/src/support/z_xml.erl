@@ -22,41 +22,50 @@
 
 %% interface functions
 -export([
+    escape/2,
     escape/1
 ]).
 
+-include("zotonic.hrl").
+
+escape({trans, _} = Tr, Context) ->
+    escape(z_trans:lookup_fallback(Tr, Context));
+escape(V, _Context) ->
+    escape(V).
 
 %% @doc Escape a html text to valid a xml text so that it can be transported in XML.  Translates control characters to
 %% spaces, except for TAB, CR and LF.
 %% @spec escape(iolist()) -> iolist()
 escape(undefined) ->
-    undefined;
+    <<>>;
 escape(<<>>) ->
     <<>>;
 escape([]) ->
-    [];
+    <<>>;
 escape(L) when is_list(L) ->
-    escape(list_to_binary(L));
+    escape(iolist_to_binary(L));
+escape(A) when is_atom(A) ->
+    escape(atom_to_binary(A, utf8));
 escape(B) when is_binary(B) ->
-    escape(B, <<>>).
+    esc(B, <<>>).
 
-    escape(<<>>, Acc) ->
-        Acc;
-    escape(<<$&, T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&#38;">>);
-    escape(<<$<, T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&#60;">>);
-    escape(<<$>, T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&#62;">>);
-    escape(<<$", T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&#34;">>);
-    escape(<<$', T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, "&#39;">>);
-    escape(<<C, T/binary>>, Acc) when C == 9; C == 10; C == 13 ->
-        escape(T, <<Acc/binary, C>>);
-    escape(<<C, T/binary>>, Acc) when C < 32 ->
-        escape(T, <<Acc/binary, 32>>);
-    escape(<<C, T/binary>>, Acc) ->
-        escape(T, <<Acc/binary, C>>).
+esc(<<>>, Acc) ->
+    Acc;
+esc(<<$&, T/binary>>, Acc) ->
+    esc(T, <<Acc/binary, "&#38;">>);
+esc(<<$<, T/binary>>, Acc) ->
+    esc(T, <<Acc/binary, "&#60;">>);
+esc(<<$>, T/binary>>, Acc) ->
+    esc(T, <<Acc/binary, "&#62;">>);
+esc(<<$", T/binary>>, Acc) ->
+    esc(T, <<Acc/binary, "&#34;">>);
+esc(<<$', T/binary>>, Acc) ->
+    esc(T, <<Acc/binary, "&#39;">>);
+esc(<<C, T/binary>>, Acc) when C == 9; C == 10; C == 13 ->
+    esc(T, <<Acc/binary, C>>);
+esc(<<C, T/binary>>, Acc) when C < 32 ->
+    esc(T, <<Acc/binary, 32>>);
+esc(<<C/utf8, T/binary>>, Acc) ->
+    esc(T, <<Acc/binary, C/utf8>>).
 
 

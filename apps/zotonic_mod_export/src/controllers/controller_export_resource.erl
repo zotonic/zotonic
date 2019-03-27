@@ -133,7 +133,7 @@ get_content_type(Id, Dispatch, Context) ->
         undefined ->
             get_content_type_observer(Id, Dispatch, Context);
         Type when is_atom(Type) ->
-            get_content_type_extension(z_convert:to_binary(Type), Id, Dispatch, Context);
+            get_content_type_extension(z_convert:to_binary(Type), Context);
         ContentType when is_binary(ContentType); is_list(ContentType) ->
             {ok, z_convert:to_binary(ContentType)}
     end.
@@ -141,25 +141,30 @@ get_content_type(Id, Dispatch, Context) ->
 get_content_type_observer(Id, Dispatch, Context) ->
     case z_notifier:first(#export_resource_content_type{id=Id, dispatch=Dispatch}, Context) of
         undefined ->
-            get_content_type_extension(z_context:get_q(<<"type">>, Context), Id, Dispatch, Context);
+            get_content_type_extension(z_context:get_q(<<"type">>, Context), Context);
         {error, _} = Error ->
             Error;
         {ok, _} = Ok ->
             Ok
     end.
 
-get_content_type_extension(undefined, _Id, _Dispatch, _Context) ->
+get_content_type_extension(undefined, _Context) ->
     {error, no_content_type};
-get_content_type_extension(Type, _Id, _Dispatch, Context) ->
+get_content_type_extension(<<"bert">>, _Context) ->
+    {ok, {<<"application">>, <<"x-bert">>, []}};
+get_content_type_extension(<<"ubf">>, _Context) ->
+    {ok, {<<"text">>, <<"x-ubf">>, []}};
+get_content_type_extension(Type, Context) ->
     [Mime|_] = mimetypes:ext_to_mimes(Type),
     case Mime of
         <<"application/octet-stream">> ->
             {error, no_content_type};
         _ ->
             % Must have an exporter
+            Mime1 = cowmachine_util:normalize_content_type(Mime),
             ContentTypes = export_encoder:content_types(Context),
-            case lists:member(Mime, ContentTypes) of
-                true -> {ok, Mime};
+            case lists:member(Mime1, ContentTypes) of
+                true -> {ok, Mime1};
                 false -> {error, no_content_type}
             end
     end.

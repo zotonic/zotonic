@@ -2,7 +2,6 @@
 %% @copyright 2010-2018 Marc Worrell
 %% @doc Handle generic upload of encoded blobs with a resource (from deprecated mod_rest)
 %% @todo Should be replaced with m_rsc:m_post/3 handling
-%% Support creation of periodic backups.
 
 %% Copyright 2010-2018 Marc Worrell
 %%
@@ -27,7 +26,9 @@
 
 rsc_upload(#rsc_upload{id=Id, format=bert, data=Data}, Context) ->
     case catch bert:decode(Data) of
-        Props when is_list(Props) ->
+        [ {OtherId, Props} ] when is_list(Props), is_integer(OtherId) ->
+            rsc_upload(Id, Props, Context);
+        [ {Prop,_} | _ ] = Props when is_list(Props), is_atom(Prop) ->
             rsc_upload(Id, Props, Context);
         _ ->
             {error, badarg}
