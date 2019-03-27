@@ -23,11 +23,20 @@
 
 var model = {
     status: 'start',
-    logon_view: 'logon',
+    logon_view: '',
     is_connected: false,
     is_error: false,
     error: undefined,
-    email: undefined
+    email: undefined,
+    username: undefined,
+    secret: undefined,
+    need_passcode: false,
+
+    // Depends on these models, wait for a ping
+    depends: {
+        "location": false,
+        "auth": false
+    }
 };
 
 model.present = function(data) {
@@ -47,10 +56,29 @@ model.present = function(data) {
             function(msg) { actions.authError(msg.payload); });
 
         self.subscribe(
+            "model/auth/event/auth-user-id",
+            function(msg) { actions.authUserId(msg.payload); });
+
+        self.subscribe(
             "model/auth-ui/post/form/reminder",
             function(msg) { actions.reminderForm(msg.payload); });
 
-        model.status = "waiting_for_bridge";
+        self.subscribe(
+            "model/auth-ui/post/form/reset",
+            function(msg) { actions.resetForm(msg.payload); });
+
+        self.subscribe(
+            "model/+model/event/ping",
+            function(msg, bindings) {
+                actions.modelPing({ model: bindings.model, payload: msg.payload });
+            });
+
+        self.publish("model/auth-ui/event/ping", "pong", { retain: true });
+
+        model.logon_view = data.logon_view || 'logon';
+        model.secret = data.secret;
+        model.username = data.username;
+        model.status = "waiting";
     }
 
     if ("is_error" in data) {
@@ -59,11 +87,16 @@ model.present = function(data) {
         model.status = 'updated';
     }
 
+    if ("model" in data) {
+        model.depends[data.model] = data.is_active;
+    }
+
     if (typeof data.is_connected == "boolean") {
-        if (state.waitingForBridge(model) && data.is_connected) {
-            model.status = "connected";
-        }
         model.is_connected = data.is_connected;
+    }
+
+    if (model.status == 'waiting' && !state.waiting(model)) {
+        model.status = 'connected'
     }
 
     if (data.is_view_loaded) {
@@ -79,7 +112,9 @@ model.present = function(data) {
     }
 
     if (data.reminder) {
-        self.call("bridge/origin/model/authentication/post/request-reminder", { email: data.email })
+        self.call("bridge/origin/model/authentication/post/request-reminder",
+                  { email: data.email },
+                  { qos: 1 })
             .then(actions.reminderResponse)
             .catch(actions.fetchError);
     }
@@ -96,6 +131,47 @@ model.present = function(data) {
             model.status = 'updated';
         }
         model.email = data.email
+    }
+
+    if (data.is_reset_check) {
+        if (data.status == 'ok') {
+            model.is_error = false;
+            model.error = undefined;
+            model.need_passcode = data.need_passcode;
+            model.username = data.username;
+            model.secret = data.secret
+        } else {
+            model.is_error = true;
+            model.error = data.error || "error"
+        }
+        model.logon_view = 'reset_form';
+    }
+
+    if (data.reset) {
+        if (data.is_password_equal) {
+            let reset = {
+                username: model.username,
+                secret: model.secret,
+                passcode: data.passcode,
+                password: data.password,
+                onauth: "#"
+            };
+            self.publish("model/auth/post/reset", reset);
+            model.status = 'reset_wait';
+            // The error response comes async via the auth-error topic
+            //
+            // If reset was done ok then we should show a 'success' screen with
+            // a link to the home page and/or the user's page.
+        } else {
+            model.is_error = true;
+            model.error = 'unequal';
+            model.logon_view = 'reset_form';
+        }
+    }
+
+    if (data.auth_user_id && model.status == 'reset_wait') {
+        model.logon_view = 'reset_done';
+        model.status = 'updated';
     }
 
     state.render(model) ;
@@ -135,21 +211,27 @@ model.state = state ;
 
 // Derive the state representation as a function of the systen control state
 state.representation = function(model) {
-    if (state.waitingForBridge(model)) {
+    if (state.waiting(model)) {
         self.publish(
             "model/ui/insert/signup_logon_box",
             { inner: true, initialData: "<img src='/lib/images/spinner.gif' class='loading'>" });
     }
 
-    if (state.connected(model) || (model.is_connected && state.updated(model))) {
+    if (state.running(model)) {
         self.publish(
-            "bridge/origin/model/template/get/render/_logon_box.tpl",
+            "model/ui/render-template/signup_logon_box",
             {
-                logon_view: model.logon_view,
-                error: model.error,
-                email: model.email
-            },
-            { properties: { response_topic: "model/ui/update/signup_logon_box" }, qos: 1 });
+                topic: "bridge/origin/model/template/get/render/_logon_box.tpl",
+                dedup: true,
+                data: {
+                    logon_view: model.logon_view,
+                    error: model.error,
+                    email: model.email,
+                    username: model.username,
+                    secret: model.secret,
+                    need_passcode: model.need_passcode
+                }
+            });
     }
 
     // var representation = 'oops... something went wrong, the system is in an invalid state' ;
@@ -177,8 +259,12 @@ state.loaded = function(model) {
     return model.status === 'loaded';
 }
 
-state.waitingForBridge = function(model) {
-    return model.status === 'waiting_for_bridge';
+state.waiting = function(model) {
+    return !model.is_connected || !model.depends.auth;
+}
+
+state.running = function(model) {
+    return model.is_connected && model.depends.auth;
 }
 
 
@@ -189,6 +275,12 @@ state.waitingForBridge = function(model) {
 state.nextAction = function (model) {
     if (state.connected(model) || state.updated(model)) {
         actions.loaded()
+    }
+    if (state.running(model) && model.logon_view == 'reset') {
+        actions.resetCodeCheck({
+                secret: model.secret,
+                username: model.username
+            });
     }
 }
 
@@ -206,7 +298,14 @@ var actions = {} ;
 
 actions.start = function(data) {
     data = data || {};
-    model.present(data);
+    // TODO: wait for location model to be up and running
+    self.call("model/location/get/q")
+        .then(function(msg) {
+            data.logon_view = msg.payload.logon_view || "logon";
+            data.secret = msg.payload.secret || undefined;
+            data.username = msg.payload.u || undefined,
+            model.present(data);
+        });
 };
 
 actions.setBridgeStatus = function(data) {
@@ -228,6 +327,17 @@ actions.reminderForm = function(data) {
         email: data.value.email
     }
     model.present(dataReminder);
+}
+
+actions.resetForm = function(data) {
+    let dataReset = {
+        reset: true,
+        password: data.value.password_reset1,
+        is_password_equal: data.value.password_reset1 === data.value.password_reset2,
+        passcode: data.value.passcode || "",
+        setautologon: data.value.rememberme ? true : false
+    }
+    model.present(dataReset);
 }
 
 actions.reminderResponse = function(data) {
@@ -259,6 +369,29 @@ actions.fetchError = function(_data) {
 
 actions.authError = function(data) {
     model.present({ is_error: true, error: data.error });
+}
+
+actions.authUserId = function(data) {
+    model.present({ auth_user_id: data });
+}
+
+actions.resetCodeCheck = function(data) {
+    self.call("model/auth/post/reset-code-check", { secret: data.secret, username: data.username } )
+        .then(function(msg) {
+            let d = {
+                is_reset_check: true,
+                status: msg.payload.status,
+                error: msg.payload.error || undefined,
+                secret: data.secret,
+                username: msg.payload.username || data.username,
+                need_passcode: msg.payload.need_pascode || false
+            };
+            model.present(d)
+        });
+}
+
+actions.modelPing = function(data) {
+    model.present({ model: data.model, is_active: data.payload === 'pong' });
 }
 
 ////////////////////////////////////////////////////////////////////////////////

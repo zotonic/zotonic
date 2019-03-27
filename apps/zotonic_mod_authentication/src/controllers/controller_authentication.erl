@@ -65,14 +65,20 @@ handle_cmd(<<"refresh">>, Payload, Context) ->
     refresh(Payload, Context);
 handle_cmd(<<"setautologon">>, Payload, Context) ->
     setautologon(Payload, Context);
+handle_cmd(<<"reset_check">>, Payload, Context) ->
+    { check_reminder_secret(Payload, Context), Context };
+handle_cmd(<<"reset">>, Payload, Context) ->
+    reset(Payload, Context);
 handle_cmd(<<"status">>, Payload, Context) ->
     status(Payload, Context);
-handle_cmd(_Cmd, _Payload, Context) ->
+handle_cmd(Cmd, _Payload, Context) ->
+    lager:info("controller_authentication: unknown cmd ~p", [ Cmd ]),
     {
         #{
             status => error,
             error => <<"unknown_cmd">>,
-            message => <<"Unknown cmd, use one of 'logon', 'logoff', 'refresh', 'setautologon', 'switch_user' or 'status'">>
+            message => <<"Unknown cmd, use one of 'logon', 'logoff', 'refresh', 'setautologon', "
+                         "'reset_check', 'reset', 'switch_user' or 'status'">>
         },
         Context
     }.
@@ -166,6 +172,76 @@ setautologon(_Payload, Context) ->
             { #{ status => ok }, Context1 }
     end.
 
+%% @doc Set an autologon cookie for the current user
+%% @todo Do not set the cookie if the user has 2fa enabled
+-spec reset( map(), z:context() ) -> { map(), z:context() }.
+reset(#{
+        <<"secret">> := Secret,
+        <<"username">> := Username,
+        <<"password">> := Password,
+        <<"passcode">> := Passcode
+    } = Payload, Context) when is_binary(Secret), is_binary(Username), is_binary(Password), is_binary(Passcode) ->
+    case auth_precheck(Username, Context) of
+        ok ->
+            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 6, Context)),
+
+            case size(Password) of
+                N when N < PasswordMinLength ->
+                    { #{ status => error, error => tooshort }, Context };
+                _ ->
+                    case get_by_reminder_secret(Secret, Context) of
+                        {ok, UserId} ->
+                            case m_identity:get_username(UserId, Context) of
+                                undefined ->
+                                    lager:error("Password reset: User ~p does not have an username defined.", [ UserId ]),
+                                    { #{ status => error, error => username }, Context };
+                                Username ->
+                                    case reset_1(UserId, Username, Password, Context) of
+                                        ok ->
+                                            logon_1({ok, UserId}, Payload, Context);
+                                        {error, Reason} ->
+                                            { #{ status => error, error => Reason }, Context }
+                                    end
+                            end;
+                        undefined ->
+                            { #{ status => error, error => unknown_code }, Context }
+                    end
+            end;
+        {error, ratelimit} ->
+            { #{ status => error, error => ratelimit }, Context };
+        _ ->
+            { #{ status => error, error => error }, Context }
+    end;
+reset(_Payload, Context) ->
+    { #{
+        status => error,
+        error => args,
+        message => <<"Missing one of: secret, username, password, passcode">>
+    }, Context }.
+
+
+reset_1(UserId, Username, Password, Context) ->
+    case auth_postcheck(UserId, z_context:get_q_all(Context), Context) of
+        ok ->
+            ContextLoggedon = z_acl:logon(UserId, Context),
+            m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(ContextLoggedon)),
+            m_identity:delete_by_type(UserId, "logon_reminder_secret", ContextLoggedon),
+            ok;
+        {error, need_passcode} ->
+            {error, need_passcode};
+        {error, passcode} ->
+            z_notifier:notify_sync(
+                #auth_checked{
+                    id = UserId,
+                    username = Username,
+                    is_accepted = false
+                },
+                Context),
+            {error, passcode};
+        _Error ->
+            {error, error}
+    end.
+
 %% @doc Return information about the current user and request language/timezone
 -spec status( map(), z:context() ) -> { map(), z:context() }.
 status(Payload, Context) ->
@@ -195,4 +271,72 @@ status(Payload, Context) ->
     end,
     { Status1, Context1 }.
 
+
+-spec check_reminder_secret( map(), z:context() ) -> map().
+check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, Context) when is_binary(Secret), is_binary(Username) ->
+    case z_notifier:first( #auth_reset{ username = Username }, Context ) of
+        Ok when Ok =:= undefined; Ok =:= ok ->
+            case get_by_reminder_secret(Secret, Context) of
+                {ok, UserId} ->
+                    case m_identity:get_username(UserId, Context) of
+                        undefined ->
+                            {[], Context};
+                        Username ->
+                            NeedPasscode = case auth_postcheck(UserId, [], Context) of
+                                {error, need_passcode} -> true;
+                                _ -> false
+                            end,
+                            #{
+                                status => ok,
+                                user_id => UserId,
+                                username => Username,
+                                need_passcode => NeedPasscode
+                            };
+                        OtherUsername ->
+                            lager:error("Password reset with username mismatch: got \"~s\", expected \"~s\"",
+                                        [ Username, OtherUsername ]),
+                            #{
+                                status => error,
+                                error => unknown_code
+                            }
+                    end;
+                undefined ->
+                    #{
+                        status => error,
+                        error => unknown_code
+                    }
+            end;
+        {error, Reason} ->
+            #{
+                status => error,
+                error => Reason
+            }
+    end;
+check_reminder_secret(_Payload, _Context) ->
+    #{
+        status => error,
+        error => args,
+        message => <<"Missing username and/or secret">>
+    }.
+
+get_by_reminder_secret(Code, Context) ->
+    case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
+        undefined -> undefined;
+        Row -> {ok, proplists:get_value(rsc_id, Row)}
+    end.
+
+
+auth_precheck(Username, Context) when is_binary(Username) ->
+    case z_notifier:first(#auth_precheck{ username = Username }, Context) of
+        undefined -> ok;
+        ok -> ok;
+        Error -> Error
+    end.
+
+auth_postcheck(UserId, QueryArgs, Context) ->
+    case z_notifier:first(#auth_postcheck{ id = UserId, query_args = QueryArgs }, Context) of
+        undefined -> ok;
+        ok -> ok;
+        Error -> Error
+    end.
 

@@ -93,12 +93,23 @@ model.present = function(data) {
             actions.switchUser(msg.payload);
         });
 
+        // Check reset codes
+        self.subscribe("model/auth/post/reset-code-check", function(msg) {
+            actions.resetCodeCheck(msg);
+        });
+
+        self.subscribe("model/auth/post/reset", function(msg) {
+            actions.resetPassword(msg);
+        });
+
         // Keep-alive ping for token refresh
         self.subscribe("model/ui/event/recent-activity", function(msg) {
             if (msg.payload.is_active) {
                 actions.keepAlive(msg.payload);
             }
         });
+
+       self.publish("model/auth/event/ping", "pong", { retain: true });
     }
 
     if ("is_fetch_error" in data) {
@@ -203,6 +214,22 @@ model.present = function(data) {
 
     if (data.is_keep_alive) {
         model.is_keep_alive = true;
+    }
+
+    if (data.is_reset) {
+        model.state_change('authenticating');
+        model.onauth = data.onauth || null;
+
+        fetchWithUA({
+            cmd: "reset",
+            username: data.username,
+            password: data.password,
+            secret: data.secret,
+            passcode: data.passcode
+        })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authLogonResponse(body); })
+        .catch((e) => { actions.fetchError(); });
     }
 
     // console.log("AUTH state", model);
@@ -447,6 +474,52 @@ actions.logoff = function(data) {
 
 actions.keepAlive = function(_date) {
     model.present({ is_keep_alive: true });
+}
+
+actions.resetCodeCheck = function(msg) {
+    let body = {
+        cmd: "reset_check",
+        username: msg.payload.username || "",
+        secret: msg.payload.secret,
+        passcode: msg.payload.secret || ""
+    };
+
+    fetch( self.abs_url("/zotonic-auth"), {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    })
+    .then(function(resp) { return resp.json(); })
+    .then(function(body) {
+        if (msg.properties.response_topic) {
+            self.publish(msg.properties.response_topic, body, { qos: msg.qos });
+        }
+    })
+    .catch(function(_error) {
+        if (msg.properties.response_topic) {
+            let result = {
+                result: "error",
+                error: "fetch"
+            };
+            self.publish(msg.properties.response_topic, result, { qos: msg.qos });
+        }
+    });
+}
+
+actions.resetPassword = function(msg) {
+    let data = {
+        is_reset: true,
+        username: msg.payload.username,
+        password: msg.payload.password,
+        secret: msg.payload.secret,
+        passcode: msg.payload.passcode,
+        onauth: msg.payload.onauth || null
+    };
+    model.present(data);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

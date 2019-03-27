@@ -140,10 +140,11 @@ send_reminder(Id, Email, Context) ->
                 {username, Username},
                 {email, PrefEmail}
             ],
-            z_email:send_render(Email, "email_password_reset.tpl", Vars, Context),
+            ContextUser = z_acl:logon(Id, Context),
+            z_email:send_render(Email, "email_password_reset.tpl", Vars, ContextUser),
             case Email of
                 PrefEmail -> ok;
-                _ -> z_email:send_render(PrefEmail, "email_password_reset.tpl", Vars, Context)
+                _ -> z_email:send_render(PrefEmail, "email_password_reset.tpl", Vars, ContextUser)
             end
     end.
 

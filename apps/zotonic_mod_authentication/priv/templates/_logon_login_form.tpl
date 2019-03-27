@@ -5,5 +5,6 @@
     {#  <input type="hidden" name="onauth" value="{{ page|escape }}" /> #}
 
     {% include form_fields_tpl %}
+
 </form>
 <iframe src="" id="logonTarget" name="logonTarget" style="display:none"></iframe>

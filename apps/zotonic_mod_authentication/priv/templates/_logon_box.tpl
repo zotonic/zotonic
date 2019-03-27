@@ -2,7 +2,7 @@
     Render the logon_box contents with the correct sub-template.
     This template is rendered by the zotonic.auth-ui.worker.js
 #}
-{% if zotonic_dispatch == `logon_reminder` or q.logon_view == 'reminder' %}
+{% if q.logon_view == 'reminder' %}
 
     {% include "_logon_box_view.tpl"
         form_title_tpl="_logon_reminder_title.tpl"
@@ -12,7 +12,15 @@
         style_boxed=style_boxed
     %}
 
-{% elseif zotonic_dispatch == `logon_reset` or q.logon_view == 'reset' %}
+{% elseif q.logon_view == 'reset' %}
+
+    <h2 class="z-logon-title">{_ Reset your password _}</h2>
+
+    <p class="text-muted">
+        <img src="/lib/images/spinner.gif" height="16"> &nbsp; {_ Checking the reset code… _}
+    </p>
+
+{% elseif q.logon_view == 'reset_form' %}
 
     {% include "_logon_box_view.tpl"
         form_title_tpl="_logon_reset_title.tpl"
@@ -22,16 +30,34 @@
         style_boxed=style_boxed
     %}
 
+{% elseif q.logon_view == 'reset_done' %}
+
+    <h2 class="z-logon-title">{_ Your password has been reset _}</h2>
+
+    <p>{_ You are now signed in. _}</p>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url home %}">{_ Go to the home page _}</a>
+        </li>
+        {% if m.acl.user %}
+            <li>
+                <a href="{{ m.acl.user.page_url }}">{_ Go to the your profile page _}</a>
+            </li>
+        {% endif %}
+        {% if m.acl.is_allowed.use.mod_admin %}
+            <li>
+                <a href="{% url admin %}">{_ Go to the admin _}</a>
+            </li>
+        {% endif %}
+    </ul>
+
 {% elseif q.logon_view == "reminder_sent" %}
 
     <h2 class="z-logon-title">{_ Check your email _}</h2>
     <p>{_ We have sent an email with a link to reset your password to _}: <b>{{ q.email|escape }}</b></p>
     <p>{_ If you do not receive the email within a few minutes, please check your spam folder. _}</p>
-    {% if not m.acl.user %}
-        <p><a id="back_to_logon" class="btn btn-primary" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Back to sign in _}</a></p>
-    {% else %}
-        <p><a id="back_to_logon" class="btn btn-default" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ OK _}</a></p>
-    {% endif %}
+    <p><a id="back_to_logon" class="btn btn-primary" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Back to sign in _}</a></p>
 
 {% elseif q.logon_view == "verification_pending" %}
 

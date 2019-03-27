@@ -22,7 +22,7 @@ Params:
         {% include form_extra_tpl %}
     {% endif %}
 
-    {% if q.error %}
+    {% if q.error and q.error != "unknown_code" %}
         <div id="logon_error" class="alert alert-danger">
             {% include "_logon_error.tpl" %}
         </div>
