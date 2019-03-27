@@ -340,19 +340,6 @@ model_pgsql() ->
     "CREATE INDEX fki_predicate_category_predicate_id ON predicate_category (predicate_id)",
     "CREATE INDEX fki_predicate_category_category_id ON predicate_category (category_id)",
 
-    % Table persistent
-    % Holds persistent information coupled to an user agent.  Can be shopping cart, click history etc
-
-	"CREATE TABLE persistent
-	 (
-	  id character varying(32) not null,
-	  props bytea,
-	  created timestamp with time zone NOT NULL DEFAULT now(),
-	  modified timestamp with time zone NOT NULL DEFAULT now(),
-	  CONSTRAINT persistent_pkey PRIMARY KEY (id)
-	)",
-
-
     % Table identity
     % Identities of an user, used for authentication.  Examples are password, openid, msn, xmpp etc.
 

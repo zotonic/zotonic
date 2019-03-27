@@ -132,13 +132,10 @@ install_comment_table(true, Context) ->
         [created,id,email,gravatar_code,ip_address,is_visible,keep_informed,
          name,props,rsc_id,user_agent,user_id,visitor_id] ->
             z_db:q("alter table comment drop column visitor_id cascade, "
-                   "add column persistent_id character varying (32), "
-                   "add constraint fk_comment_persistent_id foreign key (persistent_id) "
-                   "  references persistent(id) on delete set null on update cascade", Context),
-            z_db:q("create index fki_comment_persistent_id on comment(persistent_id)", Context),
+                   "add column persistent_id character varying (32) ", Context),
+            z_db:q("create index comment_persistent_id_key on comment(persistent_id)", Context),
             ok;
         _ ->
-            % todo: add list of current fields here
             ok
     end;
 install_comment_table(false, Context) ->
@@ -164,17 +161,14 @@ install_comment_table(false, Context) ->
                 on delete cascade on update cascade,
             constraint fk_comment_user_id foreign key (user_id)
                 references rsc(id)
-                on delete set null on update cascade,
-            constraint fk_comment_persistent_id foreign key (persistent_id)
-                references persistent(id)
                 on delete set null on update cascade
         )
     ", Context),
     Indices = [
         {"fki_comment_rsc_id", "rsc_id"},
         {"fki_comment_user_id", "user_id"},
-        {"fki_comment_persistent_id", "persistent_id"},
         {"fki_comment_ip_address", "ip_address"},
+        {"comment_persistent_id_key", "persistent_id"},
         {"comment_rsc_created_key", "rsc_id, created"},
         {"comment_created_key", "created"}
     ],
