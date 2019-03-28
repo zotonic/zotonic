@@ -220,7 +220,8 @@ props_to_rsc(Props, IsVerified, Context) ->
         {category, Category},
         {is_verified_account, IsVerified},
         {creator_id, self},
-        {pref_language, z_context:language(Context)}
+        {pref_language, z_context:language(Context)},
+        {tos_agreed, calendar:universal_time()}
         | Props
     ],
     case proplists:is_defined(title, Props1) of
