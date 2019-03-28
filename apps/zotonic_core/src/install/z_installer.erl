@@ -154,9 +154,10 @@ maybe_drop_db(Context) ->
         true ->
             case z_db_pool:test_connection(Context) of
                 ok ->
-                    lager:info("[~p] Dropping schema ~p",
-                            [ z_context:site(Context), proplists:get_value(dbschema, DbOptions) ]),
-                    ok = z_db:drop_schema(Context);
+                    lager:warning("[~p] Dropping existing schema ~p because of 'dbdropschema' is set.",
+                                  [ z_context:site(Context), proplists:get_value(dbschema, DbOptions) ]),
+                    ok = z_db:drop_schema(Context),
+                    ok;
                 {error, _} ->
                     ok
             end;
