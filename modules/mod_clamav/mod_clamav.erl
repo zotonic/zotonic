@@ -22,6 +22,7 @@
 -mod_title("ClamAV").
 -mod_description("Scan uploaded files for viruses and malware.").
 -mod_prio(100).
+-mod_provides([ antivirus ]).
 
 -export([
      observe_media_upload_preprocess/2,
@@ -32,25 +33,30 @@
 
 
 %% @doc Check the uploaded file with clamav
-observe_media_upload_preprocess(#media_upload_preprocess{ file = File } = Pre, Context) ->
-    case z_clamav:scan_file(File) of
-        ok ->
-            % all ok, give the next preprocessor a try
-            lager:info("clamav: file ~p for user ~p is ok",
-                       [ Pre#media_upload_preprocess.original_filename,
-                         z_acl:user(Context)
-                       ]),
+observe_media_upload_preprocess(#media_upload_preprocess{ file = File, medium = Medium } = Pre, Context) ->
+    case proplists:get_value(is_av_sizelimit, Medium, false) of
+        true ->
+            % This is the second try, now with disabled av-scanner
             undefined;
-        {error, _} = Error ->
-            lager:error("clamav: error ~p checking ~p (~p) for user ~p",
-                        [ Error,
-                          Pre#media_upload_preprocess.original_filename,
-                          Pre#media_upload_preprocess.mime,
-                          z_acl:user(Context)
-                        ]),
-            Error
+        false ->
+            case z_clamav:scan_file(File) of
+                ok ->
+                    % all ok, give the next preprocessor a try
+                    lager:info("clamav: file ~p for user ~p is ok",
+                               [ Pre#media_upload_preprocess.original_filename,
+                                 z_acl:user(Context)
+                               ]),
+                    undefined;
+                {error, _} = Error ->
+                    lager:error("clamav: error ~p checking ~p (~p) for user ~p",
+                                [ Error,
+                                  Pre#media_upload_preprocess.original_filename,
+                                  Pre#media_upload_preprocess.mime,
+                                  z_acl:user(Context)
+                                ]),
+                    Error
+            end
     end.
-
 
 %% @doc Periodic ping of clamav to check the settings
 observe_tick_1h(tick_1h, _Context) ->
