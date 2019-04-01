@@ -334,7 +334,7 @@ reload_dispatch_list(#state{context=Context} = State) ->
 
 %% @doc Collect all dispatch lists.  Checks priv/dispatch for all dispatch list definitions.
 collect_dispatch_lists(Context) ->
-    Files      = filelib:wildcard(filename:join([z_path:site_dir(Context), "dispatch", "*"])),
+    Files      = drop_blacklisted_files( filelib:wildcard(filename:join([z_path:site_dir(Context), "dispatch", "*"])) ),
     Modules    = z_module_manager:active(Context),
     ModuleDirs = z_module_manager:scan(Context),
     ModDisp    = [ {M, filelib:wildcard(filename:join([proplists:get_value(M, ModuleDirs), "dispatch", "*"]))} || M <- Modules ],
@@ -342,6 +342,8 @@ collect_dispatch_lists(Context) ->
     Dispatch   = lists:map(fun get_file_dispatch/1, ModDispOnPrio++Files),
     lists:flatten(Dispatch).
 
+drop_blacklisted_files( Fs ) ->
+    lists:filter(fun(F) -> not z_filewatcher_handler:file_blacklisted(F) end, Fs).
 
 %% @doc Read a dispatch file, the file should contain a valid Erlang dispatch datastructure.
 %% @spec get_file_dispatch(filename()) -> DispatchList

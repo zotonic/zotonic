@@ -34,7 +34,7 @@
 
 %% Which files do we not consider at all in the file_changed handler
 -define(FILENAME_BLACKLIST_RE,
-        "node_modules|_flymake|\\.#|/sites/[^/]+/files/|/\\.git/|/\\.gitignore|\\.hg/|/log/|\\.log$|/mnesia/").
+        "node_modules|_flymake|/sites/[^/]+/files/|/\\.git/|/\\.gitignore|\\.hg/|/mnesia/|/log/|\\.log$|\\.#|~$|\\.bck$|\\.swp$").
 
 
 %% @doc Called when a file is changed on disk. Decides what to do.
@@ -63,6 +63,7 @@ file_changed(Verb, F) ->
     end,
     ok.
 
+-spec file_blacklisted( file:filename() ) -> boolean().
 file_blacklisted(F) ->
     case re:run(F, ?FILENAME_BLACKLIST_RE) of
         {match, _} ->
