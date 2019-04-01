@@ -50,7 +50,7 @@ ping() ->
         _ -> pang
     end.
 
--spec scan_file( filename:filename() ) -> ok | {error, noclamav | infected | term() }.
+-spec scan_file( file:filename() ) -> ok | {error, noclamav | infected | term() }.
 scan_file(Filename) ->
     MaxSize = max_size(),
     case filelib:file_size(Filename) of
