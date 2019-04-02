@@ -10,6 +10,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
         dialog_open
         template="_action_dialog_connect.tpl"
         title=_"Insert image"
+        width="large"
         subject_id=id
         predicate=`depiction`
         is_zmedia
@@ -25,6 +26,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
         dialog_open
         template="_action_dialog_connect.tpl"
         title=_"Add link"
+        width="large"
         subject_id=id
         is_zlink
         tab="find"

@@ -173,6 +173,10 @@ h3 {
 pre:empty {
   display: none;
 }
+.ui-effects-transfer {
+  border: 1px dotted #333;
+  z-index: 10000;
+}
 .text-muted {
   color: #999;
 }
@@ -383,10 +387,71 @@ fieldset[disabled] .btn-primary.active {
 .dashboard .table td {
   background: #fff;
 }
-#dialog_new_rsc_results {
-  max-height: 60vh;
+#dialog-new-rsc-tab .new-find-cols {
+  display: -ms-grid;
+  -ms-grid-columns: 1fr 16px 1fr;
+  -ms-grid-rows: minmax(300px, 70vh);
+  display: grid;
+  grid-template-columns: 1fr 16px 1fr;
+  grid-template-rows: minmax(300px, 70vh);
+}
+#dialog-new-rsc-tab .new-find-cols .modal-footer {
+  margin: 15px 0 0;
+  padding: 15px 0;
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+#dialog-new-rsc-tab .new-find-cols > .form-panel {
+  -ms-grid-column: 1;
+  -ms-grid-row: 1;
+  grid-column: 1;
+  grid-row: 1;
+  background-color: white;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper {
+  -ms-grid-column: 1;
+  -ms-grid-row: 1;
+  grid-column: 1;
+  grid-row: 1;
+  background-color: white;
+  z-index: 1051;
+  max-height: 100%;
+  overflow-y: auto;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper img {
+  max-width: 100%;
+}
+#dialog-new-rsc-tab .new-find-cols > .new-find-results {
+  -ms-grid-column: 3;
+  -ms-grid-row: 1;
+  grid-column: 3;
+  grid-row: 1;
+  display: -ms-grid;
+  -ms-grid-columns: 1fr;
+  -ms-grid-rows: auto 1fr;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  max-height: 100%;
+}
+#dialog-new-rsc-tab .new-find-cols > .new-find-results > .new-find-results-header {
+  -ms-grid-column: 1;
+  -ms-grid-row: 1;
+  grid-column: 1;
+  grid-row: 1;
+}
+#dialog-new-rsc-tab .new-find-cols > .new-find-results > #dialog-rsc-new-found {
+  -ms-grid-column: 1;
+  -ms-grid-row: 2;
+  grid-column: 1;
+  grid-row: 2;
+  max-height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+#dialog_new_rsc_results {
   margin-top: 10px;
 }
 #dialog_new_rsc_results .items {
