@@ -208,7 +208,6 @@
 
 	    <div class="new-find-results-header">
 
-		    <div class="row">
 {% comment %}
 				{% if nocatselect and cat %}
 		    		<input type="hidden" class="nosubmit" name="find_category" value="{{ cat }}">
@@ -221,17 +220,18 @@
 					</div>
 		        {% endif %}
 {% endcomment %}
-				<div class="col-xs-6">
-		        	<label class="checkbox-inline">
-		        		<input type="checkbox" class="nosubmit" name="find_cg" value="me" {% if content_group|to_binary == 'me' %}checked{% endif %}>
-		        		{_ My content _}
-		        	</label>
-		        </div>
-		    </div>
 
-			<p class="help-block" id="new-find-results-description">
+			<h4>{_ Existing pages _}</h4>
+
+			<p id="new-find-results-description">
 				{% include "_action_dialog_new_rsc_tab_find_description.tpl" %}
 			</p>
+
+        	<label class="checkbox-inline">
+        		<input type="checkbox" class="nosubmit" name="find_cg" value="me" {% if content_group|to_binary == 'me' %}checked{% endif %}>
+        		{_ Show only my created content _}
+        	</label>
+
 		</div>
 
 		<div id="dialog-rsc-new-found" class="do_feedback"
@@ -242,7 +242,7 @@
 		    action={update
 		    	target=#view
 		    	newform=#newform
-		    	template="_rsc_preview_panel.tpl"
+		    	template="_action_dialog_new_rsc_tab_preview.tpl"
 	            id=id
 	            subject_id=subject_id
 	            object_id=object_id

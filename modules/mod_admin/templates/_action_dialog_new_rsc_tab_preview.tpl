@@ -25,6 +25,7 @@
 %}
 
 <div class="rsc-preview-panel" data-id="{{ id }}">
+    <h4>{_ Preview _}</h4>
     <div class="rsc-preview">
         {% catinclude "_rsc_preview.tpl" id %}
     </div>
