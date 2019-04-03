@@ -422,7 +422,7 @@ fieldset[disabled] .btn-primary.active {
   position: relative;
   background-color: white;
   z-index: 1051;
-  padding: 15px 15px 0 15px;
+  padding: 10px 15px 0 15px;
   max-height: 100%;
   overflow-y: auto;
 }

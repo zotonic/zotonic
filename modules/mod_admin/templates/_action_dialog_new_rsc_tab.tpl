@@ -125,6 +125,41 @@
 							}
 		            	});
 		            {% endjavascript %}
+
+		            {# Hide/show media upload depending on the selected category #}
+					{% javascript %}
+						var media_cats = [
+							{{ m.rsc.media.id }}
+							{% for c in m.category.media.tree_flat %}
+								,{{ c.id }}
+							{% endfor %}
+						];
+
+						$('#{{ #newform }} [name=category_id]').on('click change', function() {
+							var cat_id = $(this).val();
+							var is_media = cat_id ? false : true;
+
+							for (var i=0; i < media_cats.length; i++) {
+								if (media_cats[i] == cat_id) {
+									is_media = true;
+								}
+							}
+
+							if (is_media) {
+								$('#new-rsc-tab-upload')
+									.slideDown()
+									.find('input')
+									.removeAttr('disabled')
+									.removeClass('nosubmit');
+							} else {
+								$('#new-rsc-tab-upload')
+									.slideUp()
+									.find('input')
+									.attr('disabled', true)
+									.addClass('nosubmit');
+							}
+						});
+					{% endjavascript %}
 		        </div>
 	        {% endif %}
 
