@@ -263,9 +263,31 @@
 			</p>
 
         	<label class="checkbox-inline">
-        		<input type="checkbox" class="nosubmit" name="find_creator_id" value="{{ m.acl.user }}">
+        		<input type="checkbox" class="nosubmit" id="{{ #find_me }}"
+        			   name="find_creator_id" value="{{ m.acl.user }}"
+        			   {% if m.config.mod_admin.connect_created_me.value %}checked{% endif %}>
         		{_ Created by me _}
         	</label>
+
+        	{% javascript %}
+        		switch (window.sessionStorage.getItem('dialog_connect_created_me')) {
+        			case "true":
+        				$("#{{ #find_me }}").attr('checked', true);
+        				break;
+        			case "false":
+        				$("#{{ #find_me }}").removeAttr('checked');
+        				break;
+        			default:
+        				break;
+        		}
+        		$("#{{ #find_me }}").click(function() {
+        			if ($(this).is(":checked")) {
+        				window.sessionStorage.setItem('dialog_connect_created_me', "true");
+        			} else {
+        				window.sessionStorage.setItem('dialog_connect_created_me', "false");
+        			}
+        		});
+        	{% endjavascript %}
 
 		</div>
 

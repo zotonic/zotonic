@@ -206,7 +206,7 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
 event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Context)
     when Trigger =:= "dialog-new-rsc-tab"; Trigger =:= "dialog-connect-find" ->
     % Find pages matching the search criteria.
-    CreatorId = z_convert:to_integer(z_context:get_q(creator_id, Context)),
+    CreatorId = z_convert:to_integer(z_context:get_q(find_creator_id, Context)),
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
     Predicate = z_context:get_q(predicate, Context, ""),
