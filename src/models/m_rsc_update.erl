@@ -686,7 +686,8 @@ preflight_check(Id, [{'query', Query}|T], Context) ->
     Valid = case m_rsc:is_a(Id, 'query', Context) of
                 true ->
                     try
-                        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), Context),
+                        SearchContext = z_context:new( Context ),
+                        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
                         true
                     catch
                         _: {error, {_, _}} ->
