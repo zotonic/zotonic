@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-04-03 13:28+0200\n"
+"PO-Revision-Date: 2019-04-03 13:32+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -618,7 +618,7 @@ msgstr "Basis"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:225
 msgid "Make"
-msgstr "Aanmaken"
+msgstr "Maak"
 
 #: modules/mod_admin/templates/admin_media.tpl:69
 msgid "Make a new media item"
@@ -996,7 +996,7 @@ msgstr "Sla deze pagina op."
 
 #: modules/mod_admin/templates/_admin_status_update_pivot_count.tpl:68
 msgid "Search indices rebuilt."
-msgstr "Zoekindex klaar"
+msgstr "Zoekindex klaar."
 
 #: modules/mod_admin/templates/_action_dialog_zmedia_choose.tpl:5
 msgid "Search other media"
@@ -1144,7 +1144,7 @@ msgstr ""
 
 #: modules/mod_admin/actions/action_admin_link.erl:83
 msgid "This connection already exists."
-msgstr "Deze connectie bestaat al"
+msgstr "Deze connectie bestaat al."
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:180
 #: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:161
@@ -1241,7 +1241,7 @@ msgstr "Bestand uploaden"
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
-msgstr "Upload een bestand van je computer"
+msgstr "Upload een bestand van je computer."
 
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_url.tpl:3
 msgid "Upload a file which is already on the internet."
@@ -1259,7 +1259,7 @@ msgstr "Upload bestand"
 
 #: modules/mod_admin/templates/admin_media.tpl:87
 msgid "Uploaded"
-msgstr "geupload"
+msgstr "Geüpload"
 
 #: modules/mod_admin/templates/_admin_system_status.tpl:23
 msgid "Usage"
