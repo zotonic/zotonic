@@ -187,7 +187,7 @@
 						                {% endif %}
 						            {% endfor %}
 						        </select>
-								{% validate id=#category name="category_id" type={presence} %}
+								{% validate id=#category name="category_id" type={presence} only_on_submit %}
 						    {% endblock %}
 					    {% endif %}
 				    </div>

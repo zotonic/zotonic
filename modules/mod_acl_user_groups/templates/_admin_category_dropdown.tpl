@@ -13,5 +13,5 @@
 			{% endif %}
 		{% endfor %}
 	</select>
-	{% validate id=catsel_id|default:#catid name="category_id" type={presence} %}
+	{% validate id=catsel_id|default:#catid name="category_id" type={presence} only_on_submit %}
 {% endwith %}
