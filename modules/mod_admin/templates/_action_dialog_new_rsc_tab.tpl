@@ -112,7 +112,7 @@
 		            		}
 
 		            		if ($('#new_rsc_title').val() == '' || $('#new_rsc_title').val() == window.z_upload_title) {
-		            			$('#new_rsc_title').val(basename).change();
+		            			$('#new_rsc_title').val(basename).change().focus();
 		            			window.z_upload_title = basename;
 		            		}
 
