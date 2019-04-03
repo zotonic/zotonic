@@ -410,7 +410,7 @@ fieldset[disabled] .btn-primary.active {
   grid-column: 1;
   grid-row: 1;
   background-color: white;
-  padding: 15px 15px 0 15px;
+  padding: 10px 15px 0 15px;
   max-height: 100%;
   overflow-y: auto;
 }

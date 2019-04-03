@@ -19,6 +19,9 @@
 	<div id="{{ #newform }}" class="form-panel">
 		{% with 'dialog-new-rsc-tab' as form %}
 
+			<h4>{_ Create or search _}</h4>
+			<p>{_ Here you can create new content or find existing content. _}</p>
+
 			{% block rsc_props_title %}
 				{# The new resource title, also used for the feedback search #}
 				<div class="form-group row">
@@ -222,7 +225,7 @@
 		    <div class="modal-footer">
 			    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 			    <button class="btn btn-primary" type="submit">
-			    	{_ Make _} {{ catname }}
+			    	{_ Create _} {{ catname }}
 			    	{% if is_zlink %} &amp; {_ Link _}{% elseif subject_id or object_id %} &amp; {_ Connect _}{% endif %}
 			    </button>
 		    </div>
@@ -256,7 +259,7 @@
 		        {% endif %}
 {% endcomment %}
 
-			<h4>{_ Existing pages _}</h4>
+			<h4>{_ Existing content _}</h4>
 
 			<p id="new-find-results-description">
 				{% include "_action_dialog_new_rsc_tab_find_description.tpl" %}

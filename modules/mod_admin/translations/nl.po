@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-04-03 13:32+0200\n"
+"PO-Revision-Date: 2019-04-03 14:46+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -180,7 +180,7 @@ msgstr "Citaat"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:223
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:226
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
@@ -191,7 +191,7 @@ msgstr "Citaat"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:169
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:172
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_description.tpl:3
@@ -274,7 +274,7 @@ msgid "Confirm logoff"
 msgstr "Bevestig uitloggen"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:226
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:229
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_preview.tpl:47
 msgid "Connect"
 msgstr "Koppel"
@@ -306,6 +306,7 @@ msgstr "Aantal"
 msgid "Country"
 msgstr "Land"
 
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:228
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:41
 msgid "Create"
 msgstr "Maak"
@@ -315,11 +316,15 @@ msgstr "Maak"
 msgid "Create or find"
 msgstr "Maak of vind"
 
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:22
+msgid "Create or search"
+msgstr "Maak of zoek"
+
 #: modules/mod_admin/templates/_rsc_preview.tpl:3
 msgid "Created by"
 msgstr "Gemaakt door"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:270
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:273
 msgid "Created by me"
 msgstr "Gemaakt door mij"
 
@@ -462,8 +467,8 @@ msgstr ""
 "categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een "
 "categorie voertuig hebben met daarin subcategorieën auto en fiets."
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:259
-msgid "Existing pages"
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:262
+msgid "Existing content"
 msgstr "Bestaande pagina's"
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:178
@@ -534,6 +539,10 @@ msgstr "Groepsleden"
 msgid "Header"
 msgstr "Kop"
 
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:23
+msgid "Here you can create new content or find existing content."
+msgstr "Hier kan je nieuwe pagina’s maken of bestaande vinden."
+
 #: modules/mod_admin/templates/_admin_edit_content.query.tpl:18
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
@@ -588,7 +597,7 @@ msgid "Latest modified texts"
 msgstr "Laatste teksten"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:226
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:229
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Link"
 msgstr "Verbind"
@@ -615,10 +624,6 @@ msgstr "Postadres"
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:20
 msgid "Main"
 msgstr "Basis"
-
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:225
-msgid "Make"
-msgstr "Maak"
 
 #: modules/mod_admin/templates/admin_media.tpl:69
 msgid "Make a new media item"
@@ -659,7 +664,7 @@ msgstr ""
 "Mediabestanden omvatten alle geuploade afbeeldingen, filmpjes en documenten. "
 "Ze kunnen worden gekoppeld aan pagina's."
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:41
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:44
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:26
 msgid "Media file"
 msgstr "Mediabestand"
@@ -716,7 +721,7 @@ msgstr "Modules"
 msgid "More like this"
 msgstr "Vergelijkbare pagina's"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:201
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:204
 msgid "Name"
 msgstr "Naam"
 
@@ -794,7 +799,7 @@ msgstr "Paginaslug"
 msgid "Page title"
 msgstr "Paginatitel"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:29
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:32
 msgid "Page title or text to find page"
 msgstr "Paginatitel of tekst om pagina te vinden"
 
@@ -873,7 +878,7 @@ msgstr "Publiceer deze pagina"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:33
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:216
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:219
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:41
 msgid "Published"
 msgstr "Gepubliceerd"
@@ -1018,7 +1023,7 @@ msgstr "Selecteer een gekoppelde afbeelding"
 msgid "Selected Categories"
 msgstr "Geselecteerde categorieën"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:49
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:52
 msgid "Selecting a file will make the page a media item."
 msgstr "Als u een bestand selecteert, wordt de pagina een media-item."
 
@@ -1201,7 +1206,7 @@ msgid "Till"
 msgstr "Tot"
 
 #: modules/mod_admin/templates/admin_media.tpl:85
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:25
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:28
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
 #: modules/mod_admin/templates/admin_referrers.tpl:20
@@ -1493,6 +1498,9 @@ msgstr "bekijk"
 #: modules/mod_admin/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
 msgstr "bezoek site"
+
+#~ msgid "Make"
+#~ msgstr "Maak"
 
 #~ msgid "Any valid for:"
 #~ msgstr "Geldig voor:"
