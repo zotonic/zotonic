@@ -263,8 +263,8 @@
 			</p>
 
         	<label class="checkbox-inline">
-        		<input type="checkbox" class="nosubmit" name="find_cg" value="me" {% if content_group|to_binary == 'me' %}checked{% endif %}>
-        		{_ Show only my created content _}
+        		<input type="checkbox" class="nosubmit" name="find_creator_id" value="{{ m.acl.user }}">
+        		{_ Created by me _}
         	</label>
 
 		</div>

@@ -206,6 +206,7 @@ event(#postback_notify{message="admin-insert-block"}, Context) ->
 event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Context)
     when Trigger =:= "dialog-new-rsc-tab"; Trigger =:= "dialog-connect-find" ->
     % Find pages matching the search criteria.
+    CreatorId = z_convert:to_integer(z_context:get_q(creator_id, Context)),
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
     Predicate = z_context:get_q(predicate, Context, ""),
@@ -236,6 +237,7 @@ event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Co
                 CatId -> [{m_rsc:rid(CatId, Context)}]
            end,
     Vars = [
+        {creator_id, CreatorId},
         {subject_id, SubjectId},
         {cat, Cats},
         {cat_exclude, z_context:get_q(cat_exclude, Context)},
@@ -251,8 +253,6 @@ event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Co
         <<>> -> [];
         "" -> [];
         undefined -> [];
-        <<"me">> -> [ {creator_id, z_acl:user(Context)} ];
-        "me" -> [ {creator_id, z_acl:user(Context)} ];
         CgId -> [ {content_group, m_rsc:rid(CgId, Context)}]
     end,
     case Trigger of
