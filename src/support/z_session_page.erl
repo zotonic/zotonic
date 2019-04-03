@@ -64,6 +64,8 @@
     comet_detach/1,
     websocket_attach/2,
     websocket_attach/3,
+    websocket_detach/2,
+    websocket_detach/1,
 
     get_attach_state/1,
 
@@ -178,6 +180,21 @@ comet_detach(undefined) ->
 comet_detach(Pid) ->
     catch gen_server:call(Pid, comet_detach),
     z_utils:flush_message(script_queued).
+
+-spec websocket_detach(binary()|undefined, #context{}) -> ok.
+websocket_detach(PageId, Context) when is_binary(PageId) ->
+    websocket_detach(whereis(PageId, Context));
+websocket_detach(undefined, _Context) ->
+    % No page id, ignore attach.
+    ok.
+
+-spec websocket_detach(pid()|undefined|z:context()) -> ok.
+websocket_detach(undefined) ->
+    ok;
+websocket_detach(#context{ page_pid = PagePid }) ->
+    websocket_detach(PagePid);
+websocket_detach(PagePid) when is_pid(PagePid) ->
+    gen_server:cast(PagePid, websocket_detach).
 
 %% @doc Attach the websocket request process to the page session, enabling sending scripts to the user agent
 -spec websocket_attach(pid(), binary()|undefined, #context{}) -> ok.
@@ -300,6 +317,19 @@ handle_cast({append, Key, Value}, State) ->
     end,
     State1 = State#page_state{vars = z_utils:prop_replace(Key, NewValue, State#page_state.vars)},
     {noreply, State1};
+
+handle_cast(websocket_detach, #page_state{ websocket_pid = undefined } = State) ->
+    {noreply, State};
+
+handle_cast(websocket_detach, #page_state{ websocket_pid = WebsocketPid } = State) ->
+    case z_utils:is_process_alive(WebsocketPid) of
+        true ->
+            opt_demonitor(State#page_state.websocket_monitor_ref),
+            opt_close_websocket(State#page_state.websocket_pid);
+        false ->
+            ok
+    end,
+    {noreply, State#page_state{ websocket_pid = undefined }};
 
 handle_cast({websocket_attach, WebsocketPid}, #page_state{websocket_pid=WebsocketPid} = State) ->
     {noreply, State};

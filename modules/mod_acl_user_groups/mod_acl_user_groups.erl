@@ -46,6 +46,9 @@
     observe_manage_data/2,
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
+    observe_edge_insert/2,
+    observe_edge_delete/2,
+    signal_user_changed/2,
     name/1,
     manage_schema/2
 ]).
@@ -278,6 +281,40 @@ observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->
         false ->
             ok
     end.
+
+observe_edge_insert(#edge_insert{ subject_id = UserId, predicate = hasusergroup }, Context) ->
+    signal_user_changed(UserId, Context);
+observe_edge_insert(#edge_insert{ predicate = hascollabmember, object_id = UserId }, Context) ->
+    signal_user_changed(UserId, Context);
+observe_edge_insert(#edge_insert{ predicate = hascollabmanager, object_id = UserId }, Context) ->
+    signal_user_changed(UserId, Context);
+observe_edge_insert(_, _Context) ->
+    ok.
+
+observe_edge_delete(#edge_delete{ subject_id = UserId, predicate = hasusergroup }, Context) ->
+    signal_user_changed(UserId, Context);
+observe_edge_delete(#edge_delete{ predicate = hascollabmember, object_id = UserId }, Context) ->
+    signal_user_changed(UserId, Context);
+observe_edge_delete(#edge_delete{ predicate = hascollabmanager, object_id = UserId }, Context) ->
+    signal_user_changed(UserId, Context);
+observe_edge_delete(_, _Context) ->
+    ok.
+
+%% @doc Reattach all websocket connections of an user, this forces a refresh of the permissions
+%%      used by the websocket processes.
+-spec signal_user_changed( m_rsc:resource_id(), z:context() ) -> ok.
+signal_user_changed(UserId, Context) ->
+    Sessions = z_session_manager:list_sessions_user(UserId, Context),
+    lists:foreach(
+        fun(Session) ->
+            {pid, SessionPid} = proplists:lookup(pid, Session),
+            lists:foreach(
+                fun(PagePid) ->
+                    z_session_page:websocket_detach(PagePid)
+                end,
+                z_session:get_pages(SessionPid))
+        end,
+        Sessions).
 
 status(Context) ->
     gen_server:call(name(Context), status).
