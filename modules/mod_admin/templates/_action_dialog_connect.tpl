@@ -45,13 +45,7 @@ find params:
                 {% if not tabs_enabled or "new"|member:tabs_enabled %}
                     <li class="active">
                         <a data-toggle="tab" href="#{{ #tab }}-findnew">
-                            {% if predicate and (subject_id or object_id) %}
-                                {_ Connect _}
-                            {% elseif is_zlink %}
-                                {_ Link _}
-                            {% else %}
-                                {_ Page _}
-                            {% endif %}
+                            {_ Create or find _}
                         </a>
                     </li>
                 {% elseif tabs_enabled and "find"|member:tabs_enabled %}

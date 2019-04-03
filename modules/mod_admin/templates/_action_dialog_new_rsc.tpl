@@ -7,7 +7,7 @@ params:
         {% if not tabs_enabled or "new"|member:tabs_enabled or "upload"|member:tabs_enabled %}
             <li class="active">
                 <a data-toggle="tab" href="#{{ #tab }}-findnew">
-                    {_ Page _}
+                    {_ Create or find _}
                 </a>
             </li>
         {% endif %}

@@ -419,6 +419,7 @@ fieldset[disabled] .btn-primary.active {
   -ms-grid-row: 1;
   grid-column: 1;
   grid-row: 1;
+  position: relative;
   background-color: white;
   z-index: 1051;
   padding: 15px 15px 0 15px;
