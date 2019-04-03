@@ -780,6 +780,15 @@ input.form-field-error {
 input.form-control[type=file] {
   height: auto;
 }
+select:required:invalid {
+  color: gray;
+}
+option[value=""][disabled] {
+  display: none;
+}
+option {
+  color: black;
+}
 img.thumb {
   padding: 0;
   -webkit-border-radius: 0;

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-04-03 14:46+0200\n"
+"PO-Revision-Date: 2019-04-03 16:18+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -180,7 +180,7 @@ msgstr "Citaat"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:226
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:227
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:65
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
@@ -191,7 +191,7 @@ msgstr "Citaat"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:172
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:173
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_description.tpl:3
@@ -274,7 +274,7 @@ msgid "Confirm logoff"
 msgstr "Bevestig uitloggen"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:229
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:230
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_preview.tpl:47
 msgid "Connect"
 msgstr "Koppel"
@@ -306,7 +306,7 @@ msgstr "Aantal"
 msgid "Country"
 msgstr "Land"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:228
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:229
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:41
 msgid "Create"
 msgstr "Maak"
@@ -324,7 +324,7 @@ msgstr "Maak of zoek"
 msgid "Created by"
 msgstr "Gemaakt door"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:273
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:274
 msgid "Created by me"
 msgstr "Gemaakt door mij"
 
@@ -467,7 +467,7 @@ msgstr ""
 "categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een "
 "categorie voertuig hebben met daarin subcategorieën auto en fiets."
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:262
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:263
 msgid "Existing content"
 msgstr "Bestaande pagina's"
 
@@ -597,7 +597,7 @@ msgid "Latest modified texts"
 msgstr "Laatste teksten"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:229
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:230
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Link"
 msgstr "Verbind"
@@ -721,7 +721,7 @@ msgstr "Modules"
 msgid "More like this"
 msgstr "Vergelijkbare pagina's"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:204
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:205
 msgid "Name"
 msgstr "Naam"
 
@@ -878,7 +878,7 @@ msgstr "Publiceer deze pagina"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:33
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:219
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:220
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:41
 msgid "Published"
 msgstr "Gepubliceerd"
@@ -1018,6 +1018,11 @@ msgstr "Zoeken..."
 #: modules/mod_admin/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
 msgstr "Selecteer een gekoppelde afbeelding"
+
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:181
+#: modules/mod_admin/templates/_admin_category_dropdown.tpl:7
+msgid "Select category"
+msgstr "Selecteer categorie"
 
 #: modules/mod_admin/templates/admin_overview.tpl:42
 msgid "Selected Categories"

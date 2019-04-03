@@ -177,8 +177,8 @@
 						    <input type="hidden" name="category_id" value="{{ cat }}">
 					    {% else %}
 						    {% block category_select %}
-						        <select class="form-control" id="{{ #category }}" name="category_id">
-									<option value=""></option>
+						        <select class="form-control" id="{{ #category }}" name="category_id" required>
+								    <option value="" disabled {% if not cat %}selected{% endif %}>{_ Select category _}</option>
 						            {% for c in m.category.tree_flat %}
 						                {% if m.acl.insert[c.id.name|as_atom]
 						                	  and (not cat or m.category[c.id].is_a[cat])
