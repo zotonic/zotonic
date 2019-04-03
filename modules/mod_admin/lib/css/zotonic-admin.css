@@ -425,9 +425,20 @@ fieldset[disabled] .btn-primary.active {
   padding: 10px 15px 0 15px;
   max-height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
 }
-#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper img {
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview h1 {
+  font-size: 23px;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview h2 {
+  font-size: 17px;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview h3 {
+  font-size: 17px;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview img {
   max-width: 100%;
+  margin: 15px 0;
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results {
   -ms-grid-column: 2;

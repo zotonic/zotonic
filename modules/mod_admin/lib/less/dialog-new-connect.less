@@ -45,10 +45,25 @@
             padding: 10px 15px 0 15px;
             max-height: 100%;
             overflow-y: auto;
+            overflow-x: hidden;
 
-            img {
-                max-width: 100%;
+            .rsc-preview {
+                h1 {
+                    font-size: @font-size-h3;
+                }
+                h2 {
+                    font-size: @font-size-h4;
+                }
+                h3 {
+                    font-size: @font-size-h4;
+                }
+
+                img {
+                    max-width: 100%;
+                    margin: 15px 0;
+                }
             }
+
         }
         > .new-find-results {
             -ms-grid-column: 2;
@@ -203,6 +218,5 @@
             }
         }
     }
-
 
 }
