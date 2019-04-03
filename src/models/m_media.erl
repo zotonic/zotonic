@@ -522,11 +522,36 @@ replace_file_acl_ok(File, RscId, Props, Medium, Opts, Context) ->
                                         proplists:get_value(original_filename, Medium, File)),
                     medium=Medium
                 },
+    case notify_first_preproc(PreProc, true, Context) of
+        {ok, PreProc1} ->
+            PreProc2 = set_av_flag(PreProc1, Context),
+            replace_file_sanitize(RscId, PreProc2, Props, Opts, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Set a flag that there was an av scan. This needs to be more generic.
+set_av_flag( #media_upload_preprocess{ medium = Medium } = PreProc, Context ) ->
+    Medium1 = [
+        {is_av_scanned, not proplists:get_value(is_av_sizelimit, Medium, false)
+                        andalso lists:member(antivirus, z_module_manager:get_provided(Context))}
+        | proplists:delete(is_av_scanned, Medium)
+    ],
+    PreProc#media_upload_preprocess{ medium = Medium1 }.
+
+notify_first_preproc(PreProc, IsFirstTry, Context) ->
     case z_notifier:first(PreProc, Context) of
         undefined ->
-            replace_file_sanitize(RscId, PreProc, Props, Opts, Context);
+            {ok, PreProc};
         #media_upload_preprocess{} = MappedPreProc ->
-            replace_file_sanitize(RscId, MappedPreProc, Props, Opts, Context);
+            {ok, MappedPreProc};
+        {error, av_sizelimit} when IsFirstTry ->
+            Medium1 = [
+                {is_av_sizelimit, true}
+                | proplists:delete(is_av_sizelimit, PreProc#media_upload_preprocess.medium)
+            ],
+            PreProc1 = PreProc#media_upload_preprocess{ medium = Medium1 },
+            notify_first_preproc(PreProc1, false, Context);
         {error, _} = Error ->
             Error
     end.
@@ -870,8 +895,13 @@ is_unique_file(Filename, Context) ->
 medium_insert(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     Props1 = check_medium_props(Props),
-    z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=[], post_props=Props1}, Context),
-    z_db:insert(medium, Props1, Context).
+    case z_db:insert(medium, Props1, Context) of
+        {ok, _} = OK ->
+            z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=[], post_props=Props1}, Context),
+            OK;
+        {error, _} = Error ->
+            Error
+    end.
 
 medium_delete(Id, Context) ->
     medium_delete(Id, get(Id, Context), Context).
@@ -880,8 +910,13 @@ medium_delete(_Id, undefined, _Context) ->
     {ok, 0};
 medium_delete(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
-    z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=[]}, Context),
-    z_db:delete(medium, Id, Context).
+    case z_db:delete(medium, Id, Context) of
+        {ok, _} = OK ->
+            z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=[]}, Context),
+            OK;
+        {error, _} = Error ->
+            Error
+    end.
 
 check_medium_props(Ps) ->
     [ check_medium_prop(P) || P <- Ps ].

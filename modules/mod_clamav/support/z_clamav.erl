@@ -50,7 +50,7 @@ ping() ->
         _ -> pang
     end.
 
--spec scan_file( file:filename() ) -> ok | {error, noclamav | infected | term() }.
+-spec scan_file( file:filename() ) -> ok | {error, noclamav | infected | av_sizelimit | term() }.
 scan_file(Filename) ->
     MaxSize = max_size(),
     case filelib:file_size(Filename) of
@@ -66,8 +66,8 @@ scan_file(Filename) ->
                 {error, _} = Error ->
                     Error
             end;
-        true ->
-            {error, sizelimit}
+        _TooBig ->
+            {error, av_sizelimit}
     end.
 
 -spec scan( binary() ) -> ok | {error, noclamav | infected}.
@@ -78,7 +78,7 @@ scan( Data ) when is_binary(Data) ->
             F = fun(Socket) -> send_chunks(Socket, chop(Data, [])) end,
             handle_result(do_clam(<<"zINSTREAM",0>>, F));
         true ->
-            {error, sizelimit}
+            {error, av_sizelimit}
     end.
 
 %% @doc Send a command to clamd, return the reply.
