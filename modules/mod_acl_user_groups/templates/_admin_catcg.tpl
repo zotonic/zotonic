@@ -2,7 +2,7 @@
     <label class="control-label col-md-3" for="{{ #category }}">{_ Category _}</label>
     <div class="col-md-9">
         {% if is_nocatselect %}
-            <input class="form-control" type="text" readonly value="{{ cat_id.title }}" />
+            <input class="form-control nosubmit" type="text" readonly value="{{ cat_id.title }}" />
             <input type="hidden" id="{{ #catsel }}" name="category_id" value="{{ cat_id }}"/>
         {% else %}
             {% include "_admin_category_dropdown.tpl" catsel_id=#catsel %}

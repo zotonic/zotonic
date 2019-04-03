@@ -7,11 +7,7 @@ params:
         {% if not tabs_enabled or "new"|member:tabs_enabled or "upload"|member:tabs_enabled %}
             <li class="active">
                 <a data-toggle="tab" href="#{{ #tab }}-findnew">
-                    {% if predicate and (subject_id or object_id) %}
-                        {_ Find or Create Page _}
-                    {% else %}
-                        {_ Create Page _}
-                    {% endif %}
+                    {_ Create or find _}
                 </a>
             </li>
         {% endif %}

@@ -173,6 +173,10 @@ h3 {
 pre:empty {
   display: none;
 }
+.ui-effects-transfer {
+  border: 1px dotted #333;
+  z-index: 10000;
+}
 .text-muted {
   color: #999;
 }
@@ -383,10 +387,93 @@ fieldset[disabled] .btn-primary.active {
 .dashboard .table td {
   background: #fff;
 }
-#dialog_new_rsc_results {
-  max-height: 60vh;
+#zmodal #dialog-new-rsc-tab {
+  margin: -15px;
+}
+#dialog-new-rsc-tab .new-find-cols {
+  display: -ms-grid;
+  -ms-grid-columns: 1fr 1fr;
+  -ms-grid-rows: minmax(300px, 70vh);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(300px, 70vh);
+}
+#dialog-new-rsc-tab .new-find-cols .modal-footer {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+#dialog-new-rsc-tab .new-find-cols > .form-panel {
+  -ms-grid-column: 1;
+  -ms-grid-row: 1;
+  grid-column: 1;
+  grid-row: 1;
+  background-color: white;
+  padding: 10px 15px 0 15px;
+  max-height: 100%;
+  overflow-y: auto;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper {
+  -ms-grid-column: 1;
+  -ms-grid-row: 1;
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  background-color: white;
+  z-index: 1051;
+  padding: 10px 15px 0 15px;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview h1 {
+  font-size: 23px;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview h2 {
+  font-size: 17px;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview h3 {
+  font-size: 17px;
+}
+#dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview img {
+  max-width: 100%;
+  margin: 15px 0;
+}
+#dialog-new-rsc-tab .new-find-cols > .new-find-results {
+  -ms-grid-column: 2;
+  -ms-grid-row: 1;
+  grid-column: 2;
+  grid-row: 1;
+  display: -ms-grid;
+  -ms-grid-columns: 1fr;
+  -ms-grid-rows: auto 1fr;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  max-height: 100%;
+  padding: 10px 0 0 14px;
+  margin-left: 0;
+  border-left: 1px solid rgba(215, 215, 215, 0.7);
+}
+#dialog-new-rsc-tab .new-find-cols > .new-find-results > .new-find-results-header {
+  -ms-grid-column: 1;
+  -ms-grid-row: 1;
+  grid-column: 1;
+  grid-row: 1;
+  padding-right: 15px;
+}
+#dialog-new-rsc-tab .new-find-cols > .new-find-results > #dialog-rsc-new-found {
+  -ms-grid-column: 1;
+  -ms-grid-row: 2;
+  grid-column: 1;
+  grid-row: 2;
+  max-height: 100%;
+  padding-right: 15px;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+#dialog_new_rsc_results {
   margin-top: 10px;
 }
 #dialog_new_rsc_results .items {
@@ -692,6 +779,15 @@ input.form-field-error {
 }
 input.form-control[type=file] {
   height: auto;
+}
+select:required:invalid {
+  color: gray;
+}
+option[value=""][disabled] {
+  display: none;
+}
+option {
+  color: black;
 }
 img.thumb {
   padding: 0;
