@@ -710,7 +710,10 @@ sql_safe(String) when not is_list(String) ->
 sql_safe(String) ->
     case re:run(String, ?SQL_SAFE_REGEXP) of
         {match, _} ->
-            String;
+            case lists:member($., String) of
+                false -> "rsc." ++ String;
+                true -> String
+            end;
         _ ->
             throw({error, {unsafe_expression, String}})
     end.
