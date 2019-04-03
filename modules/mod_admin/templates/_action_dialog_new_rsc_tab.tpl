@@ -177,7 +177,7 @@
 					    {% else %}
 						    {% block category_select %}
 						        <select class="form-control" id="{{ #category }}" name="category_id">
-									<option></option>
+									<option value=""></option>
 						            {% for c in m.category.tree_flat %}
 						                {% if m.acl.insert[c.id.name|as_atom]
 						                	  and (not cat or m.category[c.id].is_a[cat])
