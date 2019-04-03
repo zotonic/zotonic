@@ -96,8 +96,9 @@
 		            	$('#upload_file').on('change', function() {
 	            			var filename = $('#upload_file').val();
 	            			var basename = filename.replace(/^([^\\/]*[\\/])*/, '');
-
+	            			var rootname = basename.replace(/\.[a-zA-Z0-9]{1,4}$/, '');
 	            			var new_cat = '{{ m.rsc.media.id }}';
+
 		            		switch (file_category(basename)) {
 		            			case 'image': new_cat = '{{ m.rsc.image.id }}'; break;
 		            			case 'audio': new_cat = '{{ m.rsc.audio.id }}'; break;
@@ -112,8 +113,8 @@
 		            		}
 
 		            		if ($('#new_rsc_title').val() == '' || $('#new_rsc_title').val() == window.z_upload_title) {
-		            			$('#new_rsc_title').val(basename).change().focus();
-		            			window.z_upload_title = basename;
+		            			$('#new_rsc_title').val(rootname).change().focus();
+		            			window.z_upload_title = rootname;
 		            		}
 
 		            		if (is_viewable(basename)) {
