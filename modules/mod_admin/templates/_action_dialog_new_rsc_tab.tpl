@@ -262,12 +262,14 @@
 				{% include "_action_dialog_new_rsc_tab_find_description.tpl" %}
 			</p>
 
-        	<label class="checkbox-inline">
-        		<input type="checkbox" class="nosubmit" id="{{ #find_me }}"
-        			   name="find_creator_id" value="{{ m.acl.user }}"
-        			   {% if m.config.mod_admin.connect_created_me.value %}checked{% endif %}>
-        		{_ Created by me _}
-        	</label>
+			<p>
+	        	<label class="checkbox-inline">
+	        		<input type="checkbox" class="nosubmit" id="{{ #find_me }}"
+	        			   name="find_creator_id" value="{{ m.acl.user }}"
+	        			   {% if m.config.mod_admin.connect_created_me.value %}checked{% endif %}>
+	        		{_ Created by me _}
+	        	</label>
+	        </p>
 
         	{% javascript %}
         		switch (window.sessionStorage.getItem('dialog_connect_created_me')) {
