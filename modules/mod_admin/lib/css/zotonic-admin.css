@@ -387,17 +387,18 @@ fieldset[disabled] .btn-primary.active {
 .dashboard .table td {
   background: #fff;
 }
+#zmodal #dialog-new-rsc-tab {
+  margin: -15px;
+}
 #dialog-new-rsc-tab .new-find-cols {
   display: -ms-grid;
-  -ms-grid-columns: 1fr 16px 1fr;
+  -ms-grid-columns: 1fr 1fr;
   -ms-grid-rows: minmax(300px, 70vh);
   display: grid;
-  grid-template-columns: 1fr 16px 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: minmax(300px, 70vh);
 }
 #dialog-new-rsc-tab .new-find-cols .modal-footer {
-  margin: 15px 0 0;
-  padding: 15px 0;
   position: -webkit-sticky;
   position: sticky;
   bottom: 0;
@@ -409,6 +410,9 @@ fieldset[disabled] .btn-primary.active {
   grid-column: 1;
   grid-row: 1;
   background-color: white;
+  padding: 15px 15px 0 15px;
+  max-height: 100%;
+  overflow-y: auto;
 }
 #dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper {
   -ms-grid-column: 1;
@@ -417,6 +421,7 @@ fieldset[disabled] .btn-primary.active {
   grid-row: 1;
   background-color: white;
   z-index: 1051;
+  padding: 15px 15px 0 15px;
   max-height: 100%;
   overflow-y: auto;
 }
@@ -424,9 +429,9 @@ fieldset[disabled] .btn-primary.active {
   max-width: 100%;
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results {
-  -ms-grid-column: 3;
+  -ms-grid-column: 2;
   -ms-grid-row: 1;
-  grid-column: 3;
+  grid-column: 2;
   grid-row: 1;
   display: -ms-grid;
   -ms-grid-columns: 1fr;
@@ -435,12 +440,16 @@ fieldset[disabled] .btn-primary.active {
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr;
   max-height: 100%;
+  padding: 10px 0 0 14px;
+  margin-left: 0;
+  border-left: 1px solid rgba(215, 215, 215, 0.7);
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results > .new-find-results-header {
   -ms-grid-column: 1;
   -ms-grid-row: 1;
   grid-column: 1;
   grid-row: 1;
+  padding-right: 15px;
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results > #dialog-rsc-new-found {
   -ms-grid-column: 1;
@@ -448,6 +457,7 @@ fieldset[disabled] .btn-primary.active {
   grid-column: 1;
   grid-row: 2;
   max-height: 100%;
+  padding-right: 15px;
   overflow-x: hidden;
   overflow-y: scroll;
 }

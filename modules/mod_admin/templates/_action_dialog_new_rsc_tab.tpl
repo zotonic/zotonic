@@ -22,7 +22,7 @@
 			{% block rsc_props_title %}
 				{# The new resource title, also used for the feedback search #}
 				<div class="form-group row">
-				    <label class="control-label col-md-3" for="new_rsc_title">{_ Page title _}</label>
+				    <label class="control-label col-md-3" for="new_rsc_title">{_ Title _}</label>
 				    <div class="col-md-9">
 					    <input type="text" id="new_rsc_title" name="title"
 					    	   value="{{ title|escape }}" class="do_autofocus form-control"

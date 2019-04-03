@@ -29,7 +29,7 @@
         {% catinclude "_rsc_preview.tpl" id %}
     </div>
     <div class="rsc-preview-action modal-footer">
-        <a href="#" id="{{ #cancel }}" class="btn btn-default">{_ Close _}</a>
+        <a href="#" id="{{ #cancel }}" class="btn btn-default">{_ Close preview _}</a>
         {% wire id=#cancel action={trigger_event name='dialog_new_rsc_preview_close'} %}
 
         {% if id.is_editable %}

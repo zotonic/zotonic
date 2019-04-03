@@ -1,18 +1,20 @@
 
+#zmodal #dialog-new-rsc-tab {
+    margin: -15px;
+}
+
 #dialog-new-rsc-tab {
 
     .new-find-cols {
         display: -ms-grid;
-        -ms-grid-columns: 1fr 16px 1fr;
+        -ms-grid-columns: 1fr 1fr;
         -ms-grid-rows: minmax(300px,70vh);
 
         display: grid;
-        grid-template-columns: 1fr 16px 1fr;
+        grid-template-columns: 1fr 1fr;
         grid-template-rows: minmax(300px,70vh);
 
         .modal-footer {
-            margin: 15px 0 0;
-            padding: 15px 0;
             position: -webkit-sticky;
             position: sticky;
             bottom: 0;
@@ -26,7 +28,9 @@
             grid-row: 1;
 
             background-color: white;
-
+            padding: 15px 15px 0 15px;
+            max-height: 100%;
+            overflow-y: auto;
         }
         > .rsc-preview-panel-wrapper {
             -ms-grid-column: 1;
@@ -37,6 +41,7 @@
             background-color: white;
             z-index: 1051;
 
+            padding: 15px 15px 0 15px;
             max-height: 100%;
             overflow-y: auto;
 
@@ -45,10 +50,10 @@
             }
         }
         > .new-find-results {
-            -ms-grid-column: 3;
+            -ms-grid-column: 2;
             -ms-grid-row: 1;
 
-            grid-column: 3;
+            grid-column: 2;
             grid-row: 1;
 
             display: -ms-grid;
@@ -60,12 +65,16 @@
             grid-template-rows: auto 1fr;
 
             max-height: 100%;
+            padding: 10px 0 0 14px;
+            margin-left: 0;
+            border-left: 1px solid @borderColorMediumTransparent;
 
             > .new-find-results-header {
                 -ms-grid-column: 1;
                 -ms-grid-row: 1;
                 grid-column: 1;
                 grid-row: 1;
+                padding-right: 15px;
             }
 
             > #dialog-rsc-new-found {
@@ -75,6 +84,7 @@
                 grid-row: 2;
 
                 max-height: 100%;
+                padding-right: 15px;
 
                 overflow-x: hidden;
                 overflow-y: scroll;

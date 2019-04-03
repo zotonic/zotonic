@@ -38,7 +38,7 @@ find params:
             {% if in_sorter == "category" %}
                 {% if "new"|member:tabs_enabled %}
                     <li class="active">
-                        <a data-toggle="tab" href="#{{ #tab }}-new">{_ Create Page _}</a>
+                        <a data-toggle="tab" href="#{{ #tab }}-new">{_ Create _}</a>
                     </li>
                 {% endif %}
             {% else %}
@@ -46,9 +46,11 @@ find params:
                     <li class="active">
                         <a data-toggle="tab" href="#{{ #tab }}-findnew">
                             {% if predicate and (subject_id or object_id) %}
-                                {_ Page _}
+                                {_ Connect _}
+                            {% elseif is_zlink %}
+                                {_ Link _}
                             {% else %}
-                                {_ Create Page _}
+                                {_ Page _}
                             {% endif %}
                         </a>
                     </li>
