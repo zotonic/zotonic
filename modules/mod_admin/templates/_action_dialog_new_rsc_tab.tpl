@@ -30,7 +30,7 @@
 					    <input type="text" id="new_rsc_title" name="title"
 					    	   value="{{ title|escape }}" class="do_autofocus form-control"
 					    	   placeholder="{_ Page title or text to find page _}">
-					    {% validate id="new_rsc_title" name="title" type={presence} %}
+					    {% validate id="new_rsc_title" name="title" type={presence} only_on_submit %}
 				    </div>
 				</div>
 			{% endblock %}
