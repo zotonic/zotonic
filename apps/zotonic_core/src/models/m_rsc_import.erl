@@ -28,18 +28,31 @@
 
 
 %% @doc Create an empty, non-authoritative resource, with the given uri.
-%% @spec create_empty(Uri, Context) -> {ok, Id} | {error, Reason}
+-spec create_empty( string() | binary(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
 create_empty(Uri, Context) ->
     create_empty(Uri, [], Context).
 
+-spec create_empty( string() | binary(), m_rsc:props(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
 create_empty(Uri, Props, Context) ->
-    {ok, CategoryId} = m_category:name_to_id(other, Context),
-    Props1 = [{category_id, CategoryId},
-        {note, "Pending import"},
-        {is_published, false},
-        {uri, Uri},
-        {is_authoritative, false}] ++ Props,
-    m_rsc:insert(Props1, Context).
+    case m_rsc:uri_lookup(Uri, Context) of
+        undefined ->
+            Props1 = case proplists:lookup(category_id, Props) of
+                none -> [ {category_id, other} | Props ];
+                {category_id, _} -> Props
+            end,
+            Props2 = [
+                {note, "Pending import"},
+                {is_published, false},
+                {uri, Uri},
+                {is_authoritative, false}
+                | Props1
+            ],
+            m_rsc:insert(Props2, Context);
+        RscId ->
+            lager:info("Imported resource of \"~s\" already exists as rsc id ~p",
+                       [ Uri, RscId ]),
+            {error, duplicate_uri}
+    end.
 
 
 %% @doc Import given resource. resource must already exist and be

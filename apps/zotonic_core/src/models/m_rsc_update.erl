@@ -707,6 +707,7 @@ preflight_check(Id, [{uri, Uri} | T], Context) when Uri =/= undefined ->
         0 ->
             preflight_check(Id, T, Context);
         _N ->
+            Uri = 1,
             lager:warning("Trying to insert duplicate uri ~p", [Uri]),
             throw({error, duplicate_uri})
     end;

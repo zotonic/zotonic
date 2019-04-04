@@ -26,6 +26,7 @@ modify_rsc_test() ->
     ?assertEqual(Id, m_rsc:uri_lookup("http://foo.com/id/333", C)),
     ?assertEqual(Id, m_rsc:uri_lookup(<<"http://foo.com/id/333">>, C)),
 
+    lager:info("[~p] Expecting duplicate_uri error...", [?MODULE]),
     ?assertEqual({error, duplicate_uri}, m_rsc_import:create_empty("http://foo.com/id/333", AdminC)),
 
     %% Existence check
