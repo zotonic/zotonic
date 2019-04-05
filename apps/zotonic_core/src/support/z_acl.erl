@@ -31,6 +31,11 @@
          cache_key/1,
 
          user/1,
+         user_groups/1,
+
+         is_read_only/1,
+         set_read_only/2,
+
          is_admin/1,
          sudo/1,
          sudo/2,
@@ -71,11 +76,15 @@
     maybe_boolean/0
 ]).
 
+-define(is_update_action(A), A =:= admin; A =:= insert; A =:= update; A =:= delete; A =:= link).
+
 %% @doc Check if an action is allowed for the current actor.
 -spec is_allowed(action(), object(), z:context()) -> boolean().
-is_allowed(_Action, _Object, #context{acl=admin}) ->
+is_allowed(_Action, _Object, #context{ acl = admin }) ->
     true;
-is_allowed(_Action, _Object, #context{user_id=?ACL_ADMIN_USER_ID}) ->
+is_allowed(UpdateAction, _Object, #context{ acl_is_read_only = true }) when ?is_update_action(UpdateAction) ->
+    false;
+is_allowed(_Action, _Object, #context{ user_id=?ACL_ADMIN_USER_ID }) ->
     true;
 is_allowed(link, Object, Context) ->
     is_allowed(insert, #acl_edge{subject_id=Object, predicate=relation, object_id=Object}, Context);
@@ -87,8 +96,10 @@ is_allowed(Action, Object, Context) ->
     end.
 
 -spec maybe_allowed(action(), object(), z:context()) -> maybe_boolean().
-maybe_allowed(_Action, _Object, #context{acl = admin}) ->
+maybe_allowed(_Action, _Object, #context{ acl = admin }) ->
     true;
+maybe_allowed(UpdateAction, _Object, #context{ acl_is_read_only = true }) when ?is_update_action(UpdateAction) ->
+    false;
 maybe_allowed(_Action, _Object, #context{user_id = ?ACL_ADMIN_USER_ID}) ->
     true;
 maybe_allowed(Action, Object, Context) ->
@@ -96,9 +107,11 @@ maybe_allowed(Action, Object, Context) ->
 
 %% @doc Check if an action on a property of a resource is allowed for the current actor.
 -spec is_allowed_prop(action(), object(), atom(), z:context()) -> true | false | undefined.
-is_allowed_prop(_Action, _Object, _Property, #context{acl=admin}) ->
+is_allowed_prop(_Action, _Object, _Property, #context{ acl = admin }) ->
     true;
-is_allowed_prop(_Action, _Object, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
+is_allowed_prop(UpdateAction, _Object, _Property, #context{ acl_is_read_only = true }) when ?is_update_action(UpdateAction) ->
+    false;
+is_allowed_prop(_Action, _Object, _Property, #context{ user_id = ?ACL_ADMIN_USER_ID }) ->
     true;
 is_allowed_prop(Action, Object, Property, Context) ->
     case z_notifier:first(#acl_is_allowed_prop{action=Action, object=Object, prop=Property}, Context) of
@@ -228,6 +241,22 @@ cache_key(Context) ->
 user(#context{user_id = UserId}) ->
     UserId.
 
+%% @doc Return the list of user groups the current context is member of.
+-spec user_groups(z:context()) -> [ m_rsc:resource_id() ].
+user_groups(Context) ->
+    case z_notifier:first(#acl_user_groups{}, Context) of
+        undefined -> [];
+        L when is_list(L) -> L
+    end.
+
+-spec is_read_only( z:context() ) -> boolean().
+is_read_only(#context{ acl_is_read_only = IsReadOnly }) ->
+    IsReadOnly.
+
+-spec set_read_only( boolean(), z:context() ) -> z:context().
+set_read_only(IsReadOnly, Context) ->
+    Context#context{ acl_is_read_only = IsReadOnly }.
+
 
 %% @doc Call a function with admin privileges.
 -spec sudo( Fun, z:context() ) -> any()
@@ -251,11 +280,10 @@ set_admin(#context{ acl = undefined } = Context) ->
 set_admin(Context) ->
     Context#context{acl = admin}.
 
-
 %% @doc Check if the current user is an admin or a sudo action
--spec is_admin(z:context()) -> boolean().
-is_admin(#context{user_id=?ACL_ADMIN_USER_ID}) -> true;
-is_admin(#context{acl=admin}) -> true;
+-spec is_admin( z:context() ) -> boolean().
+is_admin(#context{user_id = ?ACL_ADMIN_USER_ID}) -> true;
+is_admin(#context{acl = admin}) -> true;
 is_admin(Context) -> is_allowed(use, mod_admin_config, Context).
 
 

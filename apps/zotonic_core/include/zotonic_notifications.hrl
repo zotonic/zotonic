@@ -517,7 +517,7 @@
     prop :: atom()
 }).
 
-%% @doc Set the context to a typical authenticated uses. Used by m_acl.erl
+%% @doc Set the context to a typical authenticated user. Used by m_acl.erl
 %% Type: first
 %% Return: authenticated ``#context{}`` or ``undefined``
 -record(acl_context_authenticated, {
@@ -535,6 +535,11 @@
 %% Type: first
 %% Return: updated ``z:context()`` or ``undefined``
 -record(acl_logoff, {}).
+
+%% @doc Return the groups for the current user.
+%% Type: first
+%% Return: ``[ m_rsc:resource_id() ]`` or ``undefined``
+-record(acl_user_groups, {}).
 
 %% @doc Confirm a user id.
 %% Type: foldl

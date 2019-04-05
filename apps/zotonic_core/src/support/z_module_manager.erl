@@ -60,6 +60,9 @@
 
 -include_lib("zotonic.hrl").
 
+-type manage_schema() :: install
+                       | {upgrade, integer()}.
+
 -type module_status() :: new
                      | starting
                      | running
@@ -94,6 +97,11 @@
     module_monitors = #{} :: map(),  % pid() => atom()
     modules = #{} :: map() % atom() => #module_status{}
 }).
+
+-export_type([
+    manage_schema/0,
+    module_status/0
+]).
 
 %% The default module priority
 -define(MOD_PRIO, 500).

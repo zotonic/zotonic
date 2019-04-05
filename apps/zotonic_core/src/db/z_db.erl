@@ -40,6 +40,9 @@
     assoc/2,
     assoc/3,
     assoc/4,
+    assoc_map/2,
+    assoc_map/3,
+    assoc_map/4,
     assoc_props/2,
     assoc_props/3,
     assoc_props/4,
@@ -248,6 +251,21 @@ assoc_props_row(Sql, Parameters, Context) ->
         [] -> undefined
     end.
 
+
+%% @doc Return property lists of the results of a query on the database in the Context
+-spec assoc_map(sql(), z:context()) -> map().
+assoc_map(Sql, Context) ->
+    assoc_map(Sql, [], Context).
+
+assoc_map(Sql, Parameters, #context{} = Context) ->
+    assoc_map(Sql, Parameters, Context, ?TIMEOUT);
+assoc_map(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
+    assoc_map(Sql, [], Context, Timeout).
+
+assoc_map(Sql, Parameters, Context, Timeout) ->
+
+    Result = assoc(Sql, Parameters, Context, Timeout),
+    lists:map(fun maps:from_list/1, Result).
 
 %% @doc Return property lists of the results of a query on the database in the Context
 -spec assoc(sql(), z:context()) -> list().

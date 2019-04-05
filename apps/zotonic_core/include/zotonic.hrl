@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2018 Marc Worrell
+%% @copyright 2009-2019 Marc Worrell
 %% @doc Main definitions for zotonic
 
-%% Copyright 2009-2018 Marc Worrell
+%% Copyright 2009-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,8 +34,9 @@
         routing_id = undefined :: binary(),                     % Unique routing id
 
         %% User authenticated for this request
-        acl = undefined     :: term() | admin | undefined,  %% opaque placeholder managed by the z_acl module
-        user_id = undefined :: integer() | undefined,
+        acl = undefined          :: term() | admin | undefined,  %% opaque placeholder managed by the z_acl module
+        acl_is_read_only = false :: boolean(),
+        user_id = undefined      :: integer() | undefined,
 
         %% Deprecated template render state, used for wires, actions and other embedded scripts.
         render_state = undefined :: z_render:render_state(),

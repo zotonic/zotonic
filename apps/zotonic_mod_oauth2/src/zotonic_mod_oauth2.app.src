@@ -1,5 +1,5 @@
-{application, zotonic_mod_oauth, [
-    {description, "Provides authentication over OAuth."},
+{application, zotonic_mod_oauth2, [
+    {description, "Provides authentication over OAuth2."},
     {vsn, "git"},
     {registered, []},
     {applications, [zotonic_core]},

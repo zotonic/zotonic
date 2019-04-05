@@ -35,6 +35,7 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_get([ user | Rest ], _Msg, Context) -> {ok, {z_acl:user(Context), Rest}};
 m_get([ is_admin | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin(Context), Rest}};
+m_get([ is_read_only | Rest ], _Msg, Context) -> {ok, {z_acl:is_read_only(Context), Rest}};
 
 % Check if current user is allowed to perform an action on some object
 m_get([ Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->

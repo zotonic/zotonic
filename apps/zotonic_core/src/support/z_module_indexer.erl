@@ -541,6 +541,8 @@ to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Typ
             % Also index models as binaries, for quick lookup in mod_mqtt
             case Type of
                 model ->
+                    % Ensure that all atoms defined in the module are known
+                    zotonic_filehandler:load_module(ErlMod),
                     K1 = K#module_index{
                         key = #module_index_key{
                             site = Site,
