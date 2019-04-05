@@ -83,7 +83,7 @@ device_id(Context) ->
     case z_memo:get(z_device_id) of
         undefined ->
             RC = {Result, _Context1} = device_id_1(Context),
-            z_memo:put(z_device_id, Result),
+            z_memo:set(z_device_id, Result),
             RC;
         Result ->
             {Result, Context}

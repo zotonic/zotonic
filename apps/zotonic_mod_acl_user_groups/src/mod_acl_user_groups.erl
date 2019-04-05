@@ -29,6 +29,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("support/acl_user_groups.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
+-include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
 % API
 -export([
@@ -131,11 +132,9 @@ event(#postback{message={delete_all, Args}}, Context) ->
             )
     end.
 
+%% @todo let the client subscribe to the resources to reflect the deletions
 -spec ug_delete(list(m_rsc:resource_id()), z:context()) -> any().
 ug_delete(Ids, Context) ->
-    z_session_page:add_script(
-        z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)
-    ),
     UGUserIds = in_user_groups(Ids, Context),
     Total = lists:sum([length(UIds) || {_, UIds} <- UGUserIds]),
     case unlink_all(UGUserIds, 0, Total, Context) of
@@ -144,20 +143,18 @@ ug_delete(Ids, Context) ->
                              m_rsc:delete(Id, Context)
                           end,
                           Ids),
-            z_session_page:add_script(z_render:wire({unmask, []}, Context));
+            page_actions({ unmask, []}, Context);
         {error, _} ->
-            Context1 = z_render:wire([
-                    {unmask, []},
-                    {alert, [{message, ?__("Not all user groups could be deleted.", Context)}]}
-                ],
-                Context),
-            z_session_page:add_script(Context1)
-
+            Actions = [
+                {unmask, []},
+                {alert, [{message, ?__("Not all user groups could be deleted.", Context)}]}
+            ],
+            page_actions(Actions, Context)
     end.
 
 -spec ug_move_and_delete([pos_integer()], m_rsc:resource_id(), #context{}) -> ok.
 ug_move_and_delete(Ids, ToGroupId, Context) ->
-    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    page_actions({mask, [{message, ?__("Deleting...", Context)}]}, Context),
     UGUserIds = in_user_groups(Ids, Context),
     Total = lists:sum([length(UIds) || {_, UIds} <- UGUserIds]),
     ok = move_all(UGUserIds, ToGroupId, 0, Total+Total, Context),
@@ -165,7 +162,7 @@ ug_move_and_delete(Ids, ToGroupId, Context) ->
                      m_rsc:delete(Id, Context)
                   end,
                   Ids),
-    z_session_page:add_script(z_render:wire({unmask, []}, Context)),
+    page_actions({unmask, []}, Context ),
     ok.
 
 in_user_groups(Ids, Context) ->
@@ -227,7 +224,7 @@ maybe_progress(N1, N2, Total, Context) ->
     S2 = round(N2 / PerStep),
     case S1 of
         S2 -> ok;
-        _ -> z_session_page:add_script(z_render:wire({mask_progress, [{percent,S2}]}, Context))
+        _ -> page_actions({mask_progress, [{percent,S2}]}, Context )
     end.
 
 deletable(Ids, Context) ->
@@ -691,6 +688,8 @@ manage_data(install, Context) ->
 manage_data(_Version, _Context) ->
     ok.
 
+page_actions(Actions, Context) ->
+    z_notifier:first(#page_actions{ actions = Actions }, Context).
 
 check_hasusergroup(UserId, P, Context) ->
     HasUserGroup = proplists:get_all_values(hasusergroup, P),

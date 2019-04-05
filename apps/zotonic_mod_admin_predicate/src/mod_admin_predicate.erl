@@ -39,8 +39,7 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
-
-
+-include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
 event(#submit{message={delete_move, Args}}, Context) ->
     ToPredId = z_convert:to_integer(z_context:get_q_validated(<<"predicate_id">>, Context)),
@@ -80,14 +79,17 @@ event(#postback{message={delete_all, Args}}, Context) ->
             z_render:wire({alert, [{message, ?__("Delete is canceled, there are connections with this predicate.", Context)}]}, Context)
     end.
 
+page_actions(Actions, Context) ->
+    z_notifier:first(#page_actions{ actions = Actions }, Context).
+
 pred_delete(Id, Context) ->
-    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    page_actions({mask, [{message, ?__("Deleting...", Context)}]}, Context),
     z_db:q("delete from edge where predicate_id = $1", [Id], Context, 120000),
     _ = m_rsc:delete(Id, Context),
-    z_session_page:add_script(z_render:wire({unmask, []}, Context)).
+    page_actions({unmask, []}, Context).
 
 pred_move_and_delete(FromPredId, ToPredId, Context) ->
-    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    page_actions({mask, [{message, ?__("Deleting...", Context)}]}, Context),
     Edges = z_db:q("select a.id
                     from edge a
                             left join edge b
@@ -103,7 +105,7 @@ pred_move_and_delete(FromPredId, ToPredId, Context) ->
     pred_move(Edges1, ToPredId, 0, length(Edges), Context),
     z_db:q("delete from edge where predicate_id = $1", [FromPredId], Context, 120000),
     _ = m_rsc:delete(FromPredId, Context),
-    z_session_page:add_script(z_render:wire({unmask, []}, Context)).
+    page_actions({unmask, []}, Context).
 
 pred_move([], _ToPredId, _Ct, _N, _Context) ->
     ok;
@@ -128,7 +130,7 @@ maybe_progress(N1, N2, Total, Context) ->
     S2 = round(N2 / PerStep),
     case S1 of
         S2 -> ok;
-        _ -> z_session_page:add_script(z_render:wire({mask_progress, [{percent,S2}]}, Context))
+        _ -> page_actions({mask_progress, [{percent,S2}]}, Context)
     end.
 
 

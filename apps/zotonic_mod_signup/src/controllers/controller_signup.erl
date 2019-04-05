@@ -34,12 +34,13 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
                 undefined ->
                     [];
                 Check ->
-                    case z_session:get(signup_xs, Context2) of
-                        {Check, Props, SignupProps} -> [ {xs_props, {Props,SignupProps}} | Props ];
-                        _ -> []
-                    end
+                    []
+                    % case z_session:get(signup_xs, Context2) of
+                    %     {Check, Props, SignupProps} -> [ {xs_props, {Props,SignupProps}} | Props ];
+                    %     _ -> []
+                    % end
             end,
-    z_session:set(signup_xs, undefined, Context),
+    % z_session:set(signup_xs, undefined, Context),
     Rendered = z_template:render(<<"signup.tpl">>, Vars, Context2),
     z_context:output(Rendered, Context2).
 

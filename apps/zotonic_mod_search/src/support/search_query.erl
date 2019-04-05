@@ -782,13 +782,13 @@ assure_category_1(Name, Context) ->
             case m_rsc:rid(Name, Context) of
                 undefined ->
                     lager:warning("Query: unknown category '~p'", [Name]),
-                    display_error([ ?__("Unknown category", Context), 32, $", z_html:escape(z_convert:to_binary(Name)), $" ], Context),
+                    % display_error([ ?__("Unknown category", Context), 32, $", z_html:escape(z_convert:to_binary(Name)), $" ], Context),
                     error;
                 CatId ->
                     case m_category:id_to_name(CatId, Context) of
                         undefined ->
                             lager:warning("Query: '~p' is not a category", [Name]),
-                            display_error([ $", z_html:escape(z_convert:to_binary(Name)), $", 32, ?__("is not a category", Context) ], Context),
+                            % display_error([ $", z_html:escape(z_convert:to_binary(Name)), $", 32, ?__("is not a category", Context) ], Context),
                             error;
                         Name1 ->
                             {ok, Name1}
@@ -797,14 +797,14 @@ assure_category_1(Name, Context) ->
     end.
 
 %% If the current user is an administrator or editor, show an error message about this search
-display_error(Msg, Context) ->
-    case z_acl:is_allowed(use, mod_admin, Context) of
-        true ->
-            ContextPruned = z_context:prune_for_async(Context),
-            z_session_page:add_script(z_render:growl_error(Msg, ContextPruned));
-        false ->
-            ok
-    end.
+% display_error(Msg, Context) ->
+%     case z_acl:is_allowed(use, mod_admin, Context) of
+%         true ->
+%             ContextPruned = z_context:prune_for_async(Context),
+%             z_session_page:add_script(z_render:growl_error(Msg, ContextPruned));
+%         false ->
+%             ok
+%     end.
 
 
 %% Add filters
@@ -959,7 +959,7 @@ predicate_to_id_1(Pred, Context) ->
             Id;
         {error, _} ->
             lager:warning("Query: unknown predicate '~p'", [Pred]),
-            display_error([ ?__("Unknown predicate", Context), 32, $", z_html:escape(z_convert:to_binary(Pred)), $" ], Context),
+            % display_error([ ?__("Unknown predicate", Context), 32, $", z_html:escape(z_convert:to_binary(Pred)), $" ], Context),
             0
     end.
 

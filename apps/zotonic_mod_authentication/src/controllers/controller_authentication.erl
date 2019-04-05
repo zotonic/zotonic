@@ -130,7 +130,7 @@ logon_1(undefined, _Payload, Context) ->
 -spec switch_user( map(), z:context() ) -> { map(), z:context() }.
 switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(UserId) ->
     AuthOptions = z_context:get(auth_options, Context, #{}),
-    case z_auth:logon_switch(UserId, AuthOptions, Context) of
+    case z_auth:logon_switch(UserId, Context) of
         {ok, Context1} ->
             lager:warning("[~p] Authentication: user ~p is switching to user ~p",
                           [ z_context:site(Context), z_acl:user(Context), UserId ]),

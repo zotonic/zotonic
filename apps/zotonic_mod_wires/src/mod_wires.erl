@@ -25,10 +25,12 @@
 -export([
     observe_acl_is_allowed/2,
     observe_output_html/3,
+    observe_page_actions/2,
     'mqtt:zotonic-transport/+'/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
 
 %% @doc Allow publish from clients to the transport topic
@@ -49,6 +51,12 @@ observe_acl_is_allowed(_, _Context) ->
 %% @doc Render nested actions and scomp results.
 observe_output_html(#output_html{}, {MixedHtml, Context}, _Context) ->
     z_render:output(MixedHtml, Context).
+
+observe_page_actions(#page_actions{ actions = Actions }, Context) ->
+    Context1 = z_render:clean(Context),
+    Context2 = z_render:wire(Actions, Context1),
+    Script = iolist_to_binary( z_render:get_script(Context2) ),
+    z_mqtt:publish([ <<"~client">>, <<"zotonic-transport">>, <<"eval">> ], Script, Context).
 
 %% @doc Subscribe to transport events coming in from the client.
 'mqtt:zotonic-transport/+'( #{
