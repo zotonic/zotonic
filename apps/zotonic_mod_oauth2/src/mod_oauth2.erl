@@ -39,7 +39,7 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
         true ->
             Context;
         false ->
-            case z_acl:is_auth(Context) of
+            case z_auth:is_auth(Context) of
                 true ->
                     Context;
                 false ->
@@ -81,7 +81,7 @@ try_bearer(Token, Context) ->
 
 try_token(TokenId, TokenSecret, Context) ->
     case m_oauth2:get_token_access(TokenId, Context) of
-        {ok, #{ secret := TokenSecret }} = Token ->
+        {ok, #{ secret := TokenSecret } = Token} ->
             #{
                 user_id := UserId,
                 user_groups := UserGroups,
@@ -122,5 +122,5 @@ try_token(TokenId, TokenSecret, Context) ->
 
 
 -spec manage_schema( z_module_manager:manage_schema(), z:context() ) -> ok.
-manage_schema(_Version, Context) ->
-    m_oauth2:manage_schema(Context).
+manage_schema(Version, Context) ->
+    m_oauth2:manage_schema(Version, Context).

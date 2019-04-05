@@ -6,71 +6,52 @@
 oauth2_request_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_context:new(zotonic_site_testsandbox),
-    ok = z_module_manager:activate_await(mod_oauth, Context),
+    SudoContext = z_acl:sudo(Context),
+    ok = z_module_manager:activate_await(mod_oauth2, Context),
     ok = z_module_manager:upgrade_await(Context),
 
-    % 1. Drop all OAuth apps
-    ok = m_oauth_app:delete_consumers(Context),
+    % Make a new OAuth2 token with full access to the admin (user 1) account
+    TPs = [
+        {is_read_only, false},
+        {is_full_access, true}
+    ],
 
-    % 2. Make new consumer
-    ConsumerProps = m_oauth_app:create_consumer(<<"OAuth Test">>, Context),
-    {id, ConsumerId} = proplists:lookup(id, ConsumerProps),
+    % Should have permission to make a token for user 1
+    {error, eacces} = m_oauth2:insert(1, TPs, Context),
 
-    ok = m_oauth_perms:set(ConsumerId, [ <<"oauth/test">> ], Context),
+    {ok, TId_1} = m_oauth2:insert(1, TPs, SudoContext),
+    {ok, Token_1} = m_oauth2:encode_bearer_token(TId_1, 60, SudoContext),
+    {ok, {TId_1, _TSecret_1}} = m_oauth2:decode_bearer_token(Token_1, Context),
 
-    % 3a. Make anonymous app token
-    {ok, AnonToken} = m_oauth_app:ensure_anonymous_token(ConsumerId, Context),
+    {ok, Token_1a} = m_oauth2:encode_bearer_token(TId_1, undefined, SudoContext),
+    {ok, {TId_1, _TSecret_1a}} = m_oauth2:decode_bearer_token(Token_1a, Context),
 
-    % 3b. Should stay the same
-    {ok, AnonToken} = m_oauth_app:ensure_anonymous_token(ConsumerId, Context),
+    % Tokens can expire
+    {ok, Token_1t} = m_oauth2:encode_bearer_token(TId_1, -1, SudoContext),
+    {error, expired} = m_oauth2:decode_bearer_token(Token_1t, Context),
 
-    AnonTokenKeys = lists:sort(proplists:get_keys(AnonToken)),
-    ?assertEqual([consumer_key, consumer_secret], AnonTokenKeys),
+    Url = z_context:abs_url( z_dispatcher:url_for(api, [ {star, <<"acl/user">> } ], Context), Context),
 
-    % 4. Make an non-anonymous App (with access tokens) for the admin user
-    {ok, UserToken} = m_oauth_app:create_app(ConsumerId, 1, Context),
+    % No token
+    {ok, {_, _, _, <<"null">>}} = z_url_fetch:fetch(Url, []),
 
-    UserTokenKeys = lists:sort(proplists:get_keys(UserToken)),
-    ?assertEqual([consumer_key, consumer_secret, token, token_secret], UserTokenKeys),
+    % Valid tokens
+    {ok, {_, _, _, <<"1">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1/binary>>} ]),
+    {ok, {_, _, _, <<"1">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1a/binary>>} ]),
 
-    % 5. Make a GET request with the anonymous tokens
-    Url = z_convert:to_list(
-            z_context:abs_url(
-                z_dispatcher:url_for(
-                    api,
-                    [ {star, <<"oauth_test/test">>} ],
-                    Context),
-                Context)),
+    % Expired token
+    {ok, {_, _, _, <<"null">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1t/binary>>} ]),
 
-    Consumer = {
-        z_convert:to_list(proplists:get_value(consumer_key, AnonToken)),
-        z_convert:to_list(proplists:get_value(consumer_secret, AnonToken)),
-        hmac_sha1
-    },
+    % Illegal token
+    {ok, {_, _, _, <<"null">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1/binary, "xxx">>} ]),
 
-    AnonGet = oauth:get(Url, [ {"b", "2"}, {"a","1"} ], Consumer),
+    % Uknown token
+    {ok, {_, _, _, <<"null">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer xxx">>} ]),
 
-        {ok, {{_, 200, _}, _AnonGetHs, AnonGetBody}} = AnonGet,
-        ?assertEqual(#{<<"user">> => <<"anon">>}, z_json:decode(list_to_binary(AnonGetBody))),
+    % TODO:
+    % - test limitations on groups
+    % - test read only flag
+    % - test IP restrictions
 
-    % 6. Make a GET request with the user tokens
-    UserGet = oauth:get(
-                    Url,
-                    [ {"b", "2"}, {"a","1"} ],
-                    Consumer,
-                    z_convert:to_list(proplists:get_value(token, UserToken)),
-                    z_convert:to_list(proplists:get_value(token_secret, UserToken))),
+    ok.
 
-        {ok, {{_, 200, _}, _UserGetHs, UserGetBody}} = UserGet,
-        ?assertEqual(#{<<"user">> => <<"auth">>}, z_json:decode(list_to_binary(UserGetBody))),
-
-    % 7. Make a POST request with the user tokens
-    UserPost = oauth:post(
-                    Url,
-                    [ {"b", "2"}, {"a","1"} ],
-                    Consumer,
-                    z_convert:to_list(proplists:get_value(token, UserToken)),
-                    z_convert:to_list(proplists:get_value(token_secret, UserToken))),
-
-        {ok, {{_, 200, _}, _UserPostHs, UserPostBody}} = UserPost,
-        ?assertEqual(#{<<"user">> => <<"auth">>}, z_json:decode(list_to_binary(UserPostBody))).

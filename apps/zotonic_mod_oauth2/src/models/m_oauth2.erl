@@ -30,7 +30,7 @@
     insert/3,
     delete/2,
 
-    encode_bearer_token/2,
+    encode_bearer_token/3,
     decode_bearer_token/2,
 
     get_token_access/2,
@@ -39,6 +39,7 @@
     manage_schema/2
 ]).
 
+-define(TOKEN_PREFIX, "oauth2-").
 
 m_get([ user_groups | Rest ], _Msg, Context) ->
     {ok, {user_groups(Context), Rest}};
@@ -86,43 +87,46 @@ list_tokens(undefined, _Context) ->
 insert( UserId, Props, Context ) when is_list(Props) ->
     case is_allowed(UserId, Context) of
         true ->
-            Secret = z_ids:id(32),
-            Props1 = [
-                {user_id, UserId},
-                {is_read_only, z_convert:to_bool( proplists:get_value(is_read_only, Props, true) )},
-                {is_full_access, z_convert:to_bool( proplists:get_value(is_full_access, Props, false) )},
-                {ip_allowed, z_string:trim( z_convert:to_binary( proplists:get_value(ip_allowed, Props, <<>>) ) )},
-                {note, z_html:escape( z_string:trim( proplists:get_value(note, Props, <<>>) ) )},
-                {valid_till, proplists:get_value(valid_till, Props)},
-                {secret, Secret}
-            ],
-            case z_db:insert(oauth2_token, Props1, Context) of
-                {ok, TokenId} ->
-                    Groups = proplists:get_value(user_groups, Props, []),
-                    Groups1 = [ m_rsc:rid(GId, Context) || GId <- Groups ],
-                    Groups2 = filter_groups(Groups1, Context),
-                    z_db:trans(
-                        fun(Ctx) ->
-                            lists:foreach(
-                                fun(GId) ->
-                                    z_db:q("
-                                        insert into oauth2_token_group (token_id, group_id)
-                                        values ($1, $2)",
-                                        [ TokenId, GId ],
-                                        Ctx)
-                                end,
-                                Groups2)
-                        end,
-                        Context),
-                    {ok, TokenId};
-                {error, _} = Error ->
-                    Error
-            end;
+            z_db:transaction(
+                fun(Ctx) ->
+                    insert_trans(UserId, Props, Ctx)
+                end,
+                Context);
         false ->
             {error, eacces}
     end;
 insert( UserId, Props, Context) when is_map(Props) ->
     insert(UserId, maps:to_list(Props), Context).
+
+insert_trans(UserId, Props, Context) ->
+    Secret = z_ids:id(32),
+    Props1 = [
+        {user_id, UserId},
+        {is_read_only, z_convert:to_bool( proplists:get_value(is_read_only, Props, true) )},
+        {is_full_access, z_convert:to_bool( proplists:get_value(is_full_access, Props, false) )},
+        {ip_allowed, z_string:trim( z_convert:to_binary( proplists:get_value(ip_allowed, Props, <<>>) ) )},
+        {note, z_html:escape( z_string:trim( proplists:get_value(note, Props, <<>>) ) )},
+        {valid_till, proplists:get_value(valid_till, Props)},
+        {secret, Secret}
+    ],
+    case z_db:insert(oauth2_token, Props1, Context) of
+        {ok, TokenId} ->
+            Groups = proplists:get_value(user_groups, Props, []),
+            Groups1 = [ m_rsc:rid(GId, Context) || GId <- Groups ],
+            Groups2 = filter_groups(Groups1, Context),
+            lists:foreach(
+                fun(GId) ->
+                    z_db:q("
+                        insert into oauth2_token_group (token_id, group_id)
+                        values ($1, $2)",
+                        [ TokenId, GId ],
+                        Context)
+                end,
+                Groups2),
+            {ok, TokenId};
+        {error, _} = Error ->
+            Error
+    end.
 
 
 -spec delete( integer(), z:context() ) -> ok | {error, notfound | eacces}.
@@ -141,15 +145,16 @@ delete( TokenId, Context ) when is_integer(TokenId) ->
     end.
 
 %% @doc Return the Bearer OAuth2 token for the given user
--spec encode_bearer_token( integer(), z:context() ) -> {ok, binary()} | {error, notfound | eacces}.
-encode_bearer_token( TokenId, Context ) ->
+-spec encode_bearer_token( integer(), undefined | integer(), z:context() ) -> {ok, binary()} | {error, notfound | eacces}.
+encode_bearer_token( TokenId, TTL, Context ) ->
     case get_token_access(TokenId, Context) of
         {ok, #{ user_id := UserId, secret := TokenSecret }} ->
             case is_allowed(UserId, Context) of
                 true ->
                     Key = oauth_key(Context),
-                    Enc = termit:encode_base64({v1, TokenId, TokenSecret}, Key),
-                    {ok, <<"oauth2-", Enc/binary>>};
+                    Term = {v1, TokenId, TokenSecret},
+                    Enc = issue_token(Term, Key, TTL),
+                    {ok, <<?TOKEN_PREFIX, Enc/binary>>};
                 false ->
                     {error, eacces}
             end;
@@ -157,9 +162,15 @@ encode_bearer_token( TokenId, Context ) ->
             Error
     end.
 
--spec decode_bearer_token(binary(), z:context()) -> {ok, {integer(), binary()}} | {error, unknown_token | term()}.
-decode_bearer_token(<<"oauth2-", Token/binary>>, Context) ->
-    case termit:decode_base64(Token, m_oauth2:oauth_key(Context)) of
+%5 @doc Issue token with optional expiration.
+issue_token(Term, Key, undefined) ->
+    termit:issue_token(Term, Key);
+issue_token(Term, Key, TTL) when is_integer(TTL) ->
+    termit:issue_token(Term, Key, TTL).
+
+-spec decode_bearer_token(binary(), z:context()) -> {ok, {integer(), binary()}} | {error, unknown_token | expired | forged | badarg}.
+decode_bearer_token(<<?TOKEN_PREFIX, Token/binary>>, Context) ->
+    case termit:verify_token(Token, m_oauth2:oauth_key(Context)) of
         {ok, {v1, TokenId, TokenSecret}} ->
             {ok, {TokenId, TokenSecret}};
         {error, _Reason} = Error ->
@@ -286,8 +297,9 @@ install_tables(Context) ->
             secret character varying(64) not null,
             ip_allowed character varying(500) not null default '*',
             valid_till timestamp with time zone,
+            note text,
             created timestamp with time zone NOT NULL DEFAULT now(),
-            modified timestamp with time zone NOT NULL DEFAULT now()
+            modified timestamp with time zone NOT NULL DEFAULT now(),
 
             primary key (id),
 
@@ -313,7 +325,7 @@ install_tables(Context) ->
                 references oauth2_token(id)
                 on update cascade
                 on delete cascade,
-            constraint fk_oauth2_token_group_group_id foreign key foreign key (group_id)
+            constraint fk_oauth2_token_group_group_id foreign key (group_id)
                 references rsc(id)
                 on update cascade
                 on delete cascade
@@ -323,7 +335,7 @@ install_tables(Context) ->
         "CREATE INDEX fki_oauth2_token_group_token_id ON oauth2_token_group (token_id)",
         Context),
     [] = z_db:q(
-        "CREATE INDEX fki_oauth2_token_group_group_id ON oauth2_token_group (group_od)",
+        "CREATE INDEX fki_oauth2_token_group_group_id ON oauth2_token_group (group_id)",
         Context),
 
     % A log of requests for this token (should be periodically pruned to keep only the last period)
@@ -333,7 +345,7 @@ install_tables(Context) ->
             token_id int not null,
             remote_ip character varying(32) not null,
             request_path character varying(500) not null,
-            created timestamp not null default current_timestamp,
+            created timestamp with time zone not null default current_timestamp,
 
             primary key(id),
 
