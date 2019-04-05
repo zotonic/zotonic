@@ -57,7 +57,7 @@
 -define(BCK_POLL_INTERVAL, 3600 * 1000).
 
 
-observe_rsc_upload(Upload, Context) ->
+observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
     backup_rsc_upload:rsc_upload(Upload, Context).
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->

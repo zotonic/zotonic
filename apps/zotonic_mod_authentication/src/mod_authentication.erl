@@ -181,7 +181,7 @@ logon_identity(Auth, IdnPs, Context) ->
         IdnPs,
         Context),
     Context1 = z_acl:logon_prefs(UserId, Context),
-    z_authentication_tokens:set_auth_cookie(UserId, Context1).
+    z_authentication_tokens:set_auth_cookie(UserId, #{}, Context1).
 
 
 maybe_signup(Auth, Context) ->
@@ -214,7 +214,7 @@ try_signup(Auth, Context) ->
                     end,
                     _ = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
                     Context1 = z_acl:logon_prefs(NewUserId, Context),
-                    z_authentication_tokens:set_auth_cookie(Context1);
+                    z_authentication_tokens:set_auth_cookie(NewUserId, #{}, Context1);
                 {error, _Reason} = Error ->
                     Error;
                 undefined ->
