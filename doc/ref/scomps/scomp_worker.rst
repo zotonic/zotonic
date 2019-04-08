@@ -1,4 +1,4 @@
 
-.. include:: meta-page.rst
+.. include:: meta-worker.rst
 
 .. todo:: Not yet documented.
