@@ -52,3 +52,4 @@ Marc Worrell (20):
  * Fix a problem with the preflight_check  of a query with 'qargs' term.
  * clamav: set medium flags 'is_av_scanned' and 'is_av_sizelimit' (#2031)
  * New z_stdlib
+ * Fix a problem with the menu editor and the new connect/find dialog. Fixes #2038
