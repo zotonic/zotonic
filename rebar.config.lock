@@ -95,7 +95,7 @@
                     "2b93ff12d8caa8e23e207b04a6aff04bc2d47a63"}},
        {diffy,".*",
               {git,"https://github.com/mmzeeman/diffy.git",
-                   "3023e993cf619ac74cae2c97af4dbb55178fd612"}},
+                   "ffb56061362865b13bad1841d759a5990b0f8f17"}},
        {gproc,".*",
               {git,"git://github.com/uwiger/gproc.git",
                    "2b1b9ac870416469097af695de413afd5e78f66c"}},
