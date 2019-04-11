@@ -7,6 +7,7 @@
     {% else %}
     	{% include "_admin_catcg.tpl"
                     cat_id=m.rsc[cat].id
+                    cat_restrict=m.rsc[cat].name|as_atom
                     is_nocatselect=(cat and nocatselect)
                     is_nocgselect=nocgselect
                     form=form

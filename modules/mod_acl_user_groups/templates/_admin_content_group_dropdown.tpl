@@ -1,7 +1,8 @@
 {% with m.acl_user_group.has_collaboration_groups as collabs %}
 {% if is_nocatselect %}
 
-    <select class="form-control" id="{{ cgsel_id|default:#content_group_id }}" name="content_group_id">
+    <select class="form-control" id="{{ cgsel_id|default:#content_group_id }}" name="content_group_id" required>
+        <option value="" disabled selected>{_ Select content group _}</option>
         {% if collabs and m.acl_rule.can_insert.acl_collaboration_group[cat_id] %}
             <optgroup label="{{ m.rsc.content_group.title }}">
         {% endif %}
@@ -32,7 +33,7 @@
 
     <select class="form-control" id="{{ cgsel_id|default:#content_group_id }}" name="content_group_id">
         {% if not cg_id %}
-            <option value=""></option>
+            <option value="" disabled selected>{_ Select content group _}</option>
         {% endif %}
         {% if collabs or cg_id.is_a.acl_collaboration_group %}
             <optgroup label="{{ m.rsc.content_group.title }}">
@@ -75,8 +76,12 @@
     {% with cat_id|default:id.category_id as category_id %}
     {% with cg_id|default:id.content_group_id as content_group_id %}
 
-        <select class="form-control" id="{{ cgsel_id|default:#content_group_id }}" name="content_group_id">
-            {% if category_id %}
+        {% if not category_id %}
+            <p class="text-muted form-control-static">&ndash;</p>
+            <input type="hidden" id="{{ cgsel_id|default:#content_group_id }}" name="content_group_id" value="">
+        {% else %}
+            <select class="form-control" id="{{ cgsel_id|default:#content_group_id }}" name="content_group_id" required>
+                <option value="" disabled {% if not content_group_id %}selected{% endif %}>{_ Select content group _}</option>
                 {% if collabs or content_group_id.is_a.acl_collaboration_group %}
                     <optgroup label="{{ m.rsc.content_group.title }}">
                 {% endif %}
@@ -113,8 +118,8 @@
                         {% endfor %}
                     </opgroup>
                 {% endif %}
-            {% endif %}
-        </select>
+            </select>
+        {% endif %}
 
     {% endwith %}
     {% endwith %}
