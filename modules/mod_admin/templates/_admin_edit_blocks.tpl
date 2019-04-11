@@ -105,6 +105,8 @@ $('#edit-blocks-wrapper').on('click', '.rsc-item h5 a', function(event) {
         callback="window.zAdminBlockConnectDone"
         center=0
         autoclose
+        is_zlink
+        width="large"
     }
 %}
 
