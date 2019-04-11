@@ -21,14 +21,15 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -svc_title("Basic information about the system.").
--svc_needauth(true).
+-svc_needauth(false).
 
 -export([process_get/2]).
 
 -include_lib("zotonic.hrl").
 -include_lib("zotonic_release.hrl").
 
-process_get(_ReqData, Context) ->
+process_get(ReqData, Context) ->
+    io:format("~p~n~n", [ReqData]),
     Result = case z_auth:is_auth(Context) of
                  true ->
                      z_convert:to_list(z_trans:lookup_fallback(m_rsc:p(Context#context.user_id, title, Context), Context));
