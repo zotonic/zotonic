@@ -48,7 +48,7 @@
  {<<"lager">>,{pkg,<<"lager">>,<<"3.2.1">>},0},
  {<<"letsencrypt">>,
   {git,"https://github.com/zotonic/letsencrypt-erlang.git",
-       {ref,"9eb5ff98a6261cc379a6b7d3a4df04086aa4e342"}},
+       {ref,"2f5d6fce1f5829774abfcca7daa1aef054235522"}},
   0},
  {<<"meck">>,{pkg,<<"meck">>,<<"0.8.4">>},0},
  {<<"mimetypes">>,{pkg,<<"mimetypes">>,<<"1.1.0">>},0},

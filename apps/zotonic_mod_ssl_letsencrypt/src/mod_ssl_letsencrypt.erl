@@ -451,7 +451,7 @@ cert_files(Context) ->
     end.
 
 cert_dir(Context) ->
-    filename:join([z_path:site_dir(Context), "ssl", "letsencrypt"]).
+    filename:join([z_path:site_dir(Context), "priv", "ssl", "letsencrypt"]).
 
 cert_temp_dir(Context) ->
     filename:join([cert_dir(Context), "tmp"]).
