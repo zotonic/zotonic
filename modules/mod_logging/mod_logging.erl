@@ -51,6 +51,8 @@ pid_observe_zlog(Pid, #zlog{props=#log_message{}=Msg}, Context) ->
     end;
 pid_observe_zlog(Pid, #zlog{props=#log_email{}=Msg}, _Context) ->
     gen_server:cast(Pid, {log, Msg});
+pid_observe_zlog(Pid, #zlog{props = #log_audit{} = Msg}, _Context) ->
+    gen_server:cast(Pid, {log, Msg});
 pid_observe_zlog(_Pid, #zlog{}, _Context) ->
     undefined.
 
@@ -193,7 +195,9 @@ handle_other_log(Record, State) ->
     end.
 
 record_to_proplist(#log_email{} = Rec) ->
-    lists:zip(record_info(fields, log_email), tl(tuple_to_list(Rec))).
+    lists:zip(record_info(fields, log_email), tl(tuple_to_list(Rec)));
+record_to_proplist(#log_audit{} = Rec) ->
+    lists:zip(record_info(fields, log_audit), tl(tuple_to_list(Rec))).
 
 record_to_log_message(#log_email{} = R, _Fields, LogType, Id) ->
     #log_message{

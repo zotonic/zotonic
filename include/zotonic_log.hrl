@@ -47,12 +47,19 @@
     props = []          % optional extra properties to be logged
 }).
 
+-record(log_audit, {
+    action :: atom(),
+    rsc_id = undefined :: m_rsc:resource(),
+    value = undefined :: string(),
+    previous_value = undefined :: string()
+}).
+
 % NOTE: Make sure to extend record_to_proplist/1 in mod_logging.erl when adding log types.
 -record(zlog, {
         type = undefined :: atom(),
         user_id = undefined :: integer(),
         timestamp = undefined :: erlang:timestamp(),
-        props = [] :: list() | #log_message{} | #log_email{}
+        props = [] :: list() | #log_message{} | #log_email{} | #log_audit{}
     }).
 
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
