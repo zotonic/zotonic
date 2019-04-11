@@ -50,8 +50,8 @@
 -record(log_audit, {
     action :: atom(),
     rsc_id = undefined :: m_rsc:resource(),
-    value = undefined :: string(),
-    previous_value = undefined :: string()
+    value = undefined :: any(),
+    previous_value = undefined :: any()
 }).
 
 % NOTE: Make sure to extend record_to_proplist/1 in mod_logging.erl when adding log types.
