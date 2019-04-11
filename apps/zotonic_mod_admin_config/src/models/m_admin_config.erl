@@ -40,7 +40,7 @@ m_get(Vs, _Msg, _Context) ->
 
 ssl_certificates(Context) ->
     Observers = z_notifier:get_observers(ssl_options, Context),
-    [ ssl_certificate(Observer, Context) || {_Prio, Observer} <- Observers ]
+    [ ssl_certificate(Observer, Context) || {_Prio, Observer, _Pid} <- Observers ]
     ++ [ self_signed(Context) ].
 
 ssl_certificate({Module, observe_ssl_options}, Context) ->

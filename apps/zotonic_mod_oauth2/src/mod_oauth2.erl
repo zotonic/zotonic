@@ -45,7 +45,9 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
                 false ->
                     try_auth(Context)
             end
-    end.
+    end;
+observe_request_context(#request_context{ phase = _Phase }, Context, _Context) ->
+    Context.
 
 try_auth(Context) ->
     case cowmachine_req:get_req_header(<<"authorization">>, Context) of

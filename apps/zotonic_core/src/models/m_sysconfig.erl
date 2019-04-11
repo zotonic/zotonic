@@ -31,8 +31,8 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ Key | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {z_config:get(Key), Rest};
-        false -> {undefined, Rest}
+        true -> {ok, {z_config:get(Key), Rest}};
+        false -> {error, eacces}
     end;
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
