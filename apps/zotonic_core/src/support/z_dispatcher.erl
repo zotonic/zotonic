@@ -58,7 +58,11 @@
 %%      Used by controller_file_id and controller_redirect
 %% TODO: this behaviour should be changed to an _inclusive_ list instead of a filter list
 dispatcher_args() ->
-    [ is_permanent, dispatch, q, qargs, zotonic_dispatch, ssl, protocol, session_id, set_session_id ].
+    [
+        is_permanent, dispatch, q, qargs,
+        zotonic_dispatch, ssl, protocol, session_id, set_session_id,
+        auth_options, auth_expires
+    ].
 
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the dispatch server

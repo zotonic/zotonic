@@ -12,8 +12,6 @@
     "js/modules/z.dialog.js"
 	"js/modules/livevalidation-1.3.js"
 	"js/modules/jquery.loadmask.js"
-
-    "js/zotonic.auth.js"
 %}
 
 {#
