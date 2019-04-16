@@ -92,6 +92,7 @@ get_skeleton_modules(empty) ->
      mod_mqtt,
      mod_logging,
      mod_l10n,
+     mod_bootstrap,
 
      mod_authentication,
      mod_acl_adminonly,
@@ -120,6 +121,7 @@ get_skeleton_modules(blog) ->
      mod_logging,
      mod_mqtt,
      mod_l10n,
+     mod_bootstrap,
 
      mod_seo,
      mod_seo_sitemap,
@@ -137,8 +139,7 @@ get_skeleton_modules(blog) ->
 
      mod_media_exif,
 
-     mod_comment,
-     mod_bootstrap
+     mod_comment
     ];
 get_skeleton_modules(_) ->
     %% nodb | undefined | OtherUnknown -> []

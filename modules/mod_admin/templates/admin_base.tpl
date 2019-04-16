@@ -12,7 +12,7 @@
         <meta name="author" content="Arjan Scherpenisse" />
 
         {% lib
-            "admin-bootstrap3/css/bootstrap.min.css"
+            "bootstrap/css/bootstrap.min.css"
         %}
 
         {% lib

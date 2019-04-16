@@ -1,5 +1,5 @@
 {% lib
-    "admin-bootstrap3/js/bootstrap.min.js"
+    "bootstrap/js/bootstrap.min.js"
 %}
 
 {% lib

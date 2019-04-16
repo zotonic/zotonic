@@ -24,6 +24,7 @@
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
 -mod_depends([base, authentication, mod_search, mod_mqtt]).
 -mod_provides([admin]).
+-mod_depends([bootstrap]).
 -mod_schema(1).
 -mod_prio(1000).
 

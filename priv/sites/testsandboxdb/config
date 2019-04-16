@@ -20,6 +20,7 @@
     {modules, [
         testsandboxdb,
         mod_base,
+        mod_bootstrap,
         mod_authentication,
         mod_admin
     ]}
