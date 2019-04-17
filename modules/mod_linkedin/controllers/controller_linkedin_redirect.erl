@@ -71,10 +71,10 @@ do_auth_user(Auth, Context) ->
     case z_notifier:first(Auth, Context) of
         undefined ->
             % No handler for signups, or signup not accepted
-            lager:warning("[linkedin] Undefined auth_user return for user with props ~p", [UserProps]),
+            lager:warning("[linkedin] Undefined auth_user return for user with props ~p", [Auth]),
             html_error(auth_user_undefined, Context);
         {error, duplicate} ->
-            lager:info("[linkedin] Duplicate connection for user with props ~p", [UserProps]),
+            lager:info("[linkedin] Duplicate connection for user with props ~p", [Auth]),
             html_error(duplicate, Context);
         {error, {duplicate_email, Email}} ->
             lager:info("[linkedin] User with email \"~s\" already exists", [Email]),
@@ -83,7 +83,7 @@ do_auth_user(Auth, Context) ->
             % We need a confirmation from the user before we add a new account
             html_error(signup_confirm, {auth, Auth}, Context);
         {error, _} = Err ->
-            lager:warning("[linkedin] Error return ~p for user with props ~p", [Err, UserProps]),
+            lager:warning("[linkedin] Error return ~p for user with props ~p", [Err, Auth]),
             html_error(auth_user_error, Context);
         {ok, Context1} ->
             html_ok(Context1)
@@ -94,9 +94,13 @@ html_ok(Context) ->
     z_context:output(Html, Context).
 
 html_error(Error, Context) ->
+    html_error(Error, undefined, Context).
+
+html_error(Error, What, Context) ->
     Vars = [
         {service, "LinkedIn"},
         {is_safari8problem, is_safari8problem(Context)},
+        {what, What},
         {error, Error}
     ],
     Html = z_template:render("logon_service_error.tpl", Vars, Context),
