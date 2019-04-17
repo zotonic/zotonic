@@ -22,7 +22,8 @@
 
 -export([
     html/1,
-    fetch_user_data/1
+    fetch_user_data/1,
+    fetch_email_address/1
     ]).
 
 -include_lib("controller_html_helper.hrl").
@@ -54,14 +55,17 @@ access_token({ok, AccessToken, Expires}, Context) ->
         {access_token, AccessToken},
         {expires, Expires}
     ],
-    user_data(fetch_user_data(AccessToken), Data, Context);
+    user_data(fetch_user_data(AccessToken), fetch_email_address(AccessToken), Data, Context);
 access_token({error, _Reason}, Context) ->
     html_error(access_token, Context).
 
-user_data({ok, UserProps}, AccessData, Context) ->
-    Auth = auth_user(UserProps, AccessData, Context),
+user_data({ok, UserProps}, {ok, Email}, AccessData, Context) ->
+    Auth = auth_user(UserProps, Email, AccessData, Context),
     do_auth_user(Auth, Context);
-user_data({error, _Reason}, _AccessData, Context) ->
+user_data({ok, UserProps}, {error, Reason}, _AccessData, Context) ->
+    lager:error("No email address, error ~p for ~p", [Reason, UserProps]),
+    html_error(service_user_data, Context);
+user_data(_UserError, _EmailError, _AccessData, Context) ->
     html_error(service_user_data, Context).
 
 do_auth_user(Auth, Context) ->
@@ -74,7 +78,7 @@ do_auth_user(Auth, Context) ->
             lager:info("[linkedin] Duplicate connection for user with props ~p", [Auth]),
             html_error(duplicate, Context);
         {error, {duplicate_email, Email}} ->
-            lager:info("[facebook] User with email \"~s\" already exists", [Email]),
+            lager:info("[linkedin] User with email \"~s\" already exists", [Email]),
             html_error(duplicate_email, Email, Context);
         {error, signup_confirm} ->
             % We need a confirmation from the user before we add a new account
@@ -115,24 +119,22 @@ is_safari8problem(Context) ->
     not HasCookies andalso IsVersion8 andalso IsSafari.
 
 
-auth_user(Profile, AccessTokenData, Context) ->
-    LinkedInUserId = proplists:get_value(<<"id">>, Profile),
+auth_user(Profile, Email, AccessTokenData, Context) ->
+    {<<"id">>, LinkedInUserId} = proplists:lookup(<<"id">>, Profile),
     lager:debug("[linkedin] Authenticating ~p ~p", [LinkedInUserId, Profile]),
-    {struct, Location} = proplists:get_value(<<"location">>, Profile),
-    {struct, Country} = proplists:get_value(<<"country">>, Location),
+
+    % {struct, Location} = proplists:get_value(<<"location">>, Profile),
+    % {struct, Country} = proplists:get_value(<<"country">>, Location),
     PersonProps = [
-        {title, proplists:get_value(<<"formattedName">>, Profile)},
-        {name_first, proplists:get_value(<<"firstName">>, Profile)},
-        {name_surname, proplists:get_value(<<"lastName">>, Profile)},
-        {summary, proplists:get_value(<<"headline">>, Profile)},
-        {body, z_html:escape_link(proplists:get_value(<<"summary">>, Profile))},
-        {website, proplists:get_value(<<"publicProfileUrl">>, Profile)},
-        {linkedin_url, proplists:get_value(<<"publicProfileUrl">>, Profile)},
-        {email, proplists:get_value(<<"emailAddress">>, Profile, [])},
-        {address_country, proplists:get_value(<<"code">>, Country)},
-        {address_line_1, proplists:get_value(<<"name">>, Location)},
-        {depiction_url, picture_url(proplists:get_value(<<"pictureUrls">>, Profile))}
-    ] ++ company_info(Profile),
+        {title, iolist_to_binary([
+                z_convert:to_binary(get_localized_value(<<"firstName">>, Profile)), " ",
+                z_convert:to_binary(get_localized_value(<<"lastName">>, Profile))
+            ])},
+        {name_first, get_localized_value(<<"firstName">>, Profile)},
+        {name_surname, get_localized_value(<<"lastName">>, Profile)},
+        {summary, get_localized_value(<<"headline">>, Profile)},
+        {email, Email}
+    ],
     Args = controller_linkedin_authorize:get_args(Context),
     #auth_validated{
         service=linkedin,
@@ -142,30 +144,21 @@ auth_user(Profile, AccessTokenData, Context) ->
         is_connect=z_convert:to_bool(proplists:get_value("is_connect", Args))
     }.
 
-company_info(Profile) ->
-    case proplists:get_value(<<"positions">>, Profile) of
-        {struct, Ps} ->
-            case proplists:get_value(<<"values">>, Ps) of
-                [{struct, Qs}|_] ->
-                    {struct, Company} = proplists:get_value(<<"company">>, Qs),
-                    [
-                        {company_name, proplists:get_value(<<"name">>, Company)},
-                        {company_role, proplists:get_value(<<"title">>, Qs)}
-                    ];
-                [] ->
-                    []
+get_localized_value(Props, JSON) ->
+    case proplists:get_value(Props, JSON) of
+        {struct, Localized} ->
+            case proplists:get_value(<<"localized">>, Localized) of
+                {struct, [ {_, V} | _ ] = Locs} ->
+                    proplists:get_value(<<"en_US">>, Locs, V);
+                undefined ->
+                    undefined
             end;
+        Bin when is_binary(Bin) ->
+            Bin;
+        null ->
+            undefined;
         undefined ->
-            []
-    end.
-
-
-picture_url(undefined) ->
-    undefined;
-picture_url({struct, Ps}) ->
-    case proplists:get_value(<<"values">>, Ps) of
-        [Url|_] -> Url;
-        _ -> undefined
+            undefined
     end.
 
 % Exchange the code for an access token
@@ -184,8 +177,8 @@ fetch_access_token(Code, Context) ->
     case httpc:request(post, {LinkedInUrl, [], "application/x-www-form-urlencoded", Body}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Json} = mochijson:binary_decode(Payload),
-            {<<"access_token">>, AccessToken} = proplists:lookup(<<"access_token">>, Json), 
-            {<<"expires_in">>, ExpiresIn} = proplists:lookup(<<"expires_in">>, Json), 
+            {<<"access_token">>, AccessToken} = proplists:lookup(<<"access_token">>, Json),
+            {<<"expires_in">>, ExpiresIn} = proplists:lookup(<<"expires_in">>, Json),
             {ok, AccessToken, ExpiresIn};
         Other ->
             lager:error("[linkedin] error fetching access token [code ~p] ~p", [Code, Other]),
@@ -194,10 +187,8 @@ fetch_access_token(Code, Context) ->
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    LinkedInUrl = "https://api.linkedin.com/v1/people/\~:"
-                ++fields()
-                ++"?secure_urls=true&format=json&oauth2_access_token="
-                ++z_convert:to_list(AccessToken),
+    LinkedInUrl = "https://api.linkedin.com/v2/me"
+                ++ "?oauth2_access_token=" ++ z_convert:to_list(AccessToken),
     case httpc:request(get, {LinkedInUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {struct, Props} = mochijson:binary_decode(Payload),
@@ -210,42 +201,43 @@ fetch_user_data(AccessToken) ->
             {error, {http_error, LinkedInUrl, Other}}
     end.
 
-% ensure_inets_profile(Profile) ->
-%     case inets:start(httpc, [{profile, Profile}]) of
-%         {ok, _Pid} -> 
-%             httpc:set_options([{keep_alive_timeout, 1}], Profile),
-%             ok;
-%         {error, {already_started, _Pid}} ->
-%             ok
-%     end.
+
+% [{<<"elements">>,
+%       [{struct,[{<<"handle">>,<<"urn:li:emailAddress:109707987">>},
+%                 {<<"handle~">>,
+%                  {struct,[{<<"emailAddress">>,<<"piet@example.com">>}]}}]}]}]}
+fetch_email_address(AccessToken) ->
+    LinkedInUrl = "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))"
+                ++ "&oauth2_access_token=" ++ z_convert:to_list(AccessToken),
+    case httpc:request(get, {LinkedInUrl, []}, httpc_http_options(), httpc_options()) of
+        {ok, {{_, 200, _}, _Headers, Payload}} ->
+            {struct, Props} = mochijson:binary_decode(Payload),
+            case proplists:get_value(<<"elements">>, Props) of
+                [ {struct, Hs} | _ ] ->
+                    case proplists:get_value(<<"handle~">>, Hs) of
+                        {struct, Es} ->
+                            case proplists:get_value(<<"emailAddress">>, Es) of
+                                Email when is_binary(Email) ->
+                                    {ok, Email};
+                                _ ->
+                                    {error, noemail}
+                            end;
+                        _ ->
+                            {error, noemail}
+                    end;
+                _ ->
+                    {error, noemail}
+            end;
+        {ok, {{_, 401, _}, _Headers, Payload}} = Other ->
+            lager:error("[linkedin] 401 error fetching user email [token ~p] will not retry ~p", [AccessToken, Payload]),
+            {error, {http_error, LinkedInUrl, Other}};
+        Other ->
+            lager:error("[linkedin] error fetching user email [token ~p] ~p", [AccessToken, Other]),
+            {error, {http_error, LinkedInUrl, Other}}
+    end.
 
 
-%% Profile fields to request (see also https://developer.linkedin.com/documents/profile-fields#profile)
-% id
-% location:(country:(code))
-% location:(name)
-% summary
-% picture-url
-% public-profile-url
-% email-address
-fields() ->
-    lists:flatten([
-        $(,
-            "id", $,,
-            "first-name", $,,
-            "last-name", $,,
-            "formatted-name", $,,
-            "headline", $,,
-            "summary", $,,
-            "location:(country:(code),name)", $,,
-            "picture-urls::(original)", $,,
-            "public-profile-url", $,,
-            "positions:(title,company:(name))", $,,
-            "email-address",
-        $)
-        ]).
-
-httpc_options() -> 
+httpc_options() ->
     [
         {sync, true},
         {body_format, binary}
