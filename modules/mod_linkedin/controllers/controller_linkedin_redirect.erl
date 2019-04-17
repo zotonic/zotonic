@@ -122,9 +122,6 @@ is_safari8problem(Context) ->
 auth_user(Profile, Email, AccessTokenData, Context) ->
     {<<"id">>, LinkedInUserId} = proplists:lookup(<<"id">>, Profile),
     lager:debug("[linkedin] Authenticating ~p ~p", [LinkedInUserId, Profile]),
-
-    % {struct, Location} = proplists:get_value(<<"location">>, Profile),
-    % {struct, Country} = proplists:get_value(<<"country">>, Location),
     PersonProps = [
         {title, iolist_to_binary([
                 z_convert:to_binary(get_localized_value(<<"firstName">>, Profile)), " ",
