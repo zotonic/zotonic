@@ -690,7 +690,14 @@ delete_reminder_secret(Id, Context) ->
 
 
 get_by_reminder_secret(Code, Context) ->
-    case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
+    Result = case m_config:get_value(mod_authentication, reset_token_maxage, Context) of
+        undefined ->
+            m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context);
+        MaxAge ->
+            m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, z_convert:to_integer(MaxAge), Context)
+    end,
+
+    case Result of
         undefined -> undefined;
         Row -> {ok, proplists:get_value(rsc_id, Row)}
     end.

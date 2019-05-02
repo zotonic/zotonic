@@ -56,6 +56,7 @@
 	lookup_by_username/2,
 	lookup_by_verify_key/2,
     lookup_by_type_and_key/3,
+    lookup_by_type_and_key/4,
     lookup_by_type_and_key_multi/3,
 
     lookup_by_rememberme_token/2,
@@ -883,6 +884,17 @@ lookup_by_username(Key, Context) ->
 
 lookup_by_type_and_key(Type, Key, Context) ->
     z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key], Context).
+
+%% @doc Look up an identity that can expire.
+%%      MaxAge is maximum age in seconds.
+-spec lookup_by_type_and_key(string(), string(), pos_integer(), z:context()) -> proplists:proplist() | undefined.
+lookup_by_type_and_key(Type, Key, MaxAge, Context) ->
+    z_db:assoc_row(
+        "select * from identity where type = $1 and key = $2 and created > now() - interval "
+            ++ "'" ++ z_convert:to_list(MaxAge) ++ " seconds'",
+        [Type, Key],
+        Context
+    ).
 
 lookup_by_type_and_key_multi(Type, Key, Context) ->
     z_db:assoc("select * from identity where type = $1 and key = $2", [Type, Key], Context).
