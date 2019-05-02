@@ -32,6 +32,8 @@ sanitize(#media_upload_preprocess{ mime = "image/svg+xml" } = PP, _Context) ->
     sanitize_svg(PP);
 sanitize(#media_upload_preprocess{ mime = "text/html" } = PP, Context) ->
     sanitize_html(PP, Context);
+sanitize(#media_upload_preprocess{ mime = "text/csv" } = PP, Context) ->
+    sanitize_csv(PP, Context);
 sanitize(#media_upload_preprocess{ mime = "application/xml+html" } = PP, Context) ->
     sanitize_html(PP, Context);
 sanitize(#media_upload_preprocess{ mime = Mime } = PP, _Context) when is_list(Mime) ->
@@ -50,6 +52,11 @@ sanitize_html(#media_upload_preprocess{file=File} = PP, Context) ->
     TmpFile = z_tempfile:new(".html"),
     ok = file:write_file(TmpFile, Html),
     PP#media_upload_preprocess{ file = TmpFile, mime = "text/html" }.
+
+sanitize_csv(#media_upload_preprocess{file=File} = PP, _Context) ->
+    TmpFile = z_tempfile:new(".csv"),
+    ok = z_csv_writer:sanitize(File, TmpFile),
+    PP#media_upload_preprocess{ file = TmpFile }.
 
 
 %% @doc Check the contents of an identified file, to see if it is acceptable for further processing.

@@ -46,7 +46,7 @@ import(Def, IsReset, Context) ->
 
     %% Read and parse all rows
     {ok, Device} = file:open(Def#filedef.filename, [read, binary, {encoding, utf8}]),
-    Rows = parse_csv:scan_lines(Device, Def#filedef.colsep),
+    Rows = z_csv_parser:scan_lines(Device, Def#filedef.colsep),
     file:close(Device),
     file:delete(Def#filedef.filename),
 
