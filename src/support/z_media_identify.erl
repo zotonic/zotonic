@@ -164,6 +164,19 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         _ -> "text/plain"
                     end,
                     {ok, [{mime, Mime2}]};
+                "text/plain" ->
+                    Mime2 = case guess_mime(OriginalFilename) of
+                        "text/csv" ->
+                            case z_csv_parser:inspect_file(File) of
+                                {ok, _Hs, _Sep} ->
+                                    "text/csv";
+                                {error, _} ->
+                                    "text/plain"
+                            end;
+                        _ ->
+                            "text/plain"
+                    end,
+                    {ok, [{mime, Mime2}]};
                 "application/x-gzip" ->
                     %% Special case for the often used extension ".tgz" instead of ".tar.gz"
                     case filename:extension(OriginalFilename) of
