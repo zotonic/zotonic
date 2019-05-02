@@ -33,13 +33,13 @@
 
 
 %% @doc Check the uploaded file with clamav
-observe_media_upload_preprocess(#media_upload_preprocess{ file = File, medium = Medium } = Pre, Context) ->
+observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mime, medium = Medium } = Pre, Context) ->
     case proplists:get_value(is_av_sizelimit, Medium, false) of
         true ->
             % This is the second try, now with disabled av-scanner
             undefined;
         false ->
-            case z_clamav:scan_file(File) of
+            case scan_file(File, Mime, Context) of
                 ok ->
                     % all ok, give the next preprocessor a try
                     lager:info("clamav: file ~p for user ~p is ok",
@@ -57,6 +57,21 @@ observe_media_upload_preprocess(#media_upload_preprocess{ file = File, medium = 
                     Error
             end
     end.
+
+scan_file(File, Mime, Context) ->
+  MimeB = z_convert:to_binary(Mime),
+  Fs = [
+    fun() -> z_clamav:scan_file(File) end,
+    fun() -> z_clamav_msoffice:scan_file(File, MimeB, Context) end
+  ],
+  lists:foldl(
+    fun
+        (F, ok) -> F();
+        (_F, Err) -> Err
+    end,
+    ok,
+    Fs).
+
 
 %% @doc Periodic ping of clamav to check the settings
 observe_tick_1h(tick_1h, _Context) ->
