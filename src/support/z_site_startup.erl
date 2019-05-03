@@ -47,10 +47,16 @@ init(SiteProps) ->
         {module, ?MODULE}
       ]),
     Context = z_context:new(Host),
+    z_notifier:observe(module_ready, self(), Context),
     {ok, #state{context=Context}, 0}.
 
 handle_call(_Msg, _From, State) ->
     {noreply, State}.
+
+handle_cast({module_ready, _NotifyContext}, #state{ context = Context } = State) ->
+    z_notifier:detach(module_ready, self(), Context),
+    z:info("Site ~p started.", [ z_context:site(Context) ], [], Context),
+    {noreply, State};
 
 handle_cast(_Msg, State) ->
     {noreply, State}.
@@ -73,7 +79,6 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 do_startup(Context) ->
-
     case z_db:has_connection(Context) of
         true ->
             z_install_data:install_modules(Context),

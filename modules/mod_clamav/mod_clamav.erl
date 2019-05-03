@@ -47,25 +47,32 @@ observe_media_upload_preprocess(#media_upload_preprocess{ file = File, medium = 
                                  z_acl:user(Context)
                                ]),
                     undefined;
-                {error, _} = Error ->
-                    lager:error("clamav: error ~p checking ~p (~p) for user ~p",
-                                [ Error,
-                                  Pre#media_upload_preprocess.original_filename,
-                                  Pre#media_upload_preprocess.mime,
-                                  z_acl:user(Context)
-                                ]),
+                {error, Reason} = Error ->
+                    UId = z_acl:user(Context),
+                    z:error(
+                        "Virus scanner: error '~p' checking '~s' (~s) for user ~p (~s)",
+                        [ Reason,
+                          Pre#media_upload_preprocess.original_filename,
+                          Pre#media_upload_preprocess.mime,
+                          UId,
+                          z_convert:to_binary( m_rsc:p_no_acl(UId, email, Context) )
+                        ],
+                        [ {module, ?MODULE}, {line, ?LINE} ],
+                        Context),
                     Error
             end
     end.
 
 %% @doc Periodic ping of clamav to check the settings
-observe_tick_1h(tick_1h, _Context) ->
+observe_tick_1h(tick_1h, Context) ->
     {IP, Port} = z_clamav:ip_port(),
     case z_clamav:ping() of
         pong ->
-            lager:info("clamav: ping ok for clamav daemon at ~s:~p",
+            lager:info("Virus scanner: ping ok for clamav daemon at ~s:~p",
                         [ IP, Port ]);
         pang ->
-            lager:error("clamav: can't ping clamav daemon at ~s:~p",
-                        [ IP, Port ])
+            z:warning("Virus scanner: can not ping clamav daemon at ~s:~p",
+                      [ IP, Port ],
+                      [ {module, ?MODULE}, {line, ?LINE} ],
+                      Context)
     end.

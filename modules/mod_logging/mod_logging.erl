@@ -42,7 +42,12 @@
 %% interface functions
 
 observe_search_query({search_query, Req, OffsetLimit}, Context) ->
-    search(Req, OffsetLimit, Context).
+    case z_acl:is_admin(Context) of
+        true ->
+            search(Req, OffsetLimit, Context);
+        false ->
+            []
+    end.
 
 pid_observe_zlog(Pid, #zlog{props=#log_message{}=Msg}, Context) ->
     case Msg#log_message.user_id of

@@ -105,8 +105,16 @@ upgrade(true, Context) ->
 deactivate(Module, Context) ->
     flush(Context),
     case z_db:q("update module set is_active = false, modified = now() where name = $1", [Module], Context) of
-        1 -> upgrade(false, Context);
-        0 -> ok
+        1 ->
+          UId = z_acl:user(Context),
+          z:warning(
+              "Module ~p deactivated by ~p (~s)",
+              [ Module, UId, z_convert:to_binary( m_rsc:p_no_acl(UId, email, Context) ) ],
+              [ {module, ?MODULE}, {line, ?LINE} ],
+              Context),
+          upgrade(false, Context);
+        0 ->
+          ok
     end.
 
 
@@ -152,6 +160,12 @@ activate(Module, IsSync, Context) ->
                         end
                 end,
             1 = z_db:transaction(F, Context),
+            UId = z_acl:user(Context),
+            z:warning(
+                "Module ~p activated by ~p (~s)",
+                [ Module, UId, z_convert:to_binary( m_rsc:p_no_acl(UId, email, Context) ) ],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                Context),
             upgrade(IsSync, Context);
         none ->
             lager:error("Could not find module '~p'", [Module]),

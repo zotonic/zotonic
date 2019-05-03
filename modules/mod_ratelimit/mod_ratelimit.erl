@@ -64,6 +64,11 @@ observe_auth_precheck( #auth_precheck{ username = Username }, Context ) ->
     end,
     case m_ratelimit:is_event_limited(auth, Username, DeviceId, Context) of
         true ->
+            z:info(
+                "Rate limit on auth hit for username '~s' (from ~p)",
+                [ Username, m_req:get(peer, Context) ],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                Context),
             {error, ratelimit};
         false ->
             undefined
@@ -113,6 +118,11 @@ observe_auth_reset(#auth_reset{ username = Username }, Context) ->
     end,
     case m_ratelimit:is_event_limited(reset, Username, DeviceId, Context) of
         true ->
+            z:info(
+                "Rate limit on reset hit for username '~s' (from ~p)",
+                [ Username, m_req:get(peer, Context) ],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                Context),
             {error, ratelimit};
         false ->
             m_ratelimit:insert_event(reset, Username, DeviceId, Context),
