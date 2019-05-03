@@ -147,19 +147,42 @@ get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Ke
 
 %% @doc Set a "simple" config value.
 %% @spec set_value(Module::atom(), Key::atom(), Value::string(), #context{}) -> ok
-set_value(Module, Key, Value, Context) ->
-    case z_db:q("update config set value = $1, modified = now() where module = $2 and key = $3", [Value, Module, Key], Context) of
-        0 -> z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Context);
-        [] -> ok;
-        1 -> ok
+set_value(Module, Key, Value0, Context) ->
+    Value = z_convert:to_binary(Value0),
+    case z_db:q1("
+        select value
+        from config
+        where module = $1
+          and key = $2",
+        [ Module, Key ],
+        Context)
+    of
+        Value ->
+            ok;
+        undefined ->
+            {ok, _} = z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Context),
+            z:warning(
+                "Configuration key '~s.~s' inserted, new value: '~s'",
+                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value ],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                Context);
+        OldValue ->
+            1 = z_db:q("
+                update config
+                set value = $1,
+                    modified = now()
+                where module = $2
+                  and key = $3",
+                [ Value, Module, Key ],
+                Context),
+            z:warning(
+                "Configuration key '~s.~s' changed, new value: '~s', old value '~s'",
+                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value, OldValue ],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                Context)
     end,
     z_depcache:flush(config, Context),
     z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
-    z:warning(
-        "Configuration key '~s.~s' changed, new value: ~s",
-        [ z_convert:to_binary(Module), z_convert:to_binary(Key), z_convert:to_binary(Value) ],
-        [ {module, ?MODULE}, {line, ?LINE} ],
-        Context),
     ok.
 
 

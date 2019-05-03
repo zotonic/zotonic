@@ -657,9 +657,13 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
             [
              begin
                  StartErrorReason = get_start_error_reason(startable(M, Provided)),
+                 z:error(
+                    "Could not start module ~p: ~s",
+                    [ M, StartErrorReason ],
+                    [ {module, ?MODULE}, {line, ?LINE} ],
+                    Context),
                  Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
-                 z_session_manager:broadcast(#broadcast{type="error", message=Msg, title="Module manager", stay=false}, z_acl:sudo(Context)),
-                 lager:error("~s", [Msg])
+                 z_session_manager:broadcast(#broadcast{type="error", message=Msg, title="Module manager", stay=false}, z_acl:sudo(Context))
              end || M <- Starting
             ],
 
