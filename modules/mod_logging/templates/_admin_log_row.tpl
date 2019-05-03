@@ -2,6 +2,8 @@
     {% with m.log[id] as l %}
         {% if l.type == 'error' %}
             <div class="alert alert-danger">
+        {% elseif l.type == 'debug' %}
+            <div class="alert alert-success">
         {% else %}
             <div class="alert alert-{{ l.type|default:"info" }}">
         {% endif %}

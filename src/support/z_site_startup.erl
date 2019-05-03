@@ -55,7 +55,7 @@ handle_call(_Msg, _From, State) ->
 
 handle_cast({module_ready, _NotifyContext}, #state{ context = Context } = State) ->
     z_notifier:detach(module_ready, self(), Context),
-    z:info("Site ~p started.", [ z_context:site(Context) ], Context),
+    z:info("Site ~p started.", [ z_context:site(Context) ], [], Context),
     m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context),
     {noreply, State};
 

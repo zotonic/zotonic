@@ -646,7 +646,7 @@ signal_upgrade_waiters(#state{upgrade_waiters = Waiters} = State) ->
 handle_start_next(#state{context=Context, start_queue=[]} = State) ->
     % Signal modules are loaded, and load all translations.
     z_notifier:notify(module_ready, Context),
-    lager:debug("Finished starting modules"),
+    z:debug("Finished starting modules", [], [ {module, ?MODULE}, {line, ?LINE} ], Context),
     spawn_link(fun() -> z_trans_server:load_translations(Context) end),
     signal_upgrade_waiters(State);
 handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} = State) ->
@@ -654,18 +654,18 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
     Provided = handle_get_provided(State),
     case lists:filter(fun(M) -> is_startable(M, Provided) end, Starting) of
         [] ->
-            [
-             begin
-                 StartErrorReason = get_start_error_reason(startable(M, Provided)),
-                 z:error(
-                    "Could not start module ~p: ~s",
-                    [ M, StartErrorReason ],
-                    [ {module, ?MODULE}, {line, ?LINE} ],
-                    Context),
-                 Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
-                 z_session_manager:broadcast(#broadcast{type="error", message=Msg, title="Module manager", stay=false}, z_acl:sudo(Context))
-             end || M <- Starting
-            ],
+            lists:foreach(
+                fun(M) ->
+                   StartErrorReason = get_start_error_reason(startable(M, Provided)),
+                   z:error(
+                      "Could not start module ~p: ~s",
+                      [ M, StartErrorReason ],
+                      [ {module, ?MODULE}, {line, ?LINE} ],
+                      Context),
+                   Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
+                   z_session_manager:broadcast(#broadcast{type="error", message=Msg, title="Module manager", stay=false}, z_acl:sudo(Context))
+                end,
+                Starting),
 
             % Add non-started modules to the list with errors.
             CleanedUpErrors = lists:foldl(fun(M,Acc) ->
