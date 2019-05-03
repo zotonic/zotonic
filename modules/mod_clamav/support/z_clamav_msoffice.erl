@@ -24,7 +24,7 @@
 
 scan_file(File, <<"application/vnd.openxmlformats-officedocument.", _/binary>>, Context) ->
     case {z_config:get(clamav_reject_msoffice_external_links, true),
-          z_convert:to_bool( m_config:get_value(mod_clamav, reject_msoffice_external_links, true, Context) )}
+          z_convert:to_bool( m_config:get_value(mod_clamav, reject_msoffice_external_links, false, Context) )}
     of
         {true, _} ->
             scan_1(File);

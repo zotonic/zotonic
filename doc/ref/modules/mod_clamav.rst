@@ -24,6 +24,11 @@ The following configs are available:
 ``clamav_max_size``
     The **StreamMaxLength** of ``clamd``, default to ``26214400`` (25M)
 
+``clamav_reject_msoffice_external_links``
+    Reject Microsoft Office documents containing ``externalLinks`` information.
+    If the Zotonic config is set to ``false`` then rejection can be forced by setting
+    the site’s config key ``mod_clamav.reject_msoffice_external_links`` to ``1``.
+
 All clamav results are logged, any infected files or other errors are logged to
 the error.log.
 
