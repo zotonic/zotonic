@@ -184,9 +184,12 @@ handle_other_log(Record, State) ->
             {ok, Id} = z_db:insert(LogType, Fields, Context),
             Log = record_to_log_message(Record, Fields, LogType, Id),
             case proplists:get_value(severity, Fields) of
-                ?LOG_FATAL -> handle_simple_log(Log#log_message{type=fatal}, State);
-                ?LOG_ERROR -> handle_simple_log(Log#log_message{type=error}, State);
-                _Other -> nop
+                ?LOG_FATAL ->
+                    handle_simple_log(Log#log_message{type=fatal}, State);
+                ?LOG_ERROR when LogType =/= log_email ->
+                    handle_simple_log(Log#log_message{type=error}, State);
+                _Other ->
+                    nop
             end,
             mod_signal:emit({LogType, [{log_id, Id}|Fields]}, Context);
         false ->
