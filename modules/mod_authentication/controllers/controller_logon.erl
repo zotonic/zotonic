@@ -40,7 +40,7 @@
 
 -define(LOGON_REMEMBERME_COOKIE, "z_logon").
 -define(LOGON_REMEMBERME_DAYS, 365).
-
+-define(RESET_TOKEN_MAXAGE, 48*3600).
 
 init(DispatchArgs) -> {ok, DispatchArgs}.
 
@@ -680,8 +680,8 @@ send_reminder(Id, Email, Context) ->
 
 %% @doc Set the unique reminder code for the account.
 set_reminder_secret(Id, Context) ->
-    Code = z_ids:id(),
-    m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),
+    Code = z_ids:id(24),
+    ok = m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),
     Code.
 
 %% @doc Delete the reminder secret of the user
@@ -690,16 +690,25 @@ delete_reminder_secret(Id, Context) ->
 
 
 get_by_reminder_secret(Code, Context) ->
-    Result = case m_config:get_value(mod_authentication, reset_token_maxage, Context) of
-        undefined ->
-            m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context);
-        MaxAge ->
-            m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, z_convert:to_integer(MaxAge), Context)
+    MaxAge = case z_convert:to_integer( m_config:get_value(mod_authentication, reset_token_maxage, Context) ) of
+        undefined -> ?RESET_TOKEN_MAXAGE;
+        MA -> MA
     end,
-
-    case Result of
-        undefined -> undefined;
-        Row -> {ok, proplists:get_value(rsc_id, Row)}
+    case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
+        undefined ->
+            undefined;
+        Row ->
+            {rsc_id, UserId} = proplists:lookup(rsc_id, Row),
+            {modified, Modified} = proplists:lookup(modified, Row),
+            ModifiedTm = z_datetime:datetime_to_timestamp(Modified),
+            case z_datetime:timestamp() < ModifiedTm + MaxAge of
+                true ->
+                    {ok, UserId};
+                false ->
+                    lager:info("Accessing expired reminder secret for user ~p", [UserId]),
+                    delete_reminder_secret(UserId, Context),
+                    undefined
+            end
     end.
 
 
