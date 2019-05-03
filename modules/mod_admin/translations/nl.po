@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-04-03 16:18+0200\n"
+"PO-Revision-Date: 2019-05-03 10:05+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -62,7 +62,7 @@ msgstr "Nieuw mediabestand toevoegen"
 msgid "Add a new media item"
 msgstr "Nieuw mediabestand"
 
-#: modules/mod_admin/templates/_admin_edit_media.tpl:59
+#: modules/mod_admin/templates/_admin_edit_media.tpl:76
 msgid "Add media item"
 msgstr "Mediabestand toevoegen"
 
@@ -71,7 +71,7 @@ msgid "Add media to body"
 msgstr "Mediabestand toevoegen aan pagina"
 
 #: modules/mod_admin/actions/action_admin_link.erl:80
-#: modules/mod_admin/mod_admin.erl:443
+#: modules/mod_admin/mod_admin.erl:444
 msgid "Added the connection to"
 msgstr "Connectie gemaakt naar"
 
@@ -157,7 +157,7 @@ msgstr "Laat Google deze pagina niet indexeren"
 msgid "Attached media"
 msgstr "Gekoppelde media"
 
-#: modules/mod_admin/mod_admin.erl:121
+#: modules/mod_admin/mod_admin.erl:122
 msgid "Auth"
 msgstr "Authenticatie"
 
@@ -227,7 +227,7 @@ msgstr "Kies een mediabestand van deze pagina om in de tekst in te voegen."
 msgid "City"
 msgstr "Stad"
 
-#: modules/mod_admin/templates/_admin_edit_media.tpl:30
+#: modules/mod_admin/templates/_admin_edit_media.tpl:31
 msgid "Click the image to set the cropping center."
 msgstr "Klik op de afbeelding om het middelpunt van uitsnedes te bepalen."
 
@@ -288,7 +288,7 @@ msgid "Connections and Sessions"
 msgstr "Connecties en sessies"
 
 #: modules/mod_admin/templates/_admin_edit_body.tpl:4
-#: modules/mod_admin/mod_admin.erl:95
+#: modules/mod_admin/mod_admin.erl:96
 msgid "Content"
 msgstr "Inhoud"
 
@@ -342,7 +342,7 @@ msgid "Customize page slug"
 msgstr "Paginaslug aanpassen"
 
 #: modules/mod_admin/templates/admin.tpl:4
-#: modules/mod_admin/templates/admin.tpl:8 modules/mod_admin/mod_admin.erl:90
+#: modules/mod_admin/templates/admin.tpl:8 modules/mod_admin/mod_admin.erl:91
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -395,7 +395,7 @@ msgstr "Ontkoppel"
 msgid "Do you want to remove this block?"
 msgstr "Wil je dit blok echt verwijderen?"
 
-#: modules/mod_admin/templates/_admin_edit_media.tpl:34
+#: modules/mod_admin/templates/_admin_edit_media.tpl:37
 msgid "Download"
 msgstr "Download"
 
@@ -431,7 +431,7 @@ msgstr "Bewerk"
 msgid "Edit:"
 msgstr "Bewerken:"
 
-#: modules/mod_admin/mod_admin.erl:160
+#: modules/mod_admin/mod_admin.erl:161
 msgid "Embed page"
 msgstr "Pagina embedden"
 
@@ -443,7 +443,7 @@ msgstr "Noodnummer (telefoon)"
 msgid "Error inserting the page."
 msgstr "Fout bij het invoegen van de pagina."
 
-#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:166
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:168
 msgid "Error uploading the file."
 msgstr "Fout bij uploaden van bestand."
 
@@ -535,7 +535,7 @@ msgid "Group members"
 msgstr "Groepsleden"
 
 #: modules/mod_admin/templates/blocks/_admin_edit_block_li_header.tpl:18
-#: modules/mod_admin/mod_admin.erl:158
+#: modules/mod_admin/mod_admin.erl:159
 msgid "Header"
 msgstr "Kop"
 
@@ -648,7 +648,7 @@ msgstr "Voldoet aan"
 
 #: modules/mod_admin/templates/admin_media.tpl:3
 #: modules/mod_admin/templates/admin_media.tpl:57
-#: modules/mod_admin/mod_admin.erl:103
+#: modules/mod_admin/mod_admin.erl:104
 msgid "Media"
 msgstr "Mediabestanden"
 
@@ -713,7 +713,7 @@ msgstr "Bewerkt op"
 msgid "Modified:"
 msgstr "Bewerkt:"
 
-#: modules/mod_admin/mod_admin.erl:116
+#: modules/mod_admin/mod_admin.erl:117
 msgid "Modules"
 msgstr "Modules"
 
@@ -804,7 +804,7 @@ msgid "Page title or text to find page"
 msgstr "Paginatitel of tekst om pagina te vinden"
 
 #: modules/mod_admin/templates/admin_overview.tpl:3
-#: modules/mod_admin/mod_admin.erl:99
+#: modules/mod_admin/mod_admin.erl:100
 msgid "Pages"
 msgstr "Pagina's"
 
@@ -929,11 +929,11 @@ msgstr "Datamodel opnieuw installeren"
 msgid "Remarks"
 msgstr "Opmerkingen"
 
-#: modules/mod_admin/templates/_admin_edit_media.tpl:28
+#: modules/mod_admin/templates/_admin_edit_media.tpl:29
 msgid "Remove crop center"
 msgstr "Verwijder uitsnede-middelpunt"
 
-#: modules/mod_admin/mod_admin.erl:447
+#: modules/mod_admin/mod_admin.erl:448
 msgid "Removed the connection to"
 msgstr "Connectie verwijderd naar"
 
@@ -949,8 +949,8 @@ msgstr "Vervang huidig mediabestand"
 msgid "Replace media item"
 msgstr "Vervang mediabestand"
 
-#: modules/mod_admin/templates/_admin_edit_media.tpl:35
-#: modules/mod_admin/templates/_admin_edit_media.tpl:59
+#: modules/mod_admin/templates/_admin_edit_media.tpl:40
+#: modules/mod_admin/templates/_admin_edit_media.tpl:76
 msgid "Replace this media item"
 msgstr "Vervang dit mediabestand"
 
@@ -1060,15 +1060,15 @@ msgstr "Er ging iets mis, onze excuses."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: modules/mod_admin/mod_admin.erl:432
+#: modules/mod_admin/mod_admin.erl:433
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: modules/mod_admin/mod_admin.erl:434
+#: modules/mod_admin/mod_admin.erl:435
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Je hebt geen rechten om deze verbinding te verwijderen."
 
-#: modules/mod_admin/mod_admin.erl:157
+#: modules/mod_admin/mod_admin.erl:158
 msgid "Standard"
 msgstr "Standaard"
 
@@ -1081,7 +1081,7 @@ msgstr "Begint"
 msgid "State"
 msgstr "Provincie"
 
-#: modules/mod_admin/mod_admin.erl:130
+#: modules/mod_admin/mod_admin.erl:131
 msgid "Status"
 msgstr "Status"
 
@@ -1095,7 +1095,7 @@ msgstr "Adresregel 1"
 msgid "Street Line 2"
 msgstr "Adresregel 2"
 
-#: modules/mod_admin/mod_admin.erl:111
+#: modules/mod_admin/mod_admin.erl:112
 msgid "Structure"
 msgstr "Structuur"
 
@@ -1111,7 +1111,7 @@ msgstr "Voorvoegsel"
 msgid "Surname"
 msgstr "Achternaam"
 
-#: modules/mod_admin/mod_admin.erl:125
+#: modules/mod_admin/mod_admin.erl:126
 msgid "System"
 msgstr "Systeem"
 
@@ -1131,7 +1131,7 @@ msgstr "Telefoon"
 msgid "Test query"
 msgstr "Test zoekopdracht"
 
-#: modules/mod_admin/mod_admin.erl:159
+#: modules/mod_admin/mod_admin.erl:160
 msgid "Text"
 msgstr "Tekst"
 
@@ -1156,13 +1156,29 @@ msgstr ""
 msgid "This connection already exists."
 msgstr "Deze connectie bestaat al."
 
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:163
+msgid "This file contains links to other files or locations."
+msgstr "Dit bestand bevat links naar andere bestanden of locaties."
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:60
+msgid "This file has been scanned for viruses."
+msgstr "Dit bestand is gescand op virussen."
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:56
+msgid "This file has not been scanned for viruses because it is too large."
+msgstr "Dit bestand is niet gescand op virussen omdat het te groot is."
+
+#: modules/mod_admin/templates/_admin_edit_media.tpl:64
+msgid "This file has not been scanned for viruses."
+msgstr "Dit bestand is niet gescand op virussen."
+
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:180
 #: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:161
 msgid "This file is infected with a virus."
 msgstr "Dit bestand is geïnfecteerd met een virus."
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:182
-#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:163
+#: modules/mod_admin/actions/action_admin_dialog_new_rsc.erl:165
 msgid "This file is too large."
 msgstr "Dit bestand is te groot."
 
@@ -1299,6 +1315,7 @@ msgid "Valid for:"
 msgstr "Geldig voor:"
 
 #: modules/mod_admin/templates/_admin_edit_content_publish_view.tpl:2
+#: modules/mod_admin/templates/_admin_edit_media.tpl:36
 #: modules/mod_admin/templates/_admin_edit_floating_buttons.tpl:8
 msgid "View"
 msgstr "Bekijken"
@@ -1465,7 +1482,7 @@ msgstr "Achternaam"
 msgid "page"
 msgstr "pagina"
 
-#: modules/mod_admin/templates/_admin_edit_media.tpl:6
+#: modules/mod_admin/templates/_admin_edit_media.tpl:7
 msgid "pixels"
 msgstr "pixels"
 
@@ -1487,8 +1504,8 @@ msgstr "ongedaan maken"
 msgid "untitled"
 msgstr "zonder titel"
 
-#: modules/mod_admin/templates/_admin_edit_media.tpl:13
-#: modules/mod_admin/templates/_admin_edit_media.tpl:54
+#: modules/mod_admin/templates/_admin_edit_media.tpl:14
+#: modules/mod_admin/templates/_admin_edit_media.tpl:71
 msgid "uploaded on"
 msgstr "geupload op"
 
