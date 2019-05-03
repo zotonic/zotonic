@@ -213,7 +213,7 @@ set_username_pw_1(true, Id, Username, Password, Context) ->
     case check_username_pw_1(Username, Password, Context) of
         {ok, _} ->
             {error, password_match};
-        {error, password} ->
+        {error, E} when E =:= nouser; E =:= password ->
             set_username_pw_2(Id, Username, Password, Context);
         {error, _} = Error ->
             Error
