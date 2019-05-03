@@ -155,7 +155,7 @@ set_value(Module, Key, Value, Context) ->
     end,
     z_depcache:flush(config, Context),
     z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
-    z:info(
+    z:warning(
         "Configuration key '~s.~s' changed, new value: ~s",
         [ z_convert:to_binary(Module), z_convert:to_binary(Key), z_convert:to_binary(Value) ],
         [ {module, ?MODULE}, {line, ?LINE} ],
@@ -172,7 +172,7 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
     end,
     z_depcache:flush(config, Context),
     z_notifier:notify(#m_config_update_prop{module=Module, key=Key, prop=Prop, value=PropValue}, Context),
-    z:info(
+    z:warning(
         "Configuration key '~s.~s' changed, new property ~p value: ~p",
         [ z_convert:to_binary(Module), z_convert:to_binary(Key), Prop, PropValue ],
         [ {module, ?MODULE}, {line, ?LINE} ],
@@ -186,7 +186,7 @@ delete(Module, Key, Context) ->
     z_db:q("delete from config where module = $1 and key = $2", [Module, Key], Context),
     z_depcache:flush(config, Context),
     z_notifier:notify(#m_config_update{module=Module, key=Key, value=undefined}, Context),
-    z:info(
+    z:warning(
         "Configuration key '~s.~s' deleted",
         [ z_convert:to_binary(Module), z_convert:to_binary(Key) ],
         [ {module, ?MODULE}, {line, ?LINE} ],
