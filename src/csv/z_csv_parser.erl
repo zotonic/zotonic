@@ -29,7 +29,8 @@
 
 -define(CSV_CHUNK_SIZE, 32*1024).
 
--type sep() :: $, | $; | $\t.
+% -type sep() :: $, | $; | $\t.
+-type sep() :: 44 | 59 | 9.
 -type line() :: list( binary() ).
 -type lines() :: list( line() ).
 
