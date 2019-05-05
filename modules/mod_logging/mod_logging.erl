@@ -90,6 +90,7 @@ init(Args) ->
             {site, Host},
             {module, ?MODULE}
         ]),
+    z:info("Logger module started", [], [ {module, ?MODULE}, {line, ?LINE}], Context),
     {ok, #state{host=Host}}.
 
 

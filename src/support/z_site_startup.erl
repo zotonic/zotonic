@@ -47,17 +47,10 @@ init(SiteProps) ->
         {module, ?MODULE}
       ]),
     Context = z_context:new(Host),
-    z_notifier:observe(module_ready, self(), Context),
     {ok, #state{context=Context}, 0}.
 
 handle_call(_Msg, _From, State) ->
     {noreply, State}.
-
-handle_cast({module_ready, _NotifyContext}, #state{ context = Context } = State) ->
-    z_notifier:detach(module_ready, self(), Context),
-    z:info("Site ~p started.", [ z_context:site(Context) ], [], Context),
-    m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context),
-    {noreply, State};
 
 handle_cast(_Msg, State) ->
     {noreply, State}.
@@ -80,15 +73,22 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 do_startup(Context) ->
+    %% Make sure all modules are started
+    erlang:spawn_link(
+        fun() ->
+            z_notifier:await(module_ready, 60000, Context),
+            z:debug("Site ~p started, modules loaded",
+                    [ z_context:site(Context) ],
+                    [ {module, ?MODULE}, {line, ?LINE} ],
+                    Context),
+            case z_db:has_connection(Context) of
+                true -> m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context);
+                false -> ok
+            end
+        end),
     case z_db:has_connection(Context) of
-        true ->
-            z_install_data:install_modules(Context),
+        true -> z_install_data:install_modules(Context);
+        false -> ok
+    end,
+    z_module_manager:upgrade(Context).
 
-            %% Make sure all modules are started
-            z_module_manager:upgrade(Context);
-
-        false ->
-
-            %% Make sure all modules are started
-            z_module_manager:upgrade(Context)
-    end.
