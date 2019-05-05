@@ -16,8 +16,8 @@
  {admin_password, "admin"},
 
  %% Add pre-configured sign keys, as the config can't be updated.
- {sign_key, "dummy"},
- {sign_key_simple, "dummy"},
+ {sign_key, <<>>},
+ {sign_key_simple, <<>>},
 
  {modules,
   [
