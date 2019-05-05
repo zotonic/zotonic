@@ -149,35 +149,47 @@ get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Ke
 %% @spec set_value(Module::atom(), Key::atom(), Value::string(), #context{}) -> ok
 set_value(Module, Key, Value0, Context) ->
     Value = z_convert:to_binary(Value0),
-    case z_db:q1("
-        select value
-        from config
-        where module = $1
-          and key = $2",
-        [ Module, Key ],
-        Context)
-    of
-        Value ->
+    Result = z_db:transaction(
+        fun(Ctx) ->
+            case z_db:q1("
+                select value
+                from config
+                where module = $1
+                  and key = $2",
+                [ Module, Key ],
+                Ctx)
+            of
+                Value ->
+                    no_change;
+                undefined ->
+                    {ok, _} = z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Ctx),
+                    insert;
+                OldValue ->
+                    1 = z_db:q("
+                        update config
+                        set value = $1,
+                            modified = now()
+                        where module = $2
+                          and key = $3",
+                        [ Value, Module, Key ],
+                        Ctx),
+                    {update, OldValue}
+            end
+        end,
+        Context),
+    case Result of
+        no_change ->
             ok;
-        undefined ->
-            {ok, _} = z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Context),
+        insert ->
             z:warning(
                 "Configuration key '~s.~s' inserted, new value: '~s'",
                 [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context);
-        OldValue ->
-            1 = z_db:q("
-                update config
-                set value = $1,
-                    modified = now()
-                where module = $2
-                  and key = $3",
-                [ Value, Module, Key ],
-                Context),
+        {update, OldV} ->
             z:warning(
                 "Configuration key '~s.~s' changed, new value: '~s', old value '~s'",
-                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value, OldValue ],
+                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value, OldV ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context)
     end,
@@ -189,14 +201,18 @@ set_value(Module, Key, Value0, Context) ->
 %% @doc Set a "complex" config value.
 %% @spec set_prop(Module::atom(), Key::atom(), Prop::atom(), PropValue::any(), #context{}) -> ok
 set_prop(Module, Key, Prop, PropValue, Context) ->
-    case get_id(Module, Key, Context) of
-        undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {Prop,PropValue}], Context);
-        Id -> z_db:update(config, Id, [{Prop,PropValue}], Context)
-    end,
+    z_db:transaction(
+        fun(Ctx) ->
+            case get_id(Module, Key, Ctx) of
+                undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {Prop,PropValue}], Ctx);
+                Id -> z_db:update(config, Id, [{Prop,PropValue}], Ctx)
+            end
+        end,
+        Context),
     z_depcache:flush(config, Context),
     z_notifier:notify(#m_config_update_prop{module=Module, key=Key, prop=Prop, value=PropValue}, Context),
-    z:warning(
-        "Configuration key '~s.~s' changed, new property ~p value: ~p",
+    z:info(
+        "Configuration key '~s.~s' changed, new property '~p' value: ~p",
         [ z_convert:to_binary(Module), z_convert:to_binary(Key), Prop, PropValue ],
         [ {module, ?MODULE}, {line, ?LINE} ],
         Context),
