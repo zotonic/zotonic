@@ -105,8 +105,16 @@ upgrade(true, Context) ->
 deactivate(Module, Context) ->
     flush(Context),
     case z_db:q("update module set is_active = false, modified = now() where name = $1", [Module], Context) of
-        1 -> upgrade(false, Context);
-        0 -> ok
+        1 ->
+          UId = z_acl:user(Context),
+          z:info(
+              "Module ~p deactivated by ~p (~s)",
+              [ Module, UId, z_convert:to_binary( m_rsc:p_no_acl(UId, email, Context) ) ],
+              [ {module, ?MODULE}, {line, ?LINE} ],
+              Context),
+          upgrade(false, Context);
+        0 ->
+          ok
     end.
 
 
@@ -152,6 +160,12 @@ activate(Module, IsSync, Context) ->
                         end
                 end,
             1 = z_db:transaction(F, Context),
+            UId = z_acl:user(Context),
+            z:info(
+                "Module ~p activated by ~p (~s)",
+                [ Module, UId, z_convert:to_binary( m_rsc:p_no_acl(UId, email, Context) ) ],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                Context),
             upgrade(IsSync, Context);
         none ->
             lager:error("Could not find module '~p'", [Module]),
@@ -481,26 +495,26 @@ handle_cast({restart_module, Module}, State) ->
 
 %% @doc New child process started, add the event listeners
 %% @todo When this is an automatic restart, start all depending modules
-handle_cast({supervisor_child_started, ChildSpec, Pid}, State) ->
+handle_cast({supervisor_child_started, ChildSpec, Pid}, #state{ context = Context } = State) ->
     Module = ChildSpec#child_spec.name,
-    lager:debug("Module ~p started", [Module]),
     State1 = handle_start_child_result(Module, {ok, Pid}, State),
+    z:debug("Module ~p started", [ Module ], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
     {noreply, State1};
 
 %% @doc Handle errors, success is handled by the supervisor_child_started above.
-handle_cast({start_child_result, Module, {error, _} = Error}, State) ->
+handle_cast({start_child_result, Module, {error, _} = Error}, #state{ context = Context } = State) ->
     State1 = handle_start_child_result(Module, Error, State),
-    lager:error("Module ~p start error ~p", [Module, Error]),
+    z:error("Module ~p start error", [ Module, Error ], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
     {noreply, State1};
 handle_cast({start_child_result, _Module, {ok, _}}, State) ->
     {noreply, State};
 
 %% @doc Existing child process stopped, remove the event listeners
-handle_cast({supervisor_child_stopped, ChildSpec, Pid}, State) ->
+handle_cast({supervisor_child_stopped, ChildSpec, Pid}, #state{ context = Context } = State) ->
     Module = ChildSpec#child_spec.name,
     remove_observers(Module, Pid, State),
-    lager:info("Module ~p stopped", [Module]),
     z_notifier:notify(#module_deactivate{module=Module}, State#state.context),
+    z:info("Module ~p stopped", [ Module ], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
     stop_children_with_missing_depends(State),
     {noreply, State};
 
@@ -632,7 +646,7 @@ signal_upgrade_waiters(#state{upgrade_waiters = Waiters} = State) ->
 handle_start_next(#state{context=Context, start_queue=[]} = State) ->
     % Signal modules are loaded, and load all translations.
     z_notifier:notify(module_ready, Context),
-    lager:debug("Finished starting modules"),
+    z:debug("Finished starting modules", [], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
     spawn_link(fun() -> z_trans_server:load_translations(Context) end),
     signal_upgrade_waiters(State);
 handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} = State) ->
@@ -640,14 +654,18 @@ handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} =
     Provided = handle_get_provided(State),
     case lists:filter(fun(M) -> is_startable(M, Provided) end, Starting) of
         [] ->
-            [
-             begin
-                 StartErrorReason = get_start_error_reason(startable(M, Provided)),
-                 Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
-                 z_session_manager:broadcast(#broadcast{type="error", message=Msg, title="Module manager", stay=false}, z_acl:sudo(Context)),
-                 lager:error("~s", [Msg])
-             end || M <- Starting
-            ],
+            lists:foreach(
+                fun(M) ->
+                   StartErrorReason = get_start_error_reason(startable(M, Provided)),
+                   z:error(
+                      "Could not start module ~p: ~s",
+                      [ M, StartErrorReason ],
+                      [ {module, ?MODULE}, {line, ?LINE} ],
+                      Context),
+                   Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
+                   z_session_manager:broadcast(#broadcast{type="error", message=Msg, title="Module manager", stay=false}, z_acl:sudo(Context))
+                end,
+                Starting),
 
             % Add non-started modules to the list with errors.
             CleanedUpErrors = lists:foldl(fun(M,Acc) ->

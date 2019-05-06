@@ -73,18 +73,22 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 do_startup(Context) ->
-
+    %% Make sure all modules are started
+    erlang:spawn_link(
+        fun() ->
+            z_notifier:await(module_ready, 60000, Context),
+            z:info("Site ~p started, modules loaded",
+                    [ z_context:site(Context) ],
+                    [ {module, ?MODULE}, {line, ?LINE} ],
+                    Context),
+            case z_db:has_connection(Context) of
+                true -> m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context);
+                false -> ok
+            end
+        end),
     case z_db:has_connection(Context) of
-        true ->
-            z_install_data:install_modules(Context),
+        true -> z_install_data:install_modules(Context);
+        false -> ok
+    end,
+    z_module_manager:upgrade(Context).
 
-            %% Make sure all modules are started
-            z_module_manager:upgrade(Context),
-
-            m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context);
-
-        false ->
-
-            %% Make sure all modules are started
-            z_module_manager:upgrade(Context)
-    end.

@@ -42,14 +42,23 @@
 %% interface functions
 
 observe_search_query({search_query, Req, OffsetLimit}, Context) ->
-    search(Req, OffsetLimit, Context).
+    case z_acl:is_admin(Context) of
+        true ->
+            search(Req, OffsetLimit, Context);
+        false ->
+            []
+    end.
 
-pid_observe_zlog(Pid, #zlog{props=#log_message{}=Msg}, Context) ->
-    case Msg#log_message.user_id of
-        undefined -> gen_server:cast(Pid, {log, Msg#log_message{user_id=z_acl:user(Context)}});
-        _UserId -> gen_server:cast(Pid, {log, Msg})
+pid_observe_zlog(Pid, #zlog{ user_id = LogUser, props = #log_message{ props = MsgProps } = Msg }, Context) ->
+    case proplists:lookup(user_id, MsgProps) of
+        {user_id, UserId} when LogUser =:= undefined ->
+            gen_server:cast(Pid, {log, Msg#log_message{ user_id = UserId }});
+        _ when LogUser =:= undefined ->
+            gen_server:cast(Pid, {log, Msg#log_message{ user_id = z_acl:user(Context) }});
+        _ ->
+            gen_server:cast(Pid, {log, Msg})
     end;
-pid_observe_zlog(Pid, #zlog{props=#log_email{}=Msg}, _Context) ->
+pid_observe_zlog(Pid, #zlog{ props = #log_email{} = Msg }, _Context) ->
     gen_server:cast(Pid, {log, Msg});
 pid_observe_zlog(_Pid, #zlog{}, _Context) ->
     undefined.
@@ -143,14 +152,40 @@ install_check(Context) ->
 
 
 
-search({log, []}, _OffsetLimit, _Context) ->
+search({log, Args}, _OffsetLimit, _Context) ->
+    % Filter on log type
+    W1 = case z_convert:to_binary( proplists:get_value(type, Args, "warning") ) of
+        <<"error">> -> " type = 'error' ";
+        <<"info">> -> " type <> 'debug' ";
+        <<"debug">> -> "";
+        _ -> " type in ('warning', 'error') "
+    end,
+    As1 = [],
+    % Filter on user-id
+    {W2, As2} = case proplists:get_value(user, Args) of
+        undefined -> {W1, As1};
+        "" -> {W1, As1};
+        <<>> -> {W1, As1};
+        User ->
+            try
+                WU = case W1 of
+                    "" -> " user_id = $" ++ integer_to_list(length(As1) + 1);
+                    _ -> W1 ++ " and user_id = $" ++ integer_to_list(length(As1) + 1)
+                end,
+                {WU, As1 ++ [ z_convert:to_integer(User) ]}
+            catch
+                _:_ ->
+                    {W1, As1}
+            end
+    end,
+    % SQL search question
     #search_sql{
-        select="l.id",
-        from="log l",
-        tables=[{log, "l"}],
-        order="created DESC",
-        args=[],
-        assoc=false
+        select = "id",
+        from = "log",
+        where = W2,
+        order = "id DESC",
+        args = As2,
+        assoc = false
     };
 search({log_email, Filter}, _OffsetLimit, Context) ->
     m_log_email:search(Filter, Context);
@@ -159,14 +194,16 @@ search(_, _, _) ->
 
 
 %% @doc Insert a simple log entry. Send an update to all UA's displaying the log.
-handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Props}, State) ->
+handle_simple_log(#log_message{ user_id = UserId, type = Type, message = Msg, props = Props }, State) ->
     Context = z_acl:sudo(z_context:new(State#state.host)),
-    {ok, Id} = z_db:insert(log, [
-                    {user_id, UserId},
-                    {type, Type},
-                    {message, Msg}
-                ] ++ Props, Context),
-    mod_signal:emit({log_message, [{log_id, Id}, {user_id, UserId}, {type, Type}, {message, Msg}, {props, Props}]}, Context).
+    Message = [
+        {user_id, UserId},
+        {type, Type},
+        {message, Msg}
+    ] ++ proplists:delete(user_id, Props),
+    MsgUserProps = maybe_add_user_props(Message, Context),
+    {ok, Id} = z_db:insert(log, MsgUserProps, Context),
+    mod_signal:emit({log_message, [ {log_id, Id} ]}, Context).
 
 % All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
 % it is also sent to the main log.
@@ -179,9 +216,12 @@ handle_other_log(Record, State) ->
             {ok, Id} = z_db:insert(LogType, Fields, Context),
             Log = record_to_log_message(Record, Fields, LogType, Id),
             case proplists:get_value(severity, Fields) of
-                ?LOG_FATAL -> handle_simple_log(Log#log_message{type=fatal}, State);
-                ?LOG_ERROR -> handle_simple_log(Log#log_message{type=error}, State);
-                _Other -> nop
+                ?LOG_FATAL ->
+                    handle_simple_log(Log#log_message{type=fatal}, State);
+                ?LOG_ERROR when LogType =/= log_email ->
+                    handle_simple_log(Log#log_message{type=error}, State);
+                _Other ->
+                    nop
             end,
             mod_signal:emit({LogType, [{log_id, Id}|Fields]}, Context);
         false ->
@@ -209,6 +249,19 @@ record_to_log_message(_, Fields, LogType, Id) ->
         message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
         props=[ {log_type, LogType}, {log_id, Id} | Fields ]
     }.
+
+maybe_add_user_props(Props, Context) ->
+    case proplists:get_value(user_id, Props) of
+        undefined ->
+            Props;
+        UserId ->
+            [
+                {user_name_first, m_rsc:p_no_acl(UserId, name_first, Context)},
+                {user_name_surname, m_rsc:p_no_acl(UserId, name_surname, Context)},
+                {user_email_raw, m_rsc:p_no_acl(UserId, email_raw, Context)}
+                | Props
+            ]
+    end.
 
 to_list({error, timeout}) ->
     "timeout";

@@ -110,6 +110,16 @@ logon(UserId, Context) ->
 
 %% @doc Continue the current session as a different user.
 switch_user(UserId, Context) ->
+    z:warning(
+        "Sudo as user ~p (~s) by user ~p (~s)",
+        [
+            UserId, z_convert:to_binary( m_rsc:p_no_acl(UserId, email, Context) ),
+            z_acl:user(Context), z_convert:to_binary( m_rsc:p_no_acl(z_acl:user(Context), email, Context) )
+        ],
+        [
+            {module, ?MODULE}, {line, ?LINE}, {auth_user_id, UserId}
+        ],
+        Context),
     Context1 = z_acl:logon_prefs(UserId, Context),
     z_context:set_session(auth_timestamp, calendar:universal_time(), Context1),
     z_context:set_session(auth_user_id, UserId, Context1),

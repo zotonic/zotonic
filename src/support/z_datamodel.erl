@@ -148,7 +148,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                             ok;
                         _ ->
                             %% Resource exists but is not installed by us.
-                            ?zInfo(io_lib:format("Resource '~p' (~p) exists but is not managed by ~p.", [Name, Id, Module]), Context),
+                            lager:info("Resource '~p' (~p) exists but is not managed by ~p.", [Name, Id, Module]),
                             ok
                     end;
                 {error, {unknown_rsc, _}} ->
@@ -171,7 +171,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                                  undefined -> [{is_dependent, false} | Props4];
                                  _ -> Props4
                              end,
-                    ?zInfo(io_lib:format("Creating new ~p '~p'", [Category, Name]), Context),
+                    lager:info("Creating new ~p '~p'", [Category, Name]),
                     {ok, Id} = m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context),
                     case proplists:get_value(media_url, Props5) of
                         undefined ->
@@ -231,10 +231,10 @@ update_new_props(Module, Id, NewProps, Options, Context) ->
 maybe_force_update(K, V, Props, Module, Id, Options, Context) ->
     case lists:member(force_update, Options) of
         true ->
-            ?zInfo(io_lib:format("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]), Context),
+            lager:info("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
             z_utils:prop_replace(K, V, Props);
         false ->
-            ?zInfo(io_lib:format("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]), Context),
+            lager:info("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]),
             Props
     end.
 

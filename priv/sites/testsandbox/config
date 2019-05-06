@@ -15,6 +15,10 @@
  %% Admin password, used during installation. You can change it later
  {admin_password, "admin"},
 
+ %% Add pre-configured sign keys, as the config can't be updated.
+ {sign_key, <<>>},
+ {sign_key_simple, <<>>},
+
  {modules,
   [
    testsandbox,

@@ -173,7 +173,6 @@ video_convert_1(QueuePath, Orientation, _Mime, Context) ->
                   [] -> ?CMDLINE;
                   CmdLineCfg -> z_convert:to_list(CmdLineCfg)
               end,
-    Logging = z_convert:to_bool(m_config:get_value(mod_video, logging, Context)),
     TmpFile = z_tempfile:new(),
     FfmpegCmd = z_convert:to_list(
                   iolist_to_binary(
@@ -186,12 +185,6 @@ video_convert_1(QueuePath, Orientation, _Mime, Context) ->
     jobs:run(video_jobs,
              fun() ->
                      lager:debug("Video convert: ~p", [FfmpegCmd]),
-                     case Logging of
-                         true ->
-                             ?zInfo(FfmpegCmd, Context);
-                         false ->
-                             nop
-                     end,
                      case os:cmd(FfmpegCmd) of
                          [] ->
                              case filelib:file_size(TmpFile) of
