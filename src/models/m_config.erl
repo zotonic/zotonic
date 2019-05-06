@@ -147,6 +147,7 @@ get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Ke
 
 %% @doc Set a "simple" config value.
 %% @spec set_value(Module::atom(), Key::atom(), Value::string(), #context{}) -> ok
+-spec set_value( atom(), atom(), string() | binary(), z:context() ) -> ok | {error, term()}.
 set_value(Module, Key, Value0, Context) ->
     Value = z_convert:to_binary(Value0),
     Result = z_db:transaction(
@@ -181,23 +182,28 @@ set_value(Module, Key, Value0, Context) ->
         no_change ->
             ok;
         insert ->
-            z:warning(
+            z_depcache:flush(config, Context),
+            z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
+            z:info(
                 "Configuration key '~s.~s' inserted, new value: '~s'",
                 [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context);
         {update, OldV} ->
-            z:warning(
+            z_depcache:flush(config, Context),
+            z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
+            z:info(
                 "Configuration key '~s.~s' changed, new value: '~s', old value '~s'",
                 [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value, OldV ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context);
-        {rollback, _} ->
-            ok
-    end,
-    z_depcache:flush(config, Context),
-    z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
-    ok.
+        {rollback,{no_database_connection,[]}} ->
+            {error, no_database_connection};
+        {rollback, {error, _} = Error} ->
+            Error;
+        {rollback, Error} ->
+            {error, Error}
+    end.
 
 
 %% @doc Set a "complex" config value.
@@ -227,7 +233,7 @@ delete(Module, Key, Context) ->
     z_db:q("delete from config where module = $1 and key = $2", [Module, Key], Context),
     z_depcache:flush(config, Context),
     z_notifier:notify(#m_config_update{module=Module, key=Key, value=undefined}, Context),
-    z:warning(
+    z:info(
         "Configuration key '~s.~s' deleted",
         [ z_convert:to_binary(Module), z_convert:to_binary(Key) ],
         [ {module, ?MODULE}, {line, ?LINE} ],

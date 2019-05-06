@@ -211,7 +211,17 @@ set_username_pw(Id, Username, Password, Context) ->
 set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
     Hash = hash(Password),
     case z_db:transaction(fun(Ctx) -> set_username_pw_trans(Id, Username, Hash, Ctx) end, Context) of
-        ok ->
+        {ok, S} ->
+            case S of
+                new ->
+                    z:debug(
+                        "New username for user ~p (~s)",
+                        [ Id, Username ],
+                        [ {module, ?MODULE} ],
+                        Context);
+                exists ->
+                    ok
+            end,
             reset_rememberme_token(Id, Context),
             z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
             z_depcache:flush(Id, Context),
@@ -252,13 +262,13 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                                         [Id, Username, {term, Hash}],
                                         Context),
                             z_db:q("update rsc set creator_id = id where id = $1 and creator_id <> id", [Id], Context),
-                            ok;
+                            {ok, new};
                         _Other ->
                             {rollback, {error, eexist}}
                     end
             end;
         1 ->
-            ok
+            {ok, exists}
     end.
 
 %% @doc Ensure that the user has an associated username and password
