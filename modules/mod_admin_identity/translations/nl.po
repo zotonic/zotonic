@@ -8,15 +8,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2014-04-01 17:32+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2019-05-03 12:51+0200\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:65
 msgid "(that's you)"
@@ -59,6 +60,10 @@ msgstr "Weet je zeker dat je dit wilt verwijderen?"
 #: modules/mod_admin_identity/templates/_action_dialog_set_username_password.tpl:21
 msgid "Cancel"
 msgstr "Annuleren"
+
+#: modules/mod_admin_identity/templates/_action_dialog_user_add.tpl:42
+msgid "Category"
+msgstr "Categorie"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:71
 msgid "Changed the username."
@@ -191,7 +196,7 @@ msgid ""
 "made an error typing his or her e-mail address."
 msgstr ""
 "Als je deze website niet kent dan kan je deze e-mail negeren. Misschien "
-"heeft iemand een fout gemaakt bij het invoeren van zijn of haar e-mailadres"
+"heeft iemand een fout gemaakt bij het invoeren van zijn of haar e-mailadres."
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:28
 msgid "Language"
@@ -204,7 +209,7 @@ msgstr "Inloggen als deze gebruiker"
 
 #: modules/mod_admin_identity/templates/_action_dialog_edit_basics.person.tpl:5
 msgid "Main"
-msgstr ""
+msgstr "Basis"
 
 #: modules/mod_admin_identity/templates/admin_users.tpl:27
 msgid "Make a new user"
@@ -240,7 +245,7 @@ msgstr "Geen bevestigd e-mail adres. Voeg deze hieronder toe."
 
 #: modules/mod_admin_identity/templates/identity_verify.tpl:14
 msgid "One moment, please..."
-msgstr "Een ogenblik geduld"
+msgstr "Een ogenblik geduld…"
 
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:46
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_user_add.erl:118
@@ -323,6 +328,10 @@ msgstr "Achternaam"
 msgid "Thank you"
 msgstr "Bedankt"
 
+#: modules/mod_admin_identity/mod_admin_identity.erl:208
+msgid "The address is invalid."
+msgstr "Het adres is ongeldig."
+
 #: modules/mod_admin_identity/actions/action_admin_identity_dialog_set_username_password.erl:93
 msgid "The new username/ password has been set."
 msgstr "De nieuwe gebruikersnaam / het wachtwoord is ingesteld."
@@ -356,7 +365,7 @@ msgstr "Dit e-mailadres is toegevoegd aan je profiel op"
 
 #: modules/mod_admin_identity/mod_admin_identity.erl:148
 msgid "This is not a valid e-mail address."
-msgstr "Dit is geen geldig  e-mailadres"
+msgstr "Dit is geen geldig e-mailadres."
 
 #: modules/mod_admin_identity/templates/_identity_password.tpl:28
 msgid "This password does not meet the security requirements"
@@ -364,7 +373,7 @@ msgstr "Dit wachtwoord komt niet overeen met de veiligheidseisen"
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:55
 msgid "This person is also a user."
-msgstr "Deze persoon is een gebruiker"
+msgstr "Deze persoon is een gebruiker."
 
 #: modules/mod_admin_identity/templates/_admin_edit_sidebar.person.tpl:57
 msgid "This person is not yet a user."
@@ -446,7 +455,7 @@ msgid ""
 "your Zotonic system.<br/><br/>What an user can do depends on the groups the "
 "user is member of."
 msgstr ""
-"wanneer je een gebruikersnaam/wachtwoord aan ene persoon koppelt, wordt deze "
+"Wanneer je een gebruikersnaam/wachtwoord aan een persoon koppelt, wordt deze "
 "persoon een gebruiker. Een gebruiker kan inloggen met die gegevens en acties "
 "uitvoeren op het Zotonic systeem.<br /><br />Wat een gebruiker precies kan "
 "doen hangt samen met de groepen waar de gebruiker lid van is."
@@ -461,7 +470,7 @@ msgstr "Je mag geen persoon-pagina maken."
 msgid "You are not allowed to edit identities."
 msgstr "Je mag geen identiteiten toevoegen of verwijderen."
 
-#: modules/mod_admin_identity/mod_admin_identity.erl:232
+#: modules/mod_admin_identity/mod_admin_identity.erl:235
 msgid "You are not allowed to switch users."
 msgstr "Je hebt niet genoeg rechten om als deze gebruiker in te loggen."
 
@@ -511,7 +520,7 @@ msgstr "Je gebruikersgegevens zijn:"
 #: modules/mod_admin_identity/templates/admin_users.tpl:67
 #: modules/mod_admin_identity/templates/admin_users.tpl:69
 msgid "d M Y, H:i"
-msgstr ""
+msgstr "d M Y, H:i"
 
 #: modules/mod_admin_identity/templates/_admin_edit_basics_user.tpl:20
 msgid "delete username"

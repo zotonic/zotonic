@@ -19,6 +19,8 @@
     {% wire action={focus target="password_reset1"} %}
 {% elseif reason == "unequal" %}
     {% wire action={focus target="password_reset1"} %}
+{% elseif reason == "password_change_match" %}
+    {% wire action={focus target="password_reset1"} %}
 {% else %}
     {% wire action={focus target="username"} %}
 {% endif %}

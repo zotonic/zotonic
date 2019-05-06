@@ -349,9 +349,15 @@ reset_1(UserId, Username, Password, Context) ->
     case auth_postcheck(UserId, z_context:get_q_all(Context), Context) of
         ok ->
             ContextLoggedon = logon_user(UserId, [], Context),
-            m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(ContextLoggedon)),
-            delete_reminder_secret(UserId, ContextLoggedon),
-            ContextLoggedon;
+            case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(ContextLoggedon)) of
+                ok ->
+                    delete_reminder_secret(UserId, ContextLoggedon),
+                    ContextLoggedon;
+                {error, password_match} ->
+                    logon_error("password_change_match", Context);
+                {error, _} ->
+                    logon_error("error", Context)
+            end;
         {error, need_passcode} ->
             logon_error("need_passcode", Context);
         {error, passcode} ->

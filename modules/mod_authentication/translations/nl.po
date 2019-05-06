@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zotonic - authentication\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-03-04 10:48+0100\n"
+"PO-Revision-Date: 2019-05-03 12:52+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -483,6 +483,14 @@ msgstr "Gebruiksvoorwaarden"
 #: modules/mod_authentication/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
 msgstr "Het e-mailadres verbonden aan je account is"
+
+#: modules/mod_authentication/templates/logon_error/message.password_change_match.tpl:2
+msgid ""
+"The new password must be different from the previous one. Please check your "
+"entry and try again."
+msgstr ""
+"Het nieuwe wachtwoord moet anders zijn dan het vorige. Controleer uw "
+"gegevens en probeer het opnieuw."
 
 #: modules/mod_authentication/templates/admin_authentication_services.tpl:21
 msgid ""
