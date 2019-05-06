@@ -498,13 +498,13 @@ handle_cast({restart_module, Module}, State) ->
 handle_cast({supervisor_child_started, ChildSpec, Pid}, #state{ context = Context } = State) ->
     Module = ChildSpec#child_spec.name,
     State1 = handle_start_child_result(Module, {ok, Pid}, State),
-    z:debug("Module ~p started", [ Module ], [ {module, ?MODULE}, {line, ?LINE}], Context),
+    z:debug("Module ~p started", [ Module ], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
     {noreply, State1};
 
 %% @doc Handle errors, success is handled by the supervisor_child_started above.
 handle_cast({start_child_result, Module, {error, _} = Error}, #state{ context = Context } = State) ->
     State1 = handle_start_child_result(Module, Error, State),
-    z:error("Module ~p start error", [ Module, Error ], [ {module, ?MODULE}, {line, ?LINE}], Context),
+    z:error("Module ~p start error", [ Module, Error ], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
     {noreply, State1};
 handle_cast({start_child_result, _Module, {ok, _}}, State) ->
     {noreply, State};
@@ -514,7 +514,7 @@ handle_cast({supervisor_child_stopped, ChildSpec, Pid}, #state{ context = Contex
     Module = ChildSpec#child_spec.name,
     remove_observers(Module, Pid, State),
     z_notifier:notify(#module_deactivate{module=Module}, State#state.context),
-    z:info("Module ~p stopped", [ Module ], [ {module, ?MODULE}, {line, ?LINE}], Context),
+    z:info("Module ~p stopped", [ Module ], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
     stop_children_with_missing_depends(State),
     {noreply, State};
 
@@ -646,7 +646,7 @@ signal_upgrade_waiters(#state{upgrade_waiters = Waiters} = State) ->
 handle_start_next(#state{context=Context, start_queue=[]} = State) ->
     % Signal modules are loaded, and load all translations.
     z_notifier:notify(module_ready, Context),
-    z:debug("Finished starting modules", [], [ {module, ?MODULE}, {line, ?LINE} ], Context),
+    z:debug("Finished starting modules", [], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
     spawn_link(fun() -> z_trans_server:load_translations(Context) end),
     signal_upgrade_waiters(State);
 handle_start_next(#state{context=Context, sup=ModuleSup, start_queue=Starting} = State) ->
