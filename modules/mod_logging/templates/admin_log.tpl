@@ -27,13 +27,15 @@
             <td></td>
             <td>
                 <select name="type" class="form-control">
-                    <option {% if q.type == 'debug' %}selected{% endif %}>debug</option>
-                    <option {% if q.type == 'info' %}selected{% endif %}>info</option>
-                    <option {% if not q.type or q.type == 'warning' %}selected{% endif %}>warning</option>
-                    <option {% if q.type == 'error' %}selected{% endif %}>error</option>
+                    <option {% if q.type == 'debug' %}selected{% endif %} value="debug">Debug</option>
+                    <option {% if q.type == 'info' %}selected{% endif %} value="info">Info</option>
+                    <option {% if not q.type or q.type == 'warning' %}selected{% endif %} value="warning">Warning</option>
+                    <option {% if q.type == 'error' %}selected{% endif %} value="error">Error</option>
                 </select>
             </td>
-            <td></td>
+            <td>
+                <input type="text" name="message" placeholder="{_ Message _}" class="form-control" value="{{ q.message|escape }}">
+            </td>
             <td>
                 <input type="number" name="user" min="1" placeholder="{_ User Id _}" class="form-control" value="{{ q.user|escape }}">
             </td>
@@ -42,7 +44,7 @@
             </td>
         </tr>
         {% for id in result %}
-            {% include "_admin_log_row.tpl" id=id %}
+            {% include "_admin_log_row.tpl" id=id qmessage=q.message %}
         {% empty %}
             <tr>
         	   <td colspan="5" class="text-muted">{_ No log messages. _}</td>
@@ -52,6 +54,7 @@
     {% lazy action={moreresults result=result
                                 target="log-area"
                                 template="_admin_log_row.tpl"
+                                qmessage=q.message
                                 visible}
     %}
 {% endwith %}

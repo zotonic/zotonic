@@ -204,7 +204,7 @@ handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Pro
 handle_other_log(Record, State) ->
     Context = z_acl:sudo(z_context:new(State#state.host)),
     LogType = element(1, Record),
-    Fields = record_to_proplist(Record),
+    Fields = maybe_add_user_props( record_to_proplist(Record), Context ),
     case z_db:table_exists(LogType, Context) of
         true ->
             {ok, Id} = z_db:insert(LogType, Fields, Context),
@@ -243,6 +243,19 @@ record_to_log_message(_, Fields, LogType, Id) ->
         message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
         props=[ {log_type, LogType}, {log_id, Id} | Fields ]
     }.
+
+maybe_add_user_props(Props, Context) ->
+    case proplists:get_value(user_id, Props) of
+        undefined ->
+            Props;
+        UserId ->
+            [
+                {user_name_first, m_rsc:p_no_acl(UserId, name_first, Context)},
+                {user_name_surname, m_rsc:p_no_acl(UserId, name_surname, Context)},
+                {user_email_raw, m_rsc:p_no_acl(UserId, email_raw, Context)}
+                | Props
+            ]
+    end.
 
 to_list({error, timeout}) ->
     "timeout";
