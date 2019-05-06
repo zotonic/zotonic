@@ -13,18 +13,49 @@
 </h3>
 <br />
 
-{% with m.search[{log page=q.page pagelen=20}] as result %}
-<div id="log-area">
-    {% for id in result %}
-    {% include "_admin_log_row.tpl" id=id %}
-    {% empty %}
-    <div class="alert alert-info">
-	{_ No log messages. _}
-    </div>
-    {% endfor %}
-</div>
-{% button class="btn btn-primary" text="more..." action={moreresults result=result target="log-area" template="_admin_log_row.tpl"} %}
+<form action="" type="GET">
+{% with m.search[{log page=q.page type=q.type user=q.user pagelen=100}] as result %}
+    <table class="table table-compact" id="log-area">
+        <tr>
+            <th>{_ Date _}</th>
+            <th>{_ Severity _}</th>
+            <th>{_ Message _}</th>
+            <th>{_ User _}</th>
+            <th>{_ Module _}</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <select name="type" class="form-control">
+                    <option {% if q.type == 'debug' %}selected{% endif %}>debug</option>
+                    <option {% if q.type == 'info' %}selected{% endif %}>info</option>
+                    <option {% if not q.type or q.type == 'warning' %}selected{% endif %}>warning</option>
+                    <option {% if q.type == 'error' %}selected{% endif %}>error</option>
+                </select>
+            </td>
+            <td></td>
+            <td>
+                <input type="number" name="user" min="1" placeholder="{_ User Id _}" class="form-control" value="{{ q.user|escape }}">
+            </td>
+            <td>
+                <button type="submit" class="btn btn-primary">{_ Filter _}</button>
+            </td>
+        </tr>
+        {% for id in result %}
+            {% include "_admin_log_row.tpl" id=id %}
+        {% empty %}
+            <tr>
+        	   <td colspan="5" class="text-muted">{_ No log messages. _}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% lazy action={moreresults result=result
+                                target="log-area"
+                                template="_admin_log_row.tpl"
+                                visible}
+    %}
 {% endwith %}
+</form>
 
 {% wire action={connect signal={log_message} action={addlog target="log-area"}} %}
 

@@ -77,7 +77,7 @@ do_startup(Context) ->
     erlang:spawn_link(
         fun() ->
             z_notifier:await(module_ready, 60000, Context),
-            z:debug("Site ~p started, modules loaded",
+            z:info("Site ~p started, modules loaded",
                     [ z_context:site(Context) ],
                     [ {module, ?MODULE}, {line, ?LINE} ],
                     Context),

@@ -1,31 +1,34 @@
 {% with signal_props.log_id|default:id as id %}
     {% with m.log[id] as l %}
         {% if l.type == 'error' %}
-            <div class="alert alert-danger">
+            <tr class="text-danger">
         {% elseif l.type == 'debug' %}
-            <div class="alert alert-success">
+            <tr class="text-muted">
+        {% elseif l.type == 'info' %}
+            <tr class="text-color">
         {% else %}
-            <div class="alert alert-{{ l.type|default:"info" }}">
+            <tr class="text-{{ l.type|default:"info" }}">
         {% endif %}
-            <div class="pull-right">
-                {% if l.user_id %}
-                    <a href="{% url admin_edit_rsc id=l.user_id %}">{{ m.rsc[l.user_id].title }}</a> @
-                {% endif %}
-                {{ l.created|date:_"d M Y, H:i" }}
-            </div>
-            <h5>
-                {% if l.type %}{{ l.type }}{% if l.module %} &mdash; {% endif %}{% endif %}
-                {% if l.module %}{{ l.module|default:"-" }}{% if l.line %}:{{ l.line }}{% endif %}{% endif %}
-            </h5>
-            <div>
-                {% if l.message|length > 200 %}
-                    <pre>
+            <td>{{ l.created|date:"Y-m-d H:i:s" }}</td>
+            <td>{{ l.type }}</td>
+            <td>
+                    {% if l.message|length > 200 %}
                         {{ l.message|truncate:255|force_escape|linebreaksbr }}
-                    </pre>
-                {% else %}
-                    {{ l.message|force_escape|linebreaksbr }}
-                {% endif %}
-            </div>
-        </div>
+                        </pre>
+                    {% else %}
+                        {{ l.message|force_escape|linebreaksbr }}
+                    {% endif %}
+            </td>
+
+            <td>
+                    {% if l.user_id %}
+                        <a href="{% url admin_edit_rsc id=l.user_id %}">{{ m.rsc[l.user_id].title }} ({{ l.user_id }})</a>
+                    {% endif %}
+            </td>
+
+            <td>
+                    {% if l.module %}{{ l.module|default:"-" }}{% if l.line %}:{{ l.line }}{% endif %}{% endif %}
+            </td>
+        </tr>
     {% endwith %}
 {% endwith %}
