@@ -3,7 +3,7 @@
 Release 0.49.0
 ==============
 
-Welcome to Zotonic 0.49.0, released on TODO.
+Welcome to Zotonic 0.49.0, released on May 6, 2019.
 
 Main changes are:
 
