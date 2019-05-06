@@ -365,7 +365,7 @@ msgstr "Dit e-mailadres is toegevoegd aan je profiel op"
 
 #: modules/mod_admin_identity/mod_admin_identity.erl:148
 msgid "This is not a valid e-mail address."
-msgstr "Dit is geen geldig  e-mailadres."
+msgstr "Dit is geen geldig e-mailadres."
 
 #: modules/mod_admin_identity/templates/_identity_password.tpl:28
 msgid "This password does not meet the security requirements"
@@ -455,7 +455,7 @@ msgid ""
 "your Zotonic system.<br/><br/>What an user can do depends on the groups the "
 "user is member of."
 msgstr ""
-"Wanneer je een gebruikersnaam/wachtwoord aan ene persoon koppelt, wordt deze "
+"Wanneer je een gebruikersnaam/wachtwoord aan een persoon koppelt, wordt deze "
 "persoon een gebruiker. Een gebruiker kan inloggen met die gegevens en acties "
 "uitvoeren op het Zotonic systeem.<br /><br />Wat een gebruiker precies kan "
 "doen hangt samen met de groepen waar de gebruiker lid van is."
