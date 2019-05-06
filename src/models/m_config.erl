@@ -188,7 +188,8 @@ set_value(Module, Key, Value0, Context) ->
                 "Configuration key '~s.~s' inserted, new value: '~s'",
                 [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
-                Context);
+                Context),
+            ok;
         {update, OldV} ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
@@ -196,7 +197,8 @@ set_value(Module, Key, Value0, Context) ->
                 "Configuration key '~s.~s' changed, new value: '~s', old value '~s'",
                 [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value, OldV ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
-                Context);
+                Context),
+            ok;
         {rollback,{no_database_connection, _Trace}} ->
             {error, no_database_connection};
         {rollback, {error, _} = Error} ->
