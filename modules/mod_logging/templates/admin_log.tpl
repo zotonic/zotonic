@@ -15,7 +15,7 @@
 
 <form action="" type="GET">
 {% with m.search[{log page=q.page type=q.type user=q.user pagelen=100}] as result %}
-    <table class="table table-compact" id="log-area">
+    <table class="table table-compact">
         <tr>
             <th>{_ Date _}</th>
             <th>{_ Severity _}</th>
@@ -43,13 +43,15 @@
                 <button type="submit" class="btn btn-primary">{_ Filter _}</button>
             </td>
         </tr>
-        {% for id in result %}
-            {% include "_admin_log_row.tpl" id=id qmessage=q.message %}
-        {% empty %}
-            <tr>
-        	   <td colspan="5" class="text-muted">{_ No log messages. _}</td>
-            </tr>
-        {% endfor %}
+        <tbody id="log-area">
+            {% for id in result %}
+                {% include "_admin_log_row.tpl" id=id qmessage=q.message %}
+            {% empty %}
+                <tr>
+            	   <td colspan="5" class="text-muted">{_ No log messages. _}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
     {% lazy action={moreresults result=result
                                 target="log-area"
@@ -60,6 +62,6 @@
 {% endwith %}
 </form>
 
-{% wire action={connect signal={log_message} action={addlog target="log-area"}} %}
+{% wire action={connect signal={log_message} action={addlog target="log-area" quser=q.user qmessage=q.message}} %}
 
 {% endblock %}

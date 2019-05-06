@@ -49,12 +49,16 @@ observe_search_query({search_query, Req, OffsetLimit}, Context) ->
             []
     end.
 
-pid_observe_zlog(Pid, #zlog{props=#log_message{}=Msg}, Context) ->
-    case Msg#log_message.user_id of
-        undefined -> gen_server:cast(Pid, {log, Msg#log_message{user_id=z_acl:user(Context)}});
-        _UserId -> gen_server:cast(Pid, {log, Msg})
+pid_observe_zlog(Pid, #zlog{ user_id = LogUser, props = #log_message{ props = MsgProps } = Msg }, Context) ->
+    case proplists:lookup(user_id, MsgProps) of
+        {user_id, UserId} when LogUser =:= undefined ->
+            gen_server:cast(Pid, {log, Msg#log_message{ user_id = UserId }});
+        _ when LogUser =:= undefined ->
+            gen_server:cast(Pid, {log, Msg#log_message{ user_id = z_acl:user(Context) }});
+        _ ->
+            gen_server:cast(Pid, {log, Msg})
     end;
-pid_observe_zlog(Pid, #zlog{props=#log_email{}=Msg}, _Context) ->
+pid_observe_zlog(Pid, #zlog{ props = #log_email{} = Msg }, _Context) ->
     gen_server:cast(Pid, {log, Msg});
 pid_observe_zlog(_Pid, #zlog{}, _Context) ->
     undefined.
@@ -190,21 +194,23 @@ search(_, _, _) ->
 
 
 %% @doc Insert a simple log entry. Send an update to all UA's displaying the log.
-handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Props}, State) ->
+handle_simple_log(#log_message{ user_id = UserId, type = Type, message = Msg, props = Props }, State) ->
     Context = z_acl:sudo(z_context:new(State#state.host)),
-    {ok, Id} = z_db:insert(log, [
-                    {user_id, UserId},
-                    {type, Type},
-                    {message, Msg}
-                ] ++ Props, Context),
-    mod_signal:emit({log_message, [{log_id, Id}, {user_id, UserId}, {type, Type}, {message, Msg}, {props, Props}]}, Context).
+    Message = [
+        {user_id, UserId},
+        {type, Type},
+        {message, Msg}
+    ] ++ proplists:delete(user_id, Props),
+    MsgUserProps = maybe_add_user_props(Message, Context),
+    {ok, Id} = z_db:insert(log, MsgUserProps, Context),
+    mod_signal:emit({log_message, [ {log_id, Id} ]}, Context).
 
 % All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
 % it is also sent to the main log.
 handle_other_log(Record, State) ->
     Context = z_acl:sudo(z_context:new(State#state.host)),
     LogType = element(1, Record),
-    Fields = maybe_add_user_props( record_to_proplist(Record), Context ),
+    Fields = record_to_proplist(Record),
     case z_db:table_exists(LogType, Context) of
         true ->
             {ok, Id} = z_db:insert(LogType, Fields, Context),

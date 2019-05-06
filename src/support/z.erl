@@ -185,12 +185,16 @@ error(Msg, Args, Props, Context)  -> log(error, Msg, Args, Props, Context).
 
 
 log(Type, Props, Context) when is_atom(Type), is_list(Props) ->
+    UserId = case proplists:lookup(user_id, Props) of
+        none -> z_acl:user(Context);
+        {user_id, UId} -> UId
+    end,
     z_notifier:notify(
         #zlog{
-            type=Type,
-            user_id=z_acl:user(Context),
-            timestamp=os:timestamp(),
-            props=Props
+            type = Type,
+            user_id = UserId,
+            timestamp = os:timestamp(),
+            props = Props
         },
         Context).
 
@@ -204,12 +208,16 @@ log(Type, Msg, Props, Context) ->
     Module = proplists:get_value(module, Props, unknown),
     lager:log(Type, Props, "[~p] ~p @ ~p:~p  ~s~n",
              [z_context:site(Context), Type, Module, Line, binary_to_list(Msg1)]),
+    UserId = case proplists:lookup(user_id, Props) of
+        none -> z_acl:user(Context);
+        {user_id, UId} -> UId
+    end,
     z_notifier:notify(
         #zlog{
-            type=Type,
-            user_id=z_acl:user(Context),
-            timestamp=os:timestamp(),
-            props=#log_message{type=Type, message=Msg1, props=Props, user_id=z_acl:user(Context)}
+            type = Type,
+            user_id = UserId,
+            timestamp = os:timestamp(),
+            props = #log_message{ type = Type, message = Msg1, props = Props, user_id = UserId }
         },
         Context).
 

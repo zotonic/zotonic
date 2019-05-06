@@ -1,6 +1,8 @@
 {% with signal_props.log_id|default:id as id %}
     {% with m.log[id] as l %}
-        {% if not qmessage or l.message|lower|match:(qmessage|lower) %}
+        {% if     (not qmessage or l.message|lower|match:(qmessage|lower))
+              and (not quser or quser == l.user_id)
+        %}
             {% if l.type == 'error' %}
                 <tr class="text-danger">
             {% elseif l.type == 'debug' %}
