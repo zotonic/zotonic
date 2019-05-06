@@ -197,7 +197,7 @@ set_value(Module, Key, Value0, Context) ->
                 [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value, OldV ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context);
-        {rollback,{no_database_connection,[]}} ->
+        {rollback,{no_database_connection, _Trace}} ->
             {error, no_database_connection};
         {rollback, {error, _} = Error} ->
             Error;
