@@ -474,34 +474,36 @@ notify_observer(Msg, {_Prio, Pid}, IsCall, Context) when is_pid(Pid) ->
             false ->
                 gen_server:cast(Pid, {Msg, Context})
         end
-    catch EM:E ->
-        case z_utils:is_process_alive(Pid) of
-            false ->
-                lager:error("Error notifying ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
-                            [Pid, Msg, EM, E, erlang:get_stacktrace()]),
-                detach(msg_event(Msg), Pid, Context);
-            true ->
-                % Assume transient error
-                nop
-        end,
-        {error, {notify_observer, Pid, Msg, EM, E}}
+    catch
+        ?WITH_STACKTRACE(EM, E, Trace)
+            case z_utils:is_process_alive(Pid) of
+                false ->
+                    lager:error("Error notifying ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
+                                [Pid, Msg, EM, E, Trace]),
+                    detach(msg_event(Msg), Pid, Context);
+                true ->
+                    % Assume transient error
+                    nop
+            end,
+            {error, {notify_observer, Pid, Msg, EM, E}}
     end;
 notify_observer(Msg, {_Prio, {M,F}}, _IsCall, Context) ->
     M:F(Msg, Context);
 notify_observer(Msg, {_Prio, {M,F,[Pid]}}, _IsCall, Context) when is_pid(Pid) ->
     try
         M:F(Pid, Msg, Context)
-    catch EM:E ->
-        case z_utils:is_process_alive(Pid) of
-            false ->
-                lager:error("Error notifying ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
-                            [{M,F,Pid}, Msg, EM, E, erlang:get_stacktrace()]),
-                detach(msg_event(Msg), {M,F,[Pid]}, Context);
-            true ->
-                % Assume transient error
-                nop
-        end,
-        {error, {notify_observer, Pid, Msg, EM, E}}
+    catch
+        ?WITH_STACKTRACE(EM, E, Trace)
+            case z_utils:is_process_alive(Pid) of
+                false ->
+                    lager:error("Error notifying ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
+                                [{M,F,Pid}, Msg, EM, E, Trace]),
+                    detach(msg_event(Msg), {M,F,[Pid]}, Context);
+                true ->
+                    % Assume transient error
+                    nop
+            end,
+            {error, {notify_observer, Pid, Msg, EM, E}}
     end;
 notify_observer(Msg, {_Prio, {M,F,Args}}, _IsCall, Context) ->
     erlang:apply(M, F, Args++[Msg, Context]).
@@ -514,36 +516,38 @@ notify_observer_fold(Msg, {_Prio, Fun}, Acc, Context) when is_function(Fun) ->
 notify_observer_fold(Msg, {_Prio, Pid}, Acc, Context) when is_pid(Pid) ->
     try
         gen_server:call(Pid, {Msg, Acc, Context}, ?TIMEOUT)
-    catch EM:E ->
-        case z_utils:is_process_alive(Pid) of
-            false ->
-                lager:error("Error folding ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
-                            [Pid, Msg, EM, E, erlang:get_stacktrace()]),
-                detach(msg_event(Msg), Pid, Context);
-            true ->
-                % Assume transient error
-                lager:error("Error folding ~p with event ~p. Error ~p:~p (~p)",
-                            [Pid, Msg, EM, E, erlang:get_stacktrace()])
-        end,
-        Acc
+    catch
+        ?WITH_STACKTRACE(EM, E, Trace)
+            case z_utils:is_process_alive(Pid) of
+                false ->
+                    lager:error("Error folding ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
+                                [Pid, Msg, EM, E, Trace]),
+                    detach(msg_event(Msg), Pid, Context);
+                true ->
+                    % Assume transient error
+                    lager:error("Error folding ~p with event ~p. Error ~p:~p (~p)",
+                                [Pid, Msg, EM, E, Trace])
+            end,
+            Acc
     end;
 notify_observer_fold(Msg, {_Prio, {M,F}}, Acc, Context) ->
     M:F(Msg, Acc, Context);
 notify_observer_fold(Msg, {_Prio, {M,F,[Pid]}}, Acc, Context) when is_pid(Pid) ->
     try
         M:F(Pid, Msg, Acc, Context)
-    catch EM:E ->
-        case z_utils:is_process_alive(Pid) of
-            false ->
-                lager:error("Error folding ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
-                            [{M,F,Pid}, Msg, EM, E, erlang:get_stacktrace()]),
-                detach(msg_event(Msg), {M,F,[Pid]}, Context);
-            true ->
-                % Assume transient error
-                lager:error("Error folding ~p with event ~p. Error ~p:~p (~p)",
-                            [{M,F,Pid}, Msg, EM, E, erlang:get_stacktrace()])
-        end,
-        Acc
+    catch
+        ?WITH_STACKTRACE(EM, E, Trace)
+            case z_utils:is_process_alive(Pid) of
+                false ->
+                    lager:error("Error folding ~p with event ~p. Error ~p:~p. Detaching pid. (~p)",
+                                [{M,F,Pid}, Msg, EM, E, Trace]),
+                    detach(msg_event(Msg), {M,F,[Pid]}, Context);
+                true ->
+                    % Assume transient error
+                    lager:error("Error folding ~p with event ~p. Error ~p:~p (~p)",
+                                [{M,F,Pid}, Msg, EM, E, Trace])
+            end,
+            Acc
     end;
 notify_observer_fold(Msg, {_Prio, {M,F,Args}}, Acc, Context) ->
     erlang:apply(M, F, Args++[Msg, Acc, Context]).

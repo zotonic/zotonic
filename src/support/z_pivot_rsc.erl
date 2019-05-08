@@ -388,13 +388,13 @@ do_poll_task(Context) ->
                         z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context)
                 end
             catch
-                error:undef ->
+                ?WITH_STACKTRACE(error, undef, Trace)
                     lager:warning("Undefined task, aborting: ~p:~p(~p) ~p",
-                                [Module, Function, Args, erlang:get_stacktrace()]),
+                                [Module, Function, Args, Trace]),
                     z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context);
-                Error:Reason ->
+                ?WITH_STACKTRACE(Error, Reason, Trace)
                     lager:warning("Task failed(~p:~p): ~p:~p(~p) ~p",
-                                [Error, Reason, Module, Function, Args, erlang:get_stacktrace()])
+                                [Error, Reason, Module, Function, Args, Trace])
             end,
             true;
         empty ->

@@ -148,9 +148,9 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                                R
                         end
                     catch
-                        _:Why ->
+                        ?WITH_STACKTRACE(_, Why, S)
                             DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
-                            {rollback, {Why, erlang:get_stacktrace()}}
+                            {rollback, {Why, S}}
                     end
               end,
               Context)
@@ -163,7 +163,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                     Result
             end;
         false ->
-            {rollback, {no_database_connection, erlang:get_stacktrace()}}
+            {rollback, {no_database_connection, []}}
     end;
 transaction1(Function, Context) ->
     % Nested transaction, only keep the outermost transaction

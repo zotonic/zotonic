@@ -192,12 +192,11 @@ incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_clas
     try
         maybe_auth_change(incoming_1(Msg#z_msg_v1{data=decode_data(CT,Data)}, Context2), Context2)
     catch
-        throw:Reason ->
-            Stacktrace = erlang:get_stacktrace(),
+        ?WITH_STACKTRACE(throw, Reason, Stacktrace)
             lager:error("Throw '~p' for transport message ~p", [Reason, Msg]),
             lager:error("Stack: ~p", [Stacktrace]),
             {ok, maybe_ack({error, Reason}, Msg, Context2), Context2};
-        error:Reason ->
+        ?WITH_STACKTRACE(error, Reason, Stacktrace)
             Stacktrace = erlang:get_stacktrace(),
             lager:error("Error '~p' for transport message ~p", [Reason, Msg]),
             lager:error("Stack: ~p", [Stacktrace]),

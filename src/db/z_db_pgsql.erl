@@ -191,8 +191,7 @@ connect(Args, RetryCt) ->
                 E
         end
     catch
-        A:B ->
-            Trace = erlang:get_stacktrace(),
+        ?WITH_STACKTRACE(A, B, Trace)
             lager:error("psql connection to ~p:~p failed (exception ~p:~p), retrying in ~p sec (~p) in ~p",
                         [Hostname, Port, A, B, ?CONNECT_RETRY_SLEEP div 1000, self(), Trace]),
             timer:sleep(?CONNECT_RETRY_SLEEP),
