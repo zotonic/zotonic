@@ -13,7 +13,7 @@
 </h3>
 <br />
 
-<form action="" type="GET">
+<form id="log_filter" action="" type="GET">
 {% with m.search[{log page=q.page type=q.type user=q.user pagelen=100}] as result %}
     <table class="table table-compact">
         <tr>
@@ -26,21 +26,29 @@
         <tr>
             <td></td>
             <td>
-                <select name="type" class="form-control">
+                <select name="type" id="log_severity" class="form-control">
                     <option {% if q.type == 'debug' %}selected{% endif %} value="debug">Debug</option>
                     <option {% if q.type == 'info' %}selected{% endif %} value="info">Info</option>
                     <option {% if not q.type or q.type == 'warning' %}selected{% endif %} value="warning">Warning</option>
                     <option {% if q.type == 'error' %}selected{% endif %} value="error">Error</option>
                 </select>
+                {% wire id="log_severity" type="change" action={submit target="log_filter"} %}
             </td>
             <td>
-                <input type="text" name="message" placeholder="{_ Message _}" class="form-control" value="{{ q.message|escape }}">
+                <input type="text" id="log_message" name="message" placeholder="{_ Message _}" class="form-control" value="{{ q.message|escape }}">
             </td>
             <td>
-                <input type="number" name="user" min="1" placeholder="{_ User Id _}" class="form-control" value="{{ q.user|escape }}">
+                <input type="number" id="log_user" name="user" min="1" placeholder="{_ User Id _}" class="form-control" value="{{ q.user|escape }}">
             </td>
             <td>
                 <button type="submit" class="btn btn-primary">{_ Filter _}</button>
+                <button class="btn btn-default" id="filter_clear">{_ All _}</button>
+                {% wire id="filter_clear"
+                    action={set_value selector="#log_message input" value=""}
+                    action={set_value selector="#log_user" value=""}
+                    action={set_value selector="#log_severity" value="debug"}
+                    action={submit target="log_filter"}
+                %}
             </td>
         </tr>
         <tbody id="log-area">

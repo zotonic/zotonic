@@ -41,13 +41,19 @@
 
 %% interface functions
 
-observe_search_query({search_query, Req, OffsetLimit}, Context) ->
+observe_search_query({search_query, {log, Args}, _OffsetLimit}, Context) ->
     case z_acl:is_admin(Context) of
-        true ->
-            search(Req, OffsetLimit, Context);
-        false ->
-            []
-    end.
+        true -> m_log:search_query(Args, Context);
+        false -> []
+    end;
+observe_search_query({search_query, {log_email, Args}, _OffsetLimit}, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> m_log_email:search(Args, Context);
+        false -> []
+    end;
+observe_search_query(_Query, _Context) ->
+    undefined.
+
 
 pid_observe_zlog(Pid, #zlog{ user_id = LogUser, props = #log_message{ props = MsgProps } = Msg }, Context) ->
     case proplists:lookup(user_id, MsgProps) of
@@ -149,48 +155,6 @@ code_change(_OldVsn, State, _Extra) ->
 install_check(Context) ->
     m_log:install(Context),
     m_log_email:install(Context).
-
-
-
-search({log, Args}, _OffsetLimit, _Context) ->
-    % Filter on log type
-    W1 = case z_convert:to_binary( proplists:get_value(type, Args, "warning") ) of
-        <<"error">> -> " type = 'error' ";
-        <<"info">> -> " type <> 'debug' ";
-        <<"debug">> -> "";
-        _ -> " type in ('warning', 'error') "
-    end,
-    As1 = [],
-    % Filter on user-id
-    {W2, As2} = case proplists:get_value(user, Args) of
-        undefined -> {W1, As1};
-        "" -> {W1, As1};
-        <<>> -> {W1, As1};
-        User ->
-            try
-                WU = case W1 of
-                    "" -> " user_id = $" ++ integer_to_list(length(As1) + 1);
-                    _ -> W1 ++ " and user_id = $" ++ integer_to_list(length(As1) + 1)
-                end,
-                {WU, As1 ++ [ z_convert:to_integer(User) ]}
-            catch
-                _:_ ->
-                    {W1, As1}
-            end
-    end,
-    % SQL search question
-    #search_sql{
-        select = "id",
-        from = "log",
-        where = W2,
-        order = "id DESC",
-        args = As2,
-        assoc = false
-    };
-search({log_email, Filter}, _OffsetLimit, Context) ->
-    m_log_email:search(Filter, Context);
-search(_, _, _) ->
-    undefined.
 
 
 %% @doc Insert a simple log entry. Send an update to all UA's displaying the log.
