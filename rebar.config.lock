@@ -52,7 +52,7 @@
                        "a60b350819c8ba5602ed85b9d0050cc8e3cb1152"}},
        {mochiweb,".*",
                  {git,"git://github.com/zotonic/mochiweb.git",
-                      "84beb0bf6b9439aa7e13d01e30d2e74b7ba7d76b"}},
+                      "dab9019ff7b85bc8a1a1122a635ccdc3da1017ed"}},
        {dispatch_compiler,".*",
                           {git,"git://github.com/zotonic/dispatch_compiler.git",
                                "ae778807f9efa25e6bb1f62b8a4125b678bf94f5"}},
@@ -64,7 +64,7 @@
                       "4dbacde524a7b35e3ccabc2bf491810b48f0c8b2"}},
        {webzmachine,".*",
                     {git,"git://github.com/zotonic/webzmachine.git",
-                         "6d01fd1bdd502b013a661483f12e4dcaabdd6888"}},
+                         "fe0075257e264fa28ba4112603794a48a78d8405"}},
        {z_stdlib,".*",
                  {git,"git://github.com/zotonic/z_stdlib.git",
                       "d97b65e24eef071073f472433042f887ad717626"}},
@@ -146,9 +146,6 @@
        {locus,".*",
               {git,"https://github.com/g-andrade/locus.git",
                    "0ea9079ce5686573e0e70e2b1311343dd25feef8"}},
-       {erlastic_search,".*",
-                        {git,"https://github.com/tsloughter/erlastic_search.git",
-                             "7612493fb2531b7091428ace633d94cba467358f"}},
        {idna,".*",
              {git,"https://github.com/benoitc/erlang-idna",
                   "40c682fef283b7c3871c4b59aa0469304c6613ef"}},
@@ -157,13 +154,7 @@
                     "678aba028a690da6822c87410d475841c048b6bf"}},
        {metrics,".*",
                 {git,"https://github.com/benoitc/erlang-metrics",
-                     "c6eb4dcf29f9e907539915e2ab996f40c2ec7e8e"}},
-       {hackney,".*",
-                {git,"https://github.com/benoitc/hackney.git",
-                     "2e4c6e377d0ef913c24e8af783bed566c1251baa"}},
-       {jsx,".*",
-            {git,"https://github.com/talentdeficit/jsx.git",
-                 "3074d4865b3385a050badf7828ad31490d860df5"}}]}.
+                     "c6eb4dcf29f9e907539915e2ab996f40c2ec7e8e"}}]}.
 {plugin_dir,"deps/rebar_lock_deps_plugin/src"}.
 {plugins,[rebar_lock_deps_plugin]}.
 {xref_checks,[undefined_function_calls,locals_not_used,
