@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2019 Marc Worrell
 %% @doc Main definitions for zotonic
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,6 +20,12 @@
 -include("zotonic_events.hrl").
 -include("zotonic_log.hrl").
 -include_lib("webzmachine/include/wm_reqdata.hrl").
+
+-ifdef(fun_stacktrace).
+-define(WITH_STACKTRACE(T, R, S), T:R -> S = erlang:get_stacktrace(),).
+-else.
+-define(WITH_STACKTRACE(T, R, S), T:R:S ->).
+-endif.
 
 %% @doc The request context, session information and other
 -record(context, {
