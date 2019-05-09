@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2017 Marc Worrell
+%% @copyright 2010-2019 Marc Worrell
 %% @doc Resource to serve the zotonic fallback site templates.
 
-%% Copyright 2010-2017 Marc Worrell
+%% Copyright 2010-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -51,16 +51,12 @@ is_authorized(Context) ->
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     case z_context:get(is_fallback_template, Context) of
         true ->
-            Context2 = z_context:ensure_qs(Context),
-            Template = z_context:get(template, Context2),
-            render_page(Template, Context2);
-        _ ->
-            Context2 = z_context:ensure_qs(Context),
-            case z_acl:user(Context2) of
-                undefined ->
-                    render_page("logon.tpl", Context2);
-                _ ->
-                    status_page(Context2)
+            Template = z_context:get(template, Context),
+            render_page(Template, Context);
+        undefined ->
+            case z_acl:is_admin(Context) of
+                false -> render_page("logon.tpl", Context);
+                true -> status_page(Context)
             end
     end.
 
@@ -94,13 +90,7 @@ resp_code(Context) ->
 
 status_page(Context) ->
     Template = z_context:get(template, Context),
-    SitesStatus = m_zotonic_status:get_sites_status(),
-    Vars = [
-        {has_user, z_acl:user(Context)},
-        {configs, m_zotonic_status:get_sites_config()},
-        {sites, SitesStatus}
-        | z_context:get_all(Context)
-    ],
+    Vars = z_context:get_all(Context),
     Rendered = z_template:render(Template, Vars, Context),
     z_context:output(Rendered, Context).
 
@@ -109,18 +99,6 @@ status_page(Context) ->
 %% Handle all events
 %% -----------------------------------------------------------------------------------------------
 
-event(#submit{message= <<>>, form=FormId}, Context) ->
-    case z_context:get_q(<<"password">>, Context) =:= z_convert:to_binary(z_config:get(password)) of
-        true ->
-            {ok, ContextAuth} = z_auth:logon(1, Context),
-            z_render:wire({reload, []}, ContextAuth);
-        false ->
-            z_render:wire([
-                        {add_class, [{target,FormId}, {class,"error-pw"}]},
-                        {set_value, [{target,"password"},{value, ""}]}], Context)
-    end;
-event(#postback{message={logoff, []}}, Context) ->
-    z_render:wire({reload, []}, z_auth:logoff(Context));
 event(#postback{message={site_start, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:start(Site),

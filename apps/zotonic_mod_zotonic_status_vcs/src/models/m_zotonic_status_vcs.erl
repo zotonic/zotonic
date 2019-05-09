@@ -37,14 +37,14 @@
 m_get([ vcs_site, Site | Rest ], _Msg, Context) when is_atom(Site) ->
     case z_acl:is_admin(Context) of
         true ->
-            {ok, vcs_site(Site), Rest};
+            {ok, {vcs_site(Site), Rest}};
         false ->
             {error, eacces}
     end;
 m_get([ vcs_zotonic | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            {ok, vcs_zotonic(), Rest};
+            {ok, {vcs_zotonic(), Rest}};
         false ->
             {error, eacces}
     end;

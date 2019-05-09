@@ -40,7 +40,14 @@
 m_get([ sites_status | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            {ok, get_sites_status(), Rest};
+            {ok, {get_sites_status(), Rest}};
+        false ->
+            {error, eacces}
+    end;
+m_get([ site_url, Site | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {ok, {site_url(Site), Rest}};
         false ->
             {error, eacces}
     end;
@@ -70,6 +77,10 @@ get_site_config(Site) ->
         {ok, Config} -> fix_hostname_port_config(Config);
         {error, _} = Error -> [{site,Site}, Error]
     end.
+
+site_url(Site) when is_atom(Site) ->
+    Config = get_site_config(Site),
+    proplists:get_value(absurl, Config).
 
 fix_hostname_port_config(Config) ->
     Hostname = proplists:get_value(hostname, Config),
