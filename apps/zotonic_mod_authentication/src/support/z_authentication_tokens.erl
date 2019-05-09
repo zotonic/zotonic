@@ -261,6 +261,18 @@ user_secret(undefined, Context) ->
         Secret -> Secret
     end;
 user_secret(UserId, Context) ->
+    user_secret_1(z_db:has_connection(Context), UserId, Context).
+
+user_secret_1(false, 1, Context) ->
+    case m_config:get_value(mod_authentication, auth_user_secret, Context) of
+        undefined ->
+            Secret = z_ids:id(?AUTH_SECRET_LENGTH),
+            m_config:set_value(mod_authentication, auth_user_secret, Secret, Context),
+            Secret;
+        Secret ->
+            Secret
+    end;
+user_secret_1(true, UserId, Context) ->
     case m_identity:get_rsc(UserId, auth_secret, Context) of
         undefined -> generate_user_secret(UserId, Context);
         Idn -> proplists:get_value(prop1, Idn)

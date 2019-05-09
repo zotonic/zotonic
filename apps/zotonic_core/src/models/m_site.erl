@@ -28,7 +28,8 @@
     load_config/2,
     all/1,
     get/2,
-    get/3
+    get/3,
+    put/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -104,7 +105,7 @@ all(Site) when is_atom(Site) ->
     application:get_all_env(Site).
 
 %% @doc Fetch a key from the site configuration
--spec get(atom(), #context{}) -> term() | undefined.
+-spec get(atom(), z:context()) -> term() | undefined.
 get(Key, Context) when is_atom(Key) ->
     try
         Site = z_context:site(Context),
@@ -129,7 +130,7 @@ get(Key, Context) when is_atom(Key) ->
     end.
 
 %% @doc Fetch a nested key from the site configuration
--spec get(atom(), atom(), #context{}) -> term() | undefined.
+-spec get(atom(), atom(), z:context()) -> term() | undefined.
 get(site, Key, Context) when is_atom(Key) ->
     get(Key, Context);
 get(Module, Key, Context) when is_atom(Key) ->
@@ -137,3 +138,17 @@ get(Module, Key, Context) when is_atom(Key) ->
         undefined -> undefined;
         L when is_list(L) -> proplists:get_value(Key, L)
     end.
+
+%% @doc Put the value in the site config (temporary, till restart)
+-spec put(atom(), atom(), term(), z:context()) -> ok.
+put(site, Key, Value, Context) ->
+    application:set_env(z_context:site(Context), Key, Value);
+put(Module, Key, Value, Context) ->
+    L1 = case get(Module, Context) of
+        undefined ->
+            [ {Key, Value} ];
+        L when is_list(L) ->
+            [ {Key, Value} | proplists:delete(Key, L) ]
+    end,
+    application:set_env(z_context:site(Context), Module, L1).
+

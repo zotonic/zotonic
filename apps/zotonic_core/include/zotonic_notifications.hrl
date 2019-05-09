@@ -575,6 +575,13 @@
         username :: undefined | binary()
     }).
 
+%% @doc First to validate a password. Return {ok, RscId} or {error, Reason}.
+-record(auth_validate, {
+        username :: undefined | binary(),
+        password :: undefined | binary()
+    }).
+
+
 %% @doc User logs on. Add user-related properties to the logon request context.
 %% Type: foldl
 %% Return: ``z:context()``

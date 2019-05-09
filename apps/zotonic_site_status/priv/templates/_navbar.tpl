@@ -34,10 +34,9 @@ Add menu item when we have more top bar items
                     </li>
 #}
                     <li>
-                        <a id="logoff" href="#" title="{_ Log Off _}">
+                        <a id="logoff" href="{% url logoff %}" title="{_ Log Off _}">
                             <span class="z-icon z-icon-off"></span>
                         </a>
-                        {% wire id="logoff" postback={logoff} %}
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->

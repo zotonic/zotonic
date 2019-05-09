@@ -21,6 +21,7 @@
 
 -export([
     content_types_provided/1,
+    is_authorized/1,
 	process/4,
 	event/2
 ]).
@@ -37,6 +38,14 @@ content_types_provided(Context) ->
             {[ z_convert:to_binary(Mime) ], Context};
         Mime ->
             {[ Mime ], Context}
+    end.
+
+is_authorized(Context) ->
+    case z_context:get(is_fallback_template, Context) of
+        true ->
+            {true, Context};
+        _ ->
+            {z_acl:is_admin(Context), Context}
     end.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->

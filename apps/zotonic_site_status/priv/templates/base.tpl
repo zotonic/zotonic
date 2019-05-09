@@ -8,7 +8,7 @@
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Arjan Scherpenisse">
+        <meta name="robots" content="noindex, nofollow" />
 
         {% all include "_html_head.tpl" %}
 
@@ -16,6 +16,7 @@
             "bootstrap/css/bootstrap.min.css"
             "css/jquery.loadmask.css"
             "css/z.icons.css"
+            "css/logon.css"
             "css/zotonic-status.css"
         %}
 

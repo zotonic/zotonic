@@ -408,19 +408,64 @@ nodash(S) ->
         S1 -> nodash(S1)
     end.
 
+%% @doc Return the rsc_id with the given username/password.
+%%      If succesful then updates the 'visited' timestamp of the entry.
+-spec check_username_pw(binary() | string(), binary() | string(), z:context()) ->
+            {ok, m_rsc:resource_id()} | {error, term()}.
+check_username_pw(Username, Password, Context) ->
+    check_username_pw(Username, Password, [], Context).
 
 %% @doc Return the rsc_id with the given username/password.
 %%      If succesful then updates the 'visited' timestamp of the entry.
--spec check_username_pw(binary() | string(), binary() | string(), #context{}) ->
-    {ok, m_rsc:resource_id()} | {error, term()}.
-check_username_pw(<<"admin">>, Password, Context) ->
-    check_username_pw("admin", Password, Context);
-check_username_pw("admin", Empty, _Context) when Empty =:= []; Empty =:= <<>> ->
+-spec check_username_pw(binary() | string(), binary() | string(), list(), z:context()) ->
+            {ok, m_rsc:resource_id()} | {error, term()}.
+check_username_pw(Username, Password, QueryArgs, Context) ->
+    NormalizedUsername = z_convert:to_binary( z_string:trim( z_string:to_lower(Username) ) ),
+    case z_notifier:first(#auth_precheck{ username =  NormalizedUsername }, Context) of
+        Ok when Ok =:= ok; Ok =:= undefined ->
+            case post_check( check_username_pw_1(NormalizedUsername, Password, Context), QueryArgs, Context ) of
+                {ok, RscId} ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = RscId,
+                            username = NormalizedUsername,
+                            is_accepted = true
+                        },
+                        Context),
+                    {ok, RscId};
+                {error, need_passcode} = Error ->
+                    Error;
+                Error ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = undefined,
+                            username = NormalizedUsername,
+                            is_accepted = false
+                        },
+                        Context),
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+post_check({ok, RscId}, QueryArgs, Context) ->
+    case z_notifier:first(#auth_postcheck{ id = RscId, query_args = QueryArgs }, Context) of
+        ok -> {ok, RscId};
+        undefined -> {ok, RscId};
+        Error -> Error
+    end;
+post_check(Error, _QueryArgs, _Context) ->
+    Error.
+
+check_username_pw_1(<<"admin">>, "", _Context) ->
     {error, password};
-check_username_pw("admin", Password, Context) ->
-    Password1 = z_convert:to_list(Password),
-    case z_convert:to_list(m_site:get(admin_password, Context)) of
-        "admin" when Password1 =:= "admin" ->
+check_username_pw_1(<<"admin">>, <<>>, _Context) ->
+    {error, password};
+check_username_pw_1(<<"admin">>, Password, Context) ->
+    Password1 = z_convert:to_binary(Password),
+    case z_convert:to_binary( m_site:get(admin_password, Context) ) of
+        <<"admin">> when Password1 =:= <<"admin">> ->
             % Only allow default password from whitelisted ip addresses
             case is_peer_whitelisted(Context) of
                 true ->
@@ -437,24 +482,28 @@ check_username_pw("admin", Password, Context) ->
             z_db:q("update identity set visited = now() where id = 1", Context),
             {ok, 1};
         _ ->
-            {error, pw}
+            {error, password}
     end;
-check_username_pw(Username, Password, Context) ->
-    Username1 = z_string:trim(z_string:to_lower(Username)),
-    Row = z_db:q_row(
-        "select rsc_id, propb from identity where type = 'username_pw' and key = $1",
-        [Username1],
-        Context
-    ),
-    case Row of
+check_username_pw_1(Username, Password, Context) ->
+    Username1 = z_convert:to_binary( z_string:trim(z_string:to_lower(Username)) ),
+    Password1 = z_convert:to_binary( Password ),
+    case z_notifier:first( #auth_validate{ username = Username1, password = Password1 }, Context) of
+        {ok, _} = OK ->
+            OK;
+        {error, _} = Error ->
+            Error;
         undefined ->
-            % If the Username looks like an e-mail address, try by Email & Password
-            case z_email_utils:is_email(Username) of
-                true -> check_email_pw(Username, Password, Context);
-                false -> {error, nouser}
-            end;
-        {RscId, Hash} ->
-            check_hash(RscId, Username, Password, Hash, Context)
+            Row = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", [Username1], Context),
+            case Row of
+                undefined ->
+                    % If the Username looks like an e-mail address, try by Email & Password
+                    case z_email_utils:is_email(Username1) of
+                        true -> check_email_pw(Username1, Password, Context);
+                        false -> {error, nouser}
+                    end;
+                {RscId, Hash} ->
+                    check_hash(RscId, Username, Password, Hash, Context)
+            end
     end.
 
 %% @doc Check if the tcp/ip peer address is a whitelisted ip address
