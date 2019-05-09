@@ -219,11 +219,6 @@ performs those operations. Example::
 
     {installer, your_installer_erlang_module},
 
-service_api_cors
-""""""""""""""""
-
-See :ref:`guide-services-cors`.
-
 Setting module-specific config values in the site config
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

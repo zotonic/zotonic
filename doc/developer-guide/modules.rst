@@ -250,20 +250,6 @@ in the module “mod_base” has the file name: “validator_base_email.erl”
 
 .. seealso:: :ref:`guide-validators`
 
-src/services/
-"""""""""""""
-
-The services folder holds Erlang modules, each of which functions as
-an API method that you can use to access Zotonic from another
-application. These are invoked by :ref:`controller-api`.
-
-Services are named a bit differently: the name of the module is
-*always* used in the service name: The service ``base/export`` will be
-found in the file ``mod_base/services/service_base_export.erl``. This
-particular service can then be found at
-``http://yoursite.com/api/base/export``.
-
-.. seealso:: :ref:`guide-services` and :ref:`controller-api`
 
 Changing / recompiling files
 ----------------------------

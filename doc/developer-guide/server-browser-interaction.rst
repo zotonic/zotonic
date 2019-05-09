@@ -60,15 +60,6 @@ Which you can handle in any Zotonic module by defining::
 
 All arguments are available via the ``z_context:get_q/2`` function (and friends).
 
-Calling API services
---------------------
-
-A third way is to write your own :ref:`API services <guide-services>` and use
-standard JavaScript to perform Ajax GET/POST requests from the browser.
-
-This use is perfectly possible and legal, although the other methods are
-preferred, as they integrate nicely with the notification and action systems.
-The API is more targeted to other applications interfacing to Zotonic.
 
 .. _guide-transport:
 

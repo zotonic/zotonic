@@ -10,12 +10,6 @@ patterns ``/api/:module/:method`` and the URL ``/api/:module``. See
 the :ref:`guide-services` manual for more information.
 
 
-Authentication
---------------
-See :ref:`guide-services-auth` on how authentication is done when
-using this controller.
-
-
 .. _controller-api-nonstandard-url:
 
 Creating services at a non-standard URL
