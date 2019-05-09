@@ -181,10 +181,7 @@ Transport mechanisms
 
 Zotonic uses various mechanisms to transport data between the browser and the server:
 
- * AJAX callbacks to the server using :ref:`controller-postback`
- * WebSocket with bidirectional transports using :ref:`controller-websocket`
- * Comet transporting data from the server to the browser using :ref:`controller-comet`
- * HTML form posts to :ref:`controller-postback`.
+ * WebSocket with bidirectional transports using :ref:`controller-mqtt_transport`
 
 AJAX calls also transport back data from the server to the browser.
 

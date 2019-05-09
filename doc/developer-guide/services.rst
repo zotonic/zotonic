@@ -5,7 +5,7 @@ API services
 
 Services provide a generalized way to create API
 calls. These calls automatically use the authentication mechanism
-(session id or :ref:`OAuth <module-mod_oauth>`) to perform access checks.
+(session id or :ref:`OAuth <module-mod_oauth2>`) to perform access checks.
 
 A Zotonic service is created in a separate service (sub)module. Here you
 typically define the method name, the type of access (GET or POST) and if
@@ -346,7 +346,7 @@ a :ref:`notification hook <guide-notification>` with the name
 ``service_authorize`` is called.
 
 In a default Zotonic install, this ``service_authorize`` hook is
-handled by the :ref:`OAuth module <mod_oauth>`, but can be replaced by
+handled by the :ref:`OAuth module <mod_oauth2>`, but can be replaced by
 a different service authentication module.
 
 The module implementing the ``service_authorize`` hook is expected to
@@ -358,5 +358,4 @@ return format.
 
     * :term:`Services glossary entry <Service>`
     * :ref:`List of all core services <services>`
-    * :ref:`mod_oauth`
-    * :ref:`controller-api`
+    * :ref:`mod_oauth2`

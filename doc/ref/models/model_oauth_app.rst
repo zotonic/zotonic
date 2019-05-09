@@ -3,4 +3,4 @@
 
 Model to manage all consumer- application keys used for the OAuth authentication on the API.
 
-These can be configured using :ref:`mod_oauth`.
+These can be configured using :ref:`mod_oauth2`.
