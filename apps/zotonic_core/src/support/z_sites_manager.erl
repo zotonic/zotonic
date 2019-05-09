@@ -83,7 +83,7 @@
     status = new :: site_status(),
     pid = undefined :: undefined | pid(),
     mref = undefined :: undefined | reference(),
-    start_time = undefined :: undefined | pos_integer(),
+    start_time = undefined :: undefined | erlang:timestam(),
     stop_time = undefined :: undefined | erlang:timestamp(),
     stop_count = 0 :: integer(),
     crash_time = undefined :: undefined | erlang:timestamp(),
@@ -568,10 +568,33 @@ do_sync_status(Sites) ->
         IsChanged,
         Sites),
     case IsChanged1 of
-        true -> z_sites_dispatcher:update_hosts();
-        false -> ok
+        true ->
+            notify_status(),
+            z_sites_dispatcher:update_hosts();
+        false ->
+            ok
     end.
 
+notify_status() ->
+    Sites = ets:tab2list(?SITES_STATUS_TABLE),
+    zotonic_notifier:notify(sites_status, Sites, undefined).
+
+% status2map(#site_status{ } = S) ->
+%     #{
+%         site => S#site_status.site,
+%         is_enabled => S#site_status.is_enabled,
+%         status => S#site_status.status,
+%         start_time => tm(S#site_status.start_time),
+%         stop_time => tm(S#site_status.stop_time),
+%         stop_count => S#site_status.stop_count,
+%         crash_time => tm(S#site_status.crash_time),
+%         crash_count => S#site_status.crash_count
+%     }.
+
+% tm(undefined) ->
+%     undefined;
+% tm({MSecs, Secs, _USecs}) ->
+%     z_datetime:timestamp_to_datetime(MSecs * 1000000 + Secs).
 
 % ----------------------------------------------------------------------------
 

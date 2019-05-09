@@ -25,6 +25,7 @@
 -mod_prio(500).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
 -export([
     event/2,
@@ -106,16 +107,25 @@ abs_url_for(Dispatch, Context) ->
 
 % @doc Render a notice.
 notice(Form, Sitename, Text, Context) ->
-    Context1 = render_notice(Sitename, Text, Context),
-    z_render:wire({unmask, [{target, Form}]}, Context1).
+    Actions = notice_actions(Sitename, Text) ++ [ {unmask, [{target, Form}]} ],
+    z_render:wire(Actions, Context).
 
 progress(Sitename, Text, Context) ->
-    z_session_page:add_script(render_notice(Sitename, Text, Context)).
+    z_notifier:notify(
+        #page_actions{
+            actions = notice_actions(Sitename, Text)
+        }, Context).
 
-render_notice(Sitename, Text, Context) ->
-    Context1 = z_render:appear_top(
-                        "notices",
-                        #render{template="_notice.tpl", vars=[{site,Sitename},{notice,Text}]},
-                        Context),
-    z_render:wire({fade_out, [{selector, "#notices > div:gt(0)"}, {speed, 2000}]}, Context1).
+notice_actions(Sitename, Text) ->
+    [
+        {insert_top, [
+            {target, "notices"},
+            {template, "_notice.tpl"},
+            {site, Sitename},
+            {notice, Text}
+        ]},
+        {fade_out, [
+            {selector, "#notices > div:gt(0)"}, {speed, 2000}
+        ]}
+    ].
 

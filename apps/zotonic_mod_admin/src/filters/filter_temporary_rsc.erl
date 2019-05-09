@@ -31,6 +31,14 @@
 temporary_rsc(RscId, Context) ->
     temporary_rsc(RscId, {props, []}, Context).
 
+temporary_rsc(_RscId, _Props, _Context) ->
+    throw(notimplemented).
+
+task_delete_inactive(_RscId, _ClientId, _Context) ->
+    throw(notimplemented).
+
+-ifdef(NOT_IMPLEMENTED).
+
 temporary_rsc(undefined, {props, Props}, Context) when is_list(Props) ->
     make_temporary_rsc(Props, Context);
 temporary_rsc(undefined, [{_,_}|_] = Props, Context) ->
@@ -45,7 +53,6 @@ temporary_rsc("xxx", Props, Context) ->
     temporary_rsc(undefined, Props, Context);
 temporary_rsc(RscId, _Props, _Context) ->
     RscId.
-
 
 task_delete_inactive(RscId, ClientId, Context) ->
     case is_unmodified_rsc(RscId, Context) of
@@ -172,3 +179,5 @@ cat(Props, Context) ->
         undefined -> z_template_compiler_runtime:find_value(category_id, Props, #{}, Context);
         Cat -> Cat
     end.
+
+-endif.

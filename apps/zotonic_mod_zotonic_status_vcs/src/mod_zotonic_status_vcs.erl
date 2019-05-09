@@ -25,97 +25,93 @@
 -mod_prio(500).
 
 -export([
-    observe_zotonic_status_init/3,
     event/2
 ]).
 
--export([notice/3, show_notice/3]).
+-export([
+    async_notice/3,
+    render_notice/3
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
 
 -spec event(#postback{}, z:context()) -> z:context().
-event(#postback{message={vcs_up, Args}}, Context) ->
-    true = z_auth:is_auth(Context),
+event(#postback{ message = {vcs_up, Args} }, Context) ->
+    true = z_acl:is_admin(Context),
     case proplists:get_value(zotonic, Args) of
         true ->
-            case has_vcs() of
-                undefined ->
-                    notice('Zotonic', <<"Zotonic hasn’t been checked out using version control."/utf8>>, Context);
-                {hg, Path} ->
-                    show_notice('Zotonic', <<"Fetching updates…"/utf8>>, Context),
-                    Command = lists:flatten(["(cd \"", Path, "\"; hg pull -u)"]),
-                    notice('Zotonic', os:cmd(Command), Context);
-                {git, Path} ->
-                    show_notice('Zotonic', <<"Fetching updates…"/utf8>>, Context),
-                    Command = lists:flatten(["(cd \"", Path, "\"; git pull)"]),
-                    notice('Zotonic', os:cmd(Command), Context)
+            case m_zotonic_status_vcs:vcs_zotonic() of
+                {_, _} = VCS ->
+                    async_notice('Zotonic', <<"Fetching updates…"/utf8>>, Context),
+                    render_notice('Zotonic', update_vcs(VCS), Context);
+                false ->
+                    render_notice('Zotonic', <<"Zotonic hasn’t been checked out using version control."/utf8>>, Context)
             end;
         undefined ->
-            Site = proplists:get_value(site, Args),
-            case has_vcs(Site) of
-                {hg, Path} ->
-                    show_notice(Site, <<"Fetching updates…"/utf8>>, Context),
-                    Command = lists:flatten(["(cd \"", Path, "\"; hg pull -u)"]),
-                    notice(Site, os:cmd(Command), Context);
-                {git, Path} ->
-                    show_notice(Site, <<"Fetching updates…"/utf8>>, Context),
-                    Command = lists:flatten(["(cd \"", Path, "\"; git pull)"]),
-                    show_notice(Site, os:cmd(Command), Context);
-                undefined ->
-                    notice(Site, <<"Unknown site or nor mercurial/git folder present.">>, Context)
+            Site = proplists:get_value(site, Args, z_context:site(Context)),
+            case m_zotonic_status_vcs:vcs_site(Site) of
+                {_, _} = VCS ->
+                    async_notice(Site, <<"Fetching updates…"/utf8>>, Context),
+                    render_notice(Site, update_vcs(VCS), Context);
+                false ->
+                    render_notice(Site, <<"Unknown site or no version control folder present.">>, Context)
             end
     end;
-event(#postback{message=make}, Context) ->
-    true = z_auth:is_auth(Context),
+event(#postback{ message = make }, Context) ->
+    true = z_acl:is_admin(Context),
     spawn(fun() ->
-                z:m(),
-                show_notice('Zotonic', <<"Finished rebuilding Zotonic.">>, Context)
-              end),
-    notice('Zotonic', <<"Building Zotonic in the background…"/utf8>>, Context).
+            z:m(),
+            async_notice('Zotonic', <<"Finished rebuilding Zotonic.">>, Context)
+          end),
+    render_notice('Zotonic', <<"Building Zotonic in the background…"/utf8>>, Context).
+
+%% @doc Run the VCS update command for a directory.
+update_vcs({hg, Path}) ->
+    Command = lists:flatten(["(cd ", z_utils:os_filename(Path), "; hg pull -u)"]),
+    os:cmd(Command);
+update_vcs({git, Path}) ->
+    Command = lists:flatten(["(cd ", z_utils:os_filename(Path), "; git pull)"]),
+    os:cmd(Command).
 
 
-% @doc Show a notice on the current webpage.
--spec show_notice(atom(), string(), z:context()) -> z:context().
-show_notice(SiteName, Text, Context) ->
-    z_session_page:add_script(notice(SiteName, Text, Context)).
+% @doc Wire a notice to the current context
+render_notice(Site, Notice, Context) ->
+    z_render:wire( notice(Site, Notice), Context ).
 
-% @doc Render a notice.
--spec notice(atom(), string(), z:context()) -> z:context().
-notice(SiteName, Text, Context) ->
-    Context1 = z_render:appear_top(
-                        "notices",
-                        #render{template="_notice.tpl", vars=[{site,SiteName},{notice,Text}]},
-                        Context),
-    z_render:wire({fade_out, [{selector, "#notices > div:gt(0)"}, {speed, 2000}]}, Context1).
+% @doc Send a notice to the current webpage.
+-spec async_notice(atom(), string(), z:context()) -> ok.
+async_notice(Sitename, Text, Context) ->
+    z_notifier:notify(
+        #page_actions{ actions = notice(Sitename, Text) },
+        Context).
+
+% @doc Actions to show a notice.
+-spec notice(atom(), string()) -> list().
+notice(SiteName, Text) ->
+    [
+        {insert_top, [
+            {target, "notices"},
+            {template, "_notice.tpl"},
+            {site, SiteName},
+            {notice, Text}
+        ]},
+        {fade_out, [
+            {selector, "#notices > div:gt(0)"},
+            {speed, 2000}
+        ]}
+    ].
 
 
-%% @doc Check which sites have a .hgrc directory. Add this info to the template vars.
-observe_zotonic_status_init(zotonic_status_init, Vars, _Context) ->
-    case proplists:get_value(has_user, Vars) of
-        undefined -> Vars;
-        N when is_integer(N) ->
-            Sites = [ SiteName || {SiteName,_Props} <- proplists:get_value(configs, Vars) ],
-            Vcs = [ {SiteName, has_vcs(SiteName)} || SiteName <- Sites ],
-            [{vcs, Vcs}, {vcs_zotonic, has_vcs()} | Vars]
-    end.
+% %% @doc Check which sites have a .hgrc/.git directory. Add this info to the template vars.
+% observe_zotonic_status_init(zotonic_status_init, Vars, _Context) ->
+%     case proplists:get_value(has_user, Vars) of
+%         undefined ->
+%             Vars;
+%         N when is_integer(N) ->
+%             Sites = [ SiteName || {SiteName,_Props} <- proplists:get_value(configs, Vars) ],
+%             Vcs = [ {SiteName, has_vcs(SiteName)} || SiteName <- Sites ],
+%             [{vcs, Vcs}, {vcs_zotonic, has_vcs()} | Vars]
+%     end.
 
-% @doc Check if the site directory has a mercurial .hg subdirectory
-has_vcs(Site) ->
-    has_vcs_dir(z_path:site_dir(Site)).
-
-%% @doc Check if zotonic itself has a .hg directory
-has_vcs() ->
-    has_vcs_dir(z_utils:lib_dir()).
-
-has_vcs_dir(Dir) ->
-    HgDir = filename:join([Dir, ".hg"]),
-    case filelib:is_dir(HgDir)  of
-        true -> {hg, Dir};
-        false ->
-            GitDir = filename:join([Dir, ".git"]),
-            case filelib:is_dir(GitDir) of
-                true -> {git, Dir};
-                false -> undefined
-            end
-    end.

@@ -134,7 +134,6 @@ new(#context{} = C) ->
         language = C#context.language,
         tz = C#context.tz,
         depcache = C#context.depcache,
-        % session_manager=C#context.session_manager,
         dispatcher = C#context.dispatcher,
         template_server = C#context.template_server,
         scomp_server = C#context.scomp_server,

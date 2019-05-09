@@ -210,7 +210,7 @@ livereload_page(Context) ->
 
 %% @doc Start a listener for a certain kind of debug information, echo it to the target id on the current page.
 start_debug_stream(TargetId, What, Context) ->
-    lager:fatal("Debug stream not functional yet"),
+    lager:critical("Debug stream not functional yet"),
     % Context1 = z_context:prune_for_async(Context),
     % z_session_page:spawn_link(?MODULE, page_debug_stream, [TargetId, What, Context1], Context1).
     ok.

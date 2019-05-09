@@ -27,12 +27,26 @@
 -mod_depends([base, bootstrap]).
 
 -export([
+    init/1,
+
+    sites_status_observer/3,
+
     observe_user_is_enabled/2,
     observe_acl_logon/2,
     observe_acl_logoff/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+-spec init( z:context() ) -> ok.
+init(Context) ->
+    ok = zotonic_notifier:observe(sites_status, {?MODULE, sites_status_observer, [Context]}, self()).
+
+
+-spec sites_status_observer( z:context(), list( {atom(), z_sites_manager:site_status()} ), term() ) -> ok.
+sites_status_observer(Context, SitesStatus, _SitesManagerContext) ->
+    z_mqtt:publish([ <<"model">>, <<"zotonic_status">>, <<"event">>, <<"sites_status">> ], SitesStatus, Context),
+    ok.
 
 %% @doc Check if an user is enabled.
 observe_user_is_enabled(#user_is_enabled{id=1}, _Context) -> true;
