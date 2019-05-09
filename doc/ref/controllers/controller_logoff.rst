@@ -7,4 +7,4 @@ disabled.
 
 .. todo:: Extend documentation
 
-.. seealso:: :ref:`controller-logon`, :ref:`guide-authentication`.
+.. seealso:: :ref:`controller-authentication`, :ref:`guide-authentication`.
