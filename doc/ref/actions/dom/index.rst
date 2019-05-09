@@ -13,7 +13,6 @@ DOM Elements
    ../action_fade_in
    ../action_fade_out
    ../action_hide
-   ../action_inject
    ../action_insert_after
    ../action_insert_before
    ../action_insert_bottom
