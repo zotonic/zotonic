@@ -348,9 +348,9 @@ reset(Secret, Username, Context) when is_binary(Username) ->
 reset_1(UserId, Username, Password, Context) ->
     case auth_postcheck(UserId, z_context:get_q_all(Context), Context) of
         ok ->
-            ContextLoggedon = logon_user(UserId, [], Context),
-            case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(ContextLoggedon)) of
+            case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
                 ok ->
+                    ContextLoggedon = logon_user(UserId, [], Context),
                     delete_reminder_secret(UserId, ContextLoggedon),
                     ContextLoggedon;
                 {error, password_match} ->
