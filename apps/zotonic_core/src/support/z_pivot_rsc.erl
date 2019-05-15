@@ -466,22 +466,25 @@ do_poll_task(Context) ->
                         z_db:delete(pivot_task_queue, TaskId, Context)
                 end
             catch
-                error:undef ->
+                ?WITH_STACKTRACE(error, undef, Trace)
                     lager:warning("Undefined task, aborting: ~p:~p(~p) ~p",
-                                [Module, Function, Args, erlang:get_stacktrace()]),
+                                [Module, Function, Args, Trace]),
                     z_db:delete(pivot_task_queue, TaskId, Context);
-                Error:Reason when ErrCt < ?MAX_TASK_ERROR_COUNT ->
-                    lager:warning("Task failed - will retry ~p:~p(~p) ~p:~p ~p",
-                                [Error, Reason, Module, Function, Args, erlang:get_stacktrace()]),
-                    RetryFields = [
-                        {due, z_datetime:next_hour(calendar:universal_time())},
-                        {error_ct, ErrCt+1}
-                    ],
-                    z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
-                Error:Reason ->
-                    lager:warning("Task failed, aborting ~p:~p(~p) ~p:~p ~p",
-                                [Error, Reason, Module, Function, Args, erlang:get_stacktrace()]),
-                    z_db:delete(pivot_task_queue, TaskId, Context)
+                ?WITH_STACKTRACE(Error, Reason, Trace)
+                    case ErrCt < ?MAX_TASK_ERROR_COUNT of
+                        true ->
+                            lager:warning("Task failed - will retry ~p:~p(~p) ~p:~p ~p",
+                                        [Error, Reason, Module, Function, Args, Trace]),
+                            RetryFields = [
+                                {due, z_datetime:next_hour(calendar:universal_time())},
+                                {error_ct, ErrCt+1}
+                            ],
+                            z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
+                        false ->
+                            lager:warning("Task failed, aborting ~p:~p(~p) ~p:~p ~p",
+                                        [Error, Reason, Module, Function, Args, Trace]),
+                            z_db:delete(pivot_task_queue, TaskId, Context)
+                    end
             end,
             true;
         empty ->
