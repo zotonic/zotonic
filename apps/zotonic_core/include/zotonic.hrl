@@ -16,6 +16,12 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
+-ifdef(fun_stacktrace).
+-define(WITH_STACKTRACE(T, R, S), T:R -> S = erlang:get_stacktrace(),).
+-else.
+-define(WITH_STACKTRACE(T, R, S), T:R:S ->).
+-endif.
+
 %% @doc The request context, session information and other
 -record(context, {
         %% Cowboy request data (only set when this context is used because of a request)
