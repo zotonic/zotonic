@@ -1,0 +1,11 @@
+[
+    {mqtt_transport, [ "mqtt-transport" ], controller_mqtt_transport, [] },
+    {mqtt_transport, [ "mqtt-transport", '*' ], controller_mqtt_transport, []},
+
+    {service_worker,
+            [ "service-worker.js" ],
+            controller_file,
+            [ {root, [lib]}, {max_age, 1}, {path, "cotonic/cotonic-service-worker-bundle.js"} ]},
+
+    {keyserver_key, [ "keyserver-key.js" ], controller_keyserver_key, []}
+].

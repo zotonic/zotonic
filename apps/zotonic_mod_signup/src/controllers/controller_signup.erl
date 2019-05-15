@@ -20,35 +20,27 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
-    content_types_provided/1,
-    provide_content/1
+    process/4
 ]).
 -export([event/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
-content_types_provided(Context) ->
-    {[{<<"text/html">>, provide_content}], Context}.
-
-
-provide_content(Context) ->
-    Context2 = z_context:ensure_all(Context),
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    Context2 = z_context:ensure_qs(Context),
     z_context:lager_md(Context2),
     Vars = case z_context:get_q(<<"xs">>, Context2) of
                 undefined ->
                     [];
                 Check ->
-                    case z_session:get(signup_xs, Context2) of
-                        {Check, Props, SignupProps} -> [ {xs_props, {Props,SignupProps}} | Props ];
-                        _ -> []
-                    end
+                    []
+                    % case z_session:get(signup_xs, Context2) of
+                    %     {Check, Props, SignupProps} -> [ {xs_props, {Props,SignupProps}} | Props ];
+                    %     _ -> []
+                    % end
             end,
-    z_session:set(signup_xs, undefined, Context),
+    % z_session:set(signup_xs, undefined, Context),
     Rendered = z_template:render(<<"signup.tpl">>, Vars, Context2),
     z_context:output(Rendered, Context2).
 

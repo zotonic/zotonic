@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2017 Marc Worrell
+%% @copyright 2010-2019 Marc Worrell
 %% @doc Resource to serve the zotonic fallback site templates.
 
-%% Copyright 2010-2017 Marc Worrell
+%% Copyright 2010-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,40 +20,43 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
     content_types_provided/1,
-	provide_content/1,
-	event/2,
-	updater/2
+    is_authorized/1,
+	process/4,
+	event/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
-
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
 
 content_types_provided(Context) ->
     case z_context:get(content_type, Context) of
         undefined ->
-            {[{<<"text/html">>, provide_content}], Context};
+            {[ {<<"text">>, <<"html">>, []} ], Context};
+        Mime when is_list(Mime) ->
+            {[ z_convert:to_binary(Mime) ], Context};
         Mime ->
-            {[{z_convert:to_binary(Mime), provide_content}], Context}
+            {[ Mime ], Context}
     end.
 
-provide_content(Context) ->
+is_authorized(Context) ->
     case z_context:get(is_fallback_template, Context) of
         true ->
-            Context2 = z_context:continue_all(Context),
-            Template = z_context:get(template, Context2),
-            render_page(Template, Context2);
+            {true, Context};
         _ ->
-            Context2 = z_context:ensure_all(Context),
-            case z_acl:user(Context2) of
-                undefined ->
-                    render_page("logon.tpl", Context2);
-                _ ->
-                    status_page(Context2)
+            {z_acl:is_admin(Context), Context}
+    end.
+
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    case z_context:get(is_fallback_template, Context) of
+        true ->
+            Template = z_context:get(template, Context),
+            render_page(Template, Context);
+        undefined ->
+            case z_acl:is_admin(Context) of
+                false -> render_page("logon.tpl", Context);
+                true -> status_page(Context)
             end
     end.
 
@@ -87,55 +90,31 @@ resp_code(Context) ->
 
 status_page(Context) ->
     Template = z_context:get(template, Context),
-    SitesStatus = get_sites_status(),
-    Vars = [
-        {has_user, z_acl:user(Context)},
-        {configs, site_configs()},
-        {sites, SitesStatus}
-        | z_context:get_all(Context)
-    ],
-    Vars1 = z_notifier:foldl(zotonic_status_init, Vars, Context),
-    Rendered = z_template:render(Template, Vars1, Context),
-    {Output, OutputContext} = z_context:output(Rendered, Context),
-    case Template of
-        "home.tpl" -> start_stream(SitesStatus, OutputContext);
-        _ -> ok
-    end,
-    {Output, OutputContext}.
+    Vars = z_context:get_all(Context),
+    Rendered = z_template:render(Template, Vars, Context),
+    z_context:output(Rendered, Context).
 
 
 %% -----------------------------------------------------------------------------------------------
 %% Handle all events
 %% -----------------------------------------------------------------------------------------------
 
-event(#submit{message= <<>>, form=FormId}, Context) ->
-    case z_context:get_q(<<"password">>, Context) =:= z_convert:to_binary(z_config:get(password)) of
-        true ->
-            {ok, ContextAuth} = z_auth:logon(1, Context),
-            z_render:wire({reload, []}, ContextAuth);
-        false ->
-            z_render:wire([
-                        {add_class, [{target,FormId}, {class,"error-pw"}]},
-                        {set_value, [{target,"password"},{value, ""}]}], Context)
-    end;
-event(#postback{message={logoff, []}}, Context) ->
-    z_render:wire({reload, []}, z_auth:logoff(Context));
 event(#postback{message={site_start, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:start(Site),
-    notice(Site, "Successfully started.", Context);
+    render_notice(Site, "Successfully started.", Context);
 event(#postback{message={site_restart, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:restart(Site),
-    notice(Site, "Successfully restarted.", Context);
+    render_notice(Site, "Successfully restarted.", Context);
 event(#postback{message={site_stop, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:stop(Site),
-    notice(Site, "Successfully stopped.", Context);
+    render_notice(Site, "Successfully stopped.", Context);
 event(#postback{message={site_flush, [{site, Site}]}}, Context) ->
     true = z_auth:is_auth(Context),
     z:flush(z_context:new(Site)),
-    notice(Site, "The cache is flushed and all dispatch rules are reloaded.", Context);
+    render_notice(Site, "The cache is flushed and all dispatch rules are reloaded.", Context);
 event(#postback{message={site_admin, [{site,Site}]}}, Context) ->
     try
         SiteContext = z_context:new(Site),
@@ -151,99 +130,38 @@ event(#postback{message={site_admin, [{site,Site}]}}, Context) ->
     end.
 
 
-%% -----------------------------------------------------------------------------------------------
-%% Stream process to update the page when data changes
-%% -----------------------------------------------------------------------------------------------
+% %% -----------------------------------------------------------------------------------------------
+% %% Stream process to update the page when data changes
+% %% -----------------------------------------------------------------------------------------------
 
-start_stream(SitesStatus, Context) ->
-    z_session_page:spawn_link(?MODULE, updater, [SitesStatus, Context], Context).
+% start_stream(SitesStatus, Context) ->
+%     z_session_page:spawn_link(?MODULE, updater, [SitesStatus, Context], Context).
 
+% % @todo Instead of polling we should observe the system wide notifications (that will be implemented)
+% -spec updater(any(), z:context()) -> z:context().
+% updater(SitesStatus, Context) ->
+%     Context1 = z_auth:logon_from_session(Context),
+%     timer:sleep(1000),
+%     z_sites_manager:upgrade(),
+%     NewStatus = m_zotonic_status:get_sites_status(),
+%     case NewStatus /= SitesStatus of
+%         true ->
+%             Context2 = render_update(NewStatus, Context1),
+%             ?MODULE:updater(NewStatus, Context2);
+%         false ->
+%             ?MODULE:updater(SitesStatus, Context1)
+%     end.
 
-% @todo Instead of polling we should observe the system wide notifications (that will be implemented)
--spec updater(any(), z:context()) -> z:context().
-updater(SitesStatus, Context) ->
-    Context1 = z_auth:logon_from_session(Context),
-    timer:sleep(1000),
-    z_sites_manager:upgrade(),
-    NewStatus = get_sites_status(),
-    case NewStatus /= SitesStatus of
-        true ->
-            Context2 = render_update(NewStatus, Context1),
-            ?MODULE:updater(NewStatus, Context2);
-        false ->
-            ?MODULE:updater(SitesStatus, Context1)
-    end.
-
-
--spec render_update(list(), z:context()) -> z:context().
-render_update(SitesStatus, Context) ->
-    Vars = [
-        {has_user, z_acl:user(Context)},
-        {configs, site_configs()},
-        {sites, SitesStatus}
-    ],
-    Vars1 = z_notifier:foldl(zotonic_status_init, Vars, Context),
-    Context1 = z_render:update("sites", #render{template="_sites.tpl", vars=Vars1}, Context),
-    z_session_page:add_script(Context1).
-
-notice(SiteName, Text, Context) ->
-     mod_zotonic_status_vcs:notice(SiteName, Text, Context).
+% -spec render_update(list(), z:context()) -> z:context().
+% render_update(SitesStatus, Context) ->
+%     Vars = [
+%         {has_user, z_acl:user(Context)},
+%         {configs, m_zotonic_status:get_sites_config()},
+%         {sites, SitesStatus}
+%     ],
+%     Actions = {update, [ {target, "sites"}, {template, "_sites.tpl"} ] ++ Vars },
+%     z_notifier:notify( #page_actions{ actions = Actions }, Context ).
 
 
-site_configs() ->
-    maps:fold(
-        fun(Site, _Status, Acc) ->
-            [ {Site, site_config(Site)} | Acc ]
-        end,
-        [],
-        get_sites()).
-
-site_config(Site) ->
-    case z_sites_manager:get_site_config(Site) of
-        {ok, Config} -> fix_hostname_port_config(Config);
-        {error, _} = Error -> [{site,Site}, Error]
-    end.
-
-fix_hostname_port_config(Config) ->
-    Hostname = proplists:get_value(hostname, Config),
-    [ {absurl, fetch_absurl(Hostname)} ].
-
-fetch_absurl(undefined) ->
-    fetch_absurl("localhost");
-fetch_absurl(Hostname) when is_binary(Hostname) ->
-    fetch_absurl(binary_to_list(Hostname));
-fetch_absurl(Hostname) ->
-    [ Host | _ ] = string:tokens(Hostname, ":"),
-    case get_protocol_port() of
-        none -> "";
-        {Protocol, ""} -> lists:flatten([Protocol, "://", Host, "/"]);
-        {Protocol, Port} -> lists:flatten([Protocol, "://", Host, ":", Port, "/"])
-    end.
-
-%% @doc Return the preferred protocol and port.
-get_protocol_port() ->
-    case z_config:get(ssl_port) of
-        none ->
-            case z_config:get(port) of
-                none -> none;
-                80 -> {"http", ""};
-                Port -> {"http", integer_to_list(Port)}
-            end;
-        443 -> {"https", ""};
-        Port ->  {"https", integer_to_list(Port)}
-    end.
-
-get_sites() ->
-    maps:filter(
-        fun(Site,_Status) ->
-            not lists:member(Site, z_sites_manager:get_builtin_sites())
-         end,
-         z_sites_manager:get_sites()).
-
-get_sites_status() ->
-    Status1 = maps:filter(
-        fun(Site, _Status) ->
-            not lists:member(Site, z_sites_manager:get_builtin_sites())
-        end,
-        z_sites_manager:get_sites()),
-    lists:sort(maps:to_list(Status1)).
+render_notice(SiteName, Text, Context) ->
+     mod_zotonic_status_vcs:render_notice(SiteName, Text, Context).

@@ -20,10 +20,10 @@
 
 -export([render_action/4]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 render_action(_TriggerId, _TargetId, Args, Context) ->
-    Topic = z_utils:js_escape(proplists:get_value(topic, Args)),
+    {topic, Topic} = proplists:lookup(topic, Args),
+    Topic1 = z_mqtt:flatten_topic( z_mqtt:map_topic( Topic, Context ) ),
+    TopicJS = z_utils:js_escape( Topic1 ),
 
     Message = case proplists:get_value(js_msg, Args) of
         undefined ->
@@ -35,7 +35,7 @@ render_action(_TriggerId, _TargetId, Args, Context) ->
             end
     end,
 
-    Script = iolist_to_binary([<<"pubzub.publish(">>, $", Topic, $", $,, Message, <<");">>]),
+    Script = iolist_to_binary([<<"cotonic.broker.publish('">>, TopicJS, <<"',">>, Message, <<");">>]),
     {Script, Context}.
 
 %%

@@ -1,3 +1,4 @@
+@_logon_box_width: 400px;
 @_horizontal_spacing: 20px;
 @_button_spacing: 10px;
 @_vertical_element_spacing: 15px; // Bootstrap default
@@ -18,7 +19,7 @@ body.err403 {
 
 .z-logon-prompt {
     text-align: center;
-    max-width: 300px;
+    max-width: @_logon_box_width;
     margin: 40px auto;
 }
 
@@ -28,44 +29,52 @@ body.err403 {
 }
 
 .z-logon-box {
-    // width set in optional template var style_width
-    
     float: none;
     margin: @_vertical_element_spacing auto;
-    
+
+    width: @_logon_box_width;
+    max-width: 100%;
+
+    img.loading {
+        display: block;
+        margin: 0 auto;
+        opacity: 0.5;
+        height: 16px;
+    }
+
     ul {
         list-style-type: none;
         margin: 0;
         padding: 0;
     }
-    
+
     p {
         margin-bottom: @_button_spacing;
     }
-    
+
     // full width submit button
     button[type="submit"],
     input[type="submit"] {
         width: 100%;
     }
-    
+
     .z-logon-title,
     h2, h3, h4 {
         &:first-of-type {
             margin-top: 0;
         }
     }
-    
+
     .z-logon-form {
         margin: @_vertical_element_spacing auto 0 auto;
     }
-        
+
     /* Extra login options */
     .z-logon-extra {
         li {
             margin: 0 0 @_button_spacing 0 ;
         }
-        
+
         .z-btn-social {
             display: block;
             text-align: center;
@@ -74,18 +83,18 @@ body.err403 {
 
         .z-logon-extra-separator {
             @_line_height: 16px;
-        
+
             position: relative;
             z-index: 1;
             text-align: center;
             line-height: @_line_height;
             margin: @_vertical_element_spacing 0;
-            
+
             &:before {
                 // background behind "or"
                 @_label_width: 40px;
                 @_label_height: @_line_height;
-            
+
                 position: absolute;
                 left: 50%;
                 top: 50%;
@@ -97,7 +106,7 @@ body.err403 {
                 margin: -@_label_height/2 0 0 -@_label_width/2;
                 z-index: -1;
             }
-        
+
             &:after {
                 // horizontal line
                 position: absolute;
@@ -113,71 +122,64 @@ body.err403 {
             display: none;
         }
     }
-    
+
     /* Supporting options */
     .z-logon-support {
         margin: @_vertical_element_spacing 0 0 0;
         padding: @_vertical_element_spacing 0 0 0;
-        
+
         &:empty {
             display: none;
         }
     }
-    
+
     .alert {
-        display: none;
-        
+
         :first-child {
             margin-top: 0;
         }
-    
+
         :last-child {
             margin-bottom: 0;
         }
     }
-    
-    &.z-logon-error {
-        .alert {
-            display: block;
-        }
-    }
-    
+
     // Overrides when the box is shown in a background-colored box
     &.z-logon-box-boxed {
         @_background_color: @_box_background_color;
-                
+
         .z-logon-form {
             margin: @_vertical_element_spacing 0;
             padding: @_vertical_element_spacing @_horizontal_spacing;
             background-color: @_background_color;
         }
-        
+
         .z-logon-extra {
             .z-logon-extra-separator {
                 margin-left: -@_horizontal_spacing;
                 margin-right: -@_horizontal_spacing;
-                
+
                 &:before {
                     background-color: @_background_color;
                 }
             }
         }
-        
+
         .z-logon-support {
             margin-left: -@_horizontal_spacing;
             margin-right: -@_horizontal_spacing;
             padding-left: @_horizontal_spacing;
             padding-right: @_horizontal_spacing;
             border-top: 1px solid @_border_color;
-            
+
             p:last-child {
                 margin-bottom: 0;
             }
         }
     }
-    
+
     /* Sign up specific*/
-    
+
     #signup_verify {
         display: none;
     }

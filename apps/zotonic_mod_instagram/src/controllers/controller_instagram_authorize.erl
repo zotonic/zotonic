@@ -21,23 +21,15 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    service_available/1,
-    charsets_provided/1,
     resource_exists/1,
     previously_existed/1,
     moved_temporarily/1
 ]).
--export([get_args/1]).
--export([redirect_location/1, redirect_uri/1]).
+-export([
+    redirect_uri/1
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
-
-service_available(Context) ->
-    Context2 = z_context:ensure_all(Context),
-    {true, Context2}.
-
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
 
 resource_exists(Context) ->
     {false, Context}.
@@ -46,17 +38,20 @@ previously_existed(Context) ->
     {true, Context}.
 
 moved_temporarily(Context) ->
-    Location = redirect_location(Context),
-    save_args(Context),
-    {{true, Location}, Context}.
+    StateId = z_ids:id(),
+    StateData = {StateId, z_context:get_q_all_noz(Context)},
+    Context1 = z_context:set_state_cookie(StateData, Context),
+    Location = redirect_location(StateId, Context1),
+    {{true, Location}, Context1}.
 
-redirect_location(Context) ->
+redirect_location(StateId, Context) ->
     {AppId, _AppSecret, Scope} = mod_instagram:get_config(Context),
     Url = iolist_to_binary([
         <<"https://api.instagram.com/oauth/authorize/?client_id=">>,
         z_url:url_encode(AppId),
         "&redirect_uri=", z_url:url_encode(redirect_uri(Context)),
         "&response_type=code"
+        "&state=", StateId
     ]),
     case Scope of
         [] -> Url;
@@ -68,13 +63,3 @@ redirect_location(Context) ->
 redirect_uri(Context) ->
     z_context:abs_url(<<"/instagram/redirect">>, Context).
 
-save_args(Context) ->
-    z_context:set_session(?MODULE, z_context:get_q_all_noz(Context), Context).
-
-get_args(Context) ->
-    Args = z_context:get_session(?MODULE, Context),
-    z_context:set_session(?MODULE, undefined, Context),
-    case Args of
-        L when is_list(L) -> L;
-        undefined -> []
-    end.

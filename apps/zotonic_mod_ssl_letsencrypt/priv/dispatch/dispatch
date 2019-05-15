@@ -1,4 +1,4 @@
 [
-    {letsencrypt_challenge, [".well-known", "acme-challenge", token], controller_letsencrypt_challenge, [{ssl,false}]},
-    {letsencrypt_ping, [".zotonic", "letsencrypt-self-ping"], controller_letsencrypt_ping, [{ssl,false}]}
+    {letsencrypt_challenge, [".well-known", "acme-challenge", token], controller_letsencrypt_challenge, []},
+    {letsencrypt_ping, [".zotonic", "letsencrypt-self-ping"], controller_letsencrypt_ping, []}
 ].

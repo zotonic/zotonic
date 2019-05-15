@@ -22,18 +22,16 @@
 -export([
     allowed_methods/1,
     content_types_provided/1,
-    handle_challenge/1
+    process/4
 ]).
 
 allowed_methods(Context) ->
-    {[<<"GET">>], Context}.
+    {[ <<"GET">> ], Context}.
 
 content_types_provided(Context) ->
-    {[
-        {<<"text/plain">>, handle_challenge}
-     ], Context}.
+    {[ {<<"text">>, <<"plain">>, []} ], Context}.
 
-handle_challenge(Context0) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context0) ->
     Context = z_context:set_noindex_header(z_context:set_nocache_headers(Context0)),
     Host = m_req:get(host, Context),
     {ok, Challenges} = mod_ssl_letsencrypt:get_challenge(Context),

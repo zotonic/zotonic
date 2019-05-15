@@ -1,6 +1,5 @@
 [
     {admin_import, ["admin", "import"], controller_admin, [
-        {template, "_admin_import.tpl"},
-        {ssl, true}
+        {template, "_admin_import.tpl"}
     ]}
 ].

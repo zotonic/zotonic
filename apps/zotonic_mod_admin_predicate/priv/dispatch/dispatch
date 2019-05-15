@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 %% Dispatch rule for a predicate list, edit and connections overview
 [
- {admin_predicate,      ["admin", "predicate"],     controller_admin,                [{acl_module, mod_admin_predicate}, {template, "admin_predicate.tpl"}, {selected, "predicate"}, {ssl, true}]},
- {admin_predicate_edit, ["admin", "predicate", id], controller_admin_predicate_edit, [{acl_module, mod_admin_predicate}, {ssl, true}]},
- {admin_edges,  		["admin", "connections"],   controller_admin,                [{template, "admin_edges.tpl"}, {selected, "edges"}, {ssl, true}]}
+ {admin_predicate,      ["admin", "predicate"],     controller_admin,                [{acl_module, mod_admin_predicate}, {template, "admin_predicate.tpl"}, {selected, "predicate"}]},
+ {admin_predicate_edit, ["admin", "predicate", id], controller_admin_predicate_edit, [{acl_module, mod_admin_predicate}]},
+ {admin_edges,  		["admin", "connections"],   controller_admin,                [{template, "admin_edges.tpl"}, {selected, "edges"}]}
 ].

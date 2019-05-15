@@ -20,15 +20,14 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    is_authorized/1
+    is_authorized/1,
+    process/4
 ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
-
 is_authorized(Context) ->
-    z_admin_controller_helper:is_authorized(mod_admin_category, Context).
+    z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_admin_category)} ], Context).
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Html = z_template:render("admin_category_sorter.tpl", [{page_admin_category_sorter, true}], Context),
     z_context:output(Html, Context).
 

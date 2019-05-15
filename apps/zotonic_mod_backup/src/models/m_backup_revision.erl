@@ -18,10 +18,10 @@
 
 -module(m_backup_revision).
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 -export([
-    m_get/2,
+    m_get/3,
 
     save_revision/3,
     get_revision/2,
@@ -35,15 +35,15 @@
 -define(BACKUP_TYPE_PROPS, $P).
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ list, Id | Rest ], Context) ->
-    {list_revisions_assoc(Id, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ list, Id | Rest ], _Msg, Context) ->
+    {ok, {list_revisions_assoc(Id, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
-save_revision(Id, Props, Context) ->
+save_revision(Id, Props, Context) when is_integer(Id) ->
     Version = proplists:get_value(version, Props),
     LastVersion = z_db:q1("select version from backup_revision where rsc_id = $1 order by created desc limit 1", [Id], Context),
     case Version of
@@ -74,7 +74,8 @@ save_revision(Id, Props, Context) ->
     end.
 
 
-get_revision(RevId, Context) ->
+get_revision(RevId0, Context) ->
+    RevId = z_convert:to_integer(RevId0),
     case z_db:assoc_row("select * from backup_revision where id = $1", [RevId], Context) of
         undefined ->
             {error, notfound};
@@ -83,19 +84,27 @@ get_revision(RevId, Context) ->
             {ok, [ {data, erlang:binary_to_term(proplists:get_value(data, Row)) } | R1 ]}
     end.
 
-list_revisions(Id, Context) ->
+list_revisions(undefined, _Context) ->
+    [];
+list_revisions(Id, Context) when is_integer(Id) ->
     z_db:q("
         select id, type, created, version, user_id, user_name
         from backup_revision
         where rsc_id = $1
-        order by created desc", [Id], Context).
+        order by created desc", [Id], Context);
+list_revisions(Id, Context) ->
+    list_revisions(m_rsc:rid(Id, Context), Context).
 
-list_revisions_assoc(Id, Context) ->
+list_revisions_assoc(undefined, _Context) ->
+    [];
+list_revisions_assoc(Id, Context) when is_integer(Id) ->
     z_db:assoc("
         select id, type, created, version, user_id, user_name
         from backup_revision
         where rsc_id = $1
-        order by created desc", [Id], Context).
+        order by created desc", [Id], Context);
+list_revisions_assoc(Id, Context) ->
+    list_revisions_assoc(m_rsc:rid(Id, Context), Context).
 
 
 %% @doc Prune the old revisions in the database. Drops revisions close to each other.

@@ -21,11 +21,11 @@
 -module(m_mailinglist).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
 	get_stats/2,
 	get_enabled_recipients/2,
@@ -62,47 +62,42 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ stats, MailingId | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ stats, MailingId | Rest ], _Msg, Context) ->
     case z_acl:rsc_editable(MailingId, Context) of
-        true -> {get_stats(MailingId, Context), Rest};
-        false -> {{undefined, undefined}, Rest}
+        true -> {ok, {get_stats(MailingId, Context), Rest}};
+        false -> {ok, {{undefined, undefined}, Rest}}
     end;
-m_get([ rsc_stats, RscId | Rest ], Context) ->
-    Stats = case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> get_rsc_stats(RscId, Context);
-        false -> undefined
-    end,
-    {Stats, Rest};
-m_get([ recipient, RecipientId | Rest ], Context) ->
-    Rcpt = case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> recipient_get(RecipientId, Context);
-        false -> undefined
-    end,
-    {Rcpt, Rest};
-m_get([ scheduled, RscId | Rest ], Context) ->
-    Scheduled = case z_acl:rsc_visible(RscId, Context) of
-        true -> get_scheduled(RscId, Context);
-        false -> undefined
-    end,
-    {Scheduled, Rest};
-m_get([ confirm_key, ConfirmKey | Rest ], Context) ->
-    {get_confirm_key(ConfirmKey, Context), Rest};
-m_get([ subscription, ListId, Email | Rest ], Context) ->
-    Sub = case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> recipient_get(ListId, Email, Context);
-        false -> undefined
-    end,
-    {Sub, Rest};
-m_get([ bounce_reason, Email | Rest ], Context) ->
-    Reason = case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> bounce_reason(Email, Context);
-        false -> undefined
-    end,
-    {Reason, Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+m_get([ rsc_stats, RscId | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true -> {ok, {get_rsc_stats(RscId, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ recipient, RecipientId | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true -> {ok, {recipient_get(RecipientId, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ scheduled, RscId | Rest ], _Msg, Context) ->
+    case z_acl:rsc_visible(RscId, Context) of
+        true -> {ok, {get_scheduled(RscId, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ confirm_key, ConfirmKey | Rest ], _Msg, Context) ->
+    {ok, {get_confirm_key(ConfirmKey, Context), Rest}};
+m_get([ subscription, ListId, Email | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true -> {ok, {recipient_get(ListId, Email, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ bounce_reason, Email | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true -> {ok, {bounce_reason(Email, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Get the stats for the mailing. Number of recipients and list of scheduled resources.
@@ -252,11 +247,11 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 					  where mailinglist_id = $1
 					    and email = $2", [ListId, Email1], Context),
 	ConfirmKey = binary_to_list(z_ids:id(20)),
-	WelcomeMessageType1 = case Rec of
-		{RecipientId, true, _OldConfirmKey} ->
+	{RecipientId, WelcomeMessageType1} = case Rec of
+		{RcptId, true, _OldConfirmKey} ->
 			%% Present and enabled
-			silent;
-		{RecipientId, false, OldConfirmKey} ->
+			{RcptId, silent};
+		{RcptId, false, OldConfirmKey} ->
 			%% Present, but not enabled
 			NewConfirmKey = case OldConfirmKey of undefined -> ConfirmKey; _ -> OldConfirmKey end,
 			case WelcomeMessageType of
@@ -265,15 +260,15 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 						OldConfirmKey -> nop;
 						_ -> z_db:q("update mailinglist_recipient
 									 set confirm_key = $2
-									 where id = $1", [RecipientId, NewConfirmKey], Context)
+									 where id = $1", [RcptId, NewConfirmKey], Context)
 					end,
-					{send_confirm, NewConfirmKey};
+					{RcptId, {send_confirm, NewConfirmKey}};
 				_ ->
 					z_db:q("update mailinglist_recipient
 							set is_enabled = true,
 							    confirm_key = $2
-							where id = $1", [RecipientId, NewConfirmKey], Context),
-					WelcomeMessageType
+							where id = $1", [RcptId, NewConfirmKey], Context),
+					{RcptId, WelcomeMessageType}
 			end;
 		undefined ->
 			%% Not present
@@ -288,8 +283,8 @@ insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
 				{email, Email1},
 				{confirm_key, ConfirmKey}
 			] ++ [ {K, case is_list(V) of true-> z_convert:to_binary(V); false -> V end} || {K,V} <- Props ],
-			{ok, RecipientId} = z_db:insert(mailinglist_recipient, Cols, Context),
-			WelcomeMessageType
+			{ok, RcptId} = z_db:insert(mailinglist_recipient, Cols, Context),
+			{RcptId, WelcomeMessageType}
 	end,
 	case WelcomeMessageType1 of
 		none -> nop;
@@ -393,6 +388,10 @@ insert_scheduled(ListId, PageId, Context) ->
 				where page_id = $1 and mailinglist_id = $2", [PageId,ListId], Context),
 	case Exists of
 		0 ->
+           z_mqtt:publish(
+                [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
+                #{ id => ListId, page_id => PageId, action => <<"insert">> },
+                Context),
 			z_db:q("insert into mailinglist_scheduled (page_id, mailinglist_id) values ($1,$2)",
 					[PageId, ListId], Context);
 		1 ->
@@ -402,7 +401,23 @@ insert_scheduled(ListId, PageId, Context) ->
 %% @doc Delete a scheduled mailing
 delete_scheduled(ListId, PageId, Context) ->
 	true = z_acl:rsc_editable(ListId, Context),
-	z_db:q("delete from mailinglist_scheduled where page_id = $1 and mailinglist_id = $2", [PageId,ListId], Context).
+	case z_db:q("
+            delete from mailinglist_scheduled
+            where page_id = $1
+              and mailinglist_id = $2",
+            [PageId,ListId],
+            Context)
+    of
+        0 ->
+            0;
+        N when N > 0 ->
+            z_mqtt:publish(
+                [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
+                #{ id => ListId, page_id => PageId, action => <<"delete">> },
+                Context),
+            N
+    end.
+
 
 %% @doc Get the list of scheduled mailings for a page.
 get_scheduled(Id, Context) ->
@@ -430,6 +445,10 @@ check_scheduled(Context) ->
 reset_log_email(ListId, PageId, Context) ->
     z_db:q("delete from log_email where other_id = $1 and content_id = $2", [ListId, PageId], Context),
     z_depcache:flush({mailinglist_stats, PageId}, Context),
+    z_mqtt:publish(
+        [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
+        #{ id => ListId, page_id => PageId, action => <<"reset">> },
+        Context),
     ok.
 
 

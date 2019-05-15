@@ -25,7 +25,6 @@
 -mod_prio(400).
 
 -export([
-    observe_auth_logoff/3,
     observe_search_query/2,
     event/2
 ]).
@@ -41,12 +40,6 @@
 -define(FACEBOOK_SCOPE, <<"email">>).
 
 
-%% @doc Reset the received facebook access token (as set in the session)
-observe_auth_logoff(#auth_logoff{}, AccContext, _Context) ->
-    z_context:set_session(facebook_logon, false, AccContext),
-    z_context:set_session(facebook_access_token, undefined, AccContext).
-
-
 %% @doc Return the facebook appid, secret and scope
 %% @spec get_config(Context) -> {AppId, Secret, Scope}
 get_config(Context) ->
@@ -58,7 +51,12 @@ get_config(Context) ->
 
 %% @doc
 observe_search_query({search_query, {fql, Args}, OffsetLimit}, Context) ->
-    m_facebook:search({fql, Args}, OffsetLimit, Context);
+    case z_acl:is_allowed(use, mod_facebook, Context) of
+        true ->
+            m_facebook:search({fql, Args}, OffsetLimit, Context);
+        false ->
+            undefined
+    end;
 observe_search_query(_, _Context) ->
     undefined.
 

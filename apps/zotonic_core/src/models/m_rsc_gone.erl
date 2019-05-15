@@ -20,11 +20,11 @@
 -module(m_rsc_gone).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     get/2,
     get_new_location/2,
@@ -37,23 +37,23 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ Id, new_location | Rest ], Context) when is_integer(Id) ->
-    {get_new_location(Id, Context), Rest};
-m_get([ Id, is_gone | Rest ], Context) when is_integer(Id) ->
-    {is_gone(Id, Context), Rest};
-m_get([ Id | Rest ], Context) when is_integer(Id) ->
-    {get(Id, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ Id, new_location | Rest ], _Msg, Context) ->
+    {ok, {get_new_location(Id, Context), Rest}};
+m_get([ Id, is_gone | Rest ], _Msg, Context) ->
+    {ok, {is_gone(Id, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 %% @doc Get the possible 'rsc_gone' resource for the id.
 get(Id, Context) when is_integer(Id) ->
     F = fun() ->
         z_db:assoc_row("select * from rsc_gone where id = $1", [Id], Context)
     end,
-    z_depcache:memo(F, {rsc_gone, Id}, Context).
+    z_depcache:memo(F, {rsc_gone, Id}, Context);
+get(Id, Context) ->
+    get(m_rsc:rid(Id, Context), Context).
 
 
 %% @doc Get the redirect location for the id, uses the current dispatch rule and otherwise

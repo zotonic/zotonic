@@ -16,7 +16,7 @@
 %% limitations under the License.
 
 -module(scomp_translation_admin_translation_statistics).
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
 

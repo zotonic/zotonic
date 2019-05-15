@@ -21,35 +21,52 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    html/1
+    process/4
     ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-html(Context) ->
-    case z_context:get_q("error", Context) of
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    case z_context:get_q(<<"error">>, Context) of
         undefined ->
-            case z_context:get_q("code", Context) of
-                undefined ->
+            case z_context:get_q(<<"code">>, Context) of
+                Code when is_binary(Code), Code =/= <<>> ->
+                    check_state(Code, Context);
+                _NoCode ->
                     Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
-                    html_error(cancel, Context1);
-                Code ->
-                    access_token(fetch_access_token(Code, Context), Context)
+                    html_error(cancel, Context1)
             end;
-        "access_denied" ->
-            html_error(z_context:get_q("error_reason", Context), Context);
+        <<"access_denied">> ->
+            html_error(z_context:get_q(<<"error_reason">>, Context), Context);
         Error ->
             lager:warning("[instagram] Error redirect with error: ~p", [Error]),
             html_error(auth_user_error, Context)
     end.
 
-access_token({ok, AccessToken, UserData}, Context) ->
-    user_data(fetch_user_data(AccessToken, UserData), AccessToken, Context);
-access_token({error, _Reason}, Context) ->
+check_state(Code, Context) ->
+    Context1 = z_context:reset_state_cookie(Context),
+    case z_context:get_state_cookie(Context) of
+        {ok, {CookieStateId, Args}} ->
+            case z_context:get_q(<<"state">>, Context1) of
+                CookieStateId ->
+                    access_token(fetch_access_token(Code, Context1), Args, Context1);
+                _Other ->
+                    lager:error("[instagram] oauth redirect: mismatch on state arg"),
+                    html_error(state_error, Context1)
+            end;
+        {error, _} ->
+            lager:error("[instagram] oauth redirect: no or illegal state cookie"),
+            html_error(state_error, Context1)
+    end.
+
+
+access_token({ok, AccessToken, UserData}, Args, Context) ->
+    user_data(fetch_user_data(AccessToken, UserData), AccessToken, Args, Context);
+access_token({error, _Reason}, _Args, Context) ->
     html_error(access_token, Context).
 
-user_data({ok, UserProps}, AccessToken, Context) ->
-    case auth_user(UserProps, AccessToken, Context) of
+user_data({ok, UserProps}, AccessToken, Args, Context) ->
+    case auth_user(UserProps, AccessToken, Args, Context) of
         undefined ->
             % No handler for signups, or signup not accepted
             lager:warning("[instagram] Undefined auth_user return for user with props ~p", [UserProps]),
@@ -63,7 +80,7 @@ user_data({ok, UserProps}, AccessToken, Context) ->
         {ok, Context1} ->
             html_ok(Context1)
     end;
-user_data({error, _Reason}, _AccessData, Context) ->
+user_data({error, _Reason}, _AccessData, _Args, Context) ->
     html_error(service_user_data, Context).
 
 
@@ -86,14 +103,13 @@ html_error(ErrorReason, Context) ->
     html_error(auth_user_error, Context).
 
 
-auth_user(InstProps, AccessToken, Context) ->
+auth_user(InstProps, AccessToken, Args, Context) ->
     InstagramUserId = proplists:get_value(<<"id">>, InstProps),
     lager:debug("[instagram] Authenticating ~p ~p", [InstagramUserId, InstProps]),
     PersonProps = [
         {title, proplists:get_value(<<"full_name">>, InstProps)},
         {depiction_url, proplists:get_value(<<"profile_picture">>, InstProps, [])}
     ],
-    Args = controller_instagram_authorize:get_args(Context),
     z_notifier:first(#auth_validated{
             service=instagram,
             service_uid=InstagramUserId,
@@ -102,7 +118,7 @@ auth_user(InstProps, AccessToken, Context) ->
                 {username, proplists:get_value(<<"username">>, InstProps)}
             ],
             props=PersonProps,
-            is_connect=z_convert:to_bool(proplists:get_value("is_connect", Args))
+            is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
         },
         Context).
 

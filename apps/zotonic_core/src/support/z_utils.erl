@@ -242,20 +242,20 @@ erase_process_dict() ->
 
 %% Encode value securely, for use in cookies.
 
-%% 50 usec on core2duo 2GHz
-encode_value(Value, Context) ->
-    Salt = binary_to_list(z_ids:id()), %% convert to list for backwards compatibility
-    Secret = z_ids:sign_key(Context),
-    base64:encode(
-      term_to_binary({Value, Salt, crypto:hmac(sha, Secret, term_to_binary([Value, Salt]))})
-     ).
+encode_value(Value, #context{} = Context) ->
+    encode_value(Value, z_ids:sign_key(Context));
+encode_value(Value, Secret) when is_list(Secret); is_binary(Secret) ->
+    Salt = z_ids:rand_bytes(4),
+    BinVal = erlang:term_to_binary(Value),
+    Hash = crypto:hmac(sha, Secret, [ BinVal, Salt ]),
+    base64:encode(iolist_to_binary([ 1, Salt, Hash, BinVal ])).
 
-%% 23 usec on core2duo 2GHz
-decode_value(Data, Context) ->
-    Secret = z_ids:sign_key(Context),
-    {Value, Salt, Sign} = binary_to_term(base64:decode(Data)),
-    Sign = crypto:hmac(sha, Secret, term_to_binary([Value, Salt])),
-    Value.
+decode_value(Data, #context{} = Context) ->
+    decode_value(Data, z_ids:sign_key(Context));
+decode_value(Data, Secret) when is_list(Secret); is_binary(Secret) ->
+    <<1, Salt:4/binary, Hash:20/binary, BinVal/binary>> = base64:decode(Data),
+    Hash = crypto:hmac(sha, Secret, [ BinVal, Salt ]),
+    erlang:binary_to_term(BinVal).
 
 encode_value_expire(Value, Date, Context) ->
     encode_value({Value, Date}, Context).

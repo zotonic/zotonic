@@ -1,11 +1,20 @@
 %% -*- mode: erlang -*-
 [
- {logon,  ["logon"],  controller_logon,  [{ssl, true}, {is_only_anonymous, true}]},
- {logoff, ["logoff"], controller_logoff, [{ssl, true}]},
- {logon_reminder, ["logon", "reminder"], controller_logon, [{ssl, true}]},
- {logon_reset, ["logon", "reset"], controller_logon, [{ssl, true}]},
+ {logoff,           ["logoff"], controller_logoff,   []},
+ {logon,            ["logon"],                            controller_template, [ {template, "logon.tpl"} ]},
 
- {logon_service, ["logon", "service", service ], controller_template, [{ssl, true}, {template, "logon_service.tpl"}]},
+ {logon_reminder,   ["logon", {logon_view, "reminder"}],  controller_template, [ {template, "logon.tpl"} ]},
+ {logon_reset,      ["logon", {logon_view, "reset"}],     controller_template, [ {template, "logon.tpl"} ]},
 
- {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{ssl,true}, {template, "admin_authentication_services.tpl"}]}
+ % For simple dispatching in the templates (without the "logon_view")
+ {logon_reset,      ["logon", "reset"],                   controller_template, [ {template, "logon.tpl"} ]},
+
+ % Authentication API used by zotonic.auth.worker.js
+ {logon_auth,       [ "zotonic-auth" ],     controller_authentication, []},
+
+ % To be checked
+ {logon_service,    ["logon", "service", service ], controller_template, [{template, "logon_service.tpl"}]},
+
+
+ {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{template, "admin_authentication_services.tpl"}]}
 ].

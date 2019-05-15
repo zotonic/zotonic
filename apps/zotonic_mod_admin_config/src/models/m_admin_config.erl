@@ -18,29 +18,29 @@
 
 -module(m_admin_config).
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 -export([
-    m_get/2,
+    m_get/3,
     ssl_certificates/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ ssl_certificates | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ ssl_certificates | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {ssl_certificates(Context), Rest};
-        false -> {[], Rest}
+        true -> {ok, {ssl_certificates(Context), Rest}};
+        false -> {ok, {[], Rest}}
     end;
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 ssl_certificates(Context) ->
     Observers = z_notifier:get_observers(ssl_options, Context),
-    [ ssl_certificate(Observer, Context) || {_Prio, Observer} <- Observers ]
+    [ ssl_certificate(Observer, Context) || {_Prio, Observer, _Pid} <- Observers ]
     ++ [ self_signed(Context) ].
 
 ssl_certificate({Module, observe_ssl_options}, Context) ->

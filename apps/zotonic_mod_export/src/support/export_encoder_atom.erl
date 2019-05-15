@@ -38,7 +38,7 @@ extension() ->
     [ <<"atom">> ].
 
 mime() ->
-    [ <<"application/atom+xml">> ].
+    [ {<<"application">>, <<"atom+xml">>, []} ].
 
 init(Options, _Context) ->
     {ok, #state{

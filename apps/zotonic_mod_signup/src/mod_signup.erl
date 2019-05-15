@@ -54,7 +54,7 @@ observe_signup(#signup{id=UserId, props=Props, signup_props=SignupProps, request
 %% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.
 observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) ->
     CheckId = binary_to_list(z_ids:id()),
-    z_session:set(signup_xs, {CheckId, Props, SignupProps}, Context),
+    % z_session:set(signup_xs, {CheckId, Props, SignupProps}, Context),
     {ok, z_dispatcher:url_for(signup, [{xs, CheckId}], Context)}.
 
 

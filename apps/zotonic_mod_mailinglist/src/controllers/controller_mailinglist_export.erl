@@ -23,16 +23,15 @@
 -export([
 	forbidden/1,
 	allowed_methods/1,
-	charsets_provided/1,
 	content_types_provided/1,
 
-	to_text_csv/1
+	process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 forbidden(Context) ->
-    Context2 = z_context:ensure_all(Context),
+    Context2 = z_context:ensure_qs(Context),
     z_context:lager_md(Context2),
 	Id = m_rsc:rid(z_context:get_q(<<"id">>, Context2), Context2),
 	{not z_acl:rsc_editable(Id, Context2), Context2}.
@@ -40,13 +39,10 @@ forbidden(Context) ->
 allowed_methods(Context) ->
     {[<<"GET">>, <<"HEAD">>], Context}.
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
 content_types_provided(Context) ->
-    { [{<<"text/csv">>, to_text_csv}], Context }.
+    { [ {<<"text">>, <<"csv">>, []} ], Context }.
 
-to_text_csv(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
 	%% Fetch all exported email addresses
 	Recipients = m_mailinglist:get_enabled_recipients(Id, Context),

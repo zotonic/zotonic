@@ -155,14 +155,23 @@ search(_, _, _) ->
 
 
 %% @doc Insert a simple log entry. Send an update to all UA's displaying the log.
-handle_simple_log(#log_message{user_id=UserId, type=Type, message=Msg, props=Props}, State) ->
+handle_simple_log(#log_message{user_id=UserId, type=Severity, message=Msg, props=Props}, State) ->
     Context = z_acl:sudo(z_context:new(State#state.site)),
     {ok, Id} = z_db:insert(log, [
                     {user_id, UserId},
-                    {type, Type},
+                    {type, Severity},
                     {message, Msg}
                 ] ++ Props, Context),
-    mod_signal:emit({log_message, [{log_id, Id}, {user_id, UserId}, {type, Type}, {message, Msg}, {props, Props}]}, Context).
+    SeverityB = z_convert:to_binary(Severity),
+    LogTypeB = z_convert:to_binary( proplists:get_value(log_type, Props, log) ),
+    z_mqtt:publish(
+        [ <<"model">>, <<"logging">>, <<"event">>, LogTypeB, SeverityB ],
+        #{
+            log_id => Id,
+            user_id => UserId
+        },
+        Context),
+    ok.
 
 % All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
 % it is also sent to the main log.
@@ -174,12 +183,16 @@ handle_other_log(Record, State) ->
         true ->
             {ok, Id} = z_db:insert(LogType, Fields, Context),
             Log = record_to_log_message(Record, Fields, LogType, Id),
-            case proplists:get_value(severity, Fields) of
-                ?LOG_FATAL -> handle_simple_log(Log#log_message{type=fatal}, State);
-                ?LOG_ERROR -> handle_simple_log(Log#log_message{type=error}, State);
-                _Other -> nop
+            Severity = proplists:get_value(severity, Fields),
+            case Severity of
+                ?LOG_FATAL ->
+                    handle_simple_log(Log#log_message{type=fatal}, State);
+                ?LOG_ERROR ->
+                    handle_simple_log(Log#log_message{type=error}, State);
+                _Other ->
+                    nop
             end,
-            mod_signal:emit({LogType, [{log_id, Id}|Fields]}, Context);
+            ok;
         false ->
             Log = #log_message{
                 message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
@@ -198,12 +211,19 @@ record_to_log_message(#log_email{} = R, _Fields, LogType, Id) ->
                     "To: ", z_convert:to_list(R#log_email.envelop_to), opt_user(R#log_email.to_id), $\n,
                     "From: ", z_convert:to_list(R#log_email.envelop_from), opt_user(R#log_email.from_id)
                 ]),
-        props=[{log_type, LogType}, {log_id, Id}]
+        props=[
+            {log_type, LogType},
+            {log_id, Id}
+        ]
     };
 record_to_log_message(_, Fields, LogType, Id) ->
     #log_message{
         message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
-        props=[ {log_type, LogType}, {log_id, Id} | Fields ]
+        props=[
+            {log_type, LogType},
+            {log_id, Id}
+            | Fields
+        ]
     }.
 
 to_list({error, timeout}) ->

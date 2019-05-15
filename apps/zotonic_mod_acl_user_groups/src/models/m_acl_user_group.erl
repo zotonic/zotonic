@@ -20,11 +20,11 @@
 -module(m_acl_user_group).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     is_used/2
 ]).
@@ -33,18 +33,18 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ has_collaboration_groups | Rest ], Context) ->
-    {acl_user_groups_checks:has_collab_groups(Context), Rest};
-m_get([ is_used, Cat | Rest ], Context) ->
-    {is_used(Cat, Context), Rest};
-m_get([ collab_group_update | Rest ], Context) ->
-    {m_config:get_value(mod_acl_user_groups, collab_group_update, Context), Rest};
-m_get([ collab_group_link | Rest ], Context) ->
-    {m_config:get_value(mod_acl_user_groups, collab_group_link, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ has_collaboration_groups | Rest ], _Msg, Context) ->
+    {ok, {acl_user_groups_checks:has_collab_groups(Context), Rest}};
+m_get([ is_used, Cat | Rest ], _Msg, Context) ->
+    {ok, {is_used(Cat, Context), Rest}};
+m_get([ collab_group_update | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(mod_acl_user_groups, collab_group_update, Context), Rest}};
+m_get([ collab_group_link | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(mod_acl_user_groups, collab_group_link, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 %% @doc Check if a user group is actually in use.
 is_used(UserGroup, Context) ->

@@ -60,6 +60,9 @@
 
 -include_lib("zotonic.hrl").
 
+-type manage_schema() :: install
+                       | {upgrade, integer()}.
+
 -type module_status() :: new
                      | starting
                      | running
@@ -94,6 +97,11 @@
     module_monitors = #{} :: map(),  % pid() => atom()
     modules = #{} :: map() % atom() => #module_status{}
 }).
+
+-export_type([
+    manage_schema/0,
+    module_status/0
+]).
 
 %% The default module priority
 -define(MOD_PRIO, 500).
@@ -695,7 +703,7 @@ handle_info(failed_restart, #state{ start_queue = [], modules = Modules } = Stat
             (_M, #module_status{}, false) ->
                 false
         end,
-        true,
+        false,
         Modules)
     of
         true -> self() ! upgrade;
@@ -833,7 +841,8 @@ handle_restart_module(Module, #state{ site = Site, modules = Modules } = State) 
                     z_module_sup:stop_module(Module, Site)
                 end),
             Ms1 = ModuleStatus#module_status{ status = restarting },
-            handle_upgrade(State#state{ modules = Ms1 });
+            Modules1 = Modules#{ Module => Ms1 },
+            handle_upgrade(State#state{ modules = Modules1 });
         {ok, _} ->
             handle_upgrade(State);
         error ->
@@ -948,10 +957,10 @@ handle_start_next(#state{site=Site, start_queue=Starting, modules=Modules} = Sta
                         Reason ->
                             % TODO: remove the broadcast and publish to topic
                             StartErrorReason = get_start_error_reason(Reason),
-                            Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
-                            z_session_manager:broadcast(
-                                #broadcast{type="error", message=Msg, title="Module manager", stay=false},
-                                z_acl:sudo(z_context:new(Site))),
+                            % Msg = iolist_to_binary(io_lib:format("Could not start ~p: ~s", [M, StartErrorReason])),
+                            % z_session_manager:broadcast(
+                            %     #broadcast{type="error", message=Msg, title="Module manager", stay=false},
+                            %     z_acl:sudo(z_context:new(Site))),
                             lager:error("Could not start module ~p, reason ~s",
                                         [M, StartErrorReason])
                     end
@@ -1090,9 +1099,8 @@ handle_start_child_result(Module, Result, #state{ site = Site, module_monitors =
         {error, Reason} = Error ->
             lager:error("Could not start module ~p, reason ~p",
                         [Module, Reason]),
-            Modules = State1#state.modules,
-            State1#state{
-                modules = do_module_down(maps:get(Module, Modules), State, undefined, Reason),
+            State2 = do_module_down(Module, State1, undefined, Reason),
+            State2#state{
                 start_error = [
                     {Module, Error} | lists:keydelete(Module, 1, State1#state.start_error)
                 ]
@@ -1248,9 +1256,9 @@ refresh_module_schema(Module, #state{module_schema=Schemas} = State) ->
         module_schema=[{Module, mod_schema(Module)} | Schemas1]
     }.
 
-manage_schema_if_db(true, Module, Current, Target, Context) ->
+manage_schema_if_db(true, Module, Current, Target, #context{} = Context) ->
     call_manage_schema(Module, Current, Target, Context);
-manage_schema_if_db(false, Module, _Current, _Target, Context) ->
+manage_schema_if_db(false, Module, _Current, _Target, #context{} = Context) ->
     lager:info("[~p] Skipping schema for ~p as there is no database connection.",
                [z_context:site(Context), Module]),
     ok.
@@ -1320,8 +1328,9 @@ add_observers(Module, Pid, #state{ site = Site } = State) ->
                   observes(Module, Exports,Pid)).
 
 %% @doc Remove the observers for a module, called before module is deactivated
+remove_observers(_Module, undefined, #state{}) ->
+    ok;
 remove_observers(_Module, Pid, #state{ site = Site }) ->
-    % {Module, Exports} = lists:keyfind(Module, 1, State#state.module_exports),
     z_notifier:detach_all(Pid, Site).
 
 

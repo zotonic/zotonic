@@ -20,11 +20,11 @@
 -module(m_category).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     flush/1,
 
@@ -74,70 +74,72 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context()) -> {term(), list()}.
-m_get([ tree | Rest ], Context) ->
-    {tree(Context), Rest};
-m_get([ tree2 | Rest ], Context) ->
-    {tree2(Context), Rest};
-m_get([ menu | Rest ], Context) ->
-    {menu(Context), Rest};
-m_get([ tree_flat | Rest ], Context) ->
-    {tree_flat(Context), Rest};
-m_get([ tree_flat_meta | Rest ], Context) ->
-    {tree_flat_meta(Context), Rest};
-m_get([ is_used, Cat | Rest ], Context) ->
-    {is_used(Cat, Context), Rest};
-m_get([ Cat, path | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ tree | Rest ], _Msg, Context) ->
+    {ok, {tree(Context), Rest}};
+m_get([ tree2 | Rest ], _Msg, Context) ->
+    {ok, {tree2(Context), Rest}};
+m_get([ menu | Rest ], _Msg, Context) ->
+    {ok, {menu(Context), Rest}};
+m_get([ tree_flat | Rest ], _Msg, Context) ->
+    {ok, {tree_flat(Context), Rest}};
+m_get([ tree_flat_meta | Rest ], _Msg, Context) ->
+    {ok, {tree_flat_meta(Context), Rest}};
+m_get([ is_used, Cat | Rest ], _Msg, Context) ->
+    {ok, {is_used(Cat, Context), Rest}};
+m_get([ Cat, path | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> get_path(Id, Context);
         {error, _} -> undefined
     end,
-    {V, Rest};
-m_get([ Cat, is_a | Rest ], Context) ->
+    {ok, {V, Rest}};
+m_get([ Cat, is_a | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> is_a(Id, Context);
         {error, _} -> undefined
     end,
-    {V, Rest};
-m_get([ Cat, tree | Rest ], Context) ->
+    {ok, {V, Rest}};
+m_get([ Cat, tree | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> tree(Id, Context);
         {error, _} -> undefined
     end,
-    {V, Rest};
-m_get([ Cat, tree_flat | Rest ], Context) ->
+    {ok, {V, Rest}};
+m_get([ Cat, tree_flat | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> tree_flat(Id, Context);
         {error, _} -> undefined
     end,
-    {V, Rest};
-m_get([ Cat, tree1 | Rest ], Context) ->
+    {ok, {V, Rest}};
+m_get([ Cat, tree1 | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> tree1(Id, Context);
         {error, _} -> undefined
     end,
-    {V, Rest};
-m_get([ Cat, tree2 | Rest ], Context) ->
+    {ok, {V, Rest}};
+m_get([ Cat, tree2 | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> tree2(Id, Context);
         {error, _} -> undefined
     end,
-    {V, Rest};
-m_get([ Cat, image | Rest ], Context) ->
+    {ok, {V, Rest}};
+m_get([ Cat, image | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> image(Id, Context);
         {error, _} -> undefined
     end,
-    {V, Rest};
-m_get([ Cat | Rest ], Context) ->
+    {ok, {V, Rest}};
+
+% Just the category
+m_get([ Cat | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> get(Id, Context);
         {error, _} -> undefined
     end,
-    {V, Rest};
-m_get(Vs, _Context) ->
+    {ok, {V, Rest}};
+m_get(Vs, _Msg, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+    {error, unknown_path}.
 
 
 % ======================================== API =======================================

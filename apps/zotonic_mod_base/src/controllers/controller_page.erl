@@ -20,26 +20,25 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
     content_types_provided/1,
     resource_exists/1,
     previously_existed/1,
     moved_temporarily/1,
     is_authorized/1,
-    provide_content/1
+    process/4
 ]).
 
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
 content_types_provided(Context) ->
-    case z_context:get(content_type, Context) of
+    CTs = case z_context:get(content_type, Context) of
         undefined ->
-            {[{<<"text/html">>, provide_content}], Context};
+            [ {<<"text">>, <<"html">>, []} ];
+        Mime when is_list(Mime) ->
+            [ z_convert:to_binary(Mime) ];
         Mime ->
-            {[{z_convert:to_binary(Mime), provide_content}], Context}
-    end.
+            [ Mime ]
+    end,
+    {CTs, Context}.
 
 %% @doc Check if the id in the request (or dispatch conf) exists.
 resource_exists(Context) ->
@@ -73,7 +72,7 @@ is_authorized(Context) ->
 
 
 %% @doc Show the page.  Add a noindex header when requested by the editor.
-provide_content(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Id = z_controller_helper:get_id(Context),
     Context1 = z_context:set_noindex_header(m_rsc:p_no_acl(Id, seo_noindex, Context), Context),
 

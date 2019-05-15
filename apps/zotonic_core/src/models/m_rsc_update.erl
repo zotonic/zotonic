@@ -109,6 +109,13 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
             pre_props = Props,
             post_props = []
         }, Context),
+     z_mqtt:publish(
+         [ <<"model">>, <<"rsc">>, <<"event">>, Id, <<"delete">> ],
+         #{
+            id => Id,
+            pre_is_a => CatList
+         },
+         Context),
     z_edge_log_server:check(Context),
     ok.
 
@@ -444,6 +451,20 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
         post_props = NewProps
     },
     z_notifier:notify_sync(Note, Context),
+    z_mqtt:publish(
+        [
+            <<"model">>, <<"rsc">>, <<"event">>, NewId,
+            case Id of
+                insert_rsc -> <<"insert">>;
+                _ -> <<"update">>
+            end
+        ],
+         #{
+            id => NewId,
+            pre_is_a => OldCatList,
+            post_is_a => NewCatList
+         },
+         Context),
 
     % Return the updated or inserted id
     {ok, NewId};
@@ -686,6 +707,7 @@ preflight_check(Id, [{uri, Uri} | T], Context) when Uri =/= undefined ->
         0 ->
             preflight_check(Id, T, Context);
         _N ->
+            Uri = 1,
             lager:warning("Trying to insert duplicate uri ~p", [Uri]),
             throw({error, duplicate_uri})
     end;

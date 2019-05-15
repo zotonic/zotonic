@@ -21,11 +21,11 @@
 -author("Marc Worrell <marc@worrell.nl").
 
 -export([
-    to_html/1
+    process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-to_html(Context) ->
+process(<<"GET">>, _, _, Context) ->
     Context1 = z_context:set_resp_header(<<"connection">>, <<"close">>, Context),
     {<<>>, Context1}.

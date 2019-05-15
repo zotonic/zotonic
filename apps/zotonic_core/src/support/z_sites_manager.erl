@@ -83,7 +83,7 @@
     status = new :: site_status(),
     pid = undefined :: undefined | pid(),
     mref = undefined :: undefined | reference(),
-    start_time = undefined :: undefined | pos_integer(),
+    start_time = undefined :: undefined | erlang:timestam(),
     stop_time = undefined :: undefined | erlang:timestamp(),
     stop_count = 0 :: integer(),
     crash_time = undefined :: undefined | erlang:timestamp(),
@@ -357,8 +357,8 @@ wait_for_running_1(Site, _State, Timeout) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init([]) ->
-    ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]),
-    ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]),
+    z_module_indexer:new_ets(),
+    z_mediaclass:new_ets(),
     ets:new(?SITES_STATUS_TABLE, [set, public, named_table, {keypos, 1}]),
     ok = gen_server:cast(self(), upgrade),
     timer:send_after(?PERIODIC_UPGRADE, periodic_upgrade),
@@ -568,16 +568,38 @@ do_sync_status(Sites) ->
         IsChanged,
         Sites),
     case IsChanged1 of
-        true -> z_sites_dispatcher:update_hosts();
-        false -> ok
+        true ->
+            notify_status(),
+            z_sites_dispatcher:update_hosts();
+        false ->
+            ok
     end.
 
+notify_status() ->
+    Sites = ets:tab2list(?SITES_STATUS_TABLE),
+    zotonic_notifier:notify(sites_status, Sites, undefined).
+
+% status2map(#site_status{ } = S) ->
+%     #{
+%         site => S#site_status.site,
+%         is_enabled => S#site_status.is_enabled,
+%         status => S#site_status.status,
+%         start_time => tm(S#site_status.start_time),
+%         stop_time => tm(S#site_status.stop_time),
+%         stop_count => S#site_status.stop_count,
+%         crash_time => tm(S#site_status.crash_time),
+%         crash_count => S#site_status.crash_count
+%     }.
+
+% tm(undefined) ->
+%     undefined;
+% tm({MSecs, Secs, _USecs}) ->
+%     z_datetime:timestamp_to_datetime(MSecs * 1000000 + Secs).
 
 % ----------------------------------------------------------------------------
 
 do_start_sites(#state{ sites = Sites } = State) ->
     Now = z_datetime:timestamp(),
-    % io:format("~n~p~n~n", [Sites]),
     NStarting = maps:fold(
         fun
             (_, #site_status{ status = starting }, Count) -> Count+1;
@@ -817,7 +839,6 @@ rescan_sites(#state{ sites = Sites } = State) ->
     ScannedSites = do_scan_sites(),
     remove_unknown_sites(Sites, ScannedSites),
     NewSites = insert_new_sites(Sites, ScannedSites),
-    % io:format("~p~n~n~n", [NewSites]),
     self() ! startup_check,
     State#state{ sites = NewSites }.
 

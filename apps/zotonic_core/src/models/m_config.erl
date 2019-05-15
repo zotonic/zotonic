@@ -20,11 +20,11 @@
 -module(m_config).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
     all/1,
     get/2,
     get/3,
@@ -44,26 +44,25 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context()) -> {term(), list()}.
-m_get([], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {all(Context), []};
-        false -> {[], []}
+        true -> {ok, {all(Context), []}};
+        false -> {ok, {[], []}}
     end;
-m_get([ Module ], Context) ->
+m_get([ Module ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {get(Module, Context), []};
-        false -> {[], []}
+        true -> {ok, {get(Module, Context), []}};
+        false -> {ok, {[], []}}
     end;
-m_get([ Module, Key | Rest ], Context) ->
+m_get([ Module, Key | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {get(Module, Key, Context), Rest};
-        false -> {[], Rest}
+        true -> {ok, {get(Module, Key, Context), Rest}};
+        false -> {ok, {[], Rest}}
     end;
-m_get(Vs, _Context) ->
+m_get(Vs, _Msg, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
-
+    {error, unknown_path}.
 
 %% @doc Return all configurations from the configuration table. Returns a nested proplist (module, key)
 all(Context) ->
@@ -94,6 +93,8 @@ all(Context) ->
 
 
 %% @doc Get the list of configuration key for the module.
+get(undefined, _Context) ->
+    [];
 get(Module, Context) when is_atom(Module) ->
     ConfigProps = case z_depcache:get_subkey(config, Module, Context) of
         {ok, undefined} ->
@@ -107,6 +108,14 @@ get(Module, Context) when is_atom(Module) ->
     case m_site:get(Module, Context) of
         L when is_list(L) -> z_convert:to_list(ConfigProps) ++ L;
         _ -> ConfigProps
+    end;
+get(Module, Context) when is_binary(Module) ->
+    try
+        Module1 = binary_to_existing_atom(Module, utf8),
+        get(Module1, Context)
+    catch
+        error:badarg ->
+            []
     end.
 
 %% @doc Get a configuration value for the given module/key combination.
@@ -135,6 +144,15 @@ get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
             end;
         _ ->
             Value
+    end;
+get(Module, Key, Context) when is_binary(Module), is_binary(Key) ->
+    try
+        Module1 = binary_to_existing_atom(Module, utf8),
+        Key1 = binary_to_existing_atom(Key, utf8),
+        get(Module1, Key1, Context)
+    catch
+        error:badarg ->
+            undefined
     end.
 
 
@@ -149,7 +167,6 @@ get_value(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
         _ -> Value
     end.
 
-
 get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Key) ->
     case get_value(Module, Key, Context) of
         undefined -> Default;
@@ -163,21 +180,29 @@ get_boolean(Module, Key, Default, Context) ->
     z_convert:to_bool(get_value(Module, Key, Default, Context)).
 
 %% @doc Set a "simple" config value.
--spec set_value(atom(), atom(), term(), #context{}) -> ok.
+-spec set_value(atom(), atom(), term(), z:context()) -> ok.
 set_value(Module, Key, Value, Context) ->
-    case z_db:q(
-        "update config set value = $1, modified = now() where module = $2 and key = $3",
-        [Value, Module, Key],
-        Context
-    ) of
-        0 ->
-            z_db:insert(config, [{module, Module}, {key, Key}, {value, Value}], Context);
-        [] -> ok;
-        1 -> ok
-    end,
-    z_depcache:flush(config, Context),
-    z_notifier:notify(#m_config_update{module = Module, key = Key, value = Value}, Context),
-    ok.
+    case z_db:has_connection(Context) of
+        true ->
+            case z_db:q(
+                "update config set value = $1, modified = now() where module = $2 and key = $3",
+                [Value, Module, Key],
+                Context
+            ) of
+                0 ->
+                    z_db:insert(config, [{module, Module}, {key, Key}, {value, Value}], Context);
+                [] -> ok;
+                1 -> ok
+            end,
+            z_depcache:flush(config, Context),
+            z_notifier:notify(#m_config_update{module = Module, key = Key, value = Value}, Context),
+            ok;
+        false ->
+            m_site:put(Module, Key, Value, Context),
+            z_depcache:flush(config, Context),
+            z_notifier:notify(#m_config_update{module = Module, key = Key, value = Value}, Context),
+            ok
+    end.
 
 
 %% @doc Set a "complex" config value.

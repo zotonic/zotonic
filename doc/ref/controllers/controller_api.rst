@@ -6,14 +6,7 @@ an easy way to create API calls to allow computer programs to perform
 functions on your Zotonic site.
 
 ``controller_api`` by default intercepts all URLs according to the
-patterns ``/api/:module/:method`` and the URL ``/api/:module``. See
-the :ref:`guide-services` manual for more information.
-
-
-Authentication
---------------
-See :ref:`guide-services-auth` on how authentication is done when
-using this controller.
+patterns ``/api/:topic``.
 
 
 .. _controller-api-nonstandard-url:

@@ -21,15 +21,16 @@
 
 -export([
     is_authorized/1,
+    process/4,
 	event/2
 ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 is_authorized(Context) ->
-    z_admin_controller_helper:is_authorized(mod_mailinglist, Context).
+    z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_mailinglist)} ], Context).
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Vars = [
         {page_admin_mailinglist, true},
 		{id, z_convert:to_integer(z_context:get_q("id", Context))}
@@ -52,7 +53,7 @@ event(#postback{message={dialog_recipient_edit, [{id,Id}, {recipient_id, RcptId}
 
 event(#postback{message={recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, target=TargetId}, Context) ->
 	m_mailinglist:recipient_is_enabled_toggle(RcptId, Context),
-	z_script:add_script(
+	z_render:add_script(
 		["$(\"#", TargetId, "\").parents(\"li:first\").toggleClass(\"unpublished\"); "],
 		Context);
 

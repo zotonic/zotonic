@@ -20,36 +20,37 @@
 
 -author("Marc Worrell <marc@worrell.nl>").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 -export([
-    m_get/2,
+    m_get/3,
 
     countries/1,
     country_name/2,
     country_name/3,
 
-    timezones/0
+    timezones/0,
+    is_timezone/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("erlang_localtime/include/tz_database.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ countries | Rest ], Context) ->
-    {countries(Context), Rest};
-m_get([ country_name, Code | Rest ], Context) ->
-    {country_name(Code, Context), Rest};
-m_get([ timezones | Rest ], _Context) ->
-    {timezones(), Rest};
-m_get([ default_timezone | Rest ], Context) ->
-    {m_config:get_value(mod_l10n, timezone, Context), Rest};
-m_get([ timezone_is_fixed | Rest ], Context) ->
-    {m_config:get_boolean(mod_l10n, timezone_is_fixed, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ countries | Rest ], _Msg, Context) ->
+    {ok, {countries(Context), Rest}};
+m_get([ country_name, Code | Rest ], _Msg, Context) ->
+    {ok, {country_name(Code, Context), Rest}};
+m_get([ timezones | Rest ], _Msg, _Context) ->
+    {ok, {timezones(), Rest}};
+m_get([ default_timezone | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(mod_l10n, timezone, Context), Rest}};
+m_get([ timezone_is_fixed | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_l10n, timezone_is_fixed, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 
@@ -72,78 +73,26 @@ country_name(Code, Language, Context) ->
 			z_trans:lookup_fallback(z_trans:translations(CountryEN, Context), Language, Context)
     end.
 
-%% Extracted from the timezone javascript.
+-spec is_timezone( binary() | string() ) -> boolean().
+is_timezone(Tz) ->
+    Mapped = case mochiglobal:get(timezones_map) of
+        undefined ->
+            TzMap = maps:from_list([ {T, true} || T <- timezones() ]),
+            mochiglobal:put(timezones_map, TzMap),
+            TzMap;
+        TzMap ->
+            TzMap
+    end,
+    maps:is_key(Tz, Mapped).
+
+-spec timezones() -> list( binary() ).
 timezones() ->
-    [
-        <<"UTC">>,
-        <<"Africa/Johannesburg">>,
-        <<"Africa/Lagos">>,
-        <<"Africa/Windhoek">>,
-        <<"America/Adak">>,
-        <<"America/Anchorage">>,
-        <<"America/Argentina/Buenos_Aires">>,
-        <<"America/Bogota">>,
-        <<"America/Caracas">>,
-        <<"America/Chicago">>,
-        <<"America/Denver">>,
-        <<"America/Godthab">>,
-        <<"America/Guatemala">>,
-        <<"America/Halifax">>,
-        <<"America/Los_Angeles">>,
-        <<"America/Montevideo">>,
-        <<"America/New_York">>,
-        <<"America/Noronha">>,
-        <<"America/Noronha">>,
-        <<"America/Phoenix">>,
-        <<"America/Santiago">>,
-        <<"America/Santo_Domingo">>,
-        <<"America/St_Johns">>,
-        <<"Asia/Baghdad">>,
-        <<"Asia/Baku">>,
-        <<"Asia/Beirut">>,
-        <<"Asia/Dhaka">>,
-        <<"Asia/Dubai">>,
-        <<"Asia/Irkutsk">>,
-        <<"Asia/Jakarta">>,
-        <<"Asia/Kabul">>,
-        <<"Asia/Kamchatka">>,
-        <<"Asia/Karachi">>,
-        <<"Asia/Kathmandu">>,
-        <<"Asia/Kolkata">>,
-        <<"Asia/Krasnoyarsk">>,
-        <<"Asia/Omsk">>,
-        <<"Asia/Rangoon">>,
-        <<"Asia/Shanghai">>,
-        <<"Asia/Tehran">>,
-        <<"Asia/Tokyo">>,
-        <<"Asia/Vladivostok">>,
-        <<"Asia/Yakutsk">>,
-        <<"Asia/Yekaterinburg">>,
-        <<"Atlantic/Azores">>,
-        <<"Atlantic/Cape_Verde">>,
-        <<"Australia/Adelaide">>,
-        <<"Australia/Brisbane">>,
-        <<"Australia/Darwin">>,
-        <<"Australia/Eucla">>,
-        <<"Australia/Lord_Howe">>,
-        <<"Australia/Sydney">>,
-        <<"Europe/Berlin">>,
-        <<"Europe/London">>,
-        <<"Europe/Moscow">>,
-        <<"Pacific/Apia">>,
-        <<"Pacific/Auckland">>,
-        <<"Pacific/Chatham">>,
-        <<"Pacific/Easter">>,
-        <<"Pacific/Gambier">>,
-        <<"Pacific/Honolulu">>,
-        <<"Pacific/Kiritimati">>,
-        <<"Pacific/Majuro">>,
-        <<"Pacific/Marquesas">>,
-        <<"Pacific/Norfolk">>,
-        <<"Pacific/Noumea">>,
-        <<"Pacific/Pago_Pago">>,
-        <<"Pacific/Pitcairn">>,
-        <<"Pacific/Tarawa">>,
-        <<"Pacific/Tongatapu">>
-    ].
+    case mochiglobal:get(timezones) of
+        undefined ->
+            Tzs = [ z_convert:to_binary(element(1, Tz)) || Tz <- ?tz_database ],
+            mochiglobal:put(timezones, Tzs),
+            Tzs;
+        Tzs ->
+            Tzs
+    end.
 

@@ -19,7 +19,7 @@
 
 
 -module(scomp_base_inplace_textbox).
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
 

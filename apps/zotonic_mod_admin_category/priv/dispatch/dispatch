@@ -1,4 +1,4 @@
 %% -*- mode: erlang -*-
 [
- {admin_category_sorter, ["admin", "category"], controller_admin_category_sorter, [{ssl, true}]}
+ {admin_category_sorter, ["admin", "category"], controller_admin_category_sorter, []}
 ].

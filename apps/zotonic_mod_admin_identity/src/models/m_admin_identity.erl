@@ -18,16 +18,22 @@
 
 -module(m_admin_identity).
 
+-behaviour (zotonic_model).
+
 -export([
-    m_get/2
+    m_get/3
 ]).
 
-m_get([ password_regex | Rest ], Context) ->
-    {m_config:get_value(mod_admin_identity, password_regex, Context), Rest};
-m_get([ new_user_category | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ password_regex | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(mod_admin_identity, password_regex, Context), Rest}};
+m_get([ new_user_category | Rest ], _Msg, Context) ->
     Cat = case m_config:get_value(mod_admin_identity, new_user_category, Context) of
         undefined -> person;
         <<>> -> person;
         C -> C
     end,
-    {Cat, Rest}.
+    {ok, {Cat, Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.

@@ -13,21 +13,6 @@
     {dir, "priv/mnesia"}
  ]},
 
- {emqtt, [
-    {auth, {zotonic, []}},
-    {access_control, {zotonic, []}},
-    {listeners, [
-        %%% Unescape to enable MQTT on the given port
-        % {1883,  [
-        %     binary,
-        %     {packet,        raw},
-        %     {reuseaddr,     true},
-        %     {backlog,       128},
-        %     {nodelay,       true}
-        % ]}
-    ]}
- ]},
-
  {lager,
   [{handlers,
     [

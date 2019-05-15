@@ -18,31 +18,29 @@
 
 -module(m_backup).
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 -export([
-    m_get/2
+    m_get/3
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ admin_panel | Rest ], Context) ->
-    {m_config:get_value(mod_backup, admin_panel, Context), Rest};
-m_get([ daily_dump | Rest ], Context) ->
-    {m_config:get_value(mod_backup, daily_dump, Context), Rest};
-m_get([ list_backups | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ admin_panel | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(mod_backup, admin_panel, Context), Rest}};
+m_get([ daily_dump | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(mod_backup, daily_dump, Context), Rest}};
+m_get([ list_backups | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
-        true -> {mod_backup:list_backups(Context), Rest};
-        false -> {[], Rest}
+        true -> {ok, {mod_backup:list_backups(Context), Rest}};
+        false -> {error, eacces}
     end;
-m_get([ is_backup_in_progress | Rest ], Context) ->
+m_get([ is_backup_in_progress | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
-        true -> {mod_backup:backup_in_progress(Context), Rest};
-        false -> {[], Rest}
+        true -> {ok, {mod_backup:backup_in_progress(Context), Rest}};
+        false -> {error, eacces}
     end;
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 

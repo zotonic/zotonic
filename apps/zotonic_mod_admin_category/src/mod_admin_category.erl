@@ -34,6 +34,7 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
+-include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
 
 event(#submit{message={delete_move, Args}}, Context) ->
@@ -71,7 +72,7 @@ event(#postback{message={delete_all, Args}}, Context) ->
     end.
 
 cat_delete(Ids, Context) ->
-    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    z_notifier:first(#page_actions{ actions = [ {mask, [{message, ?__("Deleting...", Context)}]} ] }, Context),
     RscIds = in_categories(Ids, Context),
     case delete_all(RscIds, 0, length(RscIds), Context) of
         ok ->
@@ -79,26 +80,24 @@ cat_delete(Ids, Context) ->
                              m_rsc:delete(Id, Context)
                           end,
                           Ids),
-            z_session_page:add_script(z_render:wire({unmask, []}, Context));
+            z_notifier:first(#page_actions{ actions = [ {unmask, []} ] }, Context);
         {error, _} ->
-            Context1 = z_render:wire([
-                    {unmask, []},
-                    {alert, [{text, ?__("Not all resources could be deleted.", Context)}]}
-                ],
-                Context),
-            z_session_page:add_script(Context1)
-
+            Actions = [
+                {unmask, []},
+                {alert, [{text, ?__("Not all resources could be deleted.", Context)}]}
+            ],
+            z_notifier:first(#page_actions{ actions = Actions }, Context)
     end.
 
 cat_move_and_delete(Ids, ToGroupId, Context) ->
-    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    z_notifier:first(#page_actions{ actions = [ {mask, [{message, ?__("Deleting...", Context)}]} ] }, Context),
     RscIds = in_categories(Ids, Context),
     ok = move_all(RscIds, ToGroupId, 0, length(RscIds), Context),
     lists:foreach(fun(Id) ->
                      m_rsc:delete(Id, Context)
                   end,
                   Ids),
-    z_session_page:add_script(z_render:wire({unmask, []}, Context)),
+    z_notifier:first(#page_actions{ actions = [ {unmask, []} ] }, Context),
     ok.
 
 in_categories(Ids, Context) when is_list(Ids) ->
@@ -134,7 +133,7 @@ maybe_progress(N1, N2, Total, Context) ->
     S2 = round(N2 / PerStep),
     case S1 of
         S2 -> ok;
-        _ -> z_session_page:add_script(z_render:wire({mask_progress, [{percent,S2}]}, Context))
+        _ -> z_notifier:first(#page_actions{ actions = [ {mask_progress, [{percent,S2}]} ] }, Context)
     end.
 
 deletable(Ids, Context) ->

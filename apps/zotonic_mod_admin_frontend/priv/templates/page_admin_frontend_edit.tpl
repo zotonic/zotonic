@@ -84,9 +84,6 @@
 
 {% block _js_include_extra %}
 	{% lib
-		"js/qlobber.min.js"
-		"js/pubzub.js"
-
     	"js/modules/jquery.hotkeys.js"
 	    "js/modules/z.adminwidget.js"
 	    "js/modules/z.tooltip.js"

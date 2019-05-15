@@ -84,7 +84,7 @@ get(ssl_port) ->
     case os:getenv("ZOTONIC_SSL_PORT") of
         false -> get(ssl_port, default(ssl_port));
         "" -> get(ssl_port, default(ssl_port));
-        "none" -> none;
+        % "none" -> none;
         Port -> list_to_integer(Port)
     end;
 get(smtp_listen_domain) ->
@@ -189,7 +189,6 @@ default(listen_port) -> 8000;
 default(ssl_listen_port) -> 8443;
 default(port) -> ?MODULE:get(listen_port);
 default(ssl_port) -> ?MODULE:get(ssl_listen_port);
-default(ssl_only) -> false;
 default(smtp_verp_as_from) -> false;
 default(smtp_no_mx_lookups) -> false;
 default(smtp_relay) -> false;

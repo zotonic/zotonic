@@ -80,14 +80,14 @@ close_workers(PoolPid) when is_pid(PoolPid) ->
                 WorkerPids).
 
 
+db_pool_name(Site) when is_atom(Site) ->
+    list_to_atom("z_db_pool" ++ [$$ | atom_to_list(Site)]);
 db_pool_name(#context{} = Context) ->
-    db_pool_name(z_context:site(Context));
-db_pool_name(Site) ->
-    list_to_atom("z_db_pool" ++ [$$ | atom_to_list(Site)]).
+    db_pool_name(z_context:site(Context)).
 
 db_driver(SiteProps) when is_list(SiteProps) ->
     proplists:get_value(dbdriver, SiteProps, ?DEFAULT_DB_DRIVER);
-db_driver(Context = #context{}) ->
+db_driver(Context) ->
     case m_site:get(dbdriver, Context) of
         undefined -> ?DEFAULT_DB_DRIVER;
         Driver -> Driver

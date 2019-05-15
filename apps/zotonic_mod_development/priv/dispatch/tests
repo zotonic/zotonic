@@ -1,5 +1,5 @@
 %% -*- mode: erlang -*-
 [
- {hello_world,     ["test", "hello_world"],     controller_hello_world, [{ssl, any}]},
- {hello_world_tpl, ["test", "hello_world_tpl"], controller_template,    [{ssl, any}, {template, "hello_world.tpl"}, {anonymous, true}]}
+ {hello_world,     ["test", "hello_world"],     controller_hello_world, []},
+ {hello_world_tpl, ["test", "hello_world_tpl"], controller_template,    [{template, "hello_world.tpl"}, {anonymous, true}]}
 ].

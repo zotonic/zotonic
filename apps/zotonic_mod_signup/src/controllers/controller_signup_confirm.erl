@@ -21,23 +21,15 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
-    content_types_provided/1,
-    provide_content/1
+    process/4
 ]).
 -export([event/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
-content_types_provided(Context) ->
-    {[{<<"text/html">>, provide_content}], Context}.
-
-provide_content(Context) ->
-    Context2 = z_context:ensure_all(Context),
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    Context2 = z_context:ensure_qs(Context),
     z_context:lager_md(Context2),
     Key = z_context:get_q(<<"key">>, Context2, <<>>),
     {Vars, ContextConfirm} = case Key of

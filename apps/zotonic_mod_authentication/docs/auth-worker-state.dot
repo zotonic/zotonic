@@ -1,0 +1,14 @@
+digraph auth_worker {
+    start -> origin_check;
+
+    origin_check -> user_known;
+
+    user_known -> origin_check [label="periodic"];
+    user_known -> logon;
+    user_known -> logoff;
+    user_known -> setautologon;
+
+    logoff -> user_known;
+    logon -> user_known;
+    setautologon -> user_known;
+}

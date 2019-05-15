@@ -20,5 +20,5 @@
 -export([escapexml/2]).
 
 
-escapexml(B, _Context) ->
-    z_xml:escape(B).
+escapexml(B, Context) ->
+    z_xml:escape(B, Context).

@@ -2,7 +2,10 @@
     {description, "Handles authentication and identification of users."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core, zotonic_mod_admin]},
+    {applications, [
+        termit,
+        zotonic_core
+    ]},
     {env, []},
     {modules, []},
     {maintainers, []},

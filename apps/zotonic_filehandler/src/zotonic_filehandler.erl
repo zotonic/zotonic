@@ -24,6 +24,7 @@
     compile_all/0,
     reload_modules/0,
     reload_module/1,
+    load_module/1,
     compile_options/1,
     terminal_notifier/1
 ]).
@@ -43,6 +44,15 @@ reload_modules() ->
 -spec reload_module(module()) -> ok | {error, term()}.
 reload_module(Module) ->
     zotonic_filehandler_handler:reload_module(Module).
+
+-spec load_module(module()) -> ok | {error, term()}.
+load_module(Module) ->
+    case code:ensure_loaded(Module) of
+        {module, Module} ->
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
 
 -spec compile_options(file:filename_all()) -> {ok, list()} | {error, term()}.
 compile_options(ErlangFile) ->

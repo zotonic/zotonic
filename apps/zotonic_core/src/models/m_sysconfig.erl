@@ -20,23 +20,21 @@
 -module(m_sysconfig).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2
+    m_get/3
 ]).
 
--include_lib("zotonic.hrl").
-
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ Key | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ Key | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {z_config:get(Key), Rest};
-        false -> {undefined, Rest}
+        true -> {ok, {z_config:get(Key), Rest}};
+        false -> {error, eacces}
     end;
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 

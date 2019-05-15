@@ -195,12 +195,39 @@ fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId,_EdgeId}|Rs], Acc) ->
     fetch_ids(Rs, [SubjectId,ObjectId|Acc]).
 
 do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
-    z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context),
+    Edge = #edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
+    z_notifier:notify(Edge, Context),
+    z_mqtt:publish(
+            [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
+            Edge,
+            Context),
+    z_mqtt:publish(
+            [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
+            Edge,
+            Context),
     maybe_delete_dependent(ObjectId, Context);
 do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
-    z_notifier:notify(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context);
+    Edge = #edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
+    z_notifier:notify(Edge, Context),
+    z_mqtt:publish(
+            [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
+            Edge,
+            Context),
+    z_mqtt:publish(
+            [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
+            Edge,
+            Context);
 do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
-    z_notifier:notify(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context).
+    Edge = #edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
+    z_notifier:notify(Edge, Context),
+    z_mqtt:publish(
+            [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
+            Edge,
+            Context),
+    z_mqtt:publish(
+            [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
+            Edge,
+            Context).
 
 maybe_delete_dependent(Id, Context) ->
     case m_rsc:p_no_acl(Id, is_dependent, Context) of

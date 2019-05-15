@@ -21,11 +21,11 @@
 -module(m_req).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     get/2
 ]).
@@ -34,21 +34,29 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ Key | Rest ], Context) ->
-    {get(Key, Context), Rest};
-m_get([], Context) ->
-    {values(Context), []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ Key | Rest ], _Msg, Context) when is_atom(Key) ->
+    {ok, {get(Key, Context), Rest}};
+m_get([], _Msg, Context) ->
+    {ok, {values(Context), []}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Non atomic key get: ~p", [Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Fetch the field from the cowmachine_req interface.
--spec get(atom(), #context{} | cowboy_req:req() | undefined) -> any().
+-spec get(atom(), z:context() | cowboy_req:req() | undefined) -> any().
 get(undefined, _) -> undefined;
 get(_, undefined) -> undefined;
 get(site, #context{} = Context) -> z_context:site(Context);
 get(timezone, #context{} = Context) -> z_context:tz(Context);
 get(language, #context{} = Context) -> z_context:language(Context);
 get(is_crawler, #context{} = Context) -> z_user_agent:is_crawler(Context);
+get(peer_ip, #context{} = Context) ->
+    case z_context:get(peer_ip, Context) of
+        undefined -> get_req(peer_ip, z_context:get_reqdata(Context));
+        PeerIP -> PeerIP
+    end;
 get(What, #context{} = Context) -> get_req(What, z_context:get_reqdata(Context));
 get(What, Req) -> get_req(What, Req).
 
@@ -80,7 +88,7 @@ get_req(is_crawler, RD) -> z_user_agent:is_crawler(RD);
 get_req(_Key, _RD) -> undefined.
 
 
--spec values(#context{}) -> list({atom(), any()}).
+-spec values( z:context() ) -> list({atom(), any()}).
 values(Context) ->
     [ {K, get(K, Context)} || K <- [
             method, version, peer, is_ssl, host, port, raw_path, path, qs, referrer, user_agent, is_crawler,

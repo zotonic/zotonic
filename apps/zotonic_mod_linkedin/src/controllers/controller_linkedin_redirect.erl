@@ -21,46 +21,47 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    html/1,
+    process/4,
     fetch_user_data/1
     ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-html(Context) ->
-    QState = z_context:get_q("state", Context),
-    case z_context:get_session(linkedin_state, Context) of
-        undefined ->
-            lager:warning("LinkedIn OAuth redirect with missing session state"),
-            html_error(missing_secret, Context);
-        QState ->
-            case z_context:get_q("code", Context) of
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    QState = z_context:get_q(<<"state">>, Context),
+    Context1 = z_context:reset_state_cookie(Context),
+    case z_context:get_state_cookie(Context) of
+        {ok, {QState, Args}} ->
+            case z_context:get_q(<<"code">>, Context) of
+                Code when is_binary(Code), Code =/= <<>> ->
+                    access_token(fetch_access_token(Code, Context1), Args, Context1);
                 undefined ->
-                    Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
-                    html_error(cancel, Context1);
-                Code ->
-                    access_token(fetch_access_token(Code, Context), Context)
+                    Context2 = z_render:wire({script, [{script, "window.close();"}]}, Context1),
+                    html_error(cancel, Context2)
             end;
-        SessionState ->
+        {ok, {SessionState, _}} ->
             lager:warning("LinkedIn OAuth redirect with state mismatch, expected ~p, got ~p",
                           [SessionState, QState]),
-            Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
-            html_error(wrong_secret, Context1)
+            Context2 = z_render:wire({script, [{script, "window.close();"}]}, Context1),
+            html_error(wrong_secret, Context2);
+        _ ->
+            lager:warning("LinkedIn OAuth redirect with missing or illegal state cookie"),
+            html_error(missing_secret, Context1)
     end.
 
-access_token({ok, AccessToken, Expires}, Context) ->
+access_token({ok, AccessToken, Expires}, Args, Context) ->
     Data = [
         {access_token, AccessToken},
         {expires, Expires}
     ],
-    user_data(fetch_user_data(AccessToken), Data, Context);
-access_token({error, _Reason}, Context) ->
+    user_data(fetch_user_data(AccessToken), Data, Args, Context);
+access_token({error, _Reason}, _Args, Context) ->
     html_error(access_token, Context).
 
-user_data({ok, UserProps}, AccessData, Context) ->
-    Auth = auth_user(UserProps, AccessData, Context),
+user_data({ok, UserProps}, AccessData, Args, Context) ->
+    Auth = auth_user(UserProps, AccessData, Args),
     do_auth_user(Auth, Context);
-user_data({error, _Reason}, _AccessData, Context) ->
+user_data({error, _Reason}, _AccessData, _Args, Context) ->
     html_error(service_user_data, Context).
 
 do_auth_user(Auth, Context) ->
@@ -115,7 +116,7 @@ is_safari8problem(Context) ->
     not HasCookies andalso IsVersion8 andalso IsSafari.
 
 
-auth_user(#{<<"id">> := LinkedInUserId} = Profile, AccessTokenData, Context) ->
+auth_user(#{<<"id">> := LinkedInUserId} = Profile, AccessTokenData, Args) ->
     lager:debug("[linkedin] Authenticating ~p ~p", [LinkedInUserId, Profile]),
     Location = maps:get(<<"location">>, Profile),
     Country = maps:get(<<"country">>, Location),
@@ -132,7 +133,6 @@ auth_user(#{<<"id">> := LinkedInUserId} = Profile, AccessTokenData, Context) ->
             {address_line_1, maps:get(<<"name">>, Location, undefined)},
             {depiction_url, picture_url(maps:get(<<"pictureUrls">>, Profile, undefined))}
         ] ++ company_info(Profile),
-    Args = controller_linkedin_authorize:get_args(Context),
     #auth_validated{
         service=linkedin,
         service_uid=LinkedInUserId,

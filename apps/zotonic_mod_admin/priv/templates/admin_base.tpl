@@ -28,8 +28,6 @@
         {% all include "_html_head.tpl" %}
         {% all include "_html_head_admin.tpl" %}
 
-        {% include "_js_include_jquery.tpl" %}
-
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -39,8 +37,6 @@
         {% endblock %}
     </head>
     <body class="{% block bodyclass %}{% endblock %}">
-
-	{% wire name="adminwidget_toggle" action={adminwidget_toggle} %}
 
     {% block navigation %}
         {% include "_admin_menu.tpl" %}

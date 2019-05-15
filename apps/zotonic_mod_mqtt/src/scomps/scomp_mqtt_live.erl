@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2019 Marc Worrell
 %% @doc Simple live updating events
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 %% limitations under the License.
 
 -module(scomp_mqtt_live).
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 
 -export([
         vary/2,
@@ -35,15 +35,21 @@
 
 %% @doc Special rendering for the {mqtt} wire event type
 event_type_mqtt(#action_event_type{event={mqtt, Args}, postback_js = PostbackJS, action_js = ActionJS}, Context) ->
-    Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, Args) ],
+    Topics = map_topics( proplists:get_all_values(topic, Args), Context ),
     Script = iolist_to_binary([
-        <<"pubzub.subscribe_multi(">>,
-            z_utils:js_array(Topics),$,,
-            <<"function(topic, msg, sub_id) { var zEvtArgs=pubzub.make_zEvtArgs(topic, msg, sub_id);">>,
+        <<"cotonic.broker.subscribe(">>,
+            z_utils:js_array(Topics),
+            <<", function(msg, _params, options) { ",
+                "var zEvtArgs = undefined; ",
+                "if (typeof msg == 'object') { ",
+                "    var zEvtArgs = ensure_name_value(msg); ",
+                "    zEvtArgs.unshift({name: 'topic', value: options.topic}); ",
+                "    zEvtArgs.unshift({name: 'wid', value: options.wid}); ",
+                "}">>,
                 PostbackJS,
                 ActionJS,
-              $},
-        $), $;
+            "}",
+        ");"
     ]),
     {ok, Script, Context}.
 
@@ -104,7 +110,7 @@ render_postback(Params, Context) ->
     {delegate, Delegate} = proplists:lookup(delegate, Params),
     {target, Target} = proplists:lookup(target, Params),
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, Delegate, Context),
-    Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, Params) ],
+    Topics = map_topics(  proplists:get_all_values(topic, Params), Context ),
     Script = iolist_to_binary([
         <<"z_live.subscribe(">>,
             z_utils:js_array(Topics),$,,
@@ -137,7 +143,7 @@ opt_wrap_element(Element, Id, Html) ->
 script(Target, Where, LiveVars, TplVars, Context) ->
     Tag = {live, Where, proplists:get_value(template,LiveVars), TplVars},
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, ?MODULE, Context),
-    Topics = [ z_mqtt:map_topic(V, Context) || V <- proplists:get_all_values(topic, LiveVars) ],
+    Topics = map_topics( proplists:get_all_values(topic, LiveVars), Context ),
     iolist_to_binary([
         <<"z_live.subscribe(">>,
             z_utils:js_array(Topics),$,,
@@ -145,6 +151,18 @@ script(Target, Where, LiveVars, TplVars, Context) ->
             $',Postback,$',
         $), $;
     ]).
+
+map_topics(Topics, Context) ->
+    lists:filtermap(
+        fun(T) ->
+            case z_mqtt:map_topic(T, Context) of
+                {ok, T1} ->
+                    {true, z_mqtt:origin_topic( z_mqtt:flatten_topic(T1) )};
+                {error, _} ->
+                    false
+            end
+        end,
+        Topics).
 
 render(<<"top">>, Target, Render, Context) ->
     z_render:insert_top(Target, Render, Context);
@@ -156,5 +174,3 @@ render(<<"before">>, Target, Render, Context) ->
     z_render:insert_before(Target, Render, Context);
 render(_Update, Target, Render, Context) ->
     z_render:update(Target, Render, Context).
-
-

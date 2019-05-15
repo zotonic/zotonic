@@ -20,12 +20,12 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 
-render_validator(length, TriggerId, _TargetId, Args, Context)  ->
+render_validator(length, TriggerId, _TargetId, Args, _Context)  ->
     Min        = proplists:get_value(minimum, Args),
     Max        = proplists:get_value(maximum, Args),
 	JsObject   = z_utils:js_object(z_validation:rename_args(Args)),
 	Script     = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"length\", ">>, JsObject, <<");\n">>],
-	{[to_number(Min),to_number(Max)], Script, Context}.
+	{[to_number(Min),to_number(Max)], Script}.
 
 
 %% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}

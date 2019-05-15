@@ -22,8 +22,8 @@
 
 -mod_title("Admin module").
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
--mod_depends([base, authentication, mod_search, mod_mqtt]).
--mod_provides([admin]).
+-mod_depends([ base, authentication, mod_search, mod_mqtt, mod_wires ]).
+-mod_provides([ admin ]).
 -mod_schema(1).
 -mod_prio(1000).
 
@@ -203,7 +203,7 @@ event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
         AfterId -> z_render:insert_after(AfterId, Render, Context)
     end;
 
-event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-connect-find">>, target=TargetId}, Context) ->
+event(#postback_notify{message = <<"feedback">>, trigger = <<"dialog-connect-find">>, target=TargetId}, Context) ->
     % Find pages matching the search criteria.
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
@@ -284,6 +284,7 @@ event(#postback_notify{message= <<"update">>, target=TargetId}, Context) ->
     z_render:update(TargetId, #render{template={cat, "_rsc_block_item.tpl"}, vars=Vars}, Context1);
 
 event(_E, Context) ->
+    ?DEBUG(_E),
     Context.
 
 

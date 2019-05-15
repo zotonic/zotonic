@@ -15,7 +15,7 @@ File descriptors
 By default, Linux limits the number of file descriptors (i.e. the maximum number
 of open files) at 1024. Running Zotonic at scale will require many more than
 that, particularly because Zotonic uses
-:ref:`WebSockets <controller-websocket>` extensively; remember that every open
+:ref:`WebSockets <controller-mqtt_transport>` extensively; remember that every open
 port is an open file.
 
 The limit applies on several levels:

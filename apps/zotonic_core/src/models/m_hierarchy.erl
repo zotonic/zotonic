@@ -18,7 +18,8 @@
 -module(m_hierarchy).
 
 -export([
-    m_get/2,
+    m_get/3,
+
     tree/2,
     tree1/2,
     tree_flat/2,
@@ -40,6 +41,8 @@
     assign_nrs/2
 ]).
 
+-behaviour(zotonic_model).
+
 -include_lib("zotonic.hrl").
 
 % Default delta between hierarchy items to minimize renumbering
@@ -49,47 +52,46 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context()) -> {term(), list()}.
-m_get([ Name, tree | Rest ], Context) -> {tree(Name, Context), Rest};
-m_get([ Name, tree1 | Rest ], Context) -> {tree1(Name, Context), Rest};
-m_get([ Name, tree_flat | Rest ], Context) -> {tree_flat(Name, Context), Rest};
-m_get([ Name, menu | Rest ], Context) -> {menu(Name, Context), Rest};
+-spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([ Name, tree | Rest ], _Msg, Context) -> {ok, {tree(Name, Context), Rest}};
+m_get([ Name, tree1 | Rest ], _Msg, Context) -> {ok, {tree1(Name, Context), Rest}};
+m_get([ Name, tree_flat | Rest ], _Msg, Context) -> {ok, {tree_flat(Name, Context), Rest}};
+m_get([ Name, menu | Rest ], _Msg, Context) -> {ok, {menu(Name, Context), Rest}};
 
-m_get([ Name, menu_ensured | Rest ], Context) ->
+m_get([ Name, menu_ensured | Rest ], Msg, Context) ->
     {ok, _} = ensure(Name, Context),
-    m_get([ Name, menu | Rest ], Context);
-m_get([ Name, Id, menu_ensured | Rest ], Context) ->
+    m_get([ Name, menu | Rest ], Msg, Context);
+m_get([ Name, Id, menu_ensured | Rest ], Msg, Context) ->
     {ok, _} = ensure(Name, Context),
-    m_get([ Name, Id, menu | Rest ], Context);
+    m_get([ Name, Id, menu | Rest ], Msg, Context);
 
-m_get([ Name, Id, tree | Rest ], Context) ->
+m_get([ Name, Id, tree | Rest ], _Msg, Context) ->
     V = case m_rsc:rid(Id, Context) of
         undefined -> undefined;
         RId -> tree({sub, Name, RId}, Context)
     end,
-    {V, Rest};
-m_get([ Name, Id, tree1 | Rest ], Context) ->
+    {ok, {V, Rest}};
+m_get([ Name, Id, tree1 | Rest ], _Msg, Context) ->
     V = case m_rsc:rid(Id, Context) of
         undefined -> undefined;
         RId -> tree1({sub, Name, RId}, Context)
     end,
-    {V, Rest};
-m_get([ Name, Id, tree_flat | Rest ], Context) ->
+    {ok, {V, Rest}};
+m_get([ Name, Id, tree_flat | Rest ], _Msg, Context) ->
     V = case m_rsc:rid(Id, Context) of
         undefined -> undefined;
         RId -> tree_flat({sub, Name, RId}, Context)
     end,
-    {V, Rest};
-m_get([ Name, Id, menu | Rest ], Context) ->
+    {ok, {V, Rest}};
+m_get([ Name, Id, menu | Rest ], _Msg, Context) ->
     V = case m_rsc:rid(Id, Context) of
         undefined -> undefined;
         RId -> menu({sub, Name, RId}, Context)
     end,
-    {V, Rest};
-
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+    {ok, {V, Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Fetch a named tree
@@ -264,7 +266,7 @@ ensure(Name, CatId, Context) when not is_binary(Name) ->
 
 %% @doc Save a new hierarchy, replacing a previous one.
 save(Name, Tree, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
+    case z_acl:is_admin(Context) of
         true ->
             case m_category:name_to_id(Name, Context) of
                 {ok, CatId} ->

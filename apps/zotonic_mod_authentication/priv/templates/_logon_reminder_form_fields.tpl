@@ -1,20 +1,16 @@
 <div class="form-group">
-    <label for="reminder_address" class="control-label">{_ Your email or username _}</label>
+    <label for="reminder_address" class="control-label">{_ Your email _}</label>
     <input
         class="form-control"
         type="email"
+        name="email"
         id="reminder_address"
-        autofocus
         placeholder="{_ user@example.com _}"
-        name="reminder_address"
         value="{% if q.email %}{{ q.email|escape }}{% else %}{{ m.acl.user.email }}{% endif %}"
         autocapitalize="off"
-        autocomplete="email" />
-        {% validate id="reminder_address"
-            type={presence failure_message=_"Enter your email address"}
-            type={email}
-            only_on_submit
-        %}
+        autocomplete="email"
+        autofocus
+        required />
 </div>
 
 <div class="form-group">

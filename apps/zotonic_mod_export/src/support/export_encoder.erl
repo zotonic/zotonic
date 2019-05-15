@@ -90,10 +90,13 @@ select_encoder(CT, [M|Ms]) ->
 
 encoders() ->
     [
+        export_encoder_json,
         export_encoder_csv,
         export_encoder_xlsx,
         export_encoder_ics,
-        export_encoder_atom
+        export_encoder_atom,
+        export_encoder_bert,
+        export_encoder_ubf
     ].
 
 do_header(StreamState, Context) ->

@@ -19,11 +19,11 @@
 -module(m_acl).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2
+    m_get/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -32,42 +32,45 @@
     orelse A =:= delete orelse A =:= update orelse A =:= insert
     orelse A =:= link).
 
--spec m_get( list(), z:context()) -> {term(), list()}.
-m_get([ user | Rest ], Context) -> {z_acl:user(Context), Rest};
-m_get([ is_admin | Rest ], Context) -> {z_acl:is_admin(Context), Rest};
+-spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([ user | Rest ], _Msg, Context) -> {ok, {z_acl:user(Context), Rest}};
+m_get([ is_admin | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin(Context), Rest}};
+m_get([ is_read_only | Rest ], _Msg, Context) -> {ok, {z_acl:is_read_only(Context), Rest}};
 
 % Check if current user is allowed to perform an action on some object
-m_get([ Action, Object | Rest ], Context) when ?is_action(Action), is_binary(Object) ->
-    {is_allowed_to_atom(Action, Object, Context), Rest};
-m_get([ Action, Object | Rest ], Context) when ?is_action(Action) ->
-    {z_acl:is_allowed(Action, Object, Context), Rest};
-m_get([ is_allowed, Action, Object | Rest ], Context) when ?is_action(Action), is_binary(Object) ->
-    {is_allowed_to_atom(Action, Object, Context), Rest};
-m_get([ is_allowed, Action, Object | Rest ], Context) when ?is_action(Action) ->
-    {z_acl:is_allowed(Action, Object, Context), Rest};
+m_get([ Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
+    {ok, {is_allowed_to_atom(Action, Object, Context), Rest}};
+m_get([ Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
+    {ok, {z_acl:is_allowed(Action, Object, Context), Rest}};
+m_get([ is_allowed, Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
+    {ok, {is_allowed_to_atom(Action, Object, Context), Rest}};
+m_get([ is_allowed, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
+    {ok, {z_acl:is_allowed(Action, Object, Context), Rest}};
+
 
 % Check if an authenticated (default acl setttings) is allowed to perform an action on some object
-m_get([ authenticated, Action, Object | Rest ], Context) when ?is_action(Action), is_binary(Object) ->
-    {is_allowed_authenticated_to_atom(Action, Object, Context), Rest};
-m_get([ authenticated, Action, Object | Rest ], Context) when ?is_action(Action) ->
+m_get([ authenticated, Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
+    {ok, {is_allowed_authenticated_to_atom(Action, Object, Context), Rest}};
+m_get([ authenticated, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
     Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
                     undefined -> Context;
                     Ctx -> Ctx
                end,
-    {z_acl:is_allowed(Action, Object, Context1), Rest};
-m_get([ authenticated, is_allowed, Action, Object | Rest ], Context)  when ?is_action(Action), is_binary(Object) ->
-    {is_allowed_authenticated_to_atom(Action, Object, Context), Rest};
-m_get([ authenticated, is_allowed, Action, Object | Rest ], Context) when ?is_action(Action) ->
+    {ok, {z_acl:is_allowed(Action, Object, Context1), Rest}};
+
+m_get([ authenticated, is_allowed, Action, Object | Rest ], _Msg, Context)  when ?is_action(Action), is_binary(Object) ->
+    {ok, {is_allowed_authenticated_to_atom(Action, Object, Context), Rest}};
+m_get([ authenticated, is_allowed, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
     Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
                     undefined -> Context;
                     Ctx -> Ctx
                end,
-    {z_acl:is_allowed(Action, Object, Context1), Rest};
+    {ok, {z_acl:is_allowed(Action, Object, Context1), Rest}};
 
 % Error, unknown lookup.
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 

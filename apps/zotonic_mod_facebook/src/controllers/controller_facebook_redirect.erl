@@ -21,36 +21,42 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    html/1
+    process/4
     ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-html(Context) ->
-    State = z_context:get_q("state", Context),
-    Code = z_context:get_q("code", Context),
-    SessionState = z_context:get_session(facebook_state, Context),
-    html_1(Code, State, SessionState, Context).
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    QStateId = z_context:get_q(<<"state">>, Context),
+    Code = z_context:get_q(<<"code">>, Context),
+    Context1 = z_context:reset_state_cookie(Context),
+    case z_context:get_state_cookie(Context) of
+        {ok, {CookieStateId, Args}} ->
+            html_1(Code, QStateId, CookieStateId, Args, Context1);
+        {error, Reason} ->
+            lager:error("Facebook redirect with illegal state cookie: ~p", [Reason]),
+            html_error(cancel, Context1)
+    end.
 
-html_1(Code, State, State, Context) when Code =/= undefined, Code =/= <<>>, Code =/= "" ->
-    access_token(fetch_access_token(Code, Context), Context);
-html_1(_Code, _State, _SessionState, Context) ->
+html_1(Code, State, State, Args, Context) when is_binary(Code), Code =/= <<>> ->
+    access_token(fetch_access_token(Code, Context), Args, Context);
+html_1(_Code, _State, _SessionState, _Args, Context) ->
     Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
     html_error(cancel, Context1).
 
-access_token({ok, AccessToken, Expires}, Context) ->
+access_token({ok, AccessToken, Expires}, Args, Context) ->
     Data = [
         {access_token, AccessToken},
         {expires, Expires}
     ],
-    user_data(fetch_user_data(AccessToken), Data, Context);
-access_token({error, _Reason}, Context) ->
+    user_data(fetch_user_data(AccessToken), Data, Args, Context);
+access_token({error, _Reason}, _Args, Context) ->
     html_error(access_token, Context).
 
-user_data({ok, UserProps}, AccessData, Context) ->
-    Auth = auth_user(UserProps, AccessData, Context),
+user_data({ok, UserProps}, AccessData, Args, Context) ->
+    Auth = auth_user(UserProps, AccessData, Args),
     do_auth_user(Auth, Context);
-user_data({error, _Reason}, _AccessData, Context) ->
+user_data({error, _Reason}, _AccessData, _Args, Context) ->
     html_error(service_user_data, Context).
 
 do_auth_user(Auth, Context) ->
@@ -87,14 +93,13 @@ html_error(Error, What, Context) ->
     Vars = [
         {service, "Facebook"},
         {error, Error},
-        {what, What},
-        {auth_link, controller_facebook_authorize:redirect_location(Context)++"&auth_type=rerequest"}
+        {what, What}
     ],
     Html = z_template:render("logon_service_error.tpl", Vars, Context),
     z_context:output(Html, Context).
 
 
-auth_user(FBProps, AccessTokenData, Context) ->
+auth_user(FBProps, AccessTokenData, Args) ->
     FacebookUserId = proplists:get_value(<<"id">>, FBProps),
     lager:debug("[facebook] Authenticating ~p ~p", [FacebookUserId, FBProps]),
     PersonProps = [
@@ -109,13 +114,12 @@ auth_user(FBProps, AccessTokenData, Context) ->
                 <<"/picture?type=large">>
             ])}
     ],
-    Args = controller_facebook_authorize:get_args(Context),
     #auth_validated{
-        service=facebook,
-        service_uid=FacebookUserId,
-        service_props=AccessTokenData,
-        props=PersonProps,
-        is_connect=z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
+        service = facebook,
+        service_uid = FacebookUserId,
+        service_props = AccessTokenData,
+        props = PersonProps,
+        is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
     }.
 
 

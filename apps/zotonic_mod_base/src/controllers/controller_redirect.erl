@@ -20,7 +20,6 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-	service_available/1,
 	resource_exists/1,
 	previously_existed/1,
 	moved_temporarily/1,
@@ -28,10 +27,6 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
-
-service_available(Context) ->
-    Context1 = z_context:continue_session( z_context:ensure_qs(Context) ),
-    {true, Context1}.
 
 resource_exists(Context) ->
 	{false, Context}.

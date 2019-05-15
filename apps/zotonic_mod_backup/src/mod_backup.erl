@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2012 Marc Worrell
-%% Date: 2010-02-11
 %% @doc Backup module. Creates backup of the database and files.  Allows downloading of the backup.
 %% Support creation of periodic backups.
 
@@ -26,7 +25,7 @@
 -mod_description("Make a backup of the database and files.").
 -mod_prio(600).
 -mod_provides([backup]).
--mod_depends([rest, admin]).
+-mod_depends([admin]).
 -mod_schema(1).
 
 %% gen_server exports
@@ -37,6 +36,7 @@
 -export([
     observe_admin_menu/3,
     observe_rsc_update/3,
+    observe_rsc_upload/2,
     start_backup/1,
     start_backup/2,
     list_backups/1,
@@ -57,6 +57,8 @@
 -define(BCK_POLL_INTERVAL, 3600 * 1000).
 
 
+observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
+    backup_rsc_upload:rsc_upload(Upload, Context).
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
@@ -204,7 +206,7 @@ handle_info(periodic_backup, State) ->
 handle_info({'EXIT', Pid, normal}, State) ->
     case State#state.backup_pid of
         Pid ->
-            z_mqtt:publish(<<"~site/backup">>, [{msg, <<"backup_completed">>}], State#state.context),
+            z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"completed">> }, State#state.context),
             {noreply, State#state{backup_pid=undefined, backup_start=undefined}};
         _ ->
             %% when connected to the page, then this might be the page exiting
@@ -214,7 +216,7 @@ handle_info({'EXIT', Pid, normal}, State) ->
 handle_info({'EXIT', Pid, _Error}, State) ->
     case State#state.backup_pid of
         Pid ->
-            z_mqtt:publish(<<"~site/backup">>, [{msg, <<"backup_error">>}], State#state.context),
+            z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"error">>}, State#state.context),
             %% @todo Log the error
             %% Remove all files of this backup
             Name = z_convert:to_list(z_datetime:format(State#state.backup_start, "Ymd-His", State#state.context)),
@@ -287,7 +289,7 @@ maybe_daily_dump(State) ->
 
 %% @doc Start a backup and return the pid of the backup process, whilst linking to the process.
 do_backup(Name, IsFullBackup, State) ->
-    z_mqtt:publish(<<"~site/backup">>, [{msg, <<"backup_started">>}], State#state.context),
+    z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"started">> }, State#state.context),
     spawn_link(fun() -> do_backup_process(Name, IsFullBackup, State#state.context) end).
 
 
@@ -354,14 +356,13 @@ pg_dump(Name, Context) ->
     erlang:spawn(
             fun() ->
                 timer:sleep(1000),
-                z_mqtt:publish(<<"~site/backup">>, [{msg, <<"sql_backup_started">>}], Context)
+                z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"sql_backup_started">> }, Context)
             end),
     Result = case os:cmd(binary_to_list(iolist_to_binary(Command))) of
                  [] ->
                      ok;
                  Output ->
                      lager:warning(Output),
-                     z_session_manager:broadcast(#broadcast{type="error", message=Output, title="mod_backup", stay=false}, Context),
                      {error, Output}
              end,
     ok = file:delete(PgPass),
@@ -383,7 +384,7 @@ archive(Name, Context) ->
             erlang:spawn(
                     fun() ->
                         timer:sleep(1000),
-                        z_mqtt:publish(<<"~site/backup">>, [{msg, <<"archive_backup_started">>}], Context)
+                        z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"archive_backup_started">> }, Context)
                     end),
             [] = os:cmd(Command),
             ok;

@@ -17,7 +17,7 @@
 %% limitations under the License.
 
 -module(scomp_base_lazy).
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
 
@@ -37,8 +37,8 @@ render(Params, Vars, Context) ->
             Params1 = [{id, Id}, {type, "visible"} | proplists:delete(id, Params)],
             Params2 = [ ensure_moreresults_visible(Param) || Param <- Params1 ],
             Html = [<<"<div id='">>, Id, <<"' class='">>, Class, <<"'><img src='">>, Image, <<"' alt='' /></div>">>],
-            case scomp_base_wire:render(Params2, Vars, Context) of
-                {ok, Result} -> {ok, [Html, z_context:prune_for_template(Result)]};
+            case scomp_wires_wire:render(Params2, Vars, Context) of
+                {ok, Result} -> {ok, [Html, render_state(Result)]};
                 {error, _Reason} = Error -> Error
             end;
         _Template ->
@@ -51,11 +51,16 @@ render(Params, Vars, Context) ->
                     {Target, <<>>}
             end,
             Action = {update, [{target, TargetId}|Params]},
-            case scomp_base_wire:render([{id, TargetId}, {type, "visible"}, {action, Action}], Vars, Context) of
-                {ok, Result} -> {ok, [Html, z_context:prune_for_template(Result)]};
+            case scomp_wires_wire:render([{id, TargetId}, {type, "visible"}, {action, Action}], Vars, Context) of
+                {ok, Result} -> {ok, [Html, render_state(Result)]};
                 {error, _Reason} = Error -> Error
             end
     end.
+
+render_state(#context{} = Context) ->
+    z_context:get_render_state(Context);
+render_state(MixedHtml) ->
+    MixedHtml.
 
 %% @doc Convenience function: the action "moreresults" is often used with the lazy scomp.
 %%      A mistake that happens is to not add the 'visible' argument, which stops the

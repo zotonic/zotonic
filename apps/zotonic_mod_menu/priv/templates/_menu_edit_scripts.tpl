@@ -59,18 +59,17 @@
 (function() {
 	var sortupdater = undefined;
 
-	pubzub.subscribe("~site/rsc/+", function(_topic, args) {
-		if (args.payload._record == 'rsc_update_done' && args.payload.action == 'delete') {
-			var elts = $('#{{ menu_id }} [data-page-id='+args.payload.id+']').closest('li.menu-item');
-			if (elts.length) {
-				elts.remove();
-				if (sortupdater) {
-					clearTimeout(sortupdater);
-				}
-				sortupdater = setTimeout(function() {
-					$sorter.trigger('sortupdate');
-				}, 150);
+	cotonic.broker.subscribe("bridge/origin/model/rsc/event/+id/delete", function(args, bindings) {
+        var id = parseInt(bindings.id);
+		var elts = $('#{{ menu_id }} [data-page-id='+bindings.id+']').closest('li.menu-item');
+		if (elts.length) {
+			elts.remove();
+			if (sortupdater) {
+				clearTimeout(sortupdater);
 			}
+			sortupdater = setTimeout(function() {
+				$sorter.trigger('sortupdate');
+			}, 150);
 		}
 	});
 })();
@@ -143,9 +142,9 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 					$(html).insertAfter($menu_item);
 				}
 				$sorter.trigger('sortupdate');
-				if (typeof pubzub !== "undefined") {
-					pubzub.publish("~pagesession/menu/insert", {id: rsc_id});
-				}
+                cotonic.broker.publish("menu/insert", {
+                    menu_id: '{{ menu_id }}',
+                });
 			};
 
 			{% if is_hierarchy or in_sorter == 'category' %}
@@ -173,9 +172,10 @@ window.zMenuInsertAfter = function(after_id, html) {
 	$html = $(html);
 	$html.insertAfter($menu_item);
 	$('#{{ in_sorter }}').trigger('sortupdate');
-	if (typeof pubzub !== "undefined") {
-		pubzub.publish("~pagesession/menu/insert", {menu_id: '{{ menu_id }}', id: $html.children('div').data('page-id')});
-	}
+    cotonic.broker.publish("menu/insert", {
+        menu_id: '{{ menu_id }}',
+        id: $html.children('div').data('page-id')
+    });
 }
 
 {% endjavascript %}

@@ -56,13 +56,10 @@
     rules :: z_sites_dispatcher:site_dispatch_list() | undefined
 }).
 
-
-%% @doc Modify cookie options, used for setting http_only and secure options. (foldl)
--record(cookie_options, {name, value}).
-
 %% @doc Check and possibly modify the http response security headers (first)
 %%      All headers are in lowercase.
 -record(security_headers, { headers :: list( {binary(), binary()} ) }).
+
 
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
@@ -111,7 +108,7 @@
 %% Type: first
 %% Return:: ``{ok, UserId}`` or ``{error, Reason}``
 -record(logon_submit, {
-    query_args = [] :: list()
+    payload = #{} :: map()
 }).
 
 %% @doc Request to send a verification to the user. Return ok or an error
@@ -182,17 +179,6 @@
     id :: m_rsc:resource()
 }).
 
-
-%% @doc Handle a javascript notification from the postback handler. The 'message' is the z_msg argument of
-%% the request. (first), 'trigger' the id of the element which triggered the postback, and 'target' the
-%% id of the element which should receive possible updates. Note: postback_notify is also used as an event.
-%% Return: ``undefined`` or ``#context{}`` with the result of the postback
--record(postback_notify, {message, trigger, target, data}).
-
-%% @doc Message sent by a user-agent on a postback event. Encapsulates the encoded postback and any
-%% additional data. This is handled by z_transport.erl, which will call the correct event/2 functions.
--record(postback_event, {postback, trigger, target, triggervalue, data}).
-
 %% @doc Notification to signal an inserted comment.
 %% 'comment_id' is the id of the inserted comment, 'id' is the id of the resource commented on.
 %% Type: notify
@@ -246,6 +232,12 @@
 -record(menu_rsc, {
     id :: m_rsc:resource()
 }).
+
+%% @doc Fold for mapping non-iolist output to iolist values.
+%%      Used when outputting a rendered HTML tree.
+%%      Folded accumulator is: { MixedHtml, Context }
+-record(output_html, { html :: term() }).
+
 
 %% @doc An activity in Zotonic. When this is handled as a notification then return a list
 %% of patterns matching this activity.  These patterns are then used to find interested
@@ -525,7 +517,7 @@
     prop :: atom()
 }).
 
-%% @doc Set the context to a typical authenticated uses. Used by m_acl.erl
+%% @doc Set the context to a typical authenticated user. Used by m_acl.erl
 %% Type: first
 %% Return: authenticated ``#context{}`` or ``undefined``
 -record(acl_context_authenticated, {
@@ -533,49 +525,74 @@
 
 %% @doc Initialize context with the access policy for the user.
 %% Type: first
-%% Return: updated ``#context`` or ``undefined``
+%% Return: updated ``z:context()`` or ``undefined``
 -record(acl_logon, {
-    id :: m_rsc:resource_id()
+    id :: m_rsc:resource_id(),
+    options :: map()
 }).
 
 %% @doc Clear the associated access policy for the context.
 %% Type: first
-%% Return: updated ``#context{}`` or ``undefined``
+%% Return: updated ``z:context()`` or ``undefined``
 -record(acl_logoff, {}).
+
+%% @doc Return the groups for the current user.
+%% Type: first
+%% Return: ``[ m_rsc:resource_id() ]`` or ``undefined``
+-record(acl_user_groups, {}).
 
 %% @doc Confirm a user id.
 %% Type: foldl
-%% Return: ``context{}``
+%% Return: ``z:context()``
 -record(auth_confirm, {}).
 
 %% @doc A user id has been confirmed.
 %% Type: notify
 -record(auth_confirm_done, {}).
 
-%% @doc User logs on. Add user-related properties to the session.
+%% @doc First for logon of user with username, check for ratelimit, blocks etc.
+%%      Returns: 'undefined' | ok | {error, Reason}
+-record(auth_precheck, {
+        username :: binary()
+    }).
+
+%% @doc First for logon of user with username, called after successful password check.
+%%      Returns: 'undefined' | ok | {error, Reason}
+-record(auth_postcheck, {
+        id :: m_rsc:resource_id(),
+        query_args = [] :: list()
+    }).
+
+%% @doc Fold over the context after logon of user with username, communicates valid or invalid password
+-record(auth_checked, {
+        id :: undefined | m_rsc:resource_id(),
+        username :: binary(),
+        is_accepted :: boolean()
+    }).
+
+%% @doc First to check for password reset forms, return undefined, ok, or {error, Reason}.
+-record(auth_reset, {
+        username :: undefined | binary()
+    }).
+
+%% @doc First to validate a password. Return {ok, RscId} or {error, Reason}.
+-record(auth_validate, {
+        username :: undefined | binary(),
+        password :: undefined | binary()
+    }).
+
+
+%% @doc User logs on. Add user-related properties to the logon request context.
 %% Type: foldl
-%% Return: ``context{}``
--record(auth_logon, {}).
+%% Return: ``z:context()``
+-record(auth_logon, { id :: m_rsc:resource_id() }).
 
-%% @doc User has logged on.
-%% Type: notify
--record(auth_logon_done, {}).
 
-%% @doc User is about to log off. Remove authentication from the current session.
+%% @doc User is about to log off. Modify (if needed) the logoff request context.
 %% Type: foldl
-%% Return: ``context{}``
--record(auth_logoff, {}).
+%% Return: ``z:context()``
+-record(auth_logoff, { id :: m_rsc:resource_id() }).
 
-%% @doc User has logged off.
-%% Type: notify
--record(auth_logoff_done, {}).
-
-%% @doc Check if automatic logon is enabled for this session. Sent for new
-%% sessions from ``z_auth:logon_from_session/1``. Please note this notification
-%% is sent for every single request.
-%% Type: first
-%% Return: ``{ok, UserId}`` when a user should be logged on.
--record(auth_autologon, {}).
 
 %% @doc Authentication against some (external or internal) service was validated
 -record(auth_validated, {
@@ -587,46 +604,58 @@
     is_signup_confirm = false :: boolean()
 }).
 
+
 %% @doc Called after parsing the query arguments
 %% Type: foldl
-%% Return: ``#context{}``
--record(request_context, {}).
+%% Return: ``z:context()``
+-record(request_context, {
+        phase = init :: init | auth_status,
+        document = #{} :: map()
+    }).
 
-%% @doc Initialize a context from the current session.
-%% Called for every request that has a session.
+%% @doc Update the given (accumulator) authentication options with the request options.
+%%      Note that the request options are from the client and are unsafe.
 %% Type: foldl
-%% Return: ``#context{}``
--record(session_context, {}).
+%% Return: ``map()``
+-record(auth_options_update, {
+        request_options = #{} :: map()
+    }).
 
-%% @doc A new session has been intialized: session_pid is in the context.
-%% Called for every request that has a session.
-%% Type: notify
-%% Return: ``#context{}``
--record(session_init, {}).
+% %% @doc Initialize a context from the current session.
+% %% Called for every request that has a session.
+% %% Type: foldl
+% %% Return: ``#context{}``
+% -record(session_context, {}).
 
-%% @doc Foldl over the context containing a new session.
-%% Called for every request that has a session.
-%% Type: foldl
-%% Return: ``#context{}``
--record(session_init_fold, {}).
+% %% @doc A new session has been intialized: session_pid is in the context.
+% %% Called for every request that has a session.
+% %% Type: notify
+% %% Return: ``#context{}``
+% -record(session_init, {}).
+
+% %% @doc Foldl over the context containing a new session.
+% %% Called for every request that has a session.
+% %% Type: foldl
+% %% Return: ``#context{}``
+% -record(session_init_fold, {}).
 
 %% @doc Check if a user is enabled. Enabled users are allowed to log in.
 %% Type: first
 %% Return ``true``, ``false`` or ``undefined``. If ``undefined`` is returned,
 %% the user is considered enabled if the user resource is published.
--record(user_is_enabled, {id}).
+-record(user_is_enabled, { id :: m_rsc:resource_id() }).
 
 %% @doc Set #context fields depending on the user and/or the preferences of the user.
 %% Type: foldl
--record(user_context, {id}).
+-record(user_context, { id :: m_rsc:resource_id() }).
 
 %% @doc Request API logon
--record(service_authorize, {service_module}).
+-record(service_authorize, { service_module }).
 
 %% @doc Fetch the url of a resource's html representation
 %% Type: first
 %% Return: ``{ok, Url}`` or ``undefined``
--record(page_url, {id, is_a}).
+-record(page_url, { id :: m_rsc:resource_id(), is_a :: list(atom()) }).
 
 %% @doc Handle custom named search queries in your function.
 %% Type: first
@@ -863,23 +892,12 @@
 %% @doc Delete a value from the typed key/value store
 -record(tkvstore_delete, {type, key}).
 
-%% @doc Subscribe a function to an MQTT topic.
-%% The function will be called from a temporary process, and must be of the form:
-%% m:f(#emqtt_msg{}, A, Context)
--record(mqtt_subscribe, {topic, qos = 0 :: 0 | 1 | 2, mfa}).
-
-%% @doc Unsubscribe a function from an MQTT topic.
-%% The MFA _must_ match the one supplied with #mqtt_subscribe{}
--record(mqtt_unsubscribe, {topic, mfa}).
-
 %% @doc MQTT acl check, called via the normal acl notifications.
 %% Actions for these checks: subscribe, publish
 -record(acl_mqtt, {
-    type :: 'wildcard' | 'direct',
-    topic :: binary(),
-    words :: list(binary() | integer()),
-    site :: binary(),
-    page_id :: 'undefined' | binary()
+    topic :: list( binary() ),
+    is_wildcard :: boolean(),
+    packet :: mqtt_packet_map:mqtt_packet()
 }).
 
 %% @doc Broadcast notification.

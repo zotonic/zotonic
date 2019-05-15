@@ -32,11 +32,11 @@
 -module(m_search).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     search/2,
     search_pager/2,
@@ -46,14 +46,14 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ paged, SearchProps | Rest ], Context) ->
-    {search_pager(SearchProps, Context), Rest};
-m_get([ SearchProps | Rest ], Context) ->
-    {search(SearchProps, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ paged, SearchProps | Rest ], _Msg, Context) ->
+    {ok, {search_pager(SearchProps, Context), Rest}};
+m_get([ SearchProps | Rest ], _Msg, Context) ->
+    {ok, {search(SearchProps, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Perform a search, wrap the result in a m_search_result record

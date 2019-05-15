@@ -21,11 +21,11 @@
 -module(m_modules).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
     all/1
 ]).
 
@@ -34,17 +34,17 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ all | Rest ], Context) ->
-    {all(Context), Rest};
-m_get([ enabled | Rest ], Context) ->
-    {enabled(Context), Rest};
-m_get([ disabled | Rest ], Context) ->
-    {disabled(Context), Rest};
-m_get([ active, Module | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ all | Rest ], _Msg, Context) ->
+    {ok, {all(Context), Rest}};
+m_get([ enabled | Rest ], _Msg, Context) ->
+    {ok, {enabled(Context), Rest}};
+m_get([ disabled | Rest ], _Msg, Context) ->
+    {ok, {disabled(Context), Rest}};
+m_get([ active, Module | Rest ], _Msg, Context) ->
     IsActive = lists:member(safe_to_atom(Module), active(Context)),
-    {IsActive, Rest};
-m_get([ info, Module | Rest ], Context) ->
+    {ok, {IsActive, Rest}};
+m_get([ info, Module | Rest ], _Msg, Context) ->
     M = safe_to_atom(Module),
     Info = [
         {enabled, lists:member(M, enabled(Context))},
@@ -52,10 +52,10 @@ m_get([ info, Module | Rest ], Context) ->
         {title, z_module_manager:title(M)},
         {prio, z_module_manager:prio(M)}
     ],
-    {Info, Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+    {ok, {Info, Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 safe_to_atom(M) when is_atom(M) ->
     M;

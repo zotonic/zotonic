@@ -1,14 +1,16 @@
+{% include "_js_include_jquery.tpl" %}
+
 {% lib
     "admin-bootstrap3/js/bootstrap.min.js"
 %}
 
 {% lib
-    "js/apps/zotonic-1.0.js"
-    "js/apps/z.widgetmanager.js"
+    "js/modules/jstz.min.js"
 
-    "js/modules/ubf.js"
-    "js/qlobber.js"
-    "js/pubzub.js"
+    "cotonic/zotonic-wired-bundle.js"
+
+    "js/apps/zotonic-wired.js"
+    "js/apps/z.widgetmanager.js"
 
     "js/modules/jquery.hotkeys.js"
 
@@ -31,9 +33,17 @@
     "js/modules/livevalidation-1.3.js"
     "js/modules/jquery.loadmask.js"
     "js/modules/jquery.timepicker.min.js"
-    "js/modules/jstz.min.js"
 %}
+
+{#
+    "js/modules/ubf.js"
+    "js/qlobber.js"
+    "js/pubzub.js"
+#}
+
 {% all include "_admin_lib_js.tpl" %}
+
+{% worker name="auth" src="js/zotonic.auth.worker.js" %}
 
 <script type="text/javascript">
 $(function()
@@ -41,3 +51,4 @@ $(function()
 	$.widgetManager();
 });
 </script>
+

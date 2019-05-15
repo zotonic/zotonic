@@ -20,11 +20,11 @@
 -module(m_content_group).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     is_used/2
 ]).
@@ -33,12 +33,12 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ is_used, CGId | Rest ], Context) ->
-    {is_used(CGId, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ is_used, CGId | Rest ], _Msg, Context) ->
+    {ok, {is_used(CGId, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 %% @doc Check if a content group is actually in use.
 is_used(ContentGroup, Context) ->

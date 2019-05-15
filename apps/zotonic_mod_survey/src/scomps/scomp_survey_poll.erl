@@ -17,7 +17,7 @@
 
 -module(scomp_survey_poll).
 
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 -export([vary/2, render/3]).
 -export([single_result/3]).
 

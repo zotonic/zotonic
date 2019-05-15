@@ -6,7 +6,7 @@
     <div class="acl-well">
         <div id="acl-rules">
             {% live template="_admin_acl_rules_list.tpl"
-                    topic="~site/acl-rules/edit-rebuild"
+                    topic="model/acl_user_groups/event/acl-rules/edit-rebuild"
                     kind=kind
                     group=q.g
                     is_editable=is_editable

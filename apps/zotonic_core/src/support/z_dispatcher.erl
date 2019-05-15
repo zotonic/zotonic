@@ -58,7 +58,11 @@
 %%      Used by controller_file_id and controller_redirect
 %% TODO: this behaviour should be changed to an _inclusive_ list instead of a filter list
 dispatcher_args() ->
-    [ is_permanent, dispatch, q, qargs, zotonic_dispatch, ssl, protocol, session_id, set_session_id ].
+    [
+        is_permanent, dispatch, q, qargs,
+        zotonic_dispatch, ssl, protocol, session_id, set_session_id,
+        auth_options, auth_expires
+    ].
 
 %% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the dispatch server
@@ -169,13 +173,27 @@ reload(module_ready, Context) ->
 %% Support routines, called outside the gen_server
 %%====================================================================
 
-%% @doc rewrite generated uris
-rewrite(#dispatch_url{url=undefined} = D, _Dispatch, _Args, _Context) ->
+%% @doc Rewrite the generated urls. Checks for zotonic_http_accept and checks modules.
+rewrite(#dispatch_url{url = undefined} = D, _Dispatch, _Args, _Context) ->
     D;
-rewrite(#dispatch_url{url=Url} = D, Dispatch, Args, Context) ->
+rewrite(#dispatch_url{url = Url} = D, Dispatch, Args, Context) ->
+    Url1 = iolist_to_binary(Url),
+    Url2 = check_http_options(Url1, Args),
     D#dispatch_url{
-        url=z_notifier:foldl(#url_rewrite{dispatch=Dispatch, args=Args}, iolist_to_binary(Url), Context)
+        url = z_notifier:foldl(#url_rewrite{dispatch = Dispatch, args = Args}, Url2, Context)
     }.
+
+check_http_options(Url, Args) ->
+    case lists:keyfind(zotonic_http_accept, 1, Args) of
+        {zotonic_http_accept, undefined} ->
+            Url;
+        {zotonic_http_accept, Mime} ->
+            Mime1 = cow_qs:urlencode(z_convert:to_binary(Mime)),
+            <<"/http-accept/", Mime1/binary, Url/binary>>;
+        false ->
+            Url
+    end.
+
 
 %% @doc Optionally make the url an absolute url
 opt_abs_url(#dispatch_url{url=undefined} = D, _Dispatch, _Args, _Context) ->
@@ -344,8 +362,7 @@ reload_dispatch_list(#state{context=Context} = State) ->
     DispatchList = try
         collect_dispatch_lists(Context)
     catch
-        _:{error, Msg} ->
-           z_session_manager:broadcast(#broadcast{type="error", message="Dispatch error! " ++ Msg, title="Dispatcher", stay=false}, Context),
+        _:{error, _Msg} ->
            State#state.dispatchlist
     end,
     LookupDict = dispatch_for_uri_lookup(DispatchList),
@@ -444,6 +461,7 @@ filter_empty_args(Args) ->
           ({_, undefined}) -> false;
           ({absolute_url, _}) -> false;
           (absolute_url) -> false;
+          ({zotonic_http_accept, _}) -> false;
           (_) -> true
       end, Args).
 
@@ -453,10 +471,12 @@ make_url_for1(_Args, [], _Escape, undefined) ->
     #dispatch_url{};
 make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) ->
     ReplArgs =  fun
-                    ('*') -> proplists:get_value(star, Args);
-                    (V) when is_atom(V) -> mochiweb_util:quote_plus(proplists:get_value(V, Args));
-                    ({V, _Pattern}) when is_atom(V) -> mochiweb_util:quote_plus(proplists:get_value(V, Args));
-                    (S) -> S
+                    ('*') -> path_argval('*', Args);
+                    (V) when is_atom(V) -> path_argval(V, Args);
+                    ({V, _Pattern}) when is_atom(V) ->
+                        mochiweb_util:quote_plus(path_argval(V, Args));
+                    (S) ->
+                        S
                 end,
     UriParts = lists:map(ReplArgs, Pattern),
     Uri      = [$/ | z_utils:combine($/, UriParts)],
@@ -481,6 +501,18 @@ make_url_for1(Args, [Pattern|T], Escape, Best) ->
     Best1 = select_best_pattern(Args, Pattern, Best),
     make_url_for1(Args, T, Escape, Best1).
 
+path_argval('*', Args) ->
+    case proplists:get_value(star, Args) of
+        undefined -> <<>>;
+        L when is_list(L) ->
+            List1 = [ cow_qs:urlencode(z_convert:to_binary(B)) || B <- L ],
+            z_utils:combine($/, List1);
+        V ->
+            z_convert:to_binary(V)
+    end;
+path_argval(Arg, Args) ->
+    B = z_convert:to_binary(proplists:get_value(Arg, Args, <<"-">>)),
+    cow_qs:urlencode(B).
 
 select_best_pattern(Args, {PCount, PArgs, Pattern, DispOpts}, Best) ->
     if

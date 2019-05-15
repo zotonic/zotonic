@@ -111,7 +111,7 @@ base_modules() ->
      mod_oembed,
      mod_logging,
 
-     mod_signal,
+     mod_wires,
      mod_mqtt,
 
      mod_translation,

@@ -21,17 +21,15 @@
 
 -export([
     resource_exists/1,
-    is_authorized/1
+    is_authorized/1,
+    process/4
 ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-%% @todo Change this into "visible" and add a view instead of edit template.
 is_authorized(Context) ->
-    Context1 = z_admin_controller_helper:init_session(Context),
-    {Context2, Id} = controller_admin_edit:ensure_id(Context1),
-    z_acl:wm_is_authorized([{use, mod_mailinglist}, {view, Id}], Context2).
-
+    {Context2, Id} = controller_admin_edit:ensure_id(Context),
+    z_controller_helper:is_authorized([ {use, mod_mailinglist}, {view, Id} ], Context2).
 
 resource_exists(Context) ->
     {Context2, Id} = controller_admin_edit:ensure_id(Context),
@@ -40,8 +38,7 @@ resource_exists(Context) ->
         _N -> {m_rsc:exists(Id, Context2), Context2}
     end.
 
-
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     PageId = z_context:get(id, Context),
     ListId = m_rsc:rid(mailinglist_test, Context),
     Vars = [

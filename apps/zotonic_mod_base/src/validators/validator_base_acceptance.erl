@@ -20,10 +20,10 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 
-render_validator(acceptance, TriggerId, _TargetId, Args, Context)  ->
+render_validator(acceptance, TriggerId, _TargetId, Args, _Context)  ->
 	JsObject   = z_utils:js_object(z_validation:rename_args(Args)),
 	Script     = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"acceptance\", ">>, JsObject, <<");\n">>],
-	{[], Script, Context}.
+	{[], Script}.
 
 %% @spec validate(Type, Name, Values, Args, Context) -> {ok, AcceptedValue} | {error,Id,Error}
 %%          Error = invalid | novalue

@@ -17,7 +17,7 @@
 %% limitations under the License.
 
 -module(scomp_base_pager).
--behaviour(gen_scomp).
+-behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
 -export([test/0]).

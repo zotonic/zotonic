@@ -109,7 +109,7 @@ url_for_args(Files, JoinedPath, Extension, Args, Context) ->
     end,
     Checksum = checksum(Files, Context),
     <<$/,Path/binary>> = iolist_to_binary(JoinedPath),
-    [{star, [Path, ?SEP, integer_to_binary(Checksum), Extension]} | AbsUrlArg].
+    [{star, iolist_to_binary([Path, ?SEP, integer_to_binary(Checksum), Extension])} | AbsUrlArg].
 
 %% @doc Make the collapsed paths for the js and the css files.
 collapsed_paths(Files) ->

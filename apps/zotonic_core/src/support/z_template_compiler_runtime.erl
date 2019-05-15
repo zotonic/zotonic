@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
+%% @copyright 2016-2018 Marc Worrell
 %% @doc Simple runtime for the compiled templates. Needs to be
 %%      copied and adapted for different environments.
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2018 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -186,7 +186,6 @@ map_template_1(Template, Context) when is_binary(Template) ->
 
 
 %% @doc Check if a file has been modified
-%% @todo Profile this and consider the memo cache to speed this up
 -spec is_modified(filename:filename(), calendar:datetime(), term()) -> boolean().
 is_modified(Filename, Mtime, _Context) ->
     case z_file_mtime:mtime(Filename) of
@@ -200,7 +199,7 @@ is_modified(Filename, Mtime, _Context) ->
 -spec compile_map_nested_value(Tokens :: list(), ContextVar :: string(), Context :: term()) -> NewTokens :: list().
 compile_map_nested_value([{identifier, _, <<"m">>}, {identifier, _, Model}|Rest], _ContextVar, _Context) ->
     Module = binary_to_atom(<<"m_", Model/binary>>, 'utf8'),
-    [{mfa, Module, m_get, Rest}];
+    [{mfa2, Module, m_get, Rest, undefined}];
 compile_map_nested_value([{identifier, _, <<"q">>}, {identifier, _, QArg}|Rest], ContextVar, _Context) ->
     Ast = erl_syntax:application(
                 erl_syntax:atom(z_context),
@@ -259,12 +258,6 @@ find_value(undefined, _, _TplVars, _Context) ->
     undefined;
 find_value(_, undefined, _TplVars, _Context) ->
     undefined;
-find_value(Key, #search_result{} = S, _TplVars, _Context) when is_integer(Key) ->
-    try
-        lists:nth(Key, S#search_result.result)
-    catch
-        _:_ -> undefined
-    end;
 find_value(Key, [N|_], _TplVars, Context) when is_atom(Key), is_integer(N) ->
     % Assume a predicate/property lookup in a list of ids, map to lookup of first entry
     m_rsc:p(N, Key, Context);
@@ -281,9 +274,7 @@ find_value(Name, [[{A,_}|_]|_] = Blocks, _TplVars, _Context ) when is_atom(A), n
         [] -> undefined;
         [Block|_] -> Block
     end;
-find_value(Key, #m_search_result{} = S, TplVars, Context) when is_integer(Key) ->
-    find_value(Key, S#m_search_result.result, TplVars, Context);
-find_value(Key, #search_result{} = S, _TplVars, _Context) when is_atom(Key) ->
+find_value(Key, #search_result{} = S, _TplVars, _Context) ->
     case Key of
         result -> S#search_result.result;
         all -> S#search_result.all;
@@ -291,9 +282,25 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) when is_atom(Key) ->
         page -> S#search_result.page;
         pages -> S#search_result.pages;
         next -> S#search_result.next;
-        prev -> S#search_result.prev
+        prev -> S#search_result.prev;
+        <<"result">> -> S#search_result.result;
+        <<"all">> -> S#search_result.all;
+        <<"total">> -> S#search_result.total;
+        <<"page">> -> S#search_result.page;
+        <<"pages">> -> S#search_result.pages;
+        <<"next">> -> S#search_result.next;
+        <<"prev">> -> S#search_result.prev;
+        Nth when is_integer(Nth) ->
+            nth(Nth, S#search_result.result);
+        Nth when is_binary(Nth) ->
+            try
+                Nth1 = z_convert:to_integer(Nth),
+                nth(Nth1, S#search_result.result)
+            catch
+                _:_ -> undefined
+            end
     end;
-find_value(Key, #m_search_result{} = S, _TplVars, _Context) when is_atom(Key) ->
+find_value(Key, #m_search_result{} = S, TplVars, Context) ->
     case Key of
         search -> {S#m_search_result.search_name, S#m_search_result.search_props};
         search_name -> S#m_search_result.search_name;
@@ -304,14 +311,37 @@ find_value(Key, #m_search_result{} = S, _TplVars, _Context) when is_atom(Key) ->
         pages -> S#m_search_result.pages;
         pagelen -> S#m_search_result.pagelen;
         next -> S#m_search_result.next;
-        prev -> S#m_search_result.prev
+        prev -> S#m_search_result.prev;
+        <<"search">> -> {S#m_search_result.search_name, S#m_search_result.search_props};
+        <<"search_name">> -> S#m_search_result.search_name;
+        <<"search_props">> -> S#m_search_result.search_props;
+        <<"result">> -> S#m_search_result.result;
+        <<"total">> -> S#m_search_result.total;
+        <<"page">> -> S#m_search_result.page;
+        <<"pages">> -> S#m_search_result.pages;
+        <<"pagelen">> -> S#m_search_result.pagelen;
+        <<"next">> -> S#m_search_result.next;
+        <<"prev">> -> S#m_search_result.prev;
+        Nth when is_integer(Nth) ->
+            find_value(Nth, S#m_search_result.result, TplVars, Context);
+        Nth when is_binary(Nth) ->
+            try
+                Nth1 = z_convert:to_integer(Nth),
+                find_value(Nth1, S#m_search_result.result, TplVars, Context)
+            catch
+                _:_ -> undefined
+            end
     end;
-find_value(Key, #rsc_list{list=L}, _TplVars, _Context) when is_integer(Key) ->
-    try lists:nth(Key, L)
-    catch _:_ -> undefined
+find_value(Key, #rsc_list{list=[H|_T] = L}, TplVars, Context) ->
+    try
+        case z_convert:to_integer(Key) of
+            undefined -> find_value(Key, H, TplVars, Context);
+            N -> nth(N, L)
+        end
+    catch
+        error:badarg ->
+            find_value(Key, H, TplVars, Context)
     end;
-find_value(Key, #rsc_list{list=[H|_T]}, TplVars, Context) ->
-    find_value(Key, H, TplVars, Context);
 find_value(_Key, #rsc_list{list=[]}, _TplVars, _Context) ->
     undefined;
 find_value(IsoAtom, Text, _TplVars, _Context) when is_atom(IsoAtom), is_binary(Text) ->
@@ -321,6 +351,11 @@ find_value(IsoAtom, Text, _TplVars, _Context) when is_atom(IsoAtom), is_binary(T
     end;
 find_value(Key, Ps, TplVars, Context) ->
     template_compiler_runtime:find_value(Key, Ps, TplVars, Context).
+
+
+nth(1, [H|_]) -> H;
+nth(N, [_|T]) when N > 1 -> nth(N-1, T);
+nth(_, _) -> undefined.
 
 
 -spec set_context_vars(map()|list(), term()) -> term().
@@ -378,6 +413,8 @@ builtin_tag_1(url, Dispatch, Args, _Vars, Context) ->
     z_dispatcher:url_for(z_convert:to_atom(Dispatch), Args, Context);
 builtin_tag_1(lib, Libs, Args, _Vars, Context) ->
     z_lib_include:tag(Libs, Args, Context);
+builtin_tag_1(lib_url, Libs, Args, _Vars, Context) ->
+    z_lib_include:url(Libs, Args, Context);
 builtin_tag_1(image, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_tag(Expr, Args, Context);
 builtin_tag_1(image_url, Expr, Args, _Vars, Context) ->
@@ -428,10 +465,10 @@ do_cache1(false, _Args, _Context) ->
 %% @doc Render a script block, for Zotonic this is added to the scripts in the Context
 -spec javascript_tag(template_compiler:render_result(), map(), term()) -> template_compiler:render_result().
 javascript_tag(Block, _TplVars, Context) when is_binary(Block) ->
-    z_render:wire({script, [{script, Block}]}, z_context:new(Context));
+    z_context:get_render_state(z_render:wire({script, [{script, Block}]}, z_context:new(Context)));
 javascript_tag(Block, _TplVars, Context) ->
     {Script, C} = z_render:render_to_iolist(Block, z_context:new(Context)),
-    z_render:wire({script, [{script, iolist_to_binary(Script)}]}, C).
+    z_context:get_render_state(z_render:wire({script, [{script, iolist_to_binary(Script)}]}, C)).
 
 
 %% @doc Remove spaces between HTML tags

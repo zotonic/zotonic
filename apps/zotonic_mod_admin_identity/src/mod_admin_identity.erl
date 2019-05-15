@@ -138,7 +138,7 @@ event(#postback{message={identity_verify_preferred, Args}}, Context) ->
     case m_rsc:is_editable(RscId, Context) of
         true ->
             case Type of
-                "email" ->
+                <<"email">> ->
                     case Key /= undefined andalso z_email_utils:is_email(Key) of
                         true ->
                             % Set the email property of the resource
@@ -217,12 +217,11 @@ event(#postback{message={identity_add, Args}}, Context) ->
 
 %% Log on as this user
 event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
-    case z_acl:is_admin(Context) of
-        true ->
+    case z_auth:switch_user(Id, Context) of
+        ok ->
             % Changing the authenticated will force all connected pages to reload or change.
             % After this we can't send any replies any more, as the pages are disconnecting.
-            {ok, NewContext} = z_auth:switch_user(Id, Context),
-            NewContext;
+            Context;
         false ->
             z_render:growl_error(?__("You are not allowed to switch users.", Context), Context)
     end.

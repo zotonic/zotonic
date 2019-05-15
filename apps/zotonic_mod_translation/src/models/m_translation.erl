@@ -20,11 +20,11 @@
 -module(m_translation).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     language_list_enabled/1
 ]).
@@ -33,37 +33,37 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ rewrite_url | Rest ], Context) ->
-    {m_config:get_boolean(mod_translation, rewrite_url, true, Context), Rest};
-m_get([ force_default | Rest ], Context) ->
-    {m_config:get_boolean(mod_translation, rewrite_url, false, Context), Rest};
-m_get([ language | Rest ], Context) ->
-    {z_context:language(Context), Rest};
-m_get([ language_list_configured | Rest ], Context) ->
-    {language_list_configured(Context), Rest};
-m_get([ language_list_enabled | Rest ], Context) ->
-    {language_list_enabled(Context), Rest};
-m_get([ default_language | Rest ], Context) ->
-    {default_language(Context), Rest};
-m_get([ main_languages | Rest ], _Context) ->
-    {main_languages(), Rest};
-m_get([ all_languages | Rest ], _Context) ->
-    {all_languages(), Rest};
-m_get([ enabled_language_codes | Rest ], Context) ->
-    {z_language:enabled_language_codes(Context), Rest};
-m_get([ language_list | Rest ], Context) ->
-    {z_language:language_list(Context), Rest};
-m_get([ language_stemmer | Rest ], Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ rewrite_url | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_translation, rewrite_url, true, Context), Rest}};
+m_get([ force_default | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_translation, rewrite_url, false, Context), Rest}};
+m_get([ language | Rest ], _Msg, Context) ->
+    {ok, {z_context:language(Context), Rest}};
+m_get([ language_list_configured | Rest ], _Msg, Context) ->
+    {ok, {language_list_configured(Context), Rest}};
+m_get([ language_list_enabled | Rest ], _Msg, Context) ->
+    {ok, {language_list_enabled(Context), Rest}};
+m_get([ default_language | Rest ], _Msg, Context) ->
+    {ok, {default_language(Context), Rest}};
+m_get([ main_languages | Rest ], _Msg, _Context) ->
+    {ok, {main_languages(), Rest}};
+m_get([ all_languages | Rest ], _Msg, _Context) ->
+    {ok, {all_languages(), Rest}};
+m_get([ enabled_language_codes | Rest ], _Msg, Context) ->
+    {ok, {z_language:enabled_language_codes(Context), Rest}};
+m_get([ language_list | Rest ], _Msg, Context) ->
+    {ok, {z_language:language_list(Context), Rest}};
+m_get([ language_stemmer | Rest ], _Msg, Context) ->
     Stemmer = case m_config:get_value(i18n, language_stemmer, Context) of
         undefined -> default_language(Context);
         <<>> -> default_language(Context);
         St -> St
     end,
-    {Stemmer, Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+    {ok, {Stemmer, Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 default_language(Context) ->
     z_language:default_language(Context).

@@ -24,8 +24,8 @@
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
 -mod_schema(1).
--mod_depends([admin, mod_logging]).
--mod_provides([mailinglist]).
+-mod_depends([ admin, mod_wires, mod_logging ]).
+-mod_provides([ mailinglist ]).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -118,7 +118,6 @@ event(#postback{message={mailing_cancel, Args}}, Context) ->
 	case is_allowed_mailing(MailingId, Context) and z_acl:rsc_visible(MailingId, Context) of
 		true ->
 			m_mailinglist:delete_scheduled(MailingId, PageId, Context),
-            mod_signal:emit({update_mailinglist_scheduled, [{id, PageId}]}, Context),
 			z_render:growl(?__("The mailing has been canceled.", Context), Context);
 		false ->
 			z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
@@ -129,7 +128,6 @@ event(#postback{message={mailinglist_reset, Args}}, Context) ->
 	case is_allowed_mailing(MailingId, Context) of
 		true ->
 			m_mailinglist:reset_log_email(MailingId, PageId, Context),
-            mod_signal:emit({update_mailinglist_scheduled, [{id, PageId}]}, Context),
 			z_render:growl(?__("The statistics have been cleared.", Context), Context);
 		false ->
 			z_render:growl_error(?__("You are not allowed to reset this mailing.", Context), Context)
@@ -358,45 +356,62 @@ send_mailing_process(ListId, Recipients, PageId, Context) ->
     m_mailinglist:reset_bounced(ListId, Context),
     From = m_mailinglist:get_email_from(ListId, Context),
     Options = [
-        {id,PageId}, {list_id, ListId}, {email_from, From}
+        {id, PageId},
+        {list_id, ListId},
+        {email_from, From}
     ],
     [ send(Email, From, Options, Context) || Email <- Recipients ],
     ok.
 
 
-    send(undefined, _From, _Options, _Context) ->
-        skip;
-    send(Id, From, Options, Context) when is_integer(Id) ->
-        send(m_rsc:p_no_acl(Id, email_raw, Context), From, [{recipient_id,Id}|Options], Context);
-    send(Email, From, Options, Context) ->
-        case z_convert:to_list(z_string:trim(Email)) of
-            [] ->
-                skip;
-            Email1 ->
-                Id = proplists:get_value(id, Options),
-                Attachments = mod_mailinglist:page_attachments(Id, Context),
-                z_email_server:send(#email{to=Email1,
-                                           from=From,
-                                           html_tpl={cat, "mailing_page.tpl"},
-                                           vars=[{email,Email1}|Options],
-                                           attachments=Attachments
-                                    },
-                                    Context)
-        end.
+send(undefined, _From, _Options, _Context) ->
+    skip;
+send(Id, From, Options, Context) when is_integer(Id) ->
+    Options1 = [
+        {recipient_id, Id}
+        | Options
+    ],
+    Email = m_rsc:p_no_acl(Id, email_raw, Context),
+    send(Email, From, Options1, Context);
+send(Email, From, Options, Context) ->
+    case z_convert:to_binary(z_string:trim(Email)) of
+        <<>> ->
+            skip;
+        Email1 ->
+            Id = proplists:get_value(id, Options),
+            Attachments = mod_mailinglist:page_attachments(Id, Context),
+            z_email:send(
+                #email{
+                    to = Email1,
+                    from = From,
+                    html_tpl = {cat, "mailing_page.tpl"},
+                    vars = [
+                        {email, Email1}
+                        | Options
+                    ],
+                    attachments = Attachments
+                },
+                Context)
+    end.
 
 %% @doc Return list of attachments for this page as a list of files. Attachments are outgoing 'hasdocument' edges.
 page_attachments(Id, Context) ->
     AttIds = m_edge:objects(Id, hasdocument, Context),
-    [as_upload(AId, Context) || AId <- AttIds].
-
+    lists:flatten([ as_upload(AId, Context) || AId <- AttIds ]).
 
 as_upload(Id, Context) ->
-    M = m_media:get(Id, Context),
-    #upload{
-             tmpfile=z_media_archive:abspath(proplists:get_value(filename, M), Context),
-             mime=proplists:get_value(mime, M),
-             filename=proplists:get_value(original_filename, M)
-           }.
+    case m_media:get(Id, Context) of
+        undefined ->
+            [];
+        [] ->
+            [];
+        Media ->
+            #upload{
+                tmpfile = z_media_archive:abspath(proplists:get_value(filename, Media), Context),
+                mime = proplists:get_value(mime, Media),
+                filename = proplists:get_value(original_filename, Media)
+            }
+    end.
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [

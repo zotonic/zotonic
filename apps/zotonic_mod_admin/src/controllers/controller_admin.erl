@@ -20,15 +20,14 @@
 -author("Tim Benniks <tim@timbenniks.com>").
 
 -export([
-	is_authorized/1
+	is_authorized/1,
+    process/4
     ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
-
 is_authorized(Context) ->
-    z_admin_controller_helper:is_authorized(mod_admin, Context).
+    z_controller_helper:is_authorized([{use, z_context:get(acl_module, Context, mod_admin)}], Context).
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Template = z_context:get(template, Context, "admin.tpl"),
     Selected = z_context:get(selected, Context, "dashboard"),
     Args = z_context:get_all(Context),

@@ -23,8 +23,7 @@
 -export([
         allowed_methods/1,
         content_types_provided/1,
-        hubcheck/1,
-        process_post/1
+        process/4
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -33,9 +32,28 @@ allowed_methods(Context) ->
     {[<<"POST">>, <<"GET">>], Context}.
 
 content_types_provided(Context) ->
-    {[{<<"text/plain">>, hubcheck}], Context}.
+    {[ {<<"text">>, <<"plain">>, []} ], Context}.
 
-hubcheck(Context) ->
+process(<<"POST">>, _AcceptedCT, _ProvidedCT, Context0) ->
+    {Body, Context} = cowmachine_req:req_body(Context0),
+    {_Key, Secret, _Scope} = mod_instagram:get_config(Context),
+    XHubSignature = z_convert:to_binary(
+                        z_context:get_req_header(<<"x-hub-signature">>, Context)),
+    OurSignature = z_string:to_lower(
+                        lists:flatten(
+                            z_utils:hex_encode(
+                                crypto:hmac(sha, Secret, Body)))),
+    if
+        XHubSignature =:= OurSignature ->
+            lager:debug("[instagram] Hub push received."),
+            handle_push(Body, Context);
+        true ->
+            lager:error("[instagram] Hub post with mismatched X-Hub-Signature ~p expected ~p",
+                        [XHubSignature, OurSignature])
+    end,
+    Context1 = cowmachine_req:set_resp_body(<<"ok">>, Context),
+    {true, Context1};
+process(<<"GET">>, _AcceptedCT, _ProvidedCT, Context) ->
     case z_context:get_q(<<"hub.mode">>, Context) of
         <<"subscribe">> ->
             VerifyToken = instagram_api:verify_token(Context),
@@ -53,29 +71,6 @@ hubcheck(Context) ->
         _ ->
             {<<>>, Context}
     end.
-
-process_post(Context0) ->
-    {Body, Context} = cowmachine_req:req_body(Context0),
-    {_Key, Secret, _Scope} = mod_instagram:get_config(Context),
-    XHubSignature = z_convert:to_binary(
-                        z_context:get_req_header(<<"x-hub-signature">>, Context)),
-    OurSignature = z_string:to_lower(
-                        lists:flatten(
-                            z_utils:hex_encode(
-                                hmac_sha(Secret, Body)))),
-    if
-        XHubSignature =:= OurSignature ->
-            lager:debug("[instagram] Hub push received."),
-            handle_push(Body, Context);
-        true ->
-            lager:error("[instagram] Hub post with mismatched X-Hub-Signature ~p expected ~p",
-                        [XHubSignature, OurSignature])
-    end,
-    Context1 = cowmachine_req:set_resp_body(<<"ok">>, Context),
-    {true, Context1}.
-
-hmac_sha(Key, Data) ->
-    crypto:hmac(sha, Key, Data).
 
 
 handle_push(Data, Context) ->

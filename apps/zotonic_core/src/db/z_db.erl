@@ -40,6 +40,9 @@
     assoc/2,
     assoc/3,
     assoc/4,
+    assoc_map/2,
+    assoc_map/3,
+    assoc_map/4,
     assoc_props/2,
     assoc_props/3,
     assoc_props/4,
@@ -248,6 +251,21 @@ assoc_props_row(Sql, Parameters, Context) ->
         [] -> undefined
     end.
 
+
+%% @doc Return property lists of the results of a query on the database in the Context
+-spec assoc_map(sql(), z:context()) -> map().
+assoc_map(Sql, Context) ->
+    assoc_map(Sql, [], Context).
+
+assoc_map(Sql, Parameters, #context{} = Context) ->
+    assoc_map(Sql, Parameters, Context, ?TIMEOUT);
+assoc_map(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
+    assoc_map(Sql, [], Context, Timeout).
+
+assoc_map(Sql, Parameters, Context, Timeout) ->
+
+    Result = assoc(Sql, Parameters, Context, Timeout),
+    lists:map(fun maps:from_list/1, Result).
 
 %% @doc Return property lists of the results of a query on the database in the Context
 -spec assoc(sql(), z:context()) -> list().
@@ -703,27 +721,31 @@ ensure_schema(Site, Options) ->
 
 drop_schema(Context) ->
     Options = z_db_pool:get_database_options(Context),
-    case open_connection("postgres", Options) of
+    Schema = proplists:get_value(dbschema, Options),
+    Database = proplists:get_value(dbdatabase, Options),
+    case open_connection(Database, Options) of
         {ok, DbConnection} ->
-            Schema = proplists:get_value(dbschema, Options),
             Result = case schema_exists_conn(DbConnection, Schema) of
                 true ->
                     case epgsql:equery(
                         DbConnection,
                         "DROP SCHEMA \"" ++ Schema ++ "\" CASCADE"
                     ) of
-                        {ok, _, _} ->
+                        {ok, _, _} = OK ->
+                            lager:warning("Dropped schema ~p (~p)", [Schema, OK]),
                             ok;
                         {error, Reason} = Error ->
                             lager:error("z_db error ~p when dropping schema ~p", [Reason, Schema]),
                             Error
                     end;
                 false ->
+                    lager:warning("Could not drop schema ~p as it does not exist", [Schema]),
                     ok
             end,
             close_connection(DbConnection),
             Result;
-        {error, _} ->
+        {error, Reason} ->
+            lager:error("z_db error ~p when connecting for dropping schema ~p", [Reason, Schema]),
             ok
     end.
 
@@ -773,26 +795,22 @@ create_database(_Site, Connection, Database) ->
 %% @doc Check whether schema exists
 -spec schema_exists_conn(epgsql:connection(), string()) -> boolean().
 schema_exists_conn(Connection, Schema) ->
-    {ok, _, [{IsExisting}]} = epgsql:equery(
+    {ok, _, Schemas} = epgsql:equery(
         Connection,
-        "SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = $1)",
-        [Schema]
-    ),
-    IsExisting.
+        "SELECT schema_name FROM information_schema.schemata"),
+    lists:member( {z_convert:to_binary(Schema)}, Schemas ).
 
 %% @doc Create a schema
 -spec create_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
 create_schema(_Site, Connection, Schema) ->
-    %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
-    %% the encoding of the template database (SQL_ASCII)
     case epgsql:equery(
         Connection,
         "CREATE SCHEMA \"" ++ Schema ++ "\""
     ) of
         {ok, _, _} ->
             ok;
-        {error, {error, error, <<"42P06">>, _Msg, []}} ->
-            lager:warning("schema already exists ~p", [Schema]),
+        {error, {error, error, <<"42P06">>, Msg, []}} ->
+            lager:warning("Schema already exists ~p (~p)", [Schema, Msg]),
             ok;
         {error, Reason} = Error ->
             lager:error("z_db error ~p when creating schema ~p", [Reason, Schema]),

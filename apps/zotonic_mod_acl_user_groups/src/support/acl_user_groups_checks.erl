@@ -50,6 +50,10 @@
         can_rsc/3
     ]).
 
+-export([
+        session_state/1
+    ]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("acl_user_groups.hrl").
 
@@ -328,14 +332,47 @@ is_private_property(pivot_geocode_qhash) -> true;
 is_private_property(_) -> false.
 
 
-acl_logon(#acl_logon{id=UserId}, Context) ->
-    Context#context{
+acl_logon(#acl_logon{ id = UserId, options = Options }, Context) ->
+    Context1 = Context#context{
             acl=#aclug{
                 user_groups = has_user_groups(UserId, Context),
                 collab_groups = has_collab_groups(UserId, Context),
                 state = session_state(Context)
             },
-            user_id=UserId}.
+            user_id=UserId},
+    Context2 = logon_options_readonly(Options, Context1),
+    logon_options_user_groups(Options, Context2).
+
+logon_options_readonly(#{ is_read_only := true }, Context) ->
+    Context#context{ acl_is_read_only = true };
+logon_options_readonly(#{ is_read_only := false }, Context) ->
+    Context#context{ acl_is_read_only = true };
+logon_options_readonly(_Options, Context) ->
+    Context.
+
+logon_options_user_groups(#{ user_groups := AllowedUGs }, #context{ acl = Acl } = Context) when is_list(AllowedUGs) ->
+    AllGroups = user_groups_all(Context),
+    Collab = Acl#aclug.collab_groups,
+    % Filter allowed groups agains the list of authenticated groups
+    AllowedUGs1 = lists:filter(
+        fun(UId) ->
+            lists:member(UId, AllGroups)
+            andalso not lists:member(UId, Collab)
+        end,
+        AllowedUGs),
+    % Filter collab groups directly against the allowed groups
+    Collab1 = lists:filter(
+        fun(UId) ->
+            lists:member(UId, AllGroups)
+        end,
+        Collab),
+    Acl1 = Acl#aclug{
+        user_groups = AllowedUGs1,
+        collab_groups = Collab1
+    },
+    Context#context{ acl = Acl1 };
+logon_options_user_groups(_Options, Context) ->
+    Context.
 
 acl_logoff(#acl_logoff{}, Context) ->
      Context#context{
@@ -462,11 +499,12 @@ restrict_content_groups(Context) ->
         false -> lists:usort(CGs) ++ has_collab_groups(Context)
     end.
 
+-spec session_state( z:context() ) -> publish | edit.
 session_state(Context) ->
-    case z_context:get_session(acl_user_groups_state, Context) of
-        undefined -> publish;
-        publish -> publish;
-        edit -> edit
+    case z_context:get(auth_options, Context) of
+        #{ acl_user_groups_state := publish } -> publish;
+        #{ acl_user_groups_state := edit } -> edit;
+        _ -> publish
     end.
 
 

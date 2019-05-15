@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2019 Marc Worrell
 %% @doc Controller for http errors. Called for 4xx errors and serving some expected content.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,20 +20,12 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
     content_types_provided/1,
-    do_html/1,
-    do_text/1,
-    do_json/1,
-    do_c_comment/1,
-    do_empty/1,
-    do_image/1
+    process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
 
 %% For the content type we perform multiple checks:
 %% * Original dispatch rule (think controller_file)
@@ -64,9 +56,9 @@ content_types_provided(Context) ->
                 provide_any();
             controller_api ->
                 [
-                    {<<"application/json">>, do_json},
-                    {<<"application/x-json">>, do_json},
-                    {<<"text/plain">>, do_text}
+                    {<<"application">>, <<"json">>, []},
+                    {<<"application">>, <<"x-json">>, []},
+                    {<<"text">>, <<"plain">>, []}
                 ];
             % mod_authentication
             controller_logon ->
@@ -90,44 +82,43 @@ content_types_provided(Context) ->
 
 provide_any() ->
     [
-        {<<"text/html">>, do_html},
-        {<<"application/json">>, do_json},
-        {<<"application/x-json">>, do_json},
-        {<<"application/javascript">>, do_c_comment},
-        {<<"application/x-javascript">>, do_c_comment},
-        {<<"text/css">>, do_c_comment},
-        {<<"text/plain">>, do_text},
-        {<<"application/atom+xml">>, [{<<"type">>, <<"entry">>}], do_empty},
-        {<<"application/atom+xml">>, do_empty}
+        {<<"text">>, <<"html">>, []},
+        {<<"application">>, <<"json">>, []},
+        {<<"application">>, <<"x-json">>, []},
+        {<<"application">>, <<"javascript">>, []},
+        {<<"application">>, <<"x-javascript">>, []},
+        {<<"text">>, <<"css">>, []},
+        {<<"text">>, <<"plain">>, []},
+        {<<"application">>, <<"atom+xml">>, []}
     ].
 
 provide_extension(Context, Default) ->
     case map_extension(Context) of
         html ->
             [
-                {<<"text/html">>, do_html},
-                {<<"text/plain">>, do_text}
+                {<<"text">>, <<"html">>, []},
+                {<<"text">>, <<"plain">>, []}
             ];
         json ->
             [
-                {<<"application/json">>, do_json},
-                {<<"application/x-json">>, do_json},
-                {<<"text/plain">>, do_text}
+                {<<"application">>, <<"json">>, []},
+                {<<"application">>, <<"x-json">>, []},
+                {<<"text">>, <<"plain">>, []}
             ];
         css ->
             [
-                {<<"text/css">>, do_c_comment},
-                {<<"text/plain">>, do_text}
+                {<<"text">>, <<"css">>, []},
+                {<<"text">>, <<"plain">>, []}
             ];
         javascript ->
             [
-                {<<"application/javascript">>, do_c_comment},
-                {<<"application/x-javascript">>, do_c_comment},
-                {<<"text/plain">>, do_text}
+                {<<"application">>, <<"javascript">>, []},
+                {<<"application">>, <<"x-javascript">>, []},
+                {<<"text">>, <<"plain">>, []}
             ];
         text ->
             [
-                {<<"text/plain">>, do_text}
+                {<<"text">>, <<"plain">>, []}
             ];
         image ->
             provide_image();
@@ -137,18 +128,18 @@ provide_extension(Context, Default) ->
 
 provide_image() ->
     [
-        {<<"image/gif">>, do_image}
+        {<<"image">>, <<"gif">>, []}
     ].
 
 provide_html() ->
     [
-        {<<"text/html">>, do_html},
-        {<<"text/plain">>, do_text}
+        {<<"text">>, <<"html">>, []},
+        {<<"text">>, <<"plain">>, []}
     ].
 
 provide_text() ->
     [
-        {<<"text/plain">>, do_text}
+        {<<"text">>, <<"plain">>, []}
     ].
 
 map_extension(Context) ->
@@ -166,9 +157,20 @@ map_extension(Context) ->
         _ -> other
     end.
 
+process(_Method, _AcceptedCT, {<<"text">>, <<"html">>, _}, Context) -> do_html(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"json">>, _}, Context) -> do_json(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"x-json">>, _}, Context) -> do_json(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"javascript">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"x-javascript">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"text">>, <<"css">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"application">>, <<"atom+xml">>, _}, Context) -> do_c_comment(Context);
+process(_Method, _AcceptedCT, {<<"image">>, _, _}, Context) -> do_image(Context);
+process(_Method, _AcceptedCT, {<<"text">>, _, _}, Context) -> do_text(Context);
+process(_Method, _AcceptedCT, _CT, Context) -> do_empty(Context).
+
 do_html(Context0) ->
     Context = set_headers(Context0),
-    ContextQs = z_context:continue_all(z_context:ensure_qs(Context)),
+    ContextQs = z_context:ensure_qs(Context),
     ErrorCode = error_code(Context),
     Vars = [
         {noindex, true},

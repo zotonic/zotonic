@@ -23,8 +23,8 @@
 -mod_description("Create and publish questionnaires.").
 -mod_prio(400).
 -mod_schema(4).
--mod_depends([admin]).
--mod_provides([survey, poll]).
+-mod_depends([ admin, mod_wires ]).
+-mod_provides([ survey, poll ]).
 
 %% interface functions
 -export([
@@ -578,14 +578,14 @@ do_submit(SurveyId, Questions, Answers, Context) ->
     end.
 
 insert_survey_submission(SurveyId, StorageAnswers, Context) ->
-    {UserId, PersistentId} = case z_acl:user(Context) of
-                                undefined -> {undefined, persistent_id(Context)};
-                                UId -> {UId, undefined}
+    {UserId, PersistentId, Context1} = case z_acl:user(Context) of
+                                undefined ->
+                                    {DId, C1} = m_survey:persistent_id(Context),
+                                    {undefined, DId, C1};
+                                UId ->
+                                    {UId, undefined, Context}
                              end,
-    m_survey:insert_survey_submission(SurveyId, UserId, PersistentId, StorageAnswers, Context).
-
-persistent_id(#context{session_id = undefined}) -> undefined;
-persistent_id(Context) -> z_context:persistent_id(Context).
+    m_survey:insert_survey_submission(SurveyId, UserId, PersistentId, StorageAnswers, Context1).
 
 maybe_mail(SurveyId, Answers, ResultId, Context) ->
     case probably_email(SurveyId, Context) of

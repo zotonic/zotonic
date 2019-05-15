@@ -21,11 +21,11 @@
 -module(m_predicate).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     is_predicate/2,
     is_used/2,
@@ -46,22 +46,22 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([], Context) ->
-    {all(Context), []};
-m_get([ all | Rest ], Context) ->
-    {all(Context), Rest};
-m_get([ is_used, Pred | Rest ], Context) ->
-    {is_used(Pred, Context), Rest};
-m_get([ object_category, Key | Rest ], Context) ->
-    {object_category(Key, Context), Rest};
-m_get([ subject_category, Key | Rest ], Context) ->
-    {subject_category(Key, Context), Rest};
-m_get([ Key | Rest ], Context) ->
-    {get(Key, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([], _Msg, Context) ->
+    {ok, {all(Context), []}};
+m_get([ all | Rest ], _Msg, Context) ->
+    {ok, {all(Context), Rest}};
+m_get([ is_used, Pred | Rest ], _Msg, Context) ->
+    {ok, {is_used(Pred, Context), Rest}};
+m_get([ object_category, Key | Rest ], _Msg, Context) ->
+    {ok, {object_category(Key, Context), Rest}};
+m_get([ subject_category, Key | Rest ], _Msg, Context) ->
+    {ok, {subject_category(Key, Context), Rest}};
+m_get([ Key | Rest ], _Msg, Context) ->
+    {ok, {get(Key, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Test if the property is the name of a predicate

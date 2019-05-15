@@ -154,9 +154,10 @@ maybe_drop_db(Context) ->
         true ->
             case z_db_pool:test_connection(Context) of
                 ok ->
-                    lager:info("[~p] Dropping schema ~p",
-                            [ z_context:site(Context), proplists:get_value(dbschema, DbOptions) ]),
-                    ok = z_db:drop_schema(Context);
+                    lager:warning("[~p] Dropping existing schema ~p because of 'dbdropschema' is set.",
+                                  [ z_context:site(Context), proplists:get_value(dbschema, DbOptions) ]),
+                    ok = z_db:drop_schema(Context),
+                    ok;
                 {error, _} ->
                     ok
             end;
@@ -203,7 +204,6 @@ upgrade(C, Database, Schema) ->
     ok = install_acl(C, Database, Schema),
     ok = install_identity_is_verified(C, Database, Schema),
     ok = install_identity_verify_key(C, Database, Schema),
-    ok = install_persist(C, Database, Schema),
     ok = drop_visitor(C, Database, Schema),
     ok = extent_mime(C, Database, Schema),
     ok = install_task_due(C, Database, Schema),
@@ -227,6 +227,7 @@ upgrade(C, Database, Schema) ->
 
     % 1.0
     ok = set_default_visible_for(C, Database, Schema),
+    ok = drop_persist(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -256,18 +257,20 @@ install_acl(C, Database, Schema) ->
     end.
 
 
-install_persist(C, Database, Schema) ->
+drop_persist(C, Database, Schema) ->
     case has_table(C, "persistent", Database, Schema) of
-        false ->
-            {ok,[],[]} = epgsql:squery(C, "create table persistent ( "
-                                      "  id character varying(32) not null,"
-                                      "  props bytea,"
-                                      "  created timestamp with time zone NOT NULL DEFAULT now(),"
-                                      "  modified timestamp with time zone NOT NULL DEFAULT now(),"
-                                      "  CONSTRAINT persistent_pkey PRIMARY KEY (id)"
-                                      ")"),
-            ok;
         true ->
+            case has_table(C, "comment", Database, Schema) of
+                true ->
+                    {ok, _, _} = epgsql:squery(C, "alter table comment drop constraint fk_comment_persistent_id"),
+                    {ok, _, _} = epgsql:squery(C, "alter index fki_comment_persistent_id rename to comment_persistent_id_key"),
+                    ok;
+                false ->
+                    ok
+            end,
+            {ok, _, _} = epgsql:squery(C, "drop table persistent"),
+            ok;
+        false ->
             ok
     end.
 
@@ -303,9 +306,6 @@ install_rsc_page_path_log(C, Database, Schema) ->
 drop_visitor(C, Database, Schema) ->
     case has_table(C, "visitor_cookie", Database, Schema) of
         true ->
-            {ok, _N} = epgsql:squery(C,
-                                    "insert into persistent (id,props) "
-                                    "select c.cookie, v.props from visitor_cookie c join visitor v on c.visitor_id = v.id"),
             epgsql:squery(C, "drop table visitor_cookie cascade"),
             epgsql:squery(C, "drop table visitor cascade"),
             ok;

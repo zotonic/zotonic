@@ -71,39 +71,41 @@ discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest], Context
     end;
 discover_per_provider(Url, UrlExtra, [], Context) ->
     lager:debug("Fallback embed.ly discovery for url: ~p~n", [Url]),
-    Key = m_config:get(mod_oembed, embedly_key, Context),
-    EmbedlyUrl = iolist_to_binary([
-            ?EMBEDLY_ENDPOINT,
-            z_url:url_encode(Url),
-            UrlExtra
-        ]),
-    EmbedlyUrl1 = case z_utils:is_empty(Key) of
-        true -> EmbedlyUrl;
-        false -> <<EmbedlyUrl/binary, "&key=", Key/binary>>
-    end,
-    oembed_request(EmbedlyUrl1).
+    case m_config:get_value(mod_oembed, embedly_key, Context) of
+        undefined ->
+            {error, nomatch};
+        <<>> ->
+            {error, nomatch};
+        Key ->
+            EmbedlyUrl = iolist_to_binary([
+                    ?EMBEDLY_ENDPOINT,
+                    z_url:url_encode(Url),
+                    UrlExtra
+                ]),
+            EmbedlyUrl1 = case z_utils:is_empty(Key) of
+                true -> EmbedlyUrl;
+                false -> <<EmbedlyUrl/binary, "&key=", Key/binary>>
+            end,
+            oembed_request(EmbedlyUrl1)
+    end.
 
 
 oembed_request(RequestUrl) ->
-    HttpOptions = [
-        {autoredirect, true},
+    FetchOptions = [
         {timeout, ?HTTP_GET_TIMEOUT},
-        {relaxed, true}
+        {max_length, 1024*1024}
     ],
-    case httpc:request(get, {z_convert:to_list(RequestUrl), []}, HttpOptions, []) of
-        {ok, {{_, Code, _}, Headers, Body}} ->
-            case Code of
-                200 ->
-                    {ok, z_json:decode(Body)};
-                404 ->
-                    {error, {http, 404, <<>>}};
-                NoAccess when NoAccess =:= 401; NoAccess =:= 403 ->
-                    lager:warning("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
-                    {error, {http, Code, Body}};
-                _Other ->
-                    lager:info("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Headers, Body]),
-                    {error, {http, Code, Body}}
-            end;
+    case z_url_fetch:fetch(RequestUrl, FetchOptions) of
+        {ok, {_Final, _Hs, 200, Body}} ->
+            {ok, z_json:decode(Body)};
+        {ok, {_Final, _Hs, 404, _Body}} ->
+            {error, {http, 404, <<>>}};
+        {ok, {_Final, Hs, Code, Body}} when Code =:= 401; Code =:= 403 ->
+            lager:warning("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Hs, Body]),
+            {error, {http, Code, Body}};
+        {ok, {_Final, Hs, Code, Body}} ->
+            lager:info("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Hs, Body]),
+            {error, {http, Code, Body}};
         {error, _} = Error ->
             Error
     end.

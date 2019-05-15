@@ -22,16 +22,16 @@
 -export([
     allowed_methods/1,
     content_types_provided/1,
-    to_text/1
+    process/4
 ]).
 
 allowed_methods(Context) ->
     {[<<"GET">>], Context}.
 
 content_types_provided(Context) ->
-    {[ {<<"text/plain">>, to_text} ], Context}.
+    {[ {<<"text">>, <<"plain">>, []} ], Context}.
 
-to_text(Context0) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context0) ->
     Context = z_context:set_noindex_header(z_context:set_nocache_headers(Context0)),
     {ok, Ping} = mod_ssl_letsencrypt:get_self_ping(Context),
     {Ping, Context}.

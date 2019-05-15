@@ -57,7 +57,7 @@
                 <div>
                     <label class="control-label">{_ From _}</label>
                     <div>
-                        {% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day %}
+                        {% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable %}
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                 <div>
                     <label class="control-label">{_ Till _}</label>
                     <div>
-                        {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 date_is_all_day=id.date_is_all_day %}
+                        {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable %}
                     </div>
                 </div>
             </div>

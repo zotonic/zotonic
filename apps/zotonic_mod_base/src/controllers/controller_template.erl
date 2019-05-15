@@ -20,39 +20,36 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    charsets_provided/1,
     content_types_provided/1,
     is_authorized/1,
-    provide_content/1
+    process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-charsets_provided(Context) ->
-    {[<<"utf-8">>], Context}.
-
 content_types_provided(Context) ->
     case z_context:get(content_type, Context) of
         undefined ->
-            {[{<<"text/html">>, provide_content}], Context};
+            {[ {<<"text">>, <<"html">>, []} ], Context};
+        Mime when is_list(Mime) ->
+            {[ z_convert:to_binary(Mime) ], Context};
         Mime ->
-            {[{z_convert:to_binary(Mime), provide_content}], Context}
+            {[ Mime ], Context}
     end.
 
 %% @doc Check if the current user is allowed to view the resource.
 is_authorized(Context) ->
-    case z_context:get(anonymous, Context) of
+    ContextQs = z_context:ensure_qs(Context),
+    z_context:lager_md(ContextQs),
+    case z_context:get(anonymous, ContextQs) of
         true ->
-            ContextQs = z_context:ensure_qs(Context),
             {true, ContextQs};
         _ ->
-            Context2 = z_context:ensure_all(Context),
-            z_context:lager_md(Context2),
-            z_controller_helper:is_authorized(Context2)
+            z_controller_helper:is_authorized(ContextQs)
     end.
 
 
-provide_content(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context3 = z_context:set_noindex_header(Context),
     Context4 = set_optional_cache_header(Context3),
     Template = z_context:get(template, Context4),

@@ -59,9 +59,9 @@
 {% endwith %}
 
 {% javascript %}
-    pubzub.subscribe("~site/rsc/+", function(_topic, args) {
-        if (args.payload._record == 'rsc_update_done' && args.payload.action == 'delete') {
-            $('#predicate-list tr[data-id='+args.payload.id+']').remove();
+    cotonic.broker.subscribe("bridge/origin/model/rsc/event/+", function(msg) {
+        if (msg.payload._type == 'rsc_update_done' && msg.payload.action == 'delete') {
+            $('#predicate-list tr[data-id='+msg.payload.id+']').remove();
         }
     });
 {% endjavascript %}

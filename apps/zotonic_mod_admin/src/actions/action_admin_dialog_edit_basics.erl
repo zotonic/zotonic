@@ -94,32 +94,32 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
                         ]
                   end,
             Context1 = case proplists:get_value(update_element, Args) of
-                            window -> Context;
-                            undefined -> Context;
-                             UpdateElt ->
-                                Html = z_template:render(case proplists:get_value(template, Args) of
-                                                            undefined -> "_rsc_edge.tpl";
-                                                            X -> X
-                                                          end,
-                                                          Vars,
-                                                          Context),
-                                case proplists:get_value(is_update, Args) of
-                                    true -> z_render:update(UpdateElt, Html, Context);
-                                    false -> z_render:replace(UpdateElt, Html, Context)
-                                end
-                        end,
+                window -> Context;
+                undefined -> Context;
+                UpdateElt ->
+                    Template = case proplists:get_value(template, Args) of
+                        undefined -> "_rsc_edge.tpl";
+                        X -> X
+                    end,
+                    MixedHtml = z_template:render(Template, Vars, Context),
+                    case proplists:get_value(is_update, Args) of
+                        true -> z_render:update(UpdateElt, MixedHtml, Context);
+                        false -> z_render:replace(UpdateElt, MixedHtml, Context)
+                    end
+            end,
             Context2 = z_render:wire({dialog_close, []}, Context1),
             %% wire any custom actions
             Context3 = case proplists:get_value(callback, Args) of
-                            undefined -> Context2;
-                            Callback ->
-                                Title = m_rsc:p(Id, title, Context2),
-                                z_render:wire({script, [{script, [
-                                                Callback,
-                                                $(,$",integer_to_list(Id),$",$,,
-                                                   $",z_utils:js_escape(Title,Context2),$",$),$;
-                                            ]}]}, Context2)
-                       end,
+                undefined ->
+                    Context2;
+                Callback ->
+                    Title = m_rsc:p(Id, title, Context2),
+                    z_render:wire({script, [{script, [
+                                    Callback,
+                                    $(,$",integer_to_list(Id),$",$,,
+                                       $",z_utils:js_escape(Title,Context2),$",$),$;
+                                ]}]}, Context2)
+            end,
             z_render:wire([{Action, [{id, Id}|ActionArgs]}|| {Action, ActionArgs} <- Actions], Context3);
 
         {error, _Reason} ->

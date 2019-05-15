@@ -16,7 +16,6 @@ All the nitty gritty details when the big picture has settled.
    tags/index
    global-variables
    models/index
-   services/index
    validators/index
    directory-structure
    icons

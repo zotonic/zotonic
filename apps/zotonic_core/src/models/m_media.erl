@@ -19,11 +19,12 @@
 -module(m_media).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
+
     identify/2,
     get/2,
     get_file_data/2,
@@ -66,16 +67,20 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ Id | Rest ], Context) ->
-    Media = case z_acl:rsc_visible(Id, Context) of
-        true -> get(Id, Context);
-        false -> undefined
-    end,
-    {Media, Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ Id | Rest ], _Msg, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            case z_acl:rsc_visible(RscId, Context) of
+                true -> {ok, {get(RscId, Context), Rest}};
+                false -> {error, eacces}
+            end
+    end;
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Return the identification of a medium. Used by z_media_identify:identify()
@@ -128,7 +133,8 @@ exists(Id, Context) ->
 %% @spec get(RscId, Context) -> PropList
 get(Id, Context) ->
     F = fun() ->
-        z_db:assoc_props_row("select * from medium where id = $1", [Id], Context) end,
+        z_db:assoc_props_row("select * from medium where id = $1", [Id], Context)
+    end,
     z_depcache:memo(F, {medium, Id}, ?WEEK, [Id], Context).
 
 %% @doc Return the contents of the file belonging to the media resource
@@ -221,6 +227,10 @@ delete(Id, Context) ->
             [z_depcache:flush(DepictId, Context) || DepictId <- Depicts],
             z_depcache:flush(Id, Context),
             z_notifier:notify(#media_replace_file{id = Id, medium = []}, Context),
+            z_mqtt:publish(
+                [ <<"model">>, <<"media">>, <<"event">>, Id, <<"delete">> ],
+                #{ id => Id },
+                Context),
             ok;
         false ->
             {error, eacces}
@@ -246,7 +256,12 @@ replace(Id, Props, Context) ->
                 {ok, _} ->
                     [z_depcache:flush(DepictId, Context) || DepictId <- Depicts],
                     z_depcache:flush(Id, Context),
-                    z_notifier:notify(#media_replace_file{id = Id, medium = get(Id, Context)}, Context),
+                    Medium = get(Id, Context),
+                    z_notifier:notify(#media_replace_file{id = Id, medium = Medium}, Context),
+                    z_mqtt:publish(
+                        [ <<"model">>, <<"media">>, <<"event">>, Id, <<"update">> ],
+                        mqtt_event_info(Medium),
+                        Context),
                     ok;
                 {rollback, {Error, _Trace}} ->
                     {error, Error}
@@ -627,7 +642,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
             CatList = m_rsc:is_a(Id, Context),
             [z_depcache:flush(Cat, Context) || Cat <- CatList],
 
-            m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
+            _ = m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
 
             % Run possible post insertion function.
             case PreProc#media_upload_preprocess.post_insert_fun of
@@ -637,7 +652,12 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
             end,
 
             %% Pass the medium record along in the notification; this also fills the depcache (side effect).
-            z_notifier:notify(#media_replace_file{id = Id, medium = get(Id, Context)}, Context),
+            NewMedium = get(Id, Context),
+            z_notifier:notify(#media_replace_file{id = Id, medium = NewMedium}, Context),
+            z_mqtt:publish(
+                [ <<"model">>, <<"media">>, <<"event">>, Id, <<"update">> ],
+                mqtt_event_info(NewMedium),
+                Context),
             {ok, Id};
         {rollback, {{error, not_allowed}, _StackTrace}} ->
             {error, not_allowed}
@@ -912,3 +932,17 @@ check_medium_props(Ps) ->
 check_medium_prop({width, N}) when not is_integer(N) -> {width, 0};
 check_medium_prop({height, N}) when not is_integer(N) -> {height, 0};
 check_medium_prop(P) -> P.
+
+
+% Return a map with basic (not too sensitive) medium info for MQTT events
+-spec mqtt_event_info( proplists:proplist() ) -> map().
+mqtt_event_info(Medium) ->
+    #{
+        id => proplists:get_value(id, Medium),
+        size => proplists:get_value(size, Medium),
+        width => proplists:get_value(width, Medium),
+        height => proplists:get_value(height, Medium),
+        orientation => proplists:get_value(orientation, Medium),
+        mime => proplists:get_value(mime, Medium),
+        filename => proplists:get_value(filename, Medium)
+    }.

@@ -18,8 +18,12 @@
 
 -module(m_twitter).
 
+-behaviour (zotonic_model).
+
 -export([
-    m_get/2,
+    m_get/3,
+
+    is_useauth/1,
 
     install/2,
 
@@ -41,13 +45,21 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-m_get([ useauth | Rest ], Context) ->
-    UseAuth = case m_config:get_value(mod_twitter, consumer_key, Context) of
+
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ useauth | Rest ], _Msg, Context) ->
+    {ok, {is_useauth(Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
+
+-spec is_useauth(z:context()) -> boolean().
+is_useauth(Context) ->
+    case m_config:get_value(mod_twitter, consumer_key, Context) of
         undefined -> false;
         <<>> -> false;
         _ -> m_config:get_boolean(mod_twitter, useauth, Context)
-    end,
-    {UseAuth, Rest}.
+    end.
 
 
 %% @doc Fetch a subscriptions

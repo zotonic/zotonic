@@ -23,39 +23,41 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
-    html/1
+    process/4
     ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    Context1 = z_context:reset_state_cookie(Context),
     case z_utils:is_empty(z_context:get_q(<<"denied">>, Context)) of
         true ->
-            RequestToken = z_context:get_session(twitter_request_token, Context),
-            z_context:set_session(twitter_request_token, undefined, Context),
-            request_token(RequestToken, Context);
+            case z_context:get_state_cookie(Context) of
+                {ok, {twitter, RequestToken, Args}} ->
+                    access_token(
+                        oauth_twitter_client:get_access_token(RequestToken, Context1),
+                        Args,
+                        Context1);
+                _ ->
+                    lager:warning("[twitter] Twitter OAuth redirect without cookie request token"),
+                    html_error(request_token, Context1)
+            end;
         false ->
-            Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
-            html_error(denied, Context1)
+            Context2 = z_render:wire({script, [{script, "window.close();"}]}, Context1),
+            html_error(denied, Context2)
     end.
 
-request_token({_, _} = RequestToken, Context) ->
-    access_token(oauth_twitter_client:get_access_token(RequestToken, Context), Context);
-request_token(undefined, Context) ->
-    lager:warning("[twitter] Twitter OAuth redirect without session request token"),
-    Context1 = z_render:wire({script, [{script, "window.close();"}]}, Context),
-    html_error(request_token, Context1).
 
-access_token({ok, AccessToken}, Context) ->
-    user_data(fetch_user_data(AccessToken, Context), AccessToken, Context);
-access_token({error, _Reason}, Context) ->
+access_token({ok, AccessToken}, Args, Context) ->
+    user_data(fetch_user_data(AccessToken, Context), AccessToken, Args, Context);
+access_token({error, _Reason}, _Args, Context) ->
     html_error(access_token, Context).
 
-user_data({ok, UserProps}, AccessToken, Context) ->
-    Auth = auth_user(UserProps, AccessToken, Context),
+user_data({ok, UserProps}, AccessToken, Args, Context) ->
+    Auth = auth_user(UserProps, AccessToken, Args),
     do_auth_user(Auth, Context);
-user_data({error, _}, _AccessToken, Context) ->
+user_data({error, _}, _AccessToken, _Args, Context) ->
     html_error(user_props, Context).
 
 do_auth_user(Auth, Context) ->
@@ -98,7 +100,7 @@ html_error(Error, What, Context) ->
     z_context:output(Html, Context).
 
 
-auth_user(TWProps, AccessToken, Context) ->
+auth_user(TWProps, AccessToken, Args) ->
     TwitterUserId = unicode:characters_to_binary(proplists:get_value(id_str, TWProps)),
     TwitterUserName = unicode:characters_to_binary(proplists:get_value(screen_name, TWProps)),
     lager:debug("[twitter] Authenticating ~p ~p", [TwitterUserId, TWProps]),
@@ -113,13 +115,12 @@ auth_user(TWProps, AccessToken, Context) ->
         {access_token, AccessToken},
         {screen_name, TwitterUserName}
     ],
-    Args = controller_twitter_authorize:get_args(Context),
     #auth_validated{
-        service=twitter,
-        service_uid=TwitterUserId,
-        service_props=AccessTokenData,
-        props=PersonProps,
-        is_connect=z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
+        service = twitter,
+        service_uid = TwitterUserId,
+        service_props = AccessTokenData,
+        props = PersonProps,
+        is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
     }.
 
 % Given the access token, fetch data about the user

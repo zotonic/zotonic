@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2014 Marc Worrell
+%% @copyright 2010-2019 Marc Worrell
 %% @doc Authentication and identification of users.
 
-%% Copyright 2010-2014 Marc Worrell
+%% Copyright 2010-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,11 +30,11 @@
     init/1,
     event/2,
 
+    observe_request_context/3,
+    observe_auth_options_update/3,
     observe_logon_submit/2,
-    observe_auth_autologon/2,
-    observe_auth_validated/2,
-
-    observe_admin_menu/3
+    observe_admin_menu/3,
+    observe_auth_validated/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -49,21 +49,6 @@ init(Context) ->
     end,
     ok.
 
-
-%% @doc Handle logon submits in case we cannot use controller_logon. Pass on the  data to the page controller.
-event(#submit{message={logon, WireArgs}}, Context) ->
-    Args = z_context:get_q_all(Context),
-    controller_logon:logon(Args, WireArgs, Context);
-event(#submit{message={reminder, _Args}}, Context) ->
-    Args = z_context:get_q_all(Context),
-    controller_logon:reminder(Args, Context);
-event(#submit{message={expired, _Args}}, Context) ->
-    Args = z_context:get_q_all(Context),
-    controller_logon:expired(Args, Context);
-event(#submit{message={reset, _Args}}, Context) ->
-    lager:info("reset"),
-    Args = z_context:get_q_all(Context),
-    controller_logon:reset(Args, Context);
 event(#submit{ message={signup_confirm, Props} }, Context) ->
     {auth, Auth} = proplists:get_value(auth, Props),
     Auth1 = Auth#auth_validated{ is_signup_confirm = true },
@@ -78,49 +63,77 @@ event(#submit{ message={signup_confirm, Props} }, Context) ->
             z_render:wire({script, [{script, "window.close()"}]}, Context1)
     end.
 
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
-     #menu_item{id=admin_authentication_services,
-                parent=admin_auth,
-                label=?__("External Services", Context),
-                url={admin_authentication_services},
-                visiblecheck={acl, use, mod_admin_config}}
+%% @doc Check for authentication cookies in the request.
+-spec observe_request_context( #request_context{}, z:context(), z:context() ) -> z:context().
+observe_request_context(#request_context{ phase = init }, Context, _Context) ->
+    case z_context:get(anonymous, Context, false) of
+        true ->
+            Context;
+        false ->
+            Context1 = z_authentication_tokens:req_auth_cookie(Context),
+            case z_auth:is_auth(Context1) of
+                false ->
+                    z_authentication_tokens:req_autologon_cookie(Context1);
+                true ->
+                    Context1
+            end
+    end;
+observe_request_context(#request_context{}, Context, _Context) ->
+    Context.
 
-     |Acc].
 
-%% @doc Check the logon event for the Zotonic native username/password registration.
-observe_logon_submit(#logon_submit{query_args=Args}, Context) ->
-    Username = proplists:get_value(<<"username">>, Args),
-    Password = proplists:get_value(<<"password">>, Args),
-    case Username /= undefined andalso Password /= undefined of
+observe_auth_options_update(#auth_options_update{ request_options = ROpts }, AccOpts, Context) ->
+    case ROpts of
+        #{ <<"acl_user_groups_state">> := undefined } ->
+            maps:remove(acl_user_groups_state, AccOpts);
+        #{ <<"acl_user_groups_code">> := SignedCode, <<"acl_user_groups_state">> := State } ->
+            case {m_acl_rule:is_valid_code(SignedCode, Context), State} of
+                {true, <<"edit">>} -> AccOpts#{ acl_user_groups_state => edit };
+                {true, <<"publish">>} -> maps:remove(acl_user_groups_state, AccOpts);
+                {error, _} -> AccOpts
+            end;
+        #{} ->
+            AccOpts
+    end.
+
+%% @doc Check username/password against the identity tables.
+observe_logon_submit(#logon_submit{ payload = Args }, Context) ->
+    Username = maps:get(<<"username">>, Args, undefined),
+    Password = maps:get(<<"password">>, Args, undefined),
+    case is_binary(Username) andalso is_binary(Password) of
         true ->
             case m_identity:check_username_pw(Username, Password, Context) of
-                {ok, Id} ->
+                {ok, UserId} ->
                     case Password of
-                        [] ->
-                            %% When empty password existed in identity table, prompt for a new password.
-                            %% FIXME do real password expiration here.
-                            {expired, Id};
-                        _ -> {ok, Id}
+                        <<>> ->
+                            %% If empty password existed in identity table, prompt for a new password.
+                            {expired, UserId};
+                        _ ->
+                            {ok, UserId}
                     end;
-                E -> E
+                {error, _} = E ->
+                    E
             end;
         false ->
             undefined
     end.
 
-observe_auth_autologon(#auth_autologon{}, Context) ->
-    case controller_logon:get_rememberme_cookie(Context) of
-        undefined -> undefined;
-        {ok, UserId} -> {ok, UserId}
-    end.
-
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
+    [
+        #menu_item{
+            id = admin_authentication_services,
+            parent = admin_auth,
+            label = ?__("External Services", Context),
+            url = {admin_authentication_services},
+            visiblecheck = {acl, use, mod_admin_config}}
+        | Acc
+    ].
 
 %% @doc Handle a validation against an (external) authentication service.
-%%      If identity is known: log on the associated user and session
+%%      If identity is known: log on the associated user and set auth cookies.
 %%      If unknown, add identity to current user or signup a new user
 observe_auth_validated(#auth_validated{} = Auth, Context) ->
-    z_context:set_persistent(auth_method, Auth#auth_validated.service, Context),
+    z_context:set(auth_method, Auth#auth_validated.service, Context),
     maybe_add_identity(z_acl:user(Context), Auth, Context).
 
 maybe_add_identity(undefined, Auth, Context) ->
@@ -155,19 +168,20 @@ maybe_update_identity(_Ps1, _Ps2, undefined, _Context) ->
 maybe_update_identity(_Ps, NewProps, IdnPs, Context) ->
     {key, Key} = proplists:lookup(key, IdnPs),
     {type, Type} = proplists:lookup(type, IdnPs),
-    {rsc_id, RscId} = proplists:lookup(rsc_id, IdnPs),
-    m_identity:set_by_type(RscId, Key, Type, NewProps, Context).
+    {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
+    m_identity:set_by_type(UserId, Key, Type, NewProps, Context).
 
 
 logon_identity(Auth, IdnPs, Context) ->
     {propb, IdnPropb} = proplists:lookup(propb, IdnPs),
-    {rsc_id, IdnRscId} = proplists:lookup(rsc_id, IdnPs),
+    {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
     maybe_update_identity(
         IdnPropb,
         Auth#auth_validated.service_props,
         IdnPs,
         Context),
-    z_auth:logon(IdnRscId, Context).
+    Context1 = z_acl:logon_prefs(UserId, Context),
+    z_authentication_tokens:set_auth_cookie(UserId, #{}, Context1).
 
 
 maybe_signup(Auth, Context) ->
@@ -199,7 +213,8 @@ try_signup(Auth, Context) ->
                         _ -> nop
                     end,
                     _ = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
-                    z_auth:logon(NewUserId, Context);
+                    Context1 = z_acl:logon_prefs(NewUserId, Context),
+                    z_authentication_tokens:set_auth_cookie(NewUserId, #{}, Context1);
                 {error, _Reason} = Error ->
                     Error;
                 undefined ->

@@ -21,35 +21,34 @@
 
 -export([resource_exists/1,
          content_types_provided/1,
-         to_image/1
+         process/4
         ]).
 
 resource_exists(Context) ->
-    Context2 = z_admin_controller_helper:init_session(Context),
-    case z_context:get_q(<<"id">>, Context2) of
+    case z_context:get_q(<<"id">>, Context) of
         undefined ->
-            {false, Context2};
+            {false, Context};
         <<>> ->
-            {false, Context2};
+            {false, Context};
         Id ->
-            case m_rsc:rid(Id, Context2) of
-                undefined -> 
-                    {false, Context2};
+            case m_rsc:rid(Id, Context) of
+                undefined ->
+                    {false, Context};
                 RscId ->
-                    case m_rsc:exists(RscId, Context2) andalso m_rsc:is_visible(RscId, Context2) of 
+                    case m_rsc:exists(RscId, Context) andalso m_rsc:is_visible(RscId, Context) of
                         true ->
-                            Context3 = z_context:set(id, RscId, Context2),
-                            {true, Context3};
+                            Context1 = z_context:set(id, RscId, Context),
+                            {true, Context1};
                         false ->
-                            {true, Context2}
+                            {true, Context}
                     end
             end
     end.
 
 content_types_provided(Context) ->
-    {[{<<"image/jpeg">>, to_image}], Context}.
+    {[ {<<"image">>, <<"jpeg">>, []} ], Context}.
 
-to_image(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Opts = [{mediaclass, <<"admin-editor">>}],
     case z_media_tag:url(z_context:get(id, Context), Opts, Context) of
         {ok, Url} ->

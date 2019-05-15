@@ -74,16 +74,14 @@
 
 		{% include "_js_include_jquery.tpl" %}
 		{% lib
+	        "js/modules/jstz.min.js"
+		    "cotonic/zotonic-wired-bundle.js"
 			"bootstrap/js/bootstrap.min.js"
-			"js/modules/ubf.js"
-			"js/apps/zotonic-1.0.js"
+			"js/apps/zotonic-wired.js"
 			"js/apps/z.widgetmanager.js"
-            "js/modules/ubf.js"
 			"js/modules/livevalidation-1.3.js"
-			"js/modules/z.inputoverlay.js"
 			"js/modules/z.dialog.js"
 			"js/modules/jquery.loadmask.js"
-			"js/z.superfish.js"
 		%}
 
 		{% block _js_include_extra %}{% endblock %}
@@ -93,6 +91,8 @@
 		</script>
 
 		{% script %}
+
+		{% worker name="auth" src="js/zotonic.auth.worker.js" %}
 
 		{% all include "_html_body.tpl" %}
 	</body>

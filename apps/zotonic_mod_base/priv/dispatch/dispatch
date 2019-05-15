@@ -1,51 +1,29 @@
 %% -*- mode: erlang -*-
 %% Base dispatch rules for zotonic
 [
- %% Comet connection, used with long polls from the browser.
- {comet,     ["comet"],              controller_comet, [{ssl, any}, {no_session, true}]},
- 
- %% WebSocket connection.
- {websocket, ["websocket"],          controller_websocket, [{ssl, any}]},
- 
- %% Postback of events from the browser to the server, dispatched from the postback resource.
- {postback,  ["postback", "transport", z_transport], controller_postback, [{ssl, any}]},
- {postback,  ["postback", z_message, z_delegate],    controller_postback, [{ssl, any}]},
- {postback,  ["postback", z_message],                controller_postback, [{ssl, any}]},
- {postback,  ["postback"],                           controller_postback, [{ssl, any}]},
-
  
  %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
- {close_connection, ["close-connection"],  controller_close_connection, [{ssl, any}, {no_session, true}]},
+ {close_connection, ["close-connection"],  controller_close_connection, [{no_session, true}]},
 
- %% Used to get page unload beacons from open pages.
- {unload_beacon, ["beacon"],  controller_unload_beacon, [{ssl, any}, {no_session, true}]},
- 
- %% Test page for connection tests
- {connection_test, ["connection-test"], controller_connection_test, [{ssl, any}, {template, "connection_test.tpl"}]},
- 
  %% The id controller redirects depending on the accept header sent by the user agent.
- {id, ["id", id], controller_id, [ {ssl, any} ]},
+ {id, ["id", id], controller_id, []},
  
  %% CSS, Javascript and images from the "lib" module folders. Possibly more than one file combined in a single request.
- {lib, ["lib",'*'], controller_file, [ {root,[lib]}, {ssl, any} ]},
+ {lib, ["lib",'*'], controller_file, [ {root,[lib]}]},
  
- {image, ["image",'*'], controller_file, [ {ssl, any} ]},
+ {image, ["image",'*'], controller_file, []},
  
- {media_attachment, ["media","attachment","id",id], controller_file_id, [ {dispatch, media_attachment}, {ssl, any} ]},
- {media_attachment, ["media","attachment",'*'], controller_file, [ {content_disposition, attachment}, {ssl, any} ]},
+ {media_attachment, ["media","attachment","id",id], controller_file_id, [ {dispatch, media_attachment}]},
+ {media_attachment, ["media","attachment",'*'], controller_file, [ {content_disposition, attachment}]},
  
- {media_inline, ["media","inline","id",id], controller_file_id, [ {dispatch, media_inline}, {ssl, any} ]},
- {media_inline, ["media","inline",'*'], controller_file, [ {content_disposition, inline}, {ssl, any} ]},
+ {media_inline, ["media","inline","id",id], controller_file_id, [ {dispatch, media_inline}]},
+ {media_inline, ["media","inline",'*'], controller_file, [ {content_disposition, inline}]},
  
  %% API access
- {api,     ["api", api_module, api_method], controller_api, [{ssl, any}]},
- {api,     ["api", api_module],             controller_api, [{ssl, any}]},
+ {api, ["api", '*'], controller_api, []},
  
  %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
- {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}, {ssl, any} ]},
- 
- %% Session cookie retrieval. Collects cookies set in a websocket request.
- {session_cookies, ["z_session", "cookies"], controller_cookies, [{ssl, any}]},
+ {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}]},
  
  %% robots.txt - simple allow all file
  {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]}

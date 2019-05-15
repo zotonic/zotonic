@@ -59,9 +59,7 @@ await_startup() ->
 %% @doc Stop the zotonic server.
 -spec stop() -> ok.
 stop() ->
-    Res = application:stop(zotonic_launcher),
-    application:stop(emqtt),
-    Res.
+    application:stop(zotonic_launcher).
 
 
 %% @doc Stop a zotonic server on a specific node

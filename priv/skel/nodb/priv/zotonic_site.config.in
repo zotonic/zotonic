@@ -16,6 +16,7 @@
  %% Installed modules, defined here as there is no database connection
  {modules,
   [%%SITE%%,
+   mod_wires,
    mod_base,
    mod_zotonic_status_vcs,
    mod_zotonic_tracer

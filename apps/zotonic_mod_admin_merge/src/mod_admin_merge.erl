@@ -30,6 +30,7 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
 event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-merge-find">>, target=TargetId}, Context) ->
     % Find pages matching the search criteria.
@@ -103,8 +104,10 @@ merge(WinnerId, LoserId, <<"merge_delete">>, IsMergeTrans, Context) ->
             erlang:spawn(
                 fun() ->
                     ok = m_rsc:merge_delete(WinnerId, LoserId, [ {is_merge_trans, IsMergeTrans} ], ContextSpawn),
-                    z_session_page:add_script(
-                        z_render:wire({redirect, [{dispatch, admin_edit_rsc}, {id, WinnerId}]}, ContextSpawn))
+                    z_notifier:first(#page_actions{
+                        actions = [
+                            {redirect, [{dispatch, admin_edit_rsc}, {id, WinnerId}]}
+                        ] }, Context)
                 end),
             z_render:wire([
                     {growl, [{text, ?__("Merging the two pages ...", Context)}]},

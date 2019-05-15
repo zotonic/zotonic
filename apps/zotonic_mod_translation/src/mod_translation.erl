@@ -36,9 +36,10 @@
 -mod_provides([translation]).
 
 -export([
-    observe_session_init_fold/3,
-    observe_session_context/3,
-    observe_auth_logon/3,
+    % observe_session_init_fold/3,
+    % observe_session_context/3,
+    % observe_auth_logon/3,
+    observe_request_context/3,
     observe_user_context/3,
     observe_set_user_language/3,
     observe_url_rewrite/3,
@@ -46,6 +47,7 @@
     observe_scomp_script_render/2,
     observe_admin_menu/3,
 
+    set_language/2,
     set_user_language/2,
     set_default_language/2,
     language_add/3,
@@ -67,6 +69,9 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
+
+-define(LANGUAGE_COOKIE, <<"z.lang">>).
+-define(LANGUAGE_COOKIE_MAX_AGE, 3600*24*365).
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
 init(Context) ->
@@ -112,24 +117,94 @@ default_languages() ->
     ]).
 
 
+%% @doc Set the language of the context. Sets to the given language if the language exists
+%%      in the config language and is enabled; otherwise tries the language's fallback language;
+%%      if this fails too, sets language to the site's default language.
+-spec set_language(atom(), z:context()) -> z:context().
+set_language('x-default', Context) ->
+    z_context:set_language('x-default', Context);
+set_language(Code0, Context) when is_atom(Code0) ->
+    case z_context:language(Context) of
+        Code0 ->
+            Context;
+        _ ->
+            case valid_config_language(Code0, Context) of
+                {Code, LanguageData} ->
+                    Langs = case proplists:get_value(fallback, LanguageData) of
+                        undefined -> [ Code ];
+                        Fallback -> [ Code, Fallback ]
+                    end,
+                    z_context:set_language(Langs, Context);
+                undefined ->
+                    Context
+            end
+    end;
+set_language(Code, Context) when is_binary(Code) ->
+    set_language(binary_to_existing_atom(Code, utf8), Context);
+set_language(Code, Context) when is_list(Code) ->
+    set_language(list_to_existing_atom(Code), Context).
+
+
 %% @doc Check if the user has a prefered language (in the user's persistent data). If not
 %%      then check the accept-language header (if any) against the available languages.
-observe_session_init_fold(#session_init_fold{}, Context, _Context) ->
-    case get_q_language(Context) of
-        undefined -> maybe_persistent(Context);
-        QsLang ->
-            set_language(QsLang, Context)
+% observe_session_init_fold(#session_init_fold{}, Context, _Context) ->
+%     case get_q_language(Context) of
+%         undefined -> maybe_persistent(Context);
+%         QsLang ->
+%             set_language(QsLang, Context)
+%     end.
+
+%% @doc Check if the user has a preferred language (in the user's config). If not
+%%      then check the accept-language header (if any) against the available languages.
+observe_request_context(#request_context{ phase = init }, Context, _Context) ->
+    maybe_set_cookie(
+        case get_q_language(Context) of
+            undefined ->
+                maybe_cookie(Context);
+            QsLang ->
+                set_language(QsLang, Context)
+        end);
+observe_request_context(#request_context{ phase = auth_status, document = #{ <<"language">> := _LangData } }, Context, _Context) ->
+    Context;
+observe_request_context(#request_context{}, Context, _Context) ->
+    Context.
+
+maybe_set_cookie(Context) ->
+    Lang = atom_to_binary(z_context:language(Context), utf8),
+    case z_context:get_cookie(?LANGUAGE_COOKIE, Context) of
+        Lang ->
+            Context;
+        _ ->
+            z_context:set_cookie(
+                ?LANGUAGE_COOKIE,
+                Lang,
+                [
+                    {max_age, ?LANGUAGE_COOKIE_MAX_AGE},
+                    {path, <<"/">>},
+                    {secure, true}
+                ],
+                Context)
     end.
 
 
-maybe_persistent(Context) ->
-    case z_context:get_persistent(language, Context) of
+maybe_cookie(Context) ->
+    case z_context:get_cookie(?LANGUAGE_COOKIE, Context) of
         undefined ->
-            maybe_configuration(Context);
+            maybe_user(Context);
         Language ->
             set_language(Language, Context)
     end.
 
+maybe_user(Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            maybe_configuration(Context);
+        UserId ->
+            case m_rsc:p_no_acl(UserId, pref_language, Context) of
+                undefined -> maybe_configuration(Context);
+                Lang -> set_language(Lang, Context)
+            end
+    end.
 
 maybe_configuration(Context) ->
     case z_convert:to_bool(m_config:get_value(?MODULE, force_default, Context)) of
@@ -143,10 +218,10 @@ maybe_configuration(Context) ->
             maybe_accept_header(Context)
     end.
 
-
 maybe_accept_header(Context) ->
     case z_context:get_req_header(<<"accept-language">>, Context) of
-        undefined -> Context;
+        undefined ->
+            Context;
         AcceptHeader ->
             Enabled = acceptable_languages(Context),
             case cowmachine_accept_language:accept_header(Enabled, AcceptHeader) of
@@ -177,10 +252,11 @@ acceptable_languages(Context) ->
         Context).
 
 
--spec get_q_language(#context{}) -> atom().
+-spec get_q_language( z:context() ) -> atom().
 get_q_language(Context) ->
     case z_context:get_q_all(<<"z_language">>, Context) of
-        [] -> undefined;
+        [] ->
+            undefined;
         L ->
             Enabled = acceptable_languages(Context),
             case cowmachine_accept_language:accept_list(Enabled, [lists:last(L)]) of
@@ -189,19 +265,7 @@ get_q_language(Context) ->
             end
     end.
 
-
-observe_session_context(#session_context{}, Context, _Context) ->
-    Context1 = case z_context:get_session(language, Context) of
-        undefined -> Context;
-        Language -> Context#context{language=Language}
-    end,
-    case get_q_language(Context1) of
-        undefined -> Context1;
-        QsLang -> set_language(QsLang, Context1)
-    end.
-
-
-observe_user_context(#user_context{id=UserId}, Context, _Context) ->
+observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
         Code when Code /= undefined ->
             set_language(Code, Context);
@@ -209,23 +273,7 @@ observe_user_context(#user_context{id=UserId}, Context, _Context) ->
             Context
     end.
 
-
-observe_auth_logon(#auth_logon{}, Context, _Context) ->
-    UserId = z_acl:user(Context),
-    case m_rsc:p_no_acl(UserId, pref_language, Context) of
-        undefined ->
-            % Ensure that the user has a default language
-            catch m_rsc:update(UserId, [{pref_language, z_context:language(Context)}], Context),
-            Context;
-        Code ->
-            % Switch the session to the default language of the user
-            Context1 = set_language(Code, Context),
-            z_context:set_persistent(language, z_context:language(Context1), Context1),
-            Context1
-    end.
-
-
-observe_set_user_language(#set_user_language{id=UserId}, Context, _Context) when is_integer(UserId) ->
+observe_set_user_language(#set_user_language{ id = UserId }, Context, _Context) when is_integer(UserId) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
         Code when Code /= undefined -> set_language(Code, Context);
         _ -> Context
@@ -392,51 +440,29 @@ url_strip_language1(Url, LanguageCode, Rest) when is_binary(Url) ->
 
 
 %% @doc Set the language, as selected by the user. Persist this choice.
--spec set_user_language(atom(), #context{}) -> #context{}.
+-spec set_user_language(atom(), z:context()) -> z:context().
 set_user_language(Code, Context) ->
     Context1 = set_language(Code, Context),
-    Context2 = z_context:set_persistent(language, z_context:language(Context1), Context1),
-    case z_acl:user(Context2) of
+    case z_acl:user(Context1) of
         undefined ->
             nop;
         UserId ->
-            case m_rsc:p_no_acl(UserId, pref_language, Context2) of
-                Code -> nop;
-                _ -> catch m_rsc:update(UserId, [{pref_language, z_context:language(Context2)}], Context2)
+            NewCode = z_context:language(Context1),
+            case m_rsc:p_no_acl(UserId, pref_language, Context1) of
+                NewCode ->
+                    nop;
+                _ ->
+                    catch m_rsc:update(
+                            UserId,
+                            [ {pref_language, NewCode} ],
+                            [ no_touch ],
+                            Context1)
             end
     end,
-    Context2.
-
-
-%% @doc Set the language of the current user/session. Sets to the given language if the language exists in the config language and is enabled; otherwise tries the language's fallback language; if this fails too, sets language to the site's default language.
--spec set_language(atom(), #context{}) -> #context{}.
-set_language('x-default', Context) ->
-    z_context:set_language('x-default', Context);
-set_language(Code0, Context) when is_atom(Code0) ->
-    case valid_config_language(Code0, Context) of
-        {Code, LanguageData} ->
-            FallbackCode = proplists:get_value(fallback, LanguageData),
-            Langs = [L || L <- [Code, FallbackCode], L /= undefined],
-            Context1 = z_context:set_language(Langs, Context),
-            case {z_context:language(Context), z_context:language(Context1)} of
-                {Code, Code} ->
-                    % nothing changed
-                    Context1;
-                _ ->
-                    z_context:set_session(language, Langs, Context1),
-                    Context1
-            end;
-        undefined ->
-            Context
-    end;
-set_language(Code, Context) when is_binary(Code) ->
-    set_language(binary_to_existing_atom(Code, utf8), Context);
-set_language(Code, Context) when is_list(Code) ->
-    set_language(list_to_existing_atom(Code), Context).
-
+    Context1.
 
 %% @doc Set the default language.
--spec set_default_language(atom(), #context{}) -> #context{}.
+-spec set_default_language(atom(), z:context()) -> z:context().
 set_default_language(Code, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
@@ -450,7 +476,7 @@ set_default_language(Code, Context) ->
 %% @doc Returns a valid language from the config language. If the language is not
 %%      available or not enabled, tries the language's fallback language (retrieve from
 %%      z_language); if this fails too, returns the data for the site's default language.
--spec valid_config_language(atom(), #context{}) -> {atom(), list()}.
+-spec valid_config_language(atom(), z:context()) -> {atom(), list()}.
 valid_config_language(Code, Context) ->
     valid_config_language(Code, Context, [Code]).
 
@@ -474,7 +500,7 @@ valid_config_language(Code, Context, Tries) ->
 
 
 %% @doc Add a language to the i18n configuration
--spec language_add(atom() | binary(), boolean(), #context{}) -> ok | {error, not_a_language}.
+-spec language_add(atom() | binary(), boolean(), z:context()) -> ok | {error, not_a_language}.
 language_add(NewLanguageCode, IsEnabled, Context) ->
     NewCode = z_convert:to_atom(NewLanguageCode),
     NewCodeBin = z_convert:to_binary(NewCode),
@@ -497,7 +523,7 @@ language_add(NewLanguageCode, IsEnabled, Context) ->
 
 
 %% @doc Remove a language from the i18n configuration
--spec language_delete(atom(), #context{}) -> #context{}.
+-spec language_delete(atom(), z:context()) -> z:context().
 language_delete(LanguageCode, Context) ->
     DeletesCurrentLanguage = z_context:language(Context) =:= LanguageCode,
     remove_from_config(LanguageCode, Context),
@@ -517,7 +543,7 @@ remove_from_config(LanguageCode, Context) ->
 
 
 %% @doc Set/reset the is_enabled flag of a language.
--spec language_enable(atom(), boolean(), #context{}) -> ok | {error, string()}.
+-spec language_enable(atom(), boolean(), z:context()) -> ok | {error, string()}.
 language_enable(Code, IsEnabled, Context) ->
     case ((IsEnabled =:= false) and (Code =:= z_language:default_language(Context))) of
         true -> {error, ?__(<<"Sorry, you can't disable default language.">>, Context)};
@@ -532,14 +558,14 @@ language_enable(Code, IsEnabled, Context) ->
 
 
 %% @doc Set/reset the state of the 'rewrite URL' setting.
--spec set_language_url_rewrite(boolean(), #context{}) -> #context{}.
+-spec set_language_url_rewrite(boolean(), z:context()) -> z:context().
 set_language_url_rewrite(Value, Context) ->
     m_config:set_value(mod_translation, rewrite_url, Value, Context),
     reload_page(Context).
 
 
 %% @doc Reloads the page via javascript (zotonic-1.0.js).
--spec reload_page(#context{}) -> #context{}.
+-spec reload_page(z:context()) -> z:context().
 reload_page(Context) ->
     RewriteUrl = z_convert:to_bool(m_config:get_value(?MODULE, rewrite_url, true, Context)),
     Language = case RewriteUrl of
@@ -550,7 +576,7 @@ reload_page(Context) ->
 
 
 %% @doc Get the list of configured languages that are enabled.
--spec enabled_languages(#context{}) -> list().
+-spec enabled_languages(z:context()) -> list().
 enabled_languages(Context) ->
     case z_memo:get('mod_translation$enabled_languages') of
         V when is_list(V) ->
@@ -566,7 +592,7 @@ enabled_languages(Context) ->
 
 
 %% @doc Get the list of configured languages.
--spec language_config(#context{}) -> list().
+-spec language_config(z:context()) -> list().
 language_config(Context) ->
     case m_config:get(i18n, language_list, Context) of
         undefined -> [];
@@ -580,7 +606,7 @@ is_multiple_languages_config(Context) ->
 
 
 %% @private
--spec is_enabled_language(binary(), #context{}) -> boolean().
+-spec is_enabled_language(binary(), z:context()) -> boolean().
 is_enabled_language(LanguageCode, Context) ->
     case maybe_language_code(LanguageCode) of
         true ->
@@ -607,7 +633,7 @@ set_language_config(NewConfig, Context) ->
 
 
 %% @private
--spec maybe_update_config_list(Existing::list(), Context::#context{}) -> ok.
+-spec maybe_update_config_list(Existing::list(), Context::z:context()) -> ok.
 maybe_update_config_list(Existing, Context) ->
     case proplists:get_value(list, Existing) of
         undefined -> ok;
@@ -651,7 +677,9 @@ language_list_item(Code, IsEnabled) ->
 
 
 % @doc Generate all .po templates for the given site
-generate(#context{} = Context) ->
+generate(Host) when is_atom(Host) ->
+    generate(z_context:new(Host));
+generate(Context) ->
     ActiveModules = lists:foldl(
         fun({App, _}, Acc) ->
             lists:keydelete(core_app_to_module_name(App), 1, Acc)
@@ -660,9 +688,7 @@ generate(#context{} = Context) ->
         core_apps()),
     Result = translation_po:generate(translation_scan:scan(ActiveModules)),
     _ = generate_core(),
-    Result;
-generate(Host) when is_atom(Host) ->
-    generate(z_context:new(Host)).
+    Result.
 
 %% @doc Generate consolidated translation file zotonic.pot for all core modules.
 %%      Both active and inactive modules are indexed, so the generated

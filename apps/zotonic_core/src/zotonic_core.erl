@@ -53,7 +53,9 @@ is_app_available(App) ->
 -spec setup() -> ok.
 setup() ->
     io:setopts([{encoding, unicode}]),
+    z_jsxrecord:init(),
     ensure_mnesia_schema().
+
 
 %% @doc Ensure that mnesia has created its schema in the configured priv/data/mnesia directory.
 -spec ensure_mnesia_schema() -> ok.

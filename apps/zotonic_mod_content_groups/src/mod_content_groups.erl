@@ -27,6 +27,7 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
+-include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
 -export([
     event/2,
@@ -75,7 +76,7 @@ event(#postback{message={delete_all, Args}}, Context) ->
     end.
 
 cg_delete(Ids, Context) ->
-    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    page_actions({mask, [{message, ?__("Deleting...", Context)}]}, Context),
     RscIds = in_content_groups(Ids, Context),
     case delete_all(RscIds, 0, length(RscIds), Context) of
         ok ->
@@ -83,28 +84,25 @@ cg_delete(Ids, Context) ->
                              m_rsc:delete(Id, Context)
                           end,
                           Ids),
-            Context1 = z_render:wire({unmask, []}, Context),
-            z_session_page:add_script(Context1);
-        {error, _} ->
-            Context1 = z_render:wire([
+            page_actions({unmask, []}, Context);
+        {error, _} = Error ->
+            page_actions([
                     {unmask, []},
                     {alert, [{message, ?__("Not all resources could be deleted.", Context)}]}
                 ],
                 Context),
-            z_session_page:add_script(Context1)
-
+            Error
     end.
 
 cg_move_and_delete(Ids, ToGroupId, Context) ->
-    z_session_page:add_script(z_render:wire({mask, [{message, ?__("Deleting...", Context)}]}, Context)),
+    page_actions({mask, [{message, ?__("Deleting...", Context)}]}, Context),
     RscIds = in_content_groups(Ids, Context),
     ok = move_all(RscIds, ToGroupId, 0, length(RscIds), Context),
     lists:foreach(fun(Id) ->
                      m_rsc:delete(Id, Context)
                   end,
                   Ids),
-    Context1 = z_render:wire({unmask, []}, Context),
-    z_session_page:add_script(Context1),
+    page_actions({unmask, []}, Context),
     ok.
 
 in_content_groups(Ids, Context) ->
@@ -138,7 +136,7 @@ maybe_progress(N1, N2, Total, Context) ->
     S2 = round(N2 / PerStep),
     case S1 of
         S2 -> ok;
-        _ -> z_session_page:add_script(z_render:wire({mask_progress, [{percent,S2}]}, Context))
+        _ -> page_actions({mask_progress, [{percent,S2}]}, Context)
     end.
 
 deletable(Ids, Context) ->
@@ -190,6 +188,9 @@ observe_rsc_update_done(#rsc_update_done{pre_is_a=PreIsA, post_is_a=PostIsA}, Co
         true -> m_hierarchy:ensure(content_group, Context);
         false -> ok
     end.
+
+page_actions(Actions, Context) ->
+    z_notifier:first(#page_actions{ actions = Actions }, Context).
 
 manage_schema(_Version, _Context) ->
     #datamodel{

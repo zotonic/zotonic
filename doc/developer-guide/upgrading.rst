@@ -257,7 +257,7 @@ The following changes are made:
  * Request headers are binaries.
  * Controllers initialization callbacks are removed.
  * Controller callbacks have a single *Context* argument.
- * Custom websocket handlers now use the Cowboy callbacks, see :ref:`controller-websocket`.
+ * Custom websocket handlers are removed, implement your own using Cowboy.
  * The include file ``include/controller_webmachine_helper.hrl`` is removed (and not needed anymore).
 
 Binaries for request variables

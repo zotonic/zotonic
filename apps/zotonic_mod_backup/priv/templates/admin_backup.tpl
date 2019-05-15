@@ -14,7 +14,7 @@
         <div class="row">
 
             <div class="col-lg-8 col-md-6">
-                {% live template="_admin_backup_list.tpl" topic="~site/backup" %}
+                {% live template="_admin_backup_list.tpl" topic="model/backup/event/#" %}
             </div>
 
             <div class="col-lg-4 col-md-6">

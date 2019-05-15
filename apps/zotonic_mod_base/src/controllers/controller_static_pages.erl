@@ -25,7 +25,7 @@
      expires/1,
      content_types_provided/1,
      charsets_provided/1,
-     provide_content/1,
+     process/4,
      finish_request/1,
      previously_existed/1,
      moved_temporarily/1
@@ -35,11 +35,11 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -record(cache, {
-    path=undefined,
-    fullpath=undefined,
-    mime=undefined,
-    last_modified=undefined,
-    body=undefined
+    path = undefined,
+    fullpath = undefined,
+    mime = undefined,
+    last_modified = undefined,
+    body = undefined
     }).
 
 -define(MAX_AGE, 86400).
@@ -95,9 +95,11 @@ content_types_provided(Context) ->
             FullPath = z_context:get(fullpath, Context1),
             CT = z_media_identify:guess_mime(filename:basename(FullPath, <<".tpl">>)),
             Context2 = z_context:set(mime, CT, Context1),
-            {[{CT, provide_content}], Context2};
+            {[ CT ], Context2};
+        Mime when is_list(Mime) ->
+            {[ z_convert:to_binary(Mime) ], Context1};
         Mime ->
-            {[{Mime, provide_content}], Context1}
+            {[ Mime ], Context1}
     end.
 
 charsets_provided(Context) ->
@@ -139,14 +141,14 @@ expires(Context) ->
     NowSecs = calendar:datetime_to_gregorian_seconds(calendar:universal_time()),
     {calendar:gregorian_seconds_to_datetime(NowSecs + MaxAge), Context1}.
 
-provide_content(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     case z_context:get(body, Context) of
         undefined ->
             FullPath = z_context:get(fullpath, Context),
             case filelib:is_dir(FullPath) of
                 true ->
                     %% Render directory index
-                    Context1 = z_context:ensure_all(Context),
+                    Context1 = z_context:ensure_qs(Context),
                     Root = z_context:get(root, Context),
                     Vars = directory_index_vars(FullPath, Root, Context)
                             ++ z_context:get_all(Context),
@@ -165,7 +167,7 @@ provide_content(Context) ->
                     case filename:extension(FullPath) of
                         <<".tpl">> ->
                             %% Render template, prevent caching
-                            Context1 = z_context:ensure_all(Context),
+                            Context1 = z_context:ensure_qs(Context),
                             Vars = z_context:get_all(Context1),
                             Template = #template_file{
                                 filename = FullPath,

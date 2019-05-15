@@ -22,15 +22,16 @@
 
 -export([
     is_authorized/1,
+    process/4,
     event/2
 ]).
 
--include_lib("zotonic_core/include/controller_html_helper.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 is_authorized(Context) ->
-    z_admin_controller_helper:is_authorized(mod_comment, Context).
+    z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_comment)} ], Context).
 
-html(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Html = z_template:render("admin_comments.tpl", [{page_admin_comments, true}], Context),
     z_context:output(Html, Context).
 

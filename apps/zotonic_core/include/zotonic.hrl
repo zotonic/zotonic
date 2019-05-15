@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2016 Marc Worrell
+%% @copyright 2009-2019 Marc Worrell
 %% @doc Main definitions for zotonic
 
-%% Copyright 2009-2016 Marc Worrell
+%% Copyright 2009-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,106 +19,95 @@
 %% @doc The request context, session information and other
 -record(context, {
         %% Cowboy request data (only set when this context is used because of a request)
+        %% Cowmachine requires this to be the first record field.
         req = undefined :: cowboy_req:req() | undefined,
 
-        %% The site
+        %% Site
         site = default :: atom(),
 
-        %% The controller responsible for handling this request
+        %% Controller responsible for handling this request (iff http request)
         controller_module = undefined :: atom() | undefined,
 
-        %% The page and session processes associated with the current request
-        session_pid = undefined :: pid() | undefined,  % one session per browser (also manages the persistent data)
-        session_id = undefined  :: binary() | undefined,
-        page_pid = undefined    :: pid() | undefined,     % multiple pages per session, used for pushing information to the browser
-        page_id = undefined     :: binary() | undefined,
+        %% The remote client performing this request
+        client_id = undefined :: binary(),                      % MQTT client id
+        client_topic = undefined :: mqtt_sessions:topic(),      % Topic where the client can be reached
+        routing_id = undefined :: binary(),                     % Unique routing id
+
+        %% User authenticated for this request
+        acl = undefined          :: term() | admin | undefined,  %% opaque placeholder managed by the z_acl module
+        acl_is_read_only = false :: boolean(),
+        user_id = undefined      :: integer() | undefined,
+
+        %% Deprecated template render state, used for wires, actions and other embedded scripts.
+        render_state = undefined :: z_render:render_state(),
+
+        %% Database pool and the db driver (usually z_db_pgsql)
+        db = undefined :: {atom(), atom()} | undefined,
+
+        %% Database connection used for (nested) transactions, see z_db
+        dbc = undefined :: pid() | undefined,
+
+        %% Language, used by z_trans and others
+        %% The first language in the list is the selected language, the tail are the fallback languages
+        language = [en] :: [atom()],
+
+        %% Timezone, defaults to UTC
+        tz = <<"UTC">> :: binary(),
+
+        %% Metadata, use z_context:set/3 and z_context:get/2
+        %% Also stores the parsed query args (key 'q') and validated field inputs ('q_validated')
+        props = #{} :: map(),
 
         %% Servers and supervisors for the site
+        %% TODO: delete the following and replace with cached versions (smaller context)
         depcache            :: pid() | atom(),
-        session_manager     :: pid() | atom(),
         dispatcher          :: pid() | atom(),
         template_server     :: pid() | atom(),
         scomp_server        :: pid() | atom(),
         dropbox_server      :: pid() | atom(),
         pivot_server        :: pid() | atom(),
         module_indexer      :: pid() | atom(),
-        translation_table   :: pid() | atom(),
-
-        %% The database connection used for (nested) transactions, see z_db
-        dbc = undefined     :: pid() | undefined,
-
-        %% The pid of the database pool of this site and the db driver in use (usually z_db_pgsql)
-        db = undefined      :: {atom(), atom()} | undefined,
-
-        %% The language selected, used by z_trans and others
-        %% The first language in the list is the selected language, the tail are the fallback languages
-        language = [en]     :: [atom()],
-
-        %% The timezone for this request
-        tz = <<"UTC">>      :: binary(),
-
-        %% The current logged on person, derived from the session and visitor
-        acl = undefined     :: term() | undefined,      %% opaque placeholder managed by the z_acl module
-        user_id = undefined :: integer() | undefined,
-
-        %% The state below is the render state, can be cached and/or merged
-
-        %% State of the current rendered template/scomp/page
-        updates = []         :: list(),
-        actions = []         :: list(),
-        content_scripts = [] :: list(),
-        scripts = []         :: list(),
-        wire = []            :: list(),
-        validators = []      :: list(),
-
-        %% nested list with the accumulated html, xml or whatever output (mixed values)
-        render = []          :: list(),
-
-        %% Property list with context specific metadata
-        props = []           :: proplists:proplist()
+        translation_table   :: pid() | atom()
+        %% End TODO
     }).
 
+%% Wrapper macro to put Erlang terms in a bytea database column.
+%% Extraction is automatic, based on a magic marker prefixed to the serialized term.
+-define(DB_PROPS(N), {term, N}).
 
--define(SITE(Context), Context#context.site).
--define(DBC(Context), Context#context.dbc).
 
 %% A date in the far future which will never happen.
 %% This date is used as the "no end date" value.
 -define(ST_JUTTEMIS, {{9999,8,17}, {12,0,0}}).
 
-%% Record used for parsing multipart body (see z_parse_multipart)
--record(multipart_form, {name, data, filename, tmpfile, content_type, content_length, file, files=[], args=[]}).
--record(upload, {filename, tmpfile, data, mime}).
+%% Used for parsing multipart body (see z_parse_multipart)
+-record(multipart_form, {
+    name,
+    data,
+    filename,
+    tmpfile,
+    tmpmonitor,
+    content_type,
+    content_length,
+    file,
+    files = [],
+    args = []
+}).
 
-%% Record used for transporting data between the user-agent and the server.
--record(z_msg_v1, {
-        qos = 0 :: 0 | 1 | 2,
-        dup = false :: boolean(),
-        msg_id :: binary(),
-        timestamp :: pos_integer(),
-        content_type = ubf :: text | javascript | json | form | ubf | atom() | binary(),
-        delegate = postback :: postback | mqtt | atom() | binary(),
-        push_queue = page :: page | session | user,
+%% Query argument value for uploaded files. Also used for email attachments.
+-record(upload, {
+    filename :: binary(),
+    tmpfile :: undefined | filename:filename_all(),
+    tmpmonitor :: pid(),
+    data = undefined :: undefined | binary(),
+    mime = undefined :: undefined | binary()
+}).
 
-        % Set by transports from user-agent to server
-        session_id :: binary(),
-        page_id :: binary(),
-
-        % Payload data
-        data :: any()
-    }).
-
--record(z_msg_ack, {
-        qos = 1 :: 1 | 2,
-        msg_id :: binary(),
-        push_queue = page :: page | session | user,
-        session_id :: binary(),
-        page_id :: binary(),
-        result :: any()
-    }).
 
 %% Used for specifying resource id lists, as returned by object/subject lookup
--record(rsc_list, {list}).
+-record(rsc_list, {
+    list :: list( m_rsc:resource_id() )
+}).
 
 %% Default page length for search
 -define(SEARCH_PAGELEN, 20).
@@ -142,46 +131,40 @@
 
 %% Used for fetching the site dispatch rules (see also )
 -record(site_dispatch_list, {
-            site                       :: atom(),
-            hostname = <<"localhost">> :: z_sites_dispatcher:hostname(),
-            smtphost = undefined       :: z_sites_dispatcher:hostname() | undefined,
-            hostalias = []             :: list(z_sites_dispatcher:hostname()),
-            redirect = false           :: boolean(),
-            dispatch_list = []         :: list(z_sites_dispatcher:dispatch_rule())
-        }).
-
-%% For z_supervisor, process definitions.
--record(child_spec, {name, mfa, status, pid, crashes=5, period=60,
-                     period_retry=600, period_retries=10, eternal_retry=7200,
-                     shutdown=5000}).
+    site                       :: atom(),
+    hostname = <<"localhost">> :: z_sites_dispatcher:hostname(),
+    smtphost = undefined       :: z_sites_dispatcher:hostname() | undefined,
+    hostalias = []             :: list(z_sites_dispatcher:hostname()),
+    redirect = false           :: boolean(),
+    dispatch_list = []         :: list(z_sites_dispatcher:dispatch_rule())
+}).
 
 
 %% Used for storing templates/scomps etc. in the lookup ets table
 -record(module_index_key, {
-        site :: atom(),
-        type :: z_module_indexer:key_type(),
-        name :: binary()
-    }).
+    site :: atom(),
+    type :: z_module_indexer:key_type(),
+    name :: binary()
+}).
+
 -record(module_index, {
-        key           :: #module_index_key{},
-        filepath      :: filename:filename(),
-        module        :: atom() | undefined,
-        erlang_module :: atom() | undefined,
-        tag           :: integer()
-    }).
-
-%% Name of the global module index table
--define(MODULE_INDEX, 'zotonic$module_index').
-
-%% Index record for the mediaclass ets table.
--record(mediaclass_index_key, {site, mediaclass}).
--record(mediaclass_index, {key, props=[], checksum, tag}).
-
-%% Name of the global mediaclass index table
--define(MEDIACLASS_INDEX, 'zotonic$mediaclass_index').
+    key           :: #module_index_key{},
+    filepath      :: filename:filename(),
+    module        :: atom() | undefined,
+    erlang_module :: atom() | undefined,
+    tag           :: integer()
+}).
 
 %% For the z_db definitions
--record(column_def, {name, type, length, is_nullable=true, default, primary_key, unique=false}).
+-record(column_def, {
+    name,
+    type,
+    length,
+    is_nullable = true,
+    default,
+    primary_key,
+    unique = false
+}).
 
 %% For the datamodel: default resources to create.
 -record(datamodel, {
@@ -209,10 +192,18 @@
     predicate :: pos_integer() | atom(),
     object_id :: m_rsc:resource()
 }).
--record(acl_media, {mime, size}).
+-record(acl_media, {
+    mime = <<"binary/octet-stream">> :: binary(),
+    size = undefined :: undefined | non_neg_integer()
+}).
 
 %% ACL notifications
--record(acl_add_sql_check, {alias, args, search_sql}).
+%% Modify queries by adding ACL restrictions by the database
+-record(acl_add_sql_check, {
+    alias,
+    args,
+    search_sql
+}).
 
 
 %% ACL fields for an acl check. Fields are initialized for the visible resource.
@@ -226,9 +217,6 @@
     visible_for = 0 :: non_neg_integer()
 }).
 
-%% @doc drag and drop event message
--record(dragdrop, {tag, delegate, id}).
-
 %% @doc Template definition for z_render:update/insert (and others)
 -record(render, {
     template :: string(),
@@ -237,34 +225,21 @@
 }).
 
 %% @doc Data import definition. See also mod_import_csv.
--record(import_data_def, {colsep=$\t, skip_first_row=true, columns=[], importdef}).
+-record(import_data_def, {
+    colsep = $\t :: 0..255,
+    skip_first_row = true :: boolean(),
+    columns = [] :: list(),
+    importdef
+}).
 
 %% @doc Check if an assumption is true
 -define(ASSERT(A,E), z_utils:assert(A,E)).
 
-%% @doc Call the translate function, 2nd parameter is context
+%% @doc Call the translate function for a string
 -define(__(T,Context), z_trans:trans(T,Context)).
 
-%% Number of seconds between two comet polls before the page expires
--define(SESSION_PAGE_TIMEOUT, 30).
-
-%% Number of seconds between session expiration checks
--define(SESSION_CHECK_EXPIRE, 10).
-
-%% Default session expiration in seconds.
-%% The first keepalive message must be received before SESSION_EXPIRE_1 seconds
-%% Subsequent messages must be received before SESSION_EXPIRE_N
--define(SESSION_EXPIRE_1,   40).
--define(SESSION_EXPIRE_N, 3600).
-
-%% The name of the persistent data cookie
--define(PERSIST_COOKIE, <<"z_pid">>).
-
-%% Max age of the persistent cookie, 10 years or so.
--define(PERSIST_COOKIE_MAX_AGE, 3600*24*3650).
-
-%% Millisecs of no activity before the visitor process is stopped (if there are no attached sessions).
--define(VISITOR_TIMEOUT, 60 * 1000).
+%% @doc Extra trans record definition to ease JSON mapping of translatable strings
+-record(trans, { tr = [] :: list( {atom(), binary()} )}).
 
 %% Some standard periods in seconds
 -define(MINUTE,     60).
@@ -276,11 +251,7 @@
 %% Our default WWW-Authenticate header
 -define(WWW_AUTHENTICATE, <<"OAuth-1.0">>).
 
-%% Wrapper macro to put Erlang terms in a bytea database column.
-%% Extraction is automatic, based on a magic marker prefixed to the serialized term.
--define(DB_PROPS(N), {term, N}).
-
 -include("zotonic_notifications.hrl").
--include("zotonic_events.hrl").
 -include("zotonic_log.hrl").
+-include("zotonic_deprecated.hrl").
 

@@ -21,11 +21,11 @@
 -module(m_tkvstore).
 -author("Marc Worrell <marc@worrell.nl").
 
--behaviour(gen_model).
+-behaviour(zotonic_model).
 
 %% interface functions
 -export([
-    m_get/2,
+    m_get/3,
 
     get/3,
     put/4,
@@ -38,12 +38,15 @@
 
 
 %% @doc Fetch the value for the key from a model source
--spec m_get( list(), z:context() ) -> {term(), list()}.
-m_get([ Type, Key | Rest ], Context) ->
-    {get(Type, Key, Context), Rest};
-m_get(Vs, _Context) ->
-    lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {undefined, []}.
+-spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ Type, Key | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {get(Type, Key, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 %% @doc Fetch a value from the store

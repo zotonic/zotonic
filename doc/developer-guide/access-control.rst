@@ -26,7 +26,7 @@ is said to be authenticated and authorization can start.
 
 The first request, that does not yet have a session cookie or whose session
 cookie has expired, needs to contain some credentials in order to be
-authenticated. The :ref:`logon controller <controller-logon>` takes care of
+authenticated. The :ref:`authentication controller <controller-authentication>` takes care of
 processing login requests and checks for the presence of a ‘remember me’ cookie
 for automatic login. It then responds with a fresh session cookie that the
 client will send along with subsequent requests.
