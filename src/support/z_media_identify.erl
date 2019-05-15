@@ -305,8 +305,8 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                          end,
                 {ok, Props2}
             catch
-                X:B ->
-                    ?DEBUG({X,B, erlang:get_stacktrace()}),
+                ?WITH_STACKTRACE(X, B, Stacktrace)
+                    ?DEBUG({X, B, Stacktrace}),
                     lager:info("identify of ~p failed - ~p", [CleanedImageFile, CmdOutput]),
                     {error, "unknown result from 'identify': '"++CmdOutput++"'"}
             end
@@ -442,8 +442,7 @@ exif(File) ->
                 []
         end
     catch
-        A:B ->
-            Trace = erlang:get_stacktrace(),
+        ?WITH_STACKTRACE(A, B, Trace)
             lager:error("Error reading exif ~p:~p in ~p", [A,B,Trace]),
             []
     end.

@@ -90,16 +90,16 @@ upgrade(Req, Env, Handler, HandlerOpts) ->
             {bad_request, Req2} ->
                 z_ws_request_adapter:maybe_reply(400, Req2)
 	catch
-            throw:Exc ->
-                handle_event(Req, Handler, websocket_throw, [Exc, erlang:get_stacktrace()], HandlerOpts),
-                z_ws_request_adapter:maybe_reply(400, Req);
-            error:Error ->
-                handle_event(Req, Handler, websocket_error, [Error, erlang:get_stacktrace()], HandlerOpts),
-                z_ws_request_adapter:maybe_reply(400, Req);
-            exit:Exit ->
-                handle_event(Req, Handler, websocket_exit, [Exit, erlang:get_stacktrace()], HandlerOpts),
-                z_ws_request_adapter:maybe_reply(400, Req)
-        end.
+        ?WITH_STACKTRACE(throw, Exc, S)
+            handle_event(Req, Handler, websocket_throw, [Exc, S], HandlerOpts),
+            z_ws_request_adapter:maybe_reply(400, Req);
+        ?WITH_STACKTRACE(error, Error, S)
+            handle_event(Req, Handler, websocket_error, [Error, S], HandlerOpts),
+            z_ws_request_adapter:maybe_reply(400, Req);
+        ?WITH_STACKTRACE(exit, Exit, S)
+            handle_event(Req, Handler, websocket_exit, [Exit, S], HandlerOpts),
+            z_ws_request_adapter:maybe_reply(400, Req)
+    end.
 
 % -spec websocket_upgrade(#state{}, Req)
 % 	-> {ok, #state{}, Req} when Req::z_ws_request_adapter:req().
@@ -189,14 +189,14 @@ handler_init(State=#state{env=Env, handler=Handler}, Req, HandlerOpts) ->
 			z_ws_request_adapter:ensure_response(Req2, 400),
 			{ok, Req2, [{result, closed}|Env]}
 	catch
-		throw:Exc ->
-			handle_event(Req, Handler, websocket_throw, [Exc, erlang:get_stacktrace()], HandlerOpts),
+        ?WITH_STACKTRACE(throw, Exc, S)
+			handle_event(Req, Handler, websocket_throw, [Exc, S], HandlerOpts),
 			z_ws_request_adapter:maybe_reply(400, Req);
-		error:Error ->
-			handle_event(Req, Handler, websocket_error, [Error, erlang:get_stacktrace()], HandlerOpts),
+        ?WITH_STACKTRACE(error, Error, S)
+			handle_event(Req, Handler, websocket_error, [Error, S], HandlerOpts),
 			z_ws_request_adapter:maybe_reply(400, Req);
-		exit:Exit ->
-			handle_event(Req, Handler, websocket_exit, [Exit, erlang:get_stacktrace()], HandlerOpts),
+        ?WITH_STACKTRACE(exit, Exit, S)
+			handle_event(Req, Handler, websocket_exit, [Exit, S], HandlerOpts),
 			z_ws_request_adapter:maybe_reply(400, Req)
 	end.
 
@@ -687,12 +687,12 @@ handler_call(State=#state{handler=Handler}, Req, HandlerState,
 		{shutdown, Req2, HandlerState2} ->
 			websocket_close(State, Req2, HandlerState2, {normal, shutdown})
 	catch
-		throw:Exc ->
-			handle_event(Req, Handler, websocket_throw, [Exc, erlang:get_stacktrace()], HandlerState);
-		error:Error ->
-			handle_event(Req, Handler, websocket_error, [Error, erlang:get_stacktrace()], HandlerState);
-		exit:Exit ->
-			handle_event(Req, Handler, websocket_exit, [Exit, erlang:get_stacktrace()], HandlerState)
+        ?WITH_STACKTRACE(throw, Exc, S)
+			handle_event(Req, Handler, websocket_throw, [Exc, S], HandlerState);
+        ?WITH_STACKTRACE(error, Error, S)
+			handle_event(Req, Handler, websocket_error, [Error, S], HandlerState);
+        ?WITH_STACKTRACE(exit, Exit, S)
+			handle_event(Req, Handler, websocket_exit, [Exit, S], HandlerState)
 	end.
 
 websocket_opcode(text) -> 1;

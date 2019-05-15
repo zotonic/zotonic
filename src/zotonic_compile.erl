@@ -206,7 +206,15 @@ compile_options() ->
 %% Pick up the platform_defines set in rebar.config(.lock)
 %%
 platform_defines() ->
-    opt_no_ssl(opt_coding_utf8(opt_namespaced_dicts([]))).
+    Fs = [
+        fun opt_namespaced_dicts/1,
+        fun opt_no_ssl/1,
+        fun opt_coding_utf8/1,
+        fun opt_lists_nofiltermap/1,
+        fun opt_rand_only/1,
+        fun opt_fun_stacktrace/1
+    ],
+    lists:foldl( fun(F, Acc) -> F(Acc) end, [], Fs).
 
 -ifdef(coding_utf8).
 opt_coding_utf8(Defines) -> [{d, coding_utf8} | Defines].
@@ -225,6 +233,25 @@ opt_no_ssl(Defines) -> [{d, no_ssl} | Defines].
 -else.
 opt_no_ssl(Defines) -> Defines.
 -endif.
+
+-ifdef(lists_nofiltermap).
+opt_lists_nofiltermap(Defines) -> [{d, lists_nofiltermap} | Defines].
+-else.
+opt_lists_nofiltermap(Defines) -> Defines.
+-endif.
+
+-ifdef(rand_only).
+opt_rand_only(Defines) -> [{d, rand_only} | Defines].
+-else.
+opt_rand_only(Defines) -> Defines.
+-endif.
+
+-ifdef(fun_stacktrace).
+opt_fun_stacktrace(Defines) -> [{d, fun_stacktrace} | Defines].
+-else.
+opt_fun_stacktrace(Defines) -> Defines.
+-endif.
+
 
 compile_user_options() ->
     application:load(zotonic),
