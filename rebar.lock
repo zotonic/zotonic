@@ -86,7 +86,7 @@
   0},
  {<<"template_compiler">>,
   {git,"https://github.com/zotonic/template_compiler.git",
-       {ref,"da03739e76a89ea8bcaaf63e546d4e80f8447d29"}},
+       {ref,"a171d735af23f09ec13d9d288b4c93ee74237856"}},
   0},
  {<<"termit">>,{pkg,<<"termit">>,<<"1.0.0">>},0},
  {<<"twerl">>,
