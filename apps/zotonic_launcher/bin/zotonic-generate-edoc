@@ -37,7 +37,16 @@ main(_) ->
 generate(InputDir, OutputDir) ->
     SrcPath = filename:join([os:getenv("ZOTONIC"), InputDir]),
     Files = files(SrcPath),
-    edoc:files(Files, [{dir, outpath(OutputDir)}]).
+    Options = [
+        {preprocess, true},
+        {includes, [
+            filename:join([os:getenv("ZOTONIC"), "include"]),
+            os:getenv("ZOTONIC"),
+            filename:join([os:getenv("ZOTONIC"), "deps"])
+        ]},
+        {dir, outpath(OutputDir)}
+    ],
+    edoc:files(Files, Options).
 
 outpath(Component) ->
     Path = filename:join([os:getenv("ZOTONIC"), "doc", "_build", "edoc", Component]),
