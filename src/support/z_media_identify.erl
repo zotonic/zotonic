@@ -282,10 +282,11 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
 
             %% "/tmp/ztmp-zotonic008prod@miffy.local-1321.452998.868252[0]=>/tmp/ztmp-zotonic008prod@miffy.local-1321.452998.868252 JPEG 1824x1824 1824x1824+0+0 8-bit DirectClass 1.245MB 0.000u 0:00.000"
             try
-                [_Path, Type, Dim, _Dim2 | _] = string:tokens(Result, " "),
-                Mime = mime(Type, MimeFile),
-                [Width,Height] = string:tokens(hd(string:tokens(Dim, "=>")), "x"),
-                {W1,H1} = maybe_sizeup(Mime, list_to_integer(Width), list_to_integer(Height)),
+                Result1 = z_string:trim( lists:last( binary:split( z_convert:to_binary(Result), z_convert:to_binary(ImageFile), [ global ] ) ) ),
+                [Type, Dim, _Dim2 | _] = binary:split(Result1, <<" ">>, [ global ]),
+                Mime = im_mime(Type, MimeFile),
+                [Width,Height] = binary:split( hd( binary:split(Dim, <<"=>">>) ), <<"x">>),
+                {W1,H1} = maybe_sizeup(Mime, binary_to_integer(Width), binary_to_integer(Height)),
                 Props1 = [{width, W1},
                           {height, H1},
                           {mime, Mime}],
@@ -333,28 +334,28 @@ devnull(win32) -> "nul";
 devnull(unix)  -> "/dev/null".
 
 
--spec mime(string(), string()|undefined) -> string().
+-spec im_mime( binary(), string()|undefined ) -> string().
 %% @doc ImageMagick identify can identify PDF/PS files as PBM
-mime("PBM", MimeFile) when is_list(MimeFile) -> MimeFile;
-mime(Type, _) -> mime(Type).
+im_mime(<<"PBM">>, MimeFile) when is_list(MimeFile) -> MimeFile;
+im_mime(Type, _) -> mime(Type).
 
 %% @doc Map the type returned by ImageMagick to a mime type
 %% @todo Add more imagemagick types, check the mime types
 -spec mime(string()) -> string().
-mime("JPEG") -> "image/jpeg";
-mime("GIF") -> "image/gif";
-mime("TIFF") -> "image/tiff";
-mime("BMP") -> "image/bmp";
-mime("PDF") -> "application/pdf";
-mime("PS") -> "application/postscript";
-mime("PS2") -> "application/postscript";
-mime("PS3") -> "application/postscript";
-mime("PNG") -> "image/png";
-mime("PNG8") -> "image/png";
-mime("PNG24") -> "image/png";
-mime("PNG32") -> "image/png";
-mime("SVG") -> "image/svg+xml";
-mime(Type) -> "image/" ++ string:to_lower(Type).
+mime(<<"JPEG">>)  -> "image/jpeg";
+mime(<<"GIF">>)   -> "image/gif";
+mime(<<"TIFF">>)  -> "image/tiff";
+mime(<<"BMP">>)   -> "image/bmp";
+mime(<<"PDF">>)   -> "application/pdf";
+mime(<<"PS">>)    -> "application/postscript";
+mime(<<"PS2">>)   -> "application/postscript";
+mime(<<"PS3">>)   -> "application/postscript";
+mime(<<"PNG">>)   -> "image/png";
+mime(<<"PNG8">>)  -> "image/png";
+mime(<<"PNG24">>) -> "image/png";
+mime(<<"PNG32">>) -> "image/png";
+mime(<<"SVG">>)   -> "image/svg+xml";
+mime(Type)        -> "image/" ++ string:to_lower( binary_to_list(Type) ).
 
 
 
