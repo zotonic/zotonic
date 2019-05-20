@@ -39,9 +39,12 @@
                         </div>
 
                         {% if m.site.seo.noindex|is_defined %}
-                            <input type="hidden" value="{{ m.site.seo.noindex|escape }}" name="seo-noindex">
                             <p class="alert alert-info">
-                                {_ This site is excluded from search engines by the site configuration file. _}
+                                {% if m.site.seo.noindex %}
+                                    {_ The site configuration file excludes this site from search engines. _}
+                                {% else %}
+                                    {_ The site configuration file allows this site to be indexed by search engines. _}
+                                {% endif %}
                             </p>
                         {% else %}
                             <div class="form-group row">

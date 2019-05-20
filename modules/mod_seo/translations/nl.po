@@ -63,6 +63,15 @@ msgid ""
 "Search Engine Optimization"
 msgstr "Zoekmachineoptimalisatie"
 
+#: modules/mod_seo/templates/admin_seo.tpl:46
+msgid ""
+"The site configuration file allows this site to be indexed by search engines."
+msgstr "Deze site wordt geïndexeerd door zoekmachines overeenkomstig het site-configuratiebestand."
+
+#: modules/mod_seo/templates/admin_seo.tpl:44
+msgid "The site configuration file excludes this site from search engines."
+msgstr "Deze site is uitgesloten van indexatie door zoekmachines overeenkomstig het site-configuratiebestand."
+
 #: ./modules/mod_seo_google/templates/_admin_seo_config.tpl:6 
 msgid ""
 "Google Analytics tracking id"
