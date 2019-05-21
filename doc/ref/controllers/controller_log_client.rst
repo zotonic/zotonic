@@ -25,4 +25,4 @@ Only the fields above are logged in the database, other fields are dropped.
 
 All database log entries are rate limited to a maximum of 1 per second. The log can be viewed at ``/admin/log/ui``.
 
-See :ref:`mod_logging
+See :ref:`mod_logging`
