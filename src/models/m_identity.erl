@@ -150,25 +150,38 @@ get_username(Id, Context) ->
     z_db:q1("select key from identity where rsc_id = $1 and type = 'username_pw'", [m_rsc:rid(Id, Context)], Context).
 
 
+%% @doc Check if the user is allowed to change the username of a resource.
+-spec is_allowed_set_username( m_rsc:resource_id(), z:context() ) -> boolean().
+is_allowed_set_username(Id, Context) when is_integer(Id) ->
+    z_acl:is_admin(Context)
+    orelse z_acl:is_allowed(use, mod_admin_identity, Context)
+    orelse (z_acl:is_allowed(update, Id, Context) andalso Id =:= z_acl:user(Context)).
+
+
 %% @doc Delete an username from a resource.
--spec delete_username(m_rsc:resource(), #context{}) -> ok | {error, eacces}.
+-spec delete_username(m_rsc:resource() | undefined, z:context()) -> ok | {error, eacces | enoent}.
+delete_username(undefined, _Context) ->
+    {error, enoent};
 delete_username(1, _Context) ->
     throw({error, admin_username_cannot_be_deleted});
-delete_username(Id, Context) ->
-    case z_acl:is_allowed(delete, Id, Context) orelse z_acl:is_allowed(update, Id, Context) of
+delete_username(Id, Context) when is_integer(Id) ->
+    case is_allowed_set_username(Id, Context)  of
         true ->
-            z_db:q("delete from identity where rsc_id = $1 and type = 'username_pw'", [m_rsc:rid(Id, Context)], Context),
+            z_db:q("delete from identity where rsc_id = $1 and type = 'username_pw'", [ Id, Context ], Context),
             z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
             ok;
         false ->
             {error, eacces}
-    end.
-
+    end;
+delete_username(Id, Context) ->
+    delete_username( m_rsc:rid(Id, Context), Context ).
 
 %% @doc Change the username of the resource id, only possible if there is already an username/password set
 %% @spec set_username(ResourceId, Username, Context) -> ok | {error, Reason}
-set_username(Id, Username, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
+set_username(undefined, _Username, _Context) ->
+    {error, enoent};
+set_username(Id, Username, Context) when is_integer(Id) ->
+    case is_allowed_set_username(Id, Context) of
         true ->
             Username1 = z_string:to_lower(Username),
             case is_reserved_name(Username1) of
@@ -176,7 +189,7 @@ set_username(Id, Username, Context) ->
                     {error, eexist};
                 false ->
                     F = fun(Ctx) ->
-                        UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and rsc_id <> $1 and key = $2", [m_rsc:rid(Id, Context), Username1], Ctx),
+                        UniqueTest = z_db:q1("select count(*) from identity where type = 'username_pw' and rsc_id <> $1 and key = $2", [Id, Username1], Ctx),
                         case UniqueTest of
                             0 ->
                                 case z_db:q("
@@ -185,37 +198,57 @@ set_username(Id, Username, Context) ->
                                             modified = now()
                                         where rsc_id = $1
                                           and type = 'username_pw'",
-                                        [m_rsc:rid(Id, Context), Username1],
+                                        [ Id, Username1 ],
                                         Ctx)
                                 of
                                     1 -> ok;
                                     0 -> {error, enoent};
-                                    {error, _} -> {error, eexist} % assume duplicate key error?
+                                    {error, _} ->
+                                        {error, eexist} % assume duplicate key error?
                                 end;
                             _Other ->
                                 {error, eexist}
                         end
                     end,
-                    z_db:transaction(F, Context)
+                    case z_db:transaction(F, Context) of
+                        ok ->
+                            z:info(
+                                "Change of username for user ~p (~s)",
+                                [ Id, Username1 ],
+                                [ {module, ?MODULE} ],
+                                Context),
+                            z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
+                            z_depcache:flush(Id, Context),
+                            ok;
+                        {rollback, {error, _} = Error, _Trace} ->
+                            Error;
+                        {error, _} = Error ->
+                            Error
+                    end
             end;
         false ->
             {error, eacces}
-    end.
-
+    end;
+set_username(Id, Username, Context) ->
+    set_username( m_rsc:rid(Id, Context), Username, Context ).
 
 %% @doc Set the username/password of a resource.  Replaces any existing username/password.
--spec set_username_pw(m_rsc:resource(), string(), string(), #context{}) -> ok | {error, Reason :: term()}.
+-spec set_username_pw( m_rsc:resource() | undefined, string(), string(), z:context()) -> ok | {error, Reason :: term()}.
+set_username_pw(undefined, _, _, _) ->
+    {error, enoent};
 set_username_pw(1, _, _, _) ->
     throw({error, admin_password_cannot_be_set});
-set_username_pw(Id, Username, Password, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
+set_username_pw(Id, Username, Password, Context) when is_integer(Id) ->
+    case is_allowed_set_username(Id, Context) of
         true ->
             Username1 = z_string:trim(z_string:to_lower(Username)),
             IsForceDifferent = z_convert:to_bool( m_config:get_value(site, password_force_different, Context) ),
             set_username_pw_1(IsForceDifferent, m_rsc:rid(Id, Context), Username1, Password, Context);
         false ->
             {error, eacces}
-    end.
+    end;
+set_username_pw(Id, Username, Password, Context) ->
+    set_username_pw( m_rsc:rid(Id, Context), Username, Password, Context ).
 
 set_username_pw_1(true, Id, Username, Password, Context) ->
     case check_username_pw_1(Username, Password, Context) of
@@ -236,13 +269,17 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
         {ok, S} ->
             case S of
                 new ->
-                    z:debug(
-                        "New username for user ~p (~s)",
+                    z:info(
+                        "New username/password for user ~p (~s)",
                         [ Id, Username ],
                         [ {module, ?MODULE} ],
                         Context);
                 exists ->
-                    ok
+                    z:info(
+                        "Change of username/password for user ~p (~s)",
+                        [ Id, Username ],
+                        [ {module, ?MODULE} ],
+                        Context)
             end,
             reset_rememberme_token(Id, Context),
             z_mqtt:publish(["~site", "rsc", Id, "identity"], {identity, <<"username_pw">>}, Context),
@@ -250,10 +287,12 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
             z_session_manager:stop_other_sessions(Id, Context),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
-            lager:error("set_username_pw error for ~p, setting username ~p: ~p",
-                        [Username, ErrTrace]),
+            lager:error("set_username_pw error for ~p, setting username. ~p: ~p",
+                        [Username, Error, ErrTrace]),
             Error;
         {error, _} = Error ->
+            lager:error("set_username_pw error for ~p, setting username. ~p",
+                        [Username, Error]),
             Error
     end.
 
