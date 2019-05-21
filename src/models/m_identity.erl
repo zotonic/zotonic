@@ -150,7 +150,7 @@ get_username(Id, Context) ->
     z_db:q1("select key from identity where rsc_id = $1 and type = 'username_pw'", [m_rsc:rid(Id, Context)], Context).
 
 
-%% @doc Check if the user us allowed to change the username of a resource.
+%% @doc Check if the user is allowed to change the username of a resource.
 -spec is_allowed_set_username( m_rsc:resource_id(), z:context() ) -> boolean().
 is_allowed_set_username(Id, Context) when is_integer(Id) ->
     z_acl:is_admin(Context)
