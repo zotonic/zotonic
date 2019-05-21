@@ -1612,6 +1612,49 @@ function isScrolledIntoView(elem)
     // && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop);
 }
 
+
+/* Error handling
+----------------------------------------------------------
+
+Fetch the error event and log it to the server.
+Which should log it in a separate ui error log.
+
+---------------------------------------------------------- */
+
+var oldOnError = window.onerror;
+
+window.onerror = function(message, file, line, col, error) {
+    if (!z_page_unloading) {
+        let payload = {
+            type: 'error',
+            message: message,
+            file: file,
+            line: line,
+            col: col,
+            stack: error.stack,
+            user_agent: navigator.userAgent,
+            url: window.location.href
+        };
+
+        if (theForm) {
+            try { $(theForm).unmask(); } catch (e) {}
+        }
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/log-client-event', true);
+        xhr.send(JSON.stringify(payload));
+
+        alert("Sorry, something went wrong.\n\n(" + message + ")");
+    }
+
+    if (oldOnError) {
+        return oldOnError(message, file, line, col, error);
+    } else {
+        return false;
+    }
+};
+
+
 /* Form element validations
 ----------------------------------------------------------
 
@@ -1650,6 +1693,8 @@ function z_init_postback_forms()
         });
     })
     .submit(function(event) {
+        event.preventDefault();
+
         theForm = this;
         z_editor_save(theForm);
 
