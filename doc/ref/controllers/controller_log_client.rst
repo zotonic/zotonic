@@ -5,7 +5,7 @@ Controller for logging User Interface errors.
 
 Receives an JSON like:
 
-.. code-block:: json
+.. code-block:: none
 
     {
         "type": "error",
