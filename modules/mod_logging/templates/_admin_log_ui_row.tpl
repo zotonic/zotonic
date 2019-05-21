@@ -40,7 +40,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {{ l.stack|force_escape|linebreaksbr }}
+                    <tt>{{ l.stack|log_format_stack }}</tt>
                 </td>
             </tr>
         {% endif %}

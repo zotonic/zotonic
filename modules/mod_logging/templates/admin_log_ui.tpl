@@ -2,7 +2,7 @@
 
 {% block title %}{_ Log ui events _}{% endblock %}
 
-{% block title_log %}{_ Log user-interface events _}{% endblock %}
+{% block title_log %}{_ Log user interface events _}{% endblock %}
 
 {% block active3 %}active{% endblock %}
 

@@ -77,10 +77,32 @@ pid_observe_zlog(Pid, #zlog{ props = #log_email{} = Msg }, _Context) ->
 pid_observe_zlog(_Pid, #zlog{}, _Context) ->
     undefined.
 
+
 observe_tick_1h(tick_1h, Context) ->
     m_log:periodic_cleanup(Context),
     m_log_email:periodic_cleanup(Context),
     m_log_ui:periodic_cleanup(Context).
+
+
+observe_admin_menu(admin_menu, Acc, Context) ->
+    [
+     #menu_item{id=admin_log,
+                parent=admin_system,
+                label=?__("Log", Context),
+                url={admin_log},
+                visiblecheck={acl, use, mod_logging}},
+     #menu_item{id=admin_log_email,
+                parent=admin_system,
+                label=?__("Email log", Context),
+                url={admin_log_email},
+                visiblecheck={acl, use, mod_logging}},
+     #menu_item{id=admin_log_ui,
+                parent=admin_system,
+                label=?__("User interface log", Context),
+                url={admin_log_ui},
+                visiblecheck={acl, use, mod_logging}},
+     #menu_separator{parent=admin_system}
+     |Acc].
 
 
 manage_schema(_, Context) ->
@@ -255,19 +277,4 @@ to_list(V) ->
 opt_user(undefined) -> [];
 opt_user(Id) -> [" (", integer_to_list(Id), ")"].
 
-
-observe_admin_menu(admin_menu, Acc, Context) ->
-    [
-     #menu_item{id=admin_log,
-                parent=admin_system,
-                label=?__("Log", Context),
-                url={admin_log},
-                visiblecheck={acl, use, mod_logging}},
-     #menu_item{id=admin_log_email,
-                parent=admin_system,
-                label=?__("Email log", Context),
-                url={admin_log_email},
-                visiblecheck={acl, use, mod_logging}},
-     #menu_separator{parent=admin_system}
-     |Acc].
 
