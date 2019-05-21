@@ -22,9 +22,9 @@
                         {{ l.message|force_escape|linebreaksbr }}
                     {% endif %}
                     <span class="text-muted">
-                        <br><small>{{ l.url|escape }}</small>
-                        <br><small><b>UA</b> {{ l.user_agent|escape }}</small>
-                        <br><small><b>IP</b> {{ l.remote_ip|escape }}</small>
+                        <br><small><span class="label label-default">URL</span> {{ l.url|escape }}</small>
+                        <br><small><span class="label label-default">UA</span> {{ l.user_agent|escape }}</small>
+                        <br><small><span class="label label-default">IP</span> {{ l.remote_ip|escape }}</small>
                     </span>
                 </td>
                 <td>
