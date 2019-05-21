@@ -17,4 +17,12 @@ The e-mail log is a separate view, which lists which email messages
 have been sent to which recipients. Any mail that gets sent gets
 logged here.
 
+
+User interface log
+------------------
+
+The user interface log shows Javascript errors that happened on the clients.
+At most one error per second is logged, others are dropped.
+
+
 .. todo:: Add more documentation
