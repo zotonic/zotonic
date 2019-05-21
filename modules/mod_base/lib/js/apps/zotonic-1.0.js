@@ -1643,7 +1643,6 @@ window.onerror = function(message, file, line, col, error) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '/log-client-event', true);
         xhr.send(JSON.stringify(payload));
-
         alert("Sorry, something went wrong.\n\n(" + message + ")");
     }
 
@@ -1700,6 +1699,8 @@ function z_init_postback_forms()
 
         submitFunction = function(ev) {
             try { $(theForm).mask("", 100); } catch (e) {}
+
+            throw( new Error("OH NO") );
 
             var postback     = $(theForm).data("z_submit_postback");
             var action       = $(theForm).data("z_submit_action");

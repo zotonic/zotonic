@@ -73,7 +73,8 @@ insert_event(Props, Context) when is_list(Props) ->
     end,
     Message = [
         {user_id, UserId},
-        {type, Type}
+        {type, Type},
+        {remote_ip, m_req:get(peer, Context)}
     ] ++ proplists:delete(type, Props2),
     MsgUserProps = maybe_add_user_props(Message, Context),
     z_db:insert(log_ui, MsgUserProps, Context).
@@ -192,6 +193,7 @@ install(Context) ->
                     rsc_id int,
                     user_id int,
                     type character varying(80) not null default ''::character varying,
+                    remote_ip character varying(32),
                     props bytea,
                     created timestamp with time zone not null default now(),
 
