@@ -1700,8 +1700,6 @@ function z_init_postback_forms()
         submitFunction = function(ev) {
             try { $(theForm).mask("", 100); } catch (e) {}
 
-            throw( new Error("OH NO") );
-
             var postback     = $(theForm).data("z_submit_postback");
             var action       = $(theForm).data("z_submit_action");
             var form_id      = $(theForm).attr('id');
