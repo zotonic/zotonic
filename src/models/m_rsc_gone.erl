@@ -119,31 +119,35 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
         undefined ->
             {error, notfound};
         Props when is_list(Props) ->
-            Result = z_db:transaction(
-                    fun(Ctx) ->
-                        Props1 = [
-                            {new_id, NewId},
-                            {new_uri, undefined},
-                            {modifier_id, z_acl:user(Ctx)}
-                            | Props
-                        ],
-                        case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Ctx) of
-                            1 ->
-                                lager:warning(z_context:lager_md(Ctx),
-                                              "[~p] Second rsc_gone entry for id ~p",
-                                              [z_context:site(Ctx), Id]),
-                                {ok, _} = z_db:update(rsc_gone, Id, Props1, Ctx),
-                                {ok, Id};
-                            0 ->
-                                z_db:insert(rsc_gone, Props1, Ctx)
-                        end
-                    end,
-                    Context),
-            case Result of
-                {error,{error,error,<<"23505">>, _ErrMsg, _ErrProps}} ->
-                    % Duplicate key - ignore (race condition)
+            case z_db:equery(
+                "insert into rsc_gone
+                    (id, new_id, new_uri, version, uri, name, page_path,
+                     is_authoritative, creator_id, modifier_id, created, modified)
+                 values
+                     ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, now())
+                ",
+                [
+                    Id,
+                    NewId,
+                    undefined,
+                    proplists:get_value(version, Props),
+                    proplists:get_value(uri, Props),
+                    proplists:get_value(name, Props),
+                    proplists:get_value(page_path, Props),
+                    proplists:get_value(is_authoritative, Props),
+                    proplists:get_value(creator_id, Props),
+                    z_acl:user(Context),
+                    proplists:get_value(created, Props)
+                ],
+                Context)
+            of
+                {ok, 1} ->
                     {ok, Id};
-                Other -> Other
+                {error, {error, error, <<"23505">>, _ErrMsg, _ErrDetail}} ->
+                    % Duplicate key error, ignore
+                    {ok, Id};
+                {error, _} = Error ->
+                    Error
             end
     end.
 
