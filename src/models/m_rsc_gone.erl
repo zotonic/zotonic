@@ -142,6 +142,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                 Context)
             of
                 {ok, 1} ->
+                    z_depcache:flush({rsc_is_gone, Id}, Context),
                     {ok, Id};
                 {error, {error, error, <<"23505">>, _ErrMsg, _ErrDetail}} ->
                     % Duplicate key error, ignore
