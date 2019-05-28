@@ -1624,7 +1624,6 @@ Which should log it in a separate ui error log.
 var oldOnError = window.onerror;
 
 window.onerror = function(message, file, line, col, error) {
-    console.log("window catching error", z_page_unloading, file, line, col, error);
     if (!z_page_unloading) {
         let payload = {
             type: 'error',
