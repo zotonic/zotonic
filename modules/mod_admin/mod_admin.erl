@@ -210,7 +210,7 @@ event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Co
     CreatorId = z_convert:to_integer(z_context:get_q(find_creator_id, Context)),
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
-    Predicate = z_context:get_q(predicate, Context, ""),
+    Predicate = z_convert:to_binary(z_context:get_q(predicate, Context, "")),
     PredicateId = m_rsc:rid(Predicate, Context),
     TextL = lists:foldl(
         fun(Q, Acc) ->
