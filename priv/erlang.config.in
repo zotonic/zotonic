@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 [
 
- {exometer, [{predefined, [
+ {exometer_core, [{predefined, [
     {[erlang, memory], {function, erlang, memory, [], value, []}, []},
     {[erlang, system_info], {function, erlang, system_info, ['$dp'], value, [process_count]}, []},
     {[erlang, statistics], {function, erlang, statistics, ['$dp'], value, [run_queue]}, []},
