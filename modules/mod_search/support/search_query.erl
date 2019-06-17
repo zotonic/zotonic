@@ -671,9 +671,9 @@ add_order([C,$s,$e,$q], Search) when C =:= $-; C =:= $+ ->
     end;
 add_order("edge."++_ = Order, Search) ->
     add_order([$+|Order], Search);
-add_order([C,$e,$d,$g,$e,$.|Order], Search) when C =:= $-; C =:= $+ ->
+add_order([C,$e,$d,$g,$e,$.|Column], Search) when C =:= $-; C =:= $+ ->
     case proplists:get_value(edge, Search#search_sql.tables) of
-        L when is_list(L) -> add_order([C|L]++[$.|Order], Search);
+        L when is_list(L) -> add_order([C|L]++[$.|Column], Search);
         undefined -> Search
     end;
 add_order(Sort, Search) ->
@@ -682,12 +682,18 @@ add_order(Sort, Search) ->
                      "random()";
                  _ ->
                      case Sort of
-                         [$-|F1] -> sql_safe(F1) ++ " DESC";
-                         [$+|F1] -> sql_safe(F1) ++ " ASC";
-                         _ -> sql_safe(Sort) ++ " ASC"
+                         [$-|F1] -> maybe_ref_rsc(sql_safe(F1)) ++ " DESC";
+                         [$+|F1] -> maybe_ref_rsc(sql_safe(F1)) ++ " ASC";
+                         _ -> maybe_ref_rsc(sql_safe(Sort)) ++ " ASC"
                      end
              end,
     add_order_unsafe(Clause, Search).
+
+maybe_ref_rsc(Sort) ->
+    case lists:member($., Sort) of
+        false -> "rsc." ++ Sort;
+        true -> Sort
+    end.
 
 %% Add an ORDER clause without checking on SQL safety.
 add_order_unsafe(Clause, Search) ->
