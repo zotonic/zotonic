@@ -31,6 +31,7 @@
 %% @doc Initialize the statistics collection machinery.
 %%
 init() ->
+    check_configuration(),
     webmachine_sup:start_logger(webmachine_logger).
 
 init_site(Host) ->
@@ -66,5 +67,16 @@ log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
     after
         % Pass it to the default webmachine logger.
         webmachine_logger:log_access(LogData)
+    end.
+
+%%
+%% Helpers
+%%
+
+check_configuration() ->
+    case exometer:info([erlang, system_info]) of
+        undefined ->
+            lager:warning("Default exometer config not loaded. Rename your exometer config to exometer_core.");
+        _ -> nop
     end.
 
