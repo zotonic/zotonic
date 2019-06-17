@@ -504,7 +504,7 @@ handle_cast({supervisor_child_started, ChildSpec, Pid}, #state{ context = Contex
 %% @doc Handle errors, success is handled by the supervisor_child_started above.
 handle_cast({start_child_result, Module, {error, _} = Error}, #state{ context = Context } = State) ->
     State1 = handle_start_child_result(Module, Error, State),
-    z:error("Module ~p start error", [ Module, Error ], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
+    z:error("Module ~p start error: ~p", [ Module, Error ], [ {module, ?MODULE}, {line, ?LINE}, {user_id, undefined} ], Context),
     {noreply, State1};
 handle_cast({start_child_result, _Module, {ok, _}}, State) ->
     {noreply, State};

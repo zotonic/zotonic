@@ -16,6 +16,7 @@ Strings
    ../filter_is_valid_email
    ../filter_length
    ../filter_ljust
+   ../filter_log_format_stack
    ../filter_lower
    ../filter_replace_args
    ../filter_rjust
