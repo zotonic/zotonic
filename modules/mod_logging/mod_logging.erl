@@ -113,8 +113,13 @@ manage_schema(_, Context) ->
 
 %% @doc Return true if ok to insert an UI log entry (max 1 per second)
 is_ui_ratelimit_check(Context) ->
-    {ok, Pid} = z_module_manager:whereis(?MODULE, Context),
-    gen_server:call(Pid, is_ui_ratelimit_check).
+    case z_convert:to_bool( m_config:get_value(mod_logging, ui_log_disabled, Context) ) of
+        true ->
+            true;
+        false ->
+            {ok, Pid} = z_module_manager:whereis(?MODULE, Context),
+            gen_server:call(Pid, is_ui_ratelimit_check)
+    end.
 
 %%====================================================================
 %% API
