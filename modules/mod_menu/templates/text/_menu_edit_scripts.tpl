@@ -28,7 +28,6 @@
                 center=0
                 autoclose
                 width="large"
-                is_zlink
             }
     %}
 {% else %}

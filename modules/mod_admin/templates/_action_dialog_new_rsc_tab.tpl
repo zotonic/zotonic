@@ -230,7 +230,7 @@
 			    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 			    <button class="btn btn-primary" type="submit">
 			    	{_ Create _} {{ catname }}
-			    	{% if is_zlink and predicate %} &amp; {_ Link _}{% elseif subject_id or object_id %} &amp; {_ Connect _}{% endif %}
+			    	{% if is_zlink %} &amp; {_ Link _}{% elseif subject_id or object_id %} &amp; {_ Connect _}{% endif %}
 			    </button>
 		    </div>
 		{% endwith %}

@@ -41,7 +41,7 @@
             {% endwith %}
         {% endif %}
 
-        {% if predicate and is_zlink %}
+        {% if is_zlink %}
             <a href="#" class="btn btn-primary action-connect">{_ Link _}</a>
         {% elseif predicate and is_linkable %}
             <a href="#" class="btn btn-primary action-connect">{_ Connect _}</a>
