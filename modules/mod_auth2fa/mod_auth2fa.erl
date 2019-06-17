@@ -46,9 +46,12 @@ event(#postback{ message={auth2fa_ug, Args} }, Context) ->
     end;
 event(#postback{ message={auth2fa_remove, Args} }, Context) ->
     {id, Id} = proplists:lookup(id, Args),
+    UserId = z_acl:user(Context),
     case z_acl:is_allowed(use, mod_admin_identity, Context)
-        orelse Id =:= z_acl:user(Context)
+        orelse Id =:= UserId
     of
+        true when Id =:= 1, UserId =/= 1 ->
+            z_render:growl(?__("Only the admin can change the two-factor authentication of the admin.", Context), Context);
         true ->
             ok = m_auth2fa:totp_disable(Id, Context),
             Context;

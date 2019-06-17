@@ -41,14 +41,6 @@ m_find_value(totp_image_url, #m{ value = undefined }, Context) ->
         undefined -> <<>>;
         UserId -> totp_image_url(UserId, Context)
     end;
-m_find_value(totp_image_url, #m{ value = UserId }, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context)
-        orelse UserId =:= z_acl:user(Context)
-    of
-        true -> totp_image_url(UserId, Context);
-        false -> undefined
-    end;
-
 m_find_value(is_totp_enabled, #m{ value = undefined }, Context) ->
     case z_acl:user(Context) of
         undefined -> false;
@@ -128,16 +120,29 @@ totp_disable(UserId, Context) ->
 %% @doc Generate a new totp code and return the barcode
 -spec totp_image_url( m_rsc:resource_id(), z:context() ) -> binary().
 totp_image_url(UserId, Context) when is_integer(UserId) ->
-    Issuer = z_convert:to_binary( z_context:hostname(Context) ),
-    Username = m_identity:get_username(Context),
-    ServicePart = iolist_to_binary([
-            Issuer,
-            <<"%3A">>,
-            z_url:url_encode(Username), <<"%20%2F%20">>, Issuer
-        ]),
-    {ok, Passcode} = regenerate_user_secret(UserId, Context),
-    {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
-    encode_data_url(Png, <<"image/png">>).
+    case is_allowed_totp_enable(UserId, Context) of
+        true ->
+            Issuer = z_convert:to_binary( z_context:hostname(Context) ),
+            Username = m_identity:get_username(Context),
+            ServicePart = iolist_to_binary([
+                    Issuer,
+                    <<"%3A">>,
+                    z_url:url_encode(Username), <<"%20%2F%20">>, Issuer
+                ]),
+            {ok, Passcode} = regenerate_user_secret(UserId, Context),
+            {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
+            encode_data_url(Png, <<"image/png">>);
+        false ->
+            <<>>
+    end.
+
+%% Only the admin user can enable totp for the admin user
+is_allowed_totp_enable(1, Context) ->
+    z_acl:user(Context) =:= 1;
+is_allowed_totp_enable(UserId, Context) ->
+    z_acl:user(Context) =:= UserId
+    orelse z_acl:is_allowed(use, mod_admin_identity, Context).
+
 
 encode_data_url(Data, Mime) ->
     iolist_to_binary([ <<"data:">>, Mime, <<";base64,">>, base64:encode(Data) ]).
