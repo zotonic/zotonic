@@ -145,10 +145,41 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                     z_depcache:flush({rsc_is_gone, Id}, Context),
                     {ok, Id};
                 {error, {error, error, <<"23505">>, _ErrMsg, _ErrDetail}} ->
-                    % Duplicate key error, ignore
+                    % Duplicate key error, update with the newest values
+                    gone_update(Id, NewId, Props, Context),
                     {ok, Id};
                 {error, _} = Error ->
                     Error
             end
     end.
+
+gone_update(Id, NewId, Props, Context) ->
+    z_db:equery("
+        update rsc_gone
+        set new_id = $2,
+            new_uri = $3,
+            version = $4,
+            uri = $5,
+            name = $6,
+            page_path = $7,
+            is_authoritative = $8,
+            creator_id = $9,
+            modifier_id = $10,
+            created = $11,
+            modified = now()
+        where id = $1",
+        [
+            Id,
+            NewId,
+            undefined,
+            proplists:get_value(version, Props),
+            proplists:get_value(uri, Props),
+            proplists:get_value(name, Props),
+            proplists:get_value(page_path, Props),
+            proplists:get_value(is_authoritative, Props),
+            proplists:get_value(creator_id, Props),
+            z_acl:user(Context),
+            proplists:get_value(created, Props)
+        ],
+        Context).
 
