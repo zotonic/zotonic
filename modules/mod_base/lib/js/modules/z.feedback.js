@@ -27,8 +27,8 @@ $.widget("ui.feedback",
 		var self = this;
 		z_ensure_id(this.element);
 		$('#'+this.options.trigger)
-			.bind('keyup', function() { self.update(); })
-			.bind('change', function() { self.update(); });
+			.on('keyup', function() { self.update(); })
+			.on('change', function() { self.update(); });
 	},
 	
 	update: function() 

@@ -73,7 +73,7 @@
 					clearTimeout(sortupdater);
 				}
 				sortupdater = setTimeout(function() {
-					$sorter.trigger('sortupdate');
+					$('#{{ in_sorter }}').trigger('sortupdate');
 				}, 150);
 			}
 		}

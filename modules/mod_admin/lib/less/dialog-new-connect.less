@@ -85,12 +85,15 @@
             margin-left: 0;
             border-left: 1px solid @borderColorMediumTransparent;
 
+            background: linear-gradient(to right, #f8f8f8, white, white);
+
             > .new-find-results-header {
                 -ms-grid-column: 1;
                 -ms-grid-row: 1;
                 grid-column: 1;
                 grid-row: 1;
                 padding-right: 15px;
+                padding-bottom: 10px;
             }
 
             > #dialog-rsc-new-found {
@@ -104,6 +107,10 @@
 
                 overflow-x: hidden;
                 overflow-y: scroll;
+            }
+
+            #dialog_new_rsc_results {
+                margin-top: 0;
             }
         }
 

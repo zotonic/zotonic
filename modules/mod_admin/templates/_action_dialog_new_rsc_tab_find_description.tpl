@@ -1,12 +1,12 @@
 
 {% if text %}
-    {% if category_id %}{_ Category _}: {{ m.rsc[category_id].title }}.
-    {% elseif predicate %}{_ Pages for _} “{{ m.rsc[predicate].title }}”.
+    {% if category_id %}{_ Category _}: <b>{{ m.rsc[category_id].title }}</b>.
+    {% elseif predicate %}{_ Pages for _} “<b>{{ m.rsc[predicate].title }}</b>”.
     {% endif %}
-    {_ Matching _} “{{ text|escape }} …”<br>
+    {_ Matching _} “<b>{{ text|escape }} …</b>”<br>
 {% else %}
-    {% if category_id %}{_ Category _}: {{ m.rsc[category_id].title }}.
-    {% elseif predicate %}{_ Pages for _} “{{ m.rsc[predicate].title }}”.
+    {% if category_id %}{_ Category _}: <b>{{ m.rsc[category_id].title }}</b>.
+    {% elseif predicate %}{_ Pages for _} “<b>{{ m.rsc[predicate].title }}</b>”.
     {% endif %}
     {_ Click to preview. _}
 {% endif %}

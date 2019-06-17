@@ -1,4 +1,5 @@
-{% with m.rsc[cat].name|as_atom as cat %}
+{% with m.rsc[cat].id as cat %}
+{% with m.rsc[predicate].name as predicate %}
 {% wire
     id="dialog-new-rsc-tab"
     type="submit"
@@ -19,8 +20,8 @@
 	<div id="{{ #newform }}" class="form-panel">
 		{% with 'dialog-new-rsc-tab' as form %}
 
-			<h4>{_ Create or search _}</h4>
-			<p>{_ Here you can create new content or find existing content. _}</p>
+			<h4>1. {_ Create or search _}</h4>
+			<p>{_ Start typing a title to create new content or find existing content. _}</p>
 
 			{% block rsc_props_title %}
 				{# The new resource title, also used for the feedback search #}
@@ -29,11 +30,13 @@
 				    <div class="col-md-9">
 					    <input type="text" id="new_rsc_title" name="title"
 					    	   value="{{ title|escape }}" class="do_autofocus form-control"
-					    	   placeholder="{_ Page title or text to find page _}">
+					    	   placeholder="{_ Type title or filter existing content _}">
 					    {% validate id="new_rsc_title" name="title" type={presence} only_on_submit %}
 				    </div>
 				</div>
 			{% endblock %}
+
+			<hr>
 
 			{% if (not nocatselect or m.category[cat].is_a.media)
 				and (not predicate
@@ -185,7 +188,7 @@
 						                	  and (not subject_id or predicate|is_undefined or m.predicate.is_valid_object_category[predicate][c.id])
 						                	  and (not object_id  or predicate|is_undefined or m.predicate.is_valid_subject_category[predicate][c.id])
 						                %}
-						                    <option value="{{c.id}}" {% if c.id == cat %}selected="selected" {% endif %}>
+						                    <option value="{{c.id}}" {% if c.id == cat %}selected{% endif %}>
 							                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
 						                    </option>
 						                {% endif %}
@@ -216,7 +219,7 @@
 				    <div class="checkbox col-md-9">
 					    <label>
 					        <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
-							    {% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked="checked"{% endif %}>
+							    {% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked{% endif %}>
 							{_ Published _}
 					    </label>
 				    </div>
@@ -227,7 +230,7 @@
 			    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 			    <button class="btn btn-primary" type="submit">
 			    	{_ Create _} {{ catname }}
-			    	{% if is_zlink %} &amp; {_ Link _}{% elseif subject_id or object_id %} &amp; {_ Connect _}{% endif %}
+			    	{% if is_zlink and predicate %} &amp; {_ Link _}{% elseif subject_id or object_id %} &amp; {_ Connect _}{% endif %}
 			    </button>
 		    </div>
 		{% endwith %}
@@ -239,41 +242,49 @@
 	<div class="new-find-results">
 
 		{# following hidden fields are for the feedback #}
-		<input type="hidden" class="nosubmit" name="subject_id" value="{{ subject_id }}">
-	    <input type="hidden" class="nosubmit" name="object_id" value="{{ object_id }}">
-		<input type="hidden" class="nosubmit" name="predicate" value="{{ predicate|default:'' }}">
-	    <input type="hidden" class="nosubmit" name="cat_exclude" value="{{ cat_exclude }}">
+		<input type="hidden" class="nosubmit" name="subject_id" value="{{ subject_id|escape }}">
+	    <input type="hidden" class="nosubmit" name="object_id" value="{{ object_id|escape }}">
+		<input type="hidden" class="nosubmit" name="predicate" value="{{ predicate|escape|default:'' }}">
+	    <input type="hidden" class="nosubmit" name="cat_exclude" value="{{ cat_exclude|escape }}">
 	    <input type="hidden" class="nosubmit" name="is_zlink" value="{{ is_zlink|if:'1':'' }}">
 
 	    <div class="new-find-results-header">
 
-{% comment %}
-				{% if nocatselect and cat %}
-		    		<input type="hidden" class="nosubmit" name="find_category" value="{{ cat }}">
-		        {% elseif predicate %}
-		        	<div class="col-xs-6">
-			        	<label class="checkbox-inline">
-			        		<input type="checkbox" class="nosubmit" name="find_category" value="p:{{ predicate }}" checked>
-			        		{_ Any valid for: _} {{ m.rsc[predicate].title }}
-			        	</label>
-					</div>
-		        {% endif %}
-{% endcomment %}
-
-			<h4>{_ Existing content _}</h4>
+			<h4>2. {_ Existing content _}</h4>
 
 			<p id="new-find-results-description">
 				{% include "_action_dialog_new_rsc_tab_find_description.tpl" %}
 			</p>
 
-			<p>
-	        	<label class="checkbox-inline">
-	        		<input type="checkbox" class="nosubmit" id="{{ #find_me }}"
-	        			   name="find_creator_id" value="{{ m.acl.user }}"
-	        			   {% if m.config.mod_admin.connect_created_me.value %}checked{% endif %}>
-	        		{_ Created by me _}
-	        	</label>
-	        </p>
+			<div class="row">
+				{% if not nocatselect or not cat %}
+					<div class="col-sm-6">
+				        <select class="form-control nosubmit" id="{{ #find_category }}" name="find_category">
+						    <option value="" disabled {% if not cat %}selected{% endif %}>{_ Select category _}</option>
+				        	{% if predicate %}
+				        		<option value="p:{{ predicate }}" selected>
+					        		{_ Any valid for: _} {{ m.rsc[predicate].title }}
+					        	</option>
+					        	<option disabled>
+					        	</option>
+				        	{% endif %}
+				            {% for c in m.category.tree_flat_meta %}
+			                    <option value="{{c.id}}" {% if c.id == cat %}selected{% endif %}>
+				                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
+			                    </option>
+				            {% endfor %}
+				        </select>
+					</div>
+				{% endif %}
+				<div class="col-sm-6">
+		        	<label class="checkbox-inline">
+		        		<input type="checkbox" class="nosubmit" id="{{ #find_me }}"
+		        			   name="find_creator_id" value="{{ m.acl.user }}"
+		        			   {% if m.config.mod_admin.connect_created_me.value %}checked{% endif %}>
+		        		{_ Created by me _}
+		        	</label>
+		        </div>
+	        </div>
 
         	{% javascript %}
         		switch (window.sessionStorage.getItem('dialog_connect_created_me')) {
@@ -294,7 +305,6 @@
         			}
         		});
         	{% endjavascript %}
-
 		</div>
 
 		<div id="dialog-rsc-new-found" class="do_feedback"
@@ -361,6 +371,18 @@
 						    break;
 					}
 				});
+
+			var catInitial = '{{ cat|escape }}';
+
+			$('#dialog-new-rsc-tab')
+				.on('change', 'select[name="category_id"]', function() {
+					var val = $(this).val();
+					if (val !== null && val != catInitial) {
+						catInitial = val;
+						$('#{{ #find_category }}').val(val).change();
+					}
+				});
+
 		{% endjavascript %}
 
 		{% if subject_id or object_id or is_zlink %}
@@ -428,5 +450,6 @@
 
 </form>
 
+{% endwith %}
 {% endwith %}
 

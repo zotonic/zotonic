@@ -455,6 +455,7 @@ fieldset[disabled] .btn-primary.active {
   padding: 10px 0 0 14px;
   margin-left: 0;
   border-left: 1px solid rgba(215, 215, 215, 0.7);
+  background: linear-gradient(to right, #f8f8f8, white, white);
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results > .new-find-results-header {
   -ms-grid-column: 1;
@@ -462,6 +463,7 @@ fieldset[disabled] .btn-primary.active {
   grid-column: 1;
   grid-row: 1;
   padding-right: 15px;
+  padding-bottom: 10px;
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results > #dialog-rsc-new-found {
   -ms-grid-column: 1;
@@ -472,6 +474,9 @@ fieldset[disabled] .btn-primary.active {
   padding-right: 15px;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+#dialog-new-rsc-tab .new-find-cols > .new-find-results #dialog_new_rsc_results {
+  margin-top: 0;
 }
 #dialog_new_rsc_results {
   margin-top: 10px;
