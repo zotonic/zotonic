@@ -41,14 +41,6 @@ m_find_value(totp_image_url, #m{ value = undefined }, Context) ->
         undefined -> <<>>;
         UserId -> totp_image_url(UserId, Context)
     end;
-m_find_value(totp_image_url, #m{ value = UserId }, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context)
-        orelse UserId =:= z_acl:user(Context)
-    of
-        true -> totp_image_url(UserId, Context);
-        false -> undefined
-    end;
-
 m_find_value(is_totp_enabled, #m{ value = undefined }, Context) ->
     case z_acl:user(Context) of
         undefined -> false;
