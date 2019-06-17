@@ -1636,14 +1636,14 @@ window.onerror = function(message, file, line, col, error) {
             url: window.location.href
         };
 
-        if (window.theForm) {
-            try { $(theForm).unmask(); } catch (e) {}
-        }
-
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '/log-client-event', true);
         xhr.send(JSON.stringify(payload));
-        alert("Sorry, something went wrong.\n\n(" + message + ")");
+
+        if ($("form.masked").length > 0 || (payload.stack && payload.stack.match(/(submitFunction|doValidations)/))) {
+            alert("Sorry, something went wrong.\n\n(" + message + ")");
+            try { $("form.masked").unmask(); } catch (e) {}
+        }
     }
 
     if (oldOnError) {
@@ -1692,9 +1692,10 @@ function z_init_postback_forms()
         });
     })
     .submit(function(event) {
+        var theForm = this;
+
         event.preventDefault();
 
-        theForm = this;
         z_editor_save(theForm);
 
         submitFunction = function(ev) {
