@@ -444,6 +444,8 @@ parse_query([{text, Text}|Rest], Context, Result) ->
     case z_string:trim(Text) of
         "id:"++ S ->
             mod_search:find_by_id(S, Context);
+        <<"id:", S/binary>> ->
+            mod_search:find_by_id(S, Context);
         [] ->
             parse_query(Rest, Context, Result);
         _ ->

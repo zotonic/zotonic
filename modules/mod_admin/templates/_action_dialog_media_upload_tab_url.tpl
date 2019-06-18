@@ -13,7 +13,7 @@
 	<form id="{{ #urlform }}" method="POST" action="postback" class="form form-horizontal">
 
 		<div class="form-group row">
-		    <label class="control-label col-md-3" for="upload_file">{_ Media URL _}</label>
+		    <label class="control-label col-md-3" for="url">{_ Media URL _}</label>
             <div class="col-md-9">
 		        <input type="text" class="col-lg-4 col-md-4 form-control do_autofocus" id="url" name="url" />
 		        {% validate id="url" type={presence} type={format pattern="^https?://.+"} %}
