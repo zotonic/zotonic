@@ -19,6 +19,8 @@
 	                <ul class="nav nav-pills">
 	                    <li class="active"><a data-toggle="tab" href="#{{ #main }}">{_ Main _}</a></li>
 	                    <li><a data-toggle="tab" href="#{{ #acl }}">{_ Access control _}</a></li>
+                        {% block tabbar_extra %}
+                        {% endblock %}
 	                </ul>
                 {% endblock %}
                 <div class="tab-content">
@@ -27,12 +29,23 @@
 
 	                        {% catinclude "_admin_edit_basics.tpl" id in_dialog is_editable=id.is_editable languages=languages show_header %}
 
-	                        {% if id.is_a.category or id.is_a.predicate %}
+	                        {% if id.is_a.meta %}
 	                            <div class="form-group row">
 		                            <label class="control-label col-md-3" for="{{ #unique }}">{_ Unique name _}</label>
                                     <div class="col-md-9">
 		                                <input class="form-control" type="text" id="{{ #unique }}" name="name" value="{{ id.name }}" />
-		                                {% validate id=#unique name="name" type={presence} %}
+                                        {% if id.is_a.category or id.is_a.predicate %}
+    		                                {% validate id=#unique
+                                                        name="name"
+                                                        type={presence}
+                                                        type={format pattern="^[A-Za-z0-9_]*$"}
+                                            %}
+                                        {% else %}
+                                            {% validate id=#unique
+                                                        name="name"
+                                                        type={format pattern="^[A-Za-z0-9_]*$"}
+                                            %}
+                                        {% endif %}
                                     </div>
 	                            </div>
 	                        {% endif %}
