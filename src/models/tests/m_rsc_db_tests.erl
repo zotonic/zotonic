@@ -73,3 +73,45 @@ name_rid_test() ->
     {ok, Id} = m_rsc:update(rose, [], AdminC),
     {ok, _DuplicateId} = m_rsc:duplicate(rose, [], AdminC),
     ok = m_rsc:delete(rose, AdminC).
+
+%% @doc Check normalization of dates
+normalize_date_props_test() ->
+    C = z_context:new(testsandboxdb),
+    InPropsA = [
+        {"dt:dmy:0:date_start", "13/7/-99"},
+        {date_is_all_day, true}
+    ],
+    OutPropsA = m_rsc_update:normalize_props(undefined, InPropsA, C),
+    ?assertEqual({{-99, 7, 13}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsA)),
+
+    InPropsB = [
+        {"dt:ymd:0:date_start", "-99/7/13"},
+        {date_is_all_day, true}
+    ],
+    OutPropsB = m_rsc_update:normalize_props(undefined, InPropsB, C),
+    ?assertEqual({{-99, 7, 13}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsB)),
+
+    InPropsC = [
+        {"dt:dmy:0:date_start", "31/12/1999"},
+        {date_is_all_day, true}
+    ],
+    OutPropsC = m_rsc_update:normalize_props(undefined, InPropsC, C),
+    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsC)),
+
+    InPropsC = [
+        {"dt:ymd:0:date_start", "1999/12/31"},
+        {date_is_all_day, true}
+    ],
+    OutPropsC = m_rsc_update:normalize_props(undefined, InPropsC, C),
+    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsC)),
+
+    InPropsD = [
+        {"dt:ymd:0:date_start", "1999-12-31"},
+        {date_is_all_day, true}
+    ],
+    OutPropsD = m_rsc_update:normalize_props(undefined, InPropsD, C),
+    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsD)),
+
+    ok.
+
+
