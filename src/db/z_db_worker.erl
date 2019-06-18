@@ -24,13 +24,13 @@
       WorkerArgs :: proplists:proplist(),
       Reason     :: term().
 
--callback squery(Worker, Sql, Timeout) -> pgsql:ok_reply(pgsql:squery_row()) | {error, pgsql:query_error()} when
+-callback squery(Worker, Sql, Timeout) -> epgsql:ok_reply(epgsql:squery_row()) | {error, epgsql:query_error()} when
       Worker :: pid(),
       Sql :: string(),
       Timeout :: non_neg_integer().
 
--callback equery(Worker, Sql, Parameters, Timeout) -> pgsql:ok_reply(pgsql:equery_row()) | {error, pgsql:query_error()} when
+-callback equery(Worker, Sql, Parameters, Timeout) -> epgsql:ok_reply(epgsql:equery_row()) | {error, epgsql:query_error()} when
       Worker :: pid(),
       Sql :: string(),
-      Parameters :: [pgsql:bind_param()],
+      Parameters :: [epgsql:bind_param()],
       Timeout :: non_neg_integer().

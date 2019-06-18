@@ -6,7 +6,7 @@
 
 
 connect() ->
-    {ok, Conn} = pgsql:connect("localhost", "zotonic", "",
+    {ok, Conn} = epgsql:connect("localhost", "zotonic", "",
                                [{database, "zotonic"}]),
     Conn.
 
@@ -45,7 +45,7 @@ test_squery(Conn, Sql, _Args, Time) ->
     test_squery1(Conn, Sql, Time, 0, ts()).
 
 test_squery1(Conn, Sql, Time, Count, Start) ->
-    {ok, _, _} = pgsql:squery(Conn, Sql),
+    {ok, _, _} = epgsql:squery(Conn, Sql),
     case ts() - Start of
         T when T < Time ->
             test_squery1(Conn, Sql, Time, Count+1, Start);
@@ -57,7 +57,7 @@ test_equery(Conn, Sql, Args, Time) ->
     test_equery1(Conn, Sql, Args, Time, 0, ts()).
 
 test_equery1(Conn, Sql, Args, Time, Count, Start) ->
-    {ok, _, _} = pgsql:equery(Conn, Sql, Args),
+    {ok, _, _} = epgsql:equery(Conn, Sql, Args),
     case ts() - Start of
         T when T < Time ->
             test_equery1(Conn, Sql, Args, Time, Count+1, Start);
@@ -69,7 +69,7 @@ test_z_db_q1(Conn, Sql, Args, Time) ->
     test_z_db_q1(Conn, Sql, Args, Time, 0, ts()).
 
 test_z_db_q1(Context, Sql, Args, Time, Count, Start) ->
-    %%{ok, _, _} = pgsql:equery(Conn, Sql, Args),
+    %%{ok, _, _} = epgsql:equery(Conn, Sql, Args),
     z_db:q1(Sql, Args, Context),
     case ts() - Start of
         T when T < Time ->
