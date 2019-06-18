@@ -98,19 +98,19 @@ normalize_date_props_test() ->
     OutPropsC = m_rsc_update:normalize_props(undefined, InPropsC, C),
     ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsC)),
 
-    InPropsC = [
-        {"dt:ymd:0:date_start", "1999/12/31"},
-        {date_is_all_day, true}
-    ],
-    OutPropsC = m_rsc_update:normalize_props(undefined, InPropsC, C),
-    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsC)),
-
     InPropsD = [
-        {"dt:ymd:0:date_start", "1999-12-31"},
+        {"dt:ymd:0:date_start", "1999/12/31"},
         {date_is_all_day, true}
     ],
     OutPropsD = m_rsc_update:normalize_props(undefined, InPropsD, C),
     ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsD)),
+
+    InPropsE = [
+        {"dt:ymd:0:date_start", "1999-12-31"},
+        {date_is_all_day, true}
+    ],
+    OutPropsE = m_rsc_update:normalize_props(undefined, InPropsE, C),
+    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsE)),
 
     ok.
 
