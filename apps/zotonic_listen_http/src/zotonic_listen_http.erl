@@ -138,7 +138,8 @@ start_http_listeners_ip4(WebIp, WebPort) ->
         [   inet,
             {port, WebPort},
             {backlog, z_config:get(inet_backlog)},
-            {num_acceptors, z_config:get(inet_acceptor_pool_size)}
+            {num_acceptors, z_config:get(inet_acceptor_pool_size)},
+            {max_connections, z_config:get(max_connections)}
             | WebOpt
         ],
         cowboy_options())
@@ -163,7 +164,8 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
         [   inet,
             {port, SSLPort},
             {backlog, z_config:get(ssl_backlog)},
-            {num_acceptors, z_config:get(ssl_acceptor_pool_size)}
+            {num_acceptors, z_config:get(ssl_acceptor_pool_size)},
+            {max_connections, z_config:get(ssl_max_connections)}
         ]
         ++ z_ssl_certs:ssl_listener_options()
         ++ WebOpt,
@@ -188,7 +190,8 @@ start_http_listeners_ip6(WebIp, WebPort) ->
             {ipv6_v6only, true},
             {port, WebPort},
             {backlog, z_config:get(inet_backlog)},
-            {num_acceptors, z_config:get(inet_acceptor_pool_size)}
+            {num_acceptors, z_config:get(inet_acceptor_pool_size)},
+            {max_connections, z_config:get(max_connections)}
         ]
         ++ WebOpt,
         cowboy_options()).
@@ -208,7 +211,8 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
             {ipv6_v6only, true},
             {port, SSLPort},
             {backlog, z_config:get(ssl_backlog)},
-            {num_acceptors, z_config:get(ssl_acceptor_pool_size)}
+            {num_acceptors, z_config:get(ssl_acceptor_pool_size)},
+            {max_connections, z_config:get(ssl_max_connections)}
         ]
         ++ z_ssl_certs:ssl_listener_options()
         ++ WebOpt,
