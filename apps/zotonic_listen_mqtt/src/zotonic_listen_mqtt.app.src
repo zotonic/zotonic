@@ -1,0 +1,16 @@
+%% -*- mode: erlang -*-
+{application, zotonic_listen_mqtt,
+ [{description, "Zotonic MQTT Listener"},
+  {vsn, "git"},
+  {registered, []},
+  {applications, [
+      lager,
+      ranch,
+      zotonic_core
+  ]},
+  {env, []},
+  {modules,
+   [
+    zotonic_listen_mqtt
+   ]}
+ ]}.
