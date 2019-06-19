@@ -1,4 +1,1 @@
-{% lib
-	"me/mediaelementplayer.min.css"
-	"css/video.css"
-%}
+{% lib "css/video.css" %}
