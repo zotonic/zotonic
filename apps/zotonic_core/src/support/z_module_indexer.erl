@@ -446,16 +446,18 @@ convert_name(lib, _AppPrefix, _Pattern, _Basename, _Rootname, RelPath) ->
     RelPath;
 convert_name(translation, _AppPrefix, _Pattern, _Basename, _Rootname, RelPath) ->
     RelPath;
-convert_name(_What, AppPrefix, Pattern, Basename, Rootname, _RelPath) ->
+convert_name(What, AppPrefix, Pattern, Basename, Rootname, _RelPath) ->
     case re:run(Basename, Pattern, [{capture, all_but_first, binary}]) of
         {match, [Name]} ->
-            Name1 = drop_prefix(AppPrefix, Name),
+            Name1 = maybe_drop_prefix(What, AppPrefix, Name),
             erlang:binary_to_atom(Name1, utf8);
         _ ->
             erlang:binary_to_atom(Rootname, utf8)
     end.
 
-drop_prefix(Prefix, Name) ->
+maybe_drop_prefix(model, _Prefix, Name) ->
+    Name;
+maybe_drop_prefix(_What, Prefix, Name) ->
     case binary:split(Name, Prefix) of
         [<<>>, <<$_, Rest/binary>>] -> Rest;
         _ -> Name

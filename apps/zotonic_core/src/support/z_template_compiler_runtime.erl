@@ -198,8 +198,8 @@ is_modified(Filename, Mtime, _Context) ->
 %% @doc Compile time mapping of nested value lookup
 -spec compile_map_nested_value(Tokens :: list(), ContextVar :: string(), Context :: term()) -> NewTokens :: list().
 compile_map_nested_value([{identifier, _, <<"m">>}, {identifier, _, Model}|Rest], _ContextVar, _Context) ->
-    Module = binary_to_atom(<<"m_", Model/binary>>, 'utf8'),
-    [{mfa2, Module, m_get, Rest, undefined}];
+    ModelA = binary_to_atom(Model, 'utf8'),
+    [{mfa2, z_model, template_get, Rest, ModelA}];
 compile_map_nested_value([{identifier, _, <<"q">>}, {identifier, _, QArg}|Rest], ContextVar, _Context) ->
     Ast = erl_syntax:application(
                 erl_syntax:atom(z_context),

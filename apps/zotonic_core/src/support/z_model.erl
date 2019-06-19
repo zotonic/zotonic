@@ -23,6 +23,8 @@
 -export([
     payload_msg/1,
 
+    template_get/3,
+
     call/5,
     publish/5,
     callback/5,
@@ -64,6 +66,21 @@ payload_msg(Payload) ->
         payload => Payload
     }.
 
+%% @doc Called by the compiled templates for a model lookup.
+-spec template_get( path(), model_name(), z:context() ) -> {ok, {term(), path()}} | {error, term()}.
+template_get( Path, Model, Context ) ->
+    case get_module(Model, Context) of
+        {ok, Mod} ->
+            model_call(Mod, m_get, Path, undefined, Context);
+        {error, _} ->
+            case publish(Model, get, Path, undefined, Context) of
+                {ok, Payload} ->
+                    {ok, {Payload, []}};
+                {error, _} = Error ->
+                    Error
+            end
+    end.
+
 -spec call( model_name(), verb(), path(), opt_message(), z:context() ) -> {ok, term()} | {error, term()}.
 call(Model, Verb, Path, Msg, Context) ->
     case get_module(Model, Context) of
@@ -92,7 +109,7 @@ publish(Model, Verb, Path, Msg, Context) ->
     },
     case z_mqtt:publish(Msg1, Context) of
         ok ->
-            case z_mqtt:await_response(RespTopic, ?MQTT_CALL_TIMEOUT) of
+            case z_mqtt:await_response(RespTopic, ?MQTT_CALL_TIMEOUT, Context) of
                 {ok, #{ message := ReplyMsg } } ->
                     {ok, maps:get(payload, ReplyMsg, undefined)};
                 {error, _} = Error ->
