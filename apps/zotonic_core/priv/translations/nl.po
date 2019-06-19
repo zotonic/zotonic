@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2017-02-27 17:43+0100\n"
+"PO-Revision-Date: 2019-06-19 13:53+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: apps/zotonic_core/src/support/z_media_import.erl:138
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -29,9 +29,8 @@ msgid "ago"
 msgstr ""
 
 #: apps/zotonic_core/src/support/z_datetime.erl:316./apps/zotonic_core/src/support/z_datetime.erl:319
-#, fuzzy
 msgid "day"
-msgstr "mei"
+msgstr "dag"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:316./apps/zotonic_core/src/support/z_datetime.erl:319
 msgid "days"
@@ -46,9 +45,8 @@ msgid "hours"
 msgstr ""
 
 #: apps/zotonic_core/src/support/z_datetime.erl:258
-#, fuzzy
 msgid "in"
-msgstr "Basis"
+msgstr "in"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:312./apps/zotonic_core/src/support/z_datetime.erl:315
 msgid "minute"
@@ -59,19 +57,16 @@ msgid "minutes"
 msgstr ""
 
 #: apps/zotonic_core/src/support/z_datetime.erl:309
-#, fuzzy
 msgid "moments"
-msgstr "Reacties"
+msgstr "net"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:318./apps/zotonic_core/src/support/z_datetime.erl:321
-#, fuzzy
 msgid "month"
-msgstr "Maandelijks"
+msgstr "maand"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:318./apps/zotonic_core/src/support/z_datetime.erl:321
-#, fuzzy
 msgid "months"
-msgstr "Maandelijks"
+msgstr "maanden"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:258./apps/zotonic_core/src/support/z_datetime.erl:308
 msgid "now"
@@ -218,14 +213,12 @@ msgid "Close"
 msgstr "Sluit"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:45
-#, fuzzy
 msgid "Collaboration group managers"
-msgstr "Samenwerkingsgroepen"
+msgstr "Samenwerkingsgroep managers"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:44
-#, fuzzy
 msgid "Collaboration group members"
-msgstr "Samenwerkingsgroepen"
+msgstr "Samenwerkingsgroep leden"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:49./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:394
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
@@ -267,9 +260,8 @@ msgid "Content rules for collaboration group members and managers"
 msgstr "Paginaregels voor leden en beheerders van samenwerkingsgroepen"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:42
-#, fuzzy
 msgid "Could not move to collaboration group."
-msgstr "Voeg connecties toe aan een samenwerkingsgroep"
+msgstr "Kon niet verplaatsen naar de samenwerkingsgroep."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
@@ -400,14 +392,12 @@ msgid "Maximum upload size"
 msgstr "Maximum bestandsgrootte"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:40
-#, fuzzy
 msgid "Members"
-msgstr "december"
+msgstr "Leden"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:42
-#, fuzzy
 msgid "Members of same user group"
-msgstr "Verwijder alle gebruikersgroepen"
+msgstr "Leden van dezelfde gebruikersgroep"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
@@ -472,14 +462,12 @@ msgid "Permissions"
 msgstr "Toestemming"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:45
-#, fuzzy
 msgid "Please select a collaboration_group"
-msgstr "Alle samenwerkingsgroepen"
+msgstr "Selecteer een samenwerkingsgroep"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:46
-#, fuzzy
 msgid "Private"
-msgstr "Activeer"
+msgstr "Privé"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:50
 msgid "Private properties are email, phone, visiting address, and date range."
@@ -503,9 +491,8 @@ msgid "Revert back to published version"
 msgstr "Terug naar gepubliceerde versie"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:102
-#, fuzzy
 msgid "Reverted rules"
-msgstr "Huidige regels exporteren"
+msgstr "Regels zijn teruggezet"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:66
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
@@ -518,9 +505,8 @@ msgid "Save"
 msgstr "Bewaar"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:135
-#, fuzzy
 msgid "Saved collaboration group settings"
-msgstr "Bewerk de samenwerkingsgroep"
+msgstr "Instellingen voor samenwerkingsgroepen zijn bewaard"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:86
 msgid "Show"
@@ -640,14 +626,12 @@ msgid "Which version of the ACL rules do you want to use?"
 msgstr "Welke versie van de toegangsregels wil je gebruiken?"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:40
-#, fuzzy
 msgid "You are not allowed to move to this collaboration group."
-msgstr "Je hebt geen rechten om deze pagina te bekijken."
+msgstr "Het is niet toegestaan om naar deze samenwerkingsgroep te verplaatsen."
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:59
-#, fuzzy
 msgid "You are not allowed to perform this action"
-msgstr "Je hebt geen rechten om deze pagina te bewerken."
+msgstr "Je hebt geen rechten om deze actie uit te voeren"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:73
 msgid "You are not allowed to view this page."
@@ -729,9 +713,8 @@ msgid "send this URL to somebody else for testing"
 msgstr "naar iemand anders sturen."
 
 #: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:196
-#, fuzzy
 msgid "use (acl action)"
-msgstr "toevoegen"
+msgstr "gebruik (acl-actie)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid ""
@@ -756,9 +739,8 @@ msgid "(private)"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:133
-#, fuzzy
 msgid "(public)"
-msgstr "publiceer"
+msgstr "(publiek)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:29
 msgid "+ add"
@@ -958,14 +940,12 @@ msgid "Connect a page"
 msgstr "Paginaconnectie maken"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:92
-#, fuzzy
 msgid "Could not connect to the website."
-msgstr "Aanmaken van media-pagina niet gelukt."
+msgstr "Kon geen verbinding maken met de website."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:7
-#, fuzzy
 msgid "Could not detect anything to import on that URL or embed code."
-msgstr "Kon de pagina niet bijwerken met de nieuwe embedcode."
+msgstr "Kon niets detecteren om te importeren op die URL of embed code."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:101
@@ -1035,9 +1015,8 @@ msgid "Disconnect"
 msgstr "Ontkoppel"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:32
-#, fuzzy
 msgid "Discover media"
-msgstr "Zoek naar andere mediabestanden"
+msgstr "Ontdek de media"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:38
 msgid "Do you want to remove this block?"
@@ -1084,7 +1063,6 @@ msgid "Edit:"
 msgstr "Bewerken:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:140
-#, fuzzy
 msgid "Email address"
 msgstr "E-mailadres"
 
@@ -1093,12 +1071,10 @@ msgid "Email address for public display"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:5
-#, fuzzy
 msgid "Embed"
-msgstr "Embed-URL"
+msgstr "Embed"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:26
-#, fuzzy
 msgid ""
 "Embed code will be sanitized. Only whitelisted sites are allowed in embed "
 "codes."
@@ -1125,9 +1101,8 @@ msgid ""
 msgstr ""
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:103
-#, fuzzy
 msgid "Error checking the website."
-msgstr "Fout bij uploaden van bestand."
+msgstr "Fout bij het controleren van de website."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:164
 msgid "Error uploading the file."
@@ -1377,9 +1352,8 @@ msgid "Name"
 msgstr "Naam"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:85./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:87
-#, fuzzy
 msgid "Next &gt;"
-msgstr "Volgende estap"
+msgstr "Volgende &gt;"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:70
 msgid "Next in category:"
@@ -1821,9 +1795,8 @@ msgid "Type text to search"
 msgstr "Typ een tekst om te zoeken"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:22
-#, fuzzy
 msgid "URL or Embed Code"
-msgstr "Embedcode"
+msgstr "URL of Embed Code"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38
 msgid "Unique name"
@@ -1910,9 +1883,8 @@ msgid "Website for clicks on image"
 msgstr "Website voor kliks op de afbeelding"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:69./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:15./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:19
-#, fuzzy
 msgid "Website or Embed"
-msgstr "Website"
+msgstr "Website of Embed"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8
 msgid ""
@@ -2148,9 +2120,8 @@ msgstr "Sleutel toevoegen"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:23
-#, fuzzy
 msgid "Alternative names"
-msgstr "Alternatief telefoonnummer"
+msgstr "Alternatieve namen"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
@@ -2173,9 +2144,8 @@ msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:19
-#, fuzzy
 msgid "Hostname"
-msgstr "Achternaam"
+msgstr "Hostnaam"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:15./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -2251,9 +2221,8 @@ msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:16
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:31
-#, fuzzy
 msgid "Valid till"
-msgstr "Validatie"
+msgstr "Geldig tot"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:16./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:23./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 msgid "Value"
@@ -2322,9 +2291,8 @@ msgstr "Weet je zeker dat je dit wilt verwijderen?"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:19
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:21./apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:56
-#, fuzzy
 msgid "Blocked"
-msgstr "Blok"
+msgstr "Geblokkeerd"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:71
 msgid "Changed the username."
@@ -2747,9 +2715,8 @@ msgid "Deletion cannot be undone."
 msgstr "Verwijderen kan niet ongedaan gemaakt worden."
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:107./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:116
-#, fuzzy
 msgid "Depiction"
-msgstr "Omschrijving"
+msgstr "Voorstelling"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:44./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:50
 msgid "Edit page"
@@ -3251,9 +3218,8 @@ msgid "I forgot my password"
 msgstr "Wachtwoord vergeten?"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:20
-#, fuzzy
 msgid "I want to create a new account"
-msgstr "Maak hier een nieuw wachtwoord aan."
+msgstr "Ik wil een nieuw account aanmaken"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_stage.tpl:5./apps/zotonic_mod_authentication/priv/templates/_logon_stage.tpl:25
 msgid ""
@@ -3461,9 +3427,8 @@ msgstr ""
 "mailadres typte."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:10
-#, fuzzy
 msgid "You are about to create a new account."
-msgstr "Maak hier een nieuw wachtwoord aan."
+msgstr "Je staat op het punt een nieuw account aan te maken."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:37
 msgid "You have to share your email address to be able to sign in."
@@ -3579,9 +3544,8 @@ msgid "Backups"
 msgstr "Backups"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73
-#, fuzzy
 msgid "Changed configuration."
-msgstr "Configuratie"
+msgstr "Configuratie aangepast."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
 msgid "Changes since"
@@ -3666,28 +3630,24 @@ msgid "Sorry, there was an error replacing your page."
 msgstr ""
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
-#, fuzzy
 msgid "Sorry, this backup has been deleted."
-msgstr "Helaas, deze pagina is verwijderd."
+msgstr "Sorry, deze back-up is verwijderd."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:95
-#, fuzzy
 msgid "Sorry, this backup is not valid."
-msgstr "Helaas, deze pagina is verwijderd."
+msgstr "Sorry, deze back-up is niet geldig."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:61
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr ""
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
-#, fuzzy
 msgid "Sorry, you don't have permission to change this page."
-msgstr "Sorry, je hebt geen toestemming om de taallijst te wijzigen."
+msgstr "Sorry, je hebt geen toestemming om deze pagina te wijzigen."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:75
-#, fuzzy
 msgid "Sorry, you have no permission to change the configuration."
-msgstr "Je hebt geen rechten om deze verbinding te maken."
+msgstr "Sorry, je hebt geen toestemming om de configuratie te wijzigen."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45
 msgid "Start backup now"
@@ -3748,9 +3708,8 @@ msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:66./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:69./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:78
-#, fuzzy
 msgid "You are not allowed to see the revisions"
-msgstr "Je mag geen ontvangers toevoegen of verwijderen."
+msgstr "U mag de revisies niet zien.."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:42
 msgid "You can have 10 backups, older ones will be deleted automatically."
@@ -3791,9 +3750,8 @@ msgid "CSV"
 msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/connection_test.tpl:3
-#, fuzzy
 msgid "Connection Test"
-msgstr "Paginaconnecties"
+msgstr "Verbindingstest"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:18
 msgid "Excel Workbook"
@@ -3908,17 +3866,14 @@ msgid "error"
 msgstr "fout"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:20
-#, fuzzy
 msgid "iCalendar"
-msgstr "Kalender"
+msgstr "iCalendar"
 
 #: apps/zotonic_mod_base/src/filters/filter_yesno.erl:27
-#, fuzzy
 msgid "no"
-msgstr "Informatie"
+msgstr "nee"
 
 #: apps/zotonic_mod_base/src/filters/filter_yesno.erl:26
-#, fuzzy
 msgid "yes"
 msgstr "Ja"
 
@@ -4082,18 +4037,16 @@ msgid "Settings"
 msgstr "Instellingen"
 
 #: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:43
-#, fuzzy
 msgid "The comment has been deleted."
-msgstr "Deze pagina is verwijderd."
+msgstr "De opmerking is geschrapt."
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:56
 msgid "There are no comments."
 msgstr "Er zijn geen reacties"
 
 #: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:46
-#, fuzzy
 msgid "You are not allowed to delete the comment."
-msgstr "Je mag dit media-item niet verwijderen."
+msgstr "Het is niet toegestaan om het commentaar te verwijderen."
 
 #: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:78
 #, fuzzy
@@ -4542,18 +4495,16 @@ msgid "Sent to this address"
 msgstr "Verstuurd naar dit adres"
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:68
-#, fuzzy
 msgid "Sorry, you are not allowed to block this email address."
-msgstr "Sorry, je mag dit email adres niet resetten."
+msgstr "Sorry, het is niet toegestaan om dit e-mailadres te blokkeren."
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:54
 msgid "Sorry, you are not allowed to reset this email address."
 msgstr "Sorry, je mag dit email adres niet resetten."
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:63
-#, fuzzy
 msgid "The email address has been blocked."
-msgstr "Dit emailadres is momenteel goed."
+msgstr "Het e-mailadres is geblokkeerd."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:41./apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:100
 msgid "The email address has been cleared, new emails will be sent."
@@ -4580,14 +4531,12 @@ msgstr ""
 "gauw een e-mail succesvol is ontvangen."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:23
-#, fuzzy
 msgid "This email address has been blocked, no emails will be sent."
-msgstr "Dit email adres is gereset, email zal weer worden verstuurd."
+msgstr "Dit e-mailadres is geblokkeerd, er worden geen e-mails verstuurd."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:58
-#, fuzzy
 msgid "This email address has been blocked."
-msgstr "Dit emailadres is momenteel goed."
+msgstr "Dit e-mailadres is geblokkeerd."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:107
 msgid "This email address is not valid."
@@ -4610,9 +4559,8 @@ msgid "Total/Status"
 msgstr "Totaal/status"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:28
-#, fuzzy
 msgid "Unblock"
-msgstr "blok"
+msgstr "Deblokkeren"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:80
 msgid "We are retrying email delivery."
@@ -5514,9 +5462,8 @@ msgid "Combine…"
 msgstr "Voeg samen…"
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:108
-#, fuzzy
 msgid "Confirm mailing cancelation."
-msgstr "Bevestig mijn account"
+msgstr "Bevestig de annulering van de mailing."
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:45
 msgid "Confirm sending to mailinglist"
@@ -5548,9 +5495,8 @@ msgid "Delete all recipients from this list?"
 msgstr "Alle ontvangers van deze lijst verwijderen?"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:49
-#, fuzzy
 msgid "Deleted the mailing list."
-msgstr "Hulp over mailingslijsten"
+msgstr "De mailinglijst is verwijderd."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Download all"
@@ -5569,9 +5515,8 @@ msgid "Dropbox filename (optional)"
 msgstr "Dropbox filenaam (optioneel)"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:62
-#, fuzzy
 msgid "E-mail address updated"
-msgstr "E-mailadressen"
+msgstr "E-mailadres bijgewerkt"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mail_page_button.tpl:3
 msgid "E-mail page"
@@ -5755,9 +5700,8 @@ msgid "Read this page on the web."
 msgstr "Lees deze pagina op het web."
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:66
-#, fuzzy
 msgid "Recipient deleted."
-msgstr "Ontvangers"
+msgstr "Ontvanger verwijderd."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:38./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:43
 msgid "Recipients"
@@ -5914,9 +5858,8 @@ msgid ""
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:122
-#, fuzzy
 msgid "The mailing has been canceled."
-msgstr "De error status is gereset."
+msgstr "De mailing is geannuleerd."
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:61
 msgid "The mailing will be send when the page becomes visible."
@@ -5933,9 +5876,8 @@ msgid "The recipients list of the mailing list will be deleted as well."
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:133
-#, fuzzy
 msgid "The statistics have been cleared."
-msgstr "De error status is gereset."
+msgstr "De statistieken zijn gewist."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_bounces.tpl:50
 msgid ""
@@ -6037,15 +5979,12 @@ msgid "You are not allowed to add or enable recipients."
 msgstr "Je mag geen ontvanger toevoegen of verwijderen."
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:113./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:124
-#, fuzzy
 msgid "You are not allowed to cancel this mailing."
-msgstr "Je mag dit niet veranderen."
+msgstr "Je kunt deze mailing niet annuleren."
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:53
-#, fuzzy
 msgid "You are not allowed to delete the mailing list."
-msgstr ""
-"Je hebt geen rechten om deze pagina naar de test mailinglijst te sturen"
+msgstr "Het is niet toegestaan om de mailinglijst te verwijderen."
 
 #: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:106
 msgid "You are not allowed to edit recipients."
@@ -6340,9 +6279,8 @@ msgid "Allow!"
 msgstr "Toestaan!"
 
 #: apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:108
-#, fuzzy
 msgid "Anonymous access"
-msgstr "API-toegang"
+msgstr "Anonieme toegang"
 
 #: apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:73
 msgid "Anonymous users have access."
@@ -6360,18 +6298,16 @@ msgid ""
 msgstr ""
 
 #: apps/zotonic_mod_oauth/src/controllers/controller_oauth_apps.erl:102
-#, fuzzy
 msgid "Application details saved."
-msgstr "Applicatietitel"
+msgstr "Applicatiegegevens zijn bewaard."
 
 #: apps/zotonic_mod_oauth/priv/templates/_oauth_consumer_edit.tpl:31
 msgid "Application title"
 msgstr "Applicatietitel"
 
 #: apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:79./apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:130
-#, fuzzy
 msgid "Are you sure you want to delete this token?"
-msgstr "Weet je zeker dat je dit wilt verwijderen?"
+msgstr "Weet u zeker dat u deze token wilt verwijderen?"
 
 #: apps/zotonic_mod_oauth/priv/templates/_oauth_consumer_edit.tpl:8
 msgid "Authorization"
@@ -6409,12 +6345,10 @@ msgid "Consumer secret"
 msgstr "Consumer secret"
 
 #: apps/zotonic_mod_oauth/src/controllers/controller_oauth_apps.erl:90
-#, fuzzy
 msgid "Created new application."
-msgstr "Applicatie toevoegen"
+msgstr "Nieuwe applicatie aangemaakt."
 
 #: apps/zotonic_mod_oauth/src/controllers/controller_oauth_apps.erl:115
-#, fuzzy
 msgid "Delete application"
 msgstr "Verwijder deze applicatie"
 
@@ -6436,9 +6370,8 @@ msgid "Do you really want to delete this application?"
 msgstr "Weet je zeker dat je deze applicatie wil verwijderen?"
 
 #: apps/zotonic_mod_oauth/src/controllers/controller_oauth_apps.erl:75
-#, fuzzy
 msgid "Edit application"
-msgstr "Voeg applicatie toe"
+msgstr "Bewerk applicatie"
 
 #: apps/zotonic_mod_oauth/priv/templates/_oauth_consumer_edit.tpl:38
 msgid "Homepage"
@@ -6479,18 +6412,16 @@ msgid ""
 msgstr ""
 
 #: apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:24./apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:27./apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:29
-#, fuzzy
 msgid "Reset Secret"
-msgstr "Client Secret"
+msgstr "Reset Geheim"
 
 #: apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:76./apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:127
 msgid "Revoke"
 msgstr ""
 
 #: apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:96
-#, fuzzy
 msgid "Secret"
-msgstr "App Secret"
+msgstr "Geheim"
 
 #: apps/zotonic_mod_oauth/priv/templates/oauth_authorize.tpl:9
 msgid "The application"
@@ -6501,7 +6432,6 @@ msgid "The following users are using this application:"
 msgstr "De volgende gebruikers gebruiken deze applicatie:"
 
 #: apps/zotonic_mod_oauth/priv/templates/_dialog_oauth_consumer_delete.tpl:2
-#, fuzzy
 msgid ""
 "There are users using this application. If you delete this application, you "
 "will revoke access and most likely their applications will break."
@@ -6510,9 +6440,8 @@ msgstr ""
 "verwijdert, ontneem je hun de toegang en gaan hun clients stuk."
 
 #: apps/zotonic_mod_oauth/priv/templates/_dialog_oauth_consumer_delete.tpl:4./apps/zotonic_mod_oauth/priv/templates/oauth_consumer_tokens.tpl:142
-#, fuzzy
 msgid "This application is not yet used by anybody."
-msgstr "Dit token is nog ongebruikt"
+msgstr "Deze applicatie wordt nog door niemand gebruikt."
 
 #: apps/zotonic_mod_oauth/priv/templates/oauth_authorize.tpl:19
 msgid "This application wants access to the following services:"
@@ -6935,9 +6864,8 @@ msgid "Certificates are automatically renewed before they expire."
 msgstr ""
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:5
-#, fuzzy
 msgid "Check the following urls:"
-msgstr "is naar de volgende lijsten verstuurd:"
+msgstr "Controleer de volgende url's:"
 
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:134
 msgid "Could not start fetching the SSL certificate. Try again later."
@@ -7009,9 +6937,8 @@ msgid "The port for HTTPS requests must be 443, it is now"
 msgstr ""
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:15
-#, fuzzy
 msgid "There is a certificate with the following details:"
-msgstr "Deze applicatie wil toegang tot de volgende diensten:"
+msgstr "Er is een certificaat met de volgende gegevens:"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:42
 msgid ""
@@ -7077,11 +7004,12 @@ msgid "Add questions by adding blocks with the menu."
 msgstr "Voeg vragen toe met behulp van het blok menu."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:56
-#, fuzzy
 msgid ""
 "Aggregated results from all respondents (only results for multiple choice "
 "questions are shown)"
-msgstr "Toon de resultaten van de vragenlijst aan de gebruiker aan het eind."
+msgstr ""
+"Geaggregeerde resultaten van alle respondenten (alleen resultaten voor "
+"meerkeuze vragen worden weergegeven)"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:67
 msgid "Agree"
@@ -7124,9 +7052,8 @@ msgid "Are you sure you want to delete this question?"
 msgstr "Weet je zeker dat je deze vraag wilt verwijderen?"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:101
-#, fuzzy
 msgid "Are you sure you want to delete this result?"
-msgstr "Weet je zeker dat je dit wilt verwijderen?"
+msgstr "Weet je zeker dat je dit resultaat wilt verwijderen?"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
 msgid "Are you sure you want to stop?"
@@ -7169,9 +7096,8 @@ msgid "Country select"
 msgstr "Landenselectie"
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:726
-#, fuzzy
 msgid "Created"
-msgstr "Aangemaakt:"
+msgstr "Aangemaakt"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Danger"
@@ -7354,7 +7280,6 @@ msgid "Likert"
 msgstr "Likert"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
-#, fuzzy
 msgid ""
 "List of possible answers, one per line. Use <em>value#answer</em> to store "
 "“value” but to show “answer”. E.g.  “2029#The year 2029”."
@@ -7379,9 +7304,8 @@ msgid "Mail filled in surveys to"
 msgstr "Stuur ingevulde surveys naar"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:108
-#, fuzzy
 msgid "Mail results to"
-msgstr "Resultaten bewerken"
+msgstr "Mail resultaten aan"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Match which answer fits best."
@@ -7400,9 +7324,8 @@ msgid "Multiple choice"
 msgstr "Meerkeuze"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:40
-#, fuzzy
 msgid "Multiple entries per user/browser"
-msgstr "Sta meedere keren invullen toe per gebruiker/browser."
+msgstr "Meerdere keren invullen per gebruiker/browser."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Multiple page break blocks are merged into one."
@@ -7413,14 +7336,12 @@ msgid "Narrative"
 msgstr "Verhalend"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:27./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:46
-#, fuzzy
 msgid "Needed for pass"
-msgstr "Meer hulp nodig?"
+msgstr "Nodig om te slagen"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:3
-#, fuzzy
 msgid "New result:"
-msgstr "Nieuw surveyresultaat:"
+msgstr "Nieuw resultaat:"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:64
 msgid "Next"
@@ -7443,9 +7364,8 @@ msgid "Once and allow editing afterwards"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:37./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:38
-#, fuzzy
 msgid "Once only per user/browser"
-msgstr "Sta meedere keren invullen toe per gebruiker/browser."
+msgstr "Eenmalig per gebruiker/browser."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
@@ -7464,9 +7384,8 @@ msgid "Page jump condition"
 msgstr "Paginasprong voorwaarde"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:444
-#, fuzzy
 msgid "Passed"
-msgstr "Wachtwoord"
+msgstr "Geslaagd"
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:446
 msgid "Percent"
@@ -7505,9 +7424,8 @@ msgid "Points"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_checkbox.tpl:28
-#, fuzzy
 msgid "Points per answer"
-msgstr "Lang antwoord"
+msgstr "Punten per antwoord"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:36
 msgid "Primary"
@@ -7534,9 +7452,8 @@ msgid "Questions"
 msgstr "Vragen"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_checkbox.tpl:5
-#, fuzzy
 msgid "Quiz or test question"
-msgstr "Ga naar vraag"
+msgstr "Quiz- of toetsvraag"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Randomize answers"
@@ -7559,9 +7476,8 @@ msgid "Results from the respondent"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
-#, fuzzy
 msgid "Saved"
-msgstr "Bewaar"
+msgstr "Bewaard"
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:445
 msgid "Score"
@@ -7617,9 +7533,8 @@ msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Toon voortgang als <em>Vraag 3/10</em>"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:46
-#, fuzzy
 msgid "Show results"
-msgstr " Toon resultaten"
+msgstr "Toon resultaten"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:29
 msgid "Show results (admin only)"
@@ -7707,23 +7622,20 @@ msgid "Thank you for filling in:"
 msgstr "Bedankt voor het invullen:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:69./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
-#, fuzzy
 msgid "Thank you text only"
-msgstr "Bedankt"
+msgstr "Alleen danktekst"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:14
-#, fuzzy
 msgid "Thank you text."
-msgstr "Bedankt"
+msgstr "Dank text."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "The earth is flat."
 msgstr "De aarde is plat."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
-#, fuzzy
 msgid "The results have been saved."
-msgstr "De cache is geleegd."
+msgstr "De resultaten zijn opgeslagen."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid ""
@@ -7788,9 +7700,8 @@ msgid "True/False"
 msgstr "Waar/Onwaar"
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:437
-#, fuzzy
 msgid "User Id"
-msgstr "Gebruiker"
+msgstr "Gebruikers ID"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:36
 msgid "Validation"
@@ -7856,9 +7767,8 @@ msgid "You need to give a name to every question."
 msgstr "Elke vraag moet een naam hebben."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:31./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
-#, fuzzy
 msgid "Your result"
-msgstr " Toon resultaten"
+msgstr "Jouw resultaten"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:93
 msgid "chocolate"
