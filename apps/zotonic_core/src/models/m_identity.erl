@@ -88,6 +88,8 @@
 -include_lib("zotonic.hrl").
 -include_lib("mqtt_packet_map/include/mqtt_packet_map.hrl").
 
+-define(IDN_CACHE_TIME, 3600*12).
+
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
@@ -261,6 +263,7 @@ set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
         ok ->
             reset_auth_tokens(Id, Context),
             z_depcache:flush(Id, Context),
+            z_depcache:flush({idn, Id}, Context),
             z_mqtt:publish(
                 [ <<"model">>, <<"identity">>, <<"event">>, Id, <<"username_pw">> ],
                 #{
@@ -608,8 +611,14 @@ get_rsc_by_type_1(Id, Type, Context) ->
         Context
     ).
 
--spec get_rsc(m_rsc:resource(), atom(), #context{}) -> list() | undefined.
-get_rsc(Id, Type, Context) ->
+-spec get_rsc(m_rsc:resource_id(), atom(), #context{}) -> list() | undefined.
+get_rsc(Id, Type, Context) when is_integer(Id), is_atom(Type) ->
+    F = fun() ->
+        get_rsc_1(Id, Type, Context)
+    end,
+    z_depcache:memo(F, {idn, Id, Type}, ?IDN_CACHE_TIME, [ {idn, Id} ], Context).
+
+get_rsc_1(Id, Type, Context) ->
     z_db:assoc_row(
         "select * from identity where rsc_id = $1 and type = $2",
         [m_rsc:rid(Id, Context), Type],
@@ -647,15 +656,17 @@ insert_single(Rsc, Type, Key, Context) ->
     insert(Rsc, Type, Key, [], Context).
 
 insert_single(Rsc, Type, Key, Props, Context) ->
-    case insert(Rsc, Type, Key, Props, Context) of
+    RscId = m_rsc:rid(Rsc, Context),
+    case insert(RscId, Type, Key, Props, Context) of
         {ok, IdnId} ->
             z_db:q("
                 delete from identity
                 where rsc_id = $1
                   and type = $2
                   and id <> $3",
-                [ Rsc, Type, IdnId ],
+                [ RscId, Type, IdnId ],
                 Context),
+            z_depcache:flush({idn, RscId}, Context),
             {ok, IdnId};
         {error, _} = Error ->
             Error
@@ -687,6 +698,7 @@ insert_1(Rsc, Type, Key, Props, Context) ->
         undefined ->
             Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
             Result = z_db:insert(identity, validate_is_unique(Props1), Context),
+            z_depcache:flush({idn, RscId}, Context),
             z_mqtt:publish(
                 [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                 #{
@@ -699,6 +711,7 @@ insert_1(Rsc, Type, Key, Props, Context) ->
             case proplists:get_value(is_verified, Props, false) of
                 true ->
                     set_verified_trans(RscId, Type, Key, Context),
+                    z_depcache:flush({idn, RscId}, Context),
                     z_mqtt:publish(
                         [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                         #{
@@ -849,6 +862,7 @@ delete(IdnId, Context) ->
                 true ->
                     case z_db:delete(identity, IdnId, Context) of
                         {ok, 1} ->
+                            z_depcache:flush({idn, RscId}, Context),
                             z_mqtt:publish(
                                 [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                                 #{
@@ -903,6 +917,8 @@ merge(WinnerId, LoserId, Context) ->
                 end
             end,
             z_db:transaction(F, Context),
+            z_depcache:flush({idn, LoserId}, Context),
+            z_depcache:flush({idn, WinnerId}, Context),
             z_mqtt:publish(
                 [ <<"model">>, <<"identity">>, <<"event">>, LoserId ],
                 #{
@@ -949,11 +965,12 @@ maybe_reset_email_property(_Id, _Type, _Key, _Context) ->
 
 
 -spec delete_by_type(m_rsc:resource(), atom(), #context{}) -> ok.
-delete_by_type(RscId, Type, Context) ->
-    case z_db:q("delete from identity where rsc_id = $1 and type = $2", [m_rsc:rid(RscId, Context), Type],
-        Context) of
+delete_by_type(Rsc, Type, Context) ->
+    RscId = m_rsc:rid(Rsc, Context),
+    case z_db:q("delete from identity where rsc_id = $1 and type = $2", [RscId, Type], Context) of
         0 -> ok;
         _N ->
+            z_depcache:flush({idn, RscId}, Context),
             z_mqtt:publish(
                 [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                 #{
@@ -965,11 +982,14 @@ delete_by_type(RscId, Type, Context) ->
     end.
 
 -spec delete_by_type_and_key(m_rsc:resource(), atom(), atom(), #context{}) -> ok.
-delete_by_type_and_key(RscId, Type, Key, Context) ->
+delete_by_type_and_key(Rsc, Type, Key, Context) ->
+    RscId = m_rsc:rid(Rsc, Context),
     case z_db:q("delete from identity where rsc_id = $1 and type = $2 and key = $3",
-        [m_rsc:rid(RscId, Context), Type, Key], Context) of
+                [RscId, Type, Key], Context)
+    of
         0 -> ok;
         _N ->
+            z_depcache:flush({idn, RscId}, Context),
             z_mqtt:publish(
                 [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                 #{
@@ -1031,7 +1051,11 @@ set_verify_key(Id, Context) ->
 
 
 check_hash(RscId, Username, Password, Hash, Context) ->
-    N = #identity_password_match{rsc_id = RscId, password = Password, hash = Hash},
+    N = #identity_password_match{
+        rsc_id = RscId,
+        password = Password,
+        hash = Hash
+    },
     case z_notifier:first(N, Context) of
         {ok, rehash} ->
             %% OK but module says it needs rehashing; do that using
