@@ -399,12 +399,13 @@
 			            action=action
 			            actions=actions
 			            autoclose=autoclose
+			            is_connect_toggle=not is_zmedia
 			        }
 			    }
 			%}
 			{% javascript %}
 			    $("#dialog-new-rsc-tab")
-				    .on('click', '.action-connect,.action-connect', function(e) {
+				    .on('click', '.action-connect', function(e) {
 				    	e.preventDefault();
 				    	var select_id = $(this).closest(".item,.rsc-preview-panel").data('id');
 				    	if (select_id) {
