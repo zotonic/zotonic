@@ -26,6 +26,7 @@
     insert_event/5,
     is_event_limited/4,
     list_event/3,
+    delete_event/3,
     prune/1
 ]).
 
@@ -94,6 +95,15 @@ is_event_limited( Type, Key, Device, Context ) ->
 -spec list_event( atom(), binary(), z:context() ) -> list().
 list_event(Type, Key, Context) ->
     mnesia:dirty_read( event_table(Context), {Type, Key} ).
+
+%% @doc Delete all entries for an event
+-spec delete_event( atom(), binary(), z:context() ) -> ok.
+delete_event(Type, Key, Context) ->
+    {atomic, _} = mnesia:transaction(
+        fun() ->
+            mnesia:delete({ event_table(Context), {Type, Key}})
+        end),
+    ok.
 
 -spec init( z:context() ) -> ok.
 init(Context) ->
