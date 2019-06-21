@@ -113,8 +113,8 @@ start_mqtt_listeners() ->
     start_mqtts_listeners_ip4(z_config:get(mqtt_listen_ip), z_config:get(mqtt_listen_ssl_port)),
     case ipv6_supported() of
         true ->
-            start_mqtt_listeners_ip6(z_config:get(mqtt_listen_ip6), z_config:get(listen_port)),
-            start_mqtts_listeners_ip6(z_config:get(mqtt_listen_ip6), z_config:get(ssl_listen_port)),
+            start_mqtt_listeners_ip6(z_config:get(mqtt_listen_ip6), z_config:get(mqtt_listen_port)),
+            start_mqtts_listeners_ip6(z_config:get(mqtt_listen_ip6), z_config:get(mqtt_listen_ssl_port)),
             ok;
         false ->
             ok
@@ -133,8 +133,9 @@ start_mqtt_listeners_ip4(WebIp, WebPort) ->
         any -> [];
         _ -> [{ip, WebIp}]
     end,
-    case cowboy:start_clear(
+    case ranch:start_listener(
         zotonic_mqtt_listener_ipv4,
+        ranch_tcp,
         [   inet,
             {port, WebPort},
             {backlog, z_config:get(inet_backlog)},
@@ -142,7 +143,8 @@ start_mqtt_listeners_ip4(WebIp, WebPort) ->
             {max_connections, z_config:get(mqtt_max_connections)}
             | WebOpt
         ],
-        server_options())
+        zotonic_listen_mqtt_handler,
+        handler_options())
     of
         {ok, _} = OK -> OK;
         {error, {already_started, Pid}} -> {ok, Pid}
@@ -159,8 +161,9 @@ start_mqtts_listeners_ip4(WebIp, SSLPort) ->
         any -> [];
         _ -> [{ip, WebIp}]
     end,
-    case start_tls(
+    case ranch:start_listener(
         zotonic_mqtts_listener_ipv4,
+        ranch_ssl,
         [   inet,
             {port, SSLPort},
             {backlog, z_config:get(ssl_backlog)},
@@ -169,7 +172,8 @@ start_mqtts_listeners_ip4(WebIp, SSLPort) ->
         ]
         ++ z_ssl_certs:ssl_listener_options()
         ++ WebOpt,
-        server_options())
+        zotonic_listen_mqtt_handler_tls,
+        handler_options())
     of
         {ok, _} = OK -> OK;
         {error, {already_started, Pid}} -> {ok, Pid}
@@ -184,8 +188,9 @@ start_mqtt_listeners_ip6(WebIp, WebPort) ->
         any -> [];
         _ -> [{ip, WebIp}]
     end,
-    {ok, _} = cowboy:start_clear(
+    {ok, _} = ranch:start_listener(
         zotonic_mqtt_listener_ipv6,
+        ranch_tcp,
         [   inet6,
             {ipv6_v6only, true},
             {port, WebPort},
@@ -194,7 +199,8 @@ start_mqtt_listeners_ip6(WebIp, WebPort) ->
             {max_connections, z_config:get(mqtt_max_connections)}
         ]
         ++ WebOpt,
-        server_options()).
+        zotonic_listen_mqtt_handler,
+        handler_options()).
 
 %% @doc Start the ip6 MQTT ssl listener
 start_mqtts_listeners_ip6(none, _SSLPort) -> ignore;
@@ -205,8 +211,9 @@ start_mqtts_listeners_ip6(WebIp, SSLPort) ->
         any -> [];
         _ -> [{ip, WebIp}]
     end,
-    {ok, _} = start_tls(
+    {ok, _} = ranch:start_listener(
         zotonic_mqtts_listener_ipv6,
+        ranch_ssl,
         [   inet6,
             {ipv6_v6only, true},
             {port, SSLPort},
@@ -216,32 +223,14 @@ start_mqtts_listeners_ip6(WebIp, SSLPort) ->
         ]
         ++ z_ssl_certs:ssl_listener_options()
         ++ WebOpt,
-        server_options()).
+        zotonic_listen_mqtt_handler_tls,
+        handler_options()).
 
 ip_to_string(any) -> "any";
 ip_to_string(IP) -> inet:ntoa(IP).
 
-server_options() ->
-    #{
-        request_timeout => ?MQTT_REQUEST_TIMEOUT,
-        env => #{}
-    }.
-
-
-% @doc Copied from cowboy.erl, disable http2 till the cipher problems are resolved.
--spec start_tls(ranch:ref(), ranch_ssl:opts(), list()) -> {ok, pid()} | {error, any()}.
-start_tls(Ref, TransOpts0, ProtoOpts) ->
-    TransOpts = [
-        connection_type(ProtoOpts)
-        % {next_protocols_advertised, [<<"h2">>, <<"http/1.1">>]},
-        % {alpn_preferred_protocols, [<<"h2">>, <<"http/1.1">>]}
-    |TransOpts0],
-    ranch:start_listener(Ref, ranch_ssl, TransOpts, cowboy_tls, ProtoOpts).
-
--spec connection_type(list()) -> {connection_type, worker | supervisor}.
-connection_type(ProtoOpts) ->
-    {_, Type} = maps:get(stream_handler, ProtoOpts, {cowboy_stream_h, supervisor}),
-    {connection_type, Type}.
+handler_options() ->
+    #{ }.
 
 
 %% @todo Exclude platforms that do not support raw ipv6 socket options

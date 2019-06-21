@@ -142,9 +142,6 @@ websocket_info({reply, {fetch_queue, Pid}}, Context) ->
     {reply, {binary, Payload}, Context};
 websocket_info({reply, Payload}, Context) when is_binary(Payload) ->
     {reply, {binary, Payload}, Context};
-websocket_info({reply, Msg}, Context) when is_map(Msg) ->
-    {ok, Payload} = mqtt_packet_map:encode(Msg),
-    {reply, {binary, Payload}, Context};
 websocket_info({reply, disconnect}, Context) ->
     {stop, Context};
 websocket_info(close, Context) ->
@@ -193,17 +190,23 @@ decode_incoming_data(Data, Context) ->
 
 %% Send the message to the attached MQTT session
 handle_message(Msg, Context) ->
+    MsgOptions = case maps:get(type, Msg) of
+        connect ->
+            #{
+                connection_pid => self(),
+                transport => self(),
+                peer_ip => m_req:get(peer_ip, Context),
+                context_prefs => #{
+                    user_id => z_acl:user(Context),
+                    language => z_context:language(Context),
+                    timezone => z_context:tz(Context),
+                    auth_options => z_context:get(auth_options, Context, #{})
+                }
+            };
+        _ ->
+            #{}
+    end,
     OptSessionRef = z_context:get(session_ref, Context),
-    MsgOptions = #{
-        transport => self(),
-        peer_ip => m_req:get(peer_ip, Context),
-        context_prefs => #{
-            user_id => z_acl:user(Context),
-            language => z_context:language(Context),
-            timezone => z_context:tz(Context),
-            auth_options => z_context:get(auth_options, Context, #{})
-        }
-    },
     case mqtt_sessions:incoming_message(mqtt_session_pool(Context), OptSessionRef, Msg, MsgOptions) of
         {ok, undefined} ->
             {ok, Context};

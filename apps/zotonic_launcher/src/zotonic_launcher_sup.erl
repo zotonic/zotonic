@@ -74,7 +74,12 @@ init([]) ->
         %% SMTP listener
         {zotonic_listen_smtp,
             {zotonic_listen_smtp, start_link, []},
-            permanent, 5000, worker, [zotonic_listen_smtp]}
+            permanent, 5000, worker, [zotonic_listen_smtp]},
+
+        %% MQTT listener
+        {zotonic_listen_mqtt,
+            {zotonic_listen_mqtt, start_link, []},
+            permanent, 5000, worker, [zotonic_listen_mqtt]}
 
     ]} }.
 

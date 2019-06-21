@@ -94,11 +94,16 @@ transport(<<"notify">>, Map, Context) when is_map(Map) ->
     transport(<<"postback">>, Postback, Context);
 transport(Delegate, Payload, Context) ->
     % Event
-    {ok, Module} = z_utils:ensure_existing_module(Delegate),
-    Msg = #z_msg_v1{
-        data = map_to_list(Payload)
-    },
-    incoming_context_result(Module:event(Msg, Context)).
+    case z_utils:ensure_existing_module(Delegate) of
+        {ok, Module} ->
+            Msg = #z_msg_v1{
+                data = map_to_list(Payload)
+            },
+            incoming_context_result(Module:event(Msg, Context));
+        {error, _} ->
+            lager:info("Unkwown delegate ~p for payload ~p", [Delegate, Payload]),
+            incoming_context_result(Context)
+    end.
 
 map_to_list(Payload) when is_map(Payload) ->
     maps:to_list(Payload);

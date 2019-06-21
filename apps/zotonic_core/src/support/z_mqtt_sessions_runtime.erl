@@ -111,10 +111,10 @@ connect(#{ type := connect, username := U, password := P }, Context) when ?none(
     },
     {ok, ConnAck, Context};
 connect(#{ type := connect, username := U, password := P }, Context) when not ?none(U), not ?none(P) ->
-    LogonArgs = [
-        {<<"username">>, U},
-        {<<"password">>, P}
-    ],
+    LogonArgs = #{
+        <<"username">> => U,
+        <<"password">> => P
+    },
     case z_notifier:first(#logon_submit{ payload = LogonArgs }, Context) of
         {ok, UserId} when is_integer(UserId) ->
             IsAuthOk = not z_auth:is_auth(Context)
