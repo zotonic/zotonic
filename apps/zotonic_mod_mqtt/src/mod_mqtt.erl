@@ -39,7 +39,7 @@
 
 -spec 'mqtt:test/#'(mqtt_packet_map:mqtt_packet(), z:context()) -> ok.
 'mqtt:test/#'(Msg, _Context) ->
-    ?DEBUG(Msg),
+    lager:debug("mod_mqtt test topic: ~p", [Msg]),
     ok.
 
 %% @doc Handle 'get' request for a model

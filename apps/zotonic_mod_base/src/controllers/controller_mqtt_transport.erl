@@ -137,15 +137,12 @@ websocket_handle(Data, Context) ->
     lager:warning("MQTT websocket: non binary data received: ~p", [Data]),
     {ok, Context}.
 
-websocket_info({reply, {fetch_queue, Pid}}, Context) ->
-    {ok, Payload} = gen_server:call(Pid, fetch_queue),
+% websocket_info({reply, {fetch_queue, Pid}}, Context) ->
+%     {ok, Payload} = gen_server:call(Pid, fetch_queue),
+%     {reply, {binary, Payload}, Context};
+websocket_info({mqtt_transport, _SessionRef, Payload}, Context) when is_binary(Payload) ->
     {reply, {binary, Payload}, Context};
-websocket_info({reply, Payload}, Context) when is_binary(Payload) ->
-    {reply, {binary, Payload}, Context};
-websocket_info({reply, Msg}, Context) when is_map(Msg) ->
-    {ok, Payload} = mqtt_packet_map:encode(Msg),
-    {reply, {binary, Payload}, Context};
-websocket_info({reply, disconnect}, Context) ->
+websocket_info({mqtt_transport, _SessionRef, disconnect}, Context) ->
     {stop, Context};
 websocket_info(close, Context) ->
     {stop, Context};
@@ -164,37 +161,24 @@ websocket_info(Msg, Context) ->
 %% ---------------------------------------------------------------------------------------------
 
 handle_incoming_data(Data, Context) ->
+    case z_context:get(session_ref, Context) of
+        undefined ->
+            handle_connect_data(Data, Context);
+        SessionRef ->
+            case mqtt_sessions:incoming_data(SessionRef, Data) of
+                ok ->
+                    {ok, Context};
+                {error, _} ->
+                    {stop, Context}
+            end
+    end.
+
+handle_connect_data(Data, Context) ->
     WsData = z_context:get(wsdata, Context),
-    case decode_incoming_data(<<WsData/binary, Data/binary>>, Context) of
-        {ok, RestData, Context1} ->
-            Context2 = z_context:set(wsdata, RestData, Context1),
-            {ok, Context2};
-        {error, Reason} ->
-            lager:warning("MQTT websocket: closing due to: ~p", [Reason]),
-            {stop, Context}
-    end.
-
-decode_incoming_data(<<>>, Context) ->
-    {ok, <<>>, Context};
-decode_incoming_data(Data, Context) ->
-    case mqtt_packet_map:decode(Data) of
-        {ok, {Msg, RestData}} ->
-            case handle_message(Msg, Context) of
-                {ok, Context1} ->
-                    decode_incoming_data(RestData, Context1);
-                {error, _} = Error ->
-                    Error
-            end;
-        {error, incomplete_packet} ->
-            {ok, Data, Context};
-        {error, _} = Error ->
-            Error
-    end.
-
-%% Send the message to the attached MQTT session
-handle_message(Msg, Context) ->
-    OptSessionRef = z_context:get(session_ref, Context),
-    MsgOptions = #{
+    NewData = << WsData/binary, Data/binary >>,
+    MqttPool = z_context:site(Context),
+    Options = #{
+        connection_pid => self(),
         transport => self(),
         peer_ip => m_req:get(peer_ip, Context),
         context_prefs => #{
@@ -204,18 +188,19 @@ handle_message(Msg, Context) ->
             auth_options => z_context:get(auth_options, Context, #{})
         }
     },
-    case mqtt_sessions:incoming_message(mqtt_session_pool(Context), OptSessionRef, Msg, MsgOptions) of
-        {ok, undefined} ->
-            {ok, Context};
-        {ok, OptSessionRef} ->
-            {ok, Context};
-        {ok, NewSessionRef} ->
-            erlang:monitor(process, NewSessionRef),
-            {ok, z_context:set(session_ref, NewSessionRef, Context)};
-        {error, _} = Error ->
-            Error
+    case mqtt_sessions:incoming_connect(MqttPool, NewData, Options) of
+        {ok, {SessionRef, Rest}} ->
+            erlang:monitor(process, SessionRef),
+            Context1 = z_context:set(wsdata, undefined, Context),
+            Context2 = z_context:set(session_ref, SessionRef, Context1),
+            handle_incoming_data(Rest, Context2);
+        {error, incomplete_packet} ->
+            Context1 = z_context:set(wsdata, NewData, Context),
+            {ok, Context1};
+        {error, expect_connect} ->
+            lager:info("MQTT: refusing connect with wrong packet type"),
+            {stop, Context};
+        {error, _} ->
+            % Invalid packet or unkown host - just close the connection
+            {stop, Context}
     end.
-
-mqtt_session_pool(Context) ->
-    z_context:site(Context).
-

@@ -19,6 +19,9 @@
 -module(z_mqtt_sessions_runtime).
 
 -export([
+    vhost_pool/1,
+    pool_default/0,
+
     new_user_context/3,
     connect/2,
     reauth/2,
@@ -34,6 +37,29 @@
 
 -include_lib("mqtt_packet_map/include/mqtt_packet_map.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+
+%% @doc Return the MQTT pool name for the given hostname.
+-spec vhost_pool( binary() ) -> {ok, atom()} | {error, unknown_host}.
+vhost_pool( <<"zotonic_site_status">> ) ->
+    case z_sites_manager:wait_for_running(zotonic_site_status) of
+        ok -> {ok, zotonic_site_status};
+        {error, _} -> {error, unknown_host}
+    end;
+vhost_pool( Hostname ) ->
+    case z_sites_dispatcher:get_site_for_hostname(Hostname) of
+        {ok, Site} ->
+            case z_sites_manager:wait_for_running(Site) of
+                ok -> {ok, Site};
+                {error, _} -> {error, unknown_host}
+            end;
+        undefined ->
+            {error, unknown_host}
+    end.
+
+-spec pool_default() -> {error, unknown_host}.
+pool_default() ->
+    {error, unknown_host}.
 
 
 % TODO: differentiate publish and subscribe on bridged reply/public topics
@@ -111,10 +137,14 @@ connect(#{ type := connect, username := U, password := P }, Context) when ?none(
     },
     {ok, ConnAck, Context};
 connect(#{ type := connect, username := U, password := P }, Context) when not ?none(U), not ?none(P) ->
-    LogonArgs = [
-        {<<"username">>, U},
-        {<<"password">>, P}
-    ],
+    Username = case binary:split(U, <<":">>) of
+        [ _VHost, U1 ] -> U1;
+        U1 -> U1
+    end,
+    LogonArgs = #{
+        <<"username">> => Username,
+        <<"password">> => P
+    },
     case z_notifier:first(#logon_submit{ payload = LogonArgs }, Context) of
         {ok, UserId} when is_integer(UserId) ->
             IsAuthOk = not z_auth:is_auth(Context)
