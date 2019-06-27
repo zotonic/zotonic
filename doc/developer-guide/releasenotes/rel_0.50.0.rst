@@ -3,7 +3,7 @@
 Release 0.50.0
 ==============
 
-Welcome to Zotonic 0.50.0, released on June 22, 2019.
+Welcome to Zotonic 0.50.0, released on June 27, 2019.
 
 Main changes are:
 
