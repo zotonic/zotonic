@@ -33,20 +33,27 @@ oauth2_request_test() ->
     Url = z_context:abs_url( z_dispatcher:url_for(api, [ {star, <<"model/acl/get/user">> } ], Context), Context),
 
     % No token
-    {ok, {_, _, _, <<"null">>}} = z_url_fetch:fetch(Url, []),
+    {ok, {_, _, _, NoT}} = z_url_fetch:fetch(Url, []),
+    #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = jsxrecord:decode(NoT),
 
     % Valid tokens
-    {ok, {_, _, _, <<"1">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1/binary>>} ]),
-    {ok, {_, _, _, <<"1">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1a/binary>>} ]),
+    {ok, {_, _, _, T1}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1/binary>>} ]),
+    #{ <<"result">> := 1, <<"status">> := <<"ok">> } = jsxrecord:decode(T1),
+
+    {ok, {_, _, _, T1a}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1a/binary>>} ]),
+    #{ <<"result">> := 1, <<"status">> := <<"ok">> } = jsxrecord:decode(T1a),
 
     % Expired token
-    {ok, {_, _, _, <<"null">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1t/binary>>} ]),
+    {ok, {_, _, _, T1t}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1t/binary>>} ]),
+    #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = jsxrecord:decode(T1t),
 
     % Illegal token
-    {ok, {_, _, _, <<"null">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1/binary, "xxx">>} ]),
+    {ok, {_, _, _, Tx}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1/binary, "xxx">>} ]),
+    #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = jsxrecord:decode(Tx),
 
     % Uknown token
-    {ok, {_, _, _, <<"null">>}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer xxx">>} ]),
+    {ok, {_, _, _, Tu}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer xxx">>} ]),
+    #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = jsxrecord:decode(Tu),
 
     % TODO:
     % - test limitations on groups
