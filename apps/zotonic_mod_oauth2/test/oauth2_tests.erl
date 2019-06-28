@@ -30,7 +30,7 @@ oauth2_request_test() ->
     {ok, Token_1t} = m_oauth2:encode_bearer_token(TId_1, -1, SudoContext),
     {error, expired} = m_oauth2:decode_bearer_token(Token_1t, Context),
 
-    Url = z_context:abs_url( z_dispatcher:url_for(api, [ {star, <<"acl/user">> } ], Context), Context),
+    Url = z_context:abs_url( z_dispatcher:url_for(api, [ {star, <<"model/acl/get/user">> } ], Context), Context),
 
     % No token
     {ok, {_, _, _, <<"null">>}} = z_url_fetch:fetch(Url, []),

@@ -217,8 +217,8 @@ do_json(Context0) ->
     Context = set_headers(Context0),
     StatusCode = cowmachine_req:get_metadata(http_status_code, Context),
     JSON = iolist_to_binary([
-            <<"{ code: ">>, z_convert:to_binary(StatusCode),
-            <<", status: \"">>, httpd_util:reason_phrase(StatusCode),
+            <<"{ \"code\":">>, z_convert:to_binary(StatusCode),
+            <<", \"status\":\"">>, httpd_util:reason_phrase(StatusCode),
             <<"\" }">>
         ]),
     {JSON, Context}.
