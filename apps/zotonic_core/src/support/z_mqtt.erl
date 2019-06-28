@@ -32,6 +32,7 @@
     unsubscribe/2,
     unsubscribe/3,
 
+    call/2,
     call/3,
 
     temp_response_topic/1,
@@ -86,21 +87,14 @@ publish(#{ type := publish, topic := Topic } = Msg, Context) ->
             Error
     end.
 
-
--spec call( topic(), term(), z:context() ) -> {ok, term()} | {error, term()}.
-call( Topic, Payload, Context ) ->
+-spec call( mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, term()} | {error, term()}.
+call( #{ type := publish } = Msg, Context ) ->
     {ok, RespTopic} = temp_response_topic(Context),
-    Msg = #{
-        type => publish,
-        topic => Topic,
-        payload => Payload,
-        qos => 0,
-        retain => false,
-        properties => #{
-            response_topic => RespTopic
-        }
+    Props = maps:get(properties, Msg, #{}),
+    Msg1 = Msg#{
+        properties => Props#{ response_topic => RespTopic }
     },
-    case publish(Msg, Context) of
+    case publish(Msg1, Context) of
         ok ->
             case await_response(RespTopic, ?MQTT_CALL_TIMEOUT, Context) of
                 {ok, #{ message := ReplyMsg } } ->
@@ -111,6 +105,17 @@ call( Topic, Payload, Context ) ->
         {error, _} = Error ->
             Error
     end.
+
+-spec call( topic(), term(), z:context() ) -> {ok, term()} | {error, term()}.
+call( Topic, Payload, Context ) ->
+    Msg = #{
+        type => publish,
+        topic => Topic,
+        payload => Payload,
+        qos => 0,
+        retain => false
+    },
+    call(Msg, Context).
 
 
 -spec subscribe( topic(), z:context() ) -> ok | {error, term()}.

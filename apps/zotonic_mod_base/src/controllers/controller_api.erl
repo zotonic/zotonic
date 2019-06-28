@@ -25,6 +25,7 @@
     service_available/1,
     options/1,
     allowed_methods/1,
+    malformed_request/1,
     content_types_provided/1,
     content_types_accepted/1,
 
@@ -46,6 +47,29 @@ options(Context) ->
 
 allowed_methods(Context) ->
     {[ <<"GET">>, <<"POST">>, <<"DELETE">> ], Context}.
+
+malformed_request(Context) ->
+    Path = cow_qs:urldecode( cowmachine_req:disp_path(Context) ),
+    case mqtt_sessions:validate_topic(Path) of
+        {ok, Topic} ->
+            Context1 = z_context:set(topic, Topic, Context),
+            Method = cowmachine_req:method(Context1),
+            {not is_method_topic_match(Method, Topic), Context1};
+        {error, _} ->
+            {true, Context}
+    end.
+
+% Check method against model call methods
+% GET -> get
+% POST -> post / delete / get
+% DELETE -> delete
+is_method_topic_match(<<"GET">>, [ <<"model">>, _Model, <<"get">> | _ ]) -> true;
+is_method_topic_match(<<"GET">>, [ <<"model">>, _Model, _ModelMethod | _ ]) -> false;
+is_method_topic_match(<<"GET">>, _) -> true;
+is_method_topic_match(<<"DELETE">>, [ <<"model">>, _Model, <<"delete">> | _ ]) -> true;
+is_method_topic_match(<<"DELETE">>, _) -> false;
+is_method_topic_match(<<"POST">>, _) -> true.
+
 
 %% @doc Content types accepted for the post body
 content_types_accepted(Context) ->
@@ -70,38 +94,61 @@ content_types_provided(Context) ->
      ], Context}.
 
 %% @doc Process the request, call MQTT and reply with the response
-process(Method, AcceptedCT, ProvidedCT, Context) ->
+process(_Method, AcceptedCT, ProvidedCT, Context) ->
     {Payload, Context1} = z_controller_helper:decode_request(AcceptedCT, Context),
-    {Model, Path} = request_model_path(Context),
-    Msg = #{
-        type => publish,
-        properties => #{
-            content_type => AcceptedCT
-        },
-        payload => Payload
-    },
-    case z_model:call(Model, map_method(Method), Path, Msg, Context) of
-        {ok, Resp} ->
-            Body = z_controller_helper:encode_response(ProvidedCT, Resp),
-            {Body, Context1};
-        {error, _} = Error ->
-            error_response(Error, ProvidedCT, Context)
+    case z_context:get_q(<<"response_topic">>, Context) of
+        undefined ->
+            Msg = #{
+                type => publish,
+                topic => z_context:get(topic, Context1),
+                properties => #{
+                    content_type => AcceptedCT
+                },
+                payload => Payload,
+                qos => 0,
+                retain => false
+            },
+            process_done( z_mqtt:call(Msg, Context1), ProvidedCT, Context1 );
+        <<>> ->
+            Msg = #{
+                type => publish,
+                topic => z_context:get(topic, Context1),
+                properties => #{
+                    content_type => AcceptedCT
+                },
+                payload => Payload,
+                qos => 0,
+                retain => false
+            },
+            process_done( z_mqtt:publish(Msg, Context1), ProvidedCT, Context1);
+        RespTopic ->
+            case mqtt_sessions:validate_topic(RespTopic) of
+                {ok, RespTopic1} ->
+                    Msg = #{
+                        type => publish,
+                        topic => z_context:get(topic, Context1),
+                        properties => #{
+                            content_type => AcceptedCT,
+                            response_topic => RespTopic1
+                        },
+                        payload => Payload,
+                        qos => 0,
+                        retain => false
+                    },
+                    process_done( z_mqtt:publish(Msg, Context1), ProvidedCT, Context1);
+                {error, _} = Error ->
+                    process_done( Error, ProvidedCT, Context1)
+            end
     end.
 
-map_method(<<"GET">>) -> get;
-map_method(<<"HEAD">>) -> get;
-map_method(<<"POST">>) -> post;
-map_method(<<"DELETE">>) -> delete.
-
-
-%% @doc Return the model and path to be called.
--spec request_model_path( z:context() ) -> {binary(), list( binary() )}.
-request_model_path(Context) ->
-    Path = cowmachine_req:disp_path(Context),
-    Parts = binary:split(Path, <<"/">>, [global]),
-    Parts1 = lists:map( fun cow_qs:urldecode/1, Parts ),
-    {hd(Parts1), tl(Parts1)}.
-
+process_done(ok, ProvidedCT, Context) ->
+    Body = z_controller_helper:encode_response(ProvidedCT, #{ status => ok }),
+    {Body, Context};
+process_done({ok, Resp}, ProvidedCT, Context) ->
+    Body = z_controller_helper:encode_response(ProvidedCT, Resp),
+    {Body, Context};
+process_done({error, _} = Error, ProvidedCT, Context) ->
+    error_response(Error, ProvidedCT, Context).
 
 -spec error_response({error, term()}, binary(), z:context()) -> {{halt, HttpCode :: pos_integer()}, z:context()}.
 error_response({error, payload}, CT, Context) ->
