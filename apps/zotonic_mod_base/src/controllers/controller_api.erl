@@ -50,7 +50,7 @@ allowed_methods(Context) ->
 
 malformed_request(Context) ->
     Path = cow_qs:urldecode( cowmachine_req:disp_path(Context) ),
-    case mqtt_sessions:validate_topic(Path) of
+    case mqtt_packet_map_topic:validate_topic(Path) of
         {ok, Topic} ->
             Context1 = z_context:set(topic, Topic, Context),
             Method = cowmachine_req:method(Context1),
@@ -130,7 +130,7 @@ process(_Method, AcceptedCT, ProvidedCT, Context) ->
             },
             process_done( z_mqtt:publish(Msg, Context1), ProvidedCT, Context1);
         RespTopic ->
-            case mqtt_sessions:validate_topic(RespTopic) of
+            case mqtt_packet_map_topic:validate_topic_publish(RespTopic) of
                 {ok, RespTopic1} ->
                     Msg = #{
                         type => publish,
