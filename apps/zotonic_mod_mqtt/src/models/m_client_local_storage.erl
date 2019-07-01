@@ -38,7 +38,8 @@
                | tuple().
 
 -type error() :: timeout
-               | no_client.
+               | no_client
+               | invalid_topic.
 
 -spec get( key(), z:context() ) -> {ok, value()} | {error, error()}.
 get(Key, Context) ->
@@ -48,7 +49,7 @@ get(Key, Context) ->
 get(_Key, undefined, _Context) ->
     {error, no_client};
 get(Key, BridgeTopic, Context) ->
-    BridgeTopic1 = mqtt_sessions:normalize_topic(BridgeTopic),
+    BridgeTopic1 = mqtt_packet_map_topic:normalize_topic(BridgeTopic),
     Topic = BridgeTopic1 ++ [ <<"model">>, <<"localStorage">>, <<"get">>, z_convert:to_binary(Key) ],
     z_mqtt:call(Topic, undefined, Context).
 
@@ -60,7 +61,7 @@ put(Key, Value, Context) ->
 put(_Key, _Value, undefined, _Context) ->
     {error, no_client};
 put(Key, Value, BridgeTopic, Context) ->
-    BridgeTopic1 = mqtt_sessions:normalize_topic(BridgeTopic),
+    BridgeTopic1 = mqtt_packet_map_topic:normalize_topic(BridgeTopic),
     Topic = BridgeTopic1 ++ [ <<"model">>, <<"localStorage">>, <<"post">>, z_convert:to_binary(Key) ],
     z_mqtt:publish(Topic, Value, Context).
 
@@ -73,7 +74,7 @@ delete(Key, Context) ->
 delete(_Key, undefined, _Context) ->
     {error, no_client};
 delete(Key, BridgeTopic, Context) ->
-    BridgeTopic1 = mqtt_sessions:normalize_topic(BridgeTopic),
+    BridgeTopic1 = mqtt_packet_map_topic:normalize_topic(BridgeTopic),
     Topic = BridgeTopic1 ++ [ <<"model">>, <<"localStorage">>, <<"delete">>, z_convert:to_binary(Key) ],
     z_mqtt:publish(Topic, undefined, Context).
 
