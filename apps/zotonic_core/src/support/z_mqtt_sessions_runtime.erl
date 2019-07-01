@@ -210,6 +210,8 @@ reauth(#{ type := auth }, _UserContext) ->
 is_allowed(Action, Topic, Packet, Context) when Action =:= subscribe; Action =:= publish ->
     z_acl:is_admin(Context) orelse is_allowed_acl(Action, Topic, Packet, Context).
 
+is_allowed_acl(_Action, [ '#' ], _Packet, _Context) ->
+    false;
 is_allowed_acl(Action, Topic, Packet, Context) ->
     Object = #acl_mqtt{
         topic = Topic,
@@ -225,33 +227,44 @@ is_allowed_acl(Action, Topic, Packet, Context) ->
 is_allowed(_Action,   [ <<"test">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"public">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"reply">>, <<"call-", _/binary>>, _ ], _Context) -> true;
+%% TODO: change the model access to NOT allowed per default (ACL should allow/disallow access)
 is_allowed(publish,   [ <<"model">>, _Model, <<"get">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"model">>, _Model, <<"post">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"model">>, _Model, <<"delete">> | _ ], _Context) -> true;
 is_allowed(subscribe, [ <<"model">>, _Model, <<"event">> | _ ], _Context) -> true;
+%% End todo.
 is_allowed(publish,   [ <<"bridge">>, _Remote, <<"reply">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"bridge">>, _Remote, <<"public">> | _ ], _Context) -> true;
-is_allowed(_Action,   [ <<"bridge">>, Remote | _ ], Context) ->
+is_allowed(_Action,   [ <<"bridge">>, Remote | _ ], Context) when is_binary(Remote) ->
     % User of the bridge session MUST be the same as the user publishing
-    case Context#context.routing_id =:= Remote orelse Context#context.client_id =:= Remote of
-        true ->
-            true;
+    case is_wildcard(Remote) of
+        true -> false;
         false ->
-            case z_auth:is_auth(Context) of
+            case       Context#context.routing_id =:= Remote
+                orelse Context#context.client_id  =:= Remote
+            of
                 true ->
-                    % Only works if remote is a client-id
-                    case mqtt_sessions:get_user_context(z_context:site(Context), Remote) of
-                        {ok, UserContext} ->
-                            z_acl:user(UserContext) =:= z_acl:user(Context);
-                        {error, _} ->
-                            false
-                    end;
+                    true;
                 false ->
-                    false
+                    case z_auth:is_auth(Context) of
+                        true ->
+                            % Only works if remote is a client-id
+                            case mqtt_sessions:get_user_context(z_context:site(Context), Remote) of
+                                {ok, UserContext} ->
+                                    z_acl:user(UserContext) =:= z_acl:user(Context);
+                                {error, _} ->
+                                    false
+                            end;
+                        false ->
+                            false
+                    end
             end
     end;
-is_allowed(_Action,   [ <<"client">>, ClientId | _ ], Context) ->
-    Context#context.client_id =:= ClientId;
+is_allowed(_Action,   [ <<"client">>, ClientId | _ ], Context) when is_binary(ClientId) ->
+    case is_wildcard(ClientId) of
+        true -> false;
+        false -> Context#context.client_id =:= ClientId
+    end;
 is_allowed(subscribe, [ <<"user">> ], Context) -> z_auth:is_auth(Context);
 is_allowed(_Action,   [ <<"user">>, User | _ ], Context) when is_binary(User); is_integer(User) ->
     try

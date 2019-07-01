@@ -90,10 +90,18 @@ content_types_provided(Context) ->
         {<<"application">>, <<"javascript">>, []},
         {<<"text">>, <<"javascript">>, []},
         {<<"text">>, <<"x-ubf">>, []},
-        {<<"application">>, <<"x-bert">>, []}
+        {<<"application">>, <<"x-bert">>, []},
+        {<<"text">>, <<"event-stream">>, []}
      ], Context}.
 
 %% @doc Process the request, call MQTT and reply with the response
+process(_Method, _AcceptedCT, {<<"text">>, <<"event-stream">>, _}, Context) ->
+    case z_mqtt:subscribe(z_context:get(topic, Context), Context) of
+        ok ->
+            event_stream(Context);
+        {error, _} = Error ->
+            process_done(Error, {<<"application">>, <<"json">>, []}, Context)
+    end;
 process(_Method, AcceptedCT, ProvidedCT, Context) ->
     {Payload, Context1} = z_controller_helper:decode_request(AcceptedCT, Context),
     case z_context:get_q(<<"response_topic">>, Context) of
@@ -207,6 +215,12 @@ error_response(_, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 500}, Context1}.
+
+
+%% @doc Event stream with messages sent to a subscribed topic
+event_stream(Context) ->
+    % TODO: add streaming body function
+    {{halt, 500}, Context}.
 
 
 %% set in site config file
