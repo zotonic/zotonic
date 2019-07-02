@@ -228,8 +228,8 @@ do_json(ReqData, Context0) ->
     Context = set_headers(ReqData, Context0),
     StatusCode = webmachine_request:get_metadata(http_status_code, ReqData),
     JSON = iolist_to_binary([
-            <<"{ code: ">>, z_convert:to_binary(StatusCode),
-            <<", status: \"">>, httpd_util:reason_phrase(StatusCode),
+            <<"{ \"code\": ">>, z_convert:to_binary(StatusCode),
+            <<", \"status\": \"">>, httpd_util:reason_phrase(StatusCode),
             <<"\" }">>
         ]),
     ?WM_REPLY(JSON, Context).
