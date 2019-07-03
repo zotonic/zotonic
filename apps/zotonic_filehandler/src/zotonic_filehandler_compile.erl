@@ -166,8 +166,8 @@ compile_options(Filename) ->
         {ok, Options} ->
             Options1 = [ Opt || Opt <- Options, Opt =/= error_summary ],
             {ok, Options1};
-        {error, _} = Error ->
-            Error
+        false ->
+            false
     end.
 
 compile_options_1(Filename) ->

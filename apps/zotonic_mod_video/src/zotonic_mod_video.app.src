@@ -2,7 +2,7 @@
     {description, "Play and convert uploaded videos. Requires ffmpeg."},
     {vsn, "git"},
     {registered, []},
-    {applications, [kernel, stdlib, zotonic_core]},
+    {applications, [kernel, stdlib, jobs, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

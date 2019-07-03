@@ -927,10 +927,17 @@ scan_directory(Directory) ->
 
 parse_config(CfgFile) ->
     SitePath = filename:dirname(filename:dirname(CfgFile)),
+    ensure_code_path(SitePath),
     Site = z_convert:to_atom(filename:basename(SitePath)),
     ConfigFiles = [ CfgFile | config_d_files(SitePath) ],
     parse_config(ConfigFiles, [{site, Site}]).
 
+ensure_code_path(SitePath) ->
+    Ebin = filename:join(SitePath, "ebin"),
+    case lists:member(Ebin, code:get_path()) of
+        false -> code:add_pathz(Ebin);
+        true -> ok
+    end.
 
 %% @doc Parse configurations from multiple files, merging results. The last file wins.
 parse_config([], SiteConfig) ->
