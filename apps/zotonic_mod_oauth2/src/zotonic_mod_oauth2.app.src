@@ -2,7 +2,7 @@
     {description, "Provides authentication over OAuth2."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

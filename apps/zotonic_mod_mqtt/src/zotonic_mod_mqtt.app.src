@@ -2,7 +2,7 @@
     {description, "MQTT messaging, connecting server and browser."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

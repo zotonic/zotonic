@@ -2,7 +2,7 @@
     {description, "Comments for pages. Implements a simple comment system with comments stored locally."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

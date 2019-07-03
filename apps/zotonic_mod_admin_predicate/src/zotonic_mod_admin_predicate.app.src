@@ -2,7 +2,7 @@
     {description, "Adds support for editing predicates to the admin."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

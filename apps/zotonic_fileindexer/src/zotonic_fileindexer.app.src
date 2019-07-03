@@ -7,6 +7,6 @@
   {env, []},
   {modules, []},
   {applications, [
-    zotonic_notifier
+    kernel, stdlib, lager, zotonic_notifier
   ]}
  ]}.

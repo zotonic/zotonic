@@ -2,7 +2,7 @@
     {description, "Import files with tab separated data."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

@@ -2,7 +2,7 @@
     {description, "Use Twitter for logon, and/or follow users on Twitter using the streaming HTTP API."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

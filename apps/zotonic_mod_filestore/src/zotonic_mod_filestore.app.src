@@ -2,7 +2,7 @@
     {description, "Store files on cloud storage services like Amazon S3 and GreenQloud"},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

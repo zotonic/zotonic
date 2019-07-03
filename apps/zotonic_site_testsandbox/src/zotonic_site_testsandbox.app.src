@@ -2,7 +2,7 @@
     {description, "Module implementing a sandbox website with database for testing purposes."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

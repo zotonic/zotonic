@@ -2,7 +2,7 @@
     {description, "Default Zotonic site, used when no other site can handle the supplied Host."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

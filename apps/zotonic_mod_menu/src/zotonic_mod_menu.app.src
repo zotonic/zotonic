@@ -2,7 +2,7 @@
     {description, "Menus in Zotonic, adds admin interface to define menus and other hierarchical lists."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

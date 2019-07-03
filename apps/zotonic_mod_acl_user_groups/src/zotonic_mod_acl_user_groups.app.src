@@ -2,7 +2,7 @@
     {description, "Zotonic module for organizing users into hierarchical groups"},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [ kernel, stdlib, zotonic_core ]},
     {env, []},
     {modules, []},
     {maintainers, ["Arjan Scherpenisse <arjan@miraclethings.nl>"]},

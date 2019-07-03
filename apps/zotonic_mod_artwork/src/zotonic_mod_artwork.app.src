@@ -2,7 +2,7 @@
     {description, "Art work for your site. Social icons, file icons etc."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

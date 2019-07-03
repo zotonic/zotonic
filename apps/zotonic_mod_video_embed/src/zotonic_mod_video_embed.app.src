@@ -2,7 +2,7 @@
     {description, "Embed youtube, vimeo and other movies as media pages."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

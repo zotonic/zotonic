@@ -2,7 +2,7 @@
     {description, "Mock ACL routines for in the testsandbox."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [ kernel, stdlib, zotonic_core ]},
     {env, []},
     {modules, []},
     {maintainers, []},

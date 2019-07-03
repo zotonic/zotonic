@@ -2,7 +2,7 @@
     {description, "Logs debug/info/warning messages into the site's database."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

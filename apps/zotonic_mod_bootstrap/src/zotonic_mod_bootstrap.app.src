@@ -2,7 +2,7 @@
     {description, "Bootstrap provides simple and flexible HTML, CSS, and Javascript for popular user interface components and interactions."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

@@ -2,7 +2,7 @@
     {description, "Simple contact form. Mails a contact form to the administrator user."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

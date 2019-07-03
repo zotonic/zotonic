@@ -2,7 +2,7 @@
     {description, "Make a backup of the database and files."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core, zotonic_mod_admin]},
+    {applications, [kernel, stdlib, zotonic_core, zotonic_mod_admin]},
     {env, []},
     {modules, []},
     {maintainers, []},

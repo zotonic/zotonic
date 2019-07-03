@@ -2,7 +2,7 @@
     {description, "Handle received e-mails, notifies email observers depending on the recipient."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

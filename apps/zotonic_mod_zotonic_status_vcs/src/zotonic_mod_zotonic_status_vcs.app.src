@@ -2,7 +2,7 @@
     {description, "Allows to update and rebuild sites and zotonic installs from git or mercurial. Used by zotonic_site_status."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

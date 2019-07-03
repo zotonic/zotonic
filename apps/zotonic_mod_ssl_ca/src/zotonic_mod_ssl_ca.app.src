@@ -2,7 +2,7 @@
     {description, "Use SSL Certificate from Let's Encrypt."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

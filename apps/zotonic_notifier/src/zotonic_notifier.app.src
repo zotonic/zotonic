@@ -7,6 +7,6 @@
   {env, []},
   {modules, []},
   {applications, [
-    lager
+    kernel, stdlib, lager
   ]}
  ]}.

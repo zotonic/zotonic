@@ -2,7 +2,7 @@
     {description, "Generates sitemap for crawlers, enables better indexing of your site."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

@@ -4,9 +4,8 @@
   {vsn, "git"},
   {registered, []},
   {applications, [
-      lager,
-      ranch,
-      zotonic_core
+      kernel, stdlib, lager,
+      ranch, zotonic_core, mqtt_sessions
   ]},
   {env, []},
   {modules,

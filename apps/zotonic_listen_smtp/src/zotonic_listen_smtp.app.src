@@ -4,7 +4,7 @@
   {vsn, "git"},
   {registered, []},
   {applications, [
-      lager, gen_smtp,
+      kernel, stdlib, lager, gen_smtp,
       zotonic_core
   ]},
   {env, []},

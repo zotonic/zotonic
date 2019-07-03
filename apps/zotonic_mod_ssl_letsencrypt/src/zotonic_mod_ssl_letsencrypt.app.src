@@ -2,7 +2,7 @@
     {description, "Use SSL Certificate from a Certificiate Authority."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},
     {maintainers, []},

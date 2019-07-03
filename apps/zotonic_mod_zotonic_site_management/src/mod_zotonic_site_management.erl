@@ -35,6 +35,7 @@
 
 event(#submit{message=addsite, form=Form}, Context) ->
     true = z_auth:is_auth(Context),
+    io:format("~n~p~n~n", [ z_context:get_q_all(Context) ]),
     Sitename = z_context:get_q_validated(<<"sitename">>, Context),
     Options = [
         {hostname, z_context:get_q_validated(<<"hostname">>, Context)},

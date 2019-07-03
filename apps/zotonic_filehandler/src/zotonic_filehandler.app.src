@@ -6,6 +6,7 @@
   {env, []},
   {modules, []},
   {applications, [
+    kernel, stdlib,
     erlexec,
     zotonic_notifier,
     zotonic_filewatcher

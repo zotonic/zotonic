@@ -2,7 +2,9 @@
     {description, "Deprecated wires, actions, and other embedded JavaScript."},
     {vsn, "git"},
     {registered, []},
-    {applications, [zotonic_core]},
+    {applications, [
+        kernel, stdlib, lager, zotonic_core
+    ]},
     {env, []},
     {modules, []},
     {maintainers, []},
