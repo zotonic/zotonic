@@ -554,7 +554,7 @@ add_q(Key, Value, Context) ->
 add_q(KVs, Context) ->
     lists:foldl(
         fun({K, V}, Ctx) ->
-            set_q(K, V, Ctx)
+            add_q(K, V, Ctx)
         end,
         Context,
         KVs).
