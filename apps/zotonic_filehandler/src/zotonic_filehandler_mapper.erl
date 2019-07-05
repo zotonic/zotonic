@@ -27,6 +27,10 @@
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 -include_lib("zotonic_filehandler/include/zotonic_filehandler.hrl").
 
+% Filename patterns for which we don't about unhandled events.
+-define(FILENAMES_NOWARN, <<"(/test/|/priv/ssl/)">>).
+
+
 -spec map_change(zotonic_filehandler:verb(), Filename::binary()) ->
     {ok, [ mfa() ]} | {error, term()} | false.
 map_change(Verb, Filename) ->
@@ -60,8 +64,8 @@ map_notifier(Verb, Application, What, Ext, Root, Split, Filename) ->
         Msg, undefined).
 
 map_categorized([], Verb, _Application, _What, _Ext, _Root, _Split, Filename) ->
-    case binary:match(Filename, <<"/test/">>) of
-        {_, _} -> false;
+    case re:run(Filename, ?FILENAMES_NOWARN) of
+        {match, _} -> false;
         nomatch ->
             lager:info("Unhandled file event '~p' on '~s'", [Verb, Filename])
     end,

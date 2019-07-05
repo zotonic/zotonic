@@ -202,9 +202,10 @@ site_hostname(undefined) ->
     z_convert:to_binary(LocalHostname);
 site_hostname(Context) ->
     case z_context:hostname(Context) of
-        None when None =:= none; None =:= <<"none">> ->
-            {ok, LocalHostname} = inet:gethostname(),
-            z_convert:to_binary(LocalHostname);
+        none ->
+            site_hostname(undefined);
+        <<"none">> ->
+            site_hostname(undefined);
         ConfiguredHostname ->
             ConfiguredHostname
     end.
@@ -233,7 +234,9 @@ generate_self_signed(NormalizedHostname, Opts) ->
             Command = "openssl req -x509 -nodes"
                     ++ " -days 3650"
                     ++ " -sha256"
-                    ++ " -subj '/CN="++z_convert:to_list(NormalizedHostname)++"'"
+                    ++ " -subj '/CN="++z_convert:to_list(NormalizedHostname)
+                             ++"/O="++z_convert:to_list(server_name())
+                             ++"'"
                     ++ " -newkey rsa:"++?BITS++" "
                     ++ " -keyout "++z_utils:os_filename(KeyFile)
                     ++ " -out "++z_utils:os_filename(CertFile),
@@ -243,9 +246,11 @@ generate_self_signed(NormalizedHostname, Opts) ->
             case file:read_file(KeyFile) of
                 {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
                     os:cmd("openssl rsa -in "++KeyFile++" -out "++PemFile),
+                    lager:info("Site ~p generated SSL self-signed certificate in \'~s\'", [KeyFile]),
                     {ok, Opts};
                 {ok, <<"-----BEGIN RSA PRIVATE KEY", _/binary>>} ->
                     file:rename(KeyFile, PemFile),
+                    lager:info("Site ~p generated SSL self-signed certificate in \'~s\'", [KeyFile]),
                     {ok, Opts};
                 _Error ->
                     lager:error("Failed generating self-signed ssl keys for ~s in ~s (output was ~s)",
@@ -255,6 +260,25 @@ generate_self_signed(NormalizedHostname, Opts) ->
         {error, _} = Error ->
             {error, {ensure_dir, Error, PemFile}}
     end.
+
+-spec server_name() -> binary().
+server_name() ->
+    Name = z_convert:to_binary( z_config:get(server_header) ),
+    filter_server_name(Name, <<>>).
+
+-spec filter_server_name(binary(), binary()) -> binary().
+filter_server_name(<<>>, Acc) ->
+    Acc;
+filter_server_name(<<C, Rest/binary>>, Acc) when C >= $a, C =< $z ->
+    filter_server_name(Rest, <<Acc/binary, C>>);
+filter_server_name(<<C, Rest/binary>>, Acc) when C >= $A, C =< $Z ->
+    filter_server_name(Rest, <<Acc/binary, C>>);
+filter_server_name(<<C, Rest/binary>>, Acc) when C >= $0, C =< $9 ->
+    filter_server_name(Rest, <<Acc/binary, C>>);
+filter_server_name(<<32, Rest/binary>>, Acc) ->
+    filter_server_name(Rest, <<Acc/binary, 32>>);
+filter_server_name(<<_, Rest/binary>>, Acc) ->
+    filter_server_name(Rest, Acc).
 
 %% @doc Return the dh key to be used. Needed for better forward secrecy with the DH key exchange
 -spec dh_options() -> [ssl:ssl_option()].
