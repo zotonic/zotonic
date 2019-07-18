@@ -23,7 +23,7 @@
 -export([run/1, run/2, watch/1, unwatch/1, is_watching/1]).
 
 -include_lib("zotonic.hrl").
--include_lib("epgsql/include/pgsql.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 %% @doc Run all *_sitetest.erl tests for the given site.
 run(Site) when is_atom(Site) ->
@@ -100,9 +100,9 @@ ensure_drop_test_schema(Site) ->
     close_connection(Conn).
 
 %% @doc Drop a schema
--spec drop_schema(atom(), pgsql:connection(), string()) -> ok | {error, term()}.
+-spec drop_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
 drop_schema(_Site, Connection, Schema) ->
-    case pgsql:equery(
+    case epgsql:equery(
            Connection,
            "DROP SCHEMA \"" ++ Schema ++ "\" CASCADE"
           ) of
@@ -117,7 +117,7 @@ drop_schema(_Site, Connection, Schema) ->
 
 
 open_connection(DatabaseName, Options) ->
-    pgsql:connect(
+    epgsql:connect(
       proplists:get_value(dbhost, Options),
       proplists:get_value(dbuser, Options),
       proplists:get_value(dbpassword, Options),
@@ -128,7 +128,7 @@ open_connection(DatabaseName, Options) ->
      ).
 
 close_connection(Connection) ->
-    pgsql:close(Connection).
+    epgsql:close(Connection).
 
 
 %% @doc Start the site, and wait for it to be fully booted.
