@@ -1,9 +1,11 @@
 language: erlang
-otp_release:
-  - 21.3
-  - 20.2
-  - 19.0
-  - 18.0
+matrix:
+    include:
+      - otp_release: 21.3
+      - otp_release: 20.3
+      - otp_release: 19.3
+      - otp_release: 18.3
+        dist: trusty
 services:
   - postgresql
 before_script:
