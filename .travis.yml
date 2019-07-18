@@ -12,7 +12,8 @@ matrix:
     - otp_release: 19.0
       env: DIALYZER=true
   fast_finish: true
-
+services:
+  - postgresql
 before_script:
   - psql -c 'CREATE USER zotonic; ALTER USER zotonic CREATEDB;' -U postgres
 install: echo "hi" # stub command; otherwise travis runs 'rebar get-deps'
