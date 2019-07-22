@@ -28,6 +28,7 @@
 -define(MAX_LIMIT, 1000).
 
 -include_lib("zotonic.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 process_get(_ReqData, Context) ->
     try
@@ -43,8 +44,8 @@ process_get(_ReqData, Context) ->
             {error, unknown_arg, E};
         _: {error, {Message, E}} ->
             {error, Message, E};
-        _: {case_clause, {error, {error, error, _, E, _}}} ->
-            {error, syntax, binary_to_list(E)}
+        _: {case_clause, {error, #error{ severity = error, message = ErrorMsg}}} ->
+            {error, syntax, binary_to_list(ErrorMsg)}
     end.
 
 

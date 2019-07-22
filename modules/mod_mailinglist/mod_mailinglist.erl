@@ -45,6 +45,7 @@
 
 -include_lib("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 -record(state, {context}).
 
@@ -294,7 +295,7 @@ import_file(TmpFile, IsTruncate, Id, Context) ->
     try
         ok = m_mailinglist:insert_recipients(Id, Data, IsTruncate, Context)
     catch
-        _: {badmatch, {rollback, {{case_clause, {error, {error, error, <<"22021">>, _, _}}},_}}}->
+        _: {badmatch, {rollback, {{case_clause, {error, #error{ severity = error, codename = character_not_in_repertoire }}},_}}}->
             {error, "The encoding of the input file is not right. Please upload a file with UTF-8 encoding."};
         _: _ ->
             {error, "Something unexpected went wrong while importing the recipients list."}

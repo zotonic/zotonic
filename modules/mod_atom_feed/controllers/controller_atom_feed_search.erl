@@ -100,7 +100,7 @@ provide_content(ReqData, Context) ->
             ReqData1 = wrq:set_resp_body(wrq:encode_content("Unknown query term: " ++ E, ReqData), ReqData),
             {{halt, 400}, ReqData1, Context};
 
-        _: {case_clause, {error, {error, error, _, _E, _}}} ->
+        _: {case_clause, {error, PsqlError}} when element(1, PsqlError) =:= error ->
             ReqData1 = wrq:set_resp_body(wrq:encode_content("Unknown error.", ReqData), ReqData),
             {{halt, 400}, ReqData1, Context}
     end.

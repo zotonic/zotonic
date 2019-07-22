@@ -36,6 +36,7 @@
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 %% @doc Fetch the value for the key from a model source
 %% @spec m_find_value(Key, Source, Context) -> term()
@@ -144,7 +145,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                 {ok, 1} ->
                     z_depcache:flush({rsc_is_gone, Id}, Context),
                     {ok, Id};
-                {error, {error, error, <<"23505">>, _ErrMsg, _ErrDetail}} ->
+                {error, #error{ codename = unique_violation }} ->
                     % Duplicate key error, update with the newest values
                     gone_update(Id, NewId, Props, Context),
                     {ok, Id};

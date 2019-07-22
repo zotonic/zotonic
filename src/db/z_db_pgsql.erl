@@ -25,6 +25,7 @@
 -behaviour(z_db_worker).
 
 -include("zotonic.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2,
@@ -181,9 +182,9 @@ connect(Args, RetryCt) ->
                               [Hostname, Port, ?CONNECT_RETRY_SLEEP div 1000, self()]),
                 timer:sleep(?CONNECT_RETRY_SLEEP),
                 connect(Args, RetryCt+10);
-            {error, {error,fatal,<<"53300">>,_ErrorMsg,_ErrorArgs}} ->
+            {error, #error{ codename = too_many_connections }} ->
                 too_many_connections(Args, RetryCt);
-            {error, <<"53300">>} ->
+            {error, too_many_connections} ->
                 too_many_connections(Args, RetryCt);
             {error, _} = E ->
                 lager:warning("psql connection to ~p:~p returned error ~p",
