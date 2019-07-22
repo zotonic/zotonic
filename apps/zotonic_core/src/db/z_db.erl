@@ -107,12 +107,12 @@ transaction(Function, Context) ->
 -spec transaction(transaction_fun(), list(), z:context()) -> any() | {error, term()}.
 transaction(Function, Options, Context) ->
     Result = case transaction1(Function, Context) of
-                {rollback, {{error, {error, error, <<"40P01">>, _, _}}, Trace1}} ->
+                {rollback, {{error, #error{ codename = deadlock_detected }}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
-                {rollback, {{case_clause, {error, {error, error,<<"40P01">>, _, _}}}, Trace2}} ->
-                    {rollback, {deadlock, Trace2}};
-                {rollback, {{badmatch, {error, {error, error,<<"40P01">>, _, _}}}, Trace2}} ->
-                    {rollback, {deadlock, Trace2}};
+                {rollback, {{case_clause, {error, #error{ codename = deadlock_detected }}}, Trace1}} ->
+                    {rollback, {deadlock, Trace1}};
+                {rollback, {{badmatch, {error, #error{ codename = deadlock_detected }}}, Trace1}} ->
+                    {rollback, {deadlock, Trace1}};
                 Other ->
                     Other
             end,
@@ -809,7 +809,7 @@ create_schema(_Site, Connection, Schema) ->
     ) of
         {ok, _, _} ->
             ok;
-        {error, {error, error, <<"42P06">>, Msg, []}} ->
+        {error, #error{ codename = duplicate_schema, message = Msg }} ->
             lager:warning("Schema already exists ~p (~p)", [Schema, Msg]),
             ok;
         {error, Reason} = Error ->

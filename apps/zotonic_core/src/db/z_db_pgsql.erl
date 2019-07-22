@@ -25,6 +25,7 @@
 -behaviour(z_db_worker).
 
 -include("zotonic.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2,
@@ -208,20 +209,18 @@ connect_1(Args, RetryCt, MRef) ->
                            [{database, Database}, {port, Port}]) of
             {ok, Conn} ->
                 set_schema(Conn, Schema);
+            {error, #error{ codename = too_many_connections }} ->
+                retry(Args, too_many_connections, RetryCt, MRef);
+            {error, #error{ codename = out_of_memory }} ->
+                retry(Args, out_of_memory, RetryCt, MRef);
+            {error, #error{ codename = admin_shutdown }} ->
+                retry(Args, admin_shutdown, RetryCt, MRef);
+            {error, #error{ codename = crash_shutdown }} ->
+                retry(Args, crash_shutdown, RetryCt, MRef);
+            {error, #error{ codename = cannot_connect_now }} ->
+                retry(Args, cannot_connect_now, RetryCt, MRef);
             {error, econnrefused} ->
                 retry(Args, econnrefused, RetryCt, MRef);
-            {error, <<"53200">>} ->
-                retry(Args, out_of_memory, RetryCt, MRef);
-            {error, <<"53300">>} ->
-                retry(Args, too_many_connections, RetryCt, MRef);
-            {error, {error, fatal, <<"53300">>, _ErrorMsg, _ErrorArgs}} ->
-                retry(Args, too_many_connections, RetryCt, MRef);
-            {error, <<"57P01">>} ->
-                retry(Args, admin_shutdown, RetryCt, MRef);
-            {error, <<"57P02">>} ->
-                retry(Args, crash_shutdown, RetryCt, MRef);
-            {error, <<"57P03">>} ->
-                retry(Args, cannot_connect_now, RetryCt, MRef);
             {error, _} = E ->
                 lager:warning("psql connection to ~p:~p returned error ~p",
                               [Hostname, Port, E]),
