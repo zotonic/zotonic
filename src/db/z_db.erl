@@ -791,7 +791,7 @@ create_schema(_Site, Connection, Schema) ->
     ) of
         {ok, _, _} ->
             ok;
-        {error, {error, error, <<"42P06">>, _Msg, []}} ->
+        {error, {error, error, <<"42P06">>, _Msg, _, _}} ->
             lager:warning("schema already exists ~p", [Schema]),
             ok;
         {error, Reason} = Error ->
