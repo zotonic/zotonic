@@ -108,7 +108,7 @@ drop_schema(_Site, Connection, Schema) ->
           ) of
         {ok, _, _} ->
             ok;
-        {error, {error, error, <<"3F000">>, _, _}} ->
+        {error, {error, error, <<"3F000">>, _, _, _}} ->
             ok;
         {error, Reason} = Error ->
             lager:error("z_sitetest: error while dropping schema ~p: ~p", [Schema, Reason]),
