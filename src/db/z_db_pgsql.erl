@@ -184,8 +184,6 @@ connect(Args, RetryCt) ->
                 connect(Args, RetryCt+10);
             {error, #error{ codename = too_many_connections }} ->
                 too_many_connections(Args, RetryCt);
-            {error, too_many_connections} ->
-                too_many_connections(Args, RetryCt);
             {error, _} = E ->
                 lager:warning("psql connection to ~p:~p returned error ~p",
                               [Hostname, Port, E]),
