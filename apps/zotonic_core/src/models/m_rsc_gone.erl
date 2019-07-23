@@ -34,6 +34,7 @@
 ]).
 
 -include_lib("zotonic.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 
 %% @doc Fetch the value for the key from a model source
@@ -133,7 +134,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                     end,
                     Context),
             case Result of
-                {error, {error, error, <<"23505">>, _ErrMsg, _ErrProps}} ->
+                {error, #error{ codename = unique_violation }} ->
                     % Duplicate key - ignore (race condition)
                     {ok, Id};
                 Other -> Other

@@ -27,6 +27,7 @@
 	delete/4
 ]).
 
+-include_lib("epgsql/include/epgsql.hrl").
 
 install(Context) ->
 	case z_db:table_exists(email_receive_recipient, Context) of
@@ -98,7 +99,7 @@ insert(Notification, UserId, ResourceId, Context) ->
 						   Context),
 				{ok, Recipient}
 			catch
-				throw:{error, {error,error,<<"23503">>,_Msg,_Detail} = Error} ->
+				throw:{error, #error{ severity = error, codename = foreign_key_violation } = Error} ->
 					lager:warning("Error on creating a new e-mail address ~p", [Error]),
 					{error, notfound}
 			end

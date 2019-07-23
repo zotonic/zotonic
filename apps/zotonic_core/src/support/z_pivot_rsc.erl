@@ -61,6 +61,7 @@
 ]).
 
 -include("zotonic.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 % Interval (in seconds) to check if there are any items to be pivoted.
 -define(PIVOT_POLL_INTERVAL_FAST, 2).
@@ -174,7 +175,7 @@ insert_queue(Id, Date, Context) when is_integer(Id), is_tuple(Date) ->
                                Ctx),
                         ok
                     catch
-                        throw:{error, {error,error,<<"23503">>, _, _}} ->
+                        throw:{error, #error{ codename = foreign_key_violation }} ->
                             {error, eexist}
                     end
             end
