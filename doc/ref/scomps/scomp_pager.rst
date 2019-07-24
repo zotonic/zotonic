@@ -55,3 +55,9 @@ The pager tag accepts the following arguments:
 +----------------+------------------------------------------------------------------+------------------------+
 |\*              |Any other argument is used as an argument for the dispatch rule.  |                        |
 +----------------+------------------------------------------------------------------+------------------------+
+
+.. note::
+  It is also possible to pass a list or ``{rsc_list, Ids}`` tuple for the resut. In this case you need to perform
+  the pagination for displaying the results yourself. You can use the :ref:`filter-split` for this. The pager scomp
+  will either fetch the ``page`` and ``pagenr`` from the pager arguments, or from the query arguments (if any).
+

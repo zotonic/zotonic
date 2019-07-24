@@ -39,7 +39,7 @@ render(Params, _Vars, Context) ->
                         undefined -> z_context:get(zotonic_dispatch, Context, search);
                         Dp -> Dp
                    end,
-    HideSinglePage  = proplists:get_value(hide_single_page, Params),
+    HideSinglePage  = proplists:get_value(hide_single_page, Params, false),
     CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(hide_single_page, Params))),
 
     DispatchArgs = case proplists:is_defined(qargs, CleanedArgs) of
@@ -76,10 +76,45 @@ render(Params, _Vars, Context) ->
         #search_result{page=Page, pages=Pages} ->
             Html = build_html(Page, Pages, Dispatch, DispatchArgs, Context),
             {ok, Html};
+        {rsc_list, Ids} ->
+            render_list(Ids, Params, Dispatch, DispatchArgs, HideSinglePage, Context);
+        List when is_list(List) ->
+            render_list(List, Params, Dispatch, DispatchArgs, HideSinglePage, Context);
         _ ->
-            {error, "scomp_pager: search result is not a #search_result{}"}
+            {error, "scomp_pager: search result is not a #search_result{} or list"}
     end.
 
+render_list([], _Params, _Dispatch, _DispatchArgs, _HideSinglePage, _Context) ->
+    {ok, ""};
+render_list(List, Params, Dispatch, DispatchArgs, HideSinglePage, Context) ->
+    PageLen = lookup_arg(pagelen, ?SEARCH_PAGELEN, Params, Context),
+    Page = lookup_arg(page, 1, Params, Context),
+    case (length(List) - 1) div PageLen + 1 of
+        1 when HideSinglePage ->
+            {ok, ""};
+        Pages ->
+            build_html(Page, Pages, Dispatch, DispatchArgs, Context)
+    end.
+
+lookup_arg(Name, Default, Params, Context) ->
+    V = case proplists:get_value(Name, Params) of
+        undefined -> undefined;
+        P -> try z_convert:to_integer(P) catch _:_ -> undefined end
+    end,
+    V1 = case V of
+        undefined ->
+            case z_context:get_q(Name, Context) of
+                undefined -> undefined;
+                Q -> try z_convert:to_integer(Q) catch _:_ -> undefined end
+            end;
+        _ ->
+            V
+    end,
+    case V1 of
+        undefined -> Default;
+        N when N =< 0 -> Default;
+        _ -> V1
+    end.
 
 build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
