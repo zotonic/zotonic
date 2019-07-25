@@ -38,9 +38,9 @@ start_link(Ref, Socket, Transport, Opts) ->
     Pid = proc_lib:spawn_link(?MODULE, init, [ Ref, Socket, Transport, Opts ]),
     {ok, Pid}.
 
-init(Ref, Socket, Transport, Opts) ->
-    ok = ranch:accept_ack(Ref),
-    ?MODULE:recv_connect(Socket, Transport, Opts#{ data => <<>> }).
+init(Ref, _Socket, Transport, Opts) ->
+    {ok, NewSocket} = ranch:handshake(Ref),
+    ?MODULE:recv_connect(NewSocket, Transport, Opts#{ data => <<>> }).
 
 %% @todo Close connection if connect packet is too large
 recv_connect(Socket, Transport, #{ data := Data } = State) ->
