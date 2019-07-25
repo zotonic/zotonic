@@ -159,7 +159,7 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
         any -> [];
         _ -> [{ip, WebIp}]
     end,
-    case start_tls(
+    case cowboy:start_tls(
         zotonic_https_listener_ipv4,
         [   inet,
             {port, SSLPort},
@@ -205,7 +205,7 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
         any -> [];
         _ -> [{ip, WebIp}]
     end,
-    {ok, _} = start_tls(
+    {ok, _} = cowboy:start_tls(
         zotonic_https_listener_ipv6,
         [   inet6,
             {ipv6_v6only, true},
@@ -229,20 +229,20 @@ cowboy_options() ->
     }.
 
 
-% @doc Copied from cowboy.erl, disable http2 till the cipher problems are resolved.
--spec start_tls(ranch:ref(), ranch_ssl:opts(), list()) -> {ok, pid()} | {error, any()}.
-start_tls(Ref, TransOpts0, ProtoOpts) ->
-    TransOpts = [
-        connection_type(ProtoOpts)
-        % {next_protocols_advertised, [<<"h2">>, <<"http/1.1">>]},
-        % {alpn_preferred_protocols, [<<"h2">>, <<"http/1.1">>]}
-    |TransOpts0],
-    ranch:start_listener(Ref, ranch_ssl, TransOpts, cowboy_tls, ProtoOpts).
+% % @doc Copied from cowboy.erl, disable http2 till the cipher problems are resolved.
+% -spec start_tls(ranch:ref(), ranch_ssl:opts(), list()) -> {ok, pid()} | {error, any()}.
+% start_tls(Ref, TransOpts0, ProtoOpts) ->
+%     TransOpts = [
+%         connection_type(ProtoOpts)
+%         % {next_protocols_advertised, [<<"h2">>, <<"http/1.1">>]},
+%         % {alpn_preferred_protocols, [<<"h2">>, <<"http/1.1">>]}
+%     |TransOpts0],
+%     ranch:start_listener(Ref, ranch_ssl, TransOpts, cowboy_tls, ProtoOpts).
 
--spec connection_type(list()) -> {connection_type, worker | supervisor}.
-connection_type(ProtoOpts) ->
-    {_, Type} = maps:get(stream_handler, ProtoOpts, {cowboy_stream_h, supervisor}),
-    {connection_type, Type}.
+% -spec connection_type(list()) -> {connection_type, worker | supervisor}.
+% connection_type(ProtoOpts) ->
+%     {_, Type} = maps:get(stream_handler, ProtoOpts, {cowboy_stream_h, supervisor}),
+%     {connection_type, Type}.
 
 
 %% @todo Exclude platforms that do not support raw ipv6 socket options
