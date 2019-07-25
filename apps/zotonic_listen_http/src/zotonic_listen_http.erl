@@ -228,23 +228,6 @@ cowboy_options() ->
         env => #{}
     }.
 
-
-% % @doc Copied from cowboy.erl, disable http2 till the cipher problems are resolved.
-% -spec start_tls(ranch:ref(), ranch_ssl:opts(), list()) -> {ok, pid()} | {error, any()}.
-% start_tls(Ref, TransOpts0, ProtoOpts) ->
-%     TransOpts = [
-%         connection_type(ProtoOpts)
-%         % {next_protocols_advertised, [<<"h2">>, <<"http/1.1">>]},
-%         % {alpn_preferred_protocols, [<<"h2">>, <<"http/1.1">>]}
-%     |TransOpts0],
-%     ranch:start_listener(Ref, ranch_ssl, TransOpts, cowboy_tls, ProtoOpts).
-
-% -spec connection_type(list()) -> {connection_type, worker | supervisor}.
-% connection_type(ProtoOpts) ->
-%     {_, Type} = maps:get(stream_handler, ProtoOpts, {cowboy_stream_h, supervisor}),
-%     {connection_type, Type}.
-
-
 %% @todo Exclude platforms that do not support raw ipv6 socket options
 -spec ipv6_supported() -> boolean().
 ipv6_supported() ->
