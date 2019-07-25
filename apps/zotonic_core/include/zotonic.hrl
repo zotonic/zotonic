@@ -123,7 +123,7 @@
     result = [] :: list(),
     page = 1 :: pos_integer(),
     pagelen :: pos_integer(),
-    total :: non_neg_integer(),
+    total :: undefined | non_neg_integer(),
     all :: non_neg_integer(),
     pages :: non_neg_integer(),
     next,
