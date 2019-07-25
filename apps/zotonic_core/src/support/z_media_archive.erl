@@ -194,6 +194,7 @@ make_unique(Rootname, Extension, Nr, Context) ->
 
 
 %% @doc Check if the file is archived (ie. in the archive directory)
+-spec is_archived( file:filename_all(), z:context() ) -> boolean().
 is_archived(undefined, _Context) ->
     false;
 is_archived(Filename, Context) ->

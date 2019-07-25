@@ -353,7 +353,7 @@ prune_reqdata(Req) ->
     }.
 
 %% @doc Make the url an absolute url by prepending the hostname.
--spec abs_url(iolist(), z:context()) -> binary().
+-spec abs_url(iodata(), z:context()) -> binary().
 abs_url(Url, Context) when is_list(Url) ->
     abs_url(iolist_to_binary(Url), Context);
 abs_url(<<"//", _/binary>> = Url, Context) ->
@@ -560,7 +560,8 @@ add_q(KVs, Context) ->
         KVs).
 
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
--spec get_q(string()|atom()|binary()|list(), z:context()) -> binary() | string() | #upload{} | undefined | list().
+%%      Note that this can also be populated from a JSON MQTT call, and as such contain arbitrary data.
+-spec get_q(string()|atom()|binary()|list(), z:context()) -> undefined | binary() | string() | #upload{} | list() | term().
 get_q([Key|_] = Keys, Context) when is_list(Key); is_atom(Key); is_binary(Key) ->
     lists:foldl(fun(K, Acc) ->
                     case get_q(K, Context) of

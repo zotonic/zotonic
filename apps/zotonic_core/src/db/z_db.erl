@@ -253,7 +253,7 @@ assoc_props_row(Sql, Parameters, Context) ->
 
 
 %% @doc Return property lists of the results of a query on the database in the Context
--spec assoc_map(sql(), z:context()) -> map().
+-spec assoc_map(sql(), z:context()) -> list( map() ).
 assoc_map(Sql, Context) ->
     assoc_map(Sql, [], Context).
 
@@ -262,13 +262,13 @@ assoc_map(Sql, Parameters, #context{} = Context) ->
 assoc_map(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     assoc_map(Sql, [], Context, Timeout).
 
+-spec assoc_map(sql(), list(), z:context(), integer()) -> list( map() ).
 assoc_map(Sql, Parameters, Context, Timeout) ->
-
     Result = assoc(Sql, Parameters, Context, Timeout),
     lists:map(fun maps:from_list/1, Result).
 
 %% @doc Return property lists of the results of a query on the database in the Context
--spec assoc(sql(), z:context()) -> list().
+-spec assoc(sql(), z:context()) -> list( list() ).
 assoc(Sql, Context) ->
     assoc(Sql, [], Context).
 
@@ -277,6 +277,7 @@ assoc(Sql, Parameters, #context{} = Context) ->
 assoc(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     assoc(Sql, [], Context, Timeout).
 
+-spec assoc(sql(), list(), z:context(), integer()) -> list( list() ).
 assoc(Sql, Parameters, Context, Timeout) ->
     DbDriver = z_context:db_driver(Context),
     F = fun
@@ -502,7 +503,7 @@ update(Table, Id, Parameters, Context) ->
 
 
 %% @doc Delete a row from a table, the row must have a column with the name 'id'
--spec delete(Table::atom(), Id::integer(), #context{}) -> {ok, RowsDeleted::integer()} | {error, term()}.
+-spec delete(Table::table_name(), Id::integer(), #context{}) -> {ok, RowsDeleted::integer()} | {error, term()}.
 delete(Table, Id, Context) when is_atom(Table) ->
     delete(atom_to_list(Table), Id, Context);
 delete(Table, Id, Context) ->

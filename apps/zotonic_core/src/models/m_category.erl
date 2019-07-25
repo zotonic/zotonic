@@ -694,7 +694,7 @@ id_to_name(Id, Context) when is_integer(Id) ->
 
 
 %% @doc Check if the category tree is dirty (e.g. resource pivot numbers are being updated)
--spec is_tree_dirty(#context{}) -> boolean().
+-spec is_tree_dirty( z:context() ) -> boolean().
 is_tree_dirty(Context) ->
     case m_config:get(?MODULE, meta, Context) of
         undefined -> false;
@@ -702,7 +702,7 @@ is_tree_dirty(Context) ->
     end.
 
 %% @doc Set the tree dirty flag
--spec set_tree_dirty(boolean(), #context{}) -> ok.
+-spec set_tree_dirty( boolean(), z:context() ) -> ok.
 set_tree_dirty(Flag, Context) when Flag =:= true; Flag =:= false ->
     m_config:set_prop(?MODULE, meta, tree_dirty, Flag, Context).
 

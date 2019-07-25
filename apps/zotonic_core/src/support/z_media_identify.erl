@@ -47,7 +47,7 @@ identify(#upload{tmpfile=File, filename=Filename}, Context) ->
 identify(File, Context) ->
 	identify(File, File, Context).
 
--spec identify(#upload{}|string(), string(), #context{}) -> {ok, Props::list()} | {error, term()}.
+-spec identify(#upload{}|file:filename_all(), string(), z:context()) -> {ok, Props::list()} | {error, term()}.
 identify(File, OriginalFilename, Context) ->
     identify(File, File, OriginalFilename, Context).
 
@@ -64,7 +64,7 @@ identify(File, MediumFilename, OriginalFilename, Context) ->
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.  First checks if a module
 %% has a specific identification methods.
--spec identify_file(File::string(), #context{}) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file(File::file:filename_all(), z:context()) -> {ok, Props::list()} | {error, term()}.
 identify_file(File, Context) ->
 	identify_file(File, File, Context).
 
@@ -78,11 +78,13 @@ identify_file(File, OriginalFilename, Context) ->
             identify_file_direct(File, OriginalFilename)
 	end.
 
+-spec maybe_extension(file:filename_all(), file:filename_all() | undefined) -> string().
 maybe_extension(File, undefined) ->
     maybe_extension(File);
 maybe_extension(_File, OriginalFilename) ->
     maybe_extension(OriginalFilename).
 
+-spec maybe_extension( file:filename_all() | undefined ) -> string().
 maybe_extension(undefined) ->
     "";
 maybe_extension(Filename) ->

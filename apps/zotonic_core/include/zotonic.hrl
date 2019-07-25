@@ -103,8 +103,8 @@
 %% Query argument value for uploaded files. Also used for email attachments.
 -record(upload, {
     filename :: binary(),
-    tmpfile :: undefined | filename:filename_all(),
-    tmpmonitor :: pid(),
+    tmpfile :: undefined | file:filename_all(),
+    tmpmonitor = undefined :: undefined | pid(),
     data = undefined :: undefined | binary(),
     mime = undefined :: undefined | binary()
 }).
@@ -155,7 +155,7 @@
 
 -record(module_index, {
     key           :: #module_index_key{},
-    filepath      :: filename:filename(),
+    filepath      :: file:filename_all(),
     module        :: atom() | undefined,
     erlang_module :: atom() | undefined,
     tag           :: integer()
@@ -188,9 +188,9 @@
 %% ACL objects
 -record(acl_rsc, {
     category :: atom(),
-    mime :: binary(),
-    size :: non_neg_integer(),
-    props :: list()
+    mime = undefined :: undefined | binary(),
+    size = undefined :: undefined | non_neg_integer(),
+    props = [] :: list()
 }).
 
 -record(acl_edge, {
@@ -225,7 +225,7 @@
 
 %% @doc Template definition for z_render:update/insert (and others)
 -record(render, {
-    template :: string(),
+    template :: string() | {cat, string()},
     is_all = false :: boolean(),
     vars = [] :: proplists:proplist()
 }).

@@ -206,7 +206,7 @@ set_value(Module, Key, Value, Context) ->
 
 
 %% @doc Set a "complex" config value.
--spec set_prop(atom(), atom(), atom(), any, z:context()) -> ok.
+-spec set_prop(atom(), atom(), atom(), any(), z:context()) -> ok.
 set_prop(Module, Key, Prop, PropValue, Context) ->
     case get_id(Module, Key, Context) of
         undefined ->

@@ -65,6 +65,7 @@ observe(Event, Observer, Priority, Context) when is_integer(Priority) ->
 observe(Event, Observer, OwnerPid, Context) when is_pid(OwnerPid) ->
     observe(Event, Observer, OwnerPid, prio(Observer), Context).
 
+-spec observe( zotonic_notifier:event(), zotonic_notifier:observer(), pid(), atom() | z:context() ) -> ok | {error, term()}.
 observe(Event, Observer, OwnerPid, Priority, Site) when is_atom(Site), is_pid(OwnerPid) ->
     zotonic_notifier:observe({Site, msg_event(Event)}, Observer, OwnerPid, Priority);
 observe(Event, Observer, OwnerPid, Priority, Context) ->

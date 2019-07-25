@@ -244,7 +244,7 @@ set_username(Id, Username, Context) when is_integer(Id) ->
 
 
 %% @doc Set the username/password of a resource.  Replaces any existing username/password.
--spec set_username_pw(m_rsc:resource(), string(), string(), #context{}) -> ok | {error, Reason :: term()}.
+-spec set_username_pw(m_rsc:resource(), binary()|string(), binary()|string(), #context{}) -> ok | {error, Reason :: term()}.
 set_username_pw(1, _, _, _) ->
     {error, admin_password_cannot_be_set};
 set_username_pw(Id, Username, Password, Context)  when is_integer(Id) ->

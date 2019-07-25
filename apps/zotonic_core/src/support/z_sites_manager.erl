@@ -826,7 +826,7 @@ do_cleanup_crash_state(#state{ sites = Sites } = State) ->
 % ----------------------------------------------------------------------------
 
 %% @doc Get the file path of the config file for a site.
--spec get_site_config_file( atom() ) -> filename:filename() | {error, bad_name}.
+-spec get_site_config_file( atom() ) -> file:filename_all() | {error, bad_name}.
 get_site_config_file(Site) ->
     case z_path:site_dir(Site) of
         {error, _} = Error -> Error;

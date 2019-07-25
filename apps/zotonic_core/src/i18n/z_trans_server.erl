@@ -96,7 +96,7 @@ init({Site, Name}) ->
         {module, ?MODULE}
       ]),
     process_flag(trap_exit, true),
-    z_notifier:observe(module_ready, {?MODULE, observe_module_ready}, Site),
+    ok = z_notifier:observe(module_ready, {?MODULE, observe_module_ready}, Site),
     Table = ets:new(Name, [named_table, set, protected, {read_concurrency, true}]),
     {ok, #state{table=Table, site=Site}}.
 

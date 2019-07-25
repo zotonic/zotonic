@@ -30,9 +30,9 @@
 
 -define(SERVER, ?MODULE).
 
--define(TEMP_IMAGE, "images/processing.gif").
--define(POSTER_IMAGE, "images/poster.png").
--define(BROKEN_IMAGE, "images/broken.png").
+-define(TEMP_IMAGE, <<"images/processing.gif">>).
+% -define(POSTER_IMAGE, <<"images/poster.png">>).
+-define(BROKEN_IMAGE, <<"images/broken.png">>).
 
 -define(TASK_DELAY, 3600).
 
@@ -89,7 +89,7 @@ do_media_upload_preprocess(Upload, Context) ->
                 post_insert_fun = PostFun,
                 original_filename = undefined,
                 medium = [
-                    {preview_filename, "lib/"++?TEMP_IMAGE},
+                    {preview_filename, <<"lib/", ?TEMP_IMAGE/binary>>},
                     {preview_width, proplists:get_value(width, MInfo)},
                     {preview_height, proplists:get_value(height, MInfo)},
                     {width, proplists:get_value(width, MInfo)},
@@ -112,7 +112,7 @@ do_media_upload_broken(Context) ->
                file = undefined,
                original_filename = undefined,
                medium = [
-                         {preview_filename, "lib/"++?BROKEN_IMAGE},
+                         {preview_filename, <<"lib/", ?BROKEN_IMAGE/binary>>},
                          {preview_width, proplists:get_value(width, MInfo)},
                          {preview_height, proplists:get_value(height, MInfo)},
                          {width, proplists:get_value(width, MInfo)},

@@ -71,7 +71,7 @@
 -define(FLUSH_INTERVAL, 2000).
 
 %% @doc Return the modification time of a file
--spec mtime(filename:filename()) -> {ok, calendar:datetime()} | {error, notfound}.
+-spec mtime(file:filename_all()) -> {ok, calendar:datetime()} | {error, notfound}.
 mtime(File) when is_list(File) ->
     mtime(unicode:characters_to_binary(File));
 mtime(File) when is_binary(File) ->
@@ -110,7 +110,7 @@ is_template_modified(Module, Site) ->
     end.
 
 %% @doc Return the (universal) modification time of file, 0 on enoent
--spec file_mtime(filename:filename()) -> calendar:datetime() | 0.
+-spec file_mtime(file:filename_all()) -> calendar:datetime() | 0.
 file_mtime(File) ->
     case file:read_file_info(File, [{time, universal}]) of
         {ok, #file_info{mtime=MTime}} -> MTime;

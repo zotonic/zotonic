@@ -69,7 +69,7 @@ handle_info(install_check, State) ->
     end.
 
 code_change(_Vsn, State, _Extra) ->
-    {noreply, State}.
+    {ok, State}.
 
 terminate(_Reason, _State) ->
     ok.
@@ -80,6 +80,7 @@ terminate(_Reason, _State) ->
 %%====================================================================
 
 %% Check if the config table exists, if so then assume that all is ok
+-spec install_check( proplists:list() ) -> ok | {error, nodbinstall | database | term()}.
 install_check(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
     lager:md([
@@ -95,6 +96,7 @@ install_check(SiteProps) ->
             ok
     end.
 
+-spec check_db_and_upgrade( z:context(), integer() ) -> ok | {error, nodbinstall | database | term()}.
 check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
     case z_db_pool:test_connection(Context) of
         ok ->
