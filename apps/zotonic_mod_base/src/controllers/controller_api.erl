@@ -218,14 +218,6 @@ error_response({error, Reason}, CT, Context) ->
             message => <<"Internal Error">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
-    {{halt, 500}, Context1};
-error_response(_, CT, Context) ->
-    RespBody = z_controller_helper:encode_response(CT, #{
-            status => <<"error">>,
-            error => <<"error">>,
-            message => <<"Internal Error">>
-        }),
-    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 500}, Context1}.
 
 

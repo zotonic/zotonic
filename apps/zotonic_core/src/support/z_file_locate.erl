@@ -64,7 +64,11 @@ extract_filters(Path, OptFilters, Context) ->
                 {_,_} ->
                     case z_media_tag:url2props(SafePath, Context) of
                         {ok, {OriginalFile, PreviewPropList, _Checksum, _ChecksumBaseString}} ->
-                            {SafePath, OriginalFile, case OptFilters of undefined -> []; _ -> OptFilters end ++ PreviewPropList};
+                            Filters1 = case OptFilters of
+                                undefined -> [];
+                                _ -> OptFilters
+                            end,
+                            {SafePath, OriginalFile, Filters1 ++ PreviewPropList};
                         {error, _} ->
                             {SafePath, SafePath, OptFilters}
                     end

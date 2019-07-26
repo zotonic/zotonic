@@ -227,15 +227,11 @@ create_new(List, Context) ->
     create_new_if_needed(Id, Context) when is_integer(Id) ->
         {Id, Context};
     create_new_if_needed(Id, Context) ->
-        Category = case lists:last(string:tokens(Id, "-")) of
-                        [] ->
-                            text;
-                        C ->
-                            case m_category:name_to_id(C, Context) of
-                                {error, _} -> text;
-                                {ok, C1} -> C1
-                            end
-                   end,
+        C = lists:last( string:tokens(Id, "-") ),
+        Category = case m_category:name_to_id(C, Context) of
+            {error, _} -> text;
+            {ok, C1} -> C1
+        end,
         Props = [
             {is_published, false},
             {category, Category},

@@ -476,7 +476,7 @@ set_default_language(Code, Context) ->
 %% @doc Returns a valid language from the config language. If the language is not
 %%      available or not enabled, tries the language's fallback language (retrieve from
 %%      z_language); if this fails too, returns the data for the site's default language.
--spec valid_config_language(atom(), z:context()) -> {atom(), list()}.
+-spec valid_config_language(atom(), z:context()) -> {atom(), list()} | undefined.
 valid_config_language(Code, Context) ->
     valid_config_language(Code, Context, [Code]).
 
@@ -489,6 +489,7 @@ valid_config_language(Code, Context, Tries) ->
         undefined ->
             % Language code is not listed in config, let's try a fallback
             Fallback = z_language:fallback_language(Code, Context),
+            % Bail out if we got into a loop
             case lists:member(Fallback, Tries) of
                 true -> undefined;
                 false -> valid_config_language(Fallback, Context, [Fallback|Tries])

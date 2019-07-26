@@ -42,6 +42,7 @@
 -type optional_filename() :: undefined | file:filename_all().
 -type mime_type() :: string().
 -type filename_extension() :: string().
+-type os_family() :: win32 | unix.
 
 %% @doc Caching version of identify/1. Fetches information about an image, returns width, height, type, etc.
 -spec identify( #upload{} | file:filename_all(), z:context() ) -> {ok, Props::list()} | {error, term()}.
@@ -99,7 +100,7 @@ identify_file_direct(File, OriginalFilename) ->
     check_acceptable(File, maybe_identify_extension(identify_file_direct_1(File, OriginalFilename), OriginalFilename)).
 
 identify_file_direct_1(File, OriginalFilename) ->
-    {OsFamily, _} = os:type(),
+    OsFamily = os_family(),
 	case identify_file_os(OsFamily, File, OriginalFilename) of
 		{error, _} ->
 			%% Last resort, give ImageMagick a try
@@ -113,6 +114,11 @@ identify_file_direct_1(File, OriginalFilename) ->
 				_Mime -> {ok, Props}
 			end
 	end.
+
+-spec os_family() -> os_family().
+os_family() ->
+    {OsFamily, _} = os:type(),
+    OsFamily.
 
 check_acceptable(_File, {error, _} = Error) ->
     Error;
@@ -235,7 +241,7 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
 
 
 %% @doc Try to identify the file using image magick
--spec identify_file_imagemagick(win32|unix, file:filename_all(), undefined | mime_type()) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file_imagemagick(os_family(), file:filename_all(), undefined | mime_type()) -> {ok, Props::list()} | {error, term()}.
 identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
     identify_file_imagemagick_1(os:find_executable("identify"), OsFamily, ImageFile, MimeFile).
 
@@ -461,7 +467,7 @@ exif_subject_point(Exif, Orientation, Width, Height) ->
     Point1 = maybe_resize_point(Point, Exif, Width, Height),
     maybe_rotate(Orientation, Point1, Width, Height).
 
-extract_subject_point(undefind) ->
+extract_subject_point(undefined) ->
     undefined;
 extract_subject_point(Exif) ->
     case proplists:get_value(subject_area, Exif) of

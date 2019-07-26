@@ -844,6 +844,8 @@ save_preview_url(RscId, Url, Context) ->
     end.
 
 %% @doc Save a preview for a medium record. The data is saved to a file in the archive directory.
+-spec save_preview( m_rsc:resource_id(), iodata(), binary()|string(), z:context() ) ->
+    {ok, file:filename_all()} | {error, eacces | term()}.
 save_preview(RscId, Data, Mime, Context) ->
     case z_acl:rsc_editable(RscId, Context) of
         true ->
@@ -867,7 +869,7 @@ save_preview(RscId, Data, Mime, Context) ->
                 z_depcache:flush({medium, RscId}, Context),
                 {ok, FileUnique}
             catch
-                Error ->
+                throw:{error, _} = Error ->
                     file:delete(FileUniqueAbs),
                     Error
             end;

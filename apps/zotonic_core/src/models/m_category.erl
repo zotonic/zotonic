@@ -747,7 +747,7 @@ move_below(Cat, Parent, Context) ->
     end.
 
 %% @doc Move a category after another category (on the same level).
--spec move_after(pos_integer(), pos_integer(), z:context()) -> ok.
+-spec move_after( category(), category() | undefined, z:context() ) -> ok.
 move_after(Cat, After, Context) ->
     {ok, Id} = name_to_id(Cat, Context),
     AfterId = maybe_name_to_id(After, Context),

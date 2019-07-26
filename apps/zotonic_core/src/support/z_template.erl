@@ -42,7 +42,6 @@
 -include("../../include/zotonic.hrl").
 
 
-
 start_link(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
     z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, z_context:new(Site)),

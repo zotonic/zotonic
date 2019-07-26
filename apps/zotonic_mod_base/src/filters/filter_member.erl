@@ -41,9 +41,7 @@ member(S, [H|_] = L, _Context) when is_integer(S) and is_binary(H) ->
 member(S, L, _Context) when is_list(L) ->
     lists:member(S, L);
 member(S, Value, Context) ->
-	case z_template_compiler_runtime:to_list(Value, Context) of
-		L when is_list(L) -> member(S, L, Context);
-		_ -> undefined
-	end.
+	L = z_template_compiler_runtime:to_list(Value, Context),
+	member(S, L, Context).
 
 

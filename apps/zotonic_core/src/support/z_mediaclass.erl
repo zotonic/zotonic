@@ -82,7 +82,7 @@ start_link(SiteProps) ->
 
 
 %% @doc Fetch the mediaclass definition for the current context.
--spec get(MediaClass :: list() | binary(), #context{}) -> {ok, PreviewProps :: list(), Checksum :: binary()} | {error, term()}.
+-spec get(MediaClass :: list() | binary(), #context{}) -> {ok, PreviewProps :: list(), Checksum :: binary()}.
 get(MediaClass, Context) ->
     case ets:lookup(?MEDIACLASS_INDEX,
                     #mediaclass_index_key{
@@ -90,8 +90,7 @@ get(MediaClass, Context) ->
                         mediaclass=z_convert:to_binary(MediaClass)})
     of
         [] -> {ok, [], <<>>};
-        [MC|_] -> {ok, MC#mediaclass_index.props, MC#mediaclass_index.checksum};
-        {error, _} = Error -> Error
+        [MC|_] -> {ok, MC#mediaclass_index.props, MC#mediaclass_index.checksum}
     end.
 
 %% @doc Expand the mediaclass, use the checksum when available
@@ -108,7 +107,7 @@ expand_mediaclass_checksum(Props) ->
             expand_mediaclass_checksum_1(undefined, z_convert:to_binary(Checksum), Props)
     end.
 
--spec expand_mediaclass_checksum(Checksum :: binary(), Props :: list()) -> list().
+-spec expand_mediaclass_checksum(Checksum :: binary(), Props :: list()) -> {ok, list()} | {error, checksum}.
 expand_mediaclass_checksum(Checksum, Props) ->
     expand_mediaclass_checksum_1(undefined, Checksum, Props).
 
@@ -119,9 +118,7 @@ expand_mediaclass_checksum(Checksum, Props) ->
                 {ok, expand_mediaclass_2(Props, Ps)};
             [] ->
                 lager:warning("mediaclass expand for unknown mediaclass checksum ~p:~p", [Class, Checksum]),
-                {error, checksum};
-            {error, _} = Error ->
-                Error
+                {error, checksum}
         end.
 
 
@@ -139,12 +136,8 @@ expand_mediaclass(Props, Context) ->
     end.
 
 expand_mediaclass_1(MC, Props, Context) ->
-    case get(MC, Context) of
-        {ok, Ps, _Checksum} ->
-            {ok, expand_mediaclass_2(Props, Ps)};
-        Error ->
-            Error
-    end.
+    {ok, Ps, _Checksum} = get(MC, Context),
+    {ok, expand_mediaclass_2(Props, Ps)}.
 
 expand_mediaclass_2(Props, ClassProps) ->
     lists:foldl(fun(KV, Acc) ->
@@ -245,9 +238,6 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Find all mediaclass files for all device types.
 reindex(#state{context=Context, last=Last} = State) ->
     case collect_files(Context) of
-        {error, timeout} ->
-            lager:warning("timeout on module indexer"),
-            State;
         {ok, Last} ->
             State;
         {ok, {Fs,_MaxMod} = New} ->
@@ -265,9 +255,7 @@ collect_files(Context) ->
             {ok, {[], undefined}};
         Ms when is_list(Ms) ->
             Paths = [ {Module, Path} || #module_index{filepath=Path, module=Module} <- Ms ],
-            {ok, {Paths, lists:max([ filelib:last_modified(Path) || {_, Path} <- Paths ])}};
-        {error, _} = Error ->
-            Error
+            {ok, {Paths, lists:max([ filelib:last_modified(Path) || {_, Path} <- Paths ])}}
     end.
 
 

@@ -122,9 +122,9 @@
 -record(search_result, {
     result = [] :: list(),
     page = 1 :: pos_integer(),
-    pagelen :: pos_integer(),
+    pagelen :: pos_integer() | undefined,
     total :: non_neg_integer() | undefined,
-    all :: non_neg_integer() | undefined,
+    all :: list() | undefined,
     pages :: non_neg_integer() | undefined,
     next,
     prev,
@@ -136,7 +136,7 @@
     search_props,
     result,
     page = 1,
-    pagelen :: pos_integer(),
+    pagelen :: pos_integer() | undefined,
     total :: non_neg_integer() | undefined,
     pages :: non_neg_integer() | undefined,
     next,
@@ -175,15 +175,15 @@
 -record(module_index_key, {
     site :: atom(),
     type :: z_module_indexer:key_type() | undefined,
-    name :: binary() | {binary(), binary()}
+    name :: atom() | binary() | {binary(), binary()}
 }).
 
 -record(module_index, {
     key           :: #module_index_key{},
-    filepath      :: file:filename_all(),
+    filepath      :: file:filename_all() | undefined,
     module        :: atom() | undefined,
     erlang_module :: atom() | undefined,
-    tag           :: integer()
+    tag           :: integer() | undefined
 }).
 
 %% For the z_db definitions
@@ -248,9 +248,10 @@
     visible_for = 0 :: non_neg_integer()
 }).
 
+
 %% @doc Template definition for z_render:update/insert (and others)
 -record(render, {
-    template :: string() | binary() | {cat, string() | binary()},
+    template :: template_compiler:template(),
     is_all = false :: boolean(),
     vars = [] :: proplists:proplist()
 }).

@@ -430,7 +430,12 @@ pickle(Context) ->
 %% @doc Depickle a context for restoring from a database
 -spec depickle( tuple() ) -> z:context().
 depickle({pickled_context, Site, UserId, Language, _VisitorId}) ->
-    depickle({pickled_context, Site, UserId, Language, 0, _VisitorId});
+    Context = set_server_names(#context{ site = Site, language = Language }),
+    ContextTz = Context#context{ tz = tz_config(Context) },
+    case UserId of
+        undefined -> ContextTz;
+        _ -> z_acl:logon(UserId, ContextTz)
+    end;
 depickle({pickled_context, Site, UserId, Language, Tz, _VisitorId}) ->
     Context = set_server_names(#context{ site = Site, language = Language, tz = Tz }),
     case UserId of

@@ -622,37 +622,45 @@ fixup_tsquery(_Stemmer, TsQ) ->
 %% @doc Find one more more resources by id or name, when the resources exists.
 %% Input may be a single token or a comma-separated string.
 %% Search results contain a list of ids.
--spec find_by_id(string(), #context{}) -> #search_result{}.
+-spec find_by_id(string(), z:context()) -> #search_result{}.
 find_by_id(S, Context) ->
     find_by_id(S, false, Context).
 
 %% @doc As find_by_id/2, but when Rank is true, results contain a list of tuples: {id, 1}.
--spec find_by_id(string(), boolean(), #context{}) -> #search_result{}.
+-spec find_by_id(string() | binary(), boolean(), z:context()) -> #search_result{}.
+find_by_id(S, Rank, Context) when is_binary(S) ->
+  find_by_id(z_convert:to_list(S), Rank, Context);
 find_by_id(S, Rank, Context) ->
-    Ids = lists:foldl(fun(Id, Acc) ->
-        case m_rsc:exists(Id, Context) of
+    Searches = lists:map(fun z_string:trim/1, string:tokens(S, ", ")),
+    Searches1 = lists:filter(fun(Id) -> Id =/= "" end, Searches),
+    ExactIds = lists:foldl(
+      fun(Id, Acc) ->
+        RId = m_rsc:rid(Id, Context),
+        case m_rsc:exists(RId, Context) of
             false -> Acc;
-            true -> [m_rsc:rid(Id, Context)|Acc]
+            true -> [RId|Acc]
         end
-    end, [], string:tokens(S, ", ")),
-    Ids1 = lists:sort(sets:to_list(sets:from_list(Ids))),
+    end, [], Searches1),
+    NonExactIds = lists:foldl(
+        fun(Id, Acc) ->
+            IdSafe = z_convert:to_list( z_string:to_name(Id) ),
+            Matching = z_db:q("
+                select id
+                from rsc
+                where name like '"++ IdSafe ++"%'
+                limit 10", Context),
+            Matching1 = [ M || {M} <- Matching ],
+            Matching1 ++ Acc
+        end, [], Searches1),
+    Ids1 = lists:usort(ExactIds) ++ lists:usort(NonExactIds -- ExactIds),
     Ids2 = case Rank of
         false -> Ids1;
-        true ->
-            lists:map(fun(Id) ->
-                {Id, 1}
-            end, Ids1)
+        true -> lists:map(fun(Id) -> {Id, 1} end, Ids1)
     end,
-    case length(Ids2) of
-        0 ->
-            #search_result{};
-        L ->
-            #search_result{
-                result=Ids2,
-                total=L
-            }
-    end.
-
+    #search_result{
+        result = Ids2,
+        total = length(Ids2)
+    }.
 
 %% @doc The ranking behaviour for scoring words in a full text search
 %% See also: http://www.postgresql.org/docs/9.3/static/textsearch-controls.html

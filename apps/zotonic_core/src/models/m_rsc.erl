@@ -620,7 +620,7 @@ o(Id, _Context) ->
     fun(P, Context) -> o(Id, P, Context) end.
 
 %% @doc Return the list of objects with a certain predicate
--spec o(resource(), atom(), z:context()) -> list().
+-spec o(resource(), atom(), z:context()) -> #rsc_list{}.
 o(Id, Predicate, Context) when is_integer(Id) ->
     #rsc_list{list = m_edge:objects(Id, Predicate, Context)};
 o(undefined, _Predicate, _Context) ->
@@ -630,7 +630,7 @@ o(Id, Predicate, Context) ->
 
 
 %% Return the nth object in the predicate list
--spec o(resource(), atom(), pos_integer(), z:context()) -> resource_id().
+-spec o(resource(), atom(), pos_integer(), z:context()) -> resource_id() | undefined.
 o(Id, Predicate, N, Context) when is_integer(Id) ->
     case m_edge:object(Id, Predicate, N, Context) of
         undefined -> undefined;
@@ -657,7 +657,7 @@ s(Id, _Context) ->
     fun(P, Context) -> s(Id, P, Context) end.
 
 %% Return the list of subjects with a certain predicate
--spec s(resource(), atom(), z:context()) -> list().
+-spec s(resource(), atom(), z:context()) -> #rsc_list{}.
 s(Id, Predicate, Context) when is_integer(Id) ->
     #rsc_list{list = m_edge:subjects(Id, Predicate, Context)};
 s(undefined, _Predicate, _Context) ->
@@ -666,7 +666,7 @@ s(Id, Predicate, Context) ->
     s(rid(Id, Context), Predicate, Context).
 
 %% Return the nth object in the predicate list
--spec s(resource(), atom(), pos_integer(), z:context()) -> resource_id().
+-spec s(resource(), atom(), pos_integer(), z:context()) -> resource_id() | undefined.
 s(Id, Predicate, N, Context) when is_integer(Id) ->
     case m_edge:subject(Id, Predicate, N, Context) of
         undefined -> undefined;

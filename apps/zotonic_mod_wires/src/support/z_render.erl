@@ -408,7 +408,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
 %%% AJAX UPDATES %%%
 
 %% @doc Set the contents of an element to the the html fragment
--spec update(string(), #render{} | string(), z:context()) -> z:context().
+-spec update(string()|binary(), #render{} | iodata(), z:context()) -> z:context().
 update(TargetId, Html, Context) ->
     update_selector(css_selector(TargetId), Html, Context).
 

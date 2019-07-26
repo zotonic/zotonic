@@ -45,6 +45,7 @@ sanitize_svg(#media_upload_preprocess{file=File} = PP) ->
 
 %% @doc Check the contents of an identified file, to see if it is acceptable for further processing.
 %%      Catches files that might be problematic for ImageMagick or other file processors.
+-spec is_file_acceptable( file:filename_all(), list() ) -> boolean().
 is_file_acceptable(File, MediaProps) when is_list(MediaProps) ->
     Mime = z_convert:to_binary(proplists:get_value(mime, MediaProps)),
     is_file_acceptable_1(Mime, File, MediaProps).

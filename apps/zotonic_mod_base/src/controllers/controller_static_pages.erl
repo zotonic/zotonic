@@ -323,7 +323,7 @@ check_resource_1(Context) ->
                 ], Context)
     end.
 
-last(undefined) -> undefind;
+last(undefined) -> undefined;
 last(<<>>) -> undefined;
 last(B) when is_binary(B) -> binary:last(B).
 

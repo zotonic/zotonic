@@ -90,7 +90,7 @@ observe_auth_options_update(#auth_options_update{ request_options = ROpts }, Acc
             case {m_acl_rule:is_valid_code(SignedCode, Context), State} of
                 {true, <<"edit">>} -> AccOpts#{ acl_user_groups_state => edit };
                 {true, <<"publish">>} -> maps:remove(acl_user_groups_state, AccOpts);
-                {error, _} -> AccOpts
+                {false, _} -> AccOpts
             end;
         #{} ->
             AccOpts

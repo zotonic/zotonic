@@ -71,7 +71,7 @@ is_valid(Code) ->
 
 
 %% @doc Translate a language-code to an atom.
--spec to_language_atom(Code:: list() | binary()) -> {ok, atom()} | {error, not_a_language}.
+-spec to_language_atom( atom() | string() | binary() ) -> {ok, atom()} | {error, not_a_language}.
 to_language_atom(Code) when is_binary(Code) ->
     case is_valid(Code) of
         false -> {error, not_a_language};
@@ -206,7 +206,7 @@ language_list(Context) ->
             end
     end.
 
--spec is_language_enabled( Code :: atom() | binary() | any(), z:context()) -> boolean().
+-spec is_language_enabled(atom() | binary() | string(), z:context()) -> boolean().
 is_language_enabled(Code, Context) ->
     lists:member(to_language_atom(Code), enabled_language_codes(Context)).
 

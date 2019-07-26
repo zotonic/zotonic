@@ -146,6 +146,7 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+-spec do_check( atom() ) -> {ok, non_neg_integer()} | {error, econnrefused}.
 do_check(Site) ->
     try
         Context = z_acl:sudo(z_context:new(Site)),
@@ -159,7 +160,7 @@ do_check(Site) ->
                    Context)
     catch
         exit:{timeout, _} -> {ok, 0};
-        throw:{error, econnrefused} -> false
+        throw:{error, econnrefused} = Error -> Error
     end.
 
 

@@ -158,7 +158,7 @@ set_reminder_secret(Id, Context) ->
 auth_tokens( #{ <<"username">> := Username, <<"password">> := Password }, Context) ->
     case m_identity:check_username_pw(Username, Password, Context) of
         {ok, UserId} ->
-            {ok, UserSecret} = user_auth_key(UserId, Context),
+            UserSecret = user_auth_key(UserId, Context),
             {ok, #{
                 <<"auth">> => #{
                     <<"token">> => auth_token(UserId, UserSecret, Context)

@@ -319,7 +319,7 @@ import_do_edge(Id, Row, F, State, Context) when is_function(F) ->
     [ import_do_edge(Id, Row, E, State, Context) || E <- F(Id, Row, State, Context) ];
 import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Context) ->
     % Find the predicate
-    case map_one_normalize(name, PredCat, map_one(PredRowField, Row, State)) of
+    case map_one_normalize("name", PredCat, map_one(PredRowField, Row, State)) of
         <<>> ->
             fail;
         Name ->
@@ -333,7 +333,7 @@ import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Cont
     end;
 import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField}}, State, Context) ->
     % Find the object
-    Name = map_one_normalize(name, ObjectCat, map_one(ObjectRowField, Row, State)),
+    Name = map_one_normalize("name", ObjectCat, map_one(ObjectRowField, Row, State)),
     case Name of
         <<>> -> fail;
         Name ->
@@ -348,7 +348,7 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField}}, State, Context
             end
     end;
 import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, State, Context) ->
-    Name = map_one_normalize(name, ObjectCat, map_one(ObjectRowField, Row, State)),
+    Name = map_one_normalize("name", ObjectCat, map_one(ObjectRowField, Row, State)),
     case Name of
         <<>> ->
             fail;

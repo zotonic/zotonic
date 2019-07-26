@@ -27,8 +27,8 @@
 -record(filestore, {
         action = upload :: lookup | upload | delete,
         path :: file:filename_all(),
-        filename = <<>> :: file:filename_all(),
-        mime = <<>> :: binary() | string()
+        filename :: file:filename_all(),
+        mime :: binary() | string() | undefined
     }).
 
 %%% @doc Notification to find the filestore credentials

@@ -115,14 +115,10 @@ maybe_cookie(Context) ->
 
 
 maybe_set_cookie(Context) ->
-    case z_context:tz(Context) of
-        undefined ->
-            Context;
-        Tz ->
-            case z_context:get_cookie(?TZ_COOKIE, Context) of
-                Tz -> Context;
-                _ -> set_cookie(Tz, Context)
-            end
+    Tz = z_context:tz(Context),
+    case z_context:get_cookie(?TZ_COOKIE, Context) of
+        Tz -> Context;
+        _ -> set_cookie(Tz, Context)
     end.
 
 set_cookie(Tz, Context) ->

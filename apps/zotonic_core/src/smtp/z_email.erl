@@ -87,37 +87,33 @@ get_admin_email(Context) ->
 			case m_site:get(admin_email, Context) of
 				undefined ->
 					case m_rsc:p_no_acl(1, email_raw, Context) of
-						Empty when Empty == undefined orelse Empty == <<>> ->
-                            <<"wwwadmin@", (z_context:hostname(Context))/binary>>;
-						Email -> Email
+                        undefined -> wwwadmin_email(Context);
+                        <<>> -> wwwadmin_email(Context);
+						Email when is_binary(Email) -> Email
 					end;
-				Email -> z_convert:to_binary(Email)
+				Email ->
+                    z_convert:to_binary(Email)
 			end;
-		Email -> z_convert:to_binary(Email)
+		Email ->
+            z_convert:to_binary(Email)
 	end.
 
+wwwadmin_email(Context) ->
+    <<"wwwadmin@", (z_context:hostname(Context))/binary>>.
+
 %% @doc Send a simple text message to the administrator
--spec send_admin(iolist(), iolist(), z:context()) ->
+-spec send_admin(iodata(), iodata(), z:context()) ->
           {ok, MsgId::binary()}
-        | {error, no_admin_email|sender_disabled|term()}.
+        | {error, sender_disabled|term()}.
 send_admin(Subject, Message, Context) ->
-	case get_admin_email(Context) of
-		undefined ->
-			{error, no_admin_email};
-		Email ->
-			Subject1 = [
-				$[,
-				z_context:hostname(Context),
-				"] ",
-				Subject
-			],
-			Message1 = [
-				Message,
-				"\n\n-- \nYou receive this e-mail because you are registered as the admin of the site ",
-				z_context:abs_url("/", Context)
-			],
-			z_email_server:send(#email{queue=false, to=Email, subject=Subject1, text=Message1}, Context)
-	end.
+	Email = get_admin_email(Context),
+	Subject1 = iolist_to_binary([ $[, z_context:hostname(Context), "] ", Subject ]),
+	Message1 = iolist_to_binary([
+		Message,
+		"\n\n-- \nYou receive this e-mail because you are registered as the admin of the site ",
+		z_context:abs_url(<<"/">>, Context)
+	]),
+	z_email_server:send(#email{queue=false, to=Email, subject=Subject1, text=Message1}, Context).
 
 
 %% @doc Send a page to an e-mail address, assumes the correct template "mailing_page.tpl" is available.

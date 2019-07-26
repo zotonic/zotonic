@@ -402,7 +402,7 @@ scan_path(Path) ->
         filelib:wildcard(Path)).
 
 %% @doc Strip prefix from module names iff there is a src/mod_thing.erl file.
--spec module_name(file:filename_all()) -> atom().
+-spec module_name( file:filename_all() ) -> {module(), atom()}.
 module_name(Dir) ->
     ModName = filename:basename(Dir),
     SimpleModName = strip_module_namespace(z_convert:to_list(ModName)),
@@ -477,22 +477,18 @@ startable(M, #context{} = Context) ->
 startable(Module, Dependencies) when is_list(Dependencies) ->
     case is_module(Module) of
         true ->
-            case dependencies(Module) of
-                {Module, Depends, _Provides} ->
-                    Missing = lists:foldl(fun(Dep, Ms) ->
-                                                  case lists:member(Dep, Dependencies) of
-                                                      true -> Ms;
-                                                      false -> [Dep|Ms]
-                                                  end
-                                          end,
-                                          [],
-                                          Depends),
-                    case Missing of
-                        [] -> ok;
-                        _ -> {error, {missing_dependencies, Missing}}
-                    end;
-                _ ->
-                    {error, could_not_derive_dependencies}
+            {Module, Depends, _Provides} = dependencies(Module),
+            Missing = lists:foldl(fun(Dep, Ms) ->
+                                          case lists:member(Dep, Dependencies) of
+                                              true -> Ms;
+                                              false -> [Dep|Ms]
+                                          end
+                                  end,
+                                  [],
+                                  Depends),
+            case Missing of
+                [] -> ok;
+                _ -> {error, {missing_dependencies, Missing}}
             end;
         false ->
             {error, not_found}
@@ -504,9 +500,7 @@ get_start_error_reason({error, not_found}) ->
 get_start_error_reason({error, {missing_dependencies, Missing}}) ->
     "Missing dependencies: " ++ binary_to_list(iolist_to_binary(io_lib:format("~p", [Missing])));
 get_start_error_reason({error, could_not_derive_dependencies}) ->
-    "Could not derive dependencies";
-get_start_error_reason({error, Reason}) ->
-    lists:flatten(io:format("~p", [Reason])).
+    "Could not derive dependencies".
 
 
 %% @doc Check if the code of a module exists. The database can hold module references to non-existing modules.
@@ -986,23 +980,14 @@ handle_start_next(#state{site=Site, start_queue=Starting, modules=Modules} = Sta
         [ Module | _ ] ->
             State1 = refresh_module_exports(Module, refresh_module_schema(Module, State)),
             #{ Module := ModuleStatus } = State1#state.modules,
-            case start_child(
+            {ok, StartHelperPid} = start_child(
                     self(), Module, ModuleStatus#module_status.application,
-                    module_spec(Module, Site), Site)
-            of
-                {ok, StartHelperPid} ->
-                    State1#state{
-                        start_error=proplists:delete(Module, State1#state.start_error),
-                        start_wait={Module, StartHelperPid, os:timestamp()},
-                        start_queue=lists:delete(Module, Starting)
-                    };
-                {error, Reason} ->
-                    handle_start_next(
-                        State1#state{
-                            start_error=[ {Module, Reason} | proplists:delete(Module, State1#state.start_error) ],
-                            start_queue=lists:delete(Module, Starting)
-                        })
-            end
+                    module_spec(Module, Site), Site),
+            State1#state{
+                start_error=proplists:delete(Module, State1#state.start_error),
+                start_wait={Module, StartHelperPid, os:timestamp()},
+                start_queue=lists:delete(Module, Starting)
+            }
     end.
 
 %% @doc Check if all module dependencies are running.
@@ -1047,7 +1032,7 @@ is_module(Module) ->
 
 %% @doc Try to add and start the child, do not crash on missing modules. Run as a separate process.
 %% @todo Add some preflight tests
--spec start_child(pid(), atom(), atom(), supervisor:child_spec(), atom()) -> {ok, pid()} | {error, string()}.
+-spec start_child(pid(), atom(), atom(), supervisor:child_spec(), atom()) -> {ok, pid()}.
 start_child(ManagerPid, Module, App, ChildSpec, Site) ->
     StartPid = spawn(
         fun() ->
@@ -1114,11 +1099,12 @@ handle_get_provided(State) ->
 
 get_provided_for_modules(Modules) ->
     lists:flatten(
-      [ case dependencies(M) of
-            {_, _, Provides} -> Provides;
-            _ -> []
-        end
-        || M <- Modules ]).
+        lists:map(
+            fun(M) ->
+                {_, _, Provides} = dependencies(M),
+                Provides
+            end,
+            Modules)).
 
 
 stop_children_with_missing_depends(#state{ site = Site, modules = Modules } = State) ->

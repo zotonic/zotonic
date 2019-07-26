@@ -141,37 +141,41 @@ viewer(Filename, Options, Context) ->
 %% @doc Generate a HTML image tag for the image with the filename and options. The medium _must_ be in
 %% a format for which we can generate a preview.  Note that this will never generate video or audio.
 tag(undefined, _Options, _Context) ->
-    {ok, []};
+    {ok, <<>>};
 tag([], _Options, _Context) ->
-    {ok, []};
+    {ok, <<>>};
 tag(#rsc_list{list=[]}, _Options, _Context) ->
-    {ok, []};
+    {ok, <<>>};
 tag(#rsc_list{list=[Id|_]}, Options, Context) ->
     tag(Id, Options, Context);
 tag(Name, Options, Context) when is_atom(Name) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} -> tag(Id, Options, Context);
-        _ -> {ok, []}
+        _ -> {ok, <<>>}
     end;
 tag(Id, Options, Context) when is_integer(Id) ->
     tag(m_media:depiction(Id, Context), Options, Context);
 tag([{_Prop, _Value}|_] = Props, Options, Context) ->
     case mediaprops_filename(proplists:get_value(id, Props), Props, Context) of
         None when None =:= []; None =:= <<>>; None =:= undefined ->
-            {ok, []};
+            {ok, <<>>};
         Filename ->
             Options1 = opt_crop_center(proplists:get_value(id, Props), Options, Context),
             tag1(Props, Filename, Options1, Context)
     end;
 tag(Filename, Options, Context) when is_binary(Filename) ->
-    tag(binary_to_list(Filename), Options, Context);
-tag(Filename, Options, Context) when is_list(Filename) ->
     FilePath = filename_to_filepath(Filename, Context),
     tag1(FilePath, Filename, Options, Context);
+tag(Filename, Options, Context) when is_list(Filename) ->
+    tag(list_to_binary(Filename), Options, Context);
 tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(FilePath, Filename, Options, Context).
 
 
+    -spec tag1( file:filename_all() | proplists:proplist(),
+                file:filename_all() | {filepath, file:filename_all(), file:filename_all()},
+                proplists:proplist(), z:context() )
+            -> {ok, binary()}.
     tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
         tag1(FilePath, Filename, Options, Context);
     tag1(MediaRef, Filename, Options, Context) ->
@@ -226,18 +230,15 @@ media_id([{_,_}|_] = List) ->
 
 %% @doc Give the filepath for the filename being served.
 %% @todo Ensure the file is really in the given directory (ie. no ..'s)
-filename_to_filepath(Filename, #context{} = Context) ->
-    case Filename of
-        "/" ++ _ ->
-            Filename;
-        "lib/" ++ RelFilename ->
-            case z_module_indexer:find(lib, RelFilename, Context) of
-                {ok, #module_index{filepath=Libfile}} -> Libfile;
-                _ -> Filename
-            end;
-        _ ->
-            filename:join([z_path:media_archive(Context), Filename])
-    end.
+filename_to_filepath(<<"/", _/binary>> = Filename, _Context) ->
+    Filename;
+filename_to_filepath(<<"lib/", RelFilename/binary>> = Filename, Context) ->
+    case z_module_indexer:find(lib, RelFilename, Context) of
+        {ok, #module_index{filepath=Libfile}} -> Libfile;
+        _ -> Filename
+    end;
+filename_to_filepath(Filename, Context) ->
+    filename:join([z_path:media_archive(Context), Filename]).
 
 
 %% @doc Give the base url for the filename being served using the 'image' dispatch rule
@@ -432,9 +433,9 @@ props2url([{Prop,Value}|Rest], Width, Height, Acc, Context) ->
 
 %% @doc Translate an url of the format "image.jpg(300x300)(crop-center)(checksum).jpg" to parts
 %% @todo Map the extension to the format of the preview (.jpg or .png)
--spec url2props(binary()|string(), #context{}) ->
-            {ok, {FilePath :: string(), Props :: list(), Checksum :: string(), ChecksumBaseString :: string()}} |
-            {error, no_lparen|checksum_invalid|badarg}.
+-spec url2props( binary() | string(), z:context() ) ->
+              {ok, {FilePath :: string(), Props :: list(), Checksum :: string(), ChecksumBaseString :: string()}}
+            | {error, no_lparen | checksum_invalid | badarg}.
 url2props(Url, Context) when is_binary(Url) ->
     url2props(erlang:binary_to_list(Url), Context);
 url2props(Url, Context) ->

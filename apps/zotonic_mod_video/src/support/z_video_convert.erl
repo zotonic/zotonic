@@ -168,7 +168,7 @@ video_convert(QueuePath, Mime, Context) ->
         " -preset medium "
         " -metadata:s:v:0 rotate=0 ").
 
--spec video_convert_1(file:filename(), integer(), string(), z:context()) ->
+-spec video_convert_1(file:filename(), integer(), string() | binary(), z:context()) ->
     {ok, file:filename_all()} | term().
 video_convert_1(QueuePath, Orientation, _Mime, Context) ->
     Cmdline = case m_config:get_value(mod_video, ffmpeg_cmdline, Context) of
