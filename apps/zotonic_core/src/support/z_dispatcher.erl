@@ -448,7 +448,7 @@ make_url_for(Name, Args, Escape, UriLookup) ->
         {ok, Patterns} ->
             case make_url_for1(Args1, Patterns, Escape, undefined) of
                 #dispatch_url{ url = undefined } = DispUrl when Name =/= image->
-                    lager:warning("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
+                    lager:info("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
                          [
                           Name1,
                           [{'Args', Args1},

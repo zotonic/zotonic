@@ -51,7 +51,7 @@
 -record(zlog, {
     type = undefined :: atom(),
     user_id = undefined :: m_rsc:resource_id() | undefined,
-    timestamp = os:timestamp() :: erlang:timestamp() | undefined,
+    timestamp = undefined :: erlang:timestamp() | undefined,
     props = [] :: list() | #log_message{} | #log_email{}
 }).
 
