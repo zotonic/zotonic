@@ -137,7 +137,7 @@
 %% @doc Request a signup of a new or existing user. Arguments are similar to #signup_url{}
 %% Returns {ok, UserId} or {error, Reason}
 -record(signup, {
-    id :: integer(),
+    id :: m_rsc:resource_id() | undefined,
     props = [] :: list(),
     signup_props = [] :: list(),
     request_confirm = false :: boolean()

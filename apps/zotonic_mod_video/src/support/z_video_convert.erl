@@ -117,10 +117,12 @@ insert_movie(Filename, State) ->
             lager:info("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
     end.
 
+-spec original_filename( #media_upload_preprocess{} ) -> binary().
 original_filename(#media_upload_preprocess{original_filename=undefined}) ->
-    "movie.mp4";
+    <<"movie.mp4">>;
 original_filename(#media_upload_preprocess{original_filename=OrgFile}) ->
-    z_convert:to_list(z_string:to_rootname(OrgFile))++".mp4".
+    Root = z_string:to_rootname(OrgFile),
+    << (z_convert:to_binary(Root))/binary, ".mp4">>.
 
 insert_broken(State) ->
     Context = z_context:depickle(State#state.pickled_context),

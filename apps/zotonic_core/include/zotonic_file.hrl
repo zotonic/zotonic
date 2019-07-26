@@ -27,7 +27,7 @@
 -record(filestore, {
         action = upload :: lookup | upload | delete,
         path :: file:filename_all(),
-        filename :: file:filename_all(),
+        filename :: file:filename_all() | undefined,
         mime :: binary() | string() | undefined
     }).
 

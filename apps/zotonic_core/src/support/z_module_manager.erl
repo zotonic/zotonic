@@ -87,7 +87,7 @@
 %% Module manager state
 -record(state, {
     site :: atom(),
-    module_exports = [] :: list({atom(), list(atom())}),
+    module_exports = [] :: list({atom(), list({atom(),non_neg_integer()})}),
     module_schema = [] :: list({atom(), integer()|undefined}),
     start_wait  = none :: none | {atom(), pid(), erlang:timestamp()},
     start_queue = [] :: list(atom()),
@@ -498,9 +498,7 @@ startable(Module, Dependencies) when is_list(Dependencies) ->
 get_start_error_reason({error, not_found}) ->
     "Module not found";
 get_start_error_reason({error, {missing_dependencies, Missing}}) ->
-    "Missing dependencies: " ++ binary_to_list(iolist_to_binary(io_lib:format("~p", [Missing])));
-get_start_error_reason({error, could_not_derive_dependencies}) ->
-    "Could not derive dependencies".
+    "Missing dependencies: " ++ binary_to_list(iolist_to_binary(io_lib:format("~p", [Missing]))).
 
 
 %% @doc Check if the code of a module exists. The database can hold module references to non-existing modules.
@@ -1331,15 +1329,13 @@ observes_1(_Module, _Pid, [], Acc) ->
     Acc;
 observes_1(Module, Pid, [{F,Arity}|Rest], Acc) ->
     case atom_to_list(F) of
-        "observe_" ++ Message when Arity == 2; Arity == 3 ->
+        "observe_" ++ Message when Arity =:= 2; Arity =:= 3 ->
             observes_1(Module, Pid, Rest, [{list_to_atom(Message), {Module,F}}|Acc]);
-        "pid_observe_" ++ Message when Arity == 3; Arity == 4 ->
+        "pid_observe_" ++ Message when Arity =:= 3; Arity =:= 4 ->
             observes_1(Module, Pid, Rest, [{list_to_atom(Message), {Module,F,[Pid]}}|Acc]);
         _ ->
             observes_1(Module, Pid, Rest, Acc)
-    end;
-observes_1(Module, Pid, [_|Rest], Acc) ->
-    observes_1(Module, Pid, Rest, Acc).
+    end.
 
 
 

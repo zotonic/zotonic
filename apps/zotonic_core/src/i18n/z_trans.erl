@@ -120,7 +120,9 @@ lookup(Text, Lang, Context) ->
 
 %% @doc Non strict translation lookup of a language version.
 %%      In order check: requested language, default configured language, english, any
--spec lookup_fallback({trans, list()}|binary()|string(), #context{}) -> binary() | string() | undefined.
+-spec lookup_fallback(#trans{}|binary()|string()|undefined, z:context()|undefined) -> binary() | string() | undefined.
+lookup_fallback(undefined, _Context) ->
+    undefined;
 lookup_fallback(Trans, undefined) ->
     lookup_fallback(Trans, en, undefined);
 lookup_fallback(Trans, Context) ->

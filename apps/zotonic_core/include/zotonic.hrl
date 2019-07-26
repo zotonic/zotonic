@@ -102,11 +102,11 @@
 
 %% Query argument value for uploaded files. Also used for email attachments.
 -record(upload, {
-    filename :: binary(),
-    tmpfile :: undefined | file:filename_all(),
+    filename :: binary() | undefined,
+    tmpfile :: file:filename_all() | undefined,
     tmpmonitor = undefined :: undefined | pid(),
-    data = undefined :: undefined | binary(),
-    mime = undefined :: undefined | binary()
+    data = undefined :: binary() | undefined,
+    mime = undefined :: binary() | undefined
 }).
 
 
