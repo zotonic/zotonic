@@ -59,7 +59,7 @@ addsite_check_hostname(Name, Options, Context) ->
 -spec addsite_check_db(binary(), proplists:proplist(), z:context()) ->
     {ok, Site :: atom(), Options :: list()} | {error, Reason :: list()}.
 addsite_check_db(Name, Options, Context) ->
-    case proplists:lookup(skeleton, Options) of
+    case proplists:get_value(skeleton, Options) of
         <<"nodb">> ->
             Options = [
                 {dbdatabase, none}

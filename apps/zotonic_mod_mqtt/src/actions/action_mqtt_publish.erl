@@ -22,8 +22,9 @@
 
 render_action(_TriggerId, _TargetId, Args, Context) ->
     {topic, Topic} = proplists:lookup(topic, Args),
-    Topic1 = z_mqtt:flatten_topic( z_mqtt:map_topic( Topic, Context ) ),
-    TopicJS = z_utils:js_escape( Topic1 ),
+    {ok, Topic1} = z_mqtt:map_topic( Topic, Context ),
+    Topic2 = z_mqtt:flatten_topic( Topic1 ),
+    TopicJS = z_utils:js_escape( Topic2 ),
 
     Message = case proplists:get_value(js_msg, Args) of
         undefined ->

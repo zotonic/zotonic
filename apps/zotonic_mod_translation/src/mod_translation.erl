@@ -120,7 +120,7 @@ default_languages() ->
 %% @doc Set the language of the context. Sets to the given language if the language exists
 %%      in the config language and is enabled; otherwise tries the language's fallback language;
 %%      if this fails too, sets language to the site's default language.
--spec set_language(atom(), z:context()) -> z:context().
+-spec set_language(atom() | binary() | string(), z:context()) -> z:context().
 set_language('x-default', Context) ->
     z_context:set_language('x-default', Context);
 set_language(Code0, Context) when is_atom(Code0) ->

@@ -54,6 +54,7 @@
 ]).
 
 % @doc Return a new context
+-spec c( atom() ) -> z:context().
 c(Site) ->
     z_context:new(Site).
 
@@ -78,10 +79,12 @@ compile() ->
     zotonic_filehandler:compile_all().
 
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
+-spec flush() -> ok.
 flush() ->
     [flush(C) || C <- z_sites_manager:get_site_contexts()],
     z_sites_dispatcher:update_dispatchinfo().
 
+-spec flush( atom() | z:context() ) -> ok.
 flush(Site) when is_atom(Site) ->
     flush(c(Site));
 flush(Context) ->

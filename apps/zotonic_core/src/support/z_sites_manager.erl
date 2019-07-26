@@ -88,7 +88,7 @@
     stop_count = 0 :: integer(),
     crash_time = undefined :: undefined | erlang:timestamp(),
     crash_count = 0 :: integer(),
-    config :: list()
+    config = [] :: list()
 }).
 
 -export_type([site_status/0]).
@@ -128,6 +128,7 @@ start_link() ->
 
 %% @doc Sync the supervised sites with the sites in the sites directory.
 %% Removes and stops deleted sites, adds (but does not start) new sites.
+-spec upgrade() -> ok.
 upgrade() ->
     gen_server:cast(?MODULE, upgrade).
 
@@ -269,6 +270,7 @@ module_loaded(Module) ->
 
 
 %% @doc Wait for a site to complete its startup sequence.
+-spec await_startup( z:context() | atom() ) -> ok | {error, bad_name | failed | removing | stopped | stopping}.
 await_startup(Context = #context{}) ->
     await_startup(z_context:site(Context));
 await_startup(Site) when is_atom(Site) ->
@@ -754,7 +756,7 @@ handle_down(MRef, Pid, Reason, #state{ site_monitors = Ms } = State) ->
             State1 = State#state{ site_monitors = maps:remove(Pid, Ms) },
             Sites1 = do_site_down(Site, Reason, State1#state.sites),
             State1#state{ sites = Sites1 };
-        false ->
+        error ->
             lager:warning("'DOWN' with reason ~p for unknown site",
                           [Reason]),
             State

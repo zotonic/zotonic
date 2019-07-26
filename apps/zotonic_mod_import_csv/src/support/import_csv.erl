@@ -426,17 +426,18 @@ map_def(K, Row, State) when is_atom(K); is_list(K) ->
 	map_def({K,K}, Row, State).
 
 
+-spec map_one_normalize( string(), any(), any() | {name_prefix, binary() | string() | atom(), binary() | string() | atom()} ) -> any().
 map_one_normalize("name", _Type, <<>>) ->
     <<>>;
 map_one_normalize("name", _Type, {name_prefix, Prefix, V}) ->
     CheckL = 80 - strlen(Prefix) - 1,
     Name = case strlen(V) of
-               L when L > CheckL ->
-                   % If name is too long, make a unique thing out of it.
-                   z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ base64:encode_to_string(checksum(V)));
-               _ ->
-                   z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ z_string:to_name(V))
-           end,
+        L when L > CheckL ->
+            % If name is too long, make a unique thing out of it.
+            z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ base64:encode_to_string(checksum(V)));
+        _ ->
+            z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ binary_to_list(z_string:to_name(V)))
+    end,
     z_convert:to_binary(Name);
 map_one_normalize(_, _Type, V) ->
     V.

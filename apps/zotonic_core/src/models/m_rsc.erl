@@ -72,13 +72,14 @@
     common_properties/1
 ]).
 
--export_type([resource/0, resource_id/0, resource_name/0, props/0]).
+-export_type([resource/0, resource_id/0, resource_name/0, resource_uri/0, props/0]).
 
 -include_lib("zotonic.hrl").
 
 -type resource() :: resource_id() | list(digits()) | resource_name().
 -type resource_id() :: integer().
 -type resource_name() :: string() | binary() | atom().
+-type resource_uri() :: binary().
 -type props() :: proplists:proplist().
 -type digits() :: 16#30..16#39.
 
@@ -112,7 +113,7 @@ name_to_id(Name, Context) ->
         _ -> {error, {unknown_rsc, Name}}
     end.
 
--spec name_to_id_cat(resource_name(), resource_name(), any()) -> any().
+-spec name_to_id_cat(resource_name() | resource_id(), resource_name(), z:context()) -> any().
 name_to_id_cat(Name, Cat, Context) when is_integer(Name) ->
     F = fun() ->
         {ok, CatId} = m_category:name_to_id(Cat, Context),
@@ -137,6 +138,11 @@ name_to_id_cat(Name, Cat, Context) ->
 %% once, this function will return {redirect, Id} to indicate that the
 %% page path was found but is no longer the current page path for the
 %% resource.
+-spec page_path_to_id( string(), z:context() ) ->
+              {ok, resource_id()}
+            | {redirect, resource_id()}
+            | {error, {unknown_path, string()}}
+            | {error, {illegal_page_path, string()}}.
 page_path_to_id(Path, Context) ->
     Path1 = [ $/, string:strip(Path, both, $/)],
     case catch z_db:q1("select id from rsc where page_path = $1", [Path1], Context) of
@@ -727,22 +733,25 @@ name_lookup(Name, Context) ->
 
 
 %% @doc Return the id of the resource with a certain uri.
-%% uri_lookup(string(), Context) -> int() | undefined
-uri_lookup(Uri, Context) ->
-    Uri1 = z_convert:to_binary(Uri),
-    case z_depcache:get({rsc_uri, Uri1}, Context) of
+-spec uri_lookup( resource_uri() | string(), z:context()) -> resource_id() | undefined.
+uri_lookup(<<>>, _Context) ->
+    undefined;
+uri_lookup(Uri, Context) when is_binary(Uri) ->
+    case z_depcache:get({rsc_uri, Uri}, Context) of
         {ok, undefined} ->
             undefined;
         {ok, Id} ->
             Id;
         undefined ->
-            Id = case z_db:q1("select id from rsc where uri = $1", [Uri1], Context) of
+            Id = case z_db:q1("select id from rsc where uri = $1", [Uri], Context) of
                 undefined -> undefined;
                 Value -> Value
             end,
-            z_depcache:set({rsc_uri, Uri1}, Id, ?DAY, [Id, {rsc_uri, Uri1}], Context),
+            z_depcache:set({rsc_uri, Uri}, Id, ?DAY, [Id, {rsc_uri, Uri}], Context),
             Id
-    end.
+    end;
+uri_lookup(Uri, Context) ->
+    uri_lookup(z_convert:to_binary(Uri), Context).
 
 %% @doc Check if the resource is exactly the category
 -spec is_cat(resource(), atom(), z:context()) -> boolean().
@@ -775,18 +784,20 @@ is_a_id(Id, Context) ->
     [RscCatId | m_category:get_path(RscCatId, Context)].
 
 %% @doc Check if the resource is in a category.
-%% @spec is_a(int(), atom(), Context) -> bool()
+-spec is_a(resource(), m_category:category(), z:context()) -> boolean().
 is_a(Id, Cat, Context) ->
     RscCatId = p(Id, category_id, Context),
     m_category:is_a(RscCatId, Cat, Context).
 
-
+-spec page_url( resource(), z:context() ) -> iodata() | undefined.
 page_url(Id, Context) ->
     page_url(Id, false, Context).
 
+-spec page_url_abs( resource(), z:context() ) -> iodata() | undefined.
 page_url_abs(Id, Context) ->
     page_url(Id, true, Context).
 
+-spec page_url( resource(), boolean(), z:context() ) -> iodata() | undefined.
 page_url(Id, IsAbs, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->

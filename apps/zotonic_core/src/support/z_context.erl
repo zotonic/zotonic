@@ -498,13 +498,13 @@ get_controller_module(Context) ->
 
 -spec set_controller_module(Module::atom(), z:context()) -> z:context().
 set_controller_module(Module, Context) ->
-    Context#context{controller_module=Module}.
+    Context#context{ controller_module = Module }.
 
--spec get_render_state( z:context() ) -> term().
+-spec get_render_state( z:context() ) -> z_render:render_state() | undefined.
 get_render_state(#context{ render_state = RS }) ->
     RS.
 
--spec set_render_state( term(), z:context() ) -> z:contextC().
+-spec set_render_state( z_render:render_state() | undefined, z:context() ) -> z:context().
 set_render_state(RS, Context) ->
     Context#context{ render_state = RS }.
 

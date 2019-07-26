@@ -40,8 +40,7 @@
     menu_flat/3,
     menu_subtree/3,
     menu_subtree/4,
-    remove_invisible/2,
-    test/0
+    remove_invisible/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -351,11 +350,11 @@ set_menu(Id, Menu, Context) ->
 
 
 %% @doc Flatten the menu structure in a list, used for display purposes in templates
--spec menu_flat(list() | undefined | <<>>, #context{}) -> [ {integer()|undefined, LevelIndex::list(integer()) | undefined, up|down|undefined} ].
+-spec menu_flat(list() | undefined | <<>>, z:context()) -> [ {integer()|undefined, LevelIndex::list(integer()) | undefined, up|down|undefined} ].
 menu_flat(Menu, Context) ->
     menu_flat(Menu, 999, Context).
 
--spec menu_flat(list() | undefined | <<>>, integer(), #context{}) -> [ {integer()|undefined, LevelIndex::list(integer()) | undefined, up|down|undefined} ].
+-spec menu_flat(list() | undefined | <<>>, integer(), z:context()) -> [ {integer()|undefined, LevelIndex::list(integer()) | undefined, up|down|undefined} ].
 menu_flat(Menu, _MaxDepth, _Context) when not is_list(Menu) ->
     [];
 menu_flat([], _MaxDepth, _Context) ->
@@ -478,24 +477,24 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
 
 
-%% @doc test function
-%%  111  [1]
-%%  - 44   [1,1]
-%%  - - 555  [1,1,1]
-%%  - - 666  [1,1,2]
-%%  222  [2]
-%%  - 333  [2,1]
-test() ->
+% %% @doc test function
+% %%  111  [1]
+% %%  - 44   [1,1]
+% %%  - - 555  [1,1,1]
+% %%  - - 666  [1,1,2]
+% %%  222  [2]
+% %%  - 333  [2,1]
+% test() ->
 
-    [
-     {111, [1], down },
-     {444, [1,1], down},
-     {555, [1,1,1], undefined},
-     {666, [2,1,1], undefined},
-     {undefined, undefined, up},
-     {undefined, undefined, up},
-     {222, [2], down},
-     {333, [1,2], undefined},
-     {undefined, undefined, up}
-    ]
-        = menu_flat([{111, [{444, [{555, []}, {666, []} ]}]}, {222, [{333, []}]}], x).
+%     [
+%      {111, [1], down },
+%      {444, [1,1], down},
+%      {555, [1,1,1], undefined},
+%      {666, [2,1,1], undefined},
+%      {undefined, undefined, up},
+%      {undefined, undefined, up},
+%      {222, [2], down},
+%      {333, [1,2], undefined},
+%      {undefined, undefined, up}
+%     ]
+%         = menu_flat([{111, [{444, [{555, []}, {666, []} ]}]}, {222, [{333, []}]}], x).

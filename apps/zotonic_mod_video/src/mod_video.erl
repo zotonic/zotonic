@@ -244,6 +244,7 @@ post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
     supervisor:start_child(z_utils:name_for_site(?SERVER, Context), [Task, z_context:prune_for_async(Context)]),
     ok.
 
+-spec remove_task( file:filename_all(), z:context() ) -> non_neg_integer().
 remove_task(QueueFilename, Context) ->
     z_pivot_rsc:delete_task(?MODULE, convert_task, QueueFilename, Context).
 

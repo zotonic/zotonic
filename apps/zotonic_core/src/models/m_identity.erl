@@ -764,13 +764,14 @@ insert_unique(RscId, Type, Key, Props, Context) ->
 %% @doc Set the visited timestamp for the given user.
 %% @todo Make this a log - so that we can see the last visits and check if this
 %% is from a new browser/ip address.
+-spec set_visited(m_rsc:resource_id(), z:context()) -> non_neg_integer().
 set_visited(UserId, Context) ->
     z_db:q("update identity set visited = now() where rsc_id = $1 and type = 'username_pw'",
         [m_rsc:rid(UserId, Context)], Context).
 
 
 %% @doc Set the verified flag on a record by identity id.
--spec set_verified(integer(), #context{}) -> ok | {error, notfound}.
+-spec set_verified(m_rsc:resource_id(), z:context()) -> ok | {error, notfound}.
 set_verified(Id, Context) ->
     case z_db:q_row("select rsc_id, type from identity where id = $1", [Id], Context) of
         {RscId, Type} ->
@@ -797,10 +798,11 @@ set_verified(Id, Context) ->
 
 %% @doc Set the verified flag on a record by rescource id, identity type and
 %% value (eg an user's email address).
+-spec set_verified( m_rsc:resource_id(), string() | binary(), string() | binary(), z:context()) -> ok | {error, badarg}.
 set_verified(RscId, Type, Key, Context)
     when is_integer(RscId),
          Type =/= undefined,
-         Key =/= undefined, Key =/= <<>>, Key =/= [] ->
+         Key =/= undefined, Key =/= <<>>, Key =/= "" ->
     Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context),
     z_mqtt:publish(
         [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
@@ -832,6 +834,7 @@ set_verified_trans(RscId, Type, Key, Context) ->
     end.
 
 %% @doc Check if there is a verified identity for the user, beyond the username_pw
+-spec is_verified( m_rsc:resource_id(), z:context() ) -> boolean().
 is_verified(RscId, Context) ->
     case z_db:q1("select id from identity where rsc_id = $1 and is_verified = true and type <> 'username_pw'",
                 [RscId], Context) of
@@ -839,9 +842,11 @@ is_verified(RscId, Context) ->
         _ -> true
     end.
 
--spec set_by_type(m_rsc:resource(), string(), string(), #context{}) -> ok.
+-spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), z:context()) -> ok.
 set_by_type(RscId, Type, Key, Context) ->
     set_by_type(RscId, Type, Key, [], Context).
+
+-spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), list(), z:context()) -> ok.
 set_by_type(RscId, Type, Key, Props, Context) ->
     F = fun(Ctx) ->
         case z_db:q("update identity set key = $3, propb = $4 where rsc_id = $1 and type = $2",

@@ -39,7 +39,7 @@ moved_temporarily(Context) ->
     RedirectUrl = z_context:abs_url(
                             z_dispatcher:url_for(twitter_redirect, Context),
                             Context1),
-    Lang = z_context:get_q(<<"lang">>, z_context:language(Context1)),
+    Lang = z_context:get_q(<<"lang">>, Context1, z_context:language(Context1)),
     Location = iolist_to_binary([
         oauth_twitter_client:authorize_url(Token),
         "&oauth_callback=", z_url:url_encode(RedirectUrl),

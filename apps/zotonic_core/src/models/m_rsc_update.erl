@@ -54,7 +54,7 @@
 
 
 %% @doc Insert a new resource. Crashes when insertion is not allowed.
--spec insert(m_rsc:props(), #context{}) -> {ok, m_rsc:resource_id()}.
+-spec insert(m_rsc:props(), #context{}) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(Props, Context) ->
     insert(Props, [{escape_texts, true}], Context).
 
@@ -313,6 +313,8 @@ duplicate(Id, DupProps, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
             case m_rsc:get_raw(Id, Context) of
+                [] ->
+                    {error, enoent};
                 RawProps when is_list(RawProps) ->
                     FilteredProps = props_filter_protected(RawProps, #rscupd{id = insert_rsc, is_escape_texts = false}),
                     SafeDupProps = escape_props(true, DupProps, Context),
@@ -333,9 +335,7 @@ duplicate(Id, DupProps, Context) ->
                             {ok, NewId};
                         {error, _} = Error ->
                             Error
-                    end;
-                undefined ->
-                    {error, enoent}
+                    end
             end;
         false ->
             {error, eacces}
@@ -1502,6 +1502,7 @@ normalize_block(Name, B, Context) ->
         false -> [{name, Name} | Props]
     end.
 
+-spec to_existing_atom( binary() | string() | atom() ) -> atom().
 to_existing_atom(K) when is_binary(K) ->
     binary_to_existing_atom(K, utf8);
 to_existing_atom(K) when is_list(K) ->

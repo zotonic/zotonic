@@ -124,7 +124,7 @@ last_modified(Context) ->
                 undefined ->
                     LMod = filelib:last_modified(FullPath),
                     [LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
-                    Context3 = z_context:set(last_modified, LModUTC),
+                    Context3 = z_context:set(last_modified, LModUTC, Context2),
                     {LModUTC, Context3};
                 LModUTC ->
                     {LModUTC, Context2}

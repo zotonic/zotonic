@@ -23,6 +23,7 @@
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("template_compiler/include/template_compiler.hrl").
 
 event(#submit{message=explain_tpl}, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
@@ -50,7 +51,7 @@ find_template(CatName, TplName, Context) ->
 
 index_props({error, _}) ->
     undefined;
-index_props({filename, Path}) ->
+index_props({ok, #template_file{ filename = Path}}) ->
     [
         {module, <<>>},
         {path, Path}

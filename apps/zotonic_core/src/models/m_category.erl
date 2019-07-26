@@ -69,7 +69,9 @@
     renumber_pivot_task/1
 ]).
 
--type category() :: pos_integer() | atom() | binary() | string().
+-type category() :: m_rsc:resource_id() | atom() | binary() | string().
+
+-export_type([category/0]).
 
 -include_lib("zotonic.hrl").
 
@@ -144,7 +146,7 @@ m_get(Vs, _Msg, _Context) ->
 
 % ======================================== API =======================================
 
--spec flush(#context{}) -> ok.
+-spec flush(z:context()) -> ok.
 flush(Context) ->
     m_hierarchy:flush('$category', Context),
     z_depcache:flush(category, Context).
@@ -160,7 +162,7 @@ is_used(Category, Context) ->
 
 
 %% Insert a category
--spec insert(undefined|integer(), binary()|atom()|string(), list(), #context{}) -> integer().
+-spec insert(undefined|integer(), binary()|atom()|string(), list(), z:context()) -> integer().
 insert(ParentId, Name, Props, Context) ->
     {ok, CatId} = name_to_id(category, Context),
     {ok, Id} = m_rsc_update:insert(Props ++ [{name, Name}, {category_id, CatId}], Context),
@@ -176,7 +178,7 @@ insert(ParentId, Name, Props, Context) ->
 %% @doc Delete the category, move referring pages to another category.
 %%      After this routine the caches are dirty and child-categories might need renumbering if a TransferId
 %%      was defined and there were sub-categories.
--spec delete(m_rsc:resource(), integer() | undefined, #context{}) -> ok | {error, term()}.
+-spec delete(m_rsc:resource(), integer() | undefined, z:context()) -> ok | {error, term()}.
 delete(Id, TransferId, Context) ->
     % fail when deleting 'other', 'meta', 'category' or 'predicate'
     case z_db:q("select name from rsc where id = $1", [m_rsc:rid(Id, Context)], Context) of
@@ -282,12 +284,12 @@ image(Cat, Context) ->
 
 
 %% @doc Return the category tree, every entry is a proplist.
--spec tree(#context{}) -> list(list()).
+-spec tree(z:context()) -> list(list()).
 tree(Context) ->
     m_hierarchy:tree('$category', Context).
 
 %% @doc Return the flattened category tree, every entry is a proplist. Used for select lists.
--spec tree_flat(#context{}) -> list(list()).
+-spec tree_flat(z:context()) -> list(list()).
 tree_flat(Context) ->
     {ok, MetaId} = name_to_id(meta, Context),
     lists:filter(fun(Cat) ->
@@ -304,7 +306,7 @@ tree_flat(Context) ->
                  tree_flat_meta(Context)).
 
 %% @doc Return the flattened category tree, every entry is a proplist. Used for select lists.
--spec tree_flat(category(), #context{}) -> list(list()).
+-spec tree_flat(category(), z:context()) -> list(list()).
 tree_flat(CatId, Context) ->
     case name_to_id(CatId, Context) of
         {ok, Id} ->
@@ -315,22 +317,22 @@ tree_flat(CatId, Context) ->
 
 
 %% @doc Return the flattened category tree, every entry is a proplist. Used for select lists.
--spec tree_flat_meta(#context{}) -> list(list()).
+-spec tree_flat_meta(z:context()) -> list(list()).
 tree_flat_meta(Context) ->
     m_hierarchy:tree_flat('$category', Context).
 
 %% @doc Return the category tree from the category down, max children of children
--spec tree2(#context{}) -> list() | undefined.
+-spec tree2(z:context()) -> list() | undefined.
 tree2(Context) ->
     prune(2, tree(Context)).
 
 %% @doc Return the menu representation of the category tree.
--spec menu(#context{}) -> list({integer(), list()}).
+-spec menu(z:context()) -> list({integer(), list()}).
 menu(Context) ->
     m_hierarchy:menu('$category', Context).
 
 %% @doc Return the category tree from the category down
--spec tree(category(), #context{}) -> list() | undefined.
+-spec tree(category(), z:context()) -> list() | undefined.
 tree(Cat, Context) ->
     case name_to_id(Cat, Context) of
         {ok, Id} ->
@@ -343,7 +345,7 @@ tree(Cat, Context) ->
     end.
 
 %% @doc Return the category trees below the category
--spec tree1(category(), #context{}) -> list() | undefined.
+-spec tree1(category(), z:context()) -> list() | undefined.
 tree1(Cat, Context) ->
     case tree(Cat, Context) of
         undefined -> undefined;
@@ -351,7 +353,7 @@ tree1(Cat, Context) ->
     end.
 
 %% @doc Return the category tree from the category down, max children of children
--spec tree2(category(), #context{}) -> list() | undefined.
+-spec tree2(category(), z:context()) -> list() | undefined.
 tree2(Cat, Context) ->
     case tree(Cat, Context) of
         undefined ->
@@ -381,7 +383,7 @@ prune(N, CS) ->
 
 
 %% @doc Get the basic properties of a category
--spec get(m_rsc:resource(), #context{}) -> list() | undefined.
+-spec get(m_rsc:resource(), z:context()) -> list() | undefined.
 get(undefined, _Context) ->
     undefined;
 get(Id, Context) when is_integer(Id) ->
@@ -409,7 +411,7 @@ get(Id, Context) when is_integer(Id) ->
 get(Name, Context) ->
     get_by_name(Name, Context).
 
--spec get_by_name(category(), #context{}) -> list() | undefined.
+-spec get_by_name(category(), z:context()) -> list() | undefined.
 get_by_name(Name, Context) ->
     case name_to_id(Name, Context) of
         {ok, Id} -> get(Id, Context);
@@ -436,7 +438,7 @@ get_range_by_name(Name, Context) ->
 
 
 %% @doc Given a list of category ids, return the list of numeric ranges they cover.
--spec ranges(category() | [category()], #context{}) ->
+-spec ranges(category() | [category()], z:context()) ->
     [{integer(), integer()}].
 ranges(undefined, _Context) ->
     [];
@@ -493,7 +495,7 @@ merge_ranges([H | T], Acc) ->
 
 %% @doc Return the path from a root to the category. Excluding the category
 %% itself, most specific last.
--spec get_path(category(), #context{}) -> list(integer()).
+-spec get_path(category(), z:context()) -> list(integer()).
 get_path(undefined, _Context) ->
     [];
 get_path(Id, Context) ->
@@ -504,7 +506,7 @@ get_path(Id, Context) ->
 
 %% @doc Return the categories (as atoms) the category is part of, including the
 %% category itself (as last member).
--spec is_a(m_rsc:resource(), #context{}) -> list(atom()).
+-spec is_a(m_rsc:resource(), z:context()) -> list(atom()).
 is_a(Id, Context) ->
     case get(Id, Context) of
         undefined -> [];
@@ -513,20 +515,20 @@ is_a(Id, Context) ->
 
 
 %% @doc Check if the id is within a category.
--spec is_a(category(), atom(), #context{}) -> boolean().
+-spec is_a(category(), category(), z:context()) -> boolean().
 is_a(Id, Cat, Context) ->
-    CatName = m_category:id_to_name(Cat, Context),
+    CatName = id_to_name(Cat, Context),
     lists:member(CatName, is_a(Id, Context)).
 
 %% @doc Check if a category is a meta category. This can't use the m_rsc routines as it is also
 %%      used to determine the default content group during the m_rsc:get/2
--spec is_meta(integer(), #context{}) -> boolean().
+-spec is_meta(integer(), z:context()) -> boolean().
 is_meta(CatId, Context) when is_integer(CatId) ->
     is_a_prim(CatId, <<"meta">>, Context).
 
 %% @doc Check if a category is within another category. This can be used within primitive rsc
 %%      routines that are not able to use the rsc caching (due to recursion).
--spec is_a_prim(integer(), binary()|string()|atom(), #context{}) -> boolean().
+-spec is_a_prim(integer(), binary()|string()|atom(), z:context()) -> boolean().
 is_a_prim(CatId, Name, Context) ->
     z_depcache:memo(
         fun() ->
@@ -549,7 +551,7 @@ is_a_prim(CatId, Name, Context) ->
         Context).
 
 %% @doc Map a category name to an id, be flexible with the input
--spec name_to_id(m_rsc:resource() | {m_rsc:resource_id()}, #context{}) ->
+-spec name_to_id(m_rsc:resource() | {m_rsc:resource_id()}, z:context()) ->
     {ok, m_rsc:resource_id()} | {error, {unknown_category, term()}}.
 name_to_id({Id}, _Context) when is_integer(Id) ->
     {ok, Id};
@@ -595,7 +597,7 @@ name_to_id(Name, Context) when is_atom(Name); is_binary(Name); is_list(Name) ->
 
 %% @doc Perform a function on all resource ids in a category. Order of the ids
 %% is unspecified.
--spec foreach(Category :: integer()|atom(), function(), #context{})
+-spec foreach(Category :: integer()|atom(), function(), z:context())
         -> ok | {error, term()}.
 foreach(Category, F, Context) ->
     case name_to_id(Category, Context) of
@@ -619,7 +621,7 @@ foreach(Category, F, Context) ->
 
 %% @doc Perform a function on all resource ids in a category. Order of the ids
 %% is unspecified.
--spec fold(Category :: integer()|atom(), function(), term(), #context{})
+-spec fold(Category :: integer()|atom(), function(), term(), z:context())
         -> term() | {error, term()}.
 fold(Category, F, Acc0, Context) ->
     case name_to_id(Category, Context) of
@@ -642,7 +644,7 @@ fold(Category, F, Acc0, Context) ->
     end.
 
 %% @doc Return the last modification date of the category. Returns false
--spec last_modified(category(), #context{}) -> {ok, calendar:datetime()} | {error, term()}.
+-spec last_modified(category(), z:context()) -> {ok, calendar:datetime()} | {error, term()}.
 last_modified(Cat, Context) ->
     case name_to_id(Cat, Context) of
         {ok, CatId} ->
@@ -667,7 +669,7 @@ last_modified(Cat, Context) ->
 %% If the category does not have a unique name will result in undefined.
 %% If the lookup is made by name, the name is checked for existence,
 %% and if not found, results in undefined.
--spec id_to_name(category(), #context{}) -> atom() | undefined.
+-spec id_to_name(category(), z:context()) -> atom() | undefined.
 id_to_name(Name, Context) when is_atom(Name); is_binary(Name); is_list(Name) ->
     F = fun() ->
         Nm = z_db:q1("
@@ -728,7 +730,7 @@ ensure_hierarchy(Context) ->
 
 
 %% @doc Move a category below another category (or the root set if undefined)
--spec move_below(integer(), integer(), #context{}) -> ok.
+-spec move_below(integer(), integer(), z:context()) -> ok.
 move_below(Cat, Parent, Context) ->
     {ok, Id} = name_to_id(Cat, Context),
     ParentId = maybe_name_to_id(Parent, Context),
@@ -822,7 +824,7 @@ find_tree_node([Node | Ns], Id) ->
 
 
 %% @doc Start synchronizing all resources if the category tree is marked dirty.
--spec renumber_if_dirty(#context{}) -> ok.
+-spec renumber_if_dirty(z:context()) -> ok.
 renumber_if_dirty(Context) ->
     case is_tree_dirty(Context) of
         true -> renumber(Context);
@@ -831,14 +833,14 @@ renumber_if_dirty(Context) ->
 
 %% @doc Start synchronizing all resources, so that the pivot_category_nr is in
 %% sync with the category hierarchy.
--spec renumber(#context{}) -> ok.
+-spec renumber(z:context()) -> ok.
 renumber(Context) ->
     set_tree_dirty(true, Context),
     z_pivot_rsc:insert_task_after(10, ?MODULE, renumber_pivot_task, "m_category:renumber", [], Context),
     ok.
 
 %% @doc Resync all ids that have their pivot_category_nr changed.
--spec renumber_pivot_task(#context{}) -> ok | {delay, integer()}.
+-spec renumber_pivot_task(z:context()) -> ok | {delay, integer()}.
 renumber_pivot_task(Context) ->
     Nrs = z_db:q("
                 select r.id, c.nr

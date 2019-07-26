@@ -20,6 +20,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([is_allowed/3,
+         is_allowed_prop/4,
          maybe_allowed/3,
 
          rsc_visible/2,

@@ -37,17 +37,21 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-spec service_available( z:context() ) -> {boolean(), z:context()}.
 service_available(Context) ->
     Context1 = set_cors_header(Context),
     {true, Context1}.
 
 % Headers where already added in service_available/2
+-spec options( z:context() ) -> {list( binary() ), z:context()}.
 options(Context) ->
     {[], Context}.
 
+-spec allowed_methods( z:context() ) -> {[ binary() ], z:context()}.
 allowed_methods(Context) ->
     {[ <<"GET">>, <<"POST">>, <<"DELETE">> ], Context}.
 
+-spec malformed_request( z:context() ) -> {boolean(), z:context()}.
 malformed_request(Context) ->
     Path = cow_qs:urldecode( cowmachine_req:disp_path(Context) ),
     case mqtt_packet_map_topic:validate_topic(Path) of
@@ -72,6 +76,7 @@ is_method_topic_match(<<"POST">>, _) -> true.
 
 
 %% @doc Content types accepted for the post body
+-spec content_types_accepted( z:context() ) -> {list( cowmachine_req:mime_type() ), z:context()}.
 content_types_accepted(Context) ->
     {[
         {<<"application">>, <<"json">>, []},
@@ -84,6 +89,7 @@ content_types_accepted(Context) ->
     ], Context}.
 
 %% @doc Content types provided for the resulting body
+-spec content_types_provided( z:context() ) -> {list( cowmachine_req:mime_type() ), z:context()}.
 content_types_provided(Context) ->
     {[
         {<<"application">>, <<"json">>, []},
@@ -95,6 +101,8 @@ content_types_provided(Context) ->
      ], Context}.
 
 %% @doc Process the request, call MQTT and reply with the response
+-spec process( binary(), cowmachine_req:media_type() | undefined, cowmachine_req:media_type(), z:context() )
+        -> {iodata(), z:context()} | {{halt, HttpCode :: pos_integer()}, z:context()}.
 process(_Method, _AcceptedCT, {<<"text">>, <<"event-stream">>, _}, Context) ->
     case z_mqtt:subscribe(z_context:get(topic, Context), Context) of
         ok ->
@@ -149,10 +157,14 @@ process(_Method, AcceptedCT, ProvidedCT, Context) ->
             end
     end.
 
+-spec process_done( ok | {ok, term()}  | {error, term()}, cowmachine_req:mime_type(), z:context() ) ->
+        {iodata(), z:context()} | {{halt, HttpCode :: pos_integer()}, z:context()}.
 process_done(ok, ProvidedCT, Context) ->
+    % z_mqtt:publish response
     Body = z_controller_helper:encode_response(ProvidedCT, #{ status => ok }),
     {Body, Context};
 process_done({ok, Resp}, ProvidedCT, Context) ->
+    % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
     {Body, Context};
 process_done({error, _} = Error, ProvidedCT, Context) ->

@@ -48,8 +48,8 @@ event(#postback{message={config_new_dialog, OnSuccess}}, Context) ->
 event(#submit{message={config_new, Args}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            Module = z_string:to_name(z_context:get_q_validated(<<"module">>, Context)),
-            Key = z_string:to_name(z_context:get_q_validated(<<"key">>, Context)),
+            Module = binary_to_atom(z_string:to_name(z_context:get_q_validated(<<"module">>, Context)), utf8),
+            Key = binary_to_atom(z_string:to_name(z_context:get_q_validated(<<"key">>, Context)), utf8),
             Value = z_context:get_q(<<"val">>, Context, <<>>),
             OnSuccess = proplists:get_all_values(on_success, Args),
 

@@ -591,7 +591,7 @@
 %% @doc User is about to log off. Modify (if needed) the logoff request context.
 %% Type: foldl
 %% Return: ``z:context()``
--record(auth_logoff, { id :: m_rsc:resource_id() }).
+-record(auth_logoff, { id :: m_rsc:resource_id() | undefined }).
 
 
 %% @doc Authentication against some (external or internal) service was validated

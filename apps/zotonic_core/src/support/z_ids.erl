@@ -210,7 +210,7 @@ int2list(Val, Radix, Length, Acc) ->
 bin2int(Bin) ->
     lists:foldl(fun(N, Acc) -> Acc * 256 + N end, 0, binary_to_list(Bin)).
 
--spec radix_bits(1..64) -> pos_integer().
+-spec radix_bits(1..64) -> 4 | 5 | 6.
 radix_bits(N) when N =< 16 -> 4;
 radix_bits(N) when N =< 26 -> 5;
 radix_bits(_N) -> 6.

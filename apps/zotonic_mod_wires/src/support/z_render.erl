@@ -811,7 +811,7 @@ set_render_state(RS, #render_state{})  -> RS;
 set_render_state(RS, Context)  ->
     z_context:set_render_state(RS, Context).
 
-reset_render_state(#render_state{}) -> #render_state{};
+-spec reset_render_state( z:context() ) -> z:context().
 reset_render_state(Context)  ->
     z_context:set_render_state(undefined, Context).
 

@@ -222,7 +222,7 @@ event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
             % Changing the authenticated will force all connected pages to reload or change.
             % After this we can't send any replies any more, as the pages are disconnecting.
             Context;
-        false ->
+        {error, eacces} ->
             z_render:growl_error(?__("You are not allowed to switch users.", Context), Context)
     end.
 

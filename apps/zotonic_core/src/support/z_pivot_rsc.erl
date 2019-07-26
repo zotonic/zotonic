@@ -312,11 +312,13 @@ to_utc_date({{Y,M,D},{H,I,S}} = Date) when is_integer(Y), is_integer(M), is_inte
     Date.
 
 
+-spec delete_task( module(), atom(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, Context) ->
     z_db:q("delete from pivot_task_queue where module = $1 and function = $2",
            [Module, Function],
            Context).
 
+-spec delete_task( module(), atom(), term(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, UniqueKey, Context) ->
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
     z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",

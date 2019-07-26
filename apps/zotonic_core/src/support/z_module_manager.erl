@@ -130,13 +130,13 @@ start_link(SiteProps) ->
 
 
 %% @doc Reload the list of all modules, add processes if necessary.
--spec upgrade(#context{}) -> ok.
+-spec upgrade( z:context() ) -> ok.
 upgrade(Context) ->
     flush(Context),
     gen_server:cast(name(Context), upgrade).
 
 %% @doc Wait till all modules are started, used when starting up a new or test site.
--spec upgrade_await(#context{}) -> ok.
+-spec upgrade_await(z:context()) -> ok | {error, timeout}.
 upgrade_await(Context) ->
     upgrade_await_1(Context, 20).
 
@@ -152,7 +152,7 @@ upgrade_await_1(Context, RetryCt) ->
     end.
 
 %% @doc Deactivate a module. The module is marked as deactivated and stopped when it was running.
--spec deactivate(atom(), #context{}) -> ok.
+-spec deactivate(atom(), z:context()) -> ok.
 deactivate(Module, Context) ->
     flush(Context),
     case z_db:q("
@@ -170,11 +170,11 @@ deactivate(Module, Context) ->
 
 %% @doc Activate a module. The module is marked as active and started as a child of the module supervisor.
 %% The module manager can be checked later to see if the module started or not.
--spec activate(atom(), #context{}) -> ok | {error, not_found}.
+-spec activate(atom(), z:context()) -> ok | {error, not_found}.
 activate(Module, Context) when is_atom(Module) ->
     activate(Module, false, Context).
 
--spec activate_await(atom(), #context{}) -> ok | {error, not_active} | {error, not_found}.
+-spec activate_await(atom(), z:context()) -> ok | {error, not_active} | {error, not_found}.
 activate_await(Module, Context) when is_atom(Module) ->
     case activate(Module, true, Context) of
         ok ->

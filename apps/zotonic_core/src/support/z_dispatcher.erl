@@ -429,23 +429,18 @@ make_url_for(Name, Args, Escape, UriLookup) ->
     case dict:find(Name1, UriLookup) of
         {ok, Patterns} ->
             case make_url_for1(Args1, Patterns, Escape, undefined) of
-                undefined ->
-                    case Name of
-                        image ->
-                            skip;
-                        _ ->
-                            lager:warning("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
-                                 [
-                                  Name1,
-                                  [{'Args', Args1},
-                                   {'Patterns', Patterns},
-                                   {'Escape', Escape}
-                                  ]
-                                 ])
-                    end,
-                    #dispatch_url{};
-                Url ->
-                    Url
+                #dispatch_url{ url = undefined } = DispUrl when Name =/= image->
+                    lager:warning("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
+                         [
+                          Name1,
+                          [{'Args', Args1},
+                           {'Patterns', Patterns},
+                           {'Escape', Escape}
+                          ]
+                         ]),
+                    DispUrl;
+                DispUrl ->
+                    DispUrl
             end;
         error ->
             #dispatch_url{}

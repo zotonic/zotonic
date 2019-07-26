@@ -220,8 +220,6 @@ get_file_info_cfg(id, _Context) ->
 get_file_info_cfg(ConfiguredPath, Context) when is_list(ConfiguredPath); is_binary(ConfiguredPath) ->
     get_file_info_path(rootless(z_convert:to_binary(ConfiguredPath)), Context).
 
-get_file_info_path(undefined, _Context) ->
-    {error, enoent};
 get_file_info_path(Path, Context) when is_binary(Path) ->
     Root = z_context:get(root, Context),
     OptFilters = z_context:get(media_tag_url2props, Context, undefined),

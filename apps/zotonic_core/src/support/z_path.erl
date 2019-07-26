@@ -39,7 +39,7 @@
 
 %% @doc Return the path to the site folder of the given context.
 %%      The site must have been compiled.
--spec site_dir(z:context()) -> file:filename() | {error, bad_name}.
+-spec site_dir( z:context() | atom() ) -> file:filename_all() | {error, bad_name}.
 site_dir(#context{ site = Site }) ->
     site_dir(Site);
 site_dir(Site) when is_atom(Site) ->
@@ -49,7 +49,7 @@ site_dir(Site) when is_atom(Site) ->
 %% @doc Return the path to the given module in the given context.
 %%      The module must have been compiled, so it is present in the code
 %%      path.
--spec module_dir(atom()) -> file:filename() | {error, bad_name}.
+-spec module_dir(atom()) -> file:filename_all() | {error, bad_name}.
 module_dir(Module) ->
     code:lib_dir(Module).
 
@@ -77,29 +77,30 @@ module_dir(Module) ->
 %         Paths).
 
 %% @doc Return the path to the media preview directory
--spec media_preview(z:context()) -> file:filename() | {error, bad_name}.
+-spec media_preview(z:context()) -> file:filename_all() | {error, bad_name}.
 media_preview(Context) ->
     files_subdir("preview", Context).
 
 %% @doc Return the path to the media archive directory
--spec media_archive(z:context()) -> file:filename() | {error, bad_name}.
+-spec media_archive(z:context()) -> file:filename_all() | {error, bad_name}.
 media_archive(Context) ->
     files_subdir("archive", Context).
 
 %% @doc Return the absolute path to a file in the 'file' directory
+-spec abspath( file:filename_all(), z:context() ) -> file:filename_all() | {error, bad_name}.
 abspath(Path, Context) ->
     files_subdir(Path, Context).
 
 %% @doc Return the path to a files subdirectory
--spec files_subdir(file:filename(), z:context()) -> file:filename() | {error, bad_name}.
-files_subdir(SubDir, #context{site=Site}) ->
+-spec files_subdir(file:filename_all(), z:context()) -> file:filename_all() | {error, bad_name}.
+files_subdir(SubDir, #context{ site = Site }) ->
     case site_dir(Site) of
         {error, _} = Error -> Error;
         Dir -> filename:join([Dir, "priv", "files", SubDir])
     end.
 
 %% @doc Return the path to a files subdirectory and ensure that the directory is present
--spec files_subdir_ensure(file:filename(), z:context()) -> file:filename() | {error, bad_name}.
+-spec files_subdir_ensure(file:filename_all(), z:context()) -> file:filename_all() | {error, bad_name}.
 files_subdir_ensure(SubDir, Context) ->
     case files_subdir(SubDir, Context) of
         {error, _} = Error ->
@@ -111,23 +112,27 @@ files_subdir_ensure(SubDir, Context) ->
             end
     end.
 
+-spec zotonic_sites_dir() -> file:filename_all().
 zotonic_sites_dir() ->
     filename:join([get_path(), "apps"]).
 
+-spec zotonic_modules_dir() -> file:filename_all().
 zotonic_modules_dir() ->
     filename:join([get_path(), "apps"]).
 
 %% @doc The directory of the user-defined sites
+-spec user_sites_dir() -> file:filename_all().
 user_sites_dir() ->
     z_config:get(user_sites_dir).
 
 %% @doc The directory of the user-defined modules
+-spec user_modules_dir() -> file:filename_all().
 user_modules_dir() ->
     z_config:get(user_modules_dir).
 
 %% @doc Get the path to the root dir of the Zotonic install.
 %%      If the env var 'ZOTONIC' is not set, then return the current working dir.
--spec get_path() -> file:filename().
+-spec get_path() -> file:filename_all().
 get_path() ->
     case os:getenv("ZOTONIC") of
         false ->
@@ -138,7 +143,7 @@ get_path() ->
     end.
 
 %% @doc Return the _build/default/lib directory
--spec build_lib_dir() -> file:filename().
+-spec build_lib_dir() -> file:filename_all().
 build_lib_dir() ->
     filename:dirname(code:lib_dir(zotonic_core)).
 
