@@ -408,7 +408,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
 %%% AJAX UPDATES %%%
 
 %% @doc Set the contents of an element to the the html fragment
--spec update(string(), #render{} | string(), z:context()) -> z:context().
+-spec update(string()|binary(), #render{} | iodata(), z:context()) -> z:context().
 update(TargetId, Html, Context) ->
     update_selector(css_selector(TargetId), Html, Context).
 
@@ -601,6 +601,8 @@ render_html_opt_all(true, Template, Vars, Context) ->
 
 %%% SIMPLE FUNCTION TO SHOW DIALOG OR GROWL (uses the dialog and growl actions) %%%
 
+dialog(undefind, Template, Vars, Context) ->
+    dialog(<<>>, Template, Vars, Context);
 dialog(Title, Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
     {Html, Context1} = render_to_iolist(MixedHtml, Context),
@@ -811,7 +813,7 @@ set_render_state(RS, #render_state{})  -> RS;
 set_render_state(RS, Context)  ->
     z_context:set_render_state(RS, Context).
 
-reset_render_state(#render_state{}) -> #render_state{};
+-spec reset_render_state( z:context() ) -> z:context().
 reset_render_state(Context)  ->
     z_context:set_render_state(undefined, Context).
 

@@ -39,15 +39,19 @@
 
 -include_lib("zotonic.hrl").
 
+-type optional_filename() :: undefined | file:filename_all().
+-type mime_type() :: string().
+-type filename_extension() :: string().
+-type os_family() :: win32 | unix.
 
 %% @doc Caching version of identify/1. Fetches information about an image, returns width, height, type, etc.
--spec identify(#upload{}|string(), #context{}) -> {ok, Props::list()} | {error, term()}.
+-spec identify( #upload{} | file:filename_all(), z:context() ) -> {ok, Props::list()} | {error, term()}.
 identify(#upload{tmpfile=File, filename=Filename}, Context) ->
 	identify(File, Filename, Context);
 identify(File, Context) ->
 	identify(File, File, Context).
 
--spec identify(#upload{}|string(), string(), #context{}) -> {ok, Props::list()} | {error, term()}.
+-spec identify(#upload{}|file:filename_all(), optional_filename(), z:context()) -> {ok, Props::list()} | {error, term()}.
 identify(File, OriginalFilename, Context) ->
     identify(File, File, OriginalFilename, Context).
 
@@ -64,11 +68,11 @@ identify(File, MediumFilename, OriginalFilename, Context) ->
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.  First checks if a module
 %% has a specific identification methods.
--spec identify_file(File::string(), #context{}) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file( file:filename_all(), z:context() ) -> {ok, Props::list()} | {error, term()}.
 identify_file(File, Context) ->
 	identify_file(File, File, Context).
 
--spec identify_file(File::string(), OriginalFilename::string(), #context{}) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file( file:filename_all(), optional_filename(), z:context() ) -> {ok, Props::list()} | {error, term()}.
 identify_file(File, OriginalFilename, Context) ->
     Extension = maybe_extension(File, OriginalFilename),
     case z_notifier:first(#media_identify_file{filename=File, original_filename=OriginalFilename, extension=Extension}, Context) of
@@ -78,23 +82,25 @@ identify_file(File, OriginalFilename, Context) ->
             identify_file_direct(File, OriginalFilename)
 	end.
 
+-spec maybe_extension(file:filename_all(), optional_filename()) -> filename_extension().
 maybe_extension(File, undefined) ->
     maybe_extension(File);
 maybe_extension(_File, OriginalFilename) ->
     maybe_extension(OriginalFilename).
 
+-spec maybe_extension( optional_filename() ) -> filename_extension().
 maybe_extension(undefined) ->
     "";
 maybe_extension(Filename) ->
     z_convert:to_list(z_string:to_lower(filename:extension(Filename))).
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
--spec identify_file_direct(File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file_direct( file:filename_all(), optional_filename() ) -> {ok, Props::list()} | {error, term()}.
 identify_file_direct(File, OriginalFilename) ->
     check_acceptable(File, maybe_identify_extension(identify_file_direct_1(File, OriginalFilename), OriginalFilename)).
 
 identify_file_direct_1(File, OriginalFilename) ->
-    {OsFamily, _} = os:type(),
+    OsFamily = os_family(),
 	case identify_file_os(OsFamily, File, OriginalFilename) of
 		{error, _} ->
 			%% Last resort, give ImageMagick a try
@@ -102,12 +108,17 @@ identify_file_direct_1(File, OriginalFilename) ->
 		{ok, Props} ->
 			%% Images, pdf and ps are further investigated by ImageMagick
 			case proplists:get_value(mime, Props) of
-				"image/" ++ _ = M -> identify_file_imagemagick(OsFamily, File, M);
-				"application/pdf" = M -> identify_file_imagemagick(OsFamily, File, M);
-				"application/postscript" = M -> identify_file_imagemagick(OsFamily, File, M);
+				"image/" ++ _ = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
+				"application/pdf" = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
+				"application/postscript" = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
 				_Mime -> {ok, Props}
 			end
 	end.
+
+-spec os_family() -> os_family().
+os_family() ->
+    {OsFamily, _} = os:type(),
+    OsFamily.
 
 check_acceptable(_File, {error, _} = Error) ->
     Error;
@@ -230,14 +241,14 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
 
 
 %% @doc Try to identify the file using image magick
--spec identify_file_imagemagick(win32|unix, Filename::string(), MimeFile::string()|undefined) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file_imagemagick(os_family(), file:filename_all(), undefined | mime_type()) -> {ok, Props::list()} | {error, term()}.
 identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
     identify_file_imagemagick_1(os:find_executable("identify"), OsFamily, ImageFile, MimeFile).
 
 identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
     lager:error("Please install ImageMagick 'identify' for identifying the type of uploaded files."),
     {error, "'identify' not installed"};
-identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
+identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
     CleanedImageFile = z_utils:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
     CmdOutput = os:cmd(z_utils:os_filename(Cmd)
                        ++" -quiet "
@@ -267,7 +278,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
             %% "/tmp/ztmp-zotonic008prod@miffy.local-1321.452998.868252[0]=>/tmp/ztmp-zotonic008prod@miffy.local-1321.452998.868252 JPEG 1824x1824 1824x1824+0+0 8-bit DirectClass 1.245MB 0.000u 0:00.000"
             try
                 [_Path, Type, Dim, _Dim2 | _] = string:tokens(Result, " "),
-                Mime = mime(Type, MimeFile),
+                Mime = mime(Type, MimeTypeFromFile),
                 [Width,Height] = string:tokens(hd(string:tokens(Dim, "=>")), "x"),
                 {W1,H1} = maybe_sizeup(Mime, list_to_integer(Width), list_to_integer(Height)),
                 Props1 = [{width, W1},
@@ -317,14 +328,15 @@ devnull(win32) -> "nul";
 devnull(unix)  -> "/dev/null".
 
 
--spec mime(string(), string()|undefined) -> string().
-%% @doc ImageMagick identify can identify PDF/PS files as PBM
-mime("PBM", MimeFile) when is_list(MimeFile) -> MimeFile;
+%% @doc Map ImageMagick identify to mime_type, special case for PDF/PS files identifying as PBM
+-spec mime(string(), mime_type()|undefined) -> mime_type().
+mime("PBM", undefined) -> mime("PBM");
+mime("PBM", MimeTypeFromFile) -> MimeTypeFromFile;
 mime(Type, _) -> mime(Type).
 
 %% @doc Map the type returned by ImageMagick to a mime type
 %% @todo Add more imagemagick types, check the mime types
--spec mime(string()) -> string().
+-spec mime(string()) -> mime_type().
 mime("JPEG") -> "image/jpeg";
 mime("GIF") -> "image/gif";
 mime("TIFF") -> "image/tiff";
@@ -343,14 +355,15 @@ mime(Type) -> "image/" ++ string:to_lower(Type).
 
 
 %% @doc Return the extension for a known mime type (eg. ".mov").
--spec extension(string()|binary()) -> string().
-extension(Mime) -> extension(Mime, undefined).
+-spec extension(string()|binary()) -> filename_extension().
+extension(Mime) ->
+    extension(Mime, undefined).
 
 %% @doc Return the extension for a known mime type (eg. ".mov"). When
 %% multiple extensions are found for the given mime type, returns the
 %% one that is given as the preferred extension. Otherwise, it returns
 %% the first extension.
--spec extension(string()|binary(), string()|binary()|undefined, #context{}) -> string().
+-spec extension(string()|binary(), string()|binary()|undefined, z:context()) -> filename_extension().
 extension(Mime, PreferExtension, Context) ->
     case z_notifier:first(
                 #media_identify_extension{
@@ -367,7 +380,7 @@ extension(Mime, PreferExtension, Context) ->
 maybe_binary(undefined) -> undefined;
 maybe_binary(L) -> z_convert:to_binary(L).
 
--spec extension(string()|binary(), string()|binary()|undefined) -> string().
+-spec extension(string()|binary(), string()|binary()|undefined) -> filename_extension().
 extension("image/jpeg", _PreferExtension) -> ".jpg";
 extension(<<"image/jpeg">>, _PreferExtension) -> ".jpg";
 extension("application/vnd.ms-excel", _) -> ".xls";
@@ -405,7 +418,7 @@ first_extension(Extensions) ->
 
 %% @spec guess_mime(string()) -> string()
 %% @doc  Guess the mime type of a file by the extension of its filename.
--spec guess_mime(string() | binary()) -> string().
+-spec guess_mime( file:filename_all() ) -> mime_type().
 guess_mime(File) ->
 	case mimetypes:filename(z_convert:to_binary(z_string:to_lower(File))) of
 		[Mime|_] -> maybe_map_mime(z_convert:to_list(Mime));
@@ -454,7 +467,7 @@ exif_subject_point(Exif, Orientation, Width, Height) ->
     Point1 = maybe_resize_point(Point, Exif, Width, Height),
     maybe_rotate(Orientation, Point1, Width, Height).
 
-extract_subject_point(undefind) ->
+extract_subject_point(undefined) ->
     undefined;
 extract_subject_point(Exif) ->
     case proplists:get_value(subject_area, Exif) of

@@ -43,7 +43,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_fileindexer/include/zotonic_fileindexer.hrl").
 
--type key_type() :: template  | lib | filter | scomp | action | validator | model | dispatch | service.
+-type key_type() :: template  | lib | filter | scomp | action | validator | model | dispatch.
 
 -record(state, {
     context :: z:context(),
@@ -53,7 +53,6 @@
     models = [],
     templates = [],
     lib = [],
-    services = [],
     scanner_pid = undefined :: pid() | undefined
 }).
 -record(mfile, {name, filepath, module, erlang_module, prio}).
@@ -92,12 +91,12 @@ index_ref(#context{} = Context) ->
 
 %% @doc Find all .po files in all modules and the active site.
 %% This is an active scan, not designed to be fast.
--spec translations(z:context()) -> [ {Module :: atom(), [{Language :: atom(), file:filename()}]}].
+-spec translations(z:context()) -> [ {Module :: atom(), [{Language :: atom(), file:filename_all()}]}].
 translations(Context) ->
     translations1(Context).
 
 %% @doc Find all dispatch files in all modules and the active site.
--spec dispatch(z:context()) -> [ file:filename() ].
+-spec dispatch(z:context()) -> [ {module(), [file:filename_all()]} ].
 dispatch(Context) ->
     dispatch1(Context).
 
@@ -106,9 +105,20 @@ dispatch(Context) ->
 find(What, Name, Context) when What =:= lib; What =:= template ->
     case ets:lookup(?MODULE_INDEX,
                     #module_index_key{
-                        site=z_context:site(Context),
-                        type=What,
-                        name=z_convert:to_binary(Name)
+                        site = z_context:site(Context),
+                        type = What,
+                        name = z_convert:to_binary(Name)
+                    })
+    of
+        [] -> {error, enoent};
+        [#module_index{} = M|_] -> {ok, M}
+    end;
+find(model, Name, Context) when is_atom(Name); is_binary(Name) ->
+    case ets:lookup(?MODULE_INDEX,
+                    #module_index_key{
+                        site = z_context:site(Context),
+                        type = model,
+                        name = Name
                     })
     of
         [] -> {error, enoent};
@@ -117,9 +127,9 @@ find(What, Name, Context) when What =:= lib; What =:= template ->
 find(What, Name, Context) ->
     case ets:lookup(?MODULE_INDEX,
                     #module_index_key{
-                        site=z_context:site(Context),
-                        type=What,
-                        name=Name
+                        site = z_context:site(Context),
+                        type = What,
+                        name = Name
                     })
     of
         [] -> {error, enoent};
@@ -127,10 +137,13 @@ find(What, Name, Context) ->
     end.
 
 %% @doc Find a scomp, validator etc.
--spec find_all( key_type(), binary()|atom(), z:context() ) -> list( #module_index{} ).
-find_all(template, Name, Context) ->
-    gen_server:call(Context#context.module_indexer, {find_all, template, z_convert:to_binary(Name)}, ?TIMEOUT);
-find_all(What, Name, Context) ->
+-spec find_all( key_type(), string()|binary()|atom(), z:context() ) -> list( #module_index{} ).
+find_all(What, Name, Context) when What =:= lib; What =:= template ->
+    NameB = z_convert:to_binary(Name),
+    gen_server:call(Context#context.module_indexer, {find_all, What, NameB}, ?TIMEOUT);
+find_all(model, Name, Context) when is_atom(Name); is_binary(Name) ->
+    gen_server:call(Context#context.module_indexer, {find_all, model, Name}, ?TIMEOUT);
+find_all(What, Name, Context) when is_atom(Name) ->
     gen_server:call(Context#context.module_indexer, {find_all, What, Name}, ?TIMEOUT).
 
 %% @doc Return a list of all templates, scomps etc per module
@@ -206,8 +219,6 @@ handle_call({find_all, validator, Name}, _From, State) ->
     {reply, lookup_all(Name, State#state.validators), State};
 handle_call({find_all, model, Name}, _From, State) ->
     {reply, lookup_all(Name, State#state.models), State};
-handle_call({find_all, service, Name}, _From, State) ->
-    {reply, lookup_all(Name, State#state.services), State};
 
 handle_call({find_all, lib, File}, _From, State) ->
     {reply, lookup_all(File, State#state.lib), State};
@@ -251,8 +262,7 @@ handle_cast({scanned_items, Scanned}, State) ->
         validators  = proplists:get_value(validator, Scanned),
         models      = proplists:get_value(model, Scanned),
         templates   = proplists:get_value(template, Scanned),
-        lib         = proplists:get_value(lib, Scanned),
-        services    = proplists:get_value(service, Scanned)
+        lib         = proplists:get_value(lib, Scanned)
     },
     case NewState =/= State1 of
         true ->
@@ -388,7 +398,7 @@ scan(Context) ->
         fun(What) ->
             {What, scan_apps(What, ActiveApps)}
         end,
-        [ template, lib, scomp, action, validator, model, service ]).
+        [ template, lib, scomp, action, validator, model ]).
 
 scan_apps(What, Apps) ->
     {SubDir, FileRE} = subdir_pattern(What),
@@ -401,7 +411,6 @@ subdir_pattern(translation)-> { "priv/translations", "\\.po" };
 subdir_pattern(scomp)      -> { "src/scomps",        "^scomp_(.*)\\.erl$" };
 subdir_pattern(action)     -> { "src/actions",       "^action_(.*)\\.erl$" };
 subdir_pattern(validator)  -> { "src/validators",    "^validator_(.*)\\.erl$" };
-subdir_pattern(service)    -> { "src/services",      "^service_(.*)\\.erl$" };
 subdir_pattern(model)      -> { "src/models",        "^m_(.*)\\.erl$" };
 subdir_pattern(erlang)     -> { "src/support",       "\\.erl" }.
 
@@ -498,7 +507,6 @@ reindex_ets_lookup(State) ->
     to_ets(State#state.scomps, scomp, Tag, Site),
     to_ets(State#state.actions, action, Tag, Site),
     to_ets(State#state.validators, validator, Tag, Site),
-    to_ets(State#state.services, service, Tag, Site),
     to_ets(State#state.models, model, Tag, Site),
     cleanup_ets(Tag, Site).
 
@@ -509,20 +517,6 @@ to_ets(List, Type, Tag, Site) ->
 
 to_ets([], _Type, _Tag, _Site, _Done) ->
     ok;
-to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], service, Tag, Site, Done) ->
-    K = #module_index{
-        key = #module_index_key{
-            site = Site,
-            type = service,
-            name = service_key(z_convert:to_binary(Mod), Name)
-        },
-        module = Mod,
-        erlang_module = ErlMod,
-        filepath = FP,
-        tag = Tag
-    },
-    ets:insert(?MODULE_INDEX, K),
-    to_ets(T, service, Tag, Site, Done#{ Name => true });
 to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Type, Tag, Site, Done) ->
     case maps:is_key(Name, Done) of
         true ->
@@ -558,11 +552,6 @@ to_ets([#mfile{name=Name, module=Mod, erlang_module=ErlMod, filepath=FP}|T], Typ
             end,
             to_ets(T, Type, Tag, Site, Done#{ Name => true })
     end.
-
-service_key(<<"mod_", Mod/binary>>, Name) ->
-    {Mod, z_convert:to_binary(Name)};
-service_key(Site, Name) ->
-    {Site, z_convert:to_binary(Name)}.
 
 % Place all templates in the ets table, indexed per device type
 templates_to_ets(List, Tag, Site) ->

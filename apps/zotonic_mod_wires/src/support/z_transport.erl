@@ -55,7 +55,7 @@ transport(<<"postback">>, #postback_event{ postback = Postback } = Event, Contex
                     undefined -> Event#postback_event.target;
                     _         -> TargetId
                  end,
-    case maybe_set_q(mqtt, Event#postback_event.data, Context) of
+    case maybe_set_q(Event#postback_event.data, Context) of
         {ok, Context1} ->
             TriggerValue = Event#postback_event.triggervalue,
             Context2 = z_context:set_q(<<"triggervalue">>, TriggerValue, Context1),
@@ -67,7 +67,7 @@ transport(<<"postback">>, #postback_event{ postback = Postback } = Event, Contex
     end;
 transport(<<"notify">>, #postback_notify{ data = Data } = Notify, Context) ->
     % Notify for observer
-    case maybe_set_q(mqtt, Data, Context) of
+    case maybe_set_q(Data, Context) of
         {ok, Context1} ->
             Context2 = case z_notifier:first(Notify, Context1) of
                             undefined -> Context1;
@@ -79,7 +79,7 @@ transport(<<"notify">>, #postback_notify{ data = Data } = Notify, Context) ->
     end;
 transport(Delegate, #postback_notify{ data = Data } = Notify, Context) ->
     % Notify for delegate
-    case maybe_set_q(mqtt, Data, Context) of
+    case maybe_set_q(Data, Context) of
         {ok, Context1} ->
             {ok, Module} = z_utils:ensure_existing_module(Delegate),
             incoming_context_result(Module:event(Notify, Context1));
@@ -139,9 +139,7 @@ is_submit_event("submit") -> true;
 is_submit_event(submit) -> true;
 is_submit_event(_Type) -> false.
 
-maybe_set_q(form, Qs, Context) ->
-    set_q(Qs, Context);
-maybe_set_q(_Type, #{ <<"q">> := Qs }, Context) when is_list(Qs) ->
+maybe_set_q(#{ <<"q">> := Qs }, Context) when is_list(Qs) ->
     Qs1 = lists:foldr(
         fun
             (#{ <<"name">> := K, <<"value">> := V }, Acc) ->
@@ -152,9 +150,9 @@ maybe_set_q(_Type, #{ <<"q">> := Qs }, Context) when is_list(Qs) ->
         [],
         Qs),
     set_q(Qs1, Context);
-maybe_set_q(_Type, {q, Qs}, Context) ->
+maybe_set_q({q, Qs}, Context) ->
     set_q(Qs, Context);
-maybe_set_q(_Type, _Data, Context) ->
+maybe_set_q(_Data, Context) ->
     {ok, Context}.
 
 set_q(Qs, Context) ->

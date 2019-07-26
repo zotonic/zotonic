@@ -408,7 +408,7 @@ spawn_preview_create(MediaId, InsertProps, Context) ->
 preview_youtube(MediaId, InsertProps, Context) ->
     case z_convert:to_binary(proplists:get_value(video_embed_id, InsertProps)) of
         <<>> ->
-            static_preview(MediaId, "images/youtube.jpg", Context);
+            static_preview(MediaId, <<"images/youtube.jpg">>, Context);
         EmbedId ->
             Url = "http://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg",
             m_media:save_preview_url(MediaId, Url, Context)
@@ -419,18 +419,18 @@ preview_youtube(MediaId, InsertProps, Context) ->
 preview_vimeo(MediaId, InsertProps, Context) ->
     case z_convert:to_binary(proplists:get_value(video_embed_id, InsertProps)) of
         <<>> ->
-            static_preview(MediaId, "images/vimeo.jpg", Context);
+            static_preview(MediaId, <<"images/vimeo.jpg">>, Context);
         EmbedId ->
             case videoid_to_image(vimeo, EmbedId) of
                 undefined ->
-                    static_preview(MediaId, "images/vimeo.jpg", Context);
+                    static_preview(MediaId, <<"images/vimeo.jpg">>, Context);
                 ImgUrl ->
                     m_media:save_preview_url(MediaId, ImgUrl, Context)
             end
     end.
 
-videoid_to_image(youtube, EmbedId) ->
-    "http://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg";
+% videoid_to_image(youtube, EmbedId) ->
+%     "http://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg";
 videoid_to_image(vimeo, EmbedId) ->
     JsonUrl = "http://vimeo.com/api/v2/video/" ++ z_convert:to_list(EmbedId) ++ ".json",
     case httpc:request(JsonUrl) of
@@ -442,10 +442,9 @@ videoid_to_image(vimeo, EmbedId) ->
             undefined;
         _ ->
             undefined
-    end;
-videoid_to_image(_Service, _EmbedId) ->
-    undefined.
+    end.
 
+-spec static_preview( m_rsc:resource_id(), binary(), z:context() ) -> nop | {ok, file:filename_all()} | {error, term()}.
 static_preview(MediaId, LibFile, Context) ->
     case z_module_indexer:find(lib, LibFile, Context) of
         {ok, #module_index{filepath=File}} ->

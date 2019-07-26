@@ -28,16 +28,16 @@
 
 render_action(TriggerId, TargetId, Args, Context) ->
     RscId = z_convert:to_integer(proplists:get_value(id, Args)),
-    Type = z_convert:to_binary(proplists:get_value(type, Args)),
+    Type = z_convert:to_atom(proplists:get_value(type, Args)),
     Postback = {auth_disconnect, RscId, Type},
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
-event(#postback{message={auth_disconnect, _RscId, <<"username_pw">>}}, Context) ->
+event(#postback{message={auth_disconnect, _RscId, username_pw}}, Context) ->
 	Context;
-event(#postback{message={auth_disconnect, _RscId, <<"email">>}}, Context) ->
+event(#postback{message={auth_disconnect, _RscId, email}}, Context) ->
 	Context;
-event(#postback{message={auth_disconnect, RscId, Type}}, Context) when is_binary(Type), is_integer(RscId) ->
+event(#postback{message={auth_disconnect, RscId, Type}}, Context) when is_atom(Type), is_integer(RscId) ->
     case z_acl:rsc_editable(RscId, Context) of
         true ->
             m_identity:delete_by_type(RscId, Type, Context),

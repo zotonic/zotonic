@@ -77,7 +77,7 @@ show_media1_opts(Id, Input, Index, Context) ->
     end.
 
 show_media_html(Id, Context) ->
-    show_media_html(Id, {struct, []}, Context).
+    show_media_html(Id, #{}, Context).
 
 show_media_html(Id, Args, Context) when is_map(Args) ->
     case m_rsc:rid(Id, Context) of

@@ -49,11 +49,11 @@
 
 % NOTE: Make sure to extend record_to_proplist/1 in mod_logging.erl when adding log types.
 -record(zlog, {
-        type = undefined :: atom(),
-        user_id = undefined :: integer(),
-        timestamp = undefined :: erlang:timestamp(),
-        props = [] :: list() | #log_message{} | #log_email{}
-    }).
+    type = undefined :: atom(),
+    user_id = undefined :: m_rsc:resource_id() | undefined,
+    timestamp = undefined :: erlang:timestamp() | undefined,
+    props = [] :: list() | #log_message{} | #log_email{}
+}).
 
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 

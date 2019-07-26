@@ -85,8 +85,8 @@ start_tests() ->
 %%====================================================================
 
 %% @doc Subscribe to an event. Observer is a {M,F} or pid()
--spec observe(zotonic_notifier:event(), zotonic_notifier:observer(), pid(), integer(),
-              zotonic_notifier:notifier()) -> {ok, zotonic_notifier:id()} | {error, term()}.
+-spec observe(zotonic_notifier:notifier(), zotonic_notifier:event(), zotonic_notifier:observer(),
+              pid(), integer()) -> ok | {error, term()}.
 observe(Notifier, Event, Observer, OwnerPid, Prio) ->
     gen_server:call(Notifier, {observe, Event, Observer, OwnerPid, Prio}, infinity).
 

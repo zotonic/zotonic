@@ -311,7 +311,7 @@ do_backup_process(Name, IsFullBackup, Context) ->
 
 %% @doc Return and ensure the backup directory
 dir(Context) ->
-    z_path:files_subdir_ensure(backup, Context).
+    z_path:files_subdir_ensure("backup", Context).
 
 %% @doc Return the base name of the backup files.
 name(Context) ->

@@ -58,9 +58,12 @@ vcs_zotonic() ->
     vcs_dir( z_utils:lib_dir() ).
 
 % @doc Check if the site directory has a mercurial .hg subdirectory
--spec vcs_site( atom() ) -> vcs() | false.
+-spec vcs_site( atom() | z:context() ) -> vcs() | false.
 vcs_site(Site) ->
-    vcs_dir( z_path:site_dir(Site) ).
+    case z_path:site_dir(Site) of
+        {error, bad_name} -> false;
+        Path -> vcs_dir(Path)
+    end.
 
 -spec vcs_dir( file:filename() ) -> vcs() | false.
 vcs_dir(Dir) ->

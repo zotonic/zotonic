@@ -59,7 +59,7 @@ stop(_State) ->
 scan(App, SubDir) when is_atom(App) ->
     scan(App, SubDir, undefined).
 
--spec scan(atom(), file:filename_all(), string()|binary()) -> {ok, list( zotonic_fileindexer:fileindex() )} | {error, term()}.
+-spec scan(atom(), file:filename_all(), string()|binary()|undefined) -> {ok, list( zotonic_fileindexer:fileindex() )} | {error, term()}.
 scan(App, SubDir, Pattern) when is_atom(App) ->
     zotonic_fileindexer_cache:find(App, SubDir, Pattern).
 

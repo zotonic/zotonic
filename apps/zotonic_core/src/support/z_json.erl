@@ -26,7 +26,7 @@
 ]).
 
 %% @doc Encode an Erlang term to JSON.
--spec encode(binary() | map()) -> binary().
+-spec encode(binary() | map() | list()) -> binary().
 encode(Erlang) ->
     jsx:encode(Erlang).
 

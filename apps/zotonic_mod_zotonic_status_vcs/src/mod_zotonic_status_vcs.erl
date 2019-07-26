@@ -81,14 +81,14 @@ render_notice(Site, Notice, Context) ->
     z_render:wire( notice(Site, Notice), Context ).
 
 % @doc Send a notice to the current webpage.
--spec async_notice(atom(), string(), z:context()) -> ok.
+-spec async_notice(atom(), iodata(), z:context()) -> ok.
 async_notice(Sitename, Text, Context) ->
     z_notifier:notify(
         #page_actions{ actions = notice(Sitename, Text) },
         Context).
 
 % @doc Actions to show a notice.
--spec notice(atom(), string()) -> list().
+-spec notice(atom(), iodata()) -> list().
 notice(SiteName, Text) ->
     [
         {insert_top, [

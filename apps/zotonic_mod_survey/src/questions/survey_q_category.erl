@@ -69,7 +69,7 @@ prep_answer_header(Q, Context) ->
     CatName = proplists:get_value(category, Q),
     Labels = [ z_convert:to_binary(Id) || {_Title,Id} <- all_in_cat(CatName, Context)],
     case z_convert:to_bool(proplists:get_value(is_multiple, Q)) of
-        true -> [ <<Name/binary, $:, K/binary>> || {K,_} <- Labels ];
+        true -> [ <<Name/binary, $:, Label/binary>> || Label <- Labels ];
         false -> Name
     end.
 

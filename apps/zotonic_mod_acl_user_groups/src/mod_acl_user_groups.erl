@@ -284,7 +284,7 @@ observe_rsc_insert(#rsc_insert{props=RscProps}, InsertProps, Context) ->
             InsertProps
     end.
 
--spec observe_rsc_update(#rsc_update{}, {boolean(), m_rsc:props()}, #context{}) -> m_rsc:props().
+-spec observe_rsc_update(#rsc_update{}, {boolean(), m_rsc:props()}, z:context()) -> {boolean(), m_rsc:props()}.
 observe_rsc_update(#rsc_update{ props = PrevProps }, {_IsChanged, NewProps} = Acc, Context) ->
     case proplists:is_defined(acl_mime_allowed, NewProps)
         orelse proplists:is_defined(acl_upload_size, NewProps)

@@ -59,9 +59,9 @@ search1(Left, Right, Search, Context) ->
     #search_result{result=Result, all=Sorted, total=length(Sorted)}.
 
 
-    add_title(Id, true, all_bytitle_featured, Context) ->
-        Title = ?__(m_rsc:p(Id, title, Context), Context),
-        {[32 | z_string:to_name(Title)], Title, Id};
-    add_title(Id, _Featured, _Search, Context) ->
-        Title = ?__(m_rsc:p(Id, title, Context), Context),
-        {z_string:to_name(Title), Title, Id}.
+add_title(Id, true, all_bytitle_featured, Context) ->
+    Title = ?__(m_rsc:p(Id, title, Context), Context),
+    {<<" ", (z_string:to_name(Title))/binary>>, Title, Id};
+add_title(Id, _Featured, _Search, Context) ->
+    Title = ?__(m_rsc:p(Id, title, Context), Context),
+    {z_string:to_name(Title), Title, Id}.

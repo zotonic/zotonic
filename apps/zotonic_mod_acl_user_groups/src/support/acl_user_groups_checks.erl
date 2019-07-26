@@ -191,7 +191,7 @@ can_move(CGId, RscId, Context) ->
     andalso can_rsc_insert(CGId, RscId, Context).
 
 
-
+-spec acl_is_allowed( #acl_is_allowed{}, z:context() ) -> boolean() | undefined.
 acl_is_allowed(_, #context{acl=admin}) ->
     true;
 acl_is_allowed(_, #context{user_id=1}) ->

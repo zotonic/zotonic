@@ -66,7 +66,7 @@ m_post(Vs, _Msg, _Context) ->
 
 
 %% @doc Send password reminders to everybody with the given email address
--spec request_reminder( map(), z:context() ) -> map().
+-spec request_reminder( map(), z:context() ) -> {ok, map()} | {error, email}.
 request_reminder(Payload, Context) ->
     case maps:find(<<"email">>, Payload) of
         {ok, Email} when is_binary(Email) ->
@@ -75,7 +75,7 @@ request_reminder(Payload, Context) ->
                 true ->
                     case z_notifier:first( #auth_reset{ username = EmailNorm }, Context) of
                         Ok when Ok =:= undefined; Ok =:= ok ->
-                            case lookup_identities(EmailNorm, Context) of
+                            case lookup_email_identities(EmailNorm, Context) of
                                 [] ->
                                     case z_convert:to_bool(m_config:get_value(mod_authentication, email_reminder_if_nomatch, Context)) of
                                         true ->
@@ -102,10 +102,8 @@ request_reminder(Payload, Context) ->
     end.
 
 %% @doc Find all users with a certain e-mail address or username
-lookup_identities(undefined, _Context) -> [];
-lookup_identities("", _Context) -> [];
-lookup_identities(<<>>, _Context) -> [];
-lookup_identities(EmailOrUsername, Context) ->
+lookup_email_identities(<<>>, _Context) -> [];
+lookup_email_identities(EmailOrUsername, Context) ->
     Es = m_identity:lookup_by_type_and_key_multi(email, EmailOrUsername, Context),
     Us = m_identity:lookup_by_type_and_key_multi(username_pw, EmailOrUsername, Context),
     lists:usort([ proplists:get_value(rsc_id, Row) || Row <- Es ++ Us ]).
@@ -160,7 +158,7 @@ set_reminder_secret(Id, Context) ->
 auth_tokens( #{ <<"username">> := Username, <<"password">> := Password }, Context) ->
     case m_identity:check_username_pw(Username, Password, Context) of
         {ok, UserId} ->
-            {ok, UserSecret} = user_auth_key(UserId, Context),
+            UserSecret = user_auth_key(UserId, Context),
             {ok, #{
                 <<"auth">> => #{
                     <<"token">> => auth_token(UserId, UserSecret, Context)

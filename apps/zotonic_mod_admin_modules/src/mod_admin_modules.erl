@@ -37,8 +37,9 @@
 
 
 %% @doc Fetch a list of all modules available, including their description as a propertylist. The module list is sorted
-%% on the name of the module.
--spec all(z:context()) -> list({{boolean(), 1|2, binary()}, list()}).
+%% on the name of the module. The module implementing the site comes on top.
+-spec all(z:context()) -> list({SortKey, integer(), atom(), list()})
+    when SortKey :: {IsActive :: boolean(), 1 | 2, Name :: binary()}.
 all(Context) ->
     Active  = z_module_manager:active(Context),
     Modules = z_module_manager:scan(),
@@ -57,9 +58,10 @@ all(Context) ->
 
 
 add_sort_key({Prio, M, Props}) ->
+    Name = z_string:to_name(proplists:get_value(mod_title, Props, atom_to_binary(M, 'utf8'))),
     SortKey = case atom_to_list(M) of
-                "mod_" ++ _ -> {not proplists:get_value(is_active, Props), 2, z_string:to_name(proplists:get_value(mod_title, Props))};
-                _ -> {not proplists:get_value(is_active, Props), 1, proplists:get_value(mod_title, Props)}
+                "mod_" ++ _ -> {not proplists:get_value(is_active, Props, false), 2, Name};
+                _ -> {not proplists:get_value(is_active, Props, false), 1, Name}
               end,
     {SortKey, Prio, M, Props}.
 

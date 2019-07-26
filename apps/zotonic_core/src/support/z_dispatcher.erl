@@ -44,9 +44,18 @@
 
 -include_lib("zotonic.hrl").
 
--record(state, {dispatchlist=undefined, lookup=undefined, context,
-                site, hostname, hostname_port, hostname_ssl_port, smtphost, hostalias,
-                redirect=true}).
+-record(state, {
+    dispatchlist :: list(),
+    lookup :: dict:dict(),
+    context :: z:context(),
+    site :: atom(),
+    hostname :: binary() | undefined,
+    hostname_port :: binary() | undefined,
+    hostname_ssl_port :: binary() | undefined,
+    smtphost :: binary() | undefined,
+    hostalias :: list( binary() ),
+    redirect = true
+}).
 
 -record(dispatch_url, {url, dispatch_options}).
 
@@ -107,8 +116,8 @@ url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
 
 
 %% @doc Fetch the preferred hostname for this site
--spec hostname(#context{}) -> iolist() | undefined.
-hostname(#context{dispatcher=Dispatcher}) ->
+-spec hostname( z:context() ) -> binary() | undefined.
+hostname(#context{ dispatcher = Dispatcher }) ->
     try
         gen_server:call(Dispatcher, 'hostname', infinity)
     catch
@@ -117,7 +126,7 @@ hostname(#context{dispatcher=Dispatcher}) ->
     end.
 
 %% @doc Fetch the preferred hostname, including port, for this site
--spec hostname_port(#context{}) -> iolist() | undefined.
+-spec hostname_port( z:context() ) -> binary() | undefined.
 hostname_port(#context{dispatcher=Dispatcher}) ->
     try
         gen_server:call(Dispatcher, 'hostname_port', infinity)
@@ -127,7 +136,7 @@ hostname_port(#context{dispatcher=Dispatcher}) ->
     end.
 
 %% @doc Fetch the preferred hostname for SSL, including port, for this site
--spec hostname_ssl_port(#context{}) -> iolist() | undefined.
+-spec hostname_ssl_port( z:context() ) -> binary() | undefined.
 hostname_ssl_port(#context{dispatcher=Dispatcher}) ->
     try
         gen_server:call(Dispatcher, 'hostname_ssl_port', infinity)
@@ -252,39 +261,48 @@ init(SiteProps) ->
       ]),
     {hostname, Hostname0} = proplists:lookup(hostname, SiteProps),
     Hostname = drop_port(z_convert:to_binary(Hostname0)),
-    Smtphost = z_convert:to_binary(proplists:get_value(smtphost, SiteProps)),
+    Smtphost = drop_port(proplists:get_value(smtphost, SiteProps)),
     HostAlias = proplists:get_value(hostalias, SiteProps, []),
+    Alias = lists:filtermap(
+        fun(Alias) ->
+            case drop_port(Alias) of
+                undefined -> false;
+                Alias1 -> {true, Alias1}
+            end
+        end,
+        HostAlias),
     Context = z_context:new(Site),
     process_flag(trap_exit, true),
     State  = #state{
-                dispatchlist=[],
-                lookup=dict:new(),
-                context=Context,
-                site=Site,
-                smtphost=drop_port(Smtphost),
-                hostname=Hostname,
-                hostname_port=add_port(Hostname, http, z_config:get(port)),
-                hostname_ssl_port=add_port(Hostname, https, z_config:get(ssl_port)),
-                hostalias=[ drop_port(z_convert:to_binary(Alias)) || Alias <- HostAlias ],
-                redirect=z_convert:to_bool(proplists:get_value(redirect, SiteProps, true))
+                dispatchlist = [],
+                lookup = dict:new(),
+                context = Context,
+                site = Site,
+                smtphost = Smtphost,
+                hostname = Hostname,
+                hostname_port = add_port(Hostname, http, z_config:get(port)),
+                hostname_ssl_port = add_port(Hostname, https, z_config:get(ssl_port)),
+                hostalias = Alias,
+                redirect = z_convert:to_bool(proplists:get_value(redirect, SiteProps, true))
     },
     z_notifier:observe(module_ready, {?MODULE, reload}, Context),
     {ok, State}.
 
 % @doc Drop the portnumber from the hostname
 %
-drop_port(undefined) ->
-    undefined;
-drop_port(none) ->
-    undefined;
+-spec drop_port( undefined | none | string() | binary() ) -> undefined | binary().
+drop_port(undefined) -> undefined;
+drop_port(none) -> undefined;
 drop_port(Hostname) when is_binary(Hostname) ->
     hd(binary:split(Hostname, <<":">>)).
 
+-spec add_port( binary() | undefined, http | https, pos_integer() ) -> binary().
+add_port(undefined, _Protocol, _Port) -> undefined;
 add_port(_Hostname, _Protocol, none) -> undefined;
 add_port(Hostname, http, 80) -> Hostname;
 add_port(Hostname, https, 443) -> Hostname;
 add_port(Hostname, _, Port) ->
-    iolist_to_binary([Hostname, $:, integer_to_list(Port) ]).
+    iolist_to_binary([ Hostname, $:, integer_to_list(Port) ]).
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -429,23 +447,18 @@ make_url_for(Name, Args, Escape, UriLookup) ->
     case dict:find(Name1, UriLookup) of
         {ok, Patterns} ->
             case make_url_for1(Args1, Patterns, Escape, undefined) of
-                undefined ->
-                    case Name of
-                        image ->
-                            skip;
-                        _ ->
-                            lager:warning("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
-                                 [
-                                  Name1,
-                                  [{'Args', Args1},
-                                   {'Patterns', Patterns},
-                                   {'Escape', Escape}
-                                  ]
-                                 ])
-                    end,
-                    #dispatch_url{};
-                Url ->
-                    Url
+                #dispatch_url{ url = undefined } = DispUrl when Name =/= image->
+                    lager:info("make_url_for: dispatch rule `~p' failed when processing ~p.~n",
+                         [
+                          Name1,
+                          [{'Args', Args1},
+                           {'Patterns', Patterns},
+                           {'Escape', Escape}
+                          ]
+                         ]),
+                    DispUrl;
+                DispUrl ->
+                    DispUrl
             end;
         error ->
             #dispatch_url{}

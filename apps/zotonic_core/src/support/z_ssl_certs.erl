@@ -334,7 +334,7 @@ ciphers() ->
 
 
 %% @doc Decode a certificate file, return common_name, not_after etc.
--spec decode_cert(filename:filename()) -> list().
+-spec decode_cert(file:filename_all()) -> list().
 decode_cert(CertFile) ->
     {ok, CertData} = file:read_file(CertFile),
     PemEntries = public_key:pem_decode(CertData),

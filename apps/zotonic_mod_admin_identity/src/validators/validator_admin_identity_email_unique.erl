@@ -35,8 +35,8 @@ render_validator(email_unique, TriggerId, TargetId, Args, Context)  ->
 validate(email_unique, Id, Value, Args, Context) ->
     UserId = z_convert:to_integer(proplists:get_value(id, Args)),
     case z_string:to_lower(z_string:trim(Value)) of
-        [] -> {{ok, <<>>}, Context};
-        <<>> -> {{ok, <<>>}, Context};
+        <<>> ->
+            {{ok, <<>>}, Context};
         Email ->
             case m_identity:lookup_by_type_and_key_multi(email, Email, Context) of
                 [] ->

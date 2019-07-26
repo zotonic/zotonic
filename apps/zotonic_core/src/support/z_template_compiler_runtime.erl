@@ -172,7 +172,7 @@ map_template_all_cat_1(Template, Stack, Context) when is_binary(Template) ->
 
 %% @doc Map a template name to a template file.
 -spec map_template_1(binary(), #context{}) ->
-            {ok, filename:filename()} | {error, enoent|term()}.
+            {ok, file:filename_all()} | {error, enoent|term()}.
 map_template_1(Template, Context) when is_binary(Template) ->
     case z_module_indexer:find(template, Template, Context) of
         {ok, #module_index{filepath=Filename, key=Key}} ->
@@ -186,7 +186,7 @@ map_template_1(Template, Context) when is_binary(Template) ->
 
 
 %% @doc Check if a file has been modified
--spec is_modified(filename:filename(), calendar:datetime(), term()) -> boolean().
+-spec is_modified(file:filename_all(), calendar:datetime(), term()) -> boolean().
 is_modified(Filename, Mtime, _Context) ->
     case z_file_mtime:mtime(Filename) of
         {ok, Mtime} -> false;

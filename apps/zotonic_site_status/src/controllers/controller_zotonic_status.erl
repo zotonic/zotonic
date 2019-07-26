@@ -99,23 +99,23 @@ status_page(Context) ->
 %% Handle all events
 %% -----------------------------------------------------------------------------------------------
 
-event(#postback{message={site_start, [{site, Site}]}}, Context) ->
+event(#postback{message={site_start, [{site, Site}]}}, Context) when is_atom(Site) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:start(Site),
     render_notice(Site, "Successfully started.", Context);
-event(#postback{message={site_restart, [{site, Site}]}}, Context) ->
+event(#postback{message={site_restart, [{site, Site}]}}, Context) when is_atom(Site) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:restart(Site),
     render_notice(Site, "Successfully restarted.", Context);
-event(#postback{message={site_stop, [{site, Site}]}}, Context) ->
+event(#postback{message={site_stop, [{site, Site}]}}, Context) when is_atom(Site) ->
     true = z_auth:is_auth(Context),
     z_sites_manager:stop(Site),
     render_notice(Site, "Successfully stopped.", Context);
-event(#postback{message={site_flush, [{site, Site}]}}, Context) ->
+event(#postback{message={site_flush, [{site, Site}]}}, Context) when is_atom(Site) ->
     true = z_auth:is_auth(Context),
     z:flush(z_context:new(Site)),
     render_notice(Site, "The cache is flushed and all dispatch rules are reloaded.", Context);
-event(#postback{message={site_admin, [{site,Site}]}}, Context) ->
+event(#postback{message={site_admin, [{site,Site}]}}, Context) when is_atom(Site) ->
     try
         SiteContext = z_context:new(Site),
         case z_dispatcher:url_for(admin, SiteContext) of

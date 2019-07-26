@@ -39,9 +39,9 @@
     peer :: tuple(),
     banner :: string(),
     hostname :: binary(),
-    helo :: binary(),
-    rcpt :: binary(),
-    from :: binary()
+    helo :: binary() | undefined,
+    rcpt :: binary() | undefined,
+    from :: binary() | undefined
 }).
 
 

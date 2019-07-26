@@ -222,7 +222,7 @@ event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
             % Changing the authenticated will force all connected pages to reload or change.
             % After this we can't send any replies any more, as the pages are disconnecting.
             Context;
-        false ->
+        {error, eacces} ->
             z_render:growl_error(?__("You are not allowed to switch users.", Context), Context)
     end.
 
@@ -236,6 +236,7 @@ is_existing_key(RscId, Type, Key, Context) ->
         _ -> true
     end.
 
+-spec ensure( m_rsc:resource_id(), atom(), atom()|binary()|string(), z:context() ) -> ok | {ok, integer()} | {error, term()}.
 ensure(_RscId, _Type, undefined, _Context) -> ok;
 ensure(_RscId, _Type, <<>>, _Context) -> ok;
 ensure(_RscId, _Type, [], _Context) -> ok;

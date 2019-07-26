@@ -98,6 +98,7 @@ logon_switch(UserId, Context) ->
 
 
 %% @doc Request the client's auth worker to re-authenticate as a new user
+-spec switch_user( m_rsc:resource_id(), z:context() ) -> ok | {error, eacces}.
 switch_user(UserId, Context) when is_integer(UserId) ->
     case z_acl:is_admin(Context) of
         true ->
@@ -114,7 +115,10 @@ switch_user(UserId, Context) when is_integer(UserId) ->
 %% @doc Forget about the user being logged on.
 -spec logoff(z:context()) -> z:context().
 logoff(Context) ->
-    Context1 = z_notifier:foldl(#auth_logoff{}, Context, Context),
+    Logoff = #auth_logoff{
+        id = z_acl:user(Context)
+    },
+    Context1 = z_notifier:foldl(Logoff, Context, Context),
     z_acl:logoff(Context1).
 
 

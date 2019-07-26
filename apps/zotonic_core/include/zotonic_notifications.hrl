@@ -49,7 +49,7 @@
     mod :: atom(),
     mod_opts = [] :: list(),
     path_tokens = [] :: list(binary()),
-    bindings = [] :: list({atom(), binary()})
+    bindings = [] :: list({atom(), binary() | true})
 }).
 
 -record(dispatch_rules, {
@@ -137,7 +137,7 @@
 %% @doc Request a signup of a new or existing user. Arguments are similar to #signup_url{}
 %% Returns {ok, UserId} or {error, Reason}
 -record(signup, {
-    id :: integer(),
+    id :: m_rsc:resource_id() | undefined,
     props = [] :: list(),
     signup_props = [] :: list(),
     request_confirm = false :: boolean()
@@ -264,19 +264,19 @@
 
 %% @doc e-mail notification used by z_email and z_email_server.
 -record(email, {
-    to = [] :: list(),
+    to = [] :: list() | binary(),
     cc = [] :: list(),
     bcc = [] :: list(),
-    from = [] :: list(),
+    from = <<>> :: binary() | string(),
     reply_to,
     headers = [] :: list(),
     body,
     raw,
-    subject,
-    text,
-    html,
-    text_tpl,
-    html_tpl,
+    subject :: iodata() | undefined,
+    text :: iodata() | undefined,
+    html :: iodata() | undefined,
+    text_tpl :: template_compiler:template() | undefined,
+    html_tpl :: template_compiler:template() | undefined,
     vars = [] :: list(),
     attachments = [] :: list(),
     queue = false :: boolean()
@@ -315,8 +315,8 @@
 %% If the recipient is defined then the Context is the depickled z_email:send/2 context.
 %% (notify)
 -record(email_bounced, {
-    message_nr :: binary(),
-    recipient :: undefined | binary()
+    message_nr :: binary() | undefined,
+    recipient :: binary() | undefined
 }).
 
 %% @doc Notify that we could send an e-mail (there might be a bounce later...)
@@ -335,8 +335,8 @@
     message_nr :: binary(),
     recipient :: binary(),
     is_final :: boolean(),
-    reason :: retry | illegal_address | smtphost | error,
-    retry_ct :: non_neg_integer(),
+    reason :: retry | illegal_address | smtphost | sender_disabled | error,
+    retry_ct :: non_neg_integer() | undefined,
     status :: binary()
 }).
 
@@ -591,7 +591,7 @@
 %% @doc User is about to log off. Modify (if needed) the logoff request context.
 %% Type: foldl
 %% Return: ``z:context()``
--record(auth_logoff, { id :: m_rsc:resource_id() }).
+-record(auth_logoff, { id :: m_rsc:resource_id() | undefined }).
 
 
 %% @doc Authentication against some (external or internal) service was validated
@@ -739,7 +739,7 @@
     rsc_props :: list(),
     medium_props :: list(),
     medium_url = <<>> :: binary(),
-    preview_url :: binary()
+    preview_url :: binary() | undefined
 }).
 
 %% @doc Notification to translate or map a file after upload, before insertion into the database
@@ -948,14 +948,14 @@
 %% Return: ``true`` or ``false``
 -record(export_resource_visible, {
     dispatch :: atom(),
-    id :: integer()
+    id :: integer() | undefined
 }).
 
 %% @doc mod_export -
 %% Return: ``{ok, "text/csv"})`` for the dispatch rule/id export.
 -record(export_resource_content_type, {
     dispatch :: atom(),
-    id :: integer()
+    id :: integer() | undefined
 }).
 
 %% @doc mod_export - return the {ok, Filename} for the content disposition.
@@ -963,7 +963,7 @@
 %% Return: ``{ok, Filename}}`` or ``undefined``
 -record(export_resource_filename, {
     dispatch :: atom(),
-    id :: integer(),
+    id :: integer() | undefined,
     content_type :: string()
 }).
 
@@ -972,7 +972,7 @@
 %% Return: ``{ok, list()|binary()}``, ``{ok, list()|binary(), ContinuationState}`` or ``{error, Reason}``
 -record(export_resource_header, {
     dispatch :: atom(),
-    id :: integer(),
+    id :: integer() | undefined,
     content_type :: string()
 }).
 
@@ -983,7 +983,7 @@
 %% Return: ``{ok, Values|binary()}``, ``{ok, Values|binary(), ContinuationState}`` or ``{error, Reason}``
 -record(export_resource_data, {
     dispatch :: atom(),
-    id :: integer(),
+    id :: integer() | undefined,
     content_type :: string(),
     state :: term()
 }).
@@ -993,7 +993,7 @@
 %% Return: ``{ok, binary()}``, ``{ok, binary(), ContinuationState}`` or ``{error, Reason}``
 -record(export_resource_encode, {
     dispatch :: atom(),
-    id :: integer(),
+    id :: integer() | undefined,
     content_type :: string(),
     data :: term(),
     state :: term()
@@ -1004,7 +1004,7 @@
 %% Return: ``{ok, binary()}`` or ``{error, Reason}``
 -record(export_resource_footer, {
     dispatch :: atom(),
-    id :: integer(),
+    id :: integer() | undefined,
     content_type :: string(),
     state :: term()
 }).

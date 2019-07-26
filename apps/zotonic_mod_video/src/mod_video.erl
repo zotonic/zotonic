@@ -30,9 +30,9 @@
 
 -define(SERVER, ?MODULE).
 
--define(TEMP_IMAGE, "images/processing.gif").
--define(POSTER_IMAGE, "images/poster.png").
--define(BROKEN_IMAGE, "images/broken.png").
+-define(TEMP_IMAGE, <<"images/processing.gif">>).
+% -define(POSTER_IMAGE, <<"images/poster.png">>).
+-define(BROKEN_IMAGE, <<"images/broken.png">>).
 
 -define(TASK_DELAY, 3600).
 
@@ -89,7 +89,7 @@ do_media_upload_preprocess(Upload, Context) ->
                 post_insert_fun = PostFun,
                 original_filename = undefined,
                 medium = [
-                    {preview_filename, "lib/"++?TEMP_IMAGE},
+                    {preview_filename, <<"lib/", ?TEMP_IMAGE/binary>>},
                     {preview_width, proplists:get_value(width, MInfo)},
                     {preview_height, proplists:get_value(height, MInfo)},
                     {width, proplists:get_value(width, MInfo)},
@@ -112,7 +112,7 @@ do_media_upload_broken(Context) ->
                file = undefined,
                original_filename = undefined,
                medium = [
-                         {preview_filename, "lib/"++?BROKEN_IMAGE},
+                         {preview_filename, <<"lib/", ?BROKEN_IMAGE/binary>>},
                          {preview_width, proplists:get_value(width, MInfo)},
                          {preview_height, proplists:get_value(height, MInfo)},
                          {width, proplists:get_value(width, MInfo)},
@@ -244,6 +244,7 @@ post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
     supervisor:start_child(z_utils:name_for_site(?SERVER, Context), [Task, z_context:prune_for_async(Context)]),
     ok.
 
+-spec remove_task( file:filename_all(), z:context() ) -> non_neg_integer().
 remove_task(QueueFilename, Context) ->
     z_pivot_rsc:delete_task(?MODULE, convert_task, QueueFilename, Context).
 

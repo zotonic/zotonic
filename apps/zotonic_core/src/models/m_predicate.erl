@@ -104,6 +104,7 @@ id_to_name(Id, Context) when is_integer(Id) ->
 
 %% @doc Return the id of the predicate
 %% @spec name_to_id(Pred, Context) -> {ok, int()} | {error, Reason}
+-spec name_to_id( m_rsc:resource_name(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, {unknown_predicate, term()}}.
 name_to_id(Name, Context) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} ->
@@ -115,14 +116,14 @@ name_to_id(Name, Context) ->
     end.
 
 %% @doc Return the definition of the predicate
-%% @spec get(PredId, Context) -> PredicatePropList | undefined
+-spec get( atom() | m_rsc:resource_id() | string() | binary(), z:context() ) -> list() | undefined.
 get(PredId, Context) when is_integer(PredId) ->
     case id_to_name(PredId, Context) of
         {error, _} -> undefined;
         {ok, Name} -> get(Name, Context)
     end;
 get(Pred, Context) when is_list(Pred) orelse is_binary(Pred) ->
-    get(list_to_atom(z_string:to_lower(Pred)), Context);
+    get(z_convert:to_atom(z_string:to_lower(Pred)), Context);
 get(Pred, Context) ->
     case z_depcache:get(predicate, Pred, Context) of
         {ok, undefined} ->

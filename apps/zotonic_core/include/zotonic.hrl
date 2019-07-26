@@ -35,9 +35,9 @@
         controller_module = undefined :: atom() | undefined,
 
         %% The remote client performing this request
-        client_id = undefined :: binary(),                      % MQTT client id
-        client_topic = undefined :: mqtt_sessions:topic(),      % Topic where the client can be reached
-        routing_id = undefined :: binary(),                     % Unique routing id
+        client_id = undefined :: binary() | undefined,                      % MQTT client id
+        client_topic = undefined :: mqtt_sessions:topic() | undefined,      % Topic where the client can be reached
+        routing_id = undefined :: binary() | undefined,                     % Unique routing id
 
         %% User authenticated for this request
         acl = undefined          :: term() | admin | undefined,  %% opaque placeholder managed by the z_acl module
@@ -45,7 +45,7 @@
         user_id = undefined      :: integer() | undefined,
 
         %% Deprecated template render state, used for wires, actions and other embedded scripts.
-        render_state = undefined :: z_render:render_state(),
+        render_state = undefined :: undefined | z_render:render_state(),
 
         %% Database pool and the db driver (usually z_db_pgsql)
         db = undefined :: {atom(), atom()} | undefined,
@@ -102,11 +102,11 @@
 
 %% Query argument value for uploaded files. Also used for email attachments.
 -record(upload, {
-    filename :: binary(),
-    tmpfile :: undefined | filename:filename_all(),
-    tmpmonitor :: pid(),
-    data = undefined :: undefined | binary(),
-    mime = undefined :: undefined | binary()
+    filename :: binary() | undefined,
+    tmpfile :: file:filename_all() | undefined,
+    tmpmonitor = undefined :: undefined | pid(),
+    data = undefined :: binary() | undefined,
+    mime = undefined :: binary() | undefined
 }).
 
 
@@ -122,18 +122,43 @@
 -record(search_result, {
     result = [] :: list(),
     page = 1 :: pos_integer(),
-    pagelen :: pos_integer(),
-    total :: non_neg_integer(),
-    all :: non_neg_integer(),
-    pages :: non_neg_integer(),
+    pagelen :: pos_integer() | undefined,
+    total :: non_neg_integer() | undefined,
+    all :: list() | undefined,
+    pages :: non_neg_integer() | undefined,
     next,
     prev,
     facets = [] :: list()
 }).
 
--record(m_search_result, {search_name, search_props, result, page, pagelen, total, pages, next, prev}).
--record(search_sql, {select, from, where="", order="", group_by="", limit, tables=[], args=[],
-                     cats=[], cats_exclude=[], cats_exact=[], run_func, extra=[], assoc=false}).
+-record(m_search_result, {
+    search_name,
+    search_props,
+    result,
+    page = 1,
+    pagelen :: pos_integer() | undefined,
+    total :: non_neg_integer() | undefined,
+    pages :: non_neg_integer() | undefined,
+    next,
+    prev
+}).
+
+-record(search_sql, {
+    select :: list(),
+    from :: list(),
+    where = "" :: string(),
+    order = "" :: string(),
+    group_by = "" :: string(),
+    limit,
+    tables = [] :: list(),
+    args = [] :: list(),
+    cats = [] :: list(),
+    cats_exclude = [] :: list(),
+    cats_exact = [] :: list(),
+    run_func :: function() | undefined,
+    extra = [] :: list(),
+    assoc = false :: boolean()
+}).
 
 %% Used for fetching the site dispatch rules (see also )
 -record(site_dispatch_list, {
@@ -149,16 +174,16 @@
 %% Used for storing templates/scomps etc. in the lookup ets table
 -record(module_index_key, {
     site :: atom(),
-    type :: z_module_indexer:key_type(),
-    name :: binary()
+    type :: z_module_indexer:key_type() | undefined,
+    name :: atom() | binary() | {binary(), binary()}
 }).
 
 -record(module_index, {
     key           :: #module_index_key{},
-    filepath      :: filename:filename(),
+    filepath      :: file:filename_all() | undefined,
     module        :: atom() | undefined,
     erlang_module :: atom() | undefined,
-    tag           :: integer()
+    tag           :: integer() | undefined
 }).
 
 %% For the z_db definitions
@@ -188,9 +213,9 @@
 %% ACL objects
 -record(acl_rsc, {
     category :: atom(),
-    mime :: binary(),
-    size :: non_neg_integer(),
-    props :: list()
+    mime = undefined :: undefined | binary(),
+    size = undefined :: undefined | non_neg_integer(),
+    props = [] :: list()
 }).
 
 -record(acl_edge, {
@@ -223,9 +248,10 @@
     visible_for = 0 :: non_neg_integer()
 }).
 
+
 %% @doc Template definition for z_render:update/insert (and others)
 -record(render, {
-    template :: string(),
+    template :: template_compiler:template(),
     is_all = false :: boolean(),
     vars = [] :: proplists:proplist()
 }).

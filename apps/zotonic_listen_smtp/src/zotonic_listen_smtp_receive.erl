@@ -100,9 +100,9 @@ received(Recipient, ParsedEmail,
         {error, unkown_host} ->
             lager:info("SMTP dropping message, unknown host for recipient: ~p", [Recipient]),
             {error, unknown_host};
-        {error, _} = Error ->
+        {error, not_running} ->
             lager:info("SMTP delaying message, host for recipient is not up: ~p", [Recipient]),
-            Error
+            {error, not_running}
     end.
 
 get_host(Recipient) ->
