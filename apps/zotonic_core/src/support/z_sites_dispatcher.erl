@@ -32,7 +32,7 @@
 
 %% interface functions
 -export([
-    dispatch/1,
+    dispatch/2,
     dispatch/5,
     get_fallback_site/0,
     get_site_for_hostname/1,
@@ -123,7 +123,7 @@ update_hosts() ->
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req :: cowboy_req:req(), Env :: cowboy_middleware:env().
 execute(Req, Env) ->
-    case dispatch(Req) of
+    case dispatch(Req, Env) of
         #dispatch_controller{} = Match ->
             Context = Match#dispatch_controller.context,
             {ok, Req#{
@@ -168,10 +168,11 @@ execute(Req, Env) ->
     end.
 
 %% @doc Match the host and path to a dispatch rule.
--spec dispatch(cowboy_req:req()) -> dispatch().
-dispatch(Req) ->
-    Host = cowmachine_req:host(Req),
-    Scheme = cowmachine_req:scheme(Req),
+-spec dispatch(cowboy_req:req(), cowboy_middleware:env()) -> dispatch().
+dispatch(Req, Env) ->
+    TempContext = #{ cowreq => Req, cowenv => Env },
+    Host = cowmachine_req:host(TempContext),
+    Scheme = cowmachine_req:scheme(TempContext),
     Path = cowboy_req:path(Req),
     Method = cowboy_req:method(Req),
     DispReq = #dispatch{
