@@ -34,11 +34,12 @@
 %%      metadata for lager and set the relevant Context arguments.
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req::cowboy_req:req(), Env::cowboy_middleware:env().
-execute(Req, #{ controller := Controller, controller_options := ControllerOpts } = Env) ->
+execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_options := ControllerOpts } = Env) ->
     Req1 = maybe_overrule_req_headers(Req),
-    Context1 = z_context:set(ControllerOpts, maps:get(context, Env)),
+    Context = maps:get(cowmachine_context, Env),
+    Context1 = z_context:set(ControllerOpts, Context),
     Context2 = z_context:set_controller_module(Controller, Context1),
-    Context3 = z_context:set_reqdata(Req1, Context2),
+    Context3 = z_context:init_cowdata(Req1, Env, Context2),
     Context4 = z_context:set_security_headers(Context3),
     Options = #{
         on_welformed => fun(Ctx) ->
@@ -50,7 +51,7 @@ execute(Req, #{ controller := Controller, controller_options := ControllerOpts }
             end
         end
     },
-    cowmachine:request(Controller, Context4, Env, Options).
+    cowmachine:request(Context4, Options).
 
 maybe_overrule_req_headers(#{ bindings := Bindings } = Req) ->
     case proplists:get_value(zotonic_http_accept, Bindings) of
