@@ -6,7 +6,10 @@
  {<<"color">>,{pkg,<<"erlang_color">>,<<"1.0.0">>},1},
  {<<"cowboy">>,{pkg,<<"cowboy">>,<<"2.6.3">>},1},
  {<<"cowlib">>,{pkg,<<"cowlib">>,<<"2.7.3">>},2},
- {<<"cowmachine">>,{pkg,<<"cowmachine">>,<<"1.2.0">>},0},
+ {<<"cowmachine">>,
+  {git,"https://github.com/zotonic/cowmachine.git",
+       {ref,"ada04a4d966ec8abb04527de4b30c1de0241b211"}},
+  0},
  {<<"depcache">>,{pkg,<<"depcache">>,<<"1.5.0">>},0},
  {<<"dh_date">>,{pkg,<<"dh_date">>,<<"1.0.0">>},0},
  {<<"diffy">>,{pkg,<<"diffy">>,<<"1.0.0">>},0},
@@ -85,7 +88,10 @@
        {ref,"396c73497c2cdaa5d5bebbe4a6f52dd042a5bf2c"}},
   0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.4.0">>},1},
- {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.0.1">>},0}]}.
+ {<<"zotonic_stdlib">>,
+  {git,"https://github.com/zotonic/z_stdlib.git",
+       {ref,"d1c42c242264f17f7282cd29003c78f49bcbd3ec"}},
+  0}]}.
 [
 {pkg_hash,[
  {<<"bcrypt">>, <<"6735F66D3A7309AF166CE660161009B7D9B9216508B8B2E6A0A9090AF35CB757">>},
@@ -95,7 +101,6 @@
  {<<"color">>, <<"145FE1D2E65C4516E4F03FEFCA6C2F47EBAD5899D978D70382A5CFE643E4AC9E">>},
  {<<"cowboy">>, <<"99AA50E94E685557CAD82E704457336A453D4ABCB77839AD22DBE71F311FCC06">>},
  {<<"cowlib">>, <<"A7FFCD0917E6D50B4D5FB28E9E2085A0CEB3C97DEA310505F7460FF5ED764CE9">>},
- {<<"cowmachine">>, <<"11561512FD7ACED3F120F07A3CCD322303D5118D5411276124F3B6CA477E07DD">>},
  {<<"depcache">>, <<"E7BCC07E647A43CE65E9683F0668A08B347F7208D437DB7231CA3AA4C9D1A3AE">>},
  {<<"dh_date">>, <<"5B0C286665E160DE44132552931BEF06B5CB2244D5BD20E333A686E9D8BF92E3">>},
  {<<"diffy">>, <<"1584C5CA54FF796EEAA00149D842DB580695D2843FB4BF0C279E017A37734E26">>},
@@ -137,6 +142,5 @@
  {<<"sidejob">>, <<"5D6A7C9C620778CB1908E46B552D767DF2ED4D77070BB7B5B8773D4FF18D1D37">>},
  {<<"template_compiler">>, <<"FEC3599B7525B073A0C2C22B1E084CB500F1E1C2488D8A566FE503C6B53C9D83">>},
  {<<"termit">>, <<"D463BDD0207EDD00942754D51FD822B981CDCE7FB774E9FF71D9F59429BCEF7A">>},
- {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>},
- {<<"zotonic_stdlib">>, <<"8DCD10BE6BBA7589A6C0CFC71B02770E70E2C23B143F23AA678412E98DBA21B1">>}]}
+ {<<"yamerl">>, <<"AE215B1242810A9BC07716B88062F1BFE06F6BC7CF68372091F630BAA536DF79">>}]}
 ].

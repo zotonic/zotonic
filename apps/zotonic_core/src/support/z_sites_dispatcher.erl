@@ -130,13 +130,12 @@ execute(Req, Env) ->
                 bindings => Match#dispatch_controller.bindings
             }, Env#{
                 site => z_context:site(Context),
-                cowmachine_controller => Match#dispatch_controller.controller,
-                cowmachine_controller_options => Match#dispatch_controller.controller_options,
-                cowmachine_context => Context,
-
                 dispatch_rule => Match#dispatch_controller.dispatch_rule,
+                controller => Match#dispatch_controller.controller,
+                controller_options => Match#dispatch_controller.controller_options,
                 path_tokens => Match#dispatch_controller.path_tokens,
-                bindings => Match#dispatch_controller.bindings
+                bindings => Match#dispatch_controller.bindings,
+                context => Context
             }};
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
             handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
