@@ -51,8 +51,14 @@
 
     % combine_results/2,
 
+    init_cowdata/3,
+
     get_reqdata/1,
     set_reqdata/2,
+
+    get_envdata/1,
+    set_envdata/2,
+
     get_controller_module/1,
     set_controller_module/2,
     get_render_state/1,
@@ -151,26 +157,16 @@ new(undefined) ->
     end;
 new(Site) when is_atom(Site) ->
     set_default_language_tz(
-        set_server_names(#context{ site = Site }));
-new(Req) when is_map(Req) ->
-    %% This is the requesting thread, enable simple memo functionality.
-    z_memo:enable(),
-    z_depcache:in_process(true),
-    Context = set_server_names(#context{ req = Req, site = site(Req)}),
-    set_default_language_tz(Context).
+        set_server_names(#context{ site = Site })).
 
 %% @doc Create a new context record for a site with a certain language
--spec new( atom() | cowboy_req:req(), atom() ) -> z:context().
+-spec new( Site :: atom(), Language :: atom() ) -> z:context().
 new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
     Context = set_server_names(#context{ site = Site }),
     Context#context{
         language = [ Lang ],
         tz = tz_config(Context)
-    };
-%% @doc Create a new context record for the current request and resource module
-new(Req, Module) when is_map(Req), is_atom(Module) ->
-    Context = new(Req),
-    Context#context{ controller_module = Module }.
+    }.
 
 
 -spec set_default_language_tz(z:context()) -> z:context().
@@ -285,7 +281,8 @@ hostname_ssl_port(Context) ->
 
 %% @doc Check if the current context is a request context
 -spec is_request( z:context() ) -> boolean().
-is_request(#context{ req = Req }) -> Req =/= undefined.
+is_request(#context{ cowreq = undefined }) -> false;
+is_request(#context{}) -> true.
 
 %% @doc Check if the current context has an active MQTT session.
 %%      This is never true for the first request.
@@ -333,7 +330,8 @@ prune_for_database(Context) ->
 prune_for_scomp(Context) ->
     Context#context{
         dbc = undefined,
-        req = prune_reqdata(Context#context.req),
+        cowreq = prune_reqdata(Context#context.cowreq),
+        cowenv = prune_envdata(Context#context.cowenv),
         render_state = undefined
     }.
 
@@ -343,13 +341,20 @@ prune_reqdata(Req) ->
     %% @todo: prune this better, also used by the websocket connection.
     Req#{
         bindings => [],
-        cowmachine_cookies => [],
-        cowmachine_resp_body => <<>>,
         headers => #{},
         path => <<>>,
         qs => <<>>,
         pid => undefined,
         streamid => undefined
+    }.
+
+prune_envdata(undefined) ->
+    undefined;
+prune_envdata(Env) ->
+    %% @todo: prune this better, also used by the websocket connection.
+    Env#{
+        cowmachine_cookies => [],
+        cowmachine_resp_body => <<>>
     }.
 
 %% @doc Make the url an absolute url by prepending the hostname.
@@ -485,16 +490,33 @@ ensure_qs(#context{ props = Props } = Context) ->
     end.
 
 
-%% @doc Return the webmachine request data of the context
+%% @doc Return the cowmachine request data of the context
 -spec get_reqdata(z:context()) -> cowboy_req:req() | undefined.
 get_reqdata(Context) ->
-    Context#context.req.
+    Context#context.cowreq.
 
-%% @doc Set the webmachine request data of the context
+%% @doc Set the cowmachine request data of the context
 -spec set_reqdata(cowboy_req:req() | undefined, z:context()) -> z:context().
 set_reqdata(Req, Context) when is_map(Req); Req =:= undefined ->
-    Context#context{req=Req}.
+    Context#context{ cowreq = Req }.
 
+%% @doc Return the cowmachine request data of the context
+-spec get_envdata(z:context()) -> cowmachine_middleware:env() | undefined.
+get_envdata(Context) ->
+    Context#context.cowenv.
+
+%% @doc Set the cowmachine request data of the context
+-spec set_envdata(cowmachine_middleware:env() | undefined, z:context()) -> z:context().
+set_envdata(Env, Context) when is_map(Env); Env =:= undefined ->
+    Context#context{ cowenv = Env }.
+
+%% @doc Set the cowmachine request data of the context
+-spec init_cowdata(cowboy_req:req(), cowmachine_middleware:env(), z:context()) -> z:context().
+init_cowdata(Req, Env, Context) when is_map(Req); Req =:= undefined ->
+    Context#context{
+        cowreq = Req,
+        cowenv = Env
+    }.
 
 %% @doc Get the resource module handling the request.
 -spec get_controller_module(z:context()) -> atom() | undefined.
@@ -884,23 +906,23 @@ set_tz(Tz, Context) ->
 %% @doc Set a response header for the request in the context.
 %% @spec set_resp_header(Header, Value, Context) -> NewContext
 -spec set_resp_header(binary(), binary(), z:context()) -> z:context().
-set_resp_header(Header, Value, #context{req=Req} = Context) when is_map(Req) ->
+set_resp_header(Header, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:set_resp_header(Header, Value, Context).
 
 %% @doc Get a response header
 -spec get_resp_header(binary(), z:context()) -> binary() | undefined.
-get_resp_header(Header, #context{req=Req} = Context) when is_map(Req) ->
+get_resp_header(Header, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:get_resp_header(Header, Context).
 
 %% @doc Get a request header. The header MUST be in lower case.
 -spec get_req_header(binary(), z:context()) -> binary() | undefined.
-get_req_header(Header, #context{req=Req} = Context) when is_map(Req) ->
+get_req_header(Header, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:get_req_header(Header, Context).
 
 
 %% @doc Return the request path
 -spec get_req_path(z:context()) -> binary().
-get_req_path(#context{req=Req} = Context) when is_map(Req) ->
+get_req_path(#context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:raw_path(Context).
 
 
@@ -949,7 +971,7 @@ parse_post_body(Context) ->
 %% these headers by not calling z_context:ensure_session/1, or
 %% z_context:ensure_all/1.
 -spec set_nocache_headers(z:context()) -> z:context().
-set_nocache_headers(Context = #context{req=Req}) when is_map(Req) ->
+set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
     cowmachine_req:set_resp_headers([
             {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, post-check=0, pre-check=0">>},
             {<<"expires">>, <<"Wed, 10 Dec 2008 14:30:00 GMT">>},
@@ -1011,12 +1033,12 @@ set_cookie(Key, Value, Options, Context) ->
 
 %% @doc Read a cookie value from the current request.
 -spec get_cookie(binary(), z:context()) -> binary() | undefined.
-get_cookie(Key, #context{req=Req} = Context) when is_map(Req) ->
+get_cookie(Key, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:get_cookie_value(Key, Context).
 
 %% @doc Read all cookie values with a certain key from the current request.
 -spec get_cookies(binary(), z:context()) -> [ binary() ].
-get_cookies(Key, #context{req=Req} = Context) when is_map(Req), is_binary(Key) ->
+get_cookies(Key, #context{cowreq=Req} = Context) when is_map(Req), is_binary(Key) ->
     proplists:get_all_values(Key, cowmachine_req:req_cookie(Context)).
 
 
