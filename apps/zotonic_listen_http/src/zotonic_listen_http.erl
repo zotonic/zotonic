@@ -83,7 +83,7 @@ handle_info(start, init) ->
     {noreply, started}.
 
 code_change(_Version, State, _Extra) ->
-    {noreply, State}.
+    {ok, State}.
 
 terminate(_Why, started) ->
     stop_http_listeners();

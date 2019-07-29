@@ -54,7 +54,7 @@ start_link(Site) ->
     end.
 
 %% @doc Supervisor callback, returns the supervisor tree for a zotonic site
--spec init(atom()) -> {ok, {{one_for_all, integer(), integer()}, list()}}.
+-spec init(atom()) -> {ok, {{one_for_all, non_neg_integer(), pos_integer()}, list()}}.
 init(Site) ->
     lager:md([
         {site, Site},

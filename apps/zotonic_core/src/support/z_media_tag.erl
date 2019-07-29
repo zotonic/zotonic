@@ -88,17 +88,17 @@ scomp_url(IdOrName, Options, Context) ->
 %%   MediaReference = Filename | RscId | MediaPropList
 %% @doc Generate a html fragment for displaying a medium.  This can generate audio or video player html.
 viewer(undefined, _Options, _Context) ->
-    {ok, []};
+    {ok, <<>>};
 viewer([], _Options, _Context) ->
-    {ok, []};
+    {ok, <<>>};
 viewer(#rsc_list{list=[]}, _Options, _Context) ->
-    {ok, []};
+    {ok, <<>>};
 viewer(#rsc_list{list=[Id|_]}, Options, Context) ->
     viewer(Id, Options, Context);
 viewer(Name, Options, Context) when is_atom(Name) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} -> viewer(Id, Options, Context);
-        _ -> {ok, []}
+        _ -> {ok, <<>>}
     end;
 viewer(Id, Options, Context) when is_integer(Id) ->
     case m_media:get(Id, Context) of
@@ -107,8 +107,8 @@ viewer(Id, Options, Context) when is_integer(Id) ->
     end;
 viewer([{_Prop, _Value}|_] = Props, Options, Context) ->
     Id = proplists:get_value(id, Props),
-    case z_convert:to_list(proplists:get_value(filename, Props)) of
-        None when None == []; None == undefined ->
+    case proplists:get_value(filename, Props) of
+        None when None =:= <<>>; None =:= undefined; None =:= <<>> ->
             viewer1(Id, Props, undefined, Options, Context);
         Filename ->
             FilePath = filename_to_filepath(Filename, Context),

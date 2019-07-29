@@ -55,7 +55,7 @@
 -include_lib("zotonic.hrl").
 
 -type site_dispatch_list() :: #site_dispatch_list{}.
--type dispatch_rule() :: {atom(), list(binary()), list()}.
+-type dispatch_rule() :: {Name::atom(), Path::list(binary()), Controller::atom(), Options::list()}.
 -type hostname() :: binary() | string().
 
 -record(state, {
@@ -126,8 +126,9 @@ execute(Req, Env) ->
     case dispatch(Req, Env) of
         #dispatch_controller{} = Match ->
             Context = Match#dispatch_controller.context,
+            BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
             {ok, Req#{
-                bindings => Match#dispatch_controller.bindings
+                bindings => BindingsMap
             }, Env#{
                 site => z_context:site(Context),
                 cowmachine_controller => Match#dispatch_controller.controller,
@@ -136,18 +137,18 @@ execute(Req, Env) ->
 
                 dispatch_rule => Match#dispatch_controller.dispatch_rule,
                 path_tokens => Match#dispatch_controller.path_tokens,
-                bindings => Match#dispatch_controller.bindings
+                bindings => BindingsMap
             }};
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
             handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
-        {redirect, Site, undefined, IsPermanent} ->
-            case z_sites_manager:wait_for_running(Site) of
-                ok ->
-                    Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
-                    redirect(Uri, IsPermanent, Req);
-                {error, _} ->
-                    {stop_request, 503}
-            end;
+        % {redirect, Site, undefined, IsPermanent} ->
+        %     case z_sites_manager:wait_for_running(Site) of
+        %         ok ->
+        %             Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
+        %             redirect(Uri, IsPermanent, Req);
+        %         {error, _} ->
+        %             {stop_request, 503}
+        %     end;
         {redirect, Site, NewPathOrURI, IsPermanent} ->
             case z_sites_manager:wait_for_running(Site) of
                 ok ->
@@ -260,15 +261,16 @@ handle_error(RespCode, _Method, undefined, Req, _Env, _Bindings, _Context) ->
 handle_error(_RespCode, <<"CONNECT">>, _Site, Req, _Env, _Bindings, _Context) ->
     {stop, cowboy_req:reply(400, set_server_header(Req))};
 handle_error(RespCode, Method, Site, Req, Env, Bindings, Context) when Method =:= <<"GET">>; Method =:= <<"POST">> ->
+    BindingsMap = maps:from_list(Bindings),
     {ok, Req#{
-        bindings => Bindings
+        bindings => BindingsMap
     }, Env#{
         site => Site,
-        controller => controller_http_error,
-        controller_options => [ {http_status_code, RespCode} ],
+        cowmachine_controller => controller_http_error,
+        cowmachine_controller_options => [ {http_status_code, RespCode} ],
+        cowmachine_context => Context,
         path_tokens => [],
-        bindings => Bindings,
-        context => Context
+        bindings => BindingsMap
     }};
 handle_error(RespCode, _Method, _Site, Req, _Env, _Bindings, _Context) ->
     {stop, cowboy_req:reply(RespCode, set_server_header(Req))}.
@@ -876,7 +878,7 @@ trace_final(TracerPid, #dispatch_controller{
             {controller, Controller},
             {controller_options, ControllerOptions},
             {bindings, Bindings}
-          ]),
+        ]),
     Match;
 trace_final(_TracerPid, RedirectOrHandled) ->
     RedirectOrHandled.

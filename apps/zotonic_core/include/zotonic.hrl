@@ -43,7 +43,7 @@
         %% User authenticated for this request
         acl = undefined          :: term() | admin | undefined,  %% opaque placeholder managed by the z_acl module
         acl_is_read_only = false :: boolean(),
-        user_id = undefined      :: integer() | undefined,
+        user_id = undefined      :: integer() | authenticated | undefined,
 
         %% Deprecated template render state, used for wires, actions and other embedded scripts.
         render_state = undefined :: undefined | z_render:render_state(),

@@ -156,9 +156,12 @@ from_qs(Context) ->
     Qs = z_context:get_q_all_noz(Context1),
     {maps:from_list(Qs), Context1}.
 
--spec req_body( z:context() ) -> binary().
+-spec req_body( z:context() ) -> {binary(), z:context()}.
 req_body(Context) ->
-    cowmachine_req:req_body(?MAX_BODY_LENGTH, Context).
+    case cowmachine_req:req_body(?MAX_BODY_LENGTH, Context) of
+        {undefined, Context1} -> {<<>>, Context1};
+        {Body, Context1} -> {Body, Context1}
+    end.
 
 %% @doc Encode the response data
 -spec encode_response( Mime :: cow_http_hd:media_type(), term() ) -> binary().

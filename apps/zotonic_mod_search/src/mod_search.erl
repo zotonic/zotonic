@@ -622,7 +622,7 @@ fixup_tsquery(_Stemmer, TsQ) ->
 %% @doc Find one more more resources by id or name, when the resources exists.
 %% Input may be a single token or a comma-separated string.
 %% Search results contain a list of ids.
--spec find_by_id(string(), z:context()) -> #search_result{}.
+-spec find_by_id(string() | binary(), z:context()) -> #search_result{}.
 find_by_id(S, Context) ->
     find_by_id(S, false, Context).
 

@@ -29,5 +29,5 @@
 
 -module(zotonic_scomp).
 
--callback render(Params :: list(), Vars :: list(), Context :: z:context()) -> term().
+-callback render(Params :: list(), Vars :: map(), Context :: z:context()) -> term().
 -callback vary(Params :: list(), Context :: z:context()) -> atom().

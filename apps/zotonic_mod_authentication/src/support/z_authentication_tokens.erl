@@ -79,7 +79,7 @@ req_auth_cookie(Context) ->
             end
     end.
 
--spec set_auth_cookie( m_rsc:resource_id(), map(), z:context() ) -> z:context().
+-spec set_auth_cookie( m_rsc:resource_id() | undefined, map(), z:context() ) -> z:context().
 set_auth_cookie(UserId, AuthOptions, Context) ->
     Cookie = encode_auth_token(UserId, AuthOptions, Context),
     CookieOptions = [
@@ -133,7 +133,7 @@ reset_auth_cookie(Context) ->
     ],
     z_context:set_cookie(?AUTH_COOKIE, <<>>, CookieOptions, Context).
 
--spec encode_auth_token( m_rsc:resource_id(), map(), z:context() ) -> binary().
+-spec encode_auth_token( m_rsc:resource_id() | undefined, map(), z:context() ) -> binary().
 encode_auth_token(UserId, Options, Context) ->
     Term = {auth, UserId, Options, user_secret(UserId, Context)},
     ExpTerm = termit:expiring(Term, session_expires(Context)),

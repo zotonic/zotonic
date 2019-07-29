@@ -140,7 +140,7 @@ get_sites() ->
     maps:from_list(List).
 
 %% @doc Return a list of all sites, their current running status and their hosts configs
--spec get_sites_hosts() -> #{ atom() => {site_status(), [ {Host::binary(), Prio :: pos_integer()} ]} }.
+-spec get_sites_hosts() -> {ok, #{ atom() => {site_status(), [ {Host::binary(), Prio :: pos_integer()} ]} }}.
 get_sites_hosts() ->
     gen_server:call(?MODULE, get_sites_hosts, infinity).
 

@@ -157,7 +157,7 @@ process(_Method, AcceptedCT, ProvidedCT, Context) ->
             end
     end.
 
--spec process_done( ok | {ok, term()}  | {error, term()}, cowmachine_req:mime_type(), z:context() ) ->
+-spec process_done( ok | {ok, term()}  | {error, term()}, cowmachine_req:media_type(), z:context() ) ->
         {iodata(), z:context()} | {{halt, HttpCode :: pos_integer()}, z:context()}.
 process_done(ok, ProvidedCT, Context) ->
     % z_mqtt:publish response
@@ -170,7 +170,7 @@ process_done({ok, Resp}, ProvidedCT, Context) ->
 process_done({error, _} = Error, ProvidedCT, Context) ->
     error_response(Error, ProvidedCT, Context).
 
--spec error_response({error, term()}, binary(), z:context()) -> {{halt, HttpCode :: pos_integer()}, z:context()}.
+-spec error_response({error, term()}, cowmachine_req:media_type(), z:context()) -> {{halt, HttpCode :: pos_integer()}, z:context()}.
 error_response({error, payload}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,

@@ -83,11 +83,8 @@ search_pager({SearchName, Props}, Context) ->
     {Page, PageLen, Props1} = get_paging_props(Props),
     try
         Result = z_search:search_pager({SearchName, Props1}, Page, PageLen, Context),
-        Total1 = case Result#search_result.total of
-            undefined -> length(Result#search_result.result);
-            Total -> Total
-        end,
-        #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props1}
+        Total = Result#search_result.total,
+        #m_search_result{result=Result, total=Total, search_name=SearchName, search_props=Props1}
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p",

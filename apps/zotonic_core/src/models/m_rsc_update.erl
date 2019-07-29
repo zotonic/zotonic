@@ -1491,8 +1491,7 @@ normalize_block(Name, B, Context) ->
         ({"rsc_id", V}) -> {rsc_id, m_rsc:rid(V, Context)};
         ({<<"rsc_id">>, V}) -> {rsc_id, m_rsc:rid(V, Context)};
         ({"is_" ++ _ = K, V}) -> {to_existing_atom(K), z_convert:to_bool(V)};
-        ({<<"is_", _/binary>> = K, V}) ->
-            {to_existing_atom(K), z_convert:to_bool(V)};
+        ({<<"is_", _/binary>> = K, V}) -> {to_existing_atom(K), z_convert:to_bool(V)};
         ({K, V}) when is_list(K); is_binary(K) -> {to_existing_atom(K), V};
         (Pair) -> Pair
     end,
@@ -1502,13 +1501,11 @@ normalize_block(Name, B, Context) ->
         false -> [{name, Name} | Props]
     end.
 
--spec to_existing_atom( binary() | string() | atom() ) -> atom().
+-spec to_existing_atom( binary() | string() ) -> atom().
 to_existing_atom(K) when is_binary(K) ->
     binary_to_existing_atom(K, utf8);
 to_existing_atom(K) when is_list(K) ->
-    list_to_existing_atom(K);
-to_existing_atom(K) when is_atom(K) ->
-    K.
+    list_to_existing_atom(K).
 
 %% @doc Accept only configured languages
 filter_langs(L, Cfg) ->

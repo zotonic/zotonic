@@ -737,9 +737,9 @@ check_datetime({{Y,M,D},{H,I,S}} = Date)
     when is_integer(Y), is_integer(M), is_integer(D),
          is_integer(H), is_integer(I), is_integer(S) ->
     Date;
-check_datetime({Y,M,D} = Date)
-    when is_integer(Y), is_integer(M), is_integer(D) ->
-    {Date, {0,0,0}};
+% check_datetime({Y,M,D} = Date)
+%     when is_integer(Y), is_integer(M), is_integer(D) ->
+%     {Date, {0,0,0}};
 check_datetime(_) ->
     undefined.
 

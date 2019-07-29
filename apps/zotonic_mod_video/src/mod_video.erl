@@ -372,5 +372,5 @@ orientation_to_transpose(6) -> " -vf 'transpose=1' ";
 orientation_to_transpose(_) -> "".
 
 preview_filename(Id, Context) ->
-    m_media:make_preview_unique(Id, ".jpg", Context).
+    m_media:make_preview_unique(Id, <<".jpg">>, Context).
 

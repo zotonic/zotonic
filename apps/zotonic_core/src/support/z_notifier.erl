@@ -65,7 +65,7 @@ observe(Event, Observer, Priority, Context) when is_integer(Priority) ->
 observe(Event, Observer, OwnerPid, Context) when is_pid(OwnerPid) ->
     observe(Event, Observer, OwnerPid, prio(Observer), Context).
 
--spec observe( zotonic_notifier:event(), zotonic_notifier:observer(), pid(), atom() | z:context() ) -> ok | {error, term()}.
+-spec observe( zotonic_notifier:event(), zotonic_notifier:observer(), pid(), integer(), atom() | z:context() ) -> ok | {error, term()}.
 observe(Event, Observer, OwnerPid, Priority, Site) when is_atom(Site), is_pid(OwnerPid) ->
     zotonic_notifier:observe({Site, msg_event(Event)}, Observer, OwnerPid, Priority);
 observe(Event, Observer, OwnerPid, Priority, Context) ->
@@ -176,7 +176,7 @@ await(Msg, Context) ->
         {ok, {pid(), reference()}, tuple()|atom()} |
         {error, timeout}.
 await(Msg, Timeout, Context) ->
-    zotonic_notifier:await({z_context:site(Context), msg_event(Msg)}, Msg, Timeout, Context).
+    zotonic_notifier:await({z_context:site(Context), msg_event(Msg)}, Msg, Timeout).
 
 -spec await_exact(tuple()|atom(), #context{}) ->
         {ok, tuple()|atom()} |
@@ -190,12 +190,13 @@ await_exact(Msg, Context) ->
         {ok, {pid(), reference()}, tuple()|atom()} |
         {error, timeout}.
 await_exact(Msg, Timeout, Context) ->
-    zotonic_notifier:await_exact({z_context:site(Context), msg_event(Msg)}, Msg, Timeout, Context).
+    zotonic_notifier:await_exact({z_context:site(Context), msg_event(Msg)}, Msg, Timeout).
 
 %%====================================================================
 %% support functions
 %%====================================================================
 
+-spec msg_event( atom() | tuple() ) -> atom().
 msg_event(Event) when is_atom(Event) -> Event;
 msg_event(Msg) when is_tuple(Msg) -> element(1, Msg).
 

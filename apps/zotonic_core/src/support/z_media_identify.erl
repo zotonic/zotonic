@@ -24,15 +24,15 @@
 %% interface functions
 -export([
     identify/2,
-	identify/3,
+    identify/3,
     identify/4,
-	identify_file/2,
-	identify_file/3,
-	identify_file_direct/2,
+    identify_file/2,
+    identify_file/3,
+    identify_file_direct/2,
     extension/1,
     extension/2,
     extension/3,
-	guess_mime/1,
+    guess_mime/1,
     is_mime_vector/1,
     is_mime_compressed/1
 ]).
@@ -47,9 +47,9 @@
 %% @doc Caching version of identify/1. Fetches information about an image, returns width, height, type, etc.
 -spec identify( #upload{} | file:filename_all(), z:context() ) -> {ok, Props::list()} | {error, term()}.
 identify(#upload{tmpfile=File, filename=Filename}, Context) ->
-	identify(File, Filename, Context);
+    identify(File, Filename, Context);
 identify(File, Context) ->
-	identify(File, File, Context).
+    identify(File, File, Context).
 
 -spec identify(#upload{}|file:filename_all(), optional_filename(), z:context()) -> {ok, Props::list()} | {error, term()}.
 identify(File, OriginalFilename, Context) ->
@@ -70,17 +70,17 @@ identify(File, MediumFilename, OriginalFilename, Context) ->
 %% has a specific identification methods.
 -spec identify_file( file:filename_all(), z:context() ) -> {ok, Props::list()} | {error, term()}.
 identify_file(File, Context) ->
-	identify_file(File, File, Context).
+    identify_file(File, File, Context).
 
 -spec identify_file( file:filename_all(), optional_filename(), z:context() ) -> {ok, Props::list()} | {error, term()}.
 identify_file(File, OriginalFilename, Context) ->
     Extension = maybe_extension(File, OriginalFilename),
     case z_notifier:first(#media_identify_file{filename=File, original_filename=OriginalFilename, extension=Extension}, Context) of
         {ok, Props} ->
-			{ok, Props};
+            {ok, Props};
         undefined ->
             identify_file_direct(File, OriginalFilename)
-	end.
+    end.
 
 -spec maybe_extension(file:filename_all(), optional_filename()) -> filename_extension().
 maybe_extension(File, undefined) ->
@@ -90,9 +90,9 @@ maybe_extension(_File, OriginalFilename) ->
 
 -spec maybe_extension( optional_filename() ) -> filename_extension().
 maybe_extension(undefined) ->
-    "";
+    <<>>;
 maybe_extension(Filename) ->
-    z_convert:to_list(z_string:to_lower(filename:extension(Filename))).
+    z_convert:to_binary(z_string:to_lower(filename:extension(Filename))).
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
 -spec identify_file_direct( file:filename_all(), optional_filename() ) -> {ok, Props::list()} | {error, term()}.
@@ -101,19 +101,19 @@ identify_file_direct(File, OriginalFilename) ->
 
 identify_file_direct_1(File, OriginalFilename) ->
     OsFamily = os_family(),
-	case identify_file_os(OsFamily, File, OriginalFilename) of
-		{error, _} ->
-			%% Last resort, give ImageMagick a try
-			identify_file_imagemagick(OsFamily, File, undefined);
-		{ok, Props} ->
-			%% Images, pdf and ps are further investigated by ImageMagick
-			case proplists:get_value(mime, Props) of
-				<<"image/", _/binary>> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
-				<<"application/pdf">> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
-				<<"application/postscript">> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
-				_Mime -> {ok, Props}
-			end
-	end.
+    case identify_file_os(OsFamily, File, OriginalFilename) of
+        {error, _} ->
+            %% Last resort, give ImageMagick a try
+            identify_file_imagemagick(OsFamily, File, undefined);
+        {ok, Props} ->
+            %% Images, pdf and ps are further investigated by ImageMagick
+            case proplists:get_value(mime, Props) of
+                <<"image/", _/binary>> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
+                <<"application/pdf">> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
+                <<"application/postscript">> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
+                _Mime -> {ok, Props}
+            end
+    end.
 
 -spec os_family() -> os_family().
 os_family() ->
@@ -415,15 +415,14 @@ first_extension([ Ext | _ ]) ->
 %% @doc  Guess the mime type of a file by the extension of its filename.
 -spec guess_mime( file:filename_all() ) -> mime_type().
 guess_mime(File) ->
-	case mimetypes:filename(z_string:to_lower(File)) of
-		[Mime|_] -> maybe_map_mime(Mime);
-		[] -> <<"application/octet-stream">>
-	end.
+    [Mime|_] = mimetypes:path_to_mimes(z_string:to_lower(File)),
+    maybe_map_mime(Mime).
 
 maybe_map_mime(<<"audio/x-wav">>) -> <<"audio/wav">>;
 maybe_map_mime(Mime) -> Mime.
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge
+-spec exif( file:filename_all() ) -> list().
 exif(File) ->
     try
         case exif:read(File) of
@@ -441,8 +440,6 @@ exif(File) ->
 
 %% Detect the exif rotation in an image and swaps width/height accordingly.
 -spec exif_orientation(list()) -> 1|2|3|4|5|6|7|8.
-exif_orientation(undefined) ->
-    1;
 exif_orientation(Exif) when is_list(Exif) ->
     case proplists:get_value(orientation, Exif) of
         <<"Top-left">> -> 1;
@@ -462,8 +459,6 @@ exif_subject_point(Exif, Orientation, Width, Height) ->
     Point1 = maybe_resize_point(Point, Exif, Width, Height),
     maybe_rotate(Orientation, Point1, Width, Height).
 
-extract_subject_point(undefined) ->
-    undefined;
 extract_subject_point(Exif) ->
     case proplists:get_value(subject_area, Exif) of
         [X, Y] -> {X, Y};

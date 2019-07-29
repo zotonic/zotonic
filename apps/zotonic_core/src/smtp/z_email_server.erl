@@ -714,10 +714,12 @@ send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
     gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1).
 
 
+to_binary(ok) ->
+    <<"ok">>;
 to_binary({error, Reason}) ->
     to_binary(Reason);
-to_binary(Error) when is_atom(Error) ->
-    z_convert:to_binary(Error);
+to_binary(Value) when is_atom(Value) ->
+    z_convert:to_binary(Value);
 to_binary(Error) when is_binary(Error) ->
     Error;
 to_binary(Error) when is_list(Error) ->
@@ -728,7 +730,7 @@ to_binary(Error) when is_list(Error) ->
             iolist_to_binary(io_lib:format("~p", [Error]))
     end;
 to_binary(Error) ->
-     iolist_to_binary(io:format("~p", [Error])).
+     iolist_to_binary(io_lib:format("~p", [Error])).
 
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->

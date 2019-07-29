@@ -202,8 +202,6 @@ site_hostname(undefined) ->
     z_convert:to_binary(LocalHostname);
 site_hostname(Context) ->
     case z_context:hostname(Context) of
-        none ->
-            site_hostname(undefined);
         <<"none">> ->
             site_hostname(undefined);
         ConfiguredHostname ->
@@ -334,7 +332,7 @@ ciphers() ->
 
 
 %% @doc Decode a certificate file, return common_name, not_after etc.
--spec decode_cert(file:filename_all()) -> list().
+-spec decode_cert(file:filename_all()) -> {ok, list()} | {error, not_a_certificate}.
 decode_cert(CertFile) ->
     {ok, CertData} = file:read_file(CertFile),
     PemEntries = public_key:pem_decode(CertData),

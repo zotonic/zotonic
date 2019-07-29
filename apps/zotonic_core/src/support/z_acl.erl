@@ -310,11 +310,11 @@ set_anonymous(Context) ->
 
 
 %% @doc Log the user with the id on, fill the acl field of the context
--spec logon(m_rsc:resource(), z:context()) -> z:context().
+-spec logon(m_rsc:resource() | undefined, z:context()) -> z:context().
 logon(Id, Context) ->
     logon(Id, #{}, Context).
 
--spec logon(m_rsc:resource(), map(), z:context()) -> z:context().
+-spec logon(m_rsc:resource() | undefined, map(), z:context()) -> z:context().
 logon(Id, Options, Context) ->
     UserId = m_rsc:rid(Id, Context),
     case z_notifier:first(#acl_logon{ id = UserId, options = Options }, Context) of

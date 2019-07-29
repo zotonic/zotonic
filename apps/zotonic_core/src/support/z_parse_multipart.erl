@@ -49,7 +49,7 @@
         boundary :: binary(),
         content_length :: integer(),
         length :: integer(),
-        percentage = 0 :: pos_integer(),
+        percentage = 0 :: non_neg_integer(),
         buffer :: binary(),
         next_chunk :: more | ok,
         form = #multipart_form{},

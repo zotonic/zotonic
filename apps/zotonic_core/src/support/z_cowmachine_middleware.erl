@@ -54,7 +54,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
     cowmachine:request(Context4, Options).
 
 maybe_overrule_req_headers(#{ bindings := Bindings } = Req) ->
-    case proplists:get_value(zotonic_http_accept, Bindings) of
+    case maps:get(zotonic_http_accept, Bindings, undefined) of
         undefined -> Req;
         Mime -> set_accept(map_mime(Mime), Req)
     end.

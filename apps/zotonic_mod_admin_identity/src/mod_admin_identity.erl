@@ -68,7 +68,8 @@ observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {_Modified, 
                 {_Old, undefined} -> Acc;
                 {_Old, <<>>} -> Acc;
                 {_Old, New} ->
-                    ensure(RscId, email, z_html:unescape(New), Context),
+                    NewRaw = z_html:unescape(New),
+                    ensure(RscId, email, NewRaw, Context),
                     Acc
             end
     end;
@@ -236,11 +237,10 @@ is_existing_key(RscId, Type, Key, Context) ->
         _ -> true
     end.
 
--spec ensure( m_rsc:resource_id(), atom(), atom()|binary()|string(), z:context() ) -> ok | {ok, integer()} | {error, term()}.
+-spec ensure( m_rsc:resource_id(), atom(), atom()|binary(), z:context() ) -> ok | {ok, integer()} | {error, term()}.
 ensure(_RscId, _Type, undefined, _Context) -> ok;
 ensure(_RscId, _Type, <<>>, _Context) -> ok;
-ensure(_RscId, _Type, [], _Context) -> ok;
-ensure(RscId, Type, Key, Context) ->
+ensure(RscId, Type, Key, Context) when is_binary(Key) ->
     m_identity:insert(RscId, Type, Key, Context).
 
 

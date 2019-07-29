@@ -25,16 +25,14 @@
 vary(_Params, _Context) -> default.
 
 render(_Params, _Vars, Context) ->
-    case cowmachine_req:path_info(Context) of
-        undefined ->
-            {ok, <<>>};
-        PathInfo ->
-            PathInfo1 = lists:map(
-                fun
-                    ({K, true}) -> {z_convert:to_binary(K), <<>>};
-                    ({K, V}) -> {z_convert:to_binary(K), z_convert:to_binary(V)}
-                end,
-                PathInfo),
-            {ok, cow_qs:qs(PathInfo1)}
-    end.
+    PathInfo = maps:fold(
+        fun
+            (K, true, Acc) ->
+                [ {z_convert:to_binary(K), <<>>} | Acc ];
+            (K, V, Acc) ->
+                [ {z_convert:to_binary(K), z_convert:to_binary(V)} | Acc ]
+        end,
+        [],
+        cowmachine_req:path_info(Context)),
+    {ok, cow_qs:qs(PathInfo)}.
 
