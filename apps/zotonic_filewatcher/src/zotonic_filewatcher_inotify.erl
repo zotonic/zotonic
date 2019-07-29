@@ -31,9 +31,9 @@
 -export([start_link/0]).
 
 -record(state, {
-    pid,
-    port,
-    executable
+    pid :: pid() | undefined,
+    port :: integer() | undefined,
+    executable :: string()
 }).
 
 %% interface functions
@@ -177,9 +177,7 @@ start_inotify(#state{executable = Executable, port = undefined} = State) ->
     State#state{
         port = Port,
         pid = Pid
-    };
-start_inotify(State) ->
-    State.
+    }.
 
 verb(<<"CREATE">>) -> create;
 verb(<<"MODIFY">>) -> modify;

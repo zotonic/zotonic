@@ -282,9 +282,7 @@ fetch_videoid_from_url(vimeo, Url) ->
     case z_utils:only_digits(P1) of
         true -> z_convert:to_binary(P1);
         false -> <<>>
-    end;
-fetch_videoid_from_url(_Service, _Url) ->
-    <<>>.
+    end.
 
 url_to_service(<<"https://", Url/binary>>) -> url_to_service(Url);
 url_to_service(<<"http://", Url/binary>>) -> url_to_service(Url);

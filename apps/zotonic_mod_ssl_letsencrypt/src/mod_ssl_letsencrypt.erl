@@ -169,7 +169,7 @@ status(Context) ->
     gen_server:call(z_utils:name_for_site(?MODULE, Context), status).
 
 %% @doc Load the current certificate metadata
--spec load_cert(#context{}) -> {ok, list()} | {error, term()}.
+-spec load_cert( z:context() ) -> ok.
 load_cert(Context) ->
     gen_server:cast(z_utils:name_for_site(?MODULE, Context), load_cert).
 

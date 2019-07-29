@@ -737,9 +737,9 @@ check_datetime({{Y,M,D},{H,I,S}} = Date)
     when is_integer(Y), is_integer(M), is_integer(D),
          is_integer(H), is_integer(I), is_integer(S) ->
     Date;
-check_datetime({Y,M,D} = Date)
-    when is_integer(Y), is_integer(M), is_integer(D) ->
-    {Date, {0,0,0}};
+% check_datetime({Y,M,D} = Date)
+%     when is_integer(Y), is_integer(M), is_integer(D) ->
+%     {Date, {0,0,0}};
 check_datetime(_) ->
     undefined.
 
@@ -756,39 +756,38 @@ to_tsv(Text, Level, Args, StemmingLanguage) when is_binary(Text) ->
             {["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"], Args1}
     end.
 
--spec to_float(term()) -> float().
-to_float(undefined) ->
-    undefined;
+-spec to_float(binary()) -> float() | undefined.
 to_float(Text) ->
     case z_string:trim(Text) of
         <<>> -> undefined;
         Text1 -> z_convert:to_float(Text1)
     end.
 
-to_integer(undefined) ->
-    undefined;
+-spec to_integer(binary()) -> integer() | undefined.
 to_integer(Text) ->
     case z_string:trim(Text) of
         <<>> -> undefined;
         Text1 -> z_convert:to_integer(Text1)
     end.
 
+-spec cleanup_tsv_text(binary()) -> binary().
 cleanup_tsv_text(Text) when is_binary(Text) ->
     Text1 = z_string:sanitize_utf8(Text),
     Text2 = iolist_to_binary(re:replace(Text1, <<"[ ",13,10,9,"/-]+">>, <<" ">>, [global])),
     z_string:trim(Text2).
 
-truncate(undefined, _Len) -> undefined;
-truncate(S, Len) -> iolist_to_binary(
-                        z_string:trim(
-                            z_string:to_lower(
-                                truncate_1(S, Len, Len)))).
+-spec truncate(binary(), integer()) -> binary().
+truncate(S, Len) ->
+    iolist_to_binary(
+        z_string:trim(
+            z_string:to_lower(
+                truncate_1(S, Len, Len)))).
 
 truncate_1(_S, 0, _Bytes) ->
-    "";
+    <<>>;
 truncate_1(S, Utf8Len, Bytes) ->
-    case z_string:truncate(S, Utf8Len, "") of
-        T when length(T) > Bytes -> truncate_1(T, Utf8Len-1, Bytes);
+    case z_string:truncate(S, Utf8Len, <<>>) of
+        T when size(T) > Bytes -> truncate_1(T, Utf8Len-1, Bytes);
         L -> L
     end.
 
@@ -999,9 +998,7 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
         {ok, []} ->
             z_db:insert(TableName, [{id, Id}|Columns], Context);
         {ok, _Row}  ->
-            z_db:update(TableName, Id, Columns, Context);
-        {error, _} = Error ->
-            Error
+            z_db:update(TableName, Id, Columns, Context)
     end,
     case Result of
         {ok, _} -> ok;

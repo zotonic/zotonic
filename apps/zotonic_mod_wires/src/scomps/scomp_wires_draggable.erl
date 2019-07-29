@@ -104,8 +104,6 @@ render(Params, _Vars, Context) ->
     {ok, z_render:wire(Id, Actions, Context)}.
 
 
-groups_to_classes([]) -> "";
-groups_to_classes(undefined) -> "";
 groups_to_classes(Groups) ->
 	Groups1 = ["drag_group_" ++ z_convert:to_list(X) || X <- Groups],
 	string:join(Groups1, " ").

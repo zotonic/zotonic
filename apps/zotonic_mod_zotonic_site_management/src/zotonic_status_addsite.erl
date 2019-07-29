@@ -219,39 +219,43 @@ create_gitignore(SiteDir) ->
 -spec copy_skeleton_dir(any(), any(), list(), #context{}) -> ok | {error, Reason :: binary()}.
 copy_skeleton_dir(From, To, Options, Context) ->
     Files = filelib:wildcard(z_convert:to_list(filename:join(From,"*"))),
-    lists:foreach(
-            fun(FromPath) ->
-                case filename:basename(FromPath) of
-                    "." -> ok;
-                    ".." -> ok;
-                    ".git" -> ok;
-                    Basename ->
-                        ToPath = filename:join([To, Basename]),
-                        case filelib:is_dir(FromPath) of
-                            true ->
-                                case filelib:is_file(ToPath) of
-                                    false ->
-                                        case file:make_dir(ToPath) of
-                                            ok ->
-                                                copy_skeleton_dir(FromPath, ToPath, Options, Context);
-                                            {error, _} = Error ->
-                                                lager:error("[zotonic_site_status] Error creating directory ~p: ~p",
-                                                            [ToPath, Error]),
-                                                {error, iolist_to_binary([
-                                                        ?__("Could not create the directory", Context),
-                                                        " ",
-                                                        ToPath
-                                                    ])}
-                                        end;
-                                    true ->
-                                        % Stop recursion, directory exists in both places
-                                        ok
-                                end;
-                            false ->
-                                copy_file(Basename, FromPath, ToPath, Options)
-                        end
-                end
+    lists:foldl(
+            fun
+                (FromPath, ok) ->
+                    case filename:basename(FromPath) of
+                        "." -> ok;
+                        ".." -> ok;
+                        ".git" -> ok;
+                        Basename ->
+                            ToPath = filename:join([To, Basename]),
+                            case filelib:is_dir(FromPath) of
+                                true ->
+                                    case filelib:is_file(ToPath) of
+                                        false ->
+                                            case file:make_dir(ToPath) of
+                                                ok ->
+                                                    copy_skeleton_dir(FromPath, ToPath, Options, Context);
+                                                {error, _} = Error ->
+                                                    lager:error("[zotonic_site_status] Error creating directory ~p: ~p",
+                                                                [ToPath, Error]),
+                                                    {error, iolist_to_binary([
+                                                            ?__("Could not create the directory", Context),
+                                                            " ",
+                                                            ToPath
+                                                        ])}
+                                            end;
+                                        true ->
+                                            % Stop recursion, directory exists in both places
+                                            ok
+                                    end;
+                                false ->
+                                    copy_file(Basename, FromPath, ToPath, Options)
+                            end
+                    end;
+                (_FromPath, {error, _} = Error) ->
+                    Error
             end,
+            ok,
             Files).
 
 copy_file("SITE" ++ Ext, FromPath, ToPath, Options) when Ext == ".erl"; Ext == ".app.src" ->

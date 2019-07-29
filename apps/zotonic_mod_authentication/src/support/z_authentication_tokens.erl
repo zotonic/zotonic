@@ -79,7 +79,7 @@ req_auth_cookie(Context) ->
             end
     end.
 
--spec set_auth_cookie( m_rsc:resource_id(), map(), z:context() ) -> z:context().
+-spec set_auth_cookie( m_rsc:resource_id() | undefined, map(), z:context() ) -> z:context().
 set_auth_cookie(UserId, AuthOptions, Context) ->
     Cookie = encode_auth_token(UserId, AuthOptions, Context),
     CookieOptions = [
@@ -98,7 +98,7 @@ refresh_auth_cookie(RequestOptions, Context) ->
     case z_context:get_cookie(?AUTH_COOKIE, Context) of
         undefined when RequestOptions =:= #{} ->
             z_acl:logoff(Context);
-        undefined when RequestOptions =/= #{} ->
+        undefined ->
             NewAuthOptions = merge_options(RequestOptions, #{}, Context),
             set_auth_cookie(undefined, NewAuthOptions, Context);
         AuthCookie ->
@@ -113,6 +113,7 @@ refresh_auth_cookie(RequestOptions, Context) ->
             end
     end.
 
+-spec merge_options( map(), map(), z:context() ) -> map().
 merge_options(RequestOptions, AuthOptions, Context) ->
     z_notifier:foldl(
         #auth_options_update{
@@ -133,13 +134,13 @@ reset_auth_cookie(Context) ->
     ],
     z_context:set_cookie(?AUTH_COOKIE, <<>>, CookieOptions, Context).
 
--spec encode_auth_token( m_rsc:resource_id(), map(), z:context() ) -> binary().
+-spec encode_auth_token( m_rsc:resource_id() | undefined, map(), z:context() ) -> binary().
 encode_auth_token(UserId, Options, Context) ->
     Term = {auth, UserId, Options, user_secret(UserId, Context)},
     ExpTerm = termit:expiring(Term, session_expires(Context)),
     termit:encode_base64(ExpTerm, auth_secret(Context)).
 
--spec decode_auth_token( binary(), z:context() ) -> {ok, {m_rsc:resource_id(), map(), integer()}} | {error, term()}.
+-spec decode_auth_token( binary(), z:context() ) -> {ok, {m_rsc:resource_id() | undefined, map(), integer()}} | {error, term()}.
 decode_auth_token(AuthCookie, Context) ->
     case termit:decode_base64(AuthCookie, auth_secret(Context)) of
         {ok, ExpTerm} ->

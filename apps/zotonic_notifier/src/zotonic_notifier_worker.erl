@@ -257,7 +257,7 @@ await_exact(Notifier, Event, Msg, Timeout) ->
     after Timeout ->
         {error, timeout}
     end,
-    detach(Event, self(), Notifier),
+    detach(Notifier, Event, self()),
     Result.
 
 %%====================================================================

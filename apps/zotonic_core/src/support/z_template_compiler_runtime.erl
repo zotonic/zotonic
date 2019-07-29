@@ -90,8 +90,12 @@ find_next_template(Filename, [_|Rest]) ->
     find_next_template(Filename, Rest).
 
 
-map_template_cat(Template, None, Context) when None =:= <<>>; None =:= undefined; None =:= [] ->
-    map_template_1(Template, Context);
+% map_template_cat(Template, undefined, Context) ->
+%     map_template_1(Template, Context);
+% map_template_cat(Template, <<>>, Context) ->
+%     map_template_1(Template, Context);
+% map_template_cat(Template, [], Context) ->
+%     map_template_1(Template, Context);
 map_template_cat(Template, [Item|_]=IsA, Context) when is_atom(Item) ->
     map_template_cat_1(Template, IsA, Context);
 map_template_cat(Template, Id, Context) ->
@@ -120,7 +124,7 @@ map_template_cat_1(Template, Stack, Context) when is_binary(Template) ->
 
 
 %% @doc Dynamically find all templates matching the template
--spec map_template_all(template_compiler:template(), map(), term()) -> [template_compiler:template1()].
+-spec map_template_all(template_compiler:template(), map(), term()) -> [template_compiler:template_file()].
 map_template_all({cat, Template}, Vars, Context) ->
     case maps:get(id, Vars, undefined) of
         undefined -> map_template_all_1(Template, Context);
@@ -143,8 +147,12 @@ map_template_all_1(Template, Context) ->
                 template=Key#module_index_key.name
       } || #module_index{filepath=Filename, key=Key} <- Tpls ].
 
-map_template_all_cat(Template, None, Context) when None =:= <<>>; None =:= undefined; None =:= [] ->
-    map_template_all_1(Template, Context);
+% map_template_all_cat(Template, undefined, Context)  ->
+%     map_template_all_1(Template, Context);
+% map_template_all_cat(Template, <<>>, Context) ->
+%     map_template_all_1(Template, Context);
+% map_template_all_cat(Template, [], Context) ->
+%     map_template_all_1(Template, Context);
 map_template_all_cat(Template, [Item|_]=IsA, Context) when is_atom(Item) ->
     map_template_all_cat_1(Template, IsA, Context);
 map_template_all_cat(Template, Id, Context) ->
@@ -540,12 +548,12 @@ to_render_result(V, TplVars, Context) ->
 
 
 %% @doc HTML escape a value
--spec escape(Value :: iolist(), Context :: term()) -> iolist().
+-spec escape(Value :: iolist(), Context :: z:context()) -> binary().
 escape(Value, _Context) ->
     z_html:escape(iolist_to_binary(Value)).
 
 %% @doc Called when compiling a module
--spec trace_compile(atom(), binary(), template_compiler:options(), term()) -> ok.
+-spec trace_compile(atom(), binary(), template_compiler:options(), z:context()) -> ok.
 trace_compile(Module, Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
     z_notifier:notify(
@@ -560,10 +568,11 @@ trace_compile(Module, Filename, Options, Context) ->
         undefined ->
             lager:debug("[~p] Compiling \"~s\"",
                         [z_context:site(Context), Filename])
-    end.
+    end,
+    ok.
 
 %% @doc Called when a template is rendered (could be from an include)
--spec trace_render(binary(), template_compiler:options(), term()) -> ok.
+-spec trace_render(binary(), template_compiler:options(), z:context()) -> ok | {ok, iolist(), iolist()}.
 trace_render(Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
     case z_convert:to_bool(m_config:get_value(mod_development, debug_includes, Context)) of

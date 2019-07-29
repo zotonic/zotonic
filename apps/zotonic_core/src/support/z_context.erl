@@ -248,6 +248,11 @@ hostname(Context) ->
     case z_dispatcher:hostname(Context) of
         undefined -> <<"localhost">>;
         <<>> -> <<"localhost">>;
+        <<"none">> ->
+            case is_request(Context) of
+                true -> cowmachine_req:host(Context);
+                false -> <<"localhost">>
+            end;
         Hostname -> Hostname
     end.
 
@@ -340,7 +345,7 @@ prune_reqdata(undefined) ->
 prune_reqdata(Req) ->
     %% @todo: prune this better, also used by the websocket connection.
     Req#{
-        bindings => [],
+        bindings => #{},
         headers => #{},
         path => <<>>,
         qs => <<>>,
@@ -478,7 +483,7 @@ ensure_qs(#context{ props = Props } = Context) ->
         error ->
             Query = cowmachine_req:req_qs(Context),
             PathInfo = cowmachine_req:path_info(Context),
-            PathArgs = [ {z_convert:to_binary(T), V} || {T,V} <- PathInfo ],
+            PathArgs = [ {z_convert:to_binary(T), V} || {T,V} <- maps:to_list( PathInfo ) ],
             QPropsUrl = Props#{ q => PathArgs++Query },
             ContextQs = Context#context{ props = QPropsUrl },
             % Auth user via cookie - set language
@@ -652,7 +657,7 @@ get_q_all(Key, #context{ props = Props }) ->
 
 
 %% @doc Get all query/post args, filter the zotonic internal args.
--spec get_q_all_noz(z:context()) -> list({string(), term()}).
+-spec get_q_all_noz(z:context()) -> list({binary(), term()}).
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
 
@@ -816,9 +821,9 @@ get_maybe_path_info(_, _Context, Default) ->
 get_path_info(Key, Context, Default) ->
     case is_request(Context) of
         true ->
-            case lists:keyfind(Key, 1, cowmachine_req:path_info(Context)) of
-                {Key, Value} -> Value;
-                false -> Default
+            case maps:find(Key, cowmachine_req:path_info(Context)) of
+                {ok, Value} -> Value;
+                error -> Default
             end;
         false ->
             Default

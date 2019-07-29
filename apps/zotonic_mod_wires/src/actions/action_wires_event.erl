@@ -127,7 +127,7 @@ script(visible, TriggerId, _Trigger, PostbackMsgJS, _PickledPostback, ActionsJS,
 
 script(EventType, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS, _Propagate, _Args, Context) when is_tuple(EventType) ->
     case z_notifier:first(#action_event_type{
-            event = when_is_binary_to_list(EventType),
+            event = EventType,
             trigger_id = TriggerId,
             trigger = Trigger,
             postback_js = PostbackMsgJS,
@@ -155,9 +155,3 @@ script(EventType, _TriggerId, Trigger, PostbackMsgJS, _PickledPostback, ActionsJ
         end,
         <<" } );\n">>
     ], Context}.
-
-
-when_is_binary_to_list(B) when is_binary(B) ->
-    z_convert:to_list(B);
-when_is_binary_to_list(V) ->
-    V.

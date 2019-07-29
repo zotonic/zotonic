@@ -126,7 +126,6 @@ prep_score(PreppedBlock, StoredAnswer, _Context) ->
         false ->
             K = case Answer of
                 [Ans|_] -> Ans;
-                Ans when is_binary(Ans) -> Ans;
                 _ -> <<>>
             end,
             [K, proplists:get_value(K, Points, 0)];

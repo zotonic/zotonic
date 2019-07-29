@@ -55,16 +55,12 @@
       {ok, list( zotonic_fileindexer:fileindex() )}
     | {error, term()}.
 find(App, SubDir, OptPattern) when is_atom(App) ->
-    case app_dir(App) of
-        {ok, AppDir} ->
-            case filelib:is_dir(AppDir) of
-                true ->
-                    find_1(App, AppDir, SubDir, pattern(OptPattern));
-                false ->
-                    {error, notfound}
-            end;
-        {error, _} = Error ->
-            Error
+    {ok, AppDir} = app_dir(App),
+    case filelib:is_dir(AppDir) of
+        true ->
+            find_1(App, AppDir, SubDir, pattern(OptPattern));
+        false ->
+            {error, notfound}
     end.
 
 find_1(App, AppDir, SubDir, Pattern) ->

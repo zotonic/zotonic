@@ -32,6 +32,15 @@ dev:
 test: compile
 	bin/zotonic runtests
 
+
+.PHONY: xref dialyzer
+
+xref: compile
+	./rebar3 xref
+
+dialyzer: compile
+	./rebar3 dialyzer
+
 # Generate documentation
 .PHONY: docs edocs
 docs:

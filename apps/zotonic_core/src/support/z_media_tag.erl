@@ -48,27 +48,15 @@
 scomp_viewer(undefined, _Options, _Context) ->
     <<>>;
 scomp_viewer(IdOrName, Options, Context) ->
-    case viewer(IdOrName, Options, Context) of
-        {ok, Rendered} ->
-            Rendered;
-        {error, Reason} ->
-            lager:debug("[~p] Could not render media-viewer for ~p (~p), error ~p",
-                        [z_context:site(Context), IdOrName, Options, Reason]),
-            <<>>
-    end.
+    {ok, Rendered} = viewer(IdOrName, Options, Context),
+    Rendered.
 
 %% @doc Called from template, render the media tag for some resource/medium
 scomp_tag(undefined, _Options, _Context) ->
     <<>>;
 scomp_tag(IdOrName, Options, Context) ->
-    case tag(IdOrName, Options, Context) of
-        {ok, Rendered} ->
-            Rendered;
-        {error, Reason} ->
-            lager:debug("[~p] Could not render media-tag for ~p (~p), error ~p",
-                        [z_context:site(Context), IdOrName, Options, Reason]),
-            <<>>
-    end.
+    {ok, Rendered} = tag(IdOrName, Options, Context),
+    Rendered.
 
 %% @doc Called from template, render the media url for some resource/medium
 scomp_url(undefined, _Options, _Context) ->
@@ -77,28 +65,29 @@ scomp_url(IdOrName, Options, Context) ->
     case url(IdOrName, Options, Context) of
         {ok, Rendered} ->
             Rendered;
-        {error, Reason} ->
-            lager:debug("[~p] Could not render media-url for ~p (~p), error ~p",
-                        [z_context:site(Context), IdOrName, Options, Reason]),
+        {error, enoent} ->
             <<>>
     end.
 
-
-%% @spec viewer(MediaReference, Options, Context) -> {ok, HtmlFragMent} | {error, Reason}
-%%   MediaReference = Filename | RscId | MediaPropList
 %% @doc Generate a html fragment for displaying a medium.  This can generate audio or video player html.
+-spec viewer(MediaReference, list(), z:context()) -> {ok, iodata()}
+    when MediaReference :: undefined
+                         | m_rsc:resource_id()
+                         | #rsc_list{}
+                         | proplists:list()
+                         | file:filename_all().
 viewer(undefined, _Options, _Context) ->
-    {ok, []};
+    {ok, <<>>};
 viewer([], _Options, _Context) ->
-    {ok, []};
+    {ok, <<>>};
 viewer(#rsc_list{list=[]}, _Options, _Context) ->
-    {ok, []};
+    {ok, <<>>};
 viewer(#rsc_list{list=[Id|_]}, Options, Context) ->
     viewer(Id, Options, Context);
 viewer(Name, Options, Context) when is_atom(Name) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} -> viewer(Id, Options, Context);
-        _ -> {ok, []}
+        _ -> {ok, <<>>}
     end;
 viewer(Id, Options, Context) when is_integer(Id) ->
     case m_media:get(Id, Context) of
@@ -107,8 +96,8 @@ viewer(Id, Options, Context) when is_integer(Id) ->
     end;
 viewer([{_Prop, _Value}|_] = Props, Options, Context) ->
     Id = proplists:get_value(id, Props),
-    case z_convert:to_list(proplists:get_value(filename, Props)) of
-        None when None == []; None == undefined ->
+    case proplists:get_value(filename, Props) of
+        None when None =:= <<>>; None =:= undefined; None =:= <<>> ->
             viewer1(Id, Props, undefined, Options, Context);
         Filename ->
             FilePath = filename_to_filepath(Filename, Context),
@@ -123,23 +112,27 @@ viewer(Filename, Options, Context) ->
             viewer1(undefined, Props, FilePath, Options, Context);
         {error, _} ->
             % Unknown content type, we just can't display it.
-            {ok, []}
+            {ok, <<>>}
     end.
 
 
-    %% @doc Try to generate Html for the media reference.  First check if a module can do this, then
-    %% check the normal image tag.
-    viewer1(Id, Props, FilePath, Options, Context) ->
-        case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options}, Context) of
-            {ok, Html} -> {ok, Html};
-            undefined -> tag(Props, Options, Context)
-        end.
+%% @doc Try to generate Html for the media reference.  First check if a module can do this, then
+%% check the normal image tag.
+viewer1(Id, Props, FilePath, Options, Context) ->
+    case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options}, Context) of
+        {ok, Html} -> {ok, Html};
+        undefined -> tag(Props, Options, Context)
+    end.
 
 
-%% @spec tag(MediaReference, Options, Context) -> {ok, TagString} | {error, Reason}
-%%   MediaReference = Filename | RscId | MediaPropList
 %% @doc Generate a HTML image tag for the image with the filename and options. The medium _must_ be in
 %% a format for which we can generate a preview.  Note that this will never generate video or audio.
+-spec tag(MediaReference, list(), z:context()) -> {ok, iodata()}
+    when MediaReference :: undefined
+                         | m_rsc:resource_id()
+                         | #rsc_list{}
+                         | proplists:list()
+                         | file:filename_all().
 tag(undefined, _Options, _Context) ->
     {ok, <<>>};
 tag([], _Options, _Context) ->
@@ -253,7 +246,7 @@ url(undefined, _Options, _Context) ->
 url(Name, Options, Context) when is_atom(Name) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} -> url(Id, Options, Context);
-        _ -> {ok, []}
+        _ -> {ok, <<>>}
     end;
 url(Id, Options, Context) when is_integer(Id) ->
     url(m_media:depiction(Id, Context), Options, Context);
@@ -261,7 +254,7 @@ url([{_Prop, _Value}|_] = Props, Options, Context) ->
     Id = proplists:get_value(id, Props),
     case mediaprops_filename(Id, Props, Context) of
         None when None =:= []; None =:= <<>>; None =:= undefined ->
-            {ok, []};
+            {ok, <<>>};
         Filename ->
             Options1 = opt_crop_center(Id, Options, Context),
             {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options1, Context),
@@ -285,11 +278,11 @@ url1(File, Options, Context) ->
     end.
 
 % Given the media properties of an id, find the depicting file
-mediaprops_filename(Id, undefined, Context) ->
-    case z_notifier:first({media_stillimage, Id, []}, Context) of
-        {ok, Filename} -> Filename;
-        undefined -> undefined
-    end;
+% mediaprops_filename(Id, undefined, Context) ->
+%     case z_notifier:first({media_stillimage, Id, []}, Context) of
+%         {ok, Filename} -> Filename;
+%         undefined -> undefined
+%     end;
 mediaprops_filename(undefined, Props, _Context) ->
     case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
         [] -> z_convert:to_list(proplists:get_value(filename, Props));
@@ -416,10 +409,7 @@ props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
                 $.,
                 Checksum
             ],
-            props2url(Rest, Width, Height, [MC|Acc], Context);
-        {error, _Reason} = Error ->
-            lager:info("error looking up mediaclass ~p: ~p", [Class, Error]),
-            props2url(Rest, Width, Height, Acc, Context)
+            props2url(Rest, Width, Height, [MC|Acc], Context)
     end;
 props2url([{Prop}|Rest], Width, Height, Acc, Context) ->
     props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc], Context);

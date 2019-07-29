@@ -878,7 +878,7 @@ save_preview(RscId, Data, Mime, Context) ->
             {error, eacces}
     end.
 
--spec make_preview_unique(integer()|insert_rsc, string(), #context{}) -> file:filename().
+-spec make_preview_unique(integer()|insert_rsc, binary(), z:context()) -> file:filename().
 make_preview_unique(RscId, Extension, Context) ->
     Basename = iolist_to_binary([id_to_list(RscId), $-, z_ids:identifier(16), Extension]),
     Filename = filename:join([

@@ -95,9 +95,7 @@ escape_check(V) ->
     z_html:escape_check(V).
 
 qprops(Block) when is_list(Block) ->
-    lists:filter(fun keep_qprop/1, Block);
-qprops(Block) ->
-    Block.
+    lists:filter(fun keep_qprop/1, Block).
 
 keep_qprop({prompt, _}) -> true;
 keep_qprop(_) -> false.

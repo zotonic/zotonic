@@ -87,7 +87,6 @@ get_req(headers, Context) -> cowmachine_req:get_req_headers(Context);
 get_req(user_agent, Context) -> cowmachine_req:get_req_header(<<"user-agent">>, Context);
 get_req(referer, Context) -> cowmachine_req:get_req_header(<<"referer">>, Context);
 get_req(referrer, Context) -> get_req(referer, Context);
-get_req(is_crawler, Context) -> z_user_agent:is_crawler(Context);
 get_req(_Key, _Context) -> undefined.
 
 

@@ -93,9 +93,7 @@ handle_cast(cleanup, State) ->
         {ok, 0} ->
             {noreply, State, ?CLEANUP_TIMEOUT_LONG};
         {ok, _} ->
-            {noreply, State, ?CLEANUP_TIMEOUT_SHORT};
-        {error, _} ->
-            {noreply, State, ?CLEANUP_TIMEOUT_LONG}
+            {noreply, State, ?CLEANUP_TIMEOUT_SHORT}
     end;
 
 handle_cast(Message, State) ->

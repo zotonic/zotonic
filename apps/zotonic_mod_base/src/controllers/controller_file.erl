@@ -128,8 +128,6 @@ content_types_provided(Context) ->
     case z_context:get(?MODULE, Context) of
         {error, _} ->
             {[ {<<"text">>, <<"plain">>, []} ], Context};
-        #z_file_info{ mime = Mime } when is_list(Mime) ->
-            {[ z_convert:to_binary(Mime) ], Context};
         #z_file_info{ mime = Mime } ->
             {[ Mime ], Context}
     end.

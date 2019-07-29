@@ -240,57 +240,61 @@ insert_recipient(ListId, Email, WelcomeMessageType, Context) ->
     insert_recipient(ListId, Email, [], WelcomeMessageType, Context).
 
 insert_recipient(ListId, Email, Props, WelcomeMessageType, Context) ->
-	true = z_acl:rsc_visible(ListId, Context),
-	Email1 = z_string:to_lower(Email),
-	Rec = z_db:q_row("select id, is_enabled, confirm_key
-					  from mailinglist_recipient
-					  where mailinglist_id = $1
-					    and email = $2", [ListId, Email1], Context),
-	ConfirmKey = binary_to_list(z_ids:id(20)),
-	{RecipientId, WelcomeMessageType1} = case Rec of
-		{RcptId, true, _OldConfirmKey} ->
-			%% Present and enabled
-			{RcptId, silent};
-		{RcptId, false, OldConfirmKey} ->
-			%% Present, but not enabled
-			NewConfirmKey = case OldConfirmKey of undefined -> ConfirmKey; _ -> OldConfirmKey end,
-			case WelcomeMessageType of
-				send_confirm ->
-					case NewConfirmKey of
-						OldConfirmKey -> nop;
-						_ -> z_db:q("update mailinglist_recipient
-									 set confirm_key = $2
-									 where id = $1", [RcptId, NewConfirmKey], Context)
-					end,
-					{RcptId, {send_confirm, NewConfirmKey}};
-				_ ->
-					z_db:q("update mailinglist_recipient
-							set is_enabled = true,
-							    confirm_key = $2
-							where id = $1", [RcptId, NewConfirmKey], Context),
-					{RcptId, WelcomeMessageType}
-			end;
-		undefined ->
-			%% Not present
-			IsEnabled = case WelcomeMessageType of
-				send_welcome -> true;
-				send_confirm -> false;
-				silent -> true
-			end,
-			Cols = [
-				{mailinglist_id, ListId},
-				{is_enabled, IsEnabled},
-				{email, Email1},
-				{confirm_key, ConfirmKey}
-			] ++ [ {K, case is_list(V) of true-> z_convert:to_binary(V); false -> V end} || {K,V} <- Props ],
-			{ok, RcptId} = z_db:insert(mailinglist_recipient, Cols, Context),
-			{RcptId, WelcomeMessageType}
-	end,
-	case WelcomeMessageType1 of
-		none -> nop;
-		_ -> z_notifier:notify(#mailinglist_message{what=WelcomeMessageType1, list_id=ListId, recipient=RecipientId}, Context)
-	end,
-	ok.
+	case z_acl:rsc_visible(ListId, Context) of
+        false ->
+            {error, eacces};
+        true ->
+        	Email1 = z_string:to_lower(Email),
+        	Rec = z_db:q_row("select id, is_enabled, confirm_key
+        					  from mailinglist_recipient
+        					  where mailinglist_id = $1
+        					    and email = $2", [ListId, Email1], Context),
+        	ConfirmKey = binary_to_list(z_ids:id(20)),
+        	{RecipientId, WelcomeMessageType1} = case Rec of
+        		{RcptId, true, _OldConfirmKey} ->
+        			%% Present and enabled
+        			{RcptId, silent};
+        		{RcptId, false, OldConfirmKey} ->
+        			%% Present, but not enabled
+        			NewConfirmKey = case OldConfirmKey of undefined -> ConfirmKey; _ -> OldConfirmKey end,
+        			case WelcomeMessageType of
+        				send_confirm ->
+        					case NewConfirmKey of
+        						OldConfirmKey -> nop;
+        						_ -> z_db:q("update mailinglist_recipient
+        									 set confirm_key = $2
+        									 where id = $1", [RcptId, NewConfirmKey], Context)
+        					end,
+        					{RcptId, {send_confirm, NewConfirmKey}};
+        				_ ->
+        					z_db:q("update mailinglist_recipient
+        							set is_enabled = true,
+        							    confirm_key = $2
+        							where id = $1", [RcptId, NewConfirmKey], Context),
+        					{RcptId, WelcomeMessageType}
+        			end;
+        		undefined ->
+        			%% Not present
+        			IsEnabled = case WelcomeMessageType of
+        				send_welcome -> true;
+        				send_confirm -> false;
+        				silent -> true
+        			end,
+        			Cols = [
+        				{mailinglist_id, ListId},
+        				{is_enabled, IsEnabled},
+        				{email, Email1},
+        				{confirm_key, ConfirmKey}
+        			] ++ [ {K, case is_list(V) of true-> z_convert:to_binary(V); false -> V end} || {K,V} <- Props ],
+        			{ok, RcptId} = z_db:insert(mailinglist_recipient, Cols, Context),
+        			{RcptId, WelcomeMessageType}
+        	end,
+        	case WelcomeMessageType1 of
+        		none -> nop;
+        		_ -> z_notifier:notify(#mailinglist_message{what=WelcomeMessageType1, list_id=ListId, recipient=RecipientId}, Context)
+        	end,
+        	ok
+    end.
 
 
 %% @doc Update a single recipient; changing e-mail address or name details.

@@ -78,9 +78,13 @@ start_link(Args) when is_list(Args) ->
 init(Hostname, SessionCount, PeerName, Options) ->
     case SessionCount > 20 of
         false ->
-            State = #state{options = Options, peer=PeerName, hostname=Hostname},
-            Banner = io_lib:format("~s ESMTP Zotonic", [State#state.hostname]),
-            {ok, Banner, State};
+            State = #state{
+                options = Options,
+                peer = PeerName,
+                hostname = Hostname,
+                banner = io_lib:format("~s ESMTP Zotonic", [Hostname])
+            },
+            {ok, State#state.banner, State};
         true ->
             lager:warning("SMTP Connection limit exceeded (~p)", [SessionCount]),
             {stop, normal, io_lib:format("421 ~s is too busy to accept mail right now", [Hostname])}
@@ -119,11 +123,7 @@ check_dnsbl(State) ->
                        [inet:ntoa(State#state.peer), Service]),
             Error = io_lib:format("451 ~s has recently sent spam. If you are not a spammer, please try later. Listed at ~s",
                                  [inet:ntoa(State#state.peer), Service]),
-            {error, Error, State};
-        {error, _} = Error ->
-            lager:warning("SMTP DNSBL check for ~p returns ~p -- accepting connection",
-                          [State#state.peer, Error]),
-            {ok, State}
+            {error, Error, State}
     end.
 
 
@@ -138,7 +138,7 @@ handle_RCPT(To, State) ->
     % For bounces:
     % - To = <noreply+MSGID@example.org>
     % - Return-Path header should be present and contains <>
-    case zotonic_listen_smtp_receive:get_host(To) of
+    case zotonic_listen_smtp_receive:get_site(To) of
         {ok, _} ->
             {ok, State};
         {error, unknown_host} ->
@@ -146,10 +146,10 @@ handle_RCPT(To, State) ->
             {error, "551 User not local. Relay denied.", State};
         {error, not_running} ->
             lager:info("SMTP not accepting mail for ~p: site not running", [To]),
-            {error, "453 System not accepting network messages.", State};
-        {error, Reason} ->
-            lager:info("SMTP not accepting mail for ~p: ~p", [Reason]),
-            {error, "451 Server error. Please try again later.", State}
+            {error, "453 System not accepting network messages.", State}
+        % {error, Reason} ->
+        %     lager:info("SMTP not accepting mail for ~p: ~p", [Reason]),
+        %     {error, "451 Server error. Please try again later.", State}
     end.
 
 -spec handle_RCPT_extension(Extension :: binary(), State :: #state{}) -> {'ok', #state{}} | 'error'.

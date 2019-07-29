@@ -103,10 +103,10 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
                     % The account has been disabled after verification, or
                     % verification flag not set, account didn't need verification
                     { #{ status => error, error => disabled, user_id => UserId }, Context }
-            end;
-        {error, _Reason} ->
-            % Hide other error codes, map to generic 'pw' error
-            { #{ status => error, error => pw }, Context }
+            end
+        % {error, _Reason} ->
+        %     % Hide other error codes, map to generic 'pw' error
+        %     { #{ status => error, error => pw }, Context }
     end;
 logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
     case m_identity:get_username(UserId, Context) of

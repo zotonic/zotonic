@@ -64,7 +64,7 @@ user_groups(Context) ->
     {ok, z_acl:user_groups(Context)}.
 
 
--spec list_tokens( m_rsc:resource_id() | undefined, z:context() ) -> {ok, map()}.
+-spec list_tokens( m_rsc:resource_id() | undefined, z:context() ) -> {ok, [ map() ]} | {error, eacces}.
 list_tokens(UserId, Context) when is_integer(UserId) ->
     case is_allowed(UserId, Context) of
         true ->

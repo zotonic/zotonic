@@ -40,7 +40,7 @@ resource_exists(Context) ->
 previously_existed(Context) ->
     {true, Context}.
 
--spec moved_temporarily(#context{}) -> tuple().
+-spec moved_temporarily(z:context()) -> {{true, binary()}, z:context()}.
 moved_temporarily(Context) ->
     Context1 = mod_translation:set_user_language(z_context:get_q(<<"code">>, Context), Context),
     Page = z_context:get_q(<<"p">>, Context1),
@@ -53,11 +53,12 @@ moved_temporarily(Context) ->
                     Context1),
     {{true, AbsUrl}, Context1}.
 
+-spec moved_permanently(z:context()) -> {false, z:context()}.
 moved_permanently(Context) ->
     {false, Context}.
 
 
--spec add_language(string(), #context{}) -> binary().
+-spec add_language(iodata(), z:context()) -> binary().
 add_language(Url, Context) ->
-    iolist_to_binary([$/, z_context:language(Context), Url]).
+    iolist_to_binary([$/, z_convert:to_binary(z_context:language(Context)), Url]).
 

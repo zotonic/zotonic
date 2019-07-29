@@ -265,7 +265,7 @@
 %% @doc e-mail notification used by z_email and z_email_server.
 -record(email, {
     to = [] :: list() | binary(),
-    cc = [] :: list(),
+    cc = [] :: list() | binary() | undefined,
     bcc = [] :: list(),
     from = <<>> :: binary() | string(),
     reply_to,
@@ -337,7 +337,7 @@
     is_final :: boolean(),
     reason :: retry | illegal_address | smtphost | sender_disabled | error,
     retry_ct :: non_neg_integer() | undefined,
-    status :: binary()
+    status :: binary() | undefined
 }).
 
 
@@ -939,8 +939,8 @@
 %% Return: {ok, <<"inline">>} or {ok, <<"attachment">>}
 -record(export_resource_content_disposition, {
     dispatch :: atom(),
-    id :: integer(),
-    content_type :: string()
+    id :: m_rsc:resource_id() | undefined,
+    content_type :: binary()
 }).
 
 %% @doc mod_export - Check if the resource or dispatch is visible for export.
@@ -948,14 +948,14 @@
 %% Return: ``true`` or ``false``
 -record(export_resource_visible, {
     dispatch :: atom(),
-    id :: integer() | undefined
+    id :: m_rsc:resource_id() | undefined
 }).
 
 %% @doc mod_export -
 %% Return: ``{ok, "text/csv"})`` for the dispatch rule/id export.
 -record(export_resource_content_type, {
     dispatch :: atom(),
-    id :: integer() | undefined
+    id :: m_rsc:resource_id() | undefined
 }).
 
 %% @doc mod_export - return the {ok, Filename} for the content disposition.
@@ -963,8 +963,8 @@
 %% Return: ``{ok, Filename}}`` or ``undefined``
 -record(export_resource_filename, {
     dispatch :: atom(),
-    id :: integer() | undefined,
-    content_type :: string()
+    id :: m_rsc:resource_id() | undefined,
+    content_type :: binary()
 }).
 
 %% @doc mod_export - Fetch the header for the export.
@@ -972,8 +972,8 @@
 %% Return: ``{ok, list()|binary()}``, ``{ok, list()|binary(), ContinuationState}`` or ``{error, Reason}``
 -record(export_resource_header, {
     dispatch :: atom(),
-    id :: integer() | undefined,
-    content_type :: string()
+    id :: m_rsc:resource_id() | undefined,
+    content_type :: binary()
 }).
 
 %% @doc mod_export - fetch a row for the export, can return a list of rows, a binary, and optionally a continuation state.
@@ -983,8 +983,8 @@
 %% Return: ``{ok, Values|binary()}``, ``{ok, Values|binary(), ContinuationState}`` or ``{error, Reason}``
 -record(export_resource_data, {
     dispatch :: atom(),
-    id :: integer() | undefined,
-    content_type :: string(),
+    id :: m_rsc:resource_id() | undefined,
+    content_type :: binary(),
     state :: term()
 }).
 
@@ -993,8 +993,8 @@
 %% Return: ``{ok, binary()}``, ``{ok, binary(), ContinuationState}`` or ``{error, Reason}``
 -record(export_resource_encode, {
     dispatch :: atom(),
-    id :: integer() | undefined,
-    content_type :: string(),
+    id :: m_rsc:resource_id() | undefined,
+    content_type :: binary(),
     data :: term(),
     state :: term()
 }).
@@ -1004,8 +1004,8 @@
 %% Return: ``{ok, binary()}`` or ``{error, Reason}``
 -record(export_resource_footer, {
     dispatch :: atom(),
-    id :: integer() | undefined,
-    content_type :: string(),
+    id :: m_rsc:resource_id() | undefined,
+    content_type :: binary(),
     state :: term()
 }).
 

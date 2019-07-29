@@ -342,11 +342,11 @@ merge_delete(WinnerId, LoserId, Options, Context) ->
     m_rsc_update:merge_delete(WinnerId, LoserId, Options, Context).
 
 %% @doc Update a resource
--spec update(resource(), props(), z:context()) -> {ok, resource()}.
+-spec update(resource(), props(), z:context()) -> {ok, resource()} | {error, term()}.
 update(Id, Props, Context) ->
     m_rsc_update:update(Id, Props, Context).
 
--spec update(resource(), props(), list(), z:context()) -> {ok, resource()}.
+-spec update(resource(), props(), list(), z:context()) -> {ok, resource()} | {error, term()}.
 update(Id, Props, Options, Context) ->
     m_rsc_update:update(Id, Props, Options, Context).
 

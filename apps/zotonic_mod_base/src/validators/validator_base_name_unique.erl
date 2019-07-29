@@ -27,8 +27,8 @@ render_validator(name_unique, TriggerId, TargetId, Args, Context)  ->
     Script = [<<"z_add_validator(\"">>, TriggerId, <<"\", \"postback\", ">>, JsObject, <<");\n">>],
     {Args, Script}.
 
--spec validate(name_unique, binary(), term(), list(), #context{}) ->
-    {{ok, []}, #context{}} | {{error, m_rsc:resource(), atom() | binary()}, #context{}}.
+-spec validate(name_unique, binary(), term(), list(), z:context()) ->
+    {{ok, binary()}, z:context()} | {{error, m_rsc:resource(), atom() | binary()}, #context{}}.
 validate(name_unique, Id, Value, Args, Context) ->
     Message = proplists:get_value(failure_message, Args, invalid),
     Value1 = z_string:trim(Value),
@@ -53,7 +53,7 @@ validate(name_unique, Id, Value, Args, Context) ->
     end.
 
 %% @doc Handle the validation during form entry.
--spec event(#postback{}, list()) -> #context{}.
+-spec event(#postback{}, z:context()) -> z:context().
 event(#postback{message = {validate, Args}, trigger = TriggerId}, Context) ->
     Value = z_context:get_q(triggervalue, Context),
     {IsValid, ContextValidated} = case validate(name_unique, TriggerId, Value, Args, Context) of

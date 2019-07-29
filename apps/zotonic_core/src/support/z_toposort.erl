@@ -22,10 +22,11 @@
     sort/1
 ]).
 
+-type name() :: term().
+-type topoitem() :: {Name::name(), Depends::list(), Provides::list()}.
 
 %% @doc Return the topological sort of a list.
--type topoitems() :: {Name::term(), Depends::list(), Provides::list()}.
--spec sort(topoitems()) -> {ok, list()} | {error, {cyclic, list()}}.
+-spec sort( [ topoitem() ] ) -> {error, {cyclic, [name()]}} | {ok, [name()]}.
 sort([]) ->
     {ok, []};
 sort(L) ->
