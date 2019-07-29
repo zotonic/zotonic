@@ -52,6 +52,6 @@ is_file_acceptable(File, MediaProps) when is_list(MediaProps) ->
 %     {ok, Bin} = file:read_file(File),
 %     is_acceptable_svg(Bin);
 is_file_acceptable_1(<<"unacceptable-mime-type">>, _File, _MediaProps) ->
-    false.
+    false;
 is_file_acceptable_1(_Mime, _File, _MediaProps) ->
     true.
