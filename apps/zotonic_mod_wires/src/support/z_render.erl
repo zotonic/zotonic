@@ -601,7 +601,7 @@ render_html_opt_all(true, Template, Vars, Context) ->
 
 %%% SIMPLE FUNCTION TO SHOW DIALOG OR GROWL (uses the dialog and growl actions) %%%
 
-dialog(undefind, Template, Vars, Context) ->
+dialog(undefined, Template, Vars, Context) ->
     dialog(<<>>, Template, Vars, Context);
 dialog(Title, Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
