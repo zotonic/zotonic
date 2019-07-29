@@ -31,9 +31,9 @@
 -export([start_link/0]).
 
 -record(state, {
-    pid,
-    port,
-    executable
+    pid :: pid() | undefined,
+    port :: integer() | undefined,
+    executable :: string()
 }).
 
 %% interface functions
@@ -167,9 +167,7 @@ start_fswatch(State=#state{executable = Executable, port = undefined}) ->
     State#state{
         port = Port,
         pid = Pid
-    };
-start_fswatch(State) ->
-    State.
+    }.
 
 extract_filename_verb(Line) ->
     Lines = binary:split(Line, <<0>>, [global]),

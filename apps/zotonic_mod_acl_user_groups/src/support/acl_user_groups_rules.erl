@@ -45,6 +45,7 @@
 
 -type module_rule() :: {module_name(), module_action(), user_group_id(), allow()}.
 -type rsc_rule() :: {content_group_id(), {category_id(), rsc_action(), only_if_owner(), allow()}, user_group_id()}.
+-type collab_rule() :: {collab, rsc_action(), collab}.
 
 -type rule() :: rsc_rule() | module_rule().
 -type user_group_path() :: {user_group_id(), list(user_group_id())}.
@@ -74,13 +75,13 @@ rule_content_groups(Rules) ->
         || R <- Rules
     ]).
 
--spec expand_rsc(edit|publish, #context{}) -> list(rule()).
+-spec expand_rsc(edit|publish, z:context()) -> list(rule()).
 expand_rsc(State, Context) ->
     GroupTree = m_hierarchy:menu(content_group, Context),
     UserTree = m_hierarchy:menu(acl_user_group, Context),
     expand_rsc(State, m_acl_rule:all_rules(rsc, State, Context), GroupTree, UserTree, Context).
 
--spec expand_module(edit|publish, list(), #context{}) -> list(module_rule()).
+-spec expand_module(edit|publish, list(), z:context()) -> list(module_rule()).
 expand_module(State, UserTree, Context) ->
     Modules = z_module_manager:active(Context),
     Modules1 = [ {<<>>, Modules} | [ {z_convert:to_binary(M),[M]} || M <- Modules ] ],
@@ -88,7 +89,7 @@ expand_module(State, UserTree, Context) ->
     Rules = expand_rule_rows(module, Modules1, RuleRows, Context),
     [ {M,A,GId,IsAllow} || {x,{M,A,_IsOwner,IsAllow},GId} <- expand_rules([{x,[]}], Rules, UserTree, Context) ].
 
--spec expand_collab(edit|publish, #context{}) -> list(rsc_rule()).
+-spec expand_collab(edit|publish, z:context()) -> list( collab_rule() ).
 expand_collab(State,Context) ->
     CategoryTree = m_category:menu(Context),
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(collab, State, Context)),
@@ -96,7 +97,7 @@ expand_collab(State,Context) ->
     Rules = expand_rule_rows(category_id, Cs, RuleRows, Context),
     [ {collab, Action, collab} || {undefined, Action, undefined} <- Rules ].
 
--spec expand_rsc(edit|publish, list(), list(), list(), #context{}) -> list(rsc_rule()).
+-spec expand_rsc(edit|publish, list(), list(), list(), z:context()) -> list(rsc_rule()).
 expand_rsc(_State, RscRules, GroupTree, UserTree, Context) ->
     CategoryTree = m_category:menu(Context),
     RuleRows = resort_deny_rules(RscRules),

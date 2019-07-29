@@ -37,7 +37,7 @@ filled_in(A) ->
 
 is_filled_in(<<>>) ->
     false;
-is_filled_in(<<C, T/binary>>) when C =:= 32, C=:= 9 ->
+is_filled_in(<<C, T/binary>>) when C =:= 32; C=:= 9 ->
     is_filled_in(T);
 is_filled_in(<<"<p></p>">>) ->
     false;

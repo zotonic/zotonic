@@ -21,7 +21,7 @@
 
 -export([
     received/9,
-    get_host/1
+    get_site/1
 ]).
 
 -export([
@@ -55,7 +55,7 @@ received(Recipient, ParsedEmail,
          From, Peer, Reference,
          {Type, Subtype}, Headers, Params,
          Body, Data) ->
-    case get_host(Recipient) of
+    case get_site(Recipient) of
         {ok, {LocalPart, LocalTags, Domain, Host}} ->
             Context = z_context:new(Host),
             z_notifier:notify(
@@ -97,7 +97,7 @@ received(Recipient, ParsedEmail,
                 undefined -> {error, unknown_recipient};
                 Other -> {ok, Other}
             end;
-        {error, unkown_host} ->
+        {error, unknown_host} ->
             lager:info("SMTP dropping message, unknown host for recipient: ~p", [Recipient]),
             {error, unknown_host};
         {error, not_running} ->
@@ -105,14 +105,17 @@ received(Recipient, ParsedEmail,
             {error, not_running}
     end.
 
-get_host(Recipient) ->
+-spec get_site( binary() ) ->
+        {ok, {binary(), binary(), binary(), atom()}}
+      | {error, unknown_host | not_running}.
+get_site(Recipient) ->
     [Username, Domain] = binstr:split(Recipient, <<"@">>, 2),
     [LocalPart|LocalTags] = binstr:split(Username, <<"+">>),
     case z_sites_dispatcher:get_site_for_hostname(z_string:to_lower(Domain)) of
-        {ok, Host} ->
-            case z_sites_manager:wait_for_running(Host) of
+        {ok, Site} ->
+            case z_sites_manager:wait_for_running(Site) of
                 ok ->
-                    {ok, {LocalPart, LocalTags, Domain, Host}};
+                    {ok, {LocalPart, LocalTags, Domain, Site}};
                 {error, bad_name} ->
                     {error, unknown_host};
                 {error, _Reason} ->

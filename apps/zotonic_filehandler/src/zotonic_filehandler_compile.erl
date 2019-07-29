@@ -224,7 +224,7 @@ ebin_path(SrcFile) ->
                 [] -> EbinDir;
                 _ ->
                     AppName = lists:last(SrcPath),
-                    case code:priv_dir(z_convert:to_list(AppName)) of
+                    case code:priv_dir(z_convert:to_atom(AppName)) of
                         {error, bad_name} ->
                             filename:join([z_path:build_lib_dir(), AppName, "ebin"]);
                         PrivDir ->

@@ -296,7 +296,7 @@ await_startup(Site) when is_atom(Site) ->
 
 
 %% @doc Wait for a site to be running, max 30 secs.
--spec wait_for_running(atom()) -> ok | {error, bad_name | timeout | term()}.
+-spec wait_for_running(atom()) -> ok | {error, bad_name | timeout | stopped | removing | term()}.
 wait_for_running(Site) ->
     wait_for_running(Site, ?MAX_WAIT_FOR_RUNNING).
 
@@ -310,7 +310,7 @@ wait_for_running(Site) ->
 % stopped -> status site
 % removing -> status site
 
--spec wait_for_running(atom(), Secs::integer()) -> ok | {error, bad_name | timeout | term()}.
+-spec wait_for_running(atom(), Secs::integer()) -> ok | {error, bad_name | timeout | stopped | removing | term()}.
 wait_for_running(Site, Timeout) ->
     case ets:lookup(?SITES_STATUS_TABLE, Site) of
         [] -> {error, bad_name};

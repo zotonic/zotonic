@@ -138,8 +138,6 @@ lib_src_build(_Verb, Application, {priv, <<"lib-src">>, Path}, _Ext, _Root, _Spl
             {ok, [
                 {?MODULE, run_build, [Application, BuildCmd]}
             ]};
-        ok ->
-            ok;
         false ->
             false
     end;

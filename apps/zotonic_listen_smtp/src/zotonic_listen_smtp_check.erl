@@ -215,7 +215,6 @@ get_diagnostic(Hs) ->
 
 is_nonfatal_diagnostic(Hs) ->
     case get_diagnostic(Hs) of
-        undefined -> true;
         <<"2", _/binary>> -> true;
         <<"4", _/binary>> -> true;
         _ -> false

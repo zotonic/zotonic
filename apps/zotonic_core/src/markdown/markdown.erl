@@ -355,7 +355,7 @@ grab2([{normal, P2} | T], R, Acc, LO, AO, W) ->
     case P2 of
         [{{ws, _}, _} | T2] ->
             Li = case W of
-                     false -> make_esc_str(T2, R);
+                     % false -> make_esc_str(T2, R);  % -- W is always true (!)
                      true  -> "<p>" ++
                                   string:strip(make_esc_str(T2, R), right, ?LF)
                                   ++ "</p>"
@@ -724,7 +724,7 @@ type_setext_h1(List) -> type_s_h1_1(List, []).
 %% terminates on running out or new line
 type_s_h1_1([{{lf, _}, _} = L | []], Acc) -> {setext_h1, reverse([L | Acc])};
 type_s_h1_1([], Acc)                      -> {setext_h1, reverse(Acc)};
-type_s_h1_1([[] | T], Acc)                -> type_s_h1_1(T, Acc);
+% type_s_h1_1([[] | T], Acc)                -> type_s_h1_1(T, Acc);
 type_s_h1_1([{{md, eq}, _} = H | T], Acc) -> type_s_h1_1(T, [H | Acc]);
 type_s_h1_1(L, Acc)                       ->  {normal, flatten([Acc | L])}.
 
@@ -736,7 +736,7 @@ type_setext_h2(List) ->
 %% terminates on running out or new line
 type_s_h2_1([{{lf, _}, _} | []])   -> h2_or_hr;
 type_s_h2_1([])                    -> h2_or_hr;
-type_s_h2_1([[] | T])              -> type_s_h2_1(T);
+% type_s_h2_1([[] | T])              -> type_s_h2_1(T);
 type_s_h2_1([{{md, dash}, _} | T]) -> type_s_h2_1(T);
 type_s_h2_1(_L)                    -> not_h2.
 
@@ -759,7 +759,7 @@ type_ws(List) ->
 
 type_ws1([])                  -> blank;
 type_ws1([{{lf, _}, _} | []]) -> blank;
-type_ws1([[] | T])            -> type_ws1(T);
+% type_ws1([[] | T])            -> type_ws1(T);
 type_ws1([{{ws, _}, _} | T])  -> type_ws1(T);
 type_ws1(_L)                  -> try_codeblock.
 
