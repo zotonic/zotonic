@@ -738,34 +738,22 @@ q_upload_keepalive(false, Context) ->
 %% Set lager metadata for the current process
 %% ------------------------------------------------------------------------------------
 
-lager_md(ContextOrReq) ->
-    lager_md([], ContextOrReq).
+lager_md(Context) ->
+    lager_md([], Context).
 
-lager_md(MD, #context{} = Context) when is_list(MD) ->
-    RD = get_reqdata(Context),
+lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
     lager:md([
             {site, site(Context)},
             {user_id, Context#context.user_id},
             {controller, Context#context.controller_module},
             {dispatch, get(zotonic_dispatch, Context)},
-            {method, m_req:get(method, RD)},
-            {remote_ip, m_req:get(peer, RD)},
-            {is_ssl, m_req:get(is_ssl, RD)},
+            {method, m_req:get(method, Context)},
+            {remote_ip, m_req:get(peer, Context)},
+            {is_ssl, m_req:get(is_ssl, Context)},
             % {session_id, Context#context.session_id},
             % {page_id, Context#context.page_id},
-            {req_id, m_req:get(req_id, RD)}
-            | MD
-        ]);
-lager_md(MD, Req) when is_map(Req) ->
-    PathInfo = cowmachine_req:path_info(Req),
-    lager:md([
-            {site, z_context:site(Req)},
-            {dispatch, proplists:get_value(zotonic_dispatch, PathInfo)},
-            {method, m_req:get(method, Req)},
-            {remote_ip, m_req:get(peer, Req)},
-            {is_ssl, m_req:get(is_ssl, Req)},
-            {req_id, m_req:get(req_id, Req)}
-            | MD
+            {req_id, m_req:get(req_id, Context)}
+            | MetaData
         ]).
 
 %% ------------------------------------------------------------------------------------
@@ -831,14 +819,14 @@ get_maybe_path_info(_, _Context, Default) ->
     Default.
 
 get_path_info(Key, Context, Default) ->
-    case cowmachine_req:req(Context) of
-        undefined ->
-            Default;
-        Req ->
-            case lists:keyfind(Key, 1, cowmachine_req:path_info(Req)) of
+    case is_request(Context) of
+        true ->
+            case lists:keyfind(Key, 1, cowmachine_req:path_info(Context)) of
                 {Key, Value} -> Value;
                 false -> Default
-            end
+            end;
+        false ->
+            Default
     end.
 
 

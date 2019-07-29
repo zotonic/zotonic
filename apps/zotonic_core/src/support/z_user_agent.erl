@@ -26,13 +26,11 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Check if the user agent is probably a bot.
--spec is_crawler(string()|binary()|#context{}|cowboy_req:req()|undefined) -> boolean().
+-spec is_crawler( string() | binary() |z:context() | undefined ) -> boolean().
 is_crawler(undefined) ->
     false;
-is_crawler(#context{} = Context) ->
-    is_crawler(z_context:get_reqdata(Context));
-is_crawler(Req) when is_map(Req) ->
-    case cowmachine_req:get_req_header(<<"user-agent">>, Req) of
+is_crawler(Context) when is_map(Context) ->
+    case cowmachine_req:get_req_header(<<"user-agent">>, Context) of
         undefined -> false;
         UserAgent -> is_crawler_ua(UserAgent)
     end;

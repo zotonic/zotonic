@@ -895,10 +895,10 @@ function z_transport_form(qmsg)
 
     // hack to fix Safari hang (thanks to Tim Molendijk for this)
     // see:      http://groups.google.com/group/jquery-dev/browse_thread/thread/36395b7ab510dd5d
-    if ($.browser.safari)
-        $.get('/close-connection', fileUpload);
-    else
-        fileUpload();
+    // if ($.browser.safari)
+    //     $.get('/close-connection', fileUpload);
+    // else
+    fileUpload();
 
     // private function for handling file uploads (hat tip to YAHOO!)
     function fileUpload() {

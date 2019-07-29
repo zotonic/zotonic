@@ -171,7 +171,7 @@ locate({call, From}, lookup, State) ->
 locate(timeout, _, State) ->
     Context = z_context:new(State#state.site),
     IndexRef = z_module_indexer:index_ref(Context),
-    Mime = z_convert:to_binary(z_media_identify:guess_mime(State#state.request_path)),
+    Mime = z_media_identify:guess_mime(State#state.request_path),
     Files = z_lib_include:uncollapse(State#state.request_path),
     try
         Sources = z_file_locate:locate_sources(State#state.root, State#state.image_filters, Files, Context),

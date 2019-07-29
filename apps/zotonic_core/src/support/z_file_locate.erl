@@ -230,9 +230,9 @@ render(ModuleIndex, Context) ->
 
 maybe_generate_preview(Path, OriginalFile, Filters, Medium, Context) ->
     Mime = z_media_identify:guess_mime(OriginalFile),
-    generate_preview(z_media_preview:can_generate_preview(Mime), Mime, Path, OriginalFile, Filters, Medium, Context).
+    generate_preview(z_media_preview:can_generate_preview(Mime), Path, OriginalFile, Filters, Medium, Context).
 
-generate_preview(true, _Mime, Path, OriginalFile, Filters, Medium, Context) ->
+generate_preview(true, Path, OriginalFile, Filters, Medium, Context) ->
     case fetch_archive(OriginalFile, Context) of
         {ok, Filename} ->
             PreviewDir = z_path:media_preview(Context),
@@ -260,7 +260,7 @@ generate_preview(true, _Mime, Path, OriginalFile, Filters, Medium, Context) ->
         {error, _} = Error ->
             Error
     end;
-generate_preview(false, _Mime, _Path, _OriginalFile, _Filters, _Medium, _Context) ->
+generate_preview(false, _Path, _OriginalFile, _Filters, _Medium, _Context) ->
     {error, enoent}.
 
 
