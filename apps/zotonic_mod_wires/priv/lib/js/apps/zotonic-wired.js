@@ -892,161 +892,150 @@ function z_transport_form(qmsg)
         type: 'POST',
         dataType: 'text'
     };
+    var $form = $(qmsg.options.post_form);
+    var form = $form[0];
 
-    // hack to fix Safari hang (thanks to Tim Molendijk for this)
-    // see:      http://groups.google.com/group/jquery-dev/browse_thread/thread/36395b7ab510dd5d
-    // if ($.browser.safari)
-    //     $.get('/close-connection', fileUpload);
-    // else
-    fileUpload();
+    if ($(':input[name=submit]', form).length) {
+        alert('Error: Form elements must not be named "submit".');
+        return;
+    }
 
-    // private function for handling file uploads (hat tip to YAHOO!)
-    function fileUpload() {
-        var $form = $(qmsg.options.post_form);
-        var form = $form[0];
+    var opts = $.extend({}, $.ajaxSettings, options);
+    var s = $.extend(true, {}, $.extend(true, {}, $.ajaxSettings), opts);
 
-        if ($(':input[name=submit]', form).length) {
-            alert('Error: Form elements must not be named "submit".');
-            return;
+    var id = 'jqFormIO' + (new Date().getTime());
+    var $io = $('<iframe id="' + id + '" name="' + id + '" src="about:blank" />');
+    var io = $io[0];
+
+    $io.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
+
+    var xhr = { // mock object
+        aborted: 0,
+        responseText: null,
+        responseXML: null,
+        status: 0,
+        statusText: 'n/a',
+        getAllResponseHeaders: function() {},
+        getResponseHeader: function() {},
+        setRequestHeader: function() {},
+        abort: function() {
+            this.aborted = 1;
+            $io.attr('src','about:blank'); // abort op in progress
+        }
+    };
+
+    var g = opts.global;
+
+    // trigger ajax global events so that activity/block indicators work like normal
+    if (g && ! $.active++) $.event.trigger("ajaxStart");
+    if (g) $.event.trigger("ajaxSend", [xhr, opts]);
+
+    if (s.beforeSend && s.beforeSend(xhr, s) === false) {
+        s.global && $.active--;
+        return;
+    }
+    if (xhr.aborted)
+        return;
+
+    // var cbInvoked = 0;
+    var timedOut = 0;
+
+    // take a breath so that pending repaints get some cpu time before the upload starts
+    setTimeout(function() {
+        // make sure form attrs are set
+        var t = $form.attr('target');
+        var a = $form.attr('action');
+
+        // update form attrs in IE friendly way
+        form.setAttribute('target',id);
+        if (form.getAttribute('method') != 'POST')
+            form.setAttribute('method', 'POST');
+        if (form.getAttribute('action') != opts.url)
+            form.setAttribute('action', opts.url);
+
+        // ie borks in some cases when setting encoding
+        if (! options.skipEncodingOverride) {
+            $form.attr({
+                encoding: 'multipart/form-data',
+                enctype:  'multipart/form-data'
+            });
         }
 
-        var opts = $.extend({}, $.ajaxSettings, options);
-        var s = $.extend(true, {}, $.extend(true, {}, $.ajaxSettings), opts);
-
-        var id = 'jqFormIO' + (new Date().getTime());
-        var $io = $('<iframe id="' + id + '" name="' + id + '" src="about:blank" />');
-        var io = $io[0];
-
-        $io.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
-
-        var xhr = { // mock object
-            aborted: 0,
-            responseText: null,
-            responseXML: null,
-            status: 0,
-            statusText: 'n/a',
-            getAllResponseHeaders: function() {},
-            getResponseHeader: function() {},
-            setRequestHeader: function() {},
-            abort: function() {
-                this.aborted = 1;
-                $io.attr('src','about:blank'); // abort op in progress
-            }
-        };
-
-        var g = opts.global;
-
-        // trigger ajax global events so that activity/block indicators work like normal
-        if (g && ! $.active++) $.event.trigger("ajaxStart");
-        if (g) $.event.trigger("ajaxSend", [xhr, opts]);
-
-        if (s.beforeSend && s.beforeSend(xhr, s) === false) {
-            s.global && $.active--;
-            return;
+        // support timout
+        if (opts.timeout) {
+            setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
         }
-        if (xhr.aborted)
-            return;
 
-        // var cbInvoked = 0;
-        var timedOut = 0;
+        zmsgInput = $('<input />')
+                        .attr('type', 'hidden')
+                        .attr('name', 'z_postback')
+                        .attr('value', JSON.stringify(qmsg.postback))
+                     .prependTo(form)[0];
 
-        // take a breath so that pending repaints get some cpu time before the upload starts
-        setTimeout(function() {
-            // make sure form attrs are set
-            var t = $form.attr('target');
-            var a = $form.attr('action');
+        zmsgReplyTopic = $('<input />')
+                        .attr('type', 'hidden')
+                        .attr('name', 'zotonic_topic_reply')
+                        .attr('value', qmsg.reply_topic)
+                     .prependTo(form)[0];
 
-            // update form attrs in IE friendly way
-            form.setAttribute('target',id);
-            if (form.getAttribute('method') != 'POST')
-                form.setAttribute('method', 'POST');
-            if (form.getAttribute('action') != opts.url)
-                form.setAttribute('action', opts.url);
+        zmsgProgressTopic = $('<input />')
+                        .attr('type', 'hidden')
+                        .attr('name', 'zotonic_topic_progress')
+                        .attr('value', qmsg.progress_topic)
+                     .prependTo(form)[0];
 
-            // ie borks in some cases when setting encoding
-            if (! options.skipEncodingOverride) {
-                $form.attr({
-                    encoding: 'multipart/form-data',
-                    enctype:  'multipart/form-data'
-                });
-            }
+        zmsgTriggerId = $('<input />')
+                        .attr('type', 'hidden')
+                        .attr('name', 'z_trigger_id')
+                        .attr('value', $form.attr('id') || "")
+                     .prependTo(form)[0];
 
-            // support timout
-            if (opts.timeout) {
-                setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
-            }
-
-            zmsgInput = $('<input />')
-                            .attr('type', 'hidden')
-                            .attr('name', 'z_postback')
-                            .attr('value', JSON.stringify(qmsg.postback))
-                         .prependTo(form)[0];
-
-            zmsgReplyTopic = $('<input />')
-                            .attr('type', 'hidden')
-                            .attr('name', 'zotonic_topic_reply')
-                            .attr('value', qmsg.reply_topic)
-                         .prependTo(form)[0];
-
-            zmsgProgressTopic = $('<input />')
-                            .attr('type', 'hidden')
-                            .attr('name', 'zotonic_topic_progress')
-                            .attr('value', qmsg.progress_topic)
-                         .prependTo(form)[0];
-
-            zmsgTriggerId = $('<input />')
-                            .attr('type', 'hidden')
-                            .attr('name', 'z_trigger_id')
-                            .attr('value', $form.attr('id') || "")
-                         .prependTo(form)[0];
-
-            try {
-                // add iframe to doc and submit the form
-                $io.appendTo('body');
-                if (io.attachEvent) {
-                    io.attachEvent('onload', cb);
-                } else {
-                    io.addEventListener('load', cb, false);
-                }
-                form.submit();
-            }
-            finally {
-                // reset attrs and remove "extra" input elements
-                form.setAttribute('action',a);
-                if (t) {
-                    form.setAttribute('target', t);
-                } else {
-                    $form.removeAttr('target');
-                }
-                $(zmsgInput).remove();
-                $(zmsgReplyTopic).remove();
-                $(zmsgProgressTopic).remove();
-                $(zmsgTriggerId).remove();
-            }
-        }, 10);
-
-        function cb() {
-            if (io.detachEvent) {
-                io.detachEvent('onload', cb);
+        try {
+            // add iframe to doc and submit the form
+            $io.appendTo('body');
+            if (io.attachEvent) {
+                io.attachEvent('onload', cb);
             } else {
-                io.removeEventListener('load', cb, false);
+                io.addEventListener('load', cb, false);
             }
-            if (timedOut) {
-                $.event.trigger("ajaxError", [xhr, opts, e]);
-                z_unmask_error(form.id);
-            } else {
-                $.event.trigger("ajaxSuccess", [xhr, opts]);
-                z_unmask(form.id);
-            }
-            if (g) {
-                $.event.trigger("ajaxComplete", [xhr, opts]);
-                $.event.trigger("ajaxStop");
-            }
-            if (opts.complete) {
-                opts.complete(xhr, ok ? 'success' : 'error');
-            }
-            z_transport_ensure();
+            form.submit();
         }
+        finally {
+            // reset attrs and remove "extra" input elements
+            form.setAttribute('action',a);
+            if (t) {
+                form.setAttribute('target', t);
+            } else {
+                $form.removeAttr('target');
+            }
+            $(zmsgInput).remove();
+            $(zmsgReplyTopic).remove();
+            $(zmsgProgressTopic).remove();
+            $(zmsgTriggerId).remove();
+        }
+    }, 10);
+
+    function cb() {
+        if (io.detachEvent) {
+            io.detachEvent('onload', cb);
+        } else {
+            io.removeEventListener('load', cb, false);
+        }
+        if (timedOut) {
+            $.event.trigger("ajaxError", [xhr, opts, e]);
+            z_unmask_error(form.id);
+        } else {
+            $.event.trigger("ajaxSuccess", [xhr, opts]);
+            z_unmask(form.id);
+        }
+        if (g) {
+            $.event.trigger("ajaxComplete", [xhr, opts]);
+            $.event.trigger("ajaxStop");
+        }
+        if (opts.complete) {
+            opts.complete(xhr, ok ? 'success' : 'error');
+        }
+        z_transport_ensure();
     }
 }
 
