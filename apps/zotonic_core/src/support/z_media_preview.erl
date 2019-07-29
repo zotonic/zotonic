@@ -220,7 +220,7 @@ cmd_args(FileProps, Filters, OutMime) ->
     {width, ImageWidth}   = proplists:lookup(width, FileProps),
     {height, ImageHeight} = proplists:lookup(height, FileProps),
     {mime, Mime0} = proplists:lookup(mime, FileProps),
-    Mime = z_convert:to_list(Mime0),
+    Mime = z_convert:to_binary(Mime0),
     Orientation = proplists:get_value(orientation, FileProps, 1),
     ReqWidth   = proplists:get_value(width, Filters),
     ReqHeight  = proplists:get_value(height, Filters),
@@ -338,12 +338,12 @@ get_lossless_value(Options) ->
 
 %% @spec filter2arg(Filter, Width, Height, AllFilters) -> {NewWidth, NewHeight, Filter::string}
 %% @doc Map filters to an ImageMagick argument
-filter2arg({make_image, "application/pdf"}, Width, Height, _AllFilters) ->
+filter2arg({make_image, <<"application/pdf">>}, Width, Height, _AllFilters) ->
     RArg = ["-resize ", integer_to_list(Width),$x,integer_to_list(Height)],
     {Width, Height, RArg};
 filter2arg(coalesce, Width, Height, _AllFilters) ->
     {Width, Height, "-coalesce"};
-filter2arg({make_image, _Mime}, Width, Height, _AllFilters) ->
+filter2arg({make_image, Mime}, Width, Height, _AllFilters) when is_binary(Mime) ->
     {Width, Height, []};
 filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->
     case Orientation of

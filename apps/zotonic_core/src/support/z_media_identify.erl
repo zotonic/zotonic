@@ -194,8 +194,8 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                 <<"application/ogg">> ->
                     % The file utility does some miss-guessing
                     case guess_mime(OriginalFilename) of
-                        "video/ogg" -> {ok, [{mime, <<"video/ogg">>}]};
-                        "audio/ogg" -> {ok, [{mime, <<"audio/ogg">>}]};
+                        <<"video/ogg">> -> {ok, [{mime, <<"video/ogg">>}]};
+                        <<"audio/ogg">> -> {ok, [{mime, <<"audio/ogg">>}]};
                         _ -> {ok, [{mime, <<"application/ogg">>}]}
                     end;
                 <<"application/octet-stream">> ->
