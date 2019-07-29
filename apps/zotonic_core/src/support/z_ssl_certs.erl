@@ -183,13 +183,13 @@ ensure_self_signed(Site, Context) ->
     KeyFile = proplists:get_value(keyfile, Certs),
     case {filelib:is_file(CertFile), filelib:is_file(KeyFile)} of
         {false, false} ->
-            generate_self_signed(site_hostname(Context), Certs);
+            generate_self_signed(Site, site_hostname(Context), Certs);
         {false, true} ->
             lager:error("Missing cert file ~p, regenerating keys", [CertFile]),
-            generate_self_signed(site_hostname(Context), Certs);
+            generate_self_signed(Site, site_hostname(Context), Certs);
         {true, false} ->
             lager:error("Missing pem file ~p, regenerating keys", [KeyFile]),
-            generate_self_signed(site_hostname(Context), Certs);
+            generate_self_signed(Site, site_hostname(Context), Certs);
         {true, true} ->
             case check_keyfile(KeyFile) of
                 ok -> {ok, Certs};
@@ -223,8 +223,8 @@ check_keyfile(Filename) ->
             {error, {cannot_read_pemfile, Filename, Error}}
     end.
 
--spec generate_self_signed(string()|binary(), list()) -> {ok, list()} | {error, term()}.
-generate_self_signed(NormalizedHostname, Opts) ->
+-spec generate_self_signed(atom(), string()|binary(), list()) -> {ok, list()} | {error, term()}.
+generate_self_signed(Site, NormalizedHostname, Opts) ->
     PemFile = proplists:get_value(keyfile, Opts),
     lager:info("Generating self-signed ssl keys for ~s in ~s", [NormalizedHostname, PemFile]),
     case z_filelib:ensure_dir(PemFile) of
@@ -246,15 +246,15 @@ generate_self_signed(NormalizedHostname, Opts) ->
             case file:read_file(KeyFile) of
                 {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
                     os:cmd("openssl rsa -in "++KeyFile++" -out "++PemFile),
-                    lager:info("Site ~p generated SSL self-signed certificate in \'~s\'", [KeyFile]),
+                    lager:info("SSL: Site ~p generated SSL self-signed certificate in \'~s\'", [Site, KeyFile]),
                     {ok, Opts};
                 {ok, <<"-----BEGIN RSA PRIVATE KEY", _/binary>>} ->
                     file:rename(KeyFile, PemFile),
-                    lager:info("Site ~p generated SSL self-signed certificate in \'~s\'", [KeyFile]),
+                    lager:info("SSL: Site ~p generated SSL self-signed certificate in \'~s\'", [Site, KeyFile]),
                     {ok, Opts};
                 _Error ->
-                    lager:error("Failed generating self-signed ssl keys for ~s in ~s (output was ~s)",
-                                [NormalizedHostname, PemFile, Result]),
+                    lager:error("SSL: Site ~p, failed generating self-signed ssl keys for ~s in ~s (output was ~s)",
+                                [Site, NormalizedHostname, PemFile, Result]),
                     {error, openssl}
             end;
         {error, _} = Error ->

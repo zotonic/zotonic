@@ -28,8 +28,8 @@ content_type_label(<<"text/calendar">>, Context) ->
 content_type_label(<<"text/csv">>, Context) ->
     ?__("CSV", Context);
 content_type_label(ContentType, Context) ->
-    Extension = case mimetypes:mime_to_exts(ContentType) of
-        [] -> ContentType;
-        [Ext|_] -> Ext
+    Extension = case z_media_identify:extension(ContentType) of
+        <<".bin">> -> ContentType;
+        <<".", Ext/binary>> -> Ext
     end,
     ?__(Extension, Context).

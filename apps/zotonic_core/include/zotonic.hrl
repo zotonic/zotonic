@@ -26,7 +26,8 @@
 -record(context, {
         %% Cowboy request data (only set when this context is used because of a request)
         %% Cowmachine requires this to be the first record field.
-        req = undefined :: cowboy_req:req() | undefined,
+        cowreq = undefined :: cowboy_req:req() | undefined,
+        cowenv = undefined :: cowboy_middleware:env() | undefined,
 
         %% Site
         site = default :: atom(),

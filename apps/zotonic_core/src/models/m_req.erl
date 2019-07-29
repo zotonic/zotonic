@@ -54,38 +54,41 @@ get(language, #context{} = Context) -> z_context:language(Context);
 get(is_crawler, #context{} = Context) -> z_user_agent:is_crawler(Context);
 get(peer_ip, #context{} = Context) ->
     case z_context:get(peer_ip, Context) of
-        undefined -> get_req(peer_ip, z_context:get_reqdata(Context));
+        undefined -> get_req(peer_ip, Context);
         PeerIP -> PeerIP
     end;
-get(What, #context{} = Context) -> get_req(What, z_context:get_reqdata(Context));
-get(What, Req) -> get_req(What, Req).
+get(What, #context{} = Context) ->
+    case z_context:is_request(Context) of
+        true ->  get_req(What, Context);
+        false -> undefined
+    end.
 
-get_req(_, undefined) -> undefined;
-get_req(method, RD) -> cowmachine_req:method(RD);
-get_req(version, RD) -> cowmachine_req:version(RD);
-get_req(peer, RD) -> cowmachine_req:peer(RD);
-get_req(peer_ip, RD) -> cowmachine_req:peer_ip(RD);
-get_req(is_ssl, RD) -> cowmachine_req:is_ssl(RD);
-get_req(scheme, RD) -> cowmachine_req:scheme(RD);
-get_req(host, RD) -> cowmachine_req:host(RD);
-get_req(port, RD) ->
-    case cowmachine_req:is_proxy(RD) of
-        true -> cowmachine_req:port(RD);
+-spec get_req( atom(), z:context() ) -> any().
+get_req(method, Context) -> cowmachine_req:method(Context);
+get_req(version, Context) -> cowmachine_req:version(Context);
+get_req(peer, Context) -> cowmachine_req:peer(Context);
+get_req(peer_ip, Context) -> cowmachine_req:peer_ip(Context);
+get_req(is_ssl, Context) -> cowmachine_req:is_ssl(Context);
+get_req(scheme, Context) -> cowmachine_req:scheme(Context);
+get_req(host, Context) -> cowmachine_req:host(Context);
+get_req(port, Context) ->
+    case cowmachine_req:is_proxy(Context) of
+        true -> cowmachine_req:port(Context);
         false ->
-            case cowmachine_req:is_ssl(RD) of
+            case cowmachine_req:is_ssl(Context) of
                 true -> z_config:get(ssl_port);
                 false -> z_config:get(port)
             end
     end;
-get_req(raw_path, RD) -> cowmachine_req:raw_path(RD);
-get_req(path, RD) -> cowmachine_req:path(RD);
-get_req(qs, RD) -> cowmachine_req:req_qs(RD);
-get_req(headers, RD) -> cowmachine_req:get_req_headers(RD);
-get_req(user_agent, RD) -> cowmachine_req:get_req_header(<<"user-agent">>, RD);
-get_req(referer, RD) -> cowmachine_req:get_req_header(<<"referer">>, RD);
-get_req(referrer, RD) -> get_req(referer, RD);
-get_req(is_crawler, RD) -> z_user_agent:is_crawler(RD);
-get_req(_Key, _RD) -> undefined.
+get_req(raw_path, Context) -> cowmachine_req:raw_path(Context);
+get_req(path, Context) -> cowmachine_req:path(Context);
+get_req(qs, Context) -> cowmachine_req:req_qs(Context);
+get_req(headers, Context) -> cowmachine_req:get_req_headers(Context);
+get_req(user_agent, Context) -> cowmachine_req:get_req_header(<<"user-agent">>, Context);
+get_req(referer, Context) -> cowmachine_req:get_req_header(<<"referer">>, Context);
+get_req(referrer, Context) -> get_req(referer, Context);
+get_req(is_crawler, Context) -> z_user_agent:is_crawler(Context);
+get_req(_Key, _Context) -> undefined.
 
 
 -spec values( z:context() ) -> list({atom(), any()}).

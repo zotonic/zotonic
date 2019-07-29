@@ -40,8 +40,8 @@
 -include_lib("zotonic.hrl").
 
 -type optional_filename() :: undefined | file:filename_all().
--type mime_type() :: string().
--type filename_extension() :: string().
+-type filename_extension() :: binary().
+-type mime_type() :: binary().
 -type os_family() :: win32 | unix.
 
 %% @doc Caching version of identify/1. Fetches information about an image, returns width, height, type, etc.
@@ -108,9 +108,9 @@ identify_file_direct_1(File, OriginalFilename) ->
 		{ok, Props} ->
 			%% Images, pdf and ps are further investigated by ImageMagick
 			case proplists:get_value(mime, Props) of
-				"image/" ++ _ = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
-				"application/pdf" = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
-				"application/postscript" = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
+				<<"image/", _/binary>> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
+				<<"application/pdf">> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
+				<<"application/postscript">> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
 				_Mime -> {ok, Props}
 			end
 	end.
@@ -124,13 +124,13 @@ check_acceptable(_File, {error, _} = Error) ->
     Error;
 check_acceptable(File, {ok, Props}) ->
     case z_media_sanitize:is_file_acceptable(File, Props) of
-        false -> {ok, [{mime, "application/octet-stream"}]};
+        false -> {ok, [{mime, <<"application/octet-stream">>}]};
         true -> {ok, Props}
     end.
 
 maybe_identify_extension({error, "identify error: "++_}, OriginalFilename) ->
     {ok, [ {mime, guess_mime(OriginalFilename)} ]};
-maybe_identify_extension({ok, [{mime,"application/octet-stream"}]}, OriginalFilename) ->
+maybe_identify_extension({ok, [{mime, <<"application/octet-stream">>}]}, OriginalFilename) ->
     {ok, [ {mime, guess_mime(OriginalFilename)} ]};
 maybe_identify_extension(Result, _OriginalFilename) ->
     Result.
@@ -147,18 +147,19 @@ identify_file_unix(false, _File, _OriginalFilename) ->
     {error, "'file' not installed"};
 identify_file_unix(Cmd, File, OriginalFilename) ->
     Mime = z_string:trim(
-                os:cmd(z_utils:os_filename(Cmd)
+                list_to_binary(
+                    os:cmd(z_utils:os_filename(Cmd)
                         ++" -b --mime-type "
-                        ++ z_utils:os_filename(File))),
+                        ++ z_utils:os_filename(File)))),
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
         nomatch ->
             case Mime of
                 "CDF V2 Document, corrupt:" ++ _ ->
                     % Probably just a semi-illegal variation on a MS Office file, use the extension
                     case guess_mime(OriginalFilename) of
-                        "application/msword" -> {ok, [{mime, "application/msword"}]};
-                        "application/vnd.ms-excel" -> {ok, [{mime, "application/vnd.ms-excel"}]};
-                        "application/vnd.ms-powerpoint" -> {ok, [{mime, "application/vnd.ms-powerpoint"}]};
+                        <<"application/msword">> -> {ok, [{mime, <<"application/msword">>}]};
+                        <<"application/vnd.ms-excel">> -> {ok, [{mime, <<"application/vnd.ms-excel">>}]};
+                        <<"application/vnd.ms-powerpoint">> -> {ok, [{mime, <<"application/vnd.ms-powerpoint">>}]};
                         _ -> {error, Mime}
                     end;
                 _ ->
@@ -166,73 +167,74 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
             end;
         {match, _} ->
             case Mime of
-                "text/x-c" ->
+                <<"text/x-c">> ->
                     %% "file" does a lousy job recognizing files with curly braces in them.
                     Mime2 = case guess_mime(OriginalFilename) of
-                        "text/" ++ _ = MimeFilename -> MimeFilename;
-                        "application/x-" ++ _ = MimeFilename -> MimeFilename;
-                        "application/json" -> "application/json";
-                        _ -> "text/plain"
+                        <<"text/", _/binary>> = MimeFilename -> MimeFilename;
+                        <<"application/x-", _/binary>> = MimeFilename -> MimeFilename;
+                        <<"application/json">> -> <<"application/json">>;
+                        _ -> <<"text/plain">>
                     end,
                     {ok, [{mime, Mime2}]};
-                "application/x-gzip" ->
+                <<"application/x-gzip">> ->
                     %% Special case for the often used extension ".tgz" instead of ".tar.gz"
                     case filename:extension(OriginalFilename) of
-                        ".tgz" -> {ok, [{mime, "application/x-gzip+tar"}]};
-                        _ -> {ok, [{mime, "application/x-gzip"}]}
+                        ".tgz" -> {ok, [{mime, <<"application/x-gzip+tar">>}]};
+                        <<".tgz">> -> {ok, [{mime, <<"application/x-gzip+tar">>}]};
+                        _ -> {ok, [{mime, <<"application/x-gzip">>}]}
                     end;
-                "application/zip" ->
+                <<"application/zip">> ->
                     %% Special case for zip'ed office files
                     case guess_mime(OriginalFilename) of
-                        "application/vnd.openxmlformats-officedocument." ++ _ = OfficeMime ->
+                        <<"application/vnd.openxmlformats-officedocument.", _/binary>> = OfficeMime ->
                             {ok, [{mime, OfficeMime}]};
                         _ ->
-                            {ok, [{mime, "application/zip"}]}
+                            {ok, [{mime, <<"application/zip">>}]}
                     end;
-                "application/ogg" ->
+                <<"application/ogg">> ->
                     % The file utility does some miss-guessing
                     case guess_mime(OriginalFilename) of
-                        "video/ogg" -> {ok, [{mime, "video/ogg"}]};
-                        "audio/ogg" -> {ok, [{mime, "audio/ogg"}]};
-                        _ -> {ok, [{mime, "application/ogg"}]}
+                        <<"video/ogg">> -> {ok, [{mime, <<"video/ogg">>}]};
+                        <<"audio/ogg">> -> {ok, [{mime, <<"audio/ogg">>}]};
+                        _ -> {ok, [{mime, <<"application/ogg">>}]}
                     end;
-                "application/octet-stream" ->
+                <<"application/octet-stream">> ->
                     % The file utility does some miss-guessing
                     case guess_mime(OriginalFilename) of
-                        "text/csv" -> {ok, [{mime, "text/csv"}]};
-                        "application/vnd.oasis.opendocument." ++ _ = ODF -> {ok, [{mime, ODF}]};
-                        "application/inspire" -> {ok, [{mime, "application/inspire"}]};
-                        "video/mpeg" -> {ok, [{mime, "video/mpeg"}]};
-                        "audio/mpeg" -> {ok, [{mime, "audio/mpeg"}]};
-                        _ -> {ok, [{mime, "application/octet-stream"}]}
+                        <<"text/csv">> -> {ok, [{mime, <<"text/csv">>}]};
+                        <<"application/vnd.oasis.opendocument.", _/binary>> = ODF -> {ok, [{mime, ODF}]};
+                        <<"application/inspire">> -> {ok, [{mime, <<"application/inspire">>}]};
+                        <<"video/mpeg">> -> {ok, [{mime, <<"video/mpeg">>}]};
+                        <<"audio/mpeg">> -> {ok, [{mime, <<"audio/mpeg">>}]};
+                        _ -> {ok, [{mime, <<"application/octet-stream">>}]}
                     end;
-                "application/vnd.ms-office" ->
+                <<"application/vnd.ms-office">> ->
                     % Generic ms-office mime type, check if the filename is more specific
                     case guess_mime(OriginalFilename) of
-                        "application/vnd.ms" ++ _ = M -> {ok, [{mime,M}]};
-                        "application/msword" -> {ok, [{mime,"application/msword"}]};
-                        "application/vnd.visio" -> {ok, [{mime,"application/vnd.visio"}]};
-                        _ -> {ok, [{mime, "application/vnd.ms-office"}]}
+                        <<"application/vnd.ms", _/binary>> = M -> {ok, [{mime,M}]};
+                        <<"application/msword">> -> {ok, [{mime,<<"application/msword">>}]};
+                        <<"application/vnd.visio">> -> {ok, [{mime,<<"application/vnd.visio">>}]};
+                        _ -> {ok, [{mime, <<"application/vnd.ms-office">>}]}
                     end;
-                "application/vnd.ms-excel" = Excel ->
+                <<"application/vnd.ms-excel">> = Excel ->
                     case guess_mime(OriginalFilename) of
-                        "application/vnd.openxmlformats" ++ _ = M -> {ok, [{mime,M}]};
+                        <<"application/vnd.openxmlformats", _/binary>> = M -> {ok, [{mime,M}]};
                         _ -> {ok, [{mime, Excel}]}
                     end;
-                Wav when Wav =:= "audio/x-wav"; Wav =:= "audio/wav" ->
+                Wav when Wav =:= <<"audio/x-wav">>; Wav =:= <<"audio/wav">> ->
                     case guess_mime(OriginalFilename) of
-                        "audio/" ++ _ = M -> {ok, [{mime,M}]};
-                        _ -> {ok, [{mime, "audio/wav"}]}
+                        <<"audio/", _/binary>> = M -> {ok, [{mime,M}]};
+                        _ -> {ok, [{mime, <<"audio/wav">>}]}
                     end;
-                "video/x-ms-asf" ->
+                <<"video/x-ms-asf">> ->
                     case guess_mime(OriginalFilename) of
-                        "audio/" ++ _ = M -> {ok, [{mime,M}]};
-                        _ -> {ok, [{mime, "video/x-ms-asf"}]}
+                        <<"audio/", _/binary>> = M -> {ok, [{mime,M}]};
+                        _ -> {ok, [{mime, <<"video/x-ms-asf">>}]}
                     end;
-                "video/mp4" ->
+                <<"video/mp4">> ->
                     case guess_mime(OriginalFilename) of
-                        "audio/" ++ _ = M -> {ok, [{mime,M}]};
-                        _ -> {ok, [{mime, "video/mp4"}]}
+                        <<"audio/", _/binary>> = M -> {ok, [{mime,M}]};
+                        _ -> {ok, [{mime, <<"video/mp4">>}]}
                     end;
                 _ ->
                     {ok, [{mime, Mime}]}
@@ -285,7 +287,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                           {height, H1},
                           {mime, Mime}],
                 Props2 = case Mime of
-                             "image/" ++ _ ->
+                             <<"image/", _/binary>> ->
                                  Exif = exif(ImageFile),
                                  Orientation = exif_orientation(Exif),
                                  Orientation1 = correct_orientation(Orientation, Exif, W1, H1),
@@ -314,13 +316,12 @@ maybe_sizeup(Mime, W, H) ->
         false -> {W,H}
     end.
 
-is_mime_vector("application/pdf") -> true;
-is_mime_vector("application/postscript") -> true;
-is_mime_vector("image/svg+xml") -> true;
+-spec is_mime_vector( string() | mime_type() ) -> boolean().
 is_mime_vector(<<"application/pdf">>) -> true;
 is_mime_vector(<<"application/postscript">>) -> true;
 is_mime_vector(<<"image/svg+xml">>) -> true;
-is_mime_vector(_) -> false.
+is_mime_vector(Mime) when is_binary(Mime) -> false;
+is_mime_vector(Mime) -> is_mime_vector( z_convert:to_binary(Mime) ).
 
 
 -spec devnull(win32|unix) -> string().
@@ -337,24 +338,24 @@ mime(Type, _) -> mime(Type).
 %% @doc Map the type returned by ImageMagick to a mime type
 %% @todo Add more imagemagick types, check the mime types
 -spec mime(string()) -> mime_type().
-mime("JPEG") -> "image/jpeg";
-mime("GIF") -> "image/gif";
-mime("TIFF") -> "image/tiff";
-mime("BMP") -> "image/bmp";
-mime("PDF") -> "application/pdf";
-mime("PS") -> "application/postscript";
-mime("PS2") -> "application/postscript";
-mime("PS3") -> "application/postscript";
-mime("PNG") -> "image/png";
-mime("PNG8") -> "image/png";
-mime("PNG24") -> "image/png";
-mime("PNG32") -> "image/png";
-mime("SVG") -> "image/svg+xml";
-mime(Type) -> "image/" ++ string:to_lower(Type).
+mime("JPEG")  -> <<"image/jpeg">>;
+mime("GIF")   -> <<"image/gif">>;
+mime("TIFF")  -> <<"image/tiff">>;
+mime("BMP")   -> <<"image/bmp">>;
+mime("PDF")   -> <<"application/pdf">>;
+mime("PS")    -> <<"application/postscript">>;
+mime("PS2")   -> <<"application/postscript">>;
+mime("PS3")   -> <<"application/postscript">>;
+mime("PNG")   -> <<"image/png">>;
+mime("PNG8")  -> <<"image/png">>;
+mime("PNG24") -> <<"image/png">>;
+mime("PNG32") -> <<"image/png">>;
+mime("SVG")   -> <<"image/svg+xml">>;
+mime(Type)    -> <<"image/", (z_string:to_lower(Type))/binary>>.
 
 
 
-%% @doc Return the extension for a known mime type (eg. ".mov").
+%% @doc Return the extension for a known mime type (eg. <<".mov">>).
 -spec extension(string()|binary()) -> filename_extension().
 extension(Mime) ->
     extension(Mime, undefined).
@@ -364,68 +365,62 @@ extension(Mime) ->
 %% one that is given as the preferred extension. Otherwise, it returns
 %% the first extension.
 -spec extension(string()|binary(), string()|binary()|undefined, z:context()) -> filename_extension().
-extension(Mime, PreferExtension, Context) ->
+extension(Mime, PreferExtension, Context) when is_binary(Mime) ->
     case z_notifier:first(
                 #media_identify_extension{
-                    mime=maybe_binary(Mime),
-                    preferred=maybe_binary(PreferExtension)},
+                    mime = maybe_binary(Mime),
+                    preferred = maybe_binary(PreferExtension)},
                 Context)
     of
         undefined ->
             extension(Mime, PreferExtension);
         Extension ->
-            z_convert:to_list(Extension)
-    end.
+            Extension
+    end;
+extension(Mime, PreferExtension, Context) ->
+    extension(z_convert:to_binary(Mime), PreferExtension, Context).
 
 maybe_binary(undefined) -> undefined;
 maybe_binary(L) -> z_convert:to_binary(L).
 
 -spec extension(string()|binary(), string()|binary()|undefined) -> filename_extension().
-extension("image/jpeg", _PreferExtension) -> ".jpg";
-extension(<<"image/jpeg">>, _PreferExtension) -> ".jpg";
-extension("application/vnd.ms-excel", _) -> ".xls";
-extension(<<"application/vnd.ms-excel">>, _) -> ".xls";
-extension("text/plain", _PreferExtension) -> ".txt";
-extension(<<"text/plain">>, _PreferExtension) -> ".txt";
-extension("audio/wav", _PreferExtension) -> ".wav";
-extension(<<"audio/wav">>, _PreferExtension) -> ".wav";
+extension(Mime, PreferExtension) when is_list(Mime) ->
+    extension(list_to_binary(Mime), PreferExtension);
+extension(<<"image/jpeg">>, _PreferExtension) -> <<".jpg">>;
+extension(<<"application/vnd.ms-excel">>, _) -> <<".xls">>;
+extension(<<"text/plain">>, _PreferExtension) -> <<".txt">>;
+extension(<<"audio/wav">>, _PreferExtension) -> <<".wav">>;
+extension(Mime, undefined) ->
+    Extensions = mimetypes:extensions(Mime),
+    first_extension(Extensions);
 extension(Mime, PreferExtension) ->
-    Extensions = mimetypes:extensions(z_convert:to_binary(Mime)),
-    case PreferExtension of
-        undefined ->
-            first_extension(Extensions);
-        _ ->
-            %% convert prefer extension to something that mimetypes likes
-            Ext1 = z_convert:to_binary(z_string:to_lower(PreferExtension)),
-            Ext2 = case Ext1 of
-                       <<$.,Rest/binary>> -> Rest;
-                       _ -> Ext1
-                   end,
-            case lists:member(Ext2, Extensions) of
-                true ->
-                    [$. | z_convert:to_list(Ext2)];
-                false ->
-                    first_extension(Extensions)
-            end
+    %% convert prefer extension to something that mimetypes likes
+    Ext1 = z_string:to_lower(PreferExtension),
+    Ext2 = case Ext1 of
+               <<$.,Rest/binary>> -> Rest;
+               _ -> Ext1
+           end,
+    Extensions = mimetypes:extensions(Mime),
+    case lists:member(Ext2, Extensions) of
+        true -> <<$., Ext2/binary>>;
+        false -> first_extension(Extensions)
     end.
 
-
 first_extension([]) ->
-    ".bin";
-first_extension(Extensions) ->
-    [$. | z_convert:to_list(hd(Extensions))].
+    <<".bin">>;
+first_extension([ Ext | _ ]) ->
+    <<$., Ext/binary>>.
 
 
-%% @spec guess_mime(string()) -> string()
 %% @doc  Guess the mime type of a file by the extension of its filename.
 -spec guess_mime( file:filename_all() ) -> mime_type().
 guess_mime(File) ->
-	case mimetypes:filename(z_convert:to_binary(z_string:to_lower(File))) of
-		[Mime|_] -> maybe_map_mime(z_convert:to_list(Mime));
-		[] -> "application/octet-stream"
+	case mimetypes:filename(z_string:to_lower(File)) of
+		[Mime|_] -> maybe_map_mime(Mime);
+		[] -> <<"application/octet-stream">>
 	end.
 
-maybe_map_mime("audio/x-wav") -> "audio/wav";
+maybe_map_mime(<<"audio/x-wav">>) -> <<"audio/wav">>;
 maybe_map_mime(Mime) -> Mime.
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge
@@ -527,22 +522,22 @@ correct_orientation(Orientation, Exif, Width, Height) ->
 
 
 %% @doc Given a mime type, return whether its file contents is already compressed or not.
--spec is_mime_compressed(string()) -> boolean().
-is_mime_compressed("text/"++_)                               -> false;
-is_mime_compressed("image/svgz"++_)                          -> true;
-is_mime_compressed("image/svg"++_)                           -> false;
-is_mime_compressed("image/"++_)                              -> true;
-is_mime_compressed("video/"++_)                              -> true;
-is_mime_compressed("audio/x-wav")                            -> false;
-is_mime_compressed("audio/wav")                              -> false;
-is_mime_compressed("audio/"++_)                              -> true;
-is_mime_compressed("application/x-compres"++_)               -> true;
-is_mime_compressed("application/zip")                        -> true;
-is_mime_compressed("application/x-gz"++_)                    -> true;
-is_mime_compressed("application/x-rar")                      -> true;
-is_mime_compressed("application/x-bzip2")                    -> true;
-is_mime_compressed("application/x-font-woff")                -> true;
-is_mime_compressed("application/vnd.oasis.opendocument."++_) -> true;
-is_mime_compressed("application/vnd.openxml"++_)             -> true;
-is_mime_compressed("application/x-shockwave-flash")          -> true;
-is_mime_compressed(_)                                        -> false.
+-spec is_mime_compressed(binary()) -> boolean().
+is_mime_compressed(<<"text/", _/binary>>)                        -> false;
+is_mime_compressed(<<"image/svgz", _/binary>>)                   -> true;
+is_mime_compressed(<<"image/svg", _/binary>>)                    -> false;
+is_mime_compressed(<<"image/", _/binary>>)                       -> true;
+is_mime_compressed(<<"video/", _/binary>>)                       -> true;
+is_mime_compressed(<<"audio/x-wav">>)                            -> false;
+is_mime_compressed(<<"audio/wav">>)                              -> false;
+is_mime_compressed(<<"audio/", _/binary>>)                       -> true;
+is_mime_compressed(<<"application/x-compres", _/binary>>)        -> true;
+is_mime_compressed(<<"application/zip">>)                        -> true;
+is_mime_compressed(<<"application/x-gz", _/binary>>)             -> true;
+is_mime_compressed(<<"application/x-rar">>)                      -> true;
+is_mime_compressed(<<"application/x-bzip2">>)                    -> true;
+is_mime_compressed(<<"application/x-font-woff">>)                -> true;
+is_mime_compressed(<<"application/vnd.oasis.opendocument.", _/binary>>) -> true;
+is_mime_compressed(<<"application/vnd.openxml", _/binary>>)      -> true;
+is_mime_compressed(<<"application/x-shockwave-flash">>)          -> true;
+is_mime_compressed(_)                                            -> false.

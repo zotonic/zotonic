@@ -32,7 +32,7 @@
 
 %% interface functions
 -export([
-    dispatch/1,
+    dispatch/2,
     dispatch/5,
     get_fallback_site/0,
     get_site_for_hostname/1,
@@ -123,19 +123,20 @@ update_hosts() ->
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req :: cowboy_req:req(), Env :: cowboy_middleware:env().
 execute(Req, Env) ->
-    case dispatch(Req) of
+    case dispatch(Req, Env) of
         #dispatch_controller{} = Match ->
             Context = Match#dispatch_controller.context,
             {ok, Req#{
                 bindings => Match#dispatch_controller.bindings
             }, Env#{
                 site => z_context:site(Context),
+                cowmachine_controller => Match#dispatch_controller.controller,
+                cowmachine_controller_options => Match#dispatch_controller.controller_options,
+                cowmachine_context => Context,
+
                 dispatch_rule => Match#dispatch_controller.dispatch_rule,
-                controller => Match#dispatch_controller.controller,
-                controller_options => Match#dispatch_controller.controller_options,
                 path_tokens => Match#dispatch_controller.path_tokens,
-                bindings => Match#dispatch_controller.bindings,
-                context => Context
+                bindings => Match#dispatch_controller.bindings
             }};
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
             handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
@@ -167,10 +168,11 @@ execute(Req, Env) ->
     end.
 
 %% @doc Match the host and path to a dispatch rule.
--spec dispatch(cowboy_req:req()) -> dispatch().
-dispatch(Req) ->
-    Host = cowmachine_req:host(Req),
-    Scheme = cowmachine_req:scheme(Req),
+-spec dispatch(cowboy_req:req(), cowboy_middleware:env()) -> dispatch().
+dispatch(Req, Env) ->
+    TempContext = #{ cowreq => Req, cowenv => Env },
+    Host = cowmachine_req:host(TempContext),
+    Scheme = cowmachine_req:scheme(TempContext),
     Path = cowboy_req:path(Req),
     Method = cowboy_req:method(Req),
     DispReq = #dispatch{

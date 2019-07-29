@@ -23,20 +23,22 @@ limitations under the License.
 function ZLive ()
 {
     this._subscriptions = [];
-    this._prune_timeout = 10000;
+    this._wid = 0;
     var self = this;
-    setTimeout(function() { self.prune(); }, this._prune_timeout);
+    setInterval(function() { self.prune(); }, 10000);
 }
 
 ZLive.prototype.subscribe = function(topics, target, postback) {
     var self = this;
     for(var i=topics.length-1; i >= 0; i--) {
         var topic = topics[i];
-        var wid = cotonic.broker.subscribe(
-                            topic,
-                            function(msg, _mapping, opts) {
-                                self.update(opts.topic, target, postback, msg, opts.wid);
-                            });
+        var wid = 'z-live-' + self._wid++;
+        cotonic.broker.subscribe(
+            topic,
+            function(msg, _mapping, opts) {
+                self.update(opts.topic, target, postback, msg, opts.wid);
+            },
+            { wid: wid });
 
         this._subscriptions.push({
             wid: wid,
@@ -59,7 +61,7 @@ ZLive.prototype.update = function(topic, target, postback, payload, wid) {
 };
 
 ZLive.prototype.unsubscribe = function(wid) {
-    for (var i=0; i<= this._subscriptions.length; i++) {
+    for (var i=0; i < this._subscriptions.length; i++) {
         if (this._subscriptions[i].wid == wid) {
             cotonic.broker.unsubscribe(this._subscriptions[i].topic, { wid: wid });
             this._subscriptions.splice(i,1);
@@ -76,8 +78,6 @@ ZLive.prototype.prune = function() {
             this._subscriptions.splice(i,1);
         }
     }
-    var self = this;
-    setTimeout(function() { self.prune(); }, this._prune_timeout);
 };
 
 window.z_live = new ZLive();

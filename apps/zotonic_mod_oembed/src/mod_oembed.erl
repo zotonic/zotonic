@@ -381,8 +381,8 @@ thumbnail_request(ThumbUrl, _Context) ->
     case httpc:request(get, {z_convert:to_list(ThumbUrl), []}, [], []) of
         {ok, {{_, 200, _}, Headers, ImageData}} ->
             CT = case proplists:lookup("content-type", Headers) of
-                     {"content-type", C} -> C;
-                     _ -> "image/jpeg"
+                     {"content-type", C} -> z_convert:to_binary(C);
+                     _ -> <<"image/jpeg">>
                  end,
             {ok, {CT, ImageData}};
         {ok, {{_, 404, _}, _Headers, _ImageData}} ->

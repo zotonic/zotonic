@@ -687,7 +687,7 @@ replace_url(Url, RscId, Props, Options, Context) ->
             {error, eacces}
     end.
 
-
+-spec rsc_is_media_cat( m_resource:id(), z:context() ) -> boolean().
 rsc_is_media_cat(Id, Context) ->
     case z_db:q1("select c.name from rsc c join rsc r on r.category_id = c.id where r.id = $1", [Id],
         Context) of
@@ -699,6 +699,7 @@ rsc_is_media_cat(Id, Context) ->
         _ -> false
     end.
 
+-spec mime_to_category( string() | binary() ) -> image | video | audio | document.
 mime_to_category(Mime) ->
     case Mime of
         <<"image/", _/binary>> -> image;
