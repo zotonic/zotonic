@@ -90,12 +90,12 @@ find_next_template(Filename, [_|Rest]) ->
     find_next_template(Filename, Rest).
 
 
-map_template_cat(Template, undefined, Context) ->
-    map_template_1(Template, Context);
-map_template_cat(Template, <<>>, Context) ->
-    map_template_1(Template, Context);
-map_template_cat(Template, [], Context) ->
-    map_template_1(Template, Context);
+% map_template_cat(Template, undefined, Context) ->
+%     map_template_1(Template, Context);
+% map_template_cat(Template, <<>>, Context) ->
+%     map_template_1(Template, Context);
+% map_template_cat(Template, [], Context) ->
+%     map_template_1(Template, Context);
 map_template_cat(Template, [Item|_]=IsA, Context) when is_atom(Item) ->
     map_template_cat_1(Template, IsA, Context);
 map_template_cat(Template, Id, Context) ->
@@ -147,12 +147,12 @@ map_template_all_1(Template, Context) ->
                 template=Key#module_index_key.name
       } || #module_index{filepath=Filename, key=Key} <- Tpls ].
 
-map_template_all_cat(Template, undefined, Context)  ->
-    map_template_all_1(Template, Context);
-map_template_all_cat(Template, <<>>, Context) ->
-    map_template_all_1(Template, Context);
-map_template_all_cat(Template, [], Context) ->
-    map_template_all_1(Template, Context);
+% map_template_all_cat(Template, undefined, Context)  ->
+%     map_template_all_1(Template, Context);
+% map_template_all_cat(Template, <<>>, Context) ->
+%     map_template_all_1(Template, Context);
+% map_template_all_cat(Template, [], Context) ->
+%     map_template_all_1(Template, Context);
 map_template_all_cat(Template, [Item|_]=IsA, Context) when is_atom(Item) ->
     map_template_all_cat_1(Template, IsA, Context);
 map_template_all_cat(Template, Id, Context) ->

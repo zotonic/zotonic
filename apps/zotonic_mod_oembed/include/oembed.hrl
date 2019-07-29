@@ -20,8 +20,7 @@
 -record(oembed_provider, {
           url_re,
           endpoint_url,
-          title,
-          callback=undefined
+          title
          }).
 
 

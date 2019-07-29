@@ -939,7 +939,7 @@
 %% Return: {ok, <<"inline">>} or {ok, <<"attachment">>}
 -record(export_resource_content_disposition, {
     dispatch :: atom(),
-    id :: integer(),
+    id :: m_rsc:resource_id() | undefined,
     content_type :: binary()
 }).
 
@@ -948,14 +948,14 @@
 %% Return: ``true`` or ``false``
 -record(export_resource_visible, {
     dispatch :: atom(),
-    id :: integer() | undefined
+    id :: m_rsc:resource_id() | undefined
 }).
 
 %% @doc mod_export -
 %% Return: ``{ok, "text/csv"})`` for the dispatch rule/id export.
 -record(export_resource_content_type, {
     dispatch :: atom(),
-    id :: integer() | undefined
+    id :: m_rsc:resource_id() | undefined
 }).
 
 %% @doc mod_export - return the {ok, Filename} for the content disposition.
@@ -963,7 +963,7 @@
 %% Return: ``{ok, Filename}}`` or ``undefined``
 -record(export_resource_filename, {
     dispatch :: atom(),
-    id :: integer() | undefined,
+    id :: m_rsc:resource_id() | undefined,
     content_type :: binary()
 }).
 
@@ -972,7 +972,7 @@
 %% Return: ``{ok, list()|binary()}``, ``{ok, list()|binary(), ContinuationState}`` or ``{error, Reason}``
 -record(export_resource_header, {
     dispatch :: atom(),
-    id :: integer() | undefined,
+    id :: m_rsc:resource_id() | undefined,
     content_type :: binary()
 }).
 
@@ -983,7 +983,7 @@
 %% Return: ``{ok, Values|binary()}``, ``{ok, Values|binary(), ContinuationState}`` or ``{error, Reason}``
 -record(export_resource_data, {
     dispatch :: atom(),
-    id :: integer() | undefined,
+    id :: m_rsc:resource_id() | undefined,
     content_type :: binary(),
     state :: term()
 }).
@@ -993,7 +993,7 @@
 %% Return: ``{ok, binary()}``, ``{ok, binary(), ContinuationState}`` or ``{error, Reason}``
 -record(export_resource_encode, {
     dispatch :: atom(),
-    id :: integer() | undefined,
+    id :: m_rsc:resource_id() | undefined,
     content_type :: binary(),
     data :: term(),
     state :: term()
@@ -1004,7 +1004,7 @@
 %% Return: ``{ok, binary()}`` or ``{error, Reason}``
 -record(export_resource_footer, {
     dispatch :: atom(),
-    id :: integer() | undefined,
+    id :: m_rsc:resource_id() | undefined,
     content_type :: binary(),
     state :: term()
 }).

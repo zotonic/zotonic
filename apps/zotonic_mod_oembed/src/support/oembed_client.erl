@@ -56,16 +56,11 @@ find_providers(Url, [Provider=#oembed_provider{}|Rest], Acc) ->
 discover_per_provider(Url, UrlExtra, [Provider=#oembed_provider{}|Rest], Context) ->
     case re:run(Url, Provider#oembed_provider.url_re) of
         {match, _} ->
-            case Provider#oembed_provider.callback of
-                F when is_function(F) ->
-                    F(Url);
-                undefined ->
-                    RequestUrl = iolist_to_binary([
-                            Provider#oembed_provider.endpoint_url,
-                            "?format=json&url=", z_url:url_encode(Url),
-                            UrlExtra]),
-                    oembed_request(RequestUrl)
-            end;
+            RequestUrl = iolist_to_binary([
+                    Provider#oembed_provider.endpoint_url,
+                    "?format=json&url=", z_url:url_encode(Url),
+                    UrlExtra]),
+            oembed_request(RequestUrl);
         nomatch ->
             discover_per_provider(Url, UrlExtra, Rest, Context)
     end;

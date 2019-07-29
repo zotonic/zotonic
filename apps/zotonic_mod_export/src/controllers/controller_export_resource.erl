@@ -89,14 +89,14 @@ set_filename(Id, ProvidedCT, Dispatch, Context) ->
             #export_resource_content_disposition{
                 id = Id,
                 dispatch = Dispatch,
-                content_type = ProvidedCT
+                content_type = Mime
             },
             Context),
     Filename = case z_notifier:first(
             #export_resource_filename{
                 id = Id,
                 dispatch = Dispatch,
-                content_type = ProvidedCT
+                content_type = Mime
             },
             Context)
     of
