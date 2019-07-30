@@ -160,6 +160,7 @@ websocket_info(Msg, Context) ->
 %% Internal
 %% ---------------------------------------------------------------------------------------------
 
+-spec handle_incoming_data( binary(), z:context() ) -> {ok, z:context()} | {stop, z:context()}.
 handle_incoming_data(Data, Context) ->
     case z_context:get(session_ref, Context) of
         undefined ->
@@ -173,6 +174,7 @@ handle_incoming_data(Data, Context) ->
             end
     end.
 
+-spec handle_connect_data( binary(), z:context() ) -> {ok, z:context()} | {stop, z:context()}.
 handle_connect_data(Data, Context) ->
     WsData = z_context:get(wsdata, Context),
     NewData = << WsData/binary, Data/binary >>,

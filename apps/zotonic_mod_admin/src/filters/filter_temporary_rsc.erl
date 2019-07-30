@@ -32,10 +32,12 @@ temporary_rsc(RscId, Context) ->
     temporary_rsc(RscId, {props, []}, Context).
 
 temporary_rsc(_RscId, _Props, _Context) ->
-    throw(notimplemented).
+    lager:error("~p is not yet implemented", [ ?MODULE ]),
+    <<>>.
 
 task_delete_inactive(_RscId, _ClientId, _Context) ->
-    throw(notimplemented).
+    lager:error("~p is not yet implemented", [ ?MODULE ]),
+    <<>>.
 
 -ifdef(NOT_IMPLEMENTED).
 
