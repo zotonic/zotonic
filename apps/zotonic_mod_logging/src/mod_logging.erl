@@ -215,16 +215,16 @@ record_to_log_message(#log_email{} = R, _Fields, LogType, Id) ->
             {log_type, LogType},
             {log_id, Id}
         ]
-    };
-record_to_log_message(_, Fields, LogType, Id) ->
-    #log_message{
-        message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
-        props=[
-            {log_type, LogType},
-            {log_id, Id}
-            | Fields
-        ]
     }.
+% record_to_log_message(_, Fields, LogType, Id) ->
+%     #log_message{
+%         message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
+%         props=[
+%             {log_type, LogType},
+%             {log_id, Id}
+%             | Fields
+%         ]
+%     }.
 
 to_list({error, timeout}) ->
     "timeout";

@@ -52,7 +52,7 @@
 -record(state, {
         site :: atom(),                             % Name of this site, for #context{}
         is_subscribed = false :: boolean(),
-        last_poll = 0 :: pos_integer(),             % Last poll in seconds
+        last_poll = 0 :: non_neg_integer(),             % Last poll in seconds
         tags = [] :: list(),                        % All subscribed tags
         poll = [] :: list()                         % Tags to poll
     }).
@@ -169,15 +169,15 @@ media_import_shared_data(#{<<"entry_data">> := #{<<"PostPage">> := PostPage}}, M
     Media = find_media(PostPage),
     {W,H} = media_dimensions(Media),
     Title = z_url_metadata:p(title, MD),
-    Caption = proplists:get_value(<<"caption">>, Media),
+    Caption = maps:get(<<"caption">>, Media, undefined),
     CaptionTruncated = z_string:truncate(Caption, 80),
     Summary = case CaptionTruncated of
         Caption -> Title;
         _ -> <<Caption/binary, " — "/utf8, Title/binary>>
     end,
-    case proplists:get_value(<<"is_video">>, Media) of
+    case maps:get(<<"is_video">>, Media, false) of
         false ->
-            ImgUrl = proplists:get_value(<<"display_src">>, Media),
+            ImgUrl = maps:get(<<"display_src">>, Media),
             #media_import_props{
                 prio = 1,
                 category = image,
@@ -195,8 +195,8 @@ media_import_shared_data(#{<<"entry_data">> := #{<<"PostPage">> := PostPage}}, M
                 medium_url = ImgUrl
             };
         true ->
-            VideoUrl = proplists:get_value(<<"video_url">>, Media),
-            PreviewImgUrl = proplists:get_value(<<"display_src">>, Media),
+            VideoUrl = maps:get(<<"video_url">>, Media),
+            PreviewImgUrl = maps:get(<<"display_src">>, Media),
             #media_import_props{
                 prio = 1,
                 category = video,
@@ -367,17 +367,16 @@ sync_subscription(Tags, Subs, Context) ->
 get_subscription(Context) ->
     case instagram_api:subscriptions(Context) of
         {ok, Subs} ->
-            Tags = lists:flatten(
-                        lists:map(
-                            fun(Sub) ->
-                                case proplists:get_value(object, Sub) of
-                                    <<"tag">> ->
-                                        {proplists:get_value(object_id, Sub),proplists:get_value(id, Sub)};
-                                    _ ->
-                                        []
-                                end
-                            end,
-                            Subs)),
+            Tags = lists:filtermap(
+                fun(Sub) ->
+                    case proplists:get_value(object, Sub) of
+                        <<"tag">> ->
+                            {true, {proplists:get_value(object_id, Sub),proplists:get_value(id, Sub)}};
+                        _ ->
+                            false
+                    end
+                end,
+                Subs),
             {ok, Tags};
         {error, _} = Error ->
             Error

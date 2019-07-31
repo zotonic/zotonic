@@ -54,24 +54,29 @@
 
 -define(DEFAULT_LANGUAGE, en).
 
+-type language_code() :: atom().
+-type language() :: language_code() | binary() | string().
+
+-export_type([ language/0, language_code/0 ]).
+
 %% @doc Returns the configured default language for this server; if not set, 'en'
 %%      (English).
--spec default_language(#context{}) -> atom().
-default_language(undefined) -> ?DEFAULT_LANGUAGE;
+-spec default_language( z:context() | undefined ) -> language_code().
+default_language(undefined) ->
+    ?DEFAULT_LANGUAGE;
 default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, ?DEFAULT_LANGUAGE, Context)).
 
 %% @doc Check if the language code code is a valid language.
--spec is_valid(Code::binary() | any()) -> boolean().
+-spec is_valid( language() ) -> boolean().
 is_valid(Code) when is_binary(Code) ->
-    Languages = all_languages(),
-    proplists:get_value(Code, Languages) /= undefined;
+    proplists:is_defined(Code, all_languages());
 is_valid(Code) ->
     is_valid(z_convert:to_binary(Code)).
 
 
 %% @doc Translate a language-code to an atom.
--spec to_language_atom( atom() | string() | binary() ) -> {ok, atom()} | {error, not_a_language}.
+-spec to_language_atom( language() ) -> {ok, language()} | {error, not_a_language}.
 to_language_atom(Code) when is_binary(Code) ->
     case is_valid(Code) of
         false -> {error, not_a_language};
@@ -83,7 +88,7 @@ to_language_atom(Code) ->
 
 %% @doc Return the fallback language (the base language);  if no fallback language is
 %%      found, returns the default language.
--spec fallback_language(Code::binary() | any() | undefined, #context{}) -> atom().
+-spec fallback_language( language() | undefined, z:context() ) -> language_code().
 fallback_language(Code, Context) when Code =:= undefined ->
     default_language(Context);
 fallback_language(Code, Context) when is_binary(Code) ->
@@ -101,16 +106,26 @@ fallback_language(Code, Context) ->
 
 
 %% @doc Returns the English language name.
--spec english_name(Code::atom()) -> binary() | undefined.
+-spec english_name( language() ) -> binary() | undefined.
 english_name(Code) ->
     get_property(Code, name_en).
 
 
 %% @doc Check if the given language is a rtl language.
--spec is_rtl(Code::binary() | any()) -> boolean().
+-spec is_rtl( language() ) -> boolean().
 is_rtl(Code) ->
     get_property(Code, direction) == <<"RTL">>.
 
+-spec is_language_enabled( language(), z:context() ) -> boolean().
+is_language_enabled(Code, Context) when is_atom(Code) ->
+    lists:member(Code, enabled_language_codes(Context));
+is_language_enabled(Code, Context) ->
+    case to_language_atom(Code) of
+        {ok, Lang} ->
+            lists:member(Lang, enabled_language_codes(Context));
+        {error, not_a_language} ->
+            false
+    end.
 
 %% @doc Returns a list of properties from a language item retrieved from *all* languages.
 %%      Proplists key: language code - this is the ISO 639-1 language code or otherwise
@@ -124,7 +139,7 @@ is_rtl(Code) ->
 %%          (ISO 3166-2).
 %%      -   script (only for script variations): 4-letter script code (ISO 15924); if omitted: Latn.
 %%      -   direction: (if omitted: LTR) or RTL.
--spec properties(Code::binary() | any()) -> list().
+-spec properties( language() ) -> list().
 properties(Code) when is_binary(Code) ->
     Data = proplists:get_value(Code, all_languages()),
     properties(Code, Data);
@@ -133,7 +148,7 @@ properties(Code) ->
 
 
 %% @private
--spec properties(Code::binary() | any(), list()) -> list().
+-spec properties( language(), list() ) -> list().
 properties(Code, Data) when is_binary(Code) ->
     [
         {language, proplists:get_value(language, Data)},
@@ -194,7 +209,7 @@ main_languages() ->
 
 
 %% @doc Return the currently configured list of languages
--spec language_list(z:context()) -> list( {atom(), list()} ).
+-spec language_list(z:context()) -> list( {language_code(), list()} ).
 language_list(Context) ->
     case m_config:get(i18n, language_list, Context) of
         undefined ->
@@ -206,28 +221,24 @@ language_list(Context) ->
             end
     end.
 
--spec is_language_enabled(atom() | binary() | string(), z:context()) -> boolean().
-is_language_enabled(Code, Context) ->
-    lists:member(to_language_atom(Code), enabled_language_codes(Context)).
-
--spec enabled_language_codes(z:context()) -> list( atom() ).
+-spec enabled_language_codes(z:context()) -> list( language_code() ).
 enabled_language_codes(Context) ->
     case m_config:get(i18n, language_list, Context) of
-        undefined -> [ default_language(Context) ];
-        Cfg -> [Code || {Code, _} <- proplists:get_value(list, Cfg, [{en, []}])]
+        [] -> [ default_language(Context) ];
+        Cfg -> [ Code || {Code, _} <- proplists:get_value(list, Cfg, [{en, []}]) ]
     end.
 
 
 %% @private
 %% Gets a property from an item retrieved from *all* languages.
--spec get_property(Code::binary() | any(), Key:: atom()) -> binary() | undefined.
+-spec get_property( language(), Key:: atom() ) -> binary() | undefined.
 get_property(Code, Key) ->
     get_property_from_list(Code, Key, all_languages()).
 
 
 %% @private
 %% Gets a property from an item retrieved from specified list
--spec get_property_from_list(Code::binary() | any(), Key:: atom(), List:: list()) -> binary() | list() | undefined.
+-spec get_property_from_list( language(), Key:: atom(), List:: list() ) -> binary() | list() | undefined.
 get_property_from_list(Code, Key, List) when is_binary(Code) ->
     case proplists:get_value(Code, List) of
         undefined -> undefined;
@@ -238,7 +249,7 @@ get_property_from_list(Code, Key, List) ->
 
 
 %% @private
--spec languages() -> list().
+-spec languages() -> list( {binary(), proplists:proplist()} ).
 languages() -> [
     {<<"aa">>, [
         {language, <<"aa">>},

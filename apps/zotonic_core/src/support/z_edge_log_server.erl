@@ -89,9 +89,7 @@ handle_call(check, _From, State) ->
         {ok, _} = OK ->
             {reply, OK, State, ?CLEANUP_TIMEOUT_SHORT};
         {error, _} = Error ->
-            {reply, Error, State, ?CLEANUP_TIMEOUT_LONG};
-        {rollback,{no_database_connection,_}} ->
-            {noreply, State, ?CLEANUP_TIMEOUT_LONG}
+            {reply, Error, State, ?CLEANUP_TIMEOUT_LONG}
     end;
 
 %% @doc Trap unknown calls
@@ -108,8 +106,6 @@ handle_cast(check, State) ->
         {ok, _} ->
             {noreply, State, ?CLEANUP_TIMEOUT_SHORT};
         {error, _} ->
-            {noreply, State, ?CLEANUP_TIMEOUT_LONG};
-        {rollback,{no_database_connection,_}} ->
             {noreply, State, ?CLEANUP_TIMEOUT_LONG}
     end;
 

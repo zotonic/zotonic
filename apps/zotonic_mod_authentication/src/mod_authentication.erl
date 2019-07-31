@@ -139,7 +139,7 @@ observe_auth_validated(#auth_validated{} = Auth, Context) ->
 maybe_add_identity(undefined, Auth, Context) ->
     case auth_identity(Auth, Context) of
         undefined -> maybe_signup(Auth, Context);
-        Ps -> logon_identity(Auth, Ps, Context)
+        Ps when is_list(Ps) -> logon_identity(Auth, Ps, Context)
     end;
 maybe_add_identity(CurrUserId, Auth, Context) ->
     case auth_identity(Auth, Context) of
@@ -162,8 +162,6 @@ maybe_add_identity(CurrUserId, Auth, Context) ->
 maybe_update_identity(Ps, Ps, _IdnPs, _Context) ->
     ok;
 maybe_update_identity(_Ps1, _Ps2, [], _Context) ->
-    ok;
-maybe_update_identity(_Ps1, _Ps2, undefined, _Context) ->
     ok;
 maybe_update_identity(_Ps, NewProps, IdnPs, Context) ->
     {key, Key} = proplists:lookup(key, IdnPs),
@@ -227,7 +225,6 @@ is_user_email_exists(undefined, _Context) ->
     false;
 is_user_email_exists(Email, Context) ->
     case m_identity:lookup_users_by_verified_type_and_key(email, Email, Context) of
-        undefined -> false;
         [] -> false;
         _ -> true
     end.

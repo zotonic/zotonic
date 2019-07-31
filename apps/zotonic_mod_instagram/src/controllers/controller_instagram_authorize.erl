@@ -54,9 +54,7 @@ redirect_location(StateId, Context) ->
         "&state=", StateId
     ]),
     case Scope of
-        [] -> Url;
-        <<>> -> Url;
-        undefined -> Url;
+        "" -> Url;
         _ -> <<Url/binary, "&scope=", (z_convert:to_binary(z_url:url_encode(Scope)))/binary>>
     end.
 

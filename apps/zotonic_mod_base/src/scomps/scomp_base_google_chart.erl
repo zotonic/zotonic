@@ -111,9 +111,7 @@ render(Params, _Vars, Context) ->
 
     % Axes...
     Axes = case AxesArg1 of
-            undefined   -> [];
             []          -> [];
-            <<>>        -> <<>>;
             AxesRecords ->
                 ProcessedAxes = [process_axis(N - 1, lists:nth(N, AxesRecords), Context) || N <- lists:seq(1, length(AxesRecords))],
 
@@ -129,9 +127,7 @@ render(Params, _Vars, Context) ->
 
     % Data...
     {MaxValueLength, Data} = case DataArg1 of
-                undefined   -> {0, []};
                 []          -> {0, []};
-                <<>>        -> {0, []};
                 DataRecords ->
                     ProcessedData = [process_data(N -1, lists:nth(N, DataRecords)) || N <- lists:seq(1, length(DataRecords))],
 
@@ -164,11 +160,11 @@ render(Params, _Vars, Context) ->
                     DataGroupsLength = length(Data),
                     GroupSpacerPixels = MaxValueLength * BarGroupSpace,
                     BarSpacerPixels = MaxValueLength * (DataGroupsLength * BarSpace),
-                    AvailablePixels = case Type of
-                        stacked_horizontal_bar -> Height;
-                        grouped_horizontal_bar -> Height;
-                        stacked_vertical_bar -> Width;
-                        grouped_vertical_bar -> Width;
+                    AvailablePixels = case proplists:get_value(type, Params, "line") of
+                        "stacked_horizontal_bar" -> Height;
+                        "grouped_horizontal_bar" -> Height;
+                        "stacked_vertical_bar" -> Width;
+                        "grouped_vertical_bar" -> Width;
                         _ -> 0
                     end,
                     IndividualBarSize = (AvailablePixels - GroupSpacerPixels - BarSpacerPixels) / (DataGroupsLength * MaxValueLength),

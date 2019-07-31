@@ -93,6 +93,9 @@ all(Context) ->
 
 
 %% @doc Get the list of configuration key for the module.
+%%      Returns the empty list for non existing keys, otherwise
+%%      a property list with all the module settings.
+-spec get( atom() | binary() | undefined, z:context() ) -> proplists:proplist() | [].
 get(undefined, _Context) ->
     [];
 get(Module, Context) when is_atom(Module) ->

@@ -39,8 +39,8 @@
 m_get([ useauth | Rest ], _OptMsg, Context) ->
     {ok, {is_useauth(Context), Rest}};
 m_get([ picture, Key | Rest ], _OptMsg, Context) ->
-    P = do_graph_call(get, Key, undefined, [{fields, "picture"}], Context),
-    {ok, {proplists:get_value(picture, P), Rest}};
+    {ok, P} = do_graph_call(get, Key, undefined, [{fields, "picture"}], Context),
+    {ok, {maps:get(picture, P, undefined), Rest}};
 m_get([ CT, Key | Rest ], _OptMsg, Context)
   when CT =:= friends;
        CT =:= home;

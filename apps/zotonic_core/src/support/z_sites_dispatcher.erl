@@ -81,10 +81,10 @@
 }).
 
 -type dispatch() :: #dispatch_controller{}
-                    | #dispatch_nomatch{}
-                    | {redirect, Site :: atom(), NewPathOrURI :: binary(), IsPermanent :: boolean()}
-                    | {redirect_protocol, http|https, Site :: atom(), IsPermanent :: boolean()}
-                    | {stop_request, pos_integer()}.
+                  | #dispatch_nomatch{}
+                  | {redirect, Site :: atom(), NewPathOrURI :: binary(), IsPermanent :: boolean()}
+                  | {redirect_protocol, http|https, Site :: atom(), IsPermanent :: boolean()}
+                  | {stop_request, pos_integer()}.
 
 -export_type([
     dispatch_rule/0,
@@ -177,27 +177,28 @@ dispatch(Req, Env) ->
     Path = cowboy_req:path(Req),
     Method = cowboy_req:method(Req),
     DispReq = #dispatch{
-                    host=Host,
-                    path=Path,
-                    method=Method,
-                    protocol=Scheme,
-                    tracer_pid=undefined
+                    host = Host,
+                    path = Path,
+                    method = Method,
+                    protocol = Scheme,
+                    tracer_pid = undefined
               },
     z_depcache:in_process(true),
     z_memo:enable(),
     dispatch_1(DispReq, Req).
 
+-spec dispatch( binary(), binary(), binary(), boolean(), pid() | undefined) -> dispatch().
 dispatch(Method, Host, Path, IsSsl, TracerPid) when is_boolean(IsSsl) ->
     Protocol = case IsSsl of
                     true -> https;
                     false -> http
                end,
     DispReq = #dispatch{
-                    host=z_convert:to_binary(Host),
-                    path=z_convert:to_binary(Path),
-                    method=Method,
-                    protocol=Protocol,
-                    tracer_pid=TracerPid
+                    host = z_convert:to_binary(Host),
+                    path = z_convert:to_binary(Path),
+                    method = Method,
+                    protocol = Protocol,
+                    tracer_pid = TracerPid
               },
     dispatch_1(DispReq, undefined).
 
@@ -292,7 +293,7 @@ send_static_response(RespCode, Req) ->
 %% Always redirect to https
 dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, _OptReq) when Hostname =/= undefined ->
     #dispatch{ tracer_pid = TracerPid } = DispReq,
-    redirect_protocol(https, Hostname, TracerPid, [], undefined);
+    redirect_protocol(Hostname, TracerPid, []);
 dispatch_1(DispReq, OptReq) ->
     case ets:lookup(?MODULE, DispReq#dispatch.host) of
         [] ->
@@ -612,21 +613,12 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
         context = maybe_set_language(Bindings1, Context)
     }.
 
--spec redirect_protocol(https|http, binary()|undefined, pid()|undefined, list(), #context{} | undefined) ->
+-spec redirect_protocol(binary()|undefined, pid()|undefined, list()) ->
             {redirect_protocol, http|https, binary()|undefined, boolean()}.
-redirect_protocol(https, Hostname, TracerPid, Tokens, undefined) ->
+redirect_protocol(Hostname, TracerPid, Tokens) ->
     NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
     trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
-    {redirect_protocol, https, NewHostname, true};
-redirect_protocol(https, Hostname, TracerPid, Tokens, Context) ->
-    NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
-    trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
-    IsPermanent = z_convert:to_bool(m_config:get(site, ssl_permanent, Context)),
-    {redirect_protocol, https, NewHostname, IsPermanent};
-redirect_protocol(http, Hostname, TracerPid, Tokens, _Context) ->
-    NewHostname = add_port(http, Hostname, z_config:get(port)),
-    trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, http}, {host, NewHostname}]),
-    {redirect_protocol, http, NewHostname, false}.
+    {redirect_protocol, https, NewHostname, true}.
 
 -spec do_dispatch_fail(any(), any(), any(), any(), any()) -> #dispatch_controller{} | #dispatch_nomatch{}.
 do_dispatch_fail(Bindings, Tokens, _IsDir, DispReq, Context0) ->
@@ -866,10 +858,10 @@ trace(TracerPid, PathTokens, What, Args) ->
 trace_final(undefined, R) ->
     R;
 trace_final(TracerPid, #dispatch_controller{
-    controller = Controller,
-    controller_options = ControllerOptions,
-    bindings = Bindings
-} = Match) ->
+            controller = Controller,
+            controller_options = ControllerOptions,
+            bindings = Bindings
+        } = Match) ->
     trace(
         TracerPid,
         undefined,
@@ -883,9 +875,8 @@ trace_final(TracerPid, #dispatch_controller{
 trace_final(_TracerPid, RedirectOrHandled) ->
     RedirectOrHandled.
 
-
-add_port(http, Hostname, 80) ->
-    Hostname;
+% add_port(http, Hostname, 80) ->
+%     Hostname;
 add_port(https, Hostname, 443) ->
     Hostname;
 add_port(_, Hostname, Port) ->

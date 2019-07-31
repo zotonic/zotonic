@@ -116,8 +116,6 @@ m_get([ get_result, SurveyId, AnswerId | Rest ], _Msg, Context) ->
             {error, enoent};
         RId ->
             case single_result(SurveyId, AnswerId, Context) of
-                undefined ->
-                    {ok, {undefined, Rest}};
                 [] ->
                     {ok, {[], Rest}};
                 Result ->
@@ -473,8 +471,8 @@ make_list(V) -> [V].
 
 %% @doc Get survey results, sorted by the given sort column.
 survey_results_sorted(SurveyId, SortColumn, Context) ->
-    [Headers|Data] = survey_results(SurveyId, true, Context),
-    case string:str(Headers, [z_convert:to_binary(SortColumn)]) of
+    [ Headers | Data ] = survey_results(SurveyId, true, Context),
+    case indexof(Headers, SortColumn, 1) of
         0 ->
             %% column not found, do not sort
             [Headers|Data];
@@ -485,6 +483,9 @@ survey_results_sorted(SurveyId, SortColumn, Context) ->
             [Headers|Data2]
     end.
 
+indexof([], _Col, _N) -> 0;
+indexof([ Col | _ ], Col, N) -> N;
+indexof([ _ | Cols ], Col, N) -> indexof(Cols, Col, N+1).
 
 
 %% @doc get prepared questions from the blocks
@@ -642,7 +643,7 @@ opt_totals(Points, MaxPoints, PassPercent) ->
     ].
 
 %% @doc private
-answer_row_question(_QAnswers, undefined, _IsTest, _Context) ->
+answer_row_question(_QAnswers, [], _IsTest, _Context) ->
     [];
 answer_row_question(QAnswers, Q, false, Context) ->
     Type = proplists:get_value(type, Q),

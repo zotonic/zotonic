@@ -33,11 +33,20 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-type metric() :: { exometer:name(), exometer:type(), exometer:options() }.
+
+-type subscription() :: {
+    exometer_report:metric(),
+    [ exometer_report:datapoint() ],
+    exometer_report:interval(),
+    exometer_report:extra(),
+    boolean() }.
+
 %%
 %% Observes
 %%
 
-observe_module_activate(#module_activate{module=?MODULE}, _Context) ->
+observe_module_activate(#module_activate{ module = ?MODULE }, _Context) ->
     ensure_metrics(erlang_metrics()),
     ensure_z_exometer_mqtt_added(),
     ensure_subscriptions(erlang_subscriptions()),
@@ -45,9 +54,12 @@ observe_module_activate(#module_activate{module=?MODULE}, _Context) ->
 observe_module_activate(#module_activate{}, _Context) ->
     ok.
 
-observe_module_deactivate(#module_deactivate{module=?MODULE}, _Context) ->
-    [exometer_report:unsubscribe(z_exometer_mqtt, Metric, DataPoint) ||
-        {Metric, DataPoint, _, _, _} <- erlang_subscriptions()];
+observe_module_deactivate(#module_deactivate{ module = ?MODULE }, _Context) ->
+    lists:foreach(
+        fun( {Metric, DataPoint, _, _, _} ) ->
+            exometer_report:unsubscribe(z_exometer_mqtt, Metric, DataPoint)
+        end,
+        erlang_subscriptions());
 observe_module_deactivate(#module_deactivate{}, _Context) ->
     ok.
 
@@ -55,6 +67,7 @@ observe_module_deactivate(#module_deactivate{}, _Context) ->
 %% Helpers
 %%
 
+-spec erlang_metrics() -> list( metric() ).
 erlang_metrics() ->
     [
         {[erlang, memory], {function, erlang, memory, [],
@@ -69,6 +82,7 @@ erlang_metrics() ->
                 value, [tcp_port_count]}, []}
     ].
 
+-spec erlang_subscriptions() -> list( subscription() ).
 erlang_subscriptions() ->
     [
         {[erlang, memory],
@@ -88,6 +102,7 @@ ensure_metrics([{Name, Type, Opts}|Rest]) ->
     ensure_metric(Name, Type, Opts),
     ensure_metrics(Rest).
 
+-spec ensure_metric(  exometer:name(), exometer:type(), exometer:options() ) -> ok.
 ensure_metric(Name, Type, Opts) ->
     case catch exometer:ensure(Name, Type, Opts) of
         ok ->

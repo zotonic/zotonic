@@ -305,8 +305,6 @@ get_value(K, L, D) when is_list(L) ->
 get_value(_K, undefined, D) ->
     D.
 
-import_def_edges({error, _}, _, _, State, _Context) ->
-    State;
 import_def_edges(Id, ConnectionMapping, Row, State, Context) ->
     %% @todo Use a mapfoldl here to return the new state with name lookups from the edges
     EdgeIds = lists:flatten([import_do_edge(Id, Row, Map, State, Context) || Map <- ConnectionMapping]),
