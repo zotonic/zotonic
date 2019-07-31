@@ -55,7 +55,8 @@
 -include_lib("zotonic.hrl").
 
 -type site_dispatch_list() :: #site_dispatch_list{}.
--type dispatch_rule() :: {Name::atom(), Path::list(binary()), Controller::atom(), Options::list()}.
+-type dispatch_rule() :: dispatch_compiler:dispatch_rule().
+-type bindings() :: list(dispatch_compiler:binding()).
 -type hostname() :: binary() | string().
 
 -record(state, {
@@ -67,7 +68,7 @@
     site = undefined :: atom(),
     host = <<>> :: binary(),
     path_tokens = [] :: [binary()],
-    bindings = [] :: [{atom(), binary()}],
+    bindings = [] :: bindings(),
     context = undefined :: #context{} | undefined
 }).
 
@@ -76,8 +77,8 @@
     controller = undefined :: atom(),
     controller_options = [] :: list(),
     path_tokens = [] :: [binary()],
-    bindings :: [{atom(), binary()}],
-    context :: #context{}
+    bindings :: bindings(),
+    context :: z:context()
 }).
 
 -type dispatch() :: #dispatch_controller{}
@@ -380,6 +381,7 @@ dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = 
             {stop_request, RespCode}
     end.
 
+-spec dispatch_match( list( binary() ), z:context() ) -> {ok, {dispatch_rule(), proplists:proplist()}} | fail.
 dispatch_match(Tokens, Context) ->
     Module = z_utils:name_for_site(dispatch, z_context:site(Context)),
     try
