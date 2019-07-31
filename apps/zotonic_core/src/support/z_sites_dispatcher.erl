@@ -869,13 +869,11 @@ trace(TracerPid, PathTokens, What, Args) ->
     TracerPid ! {trace, PathTokens, What, Args},
     ok.
 
-trace_final(undefined, R) ->
-    R;
 trace_final(TracerPid, #dispatch_controller{
             controller = Controller,
             controller_options = ControllerOptions,
             bindings = Bindings
-        } = Match) ->
+        } = Match) when is_pid(TracerPid) ->
     trace(
         TracerPid,
         undefined,
