@@ -197,6 +197,9 @@ connect(Args, RetryCt, MRef) ->
         connect_1(Args, RetryCt, MRef)
     end.
 
+% Suppress warning about epgsql_connect not returning {error, econnrefused}
+% It is returning it, but the type spec in epgsql is wrong.
+-dialyzer({nowarn_function, connect_1/3}).
 connect_1(Args, RetryCt, MRef) ->
     Hostname = get_arg(dbhost, Args),
     Port = get_arg(dbport, Args),
