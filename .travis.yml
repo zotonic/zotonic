@@ -2,14 +2,14 @@ language: erlang
 matrix:
   include:
     - otp_release: 21.3
-    - otp_release: 20.0
+    - otp_release: 20.3
       env: BUILD_DOCS=true
     - otp_release: 19.3
       env: ELVIS=true
-    - otp_release: 19.0
+    - otp_release: 19.3
       env: DIALYZER=true
   allow_failures:
-    - otp_release: 19.0
+    - otp_release: 19.3
       env: DIALYZER=true
   fast_finish: true
 services:
