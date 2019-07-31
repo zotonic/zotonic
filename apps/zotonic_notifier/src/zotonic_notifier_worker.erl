@@ -158,7 +158,7 @@ notify_async(Notifier, Event, Msg, ContextArg) ->
 
 %% @doc Cast the event to the first observer. The prototype of the observer is: f(Msg, Context) -> void
 notify1(Notifier, Event, Msg, ContextArg) ->
-    case get_observers(Event, Notifier) of
+    case get_observers(Notifier, Event) of
         [] -> ok;
         [ {_, Pid, _} = Obs | _ ] when is_pid(Pid) ->
             notify_observer(Msg, Obs, false, ContextArg);

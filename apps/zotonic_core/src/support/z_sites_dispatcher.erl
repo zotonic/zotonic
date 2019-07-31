@@ -82,12 +82,19 @@
 
 -type dispatch() :: #dispatch_controller{}
                   | #dispatch_nomatch{}
-                  | {redirect, Site :: atom(), NewPathOrURI :: binary(), IsPermanent :: boolean()}
-                  | {redirect_protocol, http|https, Site :: atom(), IsPermanent :: boolean()}
-                  | {stop_request, pos_integer()}.
+                  | redirect()
+                  | redirect_protocol()
+                  | stop_request().
+
+-type redirect() :: {redirect, Site :: atom(), NewPathOrURI :: binary() | undefined, IsPermanent :: boolean()}.
+-type redirect_protocol() :: {redirect_protocol, http|https, Host :: binary(), IsPermanent :: boolean()}.
+-type stop_request() :: {stop_request, pos_integer()}.
 
 -export_type([
     dispatch_rule/0,
+    redirect/0,
+    redirect_protocol/0,
+    stop_request/0,
     hostname/0
 ]).
 
@@ -613,14 +620,13 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
         context = maybe_set_language(Bindings1, Context)
     }.
 
--spec redirect_protocol(binary()|undefined, pid()|undefined, list()) ->
-            {redirect_protocol, http|https, binary()|undefined, boolean()}.
+-spec redirect_protocol(binary()|undefined, pid()|undefined, list()) -> redirect_protocol().
 redirect_protocol(Hostname, TracerPid, Tokens) ->
     NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
     trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
     {redirect_protocol, https, NewHostname, true}.
 
--spec do_dispatch_fail(any(), any(), any(), any(), any()) -> #dispatch_controller{} | #dispatch_nomatch{}.
+-spec do_dispatch_fail(any(), any(), any(), any(), any()) -> dispatch().
 do_dispatch_fail(Bindings, Tokens, _IsDir, DispReq, Context0) ->
     TokenPath = tokens_to_path(Tokens),
     trace(DispReq#dispatch.tracer_pid, DispReq#dispatch.path, notify_dispatch, []),
@@ -850,10 +856,13 @@ split_host(Host) when is_binary(Host) ->
 filter_rules(Rules, Site) ->
     z_notifier:foldl(#dispatch_rules{rules=Rules}, Rules, z_context:new(Site)).
 
+-spec trace( pid() | undefined, Path, atom(), proplists:proplist() ) -> ok
+    when Path :: binary() | [ binary() ] | undefined.
 trace(undefined, _PathTokens, _What, _Args) ->
     ok;
 trace(TracerPid, PathTokens, What, Args) ->
-    TracerPid ! {trace, PathTokens, What, Args}.
+    TracerPid ! {trace, PathTokens, What, Args},
+    ok.
 
 trace_final(undefined, R) ->
     R;
