@@ -60,7 +60,7 @@ check_state(Code, Context) ->
     end.
 
 
-access_token({ok, AccessToken, UserData}, Args, Context) ->
+access_token({ok, {AccessToken, UserData}}, Args, Context) ->
     user_data(fetch_user_data(AccessToken, UserData), AccessToken, Args, Context);
 access_token({error, _Reason}, _Args, Context) ->
     html_error(access_token, Context).
@@ -79,9 +79,9 @@ user_data({ok, UserProps}, AccessToken, Args, Context) ->
             html_error(auth_user_error, Context);
         {ok, Context1} ->
             html_ok(Context1)
-    end;
-user_data({error, _Reason}, _AccessData, _Args, Context) ->
-    html_error(service_user_data, Context).
+    end.
+% user_data({error, _Reason}, _AccessData, _Args, Context) ->
+%     html_error(service_user_data, Context).
 
 
 html_ok(Context) ->
@@ -104,21 +104,21 @@ html_error(ErrorReason, Context) ->
 
 
 auth_user(InstProps, AccessToken, Args, Context) ->
-    InstagramUserId = proplists:get_value(<<"id">>, InstProps),
+    InstagramUserId = maps:get(<<"id">>, InstProps),
     lager:debug("[instagram] Authenticating ~p ~p", [InstagramUserId, InstProps]),
     PersonProps = [
-        {title, proplists:get_value(<<"full_name">>, InstProps)},
-        {depiction_url, proplists:get_value(<<"profile_picture">>, InstProps, [])}
+        {title, maps:get(<<"full_name">>, InstProps, <<>>)},
+        {depiction_url, maps:get(<<"profile_picture">>, InstProps, <<>>)}
     ],
     z_notifier:first(#auth_validated{
             service=instagram,
             service_uid=InstagramUserId,
             service_props=[
                 {access_token, AccessToken},
-                {username, proplists:get_value(<<"username">>, InstProps)}
+                {username, maps:get(<<"username">>, InstProps)}
             ],
             props=PersonProps,
-            is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
+            is_connect = z_convert:to_bool(maps:get(<<"is_connect">>, Args, false))
         },
         Context).
 
@@ -141,11 +141,11 @@ fetch_access_token(Code, Context) ->
     of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             #{
-                <<"user">> := #{
+                <<"user">> := UserData = #{
                     <<"access_token">> := AccessToken
                 }
             } = z_json:decode(Payload),
-            {ok, AccessToken};
+            {ok, {AccessToken, UserData}};
         Other ->
             lager:error("[instagram] error fetching access token [code ~p] ~p", [Code, Other]),
             {error, {http_error, InstagramUrl, Other}}

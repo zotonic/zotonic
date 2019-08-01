@@ -34,7 +34,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Return all subscriptions
--spec subscriptions(#context{}) -> {ok, list(list())} | {error, term()}.
+-spec subscriptions( z:context() ) -> {ok, list( proplists:proplist() )} | {error, term()}.
 subscriptions(Context) ->
     {ConsumerKey, ConsumerSecret, _Scope} = mod_instagram:get_config(Context),
     Url = "https://api.instagram.com/v1/subscriptions"
@@ -42,7 +42,7 @@ subscriptions(Context) ->
             ++ "&client_id=" ++ z_url:url_encode(ConsumerKey),
     case httpc:request(get, {Url, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_Version, 200, _OK}, _Hs, Data}} ->
-            #{<<"data">> := Data} = z_json:decode(Data),
+            #{ <<"data">> := JSONData } = z_json:decode(Data),
             {ok, [
                 [
                     {id, v(<<"id">>, D)},
@@ -52,7 +52,7 @@ subscriptions(Context) ->
                     {callback_url, v(<<"callback_url">>, D)},
                     {type, v(<<"type">>, D)}
                 ]
-                || D <- Data]
+                || D <- JSONData ]
             };
         {ok, Other} ->
             {error, Other};
@@ -60,7 +60,7 @@ subscriptions(Context) ->
             Error
     end.
 
-v(K, Props) ->
+v(K, Props) when is_map(Props) ->
     case maps:get(K, Props, undefined) of
         null -> undefined;
         V -> V

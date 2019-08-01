@@ -55,7 +55,8 @@
 -include_lib("zotonic.hrl").
 
 -type site_dispatch_list() :: #site_dispatch_list{}.
--type dispatch_rule() :: {Name::atom(), Path::list(binary()), Controller::atom(), Options::list()}.
+-type dispatch_rule() :: dispatch_compiler:dispatch_rule().
+-type bindings() :: list(dispatch_compiler:binding()).
 -type hostname() :: binary() | string().
 
 -record(state, {
@@ -67,7 +68,7 @@
     site = undefined :: atom(),
     host = <<>> :: binary(),
     path_tokens = [] :: [binary()],
-    bindings = [] :: [{atom(), binary()}],
+    bindings = [] :: bindings(),
     context = undefined :: #context{} | undefined
 }).
 
@@ -76,18 +77,25 @@
     controller = undefined :: atom(),
     controller_options = [] :: list(),
     path_tokens = [] :: [binary()],
-    bindings :: [{atom(), binary()}],
-    context :: #context{}
+    bindings :: bindings(),
+    context :: z:context()
 }).
 
 -type dispatch() :: #dispatch_controller{}
-                    | #dispatch_nomatch{}
-                    | {redirect, Site :: atom(), NewPathOrURI :: binary(), IsPermanent :: boolean()}
-                    | {redirect_protocol, http|https, Site :: atom(), IsPermanent :: boolean()}
-                    | {stop_request, pos_integer()}.
+                  | #dispatch_nomatch{}
+                  | redirect()
+                  | redirect_protocol()
+                  | stop_request().
+
+-type redirect() :: {redirect, Site :: atom(), NewPathOrURI :: binary() | undefined, IsPermanent :: boolean()}.
+-type redirect_protocol() :: {redirect_protocol, http|https, Host :: binary(), IsPermanent :: boolean()}.
+-type stop_request() :: {stop_request, pos_integer()}.
 
 -export_type([
     dispatch_rule/0,
+    redirect/0,
+    redirect_protocol/0,
+    stop_request/0,
     hostname/0
 ]).
 
@@ -177,29 +185,30 @@ dispatch(Req, Env) ->
     Path = cowboy_req:path(Req),
     Method = cowboy_req:method(Req),
     DispReq = #dispatch{
-                    host=Host,
-                    path=Path,
-                    method=Method,
-                    protocol=Scheme,
-                    tracer_pid=undefined
-              },
+        host = Host,
+        path = Path,
+        method = Method,
+        protocol = Scheme,
+        tracer_pid = undefined
+    },
     z_depcache:in_process(true),
     z_memo:enable(),
-    dispatch_1(DispReq, Req).
+    dispatch_1(DispReq, Req, Env).
 
-dispatch(Method, Host, Path, IsSsl, TracerPid) when is_boolean(IsSsl) ->
+-spec dispatch( binary() | string(), binary() | string(), binary() | string(), boolean(), pid() | undefined ) -> dispatch().
+dispatch(Method, Host, Path, IsSsl, OptTracerPid) when is_boolean(IsSsl) ->
     Protocol = case IsSsl of
-                    true -> https;
-                    false -> http
-               end,
+        true -> https;
+        false -> http
+    end,
     DispReq = #dispatch{
-                    host=z_convert:to_binary(Host),
-                    path=z_convert:to_binary(Path),
-                    method=Method,
-                    protocol=Protocol,
-                    tracer_pid=TracerPid
-              },
-    dispatch_1(DispReq, undefined).
+        host = z_convert:to_binary(Host),
+        path = z_convert:to_binary(Path),
+        method = z_convert:to_binary(Method),
+        protocol = Protocol,
+        tracer_pid = OptTracerPid
+    },
+    dispatch_1(DispReq, undefined, undefined).
 
 
 %% @doc Retrieve the fallback site.
@@ -290,36 +299,39 @@ send_static_response(RespCode, Req) ->
 %% ---------------------------------------------------------------------------------------
 
 %% Always redirect to https
-dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, _OptReq) when Hostname =/= undefined ->
+-spec dispatch_1( #dispatch{}, undefined | cowboy_req:req(), undefined | cowboy_middleware:env() ) -> dispatch().
+dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, _OptReq, _OptEnv) when Hostname =/= undefined ->
     #dispatch{ tracer_pid = TracerPid } = DispReq,
-    redirect_protocol(https, Hostname, TracerPid, [], undefined);
-dispatch_1(DispReq, OptReq) ->
+    redirect_protocol(Hostname, TracerPid, []);
+dispatch_1(DispReq, OptReq, OptEnv) ->
     case ets:lookup(?MODULE, DispReq#dispatch.host) of
         [] ->
             % Check for fallback sites or other site handling this hostname
-            case find_no_host_match(DispReq, OptReq) of
+            case find_no_host_match(DispReq, OptReq, OptEnv) of
                 {ok, Site} ->
-                    dispatch_site_if_running(DispReq, OptReq, Site, []);
+                    dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, []);
                 {fallback, Site} ->
-                    dispatch_site_if_running(DispReq, OptReq, Site, [{http_status_code, 400}]);
+                    dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, [{http_status_code, 400}]);
                 Other ->
                     Other
             end;
         [{_, Site, undefined}] ->
-            dispatch_site_if_running(DispReq, OptReq, Site, []);
+            dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, []);
         [{_, Site, _Redirect}] ->
             case DispReq#dispatch.path of
                 <<"/.well-known/", _/binary>> ->
-                    dispatch_site_if_running(DispReq, OptReq, Site, []);
+                    dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, []);
                 _ ->
                     {redirect, Site, undefined, true}
             end
     end.
 
-dispatch_site_if_running(DispReq, OptReq, Site, ExtraBindings) ->
+-spec dispatch_site_if_running( #dispatch{}, undefined | cowboy_req:req(), undefined | cowboy_middleware:env(),
+            atom(), proplists:proplist() ) -> dispatch().
+dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, ExtraBindings) ->
     case z_sites_manager:wait_for_running(Site) of
         ok ->
-            Context = z_context:set_reqdata(OptReq, z_context:new(Site)),
+            Context = z_context:init_cowdata(OptReq, OptEnv, z_context:new(Site)),
             dispatch_site(DispReq, Context, ExtraBindings);
         {error, timeout} ->
             {stop_request, 503};
@@ -334,13 +346,13 @@ dispatch_site_if_running(DispReq, OptReq, Site, ExtraBindings) ->
                         {http_status_code, 400}
                         | proplists:delete(http_status_code, ExtraBindings)
                     ],
-                    dispatch_site_if_running(DispReq, OptReq, FallbackSite, ExtraBindings1);
+                    dispatch_site_if_running(DispReq, OptReq, OptEnv, FallbackSite, ExtraBindings1);
                 [{_Host, FallbackSite, _Redirect}] ->
                     {redirect, FallbackSite, undefined, true}
             end
     end.
 
--spec dispatch_site(#dispatch{}, #context{}, list()) -> dispatch().
+-spec dispatch_site(#dispatch{}, z:context(), list()) -> dispatch().
 dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context, ExtraBindings) ->
     count_request(z_context:site(Context)),
     try
@@ -369,6 +381,7 @@ dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = 
             {stop_request, RespCode}
     end.
 
+-spec dispatch_match( list( binary() ), z:context() ) -> {ok, {dispatch_rule(), proplists:proplist()}} | fail.
 dispatch_match(Tokens, Context) ->
     Module = z_utils:name_for_site(dispatch, z_context:site(Context)),
     try
@@ -592,7 +605,7 @@ map_z_language_2(z_language) -> {z_language, {?MODULE, is_bind_language}};
 map_z_language_2(X) -> X.
 
 
--spec do_dispatch_rule(tuple(), any(), any(), any(), any(), any()) -> #dispatch_controller{}.
+-spec do_dispatch_rule(dispatch_rule(), list(), list( binary() ), boolean(), #dispatch{}, z:context()) -> #dispatch_controller{}.
 do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, Context) ->
     Bindings1 = [ {zotonic_dispatch, DispatchName} | Bindings ],
     trace(DispReq#dispatch.tracer_pid,
@@ -612,23 +625,13 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
         context = maybe_set_language(Bindings1, Context)
     }.
 
--spec redirect_protocol(https|http, binary()|undefined, pid()|undefined, list(), #context{} | undefined) ->
-            {redirect_protocol, http|https, binary()|undefined, boolean()}.
-redirect_protocol(https, Hostname, TracerPid, Tokens, undefined) ->
+-spec redirect_protocol(binary()|undefined, pid()|undefined, list()) -> redirect_protocol().
+redirect_protocol(Hostname, TracerPid, Tokens) ->
     NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
     trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
-    {redirect_protocol, https, NewHostname, true};
-redirect_protocol(https, Hostname, TracerPid, Tokens, Context) ->
-    NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
-    trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
-    IsPermanent = z_convert:to_bool(m_config:get(site, ssl_permanent, Context)),
-    {redirect_protocol, https, NewHostname, IsPermanent};
-redirect_protocol(http, Hostname, TracerPid, Tokens, _Context) ->
-    NewHostname = add_port(http, Hostname, z_config:get(port)),
-    trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, http}, {host, NewHostname}]),
-    {redirect_protocol, http, NewHostname, false}.
+    {redirect_protocol, https, NewHostname, true}.
 
--spec do_dispatch_fail(any(), any(), any(), any(), any()) -> #dispatch_controller{} | #dispatch_nomatch{}.
+-spec do_dispatch_fail(list(), list( binary() ), boolean(), #dispatch{}, z:context()) -> dispatch().
 do_dispatch_fail(Bindings, Tokens, _IsDir, DispReq, Context0) ->
     TokenPath = tokens_to_path(Tokens),
     trace(DispReq#dispatch.tracer_pid, DispReq#dispatch.path, notify_dispatch, []),
@@ -750,7 +753,7 @@ language_from_bindings_1(false) ->
 
 %% @doc Try to find a site which says it can handle the host.
 %%      This enables to have special (short) urls for deep pages.
-find_no_host_match(DispReq, OptReq) ->
+find_no_host_match(DispReq, OptReq, OptEnv) ->
     Sites = z_sites_manager:get_sites(),
     DispHost = #dispatch_host{
                     host=DispReq#dispatch.host,
@@ -758,7 +761,7 @@ find_no_host_match(DispReq, OptReq) ->
                     method=DispReq#dispatch.method,
                     protocol=DispReq#dispatch.protocol
                 },
-    case first_site_match(Sites, DispHost, OptReq) of
+    case first_site_match(Sites, DispHost, OptReq, OptEnv) of
         no_host_match ->
             % See if there is a site handling wildcard domains
             case ets:lookup(?MODULE, '*') of
@@ -773,11 +776,11 @@ find_no_host_match(DispReq, OptReq) ->
             Redirect
     end.
 
-first_site_match(Sites, DispHost, OptReq) ->
+first_site_match(Sites, DispHost, OptReq, OptEnv) ->
     maps:fold(
         fun
             (Site, running, no_host_match) ->
-                case catch z_notifier:first(DispHost, z_context:set_reqdata(OptReq, z_context:new(Site))) of
+                case catch z_notifier:first(DispHost, z_context:init_cowdata(OptReq, OptEnv, z_context:new(Site))) of
                     {ok, #dispatch_redirect{location=PathOrURI, is_permanent=IsPermanent}} ->
                         {redirect, Site, PathOrURI, IsPermanent};
                     undefined ->
@@ -858,18 +861,19 @@ split_host(Host) when is_binary(Host) ->
 filter_rules(Rules, Site) ->
     z_notifier:foldl(#dispatch_rules{rules=Rules}, Rules, z_context:new(Site)).
 
+-spec trace( pid() | undefined, Path, atom(), proplists:proplist() ) -> ok
+    when Path :: binary() | [ binary() ] | undefined.
 trace(undefined, _PathTokens, _What, _Args) ->
     ok;
 trace(TracerPid, PathTokens, What, Args) ->
-    TracerPid ! {trace, PathTokens, What, Args}.
+    TracerPid ! {trace, PathTokens, What, Args},
+    ok.
 
-trace_final(undefined, R) ->
-    R;
 trace_final(TracerPid, #dispatch_controller{
-    controller = Controller,
-    controller_options = ControllerOptions,
-    bindings = Bindings
-} = Match) ->
+            controller = Controller,
+            controller_options = ControllerOptions,
+            bindings = Bindings
+        } = Match) when is_pid(TracerPid) ->
     trace(
         TracerPid,
         undefined,
@@ -883,9 +887,8 @@ trace_final(TracerPid, #dispatch_controller{
 trace_final(_TracerPid, RedirectOrHandled) ->
     RedirectOrHandled.
 
-
-add_port(http, Hostname, 80) ->
-    Hostname;
+% add_port(http, Hostname, 80) ->
+%     Hostname;
 add_port(https, Hostname, 443) ->
     Hostname;
 add_port(_, Hostname, Port) ->

@@ -36,7 +36,7 @@
     path = <<>> :: binary(),
     method = <<"GET">> :: binary(),
     protocol = http :: http|https,
-    tracer_pid = undefined :: atom() | pid()
+    tracer_pid = undefined :: pid() | undefined
 }).
 
 -record(dispatch_redirect, {

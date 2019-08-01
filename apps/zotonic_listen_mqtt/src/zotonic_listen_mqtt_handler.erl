@@ -112,13 +112,15 @@ transport(Transport, Socket, disconnect) ->
 
 
 %% @doc Small session monitor process linked to the connection handler.
+-spec session_monitor( pid(), pid(), module(), pid() ) -> ok | {error, session_down}.
 session_monitor(ConnectionPid, Socket, Transport, SessionPid) ->
     MRefSession = erlang:monitor(process, SessionPid),
     MRefConnection = erlang:monitor(process, ConnectionPid),
     receive
         {'DOWN', MRefSession, process, SessionPid, _Reason} ->
             Transport:close(Socket),
-            erlang:exit(session_down);
+            erlang:exit(ConnectionPid, session_down),
+            {error, session_down};
         {'DOWN', MRefConnection, process, ConnectionPid, _Reason} ->
             ok
     end.

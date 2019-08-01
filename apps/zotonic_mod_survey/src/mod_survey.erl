@@ -127,19 +127,12 @@ event(#postback{message={admin_show_emails, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     case m_survey:is_allowed_results_download(SurveyId, Context) of
         true ->
-            case m_survey:survey_results(SurveyId, true, Context) of
-                [Headers|Data] ->
-                    All = [lists:zip(Headers, Row) || {_Id,Row} <- Data],
-                    z_render:dialog(?__("E-mail addresses", Context),
-                                    "_dialog_survey_email_addresses.tpl",
-                                    [{id, SurveyId}, {all, All}],
-                                    Context);
-                [] ->
-                    z_render:dialog(?__("E-mail addresses", Context),
-                                    "_dialog_survey_email_addresses.tpl",
-                                    [{id, SurveyId}, {all, []}],
-                                    Context)
-            end;
+            [ Headers | Data ] = m_survey:survey_results(SurveyId, true, Context),
+            All = [lists:zip(Headers, Row) || {_Id,Row} <- Data],
+            z_render:dialog(?__("E-mail addresses", Context),
+                            "_dialog_survey_email_addresses.tpl",
+                            [{id, SurveyId}, {all, All}],
+                            Context);
         false ->
             Context
     end.
@@ -249,7 +242,8 @@ get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
 normalize_answers(undefined) -> [];
 normalize_answers(L) -> lists:map(fun normalize_answer/1, L).
 
-normalize_answer(A) when is_atom(A), is_binary(A) -> {z_convert:to_binary(A), <<"1">>};
+normalize_answer(A) when is_binary(A) -> {A, <<"1">>};
+normalize_answer(A) when is_atom(A) -> {z_convert:to_binary(A), <<"1">>};
 normalize_answer({A, undefined}) -> {z_convert:to_binary(A), <<>>};
 normalize_answer({A, true}) -> {z_convert:to_binary(A), <<"1">>};
 normalize_answer({A, false}) -> {z_convert:to_binary(A), <<"0">>};
@@ -265,7 +259,7 @@ render_update(#render{} = Render, Args, Context) ->
 
 
 %% @doc Fetch the next page from the survey, update the page view
--spec render_next_page(integer(), integer(), exact|forward, list(), list(), term()|undefined, #context{}) -> #render{} | #context{}.
+-spec render_next_page(integer(), integer(), exact|forward, list(), list(), term()|undefined, z:context()) -> #render{} | z:context().
 render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Context) when is_integer(Id) ->
     z_render:wire({redirect, [{id, Id}]}, Context);
 render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when is_integer(Id) ->
@@ -409,8 +403,6 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
 
     go_page(Nr, Qs, _Answers, exact, _Context) ->
         case fetch_page(Nr, Qs) of
-            stop -> stop;
-            submit -> submit;
             {[], _Nr} -> submit;
             {L,Nr1} ->
                 L1 = lists:dropwhile(fun is_page_end/1, L),
@@ -428,11 +420,6 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
         end.
 
 
-
-    eval_page_jumps(submit, _Answers, _Context) ->
-        submit;
-    eval_page_jumps(stop, _Answers, _Context) ->
-        stop;
     eval_page_jumps({[], _Nr}, _Answers, _Context) ->
         submit;
     eval_page_jumps({[Q|L],Nr} = QsNr, Answers, Context) ->

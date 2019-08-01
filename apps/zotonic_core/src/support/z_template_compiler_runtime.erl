@@ -548,7 +548,9 @@ to_render_result(V, TplVars, Context) ->
 
 
 %% @doc HTML escape a value
--spec escape(Value :: iolist(), Context :: z:context()) -> binary().
+-spec escape(Value :: iodata() | undefined, Context :: z:context()) -> iodata().
+escape(undefined, _Context) ->
+    <<>>;
 escape(Value, _Context) ->
     z_html:escape(iolist_to_binary(Value)).
 
@@ -572,7 +574,7 @@ trace_compile(Module, Filename, Options, Context) ->
     ok.
 
 %% @doc Called when a template is rendered (could be from an include)
--spec trace_render(binary(), template_compiler:options(), z:context()) -> ok | {ok, iolist(), iolist()}.
+-spec trace_render(binary(), template_compiler:options(), z:context()) -> ok | {ok, iodata(), iodata()}.
 trace_render(Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
     case z_convert:to_bool(m_config:get_value(mod_development, debug_includes, Context)) of
@@ -599,8 +601,9 @@ trace_render(Filename, Options, Context) ->
             ok
     end.
 
+
 %% @doc Called when a block function is called
--spec trace_block({binary(), integer(), integer()}, atom(), atom(), term()) -> ok | {ok, iolist(), iolist()}.
+-spec trace_block({binary(), integer(), integer()}, atom(), atom(), term()) -> ok | {ok, iodata(), iodata()}.
 trace_block({File, Line, _Col}, Name, Module, Context) ->
     case z_convert:to_bool(m_config:get_value(mod_development, debug_blocks, Context)) of
         true ->

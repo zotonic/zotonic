@@ -52,9 +52,14 @@
                    | {object, list()}
                    | {subject, list()}.
 -type publish_options() :: #{ retain => boolean(), qos => 0 | 1 | 2 }.
--type callback() :: pid() | mfa().
+-type callback() :: pid() | {module(), atom(), list()}.
 
--export_type([ topic/0, topic_any/0 ]).
+-export_type([
+    topic/0,
+    topic_any/0,
+    callback/0,
+    publish_options/0
+]).
 
 -include_lib("zotonic.hrl").
 

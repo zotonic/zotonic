@@ -123,8 +123,6 @@ parse_qs(<<"?", Qs/binary>>) ->
 parse_qs(null) ->
     undefined.
 
-max_id(undefined) ->
-    undefined;
 max_id([]) ->
     undefined;
 max_id(Tweets) ->

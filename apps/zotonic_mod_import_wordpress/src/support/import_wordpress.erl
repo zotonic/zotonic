@@ -242,23 +242,18 @@ map_wp_status(_) -> false.
 %% @doc Given an element, get its XML text. If "strip" attribute is
 %% set, text is stripped of (x)html constructs if type attribute is
 %% html or xhtml.
-get_xmltext(El) ->
-    get_xmltext(El, true).
-get_xmltext(Element=#xmlElement{content=Content}, Strip) ->
+get_xmltext(Element=#xmlElement{content=Content}) ->
     Text = collapse_xmltext(Content),
     %% See http://erlang.2086793.n4.nabble.com/xmerl-problem-td2121415.html
     Text2 = unicode:characters_to_binary(Text, unicode),
-    case Strip of
-        false -> Text2;
-        true ->
-            case xml_attrib(type, Element) of
-                B when B =:= <<"html">> orelse B =:= <<"xhtml">> ->
-                    %% Strip tags
-                    z_html:strip(Text2);
-                B2 when B2 =:= undefined orelse B2 =:= <<"text">> ->
-                    %% Do not strip.
-                    Text2
-            end
+    % Strip
+    case xml_attrib(type, Element) of
+        B when B =:= <<"html">> orelse B =:= <<"xhtml">> ->
+            %% Strip tags
+            z_html:strip(Text2);
+        B2 when B2 =:= undefined orelse B2 =:= <<"text">> ->
+            %% Do not strip.
+            Text2
     end.
 
 

@@ -225,14 +225,14 @@ retweeted_status_id(_Tweet) ->
     undefined.
 
 extract_language(#{ <<"lang">> := Lang }, Context) when is_binary(Lang) ->
-    [LanguageCode|_] = binary:split(Lang, <<"-">>),
+    [ LanguageCode | _ ] = binary:split(Lang, <<"-">>),
     case z_language:to_language_atom(LanguageCode) of
         {ok, Code} ->
             case z_language:is_language_enabled(Code, Context) of
                 true -> Code;
                 false -> z_context:language(Context)
             end;
-        {error, _} ->
+        {error, not_a_language} ->
             z_context:language(Context)
     end;
 extract_language(_Tweet, Context) ->
@@ -286,7 +286,7 @@ test(Context) ->
                 case filename:extension(F) of
                     ".txt" ->
                         {ok, [Tweet]} = file:consult(Dir++F),
-                        extract_test_tweet(Tweet, Context);
+                        extract_test_tweet(maps:from_list(Tweet), Context);
                     ".json" ->
                         {ok, Data} = file:read_file(Dir++F),
                         Tweet = z_json:decode(Data),
@@ -297,8 +297,9 @@ test(Context) ->
             end,
             Fs).
 
+-spec extract_test_tweet( map(), z:context() ) -> any().
 extract_test_tweet(Tweet, Context) ->
-    TweetId = proplists:get_value(<<"id">>, Tweet),
+    TweetId = maps:get(<<"id">>, Tweet),
     UniqueName = <<"tweet_", (z_convert:to_binary(TweetId))/binary>>,
     extract_import_rsc(TweetId, UniqueName, Tweet, z_acl:logon(1, Context)).
     % import_tweet(Tweet, <<"test">>, Context).
