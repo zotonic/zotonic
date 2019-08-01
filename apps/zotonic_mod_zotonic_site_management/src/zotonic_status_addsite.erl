@@ -302,7 +302,11 @@ copy_file("zotonic_site.config.in", FromPath, ToPath, Options) ->
 copy_file(_Filename, FromPath, ToPath, _Options) ->
     case filelib:is_file(ToPath) of
         true -> ok;
-        false -> file:copy(FromPath, ToPath)
+        false ->
+            case file:copy(FromPath, ToPath)  of
+                {ok, _} -> ok;
+                {error, _} = Error -> Error
+            end
     end.
 
 
