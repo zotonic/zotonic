@@ -19,7 +19,8 @@
 -module(zotonic_status_addsite).
 
 -export([
-    addsite/3
+    addsite/3,
+    site_ebin_dir/1
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -59,13 +60,13 @@ addsite_check_hostname(Name, Options, Context) ->
 -spec addsite_check_db(binary(), proplists:proplist(), z:context()) ->
     {ok, Site :: atom(), Options :: list()} | {error, Reason :: list()}.
 addsite_check_db(Name, Options, Context) ->
-    case proplists:get_value(skeleton, Options) of
+    case z_convert:to_binary( proplists:get_value(skeleton, Options) ) of
         <<"nodb">> ->
-            Options = [
+            Options1 = [
                 {dbdatabase, none}
                 | proplists:delete(dbdatabase, Options)
             ],
-            addsite_check_userdir(Name, Options, Context);
+            addsite_check_userdir(Name, Options1, Context);
         _ ->
             mod_zotonic_site_management:progress(Name, ?__("Checking database ...", Context), Context),
             DbDatabase = z_convert:to_list(get_fallback(dbdatabase, Options, z_config:get(dbdatabase))),
@@ -186,20 +187,20 @@ addsite_compile(Name, Options, Context) ->
         Context
     ),
     z:compile(),
-    EbinPath =  os:cmd("./rebar3 path --app " ++ binary_to_list(Name)),
+    EbinPath = site_ebin_dir(Name),
     case code:add_path(EbinPath) of
-	true ->
-	    Site = binary_to_atom(Name, utf8),
-	    case application:load(Site) of
-		ok ->
-		    {ok, {Site, Options}};
-		{error, {already_loaded, Site}} ->
-		    {ok, {Site, Options}};
-		Error ->
-		    Error
-	    end;
-	Error ->
-	    Error
+        true ->
+            Site = binary_to_atom(Name, utf8),
+            case application:load(Site) of
+                ok ->
+                    {ok, {Site, Options}};
+                {error, {already_loaded, Site}} ->
+                    {ok, {Site, Options}};
+                Error ->
+                    Error
+            end;
+        Error ->
+            Error
     end.
 
 % Add a sample .gitgnore file to the newly created site directory.
@@ -302,7 +303,11 @@ copy_file("zotonic_site.config.in", FromPath, ToPath, Options) ->
 copy_file(_Filename, FromPath, ToPath, _Options) ->
     case filelib:is_file(ToPath) of
         true -> ok;
-        false -> file:copy(FromPath, ToPath)
+        false ->
+            case file:copy(FromPath, ToPath)  of
+                {ok, _} -> ok;
+                {error, _} = Error -> Error
+            end
     end.
 
 
@@ -321,6 +326,15 @@ normalize_options(Options) ->
             end,
             Options)).
 
+site_ebin_dir(Name) ->
+    UserSitesDir = z_convert:to_list(z_path:user_sites_dir()),
+    Dir = case filename:basename(UserSitesDir) of
+        "_checkouts" ->
+            filename:join([ UserSitesDir, Name, "ebin" ]);
+        _ ->
+            filename:join([ z_path:build_lib_dir(), Name, "ebin" ])
+    end,
+    z_convert:to_list(Dir).
 
 site_dir(Name) ->
     z_convert:to_list(filename:join([z_path:user_sites_dir(), Name])).

@@ -232,19 +232,19 @@ get_builtin_sites() ->
 %% @doc Stop a site or multiple sites.
 stop([Node, Site]) ->
     rpc:call(Node, ?MODULE, stop, [Site]);
-stop(Site) ->
+stop(Site) when is_atom(Site) ->
     gen_server:call(?MODULE, {stop, Site}).
 
 %% @doc Start a site or multiple sites.
 start([Node, Site]) ->
     rpc:call(Node, ?MODULE, start, [Site]);
-start(Site) ->
+start(Site) when is_atom(Site) ->
     gen_server:call(?MODULE, {start, Site}).
 
 %% @doc Restart a site or multiple sites.
 restart([Node, Site]) ->
     rpc:call(Node, ?MODULE, restart, [Site]);
-restart(Site) ->
+restart(Site) when is_atom(Site) ->
     case get_site_status(Site) of
         {ok, running} ->
             gen_server:call(?MODULE, {stop, Site}),
@@ -297,7 +297,7 @@ await_startup(Site) when is_atom(Site) ->
 
 %% @doc Wait for a site to be running, max 30 secs.
 -spec wait_for_running(atom()) -> ok | {error, bad_name | timeout | stopped | removing | term()}.
-wait_for_running(Site) ->
+wait_for_running(Site) when is_atom(Site) ->
     wait_for_running(Site, ?MAX_WAIT_FOR_RUNNING).
 
 % running -> ok
@@ -311,7 +311,7 @@ wait_for_running(Site) ->
 % removing -> status site
 
 -spec wait_for_running(atom(), Secs::integer()) -> ok | {error, bad_name | timeout | stopped | removing | term()}.
-wait_for_running(Site, Timeout) ->
+wait_for_running(Site, Timeout) when is_atom(Site) ->
     case ets:lookup(?SITES_STATUS_TABLE, Site) of
         [] -> {error, bad_name};
         [{Site, running}] -> ok;
