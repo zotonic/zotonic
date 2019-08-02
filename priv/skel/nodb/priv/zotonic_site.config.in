@@ -23,7 +23,7 @@
   ]},
 
  %% Default config keys.
- {site, [{language, "en"}]},
+ {language, <<"en">>},
 
  %% Depcache settings. The maximum size in Mbs.
  {depcache_memory_max, 100},
