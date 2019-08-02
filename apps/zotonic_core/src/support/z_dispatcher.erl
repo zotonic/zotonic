@@ -260,7 +260,7 @@ init(SiteProps) ->
         {module, ?MODULE}
       ]),
     {hostname, Hostname0} = proplists:lookup(hostname, SiteProps),
-    Hostname = drop_port(z_convert:to_binary(Hostname0)),
+    Hostname = drop_port(Hostname0),
     Smtphost = drop_port(proplists:get_value(smtphost, SiteProps)),
     HostAlias = proplists:get_value(hostalias, SiteProps, []),
     Alias = lists:filtermap(
@@ -293,8 +293,11 @@ init(SiteProps) ->
 -spec drop_port( undefined | none | string() | binary() ) -> undefined | binary().
 drop_port(undefined) -> undefined;
 drop_port(none) -> undefined;
+drop_port(<<>>) -> undefined;
 drop_port(Hostname) when is_binary(Hostname) ->
-    hd(binary:split(Hostname, <<":">>)).
+    hd(binary:split(Hostname, <<":">>));
+drop_port(Hostname) when is_list(Hostname) ->
+    drop_port(z_convert:to_binary(Hostname)).
 
 -spec add_port( binary() | undefined, http | https, pos_integer() ) -> binary().
 add_port(undefined, _Protocol, _Port) -> undefined;
