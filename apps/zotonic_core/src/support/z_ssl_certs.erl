@@ -51,7 +51,11 @@
 ssl_listener_options() ->
     {ok, CertOptions} = ensure_self_signed(zotonic_site_status),
     [
+        {versions, ['tlsv1.2', 'tlsv1.1', 'tlsv1']},
         {sni_fun, fun ?MODULE:sni_fun/1},
+        {secure_renegotiate, true},
+        {reuse_sessions, true},
+        {honor_cipher_order, true},
         {ciphers, ciphers()}
     ]
     ++ CertOptions
@@ -328,7 +332,22 @@ ensure_dhfile(Filename) ->
 %% There is a problem with Firefox, which *needs* a cipher suite not implemented by Erlang
 %% https://github.com/tatsuhiro-t/lucid/blob/ce8654a75108c15cc786424b3faf1a8e945bfd53/README.rst#current-status
 ciphers() ->
-    ssl:cipher_suites().
+     [
+        "ECDHE-ECDSA-AES256-GCM-SHA384","ECDHE-RSA-AES256-GCM-SHA384",
+        "ECDHE-ECDSA-AES256-SHA384","ECDHE-RSA-AES256-SHA384", "ECDHE-ECDSA-DES-CBC3-SHA",
+        "ECDH-ECDSA-AES256-GCM-SHA384","ECDH-RSA-AES256-GCM-SHA384","ECDH-ECDSA-AES256-SHA384",
+        "ECDH-RSA-AES256-SHA384","DHE-DSS-AES256-GCM-SHA384","DHE-DSS-AES256-SHA256",
+        "AES256-GCM-SHA384","AES256-SHA256","ECDHE-ECDSA-AES128-GCM-SHA256",
+        "ECDHE-RSA-AES128-GCM-SHA256","ECDHE-ECDSA-AES128-SHA256","ECDHE-RSA-AES128-SHA256",
+        "ECDH-ECDSA-AES128-GCM-SHA256","ECDH-RSA-AES128-GCM-SHA256","ECDH-ECDSA-AES128-SHA256",
+        "ECDH-RSA-AES128-SHA256","DHE-DSS-AES128-GCM-SHA256","DHE-DSS-AES128-SHA256",
+        "AES128-GCM-SHA256","AES128-SHA256","ECDHE-ECDSA-AES256-SHA",
+        "ECDHE-RSA-AES256-SHA","DHE-DSS-AES256-SHA","ECDH-ECDSA-AES256-SHA",
+        "ECDH-RSA-AES256-SHA","AES256-SHA","ECDHE-ECDSA-AES128-SHA",
+        "ECDHE-RSA-AES128-SHA","DHE-DSS-AES128-SHA","ECDH-ECDSA-AES128-SHA",
+        "ECDH-RSA-AES128-SHA","AES128-SHA"
+    ].
+    % ssl:cipher_suites().
 
 
 %% @doc Decode a certificate file, return common_name, not_after etc.
