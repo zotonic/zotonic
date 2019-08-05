@@ -135,13 +135,16 @@ start_http_listeners_ip4(WebIp, WebPort) ->
     end,
     case cowboy:start_clear(
         zotonic_http_listener_ipv4,
-        [   inet,
-            {port, WebPort},
-            {backlog, z_config:get(inet_backlog)},
-            {num_acceptors, z_config:get(inet_acceptor_pool_size)},
-            {max_connections, z_config:get(max_connections)}
-            | WebOpt
-        ],
+        #{
+            max_connections => z_config:get(max_connections),
+            num_acceptors => z_config:get(inet_acceptor_pool_size),
+            socket_opts => [
+                inet,
+                {port, WebPort},
+                {backlog, z_config:get(inet_backlog)}
+                | WebOpt
+            ]
+        },
         cowboy_options())
     of
         {ok, _} = OK -> OK;
@@ -161,14 +164,17 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
     end,
     case cowboy:start_tls(
         zotonic_https_listener_ipv4,
-        [   inet,
-            {port, SSLPort},
-            {backlog, z_config:get(ssl_backlog)},
-            {num_acceptors, z_config:get(ssl_acceptor_pool_size)},
-            {max_connections, z_config:get(ssl_max_connections)}
-        ]
-        ++ z_ssl_certs:ssl_listener_options()
-        ++ WebOpt,
+        #{
+            max_connections => z_config:get(ssl_max_connections),
+            num_acceptors => z_config:get(ssl_acceptor_pool_size),
+            socket_opts => [
+                inet,
+                {port, SSLPort},
+                {backlog, z_config:get(ssl_backlog)}
+            ]
+            ++ z_ssl_certs:ssl_listener_options()
+            ++ WebOpt
+        },
         cowboy_options())
     of
         {ok, _} = OK -> OK;
@@ -186,14 +192,17 @@ start_http_listeners_ip6(WebIp, WebPort) ->
     end,
     {ok, _} = cowboy:start_clear(
         zotonic_http_listener_ipv6,
-        [   inet6,
-            {ipv6_v6only, true},
-            {port, WebPort},
-            {backlog, z_config:get(inet_backlog)},
-            {num_acceptors, z_config:get(inet_acceptor_pool_size)},
-            {max_connections, z_config:get(max_connections)}
-        ]
-        ++ WebOpt,
+        #{
+            max_connections => z_config:get(max_connections),
+            num_acceptors => z_config:get(inet_acceptor_pool_size),
+            socket_opts => [
+                inet6,
+                {ipv6_v6only, true},
+                {port, WebPort},
+                {backlog, z_config:get(inet_backlog)}
+            ]
+            ++ WebOpt
+        },
         cowboy_options()).
 
 %% @doc Start the ip6 HTTPS listener
@@ -207,15 +216,18 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
     end,
     {ok, _} = cowboy:start_tls(
         zotonic_https_listener_ipv6,
-        [   inet6,
-            {ipv6_v6only, true},
-            {port, SSLPort},
-            {backlog, z_config:get(ssl_backlog)},
-            {num_acceptors, z_config:get(ssl_acceptor_pool_size)},
-            {max_connections, z_config:get(ssl_max_connections)}
-        ]
-        ++ z_ssl_certs:ssl_listener_options()
-        ++ WebOpt,
+        #{
+            max_connections => z_config:get(ssl_max_connections),
+            num_acceptors => z_config:get(ssl_acceptor_pool_size),
+            socket_opts => [
+                inet6,
+                {ipv6_v6only, true},
+                {port, SSLPort},
+                {backlog, z_config:get(ssl_backlog)}
+            ]
+            ++ z_ssl_certs:ssl_listener_options()
+            ++ WebOpt
+        },
         cowboy_options()).
 
 ip_to_string(any) -> "any";
