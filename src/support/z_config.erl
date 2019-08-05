@@ -65,6 +65,7 @@ get(Key, Default) ->
 			Value
 	end.
 
+default(environment) -> production; % development | test | acceptance | production | education | backup
 default(timezone) -> <<"UTC">>;
 default(listen_port) -> 8000;
 default(port) -> ?MODULE:get(listen_port);

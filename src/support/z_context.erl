@@ -1170,7 +1170,8 @@ set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
     Default = [ {"X-Xss-Protection", "1"},
                 {"X-Content-Type-Options", "nosniff"},
                 {"X-Permitted-Cross-Domain-Policies", "none"},
-                {"Referrer-Policy", "origin-when-cross-origin"} ],
+                {"Referrer-Policy", "origin-when-cross-origin"},
+                {"X-DTAP-Environment", atom_to_list( m_site:environment(Context))} ],
     Default1 = case z_context:get(allow_frame, Context, false) of
         true -> Default;
         false -> [ {"X-Frame-Options", "sameorigin"} | Default ]

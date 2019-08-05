@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {# Base PHONE/TABLET/DESKTOP template #}
-<html lang="{{ z_language|default:"en"|escape }}">
+<html lang="{{ z_language|default:"en"|escape }}" class="environment-{{ m.site.environment }}">
 <head>
 	<meta charset="utf-8" />
 	<title>{% block title %}{{ id.title }}{% endblock %} &mdash; {{ m.config.site.title.value }}</title>
