@@ -136,13 +136,16 @@ start_mqtt_listeners_ip4(WebIp, WebPort) ->
     case ranch:start_listener(
         zotonic_mqtt_listener_ipv4,
         ranch_tcp,
-        [   inet,
-            {port, WebPort},
-            {backlog, z_config:get(inet_backlog)},
-            {num_acceptors, z_config:get(inet_acceptor_pool_size)},
-            {max_connections, z_config:get(mqtt_max_connections)}
-            | WebOpt
-        ],
+        #{
+            num_acceptors => z_config:get(inet_acceptor_pool_size),
+            max_connections => z_config:get(mqtt_max_connections),
+            socket_opts => [
+                inet,
+                {port, WebPort},
+                {backlog, z_config:get(inet_backlog)}
+                | WebOpt
+            ]
+        },
         zotonic_listen_mqtt_handler,
         handler_options())
     of
@@ -164,14 +167,17 @@ start_mqtts_listeners_ip4(WebIp, SSLPort) ->
     case ranch:start_listener(
         zotonic_mqtts_listener_ipv4,
         ranch_ssl,
-        [   inet,
-            {port, SSLPort},
-            {backlog, z_config:get(ssl_backlog)},
-            {num_acceptors, z_config:get(ssl_acceptor_pool_size)},
-            {max_connections, z_config:get(mqtt_ssl_max_connections)}
-        ]
-        ++ z_ssl_certs:ssl_listener_options()
-        ++ WebOpt,
+        #{
+            num_acceptors => z_config:get(ssl_acceptor_pool_size),
+            max_connections => z_config:get(mqtt_ssl_max_connections),
+            socket_opts => [
+                inet,
+                {port, SSLPort},
+                {backlog, z_config:get(ssl_backlog)}
+            ]
+            ++ z_ssl_certs:ssl_listener_options()
+            ++ WebOpt
+        },
         zotonic_listen_mqtt_handler_tls,
         handler_options())
     of
@@ -191,14 +197,17 @@ start_mqtt_listeners_ip6(WebIp, WebPort) ->
     {ok, _} = ranch:start_listener(
         zotonic_mqtt_listener_ipv6,
         ranch_tcp,
-        [   inet6,
-            {ipv6_v6only, true},
-            {port, WebPort},
-            {backlog, z_config:get(inet_backlog)},
-            {num_acceptors, z_config:get(inet_acceptor_pool_size)},
-            {max_connections, z_config:get(mqtt_max_connections)}
-        ]
-        ++ WebOpt,
+        #{
+            num_acceptors => z_config:get(inet_acceptor_pool_size),
+            max_connections => z_config:get(mqtt_max_connections),
+            socket_opts => [
+                inet6,
+                {ipv6_v6only, true},
+                {port, WebPort},
+                {backlog, z_config:get(inet_backlog)}
+            ]
+            ++ WebOpt
+        },
         zotonic_listen_mqtt_handler,
         handler_options()).
 
@@ -214,15 +223,18 @@ start_mqtts_listeners_ip6(WebIp, SSLPort) ->
     {ok, _} = ranch:start_listener(
         zotonic_mqtts_listener_ipv6,
         ranch_ssl,
-        [   inet6,
-            {ipv6_v6only, true},
-            {port, SSLPort},
-            {backlog, z_config:get(ssl_backlog)},
-            {num_acceptors, z_config:get(ssl_acceptor_pool_size)},
-            {max_connections, z_config:get(mqtt_ssl_max_connections)}
-        ]
-        ++ z_ssl_certs:ssl_listener_options()
-        ++ WebOpt,
+        #{
+            num_acceptors => z_config:get(ssl_acceptor_pool_size),
+            max_connections => z_config:get(mqtt_ssl_max_connections),
+            socket_opts => [
+                inet6,
+                {ipv6_v6only, true},
+                {port, SSLPort},
+                {backlog, z_config:get(ssl_backlog)}
+            ]
+            ++ z_ssl_certs:ssl_listener_options()
+            ++ WebOpt
+        },
         zotonic_listen_mqtt_handler_tls,
         handler_options()).
 
