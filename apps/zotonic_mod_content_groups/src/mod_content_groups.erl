@@ -85,10 +85,19 @@ cg_delete(Ids, Context) ->
                           end,
                           Ids),
             page_actions({unmask, []}, Context);
-        {error, _} = Error ->
+        {error, ErrorRscId} = Error ->
             page_actions([
                     {unmask, []},
-                    {alert, [{message, ?__("Not all resources could be deleted.", Context)}]}
+                    {confirm, [
+                        {text, [
+                            ?__("Not all resources could be deleted.", Context),
+                            "<br>",
+                            ?__("Stopped at page:", Context),
+                            " ", m_rsc:p(ErrorRscId, title, Context)
+                        ]},
+                        {ok, ?__("Edit Page", Context)},
+                        {action, {redirect, [ {dispatch, admin_edit_rsc}, {id, ErrorRscId} ]}}
+                    ]}
                 ],
                 Context),
             Error
@@ -117,7 +126,8 @@ delete_all([{Id}|Ids], N, Total, Context) ->
             maybe_progress(N, N+1, Total, Context),
             delete_all(Ids, N+1, Total, Context);
         Error ->
-            {error, Error}
+            lager:error("Content group delete: could not delete resource: ~p (~p)", [Id, Error]),
+            {error, Id}
     end.
 
 move_all([], _ToGroupId, _N, _Total, _Context) ->
