@@ -4,7 +4,8 @@
         <div>
             {% for id, version, version_txt, date_txt in [
                 ["d", "newest", "always use newest available", ""],
-                ["c", "4.5.5",  "4.5.5", "Mar 07 2017"]
+                ["c", "4.9.3",  "4.9.3", "Jan 31 2019"],
+                ["b", "4.5.5",  "4.5.5", "Mar 07 2017"]
             ] %}
                 <div class="radio">
                     <label>
