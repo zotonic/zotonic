@@ -91,6 +91,14 @@ function z_dialog_close()
 
 function z_dialog_confirm(options)
 {
+    var html,
+        backdrop;
+
+    if (typeof options.backdrop == 'undefined') {
+        backdrop = options.backdrop
+    } else {
+        backdrop = true;
+    }
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-default z-dialog-cancel-button">'
@@ -103,7 +111,8 @@ function z_dialog_confirm(options)
     $.dialogAdd({
         title: (options.title||z_translate('Confirm')),
         text: html,
-        width: (options.width)
+        width: (options.width),
+        backdrop: backdrop
     });
     $(".z-dialog-cancel-button").click(function() { z_dialog_close(); });
     $(".z-dialog-ok-button").click(function() {
@@ -114,6 +123,14 @@ function z_dialog_confirm(options)
 
 function z_dialog_alert(options)
 {
+    var html,
+        backdrop;
+
+    if (typeof options.backdrop == 'undefined') {
+        backdrop = options.backdrop
+    } else {
+        backdrop = true;
+    }
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-primary z-dialog-ok-button">'
@@ -123,7 +140,8 @@ function z_dialog_alert(options)
     $.dialogAdd({
         title: (options.title||z_translate('Alert')),
         text: html,
-        width: (options.width)
+        width: (options.width),
+        backdrop: backdrop
     });
     $(".z-dialog-ok-button").click(function() {
         z_dialog_close();
