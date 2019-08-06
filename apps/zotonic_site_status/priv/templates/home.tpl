@@ -3,7 +3,7 @@
 {% block title %}Zotonic{% endblock %}
 {% block navbar %}{% endblock %}
 
-{% block content %}
+{% block content_pre %}
 <div class="col-md-6 col-md-offset-3">
     <div class="jumbotron">
         <h1>{_ Powered by _} <span class="zotonic-logo"><em>Zotonic</em></span></h1>
@@ -23,14 +23,16 @@
         </p>
     </div>
 </div>
+{% endblock %}
 
-<div class="col-md-6 col-md-offset-3">
-   <div class="panel panel-default">
-        <div class="panel-body">
-            <p style="text-align: center">
-                <a href="{% url zotonic_status %}" class="btn btn-default">{_ Manage this server _}</a>
-            </p>
+{% block content %}
+    <div class="col-md-6 col-md-offset-3">
+       <div class="panel panel-default">
+            <div class="panel-body">
+                <p style="text-align: center">
+                    <a href="{% url zotonic_status %}" class="btn btn-default">{_ Manage this server _}</a>
+                </p>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

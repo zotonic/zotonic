@@ -32,8 +32,11 @@
             <div class="container">
                 <div class="row content-area">
                     {% block content_area %}
-                        {% block content %}{% endblock %}
-                        {% block sidebar %}{% endblock %}
+                        {% block content_pre %}{% endblock %}
+                        {% if is_peer_whitelisted %}
+                            {% block content %}{% endblock %}
+                            {% block sidebar %}{% endblock %}
+                        {% endif %}
                     {% endblock %}
                 </div>
             </div>

@@ -9,7 +9,7 @@
         name="reminder_address"
         value="{{ q.username|default:(m.identity[m.acl.user].username)|escape }}"
         autocapitalize="off"
-        autocomplete="off" />
+        autocomplete="on" />
         {% validate id="reminder_address"
             type={presence failure_message=_"Enter your email address or username"}
             only_on_submit
