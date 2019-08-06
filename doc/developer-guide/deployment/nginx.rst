@@ -12,6 +12,10 @@ are planning to server (the ``user/sites/your_site/config``
 files). The ``hostname`` value should not contain any port number, if
 you run from port 80: ``{hostname, "test.zotonic.com"}``.
 
+Zotonic also makes use of a websocket connection for MQTT messages
+under the ``/mqtt-transport`` location and so you have to add an extra
+proxy directive for this.
+
 Below is a configuration file we use to proxy nginx to zotonic. Be
 sure to replace all occurrences of ``test.zotonic.com`` with your own
 hostname::
@@ -45,6 +49,22 @@ hostname::
             proxy_buffers              4 32k;
             proxy_busy_buffers_size    64k;
             proxy_temp_file_write_size 64k;
+        }
+
+        # websocket
+        location /mqtt-transport {
+                 proxy_pass       http://127.0.0.1:8000/mqtt-transport;
+                 proxy_set_header Host      $host;
+                 proxy_set_header X-Real-IP $remote_addr;
+                 proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+                 proxy_set_header X-Forwarded-Proto $scheme;
+                 proxy_http_version 1.1;
+                 proxy_set_header Upgrade $http_upgrade;
+                 proxy_set_header Connection "upgrade";
+                 proxy_set_header Sec-Websocket-Extensions $http_sec_websocket_extensions;
+                 proxy_set_header Sec-Websocket-Key $http_sec_websocket_key;
+                 proxy_set_header Sec-Websocket-Protocol $http_sec_websocket_protocol;
+                 proxy_set_header Sec-Websocket-Version $http_sec_websocket_version;
         }
 
         location /close-connection {
