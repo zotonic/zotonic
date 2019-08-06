@@ -331,7 +331,7 @@ q(Sql, Parameters, Context, Timeout) ->
                 {ok, _Cols, Rows} when is_list(Rows) -> Rows;
                 {ok, Value} when is_list(Value); is_integer(Value) -> Value;
                 {error, Reason} = Error ->
-                    lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, Parameters]),
+                    lager:error("z_db error ~p in query ~s with ~p", [Reason, Sql, Parameters]),
                     throw(Error)
             end
     end,
@@ -355,7 +355,7 @@ q1(Sql, Parameters, Context, Timeout) ->
                 {ok, Value} -> Value;
                 {error, noresult} -> undefined;
                 {error, Reason} = Error ->
-                    lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, Parameters]),
+                    lager:error("z_db error ~p in query ~s with ~p", [Reason, Sql, Parameters]),
                     throw(Error)
             end
     end,
@@ -455,7 +455,7 @@ insert(Table, Props, Context) ->
              {ok, Id} -> {ok, Id};
              {error, noresult} -> {ok, undefined};
              {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~p with ~p", [Reason, FinalSql, Parameters]),
+                lager:error("z_db error ~p in query ~s with ~p", [Reason, FinalSql, Parameters]),
                 Error
          end
     end,
@@ -496,7 +496,7 @@ update(Table, Id, Parameters, Context) ->
         case equery1(DbDriver, C, Sql, [Id | Params]) of
             {ok, _RowsUpdated} = Ok -> Ok;
             {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id | Params]]),
+                lager:error("z_db error ~p in query ~s with ~p", [Reason, Sql, [Id | Params]]),
                 Error
         end
     end,
@@ -515,7 +515,7 @@ delete(Table, Id, Context) ->
         case equery1(DbDriver, C, Sql, [Id]) of
             {ok, _RowsDeleted} = Ok -> Ok;
             {error, Reason} = Error ->
-                lager:error("z_db error ~p in query ~p with ~p", [Reason, Sql, [Id]]),
+                lager:error("z_db error ~p in query ~s with ~p", [Reason, Sql, [Id]]),
                 Error
         end
     end,

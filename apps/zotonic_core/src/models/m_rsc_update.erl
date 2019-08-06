@@ -326,7 +326,7 @@ duplicate(Id, DupProps, Context) ->
                         SafeDupProps ++ [
                             {name, undefined}, {uri, undefined}, {page_path, undefined},
                             {is_authoritative, true}, {is_protected, false},
-                            {title_slug, undefined}, {slug, undefined}
+                            {title_slug, undefined}, {slug, undefined}, {custom_slug, false}
                         ]),
                     case insert(InsProps, [{escape_texts, false}], Context) of
                         {ok, NewId} ->
@@ -817,7 +817,7 @@ props_filter([{page_path, Path} | T], Acc, Context) ->
 props_filter([{title_slug, Slug}|T], Acc, Context) ->
     case z_utils:is_empty(Slug) of
         true ->
-            props_filter(T, [ {title_slug, <<>>}, {slug, <<>>} | Acc], Context);
+            props_filter(T, Acc, Context);
         false ->
             Slug1 = to_slug(Slug),
             SlugNoTr = z_trans:lookup_fallback(Slug1, en, Context),
