@@ -75,7 +75,7 @@ parse_request_args([{K,V}|Rest], Acc) when is_binary(K) ->
             end
     end;
 parse_request_args([{K,V}|Rest], Acc) ->
-    parse_request_args([{z_convert:to_binary(K), V}|Rest], Acc).
+    parse_request_args([{z_convert:to_binary(K), z_convert:to_binary(V)}|Rest], Acc).
 
 %% Parses a query text. Every line is an argument; of which the first
 %% '=' separates argument key from argument value.
@@ -374,9 +374,14 @@ parse_query([{modifier_id, Integer}|Rest], Context, Result) ->
 
 %% qargs
 %% Add all query terms from the current query arguments
-parse_query([{qargs, true}|Rest], Context, Result) ->
-    Terms = parse_request_args(qargs(Context)),
-    parse_query(Terms++Rest, Context, Result);
+parse_query([{qargs, Boolean}|Rest], Context, Result) ->
+    case z_convert:to_bool(Boolean) of
+        true ->
+            Terms = parse_request_args(qargs(Context)),
+            parse_query(Terms++Rest, Context, Result);
+        false ->
+            parse_query(Rest, Context, Result)
+    end;
 
 %% query_id=<rsc id>
 %% Get the query terms from given resource ID, and use those terms.
