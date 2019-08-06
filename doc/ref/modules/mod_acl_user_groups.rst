@@ -102,6 +102,41 @@ Collaboration rules are special content access rules that apply to content in
 :ref:`collaboration groups <collaboration groups>` only. Each rule applies to
 all collaboration groups.
 
+Allowed media
+~~~~~~~~~~~~~
+
+For each user group it is possible to define:
+
+  * Maximum size of uploaded files
+  * Allowed types of files
+
+In the admin, go to *Auth > Access control rules > File Uploads* tab to
+edit them.
+
+The file size and allowed types is inherited along the user-group hierarchy.
+For example, if *Managers* is a specialized subgroup of *Editors* then all settings
+of *Editors* also apply to all *Managers*. Not the other way round.
+
+The file types are entered using the mime type or extension of the allowed files.
+
+The following are allowed types:
+
+ * Any mime type (e.g. ``image/png``)
+ * Wildcard mime type (e.g. ``image/*`` or ``*/*``)
+ * A file extension (e.g. ``.txt``)
+ * ``msoffice`` for Microsoft Office files
+ * ``openoffice`` for Open Office files
+ * ``embed`` for media imported with ``mod_oembed`` and ``mod_video_embed``
+ * ``none``
+
+The default is: ``image/*, video/*, audio/*, embed, .pdf, .txt, msoffice, openoffice``
+
+The default mime types can be changed with the ``site.acl_mime_allowed`` key.
+The default upload size is 50MB.
+
+If an user group is not allowed to upload any files then enter ``none``.
+
+.. _module-acl:
 
 Access control on properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

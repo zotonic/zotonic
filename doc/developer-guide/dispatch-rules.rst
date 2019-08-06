@@ -193,8 +193,8 @@ detection using the following code snippet::
 
     observe_dispatch_rewrite(#dispatch_rewrite{host=Host}, {Parts, Args}, _Context) ->
         Language = case Host of
-            "example.nl" -> nl;
-            "example.de" -> de;
+            <<"example.nl">> -> nl;
+            <<"example.de">> -> de;
              _ -> en  %% default language
          end,
         {Parts, [{z_language, Language} | Args]}.
@@ -207,6 +207,21 @@ For this setup to work, this requires you to have the ``{redirect,
 false}`` option in your site, and the appropriate ``hostalias``
 directives for each host. See :ref:`guide-site-anatomy` for more
 details.
+
+
+Dispatch rule options
+^^^^^^^^^^^^^^^^^^^^^
+
+There is one dispatch rule option that is valid for all dispatch rules: ``allow_frame``
+
+Normally pages are not allowed to be displayed inside a frame on another domain than
+the domain of served frame.
+
+This is done by setting the HTTP header: ``X-Frame-Options: sameorigin``
+
+If this option is given then the ``X-Frame-Options`` header is omitted and the dispatch
+rule is allowed to be displayed inside a frame on any website.
+
 
 Unmatched hosts/domains
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -234,5 +249,39 @@ a :ref:`dispatch notification <dispatch>` is triggered.
 The module :ref:`mod_base` will check the request path against the ``page_path``
 property of all resources. After that the module :ref:`mod_custom_redirect` will
 check the configured redirect locations.
+
+Dispatch rule BNF
+^^^^^^^^^^^^^^^^^
+
+A dispatch rule is built up as follows::
+
+  {RuleName, UrlPattern, ControllerModule, ControllerArgs}
+  RuleName = atom()
+  PathSpec = [PathSegmentSpec]
+  PathSegmentSpec = StaticMatch | Wildcard | Variable
+  StaticMatch = string()
+  Wildcard = '*'
+  PathVariable = atom() | {atom(), RegExp} | {atom{}, RegExp, ReOptions}
+  RegExp = string()
+  ReOptions = [term()]
+  ResourceModule = atom()
+  ResourceArgs = [{Key,Value}]
+
+All `PathVariables` in the matching rule are made available to the
+resource through ``z_context``. The `ResourceArgs` proplist is passed
+to ``ControllerModule:init/1``.
+
+`PathVariables` are part of the request-scope configuration of
+`ControllerModule` . Things like the ID, name or category of a page being
+requested can be gathered effectively here. Judicious use of
+PathVariables can substantially reduce the number of dispatch rules
+while making them easier to read.
+
+`ControllerArgs` is the rule-scope configuration of
+ControllerModule. It makes it possible to reuse a well-designed
+resource module in many dispatch rules with different
+needs. ControllerArgs is effective for establishing implementation
+details like the template to be used, whether or not to do caching and
+where to load static resources from.
 
 .. seealso:: :ref:`mod_custom_redirect`, :ref:`mod_base`
