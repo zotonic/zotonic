@@ -99,6 +99,8 @@ logon_switch(UserId, Context) ->
 
 %% @doc Request the client's auth worker to re-authenticate as a new user
 -spec switch_user( m_rsc:resource_id(), z:context() ) -> ok | {error, eacces}.
+switch_user(1, _Context) ->
+    {error, eacces};
 switch_user(UserId, Context) when is_integer(UserId) ->
     case z_acl:is_admin(Context) of
         true ->
