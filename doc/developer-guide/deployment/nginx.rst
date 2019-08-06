@@ -18,7 +18,9 @@ proxy directive for this.
 
 Below is a configuration file we use to proxy nginx to zotonic. Be
 sure to replace all occurrences of ``test.zotonic.com`` with your own
-hostname::
+hostname:
+
+.. code-block:: nginx
 
   server {
         listen 80;
