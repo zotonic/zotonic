@@ -22,6 +22,7 @@
 
 -export([
     uri/1,
+    ensure_safe_js_callback/1,
     escape_props/1,
     escape_props/2,
     escape_props_check/1,
@@ -36,6 +37,12 @@
 
 uri(Uri) ->
     z_html:sanitize_uri(Uri).
+
+%% @doc Escape a Javascript callback function. Crash if not a safe callback function name.
+-spec ensure_safe_js_callback( string() | binary() ) -> binary().
+ensure_safe_js_callback(Callback) ->
+    nomatch = re:run(Callback, "[^a-zA-Z0-9_\\.]"),
+    iolist_to_binary(Callback).
 
 escape_props(Props) ->
     z_html:escape_props(Props, default_options()).

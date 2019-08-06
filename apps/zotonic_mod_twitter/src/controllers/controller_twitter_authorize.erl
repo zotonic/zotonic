@@ -22,10 +22,14 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
+    service_available/1,
     resource_exists/1,
     previously_existed/1,
     moved_temporarily/1
 ]).
+
+service_available(Context) ->
+    {true, z_context:set_noindex_header(Context)}.
 
 resource_exists(Context) ->
     {false, Context}.

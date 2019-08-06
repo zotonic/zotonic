@@ -23,11 +23,14 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([
+    service_available/1,
     process/4
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+service_available(Context) ->
+    {true, z_context:set_noindex_header(Context)}.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context1 = z_context:reset_state_cookie(Context),

@@ -1,11 +1,11 @@
 %% -*- mode: erlang -*-
 [
- {admin_mailinglist,            ["admin", "mailinglists"],                    controller_admin_mailinglist,            []},
+ {admin_mailinglist,            ["admin", "mailinglists"],                    controller_admin_mailinglist,            [seo_noindex]},
  
- {admin_mailing_preview,        ["admin", "mailing", "preview", id],          controller_admin_mailing_preview,        []},
- {admin_mailing_status,         ["admin", "mailing", id],                     controller_admin_mailing_status,         []},
+ {admin_mailing_preview,        ["admin", "mailing", "preview", id],          controller_admin_mailing_preview,        [seo_noindex]},
+ {admin_mailing_status,         ["admin", "mailing", id],                     controller_admin_mailing_status,         [seo_noindex]},
  
- {admin_mailinglist_recipients, ["admin", "mailinglists", "recipients", id ], controller_admin_mailinglist_recipients, []},
+ {admin_mailinglist_recipients, ["admin", "mailinglists", "recipients", id ], controller_admin_mailinglist_recipients, [seo_noindex]},
  
  {mailinglist_confirm,          ["mailinglist", "confirm", confirm_key],      controller_template,                     [{template, "mailinglist_confirm.tpl"}]},
  {mailinglist_unsubscribe,      ["mailinglist", "unsubscribe", confirm_key],  controller_template,                     [{template, "mailinglist_unsubscribe.tpl"}]},

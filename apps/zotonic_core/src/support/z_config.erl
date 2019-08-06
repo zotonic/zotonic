@@ -191,6 +191,7 @@ default(port) -> ?MODULE:get(listen_port);
 default(ssl_port) -> ?MODULE:get(ssl_listen_port);
 default(max_connections) -> 20000;
 default(ssl_max_connections) -> 20000;
+default(security_headers) -> true;
 default(smtp_verp_as_from) -> false;
 default(smtp_no_mx_lookups) -> false;
 default(smtp_relay) -> false;

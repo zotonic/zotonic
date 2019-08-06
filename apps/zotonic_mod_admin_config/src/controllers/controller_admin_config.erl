@@ -21,9 +21,13 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    service_available/1,
     is_authorized/1,
     process/4
 ]).
+
+service_available(Context) ->
+    {true, z_context:set_noindex_header(Context)}.
 
 is_authorized(Context) ->
     z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_admin_config)} ], Context).
