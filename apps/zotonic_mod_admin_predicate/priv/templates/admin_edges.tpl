@@ -17,7 +17,7 @@
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
                                select_name="qpredicate"
-                               selected_value=m.rsc[qpredicate].id
+                               selected_qvalue=m.rsc[qpredicate].id
                                selected_label=m.rsc[qpredicate].title
                                default_value=""
                                default_label=_"All Predicates"
@@ -30,8 +30,8 @@
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
                                 select_name="qpagelen"
-                                selected_value=qpagelen
-                                selected_label=qpagelen
+                                selected_qvalue=qpagelen|to_integer|default:default_pagelen
+                                selected_label=qpagelen|to_integer|default:default_pagelen
                                 default_value=default_pagelen
                                 default_label=default_pagelen_label
                                 form_id=#form
