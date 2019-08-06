@@ -751,8 +751,7 @@ can_edge(#acl_edge{predicate=P, subject_id=SubjectId, object_id=ObjectId}, Conte
 can_media(Mime, undefined, Context) ->
     can_media(Mime, 0, Context);
 can_media(Mime, Size, Context) ->
-    MaxSize = max_upload_size(Context) * 1024 * 1024,
-    case MaxSize >= Size of
+    case max_upload_size(Context) >= Size of
         true ->
             Cat = m_media:mime_to_category(Mime),
             can_insert_category(Cat, Context);
