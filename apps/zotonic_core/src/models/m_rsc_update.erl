@@ -488,10 +488,11 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
     EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps), [], Context), RscUpd),
     SafeProps = escape_props(RscUpd#rscupd.is_escape_texts, EditableProps, Context),
     SafeSlugProps = generate_slug(Id, SafeProps, Context),
+    DefaultProps = props_defaults(Id, SafeSlugProps, Context),
     try
-        preflight_check(Id, SafeSlugProps, Context),
-        throw_if_category_not_allowed(Id, SafeSlugProps, RscUpd#rscupd.is_acl_check, Context),
-        update_transaction_fun_insert(RscUpd, SafeSlugProps, Raw, UpdateProps, Context)
+        preflight_check(Id, DefaultProps, Context),
+        throw_if_category_not_allowed(Id, DefaultProps, RscUpd#rscupd.is_acl_check, Context),
+        update_transaction_fun_insert(RscUpd, DefaultProps, Raw, UpdateProps, Context)
     catch
         throw:{error, _} = Error -> {rollback, Error}
     end.
@@ -991,6 +992,27 @@ props_defaults(Props, Context) ->
         _ -> Props
     end.
 
+%% @doc Set default properties on resource insert and update.
+-spec props_defaults(m_rsc:resource(), m_rsc:properties(), z:context()) -> m_rsc:properties().
+props_defaults(_Id, Props, Context) ->
+    lists:foldl(
+        fun(Key, Acc) ->
+            prop_default(Key, proplists:get_value(Key, Props), Acc, Context)
+        end,
+        Props,
+        [publication_start]
+    ).
+
+-spec prop_default(atom(), any(), m_rsc:properties(), z:context()) -> m_rsc:properties().
+prop_default(publication_start, undefined, Props, _Context) ->
+    case proplists:get_value(is_published, Props) of
+        true ->
+            z_utils:prop_replace(publication_start, erlang:universaltime(), Props);
+        _ ->
+            Props
+    end;
+prop_default(_Key, _Value, Props, _Context) ->
+    Props.
 
 props_filter_protected(Props, RscUpd) ->
     IsNormalUpdate = is_normal_update(RscUpd),
@@ -1080,7 +1102,7 @@ is_trimmable(_, _) -> false.
 
 %% @doc Combine all textual date fields into real date. Convert them to UTC afterwards.
 recombine_dates(Id, Props, Context) ->
-    LocalNow = z_datetime:to_local(erlang:universaltime(), Context),
+    LocalNow = local_now(Context),
     {Dates, Props1} = recombine_dates_1(Props, [], []),
     {Dates1, DateGroups} = group_dates(Dates),
     {DateGroups1, DatesNull} = collect_empty_date_groups(DateGroups, [], []),
@@ -1257,6 +1279,7 @@ group_dates([{Name, D} | T], Groups, Acc) ->
 default_date("date", _LocalNow) -> undefined;
 default_date("date_start", _LocalNow) -> undefined;
 default_date("date_end", _LocalNow) -> undefined;
+default_date("publication", _LocalNow) -> undefined;
 default_date("org_pubdate", _LocalNow) -> undefined;
 default_date(_, LocalNow) -> LocalNow.
 
@@ -1549,3 +1572,7 @@ test() ->
         {<<"plop">>, <<"hello">>}
     ], z_context:new_tests()),
     ok.
+
+-spec local_now(z:context()) -> calendar:datetime().
+local_now(Context) ->
+    z_datetime:to_local(erlang:universaltime(), Context).

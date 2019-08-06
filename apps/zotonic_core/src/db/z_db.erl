@@ -67,6 +67,7 @@
     delete/3,
     select/3,
 
+    column/3,
     columns/2,
     column_names/2,
     update_sequence/3,
@@ -621,27 +622,43 @@ columns(Table, Context) ->
     end.
 
 
-    columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>}) ->
-        #column_def{
-            name = id,
-            type = "serial",
-            length = undefined,
-            is_nullable = z_convert:to_bool(Nullable),
-            default = undefined
-        };
-    columns1({Name,Type,MaxLength,Nullable,Default}) ->
-        #column_def{
-            name = z_convert:to_atom(Name),
-            type = z_convert:to_list(Type),
-            length = MaxLength,
-            is_nullable = z_convert:to_bool(Nullable),
-            default = column_default(Default)
-        }.
+columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>}) ->
+    #column_def{
+        name = id,
+        type = "serial",
+        length = undefined,
+        is_nullable = z_convert:to_bool(Nullable),
+        default = undefined
+    };
+columns1({Name,Type,MaxLength,Nullable,Default}) ->
+    #column_def{
+        name = z_convert:to_atom(Name),
+        type = z_convert:to_list(Type),
+        length = MaxLength,
+        is_nullable = z_convert:to_bool(Nullable),
+        default = column_default(Default)
+    }.
 
-    column_default(undefined) -> undefined;
-    column_default(<<"nextval(", _/binary>>) -> undefined;
-    column_default(Default) -> binary_to_list(Default).
+column_default(undefined) -> undefined;
+column_default(<<"nextval(", _/binary>>) -> undefined;
+column_default(Default) -> binary_to_list(Default).
 
+
+-spec column( atom() | string(), atom() | string(), z:context()) ->
+        {ok, #column_def{}} | {error, enoent}.
+column(Table, Column0, Context) ->
+    Column = z_convert:to_atom(Column0),
+    Columns = columns(Table, Context),
+    case lists:filter(
+        fun
+            (#column_def{ name = Name }) when Name =:= Column -> true;
+            (_) -> false
+        end,
+        Columns)
+    of
+        [] -> {error, enoent};
+        [#column_def{} = Col] -> {ok, Col}
+    end.
 
 %% @doc Return a list with the column names of a table.  The names are sorted.
 -spec column_names(table_name(), z:context()) -> list( atom() ).
