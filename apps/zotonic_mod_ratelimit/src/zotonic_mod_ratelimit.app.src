@@ -1,0 +1,11 @@
+{application, zotonic_mod_ratelimit, [
+    {description, "Rate limiting of authentication tries and other types of requests."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [kernel, stdlib, mnesia, zotonic_core]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

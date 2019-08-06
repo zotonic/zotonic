@@ -525,8 +525,7 @@ ip_whitelist(Context) ->
 %% If succesful then updates the 'visited' timestamp of the entry.
 %% @spec check_email_pw(Email, Password, Context) -> {ok, Id} | {error, Reason}
 check_email_pw(Email, Password, Context) ->
-    EmailLower = z_string:trim(z_string:to_lower(Email)),
-    case lookup_by_type_and_key_multi(email, EmailLower, Context) of
+    case lookup_by_type_and_key_multi(email, Email, Context) of
         [] -> {error, nouser};
         Users -> check_email_pw1(Users, Email, Password, Context)
     end.

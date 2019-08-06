@@ -36,7 +36,7 @@
 start() ->
     Node = get_node_argument(),
     Result = case net_adm:ping(Node) of
-                 pang -> zotonic_compile:all();
+                 pang -> all();
                  pong ->rpc:call(Node, zotonic_compile, all, [], infinity)
              end,
     halt_with_result(Result).

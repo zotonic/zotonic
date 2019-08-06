@@ -1026,6 +1026,8 @@ set_cookie(Key, Value, Context) ->
 
 %% @doc Set a cookie value with cookie options.
 -spec set_cookie(binary(), binary(), list(), z:context()) -> z:context().
+set_cookie(_Key, _Value, _Options, #context{ cowreq = undefined } = Context) ->
+    Context;
 set_cookie(Key, Value, Options, Context) ->
     % Add domain to cookie if not set
     ValueBin = z_convert:to_binary(Value),
@@ -1038,11 +1040,15 @@ set_cookie(Key, Value, Options, Context) ->
 
 %% @doc Read a cookie value from the current request.
 -spec get_cookie(binary(), z:context()) -> binary() | undefined.
+get_cookie(_Key, #context{cowreq = undefined}) ->
+    undefined;
 get_cookie(Key, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:get_cookie_value(Key, Context).
 
 %% @doc Read all cookie values with a certain key from the current request.
 -spec get_cookies(binary(), z:context()) -> [ binary() ].
+get_cookies(_Key, #context{cowreq = undefined}) ->
+    [];
 get_cookies(Key, #context{cowreq=Req} = Context) when is_map(Req), is_binary(Key) ->
     proplists:get_all_values(Key, cowmachine_req:req_cookie(Context)).
 
