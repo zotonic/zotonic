@@ -48,7 +48,6 @@
     delete_task/3,
     delete_task/4,
 
-    pivot_resource/2,
     stemmer_language/1,
     stemmer_language_config/1,
     cleanup_tsv_text/1,
@@ -499,32 +498,37 @@ ensure_list(undefined) -> [];
 ensure_list(X) -> [X].
 
 do_poll_queue(Context) ->
-    case fetch_queue(Context) of
-        [] ->
-            false;
-        Qs ->
-            F = fun(Ctx) ->
-                        [ {Id, catch pivot_resource(Id, Ctx)} || {Id,_Serial} <- Qs]
-                end,
-            case z_db:transaction(F, Context) of
-                {rollback, PivotError} ->
-                    lager:error("Pivot error: ~p: ~p",
-                                [PivotError, Qs]);
-                L when is_list(L) ->
-                    lists:map(fun({Id, _Serial}) ->
-                                    IsA = m_rsc:is_a(Id, Context),
-                                    z_notifier:notify(#rsc_pivot_done{id=Id, is_a=IsA}, Context),
-                                    % Flush the resource, as some synthesized attributes might depend on the pivoted fields.
-                                    % @todo Only do this if some fields are changed
-                                    m_rsc_update:flush(Id, Context)
-                              end, Qs),
-                    lists:map(fun({_Id, ok}) -> ok;
-                                 ({Id,Error}) -> log_error(Id, Error, Context) end,
-                              L),
-                    delete_queue(Qs, Context)
-            end,
-            true
-    end.
+    do_pivot_queued( fetch_queue(Context), Context ).
+
+%% @doc Pivot a specific id, delete its queue record if present
+do_pivot(Id, Context) ->
+    Serial = fetch_queue_id(Id, Context),
+    do_pivot_queued([ {Id, Serial} ], Context).
+
+do_pivot_queued([], _Context) ->
+    false;
+do_pivot_queued(Qs, Context) ->
+    F = fun(Ctx) ->
+                [ {Id, catch pivot_resource(Id, Ctx)} || {Id,_Serial} <- Qs]
+        end,
+    case z_db:transaction(F, Context) of
+        {rollback, PivotError} ->
+            lager:error("Pivot error: ~p: ~p",
+                        [PivotError, Qs]);
+        L when is_list(L) ->
+            lists:map(fun({Id, _Serial}) ->
+                            IsA = m_rsc:is_a(Id, Context),
+                            z_notifier:notify(#rsc_pivot_done{id=Id, is_a=IsA}, Context),
+                            % Flush the resource, as some synthesized attributes might depend on the pivoted fields.
+                            % @todo Only do this if some fields are changed
+                            m_rsc_update:flush(Id, Context)
+                      end, Qs),
+            lists:map(fun({_Id, ok}) -> ok;
+                         ({Id,Error}) -> log_error(Id, Error, Context) end,
+                      L),
+            delete_queue(Qs, Context)
+    end,
+    true.
 
 log_error(Id, Error, _Context) ->
     lager:warning("Pivot error ~p: ~p", [Id, Error]).
@@ -552,14 +556,6 @@ poll_task(Context) ->
             empty
     end.
 
-
-%% @doc Pivot a specific id, delete its queue record if present
-do_pivot(Id, Context) ->
-    Serial = fetch_queue_id(Id, Context),
-    pivot_resource(Id, Context),
-    delete_queue(Id, Serial, Context).
-
-
 %% @doc Fetch the next batch of ids from the queue. Remembers the serials, as a new
 %% pivot request might come in while we are pivoting.
 %% @spec fetch_queue(Context) -> [{Id,Serial}]
@@ -573,7 +569,11 @@ fetch_queue_id(Id, Context) ->
 %% @doc Delete the previously queued ids iff the queue entry has not been updated in the meanwhile
 delete_queue(Qs, Context) ->
     F = fun(Ctx) ->
-        [ z_db:q("delete from rsc_pivot_queue where rsc_id = $1 and serial = $2", [Id,Serial], Ctx) || {Id,Serial} <- Qs ]
+        lists:foreach(
+            fun({Id, Serial}) ->
+                delete_queue(Id, Serial, Ctx)
+            end,
+            Qs)
     end,
     z_db:transaction(F, Context).
 
