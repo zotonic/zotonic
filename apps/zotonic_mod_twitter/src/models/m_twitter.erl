@@ -164,7 +164,7 @@ set_import_count(SubId, ImportCount, Context) ->
 disable(SubscriptionId, Reason, Context) when is_integer(SubscriptionId) ->
     case z_db:q("
         update twitter_subscriptions
-        set is_enabled = false
+        set is_enabled = false,
             last_error = $2
         where id = $1",
         [ SubscriptionId, Reason ],

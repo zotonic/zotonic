@@ -12,7 +12,7 @@
                     <fieldset>
 
                         <div class="form-group row">
-                            <label class="control-label col-md-3" for="twitter_consumer_key">{_ Consumer key _}</label>
+                            <label class="control-label col-md-3" for="twitter_consumer_key">{_ Consumer Key _}</label>
                             <div class="col-md-9">
                                 <input type="text" id="twitter_consumer_key" name="consumer_key" value="{{ m.config.mod_twitter.consumer_key.value|escape }}" class="form-control" />
                             </div>
@@ -60,6 +60,26 @@
 
                                 <p class="help-block">
                                     {_ Separate #tags, @usernames and phrases with commas or newlines. _}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3" for="twitter_max_feed_backoff">{_ Maximum poll delay _}</label>
+                            <div class="col-md-9 form-inline">
+                                {% with m.config.mod_twitter.max_feed_backoff.value|default:"3600" as backoff %}
+                                    <select class="form-control" name="max_feed_backoff" id="twitter_max_feed_backoff">
+                                        <option value="60" {% if backoff == 60 %}selected{% endif %}>{_ 1 minute _}</option>
+                                        <option value="120" {% if backoff == 120 %}selected{% endif %}>{_ 2 minutes _}</option>
+                                        <option value="300" {% if backoff == 300 %}selected{% endif %}>{_ 5 minutes _}</option>
+                                        <option value="600" {% if backoff == 600 %}selected{% endif %}>{_ 10 minutes _}</option>
+                                        <option value="900" {% if backoff == 900 %}selected{% endif %}>{_ 15 minutes _}</option>
+                                        <option value="1800" {% if backoff == 1800 %}selected{% endif %}>{_ 30 minutes _}</option>
+                                        <option value="3600" {% if backoff == 3600 %}selected{% endif %}>{_ 1 hour _}</option>
+                                        <option value="7200" {% if backoff == 7200 %}selected{% endif %}>{_ 2 hours _}</option>
+                                    </select>
+                                {% endwith %}
+                                <p class="help-block">
+                                    {_ Twitter is periodically polled for new content. If there is no content then the waiting period will be extended up to this maximum. _}
                                 </p>
                             </div>
                         </div>
