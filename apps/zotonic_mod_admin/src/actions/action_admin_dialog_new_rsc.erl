@@ -83,8 +83,24 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
 
 event(#submit{message={new_page, Args}}, Context) ->
     BaseProps = get_base_props(z_context:get_q(<<"new_rsc_title">>, Context), Context),
-    {ok, Id} = m_rsc_update:insert(BaseProps, Context),
-    do_new_page_actions(Id, Args, Context).
+    File = z_context:get_q(upload_file, Context),
+    Result = case File of
+        #upload{filename = OriginalFilename, tmpfile = TmpFile} ->
+            BaseProps1 = [
+                {original_filename, OriginalFilename}
+                | BaseProps
+            ],
+            m_media:insert_file(TmpFile, BaseProps1, Context);
+        undefined ->
+            m_rsc_update:insert(BaseProps, Context)
+    end,
+    case Result of
+        {ok, Id} ->
+            do_new_page_actions(Id, Args, Context);
+        {error, Reason} ->
+            Msg = error_message(Reason, Context),
+            z_render:wire({growl, [{text, Msg}]}, Context)
+    end.
 
 do_new_page_actions(Id, Args, Context) ->
     Redirect = proplists:get_value(redirect, Args, true),
@@ -126,6 +142,22 @@ do_new_page_actions(Id, Args, Context) ->
             Location = z_dispatcher:url_for(Dispatch, [{id, Id}], Context2),
             z_render:wire({redirect, [{location, Location}]}, Context2)
     end.
+
+error_message(eacces, Context) ->
+    ?__("You don't have permission to change this media item.", Context);
+error_message(file_not_allowed, Context) ->
+    ?__("You don't have the proper permissions to upload this type of file.", Context);
+error_message(download_failed, Context) ->
+    ?__("Failed to download the file.", Context);
+error_message(infected, Context) ->
+    ?__("This file is infected with a virus.", Context);
+error_message(av_external_links, Context) ->
+    ?__("This file contains links to other files or locations.", Context);
+error_message(sizelimit, Context) ->
+    ?__("This file is too large.", Context);
+error_message(_R, Context) ->
+    lager:warning("Unknown upload error: ~p", [_R]),
+    ?__("Error uploading the file.", Context).
 
 maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
     [{ok, _} = m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects];
