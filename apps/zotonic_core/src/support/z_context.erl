@@ -1018,8 +1018,7 @@ set_cors_headers(Default, Context) ->
         undefined -> Default;
         Custom -> Custom
     end,
-    RD = set_resp_headers(CorsHeaders, Context),
-    Context#context{wm_reqdata = RD}.
+    set_resp_headers(CorsHeaders, Context).
 
 %% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
 -spec set_noindex_header(z:context()) -> z:context().
