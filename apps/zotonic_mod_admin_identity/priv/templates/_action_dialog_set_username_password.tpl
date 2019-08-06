@@ -15,41 +15,10 @@
     <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
         <input type="hidden" name="id" value="{{ id }}" />
 
-        {% include "_password_autocomplete_off.tpl" %}
-
-        <div class="form-group row">
-	        <label class="control-label col-md-3" for="new_username">{_ Username _}</label>
-            <div class="col-md-9">
-	            <input class="form-control" type="text" id="new_username" name="new_username" value="{{ username|escape }}" />
-	            {% validate id="new_username" wait=400 type={presence} type={username_unique id=id} %}
-            </div>
-        </div>
-
-        <div class="form-group row">
-	        <label class="control-label col-md-3" for="new_password">{_ Password _}</label>
-            <div class="col-md-9">
-	            <input class="form-control" type="password" id="new_password" name="new_password" value="{{ password|escape }}" />
-	            {% if m.admin_identity.password_regex %}
-	                {% validate id="new_password" type={presence} type={format pattern=m.admin_identity.password_regex} %}
-                {% else %}
-	                {% validate id="new_password" type={presence} %}
-	            {% endif %}
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-md-9 col-md-offset-3">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="send_welcome" /> {_ Send welcome e-mail _} ({{ id.email }})
-                    </label>
-                </div>
-            </div>
-        </div>
+        {% include "_identity_password.tpl" %}
 
         <div class="modal-footer">
 	        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-
 	        <button class="btn btn-primary" type="submit">{_ Save _}</button>
         </div>
     </form>
