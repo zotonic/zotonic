@@ -59,11 +59,13 @@
         </div>
     </div>
 
-    <div class="modal-footer">
-        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-        {% if m.acl.use.mod_admin or m.acl.use.mod_admin_frontend %}
-            <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default">{_ Visit full edit page _}</a>
-        {% endif %}
-        {% button class="btn btn-primary" type="submit" text=_"Save" %}
-    </div>
+    {% block modal_footer %}
+        <div class="modal-footer">
+            {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+            {% if m.acl.use.mod_admin or m.acl.use.mod_admin_frontend %}
+                <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default">{_ Visit full edit page _}</a>
+            {% endif %}
+            {% button class="btn btn-primary" type="submit" text=_"Save" %}
+        </div>
+    {% endblock %}
 </form>
