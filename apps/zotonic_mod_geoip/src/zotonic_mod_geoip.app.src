@@ -1,0 +1,15 @@
+{application, zotonic_mod_geoip, [
+    {description, "Map IP addresses to geo locations.."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [
+        kernel, stdlib,
+        zotonic_core,
+        certifi, erlpass, locus
+    ]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.
