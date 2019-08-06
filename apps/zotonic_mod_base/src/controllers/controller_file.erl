@@ -47,14 +47,15 @@
 service_available(Context0) ->
     Context = z_context:set_noindex_header(Context0),
     Context1 = z_context:ensure_qs(Context),
-    z_context:lager_md(Context1),
-    case get_file_info(Context1) of
+    Context2 = z_context:set_cors_headers([{<<"access-control-allow-origin">>, <<"*">>}], Context1),
+    z_context:lager_md(Context2),
+    case get_file_info(Context2) of
         {ok, Info} ->
-            {true, z_context:set(?MODULE, Info, Context1)};
+            {true, z_context:set(?MODULE, Info, Context2)};
         {error, enoent} = Error ->
-            {true, z_context:set(?MODULE, Error, Context1)};
+            {true, z_context:set(?MODULE, Error, Context2)};
         {error, _} = Error ->
-            {false, z_context:set(?MODULE, Error, Context1)}
+            {false, z_context:set(?MODULE, Error, Context2)}
     end.
 
 allowed_methods(Context) ->
@@ -140,9 +141,8 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
             Context1 = set_content_dispostion(z_context:get(content_disposition, Context), Context),
             MaxAge = z_context:get(max_age, Context1, ?MAX_AGE),
             Context2 = set_cache_control_public(is_public(Info#z_file_info.acls, Context1), MaxAge, Context1),
-            Context3 = set_allow_origin(Context2),
-            Context4 = set_content_policy(Info, Context3),
-            {z_file_request:content_stream(Info, cowmachine_req:resp_content_encoding(Context4)), Context4}
+            Context3 = set_content_policy(Info, Context2),
+            {z_file_request:content_stream(Info, cowmachine_req:resp_content_encoding(Context3)), Context3}
     end.
 
 %%%%% -------------------------- Support functions ------------------------
@@ -166,11 +166,6 @@ is_public([{module, Mod}|T], Context, _Answer) ->
     is_public(T, Context, z_acl:is_allowed(use, Mod, Context));
 is_public([Id|T], Context, _Answer) ->
     is_public(T, Context, z_acl:rsc_visible(Id, Context)).
-
-%% @doc Allow any origin to fetch this data. We might want to make this
-%%      configurable per site or resource.
-set_allow_origin(Context) ->
-    z_context:set_resp_header(<<"access-control-allow-origin">>, <<"*">>, Context).
 
 %% @doc Files that are uploaded get a strict content-security-policy.
 %%      Controlled files from the file system are not restricted.

@@ -115,6 +115,7 @@
     set_noindex_header/2,
 
     set_security_headers/1,
+    set_cors_headers/2,
 
     set_cookie/3,
     set_cookie/4,
@@ -1007,6 +1008,18 @@ set_security_headers(Context) ->
         Custom -> Custom
     end,
     cowmachine_req:set_resp_headers(SecurityHeaders, Context).
+
+%% @doc Set Cross-Origin Resource Sharing (CORS) headers. The caller must
+%%      specify default headers to be used in case there are no observers for
+%%      the #cors_headers{} notification.
+-spec set_cors_headers([{binary(), binary()}], z:context()) -> z:context().
+set_cors_headers(Default, Context) ->
+    CorsHeaders = case z_notifier:first(#cors_headers{ headers = Default }, Context) of
+        undefined -> Default;
+        Custom -> Custom
+    end,
+    RD = set_resp_headers(CorsHeaders, Context),
+    Context#context{wm_reqdata = RD}.
 
 %% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
 -spec set_noindex_header(z:context()) -> z:context().

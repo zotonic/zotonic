@@ -60,6 +60,8 @@
 %%      All headers are in lowercase.
 -record(security_headers, { headers :: list( {binary(), binary()} ) }).
 
+%% @doc Set CORS headers on the HTTP response.
+-record(cors_headers, { headers :: list( {binary(), binary()} ) }).
 
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
