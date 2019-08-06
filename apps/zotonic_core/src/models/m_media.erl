@@ -536,22 +536,55 @@ replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context) ->
             {error, eacces}
     end.
 
+%% @doc Preprocess the data, examples are virus scanning and video preprocessing
 replace_file_acl_ok(File, RscId, Props, Medium, Opts, Context) ->
-    Mime = z_convert:to_binary(proplists:get_value(mime, Medium)),
+    Mime = proplists:get_value(mime, Medium),
     PreProc = #media_upload_preprocess{
-        id = RscId,
-        mime = Mime,
-        file = File,
-        original_filename = proplists:get_value(original_filename, Props,
-            proplists:get_value(original_filename, Medium, File)),
-        medium = Medium
-    },
-    NewPreProc = case z_notifier:first(PreProc, Context) of
-                    undefined -> PreProc;
-                    #media_upload_preprocess{} = Mapped -> Mapped
-                 end,
-    NewPreProc2 = z_media_sanitize:sanitize(NewPreProc, Context),
-    replace_file_db(RscId, NewPreProc2, Props, Opts, Context).
+                    id=RscId,
+                    mime=Mime,
+                    file=File,
+                    original_filename=proplists:get_value(original_filename, Props,
+                                        proplists:get_value(original_filename, Medium, File)),
+                    medium=Medium
+                },
+    case notify_first_preproc(PreProc, true, Context) of
+        {ok, PreProc1} ->
+            PreProc2 = set_av_flag(PreProc1, Context),
+            replace_file_sanitize(RscId, PreProc2, Props, Opts, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Set a flag that there was an av scan. This needs to be more generic.
+set_av_flag( #media_upload_preprocess{ medium = Medium } = PreProc, Context ) ->
+    Medium1 = [
+        {is_av_scanned, not proplists:get_value(is_av_sizelimit, Medium, false)
+                        andalso lists:member(antivirus, z_module_manager:get_provided(Context))}
+        | proplists:delete(is_av_scanned, Medium)
+    ],
+    PreProc#media_upload_preprocess{ medium = Medium1 }.
+
+notify_first_preproc(PreProc, IsFirstTry, Context) ->
+    case z_notifier:first(PreProc, Context) of
+        undefined ->
+            {ok, PreProc};
+        #media_upload_preprocess{} = MappedPreProc ->
+            {ok, MappedPreProc};
+        {error, av_sizelimit} when IsFirstTry ->
+            Medium1 = [
+                {is_av_sizelimit, true}
+                | proplists:delete(is_av_sizelimit, PreProc#media_upload_preprocess.medium)
+            ],
+            PreProc1 = PreProc#media_upload_preprocess{ medium = Medium1 },
+            notify_first_preproc(PreProc1, false, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Clean up the uploaded data, removing bits that might be harmful.
+replace_file_sanitize(RscId, PreProc, Props, Opts, Context) ->
+    PreProc1 = z_media_sanitize:sanitize(PreProc, Context),
+    replace_file_db(RscId, PreProc1, Props, Opts, Context).
 
 replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     SafeRootName = z_string:to_rootname(PreProc#media_upload_preprocess.original_filename),

@@ -167,34 +167,36 @@ is_public([{module, Mod}|T], Context, _Answer) ->
 is_public([Id|T], Context, _Answer) ->
     is_public(T, Context, z_acl:rsc_visible(Id, Context)).
 
+%% @doc Allow any origin to fetch this data. We might want to make this
+%%      configurable per site or resource.
 set_allow_origin(Context) ->
     z_context:set_resp_header(<<"access-control-allow-origin">>, <<"*">>, Context).
 
+%% @doc Files that are uploaded get a strict content-security-policy.
+%%      Controlled files from the file system are not restricted.
 set_content_policy(#z_file_info{acls=[]}, Context) ->
     Context;
-set_content_policy(#z_file_info{acls = Acls, mime = <<"application/pdf">>}, Context) ->
-    case lists:any(fun is_integer/1, Acls) of
-        true ->
-            Context1 = z_context:set_resp_header(
-                    <<"content-security-policy">>,
-                    <<"object-src 'self'; plugin-types application/pdf">>,
-                    Context),
-            z_context:set_resp_header(
-                    <<"x-content-security-policy">>,
-                    <<"plugin-types: application/pdf">>,
-                    Context1);
-        false ->
-            Context
-    end;
-set_content_policy(#z_file_info{acls=Acls}, Context) ->
-    case lists:any(fun is_integer/1, Acls) of
+set_content_policy(#z_file_info{ mime = Mime } = Info, Context) ->
+    case is_resource(Info) of
+        true when Mime =:= <<"application/pdf">> ->
+            z_context:set_resp_headers([
+                    {<<"content-security-policy">>, <<"object-src 'self'; plugin-types application/pdf">>},
+                    {<<"x-content-security-policy">>,<<"plugin-types: application/pdf">>}
+                ],
+                Context);
         true ->
             % Do not set the IE11 X-CSP with sandbox as that disables file downloading
+            % https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
             z_context:set_resp_header(<<"content-security-policy">>, <<"sandbox">>, Context);
         false ->
             Context
     end.
 
+%% @doc Check if the served file originated from an user-upload (ie. it is a resource)
+is_resource( #z_file_info{ acls = Acls }) ->
+    lists:any(fun is_integer/1, Acls).
+
+%% @doc Allow caching on public data, no caching on data that needs access control.
 set_cache_control_public(true, MaxAge, Context) ->
     z_context:set_resp_header(
             <<"cache-control">>,

@@ -104,6 +104,7 @@
     set_tz/2,
 
     set_resp_header/3,
+    set_resp_headers/2,
     get_resp_header/2,
     get_req_header/2,
 
@@ -909,10 +910,14 @@ set_tz(Tz, Context) ->
     Context.
 
 %% @doc Set a response header for the request in the context.
-%% @spec set_resp_header(Header, Value, Context) -> NewContext
 -spec set_resp_header(binary(), binary(), z:context()) -> z:context().
 set_resp_header(Header, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:set_resp_header(Header, Value, Context).
+
+%% @doc Set multiple response headers for the request in the context.
+-spec set_resp_headers([ {binary(), binary()} ], z:context()) -> z:context().
+set_resp_headers(Headers, #context{cowreq=Req} = Context) when is_map(Req) ->
+    cowmachine_req:set_resp_headers(Headers, Context).
 
 %% @doc Get a response header
 -spec get_resp_header(binary(), z:context()) -> binary() | undefined.

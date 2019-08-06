@@ -98,6 +98,10 @@ error_message(file_not_allowed, Context) ->
     ?__("You don't have the proper permissions to upload this type of file.", Context);
 error_message(download_failed, Context) ->
     ?__("Failed to download the file.", Context);
+error_message(infected, Context) ->
+    ?__("This file is infected with a virus.", Context);
+error_message(sizelimit, Context) ->
+    ?__("This file is too large.", Context);
 error_message(R, Context) ->
     lager:warning("Unknown media discover error: ~p", [R]),
     ?__("Error checking the website.", Context).
