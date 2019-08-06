@@ -1,0 +1,3 @@
+[
+    {admin_auth2fa_config, ["admin", "authentication-2fa"],  controller_admin, [{ssl,true}, {template, "admin_auth2fa_config.tpl"}, {acl_module, mod_admin_config}]}
+].

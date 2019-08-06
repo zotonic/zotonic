@@ -64,6 +64,7 @@
     observe_acl_logon/2,
     observe_acl_logoff/2,
     observe_acl_context_authenticated/2,
+    observe_acl_rsc_update_check/3,
     observe_acl_user_groups/2,
     observe_acl_add_sql_check/2,
 
@@ -254,6 +255,9 @@ observe_acl_logoff(AclLogoff, Context) ->
 
 observe_acl_context_authenticated(_AclAuthenticated, Context) ->
     acl_user_groups_checks:acl_context_authenticated(Context).
+
+observe_acl_rsc_update_check(AclRscUpdateCheck, Props, Context) ->
+    acl_user_groups_checks:acl_rsc_update_check(AclRscUpdateCheck, Props, Context).
 
 observe_acl_user_groups(_AclUserGroups, Context) ->
     acl_user_groups_checks:user_groups_all(Context).

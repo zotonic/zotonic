@@ -39,6 +39,7 @@
     set_username_pw/4,
     ensure_username_pw/2,
     check_username_pw/3,
+    check_username_pw/4,
     hash/1,
     needs_rehash/1,
     hash_is_equal/2,
