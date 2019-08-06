@@ -37,6 +37,7 @@
     detach/3,
     detach_all/2,
 
+    get_observers/1,
     get_observers/2,
 
     notify_sync/4,
@@ -100,6 +101,12 @@ detach_all(Notifier, OwnerPid) when is_pid(OwnerPid) ->
 -spec detach(zotonic_notifier:notifier(), zotonic_notifier:event(), pid()) -> ok | {error, term()}.
 detach(Notifier, Event, OwnerPid) ->
     gen_server:call(Notifier, {detach, Event, OwnerPid}, infinity).
+
+%% @doc Return all observers
+-spec get_observers(zotonic_notifier:notifier()) -> list().
+get_observers(Notifier) ->
+    Table = observer_table_name(Notifier),
+    lists:flatten( ets:match(Table, '$1') ).
 
 %% @doc Return all observers for a particular event
 -spec get_observers(zotonic_notifier:notifier(), zotonic_notifier:event()) -> list().

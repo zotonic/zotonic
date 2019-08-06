@@ -1,11 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @author Bryan Fink <bryan@basho.com>
-%% @copyright 2009-2015 Marc Worrell
-%% Date: 2009-11-01
-%% @doc Development server.  Periodically performs a "make" and loads new files.
-%% When new files are loaded the caches are emptied.
+%% @copyright 2009-2019 Marc Worrell
+%% @doc Support functions for development.
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

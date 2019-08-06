@@ -130,6 +130,8 @@ get_observers(Event) ->
     get_observers(?DEFAULT_NOTIFIER, Event).
 
 -spec get_observers(notifier(), event()) -> list().
+get_observers(Notifier, '_') ->
+    zotonic_notifier_worker:get_observers(Notifier);
 get_observers(Notifier, Event) ->
     zotonic_notifier_worker:get_observers(Notifier, Event).
 
