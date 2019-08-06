@@ -401,7 +401,9 @@ collect_dispatch_lists(Context) ->
 %% @spec get_file_dispatch(filename()) -> DispatchList
 get_file_dispatch(File) ->
     try
-        case filelib:is_regular(File) of
+        case filelib:is_regular(File)
+            andalso not zotonic_filewatcher_handler:file_blacklisted(File)
+        of
             true ->
                 Basename = filename:basename(File),
                 case Basename of

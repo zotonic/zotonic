@@ -39,12 +39,13 @@
             <a href="#" id="crop-center-remove" class="btn btn-default">
                 <i class="glyphicon glyphicon-remove"></i> {_ Remove crop center _}
             </a>
-            <span id="crop-center-message">{_ Click the image to set the cropping center. _}</span>
+            <span id="crop-center-message" class="text-muted">{_ Click the image to set the cropping center. _}</span>
         {% endif %}
 
-        <div class="pull-right">
-            {% if medium.filename %}
-                <a target="_blank" class="btn btn-default" href="{% url media_attachment star=medium.filename %}" class="button">{_ Download _}</a>
+        <p class="text-right">
+            {% if medium.size > 0 %}
+                <a target="_blank" class="btn btn-default" href="{% url media_inline id=id %}" class="button">{_ View _}</a>
+                <a target="_blank" class="btn btn-default" href="{% url media_attachment id=id %}" class="button">{_ Download _}</a>
             {% endif %}
             {% button
                 text=_"Replace this media item"
@@ -61,7 +62,20 @@
     	        }
     	        disabled=not id.is_editable
     	    %}
-        </div>
+        </p>
+        {% if medium.is_av_sizelimit %}
+            <p class="text-danger text-right">
+                <span class="glyphicon glyphicon-alert"></span> {_ This file has not been scanned for viruses because it is too large. _}
+            </p>
+        {% elseif medium.is_av_scanned %}
+            <p class="text-muted text-right">
+                <span class="glyphicon glyphicon-ok-sign"></span> {_ This file has been scanned for viruses. _}
+            </p>
+        {% elseif m.modules.active.mod_clamav %}
+            <p class="text-danger text-right">
+                <span class="glyphicon glyphicon-alert"></span> {_ This file has not been scanned for viruses. _}
+            </p>
+        {% endif %}
     </div>
 {% else %}
     {% if medium.created %}

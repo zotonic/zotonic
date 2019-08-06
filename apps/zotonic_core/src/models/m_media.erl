@@ -935,15 +935,13 @@ is_unique_file(Filename, Context) ->
 medium_insert(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     Props1 = check_medium_props(Props),
-    z_notifier:notify(
-        #media_update_done{
-            action = insert,
-            id = Id,
-            post_is_a = IsA,
-            post_props = Props1
-        },
-        Context),
-    z_db:insert(medium, Props1, Context).
+    case z_db:insert(medium, Props1, Context) of
+        {ok, _} = OK ->
+            z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=[], post_props=Props1}, Context),
+            OK;
+        {error, _} = Error ->
+            Error
+    end.
 
 medium_delete(Id, Context) ->
     medium_delete(Id, get(Id, Context), Context).
@@ -952,15 +950,13 @@ medium_delete(_Id, undefined, _Context) ->
     {ok, 0};
 medium_delete(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
-    z_notifier:notify(
-        #media_update_done{
-            action = delete,
-            id = Id,
-            pre_is_a = IsA,
-            pre_props = Props
-        },
-        Context),
-    z_db:delete(medium, Id, Context).
+    case z_db:delete(medium, Id, Context) of
+        {ok, _} = OK ->
+            z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=[]}, Context),
+            OK;
+        {error, _} = Error ->
+            Error
+    end.
 
 check_medium_props(Ps) ->
     [check_medium_prop(P) || P <- Ps].
