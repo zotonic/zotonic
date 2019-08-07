@@ -54,8 +54,8 @@
          convert_task/2,
          queue_path/2,
 
-         video_info/2,
-         video_preview/3,
+         video_info/1,
+         video_preview/2,
 
          orientation_to_transpose/1
         ]).
@@ -130,9 +130,8 @@ observe_media_upload_props(#media_upload_props{archive_file=undefined, mime= <<"
     Medium;
 observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <<"video/", _/binary>>}, Medium, Context) ->
     FileAbs = z_media_archive:abspath(File, Context),
-    Info = video_info(FileAbs, Context),
-    Info2 = case video_preview(FileAbs, Info, Context) of
-                {ok, TmpFile} ->
+    Info = video_info(FileAbs),
+    Info2 = case video_preview(FileAbs, Info) of                {ok, TmpFile} ->
                     PreviewFilename = preview_filename(Id, Context),
                     PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
                     ok = z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context),
@@ -257,11 +256,11 @@ queue_path(Filename, Context) ->
     filename:join(QueueDir, Filename).
 
 
-video_info(Path, Context) ->
-    Cmdline = case m_config:get_value(mod_video, ffprobe_cmdline, Context) of
+video_info(Path) ->
+    Cmdline = case z_config:get(ffprobe_cmdline) of
                   undefined -> ?FFPROBE_CMDLINE;
                   <<>> -> ?FFPROBE_CMDLINE;
-                  [] -> ?FFPROBE_CMDLINE;
+                  "" -> ?FFPROBE_CMDLINE;
                   CmdlineCfg -> z_convert:to_list(CmdlineCfg)
               end,
     FfprobeCmd = lists:flatten([
@@ -327,17 +326,17 @@ orientation(#{<<"rotate">> := Angle}) ->
 orientation(_) ->
     1.
 
-video_preview(MovieFile, Props, Context) ->
+video_preview(MovieFile, Props) ->
     Duration = proplists:get_value(duration, Props),
     Start = case Duration of
                 N when N =< 1 -> 0;
                 N when N =< 30 -> 1;
                 _ -> 10
             end,
-    Cmdline = case m_config:get_value(mod_video, ffmpeg_preview_cmdline, Context) of
+    Cmdline = case z_config:get(ffmpeg_preview_cmdline) of
                   undefined -> ?PREVIEW_CMDLINE;
                   <<>> -> ?PREVIEW_CMDLINE;
-                  [] -> ?PREVIEW_CMDLINE;
+                  "" -> ?PREVIEW_CMDLINE;
                   CmdlineCfg -> z_convert:to_list(CmdlineCfg)
               end,
     TmpFile = z_tempfile:new(),
