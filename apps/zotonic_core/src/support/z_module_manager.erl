@@ -174,7 +174,7 @@ deactivate(Module, Context) ->
 activate(Module, Context) when is_atom(Module) ->
     activate(Module, false, Context).
 
--spec activate_await(atom(), z:context()) -> ok | {error, not_active} | {error, not_found}.
+-spec activate_await(atom(), z:context()) -> ok | {error, not_active | not_found}.
 activate_await(Module, Context) when is_atom(Module) ->
     case activate(Module, true, Context) of
         ok ->
@@ -185,7 +185,9 @@ activate_await(Module, Context) when is_atom(Module) ->
                         false -> {error, not_active}
                     end;
                 {error, not_running} ->
-                    {error, not_active}
+                    {error, not_active};
+                {error, not_found} ->
+                    {error, not_found}
             end;
         {error, _} = Error ->
             Error
@@ -364,7 +366,7 @@ get_upgrade_status(Context) ->
 
 
 %% @doc Return the pid of a running module
--spec whereis(atom(), #context{}) -> {ok, pid()} | {error, not_running}.
+-spec whereis(atom(), z:context()) -> {ok, pid()} | {error, not_running | not_found}.
 whereis(Module, Context) ->
     gen_server:call(name(Context), {whereis, Module}).
 
