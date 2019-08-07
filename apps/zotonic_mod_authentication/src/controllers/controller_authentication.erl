@@ -29,6 +29,8 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-define(RESET_TOKEN_MAXAGE, 48*3600).
+
 
 allowed_methods(Context) ->
     {[ <<"POST">> ], Context}.
@@ -320,10 +322,30 @@ check_reminder_secret(_Payload, _Context) ->
     }.
 
 get_by_reminder_secret(Code, Context) ->
+    MaxAge = case z_convert:to_integer( m_config:get_value(mod_authentication, reset_token_maxage, Context) ) of
+        undefined -> ?RESET_TOKEN_MAXAGE;
+        MA -> MA
+    end,
     case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
-        undefined -> undefined;
-        Row -> {ok, proplists:get_value(rsc_id, Row)}
+        undefined ->
+            undefined;
+        Row ->
+            {rsc_id, UserId} = proplists:lookup(rsc_id, Row),
+            {modified, Modified} = proplists:lookup(modified, Row),
+            ModifiedTm = z_datetime:datetime_to_timestamp(Modified),
+            case z_datetime:timestamp() < ModifiedTm + MaxAge of
+                true ->
+                    {ok, UserId};
+                false ->
+                    lager:info("Accessing expired reminder secret for user ~p", [UserId]),
+                    delete_reminder_secret(UserId, Context),
+                    undefined
+            end
     end.
+
+%% @doc Delete the reminder secret of the user
+delete_reminder_secret(Id, Context) ->
+    m_identity:delete_by_type(Id, "logon_reminder_secret", Context).
 
 
 auth_precheck(Username, Context) when is_binary(Username) ->

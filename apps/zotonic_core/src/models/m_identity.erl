@@ -214,20 +214,25 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                     {error, eexist};
                 false ->
                     F = fun(Ctx) ->
-                        UniqueTest = z_db:q1(
-                            "select count(*) from identity where type = 'username_pw' "
-                                ++ "and rsc_id <> $1 and key = $2",
+                        UniqueTest = z_db:q1("
+                            select count(*)
+                            from identity
+                            where type = 'username_pw'
+                              and rsc_id <> $1 and key = $2",
                             [m_rsc:rid(Id, Context), Username1],
                             Ctx
                         ),
                         case UniqueTest of
                             0 ->
-                                case z_db:q(
-                                    "update identity set key = $2 where rsc_id = $1 "
-                                        ++ "and type = 'username_pw'",
-                                    [m_rsc:rid(Id, Context), Username1],
-                                    Ctx
-                                ) of
+                                case z_db:q("
+                                        update identity
+                                        set key = $2,
+                                            modified = now()
+                                        where rsc_id = $1
+                                          and type = 'username_pw'",
+                                        [m_rsc:rid(Id, Context), Username1],
+                                        Ctx)
+                                of
                                     1 -> ok;
                                     0 -> {error, enoent};
                                     {error, _} ->
@@ -308,7 +313,7 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                             1 = z_db:q(
                                 "insert into identity (rsc_id, is_unique, is_verified, type, key, propb)
                                 values ($1, true, true, 'username_pw', $2, $3)",
-                                [Id, Username, {term, Hash}],
+                                [Id, Username, ?DB_PROPS(Hash)],
                                 Context
                             ),
                             z_db:q(
@@ -775,9 +780,14 @@ set_visited(UserId, Context) ->
 set_verified(Id, Context) ->
     case z_db:q_row("select rsc_id, type from identity where id = $1", [Id], Context) of
         {RscId, Type} ->
-            case z_db:q("update identity set is_verified = true, verify_key = null where id = $1",
-                [Id],
-                Context)
+            case z_db:q("
+                    update identity
+                    set is_verified = true,
+                        verify_key = null,
+                        modified = now()
+                    where id = $1",
+                    [Id],
+                    Context)
             of
                 1 ->
                     z_mqtt:publish(
@@ -818,8 +828,11 @@ set_verified(_RscId, _Type, _Key, _Context) ->
 set_verified_trans(RscId, Type, Key, Context) ->
     case z_db:q("update identity
                  set is_verified = true,
-                     verify_key = null
-                 where rsc_id = $1 and type = $2 and key = $3",
+                     verify_key = null,
+                     modified = now()
+                 where rsc_id = $1
+                   and type = $2
+                   and key = $3",
                 [RscId, Type, Key],
                 Context)
     of
@@ -849,11 +862,23 @@ set_by_type(RscId, Type, Key, Context) ->
 -spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), list(), z:context()) -> ok.
 set_by_type(RscId, Type, Key, Props, Context) ->
     F = fun(Ctx) ->
-        case z_db:q("update identity set key = $3, propb = $4 where rsc_id = $1 and type = $2",
-            [m_rsc:rid(RscId, Context), Type, Key, {term, Props}], Ctx) of
-            0 -> z_db:q("insert into identity (rsc_id, type, key, propb) values ($1,$2,$3,$4)",
-                [m_rsc:rid(RscId, Context), Type, Key, {term, Props}], Ctx);
-            N when N > 0 -> ok
+        case z_db:q("
+                update identity
+                set key = $3,
+                    propb = $4,
+                    modified = now()
+                where rsc_id = $1
+                  and type = $2",
+                [ m_rsc:rid(RscId, Context), Type, Key, ?DB_PROPS(Props) ],
+                Ctx)
+        of
+            0 ->
+                z_db:q("insert into identity (rsc_id, type, key, propb) values ($1,$2,$3,$4)",
+                       [ m_rsc:rid(RscId, Context), Type, Key, ?DB_PROPS(Props) ],
+                       Ctx),
+                ok;
+            N when N > 0 ->
+                ok
         end
     end,
     z_db:transaction(F, Context).
@@ -1048,7 +1073,12 @@ set_verify_key(Id, Context) ->
     N = binary_to_list(z_ids:id(10)),
     case lookup_by_verify_key(N, Context) of
         undefined ->
-            z_db:q("update identity set verify_key = $2 where id = $1", [Id, N], Context),
+            z_db:q("update identity
+                    set verify_key = $2,
+                        modified = now()
+                    where id = $1",
+                    [Id, N],
+                    Context),
             {ok, N};
         _ ->
             set_verify_key(Id, Context)
