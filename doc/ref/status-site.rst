@@ -17,24 +17,29 @@ not find a ``Host:`` header, or if the host header does not correspond
 to any known Zotonic site, it shows the ``zotonic_status`` site
 instead.
 
+
 Logging in
 ----------
 
-When logged in to the Zotonic status site, you can manage the running
-sites on the system: starting, stopping and upgrading them.
-
 Upon first visit, the site shows a friendly message, which tells
 visitors that the site they are looking at has probably not been
-configured correctly yes. It also asks for a password to log in.
+configured correctly yet.
 
-The password for this site is automatically generated and stored in ``~/.zotonic/[release]/zotonic.config``, for instance ``[release]`` is the Zotonic release number, like ``0.13``.
+Pressing the ``Manage this server`` button will bring up the login
+dialog.
+
+The username for the status site is ``wwwadmin``. The password is
+automatically generated and stored in ``~/.zotonic/[release]/zotonic.config``,
+where ``[release]`` is the Zotonic release number, like ``1.0``.
+
+When logged in to the Zotonic status site, you can manage the running
+sites on the system: starting, stopping and upgrading them.
 
 .. image:: /img/zotonic_status_sites.png
 
 The "update" buttons only appear when the site (or Zotonic itself) is
 under Mercurial or Git revision control. These buttons do a "pull"
 from the repository and then rebuild the system.
-
 
 
 Getting the global sites status
