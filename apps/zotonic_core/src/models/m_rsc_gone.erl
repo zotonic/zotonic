@@ -97,7 +97,7 @@ is_gone(Id, Context) when is_integer(Id) ->
     z_depcache:memo(F, {rsc_is_gone, Id}, Context).
 
 %% @doc Copy a resource to the 'gone' table, use the current user as the modifier (deleter).
--spec gone(integer(), #context{}) -> {ok, integer()} |  | {error, term()}.
+-spec gone(integer(), #context{}) -> {ok, integer()} | {error, term()}.
 gone(Id, Context) when is_integer(Id) ->
     gone(Id, undefined, Context).
 
