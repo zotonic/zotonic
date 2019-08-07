@@ -1227,13 +1227,19 @@ recombine_date_part({{Y, M, D}, {H, _I, S}}, <<"i">>, V) -> {{Y, M, D}, {H, V, S
 recombine_date_part({{Y, M, D}, {H, I, _S}}, <<"s">>, V) -> {{Y, M, D}, {H, I, V}};
 recombine_date_part({{Y, M, D}, {_H, _I, S}}, <<"hi">>, {H, I, _S}) -> {{Y, M, D}, {H, I, S}};
 recombine_date_part({{Y, M, D}, _Time}, <<"his">>, {_, _, _} = V) -> {{Y, M, D}, V};
-recombine_date_part({_Date, {H, I, S}}, <<"ymd">>, {_, _, _} = V) -> {V, {H, I, S}}.
-
+recombine_date_part({_Date, {H, I, S}}, <<"ymd">>, {_, _, _} = V) -> {V, {H, I, S}};
+recombine_date_part({_Date, {H, I, S}}, <<"dmy">>, {_, _, _} = V) -> {V, {H, I, S}}.
 
 to_date_value(<<"ymd">>, <<"-", V/binary>>) ->
     case to_date_value(<<"ymd">>, V) of
         {Y, M, D} when is_integer(Y) -> {-Y, M, D};
         YMD -> YMD
+    end;
+to_date_value(<<"dmy">>, V) ->
+    case re:run(V, "([0-9]+)[-/: ]([0-9]+)[-/: ](-?[0-9]+)", [{capture, all_but_first, binary}]) of
+        nomatch -> {undefined, undefined, undefined};
+        % Negative years 13/7/-99
+        {match, [D, M, Y]} -> {to_int(Y), to_int(M), to_int(D)}
     end;
 to_date_value(Part, V) when Part =:= <<"ymd">>; Part =:= <<"his">> ->
     case binary:split(V, [<<"-">>, <<"/">>, <<":">>, <<" ">>], [global]) of
@@ -1348,8 +1354,12 @@ to_int("") ->
     undefined;
 to_int(<<>>) ->
     undefined;
-to_int(<< A/binary >>) ->
-    to_int(binary_to_list(A));
+to_int(A) when is_binary(A) ->
+    try
+        binary_to_integer(A)
+    catch
+        _:_ -> undefined
+    end;
 to_int(A) ->
     try
         list_to_integer(A)
