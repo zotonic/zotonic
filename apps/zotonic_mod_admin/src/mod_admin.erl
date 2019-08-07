@@ -238,6 +238,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
+    IsConnectToggle = z_convert:to_bool( proplists:get_value(is_connect_toggle, Args) ),
 
     QAction = proplists:get_all_values(action, Args),
     QActions = proplists:get_value(actions, Args, []),
@@ -261,7 +262,12 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
                  z_convert:to_integer(ObjectId0)}
         end,
 
-    case do_link_unlink(IsConnected, SubjectId, Predicate, ObjectId, Callback, Context) of
+    % Only disconnect if connection is not made from tinymce
+    IsUnlink = case IsConnectToggle of
+        false -> false;
+        true -> IsConnected
+    end,
+    case do_link_unlink(IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
             Context2 = case z_convert:to_bool(proplists:get_value(autoclose, Args)) of
                             true -> z_render:dialog_close(Context1);
