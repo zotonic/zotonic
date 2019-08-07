@@ -1,5 +1,5 @@
 {% with is_live|if:q.payload.log_id:id|to_integer as id %}
-    {% with m.log[id] as l %}
+    {% with m.log_ui[id] as l %}
         {% if     (not qmessage or l.message|lower|match:(qmessage|lower))
               and (not quser or quser == l.user_id)
         %}
@@ -21,6 +21,11 @@
                     {% else %}
                         {{ l.message|force_escape|linebreaksbr }}
                     {% endif %}
+                    <span class="text-muted">
+                        <br><small><span class="label label-default">URL</span> {{ l.url|escape }}</small>
+                        <br><small><span class="label label-default">UA</span> {{ l.user_agent|escape }}</small>
+                        <br><small><span class="label label-default">IP</span> {{ l.remote_ip|escape }}</small>
+                    </span>
                 </td>
                 <td>
                     {% if l.user_id == 1 %}
@@ -38,7 +43,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if l.module %}{{ l.module|default:"-" }}{% if l.line %}:{{ l.line }}{% endif %}{% endif %}
+                    <tt>{{ l.stack|log_format_stack }}</tt>
                 </td>
             </tr>
         {% endif %}

@@ -1,27 +1,27 @@
 {% extends "admin_log_base.tpl" %}
 
-{% block title %}{_ Log messages _}{% endblock %}
+{% block title %}{_ Log ui events _}{% endblock %}
 
-{% block title_log %}{_ Log messages _}{% endblock %}
+{% block title_log %}{_ Log user interface events _}{% endblock %}
 
-{% block active1 %}active{% endblock %}
+{% block active3 %}active{% endblock %}
 
 {% block content_log %}
 
 <h3 class="above-list">
-    {_ Most recent messages _}
+    {_ Most recent user interface events _}
 </h3>
 <br />
 
 <form id="log_filter" action="" type="GET">
-{% with m.search[{log page=q.page type=q.type user=q.user pagelen=100}] as result %}
+{% with m.search[{log_ui page=q.page type=q.type user=q.user pagelen=100}] as result %}
     <table class="table table-compact">
         <tr>
             <th>{_ Date _}</th>
             <th>{_ Severity _}</th>
             <th>{_ Message _}</th>
             <th>{_ User _}</th>
-            <th>{_ Module _}</th>
+            <th>{_ Stack _}</th>
         </tr>
         <tr>
             <td></td>
@@ -53,7 +53,7 @@
         </tr>
         <tbody id="log-area">
             {% for id in result %}
-                {% include "_admin_log_row.tpl" id=id qmessage=q.message %}
+                {% include "_admin_log_ui_row.tpl" id=id qmessage=q.message %}
             {% empty %}
                 <tr>
                    <td colspan="5" class="text-muted">{_ No log messages. _}</td>
@@ -63,21 +63,11 @@
     </table>
     {% lazy action={moreresults result=result
                                 target="log-area"
-                                template="_admin_log_row.tpl"
+                                template="_admin_log_ui_row.tpl"
                                 qmessage=q.message
                                 visible}
     %}
 {% endwith %}
 </form>
-
-{% wire type={mqtt topic=[ "model", "logging", "event", "#" ]}
-        action={insert_top
-                    target="log-area"
-                    template="_admin_log_row.tpl"
-                    is_live
-                    qmessage=q.message
-                    visible
-                }
-%}
 
 {% endblock %}

@@ -69,12 +69,23 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 do_startup(Context) ->
-    do_startup(z_db:has_connection(Context), Context),
+    erlang:spawn_link(
+        fun() ->
+            z_notifier:await(module_ready, 60000, Context),
+            z:info("Site ~p started, modules loaded",
+                    [ z_context:site(Context) ],
+                    [ {module, ?MODULE}, {line, ?LINE} ],
+                    Context),
+            case z_db:has_connection(Context) of
+                true -> m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context);
+                false -> ok
+            end
+        end),
+    do_install_modules(z_db:has_connection(Context), Context),
     z_module_manager:upgrade_await(Context),
     z_sites_manager:set_site_status(z_context:site(Context), running).
 
-do_startup(true, Context) ->
-    z_install_data:install_modules(Context),
-    m_config:set_value(zotonic, version, ?ZOTONIC_VERSION, Context);
-do_startup(false, _Context) ->
+do_install_modules(true, Context) ->
+    z_install_data:install_modules(Context);
+do_install_modules(false, _Context) ->
     ok.

@@ -134,8 +134,16 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
     AuthOptions = z_context:get(auth_options, Context, #{}),
     case z_auth:logon_switch(UserId, Context) of
         {ok, Context1} ->
-            lager:warning("[~p] Authentication: user ~p is switching to user ~p",
-                          [ z_context:site(Context), z_acl:user(Context), UserId ]),
+            z:warning(
+                "Sudo as user ~p (~s) by user ~p (~s)",
+                [
+                    UserId, z_convert:to_binary( m_rsc:p_no_acl(UserId, email, Context) ),
+                    z_acl:user(Context), z_convert:to_binary( m_rsc:p_no_acl(z_acl:user(Context), email, Context) )
+                ],
+                [
+                    {module, ?MODULE}, {line, ?LINE}, {auth_user_id, UserId}
+                ],
+                Context),
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, AuthOptions, Context1),
             status(Payload, Context2);
         {error, _Reason} ->

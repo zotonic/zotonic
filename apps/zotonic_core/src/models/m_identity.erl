@@ -278,10 +278,18 @@ set_username_pw_1(false, Id, Username, Password, Context) when is_integer(Id) ->
 
 set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
     Hash = hash(Password),
-    case z_db:transaction(fun(Ctx) ->
-        set_username_pw_trans(Id, Username, Hash, Ctx) end, Context) of
-        ok ->
-            reset_auth_tokens(Id, Context),
+    case z_db:transaction(fun(Ctx) -> set_username_pw_trans(Id, Username, Hash, Ctx) end, Context) of
+        {ok, S} ->
+            case S of
+                new ->
+                    z:debug(
+                        "New username for user ~p (~s)",
+                        [ Id, Username ],
+                        [ {module, ?MODULE} ],
+                        Context);
+                exists ->
+                    ok
+            end,            reset_auth_tokens(Id, Context),
             z_depcache:flush(Id, Context),
             z_depcache:flush({idn, Id}, Context),
             z_mqtt:publish(
@@ -335,13 +343,13 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                                 [Id],
                                 Context
                             ),
-                            ok;
+                            {ok, new};
                         _Other ->
                             {rollback, {error, eexist}}
                     end
             end;
         1 ->
-            ok
+             {ok, exists}
     end.
 
 %% @doc Ensure that the user has an associated username and password

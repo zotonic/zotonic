@@ -183,23 +183,11 @@ get_boolean(Module, Key, Default, Context) ->
     z_convert:to_bool(get_value(Module, Key, Default, Context)).
 
 %% @doc Set a "simple" config value.
--spec set_value(atom(), atom(), term(), z:context()) -> ok.
+-spec set_value( atom(), atom(), string() | binary(), z:context() ) -> ok | {error, term()}.
 set_value(Module, Key, Value, Context) ->
     case z_db:has_connection(Context) of
         true ->
-            case z_db:q(
-                "update config set value = $1, modified = now() where module = $2 and key = $3",
-                [Value, Module, Key],
-                Context
-            ) of
-                0 ->
-                    z_db:insert(config, [{module, Module}, {key, Key}, {value, Value}], Context);
-                [] -> ok;
-                1 -> ok
-            end,
-            z_depcache:flush(config, Context),
-            z_notifier:notify(#m_config_update{module = Module, key = Key, value = Value}, Context),
-            ok;
+            set_value_db(Module, Key, Value, Context);
         false ->
             m_site:put(Module, Key, Value, Context),
             z_depcache:flush(config, Context),
@@ -207,21 +195,87 @@ set_value(Module, Key, Value, Context) ->
             ok
     end.
 
+-spec set_value_db( atom(), atom(), string() | binary(), z:context() ) -> ok | {error, term()}.
+set_value_db(Module, Key, Value0, Context) ->
+    Value = z_convert:to_binary(Value0),
+    Result = z_db:transaction(
+        fun(Ctx) ->
+            case z_db:q1("
+                select value
+                from config
+                where module = $1
+                  and key = $2",
+                [ Module, Key ],
+                Ctx)
+            of
+                Value ->
+                    no_change;
+                undefined ->
+                    {ok, _} = z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Ctx),
+                    insert;
+                OldValue ->
+                    1 = z_db:q("
+                        update config
+                        set value = $1,
+                            modified = now()
+                        where module = $2
+                          and key = $3",
+                        [ Value, Module, Key ],
+                        Ctx),
+                    {update, OldValue}
+            end
+        end,
+        Context),
+    case Result of
+        no_change ->
+            ok;
+        insert ->
+            z_depcache:flush(config, Context),
+            z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
+            z:info(
+                "Configuration key '~s.~s' inserted, new value: '~s'",
+                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value ],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                Context),
+            ok;
+        {update, OldV} ->
+            z_depcache:flush(config, Context),
+            z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
+            z:info(
+                "Configuration key '~s.~s' changed, new value: '~s', old value '~s'",
+                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value, OldV ],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                Context),
+            ok;
+        {rollback,{no_database_connection, _Trace}} ->
+            {error, no_database_connection};
+        {rollback, {error, _} = Error} ->
+            Error;
+        {rollback, Error} ->
+            {error, Error}
+    end.
 
 %% @doc Set a "complex" config value.
 -spec set_prop(atom(), atom(), atom(), any(), z:context()) -> ok.
 set_prop(Module, Key, Prop, PropValue, Context) ->
-    case get_id(Module, Key, Context) of
-        undefined ->
-            z_db:insert(config, [{module, Module}, {key, Key}, {Prop, PropValue}], Context);
-        Id ->
-            z_db:update(config, Id, [{Prop, PropValue}], Context)
-    end,
+    z_db:transaction(
+        fun(Ctx) ->
+            case get_id(Module, Key, Ctx) of
+                undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {Prop,PropValue}], Ctx);
+                Id -> z_db:update(config, Id, [{Prop,PropValue}], Ctx)
+            end
+        end,
+        Context),
     z_depcache:flush(config, Context),
     z_notifier:notify(
         #m_config_update_prop{module = Module, key = Key, prop = Prop, value = PropValue},
         Context
     ),
+    z:info(
+        "Configuration key '~s.~s' changed, new property '~p' value: ~p",
+        [ z_convert:to_binary(Module), z_convert:to_binary(Key), Prop, PropValue ],
+        [ {module, ?MODULE}, {line, ?LINE} ],
+        Context),
     ok.
 
 
@@ -234,6 +288,11 @@ delete(Module, Key, Context) ->
         #m_config_update{module = Module, key = Key, value = undefined},
         Context
     ),
+    z:info(
+        "Configuration key '~s.~s' deleted",
+        [ z_convert:to_binary(Module), z_convert:to_binary(Key) ],
+        [ {module, ?MODULE}, {line, ?LINE} ],
+        Context),
     ok.
 
 

@@ -49,6 +49,8 @@
     observe_rsc_insert/3,
     observe_rsc_update/3,
     observe_rsc_get/3,
+    observe_edge_insert/2,
+    observe_edge_delete/2,
     name/1,
     manage_schema/2,
     manage_data/2
@@ -329,11 +331,116 @@ observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->
         true ->
             case m_acl_user_group:is_used(Id, Context) of
                 true -> throw({error, is_used});
-                false -> ok
+                false ->
+                    z:info("Deleting user group ~p ('~s')",
+                           [ Id, title_bin(Id, Context) ],
+                           [ {module, ?MODULE} ],
+                           Context),
+                    ok
             end;
         false ->
+            case lists:member('acl_collaboration_group', IsA) of
+                true ->
+                    z:info("Deleting collaboration group ~p ('~s')",
+                           [ Id, title_bin(Id, Context) ],
+                           [ {module, ?MODULE} ],
+                           Context);
+                false ->
+                    ok
+            end,
             ok
     end.
+
+observe_edge_insert(#edge_insert{ subject_id = UserId, predicate = hasusergroup } = L, Context) ->
+    log_membership(L, Context),
+    signal_user_changed(UserId, Context);
+observe_edge_insert(#edge_insert{ predicate = hascollabmember, object_id = UserId } = L, Context) ->
+    log_membership(L, Context),
+    signal_user_changed(UserId, Context);
+observe_edge_insert(#edge_insert{ predicate = hascollabmanager, object_id = UserId } = L, Context) ->
+    log_membership(L, Context),
+    signal_user_changed(UserId, Context);
+observe_edge_insert(_, _Context) ->
+    ok.
+
+observe_edge_delete(#edge_delete{ subject_id = UserId, predicate = hasusergroup } = L, Context) ->
+    log_membership(L, Context),
+    signal_user_changed(UserId, Context);
+observe_edge_delete(#edge_delete{ predicate = hascollabmember, object_id = UserId } = L, Context) ->
+    log_membership(L, Context),
+    signal_user_changed(UserId, Context);
+observe_edge_delete(#edge_delete{ predicate = hascollabmanager, object_id = UserId } = L, Context) ->
+    log_membership(L, Context),
+    signal_user_changed(UserId, Context);
+observe_edge_delete(_, _Context) ->
+    ok.
+
+%% Log membership changes
+log_membership(#edge_insert{ predicate = hasusergroup, subject_id = UserId, object_id = UGId, edge_id = EdgeId }, Context) ->
+    z:info(
+        "User ~p (~s) added to user group ~p ('~s')",
+        [ UserId, email_bin(UserId, Context), UGId, title_bin(UGId, Context) ],
+        [ {module, ?MODULE}, {user_id, edge_user(EdgeId, Context)} ],
+        Context);
+log_membership(#edge_delete{ predicate = hasusergroup, subject_id = UserId, object_id = UGId }, Context) ->
+    z:info(
+        "User ~p (~s) removed from user group ~p ('~s')",
+        [ UserId, email_bin(UserId, Context), UGId, title_bin(UGId, Context) ],
+        [ {module, ?MODULE}, {user_id, undefined} ],
+        Context);
+log_membership(#edge_insert{ predicate = hascollabmember, subject_id = UGId, object_id = UserId, edge_id = EdgeId }, Context) ->
+    z:info(
+        "User ~p (~s) added to collaboration group ~p ('~s')",
+        [ UserId, email_bin(UserId, Context), UGId, title_bin(UGId, Context) ],
+        [ {module, ?MODULE}, {user_id, edge_user(EdgeId, Context)} ],
+        Context);
+log_membership(#edge_delete{ predicate = hascollabmember, subject_id = UGId, object_id = UserId }, Context) ->
+    z:info(
+        "User ~p (~s) removed from collaboration group ~p ('~s')",
+        [ UserId, email_bin(UserId, Context), UGId, title_bin(UGId, Context) ],
+        [ {module, ?MODULE}, {user_id, undefined} ],
+        Context);
+log_membership(#edge_insert{ predicate = hascollabmanager, subject_id = UGId, object_id = UserId, edge_id = EdgeId }, Context) ->
+    z:info(
+        "User ~p (~s) added as manager to collaboration group ~p ('~s')",
+        [ UserId, email_bin(UserId, Context), UGId, title_bin(UGId, Context) ],
+        [ {module, ?MODULE}, {user_id, edge_user(EdgeId, Context)} ],
+        Context);
+log_membership(#edge_delete{ predicate = hascollabmanager, subject_id = UGId, object_id = UserId }, Context) ->
+    z:info(
+        "User ~p (~s) removed as manager from collaboration group ~p ('~s')",
+        [ UserId, email_bin(UserId, Context), UGId, title_bin(UGId, Context) ],
+        [ {module, ?MODULE}, {user_id, undefined} ],
+        Context).
+
+edge_user(EdgeId, Context) ->
+    case m_edge:get(EdgeId, Context) of
+        undefined -> undefined;
+        Edge -> proplists:get_value(creator_id, Edge)
+    end.
+
+title_bin(Id, Context) ->
+    z_html:unescape( z_convert:to_binary( z_trans:lookup_fallback( m_rsc:p_no_acl(Id, title, Context), Context) ) ).
+
+email_bin(Id, Context) ->
+    z_convert:to_binary( m_rsc:p_no_acl(Id, email_raw, Context) ).
+
+%% @doc Reattach all websocket connections of an user, this forces a refresh of the permissions
+%%      used by the websocket processes.
+-spec signal_user_changed( m_rsc:resource_id(), z:context() ) -> ok.
+signal_user_changed(UserId, Context) ->
+    ok.
+    % Sessions = z_session_manager:list_sessions_user(UserId, Context),
+    % lists:foreach(
+    %     fun(Session) ->
+    %         {pid, SessionPid} = proplists:lookup(pid, Session),
+    %         lists:foreach(
+    %             fun(PagePid) ->
+    %                 z_session_page:websocket_detach(PagePid)
+    %             end,
+    %             z_session:get_pages(SessionPid))
+    %     end,
+    %     Sessions).
 
 %% @doc Ensure that the privacy property is set.
 observe_rsc_get(#rsc_get{}, [], _Context) ->

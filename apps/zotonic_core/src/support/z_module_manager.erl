@@ -199,7 +199,11 @@ activate(Module, IsSync, Context) ->
     case proplists:is_defined(Module, scan()) of
         true -> activate_1(Module, IsSync, Context);
         false ->
-            lager:error("Could not find module '~p'", [Module]),
+            z:error(
+                "Could not find module '~p'",
+                [Module],
+                [ {module, ?MODULE}, {line, ?LINE}, {user_id, z_acl:user(Context)} ],
+                Context),
             {error, not_found}
     end.
 
@@ -224,6 +228,12 @@ activate_1(Module, IsSync, Context) ->
             end
         end,
     1 = z_db:transaction(F, Context),
+    UId = z_acl:user(Context),
+    z:info(
+        "Module ~p activated by ~p (~s)",
+        [ Module, UId, z_convert:to_binary( m_rsc:p_no_acl(UId, email, Context) ) ],
+        [ {module, ?MODULE}, {line, ?LINE} ],
+        Context),
     case IsSync of
         true -> upgrade_await(Context);
         false -> upgrade(Context)
@@ -631,8 +641,12 @@ handle_cast({restart_module, Module}, State) ->
     {noreply, State1};
 
 %% @doc Handle errors, success is handled by the supervisor_child_started above.
-handle_cast({start_child_result, Module, Result}, State) ->
-    lager:debug("Module ~p start result ~p", [Module, Result]),
+handle_cast({start_child_result, Module, Result}, #state{ site = Site } = State) ->
+    z:debug(
+        "Module ~p start result ~p",
+        [Module, Result],
+        [ {module, ?MODULE}, {line, ?LINE} ],
+        z_context:new(Site)),
     State1 = handle_start_child_result(Module, Result, State),
     {noreply, State1};
 
@@ -668,16 +682,24 @@ handle_cast(Message, State) ->
 %% @spec handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
-handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ start_wait = {Module, Pid, _} } = State) ->
-    lager:debug("Module ~p start result ~p", [Module, {error, Reason}]),
+handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ start_wait = {Module, Pid, _}, site = Site } = State) ->
+    z:debug(
+        "Module ~p start result ~p",
+        [Module, {error, Reason}],
+        [ {module, ?MODULE}, {line, ?LINE} ],
+        z_context:new(Site)),
     State1 = handle_start_child_result(Module, {error, Reason}, State),
     {noreply, State1};
 
 %% @doc Handle shutdown or crash of a module
-handle_info({'DOWN', _MRef, process, Pid, Reason}, State) ->
+handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ site = Site } = State) ->
     case maps:find(Pid, State#state.module_monitors) of
         {ok, Module} ->
-            lager:info("Module ~p stopped, reason ~p", [Module, Reason]),
+            z:info(
+                "Module ~p stopped, reason ~p",
+                [Module, Reason],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                z_context:new(Site)),
             State1 = do_module_down(Module, State, Pid, Reason),
             {noreply, State1};
         error ->
@@ -925,7 +947,7 @@ handle_start_next(#state{site=Site, start_queue=[]} = State) ->
     % Signal modules are loaded, and load all translations.
     Context = z_context:new(Site),
     z_notifier:notify(module_ready, Context),
-    lager:debug("Finished starting modules"),
+    z:debug("Finished starting modules", [], [ {module, ?MODULE}, {line, ?LINE} ], z_context:new(Site)),
     spawn(fun() ->
         z_trans_server:load_translations(Context)
     end),
@@ -942,10 +964,13 @@ handle_start_next(#state{site=Site, start_queue=Starting, modules=Modules} = Sta
                 fun(M) ->
                     case startable(M, Provided) of
                         ok ->
-                            #{ M := MS } = Modules,
-                            ?DEBUG({MS#module_status.start_time - z_datetime:timestamp()}),
+                            % #{ M := MS } = Modules,
+                            % ?DEBUG({MS#module_status.start_time - z_datetime:timestamp()}),
                             % Failed module in backoff state - ignore
-                            lager:debug("Could not start module ~p, reason 'failure backoff'", [M]);
+                            z:debug("Could not start module ~p, reason 'failure backoff'",
+                                    [M],
+                                    [ {module, ?MODULE}, {line, ?LINE} ],
+                                    z_context:new(Site));
                         Reason ->
                             % TODO: remove the broadcast and publish to topic
                             StartErrorReason = get_start_error_reason(Reason),
@@ -953,8 +978,10 @@ handle_start_next(#state{site=Site, start_queue=Starting, modules=Modules} = Sta
                             % z_session_manager:broadcast(
                             %     #broadcast{type="error", message=Msg, title="Module manager", stay=false},
                             %     z_acl:sudo(z_context:new(Site))),
-                            lager:error("Could not start module ~p, reason ~s",
-                                        [M, StartErrorReason])
+                            z:error("Could not start module ~p, reason ~s",
+                                    [M, StartErrorReason],
+                                    [ {module, ?MODULE}, {line, ?LINE} ],
+                                    z_context:new(Site))
                     end
                 end,
                 Starting),
