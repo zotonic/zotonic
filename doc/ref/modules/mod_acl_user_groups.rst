@@ -136,7 +136,7 @@ The default upload size is 50MB.
 
 If an user group is not allowed to upload any files then enter ``none``.
 
-.. _module-acl:
+.. _properties-acl:
 
 Access control on properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
