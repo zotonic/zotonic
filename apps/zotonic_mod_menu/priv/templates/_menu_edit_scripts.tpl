@@ -11,6 +11,7 @@
                 tabs_enabled=["new"]
                 center=0
                 autoclose
+                width="large"
             }
     %}
 {% elseif is_hierarchy %}
@@ -26,6 +27,7 @@
                 in_sorter=in_sorter
                 center=0
                 autoclose
+                width="large"
             }
     %}
 {% else %}
@@ -39,6 +41,8 @@
                 in_sorter=in_sorter
                 center=0
                 autoclose
+                width="large"
+                is_zlink
             }
     %}
 {% endif %}

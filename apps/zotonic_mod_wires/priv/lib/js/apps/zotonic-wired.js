@@ -771,6 +771,16 @@ Which should log it in a separate ui error log.
 ---------------------------------------------------------- */
 
 var oldOnError = window.onerror;
+var z_page_unloading = false;
+
+window.addEventListener("unload", function(event) {
+    z_page_unloading = true;
+});
+
+window.addEventListener("beforeunload", function(event) {
+    z_page_unloading = true;
+    setTimeout(function() { z_page_unloading = false }, 5000);
+});
 
 window.onerror = function(message, file, line, col, error) {
     if (!z_page_unloading) {
@@ -787,6 +797,7 @@ window.onerror = function(message, file, line, col, error) {
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '/log-client-event', true);
+        xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(JSON.stringify(payload));
 
         if ($("form.masked").length > 0 || (payload.stack && payload.stack.match(/(submitFunction|doValidations)/))) {

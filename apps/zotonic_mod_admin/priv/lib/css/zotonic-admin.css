@@ -859,7 +859,7 @@ img.admin-list-overview {
 }
 @media (min-width: 720px) {
   .modal-dialog {
-    width: 700px;
+    min-width: 700px;
   }
 }
 div.modal div.tab-content {
@@ -987,6 +987,11 @@ body.navbar-menu-open {
   .navbar .dropdown-header.z-username {
     display: none;
   }
+}
+.rsc-preview-wrapper .rsc-preview {
+  max-width: 800px;
+  margin: 10px auto;
+  padding: 10px;
 }
 input[type="text"].rtl,
 textarea.rtl {

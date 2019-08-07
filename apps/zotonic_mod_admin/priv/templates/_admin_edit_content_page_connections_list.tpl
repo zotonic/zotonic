@@ -41,6 +41,7 @@ Params:
           unlink_action=unlink_action
           undo_message_id=undo_message_id|default:"unlink-undo-message"
           center=0
+          width="large"
         }
     %}
 {% endif %}

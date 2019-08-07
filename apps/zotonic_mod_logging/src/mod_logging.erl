@@ -86,7 +86,7 @@ observe_tick_1h(tick_1h, Context) ->
     m_log_ui:periodic_cleanup(Context).
 
 
-observe_admin_menu(admin_menu, Acc, Context) ->
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_log,
                 parent=admin_system,

@@ -20,7 +20,7 @@ find params:
 #}
 {% with
     callback|default:q.callback,
-    language|default:(q.language|escape)|default:z_language,,
+    language|default:(q.language|escape)|default:z_language,
     actions|default:[],
     tab|default:q.tab|default:(tabs_enabled|first)|default:"find",
     m.rsc[q.category|default:category].id|default:(m.predicate.object_category[predicate]|first|element:1)
@@ -50,7 +50,7 @@ find params:
                     {% endif %}
                 {% endif %}
                 {% if not tabs_enabled or "new"|member:tabs_enabled %}
-                    <li class="active">
+                    <li {% if tab /= "depiction" %}class="active"{% endif %}>
                         <a data-toggle="tab" href="#{{ #tab }}-findnew">
                             {_ Create or find _}
                         </a>
@@ -119,7 +119,7 @@ find params:
                     delegate=delegate
                     subject_id=subject_id
                     object_id=object_id
-                    is_active=`true`
+                    is_active=(tab /= "depiction")
                     title=""
                     cat=cat
                     content_group=content_group

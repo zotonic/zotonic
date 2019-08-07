@@ -85,7 +85,13 @@
 
             width = options.width;
             if (width) {
-                $modalDialog.css({'width': width + 'px'});
+                if (width === 'large') {
+                    $modalDialog.addClass('modal-lg');
+                } else if (width === 'small') {
+                    $modalDialog.addClass('modal-sm');
+                } else {
+                    $modalDialog.css({'width': width + 'px'});
+                }
             }
 
             $dialog = $('<div>')
