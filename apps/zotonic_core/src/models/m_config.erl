@@ -183,7 +183,7 @@ get_boolean(Module, Key, Default, Context) ->
     z_convert:to_bool(get_value(Module, Key, Default, Context)).
 
 %% @doc Set a "simple" config value.
--spec set_value( atom(), atom(), string() | binary(), z:context() ) -> ok | {error, term()}.
+-spec set_value( atom(), atom(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
 set_value(Module, Key, Value, Context) ->
     case z_db:has_connection(Context) of
         true ->
@@ -195,7 +195,7 @@ set_value(Module, Key, Value, Context) ->
             ok
     end.
 
--spec set_value_db( atom(), atom(), string() | binary(), z:context() ) -> ok | {error, term()}.
+-spec set_value_db( atom(), atom(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
 set_value_db(Module, Key, Value0, Context) ->
     Value = z_convert:to_binary(Value0),
     Result = z_db:transaction(

@@ -39,8 +39,8 @@
 -include("../support/z_auth2fa_qrcode.hrl").
 
 -define(TOTP_PERIOD, 30).
--define(TOTP_IDENTITY_TYPE, <<"auth2fa_totp">>).
--define(TOTP_IDENTITY_REQUEST_KEY, <<"auth2fa_request_key">>).
+-define(TOTP_IDENTITY_TYPE, auth2fa_totp).
+-define(TOTP_IDENTITY_REQUEST_KEY, auth2fa_request_key).
 
 m_get([ totp_image_url, RequestKey | Rest ], _Msg, Context) ->
     case request_key(Context) of

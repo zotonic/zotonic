@@ -44,8 +44,6 @@
     await_exact/3
 ]).
 
--type prio() :: integer().
-
 -include_lib("zotonic.hrl").
 
 %% Timeout for gen_server:call for observers.

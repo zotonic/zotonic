@@ -353,7 +353,7 @@ im_mime(Type, _) -> mime(Type).
 
 %% @doc Map the type returned by ImageMagick to a mime type
 %% @todo Add more imagemagick types, check the mime types
--spec mime(string()) -> mime_type().
+-spec mime( binary() ) -> mime_type().
 mime(<<"JPEG">>)  -> <<"image/jpeg">>;
 mime(<<"GIF">>)   -> <<"image/gif">>;
 mime(<<"TIFF">>)  -> <<"image/tiff">>;

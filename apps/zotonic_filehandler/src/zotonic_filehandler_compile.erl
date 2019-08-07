@@ -33,6 +33,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Compile all files. Called from zotonic-compile script
+-dialyzer({no_return, start/0}).
 start() ->
     Node = get_node_argument(),
     Result = case net_adm:ping(Node) of

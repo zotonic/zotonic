@@ -224,7 +224,7 @@ video_convert_1(QueuePath, Orientation, Mime) ->
 maybe_reset_metadata("", QueuePath, _Mime) ->
     {ok, QueuePath};
 maybe_reset_metadata(_TransposeOption, QueuePath, Mime) ->
-    TmpFile = z_tempfile:new( z_media_identify:extension(Mime) ),
+    TmpFile = z_tempfile:new( z_convert:to_list( z_media_identify:extension(Mime) ) ),
     FfmpegCmd = z_convert:to_list(
                   iolist_to_binary(
                     [io_lib:format(?CMDLINE_RESETMETA, [z_utils:os_filename(QueuePath)]),

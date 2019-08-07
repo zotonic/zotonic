@@ -37,7 +37,7 @@
 -export_type([ sep/0, line/0, lines/0 ]).
 
 
--spec inspect_file( file:filename() ) -> {ok, line(), sep()}.
+-spec inspect_file( file:filename_all() ) -> {ok, line(), sep()} | {error, invalid_csv_file | term()}.
 inspect_file(Filename) ->
     case file:open(Filename, [read, binary]) of
         {ok, Device} ->
@@ -57,7 +57,7 @@ inspect_file(Filename) ->
 
 %% @doc Check if the first row is made up of column headers.
 %% The file must have at least a name and a category column.
--spec inspect_data( binary() ) -> {ok, line(), sep()}.
+-spec inspect_data( binary() ) -> {ok, line(), sep()} | {error, invalid_csv_file}.
 inspect_data(<<>>) ->
     {error, invalid_csv_file};
 inspect_data(B0) ->
@@ -72,7 +72,7 @@ inspect_data(B0) ->
                                     {length(Comma), Comma, $,},
                                     {length(SCol), SCol, $;}
                                 ])),
-            {ok, [ z_convert:to_list(z_string:trim(C)) || C <- Cols ], Sep};
+            {ok, [ z_string:trim(C) || C <- Cols ], Sep};
         _ ->
             lager:info("Invalid CSV file, could not fetch line with column defs (is there a LF or CR at the end?)"),
             {error, invalid_csv_file}
@@ -263,5 +263,3 @@ unescape(<<$", $", Rest/binary>>, Acc, true) ->
     unescape(Rest, <<Acc/binary, $">>, true);
 unescape(<<C, Rest/binary>>, Acc, IsQuoted) ->
     unescape(Rest, <<Acc/binary, C>>, IsQuoted).
-
-

@@ -49,7 +49,7 @@ content_types_accepted(Context) ->
 process(<<"POST">>, _AcceptedCT, _ProvidedCT, Context) ->
     {Body, Context1} = req_body(Context),
     log(Body, Context1),
-    {true, Context1}.
+    {<<>>, Context1}.
 
 log(<<>>, _Context) ->
     ok;

@@ -145,7 +145,7 @@ get_localized_value(Prop, JSON) ->
         Localized when is_map(Localized) ->
             case maps:get(<<"localized">>, Localized, undefined) of
                 Locs when is_map(Locs) ->
-                    {_, V} = maps:to_list(Locs),
+                    [ {_, V} | _ ] = maps:to_list(Locs),
                     maps:get(<<"en_US">>, Locs, V);
                 undefined ->
                     undefined

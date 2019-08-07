@@ -401,7 +401,7 @@ acl_context_authenticated(#context{} = Context) ->
 %%      If it is not changed (for existing rsc) then we need update permission.
 acl_rsc_update_check(#acl_rsc_update_check{}, {error, Reason}, _Context) ->
     {error, Reason};
-acl_rsc_update_check(#acl_rsc_update_check{id=Id}, Props, Context) when is_integer(Id); Id =:= insert_rsc ->
+acl_rsc_update_check(#acl_rsc_update_check{ id = Id }, Props, Context) when is_integer(Id); Id =:= insert_rsc ->
     CatId = fetch_category_id(Id, Props, Context),
     CGId = fetch_content_group_id(Id, CatId, Props, Context),
     case acl_rsc_update_check_1(Id, CGId, CatId, Context) of
@@ -463,7 +463,7 @@ fetch_category_id(Id, Props, Context) ->
             N;
         undefined ->
             case Id of
-                rsc_insert ->
+                insert_rsc ->
                     {ok, CatId} = m_category:name_to_id(other, Context),
                     CatId;
                 Id ->

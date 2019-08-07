@@ -19,4 +19,4 @@ require_zotonic_not_running
 
 $ERL -pa $PA $NAME_ARG ${NODENAME}_compile@$NODEHOST \
     $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -noinput +B \
-    -s zotonic_compile -node $NODENAME@$NODEHOST
+    -s zotonic_filehandler_compile -node $NODENAME@$NODEHOST

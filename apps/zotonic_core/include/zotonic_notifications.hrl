@@ -522,7 +522,7 @@
 %% @doc Filter the properties of a resource update, this is done on the raw data
 %% A foldr over the update property list.
 -record(acl_rsc_update_check, {
-    id :: m_rsc:resource_id()
+    id :: m_rsc:resource_id() | 'insert_rsc'
 }).
 
 %% @doc Set the context to a typical authenticated user. Used by m_acl.erl

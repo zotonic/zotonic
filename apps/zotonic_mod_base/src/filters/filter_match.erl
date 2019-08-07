@@ -30,12 +30,10 @@ match(S0, Re0, _Context) ->
     Re = z_convert:to_binary(Re0),
     try
         case re:run(S, Re) of
-            match ->
+            {match, _} ->
                 true;
             nomatch ->
-                false;
-            {match, _} ->
-                true
+                false
         end
     catch
         error:badarg ->

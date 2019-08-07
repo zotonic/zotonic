@@ -39,7 +39,7 @@
 
 
 %% @doc Handle a dropbox file when it is a tsv/csv file we know.
-observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
+observe_dropbox_file(#dropbox_file{ filename = F }, Context) ->
     case is_csv( filename:extension(F) ) of
         true ->
             %% Correct file type, see if we can handle the file.
@@ -93,22 +93,19 @@ event(#submit{message={csv_upload, []}}, Context) ->
             ok = file:delete(TmpFile),
 
             Context2 = case can_handle(OriginalFilename, Target, Context) of
-                           {ok, Definition} ->
-                               handle_spawn(Definition, IsReset, Context),
-                               z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
-                           ok ->
-                               z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
-                           {error, _} ->
-                               file:delete(Target),
-                               z_render:growl_error(?__("This file cannot be imported.", Context), Context)
-                       end,
+                {ok, Definition} ->
+                    handle_spawn(Definition, IsReset, Context),
+                    z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
+                ok ->
+                    z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
+                {error, _} ->
+                    file:delete(Target),
+                    z_render:growl_error(?__("This file cannot be imported.", Context), Context)
+            end,
             z_render:wire([{dialog_close, []}], Context2);
         false ->
             z_render:growl_error(?__("Only admins can import CSV files.", Context), Context)
     end.
-
-
-
 
 manage_schema(What, Context) ->
     m_import_csv_data:install(What, Context).
@@ -159,8 +156,8 @@ can_handle(OriginalFilename, DataFile, Context) ->
             Error;
         undefined ->
             case inspect_file(DataFile) of
-                {ok, #filedef{columns=Cols} = FD} ->
-                    case lists:member("name", Cols) andalso lists:member("category", Cols) of
+                {ok, #filedef{ columns = Cols } = FD} ->
+                    case lists:member(<<"name">>, Cols) andalso lists:member(<<"category">>, Cols) of
                         true ->
                             {ok, FD};
                         false ->
@@ -174,7 +171,7 @@ can_handle(OriginalFilename, DataFile, Context) ->
     end.
 
 %% @doc Inspect the first line of a CSV file, extract the column headers
--spec inspect_file(string()) -> {ok, #filedef{}} | false.
+-spec inspect_file( file:filename_all() ) -> {ok, #filedef{}} | false.
 inspect_file(Filename) ->
     case z_csv_parser:inspect_file(Filename) of
         {ok, Cols, Sep} ->
@@ -202,7 +199,7 @@ cols2importdef(Cols) ->
         {
             % Field mapping
             [
-             {"name", {concat, ["name_prefix", "name"]}}
+             {<<"name">>, {concat, [<<"name_prefix">>, <<"name">>]}}
              | lists:filter(fun(X) ->
                                 X =/= undefined
                             end,
@@ -213,8 +210,8 @@ cols2importdef(Cols) ->
         }
     ].
 
-to_property_name("block." ++ B) ->
-    "blocks."++B;
+to_property_name(<<"block.", B/binary>>) ->
+    <<"blocks.", B/binary>>;
 to_property_name(Name) ->
     Name.
 
@@ -227,11 +224,11 @@ unique([C|Cs], Acc) ->
     end.
 
 %% @doc Maps well-known column names to an import definition.
-cols2importdef_map("")                  -> undefined;
-cols2importdef_map("name")              -> undefined;
-cols2importdef_map("name_prefix")       -> undefined;
-cols2importdef_map("date_start")        -> {"date_start", {datetime, "date_start"}};
-cols2importdef_map("date_end")          -> {"date_end", {datetime, "date_end"}};
-cols2importdef_map("publication_start") -> {"publication_start", {datetime, "publication_start"}};
-cols2importdef_map("publication_end")   -> {"publication_end", {datetime, "publication_end"}};
+cols2importdef_map(<<>>)                    -> undefined;
+cols2importdef_map(<<"name">>)              -> undefined;
+cols2importdef_map(<<"name_prefix">>)       -> undefined;
+cols2importdef_map(<<"date_start">>)        -> {<<"date_start">>, {datetime, <<"date_start">>}};
+cols2importdef_map(<<"date_end">>)          -> {<<"date_end">>, {datetime, <<"date_end">>}};
+cols2importdef_map(<<"publication_start">>) -> {<<"publication_start">>, {datetime, <<"publication_start">>}};
+cols2importdef_map(<<"publication_end">>)   -> {<<"publication_end">>, {datetime, <<"publication_end">>}};
 cols2importdef_map(X) -> {X, X}.

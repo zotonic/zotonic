@@ -24,10 +24,10 @@
 
 
 -record(log_message, {
-    type = error,
-    user_id,
-    message,
-    props = []
+    type = error :: z:severity(),
+    user_id :: m_rsc:resource_id() | undefined,
+    message :: iodata() | undefined,
+    props = [] :: proplists:proplist()
 }).
 
 
@@ -49,10 +49,10 @@
 
 % NOTE: Make sure to extend record_to_proplist/1 in mod_logging.erl when adding log types.
 -record(zlog, {
-    type = undefined :: atom(),
+    type = debug :: z:severity(),
     user_id = undefined :: m_rsc:resource_id() | undefined,
     timestamp = undefined :: erlang:timestamp() | undefined,
-    props = [] :: list() | #log_message{} | #log_email{}
+    props = [] :: proplists:proplist() | #log_message{} | #log_email{}
 }).
 
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus

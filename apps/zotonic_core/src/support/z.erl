@@ -63,9 +63,12 @@
 -type context() :: #context{}.
 -type validation_error() :: invalid | novalue | {script, string()} | novalidator | string().
 
+-type severity() :: debug | info | warning | error | fatal.
+
 -export_type([
     context/0,
-    validation_error/0
+    validation_error/0,
+    severity/0
 ]).
 
 % @doc Return a new context
@@ -177,6 +180,7 @@ error(Msg, Props, Context)  -> log(error, Msg, Props, Context).
 error(Msg, Args, Props, Context)  -> log(error, Msg, Args, Props, Context).
 
 
+-spec log( severity(), proplists:proplist(), z:context() ) -> ok.
 log(Type, Props, Context) when is_atom(Type), is_list(Props) ->
     UserId = case proplists:lookup(user_id, Props) of
         none -> z_acl:user(Context);
@@ -189,18 +193,20 @@ log(Type, Props, Context) when is_atom(Type), is_list(Props) ->
             timestamp = os:timestamp(),
             props = Props
         },
-        Context).
+        Context),
+    ok.
 
+-spec log( severity(), string(), list(), proplists:proplist(), z:context() ) -> ok.
 log(Type, Msg, Args, Props, Context) ->
     Msg1 = lists:flatten(io_lib:format(Msg, Args)),
     log(Type, Msg1, Props, Context).
 
+-spec log( severity(), iodata(), proplists:proplist(), z:context() ) -> ok.
 log(Type, Msg, Props, Context) ->
     Msg1 = erlang:iolist_to_binary(Msg),
     Line = proplists:get_value(line, Props, 0),
     Module = proplists:get_value(module, Props, unknown),
-    lager:log(Type, Props, "[~p] ~p @ ~p:~p  ~s~n",
-             [z_context:site(Context), Type, Module, Line, binary_to_list(Msg1)]),
+    lager(Type, Props, [ z_context:site(Context), Type, Module, Line, Msg1 ]),
     UserId = case proplists:lookup(user_id, Props) of
         none -> z_acl:user(Context);
         {user_id, UId} -> UId
@@ -212,4 +218,16 @@ log(Type, Msg, Props, Context) ->
             timestamp = os:timestamp(),
             props = #log_message{ type = Type, message = Msg1, props = Props, user_id = UserId }
         },
-        Context).
+        Context),
+    ok.
+
+lager(debug, [], Args) ->
+    lager:debug("[~p] ~p @ ~p:~p  ~s~n", Args);
+lager(info, [], Args) ->
+    lager:info("[~p] ~p @ ~p:~p  ~s~n", Args);
+lager(warning, [], Args) ->
+    lager:warning("[~p] ~p @ ~p:~p  ~s~n", Args);
+lager(_Severity, [], Args) ->
+    lager:error("[~p] ~p @ ~p:~p  ~s~n", Args);
+lager(Severity, Props, Args) ->
+    lager:log(Severity, Props, "[~p] ~p @ ~p:~p  ~s~n", Args).

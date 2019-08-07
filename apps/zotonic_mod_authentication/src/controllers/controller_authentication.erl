@@ -340,7 +340,7 @@ get_by_reminder_secret(Code, Context) ->
         undefined -> ?RESET_TOKEN_MAXAGE;
         MA -> MA
     end,
-    case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
+    case m_identity:lookup_by_type_and_key(logon_reminder_secret, Code, Context) of
         undefined ->
             undefined;
         Row ->
@@ -359,7 +359,7 @@ get_by_reminder_secret(Code, Context) ->
 
 %% @doc Delete the reminder secret of the user
 delete_reminder_secret(Id, Context) ->
-    m_identity:delete_by_type(Id, "logon_reminder_secret", Context).
+    m_identity:delete_by_type(Id, logon_reminder_secret, Context).
 
 
 auth_precheck(Username, Context) when is_binary(Username) ->

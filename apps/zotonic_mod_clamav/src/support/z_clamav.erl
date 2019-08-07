@@ -77,7 +77,7 @@ scan( Data ) when is_binary(Data) ->
         Size when Size < MaxSize ->
             F = fun(Socket) -> send_chunks(Socket, chop(Data, [])) end,
             handle_result(do_clam(<<"zINSTREAM",0>>, F));
-        true ->
+        _Size ->
             {error, av_sizelimit}
     end.
 
