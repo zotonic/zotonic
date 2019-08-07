@@ -66,20 +66,22 @@ tcp_connection_count() ->
 
 % Return the number of sessions of this site. 
 session_count(Context) ->
-    z_session_manager:count(Context).
+    undefined.
+    % z_session_manager:count(Context).
 
 % Return the number of page processes which are open.
 page_count(Context) ->
-    z_session_manager:fold(
-      fun(S, Acc) ->
-              case z_session:get_pages(S) of
-                  Pages when is_list(Pages) ->
-                      length(Pages) + Acc;
-                  _ -> Acc
-              end
-      end,
-      0,
-      Context).
+    undefined.
+    % z_session_manager:fold(
+    %   fun(S, Acc) ->
+    %           case z_session:get_pages(S) of
+    %               Pages when is_list(Pages) ->
+    %                   length(Pages) + Acc;
+    %               _ -> Acc
+    %           end
+    %   end,
+    %   0,
+    %   Context).
 
 % Group open sockets per ip-address, returns a list of proplists.
 group_sockets() ->

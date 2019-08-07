@@ -200,7 +200,7 @@ get_column_type(C, Table, Column, Database, Schema) ->
     ColumnType.
 
 is_column_nullable(C, Table, Column, Database, Schema) ->
-    {ok, _, [{IsNullable}]} = pgsql:equery(C, "
+    {ok, _, [{IsNullable}]} = epgsql:equery(C, "
             select is_nullable
             from information_schema.columns
             where table_catalog = $1
@@ -623,7 +623,7 @@ publication_start_nullable(C, Database, Schema) ->
     case is_column_nullable(C, "rsc", "publication_start", Database, Schema) of
         true -> ok;
         false ->
-            {ok, [], []} = pgsql:squery(
+            {ok, [], []} = epgsql:squery(
                 C,
                 "ALTER TABLE rsc "
                     "ALTER COLUMN publication_start DROP NOT NULL, "

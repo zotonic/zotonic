@@ -82,7 +82,7 @@ observe_auth_checked( #auth_checked{ username = Username, is_accepted = false },
         {error, _} -> undefined
     end,
     m_ratelimit:insert_event(auth, Username, DeviceId, Context);
-observe_auth_checked( #auth_checked{ username = Username, is_accepted = true }, Context ) ->
+observe_auth_checked( #auth_checked{ username = Username, is_accepted = true }, _Context ) ->
     % Store the authenticated username for later retrieval in observe_auth_logon.
     erlang:put(ratelimit_event_username, Username).
 
@@ -93,7 +93,7 @@ observe_auth_logon(auth_logon, Context, _Context) ->
         undefined ->
             Context;
         Username ->
-            erlang:erase(ratelimit_event_username, undefined),
+            erlang:erase(ratelimit_event_username),
             RId = #rldid{
                 username = Username,
                 device_id = z_ids:id(16)

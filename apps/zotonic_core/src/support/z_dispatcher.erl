@@ -402,7 +402,7 @@ collect_dispatch_lists(Context) ->
 get_file_dispatch(File) ->
     try
         case filelib:is_regular(File)
-            andalso not zotonic_filewatcher_handler:file_blacklisted(File)
+            andalso not zotonic_filewatcher_handler:is_file_blacklisted(File)
         of
             true ->
                 Basename = filename:basename(File),

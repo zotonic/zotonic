@@ -31,10 +31,10 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     QState = z_context:get_q(<<"state">>, Context),
     Context1 = z_context:reset_state_cookie(Context),
     case z_context:get_state_cookie(Context) of
-        {ok, {QState, _Args}} ->
+        {ok, {QState, Args}} ->
             case z_context:get_q(<<"code">>, Context) of
                 Code when is_binary(Code), Code =/= <<>> ->
-                    access_token(fetch_access_token(Code, Context1), Context1);
+                    access_token(fetch_access_token(Code, Context1), Args, Context1);
                 undefined ->
                     Context2 = z_render:wire({script, [{script, "window.close();"}]}, Context1),
                     html_error(cancel, Context2)
@@ -49,22 +49,22 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
             html_error(missing_secret, Context1)
     end.
 
-access_token({ok, AccessToken, Expires}, Context) ->
+access_token({ok, AccessToken, Expires}, Args, Context) ->
     Data = [
         {access_token, AccessToken},
         {expires, Expires}
     ],
-    user_data(fetch_user_data(AccessToken), fetch_email_address(AccessToken), Data, Context);
-access_token({error, _Reason}, Context) ->
+    user_data(fetch_user_data(AccessToken), fetch_email_address(AccessToken), Data, Args, Context);
+access_token({error, _Reason}, _Args, Context) ->
     html_error(access_token, Context).
 
-user_data({ok, UserProps}, {ok, Email}, AccessData, Context) ->
-    Auth = auth_user(UserProps, Email, AccessData, Context),
+user_data({ok, UserProps}, {ok, Email}, AccessData, Args, Context) ->
+    Auth = auth_user(UserProps, Email, AccessData, Args, Context),
     do_auth_user(Auth, Context);
-user_data({ok, UserProps}, {error, Reason}, _AccessData, Context) ->
+user_data({ok, UserProps}, {error, Reason}, _AccessData, _Args, Context) ->
     lager:error("No email address, error ~p for ~p", [Reason, UserProps]),
     html_error(service_user_data, Context);
-user_data(_UserError, _EmailError, _AccessData, Context) ->
+user_data(_UserError, _EmailError, _AccessData, _Args, Context) ->
     html_error(service_user_data, Context).
 
 do_auth_user(Auth, Context) ->
@@ -119,7 +119,7 @@ is_safari8problem(Context) ->
     not HasCookies andalso IsVersion8 andalso IsSafari.
 
 
-auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Context) ->
+auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Args, Context) ->
     lager:debug("[linkedin] Authenticating ~p ~p", [LinkedInUserId, Profile]),
     PersonProps = [
         {title, iolist_to_binary([
@@ -131,7 +131,6 @@ auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Conte
         {summary, get_localized_value(<<"headline">>, Profile)},
         {email, Email}
     ],
-    Args = controller_linkedin_authorize:get_args(Context),
     z_notifier:first(#auth_validated{
             service=linkedin,
             service_uid=LinkedInUserId,
