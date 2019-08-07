@@ -170,10 +170,26 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                 <<"text/x-c">> ->
                     %% "file" does a lousy job recognizing files with curly braces in them.
                     Mime2 = case guess_mime(OriginalFilename) of
+                        <<"text/csv">> ->
+                            case z_csv_parser:inspect_file(File) of
+                                {ok, _Hs, _Sep} -> <<"text/csv">>;
+                                {error, _} -> <<"text/plain">>
+                            end;
                         <<"text/", _/binary>> = MimeFilename -> MimeFilename;
                         <<"application/x-", _/binary>> = MimeFilename -> MimeFilename;
                         <<"application/json">> -> <<"application/json">>;
                         _ -> <<"text/plain">>
+                    end,
+                    {ok, [{mime, Mime2}]};
+                <<"text/plain">> ->
+                    Mime2 = case guess_mime(OriginalFilename) of
+                        <<"text/csv">> ->
+                            case z_csv_parser:inspect_file(File) of
+                                {ok, _Hs, _Sep} -> <<"text/csv">>;
+                                {error, _} -> <<"text/plain">>
+                            end;
+                        _ ->
+                            <<"text/plain">>
                     end,
                     {ok, [{mime, Mime2}]};
                 <<"application/x-gzip">> ->

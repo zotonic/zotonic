@@ -161,6 +161,8 @@ error_message(download_failed, Context) ->
     ?__("Failed to download the file.", Context);
 error_message(infected, Context) ->
     ?__("This file is infected with a virus.", Context);
+error_message(av_external_links, Context) ->
+    ?__("This file contains links to other files or locations.", Context);
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
 error_message(_R, Context) ->
