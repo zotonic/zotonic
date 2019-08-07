@@ -177,12 +177,23 @@ get_username(RscId, Context) when is_integer(RscId) ->
     ).
 
 
+%% @doc Check if the user is allowed to change the username of a resource.
+-spec is_allowed_set_username( m_rsc:resource_id(), z:context() ) -> boolean().
+is_allowed_set_username(Id, Context) when is_integer(Id) ->
+    z_acl:is_admin(Context)
+    orelse z_acl:is_allowed(use, mod_admin_identity, Context)
+    orelse (z_acl:is_allowed(update, Id, Context) andalso Id =:= z_acl:user(Context)).
+
+
 %% @doc Delete an username from a resource.
--spec delete_username(m_rsc:resource(), #context{}) -> ok | {error, eacces}.
-delete_username(1, _Context) ->
-    {error, admin_username_cannot_be_deleted};
+-spec delete_username(m_rsc:resource() | undefined, z:context()) -> ok | {error, eacces | enoent}.
+delete_username(undefined, _Context) ->
+    {error, enoent};
+delete_username(1, Context) ->
+    lager:warning("Trying to delete admin username (1) by ~p", [ z_acl:user(Context) ]),
+    {error, eacces};
 delete_username(RscId, Context) when is_integer(RscId) ->
-    case z_acl:is_allowed(delete, RscId, Context) orelse z_acl:is_allowed(update, RscId, Context) of
+    case is_allowed_set_username(RscId, Context)  of
         true ->
             z_db:q(
                 "delete from identity where rsc_id = $1 and type = 'username_pw'",
@@ -199,16 +210,22 @@ delete_username(RscId, Context) when is_integer(RscId) ->
             ok;
         false ->
             {error, eacces}
-    end.
-
+    end;
+delete_username(Id, Context) ->
+    delete_username( m_rsc:rid(Id, Context), Context ).
 
 %% @doc Change the username of the resource id, only possible if there is
 %% already an username/password set
-%% @spec set_username(ResourceId, Username, Context) -> ok | {error, Reason}
+-spec set_username( m_rsc:resource() | undefined, binary() | string(), z:context()) -> ok | {error, eacces | enoent | eexist}.
+set_username(undefined, _Username, _Context) ->
+    {error, enoent};
+set_username(1, _Username, Context) ->
+    lager:warning("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
+    {error, eacces};
 set_username(Id, Username, Context) when is_integer(Id) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
+    case is_allowed_set_username(Id, Context) of
         true ->
-            Username1 = z_string:to_lower(Username),
+            Username1 = z_string:to_lower( z_convert:to_binary(Username) ),
             case is_reserved_name(Username1) of
                 true ->
                     {error, eexist};
@@ -219,7 +236,7 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                             from identity
                             where type = 'username_pw'
                               and rsc_id <> $1 and key = $2",
-                            [m_rsc:rid(Id, Context), Username1],
+                            [Id, Username1],
                             Ctx
                         ),
                         case UniqueTest of
@@ -230,7 +247,7 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                                             modified = now()
                                         where rsc_id = $1
                                           and type = 'username_pw'",
-                                        [m_rsc:rid(Id, Context), Username1],
+                                        [Id, Username1],
                                         Ctx)
                                 of
                                     1 -> ok;
@@ -242,26 +259,53 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                                 {error, eexist}
                         end
                     end,
-                    z_db:transaction(F, Context)
+                    case z_db:transaction(F, Context) of
+                        ok ->
+                            z:info(
+                                "Change of username for user ~p (~s)",
+                                [ Id, Username1 ],
+                                [ {module, ?MODULE} ],
+                                Context),
+                            z_mqtt:publish(
+                                [ <<"model">>, <<"identity">>, <<"event">>, Id, <<"username_pw">> ],
+                                #{
+                                    id => Id,
+                                    type => <<"username_pw">>
+                                },
+                                Context),
+                            z_depcache:flush(Id, Context),
+                            ok;
+                        {rollback, {error, _} = Error, _Trace} ->
+                            Error;
+                        {error, _} = Error ->
+                            Error
+                    end
             end;
         false ->
             {error, eacces}
-    end.
+    end;
+set_username(Id, Username, Context) ->
+    set_username( m_rsc:rid(Id, Context), Username, Context ).
 
 
 %% @doc Set the username/password of a resource.  Replaces any existing username/password.
--spec set_username_pw(m_rsc:resource(), binary()|string(), binary()|string(), #context{}) -> ok | {error, Reason :: term()}.
-set_username_pw(1, _, _, _) ->
-    {error, admin_password_cannot_be_set};
+-spec set_username_pw(m_rsc:resource() | undefined, binary()|string(), binary()|string(), z:context()) -> ok | {error, Reason :: term()}.
+set_username_pw(undefined, _, _, _) ->
+    {error, enoent};
+set_username_pw(1, _, _, Context) ->
+    lager:warning("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
+    {error, eacces};
 set_username_pw(Id, Username, Password, Context)  when is_integer(Id) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
+    case is_allowed_set_username(Id, Context) of
         true ->
             Username1 = z_string:trim(z_string:to_lower(Username)),
             IsForceDifferent = z_convert:to_bool( m_config:get_value(site, password_force_different, Context) ),
             set_username_pw_1(IsForceDifferent, m_rsc:rid(Id, Context), Username1, Password, Context);
         false ->
             {error, eacces}
-    end.
+    end;
+set_username_pw(Id, Username, Password, Context) ->
+    set_username_pw(m_rsc:rid(Id, Context), Username, Password, Context).
 
 set_username_pw_1(true, Id, Username, Password, Context) ->
     case check_username_pw_1(Username, Password, Context) of
@@ -282,14 +326,19 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
         {ok, S} ->
             case S of
                 new ->
-                    z:debug(
-                        "New username for user ~p (~s)",
+                    z:info(
+                        "New username/password for user ~p (~s)",
                         [ Id, Username ],
                         [ {module, ?MODULE} ],
                         Context);
                 exists ->
-                    ok
-            end,            reset_auth_tokens(Id, Context),
+                    z:info(
+                        "Change of username/password for user ~p (~s)",
+                        [ Id, Username ],
+                        [ {module, ?MODULE} ],
+                        Context)
+            end,
+            reset_auth_tokens(Id, Context),
             z_depcache:flush(Id, Context),
             z_depcache:flush({idn, Id}, Context),
             z_mqtt:publish(
@@ -301,10 +350,12 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
                 Context),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
-            lager:error("set_username_pw error for ~p, setting username ~p: ~p",
-                [Username, ErrTrace]),
+            lager:error("set_username_pw error for ~p, setting username. ~p: ~p",
+                [Username, Error, ErrTrace]),
             Error;
         {error, _} = Error ->
+            lager:error("set_username_pw error for ~p, setting username. ~p",
+                        [Username, Error]),
             Error
     end.
 

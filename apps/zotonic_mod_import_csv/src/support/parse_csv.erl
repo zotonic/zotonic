@@ -27,8 +27,8 @@
 scan_lines(DeviceOrFilename) ->
     z_csv_parser:scan_lines(DeviceOrFilename).
 
-scan_lines(Filename, FieldSep) when is_list(Filename); is_binary(Filename) ->
-    z_csv_parser:scan_lines(Filename, FieldSep).
+scan_lines(DeviceOrFilename, FieldSep) ->
+    z_csv_parser:scan_lines(DeviceOrFilename, FieldSep).
 
 cleanup_field(L) ->
     z_csv_parser:cleanup_field(L).
