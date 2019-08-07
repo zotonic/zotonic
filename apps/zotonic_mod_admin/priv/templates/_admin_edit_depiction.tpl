@@ -31,6 +31,7 @@
                                     delegate="controller_admin_edit"}
                             ]
                             center=0
+                            width="large"
                         }
                     %}
                 </div>

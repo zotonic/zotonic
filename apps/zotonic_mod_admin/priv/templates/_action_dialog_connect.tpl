@@ -9,6 +9,8 @@ params:
 - tab (optional)
 - autoclose (optional - defaults to false)
 - nocatselect (optional - defaults to false)
+- is_zlink (optional) set by the tinyMCE 'zlink' plugin
+- is_zmedia (optional) set by the tinyMCE 'zmedia' plugin
 
 find params:
 - predicate (optional) (atom)
@@ -36,7 +38,7 @@ find params:
             {% if in_sorter == "category" %}
                 {% if "new"|member:tabs_enabled %}
                     <li class="active">
-                        <a data-toggle="tab" href="#{{ #tab }}-new">{_ Create Page _}</a>
+                        <a data-toggle="tab" href="#{{ #tab }}-new">{_ Create _}</a>
                     </li>
                 {% endif %}
             {% else %}
@@ -47,21 +49,15 @@ find params:
                         </li>
                     {% endif %}
                 {% endif %}
-                {% if not tabs_enabled or "find"|member:tabs_enabled %}
+                {% if not tabs_enabled or "new"|member:tabs_enabled %}
+                    <li class="active">
+                        <a data-toggle="tab" href="#{{ #tab }}-findnew">
+                            {_ Create or find _}
+                        </a>
+                    </li>
+                {% elseif tabs_enabled and "find"|member:tabs_enabled %}
                     <li {% if tab == "find" %}class="active"{% endif %}>
                         <a data-toggle="tab" href="#{{ #tab }}-find">{_ Find Page _}</a>
-                    </li>
-                {% endif %}
-                {% if not tabs_enabled or "new"|member:tabs_enabled %}
-                    {% if predicate.name /= "depiction" %}
-                    <li {% if tab == "new" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-new">{_ Create Page _}</a>
-                    </li>
-                    {% endif %}
-                {% endif %}
-                {% if not tabs_enabled or "upload"|member:tabs_enabled %}
-                    <li {% if tab == "upload" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload File _}</a>
                     </li>
                 {% endif %}
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
@@ -116,45 +112,32 @@ find params:
                     %}
                 {% endif %}
             {% endif %}
-            {% if not tabs_enabled or "find"|member:tabs_enabled %}
+            {% if not tabs_enabled or "new"|member:tabs_enabled %}
+                {% include "_action_dialog_connect_tab_findnew.tpl"
+                    tab=#tab
+                    predicate=predicate
+                    delegate=delegate
+                    subject_id=subject_id
+                    object_id=object_id
+                    is_active=`true`
+                    title=""
+                    cat=cat
+                    content_group=content_group
+                %}
+            {% elseif tabs_enabled and "find"|member:tabs_enabled %}
                 {% include "_action_dialog_connect_tab_find.tpl"
                     tab=#tab
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id
                     object_id=object_id
-                    is_active=(tab == "find")
+                    is_active=`true`
                     title=""
                     cat=cat
                     content_group=content_group
                 %}
             {% endif %}
-            {% if not tabs_enabled or "new"|member:tabs_enabled %}
-                {% if predicate.name /= "depiction" %}
-                    {% include "_action_dialog_connect_tab_new.tpl"
-                        tab=#tab
-                        predicate=predicate
-                        delegate=delegate
-                        subject_id=subject_id
-                        object_id=object_id
-                        title=""
-                        is_active=(tab == "new")
-                        cat=cat
-                    %}
-                {% endif %}
-            {% endif %}
             {% with "action_admin_dialog_media_upload" as delegate %}
-                {% if not tabs_enabled or "upload"|member:tabs_enabled %}
-                    {% include "_action_dialog_media_upload_tab_upload.tpl"
-                        tab=#tab
-                        predicate=predicate
-                        delegate=delegate
-                        subject_id=subject_id
-                        object_id=object_id
-                        title=""
-                        is_active=(tab == "upload")
-                    %}
-                {% endif %}
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
                     {% include "_action_dialog_media_upload_tab_url.tpl"
                         tab=#tab

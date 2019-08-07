@@ -203,33 +203,71 @@ event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
         AfterId -> z_render:insert_after(AfterId, Render, Context)
     end;
 
-event(#postback_notify{message = <<"feedback">>, trigger = <<"dialog-connect-find">>, target=TargetId}, Context) ->
+event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=TargetId}, Context)
+    when Trigger =:= <<"dialog-new-rsc-tab">>; Trigger =:= <<"dialog-connect-find">> ->
     % Find pages matching the search criteria.
+    CreatorId = z_convert:to_integer(z_context:get_q(find_creator_id, Context)),
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
     Category = z_context:get_q(<<"find_category">>, Context),
     Predicate = z_convert:to_binary(z_context:get_q(<<"predicate">>, Context, <<>>)),
-    Text = z_context:get_q(<<"find_text">>, Context),
-    Cats = case Category of
+    PredicateId = m_rsc:rid(Predicate, Context),
+    TextL = lists:foldl(
+        fun(Q, Acc) ->
+            case z_context:get_q(Q, Context) of
+                <<>> -> Acc;
+                undefined -> Acc;
+                V -> case Acc of
+                        [] -> V;
+                        _ -> [ V, " ", Acc ]
+                     end
+            end
+        end,
+        [],
+        [ title, new_rsc_title, name_first, name_surname, email ]),
+    Text = iolist_to_binary(TextL),
+    Category = case z_context:get_q(find_category, Context) of
+        undefined -> z_context:get_q(category_id, Context);
+        <<>> -> z_context:get_q(category_id, Context);
+        Cat -> Cat
+    end,
+    Cats = case z_convert:to_binary(Category) of
                 <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
+                <<>> when PredicateId =/= undefined -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<>> -> [];
                 CatId -> [{m_rsc:rid(CatId, Context)}]
            end,
     Vars = [
+        {creator_id, CreatorId},
         {subject_id, SubjectId},
         {cat, Cats},
+        {cat_exclude, z_context:get_q(cat_exclude, Context)},
         {predicate, Predicate},
-        {text, Text}
-    ]++ case z_context:get_q(find_cg, Context) of
+        {text, Text},
+        {is_multi_cat, length(Cats) > 1},
+        {category_id, case Cats of
+            [{CId}] -> CId;
+            _ -> undefined
+        end},
+        {is_zlink, z_convert:to_bool( z_context:get_q(is_zlink, Context) )}
+    ] ++ case z_context:get_q(find_cg, Context) of
         <<>> -> [];
+        "" -> [];
         undefined -> [];
-        <<"me">> -> [ {creator_id, z_acl:user(Context)} ];
         CgId -> [ {content_group, m_rsc:rid(CgId, Context)}]
     end,
-    z_render:wire([
-        {remove_class, [{target, TargetId}, {class, "loading"}]},
-        {update, [{target, TargetId}, {template, "_action_dialog_connect_tab_find_results.tpl"} | Vars]}
-    ], Context);
+    case Trigger of
+        <<"dialog-connect-find">> ->
+            z_render:wire([
+                {remove_class, [{target, TargetId}, {class, "loading"}]},
+                {update, [{target, TargetId}, {template, "_action_dialog_connect_tab_find_results.tpl"} | Vars]}
+            ], Context);
+        <<"dialog-new-rsc-tab">> ->
+            z_render:wire([
+                {remove_class, [{target, TargetId}, {class, "loading"}]},
+                {update, [{target, TargetId}, {template, "_action_dialog_new_rsc_tab_find_results.tpl"} | Vars]}
+            ], Context)
+    end;
 
 event(#postback{message={admin_connect_select, Args}}, Context) ->
     SelectId = z_context:get_q(<<"select_id">>, Context),
