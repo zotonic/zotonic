@@ -90,34 +90,42 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
     CatList = m_rsc:is_a(Id, Context),
     Props = m_rsc:get(Id, Context),
 
+    % Outside transaction as due to race conditions we might
+    % have a duplicate insert into the rsc_gone table. That
+    % triggers an error which cancels the transaction F below.
+    _ = m_rsc_gone:gone(Id, OptFollowUpId, Context),
+
     F = fun(Ctx) ->
         z_notifier:notify_sync(#rsc_delete{id = Id, is_a = CatList}, Ctx),
-        m_rsc_gone:gone(Id, OptFollowUpId, Ctx),
         z_db:delete(rsc, Id, Ctx)
     end,
-    {ok, _RowsDeleted} = z_db:transaction(F, Context),
-    % Sync the caches
-    [z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers],
-    flush(Id, CatList, Context),
-    %% Notify all modules that the rsc has been deleted
-    z_notifier:notify_sync(
-        #rsc_update_done{
-            action = delete,
-            id = Id,
-            pre_is_a = CatList,
-            post_is_a = [],
-            pre_props = Props,
-            post_props = []
-        }, Context),
-     z_mqtt:publish(
-         [ <<"model">>, <<"rsc">>, <<"event">>, Id, <<"delete">> ],
-         #{
-            id => Id,
-            pre_is_a => CatList
-         },
-         Context),
-    z_edge_log_server:check(Context),
-    ok.
+    case z_db:transaction(F, Context) of
+        {ok, _RowsDeleted} ->
+            % Sync the caches
+            [z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers],
+            flush(Id, CatList, Context),
+            %% Notify all modules that the rsc has been deleted
+            z_notifier:notify_sync(
+                #rsc_update_done{
+                    action = delete,
+                    id = Id,
+                    pre_is_a = CatList,
+                    post_is_a = [],
+                    pre_props = Props,
+                    post_props = []
+                }, Context),
+             z_mqtt:publish(
+                 [ <<"model">>, <<"rsc">>, <<"event">>, Id, <<"delete">> ],
+                 #{
+                    id => Id,
+                    pre_is_a => CatList
+                 },
+                 Context),
+            z_edge_log_server:check(Context),
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Merge two resources, delete the losing resource.
 -spec merge_delete(m_rsc:resource(), m_rsc:resource(), list(), #context{}) -> ok | {error, term()}.

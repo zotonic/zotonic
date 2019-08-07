@@ -30,6 +30,7 @@
 %% @doc Initialize the statistics collection machinery.
 %%
 init() ->
+    check_configuration(),
     ok.
 
 init_site(Host) ->
@@ -68,4 +69,15 @@ log_access(_LogData) ->
 %     after
 %         z_access_syslog:log_access(LogData)
 %     end.
+
+%%
+%% Helpers
+%%
+
+check_configuration() ->
+    case exometer:info([erlang, system_info]) of
+        undefined ->
+            lager:warning("Default exometer config not loaded. Rename your exometer config to exometer_core.");
+        _ -> nop
+    end.
 

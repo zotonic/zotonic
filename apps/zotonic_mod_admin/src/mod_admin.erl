@@ -208,7 +208,7 @@ event(#postback_notify{message = <<"feedback">>, trigger = <<"dialog-connect-fin
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
     Category = z_context:get_q(<<"find_category">>, Context),
-    Predicate = z_context:get_q(<<"predicate">>, Context, <<>>),
+    Predicate = z_convert:to_binary(z_context:get_q(<<"predicate">>, Context, <<>>)),
     Text = z_context:get_q(<<"find_text">>, Context),
     Cats = case Category of
                 <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);

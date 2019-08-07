@@ -24,10 +24,10 @@
             {% endif %}
 
             <div class="form-group row">
-                <label class="control-label col-md-3" for="upload_file">{_ Media file _}</label>
+                <label class="control-label col-md-3" for="{{ #upload_file }}">{_ Media file _}</label>
                 <div class="col-md-9">
-                    <input type="file" class="form-control" id="upload_file" name="upload_file" />
-                    {% validate id="upload_file" type={presence} %}
+                    <input type="file" class="form-control" id="{{ #upload_file }}" name="upload_file" />
+                    {% validate id=#upload_file name="upload_file" type={presence} %}
                 </div>
             </div>
 
