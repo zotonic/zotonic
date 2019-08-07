@@ -257,12 +257,26 @@ set_username_pw(Id, Username, Password, Context)  when is_integer(Id) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
         true ->
             Username1 = z_string:trim(z_string:to_lower(Username)),
-            set_username_pw_1(m_rsc:rid(Id, Context), Username1, Password, Context);
+            IsForceDifferent = z_convert:to_bool( m_config:get_value(site, password_force_different, Context) ),
+            set_username_pw_1(IsForceDifferent, m_rsc:rid(Id, Context), Username1, Password, Context);
         false ->
             {error, eacces}
     end.
 
-set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
+set_username_pw_1(true, Id, Username, Password, Context) ->
+    case check_username_pw_1(Username, Password, Context) of
+        {ok, _} ->
+            {error, password_match};
+        {error, E} when E =:= nouser; E =:= password ->
+            set_username_pw_2(Id, Username, Password, Context);
+        {error, _} = Error ->
+            Error
+    end;
+set_username_pw_1(false, Id, Username, Password, Context) when is_integer(Id) ->
+    set_username_pw_2(Id, Username, Password, Context).
+
+
+set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
     Hash = hash(Password),
     case z_db:transaction(fun(Ctx) ->
         set_username_pw_trans(Id, Username, Hash, Ctx) end, Context) of
