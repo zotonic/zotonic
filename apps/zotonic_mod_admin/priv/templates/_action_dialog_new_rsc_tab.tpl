@@ -267,6 +267,12 @@
 					        	</option>
 					        	<option disabled>
 					        	</option>
+				        	{% else %}
+				        		<option value="*" selected>
+					        		{_ Any category _}
+					        	</option>
+					        	<option disabled>
+					        	</option>
 				        	{% endif %}
 				            {% for c in m.category.tree_flat_meta %}
 			                    <option value="{{c.id}}" {% if c.id == cat %}selected{% endif %}>

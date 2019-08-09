@@ -1360,18 +1360,18 @@ function z_update_iframe(name, doc)
  * It is this array that is passed to pre-submit callback functions provided to the
  * ajaxSubmit() and ajaxForm() methods.
  */
-$.fn.formToArray = function(semantic) {
+$.fn.formToArray = function(options) {
     var a = [];
     if (this.length > 0) {
         var form = this[0];
-        var els = semantic ? form.getElementsByTagName('*') : form.elements;
+        var els = options.semantic ? form.getElementsByTagName('*') : form.elements;
         var n;
 
         if (els) {
             for(var i=0, max=els.length; i < max; i++) {
                 var el = els[i];
                 n = el.name;
-                if (n && !$(el).hasClass("nosubmit")) {
+                if (n && (!$(el).hasClass("nosubmit") || options.all)) {
                     switch ($(el).attr("type")) {
                         case "submit":
                             break;

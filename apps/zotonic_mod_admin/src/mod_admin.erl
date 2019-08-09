@@ -209,7 +209,6 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
     CreatorId = z_convert:to_integer(z_context:get_q(find_creator_id, Context)),
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
-    Category = z_context:get_q(<<"find_category">>, Context),
     Predicate = z_convert:to_binary(z_context:get_q(<<"predicate">>, Context, <<>>)),
     PredicateId = m_rsc:rid(Predicate, Context),
     TextL = lists:foldl(
@@ -235,7 +234,8 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
                 <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<>> when PredicateId =/= undefined -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<>> -> [];
-                CatId -> [{m_rsc:rid(CatId, Context)}]
+                <<"*">> -> [];
+                CatId -> [ {m_rsc:rid(CatId, Context)} ]
            end,
     Vars = [
         {creator_id, CreatorId},
