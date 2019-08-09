@@ -16,7 +16,7 @@
     <div class="form-group">
 	    <div>
 		    {% button class="btn btn-default" action={dialog_set_username_password id=id} text=_"Set username / password" %}
-		    {% if m.acl.is_admin and m.identity[id].is_user and id != m.acl.user and id != 1 %
+		    {% if m.acl.is_admin and m.identity[id].is_user and id != m.acl.user and id != 1 %}
 			    {% button class="btn btn-default" action={confirm text=_"Click OK to log on as this user. You will be redirected to the home page if this user has no rights to access the admin system." postback={switch_user id=id} delegate=`mod_admin_identity`} text=_"Log on as this user" %}
 		    {% endif %}
 	    </div>
