@@ -53,8 +53,15 @@ is_app_available(App) ->
 -spec setup() -> ok.
 setup() ->
     io:setopts([{encoding, unicode}]),
+    assert_schedulers( erlang:system_info(schedulers) ),
     z_jsxrecord:init(),
     ensure_mnesia_schema().
+
+assert_schedulers(1) ->
+    io:format("FATAL: Not enough schedulers, please start with 2 or more schedulers.~nUse: ERLOPTS=\"+S 4:4\" ./bin/zotonic debug~n~n"),
+    erlang:halt();
+assert_schedulers(_N) ->
+    ok.
 
 
 %% @doc Ensure that mnesia has created its schema in the configured priv/data/mnesia directory.
