@@ -18,6 +18,7 @@
   [%%SITE%%,
    mod_mqtt,
    mod_wires,
+   mod_bootstrap,
    mod_base,
    mod_zotonic_status_vcs,
    mod_zotonic_tracer
