@@ -77,7 +77,8 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
         {callback, Callback},
         {catname, CatName},
         {actions, Actions},
-        {objects, Objects}
+        {objects, Objects},
+        {width, <<"large">>}
     ],
     z_render:dialog(?__("Make a new page", Context), "_action_dialog_new_rsc.tpl", Vars, Context);
 
