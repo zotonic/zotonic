@@ -1362,6 +1362,7 @@ function z_update_iframe(name, doc)
  */
 $.fn.formToArray = function(options) {
     var a = [];
+    options = options || {};
     if (this.length > 0) {
         var form = this[0];
         var els = options.semantic ? form.getElementsByTagName('*') : form.elements;
