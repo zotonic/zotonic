@@ -40,7 +40,7 @@ Which should log it in a separate ui error log.
             // Show an alert if this is a form submit.
             // We recognize a form submit by some element having the class "masked"
             // or if either "submitFunction" or "doValidations" is in the stack trace.
-            var hasMasked = document.getElementsByClassName("masked").length > 0;
+            var hasMasked = document.querySelectorAll("form.masked").length > 0;
             if (hasMasked || (payload.stack && payload.stack.match(/(submitFunction|doValidations)/))) {
                 alert("Sorry, something went wrong.\n\n(" + message + ")");
                 try {
