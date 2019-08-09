@@ -88,7 +88,7 @@ observe_auth_checked( #auth_checked{ username = Username, is_accepted = true }, 
 
 
 %% @doc Authentication succeeded, set the device id cookie (if we have an username from auth_checked)
-observe_auth_logon(auth_logon, Context, _Context) ->
+observe_auth_logon( #auth_logon{}, Context, _Context ) ->
     case auth_username(Context) of
         undefined ->
             Context;

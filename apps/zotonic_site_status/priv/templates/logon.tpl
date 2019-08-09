@@ -3,7 +3,7 @@
 {% block title %}Zotonic{% endblock %}
 {% block navbar %}{% endblock %}
 
-{% block content %}
+{% block content_area %}
 <!--
 <div class="col-md-6 col-md-offset-3">
     <div class="jumbotron">

@@ -58,7 +58,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
                 undefined ->
                     case z_acl:is_admin(Context) of
                         false -> render_page(true, "logon.tpl", Context);
-                        true -> status_page(Context)
+                        true -> status_page(true, Context)
                     end
             end
     end.
@@ -92,9 +92,11 @@ resp_code(Context) ->
             200
     end.
 
-status_page(Context) ->
+status_page(IsPeerWhitelisted, Context) ->
     Template = z_context:get(template, Context),
-    Vars = z_context:get_all(Context),
+    Vars = [
+        {is_peer_whitelisted, IsPeerWhitelisted}
+    ] ++  z_context:get_all(Context),
     Rendered = z_template:render(Template, Vars, Context),
     z_context:output(Rendered, Context).
 
