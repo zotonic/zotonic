@@ -184,7 +184,6 @@
 								    <option value="" disabled {% if not cat %}selected{% endif %}>{_ Select category _}</option>
 						            {% for c in m.category.tree_flat %}
 						                {% if m.acl.insert[c.id.name|as_atom]
-						                	  and (not cat or m.category[c.id].is_a[cat])
 						                	  and (not subject_id or predicate|is_undefined or m.predicate.is_valid_object_category[predicate][c.id])
 						                	  and (not object_id  or predicate|is_undefined or m.predicate.is_valid_subject_category[predicate][c.id])
 						                %}
