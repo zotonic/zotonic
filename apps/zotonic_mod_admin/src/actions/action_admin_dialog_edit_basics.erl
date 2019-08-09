@@ -114,12 +114,13 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
             Context2 = z_render:wire({dialog_close, []}, Context1),
             %% wire any custom actions
             Context3 = case proplists:get_value(callback, Args) of
-                undefined ->
-                    Context2;
+                undefined -> Context2;
+                "" -> Context2;
+                <<>> -> Context2;
                 Callback ->
                     Title = m_rsc:p(Id, title, Context2),
                     z_render:wire({script, [{script, [
-                                    Callback,
+                                    z_sanitize:ensure_safe_js_callback(Callback),
                                     $(,$",integer_to_list(Id),$",$,,
                                        $",z_utils:js_escape(Title,Context2),$",$),$;
                                 ]}]}, Context2)

@@ -90,10 +90,10 @@
 			$(function() { $.widgetManager(); });
 		</script>
 
+		{% all include "_html_body.tpl" %}
+
 		{% script %}
 
 		{% worker name="auth" src="js/zotonic.auth.worker.js" %}
-
-		{% all include "_html_body.tpl" %}
 	</body>
 </html>

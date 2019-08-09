@@ -36,6 +36,7 @@
         acl_logon/2,
         acl_logoff/2,
         acl_context_authenticated/1,
+        acl_rsc_update_check/3,
         acl_add_sql_check/2
     ]).
 
@@ -84,6 +85,7 @@ max_upload_size_default() ->
     ?MAX_UPLOAD_SIZE_MB * 1024 * 1024.
 
 
+%% @doc Fetch the list if user groups the user is member of
 user_groups(#context{acl=#aclug{user_groups=Ids}}) ->
     Ids;
 user_groups(#context{user_id=UserId, acl=admin} = Context) ->
@@ -97,6 +99,7 @@ user_groups(#context{user_id=UserId, acl=admin} = Context) ->
 user_groups(#context{user_id=UserId} = Context) ->
     has_user_groups(UserId, Context).
 
+%% @doc Return all user groups the user is directly or indirectly member of.
 user_groups_all(Context) ->
     user_groups_expand(user_groups(Context), Context).
 
@@ -392,6 +395,81 @@ acl_context_authenticated(#context{user_id=undefined} = Context) ->
     };
 acl_context_authenticated(#context{} = Context) ->
     Context.
+
+%% @doc Restrict the content group being updated, possible set default content group.
+%%      If the content-group or category is changed then we need insert permission.
+%%      If it is not changed (for existing rsc) then we need update permission.
+acl_rsc_update_check(#acl_rsc_update_check{}, {error, Reason}, _Context) ->
+    {error, Reason};
+acl_rsc_update_check(#acl_rsc_update_check{ id = Id }, Props, Context) when is_integer(Id); Id =:= insert_rsc ->
+    CatId = fetch_category_id(Id, Props, Context),
+    CGId = fetch_content_group_id(Id, CatId, Props, Context),
+    case acl_rsc_update_check_1(Id, CGId, CatId, Context) of
+        true ->
+            Props1 = proplists:delete(category_id, Props),
+            Props2 = proplists:delete(content_group_id, Props1),
+            maybe_filter_acl_props([{category_id, CatId}, {content_group_id, CGId} | Props2], Context);
+        false ->
+            lager:debug("[acl_user_group] denied user ~p insert/update on ~p of category ~p in content-group ~p",
+                        [z_acl:user(Context), Id, CatId, CGId]),
+            {error, eacces}
+    end.
+
+%% @doc Filter upload permissions from the user-group. Only "acl admins" are allowed to change these.
+maybe_filter_acl_props(Props, Context) ->
+    case mod_acl_user_groups:is_acl_admin(Context) of
+        true ->
+            Props;
+        false ->
+            Props1 = proplists:delete(acl_upload_size, Props),
+            Props2 = proplists:delete(acl_mime_allowed, Props1),
+            proplists:delete(acl_2fa, Props2)
+    end.
+
+acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{acl=admin}) ->
+    true;
+acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{user_id=1}) ->
+    true;
+acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) ->
+    can_insert_category(CGId, CatId, Context);
+acl_rsc_update_check_1(Id, CGId, CatId, Context) when is_integer(Id) ->
+    OldCGId = m_rsc:p_no_acl(Id, content_group_id, Context),
+    OldCatId = m_rsc:p_no_acl(Id, category_id, Context),
+    case {OldCGId, OldCatId} of
+        {CGId, CatId} ->
+            UGs = user_groups(Context),
+            can_rsc_1(Id, update, CGId, CatId, UGs, Context);
+        _Changed ->
+            can_insert_category(CGId, CatId, Context)
+    end.
+
+
+fetch_content_group_id(Id, CatId, Props, Context) ->
+    case proplists:get_value(content_group_id, Props) of
+        N when is_integer(N) ->
+            N;
+        undefined ->
+            case Id of
+                insert_rsc ->
+                    default_content_group(CatId, Context);
+                Id when is_integer(Id) ->
+                    m_rsc:p_no_acl(Id, content_group_id, Context)
+            end
+    end.
+
+fetch_category_id(Id, Props, Context) ->
+    case proplists:get_value(category_id, Props) of
+        N when is_integer(N) ->
+            N;
+        undefined ->
+            case Id of
+                insert_rsc ->
+                    {ok, CatId} = m_category:name_to_id(other, Context),
+                    CatId;
+                Id ->
+                    m_rsc:p_no_acl(Id, category_id, Context)
+            end
+    end.
 
 default_content_group(CatId, Context) ->
     case m_category:is_a(CatId, meta, Context) of
@@ -751,8 +829,7 @@ can_edge(#acl_edge{predicate=P, subject_id=SubjectId, object_id=ObjectId}, Conte
 can_media(Mime, undefined, Context) ->
     can_media(Mime, 0, Context);
 can_media(Mime, Size, Context) ->
-    MaxSize = max_upload_size(Context) * 1024 * 1024,
-    case MaxSize >= Size of
+    case max_upload_size(Context) >= Size of
         true ->
             Cat = m_media:mime_to_category(Mime),
             can_insert_category(Cat, Context);

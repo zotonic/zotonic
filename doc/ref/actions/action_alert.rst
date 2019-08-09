@@ -24,6 +24,8 @@ only_text  Set this to not show the "OK"     only_text
 action     Action to be done when the user
            clicks on the OK button. There
            can be multiple actions.
+backdrop   Show backdrop: true, false, or    backdrop=`false`
+           the string "static"
 =========  ================================  ================
 
 The alert dialog is rendered using the ``_action_dialog_alert.tpl`` template.

@@ -39,15 +39,24 @@
 
             options = $.extend({}, $.ui.dialog.defaults, options);
 
-            $title = $('<div>')
-              .addClass('modal-header')
-              .append($('<a>')
-              .addClass('close')
-              .attr('data-dismiss', 'modal')
-              .html('<span>&times;</span>'))
-              .append($('<h4>')
-              .addClass('modal-title')
-              .html(options.title));
+
+            if (options.backdrop !== 'static') {
+              $title = $('<div>')
+                .addClass('modal-header')
+                .append($('<a>')
+                .addClass('close')
+                .attr('data-dismiss', 'modal')
+                .html('<span>&times;</span>'))
+                .append($('<h4>')
+                .addClass('modal-title')
+                .html(options.title));
+            } else {
+              $title = $('<div>')
+                .addClass('modal-header')
+                .append($('<h4>')
+                .addClass('modal-title')
+                .html(options.title));
+            }
             $modalContent = $('<div>').addClass('modal-content');
             $text = $('<div>').html(options.text);
 
@@ -76,7 +85,13 @@
 
             width = options.width;
             if (width) {
-                $modalDialog.css({'width': width + 'px'});
+                if (width === 'large') {
+                    $modalDialog.addClass('modal-lg');
+                } else if (width === 'small') {
+                    $modalDialog.addClass('modal-sm');
+                } else {
+                    $modalDialog.css({'width': width + 'px'});
+                }
             }
 
             $dialog = $('<div>')

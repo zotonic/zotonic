@@ -7,7 +7,7 @@
     {% endwith %}
 
     {% with "#3b5998" as brand_color %}
-        <a href="http://www.facebook.com/sharer.php?u=http%3A%2F%2F{{ m.site.hostname }}{{ id.page_url|urlencode }}&amp;t={{ id.title|urlencode }}" onclick="return !window.open(this.href, 'Facebook', 'width=700,height=400,toolbar=0,location=0,scrollbars=0,status=0')" title="Facebook" class="btn btn-social-icon" style="background-color: {{ brand_color }}; color: #fff;">
+        <a href="https://www.facebook.com/sharer.php?u=http%3A%2F%2F{{ m.site.hostname }}{{ id.page_url|urlencode }}&amp;t={{ id.title|urlencode }}" onclick="return !window.open(this.href, 'Facebook', 'width=700,height=400,toolbar=0,location=0,scrollbars=0,status=0')" title="Facebook" class="btn btn-social-icon" style="background-color: {{ brand_color }}; color: #fff;">
             <span class="z-icon z-icon-facebook" ></span>
         </a>
     {% endwith %}

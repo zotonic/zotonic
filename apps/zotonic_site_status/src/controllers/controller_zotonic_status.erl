@@ -42,28 +42,32 @@ content_types_provided(Context) ->
 
 is_authorized(Context) ->
     case z_context:get(is_fallback_template, Context) of
-        true ->
-            {true, Context};
-        _ ->
-            {z_acl:is_admin(Context), Context}
+        true -> {true, Context};
+        _ -> {z_acl:is_admin(Context), Context}
     end.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    case z_context:get(is_fallback_template, Context) of
+    case zotonic_site_status:is_peer_whitelisted(Context) of
+        false ->
+            render_page(false, "logon.tpl", Context);
         true ->
-            Template = z_context:get(template, Context),
-            render_page(Template, Context);
-        undefined ->
-            case z_acl:is_admin(Context) of
-                false -> render_page("logon.tpl", Context);
-                true -> status_page(Context)
+            case z_context:get(is_fallback_template, Context) of
+                true ->
+                    Template = z_context:get(template, Context),
+                    render_page(true, Template, Context);
+                undefined ->
+                    case z_acl:is_admin(Context) of
+                        false -> render_page(true, "logon.tpl", Context);
+                        true -> status_page(Context)
+                    end
             end
     end.
 
-render_page(Template, Context) ->
+render_page(IsPeerWhitelisted, Template, Context) ->
     StatusCode = resp_code(Context),
     Vars = [
-        {error_code, StatusCode}
+        {error_code, StatusCode},
+        {is_peer_whitelisted, IsPeerWhitelisted}
         | z_context:get_all(Context)
     ],
     Rendered = z_template:render(Template, Vars, Context),
@@ -116,6 +120,7 @@ event(#postback{message={site_flush, [{site, Site}]}}, Context) when is_atom(Sit
     z:flush(z_context:new(Site)),
     render_notice(Site, "The cache is flushed and all dispatch rules are reloaded.", Context);
 event(#postback{message={site_admin, [{site,Site}]}}, Context) when is_atom(Site) ->
+    true = z_auth:is_auth(Context),
     try
         SiteContext = z_context:new(Site),
         case z_dispatcher:url_for(admin, SiteContext) of

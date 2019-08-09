@@ -201,6 +201,8 @@
                     title=_"Find page"
                     callback="window.zAdminBlockConnectDone"
                     autoclose
+                    is_zlink
+                    width="large"
                 }
 %}
 

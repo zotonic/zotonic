@@ -203,33 +203,71 @@ event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
         AfterId -> z_render:insert_after(AfterId, Render, Context)
     end;
 
-event(#postback_notify{message = <<"feedback">>, trigger = <<"dialog-connect-find">>, target=TargetId}, Context) ->
+event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=TargetId}, Context)
+    when Trigger =:= <<"dialog-new-rsc-tab">>; Trigger =:= <<"dialog-connect-find">> ->
     % Find pages matching the search criteria.
+    CreatorId = z_convert:to_integer(z_context:get_q(find_creator_id, Context)),
     SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
     ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
-    Category = z_context:get_q(<<"find_category">>, Context),
-    Predicate = z_context:get_q(<<"predicate">>, Context, <<>>),
-    Text = z_context:get_q(<<"find_text">>, Context),
-    Cats = case Category of
+    Predicate = z_convert:to_binary(z_context:get_q(<<"predicate">>, Context, <<>>)),
+    PredicateId = m_rsc:rid(Predicate, Context),
+    TextL = lists:foldl(
+        fun(Q, Acc) ->
+            case z_context:get_q(Q, Context) of
+                <<>> -> Acc;
+                undefined -> Acc;
+                V -> case Acc of
+                        [] -> V;
+                        _ -> [ V, " ", Acc ]
+                     end
+            end
+        end,
+        [],
+        [ title, new_rsc_title, name_first, name_surname, email ]),
+    Text = iolist_to_binary(TextL),
+    Category = case z_context:get_q(find_category, Context) of
+        undefined -> z_context:get_q(category_id, Context);
+        <<>> -> z_context:get_q(category_id, Context);
+        Cat -> Cat
+    end,
+    Cats = case z_convert:to_binary(Category) of
                 <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
+                <<>> when PredicateId =/= undefined -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<>> -> [];
-                CatId -> [{m_rsc:rid(CatId, Context)}]
+                <<"*">> -> [];
+                CatId -> [ {m_rsc:rid(CatId, Context)} ]
            end,
     Vars = [
+        {creator_id, CreatorId},
         {subject_id, SubjectId},
         {cat, Cats},
+        {cat_exclude, z_context:get_q(cat_exclude, Context)},
         {predicate, Predicate},
-        {text, Text}
-    ]++ case z_context:get_q(find_cg, Context) of
+        {text, Text},
+        {is_multi_cat, length(Cats) > 1},
+        {category_id, case Cats of
+            [{CId}] -> CId;
+            _ -> undefined
+        end},
+        {is_zlink, z_convert:to_bool( z_context:get_q(is_zlink, Context) )}
+    ] ++ case z_context:get_q(find_cg, Context) of
         <<>> -> [];
+        "" -> [];
         undefined -> [];
-        <<"me">> -> [ {creator_id, z_acl:user(Context)} ];
         CgId -> [ {content_group, m_rsc:rid(CgId, Context)}]
     end,
-    z_render:wire([
-        {remove_class, [{target, TargetId}, {class, "loading"}]},
-        {update, [{target, TargetId}, {template, "_action_dialog_connect_tab_find_results.tpl"} | Vars]}
-    ], Context);
+    case Trigger of
+        <<"dialog-connect-find">> ->
+            z_render:wire([
+                {remove_class, [{target, TargetId}, {class, "loading"}]},
+                {update, [{target, TargetId}, {template, "_action_dialog_connect_tab_find_results.tpl"} | Vars]}
+            ], Context);
+        <<"dialog-new-rsc-tab">> ->
+            z_render:wire([
+                {remove_class, [{target, TargetId}, {class, "loading"}]},
+                {update, [{target, TargetId}, {template, "_action_dialog_new_rsc_tab_find_results.tpl"} | Vars]}
+            ], Context)
+    end;
 
 event(#postback{message={admin_connect_select, Args}}, Context) ->
     SelectId = z_context:get_q(<<"select_id">>, Context),
@@ -238,6 +276,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
+    IsConnectToggle = z_convert:to_bool( proplists:get_value(is_connect_toggle, Args) ),
 
     QAction = proplists:get_all_values(action, Args),
     QActions = proplists:get_value(actions, Args, []),
@@ -261,7 +300,12 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
                  z_convert:to_integer(ObjectId0)}
         end,
 
-    case do_link_unlink(IsConnected, SubjectId, Predicate, ObjectId, Callback, Context) of
+    % Only disconnect if connection is not made from tinymce
+    IsUnlink = case IsConnectToggle of
+        false -> false;
+        true -> IsConnected
+    end,
+    case do_link_unlink(IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
             Context2 = case z_convert:to_bool(proplists:get_value(autoclose, Args)) of
                             true -> z_render:dialog_close(Context1);
@@ -311,9 +355,13 @@ get_predicate(P, Context) when is_list(P) ->
 do_link(SubjectId, Predicate, ObjectId, Callback, Context) ->
     do_link_unlink(false, SubjectId, Predicate, ObjectId, Callback, Context).
 
-do_link_unlink(_IsUnlink, _SubjectId, Predicate, ObjectId, Callback, Context)
-    when Predicate =:= ""; Predicate =:= undefined ->
-    ContextP = context_language(Context),
+do_link_unlink(_IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context)
+    when Predicate =:= "";
+         Predicate =:= <<>>;
+         Predicate =:= undefined;
+         SubjectId =:= undefined;
+         ObjectId =:= undefined ->
+     ContextP = context_language(Context),
     Title = m_rsc:p(ObjectId, title, Context),
     Vars = [
             {subject_id, undefined},
@@ -324,17 +372,18 @@ do_link_unlink(_IsUnlink, _SubjectId, Predicate, ObjectId, Callback, Context)
             {title, z_trans:lookup_fallback(Title, Context)}
            ],
     case Callback of
-        undefined ->
-            {ok, Context};
+        undefined -> {ok, Context};
+        "" -> {ok, Context};
+        <<>> -> {ok, Context};
         {CB, Args} ->
             {ok, z_render:wire({script, [{script, [
-                    z_convert:to_binary(CB), $(,
+                    z_sanitize:ensure_safe_js_callback(CB), $(,
                         z_utils:js_object(Vars++Args,Context),
                     $),$;
                 ]}]}, Context)};
-        _ ->
+        CB ->
             {ok, z_render:wire({script, [{script, [
-                    z_convert:to_binary(Callback), $(,
+                    z_sanitize:ensure_safe_js_callback(CB), $(,
                         z_utils:js_object(Vars,Context),
                     $),$;
                 ]}]}, Context)}
@@ -400,8 +449,9 @@ do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId,
             Context
     end,
     case Callback of
-        undefined ->
-            {ok, Context1};
+        undefined -> {ok, Context1};
+        "" -> {ok, Context1};
+        <<>> -> {ok, Context1};
         _ ->
             Vars = [
                     {is_new, IsNew},
@@ -417,13 +467,13 @@ do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId,
             case Callback of
                     {CB, Args} ->
                         {ok, z_render:wire({script, [{script, [
-                                z_convert:to_binary(CB), $(,
+                                 z_sanitize:ensure_safe_js_callback(CB), $(,
                                     z_utils:js_object(Vars++Args,ContextP),
                                 $),$;
                             ]}]}, Context1)};
-                    _ ->
+                    CB ->
                         {ok, z_render:wire({script, [{script, [
-                                z_convert:to_binary(Callback), $(,
+                                 z_sanitize:ensure_safe_js_callback(CB), $(,
                                     z_utils:js_object(Vars,ContextP),
                                 $),$;
                             ]}]}, Context1)}

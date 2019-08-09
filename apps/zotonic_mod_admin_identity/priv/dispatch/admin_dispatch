@@ -1,6 +1,6 @@
 %% -*- mode: erlang -*-
 [
- {admin_user, ["admin", "users"], controller_admin, [{template, "admin_users.tpl"}, {selected, "users"}]},
+ {admin_user, ["admin", "users"], controller_admin, [{template, "admin_users.tpl"}, {selected, "users"}, seo_noindex]},
 
- {identity_verify, ["identity", "verify", idn_id, verify_key], controller_template, [{template, "identity_verify.tpl"}]}
+ {identity_verify, ["identity", "verify", idn_id, verify_key], controller_template, [{template, "identity_verify.tpl"}, seo_noindex]}
 ].

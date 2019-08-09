@@ -1,5 +1,3 @@
 [
-    {admin_import, ["admin", "import"], controller_admin, [
-        {template, "_admin_import.tpl"}
-    ]}
+    {admin_import, ["admin", "import"], controller_admin, [{template, "_admin_import.tpl"}, seo_noindex ]}
 ].

@@ -93,9 +93,8 @@ code_change(_OldVsn, State, _Extra) ->
 
 -spec do_convert(file:filename_all(), #state{}) -> ok.
 do_convert(QueuePath, State) ->
-    Context = z_context:depickle(State#state.pickled_context),
     Upload = State#state.upload,
-    case video_convert(QueuePath, Upload#media_upload_preprocess.mime, Context) of
+    case video_convert(QueuePath, Upload#media_upload_preprocess.mime) of
         {ok, TmpFile} ->
             insert_movie(TmpFile, State);
         Error ->
@@ -153,9 +152,9 @@ remove_task(State) ->
     Context = z_context:new(State#state.site),
     mod_video:remove_task(State#state.queue_filename, Context).
 
-video_convert(QueuePath, Mime, Context) ->
-    Info = mod_video:video_info(QueuePath, Context),
-    video_convert_1(QueuePath, proplists:get_value(orientation, Info), Mime, Context).
+video_convert(QueuePath, Mime) ->
+    Info = mod_video:video_info(QueuePath),
+    video_convert_1(QueuePath, proplists:get_value(orientation, Info), Mime).
 
 -define(CMDLINE,
         "ffmpeg -i "
@@ -170,41 +169,78 @@ video_convert(QueuePath, Mime, Context) ->
         " -preset medium "
         " -metadata:s:v:0 rotate=0 ").
 
--spec video_convert_1(file:filename(), integer(), string() | binary(), z:context()) ->
+-spec video_convert_1(file:filename(), integer(), string() | binary()) ->
     {ok, file:filename_all()} | term().
-video_convert_1(QueuePath, Orientation, _Mime, Context) ->
-    Cmdline = case m_config:get_value(mod_video, ffmpeg_cmdline, Context) of
+video_convert_1(QueuePath, Orientation, Mime) ->
+    Cmdline = case z_config:get(ffmpeg_cmdline) of
                   undefined -> ?CMDLINE;
                   <<>> -> ?CMDLINE;
-                  [] -> ?CMDLINE;
+                  "" -> ?CMDLINE;
                   CmdLineCfg -> z_convert:to_list(CmdLineCfg)
               end,
-    TmpFile = z_tempfile:new(),
+    jobs:run(video_jobs,
+             fun() ->
+                TransposeOption = mod_video:orientation_to_transpose(Orientation),
+                case maybe_reset_metadata(TransposeOption, QueuePath, Mime) of
+                    {ok, QueuePath1} ->
+                        TmpFile = z_tempfile:new(),
+                        FfmpegCmd = z_convert:to_list(
+                                      iolist_to_binary(
+                                        [io_lib:format(Cmdline, [z_utils:os_filename(QueuePath1)]),
+                                         " ",
+                                         TransposeOption,
+                                         " ",
+                                         z_utils:os_filename(TmpFile)
+                                        ])),
+
+                        lager:debug("Video convert: ~p", [FfmpegCmd]),
+                        case os:cmd(FfmpegCmd) of
+                            [] ->
+                                case filelib:file_size(TmpFile) of
+                                    0 ->
+                                        lager:warning("Video convert error: (empty result file)  [queue: ~p]", [QueuePath]),
+                                        {error, convert};
+                                    _ ->
+                                        {ok, TmpFile}
+                                end;
+                            Other ->
+                                lager:warning("Video convert error: ~p [queue: ~p]", [Other, QueuePath]),
+                                {error, Other}
+                        end;
+                    {error, _} = Error ->
+                        Error
+                end
+             end).
+
+
+  -define(CMDLINE_RESETMETA,
+        "ffmpeg -i "
+        "~s"
+        " -strict -2 "
+        " -loglevel fatal "
+        " -codec copy "
+        " -metadata:s:v:0 rotate=0 ").
+
+maybe_reset_metadata("", QueuePath, _Mime) ->
+    {ok, QueuePath};
+maybe_reset_metadata(_TransposeOption, QueuePath, Mime) ->
+    TmpFile = z_tempfile:new( z_convert:to_list( z_media_identify:extension(Mime) ) ),
     FfmpegCmd = z_convert:to_list(
                   iolist_to_binary(
-                    [io_lib:format(Cmdline, [z_utils:os_filename(QueuePath)]),
-                     " ",
-                     mod_video:orientation_to_transpose(Orientation),
+                    [io_lib:format(?CMDLINE_RESETMETA, [z_utils:os_filename(QueuePath)]),
                      " ",
                      z_utils:os_filename(TmpFile)
                     ])),
-    jobs:run(video_jobs,
-            fun() ->
-                    lager:debug("Video convert: ~p", [FfmpegCmd]),
-                    case os:cmd(FfmpegCmd) of
-                        [] ->
-                            case filelib:file_size(TmpFile) of
-                                0 ->
-                                    lager:warning("Video convert error: (empty result file)  [queue: ~p] command ~p",
-                                                  [QueuePath, FfmpegCmd]),
-                                    {error, convert};
-                                _ ->
-                                    lager:debug("Video convert ok: ~p", [TmpFile]),
-                                    {ok, TmpFile}
-                            end;
-                        Other ->
-                            lager:warning("Video convert error: ~p [queue: ~p] command ~p",
-                                          [Other, QueuePath, FfmpegCmd]),
-                            {error, Other}
-                    end
-            end).
+    case os:cmd(FfmpegCmd) of
+        [] ->
+            case filelib:file_size(TmpFile) of
+                0 ->
+                    lager:warning("Video convert error: (empty result file during metadata reset)  [queue: ~p]", [QueuePath]),
+                    {error, convert};
+                _ ->
+                    {ok, TmpFile}
+            end;
+        Other ->
+            lager:warning("Video convert error: (during metadata reset) ~p [queue: ~p]", [Other, QueuePath]),
+            {error, Other}
+    end.

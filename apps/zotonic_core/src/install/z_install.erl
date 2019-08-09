@@ -128,7 +128,7 @@ model_pgsql() ->
       is_featured boolean NOT NULL DEFAULT false,
       is_protected boolean NOT NULL DEFAULT false,
       is_dependent boolean NOT NULL DEFAULT false,
-      publication_start timestamp with time zone NOT NULL DEFAULT now(),
+      publication_start timestamp with time zone,
       publication_end timestamp with time zone NOT NULL DEFAULT '9999-06-01 00:00:00'::timestamp with time zone,
       content_group_id int,
       creator_id int,

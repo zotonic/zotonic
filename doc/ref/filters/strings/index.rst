@@ -9,6 +9,7 @@ Strings
    ../filter_append
    ../filter_capfirst
    ../filter_center
+   ../filter_log_format_stack
    ../filter_format_integer
    ../filter_format_number
    ../filter_format_price

@@ -60,6 +60,8 @@
 %%      All headers are in lowercase.
 -record(security_headers, { headers :: list( {binary(), binary()} ) }).
 
+%% @doc Set CORS headers on the HTTP response.
+-record(cors_headers, { headers :: list( {binary(), binary()} ) }).
 
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
@@ -515,6 +517,12 @@
     action :: view | update | delete | insert | atom(),
     object :: term(),
     prop :: atom()
+}).
+
+%% @doc Filter the properties of a resource update, this is done on the raw data
+%% A foldr over the update property list.
+-record(acl_rsc_update_check, {
+    id :: m_rsc:resource_id() | 'insert_rsc'
 }).
 
 %% @doc Set the context to a typical authenticated user. Used by m_acl.erl

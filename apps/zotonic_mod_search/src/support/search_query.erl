@@ -75,7 +75,7 @@ parse_request_args([{K,V}|Rest], Acc) when is_binary(K) ->
             end
     end;
 parse_request_args([{K,V}|Rest], Acc) ->
-    parse_request_args([{z_convert:to_binary(K), V}|Rest], Acc).
+    parse_request_args([{z_convert:to_binary(K), z_convert:to_binary(V)}|Rest], Acc).
 
 %% Parses a query text. Every line is an argument; of which the first
 %% '=' separates argument key from argument value.
@@ -374,9 +374,14 @@ parse_query([{modifier_id, Integer}|Rest], Context, Result) ->
 
 %% qargs
 %% Add all query terms from the current query arguments
-parse_query([{qargs, true}|Rest], Context, Result) ->
-    Terms = parse_request_args(qargs(Context)),
-    parse_query(Terms++Rest, Context, Result);
+parse_query([{qargs, Boolean}|Rest], Context, Result) ->
+    case z_convert:to_bool(Boolean) of
+        true ->
+            Terms = parse_request_args(qargs(Context)),
+            parse_query(Terms++Rest, Context, Result);
+        false ->
+            parse_query(Rest, Context, Result)
+    end;
 
 %% query_id=<rsc id>
 %% Get the query terms from given resource ID, and use those terms.
@@ -667,9 +672,9 @@ add_order([C,$s,$e,$q], Search) when C =:= $-; C =:= $+ ->
     end;
 add_order("edge."++_ = Order, Search) ->
     add_order([$+|Order], Search);
-add_order([C,$e,$d,$g,$e,$.|Order], Search) when C =:= $-; C =:= $+ ->
+add_order([C,$e,$d,$g,$e,$.|Column], Search) when C =:= $-; C =:= $+ ->
     case proplists:get_value(edge, Search#search_sql.tables) of
-        L when is_list(L) -> add_order([C|L]++[$.|Order], Search);
+        L when is_list(L) -> add_order([C|L]++[$.|Column], Search);
         undefined -> Search
     end;
 add_order(Sort, Search) ->
@@ -678,12 +683,18 @@ add_order(Sort, Search) ->
                      "random()";
                  _ ->
                      case Sort of
-                         [$-|F1] -> sql_safe(F1) ++ " DESC";
-                         [$+|F1] -> sql_safe(F1) ++ " ASC";
-                         _ -> sql_safe(Sort) ++ " ASC"
+                         [$-|F1] -> maybe_ref_rsc(sql_safe(F1)) ++ " DESC";
+                         [$+|F1] -> maybe_ref_rsc(sql_safe(F1)) ++ " ASC";
+                         _ -> maybe_ref_rsc(sql_safe(Sort)) ++ " ASC"
                      end
              end,
     add_order_unsafe(Clause, Search).
+
+maybe_ref_rsc(Sort) ->
+    case lists:member($., Sort) of
+        false -> "rsc." ++ Sort;
+        true -> Sort
+    end.
 
 %% Add an ORDER clause without checking on SQL safety.
 add_order_unsafe(Clause, Search) ->

@@ -540,10 +540,10 @@ search({events, [{'end', End}, {start, Start}]}, OffsetLimit, Context) ->
 search(_, _, _) ->
     undefined.
 
-
+-spec trim( binary() | string() | #trans{} | undefined, z:context() ) -> binary().
 trim(undefined, _Context) -> <<>>;
 trim(S, _Context) when is_binary(S) -> z_string:trim(S);
-trim({trans, _} = Tr, Context) -> trim(z_trans:lookup_fallback(Tr, Context), Context);
+trim(#trans{} = Tr, Context) -> trim(z_trans:lookup_fallback(Tr, Context), Context);
 trim(S, Context) -> trim(z_convert:to_binary(S), Context).
 
 %% @doc Expand a search string like "hello wor" to a PostgreSQL tsquery string.

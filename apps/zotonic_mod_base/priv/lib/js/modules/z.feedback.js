@@ -1,17 +1,17 @@
 /* feedback js
 ----------------------------------------------------------
 
-@package:	Zotonic 2011	
+@package:	Zotonic 2011-2019
 @Author:	Marc Worrell <marc@worrell.nl>
 
-Copyright 2011 Marc Worrell
+Copyright 2011-2019 Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
- 
+
 http://www.apache.org/licenses/LICENSE-2.0
- 
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,10 +27,10 @@ $.widget("ui.feedback",
 		var self = this;
 		z_ensure_id(this.element);
 		$('#'+this.options.trigger)
-			.bind('keyup', function() { self.update(); })
-			.bind('change', function() { self.update(); });
+			.on('keyup', function() { self.update(); })
+			.on('change', function() { self.update(); });
 	},
-	
+
 	update: function() 
 	{
 		if (this.input_updater != undefined)
@@ -38,7 +38,7 @@ $.widget("ui.feedback",
 			clearInterval(this.input_updater);
 			this.input_updater = undefined;
 		}
-		
+
 		var self = this;
 		this.input_updater = setInterval(function()
 		{
@@ -50,7 +50,7 @@ $.widget("ui.feedback",
 				self.input_updater = undefined;
 			} else {
 				if (trigger.prop('tagName').toLowerCase() == 'form') {
-					args = trigger.formToArray();
+					args = trigger.formToArray({ all: true });
 				} else {
 					var v = $.fieldValue(trigger.get(0), true);
 					if (v && v.constructor == Array) {
@@ -84,7 +84,7 @@ $.widget("ui.feedback",
 							notify_args[k] = self.options[k];
 						}
 					}
-					
+
 					if (typeof self.previous_feedback == 'undefined' || !is_equal(self.previous_feedback, notify_args)) {
 						self.element.addClass('loading');
 						self.previous_feedback = notify_args;
@@ -99,5 +99,5 @@ $.widget("ui.feedback",
 $.ui.feedback.defaults = {
 	delegate: undefined,
 	trigger: undefined,
-	timeout: 400
+	timeout: 600
 }

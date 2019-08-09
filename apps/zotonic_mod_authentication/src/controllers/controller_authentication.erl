@@ -29,6 +29,8 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-define(RESET_TOKEN_MAXAGE, 48*3600).
+
 
 allowed_methods(Context) ->
     {[ <<"POST">> ], Context}.
@@ -132,8 +134,16 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
     AuthOptions = z_context:get(auth_options, Context, #{}),
     case z_auth:logon_switch(UserId, Context) of
         {ok, Context1} ->
-            lager:warning("[~p] Authentication: user ~p is switching to user ~p",
-                          [ z_context:site(Context), z_acl:user(Context), UserId ]),
+            z:warning(
+                "Sudo as user ~p (~s) by user ~p (~s)",
+                [
+                    UserId, z_convert:to_binary( m_rsc:p_no_acl(UserId, email, Context) ),
+                    z_acl:user(Context), z_convert:to_binary( m_rsc:p_no_acl(z_acl:user(Context), email, Context) )
+                ],
+                [
+                    {module, ?MODULE}, {line, ?LINE}, {auth_user_id, UserId}
+                ],
+                Context),
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, AuthOptions, Context1),
             status(Payload, Context2);
         {error, _Reason} ->
@@ -223,10 +233,16 @@ reset(_Payload, Context) ->
 reset_1(UserId, Username, Password, Context) ->
     case auth_postcheck(UserId, z_context:get_q_all(Context), Context) of
         ok ->
-            ContextLoggedon = z_acl:logon(UserId, Context),
-            m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(ContextLoggedon)),
-            m_identity:delete_by_type(UserId, logon_reminder_secret, ContextLoggedon),
-            ok;
+            case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
+                ok ->
+                    ContextLoggedon = z_acl:logon(UserId, Context),
+                    delete_reminder_secret(UserId, ContextLoggedon),
+                    ok;
+                {error, password_match} ->
+                    {error, password_change_match};
+                {error, _} ->
+                    {error, error}
+            end;
         {error, need_passcode} ->
             {error, need_passcode};
         {error, passcode} ->
@@ -320,10 +336,30 @@ check_reminder_secret(_Payload, _Context) ->
     }.
 
 get_by_reminder_secret(Code, Context) ->
-    case m_identity:lookup_by_type_and_key("logon_reminder_secret", Code, Context) of
-        undefined -> undefined;
-        Row -> {ok, proplists:get_value(rsc_id, Row)}
+    MaxAge = case z_convert:to_integer( m_config:get_value(mod_authentication, reset_token_maxage, Context) ) of
+        undefined -> ?RESET_TOKEN_MAXAGE;
+        MA -> MA
+    end,
+    case m_identity:lookup_by_type_and_key(logon_reminder_secret, Code, Context) of
+        undefined ->
+            undefined;
+        Row ->
+            {rsc_id, UserId} = proplists:lookup(rsc_id, Row),
+            {modified, Modified} = proplists:lookup(modified, Row),
+            ModifiedTm = z_datetime:datetime_to_timestamp(Modified),
+            case z_datetime:timestamp() < ModifiedTm + MaxAge of
+                true ->
+                    {ok, UserId};
+                false ->
+                    lager:info("Accessing expired reminder secret for user ~p", [UserId]),
+                    delete_reminder_secret(UserId, Context),
+                    undefined
+            end
     end.
+
+%% @doc Delete the reminder secret of the user
+delete_reminder_secret(Id, Context) ->
+    m_identity:delete_by_type(Id, logon_reminder_secret, Context).
 
 
 auth_precheck(Username, Context) when is_binary(Username) ->

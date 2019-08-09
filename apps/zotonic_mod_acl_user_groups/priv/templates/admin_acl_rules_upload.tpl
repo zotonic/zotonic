@@ -17,10 +17,10 @@
 	</div>
 
     <div class="row header">
-    	<div class="col-md-2">
+    	<div class="col-md-3">
     		<label>{_ ACL user group _}</label>
     	</div>
-    	<div class="col-md-3">
+    	<div class="col-md-2">
     		<label>{_ Maximum upload size _}</label>
     	</div>
     	<div class="col-md-7">
@@ -38,11 +38,11 @@
 		    {% for cg in m.hierarchy.acl_user_group.tree_flat %}
 		    	{% with cg.id as id %}
 				    <div class="row">
-				    	<div class="col-md-2">
+				    	<div class="col-md-3">
 				    		<p>{{ cg.indent }}{{ id.title }}</p>
 				    		<input type="hidden" name="id" value="{{ id }}">
 				    	</div>
-				    	<div class="col-md-3">
+				    	<div class="col-md-2">
                             {% with id.acl_upload_size|default:m.acl_rule.default_upload_size as sz %}
 				    		<select "form-control" name="size-{{ id }}" id="{{ #size.id }}">
 				    			<option value="0">0</option>
@@ -82,14 +82,18 @@
 	{% else %}
 	    {% for cg in m.hierarchy.acl_user_group.tree_flat %}
 		    <div class="row">
-		    	<div class="col-md-2">
+		    	<div class="col-md-3">
 		    		<p>{{ cg.indent }}{{ cg.id.title }}</p>
 		    	</div>
-		    	<div class="col-md-4">
+		    	<div class="col-md-2">
 		    		{{ (cg.id.acl_upload_size*1024*1024)|filesizeformat }}
 		    	</div>
-		    	<div class="col-md-4">
-		    		{{ cg.id.mime_allowed|escape }}
+		    	<div class="col-md-7">
+                    {% if cg.id.acl_mime_allowed %}
+                        {{ cg.id.acl_mime_allowed }}
+                    {% else %}
+                        <span class="text-muted">{{ m.acl_rule.default_mime_allowed }}</span>
+                    {% endif %}
 		    	</div>
 		    </div>
 	    {% endfor %}

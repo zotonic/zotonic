@@ -27,6 +27,7 @@
     observe/3, observe/4, observe/5,
     detach/2, detach/3,
     detach_all/1, detach_all/2,
+    get_observers/1,
     get_observers/2,
     notify/2,
     notify_sync/2,
@@ -42,7 +43,6 @@
     await_exact/2,
     await_exact/3
 ]).
-
 
 -include_lib("zotonic.hrl").
 
@@ -89,6 +89,20 @@ detach(Event, OwnerPid, Site) when is_atom(Site), is_pid(OwnerPid) ->
     zotonic_notifier:detach({Site, msg_event(Event)}, OwnerPid);
 detach(Event, OwnerPid, Context) ->
     detach(Event, OwnerPid, z_context:site(Context)).
+
+%% @doc List all observers for all events for the site.
+-spec get_observers( z:context() ) -> list( {atom(), list({integer(), zotonic_notifier:observer()})} ).
+get_observers(Context) ->
+    Site = z_context:site(Context),
+    List = lists:filtermap(
+        fun
+            ({{S, Event}, Obs}) when S =:= Site ->
+                {true, {Event, Obs}};
+            (_) ->
+                false
+        end,
+        zotonic_notifier:get_observers('_')),
+    lists:sort(List).
 
 %% @doc Return all observers for a particular event
 get_observers(Event, Site) when is_atom(Site) ->

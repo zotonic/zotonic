@@ -35,7 +35,7 @@
         get_config/1
     ]).
 
--define(LINKEDIN_SCOPE, "r_basicprofile r_emailaddress").
+-define(LINKEDIN_SCOPE, "r_liteprofile r_emailaddress").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 

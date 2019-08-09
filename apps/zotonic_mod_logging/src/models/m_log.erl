@@ -27,6 +27,8 @@
 -export([
     m_get/3,
     get/2,
+    search_query/2,
+    periodic_cleanup/1,
     install/1
 ]).
 
@@ -63,6 +65,57 @@ list(Context) ->
 merge_props(R) ->
     proplists:delete(props, R) ++ proplists:get_value(props, R, []).
 
+
+-spec search_query( list(), z:context() ) -> #search_sql{}.
+search_query(Args, _Context) ->
+    % Filter on log type
+    W1 = case z_convert:to_binary( proplists:get_value(type, Args, "warning") ) of
+        <<"error">> -> " type = 'error' ";
+        <<"info">> -> " type <> 'debug' ";
+        <<"debug">> -> "";
+        _ -> " type in ('warning', 'error') "
+    end,
+    As1 = [],
+    % Filter on user-id
+    {W2, As2} = case proplists:get_value(user, Args) of
+        undefined -> {W1, As1};
+        "" -> {W1, As1};
+        <<>> -> {W1, As1};
+        User ->
+            try
+                WU = case W1 of
+                    "" -> " user_id = $" ++ integer_to_list(length(As1) + 1);
+                    _ -> W1 ++ " and user_id = $" ++ integer_to_list(length(As1) + 1)
+                end,
+                {WU, As1 ++ [ z_convert:to_integer(User) ]}
+            catch
+                _:_ ->
+                    {W1, As1}
+            end
+    end,
+    % SQL search question
+    #search_sql{
+        select = "id",
+        from = "log",
+        where = W2,
+        order = "id DESC",
+        args = As2,
+        assoc = false
+    }.
+
+
+%% @doc Periodic cleanup of max 10K items older than 3 months
+periodic_cleanup(Context) ->
+    z_db:q("
+        delete from log
+        where id in (
+            select id
+            from log
+            where created < now() - interval '3 months'
+            limit 10000
+        )",
+        Context,
+        300000).
 
 install(Context) ->
     case z_db:table_exists(log, Context) of

@@ -16,14 +16,6 @@
 			controls="controls" preload="none"
 			width="{{ props.width }}" height="{{ props.height }}">
 		<source type="{{ props.mime }}" src="{% url media_inline star=props.filename %}" />
-		<object style="max-width: 100%; height: auto;"
-				width="{{ props.width }}" height="{{ props.height }}"
-				type="application/x-shockwave-flash"
-				data="{% url lib star='me/flashmediaelement.swf' %}">
-			<param name="movie" value="{% url lib star='me/flashmediaelement.swf' %}" />
-			<param name="flashvars" value="controls=true&amp;file={% url media_inline star=props.filename %}" />
-			<img src="{% image_url props.id width=props.width height=props.height %}" width="{{ props.width }}" height="{{ props.height }}" title="{_ No video playback capabilities _}" />
-		</object>
 	</video>
 {% endif %}
 {% endwith %}

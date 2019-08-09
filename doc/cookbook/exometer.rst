@@ -19,7 +19,7 @@ The default erlang.config comes with a number of pre-defined exometer metrics:
 
 .. code-block:: erlang
 
-    {exometer, [{predefined, [
+    {exometer_core, [{predefined, [
         {[erlang, memory], {function, erlang, memory, [], value, []}, []},
         {[erlang, system_info], {function, erlang, system_info, ['$dp'], value, [process_count]}, []},
         {[erlang, statistics], {function, erlang, statistics, ['$dp'], value, [run_queue]}, []},

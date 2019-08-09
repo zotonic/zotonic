@@ -20,7 +20,10 @@
        {% endblock %}
     {% endblock %}
 
+    {% all include "_html_body.tpl" %}
+
     {% block _js_include %}
     {% endblock%}
+
   </body>
 </html>

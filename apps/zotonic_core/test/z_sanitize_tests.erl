@@ -5,7 +5,7 @@
 youtube_test() ->
 	Context = z_context:new(zotonic_site_testsandbox),
 	In  = <<"<iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/2RXp3r2gb3A\" frameborder=\"0\" allowfullscreen></iframe>">>,
-	Out = <<"<iframe src=\"//www.youtube.com/embed/2RXp3r2gb3A\" width=\"560\" height=\"315\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>">>,
+	Out = <<"<iframe src=\"https://www.youtube.com/embed/2RXp3r2gb3A\" width=\"560\" height=\"315\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>">>,
 	?assertEqual(Out, z_sanitize:html(In, Context)).
 
 youtube_object_test() ->
@@ -43,6 +43,21 @@ zmedia_test() ->
     In = <<"<!-- z-media 123 { \"align\":\"leftx\", \"caption\":\"&--\\u003e\" } -->">>,
     Out = <<"<!-- z-media 123 {\"align\":\"block\",\"caption\":\"&→\"} -->"/utf8>>,
     ?assertEqual(Out, z_sanitize:html(In, Context)).
+
+csv_test() ->
+    sanitize_csv(<<"1.0,2,3,\"4\",-1,-1+3\n">>, <<"\"1.0\",\"2\",\"3\",\"4\",\"-1\",\"'-1+3\"\r\n">>),
+    sanitize_csv(<<"1.0;2;3;\"4\";-1;-1+3\n">>, <<"\"1.0\";\"2\";\"3\";\"4\";\"-1\";\"'-1+3\"\r\n">>),
+    sanitize_csv(<<"\"=sum(a1;b1)\"\r\n">>, <<"\"\'=sum(a1;b1)\"\r\n">>),
+    sanitize_csv(<<"1\n2\n@1">>, <<"\"1\"\r\n\"2\"\r\n\"'@1\"\r\n">>).
+
+sanitize_csv(In, Out) ->
+    InFile = z_tempfile:new(".csv"),
+    OutFile = z_tempfile:new(".csv"),
+    ok = file:write_file(InFile, In),
+    ok = z_csv_writer:sanitize(InFile, OutFile),
+    {ok, Out} = file:read_file(OutFile),
+    file:delete(InFile),
+    file:delete(OutFile).
 
 svg_imagetragick_test() ->
     A = z_svg:sanitize(<<"

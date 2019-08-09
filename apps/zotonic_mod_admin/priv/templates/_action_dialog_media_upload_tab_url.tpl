@@ -20,7 +20,7 @@
 		</p>
 
 		<div class="form-group row">
-		    <label class="control-label col-md-3" for="upload_file">{_ URL or Embed Code_}</label>
+		    <label class="control-label col-md-3" for="url">{_ Media URL _}</label>
             <div class="col-md-9">
 		        <textarea type="text" class="col-lg-4 col-md-4 form-control do_autofocus" id="url" name="url" rows="3">{{ medium.media_import|escape }}</textarea>
 		        {% validate id="url" type={presence} %}

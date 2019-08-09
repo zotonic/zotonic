@@ -17,5 +17,6 @@
 
 require_zotonic_not_running
 
-$ERL -pa $PA $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -noinput +B \
-    -eval 'zotonic_launcher_config:load_configs(), case zotonic_filehandler_compile:all() of ok -> halt(0); error -> halt(1) end.'
+$ERL -pa $PA $NAME_ARG ${NODENAME}_compile@$NODEHOST \
+    $(find_config_arg erlang.config) $(find_config_arg zotonic.config) -noinput +B \
+    -s zotonic_filehandler_compile -node $NODENAME@$NODEHOST

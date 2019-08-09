@@ -25,13 +25,17 @@ match(undefined, _Re, _Context) ->
     false;
 match(_, undefined, _Context) ->
     false;
-match(S, Re, Context) ->
-    S1 = z_convert:to_binary(S, Context),
-    Re1 = z_convert:to_binary(Re, Context),
-    case re:run(S1, Re1) of
-        {match, _} ->
-            true;
-        nomatch ->
-            false
+match(S0, Re0, _Context) ->
+    S = z_convert:to_binary(S0),
+    Re = z_convert:to_binary(Re0),
+    try
+        case re:run(S, Re) of
+            {match, _} ->
+                true;
+            nomatch ->
+                false
+        end
+    catch
+        error:badarg ->
+            binary:match(S, Re) =/= nomatch
     end.
-

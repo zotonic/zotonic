@@ -620,6 +620,11 @@ dialog(Title, Template, Vars, Context) ->
             end,
     Args3 = case proplists:get_value(backdrop, Vars) of
                 undefined -> Args2;
+                "true" -> [{backdrop, true} | Args2 ];
+                <<"true">> -> [{backdrop, true} | Args2 ];
+                "false" -> [{backdrop, false} | Args2 ];
+                <<"false">> -> [{backdrop, false} | Args2 ];
+                static -> [ {backdrop, <<"static">>} | Args2 ];
                 Backdrop -> [{backdrop, Backdrop} | Args2]
             end,
     Args4 = case proplists:get_value(center, Vars) of

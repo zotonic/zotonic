@@ -148,8 +148,8 @@ send_reminder(Id, Email, Context) ->
 
 %% @doc Set the unique reminder code for the account.
 set_reminder_secret(Id, Context) ->
-    Code = z_ids:id(),
-    m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),
+    Code = z_ids:id(24),
+    ok = m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),
     Code.
 
 

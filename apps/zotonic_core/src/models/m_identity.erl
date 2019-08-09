@@ -39,6 +39,7 @@
     set_username_pw/4,
     ensure_username_pw/2,
     check_username_pw/3,
+    check_username_pw/4,
     hash/1,
     needs_rehash/1,
     hash_is_equal/2,
@@ -176,12 +177,23 @@ get_username(RscId, Context) when is_integer(RscId) ->
     ).
 
 
+%% @doc Check if the user is allowed to change the username of a resource.
+-spec is_allowed_set_username( m_rsc:resource_id(), z:context() ) -> boolean().
+is_allowed_set_username(Id, Context) when is_integer(Id) ->
+    z_acl:is_admin(Context)
+    orelse z_acl:is_allowed(use, mod_admin_identity, Context)
+    orelse (z_acl:is_allowed(update, Id, Context) andalso Id =:= z_acl:user(Context)).
+
+
 %% @doc Delete an username from a resource.
--spec delete_username(m_rsc:resource(), #context{}) -> ok | {error, eacces}.
-delete_username(1, _Context) ->
-    {error, admin_username_cannot_be_deleted};
+-spec delete_username(m_rsc:resource() | undefined, z:context()) -> ok | {error, eacces | enoent}.
+delete_username(undefined, _Context) ->
+    {error, enoent};
+delete_username(1, Context) ->
+    lager:warning("Trying to delete admin username (1) by ~p", [ z_acl:user(Context) ]),
+    {error, eacces};
 delete_username(RscId, Context) when is_integer(RscId) ->
-    case z_acl:is_allowed(delete, RscId, Context) orelse z_acl:is_allowed(update, RscId, Context) of
+    case is_allowed_set_username(RscId, Context)  of
         true ->
             z_db:q(
                 "delete from identity where rsc_id = $1 and type = 'username_pw'",
@@ -198,35 +210,46 @@ delete_username(RscId, Context) when is_integer(RscId) ->
             ok;
         false ->
             {error, eacces}
-    end.
-
+    end;
+delete_username(Id, Context) ->
+    delete_username( m_rsc:rid(Id, Context), Context ).
 
 %% @doc Change the username of the resource id, only possible if there is
 %% already an username/password set
-%% @spec set_username(ResourceId, Username, Context) -> ok | {error, Reason}
+-spec set_username( m_rsc:resource() | undefined, binary() | string(), z:context()) -> ok | {error, eacces | enoent | eexist}.
+set_username(undefined, _Username, _Context) ->
+    {error, enoent};
+set_username(1, _Username, Context) ->
+    lager:warning("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
+    {error, eacces};
 set_username(Id, Username, Context) when is_integer(Id) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
+    case is_allowed_set_username(Id, Context) of
         true ->
-            Username1 = z_string:to_lower(Username),
+            Username1 = z_string:to_lower( z_convert:to_binary(Username) ),
             case is_reserved_name(Username1) of
                 true ->
                     {error, eexist};
                 false ->
                     F = fun(Ctx) ->
-                        UniqueTest = z_db:q1(
-                            "select count(*) from identity where type = 'username_pw' "
-                                ++ "and rsc_id <> $1 and key = $2",
-                            [m_rsc:rid(Id, Context), Username1],
+                        UniqueTest = z_db:q1("
+                            select count(*)
+                            from identity
+                            where type = 'username_pw'
+                              and rsc_id <> $1 and key = $2",
+                            [Id, Username1],
                             Ctx
                         ),
                         case UniqueTest of
                             0 ->
-                                case z_db:q(
-                                    "update identity set key = $2 where rsc_id = $1 "
-                                        ++ "and type = 'username_pw'",
-                                    [m_rsc:rid(Id, Context), Username1],
-                                    Ctx
-                                ) of
+                                case z_db:q("
+                                        update identity
+                                        set key = $2,
+                                            modified = now()
+                                        where rsc_id = $1
+                                          and type = 'username_pw'",
+                                        [Id, Username1],
+                                        Ctx)
+                                of
                                     1 -> ok;
                                     0 -> {error, enoent};
                                     {error, _} ->
@@ -236,31 +259,85 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                                 {error, eexist}
                         end
                     end,
-                    z_db:transaction(F, Context)
+                    case z_db:transaction(F, Context) of
+                        ok ->
+                            z:info(
+                                "Change of username for user ~p (~s)",
+                                [ Id, Username1 ],
+                                [ {module, ?MODULE} ],
+                                Context),
+                            z_mqtt:publish(
+                                [ <<"model">>, <<"identity">>, <<"event">>, Id, <<"username_pw">> ],
+                                #{
+                                    id => Id,
+                                    type => <<"username_pw">>
+                                },
+                                Context),
+                            z_depcache:flush(Id, Context),
+                            ok;
+                        {rollback, {error, _} = Error, _Trace} ->
+                            Error;
+                        {error, _} = Error ->
+                            Error
+                    end
             end;
         false ->
             {error, eacces}
-    end.
+    end;
+set_username(Id, Username, Context) ->
+    set_username( m_rsc:rid(Id, Context), Username, Context ).
 
 
 %% @doc Set the username/password of a resource.  Replaces any existing username/password.
--spec set_username_pw(m_rsc:resource(), binary()|string(), binary()|string(), #context{}) -> ok | {error, Reason :: term()}.
-set_username_pw(1, _, _, _) ->
-    {error, admin_password_cannot_be_set};
+-spec set_username_pw(m_rsc:resource() | undefined, binary()|string(), binary()|string(), z:context()) -> ok | {error, Reason :: term()}.
+set_username_pw(undefined, _, _, _) ->
+    {error, enoent};
+set_username_pw(1, _, _, Context) ->
+    lager:warning("Trying to set admin username (1) by ~p", [ z_acl:user(Context) ]),
+    {error, eacces};
 set_username_pw(Id, Username, Password, Context)  when is_integer(Id) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:is_allowed(update, Id, Context) of
+    case is_allowed_set_username(Id, Context) of
         true ->
             Username1 = z_string:trim(z_string:to_lower(Username)),
-            set_username_pw_1(m_rsc:rid(Id, Context), Username1, Password, Context);
+            IsForceDifferent = z_convert:to_bool( m_config:get_value(site, password_force_different, Context) ),
+            set_username_pw_1(IsForceDifferent, m_rsc:rid(Id, Context), Username1, Password, Context);
         false ->
             {error, eacces}
-    end.
+    end;
+set_username_pw(Id, Username, Password, Context) ->
+    set_username_pw(m_rsc:rid(Id, Context), Username, Password, Context).
 
-set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
+set_username_pw_1(true, Id, Username, Password, Context) ->
+    case check_username_pw_1(Username, Password, Context) of
+        {ok, _} ->
+            {error, password_match};
+        {error, E} when E =:= nouser; E =:= password ->
+            set_username_pw_2(Id, Username, Password, Context);
+        {error, _} = Error ->
+            Error
+    end;
+set_username_pw_1(false, Id, Username, Password, Context) when is_integer(Id) ->
+    set_username_pw_2(Id, Username, Password, Context).
+
+
+set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
     Hash = hash(Password),
-    case z_db:transaction(fun(Ctx) ->
-        set_username_pw_trans(Id, Username, Hash, Ctx) end, Context) of
-        ok ->
+    case z_db:transaction(fun(Ctx) -> set_username_pw_trans(Id, Username, Hash, Ctx) end, Context) of
+        {ok, S} ->
+            case S of
+                new ->
+                    z:info(
+                        "New username/password for user ~p (~s)",
+                        [ Id, Username ],
+                        [ {module, ?MODULE} ],
+                        Context);
+                exists ->
+                    z:info(
+                        "Change of username/password for user ~p (~s)",
+                        [ Id, Username ],
+                        [ {module, ?MODULE} ],
+                        Context)
+            end,
             reset_auth_tokens(Id, Context),
             z_depcache:flush(Id, Context),
             z_depcache:flush({idn, Id}, Context),
@@ -273,10 +350,12 @@ set_username_pw_1(Id, Username, Password, Context) when is_integer(Id) ->
                 Context),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
-            lager:error("set_username_pw error for ~p, setting username ~p: ~p",
-                [Username, ErrTrace]),
+            lager:error("set_username_pw error for ~p, setting username. ~p: ~p",
+                [Username, Error, ErrTrace]),
             Error;
         {error, _} = Error ->
+            lager:error("set_username_pw error for ~p, setting username. ~p",
+                        [Username, Error]),
             Error
     end.
 
@@ -307,7 +386,7 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                             1 = z_db:q(
                                 "insert into identity (rsc_id, is_unique, is_verified, type, key, propb)
                                 values ($1, true, true, 'username_pw', $2, $3)",
-                                [Id, Username, {term, Hash}],
+                                [Id, Username, ?DB_PROPS(Hash)],
                                 Context
                             ),
                             z_db:q(
@@ -315,13 +394,13 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                                 [Id],
                                 Context
                             ),
-                            ok;
+                            {ok, new};
                         _Other ->
                             {rollback, {error, eexist}}
                     end
             end;
         1 ->
-            ok
+             {ok, exists}
     end.
 
 %% @doc Ensure that the user has an associated username and password
@@ -525,8 +604,7 @@ ip_whitelist(Context) ->
 %% If succesful then updates the 'visited' timestamp of the entry.
 %% @spec check_email_pw(Email, Password, Context) -> {ok, Id} | {error, Reason}
 check_email_pw(Email, Password, Context) ->
-    EmailLower = z_string:trim(z_string:to_lower(Email)),
-    case lookup_by_type_and_key_multi(email, EmailLower, Context) of
+    case lookup_by_type_and_key_multi(email, Email, Context) of
         [] -> {error, nouser};
         Users -> check_email_pw1(Users, Email, Password, Context)
     end.
@@ -775,9 +853,14 @@ set_visited(UserId, Context) ->
 set_verified(Id, Context) ->
     case z_db:q_row("select rsc_id, type from identity where id = $1", [Id], Context) of
         {RscId, Type} ->
-            case z_db:q("update identity set is_verified = true, verify_key = null where id = $1",
-                [Id],
-                Context)
+            case z_db:q("
+                    update identity
+                    set is_verified = true,
+                        verify_key = null,
+                        modified = now()
+                    where id = $1",
+                    [Id],
+                    Context)
             of
                 1 ->
                     z_mqtt:publish(
@@ -818,8 +901,11 @@ set_verified(_RscId, _Type, _Key, _Context) ->
 set_verified_trans(RscId, Type, Key, Context) ->
     case z_db:q("update identity
                  set is_verified = true,
-                     verify_key = null
-                 where rsc_id = $1 and type = $2 and key = $3",
+                     verify_key = null,
+                     modified = now()
+                 where rsc_id = $1
+                   and type = $2
+                   and key = $3",
                 [RscId, Type, Key],
                 Context)
     of
@@ -849,11 +935,23 @@ set_by_type(RscId, Type, Key, Context) ->
 -spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), list(), z:context()) -> ok.
 set_by_type(RscId, Type, Key, Props, Context) ->
     F = fun(Ctx) ->
-        case z_db:q("update identity set key = $3, propb = $4 where rsc_id = $1 and type = $2",
-            [m_rsc:rid(RscId, Context), Type, Key, {term, Props}], Ctx) of
-            0 -> z_db:q("insert into identity (rsc_id, type, key, propb) values ($1,$2,$3,$4)",
-                [m_rsc:rid(RscId, Context), Type, Key, {term, Props}], Ctx);
-            N when N > 0 -> ok
+        case z_db:q("
+                update identity
+                set key = $3,
+                    propb = $4,
+                    modified = now()
+                where rsc_id = $1
+                  and type = $2",
+                [ m_rsc:rid(RscId, Context), Type, Key, ?DB_PROPS(Props) ],
+                Ctx)
+        of
+            0 ->
+                z_db:q("insert into identity (rsc_id, type, key, propb) values ($1,$2,$3,$4)",
+                       [ m_rsc:rid(RscId, Context), Type, Key, ?DB_PROPS(Props) ],
+                       Ctx),
+                ok;
+            N when N > 0 ->
+                ok
         end
     end,
     z_db:transaction(F, Context).
@@ -1048,7 +1146,12 @@ set_verify_key(Id, Context) ->
     N = binary_to_list(z_ids:id(10)),
     case lookup_by_verify_key(N, Context) of
         undefined ->
-            z_db:q("update identity set verify_key = $2 where id = $1", [Id, N], Context),
+            z_db:q("update identity
+                    set verify_key = $2,
+                        modified = now()
+                    where id = $1",
+                    [Id, N],
+                    Context),
             {ok, N};
         _ ->
             set_verify_key(Id, Context)

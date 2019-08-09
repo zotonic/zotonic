@@ -33,21 +33,15 @@
     manage_schema/2
 ]).
 
-% Debugging
--export([
-    parse_line/2
-]).
-
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("include/import_csv.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
--define(CSV_INSPECT_SIZE, 32000).
 
 %% @doc Handle a dropbox file when it is a tsv/csv file we know.
-observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
-    case filename:extension(F) of
-        ".csv" ->
+observe_dropbox_file(#dropbox_file{ filename = F }, Context) ->
+    case is_csv( filename:extension(F) ) of
+        true ->
             %% Correct file type, see if we can handle the file.
             %% Either a module has a definition or there are correct header lines.
             case can_handle(F, F, Context) of
@@ -58,9 +52,13 @@ observe_dropbox_file(#dropbox_file{filename=F}, Context) ->
                 {error, _} ->
                     undefined
             end;
-        _ ->
+        false ->
             undefined
     end.
+
+is_csv(".csv") -> true;
+is_csv(<<".csv">>) -> true;
+is_csv(_) -> false.
 
 %% @doc Add menu item to 'Content' admin menu
 -spec observe_admin_menu(#admin_menu{}, list(), z:context()) -> list().
@@ -95,22 +93,19 @@ event(#submit{message={csv_upload, []}}, Context) ->
             ok = file:delete(TmpFile),
 
             Context2 = case can_handle(OriginalFilename, Target, Context) of
-                           {ok, Definition} ->
-                               handle_spawn(Definition, IsReset, Context),
-                               z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
-                           ok ->
-                               z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
-                           {error, _} ->
-                               file:delete(Target),
-                               z_render:growl_error(?__("This file cannot be imported.", Context), Context)
-                       end,
+                {ok, Definition} ->
+                    handle_spawn(Definition, IsReset, Context),
+                    z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
+                ok ->
+                    z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
+                {error, _} ->
+                    file:delete(Target),
+                    z_render:growl_error(?__("This file cannot be imported.", Context), Context)
+            end,
             z_render:wire([{dialog_close, []}], Context2);
         false ->
             z_render:growl_error(?__("Only admins can import CSV files.", Context), Context)
     end.
-
-
-
 
 manage_schema(What, Context) ->
     m_import_csv_data:install(What, Context).
@@ -161,8 +156,8 @@ can_handle(OriginalFilename, DataFile, Context) ->
             Error;
         undefined ->
             case inspect_file(DataFile) of
-                {ok, #filedef{columns=Cols} = FD} ->
-                    case lists:member("name", Cols) andalso lists:member("category", Cols) of
+                {ok, #filedef{ columns = Cols } = FD} ->
+                    case lists:member(<<"name">>, Cols) andalso lists:member(<<"category">>, Cols) of
                         true ->
                             {ok, FD};
                         false ->
@@ -176,95 +171,22 @@ can_handle(OriginalFilename, DataFile, Context) ->
     end.
 
 %% @doc Inspect the first line of a CSV file, extract the column headers
--spec inspect_file(string()) -> {ok, #filedef{}} | false.
+-spec inspect_file( file:filename_all() ) -> {ok, #filedef{}} | false.
 inspect_file(Filename) ->
-    case file:open(Filename, [read, binary]) of
-        {ok, Device} ->
-            FSize = filelib:file_size(Filename),
-            case file:read(Device, min(?CSV_INSPECT_SIZE,FSize)) of
-                {ok, Data0} ->
-                    file:close(Device),
-                    Data = utf8(Data0),
-                    case fetch_column_defs(Data) of
-                        {ok, Cols, Sep} ->
-                            Cols1 = [ to_property_name(Col) || Col <- Cols ],
-                            {ok, #filedef{
-                                        filename=Filename,
-                                        file_size=FSize,
-                                        colsep=Sep,
-                                        columns=Cols1,
-                                        skip_first_row=true,
-                                        importdef=cols2importdef(Cols1)
-                                }};
-                        {error, _} = Error ->
-                            Error
-                    end;
-                {error, _Reason} = Error ->
-                    file:close(Device),
-                    Error
-            end;
-        {error, _Reason} = Error ->
+    case z_csv_parser:inspect_file(Filename) of
+        {ok, Cols, Sep} ->
+            Cols1 = [ to_property_name(Col) || Col <- Cols ],
+            {ok, #filedef{
+                filename = Filename,
+                file_size = filelib:file_size(Filename),
+                colsep = Sep,
+                columns = Cols1,
+                skip_first_row = true,
+                importdef = cols2importdef(Cols1)
+            }};
+        {error, _} = Error ->
             Error
     end.
-
-utf8(S) ->
-    case z_string:sanitize_utf8(S) of
-        S ->
-            S;
-        Stripped ->
-            case eiconv:convert("Windows-1250", S) of
-                {ok, Utf8} -> Utf8;
-                {error, _} -> Stripped
-            end
-    end.
-
-
-%% @doc Check if the first row is made up of column headers.
-%% The file must have at least a name and a category column.
-fetch_column_defs(<<>>) ->
-    {error, invalid_csv_file};
-fetch_column_defs(B) ->
-    case fetch_line(B) of
-        {ok, Line} ->
-            {ok, Tabs} = parse_line(Line, $\t),
-            {ok, Comma} = parse_line(Line, $,),
-            {ok, SCol} = parse_line(Line, $;),
-            {_, Cols, Sep} = lists:last(lists:sort([
-                                    {length(Tabs), Tabs, $\t},
-                                    {length(Comma), Comma, $,},
-                                    {length(SCol), SCol, $;}
-                                ])),
-            {ok, [ z_convert:to_list(z_string:trim(C)) || C <- Cols ], Sep};
-        _ ->
-            lager:info("Invalid CSV file, could not fetch line with column defs (is there a LF or CR at the end?)"),
-            {error, invalid_csv_file}
-    end.
-
-fetch_line(B) ->
-    fetch_line(B, []).
-
-fetch_line(<<>>, _Line) ->
-    false;
-fetch_line(<<10, _/binary>>, Line) ->
-    {ok, lists:reverse(Line)};
-fetch_line(<<13, _/binary>>, Line) ->
-    {ok, lists:reverse(Line)};
-fetch_line(<<C, B/binary>>, Line) ->
-    fetch_line(B, [C|Line]).
-
-
-%% @doc Parse a line into its columns, using a character a separator.
-parse_line(Line, Sep) when is_list(Line), is_integer(Sep) ->
-    parse_line(Line, Sep, [], []).
-
-%% @doc Try to parse the line with the given field escape and quote chars.
-parse_line([], _Sep, Col, Cols) ->
-    {ok, lists:reverse([parse_csv:cleanup_field(lists:reverse(Col))|Cols])};
-parse_line([Sep|Rest], Sep, Col, Cols) ->
-    parse_line(Rest, Sep, [], [parse_csv:cleanup_field(lists:reverse(Col))|Cols]);
-parse_line([C|Rest], Sep, Col, Cols) ->
-    parse_line(Rest, Sep, [C|Col], Cols).
-
 
 %%====================================================================
 %% Default import definitions
@@ -277,7 +199,7 @@ cols2importdef(Cols) ->
         {
             % Field mapping
             [
-             {"name", {concat, ["name_prefix", "name"]}}
+             {<<"name">>, {concat, [<<"name_prefix">>, <<"name">>]}}
              | lists:filter(fun(X) ->
                                 X =/= undefined
                             end,
@@ -288,8 +210,8 @@ cols2importdef(Cols) ->
         }
     ].
 
-to_property_name("block." ++ B) ->
-    "blocks."++B;
+to_property_name(<<"block.", B/binary>>) ->
+    <<"blocks.", B/binary>>;
 to_property_name(Name) ->
     Name.
 
@@ -302,11 +224,11 @@ unique([C|Cs], Acc) ->
     end.
 
 %% @doc Maps well-known column names to an import definition.
-cols2importdef_map("")                  -> undefined;
-cols2importdef_map("name")              -> undefined;
-cols2importdef_map("name_prefix")       -> undefined;
-cols2importdef_map("date_start")        -> {"date_start", {datetime, "date_start"}};
-cols2importdef_map("date_end")          -> {"date_end", {datetime, "date_end"}};
-cols2importdef_map("publication_start") -> {"publication_start", {datetime, "publication_start"}};
-cols2importdef_map("publication_end")   -> {"publication_end", {datetime, "publication_end"}};
+cols2importdef_map(<<>>)                    -> undefined;
+cols2importdef_map(<<"name">>)              -> undefined;
+cols2importdef_map(<<"name_prefix">>)       -> undefined;
+cols2importdef_map(<<"date_start">>)        -> {<<"date_start">>, {datetime, <<"date_start">>}};
+cols2importdef_map(<<"date_end">>)          -> {<<"date_end">>, {datetime, <<"date_end">>}};
+cols2importdef_map(<<"publication_start">>) -> {<<"publication_start">>, {datetime, <<"publication_start">>}};
+cols2importdef_map(<<"publication_end">>)   -> {<<"publication_end">>, {datetime, <<"publication_end">>}};
 cols2importdef_map(X) -> {X, X}.

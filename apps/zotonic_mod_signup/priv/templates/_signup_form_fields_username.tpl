@@ -27,15 +27,26 @@ show_signup_password2
             <div class="form-group" id="signup_password1">
                 <label for="password1" class="control-label">{_ Password _}</label>
                 <input class="form-control" id="password1" name="password1" type="password" value="" autocomplete="new-password" />
-                {% validate id="password1"
-                    type={presence failure_message=_"Enter a password"}
-                    type={
-                        length minimum=min_length
-                        too_short_message=_"Your password is too short." ++ " " ++ _"Minimum characters: " ++ min_length
-                    }
-                    only_on_blur
-                %}
-                <p class="help-block">{_ Minimum characters: _} {{ min_length }}</p>
+                {% if m.config.mod_admin_identity.password_regex.value %}
+                    {% validate id="password1"
+                        type={presence failure_message=_"Enter a password"}
+                        type={format
+                            pattern=m.config.mod_admin_identity.password_regex.value
+                            failure_message=_"This password does not meet the security requirements"
+                        }
+                        only_on_blur
+                    %}
+                {% else %}
+                    {% validate id="password1"
+                        type={presence failure_message=_"Enter a password"}
+                        type={
+                            length minimum=min_length
+                            too_short_message=_"Your password is too short." ++ " " ++ _"Minimum characters: " ++ min_length
+                        }
+                        only_on_blur
+                    %}
+                    <p class="help-block">{_ Minimum characters: _} {{ min_length }}</p>
+                {% endif %}
             </div>
         {% endwith %}
     {% endif %}

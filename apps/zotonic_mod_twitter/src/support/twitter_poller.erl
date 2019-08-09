@@ -122,16 +122,33 @@ import_result(Sub,  #{ tweets := Tweets }, Context) ->
         Tweets).
 
 %% @doc Set the next due for the feed, backoff if no tweets fetched
-set_due(Sub, #{ max_id := MaxId}, ImportCount, Context) ->
+set_due(Sub, Result, ImportCount, Context) ->
     {id, SubId} = proplists:lookup(id, Sub),
+    Tweets = maps:get(tweets, Result, []),
+    MaxId = maps:get(max_id, Result, undefined),
     Now = z_datetime:timestamp(),
-    Delay = case MaxId of
-        undefined ->
+    Delay = case Tweets of
+        [] ->
             % Check when the last import was
             {last_import, LastImport} = proplists:lookup(last_import, Sub),
-            Last = z_datetime:datetime_to_timestamp(LastImport),
-            backoff(Now - Last);
-        _MaxId ->
+            Last = case LastImport of
+                undefined -> 0;
+                _ -> z_datetime:datetime_to_timestamp(LastImport)
+            end,
+            BackOff = backoff(Now - Last),
+            case proplists:lookup(identity_id, Sub) of
+                {identity_id, undefined} ->
+                    case z_convert:to_integer( m_config:get_value(mod_twitter, max_feed_backoff, Context) ) of
+                        undefined ->
+                            BackOff;
+                        MaxBackoff ->
+                            BackOff1 = erlang:min(BackOff, MaxBackoff),
+                            erlang:max(BackOff1, ?DELAY_MINIMUM)
+                    end;
+                {identity_id, _} ->
+                    BackOff
+            end;
+        _ ->
             ?DELAY_ACTIVE
     end,
     Due = z_datetime:timestamp_to_datetime(Now + Delay),

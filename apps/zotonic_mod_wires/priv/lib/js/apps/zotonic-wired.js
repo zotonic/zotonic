@@ -91,6 +91,14 @@ function z_dialog_close()
 
 function z_dialog_confirm(options)
 {
+    var html,
+        backdrop;
+
+    if (typeof options.backdrop == 'undefined') {
+        backdrop = options.backdrop
+    } else {
+        backdrop = true;
+    }
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-default z-dialog-cancel-button">'
@@ -103,7 +111,8 @@ function z_dialog_confirm(options)
     $.dialogAdd({
         title: (options.title||z_translate('Confirm')),
         text: html,
-        width: (options.width)
+        width: (options.width),
+        backdrop: backdrop
     });
     $(".z-dialog-cancel-button").click(function() { z_dialog_close(); });
     $(".z-dialog-ok-button").click(function() {
@@ -114,6 +123,14 @@ function z_dialog_confirm(options)
 
 function z_dialog_alert(options)
 {
+    var html,
+        backdrop;
+
+    if (typeof options.backdrop == 'undefined') {
+        backdrop = options.backdrop
+    } else {
+        backdrop = true;
+    }
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-primary z-dialog-ok-button">'
@@ -123,7 +140,8 @@ function z_dialog_alert(options)
     $.dialogAdd({
         title: (options.title||z_translate('Alert')),
         text: html,
-        width: (options.width)
+        width: (options.width),
+        backdrop: backdrop
     });
     $(".z-dialog-ok-button").click(function() {
         z_dialog_close();
@@ -743,6 +761,59 @@ function isScrolledIntoView(elem)
     // && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop);
 }
 
+
+/* Error handling
+----------------------------------------------------------
+
+Fetch the error event and log it to the server.
+Which should log it in a separate ui error log.
+
+---------------------------------------------------------- */
+
+var oldOnError = window.onerror;
+var z_page_unloading = false;
+
+window.addEventListener("unload", function(event) {
+    z_page_unloading = true;
+});
+
+window.addEventListener("beforeunload", function(event) {
+    z_page_unloading = true;
+    setTimeout(function() { z_page_unloading = false }, 5000);
+});
+
+window.onerror = function(message, file, line, col, error) {
+    if (!z_page_unloading) {
+        let payload = {
+            type: 'error',
+            message: message,
+            file: file,
+            line: line,
+            col: col,
+            stack: error.stack,
+            user_agent: navigator.userAgent,
+            url: window.location.href
+        };
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/log-client-event', true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify(payload));
+
+        if ($("form.masked").length > 0 || (payload.stack && payload.stack.match(/(submitFunction|doValidations)/))) {
+            alert("Sorry, something went wrong.\n\n(" + message + ")");
+            try { $("form.masked").unmask(); } catch (e) {}
+        }
+    }
+
+    if (oldOnError) {
+        return oldOnError(message, file, line, col, error);
+    } else {
+        return false;
+    }
+};
+
+
 /* Form element validations
 ----------------------------------------------------------
 
@@ -1289,18 +1360,18 @@ function z_update_iframe(name, doc)
  * It is this array that is passed to pre-submit callback functions provided to the
  * ajaxSubmit() and ajaxForm() methods.
  */
-$.fn.formToArray = function(semantic) {
+$.fn.formToArray = function(options) {
     var a = [];
     if (this.length > 0) {
         var form = this[0];
-        var els = semantic ? form.getElementsByTagName('*') : form.elements;
+        var els = options.semantic ? form.getElementsByTagName('*') : form.elements;
         var n;
 
         if (els) {
             for(var i=0, max=els.length; i < max; i++) {
                 var el = els[i];
                 n = el.name;
-                if (n && !$(el).hasClass("nosubmit")) {
+                if (n && (!$(el).hasClass("nosubmit") || options.all)) {
                     switch ($(el).attr("type")) {
                         case "submit":
                             break;
@@ -1484,22 +1555,23 @@ $.fn.selected = function(select) {
     });
 };
 
-// function is_equal(x, y) {
-//     if ( x === y ) return true;
-//     if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
-//     if ( x.constructor !== y.constructor ) return false;
-//     for ( var p in x ) {
-//         if ( ! x.hasOwnProperty( p ) ) continue;
-//         if ( ! y.hasOwnProperty( p ) ) return false;
-//         if ( x[ p ] === y[ p ] ) continue;
-//         if ( typeof( x[ p ] ) !== "object" ) return false;
-//         if ( ! is_equal( x[ p ],  y[ p ] ) ) return false;
-//     }
-//     for ( p in y ) {
-//         if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) return false;
-//     }
-//     return true;
-// }
+// Used in z.feedback.js
+function is_equal(x, y) {
+    if ( x === y ) return true;
+    if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
+    if ( x.constructor !== y.constructor ) return false;
+    for ( var p in x ) {
+        if ( ! x.hasOwnProperty( p ) ) continue;
+        if ( ! y.hasOwnProperty( p ) ) return false;
+        if ( x[ p ] === y[ p ] ) continue;
+        if ( typeof( x[ p ] ) !== "object" ) return false;
+        if ( ! is_equal( x[ p ],  y[ p ] ) ) return false;
+    }
+    for ( p in y ) {
+        if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) return false;
+    }
+    return true;
+}
 
 $.extend({
     keys: function(obj){

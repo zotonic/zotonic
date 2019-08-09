@@ -26,6 +26,8 @@ member(B, B, _Context) when is_binary(B); is_integer(B) ->
     true;
 member(S, [H|_] = L, _Context) when is_list(S) and is_binary(H) ->
     lists:member(list_to_binary(S), L);
+member(S, [ V | _ ] = L, Context) when is_binary(S), is_list(V) ->
+    member(z_convert:to_list(S), L, Context);
 member(S, [H|_] = L, _Context) when (is_list(S) or is_binary(S)) and is_integer(H) ->
     try
         lists:member(z_convert:to_integer(S), L)

@@ -19,12 +19,17 @@
 -module(controller_admin_referrers).
 -author("Marc Worrell <marc@worrell.nl").
 
--export([resource_exists/1,
-         previously_existed/1,
-         moved_temporarily/1,
-         is_authorized/1,
-         process/4
-        ]).
+-export([
+    service_available/1,
+    resource_exists/1,
+    previously_existed/1,
+    moved_temporarily/1,
+    is_authorized/1,
+    process/4
+    ]).
+
+service_available(Context) ->
+    {true, z_context:set_noindex_header(Context)}.
 
 is_authorized(Context) ->
     z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_admin)} ], Context).

@@ -90,34 +90,42 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
     CatList = m_rsc:is_a(Id, Context),
     Props = m_rsc:get(Id, Context),
 
+    % Outside transaction as due to race conditions we might
+    % have a duplicate insert into the rsc_gone table. That
+    % triggers an error which cancels the transaction F below.
+    _ = m_rsc_gone:gone(Id, OptFollowUpId, Context),
+
     F = fun(Ctx) ->
         z_notifier:notify_sync(#rsc_delete{id = Id, is_a = CatList}, Ctx),
-        m_rsc_gone:gone(Id, OptFollowUpId, Ctx),
         z_db:delete(rsc, Id, Ctx)
     end,
-    {ok, _RowsDeleted} = z_db:transaction(F, Context),
-    % Sync the caches
-    [z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers],
-    flush(Id, CatList, Context),
-    %% Notify all modules that the rsc has been deleted
-    z_notifier:notify_sync(
-        #rsc_update_done{
-            action = delete,
-            id = Id,
-            pre_is_a = CatList,
-            post_is_a = [],
-            pre_props = Props,
-            post_props = []
-        }, Context),
-     z_mqtt:publish(
-         [ <<"model">>, <<"rsc">>, <<"event">>, Id, <<"delete">> ],
-         #{
-            id => Id,
-            pre_is_a => CatList
-         },
-         Context),
-    z_edge_log_server:check(Context),
-    ok.
+    case z_db:transaction(F, Context) of
+        {ok, _RowsDeleted} ->
+            % Sync the caches
+            [z_depcache:flush(SubjectId, Context) || SubjectId <- Referrers],
+            flush(Id, CatList, Context),
+            %% Notify all modules that the rsc has been deleted
+            z_notifier:notify_sync(
+                #rsc_update_done{
+                    action = delete,
+                    id = Id,
+                    pre_is_a = CatList,
+                    post_is_a = [],
+                    pre_props = Props,
+                    post_props = []
+                }, Context),
+             z_mqtt:publish(
+                 [ <<"model">>, <<"rsc">>, <<"event">>, Id, <<"delete">> ],
+                 #{
+                    id => Id,
+                    pre_is_a => CatList
+                 },
+                 Context),
+            z_edge_log_server:check(Context),
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Merge two resources, delete the losing resource.
 -spec merge_delete(m_rsc:resource(), m_rsc:resource(), list(), #context{}) -> ok | {error, term()}.
@@ -326,7 +334,7 @@ duplicate(Id, DupProps, Context) ->
                         SafeDupProps ++ [
                             {name, undefined}, {uri, undefined}, {page_path, undefined},
                             {is_authoritative, true}, {is_protected, false},
-                            {title_slug, undefined}, {slug, undefined}
+                            {title_slug, undefined}, {slug, undefined}, {custom_slug, false}
                         ]),
                     case insert(InsProps, [{escape_texts, false}], Context) of
                         {ok, NewId} ->
@@ -488,10 +496,11 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
     EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps), [], Context), RscUpd),
     SafeProps = escape_props(RscUpd#rscupd.is_escape_texts, EditableProps, Context),
     SafeSlugProps = generate_slug(Id, SafeProps, Context),
+    DefaultProps = props_defaults(Id, SafeSlugProps, Context),
     try
-        preflight_check(Id, SafeSlugProps, Context),
-        throw_if_category_not_allowed(Id, SafeSlugProps, RscUpd#rscupd.is_acl_check, Context),
-        update_transaction_fun_insert(RscUpd, SafeSlugProps, Raw, UpdateProps, Context)
+        preflight_check(Id, DefaultProps, Context),
+        throw_if_category_not_allowed(Id, DefaultProps, RscUpd#rscupd.is_acl_check, Context),
+        update_transaction_fun_insert(RscUpd, DefaultProps, Raw, UpdateProps, Context)
     catch
         throw:{error, _} = Error -> {rollback, Error}
     end.
@@ -715,7 +724,8 @@ preflight_check(Id, [{'query', Query} | T], Context) ->
     Valid = case m_rsc:is_a(Id, 'query', Context) of
                 true ->
                     try
-                        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), Context),
+                        SearchContext = z_context:new( Context ),
+                        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
                         true
                     catch
                         _: {error, {_, _}} ->
@@ -816,7 +826,7 @@ props_filter([{page_path, Path} | T], Acc, Context) ->
 props_filter([{title_slug, Slug}|T], Acc, Context) ->
     case z_utils:is_empty(Slug) of
         true ->
-            props_filter(T, [ {title_slug, <<>>}, {slug, <<>>} | Acc], Context);
+            props_filter(T, Acc, Context);
         false ->
             Slug1 = to_slug(Slug),
             SlugNoTr = z_trans:lookup_fallback(Slug1, en, Context),
@@ -991,6 +1001,27 @@ props_defaults(Props, Context) ->
         _ -> Props
     end.
 
+%% @doc Set default properties on resource insert and update.
+-spec props_defaults(m_rsc:resource(), m_rsc:properties(), z:context()) -> m_rsc:properties().
+props_defaults(_Id, Props, Context) ->
+    lists:foldl(
+        fun(Key, Acc) ->
+            prop_default(Key, proplists:get_value(Key, Props), Acc, Context)
+        end,
+        Props,
+        [publication_start]
+    ).
+
+-spec prop_default(atom(), any(), m_rsc:properties(), z:context()) -> m_rsc:properties().
+prop_default(publication_start, undefined, Props, _Context) ->
+    case proplists:get_value(is_published, Props) of
+        true ->
+            z_utils:prop_replace(publication_start, erlang:universaltime(), Props);
+        _ ->
+            Props
+    end;
+prop_default(_Key, _Value, Props, _Context) ->
+    Props.
 
 props_filter_protected(Props, RscUpd) ->
     IsNormalUpdate = is_normal_update(RscUpd),
@@ -1080,7 +1111,7 @@ is_trimmable(_, _) -> false.
 
 %% @doc Combine all textual date fields into real date. Convert them to UTC afterwards.
 recombine_dates(Id, Props, Context) ->
-    LocalNow = z_datetime:to_local(erlang:universaltime(), Context),
+    LocalNow = local_now(Context),
     {Dates, Props1} = recombine_dates_1(Props, [], []),
     {Dates1, DateGroups} = group_dates(Dates),
     {DateGroups1, DatesNull} = collect_empty_date_groups(DateGroups, [], []),
@@ -1196,13 +1227,19 @@ recombine_date_part({{Y, M, D}, {H, _I, S}}, <<"i">>, V) -> {{Y, M, D}, {H, V, S
 recombine_date_part({{Y, M, D}, {H, I, _S}}, <<"s">>, V) -> {{Y, M, D}, {H, I, V}};
 recombine_date_part({{Y, M, D}, {_H, _I, S}}, <<"hi">>, {H, I, _S}) -> {{Y, M, D}, {H, I, S}};
 recombine_date_part({{Y, M, D}, _Time}, <<"his">>, {_, _, _} = V) -> {{Y, M, D}, V};
-recombine_date_part({_Date, {H, I, S}}, <<"ymd">>, {_, _, _} = V) -> {V, {H, I, S}}.
-
+recombine_date_part({_Date, {H, I, S}}, <<"ymd">>, {_, _, _} = V) -> {V, {H, I, S}};
+recombine_date_part({_Date, {H, I, S}}, <<"dmy">>, {_, _, _} = V) -> {V, {H, I, S}}.
 
 to_date_value(<<"ymd">>, <<"-", V/binary>>) ->
     case to_date_value(<<"ymd">>, V) of
         {Y, M, D} when is_integer(Y) -> {-Y, M, D};
         YMD -> YMD
+    end;
+to_date_value(<<"dmy">>, V) ->
+    case re:run(V, "([0-9]+)[-/: ]([0-9]+)[-/: ](-?[0-9]+)", [{capture, all_but_first, binary}]) of
+        nomatch -> {undefined, undefined, undefined};
+        % Negative years 13/7/-99
+        {match, [D, M, Y]} -> {to_int(Y), to_int(M), to_int(D)}
     end;
 to_date_value(Part, V) when Part =:= <<"ymd">>; Part =:= <<"his">> ->
     case binary:split(V, [<<"-">>, <<"/">>, <<":">>, <<" ">>], [global]) of
@@ -1257,6 +1294,7 @@ group_dates([{Name, D} | T], Groups, Acc) ->
 default_date("date", _LocalNow) -> undefined;
 default_date("date_start", _LocalNow) -> undefined;
 default_date("date_end", _LocalNow) -> undefined;
+default_date("publication", _LocalNow) -> undefined;
 default_date("org_pubdate", _LocalNow) -> undefined;
 default_date(_, LocalNow) -> LocalNow.
 
@@ -1316,8 +1354,12 @@ to_int("") ->
     undefined;
 to_int(<<>>) ->
     undefined;
-to_int(<< A/binary >>) ->
-    to_int(binary_to_list(A));
+to_int(A) when is_binary(A) ->
+    try
+        binary_to_integer(A)
+    catch
+        _:_ -> undefined
+    end;
 to_int(A) ->
     try
         list_to_integer(A)
@@ -1549,3 +1591,7 @@ test() ->
         {<<"plop">>, <<"hello">>}
     ], z_context:new_tests()),
     ok.
+
+-spec local_now(z:context()) -> calendar:datetime().
+local_now(Context) ->
+    z_datetime:to_local(erlang:universaltime(), Context).

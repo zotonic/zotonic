@@ -19,17 +19,22 @@
 -module(controller_admin_edit).
 -author("Marc Worrell <marc@worrell.nl>").
 
--export([resource_exists/1,
-         previously_existed/1,
-         moved_temporarily/1,
-         is_authorized/1,
-         event/2,
-         filter_props/1,
-         ensure_id/1,
-         process/4
-        ]).
+-export([
+    service_available/1,
+    resource_exists/1,
+    previously_existed/1,
+    moved_temporarily/1,
+    is_authorized/1,
+    event/2,
+    filter_props/1,
+    ensure_id/1,
+    process/4
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+service_available(Context) ->
+    {true, z_context:set_noindex_header(Context)}.
 
 is_authorized(Context) ->
     Context1 = z_context:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),

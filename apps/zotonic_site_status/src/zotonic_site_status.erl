@@ -36,7 +36,9 @@
 
     observe_user_is_enabled/2,
     observe_acl_logon/2,
-    observe_acl_logoff/2
+    observe_acl_logoff/2,
+
+    is_peer_whitelisted/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -52,14 +54,27 @@ sites_status_observer(Context, SitesStatus, _SitesManagerContext) ->
     ok.
 
 %% @doc Check the username and password entered
-observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Password }, _Context ) ->
-    case z_convert:to_binary(z_config:get(password)) of
-        Password ->
-            {ok, 1};
-        _ ->
-            {error, pw}
+observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Password }, Context ) ->
+    case is_peer_whitelisted(Context) of
+        true ->
+            case z_convert:to_binary(z_config:get(password)) of
+                Password ->
+                    lager:info("Zotonic status logon success from whitelisted IP address: ~p",
+                                [m_req:get(peer, Context)]),
+                    {ok, 1};
+                _ ->
+                    lager:error("Zotonic status logon failure from whitelisted IP address: ~p",
+                                [m_req:get(peer, Context)]),
+                    {error, pw}
+            end;
+        false ->
+            lager:error("Zotonic status logon failure from non whitelisted IP address: ~p",
+                        [m_req:get(peer, Context)]),
+            {error, blacklist}
     end;
-observe_auth_validate( #auth_validate{}, _Context ) ->
+observe_auth_validate( #auth_validate{ username = Username }, Context ) ->
+    lager:error("Zotonic status logon failure with non 'wwwadmin' username '~s' from IP address: ~p",
+                [Username, m_req:get(peer, Context)]),
     {error, pw}.
 
 
@@ -74,3 +89,9 @@ observe_acl_logon(#acl_logon{id=UserId}, Context) ->
 %% @doc Let the user log off, clean up any cached information.
 observe_acl_logoff(#acl_logoff{}, Context) ->
     Context#context{acl=undefined, user_id=undefined}.
+
+%% @doc Check peer address to the system management IP whitelist
+-spec is_peer_whitelisted( z:context() ) -> boolean().
+is_peer_whitelisted(Context) ->
+    Peer = m_req:get(peer, Context),
+    z_ip_address:ip_match(Peer, z_config:get(ip_whitelist_system_management)).

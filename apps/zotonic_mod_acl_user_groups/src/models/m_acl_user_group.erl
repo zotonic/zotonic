@@ -26,7 +26,8 @@
 -export([
     m_get/3,
 
-    is_used/2
+    is_used/2,
+    user_groups/1
 ]).
 
 
@@ -65,3 +66,8 @@ is_used(UserGroup, Context) ->
         {error, _} ->
             false
     end.
+
+%% @doc Return the user groups for the current user
+user_groups(Context) ->
+    acl_user_groups_checks:user_groups(Context).
+

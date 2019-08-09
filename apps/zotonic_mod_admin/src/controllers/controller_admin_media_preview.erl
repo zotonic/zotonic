@@ -19,10 +19,15 @@
 -module(controller_admin_media_preview).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
--export([resource_exists/1,
-         content_types_provided/1,
-         process/4
-        ]).
+-export([
+    service_available/1,
+    resource_exists/1,
+    content_types_provided/1,
+    process/4
+    ]).
+
+service_available(Context) ->
+    {true, z_context:set_noindex_header(Context)}.
 
 resource_exists(Context) ->
     case z_context:get_q(<<"id">>, Context) of

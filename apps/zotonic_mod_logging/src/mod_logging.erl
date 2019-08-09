@@ -23,37 +23,104 @@
 -mod_title("Logging to the database").
 -mod_description("Logs debug/info/warning messages into the site's database.").
 -mod_prio(1000).
+-mod_schema(1).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 -export([
     observe_search_query/2,
+    observe_tick_1h/2,
     pid_observe_zlog/3,
-    observe_admin_menu/3
+    observe_admin_menu/3,
+    is_ui_ratelimit_check/1,
+    manage_schema/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
--record(state, {site :: atom() | undefined, admin_log_pages=[] :: list()}).
+-record(state, {
+    site :: atom() | undefined,
+    admin_log_pages=[] :: list(),
+    last_ui_event = 0 :: integer()
+}).
 
 %% interface functions
 
-observe_search_query({search_query, Req, OffsetLimit}, Context) ->
-    search(Req, OffsetLimit, Context).
-
-pid_observe_zlog(Pid, #zlog{props=#log_message{}=Msg}, Context) ->
-    case Msg#log_message.user_id of
-        undefined -> gen_server:cast(Pid, {log, Msg#log_message{user_id=z_acl:user(Context)}});
-        _UserId -> gen_server:cast(Pid, {log, Msg})
+observe_search_query({search_query, {log, Args}, _OffsetLimit}, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> m_log:search_query(Args, Context);
+        false -> []
     end;
-pid_observe_zlog(Pid, #zlog{props=#log_email{}=Msg}, _Context) ->
+observe_search_query({search_query, {log_email, Args}, _OffsetLimit}, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> m_log_email:search(Args, Context);
+        false -> []
+    end;
+observe_search_query({search_query, {log_ui, Args}, _OffsetLimit}, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> m_log_ui:search_query(Args, Context);
+        false -> []
+    end;
+observe_search_query(_Query, _Context) ->
+    undefined.
+
+pid_observe_zlog(Pid, #zlog{ user_id = LogUser, props = #log_message{ props = MsgProps } = Msg }, Context) ->
+    case proplists:lookup(user_id, MsgProps) of
+        {user_id, UserId} when LogUser =:= undefined ->
+            gen_server:cast(Pid, {log, Msg#log_message{ user_id = UserId }});
+        _ when LogUser =:= undefined ->
+            gen_server:cast(Pid, {log, Msg#log_message{ user_id = z_acl:user(Context) }});
+        _ ->
+            gen_server:cast(Pid, {log, Msg})
+    end;
+pid_observe_zlog(Pid, #zlog{ props = #log_email{} = Msg }, _Context) ->
     gen_server:cast(Pid, {log, Msg});
 pid_observe_zlog(_Pid, #zlog{}, _Context) ->
     undefined.
 
+observe_tick_1h(tick_1h, Context) ->
+    m_log:periodic_cleanup(Context),
+    m_log_email:periodic_cleanup(Context),
+    m_log_ui:periodic_cleanup(Context).
 
+
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
+    [
+     #menu_item{id=admin_log,
+                parent=admin_system,
+                label=?__("Log", Context),
+                url={admin_log},
+                visiblecheck={acl, use, mod_logging}},
+     #menu_item{id=admin_log_email,
+                parent=admin_system,
+                label=?__("Email log", Context),
+                url={admin_log_email},
+                visiblecheck={acl, use, mod_logging}},
+     #menu_item{id=admin_log_ui,
+                parent=admin_system,
+                label=?__("User interface log", Context),
+                url={admin_log_ui},
+                visiblecheck={acl, use, mod_logging}},
+     #menu_separator{parent=admin_system}
+     |Acc].
+
+manage_schema(_, Context) ->
+    m_log:install(Context),
+    m_log_email:install(Context),
+    m_log_ui:install(Context),
+    ok.
+
+%% @doc Return true if ok to insert an UI log entry (max 1 per second)
+is_ui_ratelimit_check(Context) ->
+    case z_convert:to_bool( m_config:get_value(mod_logging, ui_log_disabled, Context) ) of
+        true ->
+            true;
+        false ->
+            {ok, Pid} = z_module_manager:whereis(?MODULE, Context),
+            gen_server:call(Pid, is_ui_ratelimit_check)
+    end.
 
 %%====================================================================
 %% API
@@ -75,13 +142,12 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     Context1 = z_acl:sudo(z_context:new(Context)),
-    install_check(Context1),
     Site = z_context:site(Context1),
     lager:md([
             {site, Site},
             {module, ?MODULE}
         ]),
-    {ok, #state{site=Site}}.
+    {ok, #state{ site = Site }}.
 
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -91,6 +157,10 @@ init(Args) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Handling call messages
+handle_call(is_ui_ratelimit_check, _From, #state{ last_ui_event = LastUI } = State ) ->
+    Now = z_datetime:timestamp(),
+    {reply, Now > LastUI, State#state{ last_ui_event = Now }};
+
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
@@ -133,36 +203,16 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 
-install_check(Context) ->
-    m_log:install(Context),
-    m_log_email:install(Context).
-
-
-
-search({log, []}, _OffsetLimit, _Context) ->
-    #search_sql{
-        select="l.id",
-        from="log l",
-        tables=[{log, "l"}],
-        order="created DESC",
-        args=[],
-        assoc=false
-    };
-search({log_email, Filter}, _OffsetLimit, Context) ->
-    m_log_email:search(Filter, Context);
-search(_, _, _) ->
-    undefined.
-
-
-%% @doc Insert a simple log entry. Send an update to all UA's displaying the log.
-handle_simple_log(#log_message{user_id=UserId, type=Severity, message=Msg, props=Props}, State) ->
+handle_simple_log(#log_message{ user_id = UserId, type = Type, message = Msg, props = Props }, State) ->
     Context = z_acl:sudo(z_context:new(State#state.site)),
-    {ok, Id} = z_db:insert(log, [
-                    {user_id, UserId},
-                    {type, Severity},
-                    {message, Msg}
-                ] ++ Props, Context),
-    SeverityB = z_convert:to_binary(Severity),
+    Message = [
+        {user_id, UserId},
+        {type, Type},
+        {message, Msg}
+    ] ++ proplists:delete(user_id, Props),
+    MsgUserProps = maybe_add_user_props(Message, Context),
+    {ok, Id} = z_db:insert(log, MsgUserProps, Context),
+    SeverityB = z_convert:to_binary(Type),
     LogTypeB = z_convert:to_binary( proplists:get_value(log_type, Props, log) ),
     z_mqtt:publish(
         [ <<"model">>, <<"logging">>, <<"event">>, LogTypeB, SeverityB ],
@@ -216,15 +266,19 @@ record_to_log_message(#log_email{} = R, _Fields, LogType, Id) ->
             {log_id, Id}
         ]
     }.
-% record_to_log_message(_, Fields, LogType, Id) ->
-%     #log_message{
-%         message=z_convert:to_binary(proplists:get_value(message, Fields, LogType)),
-%         props=[
-%             {log_type, LogType},
-%             {log_id, Id}
-%             | Fields
-%         ]
-%     }.
+
+maybe_add_user_props(Props, Context) ->
+    case proplists:get_value(user_id, Props) of
+        undefined ->
+            Props;
+        UserId ->
+            [
+                {user_name_first, m_rsc:p_no_acl(UserId, name_first, Context)},
+                {user_name_surname, m_rsc:p_no_acl(UserId, name_surname, Context)},
+                {user_email_raw, m_rsc:p_no_acl(UserId, email_raw, Context)}
+                | Props
+            ]
+    end.
 
 to_list({error, timeout}) ->
     "timeout";
@@ -235,20 +289,4 @@ to_list(V) ->
 
 opt_user(undefined) -> [];
 opt_user(Id) -> [" (", integer_to_list(Id), ")"].
-
-
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
-     #menu_item{id=admin_log,
-                parent=admin_system,
-                label=?__("Log", Context),
-                url={admin_log},
-                visiblecheck={acl, use, mod_logging}},
-     #menu_item{id=admin_log_email,
-                parent=admin_system,
-                label=?__("Email log", Context),
-                url={admin_log_email},
-                visiblecheck={acl, use, mod_logging}},
-     #menu_separator{parent=admin_system}
-     |Acc].
 

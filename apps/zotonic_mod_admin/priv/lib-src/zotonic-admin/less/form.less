@@ -32,3 +32,15 @@ input {
 input.form-control[type=file] {
     height: auto;
 }
+
+// https://stackoverflow.com/a/29806043/457795
+// Create a gray placeholder for selects
+select:required:invalid {
+    color: gray;
+}
+option[value=""][disabled] {
+    display: none;
+}
+option {
+    color: black;
+}

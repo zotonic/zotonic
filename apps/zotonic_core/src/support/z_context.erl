@@ -104,6 +104,7 @@
     set_tz/2,
 
     set_resp_header/3,
+    set_resp_headers/2,
     get_resp_header/2,
     get_req_header/2,
 
@@ -114,6 +115,7 @@
     set_noindex_header/2,
 
     set_security_headers/1,
+    set_cors_headers/2,
 
     set_cookie/3,
     set_cookie/4,
@@ -909,10 +911,14 @@ set_tz(Tz, Context) ->
     Context.
 
 %% @doc Set a response header for the request in the context.
-%% @spec set_resp_header(Header, Value, Context) -> NewContext
 -spec set_resp_header(binary(), binary(), z:context()) -> z:context().
 set_resp_header(Header, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:set_resp_header(Header, Value, Context).
+
+%% @doc Set multiple response headers for the request in the context.
+-spec set_resp_headers([ {binary(), binary()} ], z:context()) -> z:context().
+set_resp_headers(Headers, #context{cowreq=Req} = Context) when is_map(Req) ->
+    cowmachine_req:set_resp_headers(Headers, Context).
 
 %% @doc Get a response header
 -spec get_resp_header(binary(), z:context()) -> binary() | undefined.
@@ -1003,6 +1009,17 @@ set_security_headers(Context) ->
     end,
     cowmachine_req:set_resp_headers(SecurityHeaders, Context).
 
+%% @doc Set Cross-Origin Resource Sharing (CORS) headers. The caller must
+%%      specify default headers to be used in case there are no observers for
+%%      the #cors_headers{} notification.
+-spec set_cors_headers([{binary(), binary()}], z:context()) -> z:context().
+set_cors_headers(Default, Context) ->
+    CorsHeaders = case z_notifier:first(#cors_headers{ headers = Default }, Context) of
+        undefined -> Default;
+        Custom -> Custom
+    end,
+    set_resp_headers(CorsHeaders, Context).
+
 %% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
 -spec set_noindex_header(z:context()) -> z:context().
 set_noindex_header(Context) ->
@@ -1026,6 +1043,8 @@ set_cookie(Key, Value, Context) ->
 
 %% @doc Set a cookie value with cookie options.
 -spec set_cookie(binary(), binary(), list(), z:context()) -> z:context().
+set_cookie(_Key, _Value, _Options, #context{ cowreq = undefined } = Context) ->
+    Context;
 set_cookie(Key, Value, Options, Context) ->
     % Add domain to cookie if not set
     ValueBin = z_convert:to_binary(Value),
@@ -1038,11 +1057,15 @@ set_cookie(Key, Value, Options, Context) ->
 
 %% @doc Read a cookie value from the current request.
 -spec get_cookie(binary(), z:context()) -> binary() | undefined.
+get_cookie(_Key, #context{cowreq = undefined}) ->
+    undefined;
 get_cookie(Key, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:get_cookie_value(Key, Context).
 
 %% @doc Read all cookie values with a certain key from the current request.
 -spec get_cookies(binary(), z:context()) -> [ binary() ].
+get_cookies(_Key, #context{cowreq = undefined}) ->
+    [];
 get_cookies(Key, #context{cowreq=Req} = Context) when is_map(Req), is_binary(Key) ->
     proplists:get_all_values(Key, cowmachine_req:req_cookie(Context)).
 
