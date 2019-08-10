@@ -48,11 +48,6 @@ msgid ""
 "Domain"
 msgstr "Domeinnaam"
 
-#: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:7 ./modules/mod_custom_redirect/mod_custom_redirect.erl:59 
-msgid ""
-"Domains and redirects"
-msgstr "Domeinnamen en doorverwijzingen"
-
 #: ./modules/mod_custom_redirect/templates/admin_custom_redirect.tpl:22 
 msgid ""
 "Path"

@@ -273,11 +273,6 @@ msgstr "Bewerk ontvanger"
 msgid "Edit the mailing list &raquo;"
 msgstr "Bewerk de mailinglijst &raquo;"
 
-#: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:7
-#: modules/mod_mailinglist/templates/admin_mailinglist_recipients.tpl:46
-msgid "Email"
-msgstr "E-mail"
-
 #: modules/mod_mailinglist/templates/_dialog_mailing_bounces.tpl:6
 msgid "Enabled"
 msgstr "Actief"
