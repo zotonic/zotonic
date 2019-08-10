@@ -3155,7 +3155,7 @@ msgstr "Alle predicaten"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_extra_buttons.tpl:2
 msgid "All page connections"
-msgstr "Alla paginaconnecties"
+msgstr "Alle paginaconnecties"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
 msgid "Are you sure you want to delete"
