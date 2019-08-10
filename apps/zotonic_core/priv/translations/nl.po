@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-08-10 14:16+0200\n"
+"PO-Revision-Date: 2019-08-10 14:22+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -51,9 +51,8 @@ msgid "in"
 msgstr "in"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
-#, fuzzy
 msgid "minute"
-msgstr "1 minuut"
+msgstr "minuut"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
@@ -754,7 +753,7 @@ msgstr "alleen eigen content"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
-msgstr "naar iemand anders sturen."
+msgstr "stuur deze URL naar iemand anders om te testen"
 
 #: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:201
 msgid "use (acl action)"
@@ -4167,12 +4166,11 @@ msgstr ""
 "configuratiewaarde in en keer daarna hier terug."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:52
-#, fuzzy
 msgid ""
 "The \"tar\" command was not found in the path. Set the \"tar\" config key to "
 "the path to tar and return to this page."
 msgstr ""
-"Het \"teer\" commando werd niet gevonden in het pad. Stel de \"tar\" "
+"Het \"tar\" commando werd niet gevonden in het pad. Stel de \"tar\" "
 "configuratiesleutel in op het pad naar tar en keer terug naar deze pagina."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:41
@@ -4184,13 +4182,12 @@ msgid "This is the version saved on"
 msgstr "Deze versie is bewaard op"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
-#, fuzzy
 msgid ""
 "This site has cloud file store enabled, and there are <strong>$1</strong> "
 "media files on this system that are only stored in the cloud and not on this "
 "machine. These files will not backed up!"
 msgstr ""
-"Deze site heeft cloud file store ingeschakeld, en er zijn <strong>1 dollar</"
+"Deze site heeft cloud file store ingeschakeld, en er zijn <strong>$1</"
 "strong> mediabestanden op dit systeem die alleen zijn opgeslagen in de wolk "
 "en niet op deze machine. Van deze bestanden wordt geen back-up gemaakt!"
 
@@ -7392,9 +7389,8 @@ msgid "Request Certificate"
 msgstr "Certificaat aanvragen"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:8
-#, fuzzy
 msgid "Requesting a certificate from Let’s Encrypt for"
-msgstr "Het aanvragen van een certificaat bij Let's Encrypt voor"
+msgstr "Aanvragen van een certificaat bij Let's Encrypt voor"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_running.tpl:1
 #, fuzzy
@@ -7402,9 +7398,8 @@ msgid "Requesting certificates"
 msgstr "Certificaten aanvragen"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:5./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141
-#, fuzzy
 msgid "SSL Let’s Encrypt Certificate"
-msgstr "SSL Laten we het certificaat versleutelen"
+msgstr "SSL Let’s Encrypt certificaat"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:5
 #, fuzzy
@@ -7460,13 +7455,12 @@ msgid "This might take a while, hang on!"
 msgstr "Dit kan even duren, wacht even!"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:19
-#, fuzzy
 msgid ""
 "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> "
 "configuration file."
 msgstr ""
-"U kunt dit veranderen door de <tt>poort</tt> in te stellen in het "
-"<tt>zotonic.</tt>config configuratiebestand."
+"U kunt dit veranderen door de <tt>port</tt> in te stellen in het <tt>zotonic."
+"config</tt> configuratiebestand."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:26
 #, fuzzy
@@ -8147,7 +8141,7 @@ msgstr "Alleen danktekst"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:14
 msgid "Thank you text."
-msgstr "Dank text."
+msgstr "Dank tekst."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "The earth is flat."
@@ -9125,9 +9119,8 @@ msgid "Perform a version update of Zotonic (through git)"
 msgstr "Voer een versie-update van Zotonic uit (via git)"
 
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
-#, fuzzy
 msgid "Rebuild Zotonic"
-msgstr "Herbouw Zotoon"
+msgstr "Herbouw Zotonic"
 
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:14
 #, fuzzy
