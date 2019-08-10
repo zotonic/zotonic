@@ -24,6 +24,7 @@
     translations/2,
     parse_translations/1,
     trans/2,
+    trans/3,
     lookup/2,
     lookup/3,
     lookup_fallback/2,

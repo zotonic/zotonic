@@ -407,12 +407,12 @@ scan_apps(What, Apps) ->
 subdir_pattern(template)   -> { "priv/templates",    "" };
 subdir_pattern(lib)        -> { "priv/lib",          "" };
 subdir_pattern(dispatch)   -> { "priv/dispatch",     "" };
-subdir_pattern(translation)-> { "priv/translations", "\\.po" };
+subdir_pattern(translation)-> { "priv/translations", "\\.po$" };
 subdir_pattern(scomp)      -> { "src/scomps",        "^scomp_(.*)\\.erl$" };
 subdir_pattern(action)     -> { "src/actions",       "^action_(.*)\\.erl$" };
 subdir_pattern(validator)  -> { "src/validators",    "^validator_(.*)\\.erl$" };
 subdir_pattern(model)      -> { "src/models",        "^m_(.*)\\.erl$" };
-subdir_pattern(erlang)     -> { "src/support",       "\\.erl" }.
+subdir_pattern(erlang)     -> { "src/support",       "\\.erl$" }.
 
 
 %% @doc Scan all apps for templates/scomps/etc.

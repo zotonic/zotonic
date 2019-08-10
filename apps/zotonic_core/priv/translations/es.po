@@ -3952,9 +3952,8 @@ msgstr "La autenticación de dos factores no está habilitada para este usuario.
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:59
 #, fuzzy
-#| msgid "System Configuration"
 msgid "User group configuration"
-msgstr "Configuración de Sistema"
+msgstr ""
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:72
 #, fuzzy

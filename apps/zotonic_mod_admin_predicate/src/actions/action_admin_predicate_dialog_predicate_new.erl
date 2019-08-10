@@ -44,7 +44,7 @@ event(#postback{message={predicate_new_dialog, Title, Redirect}}, Context) ->
         {redirect, Redirect },
         {title, Title}
     ],
-    z_render:dialog("Make a new predicate", "_action_dialog_predicate_new.tpl", Vars, Context);
+    z_render:dialog(?__("Make a new predicate", Context), "_action_dialog_predicate_new.tpl", Vars, Context);
 
 
 event(#submit{message=predicate_new}, Context) ->
