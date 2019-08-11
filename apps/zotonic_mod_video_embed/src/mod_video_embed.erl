@@ -408,7 +408,7 @@ preview_youtube(MediaId, InsertProps, Context) ->
         <<>> ->
             static_preview(MediaId, <<"images/youtube.jpg">>, Context);
         EmbedId ->
-            Url = "http://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg",
+            Url = "https://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg",
             m_media:save_preview_url(MediaId, Url, Context)
     end.
 
@@ -427,10 +427,10 @@ preview_vimeo(MediaId, InsertProps, Context) ->
             end
     end.
 
-% videoid_to_image(youtube, EmbedId) ->
-%     "http://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg";
+videoid_to_image(youtube, EmbedId) ->
+    "https://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg";
 videoid_to_image(vimeo, EmbedId) ->
-    JsonUrl = "http://vimeo.com/api/v2/video/" ++ z_convert:to_list(EmbedId) ++ ".json",
+    JsonUrl = "https://vimeo.com/api/v2/video/" ++ z_convert:to_list(EmbedId) ++ ".json",
     case httpc:request(JsonUrl) of
         {ok, {{_Http, 200, _Ok}, _Header, Data}} ->
             #{<<"thumbnail_large">> := Thumbnail} = z_json:decode(Data),
