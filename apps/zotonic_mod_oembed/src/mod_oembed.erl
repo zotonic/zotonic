@@ -137,55 +137,49 @@ observe_media_viewer(#media_viewer{id=Id, props=Props, filename=Filename, option
                 {id, Id},
                 {medium, Props},
                 {options, Options},
-                {filename, Filename},
-                {is_ssl, is_ssl(Context)}
+                {filename, Filename}
             ],
             Html = case proplists:lookup(oembed, Props) of
-                       {oembed, OEmbed} ->
-                           case proplists:lookup(provider_name, OEmbed) of
-                               {provider_name, N} ->
-                                   Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
-                                   case z_module_indexer:find(template, Tpl, Context) of
-                                       {ok, Found} ->
-                                           z_template:render(Found, TplOpts, Context);
-                                       {error, _} ->
-                                           media_viewer_fallback(OEmbed, TplOpts, Context)
-                                   end;
-                               none ->
-                                   media_viewer_fallback(OEmbed, TplOpts, Context)
-                           end;
-                       none ->
-                           "<!-- No oembed code found -->"
-                   end,
+               {oembed, OEmbed} ->
+                    case lookup(<<"provider_name">>, OEmbed) of
+                        {<<"provider_name">>, N} ->
+                            Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
+                            case z_module_indexer:find(template, Tpl, Context) of
+                                {ok, Found} ->
+                                    z_template:render(Found, TplOpts, Context);
+                                {error, _} ->
+                                    media_viewer_fallback(OEmbed, TplOpts, Context)
+                            end;
+                        none ->
+                            media_viewer_fallback(OEmbed, TplOpts, Context)
+                    end;
+                none ->
+                    <<"<!-- No oembed code found -->">>
+            end,
             {ok, Html};
         _ ->
             undefined
     end.
 
+lookup(K, [ {A,_} | _ ] = OEmbed) when is_atom(A) ->
+    lookup(binary_to_atom(K, utf8), OEmbed);
+lookup(K, OEmbed) ->
+    proplists:lookup(K, OEmbed).
+
 media_viewer_fallback(OEmbed, TplOpts, Context) ->
-    case proplists:lookup(html, OEmbed) of
-        {html, Html} ->
-            case proplists:get_value(is_ssl, TplOpts) of
-                true -> binary:replace(Html, <<"http://">>, <<"https://">>);
-                false -> Html
-            end;
+    case lookup(<<"html">>, OEmbed) of
+        {<<"html">>, Html} ->
+            binary:replace(Html, <<"http://">>, <<"https://">>, [global]);
         none ->
             z_template:render("_oembed_embeddable.tpl", TplOpts, Context)
     end.
 
-%% @doc Map http:// urls to https:// if viewed on a secure connection
-is_ssl(Context) ->
-    case m_req:get(is_ssl, Context) of
-        true -> true;
-        false -> false;
-        undefined -> z_convert:to_bool(z_context:get(is_ssl, Context))
-    end.
 
 % @doc Recognize youtube and vimeo URLs, generate the correct embed code
 observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
     case oembed_request(Url, Context) of
         {ok, Json} ->
-            Category = type_to_category(proplists:get_value(type, Json)),
+            Category = type_to_category(proplists:get_value(<<"type">>, Json)),
             #media_import_props{
                 prio = case Category of
                             website -> 11; % Prefer our own 'website' extraction
@@ -195,20 +189,20 @@ observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
                 module = ?MODULE,
                 description = ?__("Embedded Content", Context),
                 rsc_props = [
-                    {title, first([proplists:get_value(title, Json), z_url_metadata:p(title, MD)])},
-                    {summary, first([proplists:get_value(description, Json), z_url_metadata:p(summary, MD)])},
+                    {title, first([proplists:get_value(<<"title">>, Json), z_url_metadata:p(title, MD)])},
+                    {summary, first([proplists:get_value(<<"description">>, Json), z_url_metadata:p(summary, MD)])},
                     {website, Url}
                 ],
                 medium_props = [
                     {mime, ?OEMBED_MIME},
-                    {width, proplists:get_value(width, Json)},
-                    {height, proplists:get_value(height, Json)},
-                    {oembed_service, proplists:get_value(provider_name, Json)},
+                    {width, proplists:get_value(<<"width">>, Json)},
+                    {height, proplists:get_value(<<"height">>, Json)},
+                    {oembed_service, proplists:get_value(<<"provider_name">>, Json)},
                     {oembed_url, Url},
                     {oembed, Json},
                     {media_import, Url}
                 ],
-                preview_url = proplists:get_value(thumbnail_url, Json)
+                preview_url = proplists:get_value(<<"thumbnail_url">>, Json)
             };
         {error, _} ->
             undefined
@@ -340,9 +334,9 @@ preview_create_from_json(MediaId, Json, Context) ->
 -spec oembed_request( string(), z:context() ) -> {ok, list()} | {error, term()}.
 oembed_request(Url, Context) ->
     F = fun() ->
-            oembed_client:discover(Url, Context)
-        end,
-    case z_depcache:memo(F, {oembed, Url}, 3600, Context) of
+        oembed_client:discover(Url, Context)
+    end,
+    case z_depcache:memo(F, {oembed, Url}, 1800, Context) of
         {ok, Json} when is_map(Json) ->
             {ok, sanitize_json(Json, Context)};
         {error, _} = Error ->
@@ -419,7 +413,7 @@ preview_url_from_json(_Type, Json) ->
 type_to_category(<<"photo">>) -> image;
 type_to_category(<<"video">>) -> video;
 type_to_category(<<"link">>) -> website;
-type_to_category(_rich) -> document.
+type_to_category(_Type) -> document.
 
 
 %% This is a copy from mod_video_embed, should be combined (which is in the works)
