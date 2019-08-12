@@ -137,55 +137,49 @@ observe_media_viewer(#media_viewer{id=Id, props=Props, filename=Filename, option
                 {id, Id},
                 {medium, Props},
                 {options, Options},
-                {filename, Filename},
-                {is_ssl, is_ssl(Context)}
+                {filename, Filename}
             ],
             Html = case proplists:lookup(oembed, Props) of
-                       {oembed, OEmbed} ->
-                           case proplists:lookup(provider_name, OEmbed) of
-                               {provider_name, N} ->
-                                   Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
-                                   case z_module_indexer:find(template, Tpl, Context) of
-                                       {ok, Found} ->
-                                           z_template:render(Found, TplOpts, Context);
-                                       {error, _} ->
-                                           media_viewer_fallback(OEmbed, TplOpts, Context)
-                                   end;
-                               none ->
-                                   media_viewer_fallback(OEmbed, TplOpts, Context)
-                           end;
-                       none ->
-                           "<!-- No oembed code found -->"
-                   end,
+               {oembed, OEmbed} ->
+                    case lookup(<<"provider_name">>, OEmbed) of
+                        {<<"provider_name">>, N} ->
+                            Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
+                            case z_module_indexer:find(template, Tpl, Context) of
+                                {ok, Found} ->
+                                    z_template:render(Found, TplOpts, Context);
+                                {error, _} ->
+                                    media_viewer_fallback(OEmbed, TplOpts, Context)
+                            end;
+                        none ->
+                            media_viewer_fallback(OEmbed, TplOpts, Context)
+                    end;
+                none ->
+                    <<"<!-- No oembed code found -->">>
+            end,
             {ok, Html};
         _ ->
             undefined
     end.
 
+lookup(K, [ {A,_} | _ ] = OEmbed) when is_atom(A) ->
+    lookup(binary_to_atom(K, utf8), OEmbed);
+lookup(K, OEmbed) ->
+    proplists:lookup(K, OEmbed).
+
 media_viewer_fallback(OEmbed, TplOpts, Context) ->
-    case proplists:lookup(html, OEmbed) of
-        {html, Html} ->
-            case proplists:get_value(is_ssl, TplOpts) of
-                true -> binary:replace(Html, <<"http://">>, <<"https://">>);
-                false -> Html
-            end;
+    case lookup(<<"html">>, OEmbed) of
+        {<<"html">>, Html} ->
+            binary:replace(Html, <<"http://">>, <<"https://">>, [global]);
         none ->
             z_template:render("_oembed_embeddable.tpl", TplOpts, Context)
     end.
 
-%% @doc Map http:// urls to https:// if viewed on a secure connection
-is_ssl(Context) ->
-    case m_req:get(is_ssl, Context) of
-        true -> true;
-        false -> false;
-        undefined -> z_convert:to_bool(z_context:get(is_ssl, Context))
-    end.
 
 % @doc Recognize youtube and vimeo URLs, generate the correct embed code
 observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
     case oembed_request(Url, Context) of
         {ok, Json} ->
-            Category = type_to_category(proplists:get_value(type, Json)),
+            Category = type_to_category(proplists:get_value(<<"type">>, Json)),
             #media_import_props{
                 prio = case Category of
                             website -> 11; % Prefer our own 'website' extraction
@@ -195,20 +189,20 @@ observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
                 module = ?MODULE,
                 description = ?__("Embedded Content", Context),
                 rsc_props = [
-                    {title, first([proplists:get_value(title, Json), z_url_metadata:p(title, MD)])},
-                    {summary, first([proplists:get_value(description, Json), z_url_metadata:p(summary, MD)])},
+                    {title, first([proplists:get_value(<<"title">>, Json), z_url_metadata:p(title, MD)])},
+                    {summary, first([proplists:get_value(<<"description">>, Json), z_url_metadata:p(summary, MD)])},
                     {website, Url}
                 ],
                 medium_props = [
                     {mime, ?OEMBED_MIME},
-                    {width, proplists:get_value(width, Json)},
-                    {height, proplists:get_value(height, Json)},
-                    {oembed_service, proplists:get_value(provider_name, Json)},
+                    {width, proplists:get_value(<<"width">>, Json)},
+                    {height, proplists:get_value(<<"height">>, Json)},
+                    {oembed_service, proplists:get_value(<<"provider_name">>, Json)},
                     {oembed_url, Url},
                     {oembed, Json},
                     {media_import, Url}
                 ],
-                preview_url = proplists:get_value(thumbnail_url, Json)
+                preview_url = proplists:get_value(<<"thumbnail_url">>, Json)
             };
         {error, _} ->
             undefined
@@ -287,14 +281,15 @@ preview_create(MediaId, MediaProps, Context) ->
         Url ->
             case oembed_request(Url, Context) of
                 {ok, Json} ->
-                    case proplists:get_value(type, Json) of
+                    case proplists:get_value(<<"type">>, Json) of
                         <<"link">> ->
                             % The selected images for "link" are quite bad, so don't
                             % embed anything for this type.
                             undefined;
                         _Type ->
                             %% store found properties in the media part of the rsc
-                            {EmbedService, EmbedId} = fetch_videoid_from_embed(<<>>, proplists:get_value(html, Json)),
+                            Html = proplists:get_value(<<"html">>, Json),
+                            {EmbedService, EmbedId} = fetch_videoid_from_embed(<<>>, Html),
                             ok = m_media:replace(MediaId,
                                                  [
                                                     {oembed, Json},
@@ -304,7 +299,7 @@ preview_create(MediaId, MediaProps, Context) ->
                                                  ],
                                                  Context),
                             _ = preview_create_from_json(MediaId, Json, Context),
-                            proplists:get_value(title, Json)
+                            proplists:get_value(<<"title">>, Json)
                     end;
                 {error, {http, Code, Body}} ->
                     Err = [{error, http_error}, {code, Code}, {body, Body}],
@@ -317,7 +312,7 @@ preview_create(MediaId, MediaProps, Context) ->
 
 
 preview_create_from_json(MediaId, Json, Context) ->
-    Type = proplists:get_value(type, Json),
+    Type = proplists:get_value(<<"type">>, Json),
     case preview_url_from_json(Type, Json) of
         undefined ->
             nop;
@@ -336,45 +331,53 @@ preview_create_from_json(MediaId, Json, Context) ->
     end.
 
 %% @doc Perform OEmbed discovery on a given URL.
-%% @spec oembed_request(string(), #context{}) -> [{Key, Value}]
+-spec oembed_request( string() | binary(), z:context() ) -> {ok, list()} | {error, term()}.
 oembed_request(Url, Context) ->
     F = fun() ->
-            oembed_client:discover(Url, Context)
-        end,
-    case z_depcache:memo(F, {oembed, Url}, 3600, Context) of
-        {ok, Json} ->
-            sanitize_json(Json, Context);
+        oembed_client:discover(Url, Context)
+    end,
+    case z_depcache:memo(F, {oembed, Url}, 1800, Context) of
+        {ok, Json} when is_map(Json) ->
+            {ok, sanitize_json(Json, Context)};
         {error, _} = Error ->
             Error
     end.
 
-
+-spec sanitize_json( map(), z:context() ) -> list().
 sanitize_json(Json, Context) ->
-    sanitize_json(Json, [], Context).
+    maps:fold(
+        fun(K, V, Acc) ->
+            case sanitize_json1(K, V, Context) of
+                {_, _} = KV -> [ KV | Acc ];
+                false -> Acc
+            end
+        end,
+        [],
+        Json).
 
-sanitize_json([], Acc, _Context) ->
-    {ok, lists:reverse(Acc)};
-sanitize_json([{html,<<>>}|Rest], Acc, Context) ->
-    sanitize_json(Rest, Acc, Context);
-sanitize_json([{html,Html}|Rest], Acc, Context) when Html =/= <<>> ->
+sanitize_json1(_K, null, _Context) ->
+    false;
+sanitize_json1(<<"html">>, <<>>, _Context) ->
+    false;
+sanitize_json1(<<"html">>, Html, Context) ->
     case z_sanitize:html(Html,Context) of
-        <<>> -> {error, illegal_html};
-        Html1 -> sanitize_json(Rest, [{html,Html1}|Acc], Context)
+        <<>> -> false;
+        Html1 -> {<<"html">>, Html1}
     end;
-sanitize_json([{body,Body}|Rest], Acc, Context) ->
-    Body1 = z_sanitize:html(Body,Context),
-    sanitize_json(Rest, [{body,Body1}|Acc], Context);
-sanitize_json([{UrlTag,Url}|Rest], Acc, Context) when UrlTag =:= url; UrlTag =:= provider_url; UrlTag =:= author_url ->
-    Url1 = z_sanitize:uri(Url),
-    sanitize_json(Rest, [{UrlTag,Url1}|Acc], Context);
-sanitize_json([{Tag,B}|Rest], Acc, Context) when is_binary(B) ->
-    B1 = z_html:escape_check(B),
-    sanitize_json(Rest, [{Tag,B1}|Acc], Context);
-sanitize_json([{Tag,N}|Rest], Acc, Context) when is_integer(N) ->
-    sanitize_json(Rest, [{Tag,N}|Acc], Context);
-sanitize_json([_|Rest], Acc, Context) ->
-    sanitize_json(Rest, Acc, Context).
-
+sanitize_json1(<<"body">>, Body, Context) ->
+    {<<"body">>, z_sanitize:html(Body, Context)};
+sanitize_json1(<<"url">>, Url, _Context) ->
+    {<<"url">>, z_sanitize:uri(Url)};
+sanitize_json1(<<"provider_url">>, Url, _Context) ->
+    {<<"provider_url">>, z_sanitize:uri(Url)};
+sanitize_json1(<<"author_url">>, Url, _Context) ->
+    {<<"author_url">>, z_sanitize:uri(Url)};
+sanitize_json1(K, V, _Context) when is_binary(V) ->
+    {K,  z_html:escape_check(V)};
+sanitize_json1(K, V, _Context) when is_boolean(V); is_integer(V) ->
+    {K, V};
+sanitize_json1(_K, _V, _Context) ->
+    false.
 
 %% @doc Given a thumbnail URL, download it and return the content type plus image data pair.
 thumbnail_request(ThumbUrl, _Context) ->
@@ -397,26 +400,20 @@ thumbnail_request(ThumbUrl, _Context) ->
 %% @doc Get the preview URL from JSON structure. Either the thumbnail
 %% URL for non-photo elements, or the full URL for photo elements.
 preview_url_from_json(<<"photo">>, Json) ->
-    case proplists:get_value(url, Json) of
-        None when None =:= undefined; None =:= null ->
-            case proplists:get_value(thumbnail_url, Json) of
-                null -> undefined;
-                Url -> Url
-            end;
+    case proplists:get_value(<<"url">>, Json) of
+        undefined ->
+            proplists:get_value(<<"thumbnail_url">>, Json);
         Url ->
             Url
     end;
 preview_url_from_json(_Type, Json) ->
-    case proplists:get_value(thumbnail_url, Json) of
-        null -> undefined;
-        Url -> Url
-    end.
+    proplists:get_value(<<"thumbnail_url">>, Json).
 
 
 type_to_category(<<"photo">>) -> image;
 type_to_category(<<"video">>) -> video;
 type_to_category(<<"link">>) -> website;
-type_to_category(_rich) -> document.
+type_to_category(_Type) -> document.
 
 
 %% This is a copy from mod_video_embed, should be combined (which is in the works)

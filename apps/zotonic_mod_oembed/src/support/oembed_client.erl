@@ -91,17 +91,14 @@ oembed_request(RequestUrl) ->
         {max_length, 1024*1024}
     ],
     case z_url_fetch:fetch(RequestUrl, FetchOptions) of
-        {ok, {_Final, _Hs, 200, Body}} ->
-            {ok, z_json:decode(Body)};
-        {ok, {_Final, _Hs, 404, _Body}} ->
-            {error, {http, 404, <<>>}};
-        {ok, {_Final, Hs, Code, Body}} when Code =:= 401; Code =:= 403 ->
-            lager:warning("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Hs, Body]),
-            {error, {http, Code, Body}};
-        {ok, {_Final, Hs, Code, Body}} ->
-            lager:info("OEmbed HTTP Request returned ~p for '~p' (~p ~p)", [Code, RequestUrl, Hs, Body]),
-            {error, {http, Code, Body}};
+        {ok, {_Final, _Hs, _Size, Body}} ->
+            try
+                {ok, z_json:decode(Body)}
+            catch
+                _:_ -> {error, nojson}
+            end;
         {error, _} = Error ->
+            lager:info("OEmbed HTTP Request returned error for '~p' (~p ~p)", [RequestUrl, Error]),
             Error
     end.
 
@@ -123,16 +120,16 @@ get_config(Cfg, Default, Context) ->
     end.
 
 %% @doc Fix oembed returned HTML, remove http: protocol to ensure that the oembed can also be shown on https: sites.
-fixup_html({ok, Props}) ->
-    {ok, fixup_protocol(html, Props)};
+fixup_html({ok, Map}) ->
+    {ok, fixup_protocol(<<"html">>, Map)};
 fixup_html({error, _} = Error) ->
     Error.
 
-fixup_protocol(Key, Props) ->
-    case lists:keytake(Key, 1, Props) of
-        false ->
-            Props;
-        {value, {Key, Value}, Props1} ->
-            Value1 = binary:replace(Value, <<"http://">>, <<"//">>, [global]),
-            [{Key,Value1}|Props1]
+fixup_protocol(Key, Map) ->
+    case maps:get(Key, Map, undefined) of
+        undefined ->
+            Map;
+        Html ->
+            Html1 = binary:replace(Html, <<"http://">>, <<"//">>, [global]),
+            Map#{ <<"html">> => Html1 }
     end.
