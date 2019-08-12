@@ -34,10 +34,10 @@ Create a site
     postgres=# \c zotonic
     postgres=# CREATE LANGUAGE "plpgsql";
 
-2. Edit your ``/etc/hosts`` file, adding an entry for ``yoursite.dev`` (the
+2. Edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
    site hostname) to point at your local host::
 
-     127.0.0.1   yoursite.dev
+     127.0.0.1   yoursite.test
 
 3. Finally, create a new Zotonic site, based on the ‘blog’ skeleton site::
 
