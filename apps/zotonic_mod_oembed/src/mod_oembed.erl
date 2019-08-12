@@ -331,7 +331,7 @@ preview_create_from_json(MediaId, Json, Context) ->
     end.
 
 %% @doc Perform OEmbed discovery on a given URL.
--spec oembed_request( string(), z:context() ) -> {ok, list()} | {error, term()}.
+-spec oembed_request( string() | binary(), z:context() ) -> {ok, list()} | {error, term()}.
 oembed_request(Url, Context) ->
     F = fun() ->
         oembed_client:discover(Url, Context)
