@@ -20,7 +20,7 @@
 
 . $ZOTONIC_SCRIPTS/helpers/zotonic_setup
 
-require_zotonic_running
+# require_zotonic_running
 
 LOGS=$(ls $ZOTONIC/priv/log/{crash,error,console}.log)
 tail -n 500 $LOGS
