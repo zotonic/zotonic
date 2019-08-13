@@ -32,6 +32,7 @@ find params:
     cat
 %}
 {% with stay or callback or subject_id as stay %}
+{% with (not tabs_enabled or "depiction"|member:tabs_enabled) and q.is_zmedia as has_depiction_tab %}
 {% if not (tabs_enabled and tabs_enabled|length == 1) %}
     <ul class="nav nav-pills">
         {% block tabs %}
@@ -42,8 +43,13 @@ find params:
                     </li>
                 {% endif %}
             {% else %}
+                {% if has_depiction_tab %}
+                    <li {% if tab == "depiction" %}class="active"{% endif %}>
+                        <a data-toggle="tab" href="#{{ #tab }}-depiction">{_ Attached media _}</a>
+                    </li>
+                {% endif %}
                 {% if not tabs_enabled or "new"|member:tabs_enabled %}
-                    <li class="active">
+                    <li {% if not tab or tab == "new" or tab == "find" or tab == "upload" %}class="active"{% endif %}>
                         <a data-toggle="tab" href="#{{ #tab }}-findnew">
                             {_ Create or find _}
                         </a>
@@ -92,6 +98,17 @@ find params:
                     autoclose
                 %}
         {% else %}
+            {% if has_depiction_tab %}
+                {% include "_action_dialog_connect_tab_depictions.tpl"
+                    tab=#tab
+                    predicate=predicate
+                    delegate=delegate
+                    subject_id=subject_id
+                    object_id=object_id
+                    is_active=(tab == "depiction")
+                    title=""
+                %}
+            {% endif %}
             {% if not tabs_enabled or "new"|member:tabs_enabled %}
                 {% include "_action_dialog_connect_tab_findnew.tpl"
                     tab=#tab
@@ -99,7 +116,7 @@ find params:
                     delegate=delegate
                     subject_id=subject_id
                     object_id=object_id
-                    is_active=`true`
+                    is_active=(not tab or tab == "new" or tab == "find" or tab == "upload")
                     title=""
                     cat=cat
                     content_group=content_group
@@ -143,5 +160,6 @@ find params:
         {% endif %}
     {% endblock %}
 </div>
+{% endwith %}
 {% endwith %}
 {% endwith %}
