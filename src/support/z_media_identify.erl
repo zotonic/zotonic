@@ -42,12 +42,25 @@
 
 %% @doc Caching version of identify/1. Fetches information about an image, returns width, height, type, etc.
 -spec identify(#upload{}|string(), #context{}) -> {ok, Props::list()} | {error, term()}.
+identify(#upload{tmpfile=undefined, data=Data, filename=Filename}, Context) when is_binary(Data) ->
+    TmpFile = z_tempfile:new(),
+    case file:write_file(TmpFile, Data) of
+        ok ->
+            Result = identify_file(TmpFile, Filename, Context),
+            file:delete(TmpFile),
+            Result;
+        {error, _} = Error ->
+            file:delete(TmpFile),
+            lager:warning("z_media_identify: could not write temporary file with ~p bytes to '~s'",
+                          [ size(Data), TmpFile ]),
+            Error
+    end;
 identify(#upload{tmpfile=File, filename=Filename}, Context) ->
-	identify(File, Filename, Context);
+	identify_file(File, Filename, Context);
 identify(File, Context) ->
 	identify(File, File, Context).
 
--spec identify(#upload{}|string(), string(), #context{}) -> {ok, Props::list()} | {error, term()}.
+-spec identify(string(), string(), #context{}) -> {ok, Props::list()} | {error, term()}.
 identify(File, OriginalFilename, Context) ->
     identify(File, File, OriginalFilename, Context).
 
@@ -68,7 +81,7 @@ identify(File, MediumFilename, OriginalFilename, Context) ->
 identify_file(File, Context) ->
 	identify_file(File, File, Context).
 
--spec identify_file(File::string(), OriginalFilename::string(), #context{}) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file(File::string()|undefined, OriginalFilename::string()|undefined, #context{}) -> {ok, Props::list()} | {error, term()}.
 identify_file(File, OriginalFilename, Context) ->
     Extension = maybe_extension(File, OriginalFilename),
     case z_notifier:first(#media_identify_file{filename=File, original_filename=OriginalFilename, extension=Extension}, Context) of

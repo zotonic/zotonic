@@ -373,14 +373,23 @@ duplicate_file(Type, Filename, Context) ->
 %% @spec insert_file(File, Context) -> {ok, Id} | {error, Reason}
 insert_file(File, Context) ->
     insert_file(File, [], Context).
-insert_file(#upload{filename=OriginalFilename, data=Data, tmpfile=undefined}, Props, Context) when Data /= undefined ->
-    TmpFile = z_tempfile:new(),
-    ok = file:write_file(TmpFile, Data),
-    insert_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, Props, [], Context);
+
 insert_file(File, Props, Context) ->
     insert_file(File, Props, [], Context).
 
-
+insert_file(#upload{ data = Data, tmpfile = undefined } = Upload, Props, Options, Context) when Data =/= undefined ->
+    TmpFile = z_tempfile:new(),
+    case file:write_file(TmpFile, Data) of
+        ok ->
+            Result = insert_file(Upload#upload{ tmpfile = TmpFile }, Props, Options, Context),
+            file:delete(TmpFile),
+            Result;
+        {error, _} = Error ->
+            lager:error("Could not write temporary file of ~p bytes, error: ~p",
+                        [ iolist_size(Data), Error ]),
+            file:delete(TmpFile),
+            Error
+    end;
 insert_file(#upload{filename=OriginalFilename, tmpfile=TmpFile}, Props, Options, Context) ->
     PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}], Context),
     insert_file(TmpFile, [{original_filename, OriginalFilename}|Props], PropsMedia, Options, Context);
