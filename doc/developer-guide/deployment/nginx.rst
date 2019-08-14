@@ -37,10 +37,6 @@ backend:
   %%% Outside port zotonic uses to receive incoming HTTPS requests.
   {ssl_port, 443},
 
-  %%% Force sites to use SSL. Redirects http requests to https.
-  {ssl_only, true},
-
-
 Nginx configuration
 -------------------
 
@@ -55,6 +51,7 @@ hostname:
         listen   [::]:80 default_server ipv6only=on; ## listen for ipv6
 
         listen 443 ssl;
+	# listen 443 ssl http2; ## enable http2
         listen [::]:443 ssl ipv6only=on;
 
         server_name  test.zotonic.com;
