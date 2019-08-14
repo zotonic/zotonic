@@ -44,10 +44,24 @@
 -type mime_type() :: binary().
 -type os_family() :: win32 | unix.
 
-%% @doc Caching version of identify/1. Fetches information about an image, returns width, height, type, etc.
+%% @doc Caching version of identify/3. Fetches information about an image, returns width, height, type, etc.
 -spec identify( #upload{} | file:filename_all(), z:context() ) -> {ok, Props::list()} | {error, term()}.
+identify(#upload{tmpfile=undefined, data=Data, filename=Filename}, Context) when is_binary(Data) ->
+    TmpFile = z_tempfile:new(),
+    case file:write_file(TmpFile, Data) of
+        ok ->
+            Result = identify_file(TmpFile, Filename, Context),
+            file:delete(TmpFile),
+            Result;
+        {error, _} = Error ->
+            file:delete(TmpFile),
+            lager:warning("z_media_identify: could not write temporary file with ~p bytes to '~s'",
+                          [ size(Data), TmpFile ]),
+            Error
+    end;
 identify(#upload{tmpfile=File, filename=Filename}, Context) ->
-    identify(File, Filename, Context);
+    % Don't cache identify results for uploaded files
+    identify_file(File, Filename, Context);
 identify(File, Context) ->
     identify(File, File, Context).
 
