@@ -118,66 +118,14 @@ certificate a real certificate can be used. Check for these the modules :ref:`mo
 HTTPS and security
 ^^^^^^^^^^^^^^^^^^
 
-It is possible to force use of https only, all incoming http connection will then redirect to HTTPS
-before they are handled further.
-
-To force HTTPS, set the following option in the ``zotonic.config`` file::
-
-    %%% Force sites to use SSL. Redirects http requests to https.
-       {ssl_only, true},
-
-This will also force all session cookies to be *secure*, i.e. HTTPS-only.
-
-
-Per site configuration
-""""""""""""""""""""""
-
-Per site the configuration can be changed using the site’s configuration file or config table.
-
-To overrule Zotonic’s ``ssl_only``, set ``site.ssl_only`` to either ``false`` or ``true``.
-Remove the site configuration key to use the Zotonic configuration.
-
-
-Per dispatch configuration
-""""""""""""""""""""""""""
-
-If ``ssl_only`` is not enforced then it is possible to specify per :ref:`dispatch rule <guide-dispatch>`
-if the request should be using https, http, or any of both.
-
-Example of a :ref:`dispatch rule <guide-dispatch>` enforcing https::
-
-     {admin, ["admin"], controller_admin, [{ssl, true}]}
-
-There are three variations:
-
-``{ssl, any}``
-    Keep the same protocol as before, don‘t switch beteen HTTP and HTTPS.
-    This used for lib and image files.
-
-``{ssl, true}``
-    Force a switch to HTTPS. When accessing the page using http then the page will
-    be reloaded using HTTPS.
-    This is useful for logon, logoff and other authentication or secure pages.
-
-``{ssl, false}``
-    Force a switch to HTTP. When accessing the page using HTTPS then the page will
-    be reloaded using HTTP.
-    This is useful for pages with embedded video or other non HTTPS content.
-
-
-Note that if the ``ssl_only`` option is set that the ``ssl`` option is ignored. All requests
-will be redirected to https.
+Zotonic always redirects all incoming HTTP connections to HTTPS. This can not be disabled.
 
 
 Secure cookies
 """"""""""""""
 
-If the ``ssl_only`` option is set then all session cookies will be set to *secure*.
-
-Secure cookies can also be enforced for non ssl-only sites. Setting the option
-``site.secure_cookie``  to ``true`` will force a new session when switching between
-protocols between http and https. This is useful for http sites with a secure admin part
-that is https only.
+All cookies related to authentication are set to *secure*. The cookie holding the authentication
+token has ``SameSite`` set to ``Strict``. This can not be configured or changed.
 
 
 Erlang SSL Configuration
