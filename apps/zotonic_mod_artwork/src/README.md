@@ -2,21 +2,21 @@
 This module contains fonts, icons and other _art work_ that can be used
 in sites and modules.
 
-Icon fonts included:
+Icon fonts:
 
  * Font Awesome 4 (build from sources)
  * Font Awesome 3 (no sources)
- * Material Design (build from sources)
+ * Material Design Iconic Font (build from sources): Sergey Kupletsky
 
-Images included:
+Images:
 
+ * Zotonic logos
  * Emotes: Tango Icon Library
  * Flags: Open Icon Library
  * Mime Icons: Tango Icon Library
  * Noun: The Noun Project
  * Social icons round: Veo Design
  * Social icons square: Open Icon Library
- * Zotonic logos
 
 ## Licenses
 
