@@ -1,0 +1,24 @@
+/*
+Errno::ENOENT: No such file or directory - /Users/marc/Sites/zotonic-master/_build/default/lib/zotonic_mod_artwork/priv/lib-src/material-design/scss/_sizes.scss
+
+Backtrace:
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin/compiler.rb:482:in `read'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin/compiler.rb:482:in `update_stylesheet'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin/compiler.rb:209:in `each'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin.rb:82:in `update_stylesheets'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/exec/sass_scss.rb:361:in `watch_or_update'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/exec/sass_scss.rb:51:in `process_result'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/exec/base.rb:52:in `parse'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/exec/base.rb:19:in `parse!'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/bin/sass:13:in `<top (required)>'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/bin/sass:19:in `load'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/bin/sass:19:in `<main>'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/bin/ruby_noexec_wrapper:14:in `eval'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/bin/ruby_noexec_wrapper:14:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Errno::ENOENT: No such file or directory - /Users/marc/Sites/zotonic-master/_build/default/lib/zotonic_mod_artwork/priv/lib-src/material-design/scss/_sizes.scss"; }

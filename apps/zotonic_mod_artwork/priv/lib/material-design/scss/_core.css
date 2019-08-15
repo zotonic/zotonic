@@ -1,0 +1,63 @@
+/*
+Error: Undefined variable: "$md-css-prefix".
+        on line 3 of /Users/marc/Sites/zotonic-master/_build/default/lib/zotonic_mod_artwork/priv/lib-src/material-design/scss/_core.scss
+
+1: // Core Class Definition
+2: // -------------------------
+3: [class^="#{$md-css-prefix}-"], [class*=" #{$md-css-prefix}-"] {
+4:   display: inline-block;
+5:   font: normal normal normal 14px/1 'Material Design Iconic Font';
+6:   font-size: inherit;
+7:   speak: none;
+8:   text-rendering: auto;
+
+Backtrace:
+/Users/marc/Sites/zotonic-master/_build/default/lib/zotonic_mod_artwork/priv/lib-src/material-design/scss/_core.scss:3
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/script/tree/variable.rb:49:in `_perform'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/script/tree/node.rb:50:in `perform'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/script/tree/interpolation.rb:100:in `_perform'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/script/tree/node.rb:50:in `perform'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:536:in `block in run_interp_no_strip'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:534:in `map'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:534:in `run_interp_no_strip'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:541:in `run_interp'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:409:in `visit_rule'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:36:in `visit'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/stack.rb:79:in `block in with_base'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/stack.rb:115:in `with_frame'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/stack.rb:79:in `with_base'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:158:in `visit'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:52:in `map'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:52:in `visit_children'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:167:in `block in visit_children'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:166:in `visit_children'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:36:in `block in visit'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:186:in `visit_root'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:36:in `visit'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:157:in `visit'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:8:in `visit'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/root_node.rb:36:in `css_tree'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/tree/root_node.rb:20:in `render'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/engine.rb:268:in `render'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin/compiler.rb:492:in `update_stylesheet'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin/compiler.rb:209:in `each'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/plugin.rb:82:in `update_stylesheets'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/exec/sass_scss.rb:361:in `watch_or_update'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/exec/sass_scss.rb:51:in `process_result'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/exec/base.rb:52:in `parse'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/lib/sass/exec/base.rb:19:in `parse!'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/gems/sass-3.4.14/bin/sass:13:in `<top (required)>'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/bin/sass:19:in `load'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/bin/sass:19:in `<main>'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/bin/ruby_noexec_wrapper:14:in `eval'
+/Users/marc/.rvm/gems/ruby-1.9.3-p429/bin/ruby_noexec_wrapper:14:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Undefined variable: \"$md-css-prefix\".\A         on line 3 of /Users/marc/Sites/zotonic-master/_build/default/lib/zotonic_mod_artwork/priv/lib-src/material-design/scss/_core.scss\A \A 1: // Core Class Definition\A 2: // -------------------------\A 3: [class^=\"#{$md-css-prefix}-\"], [class*=\" #{$md-css-prefix}-\"] {\A 4:   display: inline-block;\A 5:   font: normal normal normal 14px/1 'Material Design Iconic Font';\A 6:   font-size: inherit;\A 7:   speak: none;\A 8:   text-rendering: auto;"; }
