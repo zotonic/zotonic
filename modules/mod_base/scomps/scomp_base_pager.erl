@@ -78,7 +78,7 @@ render(Params, _Vars, Context) ->
             {ok, build_html(Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context)};
         List when is_list(List) ->
             % Flat list
-            render_list(List, Params, Dispatch, DispatchArgs, HideSinglePage, Context);
+            render_list(List, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
         #rsc_list{list=Ids} ->
             render_list(Ids, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
         _ ->
