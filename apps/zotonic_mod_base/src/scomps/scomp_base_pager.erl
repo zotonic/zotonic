@@ -63,7 +63,7 @@ render(Params, _Vars, Context) ->
         #search_result{pages=undefined} ->
             {ok, <<>>};
         #search_result{page=Page, pages=Pages} ->
-            Html = build_html(Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
+            Html = build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
         [ Chunk | _ ] = List when is_list(Chunk) ->
             % Paginated list with page chunks
@@ -72,7 +72,7 @@ render(Params, _Vars, Context) ->
             {ok, build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context)};
         List when is_list(List) ->
             % Flat list
-            render_list(Template, List, Params, Dispatch, DispatchArgs, HideSinglePage, Context);
+            render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
         #rsc_list{list=Ids} ->
             render_list(Template, Ids, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
         _ ->
