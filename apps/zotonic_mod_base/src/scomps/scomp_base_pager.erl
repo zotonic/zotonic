@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2019 Marc Worrell
 %% @doc Show the pager for the search result
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
--export([test/0]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -38,7 +37,7 @@ render(Params, _Vars, Context) ->
                    undefined -> z_context:get(zotonic_dispatch, Context, search);
                    Dp -> Dp
                end,
-    HideSinglePage = proplists:get_value(hide_single_page, Params),
+    HideSinglePage  = z_convert:to_bool(proplists:get_value(hide_single_page, Params, false)),
     Template = proplists:get_value(template, Params, "_pager.tpl"),
     DispatchArgs  = lists:foldl(
         fun(Arg, Acc) ->
@@ -49,34 +48,68 @@ render(Params, _Vars, Context) ->
 
     case Result of
         #m_search_result{result=[]} ->
-            {ok, ""};
+            {ok, <<>>};
         #m_search_result{result=undefined} ->
-            {ok, ""};
+            {ok, <<>>};
         #m_search_result{result=#search_result{pages=0}} ->
-            {ok, ""};
+            {ok, <<>>};
         #m_search_result{result=#search_result{page=Page, pages=1}} ->
-            case z_convert:to_bool(HideSinglePage) of
-                true ->
-                    {ok, []};
-                false ->
-                    {ok, build_html(Template, Page, 1, Dispatch, DispatchArgs, Context)}
-            end;
+            {ok, build_html(Template, Page, 1, HideSinglePage, Dispatch, DispatchArgs, Context)};
         #m_search_result{result=#search_result{page=Page, pages=Pages}} ->
-            Html = build_html(Template, Page, Pages, Dispatch, DispatchArgs, Context),
+            Html = build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
         #search_result{result=[]} ->
-            {ok, ""};
+            {ok, <<>>};
         #search_result{pages=undefined} ->
-            {ok, ""};
+            {ok, <<>>};
         #search_result{page=Page, pages=Pages} ->
-            Html = build_html(Template, Page, Pages, Dispatch, DispatchArgs, Context),
+            Html = build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
+        [ Chunk | _ ] = List when is_list(Chunk) ->
+            % Paginated list with page chunks
+            Page = lookup_arg(page, 1, Params, Context),
+            Pages = length(List),
+            {ok, build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context)};
+        List when is_list(List) ->
+            % Flat list
+            render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
+        #rsc_list{list=Ids} ->
+            render_list(Template, Ids, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
         _ ->
-            {error, "scomp_pager: search result is not a #search_result{}"}
+            {error, <<"scomp_pager: search result is not a #search_result{} or list">>}
     end.
 
+render_list(_Template, [], _Params, _HideSinglePage, _Dispatch, _DispatchArgs, _Context) ->
+    {ok, <<>>};
+render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, Context) ->
+    PageLen = lookup_arg(pagelen, ?SEARCH_PAGELEN, Params, Context),
+    Page = lookup_arg(page, 1, Params, Context),
+    Pages = (length(List) - 1) div PageLen + 1,
+    {ok, build_html(Template, Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context)}.
 
-build_html(Template, Page, Pages, Dispatch, DispatchArgs, Context) ->
+lookup_arg(Name, Default, Params, Context) ->
+    V = case proplists:get_value(Name, Params) of
+        undefined -> undefined;
+        P -> try z_convert:to_integer(P) catch _:_ -> undefined end
+    end,
+    V1 = case V of
+        undefined ->
+            case z_context:get_q(Name, Context) of
+                undefined -> undefined;
+                Q -> try z_convert:to_integer(Q) catch _:_ -> undefined end
+            end;
+        _ ->
+            V
+    end,
+    case V1 of
+        undefined -> Default;
+        N when N =< 0 -> Default;
+        _ -> V1
+    end.
+
+build_html(_Template, _Page, Pages, true, _Dispatch, _DispatchArgs, _Context) when Pages =< 1 ->
+    <<>>;
+build_html(Template, Page, Pages, _HideSinglePage, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
     Props = [
@@ -202,9 +235,9 @@ seq(A,B) when B < A -> [];
 seq(A,B) -> lists:seq(A,B).
 
 
-test() ->
-    C = z_context:new(default),
-    R = #search_result{result=[a], pages=100, page=10},
-    {ok, H} = render([{result,R}], [], C),
-    list_to_binary(H).
+% test() ->
+%     C = z_context:new(default),
+%     R = #search_result{result=[a], pages=100, page=10},
+%     {ok, H} = render([{result,R}], [], C),
+%     list_to_binary(H).
 
