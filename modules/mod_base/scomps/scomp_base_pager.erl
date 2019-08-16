@@ -39,7 +39,7 @@ render(Params, _Vars, Context) ->
                         undefined -> z_context:get(zotonic_dispatch, Context, search);
                         Dp -> Dp
                    end,
-    HideSinglePage  = proplists:get_value(hide_single_page, Params, false),
+    HideSinglePage  = z_convert:to_bool(proplists:get_value(hide_single_page, Params, false)),
     CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(hide_single_page, Params))),
 
     DispatchArgs = case proplists:is_defined(qargs, CleanedArgs) of
@@ -54,47 +54,44 @@ render(Params, _Vars, Context) ->
 
     case Result1 of
         #m_search_result{result=[]} ->
-            {ok, ""};
+            {ok, <<>>};
         #m_search_result{result=undefined} ->
-            {ok, ""};
+            {ok, <<>>};
         #m_search_result{result=#search_result{pages=0}} ->
-            {ok, ""};
+            {ok, <<>>};
         #m_search_result{result=#search_result{page=Page, pages=1}} ->
-            case z_convert:to_bool(HideSinglePage) of
-                true ->
-                    {ok, []};
-                false ->
-                    {ok, build_html(Page, 1, Dispatch, DispatchArgs, Context)}
-            end;
+            {ok, build_html(Page, 1, HideSinglePage, Dispatch, DispatchArgs, Context)};
         #m_search_result{result=#search_result{page=Page, pages=Pages}} ->
-            Html = build_html(Page, Pages, Dispatch, DispatchArgs, Context),
+            Html = build_html(Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
         #search_result{result=[]} ->
-            {ok, ""};
+            {ok, <<>>};
         #search_result{pages=undefined} ->
-            {ok, ""};
+            {ok, <<>>};
         #search_result{page=Page, pages=Pages} ->
-            Html = build_html(Page, Pages, Dispatch, DispatchArgs, Context),
+            Html = build_html(Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context),
             {ok, Html};
-        {rsc_list, Ids} ->
-            render_list(Ids, Params, Dispatch, DispatchArgs, HideSinglePage, Context);
+        [ Chunk | _ ] = List when is_list(Chunk) ->
+            % Paginated list with page chunks
+            Page = lookup_arg(page, 1, Params, Context),
+            Pages = length(List),
+            {ok, build_html(Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context)};
         List when is_list(List) ->
+            % Flat list
             render_list(List, Params, Dispatch, DispatchArgs, HideSinglePage, Context);
+        #rsc_list{list=Ids} ->
+            render_list(Ids, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
         _ ->
-            {error, "scomp_pager: search result is not a #search_result{} or list"}
+            {error, <<"scomp_pager: search result is not a #search_result{} or list">>}
     end.
 
-render_list([], _Params, _Dispatch, _DispatchArgs, _HideSinglePage, _Context) ->
+render_list([], _Params, _HideSinglePage, _Dispatch, _DispatchArgs, _Context) ->
     {ok, ""};
-render_list(List, Params, Dispatch, DispatchArgs, HideSinglePage, Context) ->
+render_list(List, Params, HideSinglePage, Dispatch, DispatchArgs, Context) ->
     PageLen = lookup_arg(pagelen, ?SEARCH_PAGELEN, Params, Context),
     Page = lookup_arg(page, 1, Params, Context),
-    case (length(List) - 1) div PageLen + 1 of
-        1 when HideSinglePage ->
-            {ok, ""};
-        Pages ->
-            {ok, build_html(Page, Pages, Dispatch, DispatchArgs, Context)}
-    end.
+    Pages = (length(List) - 1) div PageLen + 1,
+    {ok, build_html(Page, Pages, HideSinglePage, Dispatch, DispatchArgs, Context)}.
 
 lookup_arg(Name, Default, Params, Context) ->
     V = case proplists:get_value(Name, Params) of
@@ -116,7 +113,9 @@ lookup_arg(Name, Default, Params, Context) ->
         _ -> V1
     end.
 
-build_html(Page, Pages, Dispatch, DispatchArgs, Context) ->
+build_html(_Page, Pages, true, _Dispatch, _DispatchArgs, _Context) when Pages =< 1 ->
+    {ok, <<>>};
+build_html(Page, Pages, _HideSinglePage, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
     Props = [
