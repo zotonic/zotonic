@@ -40,9 +40,10 @@ The pager tag accepts the following arguments:
 +----------------+------------------------------------------------------------------+------------------------+
 |Argument        |Description                                                       |Example                 |
 +================+==================================================================+========================+
-|result          |The result from a search.  This must be a ``#search_result`` or   |result=mysearchresult   |
-|                |``#m_search_result`` record. Note that this must be the result of |                        |
-|                |a ``m.search.paged`` and not of a ``m.search`` call.              |                        |
+|result          |The result from a search.  This must be a ``#search_result``, a   |result=mysearchresult   |
+|                |``#m_search_result`` record, or a list. Note that the records must|                        |
+|                | be the result of a ``m.search.paged`` and not of a ``m.search``  |                        |
+|                |call.                                                             |                        |
 +----------------+------------------------------------------------------------------+------------------------+
 |dispatch        |Name of the dispatch rule to be used for the page urls. Defaults  |dispatch="searchresult" |
 |                |to the dispatch rule of the current page.                         |                        |
@@ -55,6 +56,12 @@ The pager tag accepts the following arguments:
 +----------------+------------------------------------------------------------------+------------------------+
 |template        |Name of the template for rendering the pager. Defaults to         |template="_pager.tpl"   |
 |                |``_pager.tpl``. See below for specific arguments passed.          |                        |
++----------------+------------------------------------------------------------------+------------------------+
+|page            |Current page number, the first page is page number 1. Fetched from|page=2                  |
+|                |the search result, this argument, or ``q.page``.                  |                        |
++----------------+------------------------------------------------------------------+------------------------+
+|pagelen         |Number of items per page, fetch from the search result or         |pagelen=10              |
+|                | ``q.pagelen``. Defaults to 20.                                   |                        |
 +----------------+------------------------------------------------------------------+------------------------+
 |\*              |Any other argument is used as an argument for the dispatch rule.  |                        |
 +----------------+------------------------------------------------------------------+------------------------+
@@ -78,4 +85,11 @@ The default ``_pager.tpl`` displays an ellipsis for the ``sep`` entry.
 If the result set is empty then the template is not rendered. The template is also not rendered if there
 is a single page *and* ``hide_single_page`` is set.
 
+Result argument
+---------------
+
+It is also possible to pass a list, a ``#rsc_list{ list=Ids }`` record, or a list of lists (pages) for the resut.
+In this case you need to perform the pagination for displaying the results yourself. You can use the :ref:`filter-chunk`
+for this. The pager scomp will fetch the ``page`` and ``pagelen`` from the pager arguments, or from the query
+arguments (if any). If the list is pre-chunked then the pages does not need the ``pagelen`` argument.
 
