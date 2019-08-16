@@ -55,3 +55,10 @@ The pager tag accepts the following arguments:
 +----------------+------------------------------------------------------------------+------------------------+
 |\*              |Any other argument is used as an argument for the dispatch rule.  |                        |
 +----------------+------------------------------------------------------------------+------------------------+
+
+.. note::
+  It is also possible to pass a list, a ``#rsc_list{ list=Ids }`` record, or a list of lists (pages) for the resut.
+  In this case you need to perform the pagination for displaying the results yourself. You can use the :ref:`filter-chunk`
+  for this. The pager scomp will fetch the ``page`` and ``pagelen`` from the pager arguments, or from the query
+  arguments (if any). If the list is pre-chunked then the pages does not need the ``pagelen`` argument.
+
