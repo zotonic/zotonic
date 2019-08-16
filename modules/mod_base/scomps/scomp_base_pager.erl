@@ -114,7 +114,7 @@ lookup_arg(Name, Default, Params, Context) ->
     end.
 
 build_html(_Page, Pages, true, _Dispatch, _DispatchArgs, _Context) when Pages =< 1 ->
-    {ok, <<>>};
+    <<>>;
 build_html(Page, Pages, _HideSinglePage, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
