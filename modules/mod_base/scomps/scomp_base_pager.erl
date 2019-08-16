@@ -93,7 +93,7 @@ render_list(List, Params, Dispatch, DispatchArgs, HideSinglePage, Context) ->
         1 when HideSinglePage ->
             {ok, ""};
         Pages ->
-            build_html(Page, Pages, Dispatch, DispatchArgs, Context)
+            {ok, build_html(Page, Pages, Dispatch, DispatchArgs, Context)}
     end.
 
 lookup_arg(Name, Default, Params, Context) ->
