@@ -80,7 +80,7 @@ render(Params, _Vars, Context) ->
     end.
 
 render_list(_Template, [], _Params, _HideSinglePage, _Dispatch, _DispatchArgs, _Context) ->
-    {ok, ""};
+    {ok, <<>>};
 render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, Context) ->
     PageLen = lookup_arg(pagelen, ?SEARCH_PAGELEN, Params, Context),
     Page = lookup_arg(page, 1, Params, Context),
@@ -108,7 +108,7 @@ lookup_arg(Name, Default, Params, Context) ->
     end.
 
 build_html(_Template, _Page, Pages, true, _Dispatch, _DispatchArgs, _Context) when Pages =< 1 ->
-    {ok, <<>>};
+    <<>>;
 build_html(Template, Page, Pages, _HideSinglePage, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
     Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
