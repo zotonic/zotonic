@@ -42,7 +42,7 @@ The pager tag accepts the following arguments:
 +================+==================================================================+========================+
 |result          |The result from a search.  This must be a ``#search_result``, a   |result=mysearchresult   |
 |                |``#m_search_result`` record, or a list. Note that the records must|                        |
-|                | be the result of a ``m.search.paged`` and not of a ``m.search``  |                        |
+|                |be the result of a ``m.search.paged`` and not of a ``m.search``   |                        |
 |                |call.                                                             |                        |
 +----------------+------------------------------------------------------------------+------------------------+
 |dispatch        |Name of the dispatch rule to be used for the page urls. Defaults  |dispatch="searchresult" |
@@ -61,7 +61,7 @@ The pager tag accepts the following arguments:
 |                |the search result, this argument, or ``q.page``.                  |                        |
 +----------------+------------------------------------------------------------------+------------------------+
 |pagelen         |Number of items per page, fetch from the search result or         |pagelen=10              |
-|                | ``q.pagelen``. Defaults to 20.                                   |                        |
+|                |``q.pagelen``. Defaults to 20.                                    |                        |
 +----------------+------------------------------------------------------------------+------------------------+
 |\*              |Any other argument is used as an argument for the dispatch rule.  |                        |
 +----------------+------------------------------------------------------------------+------------------------+
