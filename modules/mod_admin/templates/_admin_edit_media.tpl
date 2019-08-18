@@ -1,4 +1,3 @@
-adfasdfasf
 {% if medium.mime %}
     <p>
         {{ medium.mime }}
