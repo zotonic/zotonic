@@ -1,5 +1,5 @@
+adfasdfasf
 {% if medium.mime %}
-
     <p>
         {{ medium.mime }}
         {% if medium.filename %}
@@ -35,7 +35,25 @@
             {% if medium.size > 0 %}
                 <a target="_blank" class="btn btn-default" href="{% url media_inline id=id %}" class="button">{_ View _}</a>
                 <a target="_blank" class="btn btn-default" href="{% url media_attachment id=id %}" class="button">{_ Download _}</a>
+
+                <input type="text" style="position: absolute; top:0; left:-9999px;" id="direct-download" value="{% url media_attachment id=id %}">
+
+                {% button
+                    text="Copy download link"
+                    class="btn btn-default"
+                    action={script
+                        script="
+                            var copyText = document.getElementById('direct-download');
+                            copyText.select();
+                            document.execCommand('copy');
+                            z_event('copied');
+                        "
+                    }
+                %}
+
+                {% wire name="copied" action={growl text=_"Copied download link to clipboard"} %}
             {% endif %}
+
 
             {% button   text=_"Replace this media item"
                 class="btn btn-primary"
