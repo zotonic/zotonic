@@ -772,7 +772,7 @@ msgstr ""
 msgid "Add a new media item"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:88
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:96
 msgid "Add media item"
 msgstr ""
 
@@ -968,7 +968,15 @@ msgstr ""
 msgid "Connections and Sessions"
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:92
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:54
+msgid "Copied download link to clipboard"
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:51
+msgid "Copy download link"
+msgstr ""
+
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:110
 msgid "Could not connect to the website."
 msgstr ""
 
@@ -985,11 +993,11 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:231
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:231
 msgid "Create"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:55./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:10
 msgid "Create or find"
 msgstr ""
 
@@ -1131,8 +1139,8 @@ msgstr ""
 msgid "Embed page"
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:196
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:160
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:190
 msgid "Embedded Content"
 msgstr ""
 
@@ -1146,7 +1154,7 @@ msgid ""
 "import the data."
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:109
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:127
 msgid "Error checking the website."
 msgstr ""
 
@@ -1172,7 +1180,7 @@ msgstr ""
 msgid "Existing content"
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:161./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:100
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:161./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:118
 msgid "Failed to download the file."
 msgstr ""
 
@@ -1196,7 +1204,7 @@ msgstr ""
 msgid "Filter on content group"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:59
 msgid "Find Page"
 msgstr ""
 
@@ -1356,7 +1364,7 @@ msgstr ""
 msgid "Media file"
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:147./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:82
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:147./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:100
 msgid "Media item created."
 msgstr ""
 
@@ -1607,7 +1615,7 @@ msgstr ""
 msgid "Replace current medium"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:88
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:59./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:96
 msgid "Replace this media item"
 msgstr ""
 
@@ -1821,27 +1829,27 @@ msgstr ""
 msgid "This connection already exists."
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:165./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:104
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:165./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:122
 msgid "This file contains links to other files or locations."
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:80
 msgid "This file has been scanned for viruses."
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:76
 msgid "This file has not been scanned for viruses because it is too large."
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:76
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:84
 msgid "This file has not been scanned for viruses."
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:163./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:102
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:163./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:120
 msgid "This file is infected with a virus."
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:167./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:106
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:167./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:124
 msgid "This file is too large."
 msgstr ""
 
@@ -1873,7 +1881,7 @@ msgstr ""
 msgid "Till"
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:94
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:112
 msgid "Timeout while trying to fetch data from the website."
 msgstr ""
 
@@ -1996,7 +2004,7 @@ msgstr ""
 msgid "Website for clicks on image"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:15./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:16
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:64./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:15./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:16
 msgid "Website or Embed"
 msgstr ""
 
@@ -2029,11 +2037,11 @@ msgstr ""
 msgid "You are not allowed to edit this page."
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:157./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:157./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:96
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:157./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:157./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:114
 msgid "You don't have permission to change this media item."
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:159./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:98
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:159./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:116
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr ""
 
@@ -2136,7 +2144,7 @@ msgstr ""
 msgid "untitled"
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:91
 msgid "uploaded on"
 msgstr ""
 
@@ -3017,7 +3025,7 @@ msgstr ""
 msgid "Help about predicates"
 msgstr ""
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:16
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:16./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
 msgid "Make a new predicate"
 msgstr ""
 
@@ -6479,7 +6487,7 @@ msgid ""
 "previously."
 msgstr ""
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:243
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:237
 msgid "Attempting to fix ~p videos."
 msgstr ""
 
@@ -6491,7 +6499,7 @@ msgstr ""
 msgid "Fix embedded videos"
 msgstr ""
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:240
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:234
 msgid "No embedded videos found which need fixing."
 msgstr ""
 
@@ -6499,11 +6507,11 @@ msgstr ""
 msgid "Save Embedly Key"
 msgstr ""
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:252
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:246
 msgid "Saved the Embedly settings."
 msgstr ""
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:254
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:248
 msgid "You don't have permission to change the Embedly settings."
 msgstr ""
 
