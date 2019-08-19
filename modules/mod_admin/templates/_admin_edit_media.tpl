@@ -38,35 +38,33 @@
                 <input type="text" style="position: absolute; top:0; left:-9999px;" id="direct-download" value="{% url media_attachment id=id %}">
 
                 {% button
-                    text="Copy download link"
+                    text=_"Copy download link"
                     class="btn btn-default"
                     action={script
-                        script="
+                        script=["
                             var copyText = document.getElementById('direct-download');
                             copyText.select();
                             document.execCommand('copy');
-                            z_event('copied');
-                        "
+                            z_growl_add('", _"Copied download link to clipboard" ,"');
+                        "]
                     }
                 %}
-
-                {% wire name="copied" action={growl text=_"Copied download link to clipboard"} %}
             {% endif %}
-
 
             {% button   text=_"Replace this media item"
                 class="btn btn-primary"
                 element="a"
-    	    action={dialog_media_upload
-    	        id=id
-    	        action={update
-    	            target="media-edit-view"
-    	            template="_admin_edit_media_all.tpl"
-    	            id=id
-    	        }
-    	        center=0
-    	    }
-    	    disabled=not id.is_editable %}
+                action={dialog_media_upload
+                    id=id
+                    action={update
+                        target="media-edit-view"
+                        template="_admin_edit_media_all.tpl"
+                        id=id
+                    }
+                    center=0
+                }
+                disabled=not id.is_editable
+            %}
         </p>
         {% if medium.is_av_sizelimit %}
             <p class="text-danger text-right">
