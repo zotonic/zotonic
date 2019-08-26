@@ -64,6 +64,24 @@
 
 -include("zotonic.hrl").
 
+
+%% DTAP environment
+-type environment() :: development
+                    | test
+                    | acceptance
+                    | production
+                    | education
+                    | backup.
+
+%% Request context
+-type context() :: #context{}.
+
+-export_type([
+    environment/0,
+    context/0
+]).
+
+
 % @doc Return a new context
 c(Site) ->
     z_context:new(Site).

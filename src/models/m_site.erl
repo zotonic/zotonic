@@ -28,6 +28,8 @@
     m_find_value/3,
     m_to_list/2,
     m_value/2,
+
+    environment/1,
     all/1,
     get/2,
     get/3
@@ -43,6 +45,8 @@ m_find_value(document_domain, #m{value=undefined}, Context) ->
     z_context:document_domain(Context);
 m_find_value(protocol, #m{value=undefined}, Context) ->
     z_context:site_protocol(Context);
+m_find_value(environment, _M, Context) ->
+    environment(Context);
 m_find_value(Key, #m{value=undefined}, Context) ->
     get(Key, Context).
 
@@ -56,6 +60,25 @@ m_to_list(#m{value=undefined}, Context) ->
 m_value(#m{value=undefined}, Context) ->
     all(Context).
 
+
+%% @doc Return the current DTAP environment
+-spec environment( z:context() ) -> z:environment().
+environment(Context) ->
+    environment_atom( m_site:get(environment, Context) ).
+
+environment_atom(development) -> development;
+environment_atom(test) -> test;
+environment_atom(acceptance) -> acceptance;
+environment_atom(production) -> production;
+environment_atom(education) -> education;
+environment_atom(backup) -> backup;
+environment_atom(undefined) -> z_config:get(environment);
+environment_atom(<<>>) -> z_config:get(environment);
+environment_atom("") -> z_config:get(environment);
+environment_atom(L) when is_list(L) ->
+    environment_atom( list_to_existing_atom(L) );
+environment_atom(B) when is_binary(B) ->
+    environment_atom( binary_to_existing_atom(B, utf8) ).
 
 %% @doc Return the complete site configuration
 all(Context) ->

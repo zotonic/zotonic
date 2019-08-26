@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ z_language|default:"en"|escape }}">
+<html lang="{{ z_language|default:"en"|escape }}" class="environment-{{ m.site.environment }}">
   <head>
     <meta charset="utf-8" />
     <title>Zotonic{% block title %}{% endblock %}</title>
