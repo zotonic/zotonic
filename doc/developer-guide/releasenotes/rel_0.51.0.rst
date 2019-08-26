@@ -7,7 +7,7 @@ Welcome to Zotonic 0.51.0, released on August 26, 2019.
 
 Main changes are:
 
-  * Added DTAP (Development, Testing etc.) status of site to http headers and ``m.site.environment`
+  * Added DTAP (Development, Testing etc.) status of site to http headers and ``m.site.environment``
   * Updated PostgreSQL driver ``epgsql``
   * Added *Copy download link* button in admin media panel
   * Fixes to admin connect/create dialog
