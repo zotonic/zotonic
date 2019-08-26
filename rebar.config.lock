@@ -46,7 +46,7 @@
                     "bfd3df519921947c6da5e5d596bd5f19e74dec69"}},
        {gen_smtp,".*",
                  {git,"git://github.com/Vagabond/gen_smtp.git",
-                      "263b29241666f676f7979f7c6b156d8fe1e69f59"}},
+                      "49a907102021c836fcbc7db0e43f71133b77452f"}},
        {mimetypes,".*",
                   {git,"git://github.com/zotonic/mimetypes.git",
                        "a60b350819c8ba5602ed85b9d0050cc8e3cb1152"}},
