@@ -86,25 +86,6 @@ with the config parameter ``user_modules_dir``. This directory
 defaults to ``_checkouts``, relative to Zotonic's installation
 directory.
 
-.. _deps:
-
-`deps`
-......
-
-The ``zotonic.config`` file can hold extra dependencies which are to
-be installed as part of a user's installation. These deps are
-formatted similar to how they would be listed in a ``rebar.config`` file::
-
-   {deps,
-    [
-     {jsx, "1.4", {git, "git://github.com/talentdeficit/jsx", {tag, "v1.4"}}}
-    ]},
-
-
-On compile time, these deps are added to the list of the standard deps
-from Zotonic's ``rebar.config`` file, and cloned and compiled in the
-same way.
-
 .. _erlang-config:
 
 The `erlang.config` file
