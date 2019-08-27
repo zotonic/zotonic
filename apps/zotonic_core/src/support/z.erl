@@ -60,6 +60,14 @@
 
 -include("zotonic.hrl").
 
+%% DTAP environment
+-type environment() :: development
+                    | test
+                    | acceptance
+                    | production
+                    | education
+                    | backup.
+
 -type context() :: #context{}.
 -type validation_error() :: invalid | novalue | {script, string()} | novalidator | string().
 
@@ -67,6 +75,7 @@
 
 -export_type([
     context/0,
+    environment/0,
     validation_error/0,
     severity/0
 ]).

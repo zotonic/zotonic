@@ -24,6 +24,7 @@
 %% interface functions
 -export([
     m_get/3,
+    environment/1,
     load_config/1,
     load_config/2,
     all/1,
@@ -36,6 +37,8 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ environment | Rest ], _Msg, Context) ->
+    {ok, {environment(Context), Rest}};
 m_get([ hostname | Rest ], _Msg, Context) ->
     {ok, {z_context:hostname(Context), Rest}};
 m_get([ hostname_port | Rest ], _Msg, Context) ->
@@ -74,6 +77,26 @@ m_get([], _Msg, Context) ->
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
+
+
+%% @doc Return the current DTAP environment
+-spec environment( z:context() ) -> z:environment().
+environment(Context) ->
+    environment_atom( m_site:get(environment, Context) ).
+
+environment_atom(development) -> development;
+environment_atom(test) -> test;
+environment_atom(acceptance) -> acceptance;
+environment_atom(production) -> production;
+environment_atom(education) -> education;
+environment_atom(backup) -> backup;
+environment_atom(undefined) -> z_config:get(environment);
+environment_atom(<<>>) -> z_config:get(environment);
+environment_atom("") -> z_config:get(environment);
+environment_atom(L) when is_list(L) ->
+    environment_atom( list_to_existing_atom(L) );
+environment_atom(B) when is_binary(B) ->
+    environment_atom( binary_to_existing_atom(B, utf8) ).
 
 
 -spec load_config(atom()|z:context()) -> ok | {error, term()}.
