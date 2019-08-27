@@ -12,9 +12,9 @@ dispatch rule is used to handle the request.
 Anatomy of a controller
 -----------------------
 
-Say we have the following dispatch rule, handling ``http://localhost/example``::
+Say we have the following dispatch rule, handling ``https://localhost/example``::
 
-  {example_url, ["example"], controller_example, []},
+  {example_url, [ "example" ], controller_example, []},
 
 When hitting ``/example``, the ``controller_example`` controller will be
 initialized and various callback functions on the controller will be
@@ -25,13 +25,13 @@ cowmachine callback functions. For instance, when you define a
 function ``resource_exists/1``, it will be called to decide whether or
 not the page should return a 404 page.
 
-The simplest controller uses Zotonic’s ``controller_html_helper.hrl`` include to serve HTML::
+The simplest controller to serve HTML::
 
    -module(controller_example).
 
-   -include_lib("controller_html_helper.hrl").
+   -export([ process/4 ])
 
-   html(Context) ->
+   process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
        {<<"<h1>Hello</h1>">>, Context}.
 
 .. _guide-render:
@@ -44,28 +44,32 @@ To return the rendered output of a template file in the module's
 
    -module(controller_example).
 
-   -include_lib("controller_html_helper.hrl").
+   -export([ process/4 ])
 
-   html(Context) ->
+   process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
        % foo and bam will be available as template variables in mytemplate.tpl.
-       Html = z_template:render("mytemplate.tpl", [{foo, 'bar'}, {bam, 1234}], Context),
-       z_context:output(Html, Context).
+       Vars = [
+          {foo, <<"bar">>},
+          {bam, 1234}
+       ],
+       Rendered = z_template:render("mytemplate.tpl", Vars, Context),
+       z_context:output(Rendered, Context).
 
 If you need more examples, :ref:`mod_base` contains many controllers,
 implementing basic HTTP interaction but also redirects, websockets, et
 cetera. The :ref:`controllers` page lists all available controllers in
 the Zotonic core.
 
-The `Webmachine documentation
-<http://wiki.basho.com/Webmachine-Demo.html>`_ itself is also very
+The `Cowmachine documentation
+<https://github.com/zotonic/cowmachine/wiki>`_ is
 helpful for understanding controllers.
 
-.. _guide-controllers-webzmachine:
+.. _guide-controllers-cowmachine:
 
 Differences between Cowmachine and Basho’s Webmachine
 -----------------------------------------------------
 
-Zotonic’s fork has been named ``cowmachine`` and lives in its
+Zotonic’s fork of Webmachine has been named ``cowmachine`` and lives in its
 separate repository at https://github.com/zotonic/cowmachine).
 
 The main differences with Basho’s Webmachine are:
