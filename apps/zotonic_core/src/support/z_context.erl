@@ -998,7 +998,8 @@ set_security_headers(Context) ->
     Default = [ {<<"x-xss-protection">>, <<"1">>},
                 {<<"x-content-type-options">>, <<"nosniff">>},
                 {<<"x-permitted-cross-domain-policies">>, <<"none">>},
-                {<<"referrer-policy">>, <<"origin-when-cross-origin">>} ],
+                {<<"referrer-policy">>, <<"origin-when-cross-origin">>},
+                {<<"x-dtap-environment">>, atom_to_binary( m_site:environment(Context), utf8 )} ],
     Default1 = case z_context:get(allow_frame, Context, false) of
         true -> Default;
         false -> [ {<<"x-frame-options">>, <<"sameorigin">>} | Default ]

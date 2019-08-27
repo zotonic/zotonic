@@ -160,6 +160,7 @@ map_ip_address(Name, IP) ->
 getaddr(listen_ip6, IP) -> inet:getaddr(IP, inet6);
 getaddr(_Name, IP) -> inet:getaddr(IP, inet).
 
+default(environment) -> production; % development | test | acceptance | production | education | backup
 default(timezone) -> <<"UTC">>;
 default(listen_ip) -> any;
 default(listen_ip6) ->

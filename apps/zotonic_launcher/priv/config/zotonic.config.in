@@ -19,6 +19,10 @@
 [{zotonic,
   [
 
+%%% DTAP status of this site
+   %%% One of: development, test, acceptance, production, education, or backup
+      %% {environment, production},
+
 %%% Path configuration
 
    %% Where the Zotonic sites are located
