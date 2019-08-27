@@ -13,8 +13,8 @@ Step 1: install a Logstash handler
 ----------------------------------
 
 First, you need to install a Logstash handler for Lager, for instance
-`this one`_. To do so, add it (and the jsx JSON library) as a
-:ref:`dependency <deps>` in the ``rebar.config`` of your Zotonic site or module:
+`this one`_. To do so, add it (and the jsx JSON library) as a dependency
+in the ``rebar.config`` of your Zotonic site or module:
 
 .. code-block:: erlang
     :caption: rebar.config
