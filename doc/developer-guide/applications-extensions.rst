@@ -14,7 +14,7 @@ application into Zotonic. Let’s take `mod_elasticsearch`_, which depends on th
 `erlastic_search`_ library, as an example.
 
 To use `Erlang applications`_ in your Zotonic setup, first include them under
-:ref:`deps` in your ``zotonic.config`` file:
+``deps`` in your ``zotonic.config`` file:
 
 .. code-block:: erlang
     :caption: zotonic.config

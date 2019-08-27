@@ -21,8 +21,7 @@ In :ref:`erlang-config` file, change the ``lager`` section to configure log
 handlers and formatters. See the `Lager documentation`_ for more information.
 
 For instance, to configure Lager for logging to Logstash, include a Logstash
-handler as a :ref:`dependency <deps>` in your project, and add something like
-this:
+handler as a dependency in your project, and add something like this:
 
 .. code-block:: erlang
     :caption: erlang.config
