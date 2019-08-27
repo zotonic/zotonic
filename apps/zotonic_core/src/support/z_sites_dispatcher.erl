@@ -149,14 +149,14 @@ execute(Req, Env) ->
             }};
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
             handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
-        % {redirect, Site, undefined, IsPermanent} ->
-        %     case z_sites_manager:wait_for_running(Site) of
-        %         ok ->
-        %             Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
-        %             redirect(Uri, IsPermanent, Req);
-        %         {error, _} ->
-        %             {stop_request, 503}
-        %     end;
+        {redirect, Site, undefined, IsPermanent} ->
+            case z_sites_manager:wait_for_running(Site) of
+                ok ->
+                    Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
+                    redirect(Uri, IsPermanent, Req);
+                {error, _} ->
+                    {stop_request, 503}
+            end;
         {redirect, Site, NewPathOrURI, IsPermanent} ->
             case z_sites_manager:wait_for_running(Site) of
                 ok ->

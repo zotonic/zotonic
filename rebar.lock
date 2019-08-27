@@ -76,7 +76,7 @@
  {<<"proper">>,{pkg,<<"proper">>,<<"1.2.0">>},0},
  {<<"qdate">>,
   {git,"https://github.com/choptastic/qdate.git",
-       {ref,"ed00a606f3deca1b5e82de72249436c98faaa3a0"}},
+       {ref,"accda0db1afce64d1689a6192713dd69ae057e3f"}},
   0},
  {<<"qdate_localtime">>,{pkg,<<"qdate_localtime">>,<<"1.1.0">>},1},
  {<<"ranch">>,{pkg,<<"ranch">>,<<"1.7.1">>},0},
