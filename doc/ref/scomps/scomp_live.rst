@@ -44,6 +44,12 @@ There are three special topics:
 * Use the tuple ``{subject id=... }`` to listen to changes of incoming connections to a page.
   An example of a mapped topic is ``bridge/origin/model/edge/event/1234/s/author``
 
+Note that the topics refer to *client side topics*, that is why the bridge is used
+to subscribe to server side model events.
+
+It is possible to subscribe to client topics like ``"my/local/topic"`` and have the actions
+triggered by publish to ``cotonic.broker.publish("my/local/topic", {});`` (with any payload).
+
 
 Live actions
 ------------
