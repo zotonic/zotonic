@@ -1272,8 +1272,8 @@ refresh_module_schema(Module, #state{module_schema=Schemas} = State) ->
 manage_schema_if_db(true, Module, Current, Target, #context{} = Context) ->
     call_manage_schema(Module, Current, Target, Context);
 manage_schema_if_db(false, Module, _Current, _Target, #context{} = Context) ->
-    lager:info("[~p] Skipping schema for ~p as there is no database connection.",
-               [z_context:site(Context), Module]),
+    lager:info("[~p] Skipping schema for ~p as ~p does not use a database ('nodb').",
+               [z_context:site(Context), Module, z_context:site(Context)]),
     ok.
 
 %% @doc Optionally upgrade the schema.
