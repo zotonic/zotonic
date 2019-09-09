@@ -131,6 +131,15 @@ The following options can be configured:
   The domain the Zotonic session-id and page-id cookies will be set
   on. Defaults to the main hostname.
 
+``{session_cookie_name, <name>}``
+  Configure the name used for the session cookie. Default it is set to
+  ``z_sid``.
+
+``{session_cookie_same_site, <options>}``
+  Configure the ``SameSite`` attribute of the session cookie. Can be set to:
+  ``lax`` (default), ``strict`` or ``none``. When ``none`` is configured,
+  the ``SameSite`` attribute is not set.
+
 .. versionadded:: 0.10
 
 ``{installer, <module>}``
