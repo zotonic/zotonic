@@ -578,9 +578,7 @@ get_session_cookie_name(Context) ->
 %% @doc Save the session id in a cookie on the user agent
 -spec set_session_cookie( string(), #context{} ) -> #context{}.
 set_session_cookie(SessionId, Context) ->
-    Options = [{path, "/"},
-               {same_site, lax},
-               {http_only, true}],
+    Options = session_cookie_options(Context),
     Options1 = case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
         <<"https">> -> [ {secure, true} | Options ];
         _ -> Options
@@ -595,13 +593,19 @@ set_session_cookie(SessionId, Context) ->
 %% @doc Remove the session id from the user agent and clear the session pid in the context
 -spec clear_session_cookie( #context{} ) -> #context{}.
 clear_session_cookie(Context) ->
-    Options = [{max_age, 0},
-               {path, "/"},
-               {same_site, lax},
-               {http_only, true}],
+    Options = [{max_age, 0} | session_cookie_options(Context)],
     Context1 = z_context:set_cookie(get_session_cookie_name(Context), "", Options, Context),
     Context1#context{session_id=undefined, session_pid=undefined}.
 
+%% @doc The default session cookie options.
+session_cookie_options(Context) ->
+    Options = case m_config:get_value(site, session_cookie_same_site, Context) of
+        none -> [];
+        undefined -> [{same_site, lax}];
+        lax -> [{same_site, lax}];
+        strict -> [{same_site, strict}]
+    end,
+    [ {path, "/"}, {http_only, true} | Options ].
 
 %% @doc Update the metrics of the session count
 update_session_metrics(State) ->
