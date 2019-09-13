@@ -34,7 +34,7 @@
                              "a8b46e077034938fd82f57876103270311e6835b"}},
        {depcache,".*",
                  {git,"git://github.com/zotonic/depcache.git",
-                      "e559cd05393a3f80df11b83af6c4afd42dc403f8"}},
+                      "96b88c8e359464433381207717ed41331e4b87b1"}},
        {bert,".*",
              {git,"git://github.com/zotonic/bert.erl.git",
                   "1efd05a1a0288ec62e1df0b8af42f6d96cd0516b"}},
