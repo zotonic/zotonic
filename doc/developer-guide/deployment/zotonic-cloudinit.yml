@@ -1,0 +1,59 @@
+#cloud-config for Ubuntu 18
+#
+# Example configs here:
+# https://cloudinit.readthedocs.io/en/latest/topics/examples.html
+#
+# Add groups to the system
+groups:
+  - ubuntu: [root,sys]
+
+# Add users to the system. Users are added after groups are added.
+users:
+  - default
+  - name: zotonic
+    gecos: Zotonic
+    sudo: False
+    groups: users
+    lock_passwd: true
+    # ssh_authorized_keys:
+    #   - <ssh pub key 1>
+    #   - <ssh pub key 2>
+
+packages:
+  - build-essential
+  - iptables-persistent
+  - git
+  - erlang
+  - postgresql
+  - postgresql-client
+  - curl
+  - gettext
+  - inotify-tools
+  - libnotify-bin
+  - clamav
+  - imagemagick
+  - ffmpeg
+  - ghostscript
+
+runcmd:
+  - iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8000
+  - iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to 8443
+  - iptables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to 2525
+  - iptables -t nat -A OUTPUT -p tcp -d `/sbin/ifconfig eth0 | grep ' inet ' | awk '{ print $2 }'` --dport 80 -j REDIRECT --to 8000
+  - iptables -t nat -A OUTPUT -p tcp -d `/sbin/ifconfig eth0 | grep ' inet ' | awk '{ print $2 }'` --dport 443 -j REDIRECT --to 8443
+  - iptables -t nat -A OUTPUT -p tcp -d `/sbin/ifconfig eth0 | grep ' inet ' | awk '{ print $2 }'` --dport 25 -j REDIRECT --to 2525
+  - iptables-save > /etc/iptables/rules.v4
+  - sudo --user=postgres -- psql -c "CREATE USER zotonic WITH PASSWORD 'zotonic';"
+  - sudo --user=postgres -- psql -c "CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';"
+  - sudo --user=postgres -- psql -c "GRANT ALL ON DATABASE zotonic TO zotonic;"
+  - echo "zotonic   soft   nofile   20000" > /etc/security/limits.d/zotonic.conf
+  - echo "zotonic   hard   nofile   20000" >> /etc/security/limits.d/zotonic.conf
+  - sudo su zotonic -l -c "git clone 'https://github.com/zotonic/zotonic'"
+  - sudo su zotonic -l -c "cd zotonic; make; bin/zotonic start"
+
+# Add commands to:
+# - Change the zotonic ip config to 80/443/25
+# - Optionally set a wwwadmin password?
+# - ?? add boot zotonic start command?
+
+final_message: "Zotonic cloudinit boot finished at $TIMESTAMP. Up $UPTIME seconds"
