@@ -145,21 +145,35 @@ child_spec(Host, SiteProps) ->
 %% argument and those are the only arguments that are given to the
 %% database pool worker processes.
 db_opts(SiteProps) ->
-    Kvs = lists:filter(fun({K, V}) ->
-                               case atom_to_list(K) of
-                                   "db"++_ -> not z_utils:is_empty(V);
-                                   _ -> false
-                               end
-                       end,
-                       SiteProps),
-    Defaults = [{dbhost, z_config:get(dbhost, "localhost")},
-                {dbport, z_config:get(dbport, 5432)},
-                {dbpassword, z_config:get(dbpassword, "")},
-                {dbuser, z_config:get(dbuser, "zotonic")},
-                {dbdatabase, z_config:get(dbdatabase, "zotonic")},
-                {dbschema, z_config:get(dbschema, "public")},
-                {dbdropschema, false}],
+    Defaults = [
+        {dbhost, z_config:get(dbhost, "localhost")},
+        {dbport, z_config:get(dbport, 5432)},
+        {dbpassword, z_config:get(dbpassword, "")},
+        {dbuser, z_config:get(dbuser, "zotonic")},
+        {dbdatabase, z_config:get(dbdatabase, "zotonic")},
+        {dbschema, z_config:get(dbschema, "public")},
+        {dbdropschema, z_config:get(dbdropschema, false)}
+    ],
+    Kvs = lists:filter(
+        fun
+            ({K, V}) ->
+                proplists:is_defined(K, Defaults)
+                andalso not is_empty(V);
+            (_) ->
+                false
+        end,
+        SiteProps),
     lists:ukeymerge(1, lists:sort(Kvs), lists:sort(Defaults)).
+
+db_optkeys() ->
+    [ dbhost, dbport, dbpassword, dbuser, dbdatabase, dbschema, dbdropschema ].
+
+is_empty(undefined) -> true;
+is_empty("") -> true;
+is_empty(<<>>) -> true;
+is_empty(0) -> true;
+is_empty(null) -> true;
+is_empty(_) -> false.
 
 get_connection(#context{db={Pool,_}}) ->
     poolboy:checkout(Pool).

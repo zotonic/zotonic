@@ -298,12 +298,17 @@ do_backup_process(Name, IsFullBackup, Context) ->
     Cfg = check_configuration(),
     case proplists:get_value(ok, Cfg) of
         true ->
-            ok = pg_dump(Name, Context),
-            case IsFullBackup of
-                true -> ok = archive(Name, Context);
-                false -> ok
-            end,
-            ok;
+            case pg_dump(Name, Context) of
+                ok ->
+                    case IsFullBackup of
+                        true ->
+                            archive(Name, Context);
+                        false ->
+                            ok
+                    end;
+                {error, _} = Error ->
+                    Error
+            end;
         false ->
             {error, not_configured}
     end.
@@ -315,10 +320,11 @@ dir(Context) ->
 
 %% @doc Return the base name of the backup files.
 name(Context) ->
-    Now = calendar:universal_time(),
-    iolist_to_binary(
-      [atom_to_list(z_context:site(Context)), "-",
-       z_datetime:format(Now, "Ymd-His", Context)]).
+    iolist_to_binary([
+        atom_to_list(z_context:site(Context)),
+        "-",
+        z_datetime:format(calendar:universal_time(), "Ymd-His", Context)
+    ]).
 
 
 %% @doc Dump the sql database into the backup directory.  The Name is the basename of the dump.
@@ -361,9 +367,10 @@ pg_dump(Name, Context) ->
     Result = case os:cmd(binary_to_list(iolist_to_binary(Command))) of
                  [] ->
                      ok;
-                 Output ->
-                     lager:warning(Output),
-                     {error, Output}
+                Output ->
+                    lager:warning("backup: pg_dump error for ~p: ~s",
+                                  [ z_context:site(Context), Output ]),
+                    {error, database_archive}
              end,
     ok = file:delete(PgPass),
     Result.
@@ -386,8 +393,14 @@ archive(Name, Context) ->
                         timer:sleep(1000),
                         z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"archive_backup_started">> }, Context)
                     end),
-            [] = os:cmd(Command),
-            ok;
+            case os:cmd(Command) of
+                "" ->
+                    ok;
+                Output ->
+                     lager:warning("backup: tar error for ~p: ~s",
+                                   [ z_context:site(Context), Output ]),
+                     {error, files_archive}
+            end;
         false ->
             %% No files uploaded
             ok
