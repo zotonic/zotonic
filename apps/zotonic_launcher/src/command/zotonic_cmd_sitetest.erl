@@ -25,7 +25,7 @@
 -include("zotonic_command.hrl").
 
 run([]) ->
-    io:format("USAGE: zotonic sitetest [Sitename] ~"),
+    io:format("USAGE: zotonic sitetest [Sitename] ~n"),
     halt();
 
 run(Site) ->

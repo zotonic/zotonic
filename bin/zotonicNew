@@ -35,15 +35,22 @@ load_mod_paths() ->
     end.
 
 usage() ->
-    {ok, ListItems} = file:list_dir(?COMMANDS),
-    FileNames = [ListItem || ListItem <- ListItems, string:length(ListItem) > 12],
-    Temp = string:split(FileNames, "zotonic_cmd_", all),
-    Names = string:split(Temp, ".erl", all),
-    [_|CommandNames] = Names,
+    {ok, ListItems0} = file:list_dir(?COMMANDS),
+    ListItems = [ unicode:characters_to_binary(Item) || Item <- ListItems0 ],
+    FileNames = [ ListItem || ListItem <- ListItems, size(ListItem) > 12 ],
+    CommandNames = lists:filtermap(
+        fun(ListItem) ->
+            case filename:basename(ListItem, <<".erl">>) of
+                <<"zotonic_cmd_", Command/binary>> -> {true, Command};
+                _ -> false
+            end
+        end,
+        FileNames),
 
     io:format("USAGE: ~s (options) [command] ~n~n", [escript:script_name()]),
     io:format("Where [command] is one of: ~n"),
-    io:format("~n~s ~n~n", [CommandNames]),
+    lists:map(fun(Cmd) -> io:format("   ~s~n", [Cmd]) end, lists:sort(CommandNames)),
+    io:format("~n"),
     io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n~n"),
     io:format("Options: ~n"),
     io:format("  -v : Prints Zotonic version ~n~n").
@@ -63,7 +70,7 @@ main([Command|T]) ->
             CommandMod = string:concat(CommandName, ".erl"),
             CommandFile = string:concat(?COMMANDS, "/" ++ CommandMod),
 
-            io:format(CommandFile),
+            io:format("[debug] running: ~s~n", [ CommandFile ]),
 
             case filelib:is_file(CommandFile) of
                 true ->

@@ -9,14 +9,6 @@
 -author("Blaise").
 
 -define(NODENAME, "zotonic001").
--define(ZOTONIC, get_zotonic_dir()).
--define(NODEHOST, get_node_host()).
+-define(ZOTONIC, zotonic_command:get_zotonic_dir()).
+-define(NODEHOST, zotonic_command:get_node_host()).
 -define(MAXWAIT, 30).
-
-get_zotonic_dir() ->
-    {ok, CurrentDir} = file:get_cwd(),
-    _Dir = CurrentDir.
-
-get_node_host() ->
-    {ok, HostName} = inet:gethostname(),
-    _NodeHost = HostName.

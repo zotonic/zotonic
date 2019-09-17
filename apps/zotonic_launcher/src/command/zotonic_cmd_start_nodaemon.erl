@@ -30,7 +30,7 @@ run(_) ->
     case filelib:is_file(ZotonicApp) of
         true ->
             io:format("Starting zotonic ~s ...", [Target]),
-            net_kernel:start([Target, shortnames]),
+            {ok, _} = net_kernel:start([Target, shortnames]),
             zotonic_launcher_config:load_configs(),
             zotonic:start(),
             receive

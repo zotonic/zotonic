@@ -45,6 +45,10 @@ run(_) ->
                         [string:concat(?ZOTONIC, "/priv/log")])
             end;
         false ->
-            io:format("Building Zotonic for the first time. ~n"),
-            make:all()
+            io:format("Cannot start Zotonic: first build Zotonic using 'make'. ~n")
     end.
+
+% Build erl command - execute it in the background
+
+% erlang:open_port({spawn, Command}, [])
+% erlang:open_port({spawn_executable, Command}, [ {args, [...]}, hide ])  ---- use os:find_executable("erl")
