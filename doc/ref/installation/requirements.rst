@@ -21,12 +21,15 @@ installed:
 3. **PostgreSQL** version 8.4 or higher. Enable trust-authentication
    (username+password) in Postgres (see below).
 
-4. **make** A recent version of the GNU ``make`` utility.
+4. **PostgreSQL** version 8.4 or higher. Enable trust-authentication
+   (username+password) in Postgres (see below).
 
-5. **git** Zotonic comes with a few subprojects which are pulled from
+5. **gcc** and **g++** For compiling dependencies like `erlexec`.
+
+6. **git** Zotonic comes with a few subprojects which are pulled from
    the web with the ``git`` command.
 
-6. **gettext** For translation support.
+7. **gettext** For translation support.
 
 If you meet these requirements, head straight on to :ref:`guide-installation`,
 otherwise, read on below for the specifics on these.
@@ -41,8 +44,8 @@ command in a terminal::
 
 The output should be something like::
 
-  Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
-  Eshell V7.1  (abort with ^G)
+  Erlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+  Eshell V8.3  (abort with ^G)
   1>
 
 (Press ctrl+c twice to exit)
@@ -64,7 +67,7 @@ command in a terminal::
 
 This tells you which version of ImageMagick is installed::
 
-  Version: ImageMagick 6.7.7-10 2012-08-17 Q16 http://www.imagemagick.org
+  Version: ImageMagick 6.8.9-9 Q16 x86_64 2018-09-28 http://www.imagemagick.org
 
 
 PostgreSQL
@@ -77,7 +80,7 @@ command in a terminal::
 
 Returns the PostgreSQL version::
 
-  psql (PostgreSQL) 9.1.6
+  psql (PostgreSQL) 9.5.17
 
 
 .. _psql-trust-authentication:
@@ -97,8 +100,8 @@ version>/main/pg_hba.conf``. Add the following lines::
   host    all         zotonic     ::1/128               md5
 
 These settings assume that your Zotonic sites are going to connect
-with a Postgres user called ``zotonic``. For other user names, adjust
-accordingly. Do not forget to restart Postgres after you've made this
+with a PostgreSQL user called ``zotonic``. For other user names, adjust
+accordingly. Do not forget to restart PostgreSQL after you've made this
 change.
 
 
@@ -114,7 +117,7 @@ https://www.erlang-solutions.com/downloads/download-erlang-otp
 
 The other requirements are easily fetched with ``apt``::
 
-  sudo apt-get install build-essential postgresql imagemagick git
+  sudo sudo apt-get install gcc g++ build-essential git imagemagick postgresql
 
 
 FreeBSD
@@ -126,14 +129,13 @@ info). If you don't have GNU make, Zotonic will give an error when
 trying to compile.
 
 
-Mac OS X
-^^^^^^^^
+MacOS
+^^^^^
 
 With Homebrew you can install Erlang and ImageMagick using the
 following commands::
 
-  brew install erlang
-  brew install imagemagick
+  brew install erlang git imagemagick
 
 Alternatively, with MacPorts::
 
@@ -142,8 +144,8 @@ Alternatively, with MacPorts::
 
 For PostgreSQL choose either:
 
-* `EnterpriseDB <http://www.enterprisedb.com/products/pgdownload.do#osx>`_
-* `Postgress.app <http://postgresapp.com/>`_
+* `EnterpriseDB <https://www.enterprisedb.com/products/pgdownload.do>`_
+* `Postgress.app <https://postgresapp.com/>`_
 
 
 Windows
@@ -153,8 +155,3 @@ Currently, Zotonic is not officially supported on the Windows
 platform. However, the main dependencies Erlang, PostgreSQL and
 ImageMagick do work on Windows, so, if you’re adventurous, it should
 be possible to get it running.
-
-We have included user-contributed ``start.cmd`` and ``build.cmd``
-batch-scripts which used to work on Windows, but have not been kept
-up-to-date with recent changes. Expect some major tweaking to get this
-ack on track.

@@ -40,26 +40,32 @@ First prepare your system for running Zotonic. Zotonic needs:
 * PostgreSQL 8.4 or higher
 * ImageMagick 6.5 or higher for image resizing
 * Git for pulling in external dependencies
+* C++ compiler (gcc) for erl_exec and other dependencies
 
 .. seealso::
     a more extensive discussion of
     :ref:`all requirements <installation-preinstall>`
 
-Linux
+
+Ubuntu / Debian
+^^^^^^^^^^^^^^^
+
+We recommend you install Erlang from the Erlang solutions website:
+
+https://www.erlang-solutions.com/downloads/download-erlang-otp
+
+The other requirements are easily fetched with ``apt``::
+
+  sudo sudo apt-get install gcc g++ build-essential git imagemagick postgresql
+
+MacOS
 """""
-
-For instance on Debian you can install the dependencies by running::
-
-    $ sudo apt-get install build-essential git erlang imagemagick postgresql
-
-macOS X
-"""""""
 
 Install Homebrew_, then run::
 
     $ brew install erlang git imagemagick postgresql
 
-.. _Homebrew: http://brew.sh
+.. _Homebrew: https://brew.sh
 
 On Windows
 """"""""""

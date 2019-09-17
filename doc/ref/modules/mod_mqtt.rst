@@ -81,23 +81,15 @@ Currently the following topics are defined:
 +---------------------------------+-------------------------------------------------------------------------+
 |user                             |Topic available for any authenticated user                               |
 +---------------------------------+-------------------------------------------------------------------------+
-|site/sitename                    |Root for a site                                                          |
+|public                           |Freely accessible within the site                                        |
 +---------------------------------+-------------------------------------------------------------------------+
-|site/sitename/public             |Freely accessible within the site                                        |
+|test                             |Test topic, freely accessible within the site                            |
 +---------------------------------+-------------------------------------------------------------------------+
-|site/sitename/test               |Test topic, freely accessible within the site                            |
+|user                             |Topic available for any authenticated user of the site                   |
 +---------------------------------+-------------------------------------------------------------------------+
-|site/sitename/user               |Topic available for any authenticated user of the site *sitename*        |
+|user/UserId                      |Topic available for a specific user of the site                          |
 +---------------------------------+-------------------------------------------------------------------------+
-|site/sitename/user/UserId        |Topic available for a specific user of the site *sitename*               |
-+---------------------------------+-------------------------------------------------------------------------+
-|site/sitename/session            |HTML pages can subscribe, admins can publish                             |
-+---------------------------------+-------------------------------------------------------------------------+
-|site/sitename/session/SessionId  |Topic to relay information to a specific session                         |
-+---------------------------------+-------------------------------------------------------------------------+
-|site/sitename/pagesession        |HTML pages can subscribe, admins can publish                             |
-+---------------------------------+-------------------------------------------------------------------------+
-|site/sitename/pagesession/PageId |Topic to relay information to a specific page (in a browser)             |
+|bridge/ClientId                  |The topic forwarding to the client with id ClientId                      |
 +---------------------------------+-------------------------------------------------------------------------+
 
 
@@ -112,13 +104,9 @@ The following topics are expanded:
 +--------------------------+-----------------------------------------------------+------------------------------------------------------+
 |Topic                     | Expansion                                           | Description                                          |
 +==========================+=====================================================+======================================================+
-| ~site                    | site/mysite                                         | The context’s site root topic                        |
+| ~client                  | bridge/vWCUKL9QKmfLxotWorZv                         | The bridge topic that forwards to the user agent     |
 +--------------------------+-----------------------------------------------------+------------------------------------------------------+
-| ~session                 | site/mysite/session/oLfVVaT299zpSjlGb5Im            | The topic for the current session                    |
-+--------------------------+-----------------------------------------------------+------------------------------------------------------+
-| ~pagesession             | site/mysite/pagesession/vWCUKL9QKmfLxotWorZv        | The topic for the current HTML page in the browser   |
-+--------------------------+-----------------------------------------------------+------------------------------------------------------+
-| ~user                    | site/user/1234                                      | The topic for the current user                       |
+| ~user                    | user/1234 *or* user/anonymous                       | The topic for the current user                       |
 +--------------------------+-----------------------------------------------------+------------------------------------------------------+
 
 Note that there are not automatic subscriptions for session, pagesession and user topics. All subscriptions need to be added explicitly.
@@ -136,7 +124,7 @@ to allow access to MQTT topics:
 .. code-block:: erlang
     :caption: your_site.erl
 
-    observe_acl_is_allowed(#acl_is_allowed{object = #acl_mqtt{topic = <<"site/your_site/topic">>}}, _Context) ->
+    observe_acl_is_allowed(#acl_is_allowed{object = #acl_mqtt{topic = [ <<"my">>, <<"topic">> ]}}, _Context) ->
         %% Allow anonymous access on this topic
         true;
     observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
@@ -147,89 +135,130 @@ Subscribing modules
 
 Modules can automatically subscribe to topics. This is done by adding specially named functions.
 
-For example, the following function subscribes to the topic ``site/sitename/test``::
+For example, the following function subscribes to the topic ``test/#``::
 
     -export([
-        'mqtt:~site/test'/3
+        'mqtt:test/#'/2
     ]).
 
-    'mqtt:~site/test'(Message, ModulePid, Context) ->
-        lager:debug("mqtt:~site/test received: ~p", [{Message, ModulePid, z_context:site(Context)}]),
+    -spec 'mqtt:test/#'( map(), z:context() ) -> ok.
+    'mqtt:test/#'(Message, Context) ->
+        lager:debug("mqtt:test on site ~p received ~p", [ z_context:site(Context), Message ]),
         ok.
 
-Here *Message* is the received ``#mqtt_msg{}``, and *ModulePid* is the process id of the running module.
+Here *Message* is a map with the received MQTT message (of type ``publish``)::
 
-The function will be called from within a process that is subscribed to the topic.
+    #{
+        type => publish,
+        pool => Pool,                 % A MQTT pool (and topic tree) per site
+        topic => Topic,               % Unpacked topic for the publish [ <<"foo">>, <<"bar">> ]
+        topic_bindings => Bound,      % Variables bound from the topic
+        message => Msg,               % The MQTT message itself
+        publisher_context => PublisherContext
+    }
+
+The *Context* is the context of the process/user that subscribed to the message. Use the ``publisher_context``
+for the *Context* (and ACL permissions) of the publisher.
 
 Erlang API
 ^^^^^^^^^^
 
 Subscribe a function F in a module M to a topic::
 
-    -spec subscribe(binary()|string(), {atom,atom}, #context{}) -> ok | {error, eacces}.
-    z_mqtt:subscribe(Topic, {M,F}, Context)
+    -spec subscribe(z_mqtt:topic(), mfa(), pid(), z:context()) -> ok | {error, eacces | term()}.
+    z_mqtt:subscribe([ <<"my">>, <<"topic">>, '#' ], {M, F, []}, self(), Context)
 
-This starts a process that will subscribe to the topic and call the function whenever a message is received.
-The topic can have wildcards, though access control applies and the result ``{error, eacces}`` will be returned if access is denied, ``ok`` will be returned on a succesful subscription.
+This will subscribe the function, with the current process (``self()``) as the managing process.
+If the process exits then the subscription is removed.
+
+Access control applies and the result ``{error, eacces}`` will be returned
+if access is denied, ``ok`` will be returned on a succesful subscription.
 
 Subscribe the current process to a topic::
 
-    -spec subscribe(binary()|string(), #context{}) -> ok | {error, eacces}.
+    -spec subscribe(z_mqtt:topic(), z:context()) -> ok | {error, eacces | term()}.
     z_mqtt:subscribe(Topic, Context)
 
 When the process stops it will automatically be unsubscribed.
-The process will receive messages ``{route, #mqtt_msg{}}``.
+The process will receive messages ``{mqtt_msg, map()}``, where the ``map()`` is like
+the map in the section above.
 
 Subscribe another process to a topic::
 
-    -spec subscribe(binary()|string(), pid(), #context{}) -> ok | {error, eacces}.
+    -spec subscribe(z_mqtt:topic(), pid(), z:context()) -> ok | {error, eacces | term()}.
     z_mqtt:subscribe(Topic, Pid, Context)
 
 To unsubscribe, use ``z_mqtt:unsubscribe`` with the same arguments as during subscription.
 
 To publish a message::
 
-        -spec publish(binary()|string(), term(), #context{}) -> ok | {error, eacces}.
-        z_mqtt:publish(Topic, SomeData, Context)
+    -spec publish( z_mqtt:topic(), term(), z:context() ) -> ok | {error, term()}.
+    z_mqtt:publish(Topic, Payload, Context)
+
+With options (``qos`` or ``retain``)::
+
+    -spec publish( z_mqtt:topic(), term(), z_mqtt:publish_options(), z:context() ) -> ok | {error, term()}.
+    z_mqtt:publish(Topic, Payload, #{ qos => 1, retain => true }, Context)
+
+Or, with a complete MQTT message::
+
+    -spec publish( mqtt_packet_map:mqtt_packet(), z:context()) -> ok | {error, term()}.
+    Msg = #{
+        type => publish,
+        qos => 0,
+        topic => [ <<"~client">>, <<"public">>, <<"hello">> ]
+        payload = #{ key => 1, foo => <<"bar">> }
+    },
+    z_mqtt:publish(Msg, Context)
 
 
 JavaScript API
 ^^^^^^^^^^^^^^
 
+There is a separate topic tree in the browser. To be able to send message from/to the browser
+there are special *bridge* topics on both ends.
+
+The browser receives an unique client and routing id on connecting to the server. On the server
+those ids can be used to route messages back to the client using a bridge topic.
+
+For example the server side topic::
+
+    bridge/MyClientId/browser/topic
+
+Is mapped on the client to::
+
+    browser/topic
+
+It is possible to send messages to the server, or subscribe to topics on the server. For this there
+is a special ``bridge/origin`` (the *bridge to origin*, ie. the server serving the page) topic.
+
+Any subscribe or publish action on this topic is relayed to the server. For example, to access the
+server side topic ``my/server/topic``, use the client side topic ``bridge/origin/server/topic`` (both
+for publish and subscribe).
+
 The JavaScript API uses callback functions:
 
 .. code-block:: javascript
 
-	pubzub.subscribe("~pagesession/foo/#", function(topic, msg) { console.log(topic, msg); });
-	pubzub.publish("~pagesession/foo/bar", "hello world");
+	cotonic.broker.subscribe("bridge/origin/foo/#", function(msg, bindings, options) { console.log(msg); });
+	cotonic.broker.publish("bridge/origin/foo/bar", "hello world");
 
-If the received message was relayed from the server then it is an object:
+The received message is an JSON object:
 
 .. code-block:: javascript
 
     {
-    	ubf_type: ubf.TUPLE,
-    	_record: "z_mqtt_payload",
-    	version: 1,
-    	site: "yoursitename",
-    	user_id: 23,			// The id of the user sending the message
-    	encoding: "ubf",		// The way the payload was encoded
-    	payload: ...			// The decoded payload
+      type: "publish",
+      qos: 0,
+      payload: "hello world",
+      properties: {
+          ...
+      },
+      ...
     }
 
-The transport between the server and the browser always uses UBF(A).
-Most decoded values will be an object with an extra ``ubf_type``; always use the method ``.valueOf()`` to get the primitive type of the object.
-
-You will need to include the following JavaScript files:
-
-.. code-block:: django
-
-	{% lib
-		 "js/qlobber.min.js"
-		 "js/pubzub.js"
-	%}
-
-The file ``js/modules/ubf.js`` should already have been included, as it is used by ``zotonic-1.0.js``.
+The transport between the server and the browser uses a websocket connection and binary encoded MQTT v5
+messages.
 
 
 Connection will
@@ -257,57 +286,41 @@ On the browser all messages are queued and sent one by one to the server. This u
 Enabling the MQTT listener
 --------------------------
 
-MQTT can listen on a port for incoming connections. Per default the listener is disabled.
+MQTT can listen on a port for incoming connections. Per default the listener is enabled.
 
 Configuration
 ^^^^^^^^^^^^^
 
-The MQTT listener is configured in the :file:`~.zotonic/erlang.config`.
-If this file is missing then it can be copied from :file:`~apps/zotonic_launcher/priv/erlang.config.in`.
+The MQTT listener is configured in the :file:`~.zotonic/zotonic.config`.
+If this file is missing then it can be copied from :file:`~apps/zotonic_launcher/priv/zotonic.config.in`.
 
-The following section defines the Zotonic authentication module, access control, and a listener on the standard MQTT port 1883:
+Per default it listens on MQTT port 1883 and MQTT with TLS on port 8883::
 
-.. code-block:: erlang
+    %%% IP address for MQTT connections - defaults to 'listen_ip'
+    %%% Use 'none' to disable.
+       %% {mqtt_listen_ip, any},
 
-   {emqtt, [
-      {auth, {zotonic, []}},
-      {access_control, {zotonic, []}},
-      {listeners, [
-          {1883,  [
-              binary,
-              {packet,        raw},
-              {reuseaddr,     true},
-              {backlog,       128},
-              {nodelay,       true}
-          ]}
-      ]}
-   ]},
+    %%% IPv6 address for MQTT connections - defaults to 'listen_ip6'
+    %%% Use 'none' to disable.
+       %% {mqtt_listen_ip6, any},
+
+    %%% Port number for MQTT connections
+       %% {mqtt_listen_port, 1883},
+
+    %%% Port number for MQTT ssl connections
+       %% {mqtt_listen_ssl_port, 8883},
 
 
 Authentication
 ^^^^^^^^^^^^^^
 
-All connections must authenticat themselves using an username and password.
-The username is postfixed with the hostname of the user’s site, for example: ``jantje@foobar.com``.
+All connections must authenticate using an username and password.
+The username is prefixed with the hostname of the user’s site, for example: ``foobar.com:myusername``.
 In this way Zotonic knows which site the user belongs to.
 
 If no matching site can be found, or if no hostname is given, then Zotonic
 will try to authenticate against the default site.
 
-
-Debugging
-^^^^^^^^^
-
-To see which topics are being subscribed and published to, you can
-configure ``mod_mqtt`` to print debug messages on the Zotonic console
-whenever a publish or subscribe occurs.
-
-To do so, go to the modules overview in the admin interface, and
-scroll down to ``mod_mqtt``. Then, click on the "configure" button in
-the row in the right and tick the checkbox to enable these debug
-messages.
-
-.. image:: /img/mod_mqtt_config.png
 
 .. seealso::
     :ref:`live tag <scomp-live>`, which uses MQTT topics.
