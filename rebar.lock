@@ -65,7 +65,7 @@
  {<<"mqtt_packet_map">>,{pkg,<<"mqtt_packet_map">>,<<"1.1.0">>},1},
  {<<"mqtt_sessions">>,
   {git,"https://github.com/zotonic/mqtt_sessions.git",
-       {ref,"906a0b51e510acdac5758f067d0815aa2553a82c"}},
+       {ref,"6fdcbb0cf50b4c4a011c7e616f9d197fd6190b19"}},
   0},
  {<<"oauth">>,
   {git,"https://github.com/tim/erlang-oauth.git",

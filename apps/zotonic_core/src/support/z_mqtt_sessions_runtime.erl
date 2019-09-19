@@ -23,7 +23,7 @@
     pool_default/0,
 
     new_user_context/3,
-    connect/2,
+    connect/4,
     reauth/2,
     is_allowed/4,
     is_valid_message/3,
@@ -72,34 +72,12 @@ new_user_context( Site, ClientId, SessionOptions ) ->
         client_id = ClientId,
         routing_id = maps:get(routing_id, SessionOptions)
     },
-    Prefs = maps:get(context_prefs, SessionOptions, #{}),
-    Context2 = case maps:get(language, Prefs, undefined) of
-        undefined -> Context1;
-        Language -> z_context:set_language(Language, Context1)
-    end,
-    Context3 = case maps:get(timezone, Prefs, undefined) of
-        undefined -> Context2;
-        Tz -> z_context:set_tz(Tz, Context2)
-    end,
-    AuthOptions = maps:get(auth_options, Prefs, #{}),
-    Context4 = z_context:set(auth_options, Prefs, Context3),
-    Context5 = case Prefs of
-        #{ user_id := undefined } ->
-            % Anonymous user on the transport -- typical for anonymous HTTP connection
-            Context4;
-        #{ user_id := UserId } ->
-            % User authenticated on the transport -- typical for HTTP connection with auth cookie
-            z_acl:logon_prefs(UserId, AuthOptions, Context4);
-        #{ } ->
-            % No user on the transport - typical for a MQTT connection
-            Context4
-    end,
     mqtt_sessions:subscribe(
         Site,
         [ <<"client">>, ClientId, <<"config">> ],
         {?MODULE, context_updates, [Site, ClientId]},
-        z_acl:sudo(Context4)),
-    z_context:set(peer_ip, maps:get(peer_ip, SessionOptions, undefined), Context5).
+        z_acl:sudo(Context1)),
+    Context1.
 
 context_updates(Site, ClientId, #{ message := #{ payload := Payload} }) ->
     mqtt_sessions:update_user_context(Site, ClientId, fun(Ctx) -> update_context_fun(Payload, Ctx) end).
@@ -128,15 +106,74 @@ maybe_set_timezone(_Payload, Context) ->
     Context.
 
 
--spec connect( mqtt_packet_map:mqtt_packet(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
-connect(#{ type := connect, username := U, password := P }, Context) when ?none(U), ?none(P) ->
-    % Anonymous login -- continue with the user we have (from http ws cookies etc)
+set_connect_context_options(Options, Context) ->
+    Prefs = maps:get(context_prefs, Options, #{}),
+    Context2 = case maps:get(language, Prefs, undefined) of
+        undefined -> Context;
+        Language -> z_context:set_language(Language, Context)
+    end,
+    Context3 = case maps:get(timezone, Prefs, undefined) of
+        undefined -> Context2;
+        Tz -> z_context:set_tz(Tz, Context2)
+    end,
+    Context4 = z_context:set(auth_options, Prefs, Context3),
+    z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context4).
+
+-spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_session:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
+connect(#{ type := connect, username := U, password := P }, false,
+        #{ context_prefs := #{ user_id := UserId } = Prefs } = Options,
+        Context) when ?none(U), ?none(P) ->
+    % No session, accept user from the mqtt controller
+    AuthOptions = maps:get(auth_options, Prefs, #{}),
+    Context1 = set_connect_context_options(Options, Context),
+    Context2 = case UserId of
+        undefined -> Context1;
+        _ -> z_acl:logon_prefs(UserId, AuthOptions, Context1)
+    end,
     ConnAck = #{
         type => connack,
         reason_code => ?MQTT_RC_SUCCESS
     },
-    {ok, ConnAck, Context};
-connect(#{ type := connect, username := U, password := P }, Context) when not ?none(U), not ?none(P) ->
+    {ok, ConnAck, Context2};
+connect(#{ type := connect, username := U, password := P }, true,
+        #{ context_prefs := #{ user_id := UserId } } = Options,
+        Context) when ?none(U), ?none(P) ->
+    % Existing session, user from the mqtt controller must be the user in the mqtt sessoion
+    case z_acl:user(Context) of
+        UserId ->
+            ConnAck = #{
+                type => connack,
+                reason_code => ?MQTT_RC_SUCCESS
+            },
+            Context1 = set_connect_context_options(Options, Context),
+            {ok, ConnAck, Context1};
+        _SomeOtherUser ->
+            ConnAck = #{
+                type => connack,
+                reason_code => ?MQTT_RC_NOT_AUTHORIZED
+            },
+            {ok, ConnAck, Context}
+    end;
+connect(#{ type := connect, username := U, password := P }, _IsSessionPresent, Options, Context) when ?none(U), ?none(P) ->
+    % Anonymous login, and no user from the MQTT controller
+    case z_acl:user(Context) of
+        undefined ->
+            ConnAck = #{
+                type => connack,
+                reason_code => ?MQTT_RC_SUCCESS
+            },
+            Context1 = set_connect_context_options(Options, Context),
+            {ok, ConnAck, Context1};
+        _SomeUser ->
+            ConnAck = #{
+                type => connack,
+                reason_code => ?MQTT_RC_NOT_AUTHORIZED
+            },
+            {ok, ConnAck, Context}
+    end;
+connect(#{ type := connect, username := U, password := P }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
+    % User login, and no user from the MQTT controller
+    % The username might be something like: "example.com:localuser"
     Username = case binary:split(U, <<":">>) of
         [ _VHost, U1 ] -> U1;
         U1 -> U1
@@ -147,11 +184,14 @@ connect(#{ type := connect, username := U, password := P }, Context) when not ?n
     },
     case z_notifier:first(#logon_submit{ payload = LogonArgs }, Context) of
         {ok, UserId} when is_integer(UserId) ->
-            IsAuthOk = not z_auth:is_auth(Context)
+            % Authentication is successful, accept if user not changed
+            % or this is a new session.
+            IsAuthOk = not IsSessionPresent
                        orelse z_acl:user(Context) =:= UserId,
             case IsAuthOk of
                 true ->
-                    Context1 = z_acl:logon(UserId, Context),
+                    Context1 = set_connect_context_options(Options, Context),
+                    Context2 = z_acl:logon(UserId, Context1),
                     ConnAck = #{
                         type => connack,
                         reason_code => ?MQTT_RC_SUCCESS,
@@ -160,7 +200,7 @@ connect(#{ type := connect, username := U, password := P }, Context) when not ?n
                             % ... token ...
                         }
                     },
-                    {ok, ConnAck, Context1};
+                    {ok, ConnAck, Context2};
                 false ->
                     ConnAck = #{
                         type => connack,
@@ -182,7 +222,7 @@ connect(#{ type := connect, username := U, password := P }, Context) when not ?n
             },
             {ok, ConnAck, Context}
     end;
-connect(#{ type := connect, properties := #{ authentication_method := _AuthMethod } = Props }, Context) ->
+connect(#{ type := connect, properties := #{ authentication_method := _AuthMethod } = Props }, _IsSessionPresent, _Options, Context) ->
     % User logs on using extended authentication method
     _AuthData = maps:get(authentication_data, Props, undefined),
     % ... handle extended authentication handshake
@@ -191,7 +231,7 @@ connect(#{ type := connect, properties := #{ authentication_method := _AuthMetho
         reason_code => ?MQTT_RC_NOT_AUTHORIZED
     },
     {ok, ConnAck, Context};
-connect(_Packet, Context) ->
+connect(_Packet, _IsSessionPresent, _Options, Context) ->
     % Extended authentication
     ConnAck = #{
         type => connack,
@@ -202,7 +242,7 @@ connect(_Packet, Context) ->
 
 %% @spec Re-authentication. This is called when the client requests a re-authentication (or replies in a AUTH re-authentication).
 -spec reauth( mqtt_packet_map:mqtt_packet(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
-reauth(#{ type := auth }, _UserContext) ->
+reauth(#{ type := _auth }, _Context) ->
     {error, notsupported}.
 
 

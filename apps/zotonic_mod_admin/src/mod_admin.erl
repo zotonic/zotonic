@@ -327,6 +327,16 @@ event(#postback_notify{message= <<"update">>, target=TargetId}, Context) ->
     Context1 = z_render:wire({unmask, [{target_id, TargetId}]}, Context),
     z_render:update(TargetId, #render{template={cat, "_rsc_block_item.tpl"}, vars=Vars}, Context1);
 
+event(#postback{message = {admin_rsc_redirect, Args}}, Context) ->
+    SelectId = m_rsc:rid(z_context:get_q(<<"select_id">>, Context), Context),
+    Dispatch = case proplists:get_value(redirect, Args) of
+        true -> admin_edit_rsc;
+        false -> admin_edit_rsc;
+        undefined -> admin_edit_rsc;
+        D when is_atom(D) -> D
+    end,
+    z_render:wire({redirect, [ {dispatch, Dispatch}, {id, SelectId} ]}, Context);
+
 event(_E, Context) ->
     ?DEBUG(_E),
     Context.
