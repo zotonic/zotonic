@@ -380,14 +380,18 @@ mime(Type)        -> "image/" ++ string:to_lower( binary_to_list(Type) ).
 identify_magicnumber(File) ->
     case file:open(File, [read, raw, binary]) of
         {ok, Fd} ->
-            Result = case file:read(Fd, 10) of
-                {ok, <<"%PDF", _/binary>>} -> {ok, "application/pdf"};
-                {ok, <<9, "%PDF", _/binary>>} -> {ok, "application/pdf"};
-                {ok, <<" %PDF", _/binary>>} -> {ok, "application/pdf"};
-                _ -> {error, unknown}
-            end,
+            R = file:read(Fd, 10),
             ok = file:close(Fd),
-            Result;
+            case R of
+                {ok, <<"%PDF", _/binary>>} ->
+                    {ok, "application/pdf"};
+                {ok, <<Space, "%PDF", _/binary>>} when Space =:= $\t; Space =:= 32 ->
+                    {ok, <<_, Data/binary>>} = file:read_file(File),
+                    ok = file:write_file(File, Data),
+                    {ok, "application/pdf"};
+                _ ->
+                    {error, unknown}
+            end;
         {error, _} = Error ->
             Error
     end.
