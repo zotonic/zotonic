@@ -387,7 +387,7 @@ identify_magicnumber(File) ->
                 _ -> {error, unknown}
             end,
             ok = file:close(Fd),
-            ?DEBUG(Result);
+            Result;
         {error, _} = Error ->
             Error
     end.
