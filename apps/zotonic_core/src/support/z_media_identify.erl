@@ -236,7 +236,11 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         <<"application/inspire">> -> {ok, [{mime, <<"application/inspire">>}]};
                         <<"video/mpeg">> -> {ok, [{mime, <<"video/mpeg">>}]};
                         <<"audio/mpeg">> -> {ok, [{mime, <<"audio/mpeg">>}]};
-                        _ -> {ok, [{mime, <<"application/octet-stream">>}]}
+                        _ ->
+                            case identify_magicnumber(File) of
+                                {ok, MagicNumberMime} -> {ok, [{mime, MagicNumberMime}]};
+                                {error, _} -> {ok, [{mime, <<"application/octet-stream">>}]}
+                            end
                     end;
                 <<"application/vnd.ms-office">> ->
                     % Generic ms-office mime type, check if the filename is more specific
@@ -361,6 +365,7 @@ devnull(unix)  -> "/dev/null".
 
 
 %% @doc Map ImageMagick identify to mime_type, special case for PDF/PS files identifying as PBM
+%%      This is a known problem of IM 6.8.9 (used on Ubuntu 16)
 -spec im_mime(binary(), mime_type()|undefined) -> mime_type().
 im_mime(<<"PBM">>, MimeFile) when MimeFile =/= undefined -> MimeFile;
 im_mime(Type, _) -> mime(Type).
@@ -384,6 +389,27 @@ mime(<<"SVG">>)   -> <<"image/svg+xml">>;
 mime(Type)        -> <<"image/", (z_string:to_lower(Type))/binary>>.
 
 
+% Some PDFs start with a '\t' or whitespace, which causes 'file'
+% to mis-guess the filetype.
+-spec identify_magicnumber( file:filename_all() ) -> {ok, mime_type()} | {error, term()}.
+identify_magicnumber(File) ->
+    case file:open(File, [read, raw, binary]) of
+        {ok, Fd} ->
+            R = file:read(Fd, 10),
+            ok = file:close(Fd),
+            case R of
+                {ok, <<"%PDF", _/binary>>} ->
+                    {ok, <<"application/pdf">>};
+                {ok, <<Space, "%PDF", _/binary>>} when Space =:= $\t; Space =:= 32 ->
+                    {ok, <<_, Data/binary>>} = file:read_file(File),
+                    ok = file:write_file(File, Data),
+                    {ok, <<"application/pdf">>};
+                _ ->
+                    {error, unknown}
+            end;
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Return the extension for a known mime type (eg. <<".mov">>).
 -spec extension(string()|binary()) -> filename_extension().
