@@ -134,7 +134,7 @@ lookup_fallback(Trans, Context) ->
     lookup_fallback(Trans, z_context:language(Context), Context).
 
 lookup_fallback(#m{} = M, Lang, Context) ->
-    lookup_fallback(erlydtl_runtime:to_value(M), Lang, Context);
+    lookup_fallback(erlydtl_runtime:to_value(M, Context), Lang, Context);
 lookup_fallback({trans, Tr}, Lang, Context) ->
     case proplists:get_value(Lang, Tr) of
         undefined ->
