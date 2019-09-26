@@ -127,13 +127,13 @@ lookup(Text, Lang, Context) ->
 
 %% @doc Non strict translation lookup of a language version.
 %%      In order check: requested language, default configured language, english, any
--spec lookup_fallback({trans, list()}|binary()|string(), #context{}) -> binary() | string() | undefined.
+-spec lookup_fallback({trans, list()} | binary() | string() | #m{}, #context{}) -> binary() | string() | undefined.
 lookup_fallback(Trans, undefined) ->
     lookup_fallback(Trans, en, undefined);
 lookup_fallback(Trans, Context) ->
     lookup_fallback(Trans, z_context:language(Context), Context).
 
-lookup_fallback(#{} = M, Lang, Context) ->
+lookup_fallback(#m{} = M, Lang, Context) ->
     lookup_fallback(erlydtl_runtime:to_value(M), Lang, Context);
 lookup_fallback({trans, Tr}, Lang, Context) ->
     case proplists:get_value(Lang, Tr) of
