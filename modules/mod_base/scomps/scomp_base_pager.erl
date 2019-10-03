@@ -39,6 +39,7 @@ render(Params, _Vars, Context) ->
                         undefined -> z_context:get(zotonic_dispatch, Context, search);
                         Dp -> Dp
                    end,
+
     HideSinglePage  = z_convert:to_bool(proplists:get_value(hide_single_page, Params, false)),
     CleanedArgs  = proplists:delete(dispatch, proplists:delete(result, proplists:delete(hide_single_page, Params))),
 
@@ -128,7 +129,8 @@ build_html(Page, Pages, _HideSinglePage, Dispatch, DispatchArgs, Context) ->
                         false ->  url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context)
                    end},
         {pages, Urls},
-        {page, Page}
+        {page, Page},
+        {dispatch, Dispatch}
     ],
     {Html, _} = z_template:render_to_iolist("_pager.tpl", Props, Context),
     Html.
