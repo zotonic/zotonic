@@ -233,7 +233,7 @@ default(user_sites_dir) -> "_checkouts";
 default(user_modules_dir) -> "_checkouts";
 default(proxy_whitelist) -> local;
 default(ip_whitelist) -> local;
-default(ip_whitelist_system_management) -> "any";
+default(ip_whitelist_system_management) -> any;
 default(sessionjobs_limit) -> erlang:max(erlang:system_info(process_limit) div 10, 10000);
 default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 50000);
 default(server_header) -> "Zotonic";

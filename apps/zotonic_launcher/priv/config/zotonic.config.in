@@ -179,10 +179,19 @@
    {password, "%%GENERATED%%"}
 
 %%% IP whitelist, used for accessing sites with a default "admin" password
-   %% {ip_whitelist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,169.254.0.0/16,::1,fd00::/8,fe80::/10"},
+%%% The whitelist is one or more of the following values, separated with a comma:
+%%%   - local
+%%%   - any
+%%%   - none
+%%%   - an ip4 address: 1.2.3.4
+%%%   - an ip6 address: ::1
+%%%   - an ip address with mask: 192.168.0.0/16
+%%% The value 'local' is using an optimized matching method and equals to:
+%%%   - "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,169.254.0.0/16,::1,fd00::/8,fe80::/10,100.64.0.0/10"
+   %% {ip_whitelist, local},
 
 %%% Zotonic Status IP whitelist, used for restricting access to system management screens. Default no restriction.
-   %% {ip_whitelist_system_management, "any"},
+   %% {ip_whitelist_system_management, any},
 
 %%% Inet request backlog, increase when requests are being dropped.
    %% {inet_backlog, 500},
