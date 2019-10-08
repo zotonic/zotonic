@@ -22,7 +22,7 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
 run(_) ->
     net_kernel:start([zotonic_status, shortnames]),

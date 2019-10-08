@@ -22,17 +22,30 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
 run(_) ->
     net_kernel:start([zotonic_wait, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
     io:format("Waiting for zotonic to start: "),
-    case rpc:call(Target, zotonic, ping, []) of
-        pong ->
-            io:format("Started ~n");
-        _ ->
-            io:format("Zotonic not started in ~p~n", [?MAXWAIT])
+    wait( timestamp() + ?MAXWAIT ).
+
+wait( Till ) ->
+    case timestamp() > Till of
+        false ->
+            Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+            case rpc:call(Target, zotonic, ping, []) of
+                pong ->
+                    io:format("Started ~n");
+                _ ->
+                    timer:sleep(500),
+                    wait(Till)
+            end;
+        true ->
+            io:format("NOT Started in ~p~n", [ ?MAXWAIT ]),
+            halt()
     end.
+
+timestamp() ->
+    {A, B, _} = os:timestamp(),
+    A * 1000000 + B.

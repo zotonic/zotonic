@@ -22,18 +22,16 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
-run([]) ->
-    io:format("USAGE: Schema_name ~n"),
-    io:format("USAGE: See ZotonicCommands.txt ~n"),
-    halt();
-
-run(Site) ->
+run([ Site ]) ->
     SiteName = list_to_atom(Site),
     net_kernel:start([zotonic_sitedir, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
 
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
     Path = rpc:call(Target, z_path, site_dir, [SiteName]),
-    io:format("~s ~n~n", [Path]).
+    io:format("~s ~n~n", [Path]);
+run(_) ->
+    io:format("USAGE: sitedir [site_name] ~n"),
+    halt().

@@ -22,13 +22,9 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
-run([]) ->
-    io:format("USAGE: zotonic sitetest [Sitename] ~n"),
-    halt();
-
-run(Site) ->
+run([ Site ]) ->
     SiteName = list_to_atom(Site),
     net_kernel:start([zotonic_sitetest, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
@@ -36,4 +32,8 @@ run(Site) ->
 
     io:format("Stopping site ~p on zotonic ~p ~n", [SiteName, Target]),
     rpc:call(Target, z_sitetest, run, [SiteName]),
-    io:format("~n").
+    io:format("~n");
+
+run(_) ->
+    io:format("USAGE: sitetest [site_name] ~n"),
+    halt().

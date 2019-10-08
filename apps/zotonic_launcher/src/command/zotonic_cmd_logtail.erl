@@ -21,12 +21,11 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
 run(_) ->
     net_kernel:start([zotonic_logtail, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
-    Res = rpc:call(Target, z_access_syslog, start_link, []),
-    io:format("~p~n", [Res]).
+    Res = rpc:call(Target, os, cmd, [ "tail -n 500 priv/log/console.log" ]),
+    io:format("~s~n", [Res]).

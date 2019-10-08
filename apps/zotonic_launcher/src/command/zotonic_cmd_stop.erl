@@ -22,7 +22,7 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
 run(_) ->
     net_kernel:start([zotonic_stop, shortnames]),
@@ -33,7 +33,7 @@ run(_) ->
     case net_adm:ping(Target) of
         pong ->
             rpc:call(Target, init, stop, []),
-            io:format("Ok ~n");
+            io:format("OK ~n");
         pang ->
             halt()
     end.

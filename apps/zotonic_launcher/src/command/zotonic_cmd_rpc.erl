@@ -22,13 +22,17 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
-run([Module, Func, Args]) ->
+run([ Module, Func | Args ]) ->
     net_kernel:start([zotonic_rpc, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
     ModuleName = list_to_atom(Module),
     FuncName = list_to_atom(Func),
+    Res = rpc:call(Target, ModuleName, FuncName, Args),
+    io:format("~p~n", [ Res ]);
 
-    rpc:call(Target, ModuleName, FuncName, [Args]).
+run(_) ->
+    io:format("USAGE: rpc [module] [func] [args...] ~n"),
+    halt().

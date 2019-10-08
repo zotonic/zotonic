@@ -21,7 +21,7 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
 run(_) ->
     CONSOLE_LINES = list_to_atom(os:cmd("echo -n $(tput lines)")),

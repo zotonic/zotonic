@@ -22,7 +22,7 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
 run(_) ->
     ZotonicApp = string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
@@ -30,7 +30,7 @@ run(_) ->
     case filelib:is_file(ZotonicApp) of
         true ->
             io:format("Starting Zotonic ~s..", [Target]),
-            OldUser = kill_old_user(),
+            _OldUser = kill_old_user(),
             _ = supervisor:terminate_child(kernel_sup, user),
             _ = user_drv:start(),
             ok = wait_until_user_started(3000),

@@ -22,10 +22,10 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    ZotonicApp = string:concat(?ZOTONIC, "/_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
+    ZotonicApp = filename:join(?ZOTONIC, "_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
     case filelib:is_file(ZotonicApp) of
         true ->
@@ -42,10 +42,11 @@ run(_) ->
                      io:format("OK ~n");
                 pang ->
                     io:format("Something went wrong while starting Zotonic. Please check the log files ~s~n",
-                        [string:concat(?ZOTONIC, "/priv/log")])
+                        [ filename:join(?ZOTONIC, "priv/log") ])
             end;
         false ->
-            io:format("Cannot start Zotonic: first build Zotonic using 'make'. ~n")
+            io:format("Cannot start Zotonic: first build Zotonic using 'make'. ~n"),
+            halt()
     end.
 
 % Build erl command - execute it in the background

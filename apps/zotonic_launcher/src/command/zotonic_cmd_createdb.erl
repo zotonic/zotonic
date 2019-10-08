@@ -22,17 +22,17 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
-run([]) ->
-    io:format("USAGE: createdb ~s"),
-    io:format("USAGE: See ZotoniCommands.txt ~n");
-
-run(Site) ->
+run([ Site ]) ->
     SiteName = list_to_atom(Site),
     net_kernel:start([zotonic_createdb, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
 
     Res = rpc:call(Target, z_db, prepare_database, [SiteName]),
-    io:format("~p~n", [Res]).
+    io:format("~p~n", [Res]);
+
+run(_) ->
+    io:format("USAGE: createdb [site_name]~n"),
+    halt().

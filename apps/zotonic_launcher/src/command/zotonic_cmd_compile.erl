@@ -22,12 +22,12 @@
 %% API
 -export([run/1]).
 
--include("zotonic_command.hrl").
+-include("../../include/zotonic_command.hrl").
 
 run(_) ->
     net_kernel:start([zotonic_compile, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
 
-    Res = rpc:call(Target, zotonic_compile, all, []),
+    Res = rpc:call(Target, zotonic_filehandler_compile, all, []),
     io:format("~p~n", [Res]).
