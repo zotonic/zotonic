@@ -25,31 +25,10 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    ZotonicApp = filename:join(?ZOTONIC, "_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    case filelib:is_file(ZotonicApp) of
-        true ->
-            io:format("Starting zotonic ~s ...", [Target]),
-            net_kernel:start([Target, shortnames]),
-            zotonic_launcher_config:load_configs(),
-            zotonic:start(),
-            receive
-                {'EXIT', _, _} ->
-                    ok
-            end,
-            case zotonic:ping() of
-                pong ->
-                     io:format("OK ~n");
-                pang ->
-                    io:format("Something went wrong while starting Zotonic. Please check the log files ~s~n",
-                        [ filename:join(?ZOTONIC, "priv/log") ])
-            end;
-        false ->
-            io:format("Cannot start Zotonic: first build Zotonic using 'make'. ~n"),
-            halt()
-    end.
-
-% Build erl command - execute it in the background
-
-% erlang:open_port({spawn, Command}, [])
-% erlang:open_port({spawn_executable, Command}, [ {args, [...]}, hide ])  ---- use os:find_executable("erl")
+    Cmd = case zotonic_command:base_cmd() of
+        {ok, BaseCmd} ->
+            BaseCmd ++ " -detached -s zotonic ";
+        {error, ErrCmd} ->
+            ErrCmd
+    end,
+    io:format("~s", [ Cmd ]).

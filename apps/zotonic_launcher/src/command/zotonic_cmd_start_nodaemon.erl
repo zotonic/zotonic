@@ -25,26 +25,10 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    ZotonicApp = filename:join(?ZOTONIC, "_build/default/lib/zotonic_core/ebin/zotonic_core.app"),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    case filelib:is_file(ZotonicApp) of
-        true ->
-            io:format("Starting zotonic ~s ...", [Target]),
-            {ok, _} = net_kernel:start([Target, shortnames]),
-            zotonic_launcher_config:load_configs(),
-            zotonic:start(),
-            receive
-                {'EXIT', _, _} ->
-                    ok
-            end,
-            case zotonic:ping() of
-                pong ->
-                    io:format("OK ~n");
-                pang ->
-                    io:format("Something went wrong while starting Zotonic. Please check the log files ~s~n",
-                        [ filename:join(?ZOTONIC, "priv/log") ])
-            end;
-        false ->
-            io:format("Building Zotonic for the first time. ~n"),
-            make:all()
-    end.
+    Cmd = case zotonic_command:base_cmd() of
+        {ok, BaseCmd} ->
+            BaseCmd ++ " -s zotonic -noshell ";
+        {error, ErrCmd} ->
+            ErrCmd
+    end,
+    io:format("~s", [ Cmd ]).
