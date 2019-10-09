@@ -25,16 +25,12 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    Cmd = case zotonic_command:base_cmd_test() of
-        {ok, BaseCmd} ->
-            BaseCmd
-            ++ " -sasl errlog_type error -s zotonic "
-            ++ "-eval 'zotonic:await_startup(),init:stop(case eunit:test(["
-                ++ tests()
-                ++ "],[]) of error -> 1; ok -> 0 end)'";
-        {error, ErrCmd} ->
-            ErrCmd
-    end,
+    {ok, BaseCmd} = zotonic_command:base_cmd_test(),
+    Cmd = BaseCmd
+        ++ " -sasl errlog_type error -s zotonic "
+        ++ "-eval 'zotonic:await_startup(),init:stop(case eunit:test(["
+            ++ tests()
+            ++ "],[]) of error -> 1; ok -> 0 end)'",
     io:format("~s", [ Cmd ]).
 
 tests() ->

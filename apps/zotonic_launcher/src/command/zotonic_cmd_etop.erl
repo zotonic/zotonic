@@ -24,12 +24,8 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    CONSOLE_LINES = list_to_atom(os:cmd("echo -n $(tput lines)")),
-    LINES = CONSOLE_LINES - 11,
-
     net_kernel:start([zotonic_etop, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
-    Res = rpc:call(Target, etop, start, [{lines, LINES}, {tracing, off}]),
+    Res = rpc:call(Target, etop, start, [{lines, 30}, {tracing, off}]),
     io:format("~p~n", [Res]).
