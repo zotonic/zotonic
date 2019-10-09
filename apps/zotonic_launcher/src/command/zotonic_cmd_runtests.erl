@@ -25,25 +25,17 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_runtests, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    case net_adm:ping(Target) of
-        pang ->
-            Cmd = case zotonic_command:base_cmd_test() of
-                {ok, BaseCmd} ->
-                    BaseCmd
-                    ++ " -sasl errlog_type error -s zotonic "
-                    ++ "-eval 'zotonic:await_startup(),init:stop(case eunit:test(["
-                        ++ tests()
-                        ++ "],[]) of error -> 1; ok -> 0 end)'";
-                {error, ErrCmd} ->
-                    ErrCmd
-            end,
-            io:format("~s", [ Cmd ]);
-        pong ->
-            io:format("echo Zotonic should not be running when running tests; exit 2")
-    end.
+    Cmd = case zotonic_command:base_cmd_test() of
+        {ok, BaseCmd} ->
+            BaseCmd
+            ++ " -sasl errlog_type error -s zotonic "
+            ++ "-eval 'zotonic:await_startup(),init:stop(case eunit:test(["
+                ++ tests()
+                ++ "],[]) of error -> 1; ok -> 0 end)'";
+        {error, ErrCmd} ->
+            ErrCmd
+    end,
+    io:format("~s", [ Cmd ]).
 
 tests() ->
     Beams = filelib:wildcard( filename:join([ ?ZOTONIC, "_build", "default", "lib", "zotonic_*", "test", "*.beam" ])),
