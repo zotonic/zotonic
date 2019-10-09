@@ -27,7 +27,7 @@
 run(_) ->
     net_kernel:start([zotonic_wait, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
-    io:format("Waiting for zotonic to start: "),
+    io:format("Waiting for zotonic: "),
     wait( timestamp() + ?MAXWAIT ).
 
 wait( Till ) ->
@@ -36,13 +36,14 @@ wait( Till ) ->
             Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
             case rpc:call(Target, zotonic, ping, []) of
                 pong ->
-                    io:format("Started ~n");
+                    io:format(" OK ~n");
                 _ ->
-                    timer:sleep(500),
+                    io:format("."),
+                    timer:sleep(1000),
                     wait(Till)
             end;
         true ->
-            io:format("NOT Started in ~p~n", [ ?MAXWAIT ]),
+            io:format(" No response after ~p seconds~n", [ ?MAXWAIT ]),
             halt()
     end.
 

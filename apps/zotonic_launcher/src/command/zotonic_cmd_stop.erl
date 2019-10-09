@@ -29,11 +29,32 @@ run(_) ->
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
 
-    io:format("Stopping zotonic ~p ...", [Target]),
+    io:format("Stopping zotonic ~p ..", [Target]),
     case net_adm:ping(Target) of
         pong ->
             rpc:call(Target, init, stop, []),
-            io:format("OK ~n");
+            wait_stopped(Target, timestamp() + ?MAXWAIT);
         pang ->
+            io:format(" Not running~n"),
             halt()
     end.
+
+wait_stopped( Target, Till ) ->
+    case timestamp() > Till of
+        false ->
+            case net_adm:ping(Target) of
+                pong ->
+                    io:format("."),
+                    timer:sleep(1000),
+                    wait_stopped( Target, Till );
+                pang ->
+                    io:format(" OK~n")
+            end;
+        true ->
+            io:format(" Still not stopped after ~p seconds~n", [ ?MAXWAIT ]),
+            halt()
+    end.
+
+timestamp() ->
+    {A, B, _} = os:timestamp(),
+    A * 1000000 + B.

@@ -6,6 +6,7 @@ case "$1" in
     start)
         CMD="`$ZOTONIC/bin/zotonic.erlscript start`"
         $CMD
+        $ZOTONIC/bin/zotonic.erlscript wait
         ;;
     start_nodaemon)
         CMD="`$ZOTONIC/bin/zotonic.erlscript start_nodaemon`"

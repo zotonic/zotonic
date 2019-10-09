@@ -28,9 +28,31 @@ run(_) ->
     net_kernel:start([zotonic_status, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    io:format("Running: ~p~n~n", [Target]),
-    io:format("Sites Status: ~n"),
-    io:format("============== ~n"),
+    % case rpc:call(Target, zotonic, status, []) of
+    case rpc:call(Target, z_sites_manager, get_sites, []) of
+        {badrpc, Reason} ->
+            io:format("Not running: ~p (~p)~n", [Target, Reason]);
+        Sites when is_map(Sites) ->
+            io:format("Running: ~p~n~n", [Target]),
+            io:format("Sites Status: ~n"),
+            io:format("============================= ~n"),
+            List = maps:to_list(Sites),
+            lists:foreach(
+                fun({Site, Status}) ->
+                    io:format("~s ~p~n", [pad(Site), Status])
+                end,
+                List),
+            io:format("~n")
+    end.
 
-    rpc:call(Target, zotonic, status, []),
-    io:format("~n").
+pad(Site) ->
+    S = atom_to_list(Site),
+    case length(S) of
+        N when N < 20 ->
+            S ++ pad(20 - N, "");
+        _ ->
+            S
+    end.
+
+pad(N, Acc) when N =< 0 -> Acc;
+pad(N, Acc) -> pad(N-1, [ 32 | Acc ]).
