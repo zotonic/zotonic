@@ -15,7 +15,7 @@
 %%% @end
 %%% Created : 18. Dec 2017 11:06 AM
 %%%-------------------------------------------------------------------
--module(zotonic_cmd_dropschema).
+-module(zotonic_cmd_flush).
 -author("Blaise").
 
 %% API
@@ -28,9 +28,15 @@ run([ Site ]) ->
     net_kernel:start([zotonic_dropschema, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+    Res = rpc:call(Target, z, flush, [SiteName]),
+    io:format("~p~n", [Res]);
 
-    Res = rpc:call(Target, z_db, flush, [SiteName]),
+run([]) ->
+    net_kernel:start([zotonic_dropschema, shortnames]),
+    erlang:set_cookie(node(), erlang:get_cookie()),
+    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+    Res = rpc:call(Target, z, flush, []),
     io:format("~p~n", [Res]);
 
 run(_) ->
-    io:format("USAGE: dropschema <sitename>~n").
+    io:format("USAGE: flush [site_name]~n").

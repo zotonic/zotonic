@@ -20,7 +20,7 @@
 -author("Blaise").
 
 %% API
--export([get_zotonic_dir/0, get_node_host/0, base_cmd/0]).
+-export([get_zotonic_dir/0, get_node_host/0, base_cmd/0, base_cmd_test/0]).
 
 -include("../../include/zotonic_command.hrl").
 -include_lib("zotonic_core/include/zotonic_release.hrl").
@@ -59,6 +59,24 @@ base_cmd() ->
                     maybe_config( zotonic_launcher_config:zotonic_config_file() )
             ])}
     end.
+
+base_cmd_test() ->
+    zotonic_launcher_config:load_configs(),
+    SOpt = case erlang:system_info(schedulers) of
+        1 -> "+S 4:4";
+        _ -> ""
+    end,
+    {ok, lists:flatten([
+        "erl -smp enable ", SOpt,
+        " -env ERL_MAX_PORTS ", max_ports(),
+        " +P ", max_processes(),
+        " +K ", kernel_poll(),
+        " -pa ", lists:map( fun(D) -> [ " ", D ] end, code_paths_test() ),
+        " -sname zotonic001_testsandbox@", ?NODEHOST,
+        " -boot start_sasl ",
+            maybe_config( zotonic_launcher_config:erlang_config_file() ), " ",
+            maybe_config( zotonic_launcher_config:zotonic_config_file() )
+    ])}.
 
 maybe_config({ok, F}) -> "-config " ++ F;
 maybe_config(false) -> "".
@@ -109,6 +127,12 @@ is_distributed() ->
         "true" -> true;
         _ -> false
     end.
+
+code_paths_test() ->
+    code_paths()
+    ++ [
+        filename:join( [ ?ZOTONIC, "_build", "default", "lib", "zotonic_*", "test" ])
+    ].
 
 code_paths() ->
     [
