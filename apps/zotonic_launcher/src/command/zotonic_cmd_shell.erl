@@ -28,13 +28,10 @@ run(_) ->
     net_kernel:start([zotonic_shell, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    case zotonic:ping() of
-        pong ->
-            _ = supervisor:terminate_child(kernel_sup, user),
-            Shell = user_drv:start(['tty_sl -c -e', {Target, shell, start, []}]),
-            true = erlang:link(Shell),
-            receive
-                {'EXIT', Shell, _} ->
-                    ok
-            end
+    _ = supervisor:terminate_child(kernel_sup, user),
+    Shell = user_drv:start(['tty_sl -c -e', {Target, shell, start, []}]),
+    true = erlang:link(Shell),
+    receive
+        {'EXIT', Shell, _} ->
+            ok
     end.

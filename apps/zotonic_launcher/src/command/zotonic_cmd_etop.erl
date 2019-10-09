@@ -24,8 +24,18 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_etop, shortnames]),
+    net_kernel:start([zotonic_shell, shortnames]),
     erlang:set_cookie(node(), erlang:get_cookie()),
     Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    Res = rpc:call(Target, etop, start, [{lines, 30}, {tracing, off}]),
-    io:format("~p~n", [Res]).
+    case net_adm:ping(Target) of
+        pong ->
+            EtopArgs = [
+                {lines, 25},
+                {tracing, off},
+                {output, text},
+                {node, Target}
+            ],
+            etop:start(EtopArgs);
+        pang ->
+            io:format("Node ~p not running~n", [Target])
+    end.
