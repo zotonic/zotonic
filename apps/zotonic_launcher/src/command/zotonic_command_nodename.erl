@@ -21,7 +21,9 @@
 %% API
 -export([
     nodename_target/1,
-    nodename_command/1
+    nodename_command/1,
+
+    is_distributed/0
 ]).
 
 -include("../../include/zotonic_command.hrl").
@@ -32,20 +34,20 @@ nodename_target(DefaultName) when is_atom(DefaultName) ->
         true -> longnames;
         false -> shortnames
     end,
-    Name = name(LongOrShortNames, DefaultName),
+    Name = name(DefaultName, LongOrShortNames),
     nodename(Name, LongOrShortNames).
 
-name(longnames, DefaultName) ->
+name(DefaultName, longnames) ->
     case os:getenv("LNAME") of
         false -> DefaultName;
         "" -> DefaultName;
-        Name -> Name
+        Name -> list_to_atom(Name)
     end;
-name(shortnames, DefaultName) ->
+name(DefaultName, shortnames) ->
     case os:getenv("SNAME") of
         false -> DefaultName;
         "" -> DefaultName;
-        Name -> Name
+        Name -> list_to_atom(Name)
     end.
 
 -spec nodename_command( atom() ) -> {ok, {longnames | shortnames, node()}} | {error, long | short}.
