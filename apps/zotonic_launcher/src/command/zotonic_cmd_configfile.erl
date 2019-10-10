@@ -25,8 +25,29 @@
 run(_) ->
     case zotonic_command:net_start() of
         ok ->
-            Res = zotonic_command:rpc(zotonic_launcher_config, zotonic_config_file, []),
-            io:format("~p~n", [ Res ]);
+            case zotonic_command:get_target_node() of
+                {ok, Target} ->
+                    Files = case net_adm:ping(Target) of
+                        pong ->
+                            zotonic_command:rpc(zotonic_launcher_config, config_files, [ Target ]);
+                        pang ->
+                            zotonic_launcher_config:config_files(Target)
+                    end,
+                    list_files(Files, Target);
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.
+
+list_files(Fs, Target) when is_list(Fs) ->
+    io:format("Zotonic config files for ~p:~n", [Target]),
+    lists:foreach(
+        fun(F) ->
+            io:format("- ~s~n", [F])
+        end,
+        Fs);
+list_files(Other, Target) ->
+    io:format("Error finding config files for ~p: ~p~n", [ Target, Other ]),
+    halt(1).

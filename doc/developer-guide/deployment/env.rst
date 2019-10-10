@@ -49,9 +49,18 @@ The following environment variables influence how Zotonic starts up.
 ``ZOTONIC_SMTP_LISTEN_DOMAIN``
   The domain to bind the SMTP server to, if any.
 
-``TMP``
-  Where Zotonic puts temporary files, like temporary files for image
-  resizing or URL downloading.
+``ZOTONIC_CONFIG_DIR``
+  The directory with the configuration files. For Zotonic major version 1, this defaults to ``~/.zotonic/1/``.
+  Default locations (assuming the version of zotonic is 1.0 and the node is called ``zotonic@foobar``) are:
+
+   * ``~/.zotonic/zotonic@foobar/``
+   * ``~/.zotonic/1.0/``
+   * ``~/.zotonic/1/``
+   * ``~/.zotonic/``
+   * ``/etc/zotonic/zotonic@foobar/``
+   * ``/etc/zotonic/1.0/``
+   * ``/etc/zotonic/1/``
+   * ``/etc/zotonic/``
 
 ``SNAME``
   The *short name* of the Zotonic Erlang node. This defaults to ``zotonic``. If a
@@ -66,3 +75,6 @@ The following environment variables influence how Zotonic starts up.
   ``@`` **must** be a fully qualified domain name. Zotonic will use the OS's domain name
   if no domain is defined in the LNAME.
 
+``TMP``
+  Where Zotonic puts temporary files. Examples are temporary files for image
+  resizing or URL downloading.

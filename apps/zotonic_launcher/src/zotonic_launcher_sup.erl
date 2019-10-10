@@ -37,10 +37,16 @@ start_link() ->
     lager:info("Zotonic starting"),
     lager:info("================"),
     lager:info("Config files used:"),
-    [lager:info("- ~s", [Cfg]) || Cfg <- zotonic_launcher_config:config_files()],
+    [ lager:info("- ~s", [Cfg]) || Cfg <- zotonic_launcher_config:config_files( node() ) ],
     lager:info("================"),
-    zotonic_launcher_config:load_configs(),
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+    case zotonic_launcher_config:read_configs(node()) of
+        {ok, Cfgs} ->
+            zotonic_launcher_config:load_configs(Cfgs),
+            supervisor:start_link({local, ?SERVER}, ?MODULE, []);
+        {error, _} = Error ->
+            lager:error("Fatal error reading configuration files."),
+            Error
+    end.
 
 %%====================================================================
 %% Supervisor callbacks

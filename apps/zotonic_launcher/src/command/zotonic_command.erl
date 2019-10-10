@@ -113,13 +113,12 @@ format_error({error, Reason}) ->
 
 
 base_cmd() ->
-    base_cmd(?DEFAULT_NODENAME, code_paths()).
+    base_cmd(?DEFAULT_NODENAME, fun code_paths/0).
 
 base_cmd_test() ->
-    base_cmd(?DEFAULT_NODENAME_TEST, code_paths_test()).
+    base_cmd(?DEFAULT_NODENAME_TEST, fun code_paths_test/0).
 
 base_cmd(DefaultName, CodePaths) ->
-    zotonic_launcher_config:load_configs(),
     case zotonic_command_nodename:nodename_target( list_to_atom(DefaultName) ) of
         {error, long} ->
             {error,
@@ -132,24 +131,21 @@ base_cmd(DefaultName, CodePaths) ->
                 "contains a \".\" character, please try again with another SNAME argument."};
         {ok, {LongOrShortnames, Nodename}} ->
             SOpt = case erlang:system_info(schedulers) of
-                1 -> "+S 4:4";
+                1 -> " +S 4:4";
                 _ -> ""
             end,
             {ok, lists:flatten([
-                "erl -smp enable ", SOpt,
+                "erl",
+                " -smp enable",
+                SOpt,
                 " -env ERL_MAX_PORTS ", max_ports(),
                 " +P ", max_processes(),
                 " +K ", kernel_poll(),
-                " -pa ", lists:map( fun(D) -> [ " ", D ] end, CodePaths ),
+                " -pa ", lists:map( fun(D) -> [ " ", D ] end, CodePaths() ),
                 " ", name_arg(LongOrShortnames, Nodename),
-                " -boot start_sasl ",
-                    maybe_config( zotonic_launcher_config:erlang_config_file() ), " ",
-                    maybe_config( zotonic_launcher_config:zotonic_config_file() )
+                " -boot start_sasl "
             ])}
     end.
-
-maybe_config({ok, F}) -> "-config " ++ F;
-maybe_config(false) -> "".
 
 name_arg(longnames, Nodename) ->
     [ "-name ", atom_to_list(Nodename) ];
@@ -191,28 +187,8 @@ code_paths_test() ->
 
 code_paths() ->
     [
-        filename:join( [ get_zotonic_dir(), "_build", "default", "lib", "*", "ebin" ]),
-        filename:join( [ get_zotonic_dir(), "_checkouts", "*", "ebin" ])
-    ]
-    ++ lists:usort(
-        case application:get_env(user_sites_dir) of
-            undefined -> [];
-            {ok, "_checkouts"} -> [];
-            {ok, ""} -> [];
-            {ok, Dir} -> filename:join([ Dir, "*", "ebin" ])
-        end
-        ++ case application:get_env(user_modules_dir) of
-            undefined -> [];
-            {ok, "_checkouts"} -> [];
-            {ok, ""} -> [];
-            {ok, Dir} -> filename:join([ Dir, "*", "ebin" ])
-        end
-    ).
+        filename:join( [ get_zotonic_dir(), "_build", "default", "lib", "*", "ebin" ])
+    ].
 
 strip_nl(S) ->
     lists:filter(fun(C) -> C >= 32 end, S).
-
-
-
-
-
