@@ -92,6 +92,27 @@ Currently, the following subcommands are implemented:
 ``zotonic sitedir <site_name>``
   Get the absolute path for a site based on [site_name]
 
+``zotonic compilefile <path/to/filename.erl>``
+   Compiles and reloads a single :term:`Erlang module` within the
+   Zotonic folder. This runs very fast and works very well on a
+   save-hook of your text editor. In Emacs, it would be called like
+   this:
+
+.. code-block:: emacs
+
+     (add-hook 'erlang-mode-hook
+           '(lambda ()
+              (add-hook 'after-save-hook '
+                        (lambda ()
+                          (call-process "/path/to/your/bin/zotonic" nil "*scratch*" nil "compilefile" buffer-file-name)
+                          )
+                        )
+              ))
+
+.. tip::
+  Install ``fswatch`` or ``inotify-tools`` to automatically recompile files when they are changed. These tools will also
+  enable automatic loading of changed templates, dispatch rules, and translations.
+
 ``zotonic compile``
   Compiles all the Zotonic Erlang source files, modules and sites,
   including those in the user sites directory and user modules
