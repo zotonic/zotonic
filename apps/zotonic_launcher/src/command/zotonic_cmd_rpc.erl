@@ -34,5 +34,5 @@ run([ Module, Func | Args ]) ->
     end;
 
 run(_) ->
-    io:format("USAGE: rpc [module] [func] [args...] ~n"),
+    io:format("USAGE: rpc <module> <func> [args...] ~n"),
     halt().

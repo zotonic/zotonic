@@ -24,13 +24,30 @@
 
 -include("../../include/zotonic_command.hrl").
 
+run([ Timeout ]) ->
+    try
+        Tm = list_to_integer(Timeout),
+        wait(Tm)
+    catch
+        error:badarg ->
+            io:format("Timeout must be an integer~n"),
+            halt(1)
+    end;
+
+run([]) ->
+    wait(?MAXWAIT);
+
 run(_) ->
+    io:format("USAGE: wait [timeout] ~n"),
+    halt(1).
+
+wait(Timeout) ->
     case zotonic_command:net_start() of
         ok ->
             case zotonic_command:get_target_node() of
                 {ok, Target} ->
                     io:format("Waiting for zotonic: "),
-                    wait( Target, timestamp() + ?MAXWAIT );
+                    wait( Target, timestamp() + Timeout, Timeout);
                 {error, _} = Error ->
                     zotonic_command:format_error(Error)
             end;
@@ -38,7 +55,7 @@ run(_) ->
             zotonic_command:format_error(Error)
     end.
 
-wait( Target, Till ) ->
+wait( Target, Till, Timeout ) ->
     case timestamp() > Till of
         false ->
             case rpc:call(Target, zotonic, ping, []) of
@@ -47,10 +64,10 @@ wait( Target, Till ) ->
                 _ ->
                     io:format("."),
                     timer:sleep(1000),
-                    wait(Target, Till)
+                    wait(Target, Till, Timeout)
             end;
         true ->
-            io:format(" No response after ~p seconds~n", [ ?MAXWAIT ]),
+            io:format(" No response after ~p seconds~n", [ Timeout ]),
             halt()
     end.
 

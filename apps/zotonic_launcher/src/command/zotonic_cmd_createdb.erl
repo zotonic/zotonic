@@ -33,5 +33,5 @@ run([ Site ]) ->
     end;
 
 run(_) ->
-    io:format("USAGE: createdb [site_name]~n"),
+    io:format("USAGE: createdb <site_name>~n"),
     halt(1).

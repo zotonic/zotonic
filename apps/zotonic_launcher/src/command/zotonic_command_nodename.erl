@@ -32,13 +32,20 @@ nodename_target(DefaultName) when is_atom(DefaultName) ->
         true -> longnames;
         false -> shortnames
     end,
+    Name = name(LongOrShortNames, DefaultName),
+    nodename(Name, LongOrShortNames).
+
+name(longnames, DefaultName) ->
+    case os:getenv("LNAME") of
+        false -> DefaultName;
+        "" -> DefaultName;
+        Name -> Name
+    end;
+name(shortnames, DefaultName) ->
     case os:getenv("SNAME") of
-        false ->
-            nodename(DefaultName, LongOrShortNames);
-        "" ->
-            nodename(DefaultName, LongOrShortNames);
-        Name ->
-            nodename(list_to_atom(Name), LongOrShortNames)
+        false -> DefaultName;
+        "" -> DefaultName;
+        Name -> Name
     end.
 
 -spec nodename_command( atom() ) -> {ok, {longnames | shortnames, node()}} | {error, long | short}.
@@ -59,11 +66,19 @@ nodename(Name, LongOrShortNames) when is_atom(Name) ->
 
 is_distributed() ->
     case os:getenv("ZOTONIC_DISTRIBUTED") of
+        false -> has_lname();
+        "" -> has_lname();
         "true" -> true;
         "1" -> true;
         _ -> false
     end.
 
+has_lname() ->
+    case os:getenv("LNAME") of
+        false -> false;
+        "" -> false;
+        _ -> true
+    end.
 
 %% Code below is from net_kernel.erl, which is:
 %%

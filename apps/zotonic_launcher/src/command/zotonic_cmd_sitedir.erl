@@ -33,5 +33,5 @@ run([ Site ]) ->
     end;
 
 run(_) ->
-    io:format("USAGE: sitedir [site_name] ~n"),
+    io:format("USAGE: sitedir <site_name>~n"),
     halt().

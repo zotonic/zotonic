@@ -34,5 +34,5 @@ run([ Site ]) ->
     end;
 
 run(_) ->
-    io:format("USAGE: restartsite [site_name] ~n"),
+    io:format("USAGE: restartsite <site_name>~n"),
     halt().

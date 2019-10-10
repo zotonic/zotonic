@@ -39,7 +39,7 @@
 -define(ADMINPASSWORD, admin).
 
 usage() ->
-    io:format("Usage: zotonic-addsite [options] <site_name> ~n~n"),
+    io:format("Usage: zotonic addsite [options] <site_name> ~n~n"),
     io:format(" -s <skel>     Skeleton site (one of 'blog', 'basesite', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
     io:format(" -H <host>     Site's hostname (default: <sitename.dev>) ~n"),
     io:format(" -L            Create the site in the current directory and symlink it into ~n"),

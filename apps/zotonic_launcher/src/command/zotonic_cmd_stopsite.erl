@@ -36,6 +36,6 @@ run([ Site ]) ->
     end;
 
 run(_) ->
-    io:format("USAGE: stopsite [site_name] ~n"),
-    halt().
+    io:format("USAGE: stopsite <site_name>~n"),
+    halt(1).
 
