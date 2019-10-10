@@ -1,19 +1,19 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/..;pwd)}
 
 case "$1" in
     start)
-        CMD="`$ZOTONIC/bin/zotonic.erlscript start`"
+        CMD="`$ZOTONIC/bin/zotonic.escript start`"
         $CMD
         $ZOTONIC/bin/zotonic.erlscript wait
         ;;
     start_nodaemon)
-        CMD="`$ZOTONIC/bin/zotonic.erlscript start_nodaemon`"
+        CMD="`$ZOTONIC/bin/zotonic.escript start_nodaemon`"
         $CMD
         ;;
     debug)
-        CMD="`$ZOTONIC/bin/zotonic.erlscript debug`"
+        CMD="`$ZOTONIC/bin/zotonic.escript debug`"
         $CMD
         ;;
     runtests)
@@ -23,11 +23,11 @@ case "$1" in
         export ZOTONIC_SSL_LISTEN_PORT=8043
         export ZOTONIC_SMTP_BOUNCE_PORT=2535
 
-        CMD="`$ZOTONIC/bin/zotonic.erlscript runtests`"
+        CMD="`$ZOTONIC/bin/zotonic.escript runtests`"
         eval $CMD
         EXIT=$?
         ;;
     *)
-        $ZOTONIC/bin/zotonic.erlscript "$@"
+        $ZOTONIC/bin/zotonic.escript "$@"
         ;;
 esac
