@@ -3,7 +3,7 @@
 # If the command given is a zotonic command, pass it to zotonic; otherwise exec it directly.
 # Also check the environment for "FORCE_ZOTONIC" to provide a workaround in case the scripts 
 # are moved somewhere outside of the path below.
-if [ -x "/opt/zotonic/apps/zotonic_launcher/bin/zotonic-$1" ] || [ -n "$FORCE_ZOTONIC" ]; then
+if [ -x "/opt/zotonic/apps/zotonic_launcher/src/command/zotonic_cmd_$1.erl" ] || [ -n "$FORCE_ZOTONIC" ]; then
     set -x
 
     HOME=/tmp

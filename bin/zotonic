@@ -2,32 +2,4 @@
 
 export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/..;pwd)}
 
-case "$1" in
-    start)
-        CMD="`$ZOTONIC/bin/zotonic.escript start`"
-        $CMD
-        $ZOTONIC/bin/zotonic.erlscript wait
-        ;;
-    start_nodaemon)
-        CMD="`$ZOTONIC/bin/zotonic.escript start_nodaemon`"
-        $CMD
-        ;;
-    debug)
-        CMD="`$ZOTONIC/bin/zotonic.escript debug`"
-        $CMD
-        ;;
-    runtests)
-        export ZOTONIC_PORT=8040
-        export ZOTONIC_LISTEN_PORT=8040
-        export ZOTONIC_PORT_SSL=8043
-        export ZOTONIC_SSL_LISTEN_PORT=8043
-        export ZOTONIC_SMTP_BOUNCE_PORT=2535
-
-        CMD="`$ZOTONIC/bin/zotonic.escript runtests`"
-        eval $CMD
-        EXIT=$?
-        ;;
-    *)
-        $ZOTONIC/bin/zotonic.escript "$@"
-        ;;
-esac
+./apps/zotonic_launcher/bin/zotonic "$@"
