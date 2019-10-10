@@ -25,18 +25,18 @@
 
 run([ Site ]) ->
     SiteName = list_to_atom(Site),
-    net_kernel:start([zotonic_dropschema, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    Res = rpc:call(Target, z, flush, [SiteName]),
-    io:format("~p~n", [Res]);
-
+    flush([ SiteName ]);
 run([]) ->
-    net_kernel:start([zotonic_dropschema, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    Res = rpc:call(Target, z, flush, []),
-    io:format("~p~n", [Res]);
-
+    flush([]);
 run(_) ->
     io:format("USAGE: flush [site_name]~n").
+
+
+flush(Args) ->
+    case zotonic_command:net_start() of
+        ok ->
+            Res = zotonic_command:rpc(z, flush, Args),
+            io:format("~p~n", [ Res ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end.

@@ -25,13 +25,20 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_shell, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    _ = supervisor:terminate_child(kernel_sup, user),
-    Shell = user_drv:start(['tty_sl -c -e', {Target, shell, start, []}]),
-    true = erlang:link(Shell),
-    receive
-        {'EXIT', Shell, _} ->
-            ok
+    case zotonic_command:net_start() of
+        ok ->
+            case zotonic_command:get_target_node() of
+                {ok, Target} ->
+                    _ = supervisor:terminate_child(kernel_sup, user),
+                    Shell = user_drv:start(['tty_sl -c -e', {Target, shell, start, []}]),
+                    true = erlang:link(Shell),
+                    receive
+                        {'EXIT', Shell, _} ->
+                            ok
+                    end;
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
     end.

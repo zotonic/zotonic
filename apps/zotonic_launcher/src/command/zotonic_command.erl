@@ -20,29 +20,117 @@
 -author("Blaise").
 
 %% API
--export([get_zotonic_dir/0, get_node_host/0, base_cmd/0, base_cmd_test/0]).
+-export([
+    get_zotonic_dir/0,
+    get_target_node/0,
+    net_start/0,
+    net_start/1,
+    rpc/3,
+    format_error/1,
+    base_cmd/0,
+    base_cmd_test/0
+]).
 
 -include("../../include/zotonic_command.hrl").
 -include_lib("zotonic_core/include/zotonic_release.hrl").
 
 get_zotonic_dir() ->
-    {ok, CurrentDir} = file:get_cwd(),
-    _Dir = CurrentDir.
+    {ok, Dir} = case os:getenv("ZOTONIC") of
+        false -> file:get_cwd();
+        "" -> file:get_cwd();
+        ZotonicDir -> {ok, ZotonicDir}
+    end,
+    Dir.
 
-get_node_host() ->
-    {ok, HostName} = inet:gethostname(),
-    _NodeHost = HostName.
+get_target_node() ->
+    case zotonic_command_nodename:nodename_target( list_to_atom(?DEFAULT_NODENAME) ) of
+        {ok, {_LongOrShortnames, Nodename}} ->
+            {ok, Nodename};
+        {error, _} = Error ->
+            Error
+    end.
+
+net_start() ->
+    net_start("command" ++ integer_to_list(rand:uniform(1000000))).
+
+net_start(Name) ->
+    case zotonic_command_nodename:nodename_command( list_to_atom(Name) ) of
+        {error, _} = Error ->
+            Error;
+        {ok, {LongOrShortnames, Nodename}} ->
+            case net_kernel:start([Nodename, LongOrShortnames]) of
+                {ok, _Pid} ->
+                    case erlang:get_cookie() of
+                        nocookie ->
+                            {error, nocookie};
+                        Cookie ->
+                            erlang:set_cookie(node(), Cookie),
+                            ok
+                    end;
+                {error, _} = Error ->
+                    Error
+            end
+    end.
+
+rpc(Module, Function, Args) ->
+    case get_target_node() of
+        {ok, Target} ->
+            case net_adm:ping(Target) of
+                pong ->
+                    case rpc:call(Target, Module, Function, Args) of
+                        {badrpc, _} = RpcError ->
+                            format_error(RpcError);
+                        Other ->
+                            Other
+                    end;
+                pang ->
+                    format_error({error, pang})
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+format_error({error, long}) ->
+    io:format("Zotonic is configured to run as distributed node, but your hostname is "
+              "not configured to be a fully qualified domain name. Please configure "
+              "your system so the output of 'hostname -f' returns a FQDN.~n"),
+    halt(1);
+format_error({error, short}) ->
+    io:format("Zotonic is configured to run as local (short name) node, but your SNAME "
+              "contains a \".\" character, please try again with another SNAME argument.~n"),
+    halt(1);
+format_error({error, pang}) ->
+    {ok, Target} = get_target_node(),
+    io:format("Zotonic node at ~p is not running~n", [Target]),
+    halt(1);
+format_error({badrpc, Reason}) ->
+    {ok, Target} = get_target_node(),
+    io:format("RPC error to ~p:~n~p~n", [ Target, Reason ]),
+    halt(1);
+format_error({error, Reason}) ->
+    io:format("Error: ~p~n", [ Reason ]),
+    halt(1).
+
 
 base_cmd() ->
+    base_cmd(?DEFAULT_NODENAME, code_paths()).
+
+base_cmd_test() ->
+    base_cmd(?DEFAULT_NODENAME_TEST, code_paths_test()).
+
+base_cmd(DefaultName, CodePaths) ->
     zotonic_launcher_config:load_configs(),
-    IsDistributed = is_distributed(),
-    case is_fqdn() of
-        false when IsDistributed ->
+    case zotonic_command_nodename:nodename_target( list_to_atom(DefaultName) ) of
+        {error, long} ->
             {error,
                 "echo Zotonic is configured to run as distributed node, but your hostname is "
                 "not configured to be a fully qualified domain name. Please configure "
-                "echo your system so the output of \"hostname -f\" returns a FQDN."};
-        IsFQDN ->
+                "your system so the output of 'hostname -f' returns a FQDN."};
+        {error, short} ->
+            {error,
+                "echo Zotonic is configured to run as local (short name) node, but your SNAME "
+                "contains a \".\" character, please try again with another SNAME argument."};
+        {ok, {LongOrShortnames, Nodename}} ->
             SOpt = case erlang:system_info(schedulers) of
                 1 -> "+S 4:4";
                 _ -> ""
@@ -52,47 +140,21 @@ base_cmd() ->
                 " -env ERL_MAX_PORTS ", max_ports(),
                 " +P ", max_processes(),
                 " +K ", kernel_poll(),
-                " -pa ", lists:map( fun(D) -> [ " ", D ] end, code_paths() ),
-                " ", name_arg(IsDistributed andalso IsFQDN),
+                " -pa ", lists:map( fun(D) -> [ " ", D ] end, CodePaths ),
+                " ", name_arg(LongOrShortnames, Nodename),
                 " -boot start_sasl ",
                     maybe_config( zotonic_launcher_config:erlang_config_file() ), " ",
                     maybe_config( zotonic_launcher_config:zotonic_config_file() )
             ])}
     end.
 
-base_cmd_test() ->
-    zotonic_launcher_config:load_configs(),
-    SOpt = case erlang:system_info(schedulers) of
-        1 -> "+S 4:4";
-        _ -> ""
-    end,
-    {ok, lists:flatten([
-        "erl -smp enable ", SOpt,
-        " -env ERL_MAX_PORTS ", max_ports(),
-        " +P ", max_processes(),
-        " +K ", kernel_poll(),
-        " -pa ", lists:map( fun(D) -> [ " ", D ] end, code_paths_test() ),
-        " -sname zotonic001_testsandbox@", ?NODEHOST,
-        " -boot start_sasl ",
-            maybe_config( zotonic_launcher_config:erlang_config_file() ), " ",
-            maybe_config( zotonic_launcher_config:zotonic_config_file() )
-    ])}.
-
 maybe_config({ok, F}) -> "-config " ++ F;
 maybe_config(false) -> "".
 
-name_arg(true) ->
-    NodeName = ?NODENAME ++ "@" ++ ?NODEHOST,
-    [ "-name ", NodeName ];
-name_arg(false) ->
-    NodeName = ?NODENAME ++ "@" ++ ?NODEHOST,
-    [ "-sname ", NodeName ].
-
-is_fqdn() ->
-    lists:member($., hostname()).
-
-hostname() ->
-    strip_nl( os:cmd("hostname -f") ).
+name_arg(longnames, Nodename) ->
+    [ "-name ", atom_to_list(Nodename) ];
+name_arg(shortnames, Nodename) ->
+    [ "-sname ", atom_to_list(Nodename) ].
 
 max_ports() ->
     case os:getenv("ERL_MAX_PORTS") of
@@ -119,13 +181,6 @@ kernel_poll() ->
         false -> "true";
         "" -> "true";
         KP -> KP
-    end.
-
-is_distributed() ->
-    case os:getenv("ZOTONIC_DISTRIBUTED") of
-        false -> false;
-        "true" -> true;
-        _ -> false
     end.
 
 code_paths_test() ->
@@ -156,3 +211,8 @@ code_paths() ->
 
 strip_nl(S) ->
     lists:filter(fun(C) -> C >= 32 end, S).
+
+
+
+
+

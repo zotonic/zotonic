@@ -25,18 +25,24 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_stop, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
-    io:format("Stopping zotonic ~p ..", [Target]),
-    case net_adm:ping(Target) of
-        pong ->
-            rpc:call(Target, init, stop, []),
-            wait_stopped(Target, timestamp() + ?MAXWAIT);
-        pang ->
-            io:format(" Not running~n"),
-            halt()
+    case zotonic_command:net_start() of
+        ok ->
+            case zotonic_command:get_target_node() of
+                {ok, Target} ->
+                    io:format("Stopping zotonic ~p ..", [Target]),
+                    case net_adm:ping(Target) of
+                        pong ->
+                            rpc:call(Target, init, stop, []),
+                            wait_stopped(Target, timestamp() + ?MAXWAIT);
+                        pang ->
+                            io:format(" Not running~n"),
+                            halt()
+                    end;
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
     end.
 
 wait_stopped( Target, Till ) ->
@@ -52,7 +58,7 @@ wait_stopped( Target, Till ) ->
             end;
         true ->
             io:format(" Still not stopped after ~p seconds~n", [ ?MAXWAIT ]),
-            halt()
+            halt(1)
     end.
 
 timestamp() ->

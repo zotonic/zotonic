@@ -25,13 +25,15 @@
 -include("../../include/zotonic_command.hrl").
 
 run([ Site ]) ->
-    SiteName = list_to_atom(Site),
-    net_kernel:start([zotonic_sitedir, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
+    case zotonic_command:net_start() of
+        ok ->
+            SiteName = list_to_atom(Site),
+            Path = zotonic_command:rpc(z_path, site_dir, [ SiteName ]),
+            io:format("~s~n", [ Path ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end;
 
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    Path = rpc:call(Target, z_path, site_dir, [SiteName]),
-    io:format("~s ~n~n", [Path]);
 run(_) ->
     io:format("USAGE: sitedir [site_name] ~n"),
     halt().

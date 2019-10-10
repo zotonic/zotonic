@@ -25,16 +25,17 @@
 -include("../../include/zotonic_command.hrl").
 
 run([ Site ]) ->
-    SiteName = list_to_atom(Site),
-    net_kernel:start([zotonic_stopsite, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+    case zotonic_command:net_start() of
+        ok ->
+            SiteName = list_to_atom(Site),
+            io:format("Stopping site ~p ..", [ SiteName ]),
+            Res = zotonic_command:rpc(z, shell_stopsite, [ SiteName ]),
+            io:format("~p~n", [ Res ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end;
 
-    io:format("Stopping site ~p on zotonic ~p~n", [SiteName, Target]),
-    Result = rpc:call(Target, z, shell_stopsite, [SiteName]),
-    io:format("~p ~n", [ Result ]);
-
-run([]) ->
+run(_) ->
     io:format("USAGE: stopsite [site_name] ~n"),
     halt().
 

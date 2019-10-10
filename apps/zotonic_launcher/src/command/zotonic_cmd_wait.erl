@@ -25,22 +25,29 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_wait, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    io:format("Waiting for zotonic: "),
-    wait( timestamp() + ?MAXWAIT ).
+    case zotonic_command:net_start() of
+        ok ->
+            case zotonic_command:get_target_node() of
+                {ok, Target} ->
+                    io:format("Waiting for zotonic: "),
+                    wait( Target, timestamp() + ?MAXWAIT );
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end.
 
-wait( Till ) ->
+wait( Target, Till ) ->
     case timestamp() > Till of
         false ->
-            Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
             case rpc:call(Target, zotonic, ping, []) of
                 pong ->
-                    io:format(" OK ~n");
+                    io:format(" OK~n");
                 _ ->
                     io:format("."),
                     timer:sleep(1000),
-                    wait(Till)
+                    wait(Target, Till)
             end;
         true ->
             io:format(" No response after ~p seconds~n", [ ?MAXWAIT ]),

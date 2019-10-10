@@ -8,7 +8,9 @@
 %%%-------------------------------------------------------------------
 -author("Blaise").
 
--define(NODENAME, "zotonic001").
+-define(DEFAULT_NODENAME, "zotonic").
+-define(DEFAULT_NODENAME_TEST, "zotonic001_testsandbox").
+
 -define(ZOTONIC, zotonic_command:get_zotonic_dir()).
--define(NODEHOST, zotonic_command:get_node_host()).
+
 -define(MAXWAIT, 30).

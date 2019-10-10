@@ -25,10 +25,11 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_update, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
-    io:format("Updating zotonic ~p~n", [Target]),
-    rpc:call(Target, zotonic, update, []),
-    io:format("Update: ~p ~n", [Target]).
+    case zotonic_command:net_start() of
+        ok ->
+            io:format("Updating zotonic .."),
+            Res = zotonic_command:rpc(zotonic, update, []),
+            io:format("~n~p~n", [ Res ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end.

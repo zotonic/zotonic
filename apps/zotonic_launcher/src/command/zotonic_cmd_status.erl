@@ -25,15 +25,11 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_status, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    % case rpc:call(Target, zotonic, status, []) of
-    case rpc:call(Target, z_sites_manager, get_sites, []) of
-        {badrpc, Reason} ->
-            io:format("Not running: ~p (~p)~n", [Target, Reason]);
-        Sites when is_map(Sites) ->
-            io:format("Running: ~p~n~n", [Target]),
+    case zotonic_command:net_start() of
+        ok ->
+            Sites = zotonic_command:rpc(z_sites_manager, get_sites, []),
+            {ok, Target} = zotonic_command:get_target_node(),
+            io:format("Running: ~p~n~n", [ Target ]),
             io:format("Sites Status: ~n"),
             io:format("============================= ~n"),
             List = maps:to_list(Sites),
@@ -42,7 +38,9 @@ run(_) ->
                     io:format("~s ~p~n", [pad(Site), Status])
                 end,
                 List),
-            io:format("~n")
+            io:format("~n");
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
     end.
 
 pad(Site) ->

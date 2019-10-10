@@ -24,8 +24,10 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_logtail, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    Res = rpc:call(Target, os, cmd, [ "tail -n 500 priv/log/console.log" ]),
-    io:format("~s~n", [Res]).
+    case zotonic_command:net_start() of
+        ok ->
+            Res = zotonic_command:rpc(os, cmd, [ "tail -n 500 priv/log/console.log" ]),
+            io:format("~p~n", [ Res ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end.

@@ -25,13 +25,15 @@
 -include("../../include/zotonic_command.hrl").
 
 run([ Module, Func | Args ]) ->
-    net_kernel:start([zotonic_rpc, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-    ModuleName = list_to_atom(Module),
-    FuncName = list_to_atom(Func),
-    Res = rpc:call(Target, ModuleName, FuncName, Args),
-    io:format("~p~n", [ Res ]);
+    case zotonic_command:net_start() of
+        ok ->
+            ModuleName = list_to_atom(Module),
+            FuncName = list_to_atom(Func),
+            Res = zotonic_command:rpc(ModuleName, FuncName, Args),
+            io:format("~p~n", [ Res ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end;
 
 run(_) ->
     io:format("USAGE: rpc [module] [func] [args...] ~n"),

@@ -25,9 +25,10 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_cmd_configfile, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
-    [Res] = rpc:call(Target, zotonic_launcher_config, zotonic_config_file, []),
-    io:format("~p~n", [list_to_atom(Res)]).
+    case zotonic_command:net_start() of
+        ok ->
+            Res = zotonic_command:rpc(zotonic_launcher_config, zotonic_config_file, []),
+            io:format("~p~n", [ Res ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end.

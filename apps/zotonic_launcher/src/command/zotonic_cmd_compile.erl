@@ -25,9 +25,11 @@
 -include("../../include/zotonic_command.hrl").
 
 run(_) ->
-    net_kernel:start([zotonic_compile, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
+    case zotonic_command:net_start() of
+        ok ->
+            Res = zotonic_command:rpc(zotonic_filehandler_compile, all, []),
+            io:format("~p~n", [ Res ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end.
 
-    Res = rpc:call(Target, zotonic_filehandler_compile, all, []),
-    io:format("~p~n", [Res]).

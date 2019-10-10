@@ -25,14 +25,15 @@
 -include("../../include/zotonic_command.hrl").
 
 run([ Site ]) ->
-    SiteName = list_to_atom(Site),
-    net_kernel:start([zotonic_createschema, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
-    Res = rpc:call(Target, z_db, prepare_database, [SiteName]),
-    io:format("~p~n", [Res]);
+    case zotonic_command:net_start() of
+        ok ->
+            SiteName = list_to_atom(Site),
+            Res = zotonic_command:rpc(z_db, prepare_database, [SiteName]),
+            io:format("~p~n", [ Res ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end;
 
 run(_) ->
     io:format("USAGE: createschema [site_name]~n"),
-    halt().
+    halt(1).

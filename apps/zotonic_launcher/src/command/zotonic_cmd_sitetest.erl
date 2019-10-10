@@ -25,14 +25,15 @@
 -include("../../include/zotonic_command.hrl").
 
 run([ Site ]) ->
-    SiteName = list_to_atom(Site),
-    net_kernel:start([zotonic_sitetest, shortnames]),
-    erlang:set_cookie(node(), erlang:get_cookie()),
-    Target = list_to_atom(?NODENAME ++ "@" ++ ?NODEHOST),
-
-    io:format("Stopping site ~p on zotonic ~p ~n", [SiteName, Target]),
-    rpc:call(Target, z_sitetest, run, [SiteName]),
-    io:format("~n");
+    case zotonic_command:net_start() of
+        ok ->
+            SiteName = list_to_atom(Site),
+            io:format("Running tests for site ~p .. ", [ SiteName ]),
+            Res = zotonic_command:rpc(z_sitetest, run, [ SiteName ]),
+            io:format("~p~n", [ Res ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end;
 
 run(_) ->
     io:format("USAGE: sitetest [site_name] ~n"),
