@@ -21,8 +21,6 @@
 %% API
 -export([run/1]).
 
--include("../../include/zotonic_command.hrl").
-
 run([ Site ]) ->
     SiteName = list_to_atom(Site),
     flush([ SiteName ]);

@@ -34,7 +34,8 @@ run(_) ->
     io:format("~s", [ Cmd ]).
 
 tests() ->
-    Beams = filelib:wildcard( filename:join([ ?ZOTONIC, "_build", "default", "lib", "zotonic_*", "test", "*.beam" ])),
+    ZotonicDir = zotonic_command:get_zotonic_dir(),
+    Beams = filelib:wildcard( filename:join([ ZotonicDir, "_build", "default", "lib", "zotonic_*", "test", "*.beam" ])),
     Bs = lists:map(
         fun(B) ->
             filename:rootname( filename:basename(B) )

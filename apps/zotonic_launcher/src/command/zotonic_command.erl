@@ -186,13 +186,13 @@ kernel_poll() ->
 code_paths_test() ->
     code_paths()
     ++ [
-        filename:join( [ ?ZOTONIC, "_build", "default", "lib", "zotonic_*", "test" ])
+        filename:join( [ get_zotonic_dir(), "_build", "default", "lib", "zotonic_*", "test" ])
     ].
 
 code_paths() ->
     [
-        filename:join( [ ?ZOTONIC, "_build", "default", "lib", "*", "ebin" ]),
-        filename:join( [ ?ZOTONIC, "_checkouts", "*", "ebin" ])
+        filename:join( [ get_zotonic_dir(), "_build", "default", "lib", "*", "ebin" ]),
+        filename:join( [ get_zotonic_dir(), "_checkouts", "*", "ebin" ])
     ]
     ++ lists:usort(
         case application:get_env(user_sites_dir) of

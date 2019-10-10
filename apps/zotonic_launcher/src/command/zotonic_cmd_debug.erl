@@ -22,8 +22,6 @@
 %% API
 -export([run/1]).
 
--include("../../include/zotonic_command.hrl").
-
 run(_) ->
     Cmd = case zotonic_command:base_cmd() of
         {ok, BaseCmd} ->

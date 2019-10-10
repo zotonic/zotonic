@@ -21,13 +21,13 @@
 %% API
 -export([run/1]).
 
--include("../../include/zotonic_command.hrl").
-
 run(_) ->
     case zotonic_command:net_start() of
         ok ->
-            Res = zotonic_command:rpc(os, cmd, [ "tail -n 500 priv/log/console.log" ]),
-            io:format("~p~n", [ Res ]);
+            ZotonicDir = zotonic_command:get_zotonic_dir(),
+            Cmd = "tail -n 500 '" ++ ZotonicDir ++ "/priv/log/console.log'",
+            Res = os:cmd(Cmd),
+            io:format("~s~n", [ Res ]);
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.

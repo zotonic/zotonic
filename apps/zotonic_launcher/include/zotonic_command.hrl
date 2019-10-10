@@ -11,6 +11,4 @@
 -define(DEFAULT_NODENAME, "zotonic").
 -define(DEFAULT_NODENAME_TEST, "zotonic001_testsandbox").
 
--define(ZOTONIC, zotonic_command:get_zotonic_dir()).
-
 -define(MAXWAIT, 30).

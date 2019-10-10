@@ -22,8 +22,6 @@
 %% API
 -export([run/1]).
 
--include("../../include/zotonic_command.hrl").
-
 run([ Site ]) ->
     case zotonic_command:net_start() of
         ok ->
