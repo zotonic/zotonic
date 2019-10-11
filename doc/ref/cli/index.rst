@@ -121,8 +121,7 @@ Currently, the following subcommands are implemented:
 
 ``zotonic compile``
   Compiles all the Zotonic Erlang source files, modules and sites,
-  including those in the user sites directory and user modules
-  directory (see :ref:`guide-configuration`).
+  including those in the user directory (see :ref:`guide-configuration`).
 
 ``zotonic update``
   Like ``zotonic compile`` but also flushes caches and rescans all modules and sites for new templates etc.

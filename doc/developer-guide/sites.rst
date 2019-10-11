@@ -57,7 +57,7 @@ Create a site
 5. Finally, point your browser to http://yoursite:8000 to see your new site.
    You can log into the admin at http://yoursite:8000/admin with the password
    that you can find in your site’s configuration file:
-   :file:`yoursite/priv/zotonic_site.config` in the :term:`user sites directory`.
+   :file:`yoursite/priv/zotonic_site.config` in the :term:`zotonic user directory`.
 
    .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
 
@@ -66,7 +66,7 @@ Create a site
 Anatomy of a site
 -----------------
 
-A Zotonic site is a folder which lives in the :term:`user sites directory` and
+A Zotonic site is a folder which lives in the :term:`zotonic user directory` and
 contains at least:
 
 * a ``priv/zotonic_site.config`` file: sets the site’s hostname and other parameters

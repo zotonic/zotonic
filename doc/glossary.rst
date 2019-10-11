@@ -94,7 +94,7 @@ Glossary
    Zotonic site
       A Zotonic site is a collection of scomps, filters, dispatch rules for one website. It is a special kind of Zotonic module with has its own config file which allows one to set the hostname, admin password, database connection parameters. The config file contains site wide settings. Zotonic uses the settings to start the site on the right port and connect it to the right database. A Zotonic system can run multiple sites.
 
-   Zotonic applications
+   Zotonic user directory
         The directory in which user-installed Zotonic sites and modules are placed. Defaults to the path ``apps_user`` relative to the Zotonic installation, but can be adjusted by changing the ``ZOTONIC_APPS`` environment variable. See :ref:`guide-deployment-env`.
 
    Erlang module
