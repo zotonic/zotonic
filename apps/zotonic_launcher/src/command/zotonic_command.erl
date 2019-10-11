@@ -157,12 +157,20 @@ base_cmd(DefaultName, CodePaths) ->
                             " +K ", kernel_poll(),
                             " -pa ", lists:map( fun(D) -> [ " ", D ] end, CodePaths ),
                             " ", name_arg(LongOrShortnames, Nodename),
-                            " -boot start_sasl "
+                            " -boot start_sasl ",
+                            erlang_configs(Nodename)
                         ])};
                 {error, _} = Error ->
                     Error
             end
     end.
+
+erlang_configs(Nodename) ->
+    lists:map(
+        fun(F) ->
+            [ " -config ", z_utils:os_escape(F) ]
+        end,
+        zotonic_launcher_config:erlang_config_files(Nodename)).
 
 name_arg(longnames, Nodename) ->
     [ "-name ", atom_to_list(Nodename) ];

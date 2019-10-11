@@ -119,7 +119,7 @@ get(Key) ->
 %% @doc Get value from config file, returning default value when not set (cached).
 -spec get(atom(), any()) -> any().
 get(Key, Default) ->
-	case application:get_env(zotonic_core, Key) of
+	case application:get_env(zotonic, Key) of
 		undefined ->
 			maybe_map_value(Key, maybe_map_env(Default));
 		{ok, Value} ->

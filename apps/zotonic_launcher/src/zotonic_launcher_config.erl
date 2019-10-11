@@ -200,7 +200,8 @@ is_zotonic_config(F) ->
     end.
 
 is_erlang_config(F) ->
-    not is_zotonic_config(F).
+    not is_zotonic_config(F)
+    andalso filename:extension(F) == ".config".
 
 -spec load_configs( map() ) -> ok.
 load_configs( Cfgs ) when is_map(Cfgs) ->
@@ -254,9 +255,6 @@ app_config(File, _Data, _Cfgs) ->
                            [File]),
     {error, {config_file, missing_list_map, File, undefined}}.
 
-
-app_config(File, zotonic, Data, Acc) when is_map(Data) ->
-    app_config(File, zotonic_core, Data, Acc);
 app_config(_File, App, Data, Acc) when is_map(Data), is_atom(App) ->
     application:load(App),
     AppCfg = maps:get(App, Acc, #{}),
