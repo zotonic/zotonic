@@ -34,5 +34,5 @@ run([ Site ]) ->
     end;
 
 run(_) ->
-    io:format("USAGE: startsite <site_name>~n"),
+    io:format(standard_error, "USAGE: startsite <site_name>~n", []),
     halt().

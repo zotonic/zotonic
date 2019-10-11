@@ -91,60 +91,77 @@ rpc(Module, Function, Args) ->
     end.
 
 format_error({error, long}) ->
-    io:format("Zotonic is configured to run as distributed node, but your hostname is "
+    io:format(standard_error,
+              "Zotonic is configured to run as distributed node, but your hostname is "
               "not configured to be a fully qualified domain name. Please configure "
-              "your system so the output of 'hostname -f' returns a FQDN.~n"),
+              "your system so the output of 'hostname -f' returns a FQDN.~n",
+              []),
     halt(1);
 format_error({error, short}) ->
-    io:format("Zotonic is configured to run as local (short name) node, but your SNAME "
-              "contains a \".\" character, please try again with another SNAME argument.~n"),
+    io:format(standard_error,
+              "Zotonic is configured to run as local (short name) node, but your SNAME "
+              "contains a \".\" character, please try again with another SNAME argument.~n",
+              []),
     halt(1);
 format_error({error, pang}) ->
     {ok, Target} = get_target_node(),
-    io:format("Zotonic node at ~p is not running~n", [Target]),
+    io:format(standard_error, "Zotonic node at ~p is not running~n", [Target]),
     halt(1);
 format_error({badrpc, Reason}) ->
     {ok, Target} = get_target_node(),
-    io:format("RPC error to ~p:~n~p~n", [ Target, Reason ]),
+    io:format(standard_error, "RPC error to ~p:~n~p~n", [ Target, Reason ]),
+    halt(1);
+format_error({error, {config_file, Reason, File, undefined}}) ->
+    io:format(standard_error, "Error reading config file '~s': ~p~n", [ File, Reason ]),
+    halt(1);
+format_error({error, {config_file, consult_error, File, {Line, erl_parse, Msg}}}) ->
+    io:format(standard_error, "Error reading config file '~s':~p ~s~n", [ File, Line, Msg ]),
+    halt(1);
+format_error({error, {config_file, Reason, File, Extra}}) ->
+    io:format(standard_error, "Error reading config file '~s': ~p~n~p~n", [ File, Reason, Extra ]),
     halt(1);
 format_error({error, Reason}) ->
-    io:format("Error: ~p~n", [ Reason ]),
+    io:format(standard_error, "Error: ~p~n", [ Reason ]),
     halt(1).
 
-
 base_cmd() ->
-    base_cmd(?DEFAULT_NODENAME, fun code_paths/0).
+    base_cmd(?DEFAULT_NODENAME, code_paths()).
 
 base_cmd_test() ->
-    base_cmd(?DEFAULT_NODENAME_TEST, fun code_paths_test/0).
+    base_cmd(?DEFAULT_NODENAME_TEST, code_paths_test()).
 
 base_cmd(DefaultName, CodePaths) ->
     case zotonic_command_nodename:nodename_target( list_to_atom(DefaultName) ) of
         {error, long} ->
             {error,
-                "echo Zotonic is configured to run as distributed node, but your hostname is "
+                "Zotonic is configured to run as distributed node, but your hostname is "
                 "not configured to be a fully qualified domain name. Please configure "
                 "your system so the output of 'hostname -f' returns a FQDN."};
         {error, short} ->
             {error,
-                "echo Zotonic is configured to run as local (short name) node, but your SNAME "
+                "Zotonic is configured to run as local (short name) node, but your SNAME "
                 "contains a \".\" character, please try again with another SNAME argument."};
         {ok, {LongOrShortnames, Nodename}} ->
-            SOpt = case erlang:system_info(schedulers) of
-                1 -> " +S 4:4";
-                _ -> ""
-            end,
-            {ok, lists:flatten([
-                "erl",
-                " -smp enable",
-                SOpt,
-                " -env ERL_MAX_PORTS ", max_ports(),
-                " +P ", max_processes(),
-                " +K ", kernel_poll(),
-                " -pa ", lists:map( fun(D) -> [ " ", D ] end, CodePaths() ),
-                " ", name_arg(LongOrShortnames, Nodename),
-                " -boot start_sasl "
-            ])}
+            case zotonic_launcher_config:read_configs(Nodename) of
+                {ok, _Cfgs} ->
+                        SOpt = case erlang:system_info(schedulers) of
+                            1 -> " +S 2:2";
+                            _ -> ""
+                        end,
+                        {ok, lists:flatten([
+                            "erl",
+                            " -smp enable",
+                            SOpt,
+                            " -env ERL_MAX_PORTS ", max_ports(),
+                            " +P ", max_processes(),
+                            " +K ", kernel_poll(),
+                            " -pa ", lists:map( fun(D) -> [ " ", D ] end, CodePaths ),
+                            " ", name_arg(LongOrShortnames, Nodename),
+                            " -boot start_sasl "
+                        ])};
+                {error, _} = Error ->
+                    Error
+            end
     end.
 
 name_arg(longnames, Nodename) ->

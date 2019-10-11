@@ -23,10 +23,10 @@
 -export([run/1]).
 
 run(_) ->
-    Cmd = case zotonic_command:base_cmd() of
+    case zotonic_command:base_cmd() of
         {ok, BaseCmd} ->
-            BaseCmd ++ " -s zotonic -noshell ";
-        {error, ErrCmd} ->
-            ErrCmd
-    end,
-    io:format("~s", [ Cmd ]).
+            io:format("~s", [ BaseCmd ++ " -s zotonic -noshell " ]);
+        {error, Error} ->
+            io:format(standard_error, "~s", [ Error ]),
+            halt(1)
+    end.

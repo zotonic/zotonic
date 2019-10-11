@@ -40,8 +40,8 @@ start_link() ->
     [ lager:info("- ~s", [Cfg]) || Cfg <- zotonic_launcher_config:config_files( node() ) ],
     lager:info("================"),
     case zotonic_launcher_config:read_configs(node()) of
-        {ok, Cfgs} ->
-            zotonic_launcher_config:load_configs(Cfgs),
+        {ok, Config} ->
+            zotonic_launcher_config:load_configs(Config),
             supervisor:start_link({local, ?SERVER}, ?MODULE, []);
         {error, _} = Error ->
             lager:error("Fatal error reading configuration files."),

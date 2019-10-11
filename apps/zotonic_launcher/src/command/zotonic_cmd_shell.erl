@@ -27,12 +27,17 @@ run(_) ->
         ok ->
             case zotonic_command:get_target_node() of
                 {ok, Target} ->
-                    _ = supervisor:terminate_child(kernel_sup, user),
-                    Shell = user_drv:start(['tty_sl -c -e', {Target, shell, start, []}]),
-                    true = erlang:link(Shell),
-                    receive
-                        {'EXIT', Shell, _} ->
-                            ok
+                    case net_adm:ping(Target) of
+                        pong ->
+                            _ = supervisor:terminate_child(kernel_sup, user),
+                            Shell = user_drv:start(['tty_sl -c -e', {Target, shell, start, []}]),
+                            true = erlang:link(Shell),
+                            receive
+                                {'EXIT', Shell, _} ->
+                                    ok
+                            end;
+                        pang ->
+                            zotonic_command:format_error({error, pang})
                     end;
                 {error, _} = Error ->
                     zotonic_command:format_error(Error)

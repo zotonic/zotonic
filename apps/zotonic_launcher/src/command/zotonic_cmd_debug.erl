@@ -23,10 +23,9 @@
 -export([run/1]).
 
 run(_) ->
-    Cmd = case zotonic_command:base_cmd() of
+    case zotonic_command:base_cmd() of
         {ok, BaseCmd} ->
-            BaseCmd ++ " -sasl errlog_type error -s zotonic ";
-        {error, ErrCmd} ->
-            ErrCmd
-    end,
-    io:format("~s", [ Cmd ]).
+            io:format("~s", [ BaseCmd ++ " -sasl errlog_type error -s zotonic " ]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end.

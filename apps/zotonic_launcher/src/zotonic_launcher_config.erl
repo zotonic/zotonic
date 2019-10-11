@@ -175,9 +175,11 @@ files(Dir) ->
 files(Dir, Wildcard) ->
     Files = filelib:wildcard( filename:join(Dir, Wildcard) ),
     lists:filter(
-        fun
-            ("." ++ _) -> false;
-            (F) -> not filelib:is_dir(F)
+        fun(F) ->
+            case filename:basename(F) of
+                "." ++ _ -> false;
+                _ -> not filelib:is_dir(F)
+            end
         end,
         Files).
 
@@ -217,9 +219,7 @@ read_configs(Node) ->
                 case consult_config(F) of
                     {ok, Data} ->
                         app_config(F, Data, Acc);
-                    {error, Reason} = Error ->
-                        error_logger:error_msg("Could not read configurarion file '~s': ~p",
-                                               [ F, Reason ]),
+                    {error, _} = Error ->
                         Error
                 end
         end,
@@ -243,7 +243,7 @@ app_config(File, Data, Cfgs) when is_list(Data) ->
 app_config(File, _Data, _Cfgs) ->
     error_logger:error_msg("Config file '~s' does not contain a list or a map.",
                            [File]),
-    {error, format}.
+    {error, {config_file, missing_list_map, File, undefined}}.
 
 
 app_config(File, zotonic, Data, Acc) when is_map(Data) ->
@@ -251,22 +251,15 @@ app_config(File, zotonic, Data, Acc) when is_map(Data) ->
 app_config(_File, App, Data, Acc) when is_map(Data), is_atom(App) ->
     application:load(App),
     AppCfg = maps:get(App, Acc, #{}),
-    case maps:fold(
+    AppCfgNew = maps:fold(
         fun
-            (_, _, {error, _} = Error) ->
-                Error;
-            (K, Vs, {ok, AppAcc}) ->
+            (K, Vs, AppAcc) ->
                 K1 = z_convert:to_atom(K),
-                {ok, AppAcc#{ K1 => Vs }}
+                AppAcc#{ K1 => Vs }
         end,
-        {ok, AppCfg},
-        Data)
-    of
-        {ok, AppCfgNew} ->
-            {ok, Acc#{ App => AppCfgNew }};
-        {error, _} = Error ->
-            Error
-    end;
+        AppCfg,
+        Data),
+    {ok, Acc#{ App => AppCfgNew }};
 app_config(File, App, Data, Acc) when is_list(Data), is_atom(App) ->
     Map = to_map(Data),
     app_config(File, App, Map, Acc).
@@ -274,9 +267,9 @@ app_config(File, App, Data, Acc) when is_list(Data), is_atom(App) ->
 consult_config(File) ->
     case filename:extension(File) of
         ".config" ->
-            file:consult(File);
+            consult(File);
         ".erlang" ->
-            file:consult(File);
+            consult(File);
         ".json" ->
             case file:read_file(File) of
                 {ok, Data} ->
@@ -284,13 +277,23 @@ consult_config(File) ->
                         jsxrecord:decode(Data)
                     catch
                         _:_ ->
-                            {error, json_format}
+                            {error, {config_file, json_format, File, undefined}}
                     end;
-                {error, _} = Error ->
-                    Error
+                {error, Reason} ->
+                    {error, {config_file, Reason, File, undefined}}
             end;
         _Other ->
-            {error, unknown_format}
+            {error, {config_file, unknown_format, File, undefined}}
+    end.
+
+consult(File) ->
+    case file:consult(File) of
+        {ok, L} when is_list(L); is_map(L) ->
+            {ok, L};
+        {error, Reason} when is_atom(Reason) ->
+            {error, {config_file, Reason, File, undefined}};
+        {error, Reason} ->
+            {error, {config_file, consult_error, File, Reason}}
     end.
 
 to_map(Data) when is_list(Data) ->

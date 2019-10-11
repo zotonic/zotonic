@@ -28,9 +28,11 @@ load_mod_paths() ->
     EbinPath = string:concat(?ZOTONIC, "/_build/default/lib"),
     case file:list_dir(EbinPath) of
         {ok, FileNames} ->
-            lists:foreach(fun(Name) ->
-                code:add_pathz(EbinPath ++ "/" ++ Name ++ "/ebin")
-                          end, FileNames);
+            lists:foreach(
+                fun(Name) ->
+                    code:add_pathz(EbinPath ++ "/" ++ Name ++ "/ebin")
+                end,
+                FileNames);
         {error, enoent} ->
             halt()
     end.
@@ -60,6 +62,8 @@ main([]) ->
     usage();
 
 main([ Command | T ]) ->
+    erlang:put(is_zotonic_command, true),
+
     load_mod_paths(),
 
     case string:equal(Command, "-v") of
