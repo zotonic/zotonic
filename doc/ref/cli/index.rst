@@ -56,6 +56,12 @@ Currently, the following subcommands are implemented:
 ``zotonic status``
   List all sites on the running Zotonic instance and their current status.
 
+``zotonic configfile``
+  List all config files used for Zotonic.
+
+``zotonic configtest``
+  Read all config files and check if they are syntactically correct.
+
 ``zotonic rpc``
   Send an RPC request to the running Zotonic instance. Example: `zotonic rpc "zotonic ping"`
 

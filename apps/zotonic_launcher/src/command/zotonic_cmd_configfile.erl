@@ -49,5 +49,5 @@ list_files(Fs, Target) when is_list(Fs) ->
         end,
         Fs);
 list_files(Other, Target) ->
-    io:format("Error finding config files for ~p: ~p~n", [ Target, Other ]),
+    io:format(standard_error, "Error finding config files for ~p: ~p~n", [ Target, Other ]),
     halt(1).
