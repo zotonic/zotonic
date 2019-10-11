@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 
 export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/../../..;pwd)}
-export ZOTONIC_BIN=`dirname $0`
+export ZOTONIC_BIN=$(cd `dirname $0`;pwd)
+
+cd $ZOTONIC
 
 case "$1" in
     start)

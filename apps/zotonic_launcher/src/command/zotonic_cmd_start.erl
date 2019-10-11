@@ -23,10 +23,45 @@
 -export([run/1]).
 
 run(_) ->
-    case zotonic_command:base_cmd() of
-        {ok, BaseCmd} ->
-            io:format("~s", [ BaseCmd ++ " -detached -s zotonic " ]);
-        {error, Error} ->
-            io:format(standard_error, "~s", [ Error ]),
+    case heart(os:getenv("HEART")) of
+        {ok, HeartEnv} ->
+            case zotonic_command:base_cmd() of
+                {ok, BaseCmd} ->
+                    io:format("~s ~s -heart -detached -s zotonic", [ BaseCmd, HeartEnv ]);
+                {error, Error} ->
+                    io:format(standard_error, "~s", [ Error ]),
+                    halt(1)
+            end;
+        {error, _} ->
+            io:format(standard_error, "Too many restarts, stopping.~n", []),
             halt(1)
     end.
+
+heart(Heart) when Heart =:= false; Heart =:= "" ->
+    heart_env(0, z_datetime:timestamp());
+heart(_Heart) ->
+    % Was restarted by heart, check if we are in a restart loop
+    Start = z_convert:to_integer( os:getenv("ZOTONIC_HEART_START", "0") ),
+    Restarts = z_convert:to_integer( os:getenv("ZOTONIC_HEART_RESTARTS", "0") ),
+    Now = z_datetime:timestamp(),
+    case Now - Start of
+        TimeDiff when TimeDiff =< 60 ->
+            case Restarts of
+                N when N =< 5 ->
+                    heart_env(Restarts+1, Start);
+                _ ->
+                    {error, too_many_restarts}
+            end;
+        _ ->
+            heart_env(0, Now)
+    end.
+
+heart_env(Count, Timestamp) ->
+    RestartCmd = lists:flatten([
+        os:getenv("ENV", "/usr/bin/env"),
+        " HEART=true",
+        " ZOTONIC_HEART_RESTARTS=", integer_to_list(Count),
+        " ZOTONIC_HEART_START=", integer_to_list(Timestamp),
+        " ", os:getenv("ZOTONIC_BIN", "bin"), "/zotonic start"
+    ]),
+    {ok, lists:flatten("-env HEART_COMMAND ", z_utils:os_filename(RestartCmd))}.

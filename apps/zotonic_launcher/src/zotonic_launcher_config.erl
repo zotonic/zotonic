@@ -107,7 +107,6 @@ config_dir_fs(Node) ->
                     {error, enoent}
             end;
         [] ->
-            io:format("~nHUH???~n"),
             {error, enoent};
         [ "/etc/" ++ _ = Dir | _ ] ->
             {ok, Dir};
