@@ -124,6 +124,6 @@ repository’s `apps/` directory::
     applications.
 
     The ``apps_user`` directory is the default location of the
-    ``ZOTONIC_APPS`` environment variable. See :ref:`guide-env`.
+    ``ZOTONIC_APPS`` environment variable. See :ref:`guide-deployment-env`.
 
 
