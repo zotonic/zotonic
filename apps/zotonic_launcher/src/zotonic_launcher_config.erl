@@ -160,13 +160,30 @@ replace_placeholders(Data) ->
     binary:replace(Data, <<"%%GENERATED%%">>, z_ids:id(16), [ global ]).
 
 
+%% Zotonic config files are "zotonic.*" files in the root of the
+%% config directory and all files the 'config.d' subdirectory.
 -spec zotonic_config_files( node() ) -> list( file:filename() ).
 zotonic_config_files(Node) ->
-    lists:filter(fun(F) -> is_zotonic_config(F) end, config_files(Node)).
+    case config_dir(Node) of
+        {ok, Dir} ->
+            Files = lists:filter(fun(F) -> not is_erlang_config(F) end, files(Dir)),
+            SubFiles= files( filename:join([ Dir, "config.d" ]) ),
+            Files ++ SubFiles;
+        {error, _} ->
+            []
+    end.
 
+%% Erlang config files must be in the root of the config directory.
+%% They must also have the extension ".config" and not be called "zotonic.config"
 -spec erlang_config_files( node() ) -> list( file:filename() ).
 erlang_config_files(Node) ->
-    lists:filter(fun(F) -> is_erlang_config(F) end, config_files(Node)).
+    case config_dir(Node) of
+        {ok, Dir} ->
+            Files = files(Dir),
+            lists:filter(fun(F) -> is_erlang_config(F) end, Files);
+        {error, _} ->
+            []
+    end.
 
 config_files(Node) ->
     case config_dir(Node) of
@@ -192,16 +209,12 @@ files(Dir, Wildcard) ->
         end,
         Files).
 
-is_zotonic_config(F) ->
-    case filename:basename(F) of
-        "zotonic" -> true;
-        "zotonic." ++ _ -> true;
-        _ -> false
-    end.
-
 is_erlang_config(F) ->
-    not is_zotonic_config(F)
-    andalso filename:extension(F) == ".config".
+    case filename:basename(F) of
+        "zotonic" -> false;
+        "zotonic." ++ _ -> false;
+        _ -> filename:extension(F) == ".config"
+    end.
 
 -spec load_configs( map() ) -> ok.
 load_configs( Cfgs ) when is_map(Cfgs) ->
