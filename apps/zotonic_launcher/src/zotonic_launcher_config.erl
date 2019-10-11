@@ -90,8 +90,15 @@ config_dir_fs(Node) ->
     case Found of
         [] when is_list(Home), Home =/= "" ->
             Dir = filename:join([Home, ".zotonic", MajorVersion]),
-            _ = file:make_dir( filename:join([Home, ".zotonic"]) ),
-            _ = file:make_dir(Dir),
+            ZotonicDir = filename:join([Home, ".zotonic"]),
+            case file:make_dir(ZotonicDir) of
+                ok -> file:change_mode(ZotonicDir, 8#00700);
+                {error, _} -> ok
+            end,
+            case file:make_dir(Dir) of
+                ok -> file:change_mode(Dir, 8#00700);
+                {error, _} -> ok
+            end,
             case filelib:is_dir(Dir) of
                 true ->
                     maybe_initialize_configs(Dir),
@@ -100,6 +107,7 @@ config_dir_fs(Node) ->
                     {error, enoent}
             end;
         [] ->
+            io:format("~nHUH???~n"),
             {error, enoent};
         [ "/etc/" ++ _ = Dir | _ ] ->
             {ok, Dir};
@@ -126,7 +134,7 @@ maybe_initialize_configs(Dir) ->
     end,
     case filelib:is_file(filename:join([ Dir, "zotonic.config" ])) of
         false ->
-            copyfile("erlang.config", SourceDir, Dir);
+            copyfile("zotonic.config", SourceDir, Dir);
         true ->
             ok
     end,
@@ -139,7 +147,9 @@ copyfile(Filename, FromDir, ToDir) ->
             case file:read_file(File) of
                 {ok, Data} ->
                     Data1 = replace_placeholders(Data),
-                    file:write_file(filename:join([ ToDir, Filename ]), Data1);
+                    TargetFile = filename:join([ ToDir, Filename ]),
+                    file:write_file(TargetFile, Data1),
+                    file:change_mode(TargetFile, 8#00600);
                 {error, _} = Error ->
                     Error
             end;
