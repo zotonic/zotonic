@@ -7,24 +7,25 @@ CONFIG1 = case os:getenv("ZOTONIC_APPS") of
         CONFIG;
     "" ->
         CONFIG;
-    "_checkouts" ->
+    "apps_user" ->
         CONFIG;
     ZotonicApps ->
         AppDir = proplists:get_value(project_app_dirs, CONFIG, []),
-        AppDir1 = case filename:basename(ZotonicApps) of
-            "_checkouts" ->
-                % Assume it is the rebar _checkouts directory
-                AppDir;
-            _ ->
-                [ ZotonicApps | AppDir ]
-        end,
+        AppDir1 = [ filename:join(ZotonicApps, "*") | AppDir ],
+        C1 = lists:keystore(project_app_dirs, 1, CONFIG, {project_app_dirs, AppDir1}),
+
+        ErlOpts = proplists:get_value(erl_opts, CONFIG, []),
+        ErlOpts1 = [ {i, ZotonicApps} | ErlOpts ],
+        C2 = lists:keystore(erl_opts, 1, C1, {erl_opts, ErlOpts1}),
+
         io:format("Application Dirs:~n"),
         lists:foreach(
             fun(Dir) ->
                 io:format("- ~s~n", [Dir])
             end,
-            AppDir1),
-        lists:keystore(project_app_dirs, 1, CONFIG, {project_app_dirs, AppDir1})
+            proplists:get_value(project_app_dirs, C2, [])),
+
+        C2
 end,
 
 CONFIG1.

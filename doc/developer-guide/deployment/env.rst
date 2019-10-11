@@ -63,7 +63,7 @@ The following environment variables influence how Zotonic starts up.
    * ``/etc/zotonic/``
 
 ``ZOTONIC_APPS``
-  The directory used for sites, modules and additional OTP applications. This defaults to ``_checkouts``
+  The directory used for sites, modules and additional OTP applications. This defaults to ``apps_user``
   in the Zotonic umbrella application.
 
   If a separate checkouts directory is used, then this environment variable must be:

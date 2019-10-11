@@ -235,7 +235,7 @@ default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
 default(syslog_level) -> info;
-default(zotonic_apps) -> filename:join([ z_path:get_path(), "_checkouts" ]);
+default(zotonic_apps) -> filename:join([ z_path:get_path(), "apps_user" ]);
 default(proxy_whitelist) -> local;
 default(ip_whitelist) -> local;
 default(ip_whitelist_system_management) -> any;
