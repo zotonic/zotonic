@@ -13,7 +13,7 @@ own page after logon (/page). If you want to change this, you need to
 modify the ``sitename.erl`` file, where `sitename` is the name of your
 site. Remember that this file is located in ``user/sites/sitename/``.
 
-.. note:: Your actual site location might be different, see the :term:`User sites directory`.
+.. note:: Your actual site location might be different, see the :term:`Zotonic user directory`.
 
 Assumptions
 -----------

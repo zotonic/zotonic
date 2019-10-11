@@ -46,7 +46,7 @@ cache (to refresh the URL dispatchers) by going to "modules" ->
 http://yoursite:8000/contact. This should show the contact page with the
 template you just made.
 
-.. note:: Your actual site location might be different, see the :term:`User sites directory`.
+.. note:: Your actual site location might be different, see the :term:`Zotonic user directory`.
 
 Create the contact form
 ^^^^^^^^^^^^^^^^^^^^^^^
