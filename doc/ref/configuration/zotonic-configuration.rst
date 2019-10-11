@@ -67,25 +67,6 @@ For example, view the ``zotonic_status`` password::
 
   z_config:get(password).
 
-
-``user_sites_dir``, ``user_modules_dir``
-""""""""""""""""""""""""""""""""""""""""
-
-Zotonic keeps sites and modules that are `external` to Zotonic, e.g.
-installed by website developers, outside the Zotonic source tree.
-
-The directory under which Zotonic expects to find all sites is called
-the :term:`User sites directory`. This is configured with the config
-parameter ``user_sites_dir``. This directory defaults to
-``_checkouts``, relative to Zotonic's installation directory.
-
-The directory under which Zotonic expects to find all external
-modules, e.g. those installed with ``zotonic modules install
-mod_....``, is called the User modules directory. This is configured
-with the config parameter ``user_modules_dir``. This directory
-defaults to ``_checkouts``, relative to Zotonic's installation
-directory.
-
 .. _erlang-config:
 
 The `erlang.config` file

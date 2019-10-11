@@ -107,6 +107,12 @@ get(smtp_listen_port) ->
     end;
 get(smtp_spamd_ip) ->
     maybe_map_value(smtp_spamd_ip, ?MODULE:get(smtp_spamd_ip, default(smtp_spamd_ip)));
+get(zotonic_apps) ->
+    case os:getenv("ZOTONIC_APPS") of
+        false -> default(zotonic_apps);
+        "" -> default(zotonic_apps);
+        ZC -> ZC
+    end;
 get(Key) ->
     ?MODULE:get(Key, default(Key)).
 
@@ -229,8 +235,7 @@ default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
 default(syslog_level) -> info;
-default(user_sites_dir) -> "_checkouts";
-default(user_modules_dir) -> "_checkouts";
+default(zotonic_apps) -> filename:join([ z_path:get_path(), "_checkouts" ]);
 default(proxy_whitelist) -> local;
 default(ip_whitelist) -> local;
 default(ip_whitelist_system_management) -> any;

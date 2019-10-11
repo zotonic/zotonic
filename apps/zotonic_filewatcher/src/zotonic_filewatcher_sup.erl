@@ -111,13 +111,12 @@ which_watcher([M|Ms]) ->
     end.
 
 %% @doc Return the list of all directories to watch
-%% @todo Add a non recursive watch on user/sites, user/modules, and the lib dir.
+%% @todo Add a non recursive watch on zotonic_apps, _checkouts and the lib dir.
 %%       To see if new applications are added (or removed).
 -spec watch_dirs() -> list(string()).
 watch_dirs() ->
     ZotonicDirs = [
-        % filename:join(get_path(), "apps"),
-        filename:join(get_path(), "_checkouts"),
+        filename:join([ z_path:get_path(), "_checkouts" ]),
         build_lib_dir()
     ],
     lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs).
@@ -154,15 +153,3 @@ symlinks(Dir) ->
 build_lib_dir() ->
     filename:dirname(code:lib_dir(zotonic_filewatcher)).
 
-
-%% @doc Get the path to the root dir of the Zotonic install.
-%%      If the env var 'ZOTONIC' is not set, then return the current working dir.
--spec get_path() -> file:filename().
-get_path() ->
-    case os:getenv("ZOTONIC") of
-        false ->
-            {ok, Cwd} = file:get_cwd(),
-            Cwd;
-        ZotonicDir ->
-            ZotonicDir
-    end.

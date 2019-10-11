@@ -3,7 +3,7 @@
 
 Add an AJAX activity indicator.
 
-Whenever an AJAX call is made the HTML element with the id ``#spinner`` will be shown during the call. It will not be shown during :term:`Comet` activity.
+Whenever an AJAX call is made the HTML element with the id ``#spinner`` will be shown during the call.
 
 You can add a spinner element to your page yourself or use this tag to place it somewhere on your page.
 

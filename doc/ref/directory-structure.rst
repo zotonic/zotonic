@@ -117,20 +117,5 @@ repository’s `apps/` directory::
     Zotonic, namely user-defined sites, modules and other Erlang/OTP
     applications.
 
-``zotonic/_checkouts`` - sites
-
-    A single Zotonic installation is capable of virtually hosting
-    serving multiple sites. This directory holds the sites which are
-    created and maintained by you, the users of Zotonic.
-
-    This directory is the default location of the ``user_sites_dir``
-    configuration variable. See :ref:`guide-configuration`.
-
-``zotonic/_checkouts`` - modules
-
-    This directory holds modules which are not part of the core Zotonic
-    modules, but which are also not site-specific. All modules installed
-    with the ``zotonic module install ...`` command are placed here.
-
-    This directory is the default location of the ``user_modules_dir``
-    configuration variable. See :ref:`guide-configuration`.
+    The ``_checkouts`` directory is the default location of the
+    ``ZOTONIC_APPS`` environment variable. See :ref:`guide-env`.

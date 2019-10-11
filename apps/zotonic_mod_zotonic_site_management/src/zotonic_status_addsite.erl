@@ -327,17 +327,29 @@ normalize_options(Options) ->
             Options)).
 
 site_ebin_dir(Name) ->
-    UserSitesDir = z_convert:to_list(z_path:user_sites_dir()),
-    Dir = case filename:basename(UserSitesDir) of
-        "_checkouts" ->
-            filename:join([ UserSitesDir, Name, "ebin" ]);
-        _ ->
-            filename:join([ z_path:build_lib_dir(), Name, "ebin" ])
-    end,
-    z_convert:to_list(Dir).
+    case code:lib_dir(Name) of
+        {error, bad_name} ->
+            % Not yet compiled
+            ZotonicApps = z_convert:to_list( z_path:zotonic_apps() ),
+            Dir = case filename:basename(ZotonicApps) of
+                "_checkouts" ->
+                    filename:join([ ZotonicApps, Name, "ebin" ]);
+                _ ->
+                    filename:join([ z_path:build_lib_dir(), Name, "ebin" ])
+            end,
+            z_convert:to_list(Dir);
+        LibDir ->
+            filename:join([ LibDir, "ebin" ])
+    end.
 
 site_dir(Name) ->
-    z_convert:to_list(filename:join([z_path:user_sites_dir(), Name])).
+    case code:lib_dir(Name) of
+        {error, bad_name} ->
+            % Not yet compiled
+            z_convert:to_list(filename:join([z_path:zotonic_apps(), Name]));
+        LibDir ->
+            LibDir
+    end.
 
 skel_dir(Options) ->
     case z_string:to_name(proplists:get_value(skeleton, Options, <<"empty">>)) of

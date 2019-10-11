@@ -62,6 +62,15 @@ The following environment variables influence how Zotonic starts up.
    * ``/etc/zotonic/1/``
    * ``/etc/zotonic/``
 
+``ZOTONIC_APPS``
+  The directory used for sites, modules and additional OTP applications. This defaults to ``_checkouts``
+  in the Zotonic umbrella application.
+
+  If a separate checkouts directory is used, then this environment variable must be:
+
+   * Defined when building Zotonic with ``make compile`` or ``./rebar3 compile``
+   * Defined when starting Zotonic
+
 ``SNAME``
   The *short name* of the Zotonic Erlang node. This defaults to ``zotonic``. If a
   short name is defined then the Erlang node is started with ``-sname``. The name can
