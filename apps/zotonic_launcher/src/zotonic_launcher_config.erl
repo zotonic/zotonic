@@ -31,6 +31,7 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic_release.hrl").
+-include_lib("yamerl/include/yamerl_errors.hrl").
 
 
 -spec config_dir() -> {ok, file:filename_all()} | {error, enoent}.
@@ -287,26 +288,20 @@ app_config(File, App, Data, Acc) when is_list(Data), is_atom(App) ->
 consult_config(File) ->
     case filename:extension(File) of
         ".config" ->
-            consult(File);
+            consult_erlang(File);
         ".erlang" ->
-            consult(File);
+            consult_erlang(File);
+        ".yml" ->
+            consult_yaml(File);
+        ".yaml" ->
+            consult_yaml(File);
         ".json" ->
-            case file:read_file(File) of
-                {ok, Data} ->
-                    try
-                        jsxrecord:decode(Data)
-                    catch
-                        _:_ ->
-                            {error, {config_file, json_format, File, undefined}}
-                    end;
-                {error, Reason} ->
-                    {error, {config_file, Reason, File, undefined}}
-            end;
+            consult_json(File);
         _Other ->
             {error, {config_file, unknown_format, File, undefined}}
     end.
 
-consult(File) ->
+consult_erlang(File) ->
     case file:consult(File) of
         {ok, L} when is_list(L); is_map(L) ->
             {ok, L};
@@ -314,6 +309,27 @@ consult(File) ->
             {error, {config_file, Reason, File, undefined}};
         {error, Reason} ->
             {error, {config_file, consult_error, File, Reason}}
+    end.
+
+consult_yaml(File) ->
+    try
+        yamerl_constr:file(File, [ str_node_as_binary, {map_node_format, map} ])
+    catch
+        throw:#yamerl_exception{} = E ->
+            {error, {config_file, yaml_format, File, E}}
+    end.
+
+consult_json(File) ->
+    case file:read_file(File) of
+        {ok, Data} ->
+            try
+                jsxrecord:decode(Data)
+            catch
+                _:Reason ->
+                    {error, {config_file, json_format, File, Reason}}
+            end;
+        {error, Reason} ->
+            {error, {config_file, Reason, File, undefined}}
     end.
 
 to_map(Data) when is_list(Data) ->
@@ -325,9 +341,11 @@ to_map(Data, Map) ->
             (L, Acc) when is_list(L) ->
                 to_map(L, Acc);
             ({K, V}, Acc) ->
-                Acc#{ K => V };
+                K1 = z_convert:to_atom(K),
+                Acc#{ K1 => V };
             (K, Acc) ->
-                Acc#{ K => true }
+                K1 = z_convert:to_atom(K),
+                Acc#{ K1 => true }
         end,
         Map,
         Data).
