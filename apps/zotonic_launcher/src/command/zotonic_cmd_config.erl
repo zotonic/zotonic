@@ -121,8 +121,19 @@ pretty_print_value(_Key, Value) when is_list(Value) ->
             io:format("~s", [ Value ]);
         false ->
             lists:map(
-                fun(V) ->
-                    io:format("~n      - ~p", [ V ])
+                fun
+                    (V) when is_binary(V) ->
+                        case is_utf8(V) of
+                            true -> io:format("~n      - ~s", [ V ]);
+                            false -> io:format("~n      - ~p", [ V ])
+                        end;
+                    (V) when is_list(V) ->
+                        case z_string:is_string(V) of
+                            true -> io:format("~n      - ~s", [ V ]);
+                            false -> io:format("~n      - ~p", [ V ])
+                        end;
+                    (V) ->
+                        io:format("~n      - ~p", [ V ])
                 end,
                 Value)
     end;
