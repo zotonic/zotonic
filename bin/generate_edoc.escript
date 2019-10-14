@@ -40,10 +40,12 @@ main(_) ->
     io:format("Generated modules edoc files in ~p~n", [ outpath("modules") ]).
 
 is_zotonic_core("zotonic_mod_" ++ _) -> false;
+is_zotonic_core("zotonic_site_" ++ _) -> false;
 is_zotonic_core("zotonic_" ++ _) -> true;
 is_zotonic_core(_) -> false.
 
 is_zotonic_mod("zotonic_mod_" ++ _) -> true;
+is_zotonic_mod("zotonic_site_" ++ _) -> true;
 is_zotonic_mod(_) -> false.
 
 
