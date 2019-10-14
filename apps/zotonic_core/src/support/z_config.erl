@@ -25,7 +25,9 @@
     get/2,
 
     init_app_env/0,
-    maybe_map_env/1
+    maybe_map_env/1,
+
+    all/0
 ]).
 
 
@@ -136,6 +138,8 @@ maybe_map_env(V) -> V.
 -spec maybe_map_value(atom(), term()) -> term().
 maybe_map_value(listen_ip, IP) -> map_ip_address(listen_ip, IP);
 maybe_map_value(listen_ip6, IP) -> map_ip_address(listen_ip6, IP);
+maybe_map_value(mqtt_listen_ip, IP) -> map_ip_address(mqtt_listen_ip, IP);
+maybe_map_value(mqtt_listen_ip6, IP) -> map_ip_address(mqtt_listen_ip6, IP);
 maybe_map_value(smtp_listen_ip, IP) -> map_ip_address(smtp_listen_ip, IP);
 maybe_map_value(smtp_spamd_ip, IP) -> map_ip_address(smtp_spamd_ip, IP);
 maybe_map_value(_Key, Value) ->
@@ -213,7 +217,7 @@ default(smtp_dnsbl) -> z_email_dnsbl:dnsbl_list();
 default(smtp_dnswl) -> z_email_dnsbl:dnswl_list();
 default(smtp_delete_sent_after) -> 240;
 default(mqtt_listen_ip) -> ?MODULE:get(listen_ip);
-default(mqtt_listen_ip6) -> ?MODULE:get(listen_ip);
+default(mqtt_listen_ip6) -> ?MODULE:get(listen_ip6);
 default(mqtt_listen_port) -> 1883;
 default(mqtt_listen_ssl_port) -> 8883;
 default(mqtt_max_connections) -> 10000;
@@ -244,3 +248,75 @@ default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 5
 default(server_header) -> "Zotonic";
 default(html_error_path) -> filename:join(code:priv_dir(zotonic_core), "htmlerrors");
 default(_) -> undefined.
+
+-spec all() -> list( {atom(), term()}) .
+all() ->
+    lists:map(
+        fun
+            (ssl_dhfile) ->
+                DF = case ?MODULE:get(ssl_dhfile) of
+                    undefined -> z_ssl_certs:dhfile();
+                    Dhfile -> Dhfile
+                end,
+                {ssl_dhfile, DF};
+            (K) ->
+                {K, ?MODULE:get(K)}
+        end,
+        [
+            environment,
+            zotonic_apps,
+            timezone,
+            listen_ip,
+            listen_ip6,
+            listen_port,
+            ssl_listen_port,
+            port,
+            ssl_port,
+            max_connections,
+            ssl_max_connections,
+            dbhost,
+            dbport,
+            dbuser,
+            dbpassword,
+            dbdatabase,
+            dbschema,
+            security_headers,
+            smtp_verp_as_from,
+            smtp_no_mx_lookups,
+            smtp_relay,
+            smtp_host,
+            smtp_port,
+            smtp_ssl,
+            smtp_listen_ip,
+            smtp_listen_port,
+            smtp_spamd_ip,
+            smtp_spamd_port,
+            smtp_dnsbl,
+            smtp_dnswl,
+            smtp_delete_sent_after,
+            mqtt_listen_ip,
+            mqtt_listen_ip6,
+            mqtt_listen_port,
+            mqtt_listen_ssl_port,
+            mqtt_max_connections,
+            mqtt_ssl_max_connections,
+            inet_backlog,
+            inet_acceptor_pool_size,
+            ssl_backlog,
+            ssl_acceptor_pool_size,
+            ssl_dhfile,
+            filewatcher_enabled,
+            filewatcher_scanner_enabled,
+            syslog_ident,
+            syslog_opts,
+            syslog_facility,
+            syslog_level,
+            proxy_whitelist,
+            ip_whitelist,
+            ip_whitelist_system_management,
+            sessionjobs_limit,
+            sidejobs_limit,
+            server_header,
+            html_error_path
+        ]).
+

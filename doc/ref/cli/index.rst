@@ -62,6 +62,10 @@ Currently, the following subcommands are implemented:
 ``zotonic configtest``
   Read all config files and check if they are syntactically correct.
 
+``zotonic config [all | zotonic | erlang]``
+  Prints the configuration as defined in the configuration files. Taking into account all shell environment variables.
+  Defaults to showing the `zotonic` config.
+
 ``zotonic rpc``
   Send an RPC request to the running Zotonic instance. Example: `zotonic rpc "zotonic ping"`
 

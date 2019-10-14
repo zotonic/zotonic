@@ -232,9 +232,8 @@ load_configs( Cfgs ) when is_map(Cfgs) ->
         ok,
         Cfgs).
 
--spec read_configs( node() ) -> {ok, #{ atom() => map() }} | {error, term()}.
-read_configs(Node) ->
-    Fs = config_files(Node),
+-spec read_configs( [ file:filename_all() ] ) -> {ok, #{ atom() => map() }} | {error, term()}.
+read_configs(Fs) when is_list(Fs) ->
     lists:foldl(
         fun
             (_, {error, _} = Error) ->

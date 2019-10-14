@@ -25,7 +25,8 @@
 run(_) ->
     case zotonic_command:get_target_node() of
         {ok, Target} ->
-            case zotonic_launcher_config:read_configs(Target) of
+            CfgFiles = zotonic_launcher_config:config_files(Target),
+            case zotonic_launcher_config:read_configs(CfgFiles) of
                 {ok, _Cfg} ->
                     io:format("ok~n");
                 {error, _} = Error ->

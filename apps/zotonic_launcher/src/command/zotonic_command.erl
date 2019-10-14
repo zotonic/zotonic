@@ -142,7 +142,8 @@ base_cmd(DefaultName, CodePaths) ->
                 "Zotonic is configured to run as local (short name) node, but your SNAME "
                 "contains a \".\" character, please try again with another SNAME argument."};
         {ok, {LongOrShortnames, Nodename}} ->
-            case zotonic_launcher_config:read_configs(Nodename) of
+            CfgFiles = zotonic_launcher_config:config_files(Nodename),
+            case zotonic_launcher_config:read_configs(CfgFiles) of
                 {ok, _Cfgs} ->
                         SOpt = case erlang:system_info(schedulers) of
                             1 -> " +S 2:2";
