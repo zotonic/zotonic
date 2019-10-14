@@ -50,9 +50,9 @@ the global config files that it is using:
     12:42:17.351 [info] zotonic_launcher_sup:37 Zotonic starting
     12:42:17.351 [info] zotonic_launcher_sup:38 ================
     12:42:17.351 [info] zotonic_launcher_sup:39 Init files used:
-    12:42:17.356 [info] zotonic_launcher_sup:40 - /home/user/.zotonic/1.0/erlang.config
+    12:42:17.356 [info] zotonic_launcher_sup:40 - /home/user/.zotonic/1/erlang.config
     12:42:17.356 [info] zotonic_launcher_sup:41 Config files used:
-    12:42:17.357 [info] zotonic_launcher_sup:43 - /home/user/.zotonic/1.0/zotonic.config
+    12:42:17.357 [info] zotonic_launcher_sup:43 - /home/user/.zotonic/1/zotonic.config
     12:42:17.357 [info] zotonic_launcher_sup:44 ================
 
 
