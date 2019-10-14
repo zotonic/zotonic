@@ -24,20 +24,20 @@ main(_) ->
     Apps = [ filename:basename(F) || F <- filelib:wildcard( filename:join([ os:getenv("ZOTONIC"), "apps", "zotonic_*" ])) ],
     Core = lists:filter(fun(A) -> is_zotonic_core(A) end, Apps),
     Modules = lists:filter(fun(A) -> is_zotonic_mod(A) end, Apps),
-    io:format("Generating edoc for core apps... "),
+    io:format("Generating edoc for ~p core apps... ", [ length(Core) ]),
     lists:map(
         fun(M) ->
             generate("apps/" ++ M, "core/" ++ M)
         end,
         Core),
     io:format("~nGenerated core edoc files in ~p~n", [ outpath("core") ]),
-    io:format("Generating edoc for core modules... "),
+    io:format("Generating edoc for ~p core modules and sites... ", [ length(Modules) ]),
     lists:map(
         fun(M) ->
             generate("apps/" ++ M, "modules/" ++ M)
         end,
         Modules),
-    io:format("Generated modules edoc files in ~p~n", [ outpath("modules") ]).
+    io:format("~nGenerated modules edoc files in ~p~n", [ outpath("modules") ]).
 
 is_zotonic_core("zotonic_mod_" ++ _) -> false;
 is_zotonic_core("zotonic_site_" ++ _) -> false;
