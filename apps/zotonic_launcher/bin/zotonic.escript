@@ -25,12 +25,12 @@ get_zotonic_path() ->
     _Dir = CurrentDir.
 
 load_mod_paths() ->
-    EbinPath = string:concat(?ZOTONIC, "/_build/default/lib"),
+    EbinPath = filename:join([ ?ZOTONIC, "_build", "default", "lib" ]),
     case file:list_dir(EbinPath) of
         {ok, FileNames} ->
             lists:foreach(
                 fun(Name) ->
-                    code:add_pathz(EbinPath ++ "/" ++ Name ++ "/ebin")
+                    code:add_pathz( filename:join([ EbinPath, Name, "ebin" ]) )
                 end,
                 FileNames);
         {error, enoent} ->
@@ -66,20 +66,16 @@ main([ Command | T ]) ->
 
     load_mod_paths(),
 
-    case string:equal(Command, "-v") of
-        true ->
+    case Command of
+        "-v" ->
             zotonic_release:run();
-        false ->
-            CommandName = string:concat("zotonic_cmd_", Command),
-            CommandMod = string:concat(CommandName, ".erl"),
-            CommandFile = string:concat(?COMMANDS, "/" ++ CommandMod),
-
-            % io:format("[debug] running: ~s~n", [ CommandFile ]),
-
-            case filelib:is_file(CommandFile) of
-                true ->
-                    apply(list_to_atom(CommandName), run, [T]);
-                false ->
-                    io:format("Command not found: ~s~n", [Command])
+        _ ->
+            CommandMod = list_to_atom( "zotonic_cmd_" ++ Command ),
+            case code:ensure_loaded(CommandMod) of
+                {module, CommandMod} ->
+                    apply(CommandMod, run, [T]);
+                 {error, _} ->
+                    io:format(standard_error, "Command not found: ~s~n", [Command]),
+                    erlang:halt(1)
             end
     end.
