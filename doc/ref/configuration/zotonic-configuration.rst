@@ -55,14 +55,23 @@ the global config files that it is using:
     12:42:17.357 [info] zotonic_launcher_sup:43 - /home/user/.zotonic/1/zotonic.config
     12:42:17.357 [info] zotonic_launcher_sup:44 ================
 
+The used configuration files can be listed with ``bin/zotonic configfile``:
+
+.. code-block:: none
+
+    user$ bin/zotonic configfile
+    Zotonic config files for zotonic@PoToi:
+    - /home/user/.zotonic/1.0/erlang.config
+    - /home/user/.zotonic/1.0/zotonic.config
+
 
 The ``zotonic.config`` file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After installed for the first time, the ``~/.zotonic/zotonic.config`` file is well
-annoted with comments about what each setting does. When in doubt,
-consult the stock ``apps/zotonic_launcher/priv/config/zotonic.config.in`` file for
-explanation about all config settings.
+After installed for the first time, the ``~/.zotonic/1/zotonic.config`` file is well
+annotated with comments about what each setting does. When in doubt, consult the
+stock ``apps/zotonic_launcher/priv/config/zotonic.config.in`` file for explanation
+about all config settings.
 
 In the ``zotonic.config`` file you will find the password for the
 ``zotonic_status`` site where you can manage the server.
@@ -71,6 +80,31 @@ Zotonic configurations can also be fetched in the Erlang shell.
 For example, view the ``zotonic_status`` password::
 
   z_config:get(password).
+
+The Zotonic configuration files are read by the ``zotonic_launcher`` application before
+starting the core zotonic applications and all sites.
+
+The zotonic configuration van be viewed with ``bin/zotonic config``:
+
+.. code-block:: none
+
+    Zotonic config for zotonic@aloha:
+    =================================
+
+    zotonic:
+        environment: production
+        zotonic_apps: /home/user/zotonic/apps_user
+        password: Bthj3ruGbmgJxfmc
+        timezone: UTC
+        listen_ip: any
+        listen_ip6: any
+        listen_port: 8000
+        ssl_listen_port: 8443
+        port: 80
+        ssl_port: 443
+        max_connections: 20000
+        ...
+
 
 .. _erlang-config:
 
@@ -81,3 +115,32 @@ The ``erlang.config`` file contains application environment variables
 for the :ref:`erlang-applications` that Zotonic depends on. Here you can
 configure for instance the paths for the :ref:`log files <dev-testing>` (in
 the ``lager`` section), emqtt ports, et cetera.
+
+This file is included as an *init* configuration option when starting ``erl``
+via the command line script in ``bin/zotonic``.
+
+The erlang configuration van be viewed with ``bin/zotonic config erlang``:
+
+.. code-block:: none
+
+    Erlang init for zotonic@aloha:
+    =================================
+
+    exometer:
+        predefined:
+          - {[erlang,memory],{function,erlang,memory,[],value,[]},[]}
+          - {[erlang,system_info],
+             {function,erlang,system_info,['$dp'],value,[process_count]},
+             []}
+          - {[erlang,statistics],
+             {function,erlang,statistics,['$dp'],value,[run_queue]},
+             []}
+          - {[erlang,io],
+             {function,erlang,statistics,[io],match,{{'_',input},{'_',output}}},
+             []}
+    filezcache:
+        data_dir: priv/filezcache/data
+        journal_dir: priv/filezcache/journal
+    lager:
+    ...
+
