@@ -265,6 +265,7 @@ all() ->
         [
             environment,
             zotonic_apps,
+            password,
             timezone,
             listen_ip,
             listen_ip6,
