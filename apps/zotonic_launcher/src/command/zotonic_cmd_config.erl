@@ -137,6 +137,8 @@ pretty_print_value(_Key, Value) when is_list(Value) ->
                 end,
                 Value)
     end;
+pretty_print_value(_Key, undefined) ->
+    ok;
 pretty_print_value(_Key, Value) ->
     io:format("~p", [ Value ]).
 
