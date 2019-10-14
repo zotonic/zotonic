@@ -1169,7 +1169,7 @@ stop_children_with_missing_depends(#state{ site = Site, modules = Modules } = St
     end.
 
 
-%% @doc Return the list of module names currently up & running.
+%% @doc Return the list of module names currently up and running.
 handle_get_running(State) ->
     maps:fold(
         fun

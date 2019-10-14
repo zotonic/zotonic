@@ -1017,7 +1017,7 @@ do_is_site_redirect(Cfg) ->
 ensure_alias_list([C|_] = Alias) when is_integer(C) -> [Alias];
 ensure_alias_list(Alias) -> Alias.
 
-%% @spec Check which site will act as fallback site
+%% @doc Check which site will act as fallback site
 do_get_fallback_site(Sites) ->
     case has_zotonic_site(Sites) of
         true -> zotonic_site_status;

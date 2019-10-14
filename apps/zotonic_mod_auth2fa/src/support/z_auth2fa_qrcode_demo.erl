@@ -1,4 +1,12 @@
-%% Copyright 2011 Steve Davis <steve@simulacity.com>
+%% @copyright Copyright 2011 Steve Davis <steve@simulacity.com>
+%% @doc Shows how to achieve HOTP/SHA1 with a mobile phone using Google Authenticator.
+%%
+%% This module is a rag-bag of supporting functions, many of which are simplified
+%% extracts from the core libs (?_common, ?_crypto, ?_math, ?_image). This is to
+%% allow a full-cycle demo without requiring open-sourcing of the entire platform.
+%%
+%% @reference QR Code: ISO/IEC 18004 (2000, 1st Edition)
+
 %
 % Licensed under the Apache License, Version 2.0 (the "License");
 % you may not use this file except in compliance with the License.
@@ -13,14 +21,6 @@
 % limitations under the License.
 
 -module(z_auth2fa_qrcode_demo).
-
-%% Shows how to achieve HOTP/SHA1 with a mobile phone using Google Authenticator.
-%%
-%% This module is a rag-bag of supporting functions, many of which are simplified
-%% extracts from the core libs (?_common, ?_crypto, ?_math, ?_image). This is to
-%% allow a full-cycle demo without requiring open-sourcing of the entire platform.
-%%
-%% @ref QR Code: ISO/IEC 18004 (2000, 1st Edition)
 
 %% Google Authenticator Phone App
 %% iPhone:  <http://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8>
@@ -108,8 +108,7 @@ totp(Key, Period) ->
 	T = unow() div Period,
 	{hotp(Key, T - 1), hotp(Key, T), hotp(Key, T + 1)}.
 
-%% RFC-4226 "HOTP: An HMAC-Based One-Time Password Algorithm"
-%% @ref <http://tools.ietf.org/html/rfc4226>
+%% @doc RFC-4226 "HOTP: An HMAC-Based One-Time Password Algorithm" http://tools.ietf.org/html/rfc4226
 hotp(Key, Count) when is_binary(Key), is_integer(Count) ->
 	HS = crypto:hmac(sha, Key, <<Count:64>>),
 	<<_:19/binary, _:4, Offset:4>> = HS,

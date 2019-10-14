@@ -1,4 +1,4 @@
-%% @author Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
+%% @author Arjan Scherpenisse, Marc Worrell
 %% @copyright 2009-2018 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
 %% @doc Entrypoint for model requests via HTTP.
 

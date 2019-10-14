@@ -265,7 +265,7 @@ filter_groups(GIds, Context) when is_list(GIds) ->
                 GIds)
     end.
 
-%% @spec Return the secret site key used for symmetrically encrypting OAuth2 tokens.
+%% @doc Return the secret site key used for symmetrically encrypting OAuth2 tokens.
 -spec oauth_key( z:context() ) -> binary().
 oauth_key(Context) ->
     case m_config:get_value(mod_oauth2, oauth_key, Context) of

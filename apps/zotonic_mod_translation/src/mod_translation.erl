@@ -145,15 +145,6 @@ set_language(Code, Context) when is_list(Code) ->
     set_language(list_to_existing_atom(Code), Context).
 
 
-%% @doc Check if the user has a prefered language (in the user's persistent data). If not
-%%      then check the accept-language header (if any) against the available languages.
-% observe_session_init_fold(#session_init_fold{}, Context, _Context) ->
-%     case get_q_language(Context) of
-%         undefined -> maybe_persistent(Context);
-%         QsLang ->
-%             set_language(QsLang, Context)
-%     end.
-
 %% @doc Check if the user has a preferred language (in the user's config). If not
 %%      then check the accept-language header (if any) against the available languages.
 observe_request_context(#request_context{ phase = init }, Context, _Context) ->

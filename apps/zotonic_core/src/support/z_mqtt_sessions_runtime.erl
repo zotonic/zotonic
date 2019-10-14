@@ -240,7 +240,7 @@ connect(_Packet, _IsSessionPresent, _Options, Context) ->
     {ok, ConnAck, Context}.
 
 
-%% @spec Re-authentication. This is called when the client requests a re-authentication (or replies in a AUTH re-authentication).
+%% @doc Re-authentication. This is called when the client requests a re-authentication (or replies in a AUTH re-authentication).
 -spec reauth( mqtt_packet_map:mqtt_packet(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
 reauth(#{ type := _auth }, _Context) ->
     {error, notsupported}.

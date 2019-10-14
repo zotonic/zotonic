@@ -411,7 +411,7 @@ identify_magicnumber(File) ->
             Error
     end.
 
-%% @doc Return the extension for a known mime type (eg. <<".mov">>).
+%% @doc Return the extension for a known mime type (eg. ".mov").
 -spec extension(string()|binary()) -> filename_extension().
 extension(Mime) ->
     extension(Mime, undefined).
