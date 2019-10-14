@@ -54,10 +54,12 @@ The following environment variables influence how Zotonic starts up.
   Default locations (assuming the version of zotonic is 1.0 and the node is called ``zotonic@foobar``) are:
 
    * ``~/.zotonic/zotonic@foobar/``
+   * ``~/.zotonic/zotonic/``
    * ``~/.zotonic/1.0/``
    * ``~/.zotonic/1/``
    * ``~/.zotonic/``
    * ``/etc/zotonic/zotonic@foobar/``
+   * ``/etc/zotonic/zotonic/``
    * ``/etc/zotonic/1.0/``
    * ``/etc/zotonic/1/``
    * ``/etc/zotonic/``

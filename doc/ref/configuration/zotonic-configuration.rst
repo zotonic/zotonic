@@ -14,18 +14,20 @@ Zotonic depends on two global config files, called ``zotonic.config``
 and ``erlang.config``. On startup, Zotonic looks in the following
 places for these files:
 
+ - ``$HOME/.zotonic/(nodename@host)/``
  - ``$HOME/.zotonic/(nodename)/``
  - ``$HOME/.zotonic/(version)/``
  - ``$HOME/.zotonic/(major-version)/``
  - ``$HOME/.zotonic/``
+ - ``/etc/zotonic/(nodename@host)/``
  - ``/etc/zotonic/(nodename)/``
  - ``/etc/zotonic/(version)/``
  - ``/etc/zotonic/(major-version)/``
  - ``/etc/zotonic/``
 
 The ``(nodename)`` is the name of the Zotonic Erlang node, which
-defaults to ``zotonic001`` (and can be set with ``$NODENAME`` environment
-variable). Using the node name in the configuration path comes in
+defaults to ``zotonic001`` (and can be set with ``$SNAME`` or ``$LNAME``
+environment variable). Using the node name in the configuration path comes in
 handy when you want to run multiple Zotonic instances simultaneously.
 
 ``(version)`` is the *minor* version number of Zotonic, e.g. ``1.0``. This
@@ -44,11 +46,14 @@ the global config files that it is using:
 
 .. code-block:: none
 
-    17:03:54.766 [info] Zotonic started
-    17:03:54.766 [info] ===============
-    17:03:54.766 [info] Config files used:
-    17:03:54.768 [info] - /home/user/.zotonic/1.0/erlang.config
-    17:03:54.768 [info] - /home/user/.zotonic/zotonic001/zotonic.config
+    12:42:17.351 [info] zotonic_launcher_sup:36 ================
+    12:42:17.351 [info] zotonic_launcher_sup:37 Zotonic starting
+    12:42:17.351 [info] zotonic_launcher_sup:38 ================
+    12:42:17.351 [info] zotonic_launcher_sup:39 Init files used:
+    12:42:17.356 [info] zotonic_launcher_sup:40 - /home/user/.zotonic/1.0/erlang.config
+    12:42:17.356 [info] zotonic_launcher_sup:41 Config files used:
+    12:42:17.357 [info] zotonic_launcher_sup:43 - /home/user/.zotonic/1.0/zotonic.config
+    12:42:17.357 [info] zotonic_launcher_sup:44 ================
 
 
 The ``zotonic.config`` file

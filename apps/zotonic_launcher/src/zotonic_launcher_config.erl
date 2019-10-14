@@ -71,6 +71,7 @@ config_dir_fs(Node) ->
         _ ->
             [
                 filename:join([Home, ".zotonic", atom_to_list(Node)]),
+                filename:join([Home, ".zotonic", base_nodename(Node)]),
                 filename:join([Home, ".zotonic", ?ZOTONIC_VERSION]),
                 filename:join([Home, ".zotonic", MinorVersion]),
                 filename:join([Home, ".zotonic", MajorVersion]),
@@ -79,6 +80,7 @@ config_dir_fs(Node) ->
     end,
     EtcLocs = [
         filename:join(["/etc/zotonic", atom_to_list(Node)]),
+        filename:join(["/etc/zotonic", base_nodename(Node)]),
         filename:join(["/etc/zotonic", ?ZOTONIC_VERSION]),
         filename:join(["/etc/zotonic", MinorVersion]),
         filename:join(["/etc/zotonic", MajorVersion]),
@@ -115,6 +117,9 @@ config_dir_fs(Node) ->
             maybe_initialize_configs(Dir),
             {ok, Dir}
     end.
+
+base_nodename(Node) ->
+    lists:takewhile(fun(C) -> C =/= $@ end, atom_to_list(Node)).
 
 -spec maybe_initialize_configs( file:filename_all() ) -> ok.
 maybe_initialize_configs(Dir) ->
