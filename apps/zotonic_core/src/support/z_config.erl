@@ -285,6 +285,8 @@ all() ->
             smtp_verp_as_from,
             smtp_no_mx_lookups,
             smtp_relay,
+            smtp_username,
+            smtp_password,
             smtp_host,
             smtp_port,
             smtp_ssl,
