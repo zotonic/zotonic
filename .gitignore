@@ -45,7 +45,7 @@ apps/*/priv/translations/template/*.pot
 apps/*/priv/lib/cotonic/
 apps/*/priv/lib-src/cotonic/
 
-/user/*
+apps_user/*
 
 _build
 _checkouts

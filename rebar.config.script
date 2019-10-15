@@ -1,78 +1,31 @@
-%% Fetch the zotonic version
-Fs =   filelib:wildcard("_checkouts/zotonic_core/include/zotonic_release.hrl")
-    ++ filelib:wildcard("apps/zotonic_core/include/zotonic_release.hrl")
-    ++ filelib:wildcard("_build/default/lib/zotonic_core/include/zotonic_release.hrl")
-    ++ filelib:wildcard("_build/*/lib/zotonic_core/include/zotonic_release.hrl"),
 
-{ok, ZR} = file:read_file(hd(Fs)),
-{match, [Version]} = re:run(ZR, "ZOTONIC_VERSION[, ]+\"(.*)\"\\)", [{capture, all_but_first, list}]),
-{match, [Minor, Major]} = re:run(Version, "(([0-9]+)\\.[0-9]+)", [{capture, all_but_first, list}]),
+%% Locate the optional extra checkouts directory
+%% Add it to the project_app_dirs
 
-%% Locate the zotonic.config file to be used
-Home = os:getenv("HOME"),
-ConfigFile = "zotonic.config",
-Locations = [
-    filename:join([Home, ".zotonic", Version, ConfigFile]),
-    filename:join([Home, ".zotonic", Minor, ConfigFile]),
-    filename:join([Home, ".zotonic", Major, ConfigFile]),
-    filename:join([Home, ".zotonic", ConfigFile]),
-
-    filename:join(["/etc/zotonic", Version, ConfigFile]),
-    filename:join(["/etc/zotonic", Minor, ConfigFile]),
-    filename:join(["/etc/zotonic", Major, ConfigFile]),
-    filename:join(["/etc/zotonic", ConfigFile])
-],
-
-ConfigFileFound = case lists:dropwhile(
-    fun(Path) ->
-        not filelib:is_regular(Path)
-    end,
-    Locations)
-of
-    [] -> false;
-    [P|_] -> {ok, P}
-end,
-
-% Read the zotonic.config
-
-Config = case ConfigFileFound of
+CONFIG1 = case os:getenv("ZOTONIC_APPS") of
     false ->
-        [];
-    {ok, CfgFile} ->
-        io:format("Zotonic Config:~n- ~s~n", [CfgFile]),
-        case file:consult(CfgFile) of
-            {ok, Cfg} -> lists:flatten(Cfg);
-            {error, _} -> []
-        end
-end,
-
-% Add the user_sites_dir and the user_modules_dir to the app_dirs
-
-CONFIG1 = case proplists:get_value(zotonic, Config) of
-    undefined ->
         CONFIG;
-    ZCfg ->
+    "" ->
+        CONFIG;
+    "apps_user" ->
+        CONFIG;
+    ZotonicApps ->
         AppDir = proplists:get_value(project_app_dirs, CONFIG, []),
-        AppDir1 = case proplists:get_value(user_sites_dir, ZCfg, "user/sites") of
-            undefined -> AppDir;
-            "" -> AppDir;
-            UserSitesDir ->
-                [ UserSitesDir ++ "/*" | AppDir ]
-        end,
-        AppDir2 = case proplists:get_value(user_modules_dir, ZCfg, "user/modules") of
-            undefined -> AppDir1;
-            "" -> AppDir1;
-            UserModulesDir ->
-                [ UserModulesDir ++ "/*" | AppDir1 ]
-        end,
+        AppDir1 = [ filename:join(ZotonicApps, "*") | AppDir ],
+        C1 = lists:keystore(project_app_dirs, 1, CONFIG, {project_app_dirs, AppDir1}),
+
+        ErlOpts = proplists:get_value(erl_opts, CONFIG, []),
+        ErlOpts1 = [ {i, ZotonicApps} | ErlOpts ],
+        C2 = lists:keystore(erl_opts, 1, C1, {erl_opts, ErlOpts1}),
+
         io:format("Application Dirs:~n"),
         lists:foreach(
             fun(Dir) ->
                 io:format("- ~s~n", [Dir])
             end,
-            AppDir2),
-        lists:keystore(project_app_dirs, 1, CONFIG, {project_app_dirs, AppDir2})
+            proplists:get_value(project_app_dirs, C2, [])),
+
+        C2
 end,
 
 CONFIG1.
-

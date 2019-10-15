@@ -10,7 +10,7 @@ Site doesn’t start
 ^^^^^^^^^^^^^^^^^^
 
 Check your database connection configuration in the ``zotonic_site.config``
-file which is located in the :term:`user sites directory`. This can be found
+file which is located in the :term:`zotonic user directory`. This can be found
 in ``yoursite/priv/zotonic_site.config``. The priv directory should also be
 soft linked in the ``_build`` directory: ``_build/default/lib/yoursite/priv/zotonic_site.config``
 

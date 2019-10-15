@@ -1,6 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010 Arjan Scherpenisse
-%% @date 2010-01-30
 %% @doc Module implementing a sandbox website for unit testing purposes.
 
 %% Licensed under the Apache License, Version 2.0 (the "License");

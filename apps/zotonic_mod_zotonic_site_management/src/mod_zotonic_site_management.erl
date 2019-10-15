@@ -101,10 +101,6 @@ abs_url_for(Dispatch, Context) ->
         Url -> z_context:abs_url(Url, Context)
     end.
 
-% @doc Show a notice on the current webpage.
-% show_notice(SiteName, Text, Context) ->
-%     z_session_page:add_script(notice(SiteName, Text, Context)).
-
 % @doc Render a notice.
 notice(Form, Sitename, Text, Context) ->
     Actions = notice_actions(Sitename, Text) ++ [ {unmask, [{target, Form}]} ],

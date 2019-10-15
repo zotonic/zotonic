@@ -27,15 +27,12 @@
          abspath/2,
          files_subdir/2,
          files_subdir_ensure/2,
-         zotonic_sites_dir/0,
-         zotonic_modules_dir/0,
-         user_sites_dir/0,
-         user_modules_dir/0,
+         zotonic_apps/0,
          build_lib_dir/0,
          get_path/0
         ]).
 
--include("zotonic.hrl").
+-include("../../include/zotonic.hrl").
 
 %% @doc Return the path to the site folder of the given context.
 %%      The site must have been compiled.
@@ -52,29 +49,6 @@ site_dir(Site) when is_atom(Site) ->
 -spec module_dir(atom()) -> file:filename_all() | {error, bad_name}.
 module_dir(Module) ->
     code:lib_dir(Module).
-
-    % find_first_path([
-    %     code:lib_dir(Module),
-    %     filename:join([user_sites_dir(), Site, "modules", Module]),
-    %     filename:join([user_modules_dir(), Module]),
-    %     filename:join([z_utils:lib_dir(modules), Module])
-    % ]).
-
-
-% find_first_path(Paths) ->
-%     lists:foldl(
-%         fun
-%             (undefined, Acc) -> Acc;
-%             ({error, _}, Acc) -> Acc;
-%             (Dir, undefined) ->
-%                 case filelib:is_dir(Dir) of
-%                     true -> Dir;
-%                     false -> undefined
-%                 end;
-%             (_, Acc) -> Acc
-%         end,
-%         undefined,
-%         Paths).
 
 %% @doc Return the path to the media preview directory
 -spec media_preview(z:context()) -> file:filename_all() | {error, bad_name}.
@@ -112,23 +86,11 @@ files_subdir_ensure(SubDir, Context) ->
             end
     end.
 
--spec zotonic_sites_dir() -> file:filename_all().
-zotonic_sites_dir() ->
-    filename:join([get_path(), "apps"]).
-
--spec zotonic_modules_dir() -> file:filename_all().
-zotonic_modules_dir() ->
-    filename:join([get_path(), "apps"]).
-
 %% @doc The directory of the user-defined sites
--spec user_sites_dir() -> file:filename_all().
-user_sites_dir() ->
-    z_config:get(user_sites_dir).
+-spec zotonic_apps() -> file:filename_all().
+zotonic_apps() ->
+    z_config:get(zotonic_apps).
 
-%% @doc The directory of the user-defined modules
--spec user_modules_dir() -> file:filename_all().
-user_modules_dir() ->
-    z_config:get(user_modules_dir).
 
 %% @doc Get the path to the root dir of the Zotonic install.
 %%      If the env var 'ZOTONIC' is not set, then return the current working dir.

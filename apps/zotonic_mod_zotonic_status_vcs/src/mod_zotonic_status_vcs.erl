@@ -1,7 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% @date 2010-09-13
-%% @doc Mercurial support for zotonic sites
+%% @doc Git and Mercurial support for zotonic sites
 
 %% Copyright 2010 Marc Worrell
 %%

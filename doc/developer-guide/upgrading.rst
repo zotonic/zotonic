@@ -188,6 +188,14 @@ Sites and modules
             ...
         rebar.config
 
+* The ``user_sites_dir`` and ``user_modules_dir`` configurations have been removed.
+  The default location for sites and modules is now the ``apps_user`` directory.
+  With the ``ZOTONIC_APPS`` environment variable you can define an additional source directory
+  outside the Zotonic umbrella ``apps`` directory.
+
+  To upgrade, move your ``user/modules`` and ``user/sites`` applications to the ``apps_user``
+  directory.
+
 
 Module schema and data initialization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

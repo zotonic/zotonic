@@ -13,6 +13,10 @@ repository’s `apps/` directory::
             zotonic_mod...
             zotonic_site_status
             zotonic_site_testsandbox
+            ...
+        apps/user
+            mysite
+            ...
         bin/
         doc/
         docker/
@@ -21,10 +25,6 @@ repository’s `apps/` directory::
             sites/
             skel/
             ssl/
-        user/
-            models/
-            sites/
-
 
 ``zotonic/``
 
@@ -34,6 +34,12 @@ repository’s `apps/` directory::
 ``zotonic/_build/``
 
     The Rebar3 build directory.
+
+``zotonic/_checkouts``
+
+    Place here checkouts of dependencies that are in development and
+    should be used instead of the dependencies in ``rebar.lock`` or
+    as mentioned in the ``rebar.config`` files of all other apps.
 
 ``zotonic/doc/``
 
@@ -111,26 +117,13 @@ repository’s `apps/` directory::
 
     The Zotonic testsandbox site that tests are run against.
 
-``zotonic/_checkouts``
+``zotonic/apps_user``
 
     This directory contains user-modifiable source code which runs in
     Zotonic, namely user-defined sites, modules and other Erlang/OTP
     applications.
 
-``zotonic/_checkouts`` - sites
+    The ``apps_user`` directory is the default location of the
+    ``ZOTONIC_APPS`` environment variable. See :ref:`guide-deployment-env`.
 
-    A single Zotonic installation is capable of virtually hosting
-    serving multiple sites. This directory holds the sites which are
-    created and maintained by you, the users of Zotonic.
 
-    This directory is the default location of the ``user_sites_dir``
-    configuration variable. See :ref:`guide-configuration`.
-
-``zotonic/_checkouts`` - modules
-
-    This directory holds modules which are not part of the core Zotonic
-    modules, but which are also not site-specific. All modules installed
-    with the ``zotonic module install ...`` command are placed here.
-
-    This directory is the default location of the ``user_modules_dir``
-    configuration variable. See :ref:`guide-configuration`.

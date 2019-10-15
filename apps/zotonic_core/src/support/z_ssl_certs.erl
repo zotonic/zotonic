@@ -27,6 +27,7 @@
     dh_options/0,
     is_dhfile/1,
     ensure_dhfile/0,
+    dhfile/0,
 
     sign/2,
     get_ssl_options/1,
@@ -317,7 +318,9 @@ ensure_dhfile(Filename) ->
             Result = os:cmd(Command),
             lager:debug("SSL: ~p", [Result]),
             case is_dhfile(Filename) of
-                true -> ok;
+                true ->
+                    _ = file:change_mode(Filename, 8#00600),
+                    ok;
                 false ->
                     lager:error("Failed generating DH file in ~p (output was ~p)",
                                 [Filename, Result]),

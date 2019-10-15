@@ -48,7 +48,7 @@ For production release of your new Zotonic site you need to:
   hosting: it makes sure that Zotonic knows which site is being requested
   when somebody visits `www.mysite.com`.
 
-   .. note:: Your actual site location might be different, see the :term:`User sites directory`.
+   .. note:: Your actual site location might be different, see the :term:`zotonic user directory`.
 
 
 Running behind another web server / proxy

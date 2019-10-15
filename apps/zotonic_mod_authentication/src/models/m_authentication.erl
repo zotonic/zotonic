@@ -173,7 +173,7 @@ auth_tokens( #{ <<"username">> := Username, <<"password">> := Password }, Contex
     end.
 
 
-%% @spec Fetch the secret user key. This key is used to add an extra hash of the tokens.
+%% @doc Fetch the secret user key. This key is used to add an extra hash of the tokens.
 -spec user_auth_key( m_rsc:rid(), z:context() ) -> binary().
 user_auth_key(UserId, Context) ->
     case m_identity:get_rsc(UserId, auth_key, Context) of
@@ -190,7 +190,7 @@ user_auth_key(UserId, Context) ->
             Key
     end.
 
-%% @spec Return the secret site key used for symmetrically encrypting tokens.
+%% @doc Return the secret site key used for symmetrically encrypting tokens.
 -spec site_auth_key( z:context() ) -> binary().
 site_auth_key(Context) ->
     case m_config:get_value(mod_authenticaton, site_auth_key, Context) of
@@ -244,35 +244,35 @@ equal(_As, _Bs, _Acc) ->
 
 
 
-%% @spec Url where to exchange the cookie token for a real cookie. Handled by a special controller.
-%%       The token must be posted to the url as-is.
+%% @doc Url where to exchange the cookie token for a real cookie. Handled by a special controller.
+%%      The token must be posted to the url as-is.
 cookie_url(Context) ->
     z_context:abs_url(
         z_dispatcher:url_for(authentication_cookie, Context),
         Context).
 
-%% @spec Return a token that can be used to logon an user. The token is only valid
-%%       for a short period and can be used for a MQTT authentication.
+%% @doc Return a token that can be used to logon an user. The token is only valid
+%%      for a short period and can be used for a MQTT authentication.
 cookie_token(UserId, Context) when is_integer(UserId) ->
     cookie_token(UserId, user_auth_key(UserId, Context), Context).
 
 
-%% @spec Return a token that can be used to exchange for an authentication cookie.
-%%       The authentication cookie will have a limited lifetime and must be refreshed
-%%       periodically.
+%% @doc Return a token that can be used to exchange for an authentication cookie.
+%%      The authentication cookie will have a limited lifetime and must be refreshed
+%%      periodically.
 cookie_token(UserId, UserSecret, Context) when is_integer(UserId) ->
     Timestamp = z_datetime:timestamp(),
     Nonce1 = z_ids:number(),
     Payload = <<"cookie", 1, UserId:32, Timestamp:64/big-unsigned-integer, Nonce1:64>>,
     encode_payload_v1(Payload, UserSecret, Context).
 
-%% @spec Return a token that can be used to logon an user. The token is only valid
-%%       for a short period and can be used for a MQTT authentication.
+%% @doc Return a token that can be used to logon an user. The token is only valid
+%%      for a short period and can be used for a MQTT authentication.
 auth_token(UserId, Context) when is_integer(UserId) ->
     auth_token(UserId, user_auth_key(UserId, Context), Context).
 
-%% @spec Return a token that can be used to logon an user. The token is only valid
-%%       for a short period and can be used for a MQTT authentication.
+%% @doc Return a token that can be used to logon an user. The token is only valid
+%%      for a short period and can be used for a MQTT authentication.
 auth_token(UserId, UserSecret, Context) when is_integer(UserId) ->
     Timestamp = z_datetime:timestamp(),
     Nonce1 = z_ids:number(),

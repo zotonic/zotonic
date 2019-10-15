@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/..;pwd)}
 
-$ZOTONIC/apps/zotonic_launcher/bin/zotonic $@
+./apps/zotonic_launcher/bin/zotonic "$@"

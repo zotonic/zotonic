@@ -48,9 +48,9 @@ docs:
 	cd doc && $(MAKE) stubs && $(MAKE) html
 	@echo HTML documentation is now available in doc/_build/html/
 
-edocs:
+edocs: $(REBAR)
 	@echo Building reference edoc documentation...
-	bin/zotonic generate-edoc
+	@ZOTONIC=`pwd` bin/generate_edoc.escript
 
 # Cleaning
 .PHONY: clean_logs

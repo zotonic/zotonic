@@ -825,15 +825,6 @@ reset_render_state(Context)  ->
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% scripts %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-%% @doc Merge the scripts and the rendered content of two contexts into Context1
-% -spec combine(#render_state{}, #render_state{}) -> #render_state{}.
-% combine_scripts(C1, C2) ->
-%     Merged = merge(C2, C1),
-%     Merged#render_state{
-%         render = combine1(C1#render_state.render, C2#render_state.render)
-%     }.
-
 %% @doc Merge the scripts from context C into the context accumulator, used when collecting all scripts in an output stream
 -spec merge_scripts(#render_state{}, #render_state{}) -> #render_state{}.
 merge_scripts(RS, Acc) ->

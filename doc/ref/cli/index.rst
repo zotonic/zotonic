@@ -3,8 +3,7 @@
 Command-line
 ============
 
-The ``zotonic`` command runs a number of utility commands which all
-operate on a Zotonic instance.
+The ``zotonic`` command runs a number of utility commands which all operate on a Zotonic instance.
 
 .. tip::
 
@@ -14,7 +13,19 @@ operate on a Zotonic instance.
 
         export PATH=$HOME/zotonic/bin:$PATH
 
-The command determines where the Zotonic base dir is by looking at its path; it always assumes that its zotonic basedir is one dir up from where the binary itself is.
+The command determines where the Zotonic base dir is by looking at its path; it always assumes that its zotonic
+basedir is one dir up from where the binary itself is.
+
+
+Shell environment variables
+---------------------------
+
+See :ref:`environment variables <guide-deployment-env>` for the environment variables that can be set when
+using the Zotonic command line tools.
+
+
+Commands
+--------
 
 Currently, the following subcommands are implemented:
 
@@ -22,22 +33,38 @@ Currently, the following subcommands are implemented:
   Start the background Zotonic server instance.
 
 ``zotonic stop``
-  Stop the background Zotonic server instance.
+  Stop the Zotonic server instance.
 
 ``zotonic debug``
-  Launch the Zotonic server interactively and get an EShell on the running instance. See :ref:`guide-cli-shell`. The ``start.sh`` command in the root folder is a shortcut for this command.
+  Launch the Zotonic server interactively and get an EShell on the running instance. See :ref:`guide-cli-shell`.
+  The ``start.sh`` command in the root folder is a shortcut for this command. The Zotonic instance can be stopped
+  with twice ctrl-C.
+
+``zotonic start_nodaemon``
+  Start the Zotonic server instance as a foreground process, but without the interactive EShell. This is useful when
+  running Zotonic in a Docker container or other process.
 
 ``zotonic restart``
-  Restart the background Zotonic server instance.
+  Restart the Zotonic server instance.
 
 ``zotonic wait [timeout]``
-  Wait ``timeout`` seconds (default: 30) for Zotonic to be started, then return.
-
-``zotonic update``
-  Update the server.  Compiles and loads any new code, flushes caches and rescans all modules.
+  Wait ``timeout`` seconds (defaults to 30 seconds) for Zotonic to be started, then return.
 
 ``zotonic shell``
-  Get an EShell on the running instance. See :ref:`guide-cli-shell`.
+  Get an EShell on the running Zotonic instance. See :ref:`guide-cli-shell`.
+
+``zotonic status``
+  List all sites on the running Zotonic instance and their current status.
+
+``zotonic configfiles``
+  List all config files used for Zotonic.
+
+``zotonic configtest``
+  Read all config files and check if they are syntactically correct.
+
+``zotonic config [all | zotonic | erlang]``
+  Prints the configuration as defined in the configuration files. Taking into account all shell environment variables.
+  Defaults to showing the `zotonic` config.
 
 ``zotonic rpc``
   Send an RPC request to the running Zotonic instance. Example: `zotonic rpc "zotonic ping"`
@@ -54,92 +81,61 @@ Currently, the following subcommands are implemented:
 ``zotonic restartsite <site_name>``
   Restart the site with name [site_name].
 
-``zotonic modules <subcommand> [options]``
-  Manages modules. It has the following subcommands:
+``zotonic etop``
+  Show the processes that consume the most CPU. Stop with twice ctrl-C.
 
-  ``install <module> [module2, ...]``  Installs a module from the http://modules.zotonic.com repository into your Zotonic instance. The module will be checked out using source control (either git or hg) into the priv/modules folder.
+``zotonic logtail``
+  Show the last 50 entries of the ``console.log`` file.
 
-  ``uninstall <module> [module2, ...]``  Uninstall a module
+``zotonic flush``
+  Flush the caches of all sites.
 
-  ``activate <module> [module2, ...]``  Activate a module
+``zotonic flush <site_name>``
+  Flush the caches of the site with name [site_name].
 
-  ``deactivate <module> [module2, ...]``  Deactivate a module
-
-  ``update <module> [module2, ...]``  Update a module
-
-  ``restart <module> [module2, ...]``  Restart a module
-
-  ``reinstall <module> [module2, ...]``  Reinstall a module
-
-  ``sync-branches``  Tries to update all installed modules to reflect the module's branch to the currently checked out Zotonic branch.
-
-  ``list``  List all modules available on the Zotonic Module Repository
-
-  ``search <query>``  Search for a module
-
-  subcommand options:
-
-  --version     show program's version number and exit
-  -h, --help    show this help message and exit
-  -z ZMR, --zmr=ZMR  Zotonic modules repository
-  -s SITE, --site=SITE  affected Zotonic site
-  -d, --debug   enable debugging
-  -n NODE, --node=NODE  Zotonic Erlang node
-
-
-``zotonic copysite [site_name] [source_server]``
-  Copy [site_name] and its database content from the [source_server] over SSH and load its content into the filesystem and database of the local machine. You will need to have created the database zotonic_[site_name] for this to work.
-
-  Warning: This command will reset the content of the database to the content retrieved from the [source_server].  It does, however, generate and output a restore file in case this was run by accident and explains how to recover.
-
-``zotonic createdb [site_name]``
-  Create a database called zotonic_[site_name] with the basic setup in place to host a Zotonic datastore. This script will likely need to be run as postgres unless zotonic has been granted CREATEDB in postgres as follows::
+``zotonic createdb <site_name>``
+  Create a database called zotonic_[site_name] with the basic setup in place to host a Zotonic datastore.
+  This script will likely need to be run as postgres unless zotonic has been granted CREATEDB in postgres as follows::
 
     ALTER ROLE zotonic WITH CREATEDB
 
-``zotonic sitedir [site_name]``
+``zotonic sitedir <site_name>``
   Get the absolute path for a site based on [site_name]
 
-``zotonic snapshot [site_name]``
-  Take a version control snapshot of [site_name] including its database content.
-
-  This works differently from mod_backup in that it consistently uses
-  the same filename for the SQL backup to make revision-based full
-  site rollbacks possible.
-
-``zotonic update``
-  Update the server. Compiles and loads any new code, flushes caches and rescans all modules.
-
-``zotonic sitetest <sitename>``
-  Start Zotonic, and runs all sitetests for the given site, and exits
-  again. The exit code will be 1 if any of the tests fail, or 0
-  otherwise. See :ref:`dev-testing`.
-
-``zotonic compile``
-  Compiles all the Zotonic Erlang source files, modules and sites,
-  including those in the user sites directory and user modules
-  directory (see :ref:`guide-configuration`). This command is mainly
-  called from the Makefile when building Zotonic. It does *not*
-  compile Zotonic's dependencies (the Erlang files under the ``deps/``
-  folder). This command can only be run when Zotonic is not running; for hot code reloads, use ``zotonic update``.
-
-``zotonic compilefile [files...]``
-  Compiles and reloads a single :term:`Erlang module` within the
-  Zotonic folder. This runs very fast and works very well on a
-  save-hook of your text editor. In Emacs, it would be called like
-  this:
+``zotonic compilefile <path/to/filename.erl>``
+   Compiles and reloads a single :term:`Erlang module` within the
+   Zotonic folder. This runs very fast and works very well on a
+   save-hook of your text editor. In Emacs, it would be called like
+   this:
 
 .. code-block:: emacs
 
-    (add-hook 'erlang-mode-hook
-          '(lambda ()
-             (add-hook 'after-save-hook '
-                       (lambda ()
-                         (call-process "/path/to/your/bin/zotonic" nil "*scratch*" nil "compilefile" buffer-file-name)
-                         )
-                       )
-             ))
+     (add-hook 'erlang-mode-hook
+           '(lambda ()
+              (add-hook 'after-save-hook '
+                        (lambda ()
+                          (call-process "/path/to/your/bin/zotonic" nil "*scratch*" nil "compilefile" buffer-file-name)
+                          )
+                        )
+              ))
 
+.. tip::
+  Install ``fswatch`` or ``inotify-tools`` to automatically recompile files when they are changed. These tools will also
+  enable automatic loading of changed templates, dispatch rules, and translations.
 
-``zotonic logtail``
-  Starts a ``tail -F`` on the three Zotonic log files, console.log, error.log and crash.log
+``zotonic compile``
+  Compiles all the Zotonic Erlang source files, modules and sites,
+  including those in the user directory (see :ref:`guide-configuration`).
+
+``zotonic update``
+  Like ``zotonic compile`` but also flushes caches and rescans all modules and sites for new templates etc.
+
+``zotonic load``
+  Reloads all (changed) beam files from disk.
+
+``zotonic runtests``
+  Starts Zotonic in the foreground and runs all (enunit) tests. Stops after completion of the tests.
+
+``zotonic sitetest <site_name>``
+  Runs all tests for the given site. Zotonic must be running. See :ref:`dev-testing`.
+

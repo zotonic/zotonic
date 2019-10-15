@@ -89,10 +89,13 @@ Glossary
       There are two kinds of translations. Texts in the templates and Erlang modules; and translations of resources. Templates and Erlang modules are translated using gettext. Resources are translated in the admin, any resource can have an arbitrary number of translations. Zotonic selects the shown language based on the preferred language of the visitor and the available languages of a resource.
 
    Zotonic module
-      A Zotonic module (just .module., for short) is a collection of related functionality like scomps, filters, dispatch rules, controllers, templates, etc. Zotonic modules are located in folders under the modules/ directory and, by convention, are prefixed with `mod_`. See :ref:`guide-modules`.
+      A Zotonic module (just .module., for short) is a collection of related functionality like scomps, filters, dispatch rules, controllers, templates, etc. Zotonic modules are OTP applications and are prefixed with `zotonic_mod_`. See :ref:`guide-modules`.
 
    Zotonic site
-      A Zotonic site is a collection of scomps, filters, dispatch rules for one website. It is a special kind of Zotonic module with has its own config file which allows one to set the hostname, admin password, database connection parameters. It often has a set of site specific modules. The config file contains site wide settings. Zotonic uses the settings to start the site on the right port and connect it to the right database. A Zotonic system can run multiple sites.
+      A Zotonic site is a collection of scomps, filters, dispatch rules for one website. It is a special kind of Zotonic module with has its own config file which allows one to set the hostname, admin password, database connection parameters. The config file contains site wide settings. Zotonic uses the settings to start the site on the right port and connect it to the right database. A Zotonic system can run multiple sites.
+
+   Zotonic user directory
+        The directory in which user-installed Zotonic sites and modules are placed. Defaults to the path ``apps_user`` relative to the Zotonic installation, but can be adjusted by changing the ``ZOTONIC_APPS`` environment variable. See :ref:`guide-deployment-env`.
 
    Erlang module
       Not to be confused with a Zotonic module, an Erlang module is a single .erl file which contains Erlang functions.
@@ -100,15 +103,6 @@ Glossary
    Non Informational URI
       The non informational uri is the base url of a resource. It always redirects to a representation of the resource. Think of a HTML page, image or JSON download. The chosen representation depends on the .Accept. HTTP request header. The non informational uri of a resource is always like http://example.com/id/1234
 
-   Comet
-       Comet is a web application model in which a long-held HTTP request allows a web server to push data to a browser, without the browser explicitly requesting it (source: `Wikipedia <http://en.wikipedia.org/wiki/Comet_(programming)>`_).
-
    Delegate
         A reference to a module which will be used to call a callback function on. Used in the templates when attaching actions like a :term:postback to a DOM Event. See :ref:`guide-actions`.
-
-   User sites directory
-        The directory in which user-installed Zotonic sites are placed. Defaults to the path ``_checkouts`` relative to the Zotonic installation, but can be adjusted by changing the ``user_sites_dir`` configuration variable in the global ``zotonic.config`` file. See :ref:`guide-configuration`.
-
-   User modules directory
-        The directory in which user-installed Zotonic modules are placed. Defaults to the path ``_checkouts`` relative to the Zotonic installation, but can be adjusted by changing the ``user_modules_dir`` configuration variable in the global ``zotonic.config`` file. See :ref:`guide-configuration`.
 

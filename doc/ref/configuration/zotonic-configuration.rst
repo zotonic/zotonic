@@ -14,18 +14,20 @@ Zotonic depends on two global config files, called ``zotonic.config``
 and ``erlang.config``. On startup, Zotonic looks in the following
 places for these files:
 
+ - ``$HOME/.zotonic/(nodename@host)/``
  - ``$HOME/.zotonic/(nodename)/``
  - ``$HOME/.zotonic/(version)/``
  - ``$HOME/.zotonic/(major-version)/``
  - ``$HOME/.zotonic/``
+ - ``/etc/zotonic/(nodename@host)/``
  - ``/etc/zotonic/(nodename)/``
  - ``/etc/zotonic/(version)/``
  - ``/etc/zotonic/(major-version)/``
  - ``/etc/zotonic/``
 
 The ``(nodename)`` is the name of the Zotonic Erlang node, which
-defaults to ``zotonic001`` (and can be set with ``$NODENAME`` environment
-variable). Using the node name in the configuration path comes in
+defaults to ``zotonic001`` (and can be set with ``$SNAME`` or ``$LNAME``
+environment variable). Using the node name in the configuration path comes in
 handy when you want to run multiple Zotonic instances simultaneously.
 
 ``(version)`` is the *minor* version number of Zotonic, e.g. ``1.0``. This
@@ -44,20 +46,32 @@ the global config files that it is using:
 
 .. code-block:: none
 
-    17:03:54.766 [info] Zotonic started
-    17:03:54.766 [info] ===============
-    17:03:54.766 [info] Config files used:
-    17:03:54.768 [info] - /home/user/.zotonic/1.0/erlang.config
-    17:03:54.768 [info] - /home/user/.zotonic/zotonic001/zotonic.config
+    12:42:17.351 [info] zotonic_launcher_sup:36 ================
+    12:42:17.351 [info] zotonic_launcher_sup:37 Zotonic starting
+    12:42:17.351 [info] zotonic_launcher_sup:38 ================
+    12:42:17.351 [info] zotonic_launcher_sup:39 Init files used:
+    12:42:17.356 [info] zotonic_launcher_sup:40 - /home/user/.zotonic/1/erlang.config
+    12:42:17.356 [info] zotonic_launcher_sup:41 Config files used:
+    12:42:17.357 [info] zotonic_launcher_sup:43 - /home/user/.zotonic/1/zotonic.config
+    12:42:17.357 [info] zotonic_launcher_sup:44 ================
+
+The used configuration files can be listed with ``bin/zotonic configfiles``:
+
+.. code-block:: none
+
+    user$ bin/zotonic configfiles
+    Zotonic config files for zotonic@PoToi:
+    - /home/user/.zotonic/1.0/erlang.config
+    - /home/user/.zotonic/1.0/zotonic.config
 
 
 The ``zotonic.config`` file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After installed for the first time, the ``~/.zotonic/zotonic.config`` file is well
-annoted with comments about what each setting does. When in doubt,
-consult the stock ``apps/zotonic_launcher/priv/config/zotonic.config.in`` file for
-explanation about all config settings.
+After installed for the first time, the ``~/.zotonic/1/zotonic.config`` file is well
+annotated with comments about what each setting does. When in doubt, consult the
+stock ``apps/zotonic_launcher/priv/config/zotonic.config.in`` file for explanation
+about all config settings.
 
 In the ``zotonic.config`` file you will find the password for the
 ``zotonic_status`` site where you can manage the server.
@@ -67,24 +81,30 @@ For example, view the ``zotonic_status`` password::
 
   z_config:get(password).
 
+The Zotonic configuration files are read by the ``zotonic_launcher`` application before
+starting the core zotonic applications and all sites.
 
-``user_sites_dir``, ``user_modules_dir``
-""""""""""""""""""""""""""""""""""""""""
+The zotonic configuration van be viewed with ``bin/zotonic config``:
 
-Zotonic keeps sites and modules that are `external` to Zotonic, e.g.
-installed by website developers, outside the Zotonic source tree.
+.. code-block:: none
 
-The directory under which Zotonic expects to find all sites is called
-the :term:`User sites directory`. This is configured with the config
-parameter ``user_sites_dir``. This directory defaults to
-``_checkouts``, relative to Zotonic's installation directory.
+    Zotonic config for zotonic@aloha:
+    =================================
 
-The directory under which Zotonic expects to find all external
-modules, e.g. those installed with ``zotonic modules install
-mod_....``, is called the User modules directory. This is configured
-with the config parameter ``user_modules_dir``. This directory
-defaults to ``_checkouts``, relative to Zotonic's installation
-directory.
+    zotonic:
+        environment: production
+        zotonic_apps: /home/user/zotonic/apps_user
+        password: Bthj3ruGbmgJxfmc
+        timezone: UTC
+        listen_ip: any
+        listen_ip6: any
+        listen_port: 8000
+        ssl_listen_port: 8443
+        port: 80
+        ssl_port: 443
+        max_connections: 20000
+        ...
+
 
 .. _erlang-config:
 
@@ -95,3 +115,32 @@ The ``erlang.config`` file contains application environment variables
 for the :ref:`erlang-applications` that Zotonic depends on. Here you can
 configure for instance the paths for the :ref:`log files <dev-testing>` (in
 the ``lager`` section), emqtt ports, et cetera.
+
+This file is included as an *init* configuration option when starting ``erl``
+via the command line script in ``bin/zotonic``.
+
+The erlang configuration van be viewed with ``bin/zotonic config erlang``:
+
+.. code-block:: none
+
+    Erlang init for zotonic@aloha:
+    =================================
+
+    exometer:
+        predefined:
+          - {[erlang,memory],{function,erlang,memory,[],value,[]},[]}
+          - {[erlang,system_info],
+             {function,erlang,system_info,['$dp'],value,[process_count]},
+             []}
+          - {[erlang,statistics],
+             {function,erlang,statistics,['$dp'],value,[run_queue]},
+             []}
+          - {[erlang,io],
+             {function,erlang,statistics,[io],match,{{'_',input},{'_',output}}},
+             []}
+    filezcache:
+        data_dir: priv/filezcache/data
+        journal_dir: priv/filezcache/journal
+    lager:
+    ...
+
