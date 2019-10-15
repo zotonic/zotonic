@@ -73,6 +73,7 @@ main([ Command | T ]) ->
             CommandMod = list_to_atom( "zotonic_cmd_" ++ Command ),
             case code:ensure_loaded(CommandMod) of
                 {module, CommandMod} ->
+                    application:start(yamerl),
                     apply(CommandMod, run, [T]);
                  {error, _} ->
                     io:format(standard_error, "Command not found: ~s~n", [Command]),

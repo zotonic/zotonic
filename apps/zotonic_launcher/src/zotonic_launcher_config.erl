@@ -246,7 +246,7 @@ read_configs(Fs) when is_list(Fs) ->
             (F, {ok, Acc}) ->
                 case consult_config(F) of
                     {ok, Data} ->
-                        app_config(F, Data, Acc);
+                        apps_config(F, Data, Acc);
                     {error, _} = Error ->
                         Error
                 end
@@ -254,27 +254,43 @@ read_configs(Fs) when is_list(Fs) ->
         {ok, #{}},
         Fs).
 
-app_config(File, Data, Cfgs) when is_map(Data) ->
-    maps:fold(
+apps_config(File, Data, Cfgs) when is_list(Data) ->
+    lists:foldl(
         fun
-            (_, _, {error, _} = Error) ->
-                Error;
-            (K, Vs, {ok, Acc}) ->
-                App = z_convert:to_atom(K),
-                app_config(File, App, Vs, Acc)
+            (AppConfig, Acc) when is_map(AppConfig) ->
+                maps:fold(
+                    fun
+                        (App, Cfg, {ok, MAcc}) ->
+                            AppAtom = z_convert:to_atom(App),
+                            app_config(File, AppAtom, Cfg, MAcc);
+                        (_App, _Cfg, {error, _} = Error) ->
+                            Error
+                    end,
+                    {ok, Acc},
+                    AppConfig);
+            (AppConfig, Acc) when is_list(AppConfig) ->
+                lists:foldl(
+                    fun
+                        ({App, Cfg}, {ok, MAcc}) ->
+                            AppAtom = z_convert:to_atom(App),
+                            app_config(File, AppAtom, Cfg, MAcc);
+                        (Other, {ok, _}) ->
+                            {error, {config_file, format, File, {unknown_term, Other}}};
+                        (_, {error, _} = Error) ->
+                            Error
+                    end,
+                    {ok, Acc},
+                    AppConfig)
         end,
-        {ok, Cfgs},
+        Cfgs,
         Data);
-app_config(File, Data, Cfgs) when is_list(Data) ->
-    Map = to_map(Data),
-    app_config(File, Map, Cfgs);
-app_config(File, _Data, _Cfgs) ->
-    error_logger:error_msg("Config file '~s' does not contain a list or a map.",
+apps_config(File, _Data, _Cfgs) ->
+    error_logger:error_msg("Config file '~s' does not contain a list of configurations.",
                            [File]),
     {error, {config_file, missing_list_map, File, undefined}}.
 
 app_config(_File, App, Data, Acc) when is_map(Data), is_atom(App) ->
-    application:load(App),
+    _ = application:load(App),
     AppCfg = maps:get(App, Acc, #{}),
     AppCfgNew = maps:fold(
         fun
@@ -317,7 +333,9 @@ consult_erlang(File) ->
 
 consult_yaml(File) ->
     try
-        yamerl_constr:file(File, [ str_node_as_binary, {map_node_format, map} ])
+        io:format("~p~n~n", [File]),
+        Data = yamerl_constr:file(File, [ str_node_as_binary, {map_node_format, map} ]),
+        {ok, Data}
     catch
         throw:#yamerl_exception{} = E ->
             {error, {config_file, yaml_format, File, E}}
@@ -327,7 +345,16 @@ consult_json(File) ->
     case file:read_file(File) of
         {ok, Data} ->
             try
-                jsxrecord:decode(Data)
+                case jsxrecord:decode(Data) of
+                    {ok, Map} when is_map(Map) ->
+                        {ok, [ Map ]};
+                    {ok, [ Map | _ ] = List} when is_map(Map) ->
+                        {ok, List};
+                    {ok, _} ->
+                        {error, {config_file, no_list_or_map, File, undefined}};
+                    {error, _} = Error ->
+                        Error
+                end
             catch
                 _:Reason ->
                     {error, {config_file, json_format, File, Reason}}
