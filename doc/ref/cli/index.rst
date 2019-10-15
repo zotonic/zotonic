@@ -56,7 +56,7 @@ Currently, the following subcommands are implemented:
 ``zotonic status``
   List all sites on the running Zotonic instance and their current status.
 
-``zotonic configfile``
+``zotonic configfiles``
   List all config files used for Zotonic.
 
 ``zotonic configtest``

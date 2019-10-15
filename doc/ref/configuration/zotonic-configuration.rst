@@ -55,11 +55,11 @@ the global config files that it is using:
     12:42:17.357 [info] zotonic_launcher_sup:43 - /home/user/.zotonic/1/zotonic.config
     12:42:17.357 [info] zotonic_launcher_sup:44 ================
 
-The used configuration files can be listed with ``bin/zotonic configfile``:
+The used configuration files can be listed with ``bin/zotonic configfiles``:
 
 .. code-block:: none
 
-    user$ bin/zotonic configfile
+    user$ bin/zotonic configfiles
     Zotonic config files for zotonic@PoToi:
     - /home/user/.zotonic/1.0/erlang.config
     - /home/user/.zotonic/1.0/zotonic.config

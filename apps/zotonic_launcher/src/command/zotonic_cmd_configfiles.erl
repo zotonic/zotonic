@@ -16,7 +16,7 @@
 %%% @end
 %%% Created : 13. Dec 2017 7:36 PM
 %%%-------------------------------------------------------------------
--module(zotonic_cmd_configfile).
+-module(zotonic_cmd_configfiles).
 -author("Blaise").
 
 %% API
