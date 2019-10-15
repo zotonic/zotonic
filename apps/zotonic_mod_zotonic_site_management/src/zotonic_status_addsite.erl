@@ -343,7 +343,9 @@ skel_dir(Options) ->
     case z_string:to_name(proplists:get_value(skeleton, Options, <<"empty">>)) of
         <<>> -> undefined;
         <<"_">> -> undefined;
-        Skel -> filename:join([z_utils:lib_dir(priv), "skel", Skel])
+        Skel ->
+            PrivDir = code:priv_dir(zotonic_mod_zotonic_site_management),
+            filename:join([ PrivDir, "skel", Skel ])
     end.
 
 ensure_dir(Dir, Context) ->
