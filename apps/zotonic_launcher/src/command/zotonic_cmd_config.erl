@@ -21,6 +21,7 @@
 
 %% API
 -export([run/1]).
+-export([pretty_print_value/2]).
 
 run([ "all" ]) ->
     show(all);

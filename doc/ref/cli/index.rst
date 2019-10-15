@@ -81,6 +81,15 @@ Currently, the following subcommands are implemented:
 ``zotonic restartsite <site_name>``
   Restart the site with name [site_name].
 
+``zotonic sitedir <site_name>``
+  Get the absolute path for a site based on [site_name]
+
+``zotonic siteconfig <site_name>``
+  Prints the configuration of site [site_name] as defined in its configuration files.
+
+``zotonic siteconfigfiles <site_name>``
+  List all configuration files for of site [site_name]
+
 ``zotonic etop``
   Show the processes that consume the most CPU. Stop with twice ctrl-C.
 
@@ -98,9 +107,6 @@ Currently, the following subcommands are implemented:
   This script will likely need to be run as postgres unless zotonic has been granted CREATEDB in postgres as follows::
 
     ALTER ROLE zotonic WITH CREATEDB
-
-``zotonic sitedir <site_name>``
-  Get the absolute path for a site based on [site_name]
 
 ``zotonic compilefile <path/to/filename.erl>``
    Compiles and reloads a single :term:`Erlang module` within the
