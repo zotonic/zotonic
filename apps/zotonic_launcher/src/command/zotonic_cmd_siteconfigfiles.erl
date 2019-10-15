@@ -23,11 +23,10 @@
 -export([run/1]).
 
 run([ Site ]) ->
-    case zotonic_command:net_start() of
-        ok ->
+    case zotonic_command:get_target_node() of
+        {ok, Target} ->
             SiteName = list_to_atom(Site),
-            ConfigFiles = zotonic_command:rpc(z_sites_config, config_files, [ SiteName ]),
-            {ok, Target} = zotonic_command:get_target_node(),
+            ConfigFiles = z_sites_config:config_files(Target, SiteName),
             io:format("Site config files for ~p at ~p:~n", [ SiteName, Target ]),
             lists:foreach(
                 fun(F) ->
