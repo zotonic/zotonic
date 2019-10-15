@@ -51,13 +51,14 @@ get_target_node() ->
     end.
 
 net_start() ->
-    net_start("command" ++ integer_to_list(rand:uniform(1000000))).
+    net_start("command" ++ integer_to_list(rand:uniform(1000))).
 
 net_start(Name) ->
     case zotonic_command_nodename:nodename_command( list_to_atom(Name) ) of
         {error, _} = Error ->
             Error;
         {ok, {LongOrShortnames, Nodename}} ->
+            os:cmd("epmd -daemon"),
             case net_kernel:start([Nodename, LongOrShortnames]) of
                 {ok, _Pid} ->
                     case erlang:get_cookie() of
