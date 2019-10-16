@@ -164,14 +164,19 @@ addsite_copy_skel(Name, Options, Context) ->
                 true ->
                     Options1 = [
                         {site, Name},
-                        {admin_password, z_ids:id(12)},
                         {sign_key, z_ids:id(20)},
                         {sign_key_simple, z_ids:id(12)}
                         | Options
                     ],
-                    case copy_skeleton_dir(SkelDir, SiteDir, Options1, Context) of
+                    Options2 = case z_utils:is_empty(proplists:get_value(admin_password, Options1)) of
+                        true  ->
+                            [ {admin_password, z_ids:id(12)} | Options1 ];
+                        false ->
+                            Options1
+                    end,
+                    case copy_skeleton_dir(SkelDir, SiteDir, Options2, Context) of
                         ok ->
-                            addsite_compile(Name, Options1, Context);
+                            addsite_compile(Name, Options2, Context);
                         {error, _} = Error ->
                             Error
                     end
@@ -181,26 +186,31 @@ addsite_copy_skel(Name, Options, Context) ->
 % Compile
 -spec addsite_compile(binary(), proplists:proplist(), z:context()) -> {ok, {atom(), list()}}.
 addsite_compile(Name, Options, Context) ->
-    mod_zotonic_site_management:progress(
-        Name,
-        ?__("Force compile all Erlang files ...", Context),
-        Context
-    ),
-    z:compile(),
-    EbinPath = site_ebin_dir(Name),
-    case code:add_path(EbinPath) of
+    Site = binary_to_atom(Name, utf8),
+    case erlang:get(is_zotonic_command) of
         true ->
-            Site = binary_to_atom(Name, utf8),
-            case application:load(Site) of
-                ok ->
-                    {ok, {Site, Options}};
-                {error, {already_loaded, Site}} ->
-                    {ok, {Site, Options}};
+            {ok, {Site, Options}};
+        false ->
+            mod_zotonic_site_management:progress(
+                Name,
+                ?__("Force compile all Erlang files ...", Context),
+                Context
+            ),
+            z:compile(),
+            EbinPath = site_ebin_dir(Name),
+            case code:add_path(EbinPath) of
+                true ->
+                    case application:load(Site) of
+                        ok ->
+                            {ok, {Site, Options}};
+                        {error, {already_loaded, Site}} ->
+                            {ok, {Site, Options}};
+                        Error ->
+                            Error
+                    end;
                 Error ->
                     Error
-            end;
-        Error ->
-            Error
+            end
     end.
 
 % Add a sample .gitgnore file to the newly created site directory.
@@ -217,9 +227,9 @@ create_gitignore(SiteDir) ->
     file:write_file(filename:join([SiteDir, ".gitignore"]), GitIgnore).
 
 
--spec copy_skeleton_dir(any(), any(), list(), #context{}) -> ok | {error, Reason :: binary()}.
+-spec copy_skeleton_dir(file:filename(), file:filename(), list(), z:context()) -> ok | {error, Reason :: binary()}.
 copy_skeleton_dir(From, To, Options, Context) ->
-    Files = filelib:wildcard(z_convert:to_list(filename:join(From,"*"))),
+    Files = filelib:wildcard(z_convert:to_list(filename:join(From, "*"))),
     lists:foldl(
             fun
                 (FromPath, ok) ->
@@ -380,16 +390,16 @@ map_tag(<<"%%SKEL%%">>, Options) ->
         Skel -> Skel
     end;
 map_tag(<<"%%FULLNAME%%">>, _Options) -> <<>>;
-map_tag(<<"%%DBHOST%%">>, Options) -> proplists:get_value(dbhost, Options);
+map_tag(<<"%%DBHOST%%">>, Options) -> proplists:get_value(dbhost, Options, "");
 map_tag(<<"%%DBPORT%%">>, Options) ->
     case proplists:get_value(dbport, Options, <<>>) of
         <<>> -> "0";
         Port -> Port
     end;
-map_tag(<<"%%DBUSER%%">>, Options) -> proplists:get_value(dbuser, Options);
-map_tag(<<"%%DBPASSWORD%%">>, Options) -> proplists:get_value(dbpassword, Options);
-map_tag(<<"%%DBDATABASE%%">>, Options) -> proplists:get_value(dbdatabase, Options);
-map_tag(<<"%%DBSCHEMA%%">>, Options) -> proplists:get_value(dbschema, Options);
+map_tag(<<"%%DBUSER%%">>, Options) -> proplists:get_value(dbuser, Options, "");
+map_tag(<<"%%DBPASSWORD%%">>, Options) -> proplists:get_value(dbpassword, Options, "");
+map_tag(<<"%%DBDATABASE%%">>, Options) -> proplists:get_value(dbdatabase, Options, "");
+map_tag(<<"%%DBSCHEMA%%">>, Options) -> proplists:get_value(dbschema, Options, "");
 map_tag(<<"%%ADMINPASSWORD%%">>, Options) -> proplists:get_value(admin_password, Options);
 map_tag(<<"%%SIGNKEY%%">>, Options) -> proplists:get_value(sign_key, Options);
 map_tag(<<"%%SIGNKEYSIMPLE%%">>, Options) -> proplists:get_value(sign_key_simple, Options);
@@ -412,7 +422,7 @@ check_name(Name, Context) ->
         false ->
             Name1 = binary_to_atom(Name, utf8),
             case is_module(Name1) of
-                true -> {error, ?__("This name is taken by another module", Context)};
+                true -> {error, ?__("This name is taken by another Erlang module", Context)};
                 false -> ok
             end
     end.
