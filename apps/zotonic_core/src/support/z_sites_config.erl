@@ -125,8 +125,4 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                     AppConfig)
         end,
         Cfgs,
-        Data);
-apps_config(File, _Data, _Cfgs) ->
-    error_logger:error_msg("Config file '~s' does not contain a list of configurations.",
-                           [File]),
-    {error, {config_file, missing_list_map, File, undefined}}.
+        Data).

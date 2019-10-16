@@ -142,7 +142,7 @@ files(Dir, Wildcard) ->
 
 %% @doc Read a config file, return a list of the contents.
 %%      The file can be in erlang, yaml, or json format.
--spec consult( file:filename_all() ) -> {ok, list( map() | proplists:proplist() )}.
+-spec consult( file:filename_all() ) -> {ok, list( map() | proplists:proplist() )} | {error, term()}.
 consult(File) ->
     case filename:extension(File) of
         ".config" ->
