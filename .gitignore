@@ -5,6 +5,7 @@ erl_crash.dump
 
 .rebar
 rebar3
+rebar_etag
 rebar3.crashdump
 compile_commands.json
 
