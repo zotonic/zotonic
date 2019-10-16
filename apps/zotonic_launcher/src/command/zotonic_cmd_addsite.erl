@@ -71,8 +71,16 @@ run_parse_args(Target, Args) ->
             usage(),
             halt(1);
         {Options, [ Sitename ]} ->
-            io:format("~p~n", [Options]),
-            erlang:error(not_implemented);
+            case is_valid_sitename(Sitename) of
+                true ->
+                    addsite(Target, Sitename, Options);
+                false ->
+                    io:format(standard_error,
+                              "Invalid site name \"~s\", only use 'a-z', followed by 'a-z', 'A-Z', '0-9' and '_' characters.~n"
+                              "The site name should also not start with 'zotonic_' or 'z_'~n",
+                              [ Sitename ]),
+                    halt(1)
+            end;
         {_Options, []} ->
             io:format(standard_error, "Missing site name.~n~n", []),
             usage(),
@@ -83,18 +91,46 @@ run_parse_args(Target, Args) ->
             halt(1)
     end.
 
+is_valid_sitename("zotonic_" ++ _) ->
+    false;
+is_valid_sitename("z_" ++ _) ->
+    false;
+is_valid_sitename(Sitename) ->
+    case re:run(Sitename, "^[a-z][a-zA-Z0-9_]*$") of
+        {match, _} -> true;
+        nomatch -> false
+    end.
+
+addsite(_Target, Sitename, #{ hostname := undefined }) ->
+    io:format(standard_error, "Please specify the hostname, for example '-H ~s.test~n~n", [ Sitename ]),
+    halt(1);
+addsite(Target, Sitename, Options) ->
+    Context = z_context:new(zotonic_site_status),
+    case zotonic_status_addsite:addsite( z_convert:to_binary(Sitename), maps:to_list(Options), Context ) of
+        {error, Reason} when is_list(Reason); is_binary(Reason) ->
+            io:format(standard_error, "Error: ~s~n", [ Reason ]),
+            halt(1);
+        Result ->
+            io:format("~p~n", [ Result ])
+    end.
+
 -spec parse( list() ) -> {map(), list()}.
 parse(Args) when is_list(Args) ->
-    parse_args(Args, #{}).
+    Options = #{
+        hostname => undefined,
+        skeleton => "basesite",
+        admin_password => ?ADMINPASSWORD
+    },
+    parse_args(Args, Options).
 
 parse_args([ "-s", Skel | Args ], Acc) ->
-    parse_args(Args, Acc#{ skel => Skel });
+    parse_args(Args, Acc#{ skeleton => Skel });
 parse_args([ "-H", Host | Args ], Acc) ->
-    parse_args(Args, Acc#{ host => Host });
+    parse_args(Args, Acc#{ hostname => Host });
 parse_args([ "-L" | Args ], Acc) ->
     parse_args(Args, Acc#{ symlink => true });
-parse_args([ "-g", Remote | Args ], Acc) ->
-    parse_args(Args, Acc#{ remote => Remote });
+parse_args([ "-g", GitRemote | Args ], Acc) ->
+    parse_args(Args, Acc#{ git_remote => GitRemote });
 parse_args([ "-h", Host | Args ], Acc) ->
     parse_args(Args, Acc#{ dbhost => Host });
 parse_args([ "-p", Host | Args ], Acc) ->

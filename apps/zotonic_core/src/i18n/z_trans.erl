@@ -46,11 +46,16 @@ translations({trans, Tr0} = Trans0, Context) ->
         _ -> Trans0
     end;
 translations(From, Context) when is_binary(From) ->
-    case ets:lookup(z_trans_server:table(Context), From) of
-        [] ->
-			From;
-        [{_, Trans}] ->
-			{trans, Trans}
+    try
+        case ets:lookup(z_trans_server:table(Context), From) of
+            [] ->
+    			From;
+            [{_, Trans}] ->
+    			{trans, Trans}
+        end
+    catch
+        error:badarg ->
+            From
     end;
 translations(From, Context) when is_list(From) ->
     translations(unicode:characters_to_binary(From), Context);
