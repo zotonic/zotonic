@@ -28,63 +28,59 @@
 -export([run/1]).
 
 -define(SKEL, blog).
--define(DBHOST, "127.0.0.1").
--define(DBPORT, 5432).
--define(DBUSER, zotonic).
--define(DBPASSWORD, zotonic).
--define(DBDATABASE, zotonic).
--define(DBSCHEMA, public).
 -define(ADMINPASSWORD, admin).
 
 usage() ->
     io:format("Usage: zotonic addsite [options] <site_name> ~n~n"),
     io:format(" -s <skel>     Skeleton site (one of 'blog', 'basesite', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
-    io:format(" -H <host>     Site's hostname (default: <sitename.dev>) ~n"),
+    io:format(" -H <host>     Site's hostname (default: <site_name.test>) ~n"),
     io:format(" -L            Create the site in the current directory and symlink it into ~n"),
-    io:format(" -g <remote>   Create a git repository in the site and push it to the given remote ~n~n"),
-    io:format(" -h <host>     Database host (default: ~s) ~n", [?DBHOST]),
-    io:format(" -p <port>     Database port (default: ~p) ~n", [?DBPORT]),
-    io:format(" -u <user>     Database user (default: ~s) ~n", [?DBUSER]),
-    io:format(" -P <pass>     Database password (default: ~s) ~n", [?DBPASSWORD]),
-    io:format(" -d <name>     Database name (default: ~s) ~n", [?DBDATABASE]),
-    io:format(" -n <schema>   Database schema (default: ~s) ~n", [?DBSCHEMA]),
-    io:format(" -a <pass>     Admin password (default: ~s) ~n", [?ADMINPASSWORD]).
-
-run([]) ->
-    usage();
+    io:format(" -g <remote>   Create a git repository in the site and push it to the given remote ~n"),
+    io:format(" -h <host>     Database host (default: ~s) ~n", [ z_config:get(dbhost) ]),
+    io:format(" -p <port>     Database port (default: ~p) ~n", [ z_config:get(dbport) ]),
+    io:format(" -u <user>     Database user (default: ~s) ~n", [ z_config:get(dbuser) ]),
+    io:format(" -P <pass>     Database password (default: ~s) ~n", [ z_config:get(dbpassword) ]),
+    io:format(" -d <name>     Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
+    io:format(" -n <schema>   Database schema (defaults to <site_name>) ~n"),
+    io:format(" -a <pass>     Admin password (default: ~s) ~n~n", [ ?ADMINPASSWORD ]).
 
 run(Args) ->
     case zotonic_command:get_target_node() of
         {ok, Target} ->
-            run(Target, Args);
+            run_target(Target, Args);
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.
 
-run(Target, Args) ->
+run_target(Target, Args) ->
     ZotonicConfigFiles = zotonic_launcher_config:zotonic_config_files(Target),
-    io:format("~p::~p~n~n", [Target, ZotonicConfigFiles]),
     case zotonic_launcher_config:read_configs(ZotonicConfigFiles) of
         {ok, Cfg} ->
-            run(Target, Args, Cfg);
+            zotonic_launcher_config:load_configs(Cfg),
+            run_parse_args(Target, Args);
         {error, _} = ZError ->
             zotonic_command:format_error(ZError)
     end.
 
-run(Target, Args, Cfg) ->
-    io:format("~p~n~n", [ Cfg ]),
+run_parse_args(_Target, []) ->
+    usage();
+run_parse_args(Target, Args) ->
     case parse(Args) of
         {error, Arg} ->
             io:format(standard_error, "Unknown argument ~p~n~n", [ Arg ]),
             usage(),
             halt(1);
+        {Options, [ Sitename ]} ->
+            io:format("~p~n", [Options]),
+            erlang:error(not_implemented);
         {_Options, []} ->
             io:format(standard_error, "Missing site name.~n~n", []),
             usage(),
             halt(1);
-        {Options, Args} ->
-            io:format("~p~n", [Options]),
-            erlang:error(not_implemented)
+        {_Options, _} ->
+            io:format(standard_error, "More than one site name.~n~n", []),
+            usage(),
+            halt(1)
     end.
 
 -spec parse( list() ) -> {map(), list()}.
@@ -104,7 +100,7 @@ parse_args([ "-h", Host | Args ], Acc) ->
 parse_args([ "-p", Host | Args ], Acc) ->
     parse_args(Args, Acc#{ dbhost => Host });
 parse_args([ "-u", User | Args ], Acc) ->
-    parse_args(Args, Acc#{ dbusername => User });
+    parse_args(Args, Acc#{ dbuser => User });
 parse_args([ "-P", Pw | Args ], Acc) ->
     parse_args(Args, Acc#{ dbpassword => Pw });
 parse_args([ "-d", Database | Args ], Acc) ->
