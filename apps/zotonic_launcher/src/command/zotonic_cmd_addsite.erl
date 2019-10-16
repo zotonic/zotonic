@@ -1,12 +1,8 @@
-%%%-------------------------------------------------------------------
-%%% @author Blaise
-%%% @doc
-%% @copyright 2017
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
+%% @copyright 2019 Marc Worrell
 %% @doc Addsite CLI command
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2019 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,7 +17,7 @@
 %% limitations under the License.
 
 -module(zotonic_cmd_addsite).
--author("Blaise").
+-author("Marc Worrell").
 
 %% API
 -export([run/1]).
@@ -68,7 +64,7 @@ run_parse_args(Target, Args) ->
             io:format(standard_error, "Unknown argument ~p~n~n", [ Arg ]),
             usage(),
             halt(1);
-        {Options, [ Sitename ]} ->
+        {ok, {Options, [ Sitename ]}} ->
             case is_valid_sitename(Sitename) of
                 true ->
                     addsite(Target, Sitename, Options);
@@ -79,11 +75,11 @@ run_parse_args(Target, Args) ->
                               [ Sitename ]),
                     halt(1)
             end;
-        {_Options, []} ->
+        {ok, {_Options, []}} ->
             io:format(standard_error, "Missing site name.~n~n", []),
             usage(),
             halt(1);
-        {_Options, _} ->
+        {ok, {_Options, _}} ->
             io:format(standard_error, "More than one site name.~n~n", []),
             usage(),
             halt(1)
@@ -118,7 +114,7 @@ addsite(Target, Sitename, Options0) ->
             case zotonic_command:net_start() of
                 ok ->
                     case net_adm:ping(Target) of
-                        ping ->
+                        pong ->
                             % - if zotonic running: compile-all, start site (see zotonic_status_addsite)
                             ok;
                         pang ->
@@ -144,7 +140,7 @@ set_dbschema(Sitename, Options) ->
             Options
     end.
 
--spec parse( list() ) -> {map(), list()}.
+-spec parse( list() ) -> {ok, {map(), list()}} | {error, string()}.
 parse(Args) when is_list(Args) ->
     Options = #{
         hostname => undefined,
@@ -178,4 +174,4 @@ parse_args([ "-a", Pw | Args ], Acc) ->
 parse_args([ "-" ++ _ = Arg | _ ], _Acc) ->
     {error, Arg};
 parse_args(Rest, Acc) ->
-    {Acc, Rest}.
+    {ok, {Acc, Rest}}.

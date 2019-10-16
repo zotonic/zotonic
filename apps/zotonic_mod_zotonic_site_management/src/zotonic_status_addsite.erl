@@ -223,6 +223,8 @@ create_gitignore(SiteDir) ->
         "*.beam\n",
         "*.o\n",
         "*.plt\n"
+        "*~\n"
+        "*#\n"
     >>,
     file:write_file(filename:join([SiteDir, ".gitignore"]), GitIgnore).
 
