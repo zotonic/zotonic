@@ -29,13 +29,12 @@ run([ Site ]) ->
             ConfigFiles = z_sites_config:config_files(Target, SiteName),
             io:format("Site config for ~p at ~p:~n", [ SiteName, Target ]),
             io:format("=====================================~n"),
-            io:format("~nsite:"),
             case z_sites_config:read_configs(ConfigFiles) of
                 {ok, Map} ->
                     CfgList = lists:sort( maps:to_list(Map) ),
                     lists:foreach(
                         fun({Key, Value}) ->
-                            io:format("~n   ~p: ", [ Key ]),
+                            io:format("~n~p: ", [ Key ]),
                             zotonic_cmd_config:pretty_print_value(Key, Value)
                         end,
                         CfgList),

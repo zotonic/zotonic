@@ -103,8 +103,7 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                 maps:fold(
                     fun
                         (Key, Cfg, {ok, MAcc}) ->
-                            KeyAtom = z_convert:to_atom(Key),
-                            {ok, MAcc#{ KeyAtom => Cfg }};
+                            {ok, MAcc#{ Key => Cfg }};
                         (_Key, _Cfg, {error, _} = Error) ->
                             Error
                     end,
@@ -114,8 +113,9 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                 lists:foldl(
                     fun
                         ({Key, Cfg}, {ok, MAcc}) ->
-                            KeyAtom = z_convert:to_atom(Key),
-                            {ok, MAcc#{ KeyAtom => Cfg }};
+                            {ok, MAcc#{ Key => Cfg }};
+                        (Key, {ok, MAcc}) when is_atom(Key) ->
+                            {ok, MAcc#{ Key => true }};
                         (Other, {ok, _}) ->
                             {error, {config_file, format, File, {unknown_term, Other}}};
                         (_, {error, _} = Error) ->

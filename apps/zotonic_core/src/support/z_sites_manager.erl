@@ -904,16 +904,16 @@ do_scan_sites() ->
 do_scan_sites(true) ->
     lists:filter(
         fun is_testsandbox_site/1,
-        scan_directory( z_path:build_lib_dir() ));
+        scan_lib_dir( z_path:build_lib_dir() ));
 do_scan_sites(false) ->
     lists:filter(
         fun(Cfg) -> not is_testsandbox_site(Cfg) end,
-        scan_directory( z_path:build_lib_dir() )).
+        scan_lib_dir( z_path:build_lib_dir() )).
 
 is_testsandbox_site(Cfg) ->
    proplists:get_value(site, Cfg) =:= zotonic_site_testsandbox.
 
-scan_directory(Directory) ->
+scan_lib_dir(Directory) ->
     Apps = filelib:wildcard( filename:join(Directory, "*") ),
     Apps1 = lists:filter(
         fun(AppDir) ->
@@ -925,24 +925,34 @@ scan_directory(Directory) ->
             andalso filelib:is_dir( filename:join(AppDir, "priv") )
         end,
         Apps),
-    lists:filtermap(
-        fun(AppDir) ->
-            App = z_convert:to_atom( filename:basename(AppDir) ),
-            case z_sites_config:config_files(App) of
-                [] -> false;
-                Fs ->
-                    case z_sites_config:read_configs(Fs) of
-                        {ok, Map} ->
-                            ensure_code_path(AppDir),
-                            _ = application:load(App),
-                            Map1 = Map#{ site => App },
-                            {true, maps:to_list(Map1)};
-                        {error, _} ->
-                            false
-                    end
+    lists:filtermap( fun scan_app_dir/1, Apps1 ).
+
+scan_app_dir(AppDir) ->
+    App = z_convert:to_atom( filename:basename(AppDir) ),
+    case z_sites_config:config_files(App) of
+        [] -> false;
+        Fs ->
+            case z_sites_config:read_configs(Fs) of
+                {ok, Map} ->
+                    ensure_code_path(AppDir),
+                    _ = application:load(App),
+                    Map1 = Map#{ site => App },
+                    {true, to_list(Map1)};
+                {error, _} ->
+                    false
             end
+    end.
+
+to_list(Map) ->
+    L = maps:to_list(Map),
+    lists:map(
+        fun
+            ({K, M}) when is_map(M) ->
+                {K, maps:to_list(M)};
+            (KV) ->
+                KV
         end,
-        Apps1).
+        L).
 
 ensure_code_path(SitePath) ->
     Ebin = filename:join(SitePath, "ebin"),

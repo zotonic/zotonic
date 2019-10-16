@@ -129,7 +129,7 @@ is_erlang_config(F) ->
     case filename:basename(F) of
         "zotonic" -> false;
         "zotonic." ++ _ -> false;
-        _ -> filename:extension(F) == ".config"
+        _ -> filename:extension(F) =:= ".config"
     end.
 
 -spec load_configs( map() ) -> ok.
@@ -171,8 +171,7 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                 maps:fold(
                     fun
                         (App, Cfg, {ok, MAcc}) ->
-                            AppAtom = z_convert:to_atom(App),
-                            app_config(File, AppAtom, Cfg, MAcc);
+                            app_config(File, App, Cfg, MAcc);
                         (_App, _Cfg, {error, _} = Error) ->
                             Error
                     end,
@@ -182,8 +181,7 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                 lists:foldl(
                     fun
                         ({App, Cfg}, {ok, MAcc}) ->
-                            AppAtom = z_convert:to_atom(App),
-                            app_config(File, AppAtom, Cfg, MAcc);
+                            app_config(File, App, Cfg, MAcc);
                         (Other, {ok, _}) ->
                             {error, {config_file, format, File, {unknown_term, Other}}};
                         (_, {error, _} = Error) ->
@@ -201,34 +199,20 @@ apps_config(File, _Data, _Cfgs) ->
 
 app_config(_File, App, Data, Acc) when is_map(Data), is_atom(App) ->
     _ = application:load(App),
-    AppCfg = maps:get(App, Acc, #{}),
-    AppCfgNew = maps:fold(
-        fun
-            (K, Vs, AppAcc) ->
-                K1 = z_convert:to_atom(K),
-                AppAcc#{ K1 => Vs }
-        end,
-        AppCfg,
-        Data),
-    {ok, Acc#{ App => AppCfgNew }};
+    {ok, Acc#{ App => maps:get(App, Acc, #{}) }};
 app_config(File, App, Data, Acc) when is_list(Data), is_atom(App) ->
-    Map = to_map(Data),
+    Map = list_to_map(Data, #{}),
     app_config(File, App, Map, Acc).
 
-to_map(Data) when is_list(Data) ->
-    to_map(Data, #{}).
-
-to_map(Data, Map) ->
+list_to_map(Data, Map) ->
     lists:foldl(
         fun
             (L, Acc) when is_list(L) ->
-                to_map(L, Acc);
+                list_to_map(L, Acc);
             ({K, V}, Acc) ->
-                K1 = z_convert:to_atom(K),
-                Acc#{ K1 => V };
+                Acc#{ K => V };
             (K, Acc) ->
-                K1 = z_convert:to_atom(K),
-                Acc#{ K1 => true }
+                Acc#{ K => true }
         end,
         Map,
         Data).

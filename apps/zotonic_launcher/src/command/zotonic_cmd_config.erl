@@ -121,7 +121,7 @@ pretty_print_value(_Key, Value) when is_list(Value) ->
         true ->
             io:format("~s", [ Value ]);
         false ->
-            lists:map(
+            lists:foreach(
                 fun
                     (V) when is_binary(V) ->
                         case is_utf8(V) of
@@ -140,6 +140,24 @@ pretty_print_value(_Key, Value) when is_list(Value) ->
     end;
 pretty_print_value(_Key, undefined) ->
     ok;
+pretty_print_value(_Key, Value) when is_map(Value) ->
+    List = lists:sort( maps:to_list(Value) ),
+    lists:foreach(
+        fun
+            ({K, V}) when is_binary(V) ->
+                case is_utf8(V) of
+                    true -> io:format("~n      ~p: ~s", [ K, V ]);
+                    false -> io:format("~n      ~p: ~p", [ K, V ])
+                end;
+            ({K, V}) when is_list(V) ->
+                case z_string:is_string(V) of
+                    true -> io:format("~n      ~p: ~s", [ K, V ]);
+                    false -> io:format("~n      ~p: ~p", [ K, V ])
+                end;
+            ({K, V}) ->
+                io:format("~n      ~p: ~p", [ K, V ])
+        end,
+        List);
 pretty_print_value(_Key, Value) ->
     io:format("~p", [ Value ]).
 

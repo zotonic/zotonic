@@ -168,8 +168,12 @@ consult_erlang(File) ->
 
 consult_yaml(File) ->
     try
-        Data = yamerl_constr:file(File, [ str_node_as_binary, {map_node_format, map} ]),
-        {ok, Data}
+        Options = [
+            str_node_as_binary,
+            {map_node_format, map}
+        ],
+        Data = yamerl_constr:file(File, Options),
+        {ok, atomify_labels(Data)}
     catch
         throw:#yamerl_exception{} = E ->
             {error, {config_file, yaml_format, File, E}}
@@ -179,15 +183,13 @@ consult_json(File) ->
     case file:read_file(File) of
         {ok, Data} ->
             try
-                case jsxrecord:decode(Data) of
-                    {ok, Map} when is_map(Map) ->
+                case jsx:decode(Data, [ return_maps, {labels, atom} ]) of
+                    Map when is_map(Map) ->
                         {ok, [ Map ]};
-                    {ok, [ Map | _ ] = List} when is_map(Map) ->
+                    [ Map | _ ] = List when is_map(Map) ->
                         {ok, List};
-                    {ok, _} ->
-                        {error, {config_file, no_list_or_map, File, undefined}};
-                    {error, _} = Error ->
-                        Error
+                    _ ->
+                        {error, {config_file, no_list_or_map, File, undefined}}
                 end
             catch
                 _:Reason ->
@@ -200,3 +202,15 @@ consult_json(File) ->
 split_version(Version) ->
     {match, [Minor, Major]} = re:run(Version, "(([0-9]+)\\.[0-9]+)", [{capture, all_but_first, list}]),
     {Major, Minor}.
+
+atomify_labels(Data) when is_list(Data) ->
+    lists:map(fun atomify_labels/1, Data);
+atomify_labels(Data) when is_map(Data) ->
+    L = lists:map(
+        fun({K, V}) ->
+            {binary_to_atom(K, utf8), atomify_labels(V)}
+        end,
+        maps:to_list(Data)),
+    maps:from_list(L);
+atomify_labels(V) ->
+    V.
