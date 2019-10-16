@@ -201,18 +201,17 @@ app_config(_File, App, Data, Acc) when is_map(Data), is_atom(App) ->
     _ = application:load(App),
     {ok, Acc#{ App => maps:get(App, Acc, #{}) }};
 app_config(File, App, Data, Acc) when is_list(Data), is_atom(App) ->
-    Map = list_to_map(Data, #{}),
+    Map = flatten_to_map(Data, #{}),
     app_config(File, App, Map, Acc).
 
-list_to_map(Data, Map) ->
+% Flatten a nested list of proplists to a map.
+flatten_to_map(Data, Map) ->
     lists:foldl(
         fun
-            (L, Acc) when is_list(L) ->
-                list_to_map(L, Acc);
             ({K, V}, Acc) ->
                 Acc#{ K => V };
             (K, Acc) ->
                 Acc#{ K => true }
         end,
         Map,
-        Data).
+        lists:flatten(Data)).
