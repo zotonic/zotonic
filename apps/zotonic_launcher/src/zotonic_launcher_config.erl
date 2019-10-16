@@ -30,10 +30,15 @@
     erlang_config_files/1
 ]).
 
+%% @doc Return the zotonic configuration directory for the current node.
+%%      Optionally initialize the config files if they are not found.
 -spec config_dir() -> {ok, file:filename_all()} | {error, enoent}.
 config_dir() ->
     config_dir(node()).
 
+%% @doc Return the zotonic configuration directory for the given node.
+%%      Optionally initialize the config files if they are not found.
+-spec config_dir( node() ) -> {ok, file:filename_all()} | {error, enoent}.
 config_dir(Node) when is_atom(Node) ->
     maybe_initialize( z_config_files:config_dir(Node) ).
 
@@ -45,6 +50,9 @@ maybe_initialize({ok, Dir}) ->
 maybe_initialize({error, _} = Error) ->
     Error.
 
+%% @doc Ensure that there are configuration files in the zotonic config
+%%      directory. They are not created if the config directory is in the
+%%      "/etc/" directoy.
 -spec maybe_initialize_configs( file:filename_all() ) -> ok.
 maybe_initialize_configs(Dir) ->
     SourceDir = case code:priv_dir(zotonic_launcher) of
@@ -90,8 +98,10 @@ replace_placeholders(Data) ->
     binary:replace(Data, <<"%%GENERATED%%">>, z_ids:id(16), [ global ]).
 
 
-%% Zotonic config files are "zotonic.*" files in the root of the
-%% config directory and all files the 'config.d' subdirectory.
+%% @doc List all zotonic config files in the zotonic config directory
+%%      and the "config.d" subdirectory.
+%%      Zotonic config files are "zotonic.*" files in the root of the
+%%      config directory and all files the 'config.d' subdirectory.
 -spec zotonic_config_files( node() ) -> list( file:filename() ).
 zotonic_config_files(Node) ->
     case config_dir(Node) of
@@ -103,8 +113,9 @@ zotonic_config_files(Node) ->
             []
     end.
 
-%% Erlang config files must be in the root of the config directory.
-%% They must also have the extension ".config" and not be called "zotonic.config"
+%% @doc List all erlang init files in the zotonic configuration directory.
+%%      Erlang config files must be in the root of the config directory.
+%%      They must also have the extension ".config" and not be called "zotonic.config"
 -spec erlang_config_files( node() ) -> list( file:filename() ).
 erlang_config_files(Node) ->
     case config_dir(Node) of
@@ -115,6 +126,9 @@ erlang_config_files(Node) ->
             []
     end.
 
+%% @doc Return all files found in the main zotonic config dir and its
+%%      config.d subdirectory.
+-spec config_files( node() ) -> list( file:filename() ).
 config_files(Node) ->
     case config_dir(Node) of
         {ok, Dir} ->
@@ -132,6 +146,8 @@ is_erlang_config(F) ->
         _ -> filename:extension(F) =:= ".config"
     end.
 
+%% @doc Load all the configuration of a map into the application env.
+%%      Ensure that the app is loaded before adding to the application env.
 -spec load_configs( map() ) -> ok.
 load_configs( Cfgs ) when is_map(Cfgs) ->
     maps:fold(
@@ -147,6 +163,8 @@ load_configs( Cfgs ) when is_map(Cfgs) ->
         ok,
         Cfgs).
 
+%% @doc Read all configuration files, the last application configuration replaces configurations
+%%      in earlier configuration files.
 -spec read_configs( [ file:filename_all() ] ) -> {ok, #{ atom() => map() }} | {error, term()}.
 read_configs(Fs) when is_list(Fs) ->
     lists:foldl(
@@ -164,10 +182,12 @@ read_configs(Fs) when is_list(Fs) ->
         {ok, #{}},
         Fs).
 
+%% @doc Overlay the data read from a config file over the previously read configs.
 apps_config(File, Data, Cfgs) when is_list(Data) ->
     lists:foldl(
         fun
             (AppConfig, Acc) when is_map(AppConfig) ->
+                % Map:  #{ App => AppConfig }
                 maps:fold(
                     fun
                         (App, Cfg, {ok, MAcc}) ->
@@ -178,6 +198,7 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                     {ok, Acc},
                     AppConfig);
             (AppConfig, Acc) when is_list(AppConfig) ->
+                % Proplist:  [ {App, AppConfig} ]
                 lists:foldl(
                     fun
                         ({App, Cfg}, {ok, MAcc}) ->
@@ -192,13 +213,16 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
         end,
         Cfgs,
         Data);
+apps_config(File, Data, Cfgs) when is_map(Data) ->
+    apps_config(File, [ Data ], Cfgs);
 apps_config(File, _Data, _Cfgs) ->
     error_logger:error_msg("Config file '~s' does not contain a list of configurations.",
                            [File]),
     {error, {config_file, missing_list_map, File, undefined}}.
 
+%% @doc Accumulate/overlay the found application configuration. Ensure that the app
+%%      configuration is a map.
 app_config(_File, App, Data, Acc) when is_map(Data), is_atom(App) ->
-    _ = application:load(App),
     {ok, Acc#{ App => maps:get(App, Acc, #{}) }};
 app_config(File, App, Data, Acc) when is_list(Data), is_atom(App) ->
     Map = flatten_to_map(Data, #{}),
