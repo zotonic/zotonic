@@ -29,7 +29,7 @@
 
 -spec app_is_site( atom() ) -> boolean().
 app_is_site( App ) ->
-    file:is_regular( site_config_file( App ) ).
+    filelib:is_regular( site_config_file( App ) ).
 
 %% @doc Return the main configuration file for a site
 -spec site_config_file( atom() ) -> file:filename_all() | {error, bad_name}.
