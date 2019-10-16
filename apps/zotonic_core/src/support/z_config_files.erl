@@ -118,24 +118,27 @@ base_nodename(Node) ->
     lists:takewhile(fun(C) -> C =/= $@ end, atom_to_list(Node)).
 
 %% @doc List all (regular) files in a directory, skip hidden en temp files.
--spec files( file:filename_all() ) -> [ file: filename_all() ].
+-spec files( file:filename_all() ) -> [ file:filename_all() ].
 files(Dir) ->
     files(Dir, "*").
 
--spec files( file:filename_all(), string() ) -> [ file: filename_all() ].
+%% @doc List all (regular) files in a directory, skip hidden en temp files.
+%%      Ensures the list of files is sorted in a consistent way.
+-spec files( file:filename_all(), string() ) -> [ file:filename_all() ].
 files(Dir, Wildcard) ->
     Files = filelib:wildcard( filename:join(Dir, Wildcard) ),
-    lists:filter(
-        fun(F) ->
-            case filename:basename(F) of
-                "." ++ _ -> false;
-                _ ->
-                    not filelib:is_dir(F)
-                    andalso lists:last(F) =/= $#
-                    andalso lists:last(F) =/= $~
-            end
-        end,
-        Files).
+    lists:sort(
+        lists:filter(
+            fun(F) ->
+                case filename:basename(F) of
+                    "." ++ _ -> false;
+                    _ ->
+                        not filelib:is_dir(F)
+                        andalso lists:last(F) =/= $#
+                        andalso lists:last(F) =/= $~
+                end
+            end,
+            Files)).
 
 %% @doc Read a config file, return a list of the contents.
 %%      The file can be in erlang, yaml, or json format.
