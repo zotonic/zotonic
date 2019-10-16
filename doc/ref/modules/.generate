@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for f in `find $APPS -name zotonic_mod_\* -type d`
+for f in `find $APPS -name zotonic_mod_\* -type d | grep -v '/skel/' `
 do
 
     dir=${0%/*}
