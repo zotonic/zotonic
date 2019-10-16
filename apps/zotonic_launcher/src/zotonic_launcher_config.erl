@@ -191,18 +191,18 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                 maps:fold(
                     fun
                         (App, Cfg, {ok, MAcc}) ->
-                            app_config(File, App, Cfg, MAcc);
+                            app_config(App, Cfg, MAcc);
                         (_App, _Cfg, {error, _} = Error) ->
                             Error
                     end,
                     {ok, Acc},
                     AppConfig);
             (AppConfig, Acc) when is_list(AppConfig) ->
-                % Proplist:  [ {App, AppConfig} ]
+                % Proplist:  [ {App, AppConfig}, ... ]
                 lists:foldl(
                     fun
                         ({App, Cfg}, {ok, MAcc}) ->
-                            app_config(File, App, Cfg, MAcc);
+                            app_config(App, Cfg, MAcc);
                         (Other, {ok, _}) ->
                             {error, {config_file, format, File, {unknown_term, Other}}};
                         (_, {error, _} = Error) ->
@@ -216,14 +216,14 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
 
 %% @doc Accumulate/overlay the found application configuration. Ensure that the app
 %%      configuration is a map.
-app_config(_File, App, Data, Acc) when is_map(Data), is_atom(App) ->
-    {ok, Acc#{ App => maps:get(App, Acc, #{}) }};
-app_config(File, App, Data, Acc) when is_list(Data), is_atom(App) ->
-    Map = flatten_to_map(Data, #{}),
-    app_config(File, App, Map, Acc).
+app_config(App, Data, Acc) when is_map(Data), is_atom(App) ->
+    {ok, Acc#{ App => Data }};
+app_config(App, Data, Acc) when is_list(Data), is_atom(App) ->
+    Map = list_to_map(Data),
+    {ok, Acc#{ App => Map }}.
 
 % Flatten a nested list of proplists to a map.
-flatten_to_map(Data, Map) ->
+list_to_map(Data) ->
     lists:foldl(
         fun
             ({K, V}, Acc) ->
@@ -231,5 +231,5 @@ flatten_to_map(Data, Map) ->
             (K, Acc) ->
                 Acc#{ K => true }
         end,
-        Map,
-        lists:flatten(Data)).
+        #{},
+        Data).

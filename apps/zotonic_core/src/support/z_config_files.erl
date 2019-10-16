@@ -161,7 +161,7 @@ consult(File) ->
 
 consult_erlang(File) ->
     case file:consult(File) of
-        {ok, L} when is_list(L); is_map(L) ->
+        {ok, L} when is_list(L) ->
             {ok, L};
         {error, Reason} when is_atom(Reason) ->
             {error, {config_file, Reason, File, undefined}};
