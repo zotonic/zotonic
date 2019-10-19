@@ -103,6 +103,10 @@ install_done(SiteProps) when is_list(SiteProps) ->
     Pivot = {z_pivot_rsc,
                 {z_pivot_rsc, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
+    
+    Queue = {z_queue,
+                {z_queue, start_link, [SiteProps]},
+                permanent, 5000, worker, dynamic},
 
     MediaCleanup = {z_media_cleanup_server,
                 {z_media_cleanup_server, start_link, [SiteProps]},
@@ -126,7 +130,7 @@ install_done(SiteProps) when is_list(SiteProps) ->
 
     Processes = [
             Session,
-            Dispatcher, Template, MediaClass, Pivot, DropBox,
+            Dispatcher, Template, MediaClass, Pivot, Queue, DropBox,
             MediaCleanup, EdgeLog,
             ModuleIndexer, Modules,
             PostStartup
