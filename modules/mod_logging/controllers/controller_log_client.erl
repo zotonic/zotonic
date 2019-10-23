@@ -58,9 +58,8 @@ log(Body, Context) ->
                     m_log_ui:insert_event(Props, Context),
                     lager:info("UI event: ~s", [Body1]);
                 false ->
-                    lager:info("[ratelimit] UI event: ~s", [Body1])
-            end,
-            ok;
+                    ok
+            end;
         {error, _} ->
             ok
     end.
