@@ -115,7 +115,7 @@ manage_schema(_, Context) ->
 is_ui_ratelimit_check(Context) ->
     case z_convert:to_bool( m_config:get_value(mod_logging, ui_log_disabled, Context) ) of
         true ->
-            true;
+            false;
         false ->
             {ok, Pid} = z_module_manager:whereis(?MODULE, Context),
             gen_server:call(Pid, is_ui_ratelimit_check)
