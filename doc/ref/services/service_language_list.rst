@@ -4,7 +4,9 @@
 List all enabled languages.
 
 Calling ``/api/translation/language_list`` returns
-a list of languages, sorted on their name::
+a list of languages, sorted on their name:
+
+.. code-block:: json
 
     [
         {"iso":"de","language":"Deutsch","is_enabled":true},
