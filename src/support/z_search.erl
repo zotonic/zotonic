@@ -44,6 +44,8 @@ search_pager(Search, Page, Context) ->
 
 %% @doc Search items and handle the paging
 %% @spec search_pager({Name, SearchPropList}, Page, PageLen, #context{}) -> #search_result{}
+search_pager(Search, undefined, PageLen, Context) ->
+    search_pager(Search, 1, PageLen, Context);
 search_pager(Search, Page, PageLen, Context) ->
     SearchResult = search(Search, ?OFFSET_PAGING, Context),
     pager(SearchResult, Page, PageLen, Context).
