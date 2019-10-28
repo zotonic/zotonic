@@ -32,7 +32,7 @@ limitations under the License.
 
             while (stack.length > 0)
             {
-                var objectOptions, defaults, element = stack.pop();
+                var defaults, element = stack.pop();
                 if (typeof element.className == "string")
                 {
                     var objectClass = element.className.match(/do_[a-zA-Z0-9_]+/g);
@@ -157,30 +157,29 @@ limitations under the License.
         var elem = this[0];
         var data_name = 'widget-'+functionName;
         var data = $(elem).data(data_name);
-        if(data)
+        if(typeof data === "undefined")
         {
-            return data;
-        }
-        data = elem.getAttribute("data-"+functionName);
-        if(!data)
-        {
-            var m = /{(.*)}/.exec(elem.className);
-            if(m)
-            {
-                data = m[1];
+            data = elem.getAttribute("data-"+functionName);
+            if (data) {
+                if (data.substr(0,1) == "{") {
+                    try {
+                        data = JSON.parse(data);
+                    } catch (e) {
+                        console.error("Error parsing JSON in widget data attribute:", data);
+                    }
+                } else {
+                    try {
+                        data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
+                    } catch (e) {
+                        console.error("Error evaluating widget data attribute:", data);
+                    }
+                    data = {};
+                }
+            } else {
+                data = {};
             }
-            else
-            {
-                data = "";
-            }
+            $(elem).data(data_name, data);
         }
-
-        try {
-            data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
-        } catch (e) {
-            console.error("Error evaluating widget data attribute:", data);
-        }
-        $(elem).data(data_name, data);
         return data;
     };
 
