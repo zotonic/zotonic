@@ -578,18 +578,21 @@ get_session_cookie_name(Context) ->
 %% @doc Save the session id in a cookie on the user agent
 -spec set_session_cookie( string(), #context{} ) -> #context{}.
 set_session_cookie(SessionId, Context) ->
+    Context1 = case z_context:get(set_session_cookie, Context) of
+                   false -> Context;
+                   _ -> set_session_cookie1(SessionId, Context)
+               end,
+    z_context:set(set_session_id, true, Context1).
+
+set_session_cookie1(SessionId, Context) ->
     Options = [{path, "/"},
                {same_site, lax},
                {http_only, true}],
     Options1 = case z_convert:to_binary(m_config:get_value(site, protocol, Context)) of
-        <<"https">> -> [ {secure, true} | Options ];
-        _ -> Options
-    end,
-    z_context:set_cookie(
-                    get_session_cookie_name(Context),
-                    SessionId,
-                    Options1,
-                    z_context:set(set_session_id, true, Context)).
+                   <<"https">> -> [ {secure, true} | Options ];
+                   _ -> Options
+               end,
+    z_context:set_cookie(get_session_cookie_name(Context), SessionId, Options1, Context).
 
 
 %% @doc Remove the session id from the user agent and clear the session pid in the context
