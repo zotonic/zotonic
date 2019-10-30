@@ -20,22 +20,21 @@
 
 -author('Marc Worrell <marc@worrell.nl>').
 
--export([
-    scan/2
-    ]).
+-export([ scan/2 ]).
 
 -include_lib("zotonic_fileindexer/include/zotonic_fileindexer.hrl").
 
 % Regexp for files to be ignored.
 -define(IGNORE, "^_flymake|\\.#|\\.~|^\\.").
 
+-spec scan( file:filename_all(), undefined|string()|binary() ) -> list( file:filename_all() ).
 scan(Dir, undefined) -> scan(Dir, ".");
 scan(Dir, "") -> scan(Dir, ".");
 scan(Dir, <<>>) -> scan(Dir, ".");
 scan(Dir, FilenameRE) ->
     {ok, IgnoreRE} = re:compile(?IGNORE),
     {ok, FileRE} = re:compile(FilenameRE),
-    scan_recursive("", Dir, FileRE, IgnoreRE, []).
+    scan_recursive(<<>>, to_binary(Dir), FileRE, IgnoreRE, []).
 
 scan_recursive(RelPath, Dir, FileRE, IgnoreRE, Acc) ->
     case file:list_dir(Dir) of
@@ -77,7 +76,7 @@ scan_filename(F, RelPath, Dir, FileRE, IgnoreRE, Acc) ->
             Acc
     end.
 
-join("", F) -> F;
+join(<<>>, F) -> F;
 join(Dir, F) -> filename:join([ Dir, F ]).
 
 to_binary(B) when is_binary(B) -> B;
