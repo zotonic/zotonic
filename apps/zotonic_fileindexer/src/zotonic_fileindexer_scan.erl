@@ -41,7 +41,7 @@ scan_recursive(RelPath, Dir, FileRE, IgnoreRE, Acc) ->
         {ok, Files} ->
               lists:foldl(
                 fun(F, AccF) ->
-                    scan_filename(F, RelPath, Dir, FileRE, IgnoreRE, AccF)
+                    scan_filename(to_binary(F), RelPath, Dir, FileRE, IgnoreRE, AccF)
                 end,
                 Acc,
                 Files);
