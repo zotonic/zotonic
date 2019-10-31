@@ -64,9 +64,11 @@ find(App, SubDir, OptPattern) when is_atom(App) ->
     end.
 
 find_1(App, AppDir, SubDir, Pattern) ->
-    case ets:lookup(?MODULE, key(App, SubDir, Pattern)) of
+    AppDir1 = unicode:characters_to_binary(AppDir),
+    SubDir1 = unicode:characters_to_binary(SubDir),
+    case ets:lookup(?MODULE, key(App, SubDir1, Pattern)) of
         [] ->
-            gen_server:call(?MODULE, {index, App, AppDir, SubDir, Pattern}, ?TIMEOUT);
+            gen_server:call(?MODULE, {index, App, AppDir1, SubDir1, Pattern}, ?TIMEOUT);
         [#findex{ files = Files }] ->
             {ok, Files}
     end.
