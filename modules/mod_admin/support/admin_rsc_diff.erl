@@ -169,7 +169,7 @@ format_value(content_group_id, Id, Context) ->
 format_value(blocks, Blocks, Context) ->
     format_blocks(Blocks, Context);
 format_value(_, {trans, Tr}, _Context) ->
-    iolist_to_binary([ [z_convert:to_binary(Iso), $:, 32, V, <<"\n">>] || {Iso,V} <- Tr, V /= <<>> ]);
+    iolist_to_binary([ [z_convert:to_binary(Iso), $:, 32, V, <<"\n">>] || {Iso,V} <- Tr, z_convert:to_binary(V) /= <<>> ]);
 format_value(_K, V, _Context) when is_tuple(V) ->
     z_html:escape(iolist_to_binary(io_lib:format("~p", [V])));
 format_value(_K, V, Context) when is_list(V) ->
