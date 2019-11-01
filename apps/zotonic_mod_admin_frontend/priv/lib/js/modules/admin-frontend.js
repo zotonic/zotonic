@@ -9,11 +9,9 @@ $(function() {
 		}
 	});
 
-	// if (typeof pubzub !== "undefined") {
-	// 	pubzub.subscribe("~pagesession/menu/insert", function(topic,args) {
-	// 		window.location.hash = "#edit_id="+args.id;
-	// 	});
-	// }
+	cotonic.broker.subscribe("menu/insert", function(msg) {
+		window.location.hash = "#edit_id="+msg.payload.id;
+	});
 
 	z_event_register("admin-menu-edit", function(args) {
 		for (var i in args) {

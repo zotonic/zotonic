@@ -16,12 +16,6 @@
 	"js/modules/responsive.js"
 %}
 
-{#
-	"js/modules/ubf.js"
-	"js/qlobber.js"
-	"js/pubzub.js"
-#}
-
 {% block _js_include_extra %}{% endblock %}
 
 <script type="text/javascript">
