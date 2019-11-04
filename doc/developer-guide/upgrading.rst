@@ -335,6 +335,11 @@ Search
 * Search argument ``authoritative`` was renamed to ``is_authoritative``.
 
 
+Notifications
+^^^^^^^^^^^^^
+
+ * The ``admin_menu`` notifications is now a tuple: ``#admin_menu{}``. Update the ``observe_admin_menu`` functions in sites and modules.
+
 
 Upgrading to Zotonic 0.14
 -------------------------
