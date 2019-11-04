@@ -107,6 +107,9 @@ function do_addsite {
     echo "Building site..."
     $ZOTONIC_CALL -a "make all [[load]]"  > /dev/null
 
+    echo "Updating sites manager..."
+    $ZOTONIC_CALL -a "z_sites_manager upgrade []"  > /dev/null
+
     echo "Starting..."
     curl -s $TARGETURL > /dev/null
     sleep 1
