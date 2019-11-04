@@ -249,10 +249,14 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
 
     % Find the original message in our database of recent sent e-mail
     TrFun = fun()->
-                    [QEmail] = mnesia:read(email_queue, MsgId),
-                    mnesia:delete_object(QEmail),
-                    {(QEmail#email_queue.email)#email.to, QEmail#email_queue.pickled_context}
-            end,
+        case mnesia:read(email_queue, MsgId) of
+            [ QEmail ] ->
+                mnesia:delete_object(QEmail),
+                {(QEmail#email_queue.email)#email.to, QEmail#email_queue.pickled_context};
+            [] ->
+                mnesia:abort(notfound)
+        end
+    end,
     case mnesia:transaction(TrFun) of
         {atomic, {Recipient, PickledContext}} ->
             Context = z_context:depickle(PickledContext),
@@ -272,7 +276,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                                     to_id = z_acl:user(Context),
                                     props = []
                                 }}, Context);
-        _ ->
+        {aborted, notfound} ->
             % We got a bounce, but we don't have the message anymore.
             % Custom bounce domains make this difficult to process.
             case z_sites_dispatcher:get_site_for_hostname(Domain) of
@@ -295,7 +299,11 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
                                 }}, Context);
                 undefined ->
                     ignore
-            end
+            end;
+        {aborted, Reason} ->
+            lager:info("[smtp] Could not handle bounced messages from ~p ~p: ~p",
+                      [ Peer, BounceEmail, Reason ]),
+            ok
     end,
     {noreply, State};
 
@@ -466,7 +474,6 @@ send_email(Id, Recipient, Email, Context, State) ->
         true -> State;
         false -> spawn_send(Id, Recipient, Email, QEmail#email_queue.retry, Context, State)
     end.
-
 
 spawn_send(Id, Recipient, Email, RetryCt, Context, State) ->
     case lists:keyfind(Id, #email_sender.id, State#state.sending) =/= false of
@@ -959,16 +966,38 @@ mark_sent(Id) ->
                     [] -> {error, notfound}
                 end
          end,
-    {atomic, Result} = mnesia:transaction(Tr),
-    Result.
+    case mnesia:transaction(Tr) of
+        {atomic, Result} ->
+            Result;
+        {aborted, Reason} ->
+            lager:info("[smtp] Could not mark message ~p as sent: ~p",
+                       [ Id, Reason ]),
+            {error, Reason}
+    end.
 
 %% @doc Deletes a message from the queue.
 delete_emailq(Id) ->
     Tr = fun()->
-                 [QEmail] = mnesia:read(email_queue, Id),
-                 mnesia:delete_object(QEmail)
-         end,
-    {atomic, ok} = mnesia:transaction(Tr).
+        case mnesia:read(email_queue, Id) of
+            [ QEmail ] ->
+                 mnesia:delete_object(QEmail);
+            [] ->
+                mnesia:abort(notfound)
+         end
+    end,
+    case mnesia:transaction(Tr) of
+        {atomic, ok} ->
+            ok;
+        {atomic, NotOk} ->
+            lager:info("[smtp] Could not delete ~p message ~p: ~p",
+                       [ Id, NotOk ]),
+            {error, NotOk};
+        {aborted, Reason} ->
+            lager:info("[smtp] Could not delete message ~p: ~p",
+                       [ Id, Reason ]),
+            {error, Reason}
+    end.
+
 
 
 %%
@@ -1005,19 +1034,25 @@ delete_sent_messages(StatusSites, State) ->
             || QEmail <- DelQueryRes
         ]
     end,
-    {atomic, NotifyList} = mnesia:transaction(DelTransFun),
-    lists:foreach(
-        fun
-            ({Id, Recipient, PickledContext}) ->
-                z_notifier:notify(#email_sent{
-                    message_nr=Id,
-                    recipient=Recipient,
-                    is_final=true
-                }, z_context:depickle(PickledContext));
-            (false) ->
-                ok
-        end,
-        NotifyList).
+    case mnesia:transaction(DelTransFun) of
+        {atomic, NotifyList} ->
+            lists:foreach(
+                fun
+                    ({Id, Recipient, PickledContext}) ->
+                        z_notifier:notify(#email_sent{
+                            message_nr=Id,
+                            recipient=Recipient,
+                            is_final=true
+                        }, z_context:depickle(PickledContext));
+                    (false) ->
+                        ok
+                end,
+                NotifyList);
+        {aborted, Reason} ->
+            lager:info("[smtp] Could not delete sent messages: ~p", [ Reason ]),
+            ok
+    end.
+
 
 %% Delete all messages with too high retry count - notify that they failed
 delete_failed_messages(StatusSites) ->
@@ -1048,22 +1083,27 @@ delete_failed_messages(StatusSites) ->
             || QEmail <- PollQueryRes
         ]
     end,
-    {atomic, NotifyList} = mnesia:transaction(SetFailTransFun),
-    lists:foreach(
-        fun
-            ({Id, Recipient, RetryCt, PickledContext}) ->
-                z_notifier:first(#email_failed{
-                    message_nr=Id,
-                    recipient=Recipient,
-                    is_final=true,
-                    reason=retry,
-                    retry_ct=RetryCt,
-                    status= <<"Retries exceeded">>
-                }, z_context:depickle(PickledContext));
-            (false) ->
-                ok
-        end,
-        NotifyList).
+    case mnesia:transaction(SetFailTransFun) of
+        {atomic, NotifyList} ->
+            lists:foreach(
+                fun
+                    ({Id, Recipient, RetryCt, PickledContext}) ->
+                        z_notifier:first(#email_failed{
+                            message_nr=Id,
+                            recipient=Recipient,
+                            is_final=true,
+                            reason=retry,
+                            retry_ct=RetryCt,
+                            status= <<"Retries exceeded">>
+                        }, z_context:depickle(PickledContext));
+                    (false) ->
+                        ok
+                end,
+                NotifyList);
+        {aborted, Reason} ->
+            lager:info("[smtp] Could not delete failed messages: ~p", [ Reason ]),
+            ok
+    end.
 
 %% Fetch a batch of messages for sending
 send_next_batch(MaxListSize, _StatusSites, State) when MaxListSize =< 0 ->
@@ -1094,25 +1134,30 @@ send_next_batch(MaxListSize, StatusSites, State) ->
             ok = qlc:delete_cursor(QCursor),
             QFound
         end,
-    {atomic, Ms} = mnesia:transaction(FetchTransFun),
-    %% send the fetched messages
-    case Ms of
-        [] ->
+    case mnesia:transaction(FetchTransFun) of
+        {atomic, []} ->
             State;
-        _  ->
+        {atomic, Ms} ->
+            %% send the fetched messages
             State2 = update_config(State),
             lists:foldl(
-              fun(QEmail, St) ->
-                  update_retry(QEmail),
-                  spawn_send(QEmail#email_queue.id,
-                             QEmail#email_queue.recipient,
-                             QEmail#email_queue.email,
-                             QEmail#email_queue.retry,
-                             z_context:depickle(QEmail#email_queue.pickled_context),
-                             St)
-              end,
-              State2, Ms)
+                fun(QEmail, St) ->
+                    update_retry(QEmail),
+                    spawn_send( QEmail#email_queue.id,
+                                QEmail#email_queue.recipient,
+                                QEmail#email_queue.email,
+                                QEmail#email_queue.retry,
+                                z_context:depickle(QEmail#email_queue.pickled_context),
+                                St)
+                end,
+                State2,
+                Ms);
+        {aborted, Reason} ->
+            lager:info("[smtp] Could not fetch next messages to be sent: ~p",
+                       [ Reason ]),
+            State
     end.
+
 
 
 %% @doc Fetch a new batch of queued e-mails. Deletes failed messages.
