@@ -448,5 +448,7 @@ relpath(FilePath) when is_list(FilePath) ->
 
 drop_prefix([ A | As ], [ A | Bs ]) ->
     drop_prefix(As, Bs);
+drop_prefix([], [ $/ | Bs ]) ->
+    Bs;
 drop_prefix(_, Bs) ->
     Bs.
