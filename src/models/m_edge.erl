@@ -486,6 +486,7 @@ merge(WinnerId, LooserId, Context) ->
                                     not lists:member({PredId, ObjectId}, WinnerOutEdges)
                                 end,
                                 LooserOutEdges),
+
                 % TODO: discuss if we should enact these extra ACL checks
                 % LooserOutEdges2 = lists:filter(
                 %                 fun({PredId, ObjectId, _EdgeId}) ->
@@ -498,11 +499,14 @@ merge(WinnerId, LooserId, Context) ->
                 %                 LooserOutEdges1),
                 lists:foreach(
                         fun({_PredId, _ObjId, EdgeId}) ->
-                            z_db:q("update edge
-                                    set subject_id = $1
-                                    where id = $2",
-                                   [WinnerId, EdgeId],
-                                   Context)
+                            z_db:equery("
+                                insert into edge
+                                    (subject_id, predicate_id, object_id, created, creator_id)
+                                select $1, e.predicate_id, e.object_id, e.created, e.creator_id
+                                from edge e
+                                where e.id = $2",
+                                [ WinnerId, EdgeId ],
+                                Context)
                         end,
                         LooserOutEdges1),
 
@@ -524,11 +528,14 @@ merge(WinnerId, LooserId, Context) ->
                                     LooserInEdges),
                 lists:foreach(
                         fun({_PredId, _SubjId, EdgeId}) ->
-                            z_db:q("update edge
-                                    set object_id = $1
-                                    where id = $2",
-                                   [WinnerId, EdgeId],
-                                   Context)
+                            z_db:equery("
+                                insert into edge
+                                    (subject_id, predicate_id, object_id, created, creator_id)
+                                select e.subject_id, e.predicate_id, $1, e.created, e.creator_id
+                                from edge e
+                                where e.id = $2",
+                                [ WinnerId, EdgeId ],
+                                Context)
                         end,
                         LooserInEdges1),
 
