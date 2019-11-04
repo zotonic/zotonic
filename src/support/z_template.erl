@@ -434,6 +434,21 @@ runtime_wrap_debug_comments(FilePath, Output, Context) ->
             [Start, Output, End]
     end.
 
-relpath(FilePath) ->
-    Base = os:getenv("ZOTONIC"),
-    lists:nthtail(1+length(Base), FilePath).
+relpath(FilePath) when is_binary(FilePath) ->
+    relpath( binary_to_list(FilePath) );
+relpath(FilePath) when is_list(FilePath) ->
+    Base = case os:getenv("ZOTONIC") of
+        false ->
+            {ok, Cwd} = file:get_cwd(),
+            Cwd;
+        ZDir ->
+            ZDir
+    end,
+    drop_prefix(Base, FilePath).
+
+drop_prefix([ A | As ], [ A | Bs ]) ->
+    drop_prefix(As, Bs);
+drop_prefix([], [ $/ | Bs ]) ->
+    Bs;
+drop_prefix(_, Bs) ->
+    Bs.
