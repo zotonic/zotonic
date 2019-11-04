@@ -98,7 +98,7 @@ Try it out on the command line:
 
 .. code-block:: shell
 
-    $ curl -v -X POST -d 'name=David' http://yoursite.dev/hello
+    $ curl -v -X POST -d 'name=David' http://yoursite.test/hello
 
     # prints:
     Thank you posting, David

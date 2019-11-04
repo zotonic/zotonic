@@ -17,7 +17,7 @@ and 'nodb'. 'blog' is the default.
 The addsite command is highly configurable and takes the following options:
 
   -s <skel>    Skeleton site (one of 'blog', 'basesite', 'empty', 'nodb'; default: blog)
-  -H <host>    Site's hostname (default: <site_name>.dev)
+  -H <host>    Site's hostname (default: <site_name>.test)
   -L           Create the site in the current directory and symlink it into the user sites directory
   -g <remote>  Create a git repository in the site and push it to the given remote
 
@@ -52,18 +52,18 @@ Will print out the following:
   ************
   Warning!
   ************
-  Site: 'myfirstblog.dev' cannot be reached.
-  Command 'host myfirstblog.dev' must resolve to an IP address,
+  Site: 'myfirstblog.test' cannot be reached.
+  Command 'host myfirstblog.test' must resolve to an IP address,
   otherwise you won't be able to reach it after installing the site.
   You can fix that by adding the following line to /etc/hosts:
 
-  127.0.0.1         myfirstblog.dev
+  127.0.0.1         myfirstblog.test
 
 
   ==== Add site ====
 
   Site name: myfirstblog
-  Site URL: http://myfirstblog.dev:8000/
+  Site URL: http://myfirstblog.test:8000/
 
   Skeleton site: blog
   Site directory: /home/user/zotonic/user/sites/myfirstblog

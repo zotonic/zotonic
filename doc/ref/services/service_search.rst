@@ -23,7 +23,7 @@ Adding ``&format=simple`` to the API call gives us a list of JSON objects::
             "text"
         ],
         "id": 338,
-        "preview_url": "http://example.dev:8000/image/2014/10/8/image_2014_09_09_19_19_41.png%28800x800%29%28upscale%29%28CF8AD1D93AC1B8457F9AD6B9BA64C74F%29.jpg",
+        "preview_url": "http://example.test:8000/image/2014/10/8/image_2014_09_09_19_19_41.png%28800x800%29%28upscale%29%28CF8AD1D93AC1B8457F9AD6B9BA64C74F%29.jpg",
         "summary": {
             "trans": {
                 "en": "English summary",

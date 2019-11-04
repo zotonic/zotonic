@@ -34,7 +34,21 @@
 
 %% Which files do we not consider at all in the file_changed handler
 -define(FILENAME_BLACKLIST_RE,
-        "node_modules|_flymake|/sites/[^/]+/files/|/\\.git/|/\\.gitignore|\\.hg/|/mnesia/|/log/|\\.log$|\\.#|~$|\\.bck$|\\.swp$").
+        "node_modules"
+        "|_flymake"
+        "|/sites/[^/]+/files/"
+        "|/\\.git/"
+        "|/\\.gitignore"
+        "|\\.hg/"
+        "|/mnesia/"
+        "|/log/"
+        "|\\.log$"
+        "|\\.#"
+        "|~$"
+        "|\\.bck$"
+        "|\\.swp$"
+        "|/\\."
+        "|/SITE\\.erl").
 
 
 %% @doc Called when a file is changed on disk. Decides what to do.
@@ -102,6 +116,9 @@ set_timer(Filename, Verb, Timers, Offset) ->
 
 %% @doc Recompile Erlang files on the fly
 -spec handle_file(verb(), string(), string(), string()) -> string() | undefined.
+handle_file(_Verb, "." ++ _, _, _F) ->
+    undefined;
+
 handle_file(_Verb, _Basename, ".bea#", _F) ->
     undefined;
 
