@@ -30,6 +30,7 @@
     "js/modules/z.menuedit.js"
     "js/modules/z.cropcenter.js"
     "js/modules/z.popupwindow.js"
+    "js/modules/z.zeditor.js"
     "js/modules/livevalidation-1.3.js"
     "js/modules/jquery.loadmask.js"
     "js/modules/jquery.timepicker.min.js"
