@@ -489,7 +489,7 @@ body_ast(DjangoParseTree, Context, TreeWalker) ->
 
 block_ast(Block, Context=#dtl_context{debug_blocks=true, block_trail=[{Name,BlockFile}|_]}, TreeWalker) ->
     {{Ast, Info}, Walker1} = body_ast(Block, Context, TreeWalker),
-    Start = erl_syntax:string("\n<!-- BLOCK " ++ Name ++ " (in " ++ relpath(BlockFile) ++ ") -->\n"),
+    Start = erl_syntax:string("\n<!-- BLOCK " ++ Name ++ " (in " ++ z_template:relpath(BlockFile) ++ ") -->\n"),
     End = erl_syntax:string("\n<!-- ENDBLOCK " ++ Name ++ " -->\n"),
     Ast1 = erl_syntax:list([Start, Ast, End]),
     {{Ast1, Info}, Walker1};
@@ -1766,17 +1766,13 @@ notify(Msg, ZContext) ->
 
 
 cond_wrap_debug_comments(FilePath, Ast, #dtl_context{debug_includes=true}) ->
-    Start = erl_syntax:string("\n<!-- START " ++ relpath(FilePath) ++ " -->\n"),
-    End = erl_syntax:string("\n<!-- END " ++ relpath(FilePath) ++ " -->\n"),
+    Start = erl_syntax:string("\n<!-- START " ++ z_template:relpath(FilePath) ++ " -->\n"),
+    End = erl_syntax:string("\n<!-- END " ++ z_template:relpath(FilePath) ++ " -->\n"),
     erl_syntax:list(
       [Start, Ast, End]);
 cond_wrap_debug_comments(_, Ast, #dtl_context{}) ->
     Ast.
 
-
-relpath(FilePath) ->
-    Base = os:getenv("ZOTONIC"),
-    lists:nthtail(1+length(Base), z_convert:to_list(FilePath)).
 
 treewalker_counter(TW) ->
     Counter = TW#treewalker.counter,

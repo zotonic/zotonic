@@ -46,7 +46,8 @@
     module_reindexed/2,
     is_template_module/1,
     filename_to_modulename/2,
-    filename_to_modulename/3
+    filename_to_modulename/3,
+    relpath/1
 ]).
 
 -record(state, {reset_counter, host, do_modified_check, compile_queue, compile_job, compile_job_pid}).
