@@ -26,6 +26,9 @@ $.widget("ui.zeditor",
 	{
 		var $elt = this.element;
 		setTimeout(function() {
+            if ($elt.is('textarea')) {
+                $elt.addClass('z_editor');
+            }
             z_editor_add($elt);
 		}, 10);
 	}
