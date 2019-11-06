@@ -17,4 +17,4 @@
 %% limitations under the License.
 
 %% Release number
--define(ZOTONIC_VERSION, "0.51.2").
+-define(ZOTONIC_VERSION, "0.52.0").
