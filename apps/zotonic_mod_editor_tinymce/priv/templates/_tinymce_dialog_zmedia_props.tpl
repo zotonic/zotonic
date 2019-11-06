@@ -96,6 +96,7 @@
           </div>
      </div>
      <div class="modal-footer">
+          <button class="btn btn-danger pull-left" name="delete">{_ Delete _}</button>
           <button class="btn btn-primary" type="submit">{_ Save _}</button>
           <button class="btn btn-default" id="{{ #cancel }}">{_ Cancel _}</button>
      </div>
