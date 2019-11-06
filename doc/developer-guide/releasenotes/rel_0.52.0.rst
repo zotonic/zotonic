@@ -7,6 +7,7 @@ Welcome to Zotonic 0.52.0, released on October 6, 2019.
 
 Main changes are:
 
+  * Add controller option ``set_session_cookie``, set to ``false`` to not set a session cookie
   * Add a *delete* button in the tinymce media edit dialog
   * API for fetching the active language list ``/api/translation/language_list``
   * Add tinyMCE release 4.9.6
