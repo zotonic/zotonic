@@ -57,6 +57,9 @@
 
  %% Session cookie retrieval. Collects cookies set in a websocket request.
  {session_cookies, ["z_session", "cookies"], controller_cookies, [{ssl, any}]},
+
+ %% Log client side javascript event. This is ignored by default `mod_logging` overrides this when enabled.
+ {jslog, ["log-client-event"], controller_nocontent, [{ssl, any}]},
  
  %% robots.txt - simple allow all file
  {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]}
