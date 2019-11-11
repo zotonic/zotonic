@@ -479,7 +479,7 @@ maybe_map_mime(Mime) -> Mime.
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge
 -spec exif( file:filename_all() ) -> list().
-exif(File) ->
+exif(File) when is_list(File) ->
     try
         case exif:read(File) of
             {ok, Dict} ->
@@ -492,7 +492,9 @@ exif(File) ->
         ?WITH_STACKTRACE(A, B, Stacktrace)
             lager:error("Error reading exif ~p:~p in ~p", [A,B,Stacktrace]),
             []
-    end.
+    end;
+exif(File) when is_binary(File) ->
+    exif(unicode:characters_to_list(File)).
 
 %% Detect the exif rotation in an image and swaps width/height accordingly.
 -spec exif_orientation(list()) -> 1|2|3|4|5|6|7|8.
