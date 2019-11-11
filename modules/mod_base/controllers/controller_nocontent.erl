@@ -34,7 +34,6 @@
 -include_lib("zotonic.hrl").
 
 init(_Args) ->
-    ?DEBUG(nocontent),
     {ok, []}.
 
 resource_exists(ReqData, _Context) ->
