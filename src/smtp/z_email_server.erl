@@ -684,9 +684,9 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
             end
     end.
 
-is_retry_possible(retries_exceeded, _) -> false;
-is_retry_possible(_, permanent_failure) -> true;
-is_retry_possible(_, _) -> false.
+is_retry_possible(retries_exceeded, _) -> true;
+is_retry_possible(_, permanent_failure) -> false;
+is_retry_possible(_, _) -> true.
 
 to_binary({error, Reason}) ->
     to_binary(Reason);
