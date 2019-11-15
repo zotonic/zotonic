@@ -614,47 +614,50 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
 
             %% use the unique id as 'envelope sender' (VERP)
             case send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
-                {error, retries_exceeded, {_FailureType, Host, Message}} ->
-                    %% do nothing, it will retry later
-                    z_notifier:notify(#email_failed{
-                            message_nr=Id,
-                            recipient=Recipient,
-                            is_final=false,
-                            reason=retry,
-                            retry_ct=RetryCt,
-                            status=Message
-                        }, Context),
-                    z_notifier:notify(#zlog{
-                                        user_id=LogEmail#log_email.from_id,
-                                        props=LogEmail#log_email{
-                                                severity = ?LOG_WARNING,
-                                                mailer_status = retry,
-                                                mailer_message = to_binary(Message),
-                                                mailer_host = Host
-                                            }
-                                      }, Context),
-                    ok;
-                {error, no_more_hosts, {permanent_failure, Host, Message}} ->
-                    % classify this as a permanent failure, something is wrong with the receiving server or the recipient
-                    z_notifier:notify(#email_failed{
-                            message_nr=Id,
-                            recipient=Recipient,
-                            is_final=true,
-                            reason=smtphost,
-                            retry_ct=RetryCt,
-                            status=Message
-                        }, Context),
-                    z_notifier:notify(#zlog{
-                                        user_id=LogEmail#log_email.from_id,
-                                        props=LogEmail#log_email{
-                                                severity = ?LOG_ERROR,
-                                                mailer_status = bounce,
-                                                mailer_message = to_binary(Message),
-                                                mailer_host = Host
-                                            }
-                                      }, Context),
-                    % delete email from the queue and notify the system
-                    delete_emailq(Id);
+                {error, Reason, {FailureType, Host, Message}} ->
+                    case is_retry_possible(Reason, FailureType) of
+                        true ->
+                            %% do nothing, it will retry later
+                            z_notifier:notify(#email_failed{
+                                    message_nr=Id,
+                                    recipient=Recipient,
+                                    is_final=false,
+                                    reason=retry,
+                                    retry_ct=RetryCt,
+                                    status=Message
+                                }, Context),
+                            z_notifier:notify(#zlog{
+                                                user_id=LogEmail#log_email.from_id,
+                                                props=LogEmail#log_email{
+                                                        severity = ?LOG_WARNING,
+                                                        mailer_status = retry,
+                                                        mailer_message = z_convert:to_binary(Message),
+                                                        mailer_host = Host
+                                                    }
+                                              }, Context),
+                            ok;
+                        false ->
+                            % permanent failure, something is wrong with the receiving server or the recipient
+                            z_notifier:notify(#email_failed{
+                                    message_nr=Id,
+                                    recipient=Recipient,
+                                    is_final=true,
+                                    reason=smtphost,
+                                    retry_ct=RetryCt,
+                                    status=Message
+                                }, Context),
+                            z_notifier:notify(#zlog{
+                                                user_id=LogEmail#log_email.from_id,
+                                                props=LogEmail#log_email{
+                                                        severity = ?LOG_ERROR,
+                                                        mailer_status = bounce,
+                                                        mailer_message = z_convert:to_binary(Message),
+                                                        mailer_host = Host
+                                                    }
+                                              }, Context),
+                            % delete email from the queue and notify the system
+                            delete_emailq(Id)
+                    end;
                 {error, Reason} ->
                     % Returned when the options are not ok
                     z_notifier:notify(#email_failed{
@@ -669,7 +672,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                         props=LogEmail#log_email{
                                                 severity = ?LOG_ERROR,
                                                 mailer_status = error,
-                                                props = [{reason, to_binary(Reason)}]
+                                                props = [{reason, z_convert:to_binary(Reason)}]
                                             }
                                       }, Context),
                     %% delete email from the queue and notify the system
@@ -720,25 +723,9 @@ send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
     ],
     gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1).
 
-
-to_binary(ok) ->
-    <<"ok">>;
-to_binary({error, Reason}) ->
-    to_binary(Reason);
-to_binary(Value) when is_atom(Value) ->
-    z_convert:to_binary(Value);
-to_binary(Error) when is_binary(Error) ->
-    Error;
-to_binary(Error) when is_list(Error) ->
-    try
-        iolist_to_binary(Error)
-    catch
-        _:_ ->
-            iolist_to_binary(io_lib:format("~p", [Error]))
-    end;
-to_binary(Error) ->
-     iolist_to_binary(io_lib:format("~p", [Error])).
-
+is_retry_possible(retries_exceeded, _) -> true;
+is_retry_possible(_, permanent_failure) -> false;
+is_retry_possible(_, _) -> true.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     z_convert:to_binary([
