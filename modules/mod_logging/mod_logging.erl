@@ -222,7 +222,7 @@ handle_other_log(Record, State) ->
     Fields = record_to_proplist(Record),
     case z_db:table_exists(LogType, Context) of
         true ->
-            {ok, Id} = z_db:insert(LogType, Fields, Context),
+            {ok, Id} = z_db:insert(LogType, flatten(Fields), Context),
             Log = record_to_log_message(Record, Fields, LogType, Id),
             case proplists:get_value(severity, Fields) of
                 ?LOG_FATAL ->
@@ -240,6 +240,29 @@ handle_other_log(Record, State) ->
             },
             handle_simple_log(Log, State)
     end.
+
+flatten(Fields) ->
+    lists:map( fun flatten_prop/1, Fields ).
+
+flatten_prop({_, undefined} = Prop) ->
+    Prop;
+flatten_prop({_, V} = Prop) when is_binary(V); is_list(V); is_number(V); is_boolean(V); is_atom(V) ->
+    Prop;
+flatten_prop({_, {term, _}} = Prop) ->
+    Prop;
+flatten_prop({props, _} = Prop) ->
+    Prop;
+flatten_prop({K, {cat, T}}) when is_list(T); is_binary(T) ->
+    {K, iolist_to_binary([ "cat:", T ])};
+flatten_prop({K, V} = Prop) ->
+    case is_date(V) of
+        true -> Prop;
+        false -> {K, z_convert:to_binary(V)}
+    end.
+
+is_date({{_, _, _}, {_, _, _}}) -> true;
+is_date({Y, M, D}) when is_integer(Y); is_integer(M); is_integer(D) -> true;
+is_date(_) -> false.
 
 record_to_proplist(#log_email{} = Rec) ->
     lists:zip(record_info(fields, log_email), tl(tuple_to_list(Rec))).
