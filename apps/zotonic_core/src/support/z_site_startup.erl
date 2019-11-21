@@ -61,9 +61,6 @@ handle_info(_Msg, State) ->
 terminate(_Reason, _State) ->
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
-%% @doc Convert process state when code is changed
-
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
@@ -81,11 +78,5 @@ do_startup(Context) ->
                 false -> ok
             end
         end),
-    do_install_modules(z_db:has_connection(Context), Context),
     z_module_manager:upgrade_await(Context),
     z_sites_manager:set_site_status(z_context:site(Context), running).
-
-do_install_modules(true, Context) ->
-    z_install_data:install_modules(Context);
-do_install_modules(false, _Context) ->
-    ok.

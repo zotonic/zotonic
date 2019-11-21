@@ -444,10 +444,7 @@ manage_schema(install, Context) ->
                 menu,
                 [
                     {title, <<"Main menu">>},
-                    {menu, case z_install_defaultdata:default_menu(Context) of
-                            undefined -> [];
-                            Menu -> Menu
-                       end}
+                    {menu, default_menu(Context)}
                 ]
             }
         ]
@@ -455,6 +452,12 @@ manage_schema(install, Context) ->
 manage_schema(_Version, _Context) ->
     ok.
 
+
+default_menu(Context) ->
+    case m_site:get(install_menu, Context) of
+        Menu when is_list(Menu) -> Menu;
+        _ -> []
+    end.
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     case m_rsc:name_to_id(main_menu, Context) of

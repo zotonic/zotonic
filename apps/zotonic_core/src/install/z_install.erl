@@ -46,27 +46,15 @@
 
 -include_lib("zotonic.hrl").
 
-%% @doc Install the database for the given host.
--spec install(z:context()) -> ok.
+%% @doc Install the core database tables, triggers and data for the given site.
+-spec install( z:context() ) -> ok.
 install(Context) ->
     ok = z_db:transaction(
-           fun(Context1) ->
-                   ok = install_sql_list(Context1, model_pgsql()),
-                   ok = z_install_data:install(z_context:site(Context1), Context1)
-           end,
-           Context),
-
-    InstallData = fun() ->
-                          timer:sleep(200), %% give other processes some time to start
-
-                          %% install the default data for the skeleton the site is based on
-                          z_install_defaultdata:install(m_site:get(skeleton, Context), Context),
-
-                          %% renumber the category tree.
-                          m_category:renumber(Context)
-                  end,
-    spawn(InstallData),
-    ok.
+        fun(Context1) ->
+            ok = install_sql_list(Context1, model_pgsql()),
+            ok = z_install_data:install(z_context:site(Context1), Context1)
+        end,
+        Context).
 
 
 -spec install_sql_list(#context{}, list()) -> ok.
@@ -82,7 +70,7 @@ model_pgsql() ->
 
     % Table config
     % Holds all configuration keys
-     "CREATE TABLE config
+    "CREATE TABLE config
     (
       id serial NOT NULL,
       module character varying(80) NOT NULL DEFAULT 'zotonic'::character varying,
@@ -678,24 +666,4 @@ rsc_page_path_log() ->
 
 rsc_page_path_log_fki() ->
     "CREATE INDEX fki_rsc_page_path_log_id ON rsc_page_path_log (id)".
-
-
-%    -- Fulltext index of products
-%    -- TODO: Also mix in the shop product id, brand, group and properties
-%    -- TODO: Use ispell for handling typos
-%    CREATE INDEX shop_product_tsv ON shop_product USING gin(tsv);
-%    CREATE FUNCTION shop_product_trigger() RETURNS trigger AS $$
-%    begin
-%      new.tsv :=
-%        setweight(to_tsvector('pg_catalog.dutch', coalesce(new.title_nl,'')), 'A') ||
-%        setweight(to_tsvector('pg_catalog.dutch', coalesce(new.desc_nl,'')),  'D') ||
-%        setweight(to_tsvector('pg_catalog.english', coalesce(new.title_en,'')), 'A') ||
-%        setweight(to_tsvector('pg_catalog.english', coalesce(new.desc_en,'')),  'D');
-%      return new;
-%    end
-%    $$ LANGUAGE plpgsql;
-%    CREATE TRIGGER tsvectorupdate_shop_product BEFORE INSERT OR UPDATE
-%    ON shop_product FOR EACH ROW EXECUTE PROCEDURE shop_product_trigger();
-
-
 
