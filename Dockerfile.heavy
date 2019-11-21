@@ -20,4 +20,4 @@ VOLUME /var/lib/postgresql
 # Use dumb-init to reap zombies, catch signals, and all the other stuff pid 1 should do.
 ENTRYPOINT ["/usr/bin/dumb-init", "-c", "--", "/opt/zotonic/docker/docker-entrypoint-heavy.sh"]
 
-CMD ["start-nodaemon"]
+CMD ["start_nodaemon"]

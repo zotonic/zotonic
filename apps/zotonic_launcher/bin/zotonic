@@ -11,7 +11,7 @@ case "$1" in
         eval $CMD
         $ZOTONIC_BIN/zotonic.escript wait
         ;;
-    start_nodaemon)
+    start_nodaemon|start-nodaemon)
         CMD="`$ZOTONIC_BIN/zotonic.escript start_nodaemon`"
         eval $CMD
         ;;
