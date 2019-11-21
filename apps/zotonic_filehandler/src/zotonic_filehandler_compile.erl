@@ -20,11 +20,17 @@
 
 -export([
     start/0,
+
     all/0,
+    all_task/0,
+
     recompile/1,
     compile_options/1,
+
     run_cmd/1,
     run_cmd/2,
+    run_cmd_task/2,
+
     ld/0,
     ld/1,
     code_path_check/1
@@ -119,6 +125,9 @@ maybe_add_path(AppDir, Paths) ->
 %% @doc Compile all files
 -spec all() -> ok.
 all() ->
+    buffalo:queue({?MODULE, all_task, []}, #{ timeout => 200, deadline => 10000 }).
+
+all_task() ->
     Cmd = case os:getenv("ZOTONIC") of
         false ->
             "./rebar3 compile";
@@ -137,6 +146,9 @@ run_cmd(Cmd) ->
 run_cmd(Cmd, Opts) when is_binary(Cmd) ->
     run_cmd(unicode:characters_to_list(Cmd, utf8), Opts);
 run_cmd(Cmd, Opts) ->
+    buffalo:queue({?MODULE, run_cmd_task, [ Cmd, Opts ]}, #{ timeout => 150, deadline => 2000 }).
+
+run_cmd_task(Cmd, Opts) ->
     case exec:run(lists:flatten(Cmd), [ sync, stdout, stderr ] ++ Opts) of
         {ok, Out} ->
             StdErr = proplists:get_value(stderr, Out, []),
