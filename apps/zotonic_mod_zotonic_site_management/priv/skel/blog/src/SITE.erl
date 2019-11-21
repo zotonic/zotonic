@@ -43,19 +43,25 @@ manage_schema(_Version, _Context) ->
     #datamodel{
         resources = [
 
-            %% MENU ENTRIES
+            %% MENU ENTRIES -- see priv/zotonic_site.config for the menu definition
 
+            % This is a tuple {unique_name, category, properties}
             {page_home, text, [
                 {title, <<"Home">>},
                 {summary, <<"Welcome to your blog!">>},
+
+                % This is the path for this page, if not defined then the path would be
+                % something like "/page/1234/home", depending on the dispatch rules.
+                % Note that there is a matching 'home' dispatch rule in priv/dispatch that
+                % uses 'page_home' as the default page id.
                 {page_path, <<"/">>}
             ]},
 
             {page_about, text, [
                 {title, <<"About this blog">>},
                 {summary, <<
-                            "This is your blog!! It would be wise to type some text here on what you will be writing about. ",
-                            "Of course, this page is just a demo page and can be deleted just as well."
+                        "This is your blog!! It would be wise to type some text here on what you will be writing about. ",
+                        "Of course, this page is just a demo page and can be deleted just as well."
                         >>}
             ]},
 
@@ -63,7 +69,8 @@ manage_schema(_Version, _Context) ->
                 {title, <<"Contact">>},
                 {summary, <<
                         "Get in contact with us! Use the form below to send this site's administrator some feedback ",
-                        "on how you perceive this site.">>},
+                        "on how you perceive this site."
+                        >>},
                 {page_path, <<"/contact">>}
             ]},
 
@@ -77,16 +84,17 @@ manage_schema(_Version, _Context) ->
                         "complete system for dynamic web sites. It is built from the ground up with rich internet applications ",
                         "and web publishing in mind."
                         >>},
+                % You can use a file for the property data, the file is in priv/schema_data
                 {body, {file, "welcome.html"}}
             ]},
             {blog_article_learnmore, article, [
                 {title, <<"Want to learn more?">>},
                 {publication_start, z_datetime:prev_day(Now)},
                 {summary, <<
-                    "This blog website you're looking demonstrates only a small part of what you can do with a Zotonic site.",
-                    "For instance, did you know that sending mass-mailings is a builtin module? That it does OAuth out of the box? ",
-                    "That Zotonic sites are SEO optimized by default?"
-                    >>},
+                        "This blog website you're looking demonstrates only a small part of what you can do with a Zotonic site.",
+                        "For instance, did you know that sending mass-mailings is a builtin module? That it does OAuth out of the box? ",
+                        "That Zotonic sites are SEO optimized by default?"
+                        >>},
                 {body, {file, "learnmore.html"}}
             ]},
             {blog_article_demo, article, [
@@ -111,7 +119,11 @@ manage_schema(_Version, _Context) ->
             ]}
         ],
 
+        %% MEDIA - the files can be found in priv/schema_data
+        %%         the exact category (image, video, audio, document) is derived from the media file or url.
         media = [
+
+            % This is a tuple {unique_name, filename, properties}
             {media_learning, "learning.jpg", [
                 {title, <<"A bunch of computer books">>},
                 {summary, <<"Taken by Sibi from Flickr, licensed Attribution-Noncommercial-No Derivative Works 2.0.">>}
@@ -120,12 +132,17 @@ manage_schema(_Version, _Context) ->
                 {title, <<"Rocky sunrise">>},
                 {summary, <<"Taken by Grant MacDonald from Flickr, CC licensed Attribution-Noncommercial 2.0.">>}
             ]},
+
+            % This is a tuple {unique_name, properties}
             {media_video, [
                 {title, <<"Zotonic introduction video">>},
-                {oembed_url, <<"http://vimeo.com/7630916">>}
+
+                % This url is picked up by mod_oembed during resource insert
+                {oembed_url, <<"https://vimeo.com/7630916">>}
             ]}
         ],
 
+        %% EDGES - connections between resource, tuples {subject, predicate, object}
         edges = [
             {blog_article_learnmore, author, administrator},
             {blog_article_welcome,   author, administrator},
