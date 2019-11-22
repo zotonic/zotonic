@@ -15,4 +15,4 @@ RUN apk add --no-cache --virtual build-deps $BUILD_APKS \
 # Use dumb-init to reap zombies, catch signals, and all the other stuff pid 1 should do.
 ENTRYPOINT ["/usr/bin/dumb-init", "-c", "--", "/opt/zotonic/docker/docker-entrypoint.sh"]
 
-CMD ["start-nodaemon"]
+CMD ["start_nodaemon"]
