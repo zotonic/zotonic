@@ -214,6 +214,7 @@ code_paths_test() ->
 
 code_paths() ->
     [
+        filename:join( [ get_zotonic_dir(), "_checkouts", "*", "ebin" ]),
         filename:join( [ get_zotonic_dir(), "_build", "default", "lib", "*", "ebin" ])
     ].
 
