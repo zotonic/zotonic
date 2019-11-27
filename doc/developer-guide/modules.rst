@@ -37,11 +37,11 @@ Before you can use a module, you need to activate it. You can do so in two ways.
    the module is activated not only for you but also for other developers and
    on other servers that the website may run on (e.g. a production server). Add
    the module name to the :file:`sites/yoursite/config` file, under the
-   ``install_modules`` key::
+   ``modules`` key::
 
     [
         % ...
-        {install_modules, [
+        {modules, [
             % ...,
             mod_example
         ]}

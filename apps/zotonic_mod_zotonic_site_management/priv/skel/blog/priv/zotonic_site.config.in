@@ -53,7 +53,7 @@
     ]},
 
     % Modules installed on site (re)start
-    {install_modules, [
+    {modules, [
         mod_base,
         mod_bootstrap,
         mod_menu,

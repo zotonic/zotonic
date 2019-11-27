@@ -85,7 +85,7 @@ do_startup(Context) ->
 do_install_modules(true, Context) ->
     Site = z_context:site(Context),
     {ok, Config} = z_sites_manager:get_site_config(Site),
-    Modules = [Site | proplists:get_value(install_modules, Config, [])],
+    Modules = [ Site | proplists:get_value(modules, Config, []) ],
     lists:foreach(
         fun(M) ->
             install_module(M, Context)

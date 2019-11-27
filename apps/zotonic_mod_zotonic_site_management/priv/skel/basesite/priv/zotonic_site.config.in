@@ -23,7 +23,7 @@
     % Password for the 'admin' user.
     {admin_password, "%%ADMINPASSWORD%%"},
 
-    % What skeleton site this site is based on; for installing the initial data.
+    % What skeleton site this site is based on.
     {skeleton, %%SKEL%%},
 
     {sign_key, "%%SIGNKEY%%"},
@@ -31,8 +31,8 @@
 
     {title, "A default Zotonic website"},
 
-    %% Change modules below to override skeleton defaults
-    {install_modules, [
+    % Modules installed on site (re)start
+    {modules, [
         mod_base,
         mod_bootstrap,
         mod_menu,

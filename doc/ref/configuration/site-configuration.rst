@@ -147,7 +147,7 @@ install_menu
 
 Creates the initial main menu when installing :ref:`mod_menu`. A menu item
 is an Erlang tuple with a resource name and list of child menu items (if any):
-``{name, []}``. This overrides the default menu provided by the skeleton.
+``{name, []}``.
 Example::
 
     {install_menu, [
@@ -158,24 +158,19 @@ Example::
 
 .. _site-configuration-modules:
 
-install_modules
-"""""""""""""""
+modules
+"""""""
 
 List of all modules that are :ref:`activated <activating-modules>` when the
-site is started. This overrides the default list of modules installed by the
-skeleton. After adding a module here, :ref:`restart the site <restart-site>`
+site is started. After adding a module here, :ref:`restart the site <restart-site>`
 to load the module. Example::
 
-    {install_modules, [
+    {modules, [
         mod_admin,
         mod_menu,
         mod_your_custom_module
     ]},
 
-
-To inherit the list of modules from a skeleton, add a
-``{skeleton, <name>}`` and it will install the list of modules from that
-skeleton as well.
 
 ip_whitelist
 """"""""""""
