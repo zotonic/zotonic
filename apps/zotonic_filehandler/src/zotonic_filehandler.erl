@@ -22,6 +22,7 @@
 
 -export([
     compile_all/0,
+    compile_all_sync/0,
     reload_modules/0,
     reload_module/1,
     load_module/1,
@@ -36,6 +37,10 @@
 -spec compile_all() -> ok | {error, term()}.
 compile_all() ->
     zotonic_filehandler_handler:compile_all().
+
+-spec compile_all_sync() -> ok | {error, term()}.
+compile_all_sync() ->
+    zotonic_filehandler_compile:all_sync().
 
 -spec reload_modules() -> ok | {error, term()}.
 reload_modules() ->

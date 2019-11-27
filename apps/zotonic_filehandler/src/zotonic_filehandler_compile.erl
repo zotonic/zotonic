@@ -23,6 +23,7 @@
 
     all/0,
     all_task/0,
+    all_sync/0,
 
     recompile/1,
     recompile_task/1,
@@ -44,8 +45,8 @@
 start() ->
     Node = get_node_argument(),
     Result = case net_adm:ping(Node) of
-                 pang -> all();
-                 pong ->rpc:call(Node, zotonic_compile, all, [], infinity)
+                 pang -> all_task();
+                 pong -> rpc:call(Node, ?MODULE, all_task, [], infinity)
              end,
     halt_with_result(Result).
 
@@ -130,23 +131,22 @@ all() ->
     ok.
 
 all_task() ->
-    jobs:run(
-        zotonic_filehandler_single_job,
-        fun() ->
-            Cmd = case os:getenv("ZOTONIC") of
-                false ->
-                    "./rebar3 compile";
-                ZotonicDir ->
-                    lists:flatten([
-                        "cd ", z_utils:os_filename(ZotonicDir),
-                        "; ./rebar3 compile"
-                    ])
-            end,
-            zotonic_filehandler:terminal_notifier("Compile all: start"),
-            Result = run_cmd_task(Cmd, []),
-            zotonic_filehandler:terminal_notifier("Compile all: ready"),
-            Result
-        end).
+    jobs:run(zotonic_filehandler_single_job, fun() -> all_sync() end).
+
+all_sync() ->
+    Cmd = case os:getenv("ZOTONIC") of
+        false ->
+            "./rebar3 compile";
+        ZotonicDir ->
+            lists:flatten([
+                "cd ", z_utils:os_filename(ZotonicDir),
+                "; ./rebar3 compile"
+            ])
+    end,
+    zotonic_filehandler:terminal_notifier("Compile all: start"),
+    Result = run_cmd_task(Cmd, []),
+    zotonic_filehandler:terminal_notifier("Compile all: ready"),
+    Result.
 
 run_cmd(Cmd) ->
     run_cmd(Cmd, []).

@@ -78,5 +78,27 @@ do_startup(Context) ->
                 false -> ok
             end
         end),
+    do_install_modules(z_db:has_connection(Context), Context),
     z_module_manager:upgrade_await(Context),
     z_sites_manager:set_site_status(z_context:site(Context), running).
+
+do_install_modules(true, Context) ->
+    Site = z_context:site(Context),
+    {ok, Config} = z_sites_manager:get_site_config(Site),
+    Modules = [Site | proplists:get_value(install_modules, Config, [])],
+    lists:foreach(
+        fun(M) ->
+            install_module(M, Context)
+        end,
+        Modules);
+do_install_modules(false, _Context) ->
+    ok.
+
+install_module(M, Context) when is_atom(M); is_binary(M); is_list(M) ->
+    case z_db:equery("update module set is_active = true where name = $1", [M], Context) of
+        {ok, 1} = R ->
+            R;
+        {ok, 0} ->
+            {ok, 1} = z_db:equery("insert into module (name, is_active) values ($1, true)", [M], Context)
+    end.
+

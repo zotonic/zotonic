@@ -196,7 +196,7 @@ addsite_compile(Name, Options, Context) ->
                 ?__("Force compile all Erlang files ...", Context),
                 Context
             ),
-            z:compile(),
+            zotonic_filehandler:compile_all_sync(),
             EbinPath = site_ebin_dir(Name),
             case code:add_path(EbinPath) of
                 true ->

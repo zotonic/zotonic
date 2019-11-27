@@ -98,7 +98,7 @@ is_valid_sitename(Sitename) ->
 addsite(_Target, Sitename, #{ hostname := undefined }) ->
     io:format(standard_error, "Please specify the hostname, for example: -H ~s.test~n~n", [ Sitename ]),
     halt(1);
-addsite(Target, Sitename, Options0) ->
+addsite(_Target, Sitename, Options0) ->
     Options = set_dbschema(Sitename, Options0),
     Context = z_context:new(zotonic_site_status),
     case zotonic_status_addsite:addsite( z_convert:to_binary(Sitename), maps:to_list(Options), Context ) of
@@ -113,17 +113,19 @@ addsite(Target, Sitename, Options0) ->
                       ]),
             case zotonic_command:net_start() of
                 ok ->
-                    case net_adm:ping(Target) of
-                        pong ->
-                            % - if zotonic running: compile-all, start site (see zotonic_status_addsite)
-                            ok;
-                        pang ->
-                            % - if zotonic not running: run "zotonic_filehandler:compile_all()"
-                            ok
+                    io:format("Compiling...~n", []),
+                    _ = zotonic_command:rpc(zotonic_filehandler, compile_all_sync, []),
+                    case zotonic_command:rpc(z_sites_manager, upgrade, []) of
+                        ok ->
+                            Res = zotonic_command:rpc(z, shell_startsite, [ Site ]),
+                            io:format("Site started: ~p~n", [ Res ]);
+                        {error, _} = Error ->
+                            io:format(standard_error, "Error upgrading sites on running Zotonic: ~p.~n~n", [ Error ]),
+                            exit(1)
                     end;
-                _Error ->
-                    % - if zotonic not running: run "zotonic_filehandler:compile_all()"
-                    ok
+                {error, _} ->
+                    io:format(standard_error, "Zotonic is not running, site is not compiled and not started.~n", []),
+                    exit(1)
             end
     end.
 
