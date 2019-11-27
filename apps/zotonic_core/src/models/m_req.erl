@@ -66,7 +66,16 @@ get(What, #context{} = Context) ->
 -spec get_req( atom(), z:context() ) -> any().
 get_req(method, Context) -> cowmachine_req:method(Context);
 get_req(version, Context) -> cowmachine_req:version(Context);
-get_req(peer, Context) -> cowmachine_req:peer(Context);
+get_req(peer, Context) ->
+    case cowmachine_req:peer(Context) of
+        undefined ->
+            case cowmachine_req:peer_ip(Context) of
+                IP when is_tuple(IP) -> z_convert:to_binary( inet:ntoa(IP) );
+                Other -> Other
+            end;
+        IP ->
+            IP
+    end;
 get_req(peer_ip, Context) -> cowmachine_req:peer_ip(Context);
 get_req(is_ssl, Context) -> cowmachine_req:is_ssl(Context);
 get_req(scheme, Context) -> cowmachine_req:scheme(Context);

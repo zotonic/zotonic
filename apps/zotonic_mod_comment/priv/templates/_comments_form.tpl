@@ -12,7 +12,6 @@
         {% endif %}
 
         <div id="comments-area">
-            <h2>{_ Leave a comment _}</h2>
             {% if m.comment.moderate %}
                 <p>({_ Note: Comments are moderated _})</p>
             {% endif %}

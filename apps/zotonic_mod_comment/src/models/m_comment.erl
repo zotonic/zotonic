@@ -122,7 +122,7 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
             Message1 = z_sanitize:escape_link(z_string:trim(Message), Context),
             KeepInformed = z_convert:to_bool(z_context:get_q(<<"keep_informed">>, Context, false)),
             UserAgent = z_context:get_q(<<"user_agent">>, Context, <<>>),
-            IPAddress = m_req:get(peer_ip, Context),
+            IPAddress = z_convert:to_binary( m_req:get(peer, Context) ),
             {DeviceId, Context1} = case z_auth:is_auth(Context) of
                 true ->
                     {undefined, Context};
