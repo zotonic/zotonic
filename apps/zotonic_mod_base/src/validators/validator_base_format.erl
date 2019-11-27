@@ -92,6 +92,8 @@ trans_options([_|T], Acc) ->
     trans_options(T, Acc).
 
 %% @doc Make a javascript regular expression pcre compatible.
+javascript_to_pcre_pattern(undefined) ->
+    "";
 javascript_to_pcre_pattern(Pattern) ->
     %% convert \uXXXX to \x{XXXX}
     R1 = re:replace(Pattern, "([\\\\]{1}[u]{1}[0-9a-fA-F]{4,6})", "@@--@@&}", [global]),
