@@ -827,15 +827,6 @@ do_cleanup_crash_state(#state{ sites = Sites } = State) ->
 
 % ----------------------------------------------------------------------------
 
-%% @doc Get the file path of the config file for a site.
--spec get_site_config_file( atom() ) -> file:filename_all() | {error, bad_name}.
-get_site_config_file(Site) ->
-    case z_path:site_dir(Site) of
-        {error, _} = Error -> Error;
-        SiteDir -> filename:join([SiteDir, "priv", ?CONFIG_FILE])
-    end.
-
-
 %% @doc Rescan all sites, add new sites to the sites map
 rescan_sites(#state{ sites = Sites } = State) ->
     ScannedSites = do_scan_sites(),
@@ -899,9 +890,9 @@ new_site_status(Site, stopped, Cfg) ->
     }.
 
 %% @doc Scan all sites subdirectories for the site configurations.
--spec do_scan_sites() -> #{ Site::atom() => Config::list() }.
+-spec do_scan_sites() -> #{ Site::atom() => proplists:proplist() }.
 do_scan_sites() ->
-    List = do_scan_sites(is_testsandbox_node()),
+    List = do_scan_sites( is_testsandbox_node() ),
     lists:foldl(
         fun(Cfg, Acc) ->
             {site, Site} = proplists:lookup(site, Cfg),
@@ -911,28 +902,57 @@ do_scan_sites() ->
         List).
 
 do_scan_sites(true) ->
-    CfgFile = get_site_config_file(zotonic_site_testsandbox),
-    {ok, SiteConfig} = parse_config(CfgFile),
-    [ SiteConfig ];
+    lists:filter(
+        fun is_testsandbox_site/1,
+        scan_lib_dir( z_path:build_lib_dir() ));
 do_scan_sites(false) ->
     lists:filter(
-        fun(Cfg) ->
-            proplists:get_value(site, Cfg) =/= zotonic_site_testsandbox
+        fun(Cfg) -> not is_testsandbox_site(Cfg) end,
+        scan_lib_dir( z_path:build_lib_dir() )).
+
+is_testsandbox_site(Cfg) ->
+   proplists:get_value(site, Cfg) =:= zotonic_site_testsandbox.
+
+scan_lib_dir(Directory) ->
+    Apps = filelib:wildcard( filename:join(Directory, "*") ),
+    Apps1 = lists:filter(
+        fun(AppDir) ->
+            Basename = filename:basename(AppDir),
+            hd(Basename) =/= $.
+            andalso lists:last(Basename) =/= $~
+            andalso lists:last(Basename) =/= $#
+            andalso filelib:is_dir(AppDir)
+            andalso filelib:is_dir( filename:join(AppDir, "priv") )
         end,
-        scan_directory(z_path:build_lib_dir())).
+        Apps),
+    lists:filtermap( fun scan_app_dir/1, Apps1 ).
 
-scan_directory(Directory) ->
-    Configs = z_utils:wildcard(filename:join([Directory, "*", "priv", ?CONFIG_FILE])),
-    ConfigFiles = lists:filter(fun filelib:is_regular/1, Configs),
-    ParsedConfigs = [ parse_config(CfgFile) || CfgFile <- ConfigFiles ],
-    [ SiteConfig || {ok, SiteConfig} <- ParsedConfigs ].
+scan_app_dir(AppDir) ->
+    App = z_convert:to_atom( filename:basename(AppDir) ),
+    case z_sites_config:config_files(App) of
+        [] -> false;
+        Fs ->
+            case z_sites_config:read_configs(Fs) of
+                {ok, Map} ->
+                    ensure_code_path(AppDir),
+                    _ = application:load(App),
+                    Map1 = Map#{ site => App },
+                    {true, to_list(Map1)};
+                {error, _} ->
+                    false
+            end
+    end.
 
-parse_config(CfgFile) ->
-    SitePath = filename:dirname(filename:dirname(CfgFile)),
-    ensure_code_path(SitePath),
-    Site = z_convert:to_atom(filename:basename(SitePath)),
-    ConfigFiles = [ CfgFile | config_d_files(SitePath) ],
-    parse_config(ConfigFiles, [{site, Site}]).
+to_list(Map) ->
+    L = maps:to_list(Map),
+    lists:map(
+        fun
+            ({K, M}) when is_map(M) ->
+                {K, maps:to_list(M)};
+            (KV) ->
+                KV
+        end,
+        L).
 
 ensure_code_path(SitePath) ->
     Ebin = filename:join(SitePath, "ebin"),
@@ -940,34 +960,6 @@ ensure_code_path(SitePath) ->
         false -> code:add_pathz(Ebin);
         true -> ok
     end.
-
-%% @doc Parse configurations from multiple files, merging results. The last file wins.
-parse_config([], SiteConfig) ->
-    {ok, SiteConfig};
-parse_config([C|T], SiteConfig) ->
-    case file:consult(C) of
-        {ok, [NewSiteConfig|_]} when is_list(NewSiteConfig) ->
-            SortedNewConfig = lists:ukeysort(1, NewSiteConfig),
-            MergedConfig = lists:ukeymerge(1, SortedNewConfig, SiteConfig),
-            parse_config(T, MergedConfig);
-        {ok, [NotAList|_]} ->
-            lager:error("Expected a list in the site config ~s but got ~p",
-                        [C, NotAList]),
-            parse_config(T, SiteConfig);
-        {error, Reason} = Error ->
-            lager:error("Could not consult site config: ~s: ~s",
-                        [C, unicode:characters_to_binary(file:format_error(Reason))]),
-            Error
-    end.
-
-%% @doc Get site config.d contents in alphabetical order.
-%% Filter out files starting with '.' or ending with '~'.
-config_d_files(SitePath) ->
-    Path = filename:join([SitePath, "priv", "config.d", "*"]),
-    lists:sort([ F || F <- z_utils:wildcard(Path),
-                      filelib:is_regular(F),
-                      hd(filename:basename(F)) =/= $.,
-                      lists:last(filename:basename(F)) =/= $~ ]).
 
 do_get_sites_hosts(Sites) ->
     FallbackSite = do_get_fallback_site(Sites),

@@ -24,16 +24,16 @@
 
 -include("../../include/zotonic_command.hrl").
 
-run(_) ->
+run(Args) ->
     {ok, BaseCmd} = zotonic_command:base_cmd_test(),
     Cmd = BaseCmd
         ++ " -sasl errlog_type error -s zotonic "
         ++ "-eval 'zotonic:await_startup(),init:stop(case eunit:test(["
-            ++ tests()
+            ++ tests(Args)
             ++ "],[]) of error -> 1; ok -> 0 end)'",
     io:format("~s", [ Cmd ]).
 
-tests() ->
+tests(Args) ->
     ZotonicDir = zotonic_command:get_zotonic_dir(),
     Beams = filelib:wildcard( filename:join([ ZotonicDir, "_build", "default", "lib", "zotonic_*", "test", "*.beam" ])),
     Bs = lists:map(
@@ -41,7 +41,14 @@ tests() ->
             filename:rootname( filename:basename(B) )
         end,
         Beams),
-    concat(Bs, "").
+    concat( filter_tests(Bs, Args), "").
+
+filter_tests(Bs, []) ->
+    Bs;
+filter_tests(Bs, Args) ->
+    lists:filter(
+        fun(B) -> lists:member(B, Args) end,
+        Bs).
 
 concat([], Acc) ->
     Acc;

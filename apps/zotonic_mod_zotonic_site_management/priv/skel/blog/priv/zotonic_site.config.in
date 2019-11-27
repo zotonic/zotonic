@@ -1,0 +1,103 @@
+%% Zotonic site configuration for %%SITE%%.
+[
+    %% This site is enabled or not.
+    {enabled, true},
+
+    %% Hostname on which this site runs
+    {hostname, "%%SITEHOSTNAME%%"},
+
+    %% Aliases which should redirect to the primary hostname
+    %%{hostalias, ["www.example.com", "example.com"]},
+
+    %% PostgreSQL database connection
+    {dbhost, "%%DBHOST%%"},
+    {dbport, %%DBPORT%%},
+    {dbuser, "%%DBUSER%%"},
+    {dbpassword, "%%DBPASSWORD%%"},
+    {dbdatabase, "%%DBDATABASE%%"},
+    {dbschema, "%%DBSCHEMA%%"},
+
+    %% Depcache settings, maximum size in mbs
+    {depcache_memory_max, 100},
+
+    %% Password for the 'admin' user.
+    {admin_password, "%%ADMINPASSWORD%%"},
+
+    %% What skeleton site this site is based on; for installing the initial data.
+    {skeleton, %%SKEL%%},
+
+    %% Keys used to request
+    {sign_key, "%%SIGNKEY%%"},
+    {sign_key_simple, "%%SIGNKEYSIMPLE%%"},
+
+    %% Uncomment to override skeleton defaults
+    %%{install_menu, []},
+    %%{install_modules, []},
+
+    %% Specific options
+
+    %% Title of your site
+    %%{title, <<"Your first blog">>},
+    %% Subtitle
+    %%{subtitle, <<"built with Zotonic, the Erlang CMS.">>},
+
+    %% Page length
+    {pagelen, 20},
+
+    % The default menu, inserted by mod_menu.
+    % The names refer to pages in the datamodel in the site .erl module.
+    {default_menu, [
+        {page_home, []},
+        {page_about, []},
+        {page_contact, []}
+    ]},
+
+    % Modules installed on site (re)start
+    {install_modules, [
+        mod_base,
+        mod_bootstrap,
+        mod_menu,
+        mod_oauth,
+        mod_search,
+        mod_oembed,
+        mod_logging,
+
+        mod_wires,
+        mod_mqtt,
+
+        mod_translation,
+        mod_l10n,
+
+        mod_authentication,
+        mod_content_groups,
+        mod_acl_user_groups,
+
+        mod_editor_tinymce,
+
+        mod_admin,
+        mod_admin_category,
+        mod_admin_config,
+        mod_admin_identity,
+        mod_admin_modules,
+        mod_admin_predicate,
+        mod_admin_merge,
+
+        mod_seo,
+        mod_seo_sitemap,
+
+        mod_email_status,
+
+        mod_media_exif,
+        mod_video_embed,
+        mod_video,
+        mod_oembed,
+
+        mod_development,
+
+        mod_base_site,
+        mod_facebook,
+        mod_twitter,
+        mod_instagram,
+        mod_comment
+    ]}
+].

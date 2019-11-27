@@ -22,11 +22,17 @@
     filehandler_mappers_observer/3,
 
     app_file_check/1,
-    reindex_modules/0,
-    reload_translations/0,
-    reload_dispatch/0,
-    mark_modified/1
 
+    reindex_modules/0,
+    reindex_modules_task/0,
+
+    reload_translations/0,
+    reload_translations_task/0,
+
+    reload_dispatch/0,
+    reload_dispatch_task/0,
+
+    mark_modified/1
 ]).
 
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
@@ -135,7 +141,13 @@ app_file_check(Filename) ->
 %% @doc A Zotonic template changed
 %% @todo This should be handled by a module indexer, which can make a small reindex of
 %%       the affected application templates.
+-spec reindex_modules() -> ok.
 reindex_modules() ->
+    {ok, _} = buffalo:queue({?MODULE, reindex_modules_task, []}, #{ timeout => 100, deadline => 5000 }),
+    ok.
+
+-spec reindex_modules_task() -> ok.
+reindex_modules_task() ->
     zotonic_filehandler:terminal_notifier("Index modules."),
     lists:foreach(
         fun(Ctx) ->
@@ -145,7 +157,13 @@ reindex_modules() ->
 
 %% @doc Reload translations
 %% @todo This should be handled incrementally, passing the changed po file.
+-spec reload_translations() -> ok.
 reload_translations() ->
+    {ok, _} = buffalo:queue({?MODULE, reload_translations_task, []}, #{ timeout => 100, deadline => 5000 }),
+    ok.
+
+-spec reload_translations_task() -> ok.
+reload_translations_task() ->
     zotonic_filehandler:terminal_notifier("Load translations."),
     lists:foreach(
         fun(Ctx) ->
@@ -153,8 +171,15 @@ reload_translations() ->
         end,
         z_sites_manager:get_site_contexts()).
 
+
 %% @doc Reload all dispatch rules
+-spec reload_dispatch() -> ok.
 reload_dispatch() ->
+    {ok, _} = buffalo:queue({?MODULE, reload_dispatch_task, []}, #{ timeout => 100, deadline => 1000 }),
+    ok.
+
+-spec reload_dispatch_task() -> ok.
+reload_dispatch_task() ->
     zotonic_filehandler:terminal_notifier("Load dispatch rules."),
     lists:foreach(
         fun(Ctx) ->

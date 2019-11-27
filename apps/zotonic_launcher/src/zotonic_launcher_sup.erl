@@ -65,16 +65,6 @@ init([]) ->
             {zotonic_core_sup, start_link, [ZotonicConfig]},
             permanent, 5000, supervisor, dynamic},
 
-        %% File handler, handles filechange notifications sent by filewatcher
-        {zotonic_filehandler_sup,
-            {zotonic_filehandler_sup, start_link, []},
-            permanent, 5000, supervisor, dynamic},
-
-        %% File watcher, keep track of changed files for modules, templates etc.
-        {zotonic_filewatcher_sup,
-            {zotonic_filewatcher_sup, start_link, []},
-            permanent, 10100, supervisor, dynamic},
-
         %% HTTP listener
         {zotonic_listen_http,
             {zotonic_listen_http, start_link, []},

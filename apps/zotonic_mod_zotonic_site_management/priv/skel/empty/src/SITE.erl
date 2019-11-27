@@ -1,7 +1,7 @@
 %% @author %%FULLNAME%%
 %% @copyright %%YEAR%% %%FULLNAME%%
 %% Generated on %%DATE%%
-%% @doc This site was based on the 'blog' skeleton.
+%% @doc This site was based on the 'empty' skeleton.
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,13 +19,21 @@
 -author("%%FULLNAME%%").
 
 -mod_title("%%SITE%% zotonic site").
--mod_description("A simple weblog, used as an example of how to create a Zotonic site.").
+-mod_description("An empty Zotonic site, to base your site on.").
 -mod_prio(10).
+-mod_schema(1).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-export([ manage_schema/2 ]).
 
 %%====================================================================
 %% support functions go here
 %%====================================================================
 
+manage_schema(_Version, _Context) ->
+    #datamodel{
+        resources = [],
+        media = [],
+        edges = []
+    }.

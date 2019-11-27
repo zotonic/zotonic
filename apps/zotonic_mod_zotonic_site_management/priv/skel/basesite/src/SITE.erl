@@ -1,7 +1,7 @@
 %% @author %%FULLNAME%%
 %% @copyright %%YEAR%% %%FULLNAME%%
 %% Generated on %%DATE%%
-%% @doc This site was based on the 'empty' skeleton.
+%% @doc This site was based on the 'basesite' skeleton.
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,6 +21,9 @@
 -mod_title("%%SITE%% zotonic site").
 -mod_description("An empty Zotonic site, to base your site on.").
 -mod_prio(10).
+-mod_schema(1).
+
+-export([ manage_schema/2 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -29,3 +32,14 @@
 %% support functions go here
 %%====================================================================
 
+% If you change the schema below, then also update the mod_schema version above.
+manage_schema(_Version, _Context) ->
+    #datamodel{
+        resources = [
+            {page_home, text, [
+                {title, <<"Home">>},
+                {summary, <<"Welcome to your new site!">>},
+                {page_path, <<"/">>}
+            ]}
+        ]
+    }.

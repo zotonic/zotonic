@@ -1,8 +1,9 @@
-%% @author %%FULLNAME%%
-%% @copyright %%YEAR%% %%FULLNAME%%
-%% Generated on %%DATE%%
-%% @doc This site was based on the 'basesite' skeleton.
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2019 Marc Worrell
+%% @doc Filehandler - handles changes on files, starts recompiles
 
+%% Copyright 2019 Marc Worrell
+%%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
@@ -15,17 +16,31 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(%%SITE%%).
--author("%%FULLNAME%%").
+-module(zotonic_filewatcher_app).
 
--mod_title("%%SITE%% zotonic site").
--mod_description("An empty Zotonic site, to base your site on.").
--mod_prio(10).
+-behaviour(application).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
+-export([
+    start/0,
+    start/2,
+    stop/1
+]).
 
 %%====================================================================
-%% support functions go here
+%% API
+%%====================================================================
+
+start() ->
+    application:ensure_all_started(zotonic_filewatcher).
+
+start(_StartType, _StartArgs) ->
+    zotonic_filewatcher_sup:start_link().
+
+%%--------------------------------------------------------------------
+stop(_State) ->
+    ok.
+
+%%====================================================================
+%% Internal functions
 %%====================================================================
 

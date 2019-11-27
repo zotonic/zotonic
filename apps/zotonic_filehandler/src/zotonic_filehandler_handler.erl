@@ -145,8 +145,7 @@ terminate(_Reason, _State) ->
 %% ------------------------------------- Internal functions -------------------------------------
 
 perform(Actions) ->
-    lists:map(
-        fun( {M, F, A} ) ->
-            erlang:apply(M, F, A)
-        end,
-        Actions).
+    lists:map( fun perform_action/1, Actions ).
+
+perform_action({M, F, A}) when is_atom(M), is_atom(F), is_list(A) ->
+    erlang:apply(M, F, A).

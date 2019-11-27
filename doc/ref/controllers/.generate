@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # /path/to/zotonic/modules/<mod>/controllers/controller_controller_name.erl
-for f in `find $MODULES -name controller_\*.erl`
+for f in `find $MODULES -name controller_\*.erl | grep -v '/skel/' `
 do
     read -r mod controller <<EOF
 `echo $f | sed -e 's,.*/\zotonic_\(mod_[^/]*\).*/controller_\(.*\).erl,\1 \2,'`

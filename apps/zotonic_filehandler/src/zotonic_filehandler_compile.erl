@@ -20,11 +20,19 @@
 
 -export([
     start/0,
+
     all/0,
+    all_task/0,
+    all_sync/0,
+
     recompile/1,
+    recompile_task/1,
     compile_options/1,
+
     run_cmd/1,
     run_cmd/2,
+    run_cmd_task/2,
+
     ld/0,
     ld/1,
     code_path_check/1
@@ -37,8 +45,8 @@
 start() ->
     Node = get_node_argument(),
     Result = case net_adm:ping(Node) of
-                 pang -> all();
-                 pong ->rpc:call(Node, zotonic_compile, all, [], infinity)
+                 pang -> all_task();
+                 pong -> rpc:call(Node, ?MODULE, all_task, [], infinity)
              end,
     halt_with_result(Result).
 
@@ -119,6 +127,13 @@ maybe_add_path(AppDir, Paths) ->
 %% @doc Compile all files
 -spec all() -> ok.
 all() ->
+    {ok, _} = buffalo:queue({?MODULE, all_task, []}, #{ timeout => 200, deadline => 10000 }),
+    ok.
+
+all_task() ->
+    jobs:run(zotonic_filehandler_single_job, fun() -> all_sync() end).
+
+all_sync() ->
     Cmd = case os:getenv("ZOTONIC") of
         false ->
             "./rebar3 compile";
@@ -128,8 +143,10 @@ all() ->
                 "; ./rebar3 compile"
             ])
     end,
-    zotonic_filehandler:terminal_notifier("Compile all"),
-    run_cmd(Cmd).
+    zotonic_filehandler:terminal_notifier("Compile all: start"),
+    Result = run_cmd_task(Cmd, []),
+    zotonic_filehandler:terminal_notifier("Compile all: ready"),
+    Result.
 
 run_cmd(Cmd) ->
     run_cmd(Cmd, []).
@@ -137,6 +154,9 @@ run_cmd(Cmd) ->
 run_cmd(Cmd, Opts) when is_binary(Cmd) ->
     run_cmd(unicode:characters_to_list(Cmd, utf8), Opts);
 run_cmd(Cmd, Opts) ->
+    buffalo:queue({?MODULE, run_cmd_task, [ Cmd, Opts ]}, #{ timeout => 150, deadline => 2000 }).
+
+run_cmd_task(Cmd, Opts) ->
     case exec:run(lists:flatten(Cmd), [ sync, stdout, stderr ] ++ Opts) of
         {ok, Out} ->
             StdErr = proplists:get_value(stderr, Out, []),
@@ -165,10 +185,14 @@ run_cmd(Cmd, Opts) ->
 %%       This forces a recompile of all these files. We might not want to
 %%       automatically recompile these files during a rebar3 run. Of course
 %%       problem is to known if rebar3 is running...
--spec recompile(file:filename_all()) -> ok | {error, term()}.
+-spec recompile(file:filename_all()) -> ok.
 recompile(File) when is_binary(File) ->
     recompile(unicode:characters_to_list(File, utf8));
 recompile(File) ->
+    {ok, _} = buffalo:queue({?MODULE, recompile_task, [ File ]}, #{ timeout => 150, deadline => 2000 }),
+    ok.
+
+recompile_task(File) ->
     case compile_options(File) of
         {ok, Options} ->
             lager:debug("Recompiling '~s' using make", [File]),
@@ -178,10 +202,10 @@ recompile(File) ->
                 Other -> {error, Other}
             end;
         false ->
-            % Might be some new OTP app, recompile with rebar3
-            % Output can be anything ... no error checking for now :(
-            lager:debug("Recompile all files due to '~s'", [File]),
-            all()
+            % Might be some new OTP app, so a build on the top level
+            % should take care of this, we don't do anything now.
+            lager:info("Could not find compile options, no recompile for '~s'", [File]),
+            {error, skip}
     end.
 
 -spec compile_options(file:filename_all()) -> {ok, list()} | false.

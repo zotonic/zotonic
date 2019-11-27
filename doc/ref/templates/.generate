@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for f in `find $MODULES -name [^_]\*.tpl`
+for f in `find $MODULES -name [^_]\*.tpl | grep -v "/skel/"`
 do
     read -r mod templatepath <<EOF
 `echo $f | sed -e 's/^.*\/\zotonic_\(mod_[^\/]*\)\/priv\/templates\/\(.*\)\.tpl$/\1 \2/'`

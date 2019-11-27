@@ -30,97 +30,29 @@
     erlang_config_files/1
 ]).
 
--include_lib("zotonic_core/include/zotonic_release.hrl").
--include_lib("yamerl/include/yamerl_errors.hrl").
-
-
+%% @doc Return the zotonic configuration directory for the current node.
+%%      Optionally initialize the config files if they are not found.
 -spec config_dir() -> {ok, file:filename_all()} | {error, enoent}.
 config_dir() ->
     config_dir(node()).
 
+%% @doc Return the zotonic configuration directory for the given node.
+%%      Optionally initialize the config files if they are not found.
+-spec config_dir( node() ) -> {ok, file:filename_all()} | {error, enoent}.
 config_dir(Node) when is_atom(Node) ->
-    case os:getenv("ZOTONIC_CONFIG_DIR") of
-        false -> config_dir_init(Node);
-        "" -> config_dir_init(Node);
-        Dir ->
-            case filelib:is_dir(Dir) of
-                true -> {ok, Dir};
-                false -> {error, enoent}
-            end
-    end.
+    maybe_initialize( z_config_files:config_dir(Node) ).
 
-config_dir_init(Node) ->
-    case proplists:get_value(zotonic_config_dir, init:get_arguments()) of
-        undefined ->
-            config_dir_fs(Node);
-        [] ->
-            config_dir_fs(Node);
-        [ Dir ] ->
-            case filelib:is_dir(Dir) of
-                true -> {ok, Dir};
-                false -> {error, enoent}
-            end
-    end.
+maybe_initialize({ok, "/etc/" ++ _} = Ok) ->
+    Ok;
+maybe_initialize({ok, Dir}) ->
+    maybe_initialize_configs(Dir),
+    {ok, Dir};
+maybe_initialize({error, _} = Error) ->
+    Error.
 
-config_dir_fs(Node) ->
-    Home = os:getenv("HOME"),
-    {MajorVersion, MinorVersion} = split_version(?ZOTONIC_VERSION),
-    HomeLocs = case Home of
-        false -> [];
-        "" -> [];
-        _ ->
-            [
-                filename:join([Home, ".zotonic", atom_to_list(Node)]),
-                filename:join([Home, ".zotonic", base_nodename(Node)]),
-                filename:join([Home, ".zotonic", ?ZOTONIC_VERSION]),
-                filename:join([Home, ".zotonic", MinorVersion]),
-                filename:join([Home, ".zotonic", MajorVersion]),
-                filename:join([Home, ".zotonic"])
-            ]
-    end,
-    EtcLocs = [
-        filename:join(["/etc/zotonic", atom_to_list(Node)]),
-        filename:join(["/etc/zotonic", base_nodename(Node)]),
-        filename:join(["/etc/zotonic", ?ZOTONIC_VERSION]),
-        filename:join(["/etc/zotonic", MinorVersion]),
-        filename:join(["/etc/zotonic", MajorVersion]),
-        filename:join(["/etc/zotonic"])
-    ],
-    Locations = HomeLocs ++ EtcLocs,
-    Found = lists:dropwhile(
-        fun(D) -> files(D, "zotonic*") =:= [] end,
-        Locations),
-    case Found of
-        [] when is_list(Home), Home =/= "" ->
-            Dir = filename:join([Home, ".zotonic", MajorVersion]),
-            ZotonicDir = filename:join([Home, ".zotonic"]),
-            case file:make_dir(ZotonicDir) of
-                ok -> file:change_mode(ZotonicDir, 8#00700);
-                {error, _} -> ok
-            end,
-            case file:make_dir(Dir) of
-                ok -> file:change_mode(Dir, 8#00700);
-                {error, _} -> ok
-            end,
-            case filelib:is_dir(Dir) of
-                true ->
-                    maybe_initialize_configs(Dir),
-                    {ok, Dir};
-                false ->
-                    {error, enoent}
-            end;
-        [] ->
-            {error, enoent};
-        [ "/etc/" ++ _ = Dir | _ ] ->
-            {ok, Dir};
-        [ Dir | _ ] ->
-            maybe_initialize_configs(Dir),
-            {ok, Dir}
-    end.
-
-base_nodename(Node) ->
-    lists:takewhile(fun(C) -> C =/= $@ end, atom_to_list(Node)).
-
+%% @doc Ensure that there are configuration files in the zotonic config
+%%      directory. They are not created if the config directory is in the
+%%      "/etc/" directoy.
 -spec maybe_initialize_configs( file:filename_all() ) -> ok.
 maybe_initialize_configs(Dir) ->
     SourceDir = case code:priv_dir(zotonic_launcher) of
@@ -166,62 +98,56 @@ replace_placeholders(Data) ->
     binary:replace(Data, <<"%%GENERATED%%">>, z_ids:id(16), [ global ]).
 
 
-%% Zotonic config files are "zotonic.*" files in the root of the
-%% config directory and all files the 'config.d' subdirectory.
+%% @doc List all zotonic config files in the zotonic config directory
+%%      and the "config.d" subdirectory.
+%%      Zotonic config files are "zotonic.*" files in the root of the
+%%      config directory and all files the 'config.d' subdirectory.
 -spec zotonic_config_files( node() ) -> list( file:filename() ).
 zotonic_config_files(Node) ->
     case config_dir(Node) of
         {ok, Dir} ->
-            Files = lists:filter(fun(F) -> not is_erlang_config(F) end, files(Dir)),
-            SubFiles= files( filename:join([ Dir, "config.d" ]) ),
+            Files = lists:filter(fun(F) -> not is_erlang_config(F) end, z_config_files:files(Dir)),
+            SubFiles= z_config_files:files( filename:join([ Dir, "config.d" ]) ),
             Files ++ SubFiles;
         {error, _} ->
             []
     end.
 
-%% Erlang config files must be in the root of the config directory.
-%% They must also have the extension ".config" and not be called "zotonic.config"
+%% @doc List all erlang init files in the zotonic configuration directory.
+%%      Erlang config files must be in the root of the config directory.
+%%      They must also have the extension ".config" and not be called "zotonic.config"
 -spec erlang_config_files( node() ) -> list( file:filename() ).
 erlang_config_files(Node) ->
     case config_dir(Node) of
         {ok, Dir} ->
-            Files = files(Dir),
+            Files = z_config_files:files(Dir),
             lists:filter(fun(F) -> is_erlang_config(F) end, Files);
         {error, _} ->
             []
     end.
 
+%% @doc Return all files found in the main zotonic config dir and its
+%%      config.d subdirectory.
+-spec config_files( node() ) -> list( file:filename() ).
 config_files(Node) ->
     case config_dir(Node) of
         {ok, Dir} ->
-            Files = files(Dir),
-            SubFiles= files( filename:join([ Dir, "config.d" ]) ),
+            Files = z_config_files:files(Dir),
+            SubFiles= z_config_files:files( filename:join([ Dir, "config.d" ]) ),
             Files ++ SubFiles;
         {error, _} ->
             []
     end.
 
-files(Dir) ->
-    files(Dir, "*").
-
-files(Dir, Wildcard) ->
-    Files = filelib:wildcard( filename:join(Dir, Wildcard) ),
-    lists:filter(
-        fun(F) ->
-            case filename:basename(F) of
-                "." ++ _ -> false;
-                _ -> not filelib:is_dir(F)
-            end
-        end,
-        Files).
-
 is_erlang_config(F) ->
     case filename:basename(F) of
         "zotonic" -> false;
         "zotonic." ++ _ -> false;
-        _ -> filename:extension(F) == ".config"
+        _ -> filename:extension(F) =:= ".config"
     end.
 
+%% @doc Load all the configuration of a map into the application env.
+%%      Ensure that the app is loaded before adding to the application env.
 -spec load_configs( map() ) -> ok.
 load_configs( Cfgs ) when is_map(Cfgs) ->
     maps:fold(
@@ -237,6 +163,8 @@ load_configs( Cfgs ) when is_map(Cfgs) ->
         ok,
         Cfgs).
 
+%% @doc Read all configuration files, the last application configuration replaces configurations
+%%      in earlier configuration files.
 -spec read_configs( [ file:filename_all() ] ) -> {ok, #{ atom() => map() }} | {error, term()}.
 read_configs(Fs) when is_list(Fs) ->
     lists:foldl(
@@ -244,7 +172,7 @@ read_configs(Fs) when is_list(Fs) ->
             (_, {error, _} = Error) ->
                 Error;
             (F, {ok, Acc}) ->
-                case consult_config(F) of
+                case z_config_files:consult(F) of
                     {ok, Data} ->
                         apps_config(F, Data, Acc);
                     {error, _} = Error ->
@@ -254,26 +182,27 @@ read_configs(Fs) when is_list(Fs) ->
         {ok, #{}},
         Fs).
 
+%% @doc Overlay the data read from a config file over the previously read configs.
 apps_config(File, Data, Cfgs) when is_list(Data) ->
     lists:foldl(
         fun
             (AppConfig, Acc) when is_map(AppConfig) ->
+                % Map:  #{ App => AppConfig }
                 maps:fold(
                     fun
                         (App, Cfg, {ok, MAcc}) ->
-                            AppAtom = z_convert:to_atom(App),
-                            app_config(File, AppAtom, Cfg, MAcc);
+                            app_config(App, Cfg, MAcc);
                         (_App, _Cfg, {error, _} = Error) ->
                             Error
                     end,
                     {ok, Acc},
                     AppConfig);
             (AppConfig, Acc) when is_list(AppConfig) ->
+                % Proplist:  [ {App, AppConfig}, ... ]
                 lists:foldl(
                     fun
                         ({App, Cfg}, {ok, MAcc}) ->
-                            AppAtom = z_convert:to_atom(App),
-                            app_config(File, AppAtom, Cfg, MAcc);
+                            app_config(App, Cfg, MAcc);
                         (Other, {ok, _}) ->
                             {error, {config_file, format, File, {unknown_term, Other}}};
                         (_, {error, _} = Error) ->
@@ -283,104 +212,24 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                     AppConfig)
         end,
         Cfgs,
-        Data);
-apps_config(File, _Data, _Cfgs) ->
-    error_logger:error_msg("Config file '~s' does not contain a list of configurations.",
-                           [File]),
-    {error, {config_file, missing_list_map, File, undefined}}.
-
-app_config(_File, App, Data, Acc) when is_map(Data), is_atom(App) ->
-    _ = application:load(App),
-    AppCfg = maps:get(App, Acc, #{}),
-    AppCfgNew = maps:fold(
-        fun
-            (K, Vs, AppAcc) ->
-                K1 = z_convert:to_atom(K),
-                AppAcc#{ K1 => Vs }
-        end,
-        AppCfg,
-        Data),
-    {ok, Acc#{ App => AppCfgNew }};
-app_config(File, App, Data, Acc) when is_list(Data), is_atom(App) ->
-    Map = to_map(Data),
-    app_config(File, App, Map, Acc).
-
-consult_config(File) ->
-    case filename:extension(File) of
-        ".config" ->
-            consult_erlang(File);
-        ".erlang" ->
-            consult_erlang(File);
-        ".yml" ->
-            consult_yaml(File);
-        ".yaml" ->
-            consult_yaml(File);
-        ".json" ->
-            consult_json(File);
-        _Other ->
-            {error, {config_file, unknown_format, File, undefined}}
-    end.
-
-consult_erlang(File) ->
-    case file:consult(File) of
-        {ok, L} when is_list(L); is_map(L) ->
-            {ok, L};
-        {error, Reason} when is_atom(Reason) ->
-            {error, {config_file, Reason, File, undefined}};
-        {error, Reason} ->
-            {error, {config_file, consult_error, File, Reason}}
-    end.
-
-consult_yaml(File) ->
-    try
-        io:format("~p~n~n", [File]),
-        Data = yamerl_constr:file(File, [ str_node_as_binary, {map_node_format, map} ]),
-        {ok, Data}
-    catch
-        throw:#yamerl_exception{} = E ->
-            {error, {config_file, yaml_format, File, E}}
-    end.
-
-consult_json(File) ->
-    case file:read_file(File) of
-        {ok, Data} ->
-            try
-                case jsxrecord:decode(Data) of
-                    {ok, Map} when is_map(Map) ->
-                        {ok, [ Map ]};
-                    {ok, [ Map | _ ] = List} when is_map(Map) ->
-                        {ok, List};
-                    {ok, _} ->
-                        {error, {config_file, no_list_or_map, File, undefined}};
-                    {error, _} = Error ->
-                        Error
-                end
-            catch
-                _:Reason ->
-                    {error, {config_file, json_format, File, Reason}}
-            end;
-        {error, Reason} ->
-            {error, {config_file, Reason, File, undefined}}
-    end.
-
-to_map(Data) when is_list(Data) ->
-    to_map(Data, #{}).
-
-to_map(Data, Map) ->
-    lists:foldl(
-        fun
-            (L, Acc) when is_list(L) ->
-                to_map(L, Acc);
-            ({K, V}, Acc) ->
-                K1 = z_convert:to_atom(K),
-                Acc#{ K1 => V };
-            (K, Acc) ->
-                K1 = z_convert:to_atom(K),
-                Acc#{ K1 => true }
-        end,
-        Map,
         Data).
 
-split_version(Version) ->
-    {match, [Minor, Major]} = re:run(Version, "(([0-9]+)\\.[0-9]+)", [{capture, all_but_first, list}]),
-    {Major, Minor}.
+%% @doc Accumulate/overlay the found application configuration. Ensure that the app
+%%      configuration is a map.
+app_config(App, Data, Acc) when is_map(Data), is_atom(App) ->
+    {ok, Acc#{ App => Data }};
+app_config(App, Data, Acc) when is_list(Data), is_atom(App) ->
+    Map = list_to_map(Data),
+    {ok, Acc#{ App => Map }}.
+
+% Flatten a nested list of proplists to a map.
+list_to_map(Data) ->
+    lists:foldl(
+        fun
+            ({K, V}, Acc) ->
+                Acc#{ K => V };
+            (K, Acc) ->
+                Acc#{ K => true }
+        end,
+        #{},
+        Data).

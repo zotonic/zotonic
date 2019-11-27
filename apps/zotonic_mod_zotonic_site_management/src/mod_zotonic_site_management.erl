@@ -107,10 +107,15 @@ notice(Form, Sitename, Text, Context) ->
     z_render:wire(Actions, Context).
 
 progress(Sitename, Text, Context) ->
-    z_notifier:notify(
-        #page_actions{
-            actions = notice_actions(Sitename, Text)
-        }, Context).
+    case erlang:get(is_zotonic_command) of
+        true ->
+            io:format("~s~n", [ Text ]);
+        _ ->
+            z_notifier:notify(
+                #page_actions{
+                    actions = notice_actions(Sitename, Text)
+                }, Context)
+    end.
 
 notice_actions(Sitename, Text) ->
     [

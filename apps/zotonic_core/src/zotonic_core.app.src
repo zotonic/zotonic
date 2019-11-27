@@ -19,6 +19,7 @@
                   letsencrypt,
                   keyserver,
                   jsxrecord,
+                  yamerl,
                   mqtt_sessions,
                   zotonic_notifier
   ]}
