@@ -141,9 +141,12 @@ app_file_check(Filename) ->
 %% @doc A Zotonic template changed
 %% @todo This should be handled by a module indexer, which can make a small reindex of
 %%       the affected application templates.
+-spec reindex_modules() -> ok.
 reindex_modules() ->
-    buffalo:queue({?MODULE, reindex_modules_task, []}, #{ timeout => 100, deadline => 5000 }).
+    {ok, _} = buffalo:queue({?MODULE, reindex_modules_task, []}, #{ timeout => 100, deadline => 5000 }),
+    ok.
 
+-spec reindex_modules_task() -> ok.
 reindex_modules_task() ->
     zotonic_filehandler:terminal_notifier("Index modules."),
     lists:foreach(
@@ -154,9 +157,12 @@ reindex_modules_task() ->
 
 %% @doc Reload translations
 %% @todo This should be handled incrementally, passing the changed po file.
+-spec reload_translations() -> ok.
 reload_translations() ->
-    buffalo:queue({?MODULE, reload_translations_task, []}, #{ timeout => 100, deadline => 5000 }).
+    {ok, _} = buffalo:queue({?MODULE, reload_translations_task, []}, #{ timeout => 100, deadline => 5000 }),
+    ok.
 
+-spec reload_translations_task() -> ok.
 reload_translations_task() ->
     zotonic_filehandler:terminal_notifier("Load translations."),
     lists:foreach(
@@ -167,9 +173,12 @@ reload_translations_task() ->
 
 
 %% @doc Reload all dispatch rules
+-spec reload_dispatch() -> ok.
 reload_dispatch() ->
-    buffalo:queue({?MODULE, reload_dispatch_task, []}, #{ timeout => 100, deadline => 1000 }).
+    {ok, _} = buffalo:queue({?MODULE, reload_dispatch_task, []}, #{ timeout => 100, deadline => 1000 }),
+    ok.
 
+-spec reload_dispatch_task() -> ok.
 reload_dispatch_task() ->
     zotonic_filehandler:terminal_notifier("Load dispatch rules."),
     lists:foreach(

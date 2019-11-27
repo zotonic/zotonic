@@ -126,7 +126,8 @@ maybe_add_path(AppDir, Paths) ->
 %% @doc Compile all files
 -spec all() -> ok.
 all() ->
-    buffalo:queue({?MODULE, all_task, []}, #{ timeout => 200, deadline => 10000 }).
+    {ok, _} = buffalo:queue({?MODULE, all_task, []}, #{ timeout => 200, deadline => 10000 }),
+    ok.
 
 all_task() ->
     jobs:run(
@@ -184,11 +185,12 @@ run_cmd_task(Cmd, Opts) ->
 %%       This forces a recompile of all these files. We might not want to
 %%       automatically recompile these files during a rebar3 run. Of course
 %%       problem is to known if rebar3 is running...
--spec recompile(file:filename_all()) -> ok | {error, term()}.
+-spec recompile(file:filename_all()) -> ok.
 recompile(File) when is_binary(File) ->
     recompile(unicode:characters_to_list(File, utf8));
 recompile(File) ->
-    buffalo:queue({?MODULE, recompile_task, [ File ]}, #{ timeout => 150, deadline => 2000 }).
+    {ok, _} = buffalo:queue({?MODULE, recompile_task, [ File ]}, #{ timeout => 150, deadline => 2000 }),
+    ok.
 
 recompile_task(File) ->
     case compile_options(File) of

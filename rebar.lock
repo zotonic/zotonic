@@ -4,7 +4,7 @@
  {<<"bert">>,{pkg,<<"bert">>,<<"0.1.0">>},0},
  {<<"buffalo">>,
   {git,"https://github.com/zotonic/buffalo.git",
-       {ref,"8466adf31e6dba5274b4c367911c79d248e0d6e0"}},
+       {ref,"5b73fc85aa9c46c62602365839ea58cff04a599a"}},
   0},
  {<<"certifi">>,
   {git,"https://github.com/certifi/erlang-certifi.git",
