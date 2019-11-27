@@ -98,12 +98,16 @@ re_exclude() ->
 -spec is_file_blacklisted(binary()|string()) -> boolean().
 is_file_blacklisted(<<".", _/binary>>) ->
     true;
+is_file_blacklisted(<<>>) ->
+    true;
 is_file_blacklisted(F) when is_binary(F) ->
     case binary:last(F) of
         $# -> true;
         _ -> re:run(F, re_compiled()) =/= nomatch
     end;
 is_file_blacklisted("." ++ _) ->
+    true;
+is_file_blacklisted("") ->
     true;
 is_file_blacklisted(F) when is_list(F) ->
     case lists:last(F) of

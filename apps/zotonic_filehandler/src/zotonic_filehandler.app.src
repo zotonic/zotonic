@@ -4,11 +4,14 @@
   {vsn, "git"},
   {registered, []},
   {env, []},
+  {mod, {zotonic_filehandler_app, []}},
   {modules, []},
   {applications, [
     kernel, stdlib,
     erlexec,
     zotonic_notifier,
-    zotonic_filewatcher
+    zotonic_filewatcher,
+    jobs,
+    buffalo
   ]}
  ]}.

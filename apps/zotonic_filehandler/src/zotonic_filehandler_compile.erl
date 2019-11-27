@@ -25,6 +25,7 @@
     all_task/0,
 
     recompile/1,
+    recompile_task/1,
     compile_options/1,
 
     run_cmd/1,
@@ -128,17 +129,23 @@ all() ->
     buffalo:queue({?MODULE, all_task, []}, #{ timeout => 200, deadline => 10000 }).
 
 all_task() ->
-    Cmd = case os:getenv("ZOTONIC") of
-        false ->
-            "./rebar3 compile";
-        ZotonicDir ->
-            lists:flatten([
-                "cd ", z_utils:os_filename(ZotonicDir),
-                "; ./rebar3 compile"
-            ])
-    end,
-    zotonic_filehandler:terminal_notifier("Compile all"),
-    run_cmd(Cmd).
+    jobs:run(
+        zotonic_filehandler_single_job,
+        fun() ->
+            Cmd = case os:getenv("ZOTONIC") of
+                false ->
+                    "./rebar3 compile";
+                ZotonicDir ->
+                    lists:flatten([
+                        "cd ", z_utils:os_filename(ZotonicDir),
+                        "; ./rebar3 compile"
+                    ])
+            end,
+            zotonic_filehandler:terminal_notifier("Compile all: start"),
+            Result = run_cmd_task(Cmd, []),
+            zotonic_filehandler:terminal_notifier("Compile all: ready"),
+            Result
+        end).
 
 run_cmd(Cmd) ->
     run_cmd(Cmd, []).
@@ -181,6 +188,9 @@ run_cmd_task(Cmd, Opts) ->
 recompile(File) when is_binary(File) ->
     recompile(unicode:characters_to_list(File, utf8));
 recompile(File) ->
+    buffalo:queue({?MODULE, recompile_task, [ File ]}, #{ timeout => 150, deadline => 2000 }).
+
+recompile_task(File) ->
     case compile_options(File) of
         {ok, Options} ->
             lager:debug("Recompiling '~s' using make", [File]),
@@ -190,10 +200,10 @@ recompile(File) ->
                 Other -> {error, Other}
             end;
         false ->
-            % Might be some new OTP app, recompile with rebar3
-            % Output can be anything ... no error checking for now :(
-            lager:debug("Recompile all files due to '~s'", [File]),
-            all()
+            % Might be some new OTP app, so a build on the top level
+            % should take care of this, we don't do anything now.
+            lager:info("Could not find compile options, no recompile for '~s'", [File]),
+            {error, skip}
     end.
 
 -spec compile_options(file:filename_all()) -> {ok, list()} | false.

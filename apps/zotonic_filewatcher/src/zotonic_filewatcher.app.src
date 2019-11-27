@@ -4,6 +4,7 @@
   {vsn, "git"},
   {registered, []},
   {env, []},
+  {mod, {zotonic_filewatcher_app, []}},
   {modules, []},
   {applications, [
     kernel, stdlib, lager,
