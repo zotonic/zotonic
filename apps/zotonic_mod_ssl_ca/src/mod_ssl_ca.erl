@@ -64,7 +64,7 @@ ssl_options(Context) ->
     end.
 
 cert_files(Context) ->
-    SSLDir = filename:join([z_path:site_dir(Context), "priv", "ssl", "ca"]),
+    SSLDir = cert_dir(Context),
     Sitename = z_convert:to_list(z_context:site(Context)),
     Files = [
         {certfile, filename:join(SSLDir, Sitename++".crt")},
@@ -75,6 +75,16 @@ cert_files(Context) ->
     case filelib:is_file(CaCertFile) of
         false -> {ok, Files};
         true -> {ok, [{cacertfile, CaCertFile} | Files]}
+    end.
+
+cert_dir(Context) ->
+    PrivSSLDir = filename:join([z_path:site_dir(Context), "priv", "ssl", "ca"]),
+    case filelib:is_dir(PrivSSLDir) of
+        true ->
+            PrivSSLDir;
+        false ->
+            {ok, SecurityDir} = z_config_files:security_dir(),
+            filename:join([ SecurityDir, z_context:site(Context), "ca" ])
     end.
 
 check_keyfile(KeyFile, Context) ->

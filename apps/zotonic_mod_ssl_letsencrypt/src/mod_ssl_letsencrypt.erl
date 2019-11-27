@@ -451,7 +451,14 @@ cert_files(Context) ->
     end.
 
 cert_dir(Context) ->
-    filename:join([z_path:site_dir(Context), "priv", "ssl", "letsencrypt"]).
+    PrivSSLDir = filename:join([z_path:site_dir(Context), "priv", "ssl", "letsencrypt"]),
+    case filelib:is_dir(PrivSSLDir) of
+        true ->
+            PrivSSLDir;
+        false ->
+            {ok, SecurityDir} = z_config_files:security_dir(),
+            filename:join([ SecurityDir, z_context:site(Context), "letsencrypt" ])
+    end.
 
 cert_temp_dir(Context) ->
     filename:join([cert_dir(Context), "tmp"]).

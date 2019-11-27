@@ -154,7 +154,14 @@ get_ssl_options(Hostname, Context) ->
 %% @doc Fetch the paths of all self-signed certificates
 -spec get_self_signed_files(Site :: atom()) -> {ok, list(ssl:ssl_option())}.
 get_self_signed_files(Site) ->
-    SSLDir = filename:join([z_path:site_dir(Site), "priv", "ssl", "self-signed"]),
+    PrivSSLDir = filename:join([ z_path:site_dir(Site), "priv", "ssl", "self-signed" ]),
+    SSLDir = case filelib:is_dir(PrivSSLDir) of
+        true ->
+            PrivSSLDir;
+        false ->
+            {ok, SecurityDir} = z_config_files:security_dir(),
+            filename:join([ SecurityDir, Site, "self-signed" ])
+    end,
     Options = [
         {certfile, filename:join(SSLDir, "self-signed"++?BITS++".crt")},
         {keyfile, filename:join(SSLDir, "self-signed"++?BITS++".pem")}
@@ -286,7 +293,7 @@ filter_server_name(<<_, Rest/binary>>, Acc) ->
 %% @doc Return the dh key to be used. Needed for better forward secrecy with the DH key exchange
 -spec dh_options() -> [ssl:ssl_option()].
 dh_options() ->
-    [{dhfile, dhfile()}].
+    [ {dhfile, dhfile()} ].
 
 is_dhfile(Filename) ->
     case file:read_file(Filename) of
@@ -299,8 +306,11 @@ ensure_dhfile() ->
 
 dhfile() ->
     case z_config:get(ssl_dhfile) of
-        undefined -> filename:join([z_utils:lib_dir(priv), "ssl", "dh"++?DHBITS++".pem"]);
-        Filename -> Filename
+        undefined ->
+            {ok, SecurityDir} = z_config_files:security_dir(),
+            filename:join([ SecurityDir, "dh"++?DHBITS++".pem" ]);
+        Filename ->
+            Filename
     end.
 
 ensure_dhfile(Filename) ->
