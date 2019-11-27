@@ -105,7 +105,7 @@ addsite(Target, Sitename, Options0) ->
         {error, Reason} when is_list(Reason); is_binary(Reason) ->
             io:format(standard_error, "Error: ~s~n", [ Reason ]),
             halt(1);
-        {ok, {Site, SiteOpts}} = Result ->
+        {ok, {Site, SiteOpts}} ->
             io:format("Created site ~p:~n - url \"~s\"~n - admin password \"~s\"~n",
                       [ Site,
                         proplists:get_value(hostname, SiteOpts),
