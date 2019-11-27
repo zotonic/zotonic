@@ -497,6 +497,7 @@ ensure_key_file(Context) ->
         false ->
             lager:info("Generating RSA key for LetsEncrypt in ~p", [KeyFile]),
             ok = z_filelib:ensure_dir(KeyFile),
+            _ = file:change_mode(filename:basename(KeyFile), 8#00700),
             Escaped = z_utils:os_filename(KeyFile),
             Cmd = "openssl genrsa -out "
                     ++ Escaped
@@ -505,6 +506,7 @@ ensure_key_file(Context) ->
             Result = os:cmd(Cmd),
             case filelib:is_file(KeyFile) of
                 true ->
+                    _ = file:change_mode(KeyFile, 8#00600),
                     case check_keyfile(KeyFile, Context) of
                         ok ->
                             {ok, KeyFile};
@@ -528,7 +530,13 @@ download_cacert(Context) ->
                     SSLDir = cert_dir(Context),
                     Hostname = z_context:hostname(Context),
                     CaCertFile = filename:join(SSLDir, <<Hostname/binary, ".ca.crt">>),
-                    file:write_file(CaCertFile, Cert);
+                    case file:write_file(CaCertFile, Cert) of
+                        ok ->
+                            _ = file:change_mode(CaCertFile, 8#00600),
+                            ok;
+                        {error, _} = Error ->
+                            Error
+                    end;
                 CT ->
                     lager:error("Download of ~p returned a content-type ~p",
                                 [?CA_CERT_URL, CT]),

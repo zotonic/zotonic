@@ -59,12 +59,24 @@ find_security_dir(Type, Dir) ->
         false when Type =:= home ->
             case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
                 ok ->
+                    _ = file:change_mode(Dir, 8#00700),
                     {ok, Dir};
                 {error, _} = Error ->
                     Error
             end;
-        false ->
-            {error, enoent}
+        false when Type =:= system ->
+            case filelib:is_dir( filename:basename(Dir) ) of
+                true ->
+                    case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
+                        ok ->
+                            _ = file:change_mode(Dir, 8#00700),
+                            {ok, Dir};
+                        {error, _} = Error ->
+                            Error
+                    end;
+                false ->
+                    {error, enoent}
+            end
     end.
 
 

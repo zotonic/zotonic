@@ -319,6 +319,7 @@ ensure_dhfile(Filename) ->
             ok;
         false ->
             ok = z_filelib:ensure_dir(Filename),
+
             % Maybe use the -dsaparam, maybe we shouldn't https://www.openssl.org/news/secadv/20160128.txt
             % Though without this the generation will take a long time indeed...
             lager:info("Generating ~s bits DH key, this will take a long time (saving to ~p)",
