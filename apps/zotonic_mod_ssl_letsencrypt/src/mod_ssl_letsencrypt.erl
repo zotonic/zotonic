@@ -367,6 +367,8 @@ handle_letsencrypt_result({ok, LEFiles}, State) ->
     {keyfile, KeyFile} = proplists:lookup(keyfile, MyFiles),
     {ok, _} = file:copy(maps:get(cert, LEFiles), CertFile),
     {ok, _} = file:copy(maps:get(key, LEFiles), KeyFile),
+    _ = file:change_mode(CertFile, 8#00644),
+    _ = file:change_mode(KeyFile, 8#00600),
     _ = download_cacert(Context),
     State#state{
         request_status = ok
@@ -532,7 +534,7 @@ download_cacert(Context) ->
                     CaCertFile = filename:join(SSLDir, <<Hostname/binary, ".ca.crt">>),
                     case file:write_file(CaCertFile, Cert) of
                         ok ->
-                            _ = file:change_mode(CaCertFile, 8#00600),
+                            _ = file:change_mode(CaCertFile, 8#00644),
                             ok;
                         {error, _} = Error ->
                             Error
