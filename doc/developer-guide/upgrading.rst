@@ -247,6 +247,7 @@ SSL/https support has been completely refactored.
  * New modules :ref:`mod_ssl_ca` and :ref:`mod_ssl_letsencrypt`
  * Deleted module ``mod_ssl``
  * Port configuration has been changed, see :ref:`ref-port-ssl-configuration`
+ * If you have a ``priv/ssl`` directory in your site, rename it to ``priv/security`` 
 
 For an overview of https support, see :ref:`https-support`
 
