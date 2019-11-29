@@ -34,6 +34,18 @@ m_get([ ssl_certificates | Rest ], _Msg, Context) ->
         true -> {ok, {ssl_certificates(Context), Rest}};
         false -> {ok, {[], Rest}}
     end;
+m_get([ security_dir | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            case z_config_files:security_dir() of
+                {ok, SecDir} ->
+                    {ok, {SecDir, Rest}};
+                {error, _} ->
+                    {ok, {<<>>, Rest}}
+            end;
+        false ->
+            {ok, {<<>>, Rest}}
+    end;
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

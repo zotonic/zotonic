@@ -22,7 +22,7 @@
         </p>
 
         <p class="help-block">
-            <span class="z-icon z-icon-info-circle"></span> {_ Download as Event if the query returns events and you want export for a calendar program. _}
+            <span class="glyphicon glyphicon-info-sign"></span> {_ Download as Event if the query returns events and you want export for a calendar program. _}
         </p>
     {% elseif id.is_a.collection %}
         <p>{_ Download all the pages in the collection _}</p>
