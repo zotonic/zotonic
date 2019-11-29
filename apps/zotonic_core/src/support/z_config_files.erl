@@ -31,7 +31,7 @@
 -include_lib("yamerl/include/yamerl_errors.hrl").
 
 
-%% @doc Find the configuration directory for certificates
+%% @doc Find the default configuration directory for certificates
 -spec security_dir() -> {ok, file:filename_all()} | {error, term()}.
 security_dir() ->
     case z_config:get(security_dir) of

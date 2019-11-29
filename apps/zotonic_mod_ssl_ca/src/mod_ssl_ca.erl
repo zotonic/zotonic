@@ -78,7 +78,7 @@ cert_files(Context) ->
     end.
 
 cert_dir(Context) ->
-    PrivSSLDir = filename:join([z_path:site_dir(Context), "priv", "ssl", "ca"]),
+    PrivSSLDir = filename:join([z_path:site_dir(Context), "priv", "security", "ca"]),
     case filelib:is_dir(PrivSSLDir) of
         true ->
             PrivSSLDir;

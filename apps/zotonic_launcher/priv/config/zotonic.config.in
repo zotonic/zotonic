@@ -74,6 +74,10 @@
 %%% Defaults to ssl_listen_port.
    %% {ssl_port, 443},
 
+%%% Location of the security related files and certificates, defaults to the location of
+%%% the zotonic configuration directory: /etc/zotonic/security or ~/.zotonic/security
+   %% {security_dir, ""},
+
 %%% Maximum http connections, the ipv4 and ipv6 connections are counted separately
 %%% Use 'infinity' to disable the max connections
    %% {max_connections, 20000},

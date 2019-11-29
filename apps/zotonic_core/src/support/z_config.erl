@@ -254,17 +254,21 @@ all() ->
     lists:map(
         fun
             (ssl_dhfile) ->
-                DF = case ?MODULE:get(ssl_dhfile) of
-                    undefined -> z_ssl_certs:dhfile();
-                    Dhfile -> Dhfile
-                end,
-                {ssl_dhfile, DF};
+                {ssl_dhfile, z_ssl_certs:dhfile()};
+            (security_dir) ->
+                case z_config_files:security_dir() of
+                    {ok, SecurityDir} ->
+                        {security_dir, SecurityDir};
+                    {error, Reason} ->
+                        {security_dir, <<"ERROR: ", (z_convert:to_binary(Reason))/binary>>}
+                end;
             (K) ->
                 {K, ?MODULE:get(K)}
         end,
         [
             environment,
             zotonic_apps,
+            security_dir,
             password,
             timezone,
             listen_ip,
