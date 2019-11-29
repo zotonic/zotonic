@@ -65,7 +65,7 @@ ssl_certificate({Module, observe_ssl_options}, Context) ->
     end.
 
 self_signed(Context) ->
-    Options = z_ssl_certs:sni_self_signed(Context),
+    Options = z_ssl_certs:sni_self_signed(z_context:hostname(Context)),
     {certfile, CertFile} = proplists:lookup(certfile, Options),
     case z_ssl_certs:decode_cert(CertFile) of
         {ok, CertProps} ->

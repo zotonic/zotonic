@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2012-2016  Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2012-2019 Marc Worrell, Maas-Maarten Zeeman
 %% @doc SSL support functions, create self-signed certificates
 
-%% Copyright 2012-2016 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2012-2019 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
     is_dhfile/1,
     ensure_dhfile/0,
     dhfile/0,
+    wait_for_dhfile/0,
 
     sign/2,
     get_ssl_options/1,
@@ -36,7 +37,7 @@
     ciphers/0,
 
     sni_self_signed/1,
-    ensure_self_signed/2,
+    ensure_self_signed/1,
     decode_cert/1
 ]).
 
@@ -50,7 +51,8 @@
 %% @todo should we use the hostname as configured in the OS for the certs?
 -spec ssl_listener_options() -> list(ssl:ssl_option()).
 ssl_listener_options() ->
-    {ok, CertOptions} = ensure_self_signed(zotonic_site_status),
+    {ok, Hostname} = inet:gethostname(),
+    {ok, CertOptions} = ensure_self_signed(Hostname),
     [
         {versions, ['tlsv1.2', 'tlsv1.1', 'tlsv1']},
         {sni_fun, fun ?MODULE:sni_fun/1},
@@ -63,7 +65,7 @@ ssl_listener_options() ->
     ++ dh_options().
 
 %% @doc Callback for SSL SNI, match the hostname to a set of keys
--spec sni_fun(string()) -> [ssl:ssl_option()] | undefined.
+-spec sni_fun(string()) -> [ ssl:ssl_option() ] | undefined.
 sni_fun(Hostname) ->
     NormalizedHostname = normalize_hostname(Hostname),
     NormalizedHostnameBin = z_convert:to_binary(NormalizedHostname),
@@ -72,30 +74,33 @@ sni_fun(Hostname) ->
             get_ssl_options(NormalizedHostnameBin, z_context:new(Site));
         undefined ->
             %% @todo Serve the correct cert for sites that are down or disabled
-            undefined
+            {ok, Hostname} = inet:gethostname(),
+            sni_self_signed(Hostname)
     end.
 
--spec sni_self_signed(z:context()) -> list(ssl:ssl_option()) | undefined.
-sni_self_signed(Context) ->
-    sni_self_signed(z_context:site(Context), Context).
-
-sni_self_signed(Site, Context) ->
-    {ok, SSLOptions} = get_self_signed_files(Site),
-    CertFile = proplists:get_value(certfile, SSLOptions),
-    KeyFile = proplists:get_value(keyfile, SSLOptions),
-    case filelib:is_file(CertFile) andalso filelib:is_file(KeyFile) of
-        true ->
-            SSLOptions;
-        false ->
-            case ensure_self_signed(Site, Context) of
-                {ok, SSLOptionsNew} -> SSLOptionsNew;
-                {error, _} -> undefined
-            end
+-spec sni_self_signed( string() | binary() ) -> list( ssl:ssl_option() ) | undefined.
+sni_self_signed(Hostname) ->
+    HostnameS = z_convert:to_list(Hostname),
+    case get_self_signed_files(HostnameS) of
+        {ok, SSLOptions} ->
+            CertFile = proplists:get_value(certfile, SSLOptions),
+            KeyFile = proplists:get_value(keyfile, SSLOptions),
+            case filelib:is_file(CertFile) andalso filelib:is_file(KeyFile) of
+                true ->
+                    SSLOptions;
+                false ->
+                    case ensure_self_signed(HostnameS) of
+                        {ok, SSLOptionsNew} -> SSLOptionsNew;
+                        {error, _} -> undefined
+                    end
+            end;
+        {error, no_security_dir} ->
+            undefined
     end.
 
 %% @doc Sign data using the current private key and sha256
 %% @todo If needed more often then cache the decoded private key.
--spec sign(iolist(), z:context()) -> {ok, binary()} | {error, term()}.
+-spec sign(iodata(), z:context()) -> {ok, binary()} | {error, term()}.
 sign(Data, Context) ->
     Hostname = z_context:hostname(Context),
     case get_ssl_options(Hostname, Context) of
@@ -110,7 +115,7 @@ sign(Data, Context) ->
     end.
 
 %% @doc Find the site or fallback site that will handle the request
--spec get_site_for_hostname(binary()) -> {ok, atom()} | undefined.
+-spec get_site_for_hostname( binary() ) -> {ok, atom()} | undefined.
 get_site_for_hostname(Hostname) ->
     case z_sites_dispatcher:get_site_for_hostname(Hostname) of
         {ok, Site} ->
@@ -135,36 +140,38 @@ get_fallback_site() ->
     end.
 
 %% @doc Fetch the ssi options for the site context.
--spec get_ssl_options(z:context()) -> list(ssl:ssl_option()) | undefined.
+-spec get_ssl_options( z:context() | undefined ) -> list( ssl:ssl_option() ) | undefined.
 get_ssl_options(Context) ->
-    get_ssl_options(z_context:hostname(Context), Context).
+    get_ssl_options(site_hostname(Context), Context).
 
 %% @doc Fetch the ssl options for the given hostname and site context. If there is
 %%      is no module observing ssl_options, then return the self signed certificates.
--spec get_ssl_options(binary(), z:context()) -> list(ssl:ssl_option()) | undefined.
-get_ssl_options(Hostname, Context) ->
-    case z_notifier:first(#ssl_options{server_name=Hostname}, Context) of
+-spec get_ssl_options( binary(), z:context() ) -> list( ssl:ssl_option() ) | undefined.
+get_ssl_options(Hostname, Context) when is_binary(Hostname) ->
+    case z_notifier:first(#ssl_options{ server_name=Hostname }, Context) of
         {ok, SSLOptions} ->
             SSLOptions;
         undefined ->
-            sni_self_signed(z_context:site(Context), Context)
+            sni_self_signed( z_convert:to_list(Hostname) )
     end.
 
 
+-spec get_self_signed_files( string() ) -> {ok, list( ssl:ssl_option() )} | {error, no_security_dir}.
+get_self_signed_files(Hostname) ->
+    case z_config_files:security_dir() of
+        {ok, SecurityDir} ->
+            SSLDir = filename:join(SecurityDir, "self-signed"),
+            get_self_signed_files(Hostname, SSLDir);
+        {error, _} ->
+            {error, no_security_dir}
+    end.
+
 %% @doc Fetch the paths of all self-signed certificates
--spec get_self_signed_files(Site :: atom()) -> {ok, list(ssl:ssl_option())}.
-get_self_signed_files(Site) ->
-    PrivSSLDir = filename:join([ z_path:site_dir(Site), "priv", "ssl", "self-signed" ]),
-    SSLDir = case filelib:is_dir(PrivSSLDir) of
-        true ->
-            PrivSSLDir;
-        false ->
-            {ok, SecurityDir} = z_config_files:security_dir(),
-            filename:join([ SecurityDir, Site, "self-signed" ])
-    end,
+-spec get_self_signed_files( string(), file:filename_all() ) -> {ok, list( ssl:ssl_option() )}.
+get_self_signed_files( Hostname, SSLDir ) ->
     Options = [
-        {certfile, filename:join(SSLDir, "self-signed"++?BITS++".crt")},
-        {keyfile, filename:join(SSLDir, "self-signed"++?BITS++".pem")}
+        {certfile, filename:join(SSLDir, Hostname ++ "-self-signed" ++ ?BITS ++ ".crt")},
+        {keyfile, filename:join(SSLDir, Hostname ++ "-self-signed" ++ ?BITS ++".pem")}
     ],
     {ok, Options}.
 
@@ -183,32 +190,28 @@ is_valid_hostname_char(_) -> false.
 
 
 %% @doc Check if all certificates are available in the site's ssl directory
-%% @todo Disentangle use of the fallback site and zotonic_site_status
--spec ensure_self_signed(atom()) ->  {ok, list()} | {error, term()}.
-ensure_self_signed(Site) ->
-    ensure_self_signed(Site, undefined).
-
--spec ensure_self_signed(atom(), #context{}|undefined) ->  {ok, list()} | {error, term()}.
-ensure_self_signed(Site, Context) ->
-    {ok, Certs} = get_self_signed_files(Site),
+-spec ensure_self_signed( string() ) ->  {ok, list( ssl:ssl_option() )} | {error, term()}.
+ensure_self_signed(Hostname) ->
+    {ok, Certs} = get_self_signed_files(Hostname),
     CertFile = proplists:get_value(certfile, Certs),
     KeyFile = proplists:get_value(keyfile, Certs),
     case {filelib:is_file(CertFile), filelib:is_file(KeyFile)} of
         {false, false} ->
-            generate_self_signed(Site, site_hostname(Context), Certs);
+            generate_self_signed(Hostname, Certs);
         {false, true} ->
             lager:error("Missing cert file ~p, regenerating keys", [CertFile]),
-            generate_self_signed(Site, site_hostname(Context), Certs);
+            generate_self_signed(Hostname, Certs);
         {true, false} ->
             lager:error("Missing pem file ~p, regenerating keys", [KeyFile]),
-            generate_self_signed(Site, site_hostname(Context), Certs);
+            generate_self_signed(Hostname, Certs);
         {true, true} ->
             case check_keyfile(KeyFile) of
                 ok -> {ok, Certs};
-                {error, _}=E -> E
+                {error, _} = E -> E
             end
     end.
 
+-spec site_hostname(z:context() | undefined) -> binary().
 site_hostname(undefined) ->
     {ok, LocalHostname} = inet:gethostname(),
     z_convert:to_binary(LocalHostname);
@@ -233,19 +236,21 @@ check_keyfile(Filename) ->
             {error, {cannot_read_pemfile, Filename, Error}}
     end.
 
--spec generate_self_signed(atom(), string()|binary(), list()) -> {ok, list()} | {error, term()}.
-generate_self_signed(Site, NormalizedHostname, Opts) ->
+-spec generate_self_signed( string(), proplists:proplist() ) -> {ok, list()} | {error, term()}.
+generate_self_signed(Hostname, Opts) ->
     PemFile = proplists:get_value(keyfile, Opts),
-    lager:info("Generating self-signed ssl keys for ~s in ~s", [NormalizedHostname, PemFile]),
+    lager:info("Generating self-signed ssl keys in '~s'", [PemFile]),
     case z_filelib:ensure_dir(PemFile) of
         ok ->
+            _ = file:change_mode(filename:dirname(PemFile), 8#00700),
             KeyFile = filename:rootname(PemFile) ++ ".key",
             CertFile = proplists:get_value(certfile, Opts),
+            ServerName = z_convert:to_list( server_name() ),
             Command = "openssl req -x509 -nodes"
                     ++ " -days 3650"
                     ++ " -sha256"
-                    ++ " -subj '/CN="++z_convert:to_list(NormalizedHostname)
-                             ++"/O="++z_convert:to_list(server_name())
+                    ++ " -subj '/CN="++Hostname
+                             ++"/O="++ServerName
                              ++"'"
                     ++ " -newkey rsa:"++?BITS++" "
                     ++ " -keyout "++z_utils:os_filename(KeyFile)
@@ -256,15 +261,20 @@ generate_self_signed(Site, NormalizedHostname, Opts) ->
             case file:read_file(KeyFile) of
                 {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
                     os:cmd("openssl rsa -in "++KeyFile++" -out "++PemFile),
-                    lager:info("SSL: Site ~p generated SSL self-signed certificate in \'~s\'", [Site, KeyFile]),
+                    _ = file:change_mode(KeyFile, 8#00600),
+                    _ = file:change_mode(PemFile, 8#00600),
+                    _ = file:change_mode(CertFile, 8#00644),
+                    lager:info("SSL: Generated SSL self-signed certificate in '~s'", [KeyFile]),
                     {ok, Opts};
                 {ok, <<"-----BEGIN RSA PRIVATE KEY", _/binary>>} ->
                     file:rename(KeyFile, PemFile),
-                    lager:info("SSL: Site ~p generated SSL self-signed certificate in \'~s\'", [Site, KeyFile]),
+                    _ = file:change_mode(PemFile, 8#00600),
+                    _ = file:change_mode(CertFile, 8#00644),
+                    lager:info("SSL: Generated SSL self-signed certificate in '~s'", [KeyFile]),
                     {ok, Opts};
                 _Error ->
-                    lager:error("SSL: Site ~p, failed generating self-signed ssl keys for ~s in ~s (output was ~s)",
-                                [Site, NormalizedHostname, PemFile, Result]),
+                    lager:error("SSL: Failed generating self-signed ssl keys in '~s' (output was ~s)",
+                                [PemFile, Result]),
                     {error, openssl}
             end;
         {error, _} = Error ->
@@ -273,8 +283,10 @@ generate_self_signed(Site, NormalizedHostname, Opts) ->
 
 -spec server_name() -> binary().
 server_name() ->
-    Name = z_convert:to_binary( z_config:get(server_header) ),
-    filter_server_name(Name, <<>>).
+    case z_convert:to_binary( z_config:get(server_header) ) of
+        <<>> -> <<"Zotonic">>;
+        Name -> filter_server_name(Name, <<>>)
+    end.
 
 -spec filter_server_name(binary(), binary()) -> binary().
 filter_server_name(<<>>, Acc) ->
@@ -313,30 +325,49 @@ dhfile() ->
             Filename
     end.
 
+wait_for_dhfile() ->
+    wait_for_dhfile(1).
+
+wait_for_dhfile(N) ->
+    DHFile = dhfile(),
+    case filelib:is_file( DHFile ) of
+        true ->
+            ok;
+        false when N =:= 0 ->
+            lager:info("Waiting for DH to be generated in '~s'", [ DHFile ]),
+            timer:sleep(500),
+            wait_for_dhfile(20);
+        false ->
+            timer:sleep(500),
+            wait_for_dhfile(N-1)
+    end.
+
 ensure_dhfile(Filename) ->
     case filelib:is_file(Filename) of
         true ->
             ok;
         false ->
             ok = z_filelib:ensure_dir(Filename),
+            erlang:spawn_link(fun() -> generate_dhfile(Filename) end)
+    end.
 
-            % Maybe use the -dsaparam, maybe we shouldn't https://www.openssl.org/news/secadv/20160128.txt
-            % Though without this the generation will take a long time indeed...
-            lager:info("Generating ~s bits DH key, this will take a long time (saving to ~p)",
-                       [?DHBITS, Filename]),
-            Command = "openssl dhparam -out " ++ z_utils:os_filename(Filename) ++ " " ++ ?DHBITS,
-            lager:debug("SSL: ~p", [Command]),
-            Result = os:cmd(Command),
-            lager:debug("SSL: ~p", [Result]),
-            case is_dhfile(Filename) of
-                true ->
-                    _ = file:change_mode(Filename, 8#00600),
-                    ok;
-                false ->
-                    lager:error("Failed generating DH file in ~p (output was ~p)",
-                                [Filename, Result]),
-                    {error, openssl_dhfile}
-            end
+generate_dhfile(Filename) ->
+    % Maybe use the -dsaparam, maybe we shouldn't https://www.openssl.org/news/secadv/20160128.txt
+    % Though without this the generation will take a long time indeed...
+    lager:info("Generating ~s bits DH key, this will take a long time. Saving in '~s'",
+               [?DHBITS, Filename]),
+    Command = "openssl dhparam -out " ++ z_utils:os_filename(Filename) ++ " " ++ ?DHBITS,
+    lager:debug("SSL: ~p", [Command]),
+    Result = os:cmd(Command),
+    lager:debug("SSL: ~p", [Result]),
+    case is_dhfile(Filename) of
+        true ->
+            _ = file:change_mode(Filename, 8#00600),
+            ok;
+        false ->
+            lager:error("Failed generating DH file in '~s' (output was ~p)",
+                        [Filename, Result]),
+            {error, openssl_dhfile}
     end.
 
 
