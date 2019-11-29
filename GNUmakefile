@@ -8,8 +8,10 @@ REBAR := ./rebar3
 REBAR_URL := https://s3.amazonaws.com/rebar3/rebar3
 REBAR_ETAG := rebar_etag
 REBAR_OPTS ?=
+
+.PHONY: all upgrade-deps compile dev test
+
 # Default target - update sources and call all compile rules in succession
-.PHONY: all
 all: compile
 
 $(REBAR): $(REBAR_ETAG)
@@ -44,6 +46,7 @@ dialyzer: compile
 
 # Generate documentation
 .PHONY: docs edocs
+
 docs:
 	@echo Building HTML documentation...
 	cd doc && $(MAKE) stubs && $(MAKE) html
@@ -54,20 +57,19 @@ edocs: $(REBAR)
 	@ZOTONIC=`pwd` bin/generate_edoc.escript
 
 # Get ETAG from rebar3 amazon cloud and update etag file if different.
-define get_rebar_tag =
-$(ERL) -noshell -s inets -s ssl \
-  -eval 'case httpc:request(head, {"$(REBAR_URL)", []}, [{timeout, 2000}], []) of {ok, {_, Headers,_}} -> Etag = proplists:get_value("etag", Headers), Bin = list_to_binary(Etag), case file:read_file("$(REBAR_ETAG)") of {ok, Bin} -> io:fwrite("ETag update not needed~n"); {ok, _OldEtag} -> file:write_file("$(REBAR_ETAG)", Bin); {error, enoent} -> file:write_file("$(REBAR_ETAG)", Bin); _ -> ok end,   io:fwrite("Etag: ~s~n",[Etag]); Error -> io:fwrite("Failed to get rebar3 etag: ~p~n",[Error]) end' \
-  -s init stop
-endef
 
 # First use if it does not exist at all
 # used by "make compile" dependencies
 $(REBAR_ETAG):
-	$(get_rebar_tag)
+	$(ERL) -noshell -s inets -s ssl \
+		-eval 'case httpc:request(head, {"$(REBAR_URL)", []}, [{timeout, 2000}], []) of {ok, {_, Headers,_}} -> Etag = proplists:get_value("etag", Headers), Bin = list_to_binary(Etag), case file:read_file("$(REBAR_ETAG)") of {ok, Bin} -> io:fwrite("ETag update not needed~n"); {ok, _OldEtag} -> file:write_file("$(REBAR_ETAG)", Bin); {error, enoent} -> file:write_file("$(REBAR_ETAG)", Bin); _ -> ok end,   io:fwrite("Etag: ~s~n",[Etag]); Error -> io:fwrite("Failed to get rebar3 etag: ~p~n",[Error]) end' \
+		-s init stop
 
 .PHONY: pull
 pull:
-	$(get_rebar_tag)
+	$(ERL) -noshell -s inets -s ssl \
+		-eval 'case httpc:request(head, {"$(REBAR_URL)", []}, [{timeout, 2000}], []) of {ok, {_, Headers,_}} -> Etag = proplists:get_value("etag", Headers), Bin = list_to_binary(Etag), case file:read_file("$(REBAR_ETAG)") of {ok, Bin} -> io:fwrite("ETag update not needed~n"); {ok, _OldEtag} -> file:write_file("$(REBAR_ETAG)", Bin); {error, enoent} -> file:write_file("$(REBAR_ETAG)", Bin); _ -> ok end,   io:fwrite("Etag: ~s~n",[Etag]); Error -> io:fwrite("Failed to get rebar3 etag: ~p~n",[Error]) end' \
+		-s init stop
 
 # Cleaning
 .PHONY: clean_logs
