@@ -19,6 +19,7 @@
 -module(z_config_files).
 
 -export([
+    security_dir/0,
     config_dir/0,
     config_dir/1,
     files/1,
@@ -28,6 +29,56 @@
 
 -include_lib("zotonic_core/include/zotonic_release.hrl").
 -include_lib("yamerl/include/yamerl_errors.hrl").
+
+
+%% @doc Find the default configuration directory for certificates
+-spec security_dir() -> {ok, file:filename_all()} | {error, term()}.
+security_dir() ->
+    case z_config:get(security_dir) of
+        undefined ->
+            case find_security_dir(system, filename:join([ "etc", "zotonic", "security" ])) of
+                {ok, Dir} ->
+                    {ok, Dir};
+                {error, _} ->
+                    Home = os:getenv("HOME"),
+                    case find_security_dir(home, filename:join([ Home, ".zotonic", "security" ])) of
+                        {ok, Dir} ->
+                            {ok, Dir};
+                        {error, _} ->
+                            find_security_dir(home, filename:join([ z_utils:lib_dir(priv), "security" ]))
+                    end
+            end;
+        Dir ->
+            {ok, Dir}
+    end.
+
+find_security_dir(Type, Dir) ->
+    case filelib:is_dir(Dir) of
+        true ->
+            {ok, Dir};
+        false when Type =:= home ->
+            case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
+                ok ->
+                    _ = file:change_mode(Dir, 8#00700),
+                    {ok, Dir};
+                {error, _} = Error ->
+                    Error
+            end;
+        false when Type =:= system ->
+            case filelib:is_dir( filename:basename(Dir) ) of
+                true ->
+                    case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
+                        ok ->
+                            _ = file:change_mode(Dir, 8#00700),
+                            {ok, Dir};
+                        {error, _} = Error ->
+                            Error
+                    end;
+                false ->
+                    {error, enoent}
+            end
+    end.
+
 
 %% @doc Find the configuration directory for current running Zotonic.
 -spec config_dir() -> {ok, file:filename_all()} | {error, term()}.

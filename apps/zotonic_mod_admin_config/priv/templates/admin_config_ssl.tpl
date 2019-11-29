@@ -24,4 +24,8 @@
     {% endif %}
 {% endfor %}
 
+<p>
+    <span class="glyphicon glyphicon-info-sign"></span> {_ The certificates are located in _}: <tt>{{ m.admin_config.security_dir|escape }}</tt>
+</p>
+
 {% endblock %}

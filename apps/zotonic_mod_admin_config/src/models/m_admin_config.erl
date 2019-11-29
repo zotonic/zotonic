@@ -34,6 +34,18 @@ m_get([ ssl_certificates | Rest ], _Msg, Context) ->
         true -> {ok, {ssl_certificates(Context), Rest}};
         false -> {ok, {[], Rest}}
     end;
+m_get([ security_dir | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            case z_config_files:security_dir() of
+                {ok, SecDir} ->
+                    {ok, {SecDir, Rest}};
+                {error, _} ->
+                    {ok, {<<>>, Rest}}
+            end;
+        false ->
+            {ok, {<<>>, Rest}}
+    end;
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
@@ -65,7 +77,7 @@ ssl_certificate({Module, observe_ssl_options}, Context) ->
     end.
 
 self_signed(Context) ->
-    Options = z_ssl_certs:sni_self_signed(Context),
+    Options = z_ssl_certs:sni_self_signed(z_context:hostname(Context)),
     {certfile, CertFile} = proplists:lookup(certfile, Options),
     case z_ssl_certs:decode_cert(CertFile) of
         {ok, CertProps} ->

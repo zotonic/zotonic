@@ -94,6 +94,7 @@ The zotonic configuration van be viewed with ``bin/zotonic config``:
     zotonic:
         environment: production
         zotonic_apps: /home/user/zotonic/apps_user
+        security_dir: /home/user/.zotonic/security
         password: Bthj3ruGbmgJxfmc
         timezone: UTC
         listen_ip: any

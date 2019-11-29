@@ -110,9 +110,17 @@ SSL certificates
 
 After the server’s listen ports are correctly configured then the SSL connection can be tested.
 
-Per default Zotonic will generate a self-signed certificate for all sites. Instead of the self-signed
-certificate a real certificate can be used. Check for these the modules :ref:`mod_ssl_letsencrypt` and
+Per default Zotonic will generate a self-signed certificate for all valid hostnames. Instead of these
+self-signed certificates a real certificate can be used. Check for these the modules :ref:`mod_ssl_letsencrypt` and
 :ref:`mod_ssl_ca`
+
+Default location for the self-signed certificates is ``~/.zotonic/security/self-signed/``
+
+The *security* directory can be in one of the following directories:
+
+ * ``/etc/zotonic/security/``
+ * ``~/.zotonic/security/``
+ * ``priv/security/``
 
 
 HTTPS and security

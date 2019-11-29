@@ -62,10 +62,6 @@ repository’s `apps/` directory::
 
     Here all the http access logs are written.
 
-``zotonic/priv/ssl/``
-
-    Holds the :ref:`SSL certificates <https-support>`.
-
 ``zotonic/apps/zotonic_core/src/``
 
     The Erlang source for the core Zotonic system.

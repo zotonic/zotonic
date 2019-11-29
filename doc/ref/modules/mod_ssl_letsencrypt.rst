@@ -54,4 +54,22 @@ certificate.
   the renewal will be retried daily during thirty days.
 
 
+Certificate and key files
+-------------------------
+
+The certificate and key files are placed into the site sub-directory of the security
+directory. Default is: ``~/.zotonic/security/sitename/letsencrypt/``
+
+Where *sitename* must be replaced with the name of your site.
+
+The *security* directory can be in one of the following directories:
+
+ * ``/etc/zotonic/security/``
+ * ``~/.zotonic/security/``
+ * ``priv/security/``
+
+If there is a directory ``priv/security/letsencrypt`` inside your site's OTP application folder then
+that directory will be used.
+
+
 .. seealso:: :ref:`mod_ssl_ca`, :ref:`ref-port-ssl-configuration`

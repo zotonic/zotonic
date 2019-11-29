@@ -41,6 +41,7 @@ start_link(Options) ->
     z_tempfile_cleanup:start(),
     ensure_job_queues(),
     ensure_sidejobs(),
+    z_ssl_certs:ensure_dhfile(),
     mqtt_sessions_runtime(),
     inets:start(httpc, [{profile, zotonic}]),
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).

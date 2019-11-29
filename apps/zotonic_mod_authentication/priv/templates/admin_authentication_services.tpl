@@ -18,18 +18,18 @@
 <div>
     {% if m.acl.use.mod_admin_config %}
         {% if m.modules.active.mod_signup %}
-            <p class="text-muted"><span class="icon-info-sign"></span> {_ The signup module is enabled, users authenticating via the services below are automatically signed up. _}</p>
+            <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {_ The signup module is enabled, users authenticating via the services below are automatically signed up. _}</p>
         {% else %}
-            <p class="text-muted"><span class="icon-info-sign"></span> {_ Enable the signup module to automatically sign up users that are authenticating via the services below. _} <a href="{% url admin_modules %}">{_ Go to Modules _}</a></p>
+            <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {_ Enable the signup module to automatically sign up users that are authenticating via the services below. _} <a href="{% url admin_modules %}">{_ Go to Modules _}</a></p>
         {% endif %}
 
         {% all include "_admin_authentication_service.tpl" %}
 
         {% if not m.modules.active.mod_facebook %}
-            <p class="text-muted"><span class="icon-info-sign"></span> {_ Enable <em>mod_facebook</em> to see Facebook settings. _} <a href="{% url admin_modules %}">{_ Go to Modules _}</a></p>
+            <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {_ Enable <em>mod_facebook</em> to see Facebook settings. _} <a href="{% url admin_modules %}">{_ Go to Modules _}</a></p>
         {% endif %}
         {% if not m.modules.active.mod_twitter %}
-            <p class="text-muted"><span class="icon-info-sign"></span> {_ Enable <em>mod_twitter</em> to see Twitter settings. _} <a href="{% url admin_modules %}">{_ Go to Modules _}</a></p>
+            <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {_ Enable <em>mod_twitter</em> to see Twitter settings. _} <a href="{% url admin_modules %}">{_ Go to Modules _}</a></p>
         {% endif %}
     {% endif %}
 </div>

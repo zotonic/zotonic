@@ -8,23 +8,32 @@ A free alternative to CA provided tickets is Let’s Encrypt, see :ref:`mod_ssl_
 Certificate and key files
 -------------------------
 
-The files with the certificates and key are placed into the ``ssl`` directory inside the site
-directory :file:`user/sites/sitename/ssl/ca/`.
+The certificate and key files are placed into the site sub-directory of the security
+directory. Default is: ``~/.zotonic/security/sitename/ca/``
 
 Where *sitename* must be replaced with the name of your site.
+
+The *security* directory can be in one of the following directories:
+
+ * ``/etc/zotonic/security/``
+ * ``~/.zotonic/security/``
+ * ``priv/security/``
+
+If there is a directory ``priv/security/ca`` inside your site's OTP application folder then
+that directory will be used.
 
 The files all have the name of the site in them (*sitename* in the filenames below).
 This is to prevent mixing them up with other sites:
 
-:file:`user/sites/sitename/ssl/ca/sitename.pem`
+:file:`sitename.pem`
     This holds the private key for the encryption. The key must be unlocked and in
     PKCS#1 format (see below).
 
-:file:`user/sites/sitename/ssl/ca/sitename.crt`
+:file:`sitename.crt`
     This is the certificate. Usually it is supplied by the certificate authority where you
     bought it. It can also be a self signed certificate, see below.
 
-:file:`user/sites/sitename/ssl/ca/sitename.ca.crt`
+:file:`sitename.ca.crt`
     This is the (optional) *CA bundle* that contains root and intermediate certificates for
     the certificate authority that issued the :file:`sitename.crt` certificate.
 
