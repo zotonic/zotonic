@@ -36,12 +36,6 @@
     "js/modules/jquery.timepicker.min.js"
 %}
 
-{#
-    "js/modules/ubf.js"
-    "js/qlobber.js"
-    "js/pubzub.js"
-#}
-
 {% all include "_admin_lib_js.tpl" %}
 
 {% worker name="auth" src="js/zotonic.auth.worker.js" %}

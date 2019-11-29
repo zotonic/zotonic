@@ -14,12 +14,6 @@
 	"js/modules/jquery.loadmask.js"
 %}
 
-{#
-    "js/modules/ubf.js"
-    "js/qlobber.min.js"
-    "js/pubzub.js"
-#}
-
 {% script %}
 
 <script type="text/javascript">

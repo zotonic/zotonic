@@ -7,7 +7,7 @@
             function() {
                 setTimeout(
                     function() {
-                        pubzub.subscribe("public/development/livereload", function (topic, msg) {
+                        cotonic.broker.subscribe("bridge/origin/public/development/livereload", function (msg) {
                             if (msg.payload.is_page_reload) {
                                 z_reload();
                             } else {

@@ -75,10 +75,11 @@ function to_human(value) {
 {% endjavascript %}
 
 {% javascript %}
-    pubzub.subscribe("erlang/stats/#", function(topic, msg) {
-        var item = $("#" + topic.replace(/\//g, "-"));
-        if(!item.length) return;
-        item.html(item.data('render')(msg.payload));
+    cotonic.broker.subscribe("erlang/stats/#", function(msg) {
+        var item = $("#" + msg.topic.replace(/\//g, "-"));
+        if (item.length > 0) {
+            item.html(item.data('render')(msg.payload));
+        }
     });
 {% endjavascript %}
 
