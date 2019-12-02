@@ -47,12 +47,14 @@
 
 -define(MODULE_MAP, 'z_language_data$map').
 
--spec is_language( atom() | binary() ) -> boolean().
-is_language( Lang ) ->
-    maps:is_key(Lang, languages_map_flat()).
+-spec is_language( z_language:language() ) -> boolean().
+is_language( Lang ) when is_atom(Lang); is_binary(Lang) ->
+    maps:is_key(Lang, languages_map_flat());
+is_language( Lang ) when is_list(Lang) ->
+    is_language(z_convert:to_binary(Lang)).
 
 
--spec fallback( atom() | binary() | string() ) -> list( atom() ).
+-spec fallback(  z_language:language() ) -> list( z_language:language_code() ).
 fallback(Code) when is_atom(Code); is_binary(Code) ->
     try
         Fallback = erlang:apply(?MODULE_MAP, fallback, []),
@@ -64,7 +66,7 @@ fallback(Code) when is_atom(Code); is_binary(Code) ->
 fallback(Code) when is_list(Code) ->
     fallback(z_convert:to_binary(Code)).
 
--spec languages_map_flat() -> #{ atom() => map() }.
+-spec languages_map_flat() -> #{ (z_language:language_code() | binary()) => map() }.
 languages_map_flat() ->
     try erlang:apply(?MODULE_MAP, languages_map_flat, [])
     catch _:_ -> make_mod(), languages_map_flat()

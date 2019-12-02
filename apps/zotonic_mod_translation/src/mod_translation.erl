@@ -144,10 +144,7 @@ set_language(Code0, Context) when is_atom(Code0) ->
                 undefined ->
                     Context;
                 Code ->
-                    Fallback = case z_language:fallback_language(Code) of
-                        undefined -> [ Code ];
-                        FBs -> [ Code | FBs ]
-                    end,
+                    Fallback = [ Code | z_language:fallback_language(Code) ],
                     z_context:set_language(Fallback, Context)
             end
     end;
