@@ -45,8 +45,7 @@
         languages_list/0
     ]).
 
--define(MODULE_MAP, 'z_language_data$map$9').
-
+-define(MODULE_MAP, 'z_language_data$map').
 
 -spec is_language( atom() | binary() ) -> boolean().
 is_language( Lang ) ->
