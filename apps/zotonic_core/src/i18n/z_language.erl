@@ -182,23 +182,10 @@ enabled_language_codes(Context) ->
             [ Code || {Code, true} <- proplists:get_value(list, Cfg, []) ]
     end.
 
-
 %% @private
 %% Gets a property from an item retrieved from *all* languages.
 -spec get_property( language(), Key:: atom() ) -> binary() | undefined.
 get_property(Code, Key) ->
-    get_property_from_list(Code, Key, all_languages()).
-
-
-%% @private
-%% Gets a property from an item retrieved from specified list
--spec get_property_from_list( language(), Key:: atom(), List:: list() ) -> binary() | list() | undefined.
-get_property_from_list(Code, Key, List) when is_binary(Code) ->
-    case proplists:get_value(Code, List) of
-        undefined -> undefined;
-        Data -> proplists:get_value(Key, Data)
-    end;
-get_property_from_list(Code, Key, List) ->
-    get_property_from_list(z_convert:to_binary(Code), Key, List).
-
+    Map = maps:get(Code, z_language_data:languages_map_flat(), #{}),
+    maps:get(Key, Map, undefined).
 
