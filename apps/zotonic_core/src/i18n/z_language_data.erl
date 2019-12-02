@@ -56,7 +56,7 @@ is_language( Lang ) ->
 -spec fallback( atom() | binary() | string() ) -> list( atom() ).
 fallback(Code) when is_atom(Code); is_binary(Code) ->
     try
-        Fallback = ?MODULE_MAP:fallback(),
+        Fallback = erlang:apply(?MODULE_MAP, fallback, []),
         maps:get(Code, Fallback, [])
     catch _:_ ->
         make_mod(),
@@ -67,25 +67,25 @@ fallback(Code) when is_list(Code) ->
 
 -spec languages_map_flat() -> #{ atom() => map() }.
 languages_map_flat() ->
-    try ?MODULE_MAP:languages_map_flat()
+    try erlang:apply(?MODULE_MAP, languages_map_flat, [])
     catch _:_ -> make_mod(), languages_map_flat()
     end.
 
 languages_map_main() ->
-    try ?MODULE_MAP:languages_map_main()
+    try erlang:apply(?MODULE_MAP, languages_map_main, [])
     catch _:_ -> make_mod(), languages_map_main()
     end.
 
 
 -spec codes_bin() -> list( binary() ).
 codes_bin() ->
-    try ?MODULE_MAP:codes_bin()
+    try erlang:apply(?MODULE_MAP, codes_bin, [])
     catch _:_ -> make_mod(), codes_bin()
     end.
 
 -spec codes_atom() -> list( atom() ).
 codes_atom() ->
-    try ?MODULE_MAP:codes_atom()
+    try erlang:apply(?MODULE_MAP, codes_atom, [])
     catch _:_ -> make_mod(), codes_atom()
     end.
 
