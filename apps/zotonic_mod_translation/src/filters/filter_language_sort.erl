@@ -23,5 +23,7 @@
 
 language_sort(undefined, _Context) ->
     [];
+language_sort([ Code | _ ] = V, _Context) when is_atom(Code) ->
+    m_translation:sort_codes(V);
 language_sort(V, _Context) ->
     m_translation:sort(V).

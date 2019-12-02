@@ -31,6 +31,7 @@
     main_languages/0,
     all_languages/0,
 
+    sort_codes/1,
     sort/1
 ]).
 
