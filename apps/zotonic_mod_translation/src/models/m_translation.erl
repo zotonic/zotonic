@@ -29,7 +29,9 @@
     language_list_configured/1,
     language_list_enabled/1,
     main_languages/0,
-    all_languages/0
+    all_languages/0,
+
+    sort/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -72,7 +74,14 @@ default_language(Context) ->
     z_language:default_language(Context).
 
 language_list_configured(Context) ->
-    sort_codes(mod_translation:language_config(Context)).
+    Config = mod_translation:language_config(Context),
+    List = lists:map(
+        fun({Code, IsEnabled}) ->
+            Props = z_language:properties(Code),
+            {Code, Props#{ is_enabled => IsEnabled} }
+        end,
+        Config),
+    sort(List).
 
 language_list_enabled(Context) ->
 	sort_codes(mod_translation:enabled_languages(Context)).
@@ -86,7 +95,7 @@ all_languages() ->
 sort_codes(Codes) when is_list(Codes) ->
     List = lists:map(
         fun(Code) ->
-            {Code, z_translation:properties(Code)}
+            {Code, z_language:properties(Code)}
         end,
         Codes),
     sort(List).
