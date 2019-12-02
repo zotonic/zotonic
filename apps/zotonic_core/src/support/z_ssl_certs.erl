@@ -72,7 +72,7 @@ sni_fun(Hostname) ->
     case get_site_for_hostname(NormalizedHostnameBin) of
         {ok, Site} ->
             get_ssl_options(NormalizedHostnameBin, z_context:new(Site));
-        undefined ->
+        {error, nohost} ->
             %% @todo Serve the correct cert for sites that are down or disabled
             {ok, Hostname} = inet:gethostname(),
             sni_self_signed(Hostname)
@@ -121,22 +121,10 @@ get_site_for_hostname(Hostname) ->
         {ok, Site} ->
             case z_sites_manager:wait_for_running(Site) of
                 ok -> {ok, Site};
-                {error, _} -> get_fallback_site()
+                {error, _} -> {error, nohost}
             end;
         undefined ->
-            get_fallback_site()
-    end.
-
--spec get_fallback_site() -> {ok, atom()} | undefined.
-get_fallback_site() ->
-    case z_sites_dispatcher:get_fallback_site() of
-        {ok, Site} ->
-            case z_sites_manager:wait_for_running(Site) of
-                ok -> {ok, Site};
-                {error, _} -> undefined
-            end;
-        undefined ->
-            undefined
+            {error, nohost}
     end.
 
 %% @doc Fetch the ssi options for the site context.
