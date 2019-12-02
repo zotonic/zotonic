@@ -189,13 +189,11 @@ fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId,_EdgeId}|Rs], Acc) ->
     fetch_ids(Rs, [SubjectId,ObjectId|Acc]).
 
 do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
-    z_pivot_rsc:insert_queue(SubjectId, Context),
     z_notifier:notify(#edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context),
     maybe_delete_dependent(ObjectId, Context);
 do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
     z_notifier:notify(#edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context);
 do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
-    z_pivot_rsc:insert_queue(SubjectId, Context),
     z_notifier:notify(#edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId}, Context).
 
 maybe_delete_dependent(Id, Context) ->
