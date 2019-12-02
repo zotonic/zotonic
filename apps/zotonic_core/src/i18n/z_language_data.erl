@@ -438,7 +438,7 @@ languages_list() -> [
     {<<"az">>, [
         {type, <<"macrolanguage">>},
         {language, <<"az">>},
-        {name, <<"azərbaycan dili"/utf8>>},
+        {name, <<"Azərbaycan dili"/utf8>>},
         {name_en, <<"Azerbaijani"/utf8>>}
     ]},
     {<<"ba">>, [
@@ -483,19 +483,19 @@ languages_list() -> [
     ]},
     {<<"br">>, [
         {language, <<"br">>},
-        {name, <<"brezhoneg"/utf8>>},
+        {name, <<"Brezhoneg"/utf8>>},
         {name_en, <<"Breton"/utf8>>}
     ]},
     {<<"bs">>, [
         {language, <<"bs">>},
         {region, <<"BA">>},
-        {name, <<"bosanski"/utf8>>},
+        {name, <<"Bosanski"/utf8>>},
         {name_en, <<"Bosnian"/utf8>>}
     ]},
     {<<"ca">>, [
         {language, <<"ca">>},
         {region, <<"AD">>},
-        {name, <<"català"/utf8>>},
+        {name, <<"Català"/utf8>>},
         {name_en, <<"Catalan"/utf8>>}
     ]},
     {<<"ce">>, [
@@ -519,7 +519,7 @@ languages_list() -> [
     {<<"cs">>, [
         {language, <<"cs">>},
         {region, <<"CZ">>},
-        {name, <<"čeština"/utf8>>},
+        {name, <<"Čeština"/utf8>>},
         {name_en, <<"Czech"/utf8>>}
     ]},
     %% Omitting Church Slavic
@@ -575,7 +575,7 @@ languages_list() -> [
     ]},
     {<<"da">>, [
         {language, <<"da">>},
-        {name, <<"dansk"/utf8>>},
+        {name, <<"Dansk"/utf8>>},
         {name_en, <<"Danish"/utf8>>}
     ]},
     {<<"dz">>, [
@@ -683,127 +683,127 @@ languages_list() -> [
     ]},
     {<<"es">>, [
         {language, <<"es">>},
-        {name, <<"español"/utf8>>},
+        {name, <<"Español"/utf8>>},
         {name_en, <<"Spanish"/utf8>>},
         {sublanguages, [
             {<<"es-419">>, [
                 {language, <<"es">>},
                 {region, <<"419">>},
-                {name, <<"español latinoamericano"/utf8>>},
+                {name, <<"Español latinoamericano"/utf8>>},
                 {name_en, <<"Spanish - Latin America and the Caribbean"/utf8>>}
             ]},
             {<<"es-ar">>, [
                 {language, <<"es">>},
                 {region, <<"AR">>},
-                {name, <<"español - Argentina"/utf8>>},
+                {name, <<"Español - Argentina"/utf8>>},
                 {name_en, <<"Spanish - Argentina"/utf8>>}
             ]},
             {<<"es-bo">>, [
                 {language, <<"es">>},
                 {region, <<"BO">>},
-                {name, <<"español - Bolivia"/utf8>>},
+                {name, <<"Español - Bolivia"/utf8>>},
                 {name_en, <<"Spanish - Bolivia"/utf8>>}
             ]},
             {<<"es-cl">>, [
                 {language, <<"es">>},
                 {region, <<"CL">>},
-                {name, <<"español - Chile"/utf8>>},
+                {name, <<"Español - Chile"/utf8>>},
                 {name_en, <<"Spanish - Chile"/utf8>>}
             ]},
             {<<"es-co">>, [
                 {language, <<"es">>},
                 {region, <<"CO">>},
-                {name, <<"español - Colombia"/utf8>>},
+                {name, <<"Español - Colombia"/utf8>>},
                 {name_en, <<"Spanish - Colombia"/utf8>>}
             ]},
             {<<"es-cr">>, [
                 {language, <<"es">>},
                 {region, <<"CR">>},
-                {name, <<"español - Costa Rica"/utf8>>},
+                {name, <<"Español - Costa Rica"/utf8>>},
                 {name_en, <<"Spanish - Costa Rica"/utf8>>}
             ]},
             {<<"es-do">>, [
                 {language, <<"es">>},
                 {region, <<"DO">>},
-                {name, <<"español - República Dominicana"/utf8>>},
+                {name, <<"Español - República Dominicana"/utf8>>},
                 {name_en, <<"Spanish - Dominican Republic"/utf8>>}
             ]},
             {<<"es-ec">>, [
                 {language, <<"es">>},
                 {region, <<"EC">>},
-                {name, <<"español - Ecuador"/utf8>>},
+                {name, <<"Español - Ecuador"/utf8>>},
                 {name_en, <<"Spanish - Ecuador"/utf8>>}
             ]},
             {<<"es-es">>, [
                 {language, <<"es">>},
                 {region, <<"ES">>},
-                {name, <<"español - España"/utf8>>},
+                {name, <<"Español - España"/utf8>>},
                 {name_en, <<"Spanish - Spain"/utf8>>}
             ]},
             {<<"es-gt">>, [
                 {language, <<"es">>},
                 {region, <<"GT">>},
-                {name, <<"español - Guatemala"/utf8>>},
+                {name, <<"Español - Guatemala"/utf8>>},
                 {name_en, <<"Spanish - Guatemala"/utf8>>}
             ]},
             {<<"es-hn">>, [
                 {language, <<"es">>},
                 {region, <<"HN">>},
-                {name, <<"español - Honduras"/utf8>>},
+                {name, <<"Español - Honduras"/utf8>>},
                 {name_en, <<"Spanish - Honduras"/utf8>>}
             ]},
             {<<"es-mx">>, [
                 {language, <<"es">>},
                 {region, <<"MX">>},
-                {name, <<"español - México"/utf8>>},
+                {name, <<"Español - México"/utf8>>},
                 {name_en, <<"Spanish - Mexico"/utf8>>}
             ]},
             {<<"es-ni">>, [
                 {language, <<"es">>},
                 {region, <<"NI">>},
-                {name, <<"español - Nicaragua"/utf8>>},
+                {name, <<"Español - Nicaragua"/utf8>>},
                 {name_en, <<"Spanish - Nicaragua"/utf8>>}
             ]},
             {<<"es-pa">>, [
                 {language, <<"es">>},
                 {region, <<"PA">>},
-                {name, <<"español - Panamá"/utf8>>},
+                {name, <<"Español - Panamá"/utf8>>},
                 {name_en, <<"Spanish - Panama"/utf8>>}
             ]},
             {<<"es-pe">>, [
                 {language, <<"es">>},
                 {region, <<"PE">>},
-                {name, <<"español - Perú"/utf8>>},
+                {name, <<"Español - Perú"/utf8>>},
                 {name_en, <<"Spanish - Peru"/utf8>>}
             ]},
             {<<"es-pr">>, [
                 {language, <<"es">>},
                 {region, <<"PR">>},
-                {name, <<"español - Puerto Rico"/utf8>>},
+                {name, <<"Español - Puerto Rico"/utf8>>},
                 {name_en, <<"Spanish - Puerto Rico"/utf8>>}
             ]},
             {<<"es-py">>, [
                 {language, <<"es">>},
                 {region, <<"PY">>},
-                {name, <<"español - Paraguay"/utf8>>},
+                {name, <<"Español - Paraguay"/utf8>>},
                 {name_en, <<"Spanish - Paraguay"/utf8>>}
             ]},
             {<<"es-sv">>, [
                 {language, <<"es">>},
                 {region, <<"SV">>},
-                {name, <<"español - El Salvador"/utf8>>},
+                {name, <<"Español - El Salvador"/utf8>>},
                 {name_en, <<"Spanish - El Salvador"/utf8>>}
             ]},
             {<<"es-uy">>, [
                 {language, <<"es">>},
                 {region, <<"UY">>},
-                {name, <<"español - Uruguay"/utf8>>},
+                {name, <<"Español - Uruguay"/utf8>>},
                 {name_en, <<"Spanish - Uruguay"/utf8>>}
             ]},
             {<<"es-ve">>, [
                 {language, <<"es">>},
                 {region, <<"VE">>},
-                {name, <<"español - Venezuela"/utf8>>},
+                {name, <<"Español - Venezuela"/utf8>>},
                 {name_en, <<"Spanish - Venezuela"/utf8>>}
             ]}
         ]}
@@ -811,7 +811,7 @@ languages_list() -> [
     {<<"et">>, [
         {language, <<"et">>},
         {region, <<"EE">>},
-        {name, <<"eesti"/utf8>>},
+        {name, <<"Eesti"/utf8>>},
         {name_en, <<"Estonian"/utf8>>}
     ]},
     {<<"eu">>, [
@@ -828,7 +828,7 @@ languages_list() -> [
     ]},
     {<<"fi">>, [
         {language, <<"fi">>},
-        {name, <<"suomi"/utf8>>},
+        {name, <<"Suomi"/utf8>>},
         {name_en, <<"Finnish"/utf8>>}
     ]},
     {<<"fj">>, [
@@ -839,7 +839,7 @@ languages_list() -> [
     ]},
     {<<"fr">>, [
         {language, <<"fr">>},
-        {name, <<"français"/utf8>>},
+        {name, <<"Français"/utf8>>},
         {name_en, <<"French"/utf8>>},
         {sublanguages, [
             {<<"fr-be">>, [
@@ -883,7 +883,7 @@ languages_list() -> [
     {<<"fo">>, [
         {language, <<"fo">>},
         {region, <<"FO">>},
-        {name, <<"føroyskt"/utf8>>},
+        {name, <<"Føroyskt"/utf8>>},
         {name_en, <<"Faroese"/utf8>>}
     ]},
     {<<"fy">>, [
@@ -906,13 +906,13 @@ languages_list() -> [
     {<<"gl">>, [
         {language, <<"gl">>},
         {region, <<"ES">>},
-        {name, <<"galego"/utf8>>},
+        {name, <<"Galego"/utf8>>},
         {name_en, <<"Galician"/utf8>>}
     ]},
     {<<"gn">>, [
         {language, <<"gn">>},
         {region, <<"PY">>},
-        {name, <<"avañe'ẽ"/utf8>>},
+        {name, <<"Avañe'ẽ"/utf8>>},
         {name_en, <<"Guarani"/utf8>>}
     ]},
     {<<"gu">>, [
@@ -937,7 +937,7 @@ languages_list() -> [
     ]},
     {<<"hr">>, [
         {language, <<"hr">>},
-        {name, <<"hrvatski"/utf8>>},
+        {name, <<"Hrvatski"/utf8>>},
         {name_en, <<"Croatian"/utf8>>},
         {sublanguages, [
             {<<"hr-ba">>, [
@@ -956,7 +956,7 @@ languages_list() -> [
     ]},
     {<<"hu">>, [
         {language, <<"hu">>},
-        {name, <<"magyar"/utf8>>},
+        {name, <<"Magyar"/utf8>>},
         {name_en, <<"Hungarian"/utf8>>}
     ]},
     {<<"id">>, [
@@ -973,12 +973,12 @@ languages_list() -> [
     {<<"is">>, [
         {language, <<"is">>},
         {region, <<"IS">>},
-        {name, <<"íslenska"/utf8>>},
+        {name, <<"Íslenska"/utf8>>},
         {name_en, <<"Islandic"/utf8>>}
     ]},
     {<<"it">>, [
         {language, <<"it">>},
-        {name, <<"italiano"/utf8>>},
+        {name, <<"Italiano"/utf8>>},
         {name_en, <<"Italian"/utf8>>},
         {sublanguages, [
             {<<"it-ch">>, [
@@ -1004,7 +1004,7 @@ languages_list() -> [
     {<<"jv">>, [
         {language, <<"jv">>},
         {region, <<"ID">>},
-        {name, <<"basa jawa"/utf8>>},
+        {name, <<"Basa jawa"/utf8>>},
         {name_en, <<"Javanese"/utf8>>}
     ]},
     {<<"ka">>, [
@@ -1022,13 +1022,13 @@ languages_list() -> [
     ]},
     {<<"lt">>, [
         {language, <<"lt">>},
-        {name, <<"lietuvių"/utf8>>},
+        {name, <<"Lietuvių"/utf8>>},
         {name_en, <<"Lithuanian"/utf8>>}
     ]},
     {<<"lv">>, [
         {language, <<"lv">>},
         {region, <<"LV">>},
-        {name, <<"latviešu"/utf8>>},
+        {name, <<"Latviešu"/utf8>>},
         {name_en, <<"Latvian"/utf8>>}
     ]},
     {<<"mg">>, [
@@ -1076,7 +1076,7 @@ languages_list() -> [
     ]},
     {<<"no">>, [
         {language, <<"no">>},
-        {name, <<"norsk"/utf8>>},
+        {name, <<"Norsk"/utf8>>},
         {name_en, <<"Norwegian"/utf8>>}
     ]},
     {<<"nn">>, [
@@ -1108,7 +1108,7 @@ languages_list() -> [
     {<<"pl">>, [
         {language, <<"pl">>},
         {region, <<"PL">>},
-        {name, <<"polszczyzna"/utf8>>},
+        {name, <<"Polszczyzna"/utf8>>},
         {name_en, <<"Polish"/utf8>>}
     ]},
     {<<"ps">>, [
@@ -1119,26 +1119,26 @@ languages_list() -> [
     ]},
     {<<"pt">>, [
         {language, <<"pt">>},
-        {name, <<"português"/utf8>>},
+        {name, <<"Português"/utf8>>},
         {name_en, <<"Portuguese"/utf8>>},
         {sublanguages, [
             {<<"pt-br">>, [
                 {language, <<"pt">>},
                 {region, <<"BR">>},
-                {name, <<"português - Brasil"/utf8>>},
+                {name, <<"Português - Brasil"/utf8>>},
                 {name_en, <<"Portuguese - Brazil"/utf8>>}
             ]},
             {<<"pt-pt">>, [
                 {language, <<"pt">>},
                 {region, <<"PT">>},
-                {name, <<"português - Portugal"/utf8>>},
+                {name, <<"Português - Portugal"/utf8>>},
                 {name_en, <<"Portuguese - Portugal"/utf8>>}
             ]}
         ]}
     ]},
     {<<"ro">>, [
         {language, <<"ro">>},
-        {name, <<"română"/utf8>>},
+        {name, <<"Română"/utf8>>},
         {name_en, <<"Romanian"/utf8>>}
     ]},
     {<<"ru">>, [
@@ -1149,12 +1149,12 @@ languages_list() -> [
     ]},
     {<<"sk">>, [
         {language, <<"sk">>},
-        {name, <<"slovenčina"/utf8>>},
+        {name, <<"Slovenčina"/utf8>>},
         {name_en, <<"Slovak"/utf8>>}
     ]},
     {<<"sl">>, [
         {language, <<"sl">>},
-        {name, <<"slovenščina"/utf8>>},
+        {name, <<"Slovenščina"/utf8>>},
         {name_en, <<"Slovenian"/utf8>>}
     ]},
     {<<"sr">>, [
@@ -1165,12 +1165,12 @@ languages_list() -> [
     ]},
     {<<"sv">>, [
         {language, <<"sv">>},
-        {name, <<"svenska"/utf8>>},
+        {name, <<"Svenska"/utf8>>},
         {name_en, <<"Swedish"/utf8>>}
     ]},
     {<<"sq">>, [
         {language, <<"sq">>},
-        {name, <<"shqip"/utf8>>},
+        {name, <<"Shqip"/utf8>>},
         {name_en, <<"Albanian"/utf8>>}
     ]},
     {<<"th">>, [
