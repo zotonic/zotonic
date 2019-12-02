@@ -5,17 +5,24 @@
 
 cd `dirname $0`/../lib
 rm -rf bootstrap
-wget $1 -O bootstrap.zip
+curl -L $1 > bootstrap.zip
 unzip bootstrap.zip -d .
 rm bootstrap.zip
 mv bootstrap* bootstrap
 cd bootstrap/css
+
 # replace relative urls to fonts with absolute ones
 sed 's/..\/fonts/\/lib\/bootstrap\/fonts/g' bootstrap.css > bootstrap-tmp1.css
 sed 's/..\/fonts/\/lib\/bootstrap\/fonts/g' bootstrap.min.css > bootstrap.min-tmp1.css
-# replace sourceMappingURL to prevent it loading the sourcemap
-sed 's/\#\ sourceMappingURL/ sourceMappingURL/g' bootstrap-tmp1.css > bootstrap-tmp2.css
+
+# remove sourceMappingURL to prevent it loading the sourcemap
+sed 's/# sourceMappingURL=/ /g' bootstrap-tmp1.css > bootstrap-tmp2.css
+sed 's/# sourceMappingURL=/ /g' bootstrap.min-tmp1.css > bootstrap.min-tmp2.css
+
+# rename adapted css files
+mv bootstrap-tmp2.css bootstrap.css
+mv bootstrap.min-tmp2.css bootstrap.min.css
+
 # cleanup
-mv bootstrap-tmp1.css bootstrap.css
-mv bootstrap.min-tmp1.css bootstrap.min.css
-rm bootstrap-tmp2.css
+rm bootstrap-tmp1.css
+rm bootstrap.min-tmp1.css
