@@ -1466,9 +1466,7 @@ recombine_blocks_form(Props, OrgProps, Context) ->
                 fun({<<"block-">>, _}, Acc) ->
                     Acc;
                     ({<<"block-", Name/binary>>, Val}, Acc) ->
-                        Ts = binary:split(Name, <<"-">>, [global]),
-                        BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
-                        BlockField = lists:last(Ts),
+                        {BlockId, BlockField} = block_id(Name),
                         dict:append(BlockId, {BlockField, Val}, Acc)
                 end,
                 dict:new(),
@@ -1502,14 +1500,21 @@ recombine_blocks_import(Props, _OrgProps, Context) ->
 block_ids([], Acc) ->
     lists:reverse(Acc);
 block_ids([{<<"block-", Name/binary>>, _} | Rest], Acc) when Name =/= <<>> ->
-    Ts = binary:split(Name, <<"-">>, [global]),
-    BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
+    {BlockId, _Field} = block_id(Name),
     case lists:member(BlockId, Acc) of
         true -> block_ids(Rest, Acc);
         false -> block_ids(Rest, [BlockId | Acc])
     end;
 block_ids([_ | Rest], Acc) ->
     block_ids(Rest, Acc).
+
+
+% Typical block input field name: block-uH6I13Z5XYQ5-s-name
+block_id(Name) ->
+    case binary:split(Name, <<"-">>) of
+        [ BlockId, <<"s-", Field/binary>> ] -> {BlockId, Field};
+        [ BlockId, Field ] -> {BlockId, Field}
+    end.
 
 
 normalize_blocks(Blocks, Context) ->
