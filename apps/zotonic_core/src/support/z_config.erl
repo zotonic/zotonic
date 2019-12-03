@@ -1,4 +1,4 @@
-\%% @author Marc Worrell <marc@worrell.nl>
+%% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2017 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
 
