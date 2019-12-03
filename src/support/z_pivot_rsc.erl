@@ -146,8 +146,17 @@ insert_queue(Id, Context) ->
     case z_db:q("update rsc_pivot_queue
                  set serial = serial + 1
                  where rsc_id = $1", [Id], Context) of
-        1 -> ok;
-        0 -> z_db:q("insert into rsc_pivot_queue (rsc_id, due, is_update) values ($1, current_timestamp, true)", [Id], Context)
+        1 ->
+            ok;
+        0 ->
+            try
+                z_db:q("
+                    insert into rsc_pivot_queue (rsc_id, due, is_update)
+                    select id, current_timestamp, true
+                    from rsc where id = $1", [Id], Context)
+            catch
+                _:_ -> ok
+            end
     end.
 
 

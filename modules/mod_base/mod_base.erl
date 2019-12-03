@@ -30,10 +30,24 @@
 
 %% interface functions
 -export([
+    observe_edge_insert/2,
+    observe_edge_delete/2,
     observe_media_stillimage/2,
     observe_scomp_script_render/2,
     observe_dispatch/2
 ]).
+
+
+%% @doc If an edge is inserted, then force a repivot of the subject
+observe_edge_insert(#edge_insert{ subject_id=SubjectId }, Context) ->
+    z_pivot_rsc:insert_queue(SubjectId, Context),
+    ok.
+
+%% @doc If an edge is deleted, then force a repivot of the subject
+observe_edge_delete(#edge_delete{ subject_id=SubjectId }, Context) ->
+    z_pivot_rsc:insert_queue(SubjectId, Context),
+    ok.
+
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename} | {ok, {filepath, Filename, Path}}
