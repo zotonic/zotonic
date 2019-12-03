@@ -391,13 +391,13 @@ abs_url(Url, Context) ->
         false -> abs_url(<<$/, Url/binary>>, Context)
     end.
 
-has_url_protocol(<<"http:">>) -> true;
-has_url_protocol(<<"https:">>) -> true;
-has_url_protocol(<<"ws:">>) -> true;
-has_url_protocol(<<"wss:">>) -> true;
-has_url_protocol(<<"ftp:">>) -> true;
-has_url_protocol(<<"email:">>) -> true;
-has_url_protocol(<<"file:">>) -> true;
+has_url_protocol(<<"http:", _/binary>>) -> true;
+has_url_protocol(<<"https:", _/binary>>) -> true;
+has_url_protocol(<<"ws:", _/binary>>) -> true;
+has_url_protocol(<<"wss:", _/binary>>) -> true;
+has_url_protocol(<<"ftp:", _/binary>>) -> true;
+has_url_protocol(<<"email:", _/binary>>) -> true;
+has_url_protocol(<<"file:", _/binary>>) -> true;
 has_url_protocol(<<H, T/binary>>) when H >= $a andalso H =< $z ->
     has_url_protocol_1(T);
 has_url_protocol(_) ->

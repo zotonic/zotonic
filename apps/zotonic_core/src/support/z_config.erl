@@ -198,8 +198,16 @@ default(listen_ip6) ->
     end;
 default(listen_port) -> 8000;
 default(ssl_listen_port) -> 8443;
-default(port) -> ?MODULE:get(listen_port);
-default(ssl_port) -> ?MODULE:get(ssl_listen_port);
+default(port) ->
+    case ?MODULE:get(listen_port) of
+        none -> 80;
+        ListenPort -> ListenPort
+    end;
+default(ssl_port) ->
+    case ?MODULE:get(ssl_listen_port) of
+        none -> 443;
+        ListenPort -> ListenPort
+    end;
 default(max_connections) -> 20000;
 default(ssl_max_connections) -> 20000;
 default(security_headers) -> true;
