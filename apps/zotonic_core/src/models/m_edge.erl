@@ -219,10 +219,6 @@ insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
     of
         undefined ->
             F = fun(Ctx) ->
-                case z_convert:to_bool(proplists:get_value(no_pivot, Opts, false)) of
-                    true -> skip;
-                    false -> pivot_resources([SubjectId, ObjectId], Ctx)
-                end,
                 SeqOpt = maybe_seq_opt(Opts, SubjectId, PredId, Ctx),
                 CreatedOpt = case proplists:get_value(created, Opts) of
                                  DT when is_tuple(DT) -> [{created, DT}];
@@ -292,7 +288,6 @@ delete(Id, Context) ->
     ) of
         true ->
             F = fun(Ctx) ->
-                pivot_resources([SubjectId, ObjectId], Ctx),
                 z_db:delete(edge, Id, Ctx)
             end,
 
@@ -319,10 +314,6 @@ delete(SubjectId, Pred, ObjectId, Options, Context) ->
     ) of
         true ->
             F = fun(Ctx) ->
-                case z_convert:to_bool(proplists:get_value(no_pivot, Options)) of
-                    true -> ok;
-                    false -> pivot_resources([SubjectId, ObjectId], Ctx)
-                end,
                 z_db:q(
                     "delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",
                     [SubjectId, ObjectId, PredId],
@@ -356,7 +347,6 @@ delete_multiple(SubjectId, Preds, ObjectId, Context) ->
     case is_allowed(Allowed) of
         true ->
             F = fun(Ctx) ->
-                pivot_resources([SubjectId, ObjectId], Ctx),
                 z_db:q("delete
                         from edge
                         where subject_id = $1
@@ -430,7 +420,6 @@ duplicate(Id, ToId, Context) ->
     case z_acl:rsc_editable(Id, Context) andalso z_acl:rsc_editable(ToId, Context) of
         true ->
             F = fun(Ctx) ->
-                pivot_resources([ToId], Ctx),
                 FromEdges = z_db:q("
                                 select predicate_id, object_id, seq
                                 from edge
@@ -871,7 +860,6 @@ set_sequence(Id, Pred, ObjectIds, Context) ->
                 AllEdges = All ++ NewEdges,
                 SortedEdgeIds = [proplists:get_value(OId, AllEdges, -1) || OId <- ObjectIds],
                 z_db:update_sequence(edge, SortedEdgeIds, Ctx),
-                pivot_resources([Id], Ctx),
                 ok
             end,
 
@@ -961,7 +949,6 @@ update_sequence_edge_ids(Id, Pred, EdgeIds, Context) ->
                     All),
                 SortedEdgeIds = EdgeIds ++ lists:reverse(AppendToEnd),
                 z_db:update_sequence(edge, SortedEdgeIds, Ctx),
-                pivot_resources([Id], Ctx),
                 ok
             end,
 
@@ -1009,6 +996,3 @@ object_predicate_ids(Id, Context) ->
 subject_predicate_ids(Id, Context) ->
     Ps = z_db:q("select distinct predicate_id from edge where object_id = $1", [Id], Context),
     [P || {P} <- Ps].
-
-pivot_resources(Ids, Context) ->
-    [ z_pivot_rsc:insert_queue(Id, Context) || Id <- Ids ].
