@@ -225,15 +225,16 @@ maybe_accept_header(Context) ->
         undefined ->
             Context;
         AcceptHeader ->
-            Enabled = acceptable_languages(Context),
-            case cowmachine_accept_language:accept_header(Enabled, AcceptHeader) of
+            Acceptable = acceptable_languages(Context),
+            case cowmachine_accept_language:accept_header(Acceptable, AcceptHeader) of
                 {ok, Lang} -> set_language(binary_to_atom(Lang, utf8), Context);
                 {error, _} -> Context
             end
     end.
 
-% Fetch the list of acceptable languages and their primary fallback language.
+% Fetch the list of acceptable languages and their fallback languages.
 % Store this in the depcache (and memo) for quick(er) lookups.
+-spec acceptable_languages( z:context() ) -> list( {binary(), [ binary() ]} ).
 acceptable_languages(Context) ->
     z_depcache:memo(
         fun() ->
@@ -241,10 +242,8 @@ acceptable_languages(Context) ->
             lists:map(
                 fun(Code) ->
                     Lang = atom_to_binary(Code, utf8),
-                    case z_language:fallback_language(Code) of
-                        [] -> {Lang, undefined};
-                        [ F | _ ] -> {Lang, atom_to_binary(F, utf8)}
-                    end
+                    Fs = z_language:fallback_language(Code),
+                    {Lang, [ atom_to_binary(F, utf8) || F <- Fs ]}
                 end,
                 Enabled)
         end,
