@@ -26,7 +26,13 @@
 -export([
     m_get/3,
 
-    language_list_enabled/1
+    language_list_configured/1,
+    language_list_enabled/1,
+    main_languages/0,
+    all_languages/0,
+
+    sort_codes/1,
+    sort/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -69,14 +75,46 @@ default_language(Context) ->
     z_language:default_language(Context).
 
 language_list_configured(Context) ->
-    z_language:sort_properties(mod_translation:language_config(Context), name_en).
+    Config = mod_translation:language_config(Context),
+    List = lists:map(
+        fun({Code, IsEnabled}) ->
+            Props = z_language:properties(Code),
+            {Code, Props#{ is_enabled => IsEnabled} }
+        end,
+        Config),
+    sort(List).
 
 language_list_enabled(Context) ->
-	z_language:sort_properties(mod_translation:enabled_languages(Context), name).
+	sort_codes(mod_translation:enabled_languages(Context)).
 
 main_languages() ->
-    z_language:sort_properties(z_language:main_languages(), name_en).
+    sort(z_language:main_languages()).
 
 all_languages() ->
-    z_language:sort_properties(z_language:all_languages(), name_en).
+    sort(z_language:all_languages()).
+
+sort_codes(Codes) when is_list(Codes) ->
+    List = lists:map(
+        fun(Code) ->
+            {Code, z_language:properties(Code)}
+        end,
+        Codes),
+    sort(List).
+
+sort(Map) when is_map(Map) ->
+    List = maps:fold(
+        fun
+            (K, V, Acc) when is_atom(K) ->
+                [ {K, V} | Acc ];
+            (_, _, Acc) ->
+                Acc
+        end,
+        [],
+        Map),
+    sort(List);
+sort(List) ->
+    lists:sort(fun sortfun/2, List).
+
+sortfun({_, As}, {_, Bs}) ->
+    maps:get(sort_key, As) =< maps:get(sort_key, Bs).
 

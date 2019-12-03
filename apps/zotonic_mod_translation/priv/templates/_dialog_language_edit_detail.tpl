@@ -15,7 +15,7 @@ is_sublanguage
     language
 %}
 <div id="dialog_language_edit_content">
-    {% if initial_lang_code == undefined %}
+    {% if not initial_lang_code %}
         <a href="" id="mod_translation_details_back">{_ All languages _}</a>
         {% wire id="mod_translation_details_back"
             action={replace
@@ -28,11 +28,11 @@ is_sublanguage
     <div class="list-group mod_translation-language-detail">
         {% include "_dialog_language_edit_detail_item.tpl" code=code initial_lang_code=initial_lang_code language=language  %}
         {% with language.sublanguages as sublanguages %}
-            {% if initial_lang_code == undefined %}
+            {% if not initial_lang_code %}
                 {% if sublanguages or is_sublanguage %}
                     {% include "_dialog_language_edit_detail_sublanguage_note.tpl" %}
                 {% endif %}
-                {% for sub_code in sublanguages|element:1 %}
+                {% for sub_code,_lang in sublanguages|language_sort %}
                     {% with languages[sub_code] as sub_language %}
                         {% include "_dialog_language_edit_detail_item.tpl" code=sub_code initial_lang_code=initial_lang_code language=sub_language languages=languages  %}
                     {% endwith %}
