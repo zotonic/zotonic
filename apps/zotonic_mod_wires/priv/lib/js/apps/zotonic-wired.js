@@ -1112,7 +1112,6 @@ function z_transport_form(qmsg)
         if (opts.complete) {
             opts.complete(xhr, ok ? 'success' : 'error');
         }
-        z_transport_ensure();
     }
 }
 
