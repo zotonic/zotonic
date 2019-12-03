@@ -1,4 +1,4 @@
-%% @author Marc Worrell <marc@worrell.nl>
+\%% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2017 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
 
@@ -199,7 +199,11 @@ default(listen_ip6) ->
 default(listen_port) -> 8000;
 default(ssl_listen_port) -> 8443;
 default(port) -> ?MODULE:get(listen_port);
-default(ssl_port) -> ?MODULE:get(ssl_listen_port);
+default(ssl_port) ->
+    case ?MODULE:get(ssl_listen_port) of
+        none -> 443;
+        ListenPort -> ListenPort
+    end;
 default(max_connections) -> 20000;
 default(ssl_max_connections) -> 20000;
 default(security_headers) -> true;
