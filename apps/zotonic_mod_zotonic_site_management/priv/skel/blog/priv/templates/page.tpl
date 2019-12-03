@@ -3,14 +3,12 @@
 {% block title %}{{ m.rsc[id].title }}{% endblock %}
 
 {% block chapeau %}
-
 	{% include "_article_chapeau.tpl" %}
-
 {% endblock %}
 
 
 {% block content %}
-
+<div {% block content_attributes %}{% include "_language_attrs.tpl" id=id class="wrapper" %}{% endblock %}>
 	<h1>{{ m.rsc[id].title }}</h1>
 
 	{% if m.rsc[id].summary %}
@@ -27,9 +25,10 @@
 		{% endif %}
 	{% endblock %}
 
-	{{ m.rsc[id].body|show_media }}
-
-	{% include "_blocks.tpl" %}
+    {% block body %}
+        {{ m.rsc[id].body|show_media }}
+        {% include "_blocks.tpl" %}
+    {% endblock %}
 
 	{% block below_body %}{% endblock %}
 
@@ -42,5 +41,5 @@
         {% pager result=result dispatch='page' id=id hide_single_page %}
 
     {% endwith %}
-
+</div>
 {% endblock %}

@@ -254,7 +254,7 @@ normalize_answer([A,V]) -> normalize_answer({A,V}).
 render_update(#context{} = RenderContext, _Args, _Context) ->
     RenderContext;
 render_update(#render{} = Render, Args, Context) ->
-    TargetId = proplists:get_value(element_id, Args, "survey-question"),
+    TargetId = proplists:get_value(element_id, Args, <<"survey-question">>),
     z_render:update(TargetId, Render, Context).
 
 

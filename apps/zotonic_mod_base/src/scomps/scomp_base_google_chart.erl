@@ -53,7 +53,7 @@ render(Params, _Vars, Context) ->
     DataArg1 = lists:flatten(DataArg),
 
     % Path to Google API
-    Path = "http://chart.apis.google.com/chart?",
+    Path = "https://chart.apis.google.com/chart?",
 
     % Chart Type...
     Type = [
