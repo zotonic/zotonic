@@ -35,7 +35,7 @@
 ]).
 
 -include_lib("zotonic.hrl").
--include_lib("erlang_localtime/include/tz_database.hrl").
+-include_lib("qdate_localtime/include/tz_database.hrl").
 
 % @doc Return a list of countries in the current language
 m_find_value(countries, #m{value=undefined}, Context) ->
