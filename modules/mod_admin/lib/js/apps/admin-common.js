@@ -115,9 +115,6 @@ After a page connection is done. Calls a named wire (that must exist).
 See: _admin_edit_content_page_connections_list.tpl
 */
 window.zAdminConnectDone = function(v) {
-    if (v.is_new) {
-        z_event("links-" + v.subject_id + "-" + v.predicate);
-    }
 };
 
 window.zAdminLinkDone = function(v) {
