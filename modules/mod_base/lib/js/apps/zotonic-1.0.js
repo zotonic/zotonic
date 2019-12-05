@@ -326,7 +326,7 @@ function z_event(name, extraParams)
     }
     else if (window.console)
     {
-        console.error("z_event: no registered event named: '"+name+"'");
+        console.log("z_event: no registered event named: '"+name+"'");
     }
 }
 
