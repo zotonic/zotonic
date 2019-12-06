@@ -1,3 +1,4 @@
+{% block language_options %}
 {% with m.rsc[id].language as r_lang %}
 <div class="form-group">
     <div id="admin-translation-checkboxes">
@@ -16,3 +17,4 @@
     </div>
 </div>
 {% endwith %}
+{% endblock %}
