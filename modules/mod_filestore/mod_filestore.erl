@@ -154,19 +154,20 @@ manage_schema(Version, Context) ->
     m_filestore:install(Version, Context).
 
 lookup(Path, Context) ->
-    case m_filestore:lookup(Path, Context) of
-        undefined ->
-            undefined;
-        Props when is_list(Props) ->
-            {location, Location} = proplists:lookup(location, Props),
+    Entry = m_filestore:lookup(Path, Context),
+    case m_filestore:is_dowload_ok(Entry) of
+        true ->
+            {location, Location} = proplists:lookup(location, Entry),
             case filezcache:locate_monitor(Location) of
                 {ok, {file, _Size, Filename}} ->
-                    {ok, {filename, Filename, Props}};
+                    {ok, {filename, Filename, Entry}};
                 {ok, {pid, Pid}} ->
-                    {ok, {filezcache, Pid, Props}};
+                    {ok, {filezcache, Pid, Entry}};
                 {error, enoent} ->
-                    load_cache(Props, Context)
-            end
+                    load_cache(Entry, Context)
+            end;
+        false ->
+            undefined
     end.
 
 load_cache(Props, Context) ->
