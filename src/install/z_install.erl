@@ -182,12 +182,17 @@ model_pgsql() ->
     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_modifier_id FOREIGN KEY (modifier_id)
       REFERENCES rsc (id)
       ON UPDATE CASCADE ON DELETE SET NULL",
+    "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id FOREIGN KEY (modifier_id)
+      REFERENCES rsc (id)
+      ON UPDATE CASCADE ON DELETE RESTRICT",
 
      "CREATE INDEX fki_rsc_content_group_id ON rsc (content_group_id)",
      "CREATE INDEX fki_rsc_creator_id ON rsc (creator_id)",
      "CREATE INDEX fki_rsc_modifier_id ON rsc (modifier_id)",
-     "CREATE INDEX fki_rsc_created ON rsc (created)",
-     "CREATE INDEX fki_rsc_modified ON rsc (modified)",
+     "CREATE INDEX fki_rsc_category_id ON rsc (category_id)",
+
+     % "CREATE INDEX fki_rsc_created ON rsc (created)",
+     % "CREATE INDEX fki_rsc_modified ON rsc (modified)",
 
      "CREATE INDEX rsc_pivot_tsv_key ON rsc USING gin(pivot_tsv)",
      "CREATE INDEX rsc_pivot_rtsv_key ON rsc USING gin(pivot_rtsv)",
@@ -195,9 +200,9 @@ model_pgsql() ->
      "CREATE INDEX rsc_pivot_category_nr ON rsc (pivot_category_nr)",
      "CREATE INDEX rsc_pivot_surname_key ON rsc (pivot_surname)",
      "CREATE INDEX rsc_pivot_first_name_key ON rsc (pivot_first_name)",
-     "CREATE INDEX rsc_pivot_gender_key ON rsc (pivot_gender)",
-     "CREATE INDEX rsc_pivot_date_start_key ON rsc (pivot_date_start)",
-     "CREATE INDEX rsc_pivot_date_end_key ON rsc (pivot_date_end)",
+     % "CREATE INDEX rsc_pivot_gender_key ON rsc (pivot_gender)",
+     % "CREATE INDEX rsc_pivot_date_start_key ON rsc (pivot_date_start)",
+     % "CREATE INDEX rsc_pivot_date_end_key ON rsc (pivot_date_end)",
      "CREATE INDEX rsc_pivot_date_start_month_day_key ON rsc (pivot_date_start_month_day)",
      "CREATE INDEX rsc_pivot_date_end_month_day_key ON rsc (pivot_date_end_month_day)",
      "CREATE INDEX rsc_pivot_city_street_key ON rsc (pivot_city, pivot_street)",
@@ -206,6 +211,15 @@ model_pgsql() ->
      "CREATE INDEX rsc_pivot_geocode_key ON rsc (pivot_geocode)",
      "CREATE INDEX rsc_pivot_title_key ON rsc (pivot_title)",
      "CREATE INDEX rsc_pivot_location_key ON rsc (pivot_location_lat, pivot_location_lng)",
+
+     % Extra search indices
+     "CREATE INDEX rsc_modified_category_nr_key ON rsc (modified, pivot_category_nr)",
+     "CREATE INDEX rsc_created_category_nr_key ON rsc (created, pivot_category_nr)",
+     "CREATE INDEX rsc_pivot_date_start_category_nr_key ON rsc (pivot_date_start, pivot_category_nr)",
+     "CREATE INDEX rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)",
+     "CREATE INDEX rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)",
+     "CREATE INDEX rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)",
+
 
     % Table: rsc_gone
     % Tracks deleted or moved resources, adding "410 gone" support

@@ -134,6 +134,7 @@ search_result(#search_sql{} = Q, Limit, Context) ->
         _ ->
             Rows = case Q#search_sql.assoc of
                 false ->
+                    io:format("~n~s~n~n~p~n~n", [ Sql, Args ]),
                     Rs = z_db:q(Sql, Args, Context),
                     case Rs of
                         [{_}|_] -> [ R || {R} <- Rs ];
