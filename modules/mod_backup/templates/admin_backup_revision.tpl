@@ -46,6 +46,7 @@
     </p>
 </div>
 
+{% if id.is_editable %}
 
 <div class="row">
 
@@ -135,6 +136,13 @@ z_notify("rev-diff", {
 	z_delegate: `controller_admin_backup_revision`
 });
 {% endjavascript %}
+
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+         {_ You are not allowed to edit this page. _}
+    </div>
+{% endif %}
 
 {% endblock %}
 

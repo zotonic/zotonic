@@ -39,7 +39,12 @@
 m_find_value(list, #m{value=undefined} = M, _Context) ->
     M#m{value=list};
 m_find_value(Id, #m{value=list}, Context) when is_integer(Id) ->
-    list_revisions_assoc(Id, Context);
+    case m_rsc:is_editable(Id, Context) of
+        true ->
+            list_revisions_assoc(Id, Context);
+        false ->
+            []
+    end;
 m_find_value(_X, #m{}, _Context) ->
     undefined.
 
