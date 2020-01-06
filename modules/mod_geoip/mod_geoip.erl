@@ -1,7 +1,7 @@
 %% @doc Map IP addresses to geo locations using the MaxMind database.
 %% @author Marc Worrell <marc@worrell.nl>
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,13 +21,17 @@
 -mod_title("GeoIP").
 -mod_description("Map IP addresses to geo locations.").
 
--define(MAXMIND_COUNTRY_DB_URL, "https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz").
--define(MAXMIND_CITY_DB_URL, "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz").
+-define(MAXMIND_COUNTRY_DB, 'GeoLite2-Country').
+-define(MAXMIND_CITY_DB, 'GeoLite2-City').
 
 -export([
     init/1,
-    lookup/1
+    lookup/1,
+
+    license_key/0
 ]).
+
+-include("zotonic.hrl").
 
 -spec lookup( tuple() | string() | binary) -> {ok, map()} | {error, invalid_address|not_found}.
 lookup(IP) ->
@@ -38,17 +42,49 @@ lookup(IP) ->
             Error
     end.
 
-init(_Context) ->
+init(Context) ->
     {ok, _} = application:ensure_all_started(locus),
-    case locus:start_loader(city, ?MAXMIND_CITY_DB_URL) of
+    maybe_set_license_key(license_key(), Context),
+    case locus:start_loader(city, ?MAXMIND_CITY_DB) of
         ok ->
             ok;
         {error, already_started} ->
             ok;
         {error, Reason} ->
-            lager:error("mod_geoip: could not start locus loader: ~p", [Reason])
+            ?zError("Could not start mod_geoip dependency locus: ~p", [ Reason ], Context)
     end.
 
+maybe_set_license_key(undefined, Context) -> maybe_log_error(Context);
+maybe_set_license_key("", Context) -> maybe_log_error(Context);
+maybe_set_license_key(<<>>, Context) -> maybe_log_error(Context);
+maybe_set_license_key(LicenseKey, _Context) ->
+    application:set_env(locus, license_key, z_convert:to_list(LicenseKey)).
+
+maybe_log_error(Context) ->
+    case application:get_env(locus, license_key) of
+        {ok, "YOUR_LICENSE_KEY"} -> log_error(Context);
+        {ok, ""} -> log_error(Context);
+        {ok, _} -> ok;
+        undefined -> log_error(Context)
+    end.
+
+log_error(Context) ->
+    ?zError("Please provide a MaxMind license key in zotonic.config key 'maxmind_license_key'", Context).
+
+license_key() ->
+    case z_config:get(maxmind_license_key) of
+        undefined -> license_key_app();
+        "" -> license_key_app();
+        LicKey -> LicKey
+    end.
+
+license_key_app() ->
+    case application:get_env(locus, license_key) of
+        {ok, "YOUR_LICENSE_KEY"} -> undefined;
+        {ok, ""} -> undefined;
+        {ok, LicenseKey} -> LicenseKey;
+        undefined -> undefined
+    end.
 
 result(Map) ->
     #{
