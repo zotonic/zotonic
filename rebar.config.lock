@@ -1,6 +1,6 @@
 %% THIS FILE IS GENERATED. DO NOT EDIT IT MANUALLY %%
 
-{require_min_otp_vsn,"18"}.
+{require_min_otp_vsn,"19"}.
 {erl_opts,[{parse_transform,lager_transform},
            {platform_define,"^([0-9]+)",namespaced_dicts},
            {platform_define,"^([0-9]+|R16)",coding_utf8},
