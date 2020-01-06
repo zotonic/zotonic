@@ -19,9 +19,11 @@
 
 {% block widget_content %}
 <div class="form-group">
-    <p>
-    	<a href="{% url admin_backup_revision id=id %}">{_ List and restore an earlier version _}</a>
-    </p>
+    {% if id.is_editable %}
+        <p>
+        	<a href="{% url admin_backup_revision id=id %}">{_ List and restore an earlier version _}</a>
+        </p>
+    {% endif %}
 
     <div>
     	<a href="{% url id zotonic_http_accept="bert" id=id %}" class="btn btn-default">{_ Download backup file _}</a>

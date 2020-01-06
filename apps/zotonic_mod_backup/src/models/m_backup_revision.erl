@@ -37,7 +37,12 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ list, Id | Rest ], _Msg, Context) ->
-    {ok, {list_revisions_assoc(Id, Context), Rest}};
+    Id1 = m_rsc:rid(Id, Context),
+    Revs = case m_rsc:is_editable(Id1, Context) of
+        true -> list_revisions_assoc(Id1, Context);
+        false -> []
+    end,
+    {ok, {Revs, Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
