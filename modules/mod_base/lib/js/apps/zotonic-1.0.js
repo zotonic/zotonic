@@ -1631,7 +1631,7 @@ window.onerror = function(message, file, line, col, error) {
             file: file,
             line: line,
             col: col,
-            stack: error.stack,
+            stack: error ? error.stack : null,
             user_agent: navigator.userAgent,
             url: window.location.href
         };
