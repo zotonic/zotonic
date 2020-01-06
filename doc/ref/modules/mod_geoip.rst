@@ -1,5 +1,6 @@
 
 .. include:: meta-mod_geoip.rst
+.. highlight:: erlang
 
 Used to map IP addresses to geographical locations.
 
@@ -9,9 +10,7 @@ The database is updated automatically.
 For downloading the database you need a License Key from MaxMind.
 The License Key can be generated after `registering with MaxMind <https://www.maxmind.com/en/geolite2/signup>`_.
 
-The obtained license key can be configured in the ``erlang.config`` file with:
-
-.. highlight:: erlang
+The obtained license key can be configured in the ``erlang.config`` file with::
 
     {locus, [
         {license_key, "YOUR_LICENSE_KEY"}
