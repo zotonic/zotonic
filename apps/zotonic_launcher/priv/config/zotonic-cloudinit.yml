@@ -56,6 +56,4 @@ runcmd:
 
 # Add commands to:
 # - Optionally set a wwwadmin password?
-# - Add boot zotonic start command
-
-final_message: "Zotonic cloudinit boot finished at $TIMESTAMP. Up $UPTIME seconds"
+# - Add init.d zotonic start command

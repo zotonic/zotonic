@@ -25,6 +25,43 @@ You can now move on to :ref:`creating your first site <guide-create-site>`.
 
 .. _guide-installation:
 
+
+Cloud-Init
+----------
+
+A cloud-init file is supplied in `zotonic_launcher <https://github.com/zotonic/zotonic/blob/master/apps/zotonic_launcher/priv/config/zotonic-cloudinit.yml>`_.
+
+This file can be used to install a VPS by providers that support cloud-init. Hetzner is one such provider.
+
+After the cloud-init is done with its installation a new server is up and running on port 80 and 443.
+It will be using a self-signed certificate, located in ``/home/zotonic/.zotonic/1/security/self-signed/``.
+
+The ``wwwadmin`` password for the zotonic status site can be found after logging in to your server::
+
+    # sudo su - zotonic
+    zotonic:~$ cd zotonic
+    zotonic:~/zotonic$ bin/zotonic config
+
+    Zotonic config for 'zotonic@yourvps':
+    =================================
+
+    zotonic:
+        environment: production
+        zotonic_apps: /home/zotonic/zotonic/apps_user
+        security_dir: /home/zotonic/.zotonic/security
+        password: wXuqsZkC4qp8j1AZHyO3
+        timezone: UTC
+        ...
+
+The server can be stopped and started using the command line::
+
+    zotonic:~/zotonic$ bin/zotonic stop
+    Stopping zotonic 'zotonic@yourvps' .... OK
+    zotonic:~/zotonic$ bin/zotonic start
+    Waiting for zotonic: . OK
+
+
+
 Installation
 ------------
 
@@ -36,7 +73,7 @@ Preparation
 
 First prepare your system for running Zotonic. Zotonic needs:
 
-* Erlang 18 or higher
+* Erlang 19 or higher
 * PostgreSQL 8.4 or higher
 * ImageMagick 6.5 or higher for image resizing
 * Git for pulling in external dependencies
