@@ -1,30 +1,32 @@
 %% -*- mode: erlang -*-
 %% Base dispatch rules for zotonic
 [
- 
- %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
- {close_connection, ["close-connection"],  controller_close_connection, [{no_session, true}]},
+    %% Used in Ajax file upload, fixes a problem in Safari.  Just closes the connection.
+    {close_connection, ["close-connection"],  controller_close_connection, []},
 
- %% The id controller redirects depending on the accept header sent by the user agent.
- {id, ["id", id], controller_id, []},
- 
- %% CSS, Javascript and images from the "lib" module folders. Possibly more than one file combined in a single request.
- {lib, ["lib",'*'], controller_file, [ {root,[lib]}]},
- 
- {image, ["image",'*'], controller_file, []},
- 
- {media_attachment, ["media","attachment","id",id], controller_file_id, [ {dispatch, media_attachment}]},
- {media_attachment, ["media","attachment",'*'], controller_file, [ {content_disposition, attachment}]},
- 
- {media_inline, ["media","inline","id",id], controller_file_id, [ {dispatch, media_inline}]},
- {media_inline, ["media","inline",'*'], controller_file, [ {content_disposition, inline}]},
- 
- %% API access
- {api, ["api", '*'], controller_api, []},
- 
- %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
- {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}]},
- 
- %% robots.txt - simple allow all file
- {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]}
+    %% The id controller redirects depending on the accept header sent by the user agent.
+    {id, ["id", id], controller_id, []},
+
+    %% CSS, Javascript and images from the "lib" module folders. Possibly more than one file combined in a single request.
+    {lib, ["lib",'*'], controller_file, [ {root,[lib]}]},
+
+    {image, ["image",'*'], controller_file, []},
+
+    {media_attachment, ["media","attachment","id",id], controller_file_id, [ {dispatch, media_attachment}]},
+    {media_attachment, ["media","attachment",'*'], controller_file, [ {content_disposition, attachment}]},
+
+    {media_inline, ["media","inline","id",id], controller_file_id, [ {dispatch, media_inline}]},
+    {media_inline, ["media","inline",'*'], controller_file, [ {content_disposition, inline}]},
+
+    %% API access
+    {api, ["api", '*'], controller_api, []},
+
+    %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
+    {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}]},
+
+    %% Log client side javascript event. This is ignored by default `mod_logging` overrides this when enabled.
+    {jslog, ["log-client-event"], controller_nocontent, []},
+
+    %% robots.txt - simple allow all file
+    {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]}
 ].
