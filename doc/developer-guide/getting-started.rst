@@ -34,11 +34,11 @@ A cloud-init file is supplied in `zotonic_launcher <https://github.com/zotonic/z
 This file can be used to install a VPS by providers that support cloud-init. Hetzner is one such provider.
 
 After the cloud-init is done with its installation a new server is up and running on port 80 and 443.
-It will be using a self-signed certificate, located in ``/home/zotonic/.zotonic/1/security/self-signed/``.
+It will be using a self-signed certificate, located in ``/home/zotonic/.zotonic/security/self-signed/``.
 
 The ``wwwadmin`` password for the zotonic status site can be found after logging in to your server::
 
-    # sudo su - zotonic
+    root:~# sudo su - zotonic
     zotonic:~$ cd zotonic
     zotonic:~/zotonic$ bin/zotonic config
 
