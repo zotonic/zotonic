@@ -92,7 +92,7 @@ watches() ->
 %% @doc Drop the site's datbase schema
 ensure_drop_test_schema(Site) ->
     {ok, Config} = z_sites_manager:get_site_config(Site),
-    DbConfig = z_db_pool:db_opts(Config),
+    DbConfig = z_db_pool:database_options(Site, Config),
     Database = proplists:get_value(dbdatabase, DbConfig),
     Schema = proplists:get_value(dbschema, DbConfig),
     {ok, Conn} = open_connection(Database, DbConfig),

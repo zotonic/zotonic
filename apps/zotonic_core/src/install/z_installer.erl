@@ -151,7 +151,7 @@ check_db_and_upgrade(_Context, _Tries) ->
     {error, database}.
 
 maybe_drop_db(Context) ->
-    DbOptions = z_db_pool:db_opts(m_site:all(Context)),
+    DbOptions = z_db_pool:database_options(z_context:site(Context), m_site:all(Context)),
     case proplists:get_value(dbdropschema, DbOptions, false) of
         true ->
             case z_db_pool:test_connection(Context) of

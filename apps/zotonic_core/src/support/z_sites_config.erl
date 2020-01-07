@@ -22,7 +22,8 @@
     app_is_site/1,
     config_files/1,
     config_files/2,
-    read_configs/1
+    read_configs/1,
+    merge_global_configs/3
     ]).
 
 -define(CONFIG_FILE, "zotonic_site.*").
@@ -126,3 +127,17 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
         end,
         Cfgs,
         Data).
+
+%% @doc Merge the global config options into the site's options, adding defaults.
+-spec merge_global_configs( atom(), map(), map() ) -> map().
+merge_global_configs( Sitename, SiteConfig, GlobalConfig ) ->
+    ZotonicConfig = maps:get(zotonic, GlobalConfig, #{}),
+    DbOptions = z_db_pool:database_options( Sitename, maps:to_list(SiteConfig), maps:to_list(ZotonicConfig) ),
+    lists:foldl(
+        fun({K, V}, Acc) ->
+            Acc#{ K => V }
+        end,
+        SiteConfig,
+        DbOptions).
+
+

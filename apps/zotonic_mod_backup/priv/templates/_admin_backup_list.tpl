@@ -14,9 +14,9 @@
                             {% if in_progress %}
                                 <span class="label label-info">{_ this backup is in progress _}</span>
                             {% else %}
-                                <a class="btn btn-default btn-xs" href="{% url backup_download star=[id, ".sql"] %}">{_ download database _}</a>
+                                <a class="btn btn-default btn-xs" href="{% url backup_download star=id++".sql" %}">{_ download database _}</a>
                                 {% if is_full_backup %}
-                                    <a class="btn btn-default btn-xs" href="{% url backup_download star=[id, ".tar.gz"] %}">{_ download files _}</a>
+                                    <a class="btn btn-default btn-xs" href="{% url backup_download star=id++".tar.gz" %}">{_ download files _}</a>
                                 {% endif %}
                             {% endif %}
                         </div>
