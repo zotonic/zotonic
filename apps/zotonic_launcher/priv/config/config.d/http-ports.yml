@@ -1,0 +1,6 @@
+# Set the outside ports to the default http(s) ports.
+# Copy this to ~/.zotonic/config.d/http-ports.yml
+zotonic:
+    port: 80
+    ssl_port: 443
+

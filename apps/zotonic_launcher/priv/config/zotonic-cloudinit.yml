@@ -49,11 +49,14 @@ runcmd:
   - echo "zotonic   soft   nofile   20000" > /etc/security/limits.d/zotonic.conf
   - echo "zotonic   hard   nofile   20000" >> /etc/security/limits.d/zotonic.conf
   - sudo su zotonic -l -c "git clone 'https://github.com/zotonic/zotonic'"
-  - sudo su zotonic -l -c "cd zotonic; make; bin/zotonic start"
+  - sudo su zotonic -l -c "mkdir -p .zotonic/config.d"
+  - sudo su zotonic -l -c "mkdir -p .zotonic/security"
+  - sudo su zotonic -l -c "cp zotonic/apps/zotonic_launcher/config.d/http-ports.yml .zotonic/config.d/."
+  - sudo su zotonic -l -c "cd zotonic; make"
+  - sudo su zotonic -l -c "cd zotonic; bin/zotonic start"
 
 # Add commands to:
-# - Change the zotonic ip config to 80/443/25
 # - Optionally set a wwwadmin password?
-# - ?? add boot zotonic start command?
+# - Add boot zotonic start command
 
 final_message: "Zotonic cloudinit boot finished at $TIMESTAMP. Up $UPTIME seconds"
