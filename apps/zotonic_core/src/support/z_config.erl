@@ -238,7 +238,7 @@ default(ssl_dhfile) -> undefined;
 default(dbhost) -> "localhost";
 default(dbport) -> 5432;
 default(dbuser) -> "zotonic";
-default(dbpassword) -> "";
+default(dbpassword) -> "zotonic";
 default(dbdatabase) -> "zotonic";
 default(dbschema) -> "public";
 default(filewatcher_enabled) -> true;

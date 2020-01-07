@@ -29,7 +29,7 @@
 %%% These are the defaults for the equally named options in your site's config file.
    %% {dbdatabase, "zotonic"},
    %% {dbschema, "public"},
-   %% {dbpassword, []},
+   %% {dbpassword, "zotonic"},
    %% {dbuser, "zotonic"},
    %% {dbport, 5432},
    %% {dbhost, "localhost"},

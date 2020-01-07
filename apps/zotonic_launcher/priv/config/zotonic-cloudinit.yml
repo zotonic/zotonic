@@ -49,9 +49,9 @@ runcmd:
   - echo "zotonic   soft   nofile   20000" > /etc/security/limits.d/zotonic.conf
   - echo "zotonic   hard   nofile   20000" >> /etc/security/limits.d/zotonic.conf
   - sudo su zotonic -l -c "git clone 'https://github.com/zotonic/zotonic'"
-  - sudo su zotonic -l -c "mkdir -p .zotonic/config.d"
-  - sudo su zotonic -l -c "mkdir -p .zotonic/security"
-  - sudo su zotonic -l -c "cp zotonic/apps/zotonic_launcher/config.d/http-ports.yml .zotonic/config.d/."
+  - sudo su zotonic -l -c "git checkout cloudinit-example"
+  - sudo su zotonic -l -c "mkdir -p .zotonic/1/config.d"
+  - sudo su zotonic -l -c "cp zotonic/apps/zotonic_launcher/config.d/http-ports.yml .zotonic/1/config.d/."
   - sudo su zotonic -l -c "cd zotonic; make"
   - sudo su zotonic -l -c "cd zotonic; bin/zotonic start"
 
