@@ -217,10 +217,19 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
 %% @doc Accumulate/overlay the found application configuration. Ensure that the app
 %%      configuration is a map.
 app_config(App, Data, Acc) when is_map(Data), is_atom(App) ->
-    {ok, Acc#{ App => Data }};
+    NewData = merge_maps( Data, maps:get(App, Acc, #{}) ),
+    {ok, Acc#{ App => NewData }};
 app_config(App, Data, Acc) when is_list(Data), is_atom(App) ->
-    Map = list_to_map(Data),
-    {ok, Acc#{ App => Map }}.
+    NewData = merge_maps( list_to_map(Data), maps:get(App, Acc, #{}) ),
+    {ok, Acc#{ App => NewData }}.
+
+merge_maps(Overlay, Base) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            Acc#{ K => V }
+        end,
+        Base,
+        Overlay).
 
 % Flatten a nested list of proplists to a map.
 list_to_map(Data) ->
