@@ -12,9 +12,9 @@ users:
   - default
   - name: zotonic
     gecos: Zotonic
-    sudo: False
-    groups: users
+    sudo: false
     lock_passwd: true
+    shell: /bin/bash
     # ssh_authorized_keys:
     #   - <ssh pub key 1>
     #   - <ssh pub key 2>
