@@ -29,7 +29,7 @@
 			<li><a class="caption" href="{% url archives_y year=year %}">{{ year }}</a>
 			<ul>
 				{% for row in months %}
-				<li><a href="{% url archives_m year=year month=row.month %}">{{ row.month_as_date|date:"F" }}</a> ({{ row.count }}){% if not forloop.last %},{% else %}.{% endif %}</li>
+				<li><a href="{% url archives_m year=year month=row.month %}">{{ row.month_as_date|date:"F":1 }}</a> ({{ row.count }}){% if not forloop.last %},{% else %}.{% endif %}</li>
 				{% endfor %}
 			</ul>
 			</li>
