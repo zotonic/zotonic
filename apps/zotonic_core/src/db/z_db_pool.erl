@@ -1,10 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014 Arjan Scherpenisse
-%% Date: 2014-04-29
-%%
+%% @copyright 2014-2020 Arjan Scherpenisse
 %% @doc Database pool wrapper
 
-%% Copyright 2014 Arjan Scherpenisse
+%% Copyright 2014-2020 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,9 +29,11 @@
          child_spec/2,
          get_database_options/1,
          test_connection/1,
+         test_connection/2,
          db_pool_name/1,
          db_driver/1,
-         db_opts/1,
+         database_options/2,
+         database_options/3,
          get_connection/1,
          return_connection/2
         ]).
@@ -94,20 +94,25 @@ db_driver(Context) ->
     end.
 
 %% @doc Perform a connect to test whether the database is working.
-test_connection(SiteProps) when is_list(SiteProps) ->
-    case proplists:get_value(dbdatabase, SiteProps) of
-        none ->
+-spec test_connection( atom(), proplists:proplist() ) -> ok | {error, nodatabase | noschema | term()}.
+test_connection(Site, SiteProps) when is_list(SiteProps) ->
+    Database = proplists:get_value(dbdatabase, SiteProps),
+    case has_database(Database) of
+        true ->
             {error, nodatabase};
-        _ ->
+        false ->
             DbDriver = db_driver(SiteProps),
-            DbOpts = db_opts(SiteProps),
+            DbOpts = database_options(Site, SiteProps),
             DbDriver:test_connection(DbOpts)
-    end;
+    end.
+
+-spec test_connection( z:context() ) -> ok | {error, nodatabase | noschema | term()}.
 test_connection(Context) ->
-    case m_site:get(dbdatabase, Context) of
-        none ->
+    Database = m_site:get(dbdatabase, Context),
+    case has_database(Database) of
+        true ->
             {error, nodatabase};
-        _ ->
+        false ->
             DbDriver = db_driver(Context),
             DbDriver:test_connection(get_database_options(Context))
     end.
@@ -115,24 +120,30 @@ test_connection(Context) ->
 
 %% @doc Get all configuration options for this site which are related
 %% to the database configuration.
+-spec get_database_options( z:context() ) -> proplists:proplist().
 get_database_options(Context) ->
-    z_depcache:memo(fun() -> db_opts(m_site:all(Context)) end, z_db_opts, ?WEEK, Context).
-
+    z_depcache:memo(
+        fun() ->
+            database_options(z_context:site(Context), m_site:all(Context))
+        end,
+        z_db_opts,
+        ?DAY,
+        Context).
 
 %% @doc Optionally add the db pool connection
-child_spec(Host, SiteProps) ->
-    case proplists:get_value(dbdatabase, SiteProps, atom_to_list(Host)) of
-        none ->
+child_spec(Site, SiteProps) ->
+    case has_database( proplists:get_value(dbdatabase, SiteProps, atom_to_list(Site)) ) of
+        false ->
             %% No database connection needed
             undefined;
-        _ ->
+        true ->
             %% Add a db pool to the site's processes
-            PoolSize    = proplists:get_value(db_max_connections, SiteProps, 10),
+            PoolSize  = proplists:get_value(db_max_connections, SiteProps, 10),
 
-            Name = db_pool_name(Host),
+            Name = db_pool_name(Site),
 
             WorkerModule = db_driver(SiteProps),
-            WorkerArgs = db_opts(SiteProps),
+            WorkerArgs = database_options(Site, SiteProps),
 
             PoolArgs = [{name, {local, Name}},
                         {worker_module, WorkerModule},
@@ -141,32 +152,61 @@ child_spec(Host, SiteProps) ->
             poolboy:child_spec(Name, PoolArgs, WorkerArgs)
     end.
 
-%% @doc Any argument starting with 'db' is considered a DB driver
-%% argument and those are the only arguments that are given to the
-%% database pool worker processes.
-db_opts(SiteProps) ->
-    Defaults = [
-        {dbhost, z_config:get(dbhost, "localhost")},
-        {dbport, z_config:get(dbport, 5432)},
-        {dbpassword, z_config:get(dbpassword, "")},
-        {dbuser, z_config:get(dbuser, "zotonic")},
-        {dbdatabase, z_config:get(dbdatabase, "zotonic")},
-        {dbschema, z_config:get(dbschema, "public")},
-        {dbdropschema, z_config:get(dbdropschema, false)}
-    ],
-    Kvs = lists:filter(
-        fun
-            ({K, V}) ->
-                proplists:is_defined(K, Defaults)
-                andalso not is_empty(V);
-            (_) ->
-                false
+has_database(none) -> false;
+has_database(<<"none">>) -> false;
+has_database("none") -> false;
+has_database(_) -> true.
+
+
+%% @doc Merge the database options from the global config into the site config.
+%%      If the site uses the default database and it has no schema defined then
+%%      the site's name is used as the schema name. If the site uses its own
+%%      database then the schema defaults to "public".
+-spec database_options( atom(), proplists:proplist() ) -> proplists:proplist().
+database_options(Sitename, SiteProps) ->
+    database_options(Sitename, SiteProps, db_opts_global()).
+
+-spec database_options( atom(), proplists:proplist(), proplists:proplist() ) -> proplists:proplist().
+database_options(Sitename, SiteProps, GlobalProps) ->
+    SiteProps1 = lists:filter(
+        fun({K, V}) ->
+            proplists:is_defined(K, db_optkeys()) andalso not is_empty(V)
         end,
         SiteProps),
-    lists:ukeymerge(1, lists:sort(Kvs), lists:sort(Defaults)).
+    DefaultDB = get_value(dbdatabase, GlobalProps, "zotonic"),
+    SitePropsDB = proplists:get_value(dbdatabase, SiteProps1, DefaultDB),
+    DefaultSchema = case SitePropsDB of
+        DefaultDB -> proplists:get_value(dbschema, SiteProps1, z_convert:to_list(Sitename));
+        _ -> get_value(dbschema, GlobalProps, "public")
+    end,
+    Defaults = [
+        {dbhost, get_value(dbhost, GlobalProps, "localhost")},
+        {dbport, get_value(dbport, GlobalProps, 5432)},
+        {dbpassword, get_value(dbpassword, GlobalProps, "")},
+        {dbuser, get_value(dbuser, GlobalProps, "zotonic")},
+        {dbdatabase, DefaultDB},
+        {dbschema, DefaultSchema},
+        {dbdropschema, get_value(dbdropschema, GlobalProps, false)},
+        {dbdriver, get_value(dbdriver, GlobalProps, ?DEFAULT_DB_DRIVER)}
+    ],
+    lists:ukeymerge(1, lists:sort(SiteProps1), lists:sort(Defaults)).
+
+get_value(K, Props, Default) ->
+    V = proplists:get_value(K, Props),
+    case is_empty(V) of
+        true -> Default;
+        false -> V
+    end.
+
+db_opts_global() ->
+    lists:map(
+        fun(K) ->
+            {K, z_config:get(K)}
+        end,
+        db_optkeys()).
 
 db_optkeys() ->
-    [ dbhost, dbport, dbpassword, dbuser, dbdatabase, dbschema, dbdropschema ].
+    [ dbhost, dbport, dbpassword, dbuser, dbdatabase, dbschema, dbdropschema, dbdriver ].
 
 is_empty(undefined) -> true;
 is_empty("") -> true;

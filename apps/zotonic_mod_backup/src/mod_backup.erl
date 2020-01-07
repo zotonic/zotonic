@@ -329,13 +329,13 @@ name(Context) ->
 
 %% @doc Dump the sql database into the backup directory.  The Name is the basename of the dump.
 pg_dump(Name, Context) ->
-    All = z_db_pool:get_database_options(Context),
-    Host = proplists:get_value(dbhost, All),
-    Port = proplists:get_value(dbport, All),
-    User = proplists:get_value(dbuser, All),
-    Password = proplists:get_value(dbpassword, All),
-    Database = proplists:get_value(dbdatabase, All),
-    Schema = proplists:get_value(dbschema, All),
+    DbOpts = z_db_pool:get_database_options(Context),
+    Host = proplists:get_value(dbhost, DbOpts),
+    Port = proplists:get_value(dbport, DbOpts),
+    User = proplists:get_value(dbuser, DbOpts),
+    Password = proplists:get_value(dbpassword, DbOpts),
+    Database = proplists:get_value(dbdatabase, DbOpts),
+    Schema = proplists:get_value(dbschema, DbOpts),
 
     DumpFile = filename:join([dir(Context), z_convert:to_list(Name) ++ ".sql"]),
     PgPass = filename:join([dir(Context), ".pgpass"]),

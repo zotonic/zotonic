@@ -72,7 +72,8 @@ test_connection(Args) ->
 test_connection_1(Args) ->
     case connect(Args) of
         {ok, Conn} ->
-            case z_db:schema_exists_conn(Conn, proplists:get_value(dbschema, Args, "public")) of
+            {dbschema, Schema} = proplists:lookup(dbschema, Args),
+            case z_db:schema_exists_conn(Conn, Schema) of
                 true ->
                     epgsql:close(Conn),
                     ok;
