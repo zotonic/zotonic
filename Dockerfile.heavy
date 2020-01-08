@@ -13,7 +13,7 @@ RUN mkdir /run/postgresql && chown postgres /run/postgresql
 
 COPY docker/s6-service /service
 COPY docker/docker-entrypoint-heavy.sh /opt/zotonic/docker
-COPY docker/zotonic-heavy.config /etc/zotonic/zotonic.config
+COPY docker/zotonic-heavy-docker.config /etc/zotonic/config.d/docker.config
 
 VOLUME /var/lib/postgresql
 

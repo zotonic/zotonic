@@ -9,11 +9,12 @@ WORKDIR /opt/zotonic
 # Git is necessary because rebar3 compile requires git.
 RUN apk add --no-cache bash file gettext git imagemagick openssl
 
-COPY docker/zotonic.config /etc/zotonic/zotonic.config
+COPY apps/zotonic_launcher/priv/config/zotonc.config.in /etc/zotonic/docker.config
+COPY docker/zotonic-docker.config /etc/zotonic/config.d/docker.config
+COPY docker/erlang.config /etc/zotonic/erlang.config
 
-RUN cp apps/zotonic_launcher/priv/config/erlang.config.docker /etc/zotonic/erlang.config \
-    && adduser -S -h /tmp -H -D zotonic \
-    && chown -R zotonic /opt/zotonic/apps/zotonic_launcher/priv
+RUN adduser -S -h /tmp -H -D zotonic
+RUN chown -R zotonic /opt/zotonic/apps/zotonic_launcher/priv
 
 VOLUME /etc/zotonic
 

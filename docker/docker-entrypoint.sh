@@ -22,11 +22,11 @@ if [ -e "/opt/zotonic/apps/zotonic_launcher/src/command/zotonic_cmd_$1.erl" ] ||
     # The mimetypes app writes here on startup
     chown -R zotonic /opt/zotonic/_build/default/lib/mimetypes/ebin
 
-    # The status site gets ssl keys written to its priv dir
-    chown -R zotonic /opt/zotonic/_build/default/lib/zotonic_site_status/priv/
+    # SSL certificates are generated here
+    mkdir /etc/zotonic/security && chown -R zotonic /etc/zotonic/security
 
     # Insert password from environment variable into zotonic.config
-    sed -i -e "s/{password, \"\"}/{password, \"${ZOTONIC_PASSWORD}\"}/" /etc/zotonic/zotonic.config
+    sed -i -e "s/{password, \"\"}/{password, \"${ZOTONIC_PASSWORD}\"}/" /etc/zotonic/config.d/docker.config
 
     exec /usr/bin/gosu zotonic /opt/zotonic/bin/zotonic "$@"
 else
