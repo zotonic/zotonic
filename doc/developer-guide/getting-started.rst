@@ -104,8 +104,22 @@ Install Homebrew_, then run::
 
 .. _Homebrew: https://brew.sh
 
-On Windows
-""""""""""
+FreeBSD
+"""""""
+
+Erlang and its dependencies can be installed with ``pkg``::
+
+  # pkg install sudo zip wget bash gmake curl git gcc erlang
+
+Also install ImageMagick and PostgreSQL, at the time of writing the commands below
+can be used, they should be updated with the newest available version::
+
+  # pkg install ImageMagick7-nox11
+  # pkg install postgresql10-server
+
+
+Windows
+"""""""
 
 Currently, Zotonic is not officially supported on the Windows
 platform. However, the main dependencies Erlang, PostgreSQL and
