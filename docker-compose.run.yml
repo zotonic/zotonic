@@ -15,8 +15,7 @@ services:
         links:
             - postgres
         volumes:
-            - ./sites:/opt/zotonic/user/sites
-            - ./modules:/opt/zotonic/user/modules
+            - ./apps_user:/opt/zotonic/apps_user
         ports:
             - 80:8000
             - 443:8443

@@ -22,13 +22,9 @@ Start a Zotonic image on your Docker machine::
 
     $ docker run -d -p 8443:8443 zotonic/zotonic-heavy
 
-Mount a volume that contains your Zotonic sites::
+Mount a volume that contains your Zotonic sites and modules::
 
-    $ docker run -d -v `pwd`/sites:/opt/zotonic/user/sites zotonic/zotonic-heavy
-
-And mount a volume with your custom Zotonic modules::
-
-    $ docker run -d -v `pwd`/sites:/opt/zotonic/user/sites -v `pwd`/modules:/opt/zotonic/user/modules zotonic/zotonic-heavy
+    $ docker run -d -v `pwd`/apps_user:/opt/zotonic/apps_user zotonic/zotonic-heavy
 
 zotonic-dev
 -----------
