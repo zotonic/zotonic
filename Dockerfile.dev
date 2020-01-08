@@ -1,7 +1,10 @@
 ARG ZOTONIC_VERSION=latest
 FROM zotonic/zotonic-base:${ZOTONIC_VERSION}
 
-RUN apk add --no-cache $BUILD_APKS inotify-tools
+# This Docker image is used to run Zotonic from the host file
+# system together with a postgresql container.
+#
+# $ docker-compose run --service-ports zotonic sh
 
 VOLUME /opt/zotonic
 VOLUME /etc/zotonic

@@ -1,6 +1,9 @@
 ARG ZOTONIC_VERSION=latest
 FROM zotonic/zotonic-base:${ZOTONIC_VERSION}
 
+# This Docker image is used to run Zotonic inside the container
+# in conjunction with a postgresql container.
+
 COPY . /opt/zotonic
 WORKDIR /opt/zotonic
 
