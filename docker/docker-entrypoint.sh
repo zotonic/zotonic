@@ -26,8 +26,7 @@ if [ -e "/opt/zotonic/apps/zotonic_launcher/src/command/zotonic_cmd_$1.erl" ] ||
     chown -R zotonic /opt/zotonic/_build/default/lib/zotonic_site_status/priv/
 
     # Insert password from environment variable into zotonic.config
-    sed -i -e "s/{password, \"\"}/{password, \"${ZOTONIC_PASSWORD}\"}/" \
-        /etc/zotonic/zotonic.config
+    sed -i -e "s/{password, \"\"}/{password, \"${ZOTONIC_PASSWORD}\"}/" /etc/zotonic/zotonic.config
 
     exec /usr/bin/gosu zotonic /opt/zotonic/bin/zotonic "$@"
 else

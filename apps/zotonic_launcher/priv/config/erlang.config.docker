@@ -1,0 +1,48 @@
+%% -*- mode: erlang -*-
+[
+
+ {exometer_core, [{predefined, [
+    {[erlang, memory], {function, erlang, memory, [], value, []}, []},
+    {[erlang, system_info], {function, erlang, system_info, ['$dp'], value, [process_count]}, []},
+    {[erlang, statistics], {function, erlang, statistics, ['$dp'], value, [run_queue]}, []},
+    {[erlang, io], {function, erlang, statistics, [io], match, {{'_', input}, {'_', output}}}, []}
+   ]}
+ ]},
+
+ {mnesia, [
+    {dir, "priv/mnesia"}
+ ]},
+
+ {lager,
+  [{handlers,
+    [
+      {lager_console_backend, [
+        {level, info},
+        {formatter, lager_default_formatter},
+        {formatter_config, [time, color, " [", severity, "] ", {site, [site, " "], ""}, {module, [module, ":", line, " "], ""}, message, "\n"]}
+      ]}
+    ]},
+   {crash_log, "priv/log/crash.log"}
+  ]},
+
+ {ssl,
+  [
+%%% The number of maximum number of ssl sessions cached by the server. Increase if you
+%%% of a lot of incoming connections.
+   {session_cache_server_max, 20000},
+%%% The maximum time the client side information is stored in the cache (in seconds)
+   {session_lifetime, 300}
+ ]},
+
+ {filezcache, [
+     {data_dir, "priv/filezcache/data"},
+     {journal_dir, "priv/filezcache/journal"}
+ ]},
+
+ {setup,
+  [
+   {data_dir, "priv/data"},
+   {log_dir,  "priv/log"}
+  ]}
+
+].
