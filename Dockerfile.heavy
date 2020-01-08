@@ -6,16 +6,18 @@ FROM zotonic/zotonic:${ZOTONIC_VERSION}
 # process supervision. When run, it considers Zotonic the "main"
 # process, and exits if it does.
 
-RUN apk --no-cache add inotify-tools postgresql postgresql-client s6 \
-    && gosu postgres initdb -D /var/lib/postgresql -U zotonic
+RUN apk --no-cache add inotify-tools postgresql postgresql-client s6
 
 RUN mkdir /run/postgresql && chown postgres /run/postgresql
+RUN gosu postgres initdb -D /var/lib/postgresql -U zotonic
 
 COPY docker/s6-service /service
 COPY docker/docker-entrypoint-heavy.sh /opt/zotonic/docker
-COPY docker/zotonic-heavy-docker.config /etc/zotonic/config.d/docker.config
+COPY docker/zotonic-docker-heavy.config /etc/zotonic/config.d/00-docker.config
 
 VOLUME /var/lib/postgresql
+VOLUME /opt/zotonic
+VOLUME /etc/zotonic
 
 # Use dumb-init to reap zombies, catch signals, and all the other stuff pid 1 should do.
 ENTRYPOINT ["/usr/bin/dumb-init", "-c", "--", "/opt/zotonic/docker/docker-entrypoint-heavy.sh"]

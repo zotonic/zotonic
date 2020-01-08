@@ -36,7 +36,7 @@
 security_dir() ->
     case z_config:get(security_dir) of
         undefined ->
-            case find_security_dir(system, filename:join([ "etc", "zotonic", "security" ])) of
+            case find_security_dir(system, filename:join([ "/etc/zotonic", "security" ])) of
                 {ok, Dir} ->
                     {ok, Dir};
                 {error, _} ->
