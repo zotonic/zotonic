@@ -6,7 +6,7 @@ services:
         hostname: postgres
         restart: always
         environment:
-            POSTGRES_USER: =zotonic
+            POSTGRES_USER: zotonic
             POSTGRES_DB: zotonic
             POSTGRES_PASSWORD: zotonic
         volumes:
