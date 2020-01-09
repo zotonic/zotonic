@@ -1,10 +1,8 @@
 version: '3.1'
 
 services:
-
     postgres:
         image: postgres:11.6-alpine
-        container_name: postgres
         hostname: postgres
         restart: always
         environment:
@@ -15,22 +13,15 @@ services:
             - pgdata:/var/lib/postgresql/data
 
     zotonic:
-        image: zotonic/zotonic-dev:latest
-        # user: ${CURRENT_UID}
-        container_name: zotonic
-        # privileged: true
+        image: zotonic/zotonic-dev
         environment:
            ZOTONIC_PORT: 8000
            ZOTONIC_SSL_PORT: 8443
            ZOTONIC_APPS: /opt/zotonic/apps_user
         depends_on:
-           - postgres
-        links:
-           - postgres
+            - postgres
         volumes:
-           - "./:/opt/zotonic"
-           - "./docker-data/etc-zotonic:/etc/zotonic"
-           - "/etc/hosts:/etc/hosts:ro"
+            - ./:/opt/zotonic
         ports:
            - 8000:8000
            - 8443:8443
