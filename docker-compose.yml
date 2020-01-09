@@ -15,16 +15,16 @@ services:
     zotonic:
         image: zotonic/zotonic-dev
         environment:
-           ZOTONIC_PORT: 8000
-           ZOTONIC_SSL_PORT: 8443
-           ZOTONIC_APPS: /opt/zotonic/apps_user
+            ZOTONIC_PORT: 8000
+            ZOTONIC_SSL_PORT: 8443
+            ZOTONIC_APPS: /opt/zotonic/apps_user
         depends_on:
             - postgres
         volumes:
             - ./:/opt/zotonic
         ports:
-           - 8000:8000
-           - 8443:8443
+            - 8000:8000
+            - 8443:8443
 
 volumes:
     pgdata:
