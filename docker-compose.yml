@@ -8,10 +8,9 @@ services:
         hostname: postgres
         restart: always
         environment:
-           - POSTGRES_USER=zotonic
-           - POSTGRES_DB=zotonic
-           - POSTGRES_PASSWORD=zotonic
-           - PGDATA=/var/lib/postgresql/data/pgdata
+            POSTGRES_USER: =zotonic
+            POSTGRES_DB: zotonic
+            POSTGRES_PASSWORD: zotonic
         volumes:
            - "./docker-data/postgresql:/var/lib/postgresql/data/pgdata"
 
