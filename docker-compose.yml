@@ -12,7 +12,7 @@ services:
             POSTGRES_DB: zotonic
             POSTGRES_PASSWORD: zotonic
         volumes:
-           - "./docker-data/postgresql:/var/lib/postgresql/data/pgdata"
+            - pgdata:/var/lib/postgresql/data
 
     zotonic:
         image: zotonic/zotonic-dev:latest
@@ -35,28 +35,5 @@ services:
            - 8000:8000
            - 8443:8443
 
-# version: '2'
-
-# services:
-#     postgres:
-#         image: postgres:9.5-alpine
-#         environment:
-#             POSTGRES_USER: zotonic
-#         volumes:
-#             - ./data:/data
-#         working_dir: /data
-
-#     zotonic:
-#         image: zotonic/zotonic-dev
-#         user: zotonic
-#         privileged: true
-#         environment:
-#             ZOTONIC_PORT: 80
-#             ZOTONIC_SSL_PORT: 443
-#         links:
-#             - postgres
-#         volumes:
-#             - ./:/opt/zotonic
-#         ports:
-#             - 80:8000
-#             - 443:8443
+volumes:
+    pgdata:
