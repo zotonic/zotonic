@@ -467,14 +467,41 @@ function z_session_invalid_dialog()
 
 function z_activity_init()
 {
+    /* Use passive event capturing when it is supported */
+    var passive_if_supported = false;
+
+    try {
+        window.addEventListener("test", null,
+            Object.defineProperty({}, "passive", {
+                get: function() {
+                    passive_if_supported = {
+                        passive: false
+                    };
+                }
+            }));
+    } catch(err) {
+    }
+
+    z_last_active = 0;
     z_activity_event();
 
-    document.addEventListener("visibilitychange", z_activity_event);
-    document.addEventListener("scroll", z_activity_event);
-    document.addEventListener("keydown", z_activity_event);
-    document.addEventListener("mousemove", z_activity_event);
-    document.addEventListener("click", z_activity_event);
-    document.addEventListener("focus", z_activity_event);
+    document.addEventListener("visibilitychange", z_activity_event, passive_if_supported);
+    document.addEventListener("scroll", z_activity_event, passive_if_supported);
+    document.addEventListener("keydown", z_activity_event, passive_if_supported);
+    document.addEventListener("mousemove", z_activity_event, passive_if_supported);
+    document.addEventListener("click", z_activity_event, passive_if_supported);
+    document.addEventListener("focus", z_activity_event, passive_if_supported);
+}
+
+function z_activity_ignore() {
+    document.removeEventListener("visibilitychange", z_activity_event);
+    document.removeEventListener("scroll", z_activity_event);
+    document.removeEventListener("keydown", z_activity_event);
+    document.removeEventListener("mousemove", z_activity_event);
+    document.removeEventListener("click", z_activity_event);
+    document.removeEventListener("focus", z_activity_event);
+
+    z_last_active = null;
 }
 
 function z_activity_event()
@@ -486,8 +513,13 @@ function z_activity_event()
 
 function z_is_active(period)
 {
-    var now = Date.now();
     period = period || ACTIVITY_PERIOD;
+    var now = Date.now();
+
+    /* Return true when we are ignoring activity monitoring */
+    if(z_last_active === null) return true;
+    
+
     return z_last_active > now - period;
 }
 
@@ -1337,7 +1369,6 @@ function z_websocket_ping()
                         is_active: z_is_active(WEBSOCKET_PING_INTERVAL)
                     }
                 });
-        console.log(msg);
         z_ws.send(msg);
     }
 }
