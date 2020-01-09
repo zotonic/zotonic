@@ -1,10 +1,36 @@
-ARG ZOTONIC_VERSION=latest
-FROM zotonic/zotonic-base:${ZOTONIC_VERSION}
+FROM erlang:21.3-alpine
 
-# This Docker image is used to run Zotonic from the host file
-# system together with a postgresql container.
-#
-# $ docker-compose run --service-ports zotonic sh
+# This Docker image is used to run Zotonic inside the container
+# in conjunction with a postgresql container.
+# All Zotonic sources, configuration and other data is stored outside the
+# container(s). Check the docker-compose.yml file for details.
+
+ENV SHELL="/bin/sh"
+
+WORKDIR /opt/zotonic
+
+# Install Zotonic runtime dependencies.
+# Git is necessary because rebar3 compile requires git.
+RUN apk add --no-cache bsd-compat-headers ca-certificates wget curl \
+        make gcc musl-dev g++ libstdc++ \
+        bash file gettext git openssl inotify-tools \
+        imagemagick ffmpeg
+
+RUN adduser -S -h /tmp -H -D zotonic
+
+# Note: gosu is pulled from edge; remove that when upgrading to an alpine release that
+# includes the package.
+RUN apk add --no-cache dumb-init \
+    && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ gosu
+
+COPY docker/docker-entrypoint.sh /opt/zotonic-docker/docker-entrypoint.sh
 
 VOLUME /opt/zotonic
 VOLUME /etc/zotonic
+
+EXPOSE 8000 8443
+
+# Use dumb-init to reap zombies, catch signals, and all the other stuff pid 1 should do.
+ENTRYPOINT ["/usr/bin/dumb-init", "-c", "--", "/opt/zotonic-docker/docker-entrypoint.sh"]
+
+CMD ["/bin/bash"]
