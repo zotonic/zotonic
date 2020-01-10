@@ -12,9 +12,6 @@ export HOME ZOTONIC_PIDFILE ZOTONIC_CONFIG_DIR SHELL
 # Create the pid file and enable zotonic to write to it
 touch /run/zotonic.pid && chown zotonic /run/zotonic.pid
 
-# Allow zotonic to write some state
-mkdir -p /opt/zotonic/priv && chown -R zotonic /opt/zotonic/priv
-
 # SSL certificates are generated here
 mkdir -p /etc/zotonic/security && chown -R zotonic /etc/zotonic/security
 
