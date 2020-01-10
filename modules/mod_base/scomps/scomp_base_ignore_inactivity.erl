@@ -15,7 +15,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(scomp_base_ignore_activity).
+-module(scomp_base_ignore_inactivity).
 -behaviour(gen_scomp).
 
 -export([vary/2, render/3]).
@@ -24,5 +24,5 @@
 
 vary(_Params, _Context) -> nocache.
 render(_Params, _Vars, _Context) ->
-    {ok, {script, <<"z_activity_ignore();">>}}.
+    {ok, {javascript, <<"z_activity_ignore();">>}}.
 
