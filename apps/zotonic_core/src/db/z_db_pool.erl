@@ -22,21 +22,22 @@
 -define(DEFAULT_DB_DRIVER, z_db_pgsql).
 
 -export([
-         status/0,
-         status/1,
-         close_connections/0,
-         close_connections/1,
-         child_spec/2,
-         get_database_options/1,
-         test_connection/1,
-         test_connection/2,
-         db_pool_name/1,
-         db_driver/1,
-         database_options/2,
-         database_options/3,
-         get_connection/1,
-         return_connection/2
-        ]).
+    status/0,
+    status/1,
+    close_connections/0,
+    close_connections/1,
+    child_spec/2,
+    get_database_options/1,
+    test_connection/1,
+    test_connection/2,
+    db_pool_name/1,
+    db_driver_default/0,
+    db_driver/1,
+    database_options/2,
+    database_options/3,
+    get_connection/1,
+    return_connection/2
+]).
 
 status() ->
     Ctxs = z_sites_manager:get_site_contexts(),
@@ -84,6 +85,10 @@ db_pool_name(Site) when is_atom(Site) ->
     list_to_atom("z_db_pool" ++ [$$ | atom_to_list(Site)]);
 db_pool_name(#context{} = Context) ->
     db_pool_name(z_context:site(Context)).
+
+
+db_driver_default() ->
+    ?DEFAULT_DB_DRIVER.
 
 db_driver(SiteProps) when is_list(SiteProps) ->
     proplists:get_value(dbdriver, SiteProps, ?DEFAULT_DB_DRIVER);
