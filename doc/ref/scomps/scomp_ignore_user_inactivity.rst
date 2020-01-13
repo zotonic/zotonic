@@ -1,5 +1,5 @@
 .. highlight:: django
-.. include:: meta-ignore_inactivity.rst
+.. include:: meta-ignore_user_inactivity.rst
 
 This tag disables zotonic's user activity tracking. Normally zotonic
 indicates to the server if the user is active or not. Normally sessions
@@ -13,7 +13,7 @@ Example:
 .. code-block:: none
 
     {# Somewhere in a template #}
-    {% ignore_inactivity %}
+    {% ignore_user_inactivity %}
     ...
 
 This will make sure that the session is kept alive as long is the user
