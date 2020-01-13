@@ -15,7 +15,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(scomp_base_ignore_inactivity).
+-module(scomp_base_ignore_user_inactivity).
 -behaviour(gen_scomp).
 
 -export([vary/2, render/3]).
