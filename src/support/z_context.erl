@@ -1176,8 +1176,26 @@ set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
         true -> Default;
         false -> [ {"X-Frame-Options", "sameorigin"} | Default ]
     end,
-    SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
-        undefined -> Default1;
+
+    HSTSHeaders = case z_convert:to_bool(m_config:get_value(site, hsts, false, Context)) of
+       true ->
+           MaxAge = z_convert:to_integer(m_config:get_value(site, hsts_maxage, ?HSTS_MAXAGE, Context)),
+           Options = case {z_convert:to_bool(m_config:get_value(site, hsts_include_subdomains, false, Context)),
+                           z_convert:to_bool(m_config:get_value(site, preload, false, Context))} of
+               {true, true} -> "; includeSubDomains; preload";
+               {true, _} -> "; includeSubDomains";
+               {_, true} -> "; preload";
+               {_, _} -> ""
+           end,
+
+           HSTSSetting = lists:flatten(["max-age=", z_convert:to_list(MaxAge), Options]),
+
+           [ {"Strict-Transport-Security", HSTSSetting} | Default1 ]; 
+       _ -> Default1
+    end, 
+
+    SecurityHeaders = case z_notifier:first(#security_headers{ headers = HSTSHeaders }, Context) of
+        undefined -> HSTSHeaders;
         Custom -> Custom
     end,
     RD1 = wrq:set_resp_headers(SecurityHeaders, ReqData),
