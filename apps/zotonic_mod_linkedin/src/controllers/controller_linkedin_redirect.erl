@@ -119,7 +119,7 @@ is_safari8problem(Context) ->
     not HasCookies andalso IsVersion8 andalso IsSafari.
 
 
-auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Args, Context) ->
+auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Args, _Context) ->
     lager:debug("[linkedin] Authenticating ~p ~p", [LinkedInUserId, Profile]),
     PersonProps = [
         {title, iolist_to_binary([
