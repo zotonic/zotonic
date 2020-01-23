@@ -132,14 +132,14 @@ auth_user(Profile, Email, AccessTokenData, Context) ->
         {email, Email}
     ],
     Args = controller_linkedin_authorize:get_args(Context),
-    z_notifier:first(#auth_validated{
+    #auth_validated{
             service=linkedin,
             service_uid=LinkedInUserId,
             service_props=AccessTokenData,
             props=PersonProps,
             is_connect=z_convert:to_bool(proplists:get_value("is_connect", Args))
-        },
-        Context).
+        }.
+
 
 get_localized_value(Props, JSON) ->
     case proplists:get_value(Props, JSON) of
