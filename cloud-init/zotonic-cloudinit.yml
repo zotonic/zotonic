@@ -69,10 +69,13 @@ runcmd:
   # Enable ImageMagick PDF rendering
   - sed -i 's/^.*pattern="PDF".*$/<!-- &1 -->/g' /etc/ImageMagick-6/policy.xml
   # Let clamav listen on localhost and update definitions
+  - service clamav-daemon stop
   - systemctl stop clamav-freshclam
   - sed -i '1s/^/# For Zotonic listen on localhost\nTCPSocket 3310\nTCPAddr 127.0.0.1\n\n/' /etc/clamav/clamd.conf
+  - sed -i 's/^LocalSocket.*$/# &1/g' /etc/clamav/clamd.conf
   - freshclam
   - systemctl start clamav-freshclam
+  - service clamav-daemon start
   # Generate ssh key for git urls
   - sudo su zotonic -l -c "ssh-keygen -q -f /home/zotonic/.ssh/id_rsa -N ''"
   # Zotonic installation
