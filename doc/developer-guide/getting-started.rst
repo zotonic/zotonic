@@ -29,7 +29,7 @@ You can now move on to :ref:`creating your first site <guide-create-site>`.
 Cloud-Init
 ----------
 
-A cloud-init file is supplied in `zotonic_launcher <https://github.com/zotonic/zotonic/blob/master/apps/zotonic_launcher/priv/config/zotonic-cloudinit.yml>`_.
+A cloud-init file is supplied in `zotonic_launcher <https://github.com/zotonic/zotonic/blob/master/cloud-init/zotonic-cloudinit.yml>`_.
 
 This file can be used to install a VPS by providers that support cloud-init. Hetzner is one such provider.
 
