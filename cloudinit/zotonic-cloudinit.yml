@@ -22,6 +22,10 @@ users:
 packages:
   - build-essential
   - iptables-persistent
+  - libssl-dev
+  - automake
+  - autoconf
+  - libncurses5-dev
   - git
   - erlang
   - postgresql
@@ -31,9 +35,10 @@ packages:
   - inotify-tools
   - libnotify-bin
   - clamav
+  - clamav-daemon
+  - ghostscript
   - imagemagick
   - ffmpeg
-  - ghostscript
 
 runcmd:
   # IP4 port mapping
@@ -59,10 +64,22 @@ runcmd:
   # Set ulimit file handles
   - echo "zotonic   soft   nofile   20000" > /etc/security/limits.d/zotonic.conf
   - echo "zotonic   hard   nofile   20000" >> /etc/security/limits.d/zotonic.conf
+  # Fix openssl config
+  - sed -i 's/^.*RANDFILE.*$/# &1/g' /etc/ssl/openssl.cnf
+  # Enable ImageMagick PDF rendering
+  - sed -i 's/^.*pattern="PDF".*$/<!-- &1 -->/g' /etc/ImageMagick-6/policy.xml
+  # Let clamav listen on localhost and update definitions
+  - systemctl stop clamav-freshclam
+  - sed -i '1s/^/# For Zotonic listen on localhost\nTCPSocket 3310\nTCPAddr 127.0.0.1\n\n/' /etc/clamav/clamd.conf
+  - freshclam
+  - systemctl start clamav-freshclam
+  # Generate ssh key for git urls
+  - sudo su zotonic -l -c "ssh-keygen -q -f /home/zotonic/.ssh/id_rsa -N ''"
   # Zotonic installation
   - sudo su zotonic -l -c "git clone 'https://github.com/zotonic/zotonic'"
+  - sudo su zotonic -l -c "cd zotonic; git checkout 2292-cloudinit"
   - sudo su zotonic -l -c "mkdir -p .zotonic/1/config.d"
-  - sudo su zotonic -l -c "cp zotonic/apps/zotonic_launcher/priv/config/config.d/http-ports.yml .zotonic/1/config.d/."
+  - sudo su zotonic -l -c "cp cloudinit/config.d/* .zotonic/1/config.d/."
   - sudo su zotonic -l -c "cd zotonic; make"
   - sudo su zotonic -l -c "cd zotonic; bin/zotonic start"
 
