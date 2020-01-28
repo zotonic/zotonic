@@ -79,6 +79,6 @@ runcmd:
   - sudo su zotonic -l -c "git clone 'https://github.com/zotonic/zotonic'"
   - sudo su zotonic -l -c "cd zotonic; git checkout 2292-cloudinit"
   - sudo su zotonic -l -c "mkdir -p .zotonic/1/config.d"
-  - sudo su zotonic -l -c "cp cloud-init/config.d/* .zotonic/1/config.d/."
+  - sudo su zotonic -l -c "cp zotonic/cloud-init/config.d/* .zotonic/1/config.d/."
   - sudo su zotonic -l -c "cd zotonic; make"
   - sudo su zotonic -l -c "cd zotonic; bin/zotonic start"
