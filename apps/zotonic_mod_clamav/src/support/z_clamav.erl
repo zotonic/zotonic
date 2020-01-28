@@ -37,7 +37,7 @@
 ip_port() ->
     ClamIP = z_config:get(clamav_ip, ?CLAMAV_IP),
     ClamPort = z_config:get(clamav_port, ?CLAMAV_PORT),
-    {ClamIP, ClamPort}.
+    {z_convert:to_list(ClamIP), ClamPort}.
 
 -spec max_size() -> integer().
 max_size() ->

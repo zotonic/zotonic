@@ -1,0 +1,25 @@
+# Configure all ports
+# iptables port mappings are defined in zotonic-cloudinit.yml
+# Copy this file to ~/.zotonic/1/config.d/ports.yml
+zotonic:
+    # IP addresses to listen on
+    listen_ip: any
+    listen_ip6: any
+    # Outside ports
+    port: 80
+    ssl_port: 443
+    # HTTP port, iptables maps port 80 to 8000
+    listen_port: 8000
+    # HTTPS port, iptables maps port 443 to 8443
+    ssl_listen_port: 8443
+    # Let SMTP listen on all IP addresses
+    smtp_listen_ip: any
+    # SMTP ports, iptables maps port 25 to 2525
+    smtp_listen_port: 2525
+    # MQTT ports, opened directly
+    mqtt_listen_port: 1883
+    mqtt_listen_ssl_port: 8883
+    # ClamAV for scanning uploaded files
+    clamav_ip: "127.0.0.1"
+    clamav_port: 3310
+    clamav_max_size: 26214400

@@ -166,7 +166,7 @@ function z_dialog_overlay_open(options)
             .show();
     } else {
         html = '<div class="modal-overlay">' +
-               '<a href="#close" class="modal-overlay-close" onclick="z_dialog_overlay_close()">&times;</a>' +
+               '<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close()">&times;</a>' +
                options.html +
                '</div>';
         $('body').append(html);
@@ -179,6 +179,7 @@ function z_dialog_overlay_open(options)
 function z_dialog_overlay_close()
 {
     $('.modal-overlay').remove();
+    return false;
 }
 
 /* Growl messages
