@@ -147,15 +147,9 @@ function z_set_page_id( page_id, user_id )
     $(window).bind('beforeunload', function() {
         z_page_unloading = true;
 
-        // Stop the websocket. This prevents a connection interrupted error.
-        z_websocket_stop();
-
-        // Abort an open comet connection
-        if (z_comet) {
-            try { z_comet.abort(); } catch(e) { }
-            z_comet = undefined;
-        }
-
+        // Keep the connection open, but because the unloading flag is set
+        // the connection will not be automatically restored if it is dropped.
+        
         setTimeout(function() {
             z_page_unloading = false;
         }, 10000);
@@ -166,6 +160,15 @@ function z_set_page_id( page_id, user_id )
             "page_id": z_pageid,
             "session_id": window.z_sid || undefined
         };
+
+        // Stop the websocket. This prevents a connection interrupted error.
+        z_websocket_stop();
+
+        // Abort an open comet connection
+        if (z_comet) {
+            try { z_comet.abort(); } catch(e) { }
+            z_comet = undefined;
+        }
 
         if(navigator.sendBeacon) {
             navigator.sendBeacon("/beacon", ubf.encode(msg));
@@ -928,7 +931,7 @@ function z_ajax(options, data)
         accepts: {ubf: 'text/x-ubf'},
         converters: {"text ubf": window.String},
         contentType: 'text/x-ubf',
-        async: !z_page_unloading, // Prevents requests from being cancelled during unloading of the page.
+        async: true,
         success: function(received_data, textStatus)
         {
             try
