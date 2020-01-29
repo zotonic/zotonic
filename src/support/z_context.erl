@@ -1177,29 +1177,44 @@ set_security_headers(Context = #context{ wm_reqdata = ReqData }) ->
         false -> [ {"X-Frame-Options", "sameorigin"} | Default ]
     end,
 
-    HSTSHeaders = case z_convert:to_bool(m_config:get_value(site, hsts, false, Context)) of
-       true ->
-           MaxAge = z_convert:to_integer(m_config:get_value(site, hsts_maxage, ?HSTS_MAXAGE, Context)),
-           Options = case {z_convert:to_bool(m_config:get_value(site, hsts_include_subdomains, false, Context)),
-                           z_convert:to_bool(m_config:get_value(site, preload, false, Context))} of
-               {true, true} -> "; includeSubDomains; preload";
-               {true, _} -> "; includeSubDomains";
-               {_, true} -> "; preload";
-               {_, _} -> ""
-           end,
-
-           HSTSSetting = lists:flatten(["max-age=", z_convert:to_list(MaxAge), Options]),
-
-           [ {"Strict-Transport-Security", HSTSSetting} | Default1 ]; 
-       _ -> Default1
-    end, 
+    HSTSHeaders = case hsts_header(Context) of
+                      {_,_}=H -> [H | Default1];
+                      _ -> Default1
+                  end,
 
     SecurityHeaders = case z_notifier:first(#security_headers{ headers = HSTSHeaders }, Context) of
         undefined -> HSTSHeaders;
         Custom -> Custom
     end,
+
     RD1 = wrq:set_resp_headers(SecurityHeaders, ReqData),
     Context#context{ wm_reqdata = RD1 }.
+
+%% @doc Create a hsts header based on the current settings. The result is 
+%%      cached for quick access.
+-spec hsts_header( z:context() ) -> undefined | {_, _}.
+hsts_header(Context) ->
+    case z_convert:to_bool(m_config:get_value(site, hsts, false, Context)) of
+        true ->
+            F = fun() ->
+                          MaxAge = z_convert:to_integer(m_config:get_value(site, hsts_maxage, ?HSTS_MAXAGE, Context)),
+                          IncludeSubdomains = z_convert:to_bool(m_config:get_value(site, hsts_include_subdomains, false, Context)),
+                          Preload = z_convert:to_bool(m_config:get_value(site, preload, false, Context)),
+                          Options = case {IncludeSubdomains, Preload} of
+                              {true, true} -> "; includeSubDomains; preload";
+                              {true, _} -> "; includeSubDomains";
+                              {_, true} -> "; preload";
+                              {_, _} -> ""
+                          end,
+
+                          HSTS = lists:flatten(["max-age=", z_convert:to_list(MaxAge), Options]),
+
+                          {"Strict-Transport-Security", HSTS}
+                  end,
+            z_depcache:memo(F, hsts_header, ?DAY, [config], Context);
+        _ -> 
+            undefined
+    end.
 
 %% @doc Set Cross-Origin Resource Sharing (CORS) headers. The caller must
 %%      specify default headers to be used in case there are no observers for
