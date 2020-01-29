@@ -190,8 +190,10 @@ transaction_clear(Context) ->
     Context#context{dbc=undefined}.
 
 
-%% @doc Check if we have database connection
--spec has_connection(z:context()) -> boolean().
+%% @doc Check if we have database connection up and runnng
+-spec has_connection(z:context() | atom()) -> boolean().
+has_connection(Site) when is_atom(Site) ->
+    is_pid(erlang:whereis(z_db_pool:db_pool_name(Site)));
 has_connection(Context) ->
     is_pid(erlang:whereis(z_context:db_pool(Context))).
 

@@ -54,3 +54,5 @@ _checkouts
 
 .DS_Store
 zotonic.tmproj
+
+docker-data

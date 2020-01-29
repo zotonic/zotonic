@@ -123,25 +123,26 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                            Context),
                     ok
             end;
-        {error, nodatabase} ->
+        {error, nodatabase} = Error ->
             % No database configured, this is ok, proceed as normal (without db)
-            ok;
+            lager:error("~p: Database connection failure: no database configured", [ z_context:site(Context) ]),
+            Error;
         {error, econnrefused} = Error ->
-            lager:warning("Database connection failure: econnrefused"),
+            lager:error("~p: Database connection failure: connection refused", [ z_context:site(Context) ]),
             Error;
         {error, Reason} ->
-            lager:warning("Database connection failure: ~p", [Reason]),
+            lager:warning("~p: Database connection failure: ~p", [ z_context:site(Context), Reason ]),
             case z_config:get(dbcreate) of
                 false ->
-                    lager:warning("Database does not exist and dbcreate is false; not creating"),
+                    lager:error("~p: Database does not exist and dbcreate is false; not creating", [ z_context:site(Context) ]),
                     {error, nodbcreate};
                 _Else ->
                     case z_db:prepare_database(Context) of
                         ok ->
-                            lager:info("Retrying install check after db creation."),
+                            lager:info("~p: Retrying install check after db creation.", [ z_context:site(Context) ]),
                             check_db_and_upgrade(Context, Tries+1);
                         {error, _PrepReason} = Error ->
-                            lager:error("Could not create the database and schema."),
+                            lager:error("~p: Could not create the database and schema.", [ z_context:site(Context) ]),
                             Error
                     end
                 end

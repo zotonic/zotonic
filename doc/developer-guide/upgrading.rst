@@ -34,6 +34,18 @@ Erlang/OTP
 * All built-in modules, the testsandbox and the status sites are now to be found
   in the ``apps/`` directory.
 
+
+Docker
+^^^^^^
+
+Only the `zotonic/zotonic-dev <https://hub.docker.com/r/zotonic/zotonic-dev/>`_ image
+is now available and automatically updated.
+
+We have decided to drop the other Docker images as in practice everybody was creating
+their own production images anyway.
+
+See for more information :ref:`guide-docker`.
+
 ACL
 ^^^
 

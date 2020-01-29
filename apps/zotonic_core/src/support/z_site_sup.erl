@@ -42,12 +42,6 @@ start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     case supervisor:start_link({local, Name}, ?MODULE, Site) of
         {ok, Pid} ->
-            % TODO: replace this with something more robust, problem
-            % is that phase1 calls z_sites_manager for the site config, and
-            % that this module is called by z_sites_manager. So blocking the
-            % call. A solution is to decouple the config scanning from
-            % the sites supervisor.
-            erlang:spawn(fun() -> install_phase1(Site) end),
             {ok, Pid};
         {error, _} = Error ->
             Error
@@ -56,6 +50,12 @@ start_link(Site) ->
 %% @doc Supervisor callback, returns the supervisor tree for a zotonic site
 -spec init(atom()) -> {ok, {supervisor:sup_flags(), [ supervisor:child_spec() ]}}.
 init(Site) ->
+    % TODO: replace this with something more robust, problem
+    % is that phase1 calls z_sites_manager for the site config, and
+    % that this module is called by z_sites_manager. So blocking the
+    % call. A solution is to decouple the config scanning from
+    % the sites supervisor.
+    erlang:spawn_link(fun() -> install_phase1(Site) end),
     lager:md([
         {site, Site},
         {module, ?MODULE}
@@ -74,7 +74,19 @@ install_phase1(Site) ->
     ok = m_site:load_config(Site),
     ok = z_stats:init_site(Site),
     SiteProps = m_site:all(Site),
+    SiteSupName = z_utils:name_for_site(?MODULE, Site),
+    case z_db_pool:child_spec(Site, SiteProps) of
+        undefined ->
+            start_installer_processes(SiteSupName, SiteProps);
+        DbSpec when is_tuple(DbSpec); is_map(DbSpec) ->
+            supervisor:start_child(SiteSupName, DbSpec),
+            case wait_for_db(Site) of
+                ok -> start_installer_processes(SiteSupName, SiteProps);
+                {error, _} = Error -> Error
+            end
+    end.
 
+start_installer_processes(SiteSupName, SiteProps) ->
     % The installer needs the database pool, depcache and translation.
     InstallerModule = proplists:get_value(installer, SiteProps, z_installer),
     Processes = [
@@ -85,21 +97,30 @@ install_phase1(Site) ->
             {InstallerModule, start_link, [SiteProps]},
             permanent, 1, worker, dynamic}
     ],
-
-    Processes1 = case z_db_pool:child_spec(Site, SiteProps) of
-        undefined ->
-            Processes;
-        DbSpec when is_tuple(DbSpec) ->
-            [ DbSpec | Processes ]
-    end,
-    Name = z_utils:name_for_site(?MODULE, Site),
     lists:foreach(
             fun(Child) ->
-                supervisor:start_child(Name, Child)
+                supervisor:start_child(SiteSupName, Child)
             end,
-            Processes1).
+            Processes).
 
-%% @doc Called when the site installation is done, we can not add all other processes.
+%% @doc Wait till the database driver started. Wait max 10 seconds.
+wait_for_db(Site) ->
+    wait_for_db(Site, 1000).
+
+wait_for_db(Site, 0) ->
+    lager:error("~p: Timeout waiting for database driver", [Site]),
+    {error, timeout};
+wait_for_db(Site, N) ->
+    case z_db:has_connection(Site) of
+        true ->
+            ok;
+        false ->
+            timer:sleep(10),
+            wait_for_db(Site, N-1)
+    end.
+
+%% @doc Called by z_installer after the database installation is done.
+%%      We can now start all other site processes.
 -spec install_done(list()) -> ok.
 install_done(SiteProps) when is_list(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),

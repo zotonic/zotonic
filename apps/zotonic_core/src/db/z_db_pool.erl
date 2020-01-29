@@ -22,21 +22,22 @@
 -define(DEFAULT_DB_DRIVER, z_db_pgsql).
 
 -export([
-         status/0,
-         status/1,
-         close_connections/0,
-         close_connections/1,
-         child_spec/2,
-         get_database_options/1,
-         test_connection/1,
-         test_connection/2,
-         db_pool_name/1,
-         db_driver/1,
-         database_options/2,
-         database_options/3,
-         get_connection/1,
-         return_connection/2
-        ]).
+    status/0,
+    status/1,
+    close_connections/0,
+    close_connections/1,
+    child_spec/2,
+    get_database_options/1,
+    test_connection/1,
+    test_connection/2,
+    db_pool_name/1,
+    db_driver_default/0,
+    db_driver/1,
+    database_options/2,
+    database_options/3,
+    get_connection/1,
+    return_connection/2
+]).
 
 status() ->
     Ctxs = z_sites_manager:get_site_contexts(),
@@ -85,6 +86,10 @@ db_pool_name(Site) when is_atom(Site) ->
 db_pool_name(#context{} = Context) ->
     db_pool_name(z_context:site(Context)).
 
+
+db_driver_default() ->
+    ?DEFAULT_DB_DRIVER.
+
 db_driver(SiteProps) when is_list(SiteProps) ->
     proplists:get_value(dbdriver, SiteProps, ?DEFAULT_DB_DRIVER);
 db_driver(Context) ->
@@ -93,17 +98,17 @@ db_driver(Context) ->
         Driver -> Driver
     end.
 
-%% @doc Perform a connect to test whether the database is working.
+%% @doc Perform a connect to test if the database is working.
 -spec test_connection( atom(), proplists:proplist() ) -> ok | {error, nodatabase | noschema | term()}.
 test_connection(Site, SiteProps) when is_list(SiteProps) ->
     Database = proplists:get_value(dbdatabase, SiteProps),
     case has_database(Database) of
         true ->
-            {error, nodatabase};
-        false ->
             DbDriver = db_driver(SiteProps),
             DbOpts = database_options(Site, SiteProps),
-            DbDriver:test_connection(DbOpts)
+            DbDriver:test_connection(DbOpts);
+        false ->
+            {error, nodatabase}
     end.
 
 -spec test_connection( z:context() ) -> ok | {error, nodatabase | noschema | term()}.
@@ -111,10 +116,10 @@ test_connection(Context) ->
     Database = m_site:get(dbdatabase, Context),
     case has_database(Database) of
         true ->
-            {error, nodatabase};
-        false ->
             DbDriver = db_driver(Context),
-            DbDriver:test_connection(get_database_options(Context))
+            DbDriver:test_connection(get_database_options(Context));
+        false ->
+            {error, nodatabase}
     end.
 
 

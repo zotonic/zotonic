@@ -1,10 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014 Arjan Scherpenisse
-%% Date: 2014-04-29
-%%
+%% @copyright 2014-2020 Arjan Scherpenisse
 %% @doc Postgresql pool worker
 
-%% Copyright 2014 Arjan Scherpenisse
+%% Copyright 2014-2020 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,6 +34,7 @@
 
 %% z_db_worker callbacks
 -export([
+    ensure_all_started/0,
     test_connection/1,
     squery/3,
     equery/4,
@@ -68,6 +67,9 @@ test_connection(Args) ->
         {error, _} = Error ->
             Error
     end.
+
+ensure_all_started() ->
+    application:ensure_all_started(epgsql).
 
 test_connection_1(Args) ->
     case connect(Args) of
