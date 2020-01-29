@@ -5,48 +5,52 @@
 Docker
 ======
 
-We offer three Docker images:
+We offer the Docker image `zotonic/zotonic-dev`_ which contains build tools and Erlang.
 
-* `zotonic/zotonic-heavy`_ contains both Zotonic and PostgreSQL. Use this to get
-  started quickly if you want to build sites on Zotonic.
-* `zotonic/zotonic`_ contains only Zotonic. This image is most useful in
-  production setups or when you’re using `Docker Compose`_ with a separate
-  database container.
-* `zotonic/zotonic-dev`_ contains build tools and Erlang. Use this image for
-  development work on Zotonic itself, where you’ll mount your Zotonic directory
-  as a volume in the container.
+It can be used for development work on Zotonic itself, where you’ll mount your Zotonic directory
+as a volume in the container.
 
-To use any of the images, first `download and install Docker`_.
+To use this image, first `download and install Docker`_.
 
-Start a Zotonic image on your Docker machine::
-
-    $ docker run -d -p 8443:8443 zotonic/zotonic-heavy
-
-Mount a volume that contains your Zotonic sites and modules::
-
-    $ docker run -d -v `pwd`/apps_user:/opt/zotonic/apps_user zotonic/zotonic-heavy
 
 zotonic-dev
 -----------
 
-You can use the `zotonic/zotonic-dev`_ image when you’re doing development work
-on Zotonic. Start the container from your local Zotonic clone::
+You can use the `zotonic/zotonic-dev`_ image for doing development work
+on Zotonic and Zotonic sites.
+
+Start the container from your local Zotonic clone::
 
     $ git clone https://github.com/zotonic/zotonic.git
 
-To start the container, use Docker Compose::
+Start the container::
 
-    $ docker-compose run --service-ports zotonic sh
+    $ cd zotonic
+    $ ./start-docker.sh
 
-This opens a shell prompt in the Zotonic container. A PostgreSQL container will
-be started automatically as well. In the Zotonic container, you can enter any
-command. So, to start Zotonic in debug mode::
+This uses Docker Compose to start the Zotonic container and a PostgreSQL container.
 
-    $ bin/zotonic debug
+On first start Zotonic will be compiled and all dependencies are fetched.
+This can take quite some time if you are not running on Linux (Docker’s file i/o is
+quite inefficient on non-Linux platforms).
 
-The ``--service-ports`` flags exposes Zotonic’s port 8443 as your local port 80,
-so you can view the :ref:`Zotonic status page <ref-status-site>` at
-``http://localhost``.
+A shell prompt will appear after the build is complete. Now Zotonic can be
+started::
+
+    bash-4.4$ bin/zotonic debug
+
+You can stop Zotonic (Erlang) by typing *ctrl-C* twice.
+
+The configuration, including the Zotonic status site password, can be found with::
+
+    bash-4.4$ bin/zotonic config
+
+Zotonic’s port 8443 and 8000 are exposed as local ports. You can  view the
+:ref:`Zotonic status page <ref-status-site>` at ``https://localhost:8443/``.
+You can log in using the username `wwwadmin` and the password from the config.
+
+Zotonic is running with a self-signed certificate. The certificate can be found
+in ``docker-data/etc-zotonic/security/self-signed/``.
 
 You can also run other commands in the container, such as running the tests::
 
@@ -55,8 +59,9 @@ You can also run other commands in the container, such as running the tests::
 Any changes you make in the Zotonic source files will be propagated to the
 container and :ref:`automatically compiled <automatic-recompilation>`.
 
-.. _zotonic/zotonic-heavy: https://hub.docker.com/r/zotonic/zotonic-heavy/
-.. _zotonic/zotonic: https://hub.docker.com/r/zotonic/zotonic/
+You can stop the container using *ctrl-D* at the Bash shell prompt.
+
+
 .. _zotonic/zotonic-dev: https://hub.docker.com/r/zotonic/zotonic-dev/
 .. _Docker Compose: https://docs.docker.com/compose/
 .. _download and install Docker: https://www.docker.com/products/docker
