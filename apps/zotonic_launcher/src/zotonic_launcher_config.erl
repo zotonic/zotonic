@@ -30,6 +30,8 @@
     erlang_config_files/1
 ]).
 
+-include_lib("kernel/include/file.hrl").
+
 %% @doc Return the zotonic configuration directory for the current node.
 %%      Optionally initialize the config files if they are not found.
 -spec config_dir() -> {ok, file:filename_all()} | {error, enoent}.
@@ -42,7 +44,13 @@ config_dir() ->
 config_dir(Node) when is_atom(Node) ->
     maybe_initialize( z_config_files:config_dir(Node) ).
 
-maybe_initialize({ok, "/etc/" ++ _} = Ok) ->
+maybe_initialize({ok, "/etc/" ++ _ = Dir} = Ok) ->
+    case file:read_file_info(Dir) of
+        {ok, #file_info{ access = read_write }} ->
+            maybe_initialize_configs(Dir);
+        _ ->
+            ok
+    end,
     Ok;
 maybe_initialize({ok, Dir}) ->
     maybe_initialize_configs(Dir),
@@ -52,7 +60,7 @@ maybe_initialize({error, _} = Error) ->
 
 %% @doc Ensure that there are configuration files in the zotonic config
 %%      directory. They are not created if the config directory is in the
-%%      "/etc/" directoy.
+%%      "/etc/" directoy and read-only.
 -spec maybe_initialize_configs( file:filename_all() ) -> ok.
 maybe_initialize_configs(Dir) ->
     SourceDir = case code:priv_dir(zotonic_launcher) of

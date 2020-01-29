@@ -24,6 +24,11 @@ then
     cp ./docker/zotonic-docker.config /etc/zotonic/config.d/docker.config
 fi
 
+if [ ! -f "/etc/zotonic/erlang.config" ]
+then
+    cp ./docker/erlang.config /etc/zotonic/erlang.config
+fi
+
 if [ ! -f "/opt/zotonic/_build/default/lib/zotonic_core/ebin/zotonic_core.app" ]
 then
     /usr/bin/gosu zotonic make

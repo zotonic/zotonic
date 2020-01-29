@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker-compose run --service-ports zotonic sh
+NO_PROXY=* docker-compose run --service-ports zotonic sh

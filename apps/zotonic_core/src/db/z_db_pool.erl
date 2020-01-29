@@ -98,17 +98,17 @@ db_driver(Context) ->
         Driver -> Driver
     end.
 
-%% @doc Perform a connect to test whether the database is working.
+%% @doc Perform a connect to test if the database is working.
 -spec test_connection( atom(), proplists:proplist() ) -> ok | {error, nodatabase | noschema | term()}.
 test_connection(Site, SiteProps) when is_list(SiteProps) ->
     Database = proplists:get_value(dbdatabase, SiteProps),
     case has_database(Database) of
         true ->
-            {error, nodatabase};
-        false ->
             DbDriver = db_driver(SiteProps),
             DbOpts = database_options(Site, SiteProps),
-            DbDriver:test_connection(DbOpts)
+            DbDriver:test_connection(DbOpts);
+        false ->
+            {error, nodatabase}
     end.
 
 -spec test_connection( z:context() ) -> ok | {error, nodatabase | noschema | term()}.
@@ -116,10 +116,10 @@ test_connection(Context) ->
     Database = m_site:get(dbdatabase, Context),
     case has_database(Database) of
         true ->
-            {error, nodatabase};
-        false ->
             DbDriver = db_driver(Context),
-            DbDriver:test_connection(get_database_options(Context))
+            DbDriver:test_connection(get_database_options(Context));
+        false ->
+            {error, nodatabase}
     end.
 
 
