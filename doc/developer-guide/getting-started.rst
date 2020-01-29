@@ -24,8 +24,8 @@ https://localhost:8443/ to view the Zotonic Status page. If you wish to quit
 Zotonic, press twice Ctrl+C. If you wish to quite the container, press Ctrl+D at the
 bash prompt.
 
-Check the configuration for the password for the (and other configuration) zotonic
-status site::
+To see the configuration for the password (and other configurations) for the zotonic
+status site, type::
 
     bash-4.4$ bin/zotonic config
 
