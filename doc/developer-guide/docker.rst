@@ -39,7 +39,7 @@ started::
 
     bash-4.4$ bin/zotonic debug
 
-You can stop Zotonic (Erlang) by typing *ctrl-C* twice.
+You can stop Zotonic (Erlang) by typing Ctrl+C twice.
 
 The configuration, including the Zotonic status site password, can be found with::
 
@@ -59,7 +59,7 @@ You can also run other commands in the container, such as running the tests::
 Any changes you make in the Zotonic source files will be propagated to the
 container and :ref:`automatically compiled <automatic-recompilation>`.
 
-You can stop the container using *ctrl-D* at the Bash shell prompt.
+You can stop the container using Ctrl+D at the Bash shell prompt.
 
 
 .. _zotonic/zotonic-dev: https://hub.docker.com/r/zotonic/zotonic-dev/
