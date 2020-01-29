@@ -252,11 +252,11 @@
 -define(SESSION_EXPIRE_1,   40).
 -define(SESSION_EXPIRE_N, 3600).
 
-%% The default maxage of HSTS. Set to 200 days.
--define(HSTS_MAXAGE, 3600*24*200).
-
 %% Stop an authenticated session after this many seconds of inactivity on open pages
 -define(SESSION_EXPIRE_INACTIVE, 3600 * 4).
+
+%% The default maxage of HSTS. Set to 200 days.
+-define(HSTS_MAXAGE, 3600*24*200).
 
 %% The name of the persistent data cookie
 -define(PERSIST_COOKIE, "z_pid").
