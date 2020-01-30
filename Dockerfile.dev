@@ -21,7 +21,7 @@ RUN adduser -S -h /tmp -H -D zotonic
 # Note: gosu is pulled from edge; remove that when upgrading to an alpine release that
 # includes the package.
 RUN apk add --no-cache dumb-init \
-    && apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ gosu
+    && apk add --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/ gosu
 
 COPY docker/docker-entrypoint.sh /opt/zotonic-docker/docker-entrypoint.sh
 
