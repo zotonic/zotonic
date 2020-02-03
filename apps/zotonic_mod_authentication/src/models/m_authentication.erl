@@ -106,7 +106,16 @@ lookup_email_identities(<<>>, _Context) -> [];
 lookup_email_identities(EmailOrUsername, Context) ->
     Es = m_identity:lookup_by_type_and_key_multi(email, EmailOrUsername, Context),
     Us = m_identity:lookup_by_type_and_key_multi(username_pw, EmailOrUsername, Context),
-    lists:usort([ proplists:get_value(rsc_id, Row) || Row <- Es ++ Us ]).
+    RscIds = lists:usort([ proplists:get_value(rsc_id, Row) || Row <- Es ++ Us ]),
+    lists:filter(
+    fun (RscId) ->
+        case m_identity:get_username(RscId, Context) of
+            undefined -> false;
+            <<"admin">> -> false;
+            _ -> true
+        end
+    end,
+    RscIds).
 
 
 %% @doc Email a reset code to the user.
