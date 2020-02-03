@@ -259,7 +259,10 @@ event(#postback{message={language_default, Args}}, Context) ->
 
 %% @doc Start rescanning all templates for translation tags.
 event(#postback{message=translation_generate}, Context) ->
-    case z_acl:is_allowed(use, ?MODULE, Context) of
+    case z_acl:is_allowed(use, ?MODULE, Context) 
+        andalso (      z_acl:is_admin(Context)
+                orelse z_acl:is_allowed(use, mod_development, Context))
+    of
         true ->
             spawn(fun() -> generate(Context) end),
             z_render:growl(?__("Started building the .pot files. This may take a while...", Context), Context);
