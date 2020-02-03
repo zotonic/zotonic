@@ -179,13 +179,16 @@
 
     <div class="well">
 
-        <div class="form-group">
-            <div>
-                {% button class="btn btn-default" text=_"Generate .pot files"
-                    postback={translation_generate} delegate="mod_translation" %}
-                <span class="help-block">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href="http://docs.zotonic.com/en/latest/developer-guide/translation.html">gettext package must be installed</a>._}</span>
+        {% if m.acl.is_admin or m.acl.use.mod_development %}
+            <div class="form-group">
+                <div>
+                    {% button class="btn btn-default" text=_"Generate .pot files"
+                        postback={translation_generate} delegate="mod_translation" %}
+                    <span class="help-block">{_ Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href="http://docs.zotonic.com/en/latest/developer-guide/translation.html">gettext package must be installed</a>._}</span>
+                </div>
             </div>
-        </div>
+        {% endif %}
+
         <div class="form-group">
             <div>
                 {% button class="btn btn-default" text=_"Reload Translations"
