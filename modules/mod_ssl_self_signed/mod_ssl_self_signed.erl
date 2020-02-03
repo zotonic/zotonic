@@ -70,8 +70,9 @@ check_certs(Context) ->
             {true, true} ->
                 case check_keyfile(KeyFile) of
                     ok ->
-                        case check_dhfile(proplists:get_value(dhfile, Certs),
-                                          m_config:get_value(site, default_dh_param_name, ffdhe3072, Context)) of
+                        ParamName = z_convert:to_atom(
+                                      m_config:get_value(site, default_dh_param_name, ffdhe3072, Context)),
+                        case check_dhfile(proplists:get_value(dhfile, Certs), ParamName) of
                             ok -> {ok, Certs};
                             {error, _}=E -> E
                         end;
