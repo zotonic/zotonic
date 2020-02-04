@@ -50,8 +50,7 @@ Sites have the following default config settings:
 +---------------------------+-------------------------------------------------+-------------------+
 | Property                  | Description                                     | Example value     |
 +===========================+=================================================+===================+
-| environment               | Set the status of the site in a                 | development       |
-|                           | "X-DTAP-Environment" headers. Can be one of     |                   |
+| environment               | Set the status of the site. Can be one of       | development       |
 |                           | development, test, acceptance, education or     |                   |
 |                           | backup.                                         |                   |
 |                           | Default: production                             |                   |
