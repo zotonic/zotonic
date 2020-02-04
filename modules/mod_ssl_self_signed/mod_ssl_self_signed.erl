@@ -35,7 +35,8 @@
     observe_ssl_options/2,
 
     cert_files/1,
-    check_certs/1
+    check_certs/1,
+    dh_params/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -69,7 +70,9 @@ check_certs(Context) ->
             {true, true} ->
                 case check_keyfile(KeyFile) of
                     ok ->
-                        case check_dhfile(proplists:get_value(dhfile, Certs)) of
+                        ParamName = z_convert:to_atom(
+                                      m_config:get_value(site, default_dh_param_name, ffdhe3072, Context)),
+                        case check_dhfile(proplists:get_value(dhfile, Certs), ParamName) of
                             ok -> {ok, Certs};
                             {error, _}=E -> E
                         end;
@@ -90,7 +93,7 @@ check_keyfile(Filename) ->
 			{error, {cannot_read_pemfile, Filename, Error}}
 	end.
 
-check_dhfile(Filename) ->
+check_dhfile(Filename, Default) ->
     case filelib:is_file(Filename) of
         true ->
             case is_dhfile(Filename) of
@@ -98,7 +101,8 @@ check_dhfile(Filename) ->
                 false -> {error, {no_dhfile, Filename}}
             end;
         false ->
-            generate_dhfile(Filename)
+            FileData = dh_params(Default),
+            write_dhfile(Filename, FileData)
     end.
 
 is_dhfile(Filename) ->
@@ -137,16 +141,13 @@ generate_self_signed(Opts, Context) ->
 			{error, {ensure_dir, Error, PemFile}}
 	end.
 
-generate_dhfile(Filename) ->
+write_dhfile(Filename, Data) ->
     case filelib:ensure_dir(Filename) of
         ok ->
-            Command = "openssl dhparam -out " ++ Filename ++ " 2048",
-            lager:info("SSL: ~p", [Command]),
-            Result = os:cmd(Command),
-            lager:info("SSL: ~p", [Result]),
-            case is_dhfile(Filename) of
-                true -> ok;
-                false -> {error, "Could not generate dh parameters"}
+            case file:write_file(Filename, Data) of
+                ok -> ok;
+                {error, Reason} ->
+                    {error, {write_dhfile, Reason, Filename}}
             end;
         {error, _} = Error ->
             {error, {ensure_dir, Error, Filename}}
@@ -166,3 +167,47 @@ cert_files(Context) ->
 		false -> {ok, Files};
 		true -> {ok, [{cacertfile, CaCertFile} | Files]}
 	end.
+
+%%
+%% Recommended pre-configured DH groups per IETF (RFC 7919:
+%% https://tools.ietf.org/html/rfc7919).
+%%
+%% These values were obtained from
+%% https://wiki.mozilla.org/Security/Server_Side_TLS#ffdhe2048
+%%
+
+dh_params(ffdhe2048) ->
+    <<"-----BEGIN DH PARAMETERS-----\n",
+      "MIIBCAKCAQEA//////////+t+FRYortKmq/cViAnPTzx2LnFg84tNpWp4TZBFGQz\n",
+      "+8yTnc4kmz75fS/jY2MMddj2gbICrsRhetPfHtXV/WVhJDP1H18GbtCFY2VVPe0a\n",
+      "87VXE15/V8k1mE8McODmi3fipona8+/och3xWKE2rec1MKzKT0g6eXq8CrGCsyT7\n",
+      "YdEIqUuyyOP7uWrat2DX9GgdT0Kj3jlN9K5W7edjcrsZCwenyO4KbXCeAvzhzffi\n",
+      "7MA0BM0oNC9hkXL+nOmFg/+OTxIy7vKBg8P+OxtMb61zO7X8vC7CIAXFjvGDfRaD\n",
+      "ssbzSibBsu/6iGtCOGEoXJf//////////wIBAg==\n",
+      "-----END DH PARAMETERS-----">>;
+dh_params(ffdhe3072) ->
+    <<"-----BEGIN DH PARAMETERS-----\n",
+      "MIIBiAKCAYEA//////////+t+FRYortKmq/cViAnPTzx2LnFg84tNpWp4TZBFGQz\n",
+      "+8yTnc4kmz75fS/jY2MMddj2gbICrsRhetPfHtXV/WVhJDP1H18GbtCFY2VVPe0a\n",
+      "87VXE15/V8k1mE8McODmi3fipona8+/och3xWKE2rec1MKzKT0g6eXq8CrGCsyT7\n",
+      "YdEIqUuyyOP7uWrat2DX9GgdT0Kj3jlN9K5W7edjcrsZCwenyO4KbXCeAvzhzffi\n",
+      "7MA0BM0oNC9hkXL+nOmFg/+OTxIy7vKBg8P+OxtMb61zO7X8vC7CIAXFjvGDfRaD\n",
+      "ssbzSibBsu/6iGtCOGEfz9zeNVs7ZRkDW7w09N75nAI4YbRvydbmyQd62R0mkff3\n",
+      "7lmMsPrBhtkcrv4TCYUTknC0EwyTvEN5RPT9RFLi103TZPLiHnH1S/9croKrnJ32\n",
+      "nuhtK8UiNjoNq8Uhl5sN6todv5pC1cRITgq80Gv6U93vPBsg7j/VnXwl5B0rZsYu\n",
+      "N///////////AgEC\n",
+      "-----END DH PARAMETERS-----">>;
+dh_params(ffdhe4096) ->
+    <<"-----BEGIN DH PARAMETERS-----\n",
+    "MIICCAKCAgEA//////////+t+FRYortKmq/cViAnPTzx2LnFg84tNpWp4TZBFGQz\n",
+    "+8yTnc4kmz75fS/jY2MMddj2gbICrsRhetPfHtXV/WVhJDP1H18GbtCFY2VVPe0a\n",
+    "87VXE15/V8k1mE8McODmi3fipona8+/och3xWKE2rec1MKzKT0g6eXq8CrGCsyT7\n",
+    "YdEIqUuyyOP7uWrat2DX9GgdT0Kj3jlN9K5W7edjcrsZCwenyO4KbXCeAvzhzffi\n",
+    "7MA0BM0oNC9hkXL+nOmFg/+OTxIy7vKBg8P+OxtMb61zO7X8vC7CIAXFjvGDfRaD\n",
+    "ssbzSibBsu/6iGtCOGEfz9zeNVs7ZRkDW7w09N75nAI4YbRvydbmyQd62R0mkff3\n",
+    "7lmMsPrBhtkcrv4TCYUTknC0EwyTvEN5RPT9RFLi103TZPLiHnH1S/9croKrnJ32\n",
+    "nuhtK8UiNjoNq8Uhl5sN6todv5pC1cRITgq80Gv6U93vPBsg7j/VnXwl5B0rZp4e\n",
+    "8W5vUsMWTfT7eTDp5OWIV7asfV9C1p9tGHdjzx1VA0AEh/VbpX4xzHpxNciG77Qx\n",
+    "iu1qHgEtnmgyqQdgCpGBMMRtx3j5ca0AOAkpmaMzy4t6Gh25PXFAADwqTs6p+Y0K\n",
+    "zAqCkc3OyX3Pjsm1Wn+IpGtNtahR9EGC4caKAH5eZV9q//////////8CAQI=\n",
+    "-----END DH PARAMETERS-----">>.
