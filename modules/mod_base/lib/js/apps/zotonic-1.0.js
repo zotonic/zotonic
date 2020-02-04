@@ -63,7 +63,8 @@ var z_init_postback_forms_timeout = false;
 var TRANSPORT_TIMEOUT       = 30000;
 var TRANSPORT_TRIES         = 3;
 
-var ACTIVITY_PERIOD         = 5;  // Inactive if silent for 5 seconds
+var WEBSOCKET_PING_INTERVAL = 20000; // Send ping messages every 20 seconds
+var ACTIVITY_PERIOD         = 5000;  // Inactive if silent for 5 seconds
 
 // Misc state
 var z_spinner_show_ct       = 0;  // Set when performing an AJAX callback
@@ -470,27 +471,60 @@ function z_session_invalid_dialog()
 
 function z_activity_init()
 {
+    /* Use passive event capturing when it is supported */
+    var passive_if_supported = false;
+
+    try {
+        window.addEventListener("test", null,
+            Object.defineProperty({}, "passive", {
+                get: function() {
+                    passive_if_supported = {
+                        passive: false
+                    };
+                }
+            }));
+    } catch(err) {
+    }
+
+    z_last_active = 0;
     z_activity_event();
 
-    document.addEventListener("visibilitychange", z_activity_event);
-    document.addEventListener("scroll", z_activity_event);
-    document.addEventListener("keydown", z_activity_event);
-    document.addEventListener("mousemove", z_activity_event);
-    document.addEventListener("click", z_activity_event);
-    document.addEventListener("focus", z_activity_event);
+    document.addEventListener("visibilitychange", z_activity_event, passive_if_supported);
+    document.addEventListener("scroll", z_activity_event, passive_if_supported);
+    document.addEventListener("keydown", z_activity_event, passive_if_supported);
+    document.addEventListener("mousemove", z_activity_event, passive_if_supported);
+    document.addEventListener("click", z_activity_event, passive_if_supported);
+    document.addEventListener("focus", z_activity_event, passive_if_supported);
+}
+
+function z_activity_ignore() {
+    document.removeEventListener("visibilitychange", z_activity_event);
+    document.removeEventListener("scroll", z_activity_event);
+    document.removeEventListener("keydown", z_activity_event);
+    document.removeEventListener("mousemove", z_activity_event);
+    document.removeEventListener("click", z_activity_event);
+    document.removeEventListener("focus", z_activity_event);
+
+    z_last_active = null;
 }
 
 function z_activity_event()
 {
     if (!document.hidden) {
-        z_last_active = Math.floor(Date.now() / 1000);
+        z_last_active = Date.now();
     }
 }
 
-function z_is_active()
+function z_is_active(period)
 {
-    var now = Math.floor(Date.now() / 1000);
-    return z_last_active > now - ACTIVITY_PERIOD;
+    period = period || ACTIVITY_PERIOD;
+    var now = Date.now();
+
+    /* Return true when we are ignoring activity monitoring */
+    if(z_last_active === null) return true;
+    
+
+    return z_last_active > now - period;
 }
 
 
@@ -1336,7 +1370,7 @@ function z_websocket_ping()
                     "session_id": window.z_sid || undefined,
                     "data": {
                         count: z_ws_pong_count,
-                        is_active: z_is_active()
+                        is_active: z_is_active(WEBSOCKET_PING_INTERVAL)
                     }
                 });
         z_ws.send(msg);
@@ -1365,7 +1399,7 @@ function z_websocket_pong( msg )
         z_clear_ws_ping_timeout();
 
         z_clear_ws_ping_interval();
-        z_ws_ping_interval = setTimeout(z_websocket_ping, 20000);
+        z_ws_ping_interval = setTimeout(z_websocket_ping, WEBSOCKET_PING_INTERVAL);
 
         z_ws_pong_count++;
 
