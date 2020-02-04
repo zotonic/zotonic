@@ -148,7 +148,7 @@
                             "557713921482bb66eebe77b5b6e6b7d1b67c1e44"}},
        {locus,".*",
               {git,"https://github.com/g-andrade/locus.git",
-                   "3f1f45be263d523a12163f5ecbc631db002d8942"}},
+                   "e78adf49dfa7b40e057c160d68928d031ba6f292"}},
        {idna,".*",
              {git,"https://github.com/benoitc/erlang-idna",
                   "40c682fef283b7c3871c4b59aa0469304c6613ef"}},
