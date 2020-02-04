@@ -16,7 +16,7 @@
 					<legend>{{ page_nr }}<span class="total">/{{ pages }}</span></legend>
 				{% elseif id.survey_progress == 'bar' %}
 					<div class="progress">
-					  <div class="bar" style="width: {{ page_nr * 100 / pages }}%;"></div>
+					  <div class="progress-bar" style="width: {{ page_nr * 100 / pages }}%;"></div>
 					</div>
 				{% endif %}
 			{% endif %}
