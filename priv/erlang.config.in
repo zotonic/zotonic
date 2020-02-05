@@ -38,6 +38,23 @@
    {crash_log, "priv/log/crash.log"}
   ]},
 
+ %% SSl application configuration.
+ %%
+ %% For details see: http://erlang.org/doc/man/ssl_app.html
+ {ssl,
+  [
+   %% The max number of cached SSL parameters. Increase if you have a lot of clients
+   %% connecting to your server. 
+   {session_cache_server_max, 20000},
+
+   %% The amount of time the parameters are cached. (in seconds).
+   {session_lifetime, 300}, % 5 minutes
+
+   %% The time between pem cache cleanups (in milliseconds)
+   {ssl_pem_cache_clean, 300000} % 5 minutes
+  ]
+ },
+
  {webzmachine,
   [
 %%% Logger module, use this option to set your own.
