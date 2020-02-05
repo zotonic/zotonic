@@ -1,10 +1,8 @@
 {% if not m.admin_status.is_ssl_application_configured %}
-    <div class="container">
-        <div class="alert alert-warning" role="alert">
-            <strong>{_ Warning! _}</strong>
-            {_ SSL Application uses Erlang defaults, please configure. _}
-        </div>
-    </div>
+<div class="alert alert-warning" role="alert">
+    <strong>{_ Warning! _}</strong>
+    {_ SSL Application uses Erlang defaults, please configure. _}
+</div>
 {% endif %}
 
 <div class="container">
