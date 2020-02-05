@@ -1,4 +1,13 @@
+{% if not m.admin_status.is_ssl_application_configured %}
+    <div class="container">
+        <div class="alert alert-warning" role="alert">
+            {_ SSL Application uses Erlang defaults. Please configure _}
+        </div>
+    </div>
+{% endif %}
+
 <div class="container">
+
 <div class="col-md-3">
     <table class="table table-sm">
         <thead>
@@ -50,6 +59,7 @@
         </tbody>
     </table>
 </div>
+
 </div>
 
 {% with m.modules.active.mod_geoip as is_ip2country %}

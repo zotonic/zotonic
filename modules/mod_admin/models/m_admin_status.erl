@@ -36,6 +36,11 @@
 ]).
 
 %% @spec m_find_value(Key, Source, Context) -> term()
+m_find_value(is_ssl_application_configured, #m{value=undefined}, _Context) ->
+    case application:get_env(ssl, session_lifetime) of
+        undefined -> false;
+        {ok, _} -> true
+    end;
 m_find_value(session_count, #m{value=undefined}, Context) ->
     session_count(Context);
 m_find_value(page_count, #m{value=undefined}, Context) ->
@@ -55,7 +60,9 @@ m_find_value(allocated, #m{value=memory}, _Context) ->
 m_find_value(unused, #m{value=memory}, _Context) ->
     recon_alloc:memory(unused);
 m_find_value(usage, #m{value=memory}, _Context) ->
-    recon_alloc:memory(usage).
+    recon_alloc:memory(usage);
+m_find_value(_P, #m{value=_V}, _Context) ->
+    undefined.
 
 
 %% @spec m_to_list(Source, Context) -> List
