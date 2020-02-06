@@ -200,7 +200,7 @@ log_start_warnings(_) ->
         {ok, _} -> ok;
         undefined ->
             lager:warning(""),
-            lager:warning("SSL application using Erlang defaults, please configure."),
+            lager:warning("SSL application using Erlang defaults, it is recommended to change this configuration in your erlang.config"),
             lager:warning("")
     end.
 
