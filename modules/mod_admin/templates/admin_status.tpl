@@ -10,6 +10,12 @@
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            {% include "_admin_status_alert.tpl" %}
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-6">
             <div class="well">
 	            <div class="form-group">
