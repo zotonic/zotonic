@@ -311,6 +311,8 @@ set_anonymous(Context) ->
 
 %% @doc Log the user with the id on, fill the acl field of the context
 -spec logon(m_rsc:resource() | undefined, z:context()) -> z:context().
+logon(Id, #context{ user_id = Id } = Context) ->
+    Context;
 logon(Id, Context) ->
     logon(Id, #{}, Context).
 
