@@ -813,24 +813,29 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
         {<<"transfer-encoding">>, <<"quoted-printable">>},
         {<<"disposition-params">>, []}
     ],
+    HtmlBin = z_convert:to_binary(Html),
     Parts = case z_utils:is_empty(Text) of
         true ->
             case z_utils:is_empty(Html) of
                 true ->
                     [];
                 false ->
+                    ContentHtml = case binary:split(HtmlBin, <<"<!--content-->">>) of
+                        [ _, MDH ] -> MDH;
+                        _ -> HtmlBin
+                    end,
                     [{<<"text">>, <<"plain">>, [], Params,
-                     expand_cr(z_convert:to_binary(z_markdown:to_markdown(Html, [no_html])))}]
+                     expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html])))}]
             end;
         false ->
             [{<<"text">>, <<"plain">>, [], Params,
              expand_cr(z_convert:to_binary(Text))}]
     end,
-    Parts1 = case z_utils:is_empty(Html) of
+    Parts1 = case z_utils:is_empty(HtmlBin) of
         true ->
             Parts;
         false ->
-            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, z_convert:to_binary(Html)}], Context)
+            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, z_convert:to_binary(HtmlBin)}], Context)
     end,
     case Attachment of
         [] ->
