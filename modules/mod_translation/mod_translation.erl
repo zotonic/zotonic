@@ -301,11 +301,18 @@ event(#postback{message={language_delete, Args}}, Context) ->
             z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
     end;
 
-event(#postback{message={language_enable, Args}}, Context) ->
+event(#postback{message={language_status, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             {code, Code} = proplists:lookup(code, Args),
-            language_enable(Code, z_convert:to_bool(z_context:get_q("triggervalue", Context)), Context),
+            case z_convert:to_binary(z_context:get_q("triggervalue", Context)) of
+                <<"enabled">> ->
+                    language_enable(Code, true, Context);
+                <<"edit">> ->
+                    language_editable(Code, true, Context);
+                <<"disabled">> ->
+                    language_enable(Code, false, Context)
+            end,
             Context;
         false ->
             z_render:growl_error(?__("Sorry, you don't have permission to change the language list.", Context), Context)
@@ -399,7 +406,8 @@ language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Conte
     Languages2 = lists:usort([{IsoCodeNewAtom,
                                [{language, z_convert:to_binary(z_string:trim(z_html:escape(Language)))},
                                 {fallback, FallbackIsoCodeAtom},
-                                {is_enabled, z_convert:to_bool(IsEnabled)}
+                                {is_enabled, z_convert:to_bool(IsEnabled)},
+                                {is_editable, z_convert:to_bool(IsEnabled)}
                                ]} | Languages1]),
     set_language_config(Languages2, Context).
 
@@ -414,9 +422,39 @@ language_delete(IsoCode, Context) ->
 language_enable(Code, IsEnabled, Context) ->
     Languages = get_language_config(Context),
     Lang = proplists:get_value(Code, Languages),
-    Lang1 = [{is_enabled, IsEnabled} | proplists:delete(is_enabled, Lang)],
-    Languages1 = lists:usort([{Code, Lang1} | proplists:delete(Code, Languages)]),
-    set_language_config(Languages1, Context).
+    case proplists:get_value(is_enabled, Lang, false) of
+        false when not IsEnabled ->
+            language_editable(Code, false, Context);
+        IsEnabled ->
+            ok;
+        _ ->
+            Lang1 = proplists:delete(is_enabled, proplists:delete(is_editable, Lang)),
+            Lang2 = [
+                {is_enabled, IsEnabled},
+                {is_editable, IsEnabled}
+                | Lang1
+            ],
+            Languages1 = lists:usort([{Code, Lang2} | proplists:delete(Code, Languages)]),
+            set_language_config(Languages1, Context)
+    end.
+
+%% @doc Set/reset the is_editable flag of a language.
+language_editable(Code, IsEditable, Context) ->
+    Languages = get_language_config(Context),
+    Lang = proplists:get_value(Code, Languages),
+    case proplists:get_value(is_editable, Lang, false) of
+        IsEditable ->
+            ok;
+        _ ->
+            Lang1 = proplists:delete(is_enabled, proplists:delete(is_editable, Lang)),
+            Lang2 = [
+                {is_enabled, false},
+                {is_editable, IsEditable}
+                | Lang1
+            ],
+            Languages1 = lists:usort([{Code, Lang2} | proplists:delete(Code, Languages)]),
+            set_language_config(Languages1, Context)
+    end.
 
 
 is_multiple_languages_config(Context) ->

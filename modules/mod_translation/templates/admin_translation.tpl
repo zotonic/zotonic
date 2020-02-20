@@ -20,10 +20,12 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th width="10%">{_ Enabled _}</th>
                     <th width="10%">{_ Default _}</th>
-                    <th width="15%">{_ Language _}</th>
-                    <th width="15%">{_ ISO Code _}</th>
+                    <th width="5%">{_ View _}</th>
+                    <th width="5%">{_ Edit _}</th>
+                    <th width="5%">{_ Off _}</th>
+                    <th width="10%">{_ Language _}</th>
+                    <th width="10%">{_ ISO Code _}</th>
                     <th width="15%">{_ Fallback language _}</th>
                     <th></th>
                 </tr>
@@ -34,15 +36,27 @@
                     {% for code, lang in m.config.i18n.language_list.list %}
                         <tr id="{{ #li.code }}">
                             <td>
-                                <input type="checkbox" id="{{ #enabled.code }}" name="is_enabled" value="1"
-                                {% if lang.is_enabled %}checked="checked"{% endif %} />
-                                {% wire id=#enabled.code postback={language_enable code=code} delegate="mod_translation" %}
-                            </td>
-                            <td>
                                 <input type="radio" id="{{ #default.code }}" name="is_default" value="{{ code }}"
                                 {% if code == default_code %}checked="checked"{% endif %} />
-                                {% wire id=#default.code postback={language_default code=code} delegate="mod_translation" %}
+                                {% wire id=#default.code postback={language_status code=code} delegate="mod_translation" %}
                             </td>
+                            <td>
+                                <input type="radio" id="{{ #enabled.code }}" name="status-{{ code }}" value="enabled"
+                                {% if lang.is_enabled %}checked="checked"{% endif %} />
+                                {% wire type="change" id=#enabled.code postback={language_status code=code} delegate="mod_translation" %}
+                            </td>
+                            <td>
+                                <input type="radio" id="{{ #editable.code }}" name="status-{{ code }}" value="edit"
+                                {% if not lang.is_enabled and lang.is_editable %}checked="checked"{% endif %} />
+                                {% wire type="change" id=#editable.code postback={language_status code=code} delegate="mod_translation" %}
+                            </td>
+                            <td>
+                                <input type="radio" id="{{ #disabled.code }}" name="status-{{ code }}" value="disabled"
+                                {% if not lang.is_enabled and not lang.is_editable %}checked="checked"{% endif %} />
+                                {% wire type="change" id=#disabled.code postback={language_status code=code} delegate="mod_translation" %}
+                            </td>
+
+
                             <td class="clickable" id="{{ #b.code }}">
                                 {{ lang.language|default:"-" }}
                             </td>
