@@ -42,6 +42,8 @@ m_find_value(language_list, #m{value=undefined}, Context) ->
 	language_list(Context);
 m_find_value(language_list_enabled, #m{value=undefined}, Context) ->
 	language_list_enabled(Context);
+m_find_value(language_list_editable, #m{value=undefined}, Context) ->
+	language_list_editable(Context);
 m_find_value(language_list_all, #m{value=undefined}, Context) ->
 	language_list_all(Context).
 
@@ -65,7 +67,16 @@ language_list(Context) ->
 
 language_list_enabled(Context) ->
 	lists:filter(fun({_Code,Props}) ->
-					proplists:get_value(is_enabled, Props)
+					z_convert:to_bool( proplists:get_value(is_enabled, Props) )
+				 end,
+				 language_list(Context)).
+
+language_list_editable(Context) ->
+	lists:filter(fun({_Code,Props}) ->
+					case z_convert:to_bool( proplists:get_value(is_enabled, Props) ) of
+						true -> true;
+						false -> z_convert:to_bool( proplists:get_value(is_editable, Props) )
+					end
 				 end,
 				 language_list(Context)).
 
