@@ -1,4 +1,4 @@
 %% -*- mode: erlang -*-
 [
- {admin_modules, ["admin", "modules"], controller_admin_module_manager, [ seo_noindex ]}
+ {admin_modules, ["admin", "modules"], controller_admin_module_manager, [ seo_noindex, ssl ]}
 ].
