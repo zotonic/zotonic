@@ -72,6 +72,34 @@ ul.media {
 @_leaderImageHeight: 60px;
 
 .edit-page {
+
+    .system-content-warning {
+        display: none;
+        background-color: @brand-danger;
+        color: #fff;
+        padding: @padding-base-vertical @baseMargin;
+        margin: 0 -@baseMargin;
+    }
+
+    &.cg-system_content_group,
+    &.cat-meta {
+
+        .system-content-warning {
+            display: block;
+        }
+
+        .navbar > div {
+            border-bottom: 4px solid @brand-danger;
+        }
+
+        #sidebar-publish-page {
+            .widget-content {
+                border-top: 1px solid @brand-danger;
+            }
+        }
+    }
+
+
     .admin-container {
         margin-top: @topbarHeight;
     }

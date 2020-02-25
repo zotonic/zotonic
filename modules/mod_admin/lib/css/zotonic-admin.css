@@ -667,6 +667,25 @@ ul.media > li .bottom .caption a {
   width: 161px;
   vertical-align: text-top;
 }
+.edit-page .system-content-warning {
+  display: none;
+  background-color: #d9534f;
+  color: #fff;
+  padding: 6px 15px;
+  margin: 0 -15px;
+}
+.edit-page.cg-system_content_group .system-content-warning,
+.edit-page.cat-meta .system-content-warning {
+  display: block;
+}
+.edit-page.cg-system_content_group .navbar > div,
+.edit-page.cat-meta .navbar > div {
+  border-bottom: 4px solid #d9534f;
+}
+.edit-page.cg-system_content_group #sidebar-publish-page .widget-content,
+.edit-page.cat-meta #sidebar-publish-page .widget-content {
+  border-top: 1px solid #d9534f;
+}
 .edit-page .admin-container {
   margin-top: 50px;
 }

@@ -2,9 +2,14 @@
 
 {% block title %}{_ Edit _} “{{ m.rsc[id].title }}”{% endblock %}
 
-{% block bodyclass %}edit-page{% endblock %}
+{% block bodyclass %}edit-page cg-{{ id.content_group_id.name }} {% for cat,_ in id.is_a %}cat-{{ cat }} {% endfor %}{% endblock %}
 
 {% block content %}
+
+<div class="system-content-warning">
+    <b>{_ Proceed with care: _}</b> {_ You are editing a: _} <b>{{ id.category_id.title }}</b>. {_ This is system content. _}
+</div>
+
 {% with m.rsc[id] as r %}
 {% with r.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
