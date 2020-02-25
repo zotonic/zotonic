@@ -30,7 +30,7 @@ custompivot
         <tr id="{{ #tr.id }}" class="{% if not id.is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
             <td>
                 {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}
-                    <span class="label label-danger pull-right" title="{_ This is system content. _}">
+                    <span class="label label-warning pull-right" title="{_ This is system content. _}">
                         {{ id.name|default:_"system content" }}
                     </span>
                 {% elseif id.name %}

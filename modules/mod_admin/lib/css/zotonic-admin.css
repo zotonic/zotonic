@@ -669,7 +669,7 @@ ul.media > li .bottom .caption a {
 }
 .edit-page .system-content-warning {
   display: none;
-  background-color: #d9534f;
+  background-color: #f0ad4e;
   color: #fff;
   padding: 6px 15px;
   margin: 0 -15px;
@@ -682,12 +682,12 @@ ul.media > li .bottom .caption a {
 .edit-page.cg-system_content_group .navbar > div,
 .edit-page.cat-meta .navbar > div,
 .edit-page.name-administrator .navbar > div {
-  border-bottom: 4px solid #d9534f;
+  border-bottom: 4px solid #f0ad4e;
 }
 .edit-page.cg-system_content_group #sidebar-publish-page .widget-content,
 .edit-page.cat-meta #sidebar-publish-page .widget-content,
 .edit-page.name-administrator #sidebar-publish-page .widget-content {
-  border-top: 1px solid #d9534f;
+  border-top: 1px solid #f0ad4e;
 }
 .edit-page .admin-container {
   margin-top: 50px;
