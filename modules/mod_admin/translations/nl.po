@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-02-25 12:46+0100\n"
+"PO-Revision-Date: 2020-02-25 15:17+0100\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -231,6 +231,10 @@ msgstr "Kies een mediabestand van deze pagina om in de tekst in te voegen."
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:172
 msgid "City"
 msgstr "Stad"
+
+#: modules/mod_admin/templates/_admin_system_content_warning.tpl:11
+msgid "Click here for more information"
+msgstr "Klik hier voor meer informatie"
 
 #: modules/mod_admin/templates/_admin_edit_media.tpl:30
 msgid "Click the image to set the cropping center."
@@ -857,7 +861,7 @@ msgstr "Voorbeeld"
 msgid "Previous in category: "
 msgstr "Vorige in categorie: "
 
-#: modules/mod_admin/templates/admin_edit.tpl:10
+#: modules/mod_admin/templates/_admin_system_content_warning.tpl:2
 msgid "Proceed with care:"
 msgstr "Wees voorzichtig:"
 
@@ -1199,7 +1203,7 @@ msgstr "Dit bestand is geïnfecteerd met een virus."
 msgid "This file is too large."
 msgstr "Dit bestand is te groot."
 
-#: modules/mod_admin/templates/admin_edit.tpl:16
+#: modules/mod_admin/templates/_admin_system_content_warning.tpl:8
 #: modules/mod_admin/templates/_admin_overview_list.tpl:33
 msgid "This is system content."
 msgstr "Dit is een systeempagina."
@@ -1402,11 +1406,11 @@ msgstr ""
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
-#: modules/mod_admin/templates/admin_edit.tpl:14
+#: modules/mod_admin/templates/_admin_system_content_warning.tpl:6
 msgid "You are editing a:"
 msgstr "Je bewerkt een:"
 
-#: modules/mod_admin/templates/admin_edit.tpl:12
+#: modules/mod_admin/templates/_admin_system_content_warning.tpl:4
 msgid "You are editing the <b>Site Administrator Account</b>."
 msgstr "Je bewerkt de <b>site beheerder account</b>."
 
@@ -1422,7 +1426,7 @@ msgstr "Je mag dit media-item niet verwijderen."
 msgid "You are not allowed to delete this page."
 msgstr "Je mag deze pagina niet verwijderen."
 
-#: modules/mod_admin/templates/admin_edit.tpl:26
+#: modules/mod_admin/templates/admin_edit.tpl:18
 msgid "You are not allowed to edit this page."
 msgstr "Je hebt geen rechten om deze pagina te bewerken."
 
