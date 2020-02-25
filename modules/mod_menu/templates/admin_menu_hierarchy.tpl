@@ -1,9 +1,17 @@
 {% extends "admin_base.tpl" %}
 
+{% block bodyclass %}{% with m.rsc[q.name].id as id %}{% if id.is_a.category and m.category[id].is_a.meta %}system-content{% endif %}{% endwith %}{% endblock %}
+
 {% block content %}
+
 {% with m.rsc[q.name] as r %}
 	{% if r.is_a.category %}
 		{% with r.id as id %}
+
+            {% if m.category[id].is_a.meta %}
+                {% include "_admin_system_content_warning.tpl" category_id=id %}
+            {% endif %}
+
 			<div class="admin-header">
 				<h2>{_ Hierarchy for _}: {{ id.title }}</h2>
 			<div>

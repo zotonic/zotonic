@@ -2,9 +2,12 @@
 
 {% block title %}{_ Edit _} “{{ m.rsc[id].title }}”{% endblock %}
 
-{% block bodyclass %}edit-page{% endblock %}
+{% block bodyclass %}edit-page cg-{{ id.content_group_id.name }} {% for cat,_ in id.is_a %}cat-{{ cat }} {% endfor %} name-{{ id.name }}{% endblock %}
 
 {% block content %}
+
+{% include "_admin_system_content_warning.tpl" category_id=id.category_id %}
+
 {% with m.rsc[id] as r %}
 {% with r.is_editable as is_editable %}
 {% with m.config.i18n.language_list.list as languages %}
