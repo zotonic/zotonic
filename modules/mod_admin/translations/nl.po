@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-02-25 12:22+0100\n"
+"PO-Revision-Date: 2020-02-25 12:46+0100\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -770,7 +770,7 @@ msgstr "Geen media gevonden."
 #: modules/mod_admin/templates/_action_dialog_connect_tab_find_results_loop.tpl:16
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12
 #: modules/mod_admin/templates/admin_referrers.tpl:47
-#: modules/mod_admin/templates/_admin_overview_list.tpl:59
+#: modules/mod_admin/templates/_admin_overview_list.tpl:63
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
 
@@ -1199,7 +1199,8 @@ msgstr "Dit bestand is geïnfecteerd met een virus."
 msgid "This file is too large."
 msgstr "Dit bestand is te groot."
 
-#: modules/mod_admin/templates/admin_edit.tpl:10
+#: modules/mod_admin/templates/admin_edit.tpl:16
+#: modules/mod_admin/templates/_admin_overview_list.tpl:33
 msgid "This is system content."
 msgstr "Dit is een systeempagina."
 
@@ -1401,9 +1402,13 @@ msgstr ""
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
-#: modules/mod_admin/templates/admin_edit.tpl:10
+#: modules/mod_admin/templates/admin_edit.tpl:14
 msgid "You are editing a:"
 msgstr "Je bewerkt een:"
+
+#: modules/mod_admin/templates/admin_edit.tpl:12
+msgid "You are editing the <b>Site Administrator Account</b>."
+msgstr "Je bewerkt de <b>site beheerder account</b>."
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "You are going to duplicate the page"
@@ -1417,7 +1422,7 @@ msgstr "Je mag dit media-item niet verwijderen."
 msgid "You are not allowed to delete this page."
 msgstr "Je mag deze pagina niet verwijderen."
 
-#: modules/mod_admin/templates/admin_edit.tpl:20
+#: modules/mod_admin/templates/admin_edit.tpl:26
 msgid "You are not allowed to edit this page."
 msgstr "Je hebt geen rechten om deze pagina te bewerken."
 
@@ -1457,8 +1462,8 @@ msgid "by"
 msgstr "door"
 
 #: modules/mod_admin/templates/admin_referrers.tpl:34
-#: modules/mod_admin/templates/_admin_overview_list.tpl:46
-#: modules/mod_admin/templates/_admin_overview_list.tpl:47
+#: modules/mod_admin/templates/_admin_overview_list.tpl:50
+#: modules/mod_admin/templates/_admin_overview_list.tpl:51
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
@@ -1474,7 +1479,7 @@ msgstr "bv. kan nog veranderen"
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:67
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:75
 #: modules/mod_admin/templates/admin_referrers.tpl:39
-#: modules/mod_admin/templates/_admin_overview_list.tpl:52
+#: modules/mod_admin/templates/_admin_overview_list.tpl:56
 msgid "edit"
 msgstr "bewerk"
 
@@ -1521,6 +1526,10 @@ msgstr "pixels"
 msgid "show all"
 msgstr "toon alle"
 
+#: modules/mod_admin/templates/_admin_overview_list.tpl:34
+msgid "system content"
+msgstr "systeeminhoud"
+
 #: modules/mod_admin/templates/_action_unlink_undo.tpl:3
 msgid "undo"
 msgstr "ongedaan maken"
@@ -1541,7 +1550,7 @@ msgstr "geupload op"
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:66
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:74
 #: modules/mod_admin/templates/admin_referrers.tpl:38
-#: modules/mod_admin/templates/_admin_overview_list.tpl:51
+#: modules/mod_admin/templates/_admin_overview_list.tpl:55
 msgid "view"
 msgstr "bekijk"
 

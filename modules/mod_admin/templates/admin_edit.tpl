@@ -2,12 +2,18 @@
 
 {% block title %}{_ Edit _} “{{ m.rsc[id].title }}”{% endblock %}
 
-{% block bodyclass %}edit-page cg-{{ id.content_group_id.name }} {% for cat,_ in id.is_a %}cat-{{ cat }} {% endfor %}{% endblock %}
+{% block bodyclass %}edit-page cg-{{ id.content_group_id.name }} {% for cat,_ in id.is_a %}cat-{{ cat }} {% endfor %} name-{{ id.name }}{% endblock %}
 
 {% block content %}
 
 <div class="system-content-warning">
-    <b>{_ Proceed with care: _}</b> {_ You are editing a: _} <b>{{ id.category_id.title }}</b>. {_ This is system content. _}
+    <b>{_ Proceed with care: _}</b>
+    {% if id == 1 %}
+        {_ You are editing the <b>Site Administrator Account</b>. _}
+    {% else %}
+        {_ You are editing a: _} <b>{{ id.category_id.title }}</b>.
+    {% endif %}
+    {_ This is system content. _}
 </div>
 
 {% with m.rsc[id] as r %}
