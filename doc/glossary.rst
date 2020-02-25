@@ -77,13 +77,13 @@ Glossary
       A field in a resource. Examples are title and summary. Properties are dynamically defined. Although some property names are reserved, you can set any other property, which will be stored in the resource.
 
    Data model
-      :ref:`Zotonic’s generic data model <guide-domain-model>` of (categorized) resources which connect to other resources using labelled edges. This data model is loosely based on the principles of the semantic web.
+      :ref:`Zotonic’s generic data model <guide-datamodel>` of (categorized) resources which connect to other resources using labelled edges. This data model is loosely based on the principles of the semantic web.
 
    Domain model
-      A particular configuration of resource categories and predicates, which dictate how resources of certain categories relate to each other. For example, a blog-type site might need `person`, `article` and `keyword` categories, where persons and articles are connected using the `author` predicate to indicate article authorship, and articles might be connected to keywords with `has_keyword` predicates. See :ref:`guide-domain-model`.
+      A particular configuration of resource categories and predicates, which dictate how resources of certain categories relate to each other. For example, a blog-type site might need `person`, `article` and `keyword` categories, where persons and articles are connected using the `author` predicate to indicate article authorship, and articles might be connected to keywords with `has_keyword` predicates. See :ref:`guide-datamodel`.
 
    Resource
-      The main building block of the :ref:`data model <guide-domain-model>`. For simplicity of communication, a resource is often referred to as a page. Every resource usually has its own page on the web site. See :ref:`guide-datamodel-resources`.
+      The main building block of the :ref:`data model <guide-datamodel>`. For simplicity of communication, a resource is often referred to as a page. Every resource usually has its own page on the web site. See :ref:`guide-datamodel-resources`.
 
    Translation
       There are two kinds of translations. Texts in the templates and Erlang modules; and translations of resources. Templates and Erlang modules are translated using gettext. Resources are translated in the admin, any resource can have an arbitrary number of translations. Zotonic selects the shown language based on the preferred language of the visitor and the available languages of a resource.

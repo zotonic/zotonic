@@ -1,7 +1,7 @@
-.. _guide-domain-model:
+.. _guide-datamodel:
 
-The Zotonic domain model
-========================
+The Zotonic data model
+======================
 
 Zotonic’s data model can be seen as a pragmatic implementation of the
 `Semantic Web <http://en.wikipedia.org/wiki/Semantic_Web>`_: a mixture
@@ -71,10 +71,10 @@ given id. See the :ref:`model-rsc` model for more details on this.
 Pages
 -----
 
-Resources are the main building block of Zotonic's :ref:`data model
-<guide-domain-model>`. For simplicity of communication, a resource is
-often referred to as a page. Every resource usually has its own page
-on the web site, which is the *HTML representation* of the resource.
+Resources are the main building block of Zotonic's data model.
+For simplicity of communication, a resource is often referred to as a page.
+Every resource usually has its own page on the web site, which is the
+*HTML representation* of the resource.
 
 A resource can have multiple representations, for example ``application/json``.
 
@@ -192,12 +192,6 @@ Examples of predicates:
  * hasdocument (page has an attached document)
 
 .. seealso:: :ref:`model-predicate`
-
-Further reading
----------------
-
-* Zotonic’s defaults resources and categories: the
-  :ref:`domain model <guide-domain-model>`.
 
 
 .. todo:: document categories, predicates and resources

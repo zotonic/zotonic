@@ -54,4 +54,4 @@ The following properties are saved:
 |modified           |The date the resource was deleted.                   |{{2012,12,5},{23,59,59}}        |
 +-------------------+-----------------------------------------------------+--------------------------------+
 
-.. seealso:: :ref:`guide-domain-model`, :ref:`model-rsc`
+.. seealso:: :ref:`guide-datamodel`, :ref:`model-rsc`
