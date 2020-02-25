@@ -2,9 +2,12 @@
 
 {% block title %}{_ Edit _} “{{ id.title }}”{% endblock %}
 
-{% block bodyclass %}edit-page{% endblock %}
+{% block bodyclass %}edit-page cg-{{ id.content_group_id.name }} {% for cat,_ in id.is_a %}cat-{{ cat }} {% endfor %} name-{{ id.name }}{% endblock %}
 
 {% block content %}
+
+    {% include "_admin_system_content_warning.tpl" category_id=id.category_id %}
+
     {% if not id.is_editable %}
         <div class="alert alert-warning" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
