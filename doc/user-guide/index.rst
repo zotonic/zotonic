@@ -12,8 +12,7 @@ Zotonic.
    :maxdepth: 1
 
    cms
-   data-model
-   domain-model
+   datamodel
    user-management
    issues-and-features
 

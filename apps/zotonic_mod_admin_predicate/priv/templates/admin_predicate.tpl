@@ -2,7 +2,10 @@
 
 {% block title %}{_ Predicates _}{% endblock %}
 
+{% block bodyclass %}system-content{% endblock %}
+
 {% block content %}
+{% include "_admin_system_content_warning.tpl" category_id=`predicate` %}
 {% with m.acl.is_admin as editable %}
 <div class="admin-header">
 

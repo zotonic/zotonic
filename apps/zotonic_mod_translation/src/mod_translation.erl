@@ -696,6 +696,7 @@ generate(Context) ->
 generate_core() ->
     case zotonic_core:is_zotonic_project() of
         true ->
+            lager:info("Generating .pot files..."),
             translation_po:generate(translation_scan:scan(core_apps())),
             consolidate_core();
         false ->
@@ -715,11 +716,17 @@ core_app_to_module_name(App) when is_atom(App) ->
 
 %% @doc Consolidate translation files for core modules
 consolidate_core() ->
+    ZotonicPot = code:priv_dir(zotonic_core) ++ "/translations/zotonic.pot",
+    PotFiles = filename:join([z_path:get_path(), "apps", "zotonic_*/priv/translations/template/*.pot"]),
+    lager:info("Merging .pot files into \"~s\"", [ ZotonicPot]),
     Command = lists:flatten([
         "msgcat -o ",
-        z_utils:os_filename(code:priv_dir(zotonic_core) ++ "/translations/zotonic.pot"),
-        " ",
-        z_utils:os_filename(filename:join([z_path:get_path(), "apps", "zotonic_*/priv/translations/template/*.pot"]))
+        z_utils:os_filename(ZotonicPot),
+        lists:map(
+            fun(F) ->
+                [ " ", z_utils:os_filename(F) ]
+            end,
+            filelib:wildcard(PotFiles))
     ]),
     [] = os:cmd(Command),
     ok.

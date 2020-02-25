@@ -30,7 +30,7 @@ and can, subsequently, have their own page on the web site.
 
 Categories are organized in a hierarchical fashion, and used to
 organize the resources into meaningful groups. Zotonic has a standard
-set of categories (see :ref:`guide-domain-model`), but it is
+set of categories (see :ref:`guide-datamodel`), but it is
 very usual to define your own in your own site, resulting in a custom
 :term:`domain model`.
 

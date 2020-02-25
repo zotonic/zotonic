@@ -2,7 +2,10 @@
 
 {% block title %}{_ Category Hierarchy _}{% endblock %}
 
+{% block bodyclass %}system-content{% endblock %}
+
 {% block content %}
+{% include "_admin_system_content_warning.tpl" category_id=`predicate` %}
 <div class="admin-header">
     <h2>{_ Categories _}</h2>
 

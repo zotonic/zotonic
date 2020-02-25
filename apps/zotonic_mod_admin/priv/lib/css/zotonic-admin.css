@@ -614,6 +614,44 @@ ul.blocks.ui-sortable .form-control.block-name:focus {
   top: 0;
   bottom: 0;
 }
+.system-content-warning {
+  background-color: #f0ad4e;
+  color: #fff;
+  padding: 6px 15px;
+  margin: 0 -15px;
+}
+.system-content-warning a {
+  color: inherit;
+  text-decoration: underline;
+}
+.system-content-warning a:hover {
+  color: #0a6d93;
+}
+.edit-page .system-content-warning {
+  display: none;
+}
+body.cg-system_content_group .system-content-warning,
+body.cat-meta .system-content-warning,
+body.name-administrator .system-content-warning,
+body.system-content .system-content-warning {
+  display: block;
+}
+body.cg-system_content_group .navbar > div,
+body.cat-meta .navbar > div,
+body.name-administrator .navbar > div,
+body.system-content .navbar > div {
+  border-bottom: 4px solid #f0ad4e;
+}
+body.cg-system_content_group #sidebar-publish-page .widget-content,
+body.cat-meta #sidebar-publish-page .widget-content,
+body.name-administrator #sidebar-publish-page .widget-content,
+body.system-content #sidebar-publish-page .widget-content {
+  border-top: 1px solid #f0ad4e;
+}
+body.system-content .system-content-warning {
+  margin-top: -24px;
+  margin-bottom: 20px;
+}
 ul.media {
   margin: 0;
 }

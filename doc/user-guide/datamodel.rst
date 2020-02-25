@@ -16,6 +16,12 @@ importantly, they belong to a certain :term:`category`.
 Edges are nothing more than connections between two resources. Each
 edge is labeled, with a so-called :term:`predicate`.
 
+By default, Zotonic comes with a set of categories and predicates that makes
+sense for typical websites.
+
+You can extend the built-in domain model by adding your own categories and
+predicates.
+
 This manual describes the data model and its related database table in depth.
 
 .. _guide-datamodel-example:
@@ -65,10 +71,10 @@ given id. See the :ref:`model-rsc` model for more details on this.
 Pages
 -----
 
-Resources are the main building block of Zotonic's :ref:`data model
-<guide-datamodel>`. For simplicity of communication, a resource is
-often referred to as a page. Every resource usually has its own page
-on the web site, which is the *HTML representation* of the resource.
+Resources are the main building block of Zotonic's data model.
+For simplicity of communication, a resource is often referred to as a page.
+Every resource usually has its own page on the web site, which is the
+*HTML representation* of the resource.
 
 A resource can have multiple representations, for example ``application/json``.
 
@@ -187,8 +193,6 @@ Examples of predicates:
 
 .. seealso:: :ref:`model-predicate`
 
-Further reading
----------------
 
-* Zotonic’s defaults resources and categories: the
-  :ref:`domain model <guide-domain-model>`.
+.. todo:: document categories, predicates and resources
+
