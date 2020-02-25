@@ -72,7 +72,7 @@ Pages
 -----
 
 Resources are the main building block of Zotonic's :ref:`data model
-<guide-datamodel>`. For simplicity of communication, a resource is
+<guide-domain-model>`. For simplicity of communication, a resource is
 often referred to as a page. Every resource usually has its own page
 on the web site, which is the *HTML representation* of the resource.
 

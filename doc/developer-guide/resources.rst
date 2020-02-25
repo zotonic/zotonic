@@ -4,7 +4,7 @@ Resources
 =========
 
 Resources are Zotonic’s main data unit. You may want to familiarise yourself
-with the Zotonic :ref:`data model <guide-datamodel>` in the User Guide.
+with the Zotonic :ref:`data model <guide-domain-model>` in the User Guide.
 
 Resource properties
 -------------------
