@@ -67,7 +67,7 @@ render1_all(File, IsA, Params, Context) ->
     Ext = z_convert:to_list(filename:extension(File)),
     Templates = lists:foldr(
         fun(Cat, Templates) ->
-            Templates ++ z_template:find_template(Root ++ [$.|atom_to_list(Cat)] ++ Ext, true, Context)
+            Templates ++ z_template:find_template(Root ++ [$.|z_convert:to_list(Cat)] ++ Ext, true, Context)
         end,
         [],
         IsA),
