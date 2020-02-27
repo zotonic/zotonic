@@ -64,7 +64,7 @@ map_template({cat, Template}, Vars, Context) ->
         undefined -> map_template_1(Template, Context);
         Id -> map_template({cat, Template, Id}, Vars, Context)
     end;
-map_template({cat, Template, [Cat|_] = IsA}, _Vars, Context) when is_atom(Cat) ->
+map_template({cat, Template, [Cat|_] = IsA}, _Vars, Context) when is_atom(Cat); is_binary(Cat); is_list(Cat) ->
     map_template_cat(Template, IsA, Context);
 map_template({cat, Template, Id}, _Vars, Context) ->
     case m_rsc:rid(Id, Context) of
@@ -96,27 +96,32 @@ find_next_template(Filename, [_|Rest]) ->
 %     map_template_1(Template, Context);
 % map_template_cat(Template, [], Context) ->
 %     map_template_1(Template, Context);
-map_template_cat(Template, [Item|_]=IsA, Context) when is_atom(Item) ->
+map_template_cat(Template, [Item|_]=IsA, Context) when is_atom(Item); is_binary(Item); is_list(Item) ->
     map_template_cat_1(Template, IsA, Context);
 map_template_cat(Template, Id, Context) ->
-    IsA = case {m_rsc:is_a(Id, Context), m_rsc:p(Id, name, Context)} of
-                {L, undefined} -> L;
-                {L, Name} -> L ++ [Name]
-          end,
-    map_template_cat_1(Template, IsA, Context).
+    IsA = m_rsc:is_a(Id, Context),
+    case m_rsc:p_no_acl(Id, name, Context) of
+        undefined ->
+            map_template_cat_1(Template, IsA, Context);
+        Name ->
+            L = IsA ++ [ <<"name.", Name/binary>> ],
+            map_template_cat_1(Template, L, Context)
+    end.
 
 map_template_cat_1(Template, Stack, Context) when is_binary(Template) ->
     Root = filename:rootname(Template),
     Ext = filename:extension(Template),
-    case lists:foldr(fun(Cat, {error, enoent}) ->
-                        map_template_1(
-                                <<Root/binary, $., (z_convert:to_binary(Cat))/binary, Ext/binary>>,
-                                Context);
-                    (_Cat, Found) ->
-                        Found
-                 end,
-                 {error, enoent},
-                 Stack)
+    case lists:foldr(
+        fun
+            (Cat, {error, enoent}) ->
+                map_template_1(
+                        <<Root/binary, $., (z_convert:to_binary(Cat))/binary, Ext/binary>>,
+                        Context);
+            (_Cat, Found) ->
+                Found
+         end,
+         {error, enoent},
+         Stack)
     of
         {error, enoent} -> map_template_1(Template, Context);
         {ok, _} = OK -> OK
@@ -130,7 +135,7 @@ map_template_all({cat, Template}, Vars, Context) ->
         undefined -> map_template_all_1(Template, Context);
         Id -> map_template_all({cat, Template, Id}, Vars, Context)
     end;
-map_template_all({cat, Template, [Cat|_] = IsA}, _Vars, Context) when is_atom(Cat) ->
+map_template_all({cat, Template, [Item|_] = IsA}, _Vars, Context) when is_atom(Item); is_binary(Item); is_list(Item) ->
     map_template_all_cat(Template, IsA, Context);
 map_template_all({cat, Template, Id}, _Vars, Context) ->
     case m_rsc:rid(Id, Context) of
@@ -153,24 +158,28 @@ map_template_all_1(Template, Context) ->
 %     map_template_all_1(Template, Context);
 % map_template_all_cat(Template, [], Context) ->
 %     map_template_all_1(Template, Context);
-map_template_all_cat(Template, [Item|_]=IsA, Context) when is_atom(Item) ->
+map_template_all_cat(Template, [Item|_]=IsA, Context) when is_atom(Item); is_binary(Item); is_list(Item) ->
     map_template_all_cat_1(Template, IsA, Context);
 map_template_all_cat(Template, Id, Context) ->
-    IsA = case {m_rsc:is_a(Id, Context), m_rsc:p(Id, name, Context)} of
-                {L, undefined} -> L;
-                {L, Name} -> L ++ [Name]
-          end,
-    map_template_all_cat_1(Template, IsA, Context).
+    IsA = m_rsc:is_a(Id, Context),
+    case m_rsc:p_no_acl(Id, name, Context) of
+        undefined ->
+            map_template_all_cat_1(Template, IsA, Context);
+        Name ->
+            L = IsA ++ [ <<"name.", Name/binary>> ],
+            map_template_all_cat_1(Template, L, Context)
+    end.
 
 map_template_all_cat_1(Template, Stack, Context) when is_binary(Template) ->
     Root = filename:rootname(Template),
     Ext = filename:extension(Template),
-    Templates = lists:foldr(fun(Cat, Templates) ->
-                                Name = <<Root/binary, $., (z_convert:to_binary(Cat))/binary, Ext/binary>>,
-                                Templates ++ z_module_indexer:find_all(template, Name, Context)
-                            end,
-                            [],
-                            Stack),
+    Templates = lists:foldr(
+        fun(Cat, Templates) ->
+            Name = <<Root/binary, $., (z_convert:to_binary(Cat))/binary, Ext/binary>>,
+            Templates ++ z_module_indexer:find_all(template, Name, Context)
+        end,
+        [],
+        Stack),
     Tpls = Templates ++ z_module_indexer:find_all(template, Template, Context),
     [ #template_file{
                 filename=Filename,
@@ -179,7 +188,7 @@ map_template_all_cat_1(Template, Stack, Context) when is_binary(Template) ->
 
 
 %% @doc Map a template name to a template file.
--spec map_template_1(binary(), #context{}) ->
+-spec map_template_1(binary(), z:context()) ->
             {ok, file:filename_all()} | {error, enoent|term()}.
 map_template_1(Template, Context) when is_binary(Template) ->
     case z_module_indexer:find(template, Template, Context) of

@@ -163,18 +163,20 @@ Page templates
 Most of your templates will :ref:`page <pages>` templates. When showing
 a page, Zotonic’s :ref:`page controller <controller-page>` looks up the
 appropriate template in order of specificity and renders the first template it
-finds:
+finds (assuming the name of the page ``page_name``):
 
-1. ``page.name.tpl`` (:ref:`unique name <model-rsc>`)
+1. ``page.name.page_name.tpl`` (:ref:`unique name <model-rsc>`)
 2. ``page.category.tpl`` (:ref:`category <categories>`)
 3. ``page.tpl`` (fallback)
 
-So if you have a page in the category ‘text’ and that page has a unique name
-‘my_text_page’, Zotonic will look for the following templates:
+So if you have a page in the category ‘article’ (which is a sub-category or ‘text’)
+and that page has a unique name ‘my_text_page’, Zotonic will look for the
+following templates:
 
-1. ``page.my_text_page.tpl`` (unique name)
-2. ``page.text.tpl`` (category)
-3. ``page.tpl`` (fallback)
+1. ``page.name.my_text_page.tpl`` (unique name)
+2. ``page.article.tpl`` (category)
+3. ``page.text.tpl`` (category)
+4. ``page.tpl`` (fallback)
 
 The same lookup mechanism is used for the :ref:`tag-catinclude` tag.
 
