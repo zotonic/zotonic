@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2015 Marc Worrell, 2014 Arjan Scherpenisse
+%% @copyright 2010-2020 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
 
-%% Copyright 2010-2015 Marc Worrell, 2014 Arjan Scherpenisse
+%% Copyright 2010-2020 Marc Worrell, 2014 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,7 +22,9 @@
 %% API export
 -export([
          get/1,
-         get/2
+         get/2,
+
+         load_config/0
         ]).
 
 
@@ -33,6 +35,61 @@
 %% API
 %%====================================================================
 
+
+%% @doc Load the zotonic.config file (again) and update the zotonic env config.
+-spec load_config() -> {ok, list({ok | {error, term()}, file:filename()})} | {error, noconfig | term()}.
+load_config() ->
+    case init:get_argument(config) of
+        {ok, Fs} ->
+            case lists:filter(fun is_zotonic_config/1, Fs) of
+                [] ->
+                    {error, noconfig};
+                Cfgs ->
+                    Result = lists:map(
+                        fun ( [ F ] ) ->
+                            {load_config(F), F}
+                        end,
+                        Cfgs),
+                    {ok, Result}
+            end;
+        error ->
+            {error, noconfig}
+    end.
+
+is_zotonic_config([ F ]) ->
+    case filename:basename(F) of
+        "zotonic.config" -> true;
+        _ -> false
+    end;
+is_zotonic_config(_) ->
+    false.
+
+load_config(F) ->
+    case file:consult(F) of
+        {ok, Ts} ->
+            lists:foreach(
+                fun
+                    (T) when is_list(T) ->
+                        case proplists:lookup(zotonic, T) of
+                            {zotonic, Vs} when is_list(Vs) ->
+                                lists:map(
+                                    fun
+                                        ({K, V}) when is_atom(K) ->
+                                            application:set_env(zotonic, K, V);
+                                        (K) when is_atom(K) ->
+                                            application:set_env(zotonic, K, true)
+                                    end,
+                                    Vs);
+                            _ ->
+                                ok
+                        end;
+                    (_) ->
+                        ok
+                end,
+                Ts);
+        Err ->
+            Err
+    end.
 
 %% @doc Get value from config file (cached)
 %%

@@ -35,6 +35,8 @@
          restart/0,
          restart/1,
 
+         load_config/0,
+
          ld/0,
          ld/1,
 
@@ -134,6 +136,11 @@ restart() ->
 %% @doc Restart a site
 restart(Site) ->
     z_sites_manager:restart(Site).
+
+%% @doc Load the zotonic config (again)
+load_config() ->
+    z_config:load_config().
+
 
 %% @doc Shortcut to set the lager console log level
 log_level(Level) ->
