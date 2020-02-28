@@ -1873,3 +1873,142 @@ li h3.widget-header {
   width: 300px;
   z-index: 9999;
 }
+.environment-development body,
+.environment-test body,
+.environment-acceptance body,
+.environment-education body,
+.environment-backup body {
+  padding-left: 28px;
+}
+.environment-development body::before,
+.environment-test body::before,
+.environment-acceptance body::before,
+.environment-education body::before,
+.environment-backup body::before {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 24px;
+  font-size: 14px;
+  display: block;
+  background-color: #0fa2db;
+  color: white;
+  writing-mode: tb-rl;
+  text-align: center;
+}
+.environment-development body::before {
+  background-color: #1b5e20;
+  content: "development";
+}
+.environment-development.zotonic-admin .navbar.navbar-branded {
+  background-color: #1b5e20;
+}
+.environment-development.zotonic-admin .navbar.navbar-branded .navbar-collapse {
+  background-color: #1b5e20;
+}
+.environment-development.zotonic-admin .navbar.navbar-branded .nav > li > a:hover,
+.environment-development.zotonic-admin .navbar.navbar-branded .nav > li > a:focus {
+  background-color: #103613;
+}
+.environment-development.zotonic-admin .navbar.navbar-branded .navbar-nav > .open > a,
+.environment-development.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
+  background-color: #103613;
+}
+.environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
+.environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
+.environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
+  background-color: #103613;
+}
+.environment-test body::before {
+  background-color: #311b92;
+  content: "test";
+}
+.environment-test.zotonic-admin .navbar.navbar-branded {
+  background-color: #311b92;
+}
+.environment-test.zotonic-admin .navbar.navbar-branded .navbar-collapse {
+  background-color: #311b92;
+}
+.environment-test.zotonic-admin .navbar.navbar-branded .nav > li > a:hover,
+.environment-test.zotonic-admin .navbar.navbar-branded .nav > li > a:focus {
+  background-color: #231367;
+}
+.environment-test.zotonic-admin .navbar.navbar-branded .navbar-nav > .open > a,
+.environment-test.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
+  background-color: #231367;
+}
+.environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
+.environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
+.environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
+  background-color: #231367;
+}
+.environment-acceptance body::before {
+  background-color: #e65100;
+  content: "acceptance";
+}
+.environment-acceptance.zotonic-admin .navbar.navbar-branded {
+  background-color: #e65100;
+}
+.environment-acceptance.zotonic-admin .navbar.navbar-branded .navbar-collapse {
+  background-color: #e65100;
+}
+.environment-acceptance.zotonic-admin .navbar.navbar-branded .nav > li > a:hover,
+.environment-acceptance.zotonic-admin .navbar.navbar-branded .nav > li > a:focus {
+  background-color: #b33f00;
+}
+.environment-acceptance.zotonic-admin .navbar.navbar-branded .navbar-nav > .open > a,
+.environment-acceptance.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
+  background-color: #b33f00;
+}
+.environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
+.environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
+.environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
+  background-color: #b33f00;
+}
+.environment-education body::before {
+  background-color: #006064;
+  content: "education";
+}
+.environment-education.zotonic-admin .navbar.navbar-branded {
+  background-color: #006064;
+}
+.environment-education.zotonic-admin .navbar.navbar-branded .navbar-collapse {
+  background-color: #006064;
+}
+.environment-education.zotonic-admin .navbar.navbar-branded .nav > li > a:hover,
+.environment-education.zotonic-admin .navbar.navbar-branded .nav > li > a:focus {
+  background-color: #002f31;
+}
+.environment-education.zotonic-admin .navbar.navbar-branded .navbar-nav > .open > a,
+.environment-education.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
+  background-color: #002f31;
+}
+.environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
+.environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
+.environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
+  background-color: #002f31;
+}
+.environment-backup body::before {
+  background-color: #212121;
+  content: "backup";
+}
+.environment-backup.zotonic-admin .navbar.navbar-branded {
+  background-color: #212121;
+}
+.environment-backup.zotonic-admin .navbar.navbar-branded .navbar-collapse {
+  background-color: #212121;
+}
+.environment-backup.zotonic-admin .navbar.navbar-branded .nav > li > a:hover,
+.environment-backup.zotonic-admin .navbar.navbar-branded .nav > li > a:focus {
+  background-color: #080808;
+}
+.environment-backup.zotonic-admin .navbar.navbar-branded .navbar-nav > .open > a,
+.environment-backup.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
+  background-color: #080808;
+}
+.environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
+.environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
+.environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
+  background-color: #080808;
+}

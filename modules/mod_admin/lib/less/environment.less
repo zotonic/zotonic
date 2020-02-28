@@ -1,0 +1,102 @@
+// Environment css and colors.
+
+// Purpose is to show a distinctive marker so that user knows in which
+// environment they are working.
+
+// DTAP statuses:
+// development, test, acceptance, production, education, or backup
+
+@env-production:    #0fa2db;        // Zotonic blue
+
+@env-development:   #1b5e20;        // Dark green
+@env-test:          #311b92;        // Deep purple
+@env-acceptance:    #e65100;        // Orange
+@env-education:     #006064;        // Cyan
+@env-backup:        #212121;        // Gray
+
+.environment-development,
+.environment-test,
+.environment-acceptance,
+.environment-education,
+.environment-backup {
+
+    body {
+        &::before {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 24px;
+            font-size: 14px;
+
+            display: block;
+            background-color: @env-production;
+            color: white;
+            writing-mode: tb-rl;
+            text-align: center;
+        }
+
+        padding-left: 28px;
+    }
+}
+
+
+.environment-colors(@color, @name) {
+    body::before {
+        background-color: @color;
+        content: @name;
+    }
+
+    &.zotonic-admin {
+        .navbar.navbar-branded {
+            background-color: @color;
+
+            .navbar-collapse {
+                background-color: @color;
+            }
+
+            .nav {
+                > li > a {
+                    &:hover,
+                    &:focus {
+                        background-color: darken(@color, 10%);
+                    }
+                }
+            }
+
+            .navbar-nav {
+                > .open > a,
+                > .active > a {
+                    background-color: darken(@color, 10%);
+                }
+            }
+
+            .dropdown-menu > li.active > a,
+            .dropdown-menu > li.active > a:hover,
+            .dropdown-menu > li > a:hover {
+                background-color: darken(@color, 10%);
+            }
+        }
+    }
+}
+
+
+.environment-development {
+    .environment-colors(@env-development, "development");
+}
+
+.environment-test {
+    .environment-colors(@env-test, "test");
+}
+
+.environment-acceptance {
+    .environment-colors(@env-acceptance, "acceptance");
+}
+
+.environment-education {
+    .environment-colors(@env-education, "education");
+}
+
+.environment-backup {
+    .environment-colors(@env-backup, "backup");
+}
