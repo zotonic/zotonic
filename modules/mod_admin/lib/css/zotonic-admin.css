@@ -1880,22 +1880,24 @@ li h3.widget-header {
 .environment-backup body {
   padding-left: 28px;
 }
-.environment-development body::before,
-.environment-test body::before,
-.environment-acceptance body::before,
-.environment-education body::before,
-.environment-backup body::before {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 24px;
-  font-size: 14px;
-  display: block;
-  background-color: #0fa2db;
-  color: white;
-  writing-mode: tb-rl;
-  text-align: center;
+@media (min-width: 500px) {
+  .environment-development body::before,
+  .environment-test body::before,
+  .environment-acceptance body::before,
+  .environment-education body::before,
+  .environment-backup body::before {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 24px;
+    font-size: 14px;
+    display: block;
+    background-color: #0fa2db;
+    color: white;
+    writing-mode: tb-rl;
+    text-align: center;
+  }
 }
 .environment-development body .navbar .nav .caret,
 .environment-test body .navbar .nav .caret,
@@ -1905,9 +1907,11 @@ li h3.widget-header {
   border-top-color: white;
   border-bottom-color: white;
 }
-.environment-development body::before {
-  background-color: #1b5e20;
-  content: "development";
+@media (min-width: 500px) {
+  .environment-development body::before {
+    background-color: #1b5e20;
+    content: "development";
+  }
 }
 .environment-development.zotonic-admin .navbar.navbar-branded {
   background-color: #1b5e20;
@@ -1928,9 +1932,11 @@ li h3.widget-header {
 .environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
   background-color: #103613;
 }
-.environment-test body::before {
-  background-color: #311b92;
-  content: "test";
+@media (min-width: 500px) {
+  .environment-test body::before {
+    background-color: #311b92;
+    content: "test";
+  }
 }
 .environment-test.zotonic-admin .navbar.navbar-branded {
   background-color: #311b92;
@@ -1951,9 +1957,11 @@ li h3.widget-header {
 .environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
   background-color: #231367;
 }
-.environment-acceptance body::before {
-  background-color: #e65100;
-  content: "acceptance";
+@media (min-width: 500px) {
+  .environment-acceptance body::before {
+    background-color: #e65100;
+    content: "acceptance";
+  }
 }
 .environment-acceptance.zotonic-admin .navbar.navbar-branded {
   background-color: #e65100;
@@ -1974,9 +1982,11 @@ li h3.widget-header {
 .environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
   background-color: #b33f00;
 }
-.environment-education body::before {
-  background-color: #006064;
-  content: "education";
+@media (min-width: 500px) {
+  .environment-education body::before {
+    background-color: #006064;
+    content: "education";
+  }
 }
 .environment-education.zotonic-admin .navbar.navbar-branded {
   background-color: #006064;
@@ -1997,9 +2007,11 @@ li h3.widget-header {
 .environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
   background-color: #002f31;
 }
-.environment-backup body::before {
-  background-color: #212121;
-  content: "backup";
+@media (min-width: 500px) {
+  .environment-backup body::before {
+    background-color: #212121;
+    content: "backup";
+  }
 }
 .environment-backup.zotonic-admin .navbar.navbar-branded {
   background-color: #212121;

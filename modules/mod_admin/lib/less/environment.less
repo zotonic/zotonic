@@ -21,19 +21,22 @@
 .environment-backup {
 
     body {
-        &::before {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 24px;
-            font-size: 14px;
 
-            display: block;
-            background-color: @env-production;
-            color: white;
-            writing-mode: tb-rl;
-            text-align: center;
+        @media (min-width: 500px) {
+            &::before {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 24px;
+                font-size: 14px;
+
+                display: block;
+                background-color: @env-production;
+                color: white;
+                writing-mode: tb-rl;
+                text-align: center;
+            }
         }
 
         .navbar .nav .caret {
@@ -47,9 +50,11 @@
 
 
 .environment-colors(@color, @name) {
-    body::before {
-        background-color: @color;
-        content: @name;
+    @media (min-width: 500px) {
+        body::before {
+            background-color: @color;
+            content: @name;
+        }
     }
 
     &.zotonic-admin {
