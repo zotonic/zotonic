@@ -1897,6 +1897,14 @@ li h3.widget-header {
   writing-mode: tb-rl;
   text-align: center;
 }
+.environment-development body .navbar .nav .caret,
+.environment-test body .navbar .nav .caret,
+.environment-acceptance body .navbar .nav .caret,
+.environment-education body .navbar .nav .caret,
+.environment-backup body .navbar .nav .caret {
+  border-top-color: white;
+  border-bottom-color: white;
+}
 .environment-development body::before {
   background-color: #1b5e20;
   content: "development";
