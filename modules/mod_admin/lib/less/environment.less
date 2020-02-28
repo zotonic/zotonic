@@ -8,11 +8,12 @@
 
 @env-production:    #0fa2db;        // Zotonic blue
 
-@env-development:   #1b5e20;        // Dark green
-@env-test:          #311b92;        // Deep purple
+@env-development:   #2e6d32;        // Dark green
+@env-test:          #4527a0;        // Deep purple
 @env-acceptance:    #e65100;        // Orange
 @env-education:     #006064;        // Cyan
-@env-backup:        #212121;        // Gray
+@env-backup:        #37474f;        // Gray
+
 
 .environment-development,
 .environment-test,
@@ -32,7 +33,6 @@
                 font-size: 14px;
 
                 display: block;
-                background-color: @env-production;
                 color: white;
                 writing-mode: tb-rl;
                 text-align: center;
@@ -53,6 +53,7 @@
     @media (min-width: 500px) {
         body::before {
             background-color: @color;
+            background-image: linear-gradient(@color, white);
             content: @name;
         }
     }
