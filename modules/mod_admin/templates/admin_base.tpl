@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="environment-{{ m.site.environment }}">
+<html lang="en" class="environment-{{ m.site.environment }} zotonic-admin">
     <head>
         <meta charset="utf-8" />
         <title>{% block title %}{_ Admin _}{% endblock %} &mdash; {{ m.config.site.title.value|default:"Zotonic" }} Admin</title>
