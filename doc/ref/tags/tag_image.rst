@@ -34,6 +34,11 @@ The following arguments/filters can be specified:
 +--------------------+------------------------------------------------------------+--------------------+
 |height              |The maximum height of the image.                            |height=200          |
 +--------------------+------------------------------------------------------------+--------------------+
+|nowh                |Do not generate the width and height attributes. Per default|nowh                |
+|                    |the image width and height are calculated and added to the  |                    |
+|                    |generated ``img`` tag. This option prevents the addition of |                    |
+|                    |width and height attributes.                                |                    |
++--------------------+------------------------------------------------------------+--------------------+
 |mediaclass          |The media class of the image. See                           |mediaclass="thumb"  |
 |                    |:ref:`guide-media-classes`.                                 |                    |
 +--------------------+------------------------------------------------------------+--------------------+
