@@ -36,6 +36,7 @@
     close_sockets/2
 ]).
 
+-spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_get([ zotonic_version | Rest ], _Msg, _Context) ->
     {ok, {?ZOTONIC_VERSION, Rest}};
 m_get(Path, Msg, Context) ->
