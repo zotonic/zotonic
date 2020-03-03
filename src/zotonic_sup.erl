@@ -168,10 +168,9 @@ init([]) ->
                   lager:info("Config files used:"),
                   [lager:info("- ~s", [Cfg]) || [Cfg] <- proplists:get_all_values(config, init:get_arguments())],
                   lager:info(""),
-                  case EnableSSL of
-                      false -> lager:warning("SSL support disabled. Please upgrade to Erlang 18.1 or higher");
-                      _ -> ok
-                  end,
+
+                  log_start_warnings(EnableSSL),
+
                   case {EnableIPv6, EnableSSL} of
                       {false, false} ->
                           lager:info("Web server listening on IPv4 ~p:~p", [WebIp, WebPort]);
@@ -189,6 +188,22 @@ init([]) ->
           end),
 
     {ok, {{one_for_one, 1000, 10}, Processes1}}.
+
+%% @doc Display startup warnings (if any).
+%%
+log_start_warnings(false) ->
+    lager:warning(""),
+    lager:warning("SSL support disabled. Please upgrade to Erlang 18.1 or higher"),
+    lager:warning("");
+log_start_warnings(_) ->
+    case application:get_env(ssl, session_lifetime) of
+        {ok, _} -> ok;
+        undefined ->
+            lager:warning(""),
+            lager:warning("SSL application using Erlang defaults, it is recommended to change this configuration in your erlang.config"),
+            lager:warning("")
+    end.
+
 
 %% @doc Initializes the stats collector.
 %%

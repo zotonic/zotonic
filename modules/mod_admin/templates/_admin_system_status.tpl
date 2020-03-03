@@ -1,4 +1,5 @@
 <div class="container">
+
 <div class="col-md-3">
     <table class="table table-sm">
         <thead>
@@ -50,6 +51,7 @@
         </tbody>
     </table>
 </div>
+
 </div>
 
 {% with m.modules.active.mod_geoip as is_ip2country %}

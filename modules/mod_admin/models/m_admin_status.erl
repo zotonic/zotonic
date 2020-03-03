@@ -36,6 +36,11 @@
 ]).
 
 %% @spec m_find_value(Key, Source, Context) -> term()
+m_find_value(is_ssl_application_configured, #m{value=undefined}, _Context) ->
+    case application:get_env(ssl, session_lifetime) of
+        undefined -> false;
+        {ok, _} -> true
+    end;
 m_find_value(session_count, #m{value=undefined}, Context) ->
     session_count(Context);
 m_find_value(page_count, #m{value=undefined}, Context) ->
@@ -46,6 +51,7 @@ m_find_value(tcp_connection_count, #m{value=undefined}, _Context) ->
 m_find_value(group_sockets, #m{value=undefined}, _Context) ->
     group_sockets();
 
+% memory
 m_find_value(memory, #m{value=undefined} = M, _Context) ->
     M#m{value=memory};
 m_find_value(used, #m{value=memory}, _Context) ->
@@ -55,7 +61,20 @@ m_find_value(allocated, #m{value=memory}, _Context) ->
 m_find_value(unused, #m{value=memory}, _Context) ->
     recon_alloc:memory(unused);
 m_find_value(usage, #m{value=memory}, _Context) ->
-    recon_alloc:memory(usage).
+    recon_alloc:memory(usage);
+
+% init_arguments
+m_find_value(init_arguments, #m{value=undefined} = M, _Context) ->
+    Args = init:get_arguments(),
+    M#m{value={init_arguments, Args}};
+m_find_value(config, #m{value={init_arguments, Args}}, _Context) ->
+    ?DEBUG(proplists:get_all_values(config, Args));
+m_find_value(Key, #m{value={init_arguments, Args}}, _Context) ->
+    proplists:get_value(Key, Args);
+
+
+m_find_value(_P, #m{value=_V}, _Context) ->
+    undefined.
 
 
 %% @spec m_to_list(Source, Context) -> List
