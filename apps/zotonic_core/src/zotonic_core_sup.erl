@@ -79,6 +79,7 @@ init([]) ->
 
 spawn_delayed_status() ->
     erlang:spawn(fun() ->
+        log_start_warnings(),
         timer:sleep(4000),
         lager:info("================"),
         lager:info("Sites Status"),
@@ -99,6 +100,17 @@ spawn_delayed_status() ->
             Running ++ Other),
         lager:info("================")
     end).
+
+log_start_warnings() ->
+    case application:get_env(ssl, session_lifetime) of
+        {ok, _} ->
+            ok;
+        undefined ->
+            lager:warning("********************************************************"),
+            lager:warning("SSL application using Erlang defaults, it is recommended"),
+            lager:warning("to change this configuration in your erlang.config"),
+            lager:warning("********************************************************")
+    end.
 
 %% @doc Ensure all job queues
 ensure_job_queues() ->
