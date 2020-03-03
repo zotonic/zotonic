@@ -21,6 +21,7 @@
 
 -behaviour(zotonic_model).
 
+-include_lib("zotonic_core/include/zotonic_release.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
@@ -35,6 +36,8 @@
     close_sockets/2
 ]).
 
+m_get([ zotonic_version | Rest ], _Msg, _Context) ->
+    {ok, {?ZOTONIC_VERSION, Rest}};
 m_get(Path, Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> m_get_1(Path, Msg, Context);

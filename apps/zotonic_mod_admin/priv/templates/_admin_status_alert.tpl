@@ -10,16 +10,17 @@
 <div class="well well-lg">
     <dl class="dl-horizontal">
         {% if m.acl.is_admin %} {# Only admins are allowed to see the full paths #}
-            <dt>{_ Erlang Installation Root  _}</dt>
-            <dd>{{ m.admin_status.init_arguments.root }}</dd>
-
             <dt>{_ Home Directory _}</dt>
             <dd>{{ m.admin_status.init_arguments.home }}</dd>
 
-            <dt>{_ Config Files _}</dt>
+            <dt>{_ Erlang Init Files _}</dt>
             <dd>{{ m.admin_status.init_arguments.config | join:"<br>" }}</dd>
+
+            <dt>{_ Erlang Installation Root  _}</dt>
+            <dd>{{ m.admin_status.init_arguments.root }}</dd>
         {% endif %}
+
         <dt>{_ Zotonic Version _}</dt>
-        <dd>{{ m.config.zotonic.version.value }}<dd>
+        <dd>{{ m.admin_status.zotonic_version }}<dd>
     </dl>
 </div>
