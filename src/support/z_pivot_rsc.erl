@@ -72,6 +72,9 @@
 %% Max number of characters for a tsv vector.
 -define(MAX_TSV_LEN, 30000).
 
+%% Max number of task retries
+-define(TASK_MAX_RETRY, 10).
+
 
 -record(state, {site, is_initial_delay=true, is_pivot_delay = false}).
 
@@ -367,48 +370,77 @@ do_poll(Context) ->
     do_poll_queue(Context) or DidTask.
 
 do_poll_task(Context) ->
-    case poll_task(Context) of
-        {TaskId, Module, Function, _Key, Args} ->
-            try
-                case erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context]) of
-                    {delay, Delay} ->
-                        Due = if
-                                is_integer(Delay) ->
-                                    calendar:gregorian_seconds_to_datetime(
-                                        calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
-                                is_tuple(Delay) ->
-                                    Delay
-                              end,
-                        z_db:q("update pivot_task_queue set due = $1 where id = $2", [Due, TaskId], Context);
-                    {delay, Delay, NewArgs} ->
-                        Due = if
-                                is_integer(Delay) ->
-                                    calendar:gregorian_seconds_to_datetime(
-                                        calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
-                                is_tuple(Delay) ->
-                                    Delay
-                              end,
-                        Fields = [
-                            {due, Due},
-                            {args, NewArgs}
-                        ],
-                        z_db:update(pivot_task_queue, TaskId, Fields, Context);
-                    _OK ->
-                        z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context)
-                end
-            catch
-                ?WITH_STACKTRACE(error, undef, Trace)
-                    lager:warning("Undefined task, aborting: ~p:~p(~p) ~p",
-                                [Module, Function, Args, Trace]),
-                    z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context);
-                ?WITH_STACKTRACE(Error, Reason, Trace)
-                    lager:warning("Task failed(~p:~p): ~p:~p(~p) ~p",
-                                [Error, Reason, Module, Function, Args, Trace])
-            end,
-            true;
-        empty ->
-            false
-    end.
+    execute_task( poll_task(Context), Context ).
+
+execute_task({TaskId, Module, Function, _Key, Args, RetryCt, Props}, Context) ->
+    try
+        case erlang:apply(Module, Function, z_convert:to_list(Args) ++ [Context]) of
+            {delay, Delay} ->
+                Due = if
+                        is_integer(Delay) ->
+                            calendar:gregorian_seconds_to_datetime(
+                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
+                        is_tuple(Delay) ->
+                            Delay
+                      end,
+                z_db:q("update pivot_task_queue set due = $1 where id = $2", [Due, TaskId], Context);
+            {delay, Delay, NewArgs} ->
+                Due = if
+                        is_integer(Delay) ->
+                            calendar:gregorian_seconds_to_datetime(
+                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
+                        is_tuple(Delay) ->
+                            Delay
+                      end,
+                Fields = [
+                    {due, Due},
+                    {args, NewArgs}
+                ],
+                z_db:update(pivot_task_queue, TaskId, Fields, Context);
+            _OK ->
+                z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context)
+        end
+    catch
+        ?WITH_STACKTRACE(error, undef, Trace)
+            lager:error("Undefined task, aborting: ~p:~p(~p) ~p",
+                        [Module, Function, Args, Trace]),
+            z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context);
+        ?WITH_STACKTRACE(Error, Reason, Trace)
+            lager:error("Task ~p failed (~p:~p): ~p:~p(~p) ~p",
+                        [TaskId, Error, Reason, Module, Function, Args, Trace]),
+            task_schedule_retry(TaskId, RetryCt, Props, Context)
+    end,
+    true;
+execute_task(empty, _Context) ->
+    false.
+
+
+task_schedule_retry(TaskId, RetryCt, _Props, Context) when RetryCt >= ?TASK_MAX_RETRY ->
+    z_db:q("delete from pivot_task_queue where id = $1", [TaskId], Context);
+task_schedule_retry(TaskId, RetryCt, Props, Context) ->
+    Props1 = [
+        {error_ct, RetryCt+1}
+        | proplists:delete(error_ct, Props)
+    ],
+    Due = calendar:gregorian_seconds_to_datetime(
+                                calendar:datetime_to_gregorian_seconds(calendar:universal_time())
+                                + task_retry_backoff(RetryCt)),
+    lager:info("Task ~p set to retry on ~p", [ TaskId, Due ]),
+    z_db:q("
+        update pivot_task_queue
+        set due = $1,
+            props = $2
+        where id = $3",
+        [ Due, ?DB_PROPS(Props1), TaskId ],
+        Context).
+
+task_retry_backoff(0) -> 10;
+task_retry_backoff(1) -> 1800;
+task_retry_backoff(2) -> 7200;
+task_retry_backoff(3) -> 14400;
+task_retry_backoff(4) -> 12 * 3600;
+task_retry_backoff(N) -> (N-4) * 24 * 3600.
+
 
 %% @doc Pivot queued resource ids
 do_poll_queue(Context) ->
@@ -456,13 +488,10 @@ poll_task(Context) ->
                      order by due asc
                      limit 1", Context)
     of
-        {Id,Module,Function,Key,Props} ->
-            Args = case Props of
-                [{args,Args0}] -> Args0;
-                _ -> []
-            end,
-            %% @todo We delete the task right now, this needs to be changed to a deletion after the task has been running.
-            {Id, z_convert:to_atom(Module), z_convert:to_atom(Function), Key, Args};
+        {Id, Module, Function, Key, Props} ->
+            Args = proplists:get_value(args, Props, []),
+            RetryCt = proplists:get_value(error_ct, Props, 0),
+            {Id, z_convert:to_atom(Module), z_convert:to_atom(Function), Key, Args, RetryCt, Props};
         undefined ->
             empty
     end.
