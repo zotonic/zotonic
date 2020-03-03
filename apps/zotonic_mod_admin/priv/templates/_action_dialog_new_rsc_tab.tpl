@@ -208,13 +208,15 @@
 		    {% endif %}
 
 			{% block rsc_props %}
-				<div class="col-md-12">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" id="{{ #published }}" name="is_published" value="1"
-								{% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked{% endif %}>
-							{_ Published _}
-						</label>
+				<div class="form-group row">
+					<div class="col-md-9 col-md-offset-3">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="{{ #published }}" name="is_published" value="1"
+									{% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked{% endif %}>
+								{_ Published _}
+							</label>
+						</div>
 					</div>
 				</div>
 			{% endblock %}
