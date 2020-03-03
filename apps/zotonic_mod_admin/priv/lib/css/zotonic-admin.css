@@ -110,6 +110,9 @@ ul.media > li.ui-sortable-placeholder {
   margin: 15px;
   margin-top: 76px;
 }
+.admin-padding {
+  padding: 15px;
+}
 footer {
   margin: 20px 0;
 }
@@ -401,6 +404,7 @@ fieldset[disabled] .btn-primary.active {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: minmax(300px, 70vh);
+  border-top: 1px solid rgba(215, 215, 215, 0.7);
 }
 #dialog-new-rsc-tab .new-find-cols .modal-footer {
   position: -webkit-sticky;
@@ -1934,6 +1938,9 @@ li h3.widget-header {
 .environment-development.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #1f4922;
 }
+.environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
+  color: white;
+}
 .environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
 .environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
@@ -1959,6 +1966,9 @@ li h3.widget-header {
 .environment-test.zotonic-admin .navbar.navbar-branded .navbar-nav > .open > a,
 .environment-test.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #331d77;
+}
+.environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
+  color: white;
 }
 .environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
@@ -1986,6 +1996,9 @@ li h3.widget-header {
 .environment-acceptance.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #b33f00;
 }
+.environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
+  color: white;
+}
 .environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
 .environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
@@ -2012,6 +2025,9 @@ li h3.widget-header {
 .environment-education.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #002f31;
 }
+.environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
+  color: white;
+}
 .environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
 .environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
@@ -2037,6 +2053,9 @@ li h3.widget-header {
 .environment-backup.zotonic-admin .navbar.navbar-branded .navbar-nav > .open > a,
 .environment-backup.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #222c31;
+}
+.environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
+  color: white;
 }
 .environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,

@@ -16,27 +16,22 @@
 %}
 <form id="dialog-new-rsc-tab" method="POST" action="postback" class="form form-horizontal">
 
+<div class="admin-padding">
+ 	{% block rsc_props_title %}
+ 		{# The new resource title, also used for the feedback search #}
+ 	    <label for="new_rsc_title">{_ Start typing a title to create new content or find existing content. _}</label>
+ 	    <input type="text" id="new_rsc_title" name="title"
+ 	    	   value="{{ title|escape }}" class="do_autofocus form-control"
+ 	    	   placeholder="{_ Type title or filter existing content _}">
+ 	    {% validate id="new_rsc_title" name="title" type={presence} only_on_submit %}
+	{% endblock %}
+</div>
+
 <div class="new-find-cols">
 	<div id="{{ #newform }}" class="form-panel">
 		{% with 'dialog-new-rsc-tab' as form %}
 
-			<h4>1. {_ Create or search _}</h4>
-			<p>{_ Start typing a title to create new content or find existing content. _}</p>
-
-			{% block rsc_props_title %}
-				{# The new resource title, also used for the feedback search #}
-				<div class="form-group row">
-				    <label class="control-label col-md-3" for="new_rsc_title">{_ Title _}</label>
-				    <div class="col-md-9">
-					    <input type="text" id="new_rsc_title" name="title"
-					    	   value="{{ title|escape }}" class="do_autofocus form-control"
-					    	   placeholder="{_ Type title or filter existing content _}">
-					    {% validate id="new_rsc_title" name="title" type={presence} only_on_submit %}
-				    </div>
-				</div>
-			{% endblock %}
-
-			<hr>
+			<h4>1. {_ Create _}</h4>
 
 			{% if (not nocatselect or m.category[cat].is_a.media)
 				and (not predicate
@@ -214,14 +209,15 @@
 
 			{% block rsc_props %}
 				<div class="form-group row">
-				    <label class="control-label col-md-3" for="{{ #published }}"></label>
-				    <div class="checkbox col-md-9">
-					    <label>
-					        <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
-							    {% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked{% endif %}>
-							{_ Published _}
-					    </label>
-				    </div>
+					<div class="col-md-9 col-md-offset-3">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="{{ #published }}" name="is_published" value="1"
+									{% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked{% endif %}>
+								{_ Published _}
+							</label>
+						</div>
+					</div>
 				</div>
 			{% endblock %}
 
@@ -421,8 +417,7 @@
 					        });
 					        $item.effect("highlight").toggleClass("item-connected");
 				    	}
-				    })
-				    .change();
+				    });
 			{% endjavascript %}
 		{% endif %}
 
@@ -450,6 +445,8 @@
 				    }
 			    })
 			    .change();
+
+			$('#dialog-new-rsc-tab select[name="category_id"]').change();
 		{% endjavascript %}
 	</div>
 </div>

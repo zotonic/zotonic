@@ -57,6 +57,51 @@ m_get([ object_category, Key | Rest ], _Msg, Context) ->
     {ok, {object_category(Key, Context), Rest}};
 m_get([ subject_category, Key | Rest ], _Msg, Context) ->
     {ok, {subject_category(Key, Context), Rest}};
+m_get([ is_valid_object_category, Predicate, Category | Rest ], _Msg, Context) ->
+    CatId = m_rsc:rid(Category, Context),
+    ValidCats = object_category(Predicate, Context),
+    IsValid = case lists:member({CatId}, ValidCats) of
+        true ->
+            true;
+        false ->
+            IsA = m_category:is_a(CatId, Context),
+            lists:any(
+                fun(IsACat) ->
+                    IsACatId = m_rsc:rid(IsACat, Context),
+                    lists:member({IsACatId}, ValidCats)
+                end,
+                IsA)
+    end,
+    {ok, {IsValid, Rest}};
+m_get([ is_valid_subject_category, Predicate, Category | Rest ], _Msg, Context) ->
+    CatId = m_rsc:rid(Category, Context),
+    ValidCats = subject_category(Predicate, Context),
+    IsValid = case lists:member({CatId}, ValidCats) of
+        true ->
+            true;
+        false ->
+            IsA = m_category:is_a(CatId, Context),
+            case lists:any(
+                fun(IsACat) ->
+                    IsACatId = m_rsc:rid(IsACat, Context),
+                    lists:member({IsACatId}, ValidCats)
+                end,
+                IsA)
+            of
+                true ->
+                    true;
+                false ->
+                    % Check subcategories
+                    SubCats = m_category:tree_flat(CatId, Context),
+                    SubCatIds = lists:map(
+                        fun(C) -> proplists:get_value(id, C) end,
+                        SubCats),
+                    lists:any(
+                        fun(CId) -> lists:member({CId}, ValidCats) end,
+                        SubCatIds)
+            end
+    end,
+    {ok, {IsValid, Rest}};
 m_get([ Key | Rest ], _Msg, Context) ->
     {ok, {get(Key, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
