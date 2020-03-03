@@ -469,22 +469,25 @@ do_poll_task(Context) ->
                 end
             catch
                 ?WITH_STACKTRACE(error, undef, Trace)
-                    lager:warning("Undefined task, aborting: ~p:~p(~p) ~p",
-                                [Module, Function, Args, Trace]),
+                    lager:error("Task ~p failed - undefined function, aborting: ~p:~p(~p) ~p",
+                                [TaskId, Module, Function, Args, Trace]),
                     z_db:delete(pivot_task_queue, TaskId, Context);
                 ?WITH_STACKTRACE(Error, Reason, Trace)
                     case ErrCt < ?MAX_TASK_ERROR_COUNT of
                         true ->
-                            lager:warning("Task failed - will retry ~p:~p(~p) ~p:~p ~p",
-                                        [Error, Reason, Module, Function, Args, Trace]),
+                            Due = calendar:gregorian_seconds_to_datetime(
+                                    calendar:datetime_to_gregorian_seconds(calendar:universal_time())
+                                    + task_retry_backoff(ErrCt)),
+                            lager:error("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p ~p",
+                                        [TaskId, Module, Function, Args, Error, Reason, Due, Trace]),
                             RetryFields = [
-                                {due, z_datetime:next_hour(calendar:universal_time())},
+                                {due, Due},
                                 {error_ct, ErrCt+1}
                             ],
                             z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
                         false ->
-                            lager:warning("Task failed, aborting ~p:~p(~p) ~p:~p ~p",
-                                        [Error, Reason, Module, Function, Args, Trace]),
+                            lager:error("Task ~p failed - aborting ~p:~p(~p) ~p:~p ~p",
+                                        [TaskId, Module, Function, Args, Error, Reason, Trace]),
                             z_db:delete(pivot_task_queue, TaskId, Context)
                     end
             end,
@@ -492,6 +495,16 @@ do_poll_task(Context) ->
         empty ->
             false
     end.
+
+
+task_retry_backoff(0) -> 10;
+task_retry_backoff(1) -> 1800;
+task_retry_backoff(2) -> 7200;
+task_retry_backoff(3) -> 14400;
+task_retry_backoff(4) -> 12 * 3600;
+task_retry_backoff(N) -> (N-4) * 24 * 3600.
+
+
 
 ensure_list(L) when is_list(L) -> L;
 ensure_list(undefined) -> [];
