@@ -21,6 +21,7 @@
 
 -behaviour(zotonic_model).
 
+-include_lib("zotonic_core/include/zotonic_release.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
@@ -35,24 +36,49 @@
     close_sockets/2
 ]).
 
-m_get([ session_count | Rest ], _Msg, Context) ->
+-spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([ zotonic_version | Rest ], _Msg, _Context) ->
+    {ok, {?ZOTONIC_VERSION, Rest}};
+m_get(Path, Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> m_get_1(Path, Msg, Context);
+        false -> {error, eacces}
+    end.
+
+m_get_1([ session_count | Rest ], _Msg, Context) ->
     {ok, {session_count(Context), Rest}};
-m_get([ page_count | Rest ], _Msg, Context) ->
+m_get_1([ page_count | Rest ], _Msg, Context) ->
     {ok, {page_count(Context), Rest}};
-m_get([ tcp_connection_count | Rest ], _Msg, _Context) ->
+m_get_1([ tcp_connection_count | Rest ], _Msg, _Context) ->
     {ok, {tcp_connection_count(), Rest}};
 
-m_get([ group_sockets | Rest ], _Msg, _Context) ->
+m_get_1([ group_sockets | Rest ], _Msg, _Context) ->
     {ok, {group_sockets(), Rest}};
 
-m_get([ memory, used | Rest ], _Msg, _Context) ->
+m_get_1([ memory, used | Rest ], _Msg, _Context) ->
     {ok, {recon_alloc:memory(used), Rest}};
-m_get([ memory, allocated | Rest ], _Msg, _Context) ->
+m_get_1([ memory, allocated | Rest ], _Msg, _Context) ->
     {ok, {recon_alloc:memory(used), Rest}};
-m_get([ memory, unused | Rest ], _Msg, _Context) ->
+m_get_1([ memory, unused | Rest ], _Msg, _Context) ->
     {ok, {recon_alloc:memory(unused), Rest}};
-m_get([ memory, usage | Rest ], _Msg, _Context) ->
-    {ok, {recon_alloc:memory(usage), Rest}}.
+m_get_1([ memory, usage | Rest ], _Msg, _Context) ->
+    {ok, {recon_alloc:memory(usage), Rest}};
+
+m_get_1([ is_ssl_application_configured | Rest ], _Msg, _Context) ->
+    IsConf = case application:get_env(ssl, session_lifetime) of
+        undefined -> false;
+        {ok, _} -> true
+    end,
+    {ok, {IsConf, Rest}};
+
+m_get_1([ init_arguments, config | Rest ], _Msg, _Context) ->
+    {ok, {proplists:get_all_values(config, init:get_arguments()), Rest}};
+
+m_get_1([ init_arguments | Rest ], _Msg, _Context) ->
+    {ok, {init:get_arguments(), Rest}};
+
+m_get_1(_Path, _Msg, _Context) ->
+    {error, unknown_path}.
 
 
 %%
