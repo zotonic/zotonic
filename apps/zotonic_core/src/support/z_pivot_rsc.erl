@@ -475,13 +475,13 @@ do_poll_task(Context) ->
                 ?WITH_STACKTRACE(Error, Reason, Trace)
                     case ErrCt < ?MAX_TASK_ERROR_COUNT of
                         true ->
-                            Due = calendar:gregorian_seconds_to_datetime(
+                            RetryDue = calendar:gregorian_seconds_to_datetime(
                                     calendar:datetime_to_gregorian_seconds(calendar:universal_time())
                                     + task_retry_backoff(ErrCt)),
                             lager:error("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p ~p",
-                                        [TaskId, Module, Function, Args, Error, Reason, Due, Trace]),
+                                        [TaskId, Module, Function, Args, Error, Reason, RetryDue, Trace]),
                             RetryFields = [
-                                {due, Due},
+                                {due, RetryDue},
                                 {error_ct, ErrCt+1}
                             ],
                             z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
