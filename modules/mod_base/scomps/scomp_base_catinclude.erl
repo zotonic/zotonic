@@ -58,7 +58,7 @@ render1(true, File, Id, Params, Context) ->
         undefined ->
             IsA;
         Name ->
-            [ <<"name.", Name/binary>>, Name | IsA ]
+            IsA ++ [ Name, <<"name.", Name/binary>> ]
     end,
     render1_all(File, L, [{id,RscId}|Params], Context).
 

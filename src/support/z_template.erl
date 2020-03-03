@@ -210,11 +210,7 @@ find_template_cat(File, Id, Context) ->
         undefined ->
             find_template_cat_stack(File, IsA, Context);
         Name ->
-            L = [
-                <<"name.", Name/binary>>,
-                Name
-                | IsA
-            ],
+            L = IsA ++ [ Name, <<"name.", Name/binary>> ],
             find_template_cat_stack(File, L, Context)
     end.
 
