@@ -539,8 +539,7 @@ delete_email(Error, Id, Recipient, Email, Context) ->
             is_final = true,
             status = case Error of
                         illegal_address -> <<"Malformed email address">>;
-                        sender_disabled -> <<"Sender disabled">>;
-                        recipient_blocked -> <<"Recipient blocked">>
+                        sender_disabled -> <<"Sender disabled">>
                     end,
             reason=Error
         }, Context),
