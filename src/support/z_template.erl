@@ -84,7 +84,7 @@ render(#render{} = Render, Context) ->
 render({cat, File}, Variables, Context) ->
     Id = proplists:get_value(id, Variables),
     maybe_render(find_template_cat(File, Id, Context), File, Variables, Context);
-render({cat, File, [Cat|_] = IsA}, Variables, Context) when is_atom(Cat) ->
+render({cat, File, [Cat|_] = IsA}, Variables, Context) when is_atom(Cat); is_binary(Cat); is_list(Cat) ->
     maybe_render(find_template_cat(File, IsA, Context), File, Variables, Context);
 render(#module_index{} = M, Variables, Context) ->
     render1(M#module_index.filepath, M, Variables, Context);
@@ -202,25 +202,30 @@ find_template(File, true, Context) ->
 %% When the file is an absolute path, then do nothing and assume the file exists.
 find_template_cat(File, None, Context) when None =:= <<>>; None =:= undefined; None =:= [] ->
     find_template(File, Context);
-find_template_cat(File, [Item|_]=Stack, Context) when is_atom(Item) ->
+find_template_cat(File, [Item|_]=Stack, Context) when is_atom(Item); is_binary(Item); is_list(Item) ->
     find_template_cat_stack(File, Stack, Context);
 find_template_cat(File, Id, Context) ->
-    Stack = case {m_rsc:is_a(Id, Context), m_rsc:p(Id, name, Context)} of
-                {L, undefined} -> L;
-                {L, Name} -> L ++ [Name]
-            end,
-    find_template_cat_stack(File, Stack, Context).
+    IsA = m_rsc:is_a(Id, Context),
+    case m_rsc:p_no_acl(Id, name, Context) of
+        undefined ->
+            find_template_cat_stack(File, IsA, Context);
+        Name ->
+            L = IsA ++ [ Name, <<"name.", Name/binary>> ],
+            find_template_cat_stack(File, L, Context)
+    end.
 
 find_template_cat_stack(File, Stack, Context) ->
     Root = z_convert:to_list(filename:rootname(File)),
     Ext = z_convert:to_list(filename:extension(File)),
-    case lists:foldr(fun(Cat, {error, enoent}) ->
-                            find_template(Root ++ [$.|z_convert:to_list(Cat)] ++ Ext, Context);
-                        (_Cat, Found) ->
-                            Found
-                     end,
-                     {error, enoent},
-                     Stack)
+    case lists:foldr(
+        fun
+            (Cat, {error, enoent}) ->
+                find_template(Root ++ [ $. | z_convert:to_list(Cat) ] ++ Ext, Context);
+            (_Cat, Found) ->
+                Found
+        end,
+        {error, enoent},
+        Stack)
     of
         {error, enoent} -> find_template(File, Context);
         {ok, ModuleIndex} -> {ok, ModuleIndex}
