@@ -27,6 +27,7 @@
     ensure_dhfile/0
 ]).
 
+-define(DEFAULT_DHGROUP, ffdhe3072).
 
 %% @doc Return the dh key to be used. Needed for better forward secrecy
 %%      with the DH key exchange
@@ -52,7 +53,7 @@ dhfile() ->
                 true ->
                     DeprecatedFilename;
                 false ->
-                    Param = z_convert:to_list(z_config:get(ssl_dhgroup, ffdhe3072)),
+                    Param = z_convert:to_list(z_config:get(ssl_dhgroup, ?DEFAULT_DHGROUP)),
                     filename:join([ SecurityDir, "dh-"++Param++".pem" ])
             end;
         Filename ->
@@ -69,7 +70,7 @@ ensure_dhfile(Filename) ->
     end.
 
 write_dhfile(Filename) ->
-    Param = z_convert:to_atom(z_config:get(ssl_dhgroup, ffdhe3072)),
+    Param = z_convert:to_atom(z_config:get(ssl_dhgroup, ?DEFAULT_DHGROUP)),
     lager:info("Writing DH key ~p to '~s'",
                [Param, Filename]),
     case file:write_file(Filename, dh_params(Param)) of
