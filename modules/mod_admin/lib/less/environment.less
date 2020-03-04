@@ -50,7 +50,7 @@
 
 
 .environment-colors(@color, @name) {
-    @media (min-width: 500px) {
+    @media (min-width: @screen-phone) {
         body::before {
             background-color: @color;
             background-image: linear-gradient(@color, white);
@@ -82,8 +82,10 @@
                 }
             }
 
-            .dropdown-menu > li > a {
-                color: white;
+            @media (max-width: @screen-tablet) {
+                .dropdown-menu > li > a {
+                    color: white;
+                }
             }
             .dropdown-menu > li.active > a,
             .dropdown-menu > li.active > a:hover,
