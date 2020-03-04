@@ -94,6 +94,14 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([ lookup, Type, Key | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            Idns = lookup_by_type_and_key_multi(Type, Key, Context),
+            {ok, {Idns, Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ Id, is_user | Rest ], _Msg, Context) ->
     IsUser = case z_acl:rsc_visible(Id, Context) of
         true -> is_user(Id, Context);

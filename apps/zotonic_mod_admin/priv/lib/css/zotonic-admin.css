@@ -1162,6 +1162,13 @@ tr.clickable td {
 .table {
   border-bottom: 1px solid #e5e5e5;
 }
+table.data-table {
+  max-width: 100%;
+}
+table.data-table th,
+table.data-table td {
+  word-break: break-all;
+}
 table.do_adminLinkedTable th a:hover {
   text-decoration: none;
 }
