@@ -11,8 +11,10 @@ Example::
 
    {% catinclude "hello.tpl" id %}
 
-Assuming that the resource whose id is the value of the template variable `id` is a news article then catinclude will consider the following templates::
+Assuming that the resource whose id is the value of the template variable `id`, and that the unique name property of the resource
+is ``my_page_name`` is a news article then catinclude will consider the following templates::
 
+   hello.name.my_page_name.tpl
    hello.news.tpl
    hello.article.tpl
    hello.text.tpl
@@ -20,17 +22,14 @@ Assuming that the resource whose id is the value of the template variable `id` i
 
 This because `news` is a subcategory of `article`, which is a subcategory of `text`. When one of the previous templates is not found then the base template `hello.tpl` is tried. The catinclude tag will only include the first file it finds, and stops after having found a file to include.
 
-When the resource has a unique name (the `name` property is set), this property is also considered for the catinclude lookup, before the category-based template names. So when the resource has `name` set to `foobar`, it will first look for ``hello.foobar.tpl``, then for ``hello.news.tpl``, etc.
-
-Unlike Django the template name must be a string literal, variables are not allowed.
+If the resource has a unique name (the `name` property is set), this property is also considered for the catinclude lookup, before the category-based template names. If the resource has `name` set to `foobar`, it will first look for ``hello.name.foobar.tpl``, then for ``hello.news.tpl``, etc.
 
 The tag accepts extra arguments, which will be passed as template variables to the included template. The inclusion is always done at runtime, because the selected template depends on the category of the referenced resource.
 
-The resource id will be available in the included template as the variable `id`.
+The resource id will be available in the included template as the variable ``id``.
 
-Instead of passing an id, you can also pass in a list of category
-names which are to be search for. These names need to be atoms, like
-this::
+Instead of passing an id, you can also pass in a list of category names which are to be search for. These
+names need to be atoms or strings, for example::
 
    {% catinclude "hello.tpl" [`text`, `article`] %}
 
@@ -39,7 +38,9 @@ This will search for the following templates, in order::
    hello.article.tpl
    hello.text.tpl
    hello.tpl
- 
+
+**Note** the search order is reversed from the list order, you should add the *most specific selector last*!
+
 See the :ref:`tag-include` for caching options and argument handling.
 
 .. seealso:: :ref:`tag-all-catinclude`, which is useful to include multiple templates.

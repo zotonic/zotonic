@@ -248,7 +248,10 @@ Templates
    * ``m.config.mod_editor_tinymce.version.value`` is now ``m.editor_tinymce.version``
 
   Check the various models of the modules for the new lookups.
-
+* The ``catinclude`` for a resource with an unique name will not look for (assuming
+  the unique name is ``my_unique_name`` and the template is ``page.tpl``):
+  ``page.name.my_unique_name.tpl`` and **not** anymore for ``page.my_unique_name.tpl``.
+  Rename your templates accordingly.
 
 Port, proxies and SSL certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
