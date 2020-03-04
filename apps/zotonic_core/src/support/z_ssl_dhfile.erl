@@ -23,6 +23,7 @@
 
 -export([
     dh_options/0,
+    dhfile/0,
     is_dhfile/1,
     ensure_dhfile/0
 ]).
