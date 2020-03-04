@@ -262,7 +262,7 @@ all() ->
     lists:map(
         fun
             (ssl_dhfile) ->
-                {ssl_dhfile, z_ssl_certs:dhfile()};
+                {ssl_dhfile, z_ssl_dhfile:dhfile()};
             (security_dir) ->
                 case z_config_files:security_dir() of
                     {ok, SecurityDir} ->

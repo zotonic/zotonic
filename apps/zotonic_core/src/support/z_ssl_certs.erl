@@ -24,11 +24,6 @@
 -export([
     ssl_listener_options/0,
     sni_fun/1,
-    dh_options/0,
-    is_dhfile/1,
-    ensure_dhfile/0,
-    dhfile/0,
-    wait_for_dhfile/0,
 
     sign/2,
     get_ssl_options/1,
@@ -45,7 +40,6 @@
 -include_lib("public_key/include/public_key.hrl").
 
 -define(BITS, "4096").
--define(DHBITS, "2048").
 
 %% @doc Return the options to use for non-sni ssl
 %% @todo should we use the hostname as configured in the OS for the certs?
@@ -62,7 +56,7 @@ ssl_listener_options() ->
         {ciphers, ciphers()}
     ]
     ++ CertOptions
-    ++ dh_options().
+    ++ z_ssl_dhfile:dh_options().
 
 %% @doc Callback for SSL SNI, match the hostname to a set of keys
 -spec sni_fun(string()) -> [ ssl:ssl_option() ] | undefined.
@@ -289,74 +283,6 @@ filter_server_name(<<32, Rest/binary>>, Acc) ->
     filter_server_name(Rest, <<Acc/binary, 32>>);
 filter_server_name(<<_, Rest/binary>>, Acc) ->
     filter_server_name(Rest, Acc).
-
-%% @doc Return the dh key to be used. Needed for better forward secrecy with the DH key exchange
--spec dh_options() -> [ssl:ssl_option()].
-dh_options() ->
-    [ {dhfile, dhfile()} ].
-
-is_dhfile(Filename) ->
-    case file:read_file(Filename) of
-        {ok, <<"-----BEGIN DH PARAMETERS", _/binary>>} -> true;
-        _ -> false
-    end.
-
-ensure_dhfile() ->
-    ensure_dhfile(dhfile()).
-
-dhfile() ->
-    case z_config:get(ssl_dhfile) of
-        undefined ->
-            {ok, SecurityDir} = z_config_files:security_dir(),
-            filename:join([ SecurityDir, "dh"++?DHBITS++".pem" ]);
-        Filename ->
-            Filename
-    end.
-
-wait_for_dhfile() ->
-    wait_for_dhfile(1).
-
-wait_for_dhfile(N) ->
-    DHFile = dhfile(),
-    case filelib:is_file( DHFile ) of
-        true ->
-            ok;
-        false when N =:= 0 ->
-            lager:info("Waiting for DH to be generated in '~s'", [ DHFile ]),
-            timer:sleep(500),
-            wait_for_dhfile(20);
-        false ->
-            timer:sleep(500),
-            wait_for_dhfile(N-1)
-    end.
-
-ensure_dhfile(Filename) ->
-    case filelib:is_file(Filename) of
-        true ->
-            ok;
-        false ->
-            ok = z_filelib:ensure_dir(Filename),
-            erlang:spawn_link(fun() -> generate_dhfile(Filename) end)
-    end.
-
-generate_dhfile(Filename) ->
-    % Maybe use the -dsaparam, maybe we shouldn't https://www.openssl.org/news/secadv/20160128.txt
-    % Though without this the generation will take a long time indeed...
-    lager:info("Generating ~s bits DH key, this will take a long time. Saving in '~s'",
-               [?DHBITS, Filename]),
-    Command = "openssl dhparam -out " ++ z_utils:os_filename(Filename) ++ " " ++ ?DHBITS,
-    lager:debug("SSL: ~p", [Command]),
-    Result = os:cmd(Command),
-    lager:debug("SSL: ~p", [Result]),
-    case is_dhfile(Filename) of
-        true ->
-            _ = file:change_mode(Filename, 8#00600),
-            ok;
-        false ->
-            lager:error("Failed generating DH file in '~s' (output was ~p)",
-                        [Filename, Result]),
-            {error, openssl_dhfile}
-    end.
 
 
 %% @todo reorder cipher list? See: https://sparanoid.com/note/http2-and-ecdsa-cipher-suites/

@@ -108,7 +108,6 @@ stop_mqtt_listeners() ->
 %% @doc Start the MQTT/S listeners
 -spec start_mqtt_listeners() -> ok.
 start_mqtt_listeners() ->
-    z_ssl_certs:wait_for_dhfile(),
     start_mqtt_listeners_ip4(z_config:get(mqtt_listen_ip), z_config:get(mqtt_listen_port)),
     start_mqtts_listeners_ip4(z_config:get(mqtt_listen_ip), z_config:get(mqtt_listen_ssl_port)),
     case ipv6_supported() of

@@ -70,7 +70,7 @@ cert_files(Context) ->
         {certfile, filename:join(SSLDir, Sitename++".crt")},
         {keyfile, filename:join(SSLDir, Sitename++".pem")},
         {password, z_convert:to_list(m_config:get_value(mod_ssl, password, "", Context))}
-    ] ++ z_ssl_certs:dh_options(),
+    ] ++ z_ssl_dhfile:dh_options(),
     CaCertFile = filename:join(SSLDir, Sitename++".ca.crt"),
     case filelib:is_file(CaCertFile) of
         false -> {ok, Files};

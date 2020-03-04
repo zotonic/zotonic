@@ -445,7 +445,7 @@ cert_files(Context) ->
     Files = [
         {certfile, z_convert:to_list(filename:join(SSLDir, <<Hostname/binary, ".crt">>))},
         {keyfile, z_convert:to_list(filename:join(SSLDir, <<Hostname/binary, ".key">>))}
-    ] ++ z_ssl_certs:dh_options(),
+    ] ++ z_ssl_dhfile:dh_options(),
     CaCertFile = filename:join(SSLDir, <<Hostname/binary, ".ca.crt">>),
     case filelib:is_file(CaCertFile) of
         false -> {ok, Files};
