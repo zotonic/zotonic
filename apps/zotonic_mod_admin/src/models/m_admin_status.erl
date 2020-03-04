@@ -38,7 +38,7 @@
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_get([ zotonic_version | Rest ], _Msg, _Context) ->
-    {ok, {?ZOTONIC_VERSION, Rest}};
+    {ok, {z_convert:to_binary(?ZOTONIC_VERSION), Rest}};
 m_get(Path, Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> m_get_1(Path, Msg, Context);
