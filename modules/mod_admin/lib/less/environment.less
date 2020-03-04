@@ -23,7 +23,7 @@
 
     body {
 
-        @media (min-width: 500px) {
+        @media (min-width: @screen-phone) {
             &::before {
                 position: fixed;
                 top: 0;
@@ -87,6 +87,7 @@
                     color: white;
                 }
             }
+
             .dropdown-menu > li.active > a,
             .dropdown-menu > li.active > a:hover,
             .dropdown-menu > li > a:hover {
