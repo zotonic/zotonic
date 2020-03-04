@@ -32,11 +32,11 @@
         {% if id.to_id %}
             <a href="{% url admin_log_email severity=4 to=result_row.to_id %}" title="{{result_row.to_id|escape}}">{{ result_row.to_id }}</a> /
             <a href="{% url admin_log_email severity=4 to=result_row.envelop_to %}" title="{{result_row.envelop_to|escape}}">
-                {{ result_row.envelop_to|truncate:10|escape }}
+                {{ result_row.envelop_to|escape }}
             </a>
         {% else %}
             <a href="{% url admin_log_email severity=4 to=result_row.envelop_to %}" title="{{result_row.envelop_to|escape}}">
-                {{ result_row.envelop_to|truncate:20|escape|default:"-" }}
+                {{ result_row.envelop_to|escape|default:"-" }}
             </a>
         {% endif %}
     </td>
@@ -47,11 +47,11 @@
         {% if result_row.from_id %}
             <a href="{% url admin_log_email severity=4 from=result_row.from_id %}" title="{{result_row.from_id|escape}}">{{ result_row.from_id }}</a> /
             <a href="{% url admin_log_email severity=4 from=result_row.envelop_from %}" title="{{result_row.envelop_from|escape}}">
-                {{ result_row.envelop_from|truncate:10|escape }}
+                {{ result_row.envelop_from|escape }}
             </a>
         {% else %}
             <a href="{% url admin_log_email severity=4 from=result_row.envelop_from %}" title="{{result_row.envelop_from|escape}}">
-                {{ result_row.envelop_from|truncate:20|escape|default:"-" }}
+                {{ result_row.envelop_from|escape|default:"-" }}
             </a>
         {% endif %}
     </td>

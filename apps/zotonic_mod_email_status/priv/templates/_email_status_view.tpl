@@ -5,15 +5,30 @@
 			<a href="#" class="btn btn-danger btn-small pull-right" id="{{ #doblock }}">
 				{_ [ADMIN] _} {_ Block _}
 			</a>
-			{% wire id=#doblock
-					postback={email_status_block email=email
-							  on_success=[
-							  		{hide target=#doblock},
-							  		{hide target=#isok},
-							  		{show target=#didblock}
-							  ]}
-					delegate=`mod_email_status`
-			%}
+			{% if panel_id %}
+				{% wire id=#doblock
+						postback={email_status_block email=email 
+								  on_success=[
+								  	{update
+								  		target=panel_id
+								  		template="_email_status_view.tpl"
+								  		email=email
+								  		panel_id=panel_id
+								  	}
+								  ]}
+						delegate=`mod_email_status`
+				%}
+			{% else %}
+				{% wire id=#doblock
+						postback={email_status_block email=email 
+								  on_success=[
+								  		{hide target=#doblock},
+								  		{hide target=#isok},
+								  		{show target=#didblock}
+								  ]}
+						delegate=`mod_email_status`
+				%}
+			{% endif %}
 
 			<p class="alert alert-danger" id="{{ #didblock }}" style="display:none">
 				<span class="glyphicon glyphicon-envelope"></span>
@@ -28,18 +43,33 @@
 					{_ [ADMIN] _} {_ Unblock _}
 				</a>
 			</p>
-			{% wire id=#doreset
-					postback={email_status_reset email=email id=id
-							  on_success=[
-							  		{hide target=#doreset},
-							  		{hide target=#isblocked},
-							  		{show target=#didreset}
-							  ]}
-					delegate=`mod_email_status`
-			%}
-			<p class="alert alert-success" id="{{ #didreset }}" style="display:none">
-				{_ The email address has been cleared, new emails will be sent. _}
-			</p>
+			{% if panel_id %}
+				{% wire id=#doreset
+						postback={email_status_reset email=email id=id
+								  on_success=[
+								  	{update
+								  		target=panel_id
+								  		template="_email_status_view.tpl"
+								  		email=email
+								  		panel_id=panel_id
+								  	}
+								  ]}
+						delegate=`mod_email_status`
+				%}
+			{% else %}
+				{% wire id=#doreset
+						postback={email_status_reset email=email id=id
+								  on_success=[
+								  		{hide target=#doreset},
+								  		{hide target=#isblocked},
+								  		{show target=#didreset}
+								  ]}
+						delegate=`mod_email_status`
+				%}
+				<p class="alert alert-success" id="{{ #didreset }}" style="display:none">
+					{_ The email address has been cleared, new emails will be sent. _}
+				</p>
+			{% endif %}
 		{% endif %}
 	{% endif %}
 
@@ -86,19 +116,34 @@
 
 			{% if (id and id.is_editable) or m.acl.use.mod_email_status %}
 				<p>
-					<a href="#" class="btn btn-default btn-danger" id="{{ #doreset }}">
+					<a href="#" class="btn btn-default btn-danger" id="{{ #doclear }}">
 						{_ Clear error flag for this email address. _}
 					</a>
 				</p>
-				{% wire id=#doreset
-						postback={email_status_reset email=email id=id
-								  on_success={hide target=#doreset}
-								  on_success={show target=#didreset}}
-						delegate=`mod_email_status`
-				%}
-				<p class="alert alert-success" id="{{ #didreset }}" style="display:none">
-					{_ The email address has been cleared, new emails will be sent. _}
-				</p>
+				{% if panel_id %}
+					{% wire id=#doclear
+							postback={email_status_reset email=email id=id
+									  on_success=[
+									  	{update
+									  		target=panel_id
+									  		template="_email_status_view.tpl"
+									  		email=email
+									  		panel_id=panel_id
+									  	}
+									  ]}
+							delegate=`mod_email_status`
+					%}
+				{% else %}
+					{% wire id=#doclear
+							postback={email_status_reset email=email id=id
+									  on_success={hide target=#doclear}
+									  on_success={show target=#didclear}}
+							delegate=`mod_email_status`
+					%}
+					<p class="alert alert-success" id="{{ #didclear }}" style="display:none">
+						{_ The email address has been cleared, new emails will be sent. _}
+					</p>
+				{% endif %}
 			{% endif %}
 		{% endif %}
 	{% else %}

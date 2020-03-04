@@ -304,6 +304,11 @@
 % {z_convert:to_atom(Notification), received, UserId, ResourceId, Received}
 % The {Notification, UserId, ResourceId} comes from m_email_receive_recipient:get_by_recipient/2.
 
+%% @doc Check if an email address is blocked
+-record(email_is_blocked, {
+    recipient :: binary()
+}).
+
 %% @doc Email status notification, sent when the validity of an email recipient changes
 %% Type: notify
 -record(email_status, {

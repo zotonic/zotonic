@@ -27,6 +27,7 @@
 -export([
     event/2,
 
+    observe_email_is_blocked/2,
     observe_email_sent/2,
     observe_email_failed/2,
     observe_email_bounced/2,
@@ -76,6 +77,9 @@ is_allowed(Id, Context) ->
 is_allowed(Context) ->
     z_acl:is_allowed(use, mod_email_status, Context).
 
+
+observe_email_is_blocked(#email_is_blocked{recipient = Recipient}, Context) ->
+    not m_email_status:is_ok_to_send(Recipient, Context).
 
 observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) ->
     m_email_status:mark_sent(Recipient, IsFinal, Context).
