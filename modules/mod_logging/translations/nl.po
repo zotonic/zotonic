@@ -10,73 +10,81 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2019-05-21 17:31+0200\n"
+"PO-Revision-Date: 2020-03-04 16:28+0100\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.3\n"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:74
-#: modules/mod_logging/templates/admin_log_email.tpl:104
+#: modules/mod_logging/templates/admin_log_email.tpl:117
+#: modules/mod_logging/templates/admin_log_email.tpl:147
 #: modules/mod_logging/templates/admin_log_ui.tpl:45
 #: modules/mod_logging/templates/admin_log.tpl:45
 msgid "All"
 msgstr "Alle"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:77
+#: modules/mod_logging/templates/admin_log_email.tpl:120
 msgid "Bounce"
 msgstr "Bounce"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:55
+#: modules/mod_logging/templates/admin_log_email.tpl:98
 msgid "Content"
 msgstr "Pagina"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:58
+#: modules/mod_logging/templates/admin_log_email.tpl:101
 #: modules/mod_logging/templates/admin_log_ui.tpl:20
 #: modules/mod_logging/templates/admin_log.tpl:20
 msgid "Date"
 msgstr "Datum"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:68
+#: modules/mod_logging/templates/admin_log_email.tpl:111
 msgid "Debug"
 msgstr "Debug"
 
 #: modules/mod_logging/templates/admin_log_base.tpl:12
-#: modules/mod_logging/mod_logging.erl:268
+#: modules/mod_logging/mod_logging.erl:96
 msgid "Email log"
 msgstr "E-mail log"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:65
+#: modules/mod_logging/templates/admin_log_email.tpl:39
+msgid "Email status"
+msgstr "E-mail status"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:108
 msgid "Error"
 msgstr "Fout"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:79
+#: modules/mod_logging/templates/admin_log_email.tpl:122
 msgid "Failed"
 msgstr "Gefaald"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:64
+#: modules/mod_logging/templates/admin_log_email.tpl:107
 msgid "Fatal"
 msgstr "Fataal"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:103
+#: modules/mod_logging/templates/admin_log_email.tpl:146
 #: modules/mod_logging/templates/admin_log_ui.tpl:44
 #: modules/mod_logging/templates/admin_log.tpl:44
 msgid "Filter"
 msgstr "Filteren"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:54
+#: modules/mod_logging/templates/admin_log_email.tpl:97
 msgid "From"
 msgstr "Van"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:67
+#: modules/mod_logging/templates/admin_log_email.tpl:47
+msgid "Identities"
+msgstr "Identiteiten"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:110
 msgid "Info"
 msgstr "Info"
 
 #: modules/mod_logging/templates/admin_log_base.tpl:3
-#: modules/mod_logging/mod_logging.erl:263
+#: modules/mod_logging/mod_logging.erl:91
 msgid "Log"
 msgstr "Log"
 
@@ -113,7 +121,7 @@ msgstr "Bericht"
 msgid "Message log"
 msgstr "Berichtenlog"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:52
+#: modules/mod_logging/templates/admin_log_email.tpl:95
 msgid "Message nr"
 msgstr "Nummer"
 
@@ -130,39 +138,43 @@ msgstr "Meest recente berichten"
 msgid "Most recent user interface events"
 msgstr "Meest recente gebeurtenissen in de gebruikersinterface"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:121
+#: modules/mod_logging/templates/admin_log_email.tpl:164
 #: modules/mod_logging/templates/admin_log_ui.tpl:59
 #: modules/mod_logging/templates/admin_log.tpl:59
 msgid "No log messages."
 msgstr "Geen log-items."
 
-#: modules/mod_logging/templates/admin_log_email.tpl:56
+#: modules/mod_logging/templates/admin_log_email.tpl:99
 msgid "Other"
 msgstr "Andere"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:78
+#: modules/mod_logging/templates/admin_log_email.tpl:121
 msgid "Received"
 msgstr "Ontvangen"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:80
+#: modules/mod_logging/templates/admin_log_email.tpl:49
+msgid "Resources with email identity"
+msgstr "Pagina’s met e-mail identiteit"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:123
 msgid "Retry"
 msgstr "Opnieuw"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:75
+#: modules/mod_logging/templates/admin_log_email.tpl:118
 msgid "Sending"
 msgstr "Versturen"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:76
+#: modules/mod_logging/templates/admin_log_email.tpl:119
 msgid "Sent"
 msgstr "Verstuurd"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:50
+#: modules/mod_logging/templates/admin_log_email.tpl:93
 #: modules/mod_logging/templates/admin_log_ui.tpl:21
 #: modules/mod_logging/templates/admin_log.tpl:21
 msgid "Severity"
 msgstr "Hevigheid"
 
-#: modules/mod_logging/templates/_admin_log_ui_row.tpl:29
+#: modules/mod_logging/templates/_admin_log_ui_row.tpl:32
 #: modules/mod_logging/templates/_admin_log_row.tpl:27
 msgid "Site Administrator"
 msgstr "Beheerder"
@@ -171,15 +183,15 @@ msgstr "Beheerder"
 msgid "Stack"
 msgstr "Stack"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:51
+#: modules/mod_logging/templates/admin_log_email.tpl:94
 msgid "Status"
 msgstr "Status"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:57
+#: modules/mod_logging/templates/admin_log_email.tpl:100
 msgid "Template"
 msgstr "Template"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:53
+#: modules/mod_logging/templates/admin_log_email.tpl:96
 msgid "To"
 msgstr "Naar"
 
@@ -194,12 +206,17 @@ msgid "User Id"
 msgstr "Gebruikers ID"
 
 #: modules/mod_logging/templates/admin_log_base.tpl:13
+#: modules/mod_logging/mod_logging.erl:101
 msgid "User interface log"
 msgstr "Gebruikersinterface log"
 
-#: modules/mod_logging/templates/admin_log_email.tpl:66
+#: modules/mod_logging/templates/admin_log_email.tpl:109
 msgid "Warning"
 msgstr "Waarschuwing"
+
+#: modules/mod_logging/templates/admin_log_email.tpl:63
+msgid "email verified"
+msgstr "per e-mail geverifieerd"
 
 #~ msgid "Type"
 #~ msgstr "Type"
