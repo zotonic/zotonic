@@ -31,7 +31,7 @@
 			{% endif %}
 
 			<p class="alert alert-danger" id="{{ #didblock }}" style="display:none">
-				<span class="icon-envelope"></span>
+				<span class="glyphicon glyphicon-envelope"></span>
 				<strong>
 					{_ Blocked _}
 				</strong>
@@ -81,7 +81,7 @@
 	{% if status or email|is_valid_email %}
 		{% if status.is_blocked %}
 			<p class="alert alert-danger" style="margin: 20px 0" id="{{ #isblocked }}">
-				<span class="icon-envelope"></span>
+				<span class="glyphicon glyphicon-envelope"></span>
 				<strong>
 					{_ Blocked _}
 				</strong>
@@ -103,7 +103,7 @@
 			{% endif %}
 		{% else %}
 			<p class="alert alert-error" style="margin-bottom: 20px">
-				<span class="icon-envelope"></span>
+				<span class="glyphicon glyphicon-envelope"></span>
 				<strong>{_ There are problems with this email address. _}</strong>
 			</p>
 
