@@ -131,9 +131,10 @@ viewer(Filename, Options, Context) ->
     %% @doc Try to generate Html for the media reference.  First check if a module can do this, then
     %% check the normal image tag.
     viewer1(Id, Props, FilePath, Options, Context) ->
-        case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options}, Context) of
+        Options1 = drop_undefined(Options),
+        case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options1}, Context) of
             {ok, Html} -> {ok, Html};
-            undefined -> tag(Props, Options, Context)
+            undefined -> tag(Props, Options1, Context)
         end.
 
 
@@ -176,15 +177,16 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
         tag1(FilePath, Filename, Options, Context);
     tag1(MediaRef, Filename, Options, Context) ->
-        {url, Url, TagOpts, _ImageOpts} = url1(Filename, Options, Context),
+        Options1 = drop_undefined(Options),
+        {url, Url, TagOpts, _ImageOpts} = url1(Filename, Options1, Context),
         % Expand the mediaclass for the correct size options
-        TagOpts1 = case z_convert:to_bool( proplists:get_value(nowh, Options, false) ) of
+        TagOpts1 = case z_convert:to_bool( proplists:get_value(nowh, Options1, false) ) of
             true ->
                 TagOpts;
             false ->
-                SizeOptions = case z_mediaclass:expand_mediaclass(Options, Context) of
+                SizeOptions = case z_mediaclass:expand_mediaclass(Options1, Context) of
                     {ok, MCOpts} -> MCOpts;
-                    {error, _} -> Options
+                    {error, _} -> Options1
                 end,
                 % Calculate the default width/height
                 case z_media_preview:size(MediaRef, SizeOptions, Context) of
@@ -195,7 +197,7 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
                 end
         end,
         % Add the mediaclass to the tag's class attribute
-        TagOpts2 = case proplists:get_value(mediaclass, Options) of
+        TagOpts2 = case proplists:get_value(mediaclass, Options1) of
             undefined ->
                 TagOpts1;
             MC ->
@@ -218,6 +220,16 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
                 Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts3)]),
                 {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
         end.
+
+drop_undefined(L) when is_list(L) ->
+    lists:filter(
+        fun
+            ({_K, undefined}) -> false;
+            (undefined) -> false;
+            (_) -> true
+        end,
+        L).
+
 
 get_link(Media, true, Context) ->
     Id = media_id(Media),
