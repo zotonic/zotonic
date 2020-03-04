@@ -6,134 +6,139 @@
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2020-03-04 16:27+0100\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
 
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:83 
+#: modules/mod_email_status/templates/_email_status_view.tpl:6
+msgid "Block"
+msgstr "Blokkeer"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:36
+#: modules/mod_email_status/templates/_email_status_view.tpl:86
+msgid "Blocked"
+msgstr "Geblokkeerd"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:180
+msgid "Bounces"
+msgstr "Bounces"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:113
+msgid "Clear error flag for this email address."
+msgstr "Reset fout status voor dit emailadres."
+
+#: modules/mod_email_status/templates/_dialog_email_status.tpl:4
+msgid "Close"
+msgstr "Sluit"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:166
+msgid "Errors since last clear"
+msgstr "Fouten sinds de laatste reset"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:77
+msgid "Information about"
+msgstr "Informatie over"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:176
+msgid "Last error status"
+msgstr "Laatste fout"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:153
+msgid "Most Recent"
+msgstr "Recentste"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:156
+msgid "Received from this address"
+msgstr "Ontvangen vanaf dit adres"
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:161
+msgid "Sent to this address"
+msgstr "Verstuurd naar dit adres"
+
+#: modules/mod_email_status/mod_email_status.erl:70
+msgid "Sorry, you are not allowed to block this email address."
+msgstr "Sorry, het is niet toegestaan om dit e-mailadres te blokkeren."
+
+#: modules/mod_email_status/mod_email_status.erl:56
+msgid "Sorry, you are not allowed to reset this email address."
+msgstr "Sorry, je mag dit email adres niet resetten."
+
+#: modules/mod_email_status/mod_email_status.erl:65
+msgid "The email address has been blocked."
+msgstr "Het e-mailadres is geblokkeerd."
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:70
+#: modules/mod_email_status/templates/_email_status_view.tpl:138
+msgid "The email address has been cleared, new emails will be sent."
+msgstr "Dit email adres is gereset, email zal weer worden verstuurd."
+
+#: modules/mod_email_status/mod_email_status.erl:51
+msgid "The email error flag has been cleared."
+msgstr "De error status is gereset."
+
+#: modules/mod_email_status/templates/_email_status_flag.tpl:9
+msgid "There are email problems."
+msgstr "Er zijn email problemen."
+
+#: modules/mod_email_status/templates/_email_status_flag.tpl:6
+#: modules/mod_email_status/templates/_email_status_view.tpl:107
+msgid "There are problems with this email address."
+msgstr "Er zijn problemen met dit emailadres."
+
+#: modules/mod_email_status/templates/_email_status_view.tpl:96
 msgid ""
-"Bounces"
+"There have been some problems but they have been cleared. This message will "
+"disappear as soon as an email has been received succesfully."
 msgstr ""
+"Er zijn foutmeldingen geweest maar deze zijn gewist. Dit bericht zal "
+"verdwijnen zodra er een e-mail is ontvangen."
 
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:31 
-msgid ""
-"Clear error flag for this email address."
-msgstr ""
-"Reset fout status voor dit emailadres."
+#: modules/mod_email_status/templates/_email_status_view.tpl:38
+msgid "This email address has been blocked, no emails will be sent."
+msgstr "Dit e-mailadres is geblokkeerd, er worden geen e-mails verstuurd."
 
-#: ./modules/mod_email_status/templates/_dialog_email_status.tpl:4 
-msgid ""
-"Close"
-msgstr ""
-"Sluit"
+#: modules/mod_email_status/templates/_email_status_view.tpl:88
+msgid "This email address has been blocked."
+msgstr "Dit e-mailadres is geblokkeerd."
 
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:69 
-msgid ""
-"Errors since last clear"
-msgstr ""
-"Fouten sinds de laatste reset"
+#: modules/mod_email_status/templates/_email_status_view.tpl:145
+msgid "This email address is not valid."
+msgstr "Dit emailadres is ongeldig."
 
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:4 
-msgid ""
-"Information about"
-msgstr ""
-"Informatie over"
+#: modules/mod_email_status/templates/_email_status_view.tpl:95
+msgid "This email address is now ok."
+msgstr "Dit emailadres is momenteel goed."
 
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:79 
-msgid ""
-"Last error status"
-msgstr ""
-"Laatste fout"
+#: modules/mod_email_status/templates/_email_status_view.tpl:101
+msgid "This email address is ok."
+msgstr "Dit email adres is goed."
 
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:56 
-msgid ""
-"Most Recent"
-msgstr ""
-"Recentste"
+#: modules/mod_email_status/templates/_email_status_view.tpl:171
+msgid "Total send errors"
+msgstr "Totaal aantal fouten"
 
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:14 
-msgid ""
-"There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully."
-msgstr ""
-"Er zijn foutmeldingen geweest maar deze zijn gewist. Dit bericht zal verdwijnen zodra er een e-mail is ontvangen."
+#: modules/mod_email_status/templates/_email_status_view.tpl:152
+msgid "Total/Status"
+msgstr "Totaal/status"
 
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:59 
-msgid ""
-"Received from this address"
-msgstr ""
-"Ontvangen vanaf dit adres"
+#: modules/mod_email_status/templates/_email_status_view.tpl:43
+msgid "Unblock"
+msgstr "Deblokkeren"
 
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:64 
-msgid ""
-"Sent to this address"
-msgstr ""
-"Verstuurd naar dit adres"
+#: modules/mod_email_status/templates/_email_status_view.tpl:89
+msgid "We stopped email delivery."
+msgstr "We zijn gestopt met het afleveren van e-mail."
 
-#: ./modules/mod_email_status/mod_email_status.erl:54 
-msgid ""
-"Sorry, you are not allowed to reset this email address."
-msgstr ""
-"Sorry, je mag dit email adres niet resetten."
-
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:41 
-msgid ""
-"The email address has been cleared, new emails will be sent."
-msgstr ""
-"Dit email adres is gereset, email zal weer worden verstuurd."
-
-#: ./modules/mod_email_status/mod_email_status.erl:49 
-msgid ""
-"The email error flag has been cleared."
-msgstr ""
-"De error status is gereset."
-
-#: ./modules/mod_email_status/templates/_email_status_flag.tpl:9 
-msgid ""
-"There are email problems."
-msgstr ""
-"Er zijn email problemen."
-
-#: ./modules/mod_email_status/templates/_email_status_flag.tpl:6 ./modules/mod_email_status/templates/_email_status_view.tpl:25 
-msgid ""
-"There are problems with this email address."
-msgstr ""
-"Er zijn problemen met dit emailadres."
-
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:48 
-msgid ""
-"This email address is not valid."
-msgstr ""
-"Dit emailadres is ongeldig."
-
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:13 
-msgid ""
-"This email address is now ok."
-msgstr ""
-"Dit emailadres is momenteel goed."
-
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:19 
-msgid ""
-"This email address is ok."
-msgstr ""
-"Dit email adres is goed."
-
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:74 
-msgid ""
-"Total send errors"
-msgstr ""
-"Totaal aantal fouten"
-
-#: ./modules/mod_email_status/templates/_email_status_view.tpl:55 
-msgid ""
-"Total/Status"
-msgstr ""
-"Totaal/status"
-
+#: modules/mod_email_status/templates/_email_status_view.tpl:6
+#: modules/mod_email_status/templates/_email_status_view.tpl:43
+msgid "[ADMIN]"
+msgstr "[ADMIN]"
