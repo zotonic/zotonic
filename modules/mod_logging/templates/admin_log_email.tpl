@@ -30,6 +30,49 @@
     {_ Most recent messages _}
 </h3>
 <br />
+
+
+{% if m.modules.active.mod_email_status and q.to and not q.to|match:"%" %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="widget">
+                <h3 class="widget-header">{_ Email status _}</h3>
+                <div class="widget-content" id="{{ #statuspanel }}">
+                    {% include "_email_status_view.tpl" email=q.to panel_id=#statuspanel %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="widget">
+                <h3 class="widget-header">{_ Identities _}</h3>
+                <div class="widget-content">
+                    <h3>{_ Resources with email identity _} &lt;{{ q.to|escape }}&gt;</h3>
+                    <br>
+                    <ol>
+                        {% for idn in m.identity.lookup.email[q.to] %}
+                            <li>
+                                <b>
+                                    <a href="{% url admin_edit_rsc id=idn.rsc_id %}">
+                                        {{ idn.rsc_id.title|default:"untitled" }}
+                                    </a>
+                                </b>
+                                <br>
+                                <span class="text-muted">
+                                    {{ idn.rsc_id.category_id.title }}
+                                    {% if idn.is_verified %}
+                                        &mdash; <span class="icon-check"></span> {_ email verified _}
+                                    {% endif %}
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
 {% with m.search[{log_email
     page=q.page
     pagelen=20

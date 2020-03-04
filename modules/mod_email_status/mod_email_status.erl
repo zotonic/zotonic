@@ -54,6 +54,20 @@ event(#postback{message={email_status_reset, Args}}, Context) ->
             end;
         false ->
             z_render:growl(?__("Sorry, you are not allowed to reset this email address.", Context), Context)
+    end;
+event(#postback{message={email_status_block, Args}}, Context) ->
+    Email = proplists:get_value(email, Args),
+    case z_acl:is_admin(Context) of
+        true ->
+            ok = m_email_status:block(Email, Context),
+            case proplists:get_all_values(on_success, Args) of
+                [] ->
+                    z_render:growl(?__("The email address has been blocked.", Context), Context);
+                OnSuccess ->
+                    z_render:wire(OnSuccess, Context)
+            end;
+        false ->
+            z_render:growl(?__("Sorry, you are not allowed to block this email address.", Context), Context)
     end.
 
 is_allowed(undefined, Context) ->
