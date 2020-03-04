@@ -361,6 +361,7 @@ is_unrecoverable_error(<<"550", _/binary>> = Status) ->
     S = z_string:to_lower(Status),
     binary:match(S, <<"mailbox unavailable">>) =/= nomatch          % hotmail
     orelse binary:match(S, <<"does not exist">>) =/= nomatch        % gmail / ziggo
+    orelse binary:match(S, <<"access denied">>) =/= nomatch         % outlook
     orelse binary:match(S, <<"unknown user">>) =/= nomatch
     orelse binary:match(S, <<"user unknown">>) =/= nomatch
     orelse binary:match(S, <<"no such user">>) =/= nomatch
