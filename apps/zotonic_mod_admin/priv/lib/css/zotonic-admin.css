@@ -849,6 +849,10 @@ img.thumb {
   -moz-box-shadow: none;
   box-shadow: none;
 }
+img {
+  max-width: 100%;
+  height: auto;
+}
 img.admin-list-overview {
   width: 80px;
   height: 60px;

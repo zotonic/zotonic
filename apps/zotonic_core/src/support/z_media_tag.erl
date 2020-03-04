@@ -174,7 +174,7 @@ tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
     tag1(FilePath, Filename, Options, Context);
 tag1(MediaRef, Filename, Options, Context) ->
     Options1 = drop_undefined(Options),
-    {url, Url, TagOpts, ImageOpts} = url1(Filename, Options, Context),
+    {url, Url, TagOpts, _ImageOpts} = url1(Filename, Options1, Context),
     % Expand the mediaclass for the correct size options
     TagOpts1 = case z_convert:to_bool( proplists:get_value(nowh, Options1, false) ) of
         true ->
