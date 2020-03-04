@@ -87,7 +87,7 @@
 }] as result
 %}
 <form id="log_filter" method="GET" action="{% url log_email %}">
-    <table class="table">
+    <table class="table data-table">
         <thead>
             <tr>
             <th width="8%">{_ Severity _}</th>
