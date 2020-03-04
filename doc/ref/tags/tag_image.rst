@@ -56,6 +56,14 @@ The maximum height of the image. Example::
 
     height=200
 
+nowh
+^^^^
+
+Do not generate the width and height attributes. Per default
+the image width and height are calculated and added to the
+generated ``img`` tag. This option prevents the addition of
+width and height attributes.
+
 mediaclass
 ^^^^^^^^^^
 
