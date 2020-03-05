@@ -1,0 +1,4 @@
+% This file is intentionally here to prevent that a .erlang file
+% in the home directory will echo output. Such output will prevent
+% the Zotonic startup scripts from working.
+% See https://github.com/zotonic/zotonic/issues/1919
