@@ -190,7 +190,7 @@ addsite_compile(Name, Options, Context) ->
     case erlang:get(is_zotonic_command) of
         true ->
             {ok, {Site, Options}};
-        false ->
+        _ ->
             mod_zotonic_site_management:progress(
                 Name,
                 ?__("Force compile all Erlang files ...", Context),
