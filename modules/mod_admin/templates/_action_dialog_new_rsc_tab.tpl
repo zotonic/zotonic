@@ -19,7 +19,7 @@
 <div class="admin-padding">
 	{% block rsc_props_title %}
 		{# The new resource title, also used for the feedback search #}
-	    <label for="new_rsc_title">{_ Start typing a title to create new content or find existing content. _}</label>
+	    <label for="new_rsc_title">{_ Start typing a title to create a new page or find existing pages _}</label>
 	    <input type="text" id="new_rsc_title" name="title"
 	    	   value="{{ title|escape }}" class="do_autofocus form-control"
 	    	   placeholder="{_ Type title or filter existing content _}">
@@ -31,7 +31,7 @@
 	<div id="{{ #newform }}" class="form-panel">
 		{% with 'dialog-new-rsc-tab' as form %}
 
-			<h4>1. {_ Create _}</h4>
+			<h4>{_ Make a new page or media _}</h4>
 
 			{% if (not nocatselect or m.category[cat].is_a.media)
 				and (not predicate
@@ -209,7 +209,8 @@
 
 			{% block rsc_props %}
 				<div class="form-group row">
-				    <div class="col-md-12">
+				    <div class="col-md-3"></div>
+				    <div class="col-md-9">
 				    	<div class="checkbox">
 						    <label>
 						        <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
@@ -245,9 +246,9 @@
 
 	    <div class="new-find-results-header">
 
-			<h4>2. {_ Existing content _}</h4>
+			<h4>{_ Existing pages _}</h4>
 
-			<p id="new-find-results-description">
+			<p id="new-find-results-description" class="text-muted">
 				{% include "_action_dialog_new_rsc_tab_find_description.tpl" %}
 			</p>
 
