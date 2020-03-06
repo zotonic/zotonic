@@ -28,7 +28,7 @@
 -include_lib("zotonic_filehandler/include/zotonic_filehandler.hrl").
 
 % Filename patterns for which we don't about unhandled events.
--define(FILENAMES_NOWARN, <<"(/test/|/priv/ssl/)">>).
+-define(FILENAMES_NOWARN, <<"(/test/|/priv/ssl/|/dist/|\\.app$)">>).
 
 
 -spec map_change(zotonic_filehandler:verb(), Filename::binary()) ->
