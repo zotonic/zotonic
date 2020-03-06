@@ -12,6 +12,7 @@ Lists
    ../filter_exclude
    ../filter_filter
    ../filter_first
+   ../filter_flatten_value
    ../filter_group_by
    ../filter_index_of
    ../filter_is_list
