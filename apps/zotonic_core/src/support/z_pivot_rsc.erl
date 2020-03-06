@@ -159,27 +159,20 @@ insert_queue(Id, Context) ->
 %% @doc Insert a rsc_id in the pivot queue for a certain date
 -spec insert_queue(integer(), {calendar:date(), calendar:time()}, #context{}) -> ok | {error, eexist}.
 insert_queue(Id, Date, Context) when is_integer(Id), is_tuple(Date) ->
-    z_db:transaction(
-        fun(Ctx) ->
-            case z_db:q("update rsc_pivot_queue
-                         set serial = serial + 1,
-                             due = $2
-                         where rsc_id = $1", [Id, Date], Ctx) of
-                1 ->
-                    ok;
-                0 ->
-                    try
-                        z_db:q("insert into rsc_pivot_queue (rsc_id, due, is_update) values ($1, $2, true)",
-                               [Id, Date],
-                               Ctx),
-                        ok
-                    catch
-                        throw:{error, #error{ codename = foreign_key_violation }} ->
-                            {error, eexist}
-                    end
+    F = fun(Ctx) ->
+        z_db:q("lock table rsc_pivot_queue in share row exclusive mode", Ctx),
+        case z_db:q("update rsc_pivot_queue set serial = serial + 1 where rsc_id = $1", [Id], Ctx) of
+            1 -> ok;
+            0 ->
+                z_db:q("
+                    insert into rsc_pivot_queue (rsc_id, due, is_update)
+                    select id, current_timestamp, true from rsc where id = $1",
+                    [Id], Ctx),
+                ok
             end
-        end,
-        Context).
+    end,
+    ok = z_db:transaction(F, Context).
+
 
 %% @doc Insert a slow running pivot task. For example syncing category numbers after an category update.
 insert_task(Module, Function, Context) ->
