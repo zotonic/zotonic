@@ -76,14 +76,14 @@ reload_modules() ->
 reload_module(Module) ->
     gen_server:call(?MODULE, {reload_module, Module}, infinity).
 
-%% @spec Ignore directories that are busy, for example a directory
-%%       in lib-src where currently a Makefile is running.
+%% @doc Ignore directories that are busy, for example a directory
+%%      in lib-src where currently a Makefile is running.
 -spec ignore_dir( file:filename_all(), boolean() ) -> ok.
 ignore_dir(Dir, IsIgnore) ->
     gen_server:cast(?MODULE, {ignore_dir, Dir, IsIgnore}).
 
-%% @spec Ignore action commands, useful to prevent duplication of actions
-%%       during longer runs or as side effects of running actions.
+%% @doc Ignore action commands, useful to prevent duplication of actions
+%%      during longer runs or as side effects of running actions.
 -spec ignore_action( term(), boolean() ) -> ok.
 ignore_action(Action, IsIgnore) ->
     gen_server:cast(?MODULE, {ignore_action, Action, IsIgnore}).
