@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2018 Marc Worrell
+%% @copyright 2016-2020 Marc Worrell
 %% @doc Simple runtime for the compiled templates. Needs to be
 %%      copied and adapted for different environments.
 
-%% Copyright 2016-2018 Marc Worrell
+%% Copyright 2016-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@
     find_nested_value/3,
     find_nested_value/4,
     find_value/4,
+    get_context_name/1,
     set_context_vars/2,
     get_translations/2,
     lookup_translation/3,
@@ -374,6 +375,10 @@ nth(1, [H|_]) -> H;
 nth(N, [_|T]) when N > 1 -> nth(N-1, T);
 nth(_, _) -> undefined.
 
+
+-spec get_context_name( term() ) -> atom().
+get_context_name(Context) ->
+    z_context:site(Context).
 
 -spec set_context_vars(map()|list(), term()) -> term().
 set_context_vars(Args, Context) when is_map(Args); is_list(Args) ->
