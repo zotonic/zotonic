@@ -212,8 +212,12 @@ run_cmd_task(Cmd, RunOpts, Opts) ->
         maybe_ignore_dir(Opts, false)
     end.
 
-maybe_ignore_dir(#{ ignore_dir := Dir }, IsIgnore) ->
-    zotonic_filehandler_handler:ignore_dir(Dir, IsIgnore);
+maybe_ignore_dir(#{ ignore_dir := Dir }, false) ->
+    % Let the build dir come to rest, drop all events
+    timer:sleep(1000),
+    zotonic_filehandler_handler:ignore_dir(Dir, false);
+maybe_ignore_dir(#{ ignore_dir := Dir }, true) ->
+    zotonic_filehandler_handler:ignore_dir(Dir, true);
 maybe_ignore_dir(_, _) ->
     ok.
 
