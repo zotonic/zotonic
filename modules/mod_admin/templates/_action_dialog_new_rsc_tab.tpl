@@ -242,7 +242,7 @@
 			<input type="hidden" class="nosubmit" name="subject_id" value="{{ subject_id|escape }}">
 		    <input type="hidden" class="nosubmit" name="object_id" value="{{ object_id|escape }}">
 			<input type="hidden" class="nosubmit" name="predicate" value="{{ predicate|escape|default:'' }}">
-		    <input type="hidden" class="nosubmit" name="cat_exclude" value="{{ cat_exclude|escape }}">
+		    <input type="hidden" class="nosubmit" name="cat_exclude" value="{{ cat_exclude|flatten_value|escape }}">
 		    <input type="hidden" class="nosubmit" name="is_zlink" value="{{ is_zlink|if:'1':'' }}">
 		{% endblock %}
 
