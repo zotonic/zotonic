@@ -160,9 +160,11 @@ do_all_task( OptPid ) ->
                 "; ./rebar3 compile"
             ])
     end,
+    lager:info("Compile all: start"),
     zotonic_filehandler:terminal_notifier("Compile all: start"),
     Result = run_cmd_task(Cmd, [], []),
     zotonic_filehandler:terminal_notifier("Compile all: ready"),
+    lager:info("Compile all: ready (~p)", [Result]),
     case is_pid(OptPid) of
         false -> ok;
         true -> OptPid ! {all_task_result, Result}
@@ -248,15 +250,17 @@ recompile_task(File) ->
             lager:debug("Recompiling '~s' using make", [File]),
             zotonic_filehandler:terminal_notifier("Compiling: " ++ filename:basename(File)),
             case make:files([File], Options) of
-                up_to_date -> ok;
-                Other -> {error, Other}
+                up_to_date ->
+                    ok;
+                Other ->
+                    lager:warning("Recompiling ~p returned ~p", [ File, Other ])
             end;
         false ->
             % Might be some new OTP app, so a build on the top level
             % should take care of this, we don't do anything now.
-            lager:info("Could not find compile options, no recompile for '~s'", [File]),
-            {error, skip}
-    end.
+            lager:info("Could not find compile options, no recompile for '~s'", [File])
+    end,
+    ok.
 
 -spec compile_options(file:filename_all()) -> {ok, list()} | false.
 compile_options(File) when is_binary(File) ->

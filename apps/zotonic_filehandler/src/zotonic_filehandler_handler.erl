@@ -88,7 +88,6 @@ ignore_dir(Dir, IsIgnore) ->
 ignore_action(Action, IsIgnore) ->
     gen_server:cast(?MODULE, {ignore_action, Action, IsIgnore}).
 
-
 -spec start_link() -> {ok, pid()} | {error, term()}.
 start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
