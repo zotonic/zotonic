@@ -291,7 +291,7 @@ run_build(Application, {make, Makefile}) ->
     ],
     BuildDir = filename:dirname(Makefile),
     MakeCmd = "cd " ++ z_utils:os_escape(BuildDir) ++ "; sh -c make " ++ z_utils:os_escape(Makefile),
-    zotonic_filehandler_compile:run_cmd(MakeCmd, CmdOpts).
+    zotonic_filehandler_compile:run_cmd(MakeCmd, CmdOpts, #{ ignore_dir => BuildDir }).
 
 %% ---------------------------------------- Support routines ------------------------------
 

@@ -26,7 +26,9 @@
     handle_changes/1,
     compile_all/0,
     reload_modules/0,
-    reload_module/1
+    reload_module/1,
+    ignore_dir/2,
+    ignore_action/2
 ]).
 
 -export([
@@ -47,7 +49,10 @@
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 -include_lib("zotonic_filewatcher/include/zotonic_filewatcher.hrl").
 
--record(state, { }).
+-record(state, {
+        ignore_dir = #{} :: #{ [ binary() ] := boolean() },
+        ignore_action = #{} :: #{ term() := boolean() }
+    }).
 
 
 -spec handle_changes( map() ) -> ok.
@@ -71,6 +76,19 @@ reload_modules() ->
 reload_module(Module) ->
     gen_server:call(?MODULE, {reload_module, Module}, infinity).
 
+%% @spec Ignore directories that are busy, for example a directory
+%%       in lib-src where currently a Makefile is running.
+-spec ignore_dir( file:filename_all(), boolean() ) -> ok.
+ignore_dir(Dir, IsIgnore) ->
+    gen_server:cast(?MODULE, {ignore_dir, Dir, IsIgnore}).
+
+%% @spec Ignore action commands, useful to prevent duplication of actions
+%%       during longer runs or as side effects of running actions.
+-spec ignore_action( term(), boolean() ) -> ok.
+ignore_action(Action, IsIgnore) ->
+    gen_server:cast(?MODULE, {ignore_action, Action, IsIgnore}).
+
+
 -spec start_link() -> {ok, pid()} | {error, term()}.
 start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
@@ -87,32 +105,47 @@ init([]) ->
 handle_call({filewatcher_changes, Es}, _From, State) ->
     Actions = maps:fold(
         fun(F, Verb, Acc) ->
-            case zotonic_filehandler_mapper:map_change(Verb, F) of
-                {ok, Actions} ->
-                    (Acc -- Actions) ++ Actions;
-                {error, _} ->
+            case is_ignored_dir(F, State#state.ignore_dir) of
+                true ->
                     Acc;
                 false ->
-                    Acc
+                    case zotonic_filehandler_mapper:map_change(Verb, F) of
+                        {ok, Actions} ->
+                            (Acc -- Actions) ++ Actions;
+                        {error, _} ->
+                            Acc;
+                        false ->
+                            Acc
+                    end
             end
         end,
         [],
         Es),
-    Result = perform(Actions),
+    Actions1 = lists:filter(
+        fun(Act) ->
+            not maps:is_key(Act, State#state.ignore_action)
+        end,
+        Actions),
+    Result = perform(Actions1),
     maps:fold(
         fun(F, Verb, _) ->
             FilenameB = z_convert:to_binary(F),
-            Basename = filename:extension(FilenameB),
-            Extension = filename:extension(FilenameB),
-            z_sites_manager:foreach(
-                fun(Context) ->
-                    z_notifier:first(#filewatcher{
-                        verb = Verb,
-                        file = FilenameB,
-                        basename = Basename,
-                        extension = Extension
-                        }, Context)
-                end)
+            case is_ignored_dir(FilenameB, State#state.ignore_dir) of
+                true ->
+                    ok;
+                false ->
+                    Basename = filename:extension(FilenameB),
+                    Extension = filename:extension(FilenameB),
+                    z_sites_manager:foreach(
+                        fun(Context) ->
+                            z_notifier:first(#filewatcher{
+                                verb = Verb,
+                                file = FilenameB,
+                                basename = Basename,
+                                extension = Extension
+                                }, Context)
+                        end)
+            end
         end,
         ok,
         Es),
@@ -130,6 +163,24 @@ handle_call({reload_module, Module}, _From, State) ->
     Result = zotonic_filehandler_compile:ld(Module),
     {reply, Result, State}.
 
+handle_cast({ignore_dir, Dir, true}, #state{ ignore_dir = IgnoreDir } = State) ->
+    NormDir = normalize_dir(Dir),
+    IgnoredDirs1 = IgnoreDir#{ NormDir => true },
+    {noreply, State#state{ ignore_dir = IgnoredDirs1 }};
+
+handle_cast({ignore_dir, Dir, false}, #state{ ignore_dir = IgnoreDir } = State) ->
+    NormDir = normalize_dir(Dir),
+    IgnoredDirs1 = maps:remove(NormDir, IgnoreDir),
+    {noreply, State#state{ ignore_dir = IgnoredDirs1 }};
+
+handle_cast({ignore_action, Action, true}, #state{ ignore_action = IgnoreAction } = State) ->
+    IgnoredAction1 = IgnoreAction#{ Action => true },
+    {noreply, State#state{ ignore_action = IgnoredAction1 }};
+
+handle_cast({ignore_action, Action, false}, #state{ ignore_action = IgnoreAction } = State) ->
+    IgnoredAction1 = maps:remove(Action, IgnoreAction),
+    {noreply, State#state{ ignore_action = IgnoredAction1 }};
+
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
@@ -143,6 +194,23 @@ terminate(_Reason, _State) ->
     ok.
 
 %% ------------------------------------- Internal functions -------------------------------------
+
+normalize_dir(Dir) ->
+    lists:reverse( filename:split( z_convert:to_binary(Dir) ) ).
+
+is_ignored_dir(Filename, IgnoredDirs) ->
+    Fileparts = normalize_dir( filename:dirname(Filename) ),
+    is_ignored_dir_1(Fileparts, IgnoredDirs).
+
+is_ignored_dir_1([], _) ->
+    false;
+is_ignored_dir_1(Parts, IgnoredDirs) ->
+    case maps:is_key(Parts, IgnoredDirs) of
+        true -> true;
+        false -> is_ignored_dir_1(tl(Parts), IgnoredDirs)
+    end.
+
+
 
 perform(Actions) ->
     lists:map( fun perform_action/1, Actions ).

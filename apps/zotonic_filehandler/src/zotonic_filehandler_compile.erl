@@ -22,16 +22,16 @@
     start/0,
 
     all/0,
-    all_task/0,
     all_sync/0,
+    all_task/1,
 
     recompile/1,
     recompile_task/1,
     compile_options/1,
 
     run_cmd/1,
-    run_cmd/2,
-    run_cmd_task/2,
+    run_cmd/3,
+    run_cmd_task/3,
 
     ld/0,
     ld/1,
@@ -45,8 +45,8 @@
 start() ->
     Node = get_node_argument(),
     Result = case net_adm:ping(Node) of
-                 pang -> all_task();
-                 pong -> rpc:call(Node, ?MODULE, all_task, [], infinity)
+                 pang -> all_sync();
+                 pong -> rpc:call(Node, ?MODULE, all_sync, [], infinity)
              end,
     halt_with_result(Result).
 
@@ -127,13 +127,30 @@ maybe_add_path(AppDir, Paths) ->
 %% @doc Compile all files
 -spec all() -> ok.
 all() ->
-    {ok, _} = buffalo:queue({?MODULE, all_task, []}, #{ timeout => 200, deadline => 10000 }),
+    QueueOptions = #{
+        timeout => 200,
+        deadline => 10000,
+        is_drop_running => true
+    },
+    {ok, _} = buffalo:queue(compile_all_task, {?MODULE, all_task, [ undefined ]}, QueueOptions),
     ok.
 
-all_task() ->
-    jobs:run(zotonic_filehandler_single_job, fun() -> all_sync() end).
-
 all_sync() ->
+    QueueOptions = #{
+        timeout => 10,
+        deadline => 100,
+        is_drop_running => true
+    },
+    {ok, _} = buffalo:queue(compile_all_task, {?MODULE, all_task, [ self() ]}, QueueOptions),
+    receive
+        {all_task_result, Result} ->
+            Result
+    end.
+
+all_task( OptPid ) ->
+    jobs:run(zotonic_filehandler_single_job, fun() -> do_all_task( OptPid ) end).
+
+do_all_task( OptPid ) ->
     Cmd = case os:getenv("ZOTONIC") of
         false ->
             "./rebar3 compile";
@@ -144,53 +161,82 @@ all_sync() ->
             ])
     end,
     zotonic_filehandler:terminal_notifier("Compile all: start"),
-    Result = run_cmd_task(Cmd, []),
+    Result = run_cmd_task(Cmd, [], []),
     zotonic_filehandler:terminal_notifier("Compile all: ready"),
+    case is_pid(OptPid) of
+        false -> ok;
+        true -> OptPid ! {all_task_result, Result}
+    end,
     Result.
 
 run_cmd(Cmd) ->
-    run_cmd(Cmd, []).
+    run_cmd(Cmd, [], #{}).
 
-run_cmd(Cmd, Opts) when is_binary(Cmd) ->
-    run_cmd(unicode:characters_to_list(Cmd, utf8), Opts);
-run_cmd(Cmd, Opts) ->
-    buffalo:queue({?MODULE, run_cmd_task, [ Cmd, Opts ]}, #{ timeout => 150, deadline => 2000 }).
+run_cmd(Cmd, RunOpts, Opts) when is_binary(Cmd) ->
+    run_cmd(unicode:characters_to_list(Cmd, utf8), RunOpts, Opts);
+run_cmd(Cmd, RunOpts, Opts) ->
+    QueueOptions = #{
+        timeout => 150,
+        deadline => 2000,
+        is_drop_running => true
+    },
+    buffalo:queue({?MODULE, run_cmd_task, [ Cmd, RunOpts, Opts ]}, QueueOptions).
 
-run_cmd_task(Cmd, Opts) ->
-    case exec:run(lists:flatten(Cmd), [ sync, stdout, stderr ] ++ Opts) of
-        {ok, Out} ->
-            StdErr = proplists:get_value(stderr, Out, []),
-            case StdErr of
-                [] ->
-                    ok;
-                StdErr ->
-                    lager:error("Running '~s' returned '~s'", [Cmd, iolist_to_binary(StdErr)]),
-                    ok
-            end;
-        {error, Args} = Error when is_list(Args) ->
-            StdErr = proplists:get_value(stderr, Args, []),
-            StdOut = proplists:get_value(stdout, Args, []),
-            case {StdErr, StdOut} of
-                {[], []} ->
-                    lager:error("Error running '~s': ~p", [Cmd, Error]);
-                {StdErr, _} when StdErr =/= [] ->
-                    lager:error("Error running '~s':~n~s", [Cmd, iolist_to_binary(StdErr)]);
-                {_, StdOut} ->
-                    lager:error("Error running '~s':~n~s", [Cmd, iolist_to_binary(StdOut)])
-            end,
-            Error
+run_cmd_task(Cmd, RunOpts, Opts) ->
+    try
+        maybe_ignore_dir(Opts, true),
+        case exec:run(lists:flatten(Cmd), [ sync, stdout, stderr ] ++ RunOpts) of
+            {ok, Out} ->
+                StdErr = proplists:get_value(stderr, Out, []),
+                case StdErr of
+                    [] ->
+                        ok;
+                    StdErr ->
+                        lager:error("Running '~s' returned '~s'", [Cmd, iolist_to_binary(StdErr)]),
+                        ok
+                end;
+            {error, Args} = Error when is_list(Args) ->
+                StdErr = proplists:get_value(stderr, Args, []),
+                StdOut = proplists:get_value(stdout, Args, []),
+                case {StdErr, StdOut} of
+                    {[], []} ->
+                        lager:error("Error running '~s': ~p", [Cmd, Error]);
+                    {StdErr, _} when StdErr =/= [] ->
+                        lager:error("Error running '~s':~n~s", [Cmd, iolist_to_binary(StdErr)]);
+                    {_, StdOut} ->
+                        lager:error("Error running '~s':~n~s", [Cmd, iolist_to_binary(StdOut)])
+                end,
+                Error
+        end
+    after
+        maybe_ignore_dir(Opts, false)
     end.
 
-%% @todo When "./rebar3 compile" runs, then all .../test/*.erl file are touched.
-%%       This forces a recompile of all these files. We might not want to
-%%       automatically recompile these files during a rebar3 run. Of course
-%%       problem is to known if rebar3 is running...
+maybe_ignore_dir(#{ ignore_dir := Dir }, IsIgnore) ->
+    zotonic_filehandler_handler:ignore_dir(Dir, IsIgnore);
+maybe_ignore_dir(_, _) ->
+    ok.
+
+%% When "./rebar3 compile" runs, then all .../test/*.erl file are touched.
+%% This forces a recompile of all these files. We might not want to
+%% automatically recompile these files during a rebar3 run.
 -spec recompile(file:filename_all()) -> ok.
 recompile(File) when is_binary(File) ->
     recompile(unicode:characters_to_list(File, utf8));
 recompile(File) ->
-    {ok, _} = buffalo:queue({?MODULE, recompile_task, [ File ]}, #{ timeout => 150, deadline => 2000 }),
-    ok.
+    case buffalo:status(compile_all_task) of
+        {error, notfound} ->
+            QueueOptions = #{
+                timeout => 150,
+                deadline => 2000,
+                is_drop_running => true
+            },
+            {ok, _} = buffalo:queue({?MODULE, recompile_task, [ File ]}, QueueOptions),
+            ok;
+        {ok, _} ->
+            % rebar3 is running, ignore recompile requests
+            ok
+    end.
 
 recompile_task(File) ->
     case compile_options(File) of
