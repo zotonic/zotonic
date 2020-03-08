@@ -150,7 +150,7 @@ handle_dispatch_result(#dispatch_controller{} = Match, Req, Env) ->
           path_tokens => Match#dispatch_controller.path_tokens,
           bindings => BindingsMap
          }};
-handle_dispatch_result(#dispatch_nomatch{site = Site, bindings = Bindings, context = Context}=Nm, Req, Env) ->
+handle_dispatch_result(#dispatch_nomatch{site = Site, bindings = Bindings, context = Context}, Req, Env) ->
     cast_metrics_data(#{site => Site}, Req),
     handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
 handle_dispatch_result({redirect, Site, undefined, IsPermanent}, Req, _Env) ->
@@ -358,7 +358,6 @@ dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, ExtraBindings) ->
 
 -spec dispatch_site(#dispatch{}, z:context(), list()) -> dispatch().
 dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context, ExtraBindings) ->
-    count_request(z_context:site(Context)),
     try
         {Tokens, IsDir} = split_path(Path),
         {TokensRewritten, Bindings} = dispatch_rewrite(Hostname, Path, Tokens, IsDir, TracerPid, Context),
@@ -898,9 +897,6 @@ add_port(https, Hostname, 443) ->
 add_port(_, Hostname, Port) ->
     PortBin = z_convert:to_binary(Port),
     <<Hostname/binary, $:, PortBin/binary>>.
-
-count_request(Site) ->
-    exometer:update([zotonic, Site, webzmachine, requests], 1).
 
 cast_metrics_data(UserData, Req) ->
     cowboy_req:cast({set_options, #{metrics_user_data => UserData}}, Req).
