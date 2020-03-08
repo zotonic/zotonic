@@ -131,50 +131,44 @@ update_hosts() ->
 -spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
     when Req :: cowboy_req:req(), Env :: cowboy_middleware:env().
 execute(Req, Env) ->
-    case dispatch(Req, Env) of
-        #dispatch_controller{} = Match ->
-            Context = Match#dispatch_controller.context,
-            BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
-            {ok, Req#{
-                bindings => BindingsMap
-            }, Env#{
-                site => z_context:site(Context),
-                cowmachine_controller => Match#dispatch_controller.controller,
-                cowmachine_controller_options => Match#dispatch_controller.controller_options,
-                cowmachine_context => Context,
+    DispatchResult = dispatch(Req, Env),
+    handle_dispatch_result(DispatchResult, Req, Env).
 
-                dispatch_rule => Match#dispatch_controller.dispatch_rule,
-                path_tokens => Match#dispatch_controller.path_tokens,
-                bindings => BindingsMap
-            }};
-        #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
-            handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
-        {redirect, Site, undefined, IsPermanent} ->
-            case z_sites_manager:wait_for_running(Site) of
-                ok ->
-                    Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
-                    redirect(Uri, IsPermanent, Req);
-                {error, _} ->
-                    {stop_request, 503}
-            end;
-        {redirect, Site, NewPathOrURI, IsPermanent} ->
-            case z_sites_manager:wait_for_running(Site) of
-                ok ->
-                    Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
-                    redirect(Uri, IsPermanent, Req);
-                {error, _} ->
-                    {stop_request, 503}
-            end;
-        {redirect_protocol, Protocol, Host, IsPermanent} ->
-            Uri = iolist_to_binary([
-                        z_convert:to_binary(Protocol),
-                        <<"://">>,
-                        Host,
-                        raw_path(Req)]),
-            redirect(Uri, IsPermanent, Req);
-        {stop_request, RespCode} ->
-            stop_request(RespCode, Req, Env)
-    end.
+handle_dispatch_result(#dispatch_controller{} = Match, Req, Env) ->
+    Context = Match#dispatch_controller.context,
+    Site = z_context:site(Context), 
+    DispatchRule = Match#dispatch_controller.dispatch_rule,
+    cast_metrics_data(#{site => Site, dispatch_rule => DispatchRule}, Req),
+    BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
+    {ok,
+     Req#{bindings => BindingsMap},
+     Env#{site => Site,
+          cowmachine_controller => Match#dispatch_controller.controller,
+          cowmachine_controller_options => Match#dispatch_controller.controller_options,
+          cowmachine_context => Context,
+          dispatch_rule => DispatchRule,
+          path_tokens => Match#dispatch_controller.path_tokens,
+          bindings => BindingsMap
+         }};
+handle_dispatch_result(#dispatch_nomatch{site = Site, bindings = Bindings, context = Context}=Nm, Req, Env) ->
+    cast_metrics_data(#{site => Site}, Req),
+    handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
+handle_dispatch_result({redirect, Site, undefined, IsPermanent}, Req, _Env) ->
+    cast_metrics_data(#{site => Site}, Req),
+    redirect_when_running(Site, raw_path(Req), IsPermanent, Req);
+handle_dispatch_result({redirect, Site, NewPathOrURI, IsPermanent}, Req, _Env) ->
+    cast_metrics_data(#{site => Site}, Req),
+    redirect_when_running(Site, NewPathOrURI, IsPermanent, Req);
+handle_dispatch_result({redirect_protocol, Protocol, Host, IsPermanent}, Req, _Env) ->
+    Uri = iolist_to_binary([
+                            z_convert:to_binary(Protocol),
+                            <<"://">>,
+                            Host,
+                            raw_path(Req)]),
+    redirect(Uri, IsPermanent, Req);
+handle_dispatch_result({stop_request, RespCode}, Req, Env) ->
+    stop_request(RespCode, Req, Env).
+
 
 %% @doc Match the host and path to a dispatch rule.
 -spec dispatch(cowboy_req:req(), cowboy_middleware:env()) -> dispatch().
@@ -244,6 +238,16 @@ raw_path(Req) ->
 redirect(Uri, IsPermanent, Req) ->
     Req1 = cowboy_req:set_resp_header(<<"location">>, Uri, set_server_header(Req)),
     {stop, cowboy_req:reply(case IsPermanent of true -> 301; false -> 302 end, Req1)}.
+
+redirect_when_running(Site, Path, IsPermanent, Req) ->
+    case z_sites_manager:wait_for_running(Site) of
+        ok ->
+            Uri = z_context:abs_url(Path, z_context:new(Site)),
+            redirect(Uri, IsPermanent, Req);
+        {error, _} ->
+            {stop_request, 503}
+    end.
+
 
 %% ---------------------------------------------------------------------------------------
 
@@ -897,3 +901,7 @@ add_port(_, Hostname, Port) ->
 
 count_request(Site) ->
     exometer:update([zotonic, Site, webzmachine, requests], 1).
+
+cast_metrics_data(UserData, Req) ->
+    cowboy_req:cast({set_options, #{metrics_user_data => UserData}}, Req).
+
