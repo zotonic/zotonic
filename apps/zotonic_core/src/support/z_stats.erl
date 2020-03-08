@@ -53,23 +53,45 @@ init_site(Host) ->
 
 %% @doc Collect log data from webzmachine and update webzmachine metrics
 %%
-log_access(_LogData) ->
+
+log_access(MetricsData) ->
+    Site = get_site(MetricsData),
+
+    try
+        count_request(Site),
+        measure_duration(Site, duration(maps:get(req_start, MetricsData), maps:get(resp_end, MetricsData))),
+        measure_data_out(Site, maps:get(resp_body_length, MetricsData))
+    after
+        z_access_syslog:log_access(MetricsData)
+    end.
+
+
+count_request(Site) when is_atom(Site) ->
+    exometer:update([zotonic, Site, webzmachine, requests], 1).
+
+measure_duration(Site, Duration) when is_integer(Duration) ->
+    exometer:update([zotonic, Site, webzmachine, duration], Duration);
+measure_duration(_Site, _) ->
     ok.
 
-% log_access(#wm_log_data{finish_time=undefined}=LogData) ->
-%     log_access(LogData#wm_log_data{finish_time=os:timestamp()});
-% log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
-%                         response_length=ResponseLength}=LogData) when StartTime =/= undefined ->
-%     try
-%         %% The request has already been counted by z_sites_dispatcher.
-%         Host = webmachine_logger:get_metadata(zotonic_host, LogData),
-%         exometer:update([zotonic, Host, webzmachine, duration], timer:now_diff(FinishTime, StartTime)),
-%         exometer:update([zotonic, Host, webzmachine, data_out], ResponseLength)
-%     after
-%         z_access_syslog:log_access(LogData)
-%     end.
+measure_data_out(Site, DataOut) when is_integer(DataOut) ->
+    exometer:update([zotonic, Site, webzmachine, data_out], DataOut);
+measure_data_out(_Site, _DataOut) ->
+    ok.
+
 
 %%
 %% Helpers
 %%
+
+% @private Return the site name from the user-data
+get_site(#{user_data := #{site := Site}}) -> Site;
+get_site(#{}) -> undefined.
+
+% @private Return the duration in microseconds.
+duration(undefined, _) -> undefined;
+duration(_, undefined) -> undefined;
+duration(Start, End) ->
+    erlang:convert_time_unit(End-Start, native, microsecond).
+
 
