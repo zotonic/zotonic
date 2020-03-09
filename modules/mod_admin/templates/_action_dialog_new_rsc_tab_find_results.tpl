@@ -10,8 +10,12 @@
 
 <div id="dialog_new_rsc_results">
     {% with m.search.paged[
-            {query text=text cat=cat page=1 pagelen=10
-                   creator_id=creator_id content_group=content_group
+            {query page=1 pagelen=10
+                   text=text
+                   cat=cat
+                   creator_id=creator_id
+                   content_group=content_group
+                   cat_exclude=cat_exclude
                    zsort="-modified"
             }]
         as result
