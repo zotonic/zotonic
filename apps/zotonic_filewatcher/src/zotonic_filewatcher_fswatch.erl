@@ -79,7 +79,8 @@ init([Executable]) ->
     State = #state{
         executable = Executable,
         port = undefined,
-        pid = undefined
+        pid = undefined,
+        data = <<>>
     },
     timer:send_after(100, start),
     {ok, State}.
