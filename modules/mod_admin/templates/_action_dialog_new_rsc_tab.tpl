@@ -31,7 +31,9 @@
 	<div id="{{ #newform }}" class="form-panel">
 		{% with 'dialog-new-rsc-tab' as form %}
 
-			<h4>{_ Make a new page or media _}</h4>
+			{% block new_rsc_header %}
+				<h4>{_ Make a new page or media _}</h4>
+			{% endblock %}
 
 			{% if (not nocatselect or m.category[cat].is_a.media)
 				and (not predicate
@@ -222,13 +224,15 @@
 				</div>
 			{% endblock %}
 
-		    <div class="modal-footer">
-			    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-			    <button class="btn btn-primary" type="submit">
-			    	{_ Create _} {{ catname }}
-			    	{% if is_zlink %} &amp; {_ Link _}{% elseif subject_id or object_id %} &amp; {_ Connect _}{% endif %}
-			    </button>
-		    </div>
+			{% block new_rsc_footer %}
+			    <div class="modal-footer">
+				    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+				    <button class="btn btn-primary" type="submit">
+				    	{_ Create _} {{ catname }}
+				    	{% if is_zlink %} &amp; {_ Link _}{% elseif subject_id or object_id %} &amp; {_ Connect _}{% endif %}
+				    </button>
+			    </div>
+			{% endblock %}
 		{% endwith %}
 	</div>
 
