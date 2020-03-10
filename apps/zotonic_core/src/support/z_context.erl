@@ -1009,7 +1009,6 @@ set_security_headers(Context) ->
     end,
     SecurityHeaders = case z_notifier:first(#security_headers{ headers = HSTSHeaders }, Context) of
         undefined -> HSTSHeaders;
-        undefined -> Default1;
         Custom -> Custom
     end,
     cowmachine_req:set_resp_headers(SecurityHeaders, Context).
@@ -1034,7 +1033,7 @@ hsts_header(Context) ->
                 {<<"strict-transport-security">>, HSTS}
             end,
             z_depcache:memo(F, hsts_header, ?DAY, [config], Context);
-        _ ->
+        false ->
             undefined
     end.
 
