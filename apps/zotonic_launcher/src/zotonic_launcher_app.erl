@@ -24,7 +24,9 @@
 -export([
     start/0,
     start/2,
-    stop/1
+    stop/1,
+
+    is_root/0
 ]).
 
 %%====================================================================
@@ -35,9 +37,21 @@ start() ->
     zotonic_core:setup(),
     ensure_started(zotonic_launcher).
 
+
 start(_StartType, _StartArgs) ->
-    write_pidfile(),
-    zotonic_launcher_sup:start_link().
+    case is_root() of
+        true ->
+            lager:critical("Not running as root."),
+            {error, not_running_as_root};
+        false ->
+            write_pidfile(),
+            zotonic_launcher_sup:start_link()
+    end.
+
+
+-spec is_root() -> boolean().
+is_root() ->
+    os:getenv("USER") =:= "root".
 
 %%--------------------------------------------------------------------
 stop(_State) ->

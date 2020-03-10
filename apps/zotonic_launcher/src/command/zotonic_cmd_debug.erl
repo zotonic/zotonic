@@ -23,9 +23,15 @@
 -export([run/1]).
 
 run(_) ->
-    case zotonic_command:base_cmd() of
-        {ok, BaseCmd} ->
-            io:format("~s", [ BaseCmd ++ " -sasl errlog_type error -s zotonic " ]);
-        {error, _} = Error ->
-            zotonic_command:format_error(Error)
+    case zotonic_launcher_app:is_root() of
+        true ->
+            zotonic_command:format_error({error, not_running_as_root}),
+            halt(1);
+        false ->
+            case zotonic_command:base_cmd() of
+                {ok, BaseCmd} ->
+                    io:format("~s", [ BaseCmd ++ " -sasl errlog_type error -s zotonic " ]);
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end
     end.
