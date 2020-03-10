@@ -91,6 +91,7 @@ rpc(Module, Function, Args) ->
             Error
     end.
 
+
 format_error({error, long}) ->
     io:format(standard_error,
               "Zotonic is configured to run as distributed node, but your hostname is "
@@ -120,6 +121,12 @@ format_error({error, {config_file, consult_error, File, {Line, erl_parse, Msg}}}
     halt(1);
 format_error({error, {config_file, Reason, File, Extra}}) ->
     io:format(standard_error, "Error reading config file '~s': ~p~n~p~n", [ File, Reason, Extra ]),
+    halt(1);
+format_error({error, not_running_as_root}) ->
+    io:format(standard_error,
+              "Running Zotonic as root is extremely dangerous and not supported.~n"
+              "Try again using a regular user account.~n",
+              []),
     halt(1);
 format_error({error, Reason}) ->
     io:format(standard_error, "Error: ~p~n", [ Reason ]),

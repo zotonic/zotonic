@@ -23,18 +23,24 @@
 -export([run/1]).
 
 run(_) ->
-    case heart(os:getenv("HEART")) of
-        {ok, HeartEnv} ->
-            case zotonic_command:base_cmd() of
-                {ok, BaseCmd} ->
-                    io:format("~s ~s -heart -detached -s zotonic", [ BaseCmd, HeartEnv ]);
-                {error, Error} ->
-                    io:format(standard_error, "~s", [ Error ]),
+    case zotonic_launcher_app:is_root() of
+        true ->
+            zotonic_command:format_error({error, not_running_as_root}),
+            halt(1);
+        false ->
+            case heart(os:getenv("HEART")) of
+                {ok, HeartEnv} ->
+                    case zotonic_command:base_cmd() of
+                        {ok, BaseCmd} ->
+                            io:format("~s ~s -heart -detached -s zotonic", [ BaseCmd, HeartEnv ]);
+                        {error, Error} ->
+                            io:format(standard_error, "~s", [ Error ]),
+                            halt(1)
+                    end;
+                {error, _} ->
+                    io:format(standard_error, "Too many restarts, stopping.~n", []),
                     halt(1)
-            end;
-        {error, _} ->
-            io:format(standard_error, "Too many restarts, stopping.~n", []),
-            halt(1)
+            end
     end.
 
 heart(Heart) when Heart =:= false; Heart =:= "" ->
