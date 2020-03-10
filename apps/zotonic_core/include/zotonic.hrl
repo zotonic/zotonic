@@ -284,6 +284,10 @@
 %% Our default WWW-Authenticate header
 -define(WWW_AUTHENTICATE, <<"OAuth-1.0">>).
 
+%% The default maxage of HSTS. Set to 200 days.
+ -define(HSTS_MAXAGE, 3600*24*200).
+ 
+
 -include("zotonic_notifications.hrl").
 -include("zotonic_log.hrl").
 -include("zotonic_deprecated.hrl").
