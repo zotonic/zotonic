@@ -20,6 +20,7 @@
             "css/zp-menuedit.css"
             "css/z.modal.css"
             "css/z.icons.css"
+            "css/z.bridge.css"
             "css/logon.css"
             "css/jquery.loadmask.css"
             "css/zotonic-admin.css"
@@ -47,6 +48,7 @@
     </div>
 
     {% include "_admin_footer.tpl" %}
+    {% include "_bridge_warning.tpl" %}
 
     {% include "_admin_js_include.tpl" %}
     {% block js_extra %}{% endblock %}
