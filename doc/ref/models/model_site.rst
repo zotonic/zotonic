@@ -56,10 +56,9 @@ Sites have the following default config settings:
 +---------------------------+-------------------------------------------------+-------------------+
 | Property                  | Description                                     | Example value     |
 +===========================+=================================================+===================+
-| environment               | Set the status of the site in a                 | development       |
-|                           | "X-DTAP-Environment" headers. Can be one of     |                   |
-|                           | development, test, acceptance, education or     |                   |
-|                           | backup.                                         |                   |
+| environment               | Set the DTAP status of the site.                | development       |
+|                           | Can be one of production, development, test,    |                   |
+|                           | acceptance, education or backup.                |                   |
 |                           | Default: production                             |                   |
 +---------------------------+-------------------------------------------------+-------------------+
 | hostname                  | The hostname of the site                        | example.com       |
