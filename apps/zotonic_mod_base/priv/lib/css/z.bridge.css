@@ -1,0 +1,34 @@
+/* CSS for bridge connection status */
+.z-bridge-warning {
+  position: fixed;
+  visibility: hidden;
+  bottom: 0;
+  right: -999px;
+  opacity: 0;
+  animation: bridge-warn-display 5s;
+}
+.z-bridge-ok {
+  display: none;
+}
+html.ui-state-bridge-disconnected .z-bridge-warning {
+  visibility: visible;
+  right: 5px;
+  opacity: 1;
+}
+html.ui-state-bridge-connected .z-bridge-ok {
+  display: block;
+}
+@keyframes bridge-warn-display {
+  0% {
+    opacity: 0;
+    right: -999px;
+  }
+  50% {
+    opacity: 0.5;
+    right: 5px;
+  }
+  100% {
+    opacity: 1;
+    right: 5px;
+  }
+}
