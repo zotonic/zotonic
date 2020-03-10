@@ -49,7 +49,7 @@ module to ``localhost``.
 
 
 Default config values
- ---------------------
+---------------------
 
 Sites have the following default config settings:
 
