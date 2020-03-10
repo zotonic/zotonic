@@ -73,12 +73,31 @@ function zotonic_startup() {
         }
     }, { wid: 'zotonicjs'});
 
-    cotonic.broker.subscribe("zotonic-transport/progress", function(msg) {
-        z_progress(msg.payload.form_id, msg.payload.percentage);
-    }, { wid: 'zotonicprogress'});
+    cotonic.broker.subscribe(
+        "zotonic-transport/progress",
+        function(msg) {
+            z_progress(msg.payload.form_id, msg.payload.percentage);
+        }, { wid: 'zotonicprogress'});
+
+
+    // Register the client-id to reuse on subsequent pages
+    cotonic.broker.subscribe(
+            "$bridge/origin/status",
+            function(msg) {
+                if (msg.payload.is_connected) {
+                    cotonic.broker.publish("model/sessionStorage/post/mqtt-origin-client-id", msg.payload.client_id);
+                }
+            }, { wid: "zotonicjs" });
 
     // Start the client-server bridge
-    cotonic.mqtt_bridge.newBridge('origin');
+    cotonic.broker.call("model/sessionStorage/get/mqtt-origin-client-id")
+        .then(
+            function(msg) {
+                cotonic.mqtt_bridge.newBridge('origin', {
+                    client_id: msg.payload || '',
+                    clean_start: true
+                });
+            });
 }
 
 

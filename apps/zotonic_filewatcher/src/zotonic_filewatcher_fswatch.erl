@@ -33,6 +33,7 @@
 -record(state, {
     pid :: pid() | undefined,
     port :: integer() | undefined,
+    data :: binary(),
     executable :: string()
 }).
 
@@ -78,7 +79,8 @@ init([Executable]) ->
     State = #state{
         executable = Executable,
         port = undefined,
-        pid = undefined
+        pid = undefined,
+        data = <<>>
     },
     timer:send_after(100, start),
     {ok, State}.
@@ -101,13 +103,14 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 %% @doc Reading a line from the fswatch program.
-handle_info({stdout, _Port, FilenameFlags}, #state{} = State) ->
+handle_info({stdout, _Port, FilenameFlags}, #state{ data = Data } = State) ->
+    {FVs, Rest} = extract_filename_verb( <<Data/binary, FilenameFlags/binary>>),
     lists:map(
         fun({Filename, Verb}) ->
             zotonic_filewatcher_handler:file_changed(Verb, Filename)
         end,
-        extract_filename_verb(FilenameFlags)),
-    {noreply, State};
+        FVs),
+    {noreply, State#state{ data = Rest }};
 
 handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
     lager:error("[fswatch] fswatch port closed with ~p, restarting in 5 seconds.", [Reason]),
@@ -166,12 +169,14 @@ start_fswatch(State=#state{executable = Executable, port = undefined}) ->
     {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
     State#state{
         port = Port,
-        pid = Pid
+        pid = Pid,
+        data = <<>>
     }.
 
 extract_filename_verb(Line) ->
-    Lines = binary:split(Line, <<0>>, [global]),
-    lists:foldr(fun split_line/2, [], Lines).
+    [ Rest | Lines ] = lists:reverse( binary:split(Line, <<0>>, [global]) ),
+    FVs = lists:foldl(fun split_line/2, [], Lines),
+    {FVs, Rest}.
 
 split_line(<<>>, Acc) ->
     Acc;
