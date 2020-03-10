@@ -36,6 +36,7 @@ Other notifications
 .. include:: includes/search_query.rst
 .. include:: includes/service_authorize.rst
 .. include:: includes/ssl_options.rst
+.. include:: includes/tick.rst
 .. include:: includes/tkvstore_delete.rst
 .. include:: includes/tkvstore_get.rst
 .. include:: includes/tkvstore_put.rst
