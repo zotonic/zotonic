@@ -23,6 +23,10 @@ html.ui-state-bridge-connected .z-bridge-ok {
     opacity: 0;
     right: -999px;
   }
+  25% {
+    opacity: 0;
+    right: -200px;
+  }
   50% {
     opacity: 0.5;
     right: 5px;
