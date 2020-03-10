@@ -10,7 +10,7 @@
 			"css/admin-frontend.css"
 			"css/jquery-ui.datepicker.css"
             "css/jquery.timepicker.css"
-            "font-awesome/css/font-awesome.min.css"
+            "font-awesome/css/font-awesome.css"
 	%}
 {% endblock %}
 
