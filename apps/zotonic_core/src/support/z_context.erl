@@ -1003,11 +1003,41 @@ set_security_headers(Context) ->
         true -> Default;
         false -> [ {<<"x-frame-options">>, <<"sameorigin">>} | Default ]
     end,
-    SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
+    HSTSHeaders = case hsts_header(Context) of
+        {_,_} = H -> [ H | Default1 ];
+        _ -> Default1
+    end,
+    SecurityHeaders = case z_notifier:first(#security_headers{ headers = HSTSHeaders }, Context) of
+        undefined -> HSTSHeaders;
         undefined -> Default1;
         Custom -> Custom
     end,
     cowmachine_req:set_resp_headers(SecurityHeaders, Context).
+
+%% @doc Create a hsts header based on the current settings. The result is cached
+%%      for quick access.
+-spec hsts_header( z:context() ) -> undefined | {_, _}.
+hsts_header(Context) ->
+    case z_convert:to_bool(m_config:get_value(site, hsts, false, Context)) of
+        true ->
+            F = fun() ->
+                MaxAge = z_convert:to_integer(m_config:get_value(site, hsts_maxage, ?HSTS_MAXAGE, Context)),
+                IncludeSubdomains = z_convert:to_bool(m_config:get_value(site, hsts_include_subdomains, false, Context)),
+                Preload = z_convert:to_bool(m_config:get_value(site, preload, false, Context)),
+                Options = case {IncludeSubdomains, Preload} of
+                    {true, true} -> <<"; includeSubDomains; preload">>;
+                    {true, _} -> <<"; includeSubDomains">>;
+                    {_, true} -> <<"; preload">>;
+                    {_, _} -> <<"">>
+                end,
+                HSTS = iolist_to_binary([ <<"max-age=">>, z_convert:to_binary(MaxAge), Options ]),
+                {<<"strict-transport-security">>, HSTS}
+            end,
+            z_depcache:memo(F, hsts_header, ?DAY, [config], Context);
+        _ ->
+            undefined
+    end.
+
 
 %% @doc Set Cross-Origin Resource Sharing (CORS) headers. The caller must
 %%      specify default headers to be used in case there are no observers for
