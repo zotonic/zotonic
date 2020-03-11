@@ -548,9 +548,9 @@ post_check({ok, RscId}, QueryArgs, Context) ->
 post_check(Error, _QueryArgs, _Context) ->
     Error.
 
-check_username_pw_1(<<"admin">>, "", _Context) ->
+check_username_pw_1(_Username, "", _Context) ->
     {error, password};
-check_username_pw_1(<<"admin">>, <<>>, _Context) ->
+check_username_pw_1(_Username, <<>>, _Context) ->
     {error, password};
 check_username_pw_1(<<"admin">>, Password, Context) ->
     Password1 = z_convert:to_binary(Password),

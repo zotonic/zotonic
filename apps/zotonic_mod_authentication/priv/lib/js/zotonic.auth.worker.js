@@ -154,7 +154,8 @@ model.present = function(data) {
                     cmd: "logon",
                     username: data.username,
                     password: data.password,
-                    passcode: data.passcode
+                    passcode: data.passcode,
+                    setautologon: !!data.setautologon
                 })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
@@ -444,7 +445,8 @@ actions.logon = function(data) {
         logon: true,
         username: data.username,
         password: data.password,
-        passcode: data.passcode
+        passcode: data.passcode,
+        setautologon: data.rememberme ? true : false
     };
     model.present(dataLogon)
 }
@@ -455,6 +457,7 @@ actions.logonForm = function(data) {
         username: data.value.username,
         password: data.value.password,
         passcode: data.value.passcode,
+        setautologon: data.value.rememberme ? true : false,
         onauth: data.value.onauth
     }
     model.present(dataLogon);
@@ -517,6 +520,7 @@ actions.resetPassword = function(msg) {
         password: msg.payload.password,
         secret: msg.payload.secret,
         passcode: msg.payload.passcode,
+        setautologon: msg.payload.rememberme ? true : false,
         onauth: msg.payload.onauth || null
     };
     model.present(data);

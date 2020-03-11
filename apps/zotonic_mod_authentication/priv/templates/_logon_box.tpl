@@ -2,6 +2,8 @@
     Render the logon_box contents with the correct sub-template.
     This template is rendered by the zotonic.auth-ui.worker.js
 #}
+{% with q.error == 'passcode' or q.error == 'need_passcode' as is_show_passcode %}
+
 {% if q.logon_view == 'reminder' %}
 
     {% include "_logon_box_view.tpl"
@@ -102,3 +104,6 @@
     %}
 
 {% endif %}
+
+{% endwith %}
+

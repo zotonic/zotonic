@@ -95,7 +95,8 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
             % - (set cookie in handlers - like device-id) --> needs notification
             Options = z_context:get(auth_options, Context, #{}),
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
-            status(Payload, Context2);
+            Context3 = maybe_setautologon(Payload, Context2),
+            status(Payload, Context3);
         {error, user_not_enabled} ->
             case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
                 false ->
@@ -119,8 +120,10 @@ logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
     end;
 logon_1({error, ratelimit}, _Payload, Context) ->
     { #{ status => error, error => ratelimit }, Context };
-logon_1({error, need2fa}, _Payload, Context) ->
-    { #{ status => error, error => need2fa }, Context };
+logon_1({error, need_passcode}, _Payload, Context) ->
+    { #{ status => error, error => need_passcode }, Context };
+logon_1({error, passcode}, _Payload, Context) ->
+    { #{ status => error, error => passcode }, Context };
 logon_1({error, _Reason}, _Payload, Context) ->
     % Hide other error codes, map to generic 'pw' error
     { #{ status => error, error => pw }, Context };
@@ -171,7 +174,6 @@ refresh(Payload, Context) ->
     status(Payload, Context1).
 
 %% @doc Set an autologon cookie for the current user
-%% @todo Do not set the cookie if the user has 2fa enabled
 -spec setautologon( map(), z:context() ) -> { map(), z:context() }.
 setautologon(_Payload, Context) ->
     case z_acl:user(Context) of
@@ -181,6 +183,18 @@ setautologon(_Payload, Context) ->
             Context1 = z_authentication_tokens:set_autologon_cookie(UserId, Context),
             { #{ status => ok }, Context1 }
     end.
+
+%% @doc Set the autologon cookie for the user if the flag was speficied in the request.
+-spec maybe_setautologon( map(), z:context() ) -> z:context().
+maybe_setautologon(#{ <<"setautologon">> := SetAutoLogon }, Context) ->
+    case z_convert:to_bool(SetAutoLogon) of
+        true ->
+            z_authentication_tokens:set_autologon_cookie(z_acl:user(Context), Context);
+        false ->
+            z_authentication_tokens:reset_autologon_cookie(Context)
+    end;
+maybe_setautologon(_Payload, Context) ->
+    z_authentication_tokens:reset_autologon_cookie(Context).
 
 %% @doc Set an autologon cookie for the current user
 %% @todo Do not set the cookie if the user has 2fa enabled

@@ -25,9 +25,9 @@
     <div class="col-md-9">
         <input class="form-control" type="password" id="new_password" name="new_password" value="{{ password|escape }}" autocomplete="new-password" />
         {% if m.config.mod_admin_identity.password_regex.value %}
-            {% validate id="new_password" type={presence} type={format pattern=m.config.mod_admin_identity.password_regex.value failure_message=_"This password does not meet the security requirements"} %}
+            {% validate id="new_password" type={format pattern=m.config.mod_admin_identity.password_regex.value failure_message=_"This password does not meet the security requirements"} %}
         {% else %}
-            {% validate id="new_password" type={presence} %}
+            {% validate id="new_password" type={length minimum=m.authentication.password_min_length} %}
         {% endif %}
     </div>
 </div>

@@ -8,6 +8,7 @@
 
  % For simple dispatching in the templates (without the "logon_view")
  {logon_reset,      ["logon", "reset"],                   controller_template, [ {template, "logon.tpl"} ]},
+ {logon_reminder,   ["logon", "reminder"],                controller_template, [ {template, "logon.tpl"} ]},
 
  % Authentication API used by zotonic.auth.worker.js
  {logon_auth,       [ "zotonic-auth" ],     controller_authentication, []},

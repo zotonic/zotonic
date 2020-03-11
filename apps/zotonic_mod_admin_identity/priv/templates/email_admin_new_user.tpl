@@ -1,13 +1,13 @@
 {% extends "email_base.tpl" %}
 
 {% block title %}
-    {_ Your login details for _} {{ m.site.title }}
+    {_ Your login details for _} {{ m.site.title|default:m.site.hostname }}
 {% endblock %}
 
 {% block body %}
     <p>{_ Hi _}, {{ id.title }}!</p>
 
-    <p>{_ You have been granted access to _} {{ m.site.title }}. {_ You can now login to the admin, on the following URL: _}</p>
+    <p>{_ You have been granted access to _} {{ m.site.title|default:m.site.hostname }}. {_ You can now login to the admin, on the following URL: _}</p>
 
     <p><a href="{% url admin absolute_url %}">{% url admin absolute_url %}</a></p>
 
