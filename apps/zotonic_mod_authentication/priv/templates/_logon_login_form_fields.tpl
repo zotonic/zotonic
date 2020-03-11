@@ -23,8 +23,7 @@
         <div class="form-group passcode">
             <label for="password" class="control-label">{_ Passcode _}</label>
             <input class="form-control" type="text" id="passcode" name="passcode" value=""
-                   {% if is_show_passcode %}autofocus required{% endif %} r
-                   autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*"
+                   autofocus required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]+"
                    placeholder="{_ Two-factor passcode _}" />
         </div>
     {% endblock %}
