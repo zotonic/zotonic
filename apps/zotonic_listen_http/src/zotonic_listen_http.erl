@@ -235,8 +235,10 @@ ip_to_string(IP) -> inet:ntoa(IP).
 cowboy_options() ->
     #{
         middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
+        stream_handlers => [ cowboy_metrics_h, cowboy_stream_h ],
         request_timeout => ?HTTP_REQUEST_TIMEOUT,
-        env => #{}
+        env => #{},
+        metrics_callback => fun z_stats:log_access/1
     }.
 
 %% @todo Exclude platforms that do not support raw ipv6 socket options
