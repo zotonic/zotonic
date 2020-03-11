@@ -51,12 +51,48 @@ start_link() ->
 start_link(Ident, Opts, Facility, Level) ->
     z_buffered_worker:start_link(?MODULE, ?MODULE, [[Ident, Opts, Facility], Level]).
 
-log_access(_LogData) ->
+log_access(#{}=MetricData) ->
+    ?DEBUG(maps:keys(MetricData)),
+
+    Size = maps:get(resp_body_length, MetricData, 0),
+
+    ReqInfo = maps:get(req, MetricData, #{}),
+
+    ReqStart = maps:get(req_start, MetricData, 0),
+    StartTime = monotonic_time_to_timestamp(ReqStart),
+
+    Path = maps:get(path, ReqInfo, undefined),
+    Method = maps:get(method, ReqInfo, undefined),
+    Version = maps:get(version, ReqInfo, undefined),
+
+    Headers = maps:get(headers, ReqInfo, #{}),
+
+    UserAgent = maps:get(<<"user-agent">>, Headers, undefined),
+    Referer = maps:get(<<"referer">>, Headers, undefined),
+
+    UserData = maps:get(user_data, MetricData, #{}),
+    Site = maps:get(site, UserData, undefined),
+    Dispatch = maps:get(dispatch_rule, UserData, undefined),
+
+    % ?DEBUG(MetricData),
+
+    ?DEBUG({z_convert:to_binary(fmt_time(StartTime)), Version, Method, Site, Dispatch, Path, Size, Referer, UserAgent}),
+
     ok.
+
+monotonic_time_to_timestamp(Time) ->
+    T = erlang:convert_time_unit(Time, native, second) + erlang:time_offset(second),
+
+    MegaSecs = TO div 1000000,
+    Secs =     TO rem 1000000 ,
+    MicroSecs = 0,
+
+    {MegaSecs, Secs, MicroSecs}.
 
 % log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
 %         method=Method, response_code=Status,
 %         path=Path, headers=Headers, response_length=Size}) ->
+%         
 %     MD = [{start_time, StartTime},
 %         {finish_time, FinishTime},
 %         {method, Method},

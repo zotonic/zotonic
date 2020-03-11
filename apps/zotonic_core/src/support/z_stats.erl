@@ -67,7 +67,9 @@ log_access(MetricsData) ->
 
     try
         count_request(Site),
-        measure_duration(Site, duration(maps:get(req_start, MetricsData), maps:get(resp_end, MetricsData))),
+        measure_duration(Site,
+                         duration(maps:get(req_start, MetricsData, undefined),
+                                  maps:get(resp_end, MetricsData, undefined))),
         measure_data_out(Site, maps:get(resp_body_length, MetricsData))
     after
         z_access_syslog:log_access(MetricsData)
