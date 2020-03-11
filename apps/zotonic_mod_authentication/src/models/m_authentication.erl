@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2020 Marc Worrell
 %% @doc Model for mod_authentication
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -164,8 +164,8 @@ set_reminder_secret(Id, Context) ->
 
 %% @doc If authentication was possible, then return auth tokens and cookie url.
 -spec auth_tokens( map(), z:context() ) -> {ok, map()} | {error, term()}.
-auth_tokens( #{ <<"username">> := Username, <<"password">> := Password }, Context) ->
-    case m_identity:check_username_pw(Username, Password, Context) of
+auth_tokens( #{ <<"username">> := Username, <<"password">> := Password } = QArgs, Context) ->
+    case m_identity:check_username_pw(Username, Password, QArgs, Context) of
         {ok, UserId} ->
             UserSecret = user_auth_key(UserId, Context),
             {ok, #{

@@ -3,7 +3,7 @@
     <label class="control-label" for="password_reset1">{_ New password _}</label>
     <input class="do_autofocus form-control" type="password"
            id="password_reset1" name="password_reset1" value=""
-           required autocomplete="off" />
+           required autocomplete="new-password" />
 </div>
 {% endwith %}
 
@@ -11,7 +11,7 @@
     <label class="control-label" for="password_reset2">{_ Repeat password _}</label>
     <input class="form-control" type="password"
            id="password_reset2" name="password_reset2" value=""
-           required autocomplete="off" />
+           required autocomplete="new-password" />
 </div>
 
 <div class="form-group">
