@@ -507,8 +507,10 @@ check_username_pw(Username, Password, Context) ->
 
 %% @doc Return the rsc_id with the given username/password.
 %%      If succesful then updates the 'visited' timestamp of the entry.
--spec check_username_pw(binary() | string(), binary() | string(), list(), z:context()) ->
+-spec check_username_pw(binary() | string(), binary() | string(), list() | map(), z:context()) ->
             {ok, m_rsc:resource_id()} | {error, term()}.
+check_username_pw(Username, Password, QueryArgs, Context) when is_map(QueryArgs) ->
+    check_username_pw(Username, Password, maps:to_list(QueryArgs), Context);
 check_username_pw(Username, Password, QueryArgs, Context) ->
     NormalizedUsername = z_convert:to_binary( z_string:trim( z_string:to_lower(Username) ) ),
     case z_notifier:first(#auth_precheck{ username =  NormalizedUsername }, Context) of
