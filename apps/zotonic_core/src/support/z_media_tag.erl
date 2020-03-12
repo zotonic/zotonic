@@ -180,7 +180,7 @@ tag1(MediaRef, Filename, Options, Context) ->
         true ->
             TagOpts;
         false ->
-            {ok, MCOpts} = z_mediaclass:expand_mediaclass(Options1, Context),
+            {ok, SizeOptions} = z_mediaclass:expand_mediaclass(Options1, Context),
             % Calculate the default width/height
             case z_media_preview:size(MediaRef, SizeOptions, Context) of
                 {size, Width, Height, _Mime} ->
