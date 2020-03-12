@@ -489,7 +489,7 @@ valid_config_language(undefined, Context, Tries) ->
     valid_config_language(Default, Context, [ Default, undefined | Tries ]);
 valid_config_language(Code, Context, Tries) ->
     EnabledLanguages = enabled_languages(Context),
-    case proplists:get_value(Code, EnabledLanguages) of
+    case proplists:get_value(Code, EnabledLanguages, false) of
         false ->
             % Language code is not listed in config, let's try a fallback
             Fallback = z_language:fallback_language(Code, Context),
