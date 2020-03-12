@@ -1888,7 +1888,7 @@ li h3.widget-header {
 .environment-acceptance body,
 .environment-education body,
 .environment-backup body {
-  padding-left: 28px;
+  padding-left: 24px;
 }
 @media (min-width: 480px) {
   .environment-development body::before,
