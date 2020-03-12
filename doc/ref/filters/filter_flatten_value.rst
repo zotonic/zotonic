@@ -1,11 +1,10 @@
-.. highlight:: django
 .. include:: meta-flatten_value.rst
 
 Flatten a list to a comma separated string.
 
 Example::
 
-    {{ [ "a", 100 `c` ]|flatten_value }}
+    {{ [ "a", 100, `c` ]|flatten_value }}
 
 Gives:
 
