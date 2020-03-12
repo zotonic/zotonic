@@ -43,7 +43,7 @@
 m_get([ rewrite_url | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_translation, rewrite_url, true, Context), Rest}};
 m_get([ force_default | Rest ], _Msg, Context) ->
-    {ok, {m_config:get_boolean(mod_translation, rewrite_url, false, Context), Rest}};
+    {ok, {m_config:get_boolean(mod_translation, force_default, false, Context), Rest}};
 m_get([ language | Rest ], _Msg, Context) ->
     {ok, {z_context:language(Context), Rest}};
 m_get([ language_list_configured | Rest ], _Msg, Context) ->
