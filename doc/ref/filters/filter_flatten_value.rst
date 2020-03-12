@@ -6,7 +6,7 @@ Example::
 
     {{ [ "a", 100, `c` ]|flatten_value }}
 
-Gives:
+Gives::
 
     a,100,c
 
