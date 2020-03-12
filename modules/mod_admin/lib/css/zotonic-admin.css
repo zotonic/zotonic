@@ -835,6 +835,10 @@ option[value=""][disabled] {
 option {
   color: black;
 }
+img {
+  max-width: 100%;
+  height: auto;
+}
 img.thumb {
   padding: 0;
   -webkit-border-radius: 0;
@@ -843,10 +847,6 @@ img.thumb {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-}
-img.admin-list-overview {
-  width: 80px;
-  height: 60px;
 }
 .widget.admin-logon {
   margin: 100px auto;

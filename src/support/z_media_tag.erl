@@ -131,9 +131,10 @@ viewer(Filename, Options, Context) ->
     %% @doc Try to generate Html for the media reference.  First check if a module can do this, then
     %% check the normal image tag.
     viewer1(Id, Props, FilePath, Options, Context) ->
-        case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options}, Context) of
+        Options1 = drop_undefined(Options),
+        case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options1}, Context) of
             {ok, Html} -> {ok, Html};
-            undefined -> tag(Props, Options, Context)
+            undefined -> tag(Props, Options1, Context)
         end.
 
 
@@ -176,38 +177,59 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
         tag1(FilePath, Filename, Options, Context);
     tag1(MediaRef, Filename, Options, Context) ->
-        {url, Url, TagOpts, ImageOpts} = url1(Filename, Options, Context),
-        TagOpts1 =
-            case proplists:get_value(mediaclass, Options) of
-                undefined ->
-                    % Calculate the real size of the image using the options
-                    case z_media_preview:size(MediaRef, ImageOpts, Context) of
-                        {size, Width, Height, _Mime} ->
-                            [{width,Width},{height,Height}|TagOpts];
-                        _ ->
-                            TagOpts
-                    end;
-                MC ->
-                    % Add the mediaclass to the tag's class attribute
-                    case proplists:get_value(class, TagOpts) of
-                        undefined -> [{class, MC} | TagOpts];
-                        Class -> [{class, iolist_to_binary([MC, 32, Class])} | proplists:delete(class, TagOpts)]
-                    end
-            end,
+        Options1 = drop_undefined(Options),
+        {url, Url, TagOpts, _ImageOpts} = url1(Filename, Options1, Context),
+        % Expand the mediaclass for the correct size options
+        TagOpts1 = case z_convert:to_bool( proplists:get_value(nowh, Options1, false) ) of
+            true ->
+                TagOpts;
+            false ->
+                SizeOptions = case z_mediaclass:expand_mediaclass(Options1, Context) of
+                    {ok, MCOpts} -> MCOpts;
+                    {error, _} -> Options1
+                end,
+                % Calculate the default width/height
+                case z_media_preview:size(MediaRef, SizeOptions, Context) of
+                    {size, Width, Height, _Mime} ->
+                        [{width,Width},{height,Height}|TagOpts];
+                    _ ->
+                        TagOpts
+                end
+        end,
+        % Add the mediaclass to the tag's class attribute
+        TagOpts2 = case proplists:get_value(mediaclass, Options1) of
+            undefined ->
+                TagOpts1;
+            MC ->
+                case proplists:get_value(class, TagOpts1) of
+                    undefined -> [{class, MC} | TagOpts1];
+                    Class -> [{class, iolist_to_binary([MC, 32, Class])} | proplists:delete(class, TagOpts1)]
+                end
+        end,
         % Make sure the required alt tag is present
-        TagOpts2 =  case proplists:get_value(alt, TagOpts1) of
-                        undefined -> [{alt,""}|TagOpts1];
-                        _ -> TagOpts1
-                    end,
+        TagOpts3 =  case proplists:get_value(alt, TagOpts2) of
+            undefined -> [{alt,""}|TagOpts2];
+            _ -> TagOpts1
+        end,
         % Filter some opts
         case proplists:get_value(link, TagOpts) of
             None when None =:= []; None =:= <<>>; None =:= undefined ->
-                {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts2]))};
+                {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts3]))};
             Link ->
                 HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
-                Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts2)]),
+                Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts3)]),
                 {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
         end.
+
+drop_undefined(L) when is_list(L) ->
+    lists:filter(
+        fun
+            ({_K, undefined}) -> false;
+            (undefined) -> false;
+            (_) -> true
+        end,
+        L).
+
 
 get_link(Media, true, Context) ->
     Id = media_id(Media),
