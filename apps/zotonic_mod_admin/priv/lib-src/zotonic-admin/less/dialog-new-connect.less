@@ -24,9 +24,9 @@
         }
 
         > .form-panel {
-            -ms-grid-column: 1;
+            -ms-grid-column: 2;
             -ms-grid-row: 1;
-            grid-column: 1;
+            grid-column: 2;
             grid-row: 1;
 
             background-color: white;
@@ -35,9 +35,9 @@
             overflow-y: auto;
         }
         > .rsc-preview-panel-wrapper {
-            -ms-grid-column: 1;
+            -ms-grid-column: 2;
             -ms-grid-row: 1;
-            grid-column: 1;
+            grid-column: 2;
             grid-row: 1;
 
             position: relative;
@@ -68,10 +68,10 @@
 
         }
         > .new-find-results {
-            -ms-grid-column: 2;
+            -ms-grid-column: 1;
             -ms-grid-row: 1;
 
-            grid-column: 2;
+            grid-column: 1;
             grid-row: 1;
 
             display: -ms-grid;
@@ -85,9 +85,9 @@
             max-height: 100%;
             padding: 10px 0 0 14px;
             margin-left: 0;
-            border-left: 1px solid @borderColorMediumTransparent;
+            border-right: 1px solid @borderColorMediumTransparent;
 
-            background: linear-gradient(to right, #f8f8f8, white, white);
+            background: linear-gradient(to left, #f8f8f8, white, white);
 
             > .new-find-results-header {
                 -ms-grid-column: 1;
@@ -109,6 +109,10 @@
 
                 overflow-x: hidden;
                 overflow-y: scroll;
+
+                .item {
+                    background-color: white;
+                }
             }
 
             #dialog_new_rsc_results {

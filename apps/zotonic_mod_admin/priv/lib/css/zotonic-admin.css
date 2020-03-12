@@ -413,9 +413,9 @@ fieldset[disabled] .btn-primary.active {
   background-color: rgba(255, 255, 255, 0.8);
 }
 #dialog-new-rsc-tab .new-find-cols > .form-panel {
-  -ms-grid-column: 1;
+  -ms-grid-column: 2;
   -ms-grid-row: 1;
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 1;
   background-color: white;
   padding: 10px 15px 0 15px;
@@ -423,9 +423,9 @@ fieldset[disabled] .btn-primary.active {
   overflow-y: auto;
 }
 #dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper {
-  -ms-grid-column: 1;
+  -ms-grid-column: 2;
   -ms-grid-row: 1;
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 1;
   position: relative;
   background-color: white;
@@ -449,9 +449,9 @@ fieldset[disabled] .btn-primary.active {
   margin: 15px 0;
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results {
-  -ms-grid-column: 2;
+  -ms-grid-column: 1;
   -ms-grid-row: 1;
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 1;
   display: -ms-grid;
   -ms-grid-columns: 1fr;
@@ -462,8 +462,8 @@ fieldset[disabled] .btn-primary.active {
   max-height: 100%;
   padding: 10px 0 0 14px;
   margin-left: 0;
-  border-left: 1px solid rgba(215, 215, 215, 0.7);
-  background: linear-gradient(to right, #f8f8f8, white, white);
+  border-right: 1px solid rgba(215, 215, 215, 0.7);
+  background: linear-gradient(to left, #f8f8f8, white, white);
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results > .new-find-results-header {
   -ms-grid-column: 1;
@@ -482,6 +482,9 @@ fieldset[disabled] .btn-primary.active {
   padding-right: 15px;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+#dialog-new-rsc-tab .new-find-cols > .new-find-results > #dialog-rsc-new-found .item {
+  background-color: white;
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results #dialog_new_rsc_results {
   margin-top: 0;
