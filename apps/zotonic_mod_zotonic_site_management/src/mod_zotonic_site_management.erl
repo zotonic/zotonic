@@ -79,7 +79,7 @@ event(#submit{message=addsite, form=Form}, Context) ->
             notice(Form, Sitename, io_lib:format("~p", [Msg]), Context)
     end.
 
-%% @todo we need a better way to know if a site is up and running
+%% @doc Wait till the site is up and running. Timeout after 100 seconds.
 await(Site) ->
     await(Site, 0).
 
