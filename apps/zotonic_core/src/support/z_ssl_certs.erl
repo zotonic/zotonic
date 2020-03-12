@@ -68,8 +68,8 @@ sni_fun(Hostname) ->
             get_ssl_options(NormalizedHostnameBin, z_context:new(Site));
         {error, nosite} ->
             %% @todo Serve the correct cert for sites that are down or disabled
-            {ok, Hostname} = inet:gethostname(),
-            sni_self_signed(Hostname)
+            {ok, LocalHostname} = inet:gethostname(),
+            sni_self_signed(LocalHostname)
     end.
 
 -spec sni_self_signed( string() | binary() ) -> list( ssl:ssl_option() ) | undefined.
