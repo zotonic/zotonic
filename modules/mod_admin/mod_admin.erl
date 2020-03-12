@@ -224,7 +224,7 @@ event(#postback_notify{message="feedback", trigger=Trigger, target=TargetId}, Co
             end
         end,
         [],
-        [ title, new_rsc_title, name_first, name_surname, email ]),
+        [ find_text, title, new_rsc_title, name_first, name_surname, email ]),
     Text = iolist_to_binary(TextL),
     Category = case z_context:get_q(find_category, Context) of
         undefined -> z_context:get_q(category_id, Context);

@@ -750,9 +750,11 @@ assure_cat_flatten(Names) when is_list(Names) ->
                      case is_list(N) of
                          true ->
                              case z_string:is_string(N) of
-                                 true -> iolist_to_binary(N);
+                                 true -> binary:split(iolist_to_binary(N), <<",">>, [ global ]);
                                  false -> assure_cat_flatten(N)
                              end;
+                         false when is_binary(N) ->
+                             binary:split(N, <<",">>, [ global ]);
                          false ->
                              N
                      end

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-02-25 15:17+0100\n"
+"PO-Revision-Date: 2020-03-05 17:17+0100\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -117,7 +117,7 @@ msgstr "Alle media"
 msgid "All pages"
 msgstr "Alle pagina's"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:11
+#: modules/mod_admin/templates/_admin_system_status.tpl:12
 msgid "Allocated"
 msgstr "Toegewezen"
 
@@ -133,7 +133,7 @@ msgstr "Media-items kunnen een eigen pagina hebben."
 msgid "Any category"
 msgstr "Willekeurige categorie"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:265
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:261
 msgid "Any valid for:"
 msgstr "Geldig voor:"
 
@@ -185,7 +185,7 @@ msgstr "Citaat"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:29
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:18
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:229
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:225
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:78
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:34
 #: modules/mod_admin/templates/_action_dialog_delete_rsc.tpl:6
@@ -196,7 +196,7 @@ msgstr "Citaat"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:176
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:171
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:37
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:40
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_description.tpl:3
@@ -248,11 +248,11 @@ msgstr "Klik om te bekijken."
 msgid "Close"
 msgstr "Sluiten"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:89
+#: modules/mod_admin/templates/_admin_system_status.tpl:91
 msgid "Close Sockets"
 msgstr "Sluit Sockets"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:90
+#: modules/mod_admin/templates/_admin_system_status.tpl:92
 msgid ""
 "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr ""
@@ -270,6 +270,10 @@ msgstr "Samenwerkingsgroepen"
 msgid "Community members"
 msgstr "Leden van deze site"
 
+#: modules/mod_admin/templates/_admin_status_alert.tpl:19
+msgid "Config Files"
+msgstr "Configuratiebestanden"
+
 #: modules/mod_admin/templates/_admin_edit_blocks.tpl:37
 msgid "Confirm block removal"
 msgstr "Bevestig verwijderen van dit blok"
@@ -283,7 +287,7 @@ msgid "Confirm logoff"
 msgstr "Bevestig uitloggen"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:232
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:228
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_preview.tpl:47
 msgid "Connect"
 msgstr "Koppel"
@@ -292,7 +296,7 @@ msgstr "Koppel"
 msgid "Connect a page"
 msgstr "Paginaconnectie maken"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:34
+#: modules/mod_admin/templates/_admin_system_status.tpl:35
 msgid "Connections and Sessions"
 msgstr "Connecties en sessies"
 
@@ -313,17 +317,17 @@ msgstr "Download link is naar het prikbord gekopieerd"
 msgid "Copy download link"
 msgstr "Kopieer download link"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:68
+#: modules/mod_admin/templates/_admin_system_status.tpl:70
 msgid "Count"
 msgstr "Aantal"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:76
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:138
-#: modules/mod_admin/templates/_admin_system_status.tpl:66
+#: modules/mod_admin/templates/_admin_system_status.tpl:68
 msgid "Country"
 msgstr "Land"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:231
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:227
 #: modules/mod_admin/templates/_action_dialog_connect.tpl:42
 msgid "Create"
 msgstr "Maak"
@@ -333,15 +337,11 @@ msgstr "Maak"
 msgid "Create or find"
 msgstr "Maak of vind"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:23
-msgid "Create or search"
-msgstr "Maak of zoek"
-
 #: modules/mod_admin/templates/_rsc_preview.tpl:3
 msgid "Created by"
 msgstr "Gemaakt door"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:283
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:279
 msgid "Created by me"
 msgstr "Gemaakt door mij"
 
@@ -456,6 +456,10 @@ msgstr "Pagina embedden"
 msgid "Emergency telephone"
 msgstr "Noodnummer (telefoon)"
 
+#: modules/mod_admin/templates/_admin_status_alert.tpl:13
+msgid "Erlang Installation Root"
+msgstr "Erlang installatie folder"
+
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:195
 msgid "Error inserting the page."
 msgstr "Fout bij het invoegen van de pagina."
@@ -484,8 +488,8 @@ msgstr ""
 "categorieën zijn hiërarchisch ingedeeld. Zo kun je bijvoorbeeld een "
 "categorie voertuig hebben met daarin subcategorieën auto en fiets."
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:252
-msgid "Existing content"
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:248
+msgid "Existing pages"
 msgstr "Bestaande pagina's"
 
 #: modules/mod_admin/actions/action_admin_dialog_media_upload.erl:178
@@ -527,7 +531,7 @@ msgstr "Zoek pagina"
 msgid "First"
 msgstr "Eerste"
 
-#: modules/mod_admin/templates/admin_status.tpl:18
+#: modules/mod_admin/templates/admin_status.tpl:24
 msgid ""
 "Flush all URL dispatch rules, template- and library caches and other in-"
 "memory cached data."
@@ -535,7 +539,7 @@ msgstr ""
 "Ververs alle URL regels, template- en librarycaches en andere in-memory "
 "caches."
 
-#: modules/mod_admin/templates/admin_status.tpl:17
+#: modules/mod_admin/templates/admin_status.tpl:23
 msgid "Flush system caches"
 msgstr "Flush systeemcache"
 
@@ -568,7 +572,11 @@ msgstr ""
 "zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments"
 "\">documentatie over zoekopdrachten</a> op de Zotonic website."
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:64
+#: modules/mod_admin/templates/_admin_status_alert.tpl:16
+msgid "Home Directory"
+msgstr "Home Folder"
+
+#: modules/mod_admin/templates/_admin_system_status.tpl:66
 msgid "IP Address"
 msgstr "IP-adres"
 
@@ -610,7 +618,7 @@ msgid "Latest modified texts"
 msgstr "Laatste teksten"
 
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:232
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:228
 #: modules/mod_admin/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Link"
 msgstr "Verbind"
@@ -646,6 +654,7 @@ msgstr "Maak een nieuw mediabestand"
 msgid "Make a new page"
 msgstr "Maak een nieuwe pagina"
 
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:34
 #: modules/mod_admin/templates/_admin_dashboard_buttons.tpl:4
 #: modules/mod_admin/templates/admin_overview.tpl:85
 msgid "Make a new page or media"
@@ -677,7 +686,7 @@ msgstr ""
 "Mediabestanden omvatten alle geuploade afbeeldingen, filmpjes en documenten. "
 "Ze kunnen worden gekoppeld aan pagina's."
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:47
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:42
 #: modules/mod_admin/templates/_action_dialog_media_upload_tab_upload.tpl:26
 msgid "Media file"
 msgstr "Mediabestand"
@@ -696,7 +705,7 @@ msgstr "Media op deze pagina"
 msgid "Media title"
 msgstr "Mediatitel"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:6
+#: modules/mod_admin/templates/_admin_system_status.tpl:7
 msgid "Memory"
 msgstr "Geheugen"
 
@@ -734,7 +743,7 @@ msgstr "Modules"
 msgid "More like this"
 msgstr "Vergelijkbare pagina's"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:207
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:202
 msgid "Name"
 msgstr "Naam"
 
@@ -747,7 +756,7 @@ msgstr "Naam"
 msgid "Need more help?"
 msgstr "Meer hulp nodig?"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:39
+#: modules/mod_admin/templates/_admin_system_status.tpl:40
 msgid "Network Connections"
 msgstr "Netwerkverbindingen"
 
@@ -778,11 +787,11 @@ msgstr "Geen media gevonden."
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:61
+#: modules/mod_admin/templates/_admin_system_status.tpl:63
 msgid "Number of open sockets grouped per ip-address (top 10)"
 msgstr "Aantal open sockets gegroepeerd per ip-adres (top 10)"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:47
+#: modules/mod_admin/templates/_admin_system_status.tpl:48
 msgid "Page Count"
 msgstr "Aantal Pagina’s"
 
@@ -891,7 +900,7 @@ msgstr "Publiceer deze pagina"
 
 #: modules/mod_admin/templates/_action_dialog_duplicate_rsc.tpl:18
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:33
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:222
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:217
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:54
 msgid "Published"
 msgstr "Gepubliceerd"
@@ -904,7 +913,7 @@ msgstr "Zoekvraag"
 msgid "Query preview"
 msgstr "Zoekvraag voorbeeld"
 
-#: modules/mod_admin/templates/admin_status.tpl:44
+#: modules/mod_admin/templates/admin_status.tpl:50
 msgid ""
 "Rebuild all search-indices by putting all pages and data from the database "
 "in the indexer queue. This can take a long time!"
@@ -912,11 +921,11 @@ msgstr ""
 "Bouw de zoek-index opnieuw op door alle pagina's langs te gaan. Dit kan even "
 "duren!"
 
-#: modules/mod_admin/templates/admin_status.tpl:27
+#: modules/mod_admin/templates/admin_status.tpl:33
 msgid "Rebuild search indices"
 msgstr "Zoek-index opnieuw maken"
 
-#: modules/mod_admin/templates/admin_status.tpl:52
+#: modules/mod_admin/templates/admin_status.tpl:58
 msgid ""
 "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Hernummert de categorie-boom opnieuw. Dit kan even duren."
@@ -934,7 +943,7 @@ msgstr "Doorsturen naar website bij bekijken van de pagina"
 msgid "Referrers to"
 msgstr "Verwijzingen naar"
 
-#: modules/mod_admin/templates/admin_status.tpl:58
+#: modules/mod_admin/templates/admin_status.tpl:64
 msgid "Reinstall site datamodel"
 msgstr "Datamodel opnieuw installeren"
 
@@ -950,7 +959,7 @@ msgstr "Verwijder uitsnede-middelpunt"
 msgid "Removed the connection to"
 msgstr "Connectie verwijderd naar"
 
-#: modules/mod_admin/templates/admin_status.tpl:51
+#: modules/mod_admin/templates/admin_status.tpl:57
 msgid "Renumber category tree"
 msgstr "Categorieboom opnieuw berekenen"
 
@@ -980,7 +989,7 @@ msgstr ""
 msgid "Retrieving status..."
 msgstr "Status ophalen..."
 
-#: modules/mod_admin/templates/admin_status.tpl:59
+#: modules/mod_admin/templates/admin_status.tpl:65
 msgid "Runs the schema install command from the site's module again."
 msgstr ""
 "Voer het commando voor de schema-installatie van de hoofdmodule van deze "
@@ -989,6 +998,14 @@ msgstr ""
 #: modules/mod_admin/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
 msgstr "SEO inhoud"
+
+#: modules/mod_admin/templates/_admin_status_alert.tpl:4
+msgid ""
+"SSL Application uses Erlang defaults, it is recommended to change this "
+"configuration in your <tt>erlang.config</tt>."
+msgstr ""
+"De SSL applicatie maakt gebruik van Erlang defaults, het is aan te raden om "
+"deze configuratie te wijzigen in uw <tt>erlang.config</tt>."
 
 #: modules/mod_admin/templates/_admin_edit_content_publish.tpl:20
 #: modules/mod_admin/templates/_action_dialog_edit_basics.tpl:82
@@ -1028,12 +1045,22 @@ msgstr "Zoekopdracht"
 msgid "Search..."
 msgstr "Zoeken..."
 
+#: modules/mod_admin/templates/_admin_status_alert.tpl:6
+msgid ""
+"See also: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/"
+"zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</"
+"a>"
+msgstr ""
+"Zie ook: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/"
+"zotonic-configuration.html#the-erlang-config-file\">Het erlang.config "
+"bestand</a>"
+
 #: modules/mod_admin/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
 msgstr "Selecteer een gekoppelde afbeelding"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:184
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:262
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:179
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:258
 #: modules/mod_admin/templates/_admin_category_dropdown.tpl:7
 msgid "Select category"
 msgstr "Selecteer categorie"
@@ -1042,11 +1069,11 @@ msgstr "Selecteer categorie"
 msgid "Selected Categories"
 msgstr "Geselecteerde categorieën"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:55
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:50
 msgid "Selecting a file will make the page a media item."
 msgstr "Als u een bestand selecteert, wordt de pagina een media-item."
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:43
+#: modules/mod_admin/templates/_admin_system_status.tpl:44
 msgid "Session Count"
 msgstr "Aantal sessies"
 
@@ -1086,11 +1113,11 @@ msgstr "Je hebt geen rechten om deze verbinding te verwijderen."
 msgid "Standard"
 msgstr "Standaard"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:24
-msgid "Start typing a title to create new content or find existing content."
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:22
+msgid "Start typing a title to create a new page or find existing pages"
 msgstr ""
-"Begin met het typen van een titel om nieuwe inhoud te creëren of om "
-"bestaande inhoud te vinden."
+"Start met het typen van een titel om een nieuwe pagina aan te maken of om "
+"bestaande pagina's te vinden"
 
 #: modules/mod_admin/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
@@ -1253,7 +1280,6 @@ msgid "Till"
 msgstr "Tot"
 
 #: modules/mod_admin/templates/admin_media.tpl:85
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:29
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:35
 #: modules/mod_admin/templates/admin_widget_dashboard_latest.tpl:39
 #: modules/mod_admin/templates/admin_referrers.tpl:20
@@ -1274,7 +1300,7 @@ msgstr "Navigatie open/dicht"
 msgid "Type text to search"
 msgstr "Typ een tekst om te zoeken"
 
-#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:33
+#: modules/mod_admin/templates/_action_dialog_new_rsc_tab.tpl:25
 msgid "Type title or filter existing content"
 msgstr "Type titel of filter bestaande inhoud"
 
@@ -1287,7 +1313,7 @@ msgstr "Unieke naam"
 msgid "Unique uri"
 msgstr "Unieke URI"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:19
+#: modules/mod_admin/templates/_admin_system_status.tpl:20
 msgid "Unused"
 msgstr "Ongebruikt"
 
@@ -1317,7 +1343,7 @@ msgstr "Upload bestand"
 msgid "Uploaded"
 msgstr "Geüpload"
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:23
+#: modules/mod_admin/templates/_admin_system_status.tpl:24
 msgid "Usage"
 msgstr "Gebruik"
 
@@ -1332,7 +1358,7 @@ msgstr ""
 "Gebruik de titel van de basisgegevens voor de naam zoals die wordt "
 "weergegeven op pagina's."
 
-#: modules/mod_admin/templates/_admin_system_status.tpl:15
+#: modules/mod_admin/templates/_admin_system_status.tpl:16
 msgid "Used"
 msgstr "Gebruikt"
 
@@ -1382,6 +1408,10 @@ msgstr "Ga naar volledige pagina"
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:72
 msgid "Visiting address"
 msgstr "Bezoekadres"
+
+#: modules/mod_admin/templates/_admin_status_alert.tpl:3
+msgid "Warning!"
+msgstr "Waarschuwing!"
 
 #: modules/mod_admin/templates/_admin_edit_content_address.tpl:51
 #: modules/mod_admin/templates/_admin_edit_content_website.tpl:6
@@ -1451,6 +1481,10 @@ msgid ""
 msgstr ""
 "Je moet een omschrijving van het mediabestand geven om het zo makkelijker "
 "vindbaar te maken."
+
+#: modules/mod_admin/templates/_admin_status_alert.tpl:22
+msgid "Zotonic Version"
+msgstr "Zotone versie"
 
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
@@ -1562,6 +1596,9 @@ msgstr "bekijk"
 #: modules/mod_admin/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
 msgstr "bezoek site"
+
+#~ msgid "Create or search"
+#~ msgstr "Maak of zoek"
 
 #~ msgid "Page title or text to find page"
 #~ msgstr "Paginatitel of tekst om pagina te vinden"
