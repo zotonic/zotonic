@@ -59,8 +59,8 @@ event(#submit{message=addsite, form=Form}, Context) ->
             case await(Site) of
                 ok ->
                     lager:info("[zotonic_site_status] Site ~s is running", [Site]),
-                    timer:sleep(2000),
                     SiteContext = z_context:new(Site),
+                    z_module_manager:upgrade_await(SiteContext),
                     Vars = [
                         {admin_url, abs_url_for(admin, SiteContext)},
                         {site_url, z_context:abs_url(<<"/">>, SiteContext)},
