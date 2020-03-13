@@ -81,9 +81,9 @@ $(function() {
                 setCropFromValue($(config.hiddenInput).val());
             }).each(function() {
                 if (this.complete) {
-                    $(this).load();
+                    $(this).trigger('load');
                 }
-            });   
+            });
         }
     });
 });
