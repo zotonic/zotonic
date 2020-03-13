@@ -52,13 +52,8 @@ $.widget("ui.popupwindow", {
 			var top, left;
 
 			if (self.options.centerBrowser && !self.options.centerScreen) {
-				if ($.browser.msie) {
-					top = (window.screenTop - 120) + ((((document.documentElement.clientHeight + 120)/2) - (self.options.height/2)));
-					left = window.screenLeft + ((((document.documentElement.clientWidth + 20)/2) - (self.options.width/2)));
-				} else {
-					top = window.screenY + (((window.outerHeight/2) - (self.options.height/2)));
-					left = window.screenX + (((window.outerWidth/2) - (self.options.width/2)));
-				}
+				top = window.screenY + (((window.outerHeight/2) - (self.options.height/2)));
+				left = window.screenX + (((window.outerWidth/2) - (self.options.width/2)));
 			} else if (self.options.centerScreen) {
 				top = (screen.height - self.options.height)/2;
 				left = (screen.width - self.options.width)/2;
@@ -66,7 +61,7 @@ $.widget("ui.popupwindow", {
 				top = self.options.top;
 				left = self.options.left;
 			}
-			
+
 			/* Remove non-alphanumeric characters for msie */
 			if (windowName) {
 				windowName = windowName.replace(/[^a-zA-Z0-9]/g,'_');

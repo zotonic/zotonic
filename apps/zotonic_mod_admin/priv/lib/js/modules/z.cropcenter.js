@@ -84,9 +84,9 @@ $(function() {
                 }, 100);
             }).each(function() {
                 if (this.complete) {
-                    $(this).load();
+                    $(this).trigger('load');
                 }
-            });   
+            });
         }
     });
 });

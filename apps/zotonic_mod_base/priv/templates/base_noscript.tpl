@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ z_language }}" class="environment-{{ m.site.environment }}">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <title>{% block title %}Zotonic{% endblock %}</title>
 
@@ -11,19 +12,22 @@
 
     {% block _html_head %}
     {% endblock %}
-  </head>
+</head>
 
-  <body>
-    {% block content_area %}
-       {% block content %}
-          {% block main %}{% endblock %}
-       {% endblock %}
-    {% endblock %}
+<body class="{% block page_class %}{% endblock %}" data-cotonic-pathname-search="{% cotonic_pathname_search %}">
+    <div class="container">
+        {% block content_area %}
+           {% block content %}
+              {% block main %}{% endblock %}
+           {% endblock %}
+        {% endblock %}
+    </div>
 
     {% all include "_html_body.tpl" %}
 
     {% block _js_include %}
     {% endblock%}
 
-  </body>
+</body>
+
 </html>
