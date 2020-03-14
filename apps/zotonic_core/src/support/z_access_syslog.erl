@@ -31,7 +31,6 @@
 
 -record(state, {
     priority,
-    format,
     log
 }).
 
@@ -46,63 +45,37 @@ start_link() ->
     Opts = z_config:get(syslog_opts),
     Facility = z_config:get(syslog_facility),
     Level = z_config:get(syslog_level),
+
     start_link(Ident, Opts, Facility, Level).
 
 start_link(Ident, Opts, Facility, Level) ->
     z_buffered_worker:start_link(?MODULE, ?MODULE, [[Ident, Opts, Facility], Level]).
 
 log_access(#{}=MetricData) ->
-    ?DEBUG(maps:keys(MetricData)),
-
-    Size = maps:get(resp_body_length, MetricData, 0),
-
     ReqInfo = maps:get(req, MetricData, #{}),
-
-    ReqStart = maps:get(req_start, MetricData, 0),
-    StartTime = monotonic_time_to_timestamp(ReqStart),
-
-    Path = maps:get(path, ReqInfo, undefined),
-    Method = maps:get(method, ReqInfo, undefined),
-    Version = maps:get(version, ReqInfo, undefined),
-
     Headers = maps:get(headers, ReqInfo, #{}),
-
-    UserAgent = maps:get(<<"user-agent">>, Headers, undefined),
-    Referer = maps:get(<<"referer">>, Headers, undefined),
-
+    {IP, _} = maps:get(peer, ReqInfo, {undefined, undefined}),
     UserData = maps:get(user_data, MetricData, #{}),
-    Site = maps:get(site, UserData, undefined),
-    Dispatch = maps:get(dispatch_rule, UserData, undefined),
 
-    % ?DEBUG(MetricData),
+    MD = #{
+      site => maps:get(site, UserData, '-'),
+      dispatch_rule => maps:get(dispatch_rule, UserData, '-'),
+      user => maps:get(user, UserData, <<$->>),
 
-    ?DEBUG({z_convert:to_binary(fmt_time(StartTime)), Version, Method, Site, Dispatch, Path, Size, Referer, UserAgent}),
+      size => maps:get(resp_body_length, MetricData, 0),
+      req_start => maps:get(req_start, MetricData, 0),
 
-    ok.
+      status => maps:get(resp_status, MetricData, '-'),
+      remote_ip => IP,
 
-monotonic_time_to_timestamp(Time) ->
-    T = erlang:convert_time_unit(Time, native, second) + erlang:time_offset(second),
+      path => maps:get(path, ReqInfo, <<$->>),
+      method => maps:get(method, ReqInfo, <<$->>),
+      version => maps:get(version, ReqInfo, '-'),
 
-    MegaSecs = TO div 1000000,
-    Secs =     TO rem 1000000 ,
-    MicroSecs = 0,
-
-    {MegaSecs, Secs, MicroSecs}.
-
-% log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
-%         method=Method, response_code=Status,
-%         path=Path, headers=Headers, response_length=Size}) ->
-%         
-%     MD = [{start_time, StartTime},
-%         {finish_time, FinishTime},
-%         {method, Method},
-%         {status, Status},
-%         {path, z_convert:to_binary(Path)},
-%         {size, Size},
-%         {user_agent, get_header_value("User-Agent", Headers)},
-%         {referer, get_header_value("Referer", Headers)}
-%         | lager:md()],
-%     z_buffered_worker:push(?MODULE, MD).
+      user_agent => maps:get(<<"user-agent">>, Headers, <<$->>),
+      referer => maps:get(<<"referer">>, Headers, <<$->>)
+     },
+    z_buffered_worker:push(?MODULE, MD).
 
 %%
 %% Buffered worker callbacks
@@ -111,11 +84,11 @@ monotonic_time_to_timestamp(Time) ->
 % @doc Initialize the logger.
 init(_Pid, [[Name, Opts, Facility], Priority]) ->
     {ok, Log} = syslog:open(Name, Opts, Facility),
-    {ok, ?FLUSH_INTERVAL, #state{priority=Priority, format=alog, log=Log}}.
+    {ok, ?FLUSH_INTERVAL, #state{priority=Priority, log=Log}}.
 
 % @doc Log one entry
-handle_value(_Pid, _Count, MD, #state{log=Log, priority=Priority, format=Format}) ->
-    Msg = format(Format, MD),
+handle_value(_Pid, _Count, MD, #state{log=Log, priority=Priority}) ->
+    Msg = format(MD),
     syslog:log(Log, Priority, Msg).
 
 % @doc Flush operation done.
@@ -127,54 +100,57 @@ handle_flush_done(_Pid, _State) ->
 %% Helpers
 %%
 
-% get_header_value(Name, Headers) ->
-%     case mochiweb_headers:get_value(Name, Headers) of
-%         undefined -> <<>>;
-% 	   Value -> z_convert:to_binary(Value)
-%     end.
+% @doc Get a second resolution timestamp from a monotonic time sample.
+monotonic_time_to_timestamp(MonotonicTime) ->
+    Time = erlang:convert_time_unit(MonotonicTime, native, second) + erlang:time_offset(second),
+    MegaSecs = Time div 1000000,
+    Secs = Time rem 1000000,
+    {MegaSecs, Secs, 0}.
 
-%%
-%% Formats
-%%
+% @doc Format the reguest. We use a format similar to apache's vhost_commont
+% The site and dispatch rule is also included in the log line.
+format(#{ site := Site,
+          dispatch_rule := Dispatch, 
+          req_start := ReqStart,
+          path := Path,
+          method := Method,
+          status := Status,
+          size := Size,
+          user := User,
+          remote_ip := RemoteIP,
+          referer := Referer,
+          user_agent := UserAgent,
+          version := Version
+        }) ->
 
-format(alog, MD) ->
-    StartTime = proplists:get_value(start_time, MD),
-    RequestId = proplists:get_value(req_id, MD),
-    Path = proplists:get_value(path, MD),
-    Method = proplists:get_value(method, MD),
-    Status = proplists:get_value(status, MD),
-    Size = proplists:get_value(size, MD),
-    User = z_convert:to_binary(proplists:get_value(user, MD, <<"-">>)),
-    RemoteIP = proplists:get_value(remote_ip, MD),
-    Referer = proplists:get_value(referer, MD),
-    UserAgent = proplists:get_value(user_agent, MD),
+    StartTime = monotonic_time_to_timestamp(ReqStart),
 
-    fmt_alog(
+    fmt(z_convert:to_binary(Site),
+        z_convert:to_binary(Dispatch),
         fmt_time(StartTime),
-        RequestId,
-        RemoteIP,
-        z_convert:to_binary(User),
-        z_convert:to_binary(Method),
-        Path,
-        {1,1},
+        fmt_ip(RemoteIP),
+        User,
+        Method,
+        sanitize(Path),
+        z_convert:to_binary(Version),
         z_convert:to_binary(Status),
         z_convert:to_binary(Size),
-        Referer,
-        UserAgent).
+        sanitize(Referer),
+        sanitize(UserAgent)).
 
+% @doc Format the information in a similar format as the apache log format.
+fmt(Site, DispatchRule, Time, Ip, User, Method, Path, Version, Status,  Length, Referrer, UserAgent) ->
+    [Site, $:, DispatchRule, $\s,
+     Ip, $\s,
+     User, $\s,
+     Time, $\s,
+     $", Method, $\s, Path, $\s, Version, $", $\s,
+     Status, $\s,
+     Length, $\s,
+     $", Referrer, $", $\s,
+     $", UserAgent, $"].
 
-fmt_time({_MegaSecs, _Secs, _MicroSecs}=Ts) ->
-    fmt_time(calendar:now_to_universal_time(Ts));
-fmt_time({{Year, Month, Date}, {Hour, Min, Sec}}) ->
-    io_lib:format("[~2..0w/~s/~4..0w:~2..0w:~2..0w:~2..0w ~s]",
-        [Date, month(Month), Year, Hour, Min, Sec, "+0000"]).
-
-fmt_alog(Time, ReqId, Ip, User, Method, Path, {VM,Vm}, Status,  Length, Referrer, UserAgent) ->
-    [fmt_ip(Ip), " - ", sanitize(User), $\s, Time, $\s, $", sanitize(Method), " ", sanitize(Path),
-     " HTTP/", z_convert:to_binary(VM), $., z_convert:to_binary(Vm), $",$\s,
-     Status, $\s, Length, $\s,$", sanitize(Referrer),
-     $",$\s,$", sanitize(UserAgent), $",$\s, z_convert:to_binary(ReqId)].
-
+% @doc Format the ip address
 fmt_ip(IP) when is_tuple(IP) ->
     inet_parse:ntoa(IP);
 fmt_ip(undefined) ->
@@ -182,10 +158,17 @@ fmt_ip(undefined) ->
 fmt_ip(HostName) ->
     HostName.
 
+% @doc Format the time
+fmt_time({_MegaSecs, _Secs, _MicroSecs}=Ts) ->
+    fmt_time(calendar:now_to_universal_time(Ts));
+fmt_time({{Year, Month, Date}, {Hour, Min, Sec}}) ->
+    io_lib:format("[~2..0w/~s/~4..0w:~2..0w:~2..0w:~2..0w ~s]",
+        [Date, month(Month), Year, Hour, Min, Sec, <<"+0000">>]).
+
 % @doc Prevent escape characters to be shown in the log file.
 % Seealso http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-4487
-sanitize(S) ->
-    sanitize(S, <<>>).
+sanitize(undefined) -> <<$->>;
+sanitize(S) -> sanitize(S, <<>>).
 
 sanitize(<<>>, Acc) ->
     Acc;
@@ -194,6 +177,7 @@ sanitize(<<C, Rest/binary>>, Acc) when C < 32 ->
 sanitize(<<C, Rest/binary>>, Acc) ->
     sanitize(Rest, <<Acc/binary, C>>).
 
+% @doc Get a short name for the month
 month(1) -> <<"Jan">>;
 month(2) -> <<"Feb">>;
 month(3) -> <<"Mar">>;
