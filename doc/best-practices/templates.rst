@@ -50,7 +50,7 @@ becomes:
               <p class="image-caption">{{ image_id.summary }}</p>
           {% endif %}
         </figure>
-      {% endfor %}
+        {% endfor %}
     </li>
 
 Pitfalls

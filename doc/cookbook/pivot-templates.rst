@@ -31,7 +31,7 @@ The following blocks are defined:
    * ``pivot/_title_text.tpl`` for block *a*
    * ``pivot/_main_text.tpl`` for block *b*
    * ``pivot/_block_text.tpl`` for block *c*
-   * ``pivot/_related_text.tpl`` for block *c*
+   * ``pivot/_related_text.tpl`` for block *d*
 
 **title**
 

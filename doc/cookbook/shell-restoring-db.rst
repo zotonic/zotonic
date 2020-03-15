@@ -62,7 +62,7 @@ Create a new database in postgres:
 .. code-block:: bash
 
   zotonic:~$ sudo su -l postgres
-  postgres:~$ ~Zotonic/zotonic/bin/zotonic createdb yoursite_new
+  postgres:~$ ~zotonic/zotonic/bin/zotonic createdb yoursite_new
   CREATE DATABASE
   GRANT
   You are now connected to database "zotonic_yoursite_new".
