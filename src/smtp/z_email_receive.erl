@@ -25,7 +25,8 @@
         ]).
 
 -export([
-      parse_file/1
+      parse_file/1,
+      parse_email/4
     ]).
 
 -include_lib("zotonic.hrl").
