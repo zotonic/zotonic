@@ -67,7 +67,7 @@
                          "fe0075257e264fa28ba4112603794a48a78d8405"}},
        {z_stdlib,".*",
                  {git,"git://github.com/zotonic/z_stdlib.git",
-                      "d97b65e24eef071073f472433042f887ad717626"}},
+                      "8e37cafc58a2e3ba5d3878f3812fa651e676fa97"}},
        {bear,".*",
              {git,"https://github.com/folsom-project/bear.git",
                   "cdd853442a20d36f2104f2be4dafcf94b32a8b06"}},
