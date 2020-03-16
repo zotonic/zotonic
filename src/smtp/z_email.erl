@@ -130,10 +130,10 @@ send_page(Email, Id, Context) when is_integer(Id) ->
 			send_render(Email, {cat, "mailing_page.tpl"}, Vars, Context);
 		true ->
 			E = #email{
-				to=Email,
-				html_tpl={cat, "mailing_page.tpl"},
-				vars=Vars,
-				attachments=[Id]
+				to = z_convert:to_binary(Email),
+				html_tpl = {cat, "mailing_page.tpl"},
+				vars = Vars,
+				attachments = [Id]
 			},
 			send(E, Context)
 	end;
@@ -150,11 +150,11 @@ send(MsgId, #email{} = Email, Context) ->
 
 %% @doc Send a simple text message to an email address
 send(To, Subject, Message, Context) ->
-	z_email_server:send(#email{queue=false, to=To, subject=Subject, text=Message}, Context).
+	z_email_server:send(#email{queue=false, to=z_convert:to_binary(To), subject=Subject, text=Message}, Context).
 
 %% @doc Queue a simple text message to an email address
 sendq(To, Subject, Message, Context) ->
-	z_email_server:send(#email{queue=true, to=To, subject=Subject, text=Message}, Context).
+	z_email_server:send(#email{queue=true, to=z_convert:to_binary(To), subject=Subject, text=Message}, Context).
 
 %% @doc Send a html message to an email address, render the message using a template.
 send_render(To, HtmlTemplate, Vars, Context) ->
@@ -171,8 +171,14 @@ sendq_render(To, HtmlTemplate, Vars, Context) ->
 
 %% @doc Queue a html and text message to an email address, render the message using two templates.
 sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
-	z_email_server:send(#email{queue=true, to=To, from=proplists:get_value(email_from, Vars),
-	                             html_tpl=HtmlTemplate, text_tpl=TextTemplate, vars=Vars}, Context).
+	z_email_server:send(#email{
+            queue = true,
+            to = z_convert:to_binary(To),
+            from = proplists:get_value(email_from, Vars),
+            html_tpl = HtmlTemplate,
+            text_tpl = TextTemplate,
+            vars = Vars
+        }, Context).
 
 
 %% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'
