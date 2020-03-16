@@ -172,6 +172,9 @@ recipient_is_user_or_admin(Id, RecipientEmail, Context) ->
                      end,
                      m_identity:get_rsc_by_type(Id, email, Context)).
 
+
+%% @doc Check if a recipient is blocked
+-spec is_recipient_blocked( string() | binary(), z:context() ) -> boolean().
 is_recipient_blocked(Recipient, Context) ->
     RecipientEmail = recipient_email_address(Recipient),
     case z_notifier:first( #email_is_blocked{ recipient = RecipientEmail }, Context) of
@@ -180,10 +183,12 @@ is_recipient_blocked(Recipient, Context) ->
         false -> false
     end.
 
+%% @doc Extract the email address from a recipient and return it in lowercase.
+-spec recipient_email_address( string() | binary() ) -> binary().
 recipient_email_address(Recipient) ->
     Recipient2 = z_string:trim(z_string:line(z_convert:to_binary(Recipient))),
     {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
-    z_string:to_lower(RecipientEmail).
+    z_string:to_lower( z_convert:to_binary(RecipientEmail) ).
 
 
 %%====================================================================
@@ -257,7 +262,7 @@ handle_cast({send, Id, #email{} = Email, Context}, State) ->
 %%@ doc Handle a bounced email
 handle_cast({bounced, Peer, BounceEmail}, State) ->
     % Fetch the MsgId from the bounce address
-    [BounceLocalName,Domain] = binstr:split(z_convert:to_binary(BounceEmail), <<"@">>),
+    [BounceLocalName,Domain] = binary:split(z_convert:to_binary(BounceEmail), <<"@">>),
     <<"noreply+", MsgId/binary>> = BounceLocalName,
 
     % Find the original message in our database of recent sent e-mail
@@ -552,7 +557,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
     RecipientEmail = recipient_email_address(Recipient1),
     case is_recipient_blocked(RecipientEmail, Context) of
         false ->
-            [_RcptLocalName, RecipientDomain] = string:tokens(RecipientEmail, "@"),
+            [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
             SmtpOpts = [
                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
                 {hostname, z_email:email_domain(Context)}
