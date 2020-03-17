@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2020 Marc Worrell
 %%
 %% @doc Process holding information mapping a request path to one or more files.
 %% The files can be a static file, a temporary file, cached file or a binary.
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -246,9 +246,11 @@ handle_event({call, From}, lookup, StateName, State) ->
             {next_state, locate, State1, 0}
     end;
 handle_event({call, From}, force_stale, _StateName, State) ->
-    {next_state, locate, State, [{timeout, 0}, {reply, From, ok}]};
-handle_event({call, _From}, stop, _StateName, State) ->
+    gen_statem:reply(From, ok),
+    {next_state, locate, State, 0};
+handle_event({call, From}, stop, _StateName, State) ->
     unreg(State),
+    gen_statem:reply(From, ok),
     {next_state, stopping, State, ?STOP_TIMEOUT};
 handle_event(info, {gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
     State1 = State#state{
