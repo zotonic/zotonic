@@ -37,9 +37,9 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context0) ->
     Token = z_context:get_q(<<"token">>, Context),
     case maps:get(Token, Challenges, undefined) of
         undefined ->
-            lager:warning("Letsencrypt unknown token for host ~p", [ m_req:host(Context) ]),
+            lager:warning("Letsencrypt unknown token for host ~p", [ m_req:get(host, Context) ]),
             {{halt, 404}, Context};
         Thumbprint ->
-            lager:info("Letsencrypt token matched for host ~p", [ m_req:host(Context) ]),
+            lager:info("Letsencrypt token matched for host ~p", [ m_req:get(host, Context) ]),
             {Thumbprint, Context}
     end.
