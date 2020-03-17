@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2020 Marc Worrell
 %%
 %% @doc Locate a file and (if needed) generate a preview. Used by z_file_entry.erl
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= un
         {error, preview_source_gone} ->
             throw(preview_source_gone);
         {error, _} = Error->
-            lager:debug("Could not find ~p, error ~p, original ~p", [Path, Error, OriginalFile]),
+            lager:debug("Could not find '~s', error ~p, original '~s'", [Path, Error, OriginalFile]),
             #part_missing{file = Path};
         {ok, Loc} ->
             Loc
@@ -94,6 +94,9 @@ locate_source([ModuleIndex|Roots], Path, OriginalFile, Filters, Context) when is
     case locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) of
         {ok, Loc} ->
             Loc;
+        {error, eacces} ->
+            lager:info("No access to file '~s', original '~s'", [Path, OriginalFile]),
+            locate_source(Roots, Path, OriginalFile, Filters, Context);
         {error, enoent} ->
             locate_source(Roots, Path, OriginalFile, Filters, Context)
     end;
@@ -201,6 +204,12 @@ part_missing(Filename) ->
 
 part_file(Filename, Opts) ->
     case file:read_file_info(Filename) of
+        {ok, #file_info{access = none}} ->
+            % No access
+            {error, eacces};
+        {ok, #file_info{access = write}} ->
+            % Only write access
+            {error, eacces};
         {ok, #file_info{size=Size, type=regular, mtime=MTime}} ->
             {ok, #part_file{
                     size=Size,

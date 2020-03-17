@@ -23,7 +23,8 @@
 -export([init/1]).
 
 -export([
-    ensure_file/4
+    ensure_file/4,
+    refresh/0
     ]).
 
 -define(SERVER, ?MODULE).
@@ -44,6 +45,20 @@ ensure_file(Path, Root, OptFilters, Context) ->
 lookup_file(Pid) ->
     z_file_entry:lookup(Pid).
 
+
+%% @doc Flush all cached file entries, needed if some missing files are now
+%%      present.
+-spec refresh() -> ok.
+refresh() ->
+    Children = supervisor:which_children(?SERVER),
+    lists:foreach(
+        fun
+            ({_Id, Child, worker, _Modules}) ->
+                z_file_entry:force_stale(Child);
+            (_) ->
+                ok
+        end,
+        Children).
 
 start_link() ->
     supervisor:start_link({local, ?SERVER}, ?MODULE, []).

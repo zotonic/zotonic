@@ -273,6 +273,7 @@ handle_cast({scanned_items, Scanned}, State) ->
             z_depcache:set(module_index_ref, erlang:make_ref(), NewState#state.context),
             z_notifier:notify(module_reindexed, NewState#state.context),
             z_depcache:flush(module_index, NewState#state.context),
+            z_file_sup:refresh(),
             {noreply, NewState};
         false ->
             {noreply, State1}
