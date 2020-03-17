@@ -128,7 +128,9 @@ all(Site) when is_atom(Site) ->
     application:get_all_env(Site).
 
 %% @doc Fetch a key from the site configuration
--spec get(atom(), z:context()) -> term() | undefined.
+-spec get(atom(), z:context() | atom()) -> term() | undefined.
+get(Key, Site) when is_atom(Site) ->
+    get(Key, z_context:new(Site));
 get(Key, Context) when is_atom(Key) ->
     try
         Site = z_context:site(Context),
