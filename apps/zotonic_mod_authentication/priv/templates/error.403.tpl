@@ -5,7 +5,6 @@
 {% block page_class %}err403{% endblock %}
 
 {% block content_area %}
-
     {% if m.req.referer %}
       <div class="z-logon-back">
           <a rel="nofollow" href="{{ m.req.referer|escape }}" />{_ Go back _}</a>

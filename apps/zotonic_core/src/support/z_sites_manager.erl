@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
-%% @doc Server managing all sites running inside Zotonic.  Starts the sites
-%% according to the config files in the sites subdirectories.
+%% @copyright 2009-2020 Marc Worrell
+%% @doc Server managing all sites running inside Zotonic. Starts the sites
+%% according to the config files in the sites subdirectories. Handles scanning
+%% of all site directories for config files.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -388,12 +389,17 @@ handle_call(get_sites_status, _From, #state{ sites = Sites } = State) ->
     {reply, SiteStatus, State};
 
 %% @doc Start a site.
-%% TODO: queue sites if too many are starting
-handle_call({start, Site}, _From, State) ->
-    case do_start(Site, State) of
-        {ok, StateStarting} ->
-            do_sync_status(StateStarting#state.sites),
-            {reply, ok, StateStarting};
+handle_call({start, Site}, _From, #state{ sites = Sites } = State) ->
+    case do_reload_site_config(Site, Sites) of
+        {ok, Sites1} ->
+            State1 = State#state{ sites = Sites1 },
+            case do_start(Site, State1) of
+                {ok, StateStarting} ->
+                    do_sync_status(StateStarting#state.sites),
+                    {reply, ok, StateStarting};
+                {error, _} = Error ->
+                    {reply, Error, State1}
+            end;
         {error, _} = Error ->
             {reply, Error, State}
     end;
@@ -537,6 +543,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
 
 %% @doc Sync the status of all sites to the SITES_STATUS_TABLE ets table.
 do_sync_status(Sites) ->
@@ -827,6 +834,25 @@ do_cleanup_crash_state(#state{ sites = Sites } = State) ->
 
 % ----------------------------------------------------------------------------
 
+%% @doc Reload the site's config files.
+do_reload_site_config(Site, Sites) ->
+    case maps:find(Site, Sites) of
+        {ok, S} ->
+            case scan_app(Site) of
+                {true, NewConfig} ->
+                    S1 = S#site_status{ config = NewConfig },
+                    {ok, Sites#{ Site => S1 }};
+                false ->
+                    {ok, Sites}
+            end;
+        error ->
+            lager:info("Requested to reload site config from unknown site ~p", [Site]),
+            {error, bad_name}
+    end.
+
+% ----------------------------------------------------------------------------
+
+
 %% @doc Rescan all sites, add new sites to the sites map
 rescan_sites(#state{ sites = Sites } = State) ->
     ScannedSites = do_scan_sites(),
@@ -928,17 +954,21 @@ scan_lib_dir(Directory) ->
     lists:filtermap( fun scan_app_dir/1, Apps1 ).
 
 scan_app_dir(AppDir) ->
+    ensure_code_path(AppDir),
     App = z_convert:to_atom( filename:basename(AppDir) ),
+    scan_app(App).
+
+scan_app(App) ->
     case z_sites_config:config_files(App) of
         [] -> false;
         Fs ->
             case z_sites_config:read_configs(Fs) of
                 {ok, Map} ->
-                    ensure_code_path(AppDir),
                     _ = application:load(App),
                     Map1 = Map#{ site => App },
                     {true, to_list(Map1)};
-                {error, _} ->
+                {error, Reason} ->
+                    lager:error("Error reading config files for ~p: ~p", [ App, Reason ]),
                     false
             end
     end.

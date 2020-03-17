@@ -53,6 +53,9 @@ m_get([ password_min_length | Rest ], _Msg, Context) ->
         N -> z_convert:to_integer(N)
     end,
     {ok, {Len, Rest}};
+m_get([ is_supported, rememberme | Rest ], _Msg, Context) ->
+    IsSupported = z_db:has_connection(Context),
+    {ok, {IsSupported, Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

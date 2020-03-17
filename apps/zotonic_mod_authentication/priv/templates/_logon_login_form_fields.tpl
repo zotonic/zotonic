@@ -29,14 +29,16 @@
     {% endblock %}
 {% endif %}
 
-<div class="form-group">
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" name="rememberme" value="1" />
-            {_ Keep me signed in _}
-        </label>
+{% if m.authentication.is_supported.rememberme %}
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="rememberme" value="1" />
+                {_ Keep me signed in _}
+            </label>
+        </div>
     </div>
-</div>
+{% endif %}
 
 <div class="form-group">
     <button class="btn btn-primary" type="submit">{_ Sign in _}</button>
