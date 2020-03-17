@@ -223,10 +223,10 @@ handle_call({cert_request, Hostname, SANs}, _From, State) ->
 handle_call(get_challenge, _From, #state{request_letsencrypt_pid = undefined} = State) ->
     lager:error("Fetching Letsencrypt challenge but no request running"),
     {reply, {ok, #{}}, State};
-handle_call(get_challenge, _From, #state{request_letsencrypt_pid = Pid} = State) ->
-    case letsencrypt:get_challenge(Pid) of
+handle_call(get_challenge, _From, #state{request_letsencrypt_pid = _Pid} = State) ->
+    case letsencrypt:get_challenge() of
         error ->
-            lager:error("Error fetching Letsencrypt challenge from ~p", [Pid]),
+            lager:error("Error fetching Letsencrypt challenge."),
             {reply, {ok, #{}}, State};
         Map when is_map(Map) ->
             {reply, {ok, Map}, State}
@@ -254,7 +254,6 @@ handle_cast(load_cert, State) ->
 handle_cast({complete, Ret, LetsPid}, #state{request_letsencrypt_pid = LetsPid} = State) ->
     State1 = handle_letsencrypt_result(Ret, State),
     erlang:demonitor(State#state.request_monitor),
-    letsencrypt:stop(LetsPid),
     gen_server:cast(self(), load_cert),
     {noreply, State1#state{
         request_letsencrypt_pid = undefined,
@@ -388,21 +387,14 @@ start_cert_request(Hostname, SANs, #state{site = Site, request_letsencrypt_pid =
             {error, eexist} -> ok;
             ok -> ok
          end,
+    CertPath = cert_temp_dir(Context),
     LetsOpts = [
         {mode, slave},
-        {cert_path, cert_temp_dir(Context)},
+        {cert_path, CertPath},
         {key_file, KeyFile}
         | ?ACME_SRV_OPTS
     ],
-    {ok, Pid} = letsencrypt:start_link(undefined, LetsOpts),
-    CertOpts = #{
-        callback => fun(Ret) ->
-                        gen_server:cast(z_utils:name_for_site(?MODULE, Site), {complete, Ret, Pid})
-                    end,
-        async => true,
-        san => SANs
-    },
-    async = letsencrypt:make_cert(Pid, Hostname, CertOpts),
+    {ok, Pid} = z_letsencrypt_job:request(self(), Hostname, SANs, LetsOpts),
     {ok, State#state{
         request_letsencrypt_pid = Pid,
         request_monitor = erlang:monitor(process, Pid),
