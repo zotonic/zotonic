@@ -37,6 +37,7 @@ var z_registered_events     = {};
 var z_on_visible_checks     = [];
 var z_on_visible_timer;
 var z_unique_id_counter     = 0;
+var z_transport_queue       = [];
 
 
 /* Startup
@@ -98,6 +99,8 @@ function zotonic_startup() {
                     clean_start: true
                 });
             });
+
+    setInterval(function() { z_transport_queue_check(); }, 500);
 }
 
 
@@ -304,21 +307,43 @@ function z_notify(message, extraParams)
 function z_transport(delegate, content_type, data, options)
 {
     options = options || {};
-    if (options.transport == 'form') {
-        let prefix = window.sessionStorage.getItem("mqtt$clientBridgeTopic");
-        prefix = JSON.parse(prefix);
-        z_transport_form({
-            url: "/mqtt-transport/zotonic-transport/" + delegate,
-            postback: data,
-            options: options,
-            progress_topic: prefix + "zotonic-transport/progress",
-            reply_topic: prefix + "zotonic-transport/eval"
-        });
+    if ($('html').hasClass('ui-state-bridge-connected')) {
+        if (options.transport == 'form') {
+            let prefix = window.sessionStorage.getItem("mqtt$clientBridgeTopic");
+            prefix = JSON.parse(prefix);
+            z_transport_form({
+                url: "/mqtt-transport/zotonic-transport/" + delegate,
+                postback: data,
+                options: options,
+                progress_topic: prefix + "zotonic-transport/progress",
+                reply_topic: prefix + "zotonic-transport/eval"
+            });
+        } else {
+            cotonic.broker.publish(
+                "bridge/origin/zotonic-transport/" + delegate,
+                data,
+                { qos: 1 });
+        }
     } else {
-        cotonic.broker.publish(
-            "bridge/origin/zotonic-transport/" + delegate,
-            data,
-            { qos: 1 });
+        z_transport_queue_add(delegate, content_type, data, options);
+    }
+}
+
+function z_transport_queue_add( delegate, content_type, data, options )
+{
+    z_transport_queue.push({
+        delegate: delegate,
+        content_type: content_type,
+        data: data,
+        options: options
+    });
+}
+
+function z_transport_queue_check()
+{
+    if (z_transport_queue.length > 0 && $('html').hasClass('ui-state-bridge-connected')) {
+        var trans = z_transport_queue.shift();
+        z_transport(trans.delegate, trans.content_type, trans.data, trans.options);
     }
 }
 

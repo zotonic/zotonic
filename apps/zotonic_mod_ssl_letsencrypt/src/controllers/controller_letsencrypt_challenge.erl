@@ -33,12 +33,13 @@ content_types_provided(Context) ->
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context0) ->
     Context = z_context:set_noindex_header(z_context:set_nocache_headers(Context0)),
-    Host = m_req:get(host, Context),
     {ok, Challenges} = mod_ssl_letsencrypt:get_challenge(Context),
     Token = z_context:get_q(<<"token">>, Context),
-    case maps:get(Host, Challenges, undefined) of
-        #{token := Token, thumbprint := Thumbprint} ->
-            {Thumbprint, Context};
-        _X ->
-            {{halt, 404}, Context}
+    case maps:get(Token, Challenges, undefined) of
+        undefined ->
+            lager:warning("Letsencrypt unknown token for host ~p", [ m_req:get(host, Context) ]),
+            {{halt, 404}, Context};
+        Thumbprint ->
+            lager:info("Letsencrypt token matched for host ~p", [ m_req:get(host, Context) ]),
+            {Thumbprint, Context}
     end.

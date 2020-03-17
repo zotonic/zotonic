@@ -11,7 +11,6 @@
 
                 {% live template="_ssl_letsencrypt_status.tpl" topic="model/letsencrypt/event/status" %}
 
-
                 {% if m.acl.use.mod_admin_config %}
                     {% if m.sysconfig.port /= 80 %}
                         <p class="alert alert-danger">
