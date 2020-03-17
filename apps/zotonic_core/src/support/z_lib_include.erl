@@ -159,9 +159,7 @@ uncollapse_dirs([], _Dirname, Acc) ->
 uncollapse_dirs([ <<>> | Rest ], Dirname, Acc) ->
     uncollapse_dirs(Rest, Dirname, Acc);
 uncollapse_dirs([ Rest ], _Dirname, Acc) ->
-    [ z_convert:to_binary(Rest) | Acc ];
-uncollapse_dirs([ File | Rest ], Dirname, Acc) when not is_binary(File) ->
-    uncollapse_dirs([ z_convert:to_binary(File) | Rest ], Dirname, Acc);
+    [ Rest | Acc ];
 uncollapse_dirs([ <<$/,_/binary>> = File | Rest ], _Dirname, Acc) ->
     uncollapse_dirs(Rest, filename:dirname(File), [ File | Acc ]);
 uncollapse_dirs([ File | Rest ], Dirname, Acc) ->
