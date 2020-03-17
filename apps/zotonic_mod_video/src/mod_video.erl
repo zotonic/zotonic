@@ -175,13 +175,26 @@ observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
             undefined
     end.
 
+%% --------------- Supervisor callbacks ---------------
 
 start_link(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     ensure_job_queues(),
     supervisor:start_link({local, z_utils:name_for_site(?SERVER, Context)}, ?MODULE, []).
 
+init([]) ->
+    Element = {z_video_convert, {z_video_convert, start_link, []},
+               temporary, brutal_kill, worker, [z_video_convert]},
+    Children = [Element],
+    RestartStrategy = {simple_one_for_one, 0, 1},
+    {ok, {RestartStrategy, Children}}.
+
+%% --------------- Support routines ---------------
+
 ensure_job_queues() ->
+  jobs:run(zotonic_singular_job, fun ensure_job_queues_1/0).
+
+ensure_job_queues_1() ->
     case jobs:queue_info(video_jobs) of
         undefined ->
             jobs:add_queue(video_jobs, [
@@ -208,14 +221,6 @@ ensure_job_queues() ->
         {queue, _} ->
             ok
     end.
-
-
-init([]) ->
-    Element = {z_video_convert, {z_video_convert, start_link, []},
-               temporary, brutal_kill, worker, [z_video_convert]},
-    Children = [Element],
-    RestartStrategy = {simple_one_for_one, 0, 1},
-    {ok, {RestartStrategy, Children}}.
 
 
 %% @doc The medium record has been inserted, queue a conversion
