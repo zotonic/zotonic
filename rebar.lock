@@ -52,7 +52,7 @@
  {<<"lager">>,{pkg,<<"lager">>,<<"3.6.10">>},0},
  {<<"letsencrypt">>,
   {git,"https://github.com/zotonic/letsencrypt-erlang.git",
-       {ref,"09a023866bb2af93bb67dfb05c080a4635e78fd9"}},
+       {ref,"383fcbfc12dec60864092a4f91a8af26bfda04bb"}},
   0},
  {<<"locus">>,{pkg,<<"locus">>,<<"1.9.0-beta">>},0},
  {<<"meck">>,{pkg,<<"meck">>,<<"0.8.13">>},0},
