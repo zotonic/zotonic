@@ -43,6 +43,7 @@
         mod_oauth,
         mod_search,
         mod_oembed,
+        mod_cron,
         mod_logging,
 
         mod_wires,

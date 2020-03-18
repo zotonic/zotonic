@@ -24,6 +24,7 @@
 -mod_description("Logs debug/info/warning messages into the site's database.").
 -mod_prio(1000).
 -mod_schema(1).
+-mod_depends([ cron ]).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).

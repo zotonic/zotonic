@@ -31,7 +31,7 @@
 -mod_description("Use Twitter for logon, and/or import tweets from users or tags on Twitter.").
 -mod_prio(401).
 -mod_schema(2).
--mod_depends([admin, authentication]).
+-mod_depends([admin, authentication, cron]).
 -mod_provides([twitter]).
 
 %% interface functions

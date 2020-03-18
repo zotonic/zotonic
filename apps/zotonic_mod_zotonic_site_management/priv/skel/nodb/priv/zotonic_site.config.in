@@ -24,6 +24,7 @@
         mod_wires,
         mod_bootstrap,
         mod_base,
+        mod_cron,
         mod_zotonic_status_vcs
     ]},
 
