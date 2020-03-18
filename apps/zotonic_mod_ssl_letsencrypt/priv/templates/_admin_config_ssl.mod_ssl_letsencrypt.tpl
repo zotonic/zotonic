@@ -1,13 +1,20 @@
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-default">
+            <a href="https://letsencrypt.org/" target="_blank">
+                <img src="/lib/images/letsencrypt-logo-horizontal.png"
+                     alt="{_ Let’s Encrypt Certificate _}"
+                     style="height: 40px; margin: 2px 10px 0 0;"
+                     class="pull-right">
+            </a>
+
             <div class="panel-heading">
-                <h3 class="panel-title">{{ nr }}. {_ SSL Let’s Encrypt Certificate _}</h3>
+                <h3 class="panel-title">{{ nr }}. {_ Let’s Encrypt Certificate _}</h3>
             </div>
             <div class="panel-body">
                 <p>{_ Let’s Encrypt provides free SSL certificates for websites. Here you can request such a certificate. _}</p>
 
-                <p><a href="https://letsencrypt.org" target="_blank">{_ Read more at the Let’s Encrypt website _} &raquo;</a></p>
+                <p><a href="https://letsencrypt.org/" target="_blank">{_ Read more at the Let’s Encrypt website _} &raquo;</a></p>
 
                 {% live template="_ssl_letsencrypt_status.tpl" topic="model/letsencrypt/event/status" %}
 
