@@ -23,6 +23,7 @@
 -mod_description("Scan uploaded files for viruses and malware.").
 -mod_prio(100).
 -mod_provides([ antivirus ]).
+-mod_depends([ cron ]).
 
 -export([
      observe_media_upload_preprocess/2,

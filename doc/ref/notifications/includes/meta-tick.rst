@@ -3,8 +3,10 @@
 tick
 ^^^^
 
+This event is provided by :ref:`mod_cron`.
+
 For periodic tasks the system has various periodic tick events.
-They are names after their interval *s* for seconds, *m* for minutes,
+They are named after their interval *s* for seconds, *m* for minutes,
 and *h* for hours.
 
   * tick_1s
@@ -32,3 +34,7 @@ The return value is ignored.
 
 The *tick* observers are called one by one in a separate process. So a slow
 handler can delay the other handlers.
+
+.. seealso::
+
+    * :ref:`mod_cron` module
