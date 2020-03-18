@@ -33,21 +33,23 @@ request(ModulePid, Hostname, SANs, LetsOpts) ->
 
 
 request_process(ModulePid, Hostname, SANs, LetsOpts) ->
-    try
-        erlang:register(?MODULE, self()),
-        CertOpts = #{
-            san => SANs,
-            async => false
-        },
-        {ok, _} = letsencrypt:start(LetsOpts),
-        Result = letsencrypt:make_cert(Hostname, CertOpts),
-        gen_server:cast(ModulePid, {complete, Result, self()}),
-        letsencrypt:stop()
-    catch
-        badarg ->
-            lager:info("LetsEncrypt job already running, waiting 5 secs ..."),
-            timer:sleep(5000),
-            request_process(ModulePid, Hostname, SANs, LetsOpts)
+    case global:trans(
+        {?MODULE, self()},
+        fun() ->
+            CertOpts = #{
+                san => SANs,
+                async => false
+            },
+            {ok, _} = letsencrypt:start(LetsOpts),
+            Result = letsencrypt:make_cert(Hostname, CertOpts),
+            gen_server:cast(ModulePid, {complete, Result, self()}),
+            letsencrypt:stop(),
+            ok
+        end)
+    of
+        aborted ->
+            lager:error("LetsEncrypt process aborted for: ~s", [ Hostname ]);
+        ok ->
+            ok
     end.
-
 

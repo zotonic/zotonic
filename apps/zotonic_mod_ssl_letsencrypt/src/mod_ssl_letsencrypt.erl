@@ -300,6 +300,9 @@ handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{request_monitor = MRef
         request_letsencrypt_pid = undefined,
         request_status = error
     }};
+handle_info({'DOWN', _MRef, process, _Pid, normal}, #state{request_monitor = undefined} = State) ->
+    % Late down message
+    {noreply, State};
 handle_info({'EXIT', _Pid, _Reason}, State) ->
     {noreply, State};
 handle_info(Info, State) ->
