@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2017 Maximonster Interactive Things
+%% @copyright 2010-2020 Maximonster Interactive Things
 %% @doc Email server. Queues, renders and sends e-mails.
 
-%% Copyright 2010-2017 Maximonster Interactive Things
+%% Copyright 2010-2020 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@
     start_link/0,
     is_bounce_email_address/1,
     bounced/2,
+    delivery_report/4,
     generate_message_id/0,
     send/2,
     send/3,
@@ -71,6 +72,11 @@
 
 -record(email_sender, {id, sender_pid, domain, is_connected=false}).
 
+
+-type delivery_type() :: permanent_failure | temporary_failure | sent | received.
+-export_type([ delivery_type/0 ]).
+
+
 %%====================================================================
 %% API
 %%====================================================================
@@ -93,6 +99,10 @@ is_bounce_email_address(_) -> false.
 bounced(Peer, NoReplyEmail) ->
     gen_server:cast(?MODULE, {bounced, Peer, NoReplyEmail}).
 
+%% @doc Handle a delivery report from an outside service like mailgun
+-spec delivery_report( delivery_type(), binary() | undefined, binary(), binary() | undefined ) -> ok.
+delivery_report(What, OptRecipient, MsgIdHeader, OptStatusMessage) ->
+    gen_server:cast(?MODULE, {delivery_report, What, OptRecipient, MsgIdHeader, OptStatusMessage}).
 
 %% @doc Generate a new message id
 -spec generate_message_id() -> binary().
@@ -104,13 +114,14 @@ send(#email{} = Email, Context) ->
     send(generate_message_id(), Email, Context).
 
 %% @doc Send an email using a predefined unique id.
-send(Id, #email{} = Email, Context) ->
+send(EmailId, #email{} = Email, Context) ->
     case is_sender_enabled(Email, Context) of
         true ->
+            EmailId1 = z_convert:to_binary(EmailId),
             Email1 = copy_attachments(Email),
             Context1 = z_context:depickle(z_context:pickle(Context)),
-            gen_server:cast(?MODULE, {send, Id, Email1, Context1}),
-            {ok, Id};
+            gen_server:cast(?MODULE, {send, EmailId1, Email1, Context1}),
+            {ok, EmailId1};
         false ->
             {error, sender_disabled}
     end.
@@ -320,6 +331,31 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
     end,
     {noreply, State};
 
+handle_cast({delivery_report, What, OptRecipient, MsgIdHeader, OptStatusMessage}, State) ->
+    [ MsgId, Domain ] = binstr:split(z_convert:to_binary(MsgIdHeader), <<"@">>),
+    % Find the original message in our database of recent sent e-mail
+    TrFun = fun()->
+                    [QEmail] = mnesia:read(email_queue, MsgId),
+                    mnesia:delete_object(QEmail),
+                    {(QEmail#email_queue.email)#email.to, QEmail#email_queue.pickled_context}
+            end,
+    case mnesia:transaction(TrFun) of
+        {atomic, {Recipient, PickledContext}} ->
+            Context = z_context:depickle(PickledContext),
+            handle_delivery_report(What, MsgId, Recipient, OptStatusMessage, Context);
+        _ ->
+            % We got a bounce, but we don't have the message anymore.
+            % Custom bounce domains make this difficult to process.
+            case z_sites_dispatcher:get_host_for_domain(Domain) of
+                {ok, Host} ->
+                    Context = z_context:new(Host),
+                    handle_delivery_report(What, MsgId, OptRecipient, OptStatusMessage, Context);
+                undefined ->
+                    ignore
+            end
+    end,
+    {noreply, State};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -358,6 +394,102 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+handle_delivery_report(permanent_failure, MsgId, Recipient, OptMessage, Context) ->
+    lager:warning("[smtp] Permanent failure sending email to ~p (~p): ~p",
+                  [Recipient, MsgId, OptMessage]),
+    z_notifier:notify(#email_failed{
+            message_nr = MsgId,
+            recipient = Recipient,
+            is_final = true,
+            reason = bounce,
+            status = OptMessage
+        }, Context),
+    z_notifier:notify(#zlog{
+            user_id = z_acl:user(Context),
+            props = #log_email{
+                    severity = ?LOG_ERROR,
+                    message_nr = MsgId,
+                    mailer_status = bounce,
+                    mailer_message = OptMessage,
+                    envelop_to = Recipient,
+                    envelop_from = "<>",
+                    to_id = z_acl:user(Context),
+                    props = []
+                }
+          }, Context),
+    % delete email from the queue and notify the system
+    delete_emailq(MsgId);
+handle_delivery_report(temporary_failure, MsgId, Recipient, OptMessage, Context) ->
+    lager:info("[smtp] Temporary failure sending email to ~p (~p): ~p",
+               [Recipient, MsgId, OptMessage]),
+    z_notifier:notify(#email_failed{
+            message_nr = MsgId,
+            recipient = Recipient,
+            is_final = false,
+            reason = retry,
+            status = OptMessage
+        }, Context),
+    z_notifier:notify(#zlog{
+            user_id = z_acl:user(Context),
+            props = #log_email{
+                    severity = ?LOG_WARNING,
+                    message_nr = MsgId,
+                    mailer_status = retry,
+                    mailer_message = OptMessage,
+                    envelop_to = Recipient,
+                    envelop_from = "<>",
+                    to_id = z_acl:user(Context),
+                    props = []
+                }
+          }, Context);
+handle_delivery_report(sent, MsgId, Recipient, OptMessage, Context) ->
+    lager:info("[smtp] Success sending email to ~p (~p): sent",
+               [Recipient, MsgId]),
+    z_notifier:notify(#email_sent{
+            message_nr = MsgId,
+            recipient = Recipient,
+            is_final = false
+        }, Context),
+    z_notifier:notify(#zlog{
+            user_id = z_acl:user(Context),
+            props = #log_email{
+                    severity = ?LOG_INFO,
+                    message_nr = MsgId,
+                    mailer_status = sent,
+                    mailer_message = OptMessage,
+                    envelop_to = Recipient,
+                    envelop_from = "<>",
+                    to_id = z_acl:user(Context),
+                    props = []
+                }
+          }, Context);
+handle_delivery_report(received, MsgId, Recipient, OptMessage, Context) ->
+    lager:info("[smtp] Success sending email to ~p (~p): received",
+               [Recipient, MsgId]),
+    z_notifier:notify(#email_sent{
+            message_nr = MsgId,
+            recipient = Recipient,
+            is_final = true
+        }, Context),
+    z_notifier:notify(#zlog{
+            user_id = z_acl:user(Context),
+            props = #log_email{
+                    severity = ?LOG_INFO,
+                    message_nr = MsgId,
+                    mailer_status = received,
+                    mailer_message = OptMessage,
+                    envelop_to = Recipient,
+                    envelop_from = "<>",
+                    to_id = z_acl:user(Context),
+                    props = []
+                }
+          }, Context);
+handle_delivery_report(_What, _MsgId, _Recipient, _OptMessage, _Context) ->
+    ok.
+
+
 
 %% @doc Create the email queue in mnesia
 create_email_queue() ->
@@ -741,7 +873,8 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
 
 send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
     case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
-        {error, no_more_hosts, {permanent_failure, _Host, <<105,103,110,32,82,111,111,116,32, _/binary>>}} ->
+        {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}} ->
+            % Don't ask ...
             send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
         {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
             send_blocking_no_tls({VERP, [RecipientEmail], EncodedMail}, SmtpOpts);
@@ -871,7 +1004,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
         true ->
             Parts;
         false ->
-            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, z_convert:to_binary(HtmlBin)}], Context)
+            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, HtmlBin}], Context)
     end,
     case Attachment of
         [] ->
@@ -1223,30 +1356,12 @@ inc_timestamp({MegaSec, Sec, MicroSec}, MinToAdd) when is_integer(MinToAdd) ->
 is_valid_email(Recipient) ->
     Recipient1 = z_string:trim(z_string:line(z_convert:to_binary(Recipient))),
     {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient1),
-    case re:run(RecipientEmail, [$^|re()]++"$", [extended]) of
-        nomatch   -> false;
-        {match,_} -> true
-    end.
-
-re() ->
-    "(
-            (\"[^\"\\f\\n\\r\\t\\v\\b]+\")
-        |   ([\\w\\!\\#\\$\\%\\&\'\\*\\+\\-\\~\\/\\^\\`\\|\\{\\}]+
-                (\\.[\\w\\!\\#\\$\\%\\&\\'\\*\\+\\-\\~\\/\^\`\\|\\{\\}]+)*
-            )
-    )
-    @
-    (
-        (
-            ([A-Za-z0-9\\-])+\\.
-        )+
-        [A-Za-z\\-]{2,}
-    )".
+    z_email_utils:is_email(RecipientEmail).
 
 email_max_domain(Domain) ->
     email_max_domain_1(lists:reverse(binary:split(z_convert:to_binary(Domain), <<".">>, [global]))).
 
-%% Some mail providers
+%% Some mail providers have problems handling more than two connections
 email_max_domain_1([<<"net">>, <<"upcmail">> | _]) -> 2;
 email_max_domain_1([<<"nl">>, <<"timing">> | _]) -> 2;
 email_max_domain_1(_) -> ?EMAIL_MAX_DOMAIN.

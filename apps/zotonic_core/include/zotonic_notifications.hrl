@@ -314,7 +314,8 @@
 -record(email_status, {
     recipient :: binary(),
     is_valid :: boolean(),
-    is_final :: boolean()
+    is_final :: boolean(),
+    is_manual :: boolean()
 }).
 
 %% @doc Bounced e-mail notification.  The recipient is the e-mail that is bouncing. When the

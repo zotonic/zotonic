@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2011 Marc Worrell
+%% @copyright 2010-2020 Marc Worrell
 %%
 %% @doc Model for accessing survey information.
 
-%% Copyright 2010-2011 Marc Worrell
+%% Copyright 2010-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -504,7 +504,7 @@ survey_results(SurveyId, IsAnonymous, Context) ->
     [ Hs | Data ].
 
 %% @doc Return all results of a survey with separate names, prompts and data
-survey_results_prompts(undefined, _IsAnonymous, _Context) ->
+survey_results_prompts(undefined, _IsForceAnonymous, _Context) ->
     {[], [], []};
 survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(SurveyId) ->
     case get_questions(SurveyId, Context) of
@@ -523,7 +523,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
             Hs = [ {B, answer_header(B, MaxPoints, Context)} || {_,B} <- NQs ],
             Prompts = [ {B, z_trans:lookup_fallback(answer_prompt(B), Context)} || {_,B} <- NQs ],
             Hs1 = lists:flatten([
-                case IsForceAnonymous of
+                case IsAnonymous of
                     true -> [ ?__(<<"Date">>, Context) ];
                     false ->
                         [
@@ -543,7 +543,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                 [ H || {_,H} <- Hs ]
             ]),
             Prompts1 = lists:flatten([
-                case IsForceAnonymous of
+                case IsAnonymous of
                     true -> [ <<>> ];
                     false -> [ <<>>, <<>>, <<>> ]
                 end,
@@ -551,7 +551,18 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                     0 -> [];
                     _ -> [ <<>>, <<>>, <<>> ]
                 end,
-                [ [ P, repeat(<<>>, maybe_length(proplists:get_value(B, Hs, []))-1) ] || {B,P} <- Prompts ]
+                lists:map(
+                    fun({B, P}) ->
+                        case proplists:get_value(B, Hs, []) of
+                            [] ->
+                                % Not a question
+                                [];
+                            BHs ->
+                                % Question with maybe additional columns
+                                [ P, repeat(<<>>, maybe_length(BHs)-1) ]
+                        end
+                    end,
+                    Prompts)
             ]),
             {Hs1, Prompts1, Answers};
         undefined ->

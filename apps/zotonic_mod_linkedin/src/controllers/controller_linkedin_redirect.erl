@@ -22,7 +22,8 @@
 
 -export([
     process/4,
-    fetch_user_data/1
+    fetch_user_data/1,
+    fetch_email_address/1
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -77,7 +78,7 @@ do_auth_user(Auth, Context) ->
             lager:info("[linkedin] Duplicate connection for user with props ~p", [Auth]),
             html_error(duplicate, Context);
         {error, {duplicate_email, Email}} ->
-            lager:info("[facebook] User with email \"~s\" already exists", [Email]),
+            lager:info("[linkedin] User with email \"~s\" already exists", [Email]),
             html_error(duplicate_email, Email, Context);
         {error, signup_confirm} ->
             % We need a confirmation from the user before we add a new account

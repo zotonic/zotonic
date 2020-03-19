@@ -42,20 +42,20 @@
 
     debug_msg/3,
 
-     log/3,
+    log/3,
 
-     debug/2,
-     debug/3,
-     debug/4,
-     info/2,
-     info/3,
-     info/4,
-     warning/2,
-     warning/3,
-     warning/4,
-     error/2,
-     error/3,
-     error/4
+    debug/2,
+    debug/3,
+    debug/4,
+    info/2,
+    info/3,
+    info/4,
+    warning/2,
+    warning/3,
+    warning/4,
+    error/2,
+    error/3,
+    error/4
 ]).
 
 -include("zotonic.hrl").

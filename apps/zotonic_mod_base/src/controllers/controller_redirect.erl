@@ -20,6 +20,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    is_authorized/1,
 	resource_exists/1,
 	previously_existed/1,
 	moved_temporarily/1,
@@ -27,6 +28,9 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+is_authorized(Context) ->
+    z_controller_helper:is_authorized(Context).
 
 resource_exists(Context) ->
 	{false, Context}.
@@ -45,7 +49,6 @@ moved_permanently(Context) ->
         true -> do_redirect(Context);
         false -> {false, Context}
     end.
-
 
 do_redirect(Context) ->
 	Location = case z_context:get(url, Context) of
@@ -73,7 +76,7 @@ do_redirect(Context) ->
 										end,
 										QArgs ++ Args1,
 										z_dispatcher:dispatcher_args()),
-					z_dispatcher:url_for(Dispatch, Args2, Context)
+					 z_html:unescape( z_dispatcher:url_for(Dispatch, Args2, Context) )
 			end;
 		Url ->
 			Url

@@ -431,63 +431,63 @@ do_poll(Context) ->
     end.
 
 do_poll_task(Context) ->
-    case poll_task(Context) of
-        {TaskId, Module, Function, Args, ErrCt} ->
-            try
-                case erlang:apply(Module, Function, ensure_list(Args) ++ [Context]) of
-                    {delay, Delay} ->
-                        Due = if
-                                is_integer(Delay) ->
-                                    calendar:gregorian_seconds_to_datetime(
-                                        calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
-                                is_tuple(Delay) ->
-                                    Delay
-                              end,
-                        z_db:update(pivot_task_queue, TaskId, [ {due, Due} ], Context);
-                    {delay, Delay, NewArgs} ->
-                        Due = if
-                                is_integer(Delay) ->
-                                    calendar:gregorian_seconds_to_datetime(
-                                        calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
-                                is_tuple(Delay) ->
-                                    Delay
-                              end,
-                        Fields = [
-                            {due, Due},
-                            {args, NewArgs}
-                        ],
-                        z_db:update(pivot_task_queue, TaskId, Fields, Context);
-                    _OK ->
-                        z_db:delete(pivot_task_queue, TaskId, Context)
-                end
-            catch
-                ?WITH_STACKTRACE(error, undef, Trace)
-                    lager:error("Task ~p failed - undefined function, aborting: ~p:~p(~p) ~p",
-                                [TaskId, Module, Function, Args, Trace]),
-                    z_db:delete(pivot_task_queue, TaskId, Context);
-                ?WITH_STACKTRACE(Error, Reason, Trace)
-                    case ErrCt < ?MAX_TASK_ERROR_COUNT of
-                        true ->
-                            RetryDue = calendar:gregorian_seconds_to_datetime(
-                                    calendar:datetime_to_gregorian_seconds(calendar:universal_time())
-                                    + task_retry_backoff(ErrCt)),
-                            lager:error("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p ~p",
-                                        [TaskId, Module, Function, Args, Error, Reason, RetryDue, Trace]),
-                            RetryFields = [
-                                {due, RetryDue},
-                                {error_ct, ErrCt+1}
-                            ],
-                            z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
-                        false ->
-                            lager:error("Task ~p failed - aborting ~p:~p(~p) ~p:~p ~p",
-                                        [TaskId, Module, Function, Args, Error, Reason, Trace]),
-                            z_db:delete(pivot_task_queue, TaskId, Context)
-                    end
-            end,
-            true;
-        empty ->
-            false
-    end.
+    execute_task(poll_task(Context), Context).
+
+execute_task({TaskId, Module, Function, Args, ErrCt}, Context) ->
+    try
+        case erlang:apply(Module, Function, ensure_list(Args) ++ [Context]) of
+            {delay, Delay} ->
+                Due = if
+                        is_integer(Delay) ->
+                            calendar:gregorian_seconds_to_datetime(
+                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
+                        is_tuple(Delay) ->
+                            Delay
+                      end,
+                z_db:update(pivot_task_queue, TaskId, [ {due, Due} ], Context);
+            {delay, Delay, NewArgs} ->
+                Due = if
+                        is_integer(Delay) ->
+                            calendar:gregorian_seconds_to_datetime(
+                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
+                        is_tuple(Delay) ->
+                            Delay
+                      end,
+                Fields = [
+                    {due, Due},
+                    {args, NewArgs}
+                ],
+                z_db:update(pivot_task_queue, TaskId, Fields, Context);
+            _OK ->
+                z_db:delete(pivot_task_queue, TaskId, Context)
+        end
+    catch
+        ?WITH_STACKTRACE(error, undef, Trace)
+            lager:error("Task ~p failed - undefined function, aborting: ~p:~p(~p) ~p",
+                        [TaskId, Module, Function, Args, Trace]),
+            z_db:delete(pivot_task_queue, TaskId, Context);
+        ?WITH_STACKTRACE(Error, Reason, Trace)
+            case ErrCt < ?MAX_TASK_ERROR_COUNT of
+                true ->
+                    RetryDue = calendar:gregorian_seconds_to_datetime(
+                            calendar:datetime_to_gregorian_seconds(calendar:universal_time())
+                            + task_retry_backoff(ErrCt)),
+                    lager:error("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p ~p",
+                                [TaskId, Module, Function, Args, Error, Reason, RetryDue, Trace]),
+                    RetryFields = [
+                        {due, RetryDue},
+                        {error_ct, ErrCt+1}
+                    ],
+                    z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
+                false ->
+                    lager:error("Task ~p failed - aborting ~p:~p(~p) ~p:~p ~p",
+                                [TaskId, Module, Function, Args, Error, Reason, Trace]),
+                    z_db:delete(pivot_task_queue, TaskId, Context)
+            end
+    end,
+    true;
+execute_task(empty, _Context) ->
+    false.
 
 
 task_retry_backoff(0) -> 10;

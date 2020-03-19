@@ -17,7 +17,7 @@
 		delegate=`controller_admin_edit`
 %}
 {% wire id="rscform" type="submit" postback={rscform view_location=view_location} delegate=`controller_admin_edit` %}
-<form id="rscform" method="post" action="postback" class="form">
+<form id="rscform" method="post" action="postback" class="form do_formdirty">
 	<input type="hidden" name="id" value="{{ id }}" />
 
 	<div class="meta-data row">

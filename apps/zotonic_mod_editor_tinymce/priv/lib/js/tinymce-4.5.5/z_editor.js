@@ -38,6 +38,11 @@ var z_editor = (function ($) {
         if ($el.attr('dir')) {
             options.directionality = $el.attr('dir');
         }
+        options.init_instance_callback = function (editor) {
+            editor.on('Change', function (e) {
+                $el.closest('form').trigger('z:editorChange');
+            });
+        }
         tinymce.init(options);
         $el.addClass(CLASS_EDITOR_INSTALLED);
     };
