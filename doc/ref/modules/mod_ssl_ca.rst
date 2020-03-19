@@ -13,29 +13,31 @@ directory. Default is: ``~/.zotonic/security/sitename/ca/``
 
 Where *sitename* must be replaced with the name of your site.
 
-The *security* directory can be in one of the following directories:
+The *security* directory for ``mod_ssl_ca`` can be one of the following directories:
 
- * ``/etc/zotonic/security/``
- * ``~/.zotonic/security/``
- * ``priv/security/``
+ * ``/etc/zotonic/security/sitename/ca``
+ * ``~/.zotonic/security/sitename/ca``
+ * ``priv/security/sitename/ca``
 
 If there is a directory ``priv/security/ca`` inside your site's OTP application folder then
 that directory will be used.
 
-The files all have the name of the site in them (*sitename* in the filenames below).
-This is to prevent mixing them up with other sites:
+The filenames are checked against their extension. When you copy your files to the
+``ca`` directory then you need to ensure that they have the right extensions.
 
-:file:`sitename.pem`
+The following file extensions are expected:
+
+:file:`*.pem` or :file:`*.key`
     This holds the private key for the encryption. The key must be unlocked and in
     PKCS#1 format (see below).
 
-:file:`sitename.crt`
+:file:`*.crt`
     This is the certificate. Usually it is supplied by the certificate authority where you
     bought it. It can also be a self signed certificate, see below.
 
-:file:`sitename.ca.crt`
+:file:`*.ca.crt`, :file:`cabundle.crt` or :file:`bundle.crt`
     This is the (optional) *CA bundle* that contains root and intermediate certificates for
-    the certificate authority that issued the :file:`sitename.crt` certificate.
+    the certificate authority that issued the :file:`.crt` certificate.
 
     The certificate authority will supply these. All supplied certificates are
     concatenated, with the root certificate last.
@@ -44,7 +46,7 @@ This is to prevent mixing them up with other sites:
 
 .. code-block:: bash
 
-        cat intermediate.crt root.crt > sitename.ca.crt
+        cat intermediate.crt root.crt > cabundle.crt
 
 Due to caching, it can take up to a minute before the new certificates are used.
 
@@ -52,81 +54,54 @@ Due to caching, it can take up to a minute before the new certificates are used.
 Format of the private key
 -------------------------
 
-The Erlang SSL implementation uses PKCS#1 format keys. OpenSSL generates (since 2010) PKCS#8
-format keys. The difference can be seen when inspecting the key file. A PKCS#1 key starts with:
+The Erlang SSL implementation accepts PKCS#1 and PKCS#8 format keys. OpenSSL generates (since 2010) PKCS#8
+format keys.
+
+A PKCS#1 key starts with:
 
 .. code-block:: none
 
     -----BEGIN RSA PRIVATE KEY-----
 
-Where a PKCS#8 key starts with:
+A PKCS#8 key starts with:
 
 .. code-block:: none
 
     -----BEGIN PRIVATE KEY-----
 
-If mod_ssl sees that the key file is a PKCS#8 file then it will stop and log the following
-error:
-
-.. code-block:: none
-
-    Need RSA private key file. Use: `openssl rsa -in ssl/ca/sitename.key -out ssl/ca/sitename.pem`
-
-The given command is the command needed to convert the key to a PKCS#1 key. The
-PKCS#8 key should be renamed to :file:`sitename.key` from :file:`sitename.pem`, before running the
-above command.
-
-Note that the resulting key file *must* be named :file:`sitename.pem` where *sitename* is the name of
-the site the key is placed in.
+If there are problems then check if the ``.key`` or ``.pem`` file starts with one of the above strings.
 
 
 Using SSL certificates
 ----------------------
 
 If you order a SSL certificate, the signing authority will ask you which kind of web server you are using and a CSR file.
-For the web server, select *other*. For the CSR, use the following command (replace ``sitename`` with
-the name of your site):
+For the web server, select *other*. For the CSR, use the following command:
 
 .. code-block:: bash
 
-    openssl req -out sitename.csr -new -newkey rsa:2048 -nodes -keyout sitename.key
+    openssl req -out certificate.csr -new -newkey rsa:2048 -nodes -keyout certificate.key
 
 When OpenSSL asks for the *Common Name* then fill in the site’s hostname (e.g. *www.example.com*).
 
-The resulting ``.key`` file can be converted to a ``.pem`` file:
+From the SSL certificate authority you will receive a signed ``.crt`` file and maybe a ``cabundle.crt`` file.
 
-.. code-block:: bash
-
-    openssl rsa -in sitename.key -out sitename.pem
-
-From the SSL certificate authority you will receive a signed ``.crt`` file.
-
-See the section *Certificate and key files* above for instructions how to use the ``.crt`` and ``.pem`` files.
+See the section *Certificate and key files* above for instructions how to use the ``.crt`` and ``.key`` files.
 
 
 Generating a self signed certificate
 ------------------------------------
 
-If you want to use a self signed certificate, then run the following commmands (where ``sitename`` should
-be replaced with the name of the site):
+There is no need to make your own self signed certificate as Zotonic will generate one for every site.
+
+Nevertheless, if you want to use your own self signed certificate, then run the following commmands:
 
 .. code-block:: bash
 
     openssl req -x509 -nodes -days 3650 -subj '/CN=www.example.com' -newkey rsa:2048 \
-         -keyout sitename.key -out sitename.crt
+         -keyout certificate.key -out certificate.crt
 
 This generates a private key of 2048 bits and a certificate that is valid for 10 years.
-
-If the key is in PKCS#8 format (it starts with ``-----BEGIN PRIVATE KEY-----``), 
-then run the following command as well:
-
-.. code-block:: bash
-
-    openssl rsa -in sitename.key -out sitename.pem
-
-If the key is already in PKCS#1 format (it starts with ``-----BEGIN RSA PRIVATE KEY-----``) 
-then just rename the file :file:`sitename.key` to :file:`sitename.pem`.
-
 
 .. seealso:: :ref:`mod_ssl_letsencrypt`, :ref:`ref-port-ssl-configuration`
 
