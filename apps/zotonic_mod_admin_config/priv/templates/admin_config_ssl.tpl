@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="admin-header">
-    <h2>{_ SSL Certificates provided by SSL modules _}</h2>
+    <h2>{_ Certificates provided by SSL modules _}</h2>
 
     <p>{_ This is a list of the certificates provided by modules and the system. The first certificate will be used. _}</p>
 
@@ -16,16 +16,20 @@
     {% endif %}
 </div>
 
-{% for cert in m.admin_config.ssl_certificates %}
-    {% if cert.is_zotonic_self_signed %}
-        {% include "_admin_config_ssl.tpl" nr=forloop.counter %}
-    {% else %}
-        {% catinclude "_admin_config_ssl.tpl" [cert.module] cert=cert nr=forloop.counter %}
-    {% endif %}
-{% endfor %}
-
-<p>
-    <span class="glyphicon glyphicon-info-sign"></span> {_ The certificates are located in _}: <tt>{{ m.admin_config.security_dir|escape }}</tt>
+<p class="text-muted">
+    <span class="glyphicon glyphicon-info-sign"></span> {_ The default directory for all site-certificates is  _}: <tt>{{ m.admin_config.security_dir|escape }}</tt>
 </p>
+
+<div class="row">
+{% for cert in m.admin_config.ssl_certificates %}
+    <div class="col-md-6">
+        {% if cert.is_zotonic_self_signed %}
+            {% include "_admin_config_ssl.tpl" nr=forloop.counter %}
+        {% else %}
+            {% catinclude "_admin_config_ssl.tpl" [cert.module] cert=cert nr=forloop.counter %}
+        {% endif %}
+    </div>
+{% endfor %}
+</div>
 
 {% endblock %}

@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012-2016 Marc Worrell, Maas-Maarten Zeeman
-%%
+%% @copyright 2012-2020 Marc Worrell, Maas-Maarten Zeeman
 %% @doc CA supplied certificate handling
 
-%% Copyright 2012 - 2016 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2012 - 2020 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,7 +27,8 @@
 -author('Marc Worrell <marc@worrell.nl>').
 
 -export([
-    observe_ssl_options/2
+    observe_ssl_options/2,
+    ssl_options/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -40,42 +40,50 @@ observe_ssl_options(#ssl_options{server_name=_NormalizedHostnameBin}, Context) -
     z_depcache:memo(fun() -> ssl_options(Context) end, sni_ssl_ca, ?SNI_CACHE_TIME, Context).
 
 ssl_options(Context) ->
-    {ok, CertFiles} = cert_files(Context),
-    CertFile = proplists:get_value(certfile, CertFiles),
-    KeyFile = proplists:get_value(keyfile, CertFiles),
-    case {filelib:is_file(CertFile), filelib:is_file(KeyFile)} of
-        {false, false} ->
-            lager:info("mod_ssl_ca: no ~p and ~p files, skipping.",
-                       [CertFile, KeyFile]),
-            undefined;
-        {false, true} ->
-            lager:info("mod_ssl_ca: no ~p file (though there is a key file), skipping.",
-                       [CertFile]),
-            undefined;
-        {true, false} ->
-            lager:info("mod_ssl_ca: no ~p file (though there is a crt file), skipping.",
-                       [KeyFile]),
-            undefined;
-        {true, true} ->
-            case check_keyfile(KeyFile, Context) of
+    case cert_files(Context) of
+        {ok, CertFiles} ->
+            PemFile = proplists:get_value(keyfile, CertFiles),
+            case check_keyfile(PemFile) of
                 ok -> {ok, CertFiles};
                 {error, _} -> undefined
-            end
+            end;
+        {error, _} ->
+            undefined
     end.
 
 cert_files(Context) ->
     SSLDir = cert_dir(Context),
-    Sitename = z_convert:to_list(z_context:site(Context)),
-    Files = [
-        {certfile, filename:join(SSLDir, Sitename++".crt")},
-        {keyfile, filename:join(SSLDir, Sitename++".pem")},
-        {password, z_convert:to_list(m_config:get_value(mod_ssl, password, "", Context))}
+    Files = scan_cert_dir(SSLDir),
+    files_to_ssl_options(Files).
+
+files_to_ssl_options(#{ bundle := CaCrt, crt := Crt, pem := Pem }) ->
+    Options = [
+        {certfile, Crt},
+        {keyfile, Pem},
+        {cacertfile, CaCrt}
     ] ++ z_ssl_dhfile:dh_options(),
-    CaCertFile = filename:join(SSLDir, Sitename++".ca.crt"),
-    case filelib:is_file(CaCertFile) of
-        false -> {ok, Files};
-        true -> {ok, [{cacertfile, CaCertFile} | Files]}
-    end.
+    {ok, Options};
+files_to_ssl_options(#{ crt := Crt, pem := Pem }) ->
+    Options = [
+        {certfile, Crt},
+        {keyfile, Pem}
+    ] ++ z_ssl_dhfile:dh_options(),
+    {ok, Options};
+files_to_ssl_options(#{ bundle := CaCrt, crt := Crt, key := Key }) ->
+    Options = [
+        {certfile, Crt},
+        {keyfile, Key},
+        {cacertfile, CaCrt}
+    ] ++ z_ssl_dhfile:dh_options(),
+    {ok, Options};
+files_to_ssl_options(#{ crt := Crt, key := Key }) ->
+    Options = [
+        {certfile, Crt},
+        {keyfile, Key}
+    ] ++ z_ssl_dhfile:dh_options(),
+    {ok, Options};
+files_to_ssl_options(_Files) ->
+    {error, notfound}.
 
 cert_dir(Context) ->
     PrivSSLDir = filename:join([z_path:site_dir(Context), "priv", "security", "ca"]),
@@ -87,23 +95,67 @@ cert_dir(Context) ->
             filename:join([ SecurityDir, z_context:site(Context), "ca" ])
     end.
 
-check_keyfile(KeyFile, Context) ->
-    Site = z_context:site(Context),
-    case file:read_file(KeyFile) of
+scan_cert_dir( Dir ) ->
+    Files = filelib:wildcard( filename:join( Dir, "*" ) ),
+    lists:foldl(
+        fun
+            (F, Acc) ->
+                case filelib:is_dir(F) of
+                    true ->
+                        Acc;
+                    false ->
+                        case filename:basename(F) of
+                            "cabundle.crt" ->
+                                Acc#{ bundle => F };
+                            "bundle.crt" ->
+                                Acc#{ bundle => F };
+                            Basename ->
+                                case filename:extension(Basename) of
+                                    "" -> Acc;
+                                    ".crt" ->
+                                        case filename:basename(Basename, ".ca.crt") of
+                                            Basename -> Acc#{ crt => F };
+                                            _ -> Acc#{ bundle => F }
+                                        end;
+                                    ".key" ->
+                                        case classify_key_file(F) of
+                                            pem -> Acc#{ pem => F };
+                                            key -> Acc#{ key => F };
+                                            error -> Acc
+                                        end;
+                                    ".pem" ->
+                                        Acc#{ pem => F };
+                                    _Ext ->
+                                        Acc
+                                end
+                        end
+                end
+        end,
+        #{},
+        Files).
+
+classify_key_file(File) ->
+    case file:read_file(File) of
         {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
-            lager:error("Need RSA private key file. Use: `openssl rsa -in ssl/ca/~p.key -out ssl/ca/~p.pem`",
-                        [Site, Site]),
-            {error, need_rsa_private_key};
+            key;
+        {ok, <<"-----BEGIN RSA PRIVATE KEY", _/binary>>} ->
+            pem;
+        _ ->
+            error
+    end.
+
+check_keyfile(PemFile) ->
+    case file:read_file(PemFile) of
         {ok, Bin} ->
             case public_key:pem_decode(Bin) of
                 [] ->
-                    lager:error("No private keys found in ~p", [KeyFile]),
+                    lager:error("No private PEM key found in ~p", [PemFile]),
                     {error, no_private_keys_found};
                 _ ->
                     ok
             end;
         {error, _} = Error ->
             lager:error("Cannot read key file ~p, error: ~p",
-                        [KeyFile, Error]),
+                        [PemFile, Error]),
             Error
     end.

@@ -1,10 +1,16 @@
 {% with m.ssl_letsencrypt.status as status %}
     {% if status.request_status == `ok` %}
-        <p class="text-success">{_ Let’s Encrypt certificate request was successful! _}</p>
+        <p class="alert alert-success">
+            {_ Let’s Encrypt certificate request was successful! _}
+            <span class="text-muted">&mdash; {{ status.request_start|timesince }}</span>
+        </p>
     {% elseif status.request_status == `error` %}
-        <p class="text-danger">{_ Sorry, there was an error fetching the Let’s Encrypt certificate. _}</p>
+        <p class="alert alert-danger">
+            {_ Sorry, there was an error fetching the Let’s Encrypt certificate. _}
+            <span class="text-muted">&mdash; {{ status.request_start|timesince }}</span>
+        </p>
     {% elseif status.request_status == `requesting` %}
-        <p class="text-info">
+        <p class="alert alert-info">
             {_ Requesting a certificate from Let’s Encrypt for _}
             <strong>{{ status.request_hostname|escape }}</strong>
             ...
@@ -30,14 +36,25 @@
             <tr>
                 <th>{_ Valid till _}</th>
                 <td>
-                    {{ status.cert_valid_till|date:"Y-m-d H:i" }}
+                    {{ status.cert_valid_till|date:"Y-m-d H:i" }}<br>
+                    <span class="text-muted">{{ status.cert_valid_till|timesince }}</span>
                 </td>
             </tr>
         </table>
 
-        <p class="text-muted">
+        <p>
             <span class="glyphicon glyphicon-info-sign"></span> {_ Certificates are automatically renewed before they expire. _}
         </p>
+
+        {% if status.request_status == `error` %}
+            <p>
+                {_ Retry the request below. _}
+            </p>
+        {% elseif status.request_status != `requesting` %}
+            <p>
+                {_ If you want different hostnames in the certificate then request a new certificate below. _}
+            </p>
+        {% endif %}
     {% else %}
         <p>{_ There is no certificate from Let’s Encrypt. You can request one with the form. _}</p>
     {% endif %}

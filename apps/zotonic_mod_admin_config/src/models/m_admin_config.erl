@@ -66,7 +66,8 @@ ssl_certificate({Module, observe_ssl_options}, Context) ->
                     case z_ssl_certs:decode_cert(CertFile) of
                         {ok, CertProps} ->
                             modinfo(Module) ++ [
-                                {certificate, CertProps}
+                                {certificate, CertProps},
+                                {directory, filename:dirname(CertFile)}
                             ];
                         {error, _} ->
                             modinfo(Module)
