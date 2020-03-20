@@ -346,7 +346,7 @@ handle_cast({delivery_report, What, OptRecipient, MsgIdHeader, OptStatusMessage}
         _ ->
             % We got a bounce, but we don't have the message anymore.
             % Custom bounce domains make this difficult to process.
-            case z_sites_dispatcher:get_host_for_domain(Domain) of
+            case z_sites_dispatcher:get_site_for_hostname(Domain) of
                 {ok, Host} ->
                     Context = z_context:new(Host),
                     handle_delivery_report(What, MsgId, OptRecipient, OptStatusMessage, Context);
