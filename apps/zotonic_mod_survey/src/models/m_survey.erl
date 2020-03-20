@@ -39,6 +39,7 @@
 
     is_answer_user/2,
     is_answer_user/3,
+    answer_user/2,
 
     list_results/2,
     single_result/3,
@@ -213,7 +214,7 @@ is_allowed_results_download(Id, Context) ->
     orelse z_notifier:first(#survey_is_allowed_results_download{id=Id}, Context) =:= true.
 
 %% @doc Return the list of known survey handlers
--spec get_handlers(#context{}) -> list({atom(), binary()}).
+-spec get_handlers(z:context()) -> list({atom(), binary()}).
 get_handlers(Context) ->
     z_notifier:foldr(#survey_get_handlers{}, [], Context).
 
@@ -714,11 +715,11 @@ answer_prompt(Block) ->
         _M -> proplists:get_value(prompt, Block, <<>>)
     end.
 
--spec is_answer_user(integer(), #context{}) -> boolean().
+-spec is_answer_user(integer(), z:context()) -> boolean().
 is_answer_user(AnsId, Context) ->
     is_answer_user(AnsId, z_acl:user(Context), Context).
 
--spec is_answer_user(integer(), integer(), #context{}) -> boolean().
+-spec is_answer_user(integer(), integer(), z:context()) -> boolean().
 is_answer_user(AnsId, UserId, Context) when is_integer(UserId) ->
     AnsUserId = z_db:q1("
         select user_id
@@ -730,7 +731,16 @@ is_answer_user(AnsId, UserId, Context) when is_integer(UserId) ->
 is_answer_user(_AnsId, _UserId, _Context) ->
     false.
 
--spec list_results(integer(), #context{}) -> list().
+-spec answer_user(integer(), z:context()) -> integer() | undefined.
+answer_user(AnsId, Context) ->
+    z_db:q1("
+        select user_id
+        from survey_answers
+        where id = $1",
+        [AnsId],
+        Context).
+
+-spec list_results(integer(), z:context()) -> list().
 list_results(SurveyId, Context) when is_integer(SurveyId) ->
     z_db:assoc("
         select *
@@ -741,7 +751,7 @@ list_results(SurveyId, Context) when is_integer(SurveyId) ->
         [SurveyId],
         Context).
 
--spec single_result(integer(), integer(), #context{}) -> list().
+-spec single_result(integer(), integer(), z:context()) -> list().
 single_result(SurveyId, AnswerId, Context) when is_integer(SurveyId), is_integer(AnswerId) ->
     case z_db:assoc_props_row("
             select *
