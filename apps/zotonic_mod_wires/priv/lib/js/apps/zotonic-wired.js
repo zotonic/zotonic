@@ -180,27 +180,51 @@ function z_dialog_alert(options)
 
 function z_dialog_overlay_open(options)
 {
-    var $overlay = $('.modal-overlay');
+    var overlay_id = 'modal-overlay';
+
+    if (typeof options.level !== 'undefined' && options.level > 0) {
+        overlay_id = overlay_id + "-level-" + options.level;
+        level = options.level;
+    } else {
+        level = 0;
+    }
+    var $overlay = $('#'+overlay_id);
     if ($overlay.length > 0) {
         $overlay
-            .html(options.html)
+            .html('<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' + options.html)
             .attr('class', 'modal-overlay')
             .show();
     } else {
-        html = '<div class="modal-overlay">' +
-               '<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close()">&times;</a>' +
+        html = '<div class="modal-overlay modal-overlay-level-' + level + '" id="' + overlay_id + '">' +
+               '<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' +
                options.html +
                '</div>';
         $('body').append(html);
+        $overlay = $('#'+overlay_id);
     }
     if (options.class) {
-        $('.modal-overlay').addClass(options.class);
+        $overlay.addClass(options.class);
     }
+    $('body').addClass('overlay-open');
+    if (typeof($.widgetManager) != 'undefined') {
+        $overlay.widgetManager();
+    }
+    z_editor_add($overlay);
 }
 
-function z_dialog_overlay_close()
+function z_dialog_overlay_close( closeButton )
 {
-    $('.modal-overlay').remove();
+    var $overlay;
+
+    if (typeof closeButton !== 'undefined') {
+        $overlay = $(closeButton).closest(".modal-overlay");
+    } else {
+        $overlay = $('.modal-overlay');
+    }
+    $overlay.remove();
+    if ($('.modal-overlay').length == 0) {
+        $('body').removeClass('overlay-open');
+    }
     return false;
 }
 
@@ -964,6 +988,7 @@ function z_init_postback_forms()
             theForm.clk_x = null;
             theForm.clk_y = null;
             ev.stopPropagation();
+            $(theForm).trigger('z:formSubmit');
             return false;
         };
 

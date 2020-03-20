@@ -552,13 +552,13 @@ do_submit(SurveyId, Questions, Answers, Context) ->
         undefined ->
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
             {ok, ResultId} = insert_survey_submission(SurveyId, StorageAnswers, Context),
-            maybe_mail(SurveyId, Answers, ResultId, Context),
+            maybe_mail(SurveyId, Answers, ResultId, false, Context),
             ok;
         ok ->
-            maybe_mail(SurveyId, Answers, undefined, Context),
+            maybe_mail(SurveyId, Answers, undefined, false, Context),
             ok;
         {ok, _Context1} = Handled ->
-            maybe_mail(SurveyId, Answers, undefined, Context),
+            maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
@@ -574,8 +574,8 @@ insert_survey_submission(SurveyId, StorageAnswers, Context) ->
                              end,
     m_survey:insert_survey_submission(SurveyId, UserId, PersistentId, StorageAnswers, Context1).
 
-maybe_mail(SurveyId, Answers, ResultId, Context) ->
-    case probably_email(SurveyId, Context) of
+maybe_mail(SurveyId, Answers, ResultId, IsEditing, Context) ->
+    case IsEditing orelse probably_email(SurveyId, Context) of
         true ->
             PrepAnswers = survey_answer_prep:readable(SurveyId, Answers, Context),
             Attachments = uploads(Context),
@@ -583,7 +583,7 @@ maybe_mail(SurveyId, Answers, ResultId, Context) ->
                 undefined -> undefined;
                 _ -> m_survey:single_result(SurveyId, ResultId, Context)
             end,
-            mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context),
+            mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditing, Context),
             mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context);
         false ->
             nop
@@ -629,10 +629,17 @@ mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
                 Es)
     end.
 
-mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context) ->
+mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditing, Context) ->
     case z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)) of
         true ->
-            case find_email_respondent(Answers, Context) of
+            EmailUser = case IsEditing of
+                false ->
+                    m_rsc:p_no_acl(z_acl:user(Context), email_raw, Context);
+                true ->
+                    AnsUserId = m_survey:answer_user(ResultId, Context),
+                    m_rsc:p_no_acl(AnsUserId, email_raw, Context)
+            end,
+            case find_email_respondent(Answers, EmailUser) of
                 <<>> ->
                     skip;
                 undefined ->
@@ -650,16 +657,16 @@ mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context) ->
             skip
     end.
 
-find_email_respondent([], Context) ->
-    m_rsc:p_no_acl(z_acl:user(Context), email, Context);
-find_email_respondent([{<<"email">>, Ans}|As], Context) ->
+find_email_respondent([], Default) ->
+    Default;
+find_email_respondent([{<<"email">>, Ans}|As], Default) ->
     Ans1 = z_string:trim(Ans),
     case z_utils:is_empty(Ans1) of
-        true -> find_email_respondent(As, Context);
+        true -> find_email_respondent(As, Default);
         false -> Ans1
     end;
-find_email_respondent([_Ans|As], Context) ->
-    find_email_respondent(As, Context).
+find_email_respondent([_Ans|As], Default) ->
+    find_email_respondent(As, Default).
 
 
 %% @doc Collect all answers, report any missing answers.
@@ -702,6 +709,12 @@ admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actio
             {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
             m_survey:replace_survey_submission(SurveyId, AnswerId, StorageAnswers, Context),
+            case z_context:get_q(<<"submit-email">>, Context) of
+                undefined ->
+                    ok;
+                _SomeValue ->
+                    maybe_mail(SurveyId, Answers, AnswerId, true, Context)
+            end,
             case Actions of
                 [] ->
                     Context1 = z_render:dialog_close(Context),

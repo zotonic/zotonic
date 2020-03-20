@@ -18,7 +18,7 @@
 		{% if id.email_text_html %}
 			{{ id.email_text_html|show_media:"_body_media_mailing.tpl" }}
 		{% else %}
-			<p>{_ Thank you for filling in: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a></p>
+			<p>{_ The following has been filled in: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a></p>
 		{% endif %}
 	{% endif %}
 {% endblock %}

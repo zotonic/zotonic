@@ -314,7 +314,8 @@
 -record(email_status, {
     recipient :: binary(),
     is_valid :: boolean(),
-    is_final :: boolean()
+    is_final :: boolean(),
+    is_manual :: boolean()
 }).
 
 %% @doc Bounced e-mail notification.  The recipient is the e-mail that is bouncing. When the
@@ -342,7 +343,7 @@
     message_nr :: binary(),
     recipient :: binary(),
     is_final :: boolean(),
-    reason :: retry | illegal_address | smtphost | sender_disabled | error,
+    reason :: bounce | retry | illegal_address | smtphost | sender_disabled | error,
     retry_ct :: non_neg_integer() | undefined,
     status :: binary() | undefined
 }).

@@ -13,8 +13,11 @@
 	{% image props.preview_filename width=options.width height=options.height class=options.class %}
 {% elseif props.filename %}
 	<video id="{{ #video }}" style="max-width: 100%; height: auto;" poster="{% image_url props.id width=props.width height=props.height %}"
-			controls="controls" preload="none"
-			width="{{ props.width }}" height="{{ props.height }}">
+			controls
+            {% if options.autoplay %}autoplay
+            {% else %}preload="none"
+            {% endif %}
+            width="{{ props.width }}" height="{{ props.height }}">
 		<source type="{{ props.mime }}" src="{% url media_inline star=props.filename %}" />
 	</video>
 {% endif %}

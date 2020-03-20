@@ -58,12 +58,20 @@
 	<div class="container">
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-4 col-md-4">
-				{% block close_button %}
-					<a href="{{ id.page_url }}" class="btn btn-default">{_ Close _}</a>
-				{% endblock %}
-			</div>
-			<div class="col-lg-8 col-md-8" id="save-buttons" style="display:none">
+			{% if tree_id %}
+				<div class="col-lg-4 col-md-4">
+					{% block close_button %}
+						{% if id.is_temporary %}
+							<a href="{% url mx_resource_cleanup id=id %}" class="btn btn-default">{_ Close _}</a>
+						{% else %}
+							<a href="{{ id.page_url }}" class="btn btn-default">{_ Close _}</a>
+						{% endif %}
+					{% endblock %}
+				</div>
+				<div class="col-lg-8 col-md-8" id="save-buttons" style="display:none">
+			{% else %}
+				<div class="col-lg-12 col-md-12" id="save-buttons" style="display:none">
+			{% endif %}
 				<span class="navbar-brand visible-desktop">{_ This page _}</span>
 
 				{% button class="btn btn-primary" text=_"Save" title=_"Save this page."
@@ -74,7 +82,13 @@
 						  action={script script="$('#save_view').click();"}
 				 %}
 
-				{% button class="btn btn-default pull-right" text=_"Cancel" action={redirect back} tag="a" %}
+				{% if id.is_temporary %}
+					<a href="{% url mx_resource_cleanup id=id %}" class="btn">{_ Cancel _}</a>
+				{% elseif not tree_id %}
+					<a href="{{ id.page_url }}" class="btn">{_ Cancel _}</a>
+				{% else %}
+					{% button class="btn pull-right" text=_"Cancel" action={redirect back} tag="a" %}
+				{% endif %}
 	    	</div>
 		</div>
 	</div>
@@ -92,6 +106,7 @@
 	    "js/modules/z.datepicker.js"
 	    "js/modules/z.menuedit.js"
 	    "js/modules/z.cropcenter.js"
+	    "js/modules/z.formdirty.js"
 	    "js/modules/jquery.shorten.js"
 	    "js/modules/jquery.timepicker.min.js"
 
@@ -103,4 +118,10 @@
 	%}
 	{% all include "_admin_lib_js.tpl" %}
 	{% include "_editor.tpl" is_editor_include %}
+
+	{% javascript %}
+	    window.z_translations["Yes, discard changes"] = "{_ Yes, discard changes _}";
+	    window.z_translations["There are unsaved changes. Are you sure you want to leave without saving?"]
+	    	= "{_ There are unsaved changes. Are you sure you want to leave without saving? _}";
+	{% endjavascript %}
 {% endblock %}

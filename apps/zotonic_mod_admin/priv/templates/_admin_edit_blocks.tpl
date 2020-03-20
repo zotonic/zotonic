@@ -28,6 +28,7 @@ $('#edit-blocks').sortable({
     },
     stop: function(event, ui) {
         z_editor_add($(this));
+        $(this).closest('form').trigger('change');
     }
 })
 .on('click', '.block-remove', function(event) {
@@ -42,6 +43,7 @@ $('#edit-blocks').sortable({
             $block
                 .fadeTo('fast', 0.0)
                 .slideUp('normal', 0.0, function() {
+                    $(this).closest('form').trigger('change');
                     z_editor_remove($(this));
                     $(this).remove();
                 });

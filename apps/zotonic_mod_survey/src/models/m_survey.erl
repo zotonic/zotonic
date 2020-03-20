@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2011 Marc Worrell
+%% @copyright 2010-2020 Marc Worrell
 %%
 %% @doc Model for accessing survey information.
 
-%% Copyright 2010-2011 Marc Worrell
+%% Copyright 2010-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@
 
     is_answer_user/2,
     is_answer_user/3,
+    answer_user/2,
 
     list_results/2,
     single_result/3,
@@ -213,7 +214,7 @@ is_allowed_results_download(Id, Context) ->
     orelse z_notifier:first(#survey_is_allowed_results_download{id=Id}, Context) =:= true.
 
 %% @doc Return the list of known survey handlers
--spec get_handlers(#context{}) -> list({atom(), binary()}).
+-spec get_handlers(z:context()) -> list({atom(), binary()}).
 get_handlers(Context) ->
     z_notifier:foldr(#survey_get_handlers{}, [], Context).
 
@@ -504,7 +505,7 @@ survey_results(SurveyId, IsAnonymous, Context) ->
     [ Hs | Data ].
 
 %% @doc Return all results of a survey with separate names, prompts and data
-survey_results_prompts(undefined, _IsAnonymous, _Context) ->
+survey_results_prompts(undefined, _IsForceAnonymous, _Context) ->
     {[], [], []};
 survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(SurveyId) ->
     case get_questions(SurveyId, Context) of
@@ -523,7 +524,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
             Hs = [ {B, answer_header(B, MaxPoints, Context)} || {_,B} <- NQs ],
             Prompts = [ {B, z_trans:lookup_fallback(answer_prompt(B), Context)} || {_,B} <- NQs ],
             Hs1 = lists:flatten([
-                case IsForceAnonymous of
+                case IsAnonymous of
                     true -> [ ?__(<<"Date">>, Context) ];
                     false ->
                         [
@@ -543,7 +544,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                 [ H || {_,H} <- Hs ]
             ]),
             Prompts1 = lists:flatten([
-                case IsForceAnonymous of
+                case IsAnonymous of
                     true -> [ <<>> ];
                     false -> [ <<>>, <<>>, <<>> ]
                 end,
@@ -551,7 +552,18 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                     0 -> [];
                     _ -> [ <<>>, <<>>, <<>> ]
                 end,
-                [ [ P, repeat(<<>>, maybe_length(proplists:get_value(B, Hs, []))-1) ] || {B,P} <- Prompts ]
+                lists:map(
+                    fun({B, P}) ->
+                        case proplists:get_value(B, Hs, []) of
+                            [] ->
+                                % Not a question
+                                [];
+                            BHs ->
+                                % Question with maybe additional columns
+                                [ P, repeat(<<>>, maybe_length(BHs)-1) ]
+                        end
+                    end,
+                    Prompts)
             ]),
             {Hs1, Prompts1, Answers};
         undefined ->
@@ -703,11 +715,11 @@ answer_prompt(Block) ->
         _M -> proplists:get_value(prompt, Block, <<>>)
     end.
 
--spec is_answer_user(integer(), #context{}) -> boolean().
+-spec is_answer_user(integer(), z:context()) -> boolean().
 is_answer_user(AnsId, Context) ->
     is_answer_user(AnsId, z_acl:user(Context), Context).
 
--spec is_answer_user(integer(), integer(), #context{}) -> boolean().
+-spec is_answer_user(integer(), integer(), z:context()) -> boolean().
 is_answer_user(AnsId, UserId, Context) when is_integer(UserId) ->
     AnsUserId = z_db:q1("
         select user_id
@@ -719,7 +731,16 @@ is_answer_user(AnsId, UserId, Context) when is_integer(UserId) ->
 is_answer_user(_AnsId, _UserId, _Context) ->
     false.
 
--spec list_results(integer(), #context{}) -> list().
+-spec answer_user(integer(), z:context()) -> integer() | undefined.
+answer_user(AnsId, Context) ->
+    z_db:q1("
+        select user_id
+        from survey_answers
+        where id = $1",
+        [AnsId],
+        Context).
+
+-spec list_results(integer(), z:context()) -> list().
 list_results(SurveyId, Context) when is_integer(SurveyId) ->
     z_db:assoc("
         select *
@@ -730,7 +751,7 @@ list_results(SurveyId, Context) when is_integer(SurveyId) ->
         [SurveyId],
         Context).
 
--spec single_result(integer(), integer(), #context{}) -> list().
+-spec single_result(integer(), integer(), z:context()) -> list().
 single_result(SurveyId, AnswerId, Context) when is_integer(SurveyId), is_integer(AnswerId) ->
     case z_db:assoc_props_row("
             select *

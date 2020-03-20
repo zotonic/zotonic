@@ -104,7 +104,6 @@
               .modal({backdrop: options.backdrop})
               .css({'overflow-x': 'hidden', 'overflow-y': 'auto'});
 
-
             if (options.center) {
                 $modalDialog.hide();
                 setTimeout(function() {

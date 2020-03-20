@@ -1,22 +1,38 @@
 
 $(function() {
+	function confirm_unsaved( hash ) {
+		z_editor_save($('#rscform'));
+		if ($('#rscform').attr('data-formdirty')) {
+			z_dialog_confirm({
+				ok: z_translate("Yes, discard changes"),
+				text: '<p>' + z_translate("There are unsaved changes. Are you sure you want to leave without saving?") + '</p>',
+				on_confirm: function() {
+					window.location.hash = hash;
+				}
+			});
+		} else {
+			window.location.hash = hash;
+		}
+	}
+
 	$('body').on("click", "a", function(evt) {
 		var href = $(this).attr('href');
 		var m = href && href.match(/\/(..\/)?admin\/edit\/([0-9]+)$/);
 		if (m) {
-			window.location.hash = "#edit_id="+m[2];
+			confirm_unsaved("#edit_id="+m[2]);
 			evt.preventDefault();
 		}
 	});
 
 	cotonic.broker.subscribe("menu/insert", function(msg) {
-		window.location.hash = "#edit_id="+msg.payload.id;
+		confirm_unsaved("#edit_id="+msg.payload.id);
 	});
 
 	z_event_register("admin-menu-edit", function(args) {
 		for (var i in args) {
 			if (args[i]["name"] == "id") {
-				window.location.hash = "#edit_id="+args[i].value;
+				confirm_unsaved("#edit_id="+args[i].value);
+				break;
 			}
 		}
 	});

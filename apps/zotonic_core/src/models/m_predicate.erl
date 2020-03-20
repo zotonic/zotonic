@@ -63,6 +63,8 @@ m_get([ is_valid_object_category, Predicate, Category | Rest ], _Msg, Context) -
     IsValid = case lists:member({CatId}, ValidCats) of
         true ->
             true;
+        false when ValidCats =:= [] ->
+            true;
         false ->
             IsA = m_category:is_a(CatId, Context),
             lists:any(
@@ -78,6 +80,8 @@ m_get([ is_valid_subject_category, Predicate, Category | Rest ], _Msg, Context) 
     ValidCats = subject_category(Predicate, Context),
     IsValid = case lists:member({CatId}, ValidCats) of
         true ->
+            true;
+        false when ValidCats =:= [] ->
             true;
         false ->
             IsA = m_category:is_a(CatId, Context),

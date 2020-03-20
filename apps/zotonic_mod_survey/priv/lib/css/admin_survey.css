@@ -127,13 +127,13 @@ label.block-type {
     background-color: #f8f8ff;
 }
 
-#modal-question .span4 {
+#modal-question .col-md-4 {
     min-height: 5em;
     cursor: pointer;
 }
 
-#modal-question .span4 input,
-#modal-question .span4 textarea,
-#modal-question .span4 select {
+#modal-question .col-md-4 input,
+#modal-question .col-md-4 textarea,
+#modal-question .col-md-4 select {
     cursor: pointer;
 }

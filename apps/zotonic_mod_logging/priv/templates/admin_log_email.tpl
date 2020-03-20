@@ -47,9 +47,9 @@
                 <div class="widget-content">
                     <h3>{_ Resources with email identity _} &lt;{{ q.to|escape }}&gt;</h3>
                     <br>
-                    <ol>
+                    <ol id="email-identities">
                         {% for idn in m.identity.lookup.email[q.to] %}
-                            <li>
+                            <li class="{% if not idn.rsc_id.is_a.person %}hidden non-person{% endif %}">
                                 <b>
                                     <a href="{% url admin_edit_rsc id=idn.rsc_id %}">
                                         {{ idn.rsc_id.title|default:"untitled" }}
@@ -65,6 +65,18 @@
                             </li>
                         {% endfor %}
                     </ol>
+                    <p>
+                        <a id="identities-show-all" href="#" class="btn btn-default" style="display:none">{_ Toggle non people _}</a>
+                    </p>
+                    {% javascript %}
+                        if ($('#email-identities li.non-person').length > 0) {
+                            $('#identities-show-all').show();
+                        }
+                        $('#identities-show-all').on('click', function(e) {
+                            e.preventDefault();
+                            $('#email-identities li.non-person').toggleClass('hidden');
+                        });
+                    {% endjavascript %}
                 </div>
             </div>
         </div>
