@@ -636,7 +636,7 @@ mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditin
                 false ->
                     m_rsc:p_no_acl(z_acl:user(Context), email_raw, Context);
                 true ->
-                    AnsUserId = answer_user(ResultId, Context),
+                    AnsUserId = m_survey:answer_user(ResultId, Context),
                     m_rsc:p_no_acl(AnsUserId, email_raw, Context)
             end,
             case find_email_respondent(Answers, EmailUser) of
@@ -744,11 +744,6 @@ is_answer_user(AnswerId, Context) when is_integer(AnswerId) ->
     end;
 is_answer_user(_, _Context) ->
     false.
-
-answer_user({user, UserId}, _) ->
-    UserId;
-answer_user(AnswerId, Context) ->
-    m_survey:answer_user(AnswerId, Context).
 
 survey_answers_to_storage(AnsPerBlock) ->
     lists:flatten(
