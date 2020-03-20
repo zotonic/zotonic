@@ -562,6 +562,16 @@ fieldset[disabled] .btn-primary.active {
 #dialog_new_rsc_results .items .item .rsc-actions {
   text-align: right;
 }
+.panel-footer .inline-div {
+  display: inline-block;
+  margin-left: 20px;
+}
+.panel-footer .inline-div::first-child {
+  margin-top: 0;
+}
+.panel-footer .inline-div:last-child {
+  margin-bottom: 0;
+}
 .block-add-block {
   margin: 0 0 9px 0;
 }

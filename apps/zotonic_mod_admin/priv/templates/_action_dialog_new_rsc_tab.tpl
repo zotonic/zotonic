@@ -210,6 +210,18 @@
 		    {% endif %}
 
 			{% block rsc_props %}
+	            {% if subject_id %}
+	                <div class="form-group row">
+	                    <div class="col-md-9 col-md-offset-3">
+	                        <div class="checkbox">
+	                            <label>
+	                                <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1">
+	                                {_ Delete after disconnecting from _}: {{ subject_id.title }}
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div>
+	            {% endif %}
 				<div class="form-group row">
 					<div class="col-md-9 col-md-offset-3">
 						<div class="checkbox">
