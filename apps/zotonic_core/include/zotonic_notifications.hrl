@@ -343,7 +343,7 @@
     message_nr :: binary(),
     recipient :: binary(),
     is_final :: boolean(),
-    reason :: retry | illegal_address | smtphost | sender_disabled | error,
+    reason :: bounce | retry | illegal_address | smtphost | sender_disabled | error,
     retry_ct :: non_neg_integer() | undefined,
     status :: binary() | undefined
 }).
