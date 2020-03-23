@@ -38,7 +38,7 @@
                             <td>
                                 <input type="radio" id="{{ #default.code }}" name="is_default" value="{{ code }}"
                                 {% if code == default_code %}checked="checked"{% endif %} />
-                                {% wire id=#default.code postback={language_status code=code} delegate="mod_translation" %}
+                                {% wire id=#default.code postback={language_default code=code} delegate="mod_translation" %}
                             </td>
                             <td>
                                 <input type="radio" id="{{ #enabled.code }}" name="status-{{ code }}" value="enabled"
