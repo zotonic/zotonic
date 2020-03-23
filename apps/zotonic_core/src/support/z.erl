@@ -70,11 +70,13 @@
 
 -type context() :: #context{}.
 -type validation_error() :: invalid | novalue | {script, string()} | novalidator | string().
+-type trans() :: #trans{}.
 
 -type severity() :: debug | info | warning | error | fatal.
 
 -export_type([
     context/0,
+    trans/0,
     environment/0,
     validation_error/0,
     severity/0

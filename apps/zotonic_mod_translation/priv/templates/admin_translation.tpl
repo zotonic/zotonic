@@ -20,8 +20,10 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th width="10%">{_ Enabled _}</th>
                 <th width="10%">{_ Default _}</th>
+                <th width="5%">{_ View _}</th>
+                <th width="5%">{_ Editable _}</th>
+                <th width="5%">{_ Off _}</th>
                 <th width="20%">{_ Language _}</th>
                 <th width="10%">{_ Code _}</th>
                 <th width="10%">{_ Region _}</th>
@@ -30,63 +32,15 @@
             </tr>
         </thead>
 
-        <tbody>
-            {% with m.translation.default_language as default_code %}
-                {% for code, lang in m.translation.language_list_configured %}
-                    <tr id="{{ #li.code }}" class="{% if not lang.is_enabled %}unpublished{% endif %}">
-                        <td>
-                            <input type="checkbox" id="{{ #enabled.code }}" name="is_enabled" value="1"{% if lang.is_enabled %} checked="checked"{% endif %}{% if m.translation.default_language == code %} disabled="disabled"{% endif %} />
-                            {% wire id=#enabled.code postback={language_enable code=code} delegate="mod_translation" %}
-                        </td>
-                        <td>
-                            <input type="radio" id="{{ #default.code }}" name="is_default" value="{{ code }}"
-                            {% if code == default_code %}checked="checked"{% endif %} />
-                            {% wire id=#default.code postback={language_default code=code} delegate="mod_translation" %}
-                        </td>
-                        <td>
-                            {{ lang.name_en|default:"-" }}
-                        </td>
-                        <td>
-                            {{ code|default:"-" }}
-                        </td>
-                        <td>
-                            {{ lang.region|default:"<span class='text-muted'>-</span>" }}
-                        </td>
-                        <td>
-                            {{ lang.script|default:"<span class='text-muted'>-</span>" }}
-                        </td>
-                        <td>
-                            <div class="pull-right">
-                                {% button class="btn btn-default btn-xs" text=_"Remove"
-                                    action={
-                                        dialog_open
-                                        title=_"Remove language"|append:": "|append:lang.name_en
-                                        template="_dialog_language_delete.tpl"
-                                        code=code
-                                        lang=lang
-                                    }
-                                %}
-                                {% button class="btn btn-default btn-xs"text=_"Details"
-                                    action={
-                                        dialog_open
-                                        title=_"Language"|append:": "|append:lang.name_en
-                                        template="_dialog_language_edit.tpl"
-                                        code=code
-                                    }
-                                %}
-                            </div>
-                        </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">
-                {_ No languages configured. _}
-            </td>
-        </tr>
-        {% endfor %}
-        {% endwith %}
+        <tbody id="translation-language-status">
+            {% include "_translation_language_status.tpl" %}
         </tbody>
     </table>
+
+    <p class="help-block">
+        {_ If a language is set to 'view' or 'editable' then texts for that language are editable in the admin. _}<br>
+        {_ If a language is set to 'off' then edited texts will loose their translation in that lanuage. _}
+    </p>
 
 </div>
 
@@ -127,7 +81,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     {# See z_pivot_rsc for the list of languages #}
-                    {# TODO: make a model call to fetch this list #}
+                    {# TODO: make a model call to fetch this list from the database #}
 
                     {_ Language used for stemming of the search indices _} &nbsp;
 
@@ -194,12 +148,6 @@
                 {% button class="btn btn-default" text=_"Reload Translations"
                     postback={translation_reload} delegate="mod_translation" %}
                 <span class="help-block">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
-            </div>
-        </div>
-        <div>
-            <div>
-                <a class="btn btn-default" href="{% url admin_translation_status %}" class="button">{_ Translation status _}</a>
-                <span class="help-block">{_ Show per module how much of the templates are translated. _}</span>
             </div>
         </div>
 

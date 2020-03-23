@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2020 Marc Worrell
 %% @doc Translate english sentences into other languages, following
 %% the GNU gettext principle.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,16 +33,15 @@
     lookup_fallback_language/3
 ]).
 
--include_lib("zotonic.hrl").
-
+-include_lib("../../include/zotonic.hrl").
 
 %% @doc Fetch all translations for the given string.
--spec translations({trans, list()} | binary() | string(), #context{}) -> {trans, list()} | binary().
-translations({trans, Tr0} = Trans0, Context) ->
+-spec translations(z:trans() | binary() | string(), z:context()) -> z:trans() | binary().
+translations(#trans{ tr = Tr0 } = Trans0, Context) ->
     {en, From} = proplists:lookup(en, Tr0),
     case translations(From, Context) of
-        {trans, Tr1} ->
-            {trans, merge_trs(Tr0, lists:reverse(Tr1))};
+        #trans{ tr = Tr1 } ->
+            #trans{ tr = merge_trs(Tr0, lists:reverse(Tr1)) };
         _ -> Trans0
     end;
 translations(From, Context) when is_binary(From) ->
@@ -51,7 +50,7 @@ translations(From, Context) when is_binary(From) ->
             [] ->
     			From;
             [{_, Trans}] ->
-    			{trans, Trans}
+    			#trans{ tr = Trans }
         end
     catch
         error:badarg ->
@@ -126,7 +125,7 @@ lookup(Text, Lang, Context) ->
 
 %% @doc Non strict translation lookup of a language version.
 %%      In order check: requested language, default configured language, english, any
--spec lookup_fallback(#trans{}|binary()|string()|undefined, z:context()|undefined) -> binary() | string() | undefined.
+-spec lookup_fallback(z:trans()|binary()|string()|undefined, z:context()|undefined) -> binary() | string() | undefined.
 lookup_fallback(undefined, _Context) ->
     undefined;
 lookup_fallback(Trans, undefined) ->
@@ -134,7 +133,7 @@ lookup_fallback(Trans, undefined) ->
 lookup_fallback(Trans, Context) ->
     lookup_fallback(Trans, z_context:language(Context), Context).
 
-lookup_fallback({trans, Tr}, Lang, Context) ->
+lookup_fallback(#trans{ tr = Tr }, Lang, Context) ->
     case proplists:get_value(Lang, Tr) of
         undefined ->
             FallbackLang = case Context of
@@ -160,22 +159,22 @@ lookup_fallback({trans, Tr}, Lang, Context) ->
 lookup_fallback(Text, _Lang, _Context) ->
     Text.
 
-    take_english_or_first(Tr) ->
-        case proplists:get_value(en, Tr) of
-            undefined ->
-                case Tr of
-                    [{_,Text}|_] -> Text;
-                    _ -> undefined
-                end;
-            EnglishText ->
-                EnglishText
-        end.
+take_english_or_first(Tr) ->
+    case proplists:get_value(en, Tr) of
+        undefined ->
+            case Tr of
+                [{_,Text}|_] -> Text;
+                _ -> undefined
+            end;
+        EnglishText ->
+            EnglishText
+    end.
 
--spec lookup_fallback_language([atom()], #context{}) -> atom().
+-spec lookup_fallback_language([atom()], z:context()) -> atom().
 lookup_fallback_language(Langs, Context) ->
     lookup_fallback_language(Langs, z_context:language(Context), Context).
 
--spec lookup_fallback_language([atom()], atom(), #context{}) -> atom().
+-spec lookup_fallback_language([atom()], atom(), z:context()) -> atom().
 lookup_fallback_language([], Lang, _Context) ->
     Lang;
 lookup_fallback_language(Langs, Lang, Context) ->
@@ -215,19 +214,19 @@ lookup_fallback_language(Langs, Lang, Context) ->
 
 
 %% @doc translate a string or trans record into another language
--spec trans({trans, list()} | binary() | string(), #context{} | atom()) -> binary() | string() | undefined.
-trans({trans, Tr}, Lang) when is_atom(Lang) ->
+-spec trans(z:trans() | binary() | string(), z:context() | atom()) -> binary() | undefined.
+trans(#trans{ tr = Tr }, Lang) when is_atom(Lang) ->
     proplists:get_value(Lang, Tr);
 trans(Text, Lang) when is_atom(Lang) ->
     Text;
 trans(Text, Context) ->
     trans(Text, z_context:language(Context), Context).
 
-trans({trans, Tr0}, Language, Context) ->
+trans(#trans{ tr = Tr0 }, Language, Context) ->
     case proplists:lookup(en, Tr0) of
         {en, Text} ->
             case translations(Text, Context) of
-                {trans, Tr} ->
+                #trans{ tr = Tr } ->
                     case proplists:get_value(Language, Tr) of
                         undefined -> proplists:get_value(Language, Tr0, Text);
                         Translated -> Translated
@@ -240,7 +239,7 @@ trans({trans, Tr0}, Language, Context) ->
     end;
 trans(Text, Language, Context) ->
     case translations(Text, Context) of
-        {trans, Tr} ->
+        #trans{ tr = Tr } ->
             proplists:get_value(Language, Tr, Text);
         _ -> Text
     end.
