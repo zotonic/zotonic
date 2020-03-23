@@ -20,10 +20,10 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th width="5%">{_ Default _}</th>
-                <th width="5%">{_ Enabled _}</th>
+                <th width="10%">{_ Default _}</th>
+                <th width="5%">{_ View _}</th>
                 <th width="5%">{_ Editable _}</th>
-                <th width="5%">{_ Disabled _}</th>
+                <th width="5%">{_ Off _}</th>
                 <th width="20%">{_ Language _}</th>
                 <th width="10%">{_ Code _}</th>
                 <th width="10%">{_ Region _}</th>
@@ -38,7 +38,8 @@
     </table>
 
     <p class="help-block">
-        {_ If a language is enabled or editable then texts for that language are editable in the admin. _}<br>
+        {_ If a language is set to 'view' or 'editable' then texts for that language are editable in the admin. _}<br>
+        {_ If a language is set to 'off' then edited texts will loose their translation in that lanuage. _}
     </p>
 
 </div>
