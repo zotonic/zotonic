@@ -85,6 +85,8 @@ m_find_value(Category, #m{value={cat_check, ValidCats, IsSub}}, Context) ->
     case lists:member({CatId}, ValidCats) of
         true ->
             true;
+        false when ValidCats =:= [] ->
+            true;
         false ->
             IsA = m_category:is_a(CatId, Context),
             case lists:any(

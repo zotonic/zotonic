@@ -121,7 +121,13 @@ to_atom(<<"crop">>) -> crop;
 to_atom(<<"link">>) -> link;
 to_atom(<<"link_url">>) -> link_url;
 to_atom(<<"align">>) -> align;
-to_atom(A) -> binary_to_existing_atom(A, 'utf8'). 
+to_atom(A) ->
+    try
+        binary_to_existing_atom(A, 'utf8')
+    catch
+        _:_ ->
+            undefined
+    end.
 
 filter_args([], true, Acc, _Context) ->
     Acc;

@@ -82,14 +82,6 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
 
 
 event(#submit{message={new_page, Args}}, Context) ->
-    Redirect = proplists:get_value(redirect, Args),
-    SubjectId = z_convert:to_integer(proplists:get_value(subject_id, Args)),
-    ObjectId = z_convert:to_integer(proplists:get_value(object_id, Args)),
-    Predicate = proplists:get_value(predicate, Args),
-    Callback = proplists:get_value(callback, Args),
-    Actions = proplists:get_value(actions, Args, []),
-    Objects = proplists:get_value(objects, Args, []),
-
     Title = z_context:get_q("title", Context, z_context:get_q("new_rsc_title", Context)),
     BaseProps = get_base_props(Title, Context),
     File = z_context:get_q(upload_file, Context),
@@ -105,43 +97,7 @@ event(#submit{message={new_page, Args}}, Context) ->
     end,
     case Result of
         {ok, Id} ->
-            Callback1 = case dispatch(Redirect) of
-                false -> Callback;
-                _Dispatch -> undefined
-            end,
-
-            % Optionally add an edge from the subject to this new resource
-            {_,Context1} = case {is_integer(SubjectId), is_integer(ObjectId)} of
-                {true, _} ->
-                    mod_admin:do_link(SubjectId, Predicate, Id, Callback1, Context);
-                {_, true} ->
-                    mod_admin:do_link(Id, Predicate, ObjectId, Callback1, Context);
-                {false, false} when Callback1 =/= undefined ->
-                    % Call the optional callback
-                    mod_admin:do_link(undefined, undefined, Id, Callback1, Context);
-                {false, false} ->
-                    {ok, Context}
-            end,
-
-            %% Optionally add outgoing edges from this new rsc to the given resources (id / name, predicate pairs)
-            maybe_add_objects(Id, Objects, Context),
-
-            % Close the dialog
-            Context2a = z_render:wire({dialog_close, []}, Context1),
-
-            % wire any custom actions
-            Context2 = z_render:wire([{Action, [{id, Id}|ActionArgs]}|| {Action, ActionArgs} <- Actions], Context2a),
-
-            % optionally redirect to the edit page of the new resource
-            case dispatch(Redirect) of
-                false ->
-                    Context2;
-                page ->
-                    z_render:wire({redirect, [{id, Id}]}, Context2);
-                Dispatch ->
-                    Location = z_dispatcher:url_for(Dispatch, [{id, Id}], Context2),
-                    z_render:wire({redirect, [{location, Location}]}, Context2)
-            end;
+            do_new_page_actions(Id, Args, Context);
         {error, Reason} ->
             Msg = error_message(Reason, Context),
             z_render:wire({growl, [{text, Msg}]}, Context)
@@ -150,6 +106,53 @@ event(#submit{message={new_page, Args}}, Context) ->
 event(#postback{message={admin_connect_select, _Args}} = Postback, Context) ->
     mod_admin:event(Postback, Context).
 
+
+do_new_page_actions(Id, Args, Context) ->
+    Redirect = proplists:get_value(redirect, Args),
+    SubjectId = z_convert:to_integer(proplists:get_value(subject_id, Args)),
+    ObjectId = z_convert:to_integer(proplists:get_value(object_id, Args)),
+    Predicate = proplists:get_value(predicate, Args),
+    Callback = proplists:get_value(callback, Args),
+    Actions = proplists:get_value(actions, Args, []),
+    Objects = proplists:get_value(objects, Args, []),
+
+    Callback1 = case dispatch(Redirect) of
+        false -> Callback;
+        _Dispatch -> undefined
+    end,
+
+    % Optionally add an edge from the subject to this new resource
+    {_,Context1} = case {is_integer(SubjectId), is_integer(ObjectId)} of
+        {true, _} ->
+            mod_admin:do_link(SubjectId, Predicate, Id, Callback1, Context);
+        {_, true} ->
+            mod_admin:do_link(Id, Predicate, ObjectId, Callback1, Context);
+        {false, false} when Callback1 =/= undefined ->
+            % Call the optional callback
+            mod_admin:do_link(undefined, undefined, Id, Callback1, Context);
+        {false, false} ->
+            {ok, Context}
+    end,
+
+    %% Optionally add outgoing edges from this new rsc to the given resources (id / name, predicate pairs)
+    maybe_add_objects(Id, Objects, Context),
+
+    % Close the dialog
+    Context2a = z_render:wire({dialog_close, []}, Context1),
+
+    % wire any custom actions
+    Context2 = z_render:wire([{Action, [{id, Id}|ActionArgs]}|| {Action, ActionArgs} <- Actions], Context2a),
+
+    % optionally redirect to the edit page of the new resource
+    case dispatch(Redirect) of
+        false ->
+            Context2;
+        page ->
+            z_render:wire({redirect, [{id, Id}]}, Context2);
+        Dispatch ->
+            Location = z_dispatcher:url_for(Dispatch, [{id, Id}], Context2),
+            z_render:wire({redirect, [{location, Location}]}, Context2)
+    end.
 
 error_message(eacces, Context) ->
     ?__("You don't have permission to change this media item.", Context);
