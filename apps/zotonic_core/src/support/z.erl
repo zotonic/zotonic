@@ -36,6 +36,8 @@
     ld/0,
     ld/1,
 
+    reindex/0,
+
     shell_stopsite/1,
     shell_startsite/1,
     shell_restartsite/1,
@@ -120,6 +122,10 @@ flush(Context) ->
     z_depcache:flush(Context),
     z_dispatcher:reload(Context),
     n(module_ready, Context).
+
+%% @doc Reindex all sites, find new files.
+reindex() ->
+    z_module_indexer:reindex().
 
 %% @doc Full restart of Zotonic
 restart() ->
