@@ -198,8 +198,7 @@ mqtt_topic(Model, Method, Path) ->
     % Path = cowmachine_req:disp_path(Context),
     % Parts = binary:split(Path, <<"/">>, [global]),
     % Parts1 = lists:map( fun cow_qs:urldecode/1, Parts ),
-    Path1 = [ z_convert:to_binary(P) || P <- Path ],
-    [ <<"model">>, z_convert:to_binary(Model), z_convert:to_binary(Method) | Path1 ].
+    [ <<"model">>, z_convert:to_binary(Model), z_convert:to_binary(Method) | binarize(Path) ].
 
 
 
@@ -215,7 +214,7 @@ model_call(Mod, m_get, Path, Msg, Context) ->
     Mod:m_get(atomize(Path), Msg, Context);
 model_call(Mod, Callback, Path, Msg, Context) ->
     try
-        Mod:Callback(atomize(Path), Msg, Context)
+        Mod:Callback(binarize(Path), Msg, Context)
     catch
         error:undef ->
             case erlang:function_exported(Mod, Callback, 3) of
@@ -226,6 +225,10 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                     erlang:raise(error, undef, erlang:get_stacktrace())
             end
     end.
+
+-spec binarize( list() ) -> list( binary() ).
+binarize(Path) ->
+    [ z_convert:to_binary(P) || P <- Path ].
 
 atomize(Path) ->
     [ maybe_atom(P) || P <- Path ].

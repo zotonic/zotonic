@@ -61,7 +61,7 @@ m_get(Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
-m_post([ 'request-reminder' ], #{ payload := Payload }, Context) when is_map(Payload) ->
+m_post([ <<"request-reminder">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     request_reminder(Payload, Context);
 m_post(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p post: ~p", [?MODULE, Vs]),
