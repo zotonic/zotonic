@@ -47,7 +47,7 @@ get_location(Args, Context) ->
         undefined ->
             case proplists:lookup(id, Args) of
                 none ->
-                    proplists:get_value(location, Args, "/");
+                    sanitize( proplists:get_value(location, Args, "/") );
                 {id, undefined} ->
                     undefined;
                 {id, Id} ->
@@ -59,3 +59,7 @@ get_location(Args, Context) ->
             z_dispatcher:url_for(Dispatch, Args1, none, Context)
     end.
 
+sanitize(undefined) ->
+    undefined;
+sanitize(Url) ->
+    z_html:sanitize_uri(Url).
