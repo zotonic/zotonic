@@ -48,7 +48,7 @@ get_location(Args, Context) ->
         undefined ->
             case proplists:lookup(id, Args) of
                 none ->
-                    proplists:get_value(location, Args, <<"/">>);
+                    sanitize( proplists:get_value(location, Args, <<"/">>) );
                 {id, undefined} ->
                     undefined;
                 {id, Id} ->
@@ -67,4 +67,10 @@ redirect_location({redirect, Args}, Context) ->
         undefined -> false;
         Location -> {ok, iolist_to_binary(Location)}
     end.
+
+sanitize(undefined) ->
+    undefined;
+sanitize(Url) ->
+    z_html:sanitize_uri(Url).
+
 
