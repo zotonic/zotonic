@@ -47,9 +47,9 @@
 %%
 
 observe_module_activate(#module_activate{ module = ?MODULE }, _Context) ->
-    ensure_metrics(erlang_metrics()),
-    ensure_z_exometer_mqtt_added(),
-    ensure_subscriptions(erlang_subscriptions()),
+    % ensure_metrics(erlang_metrics()),
+    % ensure_z_exometer_mqtt_added(),
+    % ensure_subscriptions(erlang_subscriptions()),
     ok;
 observe_module_activate(#module_activate{}, _Context) ->
     ok.
