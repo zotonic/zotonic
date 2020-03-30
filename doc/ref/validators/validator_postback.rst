@@ -27,7 +27,7 @@ The ``event`` argument declares the name of the event that will be
     observe_validate_username({validate_username, {postback, Id, Value, _Args}}, Context) ->
         case is_valid(Value) of
             true ->
-                {{ok, Value, Context};
+                {{ok, Value}, Context};
             false ->
                 %% The validation message will be shown in the form
                 {{error, Id, "Sorry, that's not valid. Try again!"}, Context}
