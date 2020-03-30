@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2020 Marc Worrell
 %% @doc MQTT protocol handler for ranch
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,10 +25,18 @@
 -export([
     recv_connect/3,
     loop/3,
-    transport/3
+    transport/4
 ]).
 
--define(MQTT_CONNECT_TIMEOUT, 10000).
+%% Connect data should arrive before this timeout (msec)
+-define(MQTT_CONNECT_TIMEOUT, 4000).
+
+%% Connect should be finished before this timeout (msec)
+-define(MQTT_CONNECT_MAX_TIMEOUT, 10000).
+
+%% Maximum size for the connect packet
+-define(MQTT_CONNECT_MAXSIZE, 1024).
+
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("mqtt_packet_map/include/mqtt_packet_map.hrl").
@@ -39,44 +47,59 @@ start_link(Ref, Socket, Transport, Opts) ->
     {ok, Pid}.
 
 init(Ref, _Socket, Transport, Opts) ->
+    timer:send_after(?MQTT_CONNECT_MAX_TIMEOUT, connect_check),
     {ok, NewSocket} = ranch:handshake(Ref),
     ?MODULE:recv_connect(NewSocket, Transport, Opts#{ data => <<>> }).
 
-%% @todo Close connection if connect packet is too large
-recv_connect(Socket, Transport, #{ data := Data } = State) ->
+recv_connect(Socket, Transport, State) ->
+    receive
+        connect_check ->
+            _ = Transport:close(Socket)
+        after 0 ->
+            recv_connect_1(Socket, Transport, State)
+    end.
+
+recv_connect_1(Socket, Transport, #{ data := Data } = State) ->
     case Transport:recv(Socket, 0, ?MQTT_CONNECT_TIMEOUT) of
         {ok, Rcvd} ->
-            Data1 = <<Data/binary, Rcvd/binary>>,
-            {ok, {PeerIP, _}} = Transport:peername(Socket),
-            Options = #{
-                transport => fun(D) -> ?MODULE:transport(Transport, Socket, D) end,
-                connection_pid => self(),
-                peer_ip => PeerIP,
-                context_prefs => #{
-                }
-            },
-            case mqtt_sessions:incoming_connect(Data1, Options) of
-                {ok, {SessionRef, Rest}} ->
-                    Self = self(),
-                    SessionMonitorPid = erlang:spawn_link(fun() -> session_monitor(Self, Socket, Transport, SessionRef) end),
-                    State1 = State#{
-                        data => undefined,
-                        session_ref => SessionRef,
-                        session_monitor => SessionMonitorPid
-                    },
-                    loop_data(Rest, Socket, Transport, State1);
-                {error, incomplete_packet} ->
-                    ?MODULE:recv_connect(Socket, Transport, State#{ data => Data1 });
-                {error, expect_connect} ->
-                    lager:info("MQTT: refusing connect with wrong packet type"),
-                    ok = Transport:close(Socket);
-                {error, _} ->
-                    % Invalid packet or unkown host - just close the connection
-                    ok = Transport:close(Socket)
-            end;
+            recv_connect_data(<<Data/binary, Rcvd/binary>>, Socket, Transport, State);
         {error, _} ->
             ok = Transport:close(Socket)
     end.
+
+recv_connect_data(ConnectData, Socket, Transport, _State) when size(ConnectData) > ?MQTT_CONNECT_MAXSIZE ->
+    lager:info("MQTT: refusing connect with large connect packet"),
+    ok = Transport:close(Socket);
+recv_connect_data(ConnectData, Socket, Transport, State) ->
+    Self = self(),
+    {ok, {PeerIP, _}} = Transport:peername(Socket),
+    Options = #{
+        transport => fun(D) -> ?MODULE:transport(Transport, Socket, Self, D) end,
+        connection_pid => self(),
+        peer_ip => PeerIP,
+        context_prefs => #{
+        }
+    },
+    case mqtt_sessions:incoming_connect(ConnectData, Options) of
+        {ok, {SessionRef, Rest}} ->
+            Self = self(),
+            SessionMonitorPid = erlang:spawn_link(fun() -> session_monitor(Self, Socket, Transport, SessionRef) end),
+            State1 = State#{
+                data => undefined,
+                session_ref => SessionRef,
+                session_monitor => SessionMonitorPid
+            },
+            loop_data(Rest, Socket, Transport, State1);
+        {error, incomplete_packet} ->
+            ?MODULE:recv_connect(Socket, Transport, State#{ data => ConnectData });
+        {error, expect_connect} ->
+            lager:info("MQTT: refusing connect with wrong packet type"),
+            ok = Transport:close(Socket);
+        {error, _} ->
+            % Invalid packet or unkown host - just close the connection
+            ok = Transport:close(Socket)
+    end.
+
 
 %% @doc Receive data loop
 loop(Socket, Transport, State) ->
@@ -99,7 +122,7 @@ loop_data(Data, Socket, Transport, #{ session_ref := SessionRef } = State) ->
 % --------------------------------- Support Routines ----------------------------------
 
 %% @doc Transport data to client, called by mqtt_sessions.
-transport(Transport, Socket, Payload) when is_binary(Payload) ->
+transport(Transport, Socket, _Self, Payload) when is_binary(Payload) ->
     case Transport:send(Socket, Payload) of
         ok ->
             ok;
@@ -107,8 +130,9 @@ transport(Transport, Socket, Payload) when is_binary(Payload) ->
             Transport:close(Socket),
             Error
     end;
-transport(Transport, Socket, disconnect) ->
-    Transport:close(Socket).
+transport(Transport, Socket, Self, disconnect) ->
+    Transport:close(Socket),
+    timer:apply_after(500, erlang, exit, [ Self, disconnect ]).
 
 
 %% @doc Small session monitor process linked to the connection handler.
