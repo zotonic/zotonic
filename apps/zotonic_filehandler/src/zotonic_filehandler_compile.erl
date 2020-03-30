@@ -249,11 +249,16 @@ recompile_task(File) ->
         {ok, Options} ->
             lager:debug("Recompiling '~s' using make", [File]),
             zotonic_filehandler:terminal_notifier("Compiling: " ++ filename:basename(File)),
-            case make:files([File], Options) of
-                up_to_date ->
-                    ok;
-                Other ->
-                    lager:warning("Recompiling ~p returned ~p", [ File, Other ])
+            try
+                case make:files([File], Options) of
+                    up_to_date ->
+                        ok;
+                    Other ->
+                        lager:warning("Recompiling ~p returned ~p", [ File, Other ])
+                end
+            catch
+                Type:Err ->
+                    lager:warning("Recompiling ~p exited with ~p:~p", [ File, Type, Err ])
             end;
         false ->
             % Might be some new OTP app, so a manual build on the top level
