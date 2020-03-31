@@ -260,7 +260,7 @@ handle_event(info, {gzip, Ref, Data}, StateName, #state{gzipper=Ref} = State) ->
     },
     {next_state, StateName, State1, timeout(StateName, State1#state.is_found)};
 handle_event(info, {gzip, _Ref, _Data}, StateName, State) ->
-    lager:info("Unexpected gzip info message in state ~p", [ StateName ]),
+    lager:debug("Unexpected gzip info message in state ~p", [ StateName ]),
     {next_state, StateName, State};
 handle_event(info, {'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
     case is_mref_part(MRef, State#state.parts) of
