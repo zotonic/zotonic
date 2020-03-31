@@ -35,4 +35,3 @@ you through all aspects of the framework.
    contributing
    releasenotes/index
    upgrading
-   *
