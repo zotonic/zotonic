@@ -103,6 +103,9 @@ m_get([ lookup, Type, Key | Rest ], _Msg, Context) ->
         false ->
             {error, eacces}
     end;
+m_get([ generate_password | Rest ], _Msg, _Context) ->
+    Password = iolist_to_binary([ z_ids:id(5), $-, z_ids:id(5), $-, z_ids:id(5) ]),
+    {ok, {Password, Rest}};
 m_get([ Id, is_user | Rest ], _Msg, Context) ->
     IsUser = case z_acl:rsc_visible(Id, Context) of
         true -> is_user(Id, Context);
@@ -210,7 +213,7 @@ delete_username(RscId, Context) when is_integer(RscId) ->
                 Context
             ),
             z_mqtt:publish(
-                [ <<"model">>, <<"identity">>, <<"event">>, RscId ],
+                [ <<"model">>, <<"identity">>, <<"event">>, RscId, <<"username_pw">> ],
                 #{
                     id => RscId,
                     type => <<"username_pw">>

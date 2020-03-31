@@ -69,7 +69,10 @@
                                     {{ id.modified|date:_"d M Y, H:i" }}
                                     <div class="pull-right buttons">
                                         {% if is_users_editable %}
-                                            {% button class="btn btn-default btn-xs" action={dialog_set_username_password id=id} text=_"set username / password" on_delete={slide_fade_out target=#tr.id} %}
+                                            {% button class="btn btn-default btn-xs"
+                                                      action={dialog_set_username_password id=id on_delete={slide_fade_out target=#tr.id}}
+                                                      text=_"set username / password"
+                                            %}
                                         {% endif %}
                                         {% button class="btn btn-default btn-xs" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
                                     </div>
