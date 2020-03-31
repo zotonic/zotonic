@@ -1,3 +1,4 @@
+
 {% wire id="password_expired" type="submit" postback={expired} delegate=`mod_authentication` %}
 <form id="password_expired" method="post" action="postback">
     <h2 class="z-logon-title">{_ Your password has expired _}</h2>
@@ -41,8 +42,3 @@
         <button class="btn btn-primary" type="submit">{_ Change password and Sign in _}</button>
     </div>
 </form>
-{% javascript %}
-setTimeout(function() {
-    z_init_postback_forms();
-}, 100);
-{% endjavascript %}

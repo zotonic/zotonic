@@ -206,7 +206,10 @@ model.present = function(data) {
         } else {
             model.state_change('auth_unknown');
         }
-        self.publish("model/auth/event/auth-error", { error: model.authentication_error });
+        self.publish("model/auth/event/auth-error", {
+            error: model.authentication_error,
+            data: data.data
+        });
     }
 
     if (data.is_auth_changed && state.authChanging(model)) {
@@ -415,7 +418,8 @@ actions.authLogonResponse = function(data) {
             model.present({
                     is_auth_error: true,
                     is_fetch_error: false,
-                    error: data.error
+                    error: data.error,
+                    data: data
                 });
             break;
         default:

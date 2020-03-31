@@ -1,17 +1,3 @@
-<p>
-    {_ Enter a unique username and a password. Usernames and passwords are case sensitive, so be careful when entering them. _}
-
-    {% if username %}
-        {_ Click “delete” to remove any existing username/password from the person; this person will no longer be a user. _}
-    {% endif %}
-</p>
-
-<!-- Fake usernames/password fields to stop Safari from autofilling -->
-<!-- See https://github.com/zotonic/zotonic/issues/811 -->
-<input style="position:absolute;top:-9999px;" type="text" id="fake-username" name="fake-username" class="nosubmit" value="" />
-<input style="position:absolute;top:-9999px;" type="password" id="fake-password" name="fake-password" class="nosubmit" value="" />
-<!-- End Safari -->
-
 <div class="form-group row">
     <label class="control-label col-md-3" for="new_username">{_ Username _}</label>
     <div class="col-md-9">
@@ -20,17 +6,43 @@
     </div>
 </div>
 
-<div class="form-group row">
-    <label class="control-label col-md-3" for="new_password">{_ Password _}</label>
-    <div class="col-md-9">
-        <input class="form-control" type="password" id="new_password" name="new_password" value="{{ password|escape }}" autocomplete="new-password" />
-        {% if m.config.mod_admin_identity.password_regex.value %}
-            {% validate id="new_password" type={format pattern=m.config.mod_admin_identity.password_regex.value failure_message=_"This password does not meet the security requirements"} %}
-        {% else %}
-            {% validate id="new_password" type={length minimum=m.authentication.password_min_length} %}
-        {% endif %}
-    </div>
-</div>
+{% with m.identity.generate_password as password %}
+    {% if not username and id != m.acl.user %}
+        <div class="form-group row">
+            <label class="control-label col-md-3" for="new_password">{_ Password _}</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="new_password" name="new_password" value="{{ password|escape }}">
+                <p class="help-block">
+                    {_ A secure password is prefilled, replace if needed. _}
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <div class="form-group row">
+            <label class="control-label col-md-3" for="new_password">{_ New password _}</label>
+            <div class="col-md-9">
+                <input class="form-control" type="password" id="new_password" name="new_password"
+                       value="" autocomplete="new-password" placeholder="{_ Type password to change password _}"/>
+                <p class="help-block">
+                    {_ Random secure password: _} <tt>{{ password }}</tt>
+                    <a href="#" id="password-use-generated" class="btn btn-xs btn-default">{_ Use this password _}</a>
+                    {% wire id="password-use-generated"
+                            action={set_value target="new_password" value=password}
+                    %}
+                    <br>
+                    {_ Leave empty to not change the password. _}
+                </p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if m.config.mod_admin_identity.password_regex.value %}
+        {% validate id="new_password" type={format pattern=m.config.mod_admin_identity.password_regex.value failure_message=_"This password does not meet the security requirements"} %}
+    {% else %}
+        {% validate id="new_password" type={length minimum=m.authentication.password_min_length} %}
+    {% endif %}
+
+{% endwith %}
 
 <div class="form-group row">
     <div class="col-md-9 col-md-offset-3">
