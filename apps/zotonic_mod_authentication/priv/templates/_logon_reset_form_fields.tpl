@@ -14,14 +14,27 @@
            required autocomplete="new-password" />
 </div>
 
-<div class="form-group">
-    <div class="checkbox">
-        <label for="{{ #rememberme }}">
-            <input type="checkbox" id="{{ #rememberme }}" name="rememberme" value="1" />
-            {_ Keep me signed in _}
-        </label>
+{% if is_show_passcode %}
+    {% block field_passcode %}
+        <div class="form-group passcode">
+            <label for="password" class="control-label">{_ Passcode _}</label>
+            <input class="form-control" type="text" id="passcode" name="passcode" value=""
+                   autofocus required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]+"
+                   placeholder="{_ Two-factor passcode _}" />
+        </div>
+    {% endblock %}
+{% endif %}
+
+{% if m.authentication.is_supported.rememberme %}
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="rememberme" value="1" />
+                {_ Keep me signed in _}
+            </label>
+        </div>
     </div>
-</div>
+{% endif %}
 
 <div class="form-group">
     <div>

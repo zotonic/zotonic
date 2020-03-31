@@ -111,6 +111,8 @@ observe_logon_submit(#logon_submit{ payload = Args }, Context) ->
                         _ ->
                             {ok, UserId}
                     end;
+                {error, {expired, UserId}} ->
+                    {expired, UserId};
                 {error, _} = E ->
                     E
             end;

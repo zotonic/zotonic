@@ -112,11 +112,13 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
         %     { #{ status => error, error => pw }, Context }
     end;
 logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
+    % The password is expired and needs a reset - this is similar to password reset
     case m_identity:get_username(UserId, Context) of
         undefined ->
             { #{ status => error, error => pw }, Context };
-        _Username ->
-            { #{ status => error, error => password_expired }, Context }
+        Username ->
+            Code = m_authentication:set_reminder_secret(UserId, Context),
+            { #{ status => error, error => password_expired, username => Username, secret => Code }, Context }
     end;
 logon_1({error, ratelimit}, _Payload, Context) ->
     { #{ status => error, error => ratelimit }, Context };

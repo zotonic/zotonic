@@ -37,6 +37,7 @@
     delete_username/2,
     set_username/3,
     set_username_pw/4,
+    set_expired/3,
     ensure_username_pw/2,
     check_username_pw/3,
     check_username_pw/4,
@@ -222,6 +223,34 @@ delete_username(RscId, Context) when is_integer(RscId) ->
 delete_username(Id, Context) ->
     delete_username( m_rsc:rid(Id, Context), Context ).
 
+
+%% @doc Mark the username_pw identity of an user as 'expired', this forces a prompt
+%%      for a password reset on the next authentication.
+set_expired(UserId, true, Context) ->
+    case z_db:q("
+        update identity
+        set prop1 = 'expired'
+        where type = 'username_pw'
+          and rsc_id = $1",
+        [ UserId ],
+        Context)
+    of
+        0 -> {error, enoent};
+        _ -> ok
+    end;
+set_expired(UserId, false, Context) ->
+    case z_db:q("
+        update identity
+        set prop1 = 'expired'
+        where type = ''
+          and rsc_id = $1",
+        [ UserId ],
+        Context)
+    of
+        0 -> {error, enoent};
+        _ -> ok
+    end.
+
 %% @doc Change the username of the resource id, only possible if there is
 %% already an username/password set
 -spec set_username( m_rsc:resource() | undefined, binary() | string(), z:context()) -> ok | {error, eacces | enoent | eexist}.
@@ -372,6 +401,7 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                 update identity
                 set key = $2,
                     propb = $3,
+                    prop1 = '',
                     is_verified = true,
                     modified = now()
                 where type = 'username_pw'
@@ -525,6 +555,15 @@ check_username_pw(Username, Password, QueryArgs, Context) ->
                         },
                         Context),
                     {ok, RscId};
+                {error, {expired, RscId}} ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = RscId,
+                            username = NormalizedUsername,
+                            is_accepted = true
+                        },
+                        Context),
+                    {error, {expired, RscId}};
                 {error, need_passcode} = Error ->
                     Error;
                 Error ->
@@ -585,7 +624,7 @@ check_username_pw_1(Username, Password, Context) ->
         {error, _} = Error ->
             Error;
         undefined ->
-            Row = z_db:q_row("select rsc_id, propb from identity where type = 'username_pw' and key = $1", [Username1], Context),
+            Row = z_db:q_row("select rsc_id, propb, prop1 from identity where type = 'username_pw' and key = $1", [Username1], Context),
             case Row of
                 undefined ->
                     % If the Username looks like an e-mail address, try by Email & Password
@@ -593,7 +632,14 @@ check_username_pw_1(Username, Password, Context) ->
                         true -> check_email_pw(Username1, Password, Context);
                         false -> {error, nouser}
                     end;
-                {RscId, Hash} ->
+                {RscId, Hash, <<"expired">>} ->
+                    case check_hash(RscId, Username, Password, Hash, Context) of
+                        {ok, UserId} ->
+                            {error, {expired, UserId}};
+                        {error, _} = Error ->
+                            Error
+                    end;
+                {RscId, Hash, _Prop1} ->
                     check_hash(RscId, Username, Password, Hash, Context)
             end
     end.

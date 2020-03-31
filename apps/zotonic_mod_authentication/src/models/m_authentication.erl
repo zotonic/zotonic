@@ -25,6 +25,7 @@
     m_post/3,
 
     send_reminder/2,
+    set_reminder_secret/2,
 
     auth_token/2,
     cookie_token/2,
@@ -159,6 +160,7 @@ send_reminder(Id, Email, Context) ->
     end.
 
 %% @doc Set the unique reminder code for the account.
+-spec set_reminder_secret( m_rsc:resource_id(), z:context() ) -> binary().
 set_reminder_secret(Id, Context) ->
     Code = z_ids:id(24),
     ok = m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),

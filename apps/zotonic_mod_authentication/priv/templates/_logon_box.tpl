@@ -87,10 +87,6 @@
         {% wire id=#cancel action={redirect back} %}
     {% endif %}
 
-{% elseif q.logon_view == "password_expired" %}
-
-    {% include "_logon_expired_form.tpl" %}
-
 {% else %}
 
     {% include "_logon_box_view.tpl"
