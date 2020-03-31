@@ -69,9 +69,12 @@ table th {
   vertical-align: top;
 }
 iframe,
-video,
 audio {
   max-width: 100%;
+}
+video {
+  max-width: 100%;
+  height: auto;
 }
 .unpublished,
 .unpublished a:not(.btn),
@@ -566,7 +569,7 @@ fieldset[disabled] .btn-primary.active {
   display: inline-block;
   margin-left: 20px;
 }
-.panel-footer .inline-div::first-child {
+.panel-footer .inline-div:first-child {
   margin-top: 0;
 }
 .panel-footer .inline-div:last-child {
@@ -760,7 +763,6 @@ img.admin-leader-image {
   height: 60px;
 }
 .admin-edit-media {
-  display: inline-block;
   background: white;
   padding: 0;
   margin: 0 0 10px 0;
