@@ -169,7 +169,14 @@ lookup(K, OEmbed) ->
 media_viewer_fallback(OEmbed, TplOpts, Context) ->
     case lookup(<<"html">>, OEmbed) of
         {<<"html">>, Html} ->
-            binary:replace(Html, <<"http://">>, <<"https://">>, [global]);
+            Html1 = binary:replace(Html, <<"http://">>, <<"https://">>, [global]),
+            IsIframe = binary:match(Html1, <<"<iframe">>) =/= nomatch,
+            TplOpts1 = [
+                {html, Html1},
+                {is_iframe, IsIframe}
+                | TplOpts
+            ],
+            z_template:render("_oembed_embeddable.tpl", TplOpts1, Context);
         none ->
             z_template:render("_oembed_embeddable.tpl", TplOpts, Context)
     end.

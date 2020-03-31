@@ -141,12 +141,21 @@ observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, Props}, Context)
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
 %% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
-observe_media_viewer(#media_viewer{props=Props}, _Context) ->
+observe_media_viewer(#media_viewer{props=Props}, Context) ->
     case proplists:get_value(mime, Props) of
         ?EMBED_MIME ->
             case proplists:get_value(video_embed_code, Props) of
                 undefined -> undefined;
-                EmbedCode -> {ok, EmbedCode}
+                EmbedCode ->
+                    EmbedCode1 = binary:replace(EmbedCode, <<"http://">>, <<"https://">>, [global]),
+                    IsIframe = binary:match(EmbedCode1, <<"<iframe">>) =/= nomatch,
+                    Vars = [
+                        {html, EmbedCode1},
+                        {is_iframe, IsIframe},
+                        {medium, Props}
+                    ],
+                    Html = z_template:render("_video_embed.tpl", Vars, Context),
+                    {ok, Html}
             end;
         _ ->
             undefined

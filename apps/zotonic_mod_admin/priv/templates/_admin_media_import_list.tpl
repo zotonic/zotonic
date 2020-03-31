@@ -53,9 +53,7 @@
                             {% endif %}
                         </p>
                     {% elseif mi.medium %}
-                        <p class="embed-responsive embed-responsive-16by9">
-                            {% media mi.medium %}
-                        </p>
+                        {% media mi.medium %}
                     {% elseif mi.preview_url %}
                         <p>
                             <img src="{{ mi.preview_url|escape }}" class="img-responsive">
