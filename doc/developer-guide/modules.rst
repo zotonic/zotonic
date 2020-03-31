@@ -71,11 +71,16 @@ more.
 
 The generic structure is::
 
-    mod_example/
+    zotonic_mod_example/
         priv/dispatch/
         priv/templates/
+        priv/lib/
+        priv/lib-src/
         src/mod_example.erl
-        src/actions/...
+        src/zotonic_mod_exampe.app.src
+        src/models/...
+        src/filters/...
+        rebar.config
 
 .. _module-file:
 
@@ -149,6 +154,10 @@ and javascript files. These files will be served with via the
     priv/lib/misc/
 
 .. seealso:: the :ref:`tag-lib` template tag.
+
+priv/lib-src/
+"""""""""""""
+
 
 priv/templates/
 """""""""""""""
