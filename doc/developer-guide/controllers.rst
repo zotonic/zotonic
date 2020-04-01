@@ -17,13 +17,13 @@ Say we have the following dispatch rule, handling ``https://localhost/example``:
   {example_url, [ "example" ], controller_example, []},
 
 When hitting ``/example``, the ``controller_example`` controller will be
-initialized and various callback functions on the controller will be
+initialized and callback functions on the controller will be
 called, according to the HTTP protocol flow.
 
 Controllers are pretty self-documenting, thanks to the names of the
 cowmachine callback functions. For instance, when you define a
-function ``resource_exists/1``, it will be called to decide whether or
-not the page should return a 404 page.
+function ``resource_exists/1``, it will be called to decide if
+the page should return a 404.
 
 The simplest controller to serve HTML::
 
@@ -40,7 +40,7 @@ Rendering templates
 -------------------
 
 To return the rendered output of a template file in the module's
-:file:`priv/templates` directory, use ``z_template:render/3``::
+:file:`priv/templates` directory, use ``z_template:render_to_iolist/3``::
 
    -module(controller_example).
 
@@ -52,8 +52,7 @@ To return the rendered output of a template file in the module's
           {foo, <<"bar">>},
           {bam, 1234}
        ],
-       Rendered = z_template:render("mytemplate.tpl", Vars, Context),
-       z_context:output(Rendered, Context).
+       z_template:render_to_iolist("mytemplate.tpl", Vars, Context).
 
 If you need more examples, :ref:`mod_base` contains many controllers,
 implementing basic HTTP interaction but also redirects, websockets, et
@@ -74,7 +73,7 @@ separate repository at https://github.com/zotonic/cowmachine).
 
 The main differences with Basho’s Webmachine are:
 
-* Used Cowboy instead of MochiWeb
+* Uses Cowboy instead of MochiWeb
 * All callbacks have a single handler
 * Pluggable dispatch handler
 * Support for the HTTP ``Upgrade:`` header
@@ -85,5 +84,5 @@ The main differences with Basho’s Webmachine are:
 * Extra logging
 * ping and init callbacks are removed
 
-Together, this gave a significant simplification and speed boost to Cowmachine.
+Together, this is a significant simplification and speed boost.
 

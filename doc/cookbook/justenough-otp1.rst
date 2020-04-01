@@ -33,7 +33,7 @@ a release that can be copied and run on a suitable host system.
 Assumptions
 -----------
 
-You have Erlang R14B or later installed on your system. You have
+You have Erlang 20 or later installed on your system. You have
 Internet access and basic Bash command line skills. File editing tasks
 refer to vim. But you can use your code editor of choice.
 
@@ -53,7 +53,7 @@ Download the rebar binary
 .........................
 In the shell::
 
-  learn$ git clone https://github.com/basho/rebar.git rebar-src
+  learn$ git clone https://github.com/erlang/rebar3.git rebar-src
   learn$ cd rebar-src/
   rebar-src$ ./bootstrap
   rebar$ cd ..
@@ -238,14 +238,14 @@ Make sure you have this directory structure:
   .
   apps
   │   ├── zzz
-  │   │   ├── ebin
+  │   │   ├── _build
   │   │   └── src
   │   │       ├── zzz_app.erl
   │   │       ├── zzz.app.src
   │   │       ├── zzz_srv.erl
   │   │       └── zzz_sup.erl
   │   └── zzz_lib
-  │   │   ├── ebin
+  │   │   ├── _build
   │       └── src
   │           ├── hello.erl
   │           ├── zzz_lib_app.erl
@@ -276,7 +276,7 @@ References on the web
 ---------------------
 
 Getting Started:
-https://github.com/basho/rebar/wiki/Getting-started
+https://github.com/erlang/rebar3/wiki/Getting-started
 
 Damn Technology:
 http://damntechnology.blogspot.com/
@@ -285,7 +285,7 @@ How to create, build, and run an Erlang OTP application using Rebar:
 http://skeptomai.com/?p=56#sec-3
 
 Commands:
-https://github.com/basho/rebar/wiki/Rebar-commands
+https://github.com/erlang/rebar3/wiki/Rebar-commands
 
 Erlang App. Management with Rebar:
 http://erlang-as-is.blogspot.com/2011/04/erlang-app-management-with-rebar-alan.html

@@ -21,7 +21,7 @@ and generate documentation.
 ASSUMPTIONS
 -----------
 
-You have Erlang R14B or later installed on your system. You have basic
+You have Erlang 20 or later installed on your system. You have basic
 Bash command line skills. File editing tasks refer to vim. But you can
 use your code editor of choice.
 
@@ -238,7 +238,7 @@ REFERENCES
 ----------
 
 Getting Started:
-https://github.com/basho/rebar/wiki/Getting-started
+https://github.com/erlang/rebar3/wiki/Getting-started
 
 Damn Technology:
 http://damntechnology.blogspot.com/
@@ -247,7 +247,7 @@ How to create, build, and run an Erlang OTP application using Rebar:
 http://skeptomai.com/?p=56#sec-3
 
 Commands:
-https://github.com/basho/rebar/wiki/Rebar-commands
+https://github.com/erlang/rebar3/wiki/Rebar-commands
 
 Erlang App. Management with Rebar:
 http://erlang-as-is.blogspot.com/2011/04/erlang-app-management-with-rebar-alan.html
@@ -259,4 +259,4 @@ Rebar Demo using ibrowse:
 http://vimeo.com/8311407
 
 rebar / rebar.config.sample:
-https://github.com/basho/rebar/blob/master/rebar.config.sample?source=cc
+https://github.com/erlang/rebar3/blob/master/rebar.config.sample?source=cc

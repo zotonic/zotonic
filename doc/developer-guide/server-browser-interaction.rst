@@ -6,16 +6,54 @@ and client-side JavaScript.
 
 If you want to initiate the interaction in the client (browser)
 
-1. wired events
-2. notifications
-3. API methods
-4. transport
-5. publish/subscribe.
+1. publish/subscribe.
+2. API methods
+3. Wires
+4. Notifications
+5. Transport (deprecated)
+
+
+Publish/subscribe (MQTT)
+------------------------
+
+The preferred transport is using publish and subscribe with MQTT topics.
+Message that are published on the bridge topics are relayed between the server
+and the browser (and vice versa).
+
+See :ref:`mod_mqtt` for more information.
+
+An example of MQTT PubSub usage is the custom tag :ref:`scomp-live`.
+
+
+API Methods
+-----------
+
+All model interfaces ``m_get``, ``m_post``, and ``m_delete`` are
+directly exposed as JSON APIs.
+
+For example, the ``m_get`` call for the Erlang file ``m_mymodel.erl``
+is available via a HTTP ``GET`` on the path: ``/api/model/mymodel/get/...``
+
+Similar for the ``POST`` and ``DELETE`` HTTP methods.
+
 
 .. _guide-named-wire:
 
+Wires
+-----
+
+This is part of :ref:`mod_wires` and is the older method of transporting data
+between the server and the browser.
+
+It is fully functional and the *admin* interface is using these methods.
+
+If you creating a new site then it is advised to start using the
+MQTT topics and isolate the places where you are using wires, so that these
+can be replaced in due time.
+
+
 Wired events
-------------
+^^^^^^^^^^^^
 
 First, define a named action:
 
@@ -29,10 +67,11 @@ Then, call that action from your JavaScript code:
 
     z_event("test");
 
-Trigger notifications from JavaScript
--------------------------------------
 
-Trigger a :ref:`notification <guide-notification>` in Zotonic with the
+Trigger server side notifications from JavaScript
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Trigger an Erlang :ref:`notification <guide-notification>` in Zotonic with the
 ``z_notify`` JavaScript function:
 
 .. code-block:: javascript
@@ -63,18 +102,30 @@ All arguments are available via the ``z_context:get_q/2`` function (and friends)
 
 .. _guide-transport:
 
-Transport
----------
 
-The transport functions are a low-level layer, just above the WebSocket, Comet
-and AJAX methods used for communication between the server and the browser.
+Transport
+^^^^^^^^^
 
 Zotonic has a message bus to transport data between server and browser. It
 transports structured data in different formats and supports retransmission in
 case of lost messages.
 
+Zotonic uses two mechanisms to transport data from the browser to the server:
+
+ * WebSocket with bidirectional transports using :ref:`controller-mqtt_transport`
+ * AJAX calls to publish via :ref:`controller-mqtt_transport` to a topic. This is used
+   to post forms with files to the server.
+
+The WebSocket connection it used to transport data from the server to the browser.
+
+.. note::
+
+    It is strongly advised to use MQTT topics instead of the ``z_transport`` mechanism.
+    See :ref:`mod_mqtt` for more information.
+
+
 From browser to server
-^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""
 
 To send a message from the browser to the server:
 
@@ -98,8 +149,9 @@ This will print on the console::
 
     [{<<"hello">>,<<"world">>}]
 
+
 Quality of service
-^^^^^^^^^^^^^^^^^^
+""""""""""""""""""
 
 The message will be sent with a quality of service of 0. That means the browser
 will try to send the message, but will not check if it arrived. Alterntively,
@@ -124,7 +176,7 @@ received:
     });
 
 From server to browser
-^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""
 
 Sending JavaScript (or other data) from the server to the browser is
 straightforward::
@@ -156,23 +208,4 @@ be responsible for resending the message and where the ack message is received.
 If ``user`` is specified as queue then it will be replaced by ``session``.
 
 .. seealso:: :ref:`transport reference <ref-transport>`.
-
-Publish/subscribe (PubSub)
---------------------------
-
-It is possible to publish and subscribe to topics on the server. Messages are
-relayed between the server and the browser.
-
-See :ref:`mod_mqtt` for more information.
-
-An example of MQTT PubSub usage is the custom tag :ref:`scomp-live`.
-
-Transport mechanisms
---------------------
-
-Zotonic uses various mechanisms to transport data between the browser and the server:
-
- * WebSocket with bidirectional transports using :ref:`controller-mqtt_transport`
-
-AJAX calls also transport back data from the server to the browser.
 

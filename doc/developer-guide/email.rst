@@ -252,7 +252,7 @@ To include inline images, just add an ``<img>`` tag:
 
     …
         <body>
-            <img src="http://yoursite.com/logo.png">
+            <img src="https://yoursite.com/logo.png">
         </body>
     …
 
