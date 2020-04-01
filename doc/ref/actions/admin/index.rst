@@ -7,3 +7,4 @@ Admin
    :glob:
 
    ../action_admin_tasks
+   ../action_redirect_incat
