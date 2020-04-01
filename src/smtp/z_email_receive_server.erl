@@ -218,12 +218,17 @@ receive_data({error, Reason}, Decoded, MsgId, From, To, DataRcvd, State) ->
 reply_handled_status(Received, MsgId, State) ->
     KnownHosts = [ X || X <- Received, X =/= {error, unknown_host} ],
     Handled    = [ X || X <- KnownHosts, X =/= undefined ],
-    case {KnownHosts, Handled} of
-        {[], _} ->
+    IsAllRunning = z_sites_manager:all_sites_running(),
+    case {KnownHosts, Handled, IsAllRunning} of
+        {[], _, true} ->
             {error, "551 User not local. Relay denied.", State};
-        {_, []} ->
+        {_, [], true} ->
             {error, "550 No such user here", State};
-        {_, _} ->
+        {[], _, false} ->
+            {error, "451 Temporary error. Please try again later.", State};
+        {_, [], false} ->
+            {error, "451 Temporary error. Please try again later.", State};
+        {_, _, _} ->
             {ok, MsgId, State}
     end.
 

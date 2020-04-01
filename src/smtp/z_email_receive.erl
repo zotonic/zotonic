@@ -78,7 +78,7 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
                       },
              z_notifier:first(Email1, Context);
          undefined ->
-             lager:info("SMTP Dropping message, unknown host for recipient: ~p", [Recipient]),
+             lager:info("SMTP refusing message, unknown host for recipient: ~p", [Recipient]),
              {error, unknown_host}
      end
      || Recipient <- Recipients
