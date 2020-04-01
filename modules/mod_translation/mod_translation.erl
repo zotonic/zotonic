@@ -53,6 +53,9 @@
 -include("zotonic.hrl").
 -include_lib("modules/mod_admin/include/admin_menu.hrl").
 
+-define(LANGUAGE_COOKIE, "z.lang").
+-define(LANGUAGE_COOKIE_MAX_AGE, 3600*24*365).
+
 
 %% @doc Make sure that we have the i18n.language_list setting when the site starts up.
 init(Context) ->
@@ -101,21 +104,45 @@ default_languages() ->
     ].
 -endif.
 
+set_language_cookie(Context) ->
+    case z_context:is_request(Context) of
+        true ->
+            Language = z_convert:to_list( z_context:language(Context) ),
+            case z_context:get_cookie(?LANGUAGE_COOKIE, Context) of
+                Language ->
+                    Context;
+                _ ->
+                    Options = [
+                         {max_age, ?LANGUAGE_COOKIE_MAX_AGE},
+                         {path, "/"},
+                         {same_site, lax},
+                         {http_only, true}
+                    ],
+                    z_context:set_cookie(?LANGUAGE_COOKIE, Language, Options, Context)
+            end;
+        false ->
+            Context
+    end.
 
 %% @doc Check if the user has a prefered language (in the user's persistent data). If not
 %%      then check the accept-language header (if any) against the available languages.
 observe_session_init_fold(session_init_fold, Context, _Context) ->
     case get_q_language(Context) of
-        undefined -> maybe_persistent(Context);
+        undefined -> maybe_cookie(Context);
         QsLang -> try_set_language(QsLang, Context)
     end.
 
-maybe_persistent(Context) ->
-    case z_context:get_persistent(language, Context) of
+maybe_cookie(Context) ->
+    case z_context:get_cookie(?LANGUAGE_COOKIE, Context) of
         undefined ->
             maybe_configuration(Context);
-        Language ->
-            do_set_language(Language, Context)
+        CookieLang ->
+            case z_trans:is_language(CookieLang) of
+                true ->
+                    do_set_language(z_convert:to_atom(CookieLang), Context);
+                false ->
+                    maybe_configuration(Context)
+            end
     end.
 
 maybe_configuration(Context) ->
@@ -152,10 +179,11 @@ observe_session_context(session_context, Context, _Context) ->
                    undefined -> Context;
                    Language -> Context#context{language=Language}
                end,
-    case get_q_language(Context1) of
+    Context2 = case get_q_language(Context1) of
         undefined -> Context1;
         QsLang -> try_set_language(QsLang, Context1)
-    end.
+    end,
+    set_language_cookie(Context2).
 
 observe_user_context(#user_context{id=UserId}, Context, _Context) ->
     case m_rsc:p_no_acl(UserId, pref_language, Context) of
@@ -176,8 +204,7 @@ observe_auth_logon(auth_logon, Context, _Context) ->
                                                 % Switch the session to the default language of the user
             List = get_language_config(Context),
             Context1 = set_language(z_convert:to_list(Code), List, Context),
-            z_context:set_persistent(language, z_context:language(Context1), Context1),
-            Context1
+            set_language_cookie(Context1)
     end.
 
 observe_set_user_language(#set_user_language{id=UserId}, Context, _Context) when is_integer(UserId) ->
@@ -338,8 +365,8 @@ url_strip_language(Url) ->
 set_user_language(Code, Context) ->
     List = get_language_config(Context),
     Context1 = set_language(z_convert:to_list(Code), List, Context),
-    z_context:set_persistent(language, z_context:language(Context1), Context1),
-    case z_acl:user(Context1) of
+    Context2 = set_language_cookie(Context1),
+    case z_acl:user(Context2) of
         undefined ->
             nop;
         UserId ->
