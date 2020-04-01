@@ -51,29 +51,20 @@
 
 <div class="form-group">
     <div class="pull-right">
-        {% with
-           m.search[{previous id=id cat=m.rsc[id].category.name pagelen=1}],
-           m.search[{next id=id cat=m.rsc[id].category.name pagelen=1}]
-           as
-           previous_items,
-           next_items
-        %}
-            {% if previous_items or next_items %}
-                <div class="btn-group">
-                    {% for id in previous_items %}
-                        {% button class="btn btn-default btn-sm" text="<span class='glyphicon glyphicon-arrow-left'></span>" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Previous in category: "|append:m.rsc[id].title %}
-                    {% empty %}
-                        {% button class="btn btn-default btn-sm disabled" text="<span class='glyphicon glyphicon-arrow-left'></span>" %}
-                    {% endfor %}
-
-                    {% for id in next_items %}
-                        {% button class="btn btn-default btn-sm" text="<span class='glyphicon glyphicon-arrow-right'></span>" action={redirect dispatch="admin_edit_rsc" id=id} title=_"Next in category: "|append:m.rsc[id].title %}
-                    {% empty %}
-                        {% button class="btn btn-default btn-sm disabled" text="<span class='glyphicon glyphicon-arrow-right'></span>" %}
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
+        <div class="btn-group">
+            {% with m.rsc[q.qcat].id|default:id.category_id as cat_id %}
+                <a id="rsc-prev-incat" href="#previous" class="btn btn-default btn-sm"
+                   title="{_ Previous in category: _} {{ cat_id.title }}">
+                    <span class='glyphicon glyphicon-arrow-left'></span>
+                </a>
+                <a id="rsc-next-incat" href="#previous" class="btn btn-default btn-sm"
+                   title="{_ Next in category: _} {{ cat_id.title }}">
+                    <span class='glyphicon glyphicon-arrow-right'></span>
+                </a>
+                {% wire id="rsc-prev-incat" action={redirect_incat id=id cat_id=cat_id is_prev} %}
+                {% wire id="rsc-next-incat" action={redirect_incat id=id cat_id=cat_id is_next} %}
+            {% endwith %}
+        </div>
     </div>
 
     {% ifnotequal id 1 %}
