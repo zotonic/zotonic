@@ -25,7 +25,7 @@
     event/2
 ]).
 
--include("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 render_action(TriggerId, TargetId, Args, Context) ->
     Id = m_rsc:rid(proplists:get_value(id, Args), Context),
