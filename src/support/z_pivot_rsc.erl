@@ -137,7 +137,7 @@ queue_all(Context) ->
                 done;
             Ids ->
                 F = fun(Ctx) ->
-                        [ insert_queue(Id, Ctx) || {Id} <- Ids ]
+                        [ do_insert_queue(Id, Ctx) || {Id} <- Ids ]
                     end,
                 z_db:transaction(F, Context),
                 {LastId} = lists:last(Ids),
@@ -146,17 +146,7 @@ queue_all(Context) ->
 
 %% @doc Insert a rsc_id in the pivot queue
 insert_queue(Id, Context) ->
-    F = fun(Ctx) ->
-                z_db:q("lock table rsc_pivot_queue in share row exclusive mode", Ctx),
-                case z_db:q("update rsc_pivot_queue set serial = serial + 1 where rsc_id = $1", [Id], Ctx) of
-                    1 -> ok;
-                    0 ->
-                        z_db:q("insert into rsc_pivot_queue (rsc_id, due, is_update) select id, current_timestamp, true from rsc where id = $1", [Id], Ctx),
-                        ok
-                    end
-        end,
-    ok = z_db:transaction(F, Context).
-
+    gen_server:cast(Context#context.pivot_server, {insert_queue, Id}).
 
 %% @doc Insert a slow running pivot task. For example syncing category numbers after an category update.
 insert_task(Module, Function, Context) ->
@@ -307,10 +297,15 @@ handle_cast(poll, State) ->
     do_poll(z_context:new(State#state.site)),
     {noreply, State};
 
+%% @doc Insert an id into the queue.
+handle_cast({insert_queue, Id}, State) ->
+    do_insert_queue(Id, z_context:new(State#state.site)),
+    z_utils:flush_message({'$gen_cast', {insert_queue, Id}}),
+    {noreply, State};
 
 %% @doc Poll the queue for a particular database
 handle_cast({pivot, Id}, #state{is_initial_delay=true} = State) ->
-    insert_queue(Id, z_context:new(State#state.site)),
+    do_insert_queue(Id, z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, State) ->
     do_pivot(Id, z_context:new(State#state.site)),
@@ -358,6 +353,27 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+%% @private Insert an id into the queue.
+do_insert_queue(Id, Context) ->
+    F = fun(Ctx) ->
+                z_db:q("lock table rsc_pivot_queue in share row exclusive mode", Ctx),
+                case z_db:q("update rsc_pivot_queue set serial = serial + 1 where rsc_id = $1", [Id], Ctx) of
+                    1 -> ok;
+                    0 ->
+                        z_db:q("insert into rsc_pivot_queue (rsc_id, due, is_update) select id, current_timestamp, true from rsc where id = $1", [Id], Ctx),
+                        ok
+                    end
+        end,
+    case z_db:transaction(F, Context) of
+        ok -> ok;
+        Error ->
+            lager:error("Could not insert ~p into pivot queue table, error: ~p",
+                        [Id, Error]),
+            Error
+    end.
+
 
 %% @doc Poll a database for any queued updates.
 do_poll(Context) ->
