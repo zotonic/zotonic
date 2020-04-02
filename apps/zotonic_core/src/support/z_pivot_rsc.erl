@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2020 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -134,18 +134,16 @@ queue_all(Context) ->
                     queue_all(0, Context)
                  end).
 
-    queue_all(FromId, Context) ->
-        case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
-            [] ->
-                done;
-            Ids ->
-                F = fun(Ctx) ->
-                        [ insert_queue(Id, Ctx) || {Id} <- Ids ]
-                    end,
-                z_db:transaction(F, Context),
-                {LastId} = lists:last(Ids),
-                queue_all(LastId, Context)
-        end.
+queue_all(FromId, Context) ->
+    case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
+        [] ->
+            done;
+        Rs ->
+            Ids = [ Id || {Id} <- Rs ],
+            do_insert_queue(Ids, calendar:universal_time(), Context),
+            queue_all(lists:last(Ids), Context)
+    end.
+
 
 %% @doc Return the length of the pivot queue.
 -spec queue_count(z:context()) -> integer().
@@ -153,26 +151,16 @@ queue_count(Context) ->
     z_db:q1("SELECT COUNT(*) FROM rsc_pivot_queue", Context).
 
 %% @doc Insert a rsc_id in the pivot queue
-insert_queue(Id, Context) ->
-    insert_queue(Id, calendar:universal_time(), Context).
+-spec insert_queue(m_rsc:resource_id() | list(m_rsc:resource_id()), z:context()) -> ok | {error, eexist}.
+insert_queue(IdorIds, Context) ->
+    insert_queue(IdorIds, calendar:universal_time(), Context).
 
 %% @doc Insert a rsc_id in the pivot queue for a certain date
--spec insert_queue(integer(), {calendar:date(), calendar:time()}, #context{}) -> ok | {error, eexist}.
-insert_queue(Id, Date, Context) when is_integer(Id), is_tuple(Date) ->
-    F = fun(Ctx) ->
-        z_db:q("lock table rsc_pivot_queue in share row exclusive mode", Ctx),
-        case z_db:q("update rsc_pivot_queue set serial = serial + 1 where rsc_id = $1", [Id], Ctx) of
-            1 -> ok;
-            0 ->
-                z_db:q("
-                    insert into rsc_pivot_queue (rsc_id, due, is_update)
-                    select id, current_timestamp, true from rsc where id = $1",
-                    [Id], Ctx),
-                ok
-            end
-    end,
-    ok = z_db:transaction(F, Context).
-
+-spec insert_queue(m_rsc:resource_id() | list(m_rsc:resource_id()), calendar:datetime(), z:context()) -> ok | {error, eexist}.
+insert_queue(Id, DueDate, Context) when is_integer(Id), is_tuple(DueDate) ->
+    insert_queue([Id], DueDate, Context);
+insert_queue(Ids, DueDate, Context) when is_list(Ids), is_tuple(DueDate) ->
+    gen_server:cast(Context#context.pivot_server, {insert_queue, DueDate, Ids}).
 
 %% @doc Insert a slow running pivot task. For example syncing category numbers after an category update.
 insert_task(Module, Function, Context) ->
@@ -190,7 +178,7 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
 
 %% @doc Insert a slow running pivot task with unique key and arguments that should start after Seconds seconds.
 %%      Always delete any existing transaction, to prevent race conditions when the task is running
-%%      during this insert.-spec insert_queue(m_rsc:resource(), #context{}) -> ok | {error, eexist}.
+%%      during this insert.
 insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) when is_function(ArgsFun) ->
     Due = to_utc_date(SecondsOrDate),
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
@@ -368,12 +356,18 @@ handle_cast(poll, State) ->
     do_poll(z_context:new(State#state.site)),
     {noreply, State};
 
+%% @doc Insert an id into the queue.
+handle_cast({insert_queue, DueDate, Ids}, State) when is_list(Ids) ->
+    do_insert_queue(Ids, DueDate, z_context:new(State#state.site)),
+    z_utils:flush_message({'$gen_cast', {insert_queue, DueDate, Ids}}),
+    {noreply, State};
 
 %% @doc Poll the queue for a particular database
-handle_cast({pivot, Id}, #state{is_initial_delay=true} = State) ->
-    insert_queue(Id, z_context:new(State#state.site)),
+handle_cast({pivot, Id}, #state{is_initial_delay=true} = State) when is_integer(Id) ->
+    Due = z_datetime:next_minute(calendar:universal_time()),
+    do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
-handle_cast({pivot, Id}, State) ->
+handle_cast({pivot, Id}, State) when is_integer(Id) ->
     do_pivot(Id, z_context:new(State#state.site)),
     {noreply, State};
 
@@ -419,6 +413,47 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+%% @doc Insert a list of ids into the pivot queue.
+do_insert_queue(Ids, DueDate, Context) when is_list(Ids) ->
+    F = fun(Ctx) ->
+        z_db:q("lock table rsc_pivot_queue in share row exclusive mode", Ctx),
+        lists:foreach(
+            fun(Id) ->
+                case z_db:q1("select id from rsc where id = $1", [Id], Ctx) of
+                    Id ->
+                        case z_db:q("
+                            update rsc_pivot_queue
+                            set serial = serial + 1,
+                                due = $2
+                            where rsc_id = $1",
+                            [ Id, DueDate ],
+                            Ctx)
+                        of
+                            1 -> ok;
+                            0 ->
+                                z_db:q("
+                                    insert into rsc_pivot_queue (rsc_id, due, is_update)
+                                    select id, $2, true from rsc where id = $1",
+                                    [ Id, DueDate ], Ctx)
+                        end;
+                    undefined ->
+                        ok
+                end
+            end,
+            Ids)
+    end,
+    case z_db:transaction(F, Context) of
+        ok ->
+            ok;
+        {rollback, Reason} ->
+            lager:error("pivot: rollback during pivot queue insert: ~p", [Reason]),
+            timer:apply_after(100, ?MODULE, insert_queue, [Ids, DueDate, Context]);
+        {error, Reason} ->
+            lager:error("pivot: error during pivot queue insert: ~p", [Reason])
+    end.
+
 
 %% @doc Poll a database for any queued updates.
 do_poll(Context) ->
