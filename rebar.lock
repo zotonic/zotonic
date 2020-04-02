@@ -88,7 +88,7 @@
   {git,"https://github.com/Vagabond/erlang-syslog.git",
        {ref,"4a6c6f2c996483e86c1320e9553f91d337bcb6aa"}},
   0},
- {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.1.0">>},0},
+ {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.2.0">>},0},
  {<<"termit">>,{pkg,<<"termit">>,<<"1.0.0">>},0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
  {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.0.3">>},0}]}.
@@ -147,7 +147,7 @@
  {<<"sidejob">>, <<"5D6A7C9C620778CB1908E46B552D767DF2ED4D77070BB7B5B8773D4FF18D1D37">>},
  {<<"ssl_verify_fun">>, <<"6EAF7AD16CB568BB01753DBBD7A95FF8B91C7979482B95F38443FE2C8852A79B">>},
  {<<"stacktrace_compat">>, <<"1C064BC1725F5BD6470853487AC7FBDA5D5E8745CE4B57D0AE71765C85B4414A">>},
- {<<"template_compiler">>, <<"8DE4BE3E9E04218E0975F4DDA171DC3681A980D3C9E347CFD52881EFADE8F3A7">>},
+ {<<"template_compiler">>, <<"87CC8A336FBF92C26E61CB9AD7250D1ECFDFC76F5FFCE1CE33E2918C8FBC3032">>},
  {<<"termit">>, <<"D463BDD0207EDD00942754D51FD822B981CDCE7FB774E9FF71D9F59429BCEF7A">>},
  {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>},
  {<<"zotonic_stdlib">>, <<"8F2C2345E1C930806C4CE63F9C745F503CF576C0B6EAA19218FCF3775F227E7B">>}]}

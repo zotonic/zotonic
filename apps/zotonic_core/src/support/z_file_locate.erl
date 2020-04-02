@@ -68,7 +68,7 @@ extract_filters(Path, OptFilters, Context) ->
                                 undefined -> [];
                                 _ -> OptFilters
                             end,
-                            {SafePath, OriginalFile, Filters1 ++ PreviewPropList};
+                            {SafePath, z_convert:to_binary(OriginalFile), Filters1 ++ PreviewPropList};
                         {error, _} ->
                             {SafePath, SafePath, OptFilters}
                     end
@@ -76,8 +76,6 @@ extract_filters(Path, OptFilters, Context) ->
     end.
 
 % Find all files, possibly starting a preview-request
-locate_source(NoRoots, Path, "lib/"++OriginalFile, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->
-    locate_source([lib], Path, OriginalFile, Filters, Context);
 locate_source(NoRoots, Path, <<"lib/",OriginalFile/binary>>, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->
     locate_source([lib], Path, OriginalFile, Filters, Context);
 locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->
@@ -126,13 +124,13 @@ locate_source([DirName|Rs], Path, OriginalFile, Filters, Context) ->
 %%      Resized images are located in files/preview.
 locate_source_module_indexer(lib, Path, OriginalFile, [], Context) ->
     locate_source_module_indexer(lib, Path, OriginalFile, undefined, Context);
-locate_source_module_indexer(ModuleIndex, Path, _OriginalFile, undefined, Context) ->
-    case z_module_indexer:find(ModuleIndex, Path, Context) of
+locate_source_module_indexer(ModuleIndex, _Path, OriginalFile, undefined, Context) ->
+    case z_module_indexer:find(ModuleIndex, OriginalFile, Context) of
         {ok, #module_index{filepath=FoundFile}} ->
             part_file(FoundFile, []);
         {error, enoent} ->
             % Try to find ".tpl" version -> render and cache result
-            TplFile = <<Path/binary, ".tpl">>,
+            TplFile = <<OriginalFile/binary, ".tpl">>,
             case z_module_indexer:find(template, TplFile, Context) of
                 {ok, #module_index{} = M} ->
                     {ok, render(M, Context)};

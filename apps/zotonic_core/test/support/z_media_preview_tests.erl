@@ -21,3 +21,8 @@ cmd_args_gif_test() ->
     CmdArgs = lists:flatten(z_utils:combine(32, Args)),
     ?assertEqual("-coalesce    -gravity NorthWest -crop 80x80+21+0 -extent 80x80 +repage -colorspace \"sRGB\" -set units PixelsPerInch -density 72  ", CmdArgs).
 
+media_data_url_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    Data = z_media_tag:scomp_data_url(<<"lib/images/trans.gif">>, [], Context),
+    ?assertEqual(Data, <<"data:image/gif;base64,R0lGODlhAQABAJAAAAAAAAAAACH5BAEUAAAALAAAAAABAAEAAAICRAEAOw==">>).
+
