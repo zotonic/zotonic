@@ -216,4 +216,4 @@ Ensure that the generated URL contains the
 .. seealso::
     * :ref:`guide-media` developer guide.
     * :ref:`guide-media-classes` for some options that are only available in `mediaclass` files.
-    * :ref:`tag-image_url` and :ref:`tag-media` tags.
+    * :ref:`tag-image_url`, :ref:`tag-image_data_url` and :ref:`tag-media` tags.

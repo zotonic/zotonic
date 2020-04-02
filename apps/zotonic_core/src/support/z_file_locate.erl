@@ -76,8 +76,6 @@ extract_filters(Path, OptFilters, Context) ->
     end.
 
 % Find all files, possibly starting a preview-request
-locate_source(NoRoots, Path, "lib/"++OriginalFile, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->
-    locate_source([lib], Path, OriginalFile, Filters, Context);
 locate_source(NoRoots, Path, <<"lib/",OriginalFile/binary>>, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->
     locate_source([lib], Path, OriginalFile, Filters, Context);
 locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->

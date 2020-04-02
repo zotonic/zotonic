@@ -57,7 +57,7 @@ lookup(<<"/lib/", Path/binary>>, Context) ->
     if_visible(lookup_decoded(<<"lib">>, SafePath, Context), Context);
 lookup(<<"/image/", Path/binary>>, Context) ->
     SafePath = mochiweb_util:unquote(Path),
-    if_visible(lookup_decoded(<<"lib">>, SafePath, Context), Context);
+    if_visible(lookup_decoded(<<"image">>, SafePath, Context), Context);
 lookup(_, _Context) ->
     {error, enoent}.
 

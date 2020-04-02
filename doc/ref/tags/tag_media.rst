@@ -13,4 +13,7 @@ The ``{% media %}`` tag is not implemented in the core of Zotonic. It depends on
 
 An example of a module using ``{% media %}`` is :ref:`mod_video_embed` which enables the use of embed code from sites as youtube and vimeo.  Mod_video_embed will echo the embed code for a ``{% media %}`` tag and output a still image for an ``{% image %}`` tag.
 
-.. seealso:: :ref:`tag-image`.
+.. seealso::
+    * :ref:`guide-media` developer guide.
+    * :ref:`guide-media-classes` for some options that are only available in `mediaclass` files.
+    * :ref:`tag-image`, :ref:`tag-image_url` and :ref:`tag-image_data_url` tags.
