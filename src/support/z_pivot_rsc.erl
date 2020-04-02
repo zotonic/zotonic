@@ -131,22 +131,21 @@ queue_all(Context) ->
                     queue_all(0, Context)
                  end).
 
-    queue_all(FromId, Context) ->
-        case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
-            [] ->
-                done;
-            Ids ->
-                F = fun(Ctx) ->
-                        [ do_insert_queue(Id, Ctx) || {Id} <- Ids ]
-                    end,
-                z_db:transaction(F, Context),
-                {LastId} = lists:last(Ids),
-                queue_all(LastId, Context)
-        end.
+queue_all(FromId, Context) ->
+    case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
+        [] ->
+            done;
+        Rs ->
+            Ids = [ Id || {Id} <- Rs ],
+            do_insert_queue(Ids, Context),
+            queue_all(lists:last(Ids), Context)
+    end.
 
 %% @doc Insert a rsc_id in the pivot queue
-insert_queue(Id, Context) ->
-    gen_server:cast(Context#context.pivot_server, {insert_queue, Id}).
+insert_queue(Id, Context) when is_integer(Id) ->
+    insert_queue([Id], Context);
+insert_queue(Ids, Context) when is_list(Ids) ->
+    gen_server:cast(Context#context.pivot_server, {insert_queue, Ids}).
 
 %% @doc Insert a slow running pivot task. For example syncing category numbers after an category update.
 insert_task(Module, Function, Context) ->
@@ -298,14 +297,14 @@ handle_cast(poll, State) ->
     {noreply, State};
 
 %% @doc Insert an id into the queue.
-handle_cast({insert_queue, Id}, State) ->
-    do_insert_queue(Id, z_context:new(State#state.site)),
-    z_utils:flush_message({'$gen_cast', {insert_queue, Id}}),
+handle_cast({insert_queue, Ids}, State) when is_list(Ids) ->
+    do_insert_queue(Ids, z_context:new(State#state.site)),
+    z_utils:flush_message({'$gen_cast', {insert_queue, Ids}}),
     {noreply, State};
 
-%% @doc Poll the queue for a particular database
+%% @doc Requests for immediate pivot of a resource
 handle_cast({pivot, Id}, #state{is_initial_delay=true} = State) ->
-    do_insert_queue(Id, z_context:new(State#state.site)),
+    do_insert_queue([Id], z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, State) ->
     do_pivot(Id, z_context:new(State#state.site)),
@@ -354,24 +353,37 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-
-%% @private Insert an id into the queue.
-do_insert_queue(Id, Context) ->
+%% @doc Insert a list of ids into the pivot queue.
+do_insert_queue(Ids, Context) when is_list(Ids) ->
     F = fun(Ctx) ->
-                z_db:q("lock table rsc_pivot_queue in share row exclusive mode", Ctx),
-                case z_db:q("update rsc_pivot_queue set serial = serial + 1 where rsc_id = $1", [Id], Ctx) of
-                    1 -> ok;
-                    0 ->
-                        z_db:q("insert into rsc_pivot_queue (rsc_id, due, is_update) select id, current_timestamp, true from rsc where id = $1", [Id], Ctx),
+        z_db:q("lock table rsc_pivot_queue in share row exclusive mode", Ctx),
+        lists:foreach(
+            fun(Id) ->
+                case z_db:q1("select id from rsc where id = $1", [Id], Ctx) of
+                    Id ->
+                        case z_db:q("update rsc_pivot_queue set serial = serial + 1 where rsc_id = $1", [Id], Ctx) of
+                            1 -> ok;
+                            0 ->
+                                z_db:q("
+                                    insert into rsc_pivot_queue (rsc_id, due, is_update)
+                                    select id, current_timestamp, true from rsc where id = $1",
+                                    [Id], Ctx)
+                        end;
+                    undefined ->
                         ok
-                    end
-        end,
+                end
+            end,
+            Ids)
+    end,
     case z_db:transaction(F, Context) of
-        ok -> ok;
-        Error ->
-            lager:error("Could not insert ~p into pivot queue table, error: ~p",
-                        [Id, Error]),
-            Error
+        ok ->
+            ok;
+        {rollback, Reason} ->
+            % Retry in 100msec
+            lager:error("pivot: rollback during pivot queue insert: ~p", [Reason]),
+            timer:apply_after(100, ?MODULE, insert_queue, [Ids, Context]);
+        {error, Reason} ->
+            lager:error("pivot: error during pivot queue insert: ~p", [Reason])
     end.
 
 
