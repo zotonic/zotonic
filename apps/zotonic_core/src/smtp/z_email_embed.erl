@@ -58,7 +58,7 @@ embed_images_html(Html, Context) ->
     {Parts, Html1}.
 
 find_images(Html) ->
-    Re = <<"src=([\"']/(lib|image)/(.*?)[\"'])">>,
+    Re = <<"src=([\"'](/(lib|image)/[^\"']*\\.(jpg|gif|png))[\"'])">>,
     case re:run(Html, Re, [{capture, all_but_first, binary}, global]) of
         nomatch ->
             [];
@@ -66,43 +66,17 @@ find_images(Html) ->
             sets:to_list(sets:from_list(Matches))
     end.
 
-embed_image([Path, LibImg, SubPath], {Parts, Html, Context} = Acc) ->
-    case lookup(LibImg, SubPath, Context) of
-        {ok, #z_file_info{mime=Mime} = Info} ->
-            try
-                Data = z_file_request:content_data(Info, identity),
-                {Part, Cid} = create_attachment(Data, Mime, filename:basename(SubPath)),
-                NewPath = iolist_to_binary([$", "cid:", Cid, $"]),
-                Html1 = re:replace(Html, Path, NewPath, [global, {return, binary}]),
-                {[Part|Parts], Html1, Context}
-            catch
-                error:Error ->
-                    Stacktrace = erlang:get_stacktrace(),
-                    lager:error("email embed_image error ~p on embedding ~p~n~p", [Error, Info, Stacktrace]),
-                    Acc
-            end;
+% [<<"'/lib/foo/bar.png'">>,<<"/lib/foo/bar.png">>,<<"lib">>, <<"png">>]
+embed_image([QuotedPath, Path, _LibImg, _Ext], {Parts, Html, Context}) ->
+    case z_media_data:file_data(Path, Context) of
+        {ok, {Mime, Data}} ->
+            {Part, Cid} = create_attachment(Data, Mime, filename:basename(Path)),
+            NewPath = iolist_to_binary([$", "cid:", Cid, $"]),
+            Html1 = re:replace(Html, QuotedPath, NewPath, [global, {return, binary}]),
+            {[Part|Parts], Html1, Context};
         {error, _} ->
-            Acc
+            {Parts, Html, Context}
     end.
-
-lookup(Where, Path, Context) ->
-    SafePath = mochiweb_util:safe_relative_path(mochiweb_util:unquote(Path)),
-    if_visible(lookup_decoded(Where, SafePath, Context), Context).
-
-if_visible({ok, #z_file_info{} = Info} = OK, Context) ->
-    case z_file_request:is_visible(Info, Context) of
-        true ->
-            OK;
-        false ->
-            {error, eacces}
-    end;
-if_visible({error, _} = Error, _Context) ->
-    Error.
-
-lookup_decoded(<<"lib">>, Path, Context) ->
-    z_file_request:lookup_lib(Path, Context);
-lookup_decoded(<<"image">>, Path, Context) ->
-    z_file_request:lookup_file(Path, Context).
 
 create_attachment(Data, ContentType, Name) ->
     ContentId = z_ids:id(30),

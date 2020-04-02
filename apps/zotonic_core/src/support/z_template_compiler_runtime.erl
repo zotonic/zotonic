@@ -441,6 +441,8 @@ builtin_tag_1(image, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_tag(Expr, Args, Context);
 builtin_tag_1(image_url, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_url(Expr, Args, Context);
+builtin_tag_1(image_data_url, Expr, Args, _Vars, Context) ->
+    z_media_tag:scomp_data_url(Expr, Args, Context);
 builtin_tag_1(media, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_viewer(Expr, Args, Context);
 builtin_tag_1(Tag, _Expr, _Args, _Vars, Context) ->
