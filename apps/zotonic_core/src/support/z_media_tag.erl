@@ -281,7 +281,7 @@ filename_to_filepath_1(Filename, Context) ->
 
 %% @doc Give the base url for the filename being served using the 'image' dispatch rule
 filename_to_urlpath(Filename, Context) ->
-    z_dispatcher:url_for(image, [{star, iolist_to_binary(Filename)}], z_context:set_language(undefined, Context)).
+    z_dispatcher:url_for(image, [{star, Filename}], z_context:set_language(undefined, Context)).
 
 
 %% @spec url(MediaRef, Options, Context) -> {ok, Url::binary()} | {error, Reason}
@@ -366,25 +366,28 @@ use_absolute(false) -> false;
 use_absolute(A) -> z_convert:to_bool(A).
 
 
-url2(File, Options, Context) ->
-    Filename = z_convert:to_list(File),
-    {TagOpts, ImageOpts} = lists:partition(fun is_tagopt/1, filter_options(Options)),
-    % Map all ImageOpts to an opt string
-    MimeFile = z_media_identify:guess_mime(Filename),
-    {_Mime,Extension} = z_media_preview:out_mime(MimeFile, ImageOpts, Context),
-    case props2url(ImageOpts, Context) of
-        {no_checksum, UrlProps} ->
-            PropsQuoted = mochiweb_util:quote_plus(UrlProps),
-            {url, filename_to_urlpath(lists:flatten([Filename,PropsQuoted,Extension]), Context),
-                  TagOpts,
-                  ImageOpts};
-        {checksum, UrlProps} ->
-            Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
-            PropCheck = mochiweb_util:quote_plus(iolist_to_binary([UrlProps,$(,Checksum,$)])),
-            {url, filename_to_urlpath(lists:flatten([Filename,PropCheck,Extension]), Context),
-                  TagOpts,
-                  ImageOpts}
-    end.
+url2(Filename, Options, Context) ->
+    case lists:partition(fun is_tagopt/1, filter_options(Options)) of
+        {TagOpts, []} ->
+            {url, filename_to_urlpath(Filename, Context), TagOpts, []};
+        {TagOpts, ImageOpts} ->
+            % Map all ImageOpts to an opt string
+            MimeFile = z_media_identify:guess_mime(Filename),
+            {_Mime, Extension} = z_media_preview:out_mime(MimeFile, ImageOpts, Context),
+            case props2url(ImageOpts, Context) of
+                {no_checksum, UrlProps} ->
+                    PropsQuoted = z_url:url_encode(UrlProps),
+                    {url, filename_to_urlpath(iolist_to_binary([Filename,PropsQuoted,Extension]), Context),
+                          TagOpts,
+                          ImageOpts};
+                {checksum, UrlProps} ->
+                    Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
+                    PropCheck = z_url:url_encode(iolist_to_binary([UrlProps,$(,Checksum,$)])),
+                    {url, filename_to_urlpath(iolist_to_binary([Filename,PropCheck,Extension]), Context),
+                          TagOpts,
+                          ImageOpts}
+            end
+   end.
 
 filter_options(Options) ->
     lists:filter(

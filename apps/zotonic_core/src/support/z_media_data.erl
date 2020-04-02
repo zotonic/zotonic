@@ -59,7 +59,7 @@ lookup(<<"/image/", Path/binary>>, Context) ->
     SafePath = mochiweb_util:unquote(Path),
     if_visible(lookup_decoded(<<"lib">>, SafePath, Context), Context);
 lookup(_, _Context) ->
-    <<>>.
+    {error, enoent}.
 
 if_visible({ok, #z_file_info{} = Info} = OK, Context) ->
     case z_file_request:is_visible(Info, Context) of
