@@ -23,7 +23,12 @@
 lower(undefined, _Context) ->
     undefined;
 lower(Input, _Context) when is_list(Input) or is_binary(Input) ->
-    z_string:to_lower(Input);
+    try
+        z_string:to_lower(Input)
+    catch
+        _:_ ->
+            z_string:to_lower(z_string:sanitize_utf8(Input))
+    end;
 lower(Input, Context) ->
     lower(erlydtl_runtime:to_list(Input, Context), Context).
 
