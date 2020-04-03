@@ -30,6 +30,8 @@
     pivot/2,
     pivot_delay/1,
     pivot_resource_update/4,
+    pivot_resource/2,
+
     queue_all/1,
     insert_queue/2,
 
@@ -108,7 +110,7 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
                         end, UpdateProps, [date_start, date_end, title]),
 
     {DateStart, DateEnd} = pivot_date(Props),
-    PivotTitle = truncate(get_pivot_title(Props), 100),
+    PivotTitle = truncate(get_pivot_title(Props), 60),
     Props1 = [
         {pivot_date_start, DateStart},
         {pivot_date_end, DateEnd},
@@ -119,10 +121,10 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
     ],
     z_notifier:foldr(#pivot_update{id=Id, raw_props=RawProps}, Props1, Context).
 
-    month_day(undefined) -> undefined;
-    month_day(?EPOCH_START) -> undefined;
-    month_day(?ST_JUTTEMIS) -> undefined;
-    month_day({{_Y,M,D}, _}) -> M*100+D.
+month_day(undefined) -> undefined;
+month_day(?EPOCH_START) -> undefined;
+month_day(?ST_JUTTEMIS) -> undefined;
+month_day({{_Y,M,D}, _}) -> M*100+D.
 
 
 %% @doc Rebuild the search index by queueing all resources for pivot.
@@ -706,7 +708,7 @@ pivot_date(R) ->
 
 %% @doc Fetch the first title from the record for sorting.
 get_pivot_title(Id, Context) ->
-    z_string:to_lower(get_pivot_title([{title, m_rsc:p(Id, title, Context)}])).
+    z_string:truncate( z_string:to_lower(get_pivot_title([{title, m_rsc:p(Id, title, Context)}])), 50, <<>>).
 
 get_pivot_title(Props) ->
     case proplists:get_value(title, Props) of
