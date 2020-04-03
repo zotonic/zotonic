@@ -44,6 +44,7 @@
         "|/log/"
         "|\\.log$"
         "|\\.#"
+        "|\\.bea#$"
         "|~$"
         "|\\.bck$"
         "|\\.swp$"
@@ -59,6 +60,7 @@ file_changed(Verb, F) ->
         true ->
             nop;
         false ->
+            z_file_mtime:modified(F),
             Message = handle_file(Verb, filename:basename(F), filename:extension(F), F),
             FilenameB = z_convert:to_binary(F),
             Basename = filename:extension(FilenameB),

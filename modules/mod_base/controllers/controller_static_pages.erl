@@ -390,7 +390,7 @@ fileinfo(F) ->
 fileinfo(F, N) ->
     [{name, N},
      {is_dir, filelib:is_dir(F)},
-     {last_modified, filelib:last_modified(F)},
+     {last_modified, z_file_mtime:last_modified(F)},
      {mime, z_media_identify:guess_mime(F)},
      {size, filelib:file_size(F)}].
 

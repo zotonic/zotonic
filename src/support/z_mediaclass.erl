@@ -251,7 +251,7 @@ collect_files([UAClass|Rest], Acc, Context) ->
             collect_files(Rest, Acc, Context);
         Ms ->
             Paths = [ {Module, UAClass, Path} || #module_index{filepath=Path, module=Module} <- Ms ],
-            Acc1 = [ {Paths, lists:max([ filelib:last_modified(Path) || {_, _, Path} <- Paths ])} | Acc ],
+            Acc1 = [ {Paths, lists:max([ z_file_mtime:last_modified(Path) || {_, _, Path} <- Paths ])} | Acc ],
             collect_files(Rest, Acc1, Context)
     end.
 
