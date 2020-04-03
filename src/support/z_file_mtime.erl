@@ -76,16 +76,24 @@
 mtime(File) when is_list(File) ->
     mtime(unicode:characters_to_binary(File));
 mtime(File) when is_binary(File) ->
-    case ets:lookup(?MTIME, File) of
-        [] ->
-            gen_server:call(?MODULE, {mtime, File});
-        [{_, 0}] ->
-            {error, notfound};
-        [{_, MTime}] ->
-            {ok, MTime}
+    case z_config:get(filewatcher_mtime_cache, true) of
+        true ->
+            case ets:lookup(?MTIME, File) of
+                [] ->
+                    gen_server:call(?MODULE, {mtime, File});
+                [{_, 0}] ->
+                    {error, notfound};
+                [{_, MTime}] ->
+                    {ok, MTime}
+            end;
+        false ->
+            case file_mtime(File) of
+                0 -> {error, notfound};
+                M -> {ok, M}
+            end
     end.
 
--spec last_modified( file:filename_all() ) -> integer().
+-spec last_modified( file:filename_all() ) -> calendar:datetime() | 0.
 last_modified(File) ->
     case mtime(File) of
         {ok, MTime} -> MTime;
