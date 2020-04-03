@@ -219,7 +219,7 @@ forms(File, Module, BodyAst, BodyInfo, Context, TreeWalker, TemplateResetCounter
         erl_syntax:atom(source),
             [ erl_syntax:clause([], none, [ erl_syntax:string(File) ]) ]),
 
-    Dependencies  = lists:usort([{File, filelib:last_modified(File)} | BodyInfo#ast_info.dependencies]),
+    Dependencies  = lists:usort([{File, z_file_mtime:last_modified(File)} | BodyInfo#ast_info.dependencies]),
     Dependencies1 = lists:filter(fun({[],0}) -> false; (_) -> true end, Dependencies),
     DependenciesFunctionAst = erl_syntax:function(
         erl_syntax:atom(dependencies), [
@@ -519,7 +519,7 @@ merge_info(Info1, Info2) ->
 
 with_dependency(FilePath, {{Ast, Info}, TreeWalker}, Context) ->
     Ast1 = cond_wrap_debug_comments(FilePath, Ast, Context),
-    {{Ast1, Info#ast_info{dependencies = [{FilePath, filelib:last_modified(FilePath)} | Info#ast_info.dependencies]}}, TreeWalker}.
+    {{Ast1, Info#ast_info{dependencies = [{FilePath, z_file_mtime:last_modified(FilePath)} | Info#ast_info.dependencies]}}, TreeWalker}.
 
 
 

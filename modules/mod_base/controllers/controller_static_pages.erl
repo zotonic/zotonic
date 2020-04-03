@@ -124,8 +124,7 @@ last_modified(ReqData, State) ->
             RD1 = wrq:set_resp_header("Cache-Control", "public, max-age="++integer_to_list(?MAX_AGE), ReqData1),
             case State#state.last_modified of
                 undefined ->
-                    LMod = filelib:last_modified(State#state.fullpath),
-                    [LModUTC|_] = calendar:local_time_to_universal_time_dst(LMod),
+                    LModUTC = z_file_mtime:last_modified(State#state.fullpath),
                     {LModUTC, RD1, State1#state{last_modified=LModUTC}};
                 LModUTC ->
                     {LModUTC, RD1, State1}
@@ -390,7 +389,7 @@ fileinfo(F) ->
 fileinfo(F, N) ->
     [{name, N},
      {is_dir, filelib:is_dir(F)},
-     {last_modified, filelib:last_modified(F)},
+     {last_modified, z_file_mtime:last_modified(F)},
      {mime, z_media_identify:guess_mime(F)},
      {size, filelib:file_size(F)}].
 
