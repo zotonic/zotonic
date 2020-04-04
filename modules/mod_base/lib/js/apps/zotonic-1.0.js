@@ -57,6 +57,7 @@ var z_transport_delegates   = {
     session: z_transport_session_status,
     reload: z_session_invalid_dialog
 };
+var z_transport_retransmission_enabled = false;
 var z_force_unload_beacon   = false;
 var z_init_postback_forms_timeout = false;
 
@@ -749,7 +750,9 @@ function z_transport_incoming_msg(msg)
                 var ack = z_transport_acks[msg.msg_id];
                 delete z_transport_acks[msg.msg_id];
 
-                clearTimeout(ack.timeout_timer);
+                if (ack.timeout_timer) {
+                    clearTimeout(ack.timeout_timer);
+                }
                 if (typeof ack.options.ack == 'function') {
                     ack.options.ack(msg, ack.options);
                 }
@@ -799,7 +802,7 @@ function z_transport_timeout(msg_id)
     if (typeof z_transport_acks[msg_id] == 'object') {
         if (z_transport_acks[msg_id].timeout_count++ < TRANSPORT_TRIES) {
             // Requeue the request (if it is not waiting in the queue)
-            if (!z_transport_acks[msg_id].is_queued) {
+            if (!z_transport_acks[msg_id].is_queued && z_transport_retransmission_enabled) {
                 z_transport_acks[msg_id].msg.dup = true;
                 z_transport_queue.push({
                     msg: z_transport_acks[msg_id].msg,
