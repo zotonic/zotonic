@@ -51,6 +51,18 @@
                         {_ Page connections overview _}
                     {% endif %}
                 </h2>
+
+                {% if q.qhassubject or q.qhasobject %}
+                    <p>
+                        {_ Only showing connections with: _}
+                        {% if q.qhassubject %}
+                            {_ subject _} <a href="{% url admin_edit_rsc id=q.qhasubject %}">{{ m.rsc[q.qhassubject].title|default:_"Untitled" }}</a>
+                        {% endif %}
+                        {% if q.qhasobject %}
+                            {_ object _} <a href="{% url admin_edit_rsc id=q.qhasobject %}">{{ m.rsc[q.qhasobject].title|default:_"Untitled" }}</a>
+                        {% endif %}
+                    </p>
+                {% endif %}
             </div>
             <div class="well z-button-row">
                 <a name="content-pager"></a>
@@ -72,7 +84,13 @@
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
 
-            {% with m.search.paged[{edges predicate=q.qpredicate page=q.page pagelen=qpagelen}] as result %}
+            {% with m.search.paged[{edges
+                    hassubject=q.qhassubject
+                    hasobject=q.qhasobject
+                    predicate=q.qpredicate
+                    page=q.page
+                    pagelen=qpagelen
+                }] as result %}
                 {% include "_admin_edges_list.tpl" result=result qsort=qsort qcat=qcat %}
                 {% pager result=result dispatch="admin_edges" qargs hide_single_page %}
             {% endwith %}

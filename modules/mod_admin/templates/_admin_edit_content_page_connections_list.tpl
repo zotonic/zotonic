@@ -14,14 +14,23 @@ Params:
 #}
 {% with list_id|default:#list_id as list_id %}
 <div class="unlink-wrapper">
-    {% sorter id=list_id
-              tag={object_sorter predicate=predicate id=id}
-              group="edges"
-              delegate=delegate|default:`controller_admin_edit`
-    %}
-    <ul id="{{ list_id }}" class="tree-list connections-list">
-      {% include "_rsc_edge_list.tpl" id=id predicate=predicate unlink_action=unlink_action undo_message_id=undo_message_id %}
-    </ul>
+    {% with m.edge.o[id][predicate] as edges %}
+      {% with edges|length > 60 as is_list_truncated %}
+        {% if not is_list_truncated %}
+          {% sorter id=list_id
+                    tag={object_sorter predicate=predicate id=id}
+                    group="edges"
+                    delegate=delegate|default:`controller_admin_edit`
+          %}
+        {% endif %}
+        <ul id="{{ list_id }}" class="tree-list connections-list">
+          {% include "_rsc_edge_list.tpl" id=id predicate=predicate
+                unlink_action=unlink_action undo_message_id=undo_message_id
+                is_list_truncated=is_list_truncated
+          %}
+        </ul>
+      {% endwith %}
+    {% endwith %}
 </div>
 {% endwith %}
 

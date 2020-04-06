@@ -194,25 +194,46 @@ observe_admin_menu(admin_menu, Acc, Context) ->
                 url={admin_edges}}
      |Acc].
 
-observe_search_query({search_query, {edges, [{predicate,Predicate}]}, _OffsetLimit}, Context)
-   when Predicate =/= undefined, Predicate =/= <<>>, Predicate =/= [] ->
-    PredId = m_rsc:rid(Predicate, Context),
-    #search_sql{
-        select="e.id, e.subject_id, e.predicate_id, e.object_id, e.creator_id, e.created",
-        from="edge e join rsc s on s.id = e.subject_id join rsc o on o.id = e.object_id",
-        order="e.id desc",
-        where="e.predicate_id = $1",
-        args=[PredId],
-        tables=[{rsc,"o"}, {rsc,"s"}],
-        assoc=true
-    };
-observe_search_query({search_query, {edges, _Args}, _OffsetLimit}, _Context) ->
-    #search_sql{
-        select="e.id, e.subject_id, e.predicate_id, e.object_id, e.creator_id, e.created",
-        from="edge e join rsc s on s.id = e.subject_id join rsc o on o.id = e.object_id",
-        order="e.id desc",
-        tables=[{rsc,"o"}, {rsc,"s"}],
-        assoc=true
-    };
+observe_search_query({search_query, {edges, Args}, _OffsetLimit}, Context) ->
+    PredId = rid(predicate, Args, Context),
+    SubjectId = rid(hassubject, Args, Context),
+    ObjectId = rid(hasobject, Args, Context),
+    search_query(SubjectId, PredId, ObjectId);
 observe_search_query(_, _Context) ->
     undefined.
+
+rid(P, Args, Context) ->
+    m_rsc:rid(map_empty(proplists:get_value(P, Args)), Context).
+
+search_query(SubjectId, PredId, ObjectId) ->
+    {W1, A1} = maybe_add("e.predicate_id ", PredId, [], []),
+    {W2, A2} = maybe_add("e.subject_id ", SubjectId, W1, A1),
+    {W3, A3} = maybe_add("e.object_id ", ObjectId, W2, A2),
+    #search_sql{
+        select="e.id, e.subject_id, e.predicate_id, e.object_id, e.creator_id, e.created",
+        from="edge e join rsc s on s.id = e.subject_id join rsc o on o.id = e.object_id",
+        order="e.id desc",
+        where=W3,
+        args=A3,
+        tables=[{rsc,"o"}, {rsc,"s"}],
+        assoc=true
+    }.
+
+maybe_add(_, undefined, Where, As) ->
+    {Where, As};
+maybe_add(Clause, V, Where, As) ->
+    As1 = As ++ [ V ],
+    W = Clause ++ " = $"++integer_to_list(length(As1)),
+    {append_where(Where, W), As1}.
+
+append_where("", W) ->
+    W;
+append_where(Ws, W) ->
+    Ws ++ " and " ++ W.
+
+map_empty(<<>>) -> undefined;
+map_empty("") -> undefined;
+map_empty(null) -> undefined;
+map_empty(false) -> undefined;
+map_empty(A) -> A.
+
