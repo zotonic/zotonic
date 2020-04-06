@@ -24,23 +24,25 @@ languages
             {% image depict mediaclass="admin-leader-image" class="admin-leader" title=depict.id.title %}
         {% endif %}
 
-        <div class="{% if depict %}admin-header-has-image{% endif %}">
-            <h2 {% include "_language_attrs.tpl" %}>
-                {{ id.title|striptags|default:("<em>" ++ _"untitled" ++ "</em>")}}
-            </h2>
-            <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">{_ Category: _} {{ id.category_id.title|default:_"untitled" }}</a>
-            {% wire id="changecategory"
-                action={dialog_open
-                    title=[_"Category:", " ", id.category_id.title|default:_"untitled"]
-                    template="_action_dialog_change_category.tpl"
-                    id=id
-                    cat_id=id.category_id
-                    is_editable = is_editable
-                                and not id.is_a.category
-                                and not id.is_a.predicate
-                                and (m.acl.insert[id.category.name|as_atom] or not id.category_id.exists)
-                }
-            %}
-        </div>
+        {% with id.category_id as cat_id %}
+            <div class="{% if depict %}admin-header-has-image{% endif %}">
+                <h2 {% include "_language_attrs.tpl" %}>
+                    {{ id.title|striptags|default:("<em>" ++ _"untitled" ++ "</em>")}}
+                </h2>
+                <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">{_ Category: _} {{ cat_id.title|default:_"untitled" }}</a>
+                {% wire id="changecategory"
+                    action={dialog_open
+                        title=[_"Category:", " ", cat_id.title|default:_"untitled"]
+                        template="_action_dialog_change_category.tpl"
+                        id=id
+                        cat_id=cat_id
+                        is_editable = is_editable
+                                    and not id.is_a.category
+                                    and not id.is_a.predicate
+                                    and (m.acl.insert[cat_id.name|as_atom] or not cat_id.exists)
+                    }
+                %}
+            </div>
+        {% endwith %}
     {% endwith %}
 </div>
