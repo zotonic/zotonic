@@ -27,6 +27,9 @@
 -include("zotonic.hrl").
 -include_lib("epgsql/include/epgsql.hrl").
 
+%% @doc Threshold above which we do an automatic explain of traced queries.
+-define(DBTRACE_EXPLAIN_MSEC, 100).
+
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2,
          code_change/3]).
@@ -76,11 +79,16 @@ test_connection(Args) ->
     end.
 
 squery(Worker, Sql, Timeout) ->
-    gen_server:call(Worker, {squery, Sql}, Timeout).
+    gen_server:call(Worker, {squery, Sql, is_tracing()}, Timeout).
 
 equery(Worker, Sql, Parameters, Timeout) ->
-    gen_server:call(Worker, {equery, Sql, Parameters}, Timeout).
+    gen_server:call(Worker, {equery, Sql, Parameters, is_tracing()}, Timeout).
 
+is_tracing() ->
+    case erlang:get(is_dbtrace) of
+        true -> true;
+        _ -> false
+    end.
 
 %% This function should not be used but currently is required by the
 %% install / upgrade routines. Can only be called from inside a
@@ -106,11 +114,17 @@ handle_call(Cmd, _From, #state{conn=undefined, conn_args=Args}=State) ->
             {reply, E, State}
     end;
 
-handle_call({squery, Sql}, _From, #state{conn=Conn}=State) ->
-    {reply, decode_reply(epgsql:squery(Conn, Sql)), State, ?IDLE_TIMEOUT};
+handle_call({squery, Sql, IsTracing}, _From, #state{conn=Conn}=State) ->
+    Start = trace_start(IsTracing, Sql, []),
+    Result = epgsql:squery(Conn, Sql),
+    trace_end(IsTracing, Start, Sql, [], Conn),
+    {reply, decode_reply(Result), State, ?IDLE_TIMEOUT};
 
-handle_call({equery, Sql, Params}, _From, #state{conn=Conn}=State) ->
-    {reply, decode_reply(epgsql:equery(Conn, Sql, encode_values(Params))), State, ?IDLE_TIMEOUT};
+handle_call({equery, Sql, Params, IsTracing}, _From, #state{conn=Conn}=State) ->
+    Start = trace_start(IsTracing, Sql, []),
+    Result = epgsql:equery(Conn, Sql, encode_values(Params)),
+    trace_end(IsTracing, Start, Sql, Params, Conn),
+    {reply, decode_reply(Result), State, ?IDLE_TIMEOUT};
 
 handle_call(get_raw_connection, _From, #state{conn=Conn}=State) ->
     {reply, Conn, State, ?IDLE_TIMEOUT};
@@ -216,7 +230,41 @@ disconnect(#state{conn=Conn} = State) ->
 get_arg(K, Args) ->
     proplists:get_value(K, Args, z_config:get(K)).
 
+%%
+%% Reques tracing
+%%
 
+trace_start(false, _Sql, _Params) ->
+    ok;
+trace_start(true, _Sql, _Params) ->
+    msec().
+
+trace_end(false, _Start, _Sql, _Params, _Conn) ->
+    ok;
+trace_end(true, Start, Sql, Params, Conn) ->
+    Duration = msec() - Start,
+    lager:info(
+        "SQL ~p msec: \"~s\"   ~p",
+        [ Duration, Sql, Params ]),
+    maybe_explain(Duration, Sql, Params, Conn).
+
+maybe_explain(Duration, _Sql, _Params, _Conn) when Duration < ?DBTRACE_EXPLAIN_MSEC ->
+    ok;
+maybe_explain(_Duration, Sql, Params, Conn) ->
+    Sql1 = "explain "++Sql,
+    R = epgsql:equery(Conn, Sql1, encode_values(Params)),
+    maybe_log_query_plan(R).
+
+maybe_log_query_plan({ok, [ #column{ name = <<"QUERY PLAN">> } ], Rows}) ->
+    Lines = lists:map( fun({R}) -> [ 10, R ] end, Rows ),
+    lager:info("SQL EXPLAIN: ~s", [ iolist_to_binary(Lines) ]);
+maybe_log_query_plan(Other) ->
+    lager:info("SQL EXPLAIN: ~p", [ Other ]),
+    ok.
+
+msec() ->
+    {A, B, C} = os:timestamp(),
+    A * 1000000000 + B * 1000 + C div 1000.
 
 %%
 %% These are conversion routines between how z_db expects values and how epgsl expects them.
