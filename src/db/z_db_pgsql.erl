@@ -161,7 +161,7 @@ handle_call(Cmd, _From, #state{conn = undefined, conn_args = Args}=State) ->
     end;
 
 handle_call({fetch_conn, Ref, CallerPid, Sql, Params, Timeout, IsTracing}, _From, #state{ busy_pid = undefined } = State) ->
-    Start = trace_start(IsTracing, Sql, []),
+    Start = trace_start(),
     State1 = State#state{
         busy_monitor = erlang:monitor(process, CallerPid),
         busy_pid = CallerPid,
@@ -384,9 +384,7 @@ get_arg(K, Args) ->
 %% Reques tracing
 %%
 
-trace_start(false, _Sql, _Params) ->
-    ok;
-trace_start(true, _Sql, _Params) ->
+trace_start() ->
     msec().
 
 trace_end(false, _Start, _Sql, _Params, _Conn) ->
