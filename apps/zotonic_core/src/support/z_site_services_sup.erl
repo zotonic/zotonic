@@ -37,7 +37,7 @@ start_link(SiteProps) ->
 
 
 %% @doc Supervisor callback, returns the supervisor tree for the zotonic site services
--spec init( proplists:proplist() ) -> {ok, {{one_for_one, integer(), integer()}, list()}}.
+-spec init( proplists:proplist() ) -> {ok, {supervisor:sup_flags(), [ supervisor:child_spec() ]}}.
 init(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
     lager:md([
