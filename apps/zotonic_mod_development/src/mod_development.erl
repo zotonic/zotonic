@@ -38,6 +38,8 @@
     pid_observe_development_reload/3,
     pid_observe_development_make/3,
     observe_admin_menu/3,
+    observe_session_context/3,
+    observe_session_process_init/2,
     % internal (for spawn)
     page_debug_stream/3,
     page_debug_stream_loop/3
@@ -89,6 +91,12 @@ pid_observe_development_reload(Pid, development_reload, _Context) ->
 pid_observe_development_make(Pid, development_make, _Context) ->
      gen_server:cast(Pid, development_make).
 
+observe_session_process_init(session_process_init, Context) ->
+    z_development_dbtrace:copy_from_session(Context).
+
+observe_session_context(session_context, Context, _Context) ->
+    z_development_dbtrace:copy_from_session(Context),
+    Context.
 
 %%====================================================================
 %% gen_server callbacks

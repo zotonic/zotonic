@@ -328,32 +328,35 @@ subject_category(Id, Context) ->
 %% @doc Return the list of predicates that are valid for the given resource id.
 %% Append all predicates that have no restrictions.
 for_subject(Id, Context) ->
-    {L, R} = cat_bounds(Context),
-    ValidIds = z_db:q("
-                select p.predicate_id
-                from predicate_category p,
-                     hierarchy pc,
-                     rsc r,
-                     hierarchy rc
-                where p.category_id = pc.id
-                  and pc.name = '$category'
-                  and r.category_id = rc.id
-                  and rc.name = '$category'
-                  and rc.nr >= pc.lft
-                  and rc.nr <= pc.rght
-                  and r.id = $1
-                  and is_subject = true
-                ", [Id], Context),
-    Valid = [ValidId || {ValidId} <- ValidIds],
-    NoRestrictionIds = z_db:q("
-                    select r.id
-                    from rsc r left join predicate_category p on p.predicate_id = r.id and p.is_subject = true
-                        join hierarchy c on (r.category_id = c.id and c.name = '$category')
-                    where p.predicate_id is null
-                      and $1 <= c.nr and c.nr <= $2
-                ", [L, R], Context),
-    NoRestriction = [NoRestrictionId || {NoRestrictionId} <- NoRestrictionIds],
-    Valid ++ NoRestriction.
+    F = fun() ->
+        {L, R} = cat_bounds(Context),
+        ValidIds = z_db:q("
+                    select p.predicate_id
+                    from predicate_category p,
+                         hierarchy pc,
+                         rsc r,
+                         hierarchy rc
+                    where p.category_id = pc.id
+                      and pc.name = '$category'
+                      and r.category_id = rc.id
+                      and rc.name = '$category'
+                      and rc.nr >= pc.lft
+                      and rc.nr <= pc.rght
+                      and r.id = $1
+                      and is_subject = true
+                    ", [Id], Context),
+        Valid = [ValidId || {ValidId} <- ValidIds],
+        NoRestrictionIds = z_db:q("
+                        select r.id
+                        from rsc r left join predicate_category p on p.predicate_id = r.id and p.is_subject = true
+                            join hierarchy c on (r.category_id = c.id and c.name = '$category')
+                        where p.predicate_id is null
+                          and $1 <= c.nr and c.nr <= $2
+                    ", [L, R], Context),
+        NoRestriction = [NoRestrictionId || {NoRestrictionId} <- NoRestrictionIds],
+        Valid ++ NoRestriction
+    end,
+    z_depcache:memo(F, {predicate_for_subject, Id}, ?WEEK, [predicare, category], Context).
 
 %% @doc Return the id of the predicate category
 -spec cat_id(#context{}) -> integer().

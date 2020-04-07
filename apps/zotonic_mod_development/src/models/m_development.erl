@@ -31,6 +31,8 @@
 ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ is_dbtrace | Rest ], _Msg, Context) ->
+    {ok, {z_development_dbtrace:is_tracing(Context), Rest}};
 m_get([ Cfg | Rest ], _Msg, Context)
     when Cfg =:= debug_includes;
          Cfg =:= debug_blocks;
