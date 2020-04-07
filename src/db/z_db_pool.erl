@@ -23,8 +23,7 @@
 -include_lib("zotonic.hrl").
 -define(DEFAULT_DB_DRIVER, z_db_pgsql).
 
--define(DB_POOL_HIGH_USAGE, 0.7).
--define(DB_POOL_VERY_HIGH_USAGE, 0.9).
+-define(DB_POOL_HIGH_USAGE, 0.8).
 
 -export([
          status/0,
@@ -165,31 +164,19 @@ return_connection(Worker, #context{db={Pool,_}}=Context) ->
     check_pool_health(Context).
 
 check_pool_health(#context{db={Pool,_}}=Context) ->
-    Advice = "please increase the pool size.",
     case poolboy:status(Pool) of
         {ready, Ready, _, Working} ->
             case Working / (Ready + Working) of
                 Usage when Usage >= ?DB_POOL_HIGH_USAGE ->
-                    z:info("Database pool usage is high, ~s", [Advice],
-                           [{module, ?MODULE}, {line, ?LINE}],
-                           Context);
-                Usage when Usage >= ?DB_POOL_VERY_HIGH_USAGE ->
-                    z:error("Database pool usage is close to exhaustion, ~s", [Advice],
-                            [{module, ?MODULE}, {line, ?LINE}],
-                            Context);
+                    z_stats:count_db_event(pool_high_usage, Context);
                 _Usage ->
                     %% Everything is fine
                     ok
             end;
         {overflow, _, _, _} ->
             %% We don't really use the pool overflow mechanism of poolboy.
-            lager:error("Database pool is overflown, ~s", [Advice]);
+            z_stats:count_db_event(pool_full, Context);
         {full, _, _, _} ->
-            % Don't log to the database. Especially not when the pool is fully used.
-            lager:error("Database pool ~p is fully used, ~s", [Pool, Advice])
+            z_stats:count_db_event(pool_full, Context)
     end.
-
-
-
-
 

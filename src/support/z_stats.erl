@@ -25,8 +25,11 @@
 -export([init/0, init_site/1]).
 
 %% Act as a webmachine logger
--export([log_access/1]).
+-export([
+    log_access/1,
 
+    count_db_event/2
+]).
 
 %% @doc Initialize the statistics collection machinery.
 %%
@@ -43,7 +46,7 @@ init_site(Host) ->
     exometer:re_register([zotonic, Host, depcache, evictions], counter, []),
 
     %% Database metrics
-    exometer:re_register([zotonic, Host, db, requests], counter, []),
+    exometer:re_register([zotonic, Host, db, requests], spiral, []),
     exometer:re_register([zotonic, Host, db, duration], histogram, []),
 
     %% Session metrics
@@ -68,6 +71,11 @@ log_access(#wm_log_data{start_time=StartTime, finish_time=FinishTime,
         % Pass it to the default webmachine logger.
         webmachine_logger:log_access(LogData)
     end.
+
+%% @doc Count a db event, like pool_full, or pull_high_usage.
+count_db_event(Event, Context) when is_atom(Event) ->
+    Site = z_context:site(Context),
+    ok = exometer:update_or_create([zotonic, Site, db, Event], 1, spiral, []).
 
 %%
 %% Helpers
