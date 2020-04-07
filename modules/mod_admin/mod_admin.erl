@@ -163,7 +163,6 @@ observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
         | Menu
     ].
 
-
 observe_module_ready(module_ready, Context) ->
     z_depcache:flush(admin_menu, Context).
 

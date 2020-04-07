@@ -23,6 +23,8 @@
 -include_lib("zotonic.hrl").
 -define(DEFAULT_DB_DRIVER, z_db_pgsql).
 
+-define(DB_POOL_HIGH_USAGE, 0.8).
+
 -export([
          status/0,
          status/1,
@@ -157,5 +159,24 @@ db_opts(SiteProps) ->
 get_connection(#context{db={Pool,_}}) ->
     poolboy:checkout(Pool).
 
-return_connection(Worker, #context{db={Pool,_}}) ->
-    poolboy:checkin(Pool, Worker).
+return_connection(Worker, #context{db={Pool,_}}=Context) ->
+    poolboy:checkin(Pool, Worker),
+    check_pool_health(Context).
+
+check_pool_health(#context{db={Pool,_}}=Context) ->
+    case poolboy:status(Pool) of
+        {ready, Ready, _, Working} ->
+            case Working / (Ready + Working) of
+                Usage when Usage >= ?DB_POOL_HIGH_USAGE ->
+                    z_stats:count_db_event(pool_high_usage, Context);
+                _Usage ->
+                    %% Everything is fine
+                    ok
+            end;
+        {overflow, _, _, _} ->
+            %% We don't really use the pool overflow mechanism of poolboy.
+            z_stats:count_db_event(pool_full, Context);
+        {full, _, _, _} ->
+            z_stats:count_db_event(pool_full, Context)
+    end.
+
