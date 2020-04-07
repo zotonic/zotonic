@@ -30,6 +30,8 @@
 
 -include("zotonic.hrl").
 
+m_find_value(is_dbtrace, #m{}, Context) ->
+    z_development_dbtrace:is_tracing(Context);
 m_find_value(list_observers, #m{ value = undefined }, Context) ->
     Observers = z_notifier:get_observers(Context),
     [ {atom_to_binary(Event, utf8), readable(Os)} || {Event, Os} <- Observers ];

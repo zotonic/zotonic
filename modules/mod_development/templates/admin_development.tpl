@@ -67,6 +67,17 @@
             {_ Enable API to recompile &amp; build Zotonic _}
         </label>
     </div>
+
+    <div>
+        {% wire id="dbtrace"
+                postback=`dbtrace_toggle`
+                delegate=`z_development_dbtrace`
+        %}
+        <label class="checkbox-inline">
+            <input type="checkbox" id="dbtrace" value="1" {% if m.development.is_dbtrace %}checked="checked"{% endif %} />
+            {_ Trace all database queries for the current session _}
+        </label>
+    </div>
 </div>
 
 <h3>{_ Template debugging _}</h2>
