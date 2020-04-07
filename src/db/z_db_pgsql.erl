@@ -399,9 +399,23 @@ trace_end(true, Start, Sql, Params, Conn) ->
 maybe_explain(Duration, _Sql, _Params, _Conn) when Duration < ?DBTRACE_EXPLAIN_MSEC ->
     ok;
 maybe_explain(_Duration, Sql, Params, Conn) ->
-    Sql1 = "explain "++Sql,
-    R = epgsql:equery(Conn, Sql1, encode_values(Params)),
-    maybe_log_query_plan(R).
+    case is_explainable(z_string:to_lower(Sql)) of
+        true ->
+            Sql1 = "explain "++Sql,
+            R = epgsql:equery(Conn, Sql1, encode_values(Params)),
+            maybe_log_query_plan(R);
+        false ->
+            ok
+    end.
+
+is_explainable(<<"begin", _/binary>>) -> false;
+is_explainable(<<"commit", _/binary>>) -> false;
+is_explainable(<<"rollback", _/binary>>) -> false;
+is_explainable(<<"explain ", _/binary>>) -> false;
+is_explainable(<<"alter ", _/binary>>) -> false;
+is_explainable(<<"drop ", _/binary>>) -> false;
+is_explainable(<<"create ", _/binary>>) -> false;
+is_explainable(_) -> true.
 
 maybe_log_query_plan({ok, [ #column{ name = <<"QUERY PLAN">> } ], Rows}) ->
     Lines = lists:map( fun({R}) -> [ 10, R ] end, Rows ),
