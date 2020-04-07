@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
-%% @doc Supervisor for a zotonic server. Starts webmachine, all base zotonic processes and the site supervisor.
+%% @copyright 2009-2020 Marc Worrell
+%% @doc Supervisor for a zotonic site.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -124,42 +124,13 @@ wait_for_db(Site, N) ->
 -spec install_done(list()) -> ok.
 install_done(SiteProps) when is_list(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
-    KeyServerName = z_utils:name_for_site(keyserver, Site),
-    KeyServer = {keyserver_sup,
-                 {keyserver_sup, start_link, [KeyServerName]},
-                 permanent, 5000, supervisor, dynamic},
-
-    MqttPool = {mqtt_sessions_pool_sup,
-                {mqtt_sessions_pool_sup, start_link, [Site]},
-                permanent, 5000, supervisor, dynamic},
-
     Dispatcher = {z_dispatcher,
                 {z_dispatcher, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
 
-    Template = {z_template,
-                {z_template, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    MediaClass = {z_mediaclass,
-                {z_mediaclass, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    DropBox = {z_dropbox,
-                {z_dropbox, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    Pivot = {z_pivot_rsc,
-                {z_pivot_rsc, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    MediaCleanup = {z_media_cleanup_server,
-                {z_media_cleanup_server, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    EdgeLog = {z_edge_log_server,
-                {z_edge_log_server, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
+    SiteServices = {z_site_services_sup,
+                {z_site_services_sup, start_link, [SiteProps]},
+                permanent, 5000, supervisor, dynamic},
 
     ModuleIndexer = {z_module_indexer,
                 {z_module_indexer, start_link, [SiteProps]},
@@ -174,11 +145,10 @@ install_done(SiteProps) when is_list(SiteProps) ->
                     permanent, 5000, worker, dynamic},
 
     Processes = [
-            KeyServer,
-            MqttPool,
-            Dispatcher, Template, MediaClass, Pivot, DropBox,
-            MediaCleanup, EdgeLog,
-            ModuleIndexer, ModuleManager,
+            Dispatcher,
+            SiteServices,
+            ModuleIndexer,
+            ModuleManager,
             PostStartup
         ],
 
