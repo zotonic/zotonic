@@ -26,9 +26,11 @@
     lookup/3,
     store/4,
     delete/3,
+    delete/2,
     secure_lookup/3,
     secure_store/4,
-    secure_delete/3
+    secure_delete/3,
+    secure_delete/2
     ]).
 
 -export([
@@ -48,6 +50,7 @@
 -record(state, {
         id :: binary(),
         timeout :: integer(),
+        size :: integer(),
         data :: map(),
         secure :: map()
     }).
@@ -83,6 +86,13 @@ delete(SessionId, Key, Context) ->
         Pid -> gen_server:cast(Pid, {delete, Key})
     end.
 
+-spec delete( binary(), z:context() ) -> ok | {error, no_session}.
+delete(SessionId, Context) ->
+    case z_proc:whereis({?MODULE, SessionId}, Context) of
+        undefined -> {error, no_session};
+        Pid -> gen_server:cast(Pid, delete)
+    end.
+
 -spec secure_lookup( binary(), term(), z:context() ) -> {ok, term()} | {error, not_found | no_session}.
 secure_lookup(SessionId, Key, Context) ->
     case z_proc:whereis({?MODULE, SessionId}, Context) of
@@ -102,6 +112,13 @@ secure_delete(SessionId, Key, Context) ->
     case z_proc:whereis({?MODULE, SessionId}, Context) of
         undefined -> {error, no_session};
         Pid -> gen_server:cast(Pid, {secure_delete, Key})
+    end.
+
+-spec secure_delete( binary(), z:context() ) -> ok | {error, no_session}.
+secure_delete(SessionId, Context) ->
+    case z_proc:whereis({?MODULE, SessionId}, Context) of
+        undefined -> {error, no_session};
+        Pid -> gen_server:cast(Pid, secure_delete)
     end.
 
 -spec ping( binary(), z:context() ) -> ok | {error, no_session}.
@@ -156,12 +173,18 @@ handle_cast({store, Key, Value}, #state{ data = Data } = State) ->
 handle_cast({delete, Key}, #state{ data = Data } = State) ->
     State1 = State#state{ data = maps:remove(Key, Data) },
     {noreply, State1, State#state.timeout};
+handle_cast(delete, #state{} = State) ->
+    State1 = State#state{ data = #{} },
+    {noreply, State1, State#state.timeout};
 
 handle_cast({secure_store, Key, Value}, #state{ secure = Data } = State) ->
     State1 = State#state{ secure = Data#{ Key => Value } },
     {noreply, State1, State#state.timeout};
 handle_cast({secure_delete, Key}, #state{ secure = Data } = State) ->
     State1 = State#state{ secure = maps:remove(Key, Data) },
+    {noreply, State1, State#state.timeout};
+handle_cast(secure_delete, #state{} = State) ->
+    State1 = State#state{ secure = #{} },
     {noreply, State1, State#state.timeout};
 
 handle_cast(ping, State) ->

@@ -28,10 +28,12 @@
     lookup/2,
     store/3,
     delete/2,
+    delete/1,
 
     secure_lookup/2,
     secure_store/3,
-    secure_delete/2
+    secure_delete/2,
+    secure_delete/1
     ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
@@ -56,7 +58,9 @@ m_post([ Key ], #{ payload := Payload }, Context) ->
 
 -spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
 m_delete([ Key ], _Msg, Context) ->
-    delete(Key, Context).
+    delete(Key, Context);
+m_delete([], _Msg, Context) ->
+    delete(Context).
 
 
 
@@ -106,6 +110,15 @@ delete(Key, Context) ->
             Error
     end.
 
+%% @doc Delete all keys from the session.
+-spec delete( z:context() ) -> ok | {error, no_session | not_found | term()}.
+delete(Context) ->
+    case session_id(Context) of
+        {ok, Sid} ->
+            z_server_storage:delete(Sid, Context);
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Store a key/valye in the session, without access via the model access functions.
 -spec secure_store( term(), term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
@@ -139,6 +152,16 @@ secure_delete(Key, Context) ->
     case session_id(Context) of
         {ok, Sid} ->
             z_server_storage:secure_delete(Sid, Key, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Delete all keys from the session, without access via the model access functions.
+-spec secure_delete( z:context() ) -> ok | {error, no_session | not_found | term()}.
+secure_delete(Context) ->
+    case session_id(Context) of
+        {ok, Sid} ->
+            z_server_storage:secure_delete(Sid, Context);
         {error, _} = Error ->
             Error
     end.
