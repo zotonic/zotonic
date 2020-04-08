@@ -280,6 +280,7 @@ reset_1(UserId, Username, Password, Context) ->
 -spec status( map(), z:context() ) -> { map(), z:context() }.
 status(Payload, Context) ->
     Context1 = z_authentication_tokens:ensure_auth_cookie(Context),
+    z_notifier:notify(#auth_ping{}, Context),
     return_status(Payload, Context1).
 
 return_status(Payload, Context) ->

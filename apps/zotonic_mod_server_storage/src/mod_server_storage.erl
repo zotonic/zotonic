@@ -30,11 +30,18 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([
+    observe_auth_ping/2,
     start_session/2,
     start_link/1,
     init/1
     ]).
 
+
+%% @doc Periodic ping for the session, done by the client.
+-spec observe_auth_ping(#auth_ping{}, z:context()) -> ok.
+observe_auth_ping(#auth_ping{}, Context) ->
+    mod_server_storage:ping(Context),
+    ok.
 
 %% @doc Start the session with the given Id
 -spec start_session( z:context(), binary() ) -> {ok, pid()} | {error, term()}.
