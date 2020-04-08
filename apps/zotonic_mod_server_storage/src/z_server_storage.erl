@@ -45,22 +45,28 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+% After this idle time the storage stops.
 -define(STORAGE_EXPIRE, 900).
 
 % Max storage size is 1MB - above this writes are refused
--define(STORAGE_SIZE_MAX, 1000000).
+-define(STORAGE_MAXSIZE, 1000000).
 
 -record(state, {
         id :: binary(),
         timeout :: integer(),
         size :: integer(),
+        maxsize :: integer(),
         data :: map(),
         secure :: map()
     }).
 
 -spec start_link( binary(), z:context()) -> {ok, pid()} | {error, {already_started, pid()}}.
 start_link(SessionId, Context) ->
-    gen_server:start_link({via, z_proc, {{?MODULE, SessionId}, Context}}, ?MODULE, [SessionId, timeout(Context)], []).
+    gen_server:start_link(
+        {via, z_proc, {{?MODULE, SessionId}, Context}},
+        ?MODULE,
+        [ SessionId, timeout(Context), maxsize(Context) ],
+        []).
 
 
 %%% ------------------------------------------------------------------------------------
@@ -147,10 +153,12 @@ stop(SessionId, Context) ->
 %%% gen_server callbacks
 %%% ------------------------------------------------------------------------------------
 
-init([SessionId, Timeout]) ->
+init([SessionId, Timeout, Maxsize]) ->
     {ok, #state{
         id = SessionId,
         timeout = Timeout * 1000,
+        size = 0,
+        maxsize = Maxsize,
         data = #{},
         secure = #{}
     }, Timeout}.
@@ -174,7 +182,7 @@ handle_call({store, Key, Value}, _From, #state{ data = Data, size = Size } = Sta
     NewKVSize = kv_size(Key, {ok, Data}),
     AfterSize = Size - OldKVSize + NewKVSize,
     if
-        AfterSize > ?STORAGE_SIZE_MAX ->
+        AfterSize > State#state.maxsize ->
             {reply, {error, full}, State, State#state.timeout};
         true ->
             State1 = State#state{
@@ -231,6 +239,13 @@ timeout(Context) ->
     case m_config:get_value(mod_server_storage, storage_expire, ?STORAGE_EXPIRE, Context) of
         <<>> -> ?STORAGE_EXPIRE;
         undefined -> ?STORAGE_EXPIRE;
+        V -> z_convert:to_integer(V)
+    end.
+
+maxsize(Context) ->
+    case m_config:get_value(mod_server_storage, storage_maxsize, ?STORAGE_MAXSIZE, Context) of
+        <<>> -> ?STORAGE_MAXSIZE;
+        undefined -> ?STORAGE_MAXSIZE;
         V -> z_convert:to_integer(V)
     end.
 
