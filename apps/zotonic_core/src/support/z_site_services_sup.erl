@@ -47,7 +47,7 @@ init(SiteProps) ->
 
     KeyServerName = z_utils:name_for_site(keyserver, Site),
     KeyServer = {keyserver_sup,
-                 {keyserver_sup, start_link, [KeyServerName]},
+                 {keyserver_sup, start_link, [KeyServerName, z_keyserver_callback, z_context:new(Site)]},
                  permanent, 5000, supervisor, dynamic},
 
     MqttPool = {mqtt_sessions_pool_sup,
