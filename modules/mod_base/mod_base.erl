@@ -34,7 +34,8 @@
     observe_edge_delete/2,
     observe_media_stillimage/2,
     observe_scomp_script_render/2,
-    observe_dispatch/2
+    observe_dispatch/2,
+    observe_hierarchy_updated/2
 ]).
 
 
@@ -146,6 +147,12 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
             end
     end.
 
+
+observe_hierarchy_updated(#hierarchy_updated{ root_id = <<"$category">> }, Context) ->
+    % Something changed to the category hierarchy - let m_categoruy resync the pivot
+    m_category:renumber(Context);
+observe_hierarchy_updated(#hierarchy_updated{ root_id = _ }, _Context) ->
+    ok.
 
 %%====================================================================
 %% support functions

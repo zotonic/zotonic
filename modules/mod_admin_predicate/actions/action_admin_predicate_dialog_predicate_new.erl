@@ -50,15 +50,22 @@ event(#postback{message={predicate_new_dialog, Title, Redirect}}, Context) ->
 event(#submit{message=predicate_new}, Context) ->
     Title    = z_context:get_q("new_predicate_title", Context),
     Redirect = z_context:get_q("redirect", Context),
-    {ok, Id} = m_predicate:insert(Title, Context),
+    try
+        {ok, Id} = m_predicate:insert(Title, Context),
 
-    % Close the dialog and optionally redirect to the edit page of the new resource
-    Context2 = z_render:wire({dialog_close, []}, Context),
-    case z_convert:to_bool(Redirect) of
-        false ->
-            Context2;
-        true ->
-            Location = z_dispatcher:url_for(admin_edit_rsc, [{id, Id}], Context2),
-            z_render:wire({redirect, [{location, Location}]}, Context2)
+        % Close the dialog and optionally redirect to the edit page of the new resource
+        Context2 = z_render:wire({dialog_close, []}, Context),
+        case z_convert:to_bool(Redirect) of
+            false ->
+                Context2;
+            true ->
+                Location = z_dispatcher:url_for(admin_edit_rsc, [{id, Id}], Context2),
+                z_render:wire({redirect, [{location, Location}]}, Context2)
+        end
+    catch
+        throw:{{error, duplicate_name}, _} ->
+            z_render:growl_error(?__("There is already a predicate with this name.", Context), Context);
+        throw:_ ->
+            z_render:growl_error(?__("Could not add the predicate.", Context), Context)
     end.
 
