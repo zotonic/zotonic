@@ -42,6 +42,7 @@
 
 % @doc Lookup the pid of the process.
 %
+-spec whereis( term(), atom() | z:context() ) -> undefined | pid().
 whereis(Name, Site) when is_atom(Site) ->
     whereis_name(name(Name, Site));
 whereis(Name, Context) ->

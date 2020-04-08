@@ -1,0 +1,14 @@
+{application, zotonic_mod_server_storage, [
+    {description, "Server side data storage in sessions."},
+    {vsn, "git"},
+    {registered, []},
+    {applications, [
+        kernel, stdlib,
+        zotonic_core
+    ]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2020 Marc Worrell
 %% @doc Authentication tokens and cookies.
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@
     set_auth_cookie/3,
     refresh_auth_cookie/2,
     reset_auth_cookie/1,
+    ensure_auth_cookie/1,
 
     req_autologon_cookie/1,
     set_autologon_cookie/2,
@@ -81,7 +82,8 @@ req_auth_cookie(Context) ->
 
 -spec set_auth_cookie( m_rsc:resource_id() | undefined, map(), z:context() ) -> z:context().
 set_auth_cookie(UserId, AuthOptions, Context) ->
-    Cookie = encode_auth_token(UserId, AuthOptions, Context),
+    AuthOptions1 = ensure_sid(AuthOptions),
+    Cookie = encode_auth_token(UserId, AuthOptions1, Context),
     CookieOptions = [
         {path, <<"/">>},
         {http_only, true},
@@ -90,8 +92,15 @@ set_auth_cookie(UserId, AuthOptions, Context) ->
     ],
     Context1 = z_context:set_cookie(?AUTH_COOKIE, Cookie, CookieOptions, Context),
     Context2 = z_context:set(auth_expires, session_expires(Context1), Context1),
-    z_context:set(auth_options, AuthOptions, Context2).
+    z_context:set(auth_options, AuthOptions1, Context2).
 
+%% @doc Always ensure that there is a sid in the auth options
+ensure_sid(#{ sid := Sid } = AuthOptions) when is_binary(Sid) ->
+    AuthOptions;
+ensure_sid(AuthOptions) ->
+    AuthOptions#{
+        sid => z_ids:id(20)
+    }.
 
 -spec refresh_auth_cookie( map(), z:context() ) -> z:context().
 refresh_auth_cookie(RequestOptions, Context) ->
@@ -125,14 +134,17 @@ merge_options(RequestOptions, AuthOptions, Context) ->
 
 -spec reset_auth_cookie( z:context() ) -> z:context().
 reset_auth_cookie(Context) ->
-    CookieOptions = [
-        {max_age, 0},
-        {path, <<"/">>},
-        {http_only, true},
-        {secure, true},
-        {same_site, strict}
-    ],
-    z_context:set_cookie(?AUTH_COOKIE, <<>>, CookieOptions, Context).
+    set_auth_cookie(undefined, #{}, Context).
+
+-spec ensure_auth_cookie( z:context() ) -> z:context().
+ensure_auth_cookie(Context) ->
+    case z_context:get_cookie(?AUTH_COOKIE, Context) of
+        undefined ->
+            AuthOptions = z_context:get(auth_options, Context, #{}),
+            set_auth_cookie(undefined, AuthOptions, Context);
+        _Cookie ->
+            Context
+    end.
 
 -spec encode_auth_token( m_rsc:resource_id() | undefined, map(), z:context() ) -> binary().
 encode_auth_token(UserId, Options, Context) ->
