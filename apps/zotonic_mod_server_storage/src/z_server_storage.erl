@@ -45,10 +45,10 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--define(SESSION_EXPIRE_N, 3600).
+-define(STORAGE_EXPIRE, 900).
 
 % Max storage size is 1MB - above this writes are refused
--define(MAX_STORAGE_SIZE, 1000000).
+-define(STORAGE_SIZE_MAX, 1000000).
 
 -record(state, {
         id :: binary(),
@@ -174,7 +174,7 @@ handle_call({store, Key, Value}, _From, #state{ data = Data, size = Size } = Sta
     NewKVSize = kv_size(Key, {ok, Data}),
     AfterSize = Size - OldKVSize + NewKVSize,
     if
-        AfterSize > ?MAX_STORAGE_SIZE ->
+        AfterSize > ?STORAGE_SIZE_MAX ->
             {reply, {error, full}, State, State#state.timeout};
         true ->
             State1 = State#state{
@@ -228,8 +228,11 @@ terminate(_Reason, _State) ->
 %%% ------------------------------------------------------------------------------------
 
 timeout(Context) ->
-    z_convert:to_integer(m_config:get_value(site, session_expire_n, ?SESSION_EXPIRE_N, Context)).
-
+    case m_config:get_value(mod_server_storage, storage_expire, ?STORAGE_EXPIRE, Context) of
+        <<>> -> ?STORAGE_EXPIRE;
+        undefined -> ?STORAGE_EXPIRE;
+        V -> z_convert:to_integer(V)
+    end.
 
 kv_size(_Key, error) -> 0;
 kv_size(Key, {ok, V}) -> term_size(Key) + term_size(V).
