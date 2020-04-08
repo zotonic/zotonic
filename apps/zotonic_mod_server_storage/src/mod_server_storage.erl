@@ -40,7 +40,7 @@
 %% @doc Periodic ping for the session, done by the client.
 -spec observe_auth_ping(#auth_ping{}, z:context()) -> ok.
 observe_auth_ping(#auth_ping{}, Context) ->
-    mod_server_storage:ping(Context),
+    m_server_storage:ping(Context),
     ok.
 
 %% @doc Start the session with the given Id
