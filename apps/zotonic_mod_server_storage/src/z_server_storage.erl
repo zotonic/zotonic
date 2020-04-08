@@ -25,7 +25,10 @@
     stop/2,
     lookup/3,
     store/4,
-    delete/3
+    delete/3,
+    secure_lookup/3,
+    secure_store/4,
+    secure_delete/3
     ]).
 
 -export([
@@ -45,7 +48,8 @@
 -record(state, {
         id :: binary(),
         timeout :: integer(),
-        data :: map()
+        data :: map(),
+        secure :: map()
     }).
 
 -spec start_link( binary(), z:context()) -> {ok, pid()} | {error, {already_started, pid()}}.
@@ -79,11 +83,36 @@ delete(SessionId, Key, Context) ->
         Pid -> gen_server:cast(Pid, {delete, Key})
     end.
 
+-spec secure_lookup( binary(), term(), z:context() ) -> {ok, term()} | {error, not_found | no_session}.
+secure_lookup(SessionId, Key, Context) ->
+    case z_proc:whereis({?MODULE, SessionId}, Context) of
+        undefined -> {error, no_session};
+        Pid -> gen_server:call(Pid, {secure_lookup, Key})
+    end.
+
+-spec secure_store( binary(), term(), term(), z:context() ) -> ok | {error, no_session}.
+secure_store(SessionId, Key, Value, Context) ->
+    case z_proc:whereis({?MODULE, SessionId}, Context) of
+        undefined -> {error, no_session};
+        Pid -> gen_server:cast(Pid, {secure_store, Key, Value})
+    end.
+
+-spec secure_delete( binary(), term(), z:context() ) -> ok | {error, no_session}.
+secure_delete(SessionId, Key, Context) ->
+    case z_proc:whereis({?MODULE, SessionId}, Context) of
+        undefined -> {error, no_session};
+        Pid -> gen_server:cast(Pid, {secure_delete, Key})
+    end.
+
 -spec ping( binary(), z:context() ) -> ok | {error, no_session}.
 ping(SessionId, Context) ->
     case z_proc:whereis({?MODULE, SessionId}, Context) of
         undefined -> {error, no_session};
-        Pid -> gen_server:cast(Pid, ping)
+        Pid ->
+            case erlang:is_process_alive(Pid) of
+                true -> gen_server:cast(Pid, ping);
+                false -> {error, no_session}
+            end
     end.
 
 -spec stop( binary(), z:context() ) -> ok | {error, no_session}.
@@ -102,10 +131,18 @@ init([SessionId, Timeout]) ->
     {ok, #state{
         id = SessionId,
         timeout = Timeout * 1000,
-        data = #{}
+        data = #{},
+        secure = #{}
     }, Timeout}.
 
 handle_call({lookup, Key}, _From, #state{ data = Data } = State) ->
+    case maps:find(Key, Data) of
+        {ok, Value} ->
+            {reply, {ok, Value}, State, State#state.timeout};
+        error ->
+            {reply, {error, not_found}, State, State#state.timeout}
+    end;
+handle_call({secure_lookup, Key}, _From, #state{ secure = Data } = State) ->
     case maps:find(Key, Data) of
         {ok, Value} ->
             {reply, {ok, Value}, State, State#state.timeout};
@@ -119,6 +156,14 @@ handle_cast({store, Key, Value}, #state{ data = Data } = State) ->
 handle_cast({delete, Key}, #state{ data = Data } = State) ->
     State1 = State#state{ data = maps:remove(Key, Data) },
     {noreply, State1, State#state.timeout};
+
+handle_cast({secure_store, Key, Value}, #state{ secure = Data } = State) ->
+    State1 = State#state{ secure = Data#{ Key => Value } },
+    {noreply, State1, State#state.timeout};
+handle_cast({secure_delete, Key}, #state{ secure = Data } = State) ->
+    State1 = State#state{ secure = maps:remove(Key, Data) },
+    {noreply, State1, State#state.timeout};
+
 handle_cast(ping, State) ->
     {noreply, State, State#state.timeout};
 handle_cast(stop, State) ->

@@ -248,7 +248,7 @@ maybe_resolve(get, {ok, {Res, Ks}}, Context) when is_list(Ks) ->
     {ok, Res1};
 maybe_resolve(_Verb, {ok, Res}, _Context) ->
     {ok, Res};
-% maybe_resolve(_Verb, ok, _Context) ->
-%     {ok, success};
+maybe_resolve(_Verb, ok, _Context) ->
+    {ok, <<>>};
 maybe_resolve(_Verb, {error, _} = Error, _Context) ->
     Error.

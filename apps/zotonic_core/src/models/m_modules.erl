@@ -53,6 +53,10 @@ m_get([ info, Module | Rest ], _Msg, Context) ->
         {prio, z_module_manager:prio(M)}
     ],
     {ok, {Info, Rest}};
+m_get([ provided, Service | Rest ], _Msg, Context) ->
+    M = safe_to_atom(Service),
+    IsProvided = z_module_manager:is_provided(M, Context),
+    {ok, {IsProvided, Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
