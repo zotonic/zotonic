@@ -49,15 +49,15 @@
                     </div>
                     {{ p.reversed|yesno:"reversed,&nbsp;" }}
                 </td>
-            </li>
+            </tr>
             {% empty %}
-            <li>
+            <tr>
                 {_ No predicates found. _}
-            </li>
+            </tr>
             {% endfor %}
-        </ul>
+        </tbody>
 
-    </div>
+    </table>
 </div>
 {% endwith %}
 

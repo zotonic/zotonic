@@ -100,7 +100,7 @@ event(#submit{message={new_page, Args}}, Context) ->
             do_new_page_actions(Id, Args, Context);
         {error, Reason} ->
             Msg = error_message(Reason, Context),
-            z_render:wire({growl, [{text, Msg}]}, Context)
+            z_render:growl_error(Msg, Context)
     end;
 
 event(#postback{message={admin_connect_select, _Args}} = Postback, Context) ->
@@ -153,8 +153,10 @@ do_new_page_actions(Id, Args, Context) ->
             z_render:wire({redirect, [{location, Location}]}, Context2)
     end.
 
+error_message(duplicate_name, Context) ->
+    ?__("There is already a page with this name.", Context);
 error_message(eacces, Context) ->
-    ?__("You don't have permission to change this media item.", Context);
+    ?__("You don't have permission to create this page.", Context);
 error_message(file_not_allowed, Context) ->
     ?__("You don't have the proper permissions to upload this type of file.", Context);
 error_message(download_failed, Context) ->
@@ -166,8 +168,8 @@ error_message(av_external_links, Context) ->
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
 error_message(_R, Context) ->
-    lager:warning("Unknown upload error: ~p", [_R]),
-    ?__("Error uploading the file.", Context).
+    lager:warning("Unknown page creation or upload error: ~p", [_R]),
+    ?__("Error creating the page.", Context).
 
 maybe_add_objects(Id, Objects, Context) when is_list(Objects) ->
     [{ok, _} = m_edge:insert(Id, Pred, m_rsc:rid(Object, Context), Context) || [Object, Pred] <- Objects];

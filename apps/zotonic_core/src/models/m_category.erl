@@ -857,6 +857,7 @@ renumber_pivot_task(Context) ->
             set_tree_dirty(false, Context),
             ok;
         Ids ->
+            lager:info("Category renumbering of ~p resources", [ length(Ids) ]),
             ok = z_db:transaction(fun(Ctx) ->
                 lists:foreach(
                     fun({Id, CatNr}) ->
