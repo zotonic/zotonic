@@ -66,6 +66,9 @@
 -define(PIVOT_POLL_INTERVAL_FAST, 2).
 -define(PIVOT_POLL_INTERVAL_SLOW, 20).
 
+% How many PIVOT_POLL_INTERVAL_SLOW we will skip on SQL errors (like timeouts)
+-define(BACKOFF_POLL_ERROR, 4).
+
 % Max number of times a task will retry on fatal exceptions
 -define(MAX_TASK_ERROR_COUNT, 5).
 
@@ -79,7 +82,12 @@
 -define(MAX_TSV_LEN, 30000).
 
 
--record(state, {site, is_initial_delay=true, is_pivot_delay = false}).
+-record(state, {
+    site :: atom(),
+    is_initial_delay = true :: boolean(),
+    is_pivot_delay = false :: boolean(),
+    backoff_counter = 0 :: integer()
+}).
 
 
 %% @doc Poll the pivot queue for the database in the context
@@ -353,8 +361,14 @@ handle_call(Message, _From, State) ->
 handle_cast(poll, #state{is_initial_delay=true} = State) ->
     {noreply, State};
 handle_cast(poll, State) ->
-    do_poll(z_context:new(State#state.site)),
-    {noreply, State};
+    try
+        do_poll(z_context:new(State#state.site)),
+        {noreply, State}
+    catch
+        ?WITH_STACKTRACE(Type, Err, Stack)
+            lager:error("Poll error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+            {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+    end;
 
 %% @doc Insert an id into the queue.
 handle_cast({insert_queue, DueDate, Ids}, State) when is_list(Ids) ->
@@ -363,7 +377,11 @@ handle_cast({insert_queue, DueDate, Ids}, State) when is_list(Ids) ->
     {noreply, State};
 
 %% @doc Poll the queue for a particular database
-handle_cast({pivot, Id}, #state{is_initial_delay=true} = State) when is_integer(Id) ->
+handle_cast({pivot, Id}, #state{ is_initial_delay = true } = State) when is_integer(Id) ->
+    Due = z_datetime:next_minute(calendar:universal_time()),
+    do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
+    {noreply, State};
+handle_cast({pivot, Id}, #state{ backoff_counter = Ct } = State) when Ct > 0 ->
     Due = z_datetime:next_minute(calendar:universal_time()),
     do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
@@ -383,15 +401,25 @@ handle_cast(Message, State) ->
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
-handle_info(poll, #state{is_pivot_delay=true} = State) ->
+handle_info(poll, #state{ is_pivot_delay = true } = State) ->
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {noreply, State#state{is_pivot_delay=false}};
+    {noreply, State#state{ is_pivot_delay = false}};
+handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
+    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+    {noreply, State#state{ backoff_counter = Ct - 1 }};
 handle_info(poll, State) ->
-    case do_poll(z_context:new(State#state.site)) of
-        true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
-        false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
-    end,
-    {noreply, State#state{is_initial_delay = false}};
+    try
+        case do_poll(z_context:new(State#state.site)) of
+            true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
+            false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
+        end,
+        {noreply, State#state{is_initial_delay = false}}
+    catch
+        ?WITH_STACKTRACE(Type, Err, Stack)
+            lager:error("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+            timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+            {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+    end;
 
 handle_info(_Info, State) ->
     {noreply, State}.
