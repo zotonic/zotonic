@@ -36,6 +36,7 @@
     observe_media_stillimage/2,
     observe_scomp_script_render/2,
     observe_dispatch/2,
+    observe_hierarchy_updated/2,
     manage_schema/2
 ]).
 
@@ -150,6 +151,13 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
 
 last(<<>>) -> $/;
 last(Path) -> binary:last(Path).
+
+
+observe_hierarchy_updated(#hierarchy_updated{ root_id = <<"$category">> }, Context) ->
+    % Something changed to the category hierarchy - let m_categoruy resync the pivot
+    m_category:renumber(Context);
+observe_hierarchy_updated(#hierarchy_updated{ root_id = _ }, _Context) ->
+    ok.
 
 datamodel() ->
     #datamodel{
