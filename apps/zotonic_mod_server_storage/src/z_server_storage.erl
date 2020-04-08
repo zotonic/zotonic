@@ -47,6 +47,9 @@
 
 -define(SESSION_EXPIRE_N, 3600).
 
+% Max storage size is 1MB - above this writes are refused
+-define(MAX_STORAGE_SIZE, 1000000).
+
 -record(state, {
         id :: binary(),
         timeout :: integer(),
@@ -72,11 +75,11 @@ lookup(SessionId, Key, Context) ->
         Pid -> gen_server:call(Pid, {lookup, Key})
     end.
 
--spec store( binary(), term(), term(), z:context() ) -> ok | {error, no_session}.
+-spec store( binary(), term(), term(), z:context() ) -> ok | {error, no_session | full}.
 store(SessionId, Key, Value, Context) ->
     case z_proc:whereis({?MODULE, SessionId}, Context) of
         undefined -> {error, no_session};
-        Pid -> gen_server:cast(Pid, {store, Key, Value})
+        Pid -> gen_server:call(Pid, {store, Key, Value})
     end.
 
 -spec delete( binary(), term(), z:context() ) -> ok | {error, no_session}.
@@ -165,16 +168,34 @@ handle_call({secure_lookup, Key}, _From, #state{ secure = Data } = State) ->
             {reply, {ok, Value}, State, State#state.timeout};
         error ->
             {reply, {error, not_found}, State, State#state.timeout}
+    end;
+handle_call({store, Key, Value}, _From, #state{ data = Data, size = Size } = State) ->
+    OldKVSize = kv_size(Key, maps:find(Key, Data)),
+    NewKVSize = kv_size(Key, {ok, Data}),
+    AfterSize = Size - OldKVSize + NewKVSize,
+    if
+        AfterSize > ?MAX_STORAGE_SIZE ->
+            {reply, {error, full}, State, State#state.timeout};
+        true ->
+            State1 = State#state{
+                size = AfterSize,
+                data = Data#{ Key => Value }
+            },
+            {reply, ok, State1, State#state.timeout}
     end.
 
-handle_cast({store, Key, Value}, #state{ data = Data } = State) ->
-    State1 = State#state{ data = Data#{ Key => Value } },
-    {noreply, State1, State#state.timeout};
-handle_cast({delete, Key}, #state{ data = Data } = State) ->
-    State1 = State#state{ data = maps:remove(Key, Data) },
+handle_cast({delete, Key}, #state{ data = Data, size = Size } = State) ->
+    OldKVSize = kv_size(Key, maps:find(Key, Data)),
+    State1 = State#state{
+        size = Size - OldKVSize,
+        data = maps:remove(Key, Data)
+    },
     {noreply, State1, State#state.timeout};
 handle_cast(delete, #state{} = State) ->
-    State1 = State#state{ data = #{} },
+    State1 = State#state{
+        size = 0,
+        data = #{}
+    },
     {noreply, State1, State#state.timeout};
 
 handle_cast({secure_store, Key, Value}, #state{ secure = Data } = State) ->
@@ -208,3 +229,11 @@ terminate(_Reason, _State) ->
 
 timeout(Context) ->
     z_convert:to_integer(m_config:get_value(site, session_expire_n, ?SESSION_EXPIRE_N, Context)).
+
+
+kv_size(_Key, error) -> 0;
+kv_size(Key, {ok, V}) -> term_size(Key) + term_size(V).
+
+term_size(V) when is_binary(V) -> byte_size(V);
+term_size(A) when is_atom(A) -> 4;
+term_size(V) -> erlang:external_size(V).

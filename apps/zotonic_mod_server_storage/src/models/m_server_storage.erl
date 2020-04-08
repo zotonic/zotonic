@@ -25,6 +25,7 @@
     m_post/3,
     m_delete/3,
 
+    ping/1,
     lookup/2,
     store/3,
     delete/2,
@@ -37,13 +38,6 @@
     ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ '$ping' | Rest ], _Msg, Context) ->
-    case ping(Context) of
-        ok ->
-            {ok, {true, Rest}};
-        {error, _} ->
-            {ok, {false, Rest}}
-    end;
 m_get([ Key | Rest ], _Msg, Context) ->
     case lookup(z_convert:to_binary(Key), Context) of
         {ok, Value} ->
@@ -75,7 +69,7 @@ ping(Context) ->
     end.
 
 %% @doc Store a key in the session.
--spec store( term(), term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
+-spec store( term(), term(), z:context() ) -> ok | {error, no_session | not_found | full | term()}.
 store(Key, Value, Context) ->
     case session_id(Context) of
         {ok, Sid} ->
@@ -84,7 +78,9 @@ store(Key, Value, Context) ->
                     ok;
                 {error, no_session} ->
                     _ = mod_server_storage:start_session(Sid, Context),
-                    z_server_storage:store(Sid, Key, Value, Context)
+                    z_server_storage:store(Sid, Key, Value, Context);
+                {error, _} = Error ->
+                    Error
             end;
         {error, _} = Error ->
             Error
