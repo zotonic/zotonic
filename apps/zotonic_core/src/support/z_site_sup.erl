@@ -99,7 +99,10 @@ start_installer_processes(SiteSupName, SiteProps) ->
     ],
     lists:foreach(
             fun(Child) ->
-                supervisor:start_child(SiteSupName, Child)
+                case supervisor:start_child(SiteSupName, Child) of
+                    {ok, _} -> ok;
+                    {error, {already_started, _}} -> ok
+                end
             end,
             Processes).
 
@@ -155,6 +158,9 @@ install_done(SiteProps) when is_list(SiteProps) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     lists:foreach(
             fun(Child) ->
-                supervisor:start_child(Name, Child)
+                case supervisor:start_child(Name, Child) of
+                    {ok, _} -> ok;
+                    {error, {already_started, _}} -> ok
+                end
             end,
             Processes).

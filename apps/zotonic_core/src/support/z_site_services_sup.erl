@@ -45,11 +45,6 @@ init(SiteProps) ->
         {module, ?MODULE}
       ]),
 
-    KeyServerName = z_utils:name_for_site(keyserver, Site),
-    KeyServer = {keyserver_sup,
-                 {keyserver_sup, start_link, [KeyServerName, z_keyserver_callback, z_context:new(Site)]},
-                 permanent, 5000, supervisor, dynamic},
-
     MqttPool = {mqtt_sessions_pool_sup,
                 {mqtt_sessions_pool_sup, start_link, [Site]},
                 permanent, 5000, supervisor, dynamic},
@@ -79,9 +74,24 @@ init(SiteProps) ->
                 permanent, 5000, worker, dynamic},
 
     Processes = [
-            KeyServer, MqttPool,
-            Template, MediaClass, Pivot, DropBox,
-            MediaCleanup, EdgeLog
-        ],
+        MqttPool, Template, MediaClass, Pivot, DropBox,
+        MediaCleanup, EdgeLog
+    ],
+    Processes1 = maybe_start_keyserver(Site, Processes),
 
-    {ok, {{one_for_one, 500, 10}, Processes}}.
+    {ok, {{one_for_one, 500, 10}, Processes1}}.
+
+
+%% @doc Keyserver is available on OTP20 and later due to crypto requirements.
+-ifdef(no_keyserver).
+maybe_start_keyserver(Site, Processes) ->
+    Processes.
+-else.
+maybe_start_keyserver(Site, Processes) ->
+    KeyServerName = z_utils:name_for_site(keyserver, Site),
+    KeyServer = {keyserver_sup,
+                 {keyserver_sup, start_link, [KeyServerName, z_keyserver_callback, z_context:new(Site)]},
+                 permanent, 5000, supervisor, dynamic},
+    [ KeyServer | Processes ].
+-endif.
+
