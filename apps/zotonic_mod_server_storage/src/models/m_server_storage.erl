@@ -56,13 +56,17 @@ m_get([ Key | Rest ], _Msg, Context) ->
 
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
 m_post([ Key ], #{ payload := Payload }, Context) ->
-    store(Key, Payload, Context).
+    store(Key, Payload, Context);
+m_post(_Path, _Msg, _Context) ->
+    {error, unknown_path}.
 
 -spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
 m_delete([ Key ], _Msg, Context) ->
     delete(Key, Context);
 m_delete([], _Msg, Context) ->
-    delete(Context).
+    delete(Context);
+m_delete(_Path, _Msg, _Context) ->
+    {error, unknown_path}.
 
 
 
