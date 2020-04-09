@@ -26,6 +26,7 @@
     m_delete/3,
 
     ping/1,
+    lookup/1,
     lookup/2,
     store/3,
     delete/2,
@@ -38,6 +39,13 @@
     ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([], _Msg, Context) ->
+    case lookup(Context) of
+        {ok, Values} ->
+            {ok, {Values, []}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get([ Key | Rest ], _Msg, Context) ->
     case lookup(z_convert:to_binary(Key), Context) of
         {ok, Value} ->
@@ -86,8 +94,18 @@ store(Key, Value, Context) ->
             Error
     end.
 
+%% @doc Find all keys in the session.
+-spec lookup( z:context() ) -> {ok, map()}| {error, no_session | not_found | term()}.
+lookup(Context) ->
+    case session_id(Context) of
+        {ok, Sid} ->
+            z_server_storage:lookup(Sid, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
 %% @doc Find a key in the session.
--spec lookup( term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
+-spec lookup( term(), z:context() ) -> {ok, term()} | {error, no_session | not_found | term()}.
 lookup(Key, Context) ->
     case session_id(Context) of
         {ok, Sid} ->

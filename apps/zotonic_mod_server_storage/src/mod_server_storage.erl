@@ -44,8 +44,8 @@ observe_auth_ping(#auth_ping{}, Context) ->
     ok.
 
 %% @doc Start the session with the given Id
--spec start_session( z:context(), binary() ) -> {ok, pid()} | {error, term()}.
-start_session(SessionId, Context) ->
+-spec start_session( binary(), z:context() ) -> {ok, pid()} | {error, term()}.
+start_session(SessionId, Context) when is_binary(SessionId) ->
     Name = z_utils:name_for_site(?MODULE, Context),
     case supervisor:start_child(Name, [SessionId, z_context:new(Context) ]) of
         {ok, Pid} -> {ok, Pid};

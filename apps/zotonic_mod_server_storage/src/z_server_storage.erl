@@ -23,6 +23,7 @@
 -export([
     ping/2,
     stop/2,
+    lookup/2,
     lookup/3,
     store/4,
     delete/3,
@@ -48,8 +49,8 @@
 % After this idle time the storage stops.
 -define(STORAGE_EXPIRE, 900).
 
-% Max storage size is 1MB - above this writes are refused
--define(STORAGE_MAXSIZE, 1000000).
+% Max storage size is 100KB - above this writes are refused
+-define(STORAGE_MAXSIZE, 102400).
 
 -record(state, {
         id :: binary(),
@@ -73,6 +74,13 @@ start_link(SessionId, Context) ->
 %%% API
 %%% ------------------------------------------------------------------------------------
 
+
+-spec lookup( binary(), z:context() ) -> {ok, map()} | {error, not_found | no_session}.
+lookup(SessionId, Context) ->
+    case z_proc:whereis({?MODULE, SessionId}, Context) of
+        undefined -> {error, no_session};
+        Pid -> gen_server:call(Pid, lookup)
+    end.
 
 -spec lookup( binary(), term(), z:context() ) -> {ok, term()} | {error, not_found | no_session}.
 lookup(SessionId, Key, Context) ->
@@ -163,6 +171,8 @@ init([SessionId, Timeout, Maxsize]) ->
         secure = #{}
     }, Timeout}.
 
+handle_call(lookup, _From, #state{ data = Data } = State) ->
+    {reply, {ok, Data}, State, State#state.timeout};
 handle_call({lookup, Key}, _From, #state{ data = Data } = State) ->
     case maps:find(Key, Data) of
         {ok, Value} ->
