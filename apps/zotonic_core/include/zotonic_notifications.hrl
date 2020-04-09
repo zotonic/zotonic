@@ -635,6 +635,11 @@
         request_options = #{} :: map()
     }).
 
+%% @doc Periodic ping by the client that the authentication is still alive
+-record(auth_ping, {
+    }).
+
+
 % %% @doc Initialize a context from the current session.
 % %% Called for every request that has a session.
 % %% Type: foldl

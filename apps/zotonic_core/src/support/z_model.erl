@@ -209,7 +209,7 @@ map_verb(post) -> m_post;
 map_verb(delete) -> m_delete.
 
 
--spec model_call( module(), atom(), path(), mqtt_packet_map:mqtt_message(), z:context() ) -> {ok, term()} | {error, unacceptable | term()}.
+-spec model_call( module(), atom(), path(), mqtt_packet_map:mqtt_message(), z:context() ) -> {ok, term()} | ok | {error, unacceptable | term()}.
 model_call(Mod, m_get, Path, Msg, Context) ->
     Mod:m_get(atomize(Path), Msg, Context);
 model_call(Mod, Callback, Path, Msg, Context) ->
@@ -248,7 +248,7 @@ maybe_resolve(get, {ok, {Res, Ks}}, Context) when is_list(Ks) ->
     {ok, Res1};
 maybe_resolve(_Verb, {ok, Res}, _Context) ->
     {ok, Res};
-% maybe_resolve(_Verb, ok, _Context) ->
-%     {ok, success};
+maybe_resolve(_Verb, ok, _Context) ->
+    {ok, <<>>};
 maybe_resolve(_Verb, {error, _} = Error, _Context) ->
     Error.

@@ -41,6 +41,7 @@
     active_dir/1,
     lib_dir/1,
     module_to_app/1,
+    is_provided/2,
     get_provided/1,
     get_modules/1,
     get_modules_status/1,
@@ -350,6 +351,11 @@ get_modules(Context) ->
     gen_server:call(name(Context), get_modules).
 
 
+%% @doc Check if a service is provided by any module.
+-spec is_provided( atom(), z:context() ) -> boolean().
+is_provided(Service, Context) ->
+    gen_server:call(name(Context), {is_provided, Service}).
+
 %% @doc Return the list of all provided functionalities in running modules.
 get_provided(Context) ->
     gen_server:call(name(Context), get_provided).
@@ -580,6 +586,10 @@ handle_call(get_modules, _From, #state{ modules = Modules } = State) ->
 handle_call(get_provided, _From, State) ->
     Provided = handle_get_provided(State),
     {reply, Provided, State};
+
+handle_call({is_provided, Service}, _From, State) ->
+    IsProvided = lists:member(Service, handle_get_provided(State)),
+    {reply, IsProvided, State};
 
 %% @doc Return all running modules and their status
 handle_call(get_modules_status, _From, #state{ modules = Modules } = State) ->

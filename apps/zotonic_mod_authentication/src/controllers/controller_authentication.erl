@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2020 Marc Worrell
 %% @doc Handle HTTP authentication of users.
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -94,9 +94,11 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
         {ok, Context1} ->
             % - (set cookie in handlers - like device-id) --> needs notification
             Options = z_context:get(auth_options, Context, #{}),
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
+            % Force reset of sid on logon
+            Options1 = maps:remove(sid, Options),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options1, Context1),
             Context3 = maybe_setautologon(Payload, Context2),
-            status(Payload, Context3);
+            return_status(Payload, Context3);
         {error, user_not_enabled} ->
             case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
                 false ->
@@ -150,7 +152,7 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
                 ],
                 Context),
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, AuthOptions, Context1),
-            status(Payload, Context2);
+            return_status(Payload, Context2);
         {error, _Reason} ->
             { #{ status => error, error => eacces }, Context }
     end;
@@ -163,7 +165,7 @@ switch_user(_Payload, Context) ->
 logoff(Payload, Context) ->
     Context1 = z_auth:logoff(Context),
     Context2 = z_authentication_tokens:reset_cookies(Context1),
-    status(Payload, Context2).
+    return_status(Payload, Context2).
 
 %% @doc Refresh the current authentication cookie
 -spec refresh( map(), z:context() ) -> { map(), z:context() }.
@@ -173,7 +175,7 @@ refresh(Payload, Context) ->
         _ -> #{}
     end,
     Context1 = z_authentication_tokens:refresh_auth_cookie(Options, Context),
-    status(Payload, Context1).
+    return_status(Payload, Context1).
 
 %% @doc Set an autologon cookie for the current user
 -spec setautologon( map(), z:context() ) -> { map(), z:context() }.
@@ -277,6 +279,10 @@ reset_1(UserId, Username, Password, Context) ->
 %% @doc Return information about the current user and request language/timezone
 -spec status( map(), z:context() ) -> { map(), z:context() }.
 status(Payload, Context) ->
+    Context1 = z_authentication_tokens:ensure_auth_cookie(Context),
+    return_status(Payload, Context1).
+
+return_status(Payload, Context) ->
     Context1 = z_notifier:foldl(
         #request_context{
             phase = auth_status,
@@ -284,6 +290,7 @@ status(Payload, Context) ->
         },
         Context,
         Context),
+    z_notifier:notify(#auth_ping{}, Context1),
     Status = #{
         status => ok,
         is_authenticated => z_auth:is_auth(Context1),
