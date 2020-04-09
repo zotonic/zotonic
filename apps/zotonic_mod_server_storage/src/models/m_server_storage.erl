@@ -175,7 +175,17 @@ secure_store(Key, Value, Context) ->
             Error
     end.
 
-%% @doc Find a key in the session, without access via the model access functions.
+%% @doc Find all keys in the secure session, without access via the model access functions.
+-spec secure_lookup( z:context() ) -> ok | {error, no_session | not_found | term()}.
+secure_lookup(Context) ->
+    case z_context:session_id(Context) of
+        {ok, Sid} ->
+            z_server_storage:secure_lookup(Sid, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Find a key in the secure session, without access via the model access functions.
 -spec secure_lookup( term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
 secure_lookup(Key, Context) ->
     case z_context:session_id(Context) of
