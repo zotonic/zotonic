@@ -32,24 +32,22 @@
 %%
 init() ->
     create_vm_metrics(),
-    setup_mqtt_reporter(),
-
-
+    setup_system_reporter(),
 
     ok.
 
 % @doc Setup stats for each site.
 init_site(Host) ->
     %% Cowmachine/HTTP metrics
-    exometer:re_register([zotonic, Host, http, requests], counter, []),
-    exometer:re_register([zotonic, Host, http, duration], histogram, []),
-    exometer:re_register([zotonic, Host, http, data_out], counter, []),
+    % exometer:re_register([zotonic, Host, http, requests], counter, []),
+    % exometer:re_register([zotonic, Host, http, duration], histogram, []),
+    % exometer:re_register([zotonic, Host, http, data_out], counter, []),
 
     %% MQTT metrics
     exometer:re_register([zotonic, Host, mqtt, connects], counter, []),
 
     %% Misc metrics
-    exometer:re_register([zotonic, Host, depcache, evictions], counter, []),
+    exometer:re_register([zotonic, Host, depcache, evictions], spiral, []),
 
     %% Database metrics
     exometer:re_register([zotonic, Host, db, requests], spiral, []),
@@ -77,35 +75,44 @@ log_access(MetricsData) ->
     end.
 
 
+% @private Register the request.
 handle_stats(MetricsData) ->
     Site = get_site(MetricsData),
     DispatchRule = get_dispatch_rule(MetricsData),
-    count_request(Site, DispatchRule),
-    measure_duration(Site, DispatchRule,
-                     duration(maps:get(req_start, MetricsData, undefined),
-                              maps:get(resp_end, MetricsData, undefined))),
-    measure_data_out(Site, DispatchRule,
-                     maps:get(resp_body_length, MetricsData)).
 
+    Duration = duration(maps:get(req_start, MetricsData, undefined),
+                        maps:get(resp_end, MetricsData, undefined)),
 
-count_request(Site, DispatchRule) when is_atom(Site)
-                                       andalso is_atom(DispatchRule) ->
-    ok = exometer:update_or_create([zotonic, Site, cowmachine, DispatchRule, requests], 1, spiral, []);
-count_request(_Site, _DispatchRule) ->
-    ok.
+    DataIn = maps:get(req_body_length, MetricsData),
+    DataOut = maps:get(resp_body_length, MetricsData),
 
-measure_duration(Site, DispatchRule, Duration) when is_atom(Site)
-                                                    andalso is_atom(DispatchRule)
-                                                    andalso is_integer(Duration) ->
-    ok = exometer:update_or_create([zotonic, Site, cowmachine, DispatchRule, duration], Duration, histogram, []);
-measure_duration(_Site, _Dispatch, _Duration) ->
-    ok.
+    Reason = maps:get(reason, MetricsData),
+    Status = maps:get(resp_status, MetricsData),
 
-measure_data_out(Site, Dispatch, DataOut) when is_atom(Site)
-                                               andalso is_atom(Dispatch)
-                                               andalso is_integer(DataOut) ->
-    ok = exometer:update_or_create([zotonic, Site, cowmachine, Dispatch, data_out], DataOut, spiral, []);
-measure_data_out(_Site, _Dispatch, _DataOut) ->
+    StatusCategory = http_status_category(Reason, Status),
+
+    PathPrefix = [zotonic, Site, cowmachine, DispatchRule, StatusCategory],
+
+    ok = exometer:update_or_create(PathPrefix ++ [requests], 1, spiral, []),
+
+    if Duration > 0 ->
+           ok = exometer:update_or_create(PathPrefix ++ [duration], Duration, histogram, []);
+       Duration =< 0 ->
+           ok
+    end,
+
+    if DataIn > 0 ->
+           ok = exometer:update_or_create(PathPrefix ++ [data_in], DataIn, spiral, []);
+       DataIn =< 0 ->
+           ok
+    end,
+
+    if DataOut > 0 ->
+           ok = exometer:update_or_create(PathPrefix ++ [data_out], DataOut, spiral, []);
+       DataOut =< 0 ->
+           ok
+    end,
+
     ok.
 
 % log_access(#wm_log_data{finish_time=undefined}=LogData) ->
@@ -129,6 +136,18 @@ count_db_event(Event, Context) when is_atom(Event) ->
 %%
 %% Helpers
 %%
+
+all_http_status_categories() ->
+    ['1xx', '2xx', '3xx', '4xx', '5xx', 'xxx'].
+
+% @private return a status category
+http_status_category(switch_protocol, _) -> '1xx';
+http_status_category(_, X) when X < 300 -> '2xx';
+http_status_category(_, X) when X < 400 -> '3xx';
+http_status_category(_, X) when X < 500 -> '4xx';
+http_status_category(_, X) when X < 600 -> '5xx';
+http_status_category(_, _X) -> 'xxx'.
+
 
 % @private Return the site name from the user-data
 get_site(#{user_data := #{site := Site}}) -> Site;
@@ -172,32 +191,39 @@ create_vm_metrics() ->
 
 
 % @private Setup mqtt reporter
-setup_mqtt_reporter() ->
-    add_mqtt_reporter(),
+setup_system_reporter() ->
+    add_system_reporter(),
 
-    [ ok = exometer_report:subscribe(z_exometer_mqtt,
-                                     {select,
-                                      [{ {[zotonic | '_'], DataPoint, enabled}, [], ['$_'] }]},
-                                     default, % datapoints(DataPoint),
-                                     10000)
-      || DataPoint <- datapoints()],
+    ok = exometer_report:subscribe(system_reporter,
+                                   {select,
+                                    [{ {[zotonic | '_'], '_', enabled}, [], ['$_'] }]},
+                                   default,
+                                   10000),
     
-    ok = exometer_report:subscribe(z_exometer_mqtt,
-                                     {select,
-                                      [{ {[erlang | '_'], '_', enabled}, [], ['$_'] }]},
-                                     default,
-                                     10000),
+    ok = exometer_report:subscribe(system_reporter,
+                                   {select,
+                                    [{ {[erlang | '_'], '_', enabled}, [], ['$_'] }]},
+                                   default,
+                                   10000),
 
     ok.
 
 
-%
-add_mqtt_reporter() ->
+% Add the system reporter. It publishes on the default mqtt pool for
+% the whole system.
+add_system_reporter() -> 
     case exometer_report:add_reporter(
-           z_exometer_mqtt, [{status, enabled}, {report_bulk, true}]) of
+           system_reporter,
+           [ {module, z_exometer_mqtt},
+             {status, enabled},
+             {report_bulk, true},
+             {topic_prefix, [<<"$SYS">>]},
+             {context, #context{ site = '-mqtt-',
+                                 acl = admin }} ]) of
         ok -> ok;
         {error, already_running} -> ok
     end.
+<<<<<<< HEAD
 
 
 datapoints() ->
@@ -210,3 +236,5 @@ datapoints(histogram) -> [mean, min, max, 50, 95, 99, 999];
 datapoints(meter) -> [count, one, five, fifteen, day, mean].
 
 >>>>>>> 8290c7c5d... Use bulk reporting
+=======
+>>>>>>> 445ee864f... Simplify the metrics

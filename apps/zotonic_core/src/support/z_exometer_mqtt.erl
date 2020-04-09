@@ -35,30 +35,34 @@
 -include("zotonic.hrl").
 -include_lib("exometer_core/include/exometer.hrl").
 
-exometer_init(_Opts) ->
-    ?DEBUG(init),
-    {ok, []}.
+-record(state, { 
+    topic_prefix = [],
+    context % The context
+}).
+
+exometer_init(Opts) ->
+    {context, Context} = proplists:lookup(context, Opts),
+    TopicPrefix = proplists:get_value(topic_prefix, Opts, []),
+    {ok, #state{topic_prefix=TopicPrefix, context=Context}}.
 
 exometer_subscribe(_Metric, _DataPoint, _Extra, _Interval, State) ->
-    ?DEBUG(subscribe),
     {ok, State}.
 
 exometer_unsubscribe(_Metric, _DataPoint, _Extra, State) ->
-    ?DEBUG(unsubscribe),
     {ok, State}.
 
-exometer_report(Metric, DataPoint, Extra, Value, State) ->
-    %% Map the exometer metric name to a mqtt topic.
-    Topic = make_topic(Metric, DataPoint),
-    ?DEBUG({Topic, Metric, DataPoint, Extra, Value}),
-    % z_mqtt:publish(Topic, Value, z_acl:sudo(get_context(Extra))),
+exometer_report(Metric, DataPoint, _Extra, Value, State) ->
+    Topic = make_topic(Metric, DataPoint, State#state.topic_prefix),
+    z_mqtt:publish(Topic, Value, State#state.context),
     {ok, State}.
 
 exometer_report_bulk(Found, _Extra, State) ->
-    [ ?DEBUG({make_topic(Metric), DataPoint}) || {Metric, DataPoint} <- Found],
+    [ begin
+          Topic = make_topic(Metric, State#state.topic_prefix),
+          z_mqtt:publish(Topic, DataPoint, State#state.context)
+      end || {Metric, DataPoint} <- Found],
 
     {ok, State}.
-
 
 exometer_call(Unknown, From, State) ->
     lager:debug("Unknown call ~p from ~p", [Unknown, From]),
@@ -72,12 +76,10 @@ exometer_info(Unknown, State) ->
     lager:debug("Unknown info: ~p", [Unknown]),
     {ok, State}.
 
-exometer_newentry(Entry, State) ->
-    ?DEBUG({new_entry, Entry}),
+exometer_newentry(_Entry, State) ->
     {ok, State}.
 
-exometer_setopts(Metric, Options, _Status, State) ->
-    ?DEBUG({setupts, Metric, Options}),
+exometer_setopts(_Metric, _Options, _Status, State) ->
     {ok, State}.
 
 exometer_terminate(_, _State) ->
@@ -88,31 +90,13 @@ exometer_terminate(_, _State) ->
 %%
 
 
-
-get_context(undefined) ->
-    z_context:new(zotonic_site_status);
-get_context(Site) when is_atom(Site) ->
-    z_context:new(Site);
-get_context(#context{}=Context) ->
-    Context.
-
-make_topic([erlang|Metric]) ->
-    Topic = [ <<"stats">>, <<"erlang">>, [z_convert:to_binary(M) || M <- Metric]],
-    join_topic(Topic);
-make_topic([zotonic|Metric]) ->
-    Topic = [ <<"stats">>, <<"site">>, [z_convert:to_binary(M) || M <- Metric]],
-    join_topic(Topic);
-make_topic(Metric) ->
-    Topic = [ <<"stats">>, <<"extra">>, [z_convert:to_binary(M) || M <- Metric]],
+make_topic(Metric, Prefix) ->
+    Topic = [ Prefix, [z_convert:to_binary(M) || M <- Metric]],
     join_topic(Topic).
 
-make_topic([erlang|Metric], DataPoint) ->
-    Topic = [ <<"stats">>, <<"erlang">>, [z_convert:to_binary(M) || M <- Metric],
-        z_convert:to_binary(DataPoint)],
-    join_topic(Topic);
-make_topic(Metric, DataPoint) ->
-    Topic = [ <<"stats">>, <<"site">>, [z_convert:to_binary(M) || M <- Metric],
-        z_convert:to_binary(DataPoint)],
+make_topic(Metric, DataPoint, Prefix) ->
+    Topic = [ Prefix, [z_convert:to_binary(M) || M <- Metric],
+              z_convert:to_binary(DataPoint)],
     join_topic(Topic).
 
 join_topic(Topic) ->
@@ -121,8 +105,7 @@ join_topic(Topic) ->
 join(L, Sep) ->
     join(L, Sep, <<>>).
 
-join([], _Sep, Acc) ->
-    Acc;
+join([], _Sep, Acc) -> Acc;
 join([B| Rest], Sep, <<>>) ->
     join(Rest, Sep, B);
 join([B| Rest], Sep, Acc) ->
