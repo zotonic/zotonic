@@ -557,8 +557,16 @@ to_render_result(#m_search_result{result=#search_result{result=Result}}, _TplVar
     io_lib:format("~p", [Result]);
 to_render_result(#rsc_list{list=L}, _TplVars, _Context) ->
     io_lib:format("~p", [L]);
-to_render_result({trans, _} = Trans, TplVars, Context) ->
+to_render_result(#trans{} = Trans, TplVars, Context) ->
     z_trans:lookup_fallback(Trans, set_context_vars(TplVars, Context));
+to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
+    lists:map(
+        fun
+            % (V) when is_integer(V), V =< 255 -> V;
+            (V) when is_binary(V) -> V;
+            (V) -> to_render_result(V, TplVars, Context)
+        end,
+        Vs);
 to_render_result(V, TplVars, Context) ->
     template_compiler_runtime:to_render_result(V, TplVars, Context).
 
