@@ -50,7 +50,27 @@
 -define(CONNECT_RETRY_SLEEP, 10000).
 -define(CONNECT_RETRY_SHORT, 10).
 
--record(state, {conn, conn_args}).
+%% @doc Threshold above which we do an automatic explain of traced queries.
+ -define(DBTRACE_EXPLAIN_MSEC, 100).
+
+-record(state, {
+    conn,
+    conn_args = undefined :: undefined | list(),
+    busy_monitor = undefined :: undefined | reference(),
+    busy_pid = undefined :: undefined | pid(),
+    busy_ref = undefined :: undefined | reference(),
+    busy_timeout = undefined :: undefined | integer(),
+    busy_start = undefined :: undefined | pos_integer(),
+    busy_sql = undefined :: undefined | string(),
+    busy_params = [] :: list(),
+    busy_tracing = false :: boolean()
+}).
+
+-type query_result() :: {ok, Columns :: list(), Rows :: list()}
+                      | {ok, Nr :: integer(), Columns :: list(), Rows :: list()}
+                      | {error, term()}.
+
+-export_type([ query_result/0 ]).
 
 
 %%
@@ -87,12 +107,43 @@ test_connection_1(Args) ->
             E
     end.
 
+%% @doc Simple query without parameters, the query is interrupted if it takes
+%%      longer then Timeout msec.
+-spec squery( pid(), string(), pos_integer() ) -> query_result().
 squery(Worker, Sql, Timeout) ->
-    gen_server:call(Worker, {squery, Sql}, Timeout).
+    {ok, {Conn, Ref}} = fetch_conn(Worker, Sql, [], Timeout),
+    Result = epgsql:squery(Conn, Sql),
+    ok = return_conn(Worker, Ref),
+    decode_reply(Result).
 
+%% @doc Query with parameters, the query is interrupted if it takes
+%%      longer then Timeout msec.
+-spec equery( pid(), string(), list(), pos_integer() ) -> query_result().
 equery(Worker, Sql, Parameters, Timeout) ->
-    gen_server:call(Worker, {equery, Sql, Parameters}, Timeout).
+    {ok, {Conn, Ref}} = fetch_conn(Worker, Sql, Parameters, Timeout),
+    Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
+    ok = return_conn(Worker, Ref),
+    decode_reply(Result).
 
+%% @doc Request the SQL connection from the worker
+fetch_conn(Worker, Sql, Parameters, Timeout) ->
+    Ref = erlang:make_ref(),
+    {ok, Conn} = gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}),
+    {ok, {Conn, Ref}}.
+
+%% @doc Return the SQL connection to the worker, must be done within the timeout
+%%      specified in the fetch_conn/4 call.
+return_conn(Worker, Ref) ->
+    gen_server:call(Worker, {return_conn, Ref, self()}).
+
+
+%% @doc Return the tracing flag from the process dictionary.
+-spec is_tracing() -> boolean().
+is_tracing() ->
+    case erlang:get(is_dbtrace) of
+        true -> true;
+        _ -> false
+    end.
 
 %% This function should not be used but currently is required by the
 %% install / upgrade routines. Can only be called from inside a
@@ -111,53 +162,152 @@ init(Args) ->
     {ok, #state{conn=undefined, conn_args=Args}, ?IDLE_TIMEOUT}.
 
 
-handle_call(Cmd, From, #state{conn=undefined, conn_args=Args}=State) ->
+handle_call(Cmd, From, #state{conn = undefined, conn_args = Args}=State) ->
     case connect(Args, From) of
         {ok, Conn} ->
+            erlang:monitor(process, Conn),
             handle_call(Cmd, From, State#state{conn=Conn});
         {error, _} = E ->
             {reply, E, State}
     end;
 
-handle_call({squery, Sql}, _From, #state{conn=Conn}=State) ->
-    {reply, decode_reply(epgsql:squery(Conn, Sql)), State, ?IDLE_TIMEOUT};
+handle_call({fetch_conn, Ref, CallerPid, Sql, Params, Timeout, IsTracing}, _From, #state{ busy_pid = undefined } = State) ->
+    Start = trace_start(),
+    State1 = State#state{
+        busy_monitor = erlang:monitor(process, CallerPid),
+        busy_pid = CallerPid,
+        busy_ref = Ref,
+        busy_timeout = Timeout,
+        busy_start = Start,
+        busy_sql = Sql,
+        busy_params = Params,
+        busy_tracing = IsTracing
+    },
+    {reply, {ok, State#state.conn}, State1, Timeout};
 
+handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State) ->
+    lager:error("Connection requested by ~p but in use by ~p (query \"~s\" with ~p)",
+                [ CallerPid, OtherPid, Sql, Params ]),
+    {reply, {error, busy}, State, timeout(State)};
 
-handle_call({equery, Sql, Params}, _From, #state{conn=Conn}=State) ->
-    {reply, decode_reply(epgsql:equery(Conn, Sql, encode_values(Params))), State, ?IDLE_TIMEOUT};
+handle_call({return_conn, Ref, Pid}, _From,
+        #state{
+            busy_monitor = Monitor,
+            busy_ref = Ref,
+            busy_pid = Pid,
+            busy_sql = Sql,
+            busy_params = Params,
+            busy_start = Start,
+            busy_tracing = IsTracing,
+            conn = Conn
+        } = State) ->
+    erlang:demonitor(Monitor),
+    trace_end(IsTracing, Start, Sql, Params, Conn),
+    State1 = State#state{
+        busy_monitor = undefined,
+        busy_pid = undefined,
+        busy_ref = undefined,
+        busy_timeout = undefined,
+        busy_start = undefined,
+        busy_sql = undefined,
+        busy_params = []
+    },
+    {reply, ok, State1, timeout(State1)};
 
-handle_call(get_raw_connection, _From, #state{conn=Conn}=State) ->
-    {reply, Conn, State, ?IDLE_TIMEOUT};
+handle_call({return_conn, _Ref}, From, #state{ busy_pid = undefined } = State) ->
+    lager:error("SQL connection returned by ~p but not in use.", [ From ]),
+    {reply, {error, idle}, State, timeout(State)};
+
+handle_call({return_conn, _Ref}, From, #state{ busy_pid = OtherPid } = State) ->
+    lager:error("SQL connection returned by ~p but in use by ~p", [ From, OtherPid ]),
+    {reply, {error, notyours}, State, timeout(State)};
+
+handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
+    {reply, Conn, State, timeout(State)};
 
 handle_call(_Request, _From, State) ->
-    {reply, unknown_call, State, ?IDLE_TIMEOUT}.
+    {reply, unknown_call, State, timeout(State)}.
 
 
 handle_cast(_Msg, State) ->
     {noreply, State, ?IDLE_TIMEOUT}.
 
-handle_info(disconnect, #state{conn=undefined} = State) ->
+handle_info(disconnect, #state{ conn = undefined } = State) ->
     {noreply, State};
-handle_info(disconnect, State) ->
+
+
+handle_info(disconnect, #state{ busy_pid = undefined } = State) ->
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
-    lager:debug("Closing connection to ~s/~s (~p)", [Database, Schema, self()]),
-    {noreply, disconnect(State)};
-handle_info(timeout, State) ->
-    {noreply, disconnect(State)};
-handle_info({'EXIT', Pid, _Reason}, #state{conn=Pid} = State) ->
-    % Unexpected EXIT from the connection
-    {noreply, State#state{conn=undefined}};
-handle_info({'EXIT', _Pid, _Reason}, #state{conn=undefined} = State) ->
-    % Expected EXIT after disconnect
-    {noreply, State, hibernate};
-handle_info(_Info, State) ->
-    {noreply, State, ?IDLE_TIMEOUT}.
+    lager:debug("SQL closing connection to ~s/~s (~p)", [ Database, Schema, self() ]),
+    {noreply, cancel(State)};
 
-terminate(_Reason, #state{conn=undefined}) ->
+handle_info(disconnect, State) ->
+    lager:error("SQL disconnect from ~s/~s whilst busy with \"~s\"  ~p",
+                [ State#state.busy_sql, State#state.busy_params ]),
+    {noreply, State, cancel(State)};
+
+handle_info(timeout, #state{ busy_pid = undefined } = State) ->
+    % Idle timeout
+    {noreply, disconnect(State), hibernate};
+
+handle_info(timeout, #state{
+        busy_pid = Pid,
+        busy_sql = Sql,
+        busy_params = Params,
+        busy_timeout = Timeout
+    } = State) ->
+    % Query timeout - pull the connection from underneath the caller
+    % The connection needs to be killed to stop the out-of-bounds query
+    % on the db server. This to prevent that long running queries are
+    % filling up all our connections and also slowing down the database.
+    lager:error(
+        "SQL Timeout (~p) ~p msec: \"~s\"   ~p",
+        [ Pid, Timeout, Sql, Params ]),
+    {noreply, cancel(State)};
+
+handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
+        busy_pid = BusyPid,
+        busy_sql = Sql,
+        busy_params = Params
+    } = State) ->
+    lager:error(
+        "SQL caller ~p down with reason ~p during: \"~s\"   ~p",
+        [ BusyPid, Reason, Sql, Params ]),
+    {noreply, cancel(State)};
+
+handle_info({'DOWN', _Ref, process, ConnPid, Reason}, #state{
+        conn = ConnPid,
+        busy_pid = BusyPid,
+        busy_sql = Sql,
+        busy_params = Params
+    } = State) when is_pid(BusyPid) ->
+    % Unexpected DOWN from the connection during query
+    lager:error(
+        "SQL connection drop (~p) reason ~p on: \"~s\"   ~p",
+        [ ConnPid, Reason, Sql, Params ]),
+    {noreply, cancel(State)};
+
+handle_info({'DOWN', _Ref, process, Pid, _Reason}, #state{ conn = Pid } = State) ->
+    % Connection down, no processes running, ok to hibernate
+    {noreply, State#state{ conn = undefined }, hibernate};
+
+handle_info({'DOWN', _Ref, process, _Pid, _Reason}, #state{ busy_pid = undefined } = State) ->
+    % Might be a late down message from the busy pid, ignore.
+    {noreply, State, timeout(State)};
+
+handle_info({'EXIT', _Pid, _Reason}, State) ->
+    % Ignore - we have monitors for the connection and the request caller.
+    {noreply, State};
+
+handle_info(Info, State) ->
+    lager:warning("SQL unexpected info message ~p", [ Info ]),
+    {noreply, State, timeout(State)}.
+
+terminate(_Reason, #state{ conn = undefined }) ->
     ok;
-terminate(_Reason, #state{conn=Conn}) ->
-    _ = epgsql:close(Conn),
+terminate(_Reason, #state{ conn = Conn }) ->
+    ok = epgsql:cancel(Conn),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
@@ -167,6 +317,20 @@ code_change(_OldVsn, State, _Extra) ->
 %%
 %% Helper functions
 %%
+
+cancel(#state{ conn = ConnPid } = State) ->
+    ok = epgsql:cancel(ConnPid),
+    #state{
+        conn_args = State#state.conn_args
+    }.
+
+%% @doc Calculate the remaining timeout for the running query.
+timeout(#state{ busy_timeout = undefined }) ->
+    ?IDLE_TIMEOUT;
+timeout(#state{ busy_timeout = Timeout, busy_start = Start }) ->
+    Now = msec(),
+    erlang:max(1, Timeout - (Now - Start)).
+
 try_connect_tcp(Args) ->
     Addr = get_arg(dbhost, Args),
     Port = get_arg(dbport, Args),
@@ -286,6 +450,53 @@ maybe_default(K, "") -> z_config:get(K);
 maybe_default(K, <<>>) -> z_config:get(K);
 maybe_default(_K, V) -> V.
 
+%%
+%% Request tracing
+%%
+
+trace_start() ->
+    msec().
+
+trace_end(false, _Start, _Sql, _Params, _Conn) ->
+    ok;
+trace_end(true, Start, Sql, Params, Conn) ->
+    Duration = msec() - Start,
+    lager:info(
+        "SQL ~p msec: \"~s\"   ~p",
+        [ Duration, Sql, Params ]),
+    maybe_explain(Duration, Sql, Params, Conn).
+
+maybe_explain(Duration, _Sql, _Params, _Conn) when Duration < ?DBTRACE_EXPLAIN_MSEC ->
+    ok;
+maybe_explain(_Duration, Sql, Params, Conn) ->
+    case is_explainable(z_string:to_lower(Sql)) of
+        true ->
+            Sql1 = "explain "++Sql,
+            R = epgsql:equery(Conn, Sql1, encode_values(Params)),
+            maybe_log_query_plan(R);
+        false ->
+            ok
+    end.
+
+is_explainable(<<"begin", _/binary>>) -> false;
+is_explainable(<<"commit", _/binary>>) -> false;
+is_explainable(<<"rollback", _/binary>>) -> false;
+is_explainable(<<"explain ", _/binary>>) -> false;
+is_explainable(<<"alter ", _/binary>>) -> false;
+is_explainable(<<"drop ", _/binary>>) -> false;
+is_explainable(<<"create ", _/binary>>) -> false;
+is_explainable(_) -> true.
+
+maybe_log_query_plan({ok, [ #column{ name = <<"QUERY PLAN">> } ], Rows}) ->
+    Lines = lists:map( fun({R}) -> [ 10, R ] end, Rows ),
+    lager:info("SQL EXPLAIN: ~s", [ iolist_to_binary(Lines) ]);
+maybe_log_query_plan(Other) ->
+    lager:info("SQL EXPLAIN: ~p", [ Other ]),
+    ok.
+
+msec() ->
+    {A, B, C} = os:timestamp(),
+    A * 1000000000 + B * 1000 + C div 1000.
 
 %%
 %% These are conversion routines between how z_db expects values and how epgsl expects them.

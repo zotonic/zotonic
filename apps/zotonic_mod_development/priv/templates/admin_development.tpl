@@ -67,6 +67,26 @@
             {_ Enable API to recompile and build Zotonic _}
         </label>
     </div>
+
+    {% if m.modules.provided.server_storage %}
+        <div>
+            {% wire id="dbtrace"
+                    postback=`dbtrace_toggle`
+                    delegate=`z_development_dbtrace`
+            %}
+            <label class="checkbox-inline">
+                <input type="checkbox" id="dbtrace" value="1" {% if m.development.is_dbtrace %}checked="checked"{% endif %} />
+                {_ Trace all database queries for the current session _}
+            </label>
+        </div>
+    {% else %}
+        <div>
+            <p class="help-block">
+                <br>
+                {_ Enable <tt>mod_server_storage</tt> to use database query tracing. _}
+            </p>
+        </div>
+    {% endif %}
 </div>
 
 <h3>{_ Template debugging _}</h2>

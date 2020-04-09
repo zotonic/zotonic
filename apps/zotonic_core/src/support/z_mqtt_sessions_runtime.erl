@@ -80,11 +80,13 @@ new_user_context( Site, ClientId, SessionOptions ) ->
     Context1.
 
 context_updates(Site, ClientId, #{ message := #{ payload := Payload} }) ->
+    ?DEBUG(Payload),
     mqtt_sessions:update_user_context(Site, ClientId, fun(Ctx) -> update_context_fun(Payload, Ctx) end).
 
 update_context_fun(Payload, Context) ->
     Context1 = maybe_set_language(Payload, Context),
-    maybe_set_timezone(Payload, Context1).
+    Context2 = maybe_set_timezone(Payload, Context1),
+    z_notifier:foldl(#request_context{ phase = refresh }, Context2, Context2).
 
 maybe_set_language(#{ <<"language">> := <<>> }, Context) ->
     Context;

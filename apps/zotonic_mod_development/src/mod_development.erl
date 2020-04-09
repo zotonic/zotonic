@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2019 Marc Worrell
+%% @copyright 2009-2020 Marc Worrell
 %% @doc Support functions for development.
 
-%% Copyright 2009-2019 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@
     pid_observe_development_reload/3,
     pid_observe_development_make/3,
     observe_admin_menu/3,
+    observe_request_context/3,
     % internal (for spawn)
     page_debug_stream/3,
     page_debug_stream_loop/3
@@ -89,6 +90,11 @@ pid_observe_development_reload(Pid, development_reload, _Context) ->
 pid_observe_development_make(Pid, development_make, _Context) ->
      gen_server:cast(Pid, development_make).
 
+observe_request_context(#request_context{ phase = refresh }, Context, _Context) ->
+    z_development_dbtrace:copy_from_session(Context),
+    Context;
+observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
+    Context.
 
 %%====================================================================
 %% gen_server callbacks

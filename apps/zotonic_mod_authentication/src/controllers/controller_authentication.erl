@@ -290,7 +290,6 @@ return_status(Payload, Context) ->
         },
         Context,
         Context),
-    z_notifier:notify(#auth_ping{}, Context1),
     Status = #{
         status => ok,
         is_authenticated => z_auth:is_auth(Context1),

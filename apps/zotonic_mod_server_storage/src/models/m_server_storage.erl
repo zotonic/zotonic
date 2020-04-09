@@ -32,11 +32,13 @@
     delete/2,
     delete/1,
 
+    secure_lookup/1,
     secure_lookup/2,
     secure_store/3,
     secure_delete/2,
     secure_delete/1
     ]).
+
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_get([], _Msg, Context) ->
@@ -73,7 +75,7 @@ m_delete(_Path, _Msg, _Context) ->
 %% @doc Ping the session to keep it alive.
 -spec ping( z:context() ) -> ok | {error, no_session | term()}.
 ping(Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
             z_server_storage:ping(Sid, Context);
         {error, _} = Error ->
@@ -83,14 +85,19 @@ ping(Context) ->
 %% @doc Store a key in the session.
 -spec store( term(), term(), z:context() ) -> ok | {error, no_session | not_found | full | term()}.
 store(Key, Value, Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
             case z_server_storage:store(Sid, Key, Value, Context) of
                 ok ->
-                    ok;
+                    event(Sid, #{ op => store, key => Key, value => Value }, Context);
                 {error, no_session} ->
                     _ = mod_server_storage:start_session(Sid, Context),
-                    z_server_storage:store(Sid, Key, Value, Context);
+                    case z_server_storage:store(Sid, Key, Value, Context) of
+                        ok ->
+                            event(Sid, #{ op => store, key => Key, value => Value }, Context);
+                        R ->
+                            R
+                    end;
                 {error, _} = Error ->
                     Error
             end;
@@ -101,7 +108,7 @@ store(Key, Value, Context) ->
 %% @doc Find all keys in the session.
 -spec lookup( z:context() ) -> {ok, map()}| {error, no_session | not_found | term()}.
 lookup(Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
             z_server_storage:lookup(Sid, Context);
         {error, _} = Error ->
@@ -111,7 +118,7 @@ lookup(Context) ->
 %% @doc Find a key in the session.
 -spec lookup( term(), z:context() ) -> {ok, term()} | {error, no_session | not_found | term()}.
 lookup(Key, Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
             z_server_storage:lookup(Sid, Key, Context);
         {error, _} = Error ->
@@ -121,9 +128,14 @@ lookup(Key, Context) ->
 %% @doc Delete a key from the session.
 -spec delete( term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
 delete(Key, Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
-            z_server_storage:delete(Sid, Key, Context);
+            case z_server_storage:delete(Sid, Key, Context) of
+                ok ->
+                    event(Sid, #{ op => delete }, Context);
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.
@@ -131,9 +143,14 @@ delete(Key, Context) ->
 %% @doc Delete all keys from the session.
 -spec delete( z:context() ) -> ok | {error, no_session | not_found | term()}.
 delete(Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
-            z_server_storage:delete(Sid, Context);
+            case z_server_storage:delete(Sid, Context) of
+                ok ->
+                    event(Sid, #{ op => delete }, Context);
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.
@@ -141,23 +158,38 @@ delete(Context) ->
 %% @doc Store a key/valye in the session, without access via the model access functions.
 -spec secure_store( term(), term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
 secure_store(Key, Value, Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
             case z_server_storage:secure_store(Sid, Key, Value, Context) of
                 ok ->
-                    ok;
+                    event(Sid, #{ op => secure_store }, Context);
                 {error, no_session} ->
                     _ = mod_server_storage:start_session(Sid, Context),
-                    z_server_storage:secure_store(Sid, Key, Value, Context)
+                    case z_server_storage:secure_store(Sid, Key, Value, Context) of
+                        ok ->
+                            event(Sid, #{ op => secure_store }, Context);
+                        {error, _} = Error ->
+                            Error
+                    end
             end;
         {error, _} = Error ->
             Error
     end.
 
-%% @doc Find a key in the session, without access via the model access functions.
+%% @doc Find all keys in the secure session, without access via the model access functions.
+-spec secure_lookup( z:context() ) -> ok | {error, no_session | not_found | term()}.
+secure_lookup(Context) ->
+    case z_context:session_id(Context) of
+        {ok, Sid} ->
+            z_server_storage:secure_lookup(Sid, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Find a key in the secure session, without access via the model access functions.
 -spec secure_lookup( term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
 secure_lookup(Key, Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
             z_server_storage:secure_lookup(Sid, Key, Context);
         {error, _} = Error ->
@@ -167,9 +199,14 @@ secure_lookup(Key, Context) ->
 %% @doc Delete a key from the session, without access via the model access functions.
 -spec secure_delete( term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
 secure_delete(Key, Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
-            z_server_storage:secure_delete(Sid, Key, Context);
+            case z_server_storage:secure_delete(Sid, Key, Context) of
+                ok ->
+                    event(Sid, #{ op => secure_delete }, Context);
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.
@@ -177,17 +214,20 @@ secure_delete(Key, Context) ->
 %% @doc Delete all keys from the session, without access via the model access functions.
 -spec secure_delete( z:context() ) -> ok | {error, no_session | not_found | term()}.
 secure_delete(Context) ->
-    case session_id(Context) of
+    case z_context:session_id(Context) of
         {ok, Sid} ->
-            z_server_storage:secure_delete(Sid, Context);
+            case z_server_storage:secure_delete(Sid, Context) of
+                ok ->
+                    event(Sid, #{ op => secure_delete }, Context);
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.
 
-session_id(Context) ->
-    case z_context:get(auth_options, Context) of
-        #{ sid := Sid } ->
-            {ok, Sid};
-        _ ->
-            {error, no_session}
-    end.
+event(_Sid, _Payload, _Context) ->
+    % @todo first add some security checks to not leak the Sid, or find a method
+    % to publish to a client routing topic wihout using the Sid
+    % z_mqtt:publish([ <<"model">>, <<"server_storage">>, <<"event">>, Sid ], Payload, Context).
+    ok.

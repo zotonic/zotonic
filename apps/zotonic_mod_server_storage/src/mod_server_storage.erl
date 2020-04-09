@@ -30,7 +30,8 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([
-    observe_auth_ping/2,
+    observe_request_context/3,
+    observe_server_storage/2,
     start_session/2,
     start_link/1,
     init/1
@@ -38,10 +39,29 @@
 
 
 %% @doc Periodic ping for the session, done by the client.
--spec observe_auth_ping(#auth_ping{}, z:context()) -> ok.
-observe_auth_ping(#auth_ping{}, Context) ->
+-spec observe_request_context(#request_context{}, z:context(), z:context()) -> z:context().
+observe_request_context(#request_context{}, Context, _Context) ->
     m_server_storage:ping(Context),
-    ok.
+    Context.
+
+%% @doc Decoupling of server storage from other modules.
+observe_server_storage({server_storage, Verb, Key, OptValue}, Context) ->
+    case Verb of
+        lookup  -> m_server_storage:lookup(Key, Context);
+        store   -> m_server_storage:store(Key, OptValue, Context);
+        delete  -> m_server_storage:delete(Key, Context);
+        secure_lookup  -> m_server_storage:secure_lookup(Key, Context);
+        secure_store   -> m_server_storage:secure_store(Key, OptValue, Context);
+        secure_delete  -> m_server_storage:secure_delete(Key, Context)
+    end;
+observe_server_storage({server_storage, Verb}, Context) ->
+    case Verb of
+        lookup  -> m_server_storage:lookup(Context);
+        delete  -> m_server_storage:delete(Context);
+        secure_lookup  -> m_server_storage:secure_lookup(Context);
+        secure_delete  -> m_server_storage:secure_delete(Context)
+    end.
+
 
 %% @doc Start the session with the given Id
 -spec start_session( binary(), z:context() ) -> {ok, pid()} | {error, term()}.

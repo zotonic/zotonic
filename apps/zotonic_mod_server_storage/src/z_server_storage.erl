@@ -28,6 +28,7 @@
     store/4,
     delete/3,
     delete/2,
+    secure_lookup/2,
     secure_lookup/3,
     secure_store/4,
     secure_delete/3,
@@ -110,6 +111,13 @@ delete(SessionId, Context) ->
         Pid -> gen_server:cast(Pid, delete)
     end.
 
+-spec secure_lookup( term(), z:context() ) -> {ok, term()} | {error, not_found | no_session}.
+secure_lookup(SessionId, Context) ->
+    case z_proc:whereis({?MODULE, SessionId}, Context) of
+        undefined -> {error, no_session};
+        Pid -> gen_server:call(Pid, secure_lookup)
+    end.
+
 -spec secure_lookup( binary(), term(), z:context() ) -> {ok, term()} | {error, not_found | no_session}.
 secure_lookup(SessionId, Key, Context) ->
     case z_proc:whereis({?MODULE, SessionId}, Context) of
@@ -180,6 +188,8 @@ handle_call({lookup, Key}, _From, #state{ data = Data } = State) ->
         error ->
             {reply, {error, not_found}, State, State#state.timeout}
     end;
+handle_call(secure_lookup, _From, #state{ secure = Data } = State) ->
+    {reply, {ok, Data}, State, State#state.timeout};
 handle_call({secure_lookup, Key}, _From, #state{ secure = Data } = State) ->
     case maps:find(Key, Data) of
         {ok, Value} ->
