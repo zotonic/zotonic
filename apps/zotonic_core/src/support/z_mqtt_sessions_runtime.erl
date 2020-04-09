@@ -80,7 +80,6 @@ new_user_context( Site, ClientId, SessionOptions ) ->
     Context1.
 
 context_updates(Site, ClientId, #{ message := #{ payload := Payload} }) ->
-    ?DEBUG(Payload),
     mqtt_sessions:update_user_context(Site, ClientId, fun(Ctx) -> update_context_fun(Payload, Ctx) end).
 
 update_context_fun(Payload, Context) ->
