@@ -32,6 +32,7 @@
     delete/2,
     delete/1,
 
+    secure_lookup/1,
     secure_lookup/2,
     secure_store/3,
     secure_delete/2,
