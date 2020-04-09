@@ -55,7 +55,7 @@
 
 -record(state, {
     conn,
-    conn_args = undefined :: undefind | list(),
+    conn_args = undefined :: undefined | list(),
     busy_monitor = undefined :: undefined | reference(),
     busy_pid = undefined :: undefined | pid(),
     busy_ref = undefined :: undefined | reference(),
@@ -210,7 +210,7 @@ handle_call({return_conn, Ref, Pid}, _From,
         busy_timeout = undefined,
         busy_start = undefined,
         busy_sql = undefined,
-        busy_params = undefined
+        busy_params = []
     },
     {reply, ok, State1, timeout(State1)};
 

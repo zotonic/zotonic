@@ -851,7 +851,7 @@ get_path_info(Key, Context, Default) ->
 
 
 %% @doc Return a proplist with all context variables.
--spec get_all( z:context() ) -> map().
+-spec get_all( z:context() ) -> list().
 get_all(Context) ->
     maps:to_list(Context#context.props).
 

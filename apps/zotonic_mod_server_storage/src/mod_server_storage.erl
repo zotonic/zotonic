@@ -39,7 +39,7 @@
 
 
 %% @doc Periodic ping for the session, done by the client.
--spec observe_request_context(#request_context{}, z:context(), z:context()) -> ok.
+-spec observe_request_context(#request_context{}, z:context(), z:context()) -> z:context().
 observe_request_context(#request_context{}, Context, _Context) ->
     m_server_storage:ping(Context),
     Context.
