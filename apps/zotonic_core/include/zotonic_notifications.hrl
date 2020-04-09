@@ -618,15 +618,6 @@
     is_signup_confirm = false :: boolean()
 }).
 
-
-%% @doc Called after parsing the query arguments
-%% Type: foldl
-%% Return: ``z:context()``
--record(request_context, {
-        phase = init :: init | auth_status,
-        document = #{} :: map()
-    }).
-
 %% @doc Update the given (accumulator) authentication options with the request options.
 %%      Note that the request options are from the client and are unsafe.
 %% Type: foldl
@@ -635,16 +626,31 @@
         request_options = #{} :: map()
     }).
 
-%% @doc Periodic ping by the client that the authentication is still alive
--record(auth_ping, {
+%% @doc Called during different moments of the request.
+%%      * init - called on every http request
+%%      * refresh - called after init and on mqtt context updates
+%%      * auth_status - called on every authentication status poll
+%% Type: foldl
+%% Return: ``z:context()``
+-record(request_context, {
+        phase = init :: init | refresh | auth_status,
+
+        % Document properties from the auth_status call. The client adds
+        % here properties like the client's preferred language and timezone.
+        document = #{} :: map()
     }).
 
+%% @doc Refresh the context or request process for the given request or action
+%%      Called for every request that is not anoymous and before every MQTT relay from
+%%      the client.  Example: mod_development uses this to set flags in the process
+%%      dictionary.
+%% Type: foldl
+%% Return: ``#context{}``
+-record(session_context, {
+        request_type :: http | mqtt,
+        payload = undefined :: undefined | term()
+    }).
 
-% %% @doc Initialize a context from the current session.
-% %% Called for every request that has a session.
-% %% Type: foldl
-% %% Return: ``#context{}``
-% -record(session_context, {}).
 
 % %% @doc A new session has been intialized: session_pid is in the context.
 % %% Called for every request that has a session.

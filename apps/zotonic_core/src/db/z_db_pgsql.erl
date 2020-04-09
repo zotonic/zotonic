@@ -50,6 +50,9 @@
 -define(CONNECT_RETRY_SLEEP, 10000).
 -define(CONNECT_RETRY_SHORT, 10).
 
+%% @doc Threshold above which we do an automatic explain of traced queries.
+ -define(DBTRACE_EXPLAIN_MSEC, 100).
+
 -record(state, {
     conn,
     conn_args = undefined :: undefind | list(),
@@ -293,6 +296,10 @@ handle_info({'DOWN', _Ref, process, _Pid, _Reason}, #state{ busy_pid = undefined
     % Might be a late down message from the busy pid, ignore.
     {noreply, State, timeout(State)};
 
+handle_info({'EXIT', _Pid, _Reason}, State) ->
+    % Ignore - we have monitors for the connection and the request caller.
+    {noreply, State};
+
 handle_info(Info, State) ->
     lager:warning("SQL unexpected info message ~p", [ Info ]),
     {noreply, State, timeout(State)}.
@@ -300,7 +307,7 @@ handle_info(Info, State) ->
 terminate(_Reason, #state{ conn = undefined }) ->
     ok;
 terminate(_Reason, #state{ conn = Conn }) ->
-    ok = epgsql:close(Conn),
+    ok = epgsql:cancel(Conn),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->

@@ -202,12 +202,26 @@ has_connection(Context) ->
 get_connection(#context{dbc=undefined} = Context) ->
     case has_connection(Context) of
         true ->
+            set_dbtrace_flag(Context),
             z_db_pool:get_connection(Context);
         false ->
             none
     end;
 get_connection(Context) ->
     Context#context.dbc.
+
+set_dbtrace_flag(Context) ->
+    case erlang:get(is_dbtrace) of
+        true -> ok;
+        false -> ok;
+        _ ->
+            IsTrace = case z_notifier:first({server_storage, secure_lookup, is_dbtrace, undefined}, Context) of
+                {ok, true} -> true;
+                _ -> false
+            end,
+            erlang:put(is_dbtrace, IsTrace),
+            ok
+    end.
 
 %% @doc Transaction handler safe function for releasing a db connection
 return_connection(C, Context=#context{dbc=undefined}) ->

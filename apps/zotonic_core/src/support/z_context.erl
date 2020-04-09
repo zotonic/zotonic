@@ -89,6 +89,8 @@
     client_id/1,
     client_topic/1,
 
+    session_id/1,
+
     set/3,
     set/2,
     get/2,
@@ -489,9 +491,10 @@ ensure_qs(#context{ props = Props } = Context) ->
             QPropsUrl = Props#{ q => PathArgs++Query },
             ContextQs = Context#context{ props = QPropsUrl },
             % Auth user via cookie - set language
-            ContextReq = z_notifier:foldl(#request_context{}, ContextQs, ContextQs),
+            ContextReq = z_notifier:foldl(#request_context{ phase = init }, ContextQs, ContextQs),
+            ContextReq2 = z_notifier:foldl(#request_context{ phase = refresh }, ContextReq, ContextReq),
             % Parse the POST body (if any)
-            {Body, ContextParsed} = parse_post_body(ContextReq),
+            {Body, ContextParsed} = parse_post_body(ContextReq2),
             QPropsAll = (ContextParsed#context.props)#{ q => PathArgs++Body++Query },
             ContextParsed#context{ props = QPropsAll }
     end.
@@ -744,6 +747,10 @@ lager_md(Context) ->
     lager_md([], Context).
 
 lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
+    SessionId = case session_id(Context) of
+        {ok, Sid} -> Sid;
+        {error, _} -> undefind
+    end,
     lager:md([
             {site, site(Context)},
             {user_id, Context#context.user_id},
@@ -752,8 +759,7 @@ lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
             {method, m_req:get(method, Context)},
             {remote_ip, m_req:get(peer, Context)},
             {is_ssl, m_req:get(is_ssl, Context)},
-            % {session_id, Context#context.session_id},
-            % {page_id, Context#context.page_id},
+            {session_id, SessionId},
             {req_id, m_req:get(req_id, Context)}
             | MetaData
         ]).
@@ -773,13 +779,25 @@ client_id(#context{ client_id = ClientId }) ->
 client_topic(#context{ client_topic = ClientTopic }) ->
     ClientTopic.
 
-%% @spec set(Key, Value, Context) -> Context
+%% @doc Return the unique random session id for the current client auth.
+%%      This session_id is re-assigned when the authentication of a client
+%%      changes.
+-spec session_id( z:context() ) -> {ok, binary()} | {error, no_session}.
+session_id(Context) ->
+    case get(auth_options, Context) of
+        #{ sid := Sid } ->
+            {ok, Sid};
+        _ ->
+            {error, no_session}
+    end.
+
 %% @doc Set the value of the context variable Key to Value
+-spec set( atom(), term(), z:context() ) -> z:context().
 set(Key, Value, #context{ props = Props } = Context) ->
     Context#context{ props = Props#{ Key => Value } }.
 
-%% @spec set(PropList, Context) -> Context
 %% @doc Set the value of the context variables to all {Key, Value} properties.
+-spec set( proplists:proplist(), z:context() ) -> z:context().
 set(PropList, Context) when is_list(PropList) ->
     NewProps = lists:foldl(
         fun
@@ -791,13 +809,13 @@ set(PropList, Context) when is_list(PropList) ->
     Context#context{ props = NewProps }.
 
 
-%% @spec get(Key, Context) -> Value | undefined
 %% @doc Fetch the value of the context variable Key, return undefined when Key is not found.
+-spec get( atom(), z:context() ) -> term() | undefined.
 get(Key, Context) ->
     get(Key, Context, undefined).
 
-%% @spec get(Key, Context, Default) -> Value | Default
 %% @doc Fetch the value of the context variable Key, return Default when Key is not found.
+-spec get( atom(), z:context(), term() ) -> term().
 get(Key, Context, Default) ->
     get_1(Key, Context, Default).
 
@@ -833,7 +851,7 @@ get_path_info(Key, Context, Default) ->
 
 
 %% @doc Return a proplist with all context variables.
--spec get_all( z:context() ) -> list().
+-spec get_all( z:context() ) -> map().
 get_all(Context) ->
     maps:to_list(Context#context.props).
 

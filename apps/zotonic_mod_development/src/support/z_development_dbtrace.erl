@@ -26,27 +26,39 @@
     is_tracing/1
     ]).
 
--include("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 event(#postback{ message=dbtrace_toggle }, Context) ->
-    IsTracing = is_tracing(Context),
-    set_tracing(not IsTracing, Context),
+    IsTracing = not storage_lookup(Context),
+    set_tracing(IsTracing, Context),
     Context.
 
 set_tracing(IsTracing, Context) ->
-    z_context:set_session(is_dbtrace, IsTracing, Context),
+    storage_store(IsTracing, Context),
     erlang:put(is_dbtrace, IsTracing).
 
 copy_from_session(Context) ->
-    Tracing = z_convert:to_bool( z_context:get_session( is_dbtrace, Context ) ),
+    Tracing = z_convert:to_bool( storage_lookup(Context) ),
     erlang:put(is_dbtrace, Tracing).
 
 is_tracing(Context) ->
     case erlang:get(is_dbtrace) of
         true ->
             true;
+        false ->
+            false;
         _ ->
-            Tracing = z_convert:to_bool( z_context:get_session( is_dbtrace, Context ) ),
+            Tracing = storage_lookup(Context),
             erlang:put(is_dbtrace, Tracing),
             Tracing
     end.
+
+storage_lookup(Context) ->
+    case z_notifier:first({server_storage, secure_lookup, is_dbtrace, undefined}, Context) of
+        {ok, V} -> z_convert:to_bool(V);
+        {error, _} -> false;
+        undefined -> false
+    end.
+
+storage_store(V, Context) ->
+    z_notifier:first({server_storage, secure_store, is_dbtrace, V}, Context).
