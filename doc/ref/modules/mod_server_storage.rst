@@ -20,9 +20,9 @@ Model functions
 
 ``model/server_storage/delete`` - delete all values from the server storage.
 
-Example in JavaScript from the client::
-
 .. highlight:: javascript
+
+Example in JavaScript from the client::
 
     cotonic.broker.publish("bridge/origin/model/server_storage/post/foo", { "hello": "world" });
 
@@ -41,10 +41,9 @@ Example in JavaScript from the client::
     }
 
 
-Example in a template::
-
 .. highlight:: django
 
+Example in a template::
 
     The hello key of foo is now: {{ m.server_storage.foo.hello|escape }}
 
@@ -52,9 +51,9 @@ Note that we **must** escape the value, as it originates from the client and con
 arbitrary values, including HTML.
 
 
-Example in Erlang:
-
 .. highlight:: erlang
+
+Example in Erlang::
 
     m_server_storage:store(<<"foo">>, #{ <<"hello">> => <<"world">> }, Context),
 
@@ -73,10 +72,10 @@ Storage of secret server data
 Sometimes the server code wants to attach data to the specific client that is not accessible
 to the client itself. An example is a secret during an OAuth handshake.
 
+.. highlight:: erlang
+
 For this there is a special, unlimited, storage API, which is only accessible using the
 Erlang API::
-
-.. highlight:: erlang
 
     m_server_storage:secure_store(<<"foo">>, #{ <<"my">> => <<"secret">> }, Context),
 
