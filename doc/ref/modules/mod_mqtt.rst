@@ -77,15 +77,9 @@ Currently the following topics are defined:
 +=================================+=========================================================================+
 |public                           |Freely accessible topic, both for subscribe and publish                  |
 +---------------------------------+-------------------------------------------------------------------------+
-|test                             |Test topic. If you publish here then mod_mqtt will log debug message.    |
+|test                             |Test topic. If you publish here then mod_mqtt will log a debug message.  |
 +---------------------------------+-------------------------------------------------------------------------+
 |user                             |Topic available for any authenticated user                               |
-+---------------------------------+-------------------------------------------------------------------------+
-|public                           |Freely accessible within the site                                        |
-+---------------------------------+-------------------------------------------------------------------------+
-|test                             |Test topic, freely accessible within the site                            |
-+---------------------------------+-------------------------------------------------------------------------+
-|user                             |Topic available for any authenticated user of the site                   |
 +---------------------------------+-------------------------------------------------------------------------+
 |user/UserId                      |Topic available for a specific user of the site                          |
 +---------------------------------+-------------------------------------------------------------------------+
@@ -109,7 +103,7 @@ The following topics are expanded:
 | ~user                    | user/1234 *or* user/anonymous                       | The topic for the current user                       |
 +--------------------------+-----------------------------------------------------+------------------------------------------------------+
 
-Note that there are not automatic subscriptions for session, pagesession and user topics. All subscriptions need to be added explicitly.
+Note that there are not automatic subscriptions for user topics. All subscriptions need to be added explicitly.
 
 .. _mqtt-access-control:
 
