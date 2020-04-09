@@ -28,7 +28,7 @@
                         <button id="{{ #unlink.id }}" class="btn btn-xs btn-default">{_ Disconnect _}</button>
                         {% wire id=#unlink.id
                             action={confirm
-                                text=[_"Are you sure you want to disconnect: ", edge.object_id.title, "?" ]
+                                text=[_"Are you sure you want to disconnect:", " ", edge.object_id.title, "?" ]
                                 ok=_"Disconnect"
                                 action={unlink
                                     subject_id=edge.subject_id

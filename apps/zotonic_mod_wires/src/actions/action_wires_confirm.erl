@@ -18,12 +18,13 @@
 %% limitations under the License.
 
 -module(action_wires_confirm).
--include_lib("zotonic_core/include/zotonic.hrl").
+
 -export([
     render_action/4,
     event/2
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 render_action(TriggerId, TargetId, Args, Context) ->
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback({confirm, Args}, click, TriggerId, TargetId, ?MODULE, Context),
@@ -34,12 +35,12 @@ render_action(TriggerId, TargetId, Args, Context) ->
 event(#postback{message={confirm, Args}}, Context) ->
     Title = proplists:get_value(title, Args, ?__(<<"Confirm">>, Context)),
     {IsTemplate, Text,Context1} = case proplists:get_value(text_template, Args) of
-              undefined ->
-                  {false, proplists:get_value(text, Args), Context};
-              Template ->
-                  {Txt, Ctx} = z_template:render_to_iolist(Template, Args, Context),
-                  {true, Txt, Ctx}
-           end,
+        undefined ->
+            {false, proplists:get_value(text, Args), Context};
+         Template ->
+            {Txt, Ctx} = z_template:render_to_iolist(Template, Args, Context),
+            {true, Txt, Ctx}
+    end,
     Vars = [
         {title, Title},
         {text, Text},
