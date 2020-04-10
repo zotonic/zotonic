@@ -34,25 +34,21 @@ Create a site
     postgres=# \c zotonic
     postgres=# CREATE LANGUAGE "plpgsql";
 
-2. Edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
+2. And (re)start Zotonic::
+
+    $ bin/zotonic debug
+
+3. In a new terminal window, Edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
    site hostname) to point at your local host::
 
      127.0.0.1   yoursite.test
 
-3. Finally, create a new Zotonic site, based on the ‘blog’ skeleton site::
+4. Create a new Zotonic site, based on the ‘blog’ skeleton site::
 
      $ bin/zotonic addsite -s blog yoursite
 
    .. note:: Zotonic has to be running for the ``addsite`` command to succeed.
 
-4. Then rebuild Zotonic::
-
-    $ cd dir/to/zotonic
-    $ make
-
-5. And (re)start Zotonic::
-
-    $ bin/zotonic debug
 
 5. Finally, point your browser to http://yoursite:8000 to see your new site.
    You can log into the admin at http://yoursite:8000/admin with the password
