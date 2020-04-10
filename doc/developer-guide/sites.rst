@@ -33,8 +33,13 @@ Create a site
     postgres=# GRANT ALL ON DATABASE zotonic TO zotonic;
     postgres=# \c zotonic
     postgres=# CREATE LANGUAGE "plpgsql";
+  
+  And quit postgres:
+  
+    postgres=# \q
 
-2. And (re)start Zotonic::
+2. Now that there is a database Zotonic can be started. We do this in debug mode
+   so that all console output is visible::
 
     $ bin/zotonic debug
 
@@ -56,6 +61,18 @@ Create a site
    :file:`yoursite/priv/zotonic_site.config` in the :term:`zotonic user directory`.
 
    .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
+
+
+You can stop Zotonic by typing twice Ctrl-C at the Erlang command prompt.
+
+If you want to start Zotonic in the background then use::
+
+  $ bin/zotonic start
+  
+This can be stopped with::
+
+  $ bin/zotonic stop
+
 
 .. _guide-site-anatomy:
 
