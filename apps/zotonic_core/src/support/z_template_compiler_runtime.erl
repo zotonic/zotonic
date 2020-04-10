@@ -564,7 +564,7 @@ to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
     % Assume that all integers are meant to be (utf8) characters.
     lists:map(
         fun
-            (V) when is_integer(V), V =< 255 -> V;
+            (V) when is_integer(V), V >= 0, V =< 255 -> V;
             (V) when is_integer(V), V >= 256 -> <<V/utf8>>;
             (V) when is_binary(V) -> V;
             (V) -> to_render_result(V, TplVars, Context)
