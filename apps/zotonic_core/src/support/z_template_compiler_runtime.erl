@@ -560,9 +560,12 @@ to_render_result(#rsc_list{list=L}, _TplVars, _Context) ->
 to_render_result(#trans{} = Trans, TplVars, Context) ->
     z_trans:lookup_fallback(Trans, set_context_vars(TplVars, Context));
 to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
+    % A list, which could be a string but also a nested render result.
+    % Assume that all integers are meant to be (utf8) characters.
     lists:map(
         fun
             (V) when is_integer(V), V =< 255 -> V;
+            (V) when is_integer(V), V >= 256 -> <<V/utf8>>;
             (V) when is_binary(V) -> V;
             (V) -> to_render_result(V, TplVars, Context)
         end,
