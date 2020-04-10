@@ -834,7 +834,7 @@ insert_1(Rsc, Type, Key, Props, Context) ->
     of
         undefined ->
             Props1 = [{rsc_id, RscId}, {type, Type}, {key, Key} | Props],
-            Result = z_db:insert(identity, validate_is_unique(Props1), Context),
+            Result = z_db:insert(identity, Props1, Context),
             z_depcache:flush({idn, RscId}, Context),
             z_mqtt:publish(
                 [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
@@ -860,16 +860,6 @@ insert_1(Rsc, Type, Key, Props, Context) ->
                     nop
             end,
             {ok, IdnId}
-    end.
-
-% The is_unique flag is 'null' if the entry is not unique.
-% This enables using an 'unique' constraint.
-validate_is_unique(Props) ->
-    case proplists:get_value(is_unique, Props) of
-        false ->
-            [{is_unique, undefined} | proplists:delete(is_unique, Props)];
-        _ ->
-            Props
     end.
 
 is_valid_key(_Type, undefined, _Context) ->

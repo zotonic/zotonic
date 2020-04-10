@@ -167,15 +167,17 @@ model_pgsql() ->
      "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_creator_id FOREIGN KEY (creator_id)
       REFERENCES rsc (id)
       ON UPDATE CASCADE ON DELETE SET NULL",
-    "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_modifier_id FOREIGN KEY (modifier_id)
+     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_modifier_id FOREIGN KEY (modifier_id)
       REFERENCES rsc (id)
       ON UPDATE CASCADE ON DELETE SET NULL",
+     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id FOREIGN KEY (category_id)
+      REFERENCES rsc (id)
+      ON UPDATE CASCADE ON DELETE RESTRICT",
 
      "CREATE INDEX fki_rsc_content_group_id ON rsc (content_group_id)",
      "CREATE INDEX fki_rsc_creator_id ON rsc (creator_id)",
      "CREATE INDEX fki_rsc_modifier_id ON rsc (modifier_id)",
-     "CREATE INDEX fki_rsc_created ON rsc (created)",
-     "CREATE INDEX fki_rsc_modified ON rsc (modified)",
+     "CREATE INDEX fki_rsc_category_id ON rsc (category_id)",
 
      "CREATE INDEX rsc_pivot_tsv_key ON rsc USING gin(pivot_tsv)",
      "CREATE INDEX rsc_pivot_rtsv_key ON rsc USING gin(pivot_rtsv)",
@@ -183,9 +185,6 @@ model_pgsql() ->
      "CREATE INDEX rsc_pivot_category_nr ON rsc (pivot_category_nr)",
      "CREATE INDEX rsc_pivot_surname_key ON rsc (pivot_surname)",
      "CREATE INDEX rsc_pivot_first_name_key ON rsc (pivot_first_name)",
-     "CREATE INDEX rsc_pivot_gender_key ON rsc (pivot_gender)",
-     "CREATE INDEX rsc_pivot_date_start_key ON rsc (pivot_date_start)",
-     "CREATE INDEX rsc_pivot_date_end_key ON rsc (pivot_date_end)",
      "CREATE INDEX rsc_pivot_date_start_month_day_key ON rsc (pivot_date_start_month_day)",
      "CREATE INDEX rsc_pivot_date_end_month_day_key ON rsc (pivot_date_end_month_day)",
      "CREATE INDEX rsc_pivot_city_street_key ON rsc (pivot_city, pivot_street)",
@@ -194,27 +193,35 @@ model_pgsql() ->
      "CREATE INDEX rsc_pivot_geocode_key ON rsc (pivot_geocode)",
      "CREATE INDEX rsc_pivot_title_key ON rsc (pivot_title)",
      "CREATE INDEX rsc_pivot_location_key ON rsc (pivot_location_lat, pivot_location_lng)",
+     "CREATE INDEX rsc_modified_category_nr_key ON rsc (modified, pivot_category_nr)",
+     "CREATE INDEX rsc_created_category_nr_key ON rsc (created, pivot_category_nr)",
+     "CREATE INDEX rsc_pivot_date_start_category_nr_key ON rsc (pivot_date_start, pivot_category_nr)",
+     "CREATE INDEX rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)",
+     "CREATE INDEX rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)",
+     "CREATE INDEX rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)",
+
 
     % Table: rsc_gone
     % Tracks deleted or moved resources, adding "410 gone" support
     % Also contains new id or new url for 301 moved permanently replies.
     % mod_backup is needed to recover a deleted resource's content.
 
-     "CREATE TABLE rsc_gone (
+    "CREATE TABLE rsc_gone
+     (
         id bigint not null,
-     new_id bigint,
-     new_uri character varying(2048),
-     version int not null,
-     uri character varying(2048),
-     name character varying(80),
-     page_path character varying(80),
-     is_authoritative boolean NOT NULL DEFAULT true,
-     creator_id bigint,
-     modifier_id bigint,
-     created timestamp with time zone NOT NULL DEFAULT now(),
-     modified timestamp with time zone NOT NULL DEFAULT now(),
-     CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
-    )",
+        new_id bigint,
+        new_uri character varying(2048),
+        version int not null,
+        uri character varying(2048),
+        name character varying(80),
+        page_path character varying(80),
+        is_authoritative boolean NOT NULL DEFAULT true,
+        creator_id bigint,
+        modifier_id bigint,
+        created timestamp with time zone NOT NULL DEFAULT now(),
+        modified timestamp with time zone NOT NULL DEFAULT now(),
+        CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
+     )",
     "CREATE INDEX rsc_gone_name ON rsc_gone(name)",
     "CREATE INDEX rsc_gone_page_path ON rsc_gone(page_path)",
     "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)",
@@ -224,14 +231,15 @@ model_pgsql() ->
     % By making an entry in this table we protect a rsc from being deleted.
     % This table is maintained by the update/insert trigger.
 
-    "CREATE TABLE protect (
+    "CREATE TABLE protect
+    (
         id int NOT NULL,
 
-    CONSTRAINT protect_id PRIMARY KEY (id),
-    CONSTRAINT fk_protect_id FOREIGN KEY (id)
-        REFERENCES rsc(id)
-        ON UPDATE CASCADE ON DELETE RESTRICT
-        )",
+        CONSTRAINT protect_id PRIMARY KEY (id),
+        CONSTRAINT fk_protect_id FOREIGN KEY (id)
+          REFERENCES rsc(id)
+          ON UPDATE CASCADE ON DELETE RESTRICT
+    )",
 
     % Table: edge
     % All relations between resources, forming a directed graph
@@ -337,7 +345,7 @@ model_pgsql() ->
       rsc_id int NOT NULL,
       type character varying(32) NOT NULL DEFAULT ''::character varying,
       key character varying(200) NOT NULL DEFAULT ''::character varying,
-      is_unique boolean,          -- set to true when the type/key should be unique
+      is_unique boolean NOT NULL DEFAULT false,          -- set to true when the type/key should be unique
       is_verified boolean not null default false,
       verify_key character varying(32),
       propb bytea,
@@ -352,17 +360,18 @@ model_pgsql() ->
       CONSTRAINT pk_auth_rsc_id FOREIGN KEY (rsc_id)
         REFERENCES rsc (id)
         ON UPDATE CASCADE ON DELETE CASCADE,
-      CONSTRAINT identity_type_key_unique UNIQUE (type, key, is_unique),
       CONSTRAINT identity_verify_key_unique UNIQUE (verify_key)
     )",
 
     "CREATE INDEX fki_identity_rsc_id ON identity (rsc_id)",
-    "CREATE INDEX identity_type_key_key ON identity (type, key)",
     "CREATE INDEX identity_visited_key ON identity (visited)",
     "CREATE INDEX identity_created_key ON identity (created)",
+    "CREATE UNIQUE identity_type_key_unique ON identity (type, key) WHERE (is_unique)",
+    "CREATE INDEX identity_type_key_key ON identity using btree (type, key collate ucs_basic text_pattern_ops)",
 
     % Email send queue and log
-    "CREATE TABLE emailq (
+    "CREATE TABLE emailq
+    (
         id serial NOT NULL,
         status character varying(10) not null default 'new', -- new, sent, fail
         retry_on timestamp with time zone default (now() + '00:10:00'::interval),
