@@ -562,7 +562,7 @@ to_render_result(#trans{} = Trans, TplVars, Context) ->
 to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
     lists:map(
         fun
-            % (V) when is_integer(V), V =< 255 -> V;
+            (V) when is_integer(V), V =< 255 -> V;
             (V) when is_binary(V) -> V;
             (V) -> to_render_result(V, TplVars, Context)
         end,
