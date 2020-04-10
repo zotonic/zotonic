@@ -172,7 +172,7 @@ model_pgsql() ->
       ON UPDATE CASCADE ON DELETE SET NULL",
      "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id FOREIGN KEY (category_id)
       REFERENCES rsc (id)
-      ON UPDATE CASCADE ON DELETE SET NULL",
+      ON UPDATE CASCADE ON DELETE RESTRICT",
 
      "CREATE INDEX fki_rsc_content_group_id ON rsc (content_group_id)",
      "CREATE INDEX fki_rsc_creator_id ON rsc (creator_id)",

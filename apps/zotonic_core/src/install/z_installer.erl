@@ -712,7 +712,7 @@ key_changes_v1_0(C, Database, Schema) ->
             {ok, [], []} = epgsql:squery(C, "
                 ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id
                     FOREIGN KEY (category_id) REFERENCES rsc (id)
-                    ON UPDATE CASCADE ON DELETE SET NULL
+                    ON UPDATE CASCADE ON DELETE RESTRICT
             "),
 
             {ok, [], []} = epgsql:squery(C, "CREATE INDEX fki_rsc_category_id ON rsc (category_id)"),
