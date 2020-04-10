@@ -213,6 +213,30 @@ is_column_nullable(C, Table, Column, Database, Schema) ->
         <<"NO">> -> false
     end.
 
+%% Check if a constraint in a table exists by querying the information schema.
+has_constraint(C, Table, Constraint, Database, Schema) ->
+    {ok, _, [{HasConstraint}]} = epgsql:equery(C, "
+            select count(*)
+            from information_schema.table_constraints
+            where constraint_catalog = $1
+              and constraint_schema = $2
+              and table_name = $3
+              and constraint_name = $4", [Database, Schema, Table, Constraint]),
+    HasConstraint >= 1.
+
+%% Check if a key on a table exists by querying the information schema.
+% has_key(C, Table, Key, Database, Schema) ->
+%     {ok, _, [{HasKey}]} = epgsql:equery(C, "
+%             select count(*)
+%             from information_schema.key_column_usage
+%             where constraint_catalog = $1
+%               and constraint_schema = $2
+%               and table_name = $3
+%               and constraint_name = $4", [Database, Schema, Table, Key]),
+%     HasKey >= 1.
+
+
+
 %% Upgrade older Zotonic versions.
 upgrade(C, Database, Schema) ->
     % Ancient versions - this should be cleaned up.
@@ -244,6 +268,7 @@ upgrade(C, Database, Schema) ->
     ok = set_default_visible_for(C, Database, Schema),
     ok = drop_persist(C, Database, Schema),
     ok = publication_start_nullable(C, Database, Schema),
+    ok = key_changes_v1_0(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -633,3 +658,69 @@ publication_start_nullable(C, Database, Schema) ->
             ok
     end.
 
+
+key_changes_v1_0(C, Database, Schema) ->
+    % Identity table:
+
+    % - changed 'is_unique' flag to not null default false
+    % - added prefix key on type+key for 'like' queries
+    case is_column_nullable(C, "identity", "is_unique", Database, Schema) of
+        false ->
+            ok;
+        true ->
+            lager:info("Upgrade: changing is_unique database ~s table ~s.identity", [ Database, Schema ]),
+
+            {ok, [], []} = epgsql:squery(C, "
+                ALTER TABLE identity
+                DROP CONSTRAINT identity_type_key_unique"),
+            {ok, _} = epgsql:squery(C, "
+                UPDATE identity
+                SET is_unique = false
+                WHERE is_unique IS NULL
+                "),
+            {ok, [], []} = epgsql:squery(C, "
+                ALTER TABLE identity
+                    ALTER COLUMN is_unique SET NOT NULL,
+                    ALTER COLUMN is_unique SET DEFAULT false
+            "),
+            {ok, [], []} = epgsql:squery(C, "
+                CREATE UNIQUE INDEX identity_type_key_unique
+                ON identity (type, key) WHERE (is_unique)
+            "),
+            {ok, [], []} = epgsql:squery(C, "
+                DROP INDEX IF EXISTS identity_type_key_key"),
+            {ok, [], []} = epgsql:squery(C, "
+                CREATE INDEX identity_type_key_key
+                ON identity using btree (type, key collate ucs_basic text_pattern_ops)
+            ")
+    end,
+
+    % Rsc table
+
+    % Drop keys
+    {ok, [], []} = epgsql:squery(C, "DROP INDEX IF EXISTS fki_rsc_created"),
+    {ok, [], []} = epgsql:squery(C, "DROP INDEX IF EXISTS rsc_pivot_gender_key"),
+    {ok, [], []} = epgsql:squery(C, "DROP INDEX IF EXISTS rsc_pivot_date_start_key"),
+    {ok, [], []} = epgsql:squery(C, "DROP INDEX IF EXISTS rsc_pivot_date_end_key"),
+
+    % New keys
+    case has_constraint(C, "rsc", "fk_rsc_category_id", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            lager:info("Upgrade: adding indices to database ~s table ~s.rsc", [ Database, Schema ]),
+            {ok, [], []} = epgsql:squery(C, "
+                ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id
+                    FOREIGN KEY (category_id) REFERENCES rsc (id)
+                    ON UPDATE CASCADE ON DELETE SET NULL
+            "),
+
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX fki_rsc_category_id ON rsc (category_id)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_modified_category_nr_key ON rsc (modified, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_created_category_nr_key ON rsc (created, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_pivot_date_start_category_nr_key ON rsc (pivot_date_start, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)")
+    end,
+    ok.
