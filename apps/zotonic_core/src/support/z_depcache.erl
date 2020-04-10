@@ -134,7 +134,6 @@ flush_process_dict() ->
     depcache:flush_process_dict().
 
 record_depcache_event({eviction, _DepcacheName}, Host) ->
-    exometer:update([zotonic, Host, depcache, evictions], 1);
+    z_stats:record_event(depcache, eviction, Host);
 record_depcache_event(_Event, _Metadata) ->
-    ?DEBUG(_Event),
     ok.

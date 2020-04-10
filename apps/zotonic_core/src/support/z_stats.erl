@@ -25,8 +25,12 @@
 %% Act as a webmachine logger
 -export([
     log_access/1,
-    count_db_event/2
+    count_db_event/2,
+
+    record_event/3,
+    record_duration/4
 ]).
+
 
 %% @doc Initialize the statistics collection machinery.
 %%
@@ -38,23 +42,29 @@ init() ->
 
 % @doc Setup stats for each site.
 init_site(Host) ->
-    %% Cowmachine/HTTP metrics
-    % exometer:re_register([zotonic, Host, http, requests], counter, []),
-    % exometer:re_register([zotonic, Host, http, duration], histogram, []),
-    % exometer:re_register([zotonic, Host, http, data_out], counter, []),
+    % %% Cowmachine/HTTP metrics
+    % % exometer:re_register([zotonic, Host, http, requests], counter, []),
+    % % exometer:re_register([zotonic, Host, http, duration], histogram, []),
+    % % exometer:re_register([zotonic, Host, http, data_out], counter, []),
 
-    %% MQTT metrics
-    exometer:re_register([zotonic, Host, mqtt, connects], counter, []),
+    % %% MQTT metrics
+    % exometer:re_register([zotonic, Host, mqtt, connects], counter, []),
 
-    %% Misc metrics
-    exometer:re_register([zotonic, Host, depcache, evictions], spiral, []),
+    % %% Misc metrics
+    % exometer:re_register([zotonic, Host, depcache, evictions], spiral, []),
 
-    %% Database metrics
-    exometer:re_register([zotonic, Host, db, requests], spiral, []),
-    exometer:re_register([zotonic, Host, db, pool_full], spiral, []),
-    exometer:re_register([zotonic, Host, db, pool_high_usage], spiral, []),
-    exometer:re_register([zotonic, Host, db, duration], histogram, []),
-    exometer:re_register([zotonic, Host, db, connection_wait], histogram, []),
+    % %% Database metrics
+    % exometer:re_register([zotonic, Host, db, requests], spiral, []),
+    % exometer:re_register([zotonic, Host, db, pool_full], spiral, []),
+    % exometer:re_register([zotonic, Host, db, pool_high_usage], spiral, []),
+    % exometer:re_register([zotonic, Host, db, duration], histogram, []),
+    % exometer:re_register([zotonic, Host, db, connection_wait], histogram, []),
+    Context = z_context:new(Host),
+
+    % Keep track of the size of the depcache
+    ok = exometer:new([site, Host, depcache, size],
+                      {function, z_depcache, size, [Context], value, []}),
+
 
     %% Session metrics
     %% [TODO] add mqtt sessions
@@ -63,20 +73,34 @@ init_site(Host) ->
 
     ok.
 
+% @doc Count a event
+record_event(System, What, #context{}=Context) ->
+    record_event(System, What, z_context:site(Context));
+record_event(System, What, Site) when is_atom(Site) ->
+    ok = exometer:update_or_create([site, Site, System, What], 1, spiral, []).
+
+% @doc Record a duration
+record_duration(System, What, Duration, #context{}=Context) ->
+    Site = z_context:site(Context),
+    record_duration(System, What, Duration, Site);
+record_duration(System, What, Duration, Site) when is_atom(Site) ->
+    record_event(System, What, Site),
+    ok = exometer:update_or_create([site, Site, System, What, duration], Duration, histogram, []).
+
 
 %% @doc Collect log data from cowmachine and update cowmachine metrics
 %%
 
 log_access(MetricsData) ->
     try
-        handle_stats(MetricsData)
+        handle_cowmachine_stats(MetricsData)
     after
         z_access_syslog:log_access(MetricsData)
     end.
 
 
 % @private Register the request.
-handle_stats(MetricsData) ->
+handle_cowmachine_stats(MetricsData) ->
     Site = get_site(MetricsData),
     DispatchRule = get_dispatch_rule(MetricsData),
 
@@ -91,9 +115,9 @@ handle_stats(MetricsData) ->
 
     StatusCategory = http_status_category(Reason, Status),
 
-    PathPrefix = [zotonic, Site, cowmachine, DispatchRule, StatusCategory],
+    PathPrefix = [site, Site, cowmachine, DispatchRule],
 
-    ok = exometer:update_or_create(PathPrefix ++ [requests], 1, spiral, []),
+    ok = exometer:update_or_create(PathPrefix ++ [StatusCategory], 1, spiral, []),
 
     if Duration > 0 ->
            ok = exometer:update_or_create(PathPrefix ++ [duration], Duration, histogram, []);
@@ -137,9 +161,6 @@ count_db_event(Event, Context) when is_atom(Event) ->
 %% Helpers
 %%
 
-all_http_status_categories() ->
-    ['1xx', '2xx', '3xx', '4xx', '5xx', 'xxx'].
-
 % @private return a status category
 http_status_category(switch_protocol, _) -> '1xx';
 http_status_category(_, X) when X < 300 -> '2xx';
@@ -163,8 +184,6 @@ duration(undefined, _) -> undefined;
 duration(_, undefined) -> undefined;
 duration(Start, End) ->
     erlang:convert_time_unit(End-Start, native, microsecond).
-<<<<<<< HEAD
-=======
 
 
 % @private vm_stats
@@ -196,7 +215,7 @@ setup_system_reporter() ->
 
     ok = exometer_report:subscribe(system_reporter,
                                    {select,
-                                    [{ {[zotonic | '_'], '_', enabled}, [], ['$_'] }]},
+                                    [{ {[site | '_'], '_', enabled}, [], ['$_'] }]},
                                    default,
                                    10000),
     
@@ -223,8 +242,6 @@ add_system_reporter() ->
         ok -> ok;
         {error, already_running} -> ok
     end.
-<<<<<<< HEAD
-
 
 datapoints() ->
     [counter, spiral, gauge, histogram, meter].
@@ -234,7 +251,3 @@ datapoints(spiral) -> [count, one];
 datapoints(gauge) -> [value];
 datapoints(histogram) -> [mean, min, max, 50, 95, 99, 999];
 datapoints(meter) -> [count, one, five, fifteen, day, mean].
-
->>>>>>> 8290c7c5d... Use bulk reporting
-=======
->>>>>>> 445ee864f... Simplify the metrics
