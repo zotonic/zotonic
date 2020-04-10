@@ -75,7 +75,13 @@ function to_human(value) {
 {% endjavascript %}
 
 {% javascript %}
-    cotonic.broker.subscribe("erlang/stats/#", function(msg) {
+    cotonic.broker.subscribe("bridge/origin/$SYS/cowmachine/#",function(msg, args) {
+    })
+
+    cotonic.broker.subscribe("bridge/origin/$SYS/db/#",function(msg, args) {
+    })
+
+    cotonic.broker.subscribe("bridge/origin/$SYS/erlang/#", function(msg, args) {
         var item = $("#" + msg.topic.replace(/\//g, "-"));
         if (item.length > 0) {
             item.html(item.data('render')(msg.payload));

@@ -24,7 +24,12 @@
 -export([init/0, init_site/1]).
 
 %% Act as a webmachine logger
--export([log_access/1]).
+-export([
+    log_access/1,
+        
+    record_event/3,
+    record_duration/4
+]).
 
 
 %% @doc Initialize the statistics collection machinery.
@@ -37,11 +42,12 @@ init() ->
 
 % @doc Setup stats for each site.
 init_site(Host) ->
-    exometer:re_register([zotonic, Host, depcache, evictions], spiral, []),
+    Context = z_context:new(Host),
 
-    %% Database metrics
-    exometer:re_register([zotonic, Host, db, requests], counter, []),
-    exometer:re_register([zotonic, Host, db, duration], histogram, []),
+    % Keep track of the size of the depcache
+    ok = exometer:new([site, Host, depcache, size],
+                      {function, z_depcache, size, [Context], value, []}),
+
 
     %% Session metrics
     %% [TODO] add mqtt sessions
@@ -50,20 +56,34 @@ init_site(Host) ->
 
     ok.
 
+% @doc Count a event
+record_event(System, What, #context{}=Context) ->
+    record_event(System, What, z_context:site(Context));
+record_event(System, What, Site) when is_atom(Site) ->
+    ok = exometer:update_or_create([site, Site, System, What], 1, spiral, []).
+
+% @doc Record a duration
+record_duration(System, What, Duration, #context{}=Context) ->
+    Site = z_context:site(Context),
+    record_duration(System, What, Duration, Site);
+record_duration(System, What, Duration, Site) when is_atom(Site) ->
+    record_event(System, What, Site),
+    ok = exometer:update_or_create([site, Site, System, What, duration], Duration, histogram, []).
+    
 
 %% @doc Collect log data from cowmachine and update cowmachine metrics
 %%
 
 log_access(MetricsData) ->
     try
-        handle_stats(MetricsData)
+        handle_cowmachine_stats(MetricsData)
     after
         z_access_syslog:log_access(MetricsData)
     end.
 
 
 % @private Register the request.
-handle_stats(MetricsData) ->
+handle_cowmachine_stats(MetricsData) ->
     Site = get_site(MetricsData),
     DispatchRule = get_dispatch_rule(MetricsData),
 
@@ -78,9 +98,9 @@ handle_stats(MetricsData) ->
 
     StatusCategory = http_status_category(Reason, Status),
 
-    PathPrefix = [zotonic, Site, cowmachine, DispatchRule, StatusCategory],
+    PathPrefix = [site, Site, cowmachine, DispatchRule],
 
-    ok = exometer:update_or_create(PathPrefix ++ [requests], 1, spiral, []),
+    ok = exometer:update_or_create(PathPrefix ++ [StatusCategory], 1, spiral, []),
 
     if Duration > 0 ->
            ok = exometer:update_or_create(PathPrefix ++ [duration], Duration, histogram, []);
@@ -106,9 +126,6 @@ handle_stats(MetricsData) ->
 %%
 %% Helpers
 %%
-
-all_http_status_categories() ->
-    ['1xx', '2xx', '3xx', '4xx', '5xx', 'xxx'].
 
 % @private return a status category
 http_status_category(switch_protocol, _) -> '1xx';
@@ -164,7 +181,7 @@ setup_system_reporter() ->
 
     ok = exometer_report:subscribe(system_reporter,
                                    {select,
-                                    [{ {[zotonic | '_'], '_', enabled}, [], ['$_'] }]},
+                                    [{ {[site | '_'], '_', enabled}, [], ['$_'] }]},
                                    default,
                                    10000),
     
