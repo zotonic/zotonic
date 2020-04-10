@@ -52,7 +52,11 @@ addsite_check_hostname(Name, Options, Context) ->
         {ok, _} ->
             addsite_check_db(Name, Options, Context);
         {error, nxdomain} ->
-            {error, ?__("The hostname is unknown, check your DNS or /etc/hosts file.", Context)}
+            Error = iolist_to_binary([
+                ?__("The hostname is unknown, check your DNS or /etc/hosts file", Context),
+                ": ", Host
+            ]),
+            {error, Error}
     end.
 
 % Check if we can connect to the database
