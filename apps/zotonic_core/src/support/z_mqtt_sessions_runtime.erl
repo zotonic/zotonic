@@ -248,7 +248,34 @@ reauth(#{ type := _auth }, _Context) ->
 
 -spec is_allowed( publish | subscribe, mqtt_sessions_runtime:topic(), mqtt_packet_map:mqtt_packet(), z:context()) -> boolean().
 is_allowed(Action, Topic, Packet, Context) when Action =:= subscribe; Action =:= publish ->
-    z_acl:is_admin(Context) orelse is_allowed_acl(Action, Topic, Packet, Context).
+    is_allowed(z_acl:is_admin(Context), Action, Topic, Packet, Context).
+
+is_allowed(true, publish, _Topic, _Packet, _Context) -> true;
+is_allowed(true, subscribe, Topic, _Packet, Context) ->
+    is_allowed_admin_subscribe(Topic, Context);
+is_allowed(false, Action, Topic, Packet, Context) ->
+    is_allowed_acl(Action, Topic, Packet, Context).
+
+% Check if it is allowed for the admin to subscribe to a topic.
+is_allowed_admin_subscribe([<<"$SYS">>, <<"site">>, Site | _], Context) ->
+    case z_context:site(Context) of
+        zotonic_status_site ->
+            % admin of the status site is allowed to subscribe to sys
+            % topics of all sites.
+            true;
+        Host ->
+            % A normal site admin is allowed to subscribe to site specific
+            % sys topics.
+            Site =:= z_convert:to_binary(Host)
+    end;
+is_allowed_admin_subscribe([<<"$SYS">>, <<"erlang">> | _], _Context) ->
+    % and to zotonic node wide erlang topics
+    true;
+is_allowed_admin_subscribe([<<"$SYS">> | _], _Context) ->
+    % other sys topics are disallowed
+    false;
+is_allowed_admin_subscribe(_, _Context) ->
+    true.
 
 is_allowed_acl(_Action, [ '#' ], _Packet, _Context) ->
     false;
@@ -263,6 +290,7 @@ is_allowed_acl(Action, Topic, Packet, Context) ->
         false -> false;
         undefined -> is_allowed(Action, Topic, Context)
     end.
+
 
 is_allowed(_Action,   [ <<"test">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"public">> | _ ], _Context) -> true;
