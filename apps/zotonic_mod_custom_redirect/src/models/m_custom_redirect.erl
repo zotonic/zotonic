@@ -42,7 +42,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ list | Rest ], _Msg, Context) ->
+m_get([ <<"list">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {list(Context), Rest}};
         false -> {error, eacces}

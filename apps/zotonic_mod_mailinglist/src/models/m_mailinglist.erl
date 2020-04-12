@@ -63,34 +63,34 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ stats, MailingId | Rest ], _Msg, Context) ->
+m_get([ <<"stats">>, MailingId | Rest ], _Msg, Context) ->
     case z_acl:rsc_editable(MailingId, Context) of
         true -> {ok, {get_stats(MailingId, Context), Rest}};
         false -> {ok, {{undefined, undefined}, Rest}}
     end;
-m_get([ rsc_stats, RscId | Rest ], _Msg, Context) ->
+m_get([ <<"rsc_stats">>, RscId | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
         true -> {ok, {get_rsc_stats(RscId, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ recipient, RecipientId | Rest ], _Msg, Context) ->
+m_get([ <<"recipient">>, RecipientId | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
         true -> {ok, {recipient_get(RecipientId, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ scheduled, RscId | Rest ], _Msg, Context) ->
+m_get([ <<"scheduled">>, RscId | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(RscId, Context) of
         true -> {ok, {get_scheduled(RscId, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ confirm_key, ConfirmKey | Rest ], _Msg, Context) ->
+m_get([ <<"confirm_key">>, ConfirmKey | Rest ], _Msg, Context) ->
     {ok, {get_confirm_key(ConfirmKey, Context), Rest}};
-m_get([ subscription, ListId, Email | Rest ], _Msg, Context) ->
+m_get([ <<"subscription">>, ListId, Email | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
         true -> {ok, {recipient_get(ListId, Email, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ bounce_reason, Email | Rest ], _Msg, Context) ->
+m_get([ <<"bounce_reason">>, Email | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
         true -> {ok, {bounce_reason(Email, Context), Rest}};
         false -> {error, eacces}

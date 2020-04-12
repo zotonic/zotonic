@@ -76,32 +76,32 @@
 
 %% @doc Fetch all object/edge ids for a subject/predicate
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ o, Id, Pred | Rest ], _Msg, Context) ->
+m_get([ <<"o">>, Id, Pred | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true -> {ok, {object_edge_ids(Id, Pred, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ o_props, Id, Pred | Rest ], _Msg, Context) ->
+m_get([ <<"o_props">>, Id, Pred | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true -> {ok, {object_edge_props(Id, Pred, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ s, Id, Pred | Rest ], _Msg, Context) ->
+m_get([ <<"s">>, Id, Pred | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true -> {ok, {subject_edge_ids(Id, Pred, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ s_props, Id, Pred | Rest ], _Msg, Context) ->
+m_get([ <<"s_props">>, Id, Pred | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true -> {ok, {subject_edge_props(Id, Pred, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ edges, Id | Rest ], _Msg, Context) ->
+m_get([ <<"edges">>, Id | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true -> {ok, {get_edges(Id, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ id, SubjectId, Pred, ObjectId | Rest ], _Msg, Context) ->
+m_get([ <<"id">>, SubjectId, Pred, ObjectId | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(SubjectId, Context) of
         true ->
             % m.edge.id[subject_id].predicatename[object_id] returns the

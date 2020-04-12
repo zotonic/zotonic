@@ -36,7 +36,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ list, Id | Rest ], _Msg, Context) ->
+m_get([ <<"list">>, Id | Rest ], _Msg, Context) ->
     Id1 = m_rsc:rid(Id, Context),
     Revs = case m_rsc:is_editable(Id1, Context) of
         true -> list_revisions_assoc(Id1, Context);

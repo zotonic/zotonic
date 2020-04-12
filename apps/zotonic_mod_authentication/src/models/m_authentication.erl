@@ -42,19 +42,19 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ authenticate, password | Rest ], #{ payload := Payload }, Context) when is_map(Payload) ->
+m_get([ <<"authenticate">>, <<"password">> | Rest ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case auth_tokens(Payload, Context) of
         {ok, Tk} -> {ok, {Tk, Rest}};
         {error, _} = Error -> Error
     end;
-m_get([ password_min_length | Rest ], _Msg, Context) ->
+m_get([ <<"password_min_length">> | Rest ], _Msg, Context) ->
     Len = case m_config:get_value(mod_authenticaton, password_min_length, Context) of
         undefined -> 6;
         <<>> -> 6;
         N -> z_convert:to_integer(N)
     end,
     {ok, {Len, Rest}};
-m_get([ is_supported, rememberme | Rest ], _Msg, Context) ->
+m_get([ <<"is_supported">>, <<"rememberme">> | Rest ], _Msg, Context) ->
     IsSupported = z_db:has_connection(Context),
     {ok, {IsSupported, Rest}};
 m_get(Vs, _Msg, _Context) ->

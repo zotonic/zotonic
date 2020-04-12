@@ -31,7 +31,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ list, Id | Rest ], _Msg, Context) ->
+m_get([ <<"list">>, Id | Rest ], _Msg, Context) ->
     RscId = m_rsc:rid(Id, Context),
     List = lists:sort( z_notifier:foldr(#admin_edit_blocks{ id = RscId }, [], Context) ),
     {ok, {List, Rest}};

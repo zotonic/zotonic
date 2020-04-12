@@ -41,22 +41,25 @@
 
 -define(TOKEN_PREFIX, "oauth2-").
 
-m_get([ user_groups | Rest ], _Msg, Context) ->
+m_get([ <<"user_groups">> | Rest ], _Msg, Context) ->
     {ok, {user_groups(Context), Rest}};
-m_get([ tokens, list ], Msg, Context) ->
-    m_get([ tokens, list, me ], Msg, Context);
+m_get([ <<"tokens">>, <<"list">> ], Msg, Context) ->
+    m_get([ <<"tokens">>, <<"list">>, <<"me">> ], Msg, Context);
 m_get([ tokens, list, me | Rest ], _Msg, Context) ->
     case list_tokens(z_acl:user(Context), Context) of
         {ok, List} -> {ok, {List, Rest}};
         {error, _} = Error -> Error
     end;
-m_get([ tokens, list, UserId | Rest ], _Msg, Context) ->
+m_get([ <<"tokens">>, <<"list">>, UserId | Rest ], _Msg, Context) ->
     case list_tokens(m_rsc:rid(UserId, Context), Context) of
         {ok, List} -> {ok, {List, Rest}};
         {error, _} = Error -> Error
     end;
-m_get([ tokens, TokenId | Rest ], _Msg, Context) ->
-    {ok, {get_token(TokenId, Context), Rest}}.
+m_get([ <<"tokens">>, TokenId | Rest ], _Msg, Context) ->
+    {ok, {get_token(TokenId, Context), Rest}};
+m_get(Vs, _Msg, _Context) ->
+    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {error, unknown_path}.
 
 
 -spec user_groups( z:context() ) -> {ok, [ m_rsc:resource_id() ]}.

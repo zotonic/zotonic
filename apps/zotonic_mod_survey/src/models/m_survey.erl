@@ -61,7 +61,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ results, Id | Rest ], _Msg, Context) ->
+m_get([ <<"results">>, Id | Rest ], _Msg, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
             {error, enoent};
@@ -75,7 +75,7 @@ m_get([ results, Id | Rest ], _Msg, Context) ->
                     {error, eacces}
             end
     end;
-m_get([ all_results, [Id, SortColumn] | Rest ], _Msg, Context) ->
+m_get([ <<"all_results">>, [Id, SortColumn] | Rest ], _Msg, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
             {error, enoent};
@@ -87,7 +87,7 @@ m_get([ all_results, [Id, SortColumn] | Rest ], _Msg, Context) ->
                     {error, eacces}
             end
     end;
-m_get([ all_results, Id | Rest ], _Msg, Context) ->
+m_get([ <<"all_results">>, Id | Rest ], _Msg, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
             {error, enoent};
@@ -99,7 +99,7 @@ m_get([ all_results, Id | Rest ], _Msg, Context) ->
                     {error, eacces}
             end
     end;
-m_get([ list_results, Id | Rest ], _Msg, Context) ->
+m_get([ <<"list_results">>, Id | Rest ], _Msg, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
             {error, enoent};
@@ -111,7 +111,7 @@ m_get([ list_results, Id | Rest ], _Msg, Context) ->
                     {error, eacces}
             end
     end;
-m_get([ get_result, SurveyId, AnswerId | Rest ], _Msg, Context) ->
+m_get([ <<"get_result">>, SurveyId, AnswerId | Rest ], _Msg, Context) ->
     case m_rsc:rid(SurveyId, Context) of
         undefined ->
             {error, enoent};
@@ -129,14 +129,14 @@ m_get([ get_result, SurveyId, AnswerId | Rest ], _Msg, Context) ->
                     end
             end
     end;
-m_get([ captions, SurveyId | Rest ], _Msg, Context) ->
+m_get([ <<"captions">>, SurveyId | Rest ], _Msg, Context) ->
     case m_rsc:rid(SurveyId, Context) of
         undefined ->
             {error, enoent};
         RId ->
             {ok, {survey_captions(RId, Context), Rest}}
     end;
-m_get([ totals, SurveyId | Rest ], _Msg, Context) ->
+m_get([ <<"totals">>, SurveyId | Rest ], _Msg, Context) ->
     case m_rsc:rid(SurveyId, Context) of
         undefined ->
             {error, enoent};
@@ -148,9 +148,9 @@ m_get([ totals, SurveyId | Rest ], _Msg, Context) ->
                     {error, eacces}
             end
     end;
-m_get([ did_survey, SurveyId | Rest ], _Msg, Context) ->
+m_get([ <<"did_survey">>, SurveyId | Rest ], _Msg, Context) ->
     {ok, {did_survey(m_rsc:rid(SurveyId, Context), Context), Rest}};
-m_get([ did_survey_answers, SurveyId | Rest ], _Msg, Context) ->
+m_get([ <<"did_survey_answers">>, SurveyId | Rest ], _Msg, Context) ->
     {UserId, PersistentId, Context1} = case z_acl:user(Context) of
                                 undefined ->
                                     {DId, C1} = persistent_id(Context),
@@ -172,7 +172,7 @@ m_get([ did_survey_answers, SurveyId | Rest ], _Msg, Context) ->
                 Answers)
     end,
     {ok, {As, Rest}};
-m_get([ did_survey_results, SurveyId | Rest ], _Msg, Context) ->
+m_get([ <<"did_survey_results">>, SurveyId | Rest ], _Msg, Context) ->
     {UserId, PersistentId, Context1} = case z_acl:user(Context) of
                                 undefined ->
                                     {DId, C1} = persistent_id(Context),
@@ -181,7 +181,7 @@ m_get([ did_survey_results, SurveyId | Rest ], _Msg, Context) ->
                                     {UId, undefined, Context}
                             end,
     {ok, {m_survey:single_result(SurveyId, UserId, PersistentId, Context1), Rest}};
-m_get([ did_survey_results_readable, SurveyId | Rest ], _Msg, Context) ->
+m_get([ <<"did_survey_results_readable">>, SurveyId | Rest ], _Msg, Context) ->
     {UserId, PersistentId, Context1} = case z_acl:user(Context) of
                                 undefined ->
                                     {DId, C1} = persistent_id(Context),
@@ -192,9 +192,9 @@ m_get([ did_survey_results_readable, SurveyId | Rest ], _Msg, Context) ->
     RId = m_rsc:rid(SurveyId, Context1),
     SurveyAnswer = m_survey:single_result(RId, UserId, PersistentId, Context1),
     {ok, {survey_answer_prep:readable_stored_result(RId, SurveyAnswer, Context), Rest}};
-m_get([ is_allowed_results_download, SurveyId | Rest ], _Msg, Context) ->
+m_get([ <<"is_allowed_results_download">>, SurveyId | Rest ], _Msg, Context) ->
     {ok, {is_allowed_results_download(m_rsc:rid(SurveyId, Context), Context), Rest}};
-m_get([ handlers | Rest ], _Msg, Context) ->
+m_get([ <<"handlers">> | Rest ], _Msg, Context) ->
     {ok, {get_handlers(Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),

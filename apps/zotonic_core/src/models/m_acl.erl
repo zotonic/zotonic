@@ -28,39 +28,39 @@
 
 -include_lib("zotonic.hrl").
 
--define(is_action(A), A =:= use orelse A =:= admin orelse A =:= view
-    orelse A =:= delete orelse A =:= update orelse A =:= insert
-    orelse A =:= link).
+-define(is_action(A), A =:= <<"use">> orelse A =:= <<"admin">> orelse A =:= <<"view">>
+    orelse A =:= <<"delete">> orelse A =:= <<"update">> orelse A =:= <<"insert">>
+    orelse A =:= <<"link">>).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ user | Rest ], _Msg, Context) -> {ok, {z_acl:user(Context), Rest}};
-m_get([ is_admin | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin(Context), Rest}};
-m_get([ is_read_only | Rest ], _Msg, Context) -> {ok, {z_acl:is_read_only(Context), Rest}};
+m_get([ <<"user">> | Rest ], _Msg, Context) -> {ok, {z_acl:user(Context), Rest}};
+m_get([ <<"is_admin">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin(Context), Rest}};
+m_get([ <<"is_read_only">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_read_only(Context), Rest}};
 
 % Check if current user is allowed to perform an action on some object
 m_get([ Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
     {ok, {is_allowed_to_atom(Action, Object, Context), Rest}};
 m_get([ Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
     {ok, {z_acl:is_allowed(Action, Object, Context), Rest}};
-m_get([ is_allowed, Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
+m_get([ <<"is_allowed">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
     {ok, {is_allowed_to_atom(Action, Object, Context), Rest}};
-m_get([ is_allowed, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
+m_get([ <<"is_allowed">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
     {ok, {z_acl:is_allowed(Action, Object, Context), Rest}};
 
 
 % Check if an authenticated (default acl setttings) is allowed to perform an action on some object
-m_get([ authenticated, Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
+m_get([ <<"authenticated">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
     {ok, {is_allowed_authenticated_to_atom(Action, Object, Context), Rest}};
-m_get([ authenticated, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
+m_get([ <<"authenticated">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
     Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
                     undefined -> Context;
                     Ctx -> Ctx
                end,
     {ok, {z_acl:is_allowed(Action, Object, Context1), Rest}};
 
-m_get([ authenticated, is_allowed, Action, Object | Rest ], _Msg, Context)  when ?is_action(Action), is_binary(Object) ->
+m_get([ <<"authenticated">>, <<"is_allowed">>, Action, Object | Rest ], _Msg, Context)  when ?is_action(Action), is_binary(Object) ->
     {ok, {is_allowed_authenticated_to_atom(Action, Object, Context), Rest}};
-m_get([ authenticated, is_allowed, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
+m_get([ <<"authenticated">>, <<"is_allowed">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
     Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
                     undefined -> Context;
                     Ctx -> Ctx
@@ -76,20 +76,22 @@ m_get(Vs, _Msg, _Context) ->
 
 is_allowed_to_atom(Action, Object, Context) ->
     try
+        ActionAtom = erlang:binary_to_existing_atom(Action, utf8),
         ObjectAtom = erlang:binary_to_existing_atom(Object, utf8),
-        z_acl:is_allowed(Action, ObjectAtom, Context)
+        z_acl:is_allowed(ActionAtom, ObjectAtom, Context)
     catch
         error:badarg -> false
     end.
 
 is_allowed_authenticated_to_atom(Action, Object, Context) ->
     try
+        ActionAtom = erlang:binary_to_existing_atom(Action, utf8),
         ObjectAtom = erlang:binary_to_existing_atom(Object, utf8),
         Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
                         undefined -> Context;
                         Ctx -> Ctx
                    end,
-        z_acl:is_allowed(Action, ObjectAtom, Context1)
+        z_acl:is_allowed(ActionAtom, ObjectAtom, Context1)
     catch
         error:badarg -> false
     end.

@@ -49,15 +49,15 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([], _Msg, Context) ->
     {ok, {all(Context), []}};
-m_get([ all | Rest ], _Msg, Context) ->
+m_get([ <<"all">> | Rest ], _Msg, Context) ->
     {ok, {all(Context), Rest}};
-m_get([ is_used, Pred | Rest ], _Msg, Context) ->
+m_get([ <<"is_used">>, Pred | Rest ], _Msg, Context) ->
     {ok, {is_used(Pred, Context), Rest}};
-m_get([ object_category, Key | Rest ], _Msg, Context) ->
+m_get([ <<"object_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {object_category(Key, Context), Rest}};
-m_get([ subject_category, Key | Rest ], _Msg, Context) ->
+m_get([ <<"subject_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {subject_category(Key, Context), Rest}};
-m_get([ is_valid_object_category, Predicate, Category | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_object_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = object_category(Predicate, Context),
     IsValid = case lists:member({CatId}, ValidCats) of
@@ -75,7 +75,7 @@ m_get([ is_valid_object_category, Predicate, Category | Rest ], _Msg, Context) -
                 IsA)
     end,
     {ok, {IsValid, Rest}};
-m_get([ is_valid_subject_category, Predicate, Category | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_subject_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = subject_category(Predicate, Context),
     IsValid = case lists:member({CatId}, ValidCats) of

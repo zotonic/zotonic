@@ -42,7 +42,7 @@
 -define(TOTP_IDENTITY_TYPE, auth2fa_totp).
 -define(TOTP_IDENTITY_REQUEST_KEY, auth2fa_request_key).
 
-m_get([ totp_image_url, RequestKey | Rest ], _Msg, Context) ->
+m_get([ <<"totp_image_url">>, RequestKey | Rest ], _Msg, Context) ->
     case request_key(Context) of
         undefined ->
             {ok, {<<>>, Rest}};
@@ -50,7 +50,7 @@ m_get([ totp_image_url, RequestKey | Rest ], _Msg, Context) ->
             reset_request_key(Context),
             {ok, {totp_image_url(z_acl:user(Context), Context), Rest}}
     end;
-m_get([ User, is_totp_enabled | Rest ], _Msg, Context) ->
+m_get([ User, <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
     UserId = m_rsc:rid(User, Context),
     IsEnabled = case z_acl:is_allowed(use, mod_admin_identity, Context)
         orelse UserId =:= z_acl:user(Context)
@@ -59,20 +59,20 @@ m_get([ User, is_totp_enabled | Rest ], _Msg, Context) ->
         false -> undefined
     end,
     {ok, {IsEnabled, Rest}};
-m_get([ is_totp_enabled | Rest ], _Msg, Context) ->
+m_get([ <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
     IsEnabled  = case z_acl:user(Context) of
         undefined -> false;
         UserId -> is_totp_enabled(UserId, Context)
     end,
     {ok, {IsEnabled, Rest}};
-m_get([ is_totp_requested, RequestKey | Rest ], _Msg, Context) ->
+m_get([ <<"is_totp_requested">>, RequestKey | Rest ], _Msg, Context) ->
     IsRequested = case request_key(Context) of
         undefined -> false;
         RequestKey -> true;
         _ -> false
     end,
     {ok, {IsRequested, Rest}};
-m_get([ user_mode | Rest ], _Msg, Context) ->
+m_get([ <<"user_mode">> | Rest ], _Msg, Context) ->
     {ok, {user_mode(Context), Rest}};
 m_get(_Path, _Msg, _Context) ->
     {error, unknown_path}.

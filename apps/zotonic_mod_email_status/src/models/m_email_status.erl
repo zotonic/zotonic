@@ -47,7 +47,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ is_valid, Email | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid">>, Email | Rest ], _Msg, Context) ->
     {ok, {is_valid(Email, Context), Rest}};
 m_get([ Email | Rest ], _Msg, Context) ->
     case is_allowed(Email, Context) of

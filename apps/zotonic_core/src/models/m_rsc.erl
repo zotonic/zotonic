@@ -86,7 +86,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ Id, is_cat, Key | Rest ], _Msg, Context) ->
+m_get([ Id, <<"is_cat">>, Key | Rest ], _Msg, Context) ->
     {ok, {is_cat(Id, Key, Context), Rest}};
 m_get([ Id, Key | Rest ], _Msg, Context) ->
     {ok, {p(Id, Key, Context), Rest}};

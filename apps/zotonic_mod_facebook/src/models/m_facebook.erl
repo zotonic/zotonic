@@ -36,27 +36,27 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ useauth | Rest ], _OptMsg, Context) ->
+m_get([ <<"useauth">> | Rest ], _OptMsg, Context) ->
     {ok, {is_useauth(Context), Rest}};
-m_get([ picture, Key | Rest ], _OptMsg, Context) ->
+m_get([ <<"picture">>, Key | Rest ], _OptMsg, Context) ->
     {ok, P} = do_graph_call(get, Key, undefined, [{fields, "picture"}], Context),
     {ok, {maps:get(picture, P, undefined), Rest}};
 m_get([ CT, Key | Rest ], _OptMsg, Context)
-  when CT =:= friends;
-       CT =:= home;
-       CT =:= feed;
-       CT =:= likes;
-       CT =:= movies;
-       CT =:= music;
-       CT =:= books;
-       CT =:= notes;
-       CT =:= permissions;
-       CT =:= photos;
-       CT =:= albums;
-       CT =:= videos;
-       CT =:= events;
-       CT =:= groups;
-       CT =:= checkins ->
+  when CT =:= <<"friends">>;
+       CT =:= <<"home">>;
+       CT =:= <<"feed">>;
+       CT =:= <<"likes">>;
+       CT =:= <<"movies">>;
+       CT =:= <<"music">>;
+       CT =:= <<"books">>;
+       CT =:= <<"notes">>;
+       CT =:= <<"permissions">>;
+       CT =:= <<"photos">>;
+       CT =:= <<"albums">>;
+       CT =:= <<"videos">>;
+       CT =:= <<"events">>;
+       CT =:= <<"groups">>;
+       CT =:= <<"checkins">> ->
     {ok, {do_graph_call(get, Key, CT, [], Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),

@@ -37,7 +37,7 @@
 
 m_get([ Index | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {ok, {get(Index, Context), Rest}};
+        true -> {ok, {get(z_convert:to_integer(Index), Context), Rest}};
         false -> {error, eacces}
     end;
 m_get(Vs, _Msg, _Context) ->

@@ -47,53 +47,61 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--define(valid_acl_kind(T), ((T) =:= rsc orelse (T) =:= module orelse (T) =:= collab)).
--define(valid_acl_state(T), ((T) =:= edit orelse (T) =:= publish)).
+-define(valid_acl_kind(T), ((T) =:= <<"rsc">> orelse (T) =:= <<"module">> orelse (T) =:= <<"collab">>)).
+-define(valid_acl_state(T), ((T) =:= <<"edit">> orelse (T) =:= <<"publish">>)).
 
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ is_valid_code, Code | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_code">>, Code | Rest ], _Msg, Context) ->
     {ok, {is_valid_code(Code, Context), Rest}};
-m_get([ generate_code | Rest ], _Msg, Context) ->
+m_get([ <<"generate_code">> | Rest ], _Msg, Context) ->
     {ok, {generate_code(Context), Rest}};
 
-m_get([ default_upload_size | Rest ], _Msg, _Context) ->
+m_get([ <<"default_upload_size">> | Rest ], _Msg, _Context) ->
     {ok, {acl_user_groups_checks:max_upload_size_default(), Rest}};
-m_get([ default_mime_allowed | Rest ], _Msg, Context) ->
+m_get([ <<"default_mime_allowed">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_group_mime_check:mime_allowed_default(Context), Rest}};
-m_get([ upload_size | Rest ], _Msg, Context) ->
+m_get([ <<"upload_size">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:max_upload_size(Context), Rest}};
 
-m_get([ can_insert, none, CategoryId | Rest ], _Msg, Context) ->
+m_get([ <<"can_insert">>, <<"none">>, CategoryId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_insert_category(CategoryId, Context), Rest}};
-m_get([ can_insert, acl_collaboration_group, CategoryId | Rest ], _Msg, Context) ->
+m_get([ <<"can_insert">>, <<"acl_collaboration_group">>, CategoryId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_insert_category_collab(CategoryId, Context), Rest}};
-m_get([ can_insert, ContentGroupId, CategoryId | Rest ], _Msg, Context) ->
+m_get([ <<"can_insert">>, ContentGroupId, CategoryId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_insert_category(ContentGroupId, CategoryId, Context), Rest}};
 
-m_get([ can_move, ContentGroupId, RscId | Rest ], _Msg, Context) ->
+m_get([ <<"can_move">>, ContentGroupId, RscId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_move(ContentGroupId, RscId, Context), Rest}};
 
-m_get([ acl_user_groups_state | Rest ], _Msg, Context) ->
+m_get([ <<"acl_user_groups_state">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:session_state(Context), Rest}};
 
-m_get([ T, actions | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
+m_get([ T, <<"actions">> | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
     {ok, {actions(T, Context), Rest}};
 m_get([ T, S, {all, Opts} | Rest ], _Msg, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    {ok, {all_rules(T, S, Opts, Context), Rest}};
+    {ok, {all_rules(to_atom(T), to_atom(S), Opts, Context), Rest}};
 m_get([ T, S | Rest ], _Msg, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    {ok, {all_rules(T, S, [], Context), Rest}};
-m_get([ T, Id | Rest ], _Msg, Context) when ?valid_acl_kind(T), is_integer(Id) ->
-    {ok, Props} = get(T, Id, Context),
-    {ok, {Props, Rest}};
-m_get([ T, undefined | Rest ], _Msg, _Context) when ?valid_acl_kind(T) ->
+    {ok, {all_rules(to_atom(T), to_atom(S), [], Context), Rest}};
+m_get([ T, <<"undefined">> | Rest ], _Msg, _Context) when ?valid_acl_kind(T) ->
     {ok, {undefined, Rest}};
+m_get([ T, Id | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
+    try
+        IdInt = z_convert:to_integer(Id),
+        {ok, Props} = get(to_atom(T), IdInt, Context),
+        {ok, {Props, Rest}}
+    catch
+        error:badarg ->
+            {ok, {undefined, Rest}}
+    end;
 
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
+
+to_atom(A) -> erlang:binary_to_existing_atom(A, utf8).
 
 %% @doc Generate a code for testing out the 'test' acl rules
 generate_code(Context) ->
@@ -217,6 +225,8 @@ update(Kind, Id, Props, Context) ->
     mod_acl_user_groups:rebuild(edit, Context),
     Result.
 
+get(_Kind, undefined, _Context) ->
+    {ok, undefined};
 get(Kind, Id, Context) ->
     {ok, Row} = z_db:select(table(Kind), Id, Context),
     {ok, normalize_action(Row)}.

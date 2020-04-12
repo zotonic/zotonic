@@ -37,37 +37,43 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ environment | Rest ], _Msg, Context) ->
+m_get([ <<"environment">> | Rest ], _Msg, Context) ->
     {ok, {environment(Context), Rest}};
-m_get([ hostname | Rest ], _Msg, Context) ->
+m_get([ <<"hostname">> | Rest ], _Msg, Context) ->
     {ok, {z_context:hostname(Context), Rest}};
-m_get([ hostname_port | Rest ], _Msg, Context) ->
+m_get([ <<"hostname_port">> | Rest ], _Msg, Context) ->
     {ok, {z_context:hostname_port(Context), Rest}};
-m_get([ hostname_ssl_port | Rest ], _Msg, Context) ->
+m_get([ <<"hostname_ssl_port">> | Rest ], _Msg, Context) ->
     {ok, {z_context:hostname_ssl_port(Context), Rest}};
-m_get([ hostalias | Rest ], _Msg, Context) ->
+m_get([ <<"hostalias">> | Rest ], _Msg, Context) ->
     {ok, {get(hostalias, Context), Rest}};
-m_get([ protocol | Rest ], _Msg, Context) ->
+m_get([ <<"protocol">> | Rest ], _Msg, Context) ->
     {ok, {z_context:site_protocol(Context), Rest}};
-m_get([ is_ssl | Rest ], _Msg, Context) ->
+m_get([ <<"is_ssl">> | Rest ], _Msg, Context) ->
     {ok, {z_context:is_ssl_site(Context), Rest}};
-m_get([ title | Rest ], _Msg, Context) ->
+m_get([ <<"title">> | Rest ], _Msg, Context) ->
     Title = m_config:get_value(site, title, Context),
     {ok, {Title, Rest}};
-m_get([ subtitle | Rest ], _Msg, Context) ->
+m_get([ <<"subtitle">> | Rest ], _Msg, Context) ->
     SubTitle = m_config:get_value(site, subtitle, Context),
     {ok, {SubTitle, Rest}};
-m_get([ pagelen | Rest ], _Msg, Context) ->
+m_get([ <<"pagelen">> | Rest ], _Msg, Context) ->
     PageLen = case m_config:get_value(site, pagelen, Context) of
         undefined -> ?SEARCH_PAGELEN;
         <<>> -> ?SEARCH_PAGELEN;
         V -> z_convert:to_integer(V)
     end,
     {ok, {PageLen, Rest}};
-m_get([ Key | Rest ], _Msg, Context) when is_atom(Key) ->
-    case z_acl:is_admin(Context) of
-        true -> {ok, {get(Key, Context), Rest}};
-        false -> {ok, {undefined, []}}
+m_get([ Key | Rest ], _Msg, Context) when is_binary(Key) ->
+    try
+        KeyAtom = erlang:binary_to_existing_atom(Key, utf8),
+        case z_acl:is_admin(Context) of
+            true -> {ok, {get(KeyAtom, Context), Rest}};
+            false -> {ok, {undefined, []}}
+        end
+    catch
+        error:badarg ->
+            {ok, {undefined, []}}
     end;
 m_get([], _Msg, Context) ->
     case z_acl:is_admin(Context) of

@@ -34,14 +34,14 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ vcs_site, Site | Rest ], _Msg, Context) when is_atom(Site) ->
+m_get([ <<"vcs_site">>, Site | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             {ok, {vcs_site(Site), Rest}};
         false ->
             {error, eacces}
     end;
-m_get([ vcs_zotonic | Rest ], _Msg, Context) ->
+m_get([ <<"vcs_zotonic">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             {ok, {vcs_zotonic(), Rest}};
@@ -58,14 +58,22 @@ vcs_zotonic() ->
     vcs_dir( z_utils:lib_dir() ).
 
 % @doc Check if the site directory has a mercurial .hg subdirectory
--spec vcs_site( atom() | z:context() ) -> vcs() | false.
+-spec vcs_site( atom() | binary() | z:context() ) -> vcs() | false.
+vcs_site(Site) when is_binary(Site) ->
+    try
+        SiteAtom = erlang:binary_to_existing_atom(Site, utf8),
+        vcs_site(SiteAtom)
+    catch
+        error:badarg ->
+            false
+    end;
 vcs_site(Site) ->
     case z_path:site_dir(Site) of
         {error, bad_name} -> false;
         Path -> vcs_dir(Path)
     end.
 
--spec vcs_dir( file:filename() ) -> vcs() | false.
+-spec vcs_dir( file:filename_all() ) -> vcs() | false.
 vcs_dir(Dir) ->
     VCSs = [
         {".git", {git, Dir}},
