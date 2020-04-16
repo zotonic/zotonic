@@ -366,7 +366,7 @@ model_pgsql() ->
     "CREATE INDEX fki_identity_rsc_id ON identity (rsc_id)",
     "CREATE INDEX identity_visited_key ON identity (visited)",
     "CREATE INDEX identity_created_key ON identity (created)",
-    "CREATE UNIQUE identity_type_key_unique ON identity (type, key) WHERE (is_unique)",
+    "CREATE UNIQUE INDEX identity_type_key_unique ON identity (type, key) WHERE (is_unique)",
     "CREATE INDEX identity_type_key_key ON identity using btree (type, key collate ucs_basic text_pattern_ops)",
 
     % Email send queue and log

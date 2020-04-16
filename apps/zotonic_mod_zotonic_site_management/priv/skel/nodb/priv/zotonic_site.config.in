@@ -20,11 +20,11 @@
     %% Installed modules, defined here as there is no database connection
     {modules, [
         %%SITE%%,
+        mod_cron,
         mod_mqtt,
         mod_wires,
         mod_bootstrap,
         mod_base,
-        mod_cron,
         mod_zotonic_status_vcs
     ]},
 
