@@ -443,9 +443,8 @@ msgstr ""
 
 #: modules/mod_authentication/templates/_logon_reminder_form_fields.tpl:21
 #: modules/mod_authentication/templates/_logon_reminder_admin_form_fields.tpl:20
-#, fuzzy
 msgid "Send"
-msgstr "Enviar y borrar mensaje"
+msgstr "Enviar"
 
 #: modules/mod_authentication/templates/_logon_stage.tpl:34
 msgid "Send Verification Message"
