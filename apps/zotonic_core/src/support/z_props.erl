@@ -25,8 +25,12 @@
 -export([
     from_props/1,
 
+    from_list/1,
     from_qs/1,
     from_qs/2,
+
+    extract_languages/1,
+    prune_languages/2,
 
     test/0
     ]).
@@ -92,14 +96,39 @@ from_prop_value(K, [ C | _ ] = V) when is_integer(C), C >= 0, C =< 255 ->
     % Might be string with UTF8 encoded characters.
     % Usual in Zotonic 0.x code.
     try
-        V1 = list_to_binary(V),
+        V1 = iolist_to_binary(V),
         {K, V1}
     catch
         error:badarg ->
             {K, V}
     end;
+from_prop_value(K, #trans{ tr = Tr }) ->
+    Tr1 = lists:filtermap(
+        fun
+            ({Iso, Text}) when is_atom(Iso), is_binary(Text) ->
+                {true, {Iso, Text}};
+            ({Iso, Text}) ->
+                case z_language:to_language_atom(Iso) of
+                    {ok, Code} ->
+                        {true, {Code, z_convert:to_binary(Text)}};
+                    _ ->
+                        false
+                end
+        end,
+        Tr),
+    {K, #trans{ tr = Tr1 }};
 from_prop_value(K, V) ->
     {K, V}.
+
+
+%% @doc Convert a list for rsc insert and/or update to a map.
+%%      The list could be a list of (binary) query args, or
+%%      a property list with atom keys.
+-spec from_list( list() ) -> {ok, #{ binary() => term() }}.
+from_list([ {K, _} | _ ] = L) when is_atom(K) ->
+    {ok, from_props(L)};
+from_list([ {K, _} | _ ] = L) when is_binary(K) ->
+    from_qs(L).
 
 
 %% @doc Combine properties from a form. The form consists of a flat list
@@ -604,7 +633,54 @@ to_int(A) ->
 
 
 
+%% @doc Find all different language codes in the maps.
+-spec extract_languages( map() ) -> [ atom() ].
+extract_languages( Props ) when is_map(Props) ->
+    Langs = maps:fold(fun extract_languages_1/3, #{}, Props),
+    lists:sort( maps:keys(Langs) ).
 
+extract_languages_1(_, V, Langs) when is_map(V) ->
+    maps:fold(fun extract_languages_1/3, Langs, V);
+extract_languages_1(_, V, Langs) when is_list(V) ->
+    lists:foldl(
+        fun(X, Acc) ->
+            extract_languages_1(k, X, Acc)
+        end,
+        Langs,
+        V);
+extract_languages_1(_, #trans{ tr = Tr }, Langs) ->
+    lists:foldl(
+        fun
+            ({Iso, _Trans}, Acc) ->
+                case maps:is_key(Iso, Acc) of
+                    false -> Acc#{ Iso => true };
+                    true -> Acc
+                end
+        end,
+        Langs,
+        Tr);
+extract_languages_1(_, _, Langs) ->
+    Langs.
+
+
+%% @doc Check all trans records, remove languages not mentioned.
+-spec prune_languages(map(), list(atom())) -> map().
+prune_languages(Props, Langs) ->
+    prune_languages_1(Props, Langs).
+
+prune_languages_1(M, Langs) when is_map(M) ->
+    maps:map(
+        fun(_K, V) -> prune_languages(V, Langs) end,
+        M);
+prune_languages_1(L, Langs) when is_list(L) ->
+    lists:map(fun(E) -> prune_languages_1(E, Langs) end, L);
+prune_languages_1(#trans{ tr = Tr }, Langs) ->
+    Tr1 = lists:filter(
+        fun({Iso, _}) -> lists:member(Iso, Langs) end,
+        Tr),
+    #trans{ tr = Tr1 };
+prune_languages_1(V, _Langs) ->
+    V.
 
 
 
@@ -683,14 +759,56 @@ test() ->
             ]),
     %%
     %%
-    {ok, #{ <<"a">> := 1 }}           = z_props:from_props([ {a, 1} ]),
-    {ok, #{ <<"a">> := <<"hello">> }} = z_props:from_props([ {a, "hello"} ]),
-    {ok, #{ <<"a">> := [ 1, 256 ] }}  = z_props:from_props([ {a, [ 1, 256 ]} ]),
-    {ok, #{ <<"a">> := true }}        = z_props:from_props([ a ]),
+    #{ <<"a">> := 1 }           = z_props:from_props([ {a, 1} ]),
+    #{ <<"a">> := <<"hello">> } = z_props:from_props([ {a, "hello"} ]),
+    #{ <<"a">> := [ 1, 256 ] }  = z_props:from_props([ {a, [ 1, 256 ]} ]),
+    #{ <<"a">> := true }        = z_props:from_props([ a ]),
     %%
-    {ok, #{
+    #{
         <<"a">> := [
             #{ <<"b">> := true },
             #{ <<"c">> := false }
-        ] }} = z_props:from_props([ {a, [ [{b, true}], [{c, false }] ]} ]),
+        ] } = z_props:from_props([ {a, [ [{b, true}], [{c, false }] ]} ]),
+    %%
+    %%
+    [] = extract_languages( #{ <<"a">> => <<>> }),
+    [ en ] = extract_languages( #{ <<"a">> => #trans{ tr = [ {en, <<>>} ] } }),
+    [ en, nl ] = extract_languages(
+            #{ <<"a">> => [
+                    #trans{ tr = [ {en, <<>>} ] },
+                    #{
+                        <<"a">> => #trans{ tr = [ {nl, <<>>}, {en, <<>>} ] }
+                    }
+                ]
+            }),
+    #{ <<"a">> := #trans{ tr = [] } } = prune_languages( #{ <<"a">> => #trans{ tr = [ {en, <<>>} ] } }, [ nl] ),
+    #{ <<"a">> := #trans{ tr = [ {en, <<>>} ] } } = prune_languages( #{ <<"a">> => #trans{ tr = [ {en, <<>>} ] } }, [ en, nl ] ),
+    #{ <<"a">> := [
+            #trans{ tr = [ {en, <<>>} ] },
+            #{
+                <<"a">> := #trans{ tr = [ {nl, <<>>}, {en, <<>>} ] }
+            }
+        ]
+    } = prune_languages(
+            #{ <<"a">> => [
+                    #trans{ tr = [ {en, <<>>} ] },
+                    #{
+                        <<"a">> => #trans{ tr = [ {nl, <<>>}, {en, <<>>} ] }
+                    }
+                ]
+            }, [ nl, en ]),
+    #{ <<"a">> := [
+            #trans{ tr = [] },
+            #{
+                <<"a">> := #trans{ tr = [ {nl, <<>>} ] }
+            }
+        ]
+    } = prune_languages(
+            #{ <<"a">> => [
+                    #trans{ tr = [ {en, <<>>} ] },
+                    #{
+                        <<"a">> => #trans{ tr = [ {nl, <<>>}, {en, <<>>} ] }
+                    }
+                ]
+            }, [ nl, de ]),
     ok.

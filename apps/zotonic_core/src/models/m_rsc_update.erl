@@ -57,7 +57,10 @@
 insert(Props, Context) ->
     insert(Props, [{escape_texts, true}], Context).
 
-insert(Props, Options, Context) ->
+insert(Props, Options, Context) when is_list(Props) ->
+    {ok, Map} = z_props:from_list(Props),
+    insert(Map, Options, Context);
+insert(Props, Options, Context) when is_map(Props) ->
     PropsDefaults = props_defaults(Props, Context),
     update(insert_rsc, PropsDefaults, Options, Context).
 
@@ -364,7 +367,7 @@ update(Id, Props, Context) ->
 -spec update(m_rsc:resource() | insert_rsc, m_rsc:props_all(), list() | boolean(), z:context()) ->
     {ok, m_rsc:resource_id()} | {error, term()}.
 update(Id, Props, Options, Context) when is_list(Props) ->
-    Props1 = z_props:from_props(Props),
+    {ok, Props1} = z_props:from_list(Props),
     update(Id, Props1, Options, Context);
 update(Id, Props, false, Context) ->
     update(Id, Props, [{escape_texts, false}], Context);
@@ -664,20 +667,71 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
                             UpdatePropsN#{ <<"pivot_category_nr">> => CatNr }
                     end,
 
+    % 1. Merge UpdatePropsN into Raw for complete view
+    NewProps = maps:merge(Raw, UpdatePropsN1),
+
+    % 2. Ensure language tag
+    Langs = z_props:extract_languages(NewProps),
+    Langs1 = case Langs of
+        [] -> [ z_context:language(Context) ];
+        _ -> Langs
+    end,
+    % Only editable languages
+    Langs2 = lists:filter(
+        fun(Iso) ->
+            z_language:is_language_editable(Iso, Context)
+        end,
+        Langs1),
+    NewPropsLang = maybe_set_langs(NewProps, Langs2),
+
+    % 4. Prune languages
+    NewPropsLangPruned = z_props:prune_languages(NewPropsLang, maps:get(<<"language">>, NewPropsLang)),
+
+    % 5. Diff the update
+    NewPropsDiff = diff(NewPropsLangPruned, Raw),
+
+    % 6. Perform optional update, check diff
     case       RscUpd#rscupd.id =:= insert_rsc
         orelse IsChanged
-        orelse is_changed(Raw, UpdatePropsN1)
+        orelse is_changed(Raw, NewPropsDiff)
     of
         true ->
-            UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, UpdatePropsN1, Raw, Context),
+
+            UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiff, Raw, Context),
             {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
-            ok = update_page_path_log(Id, Raw, UpdatePropsN, Context),
-            {ok, Id, Raw, UpdatePropsN, IsABefore, IsCatInsert};
+            ok = update_page_path_log(Id, Raw, NewPropsDiff, Context),
+            {ok, Id, Raw, NewPropsDiff, IsABefore, IsCatInsert};
         false ->
             {ok, Id, notchanged}
     end.
 
-%% @doc Recombine all properties from the ones that are posted by a form.
+maybe_set_langs(#{ <<"language">> := Langs } = Props, NewLangs) when is_list(Langs) ->
+    case Langs of
+        NewLangs -> Props;
+        _ -> Props#{ <<"language">> => NewLangs }
+    end;
+maybe_set_langs(Props, NewLangs) ->
+    Props#{ <<"language">> => NewLangs }.
+
+%% @doc Remove everything from New that has the same value in Old.
+diff(New, Old) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            case maps:find(K, Old) of
+                {ok, V} -> maps:remove(K, Acc);
+                _ -> Acc
+            end
+        end,
+        New,
+        New).
+
+
+%% TODO TODO TODO
+%% TODO TODO TODO
+%% TODO TODO TODO
+%% TODO TODO TODO
+%% TODO TODO TODO
+%% @doc Ensure all dates are mapped to UTC
 normalize_props(Id, Props, Context) when is_integer(Id) ->
     DateIsAllDay = z_convert:to_bool( m_rsc:p_no_acl(Id, <<"date_is_all_day">>, Context) ),
     % z_props:recombine(DateIsAllDay, Props, Context);
@@ -1015,7 +1069,7 @@ filter_languages(Lang) when is_binary(Lang); is_atom(Lang) ->
 filter_languages([C | _] = Lang) when is_integer(C) ->
     filter_languages([Lang]);
 filter_languages([L | _] = Langs) when is_list(L); is_binary(L); is_atom(L) ->
-    lists:foldr(
+    Langs1 = lists:foldl(
         fun(Lang, Acc) ->
             case z_language:to_language_atom(Lang) of
                 {ok, LangAtom} -> [LangAtom | Acc];
@@ -1023,7 +1077,8 @@ filter_languages([L | _] = Langs) when is_list(L); is_binary(L); is_atom(L) ->
             end
         end,
         [],
-        Langs).
+        Langs),
+    lists:sort(Langs1).
 
 %% @doc If title is updating, check the rsc 'custom_slug' field to see if we need to update the slug or not.
 generate_slug(Id, Props, Context) ->
