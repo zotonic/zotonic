@@ -675,7 +675,7 @@ update(Table, Id, Parameters, Context) ->
                                 NewProps1 = maps:merge(z_props:from_props(OldProps), NewProps),
                                 UpdateProps#{ <<"props">> => ?DB_PROPS(NewProps1) };
                             {ok, OldProps} when is_map(OldProps) ->
-                                NewProps1 = merge_props(OldProps, NewProps),
+                                NewProps1 = maps:merge(OldProps, NewProps),
                                 UpdateProps#{ <<"props">> => ?DB_PROPS(NewProps1) };
                             _ ->
                                 UpdateProps#{ <<"props">> => ?DB_PROPS(NewProps) }

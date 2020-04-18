@@ -48,8 +48,7 @@ m_get(Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
-save_revision(Id, Props, Context) when is_integer(Id) ->
-    Version = proplists:get_value(version, Props),
+save_revision(Id, #{ <<"version">> := Version } = Props, Context) when is_integer(Id), is_map(Props) ->
     LastVersion = z_db:q1("select version from backup_revision where rsc_id = $1 order by created desc limit 1", [Id], Context),
     case Version of
         LastVersion when LastVersion =/= undefined ->
@@ -63,7 +62,7 @@ save_revision(Id, Props, Context) when is_integer(Id) ->
                 ", [
                     Id,
                     ?BACKUP_TYPE_PROPS,
-                    proplists:get_value(version, Props),
+                    Version,
                     UserId,
                     z_string:truncate(
                         z_trans:lookup_fallback(
