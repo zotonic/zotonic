@@ -226,6 +226,7 @@ binarize(Path) ->
     [ maybe_binary(P) || P <- Path ].
 
 maybe_binary(B) when is_binary(B) -> B;
+maybe_binary(undefined) -> <<>>;
 maybe_binary(A) when is_atom(A) -> atom_to_binary(A, utf8);
 maybe_binary(L) when is_list(L) -> unicode:characters_to_binary(L, unicode);
 maybe_binary(V) -> V.

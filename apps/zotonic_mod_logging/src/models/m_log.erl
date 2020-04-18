@@ -54,8 +54,10 @@ m_get(Vs, _Msg, _Context) ->
 
 
 get(Id, Context) ->
-    {ok, R} = z_db:select(log, Id, Context),
-    R.
+    case z_db:select(log, Id, Context) of
+        {ok, R} -> R;
+        {error, enoent} -> undefined
+    end.
 
 
 list(Context) ->

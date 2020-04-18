@@ -60,10 +60,10 @@ m_get([ Name, <<"menu">> | Rest ], _Msg, Context) -> {ok, {menu(Name, Context), 
 
 m_get([ Name, <<"menu_ensured">> | Rest ], Msg, Context) ->
     {ok, _} = ensure(Name, Context),
-    m_get([ Name, menu | Rest ], Msg, Context);
+    m_get([ Name, <<"menu">> | Rest ], Msg, Context);
 m_get([ Name, Id, <<"menu_ensured">> | Rest ], Msg, Context) ->
     {ok, _} = ensure(Name, Context),
-    m_get([ Name, Id, menu | Rest ], Msg, Context);
+    m_get([ Name, Id, <<"menu">> | Rest ], Msg, Context);
 
 m_get([ Name, Id, <<"tree">> | Rest ], _Msg, Context) ->
     V = case m_rsc:rid(Id, Context) of

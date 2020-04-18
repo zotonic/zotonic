@@ -67,7 +67,8 @@
 }).
 
 -type query_result() :: {ok, Columns :: list(), Rows :: list()}
-                      | {ok, Nr :: integer(), Columns :: list(), Rows :: list()}
+                      | {ok, Count :: non_neg_integer(), Columns :: list(), Rows :: list()}
+                      | {ok, Count :: non_neg_integer()}
                       | {error, term()}.
 
 -export_type([ query_result/0 ]).

@@ -40,29 +40,29 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ rewrite_url | Rest ], _Msg, Context) ->
+m_get([ <<"rewrite_url">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_translation, rewrite_url, true, Context), Rest}};
-m_get([ force_default | Rest ], _Msg, Context) ->
+m_get([ <<"force_default">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_translation, force_default, false, Context), Rest}};
-m_get([ language | Rest ], _Msg, Context) ->
+m_get([ <<"language">> | Rest ], _Msg, Context) ->
     {ok, {z_context:language(Context), Rest}};
-m_get([ language_list_configured | Rest ], _Msg, Context) ->
+m_get([ <<"language_list_configured">> | Rest ], _Msg, Context) ->
     {ok, {language_list_configured(Context), Rest}};
-m_get([ language_list_enabled | Rest ], _Msg, Context) ->
+m_get([ <<"language_list_enabled">> | Rest ], _Msg, Context) ->
     {ok, {language_list_enabled(Context), Rest}};
-m_get([ language_list_editable | Rest ], _Msg, Context) ->
+m_get([ <<"language_list_editable">> | Rest ], _Msg, Context) ->
     {ok, {language_list_editable(Context), Rest}};
-m_get([ default_language | Rest ], _Msg, Context) ->
+m_get([ <<"default_language">> | Rest ], _Msg, Context) ->
     {ok, {default_language(Context), Rest}};
-m_get([ main_languages | Rest ], _Msg, _Context) ->
+m_get([ <<"main_languages">> | Rest ], _Msg, _Context) ->
     {ok, {main_languages(), Rest}};
-m_get([ all_languages | Rest ], _Msg, _Context) ->
+m_get([ <<"all_languages">> | Rest ], _Msg, _Context) ->
     {ok, {all_languages(), Rest}};
-m_get([ enabled_language_codes | Rest ], _Msg, Context) ->
+m_get([ <<"enabled_language_codes">> | Rest ], _Msg, Context) ->
     {ok, {z_language:enabled_language_codes(Context), Rest}};
-m_get([ language_list | Rest ], _Msg, Context) ->
+m_get([ <<"language_list">> | Rest ], _Msg, Context) ->
     {ok, {z_language:language_list(Context), Rest}};
-m_get([ language_stemmer | Rest ], _Msg, Context) ->
+m_get([ <<"language_stemmer">> | Rest ], _Msg, Context) ->
     Stemmer = case m_config:get_value(i18n, language_stemmer, Context) of
         undefined -> default_language(Context);
         <<>> -> default_language(Context);

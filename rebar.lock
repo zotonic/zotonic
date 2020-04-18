@@ -9,7 +9,7 @@
  {<<"cowboy">>,{pkg,<<"cowboy">>,<<"2.7.0">>},1},
  {<<"cowlib">>,{pkg,<<"cowlib">>,<<"2.8.0">>},2},
  {<<"cowmachine">>,{pkg,<<"cowmachine">>,<<"1.3.0">>},0},
- {<<"depcache">>,{pkg,<<"depcache">>,<<"1.5.0">>},0},
+ {<<"depcache">>,{pkg,<<"depcache">>,<<"1.7.0">>},0},
  {<<"dh_date">>,{pkg,<<"dh_date">>,<<"1.0.0">>},0},
  {<<"diffy">>,{pkg,<<"diffy">>,<<"1.0.0">>},0},
  {<<"dispatch_compiler">>,{pkg,<<"dispatch_compiler">>,<<"1.0.0">>},0},
@@ -31,7 +31,7 @@
  {<<"folsom">>,{pkg,<<"folsom">>,<<"0.8.7">>},1},
  {<<"gen_smtp">>,
   {git,"https://github.com/gen-smtp/gen_smtp.git",
-       {ref,"813d0258eeac6b9cc4ce47b7a9616ec5f8e43c80"}},
+       {ref,"d2d48603d321f404ad437f9153bb9cc7c384cfea"}},
   0},
  {<<"getopt">>,{pkg,<<"getopt">>,<<"1.0.1">>},1},
  {<<"goldrush">>,{pkg,<<"goldrush">>,<<"0.1.9">>},1},
@@ -49,7 +49,7 @@
  {<<"lager">>,{pkg,<<"lager">>,<<"3.8.0">>},0},
  {<<"letsencrypt">>,
   {git,"https://github.com/zotonic/letsencrypt-erlang.git",
-       {ref,"383fcbfc12dec60864092a4f91a8af26bfda04bb"}},
+       {ref,"df28406908f5ba8bae275555c77b959dcc2dab30"}},
   0},
  {<<"locus">>,{pkg,<<"locus">>,<<"1.9.0-beta">>},0},
  {<<"meck">>,{pkg,<<"meck">>,<<"0.8.13">>},0},
@@ -88,10 +88,16 @@
   {git,"https://github.com/Vagabond/erlang-syslog.git",
        {ref,"4a6c6f2c996483e86c1320e9553f91d337bcb6aa"}},
   0},
- {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.2.0">>},0},
+ {<<"template_compiler">>,
+  {git,"https://github.com/zotonic/template_compiler.git",
+       {ref,"24b8c8fac5588fc5df86765d7fb144791e46f82d"}},
+  0},
  {<<"termit">>,{pkg,<<"termit">>,<<"1.0.0">>},0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
- {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.0.3">>},0}]}.
+ {<<"zotonic_stdlib">>,
+  {git,"https://github.com/zotonic/z_stdlib.git",
+       {ref,"bfb3a3b258ee4b30eef37ebfe35bad93f4ba5a1b"}},
+  0}]}.
 [
 {pkg_hash,[
  {<<"bcrypt">>, <<"6735F66D3A7309AF166CE660161009B7D9B9216508B8B2E6A0A9090AF35CB757">>},
@@ -104,7 +110,7 @@
  {<<"cowboy">>, <<"91ED100138A764355F43316B1D23D7FF6BDB0DE4EA618CB5D8677C93A7A2F115">>},
  {<<"cowlib">>, <<"FD0FF1787DB84AC415B8211573E9A30A3EBE71B5CBFF7F720089972B2319C8A4">>},
  {<<"cowmachine">>, <<"72559E8F30CC8CD0BBA0CA9999E694585CABB856D156D01BDC480C6EAD239473">>},
- {<<"depcache">>, <<"E7BCC07E647A43CE65E9683F0668A08B347F7208D437DB7231CA3AA4C9D1A3AE">>},
+ {<<"depcache">>, <<"2B401DBAB32CC8E64F1917B3B5D2F504D9CB5577BDE251EED2F5DCEE1D8C1459">>},
  {<<"dh_date">>, <<"5B0C286665E160DE44132552931BEF06B5CB2244D5BD20E333A686E9D8BF92E3">>},
  {<<"diffy">>, <<"1584C5CA54FF796EEAA00149D842DB580695D2843FB4BF0C279E017A37734E26">>},
  {<<"dispatch_compiler">>, <<"E55A3A7B5CC6F5F3887691FF600C177B52534504C8C67804DCE115B5756F2FA0">>},
@@ -147,8 +153,6 @@
  {<<"sidejob">>, <<"5D6A7C9C620778CB1908E46B552D767DF2ED4D77070BB7B5B8773D4FF18D1D37">>},
  {<<"ssl_verify_fun">>, <<"6EAF7AD16CB568BB01753DBBD7A95FF8B91C7979482B95F38443FE2C8852A79B">>},
  {<<"stacktrace_compat">>, <<"1C064BC1725F5BD6470853487AC7FBDA5D5E8745CE4B57D0AE71765C85B4414A">>},
- {<<"template_compiler">>, <<"87CC8A336FBF92C26E61CB9AD7250D1ECFDFC76F5FFCE1CE33E2918C8FBC3032">>},
  {<<"termit">>, <<"D463BDD0207EDD00942754D51FD822B981CDCE7FB774E9FF71D9F59429BCEF7A">>},
- {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>},
- {<<"zotonic_stdlib">>, <<"8F2C2345E1C930806C4CE63F9C745F503CF576C0B6EAA19218FCF3775F227E7B">>}]}
+ {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>}]}
 ].

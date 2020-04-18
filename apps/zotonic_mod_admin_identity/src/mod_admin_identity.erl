@@ -63,7 +63,7 @@ observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {_Modified, 
         true ->
             Acc;
         _false ->
-            case {proplists:get_value(email, Pre), proplists:get_value(email, Post)} of
+            case {maps:get(<<"email">>, Pre, undefined), maps:get(<<"email">>, Post, undefined)} of
                 {A, A} -> Acc;
                 {_Old, undefined} -> Acc;
                 {_Old, <<>>} -> Acc;

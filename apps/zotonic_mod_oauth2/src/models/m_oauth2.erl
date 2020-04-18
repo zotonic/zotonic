@@ -67,18 +67,17 @@ user_groups(Context) ->
     {ok, z_acl:user_groups(Context)}.
 
 
--spec list_tokens( m_rsc:resource_id() | undefined, z:context() ) -> {ok, [ map() ]} | {error, eacces}.
+-spec list_tokens( m_rsc:resource_id() | undefined, z:context() ) -> {ok, [ map() ]} | {error, term()}.
 list_tokens(UserId, Context) when is_integer(UserId) ->
     case is_allowed(UserId, Context) of
         true ->
-            List = z_db:assoc_map("
+            z_db:qmap("
                 select id, user_id, is_read_only, ip_allowed, note, created, modified
                 from oauth2_token
                 where user_id = $1
                 order by created desc",
                 [ UserId ],
-                Context),
-            {ok, List};
+                Context);
         false ->
             {error, eacces}
     end;
@@ -86,7 +85,7 @@ list_tokens(undefined, _Context) ->
     {ok, []}.
 
 
--spec insert( m_rsc:resource_id(), map() | proplists:list(), z:context() ) -> {ok, integer()} | {error, eacces}.
+-spec insert( m_rsc:resource_id(), map() | proplists:list(), z:context() ) -> {ok, integer()} | {error, term()}.
 insert( UserId, Props, Context ) when is_list(Props) ->
     case is_allowed(UserId, Context) of
         true ->
@@ -182,21 +181,21 @@ decode_bearer_token(<<?TOKEN_PREFIX, Token/binary>>, Context) ->
 decode_bearer_token(_Token, _Context) ->
     {error, unknown_token}.
 
--spec get_token( integer() | undefined, z:context() ) -> {ok, map()} | {error, notfound | eacces}.
+-spec get_token( integer() | undefined, z:context() ) -> {ok, map()} | {error, notfound | eacces | term()}.
 get_token( TokenId, Context ) when is_integer(TokenId) ->
-    case z_db:assoc_map("
+    case z_db:qmap("
         select id, user_id, is_read_only, is_full_access, ip_allowed, note, created, modified
         from oauth2_token
         where id = $1",
         [ z_convert:to_integer(TokenId) ],
         Context)
     of
-        [] ->
+        {ok, []} ->
             {error, notfound};
-        [#{ user_id := UserId } = Token] ->
+        {ok, [#{ user_id := UserId } = Token]} ->
             case is_allowed(UserId, Context) of
                 true ->
-                    Log = z_db:assoc_map("
+                    Log = z_db:qmap("
                             select *
                             from oauth2_token_log
                             where token_id = $1
@@ -216,17 +215,19 @@ get_token( TokenId, Context ) when is_integer(TokenId) ->
                     }};
                 false ->
                     {error, eacces}
-            end
+            end;
+        {error, _} = Error ->
+            Error
     end;
 get_token( undefined, _Context ) ->
-    {error, notfound}.
+    {error, not_found}.
 
 
 %% @doc Get the token details for authentication checks.
 %% @todo Cache this for speeding up api requests
--spec get_token_access( integer(), z:context() ) -> {ok, map()} | {error, notfound}.
+-spec get_token_access( integer(), z:context() ) -> {ok, map()} | {error, not_found}.
 get_token_access(TokenId, Context) when is_integer(TokenId) ->
-    case z_db:assoc_map("
+    case z_db:qmap("
         select user_id, is_read_only, is_full_access, ip_allowed, secret
         from oauth2_token
         where id = $1
@@ -235,7 +236,7 @@ get_token_access(TokenId, Context) when is_integer(TokenId) ->
         Context)
     of
         [] ->
-            {error, notfound};
+            {error, not_found};
         [ Token ] ->
             Groups = z_db:q("
                     select group_id

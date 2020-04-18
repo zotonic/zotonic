@@ -45,13 +45,13 @@
 %% the attached medium item.
 -spec observe_rsc_update(#rsc_update{}, {boolean(), list()}, #context{}) -> {boolean(), list()}.
 observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context) ->
-    case proplists:get_value(oembed_url, Props) of
+    case maps:get(<<"oembed_url">>, Props, undefined) of
         undefined ->
             {Changed, Props};
-        [] ->
-            {true, proplists:delete(oembed_url, Props)};
+        "" ->
+            {true, maps:remove(<<"oembed_url">>, Props)};
         <<>> ->
-            {true, proplists:delete(oembed_url, Props)};
+            {true, maps:remove(<<"oembed_url">>, Props)};
         EmbedUrl ->
             case z_acl:is_allowed(insert, #acl_media{mime=?OEMBED_MIME}, Context) of
                 true ->
@@ -61,24 +61,29 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
                     ],
                     case preview_create(Id, MediaProps, z_acl:sudo(Context)) of
                         undefined ->
-                            {true, proplists:delete(oembed_url, Props)};
+                            {true, maps:remove(<<"oembed_url">>, Props)};
                         OEmbedTitle ->
-                            Props1 = case z_utils:is_empty(z_trans:lookup_fallback(proplists:get_value(title, Props), Context)) of
-                                        true ->  [{title, z_html:escape(OEmbedTitle)} | proplists:delete(title, Props)];
-                                        false -> Props
+                            Title = z_trans:lookup_fallback( maps:get(<<"title">>, Props, <<>>), Context ),
+                            Props1 = case z_utils:is_empty(Title) of
+                                        true ->
+                                            Props#{
+                                                <<"title">> => z_html:escape(OEmbedTitle)
+                                            };
+                                        false ->
+                                            Props
                                      end,
-                            {true, proplists:delete(oembed_url, Props1)}
+                            {true, maps:remove(<<"oembed_url">>, Props1)}
                     end;
                 false ->
-                    {true, proplists:delete(oembed_url, Props)}
+                    {true, maps:remove(<<"oembed_url">>, Props)}
             end
     end;
 observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {Changed, UpdateProps}, Context) ->
-    case proplists:is_defined(oembed_url, UpdateProps) of
+    case maps:is_key(<<"oembed_url">>, UpdateProps) of
         true ->
             OldMediaProps = m_media:get(Id, Context),
-            {EmbedChanged, OEmbedTitle} = case proplists:get_value(oembed_url, UpdateProps) of
-                Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= [] ->
+            {EmbedChanged, OEmbedTitle} = case maps:get(<<"oembed_url">>, UpdateProps) of
+                Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= "" ->
                     % Delete the media record iff the media mime type is our mime type
                     case OldMediaProps of
                         undefined ->
@@ -113,12 +118,16 @@ observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {Changed,
                             end
                     end
             end,
-            CurrTitle = proplists:get_value(title, UpdateProps, proplists:get_value(title, CurrProps)),
+            CurrTitle = maps:get(<<"title">>, UpdateProps, maps:get(<<"title">>, CurrProps, <<>>)),
             UpdateProps1 = case EmbedChanged andalso z_utils:is_empty(z_trans:lookup_fallback(CurrTitle, Context)) of
-                        true ->  [{title, z_html:escape_check(OEmbedTitle)} | proplists:delete(title, UpdateProps)];
-                        false -> UpdateProps
+                        true ->
+                            UpdateProps#{
+                                <<"title">> => z_html:escape_check(OEmbedTitle)
+                            };
+                        false ->
+                            UpdateProps
                      end,
-            {Changed or EmbedChanged, proplists:delete(oembed_url, UpdateProps1)};
+            {Changed or EmbedChanged, maps:remove(<<"oembed_url">>, UpdateProps1)};
         false ->
             {Changed, UpdateProps}
     end.

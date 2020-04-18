@@ -257,14 +257,14 @@ diff_raw_props(Current, LastImport, undefined) ->
 
 get_updated_props(Id, Row, Context) ->
     Raw = m_rsc:get_raw(Id, Context),
-    sort_props([ {K, proplists:get_value(K, Raw)} || {K, _} <- Row ]).
+    sort_props([ {K, maps:get(K, Raw, undefined)} || {K, _} <- Row ]).
 
 sort_props(Props) ->
     Props1 = lists:sort(Props),
     [ sort_props_1(P) || P <- Props1 ].
 
-sort_props_1({trans, Tr}) ->
-    {trans, lists:sort(Tr)};
+sort_props_1(#trans{ tr = Tr }) ->
+    #trans{ tr = lists:sort(Tr) };
 sort_props_1({K, [A|_] = L}) when is_list(A) ->
     L1 = [ sort_props(V) || V <- L ],
     {K, L1};

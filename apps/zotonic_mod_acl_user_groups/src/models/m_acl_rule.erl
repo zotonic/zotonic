@@ -191,10 +191,21 @@ state_sql_clause(publish) -> "is_edit = false".
 normalize_actions(Rows) ->
     [normalize_action(Row) || Row <- Rows].
 
-normalize_action(Row) ->
+normalize_action(Row) when is_map(Row) ->
+    Actions = maps:get(<<"actions">>, Row),
+    ActionsSplit = binary:split(Actions, <<",">>, [global]),
+    Actions1 = [ {binary_to_atom(T,utf8), true} || T <- ActionsSplit ],
+    Row#{
+        <<"actions">> => Actions1
+    };
+normalize_action(Row) when is_list(Row) ->
     Actions = proplists:get_value(actions, Row),
-    [{actions, [{z_convert:to_atom(T), true} || T <- string:tokens(z_convert:to_list(Actions), ",")]}
-     | proplists:delete(actions, Row)].
+    ActionsSplit = binary:split(Actions, <<",">>, [global]),
+    Actions1 = [ {binary_to_atom(T,utf8), true} || T <- ActionsSplit ],
+    [
+        {actions, Actions1}
+        | proplists:delete(actions, Row)
+    ].
 
 actions(Kind, Context) when Kind =:= rsc; Kind =:= collab ->
     [
@@ -228,8 +239,14 @@ update(Kind, Id, Props, Context) ->
 get(_Kind, undefined, _Context) ->
     {ok, undefined};
 get(Kind, Id, Context) ->
-    {ok, Row} = z_db:select(table(Kind), Id, Context),
-    {ok, normalize_action(Row)}.
+    case z_db:select(table(Kind), Id, Context) of
+        {ok, Row} ->
+            {ok, normalize_action(Row)};
+        {error, enoent} ->
+            {ok, undefined};
+        {error, _} = Error ->
+            Error
+    end.
 
 insert(Kind, Props, Context) ->
     lager:debug(
@@ -278,7 +295,7 @@ delete(Kind, Id, Context) ->
     ),
     %% Assertion, can only delete edit version of a rule
     {ok, Row} = z_db:select(table(Kind), Id, Context),
-    true = proplists:get_value(is_edit, Row),
+    true = maps:get(<<"is_edit">>, Row),
     {ok, _} = z_db:delete(table(Kind), Id, Context),
     mod_acl_user_groups:rebuild(edit, Context),
     ok.

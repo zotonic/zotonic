@@ -52,19 +52,19 @@
 %% @doc Check if the update contains video embed information.  If so then update the attached medium item.
 -spec observe_rsc_update(#rsc_update{}, {boolean(), list()}, #context{}) -> {boolean(), list()}.
 observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context) ->
-    case proplists:get_value(video_embed_code, Props) of
+    case maps:get(<<"video_embed_code">>, Props, undefined) of
         undefined ->
             {Changed, Props};
-        [] ->
-            {true, proplists:delete(video_embed_code, Props)};
+        "" ->
+            {true, maps:remove(<<"video_embed_code">>, Props)};
         <<>> ->
-            {true, proplists:delete(video_embed_code, Props)};
+            {true, maps:remove(<<"video_embed_code">>, Props)};
         EmbedCodeRaw ->
             case z_acl:is_allowed(insert, #acl_media{mime=?EMBED_MIME}, Context) of
                 true ->
                     EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
                     EmbedService = z_convert:to_binary(
-                                        proplists:get_value(video_embed_service, Props, <<>>)),
+                                        maps:get(<<"video_embed_service">>, Props, <<>>)),
                     {EmbedService1, EmbedId} = fetch_videoid_from_embed(EmbedService, EmbedCode),
                     MediaProps = [
                         {mime, ?EMBED_MIME},
@@ -79,64 +79,61 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
                                [z_acl:user(Context), ?EMBED_MIME, EmbedCodeRaw]),
                     ok
             end,
-            Props1 = proplists:delete(video_embed_code,
-                        proplists:delete(video_embed_service, Props)),
+            Props1 = maps:remove(<<"video_embed_code">>,
+                        maps:remove(<<"video_embed_service">>, Props)),
             {true, Props1}
     end;
-observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, Props}, Context) ->
-    case proplists:is_defined(video_embed_code, Props) of
-        true ->
-            OldMediaProps = m_media:get(Id, Context),
-            EmbedChanged = case proplists:get_value(video_embed_code, Props) of
-                Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= [] ->
-                    % Delete the media record iff the media mime type is our mime type
-                    case OldMediaProps of
-                        undefined ->
-                            false;
-                        _ ->
-                            case proplists:get_value(mime, OldMediaProps) of
-                                ?EMBED_MIME ->
-                                    m_media:delete(Id, Context),
-                                    true;
-                                _ ->
-                                    false
-                            end
-                    end;
-                EmbedCodeRaw ->
-                    EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
-                    EmbedService = proplists:get_value(video_embed_service, Props, <<>>),
-                    {EmbedService1, EmbedId} = fetch_videoid_from_embed(EmbedService, EmbedCode),
-                    MediaProps = [
-                        {mime, ?EMBED_MIME},
-                        {video_embed_code, EmbedCode},
-                        {video_embed_service, EmbedService1},
-                        {video_embed_id, EmbedId}
-                    ],
-                    case OldMediaProps of
-                        undefined ->
-                            ok = m_media:replace(Id, MediaProps, Context),
-                            spawn_preview_create(Id, MediaProps, Context),
+observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, #{ <<"video_embed_code">> := EmbedCodeRaw } = Props}, Context) ->
+    OldMediaProps = m_media:get(Id, Context),
+    EmbedChanged = case EmbedCodeRaw of
+        Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= "" ->
+            % Delete the media record iff the media mime type is our mime type
+            case OldMediaProps of
+                undefined ->
+                    false;
+                _ ->
+                    case proplists:get_value(mime, OldMediaProps) of
+                        ?EMBED_MIME ->
+                            m_media:delete(Id, Context),
                             true;
                         _ ->
-                            case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?EMBED_MIME)
-                                andalso z_utils:are_equal(proplists:get_value(video_embed_code, OldMediaProps), EmbedCode)
-                                andalso z_utils:are_equal(proplists:get_value(video_embed_service, OldMediaProps), EmbedService)
-                            of
-                                true ->
-                                    false;
-                                false ->
-                                    ok = m_media:replace(Id, MediaProps, Context),
-                                    spawn_preview_create(Id, MediaProps, Context),
-                                    true
-                            end
+                            false
                     end
-            end,
-            Props1 = proplists:delete(video_embed_code,
-                        proplists:delete(video_embed_service, Props)),
-            {Changed or EmbedChanged, Props1};
-        false ->
-            {Changed, Props}
-    end.
+            end;
+        _ ->
+            EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
+            EmbedService = maps:get(<<"video_embed_service">>, Props, <<>>),
+            {EmbedService1, EmbedId} = fetch_videoid_from_embed(EmbedService, EmbedCode),
+            MediaProps = [
+                {mime, ?EMBED_MIME},
+                {video_embed_code, EmbedCode},
+                {video_embed_service, EmbedService1},
+                {video_embed_id, EmbedId}
+            ],
+            case OldMediaProps of
+                undefined ->
+                    ok = m_media:replace(Id, MediaProps, Context),
+                    spawn_preview_create(Id, MediaProps, Context),
+                    true;
+                _ ->
+                    case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?EMBED_MIME)
+                        andalso z_utils:are_equal(proplists:get_value(video_embed_code, OldMediaProps), EmbedCode)
+                        andalso z_utils:are_equal(proplists:get_value(video_embed_service, OldMediaProps), EmbedService)
+                    of
+                        true ->
+                            false;
+                        false ->
+                            ok = m_media:replace(Id, MediaProps, Context),
+                            spawn_preview_create(Id, MediaProps, Context),
+                            true
+                    end
+            end
+    end,
+    Props1 = maps:remove(<<"video_embed_code">>,
+                maps:remove(<<"video_embed_service">>, Props)),
+    {Changed or EmbedChanged, Props1};
+observe_rsc_update(#rsc_update{}, {Changed, Props}, _Context) ->
+    {Changed, Props}.
 
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).

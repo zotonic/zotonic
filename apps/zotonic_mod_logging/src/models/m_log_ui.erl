@@ -46,8 +46,10 @@ m_get(Vs, _Msg, _Context) ->
 
 
 get(Id, Context) ->
-    {ok, R} = z_db:select(log_ui, Id, Context),
-    R.
+    case z_db:select(log_ui, Id, Context) of
+        {ok, R} -> R;
+        {error, enoent} -> undefined
+    end.
 
 insert(Props, Context) ->
     z_db:insert(log_ui, Props, Context).

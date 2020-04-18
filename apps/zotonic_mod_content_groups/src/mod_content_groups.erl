@@ -152,22 +152,17 @@ maybe_progress(N1, N2, Total, Context) ->
 deletable(Ids, Context) ->
     lists:all(fun(Id) -> z_acl:rsc_deletable(Id, Context) end, Ids).
 
-observe_rsc_get(#rsc_get{}, [], _Context) ->
-    [];
-observe_rsc_get(#rsc_get{}, Props, Context) ->
-    case proplists:get_value(content_group_id, Props) of
-        undefined ->
-            [
-                {content_group_id,
-                        case m_category:is_meta(proplists:get_value(category_id, Props), Context) of
-                            true -> m_rsc:rid(system_content_group, Context);
-                            false -> m_rsc:rid(default_content_group, Context)
-                        end}
-                | proplists:delete(content_group_id, Props)
-            ];
-        _ ->
-            Props
-    end.
+observe_rsc_get(#rsc_get{}, #{ <<"content_group_id">> := undefined } = Props, Context) ->
+    CatId = maps:get(<<"category_id">>, Props),
+    Props#{
+        <<"content_group_id">> =>
+                case m_category:is_meta(CatId, Context) of
+                    true -> m_rsc:rid(system_content_group, Context);
+                    false -> m_rsc:rid(default_content_group, Context)
+                end
+    };
+observe_rsc_get(#rsc_get{}, Props, _Context) ->
+    Props.
 
 %% @doc Do not allow a content group to be removed iff there are resources in that content group
 observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->

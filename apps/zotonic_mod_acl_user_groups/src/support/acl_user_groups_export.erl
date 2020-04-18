@@ -83,7 +83,7 @@ fetch_all(Category, Context) ->
                         Ps1 = cleanup_rsc(Ps),
                         Rsc = {rsc,
                                m_rsc:is_a(Id, Ctx),
-                               m_rsc:p_no_acl(proplists:get_value(content_group_id, Ps), name, Ctx),
+                               m_rsc:p_no_acl(maps:get(<<"content_group_id">>, Ps), <<"name">>, Ctx),
                                Ps1},
                         [Rsc | Acc]
                     end,
@@ -91,19 +91,23 @@ fetch_all(Category, Context) ->
                     Context).
 
 cleanup_rsc(Ps) ->
-    lists:foldl(
+    maps:foldl(
         fun(P,Acc) ->
-            proplists:delete(P, Acc)
+            maps:remove(P, Acc)
         end,
         Ps,
         [
-            id, version,
-            category_id, content_group_id,
-            creator_id, modifier_id,
-            created, modified,
-            page_path,
-            pivot_geocode,
-            installed_by
+            <<"id">>,
+            <<"version">>,
+            <<"category_id">>,
+            <<"content_group_id">>,
+            <<"creator_id">>,
+            <<"modifier_id">>,
+            <<"created">>,
+            <<"modified">>,
+            <<"page_path">>,
+            <<"pivot_geocode">>,
+            <<"installed_by">>
         ]).
 
 %% @doc Ensure that all resources of this category are present in the database
@@ -113,14 +117,16 @@ import_all(Cat, [Rsc|Rest], IdsAcc, Context) ->
     IdsAcc1 = import_1(Cat, Rsc, IdsAcc, Context),
     import_all(Cat, Rest, IdsAcc1, Context).
 
+import_1(Cat, {rsc, IsA, CGName, Ps0}, IdsAcc, Context) when is_list(Ps0) ->
+    Map = z_props:from_props(Ps0),
+    import_1(Cat, {rsc, IsA, CGName, Map}, IdsAcc, Context);
 import_1(Cat, {rsc, IsA, CGName, Ps0}, IdsAcc, Context) ->
-    Name = proplists:get_value(name, Ps0),
+    Name = maps:get(<<"name">>, Ps0),
     Ps = cleanup_rsc(Ps0),
     Cat1 = select_cat(Cat, lists:reverse(IsA), Context),
-    Props = [
-        {category_id, Cat1}
-        | Ps
-    ],
+    Props = Ps#{
+        <<"category_id">> => Cat1
+    },
     case m_rsc:rid(Name, Context) of
         undefined ->
             lager:info("ACL export, inserting ~p with name ~p", [Cat1, Name]),
@@ -172,11 +178,11 @@ ensure_content_group(CGName, IdsAcc, Context) ->
         undefined ->
             case m_rsc:rid(CGName, Context) of
                 undefined ->
-                    Props = [
-                        {category, content_group},
-                        {title, CGName},
-                        {name, CGName}
-                    ],
+                    Props = #{
+                        <<"category">> => content_group,
+                        <<"title">> => CGName,
+                        <<"name">> => CGName
+                    },
                     lager:info("ACL export, inserting content_group with name ~p",
                                [CGName]),
                     {ok, Id} = m_rsc:insert(Props, Context),

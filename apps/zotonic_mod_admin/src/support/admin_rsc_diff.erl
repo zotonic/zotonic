@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
+%% @copyright 2012-2020 Marc Worrell
 %% @doc Format a resource record for a browser diff function.
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,118 +25,122 @@
 
 % These fields are shown in this order, any other fields are shown after these.
 -define(FIELDS, [
-    title,
+    <<"title">>,
 
-    category_id,
-    creator_id,
-    modifier_id,
+    <<"category_id">>,
+    <<"creator_id">>,
+    <<"modifier_id">>,
 
-    created,
-    modified,
+    <<"created">>,
+    <<"modified">>,
 
-    publication_start,
-    publication_end,
-    org_pubdate,
+    <<"publication_start">>,
+    <<"publication_end">>,
+    <<"org_pubdate">>,
 
-    is_published,
-    is_featured,
-    is_protected,
-    is_dependent,
+    <<"is_published">>,
+    <<"is_featured">>,
+    <<"is_protected">>,
+    <<"is_dependent">>,
 
-    visible_for,
-    content_group_id,
+    <<"visible_for">>,
+    <<"content_group_id">>,
 
-    language,
+    <<"language">>,
 
-    chapeau,
-    subtitle,
-    short_title,
-    summary,
+    <<"chapeau">>,
+    <<"subtitle">>,
+    <<"short_title">>,
+    <<"summary">>,
 
-    name_prefix,
-    name_first,
-    name_surname_prefix,
-    name_surname,
+    <<"name_prefix">>,
+    <<"name_first">>,
+    <<"name_surname_prefix">>,
+    <<"name_surname">>,
 
-    phone,
-    phone_mobile,
-    phone_alt,
-    phone_emergency,
+    <<"phone">>,
+    <<"phone_mobile">>,
+    <<"phone_alt">>,
+    <<"phone_emergency">>,
 
-    email,
-    website,
-    is_website_redirect,
+    <<"email">>,
+    <<"website">>,
+    <<"is_website_redirect">>,
 
-    date_start,
-    date_end,
-    date_remarks,
-    date_is_all_day,
+    <<"date_start">>,
+    <<"date_end">>,
+    <<"date_remarks">>,
+    <<"date_is_all_day">>,
 
-    address_street_1,
-    address_street_2,
-    address_city,
-    address_state,
-    address_postcode,
-    address_country,
+    <<"address_street_1">>,
+    <<"address_street_2">>,
+    <<"address_city">>,
+    <<"address_state">>,
+    <<"address_postcode">>,
+    <<"address_country">>,
 
-    mail_street_1,
-    mail_street_2,
-    mail_city,
-    mail_state,
-    mail_postcode,
-    mail_country,
+    <<"mail_street_1">>,
+    <<"mail_street_2">>,
+    <<"mail_city">>,
+    <<"mail_state">>,
+    <<"mail_postcode">>,
+    <<"mail_country">>,
 
-    location_lng,
-    location_lat,
+    <<"location_lng">>,
+    <<"location_lat">>,
 
-    body,
-    body_extra,
-    blocks,
+    <<"body">>,
+    <<"body_extra">>,
+    <<"blocks">>,
 
-    uri,
-    page_path,
-    is_page_path_multiple,
-    name,
+    <<"uri">>,
+    <<"page_path">>,
+    <<"is_page_path_multiple">>,
+    <<"name">>,
 
-    seo_noindex,
-    slug,
-    custom_slug,
-    seo_desc
+    <<"seo_noindex">>,
+    <<"slug">>,
+    <<"custom_slug">>,
+    <<"seo_desc">>
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-format(undefined, List, Context) ->
-    format([], List, Context);
-format(List, undefined, Context) ->
-    format(List, [], Context);
-format(ListA, ListB, Context) ->
-    AllKeys = lists:usort(proplists:get_keys(ListA) ++ proplists:get_keys(ListB)),
-    Extra = proplists:get_keys(AllKeys) -- ?FIELDS,
+format(L, B, Context) when is_list(L) ->
+    format(z_props:from_props(L), B, Context);
+format(A, L, Context) when is_list(L) ->
+    format(A, z_props:from_props(L), Context);
+format(undefined, B, Context) ->
+    format(#{}, B, Context);
+format(A, undefined, Context) ->
+    format(A, #{}, Context);
+format(A, B, Context) when is_map(A), is_map(B) ->
+    AllKeys = lists:usort( maps:keys(A) ++ maps:keys(B) ),
+    Extra = AllKeys -- ?FIELDS,
     Ks = lists:reverse(?FIELDS ++ Extra),
-    fetch(Ks, ListA, ListB, [], Context).
+    fetch(Ks, A, B, [], Context).
 
-fetch([], _ListA, _ListB, Acc, _Context) ->
+fetch([], _A, _B, Acc, _Context) ->
     Acc;
-fetch([K|Ks], ListA, ListB, Acc, Context) ->
-    A = normalize(K, proplists:get_value(K, ListA)),
-    B = normalize(K, proplists:get_value(K, ListB)),
+fetch([K|Ks], MapA, MapB, Acc, Context) ->
+    A = normalize(K, maps:get(K, MapA, undefined)),
+    B = normalize(K, maps:get(K, MapB, undefined)),
     case A of
         B ->
-            fetch(Ks, ListA, ListB, Acc, Context);
+            fetch(Ks, A, B, Acc, Context);
         _ ->
             case {format_value(K, A, Context),
                   format_value(K, B, Context)}
             of
                 {X,X} ->
-                    fetch(Ks, ListA, ListB, Acc, Context);
+                    fetch(Ks, MapA, MapB, Acc, Context);
                 {FA,FB} ->
                     Acc1 = [ {K, FA, FB} | Acc ],
-                    fetch(Ks, ListA, ListB, Acc1, Context)
+                    fetch(Ks, MapA, MapB, Acc1, Context)
             end
     end.
 
-normalize(_K, {trans, Tr}) -> {trans, lists:sort(Tr)};
+normalize(_K, #trans{ tr = Tr }) -> #trans{ tr = lists:sort(Tr) };
 normalize(language, L) when is_list(L) -> lists:sort(L);
 normalize(_K, V) -> V.
 
@@ -146,7 +150,7 @@ format_value(_K, <<>>, _Context) ->
     <<>>;
 format_value(_K, [], _Context) ->
     <<>>;
-format_value(_K, {trans, []}, _Context) ->
+format_value(_K, #trans{ tr = [] }, _Context) ->
     <<>>;
 format_value(_K, {{_,_,_},{_,_,_}} = V, Context) ->
     z_datetime:format(V, "Y-m-d H:i:s", Context);
@@ -154,19 +158,21 @@ format_value(uri, Uri, _Context) when is_binary(Uri) ->
     z_html:escape(Uri);
 format_value(_K, V, _Context) when is_binary(V) ->
     V;
-format_value(category_id, Id, Context) ->
+format_value(<<"category_id">>, Id, Context) ->
     by_id(Id, Context);
-format_value(creator_id, Id, Context) ->
+format_value(<<"creator_id">>, Id, Context) ->
     by_id(Id, Context);
-format_value(modifier_id, Id, Context) ->
+format_value(<<"modifier_id">>, Id, Context) ->
     by_id(Id, Context);
-format_value(rsc_id, Id, Context) ->
+format_value(<<"rsc_id">>, Id, Context) ->
     by_id(Id, Context);
-format_value(content_group_id, Id, Context) ->
+format_value(<<"content_group_id">>, Id, Context) ->
     by_id(Id, Context);
-format_value(blocks, Blocks, Context) ->
+format_value(<<"blocks">>, Blocks, Context) when is_list(Blocks) ->
     format_blocks(Blocks, Context);
-format_value(_, {trans, Tr}, _Context) ->
+format_value(<<"blocks">>, _, _Context) ->
+    <<>>;
+format_value(_, #trans{ tr = Tr }, _Context) ->
     iolist_to_binary([
         [ z_convert:to_binary(Iso), $:, 32, V, <<"\n">> ]
         || {Iso, V} <- Tr, is_binary(V), V =/= <<>>
@@ -193,6 +199,8 @@ by_id(Id, Context) when is_integer(Id) ->
 format_blocks(Blocks, Context) ->
     iolist_to_binary(z_utils:combine("\n\n--\n\n", [ format_block(B, Context) || B <- Blocks ])).
 
+format_block(B, Context) when is_map(B) ->
+    format_block(lists:sort( maps:to_list(B) ), Context);
 format_block(B, Context) ->
     iolist_to_binary(z_utils:combine(
             "\n",

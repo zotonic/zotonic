@@ -405,7 +405,7 @@
 %% Type: foldr
 %% Return: proplist accumulator
 -record(rsc_insert, {
-    props :: list()
+    props :: rsc:props()
 }).
 
 %% @doc Map to signal merging two resources. Move any information from the loser to the
@@ -427,7 +427,7 @@
 -record(rsc_update, {
     action :: insert | update,
     id :: m_rsc:resource_id(),
-    props :: list()
+    props :: rsc:props()
 }).
 
 %% @doc An updated resource has just been persisted. Observe this notification to
@@ -439,8 +439,8 @@
     id :: m_rsc:resource_id(),
     pre_is_a :: list(),
     post_is_a :: list(),
-    pre_props :: list(),
-    post_props :: list()
+    pre_props :: rsc:props(),
+    post_props :: rsc:props()
 }).
 
 %% @doc Upload and replace the resource with the given data. The data is in the given format.
@@ -456,20 +456,24 @@
     id :: m_rsc:resource_id()
 }).
 
-% 'pivot_rsc_data' - foldl over the resource props to extend/remove data to be pivoted
+% foldl over the resource props map to extend/remove data to be pivoted
+-record(pivot_rsc_data, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Pivot just before a m_rsc_update update. Used to pivot fields before the pivot itself.
 %% Type: foldr
 -record(pivot_update, {
     id :: m_rsc:resource_id(),
-    raw_props :: list()
+    raw_props :: rsc:props()
 }).
 
 %% @doc Foldr to change or add pivot fields for the main pivot table.
 %%  The rsc contains all rsc properties for this resource, including pivot properties.
+%%  foldl with a map containing the pivot fields.
 -record(pivot_fields, {
     id :: m_rsc:resource_id(),
-    rsc :: list()
+    raw_props :: rsc:props()
 }).
 
 %% @doc Signal that a resource pivot has been done.
@@ -522,7 +526,7 @@
 -record(acl_is_allowed_prop, {
     action :: view | update | delete | insert | atom(),
     object :: term(),
-    prop :: atom()
+    prop :: binary()
 }).
 
 %% @doc Filter the properties of a resource update, this is done on the raw data
