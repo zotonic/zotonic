@@ -37,13 +37,13 @@
 
     % Modules installed on site (re)start
     {modules, [
+        mod_cron,
         mod_base,
         mod_bootstrap,
         mod_menu,
         mod_oauth,
         mod_search,
         mod_oembed,
-        mod_cron,
         mod_logging,
 
         mod_wires,
