@@ -28,7 +28,8 @@
     log_access/1,
         
     record_event/3,
-    record_duration/4
+    record_duration/4,
+    system_usage/1
 ]).
 
 
@@ -45,9 +46,14 @@ init_site(Host) ->
     Context = z_context:new(Host),
 
     % Keep track of the size of the depcache
-    ok = exometer:new([site, Host, depcache, size],
-                      {function, z_depcache, size, [Context], value, []}),
+    ok = exometer:re_register([site, Host, depcache, size],
+                              {function, z_depcache, size, [Context], match, size}, []),
 
+    ok = exometer:re_register([site, Host, broker, session_count],
+                              {function, mqtt_sessions, session_count, [Host], match, count}, []),
+
+    ok = exometer:re_register([site, Host, broker, router_info],
+                              {function, mqtt_sessions, router_info, [Host], value, []}, []),
 
     %% Session metrics
     %% [TODO] add mqtt sessions
@@ -122,6 +128,16 @@ handle_cowmachine_stats(MetricsData) ->
 
     ok.
 
+% Return the usage in percentage, for atoms, ports and processes.
+system_usage(atom) -> system_usage_helper(atom_count, atom_limit);
+system_usage(port) -> system_usage_helper(port_count, port_limit);
+% system_usage(ets) -> system_usage_helper(ets_count, ets_limit);
+system_usage(process) -> system_usage_helper(process_count, process_limit).
+
+%% Returns the usage in percentage k
+system_usage_helper(Count, Limit) ->
+    z_convert:to_integer((erlang:system_info(Count) / erlang:system_info(Limit)) * 100).
+
 
 %%
 %% Helpers
@@ -155,12 +171,18 @@ duration(Start, End) ->
 % @private vm_stats
 create_vm_metrics() ->
     ok = exometer:new([erlang, memory],
-                      {function, erlang, memory, ['$dp'], value,
-                       [total, processes, system, atom, binary, ets]}),
+                      {function, erlang, memory, [], value, []}),
+
+    ok = exometer:new([erlang, usage],
+                      {function, z_stats, system_usage, ['$dp'], value,
+                       [atom, process, port]}),
 
     ok = exometer:new([erlang, system],
                       {function, erlang, system_info, ['$dp'], value,
-                       [process_count, port_count]}),
+                       [process_count, process_limit,
+                        port_count, port_limit,
+                        atom_count, atom_limit
+                       ]}),
 
     ok = exometer:new([erlang, statistics],
                       {function, erlang, statistics, ['$dp'], value,

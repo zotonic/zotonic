@@ -248,6 +248,7 @@ reauth(#{ type := _auth }, _Context) ->
 
 -spec is_allowed( publish | subscribe, mqtt_sessions_runtime:topic(), mqtt_packet_map:mqtt_packet(), z:context()) -> boolean().
 is_allowed(Action, Topic, Packet, Context) when Action =:= subscribe; Action =:= publish ->
+    z_stats:record_event(broker, Action, Context), 
     is_allowed(z_acl:is_admin(Context), Action, Topic, Packet, Context).
 
 is_allowed(true, publish, _Topic, _Packet, _Context) -> true;
