@@ -60,18 +60,18 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
         <<>> ->
             {true, maps:remove(<<"video_embed_code">>, Props)};
         EmbedCodeRaw ->
-            case z_acl:is_allowed(insert, #acl_media{mime=?EMBED_MIME}, Context) of
+            case z_acl:is_allowed(insert, #acl_media{ mime = ?EMBED_MIME }, Context) of
                 true ->
                     EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
                     EmbedService = z_convert:to_binary(
                                         maps:get(<<"video_embed_service">>, Props, <<>>)),
                     {EmbedService1, EmbedId} = fetch_videoid_from_embed(EmbedService, EmbedCode),
-                    MediaProps = [
-                        {mime, ?EMBED_MIME},
-                        {video_embed_code, EmbedCode},
-                        {video_embed_service, EmbedService1},
-                        {video_embed_id, EmbedId}
-                    ],
+                    MediaProps = #{
+                        <<"mime">> => ?EMBED_MIME,
+                        <<"video_embed_code">> => EmbedCode,
+                        <<"video_embed_service">> => EmbedService1,
+                        <<"video_embed_id">> => EmbedId
+                    },
                     ok = m_media:replace(Id, MediaProps, Context),
                     spawn_preview_create(Id, MediaProps, Context);
                 false ->
@@ -89,36 +89,26 @@ observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, #{ <<"video_embe
         Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= "" ->
             % Delete the media record iff the media mime type is our mime type
             case OldMediaProps of
-                undefined ->
-                    false;
+                #{ <<"mime">> := ?EMBED_MIME } ->
+                    m_media:delete(Id, Context),
+                    true;
                 _ ->
-                    case proplists:get_value(mime, OldMediaProps) of
-                        ?EMBED_MIME ->
-                            m_media:delete(Id, Context),
-                            true;
-                        _ ->
-                            false
-                    end
+                    false
             end;
         _ ->
             EmbedCode = z_sanitize:html(z_html:unescape(EmbedCodeRaw), Context),
             EmbedService = maps:get(<<"video_embed_service">>, Props, <<>>),
             {EmbedService1, EmbedId} = fetch_videoid_from_embed(EmbedService, EmbedCode),
-            MediaProps = [
-                {mime, ?EMBED_MIME},
-                {video_embed_code, EmbedCode},
-                {video_embed_service, EmbedService1},
-                {video_embed_id, EmbedId}
-            ],
+            MediaProps = #{
+                <<"mime">> => ?EMBED_MIME,
+                <<"video_embed_code">> => EmbedCode,
+                <<"video_embed_service">> => EmbedService1,
+                <<"video_embed_id">> => EmbedId
+            },
             case OldMediaProps of
-                undefined ->
-                    ok = m_media:replace(Id, MediaProps, Context),
-                    spawn_preview_create(Id, MediaProps, Context),
-                    true;
-                _ ->
-                    case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?EMBED_MIME)
-                        andalso z_utils:are_equal(proplists:get_value(video_embed_code, OldMediaProps), EmbedCode)
-                        andalso z_utils:are_equal(proplists:get_value(video_embed_service, OldMediaProps), EmbedService)
+                #{ <<"mime">> := ?EMBED_MIME } ->
+                    case        z_utils:are_equal(maps:get(<<"video_embed_code">>, OldMediaProps, undefined), EmbedCode)
+                        andalso z_utils:are_equal(maps:get(<<"video_embed_service">>, OldMediaProps, undefined), EmbedService)
                     of
                         true ->
                             false;
@@ -126,7 +116,11 @@ observe_rsc_update(#rsc_update{action=update, id=Id}, {Changed, #{ <<"video_embe
                             ok = m_media:replace(Id, MediaProps, Context),
                             spawn_preview_create(Id, MediaProps, Context),
                             true
-                    end
+                    end;
+                _ ->
+                    ok = m_media:replace(Id, MediaProps, Context),
+                    spawn_preview_create(Id, MediaProps, Context),
+                    true
             end
     end,
     Props1 = maps:remove(<<"video_embed_code">>,
@@ -138,52 +132,50 @@ observe_rsc_update(#rsc_update{}, {Changed, Props}, _Context) ->
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
 %% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
-observe_media_viewer(#media_viewer{props=Props}, Context) ->
-    case proplists:get_value(mime, Props) of
-        ?EMBED_MIME ->
-            case proplists:get_value(video_embed_code, Props) of
-                undefined -> undefined;
-                EmbedCode ->
-                    EmbedCode1 = binary:replace(EmbedCode, <<"http://">>, <<"https://">>, [global]),
-                    IsIframe = binary:match(EmbedCode1, <<"<iframe">>) =/= nomatch,
-                    Vars = [
-                        {html, EmbedCode1},
-                        {is_iframe, IsIframe},
-                        {medium, Props}
-                    ],
-                    Html = z_template:render("_video_embed.tpl", Vars, Context),
-                    {ok, Html}
-            end;
+observe_media_viewer(#media_viewer{props= #{ <<"mime">> := ?EMBED_MIME } = Props}, Context) ->
+    case maps:get(<<"video_embed_code">>, Props, undefined) of
+        EmbedCode when is_binary(EmbedCode) ->
+            EmbedCode1 = binary:replace(EmbedCode, <<"http://">>, <<"https://">>, [global]),
+            IsIframe = binary:match(EmbedCode1, <<"<iframe">>) =/= nomatch,
+            Vars = [
+                {html, EmbedCode1},
+                {is_iframe, IsIframe},
+                {medium, Props}
+            ],
+            Html = z_template:render("_video_embed.tpl", Vars, Context),
+            {ok, Html};
         _ ->
             undefined
-    end.
+    end;
+observe_media_viewer(#media_viewer{}, _Context) ->
+    undefined.
 
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-observe_media_stillimage(#media_stillimage{id=Id, props=Props}, Context) ->
-    case proplists:get_value(mime, Props) of
-        ?EMBED_MIME ->
-            case m_rsc:p(Id, depiction, Context) of
-                undefined ->
-                    case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-                        [] ->
-                            case proplists:get_value(video_embed_service, Props) of
-                                <<"youtube">> -> {ok, "lib/images/youtube.jpg"};
-                                <<"vimeo">> -> {ok, "lib/images/vimeo.jpg"};
-                                _ -> {ok, "lib/images/embed.jpg"}
-                            end;
-                        PreviewFile -> {ok, PreviewFile}
-                    end;
-                DepictionProps ->
-                    case z_convert:to_list(proplists:get_value(filename, DepictionProps)) of
-                        [] -> undefined;
-                        Filename -> {ok, Filename}
+observe_media_stillimage(#media_stillimage{id=Id, props= #{ <<"mime">> := ?EMBED_MIME } = Props}, Context) ->
+    case m_rsc:p(Id, depiction, Context) of
+        undefined ->
+            case maps:get(<<"preview_filename">>, Props, undefined) of
+                PreviewFile when is_binary(PreviewFile), PreviewFile =/= <<>> ->
+                    {ok, PreviewFile};
+                _ ->
+                    case maps:get(video_embed_service, Props, undefined) of
+                        <<"youtube">> -> {ok, <<"lib/images/youtube.jpg">>};
+                        <<"vimeo">> -> {ok, <<"lib/images/vimeo.jpg">>};
+                        _ -> {ok, <<"lib/images/embed.jpg">>}
                     end
             end;
-        _ ->
-            undefined
-    end.
+        DepictionProps ->
+            case maps:get(<<"filename">>, DepictionProps, undefined) of
+                Filename when is_binary(Filename), Filename =/= <<>> ->
+                    {ok, Filename};
+                _ ->
+                    undefined
+            end
+    end;
+observe_media_stillimage(#media_stillimage{}, _Context) ->
+    undefined.
 
 
 %% @doc Recognize youtube and vimeo URLs, generate the correct embed code

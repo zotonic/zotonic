@@ -150,7 +150,7 @@ as_proplist(#media_import_props{} = MI) ->
         image -> image;
         website -> website;
         document -> document;
-        _ -> m_media:mime_to_category(proplists:get_value(mime, MI#media_import_props.medium_props))
+        _ -> m_media:mime_to_category(maps:get(<<"mime">>, MI#media_import_props.medium_props, undefined))
     end,
     [
         {description, MI#media_import_props.description},
@@ -171,17 +171,17 @@ try_embed(<<$<, _/binary>> = Html, Context) ->
           end,
     {ok, [
         #media_import_props{
-            prio=1,
-            category=video,
-            description=?__("Embedded Content", Context),
-            rsc_props=[
-                {website, Url}
-            ],
-            medium_props=[
-                {mime, <<"text/html-video-embed">>},
-                {video_embed_code, EmbedCode},
-                {media_import, Html}
-            ]
+            prio = 1,
+            category = video,
+            description = ?__("Embedded Content", Context),
+            rsc_props = #{
+                <<"website">> => Url
+            },
+            medium_props = #{
+                <<"mime">> => <<"text/html-video-embed">>,
+                <<"video_embed_code">> => EmbedCode,
+                <<"media_import">> => Html
+            }
         }
     ]};
 try_embed(Url, Context) ->

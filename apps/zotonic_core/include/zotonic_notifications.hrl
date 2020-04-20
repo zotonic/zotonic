@@ -751,7 +751,7 @@
 -record(m_config_update_prop, {module, key, prop, value}).
 
 %% @doc Notification for fetching #media_import_props{} from different modules.
-%% This is used by z_media_import.erl for fetching properties and medium information
+%% This is used by z_media_import.erl for fetching properties and medium information (map)
 %% about resources.
 -record(media_import, {
     url :: binary(),
@@ -764,9 +764,9 @@
     prio = 5 :: pos_integer(),      % 1 for perfect match (ie. host specific importer)
     category :: atom(),
     module :: atom(),
-    description :: binary() | {trans, list()},
-    rsc_props :: list(),
-    medium_props :: list(),
+    description :: binary() | z:trans(),
+    rsc_props :: map(),
+    medium_props :: z_media_identify:media_info(),
     medium_url = <<>> :: binary(),
     preview_url :: binary() | undefined
 }).
@@ -780,9 +780,9 @@
 -record(media_upload_preprocess, {
     id = insert_rsc :: m_rsc:resource_id() | insert_rsc,
     mime :: binary(),
-    file :: file:filename() | undefined,
-    original_filename :: file:filename() | undefined,
-    medium :: list(),
+    file :: filename:filename_all() | undefined,
+    original_filename :: filename:filename_all() | undefined,
+    medium :: z_media_identify:media_info(),
     post_insert_fun :: function() | undefined
 }).
 
@@ -793,7 +793,7 @@
 -record(media_upload_props, {
     id :: integer() | 'insert_rsc',
     mime :: binary(),
-    archive_file :: file:filename() | undefined,
+    archive_file :: filename:filename_all() | undefined,
     options :: list()
 }).
 
@@ -806,7 +806,7 @@
     mime :: binary(),
     archive_file,
     options :: list(),
-    medium :: list()
+    medium :: z_media_identify:media_info()
 }).
 
 %% @doc Notification that a medium file has been changed (notify)
@@ -872,7 +872,11 @@
 
 %% @doc Try to identify a file, returning a list of file properties.
 %% Type: first
--record(media_identify_file, {filename, original_filename, extension}).
+-record(media_identify_file, {
+    filename :: filename:filename_all(),
+    original_filename :: binary(),
+    extension :: binary()
+}).
 
 %% @doc Try to find a filename extension for a mime type (example: ".jpg")
 %% Type: first
@@ -886,14 +890,17 @@
 %% Return: ``{ok, Html}`` or ``undefined``
 -record(media_viewer, {
     id,
-    props :: list(),
-    filename,
+    props :: z_media_identify:media_info(),
+    filename :: filename:filename_all(),
     options = [] :: list()
 }).
 
 %% @doc See if there is a 'still' image preview of a media item. (eg posterframe of a movie)
 %% Return:: ``{ok, ResourceId}`` or ``undefined``
--record(media_stillimage, {id, props = []}).
+-record(media_stillimage, {
+    id :: m_rsc:resource_id() | undefined,
+    props = z_media_identify:media_info()
+}).
 
 
 %% @doc Fetch lisy of handlers.

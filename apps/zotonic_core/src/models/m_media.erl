@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2014 Marc Worrell
+%% @copyright 2009-2020 Marc Worrell
 %% @doc Model for medium database
 
-%% Copyright 2009-2014 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ m_get(Vs, _Msg, _Context) ->
 
 
 %% @doc Return the identification of a medium. Used by z_media_identify:identify()
-%% @spec identify(ImageFilePath, Context) -> {ok, PropList} | {error, Reason}
+-spec identify( m_rsc:resource_id(), z:context() ) -> {ok, z_media_identify:media_info()} | {error, term()}.
 identify(Id, Context) when is_integer(Id) ->
     case z_db:assoc_row("select id, mime, width, height, orientation from medium where id = $1", [Id],
         Context) of
@@ -133,42 +133,47 @@ exists(Id, Context) ->
 
 %% @doc Get the medium record with the id
 %% @spec get(RscId, Context) -> PropList
+-spec get( m_rsc:resource_id(), z:context() ) -> z_media_identify:media_info() | undefined.
 get(Id, Context) ->
     F = fun() ->
-        z_db:assoc_props_row("select * from medium where id = $1", [Id], Context)
+        case z_db:qmap_row("select * from medium where id = $1", [Id], Context) of
+            {ok, Map} -> Map;
+            {error, enoent} -> undefined
+        end
     end,
     z_depcache:memo(F, {medium, Id}, ?WEEK, [Id], Context).
 
 %% @doc Return the contents of the file belonging to the media resource
 get_file_data(Id, Context) ->
     case get(Id, Context) of
-        undefined ->
-            {error, enoent};
-        Media ->
-            Filename = proplists:get_value(filename, Media),
+        #{ <<"filename">> := Filename } = Media when is_binary(Filename) ->
             ArchivedFilename = z_media_archive:abspath(Filename, Context),
             case file:read_file(ArchivedFilename) of
                 {ok, Data} ->
                     #upload{
                         filename = Filename,
                         data = Data,
-                        mime = proplists:get_value(mime, Media)
+                        mime = maps:get(<<"mime">>, Media, undefined)
                     };
                 Error ->
                     Error
-            end
+            end;
+        undefined ->
+            {error, enoent};
+        _ ->
+            {error, nofile}
     end.
 
 %% @doc Fetch a medium by filename
 get_by_filename(Filename, Context) ->
     case z_depcache:get({medium, Filename}, Context) of
         undefined ->
-            Row = z_db:assoc_props_row("select * from medium where filename = $1", [Filename], Context),
+            Row = z_db:qmap_row("select * from medium where filename = $1", [Filename], Context),
             case Row of
+                #{ <<"id">> := Id } ->
+                    z_depcache:set({medium, Filename}, Row, ?HOUR, [Id], Context);
                 undefined ->
-                    z_depcache:set({medium, Filename}, undefined, ?HOUR, Context);
-                _L ->
-                    z_depcache:set({medium, Filename}, Row, ?HOUR, [proplists:get_value(id, Row)], Context)
+                    z_depcache:set({medium, Filename}, undefined, ?HOUR, Context)
             end,
             Row;
         {ok, Row} ->
@@ -179,7 +184,7 @@ get_by_filename(Filename, Context) ->
 %% @doc Get the medium record that depicts the resource id. "depiction" Predicates are preferred, when
 %% they are missing then the attached medium record itself is returned.  We must be able to generate a preview
 %% from the medium.
-%% @spec depiction(RscId, Context) -> PropList | undefined
+-spec depiction( m_rsc:resource_id(), z:context() ) -> map() | undefined.
 depiction(Id, Context) ->
     try
         z_depcache:memo(
@@ -204,23 +209,23 @@ depiction([Id | Ids], Visited, Context) ->
                     case get(Id, Context) of
                         undefined ->
                             depiction(Ids, [Id | Visited], Context);
-                        Props when is_list(Props) ->
-                            Props
+                        Media ->
+                            Media
                     end;
-                Props when is_list(Props) ->
-                    Props
+                Media when is_map(Media) ->
+                    Media
             end
     end.
 
 
 %% @doc Return the list of resources that is depicted by the medium (excluding the rsc itself)
-%% @spec depicts(RscId, Context) -> [Id]
+-spec depicts( m_rsc:resource_id(), z:context() ) -> list( m_rsc:resource_id() ).
 depicts(Id, Context) ->
     m_edge:subjects(Id, depiction, Context).
 
 
 %% @doc Delete the medium at the id.  The file is queued for later deletion.
-%% @spec delete(RscId, Context) -> ok | {error, Reason}
+-spec delete( m_rsc:resource_id(), z:context() ) -> ok  | {error, term()}.
 delete(Id, Context) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
@@ -241,10 +246,13 @@ delete(Id, Context) ->
 
 %% @doc Replace or insert a medium record for the page.  This is useful for non-file related media.
 %% Resets all non mentioned attributes.
-%% @spec replace(Id, Props, Context) -> ok | {error, Reason}
+-spec replace( m_rsc:resource_id(), map(), z:context() ) -> ok  | {error, term()}.
+replace(Id, Props, Context) when is_list(Props) ->
+    {ok, Map} = z_props:from_list(Props),
+    replace(Id, Map, Context);
 replace(Id, Props, Context) ->
-    Mime = proplists:get_value(mime, Props),
-    Size = proplists:get_value(size, Props, 0),
+    Mime = maps:get(<<"mime">>, Props, undefined),
+    Size = maps:get(<<"size">>, Props, 0),
     case z_acl:rsc_editable(Id, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = Size}, Context)
     of
@@ -252,7 +260,7 @@ replace(Id, Props, Context) ->
             Depicts = depicts(Id, Context),
             F = fun(Ctx) ->
                 {ok, _} = medium_delete(Id, Ctx),
-                {ok, Id} = medium_insert(Id, [{id, Id} | Props], Ctx)
+                {ok, Id} = medium_insert(Id, Props#{ id => Id }, Ctx)
             end,
             case z_db:transaction(F, Context) of
                 {ok, _} ->
@@ -288,9 +296,9 @@ merge(WinnerId, LoserId, Context) ->
                         1 ->
                             Depicts = depicts(LoserId, Context),
                             1 = z_db:q("update medium set id = $1 where id = $2",
-                                [WinnerId, LoserId],
+                                [ WinnerId, LoserId ],
                                 Context),
-                            [z_depcache:flush(DepictId, Context) || DepictId <- Depicts],
+                            [ z_depcache:flush(DepictId, Context) || DepictId <- Depicts ],
                             z_depcache:flush(LoserId, Context),
                             z_depcache:flush(WinnerId, Context),
                             ok
@@ -301,74 +309,57 @@ merge(WinnerId, LoserId, Context) ->
     end.
 
 %% @doc Duplicate the media item from the id to the new-id. Called by m_rsc:duplicate/3
--spec duplicate(m_rsc:resource(), m_rsc:resource(), #context{}) -> ok.
+-spec duplicate( m_rsc:resource(), m_rsc:resource(), z:context() ) -> ok.
 duplicate(FromId, ToId, Context) ->
-    case z_db:assoc_props_row("select * from medium where id = $1", [m_rsc:rid(FromId, Context)], Context) of
+    FromId1 = m_rsc:rid(FromId, Context),
+    ToId1 = m_rsc:rid(ToId, Context),
+    case z_db:assoc_props_row("select * from medium where id = $1", [FromId1], Context) of
         Ms when is_list(Ms) ->
             {ok, Ms1} = maybe_duplicate_file(Ms, Context),
             {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
-            Ms3 = z_utils:prop_replace(id, ToId, Ms2),
-            {ok, _ToId} = medium_insert(ToId, Ms3, Context),
+            Ms3 = z_utils:prop_replace(id, ToId1, Ms2),
+            {ok, _ToId} = medium_insert(ToId1, Ms3, Context),
             ok;
         undefined ->
             ok
     end.
 
-maybe_duplicate_file(Ms, Context) ->
-    case proplists:get_value(filename, Ms) of
-        <<>> ->
-            {ok, Ms};
-        undefined ->
-            {ok, Ms};
-        Filename ->
-            case proplists:get_value(is_deletable_file, Ms) of
-                false ->
-                    {ok, Ms};
-                true ->
-                    {ok, NewFile} = duplicate_file(archive, Filename, Context),
-                    RootName = filename:rootname(filename:basename(NewFile)),
-                    Ms1 = proplists:delete(filename,
-                        proplists:delete(rootname,
-                            proplists:delete(is_deletable_file, Ms))),
-                    Ms2 = [
-                        {filename, NewFile},
-                        {rootname, RootName},
-                        {is_deletable_file, true}
-                        | Ms1
-                    ],
-                    {ok, Ms2}
-            end
-    end.
+maybe_duplicate_file(#{ <<"filename">> := <<>> } = Ms, _Context) ->
+    {ok, Ms};
+maybe_duplicate_file(#{ <<"filename">> := undefined } = Ms, _Context) ->
+    {ok, Ms};
+maybe_duplicate_file(#{ <<"filename">> := _, <<"is_deletable_file">> := false } = Ms, _Context) ->
+    {ok, Ms};
+maybe_duplicate_file(#{ <<"filename">> := Filename, <<"is_deletable_file">> := true } = Ms, Context) ->
+    {ok, NewFile} = duplicate_file(archive, Filename, Context),
+    RootName = filename:rootname(filename:basename(NewFile)),
+    Ms2 = Ms#{
+        <<"filename">> => NewFile,
+        <<"rootname">> => RootName,
+        <<"is_deletable_file">> => true
+    },
+    {ok, Ms2}.
 
-maybe_duplicate_preview(Ms, Context) ->
-    case proplists:get_value(preview_filename, Ms) of
-        <<>> ->
-            {ok, Ms};
-        undefined ->
-            {ok, Ms};
-        Filename ->
-            case proplists:get_value(is_deletable_preview, Ms) of
-                false ->
-                    {ok, Ms};
-                true ->
-                    case duplicate_file(preview, Filename, Context) of
-                        {ok, NewFile} ->
-                            Ms1 = proplists:delete(preview_filename,
-                                proplists:delete(is_deletable_preview, Ms)),
-                            Ms2 = [
-                                {preview_filename, NewFile},
-                                {is_deletable_preview, true}
-                                | Ms1
-                            ],
-                            {ok, Ms2};
-                        {error, _} = Error ->
-                            lager:error("Duplicate preview: error ~p for preview file ~p",
-                                [Error, Filename]),
-                            Ms1 = proplists:delete(preview_filename,
-                                proplists:delete(is_deletable_preview, Ms)),
-                            {ok, Ms1}
-                    end
-            end
+maybe_duplicate_preview(#{ <<"preview_filename">> := <<>> } = Ms, _Context) ->
+    {ok, Ms};
+maybe_duplicate_preview(#{ <<"preview_filename">> := undefined } = Ms, _Context) ->
+    {ok, Ms};
+maybe_duplicate_preview(#{ <<"preview_filename">> := _, <<"is_deletable_preview">> := false  } = Ms, _Context) ->
+    {ok, Ms};
+maybe_duplicate_preview(#{ <<"preview_filename">> := Filename, <<"is_deletable_preview">> := true } = Ms, Context) ->
+    case duplicate_file(preview, Filename, Context) of
+        {ok, NewFile} ->
+            Ms1 = Ms#{
+                <<"preview_filename">> => NewFile,
+                <<"is_deletable_preview">> => true
+            },
+            {ok, Ms1};
+        {error, _} = Error ->
+            lager:error("Duplicate preview: error ~p for preview file \"~s\"",
+                [Error, Filename]),
+            Ms1 = maps:remove(<<"preview_filename">>, Ms),
+            Ms2 = maps:remove(<<"is_deletable_preview">>, Ms1),
+            {ok, Ms2}
     end.
 
 
@@ -385,18 +376,21 @@ duplicate_file(Type, Filename, Context) ->
 %% dir then a copy is made in the archive dir
 -spec insert_file(file:filename_all() | #upload{}, z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert_file(File, Context) ->
-    insert_file(File, [], Context).
+    insert_file(File, #{}, [], Context).
 
--spec insert_file(file:filename_all() | #upload{}, list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
-insert_file(File, Props, Context) ->
-    insert_file(File, Props, [], Context).
+-spec insert_file(file:filename_all() | #upload{}, m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+insert_file(File, RscProps, Context) ->
+    insert_file(File, RscProps, [], Context).
 
--spec insert_file(file:filename_all() | #upload{}, list(), list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
-insert_file(#upload{ data = Data, tmpfile = undefined } = Upload, Props, Options, Context) when Data =/= undefined ->
+-spec insert_file(file:filename_all() | #upload{}, m_rsc:props_all(), list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+insert_file(File, RscProps, Options, Context) when is_list(RscProps) ->
+    {ok, PropsMap} = z_props:from_list(RscProps),
+    insert_file(File, PropsMap, Options, Context);
+insert_file(#upload{ data = Data, tmpfile = undefined } = Upload, RscProps, Options, Context) when Data =/= undefined ->
     TmpFile = z_tempfile:new(),
     case file:write_file(TmpFile, Data) of
         ok ->
-            Result = insert_file(Upload#upload{ tmpfile = TmpFile }, Props, Options, Context),
+            Result = insert_file(Upload#upload{ tmpfile = TmpFile }, RscProps, Options, Context),
             file:delete(TmpFile),
             Result;
         {error, _} = Error ->
@@ -405,20 +399,29 @@ insert_file(#upload{ data = Data, tmpfile = undefined } = Upload, Props, Options
             file:delete(TmpFile),
             Error
     end;
-insert_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, Props, Options, Context) ->
-    PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-    insert_file(TmpFile, [{original_filename, OriginalFilename} | Props], PropsMedia, Options, Context);
-insert_file(File, Props, Options, Context) ->
-    OriginalFilename = proplists:get_value(original_filename, Props, File),
-    PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename}], Context),
-    insert_file(File, Props, PropsMedia, Options, Context).
+insert_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscProps, Options, Context) ->
+    RscProps1 = RscProps#{
+        <<"original_filename">> => OriginalFilename
+    },
+    MediaProps = #{
+        <<"original_filename">> => OriginalFilename
+    },
+    MediaProps1 = add_medium_info(TmpFile, OriginalFilename, MediaProps, Context),
+    insert_file(TmpFile, RscProps1, MediaProps1, Options, Context);
+insert_file(File, RscProps, Options, Context) ->
+    OriginalFilename = maps:get(<<"original_filename">>, RscProps, File),
+    MediaProps = #{
+        <<"original_filename">> => OriginalFilename
+    },
+    MediaProps1 = add_medium_info(File, OriginalFilename, MediaProps, Context),
+    insert_file(File, RscProps, MediaProps1, Options, Context).
 
-insert_file(File, Props, PropsMedia, Options, Context) ->
-    Mime = proplists:get_value(mime, PropsMedia),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = Props}, Context) andalso
+insert_file(File, RscProps, MediaProps, Options, Context) ->
+    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = RscProps}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
         true ->
-            insert_file_mime_ok(File, Props, PropsMedia, Options, Context);
+            insert_file_mime_ok(File, RscProps, MediaProps, Options, Context);
         false ->
             {error, file_not_allowed}
     end.
@@ -433,11 +436,11 @@ replace_medium(Medium, RscId, RscProps, Options, Context) ->
         false -> {error, eacces}
     end.
 
-update_medium_1(RscId, Medium, RscProps, Options, Context) ->
-    {mime, Mime} = proplists:lookup(mime, Medium),
-    Category = case proplists:get_value(category, RscProps) of
-                    undefined -> tl(m_rsc:is_a(RscId, Context));
-                    Cat -> Cat
+update_medium_1(RscId, #{ mime := Mime } = Medium, RscProps, Options, Context) ->
+    Category = case maps:find(<<"category">>, RscProps) of
+                    {ok, undefined} -> tl(m_rsc:is_a(RscId, Context));
+                    {ok, Cat} -> Cat;
+                    false -> tl(m_rsc:is_a(RscId, Context))
                end,
     case z_acl:is_allowed(insert, #acl_rsc{category = Category, props = RscProps}, Context) andalso
          z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context) of
@@ -460,18 +463,25 @@ update_medium_1(RscId, Medium, RscProps, Options, Context) ->
 
 
 %% @doc Make a new resource for the file based on a URL.
-%% @spec insert_url(File, Context) -> {ok, Id} | {error, Reason}
--spec insert_url(file:filename(), #context{}) -> {ok, pos_integer()} | {error, term()}.
+-spec insert_url(file:filename(), z:context()) -> {ok, pos_integer()} | {error, term()}.
 insert_url(Url, Context) ->
-    insert_url(Url, [], Context).
+    insert_url(Url, #{}, [], Context).
 
-insert_url(Url, Props, Context) ->
-    insert_url(Url, Props, [], Context).
+-spec insert_url(file:filename(), z_props:props_all(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+insert_url(Url, RscProps, Context) ->
+    insert_url(Url, RscProps, [], Context).
 
-insert_url(Url, Props, Options, Context) ->
+-spec insert_url(file:filename(), z_props:props_all(), list(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+insert_url(Url, RscProps, Options, Context) when is_list(RscProps) ->
+    {ok, PropsMap} = z_props:from_list(RscProps),
+    insert_url(Url, PropsMap, Options, Context);
+insert_url(Url, RscProps, Options, Context) ->
     case download_file(Url) of
         {ok, TmpFile, Filename} ->
-            Result = insert_file(TmpFile, [{original_filename, Filename} | Props], Options, Context),
+            RscProps1 = RscProps#{
+                <<"original_filename">> => Filename
+            },
+            Result = insert_file(TmpFile, RscProps1, Options, Context),
             file:delete(TmpFile),
             Result;
         {error, Reason} ->
@@ -480,17 +490,21 @@ insert_url(Url, Props, Options, Context) ->
 
 %% Perform the resource management around inserting a file. The ACL is already checked for the mime type.
 %% Runs the final insert inside a transaction so that we can rollback.
-insert_file_mime_ok(File, Props1, PropsMedia, Options, Context) ->
-    Props2 = case proplists:get_value(is_published, Props1) of
-        undefined -> [{is_published, true} | Props1];
-        _ -> Props1
-    end,
-    Props3 = case z_utils:is_empty(proplists:get_value(title, Props2)) of
+insert_file_mime_ok(File, RscProps, MediaProps, Options, Context) ->
+    IsPublished = z_convert:to_bool( maps:get(<<"is_published">>, RscProps, true) ),
+    RscProps1 = RscProps#{
+        <<"is_published">> => IsPublished
+    },
+    RscProps2 = case z_utils:is_empty(maps:get(<<"title">>, RscProps1, <<>>)) of
         true ->
-            [{title, filename_basename(proplists:get_value(original_filename, PropsMedia))} | Props2];
-        false -> Props2
+            OriginalFilename = maps:get(<<"original_filename">>, MediaProps, undefined),
+            RscProps1#{
+                <<"title">> => filename_basename(OriginalFilename)
+            };
+        false ->
+            RscProps1
     end,
-    replace_file_mime_ok(File, insert_rsc, Props3, PropsMedia, Options, Context).
+    replace_file_mime_ok(File, insert_rsc, RscProps2, MediaProps, Options, Context).
 
 filename_basename(undefined) -> <<>>;
 filename_basename(Filename) ->
@@ -501,79 +515,94 @@ filename_basename(Filename) ->
 %% @doc Replaces a medium file, when the file is not in archive then a copy is
 %% made in the archive. When the resource is in the media category, then the
 %% category is adapted depending on the mime type of the uploaded file.
-%% @spec replace_file(File, RscId, Context) -> {ok, Id} | {error, Reason}
 replace_file(File, RscId, Context) ->
-    replace_file(File, RscId, [], [], Context).
+    replace_file(File, RscId, #{}, #{}, [], Context).
 
-replace_file(File, RscId, Props, Context) ->
-    replace_file(File, RscId, Props, [], Context).
+replace_file(File, RscId, RscProps, Context) ->
+    replace_file(File, RscId, RscProps, #{}, [], Context).
 
-replace_file(File, RscId, Props, Opts, Context) ->
-    replace_file(File, RscId, Props, [], Opts, Context).
+replace_file(File, RscId, RscProps, Opts, Context) ->
+    replace_file(File, RscId, RscProps, #{}, Opts, Context).
 
-replace_file(#upload{filename = OriginalFilename, data = Data, tmpfile = undefined},
-    RscId, Props, MInfo, Opts, Context) when Data /= undefined ->
+replace_file(File, RscId, RscProps, MediaInfo, Opts, Context) when is_list(RscProps) ->
+    {ok, RscMap} = z_props:from_list(RscProps),
+    replace_file(File, RscId, RscMap, MediaInfo, Opts, Context);
+replace_file(File, RscId, RscProps, MediaInfo, Opts, Context) when is_list(MediaInfo) ->
+    {ok, MediaInfoMap} = z_props:from_list(MediaInfo),
+    replace_file(File, RscId, RscProps, MediaInfoMap, Opts, Context);
+replace_file(
+        #upload{filename = OriginalFilename, data = Data, tmpfile = undefined},
+        RscId, RscProps, MInfo, Opts, Context) when Data =/= undefined ->
     TmpFile = z_tempfile:new(),
     ok = file:write_file(TmpFile, Data),
-    replace_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscId, Props, MInfo, Opts, Context);
-replace_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscId, Props, MInfo, Opts, Context) ->
-    PropsMedia = add_medium_info(TmpFile, OriginalFilename, [{original_filename, OriginalFilename} | MInfo],
-        Context),
-    replace_file_mime_check(TmpFile, RscId, [{original_filename, OriginalFilename} | Props], PropsMedia, Opts,
-        Context);
-replace_file(File, RscId, Props, MInfo, Opts, Context) ->
-    OriginalFilename = proplists:get_value(original_filename, Props, File),
-    PropsMedia = add_medium_info(File, OriginalFilename, [{original_filename, OriginalFilename} | MInfo],
-        Context),
-    replace_file_mime_check(File, RscId, Props, PropsMedia, Opts, Context).
+    replace_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscId, RscProps, MInfo, Opts, Context);
+replace_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscId, RscProps, MInfo, Opts, Context) ->
+    MInfo1 = MInfo#{
+        <<"original_filename">> => OriginalFilename
+    },
+    MediaProps = add_medium_info(TmpFile, OriginalFilename, MInfo1, Context),
+    RscProps1 = RscProps#{
+        <<"original_filename">> => OriginalFilename
+    },
+    replace_file_mime_check(TmpFile, RscId, RscProps1, MediaProps, Opts, Context);
+replace_file(File, RscId, RscProps, MInfo, Opts, Context) ->
+    OriginalFilename = maps:get(<<"original_filename">>, RscProps, File),
+    MInfo1 = MInfo#{
+        <<"original_filename">> => OriginalFilename
+    },
+    MediaProps = add_medium_info(File, OriginalFilename, MInfo1, Context),
+    replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context).
 
-replace_file_mime_check(File, RscId, Props, PropsMedia, Opts, Context) ->
-    Mime = proplists:get_value(mime, PropsMedia),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = Props}, Context) andalso
+replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context) ->
+    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = RscProps}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
         true ->
-            replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context);
+            replace_file_mime_ok(File, RscId, RscProps, MediaProps, Opts, Context);
         false ->
             {error, file_not_allowed}
     end.
 
 %% @doc Replace the file, no mime check needed.
-replace_file_mime_ok(File, RscId, Props, PropsMedia, Opts, Context) ->
-    case RscId == insert_rsc
+replace_file_mime_ok(File, RscId, RscProps, MediaProps, Opts, Context) ->
+    case RscId =:= insert_rsc
         orelse z_acl:rsc_editable(RscId, Context)
         orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
         true ->
-            replace_file_acl_ok(File, RscId, Props, PropsMedia, Opts, Context);
+            replace_file_acl_ok(File, RscId, RscProps, MediaProps, Opts, Context);
         false ->
             {error, eacces}
     end.
 
 %% @doc Preprocess the data, examples are virus scanning and video preprocessing
-replace_file_acl_ok(File, RscId, Props, Medium, Opts, Context) ->
-    Mime = proplists:get_value(mime, Medium),
+replace_file_acl_ok(File, RscId, RscProps, Medium, Opts, Context) ->
+    Mime = maps:get(<<"mime">>, Medium, undefined),
+    OriginalFilename = maps:get(
+        <<"original_filename">>,
+        RscProps,
+        maps:get(<<"original_filename">>, Medium, File)),
     PreProc = #media_upload_preprocess{
-                    id=RscId,
-                    mime=Mime,
-                    file=File,
-                    original_filename=proplists:get_value(original_filename, Props,
-                                        proplists:get_value(original_filename, Medium, File)),
-                    medium=Medium
-                },
+        id = RscId,
+        mime = Mime,
+        file = File,
+        original_filename = OriginalFilename,
+        medium = Medium
+    },
     case notify_first_preproc(PreProc, true, Context) of
         {ok, PreProc1} ->
             PreProc2 = set_av_flag(PreProc1, Context),
-            replace_file_sanitize(RscId, PreProc2, Props, Opts, Context);
+            replace_file_sanitize(RscId, PreProc2, RscProps, Opts, Context);
         {error, _} = Error ->
             Error
     end.
 
 %% @doc Set a flag that there was an av scan. This needs to be more generic.
 set_av_flag( #media_upload_preprocess{ medium = Medium } = PreProc, Context ) ->
-    Medium1 = [
-        {is_av_scanned, not proplists:get_value(is_av_sizelimit, Medium, false)
-                        andalso lists:member(antivirus, z_module_manager:get_provided(Context))}
-        | proplists:delete(is_av_scanned, Medium)
-    ],
+    IsAvScanned = not maps:get(<<"is_av_sizelimit">>, Medium, false)
+        andalso lists:member(antivirus, z_module_manager:get_provided(Context)),
+    Medium1 = Medium#{
+        <<"is_av_scanned">> => IsAvScanned
+    },
     PreProc#media_upload_preprocess{ medium = Medium1 }.
 
 notify_first_preproc(PreProc, IsFirstTry, Context) ->
@@ -583,10 +612,9 @@ notify_first_preproc(PreProc, IsFirstTry, Context) ->
         #media_upload_preprocess{} = MappedPreProc ->
             {ok, MappedPreProc};
         {error, av_sizelimit} when IsFirstTry ->
-            Medium1 = [
-                {is_av_sizelimit, true}
-                | proplists:delete(is_av_sizelimit, PreProc#media_upload_preprocess.medium)
-            ],
+            Medium1 = (PreProc#media_upload_preprocess.medium)#{
+                <<"is_av_sizelimit">> => true
+            },
             PreProc1 = PreProc#media_upload_preprocess{ medium = Medium1 },
             notify_first_preproc(PreProc1, false, Context);
         {error, _} = Error ->
@@ -603,23 +631,24 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     PreferExtension = z_convert:to_binary(
         filename:extension(PreProc#media_upload_preprocess.original_filename)),
     Mime = z_convert:to_binary(PreProc#media_upload_preprocess.mime),
-    SafeFilename = iolist_to_binary(
-        [SafeRootName, z_media_identify:extension(Mime, PreferExtension, Context)]),
+    SafeFilename = iolist_to_binary([
+        SafeRootName, z_media_identify:extension(Mime, PreferExtension, Context)
+    ]),
     ArchiveFile = case PreProc#media_upload_preprocess.file of
-                      undefined -> undefined;
-                    UploadFile -> z_media_archive:archive_copy_opt(UploadFile, SafeFilename, Context)
-                  end,
+        undefined -> undefined;
+        UploadFile -> z_media_archive:archive_copy_opt(UploadFile, SafeFilename, Context)
+    end,
     RootName = case ArchiveFile of
-                    undefined -> undefined;
-                    _ -> filename:rootname(filename:basename(ArchiveFile))
-               end,
-    Medium0 = [
-        {mime, Mime},
-        {filename, ArchiveFile},
-        {rootname, RootName},
-        {is_deletable_file, is_deletable_file(PreProc#media_upload_preprocess.file, Context)}
-    ],
-    Medium = z_utils:props_merge(PreProc#media_upload_preprocess.medium, Medium0),
+        undefined -> undefined;
+        _ -> filename:rootname(filename:basename(ArchiveFile))
+    end,
+    Medium0 = #{
+        <<"mime">> => Mime,
+        <<"filename">> => ArchiveFile,
+        <<"rootname">> => RootName,
+        <<"is_deletable_file">> => is_deletable_file(PreProc#media_upload_preprocess.file, Context)
+    },
+    Medium = maps:merge(Medium0, PreProc#media_upload_preprocess.medium),
     Medium1 = z_notifier:foldl(
         #media_upload_props{
             id = RscId,
@@ -646,11 +675,15 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     F = fun(Ctx) ->
         %% If the resource is in the media category, then move it to the correct sub-category depending
         %% on the mime type of the uploaded file.
-        Props1 = case proplists:is_defined(category, PropsM)
-            orelse proplists:is_defined(category_id, PropsM)
+        Props1 = case maps:is_key(<<"category">>, PropsM)
+            orelse maps:is_key(<<"category_id">>, PropsM)
         of
-            true -> PropsM;
-            false -> [{category, mime_to_category(Mime)} | PropsM]
+            true ->
+                PropsM;
+            false ->
+                PropsM#{
+                    <<"category">> => mime_to_category(Mime)
+                }
         end,
         {ok, Id} = case RscId of
             insert_rsc ->
@@ -685,7 +718,11 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
 
             %% Flush categories
             CatList = m_rsc:is_a(Id, Context),
-            [z_depcache:flush(Cat, Context) || Cat <- CatList],
+            lists:foreach(
+                fun(Cat) ->
+                    z_depcache:flush(Cat, Context)
+                end,
+                CatList),
 
             _ = m_rsc:get(Id, Context), %% Prevent side effect that empty things are cached?
 
@@ -713,16 +750,21 @@ is_deletable_file(undefined, _Context) ->
 is_deletable_file(File, Context) ->
     not z_media_archive:is_archived(File, Context).
 
-replace_url(Url, RscId, Props, Context) ->
-    replace_url(Url, RscId, Props, [], Context).
+replace_url(Url, RscId, RscProps, Context) ->
+    replace_url(Url, RscId, RscProps, [], Context).
 
-replace_url(Url, RscId, Props, Options, Context) ->
+replace_url(Url, RscId, RscProps, Options, Context) when is_list(RscProps) ->
+    {ok, PropsMap} = z_props:from_list(RscProps),
+    replace_url(Url, RscId, PropsMap, Options, Context);
+replace_url(Url, RscId, RscProps, Options, Context) ->
     case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
         true ->
             case download_file(Url) of
                 {ok, File, Filename} ->
-                    Result = replace_file(File, RscId, [{original_filename, Filename} | Props], Options,
-                        Context),
+                    RscProps1 = RscProps#{
+                        <<"original_filename">> => Filename
+                    },
+                    Result = replace_file(File, RscId, RscProps1, Options, Context),
                     file:delete(File),
                     Result;
                 {error, E} ->
@@ -741,7 +783,7 @@ reupload(Id, Context) ->
                 undefined ->
                     {error, enoent};
                 Medium ->
-                    case proplists:get_value(size, Medium, 0) of
+                    case maps:get(<<"size">>, Medium, 0) of
                         undefined -> {error, nofile};
                         0 -> {error, nofile};
                         _ -> reupload_1(Id, Medium, Context)
@@ -753,7 +795,7 @@ reupload(Id, Context) ->
 
 reupload_1(Id, Medium, Context) ->
     % Fetch all filenames being used.
-    case proplists:get_value(filename, Medium) of
+    case map:get(<<"filename">>, Medium, undefined) of
         undefined -> {error, nofile};
         <<>> -> {error, nofile};
         Filename ->
@@ -767,7 +809,7 @@ reupload_2(Id, Medium, Filename, {ok, #z_file_info{} = FInfo}, Context) ->
             % Copy file to temp file
             Result = case file:copy(MediaFile, TmpFile) of
                 {ok, _} ->
-                    OrgFilename = case proplists:get_value(original_filename, Medium) of
+                    OrgFilename = case maps:get(<<"original_filename">>, Medium, undefined) of
                         undefined -> filename:basename(Filename);
                         <<>> -> filename:basename(Filename);
                         Fn -> Fn
@@ -882,18 +924,22 @@ filebase(<<"media/", _/binary>>) -> <<"media">>;
 filebase(_) -> <<"document">>.
 
 %% @doc Fetch the medium information of the file, if they are not set in the Props
-add_medium_info(File, OriginalFilename, Props, Context) ->
-    PropsSize = case proplists:get_value(size, Props) of
+add_medium_info(File, OriginalFilename, MediaProps, Context) ->
+    PropsSize = case maps:get(<<"size">>, MediaProps, undefined) of
         undefined ->
-            [{size, filelib:file_size(File)} | Props];
+            MediaProps#{
+                <<"size">> => filelib:file_size(File)
+            };
         _ ->
-            Props
+            MediaProps
     end,
-    PropsMime = case proplists:get_value(mime, PropsSize) of
+    PropsMime = case maps:get(<<"mime">>, PropsSize, undefined) of
         undefined ->
             case z_media_identify:identify_file(File, OriginalFilename, Context) of
-                {ok, MediaInfo} -> MediaInfo ++ PropsSize;
-                {error, _Reason} -> PropsSize
+                {ok, MediaInfo} ->
+                    maps:merge(MediaInfo, PropsSize);
+                {error, _Reason} ->
+                    PropsSize
             end;
         _ ->
             PropsSize
@@ -908,9 +954,9 @@ save_preview_url(RscId, Url, Context) ->
             case z_media_identify:identify_file(TmpFile, Filename, Context) of
                 {ok, MediaInfo} ->
                     try
-                        {mime, Mime} = proplists:lookup(mime, MediaInfo),
-                        {width, Width} = proplists:lookup(width, MediaInfo),
-                        {height, Height} = proplists:lookup(height, MediaInfo),
+                        Mime = maps:get(<<"mime">>, MediaInfo),
+                        Width = maps:get(<<"width">>, MediaInfo),
+                        Height = maps:get(<<"height">>, MediaInfo),
 
                         FileUnique = make_preview_unique(RscId, z_media_identify:extension(Mime), Context),
                         FileUniqueAbs = z_media_archive:abspath(FileUnique, Context),
@@ -923,12 +969,12 @@ save_preview_url(RscId, Url, Context) ->
                             ok ->
                                 ok
                         end,
-                        UpdateProps = [
-                            {preview_filename, FileUnique},
-                            {preview_width, Width},
-                            {preview_height, Height},
-                            {is_deletable_preview, true}
-                        ],
+                        UpdateProps = #{
+                            <<"preview_filename">> => FileUnique,
+                            <<"preview_width">> => Width,
+                            <<"preview_height">> => Height,
+                            <<"is_deletable_preview">> => true
+                        },
                         {ok, 1} = z_db:update(medium, RscId, UpdateProps, Context),
                         z_depcache:flush({medium, RscId}, Context),
                         {ok, FileUnique}
@@ -959,15 +1005,15 @@ save_preview(RscId, Data, Mime, Context) ->
 
             try
                 {ok, MediaInfo} = z_media_identify:identify(FileUniqueAbs, Context),
-                {width, Width} = proplists:lookup(width, MediaInfo),
-                {height, Height} = proplists:lookup(height, MediaInfo),
+                Width = maps:get(<<"width">>, MediaInfo),
+                Height = maps:get(<<"height">>, MediaInfo),
 
-                UpdateProps = [
-                    {preview_filename, FileUnique},
-                    {preview_width, Width},
-                    {preview_height, Height},
-                    {is_deletable_preview, true}
-                ],
+                UpdateProps = #{
+                    <<"preview_filename">> => FileUnique,
+                    <<"preview_width">> => Width,
+                    <<"preview_height">> => Height,
+                    <<"is_deletable_preview">> => true
+                },
                 {ok, 1} = z_db:update(medium, RscId, UpdateProps, Context),
                 z_depcache:flush({medium, RscId}, Context),
                 {ok, FileUnique}
@@ -1006,7 +1052,7 @@ medium_insert(Id, Props, Context) ->
     Props1 = check_medium_props(Props),
     case z_db:insert(medium, Props1, Context) of
         {ok, _} = OK ->
-            z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=[], post_props=Props1}, Context),
+            z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=#{}, post_props=Props1}, Context),
             OK;
         {error, _} = Error ->
             Error
@@ -1021,29 +1067,38 @@ medium_delete(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     case z_db:delete(medium, Id, Context) of
         {ok, _} = OK ->
-            z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=[]}, Context),
+            z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=#{}}, Context),
             OK;
         {error, _} = Error ->
             Error
     end.
 
 check_medium_props(Ps) ->
-    [check_medium_prop(P) || P <- Ps].
+    maps:fold(
+        fun(K, V, Acc) ->
+            V1 = check_medium_prop(K, V),
+            Acc#{
+                K => V1
+            }
+        end,
+        Ps).
 
-check_medium_prop({width, N}) when not is_integer(N) -> {width, 0};
-check_medium_prop({height, N}) when not is_integer(N) -> {height, 0};
-check_medium_prop(P) -> P.
+check_medium_prop(<<"width">>, N) when not is_integer(N) -> 0;
+check_medium_prop(<<"height">>, N) when not is_integer(N) -> 0;
+check_medium_prop(B, P) when is_binary(B) -> P.
 
 
 % Return a map with basic (not too sensitive) medium info for MQTT events
 -spec mqtt_event_info( proplists:proplist() ) -> map().
 mqtt_event_info(Medium) ->
-    #{
-        id => proplists:get_value(id, Medium),
-        size => proplists:get_value(size, Medium),
-        width => proplists:get_value(width, Medium),
-        height => proplists:get_value(height, Medium),
-        orientation => proplists:get_value(orientation, Medium),
-        mime => proplists:get_value(mime, Medium),
-        filename => proplists:get_value(filename, Medium)
-    }.
+    lists:foldl(
+        fun(K, Acc) ->
+            Acc#{
+                K => maps:get(K, Medium, undefined)
+            }
+        end,
+        #{},
+        [
+            id, size, width, height,
+            orientation, mime, filename
+        ]).

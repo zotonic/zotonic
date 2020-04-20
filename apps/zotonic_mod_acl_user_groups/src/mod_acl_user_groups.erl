@@ -317,9 +317,14 @@ force_copy_prop(P, PrevProps, NewProps) ->
     end.
 
 
-observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostIsA}=M, Context) ->
-    check_hasusergroup(Id, M#rsc_update_done.post_props, Context),
-    case  lists:member('acl_user_group', PreIsA)
+observe_rsc_update_done(#rsc_update_done{
+            id = Id,
+            pre_is_a = PreIsA,
+            post_is_a = PostIsA,
+            post_props = PostProps
+        }, Context) ->
+    check_hasusergroup(Id, PostProps, Context),
+    case lists:member('acl_user_group', PreIsA)
         orelse lists:member('acl_user_group', PostIsA)
     of
         true -> m_hierarchy:ensure('acl_user_group', Context);

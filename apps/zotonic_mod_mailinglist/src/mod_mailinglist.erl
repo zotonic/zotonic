@@ -404,13 +404,11 @@ as_upload(Id, Context) ->
     case m_media:get(Id, Context) of
         undefined ->
             [];
-        [] ->
-            [];
         Media ->
             #upload{
-                tmpfile = z_media_archive:abspath(proplists:get_value(filename, Media), Context),
-                mime = proplists:get_value(mime, Media),
-                filename = proplists:get_value(original_filename, Media)
+                tmpfile = z_media_archive:abspath(maps:get(<<"filename">>, Media, <<>>), Context),
+                mime = maps:get(<<"mime">>, Media, undefined),
+                filename = maps:get(<<"original_filename">>, Media, undefined)
             }
     end.
 

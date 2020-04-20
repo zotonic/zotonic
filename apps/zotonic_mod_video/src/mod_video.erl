@@ -31,8 +31,8 @@
 -define(SERVER, ?MODULE).
 
 -define(TEMP_IMAGE, <<"images/processing.gif">>).
-% -define(POSTER_IMAGE, <<"images/poster.png">>).
 -define(BROKEN_IMAGE, <<"images/broken.png">>).
+% -define(POSTER_IMAGE, <<"images/poster.png">>).
 
 -define(TASK_DELAY, 3600).
 
@@ -66,7 +66,7 @@ observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/mp4">>, 
 observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/x-mp4-broken">>}, Context) ->
     do_media_upload_broken(Context);
 observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/", _/binary>>, medium=Medium} = Upload, Context) ->
-    case proplists:get_value(is_video_ok, Medium) of
+    case maps:get(<<"is_video_ok">>, Medium, undefined) of
         true ->
             undefined;
         undefined ->
@@ -77,7 +77,7 @@ observe_media_upload_preprocess(#media_upload_preprocess{}, _Context) ->
 
 do_media_upload_preprocess(Upload, Context) ->
     case z_module_indexer:find(lib, ?TEMP_IMAGE, Context) of
-        {ok, #module_index{filepath=Filename}} ->
+        {ok, #module_index{ filepath = Filename }} ->
             ProcessNr = z_ids:identifier(20),
             PostFun = fun(InsId, InsMedium, InsContext) ->
                           ?MODULE:post_insert_fun(InsId, InsMedium, Upload, ProcessNr, InsContext)
@@ -88,16 +88,16 @@ do_media_upload_preprocess(Upload, Context) ->
                 file = undefined,
                 post_insert_fun = PostFun,
                 original_filename = undefined,
-                medium = [
-                    {preview_filename, <<"lib/", ?TEMP_IMAGE/binary>>},
-                    {preview_width, proplists:get_value(width, MInfo)},
-                    {preview_height, proplists:get_value(height, MInfo)},
-                    {width, proplists:get_value(width, MInfo)},
-                    {height, proplists:get_value(height, MInfo)},
-                    {is_deletable_preview, false},
-                    {is_video_processing, true},
-                    {video_processing_nr, ProcessNr}
-                ]
+                medium = #{
+                    <<"preview_filename">> => <<"lib/", ?TEMP_IMAGE/binary>>,
+                    <<"preview_width">> => maps:get(<<"width">>, MInfo, undefined),
+                    <<"preview_height">> => maps:get(<<"height">>, MInfo, undefined),
+                    <<"width">> => maps:get(<<"width">>, MInfo, undefined),
+                    <<"height">> => maps:get(<<"height">>, MInfo, undefined),
+                    <<"is_deletable_preview">> => false,
+                    <<"is_video_processing">> => true,
+                    <<"video_processing_nr">> => ProcessNr
+                }
             };
         {error, enoent} ->
             undefined
@@ -108,19 +108,19 @@ do_media_upload_broken(Context) ->
         {ok, #module_index{filepath=Filename}} ->
             {ok, MInfo} = z_media_identify:identify_file(Filename, Context),
             #media_upload_preprocess{
-               mime = <<"video/mp4">>,
-               file = undefined,
-               original_filename = undefined,
-               medium = [
-                         {preview_filename, <<"lib/", ?BROKEN_IMAGE/binary>>},
-                         {preview_width, proplists:get_value(width, MInfo)},
-                         {preview_height, proplists:get_value(height, MInfo)},
-                         {width, proplists:get_value(width, MInfo)},
-                         {height, proplists:get_value(height, MInfo)},
-                         {is_deletable_preview, false},
-                         {is_video_broken, true}
-                        ]
-              };
+                 mime = <<"video/mp4">>,
+                 file = undefined,
+                 original_filename = undefined,
+                 medium = #{
+                     <<"preview_filename">> => <<"lib/", ?BROKEN_IMAGE/binary>>,
+                     <<"preview_width">> => maps:get(<<"width">>, MInfo, undefined),
+                     <<"preview_height">> => maps:get(<<"height">>, MInfo, undefined),
+                     <<"width">> => maps:get(<<"width">>, MInfo, undefined),
+                     <<"height">> => maps:get(<<"height">>, MInfo, undefined),
+                     <<"is_deletable_preview">> => false,
+                     <<"is_video_broken">> => true
+              }
+            };
         {error, enoent} ->
             undefined
     end.
@@ -131,49 +131,50 @@ observe_media_upload_props(#media_upload_props{archive_file=undefined, mime= <<"
 observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <<"video/", _/binary>>}, Medium, Context) ->
     FileAbs = z_media_archive:abspath(File, Context),
     Info = video_info(FileAbs),
-    Info2 = case video_preview(FileAbs, Info) of                {ok, TmpFile} ->
-                    PreviewFilename = preview_filename(Id, Context),
-                    PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
-                    ok = z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context),
-                    _ = file:delete(TmpFile),
-                    [
-                        {preview_filename, PreviewFilename},
-                        {preview_width, proplists:get_value(width, Info)},
-                        {preview_height, proplists:get_value(height, Info)},
-                        {is_deletable_preview, true}
-                        | Info
-                    ];
-                {error, _} ->
-                    Info
-            end,
+    Info2 = case video_preview(FileAbs, Info) of
+        {ok, TmpFile} ->
+            PreviewFilename = preview_filename(Id, Context),
+            PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
+            ok = z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context),
+            _ = file:delete(TmpFile),
+            Info#{
+                <<"preview_filename">> => PreviewFilename,
+                <<"preview_width">> => maps:get(<<"width">>, Info, undefined),
+                <<"preview_height">> => maps:get(<<"height">>, Info, undefined),
+                <<"is_deletable_preview">> => true
+            };
+        {error, _} ->
+            Info
+    end,
     z_utils:props_merge(Info2, Medium);
 observe_media_upload_props(#media_upload_props{}, Medium, _Context) ->
     Medium.
 
 
 %% @doc Return the media viewer for the mp4 video
--spec observe_media_viewer(#media_viewer{}, #context{}) -> undefined | {ok, list()|binary()}.
+-spec observe_media_viewer(#media_viewer{}, z:context()) -> undefined | {ok, template_compiler:render_result()}.
 observe_media_viewer(#media_viewer{props=Props, options=Options}, Context) ->
-    case proplists:get_value(mime, Props) of
+    case maps:get(<<"mime">>, Props, undefined) of
         <<"video/mp4">> ->
-            {ok, z_template:render(#render{template="_video_viewer.tpl", vars=[{props,Props},{options,Options}]}, Context)};
+            Vars = [
+                {props, Props},
+                {options, Options}
+            ],
+            {ok, z_template:render(#render{template="_video_viewer.tpl", vars = Vars}, Context)};
         _ ->
             undefined
     end.
 
 
 %% @doc Return the filename of a still image to be used for image tags.
--spec observe_media_stillimage(#media_stillimage{}, #context{}) -> undefined | {ok, file:filename()}.
-observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
-    case proplists:get_value(mime, Props) of
-        <<"video/mp4">> ->
-            case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-                [] -> {ok, "lib/images/poster.png"};
-                PreviewFile -> {ok, PreviewFile}
-            end;
-        _ ->
-            undefined
-    end.
+-spec observe_media_stillimage(#media_stillimage{}, z:context()) -> undefined | {ok, file:filename_all()}.
+observe_media_stillimage(#media_stillimage{ props = #{ <<"mime">> := <<"video/mp4">> } = Props }, _Context) ->
+    case z_convert:to_binary(maps:get(<<"preview_filename">>, Props, undefined)) of
+        <<>> -> {ok, <<"lib/images/poster.png">>};
+        PreviewFile -> {ok, PreviewFile}
+    end;
+observe_media_stillimage(#media_stillimage{}, _Context) ->
+    undefined.
 
 %% --------------- Supervisor callbacks ---------------
 

@@ -86,36 +86,31 @@ observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {Changed,
                 Empty when Empty =:= undefined; Empty =:= <<>>; Empty =:= "" ->
                     % Delete the media record iff the media mime type is our mime type
                     case OldMediaProps of
-                        undefined ->
-                            {false, undefined};
+                        #{ <<"mime">> := ?OEMBED_MIME } ->
+                            m_media:delete(Id, Context);
                         _ ->
-                            case proplists:get_value(mime, OldMediaProps) of
-                                ?OEMBED_MIME ->
-                                    m_media:delete(Id, Context),
-                                    {true, undefined};
-                                _ ->
-                                    {false, undefined}
-                            end
+                            undefined
                     end;
                 EmbedUrl ->
-                    MediaProps = [
-                        {mime, ?OEMBED_MIME},
-                        {oembed_url, EmbedUrl}
-                    ],
+                    MediaProps = #{
+                        <<"mime">> => ?OEMBED_MIME,
+                        <<"oembed_url">> => EmbedUrl
+                    },
                     case OldMediaProps of
                         undefined ->
                             {true, preview_create(Id, MediaProps, Context)};
-                        _ ->
-                            case        z_utils:are_equal(proplists:get_value(mime, OldMediaProps), ?OEMBED_MIME)
-                                andalso z_utils:are_equal(proplists:get_value(oembed_url, OldMediaProps), EmbedUrl)
-                                andalso proplists:get_value(oembed, OldMediaProps) =/= undefined of
+                        #{ <<"mime">> := ?OEMBED_MIME } ->
+                            case        z_utils:are_equal(maps:get(oembed_url, OldMediaProps, undefined), EmbedUrl)
+                                andalso maps:get(<<"oembed">>, OldMediaProps, undefined) =/= undefined of
                                 true ->
                                     %% Not changed
                                     {false, undefined};
                                 false ->
                                     %% Changed, update the medium record
                                     {true, preview_create(Id, MediaProps, Context)}
-                            end
+                            end;
+                        _ ->
+                            {true, preview_create(Id, MediaProps, Context)}
                     end
             end,
             CurrTitle = maps:get(<<"title">>, UpdateProps, maps:get(<<"title">>, CurrProps, <<>>)),
@@ -139,45 +134,48 @@ observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {Changed,
 %% the HTML code that the oembed provider gave us; if none found,
 %% falls back to the generic template <tt>_oembed_embeddable.tpl</tt>.
 %% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
-observe_media_viewer(#media_viewer{id=Id, props=Props, filename=Filename, options=Options}, Context) ->
-    case proplists:get_value(mime, Props) of
-        ?OEMBED_MIME ->
-            TplOpts = [
-                {id, Id},
-                {medium, Props},
-                {options, Options},
-                {filename, Filename}
-            ],
-            Html = case proplists:lookup(oembed, Props) of
-               {oembed, OEmbed} ->
-                    case lookup(<<"provider_name">>, OEmbed) of
-                        {<<"provider_name">>, N} ->
-                            Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
-                            case z_module_indexer:find(template, Tpl, Context) of
-                                {ok, Found} ->
-                                    z_template:render(Found, TplOpts, Context);
-                                {error, _} ->
-                                    media_viewer_fallback(OEmbed, TplOpts, Context)
-                            end;
-                        none ->
+observe_media_viewer(#media_viewer{
+            id = Id,
+            props= #{ <<"mime">> := ?OEMBED_MIME } = Props,
+            filename = Filename,
+            options = Options
+        }, Context) ->
+    TplOpts = [
+        {id, Id},
+        {medium, Props},
+        {options, Options},
+        {filename, Filename}
+    ],
+    Html = case maps:find(<<"oembed">>, Props) of
+       {ok, OEmbed} ->
+            case lookup(<<"provider_name">>, provider_name, OEmbed) of
+                {ok, N} ->
+                    Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
+                    case z_module_indexer:find(template, Tpl, Context) of
+                        {ok, Found} ->
+                            z_template:render(Found, TplOpts, Context);
+                        {error, _} ->
                             media_viewer_fallback(OEmbed, TplOpts, Context)
                     end;
-                none ->
-                    <<"<!-- No oembed code found -->">>
-            end,
-            {ok, Html};
-        _ ->
-            undefined
+                error ->
+                    media_viewer_fallback(OEmbed, TplOpts, Context)
+            end;
+        error ->
+            <<"<!-- No oembed code found -->">>
+    end,
+    {ok, Html};
+observe_media_viewer(#media_viewer{}, _Context) ->
+    undefined.
+
+lookup(K1, K2, OEmbed) ->
+    case maps:find(K1, OEmbed) of
+        {ok, V} -> {ok, V};
+        error -> maps:find(K2, OEmbed)
     end.
 
-lookup(K, [ {A,_} | _ ] = OEmbed) when is_atom(A) ->
-    lookup(binary_to_atom(K, utf8), OEmbed);
-lookup(K, OEmbed) ->
-    proplists:lookup(K, OEmbed).
-
 media_viewer_fallback(OEmbed, TplOpts, Context) ->
-    case lookup(<<"html">>, OEmbed) of
-        {<<"html">>, Html} ->
+    case lookup(<<"html">>, html, OEmbed) of
+        {ok, Html} ->
             Html1 = binary:replace(Html, <<"http://">>, <<"https://">>, [global]),
             IsIframe = binary:match(Html1, <<"<iframe">>) =/= nomatch,
             TplOpts1 = [
@@ -186,7 +184,7 @@ media_viewer_fallback(OEmbed, TplOpts, Context) ->
                 | TplOpts
             ],
             z_template:render("_oembed_embeddable.tpl", TplOpts1, Context);
-        none ->
+        error ->
             z_template:render("_oembed_embeddable.tpl", TplOpts, Context)
     end.
 
@@ -233,18 +231,16 @@ first([X|_]) -> X.
 
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
-observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
-    case proplists:get_value(mime, Props) of
-        ?OEMBED_MIME ->
-            case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-                [] -> {ok, "lib/images/embed.jpg"};
-                PreviewFile -> {ok, PreviewFile}
-            end;
-        _ ->
-            undefined
-    end.
+observe_media_stillimage(#media_stillimage{ props = #{ <<"mime">> := ?OEMBED_MIME } = Props}, _Context) ->
+    case maps:get(<<"preview_filename">>, Props, <<>>) of
+        undefined -> {ok, <<"lib/images/embed.jpg">>};
+        <<>> -> {ok, <<"lib/images/embed.jpg">>};
+        PreviewFile -> {ok, PreviewFile}
+    end;
+observe_media_stillimage(#media_stillimage{}, _Context) ->
+    undefined.
 
-event(#postback{message=fix_missing}, Context) ->
+event(#postback{ message = fix_missing }, Context) ->
     case oembed_admin:count_missing(Context) of
         0 ->
             z_render:growl(?__("No embedded videos found which need fixing.", Context), Context);
@@ -254,7 +250,7 @@ event(#postback{message=fix_missing}, Context) ->
             z_render:growl(lists:flatten(io_lib:format(Msg, [N])), Context)
     end;
 
-event(#submit{message=admin_oembed}, Context) ->
+event(#submit{ message = admin_oembed }, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
             EmbedlyKey = z_string:trim(z_context:get_q(<<"embedly_key">>, Context)),
@@ -270,8 +266,8 @@ preview_create(Id, Context) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             case m_media:get(Id, Context) of
-                Ms when is_list(Ms) ->
-                    case proplists:get_value(oembed, Ms) of
+                Ms when is_map(Ms) ->
+                    case maps:get(<<"oembed">>, Ms, undefined) of
                         Json when is_list(Json) ->
                             preview_create_from_json(Id, Json, Context);
                         undefined ->
@@ -306,19 +302,21 @@ preview_create(MediaId, MediaProps, Context) ->
                             %% store found properties in the media part of the rsc
                             Html = proplists:get_value(<<"html">>, Json),
                             {EmbedService, EmbedId} = fetch_videoid_from_embed(<<>>, Html),
-                            ok = m_media:replace(MediaId,
-                                                 [
-                                                    {oembed, Json},
-                                                    {video_embed_service, EmbedService},
-                                                    {video_embed_id, EmbedId}
-                                                    | MediaProps
-                                                 ],
-                                                 Context),
+                            MediaProps1 = MediaProps#{
+                                <<"oembed">> => Json,
+                                <<"video_embed_service">> => EmbedService,
+                                <<"video_embed_id">> => EmbedId
+                            },
+                            ok = m_media:replace(MediaId, MediaProps1, Context),
                             _ = preview_create_from_json(MediaId, Json, Context),
                             proplists:get_value(<<"title">>, Json)
                     end;
                 {error, {http, Code, Body}} ->
-                    Err = [{error, http_error}, {code, Code}, {body, Body}],
+                    Err = [
+                        {error, http_error},
+                        {code, Code},
+                        {body, Body}
+                    ],
                     ok = m_media:replace(MediaId, [{oembed, Err} | MediaProps], Context),
                     undefined;
                 {error, _} ->

@@ -1024,20 +1024,19 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
 
 encode_attachment(Att, Context) when is_integer(Att) ->
     case m_media:get(Att, Context) of
-        undefined ->
-            {error, no_medium};
-        Props ->
+        #{ <<"filename">> := Filename, <<"mime">> := Mime } ->
             Upload = #upload{
-                        tmpfile=filename:join(z_path:media_archive(Context),
-                                               proplists:get_value(filename, Props)),
-                        mime=proplists:get_value(mime, Props)
-                    },
-            encode_attachment(Upload, Context)
+                tmpfile = filename:join(z_path:media_archive(Context), Filename),
+                mime = Mime
+            },
+            encode_attachment(Upload, Context);
+        _ ->
+            {error, no_medium}
     end;
 encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=File, filename=Filename} = Att, Context) ->
     case z_media_identify:identify(File, Filename, Context) of
         {ok, Ps} ->
-            Mime = proplists:get_value(mime, Ps, <<"application/octet-stream">>),
+            Mime = maps:get(<<"mime">>, Ps, <<"application/octet-stream">>),
             encode_attachment(Att#upload{mime=Mime}, Context);
         {error, _} ->
             encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
