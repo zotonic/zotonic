@@ -91,7 +91,7 @@ fetch_all(Category, Context) ->
                     Context).
 
 cleanup_rsc(Ps) ->
-    maps:foldl(
+    maps:fold(
         fun(P,Acc) ->
             maps:remove(P, Acc)
         end,

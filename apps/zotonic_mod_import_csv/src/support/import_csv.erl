@@ -26,21 +26,32 @@
     import/3
 ]).
 
--export([
-    sort_props/1
-    ]).
-
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("include/import_csv.hrl").
+-include("../../include/import_csv.hrl").
 
 -record(importresult, {seen=[], new=[], updated=[], errors=[], ignored=[], deleted=0}).
 -record(importstate, {is_reset, name_to_id, managed_edges, to_flush=[], result, managed_resources}).
 
 
+-type importresult() :: {file, file:filename_all()}
+                      | {date_start, calendar:datetime()}
+                      | {date_end, calendar:datetime()}
+                      | {seen, list( {CategoryName :: binary(), non_neg_integer() })}
+                      | {new, list( {CategoryName :: binary(), non_neg_integer() })}
+                      | {updated, list( {CategoryName :: binary(), non_neg_integer() })}
+                      | {errors, list()}
+                      | {deleted, non_neg_integer()}
+                      | {ignored, list()}.
+
+-type importresults() :: list( importresult() ).
+
+-export_type([ importresult/0, importresults/0 ]).
+
+
 %% @doc The import function, read the csv file and fetch all records.
 %% This function is run as a spawned process.  The Context should have the right permissions for inserting
 %% or updating the resources.
--spec import(#filedef{}, boolean(), #context{}) -> list().
+-spec import(#filedef{}, boolean(), z:context()) -> importresults().
 import(Def, IsReset, Context) ->
     StartDate = erlang:universaltime(),
 
@@ -59,15 +70,17 @@ import(Def, IsReset, Context) ->
 
     %% Return the stats from this import run
     R = State#importstate.result,
-    [ {file, filename:basename(Def#filedef.filename)},
-      {date_start, StartDate},
-      {date_end, erlang:universaltime()},
-      {seen, R#importresult.seen},
-      {new,  R#importresult.new},
-      {updated, R#importresult.updated},
-      {errors, R#importresult.errors},
-      {deleted, 0},
-      {ignored, R#importresult.ignored}].
+    [
+        {file, filename:basename(Def#filedef.filename)},
+        {date_start, StartDate},
+        {date_end, erlang:universaltime()},
+        {seen, R#importresult.seen},
+        {new,  R#importresult.new},
+        {updated, R#importresult.updated},
+        {errors, R#importresult.errors},
+        {deleted, 0},
+        {ignored, R#importresult.ignored}
+    ].
 
 
 new_importstate(IsReset) ->
@@ -99,10 +112,10 @@ import_rows([R|Rows], RowNr, Def, ImportState, Context) ->
 %% @doc Combine the field name definitions and the field values.
 zip(_Cols, [], Acc) -> lists:reverse(Acc);
 zip([_C|Cs], [''|Ns], Acc) -> zip(Cs, Ns, Acc);
-zip([_C|Cs], [""|Ns], Acc) -> zip(Cs, Ns, Acc);
+zip([_C|Cs], [<<>>|Ns], Acc) -> zip(Cs, Ns, Acc);
 zip([_C|Cs], [undefined|Ns], Acc) -> zip(Cs, Ns, Acc);
-zip([], [N|Ns], Acc) -> zip([], Ns, [{z_convert:to_list(N),<<>>}|Acc]);
-zip([C|Cs], [N|Ns], Acc) -> zip(Cs, Ns, [{z_convert:to_list(N), C}|Acc]).
+zip([], [N|Ns], Acc) -> zip([], Ns, [{N,<<>>}|Acc]);
+zip([C|Cs], [N|Ns], Acc) -> zip(Cs, Ns, [{N, C}|Acc]).
 
 
 %% @doc Import all resources on a row
@@ -156,46 +169,48 @@ import_def_rsc(FieldMapping, Row, State, Context) ->
 
 import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
     %% Get category name; put category ID in the record.
-    {"category", CategoryName} = proplists:lookup("category", Row),
+    {<<"category">>, CategoryName} = proplists:lookup(<<"category">>, Row),
     {CatId, State1} = name_lookup_exists(CategoryName, State, Context),
-    Row1 = [{"category_id", CatId} | proplists:delete("category", Row)],
-    Name = case proplists:get_value("name", Row1) of
+    Row1 = [{<<"category_id">>, CatId} | proplists:delete(<<"category">>, Row)],
+    Name = case proplists:get_value(<<"name">>, Row1) of
                undefined -> throw({import_error, {definition_without_unique_name}});
                N -> N
            end,
     {OptRscId, State2} = name_lookup(Name, State1, Context),
     RscId = case OptRscId of undefined -> insert_rsc; _ -> OptRscId end,
-    NormalizedRow = sort_props(m_rsc_update:normalize_props(RscId, Row1, [is_import], Context)),
-    case has_required_rsc_props(NormalizedRow) of
+    {ok, RowMap} = z_props:from_qs(Row1),
+    NormalizedRowMap = z_html:escape_props_check(RowMap, Context),
+    % NormalizedRow = sort_props(m_rsc_update:normalize_props(RscId, Row1, [is_import], Context)),
+    case has_required_rsc_props(NormalizedRowMap) of
         true ->
-           import_def_rsc_2_name(RscId, State2, Name, CategoryName, NormalizedRow, Callbacks, Context);
+           import_def_rsc_2_name(RscId, State2, Name, CategoryName, NormalizedRowMap, Callbacks, Context);
         false ->
             lager:info("import_csv: missing required attributes for ~p", [Name]),
             {State2, ignore}
     end.
 
-import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRow, Callbacks, Context) ->
+import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRowMap, Callbacks, Context) ->
     lager:debug("import_csv: importing ~p", [Name]),
-    case rsc_insert(NormalizedRow, Context) of
+    case rsc_insert(NormalizedRowMap, Context) of
         {ok, NewId} ->
-            RawRscFinal = get_updated_props(NewId, NormalizedRow, Context),
-            Checksum = checksum(NormalizedRow),
-            m_import_csv_data:update(NewId, Checksum, NormalizedRow, RawRscFinal, Context),
+            RawRscFinal = get_updated_props(NewId, NormalizedRowMap, Context),
+            Checksum = checksum(NormalizedRowMap),
+            m_import_csv_data:update(NewId, Checksum, NormalizedRowMap, RawRscFinal, Context),
 
             case proplists:get_value(rsc_insert, Callbacks) of
                 undefined -> none;
-                Callback -> Callback(NewId, NormalizedRow, Context)
+                Callback -> Callback(NewId, NormalizedRowMap, Context)
             end,
             {flush_add(NewId, State), {new, CategoryName, NewId, Name}};
         {error, _} = E ->
             lager:warning("import_csv: could not insert ~p: ~p", [Name, E]),
             {State, {error, CategoryName, E}}
     end;
-import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, Context) when is_integer(Id) ->
+import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRowMap, Callbacks, Context) when is_integer(Id) ->
     % 1. Check if this update was the same as the last known import
     PrevImportData = m_import_csv_data:get(Id, Context),
     PrevChecksum = get_value(checksum, PrevImportData),
-    case checksum(NormalizedRow) of
+    case checksum(NormalizedRowMap) of
         PrevChecksum when not State#importstate.is_reset ->
             lager:info("import_csv: skipping ~p (importing same values)", [Name]),
             {State, {equal, CategoryName, Id}};
@@ -205,30 +220,33 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, C
             % 2. Some properties might have been overwritten by an editor.
             %    For this we will update a second time with all the changed values
             %    (also pass any import-data from an older import module)
-            RawRscPre = get_updated_props(Id, NormalizedRow, Context),
+            RawRscPre = get_updated_props(Id, NormalizedRowMap, Context),
             Edited = diff_raw_props(RawRscPre,
                                     get_value(rsc_data, PrevImportData, []),
                                     m_rsc:p_no_acl(Id, import_csv_original, Context)),
 
             % Cleanup old import_csv data on update
-            Row1 = [ {import_csv_original, undefined}, {import_csv_touched, undefined} | NormalizedRow ],
+            Row1 = NormalizedRowMap#{
+                <<"import_csv_original">> => undefined,
+                <<"import_csv_touched">> => undefined
+            },
             case rsc_update(Id, Row1, Context) of
                 {ok, _} ->
-                    RawRscFinal = get_updated_props(Id, NormalizedRow, Context),
+                    RawRscFinal = get_updated_props(Id, NormalizedRowMap, Context),
                     % Ensure edited properties are set back to their edited values
-                    case Edited of
-                        [] ->
+                    case maps:size(Edited) of
+                        0 ->
                             ok;
                         _ when State#importstate.is_reset ->
                             ok;
                         _ ->
                             {ok, _} = m_rsc_update:update(Id, Edited, [{is_import, true}], Context)
                     end,
-                    m_import_csv_data:update(Id, Checksum, NormalizedRow, RawRscFinal, Context),
+                    m_import_csv_data:update(Id, Checksum, NormalizedRowMap, RawRscFinal, Context),
 
                     case proplists:get_value(rsc_update, Callbacks) of
                         undefined -> none;
-                        Callback -> Callback(Id, NormalizedRow, Context)
+                        Callback -> Callback(Id, NormalizedRowMap, Context)
                     end,
                     {flush_add(Id, State), {updated, CategoryName, Id}};
                 {error, _} = E ->
@@ -237,41 +255,43 @@ import_def_rsc_2_name(Id, State, Name, CategoryName, NormalizedRow, Callbacks, C
     end.
 
 
-%% @doc Check which properties are changed
-diff_raw_props(Current, [], {props, OriginalProps}) ->
+%% @doc Return all properties in PreviousImport that are different in Current
+diff_raw_props(Current, [], {props, OriginalProps}) when is_list(OriginalProps) ->
     % Old version of the csv import, do our best on the diff
-    diff_raw_props(Current, sort_props(OriginalProps), undefined);
-diff_raw_props(LastImport, LastImport, undefined) ->
-    [];
-diff_raw_props(Current, LastImport, undefined) ->
-    % Return the fields that are changed in Current but that were
-    % updated in the last import.
-    % Bit primitive for now ....
-    case LastImport -- Current of
-        [] ->
-            [];
-        Diff ->
-            Keys = [ K || {K, _} <- Diff ],
-            [ {K, proplists:get_value(K, Current)} || K <- Keys ]
-    end.
+    PreviousImport = z_props:from_props(OriginalProps),
+    diff_raw_props(Current, PreviousImport, undefined);
+diff_raw_props(PreviousImport, PreviousImport, undefined) ->
+    #{};
+diff_raw_props(Current, PreviousImport, undefined) when is_list(PreviousImport) ->
+    PreviousImportMap = z_props:from_props(PreviousImport),
+    diff_raw_props(Current, PreviousImportMap, undefined);
+diff_raw_props(Current, PreviousImport, undefined) when is_map(PreviousImport) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            case maps:find(K, Current) of
+                {ok, V} ->
+                    Acc;
+                {ok, _} ->
+                    Acc#{ K => V };
+                error ->
+                    Acc#{ K => V }
+            end
+        end,
+        #{},
+        PreviousImport).
 
-get_updated_props(Id, Row, Context) ->
+
+%% @doc Get all prop values in the Raw resource data
+get_updated_props(Id, ImportedRow, Context) ->
     Raw = m_rsc:get_raw(Id, Context),
-    sort_props([ {K, maps:get(K, Raw, undefined)} || {K, _} <- Row ]).
-
-sort_props(Props) ->
-    Props1 = lists:sort(Props),
-    [ sort_props_1(P) || P <- Props1 ].
-
-sort_props_1(#trans{ tr = Tr }) ->
-    #trans{ tr = lists:sort(Tr) };
-sort_props_1({K, [A|_] = L}) when is_list(A) ->
-    L1 = [ sort_props(V) || V <- L ],
-    {K, L1};
-sort_props_1({K, [{A,_}|_] = L}) when is_atom(A) ->
-    {K, sort_props(L)};
-sort_props_1(V) ->
-    V.
+    maps:fold(
+        fun(K, _, Acc) ->
+            Acc#{
+                K => maps:get(K, Raw, undefined)
+            }
+        end,
+        #{},
+        ImportedRow).
 
 rsc_insert(Props, Context) ->
     case check_medium(Props) of
@@ -290,11 +310,11 @@ rsc_update(Id, Props, Context) ->
     end.
 
 check_medium(Props) ->
-    case proplists:get_value(medium_url, Props) of
+    case maps:get(<<"medium_url">>, Props, undefined) of
         undefined -> none;
         <<>> -> none;
         [] -> none;
-        Url -> {url, Url, proplists:delete(medium_url, Props)}
+        Url -> {url, Url, maps:remove(<<"medium_url">>, Props)}
     end.
 
 get_value(K, L) ->
@@ -317,7 +337,7 @@ import_do_edge(Id, Row, F, State, Context) when is_function(F) ->
     [ import_do_edge(Id, Row, E, State, Context) || E <- F(Id, Row, State, Context) ];
 import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Context) ->
     % Find the predicate
-    case map_one_normalize("name", PredCat, map_one(PredRowField, Row, State)) of
+    case map_one_normalize(<<"name">>, PredCat, map_one(PredRowField, Row, State)) of
         <<>> ->
             fail;
         Name ->
@@ -331,7 +351,7 @@ import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Cont
     end;
 import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField}}, State, Context) ->
     % Find the object
-    Name = map_one_normalize("name", ObjectCat, map_one(ObjectRowField, Row, State)),
+    Name = map_one_normalize(<<"name">>, ObjectCat, map_one(ObjectRowField, Row, State)),
     case Name of
         <<>> -> fail;
         Name ->
@@ -346,7 +366,7 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField}}, State, Context
             end
     end;
 import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, State, Context) ->
-    Name = map_one_normalize("name", ObjectCat, map_one(ObjectRowField, Row, State)),
+    Name = map_one_normalize(<<"name">>, ObjectCat, map_one(ObjectRowField, Row, State)),
     case Name of
         <<>> ->
             fail;
@@ -373,8 +393,8 @@ import_do_edge(_, _, Def, _State, _Context) ->
 
 
 %% Adds a resource Id to the list of managed resources, if the import definition allows it.
-add_managed_resource(Id, Props, State=#importstate{managed_resources=M}) ->
-    case proplists:get_value(import_skip_delete, Props) of
+add_managed_resource(Id, FieldMapping, State=#importstate{managed_resources=M}) ->
+    case proplists:get_value(import_skip_delete, FieldMapping) of
         true -> State;
         _ -> State#importstate{managed_resources=sets:add_element(Id, M)}
     end.
@@ -405,11 +425,11 @@ name_lookup_exists(Name, State, Context) ->
 %% @doc Maps fields from the given mapping into a new row, filtering out undefined values.
 map_fields(Mapping, Row, State) ->
     Defaults = [
-        {"is_protected", true},
-        {"is_published", true}
+        {<<"is_protected">>, true},
+        {<<"is_published">>, true}
     ],
-    Mapped = [map_def(MapOne, Row, State) || MapOne <- Mapping],
-    Type = case proplists:get_value("category", Mapped) of
+    Mapped = [ map_def(MapOne, Row, State) || MapOne <- Mapping ],
+    Type = case proplists:get_value(<<"category">>, Mapped) of
                undefined -> throw({import_error, no_category_in_import_definition});
                T -> T
            end,
@@ -424,18 +444,19 @@ map_def(K, Row, State) when is_atom(K); is_list(K) ->
 	map_def({K,K}, Row, State).
 
 
--spec map_one_normalize( string(), any(), any() | {name_prefix, binary() | string() | atom(), binary() | string() | atom()} ) -> any().
-map_one_normalize("name", _Type, <<>>) ->
+-spec map_one_normalize( binary(), any(), any() | {name_prefix, binary() | string() | atom(), binary() | string() | atom()} ) -> any().
+map_one_normalize(<<"name">>, _Type, <<>>) ->
     <<>>;
-map_one_normalize("name", _Type, {name_prefix, Prefix, V}) ->
+map_one_normalize(<<"name">>, _Type, {name_prefix, Prefix, V}) ->
     CheckL = 80 - strlen(Prefix) - 1,
-    Name = case strlen(V) of
+    Postfix = case strlen(V) of
         L when L > CheckL ->
             % If name is too long, make a unique thing out of it.
-            z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ base64:encode_to_string(checksum(V)));
+            base64:encode(checksum(V));
         _ ->
-            z_string:to_name(z_convert:to_list(Prefix) ++ "_" ++ binary_to_list(z_string:to_name(V)))
+            V
     end,
+    Name = z_string:to_name( iolist_to_binary([Prefix, "_", Postfix]) ),
     z_convert:to_binary(Name);
 map_one_normalize(_, _Type, V) ->
     V.
@@ -529,9 +550,9 @@ concat_spaces([H|T], Acc) ->
     concat_spaces(T, [<<" ">>,H|Acc]).
 
 has_required_rsc_props(Props) ->
-            not(prop_empty(proplists:get_value(category_id, Props)))
-    andalso not(prop_empty(proplists:get_value(name, Props)))
-    andalso not(prop_empty(proplists:get_value(title, Props))).
+            not(prop_empty(maps:get(<<"category_id">>, Props, undefined)))
+    andalso not(prop_empty(maps:get(<<"name">>, Props, undefined)))
+    andalso not(prop_empty(maps:get(<<"title">>, Props, undefined))).
 
 
 add_defaults(D, P) ->
