@@ -12,14 +12,16 @@
 {% block widget_content %}
     {% if id.is_editable %}
     <div class="form-group">
-        <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="block-{{name}}-prompt{{ lang_code_with_dollar }}"
+        <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}"
+               name="block[].prompt{{ lang_code_with_dollar }}"
                class="col-md-8 form-control" value="{{ blk.prompt[lang_code]  }}"
                placeholder="{_ Button text _} ({{ lang_code }})" />
     </div>
 
     <div class="form-group view-expanded">
-       <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}" name="block-{{name}}-explanation{{ lang_code_with_dollar }}" rows="2"
-              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
+       <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}"
+                 name="block[].explanation{{ lang_code_with_dollar }}" rows="2"
+                 placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
     </div>
 
     {% else %}
@@ -31,7 +33,7 @@
 <div class="form-group view-expanded">
     <label class="control-label" for="block-{{name}}-style">{_ Button style _}</label>
     <div>
-      <select class="form-control" id="block-{{name}}-style" name="block-{{name}}-style">
+      <select class="form-control" id="block-{{name}}-style" name="block[].style">
            <option value="">{_ Default _}</option>
            <option value="btn-primary" {% if blk.style == "btn-primary" %}selected="selected"{% endif %}>{_ Primary _}</option>
            <option value="btn-info" {% if blk.style == "btn-info" %}selected="selected"{% endif %}>{_ Informational _}</option>
@@ -46,7 +48,7 @@
 <div class="form-group view-expanded question-options">
     <label class="control-label" for="block-{{name}}-target">{_ question _}</label>
     <div>
-      <input class="form-control" type="text" id="block-{{name}}-target" name="block-{{name}}-target" value="{{ blk.target }}" placeholder="{_ Jump target _}" />
+      <input class="form-control" type="text" id="block-{{name}}-target" name="block[].target" value="{{ blk.target }}" placeholder="{_ Jump target _}" />
       <p class="help-block">{_ Jump to a question on a next page. _}</p>
     </div>
 </div>
@@ -54,7 +56,7 @@
 <div class="form-group question-options">
     <div class="checkbox">
         <label>
-            <input type="checkbox" id="block-{{name}}-is_hide_result" name="block-{{name}}-is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
+            <input type="checkbox" id="block-{{name}}-is_hide_result" name="block[].is_hide_result" value="1" {% if blk.is_hide_result %}checked="checked"{% endif %} />
             {_ Hide from results _}
         </label>
     </div>

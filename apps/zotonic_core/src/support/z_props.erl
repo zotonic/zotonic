@@ -32,6 +32,8 @@
     extract_languages/1,
     prune_languages/2,
 
+    normalize_dates/3,
+
     test/0
     ]).
 
@@ -211,6 +213,13 @@ reverse_lists(V) ->
 nested_assign([ <<>> | _ ], _V, Map) ->
     % Drop empty keys
     Map;
+nested_assign([ <<"block-">> ], V, Map) ->
+    nested_assign([ <<"block[].">> ], V, Map);
+nested_assign([ <<"block-", Rest/binary>> ], V, Map) ->
+    case binary:split(Rest, <<"-">>) of
+        [ _ , K ] -> nested_assign([ <<"block[].", K/binary>> ], V, Map);
+        [ K ] -> nested_assign([ <<"block[].", K/binary>> ], V, Map)
+    end;
 nested_assign([ K, <<>> ], _V, Map) ->
     % Start a new map, if key ends in "[]"
     % This was a key 'a.b[].' which notifies the
@@ -682,6 +691,96 @@ prune_languages_1(#trans{ tr = Tr }, Langs) ->
 prune_languages_1(V, _Langs) ->
     V.
 
+
+%% @doc Normalize dates, ensure that all dates are in UTC
+%%      and parsed to Erlang datetime format.
+-spec normalize_dates( m_rsc:props(), boolean(), binary()|undefined ) -> m_rsc:props().
+normalize_dates(#{ <<"tz">> := Tz } = Props, IsAllDay, undefined) ->
+    normalize_dates_1(Props, IsAllDay, Tz);
+normalize_dates(Props, IsAllDay, Tz) ->
+    normalize_dates_1(Props, IsAllDay, Tz).
+
+normalize_dates_1(Props, IsAllDay, undefined) ->
+    normalize_dates_2(Props, IsAllDay, <<"UTC">>);
+normalize_dates_1(Props, IsAllDay, Tz) ->
+    normalize_dates_2(Props, IsAllDay, Tz).
+
+normalize_dates_2(M, IsAllDay, Tz) when is_map(M) ->
+    maps:map(
+        fun(K, V) ->
+            case is_date_key(K) orelse is_date_value(V) of
+                true ->
+                    try
+                        norm_date(K, V, IsAllDay, Tz)
+                    catch
+                        _:_ -> undefined
+                    end;
+                false ->
+                    V
+            end
+        end,
+        M);
+normalize_dates_2(L, IsAllDay, Tz) when is_list(L) ->
+    lists:map(
+        fun(V) -> normalize_dates_2(V, IsAllDay, Tz) end,
+        L);
+normalize_dates_2(V, IsAllDay, Tz) ->
+    case is_date_value(V) of
+        true ->
+            try
+                norm_date(<<>>, V, IsAllDay, Tz)
+            catch
+                _:_ -> undefined
+            end;
+        false ->
+            V
+    end.
+
+norm_date(_K, undefined, _IsAllDay, _Tz) ->
+    undefined;
+norm_date(_K, V, _IsAllDay, _Tz) when is_integer(V) ->
+    z_datetime:timestamp_to_datetime(V);
+norm_date(K, {{Y,M,D}, {H,I,S}} = DT, true, Tz) when
+    is_integer(Y), is_integer(M), is_integer(D),
+    is_integer(H), is_integer(I), is_integer(S) ->
+    case K of
+        <<"date_start">> -> DT;
+        <<"date_end">> -> DT;
+        _ -> z_datetime:to_utc(DT, Tz)
+    end;
+norm_date(_K, {{Y,M,D}, {H,I,S}} = DT, false, Tz) when
+    is_integer(Y), is_integer(M), is_integer(D),
+    is_integer(H), is_integer(I), is_integer(S) ->
+    z_datetime:to_utc(DT, Tz);
+norm_date(K, V, true, Tz) ->
+    case K of
+        <<"date_start">> -> z_datetime:to_datetime(V, <<"UTC">>);
+        <<"date_end">> -> z_datetime:to_datetime(V, <<"UTC">>);
+        _ -> z_datetime:to_datetime(V, Tz)
+    end;
+norm_date(_K, V, false, Tz) ->
+    z_datetime:to_datetime(V, Tz).
+
+
+is_date_value({{Y,M,D}, {H,I,S}}) when
+    is_integer(Y), is_integer(M), is_integer(D),
+    is_integer(H), is_integer(I), is_integer(S) ->
+    true;
+is_date_value(_) ->
+    false.
+
+is_date_key(<<"date_is_all_day">>) -> false;
+is_date_key(<<"date_remarks">>) -> false;
+is_date_key(<<"date_", _/binary>>) -> true;
+is_date_key(<<"org_pubdate">>) -> true;
+is_date_key(<<"publication_start">>) -> true;
+is_date_key(<<"publication_end">>) -> true;
+is_date_key(K) when is_binary(K) ->
+    case binary:longest_common_suffix([ K, <<"_date">> ]) of
+        5 -> true;
+        _ -> false
+    end;
+is_date_key(_) -> false.
 
 
 test() ->

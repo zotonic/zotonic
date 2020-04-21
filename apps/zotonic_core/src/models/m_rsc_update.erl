@@ -24,14 +24,13 @@
     insert/2,
     insert/3,
     delete/2,
+    delete/3,
     update/3,
     update/4,
     duplicate/3,
     merge_delete/4,
 
     flush/2,
-
-    normalize_props/3,
 
     delete_nocheck/2,
 
@@ -46,6 +45,7 @@
     is_acl_check = true,
     is_import = false,
     is_no_touch = false,
+    tz = <<"UTC">>,
     expected = []
 }).
 
@@ -67,26 +67,47 @@ insert(Props, Options, Context) when is_map(Props) ->
 
 %% @doc Delete a resource
 -spec delete(m_rsc:resource(), z:context()) -> ok | {error, atom()}.
-delete(Id, Context) when is_integer(Id), Id /= 1 ->
-    case z_acl:rsc_deletable(Id, Context) of
-        true ->
+delete(Id, Context) ->
+    delete(Id, undefined, Context).
+
+-spec delete(m_rsc:resource(), m_rsc:resource(), z:context()) -> ok | {error, atom()}.
+delete(1, _FollowUpId, _Context) ->
+    {error, eacces};
+delete(undefined, _FollowUpId, _Context) ->
+    {error, enoent};
+delete(Id, FollowUpId, Context)
+    when is_integer(Id),
+        (is_integer(FollowUpId) orelse FollowUpId =:= undefined) ->
+    case {
+        z_acl:rsc_deletable(Id, Context),
+        FollowUpId =:= undefined orelse m_rsc:exists(FollowUpId, Context)
+        }
+    of
+        {true, true} ->
             case m_rsc:is_a(Id, category, Context) of
                 true ->
                     m_category:delete(Id, undefined, Context);
                 false ->
                     delete_nocheck(Id, Context)
             end;
-        false ->
-            {error, eacces}
+        {false, _} ->
+            {error, eacces};
+        {_, false} ->
+            {error, unknown_followup}
     end;
-delete(Name, Context) when Name /= undefined ->
-    delete(m_rsc:rid(Name, Context), Context).
+delete(Name, FollowUpId, Context) ->
+    delete(
+        m_rsc:rid(Name, Context),
+        m_rsc:rid(FollowUpId, Context),
+        Context).
 
 %% @doc Delete a resource, no check on rights etc is made. This is called by m_category:delete/3
--spec delete_nocheck(m_rsc:resource(), #context{}) -> ok | {error, atom()}.
+-spec delete_nocheck(m_rsc:resource(), z:context()) -> ok | {error, atom()}.
 delete_nocheck(Id, Context) ->
     delete_nocheck(m_rsc:rid(Id, Context), undefined, Context).
 
+delete_nocheck(1, _OptFollowUpId, _Context) ->
+    {error, eacces};
 delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
     Referrers = m_edge:subjects(Id, Context),
     CatList = m_rsc:is_a(Id, Context),
@@ -319,13 +340,20 @@ flush(Id, CatList, Context) ->
 
 
 %% @doc Duplicate a resource, creating a new resource with the given title.
--spec duplicate(m_rsc:resource(), list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec duplicate(m_rsc:resource(), m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+duplicate(Id, DupProps, Context) when is_list(DupProps) ->
+    {ok, DupMap} = z_props:from_list(DupProps),
+    duplicate(Id, DupMap, Context);
 duplicate(Id, DupProps, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
             case m_rsc:get_raw(Id, Context) of
                 {ok, RawProps} ->
-                    FilteredProps = props_filter_protected(RawProps, #rscupd{id = insert_rsc, is_escape_texts = false}),
+                    RscUpd = #rscupd{
+                        id = insert_rsc,
+                        is_escape_texts = false
+                    },
+                    FilteredProps = props_filter_protected(RawProps, RscUpd),
                     SafeDupProps = escape_props(true, DupProps, Context),
                     InsProps = maps:fold(
                         fun(Key, Value, Acc) ->
@@ -358,17 +386,47 @@ duplicate(Id, DupProps, Context) ->
     end.
 
 %% @doc Update a resource
--spec update(m_rsc:resource() | insert_rsc, m_rsc:props(), z:context()) ->
+-spec update(
+        m_rsc:resource() | insert_rsc,
+        m_rsc:props_all() | m_rsc:update_function(),
+        z:context()
+    ) ->
     {ok, m_rsc:resource_id()} | {error, term()}.
 update(Id, Props, Context) ->
     update(Id, Props, [], Context).
 
 %% @doc Update a resource
--spec update(m_rsc:resource() | insert_rsc, m_rsc:props_all(), list() | boolean(), z:context()) ->
+-spec update(
+        m_rsc:resource() | insert_rsc,
+        m_rsc:props_all() | m_rsc:update_function(),
+        list() | boolean(),
+        z:context()
+    ) ->
     {ok, m_rsc:resource_id()} | {error, term()}.
 update(Id, Props, Options, Context) when is_list(Props) ->
     {ok, Props1} = z_props:from_list(Props),
-    update(Id, Props1, Options, Context);
+    OptionsTz = case proplists:lookup(tz, Options) of
+        {tz, _} ->
+            % Timezone set in the update options
+            Options;
+        none ->
+            case maps:find(<<"tz">>, Props1) of
+                {ok, Tz} ->
+                    % Timezone specified in the update
+                    [ {tz, Tz} | Options ];
+                error ->
+                    case Props of
+                        [ {K, _} | _ ] when is_binary(K); is_list(K) ->
+                            % On a form post input we use the timezone of
+                            % of the request context.
+                            [ {tz, z_context:tz(Context)} | Options ];
+                        _ ->
+                            % Assume UTC
+                            Options
+                    end
+            end
+    end,
+    update(Id, Props1, OptionsTz, Context);
 update(Id, Props, false, Context) ->
     update(Id, Props, [{escape_texts, false}], Context);
 update(Id, Props, true, Context) ->
@@ -377,20 +435,25 @@ update(Id, Props, true, Context) ->
 %% [Options]: {escape_texts, true|false (default: true}, {acl_check: true|false (default: true)}
 %% {escape_texts, false} checks if the texts are escaped, and if not then it
 %% will escape. This prevents "double-escaping" of texts.
-update(Id, Props, Options, Context) when is_integer(Id) orelse Id =:= insert_rsc ->
+update(Id, Props, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
     RscUpd = #rscupd{
         id = Id,
         is_escape_texts = proplists:get_value(escape_texts, Options, true),
         is_acl_check = proplists:get_value(acl_check, Options, true),
         is_import = proplists:get_value(is_import, Options, false),
         is_no_touch = proplists:get_value(no_touch, Options, false)
-            andalso z_acl:is_admin(Context),
+                      andalso z_acl:is_admin(Context),
+        tz = proplists:get_value(tz, Options, maps:get(<<"tz">>, Props, undefined)),
         expected = proplists:get_value(expected, Options, [])
     },
     update_imported_check(RscUpd, Props, Context);
 update(Name, Props, Options, Context) ->
-    {ok, Id} = m_rsc:name_to_id(Name, Context),
-    update(Id, Props, Options, Context).
+    case m_rsc:name_to_id(Name, Context) of
+        {ok, Id} ->
+            update(Id, Props, Options, Context);
+        {error, _} = Error ->
+            Error
+    end.
 
 update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, Props, Context) when is_integer(Id) ->
     case m_rsc:exists(Id, Context) of
@@ -421,11 +484,28 @@ update_editable_check(#rscupd{id = Id, is_acl_check = true} = RscUpd, Props, Con
 update_editable_check(RscUpd, Props, Context) ->
     update_normalize_props(RscUpd, Props, Context).
 
-update_normalize_props(#rscupd{id = Id} = RscUpd, Props, Context) when is_map(Props) ->
-    AtomProps = normalize_props(Id, Props, Context),
-    update_transaction(RscUpd, fun(_, _, _) -> {ok, AtomProps} end, Context);
+update_normalize_props(#rscupd{id = Id, tz = Tz} = RscUpd, Props, Context) when is_map(Props) ->
+    % Convert the dates in the properties to Erlang DateTime and optionally convert
+    % them to UTC as well.
+    IsAllDay = is_all_day(Id, Props, Context),
+    PropsDates = z_props:normalize_dates(Props, IsAllDay, Tz),
+    update_transaction(RscUpd, fun(_, _, _) -> {ok, PropsDates} end, Context);
 update_normalize_props(RscUpd, Func, Context) when is_function(Func) ->
     update_transaction(RscUpd, Func, Context).
+
+
+%% If the "all day" flag is set then the date_start and date_end are specified
+%% in UTC. This is used for dates that are fixed across timezones. An example
+%% is Christmas, which is always on the 25th of december, local time.
+%% All other dates are not affected by the flag and are subject to the timezone
+%% specified in the update options or resource properties.
+is_all_day(_Id, #{ <<"date_is_all_day">> := IsAllDay }, _Context) ->
+    z_convert:to_bool(IsAllDay);
+is_all_day(Id, _Props, Context) when is_integer(Id) ->
+    z_convert:to_bool(m_rsc:p_no_acl(Id, date_is_all_day, Context));
+is_all_day(_Id, _Props, _Context) ->
+    false.
+
 
 update_transaction(RscUpd, Func, Context) ->
     Result = z_db:transaction(
@@ -724,22 +804,6 @@ diff(New, Old) ->
         end,
         New,
         New).
-
-
-%% TODO TODO TODO
-%% TODO TODO TODO
-%% TODO TODO TODO
-%% TODO TODO TODO
-%% TODO TODO TODO
-%% @doc Ensure all dates are mapped to UTC
-normalize_props(Id, Props, Context) when is_integer(Id) ->
-    DateIsAllDay = z_convert:to_bool( m_rsc:p_no_acl(Id, <<"date_is_all_day">>, Context) ),
-    % z_props:recombine(DateIsAllDay, Props, Context);
-    Props;
-normalize_props(_Id, Props, Context) ->
-    % z_props:recombine(false, Props, Context).
-    Props.
-
 
 set_if_normal_update(#rscupd{} = RscUpd, K, V, Props) ->
     set_if_normal_update_1(

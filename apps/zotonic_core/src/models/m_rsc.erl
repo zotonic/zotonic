@@ -37,7 +37,9 @@
     get_raw_lock/2,
     get_acl_props/2,
     insert/2,
+    insert/3,
     delete/2,
+    delete/3,
     merge_delete/3,
     merge_delete/4,
     update/3,
@@ -83,6 +85,13 @@
 -type props_all() :: props() | props_legacy().
 -type digits() :: 16#30..16#39.
 
+-type update_function() :: fun(
+        ( resource() | insert_rsc, props(), z:context() )
+        ->
+        {ok, UpdateProps :: props() } | {error, term()}
+    ).
+
+
 -export_type([
     resource/0,
     resource_id/0,
@@ -90,7 +99,8 @@
     resource_uri/0,
     props/0,
     props_all/0,
-    props_legacy/0
+    props_legacy/0,
+    update_function/0
 ]).
 
 
@@ -381,14 +391,22 @@ get_acl_props(Name, Context) ->
 
 
 %% @doc Insert a new resource
--spec insert(Props :: props(), z:context()) -> {ok, resource_id()} | {error, term()}.
+-spec insert(props_all(), z:context()) -> {ok, resource_id()} | {error, term()}.
 insert(Props, Context) ->
-    m_rsc_update:insert(Props, Context).
+    m_rsc_update:insert(Props, [], Context).
+
+-spec insert(props_all(), list(), z:context()) -> {ok, resource_id()} | {error, term()}.
+insert(Props, Options, Context) ->
+    m_rsc_update:insert(Props, Options, Context).
 
 %% @doc Delete a resource
 -spec delete(resource(), z:context()) -> ok | {error, term()}.
 delete(Id, Context) ->
-    m_rsc_update:delete(Id, Context).
+    m_rsc_update:delete(Id, undefined, Context).
+
+-spec delete(resource(), resource(), z:context()) -> ok | {error, term()}.
+delete(Id, FollowUp, Context) ->
+    m_rsc_update:delete(Id, FollowUp, Context).
 
 %% @doc Merge a resource with another, delete the loser.
 -spec merge_delete(resource(), resource(), z:context()) -> ok | {error, term()}.
@@ -401,17 +419,26 @@ merge_delete(WinnerId, LoserId, Options, Context) ->
     m_rsc_update:merge_delete(WinnerId, LoserId, Options, Context).
 
 %% @doc Update a resource
--spec update(resource(), props(), z:context()) -> {ok, resource()} | {error, term()}.
+-spec update(
+        resource(),
+        props_all() | update_function(),
+        z:context()
+    ) -> {ok, resource()} | {error, term()}.
 update(Id, Props, Context) ->
     m_rsc_update:update(Id, Props, Context).
 
--spec update(resource(), props(), list(), z:context()) -> {ok, resource()} | {error, term()}.
+-spec update(
+        resource(),
+        props_all() | update_function(),
+        list(),
+        z:context()
+    ) -> {ok, resource()} | {error, term()}.
 update(Id, Props, Options, Context) ->
     m_rsc_update:update(Id, Props, Options, Context).
 
 
 %% @doc Duplicate a resource.
--spec duplicate(resource(), props(), z:context()) ->
+-spec duplicate(resource(), props_all(), z:context()) ->
     {ok, NewId :: resource_id()} | {error, Reason :: string()}.
 duplicate(Id, Props, Context) ->
     m_rsc_update:duplicate(Id, Props, Context).
