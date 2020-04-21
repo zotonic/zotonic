@@ -5,7 +5,7 @@
         {% for code, lang in m.translation.language_list_configured %}
             {% if lang.is_editable %}
             <label class="checkbox-inline">
-    	    <input type="checkbox" id="{{ #language.code }}" name="language" value="{{ code }}"
+    	    <input type="checkbox" id="{{ #language.code }}" name="language[]" value="{{ code }}"
     	           {% if code|member:r_lang or (not r_lang and z_language == code) %}checked="checked"{% endif %} />
     	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.name_en }}</span>
             </label>

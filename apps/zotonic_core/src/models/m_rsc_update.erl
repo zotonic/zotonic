@@ -722,7 +722,7 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     },
     UpdateProps1 = set_if_normal_update(RscUpd, <<"modified">>, erlang:universaltime(), UpdateProps),
     UpdateProps2 = set_if_normal_update(RscUpd, <<"modifier_id">>, z_acl:user(Context), UpdateProps1),
-    {IsChanged, UpdatePropsN} = z_notifier:foldr(#rsc_update{
+    {IsForceUpdate, UpdatePropsN} = z_notifier:foldr(#rsc_update{
                                             action = case RscUpd#rscupd.id of
                                                         insert_rsc -> insert;
                                                         _ -> update
@@ -730,7 +730,7 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
                                             id = Id,
                                             props = Raw
                                         },
-                                        {false, UpdateProps2},
+                                        {Id =:= insert_rsc, UpdateProps2},
                                         Context),
 
     % Pre-pivot of the category-id to the category sequence nr.
@@ -751,7 +751,10 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     NewProps = maps:merge(Raw, UpdatePropsN1),
 
     % 2. Ensure language tag
-    Langs = z_props:extract_languages(NewProps),
+    Langs = case maps:get(<<"language">>, NewProps, []) of
+        [ _ | _ ] = Lngs -> Lngs;
+        _ -> z_props:extract_languages(NewProps)
+    end,
     Langs1 = case Langs of
         [] -> [ z_context:language(Context) ];
         _ -> Langs
@@ -772,11 +775,10 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
 
     % 6. Perform optional update, check diff
     case       RscUpd#rscupd.id =:= insert_rsc
-        orelse IsChanged
+        orelse IsForceUpdate
         orelse is_changed(Raw, NewPropsDiff)
     of
         true ->
-
             UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiff, Raw, Context),
             {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
             ok = update_page_path_log(Id, Raw, NewPropsDiff, Context),
