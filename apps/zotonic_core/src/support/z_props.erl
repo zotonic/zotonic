@@ -401,6 +401,7 @@ combine_dates_1(true, Map, Now) ->
         Map),
     ByName = group_date_parts(DateParts),
     DateKVs = combine_date_parts(ByName, Now),
+    io:format("~p~n", [DateKVs]),
     DateKVs1 = cleanup_dates(DateKVs),
     maps:merge(OtherProps, maps:from_list(DateKVs1));
 combine_dates_1(false, Qs, _Now) ->
@@ -435,7 +436,8 @@ group_date_parts(DatePartsQs) ->
                         group_date_part(K, false, full, V, Acc);
                     _ ->
                         lager:info("Dropping unknown date part '~s', should be like 'dt:ymd:0:propname'",
-                                   [ K ])
+                                   [ K ]),
+                        Acc
                 end
         end,
         #{},
@@ -557,9 +559,9 @@ to_date_value(<<"hi">>, V) ->
 to_date_value(_, V) ->
     to_int(V).
 
-copy_missing( <<"publication_end">>, _S, {{undefined,undefined,undefined},{undefined,undefined,undefined}} ) ->
+copy_missing( <<"publication_end">>, _S, {{undefined,undefined,undefined},{undefined,undefined,_}} ) ->
     ?ST_JUTTEMIS;
-copy_missing( _Name, _S, {{undefined,undefined,undefined},{undefined,undefined,undefined}} ) ->
+copy_missing( _Name, _S, {{undefined,undefined,undefined},{undefined,undefined,_}} ) ->
     undefined;
 copy_missing( Name, {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{undefined,Me,De},{He,Ie,Se}} ) when is_integer(Ys) ->
     copy_missing( Name, {{Ys,Ms,Ds},{Hs,Is,Ss}}, {{Ys,Me,De},{He,Ie,Se}} );
@@ -737,6 +739,8 @@ normalize_dates_2(V, IsAllDay, Tz) ->
     end.
 
 norm_date(_K, undefined, _IsAllDay, _Tz) ->
+    undefined;
+norm_date(_K, <<>>, _IsAllDay, _Tz) ->
     undefined;
 norm_date(_K, V, _IsAllDay, _Tz) when is_integer(V) ->
     z_datetime:timestamp_to_datetime(V);
