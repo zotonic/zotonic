@@ -69,11 +69,11 @@ manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Options, Context
         ok ->
             ok;
         {ok, Id} ->
-            MediaProps = [
-                {mime, <<"text/html-video-embed">>},
-                {video_embed_service, EmbedService},
-                {video_embed_code, EmbedCode}
-            ],
+            MediaProps = #{
+                <<"mime">> => <<"text/html-video-embed">>,
+                <<"video_embed_service">> => EmbedService,
+                <<"video_embed_code">> => EmbedCode
+            },
             m_media:replace(Id, MediaProps, Context),
             {ok, Id}
     end;

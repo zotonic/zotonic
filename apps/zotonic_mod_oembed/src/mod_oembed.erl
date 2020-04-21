@@ -55,10 +55,10 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {Changed, Props}, Context)
         EmbedUrl ->
             case z_acl:is_allowed(insert, #acl_media{mime=?OEMBED_MIME}, Context) of
                 true ->
-                    MediaProps = [
-                        {mime, ?OEMBED_MIME},
-                        {oembed_url, EmbedUrl}
-                    ],
+                    MediaProps = #{
+                        <<"mime">> => ?OEMBED_MIME,
+                        <<"oembed_url">> => EmbedUrl
+                    },
                     case preview_create(Id, MediaProps, z_acl:sudo(Context)) of
                         undefined ->
                             {true, maps:remove(<<"oembed_url">>, Props)};
@@ -202,20 +202,20 @@ observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
                 category = Category,
                 module = ?MODULE,
                 description = ?__("Embedded Content", Context),
-                rsc_props = [
-                    {title, first([proplists:get_value(<<"title">>, Json), z_url_metadata:p(title, MD)])},
-                    {summary, first([proplists:get_value(<<"description">>, Json), z_url_metadata:p(summary, MD)])},
-                    {website, Url}
-                ],
-                medium_props = [
-                    {mime, ?OEMBED_MIME},
-                    {width, proplists:get_value(<<"width">>, Json)},
-                    {height, proplists:get_value(<<"height">>, Json)},
-                    {oembed_service, proplists:get_value(<<"provider_name">>, Json)},
-                    {oembed_url, Url},
-                    {oembed, Json},
-                    {media_import, Url}
-                ],
+                rsc_props = #{
+                    <<"title">> => first([proplists:get_value(<<"title">>, Json), z_url_metadata:p(title, MD)]),
+                    <<"summary">> => first([proplists:get_value(<<"description">>, Json), z_url_metadata:p(summary, MD)]),
+                    <<"website">> => Url
+                },
+                medium_props = #{
+                    <<"mime">> => ?OEMBED_MIME,
+                    <<"width">> => proplists:get_value(<<"width">>, Json),
+                    <<"height">> => proplists:get_value(<<"height">>, Json),
+                    <<"oembed_service">> => proplists:get_value(<<"provider_name">>, Json),
+                    <<"oembed_url">> => Url,
+                    <<"oembed">> => Json,
+                    <<"media_import">> => Url
+                },
                 preview_url = proplists:get_value(<<"thumbnail_url">>, Json)
             };
         {error, _} ->

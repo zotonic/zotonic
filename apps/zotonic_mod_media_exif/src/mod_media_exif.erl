@@ -31,37 +31,39 @@
 ]).
 
 observe_media_upload_rsc_props(#media_upload_rsc_props{medium=Medium, options=Opts}, Props, _Context) ->
-    Exif = proplists:get_value(exif, Medium, []),
+    Exif = maps:get(<<"exif">>, Medium, #{}),
     PropsForced = forced_props(Medium),
     PropsOverlay = overlay_props(Exif),
-    Props1 = z_utils:props_merge(PropsForced, Props),
+    Props1 = maps:merge(Props, PropsForced),
     case proplists:get_value(is_force_medium_props, Opts, true) of
-        true -> z_utils:props_merge(PropsOverlay, Props1);
-        false -> z_utils:props_merge(Props1, PropsOverlay)
+        true -> maps:merge(Props1, PropsOverlay);
+        false -> maps:merge(PropsOverlay, Props1)
     end.
 
 medium_props(undefined) ->
-    [];
+    #{};
 medium_props(Medium) ->
-    Exif = proplists:get_value(exif, Medium, []),
-    forced_props(Medium) ++ overlay_props(Exif).
+    Exif = maps:get(<<"exif">>, Medium, #{}),
+    maps:merge(Exif, overlay_props(Exif)).
 
 forced_props(Medium) ->
-    [
-        {crop_center, to_binary_point(proplists:get_value(subject_point, Medium))}
-    ].
+    #{
+        <<"crop_center">> => to_binary_point(maps:get(<<"subject_point">>, Medium, undefined))
+    }.
 
-overlay_props(Exif) ->
-    DateStart = to_dt(proplists:get_value(date_time, Exif,
-                         proplists:get_value(date_time_digitized, Exif))),
-    PropsOverlay = [
-        {date_start, DateStart},
-        {date_end, DateStart},
-        {org_pubdate, DateStart},
-        {location_lat, gps(proplists:get_value(gps_latitude, Exif))},
-        {location_lng, gps(proplists:get_value(gps_longitude, Exif))}
-    ],
-    [ {K,V} || {K,V} <- PropsOverlay, V =/= undefined ].
+overlay_props(Exif) when is_list(Exif) ->
+    overlay_props( z_props:from_list(Exif) );
+overlay_props(Exif) when is_map(Exif) ->
+    DateStart = to_dt(maps:get(<<"date_time">>, Exif,
+                         maps:get(<<"date_time_digitized">>, Exif, undefined))),
+    PropsOverlay = #{
+        <<"date_start">> => DateStart,
+        <<"date_end">> => DateStart,
+        <<"org_pubdate">> => DateStart,
+        <<"location_lat">> => gps(maps:get(<<"gps_latitude">>, Exif, undefined)),
+        <<"location_lng">> => gps(maps:get(<<"gps_longitude">>, Exif, undefined))
+    },
+    maps:filter(fun(_K, V) -> V =/= undefined end, PropsOverlay).
 
 to_binary_point({X,Y}) ->
     iolist_to_binary([ $+, integer_to_list(X), $+, integer_to_list(Y) ]);

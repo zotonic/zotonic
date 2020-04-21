@@ -206,20 +206,20 @@ media_import_props_video(Service, Descr, MD, MI, H, W, VideoId) ->
         category = video,
         module = ?MODULE,
         description = Descr,
-        rsc_props = [
-            {title, z_url_metadata:p(title, MD)},
-            {summary, z_url_metadata:p(summary, MD)},
-            {website, MI#media_import.url}
-        ],
-        medium_props = [
-            {mime, ?EMBED_MIME},
-            {width, W},
-            {height, H},
-            {video_embed_service, z_convert:to_binary(Service)},
-            {video_embed_code, embed_code(Service, H, W, VideoId)},
-            {video_embed_id, z_convert:to_binary(VideoId)},
-            {media_import, MI#media_import.url}
-        ],
+        rsc_props = #{
+            <<"title">> => z_url_metadata:p(title, MD),
+            <<"summary">> => z_url_metadata:p(summary, MD),
+            <<"website">> => MI#media_import.url
+        },
+        medium_props = #{
+            <<"mime">> => ?EMBED_MIME,
+            <<"width">> => W,
+            <<"height">> => H,
+            <<"video_embed_service">> => z_convert:to_binary(Service),
+            <<"video_embed_code">> => embed_code(Service, H, W, VideoId),
+            <<"video_embed_id">> => z_convert:to_binary(VideoId),
+            <<"media_import">> => MI#media_import.url
+        },
         preview_url = z_url_metadata:p(image, MD)
     }.
 
@@ -232,14 +232,14 @@ media_import_props_image(Service, MD, VideoId, Context) ->
                 prio = 10,
                 category = image,
                 description = m_rsc:p_no_acl(image, title, Context),
-                rsc_props = [
-                    {title, z_url_metadata:p(title, MD)},
-                    {summary, z_url_metadata:p(summary, MD)},
-                    {website, z_url_metadata:p(url, MD)}
-                ],
-                medium_props = [
-                    {mime, z_convert:to_binary(z_media_identify:guess_mime(ImgUrl))}
-                ],
+                rsc_props = #{
+                    <<"title">> => z_url_metadata:p(title, MD),
+                    <<"summary">> => z_url_metadata:p(summary, MD),
+                    <<"website">> => z_url_metadata:p(url, MD)
+                },
+                medium_props = #{
+                    <<"mime">> => z_convert:to_binary(z_media_identify:guess_mime(ImgUrl))
+                },
                 medium_url = z_convert:to_binary(ImgUrl)
             }
     end.

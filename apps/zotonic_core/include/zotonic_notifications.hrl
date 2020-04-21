@@ -899,7 +899,7 @@
 %% Return:: ``{ok, ResourceId}`` or ``undefined``
 -record(media_stillimage, {
     id :: m_rsc:resource_id() | undefined,
-    props = z_media_identify:media_info()
+    props :: z_media_identify:media_info()
 }).
 
 

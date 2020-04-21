@@ -88,13 +88,10 @@ m_get(Vs, _Msg, _Context) ->
 %% @doc Return the identification of a medium. Used by z_media_identify:identify()
 -spec identify( m_rsc:resource_id(), z:context() ) -> {ok, z_media_identify:media_info()} | {error, term()}.
 identify(Id, Context) when is_integer(Id) ->
-    case z_db:assoc_row("select id, mime, width, height, orientation from medium where id = $1", [Id],
-        Context) of
-        undefined ->
-            {error, enoent};
-        Props ->
-            {ok, Props}
-    end;
+    z_db:qmap_props_row(
+        "select id, mime, width, height, orientation from medium where id = $1",
+        [ Id ],
+        Context);
 identify(ImageFile, Context) ->
     case z_media_archive:is_archived(ImageFile, Context) of
         true ->
@@ -105,13 +102,10 @@ identify(ImageFile, Context) ->
     end.
 
 identify_medium_filename(MediumFilename, Context) ->
-    case z_db:assoc_row("select id, mime, width, height, orientation from medium where filename = $1",
-        [MediumFilename], Context) of
-        undefined ->
-            {error, enoent};
-        Props ->
-            {ok, Props}
-    end.
+    z_db:qmap_props_row("
+        select id, mime, width, height, orientation from medium where filename = $1",
+        [MediumFilename],
+        Context).
 
 
 %% @doc Check if a medium record exists
@@ -136,7 +130,7 @@ exists(Id, Context) ->
 -spec get( m_rsc:resource_id(), z:context() ) -> z_media_identify:media_info() | undefined.
 get(Id, Context) ->
     F = fun() ->
-        case z_db:qmap_row("select * from medium where id = $1", [Id], Context) of
+        case z_db:qmap_props_row("select * from medium where id = $1", [Id], Context) of
             {ok, Map} -> Map;
             {error, enoent} -> undefined
         end
@@ -168,14 +162,15 @@ get_file_data(Id, Context) ->
 get_by_filename(Filename, Context) ->
     case z_depcache:get({medium, Filename}, Context) of
         undefined ->
-            Row = z_db:qmap_row("select * from medium where filename = $1", [Filename], Context),
+            Row = z_db:qmap_props_row("select * from medium where filename = $1", [Filename], Context),
             case Row of
-                #{ <<"id">> := Id } ->
-                    z_depcache:set({medium, Filename}, Row, ?HOUR, [Id], Context);
-                undefined ->
-                    z_depcache:set({medium, Filename}, undefined, ?HOUR, Context)
-            end,
-            Row;
+                {ok, #{ <<"id">> := Id } = Medium} ->
+                    z_depcache:set({medium, Filename}, Medium, ?HOUR, [Id], Context),
+                    Medium;
+                {error, enoent} ->
+                    z_depcache:set({medium, Filename}, undefined, ?HOUR, Context),
+                    undefined
+            end;
         {ok, Row} ->
             Row
     end.
@@ -701,7 +696,8 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 medium_delete(RscId, Ctx),
                 {ok, RscId}
         end,
-        case medium_insert(Id, [{id, Id} | Medium1], Ctx) of
+        Medium2 = Medium#{ <<"id">> => Id },
+        case medium_insert(Id, Medium2, Ctx) of
             {ok, _MediaId} ->
                 {ok, Id};
             Error ->
@@ -1081,6 +1077,7 @@ check_medium_props(Ps) ->
                 K => V1
             }
         end,
+        #{},
         Ps).
 
 check_medium_prop(<<"width">>, N) when not is_integer(N) -> 0;

@@ -114,7 +114,7 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
                     pre_is_a = CatList,
                     post_is_a = [],
                     pre_props = Props,
-                    post_props = []
+                    post_props = #{}
                 }, Context),
              z_mqtt:publish(
                  [ <<"model">>, <<"rsc">>, <<"event">>, Id, <<"delete">> ],

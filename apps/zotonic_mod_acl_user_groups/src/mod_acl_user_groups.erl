@@ -805,8 +805,8 @@ manage_data(_Version, _Context) ->
 page_actions(Actions, Context) ->
     z_notifier:first(#page_actions{ actions = Actions }, Context).
 
-check_hasusergroup(UserId, P, Context) ->
-    HasUserGroup = to_list( maps:get(hasusergroup, P, []) ),
+check_hasusergroup(UserId, RscProps, Context) ->
+    HasUserGroup = to_list( maps:get(<<"hasusergroup">>, RscProps, []) ),
     case length(HasUserGroup) of
         0 ->
             %% not submitted, do nothing
@@ -814,7 +814,12 @@ check_hasusergroup(UserId, P, Context) ->
         _ ->
             GroupIds = lists:map(
                 fun z_convert:to_integer/1,
-                lists:filter(fun(<<>>) -> false; (_) -> true end, HasUserGroup)),
+                lists:filter(
+                    fun
+                        (<<>>) -> false;
+                        (_) -> true
+                    end,
+                    HasUserGroup)),
             {ok, PredId} = m_predicate:name_to_id(hasusergroup, Context),
             m_edge:replace(UserId, PredId, GroupIds, Context)
     end.

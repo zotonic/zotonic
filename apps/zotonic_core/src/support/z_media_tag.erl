@@ -340,11 +340,14 @@ mediaprops_filename(undefined, Props, _Context) ->
     end;
 mediaprops_filename(Id, Props, Context) ->
     case z_notifier:first({media_stillimage, Id, Props}, Context) of
-        {ok, Filename} -> Filename;
-        _ -> case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-                 [] -> z_convert:to_list(proplists:get_value(filename, Props));
-                 Filename -> Filename
-             end
+        {ok, Filename} ->
+            Filename;
+        _ ->
+            case maps:get(<<"preview_filename">>, Props, undefined) of
+                undefined -> maps:get(<<"filename">>, Props, undefined);
+                <<>> -> maps:get(<<"filename">>, Props, undefined);
+                Filename -> Filename
+            end
     end.
 
 use_absolute_url(Options, Context) ->

@@ -207,7 +207,7 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         <<"application/json">> -> <<"application/json">>;
                         _ -> <<"text/plain">>
                     end,
-                    {ok, [{mime, MXc}]};
+                    {ok, #{ <<"mime">> => MXc}};
                 <<"text/plain">> ->
                     MText = case guess_mime(OriginalFilename) of
                         <<"text/csv">> ->
