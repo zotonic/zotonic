@@ -92,10 +92,9 @@ import_item(#import_resource{name=UniqueName} = Rsc, Context) ->
         undefined ->
             case z_notifier:first(Rsc, Context) of
                 undefined ->
-                    Props = [
-                        {is_published, true}
-                        | Rsc#import_resource.props
-                    ],
+                    Props = (Rsc#import_resource.props)#{
+                        <<"is_published">> => true
+                    },
                     case m_media:insert_url(
                                 hd(Rsc#import_resource.media_urls),
                                 Props,
@@ -134,9 +133,9 @@ import_rsc(photo, {struct, Ps}, Context) ->
     {struct, Medium} = proplists:get_value(<<"standard_resolution">>, Images,
                                 proplists:get_value(<<"low_resolution">>, Images)),
     BaseRsc#import_resource{
-        props=[
-            {category, image} | BaseRsc#import_resource.props
-        ],
+        props = (BaseRsc#import_resource.props)#{
+            <<"category">> => image
+        },
         media_urls = [
             proplists:get_value(<<"url">>, Medium)
         ]
@@ -147,9 +146,9 @@ import_rsc(video, {struct, Ps}, Context) ->
     {struct, Medium} = proplists:get_value(<<"standard_resolution">>, Videos,
                                 proplists:get_value(<<"low_bandwidth">>, Videos)),
     BaseRsc#import_resource{
-        props=[
-            {category, video} | BaseRsc#import_resource.props
-        ],
+        props = (BaseRsc#import_resource.props)#{
+            <<"category">> => video
+        },
         media_urls = [
             proplists:get_value(<<"url">>, Medium)
         ]
@@ -173,16 +172,16 @@ import_rsc_base(Ps, Context) ->
         source_user_id = InsUserId,
         user_id = UserId,
         name = UniqueName,
-        props = [
-            {title, iolist_to_binary([
+        props = #{
+            <<"title">> => iolist_to_binary([
                         UserName, ": ", z_string:truncate(Caption, 50)
-                    ])},
-            {short_title, LocDescr},
-            {body, z_html:escape_link(Caption)},
-            {location_lng, Long},
-            {location_lat, Lat},
-            {website, SourceUrl}
-        ],
+                    ]),
+            <<"short_title">> => LocDescr,
+            <<"body">> => z_html:escape_link(Caption),
+            <<"location_lng">> => Long,
+            <<"location_lat">> => Lat,
+            <<"website">> => SourceUrl
+        },
         media_urls = [],
         urls = [],
         data = Ps

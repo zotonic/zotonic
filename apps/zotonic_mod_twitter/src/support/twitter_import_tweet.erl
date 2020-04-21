@@ -58,11 +58,10 @@ import_rsc(_RscId, TweetId, _UniqueName, _AuthorId, _Tweet, _Context) ->
 
 do_import_rsc(TweetId, ImportRsc, AuthorId, Tweet, Context) ->
     AdminContext = z_acl:sudo(Context),
-    RscProps = [
-        {category, tweet},
-        {is_published, true}
-        | ImportRsc#import_resource.props
-    ],
+    RscProps = (ImportRsc#import_resource.props)#{
+        <<"category">> => tweet,
+        <<"is_published">> => true
+    },
     Result = case first_media_props(ImportRsc#import_resource.media_urls, Context) of
                 {ok, MI} ->
                     z_media_import:insert(MI#media_import_props{rsc_props=RscProps}, AdminContext);
@@ -136,43 +135,48 @@ extract_import_rsc(TweetId, UniqueName, #{ <<"user">> := User } = Tweet, Context
     Language = extract_language(Tweet, Context),
     {Long, Lat} = extract_coordinates(Tweet),
     Created = qdate:parse(maps:get(<<"created_at">>, Tweet)),
-    TweetProps = [
-        {tweet_id, TweetId},
-        {tweet_url, TweetUrl},
-        {user, [
-            {is_verified, z_convert:to_bool(get_value(<<"verified">>, User))},
-            {id, TwitterUserId},
-            {screen_name, ScreenName},
-            {name, get_value(<<"name">>, User)},
-            {image_url, get_value(<<"profile_image_url_https">>, User)},
-            {url, <<"https://twitter.com/", ScreenName/binary>>}
-        ]},
-        {in_reply_to_user_id, get_value(<<"in_reply_to_user_id">>, Tweet)},
-        {in_reply_to_screen_name, get_value(<<"in_reply_to_screen_name">>, Tweet)},
-        {in_reply_to_status_id, get_value(<<"in_reply_to_status_id">>, Tweet)},
-        {is_retweet_status, get_value(<<"retweeted_status">>, Tweet) =/= undefined},
-        {retweeted_status_url, retweeted_status_url(Tweet)},
-        {retweeted_status_id, retweeted_status_id(Tweet)},
-        {is_quote_status, z_convert:to_bool(get_value(<<"is_quote_status">>, Tweet))},
-        {quoted_status_url, quoted_status_url(Tweet)}
-    ],
-    TweetProps1 = [ {K, V} || {K, V} <- TweetProps, V =/= undefined ],
-    Props = [
-        {name, UniqueName},
-        {language, [Language]},
-        {title, {trans, [
+    TweetProps = #{
+        <<"tweet_id">> => TweetId,
+        <<"tweet_url">> => TweetUrl,
+        <<"user">> => #{
+            <<"is_verified">> => z_convert:to_bool(get_value(<<"verified">>, User)),
+            <<"id">> => TwitterUserId,
+            <<"screen_name">> => ScreenName,
+            <<"name">> => get_value(<<"name">>, User),
+            <<"image_url">> => get_value(<<"profile_image_url_https">>, User),
+            <<"url">> => <<"https://twitter.com/", ScreenName/binary>>
+        },
+        <<"in_reply_to_user_id">> => get_value(<<"in_reply_to_user_id">>, Tweet),
+        <<"in_reply_to_screen_name">> => get_value(<<"in_reply_to_screen_name">>, Tweet),
+        <<"in_reply_to_status_id">> => get_value(<<"in_reply_to_status_id">>, Tweet),
+        <<"is_retweet_status">> => get_value(<<"retweeted_status">>, Tweet) =/= undefined,
+        <<"retweeted_status_url">> => retweeted_status_url(Tweet),
+        <<"retweeted_status_id">> => retweeted_status_id(Tweet),
+        <<"is_quote_status">> => z_convert:to_bool(get_value(<<"is_quote_status">>, Tweet)),
+        <<"quoted_status_url">> => quoted_status_url(Tweet)
+    },
+    TweetProps1 = maps:filter(
+        fun
+            (_K, undefined) -> false;
+            (_K, _V) -> true
+        end,
+        TweetProps),
+    Props = #{
+        <<"name">> => UniqueName,
+        <<"language">> => [Language],
+        <<"title">> => #trans{ tr = [
                     {Language, iolist_to_binary([
                                 ScreenName, ": ",
                                 z_string:truncate(z_html:unescape(z_html:strip(Body)), 50)])}
-                 ]}},
-        {body, {trans, [{Language, Body}]}},
-        {location_lng, Long},
-        {location_lat, Lat},
-        {website, first_link(LinkUrls, TweetUrl)},
-        {org_pubdate, Created},
-        {publication_start, Created},
-        {tweet, TweetProps1}
-    ],
+                 ]},
+        <<"body">> => #trans{ tr = [{Language, Body}] },
+        <<"location_lng">> => Long,
+        <<"location_lat">> => Lat,
+        <<"website">> => first_link(LinkUrls, TweetUrl),
+        <<"org_pubdate">> => Created,
+        <<"publication_start">> => Created,
+        <<"tweet">> => TweetProps1
+    },
     {ok, #import_resource{
         source = twitter,
         source_id = TweetId,

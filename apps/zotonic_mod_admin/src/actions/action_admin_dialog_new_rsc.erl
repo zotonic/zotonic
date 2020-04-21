@@ -192,9 +192,17 @@ dispatch(false) ->
 dispatch(Dispatch) when is_atom(Dispatch) ->
     Dispatch;
 dispatch(Dispatch) when is_list(Dispatch) ->
-    dispatch(z_convert:to_atom(Dispatch));
+    try
+        dispatch(list_to_existing_atom(Dispatch))
+    catch
+        error:badarg -> false
+    end;
 dispatch(Dispatch) when is_binary(Dispatch) ->
-    dispatch(z_convert:to_atom(Dispatch));
+    try
+        dispatch(binary_to_existing_atom(Dispatch, utf8))
+    catch
+        error:badarg -> false
+    end;
 dispatch(Cond) ->
     dispatch(z_convert:to_bool(Cond)).
 
@@ -206,13 +214,12 @@ get_base_props(NewRscTitle, Context) ->
     Props = lists:foldl(fun({Prop,Val}, Acc) ->
                             maybe_add_prop(Prop, Val, Acc)
                         end,
-                        [],
+                        #{},
                         z_context:get_q_all_noz(Context)),
-    [
-        {title, {trans, [{Lang, NewRscTitle}]}},
-        {language, [Lang]}
-        | Props
-    ].
+    Props#{
+        <<"title">> => #trans{ tr = [ {Lang, NewRscTitle} ] },
+        <<"language">> => [ Lang ]
+    }.
 
 maybe_add_prop(_P, #upload{}, Acc) ->
     Acc;
@@ -223,12 +230,18 @@ maybe_add_prop(<<"title">>, _, Acc) ->
 maybe_add_prop(<<"new_rsc_title">>, _, Acc) ->
     Acc;
 maybe_add_prop(<<"category_id">>, Cat, Acc) ->
-    [{category_id, z_convert:to_integer(Cat)} | Acc];
+    Acc#{
+        <<"category_id">> => z_convert:to_integer(Cat)
+    };
 maybe_add_prop(<<"is_published">>, IsPublished, Acc) ->
-    [{is_published, z_convert:to_bool(IsPublished)} | Acc];
+    Acc#{
+        <<"is_published">> => z_convert:to_bool(IsPublished)
+    };
 maybe_add_prop(<<"is_dependent">>, IsDependent, Acc) ->
-    [{is_dependent, z_convert:to_bool(IsDependent)} | Acc];
+    Acc#{
+        <<"is_dependent">> => z_convert:to_bool(IsDependent)
+    };
 maybe_add_prop(P, V, Acc) ->
-    [{P, V} | Acc].
-
-
+    Acc#{
+        P => V
+    }.

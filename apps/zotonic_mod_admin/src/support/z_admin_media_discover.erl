@@ -70,34 +70,37 @@ media_insert_rsc_props(ArgsEmbed, Context) ->
     add_qprops(SubjectId, CGId, Context).
 
 add_qprops(undefined, CGId, Context) ->
-    [
-        {content_group_id, CGId},
-        {is_published, z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) )}
-    ]
-    ++ maybe_title(Context);
+    Props = #{
+        <<"content_group_id">> => CGId,
+        <<"is_published">> => z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) )
+    },
+    maybe_title(Props, Context);
 add_qprops(SubjectId, undefined, Context) when is_integer(SubjectId) ->
     SubjCGId = m_rsc:p_no_acl(SubjectId, content_group_id, Context),
     CGId = get_q(<<"content_group_id">>, SubjCGId, Context),
-    [
-        {content_group_id, z_convert:to_integer(CGId)},
-        {is_published, z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) )},
-        {is_dependent, z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )}
-    ]
-    ++ maybe_title(Context);
+    Props = #{
+        <<"content_group_id">> => z_convert:to_integer(CGId),
+        <<"is_published">> => z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
+        <<"is_dependent">> => z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )
+    },
+    maybe_title(Props, Context);
 add_qprops(SubjectId, CGId, Context) when is_integer(SubjectId), is_integer(CGId) ->
     CGId1 = get_q(<<"content_group_id">>, CGId, Context),
-    [
-        {content_group_id, z_convert:to_integer(CGId1)},
-        {is_published, z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) )},
-        {is_dependent, z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )}
-    ]
-    ++ maybe_title(Context).
+    Props = #{
+        <<"content_group_id">> => z_convert:to_integer(CGId1),
+        <<"is_published">> => z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
+        <<"is_dependent">> => z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )
+    },
+    maybe_title(Props, Context).
 
-maybe_title(Context) ->
+maybe_title(Props, Context) ->
     case z_context:get_q(<<"new_media_title">>, Context) of
-        undefined -> [];
-        <<>> -> [];
-        Title -> [ {title, Title} ]
+        Title when is_binary(Title), Title =/= <<>> ->
+            Props#{
+                <<"title">> => Title
+            };
+        _ ->
+            Props
     end.
 
 get_q(P, Default, Context) ->

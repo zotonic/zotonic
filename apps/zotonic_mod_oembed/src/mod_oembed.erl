@@ -167,7 +167,16 @@ observe_media_viewer(#media_viewer{
 observe_media_viewer(#media_viewer{}, _Context) ->
     undefined.
 
-lookup(K1, K2, OEmbed) ->
+lookup(K1, K2, OEmbed) when is_list(OEmbed) ->
+    case proplists:lookup(K1, OEmbed) of
+        {K1, V} -> {ok, V};
+        none ->
+            case proplists:lookup(K2, OEmbed) of
+                {K2, V} -> {ok, V};
+                none -> error
+            end
+    end;
+lookup(K1, K2, OEmbed) when is_map(OEmbed) ->
     case maps:find(K1, OEmbed) of
         {ok, V} -> {ok, V};
         error -> maps:find(K2, OEmbed)

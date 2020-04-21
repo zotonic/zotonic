@@ -431,11 +431,11 @@ replace_medium(Medium, RscId, RscProps, Options, Context) ->
         false -> {error, eacces}
     end.
 
-update_medium_1(RscId, #{ mime := Mime } = Medium, RscProps, Options, Context) ->
+update_medium_1(RscId, #{ <<"mime">> := Mime } = Medium, RscProps, Options, Context) ->
     Category = case maps:find(<<"category">>, RscProps) of
                     {ok, undefined} -> tl(m_rsc:is_a(RscId, Context));
                     {ok, Cat} -> Cat;
-                    false -> tl(m_rsc:is_a(RscId, Context))
+                    error -> tl(m_rsc:is_a(RscId, Context))
                end,
     case z_acl:is_allowed(insert, #acl_rsc{category = Category, props = RscProps}, Context) andalso
          z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context) of

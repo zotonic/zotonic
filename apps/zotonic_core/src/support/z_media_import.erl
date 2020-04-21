@@ -63,7 +63,7 @@ insert_1(_, #media_import_props{medium_url=MediumUrl} = MI, RscProps, Context) -
     m_media:insert_url(MediumUrl, RscProps2, Context).
 
 default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
-    z_utils:props_merge(
+    maps:merge(
         #{
             <<"is_published">> => true,
             <<"category">> => Cat

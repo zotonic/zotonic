@@ -328,15 +328,14 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                               end,
             Predicate = proplists:get_value(predicate, EventProps, depiction),
             Title   = z_context:get_q_validated(<<"title">>, Context),
-            Props = [
-                {title, Title},
-                {is_published, true},
-                {category, video},
-                {video_embed_service, EmbedService},
-                {video_embed_code, EmbedCode},
-                {content_group_id, ContentGroupdId}
-            ],
-
+            Props = #{
+                <<"title">> => Title,
+                <<"is_published">> => true,
+                <<"category">> => video,
+                <<"video_embed_service">> => EmbedService,
+                <<"video_embed_code">> => EmbedCode,
+                <<"content_group_id">> => ContentGroupdId
+            },
             try m_rsc:insert(Props, Context) of
                 {ok, MediaId} ->
                     spawn_preview_create(MediaId, Props, Context),
@@ -369,12 +368,11 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 
         %% Update the current page
         N when is_integer(N) ->
-            Props = [
-                {category, video},
-                {video_embed_service, EmbedService},
-                {video_embed_code, EmbedCode}
-            ],
-
+            Props = #{
+                <<"category">> => video,
+                <<"video_embed_service">> => EmbedService,
+                <<"video_embed_code">> => EmbedCode
+            },
             try
                 {ok, _} = m_rsc:update(Id, Props, Context)
             catch
