@@ -124,8 +124,10 @@ get(Module, Context) when is_binary(Module) ->
 %% @doc Get a configuration value for the given module/key combination.
 %% @spec get(Module::atom(), Key::atom(), #context{}) -> Value | undefined
 get(zotonic, Key, _Context) when is_atom(Key) ->
-    [{value, z_config:get(Key)}];
-get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
+    [
+        {value, z_config:get(Key)}
+    ];
+get(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
     Value = case z_depcache:get_subkey(config, Module, Context) of
         {ok, undefined} ->
             undefined;
@@ -148,29 +150,53 @@ get(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
         _ ->
             Value
     end;
-get(Module, Key, Context) when is_binary(Module), is_binary(Key) ->
+get(Module, Key, Context) when is_binary(Module) ->
     try
         Module1 = binary_to_existing_atom(Module, utf8),
+        get(Module1, Key, Context)
+    catch
+        error:badarg ->
+            undefined
+    end;
+get(Module, Key, Context) when is_binary(Key) ->
+    try
         Key1 = binary_to_existing_atom(Key, utf8),
-        get(Module1, Key1, Context)
+        get(Module, Key1, Context)
     catch
         error:badarg ->
             undefined
     end.
 
 
-get_value(Module, Key, Context) when is_atom(Module) andalso is_atom(Key) ->
+
+get_value(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
     Value = case get(Module, Key, Context) of
         undefined -> undefined;
-        Cfg ->
-            proplists:get_value(value, Cfg)
+        Cfg -> proplists:get_value(value, Cfg)
     end,
     case Value of
         undefined -> m_site:get(Module, Key, Context);
         _ -> Value
+    end;
+get_value(Module, Key, Context) when is_binary(Module) ->
+    try
+        Module1 = binary_to_existing_atom(Module, utf8),
+        get_value(Module1, Key, Context)
+    catch
+        error:badarg ->
+            undefined
+    end;
+get_value(Module, Key, Context) when is_binary(Key) ->
+    try
+        Key1 = binary_to_existing_atom(Key, utf8),
+        get_value(Module, Key1, Context)
+    catch
+        error:badarg ->
+            undefined
     end.
 
-get_value(Module, Key, Default, Context) when is_atom(Module) andalso is_atom(Key) ->
+
+get_value(Module, Key, Default, Context) ->
     case get_value(Module, Key, Context) of
         undefined -> Default;
         Value -> Value
@@ -195,8 +221,10 @@ set_value(Module, Key, Value, Context) ->
             ok
     end.
 
--spec set_value_db( atom(), atom(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
+-spec set_value_db( atom() | binary(), atom() | binary(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
 set_value_db(Module, Key, Value0, Context) ->
+    ModuleAtom = z_convert:to_atom(Module),
+    KeyAtom = z_convert:to_atom(Key),
     Value = z_convert:to_binary(Value0),
     Result = z_db:transaction(
         fun(Ctx) ->
@@ -211,7 +239,12 @@ set_value_db(Module, Key, Value0, Context) ->
                 Value ->
                     no_change;
                 undefined ->
-                    {ok, _} = z_db:insert(config, [{module,Module}, {key, Key}, {value, Value}], Ctx),
+                    Props = [
+                        {module,ModuleAtom},
+                        {key, KeyAtom},
+                        {value, Value}
+                    ],
+                    {ok, _} = z_db:insert(config, Props, Ctx),
                     insert;
                 OldValue ->
                     1 = z_db:q("
@@ -220,7 +253,7 @@ set_value_db(Module, Key, Value0, Context) ->
                             modified = now()
                         where module = $2
                           and key = $3",
-                        [ Value, Module, Key ],
+                        [ Value, ModuleAtom, KeyAtom ],
                         Ctx),
                     {update, OldValue}
             end
@@ -233,8 +266,8 @@ set_value_db(Module, Key, Value0, Context) ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
             z:info(
-                "Configuration key '~s.~s' inserted, new value: '~s'",
-                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value ],
+                "Configuration key '~p.~p' inserted, new value: '~s'",
+                [ ModuleAtom, KeyAtom, Value ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;
@@ -242,8 +275,8 @@ set_value_db(Module, Key, Value0, Context) ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
             z:info(
-                "Configuration key '~s.~s' changed, new value: '~s', old value '~s'",
-                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Value, OldV ],
+                "Configuration key '~p.~p' changed, new value: '~s', old value '~s'",
+                [ ModuleAtom, KeyAtom, Value, OldV ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;

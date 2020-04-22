@@ -47,15 +47,18 @@ convert(Html, Options) when is_list(Html) ->
     convert1(iolist_to_binary(["<sanitize>", Html, "</sanitize>"]), Options).
 
 convert1(Html, Options) ->
-    Parsed = z_html_parse:parse(Html),
-    {Text, M} = to_md(Parsed, #md{}, set_options(Options, #ms{})),
-    list_to_binary([trimnl(iolist_to_binary(Text)), expand_anchors(M)]).
+    case z_html_parse:parse(Html) of
+        {ok, Parsed} ->
+            {Text, M} = to_md(Parsed, #md{}, set_options(Options, #ms{})),
+            list_to_binary([trimnl(iolist_to_binary(Text)), expand_anchors(M)]);
+        {error, _} ->
+            <<>>
+    end.
 
-    set_options([], S) ->
-        S;
-    set_options([no_html|T], S) ->
-        set_options(T, S#ms{allow_html=false}).
-
+set_options([], S) ->
+    S;
+set_options([no_html|T], S) ->
+    set_options(T, S#ms{allow_html=false}).
 
 to_md(B, M, _S) when is_binary(B) ->
     {escape_html_text(B, <<>>), M};

@@ -2,8 +2,6 @@
 {% wire id=#form type="submit" postback={user_add on_success=on_success} delegate=delegate %}
 <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
 
-    {% include "_password_autocomplete_off.tpl" %}
-
     <h4>{_ Name and e-mail address _}</h4>
     <p>
 	    {_ Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user. _}
@@ -35,7 +33,7 @@
     <div class="form-group row">
 	    <label class="control-label col-md-3" for="{{ #email }}">{_ E-mail _}</label>
         <div class="col-md-9">
-	        <input class="form-control" type="text" id="{{ #email }}" name="email" value="" tabindex="4" />
+	        <input class="form-control" type="email" id="{{ #email }}" name="email" value="" tabindex="4" />
 	        {% validate id=#email name="email" type={presence} type={email} %}
 	    </div>
     </div>
@@ -46,7 +44,7 @@
             <select class="form-control" id="{{ #category }}" name="category">
                 {% with m.admin_identity.new_user_category as default_category %}
                     {% for category in m.category.person.tree_flat %}
-                        {% if m.acl.is_allowed.insert[category] %}
+                        {% if m.acl.is_allowed.insert[category.id] %}
                             <option value="{{ category.id.name }}" {% if category.id.name == default_category %}selected{% endif %}>
                                 {{ category.indent }} {{ category.id.title }}
                             </option>

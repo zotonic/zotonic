@@ -255,12 +255,12 @@ ensure(RscId, Type, Key, Context) when is_binary(Key) ->
 
 % Restrict which category resources have email identity records.
 % This should overlap with the categories that could authenticate.
-is_email_identity_category(Pre, Props, Context) ->
-    CatId = case proplists:get_value(category_id, Props) of
-        undefined -> proplists:get_value(category_id, Pre);
-        CId -> CId
-    end,
-    is_email_identity_category(m_category:is_a(CatId, Context)).
+is_email_identity_category(_Pre, #{ <<"category_id">> := CatId }, Context) when is_integer(CatId) ->
+    is_email_identity_category(m_category:is_a(CatId, Context));
+is_email_identity_category(#{ <<"category_id">> := CatId }, _Post, Context) when is_integer(CatId) ->
+    is_email_identity_category(m_category:is_a(CatId, Context));
+is_email_identity_category(_Pre, _Post, _Context) ->
+    false.
 
 is_email_identity_category(IsA) when is_list(IsA) ->
     lists:member(person, IsA)
