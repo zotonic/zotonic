@@ -789,14 +789,10 @@ reupload(Id, Context) ->
             {error, eacces}
     end.
 
-reupload_1(Id, Medium, Context) ->
-    % Fetch all filenames being used.
-    case map:get(<<"filename">>, Medium, undefined) of
-        undefined -> {error, nofile};
-        <<>> -> {error, nofile};
-        Filename ->
-            reupload_2(Id, Medium, Filename, z_file_request:lookup_file(Filename, Context), Context)
-    end.
+reupload_1(Id, #{ <<"filename">> := Filename } = Medium, Context) when is_binary(Filename), Filename =/= <<>> ->
+    reupload_2(Id, Medium, Filename, z_file_request:lookup_file(Filename, Context), Context);
+reupload_1(_Id, _Medium, _Context) ->
+    {error, nofile}.
 
 reupload_2(Id, Medium, Filename, {ok, #z_file_info{} = FInfo}, Context) ->
     case z_file_request:content_file(FInfo, Context) of
