@@ -72,7 +72,7 @@ test_get_properties_1() ->
     Result = z_language:properties(Code),
     ?assertEqual(
         proplists:get_value(language, ?EXPECTED_PROPERTIES),
-        proplists:get_value(language, Result)
+        maps:get(<<"language">>, Result)
     ).
 
 test_get_properties_2() ->
@@ -80,7 +80,7 @@ test_get_properties_2() ->
     Result = z_language:properties(Code),
     ?assertEqual(
         proplists:get_value(direction, ?EXPECTED_PROPERTIES),
-        proplists:get_value(direction, Result)
+        maps:get(<<"direction">>, Result)
     ).
 
 test_get_properties_3() ->
@@ -88,7 +88,7 @@ test_get_properties_3() ->
     Result = z_language:properties(Code),
     ?assertEqual(
         proplists:get_value(name, ?EXPECTED_PROPERTIES),
-        proplists:get_value(name, Result)
+        maps:get(<<"name">>, Result)
     ).
 
 test_get_properties_4() ->
@@ -96,7 +96,7 @@ test_get_properties_4() ->
     Result = z_language:properties(Code),
     ?assertEqual(
         proplists:get_value(name_en, ?EXPECTED_PROPERTIES),
-        proplists:get_value(name_en, Result)
+        maps:get(<<"name_en">>, Result)
     ).
 
 test_get_properties_5() ->
@@ -104,7 +104,7 @@ test_get_properties_5() ->
     Result = z_language:properties(Code),
     ?assertEqual(
         proplists:get_value(script, ?EXPECTED_PROPERTIES),
-        proplists:get_value(script, Result)
+        maps:get(<<"script">>, Result)
     ).
 
 test_get_properties_6() ->
@@ -112,14 +112,14 @@ test_get_properties_6() ->
     Result = z_language:properties(Code),
     ?assertEqual(
         length(proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES)),
-        length(proplists:get_value(sublanguages, Result))
+        length(maps:get(<<"sublanguages">>, Result))
     ).
 
 test_get_properties_7() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
     Result = z_language:properties(Code),
     [{ExpectedCode, _ExpectedData}|_] = proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES),
-    [{ResultCode, _ResultData}|_] = proplists:get_value(sublanguages, Result),
+    [{ResultCode, _ResultData}|_] = maps:get(<<"sublanguages">>, Result),
     ?assertEqual(
         ExpectedCode,
         ResultCode
@@ -129,10 +129,10 @@ test_get_properties_8() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
     Result = z_language:properties(Code),
     [{_ExpectedCode, ExpectedData}|_] = proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES),
-    [{_ResultCode, ResultData}|_] = proplists:get_value(sublanguages, Result),
+    [{_ResultCode, ResultData}|_] = maps:get(<<"sublanguages">>, Result),
     ?assertEqual(
         proplists:get_value(region, ExpectedData),
-        proplists:get_value(region, ResultData)
+        maps:get(<<"region">>, ResultData)
     ).
 
 
