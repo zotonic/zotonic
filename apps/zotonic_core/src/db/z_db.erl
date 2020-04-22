@@ -655,7 +655,7 @@ insert(Table, Props, Context) ->
 
 
 %% @doc Update a row in a table, merging the props list with any new props values
--spec update(table_name(), id(), parameters(), z:context()) -> {ok, RowsUpdated::integer()} | {error, term()}.
+-spec update(table_name(), id(), props(), z:context()) -> {ok, RowsUpdated::integer()} | {error, term()}.
 update(Table, Id, Parameters, Context) when is_list(Parameters) ->
     update(Table, Id, z_props:from_props(Parameters), Context);
 update(Table, Id, Parameters, Context) when is_atom(Table) ->

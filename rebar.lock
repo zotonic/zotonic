@@ -9,7 +9,10 @@
  {<<"cowboy">>,{pkg,<<"cowboy">>,<<"2.7.0">>},1},
  {<<"cowlib">>,{pkg,<<"cowlib">>,<<"2.8.0">>},2},
  {<<"cowmachine">>,{pkg,<<"cowmachine">>,<<"1.3.0">>},0},
- {<<"depcache">>,{pkg,<<"depcache">>,<<"1.7.0">>},0},
+ {<<"depcache">>,
+  {git,"https://github.com/zotonic/depcache.git",
+       {ref,"75f2ff4d07622513207eba51b1590f8e0107ca95"}},
+  0},
  {<<"dh_date">>,{pkg,<<"dh_date">>,<<"1.0.0">>},0},
  {<<"diffy">>,{pkg,<<"diffy">>,<<"1.0.0">>},0},
  {<<"dispatch_compiler">>,{pkg,<<"dispatch_compiler">>,<<"1.0.0">>},0},
@@ -96,7 +99,7 @@
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
  {<<"zotonic_stdlib">>,
   {git,"https://github.com/zotonic/z_stdlib.git",
-       {ref,"a5c84d9bf54368672c98d57af1ed193073b6a1c1"}},
+       {ref,"30db6fb5514f89f2368a7f45be0927109be9c6c9"}},
   0}]}.
 [
 {pkg_hash,[
@@ -110,7 +113,6 @@
  {<<"cowboy">>, <<"91ED100138A764355F43316B1D23D7FF6BDB0DE4EA618CB5D8677C93A7A2F115">>},
  {<<"cowlib">>, <<"FD0FF1787DB84AC415B8211573E9A30A3EBE71B5CBFF7F720089972B2319C8A4">>},
  {<<"cowmachine">>, <<"72559E8F30CC8CD0BBA0CA9999E694585CABB856D156D01BDC480C6EAD239473">>},
- {<<"depcache">>, <<"2B401DBAB32CC8E64F1917B3B5D2F504D9CB5577BDE251EED2F5DCEE1D8C1459">>},
  {<<"dh_date">>, <<"5B0C286665E160DE44132552931BEF06B5CB2244D5BD20E333A686E9D8BF92E3">>},
  {<<"diffy">>, <<"1584C5CA54FF796EEAA00149D842DB580695D2843FB4BF0C279E017A37734E26">>},
  {<<"dispatch_compiler">>, <<"E55A3A7B5CC6F5F3887691FF600C177B52534504C8C67804DCE115B5756F2FA0">>},

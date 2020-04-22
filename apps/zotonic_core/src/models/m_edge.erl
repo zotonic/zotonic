@@ -184,12 +184,12 @@ get_edges(SubjectId, Context) ->
     end.
 
 %% @doc Insert a new edge
--spec insert(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), #context{}) ->
+-spec insert(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), z:context()) ->
     {ok, EdgeId :: pos_integer()} | {error, term()}.
 insert(Subject, Pred, Object, Context) ->
     insert(Subject, Pred, Object, [], Context).
 
--spec insert(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), insert_options(), #context{}) ->
+-spec insert(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), insert_options(), z:context()) ->
         {ok, EdgeId :: pos_integer()} | {error, term()}.
 insert(SubjectId, PredId, ObjectId, Opts, Context)
     when is_integer(SubjectId), is_integer(PredId), is_integer(ObjectId) ->
