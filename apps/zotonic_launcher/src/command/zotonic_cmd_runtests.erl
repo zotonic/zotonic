@@ -29,9 +29,7 @@ run(Args) ->
     {ok, BaseCmd} = zotonic_command:base_cmd_test(),
     Cmd = BaseCmd
         ++ " -sasl errlog_type error -s zotonic "
-        ++ "-eval 'zotonic:await_startup(),init:stop(case eunit:test(["
-            ++ tests(Tests)
-            ++ "],[]) of error -> 1; ok -> 0 end)'",
+        ++ "-eval 'zotonic:runtests(["++tests(Tests)++"])'",
     io:format("~s", [ Cmd ]).
 
 tests(Args) ->

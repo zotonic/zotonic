@@ -149,7 +149,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                             lager:info("Resource '~p' (~p) exists but is not managed by ~p.", [Name, Id, Module]),
                             ok
                     end;
-                {error, enoent} ->
+                {error, {unknown_rsc, _}} ->
                     %% new resource, or old resource
                     Props1 = #{
                         <<"name">> => Name,
