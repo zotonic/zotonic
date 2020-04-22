@@ -139,11 +139,11 @@ from_list([ {K, _} | _ ] = L) when is_binary(K) ->
 %% <ul>
 %%  <li> 'dt:ymd:0:property' is datetime property, 0 for start-date, 1 for end-date,
 %%    the pattern 'ymd' describes what is in the value, could also be 'y', 'm',
-%%    'd', 'dmy', 'his', 'hi', 'h', 'i', or 's'
-%%  <li> 'prop$en' is the 'en' translation of the property named 'prop'
-%%  <li> 'a.b.c.d' is a nested map
+%%    'd', 'dmy', 'his', 'hi', 'h', 'i', or 's'</li>
+%%  <li> 'prop$en' is the 'en' translation of the property named 'prop'</li>
+%%  <li> 'a.b.c.d' is a nested map</li>
 %%  <li> 'blocks[].name' is a list of maps, use 'blocks[].' to append a new empty
-%%    entry. Use 'name[]' to append to a list of values.
+%%    entry. Use 'name[]' to append to a list of values.</li>
 %% </ul>
 %%
 %% If a date/time part is missing then the current UTC date is used to fill the
