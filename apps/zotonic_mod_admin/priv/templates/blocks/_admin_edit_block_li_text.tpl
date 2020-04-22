@@ -15,7 +15,7 @@
 		{% if id.is_editable %}
 			<textarea rows="10"
 			    id="block-{{name}}-body{{ lang_code_for_id }}"
-			    name="block[].body{{ lang_code_with_dollar }}"
+			    name="blocks[].body{{ lang_code_with_dollar }}"
 			    class="body z_editor-init form-control"
 			    {% include "_language_attrs.tpl" language=lang_code %}>{{ blk.body[lang_code] |escape }}</textarea>
 		{% else %}

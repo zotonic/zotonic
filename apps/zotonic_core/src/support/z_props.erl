@@ -214,11 +214,13 @@ nested_assign([ <<>> | _ ], _V, Map) ->
     % Drop empty keys
     Map;
 nested_assign([ <<"block-">> ], V, Map) ->
-    nested_assign([ <<"block[].">> ], V, Map);
+    % Handle forms with old 'block-' editing templates
+    nested_assign([ <<"blocks[].">> ], V, Map);
 nested_assign([ <<"block-", Rest/binary>> ], V, Map) ->
+    % Handle forms with old 'block-' editing templates
     case binary:split(Rest, <<"-">>) of
-        [ _ , K ] -> nested_assign([ <<"block[].", K/binary>> ], V, Map);
-        [ K ] -> nested_assign([ <<"block[].", K/binary>> ], V, Map)
+        [ _ , K ] -> nested_assign([ <<"blocks[].", K/binary>> ], V, Map);
+        [ K ] -> nested_assign([ <<"blocks[].", K/binary>> ], V, Map)
     end;
 nested_assign([ K, <<>> ], _V, Map) ->
     % Start a new map, if key ends in "[]"
@@ -401,7 +403,6 @@ combine_dates_1(true, Map, Now) ->
         Map),
     ByName = group_date_parts(DateParts),
     DateKVs = combine_date_parts(ByName, Now),
-    io:format("~p~n", [DateKVs]),
     DateKVs1 = cleanup_dates(DateKVs),
     maps:merge(OtherProps, maps:from_list(DateKVs1));
 combine_dates_1(false, Qs, _Now) ->

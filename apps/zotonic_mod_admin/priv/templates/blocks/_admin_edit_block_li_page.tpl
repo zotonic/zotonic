@@ -12,7 +12,7 @@
     		{% catinclude "_rsc_block_item.tpl" blk.rsc_id %}
         {% endif %}
 	</div>
-	<input type="hidden" id="block-{{name}}-rsc_id" name="block[].rsc_id" value="{{ blk.rsc_id }}" />
+	<input type="hidden" id="block-{{name}}-rsc_id" name="blocks[].rsc_id" value="{{ blk.rsc_id }}" />
 </fieldset>
 
 {% include "_admin_edit_block_show_as.tpl" is_page_block %}

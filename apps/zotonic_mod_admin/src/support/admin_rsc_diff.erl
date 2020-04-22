@@ -127,7 +127,7 @@ fetch([K|Ks], MapA, MapB, Acc, Context) ->
     B = normalize(K, maps:get(K, MapB, undefined)),
     case A of
         B ->
-            fetch(Ks, A, B, Acc, Context);
+            fetch(Ks, MapA, MapB, Acc, Context);
         _ ->
             case {format_value(K, A, Context),
                   format_value(K, B, Context)}

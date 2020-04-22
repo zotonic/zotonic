@@ -218,41 +218,51 @@ move_creator_modifier_ids(WinnerId, LoserId, Context) ->
         end,
         Ids).
 
-merge_copy_props(WinnerId, Props, IsMergeTrans, Context) ->
-    Props1 = ensure_merge_language(Props, Context),
-    merge_copy_props_1(WinnerId, Props1, IsMergeTrans, [], Context).
+merge_copy_props(WinnerId, LoserProps, IsMergeTrans, Context) ->
+    LoserProps1 = ensure_merge_language(LoserProps, Context),
+    maps:fold(
+        fun(K, V, Acc) ->
+            case merge_copy_props_1(WinnerId, K, V, IsMergeTrans, Context) of
+                {ok, V1} ->
+                    Acc#{ K => V1 };
+                false ->
+                    Acc
+            end
+        end,
+        #{},
+        LoserProps1).
 
-merge_copy_props_1(_WinnerId, [], _IsMergeTrans, Acc, _Context) ->
-    lists:reverse(Acc);
-merge_copy_props_1(WinnerId, [{P,_}|Ps], IsMergeTrans, Acc, Context)
+merge_copy_props_1(_WinnerId, P, _V, _IsMergeTrans, _Context)
     when P =:= <<"creator">>; P =:= <<"creator_id">>; P =:= <<"modifier">>; P =:= <<"modifier_id">>;
          P =:= <<"created">>; P =:= <<"modified">>; P =:= <<"version">>;
          P =:= <<"id">>; P =:= <<"is_published">>; P =:= <<"is_protected">>; P =:= <<"is_dependent">>;
          P =:= <<"is_authoritative">>; P =:= <<"pivot_geocode">>; P =:= <<"pivot_geocode_qhash">>;
          P =:= <<"category_id">> ->
-    merge_copy_props_1(WinnerId, Ps, IsMergeTrans, Acc, Context);
-merge_copy_props_1(WinnerId, [{<<"blocks">>, LoserBs}|Ps], IsMergeTrans, Acc, Context) ->
-    WinnerBs = m_rsc:p_no_acl(WinnerId, blocks, Context),
-    NewBs = merge_copy_props_blocks(WinnerBs, LoserBs, IsMergeTrans, Context),
-    merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [ {<<"blocks">>, NewBs} | Acc ], Context);
-merge_copy_props_1(WinnerId, [{_,Empty}|Ps], IsMergeTrans, Acc, Context)
-    when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
-    merge_copy_props_1(WinnerId, Ps, IsMergeTrans, Acc, Context);
-merge_copy_props_1(WinnerId, [{P,LoserValue} = PV|Ps], IsMergeTrans, Acc, Context) ->
+    false;
+merge_copy_props_1(WinnerId, <<"blocks">>, LoserBs, IsMergeTrans, Context) ->
+    WinnerBs = m_rsc:p_no_acl(WinnerId, <<"blocks">>, Context),
+    {ok, merge_copy_props_blocks(WinnerBs, LoserBs, IsMergeTrans, Context)};
+merge_copy_props_1(_WinnerId, _K, undefined, _IsMergeTrans, _Context) -> false;
+merge_copy_props_1(_WinnerId, _K, [], _IsMergeTrans, _Context) -> false;
+merge_copy_props_1(_WinnerId, _K, <<>>, _IsMergeTrans, _Context) -> false;
+merge_copy_props_1(WinnerId, P, LoserValue, IsMergeTrans, Context) ->
     case m_rsc:p_no_acl(WinnerId, P, Context) of
         undefined when IsMergeTrans, P =:= <<"language">>, is_list(LoserValue) ->
             V1 = lists:usort([ z_language:default_language(Context) ] ++ LoserValue),
-            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [{P,V1}|Acc], Context);
-        Empty when Empty =:= []; Empty =:= <<>>; Empty =:= undefined ->
-            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [PV|Acc], Context);
+            {ok, V1};
+        undefined ->
+            false;
+        <<>> ->
+            false;
+        [] ->
+            false;
         Value when IsMergeTrans, P =:= <<"language">>, is_list(Value), is_list(LoserValue) ->
             V1 = lists:usort(Value ++ LoserValue),
-            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [{P,V1}|Acc], Context);
+            {ok, V1};
         Value when IsMergeTrans ->
-            V1 = merge_trans(Value, LoserValue, Context),
-            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, [{P,V1}|Acc], Context);
+            {ok, merge_trans(Value, LoserValue, Context)};
         _Value ->
-            merge_copy_props_1(WinnerId, Ps, IsMergeTrans, Acc, Context)
+            false
     end.
 
 ensure_merge_language(Props, Context) ->
@@ -395,7 +405,20 @@ duplicate(Id, DupProps, Context) ->
 update(Id, Props, Context) ->
     update(Id, Props, [], Context).
 
-%% @doc Update a resource
+%% @doc Update a resource.
+%% Options flags:
+%%      escape_texts    (default: true}
+%%      acl_check       (default: true)
+%%      no_touch        (default: false)
+%%      is_import       (default: false)
+%% Other options:
+%%      tz - timezone for date conversions
+%%      expected - list with property value pairs that
+%%                 are expected, fail if the properties
+%%                 are different.
+%%
+%% {escape_texts, false} checks if the texts are escaped, and if not then it
+%% will escape. This prevents "double-escaping" of texts.
 -spec update(
         m_rsc:resource() | insert_rsc,
         m_rsc:props_all() | m_rsc:update_function(),
@@ -431,10 +454,6 @@ update(Id, Props, false, Context) ->
     update(Id, Props, [{escape_texts, false}], Context);
 update(Id, Props, true, Context) ->
     update(Id, Props, [{escape_texts, true}], Context);
-
-%% [Options]: {escape_texts, true|false (default: true}, {acl_check: true|false (default: true)}
-%% {escape_texts, false} checks if the texts are escaped, and if not then it
-%% will escape. This prevents "double-escaping" of texts.
 update(Id, Props, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
     RscUpd = #rscupd{
         id = Id,

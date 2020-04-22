@@ -5,7 +5,7 @@
 {% block widget_title %}
 {_ Publication period _}
 <div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Publication date range"|escapejs }}', text: '{{ _"When a page has a publication date range then it will only be visible between the two dates. Note that when you are allowed to edit the page then you can always see it."|escapejs }}'" title="{_ Need more help? _}"></a>
+    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Publication date range"|escapejs }}', text: '{{ _"If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."|escapejs }}'" title="{_ Need more help? _}"></a>
 </div>
 {% endblock %}
 

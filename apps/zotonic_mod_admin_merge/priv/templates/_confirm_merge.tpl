@@ -7,7 +7,11 @@ Params
 - left_id
 - right_id
 #}
-{% wire id="merge-form" type="submit" postback={merge winner_id=winner_id loser_id=loser_id} delegate=`mod_admin_merge` %}
+{% wire id="merge-form"
+        type="submit"
+        postback={merge winner_id=winner_id loser_id=loser_id}
+        delegate=`mod_admin_merge`
+%}
 <form id="merge-form" method="post" action="postback">
     <fieldset class="form-horizontal">
         <input type="hidden" name="merge_action" value="merge_delete" />
@@ -16,7 +20,7 @@ Params
         <div class="form-group row">
             <div class="col-md-4">
                 <div class="panel panel-default">
-                    <div class="panel-body">
+                    <div class="panel-body {% if right %}text-warning{% endif %}">
                         {{ left_id.title|truncate_html:80 }}
                     </div>
                 </div>
@@ -30,7 +34,7 @@ Params
             </div>
             <div class="col-md-4">
                 <div class="panel panel-default">
-                    <div class="panel-body">
+                    <div class="panel-body {% if left %}text-warning{% endif %}">
                         {{ right_id.title|truncate_html:80 }}
                     </div>
                 </div>
@@ -40,9 +44,15 @@ Params
         <div class="form-group row">
             <div class="col-md-4">
                 {% if right %}
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <s>{{ left_id.title }}</s>
+                    <div class="panel panel-danger">
+                        <div class="panel-body text-danger">
+                            <span class="glyphicon glyphicon-remove"></span> <s>{{ left_id.title }}</s>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="panel panel-success">
+                        <div class="panel-body text-success">
+                            <span class="glyphicon glyphicon-ok"></span> {{ left_id.title }}
                         </div>
                     </div>
                 {% endif %}
@@ -54,9 +64,15 @@ Params
             </div>
             <div class="col-md-4">
                 {% if left %}
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <s>{{ right_id.title }}</s>
+                    <div class="panel panel-danger">
+                        <div class="panel-body text-danger">
+                            <span class="glyphicon glyphicon-remove"></span> <s>{{ right_id.title }}</s>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="panel panel-success">
+                        <div class="panel-body text-success">
+                            <span class="glyphicon glyphicon-ok"></span> {{ right_id.title }}
                         </div>
                     </div>
                 {% endif %}
@@ -82,6 +98,6 @@ Params
 
     <div class="modal-footer clearfix">
         {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-        {% button class="btn btn-primary" text=_"Merge" %}
+        {% button class="btn btn-danger" type="submit" text=_"Merge" %}
     </div>
 </form>

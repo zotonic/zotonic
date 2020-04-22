@@ -16,7 +16,7 @@
         <input class="form-control"
                type="text"
                id="block-{{name}}-header{{ lang_code_for_id }}"
-               name="block[].header{{ lang_code_with_dollar }}"
+               name="blocks[].header{{ lang_code_with_dollar }}"
                value="{{ blk.header[lang_code] }}"
                placeholder="{_ Header _} ({{ lang_code }})">
     {% else %}
