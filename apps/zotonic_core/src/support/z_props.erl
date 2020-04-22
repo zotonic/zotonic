@@ -47,7 +47,7 @@
     qs_prop/0
     ]).
 
-%% @doc We use -4700 as the most prehistoric date, as postgresql can't handle
+%% We use -4700 as the most prehistoric date, as postgresql can't handle
 %% dates before this date.
 -define(EPOCH_START_YEAR, -4700).
 -define(EPOCH_END_YEAR, 9999).
