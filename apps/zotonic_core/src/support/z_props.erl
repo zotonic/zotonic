@@ -35,8 +35,8 @@
     normalize_dates/3
     ]).
 
-%% @doc Query String key, value and property types.
-%%      Used as input for the from_qs/1,2 functions.
+%% Query String key, value and property types.
+%% Used as input for the from_qs/1,2 functions.
 -type qs_key() :: binary().
 -type qs_value() :: binary() | #upload{} | term().
 -type qs_prop() :: { qs_key(), qs_value() }.
