@@ -508,7 +508,14 @@ update_normalize_props(#rscupd{id = Id, tz = Tz} = RscUpd, Props, Context) when 
     % them to UTC as well.
     IsAllDay = is_all_day(Id, Props, Context),
     PropsDates = z_props:normalize_dates(Props, IsAllDay, Tz),
-    update_transaction(RscUpd, fun(_, _, _) -> {ok, PropsDates} end, Context);
+    % The 'blocks' must be a list (of maps), if anything else then
+    % the blocks are set to 'undefined' and removed from the rsc
+    PropsBlocks = case maps:find(<<"blocks">>, PropsDates) of
+        {ok, L} when is_list(L) -> PropsDates;
+        {ok, _} -> PropsDates#{ <<"blocks">> => undefined };
+        error -> PropsDates
+    end,
+    update_transaction(RscUpd, fun(_, _, _) -> {ok, PropsBlocks} end, Context);
 update_normalize_props(RscUpd, Func, Context) when is_function(Func) ->
     update_transaction(RscUpd, Func, Context).
 
