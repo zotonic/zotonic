@@ -65,7 +65,11 @@ page_path_test() ->
     C = z_context:new(zotonic_site_testsandbox),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
 
-    {ok, Id} = m_rsc:insert([{title, "Hello."}, {category, text}, {page_path, "/foo/bar"}], AdminC),
+    {ok, Id} = m_rsc:insert([
+            {title, "Hello."},
+            {category, text},
+            {page_path, "/foo/bar"}
+        ], AdminC),
     ?assertEqual(<<"/foo/bar">>, m_rsc:p(Id, page_path, AdminC)),
     ok = m_rsc:delete(Id, AdminC).
 
@@ -74,7 +78,11 @@ name_rid_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_context:new(zotonic_site_testsandbox),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
-    {ok, Id} = m_rsc:insert([{title, <<"What’s in a name?"/utf8>>}, {category_id, text}, {name, rose}],
+    {ok, Id} = m_rsc:insert([
+            {title, <<"What’s in a name?"/utf8>>},
+            {category_id, text},
+            {name, rose}
+        ],
         AdminC),
 
     m_rsc:get_raw(rose, AdminC),
@@ -85,40 +93,39 @@ name_rid_test() ->
 
 %% @doc Check normalization of dates
 normalize_date_props_test() ->
-    C = z_context:new(testsandboxdb),
     InPropsA = [
         {<<"dt:dmy:0:date_start">>, <<"13/7/-99">>},
-        {date_is_all_day, true}
+        {<<"date_is_all_day">>, true}
     ],
-    OutPropsA = m_rsc_update:normalize_props(undefined, InPropsA, C),
-    ?assertEqual({{-99, 7, 13}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsA)),
+    {ok, OutPropsA} = z_props:from_qs(InPropsA),
+    ?assertEqual({{-99, 7, 13}, {0, 0, 0}}, maps:get(<<"date_start">>, OutPropsA)),
 
     InPropsB = [
         {<<"dt:ymd:0:date_start">>, <<"-99/7/13">>},
-        {date_is_all_day, true}
+        {<<"date_is_all_day">>, true}
     ],
-    OutPropsB = m_rsc_update:normalize_props(undefined, InPropsB, C),
-    ?assertEqual({{-99, 7, 13}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsB)),
+    {ok, OutPropsB} = z_props:from_qs(InPropsB),
+    ?assertEqual({{-99, 7, 13}, {0, 0, 0}}, maps:get(<<"date_start">>, OutPropsB)),
 
     InPropsC = [
         {<<"dt:dmy:0:date_start">>, <<"31/12/1999">>},
-        {date_is_all_day, true}
+        {<<"date_is_all_day">>, true}
     ],
-    OutPropsC = m_rsc_update:normalize_props(undefined, InPropsC, C),
-    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsC)),
+    {ok, OutPropsC} = z_props:from_qs(InPropsC),
+    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, maps:get(<<"date_start">>, OutPropsC)),
 
     InPropsD = [
         {<<"dt:ymd:0:date_start">>, <<"1999/12/31">>},
-        {date_is_all_day, true}
+        {<<"date_is_all_day">>, true}
     ],
-    OutPropsD = m_rsc_update:normalize_props(undefined, InPropsD, C),
-    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsD)),
+    {ok, OutPropsD} = z_props:from_qs(InPropsD),
+    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, maps:get(<<"date_start">>, OutPropsD)),
 
     InPropsE = [
         {<<"dt:ymd:0:date_start">>, <<"1999-12-31">>},
-        {date_is_all_day, true}
+        {<<"date_is_all_day">>, true}
     ],
-    OutPropsE = m_rsc_update:normalize_props(undefined, InPropsE, C),
-    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, proplists:get_value(date_start, OutPropsE)),
+    {ok, OutPropsE} = z_props:from_qs(InPropsE),
+    ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, maps:get(<<"date_start">>, OutPropsE)),
 
     ok.
