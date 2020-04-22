@@ -96,7 +96,7 @@ from_prop_value(K, "") ->
     {K, <<>>};
 from_prop_value(K, [ C | _ ] = V) when is_integer(C), C >= 0, C =< 255 ->
     % Might be string with UTF8 encoded characters.
-    % Usual in Zotonic 0.x code.
+    % Can be found in legacy Zotonic 0.x code.
     try
         V1 = iolist_to_binary(V),
         {K, V1}
@@ -163,7 +163,6 @@ from_qs(Qs, Now) ->
     WithDates = combine_dates(Nested, Now),
     WithTrans = combine_trans(WithDates),
     {ok, WithTrans}.
-
 
 % -spec local_now(z:context()) -> calendar:datetime().
 % local_now(Context) ->

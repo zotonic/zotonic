@@ -616,7 +616,7 @@ insert(Table, Props, Context) ->
             InsertProps1 = case maps:find(<<"props">>, InsertProps) of
                 {ok, PropsCol} when is_map(PropsCol) ->
                     InsertProps#{
-                        <<"props">> => ?DB_PROPS(cleanup_props(PropsCol))
+                        <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
                     };
                 {ok, _} ->
                     InsertProps;
@@ -673,12 +673,12 @@ update(Table, Id, Parameters, Context) ->
                         case equery1(DbDriver, C, "select props from \""++Table++"\" where id = $1", [Id]) of
                             {ok, OldProps} when is_list(OldProps) ->
                                 NewProps1 = maps:merge(z_props:from_props(OldProps), NewProps),
-                                UpdateProps#{ <<"props">> => ?DB_PROPS(NewProps1) };
+                                UpdateProps#{ <<"props">> => ?DB_PROPS( filter_empty_props(NewProps1) ) };
                             {ok, OldProps} when is_map(OldProps) ->
                                 NewProps1 = maps:merge(OldProps, NewProps),
-                                UpdateProps#{ <<"props">> => ?DB_PROPS(NewProps1) };
+                                UpdateProps#{ <<"props">> => ?DB_PROPS( filter_empty_props(NewProps1) ) };
                             _ ->
-                                UpdateProps#{ <<"props">> => ?DB_PROPS(NewProps) }
+                                UpdateProps#{ <<"props">> => ?DB_PROPS( filter_empty_props(NewProps) ) }
                         end;
                     _ ->
                         UpdateProps
@@ -706,6 +706,23 @@ update(Table, Id, Parameters, Context) ->
             Error
     end.
 
+filter_empty_props(Map) ->
+    maps:filter(
+        fun
+            (_K, undefined) -> false;
+            (_K, <<>>) -> false;
+            (_K, #trans{ tr = Tr }) ->
+                lists:any(
+                    fun
+                        ({_, <<>>}) -> false;
+                        (_) -> true
+                    end,
+                    Tr);
+            (_K, _V) ->
+                true
+        end,
+        Map).
+
 
 %% @doc Delete a row from a table, the row must have a column with the name 'id'
 -spec delete(Table::table_name(), Id::integer(), z:context()) -> {ok, RowsDeleted::non_neg_integer()} | {error, term()}.
@@ -731,33 +748,6 @@ select(Table, Id, Context) ->
     assert_table_name(Table),
     Sql = "select * from \""++Table++"\" where id = $1 limit 1",
     qmap_props_row(Sql, [ Id ], Context).
-
-
-%% @doc Remove all undefined props, translate texts to binaries.
-cleanup_props(Ps) when is_map(Ps) ->
-    Defined = maps:filter(
-        fun(_K, V) -> V =/= undefined end,
-        Ps),
-    maps:map(
-        fun(_K, V) -> to_binary_string(V) end,
-        Defined);
-cleanup_props(P) ->
-    P.
-
-to_binary_string([]) ->
-    [];
-to_binary_string(L) when is_list(L) ->
-    case z_string:is_string(L) of
-        true -> list_to_binary(L);
-        false -> L
-    end;
-to_binary_string(#trans{ tr = Tr }) ->
-    #trans{ tr = [ {Lang,to_binary(V)} || {Lang,V} <- Tr ] };
-to_binary_string(V) ->
-    V.
-
-to_binary(L) when is_list(L) -> list_to_binary(L);
-to_binary(V) -> V.
 
 
 %% @doc Check if all cols are valid columns in the target table, move unknown properties
