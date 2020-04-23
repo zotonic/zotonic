@@ -83,12 +83,12 @@ try_bearer(Token, Context) ->
 
 try_token(TokenId, TokenSecret, Context) ->
     case m_oauth2:get_token_access(TokenId, Context) of
-        {ok, #{ secret := TokenSecret } = Token} ->
+        {ok, #{ <<"secret">> := TokenSecret } = Token} ->
             #{
-                user_id := UserId,
-                user_groups := UserGroups,
-                is_read_only := IsReadOnly,
-                is_full_access := IsFullAccess
+                <<"user_id">> := UserId,
+                <<"user_groups">> := UserGroups,
+                <<"is_read_only">> := IsReadOnly,
+                <<"is_full_access">> := IsFullAccess
             } = Token,
             Options = case IsFullAccess of
                 true ->

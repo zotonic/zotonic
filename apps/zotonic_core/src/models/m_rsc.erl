@@ -194,7 +194,8 @@ page_path_to_id(Path, Context) ->
     end.
 
 is_utf8(<<>>) -> true;
-is_utf8(<<_/utf8, S/binary>>) -> is_utf8(S).
+is_utf8(<<_/utf8, S/binary>>) -> is_utf8(S);
+is_utf8(_) -> false.
 
 %% @doc Read a whole resource. Return 'undefined' if the resource was
 %%      not found, crash on database errors. The properties are filtered
@@ -259,18 +260,16 @@ filter_props_acl(Id, Props, Context) when is_map(Props) ->
 
 %% @doc Get the resource from the database, do not fetch the pivot fields and
 %%      do not use the cached result. The properties are NOT filtered by the ACL.
--spec get_raw(resource(), z:context()) -> {ok, map()} | {error, term()}.
+-spec get_raw(resource_id(), z:context()) -> {ok, map()} | {error, term()}.
 get_raw(Id, Context) when is_integer(Id) ->
     get_raw(Id, false, Context).
 
 %% @doc Same as get_raw/2 but also lock the resource for update.
 %%      The properties are NOT filtered by the ACL.
--spec get_raw_lock(resource(), z:context()) -> {ok, map()} | {error, term()}.
+-spec get_raw_lock(resource_id(), z:context()) -> {ok, map()} | {error, term()}.
 get_raw_lock(Id, Context) when is_integer(Id) ->
     get_raw(Id, true, Context).
 
-get_raw(undefined, _IsLock, _Context) ->
-    {error, enoent};
 get_raw(Id, IsLock, Context) when is_integer(Id) ->
     SQL = case z_memo:get(rsc_raw_sql) of
         undefined ->
@@ -297,16 +296,12 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
         true -> z_convert:to_list(SQL) ++ " for update";
         false -> z_convert:to_list(SQL)
     end,
-    case z_db:qmap_props(SQL1, [ Id ], Context) of
-        {ok, [ Map ]} ->
+    case z_db:qmap_props_row(SQL1, [ Id ], Context) of
+        {ok, Map} ->
             {ok, ensure_utc_dates(Map, Context)};
-        {ok, []} ->
-            {error, enoent};
         {error, _} = Error ->
             Error
-    end;
-get_raw(Id, IsLock, Context) ->
-    get_raw(m_rsc:rid(Id, Context), IsLock, Context).
+    end.
 
 %% Fix old records which had serialized data in localtime and no date_is_all_day flag
 ensure_utc_dates(#{ <<"tz">> := _ } = Map, _Context) ->

@@ -2,7 +2,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @author Marc Worrell <marc@worrell.nl>
 
-%% Copyright 2010-2015 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2010-2020 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -44,6 +44,15 @@
                       | {ignored, list()}.
 
 -type importresults() :: list( importresult() ).
+
+-type rowresult() :: ignore
+                   | {error, term(), term()}
+                   | {new, Type::term(), Id::term(), Name::term()}
+                   | {equal, Type::term(), Id::term()}
+                   | {updated, Type::term(), Id::term()}.
+
+-type row() :: list( {binary(), term()} ).
+% -type id() :: insert_rsc | m_rsc:resource_id().
 
 -export_type([ importresult/0, importresults/0 ]).
 
@@ -97,6 +106,8 @@ new_importstate(IsReset) ->
 %%====================================================================
 
 %% @doc Import all rows.
+-spec import_rows(list( row() ), non_neg_integer(), #filedef{}, #importstate{}, z:context()) ->
+        #importstate{}.
 import_rows([], _RowNr, _Def, ImportState, _Context) ->
     ImportState;
 import_rows([[<<$#, _/binary>>|_]|Rows], RowNr, Def, ImportState, Context) ->
@@ -119,6 +130,8 @@ zip([C|Cs], [N|Ns], Acc) -> zip(Cs, Ns, [{N, C}|Acc]).
 
 
 %% @doc Import all resources on a row
+-spec import_parts( row(), non_neg_integer(), list( tuple() ), #importstate{}, z:context() ) ->
+    #importstate{}.
 import_parts(_Row, _RowNr, [], ImportState, _Context) ->
     ImportState;
 import_parts(Row, RowNr, [Def | Definitions], ImportState, Context) ->
@@ -158,7 +171,8 @@ import_parts(Row, RowNr, [Def | Definitions], ImportState, Context) ->
             ImportState
     end.
 
-
+-spec import_def_rsc(list(), row(), #importstate{}, z:context()) ->
+    {#importstate{}, rowresult()}.
 import_def_rsc(FieldMapping, Row, State, Context) ->
     {Callbacks, FieldMapping1} = case proplists:get_value(callbacks, FieldMapping) of
                                      undefined -> {[], FieldMapping};
@@ -167,6 +181,8 @@ import_def_rsc(FieldMapping, Row, State, Context) ->
     RowMapped = map_fields(FieldMapping1, Row, State),
     import_def_rsc_1_cat(RowMapped, Callbacks, State, Context).
 
+-spec import_def_rsc_1_cat(row(), list(), #importstate{}, z:context()) ->
+    {#importstate{}, rowresult()}.
 import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
     %% Get category name; put category ID in the record.
     {<<"category">>, CategoryName} = proplists:lookup(<<"category">>, Row),
@@ -179,7 +195,7 @@ import_def_rsc_1_cat(Row, Callbacks, State, Context) ->
     {OptRscId, State2} = name_lookup(Name, State1, Context),
     RscId = case OptRscId of undefined -> insert_rsc; _ -> OptRscId end,
     {ok, RowMap} = z_props:from_qs(Row1),
-    NormalizedRowMap = z_html:escape_props_check(RowMap, Context),
+    NormalizedRowMap = z_sanitize:escape_props_check(RowMap, Context),
     % NormalizedRow = sort_props(m_rsc_update:normalize_props(RscId, Row1, [is_import], Context)),
     case has_required_rsc_props(NormalizedRowMap) of
         true ->
@@ -283,7 +299,7 @@ diff_raw_props(Current, PreviousImport, undefined) when is_map(PreviousImport) -
 
 %% @doc Get all prop values in the Raw resource data
 get_updated_props(Id, ImportedRow, Context) ->
-    Raw = m_rsc:get_raw(Id, Context),
+    {ok, Raw} = m_rsc:get_raw(Id, Context),
     maps:fold(
         fun(K, _, Acc) ->
             Acc#{
@@ -293,6 +309,7 @@ get_updated_props(Id, ImportedRow, Context) ->
         #{},
         ImportedRow).
 
+-spec rsc_insert( m_rsc:props_all(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
 rsc_insert(Props, Context) ->
     case check_medium(Props) of
         {url, Url, PropsMedia} ->
@@ -301,6 +318,7 @@ rsc_insert(Props, Context) ->
             m_rsc_update:insert(Props, [{is_import, true}], Context)
     end.
 
+-spec rsc_update( m_rsc:resource_id(), m_rsc:props_all(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
 rsc_update(Id, Props, Context) ->
     case check_medium(Props) of
         {url, Url, PropsMedia} ->
@@ -309,11 +327,12 @@ rsc_update(Id, Props, Context) ->
             m_rsc_update:update(Id, Props, [{is_import, true}], Context)
     end.
 
+-spec check_medium( map() ) -> none | {url, binary(), map()}.
 check_medium(Props) ->
     case maps:get(<<"medium_url">>, Props, undefined) of
         undefined -> none;
         <<>> -> none;
-        [] -> none;
+        "" -> none;
         Url -> {url, Url, maps:remove(<<"medium_url">>, Props)}
     end.
 

@@ -77,21 +77,23 @@ configs() ->
 
 % @doc Fetch all resources within the given category
 fetch_all(Category, Context) ->
-    m_category:fold(Category,
-                    fun(Id, Acc, Ctx) ->
-                        Ps = m_rsc:get(Id, Ctx),
-                        Ps1 = cleanup_rsc(Ps),
-                        Rsc = {rsc,
-                               m_rsc:is_a(Id, Ctx),
-                               m_rsc:p_no_acl(maps:get(<<"content_group_id">>, Ps), <<"name">>, Ctx),
-                               Ps1},
-                        [Rsc | Acc]
-                    end,
-                    [],
-                    Context).
+    m_category:fold(
+        Category,
+        fun(Id, Acc, Ctx) ->
+            Ps = m_rsc:get(Id, Ctx),
+            Ps1 = cleanup_rsc(Ps),
+            CGId = maps:get(<<"content_group_id">>, Ps),
+            Rsc = {rsc,
+                   m_rsc:is_a(Id, Ctx),
+                   m_rsc:p_no_acl(CGId, <<"name">>, Ctx),
+                   Ps1},
+            [ Rsc | Acc ]
+        end,
+        [],
+        Context).
 
 cleanup_rsc(Ps) ->
-    maps:fold(
+    lists:foldl(
         fun(P,Acc) ->
             maps:remove(P, Acc)
         end,
@@ -120,11 +122,11 @@ import_all(Cat, [Rsc|Rest], IdsAcc, Context) ->
 import_1(Cat, {rsc, IsA, CGName, Ps0}, IdsAcc, Context) when is_list(Ps0) ->
     Map = z_props:from_props(Ps0),
     import_1(Cat, {rsc, IsA, CGName, Map}, IdsAcc, Context);
-import_1(Cat, {rsc, IsA, CGName, Ps0}, IdsAcc, Context) ->
-    Name = maps:get(<<"name">>, Ps0),
-    Ps = cleanup_rsc(Ps0),
+import_1(Cat, {rsc, IsA, CGName, RscProps}, IdsAcc, Context) ->
+    Name = maps:get(<<"name">>, RscProps),
+    RscPropsClean = cleanup_rsc(RscProps),
     Cat1 = select_cat(Cat, lists:reverse(IsA), Context),
-    Props = Ps#{
+    RscPropsCat = RscPropsClean#{
         <<"category_id">> => Cat1
     },
     case m_rsc:rid(Name, Context) of
@@ -132,14 +134,14 @@ import_1(Cat, {rsc, IsA, CGName, Ps0}, IdsAcc, Context) ->
             lager:info("ACL export, inserting ~p with name ~p", [Cat1, Name]),
             case Name of
                 CGName ->
-                    {ok, Id} = m_rsc:insert(Props, Context),
+                    {ok, Id} = m_rsc:insert(RscPropsCat, Context),
                     m_rsc:update(Id, [{content_group_id, Id}], Context),
                     [{Name,Id}|IdsAcc];
                 _Other ->
                     {CGId, IdsAcc1} = ensure_content_group(CGName, IdsAcc, Context),
-                    Props1 = [
-                        {content_group_id, CGId} | Props
-                    ],
+                    Props1 = RscPropsCat#{
+                        <<"content_group_id">> => CGId
+                    },
                     {ok, Id} = m_rsc:insert(Props1, Context),
                     [{Name, Id}|IdsAcc1]
             end;
@@ -149,9 +151,9 @@ import_1(Cat, {rsc, IsA, CGName, Ps0}, IdsAcc, Context) ->
                     IdsAcc;
                 Id ->
                     {CGId, IdsAcc1} = ensure_content_group(CGName, IdsAcc, Context),
-                    Props1 = [
-                        {content_group_id, CGId} | Props
-                    ],
+                    Props1 = RscPropsCat#{
+                        <<"content_group_id">> => CGId
+                    },
                     case z_acl:rsc_editable(Id, Context) of
                         true ->
                             lager:info("ACL export, updating ~p with name ~p",

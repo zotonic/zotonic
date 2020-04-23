@@ -455,7 +455,13 @@ update(Id, Props, false, Context) ->
     update(Id, Props, [{escape_texts, false}], Context);
 update(Id, Props, true, Context) ->
     update(Id, Props, [{escape_texts, true}], Context);
-update(Id, Props, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
+update(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
+    Tz = case is_map(PropsOrFun) of
+        true ->
+            proplists:get_value(tz, Options, maps:get(<<"tz">>, PropsOrFun, undefined));
+        false ->
+            proplists:get_value(tz, Options)
+    end,
     RscUpd = #rscupd{
         id = Id,
         is_escape_texts = proplists:get_value(escape_texts, Options, true),
@@ -463,19 +469,19 @@ update(Id, Props, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
         is_import = proplists:get_value(is_import, Options, false),
         is_no_touch = proplists:get_value(no_touch, Options, false)
                       andalso z_acl:is_admin(Context),
-        tz = proplists:get_value(tz, Options, maps:get(<<"tz">>, Props, undefined)),
+        tz = Tz,
         expected = proplists:get_value(expected, Options, [])
     },
-    update_imported_check(RscUpd, Props, Context);
-update(Name, Props, Options, Context) ->
+    update_imported_check(RscUpd, PropsOrFun, Context);
+update(Name, PropsOrFun, Options, Context) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} ->
-            update(Id, Props, Options, Context);
+            update(Id, PropsOrFun, Options, Context);
         {error, _} = Error ->
             Error
     end.
 
-update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, Props, Context) when is_integer(Id) ->
+update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, PropsOrFun, Context) when is_integer(Id) ->
     case m_rsc:exists(Id, Context) of
         false ->
             {ok, CatId} = m_category:name_to_id(other, Context),
@@ -486,23 +492,23 @@ update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, Props, Contex
         true ->
             ok
     end,
-    update_editable_check(RscUpd, Props, Context);
-update_imported_check(RscUpd, Props, Context) ->
-    update_editable_check(RscUpd, Props, Context).
+    update_editable_check(RscUpd, PropsOrFun, Context);
+update_imported_check(RscUpd, PropsOrFun, Context) ->
+    update_editable_check(RscUpd, PropsOrFun, Context).
 
 
-update_editable_check(#rscupd{id = Id, is_acl_check = true} = RscUpd, Props, Context) when is_integer(Id) ->
+update_editable_check(#rscupd{id = Id, is_acl_check = true} = RscUpd, PropsOrFun, Context) when is_integer(Id) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            update_normalize_props(RscUpd, Props, Context);
+            update_normalize_props(RscUpd, PropsOrFun, Context);
         false ->
             case m_rsc:p(Id, is_authoritative, Context) of
                 false -> {error, non_authoritative};
                 true -> {error, eacces}
             end
     end;
-update_editable_check(RscUpd, Props, Context) ->
-    update_normalize_props(RscUpd, Props, Context).
+update_editable_check(RscUpd, PropsOrFun, Context) ->
+    update_normalize_props(RscUpd, PropsOrFun, Context).
 
 update_normalize_props(#rscupd{id = Id, tz = Tz} = RscUpd, Props, Context) when is_map(Props) ->
     % Convert the dates in the properties to Erlang DateTime and optionally convert
@@ -747,17 +753,18 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     UpdateProps = Props#{
         <<"version">> => Version + 1
     },
+    IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
     UpdateProps1 = set_if_normal_update(RscUpd, <<"modified">>, erlang:universaltime(), UpdateProps),
     UpdateProps2 = set_if_normal_update(RscUpd, <<"modifier_id">>, z_acl:user(Context), UpdateProps1),
     {IsForceUpdate, UpdatePropsN} = z_notifier:foldr(#rsc_update{
-                                            action = case RscUpd#rscupd.id of
-                                                        insert_rsc -> insert;
-                                                        _ -> update
+                                            action = case IsInsert of
+                                                        true -> insert;
+                                                        false -> update
                                                      end,
                                             id = Id,
                                             props = Raw
                                         },
-                                        {Id =:= insert_rsc, UpdateProps2},
+                                        {IsInsert, UpdateProps2},
                                         Context),
 
     % Pre-pivot of the category-id to the category sequence nr.
@@ -765,10 +772,11 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
                         undefined ->
                             UpdatePropsN;
                         CatId ->
-                            CatNr = z_db:q1("select nr
-                                             from hierarchy
-                                             where id = $1
-                                               and name = '$category'",
+                            CatNr = z_db:q1("
+                                    select nr
+                                    from hierarchy
+                                    where id = $1
+                                      and name = '$category'",
                                 [CatId],
                                 Context),
                             UpdatePropsN#{ <<"pivot_category_nr">> => CatNr }
@@ -1022,7 +1030,7 @@ props_filter(<<"page_path">>, Path, Acc, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
         true when ?is_empty(Path) ->
             Acc#{ <<"page_path">> => undefined };
-        trye ->
+        true ->
             P = iolist_to_binary([
                 $/, z_string:trim(z_url:url_path_encode(Path), $/)
             ]),

@@ -40,7 +40,7 @@ insert(MI, Context) ->
 insert(#media_import_props{medium_props = MI} = MIPs, RscProps, Context) ->
     insert_1(maps:size(MI), MIPs, RscProps, Context).
 
-insert_1(0, #media_import_props{medium_props = MI}, RscProps, Context) ->
+insert_1(0, #media_import_props{} = MI, RscProps, Context) ->
     RscProps1 = maps:merge(
                     default_rsc_props(MI, RscProps),
                     MI#media_import_props.rsc_props),

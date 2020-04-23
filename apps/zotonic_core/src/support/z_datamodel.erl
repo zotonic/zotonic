@@ -196,28 +196,28 @@ update_new_props(Module, Id, NewProps, Options, Context) ->
             NewProps;
         PreviousProps ->
             maps:fold(
-                fun({K, V}, Props) ->
+                fun(K, V, Acc) ->
                     case m_rsc:p_no_acl(Id, K, Context) of
                         V ->
                             %% New value == current value
-                            Props;
+                            Acc;
                         DbVal ->
                             case maps:get(K, PreviousProps, undefined) of
                                 DbVal ->
                                     %% New value in NewProps, unchanged in DB
-                                    Props#{ K => V };
+                                    Acc#{ K => V };
                                 _PrevVal when is_binary(DbVal) ->
                                     %% Compare with converted to binary value
                                     case z_convert:to_binary(DbVal) of
                                         V ->
-                                            Props;
+                                            Acc;
                                         _X ->
                                             %% Changed by someone else
-                                            maybe_force_update(K, V, Props, Module, Id, Options, Context)
+                                            maybe_force_update(K, V, Acc, Module, Id, Options, Context)
                                     end;
                                 _PrevVal2 ->
                                     %% Changed by someone else
-                                    maybe_force_update(K, V, Props, Module, Id, Options, Context)
+                                    maybe_force_update(K, V, Acc, Module, Id, Options, Context)
                             end
                     end
                 end,

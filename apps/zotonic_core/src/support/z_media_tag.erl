@@ -112,7 +112,7 @@ viewer([ Id | _ ], Options, Context) when is_integer(Id) ->
 viewer(Id, Options, Context) when is_integer(Id) ->
     case m_media:get(Id, Context) of
         MediaProps when is_map(MediaProps) -> viewer(MediaProps, Options, Context);
-        undefined -> viewer1(Id, [], undefined, Options, Context)
+        undefined -> viewer1(Id, #{}, undefined, Options, Context)
     end;
 viewer(Props, Options, Context) when is_map(Props) ->
     Id = maps:get(<<"id">>, Props, undefined),
@@ -148,7 +148,7 @@ viewer1(Id, Props, FilePath, Options, Context) ->
 
 %% @doc Generate a HTML image tag for the image with the filename and options. The medium _must_ be in
 %% a format for which we can generate a preview.  Note that this will never generate video or audio.
--spec tag(MediaReference, list(), z:context()) -> {ok, iodata()}
+-spec tag(MediaReference, Options :: list(), z:context()) -> {ok, iodata()}
     when MediaReference :: undefined
                          | m_rsc:resource_id()
                          | #rsc_list{}
@@ -189,7 +189,7 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(FilePath, Filename, Options, Context).
 
 
--spec tag1( file:filename_all() | proplists:proplist(),
+-spec tag1( file:filename_all() | map(),
             file:filename_all() | {filepath, file:filename_all(), file:filename_all()},
             proplists:proplist(), z:context() )
         -> {ok, binary()}.

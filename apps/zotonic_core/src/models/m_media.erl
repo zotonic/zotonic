@@ -67,6 +67,9 @@
 -define(MEDIA_MAX_LENGTH_DOWNLOAD, 500 * 1024 * 1024).
 -define(MEDIA_TIMEOUT_DOWNLOAD, 60 * 1000).
 
+-type media_url() :: binary() | string().
+
+-export_type([ media_url/0 ]).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -304,19 +307,23 @@ merge(WinnerId, LoserId, Context) ->
     end.
 
 %% @doc Duplicate the media item from the id to the new-id. Called by m_rsc:duplicate/3
--spec duplicate( m_rsc:resource(), m_rsc:resource(), z:context() ) -> ok.
+-spec duplicate( m_rsc:resource(), m_rsc:resource(), z:context() ) -> ok | {error, term()}.
 duplicate(FromId, ToId, Context) ->
     FromId1 = m_rsc:rid(FromId, Context),
     ToId1 = m_rsc:rid(ToId, Context),
-    case z_db:assoc_props_row("select * from medium where id = $1", [FromId1], Context) of
-        Ms when is_list(Ms) ->
+    case z_db:qmap_row("select * from medium where id = $1", [FromId1], Context) of
+        {ok, Ms} ->
             {ok, Ms1} = maybe_duplicate_file(Ms, Context),
             {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
-            Ms3 = z_utils:prop_replace(id, ToId1, Ms2),
-            {ok, _ToId} = medium_insert(ToId1, Ms3, Context),
-            ok;
-        undefined ->
-            ok
+            Ms3 = Ms2#{
+                <<"id">> => ToId1
+            },
+            case medium_insert(ToId1, Ms3, Context) of
+                {ok, _} -> ok;
+                {error, _} = Error -> Error
+            end;
+        {error, _} = Error ->
+            Error
     end.
 
 maybe_duplicate_file(#{ <<"filename">> := <<>> } = Ms, _Context) ->
@@ -458,15 +465,15 @@ update_medium_1(RscId, #{ <<"mime">> := Mime } = Medium, RscProps, Options, Cont
 
 
 %% @doc Make a new resource for the file based on a URL.
--spec insert_url(file:filename(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+-spec insert_url(media_url(), z:context()) -> {ok, pos_integer()} | {error, term()}.
 insert_url(Url, Context) ->
     insert_url(Url, #{}, [], Context).
 
--spec insert_url(file:filename(), z_props:props_all(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+-spec insert_url(media_url(), z_props:props_all(), z:context()) -> {ok, pos_integer()} | {error, term()}.
 insert_url(Url, RscProps, Context) ->
     insert_url(Url, RscProps, [], Context).
 
--spec insert_url(file:filename(), z_props:props_all(), list(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+-spec insert_url(media_url(), z_props:props_all(), list(), z:context()) -> {ok, pos_integer()} | {error, term()}.
 insert_url(Url, RscProps, Options, Context) when is_list(RscProps) ->
     {ok, PropsMap} = z_props:from_list(RscProps),
     insert_url(Url, PropsMap, Options, Context);

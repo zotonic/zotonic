@@ -52,7 +52,8 @@ forced_props(Medium) ->
     }.
 
 overlay_props(Exif) when is_list(Exif) ->
-    overlay_props( z_props:from_list(Exif) );
+    {ok, ExifMap} = z_props:from_list(Exif),
+    overlay_props(ExifMap);
 overlay_props(Exif) when is_map(Exif) ->
     DateStart = to_dt(maps:get(<<"date_time">>, Exif,
                          maps:get(<<"date_time_digitized">>, Exif, undefined))),

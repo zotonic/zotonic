@@ -85,8 +85,8 @@ list_tokens(undefined, _Context) ->
     {ok, []}.
 
 
--spec insert( m_rsc:resource_id(), map() | proplists:list(), z:context() ) -> {ok, integer()} | {error, term()}.
-insert( UserId, Props, Context ) when is_list(Props) ->
+-spec insert( m_rsc:resource_id(), map(), z:context() ) -> {ok, integer()} | {error, term()}.
+insert( UserId, Props, Context ) ->
     case is_allowed(UserId, Context) of
         true ->
             z_db:transaction(
@@ -96,24 +96,22 @@ insert( UserId, Props, Context ) when is_list(Props) ->
                 Context);
         false ->
             {error, eacces}
-    end;
-insert( UserId, Props, Context) when is_map(Props) ->
-    insert(UserId, maps:to_list(Props), Context).
+    end.
 
 insert_trans(UserId, Props, Context) ->
     Secret = z_ids:id(32),
-    Props1 = [
-        {user_id, UserId},
-        {is_read_only, z_convert:to_bool( proplists:get_value(is_read_only, Props, true) )},
-        {is_full_access, z_convert:to_bool( proplists:get_value(is_full_access, Props, false) )},
-        {ip_allowed, z_string:trim( z_convert:to_binary( proplists:get_value(ip_allowed, Props, <<>>) ) )},
-        {note, z_html:escape( z_string:trim( proplists:get_value(note, Props, <<>>) ) )},
-        {valid_till, proplists:get_value(valid_till, Props)},
-        {secret, Secret}
-    ],
+    Props1 = #{
+        <<"user_id">> => UserId,
+        <<"is_read_only">> => z_convert:to_bool( maps:get(<<"is_read_only">>, Props, true) ),
+        <<"is_full_access">> => z_convert:to_bool( maps:get(<<"is_full_access">>, Props, false) ),
+        <<"ip_allowed">> => z_string:trim( z_convert:to_binary( maps:get(<<"ip_allowed">>, Props, <<>>) ) ),
+        <<"note">> => z_html:escape( z_string:trim( maps:get(<<"note">>, Props, <<>>) ) ),
+        <<"valid_till">> => maps:get(<<"valid_till">>, Props, undefined),
+        <<"secret">> => Secret
+    },
     case z_db:insert(oauth2_token, Props1, Context) of
         {ok, TokenId} ->
-            Groups = proplists:get_value(user_groups, Props, []),
+            Groups = maps:get(<<"user_groups">>, Props, []),
             Groups1 = [ m_rsc:rid(GId, Context) || GId <- Groups ],
             Groups2 = filter_groups(Groups1, Context),
             lists:foreach(
@@ -131,11 +129,11 @@ insert_trans(UserId, Props, Context) ->
     end.
 
 
--spec delete( integer(), z:context() ) -> ok | {error, notfound | eacces}.
+-spec delete( integer(), z:context() ) -> ok | {error, enoent | eacces}.
 delete( TokenId, Context ) when is_integer(TokenId) ->
     case z_db:q1("select user_id from oauth2_token where id = $1", [ TokenId ], Context) of
         undefined ->
-            {error, notfound};
+            {error, enoent};
         UserId ->
             case is_allowed(UserId, Context) of
                 true ->
@@ -147,10 +145,10 @@ delete( TokenId, Context ) when is_integer(TokenId) ->
     end.
 
 %% @doc Return the Bearer OAuth2 token for the given user
--spec encode_bearer_token( integer(), undefined | integer(), z:context() ) -> {ok, binary()} | {error, notfound | eacces}.
+-spec encode_bearer_token( integer(), undefined | integer(), z:context() ) -> {ok, binary()} | {error, enoent | eacces}.
 encode_bearer_token( TokenId, TTL, Context ) ->
     case get_token_access(TokenId, Context) of
-        {ok, #{ user_id := UserId, secret := TokenSecret }} ->
+        {ok, #{ <<"user_id">> := UserId, <<"secret">> := TokenSecret }} ->
             case is_allowed(UserId, Context) of
                 true ->
                     Key = oauth_key(Context),
@@ -181,18 +179,16 @@ decode_bearer_token(<<?TOKEN_PREFIX, Token/binary>>, Context) ->
 decode_bearer_token(_Token, _Context) ->
     {error, unknown_token}.
 
--spec get_token( integer() | undefined, z:context() ) -> {ok, map()} | {error, notfound | eacces | term()}.
+-spec get_token( integer() | undefined, z:context() ) -> {ok, map()} | {error, enoent | eacces | term()}.
 get_token( TokenId, Context ) when is_integer(TokenId) ->
-    case z_db:qmap("
+    case z_db:qmap_row("
         select id, user_id, is_read_only, is_full_access, ip_allowed, note, created, modified
         from oauth2_token
         where id = $1",
         [ z_convert:to_integer(TokenId) ],
         Context)
     of
-        {ok, []} ->
-            {error, notfound};
-        {ok, [#{ user_id := UserId } = Token]} ->
+        {ok, #{ <<"user_id">> := UserId } = Token} ->
             case is_allowed(UserId, Context) of
                 true ->
                     Log = z_db:qmap("
@@ -210,8 +206,8 @@ get_token( TokenId, Context ) when is_integer(TokenId) ->
                             Context),
                     Groups1 = [ Id || {Id} <- Groups ],
                     {ok, Token#{
-                        log => Log,
-                        user_groups => Groups1
+                        <<"log">> => Log,
+                        <<"user_groups">> => Groups1
                     }};
                 false ->
                     {error, eacces}
@@ -220,14 +216,14 @@ get_token( TokenId, Context ) when is_integer(TokenId) ->
             Error
     end;
 get_token( undefined, _Context ) ->
-    {error, not_found}.
+    {error, enoent}.
 
 
 %% @doc Get the token details for authentication checks.
 %% @todo Cache this for speeding up api requests
--spec get_token_access( integer(), z:context() ) -> {ok, map()} | {error, not_found}.
+-spec get_token_access( integer(), z:context() ) -> {ok, map()} | {error, enoent}.
 get_token_access(TokenId, Context) when is_integer(TokenId) ->
-    case z_db:qmap("
+    case z_db:qmap_row("
         select user_id, is_read_only, is_full_access, ip_allowed, secret
         from oauth2_token
         where id = $1
@@ -235,9 +231,7 @@ get_token_access(TokenId, Context) when is_integer(TokenId) ->
         [ z_convert:to_integer(TokenId) ],
         Context)
     of
-        [] ->
-            {error, not_found};
-        [ Token ] ->
+        {ok, Token} ->
             Groups = z_db:q("
                     select group_id
                     from oauth2_token_group
@@ -246,8 +240,10 @@ get_token_access(TokenId, Context) when is_integer(TokenId) ->
                     Context),
             Groups1 = [ Id || {Id} <- Groups ],
             {ok, Token#{
-                user_groups => Groups1
-            }}
+                <<"user_groups">> => Groups1
+            }};
+        {error, enoent} ->
+            {error, enoent}
     end.
 
 

@@ -163,7 +163,8 @@ maybe_identify_extension(Result, _OriginalFilename) ->
     Result.
 
 %% @doc Identify the mime type of a file using the unix "file" command.
--spec identify_file_os(win32|unix, File::string(), OriginalFilename::string()) -> {ok, media_info()} | {error, term()}.
+-spec identify_file_os(win32|unix, File :: file:filename_all(), OriginalFilename :: file:filename_all()) ->
+    {ok, media_info()} | {error, term()}.
 identify_file_os(win32, _File, OriginalFilename) ->
     {ok, #{ <<"mime">> => guess_mime(OriginalFilename)}};
 identify_file_os(unix, File, OriginalFilename) ->
@@ -173,11 +174,12 @@ identify_file_unix(false, _File, _OriginalFilename) ->
     lager:error("Please install 'file' for identifying the type of uploaded files."),
     {error, no_file_cmd};
 identify_file_unix(Cmd, File, OriginalFilename) ->
-    Mime = z_string:trim(
-                list_to_binary(
-                    os:cmd(z_utils:os_filename(Cmd)
-                        ++" -b --mime-type "
-                        ++ z_utils:os_filename(File)))),
+    CmdLine = unicode:characters_to_list([
+        z_utils:os_filename(Cmd),
+        " -b --mime-type ",
+        z_utils:os_filename(File)
+    ]),
+    Mime = z_string:trim( unicode:characters_to_binary( os:cmd( CmdLine ) ) ),
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
         nomatch ->
             case Mime of

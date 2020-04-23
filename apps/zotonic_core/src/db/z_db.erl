@@ -113,7 +113,8 @@
                    | integer()
                    | boolean()
                    | float().
--type props() :: proplists:proplist() | map().
+-type props() :: proplists:proplist() | props_map().
+-type props_map() :: #{ binary() => term() }.
 -type id() :: pos_integer().
 
 -type query_result() :: {ok, Columns :: list(), Rows :: list()}

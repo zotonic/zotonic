@@ -218,20 +218,26 @@ queue_all_stop(Context) ->
     z_pivot_rsc:delete_task(?MODULE, task_queue_all, filestore_queue_all, Context).
 
 task_queue_all(Offset, Max, Context) when Offset =< Max ->
-    Media = z_db:qmap_props("
-                    select *
-                    from medium
-                    order by id asc
-                    limit $1
-                    offset $2",
-                    [?BATCH_SIZE, Offset],
-                    Context),
-    lager:info("Ensuring ~p files are queued for remote upload.", [length(Media)]),
-    lists:foreach(fun(M) ->
-                    queue_medium(M, Context)
-                  end,
-                  Media),
-    {delay, 0, [Offset+?BATCH_SIZE, Max]};
+    case z_db:qmap_props("
+        select *
+        from medium
+        order by id asc
+        limit $1
+        offset $2",
+        [?BATCH_SIZE, Offset],
+        Context)
+    of
+        {ok, Media} ->
+            lager:info("Ensuring ~p files are queued for remote upload.", [length(Media)]),
+            lists:foreach(fun(M) ->
+                            queue_medium(M, Context)
+                          end,
+                          Media),
+            {delay, 0, [Offset+?BATCH_SIZE, Max]};
+        {error, _} = Error ->
+            lager:error("Error ~p when queueing files for remote upload.", [Error]),
+            {delay, 60, [Offset, Max]}
+    end;
 task_queue_all(_Offset, _Max, _Context) ->
     ok.
 

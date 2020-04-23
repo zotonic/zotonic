@@ -111,7 +111,13 @@ insert_movie(Filename, State) ->
             PropsMedia = #{
                 <<"is_video_ok">> => true
             },
-            m_media:replace_file(#upload{filename=OrgFile, tmpfile=Filename}, State#state.id, [], PropsMedia, [no_touch], Context);
+            m_media:replace_file(
+                #upload{filename=OrgFile, tmpfile=Filename},
+                State#state.id,
+                #{},
+                PropsMedia,
+                [no_touch],
+                Context);
         false ->
             lager:info("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
     end.
@@ -130,7 +136,7 @@ insert_broken(State) ->
             PropsMedia = #{
                 <<"mime">> => <<"video/x-mp4-broken">>
             },
-            m_media:replace_file(undefined, State#state.id, [], PropsMedia, [no_touch], Context);
+            m_media:replace_file(undefined, State#state.id, #{}, PropsMedia, [no_touch], Context);
         false ->
             lager:info("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
     end.

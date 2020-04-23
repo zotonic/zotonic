@@ -264,15 +264,14 @@ queue_path(Filename, Context) ->
 
 video_info(Path) ->
     Cmdline = case z_config:get(ffprobe_cmdline) of
-                  undefined -> ?FFPROBE_CMDLINE;
-                  <<>> -> ?FFPROBE_CMDLINE;
-                  "" -> ?FFPROBE_CMDLINE;
-                  CmdlineCfg -> z_convert:to_list(CmdlineCfg)
-              end,
+        undefined -> ?FFPROBE_CMDLINE;
+        <<>> -> ?FFPROBE_CMDLINE;
+        "" -> ?FFPROBE_CMDLINE;
+        CmdlineCfg -> z_convert:to_list(CmdlineCfg)
+    end,
     FfprobeCmd = lists:flatten([
-                                Cmdline, " ",
-                                z_utils:os_filename(Path)
-                               ]),
+           Cmdline, " ", z_utils:os_filename(Path)
+       ]),
     lager:debug("Video info: ~p", [FfprobeCmd]),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
     try
@@ -287,7 +286,7 @@ video_info(Path) ->
     catch
         error:E ->
             lager:warning("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
-            []
+            #{}
     end.
 
 decode_json(JSONText) ->
@@ -299,16 +298,16 @@ fetch_duration(_) ->
     0.
 
 fetch_size(#{<<"streams">> := Streams}) ->
-    [Video | _] = lists:dropwhile(
-                            fun({#{<<"codec_type">> := CodecType}}) ->
-                                    CodecType =/= <<"video">>
-                            end, Streams),
+    [ Video | _ ] = lists:dropwhile(
+        fun( { #{<<"codec_type">> := CodecType} } ) ->
+           CodecType =/= <<"video">>
+        end,
+        Streams),
     #{
         <<"width">> := Width,
         <<"height">> := Height,
         <<"tags">> := Tags
     } = Video,
-
     Orientation = orientation(Tags),
     case Orientation of
         6 -> {Height, Width, Orientation};
@@ -333,43 +332,44 @@ orientation(_) ->
     1.
 
 video_preview(MovieFile, Props) ->
-    Duration = proplists:get_value(duration, Props),
+    #{
+        duration := Duration,
+        orientation := Orientation
+    } = Props,
     Start = case Duration of
-                N when N =< 1 -> 0;
-                N when N =< 30 -> 1;
-                _ -> 10
-            end,
+        N when N =< 1 -> 0;
+        N when N =< 30 -> 1;
+        _ -> 10
+    end,
     Cmdline = case z_config:get(ffmpeg_preview_cmdline) of
-                  undefined -> ?PREVIEW_CMDLINE;
-                  <<>> -> ?PREVIEW_CMDLINE;
-                  "" -> ?PREVIEW_CMDLINE;
-                  CmdlineCfg -> z_convert:to_list(CmdlineCfg)
-              end,
+        undefined -> ?PREVIEW_CMDLINE;
+        <<>> -> ?PREVIEW_CMDLINE;
+        "" -> ?PREVIEW_CMDLINE;
+        CmdlineCfg -> z_convert:to_list(CmdlineCfg)
+    end,
     TmpFile = z_tempfile:new(),
     FfmpegCmd = z_convert:to_list(
-                  iolist_to_binary(
-                    [
-                     case string:str(Cmdline, "-itsoffset") of
-                        0 -> io_lib:format(Cmdline, [MovieFile]);
-                        _ -> io_lib:format(Cmdline, [Start, MovieFile])
-                     end,
-                     " ",
-                     orientation_to_transpose(proplists:get_value(orientation, Props)),
-                     z_utils:os_filename(TmpFile)
-                    ]
-                   )),
+        iolist_to_binary([
+            case string:str(Cmdline, "-itsoffset") of
+                0 -> io_lib:format(Cmdline, [MovieFile]);
+                _ -> io_lib:format(Cmdline, [Start, MovieFile])
+            end,
+            " ",
+            orientation_to_transpose(Orientation),
+            z_utils:os_filename(TmpFile)
+        ])),
     jobs:run(media_preview_jobs,
-             fun() ->
-                     lager:info("Video preview: ~p", [FfmpegCmd]),
-                     case os:cmd(FfmpegCmd) of
-                         [] ->
-                            lager:info("Preview ok, file: ~p", [TmpFile]),
-                            {ok, TmpFile};
-                         Other ->
-                            lager:warning("Video preview error: ~p", [Other]),
-                            {error, Other}
-                     end
-             end).
+        fun() ->
+            lager:info("Video preview: ~p", [FfmpegCmd]),
+            case os:cmd(FfmpegCmd) of
+                [] ->
+                   lager:info("Preview ok, file: ~p", [TmpFile]),
+                   {ok, TmpFile};
+                Other ->
+                   lager:warning("Video preview error: ~p", [Other]),
+                   {error, Other}
+            end
+        end).
 
 orientation_to_transpose(8) -> " -vf 'transpose=2' ";
 orientation_to_transpose(3) -> " -vf 'transpose=2,transpose=2' ";
