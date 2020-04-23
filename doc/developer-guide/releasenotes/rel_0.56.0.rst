@@ -3,7 +3,7 @@
 Release 0.56.0
 ==============
 
-Welcome to Zotonic 0.56.0, released on ...
+Welcome to Zotonic 0.56.0, released on April 23, 2020.
 
 Possible breaking changes:
 
