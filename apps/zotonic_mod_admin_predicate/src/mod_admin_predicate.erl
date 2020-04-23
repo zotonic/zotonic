@@ -155,8 +155,10 @@ observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
             Objects  = maps:get(<<"predicate_object">>, Props, []),
             m_predicate:update_noflush(Id, Subjects, Objects, Context),
 
-            Props1 = maps:remove(predicate_subject,
-                        maps:remove(predicate_object, Props)),
+            Props1 = maps:without([
+                    <<"predicate_subject">>,
+                    <<"predicate_object">>
+                ], Props),
             {true, Props1};
         false ->
             {Changed, Props}

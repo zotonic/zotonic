@@ -101,7 +101,7 @@ do_redirect(_Id, undefined, Context) ->
     {false, Context};
 do_redirect(undefined, _Medium, Context) ->
     {false, Context};
-do_redirect(_Id, #{ <<"filename">> := Filename } = Medium, Context)
+do_redirect(_Id, #{ <<"filename">> := Filename }, Context)
     when is_binary(Filename), Filename =/= <<>> ->
     Dispatch = z_context:get(dispatch, Context, media_inline),
     Args = z_context:get_all(Context),
