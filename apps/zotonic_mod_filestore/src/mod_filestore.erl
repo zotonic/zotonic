@@ -224,7 +224,8 @@ task_queue_all(Offset, Max, Context) when Offset =< Max ->
         order by id asc
         limit $1
         offset $2",
-        [?BATCH_SIZE, Offset],
+        [ ?BATCH_SIZE, Offset ],
+        [ {keys, binary} ],
         Context)
     of
         {ok, Media} ->

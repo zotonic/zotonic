@@ -77,6 +77,7 @@ list_tokens(UserId, Context) when is_integer(UserId) ->
                 where user_id = $1
                 order by created desc",
                 [ UserId ],
+                [ {keys, binary} ],
                 Context);
         false ->
             {error, eacces}
@@ -186,6 +187,7 @@ get_token( TokenId, Context ) when is_integer(TokenId) ->
         from oauth2_token
         where id = $1",
         [ z_convert:to_integer(TokenId) ],
+        [ {keys, binary} ],
         Context)
     of
         {ok, #{ <<"user_id">> := UserId } = Token} ->
@@ -197,6 +199,7 @@ get_token( TokenId, Context ) when is_integer(TokenId) ->
                             where token_id = $1
                             order by id desc",
                             [ TokenId ],
+                            [ {keys, binary} ],
                             Context),
                     Groups = z_db:q("
                             select group_id
@@ -229,6 +232,7 @@ get_token_access(TokenId, Context) when is_integer(TokenId) ->
         where id = $1
           and (valid_till is null or valid_till > now())",
         [ z_convert:to_integer(TokenId) ],
+        [ {keys, binary} ],
         Context)
     of
         {ok, Token} ->

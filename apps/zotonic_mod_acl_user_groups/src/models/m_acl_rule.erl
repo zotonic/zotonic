@@ -132,7 +132,7 @@ all_rules(Kind, State, Context) ->
 all_rules(Kind, State, Opts, Context) ->
     Query = "SELECT * FROM " ++ z_convert:to_list(table(Kind))
         ++ " WHERE " ++ state_sql_clause(State),
-    {ok, All} = z_db:qmap(Query, Context),
+    {ok, All} = z_db:qmap(Query, [], [ {keys, binary} ], Context),
     sort_by_user_group(
         normalize_actions(All),
         z_convert:to_integer(proplists:get_value(group, Opts)),
@@ -335,7 +335,11 @@ revert(Kind, Context) ->
     Result = z_db:transaction(
         fun(Ctx) ->
             z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = true", Ctx),
-            {ok, All} = z_db:qmap("SELECT * FROM " ++ T ++ " WHERE is_edit = false", Ctx),
+            {ok, All} = z_db:qmap(
+                    "SELECT * FROM " ++ T ++ " WHERE is_edit = false",
+                    [],
+                    [ {keys, binary} ],
+                    Ctx),
             lists:foreach(
                 fun(Row) ->
                     Row1 = Row#{
@@ -361,7 +365,11 @@ publish(Kind, Context) ->
     Result = z_db:transaction(
        fun(Ctx) ->
             z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = false", Ctx),
-            {ok, All} = z_db:qmap("SELECT * FROM " ++ T ++ " WHERE is_edit = true", Ctx),
+            {ok, All} = z_db:qmap(
+                "SELECT * FROM " ++ T ++ " WHERE is_edit = true",
+                [],
+                [ {keys, binary} ],
+                Ctx),
             lists:foreach(
                 fun(Row) ->
                     Row1 = Row#{

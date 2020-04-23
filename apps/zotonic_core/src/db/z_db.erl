@@ -370,15 +370,15 @@ assoc_props(Sql, Parameters, Context, Timeout) ->
 
 -spec qmap_row( sql(), z:context() ) -> {ok, map()} | {error, query_error()}.
 qmap_row(Sql, Context) ->
-    qmap_row(Sql, [], Context, ?TIMEOUT).
+    qmap_row(Sql, [], [], Context).
 
 -spec qmap_row( sql(), parameters(), z:context() ) -> {ok, map()} | {error, query_error()}.
 qmap_row(Sql, Args, Context) ->
-    qmap_row(Sql, Args, Context, ?TIMEOUT).
+    qmap_row(Sql, Args, [], Context).
 
--spec qmap_row( sql(), parameters(), z:context(), query_timeout()) -> {ok, map()} | {error, query_error()}.
-qmap_row(Sql, Args, Context, Timeout) ->
-    case qmap(Sql, Args, Context, Timeout) of
+-spec qmap_row( sql(), parameters(), list(), z:context()) -> {ok, map()} | {error, query_error()}.
+qmap_row(Sql, Args, Options, Context) ->
+    case qmap(Sql, Args, Options, Context) of
         {ok, [ M | _ ]} when is_map(M) ->
             {ok, M};
         {ok, []} ->
@@ -389,15 +389,15 @@ qmap_row(Sql, Args, Context, Timeout) ->
 
 -spec qmap_props_row( sql(), z:context() ) -> {ok, map()} | {error, query_error()}.
 qmap_props_row(Sql, Context) ->
-    qmap_props_row(Sql, [], Context, ?TIMEOUT).
+    qmap_props_row(Sql, [], [], Context).
 
 -spec qmap_props_row( sql(), parameters(), z:context() ) -> {ok, map()} | {error, query_error()}.
 qmap_props_row(Sql, Args, Context) ->
-    qmap_props_row(Sql, Args, Context, ?TIMEOUT).
+    qmap_props_row(Sql, Args, [], Context).
 
--spec qmap_props_row( sql(), parameters(), z:context(), query_timeout()) -> {ok, map()} | {error, query_error()}.
-qmap_props_row(Sql, Args, Context, Timeout) ->
-    case qmap_props(Sql, Args, Context, Timeout) of
+-spec qmap_props_row( sql(), parameters(), list(), z:context()) -> {ok, map()} | {error, query_error()}.
+qmap_props_row(Sql, Args, Options, Context) ->
+    case qmap_props(Sql, Args, Options, Context) of
         {ok, [ M | _ ]} when is_map(M) ->
             {ok, M};
         {ok, []} ->
@@ -408,24 +408,26 @@ qmap_props_row(Sql, Args, Context, Timeout) ->
 
 -spec qmap( sql(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
 qmap(Sql, Context) ->
-    qmap(Sql, [], Context, ?TIMEOUT).
+    qmap(Sql, [], [], Context).
 
 -spec qmap( sql(), parameters(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
 qmap(Sql, Args, Context) ->
-    qmap(Sql, Args, Context, ?TIMEOUT).
+    qmap(Sql, Args, [], Context).
 
--spec qmap( sql(), parameters(), z:context(), query_timeout() ) -> {ok, [ map() ]} | {error, query_error()}.
-qmap(Sql, Args, Context, Timeout) ->
+-spec qmap( sql(), parameters(), list(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
+qmap(Sql, Args, Options, Context) ->
     DbDriver = z_context:db_driver(Context),
     F = fun
         (none) ->
             {error, nodb};
         (C) ->
+            Timeout = proplists:get_value(timeout, Options, ?TIMEOUT),
+            Keys = proplists:get_value(keys, Options, binary),
             case DbDriver:equery(C, Sql, Args, Timeout) of
                 {ok, _Affected, Cols, Rows} when is_list(Rows) ->
-                    {ok, cols_map(Cols, Rows, false)};
+                    {ok, cols_map(Cols, Rows, false, Keys)};
                 {ok, Cols, Rows} when is_list(Rows) ->
-                    {ok, cols_map(Cols, Rows, false)};
+                    {ok, cols_map(Cols, Rows, false, Keys)};
                 {ok, Value} when is_list(Value); is_integer(Value) ->
                     {ok, Value};
                 {error, Reason} = Error ->
@@ -438,24 +440,26 @@ qmap(Sql, Args, Context, Timeout) ->
 
 -spec qmap_props( sql(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
 qmap_props(Sql, Context) ->
-    qmap_props(Sql, [], Context, ?TIMEOUT).
+    qmap_props(Sql, [], [], Context).
 
 -spec qmap_props( sql(), parameters(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
 qmap_props(Sql, Args, Context) ->
-    qmap_props(Sql, Args, Context, ?TIMEOUT).
+    qmap_props(Sql, Args, [], Context).
 
--spec qmap_props( sql(), parameters(), z:context(), timeout() ) -> {ok, [ map() ]} | {error, query_error()}.
-qmap_props(Sql, Args, Context, Timeout) ->
+-spec qmap_props( sql(), parameters(), list(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
+qmap_props(Sql, Args, Options, Context) ->
     DbDriver = z_context:db_driver(Context),
     F = fun
         (none) ->
             {error, nodb};
         (C) ->
+            Timeout = proplists:get_value(timeout, Options, ?TIMEOUT),
+            Keys = proplists:get_value(keys, Options, binary),
             case DbDriver:equery(C, Sql, Args, Timeout) of
                 {ok, _Affected, Cols, Rows} when is_list(Rows) ->
-                    {ok, cols_map(Cols, Rows, true)};
+                    {ok, cols_map(Cols, Rows, true, Keys)};
                 {ok, Cols, Rows} when is_list(Rows) ->
-                    {ok, cols_map(Cols, Rows, true)};
+                    {ok, cols_map(Cols, Rows, true, Keys)};
                 {ok, Value} when is_list(Value); is_integer(Value) ->
                     {ok, Value};
                 {error, Reason} = Error ->
@@ -468,14 +472,21 @@ qmap_props(Sql, Args, Context, Timeout) ->
 
 
 %% @doc Make associative maps from all the rows in the result set.
-cols_map(Cols, Rows, IsMergeProps) ->
-    ColNames = [ Name || #column{name=Name} <- Cols ],
-    ColIndices = lists:zip( lists:seq(1, length(ColNames)), ColNames ),
+cols_map(Cols, Rows, IsMergeProps, Keys) ->
+    ColNames = [ Name || #column{ name = Name } <- Cols ],
+    ColNames1 = case Keys of
+        atom -> [ binary_to_atom(K, utf8) || K <- ColNames ];
+        binary -> ColNames
+    end,
+    ColIndices = lists:zip( lists:seq(1, length(ColNames1)), ColNames1 ),
     lists:map(
         fun(Row) ->
             lists:foldl(
                 fun
                     ({Nr, <<"props">>}, Acc) when IsMergeProps ->
+                        Props = erlang:element(Nr, Row),
+                        map_merge_props(Props, Acc);
+                    ({Nr, props}, Acc) when IsMergeProps ->
                         Props = erlang:element(Nr, Row),
                         map_merge_props(Props, Acc);
                     ({Nr, Col}, Acc) ->
@@ -605,14 +616,15 @@ insert(Table, Context) ->
 %% serialized in the props column. When the table has an 'id' column then the
 %% new id is returned.
 -spec insert(table_name(), props(), z:context()) -> {ok, integer()|undefined} | {error, term()}.
-insert(Table, Props, Context) when is_list(Props) ->
-    insert(Table, z_props:from_props(Props), Context);
-insert(Table, Props, Context) when is_atom(Table) ->
-    insert(atom_to_list(Table), Props, Context);
-insert(Table, Props, Context) ->
+insert(Table, Parameters, Context) when is_list(Parameters) ->
+    insert(Table, z_props:from_props(Parameters), Context);
+insert(Table, Parameters, Context) when is_atom(Table) ->
+    insert(atom_to_list(Table), Parameters, Context);
+insert(Table, Parameters, Context) ->
     assert_table_name(Table),
     Cols = column_names_bin(Table, Context),
-    case prepare_cols(Cols, Props) of
+    BinParams = ensure_binary_keys(Parameters),
+    case prepare_cols(Cols, BinParams) of
         {ok, InsertProps} ->
             InsertProps1 = case maps:find(<<"props">>, InsertProps) of
                 {ok, PropsCol} when is_map(PropsCol) ->
@@ -626,12 +638,12 @@ insert(Table, Props, Context) ->
             end,
 
             %% Build the SQL insert statement
-            {ColNames, Parameters} = lists:unzip( maps:to_list(InsertProps1) ),
+            {ColNames, ColParams} = lists:unzip( maps:to_list(InsertProps1) ),
             Sql = iolist_to_binary([
                 "insert into \"", Table, "\" (\"",
                     z_utils:combine("\", \"", ColNames),
                 "\") values (",
-                    z_utils:combine(", ", [ [$$ | integer_to_list(N)] || N <- lists:seq(1, length(Parameters)) ]),
+                    z_utils:combine(", ", [ [$$ | integer_to_list(N)] || N <- lists:seq(1, length(ColParams)) ]),
                 ")"
             ]),
             FinalSql = case lists:member(<<"id">>, Cols) of
@@ -641,11 +653,11 @@ insert(Table, Props, Context) ->
 
             F = fun(C) ->
                  DbDriver = z_context:db_driver(Context),
-                 case equery1(DbDriver, C, FinalSql, Parameters) of
+                 case equery1(DbDriver, C, FinalSql, ColParams) of
                      {ok, Id} -> {ok, Id};
                      {error, noresult} -> {ok, undefined};
                      {error, Reason} = Error ->
-                        lager:error("z_db error ~p in query ~s with ~p", [Reason, FinalSql, Parameters]),
+                        lager:error("z_db error ~p in query ~s with ~p", [Reason, FinalSql, ColParams]),
                         Error
                  end
             end,
@@ -661,11 +673,12 @@ update(Table, Id, Parameters, Context) when is_list(Parameters) ->
     update(Table, Id, z_props:from_props(Parameters), Context);
 update(Table, Id, Parameters, Context) when is_atom(Table) ->
     update(atom_to_list(Table), Id, Parameters, Context);
-update(Table, Id, Parameters, Context) ->
+update(Table, Id, Parameters, Context) when is_map(Parameters), is_list(Table) ->
     assert_table_name(Table),
     DbDriver = z_context:db_driver(Context),
     Cols = column_names_bin(Table, Context),
-    case prepare_cols(Cols, Parameters) of
+    BinParams = ensure_binary_keys(Parameters),
+    case prepare_cols(Cols, BinParams) of
         {ok, UpdateProps} ->
             F = fun(C) ->
                 UpdateProps1 = case maps:get(<<"props">>, UpdateProps, undefined) of
@@ -707,6 +720,21 @@ update(Table, Id, Parameters, Context) ->
             Error
     end.
 
+ensure_binary_keys(Ps) ->
+    maps:fold(
+        fun
+            (K, V, Acc) when is_atom(K) ->
+                Acc#{
+                    atom_to_binary(K, utf8) => V
+                };
+            (K, V, Acc) when is_binary(K) ->
+                Acc#{
+                    K => V
+                }
+        end,
+        #{},
+        Ps).
+
 filter_empty_props(Map) ->
     maps:filter(
         fun
@@ -743,12 +771,17 @@ delete(Table, Id, Context) ->
 %% @doc Read a row from a table, the row must have a column with the name 'id'.
 %% The props column contents is merged with the other properties returned.
 -spec select(table_name(), any(), z:context()) -> {ok, Row :: map()} | {error, term()}.
-select(Table, Id, Context) when is_atom(Table) ->
-    select(atom_to_list(Table), Id, Context);
 select(Table, Id, Context) ->
+    select(Table, Id, [], Context).
+
+
+-spec select(table_name(), any(), list(), z:context()) -> {ok, Row :: map()} | {error, term()}.
+select(Table, Id, Options, Context) when is_atom(Table) ->
+    select(atom_to_list(Table), Id, Options, Context);
+select(Table, Id, Options, Context) ->
     assert_table_name(Table),
     Sql = "select * from \""++Table++"\" where id = $1 limit 1",
-    qmap_props_row(Sql, [ Id ], Context).
+    qmap_props_row(Sql, [ Id ], Options, Context).
 
 
 %% @doc Check if all cols are valid columns in the target table, move unknown properties

@@ -894,7 +894,12 @@ get_pivot_title(Props) ->
 
 %% @doc Return the raw resource data for the pivoter
 get_pivot_rsc(Id, Context) ->
-    case z_db:qmap_props_row("select * from rsc where id = $1", [Id], Context) of
+    case z_db:qmap_props_row(
+        "select * from rsc where id = $1",
+        [ Id ],
+        [ {keys, binary} ],
+        Context)
+    of
         {ok, FullRecord} ->
             z_notifier:foldl(#pivot_rsc_data{ id = Id }, FullRecord, Context);
         {error, _} ->

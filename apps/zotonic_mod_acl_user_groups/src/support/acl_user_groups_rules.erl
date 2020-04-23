@@ -67,13 +67,16 @@ expand(State, Context) ->
         ++ expand_rsc(State, RscRules, GroupTree, UserTree, Context)}.
 
 rule_content_groups(Rules) ->
-    lists:flatten([
-        case proplists:get_value(content_group_id, R) of
-            undefined -> [];
-            Id -> Id
-        end
-        || R <- Rules
-    ]).
+    Ids = lists:foldl(
+        fun
+            (#{ <<"content_group_id">> := Id }, Acc) when is_integer(Id) ->
+                Acc#{ Id => true };
+            (_R, Acc) ->
+                Acc
+        end,
+        #{},
+        Rules),
+    maps:keys(Ids).
 
 -spec expand_rsc(edit|publish, z:context()) -> list(rule()).
 expand_rsc(State, Context) ->
@@ -86,7 +89,7 @@ expand_module(State, UserTree, Context) ->
     Modules = z_module_manager:active(Context),
     Modules1 = [ {<<>>, Modules} | [ {z_convert:to_binary(M),[M]} || M <- Modules ] ],
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(module, State, Context)),
-    Rules = expand_rule_rows(module, Modules1, RuleRows, Context),
+    Rules = expand_rule_rows(<<"module">>, Modules1, RuleRows, Context),
     [ {M,A,GId,IsAllow} || {x,{M,A,_IsOwner,IsAllow},GId} <- expand_rules([{x,[]}], Rules, UserTree, Context) ].
 
 -spec expand_collab(edit|publish, z:context()) -> list( collab_rule() ).
@@ -94,7 +97,7 @@ expand_collab(State,Context) ->
     CategoryTree = m_category:menu(Context),
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(collab, State, Context)),
     Cs = [{undefined, tree_ids(CategoryTree)} | tree_expand(CategoryTree) ],
-    Rules = expand_rule_rows(category_id, Cs, RuleRows, Context),
+    Rules = expand_rule_rows(<<"category_id">>, Cs, RuleRows, Context),
     [ {collab, Action, collab} || {undefined, Action, undefined} <- Rules ].
 
 -spec expand_rsc(edit|publish, list(), list(), list(), z:context()) -> list(rsc_rule()).
@@ -102,12 +105,12 @@ expand_rsc(_State, RscRules, GroupTree, UserTree, Context) ->
     CategoryTree = m_category:menu(Context),
     RuleRows = resort_deny_rules(RscRules),
     Cs = [{undefined, tree_ids(CategoryTree)} | tree_expand(CategoryTree) ],
-    Rules = expand_rule_rows(category_id, Cs, RuleRows, Context),
+    Rules = expand_rule_rows(<<"category_id">>, Cs, RuleRows, Context),
     expand_rules(GroupTree, Rules, UserTree, Context).
 
 expand_rule_rows(category_id, Cs, RuleRows, Context) ->
     NonMetaCs = remove_meta_category(Cs, Context),
-    lists:flatten([ expand_rule_row(category_id, RuleRow, Cs, NonMetaCs, Context) || RuleRow <- RuleRows ]);
+    lists:flatten([ expand_rule_row(<<"category_id">>, RuleRow, Cs, NonMetaCs, Context) || RuleRow <- RuleRows ]);
 expand_rule_rows(Prop, Cs, RuleRows, Context) ->
     lists:flatten([ expand_rule_row(Prop, RuleRow, Cs, Cs, Context) || RuleRow <- RuleRows ]).
 
@@ -125,12 +128,16 @@ remove_meta_category(Cs, Context) ->
     end.
 
 expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) ->
-    Actions = [ Act || {Act,true} <- proplists:get_value(actions, Row, []) ],
-    IsAllow = not proplists:get_value(is_block, Row),
-    ContentGroupId = proplists:get_value(content_group_id, Row),
-    UserGroupId = proplists:get_value(acl_user_group_id, Row),
-    IsOwner = proplists:get_value(is_owner, Row, false),
-    PropId = proplists:get_value(Prop, Row),
+    #{
+        <<"actions">> := Actions0,
+        <<"is_block">> := IsBlock,
+        <<"content_group_id">> := ContentGroupId,
+        <<"acl_user_group_id">> := UserGroupId
+    } = Row,
+    Actions = [ Act || {Act,true} <- Actions0 ],
+    IsAllow = not IsBlock,
+    IsOwner = maps:get(<<"is_owner">>, Row, false),
+    PropId = maps:get(Prop, Row),
     ContentGroupName = m_rsc:p_no_acl(ContentGroupId, name, Context),
     CIdsEdit = maybe_filter_meta(ContentGroupName, Prop, PropId, Cs, NonMetaCs, Context),
     CIdsView = proplists:get_value(PropId, Cs, [PropId]),
@@ -226,9 +233,9 @@ resort_deny_rules(Rs) ->
 resort_deny_rules([], _GroupId, DenyAcc, Acc) ->
     lists:reverse(DenyAcc ++ Acc);
 resort_deny_rules([R|Rs], GroupId, DenyAcc, Acc) ->
-    case proplists:get_value(acl_user_group_id, R) of
+    case maps:get(<<"acl_user_group_id">>, R) of
         GroupId ->
-            case proplists:get_value(is_block, R) of
+            case maps:get(<<"is_block">>, R) of
                 true ->
                     resort_deny_rules(Rs, GroupId, [R|DenyAcc], Acc);
                 false ->
@@ -236,7 +243,7 @@ resort_deny_rules([R|Rs], GroupId, DenyAcc, Acc) ->
             end;
         NewGroupId ->
             Acc1 = DenyAcc ++ Acc,
-            case proplists:get_value(is_block, R) of
+            case maps:get(<<"is_block">>, R) of
                 true ->
                     resort_deny_rules(Rs, NewGroupId, [R], Acc1);
                 false ->

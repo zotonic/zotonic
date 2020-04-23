@@ -84,7 +84,10 @@ full(Id, Context) when is_integer(Id) ->
                                 from edge e
                                         join rsc p on p.id = e.predicate_id
                                 where e.subject_id = $1
-                                order by e.predicate_id, e.seq, e.id", [Id], Context),
+                                order by e.predicate_id, e.seq, e.id",
+                                [Id],
+                                [ {keys, binary} ],
+                                Context),
             Edges = [ edge_details(E, Context) || E <- Edges0 ],
             Medium = m_media:get(Id, Context),
 

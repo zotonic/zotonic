@@ -296,7 +296,7 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
         true -> z_convert:to_list(SQL) ++ " for update";
         false -> z_convert:to_list(SQL)
     end,
-    case z_db:qmap_props_row(SQL1, [ Id ], Context) of
+    case z_db:qmap_props_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
         {ok, Map} ->
             {ok, ensure_utc_dates(Map, Context)};
         {error, _} = Error ->

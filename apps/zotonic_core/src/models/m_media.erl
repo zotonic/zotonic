@@ -94,6 +94,7 @@ identify(Id, Context) when is_integer(Id) ->
     z_db:qmap_props_row(
         "select id, mime, width, height, orientation from medium where id = $1",
         [ Id ],
+        [ {keys, binary} ],
         Context);
 identify(ImageFile, Context) ->
     case z_media_archive:is_archived(ImageFile, Context) of
@@ -107,7 +108,8 @@ identify(ImageFile, Context) ->
 identify_medium_filename(MediumFilename, Context) ->
     z_db:qmap_props_row("
         select id, mime, width, height, orientation from medium where filename = $1",
-        [MediumFilename],
+        [ MediumFilename ],
+        [ {keys, binary} ],
         Context).
 
 
