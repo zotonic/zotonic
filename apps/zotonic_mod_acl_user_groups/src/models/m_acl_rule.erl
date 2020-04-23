@@ -123,49 +123,65 @@ is_valid_code(Code, Context) ->
 
 
 -type acl_rule() :: list().
--spec all_rules(rsc | module | collab, edit | publish, #context{}) -> [acl_rule()].
+-spec all_rules(rsc | module | collab, edit | publish, z:context()) -> [acl_rule()].
 all_rules(Kind, State, Context) ->
     all_rules(Kind, State, [], Context).
 
 -type acl_rules_opt() :: {group, string()}.
--spec all_rules(rsc | module | collab, edit | publish, [acl_rules_opt()], #context{}) -> [acl_rule()].
+-spec all_rules(rsc | module | collab, edit | publish, [acl_rules_opt()], z:context()) -> [acl_rule()].
 all_rules(Kind, State, Opts, Context) ->
     Query = "SELECT * FROM " ++ z_convert:to_list(table(Kind))
         ++ " WHERE " ++ state_sql_clause(State),
-    All = z_db:assoc(Query, Context),
-    sort_by_user_group(normalize_actions(All), z_convert:to_integer(proplists:get_value(group, Opts)), Context).
+    {ok, All} = z_db:qmap(Query, Context),
+    sort_by_user_group(
+        normalize_actions(All),
+        z_convert:to_integer(proplists:get_value(group, Opts)),
+        Context).
 
 
 sort_by_user_group(Rs, undefined, Context) ->
     Tree = m_hierarchy:menu(acl_user_group, Context),
     Ids = lists:reverse(flatten_tree(Tree, [])),
     Zipped = lists:zip(Ids, lists:seq(1,length(Ids))),
-    WithNr = lists:map(fun(R) ->
-                               UGId = proplists:get_value(acl_user_group_id, R),
-                               Nr = proplists:get_value(UGId, Zipped),
-                               IsBlock = proplists:get_value(is_block, R),
-                               {{Nr,
-                                 not IsBlock,
-                                 cat_key(proplists:get_value(category_id, R), Context),
-                                 proplists:get_value(created,R),
-                                 proplists:get_value(id, R)}, R}
-                       end,
-                       Rs),
+    WithNr = lists:map(
+        fun(R) ->
+            #{
+                <<"id">> := Id,
+                <<"acl_user_group_id">> := UGId,
+                <<"is_block">> := IsBlock,
+                <<"category_id">> := CatId,
+                <<"created">> := Created
+            } = R,
+            Nr = proplists:get_value(UGId, Zipped),
+            {
+                {   Nr,
+                    not IsBlock,
+                    cat_key(CatId, Context),
+                    Created,
+                    Id
+                },
+                R
+            }
+        end,
+        Rs),
     Rs1 = lists:sort(WithNr),
     [ R1 || {_,R1} <- Rs1 ];
-
 sort_by_user_group(Rs, Group, Context) ->
     Parents = m_hierarchy:parents(acl_user_group, Group, Context),
     Tree = m_hierarchy:menu(acl_user_group, Context),
-    Ids = [Group | Parents] ++ lists:reverse(flatten_tree(Tree, [])),
+    Ids = [ Group | Parents ] ++ lists:reverse(flatten_tree(Tree, [])),
     Zipped = lists:zip(Ids, lists:seq(1,length(Ids))),
-    WithNr = lists:map(fun(R) ->
-                               UGId = proplists:get_value(acl_user_group_id, R),
-                               Nr = proplists:get_value(UGId, Zipped),
-                               IsBlock = proplists:get_value(is_block, R),
-                               {{Nr,not IsBlock}, R}
-                       end,
-                       Rs),
+    WithNr = lists:map(
+        fun(R) ->
+            #{
+                <<"acl_user_group_id">> := UGId,
+                <<"is_block">> := IsBlock
+            } = R,
+            UGId = proplists:get_value(acl_user_group_id, R),
+            Nr = proplists:get_value(UGId, Zipped),
+            {{Nr,not IsBlock}, R}
+        end,
+        Rs),
     Rs1 = lists:sort(WithNr),
     [ R1 || {_,R1} <- Rs1 ].
 
@@ -197,10 +213,7 @@ normalize_action(Row) when is_map(Row) ->
     Actions1 = [ {binary_to_existing_atom(T,utf8), true} || T <- ActionsSplit ],
     Row#{
         <<"actions">> => Actions1
-    };
-normalize_action(Row) when is_list(Row) ->
-    {ok, RowMap} = z_props:from_list(Row),
-    normalize_action(RowMap).
+    }.
 
 actions(Kind, Context) when Kind =:= rsc; Kind =:= collab ->
     [
