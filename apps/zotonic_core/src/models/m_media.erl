@@ -1082,7 +1082,7 @@ check_medium_prop(B, P) when is_binary(B) -> P.
 
 
 % Return a map with basic (not too sensitive) medium info for MQTT events
--spec mqtt_event_info( proplists:proplist() ) -> map().
+-spec mqtt_event_info( map() ) -> map().
 mqtt_event_info(Medium) ->
     lists:foldl(
         fun(K, Acc) ->

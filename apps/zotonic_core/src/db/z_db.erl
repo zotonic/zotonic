@@ -303,11 +303,11 @@ assoc_row(Sql, Parameters, Context) ->
         [] -> undefined
     end.
 
--spec assoc_props_row(string(), z:context()) -> proplists:proplist().
+-spec assoc_props_row(string(), z:context()) -> proplists:proplist() | undefined.
 assoc_props_row(Sql, Context) ->
     assoc_props_row(Sql, [], Context).
 
--spec assoc_props_row(string(), list(), z:context()) -> proplists:proplist().
+-spec assoc_props_row(string(), list(), z:context()) -> proplists:proplist() | undefined.
 assoc_props_row(Sql, Parameters, Context) ->
     case assoc_props(Sql, Parameters, Context) of
         [Row|_] -> Row;

@@ -53,10 +53,11 @@
 
 
 %% @doc Insert a new resource. Crashes when insertion is not allowed.
--spec insert(m_rsc:props(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec insert(m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(Props, Context) ->
     insert(Props, [{escape_texts, true}], Context).
 
+-spec insert(m_rsc:props_all(), list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(Props, Options, Context) when is_list(Props) ->
     {ok, Map} = z_props:from_list(Props),
     insert(Map, Options, Context);

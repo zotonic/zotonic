@@ -57,9 +57,18 @@ prep_block(B, _Context) ->
 
 %% @doc Evaluate the (optional) jump expression of a page break
 test(Q, Answers, Context) ->
-    case eval(proplists:get_value(condition1, Q), proplists:get_value(target1, Q), Answers, Context) of
-        {jump, _} = Jump1 -> Jump1;
-        _ -> eval(proplists:get_value(condition2, Q), proplists:get_value(target2, Q), Answers, Context)
+    case eval(
+            maps:get(<<"condition1">>, Q, undefined),
+            maps:get(<<"target1">>, Q, undefined),
+            Answers, Context)
+    of
+        {jump, _} = Jump1 ->
+            Jump1;
+        _ ->
+            eval(
+                maps:get(<<"condition2">>, Q, undefined),
+                maps:get(<<"target2">>, Q, undefined),
+                Answers, Context)
     end.
 
 eval(_, undefined, _, _Context) ->

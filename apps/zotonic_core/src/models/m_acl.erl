@@ -38,61 +38,56 @@ m_get([ <<"is_admin">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin(Context)
 m_get([ <<"is_read_only">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_read_only(Context), Rest}};
 
 % Check if current user is allowed to perform an action on some object
-m_get([ Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
-    {ok, {is_allowed_to_atom(Action, Object, Context), Rest}};
 m_get([ Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
-    {ok, {z_acl:is_allowed(Action, Object, Context), Rest}};
-m_get([ <<"is_allowed">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
-    {ok, {is_allowed_to_atom(Action, Object, Context), Rest}};
+    {ok, {is_allowed(Action, Object, Context), Rest}};
 m_get([ <<"is_allowed">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
-    {ok, {z_acl:is_allowed(Action, Object, Context), Rest}};
-
+    {ok, {is_allowed(Action, Object, Context), Rest}};
 
 % Check if an authenticated (default acl setttings) is allowed to perform an action on some object
-m_get([ <<"authenticated">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action), is_binary(Object) ->
-    {ok, {is_allowed_authenticated_to_atom(Action, Object, Context), Rest}};
 m_get([ <<"authenticated">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
-    Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
-                    undefined -> Context;
-                    Ctx -> Ctx
-               end,
-    {ok, {z_acl:is_allowed(Action, Object, Context1), Rest}};
-
-m_get([ <<"authenticated">>, <<"is_allowed">>, Action, Object | Rest ], _Msg, Context)  when ?is_action(Action), is_binary(Object) ->
-    {ok, {is_allowed_authenticated_to_atom(Action, Object, Context), Rest}};
-m_get([ <<"authenticated">>, <<"is_allowed">>, Action, Object | Rest ], _Msg, Context) when ?is_action(Action) ->
-    Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
-                    undefined -> Context;
-                    Ctx -> Ctx
-               end,
-    {ok, {z_acl:is_allowed(Action, Object, Context1), Rest}};
+    {ok, {is_allowed_authenticated(Action, Object, Context), Rest}};
+m_get([ <<"authenticated">>, <<"is_allowed">>, Action, Object | Rest ], _Msg, Context)  when ?is_action(Action) ->
+    {ok, {is_allowed_authenticated(Action, Object, Context), Rest}};
 
 % Error, unknown lookup.
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
-
-
-is_allowed_to_atom(Action, Object, Context) ->
+is_allowed(Action, Object, Context) when ?is_action(Action) ->
     try
         ActionAtom = erlang:binary_to_existing_atom(Action, utf8),
-        ObjectAtom = erlang:binary_to_existing_atom(Object, utf8),
-        z_acl:is_allowed(ActionAtom, ObjectAtom, Context)
+        Object1 = maybe_atom(Object),
+        z_acl:is_allowed(ActionAtom, Object1, Context)
     catch
         error:badarg -> false
     end.
 
-is_allowed_authenticated_to_atom(Action, Object, Context) ->
+is_allowed_authenticated(Action, Object, Context) ->
     try
         ActionAtom = erlang:binary_to_existing_atom(Action, utf8),
-        ObjectAtom = erlang:binary_to_existing_atom(Object, utf8),
         Context1 = case z_notifier:first(#acl_context_authenticated{}, Context) of
                         undefined -> Context;
                         Ctx -> Ctx
                    end,
-        z_acl:is_allowed(ActionAtom, ObjectAtom, Context1)
+        Object1 = maybe_atom(Object),
+        z_acl:is_allowed(ActionAtom, Object1, Context1)
     catch
         error:badarg -> false
     end.
+
+
+maybe_atom(<<>>) ->
+    undefined;
+maybe_atom(<<C, _/binary>> = B) when C >= $0, C =< $9 ->
+    % Assume some integer or resource name
+    B;
+maybe_atom(B) when is_binary(B) ->
+    try
+        binary_to_existing_atom(B, utf8)
+    catch
+        _:_ -> B
+    end;
+maybe_atom(V) ->
+    V.
 

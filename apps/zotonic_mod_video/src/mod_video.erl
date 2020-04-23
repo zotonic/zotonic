@@ -278,12 +278,12 @@ video_info(Path) ->
     try
         Ps = decode_json(JSONText),
         {Width, Height, Orientation} = fetch_size(Ps),
-        [
-         {duration, fetch_duration(Ps)},
-         {width, Width},
-         {height, Height},
-         {orientation, Orientation}
-        ]
+        #{
+            duration => fetch_duration(Ps),
+            width => Width,
+            height => Height,
+            orientation => Orientation
+        }
     catch
         error:E ->
             lager:warning("Unexpected ffprobe return (~p) ~p", [E, JSONText]),

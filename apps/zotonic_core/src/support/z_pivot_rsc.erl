@@ -879,7 +879,7 @@ pivot_date1(S, E) when is_tuple(S) andalso is_tuple(E) ->
 
 %% @doc Fetch the first title from the record for sorting.
 get_pivot_title(Id, Context) ->
-    z_string:to_lower(get_pivot_title([{title, m_rsc:p(Id, <<"title">>, Context)}])).
+    z_string:to_lower(get_pivot_title(#{ <<"title">> => m_rsc:p(Id, <<"title">>, Context) })).
 
 get_pivot_title(Props) ->
     case maps:get(<<"title">>, Props, <<>>) of

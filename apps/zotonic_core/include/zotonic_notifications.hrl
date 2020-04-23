@@ -964,7 +964,7 @@
     source_user_id :: binary() | integer(),
     user_id :: integer(),
     name :: binary(),
-    props :: list(),
+    props :: m_rsc:props_all(),
     urls :: list(),
     media_urls :: list(),
     data :: any()

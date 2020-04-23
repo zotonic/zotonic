@@ -389,7 +389,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 
 %% Fetch or create a preview for the movie
 spawn_preview_create(MediaId, InsertProps, Context) ->
-    case z_convert:to_binary(proplists:get_value(video_embed_service, InsertProps)) of
+    case z_convert:to_binary(maps:get(<<"video_embed_service">>, InsertProps, undefined)) of
         <<"youtube">> ->
             spawn(fun() -> preview_youtube(MediaId, InsertProps, z_context:prune_for_async(Context)) end);
         <<"vimeo">> ->
@@ -400,7 +400,7 @@ spawn_preview_create(MediaId, InsertProps, Context) ->
 % @doc Fetch the preview image of a youtube video. The preview is located at: http://img.youtube.com/vi/[code]/0.jpg
 % @todo Make this more robust wrt http errors.
 preview_youtube(MediaId, InsertProps, Context) ->
-    case z_convert:to_binary(proplists:get_value(video_embed_id, InsertProps)) of
+    case z_convert:to_binary(maps:get(<<"video_embed_id">>, InsertProps, <<>>)) of
         <<>> ->
             static_preview(MediaId, <<"images/youtube.jpg">>, Context);
         EmbedId ->
@@ -411,7 +411,7 @@ preview_youtube(MediaId, InsertProps, Context) ->
 % @doc Fetch the preview image of a vimeo video. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
 % @todo Make this more robust wrt http errors.
 preview_vimeo(MediaId, InsertProps, Context) ->
-    case z_convert:to_binary(proplists:get_value(video_embed_id, InsertProps)) of
+    case z_convert:to_binary(maps:get(<<"video_embed_id">>, InsertProps, <<>>)) of
         <<>> ->
             static_preview(MediaId, <<"images/vimeo.jpg">>, Context);
         EmbedId ->
