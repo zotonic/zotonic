@@ -67,16 +67,16 @@ expand(State, Context) ->
         ++ expand_rsc(State, RscRules, GroupTree, UserTree, Context)}.
 
 rule_content_groups(Rules) ->
-    Ids = lists:foldl(
+    Ks = lists:foldl(
         fun
-            (#{ <<"content_group_id">> := Id }, Acc) when is_integer(Id) ->
-                Acc#{ Id => true };
-            (_R, Acc) ->
-                Acc
+            (#{ <<"content_group_id">> := undefined }, Acc) ->
+                Acc;
+            (#{ <<"content_group_id">> := Id }, Acc) ->
+                Acc#{ Id => true }
         end,
         #{},
         Rules),
-    maps:keys(Ids).
+    maps:keys(Ks).
 
 -spec expand_rsc(edit|publish, z:context()) -> list(rule()).
 expand_rsc(State, Context) ->
@@ -108,7 +108,7 @@ expand_rsc(_State, RscRules, GroupTree, UserTree, Context) ->
     Rules = expand_rule_rows(<<"category_id">>, Cs, RuleRows, Context),
     expand_rules(GroupTree, Rules, UserTree, Context).
 
-expand_rule_rows(category_id, Cs, RuleRows, Context) ->
+expand_rule_rows(<<"category_id">>, Cs, RuleRows, Context) ->
     NonMetaCs = remove_meta_category(Cs, Context),
     lists:flatten([ expand_rule_row(<<"category_id">>, RuleRow, Cs, NonMetaCs, Context) || RuleRow <- RuleRows ]);
 expand_rule_rows(Prop, Cs, RuleRows, Context) ->
@@ -127,16 +127,16 @@ remove_meta_category(Cs, Context) ->
             Cs
     end.
 
-expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) ->
+expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) when is_binary(Prop) ->
     #{
         <<"actions">> := Actions0,
-        <<"is_block">> := IsBlock,
-        <<"content_group_id">> := ContentGroupId,
-        <<"acl_user_group_id">> := UserGroupId
+        <<"is_block">> := IsBlock
     } = Row,
     Actions = [ Act || {Act,true} <- Actions0 ],
     IsAllow = not IsBlock,
     IsOwner = maps:get(<<"is_owner">>, Row, false),
+    UserGroupId = maps:get(<<"acl_user_group_id">>, Row, undefined),
+    ContentGroupId = maps:get(<<"content_group_id">>, Row, undefined),
     PropId = maps:get(Prop, Row),
     ContentGroupName = m_rsc:p_no_acl(ContentGroupId, name, Context),
     CIdsEdit = maybe_filter_meta(ContentGroupName, Prop, PropId, Cs, NonMetaCs, Context),
@@ -153,9 +153,9 @@ expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) ->
 select_cids(view, _Edit, View) -> View;
 select_cids(_Action, Edit, _View) -> Edit.
 
-maybe_filter_meta(<<"system_content_group">>, category_id, PropId, Cs, _NonMetaCs, _Context) ->
+maybe_filter_meta(<<"system_content_group">>, <<"category_id">>, PropId, Cs, _NonMetaCs, _Context) ->
     proplists:get_value(PropId, Cs, [PropId]);
-maybe_filter_meta(_ContentGroupName, category_id, PropId, Cs, NonMetaCs, Context) ->
+maybe_filter_meta(_ContentGroupName, <<"category_id">>, PropId, Cs, NonMetaCs, Context) ->
     case m_rsc:is_a(PropId, meta, Context) of
         true -> proplists:get_value(PropId, Cs, [PropId]);
         false -> proplists:get_value(PropId, NonMetaCs, [PropId])
@@ -233,7 +233,7 @@ resort_deny_rules(Rs) ->
 resort_deny_rules([], _GroupId, DenyAcc, Acc) ->
     lists:reverse(DenyAcc ++ Acc);
 resort_deny_rules([R|Rs], GroupId, DenyAcc, Acc) ->
-    case maps:get(<<"acl_user_group_id">>, R) of
+    case maps:get(<<"acl_user_group_id">>, R, undefined) of
         GroupId ->
             case maps:get(<<"is_block">>, R) of
                 true ->

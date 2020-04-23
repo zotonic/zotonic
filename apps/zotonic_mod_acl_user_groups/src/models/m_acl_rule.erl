@@ -147,11 +147,11 @@ sort_by_user_group(Rs, undefined, Context) ->
         fun(R) ->
             #{
                 <<"id">> := Id,
-                <<"acl_user_group_id">> := UGId,
                 <<"is_block">> := IsBlock,
-                <<"category_id">> := CatId,
                 <<"created">> := Created
             } = R,
+            CatId = maps:get(<<"category_id">>, R, undefined),
+            UGId = maps:get(<<"acl_user_group_id">>, R, undefined),
             Nr = proplists:get_value(UGId, Zipped),
             {
                 {   Nr,
@@ -293,7 +293,7 @@ map_prop(<<"content_group_id">>, Id, Context) ->
     m_rsc:rid(Id, Context);
 map_prop(<<"category_id">>, Id, Context) ->
     m_rsc:rid(Id, Context);
-map_prop(<<"actions">>, Actions, _Context) ->
+map_prop(<<"actions">>, Actions, _Context) when is_list(Actions) ->
     Actions1 = lists:map(
         fun(A) -> z_convert:to_binary(A) end,
         Actions),
