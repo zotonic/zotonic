@@ -780,8 +780,8 @@
 -record(media_upload_preprocess, {
     id = insert_rsc :: m_rsc:resource_id() | insert_rsc,
     mime :: binary(),
-    file :: filename:filename_all() | undefined,
-    original_filename :: filename:filename_all() | undefined,
+    file :: file:filename_all() | undefined,
+    original_filename :: file:filename_all() | undefined,
     medium :: z_media_identify:media_info(),
     post_insert_fun :: function() | undefined
 }).
@@ -793,7 +793,7 @@
 -record(media_upload_props, {
     id :: integer() | 'insert_rsc',
     mime :: binary(),
-    archive_file :: filename:filename_all() | undefined,
+    archive_file :: file:filename_all() | undefined,
     options :: list()
 }).
 
@@ -873,7 +873,7 @@
 %% @doc Try to identify a file, returning a list of file properties.
 %% Type: first
 -record(media_identify_file, {
-    filename :: filename:filename_all(),
+    filename :: file:filename_all(),
     original_filename :: binary(),
     extension :: binary()
 }).
@@ -891,7 +891,7 @@
 -record(media_viewer, {
     id,
     props :: z_media_identify:media_info(),
-    filename :: filename:filename_all(),
+    filename :: file:filename_all(),
     options = [] :: list()
 }).
 
