@@ -326,7 +326,7 @@ preview_create_from_medium(MediaId, #{ <<"oembed_url">> := Url } = MediaProps, C
                     undefined;
                 _Type ->
                     %% store found properties in the media part of the rsc
-                    Html = map:get(<<"html">>, Json, <<>>),
+                    Html = maps:get(<<"html">>, Json, <<>>),
                     {EmbedService, EmbedId} = fetch_videoid_from_embed(<<>>, Html),
                     MediaProps1 = MediaProps#{
                         <<"oembed">> => Json,
