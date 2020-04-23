@@ -50,6 +50,9 @@
 -define(valid_acl_kind(T), ((T) =:= <<"rsc">> orelse (T) =:= <<"module">> orelse (T) =:= <<"collab">>)).
 -define(valid_acl_state(T), ((T) =:= <<"edit">> orelse (T) =:= <<"publish">>)).
 
+-type acl_rule() :: map().
+-type acl_rules_opt() :: {group, string()}.
+
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -121,13 +124,10 @@ is_valid_code(Code, Context) ->
             false
     end.
 
-
--type acl_rule() :: list().
 -spec all_rules(rsc | module | collab, edit | publish, z:context()) -> [acl_rule()].
 all_rules(Kind, State, Context) ->
     all_rules(Kind, State, [], Context).
 
--type acl_rules_opt() :: {group, string()}.
 -spec all_rules(rsc | module | collab, edit | publish, [acl_rules_opt()], z:context()) -> [acl_rule()].
 all_rules(Kind, State, Opts, Context) ->
     Query = "SELECT * FROM " ++ z_convert:to_list(table(Kind))
@@ -177,7 +177,6 @@ sort_by_user_group(Rs, Group, Context) ->
                 <<"acl_user_group_id">> := UGId,
                 <<"is_block">> := IsBlock
             } = R,
-            UGId = proplists:get_value(acl_user_group_id, R),
             Nr = proplists:get_value(UGId, Zipped),
             {{Nr,not IsBlock}, R}
         end,
