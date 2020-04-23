@@ -405,7 +405,7 @@
 %% Type: foldr
 %% Return: proplist accumulator
 -record(rsc_insert, {
-    props :: rsc:props()
+    props :: m_rsc:props()
 }).
 
 %% @doc Map to signal merging two resources. Move any information from the loser to the
@@ -427,7 +427,7 @@
 -record(rsc_update, {
     action :: insert | update,
     id :: m_rsc:resource_id(),
-    props :: rsc:props()
+    props :: m_rsc:props()
 }).
 
 %% @doc An updated resource has just been persisted. Observe this notification to
@@ -439,8 +439,8 @@
     id :: m_rsc:resource_id(),
     pre_is_a :: list(),
     post_is_a :: list(),
-    pre_props :: rsc:props(),
-    post_props :: rsc:props()
+    pre_props :: m_rsc:props(),
+    post_props :: m_rsc:props()
 }).
 
 %% @doc Upload and replace the resource with the given data. The data is in the given format.
@@ -465,7 +465,7 @@
 %% Type: foldr
 -record(pivot_update, {
     id :: m_rsc:resource_id(),
-    raw_props :: rsc:props()
+    raw_props :: m_rsc:props()
 }).
 
 %% @doc Foldr to change or add pivot fields for the main pivot table.
@@ -473,7 +473,7 @@
 %%  foldl with a map containing the pivot fields.
 -record(pivot_fields, {
     id :: m_rsc:resource_id(),
-    raw_props :: rsc:props()
+    raw_props :: m_rsc:props()
 }).
 
 %% @doc Signal that a resource pivot has been done.
