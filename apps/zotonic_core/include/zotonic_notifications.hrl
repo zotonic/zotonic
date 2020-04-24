@@ -891,7 +891,7 @@
 -record(media_viewer, {
     id,
     props :: z_media_identify:media_info(),
-    filename :: file:filename_all(),
+    filename = undefined :: file:filename_all() | undefined,
     options = [] :: list()
 }).
 

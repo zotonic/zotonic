@@ -140,7 +140,13 @@ viewer(Filename, Options, Context) when is_binary(Filename) ->
 %% check the normal image tag.
 viewer1(Id, Props, FilePath, Options, Context) ->
     Options1 = drop_undefined(Options),
-    case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options1}, Context) of
+    case z_notifier:first(#media_viewer{
+            id = Id,
+            props = Props,
+            filename = FilePath,
+            options = Options1
+        }, Context)
+    of
         {ok, Html} -> {ok, Html};
         undefined -> tag(Props, Options1, Context)
     end.
@@ -264,7 +270,7 @@ media_id([{_,_}|_] = List) ->
 
 %% @doc Give the filepath for the filename being served.
 filename_to_filepath(Filename, Context) ->
-    case binary:match(Filename, [ <<"../">>, <<"..\\">> ]) of
+    case binary:match(Filename, [ <<"../">>, <<"\\">> ]) of
         nomatch -> filename_to_filepath_1(Filename, Context);
         _ -> <<"error">>
     end.
