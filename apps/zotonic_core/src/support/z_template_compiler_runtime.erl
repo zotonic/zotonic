@@ -483,7 +483,12 @@ cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) ->
     end.
 
 do_cache(Args, Context) ->
-    do_cache1(z_convert:to_bool(proplists:get_value('if', Args, true)), Args, Context).
+    case z_convert:to_bool( m_config:get_value(mod_development, nocache, Context) ) of
+        true ->
+            false;
+        false ->
+            do_cache1(z_convert:to_bool(proplists:get_value('if', Args, true)), Args, Context)
+    end.
 
 do_cache1(true, Args, Context) ->
     case z_convert:to_bool(proplists:get_value(if_anonymous, Args, false)) of

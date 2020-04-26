@@ -68,6 +68,16 @@
         </label>
     </div>
 
+    <div>
+        {% wire id="nocache"
+            action={config_toggle module="mod_development" key="nocache"}
+        %}
+        <label class="checkbox-inline">
+            <input type="checkbox" id="nocache" value="1" {% if m.development.nocache %}checked="checked"{% endif %} />
+            {_ Disable caching by the <tt>{% cache %}</tt> tag. _}
+        </label>
+    </div>
+
     {% if m.modules.provided.server_storage %}
         <div>
             {% wire id="dbtrace"
