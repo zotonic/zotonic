@@ -29,12 +29,12 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ ssl_certificates | Rest ], _Msg, Context) ->
+m_get([ <<"ssl_certificates">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {ssl_certificates(Context), Rest}};
         false -> {ok, {[], Rest}}
     end;
-m_get([ security_dir | Rest ], _Msg, Context) ->
+m_get([ <<"security_dir">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             case z_config_files:security_dir() of

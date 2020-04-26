@@ -47,53 +47,64 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--define(valid_acl_kind(T), ((T) =:= rsc orelse (T) =:= module orelse (T) =:= collab)).
--define(valid_acl_state(T), ((T) =:= edit orelse (T) =:= publish)).
+-define(valid_acl_kind(T), ((T) =:= <<"rsc">> orelse (T) =:= <<"module">> orelse (T) =:= <<"collab">>)).
+-define(valid_acl_state(T), ((T) =:= <<"edit">> orelse (T) =:= <<"publish">>)).
+
+-type acl_rule() :: map().
+-type acl_rules_opt() :: {group, string()}.
 
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ is_valid_code, Code | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_code">>, Code | Rest ], _Msg, Context) ->
     {ok, {is_valid_code(Code, Context), Rest}};
-m_get([ generate_code | Rest ], _Msg, Context) ->
+m_get([ <<"generate_code">> | Rest ], _Msg, Context) ->
     {ok, {generate_code(Context), Rest}};
 
-m_get([ default_upload_size | Rest ], _Msg, _Context) ->
+m_get([ <<"default_upload_size">> | Rest ], _Msg, _Context) ->
     {ok, {acl_user_groups_checks:max_upload_size_default(), Rest}};
-m_get([ default_mime_allowed | Rest ], _Msg, Context) ->
+m_get([ <<"default_mime_allowed">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_group_mime_check:mime_allowed_default(Context), Rest}};
-m_get([ upload_size | Rest ], _Msg, Context) ->
+m_get([ <<"upload_size">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:max_upload_size(Context), Rest}};
 
-m_get([ can_insert, none, CategoryId | Rest ], _Msg, Context) ->
+m_get([ <<"can_insert">>, <<"none">>, CategoryId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_insert_category(CategoryId, Context), Rest}};
-m_get([ can_insert, acl_collaboration_group, CategoryId | Rest ], _Msg, Context) ->
+m_get([ <<"can_insert">>, <<"acl_collaboration_group">>, CategoryId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_insert_category_collab(CategoryId, Context), Rest}};
-m_get([ can_insert, ContentGroupId, CategoryId | Rest ], _Msg, Context) ->
+m_get([ <<"can_insert">>, ContentGroupId, CategoryId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_insert_category(ContentGroupId, CategoryId, Context), Rest}};
 
-m_get([ can_move, ContentGroupId, RscId | Rest ], _Msg, Context) ->
+m_get([ <<"can_move">>, ContentGroupId, RscId | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:can_move(ContentGroupId, RscId, Context), Rest}};
 
-m_get([ acl_user_groups_state | Rest ], _Msg, Context) ->
+m_get([ <<"acl_user_groups_state">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:session_state(Context), Rest}};
 
-m_get([ T, actions | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
-    {ok, {actions(T, Context), Rest}};
+m_get([ T, <<"actions">> | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
+    {ok, {actions(to_atom(T), Context), Rest}};
 m_get([ T, S, {all, Opts} | Rest ], _Msg, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    {ok, {all_rules(T, S, Opts, Context), Rest}};
+    {ok, {all_rules(to_atom(T), to_atom(S), Opts, Context), Rest}};
 m_get([ T, S | Rest ], _Msg, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    {ok, {all_rules(T, S, [], Context), Rest}};
-m_get([ T, Id | Rest ], _Msg, Context) when ?valid_acl_kind(T), is_integer(Id) ->
-    {ok, Props} = get(T, Id, Context),
-    {ok, {Props, Rest}};
-m_get([ T, undefined | Rest ], _Msg, _Context) when ?valid_acl_kind(T) ->
+    {ok, {all_rules(to_atom(T), to_atom(S), [], Context), Rest}};
+m_get([ T, <<"undefined">> | Rest ], _Msg, _Context) when ?valid_acl_kind(T) ->
     {ok, {undefined, Rest}};
+m_get([ T, Id | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
+    try
+        IdInt = z_convert:to_integer(Id),
+        {ok, Props} = get(to_atom(T), IdInt, Context),
+        {ok, {Props, Rest}}
+    catch
+        error:badarg ->
+            {ok, {undefined, Rest}}
+    end;
 
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
+
+to_atom(A) -> erlang:binary_to_existing_atom(A, utf8).
 
 %% @doc Generate a code for testing out the 'test' acl rules
 generate_code(Context) ->
@@ -113,51 +124,63 @@ is_valid_code(Code, Context) ->
             false
     end.
 
-
--type acl_rule() :: list().
--spec all_rules(rsc | module | collab, edit | publish, #context{}) -> [acl_rule()].
+-spec all_rules(rsc | module | collab, edit | publish, z:context()) -> [acl_rule()].
 all_rules(Kind, State, Context) ->
     all_rules(Kind, State, [], Context).
 
--type acl_rules_opt() :: {group, string()}.
--spec all_rules(rsc | module | collab, edit | publish, [acl_rules_opt()], #context{}) -> [acl_rule()].
+-spec all_rules(rsc | module | collab, edit | publish, [acl_rules_opt()], z:context()) -> [acl_rule()].
 all_rules(Kind, State, Opts, Context) ->
     Query = "SELECT * FROM " ++ z_convert:to_list(table(Kind))
         ++ " WHERE " ++ state_sql_clause(State),
-    All = z_db:assoc(Query, Context),
-    sort_by_user_group(normalize_actions(All), z_convert:to_integer(proplists:get_value(group, Opts)), Context).
+    {ok, All} = z_db:qmap(Query, [], [ {keys, binary} ], Context),
+    sort_by_user_group(
+        normalize_actions(All),
+        z_convert:to_integer(proplists:get_value(group, Opts)),
+        Context).
 
 
 sort_by_user_group(Rs, undefined, Context) ->
     Tree = m_hierarchy:menu(acl_user_group, Context),
     Ids = lists:reverse(flatten_tree(Tree, [])),
     Zipped = lists:zip(Ids, lists:seq(1,length(Ids))),
-    WithNr = lists:map(fun(R) ->
-                               UGId = proplists:get_value(acl_user_group_id, R),
-                               Nr = proplists:get_value(UGId, Zipped),
-                               IsBlock = proplists:get_value(is_block, R),
-                               {{Nr,
-                                 not IsBlock,
-                                 cat_key(proplists:get_value(category_id, R), Context),
-                                 proplists:get_value(created,R),
-                                 proplists:get_value(id, R)}, R}
-                       end,
-                       Rs),
+    WithNr = lists:map(
+        fun(R) ->
+            #{
+                <<"id">> := Id,
+                <<"is_block">> := IsBlock,
+                <<"created">> := Created
+            } = R,
+            CatId = maps:get(<<"category_id">>, R, undefined),
+            UGId = maps:get(<<"acl_user_group_id">>, R, undefined),
+            Nr = proplists:get_value(UGId, Zipped),
+            {
+                {   Nr,
+                    not IsBlock,
+                    cat_key(CatId, Context),
+                    Created,
+                    Id
+                },
+                R
+            }
+        end,
+        Rs),
     Rs1 = lists:sort(WithNr),
     [ R1 || {_,R1} <- Rs1 ];
-
 sort_by_user_group(Rs, Group, Context) ->
     Parents = m_hierarchy:parents(acl_user_group, Group, Context),
     Tree = m_hierarchy:menu(acl_user_group, Context),
-    Ids = [Group | Parents] ++ lists:reverse(flatten_tree(Tree, [])),
+    Ids = [ Group | Parents ] ++ lists:reverse(flatten_tree(Tree, [])),
     Zipped = lists:zip(Ids, lists:seq(1,length(Ids))),
-    WithNr = lists:map(fun(R) ->
-                               UGId = proplists:get_value(acl_user_group_id, R),
-                               Nr = proplists:get_value(UGId, Zipped),
-                               IsBlock = proplists:get_value(is_block, R),
-                               {{Nr,not IsBlock}, R}
-                       end,
-                       Rs),
+    WithNr = lists:map(
+        fun(R) ->
+            #{
+                <<"acl_user_group_id">> := UGId,
+                <<"is_block">> := IsBlock
+            } = R,
+            Nr = proplists:get_value(UGId, Zipped),
+            {{Nr,not IsBlock}, R}
+        end,
+        Rs),
     Rs1 = lists:sort(WithNr),
     [ R1 || {_,R1} <- Rs1 ].
 
@@ -181,24 +204,27 @@ state_sql_clause(edit) -> "is_edit = true";
 state_sql_clause(publish) -> "is_edit = false".
 
 normalize_actions(Rows) ->
-    [normalize_action(Row) || Row <- Rows].
+    [ normalize_action(Row) || Row <- Rows ].
 
-normalize_action(Row) ->
-    Actions = proplists:get_value(actions, Row),
-    [{actions, [{z_convert:to_atom(T), true} || T <- string:tokens(z_convert:to_list(Actions), ",")]}
-     | proplists:delete(actions, Row)].
+normalize_action(Row) when is_map(Row) ->
+    Actions = maps:get(<<"actions">>, Row),
+    ActionsSplit = binary:split(Actions, <<",">>, [global]),
+    Actions1 = [ {binary_to_existing_atom(T,utf8), true} || T <- ActionsSplit ],
+    Row#{
+        <<"actions">> => Actions1
+    }.
 
 actions(Kind, Context) when Kind =:= rsc; Kind =:= collab ->
     [
-     {view, ?__("view (acl action)", Context)},
-     {insert, ?__("insert (acl action)", Context)},
-     {update, ?__("edit (acl action)", Context)},
-     {delete, ?__("delete (acl action)", Context)},
-     {link, ?__("link (acl action)", Context)}
+        {view, ?__("view (acl action)", Context)},
+        {insert, ?__("insert (acl action)", Context)},
+        {update, ?__("edit (acl action)", Context)},
+        {delete, ?__("delete (acl action)", Context)},
+        {link, ?__("link (acl action)", Context)}
     ];
 actions(module, Context) ->
     [
-     {use, ?__("use (acl action)", Context)}
+        {use, ?__("use (acl action)", Context)}
     ].
 
 
@@ -207,59 +233,72 @@ update(Kind, Id, Props, Context) ->
         "ACL user groups update by ~p of ~p:~p with ~p",
        [z_acl:user(Context), Kind, Id, Props]
     ),
-    Result = z_db:update(
-               table(Kind), Id,
-               [{is_edit, true},
-                {modifier_id, z_acl:user(Context)},
-                {modified, calendar:universal_time()}
-                | map_props(Props, Context)], Context
-              ),
+    BaseProps = map_props(Props, Context),
+    RuleProps = BaseProps#{
+        <<"is_edit">> => true,
+        <<"modifier_id">> => z_acl:user(Context),
+        <<"modified">> => calendar:universal_time()
+    },
+    Result = z_db:update(table(Kind), Id, RuleProps, Context),
     mod_acl_user_groups:rebuild(edit, Context),
     Result.
 
+get(_Kind, undefined, _Context) ->
+    {ok, undefined};
 get(Kind, Id, Context) ->
-    {ok, Row} = z_db:select(table(Kind), Id, Context),
-    {ok, normalize_action(Row)}.
+    case z_db:select(table(Kind), Id, Context) of
+        {ok, Row} ->
+            {ok, normalize_action(Row)};
+        {error, enoent} ->
+            {ok, undefined};
+        {error, _} = Error ->
+            Error
+    end.
 
 insert(Kind, Props, Context) ->
     lager:debug(
         "ACL user groups insert by ~p of ~p with ~p",
        [z_acl:user(Context), Kind, Props]
     ),
-
-    Result = z_db:insert(
-               table(Kind),
-               [{is_edit, true},
-                {modifier_id, z_acl:user(Context)},
-                {modified, calendar:universal_time()},
-                {creator_id, z_acl:user(Context)},
-                {created, calendar:universal_time()} | map_props(Props, Context)], Context
-              ),
+    BaseProps = map_props(Props, Context),
+    RuleProps = BaseProps#{
+        <<"is_edit">> => true,
+        <<"modifier_id">> => z_acl:user(Context),
+        <<"modified">> => calendar:universal_time(),
+        <<"creator_id">> => z_acl:user(Context),
+        <<"created">> => calendar:universal_time()
+    },
+    Result = z_db:insert(table(Kind), RuleProps, Context),
     mod_acl_user_groups:rebuild(edit, Context),
     Result.
 
-map_props(Props, Context) ->
-    lists:map(
-        fun(Prop) ->
-            map_prop(Prop, Context)
+map_props(Props, Context) when is_list(Props) ->
+    {ok, PropsMap} = z_props:from_list(Props),
+    map_props(PropsMap, Context);
+map_props(Props, Context) when is_map(Props) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            K1 = z_convert:to_binary(K),
+            Acc#{
+                K1 => map_prop(K1, V, Context)
+            }
         end,
-        Props
-    ).
+        #{},
+        Props).
 
-map_prop({acl_user_group_id, Id}, Context) ->
-    {acl_user_group_id, m_rsc:rid(Id, Context)};
-map_prop({content_group_id, Id}, Context) ->
-    {content_group_id, m_rsc:rid(Id, Context)};
-map_prop({category_id, Id}, Context) ->
-    {category_id, m_rsc:rid(Id, Context)};
-map_prop({actions, Actions}, _Context) ->
-    Joined = string:join(
-        [z_convert:to_list(Action) || Action <- Actions],
-        ","
-    ),
-    {actions, Joined};
-map_prop(Prop, _Context) ->
-    Prop.
+map_prop(<<"acl_user_group_id">>, Id, Context) ->
+    m_rsc:rid(Id, Context);
+map_prop(<<"content_group_id">>, Id, Context) ->
+    m_rsc:rid(Id, Context);
+map_prop(<<"category_id">>, Id, Context) ->
+    m_rsc:rid(Id, Context);
+map_prop(<<"actions">>, Actions, _Context) when is_list(Actions) ->
+    Actions1 = lists:map(
+        fun(A) -> z_convert:to_binary(A) end,
+        Actions),
+    iolist_to_binary(z_utils:combine(",", Actions1));
+map_prop(_K, V, _Context) ->
+    V.
 
 delete(Kind, Id, Context) ->
     lager:debug(
@@ -268,7 +307,7 @@ delete(Kind, Id, Context) ->
     ),
     %% Assertion, can only delete edit version of a rule
     {ok, Row} = z_db:select(table(Kind), Id, Context),
-    true = proplists:get_value(is_edit, Row),
+    true = maps:get(<<"is_edit">>, Row),
     {ok, _} = z_db:delete(table(Kind), Id, Context),
     mod_acl_user_groups:rebuild(edit, Context),
     ok.
@@ -293,15 +332,24 @@ revert(Kind, Context) ->
                   [z_acl:user(Context), Kind]),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
-               fun(Ctx) ->
-                       z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = true", Ctx),
-                       All = z_db:assoc("SELECT * FROM " ++ T ++ " WHERE is_edit = false", Ctx),
-                       [z_db:insert(table(Kind),
-                                    z_utils:prop_delete(id, z_utils:prop_replace(is_edit, true, Row)),
-                                    Context) || Row <- All],
-                       ok
-               end,
-               Context),
+        fun(Ctx) ->
+            z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = true", Ctx),
+            {ok, All} = z_db:qmap(
+                    "SELECT * FROM " ++ T ++ " WHERE is_edit = false",
+                    [],
+                    [ {keys, binary} ],
+                    Ctx),
+            lists:foreach(
+                fun(Row) ->
+                    Row1 = Row#{
+                        <<"is_edit">> => true
+                    },
+                    Row2 = maps:remove(<<"id">>, Row1),
+                    z_db:insert(table(Kind), Row2, Ctx)
+                end,
+                All)
+        end,
+        Context),
     mod_acl_user_groups:rebuild(edit, Context),
     Result.
 
@@ -314,15 +362,24 @@ publish(Kind, Context) ->
     ),
     T = z_convert:to_list(table(Kind)),
     Result = z_db:transaction(
-               fun(Ctx) ->
-                       z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = false", Ctx),
-                       All = z_db:assoc("SELECT * FROM " ++ T ++ " WHERE is_edit = true", Ctx),
-                       [z_db:insert(table(Kind),
-                                    z_utils:prop_delete(id, z_utils:prop_replace(is_edit, false, Row)),
-                                    Context) || Row <- All],
-                       ok
-               end,
-               Context),
+       fun(Ctx) ->
+            z_db:q("DELETE FROM " ++ T ++ " WHERE is_edit = false", Ctx),
+            {ok, All} = z_db:qmap(
+                "SELECT * FROM " ++ T ++ " WHERE is_edit = true",
+                [],
+                [ {keys, binary} ],
+                Ctx),
+            lists:foreach(
+                fun(Row) ->
+                    Row1 = Row#{
+                        <<"is_edit">> => false
+                    },
+                    Row2 = maps:remove(<<"id">>, Row1),
+                    z_db:insert(table(Kind), Row2, Ctx)
+                end,
+                All)
+       end,
+       Context),
     mod_acl_user_groups:rebuild(publish, Context),
     Result.
 
@@ -335,15 +392,13 @@ manage_schema(_Version, Context) ->
 ensure_acl_rule_rsc(Context) ->
     case z_db:table_exists(acl_rule_rsc, Context) of
         false ->
-            z_db:create_table(acl_rule_rsc,
-                              shared_table_columns() ++
-                                  [
-                                   #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
-                                   #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
-                                   #column_def{name=category_id, type="integer", is_nullable=true},
-                                   #column_def{name=content_group_id, type="integer", is_nullable=true}
-                                  ],
-                              Context),
+            Columns = shared_table_columns() ++ [
+                #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
+                #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
+                #column_def{name=category_id, type="integer", is_nullable=true},
+                #column_def{name=content_group_id, type="integer", is_nullable=true}
+            ],
+            z_db:create_table(acl_rule_rsc, Columns, Context),
             fk_setnull("acl_rule_rsc", "creator_id", Context),
             fk_setnull("acl_rule_rsc", "modifier_id", Context),
             fk_cascade("acl_rule_rsc", "acl_user_group_id", Context),
@@ -361,13 +416,11 @@ ensure_acl_rule_rsc(Context) ->
 ensure_acl_rule_module(Context) ->
     case z_db:table_exists(acl_rule_module, Context) of
         false ->
-            z_db:create_table(acl_rule_module,
-                              shared_table_columns() ++
-                                  [
-                                   #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
-                                   #column_def{name=module, type="character varying", length=300, is_nullable=false}
-                                  ],
-                              Context),
+            Columns = shared_table_columns() ++ [
+                #column_def{name=acl_user_group_id, type="integer", is_nullable=false},
+                #column_def{name=module, type="character varying", length=300, is_nullable=false}
+            ],
+            z_db:create_table(acl_rule_module, Columns, Context),
             fk_setnull("acl_rule_module", "creator_id", Context),
             fk_setnull("acl_rule_module", "modifier_id", Context),
             fk_cascade("acl_rule_module", "acl_user_group_id", Context),
@@ -383,13 +436,11 @@ ensure_acl_rule_module(Context) ->
 ensure_acl_rule_collab(Context) ->
     case z_db:table_exists(acl_rule_collab, Context) of
         false ->
-            z_db:create_table(acl_rule_collab,
-                              shared_table_columns() ++
-                                  [
-                                   #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
-                                   #column_def{name=category_id, type="integer", is_nullable=true}
-                                  ],
-                              Context),
+            Columns = shared_table_columns() ++ [
+                #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
+                #column_def{name=category_id, type="integer", is_nullable=true}
+            ],
+            z_db:create_table(acl_rule_collab, Columns, Context),
             fk_setnull("acl_rule_collab", "creator_id", Context),
             fk_setnull("acl_rule_collab", "modifier_id", Context),
             fk_cascade("acl_rule_collab", "category_id", Context),
@@ -443,15 +494,15 @@ ensure_fix_nullable(Table, Context) ->
 
 shared_table_columns() ->
     [
-     #column_def{name=id, type="serial", is_nullable=false},
-     #column_def{name=is_edit, type="boolean", is_nullable=false, default="false"},
-     #column_def{name=creator_id, type="integer", is_nullable=true},
-     #column_def{name=modifier_id, type="integer", is_nullable=true},
-     #column_def{name=created, type="timestamp with time zone", is_nullable=true},
-     #column_def{name=modified, type="timestamp with time zone", is_nullable=true},
-     #column_def{name=managed_by, type="character varying", length=255, is_nullable=true},
-     #column_def{name=is_block, type="boolean", is_nullable=false, default="false"},
-     #column_def{name=actions, type="character varying", length=300, is_nullable=true}
+        #column_def{name=id, type="serial", is_nullable=false},
+        #column_def{name=is_edit, type="boolean", is_nullable=false, default="false"},
+        #column_def{name=creator_id, type="integer", is_nullable=true},
+        #column_def{name=modifier_id, type="integer", is_nullable=true},
+        #column_def{name=created, type="timestamp with time zone", is_nullable=true},
+        #column_def{name=modified, type="timestamp with time zone", is_nullable=true},
+        #column_def{name=managed_by, type="character varying", length=255, is_nullable=true},
+        #column_def{name=is_block, type="boolean", is_nullable=false, default="false"},
+        #column_def{name=actions, type="character varying", length=300, is_nullable=true}
     ].
 
 fk_cascade(Table0, Field0, Context) ->
@@ -484,23 +535,28 @@ import_rules(Kind, State, Rules0, Context) ->
                   ++ " WHERE " ++ state_sql_clause(State),
             z_db:equery(Query, Ctx),
             lists:foreach(
-                    fun
-                        ([]) ->
-                            ok;
-                        (R) ->
-                            R1 = [
-                                {modifier_id, z_acl:user(Context)},
-                                {creator_id, z_acl:user(Context)}
-                                | proplists:delete(modifier_id,
-                                    proplists:delete(creator_id, R))
-                            ],
-                            z_db:insert(table(Kind), R1, Ctx)
-                    end,
-                    Rules)
+                fun(Rule) ->
+                    import_rule_1(Kind, Rule, Ctx)
+                end,
+                Rules)
         end,
         Context),
     mod_acl_user_groups:rebuild(State, Context).
 
+import_rule_1(Kind, Rule, Context) when is_list(Rule) ->
+    {ok, RuleMap} = z_props:from_list(Rule),
+    import_rule_1(Kind, RuleMap, Context);
+import_rule_1(Kind, Rule, Context) when is_map(Rule) ->
+    case maps:size(Rule) of
+        0 ->
+            ok;
+        _ ->
+            Rule1 = Rule#{
+                <<"modifier_id">> => z_acl:user(Context),
+                <<"creator_id">> => z_acl:user(Context)
+            },
+            z_db:insert(table(Kind), Rule1, Context)
+    end.
 
 ids_to_names(Rows, Context) ->
     [

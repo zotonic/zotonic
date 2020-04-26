@@ -37,14 +37,14 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ sites_status | Rest ], _Msg, Context) ->
+m_get([ <<"sites_status">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             {ok, {get_sites_status(), Rest}};
         false ->
             {error, eacces}
     end;
-m_get([ site_url, Site | Rest ], _Msg, Context) ->
+m_get([ <<"site_url">>, Site | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             {ok, {site_url(Site), Rest}};
@@ -78,6 +78,14 @@ get_site_config(Site) ->
         {error, _} = Error -> [{site,Site}, Error]
     end.
 
+site_url(Site) when is_binary(Site) ->
+    try
+        SiteAtom = erlang:binary_to_existing_atom(Site, utf8),
+        site_url(SiteAtom)
+    catch
+        error:badarg ->
+            undefined
+    end;
 site_url(Site) when is_atom(Site) ->
     Config = get_site_config(Site),
     proplists:get_value(absurl, Config).

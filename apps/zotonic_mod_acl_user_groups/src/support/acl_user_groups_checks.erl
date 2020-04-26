@@ -73,7 +73,7 @@ state(#context{}) ->
 
 max_upload_size(Context) ->
     Ids = user_groups_all(Context),
-    Sizes = [ m_rsc:p_no_acl(Id, acl_upload_size, Context) || Id <- Ids ],
+    Sizes = [ m_rsc:p_no_acl(Id, <<"acl_upload_size">>, Context) || Id <- Ids ],
     Sizes1 = [ Sz || Sz <- Sizes, is_integer(Sz), Sz > 0 ],
     Sizes2 = [ z_convert:to_integer(Sz) || Sz <- Sizes1 ],
     case Sizes2 of
@@ -205,18 +205,20 @@ acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer
     can_rsc(Id, view, Context);
 acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) ->
     can_media(Mime, Size, Context);
-acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=Cat, props=[]}}, Context) ->
-    % No properties, check default content group of the user.
+acl_is_allowed(#acl_is_allowed{
+        action = insert,
+        object = #acl_rsc{
+            category = Cat,
+            props = #{ <<"content_group_id">> := CGId }
+        }
+    }, Context) when CGId =/= undefined ->
+    can_insert_category(CGId, Cat, Context);
+acl_is_allowed(#acl_is_allowed{
+        action = insert,
+        object = #acl_rsc{ category=Cat }
+    }, Context) ->
+    % Check with default content group of the user.
     can_insert(Cat, Context);
-acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_rsc{category=Cat, props=Props}}, Context) ->
-    case proplists:get_value(content_group_id, Props) of
-        undefined ->
-            % No explicit content group given, the resource will end up in the default
-            % content group of the user.
-            can_insert(Cat, Context);
-        CGId ->
-            can_insert_category(CGId, Cat, Context)
-    end;
 acl_is_allowed(#acl_is_allowed{action=insert, object=Cat}, Context) when is_atom(Cat) ->
     can_insert(Cat, Context);
 acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) ->
@@ -259,7 +261,7 @@ acl_is_allowed_prop(Id, Prop, Context) ->
 %% 40 - collaboration group managers
 %% 50 - private (only for editors)
 privacy(Id, Context) ->
-    case m_rsc:p_no_acl(Id, privacy, Context) of
+    case m_rsc:p_no_acl(Id, <<"privacy">>, Context) of
         N when is_integer(N) ->
             N;
         _OtherOrUndefined ->
@@ -275,9 +277,9 @@ privacy_check(?ACL_PRIVACY_USER_GROUP, false, Id, Context) ->
     % Same user group, but not a person -- apply collaboration group semantics
     privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, false, Id, Context);
 privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, false, Id, Context) ->
-    is_collab_group_member(m_rsc:p_no_acl(Id, content_group_id, Context), Context);
+    is_collab_group_member(m_rsc:p_no_acl(Id, <<"content_group_id">>, Context), Context);
 privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, false, Id, Context) ->
-    is_collab_group_manager(m_rsc:p_no_acl(Id, content_group_id, Context), Context);
+    is_collab_group_manager(m_rsc:p_no_acl(Id, <<"content_group_id">>, Context), Context);
 % People - check their memberships *and* their content group
 privacy_check(?ACL_PRIVACY_USER_GROUP, true, _Id, #context{acl=#aclug{user_groups=[]}}) ->
     false;
@@ -296,9 +298,9 @@ privacy_check(?ACL_PRIVACY_COLLAB_MEMBER, true, Id, #context{acl=#aclug{collab_g
         [] -> false;
         Other ->
             lists:any(fun(UgId) -> lists:member(UgId, CGs) end, Other)
-            orelse lists:member(m_rsc:p_no_acl(Id, content_group_id, Context), CGs)
+            orelse lists:member(m_rsc:p_no_acl(Id, <<"content_group_id">>, Context), CGs)
     end
-    orelse lists:member(m_rsc:p_no_acl(Id, content_group_id, Context), CGs);
+    orelse lists:member(m_rsc:p_no_acl(Id, <<"content_group_id">>, Context), CGs);
 privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, true, _Id, #context{acl=#aclug{collab_groups=[]}}) ->
     false;
 privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, true, Id, #context{user_id=UserId} = Context) ->
@@ -309,29 +311,29 @@ privacy_check(?ACL_PRIVACY_COLLAB_MANAGER, true, Id, #context{user_id=UserId} = 
                 [] -> false;
                 Other ->
                     lists:any(fun(UgId) -> lists:member(UgId, ManagerOf) end, Other)
-                    orelse lists:member(m_rsc:p_no_acl(Id, content_group_id, Context), ManagerOf)
+                    orelse lists:member(m_rsc:p_no_acl(Id, <<"content_group_id">>, Context), ManagerOf)
             end
     end;
 privacy_check(_Privacy, _IsPerson, _Id, _Context) ->
     false.
 
 
-is_private_property(email) -> true;
-is_private_property(phone) -> true;
-is_private_property(phone_mobile) -> true;
-is_private_property(phone_alt) -> true;
-is_private_property(address_street_1) -> true;
-is_private_property(address_street_2) -> true;
-is_private_property(address_postcode) -> true;
-is_private_property(address_city) -> true;
-is_private_property(date_start) -> true;
-is_private_property(date_end) -> true;
-is_private_property(location_lat) -> true;
-is_private_property(location_lng) -> true;
-is_private_property(pivot_location_lat) -> true;
-is_private_property(pivot_location_lng) -> true;
-is_private_property(pivot_geocode) -> true;
-is_private_property(pivot_geocode_qhash) -> true;
+is_private_property(<<"email">>) -> true;
+is_private_property(<<"phone">>) -> true;
+is_private_property(<<"phone_mobile">>) -> true;
+is_private_property(<<"phone_alt">>) -> true;
+is_private_property(<<"address_street_1">>) -> true;
+is_private_property(<<"address_street_2">>) -> true;
+is_private_property(<<"address_postcode">>) -> true;
+is_private_property(<<"address_city">>) -> true;
+is_private_property(<<"date_start">>) -> true;
+is_private_property(<<"date_end">>) -> true;
+is_private_property(<<"location_lat">>) -> true;
+is_private_property(<<"location_lng">>) -> true;
+is_private_property(<<"pivot_location_lat">>) -> true;
+is_private_property(<<"pivot_location_lng">>) -> true;
+is_private_property(<<"pivot_geocode">>) -> true;
+is_private_property(<<"pivot_geocode_qhash">>) -> true;
 is_private_property(_) -> false.
 
 
@@ -406,9 +408,11 @@ acl_rsc_update_check(#acl_rsc_update_check{ id = Id }, Props, Context) when is_i
     CGId = fetch_content_group_id(Id, CatId, Props, Context),
     case acl_rsc_update_check_1(Id, CGId, CatId, Context) of
         true ->
-            Props1 = proplists:delete(category_id, Props),
-            Props2 = proplists:delete(content_group_id, Props1),
-            maybe_filter_acl_props([{category_id, CatId}, {content_group_id, CGId} | Props2], Context);
+            Props1 = Props#{
+                <<"category_id">> => CatId,
+                <<"content_group_id">> => CGId
+            },
+            maybe_filter_acl_props(Props1, Context);
         false ->
             lager:debug("[acl_user_group] denied user ~p insert/update on ~p of category ~p in content-group ~p",
                         [z_acl:user(Context), Id, CatId, CGId]),
@@ -421,9 +425,9 @@ maybe_filter_acl_props(Props, Context) ->
         true ->
             Props;
         false ->
-            Props1 = proplists:delete(acl_upload_size, Props),
-            Props2 = proplists:delete(acl_mime_allowed, Props1),
-            proplists:delete(acl_2fa, Props2)
+            Props1 = maps:remove(<<"acl_upload_size">>, Props),
+            Props2 = maps:remove(<<"acl_mime_allowed">>, Props1),
+            maps:remove(<<"acl_2fa">>, Props2)
     end.
 
 acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{acl=admin}) ->
@@ -433,8 +437,8 @@ acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{user_id=1}) ->
 acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) ->
     can_insert_category(CGId, CatId, Context);
 acl_rsc_update_check_1(Id, CGId, CatId, Context) when is_integer(Id) ->
-    OldCGId = m_rsc:p_no_acl(Id, content_group_id, Context),
-    OldCatId = m_rsc:p_no_acl(Id, category_id, Context),
+    OldCGId = m_rsc:p_no_acl(Id, <<"content_group_id">>, Context),
+    OldCatId = m_rsc:p_no_acl(Id, <<"category_id">>, Context),
     case {OldCGId, OldCatId} of
         {CGId, CatId} ->
             UGs = user_groups(Context),
@@ -445,7 +449,7 @@ acl_rsc_update_check_1(Id, CGId, CatId, Context) when is_integer(Id) ->
 
 
 fetch_content_group_id(Id, CatId, Props, Context) ->
-    case proplists:get_value(content_group_id, Props) of
+    case maps:get(<<"content_group_id">>, Props, undefined) of
         N when is_integer(N) ->
             N;
         undefined ->
@@ -453,12 +457,12 @@ fetch_content_group_id(Id, CatId, Props, Context) ->
                 insert_rsc ->
                     default_content_group(CatId, Context);
                 Id when is_integer(Id) ->
-                    m_rsc:p_no_acl(Id, content_group_id, Context)
+                    m_rsc:p_no_acl(Id, <<"content_group_id">>, Context)
             end
     end.
 
 fetch_category_id(Id, Props, Context) ->
-    case proplists:get_value(category_id, Props) of
+    case maps:get(<<"category_id">>, Props) of
         N when is_integer(N) ->
             N;
         undefined ->
@@ -467,7 +471,7 @@ fetch_category_id(Id, Props, Context) ->
                     {ok, CatId} = m_category:name_to_id(other, Context),
                     CatId;
                 Id ->
-                    m_rsc:p_no_acl(Id, category_id, Context)
+                    m_rsc:p_no_acl(Id, <<"category_id">>, Context)
             end
     end.
 

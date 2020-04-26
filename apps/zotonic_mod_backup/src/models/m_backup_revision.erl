@@ -36,7 +36,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ list, Id | Rest ], _Msg, Context) ->
+m_get([ <<"list">>, Id | Rest ], _Msg, Context) ->
     Id1 = m_rsc:rid(Id, Context),
     Revs = case m_rsc:is_editable(Id1, Context) of
         true -> list_revisions_assoc(Id1, Context);
@@ -48,8 +48,7 @@ m_get(Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
-save_revision(Id, Props, Context) when is_integer(Id) ->
-    Version = proplists:get_value(version, Props),
+save_revision(Id, #{ <<"version">> := Version } = Props, Context) when is_integer(Id), is_map(Props) ->
     LastVersion = z_db:q1("select version from backup_revision where rsc_id = $1 order by created desc limit 1", [Id], Context),
     case Version of
         LastVersion when LastVersion =/= undefined ->
@@ -63,7 +62,7 @@ save_revision(Id, Props, Context) when is_integer(Id) ->
                 ", [
                     Id,
                     ?BACKUP_TYPE_PROPS,
-                    proplists:get_value(version, Props),
+                    Version,
                     UserId,
                     z_string:truncate(
                         z_trans:lookup_fallback(

@@ -108,10 +108,16 @@ insert_movie(Filename, State) ->
     case is_current_upload(State, Context) of
         true ->
             OrgFile = original_filename(State#state.upload),
-            PropsMedia = [
-                {is_video_ok, true}
-            ],
-            m_media:replace_file(#upload{filename=OrgFile, tmpfile=Filename}, State#state.id, [], PropsMedia, [no_touch], Context);
+            PropsMedia = #{
+                <<"is_video_ok">> => true
+            },
+            m_media:replace_file(
+                #upload{filename=OrgFile, tmpfile=Filename},
+                State#state.id,
+                #{},
+                PropsMedia,
+                [no_touch],
+                Context);
         false ->
             lager:info("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
     end.
@@ -127,10 +133,10 @@ insert_broken(State) ->
     Context = z_context:depickle(State#state.pickled_context),
     case is_current_upload(State, Context) of
         true ->
-            PropsMedia = [
-                {mime, <<"video/x-mp4-broken">>}
-            ],
-            m_media:replace_file(undefined, State#state.id, [], PropsMedia, [no_touch], Context);
+            PropsMedia = #{
+                <<"mime">> => <<"video/x-mp4-broken">>
+            },
+            m_media:replace_file(undefined, State#state.id, #{}, PropsMedia, [no_touch], Context);
         false ->
             lager:info("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
     end.
@@ -139,10 +145,10 @@ is_current_upload(State, Context) ->
     case m_rsc:exists(State#state.id, Context) of
         true ->
             case m_media:get(State#state.id, Context) of
-                undefined ->
-                    false;
-                Props ->
-                    proplists:get_value(video_processing_nr, Props) =:= State#state.process_nr
+                #{ <<"video_processing_nr">> := PNr } ->
+                    PNr =:= State#state.process_nr;
+                _ ->
+                    false
             end;
         false ->
             false
@@ -154,7 +160,7 @@ remove_task(State) ->
 
 video_convert(QueuePath, Mime) ->
     Info = mod_video:video_info(QueuePath),
-    video_convert_1(QueuePath, proplists:get_value(orientation, Info), Mime).
+    video_convert_1(QueuePath, maps:get(orientation, Info), Mime).
 
 -define(CMDLINE,
         "ffmpeg -i "

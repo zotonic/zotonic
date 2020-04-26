@@ -39,7 +39,7 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([], _Msg, Context) ->
     {ok, {menu(Context), []}};
-m_get([ menu | Rest ], _Msg, Context) ->
+m_get([ <<"menu">> | Rest ], _Msg, Context) ->
     {ok, {menu(Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),

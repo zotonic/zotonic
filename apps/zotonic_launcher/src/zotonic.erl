@@ -29,8 +29,9 @@
     status/1,
     update/0,
     update/1,
-    run_tests/0,
-    await_startup/0
+    runtests/1,
+    await_startup/0,
+    await_startup/1
 ]).
 
 -compile([{parse_transform, lager_transform}]).
@@ -54,6 +55,45 @@ start() ->
 -spec await_startup() -> ok.
 await_startup() ->
     zotonic_listen_http:await(),
+    ok.
+
+-spec await_startup( atom() ) -> ok | {error, timeout | stopped | removing | term()}.
+await_startup(Site) ->
+    ok = await_startup(),
+    await_startup_1(Site, 500).
+
+await_startup_1(_Site, 0) ->
+    {error, timeout};
+await_startup_1(Site, N) ->
+    case z_sites_manager:wait_for_running(Site) of
+        {error, bad_name} ->
+            timer:sleep(100),
+            await_startup_1(Site, N-1);
+        {error, _} = Error ->
+            Error;
+        ok ->
+            ok
+    end.
+
+%% @doc Called by the 'make test' commands.
+-spec runtests( list(atom()) ) -> ok.
+runtests(Tests) ->
+    erlang:spawn(
+        fun() ->
+            io:format("~nRunning tests:"),
+            lists:foreach(
+                fun(T) ->
+                    io:format("~n - ~p", [T])
+                end,
+                Tests),
+            io:format("~nWaiting for zotonic_site_testsandbox to be started...~n"),
+            ok = await_startup(zotonic_site_testsandbox),
+            io:format("~nStarting eunit tests~n"),
+            case eunit:test(Tests, []) of
+                ok -> init:stop(0);
+                error -> init:stop(1)
+            end
+        end),
     ok.
 
 %% @doc Stop the zotonic server.
@@ -128,7 +168,3 @@ otp_release() ->
         [$R | V] -> V;
         V -> V
     end.
-
-run_tests() ->
-    z_media_preview_tests:test().
-

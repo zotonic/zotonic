@@ -23,7 +23,7 @@
 -export([ m_get/3 ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ version | Rest ], _Msg, Context) ->
+m_get([ <<"version">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_editor_tinymce, version, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),

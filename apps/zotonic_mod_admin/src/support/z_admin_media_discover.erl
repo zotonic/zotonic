@@ -70,34 +70,37 @@ media_insert_rsc_props(ArgsEmbed, Context) ->
     add_qprops(SubjectId, CGId, Context).
 
 add_qprops(undefined, CGId, Context) ->
-    [
-        {content_group_id, CGId},
-        {is_published, z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) )}
-    ]
-    ++ maybe_title(Context);
+    Props = #{
+        <<"content_group_id">> => CGId,
+        <<"is_published">> => z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) )
+    },
+    maybe_title(Props, Context);
 add_qprops(SubjectId, undefined, Context) when is_integer(SubjectId) ->
     SubjCGId = m_rsc:p_no_acl(SubjectId, content_group_id, Context),
     CGId = get_q(<<"content_group_id">>, SubjCGId, Context),
-    [
-        {content_group_id, z_convert:to_integer(CGId)},
-        {is_published, z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) )},
-        {is_dependent, z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )}
-    ]
-    ++ maybe_title(Context);
+    Props = #{
+        <<"content_group_id">> => z_convert:to_integer(CGId),
+        <<"is_published">> => z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
+        <<"is_dependent">> => z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )
+    },
+    maybe_title(Props, Context);
 add_qprops(SubjectId, CGId, Context) when is_integer(SubjectId), is_integer(CGId) ->
     CGId1 = get_q(<<"content_group_id">>, CGId, Context),
-    [
-        {content_group_id, z_convert:to_integer(CGId1)},
-        {is_published, z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) )},
-        {is_dependent, z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )}
-    ]
-    ++ maybe_title(Context).
+    Props = #{
+        <<"content_group_id">> => z_convert:to_integer(CGId1),
+        <<"is_published">> => z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
+        <<"is_dependent">> => z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) )
+    },
+    maybe_title(Props, Context).
 
-maybe_title(Context) ->
+maybe_title(Props, Context) ->
     case z_context:get_q(<<"new_media_title">>, Context) of
-        undefined -> [];
-        <<>> -> [];
-        Title -> [ {title, Title} ]
+        Title when is_binary(Title), Title =/= <<>> ->
+            Props#{
+                <<"title">> => Title
+            };
+        _ ->
+            Props
     end.
 
 get_q(P, Default, Context) ->
@@ -150,7 +153,7 @@ as_proplist(#media_import_props{} = MI) ->
         image -> image;
         website -> website;
         document -> document;
-        _ -> m_media:mime_to_category(proplists:get_value(mime, MI#media_import_props.medium_props))
+        _ -> m_media:mime_to_category(maps:get(<<"mime">>, MI#media_import_props.medium_props, undefined))
     end,
     [
         {description, MI#media_import_props.description},
@@ -171,17 +174,17 @@ try_embed(<<$<, _/binary>> = Html, Context) ->
           end,
     {ok, [
         #media_import_props{
-            prio=1,
-            category=video,
-            description=?__("Embedded Content", Context),
-            rsc_props=[
-                {website, Url}
-            ],
-            medium_props=[
-                {mime, <<"text/html-video-embed">>},
-                {video_embed_code, EmbedCode},
-                {media_import, Html}
-            ]
+            prio = 1,
+            category = video,
+            description = ?__("Embedded Content", Context),
+            rsc_props = #{
+                <<"website">> => Url
+            },
+            medium_props = #{
+                <<"mime">> => <<"text/html-video-embed">>,
+                <<"video_embed_code">> => EmbedCode,
+                <<"media_import">> => Html
+            }
         }
     ]};
 try_embed(Url, Context) ->

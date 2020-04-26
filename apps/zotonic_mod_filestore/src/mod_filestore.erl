@@ -218,30 +218,41 @@ queue_all_stop(Context) ->
     z_pivot_rsc:delete_task(?MODULE, task_queue_all, filestore_queue_all, Context).
 
 task_queue_all(Offset, Max, Context) when Offset =< Max ->
-    Media = z_db:assoc_props("
-                    select *
-                    from medium
-                    order by id asc
-                    limit $1
-                    offset $2",
-                    [?BATCH_SIZE, Offset],
-                    Context),
-    lager:info("Ensuring ~p files are queued for remote upload.", [length(Media)]),
-    lists:foreach(fun(M) ->
-                    queue_medium(M, Context)
-                  end,
-                  Media),
-    {delay, 0, [Offset+?BATCH_SIZE, Max]};
+    case z_db:qmap_props("
+        select *
+        from medium
+        order by id asc
+        limit $1
+        offset $2",
+        [ ?BATCH_SIZE, Offset ],
+        [ {keys, binary} ],
+        Context)
+    of
+        {ok, Media} ->
+            lager:info("Ensuring ~p files are queued for remote upload.", [length(Media)]),
+            lists:foreach(fun(M) ->
+                            queue_medium(M, Context)
+                          end,
+                          Media),
+            {delay, 0, [Offset+?BATCH_SIZE, Max]};
+        {error, _} = Error ->
+            lager:error("Error ~p when queueing files for remote upload.", [Error]),
+            {delay, 60, [Offset, Max]}
+    end;
 task_queue_all(_Offset, _Max, _Context) ->
     ok.
 
 
 queue_medium(Props, Context) ->
-    maybe_queue_file(<<"archive/">>, proplists:get_value(filename, Props), proplists:get_value(is_deletable_file, Props), Props, Context),
+    Filename = maps:get(<<"filename">>, Props, undefined),
+    IsDeletable = maps:get(<<"is_deletable_file">>, Props, undefined),
+    Preview = maps:get(<<"preview_filename">>, Props, undefined),
+    PreviewDeletable = maps:get(<<"is_deletable_preview">>, Props, undefined),
+    maybe_queue_file(<<"archive/">>, Filename, IsDeletable, Props, Context),
     Props1 = [
-        {id, proplists:get_value(id, Props)}
+        {id, maps:get(<<"id">>, Props, undefined)}
     ],
-    maybe_queue_file(<<"archive/">>, proplists:get_value(preview_filename, Props), proplists:get_value(is_deletable_preview, Props), Props1, Context).
+    maybe_queue_file(<<"archive/">>, Preview, PreviewDeletable, Props1, Context).
 
 
 maybe_queue_file(_Prefix, undefined, _IsDeletable, _Props, _Context) ->

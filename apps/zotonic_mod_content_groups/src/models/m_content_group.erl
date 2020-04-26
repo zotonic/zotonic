@@ -34,7 +34,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ is_used, CGId | Rest ], _Msg, Context) ->
+m_get([ <<"is_used">>, CGId | Rest ], _Msg, Context) ->
     {ok, {is_used(CGId, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),

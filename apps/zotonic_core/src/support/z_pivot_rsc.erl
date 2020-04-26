@@ -109,25 +109,26 @@ pivot_delay(Context) ->
 
 %% @doc Return a modified property list with fields that need immediate pivoting on an update.
 pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
-    Props = lists:foldl(fun(Key, All) ->
-                                case proplists:is_defined(Key, UpdateProps) of
-                                    false ->
-                                        [{Key, proplists:get_value(Key, RawProps)}|All];
-                                    true ->
-                                        All
-                                end
-                        end, UpdateProps, [date_start, date_end, title]),
-
+    Props = lists:foldl(
+        fun(Key, Acc) ->
+            case maps:is_key(Key, UpdateProps) of
+                false ->
+                    Acc#{ Key => maps:get(Key, RawProps, undefined) };
+                true ->
+                    Acc
+            end
+        end,
+        UpdateProps,
+        [ <<"date_start">>, <<"date_end">>, <<"title">> ]),
     {DateStart, DateEnd} = pivot_date(Props),
     PivotTitle = truncate(get_pivot_title(Props), 100),
-    Props1 = [
-        {pivot_date_start, DateStart},
-        {pivot_date_end, DateEnd},
-        {pivot_date_start_month_day, month_day(DateStart)},
-        {pivot_date_end_month_day, month_day(DateEnd)},
-        {pivot_title, PivotTitle}
-        | Props
-    ],
+    Props1 = Props#{
+        <<"pivot_date_start">> => DateStart,
+        <<"pivot_date_end">> => DateEnd,
+        <<"pivot_date_start_month_day">> => month_day(DateStart),
+        <<"pivot_date_end_month_day">> => month_day(DateEnd),
+        <<"pivot_title">> => PivotTitle
+    },
     z_notifier:foldr(#pivot_update{id=Id, raw_props=RawProps}, Props1, Context).
 
 month_day(undefined) -> undefined;
@@ -702,26 +703,26 @@ pivot_resource(Id, Context0) ->
                     Tsv  = z_db:q1(iolist_to_binary(["select ", TsvSql]), ArgsD, Context),
                     Rtsv = z_db:q1("select to_tsvector($1)", [TsvIds], Context),
 
-                    KVs = [
-                        {pivot_tsv, Tsv},
-                        {pivot_rtsv, Rtsv},
-                        {pivot_street, truncate(Street, 120)},
-                        {pivot_city, truncate(City, 100)},
-                        {pivot_postcode, truncate(Postcode, 30)},
-                        {pivot_state, truncate(State, 50)},
-                        {pivot_country, truncate(Country, 80)},
-                        {pivot_first_name, truncate(NameFirst, 100)},
-                        {pivot_surname, truncate(NameSurname, 100)},
-                        {pivot_gender, truncate(Gender, 1)},
-                        {pivot_date_start, DateStart},
-                        {pivot_date_end, DateEnd},
-                        {pivot_date_start_month_day, DateStartMonthDay},
-                        {pivot_date_end_month_day, DateEndMonthDay},
-                        {pivot_title, truncate(Title, 100)},
-                        {pivot_location_lat, LocationLat},
-                        {pivot_location_lng, LocationLng}
-                    ],
-                    KVs1= z_notifier:foldr(#pivot_fields{id=Id, rsc=RscProps}, KVs, Context),
+                    KVs = #{
+                        <<"pivot_tsv">> => Tsv,
+                        <<"pivot_rtsv">> =>  Rtsv,
+                        <<"pivot_street">> => truncate(Street, 120),
+                        <<"pivot_city">> => truncate(City, 100),
+                        <<"pivot_postcode">> => truncate(Postcode, 30),
+                        <<"pivot_state">> => truncate(State, 50),
+                        <<"pivot_country">> => truncate(Country, 80),
+                        <<"pivot_first_name">> => truncate(NameFirst, 100),
+                        <<"pivot_surname">> => truncate(NameSurname, 100),
+                        <<"pivot_gender">> => truncate(Gender, 1),
+                        <<"pivot_date_start">> => DateStart,
+                        <<"pivot_date_end">> => DateEnd,
+                        <<"pivot_date_start_month_day">> => DateStartMonthDay,
+                        <<"pivot_date_end_month_day">> => DateEndMonthDay,
+                        <<"pivot_title">> => truncate(Title, 100),
+                        <<"pivot_location_lat">> => LocationLat,
+                        <<"pivot_location_lng">> => LocationLng
+                    },
+                    KVs1 = z_notifier:foldr(#pivot_fields{id=Id, raw_props=RscProps}, KVs, Context),
                     update_changed(Id, KVs1, RscProps, Context),
                     pivot_resource_custom(Id, Context),
 
@@ -744,34 +745,33 @@ render_block(Block, Template, Vars, Context) ->
 
 %% @doc Check which pivot fields are changed, update only those
 update_changed(Id, KVs, RscProps, Context) ->
-    case lists:filter(
-                fun
-                    ({K,V}) when is_list(V) ->
-                        proplists:get_value(K, RscProps) =/= iolist_to_binary(V);
-                    ({K,undefined}) ->
-                        proplists:get_value(K, RscProps) =/= undefined;
-                    ({K,V}) when is_atom(V) ->
-                        proplists:get_value(K, RscProps) =/= z_convert:to_binary(V);
-                    ({K,V}) ->
-                        proplists:get_value(K, RscProps) =/= V
-                end,
-                KVs)
-    of
-        [] ->
-            % No fields changed, nothing to do
-            nop;
-        KVsChanged ->
+    KVsChanged = maps:filter(
+        fun
+            (K, V) when is_list(V) ->
+                maps:get(K, RscProps, undefined) =/= iolist_to_binary(V);
+            (K, undefined) ->
+                maps:get(K, RscProps, undefined) =/= undefined;
+            (K, V) when is_atom(V) ->
+                maps:get(K, RscProps, undefined) =/= z_convert:to_binary(V);
+            (K, V) ->
+                maps:get(K, RscProps, undefined) =/= V
+        end,
+        KVs),
+    case maps:size(KVsChanged) of
+        0 ->
+            ok;
+        _ ->
             % Make Sql update statement for the changed fields
-            {Sql, Args} = lists:foldl(fun({K,V}, {Sq,As}) ->
-                                         {[Sq,
-                                            case As of [] -> []; _ -> $, end,
-                                            z_convert:to_list(K),
-                                            " = $", integer_to_list(length(As)+1)
-                                          ],
-                                          [V|As]}
-                                      end,
-                                      {"update rsc set ",[]},
-                                      KVsChanged),
+            {Sql, Args} = maps:fold(
+                    fun(K, V, {Sq,As}) ->
+                        {[  Sq,
+                            case As of [] -> []; _ -> $, end,
+                            z_convert:to_list(K), " = $", integer_to_list(length(As)+1)
+                        ],
+                        [V|As]}
+                    end,
+                    {"update rsc set ",[]},
+                    KVsChanged),
 
             z_db:q1(iolist_to_binary([Sql, " where id = $", integer_to_list(length(Args)+1)]),
                     lists:reverse([Id|Args]),
@@ -863,29 +863,29 @@ truncate_1(S, Utf8Len, Bytes) ->
 
 %% @doc Fetch the date range from the record
 pivot_date(R) ->
-    DateStart = z_datetime:undefined_if_invalid_date(proplists:get_value(date_start, R)),
-    DateEnd   = z_datetime:undefined_if_invalid_date(proplists:get_value(date_end, R)),
+    DateStart = z_datetime:undefined_if_invalid_date(maps:get(<<"date_start">>, R, undefined)),
+    DateEnd   = z_datetime:undefined_if_invalid_date(maps:get(<<"date_end">>, R, undefined)),
     pivot_date1(DateStart, DateEnd).
 
-    pivot_date1(S, E) when not is_tuple(S) andalso not is_tuple(E) ->
-        {undefined, undefined};
-    pivot_date1(S, E) when not is_tuple(S) andalso is_tuple(E) ->
-        { ?EPOCH_START, E};
-    pivot_date1(S, E) when is_tuple(S) andalso not is_tuple(E) ->
-        {S, ?ST_JUTTEMIS};
-    pivot_date1(S, E) when is_tuple(S) andalso is_tuple(E) ->
-        {S, E}.
+pivot_date1(S, E) when not is_tuple(S) andalso not is_tuple(E) ->
+    {undefined, undefined};
+pivot_date1(S, E) when not is_tuple(S) andalso is_tuple(E) ->
+    { ?EPOCH_START, E};
+pivot_date1(S, E) when is_tuple(S) andalso not is_tuple(E) ->
+    {S, ?ST_JUTTEMIS};
+pivot_date1(S, E) when is_tuple(S) andalso is_tuple(E) ->
+    {S, E}.
 
 
 %% @doc Fetch the first title from the record for sorting.
 get_pivot_title(Id, Context) ->
-    z_string:to_lower(get_pivot_title([{title, m_rsc:p(Id, title, Context)}])).
+    z_string:to_lower(get_pivot_title(#{ <<"title">> => m_rsc:p(Id, <<"title">>, Context) })).
 
 get_pivot_title(Props) ->
-    case proplists:get_value(title, Props) of
-        {trans, []} ->
-            "";
-        {trans, [{_, Text}|_]} ->
+    case maps:get(<<"title">>, Props, <<>>) of
+        #trans{ tr = [] } ->
+            <<>>;
+        #trans{ tr = [{_, Text}|_] } ->
             z_string:to_lower(Text);
         T ->
             z_string:to_lower(T)
@@ -894,8 +894,17 @@ get_pivot_title(Props) ->
 
 %% @doc Return the raw resource data for the pivoter
 get_pivot_rsc(Id, Context) ->
-    FullRecord = z_db:assoc_props_row("select * from rsc where id = $1", [Id], Context),
-    z_notifier:foldl(pivot_rsc_data, FullRecord, Context).
+    case z_db:qmap_props_row(
+        "select * from rsc where id = $1",
+        [ Id ],
+        [ {keys, binary} ],
+        Context)
+    of
+        {ok, FullRecord} ->
+            z_notifier:foldl(#pivot_rsc_data{ id = Id }, FullRecord, Context);
+        {error, _} ->
+            undefined
+    end.
 
 
 %% @doc Translate a language to a language string as used by
@@ -1064,10 +1073,10 @@ custom_columns([{Name, Spec, _Opts}|Rest], Acc) ->
 update_custom_pivot(Id, {Module, Columns}, Context) ->
     TableName = "pivot_" ++ z_convert:to_list(Module),
     Result = case z_db:select(TableName, Id, Context) of
-        {ok, []} ->
-            z_db:insert(TableName, [{id, Id}|Columns], Context);
         {ok, _Row}  ->
-            z_db:update(TableName, Id, Columns, Context)
+            z_db:update(TableName, Id, Columns, Context);
+        {error, enoent} ->
+            z_db:insert(TableName, [ {id, Id} | Columns ], Context)
     end,
     case Result of
         {ok, _} -> ok;

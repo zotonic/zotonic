@@ -174,7 +174,7 @@ get_redirect_page(SignupProps) ->
 ensure_published(UserId, Context) ->
     case m_rsc:p(UserId, is_published, Context) of
         true -> {ok, UserId};
-        false -> m_rsc:update(UserId, [{is_published, true}], Context)
+        false -> m_rsc:update(UserId, #{ <<"is_published">> => true }, Context)
     end.
 
 

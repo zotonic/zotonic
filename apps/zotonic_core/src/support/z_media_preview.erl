@@ -57,8 +57,7 @@ convert(InFile, OutFile, Filters, Context) ->
 
 convert(InFile, MediumFilename, OutFile, Filters, Context) ->
     case z_media_identify:identify(InFile, MediumFilename, MediumFilename, Context) of
-        {ok, FileProps} ->
-            {mime, Mime} = proplists:lookup(mime, FileProps),
+        {ok, #{ <<"mime">> := Mime } = FileProps} ->
             case can_generate_preview(Mime) of
                 true ->
                     case z_mediaclass:expand_mediaclass_checksum(Filters) of
@@ -72,6 +71,8 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                     lager:info("cannot convert a ~p (~p)", [Mime, InFile]),
                     {error, mime_type}
             end;
+        {ok, _} ->
+            {error, mime_type};
         {error, Reason} ->
             {error, Reason}
     end.
@@ -116,12 +117,8 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
 
 % We need to set a bigger density for PDF rendering, otherwise the resulting
 % image is too small.
-opt_density(Props) ->
-    case proplists:get_value(mime, Props) of
-        <<"application/pdf">> -> " -density 150x150 ";
-        "application/pdf" -> " -density 150x150 ";
-        _Mime -> ""
-    end.
+opt_density(#{ <<"mime">> := <<"application/pdf">> }) -> " -density 150x150 ";
+opt_density(_) -> "".
 
 run_cmd(Cmd, OutFile) ->
     jobs:run(media_preview_jobs,
@@ -168,9 +165,9 @@ infile_suffix(_) -> "[0]".
 %% @spec size(MediaRef, Filters, Context) -> {size, Width, Height, ResizedMime} | {error, Reason}
 %%   MediaRef = Filename | MediaProps
 %% @doc Calculate the size of the resulting image.
-size([{_Prop, _Value}|_] = Props, Filters, _Context) ->
+size(Props, Filters, _Context) when is_map(Props) ->
     size_props(Props, Filters);
-size(InFile, Filters, Context) ->
+size(InFile, Filters, Context) when is_binary(InFile); is_integer(InFile) ->
     case z_media_identify:identify(InFile, Context) of
         {ok, FileProps} ->
             size_props(FileProps, Filters);
@@ -179,31 +176,33 @@ size(InFile, Filters, Context) ->
     end.
 
 
-    size_props(FileProps, Filters) ->
-        {mime, Mime} = proplists:lookup(mime, FileProps),
-        case can_generate_preview(Mime) of
-            true ->
-                {width, ImageWidth}   = proplists:lookup(width, FileProps),
-                {height, ImageHeight} = proplists:lookup(height, FileProps),
-                Orientation = proplists:get_value(orientation, FileProps, 1),
-
-                ReqWidth   = z_convert:to_integer(proplists:get_value(width, Filters)),
-                ReqHeight  = z_convert:to_integer(proplists:get_value(height, Filters)),
-                {CropPar,_Filters1} = fetch_crop(Filters),
-                {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation, is_enabled(upscale, Filters)),
-                case CropArgs of
-                    none ->
-                        case is_enabled(extent, Filters) of
-                            true when is_integer(ReqWidth) andalso is_integer(ReqHeight) ->
-                                {size, ReqWidth, ReqHeight, <<"image/jpeg">>};
-                            _ ->
-                                {size, ResizeWidth, ResizeHeight, <<"image/jpeg">>}
-                        end;
-                    {_CropL, _CropT, CropWidth, CropHeight} -> {size, CropWidth, CropHeight, <<"image/jpeg">>}
-                end;
-            false ->
-                {error, {no_preview_for_mimetype, Mime}}
-        end.
+size_props(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := ImageHeight } = FileProps, Filters) ->
+    case can_generate_preview(Mime) of
+        true ->
+            Orientation = maps:get(<<"orientation">>, FileProps, 1),
+            ReqWidth = z_convert:to_integer(proplists:get_value(width, Filters)),
+            ReqHeight = z_convert:to_integer(proplists:get_value(height, Filters)),
+            {CropPar,_Filters1} = fetch_crop(Filters),
+            {ResizeWidth,ResizeHeight,CropArgs} = calc_size(
+                ReqWidth, ReqHeight,
+                ImageWidth, ImageHeight,
+                CropPar, Orientation,
+                is_enabled(upscale, Filters)),
+            case CropArgs of
+                none ->
+                    case is_enabled(extent, Filters) of
+                        true when is_integer(ReqWidth) andalso is_integer(ReqHeight) ->
+                            {size, ReqWidth, ReqHeight, <<"image/jpeg">>};
+                        _ ->
+                            {size, ResizeWidth, ResizeHeight, <<"image/jpeg">>}
+                    end;
+                {_CropL, _CropT, CropWidth, CropHeight} -> {size, CropWidth, CropHeight, <<"image/jpeg">>}
+            end;
+        false ->
+            {error, {no_preview_for_mimetype, Mime}}
+    end;
+size_props(Props, _Filters) ->
+    {error, {no_preview_for_mimetype, maps:get(<<"mime">>, Props, undefined)}}.
 
 
 %% @doc Check if we can generate a preview image of the given mime type
@@ -216,16 +215,16 @@ can_generate_preview(_Mime) -> false.
 
 
 %% @doc Map filters to commandline options
-cmd_args(FileProps, Filters, OutMime) ->
-    {width, ImageWidth}   = proplists:lookup(width, FileProps),
-    {height, ImageHeight} = proplists:lookup(height, FileProps),
-    {mime, Mime0} = proplists:lookup(mime, FileProps),
-    Mime = z_convert:to_binary(Mime0),
-    Orientation = proplists:get_value(orientation, FileProps, 1),
+cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := ImageHeight } = FileProps, Filters, OutMime) ->
+    Orientation = maps:get(<<"orientation">>, FileProps, 1),
     ReqWidth   = proplists:get_value(width, Filters),
     ReqHeight  = proplists:get_value(height, Filters),
     {CropPar,Filters1} = fetch_crop(Filters),
-    {ResizeWidth,ResizeHeight,CropArgs} = calc_size(ReqWidth, ReqHeight, ImageWidth, ImageHeight, CropPar, Orientation, is_enabled(upscale, Filters)),
+    {ResizeWidth,ResizeHeight,CropArgs} = calc_size(
+        ReqWidth, ReqHeight,
+        ImageWidth, ImageHeight,
+        CropPar, Orientation,
+        is_enabled(upscale, Filters)),
     Filters2   = [  {make_image, Mime},
                     {correct_orientation, Orientation},
                     {resize, ResizeWidth, ResizeHeight, is_enabled(upscale, Filters)},

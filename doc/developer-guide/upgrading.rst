@@ -46,6 +46,85 @@ their own production images anyway.
 
 See for more information :ref:`guide-docker`.
 
+
+Sites and modules are now OTP apps
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Both sites and modules now follow the standard `OTP directory structure`_,
+  which means all Erlang files should reside in :file:`src/` and all other files
+  (templates, dispatch rules etc.) in :file:`priv`/.
+
+  Before::
+
+    yoursite/
+        models/
+            m_some_model.erl
+        templates/
+            some_template.tpl
+        yoursite.erl
+        config
+        ...
+
+
+  After::
+
+    yoursite/
+        priv/
+            zotonic_site.config
+            templates/some_template.tpl
+            ...
+        src/
+            models/m_some_model.erl
+            yoursite.erl
+            yoursite.app.src
+            ...
+        rebar.config
+
+* The ``user_sites_dir`` and ``user_modules_dir`` configurations have been removed.
+  The default location for sites and modules is now the ``apps_user`` directory.
+  With the ``ZOTONIC_APPS`` environment variable you can define an additional source directory
+  outside the Zotonic umbrella ``apps`` directory.
+
+  To upgrade, move your ``user/modules`` and ``user/sites`` applications to the ``apps_user``
+  directory.
+
+
+Resources
+^^^^^^^^^
+
+* All resources are now *maps* with *binary* keys. Use of the previous 0.x
+  proplists is deprecated, the fetch routines will always return maps, the
+  update routines will convert property lists to maps before updating.
+
+* The ``name_to_id_check/2`` functions were removed from ``m_category``,
+  ``m_predicate`` and ``m_rsc``.
+
+  Before::
+
+    Id = m_rsc:name_to_id_check(Value, Context).
+
+  After::
+
+    {ok, Id} = m_rsc:name_to_id(Value, Context).
+
+* Inserting or deleting an edge no longer modifies the last modified and
+  modifier properties of the edge’s subject resource.
+
+* There are extra access controls on rsc properties. The ``privavy`` property
+  controls what is visible for whom.
+
+* The function ``m_rsc:get_visible/2`` has been removed. The function ``m_rsc:get/2``
+  now checks on visibility of properties. To fetch all properties, either  use ``m_rsc:get_raw/2``
+  or call ``m_rsc:get/2`` as a administrator level user.
+
+Media
+^^^^^
+
+The medium record is now a *map* with *binary* keys. Use of the previous 0.x
+proplists is deprecated, the fetch routines will always return maps, the
+update routines will convert property lists to maps before updating.
+
+
 ACL
 ^^^
 
@@ -142,71 +221,6 @@ Removed deprecated functions
   ``z_utils:name_for_site/2`` instead.
 * The ``{% stream %}`` tag was removed.
 * Removed older TinyMCE versions 3.5.0 and 4.2.4.
-
-Resources
-^^^^^^^^^
-
-* The ``name_to_id_check/2`` functions were removed from ``m_category``,
-  ``m_predicate`` and ``m_rsc``.
-
-  Before::
-
-    Id = m_rsc:name_to_id_check(Value, Context).
-
-  After::
-
-    {ok, Id} = m_rsc:name_to_id(Value, Context).
-
-* Inserting or deleting an edge no longer modifies the last modified and
-  modifier properties of the edge’s subject resource.
-
-* There are extra access controls on rsc properties. The ``privavy`` property
-  controls what is visible for whom.
-
-* The function ``m_rsc:get_visible/2`` has been removed. The function ``m_rsc:get/2``
-  now checks on visibility of properties. To fetch all properties, either  use ``m_rsc:get_raw/2``
-  or call ``m_rsc:get/2`` as a administrator level user.
-
-Sites and modules
-^^^^^^^^^^^^^^^^^
-
-* Both sites and modules now follow the standard `OTP directory structure`_,
-  which means all Erlang files should reside in :file:`src/` and all other files
-  (templates, dispatch rules etc.) in :file:`priv`/.
-
-  Before::
-
-    yoursite/
-        models/
-            m_some_model.erl
-        templates/
-            some_template.tpl
-        yoursite.erl
-        config
-        ...
-
-
-  After::
-
-    yoursite/
-        priv/
-            zotonic_site.config
-            templates/some_template.tpl
-            ...
-        src/
-            models/m_some_model.erl
-            yoursite.erl
-            yoursite.app.src
-            ...
-        rebar.config
-
-* The ``user_sites_dir`` and ``user_modules_dir`` configurations have been removed.
-  The default location for sites and modules is now the ``apps_user`` directory.
-  With the ``ZOTONIC_APPS`` environment variable you can define an additional source directory
-  outside the Zotonic umbrella ``apps`` directory.
-
-  To upgrade, move your ``user/modules`` and ``user/sites`` applications to the ``apps_user``
-  directory.
 
 
 Module schema and data initialization

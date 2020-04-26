@@ -2,7 +2,7 @@
 
 {% with blocks|if_undefined:(m.admin_blocks.list[id]) as blocks %}
 <div id="edit-blocks-wrapper">
-    <input type="hidden" id="block-" name="block-" value="" />
+    <input type="hidden" name="block" value="" />
     {% include "_admin_edit_block_addblock.tpl" %}
     <ul class="blocks ui-sortable" id="edit-blocks">
         {% block blocks %}

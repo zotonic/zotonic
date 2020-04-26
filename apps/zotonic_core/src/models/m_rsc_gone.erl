@@ -39,9 +39,9 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ Id, new_location | Rest ], _Msg, Context) ->
+m_get([ Id, <<"new_location">> | Rest ], _Msg, Context) ->
     {ok, {get_new_location(Id, Context), Rest}};
-m_get([ Id, is_gone | Rest ], _Msg, Context) ->
+m_get([ Id, <<"is_gone">> | Rest ], _Msg, Context) ->
     {ok, {is_gone(Id, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),

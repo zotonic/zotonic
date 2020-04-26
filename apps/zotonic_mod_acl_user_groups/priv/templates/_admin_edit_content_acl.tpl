@@ -36,7 +36,7 @@
         <div>
             {% with id.privacy as privacy %}
             <select class="form-control" id="{{ #privacy }}" name="privacy">
-                <option value="0">{_ Everybody _}</option>
+                <option value="0">{_ People who can view this page _}</option>
                 <option value="10" {% if privacy == 10 %}selected{% endif %}>{_ Members _}</option>
                 {% if id.is_a.person or privacy == 20 %}
                     <option value="20" {% if privacy == 20 %}selected{% endif %}>{_ Members of same user group _}</option>

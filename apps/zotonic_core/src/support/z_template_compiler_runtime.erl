@@ -270,25 +270,32 @@ find_nested_value(V, [K|Ks], TplVars, Context) ->
     find_nested_value(find_value(K, V, TplVars, Context), Ks, TplVars, Context).
 
 
+-define(is_property_key(K), (is_binary(K) orelse is_atom(K))).
+-define(is_resource(K), (is_integer(K) orelse is_binary(K) orelse is_atom(K))).
+
 %% @doc Find the value of key in some structure.
 -spec find_value(Key :: term(), Vars :: term(), TplVars :: map(), Context :: term()) -> term().
 find_value(undefined, _, _TplVars, _Context) ->
     undefined;
 find_value(_, undefined, _TplVars, _Context) ->
     undefined;
-find_value(Key, [N|_], _TplVars, Context) when is_atom(Key), is_integer(N) ->
+find_value(Key, [N|_], _TplVars, Context) when ?is_property_key(Key), is_integer(N) ->
     % Assume a predicate/property lookup in a list of ids, map to lookup of first entry
     m_rsc:p(N, Key, Context);
-find_value(Key, Id, _TplVars, Context) when is_atom(Key), is_integer(Id) ->
+find_value(Key, Id, _TplVars, Context) when ?is_property_key(Key), ?is_resource(Id) ->
     % Property of a resource, just assume an integer is a rsc id
     m_rsc:p(Id, Key, Context);
-find_value(Key, RscName, _TplVars, Context) when is_atom(Key), is_atom(RscName) ->
-    % Property of a resource, just assume an integer is a rsc id
-    m_rsc:p(RscName, Key, Context);
 find_value(Name, [[{A,_}|_]|_] = Blocks, _TplVars, _Context ) when is_atom(A), not is_integer(Name) ->
-    % List of proplists - blocks in the rsc
+    % List of proplists - blocks in the old style list rsc
     NameB = z_convert:to_binary(Name),
     case lists:dropwhile(fun(Ps) -> proplists:get_value(name, Ps) =/= NameB end, Blocks) of
+        [] -> undefined;
+        [Block|_] -> Block
+    end;
+find_value(Name, [#{}|_] = Blocks, _TplVars, _Context ) when not is_integer(Name) ->
+    % List of maps - blocks in the rsc
+    NameB = z_convert:to_binary(Name),
+    case lists:dropwhile( fun (B) -> maps:get(<<"name">>, B, undefined) =/= NameB end, Blocks ) of
         [] -> undefined;
         [Block|_] -> Block
     end;

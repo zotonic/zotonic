@@ -47,7 +47,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ paged, SearchProps | Rest ], _Msg, Context) ->
+m_get([ <<"paged">>, SearchProps | Rest ], _Msg, Context) ->
     {ok, {search_pager(SearchProps, Context), Rest}};
 m_get([ SearchProps | Rest ], _Msg, Context) ->
     {ok, {search(SearchProps, Context), Rest}};

@@ -62,20 +62,24 @@ manage(Module, Datamodel, Options, Context) ->
 manage_medium(Module, {Name, Props}, Options, Context) ->
     manage_resource(Module, {Name, media, Props}, Options, Context);
 
+manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Options, Context) when is_list(Props) ->
+    manage_medium(Module, {Name, {EmbedService, EmbedCode}, z_props:from_props(Props)}, Options, Context);
 manage_medium(Module, {Name, {EmbedService, EmbedCode}, Props}, Options, Context) ->
     case manage_resource(Module, {Name, media, Props}, Options, Context) of
         ok ->
             ok;
         {ok, Id} ->
-            MediaProps = [
-                {mime, <<"text/html-video-embed">>},
-                {video_embed_service, EmbedService},
-                {video_embed_code, EmbedCode}
-            ],
+            MediaProps = #{
+                <<"mime">> => <<"text/html-video-embed">>,
+                <<"video_embed_service">> => EmbedService,
+                <<"video_embed_code">> => EmbedCode
+            },
             m_media:replace(Id, MediaProps, Context),
             {ok, Id}
     end;
 
+manage_medium(Module, {Name, Filename, Props}, Options, Context) when is_list(Props) ->
+    manage_medium(Module, {Name, Filename, z_props:from_props(Props)}, Options, Context);
 manage_medium(Module, {Name, Filename, Props}, Options, Context) ->
     case manage_resource(Module, {Name, media, Props}, Options, Context) of
         ok ->
@@ -85,7 +89,8 @@ manage_medium(Module, {Name, Filename, Props}, Options, Context) ->
             {ok, Id}
     end.
 
-
+manage_category(Module, {Name, ParentCategory, Props}, Options, Context) when is_list(Props) ->
+    manage_category(Module, {Name, ParentCategory, z_props:from_props(Props)}, Options, Context);
 manage_category(Module, {Name, ParentCategory, Props}, Options, Context) ->
     case manage_resource(Module, {Name, category, Props}, Options, Context) of
         ok ->
@@ -104,13 +109,16 @@ manage_category(Module, {Name, ParentCategory, Props}, Options, Context) ->
             end
     end.
 
-
+manage_predicate(Module, {Name, Uri, Props, ValidFor}, Options, Context) when is_list(Props) ->
+    manage_predicate(Module, {Name, Uri, z_props:from_props(Props), ValidFor}, Options, Context);
 manage_predicate(Module, {Name, Uri, Props, ValidFor}, Options, Context) ->
-    manage_predicate(Module, {Name, [{uri,Uri}|Props], ValidFor}, Options, Context);
+    manage_predicate(Module, {Name, Props#{ <<"uri">> => Uri }, ValidFor}, Options, Context);
 
+manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) when is_list(Props) ->
+    manage_predicate(Module, {Name, z_props:from_props(Props), ValidFor}, Options, Context);
 manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) ->
-    Category = proplists:get_value(category, Props, predicate),
-    case manage_resource(Module, {Name, Category, lists:keydelete(category, 1, Props)}, Options, Context) of
+    Category = maps:get(<<"category">>, Props, predicate),
+    case manage_resource(Module, {Name, Category, maps:remove(<<"category">>, Props)}, Options, Context) of
         ok ->
             ok;
         {ok, Id} ->
@@ -119,6 +127,8 @@ manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) ->
     end.
 
 
+manage_resource(Module, {Name, Category, Props0}, Options, Context) when is_list(Props0) ->
+    manage_resource(Module, {Name, Category, z_props:from_props(Props0)}, Options, Context);
 manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
     case m_category:name_to_id(Category, Context) of
         {ok, CatId} ->
@@ -130,7 +140,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                             NewProps = update_new_props(Module, Id, Props, Options, Context),
                             m_rsc_update:update(
                                     Id,
-                                    [{managed_props, z_html:escape_props(Props)} | NewProps],
+                                    NewProps#{ <<"managed_props">> => z_html:escape_props(Props) },
                                     [{is_import, true}],
                                     Context),
                             ok;
@@ -141,36 +151,35 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                     end;
                 {error, {unknown_rsc, _}} ->
                     %% new resource, or old resource
-                    Props1 = [
-                        {name, Name},
-                        {category_id, CatId},
-                        {installed_by, Module},
-                        {managed_props, z_html:escape_props(Props)}
-                        | Props
-                    ],
-                    Props2 = case proplists:get_value(is_published, Props1) of
-                                 undefined -> [{is_published, true} | Props1];
+                    Props1 = #{
+                        <<"name">> => Name,
+                        <<"category_id">> => CatId,
+                        <<"installed_by">> => Module,
+                        <<"managed_prop">> => z_html:escape_props(Props)
+                    },
+                    Props2 = case maps:get(<<"is_published">>, Props1, undefined) of
+                                 undefined -> Props1#{ <<"is_published">> => true };
                                  _ -> Props1
                              end,
-                    Props4 = case proplists:get_value(is_protected, Props2) of
-                                 undefined -> [{is_protected, true} | Props2];
+                    Props4 = case maps:get(<<"is_protected">>, Props2, undefined) of
+                                 undefined -> Props2#{ <<"is_protected">> => true };
                                  _ -> Props2
                              end,
-                    Props5 = case proplists:get_value(is_dependent, Props4) of
-                                 undefined -> [{is_dependent, false} | Props4];
+                    Props5 = case maps:get(<<"is_dependent">>, Props4, undefined) of
+                                 undefined -> Props4#{ <<"is_dependent">> => false };
                                  _ -> Props4
                              end,
                     lager:info("Creating new ~p '~p'", [Category, Name]),
                     {ok, Id} = m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context),
-                    case proplists:get_value(media_url, Props5) of
-                        undefined ->
-                            nop;
+                    case maps:get(<<"media_url">>, Props5, undefined) of
+                        undefined -> nop;
+                        <<>> -> nop;
                         Url ->
                             m_media:replace_url(Url, Id, [], Context)
                     end,
-                    case proplists:get_value(media_file, Props5) of
-                        undefined ->
-                            nop;
+                    case maps:get(<<"media_file">>, Props5, undefined) of
+                        undefined -> nop;
+                        <<>> -> nop;
                         File ->
                             m_media:replace_file(path(File, Context), Id, Context)
                     end,
@@ -182,37 +191,37 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
     end.
 
 update_new_props(Module, Id, NewProps, Options, Context) ->
-    case m_rsc:p(Id, managed_props, Context) of
+    case m_rsc:p(Id, <<"managed_props">>, Context) of
         undefined ->
             NewProps;
         PreviousProps ->
-            lists:foldl(
-                fun({K, V}, Props) ->
-                    case m_rsc:p(Id, K, Context) of
+            maps:fold(
+                fun(K, V, Acc) ->
+                    case m_rsc:p_no_acl(Id, K, Context) of
                         V ->
                             %% New value == current value
-                            Props;
+                            Acc;
                         DbVal ->
-                            case proplists:get_value(K, PreviousProps) of
+                            case maps:get(K, PreviousProps, undefined) of
                                 DbVal ->
                                     %% New value in NewProps, unchanged in DB
-                                    [{K,V} | Props];
+                                    Acc#{ K => V };
                                 _PrevVal when is_binary(DbVal) ->
-                                    %% Compare with converted to list value
-                                    case z_convert:to_list(DbVal) of
+                                    %% Compare with converted to binary value
+                                    case z_convert:to_binary(DbVal) of
                                         V ->
-                                            Props;
+                                            Acc;
                                         _X ->
                                             %% Changed by someone else
-                                            maybe_force_update(K, V, Props, Module, Id, Options, Context)
+                                            maybe_force_update(K, V, Acc, Module, Id, Options, Context)
                                     end;
                                 _PrevVal2 ->
                                     %% Changed by someone else
-                                    maybe_force_update(K, V, Props, Module, Id, Options, Context)
+                                    maybe_force_update(K, V, Acc, Module, Id, Options, Context)
                             end
                     end
                 end,
-                [],
+                #{},
                 NewProps)
     end.
 
@@ -221,7 +230,7 @@ maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
     case lists:member(force_update, Options) of
         true ->
             lager:info("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
-            z_utils:prop_replace(K, V, Props);
+            Props#{ K => V };
         false ->
             lager:info("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]),
             Props
@@ -257,14 +266,11 @@ manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Options, Context
 
 
 map_props(Props, Context) ->
-    map_props(Props, Context, []).
-
-map_props([], _Context, Acc) ->
-    Acc;
-map_props([{Key, Value}|Rest], Context, Acc) ->
-    Value2 = map_prop(Value, Context),
-    map_props(Rest, Context, [{Key, Value2}|Acc]).
-
+    maps:map(
+        fun(_K, V) ->
+            map_prop(V, Context)
+        end,
+        Props).
 
 map_prop({file, Filename}, Context) ->
     {ok, Data} = file:read_file( path(Filename, Context) ),

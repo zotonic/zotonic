@@ -35,13 +35,13 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ has_collaboration_groups | Rest ], _Msg, Context) ->
+m_get([ <<"has_collaboration_groups">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:has_collab_groups(Context), Rest}};
-m_get([ is_used, Cat | Rest ], _Msg, Context) ->
+m_get([ <<"is_used">>, Cat | Rest ], _Msg, Context) ->
     {ok, {is_used(Cat, Context), Rest}};
-m_get([ collab_group_update | Rest ], _Msg, Context) ->
+m_get([ <<"collab_group_update">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_acl_user_groups, collab_group_update, Context), Rest}};
-m_get([ collab_group_link | Rest ], _Msg, Context) ->
+m_get([ <<"collab_group_link">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_acl_user_groups, collab_group_link, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),

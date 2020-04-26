@@ -231,11 +231,11 @@ create_new(List, Context) ->
             {error, _} -> text;
             {ok, C1} -> C1
         end,
-        Props = [
-            {is_published, false},
-            {category, Category},
-            {title, ?__("New page", Context)}
-        ],
+        Props = #{
+            <<"is_published">> => false,
+            <<"category">> => Category,
+            <<"title">> => ?__("New page", Context)
+        },
         {ok, RscId} = m_rsc:insert(Props, Context),
         OuterId = iolist_to_binary(["outernew-",integer_to_list(RscId)]),
         InnerId = iolist_to_binary(["innernew-",integer_to_list(RscId)]),
@@ -325,12 +325,12 @@ remove_invisible([Id|Rest], Acc, Context) ->
 set_menu(Menu, Context) ->
     case m_rsc:rid(main_menu, Context) of
         undefined ->
-            Props = [
-                {category, menu},
-                {is_published, true},
-                {title, <<"Main menu">>},
-                {menu, Menu}
-            ],
+            Props = #{
+                <<"category">> => menu,
+                <<"is_published">> => true,
+                <<"title">> => <<"Main menu">>,
+                <<"menu">> => Menu
+            },
             {ok, _Id} = m_rsc:insert(Props, z_acl:sudo(Context)),
             ok;
         Id ->

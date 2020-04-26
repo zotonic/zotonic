@@ -49,15 +49,15 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([], _Msg, Context) ->
     {ok, {all(Context), []}};
-m_get([ all | Rest ], _Msg, Context) ->
+m_get([ <<"all">> | Rest ], _Msg, Context) ->
     {ok, {all(Context), Rest}};
-m_get([ is_used, Pred | Rest ], _Msg, Context) ->
+m_get([ <<"is_used">>, Pred | Rest ], _Msg, Context) ->
     {ok, {is_used(Pred, Context), Rest}};
-m_get([ object_category, Key | Rest ], _Msg, Context) ->
+m_get([ <<"object_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {object_category(Key, Context), Rest}};
-m_get([ subject_category, Key | Rest ], _Msg, Context) ->
+m_get([ <<"subject_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {subject_category(Key, Context), Rest}};
-m_get([ is_valid_object_category, Predicate, Category | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_object_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = object_category(Predicate, Context),
     IsValid = case lists:member({CatId}, ValidCats) of
@@ -75,7 +75,7 @@ m_get([ is_valid_object_category, Predicate, Category | Rest ], _Msg, Context) -
                 IsA)
     end,
     {ok, {IsValid, Rest}};
-m_get([ is_valid_subject_category, Predicate, Category | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_subject_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = subject_category(Predicate, Context),
     IsValid = case lists:member({CatId}, ValidCats) of
@@ -229,18 +229,18 @@ all(Context) ->
     z_depcache:memo(F, predicate, ?DAY, Context).
 
 %% @doc Insert a new predicate, sets some defaults.
--spec insert(binary()|list(), #context{}) -> {ok, integer()} | {error, any()}.
+-spec insert(binary()|list(), z:context()) -> {ok, integer()} | {error, any()}.
 insert(Title, Context) ->
     Name = z_string:to_name(Title),
     Uri  = "http://zotonic.net/predicate/" ++ Name,
-    Props = [
-        {title, Title},
-        {name, Name},
-        {uri, Uri},
-        {category, predicate},
-        {group, admins},
-        {is_published, true}
-    ],
+    Props = #{
+        <<"title">> => Title,
+        <<"name">> => Name,
+        <<"uri">> => Uri,
+        <<"category">> => predicate,
+        <<"group">> => admins,
+        <<"is_published">> => true
+    },
     case m_rsc:insert(Props, Context) of
         {ok, Id} ->
             flush(Context),
@@ -256,7 +256,7 @@ flush(Context) ->
 
 
 %% @doc Reset the list of valid subjects and objects.
--spec update_noflush(integer(), list(), list(), #context{}) -> ok.
+-spec update_noflush(integer(), list(), list(), z:context()) -> ok.
 update_noflush(Id, Subjects, Objects, Context) ->
     SubjectIds0 = [m_rsc:rid(N, Context) || N <- Subjects, N /= [], N /= <<>>],
     ObjectIds0 = [m_rsc:rid(N, Context) || N <- Objects, N /= [], N /= <<>>],

@@ -55,25 +55,23 @@ event(#submit{message={user_add, Props}}, Context) ->
             NamePrefix = z_context:get_q(<<"name_surname_prefix">>, Context, <<>>),
             NameSur = z_context:get_q_validated(<<"name_surname">>, Context),
             Category = z_context:get_q(<<"category">>, Context, person),
+            Email = z_context:get_q_validated(<<"email">>, Context),
+            NameProps = #{
+                <<"name_first">> => NameFirst,
+                <<"name_surname_prefix">> => NamePrefix,
+                <<"name_surname">> => NameSur
+            },
             Vs = [
-                {id, [
-                    {name_first, NameFirst},
-                    {name_surname_prefix, NamePrefix},
-                    {name_surname, NameSur}
-                ]}
+                {id, NameProps}
             ],
             {Title, _} = z_template:render_to_iolist("_name.tpl", Vs, Context),
-            Email = z_context:get_q_validated(<<"email">>, Context),
-            PersonProps = [
-                {is_published, true},
-                {category, Category},
-                {title, iolist_to_binary(Title)},
-                {name_first, NameFirst},
-                {name_surname_prefix, NamePrefix},
-                {name_surname, NameSur},
-                {email, Email},
-                {creator_id, self}
-            ],
+            PersonProps = NameProps#{
+                <<"is_published">> => true,
+                <<"category">> => Category,
+                <<"title">> => unicode:characters_to_binary(Title),
+                <<"email">> => Email,
+                <<"creator_id">> => self
+            },
 
             F = fun(Ctx) ->
                 case m_rsc:insert(PersonProps, Ctx) of
@@ -86,9 +84,11 @@ event(#submit{message={user_add, Props}}, Context) ->
                         end,
                         case z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)) of
                             true ->
-                                Vars = [{id, PersonId},
-                                        {username, Username},
-                                        {password, Password}],
+                                Vars = [
+                                    {id, PersonId},
+                                    {username, Username},
+                                    {password, Password}
+                                ],
                                 z_email:send_render(Email, "email_admin_new_user.tpl", Vars, Context);
                             false ->
                                 nop

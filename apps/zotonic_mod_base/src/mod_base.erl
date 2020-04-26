@@ -57,11 +57,12 @@ observe_edge_delete(#edge_delete{ subject_id=SubjectId }, Context) ->
 %% @doc Return the filename of a still image to be used for image tags.
 %% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename} | {ok, {filepath, Filename, Path}}
 observe_media_stillimage(#media_stillimage{props=Props}, Context) ->
-    case proplists:get_value(preview_filename, Props) of
+    case maps:get(<<"preview_filename">>, Props, undefined) of
         None when None =:= <<>>; None =:= undefined ->
-            case proplists:get_value(mime, Props) of
+            case maps:get(<<"mime">>, Props, undefined) of
                 undefined -> undefined;
                 [] -> undefined;
+                <<>> -> undefined;
                 Mime ->
                     case z_media_preview:can_generate_preview(Mime) of
                         true ->
@@ -69,17 +70,16 @@ observe_media_stillimage(#media_stillimage{props=Props}, Context) ->
                             undefined;
                         false ->
                             %% Serve an icon representing the mime type.
-                            [A,B] = string:tokens(z_convert:to_list(Mime), "/"),
+                            [ A, B ] = binary:split(Mime, <<"/">>),
                             Files = [
-                                "images/mimeicons/"++A++[$-|B]++".png",
-                                "images/mimeicons/"++A++".png",
-                                "images/mimeicons/application-octet-stream.png"
+                                <<"images/mimeicons/", A/binary, $-, B/binary, ".png">>,
+                                <<"images/mimeicons/", A/binary, ".png">>,
+                                <<"images/mimeicons/application-octet-stream.png">>
                             ],
-
                             lists:foldl(
                                 fun(F, undefined) ->
                                         case z_module_indexer:find(lib, F, Context) of
-                                            {ok, #module_index{filepath=_File}} -> {ok, "lib/"++F};
+                                            {ok, #module_index{filepath=_File}} -> {ok, <<"lib/", F/binary>>};
                                             {error, enoent} -> undefined
                                         end;
                                    (_F, Result) ->

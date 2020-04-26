@@ -216,7 +216,7 @@
     category :: atom(),
     mime = undefined :: undefined | binary(),
     size = undefined :: undefined | non_neg_integer(),
-    props = [] :: list()
+    props = #{} :: map()
 }).
 
 -record(acl_edge, {

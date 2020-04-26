@@ -68,12 +68,12 @@ observe_request_context(#request_context{ phase = auth_status, document = #{ <<"
                     Context1 = try_set_timezone(Tz, Context),
                     maybe_set_cookie(Context1);
                 UserId ->
-                    case m_rsc:p_no_acl(UserId, pref_tz, Context) of
+                    case m_rsc:p_no_acl(UserId, <<"pref_tz">>, Context) of
                         None when None =:= undefined; None =:= <<>> ->
                             Context1 = try_set_timezone(Tz, Context),
                             _ = m_rsc:update(
                                     UserId,
-                                    [ {pref_tz, z_context:tz(Context1)} ],
+                                    #{ <<"pref_tz">> => z_context:tz(Context1) },
                                     [ no_touch ],
                                     Context1),
                             maybe_set_cookie(Context1);
@@ -97,7 +97,7 @@ maybe_user(Context) ->
         undefined ->
             maybe_cookie(Context);
         UserId ->
-            case m_rsc:p_no_acl(UserId, pref_tz, Context) of
+            case m_rsc:p_no_acl(UserId, <<"pref_tz">>, Context) of
                 undefined ->
                     maybe_cookie(Context);
                 Tz ->
@@ -137,7 +137,7 @@ observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
         true ->
             Context;
         false ->
-            case m_rsc:p_no_acl(UserId, pref_tz, Context) of
+            case m_rsc:p_no_acl(UserId, <<"pref_tz">>, Context) of
                 Tz when is_binary(Tz), Tz =/= <<>> ->
                     z_context:set_tz(Tz, Context);
                 _Undefined ->
@@ -178,9 +178,9 @@ set_user_timezone(Tz, Context) ->
         undefined ->
             nop;
         UserId ->
-            case m_rsc:p_no_acl(UserId, pref_tz, Context1) of
+            case m_rsc:p_no_acl(UserId, <<"pref_tz">>, Context1) of
                 Tz -> nop;
-                _ -> catch m_rsc:update(UserId, [{pref_tz, z_context:tz(Context1)}], Context1)
+                _ -> catch m_rsc:update(UserId, #{ <<"pref_tz">> => z_context:tz(Context1) }, Context1)
             end
     end,
     Context1.
@@ -212,57 +212,70 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
      |Acc].
 
 %% @doc Expand the two letter iso code country depending on the languages in the resource.
-observe_pivot_rsc_data(pivot_rsc_data, Rsc, Context) ->
+observe_pivot_rsc_data(#pivot_rsc_data{}, Rsc, Context) ->
     Languages = lists:usort([ en, default_language(Context) | resource_languages(Rsc) ]),
-    Rsc2 = expand_country(address_country, Rsc, Languages, Context),
-    expand_country(mail_country, Rsc2, Languages, Context).
+    Rsc2 = expand_country(<<"address_country">>, Rsc, Languages, Context),
+    expand_country(<<"mail_country">>, Rsc2, Languages, Context).
 
 expand_country(Prop, Rsc, Languages, Context) ->
 	Rsc1 = map_country(Prop, Rsc),
-    case proplists:get_value(Prop, Rsc1) of
-        <<>> -> Rsc1;
-        undefined -> Rsc1;
+    case maps:get(Prop, Rsc1, undefined) of
+        <<>> ->
+            Rsc1;
+        undefined ->
+            Rsc1;
         <<_,_>> = Iso ->
             Countries = lists:map(
                             fun(Lang) ->
                                 m_l10n:country_name(Iso, Lang, Context)
                             end,
                             Languages),
-            add_alias(Iso, Rsc1 ++ [ {extra_pivot_data, C} || C <- lists:usort(Countries)]);
-        _Other -> Rsc1
+            Rsc2 = lists:foldl(
+                fun(C, Acc) ->
+                    extra_pivot_data(C, Acc)
+                end,
+                Rsc1,
+                lists:usort(Countries)),
+            add_alias(Iso, Rsc2);
+        _Other ->
+            Rsc1
     end.
 
-    add_alias(<<"us">>, R) ->
-        [{extra_pivot_data, <<"USA">>} | R];
-    add_alias(<<"uk">>, R) ->
-        [{extra_pivot_data, <<"England">>} | R];
-    add_alias(<<"nl">>, R) ->
-        [{extra_pivot_data, <<"Holland">>} | R];
-    add_alias(<<"be">>, R) ->
-        [{extra_pivot_data, <<"België"/utf8>>}, {extra_pivot_data, "Belgique"} | R];
-    add_alias(_, R) ->
-        R.
+add_alias(<<"us">>, R) -> extra_pivot_data(<<"USA">>, R);
+add_alias(<<"uk">>, R) -> extra_pivot_data(<<"England">>, R);
+add_alias(<<"nl">>, R) -> extra_pivot_data(<<"Holland">>, R);
+add_alias(<<"be">>, R) -> extra_pivot_data(<<"België Belgique"/utf8>>, R);
+add_alias(_, R) -> R.
 
-%% @doc Map a country name to its iso code.  This very crude and should be more comprehensive.
+extra_pivot_data(Text, #{ <<"extra_pivot_data">> := Extra } = R) when is_binary(Extra) ->
+    R#{
+        <<"extra_pivot_data">> => <<Extra/binary, " ", Text/binary>>
+    };
+extra_pivot_data(Text, R) ->
+    R#{
+        <<"extra_pivot_data">> => Text
+    }.
+
+%% @doc Map a country name to its iso code.  This is very crude and should be more comprehensive.
 map_country(Prop, Rsc) ->
-    case proplists:get_value(Prop, Rsc) of
+    case maps:get(Prop, Rsc, undefined) of
         <<>> -> Rsc;
         undefined -> Rsc;
         <<A,B>> when A =< $Z orelse B =< $Z ->
-            [{Prop, z_convert:to_binary(z_string:to_lower([A,B]))} | Rsc];
+            Rsc#{ Prop => z_convert:to_binary(z_string:to_lower([A,B])) };
         Country ->
             case z_convert:to_binary(z_string:to_lower(Country)) of
-                <<"usa">> -> [{Prop, <<"us">>} | Rsc];
-                <<"holland">> -> [{Prop, <<"nl">>} | Rsc];
-                <<"nederland">> -> [{Prop, <<"nl">>} | Rsc];
-                <<"netherlands">> -> [{Prop, <<"nl">>} | Rsc];
-                <<"the netherlands">> -> [{Prop, <<"nl">>} | Rsc];
-                <<"netherlands, the">> -> [{Prop, <<"nl">>} | Rsc];
-                <<"belgië"/utf8>> -> [{Prop, <<"be">>} | Rsc];
-                <<"belgie">> -> [{Prop, <<"be">>} | Rsc];
-                <<"belgique">> -> [{Prop, <<"be">>} | Rsc];
+                <<"usa">> ->                Rsc#{ Prop => <<"us">>};
+                <<"holland">> ->            Rsc#{ Prop => <<"nl">>};
+                <<"nederland">> ->          Rsc#{ Prop => <<"nl">>};
+                <<"netherlands">> ->        Rsc#{ Prop => <<"nl">>};
+                <<"the netherlands">> ->    Rsc#{ Prop => <<"nl">>};
+                <<"netherlands, the">> ->   Rsc#{ Prop => <<"nl">>};
+                <<"belgië"/utf8>> ->        Rsc#{ Prop => <<"be">>};
+                <<"belgie">> ->             Rsc#{ Prop => <<"be">>};
+                <<"belgique">> ->           Rsc#{ Prop => <<"be">>};
                 % typos
-                <<"netherlands">> -> [{Prop, <<"nl">>} | Rsc];
+                <<"netherlands">> ->        Rsc#{ Prop => <<"nl">>};
                 % just keep as-is
                 _ -> Rsc
             end
@@ -276,7 +289,7 @@ default_language(Context) ->
     end.
 
 resource_languages(Rsc) ->
-    case proplists:get_value(language, Rsc) of
+    case maps:get(<<"language">>, Rsc, undefined) of
         undefined -> [];
         <<>> -> [];
         Atom when is_atom(Atom) -> [ Atom ];

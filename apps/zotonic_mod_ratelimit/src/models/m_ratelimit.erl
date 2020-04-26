@@ -52,7 +52,7 @@
 -define(RATELIMIT_N, 5).
 
 
-m_get([ timeout | Rest ], _Msg, Context) ->
+m_get([ <<"timeout">> | Rest ], _Msg, Context) ->
     {ok, {ratelimit_t(Context), Rest}}.
 
 %% @doc Insert an event, use the context for extra properties.

@@ -43,9 +43,14 @@
 -type filename_extension() :: binary().
 -type mime_type() :: binary().
 -type os_family() :: win32 | unix.
+-type media_info() :: map().
+
+-export_type([
+    media_info/0
+]).
 
 %% @doc Caching version of identify/3. Fetches information about an image, returns width, height, type, etc.
--spec identify( #upload{} | file:filename_all(), z:context() ) -> {ok, Props::list()} | {error, term()}.
+-spec identify( #upload{} | file:filename_all(), z:context() ) -> {ok, media_info()} | {error, term()}.
 identify(#upload{tmpfile=undefined, data=Data, filename=Filename}, Context) when is_binary(Data) ->
     TmpFile = z_tempfile:new(),
     case file:write_file(TmpFile, Data) of
@@ -65,16 +70,16 @@ identify(#upload{tmpfile=File, filename=Filename}, Context) ->
 identify(File, Context) ->
     identify(File, File, Context).
 
--spec identify(#upload{}|file:filename_all(), optional_filename(), z:context()) -> {ok, Props::list()} | {error, term()}.
+-spec identify(#upload{}|file:filename_all(), optional_filename(), z:context()) -> {ok, media_info()} | {error, term()}.
 identify(File, OriginalFilename, Context) ->
     identify(File, File, OriginalFilename, Context).
 
 identify(File, MediumFilename, OriginalFilename, Context) ->
     F = fun() ->
-            case m_media:identify(MediumFilename, Context) of
-                {ok, _Props} = Result -> Result;
-                {error, _Reason} -> identify_file(File, OriginalFilename, Context)
-            end
+        case m_media:identify(MediumFilename, Context) of
+            {ok, _Props} = Result -> Result;
+            {error, _Reason} -> identify_file(File, OriginalFilename, Context)
+        end
     end,
     z_depcache:memo(F, {media_identify, MediumFilename}, ?DAY, [media_identify], Context).
 
@@ -82,14 +87,21 @@ identify(File, MediumFilename, OriginalFilename, Context) ->
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.  First checks if a module
 %% has a specific identification methods.
--spec identify_file( file:filename_all(), z:context() ) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file( file:filename_all(), z:context() ) -> {ok, media_info()} | {error, term()}.
 identify_file(File, Context) ->
     identify_file(File, File, Context).
 
--spec identify_file( file:filename_all(), optional_filename(), z:context() ) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file( file:filename_all(), optional_filename(), z:context() ) -> {ok, media_info()} | {error, term()}.
 identify_file(File, OriginalFilename, Context) ->
     Extension = maybe_extension(File, OriginalFilename),
-    case z_notifier:first(#media_identify_file{filename=File, original_filename=OriginalFilename, extension=Extension}, Context) of
+    case z_notifier:first(
+            #media_identify_file{
+                filename = File,
+                original_filename = OriginalFilename,
+                extension = Extension
+            },
+            Context)
+    of
         {ok, Props} ->
             {ok, Props};
         undefined ->
@@ -109,24 +121,25 @@ maybe_extension(Filename) ->
     z_convert:to_binary(z_string:to_lower(filename:extension(Filename))).
 
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
--spec identify_file_direct( file:filename_all(), optional_filename() ) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file_direct( file:filename_all(), optional_filename() ) -> {ok, media_info()} | {error, term()}.
 identify_file_direct(File, OriginalFilename) ->
     check_acceptable(File, maybe_identify_extension(identify_file_direct_1(File, OriginalFilename), OriginalFilename)).
 
+%% Images, pdf and ps are further investigated by ImageMagick
 identify_file_direct_1(File, OriginalFilename) ->
     OsFamily = os_family(),
     case identify_file_os(OsFamily, File, OriginalFilename) of
         {error, _} ->
             %% Last resort, give ImageMagick a try
             identify_file_imagemagick(OsFamily, File, undefined);
+        {ok, #{ <<"mime">> := <<"image/", _/binary>> = Mime }} ->
+            identify_file_imagemagick(OsFamily, File, Mime);
+        {ok, #{ <<"mime">> := <<"application/pdf">> = Mime }} ->
+            identify_file_imagemagick(OsFamily, File, Mime);
+        {ok, #{ <<"mime">> := <<"application/postscript">> = Mime }} ->
+            identify_file_imagemagick(OsFamily, File, Mime);
         {ok, Props} ->
-            %% Images, pdf and ps are further investigated by ImageMagick
-            case proplists:get_value(mime, Props) of
-                <<"image/", _/binary>> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
-                <<"application/pdf">> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
-                <<"application/postscript">> = Mime -> identify_file_imagemagick(OsFamily, File, Mime);
-                _Mime -> {ok, Props}
-            end
+            Props
     end.
 
 -spec os_family() -> os_family().
@@ -138,42 +151,44 @@ check_acceptable(_File, {error, _} = Error) ->
     Error;
 check_acceptable(File, {ok, Props}) ->
     case z_media_sanitize:is_file_acceptable(File, Props) of
-        false -> {ok, [{mime, <<"application/octet-stream">>}]};
+        false -> {ok, #{ <<"mime">> => <<"application/octet-stream">> }};
         true -> {ok, Props}
     end.
 
-maybe_identify_extension({error, "identify error: "++_}, OriginalFilename) ->
-    {ok, [ {mime, guess_mime(OriginalFilename)} ]};
-maybe_identify_extension({ok, [{mime, <<"application/octet-stream">>}]}, OriginalFilename) ->
-    {ok, [ {mime, guess_mime(OriginalFilename)} ]};
+maybe_identify_extension({ok, #{ <<"mime">> := <<"application/octet-stream">> }}, OriginalFilename) ->
+    {ok, #{ <<"mime">> => guess_mime(OriginalFilename) }};
+maybe_identify_extension({error, identify}, OriginalFilename) ->
+    {ok, #{ <<"mime">> => guess_mime(OriginalFilename) }};
 maybe_identify_extension(Result, _OriginalFilename) ->
     Result.
 
 %% @doc Identify the mime type of a file using the unix "file" command.
--spec identify_file_os(win32|unix, File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file_os(win32|unix, File :: file:filename_all(), OriginalFilename :: file:filename_all()) ->
+    {ok, media_info()} | {error, term()}.
 identify_file_os(win32, _File, OriginalFilename) ->
-    {ok, [{mime, guess_mime(OriginalFilename)}]};
+    {ok, #{ <<"mime">> => guess_mime(OriginalFilename)}};
 identify_file_os(unix, File, OriginalFilename) ->
     identify_file_unix(os:find_executable("file"), File, OriginalFilename).
 
 identify_file_unix(false, _File, _OriginalFilename) ->
     lager:error("Please install 'file' for identifying the type of uploaded files."),
-    {error, "'file' not installed"};
+    {error, no_file_cmd};
 identify_file_unix(Cmd, File, OriginalFilename) ->
-    Mime = z_string:trim(
-                list_to_binary(
-                    os:cmd(z_utils:os_filename(Cmd)
-                        ++" -b --mime-type "
-                        ++ z_utils:os_filename(File)))),
+    CmdLine = unicode:characters_to_list([
+        z_utils:os_filename(Cmd),
+        " -b --mime-type ",
+        z_utils:os_filename(File)
+    ]),
+    Mime = z_string:trim( unicode:characters_to_binary( os:cmd( CmdLine ) ) ),
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
         nomatch ->
             case Mime of
                 "CDF V2 Document, corrupt:" ++ _ ->
                     % Probably just a semi-illegal variation on a MS Office file, use the extension
                     case guess_mime(OriginalFilename) of
-                        <<"application/msword">> -> {ok, [{mime, <<"application/msword">>}]};
-                        <<"application/vnd.ms-excel">> -> {ok, [{mime, <<"application/vnd.ms-excel">>}]};
-                        <<"application/vnd.ms-powerpoint">> -> {ok, [{mime, <<"application/vnd.ms-powerpoint">>}]};
+                        <<"application/msword">> -> {ok, #{ <<"mime">> => <<"application/msword">>}};
+                        <<"application/vnd.ms-excel">> -> {ok, #{ <<"mime">> => <<"application/vnd.ms-excel">>}};
+                        <<"application/vnd.ms-powerpoint">> -> {ok, #{ <<"mime">> => <<"application/vnd.ms-powerpoint">>}};
                         _ -> {error, Mime}
                     end;
                 _ ->
@@ -183,7 +198,7 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
             case Mime of
                 <<"text/x-c">> ->
                     %% "file" does a lousy job recognizing files with curly braces in them.
-                    Mime2 = case guess_mime(OriginalFilename) of
+                    MXc = case guess_mime(OriginalFilename) of
                         <<"text/csv">> ->
                             case z_csv_parser:inspect_file(File) of
                                 {ok, _Hs, _Sep} -> <<"text/csv">>;
@@ -194,9 +209,9 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         <<"application/json">> -> <<"application/json">>;
                         _ -> <<"text/plain">>
                     end,
-                    {ok, [{mime, Mime2}]};
+                    {ok, #{ <<"mime">> => MXc}};
                 <<"text/plain">> ->
-                    Mime2 = case guess_mime(OriginalFilename) of
+                    MText = case guess_mime(OriginalFilename) of
                         <<"text/csv">> ->
                             case z_csv_parser:inspect_file(File) of
                                 {ok, _Hs, _Sep} -> <<"text/csv">>;
@@ -205,79 +220,88 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         _ ->
                             <<"text/plain">>
                     end,
-                    {ok, [{mime, Mime2}]};
+                    {ok, #{ <<"mime">> => MText }};
                 <<"application/x-gzip">> ->
                     %% Special case for the often used extension ".tgz" instead of ".tar.gz"
-                    case filename:extension(OriginalFilename) of
-                        ".tgz" -> {ok, [{mime, <<"application/x-gzip+tar">>}]};
-                        <<".tgz">> -> {ok, [{mime, <<"application/x-gzip+tar">>}]};
-                        _ -> {ok, [{mime, <<"application/x-gzip">>}]}
-                    end;
+                    MGZip = case filename:extension(OriginalFilename) of
+                        ".tgz" -> <<"application/x-gzip+tar">>;
+                        <<".tgz">> -> <<"application/x-gzip+tar">>;
+                        _ -> <<"application/x-gzip">>
+                    end,
+                    {ok, #{ <<"mime">> => MGZip }};
                 <<"application/zip">> ->
                     %% Special case for zip'ed office files
-                    case guess_mime(OriginalFilename) of
+                    MZip = case guess_mime(OriginalFilename) of
                         <<"application/vnd.openxmlformats-officedocument.", _/binary>> = OfficeMime ->
-                            {ok, [{mime, OfficeMime}]};
+                            OfficeMime;
                         _ ->
-                            {ok, [{mime, <<"application/zip">>}]}
-                    end;
+                            <<"application/zip">>
+                    end,
+                    {ok, #{ <<"mime">> => MZip }};
                 <<"application/ogg">> ->
                     % The file utility does some miss-guessing
-                    case guess_mime(OriginalFilename) of
-                        <<"video/ogg">> -> {ok, [{mime, <<"video/ogg">>}]};
-                        <<"audio/ogg">> -> {ok, [{mime, <<"audio/ogg">>}]};
-                        _ -> {ok, [{mime, <<"application/ogg">>}]}
-                    end;
+                    MOgg = case guess_mime(OriginalFilename) of
+                        <<"video/ogg">> -> <<"video/ogg">>;
+                        <<"audio/ogg">> -> <<"audio/ogg">>;
+                        _ -> <<"application/ogg">>
+                    end,
+                    {ok, #{ <<"mime">> => MOgg }};
                 <<"application/octet-stream">> ->
                     % The file utility does some miss-guessing
-                    case guess_mime(OriginalFilename) of
-                        <<"text/csv">> -> {ok, [{mime, <<"text/csv">>}]};
-                        <<"application/vnd.oasis.opendocument.", _/binary>> = ODF -> {ok, [{mime, ODF}]};
-                        <<"application/inspire">> -> {ok, [{mime, <<"application/inspire">>}]};
-                        <<"video/mpeg">> -> {ok, [{mime, <<"video/mpeg">>}]};
-                        <<"audio/mpeg">> -> {ok, [{mime, <<"audio/mpeg">>}]};
+                    MOctet = case guess_mime(OriginalFilename) of
+                        <<"text/csv">> -> <<"text/csv">>;
+                        <<"application/vnd.oasis.opendocument.", _/binary>> = ODF -> ODF;
+                        <<"application/inspire">> -> <<"application/inspire">>;
+                        <<"video/mpeg">> -> <<"video/mpeg">>;
+                        <<"audio/mpeg">> -> <<"audio/mpeg">>;
                         _ ->
                             case identify_magicnumber(File) of
-                                {ok, MagicNumberMime} -> {ok, [{mime, MagicNumberMime}]};
-                                {error, _} -> {ok, [{mime, <<"application/octet-stream">>}]}
+                                {ok, MagicNumberMime} -> MagicNumberMime;
+                                {error, _} -> <<"application/octet-stream">>
                             end
-                    end;
+                    end,
+                    {ok, #{ <<"mime">> => MOctet }};
                 <<"application/vnd.ms-office">> ->
                     % Generic ms-office mime type, check if the filename is more specific
-                    case guess_mime(OriginalFilename) of
-                        <<"application/vnd.ms", _/binary>> = M -> {ok, [{mime,M}]};
-                        <<"application/msword">> -> {ok, [{mime,<<"application/msword">>}]};
-                        <<"application/vnd.visio">> -> {ok, [{mime,<<"application/vnd.visio">>}]};
-                        _ -> {ok, [{mime, <<"application/vnd.ms-office">>}]}
-                    end;
+                    MOffice = case guess_mime(OriginalFilename) of
+                        <<"application/vnd.ms", _/binary>> = M -> M;
+                        <<"application/msword">> -> <<"application/msword">>;
+                        <<"application/vnd.visio">> -> <<"application/vnd.visio">>;
+                        _ -> <<"application/vnd.ms-office">>
+                    end,
+                    {ok, #{ <<"mime">> => MOffice }};
                 <<"application/vnd.ms-excel">> = Excel ->
-                    case guess_mime(OriginalFilename) of
-                        <<"application/vnd.openxmlformats", _/binary>> = M -> {ok, [{mime,M}]};
-                        _ -> {ok, [{mime, Excel}]}
-                    end;
+                    MExcel = case guess_mime(OriginalFilename) of
+                        <<"application/vnd.openxmlformats", _/binary>> = M -> M;
+                        _ -> Excel
+                    end,
+                    {ok, #{ <<"mime">> => MExcel }};
                 Wav when Wav =:= <<"audio/x-wav">>; Wav =:= <<"audio/wav">> ->
-                    case guess_mime(OriginalFilename) of
-                        <<"audio/", _/binary>> = M -> {ok, [{mime,M}]};
-                        _ -> {ok, [{mime, <<"audio/wav">>}]}
-                    end;
+                    MWav = case guess_mime(OriginalFilename) of
+                        <<"audio/", _/binary>> = M -> M;
+                        _ -> <<"audio/wav">>
+                    end,
+                    {ok, #{ <<"mime">> => MWav }};
                 <<"video/x-ms-asf">> ->
-                    case guess_mime(OriginalFilename) of
-                        <<"audio/", _/binary>> = M -> {ok, [{mime,M}]};
-                        _ -> {ok, [{mime, <<"video/x-ms-asf">>}]}
-                    end;
+                    MAsf = case guess_mime(OriginalFilename) of
+                        <<"audio/", _/binary>> = M -> M;
+                        _ -> <<"video/x-ms-asf">>
+                    end,
+                    {ok, #{ <<"mime">> => MAsf }};
                 <<"video/mp4">> ->
-                    case guess_mime(OriginalFilename) of
-                        <<"audio/", _/binary>> = M -> {ok, [{mime,M}]};
-                        _ -> {ok, [{mime, <<"video/mp4">>}]}
-                    end;
+                    MMP4 = case guess_mime(OriginalFilename) of
+                        <<"audio/", _/binary>> = M -> M;
+                        _ -> <<"video/mp4">>
+                    end,
+                    {ok, #{ <<"mime">> => MMP4 }};
                 _ ->
-                    {ok, [{mime, Mime}]}
+                    {ok, #{ <<"mime">> => Mime }}
             end
     end.
 
 
 %% @doc Try to identify the file using image magick
--spec identify_file_imagemagick(os_family(), file:filename_all(), undefined | mime_type()) -> {ok, Props::list()} | {error, term()}.
+-spec identify_file_imagemagick(os_family(), file:filename_all(), undefined | mime_type()) -> {ok, media_info()} | {error, term()}.
 identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
     identify_file_imagemagick_1(os:find_executable("identify"), OsFamily, ImageFile, MimeFile).
 
@@ -287,9 +311,9 @@ identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
 identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
     CleanedImageFile = z_utils:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
     CmdOutput = os:cmd(z_utils:os_filename(Cmd)
-                       ++" -quiet "
-                       ++CleanedImageFile
-                       ++" 2> " ++ devnull(OsFamily)),
+                       ++ " -quiet "
+                       ++ z_convert:to_list(CleanedImageFile)
+                       ++ " 2> " ++ devnull(OsFamily)),
     Lines = lists:dropwhile(
                     fun
                         ("Warning:" ++ _) -> true;
@@ -301,11 +325,11 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
     case Lines of
         [] ->
             Err = os:cmd(z_utils:os_filename(Cmd)
-                         ++" -quiet "
-                         ++CleanedImageFile
-                         ++" 2>&1"),
+                         ++ " -quiet "
+                         ++ z_convert:to_list(CleanedImageFile)
+                         ++ " 2>&1"),
             lager:info("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
-            {error, "identify error: " ++ Err};
+            {error, identify};
         [Result|_] ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
             %% sometimes:
@@ -318,29 +342,30 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                 Mime = im_mime(Type, MimeTypeFromFile),
                 [Width,Height] = binary:split( hd( binary:split(Dim, <<"=>">>) ), <<"x">>),
                 {W1,H1} = maybe_sizeup(Mime, binary_to_integer(Width), binary_to_integer(Height)),
-                Props1 = [{width, W1},
-                          {height, H1},
-                          {mime, Mime}],
+                Props1 = #{
+                    <<"width">> => W1,
+                    <<"height">> => H1,
+                    <<"mime">> => Mime
+                },
                 Props2 = case Mime of
-                             <<"image/", _/binary>> ->
-                                 Exif = exif(ImageFile),
-                                 Orientation = exif_orientation(Exif),
-                                 Orientation1 = correct_orientation(Orientation, Exif, W1, H1),
-                                 [
-                                    {orientation, Orientation1},
-                                    {exif, Exif},
-                                    {subject_point, exif_subject_point(Exif, Orientation, W1, H1)}
-                                  | Props1
-                                 ];
-                             _ ->
-                                Props1
-                         end,
+                    <<"image/", _/binary>> ->
+                        Exif = exif(ImageFile),
+                        Orientation = exif_orientation(Exif),
+                        Orientation1 = correct_orientation(Orientation, Exif, W1, H1),
+                        Props1#{
+                           <<"orientation">> => Orientation1,
+                           <<"exif">> => Exif,
+                           <<"subject_point">> => exif_subject_point(Exif, Orientation, W1, H1)
+                        };
+                    _ ->
+                       Props1
+                end,
                 {ok, Props2}
             catch
                 ?WITH_STACKTRACE(X, B, Stacktrace)
-                    lager:info("identify of ~p failed - ~p with ~p:~p in ~p", 
+                    lager:info("identify of \"~s\" failed - ~p with ~p:~p in ~p",
                               [CleanedImageFile, CmdOutput, X, B, Stacktrace]),
-                    {error, "unknown result from 'identify': '"++CmdOutput++"'"}
+                    {error, identify}
             end
     end.
 
@@ -478,36 +503,41 @@ maybe_map_mime(<<"audio/x-wav">>) -> <<"audio/wav">>;
 maybe_map_mime(Mime) -> Mime.
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge
--spec exif( file:filename_all() ) -> list().
+-spec exif( file:filename_all() ) -> map().
 exif(File) ->
     try
         case exif:read(File) of
             {ok, Dict} ->
-                List = dict:to_list(Dict),
-                proplists:delete(maker_note, List);
+                dict:fold(
+                    fun
+                        (maker_note, _Val, Acc) ->
+                            Acc;
+                        (Tag, Val, Acc) ->
+                            Acc#{ atom_to_binary(Tag, utf8) => Val }
+                    end,
+                    #{},
+                    Dict);
             {error, _} ->
-                []
+                #{}
         end
     catch
         ?WITH_STACKTRACE(A, B, Stacktrace)
             lager:error("Error reading exif ~p:~p in ~p", [A,B,Stacktrace]),
-            []
+            #{}
     end.
 
 %% Detect the exif rotation in an image and swaps width/height accordingly.
--spec exif_orientation(list()) -> 1|2|3|4|5|6|7|8.
-exif_orientation(Exif) when is_list(Exif) ->
-    case proplists:get_value(orientation, Exif) of
-        <<"Top-left">> -> 1;
-        <<"Top-right">> -> 2;
-        <<"Bottom-right">> -> 3;
-        <<"Bottom-left">> -> 4;
-        <<"Left-top">> -> 5;
-        <<"Right-top">> -> 6;
-        <<"Right-bottom">> -> 7;
-        <<"Left-bottom">> -> 8;
-        _ -> 1
-    end.
+-spec exif_orientation( map() ) -> 1|2|3|4|5|6|7|8.
+exif_orientation(#{ <<"orientation">> := <<"Top-left">> }) -> 1;
+exif_orientation(#{ <<"orientation">> := <<"Top-right">> }) -> 2;
+exif_orientation(#{ <<"orientation">> := <<"Bottom-right">> }) -> 3;
+exif_orientation(#{ <<"orientation">> := <<"Bottom-left">> }) -> 4;
+exif_orientation(#{ <<"orientation">> := <<"Left-top">> }) -> 5;
+exif_orientation(#{ <<"orientation">> := <<"Right-top">> }) -> 6;
+exif_orientation(#{ <<"orientation">> := <<"Right-bottom">> }) -> 7;
+exif_orientation(#{ <<"orientation">> := <<"Left-bottom">> }) -> 8;
+exif_orientation(_) -> 1.
+
 
 %% See also http://www.awaresystems.be/imaging/tiff/tifftags/privateifd/exif/subjectarea.html
 exif_subject_point(Exif, Orientation, Width, Height) ->
@@ -515,19 +545,16 @@ exif_subject_point(Exif, Orientation, Width, Height) ->
     Point1 = maybe_resize_point(Point, Exif, Width, Height),
     maybe_rotate(Orientation, Point1, Width, Height).
 
-extract_subject_point(Exif) ->
-    case proplists:get_value(subject_area, Exif) of
-        [X, Y] -> {X, Y};
-        [X, Y, _Radius] -> {X, Y};
-        [X, Y, _W, _H] -> {X, Y};
-        _ -> undefined
-    end.
+extract_subject_point(#{ <<"subject_area">> := [ X, Y ] }) -> {X, Y};
+extract_subject_point(#{ <<"subject_area">> := [X, Y, _Radius] }) -> {X, Y};
+extract_subject_point(#{ <<"subject_area">> := [X, Y, _W, _H] }) -> {X, Y};
+extract_subject_point(_) -> undefined.
 
 maybe_resize_point(undefined, _Exif, _Width, _Height) ->
     undefined;
 maybe_resize_point({X, Y}, Exif, Width, Height) ->
-    ExifWidth = proplists:get_value(pixel_x_dimension, Exif),
-    ExifHeight = proplists:get_value(pixel_y_dimension, Exif),
+    ExifWidth = maps:get(<<"pixel_x_dimension">>, Exif, undefined),
+    ExifHeight = maps:get(<<"pixel_y_dimension">>, Exif, undefined),
     case is_integer(ExifWidth) andalso is_integer(ExifHeight) of
         true when ExifWidth =:= Width, ExifHeight =:= Height ->
             {X, Y};
@@ -556,8 +583,8 @@ correct_orientation(1, _Exif, _Width, _Height) ->
     1;
 correct_orientation(Orientation, Exif, Width, Height) ->
     IsLandscape = Width > Height,
-    ExifWidth = proplists:get_value(pixel_x_dimension, Exif),
-    ExifHeight = proplists:get_value(pixel_y_dimension, Exif),
+    ExifWidth = maps:get(<<"pixel_x_dimension">>, Exif, 0),
+    ExifHeight = maps:get(<<"pixel_y_dimension">>, Exif, 0),
     case is_integer(ExifWidth) andalso is_integer(ExifHeight) of
         true when IsLandscape, ExifWidth < ExifHeight ->
             % The image is landscape, but the exif describes a portrait orientated image

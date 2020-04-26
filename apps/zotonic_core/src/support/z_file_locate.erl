@@ -139,13 +139,13 @@ locate_source_module_indexer(ModuleIndex, _Path, OriginalFile, undefined, Contex
             end
     end;
 locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) ->
-    case locate_in_filestore(Path, z_path:media_preview(Context), [], Context) of
+    case locate_in_filestore(Path, z_path:media_preview(Context), #{}, Context) of
         {ok, Part} ->
             {ok, Part};
         {error, enoent} ->
             case z_module_indexer:find(ModuleIndex, OriginalFile, Context) of
                 {ok, #module_index{filepath=FoundFile}} ->
-                    maybe_generate_preview(Path, FoundFile, Filters, [], Context);
+                    maybe_generate_preview(Path, FoundFile, Filters, #{}, Context);
                 {error, _} = Error ->
                     Error
             end
@@ -153,7 +153,7 @@ locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) 
 
 %% @doc Locate an uploaded file, stored in the archive.
 locate_source_uploaded(<<"preview/", _/binary>> = Path, OriginalFile, Filters, Context) ->
-    locate_source_uploaded_1([], Path, OriginalFile, Filters, Context);
+    locate_source_uploaded_1(#{}, Path, OriginalFile, Filters, Context);
 locate_source_uploaded(Path, OriginalFile, Filters, Context) ->
     case m_media:get_by_filename(OriginalFile, Context) of
         undefined ->
@@ -174,25 +174,26 @@ locate_source_uploaded_1(Medium, Path, OriginalFile, Filters, Context) ->
 
 locate_in_filestore(Path, InDir, Medium, Context) ->
     FSPath = z_convert:to_binary(filename:join(filename:basename(InDir), Path)),
+    OptRscId = maps:get(<<"id">>, Medium, undefined),
     case z_notifier:first(#filestore{action=lookup, path=FSPath}, Context) of
         {ok, {filezcache, Pid, Opts}} when is_pid(Pid) ->
             {ok, #part_cache{
                 cache_pid=Pid,
                 cache_monitor=erlang:monitor(process, Pid),
                 modified=proplists:get_value(created, Opts),
-                acl=proplists:get_value(id, Medium),
+                acl=OptRscId,
                 size=proplists:get_value(size, Opts)
             }};
         {ok, {filename, FoundFilename, Opts}} ->
-            part_file(FoundFilename, [{acl,proplists:get_value(id, Medium)}|Opts]);
+            part_file(FoundFilename, [{acl,OptRscId}|Opts]);
         {ok, {data, Data, Opts}} when is_list(Opts) ->
             {ok, #part_data{
                 data=Data,
                 modified=proplists:get_value(modified, Opts),
-                acl=proplists:get_value(id, Medium)
+                acl=OptRscId
             }};
         undefined ->
-            part_file(filename:join(InDir, Path), [{acl,proplists:get_value(id, Medium)}])
+            part_file(filename:join(InDir, Path), [{acl,OptRscId}])
     end.
 
 part_missing(Filename) ->
@@ -248,7 +249,7 @@ generate_preview(true, Path, OriginalFile, Filters, Medium, Context) ->
                 ok ->
                     FileStorePath = z_convert:to_binary(filename:join([filename:basename(PreviewDir), Path])),
                     z_notifier:first(#filestore{action=upload, path=FileStorePath}, Context),
-                    case proplists:get_value(id, Medium) of
+                    case maps:get(<<"id">>, Medium, undefined) of
                         undefined ->
                             part_file(PreviewFilePath, []);
                         RscId ->
@@ -279,7 +280,7 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
         {ok, #module_index{filepath=Path}} ->
             case z_media_preview:convert(z_convert:to_list(Path), Path, z_convert:to_list(PreviewFilePath), Filters, Context) of
                 ok ->
-                    case proplists:get_value(id, Medium) of
+                    case maps:get(<<"id">>, Medium, undefined) of
                         undefined ->
                             part_file(PreviewFilePath, []);
                         RscId ->
@@ -298,7 +299,7 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
 
 
 fetch_archive(File, Context) ->
-    case locate_in_filestore(File, z_path:media_archive(Context), [], Context) of
+    case locate_in_filestore(File, z_path:media_archive(Context), #{}, Context) of
         {ok, #part_file{filepath=Filename}} ->
             {ok, Filename};
         {ok, #part_cache{cache_pid=Pid}} ->

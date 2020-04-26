@@ -95,7 +95,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ lookup, Type, Key | Rest ], _Msg, Context) ->
+m_get([ <<"lookup">>, Type, Key | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             Idns = lookup_by_type_and_key_multi(Type, Key, Context),
@@ -103,40 +103,40 @@ m_get([ lookup, Type, Key | Rest ], _Msg, Context) ->
         false ->
             {error, eacces}
     end;
-m_get([ generate_password | Rest ], _Msg, _Context) ->
+m_get([ <<"generate_password">> | Rest ], _Msg, _Context) ->
     Password = iolist_to_binary([ z_ids:id(5), $-, z_ids:id(5), $-, z_ids:id(5) ]),
     {ok, {Password, Rest}};
-m_get([ Id, is_user | Rest ], _Msg, Context) ->
+m_get([ Id, <<"is_user">> | Rest ], _Msg, Context) ->
     IsUser = case z_acl:rsc_visible(Id, Context) of
         true -> is_user(Id, Context);
         false -> undefined
     end,
     {ok, {IsUser, Rest}};
-m_get([ Id, username | Rest ], _Msg, Context) ->
+m_get([ Id, <<"username">> | Rest ], _Msg, Context) ->
     Username = case z_acl:rsc_editable(Id, Context) of
         true -> get_username(Id, Context);
         false -> undefined
     end,
     {ok, {Username, Rest}};
-m_get([ Id, all_types | Rest ], _Msg, Context) ->
+m_get([ Id, <<"all_types">> | Rest ], _Msg, Context) ->
     Idns = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc_types(Id, Context);
         false -> []
     end,
     {ok, {Idns, Rest}};
-m_get([ Id, all ], _Msg, Context) ->
+m_get([ Id, <<"all">> ], _Msg, Context) ->
     IdnRsc = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc(Id, Context);
         false -> []
     end,
     {ok, {IdnRsc, []}};
-m_get([ Id, all, Type | Rest ], _Msg, Context) ->
+m_get([ Id, <<"all">>, Type | Rest ], _Msg, Context) ->
     IdnRsc = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc_by_type(Id, Type, Context);
         false -> []
     end,
     {ok, {IdnRsc, Rest}};
-m_get([ get, IdnId | Rest ], _Msg, Context) ->
+m_get([ <<"get">>, IdnId | Rest ], _Msg, Context) ->
     Idn1 = case get(IdnId, Context) of
         undefined -> undefined;
         Idn ->

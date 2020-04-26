@@ -405,7 +405,7 @@
 %% Type: foldr
 %% Return: proplist accumulator
 -record(rsc_insert, {
-    props :: list()
+    props :: m_rsc:props()
 }).
 
 %% @doc Map to signal merging two resources. Move any information from the loser to the
@@ -427,7 +427,7 @@
 -record(rsc_update, {
     action :: insert | update,
     id :: m_rsc:resource_id(),
-    props :: list()
+    props :: m_rsc:props()
 }).
 
 %% @doc An updated resource has just been persisted. Observe this notification to
@@ -439,8 +439,8 @@
     id :: m_rsc:resource_id(),
     pre_is_a :: list(),
     post_is_a :: list(),
-    pre_props :: list(),
-    post_props :: list()
+    pre_props :: m_rsc:props(),
+    post_props :: m_rsc:props()
 }).
 
 %% @doc Upload and replace the resource with the given data. The data is in the given format.
@@ -456,20 +456,24 @@
     id :: m_rsc:resource_id()
 }).
 
-% 'pivot_rsc_data' - foldl over the resource props to extend/remove data to be pivoted
+% foldl over the resource props map to extend/remove data to be pivoted
+-record(pivot_rsc_data, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Pivot just before a m_rsc_update update. Used to pivot fields before the pivot itself.
 %% Type: foldr
 -record(pivot_update, {
     id :: m_rsc:resource_id(),
-    raw_props :: list()
+    raw_props :: m_rsc:props()
 }).
 
 %% @doc Foldr to change or add pivot fields for the main pivot table.
 %%  The rsc contains all rsc properties for this resource, including pivot properties.
+%%  foldl with a map containing the pivot fields.
 -record(pivot_fields, {
     id :: m_rsc:resource_id(),
-    rsc :: list()
+    raw_props :: m_rsc:props()
 }).
 
 %% @doc Signal that a resource pivot has been done.
@@ -522,7 +526,7 @@
 -record(acl_is_allowed_prop, {
     action :: view | update | delete | insert | atom(),
     object :: term(),
-    prop :: atom()
+    prop :: binary()
 }).
 
 %% @doc Filter the properties of a resource update, this is done on the raw data
@@ -747,7 +751,7 @@
 -record(m_config_update_prop, {module, key, prop, value}).
 
 %% @doc Notification for fetching #media_import_props{} from different modules.
-%% This is used by z_media_import.erl for fetching properties and medium information
+%% This is used by z_media_import.erl for fetching properties and medium information (map)
 %% about resources.
 -record(media_import, {
     url :: binary(),
@@ -760,9 +764,9 @@
     prio = 5 :: pos_integer(),      % 1 for perfect match (ie. host specific importer)
     category :: atom(),
     module :: atom(),
-    description :: binary() | {trans, list()},
-    rsc_props :: list(),
-    medium_props :: list(),
+    description :: binary() | z:trans(),
+    rsc_props :: map(),
+    medium_props :: z_media_identify:media_info(),
     medium_url = <<>> :: binary(),
     preview_url :: binary() | undefined
 }).
@@ -776,9 +780,9 @@
 -record(media_upload_preprocess, {
     id = insert_rsc :: m_rsc:resource_id() | insert_rsc,
     mime :: binary(),
-    file :: file:filename() | undefined,
-    original_filename :: file:filename() | undefined,
-    medium :: list(),
+    file :: file:filename_all() | undefined,
+    original_filename :: file:filename_all() | undefined,
+    medium :: z_media_identify:media_info(),
     post_insert_fun :: function() | undefined
 }).
 
@@ -789,7 +793,7 @@
 -record(media_upload_props, {
     id :: integer() | 'insert_rsc',
     mime :: binary(),
-    archive_file :: file:filename() | undefined,
+    archive_file :: file:filename_all() | undefined,
     options :: list()
 }).
 
@@ -802,7 +806,7 @@
     mime :: binary(),
     archive_file,
     options :: list(),
-    medium :: list()
+    medium :: z_media_identify:media_info()
 }).
 
 %% @doc Notification that a medium file has been changed (notify)
@@ -868,7 +872,11 @@
 
 %% @doc Try to identify a file, returning a list of file properties.
 %% Type: first
--record(media_identify_file, {filename, original_filename, extension}).
+-record(media_identify_file, {
+    filename :: file:filename_all(),
+    original_filename :: binary(),
+    extension :: binary()
+}).
 
 %% @doc Try to find a filename extension for a mime type (example: ".jpg")
 %% Type: first
@@ -882,14 +890,17 @@
 %% Return: ``{ok, Html}`` or ``undefined``
 -record(media_viewer, {
     id,
-    props :: list(),
-    filename,
+    props :: z_media_identify:media_info(),
+    filename = undefined :: file:filename_all() | undefined,
     options = [] :: list()
 }).
 
 %% @doc See if there is a 'still' image preview of a media item. (eg posterframe of a movie)
 %% Return:: ``{ok, ResourceId}`` or ``undefined``
--record(media_stillimage, {id, props = []}).
+-record(media_stillimage, {
+    id :: m_rsc:resource_id() | undefined,
+    props :: z_media_identify:media_info()
+}).
 
 
 %% @doc Fetch lisy of handlers.
@@ -953,7 +964,7 @@
     source_user_id :: binary() | integer(),
     user_id :: integer(),
     name :: binary(),
-    props :: list(),
+    props :: m_rsc:props_all(),
     urls :: list(),
     media_urls :: list(),
     data :: any()
