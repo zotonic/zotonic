@@ -30,6 +30,8 @@
     extract_records/1
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"is_dbtrace">> | Rest ], _Msg, Context) ->
     {ok, {z_development_dbtrace:is_tracing(Context), Rest}};
@@ -70,7 +72,7 @@ to_atom(Rec) when is_binary(Rec) ->
 
 readable(Os) ->
     lists:map(
-        fun({Prio, Obs}) ->
+        fun({Prio, Obs, _Pid}) ->
             {Prio, iolist_to_binary(readable_1(Obs))}
         end,
         Os).
