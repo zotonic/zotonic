@@ -66,16 +66,12 @@ init_site(Host) ->
     ok = exometer:re_register([site, Host, depcache, size],
                               {function, z_depcache, size, [Context], match, size}, []),
 
+    % And some basic broker statistics
     ok = exometer:re_register([site, Host, broker, session_count],
                               {function, mqtt_sessions, session_count, [Host], match, count}, []),
 
     ok = exometer:re_register([site, Host, broker, router_info],
                               {function, mqtt_sessions, router_info, [Host], value, []}, []),
-
-    %% Session metrics
-    %% [TODO] add mqtt sessions
-    %% exometer:re_register([zotonic, Host, session, sessions], gauge, []),
-    %% exometer:re_register([zotonic, Host, session, page_processes], counter, []),
 
     ok.
 
@@ -166,12 +162,23 @@ count_db_event(Event, Context) when is_atom(Event) ->
 % Return the usage in percentage, for atoms, ports and processes.
 system_usage(atom) -> system_usage_helper(atom_count, atom_limit);
 system_usage(port) -> system_usage_helper(port_count, port_limit);
-% system_usage(ets) -> system_usage_helper(ets_count, ets_limit);
-system_usage(process) -> system_usage_helper(process_count, process_limit).
+% system_usage(ets) -> system_usage_helper(ets_count, ets_limit);  % from 21 and up
+system_usage(process) -> system_usage_helper(process_count, process_limit);
+% Memory
+system_usage(ets_memory) -> system_memory_usage_helper(ets);
+system_usage(code_memory) -> system_memory_usage_helper(code);
+system_usage(process_memory) -> system_memory_usage_helper(processes);
+system_usage(binary_memory) -> system_memory_usage_helper(binary);
+system_usage(atom_memory) -> system_memory_usage_helper(atom).
 
-%% Returns the usage in percentage k
+%% Returns the usage in percentage
 system_usage_helper(Count, Limit) ->
     z_convert:to_integer((erlang:system_info(Count) / erlang:system_info(Limit)) * 100).
+
+%% Returns the memory usage in percentage
+system_memory_usage_helper(Type) ->
+    z_convert:to_integer((erlang:memory(Type) / erlang:memory(total)) * 100).
+
 
 %%
 %% Helpers
@@ -209,7 +216,8 @@ create_vm_metrics() ->
 
     ok = exometer:new([erlang, usage],
                       {function, z_stats, system_usage, ['$dp'], value,
-                       [atom, process, port]}),
+                       [atom, process, port, 
+                        ets_memory, binary_memory, code_memory, process_memory, atom_memory]}),
 
     ok = exometer:new([erlang, system],
                       {function, erlang, system_info, ['$dp'], value,
