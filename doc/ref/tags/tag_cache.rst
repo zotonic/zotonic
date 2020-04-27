@@ -46,3 +46,6 @@ Besides the duration and the cache name the ``{% cache %}`` tag also accepts the
 |            |force to only show public items for logged on users.  Valid values are      |                    |
 |            |“user”, 3, “group”, 2, “community”, 1, “world”, “public”, 0                 |                    |
 +------------+----------------------------------------------------------------------------+--------------------+
+
+The cache tag can be disabled by setting the config key ``mod_development.nocache``. This can be done on
+the /admin/development page.
