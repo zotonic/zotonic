@@ -171,7 +171,7 @@ name_to_id_cat(Name, Cat, Context) ->
 page_path_to_id(Path, Context) ->
     Path1 = iolist_to_binary([ $/, z_string:trim(Path, $/) ]),
     case is_utf8(Path1) of
-        true when size(Path) < 200 ->
+        true when size(Path1) < 200 ->
             case z_db:q1("select id from rsc where page_path = $1", [Path1], Context) of
                 undefined ->
                     case z_db:q1(
