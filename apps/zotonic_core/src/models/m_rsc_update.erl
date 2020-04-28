@@ -214,7 +214,7 @@ move_creator_modifier_ids(WinnerId, LoserId, Context) ->
         Context,
         1200000),
     lists:foreach(
-        fun(Id) ->
+        fun({Id}) ->
             flush(Id, [], Context)
         end,
         Ids).

@@ -1022,24 +1022,42 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                             }, opt_dkim(Context))
     end.
 
-encode_attachment(Att, Context) when is_integer(Att) ->
-    case m_media:get(Att, Context) of
-        #{ <<"filename">> := Filename, <<"mime">> := Mime } ->
-            Upload = #upload{
-                tmpfile = filename:join(z_path:media_archive(Context), Filename),
-                mime = Mime
-            },
-            encode_attachment(Upload, Context);
-        _ ->
-            {error, no_medium}
+encode_attachment(AttId, Context) when is_integer(AttId) ->
+    case z_acl:rsc_visible(AttId, Context) of
+        true ->
+            case m_media:get(AttId, Context) of
+                #{ <<"filename">> := Filename, <<"mime">> := Mime } when is_binary(Filename), Filename =/= <<>> ->
+                    case z_file_request:lookup_file(Filename, Context) of
+                        {ok, FInfo} ->
+                            Upload = #upload{
+                                data = z_file_request:content_data(FInfo, identity),
+                                mime = Mime,
+                                filename = filename:basename(Filename)
+                            },
+                            encode_attachment(Upload, Context);
+                        {error, _} = Error ->
+                            Error
+                    end;
+                #{} ->
+                    {error, enoent};
+                undefined ->
+                    {error, no_medium}
+            end;
+        false ->
+            {error, eacces}
     end;
-encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=File, filename=Filename} = Att, Context) ->
-    case z_media_identify:identify(File, Filename, Context) of
-        {ok, Ps} ->
-            Mime = maps:get(<<"mime">>, Ps, <<"application/octet-stream">>),
-            encode_attachment(Att#upload{mime=Mime}, Context);
-        {error, _} ->
-            encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
+encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=TmpFile, filename=Filename} = Att, Context) ->
+    case z_tempfile:is_tempfile(TmpFile) of
+        true ->
+            case z_media_identify:identify(TmpFile, Filename, Context) of
+                {ok, Ps} ->
+                    Mime = maps:get(<<"mime">>, Ps, <<"application/octet-stream">>),
+                    encode_attachment(Att#upload{mime=Mime}, Context);
+                {error, _} ->
+                    encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
+            end;
+        false ->
+            {error, upload_not_tempfile}
     end;
 encode_attachment(#upload{mime=undefined, filename=Filename} = Att, Context) ->
     Mime = z_media_identify:guess_mime(Filename),

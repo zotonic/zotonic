@@ -27,7 +27,6 @@
 
     identify/2,
     get/2,
-    get_file_data/2,
     get_by_filename/2,
     exists/2,
     depiction/2,
@@ -142,26 +141,6 @@ get(Id, Context) ->
     end,
     z_depcache:memo(F, {medium, Id}, ?WEEK, [Id], Context).
 
-%% @doc Return the contents of the file belonging to the media resource
-get_file_data(Id, Context) ->
-    case get(Id, Context) of
-        #{ <<"filename">> := Filename } = Media when is_binary(Filename) ->
-            ArchivedFilename = z_media_archive:abspath(Filename, Context),
-            case file:read_file(ArchivedFilename) of
-                {ok, Data} ->
-                    #upload{
-                        filename = Filename,
-                        data = Data,
-                        mime = maps:get(<<"mime">>, Media, undefined)
-                    };
-                Error ->
-                    Error
-            end;
-        undefined ->
-            {error, enoent};
-        _ ->
-            {error, nofile}
-    end.
 
 %% @doc Fetch a medium by filename
 get_by_filename(Filename, Context) ->
@@ -404,14 +383,19 @@ insert_file(#upload{ data = Data, tmpfile = undefined } = Upload, RscProps, Opti
             Error
     end;
 insert_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscProps, Options, Context) ->
-    RscProps1 = RscProps#{
-        <<"original_filename">> => OriginalFilename
-    },
-    MediaProps = #{
-        <<"original_filename">> => OriginalFilename
-    },
-    MediaProps1 = add_medium_info(TmpFile, OriginalFilename, MediaProps, Context),
-    insert_file(TmpFile, RscProps1, MediaProps1, Options, Context);
+    case z_tempfile:is_tempfile(TmpFile) of
+        true ->
+            RscProps1 = RscProps#{
+                <<"original_filename">> => OriginalFilename
+            },
+            MediaProps = #{
+                <<"original_filename">> => OriginalFilename
+            },
+            MediaProps1 = add_medium_info(TmpFile, OriginalFilename, MediaProps, Context),
+            insert_file(TmpFile, RscProps1, MediaProps1, Options, Context);
+        false ->
+            {error, upload_not_tempfile}
+    end;
 insert_file(File, RscProps, Options, Context) ->
     OriginalFilename = maps:get(<<"original_filename">>, RscProps, File),
     MediaProps = #{
@@ -541,14 +525,19 @@ replace_file(
     ok = file:write_file(TmpFile, Data),
     replace_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscId, RscProps, MInfo, Opts, Context);
 replace_file(#upload{filename = OriginalFilename, tmpfile = TmpFile}, RscId, RscProps, MInfo, Opts, Context) ->
-    MInfo1 = MInfo#{
-        <<"original_filename">> => OriginalFilename
-    },
-    MediaProps = add_medium_info(TmpFile, OriginalFilename, MInfo1, Context),
-    RscProps1 = RscProps#{
-        <<"original_filename">> => OriginalFilename
-    },
-    replace_file_mime_check(TmpFile, RscId, RscProps1, MediaProps, Opts, Context);
+    case z_tempfile:is_tempfile(TmpFile) of
+        true ->
+            MInfo1 = MInfo#{
+                <<"original_filename">> => OriginalFilename
+            },
+            MediaProps = add_medium_info(TmpFile, OriginalFilename, MInfo1, Context),
+            RscProps1 = RscProps#{
+                <<"original_filename">> => OriginalFilename
+            },
+            replace_file_mime_check(TmpFile, RscId, RscProps1, MediaProps, Opts, Context);
+        false ->
+            {error, upload_not_tempfile}
+    end;
 replace_file(File, RscId, RscProps, MInfo, Opts, Context) ->
     OriginalFilename = maps:get(<<"original_filename">>, RscProps, File),
     MInfo1 = MInfo#{
