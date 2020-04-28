@@ -27,7 +27,6 @@
 
     identify/2,
     get/2,
-    get_file_data/2,
     get_by_filename/2,
     exists/2,
     depiction/2,
@@ -142,26 +141,6 @@ get(Id, Context) ->
     end,
     z_depcache:memo(F, {medium, Id}, ?WEEK, [Id], Context).
 
-%% @doc Return the contents of the file belonging to the media resource
-get_file_data(Id, Context) ->
-    case get(Id, Context) of
-        #{ <<"filename">> := Filename } = Media when is_binary(Filename) ->
-            ArchivedFilename = z_media_archive:abspath(Filename, Context),
-            case file:read_file(ArchivedFilename) of
-                {ok, Data} ->
-                    #upload{
-                        filename = Filename,
-                        data = Data,
-                        mime = maps:get(<<"mime">>, Media, undefined)
-                    };
-                Error ->
-                    Error
-            end;
-        undefined ->
-            {error, enoent};
-        _ ->
-            {error, nofile}
-    end.
 
 %% @doc Fetch a medium by filename
 get_by_filename(Filename, Context) ->
