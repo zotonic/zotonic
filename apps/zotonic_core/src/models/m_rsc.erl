@@ -225,6 +225,8 @@ get_cached_unsafe(Id, Context) when is_integer(Id) ->
             case get_raw(Id, false, Context) of
                 {ok, Props} ->
                     z_notifier:foldr(#rsc_get{ id = Id }, Props, Context);
+                {error, nodb} ->
+                    undefined;
                 {error, enoent} ->
                     undefined
             end
