@@ -1046,13 +1046,18 @@ encode_attachment(AttId, Context) when is_integer(AttId) ->
         false ->
             {error, eacces}
     end;
-encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=File, filename=Filename} = Att, Context) ->
-    case z_media_identify:identify(File, Filename, Context) of
-        {ok, Ps} ->
-            Mime = maps:get(<<"mime">>, Ps, <<"application/octet-stream">>),
-            encode_attachment(Att#upload{mime=Mime}, Context);
-        {error, _} ->
-            encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
+encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=TmpFile, filename=Filename} = Att, Context) ->
+    case z_tempfile:is_tempfile(TmpFile) of
+        true ->
+            case z_media_identify:identify(TmpFile, Filename, Context) of
+                {ok, Ps} ->
+                    Mime = maps:get(<<"mime">>, Ps, <<"application/octet-stream">>),
+                    encode_attachment(Att#upload{mime=Mime}, Context);
+                {error, _} ->
+                    encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
+            end;
+        false ->
+            {error, upload_not_tempfile}
     end;
 encode_attachment(#upload{mime=undefined, filename=Filename} = Att, Context) ->
     Mime = z_media_identify:guess_mime(Filename),
