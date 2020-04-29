@@ -109,7 +109,7 @@ The other requirements are easily fetched with ``apt``::
 
   sudo sudo apt-get install gcc g++ build-essential git imagemagick postgresql
 
-MacOS
+macOS
 """""
 
 Install Homebrew_, then run::
@@ -140,10 +140,8 @@ platform. However, the main dependencies Erlang, PostgreSQL and
 ImageMagick do work on Windows, so, if you’re adventurous, it should
 be possible to get it running.
 
-We have included user-contributed ``start.cmd`` and ``build.cmd``
-batch-scripts which used to work on Windows, but have not been kept
-up-to-date with recent changes. Expect some major tweaking to get this
-back on track.
+It is advised to use Docker or the Linux subsystem for Windows.
+
 
 Getting Zotonic
 ^^^^^^^^^^^^^^^
