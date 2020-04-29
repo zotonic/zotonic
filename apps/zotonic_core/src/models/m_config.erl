@@ -174,7 +174,7 @@ get(Module, Key, Context) when is_binary(Key) ->
 
 
 
--spec get_value( atom() | binary(), atom() | binary(), z:context() ) -> binary() | undefined.
+-spec get_value( atom() | binary(), atom() | binary(), z:context() ) -> term() | undefined.
 get_value(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
     Value = case get(Module, Key, Context) of
         undefined -> undefined;

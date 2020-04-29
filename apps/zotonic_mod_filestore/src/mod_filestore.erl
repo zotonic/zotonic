@@ -138,7 +138,7 @@ pid_observe_tick_1m(Pid, tick_1m, Context) ->
             nop
     end,
     start_downloaders(m_filestore:fetch_move_to_local(Context), Context),
-    case m_config:get_value(?MODULE, delete_interval, Context) of
+    case m_config:get_value(?MODULE, delete_interval, <<"0">>, Context) of
         false ->
             nop;
         <<"false">> ->

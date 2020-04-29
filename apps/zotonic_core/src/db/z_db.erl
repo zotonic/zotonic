@@ -1186,15 +1186,7 @@ merge_props([R|Rest], Acc) when is_list(R) ->
                 end,
                 maps:to_list(Term)),
             merge_props(Rest, [lists:keydelete(props, 1, R)++T1|Acc])
-    end;
-merge_props([R|Rest], Acc) when is_map(R) ->
-    List = maps:to_list(R),
-    List1 = lists:map(
-        fun({K,V}) ->
-            {z_convert:to_atom(K), V}
-        end,
-        List),
-    merge_props([List1|Rest], Acc).
+    end.
 
 
 -spec assoc1(atom(), z:context(), sql(), parameters(), pos_integer()) -> {ok, [proplists:proplist()]}.
