@@ -654,10 +654,15 @@ insert(Table, Parameters, Context) ->
             F = fun(C) ->
                  DbDriver = z_context:db_driver(Context),
                  case equery1(DbDriver, C, FinalSql, ColParams) of
-                     {ok, Id} -> {ok, Id};
-                     {error, noresult} -> {ok, undefined};
+                     {ok, Id} ->
+                        {ok, Id};
+                     {error, noresult} ->
+                        {ok, undefined};
+                     {error, #error{ codename = unique_violation }} = Error ->
+                        lager:info("z_db unique_violation in insert to ~p of ~p", [Table, Parameters]),
+                        Error;
                      {error, Reason} = Error ->
-                        lager:error("z_db error ~p in query ~s with ~p", [Reason, FinalSql, ColParams]),
+                        lager:error("z_db error ~p in query \"~s\" with ~p", [Reason, FinalSql, ColParams]),
                         Error
                  end
             end,
@@ -1160,21 +1165,36 @@ assert_table_name1([H|T]) when (H >= $a andalso H =< $z) orelse (H >= $0 andalso
 
 
 %% @doc Merge the contents of the props column into the result rows
--spec merge_props([proplists:proplist()]) -> list() | undefined.
+-spec merge_props([proplists:proplist() | map()]) -> list() | undefined.
 merge_props(List) ->
     merge_props(List, []).
 
 merge_props([], Acc) ->
     lists:reverse(Acc);
-merge_props([R|Rest], Acc) ->
+merge_props([R|Rest], Acc) when is_list(R) ->
     case proplists:get_value(props, R, undefined) of
         undefined ->
             merge_props(Rest, [R|Acc]);
         <<>> ->
             merge_props(Rest, [R|Acc]);
         Term when is_list(Term) ->
-            merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc])
-    end.
+            merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc]);
+        Term when is_map(Term) ->
+            T1 = lists:map(
+                fun({K,V}) ->
+                    {z_convert:to_atom(K), V}
+                end,
+                maps:to_list(Term)),
+            merge_props(Rest, [lists:keydelete(props, 1, R)++T1|Acc])
+    end;
+merge_props([R|Rest], Acc) when is_map(R) ->
+    List = maps:to_list(R),
+    List1 = lists:map(
+        fun({K,V}) ->
+            {z_convert:to_atom(K), V}
+        end,
+        List),
+    merge_props([List1|Rest], Acc).
 
 
 -spec assoc1(atom(), z:context(), sql(), parameters(), pos_integer()) -> {ok, [proplists:proplist()]}.

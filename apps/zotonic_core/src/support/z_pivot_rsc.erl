@@ -205,7 +205,7 @@ insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) 
                 Ctx),
             New = case OldTask of
                 {OldProps, OldDue} ->
-                    {args, OldArgs} = proplists:lookup(args, OldProps),
+                    OldArgs = maps:get(<<"args">>, OldProps),
                     ArgsFun(OldDue, OldArgs, Due, Ctx);
                 undefined ->
                     ArgsFun(undefined, undefined, Due, Ctx)
@@ -223,13 +223,13 @@ insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) 
                                 [ Module, Function, UniqueKeyBin ],
                                 Ctx)
                     end,
-                    Fields = [
-                        {module, Module},
-                        {function, Function},
-                        {key, UniqueKeyBin},
-                        {args, NewArgs},
-                        {due, NewDue}
-                    ],
+                    Fields = #{
+                        <<"module">> => Module,
+                        <<"function">> => Function,
+                        <<"key">> => UniqueKeyBin,
+                        <<"args">> => NewArgs,
+                        <<"due">> => NewDue
+                    },
                     z_db:insert(pivot_task_queue, Fields, Ctx);
                 {error, _} = Error ->
                     Error
@@ -248,42 +248,46 @@ insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
                   and key = $3",
                 [ Module, Function, UniqueKeyBin ],
                 Ctx),
-            Fields = [
-                {module, Module},
-                {function, Function},
-                {key, UniqueKeyBin},
-                {args, Args},
-                {due, Due}
-            ],
+            Fields = #{
+                <<"module">> => Module,
+                <<"function">> => Function,
+                <<"key">> => UniqueKeyBin,
+                <<"args">> => Args,
+                <<"due">> => Due
+            },
             z_db:insert(pivot_task_queue, Fields, Ctx)
         end,
         Context).
 
+-spec get_task( z:context() ) -> {ok, [ map() ]} | {error, term()}.
 get_task(Context) ->
-    z_db:assoc("
+    z_db:qmap("
             select *
             from pivot_task_queue",
             Context).
 
+-spec get_task( module(), z:context() ) -> {ok, [ map() ]} | {error, term()}.
 get_task(Module, Context) ->
-    z_db:assoc("
+    z_db:qmap("
             select *
             from pivot_task_queue
             where module = $1",
             [Module],
             Context).
 
+-spec get_task( module(), atom(), z:context() ) -> {ok, [ map() ]} | {error, term()}.
 get_task(Module, Function, Context) ->
-    z_db:assoc("
+    z_db:qmap("
             select *
             from pivot_task_queue
             where module = $1 and function = $2",
             [Module, Function],
             Context).
 
+-spec get_task( module(), atom(), binary()|string(), z:context() ) -> {ok, map()} | {error, term()}.
 get_task(Module, Function, UniqueKey, Context) ->
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
-    z_db:assoc_row("
+    z_db:qmap_row("
             select *
             from pivot_task_queue
             where module = $1 and function = $2 and key = $3",
@@ -487,14 +491,14 @@ do_insert_queue(Ids, DueDate, Context) when is_list(Ids) ->
 %% @doc Poll a database for any queued updates.
 do_poll(Context) ->
     try
-        DidTask = do_poll_task(Context),
+        DidTask = do_next_task(Context),
         do_poll_queue(Context) or DidTask
     catch
         exit:{timeout, _} -> false;
         throw:{error, econnrefused} -> false
     end.
 
-do_poll_task(Context) ->
+do_next_task(Context) ->
     execute_task(poll_task(Context), Context).
 
 execute_task({TaskId, Module, Function, Args, ErrCt}, Context) ->
@@ -517,10 +521,10 @@ execute_task({TaskId, Module, Function, Args, ErrCt}, Context) ->
                         is_tuple(Delay) ->
                             Delay
                       end,
-                Fields = [
-                    {due, Due},
-                    {args, NewArgs}
-                ],
+                Fields = #{
+                    <<"due">> => Due,
+                    <<"args">> => NewArgs
+                },
                 z_db:update(pivot_task_queue, TaskId, Fields, Context);
             _OK ->
                 z_db:delete(pivot_task_queue, TaskId, Context)
@@ -538,10 +542,10 @@ execute_task({TaskId, Module, Function, Args, ErrCt}, Context) ->
                             + task_retry_backoff(ErrCt)),
                     lager:error("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p ~p",
                                 [TaskId, Module, Function, Args, Error, Reason, RetryDue, Trace]),
-                    RetryFields = [
-                        {due, RetryDue},
-                        {error_ct, ErrCt+1}
-                    ],
+                    RetryFields = #{
+                        <<"due">> => RetryDue,
+                        <<"error_ct">> => ErrCt+1
+                    },
                     z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
                 false ->
                     lager:error("Task ~p failed - aborting ~p:~p(~p) ~p:~p ~p",
@@ -605,26 +609,38 @@ log_error(Id, Error, _Context) ->
 
 %% @doc Fetch the next task uit de task queue, if any.
 poll_task(Context) ->
-    case z_db:q_row("select id, module, function, props
-                     from pivot_task_queue
-                     where due is null
-                        or due < current_timestamp
-                     order by due asc
-                     limit 1", Context)
+    case z_db:q_row("
+        select id, module, function, props
+        from pivot_task_queue
+        where due is null
+           or due < current_timestamp
+        order by due asc
+        limit 1", Context)
     of
         {Id, Module, Function, Props} ->
-            Args = case is_list(Props) of
-                true -> proplists:get_value(args, Props, []);
-                false -> []
-            end,
-            ErrCt = case is_list(Props) of
-                true -> proplists:get_value(error_ct, Props, 0);
-                false -> 0
-            end,
+            Args = get_args(Props),
+            ErrCt = get_error_ct(Props),
             {Id, z_convert:to_atom(Module), z_convert:to_atom(Function), Args, ErrCt};
         undefined ->
             empty
     end.
+
+get_args(Props) when is_map(Props) ->
+    maps:get(<<"args">>, Props, []);
+get_args(Props) when is_list(Props) ->
+    % deprecated task queue entries
+    proplists:get_value(args, Props, []);
+get_args(_) ->
+    undefined.
+
+get_error_ct(Props) when is_map(Props) ->
+    maps:get(<<"error_ct">>, Props, 0);
+get_error_ct(Props) when is_list(Props) ->
+    % deprecated task queue entries
+    proplists:get_value(error_ct, Props, 0);
+get_error_ct(_) ->
+    0.
+
 
 %% @doc Fetch the next batch of ids from the queue. Remembers the serials, as a new
 %% pivot request might come in while we are pivoting.

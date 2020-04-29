@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2020 Marc Worrell
 %% @doc Model for the zotonic config table. Performs a fallback to the site configuration when
 %% a key is not defined in the configuration table.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -65,19 +65,23 @@ m_get(Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 %% @doc Return all configurations from the configuration table. Returns a nested proplist (module, key)
+%% @todo Change proplists to maps
+-spec all( z:context() ) -> list().
 all(Context) ->
     case z_depcache:get(config, Context) of
         {ok, Cs} ->
             Cs;
         undefined ->
             Cs = case z_db:has_connection(Context) of
-                     true -> try
-                                 z_db:assoc_props("select * from config order by module, key", Context)
-                             catch
-                                 %% When Zotonic has not yet been installed, there is no config table yet
-                                 _:_ -> []
-                             end;
-                     false -> []
+                     true ->
+                        try
+                            z_db:assoc_props("select * from config order by module, key", Context)
+                        catch
+                            %% When Zotonic has not yet been installed, there is no config table yet
+                            _:_ -> []
+                        end;
+                     false ->
+                        []
                  end,
             Indexed = [
                 {M, z_utils:index_proplist(key, CMs)}
@@ -95,7 +99,8 @@ all(Context) ->
 %% @doc Get the list of configuration key for the module.
 %%      Returns the empty list for non existing keys, otherwise
 %%      a property list with all the module settings.
--spec get( atom() | binary() | undefined, z:context() ) -> proplists:proplist() | [].
+%% @todo Change proplists to maps.
+-spec get( atom() | binary() | undefined, z:context() ) -> proplists:proplist().
 get(undefined, _Context) ->
     [];
 get(Module, Context) when is_atom(Module) ->
@@ -122,7 +127,7 @@ get(Module, Context) when is_binary(Module) ->
     end.
 
 %% @doc Get a configuration value for the given module/key combination.
-%% @spec get(Module::atom(), Key::atom(), #context{}) -> Value | undefined
+-spec get( atom() | binary(), atom() | binary(), z:context() ) -> proplists:proplist() | undefined.
 get(zotonic, Key, _Context) when is_atom(Key) ->
     [
         {value, z_config:get(Key)}
@@ -143,7 +148,7 @@ get(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
     case Value of
         undefined ->
             case m_site:get(Module, Key, Context) of
-                undefined -> Value;
+                undefined -> undefined;
                 [H|_] = V when is_tuple(H) -> [{list, V}];
                 V -> [{value, V}]
             end;
@@ -169,6 +174,7 @@ get(Module, Key, Context) when is_binary(Key) ->
 
 
 
+-spec get_value( atom() | binary(), atom() | binary(), z:context() ) -> binary() | undefined.
 get_value(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
     Value = case get(Module, Key, Context) of
         undefined -> undefined;
@@ -196,20 +202,23 @@ get_value(Module, Key, Context) when is_binary(Key) ->
     end.
 
 
+-spec get_value( atom() | binary(), atom() | binary(), term(), z:context() ) -> term() | undefined.
 get_value(Module, Key, Default, Context) ->
     case get_value(Module, Key, Context) of
         undefined -> Default;
         Value -> Value
     end.
 
+-spec get_boolean( atom() | binary(), atom() | binary(), z:context() ) -> boolean().
 get_boolean(Module, Key, Context) ->
     z_convert:to_bool(get_value(Module, Key, Context)).
 
+-spec get_boolean( atom() | binary(), atom() | binary(), term(), z:context() ) -> boolean().
 get_boolean(Module, Key, Default, Context) ->
     z_convert:to_bool(get_value(Module, Key, Default, Context)).
 
 %% @doc Set a "simple" config value.
--spec set_value( atom(), atom(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
+-spec set_value( atom() | binary(), atom() | binary(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
 set_value(Module, Key, Value, Context) ->
     case z_db:has_connection(Context) of
         true ->
@@ -239,11 +248,11 @@ set_value_db(Module, Key, Value0, Context) ->
                 Value ->
                     no_change;
                 undefined ->
-                    Props = [
-                        {module,ModuleAtom},
-                        {key, KeyAtom},
-                        {value, Value}
-                    ],
+                    Props = #{
+                        <<"module">> => ModuleAtom,
+                        <<"key">> => KeyAtom,
+                        <<"value">> => Value
+                    },
                     {ok, _} = z_db:insert(config, Props, Ctx),
                     insert;
                 OldValue ->
@@ -289,13 +298,23 @@ set_value_db(Module, Key, Value0, Context) ->
     end.
 
 %% @doc Set a "complex" config value.
--spec set_prop(atom(), atom(), atom(), any(), z:context()) -> ok.
+-spec set_prop(atom()|binary(), atom()|binary(), atom()|binary(), term(), z:context()) -> ok.
 set_prop(Module, Key, Prop, PropValue, Context) ->
     z_db:transaction(
         fun(Ctx) ->
             case get_id(Module, Key, Ctx) of
-                undefined -> z_db:insert(config, [{module,Module}, {key,Key}, {Prop,PropValue}], Ctx);
-                Id -> z_db:update(config, Id, [{Prop,PropValue}], Ctx)
+                undefined ->
+                    Ins = #{
+                        <<"module">> => Module,
+                        <<"key">> => Key,
+                        z_convert:to_binary(Prop) => PropValue
+                    },
+                    z_db:insert(config, Ins, Ctx);
+                Id ->
+                    Upd = #{
+                        z_convert:to_binary(Prop) => PropValue
+                    },
+                    z_db:update(config, Id, Upd, Ctx)
             end
         end,
         Context),
@@ -313,17 +332,19 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
 
 
 %% @doc Delete the specified module/key combination
-%% @spec delete(Module::atom(), Key::atom(), #context{}) -> ok
+-spec delete( atom()|binary(), atom()|binary(), z:context() ) -> ok.
 delete(Module, Key, Context) ->
-    z_db:q("delete from config where module = $1 and key = $2", [Module, Key], Context),
+    Module1 = z_convert:to_atom(Module),
+    Key1 = z_convert:to_atom(Key),
+    z_db:q("delete from config where module = $1 and key = $2", [Module1, Key1], Context),
     z_depcache:flush(config, Context),
     z_notifier:notify(
-        #m_config_update{module = Module, key = Key, value = undefined},
+        #m_config_update{module = Module1, key = Key1, value = undefined},
         Context
     ),
     z:info(
         "Configuration key '~s.~s' deleted",
-        [ z_convert:to_binary(Module), z_convert:to_binary(Key) ],
+        [ z_convert:to_binary(Module1), z_convert:to_binary(Key1) ],
         [ {module, ?MODULE}, {line, ?LINE} ],
         Context),
     ok.
