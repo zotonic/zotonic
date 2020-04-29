@@ -136,6 +136,7 @@ get(Id, Context) ->
     F = fun() ->
         case z_db:qmap_props_row("select * from medium where id = $1", [Id], Context) of
             {ok, Map} -> Map;
+            {error, nodb} -> undefined;
             {error, enoent} -> undefined
         end
     end,
