@@ -4,17 +4,69 @@
 
 {% block content %}
 
+<style>
+
+.meta {
+    font-weight: bold;
+    color: #888;
+}
+
+</style>
+
 <div class="row">
 
 <div class="col-md-2 col-lg-2 col-sm-2 col-xs-4">
   <div class="panel panel-default">
     <div class="panel-heading">Run Queue</div>
+
     <div class="panel-body">
-        {% for id, name in [ ["statistics-run_queue", "Run Queue"] ] %}
+
+        {% for id, name in [
+                ["statistics-run_queue", "Run Queue"] ] %}
             {% include "_stat_info.tpl" id=id name=name %}
         {% endfor %}
+
     </div>
   </div>
+</div>
+
+<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">Broker</div>
+        <div class="panel-body">
+            <table class="table table-condensed">
+                <thead></thead>
+                <tbody>
+                    <tr><td class="meta">Sessions</td>       <td id="broker-session_count" style="text-align:right"></td></tr>
+                    <tr><td class="meta">Subscribes/min</td> <td id="broker-subscribe_one" style="text-align:right"></td></tr>
+                    <tr><td class="meta">Publishes/min</td>  <td id="broker-publish_one" style="text-align:right"></td></tr>
+                    <tr><td class="meta">Subscribers</td>    <td id="broker-destinations" style="text-align:right"></td></tr>
+                    <tr><td class="meta">Nodes</td>          <td id="broker-nodes" style="text-align:right"></td></tr>
+                    <tr><td class="meta">Edges</td>          <td id="broker-edges" style="text-align:right"></td></tr>
+                    <tr><td class="meta">Wildcards</td>      <td id="broker-wildcards" style="text-align:right"></td></tr>
+                    <tr><td class="meta">Paths</td>          <td id="broker-paths" style="text-align:right"></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">IO</div>
+        <div class="panel-body">
+            <table class="table table-condensed">
+                <thead></thead>
+
+                ["io-input", "Input"],
+                ["io-output", "Output"]] %}
+                <tbody>
+                    <tr><td class="meta">Input</td>       <td id="io-inputt" style="text-align:right"></td></tr>
+                    <tr><td class="meta">Output/min</td>  <td id="io-outputt" style="text-align:right"></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
@@ -31,37 +83,37 @@
             </div>
             <div class="row">
                 <div class="col-md-1"><span style="color: gold">&#9607;</span></div>
-                <div class="col-md-2">process</div>
+                <div class="col-md-2 meta">process</div>
                 <div id="memory-processes" class="col-md-3 text-right">#</div>
 
                 <div class="col-md-1"><span style="color: dodgerblue">&#9607;</span></div>
-                <div class="col-md-2">ets</div>
+                <div class="col-md-2 meta">ets</div>
                 <div id="memory-atom" class="col-md-3 text-right">#</div>
             </div>
             
             <div class="row">
                 <div class="col-md-1"><span style="color: lightgreen">&#9607;</span></div>
-                <div class="col-md-2">atom</div>
+                <div class="col-md-2 meta">atom</div>
                 <div id="memory-ets" class="col-md-3 text-right">#</div>
 
                 <div class="col-md-1"><span style="color: tomato">&#9607;</span></div>
-                <div class="col-md-2">binary</div>
+                <div class="col-md-2 meta">binary</div>
                 <div id="memory-binary" class="col-md-3 text-right">#</div>
             </div>
 
             <div class="row">
                 <div class="col-md-1"><span style="color: orchid">&#9607;</span></div>
-                <div class="col-md-2">code</div>
+                <div class="col-md-2 meta">code</div>
                 <div id="memory-code" class="col-md-3 text-right">#</div>
 
                 <div class="col-md-1" style="color: lightgray">&#9607;</div>
-                <div class="col-md-2">other</div>
+                <div class="col-md-2 meta">other</div>
                 <div id="memory-other" class="col-md-3 text-right">#</div>
             </div>
 
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <span>Total </span><span id="memory-total"></span>
+                    <span class="meta">Total </span><span id="memory-total"></span>
                 </div>
                 {% javascript %}
                     $("#memory-binary").data("render", to_human);
@@ -86,7 +138,7 @@
 
             <div>
                 <div class="row">
-                    <div class="col-md-6">Atoms: <strong id="usage-atom-value">#</strong>%</div>
+                    <div class="col-md-6"><span class="meta">Atoms: </span><strong id="usage-atom-value">#</strong><span class="meta">%</span></div>
                     <div class="col-md-6 text-right">
                         <span id="system-atom_count">#</span>/<span id="system-atom_limit">#</span> 
                     </div>
@@ -104,7 +156,9 @@
 
             <div>
                 <div class="row">
-                    <div class="col-md-6">Ports: <strong id="usage-port-value" id="usage-port-value">#</strong>%</div>
+                    <div class="col-md-6">
+                        <span class="meta">Ports: </span><strong id="usage-port-value" id="usage-port-value">#</strong><span class="meta">%</span>
+                    </div>
                     <div class="col-md-6 text-right">
                         <span id="system-port_count">#</span>/<span id="system-port_limit">#</span> 
                     </div>
@@ -120,7 +174,7 @@
 
             <div>
                 <div class="row">
-                    <div class="col-md-6">Processes: <strong id="usage-process-value">#</strong>%</div>
+                    <div class="col-md-6"><span class="meta">Processes: </span><strong id="usage-process-value">#</strong><span class="meta">%</span></div>
                     <div class="col-md-6 text-right">
                         <span id="system-process_count">#</span>/<span id="system-process_limit">#</span> 
                     </div>
@@ -165,6 +219,8 @@
                 <tr>
                     <th>Dispatch</th>
                     <th>Req/min</th>
+                    <th>In</th>
+                    <th>Out</th>
                     <th>Mean Latency</th>
                     <th>99 percentile</t>
                 </tr>
@@ -180,20 +236,30 @@
 </div>
 
 {% javascript %}
-function to_human(value) {
+function to_human(value, per) {
+    if(value === undefined)
+        return "-";
+
     if(value < 512) // .5 kb
-        return value + "<small>B</small>";
+        return value + " " + unit("B", per);
 
     if(value < 524288) // .5 Mb
-        return (value/1024).toFixed(1) + "<small>Kb</small>";
+        return (value/1024).toFixed(1) + unit("Kb", per);
 
     if(value < 536870912) // .5 Gb
-        return (value/1024/1024).toFixed(1) + "<small>Mb</small>";
+        return (value/1024/1024).toFixed(1) + unit("Mb", per);
 
     if(value < 549755813888) // *.5 Tb
-        return (value/1024/1024/1024).toFixed(1) + "<small>Gb</small>";
+        return (value/1024/1024/1024).toFixed(1) + unit("Gb", per);
 
-    return (value/1024/1024/1024/1024).toFixed(1) + "<small>Tb</small>";
+    return (value/1024/1024/1024/1024).toFixed(1) + unit("Tb", per);
+}
+
+function unit(u, per) {
+    if(per) {
+        return " <small class=\"meta\">" + u + "/" + per + "</small>";
+    }
+    return " <small class=\"meta\">" + u + "</small>";
 }
 {% endjavascript %}
 
@@ -201,6 +267,27 @@ function to_human(value) {
     let collected = {};
 
     cotonic.broker.publish("model/ui/insert/the-stats", {initialData: "<tr><td>...</td></tr>", inner: true});
+
+    cotonic.broker.subscribe("bridge/origin/$SYS/site/blog/broker/+what", function(msg, args) {
+        switch(args.what) {
+            case "subscribe":
+                $("#broker-subscribe_one").html(msg.payload.one);
+                break;
+            case "publish":
+                $("#broker-publish_one").html(msg.payload.one);
+                break;
+            case "session_count":
+                $("#broker-session_count").html(msg.payload.count);
+                break;
+            case "router_info":
+                $("#broker-nodes").html(msg.payload.nodes);
+                $("#broker-edges").html(msg.payload.edges);
+                $("#broker-wildcards").html(msg.payload.wildcards);
+                $("#broker-paths").html(msg.payload.paths);
+                $("#broker-destinations").html(msg.payload.destinations);
+                break;
+        }
+    })
 
     cotonic.broker.subscribe("bridge/origin/$SYS/site/blog/cowmachine/+dispatch/+what", function(msg, args) {
         let c = collected[args.dispatch];
@@ -213,12 +300,12 @@ function to_human(value) {
             c["mean"] = msg.payload["mean"];
             break;
         case "data_out":
-            console.log("DATA OUT", msg.payload);
-            c["data_out"] = msg.payload["count"];
+            c["data_out_total"] = msg.payload["count"];
+            c["data_out_one"] = msg.payload["one"];
             break;
         case "data_in": 
-            console.log("DATA IN", msg.payload);
-            c["data_in"] = msg.payload["count"];
+            c["data_in_total"] = msg.payload["count"];
+            c["data_in_one"] = msg.payload["one"];
             break;
         case "1xx":
             c["1xx_count"] = msg.payload["count"];
@@ -256,10 +343,13 @@ function to_human(value) {
                    continue;
 
              rows.push("<tr><td>" +  keys[i] + "</td>" +
-                 "<td>" + render_requests(collected[keys[i]]) + "</td>" +
+                 "<td style=\"text-align:right\">" + render_requests(collected[keys[i]]) + "</td>" +
 
-                 "<td>" + render_ms(collected[keys[i]].mean) + "</td>" +
-                 "<td>" + render_ms(collected[keys[i]]["99"]) + "</td>" +
+                 "<td style=\"text-align:right\">" + to_human(collected[keys[i]].data_in_one, "min") + "</td>" +
+                 "<td style=\"text-align:right\">" + to_human(collected[keys[i]].data_out_one, "min") + "</td>" +
+
+                 "<td style=\"text-align:right\">" + render_ms(collected[keys[i]].mean) + "</td>" +
+                 "<td style=\"text-align:right\">" + render_ms(collected[keys[i]]["99"]) + "</td>" +
              "</tr>");
          }
 
@@ -291,7 +381,7 @@ function to_human(value) {
     function render_ms(val) {
          if(!val) return "-";
 
-         return (val / 1000).toFixed(3) + " ms" 
+         return (val / 1000).toFixed(3) + "<small class=\"meta\">ms</small>" 
     }
 
     cotonic.broker.subscribe("bridge/origin/$SYS/erlang/+entry", function(msg, args) {
