@@ -5,27 +5,30 @@
 {% block content %}
 
 <style>
-
 .meta {
     font-weight: bold;
     color: #888;
 }
-
 </style>
 
 <div class="row">
 
-<div class="col-md-2 col-lg-2 col-sm-2 col-xs-4">
+<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
   <div class="panel panel-default">
     <div class="panel-heading">Run Queue</div>
 
     <div class="panel-body">
-
-        {% for id, name in [
-                ["statistics-run_queue", "Run Queue"] ] %}
-            {% include "_stat_info.tpl" id=id name=name %}
-        {% endfor %}
-
+        <table class="table table-condensed">
+            <thead></thead>
+            <tbody>
+                {% for title, id in [ ["Run Queue", "statistics-run_queue"] ] %}
+                    {% include "_stat_row.tpl" %}
+                {% endfor %}
+            </tbody>
+            {% javascript %}
+                $("#statistics-run_queue").data("render", render_value);
+            {% endjavascript %}
+        </table>
     </div>
   </div>
 </div>
@@ -37,14 +40,16 @@
             <table class="table table-condensed">
                 <thead></thead>
                 <tbody>
-                    <tr><td class="meta">Sessions</td>       <td id="broker-session_count" style="text-align:right"></td></tr>
-                    <tr><td class="meta">Subscribes/min</td> <td id="broker-subscribe_one" style="text-align:right"></td></tr>
-                    <tr><td class="meta">Publishes/min</td>  <td id="broker-publish_one" style="text-align:right"></td></tr>
-                    <tr><td class="meta">Subscribers</td>    <td id="broker-destinations" style="text-align:right"></td></tr>
-                    <tr><td class="meta">Nodes</td>          <td id="broker-nodes" style="text-align:right"></td></tr>
-                    <tr><td class="meta">Edges</td>          <td id="broker-edges" style="text-align:right"></td></tr>
-                    <tr><td class="meta">Wildcards</td>      <td id="broker-wildcards" style="text-align:right"></td></tr>
-                    <tr><td class="meta">Paths</td>          <td id="broker-paths" style="text-align:right"></td></tr>
+                    {% for title, id in [ ["Sessions", "broker-session_count"],
+                                          ["Subscribes/min", "broker-subscribe_one"],
+                                          ["Publishes/min", "broker-publish_one"],
+                                          ["Subscribers", "broker-destinations"],
+                                          ["Nodes", "broker-nodes"],
+                                          ["Edges", "broker-edges"],
+                                          ["Wildcards", "broker-wildcards"],
+                                          ["Paths", "broker-paths"] ] %}
+                        {% include "_stat_row.tpl" %}
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -57,19 +62,22 @@
         <div class="panel-body">
             <table class="table table-condensed">
                 <thead></thead>
-
-                ["io-input", "Input"],
-                ["io-output", "Output"]] %}
                 <tbody>
-                    <tr><td class="meta">Input</td>       <td id="io-inputt" style="text-align:right"></td></tr>
-                    <tr><td class="meta">Output/min</td>  <td id="io-outputt" style="text-align:right"></td></tr>
+                    {% for title, id in [ ["Input", "io-input"],
+                                          ["Output", "io-output"] ] %}
+                        {% include "_stat_row.tpl" %}
+                    {% endfor %}
                 </tbody>
+                {% javascript %}
+                    $("#io-input").data("render", to_human);
+                    $("#io-output").data("render", to_human);
+                {% endjavascript %}
             </table>
         </div>
     </div>
 </div>
 
-<div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+<div class="col-md-5 col-lg-4 col-sm-6 col-xs-8">
     <div class="panel panel-default">
         <div class="panel-heading">Memory Usage</div>
 
@@ -192,23 +200,6 @@
     </div>
 </div>
 
-<div class="col-md-4 col-lg-4 col-sm-5">
-  <div class="panel panel-default">
-    <div class="panel-heading">I/O</div>
-    <div class="panel-body">
-        {% for id, name in [
-                ["io-input", "Input"],
-                ["io-output", "Output"]] %}
-            {% include "_stat_info.tpl" id=id name=name render="to_human" %}
-        {% endfor %}
-
-        {% for id, name in [
-                ["network-tcp_port_count", "Open TCP Connections"]] %}
-            {% include "_stat_info.tpl" id=id name=name %}
-        {% endfor %}
-    </div>
-  </div>
-</div>
 
 <div class="col-md-6 col-lg-6 col-sm-12">
   <div class="panel panel-default">
