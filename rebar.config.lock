@@ -52,7 +52,7 @@
                        "a60b350819c8ba5602ed85b9d0050cc8e3cb1152"}},
        {mochiweb,".*",
                  {git,"git://github.com/zotonic/mochiweb.git",
-                      "dab9019ff7b85bc8a1a1122a635ccdc3da1017ed"}},
+                      "0f0981876af3b3fc7e793a768ad08dec3fbad3e9"}},
        {dispatch_compiler,".*",
                           {git,"git://github.com/zotonic/dispatch_compiler.git",
                                "ae778807f9efa25e6bb1f62b8a4125b678bf94f5"}},
