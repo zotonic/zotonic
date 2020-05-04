@@ -65,8 +65,9 @@ handle_call(Msg, _From, State) ->
     {reply, {error, unknown_msg}, State}.
 
 handle_cast(start, #state{id=Id, path=Path, context=Context, props=Props} = State) ->
-    case m_filestore:lookup(Path, Context) of
-        undefined ->
+    Entry = m_filestore:lookup(Path, Context),
+    case m_filestore:is_upload_ok(Entry) of
+        true ->
             RscId = proplists:get_value(id, Props),
             case z_notifier:first(#filestore_credentials_lookup{id=RscId, path=Path}, Context) of
                 {ok, #filestore_credentials{} = Cred} ->
@@ -87,7 +88,7 @@ handle_cast(start, #state{id=Id, path=Path, context=Context, props=Props} = Stat
                     m_filestore:dequeue(Id, Context),
                     {stop, normal, State}
             end;
-        _Entry ->
+        true ->
             m_filestore:dequeue(Id, Context),
             {stop, normal, State}
     end;
