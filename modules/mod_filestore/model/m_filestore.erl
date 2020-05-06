@@ -131,13 +131,13 @@ is_upload_ok(Props) ->
 
 %% Check if it is ok to upload to the location of this entry
 -spec is_dowload_ok( undefined | proplists:proplist() ) -> boolean().
+is_dowload_ok(undefined) ->
+    true;
 is_dowload_ok(Props) ->
     Error = proplists:get_value(error, Props),
     Modified = proplists:get_value(modified, Props),
     is_download_ok(Error, Modified).
 
-is_download_ok(undefined, _Modified) ->
-    true;
 is_download_ok(_Error, Modified) ->
     % Typical error when S3 can't find anything
     % or when the credentials were wrong for some time

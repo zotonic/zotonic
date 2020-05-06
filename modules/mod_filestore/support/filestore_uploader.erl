@@ -88,7 +88,7 @@ handle_cast(start, #state{id=Id, path=Path, context=Context, props=Props} = Stat
                     m_filestore:dequeue(Id, Context),
                     {stop, normal, State}
             end;
-        true ->
+        false ->
             m_filestore:dequeue(Id, Context),
             {stop, normal, State}
     end;

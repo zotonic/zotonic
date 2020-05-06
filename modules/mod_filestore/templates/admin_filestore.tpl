@@ -53,10 +53,15 @@
                             </div>
 
                             <div class="form-group row">
-                                <div class="checkbox col-md-12">
-                                    <label for="is_upload_enabled">
+                                <div class="col-md-12">
+                                    <label class="checkbox">
                                         <input type="checkbox" id="is_upload_enabled" name="is_upload_enabled" {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
                                         {_ Upload new media files to the cloud file store _}
+                                    </label>
+
+                                    <label class="checkbox">
+                                        <input type="checkbox" id="is_create_bucket" name="is_create_bucket">
+                                        {_ Try to create a private bucket if the bucket does not exist _}
                                     </label>
                                 </div>
                             </div>
@@ -138,9 +143,9 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td id="s3queue">{{ stats.queued }}</td>
-                                        <td id="s3queue-local">{{ stats.queued_local }}</td>
-                                        <td>{{ stats.queued_deleted }}</td>
+                                        <td id="s3queue">{{ stats.queued|default:"-" }}</td>
+                                        <td id="s3queue-local">{{ stats.queued_local|default:"-" }}</td>
+                                        <td>{{ stats.queued_deleted|default:"-" }}</td>
                                     </tr>
                                 </tbody>
                             </table>
