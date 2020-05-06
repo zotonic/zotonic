@@ -158,7 +158,7 @@ lookup(Path, Context) ->
         undefined ->
             undefined;
         Entry ->
-            case m_filestore:is_dowload_ok(Entry) of
+            case m_filestore:is_download_ok(Entry) of
                 true ->
                     {location, Location} = proplists:lookup(location, Entry),
                     case filezcache:locate_monitor(Location) of
