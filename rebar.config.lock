@@ -94,7 +94,7 @@
                   "fe5bf9a252ee68f644bdee7db919cc522ff4ad03"}},
        {s3filez,".*",
                 {git,"git://github.com/mworrell/s3filez.git",
-                     "b6784fd3d3a3ede278c9b9f6f187fe1e762eb793"}},
+                     "8d9ba7f2eade956cea87167d0d786dc942000ea0"}},
        {proper,".*",
                {git,"git://github.com/manopapad/proper.git",
                     "16f9f7cb181f41ffb882c4a31052275dfad16ee1"}},

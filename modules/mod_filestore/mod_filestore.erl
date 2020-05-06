@@ -20,7 +20,7 @@
 
 -author("Marc Worrell <marc@worrell.nl>").
 -mod_title("File Storage").
--mod_description("Store files on cloud storage services like Amazon S3 and GreenQloud").
+-mod_description("Store files on cloud storage services like Amazon S3 and Google Cloud Storage").
 -mod_prio(500).
 -mod_schema(2).
 -mod_provides([filestore]).
@@ -154,20 +154,24 @@ manage_schema(Version, Context) ->
     m_filestore:install(Version, Context).
 
 lookup(Path, Context) ->
-    Entry = m_filestore:lookup(Path, Context),
-    case m_filestore:is_dowload_ok(Entry) of
-        true ->
-            {location, Location} = proplists:lookup(location, Entry),
-            case filezcache:locate_monitor(Location) of
-                {ok, {file, _Size, Filename}} ->
-                    {ok, {filename, Filename, Entry}};
-                {ok, {pid, Pid}} ->
-                    {ok, {filezcache, Pid, Entry}};
-                {error, enoent} ->
-                    load_cache(Entry, Context)
-            end;
-        false ->
-            undefined
+    case m_filestore:lookup(Path, Context) of
+        undefined ->
+            undefined;
+        Entry ->
+            case m_filestore:is_dowload_ok(Entry) of
+                true ->
+                    {location, Location} = proplists:lookup(location, Entry),
+                    case filezcache:locate_monitor(Location) of
+                        {ok, {file, _Size, Filename}} ->
+                            {ok, {filename, Filename, Entry}};
+                        {ok, {pid, Pid}} ->
+                            {ok, {filezcache, Pid, Entry}};
+                        {error, enoent} ->
+                            load_cache(Entry, Context)
+                    end;
+                false ->
+                    undefined
+            end
     end.
 
 load_cache(Props, Context) ->
