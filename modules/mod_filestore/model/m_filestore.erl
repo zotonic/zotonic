@@ -101,6 +101,7 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
                                 service = $2,
                                 size = $3,
                                 is_deleted = false,
+                                deleted = null,
                                 is_move_to_local = false,
                                 error = null,
                                 modified = now()
@@ -255,7 +256,8 @@ fetch_move_to_local(Context) ->
 purge_move_to_local(Id, Context) ->
     z_db:q("update filestore
             set is_move_to_local = false,
-                is_deleted = true
+                is_deleted = true,
+                deleted = now()
             where id = $1", [Id], Context).
 
 stats(Context) ->
