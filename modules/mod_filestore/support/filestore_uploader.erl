@@ -29,7 +29,7 @@
     code_change/3,
     terminate/2,
 
-    force_stale/2
+    stale_file_entry/2
     ]).
 
 -include_lib("zotonic.hrl").
@@ -145,9 +145,14 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
     lager:info("Filestore moved ~p to ~p : ~p", [Path, Service, Location]),
     FzCache = start_empty_cache_entry(Location),
     {ok, _} = m_filestore:store(Path, Size, Service, Location, Context),
+    % Make sure that the file entry is not serving the relocated file from the file system.
+    pause_file_entry(Path, Context),
     AbsPathTmp = <<AbsPath/binary, "~">>,
-    file:rename(AbsPath, AbsPathTmp),
-    force_stale(Path, Context),
+    _ = file:rename(AbsPath, AbsPathTmp),
+    % After the file entry is marked stale it will do a new lookup, and will find
+    % the file stored in the filecache.
+    stale_file_entry(Path, Context),
+    % The file entries are waiting for the cache process, which is monitoring the current process
     case FzCache of
         {ok, Pid} ->
             ok = filezcache_entry:store(Pid, {tmpfile, AbsPathTmp});
@@ -172,7 +177,10 @@ start_empty_cache_entry(Location) ->
             Error
     end.
 
-force_stale(Path, Context) ->
+pause_file_entry(Path, Context) ->
+    z_file_request:pause(file_entry_path(Path), Context).
+
+stale_file_entry(Path, Context) ->
     z_file_request:force_stale(file_entry_path(Path), Context).
 
 file_entry_path(<<"archive/", Path/binary>>) ->
