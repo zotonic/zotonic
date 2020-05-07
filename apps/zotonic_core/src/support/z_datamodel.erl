@@ -132,11 +132,12 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) when is_list
 manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
     case m_category:name_to_id(Category, Context) of
         {ok, CatId} ->
+            ModuleB = atom_to_binary(Module, utf8),
             Props = map_props(Props0, Context),
             case m_rsc:name_to_id(Name, Context) of
                 {ok, Id} ->
-                    case m_rsc:p(Id, installed_by, Context) of
-                        Module ->
+                    case m_rsc:p_no_acl(Id, installed_by, Context) of
+                        ModuleB ->
                             NewProps = update_new_props(Module, Id, Props, Options, Context),
                             m_rsc_update:update(
                                     Id,
@@ -151,10 +152,10 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                     end;
                 {error, {unknown_rsc, _}} ->
                     %% new resource, or old resource
-                    Props1 = #{
+                    Props1 = Props#{
                         <<"name">> => Name,
                         <<"category_id">> => CatId,
-                        <<"installed_by">> => Module,
+                        <<"installed_by">> => ModuleB,
                         <<"managed_prop">> => z_html:escape_props(Props)
                     },
                     Props2 = case maps:get(<<"is_published">>, Props1, undefined) of
