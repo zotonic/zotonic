@@ -24,6 +24,7 @@
     lookup_file/2,
     lookup_file/4,
     stop/2,
+    pause/2,
     force_stale/2,
     content_encodings/1,
     content_data/2,
@@ -53,6 +54,9 @@ lookup_file(Path, Root, OptFilters, Context) ->
 
 stop(Path, Context) ->
     z_file_entry:stop(Path, Context).
+
+pause(Path, Context) ->
+    z_file_sup:pause_file(z_convert:to_binary(Path), [], undefined, Context).
 
 force_stale(Path, Context) ->
     z_file_entry:force_stale(Path, Context).

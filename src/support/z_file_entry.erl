@@ -37,12 +37,14 @@
     stop/1,
     stop/2,
     force_stale/1,
-    force_stale/2
+    force_stale/2,
+    pause/1,
+    pause/2
     ]).
 
 %% gen_fsm exports
 -export([
-    start_link/4,
+    start_link/5,
     init/1,
     handle_sync_event/4,
     handle_event/3,
@@ -56,6 +58,7 @@
     locate/2,
     content_encoding_gzip/2,
     serving/2,
+    paused/2,
     stopping/2
     ]).
 
@@ -77,7 +80,8 @@
         gzip_size,              % size of gzip encoded data
         gzipper,                % ref to identify gzip process
         waiting = [],           % List of waiting processes
-        index_ref
+        index_ref,
+        pauser_pid :: pid() | undefined
     }).
 
 
@@ -87,6 +91,9 @@
 
 %% Period after a stop decision to handle late requests (5 secs)
 -define(STOP_TIMEOUT, 5000).
+
+%% Max period for a pause (10 secs)
+-define(PAUSE_TIMEOUT, 10000).
 
 %% Inactivity timeout when serving (1 hour)
 -define(SERVING_TIMEOUT, 3600000).
@@ -102,9 +109,11 @@
 %%% API
 %%% ------------------------------------------------------------------------------------
 
-start_link(RequestPath, Root, OptFilterProps, Context) when is_binary(RequestPath) ->
+start_link(InitialState, RequestPath, Root, OptFilterProps, Context)
+    when is_binary(RequestPath),
+         (InitialState =:= locate orelse InitialState =:= paused) ->
     Minify = z_convert:to_bool(z_context:get(minify, Context)),
-    Args = [ RequestPath, Root, OptFilterProps, Minify, z_context:site(Context) ],
+    Args = [ InitialState, RequestPath, Root, OptFilterProps, Minify, z_context:site(Context) ],
     gen_fsm:start_link({via, z_proc, {reg_name(RequestPath, Minify), Context}}, ?MODULE, Args, []).
 
 reg_name(RequestPath, Minify) ->
@@ -135,6 +144,21 @@ force_stale(Pid) ->
 force_stale(RequestPath, Context) when is_binary(RequestPath) ->
     force_stale(where(RequestPath, Context)).
 
+
+pause(undefined) ->
+    {error, noproc};
+pause(Pid) ->
+    try
+        gen_fsm:sync_send_all_state_event(Pid, {pause, self()}, infinity)
+    catch
+        exit:{noproc, _} ->
+            {error, noproc}
+    end.
+
+pause(RequestPath, Context) when is_binary(RequestPath) ->
+    pause(where(RequestPath, Context)).
+
+
 lookup(Pid) when is_pid(Pid) ->
     try
         gen_fsm:sync_send_all_state_event(Pid, lookup, infinity)
@@ -152,7 +176,7 @@ lookup(RequestPath, Context) when is_binary(RequestPath) ->
 %%% gen_fsm callbacks
 %%% ------------------------------------------------------------------------------------
 
-init([RequestPath, Root, OptFilterProps, Minify, Site]) ->
+init([InitialState, RequestPath, Root, OptFilterProps, Minify, Site]) ->
     State = #state{
         site=Site,
         request_path=RequestPath,
@@ -164,7 +188,11 @@ init([RequestPath, Root, OptFilterProps, Minify, Site]) ->
         modifiedUTC = {{1970,1,1},{0,0,0}},
         last_stale_check = os:timestamp()
     },
-    {ok, locate, State, 0}.
+    Timeout = case InitialState of
+        paused -> ?PAUSE_TIMEOUT;
+        locate -> 0
+    end,
+    {ok, InitialState, State, Timeout}.
 
 %%% ------------------------------------------------------------------------------------
 %%% gen_fsm states
@@ -226,6 +254,9 @@ content_encoding_gzip(timeout, State) ->
             {next_state, serving, State, ?SERVING_TIMEOUT}
     end.
 
+paused(timeout, State) ->
+    {next_state, locate, State, ?PAUSE_TIMEOUT}.
+
 serving(timeout, State) ->
     unreg(State), State#state.site,
     {next_state, stopping, State, ?STOP_TIMEOUT}.
@@ -240,6 +271,8 @@ stopping(timeout, State) ->
 
 handle_sync_event(lookup, From, locate, State) ->
     {next_state, locate, State#state{waiting=[From|State#state.waiting]}, 0};
+handle_sync_event(lookup, From, paused, State) ->
+    {next_state, paused, State#state{waiting=[From|State#state.waiting]}, ?PAUSE_TIMEOUT};
 handle_sync_event(lookup, _From, stopping, State) ->
     {next_state, stopping, lookup_file_info(State), ?STOP_TIMEOUT};
 handle_sync_event(lookup, From, StateName, State) ->
@@ -252,7 +285,11 @@ handle_sync_event(lookup, From, StateName, State) ->
             {next_state, locate, State1, 0}
     end;
 handle_sync_event(force_stale, _From, _StateName, State) ->
-    {reply, ok, locate, State, 0};
+    State1 = unlink_pauser(State),
+    {reply, ok, locate, State1, 0};
+handle_sync_event({pause, PauserPid}, _From, _StateName, State) ->
+    State1 = link_pauser(State, PauserPid),
+    {reply, ok, paused, State1, ?PAUSE_TIMEOUT};
 handle_sync_event(Msg, _From, StateName, State) ->
     lager:error("Unexpected sync-event ~p in state ~p", [Msg, StateName]),
     {next_state, StateName, State, ?SERVING_TIMEOUT}.
@@ -292,6 +329,20 @@ terminate(_Reason, _StateName, _State) ->
 %%% ------------------------------------------------------------------------------------
 %%% support routines
 %%% ------------------------------------------------------------------------------------
+
+unlink_pauser(#state{ pauser_pid = undefined } = State) ->
+    State;
+unlink_pauser(#state{ pauser_pid = Pid } = State) ->
+    erlang:unlink(Pid),
+    State#state{ pauser_pid = undefined }.
+
+link_pauser(State, Pid) ->
+    State1 = unlink_pauser(State),
+    erlang:link(Pid),
+    State1#state{
+        pauser_pid = Pid
+    }.
+
 
 timeout(locate, _IsFound) ->
     0;
