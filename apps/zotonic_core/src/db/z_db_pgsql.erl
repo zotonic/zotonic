@@ -302,7 +302,7 @@ handle_info({'EXIT', _Pid, _Reason}, State) ->
     {noreply, State};
 
 handle_info(Info, State) ->
-    lager:warning("SQL unexpected info message ~p", [ Info ]),
+    lager:warning("SQL unexpected info message ~p in state ~p", [ Info, State ]),
     {noreply, State, timeout(State)}.
 
 terminate(_Reason, #state{ conn = undefined }) ->

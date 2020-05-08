@@ -68,7 +68,7 @@
 
 -type media_url() :: binary() | string().
 
--export_type([ media_url/0 ]).
+-export_type([media_url/0]).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -112,7 +112,9 @@ identify_medium_filename(MediumFilename, Context) ->
         Context).
 
 
-%% @doc Check if a medium record exists
+%% @doc Check if a medium record exists. The argument should be undefined, or
+%% a (textual) integer.
+-spec exists( undefined | string() | binary() | integer(), z:context() ) -> boolean().
 exists(undefined, _Context) ->
     false;
 exists([C | _] = Name, Context) when is_integer(C) ->
@@ -130,11 +132,15 @@ exists(Id, Context) ->
 
 
 %% @doc Get the medium record with the id
-%% @spec get(RscId, Context) -> PropList
 -spec get( m_rsc:resource_id(), z:context() ) -> z_media_identify:media_info() | undefined.
 get(Id, Context) ->
     F = fun() ->
-        case z_db:qmap_props_row("select * from medium where id = $1", [Id], Context) of
+        case z_db:qmap_props_row(
+            "select * from medium where id = $1",
+            [Id],
+            [ {keys, binary} ],
+            Context)
+        of
             {ok, Map} -> Map;
             {error, nodb} -> undefined;
             {error, enoent} -> undefined
@@ -144,6 +150,7 @@ get(Id, Context) ->
 
 
 %% @doc Fetch a medium by filename
+-spec get_by_filename( binary(), z:context() ) -> z_media_identify:media_info() | undefined.
 get_by_filename(Filename, Context) ->
     case z_depcache:get({medium, Filename}, Context) of
         undefined ->

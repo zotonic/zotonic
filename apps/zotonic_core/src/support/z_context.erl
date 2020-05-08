@@ -749,7 +749,7 @@ lager_md(Context) ->
 lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
     SessionId = case session_id(Context) of
         {ok, Sid} -> Sid;
-        {error, _} -> undefind
+        {error, _} -> undefined
     end,
     lager:md([
             {site, site(Context)},

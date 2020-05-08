@@ -35,8 +35,9 @@ event(#submit{message=admin_filestore}, Context) ->
             S3Key = z_string:trim(z_context:get_q(<<"s3key">>, Context)),
             S3Secret = z_string:trim(z_context:get_q(<<"s3secret">>, Context)),
             IsUploadEnabled = z_convert:to_bool(z_context:get_q(<<"is_upload_enabled">>, Context)),
+            IsCreateBucket = z_convert:to_bool(z_context:get_q(is_create_bucket, Context)),
             DeleteInterval = z_context:get_q(<<"delete_interval">>, Context),
-            case testcred(S3Url, S3Key, S3Secret) of
+            case testcred(S3Url, S3Key, S3Secret, IsCreateBucket) of
                 ok ->
                     m_config:set_value(mod_filestore, s3url, S3Url, Context),
                     m_config:set_value(mod_filestore, s3key, S3Key, Context),
@@ -57,24 +58,45 @@ event(#submit{message=admin_filestore}, Context) ->
         false ->
             z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
     end;
-event(#submit{message=admin_filestore_queue}, Context) ->
+event(#postback{message={admin_filestore_queue, [{is_to_local, true}]}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            case z_context:get_q(<<"queue-local">>, Context) of
-                <<>> ->
-                    queue_local_all(Context);
-                undefined ->
-                    queue_upload_all(Context)
-            end;
+            queue_local_all(Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
+    end;
+event(#postback{message={admin_filestore_queue, [{is_to_cloud, true}]}}, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            queue_upload_all(Context);
         false ->
             z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
     end.
 
-
 -define(DATA, <<"Geen wolkje aan de lucht.">>).
 
 % Try a put, get, and delete sequence
-testcred(S3Url, S3Key, S3Secret) when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
+testcred(S3Url, S3Key, S3Secret, IsCreateBucket)
+    when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
+    case testcred_file(S3Url, S3Key, S3Secret) of
+        ok ->
+            ok;
+        {error, enoent} when IsCreateBucket ->
+            % Bucket might not exist, try creating it
+            Cred = {S3Key, S3Secret},
+            case s3filez:create_bucket(Cred, S3Url) of
+                ok ->
+                    testcred_file(S3Url, S3Key, S3Secret);
+                {error, _} = Error ->
+                    lager:error("S3 could not create bucket \"~s\"", [ S3Url ]),
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+testcred_file(S3Url, S3Key, S3Secret) 
+    when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
     Cred = {S3Key, S3Secret},
     Url = <<S3Url/binary, $/, "-zotonic-filestore-test-file-">>,
     Data = iolist_to_binary([?DATA, " ", z_ids:identifier()]),
@@ -94,7 +116,7 @@ testcred(S3Url, S3Key, S3Secret) when is_binary(S3Url), is_binary(S3Key), is_bin
             lager:warning("S3 put error ~p", [Error]),
             Error
     end;
-testcred(_, _, _) ->
+testcred_file(_, _, _) ->
     {error, filestore_unconfigured}.
 
 
@@ -113,7 +135,7 @@ queue_upload_all(Context) ->
     S3Url = m_config:get_value(mod_filestore, s3url, Context),
     S3Key = m_config:get_value(mod_filestore, s3key, Context),
     S3Secret = m_config:get_value(mod_filestore, s3secret, Context),
-    case testcred(S3Url, S3Key, S3Secret) of
+    case testcred_file(S3Url, S3Key, S3Secret) of
         ok ->
             mod_filestore:queue_all(Context),
             z_pivot_rsc:delete_task(?MODULE, task_file_to_local, filestore_file_to_local, Context),
