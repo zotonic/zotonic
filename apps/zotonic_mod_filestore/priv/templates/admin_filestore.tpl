@@ -53,13 +53,16 @@
                             </div>
 
                             <div class="form-group row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 form-inline">
                                     <label class="checkbox">
-                                        <input type="checkbox" id="is_upload_enabled" name="is_upload_enabled"
+                                        <input type="checkbox" class="checkbox" id="is_upload_enabled" name="is_upload_enabled"
                                             {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
                                         {_ Upload new media files to the cloud file store _}
                                     </label>
-
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12 form-inline">
                                     <label class="checkbox">
                                         <input type="checkbox" id="is_create_bucket" name="is_create_bucket">
                                         {_ Try to create a private bucket if the bucket does not exist _}
@@ -109,11 +112,11 @@
                     <form name="admin_filestore_queue" id="admin_filestore_queue" method="POST" action="postback">
 
                         {% with m.filestore.stats as stats %}
-                            <table class="table condensed" style="width: auto">
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>{_ Media _}</th>
+                                        <th>{_ Media Resources _}</th>
                                         <th>{_ Local Files _}</th>
                                         <th>{_ Cloud Files _}</th>
                                     </tr>
@@ -134,7 +137,7 @@
                                 </tbody>
                             </table>
 
-                            <table class="table condensed" style="width: auto">
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>{_ Upload Queue _}</th>
@@ -144,9 +147,9 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td id="s3queue">{{ stats.queued }}</td>
-                                        <td id="s3queue-local">{{ stats.queued_local }}</td>
-                                        <td>{{ stats.queued_deleted }}</td>
+                                        <td id="s3queue">{{ stats.queued|default:0 }}</td>
+                                        <td id="s3queue-local">{{ stats.queued_local|default:0 }}</td>
+                                        <td>{{ stats.queued_deleted|default:0 }}</td>
                                     </tr>
                                 </tbody>
                             </table>

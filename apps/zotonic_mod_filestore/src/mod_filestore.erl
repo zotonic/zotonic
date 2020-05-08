@@ -134,7 +134,7 @@ is_defined(<<>>) -> false;
 is_defined(_) -> true.
 
 pid_observe_tick_1m(Pid, tick_1m, Context) ->
-    case z_convert:to_bool(m_config:get_value(?MODULE, is_upload_enabled, Context)) of
+    case m_config:get_boolean(?MODULE, is_upload_enabled, Context) of
         true ->
             start_uploaders(Pid, m_filestore:fetch_queue(Context), Context);
         false ->

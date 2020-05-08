@@ -170,7 +170,7 @@ lookup(Path, Context) ->
         from filestore
         where path = $1
           and error is null
-          and not is_deleted",
+          and is_deleted = false",
         [Path],
         [ {keys, atom} ],
         Context).

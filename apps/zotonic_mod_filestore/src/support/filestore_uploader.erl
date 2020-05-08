@@ -68,45 +68,12 @@ handle_call(Msg, _From, State) ->
     lager:error("Unknown call: ~p", [Msg]),
     {reply, {error, unknown_msg}, State}.
 
-handle_cast(start, #state{id=Id, path=Path, context=Context, media_info=MInfo} = State) ->
+handle_cast(start, #state{path=Path, context=Context} = State) ->
     case m_filestore:lookup(Path, Context) of
         {ok, Entry} ->
-            case m_filestore:is_upload_ok(Entry) of
-                true ->
-                    RscId = maps:get(<<"id">>, MInfo, undefined),
-                    case z_notifier:first(#filestore_credentials_lookup{id=RscId, path=Path}, Context) of
-                        {ok, #filestore_credentials{} = Cred} ->
-                            case handle_upload(Path, Cred, Context) of
-                                ok ->
-                                    m_filestore:dequeue(Id, Context),
-                                    {stop, normal, State};
-                                fatal ->
-                                    m_filestore:dequeue(Id, Context),
-                                    {stop, normal, State};
-                                retry ->
-                                    lager:info("Filestore upload of ~p, sleeping 30m for retry.", [Path]),
-                                    timer:send_after(?RETRY_DELAY, restart),
-                                    {noreply, State, hibernate}
-                            end;
-                        undefined ->
-                            lager:info("Filestore no credentials found for ~p", [Path]),
-                            m_filestore:dequeue(Id, Context),
-                            {stop, normal, State}
-                    end;
-                false ->
-                    case m_filestore:is_download_ok(Entry) of
-                        true ->
-                            % Already uploaded - we can safely delete the file.
-                            AbsPath = z_path:abspath(Path, Context),
-                            file:delete(AbsPath);
-                        false ->
-                            ok
-                    end,
-                    m_filestore:dequeue(Id, Context),
-                    {stop, normal, State}
-            end;
+            try_upload(Entry, State);
         {error, enoent} ->
-            {stop, normal, State};
+            try_upload(undefined, State);
         {error, _} = Error ->
             lager:error("Filestore upload error reading for path ~p: ~p", [ Path, Error ]),
             {stop, normal, State}
@@ -130,6 +97,42 @@ terminate(_Reason, _State) ->
     ok.
 
 %%% ------ Support routines --------
+
+try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInfo} = State) ->
+    case m_filestore:is_upload_ok(MaybeEntry) of
+        true ->
+            RscId = maps:get(<<"id">>, MInfo, undefined),
+            case z_notifier:first(#filestore_credentials_lookup{id=RscId, path=Path}, Context) of
+                {ok, #filestore_credentials{} = Cred} ->
+                    case handle_upload(Path, Cred, Context) of
+                        ok ->
+                            m_filestore:dequeue(Id, Context),
+                            {stop, normal, State};
+                        fatal ->
+                            m_filestore:dequeue(Id, Context),
+                            {stop, normal, State};
+                        retry ->
+                            lager:info("Filestore upload of ~p, sleeping 30m for retry.", [Path]),
+                            timer:send_after(?RETRY_DELAY, restart),
+                            {noreply, State, hibernate}
+                    end;
+                undefined ->
+                    lager:info("Filestore no credentials found for ~p", [Path]),
+                    m_filestore:dequeue(Id, Context),
+                    {stop, normal, State}
+            end;
+        false ->
+            case m_filestore:is_download_ok(MaybeEntry) of
+                true ->
+                    % Already uploaded - we can safely delete the file.
+                    AbsPath = z_path:abspath(Path, Context),
+                    file:delete(AbsPath);
+                false ->
+                    ok
+            end,
+            m_filestore:dequeue(Id, Context),
+            {stop, normal, State}
+    end.
 
 handle_upload(Path, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),

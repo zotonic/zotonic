@@ -184,13 +184,13 @@ locate_in_filestore(Path, InDir, Medium, Context) ->
                 acl = OptRscId,
                 size = Size
             }};
-        {ok, {filename, FoundFilename, Opts}} ->
-            part_file(FoundFilename, [{acl,OptRscId}|Opts]);
-        {ok, {data, Data, Opts}} when is_list(Opts) ->
+        {ok, {filename, FoundFilename, #{ modified := Modified }}} ->
+            part_file(FoundFilename, [ {acl,OptRscId}, {modified, Modified} ]);
+        {ok, {data, Data, #{ modified := Modified }}} ->
             {ok, #part_data{
-                data=Data,
-                modified=proplists:get_value(modified, Opts),
-                acl=OptRscId
+                data = Data,
+                modified = Modified,
+                acl = OptRscId
             }};
         undefined ->
             part_file(filename:join(InDir, Path), [{acl,OptRscId}])
