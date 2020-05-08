@@ -58,19 +58,20 @@ event(#submit{message=admin_filestore}, Context) ->
         false ->
             z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
     end;
-event(#submit{message=admin_filestore_queue}, Context) ->
+event(#postback{message={admin_filestore_queue, [{is_to_local, true}]}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            case z_context:get_q(<<"queue-local">>, Context) of
-                <<>> ->
-                    queue_local_all(Context);
-                undefined ->
-                    queue_upload_all(Context)
-            end;
+            queue_local_all(Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
+    end;
+event(#postback{message={admin_filestore_queue, [{is_to_cloud, true}]}}, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            queue_upload_all(Context);
         false ->
             z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
     end.
-
 
 -define(DATA, <<"Geen wolkje aan de lucht.">>).
 
