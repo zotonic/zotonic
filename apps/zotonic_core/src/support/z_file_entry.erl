@@ -144,7 +144,7 @@ pause(undefined) ->
     {error, noproc};
 pause(Pid) ->
     try
-        gen_fsm:sync_send_all_state_event(Pid, {pause, self()}, infinity)
+        gen_statem:call(Pid, {pause, self()}, infinity)
     catch
         exit:{noproc, _} ->
             {error, noproc}

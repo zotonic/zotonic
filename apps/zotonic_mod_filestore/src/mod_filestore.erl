@@ -383,7 +383,7 @@ download_stream(Id, Path, LocalPath, Context, eof) ->
     ok = file:rename(temp_path(LocalPath), LocalPath),
     m_filestore:purge_move_to_local(Id, Context),
     filezcache:delete({z_context:site(Context), Path}),
-    filestore_uploader:force_stale(Path, Context);
+    filestore_uploader:stale_file_entry(Path, Context);
 download_stream(Id, _Path, LocalPath, Context, {error, _} = Error) ->
     lager:debug("Download error ~p file ~p", [Error, LocalPath]),
     file:delete(temp_path(LocalPath)),

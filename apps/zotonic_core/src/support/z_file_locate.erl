@@ -176,13 +176,13 @@ locate_in_filestore(Path, InDir, Medium, Context) ->
     FSPath = z_convert:to_binary(filename:join(filename:basename(InDir), Path)),
     OptRscId = maps:get(<<"id">>, Medium, undefined),
     case z_notifier:first(#filestore{action=lookup, path=FSPath}, Context) of
-        {ok, {filezcache, Pid, Opts}} when is_pid(Pid) ->
+        {ok, {filezcache, Pid, #{ created := Created, size := Size }}} when is_pid(Pid) ->
             {ok, #part_cache{
                 cache_pid=Pid,
-                cache_monitor=erlang:monitor(process, Pid),
-                modified=proplists:get_value(created, Opts),
-                acl=OptRscId,
-                size=proplists:get_value(size, Opts)
+                cache_monitor = erlang:monitor(process, Pid),
+                modified = Created,
+                acl = OptRscId,
+                size = Size
             }};
         {ok, {filename, FoundFilename, Opts}} ->
             part_file(FoundFilename, [{acl,OptRscId}|Opts]);
