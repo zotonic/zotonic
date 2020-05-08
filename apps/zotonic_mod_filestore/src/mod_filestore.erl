@@ -72,7 +72,10 @@ observe_filestore(#filestore{action=upload, path=Path, mime=undefined} = Upload,
     Mime = z_media_identify:guess_mime(Path),
     observe_filestore(Upload#filestore{mime=Mime}, Context);
 observe_filestore(#filestore{action=upload, path=Path, mime=Mime}, Context) ->
-    maybe_queue_file(<<>>, Path, true, [{mime,Mime}], Context),
+    MediaProps = #{
+        <<"mime">> => Mime
+    },
+    maybe_queue_file(<<>>, Path, true, MediaProps, Context),
     ok;
 observe_filestore(#filestore{action=delete, path=Path}, Context) ->
     Count = m_filestore:mark_deleted(Path, Context),
@@ -87,9 +90,9 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
         true ->
             Url = make_url(S3Url, Path),
             {ok, #filestore_credentials{
-                    service= <<"s3">>,
-                    location=Url,
-                    credentials={S3Key,S3Secret}
+                    service = <<"s3">>,
+                    location = Url,
+                    credentials = {S3Key,S3Secret}
             }};
         false ->
             undefined
@@ -101,9 +104,9 @@ observe_filestore_credentials_revlookup(#filestore_credentials_revlookup{service
     case is_defined(S3Key) andalso is_defined(S3Secret) of
         true ->
             {ok, #filestore_credentials{
-                    service= <<"s3">>,
-                    location=Location,
-                    credentials={S3Key,S3Secret}
+                    service = <<"s3">>,
+                    location = Location,
+                    credentials = {S3Key,S3Secret}
             }};
         false ->
             undefined
@@ -158,60 +161,64 @@ lookup(Path, Context) ->
     case m_filestore:lookup(Path, Context) of
         undefined ->
             undefined;
-        Props when is_list(Props) ->
-            {location, Location} = proplists:lookup(location, Props),
+        #{ location := Location } = StoreEntry ->
             case filezcache:locate_monitor(Location) of
                 {ok, {file, _Size, Filename}} ->
-                    {ok, {filename, Filename, Props}};
+                    {ok, {filename, Filename, StoreEntry}};
                 {ok, {pid, Pid}} ->
-                    {ok, {filezcache, Pid, Props}};
+                    {ok, {filezcache, Pid, StoreEntry}};
                 {error, enoent} ->
-                    load_cache(Props, Context)
+                    load_cache(StoreEntry, Context)
             end
     end.
 
-load_cache(Props, Context) ->
-    Service = proplists:get_value(service, Props),
-    Location = proplists:get_value(location, Props),
-    Size = proplists:get_value(size, Props),
-    Id = proplists:get_value(id, Props),
-    case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
-        {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
+load_cache(#{
+            service := Service,
+            location := Location,
+            size := Size,
+            id := Id
+        } = StoreEntry, Context) ->
+    case z_notifier:first(
+        #filestore_credentials_revlookup{ service=Service, location=Location },
+        Context)
+    of
+        {ok, #filestore_credentials{ service= <<"s3">>, location=Location1, credentials=Cred }} ->
             lager:debug("File store cache load of ~p", [Location]),
             Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
-                            s3filez:stream(Cred,
-                                           Location1,
-                                           fun({error, FinalError})
-                                                when FinalError =:= enoent; FinalError =:= forbidden ->
-                                                    lager:error("File store remote file is ~p ~p", [FinalError, Location]),
-                                                    ok = m_filestore:mark_error(Id, FinalError, Ctx),
-                                                    exit(normal);
-                                              ({error, _} = Error) ->
-                                                    % Abnormal exit when receiving an error.
-                                                    % This takes down the cache entry.
-                                                    lager:error("File store error ~p on cache load of ~p", [Error, Location]),
-                                                    exit(Error);
-                                              (T) when is_tuple(T) ->
-                                                    nop;
-                                              (B) when is_binary(B) ->
-                                                    filezcache:append_stream(CachePid, B);
-                                              (eof) ->
-                                                    filezcache:finish_stream(CachePid)
-                                           end)
-                        end,
+                s3filez:stream(
+                    Cred,
+                    Location1,
+                    fun
+                        ({error, FinalError}) when FinalError =:= enoent; FinalError =:= forbidden ->
+                            lager:error("File store remote file is ~p ~p", [FinalError, Location]),
+                            ok = m_filestore:mark_error(Id, FinalError, Ctx),
+                            exit(normal);
+                        ({error, _} = Error) ->
+                            % Abnormal exit when receiving an error.
+                            % This takes down the cache entry.
+                            lager:error("File store error ~p on cache load of ~p", [Error, Location]),
+                            exit(Error);
+                        (T) when is_tuple(T) ->
+                            nop;
+                        (B) when is_binary(B) ->
+                            filezcache:append_stream(CachePid, B);
+                         (eof) ->
+                            filezcache:finish_stream(CachePid)
+                    end)
+            end,
             case filezcache:insert_stream(Location, Size, StreamFun, [monitor]) of
                 {ok, Pid} ->
-                    {ok, {filezcache, Pid, Props}};
+                    {ok, {filezcache, Pid, StoreEntry}};
                 {error, {already_started, Pid}} ->
-                    {ok, {filezcache, Pid, Props}}
+                    {ok, {filezcache, Pid, StoreEntry}}
             end;
         undefined ->
             undefined
     end.
 
 queue_all(Context) ->
-    Max = z_db:q1("select count(id) from medium", Context),
+    Max = z_db:q1("select count(*) from medium", Context),
     z_pivot_rsc:insert_task(?MODULE, task_queue_all, filestore_queue_all, [0, Max], Context).
 
 queue_all_stop(Context) ->
@@ -243,27 +250,32 @@ task_queue_all(_Offset, _Max, _Context) ->
     ok.
 
 
-queue_medium(Props, Context) ->
-    Filename = maps:get(<<"filename">>, Props, undefined),
-    IsDeletable = maps:get(<<"is_deletable_file">>, Props, undefined),
-    Preview = maps:get(<<"preview_filename">>, Props, undefined),
-    PreviewDeletable = maps:get(<<"is_deletable_preview">>, Props, undefined),
-    maybe_queue_file(<<"archive/">>, Filename, IsDeletable, Props, Context),
-    Props1 = [
-        {id, maps:get(<<"id">>, Props, undefined)}
-    ],
-    maybe_queue_file(<<"archive/">>, Preview, PreviewDeletable, Props1, Context).
+%% @doc Queue the medium entry and its preview for upload.
+-spec queue_medium( z_media_identify:media_info(), z:context() ) -> ok | nop.
+queue_medium(Medium, Context) ->
+    Filename = maps:get(<<"filename">>, Medium, undefined),
+    IsDeletable = maps:get(<<"is_deletable_file">>, Medium, undefined),
+    Preview = maps:get(<<"preview_filename">>, Medium, undefined),
+    PreviewDeletable = maps:get(<<"is_deletable_preview">>, Medium, undefined),
+    Medium1 = maps:remove(<<"exif">>, Medium),
+    % Queue the main medium record for upload.
+    maybe_queue_file(<<"archive/">>, Filename, IsDeletable, Medium1, Context),
+    % Queue the (optional) preview file.
+    MediumPreview = #{
+        <<"id">> => maps:get(<<"id">>, Medium, undefined)
+    },
+    maybe_queue_file(<<"archive/">>, Preview, PreviewDeletable, MediumPreview, Context).
 
 
-maybe_queue_file(_Prefix, undefined, _IsDeletable, _Props, _Context) ->
+maybe_queue_file(_Prefix, undefined, _IsDeletable, _MediaInfo, _Context) ->
     nop;
-maybe_queue_file(_Prefix, <<>>, _IsDeletable, _Props, _Context) ->
+maybe_queue_file(_Prefix, <<>>, _IsDeletable, _MediaInfo, _Context) ->
     nop;
-maybe_queue_file(_Prefix, _Path, false, _Props, _Context) ->
+maybe_queue_file(_Prefix, _Path, false, _MediaInfo, _Context) ->
     nop;
-maybe_queue_file(Prefix, Filename, true, Props, Context) ->
+maybe_queue_file(Prefix, Filename, true, MediaInfo, Context) ->
     FilenameBin = z_convert:to_binary(Filename),
-    case m_filestore:queue(<<Prefix/binary, FilenameBin/binary>>, Props, Context) of
+    case m_filestore:queue(<<Prefix/binary, FilenameBin/binary>>, MediaInfo, Context) of
         ok -> ok;
         {error, duplicate} -> ok
     end.
@@ -289,30 +301,38 @@ init(_Args) ->
 %%% Support routines
 %%% ------------------------------------------------------------------------------------
 
+-spec start_uploaders(pid(), [ m_filestore:queue_entry() ], z:context()) -> ok.
 start_uploaders(Pid, Rs, Context) ->
-    [ start_uploader(Pid, R, Context) || R <- Rs ].
+    lists:foreach(
+        fun(QueueEntry) ->
+            start_uploader(Pid, QueueEntry, Context)
+        end,
+        Rs).
 
-start_uploader(Pid, R, Context) ->
-    {id, Id} = proplists:lookup(id, R),
-    {path, Path} = proplists:lookup(path, R),
-    {props, Props} = proplists:lookup(props, R),
-    supervisor:start_child(Pid, [Id, Path, Props, Context]).
+start_uploader(Pid, #{ id := Id, path := Path, props := MediumInfo }, Context) ->
+    supervisor:start_child(Pid, [Id, Path, MediumInfo, Context]).
 
+-spec start_deleters( [ m_filestore:filestore_entry() ], z:context() ) -> ok.
 start_deleters(Rs, Context) ->
-    [ start_deleter(R, Context) || R <- Rs ].
+    lists:foreach(
+        fun(FilestoreEntry) ->
+            start_deleter(FilestoreEntry, Context)
+        end,
+        Rs).
 
-start_deleter(R, Context) ->
-    {id, Id} = proplists:lookup(id, R),
-    {path, Path} = proplists:lookup(path, R),
-    {service, Service} = proplists:lookup(service, R),
-    {location, Location} = proplists:lookup(location, R),
+start_deleter(#{
+            id := Id,
+            path := Path,
+            service := Service,
+            location := Location
+        } = FilestoreEntry, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
             lager:debug("Queue delete for ~p", [Location1]),
             ContextAsync = z_context:prune_for_async(Context),
             _ = s3filez:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
         undefined ->
-            lager:debug("No credentials for ~p", [R])
+            lager:debug("No credentials for ~p", [FilestoreEntry])
     end.
 
 delete_ready(Id, Path, Context, _Ref, ok) ->
@@ -328,14 +348,20 @@ delete_ready(_Id, Path, _Context, _Ref, {error, _} = Error) ->
     lager:error("Could not delete remote file. Path ~p error ~p", [Path, Error]).
 
 
+-spec start_downloaders( [ m_filestore:filestore_entry() ], z:context() ) -> ok.
 start_downloaders(Rs, Context) ->
-    [ start_downloader(R, Context) || R <- Rs ].
+    lists:foreach(
+        fun(FilestoreEntry) ->
+            start_downloader(FilestoreEntry, Context)
+        end,
+        Rs).
 
-start_downloader(R, Context) ->
-    {id, Id} = proplists:lookup(id, R),
-    {path, Path} = proplists:lookup(path, R),
-    {service, Service} = proplists:lookup(service, R),
-    {location, Location} = proplists:lookup(location, R),
+start_downloader(#{
+            id := Id,
+            path := Path,
+            service := Service,
+            location := Location
+        } = FilestoreEntry, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
         {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
             LocalPath = z_path:files_subdir(Path, Context),
@@ -344,7 +370,7 @@ start_downloader(R, Context) ->
             ContextAsync = z_context:prune_for_async(Context),
             _ = s3filez:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]});
         undefined ->
-            lager:debug("No credentials for ~p", [R])
+            lager:debug("No credentials for ~p", [FilestoreEntry])
     end.
 
 download_stream(_Id, _Path, LocalPath, _Context, {content_type, _}) ->

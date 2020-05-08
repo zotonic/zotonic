@@ -51,6 +51,14 @@
     install/2
     ]).
 
+-type queue_entry() :: map().
+-type filestore_entry() :: map().
+
+-export_type([
+    queue_entry/0,
+    filestore_entry/0
+    ]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 % It is ok to retry transient errors every 10 minutes
@@ -67,8 +75,9 @@ m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
-
-queue(Path, Props, Context) ->
+%% @doc Add a file/medium to the upload queue.
+-spec queue(binary(), z_media_identify:media_info(), z:context()) -> ok | {error, duplicate}.
+queue(Path, MediaProps, Context) ->
     z_db:transaction(fun(Ctx) ->
             case z_db:q1("select count(*) from filestore_queue where path = $1", [Path], Ctx) of
                 0 ->
@@ -76,23 +85,46 @@ queue(Path, Props, Context) ->
                             insert into
                             filestore_queue (path, props)
                             values ($1,$2)",
-                            [Path, ?DB_PROPS(Props)],
+                            [Path, ?DB_PROPS(MediaProps)],
                             Ctx),
                     ok;
                 1 ->
                     {error, duplicate}
             end
-        end, Context).
+        end, 
+        Context).
 
-%% @doc Fetch the next batch of queued uploads, at least 10 minutes old.
+%% @doc Fetch the next batch of queued uploads, at least 10 minutes old and max 200.
+-spec fetch_queue( z:context() ) -> list( queue_entry() ).
 fetch_queue(Context) ->
-    z_db:assoc("select *
+    Rs = z_db:qmap("
+                select *
                 from filestore_queue
                 where created < now() - interval '10 min'
-                limit 200", Context).
+                limit 200",
+                [],
+                [ {keys, atom} ],
+                Context),
+    % 0.x filestore queues can have property lists in the queue, change those
+    % property lists to maps.
+    lists:map(
+        fun
+            (#{ props := L } = M) when is_list(L) ->
+                M#{
+                    props => maps:from_list(L)
+                };
+            (M) ->
+                M
+        end,
+        Rs).
 
+%% @doc Remove an entry from the upload queue.
+-spec dequeue( integer(), z:context() ) -> ok | {error, enoent}.
 dequeue(Id, Context) ->
-    z_db:q("delete from filestore_queue where id = $1", [Id], Context).
+    case z_db:q("delete from filestore_queue where id = $1", [Id], Context) of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
 
 -spec store( binary(), integer(), atom() | binary(), binary(), z:context() ) -> {ok, integer()}.
 store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(Size), is_binary(Location) ->
@@ -101,14 +133,15 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
                         [Path], Ctx)
             of
                 undefined ->
-                    z_db:insert(filestore, [
-                            {path, Path},
-                            {service, Service},
-                            {location, Location},
-                            {size, Size}
-                        ], Ctx);
+                    z_db:insert(filestore, #{
+                            <<"path">> => Path,
+                            <<"service">> => Service,
+                            <<"location">> => Location,
+                            <<"size">> => Size
+                        }, Ctx);
                 Id ->
-                    1 = z_db:q("update filestore
+                    1 = z_db:q("
+                            update filestore
                             set location = $1,
                                 service = $2,
                                 size = $3,
@@ -117,38 +150,39 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
                                 error = null,
                                 modified = now()
                             where id = $4",
-                            [Location, Service, Size, Id],
+                            [ Location, Service, Size, Id ],
                             Ctx),
                     {ok, Id}
             end
         end, Context).
 
--spec lookup( binary(), z:context() ) -> undefined | proplists:proplist().
+-spec lookup( binary(), z:context() ) -> undefined | map().
 lookup(Path, Context) ->
-    z_db:assoc_row("select *
-                    from filestore
-                    where path = $1
-                      and error is null
-                      and not is_deleted",
-                   [Path], Context).
+    z_db:qmap_row("
+        select *
+        from filestore
+        where path = $1
+          and error is null
+          and not is_deleted",
+        [Path],
+        [ {keys, atom} ],
+        Context).
 
-%% Check if it is ok to upload to the location of this entry
--spec is_upload_ok( undefined | proplists:proplist() ) -> boolean().
+%% Check if it is ok to upload to the location of this queue entry.
+%% If it is not ok then the queue entry could be deleted.
+-spec is_upload_ok( undefined | queue_entry() ) -> boolean().
 is_upload_ok(undefined) ->
     true;
-is_upload_ok(Props) ->
-    case proplists:get_value(error, Props) of
-        undefined -> false;
-        _Error -> true
-    end.
+is_upload_ok(#{ error := undefined }) ->
+    false;
+is_upload_ok(#{ error := _ }) ->
+    true.
 
-%% Check if it is ok to upload to the location of this entry
--spec is_download_ok( undefined | proplists:proplist() ) -> boolean().
+%% @doc Check if it is ok to download the given file.
+-spec is_download_ok( undefined | filestore_entry() ) -> boolean().
 is_download_ok(undefined) ->
     true;
-is_download_ok(Props) ->
-    Error = proplists:get_value(error, Props),
-    Modified = proplists:get_value(modified, Props),
+is_download_ok(#{ error := Error, modified := Modified }) ->
     is_download_ok(Error, Modified).
 
 is_download_ok(undefined, _Modified) ->
@@ -165,21 +199,36 @@ is_download_ok(_Error, Modified) ->
             false
     end.
 
+%% @doc Mark a filestore entry as being erronous, happens when the
+%% remote server can't be reached or gives an error on access.
+%% This can be a transient error, so we mark the entry with the
+%% current time for a later retry.
+-spec mark_error( integer(), binary()|atom(), z:context() ) -> ok | {error, enoent}.
 mark_error(Id, Error, Context) ->
-    z_db:q("update filestore
+    case z_db:q("update filestore
             set error = $1,
                 modified = now()
             where id = $2",
-          [Error, Id], Context).
+          [Error, Id], Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
 
+%% @doc Mark the file entries as deleted for the path or having the path as a prefix.
+-spec mark_deleted( binary() | {prefix, binary()}, z:context() ) -> ok | {error, enoent}.
 mark_deleted({prefix, Path}, Context) when is_binary(Path) ->
-    z_db:q("update filestore
+    case z_db:q("update filestore
             set is_deleted = true,
                 modified = now(),
                 deleted = now()
             where path like $1",
             [<<Path/binary, $%>>],
-            Context);
+            Context)
+    of
+        N when N > 0 -> ok;
+        0 -> {error, enoent}
+    end;
 mark_deleted(Path, Context) when is_binary(Path) ->
     z_db:q("update filestore
             set is_deleted = true,
@@ -189,12 +238,68 @@ mark_deleted(Path, Context) when is_binary(Path) ->
             [Path],
             Context).
 
-fetch_deleted(Interval, Context) when is_binary(Interval) ->
-    z_db:assoc(<<"select * from filestore where is_deleted and deleted < now() - interval '", Interval/binary, "' limit 200">>, Context).
+%% @doc Fetch all deleted file entries where the entry was marked as deleted
+%% at least 'Interval' ago. The Interval comes from the mod_filestore.delete_interval
+%% configuration.
+-spec fetch_deleted( binary() | undefined, z:context() ) -> [ filestore_entry() ].
+fetch_deleted(Interval, Context) ->
+    case map_interval(Interval) of
+        <<"false">> ->
+            [];
+        <<"0">> ->
+            z_db:qmap(
+                "select * from filestore where is_deleted = true limit 200",
+                [],
+                [ {keys, atom} ],
+                Context);
+        Interval1 ->
+            z_db:qmap(<<
+                "select * ",
+                "from filestore ",
+                "where is_deleted =true "
+                "  and deleted < now() - interval '", Interval1/binary,"' ",
+                "limit 200">>,
+                [],
+                [ {keys, atom} ],
+                Context)
+    end.
 
+map_interval(undefined) ->
+    <<"0">>;
+map_interval(Interval) ->
+    try
+        L = case binary:split(Interval, <<" ">>) of
+            [ Number ] -> num(Number);
+            [ <<"1">>, <<"day">> ] -> <<"1 day">>;
+            [ Number, <<"days">> ] -> [ num(Number), " days" ];
+            [ <<"1">>, <<"week">> ] -> <<"1 week">>;
+            [ Number, <<"weeks">> ] -> [ num(Number), " weeks" ];
+            [ <<"1">>, <<"month">> ] -> <<"1 month">>;
+            [ Number, <<"months">> ] -> [ num(Number), " months" ];
+            _ -> <<"false">>
+        end,
+        iolist_to_binary(L)
+    catch
+        error:badarg ->
+            lager:error("Filestore illegal delete interval ~p", [ Interval ]),
+            <<"false">>
+    end.
+
+num(N) -> integer_to_binary( binary_to_integer(N) ).
+
+
+%% @doc Remove the deleted file entry from the filestore table. This is done after
+%% the file has been deleted from the remote service.
+-spec purge_deleted( integer(), z:context() ) -> ok | {error, enoent}.
 purge_deleted(Id, Context) ->
-    z_db:q("delete from filestore where id = $1 and is_deleted", [Id], Context).
+    case z_db:q("delete from filestore where id = $1 and is_deleted = true", [Id], Context) of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
 
+%% @doc Mark at most Limit entries to be moved from the remote service
+%% to the local service.
+-spec mark_move_to_local_limit( non_neg_integer(), z:context() ) -> {ok, non_neg_integer()}.
 mark_move_to_local_limit(Limit, Context) ->
     z_db:transaction(fun(Ctx) ->
                         case z_db:q("
@@ -219,6 +324,9 @@ mark_move_to_local_limit(Limit, Context) ->
                      end,
                      Context).
 
+%% @doc Mark all filestore entries to be moved from the remote service
+%% to the local service.
+-spec mark_move_to_local_all( z:context() ) -> non_neg_integer().
 mark_move_to_local_all(Context) ->
     z_db:q("update filestore
             set is_move_to_local = true
@@ -226,53 +334,81 @@ mark_move_to_local_all(Context) ->
               and is_deleted = false
               and error is null", Context).
 
+%% @doc Mark the given filestore entry to be moved from the remote service
+%% to the local service.
+-spec mark_move_to_local( integer(), z:context() ) -> ok | {error, enoent}.
 mark_move_to_local(Id, Context) ->
-    z_db:q("update filestore
+    case z_db:q("update filestore
             set is_move_to_local = true
-            where id = $1", [Id], Context).
+            where id = $1", [Id], Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
 
+
+%% @doc Remove the "move to local" mark from at most Limit filestore entries.
+-spec unmark_move_to_local_limit( non_neg_integer(), z:context() ) -> {ok, non_neg_integer()}.
 unmark_move_to_local_limit(Limit, Context) ->
-    z_db:transaction(fun(Ctx) ->
-                        case z_db:q("
-                                update filestore f
-                                set is_move_to_local = false
-                                from (
-                                     select id
-                                     from filestore
-                                     where is_move_to_local = true
-                                     limit $1
-                                     for update
-                                ) mv
-                                where mv.id = f.id",
-                                [Limit],
-                                Ctx)
-                        of
-                            N when is_integer(N) ->
-                                {ok, N}
-                        end
-                     end,
-                     Context).
+    z_db:transaction(
+        fun(Ctx) ->
+            case z_db:q("
+                    update filestore f
+                    set is_move_to_local = false
+                    from (
+                         select id
+                         from filestore
+                         where is_move_to_local = true
+                         limit $1
+                         for update
+                    ) mv
+                    where mv.id = f.id",
+                    [Limit],
+                    Ctx)
+            of
+                N when is_integer(N) ->
+                    {ok, N}
+            end
+        end,
+        Context).
 
+%% @doc Remove the "move to local" mark from all filestore entries.
+-spec unmark_move_to_local_all( z:context() ) -> non_neg_integer().
 unmark_move_to_local_all(Context) ->
     z_db:q("update filestore
             set is_move_to_local = false
             where is_move_to_local", Context).
 
-unmark_move_to_local(Id, Context) ->
-    z_db:q("update filestore
-            set is_move_to_local = false
-            where id = $1", [Id], Context).
 
+%% @doc Remove the "move to local" mark from the given filestore entry.
+-spec unmark_move_to_local( integer(), z:context() ) -> ok | {error, enoent}.
+unmark_move_to_local(Id, Context) ->
+    case z_db:q("
+            update filestore
+            set is_move_to_local = false
+            where id = $1", [Id], Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
+
+%% @doc Fetch at most 200 filestore entries that are marked with "move to local".
+-spec fetch_move_to_local( z:context() ) -> [ filestore_entry() ].
 fetch_move_to_local(Context) ->
-    z_db:assoc("
+    z_db:qmap("
             select *
             from filestore
             where is_move_to_local
               and is_deleted = false
               and error is null
             limit 200",
+            [],
+            [ {keys, atom} ],
             Context).
 
+%% @doc Called after a file has been moved from the remote service to local.
+%% Marks the entry as deleted and removes the 'move to local' flag.
+-spec purge_move_to_local( integer(), z:context() ) -> ok | {error, enoent}.
 purge_move_to_local(Id, Context) ->
     z_db:q("update filestore
             set is_move_to_local = false,
@@ -280,6 +416,8 @@ purge_move_to_local(Id, Context) ->
                 deleted = now()
             where id = $1", [Id], Context).
 
+%% @doc Return some basic stats about the filestore.
+-spec stats( z:context() ) -> map().
 stats(Context) ->
     {Archived, ArchiveSize} = z_db:q_row("
                             select count(*), coalesce(sum(size), 0)
@@ -305,17 +443,17 @@ stats(Context) ->
                               and filename <> ''
                               and is_deletable_file = true",
                             Context),
-    [
-        {archived, Archived},
-        {archive_size, ArchiveSize},
-        {queued, Queued},
-        {queued_local, ToLocal},
-        {queued_deleted, Deleted},
-        {cloud, Cloud},
-        {cloud_size, CloudSize},
-        {local, Archived - InCloud},
-        {local_size, ArchiveSize - InCloudSize}
-    ].
+    #{
+        archived => Archived,
+        archive_size => ArchiveSize,
+        queued => Queued,
+        queued_local => ToLocal,
+        queued_deleted => Deleted,
+        cloud => Cloud,
+        cloud_size => CloudSize,
+        local => Archived - InCloud,
+        local_size => ArchiveSize - InCloudSize
+    }.
 
 
 

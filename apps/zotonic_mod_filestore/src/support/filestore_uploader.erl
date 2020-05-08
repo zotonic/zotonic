@@ -41,22 +41,26 @@
 -record(state, {
         id,
         path,
-        props,
+        media_info,
         context
     }).
 
-start_link(Id, Path, Props, Context) ->
+start_link(Id, Path, MediaInfo, Context) ->
     Path1 = z_convert:to_binary(Path),
-    gen_server:start_link({via, z_proc, {{upload, Path1}, Context}}, ?MODULE, [Id, Path1, Props, Context], []).
+    gen_server:start_link(
+        {via, z_proc, {{upload, Path1}, Context}},
+        ?MODULE,
+        [Id, Path1, MediaInfo, Context],
+        []).
 
-init([Id, Path, Props, Context]) ->
+init([Id, Path, MediaInfo, Context]) ->
     z_context:lager_md(Context),
     lager:debug("Started uploader for ~p", [Path]),
     gen_server:cast(self(), start),
     {ok, #state{
             id = Id,
             path = Path,
-            props = Props,
+            media_info = MediaInfo,
             context = Context
         }}.
 
@@ -64,11 +68,11 @@ handle_call(Msg, _From, State) ->
     lager:error("Unknown call: ~p", [Msg]),
     {reply, {error, unknown_msg}, State}.
 
-handle_cast(start, #state{id=Id, path=Path, context=Context, props=Props} = State) ->
+handle_cast(start, #state{id=Id, path=Path, context=Context, media_info=MInfo} = State) ->
     MaybeEntry = m_filestore:lookup(Path, Context),
     case m_filestore:is_upload_ok(MaybeEntry) of
         true ->
-            RscId = proplists:get_value(id, Props),
+            RscId = maps:get(<<"id">>, MInfo, undefined),
             case z_notifier:first(#filestore_credentials_lookup{id=RscId, path=Path}, Context) of
                 {ok, #filestore_credentials{} = Cred} ->
                     case handle_upload(Path, Cred, Context) of
