@@ -95,28 +95,35 @@ queue(Path, MediaProps, Context) ->
         Context).
 
 %% @doc Fetch the next batch of queued uploads, at least 10 minutes old and max 200.
--spec fetch_queue( z:context() ) -> list( queue_entry() ).
+-spec fetch_queue( z:context() ) -> {ok, [ queue_entry() ]} | {error, term()}.
 fetch_queue(Context) ->
-    Rs = z_db:qmap("
+    case z_db:qmap("
                 select *
                 from filestore_queue
                 where created < now() - interval '10 min'
                 limit 200",
                 [],
                 [ {keys, atom} ],
-                Context),
-    % 0.x filestore queues can have property lists in the queue, change those
-    % property lists to maps.
-    lists:map(
-        fun
-            (#{ props := L } = M) when is_list(L) ->
-                M#{
-                    props => maps:from_list(L)
-                };
-            (M) ->
-                M
-        end,
-        Rs).
+                Context)
+    of
+        {ok, Rs} ->
+            % 0.x filestore queues can have property lists in the queue, change those
+            % property lists to maps.
+            Rs1 = lists:map(
+                fun
+                    (#{ props := L } = M) when is_list(L) ->
+                        M#{
+                            props => maps:from_list(L)
+                        };
+                    (M) ->
+                        M
+                end,
+                Rs),
+            {ok, Rs1};
+        {error, _} = Error ->
+            % Ignore errors, later retry will fix this
+            Error
+    end.
 
 %% @doc Remove an entry from the upload queue.
 -spec dequeue( integer(), z:context() ) -> ok | {error, enoent}.
@@ -156,7 +163,7 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
             end
         end, Context).
 
--spec lookup( binary(), z:context() ) -> undefined | map().
+-spec lookup( binary(), z:context() ) -> {ok, map()} | {error, term()}.
 lookup(Path, Context) ->
     z_db:qmap_row("
         select *
@@ -241,7 +248,7 @@ mark_deleted(Path, Context) when is_binary(Path) ->
 %% @doc Fetch all deleted file entries where the entry was marked as deleted
 %% at least 'Interval' ago. The Interval comes from the mod_filestore.delete_interval
 %% configuration.
--spec fetch_deleted( binary() | undefined, z:context() ) -> [ filestore_entry() ].
+-spec fetch_deleted( binary() | undefined, z:context() ) -> {ok, [ filestore_entry() ]} | {error, term()}.
 fetch_deleted(Interval, Context) ->
     case map_interval(Interval) of
         <<"false">> ->
@@ -393,7 +400,7 @@ unmark_move_to_local(Id, Context) ->
     end.
 
 %% @doc Fetch at most 200 filestore entries that are marked with "move to local".
--spec fetch_move_to_local( z:context() ) -> [ filestore_entry() ].
+-spec fetch_move_to_local( z:context() ) -> {ok, [ filestore_entry() ]} | {error, term()}.
 fetch_move_to_local(Context) ->
     z_db:qmap("
             select *

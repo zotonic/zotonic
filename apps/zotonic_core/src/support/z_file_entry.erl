@@ -256,7 +256,7 @@ serving(EventType, EventContent, Data) ->
 paused(timeout, _, State) ->
     {next_state, locate, State, ?PAUSED_TIMEOUT};
 paused(EventType, EventContent, Data) ->
-    handle_event(EventType, EventContent, serving, Data).
+    handle_event(EventType, EventContent, paused, Data).
 
 stopping({call, _From}, lookup, State) ->
     {next_state, stopping, lookup_file_info(State), ?STOP_TIMEOUT};

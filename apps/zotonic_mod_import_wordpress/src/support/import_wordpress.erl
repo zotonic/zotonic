@@ -125,28 +125,20 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
                     Filename = filename:join(z_path:files_subdir("wp-content", Context), Upath),
                     case filelib:is_regular(Filename) of
                         true ->
-                            Props#{
-                              <<"media_file">> => Filename
-                            };
+                            Props#{ <<"media_file">> => Filename };
                         false ->
-                            Props#{
-                              <<"media_url">> => UText
-                            }
+                            Props#{ <<"media_url">> => UText }
                     end;
                 _ ->
-                    Props#{
-                        <<"media_url">> => UText
-                    }
+                    Props#{ <<"media_url">> => UText }
             end
     end,
 
     Props2 = case z_convert:to_datetime(z_convert:to_list(element_content("wp:post_date", Item))) of
-                 {{0,0,0},{0,0,0}} ->
-                    Props1;
-                 D ->
-                    Props1#{
-                        <<"publication_start">> => D
-                    }
+                {{Y,_,_}, _} = PubDate when Y > 0 ->
+                    Props1#{ <<"publication_start">> => PubDate };
+                _  ->
+                    Props1
              end,
 
     Edges = [],

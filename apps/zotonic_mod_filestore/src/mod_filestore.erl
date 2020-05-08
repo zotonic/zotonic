@@ -159,9 +159,7 @@ manage_schema(What, Context) ->
 
 lookup(Path, Context) ->
     case m_filestore:lookup(Path, Context) of
-        undefined ->
-            undefined;
-        #{ location := Location } = StoreEntry ->
+        {ok, #{ location := Location } = StoreEntry} ->
             case filezcache:locate_monitor(Location) of
                 {ok, {file, _Size, Filename}} ->
                     {ok, {filename, Filename, StoreEntry}};
@@ -169,7 +167,9 @@ lookup(Path, Context) ->
                     {ok, {filezcache, Pid, StoreEntry}};
                 {error, enoent} ->
                     load_cache(StoreEntry, Context)
-            end
+            end;
+        {error, _} ->
+            undefined
     end.
 
 load_cache(#{
@@ -301,24 +301,30 @@ init(_Args) ->
 %%% Support routines
 %%% ------------------------------------------------------------------------------------
 
--spec start_uploaders(pid(), [ m_filestore:queue_entry() ], z:context()) -> ok.
-start_uploaders(Pid, Rs, Context) ->
+-spec start_uploaders(pid(), {ok, [ m_filestore:queue_entry() ]} | {error, term()}, z:context()) -> ok.
+start_uploaders(Pid, {ok, Rs}, Context) ->
     lists:foreach(
         fun(QueueEntry) ->
             start_uploader(Pid, QueueEntry, Context)
         end,
-        Rs).
+        Rs);
+start_uploaders(_Pid, {error, _}, _Context) ->
+    % Ignore error, will be retried later
+    ok.
 
 start_uploader(Pid, #{ id := Id, path := Path, props := MediumInfo }, Context) ->
     supervisor:start_child(Pid, [Id, Path, MediumInfo, Context]).
 
--spec start_deleters( [ m_filestore:filestore_entry() ], z:context() ) -> ok.
-start_deleters(Rs, Context) ->
+-spec start_deleters( {ok, [ m_filestore:filestore_entry() ]} | {error, term()}, z:context() ) -> ok.
+start_deleters({ok, Rs}, Context) ->
     lists:foreach(
         fun(FilestoreEntry) ->
             start_deleter(FilestoreEntry, Context)
         end,
-        Rs).
+        Rs);
+start_deleters({error, _}, _Context) ->
+    % Ignore errors, will be fixed on a later retry
+    ok.
 
 start_deleter(#{
             id := Id,
@@ -348,13 +354,15 @@ delete_ready(_Id, Path, _Context, _Ref, {error, _} = Error) ->
     lager:error("Could not delete remote file. Path ~p error ~p", [Path, Error]).
 
 
--spec start_downloaders( [ m_filestore:filestore_entry() ], z:context() ) -> ok.
-start_downloaders(Rs, Context) ->
+-spec start_downloaders( {ok, [ m_filestore:filestore_entry() ]} | {error, term()}, z:context() ) -> ok.
+start_downloaders({ok, Rs}, Context) ->
     lists:foreach(
         fun(FilestoreEntry) ->
             start_downloader(FilestoreEntry, Context)
         end,
-        Rs).
+        Rs);
+start_downloaders({error, _}, _Context) ->
+    ok.
 
 start_downloader(#{
             id := Id,
