@@ -183,7 +183,7 @@ init([InitialState, RequestPath, Root, OptFilterProps, Minify, Site]) ->
         last_stale_check = os:timestamp()
     },
     Timeout = case InitialState of
-        paused -> ?PAUSE_TIMEOUT;
+        paused -> ?PAUSED_TIMEOUT;
         locate -> 0
     end,
     {ok, InitialState, State, Timeout}.
@@ -254,7 +254,7 @@ serving(EventType, EventContent, Data) ->
     handle_event(EventType, EventContent, serving, Data).
 
 paused(timeout, _, State) ->
-    {next_state, locate, State, ?PAUSE_TIMEOUT};
+    {next_state, locate, State, ?PAUSED_TIMEOUT};
 paused(EventType, EventContent, Data) ->
     handle_event(EventType, EventContent, serving, Data).
 
@@ -272,7 +272,7 @@ stopping(EventType, EventContent, Data) ->
 handle_event({call, From}, lookup, locate, State) ->
     {next_state, locate, State#state{waiting=[From|State#state.waiting]}, 0};
 handle_event({call, From}, lookup, paused, State) ->
-    {next_state, paused, State#state{waiting=[From|State#state.waiting]}, ?PAUSE_TIMEOUT};
+    {next_state, paused, State#state{waiting=[From|State#state.waiting]}, ?PAUSED_TIMEOUT};
 handle_event({call, From}, lookup, StateName, State) ->
     case check_current(State) of
         {ok, State1} ->
@@ -290,7 +290,7 @@ handle_event({call, From}, force_stale, _StateName, State) ->
 handle_event({call, From}, {pause, PauserPid}, _StateName, State) ->
     State1 = link_pauser(State, PauserPid),
     gen_statem:reply(From, ok),
-    {next_state, paused, State1, ?PAUSE_TIMEOUT};
+    {next_state, paused, State1, ?PAUSED_TIMEOUT};
 handle_event({call, From}, stop, _StateName, State) ->
     unreg(State),
     gen_statem:reply(From, ok),
@@ -345,7 +345,7 @@ timeout(serving, true) ->
 timeout(serving, false) ->
     ?SERVING_ENOENT_TIMEOUT;
 timeout(paused, _IsFound) ->
-    ?PUASED_TIMEOUT;
+    ?PAUSED_TIMEOUT;
 timeout(stopping, _IsFound) ->
     ?STOP_TIMEOUT.
 
