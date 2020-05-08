@@ -90,7 +90,7 @@
 -define(STOP_TIMEOUT, 5000).
 
 %% Max period for a pause (10 secs)
--define(PAUSE_TIMEOUT, 10000).
+-define(PAUSED_TIMEOUT, 10000).
 
 %% Inactivity timeout when serving (1 hour)
 -define(SERVING_TIMEOUT, 3600000).
@@ -344,6 +344,8 @@ timeout(serving, true) ->
     ?SERVING_TIMEOUT;
 timeout(serving, false) ->
     ?SERVING_ENOENT_TIMEOUT;
+timeout(paused, _IsFound) ->
+    ?PUASED_TIMEOUT;
 timeout(stopping, _IsFound) ->
     ?STOP_TIMEOUT.
 
