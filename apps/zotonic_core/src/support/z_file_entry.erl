@@ -37,12 +37,14 @@
     stop/1,
     stop/2,
     force_stale/1,
-    force_stale/2
+    force_stale/2,
+    pause/1,
+    pause/2
     ]).
 
 %% gen_statem exports
 -export([
-    start_link/4,
+    start_link/5,
     init/1,
     callback_mode/0,
     terminate/3
@@ -53,6 +55,7 @@
     locate/3,
     content_encoding_gzip/3,
     serving/3,
+    paused/3,
     stopping/3
     ]).
 
@@ -60,6 +63,7 @@
         site,                   % site associated with this file
         request_path,           % request path of this file (binary)
         root,                   % Optional root where to find the files
+        minify,                 % true if the individual files should be minified
         image_filters,          % Optional filters to apply to the found file
         is_found,               % false if request path does not exist
         acls = [],              % Associated resource ids for acl check
@@ -73,7 +77,8 @@
         gzip_size,              % size of gzip encoded data
         gzipper,                % ref to identify gzip process
         waiting = [],           % List of waiting processes
-        index_ref
+        index_ref,
+        pauser_pid :: pid() | undefined
     }).
 
 
@@ -83,6 +88,9 @@
 
 %% Period after a stop decision to handle late requests (5 secs)
 -define(STOP_TIMEOUT, 5000).
+
+%% Max period for a pause (10 secs)
+-define(PAUSE_TIMEOUT, 10000).
 
 %% Inactivity timeout when serving (1 hour)
 -define(SERVING_TIMEOUT, 3600000).
@@ -98,8 +106,11 @@
 %%% API
 %%% ------------------------------------------------------------------------------------
 
-start_link(RequestPath, Root, OptFilterProps, Context) when is_binary(RequestPath) ->
-    Args = [ RequestPath, Root, OptFilterProps, z_context:site(Context) ],
+start_link(InitialState, RequestPath, Root, OptFilterProps, Context)
+    when is_binary(RequestPath),
+         (InitialState =:= locate orelse InitialState =:= paused) ->
+    Minify = z_convert:to_bool(z_context:get(minify, Context)),
+    Args = [ InitialState, RequestPath, Root, OptFilterProps, Minify, z_context:site(Context) ],
     gen_statem:start_link({via, z_proc, {reg_name(RequestPath), Context}}, ?MODULE, Args, []).
 
 reg_name(RequestPath) ->
@@ -129,6 +140,19 @@ force_stale(Pid) ->
 force_stale(RequestPath, Context) when is_binary(RequestPath) ->
     force_stale(where(RequestPath, Context)).
 
+pause(undefined) ->
+    {error, noproc};
+pause(Pid) ->
+    try
+        gen_fsm:sync_send_all_state_event(Pid, {pause, self()}, infinity)
+    catch
+        exit:{noproc, _} ->
+            {error, noproc}
+    end.
+
+pause(RequestPath, Context) when is_binary(RequestPath) ->
+    pause(where(RequestPath, Context)).
+
 lookup(Pid) when is_pid(Pid) ->
     try
         gen_statem:call(Pid, lookup)
@@ -146,18 +170,23 @@ lookup(RequestPath, Context) when is_binary(RequestPath) ->
 %%% gen_statem callbacks
 %%% ------------------------------------------------------------------------------------
 
-init([RequestPath, Root, OptFilterProps, Site]) ->
+init([InitialState, RequestPath, Root, OptFilterProps, Minify, Site]) ->
     State = #state{
         site=Site,
         request_path=RequestPath,
         root=Root,
+        minify=Minify,
         image_filters=OptFilterProps,
         mime = <<"application/octet-stream">>,
         modified = {{1970,1,1},{0,0,0}},
         modifiedUTC = {{1970,1,1},{0,0,0}},
         last_stale_check = os:timestamp()
     },
-    {ok, locate, State, 0}.
+    Timeout = case InitialState of
+        paused -> ?PAUSE_TIMEOUT;
+        locate -> 0
+    end,
+    {ok, InitialState, State, Timeout}.
 
 callback_mode() ->
     state_functions.
@@ -210,7 +239,7 @@ content_encoding_gzip(timeout, _, State) ->
     case is_compressable(State#state.mime) andalso State#state.size < ?MAX_GZIP_SIZE of
         true ->
             % Start compression in separate process
-            State1 = State#state{gzipper = start_link_gzip(State#state.parts)},
+            State1 = State#state{gzipper = start_link_gzip(State#state.minify, State#state.parts)},
             {next_state, serving, State1, ?SERVING_TIMEOUT};
         false ->
             {next_state, serving, State, ?SERVING_TIMEOUT}
@@ -224,6 +253,11 @@ serving(timeout, _, State) ->
 serving(EventType, EventContent, Data) ->
     handle_event(EventType, EventContent, serving, Data).
 
+paused(timeout, _, State) ->
+    {next_state, locate, State, ?PAUSE_TIMEOUT};
+paused(EventType, EventContent, Data) ->
+    handle_event(EventType, EventContent, serving, Data).
+
 stopping({call, _From}, lookup, State) ->
     {next_state, stopping, lookup_file_info(State), ?STOP_TIMEOUT};
 stopping(timeout, _, State) ->
@@ -235,6 +269,10 @@ stopping(EventType, EventContent, Data) ->
 %%% ------------------------------------------------------------------------------------
 %%% gen_statem events
 %%% ------------------------------------------------------------------------------------
+handle_event({call, From}, lookup, locate, State) ->
+    {next_state, locate, State#state{waiting=[From|State#state.waiting]}, 0};
+handle_event({call, From}, lookup, paused, State) ->
+    {next_state, paused, State#state{waiting=[From|State#state.waiting]}, ?PAUSE_TIMEOUT};
 handle_event({call, From}, lookup, StateName, State) ->
     case check_current(State) of
         {ok, State1} ->
@@ -246,8 +284,13 @@ handle_event({call, From}, lookup, StateName, State) ->
             {next_state, locate, State1, 0}
     end;
 handle_event({call, From}, force_stale, _StateName, State) ->
+    State1 = unlink_pauser(State),
     gen_statem:reply(From, ok),
-    {next_state, locate, State, 0};
+    {next_state, locate, State1, 0};
+handle_event({call, From}, {pause, PauserPid}, _StateName, State) ->
+    State1 = link_pauser(State, PauserPid),
+    gen_statem:reply(From, ok),
+    {next_state, paused, State1, ?PAUSE_TIMEOUT};
 handle_event({call, From}, stop, _StateName, State) ->
     unreg(State),
     gen_statem:reply(From, ok),
@@ -279,6 +322,19 @@ terminate(_Reason, _StateName, _State) ->
 %%% ------------------------------------------------------------------------------------
 %%% support routines
 %%% ------------------------------------------------------------------------------------
+
+unlink_pauser(#state{ pauser_pid = undefined } = State) ->
+    State;
+unlink_pauser(#state{ pauser_pid = Pid } = State) ->
+    erlang:unlink(Pid),
+    State#state{ pauser_pid = undefined }.
+
+link_pauser(State, Pid) ->
+    State1 = unlink_pauser(State),
+    erlang:link(Pid),
+    State1#state{
+        pauser_pid = Pid
+    }.
 
 timeout(locate, _IsFound) ->
     0;
@@ -390,13 +446,14 @@ is_compressable(<<"application/javascript">>) -> true;
 is_compressable(<<"application/x-javascript">>) -> true;
 is_compressable(<<"application/xhtml+xml">>) -> true;
 is_compressable(<<"application/xml">>) -> true;
+is_compressable(<<"image/svg+xml">>) -> true;
 is_compressable(_Mime) -> false.
 
-start_link_gzip(Sources) ->
+start_link_gzip(Minify, Sources) ->
     Self = self(),
     Ref = erlang:make_ref(),
     Pid = erlang:spawn_link(fun() ->
-                          Bin = gzip_compress(Sources),
+                          Bin = gzip_compress(Minify, Sources),
                           Self ! {gzip, {Ref, self()}, Bin}
                       end),
     {Ref, Pid}.
@@ -404,35 +461,45 @@ start_link_gzip(Sources) ->
 % TODO: big files should be compressed to disk (tmpfile or filezcache should do)
 -define(MAX_WBITS, 15).
 
-gzip_compress(Sources) ->
+gzip_compress(Minify, Sources) ->
     Z = zlib:open(),
     zlib:deflateInit(Z, default, deflated, 16+?MAX_WBITS, 8, default),
-    Compressed = gzip_compress_1(Sources, Z, []),
+    Compressed = gzip_compress_1(Minify, Sources, Z, []),
     Last = zlib:deflate(Z, <<>>, finish),
     ok = zlib:deflateEnd(Z),
     zlib:close(Z),
     iolist_to_binary([Compressed,Last]).
 
-gzip_compress_1([], _Z, Acc) ->
+gzip_compress_1(_M, [], _Z, Acc) ->
     lists:reverse(Acc);
-gzip_compress_1([#part_data{data=B}|Ps], Z, Acc) ->
+gzip_compress_1(M, [#part_data{data=B}|Ps], Z, Acc) ->
     Acc1 = [ zlib:deflate(Z, B) | Acc],
-    gzip_compress_1(Ps, Z, Acc1);
-gzip_compress_1([#part_file{filepath=Filename}|Ps], Z, Acc) ->
-    Acc1 = compress_file(Filename, Z, Acc),
-    gzip_compress_1(Ps, Z, Acc1);
-gzip_compress_1([#part_cache{cache_pid=Pid}|Ps], Z, Acc) ->
+    gzip_compress_1(M, Ps, Z, Acc1);
+gzip_compress_1(Minify, [#part_file{filepath=Filename}|Ps], Z, Acc) ->
+    Acc1 = compress_file(Minify, Filename, Z, Acc),
+    gzip_compress_1(Minify, Ps, Z, Acc1);
+gzip_compress_1(Minify, [#part_cache{cache_pid=Pid}|Ps], Z, Acc) ->
     {ok, {file, _, Filename}} = filezcache:lookup_file(Pid),
-    Acc1 = compress_file(Filename, Z, Acc),
-    gzip_compress_1(Ps, Z, Acc1);
-gzip_compress_1([#part_missing{}|Ps], Z, Acc) ->
-    gzip_compress_1(Ps, Z, Acc).
+    Acc1 = compress_file(Minify, Filename, Z, Acc),
+    gzip_compress_1(Minify, Ps, Z, Acc1);
+gzip_compress_1(M, [#part_missing{}|Ps], Z, Acc) ->
+    gzip_compress_1(M, Ps, Z, Acc).
 
 
 % We read 512K at once for compressing files.
 -define(BLOCK_SIZE, 512*1024).
 
-compress_file(Filename, Z, Acc) ->
+compress_file(true, Filename, Z, Acc) ->
+    Ext = filename:extension(Filename),
+    case is_minifiable(Ext) of
+        true ->
+            {ok, Data} = file:read_file(Filename),
+            Data1 = minify(Filename, filename:extension(Filename), Data),
+            [zlib:deflate(Z, Data1) | Acc];
+        false ->
+            compress_file(false, Filename, Z, Acc)
+    end;
+compress_file(false, Filename, Z, Acc) ->
     {ok, IO} = file:open(Filename, [read,raw,binary]),
     Compressed = compress_file_1(Z, IO, Acc),
     ok = file:close(IO),
@@ -445,6 +512,38 @@ compress_file_1(Z, IO, Acc) ->
         {ok, Data} ->
             compress_file_1(Z, IO, [zlib:deflate(Z, Data)|Acc])
     end.
+
+is_minifiable(<<".js">>) -> true;
+is_minifiable(<<".css">>) -> true;
+is_minifiable(_Ext) -> false.
+
+minify(Filename, <<".js">>, Data) ->
+    <<(minify_m(Filename, Data, z_jsmin))/binary, ";\n">>;
+minify(Filename, <<".css">>, Data) ->
+    <<(minify_m(Filename, Data, z_cssmin))/binary, "\n">>;
+minify(_, _, Data) ->
+    Data.
+
+minify_m(Filename, Data, MinifyModule) ->
+    Basename = filename:basename(Filename),
+    case already_minified(Basename) of
+        true -> Data;
+        false ->
+            case catch MinifyModule:minify(Data) of
+                Minified when is_binary(Minified) ->
+                    Minified;
+                Reason ->
+                    error_logger:warning_msg("mod_base: Could not minify ~p. [Reason: ~p]~n", [Filename, Reason]),
+                    Data 
+            end
+    end.
+
+already_minified(<<>>) ->
+    false;
+already_minified(<<Sep, "min", _/binary>>) when Sep =:= $. orelse Sep =:= $- ->
+    true;
+already_minified(<<_C, Rest/binary>>) ->
+    already_minified(Rest).
 
 locate_enoent(State, IndexRef, Mime) ->
     State1 = State#state{

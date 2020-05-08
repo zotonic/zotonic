@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2020 Marc Worrell
 %% @doc Models for file-storage administration
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -43,12 +43,18 @@
     store/5,
     lookup/2,
 
+    is_upload_ok/1,
+    is_download_ok/1,
+
     stats/1,
 
     install/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+% It is ok to retry transient errors every 10 minutes
+-define(RETRY_TRANSIENT_ERRORS, 600).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -66,7 +72,12 @@ queue(Path, Props, Context) ->
     z_db:transaction(fun(Ctx) ->
             case z_db:q1("select count(*) from filestore_queue where path = $1", [Path], Ctx) of
                 0 ->
-                    1 = z_db:q("insert into filestore_queue (path, props) values ($1,$2)", [Path, ?DB_PROPS(Props)], Ctx),
+                    1 = z_db:q("
+                            insert into
+                            filestore_queue (path, props)
+                            values ($1,$2)",
+                            [Path, ?DB_PROPS(Props)],
+                            Ctx),
                     ok;
                 1 ->
                     {error, duplicate}
@@ -83,9 +94,12 @@ fetch_queue(Context) ->
 dequeue(Id, Context) ->
     z_db:q("delete from filestore_queue where id = $1", [Id], Context).
 
+-spec store( binary(), integer(), atom() | binary(), binary(), z:context() ) -> {ok, integer()}.
 store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(Size), is_binary(Location) ->
     z_db:transaction(fun(Ctx) ->
-            case z_db:q1("select id from filestore where path=$1", [Path], Ctx) of
+            case z_db:q1("select id from filestore where path=$1",
+                        [Path], Ctx)
+            of
                 undefined ->
                     z_db:insert(filestore, [
                             {path, Path},
@@ -109,6 +123,7 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
             end
         end, Context).
 
+-spec lookup( binary(), z:context() ) -> undefined | proplists:proplist().
 lookup(Path, Context) ->
     z_db:assoc_row("select *
                     from filestore
@@ -116,6 +131,39 @@ lookup(Path, Context) ->
                       and error is null
                       and not is_deleted",
                    [Path], Context).
+
+%% Check if it is ok to upload to the location of this entry
+-spec is_upload_ok( undefined | proplists:proplist() ) -> boolean().
+is_upload_ok(undefined) ->
+    true;
+is_upload_ok(Props) ->
+    case proplists:get_value(error, Props) of
+        undefined -> false;
+        _Error -> true
+    end.
+
+%% Check if it is ok to upload to the location of this entry
+-spec is_download_ok( undefined | proplists:proplist() ) -> boolean().
+is_download_ok(undefined) ->
+    true;
+is_download_ok(Props) ->
+    Error = proplists:get_value(error, Props),
+    Modified = proplists:get_value(modified, Props),
+    is_download_ok(Error, Modified).
+
+is_download_ok(undefined, _Modified) ->
+    true;
+is_download_ok(_Error, Modified) ->
+    % Typical error when S3 can't find anything
+    % or when the credentials were wrong for some time
+    MTimestamp = z_datetime:datetime_to_timestamp(Modified),
+    Now = z_datetime:timestamp(),
+    case Now - MTimestamp of
+        Delta when Delta > ?RETRY_TRANSIENT_ERRORS ->
+            true;
+        _ ->
+            false
+    end.
 
 mark_error(Id, Error, Context) ->
     z_db:q("update filestore
@@ -155,8 +203,8 @@ mark_move_to_local_limit(Limit, Context) ->
                                 from (
                                      select id
                                      from filestore
-                                     where not is_move_to_local
-                                       and not is_deleted
+                                     where is_move_to_local = false
+                                       and is_deleted = false
                                        and error is null
                                      limit $1
                                      for update
@@ -174,8 +222,8 @@ mark_move_to_local_limit(Limit, Context) ->
 mark_move_to_local_all(Context) ->
     z_db:q("update filestore
             set is_move_to_local = true
-            where not is_move_to_local
-              and not is_deleted
+            where is_move_to_local = false
+              and is_deleted = false
               and error is null", Context).
 
 mark_move_to_local(Id, Context) ->
@@ -191,7 +239,7 @@ unmark_move_to_local_limit(Limit, Context) ->
                                 from (
                                      select id
                                      from filestore
-                                     where is_move_to_local
+                                     where is_move_to_local = true
                                      limit $1
                                      for update
                                 ) mv
@@ -216,12 +264,20 @@ unmark_move_to_local(Id, Context) ->
             where id = $1", [Id], Context).
 
 fetch_move_to_local(Context) ->
-    z_db:assoc("select * from filestore where is_move_to_local and not is_deleted and error is null limit 200", Context).
+    z_db:assoc("
+            select *
+            from filestore
+            where is_move_to_local
+              and is_deleted = false
+              and error is null
+            limit 200",
+            Context).
 
 purge_move_to_local(Id, Context) ->
     z_db:q("update filestore
             set is_move_to_local = false,
-                is_deleted = true
+                is_deleted = true,
+                deleted = now()
             where id = $1", [Id], Context).
 
 stats(Context) ->
@@ -233,8 +289,10 @@ stats(Context) ->
                               and is_deletable_file", Context),
     Queued = z_db:q1("select count(*) from filestore_queue", Context),
     {Cloud, CloudSize, ToLocal, Deleted} = z_db:q_row("
-                            select count(*), sum(size),
-                                   sum(is_move_to_local::integer), sum(is_deleted::integer)
+                            select count(*),
+                                   sum(size),
+                                   sum(is_move_to_local::integer),
+                                   sum(is_deleted::integer)
                             from filestore", Context),
 
     % TODO: we need a separate index for this lookup
@@ -245,7 +303,8 @@ stats(Context) ->
                                     on f.path = 'archive/' || m.filename
                             where filename is not null
                               and filename <> ''
-                              and is_deletable_file", Context),
+                              and is_deletable_file = true",
+                            Context),
     [
         {archived, Archived},
         {archive_size, ArchiveSize},

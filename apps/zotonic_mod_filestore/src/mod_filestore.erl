@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2020 Marc Worrell
 %% @doc Module managing the storage of files on remote servers.
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 -author("Marc Worrell <marc@worrell.nl>").
 -mod_title("File Storage").
--mod_description("Store files on cloud storage services like Amazon S3 and GreenQloud").
+-mod_description("Store files on cloud storage services like Amazon S3 and Google Cloud Storage").
 -mod_prio(500).
 -mod_schema(1).
 -mod_provides([filestore]).
