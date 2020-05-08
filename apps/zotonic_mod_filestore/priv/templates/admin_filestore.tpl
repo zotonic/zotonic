@@ -135,18 +135,18 @@
                                         <td>{{ stats.cloud_size|filesizeformat }}</td>
                                     </tr>
                                 </tbody>
-                            </table>
 
-                            <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>{_ Upload Queue _}</th>
-                                        <th>{_ Download Queue _}</th>
-                                        <th>{_ Delete Queue_}</th>
+                                        <th></th>
+                                        <th><br>{_ Upload Queue _}</th>
+                                        <th><br>{_ Download Queue _}</th>
+                                        <th><br>{_ Delete Queue_}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <th>{_ Files _}</th>
                                         <td id="s3queue">{{ stats.queued|default:0 }}</td>
                                         <td id="s3queue-local">{{ stats.queued_local|default:0 }}</td>
                                         <td>{{ stats.queued_deleted|default:0 }}</td>
