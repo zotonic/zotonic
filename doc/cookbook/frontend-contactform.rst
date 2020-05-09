@@ -141,7 +141,10 @@ following::
             {name, z_context:get_q(<<"name">>, Context)},
             {message, z_context:get_q(<<"message">>, Context)}],
     z_email:send_render(z_email:get_admin_email(Context), "_email_contact.tpl", Vars, Context),
-    z_render:update("contact-form", "<p>The form has been submitted! Thank you, we'll get in touch soon.</p>", Context).
+    z_render:update(
+        <<"contact-form">>,
+        <<"<p>The form has been submitted! Thank you, we'll get in touch soon.</p>">>,
+        Context).
 
 This loads the relevant values from the form, puts them in the Vars
 variable, and then calls the z_email module to mail the given template

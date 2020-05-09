@@ -47,7 +47,7 @@
 
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ useauth | Rest ], _Msg, Context) ->
+m_get([ <<"useauth">> | Rest ], _Msg, Context) ->
     {ok, {is_useauth(Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
@@ -258,14 +258,13 @@ update_identitiy_subscriptions(Context) ->
         All -- Ks1).
 
 update_config_subscriptions(Context) ->
-    Config = m_config:get_value(mod_twitter, follow, Context),
+    Config = m_config:get_value(mod_twitter, follow, <<>>, Context),
     update_config_subscriptions(Config, Context).
 
 %% @doc Sync the subscriptions table, remove all subs
-update_config_subscriptions(S, Context) when is_list(S) ->
-    update_config_subscriptions(z_convert:to_binary(S), Context);
 update_config_subscriptions(S, Context) ->
-    Keys = lists:map( fun(K) -> normalize_key(K, any) end, split(S) ),
+    S1 = z_convert:to_binary(S),
+    Keys = lists:map( fun(K) -> normalize_key(K, any) end, split(S1) ),
     All = z_db:q("
         select key
         from twitter_subscriptions
@@ -345,8 +344,6 @@ normalize_key_1(<<"@", _/binary>> = Username) -> Username;
 normalize_key_1(<<"#", _/binary>> = Tag) -> Tag;
 normalize_key_1(Phrase) -> Phrase.
 
-split(undefined) ->
-    [];
 split(B) when is_binary(B) ->
     B1 = binary:replace(B, <<9>>, <<" ">>, [global]),
     B2 = re:split(B1, <<"[ \n\r\f,]">>),

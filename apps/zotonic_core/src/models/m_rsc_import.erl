@@ -30,23 +30,25 @@
 %% @doc Create an empty, non-authoritative resource, with the given uri.
 -spec create_empty( string() | binary(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
 create_empty(Uri, Context) ->
-    create_empty(Uri, [], Context).
+    create_empty(Uri, #{}, Context).
 
--spec create_empty( string() | binary(), m_rsc:props(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
+-spec create_empty( string() | binary(), m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, duplicate_uri | term()}.
+create_empty(Uri, Props, Context) when is_list(Props) ->
+    {ok, RscMap} = z_props:from_list(Props),
+    create_empty(Uri, RscMap, Context);
 create_empty(Uri, Props, Context) ->
     case m_rsc:uri_lookup(Uri, Context) of
         undefined ->
-            Props1 = case proplists:lookup(category_id, Props) of
-                none -> [ {category_id, other} | Props ];
-                {category_id, _} -> Props
+            Props1 = case maps:is_key(<<"category_id">>, Props) of
+                false -> Props#{ <<"category_id">> => other };
+                true -> Props
             end,
-            Props2 = [
-                {note, "Pending import"},
-                {is_published, false},
-                {uri, Uri},
-                {is_authoritative, false}
-                | Props1
-            ],
+            Props2 = Props1#{
+                <<"note">> => <<"Pending import">>,
+                <<"is_published">> => false,
+                <<"uri">> => Uri,
+                <<"is_authoritative">> => false
+            },
             m_rsc:insert(Props2, Context);
         RscId ->
             lager:info("Imported resource of \"~s\" already exists as rsc id ~p",
@@ -57,44 +59,54 @@ create_empty(Uri, Props, Context) ->
 
 %% @doc Import given resource. resource must already exist and be
 %% non-authoritative. URIs must match.
--spec import(proplists:proplist(), z:context()) -> {ok, m_rsc:resource_id()} | {error, atom()}.
-import(RscImport, Context) ->
-    {uri, Uri} = proplists:lookup(uri, RscImport),
-    Id = case m_rsc:uri_lookup(Uri, Context) of
-             undefined -> {error, {unknown_rsc, Uri}};
-             TheId -> TheId
-         end,
+-spec import(m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, atom()}.
+import(RscImport, Context) when is_list(RscImport) ->
+    {ok, RscMap} = z_props:from_list(RscImport),
+    import(RscMap, Context);
+import(#{ <<"uri">> := Uri } = RscImport, Context) ->
+    case m_rsc:uri_lookup(Uri, Context) of
+        undefined ->
+            {error, {unknown_rsc, Uri}};
+        Id ->
+            import_1(Id, RscImport, Context)
+    end;
+import(_RscImport, _Context) ->
+    {error, no_uri}.
+
+import_1(Id, RscImport, Context) ->
     case z_acl:rsc_editable(Id, Context) of
-        false -> {error, eacces};
+        false ->
+            {error, eacces};
         true ->
             case m_rsc:p(Id, is_authoritative, Context) of
                 false ->
                     %% Import rsc
-                    {rsc, Props} = proplists:lookup(rsc, RscImport),
-
-                    Props1 = case proplists:get_value(is_published, Props) of
-                                 true -> Props;
-                                 _ -> [{is_published, true} | proplists:delete(is_published, Props)]
-                             end,
-
-                    Opts = [{escape_texts, false}],
-                    {ok, Id} = m_rsc_update:update(Id, Props1, Opts, Context),
-
-                    %% Import medium
-                    {ok, Id} = case proplists:get_value(medium, RscImport) of
-                                   undefined ->
-                                       {ok, Id};
-                                   MediumProps ->
-                                       Url = proplists:get_value(url, MediumProps),
-                                       m_media:replace_url(Url, Id, MediumProps, Context)
-                               end,
-
-                    %% Import category
-                    %% Import group
-                    %% Import Edges
-                    {ok, Id};
+                    Props = maps:get(<<"rsc">>, RscImport),
+                    Props1 = case maps:find(<<"is_published">>, Props) of
+                        {ok, true} -> Props;
+                        _ -> Props#{ <<"is_published">> => true }
+                    end,
+                    Opts = [
+                        {escape_texts, false}
+                    ],
+                    case m_rsc_update:update(Id, Props1, Opts, Context) of
+                        {ok, Id} ->
+                            %% Import medium
+                            {ok, Id} = case maps:find(<<"medium">>, RscImport) of
+                                {ok, #{ <<"url">> := Url } = MediumProps} ->
+                                    m_media:replace_url(Url, Id, MediumProps, Context);
+                                _ ->
+                                   {ok, Id}
+                            end,
+                            %% Import category
+                            %% Import group
+                            %% Import Edges
+                            {ok, Id};
+                        {error, _} = Error ->
+                            Error
+                    end;
                 true ->
-                    {error, cannot_import_authoritative_rsc}
+                    {error, authoritative}
             end
     end.
 

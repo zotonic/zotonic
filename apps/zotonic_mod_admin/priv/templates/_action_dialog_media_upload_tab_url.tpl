@@ -1,18 +1,16 @@
 {% with id.medium as medium %}
 <div class="tab-pane" id="{{ tab }}-url">
-	{# todo: check the content_group_id #}
-
-	{% wire id=#urlform type="submit" 
-		postback={media_url_embed 
+	{% wire id=#urlform type="submit"
+		postback={media_url_embed
 						subject_id=subject_id
 						object_id=object_id
-						predicate=predicate  
-						id=id  
+						predicate=predicate
+						id=id
 						redirect=redirect|if_undefined:(not stay)
 						content_group_id=content_group_id
 						actions=actions callback=callback
-						discover_elt=#discover} 
-		delegate=`z_admin_media_discover` 
+						discover_elt=#discover}
+		delegate=`z_admin_media_discover`
 	%}
 	<form id="{{ #urlform }}" method="POST" action="postback" class="form form-horizontal">
 		<p>

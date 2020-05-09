@@ -133,6 +133,15 @@ ensure_job_queues() ->
                 ]}
             ]}
         ]),
+    ensure_job_queue(
+        zotonic_singular_job,
+        [
+            {regulators, [
+                {counter, [
+                    {limit, 1}
+                ]}
+            ]}
+        ]),
     ok.
 
 ensure_job_queue(Name, Options) ->

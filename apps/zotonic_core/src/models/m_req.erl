@@ -35,12 +35,18 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ Key | Rest ], _Msg, Context) when is_atom(Key) ->
-    {ok, {get(Key, Context), Rest}};
+m_get([ Key | Rest ], _Msg, Context) when is_binary(Key) ->
+    try
+        KeyAtom = erlang:binary_to_existing_atom(Key, utf8),
+        {ok, {get(KeyAtom, Context), Rest}}
+    catch
+        error:badarg ->
+            {error, unknown_key}
+    end;
 m_get([], _Msg, Context) ->
     {ok, {values(Context), []}};
 m_get(Vs, _Msg, _Context) ->
-    lager:info("Non atomic key get: ~p", [Vs]),
+    lager:info("Non binary key get: ~p", [Vs]),
     {error, unknown_path}.
 
 

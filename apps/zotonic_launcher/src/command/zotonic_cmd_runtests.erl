@@ -25,17 +25,16 @@
 -include("../../include/zotonic_command.hrl").
 
 run(Args) ->
+    Tests = Args -- [ "runtests" ],
     {ok, BaseCmd} = zotonic_command:base_cmd_test(),
     Cmd = BaseCmd
         ++ " -sasl errlog_type error -s zotonic "
-        ++ "-eval 'zotonic:await_startup(),init:stop(case eunit:test(["
-            ++ tests(Args)
-            ++ "],[]) of error -> 1; ok -> 0 end)'",
+        ++ "-eval 'zotonic:runtests(["++tests(Tests)++"])'",
     io:format("~s", [ Cmd ]).
 
 tests(Args) ->
     ZotonicDir = zotonic_command:get_zotonic_dir(),
-    Beams = filelib:wildcard( filename:join([ ZotonicDir, "_build", "default", "lib", "zotonic_*", "test", "*.beam" ])),
+    Beams = filelib:wildcard( filename:join([ ZotonicDir, "_build", "default", "lib", "zotonic_*", "test", "*.erl" ])),
     Bs = lists:map(
         fun(B) ->
             filename:rootname( filename:basename(B) )

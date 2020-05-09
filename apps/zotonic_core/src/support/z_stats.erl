@@ -26,12 +26,12 @@
 %% Act as a webmachine logger
 -export([
     log_access/1,
-        
+
     record_event/3,
     record_duration/4,
-    system_usage/1
+    system_usage/1,
+    count_db_event/2
 ]).
-
 
 %% @doc Initialize the statistics collection machinery.
 %%
@@ -52,6 +52,10 @@ init_site(Host) ->
     % And some basic broker statistics
     ok = exometer:re_register([site, Host, broker, session_count],
                               {function, mqtt_sessions, session_count, [Host], match, count}, []),
+
+    %% Database metrics
+    exometer:re_register([zotonic, Host, db, requests], spiral, []),
+    exometer:re_register([zotonic, Host, db, duration], histogram, []),
 
     ok = exometer:re_register([site, Host, broker, router_info],
                               {function, mqtt_sessions, router_info, [Host], value, []}, []),
@@ -223,7 +227,7 @@ setup_system_reporter() ->
     ok.
 
 
-% Add the system reporter. It publishes on the default mqtt pool for
+% Add the system wide reporter. It publishes on the default mqtt pool for
 % the whole system.
 add_system_reporter() -> 
     case exometer_report:add_reporter(
@@ -237,3 +241,9 @@ add_system_reporter() ->
         ok -> ok;
         {error, already_running} -> ok
     end.
+
+% @doc Count a db event, like pool_full, or pull_high_usage.
+count_db_event(Event, Context) when is_atom(Event) ->
+    Site = z_context:site(Context),
+    ok = exometer:update_or_create([zotonic, Site, db, Event], 1, spiral, []).
+

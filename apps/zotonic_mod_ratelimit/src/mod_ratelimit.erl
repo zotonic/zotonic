@@ -24,6 +24,7 @@
 -mod_title("Rate Limiting").
 -mod_description("Rate limiting of authentication tries and other types of requests.").
 -mod_prio(500).
+-mod_depends([ cron ]).
 
 -export([
     observe_auth_precheck/2,

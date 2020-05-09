@@ -71,12 +71,13 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
             Context;
         false ->
             Context1 = z_authentication_tokens:req_auth_cookie(Context),
-            case z_auth:is_auth(Context1) of
+            Context2 = case z_auth:is_auth(Context1) of
                 false ->
                     z_authentication_tokens:req_autologon_cookie(Context1);
                 true ->
                     Context1
-            end
+            end,
+            z_notifier:foldl(#session_context{ request_type = http, payload = undefined }, Context2, Context2)
     end;
 observe_request_context(#request_context{}, Context, _Context) ->
     Context.
@@ -111,6 +112,8 @@ observe_logon_submit(#logon_submit{ payload = Args }, Context) ->
                         _ ->
                             {ok, UserId}
                     end;
+                {error, {expired, UserId}} ->
+                    {expired, UserId};
                 {error, _} = E ->
                     E
             end;

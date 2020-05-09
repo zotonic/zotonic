@@ -31,7 +31,7 @@
 -mod_description("Use Twitter for logon, and/or import tweets from users or tags on Twitter.").
 -mod_prio(401).
 -mod_schema(2).
--mod_depends([admin, authentication]).
+-mod_depends([admin, authentication, cron]).
 -mod_provides([twitter]).
 
 %% interface functions
@@ -61,8 +61,9 @@ init(Context) ->
 %% @doc Ensure our poller task is always there.
 observe_tick_1h(tick_1h, Context) ->
     case z_pivot_rsc:get_task(twitter_poller, poll, ?POLL_TASK_NAME, Context) of
-        undefined -> init(Context);
-        _Task -> ok
+        {ok, _Task} -> ok;
+        {error, enoent} -> init(Context);
+        {error, _} -> ok
     end.
 
 

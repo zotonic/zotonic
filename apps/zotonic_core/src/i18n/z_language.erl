@@ -47,7 +47,9 @@
     main_languages/0,
     language_list/1,
     is_language_enabled/2,
-    enabled_language_codes/1
+    is_language_editable/2,
+    enabled_language_codes/1,
+    editable_language_codes/1
 ]).
 
 -include("zotonic.hrl").
@@ -118,13 +120,28 @@ english_name(Code) ->
 is_rtl(Code) ->
     get_property(Code, direction) =:= <<"RTL">>.
 
--spec is_language_enabled( language(), z:context() ) -> boolean().
+
+%% @doc Check if a language code is allowed to be used as an user
+%%      selectable language for the interface.
 is_language_enabled(Code, Context) when is_atom(Code) ->
     lists:member(Code, enabled_language_codes(Context));
 is_language_enabled(Code, Context) ->
     case to_language_atom(Code) of
         {ok, Lang} ->
             lists:member(Lang, enabled_language_codes(Context));
+        {error, not_a_language} ->
+            false
+    end.
+
+%% @doc Check if a language code is allowed to be edited.
+%%      This is a superset of the enabled languages.
+-spec is_language_editable( language(), z:context() ) -> boolean().
+is_language_editable(Code, Context) when is_atom(Code) ->
+    lists:member(Code, editable_language_codes(Context));
+is_language_editable(Code, Context) ->
+    case to_language_atom(Code) of
+        {ok, Lang} ->
+            lists:member(Lang, editable_language_codes(Context));
         {error, not_a_language} ->
             false
     end.
@@ -173,13 +190,35 @@ language_list(Context) ->
             end
     end.
 
+%% @doc Return list of languges enabled in the user interface.
 -spec enabled_language_codes(z:context()) -> list( language_code() ).
 enabled_language_codes(Context) ->
     case m_config:get(i18n, languages, Context) of
         undefined ->
             [ default_language(Context) ];
         Cfg when is_list(Cfg) ->
-            [ Code || {Code, true} <- proplists:get_value(list, Cfg, []) ]
+            lists:filtermap(
+                fun
+                    ({Code, true}) -> {true, Code};
+                    (_) -> false
+                end,
+                proplists:get_value(list, Cfg, []))
+    end.
+
+%% @doc Return list of languges enabled in the user interface.
+-spec editable_language_codes(z:context()) -> list( language_code() ).
+editable_language_codes(Context) ->
+    case m_config:get(i18n, languages, Context) of
+        undefined ->
+            [ default_language(Context) ];
+        Cfg when is_list(Cfg) ->
+            lists:filtermap(
+                fun
+                    ({Code, true}) -> {true, Code};
+                    ({Code, edit}) -> {true, Code};
+                    (_) -> false
+                end,
+                proplists:get_value(list, Cfg, []))
     end.
 
 %% @private

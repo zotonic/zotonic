@@ -23,6 +23,7 @@
 -mod_description("Scan uploaded files for viruses and malware.").
 -mod_prio(100).
 -mod_provides([ antivirus ]).
+-mod_depends([ cron ]).
 
 -export([
      observe_media_upload_preprocess/2,
@@ -34,7 +35,7 @@
 
 %% @doc Check the uploaded file with clamav
 observe_media_upload_preprocess(#media_upload_preprocess{ file = File, mime = Mime, medium = Medium } = Pre, Context) ->
-    case proplists:get_value(is_av_sizelimit, Medium, false) of
+    case maps:get(<<"is_av_sizelimit">>, Medium, false) of
         true ->
             % This is the second try, now with disabled av-scanner
             undefined;

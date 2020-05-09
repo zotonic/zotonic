@@ -47,7 +47,7 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ is_valid, Email | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid">>, Email | Rest ], _Msg, Context) ->
     {ok, {is_valid(Email, Context), Rest}};
 m_get([ Email | Rest ], _Msg, Context) ->
     case is_allowed(Email, Context) of
@@ -97,7 +97,7 @@ block(Email0, Context) ->
         Context)
     of
         1 ->
-            maybe_notify(Email, false, false, true, Context),
+            maybe_notify(Email, false, false, true, true, Context),
             ok;
         0 ->
             z_db:q("
@@ -138,7 +138,7 @@ clear_status(Email, Context) ->
             Context)
     of
         1 ->
-            maybe_notify(Email, false, true, true, Context),
+            maybe_notify(Email, false, true, true, true, Context),
             ok;
         0 -> ok
     end.
@@ -213,7 +213,7 @@ mark_received(Email0, Context) ->
                 Context),
             ok;
         1 ->
-            maybe_notify(Email, IsValid, true, true, Context),
+            maybe_notify(Email, IsValid, true, true, false, Context),
             ok
     end.
 
@@ -243,7 +243,7 @@ mark_read(Email0, Context) ->
                 Context),
             ok;
         1 ->
-            maybe_notify(Email, IsValid, true, true, Context),
+            maybe_notify(Email, IsValid, true, true, false, Context),
             ok
     end.
 
@@ -270,7 +270,7 @@ mark_sent(Email0, false, Context) ->
                 Context),
             ok;
         1 ->
-            maybe_notify(Email, IsValid, true, false, Context),
+            maybe_notify(Email, IsValid, true, false, false, Context),
             ok
     end;
 mark_sent(Email0, true, Context) ->
@@ -289,7 +289,7 @@ mark_sent(Email0, true, Context) ->
         Context)
     of
         1 ->
-            maybe_notify(Email, IsValid, true, true, Context),
+            maybe_notify(Email, IsValid, true, true, false, Context),
             ok;
         0 ->
             ok
@@ -339,7 +339,7 @@ mark_failed(Email0, IsFinal, Status, Context) ->
                     end
                end,
                Context),
-    maybe_notify(Email, IsValid, false, IsFinal, Context).
+    maybe_notify(Email, IsValid, false, IsFinal, false, Context).
 
 
 new_recent_error(LastRecent, IsFinal, Status) ->
@@ -357,6 +357,9 @@ new_recent_error(LastRecent, IsFinal, Status) ->
 % If the permanent error is about an unknown user then we consider it fruitless to
 % try again later.  Errors about missing domains, connection errors and timeouts
 % could all be fixed later, so it is ok to mail those for a while.
+is_unrecoverable_error(<<"605", _/binary>>) ->
+    % mailgun - not trying again as they blocked the email address
+    true;
 is_unrecoverable_error(<<"550", _/binary>> = Status) ->
     S = z_string:to_lower(Status),
     binary:match(S, <<"mailbox unavailable">>) =/= nomatch          % hotmail
@@ -421,17 +424,18 @@ mark_bounced(Email0, Context) ->
             end
         end,
         Context),
-    maybe_notify(Email, IsValid, false, true, Context),
+    maybe_notify(Email, IsValid, false, true, false, Context),
     ok.
 
-maybe_notify(_Email, IsValid, IsValid, false, _Context) ->
+maybe_notify(_Email, IsValid, IsValid, false, _IsManual, _Context) ->
     ok;
-maybe_notify(Email, _OldIsValid, IsValid, IsFinal, Context) ->
+maybe_notify(Email, _OldIsValid, IsValid, IsFinal, IsManual, Context) ->
     z_depcache:flush({email_valid, Email}, Context),
     z_notifier:notify(#email_status{
-                        recipient=Email,
-                        is_valid=IsValid,
-                        is_final=IsFinal
+                        recipient = Email,
+                        is_valid = IsValid,
+                        is_final = IsFinal,
+                        is_manual = IsManual
                     },
                     Context).
 

@@ -63,13 +63,18 @@ observe_rsc_update(#rsc_update{action=Action, id=RscId, props=Pre}, {_Modified, 
         true ->
             Acc;
         _false ->
-            case {proplists:get_value(email, Pre), proplists:get_value(email, Post)} of
+            case {maps:get(<<"email">>, Pre, undefined), maps:get(<<"email">>, Post, undefined)} of
                 {A, A} -> Acc;
                 {_Old, undefined} -> Acc;
                 {_Old, <<>>} -> Acc;
                 {_Old, New} ->
-                    NewRaw = z_html:unescape(New),
-                    ensure(RscId, email, NewRaw, Context),
+                    case is_email_identity_category(Pre, Post, Context) of
+                        true ->
+                            NewRaw = z_html:unescape(New),
+                            ensure(RscId, email, NewRaw, Context);
+                        false ->
+                            ok
+                    end,
                     Acc
             end
     end;
@@ -247,6 +252,19 @@ ensure(RscId, Type, Key, Context) when is_binary(Key) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+% Restrict which category resources have email identity records.
+% This should overlap with the categories that could authenticate.
+is_email_identity_category(_Pre, #{ <<"category_id">> := CatId }, Context) when is_integer(CatId) ->
+    is_email_identity_category(m_category:is_a(CatId, Context));
+is_email_identity_category(#{ <<"category_id">> := CatId }, _Post, Context) when is_integer(CatId) ->
+    is_email_identity_category(m_category:is_a(CatId, Context));
+is_email_identity_category(_Pre, _Post, _Context) ->
+    false.
+
+is_email_identity_category(IsA) when is_list(IsA) ->
+    lists:member(person, IsA)
+    orelse lists:member(institution, IsA).
 
 
 send_verification(RscId, IdnId, Context) ->

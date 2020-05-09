@@ -1,0 +1,60 @@
+@overlay_z_index: 1031;
+
+.modal-dialog {
+    /* for dialog offset, set margin here */
+}
+div.modal-backdrop {
+    opacity: 0.5;
+}
+
+div#zmodal form {
+    margin-bottom: 0;
+}
+
+/* do not use scrolling inside modal body */
+div.modal-body {
+    max-height: none;
+}
+
+/* make it possible to use the nice modal footer inside the body, e.g. for tabs */
+div.modal-body div.modal-footer {
+    margin: -15px;
+    margin-top: 0;
+}
+
+/* modal overlay - full screen dialog - below normal dialog */
+.modal-overlay {
+    position: fixed;
+    z-index: @overlay_z_index;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    overflow-y: auto;
+    background-color: white;
+
+    &.modal-overlay-level-1 {
+        z-index: @overlay_z_index+1;
+    }
+
+    &.modal-overlay-level-2 {
+        z-index: @overlay_z_index+2;
+    }
+
+    &.modal-overlay-level-3 {
+        z-index: @overlay_z_index+3;
+    }
+
+    .modal-overlay-close {
+        position: absolute;
+        z-index: 1032;
+        right: 8px;
+        top: -10px;
+        font-size: 48px;
+        font-weight: 100;
+        cursor: pointer;
+    }
+    .modal-overlay-close:hover {
+        text-decoration: none;
+    }
+}

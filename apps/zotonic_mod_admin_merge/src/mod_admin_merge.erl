@@ -32,7 +32,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
-event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-merge-find">>, target=TargetId}, Context) ->
+event(#postback_notify{message = <<"feedback">>, trigger = <<"dialog-merge-find">>, target=TargetId}, Context) ->
     % Find pages matching the search criteria.
     Category = z_context:get_q(<<"find_category">>, Context, <<>>),
     Text = z_context:get_q(<<"find_text">>, Context),
@@ -50,7 +50,7 @@ event(#postback_notify{message= <<"feedback">>, trigger= <<"dialog-merge-find">>
         {update, [{target, TargetId}, {template, "_merge_find_results.tpl"} | Vars]}
     ], Context);
 
-event(#postback{message={merge_select, Args}}, Context) ->
+event(#postback{ message={merge_select, Args} }, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     SelectId = m_rsc:rid(z_context:get_q(<<"select_id">>, Context), Context),
     case z_acl:rsc_editable(Id, Context) andalso z_acl:rsc_editable(SelectId, Context) of
@@ -60,7 +60,7 @@ event(#postback{message={merge_select, Args}}, Context) ->
             z_render:growl(?__("Sorry, you have no permission to edit this page.", Context), Context)
     end;
 
-event(#submit{message={merge, Args}}, Context) ->
+event(#submit{ message={merge, Args} }, Context) ->
     {winner_id, WinnerId} = proplists:lookup(winner_id, Args),
     {loser_id, LoserId} = proplists:lookup(loser_id, Args),
     MergeAction = z_context:get_q(<<"merge_action">>, Context),

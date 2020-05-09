@@ -53,10 +53,19 @@
                             </div>
 
                             <div class="form-group row">
-                                <div class="checkbox col-md-12">
-                                    <label for="is_upload_enabled">
-                                        <input type="checkbox" id="is_upload_enabled" name="is_upload_enabled" {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
+                                <div class="col-md-12 form-inline">
+                                    <label class="checkbox">
+                                        <input type="checkbox" class="checkbox" id="is_upload_enabled" name="is_upload_enabled"
+                                            {% if m.config.mod_filestore.is_upload_enabled.value == "true" %}checked{% endif %} />
                                         {_ Upload new media files to the cloud file store _}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12 form-inline">
+                                    <label class="checkbox">
+                                        <input type="checkbox" id="is_create_bucket" name="is_create_bucket">
+                                        {_ Try to create a private bucket if the bucket does not exist _}
                                     </label>
                                 </div>
                             </div>
@@ -95,76 +104,101 @@
             <div class="widget">
                 <h3 class="widget-header">{_ S3 Cloud Utilities and Statistics _}</h3>
                 <div class="widget-content">
-                    {% wire id="admin_filestore_queue"
-                        type="submit"
-                        postback=`admin_filestore_queue`
-                        delegate=`filestore_admin`
-                    %}
-                    <form name="admin_filestore_queue" id="admin_filestore_queue" method="POST" action="postback">
+                    {% with m.filestore.stats as stats %}
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>{_ Media Resources _}</th>
+                                    <th>{_ Local Files _}</th>
+                                    <th>{_ Cloud Files _}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>{_ Files _}</th>
+                                    <td>{{ stats.archived }}</td>
+                                    <td>{{ stats.local }}</td>
+                                    <td>{{ stats.cloud }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{_ Storage _}</th>
+                                    <td>{{ stats.archive_size|filesizeformat }}</td>
+                                    <td>{{ stats.local_size|filesizeformat }}</td>
+                                    <td>{{ stats.cloud_size|filesizeformat }}</td>
+                                </tr>
+                            </tbody>
 
-                        {% with m.filestore.stats as stats %}
-                            <table class="table condensed" style="width: auto">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>{_ Media _}</th>
-                                        <th>{_ Local Files _}</th>
-                                        <th>{_ Cloud Files _}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>{_ Files _}</th>
-                                        <td>{{ stats.archived }}</td>
-                                        <td>{{ stats.local }}</td>
-                                        <td>{{ stats.cloud }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{_ Storage _}</th>
-                                        <td>{{ stats.archive_size|filesizeformat }}</td>
-                                        <td>{{ stats.local_size|filesizeformat }}</td>
-                                        <td>{{ stats.cloud_size|filesizeformat }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><br>{_ Upload Queue _}</th>
+                                    <th><br>{_ Download Queue _}</th>
+                                    <th><br>{_ Delete Queue_}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>{_ Files _}</th>
+                                    <td id="s3queue">{{ stats.queued|default:0 }}</td>
+                                    <td id="s3queue-local">{{ stats.queued_local|default:0 }}</td>
+                                    <td>{{ stats.queued_deleted|default:0 }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                            <table class="table condensed" style="width: auto">
-                                <thead>
-                                    <tr>
-                                        <th>{_ Upload Queue _}</th>
-                                        <th>{_ Download Queue _}</th>
-                                        <th>{_ Delete Queue_}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td id="s3queue">{{ stats.queued }}</td>
-                                        <td id="s3queue-local">{{ stats.queued_local }}</td>
-                                        <td>{{ stats.queued_deleted }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    {% endwith %}
 
-                        {% endwith %}
+                    <h3>{_ Actions _}</h3>
 
-                        <h3>{_ Actions _}</h3>
+                    <p class="help-block">
+                        {_ All local uploaded and preview files can be moved to the cloud. _}<br/>
+                        {_ This will queue the files for later asynchronous upload. _}
+                        {_ There is a 10 minute wait before files are uploaded. _}
+                    </p>
 
-                        <p class="help-block">
-                            {_ All local uploaded and preview files can be moved to the cloud. _}<br/>
-                            {_ This will queue the files for later asynchronous upload. _}
-                        </p>
+                    <p id="s3error-queue" class="alert alert-error" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
+                    <p id="s3ok-queue" class="alert alert-success" style="display:none">{_ All files will be queued, uploads will start in the background within 10 minutes. _}</p>
+                    <p id="s3ok-queue-local" class="alert alert-success" style="display:none">{_ All cloud files will be queued for download. _}</p>
 
-                        <p id="s3error-queue" class="alert alert-error" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
-                        <p id="s3ok-queue" class="alert alert-success" style="display:none">{_ All files will be queued, uploads will start in the background within 10 minutes. _}</p>
-                        <p id="s3ok-queue-local" class="alert alert-success" style="display:none">{_ All cloud files will be queued for download. _}</p>
-
-                        <div class="form-group">
-                            <div>
-                                <button name="queue-all" type="submit" class="btn btn-danger">{_ Move all local files to S3 _}</button>
-                                <button name="queue-local" type="submit" class="btn btn-default">{_ Move all S3 files to local _}</button>
-                            </div>
+                    <div class="form-group">
+                        <div>
+                            <button id="queue-all" name="queue-all" type="submit" class="btn btn-danger">
+                                {_ Move all local files to S3 _}
+                            </button>
+                            {% wire id="queue-all"
+                                    action={confirm
+                                        text=_"Are you sure you want to move all files to the cloud?"
+                                        ok=_"Move files to cloud"
+                                        is_danger
+                                        postback={admin_filestore_queue is_to_cloud}
+                                        delegate=`filestore_admin`
+                                    }
+                            %}
                         </div>
-                    </form>
+                    </div>
+
+                    <p class="help-block">
+                        {_ All cloud files can be moved back to the file system on the server. _} 
+                        {_ Ensure yourself there is enough disk space before starting this process. _}
+                    </p>
+
+                    <div class="form-group">
+                        <div>
+                            <button id="queue-local" name="queue-local" type="submit" class="btn btn-default">
+                                {_ Move all S3 files to local _}
+                            </button>
+                            {% wire id="queue-local"
+                                    action={confirm
+                                        text=_"Are you sure you want to move all files to the server?"
+                                        ok=_"Move files to local"
+                                        is_danger
+                                        postback={admin_filestore_queue is_to_local}
+                                        delegate=`filestore_admin`
+                                    }
+                            %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

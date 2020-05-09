@@ -1,13 +1,14 @@
+
 {% wire id="password_expired" type="submit" postback={expired} delegate=`mod_authentication` %}
 <form id="password_expired" method="post" action="postback">
     <h2 class="z-logon-title">{_ Your password has expired _}</h2>
     <p>{_ You'll need to create a new one. _}</p>
     <input type="hidden" id="logon_password_expired_secret" name="secret" value="{{ secret|escape }}" />
 
-    {% with m_authentication.password_min_length as min_length %}
+    {% with m.authentication.password_min_length as min_length %}
     <div class="form-group">
         <label class="control-label" for="password_reset1">{_ New password _}</label>
-        <input type="password" id="password_reset1" class="do_autofocus form-control" name="password_reset1" value="" autocomplete="off" />
+        <input type="password" id="password_reset1" class="do_autofocus form-control" name="password_reset1" value="" autocomplete="new-password" />
         {% validate id="password_reset1"
             type={presence failure_message=_"Enter a password"}
             type={
@@ -21,7 +22,7 @@
 
     <div class="form-group">
         <label class="control-label" for="password_reset1">{_ Repeat password _}</label>
-        <input type="password" id="password_reset2" class="form-control" name="password_reset2" value="" autocomplete="off" />
+        <input type="password" id="password_reset2" class="form-control" name="password_reset2" value="" autocomplete="new-password" />
         {% validate id="password_reset2"
             type={presence failure_message=_"Repeat your password"}
             type={confirmation match="password_reset1" failure_message="This does not match the first password"}
@@ -41,8 +42,3 @@
         <button class="btn btn-primary" type="submit">{_ Change password and Sign in _}</button>
     </div>
 </form>
-{% javascript %}
-setTimeout(function() {
-    z_init_postback_forms();
-}, 100);
-{% endjavascript %}

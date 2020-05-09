@@ -35,55 +35,65 @@
 
 %% @doc Insert a selected #media_import_props{}
 insert(MI, Context) ->
-    insert(MI, [], Context).
+    insert(MI, #{}, Context).
 
-insert(#media_import_props{medium_props=[]} = MI, RscProps, Context) ->
-    RscProps1 = z_utils:props_merge(
-                    MI#media_import_props.rsc_props,
-                    default_rsc_props(MI, RscProps)),
+insert(#media_import_props{medium_props = MI} = MIPs, RscProps, Context) ->
+    insert_1(maps:size(MI), MIPs, RscProps, Context).
+
+insert_1(0, #media_import_props{} = MI, RscProps, Context) ->
+    RscProps1 = maps:merge(
+                    default_rsc_props(MI, RscProps),
+                    MI#media_import_props.rsc_props),
     case MI#media_import_props.preview_url of
         undefined ->  m_rsc:insert(RscProps1, Context);
         PreviewUrl -> m_media:insert_url(PreviewUrl, RscProps1, Context)
     end;
-insert(#media_import_props{medium_url=MediumUrl, medium_props=MediumProps} = MI, RscProps, Context)
+insert_1(_, #media_import_props{medium_url=MediumUrl, medium_props=MediumProps} = MI, RscProps, Context)
     when ?EMPTY(MediumUrl) ->
-    RscProps1 = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI, RscProps)),
-    Options = [ {preview_url, MI#media_import_props.preview_url} ],
-    m_media:insert_medium(MediumProps, RscProps1, Options, Context);
-insert(#media_import_props{medium_url=MediumUrl} = MI, RscProps, Context) ->
-    RscProps1 = z_utils:props_merge(MI#media_import_props.rsc_props, default_rsc_props(MI, RscProps)),
-    RscProps2 = [
-        {original_filename, proplists:get_value(original_filename, MI#media_import_props.medium_props)}
-        | RscProps1
+    RscProps1 = maps:merge(default_rsc_props(MI, RscProps), MI#media_import_props.rsc_props),
+    Options = [
+        {preview_url, MI#media_import_props.preview_url}
     ],
+    m_media:insert_medium(MediumProps, RscProps1, Options, Context);
+insert_1(_, #media_import_props{medium_url=MediumUrl} = MI, RscProps, Context) ->
+    RscProps1 = maps:merge(default_rsc_props(MI, RscProps), MI#media_import_props.rsc_props),
+    RscProps2 = RscProps1#{
+        <<"original_filename">> => maps:get(<<"original_filename">>, MI#media_import_props.medium_props, undefined)
+    },
     m_media:insert_url(MediumUrl, RscProps2, Context).
 
 default_rsc_props(#media_import_props{category=Cat}, RscProps) ->
-    z_utils:props_merge(
-        RscProps,
-        [ {is_published, true}, {category, Cat} ]).
+    maps:merge(
+        #{
+            <<"is_published">> => true,
+            <<"category">> => Cat
+        },
+        RscProps).
 
 
 %% @doc Update a resource with the selected #media_import_props()
-update(RscId, #media_import_props{medium_props=[], preview_url=PreviewUrl, medium_url=MediumUrl}, _Context) 
+update(RscId, #media_import_props{medium_props=MI} = MIPs, Context) ->
+    update_1(maps:size(MI), RscId, MIPs, Context).
+
+update_1(0, RscId, #media_import_props{preview_url=PreviewUrl, medium_url=MediumUrl}, _Context) 
     when ?EMPTY(PreviewUrl), ?EMPTY(MediumUrl) ->
     % Nothing to do
     {ok, RscId};
-update(RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context) 
-    when MP =/= [], ?EMPTY(MediumUrl) ->
+update_1(Sz, RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context) 
+    when Sz > 0, ?EMPTY(MediumUrl) ->
     % Embedded, with optional preview_url
-    RscProps = [
-        {original_filename, proplists:get_value(original_filename, MP)}
-    ],
+    RscProps = #{
+        <<"original_filename">> => maps:get(<<"original_filename">>, MP, undefined)
+    },
     Options = [
         {preview_url, MI#media_import_props.preview_url}
     ],
     m_media:replace_medium(MP, RscId, RscProps, Options, Context);
-update(RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context) ->
+update_1(_, RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = MI, Context) ->
     % Downloadable file, with optional preview_url
-    RscProps = [
-        {original_filename, proplists:get_value(original_filename, MP)}
-    ],
+    RscProps = #{
+        <<"original_filename">> => maps:get(<<"original_filename">>, MP, undefined)
+    },
     Options = [
         {preview_url, MI#media_import_props.preview_url}
     ],
@@ -136,12 +146,12 @@ import_as_website(MD, Context) ->
         prio = 10,
         category = website,
         description = ?__("Website", Context),
-        rsc_props = [
-            {title, z_url_metadata:p(title, MD)},
-            {summary, z_url_metadata:p(summary, MD)},
-            {website, z_url_metadata:p(url, MD)}
-        ],
-        medium_props = [],
+        rsc_props = #{
+            <<"title">> => z_url_metadata:p(title, MD),
+            <<"summary">> => z_url_metadata:p(summary, MD),
+            <<"website">> => z_url_metadata:p(url, MD)
+        },
+        medium_props = #{},
         preview_url = z_url_metadata:p(image, MD)
     }.
 
@@ -157,15 +167,15 @@ import_as_media(MD, Context) ->
                         prio = 3,
                         category = Category,
                         description = m_rsc:p_no_acl(Category, title, Context),
-                        rsc_props = [
-                            {title, z_url_metadata:p(title, MD)},
-                            {summary, z_url_metadata:p(summary, MD)},
-                            {website, z_url_metadata:p(url, MD)}
-                        ],
-                        medium_props = [
-                            {mime, Mime},
-                            {original_filename, z_url_metadata:p(filename, MD)}
-                        ],
+                        rsc_props = #{
+                            <<"title">> => z_url_metadata:p(title, MD),
+                            <<"summary">> => z_url_metadata:p(summary, MD),
+                            <<"website">> => z_url_metadata:p(url, MD)
+                        },
+                        medium_props = #{
+                            <<"mime">> => Mime,
+                            <<"original_filename">> => z_url_metadata:p(filename, MD)
+                        },
                         medium_url = z_url_metadata:p(url, MD)
                     };
                 false ->
@@ -178,7 +188,7 @@ import_as_media(MD, Context) ->
 import_as_referred_image(MD, Context) ->
     Width = z_convert:to_integer(z_url_metadata:p(<<"og:image:width">>, MD)),
     Height = z_convert:to_integer(z_url_metadata:p(<<"og:image:height">>, MD)),
-    case        is_integer(Width) 
+    case        is_integer(Width)
         andalso is_integer(Height)
         andalso Width > 32
         andalso Height > 32
@@ -192,17 +202,17 @@ import_as_referred_image(MD, Context) ->
                         prio = 4,
                         category = image,
                         description = m_rsc:p_no_acl(image, title, Context),
-                        rsc_props = [
-                            {title, z_url_metadata:p(title, MD)},
-                            {summary, z_url_metadata:p(summary, MD)},
-                            {website, z_url_metadata:p(url, MD)}
-                        ],
-                        medium_props = [
-                            {mime, <<"image/unknown">>},
-                            {original_filename, z_url_metadata:p(filename, MD)},
-                            {width, Width},
-                            {height, Height}
-                        ],
+                        rsc_props = #{
+                            <<"title">> => z_url_metadata:p(title, MD),
+                            <<"summary">> => z_url_metadata:p(summary, MD),
+                            <<"website">> => z_url_metadata:p(url, MD)
+                        },
+                        medium_props = #{
+                            <<"mime">> => <<"image/unknown">>,
+                            <<"original_filename">> => z_url_metadata:p(filename, MD),
+                            <<"width">> => Width,
+                            <<"height">> => Height
+                        },
                         medium_url = ImageUrl
                     }
             end;

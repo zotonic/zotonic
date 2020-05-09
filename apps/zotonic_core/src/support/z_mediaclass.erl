@@ -123,7 +123,7 @@ expand_mediaclass_checksum(Checksum, Props) ->
 
 
 %% @doc Expand the optional mediaclass for tag generation
--spec expand_mediaclass(list(), #context{}) -> {ok, list()} | {error, term()}.
+-spec expand_mediaclass(list(), #context{}) -> {ok, list()}.
 expand_mediaclass(Props, Context) ->
     case proplists:get_value(mediaclass, Props) of
         MC when is_list(MC); is_binary(MC) ->

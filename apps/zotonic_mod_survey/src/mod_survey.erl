@@ -176,9 +176,9 @@ observe_admin_rscform(#admin_rscform{is_a=IsA}, Post, _Context) ->
 
 %% @doc Check if the given block is a survey question with submit button
 observe_survey_is_submit(#survey_is_submit{block=Q}, _Context) ->
-    case proplists:get_value(type, Q) of
+    case maps:get(<<"type">>, Q, undefined) of
         <<"survey_button">> -> true;
-        <<"survey_", _/binary>> -> proplists:get_value(input_type, Q) =:= <<"submit">>;
+        <<"survey_", _/binary>> -> maps:get(<<"input_type">>, Q, undefined) =:= <<"submit">>;
         _ -> undefined
     end.
 
@@ -226,7 +226,7 @@ observe_export_resource_data(#export_resource_data{}, _Context) ->
 
 
 get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
-    case m_rsc:p(Id, blocks, Context) of
+    case m_rsc:p(Id, <<"blocks">>, Context) of
         Qs when is_list(Qs) ->
             go_page(Nr, Qs, [], exact, Context);
         _ ->
@@ -266,7 +266,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
     {As, Submitter} = get_args(Context),
     Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
     Answers2 = Answers1 ++ group_multiselect(As),
-    case m_rsc:p(Id, blocks, Context) of
+    case m_rsc:p(Id, <<"blocks">>, Context) of
         Questions when is_list(Questions) ->
 
             Next = case Submitter of
@@ -390,12 +390,17 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
 
 
     go_button_target(Submitter, Questions, Answers, Context) ->
-        [Button|_] = lists:dropwhile(fun(B) -> proplists:get_value(name, B) =/= Submitter end, Questions),
-        TargetName = proplists:get_value(target, Button),
+        [Button|_] = lists:dropwhile(
+            fun
+                (#{ <<"name">> := NS }) when NS =:= Submitter -> false;
+                (_) -> true
+            end,
+            Questions),
+        TargetName = maps:get(<<"target">>, Button, <<>>),
         case eval_page_jumps(fetch_question_name(Questions, TargetName, 1, in_q), Answers, Context) of
-            {error, _} = Error -> Error;
             stop -> stop;
             submit -> submit;
+            {error, _} = Error -> Error;
             {L1, Nr1} ->
                 L2 = takepage(L1),
                 {L2,Nr1}
@@ -411,9 +416,9 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
         end;
     go_page(Nr, Qs, Answers, forward, Context) ->
         case eval_page_jumps(fetch_page(Nr, Qs), Answers, Context) of
-            {error, _} = Error -> Error;
             stop -> stop;
             submit -> submit;
+            {error, _} = Error -> Error;
             {L1, Nr1} ->
                 L2 = takepage(L1),
                 {L2,Nr1}
@@ -446,17 +451,17 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
         end.
 
     test(Q, Answers, Context) ->
-        case proplists:get_value(type, Q) of
+        case maps:get(<<"type">>, Q, undefined) of
             <<"survey_stop">> ->
                 ok;
             <<"survey_page_break">> ->
                 survey_q_page_break:test(Q, Answers, Context);
             <<"survey_button">> ->
                 % Assume button
-                Name = proplists:get_value(name, Q),
+                Name = maps:get(<<"name">>, Q, undefined),
                 case proplists:get_value(Name, Answers) of
                     <<"yes">> ->
-                        Target = proplists:get_value(target, Q),
+                        Target = maps:get(<<"target">>, Q, undefined),
                         case z_utils:is_empty(Target) of
                             true -> ok;
                             false -> {jump, Target}
@@ -474,7 +479,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
         % Page not found - should show error/warning here
         {[], Nr};
     fetch_question_name([Q|Qs] = QQs, Name, Nr, State) ->
-        case proplists:get_value(name, Q) of
+        case maps:get(<<"name">>, Q, undefined) of
             Name ->
                 {QQs, Nr};
             _Other ->
@@ -523,22 +528,19 @@ takepage(L) ->
     takepage([], Acc) ->
         lists:reverse(Acc);
     takepage([Q|L], Acc) ->
-        case proplists:get_value(type, Q) of
-            <<"survey_page_break">> -> lists:reverse(Acc);
-            <<"survey_stop">> -> lists:reverse([Q|Acc]);
+        case is_page_end(Q) of
+            true ->
+                lists:reverse(Acc);
             _ ->
-                case proplists:get_value(name, Q) of
-                    <<"survey_feedback">> ->  takepage(L, Acc);
+                case maps:get(<<"name">>, Q, undefined) of
+                    <<"survey_feedback">> -> takepage(L, Acc);
                     _ -> takepage(L, [Q|Acc])
                 end
         end.
 
-is_page_end(Block) ->
-    case proplists:get_value(type, Block) of
-        <<"survey_page_break">> -> true;
-        <<"survey_stop">> -> true;
-        _ -> false
-    end.
+is_page_end(#{ <<"type">> := <<"survey_page_break">> }) -> true;
+is_page_end(#{ <<"type">> := <<"survey_stop">> }) -> true;
+is_page_end(_) -> false.
 
 
 %% @doc Collect all answers per question, save to the database.
@@ -552,13 +554,13 @@ do_submit(SurveyId, Questions, Answers, Context) ->
         undefined ->
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
             {ok, ResultId} = insert_survey_submission(SurveyId, StorageAnswers, Context),
-            maybe_mail(SurveyId, Answers, ResultId, Context),
+            maybe_mail(SurveyId, Answers, ResultId, false, Context),
             ok;
         ok ->
-            maybe_mail(SurveyId, Answers, undefined, Context),
+            maybe_mail(SurveyId, Answers, undefined, false, Context),
             ok;
         {ok, _Context1} = Handled ->
-            maybe_mail(SurveyId, Answers, undefined, Context),
+            maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
@@ -574,8 +576,8 @@ insert_survey_submission(SurveyId, StorageAnswers, Context) ->
                              end,
     m_survey:insert_survey_submission(SurveyId, UserId, PersistentId, StorageAnswers, Context1).
 
-maybe_mail(SurveyId, Answers, ResultId, Context) ->
-    case probably_email(SurveyId, Context) of
+maybe_mail(SurveyId, Answers, ResultId, IsEditing, Context) ->
+    case IsEditing orelse probably_email(SurveyId, Context) of
         true ->
             PrepAnswers = survey_answer_prep:readable(SurveyId, Answers, Context),
             Attachments = uploads(Context),
@@ -583,7 +585,7 @@ maybe_mail(SurveyId, Answers, ResultId, Context) ->
                 undefined -> undefined;
                 _ -> m_survey:single_result(SurveyId, ResultId, Context)
             end,
-            mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context),
+            mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditing, Context),
             mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context);
         false ->
             nop
@@ -629,10 +631,17 @@ mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
                 Es)
     end.
 
-mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context) ->
+mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditing, Context) ->
     case z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)) of
         true ->
-            case find_email_respondent(Answers, Context) of
+            EmailUser = case IsEditing of
+                false ->
+                    m_rsc:p_no_acl(z_acl:user(Context), email_raw, Context);
+                true ->
+                    AnsUserId = m_survey:answer_user(ResultId, Context),
+                    m_rsc:p_no_acl(AnsUserId, email_raw, Context)
+            end,
+            case find_email_respondent(Answers, EmailUser) of
                 <<>> ->
                     skip;
                 undefined ->
@@ -650,16 +659,16 @@ mail_respondent(SurveyId, Answers, PrepAnswers, SurveyResult, Context) ->
             skip
     end.
 
-find_email_respondent([], Context) ->
-    m_rsc:p_no_acl(z_acl:user(Context), email, Context);
-find_email_respondent([{<<"email">>, Ans}|As], Context) ->
+find_email_respondent([], Default) ->
+    Default;
+find_email_respondent([{<<"email">>, Ans}|As], Default) ->
     Ans1 = z_string:trim(Ans),
     case z_utils:is_empty(Ans1) of
-        true -> find_email_respondent(As, Context);
+        true -> find_email_respondent(As, Default);
         false -> Ans1
     end;
-find_email_respondent([_Ans|As], Context) ->
-    find_email_respondent(As, Context).
+find_email_respondent([_Ans|As], Default) ->
+    find_email_respondent(As, Default).
 
 
 %% @doc Collect all answers, report any missing answers.
@@ -671,17 +680,17 @@ collect_answers(Qs, Answers, Context) ->
 collect_answers([], _Answers, FoundAnswers, Missing, _Context) ->
     {FoundAnswers, Missing};
 collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
-    case proplists:get_value(type, Q) of
+    case maps:get(<<"type">>, Q, undefined) of
         <<"survey_", _/binary>> = Type ->
             Module = module_name(Type),
-            QName = proplists:get_value(name, Q),
+            QName = maps:get(<<"name">>, Q, undefined),
             case Module:answer(Q, Answers, Context) of
                 {ok, none} ->
                     collect_answers(Qs, Answers, FoundAnswers, Missing, Context);
                 {ok, AnswerList} ->
                     collect_answers(Qs, Answers, [{QName, AnswerList}|FoundAnswers], Missing, Context);
                 {error, missing} ->
-                    case z_convert:to_bool(proplists:get_value(is_required, Q)) of
+                    case z_convert:to_bool(maps:get(<<"is_required">>, Q, false)) of
                         true ->
                             collect_answers(Qs, Answers, FoundAnswers, [QName|Missing], Context);
                         false ->
@@ -696,12 +705,18 @@ collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
 admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actions}, Context) ->
     case z_acl:rsc_editable(SurveyId, Context)
         orelse (
-            z_convert:to_integer(m_rsc:p(SurveyId, survey_multiple, Context)) =:= 2
+            z_convert:to_integer(m_rsc:p(SurveyId,<<"survey_multiple">>, Context)) =:= 2
             andalso is_answer_user(AnswerId, Context))
     of        true ->
             {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
             m_survey:replace_survey_submission(SurveyId, AnswerId, StorageAnswers, Context),
+            case z_context:get_q(<<"submit-email">>, Context) of
+                undefined ->
+                    ok;
+                _SomeValue ->
+                    maybe_mail(SurveyId, Answers, AnswerId, true, Context)
+            end,
             case Actions of
                 [] ->
                     Context1 = z_render:dialog_close(Context),
@@ -749,6 +764,9 @@ survey_answers_to_storage(AnsPerBlock) ->
 
 
 module_name(A) when is_atom(A) ->
-    module_name(list_to_binary(atom_to_list(A)));
-module_name(<<"survey_", Type/binary>>) -> list_to_atom("survey_q_"++z_convert:to_list(Type));
-module_name(_) -> undefined.
+    module_name(atom_to_binary(A, utf8));
+module_name(<<"survey_", Type/binary>>) ->
+    %% @todo first check if module exists before making atom
+    list_to_atom("survey_q_"++z_convert:to_list(Type));
+module_name(_) ->
+    undefined.

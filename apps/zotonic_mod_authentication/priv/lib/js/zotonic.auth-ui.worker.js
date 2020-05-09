@@ -31,6 +31,7 @@ var model = {
     username: undefined,
     secret: undefined,
     need_passcode: false,
+    is_expired: false,
 
     // Depends on these models, wait for a ping
     depends: {
@@ -133,6 +134,16 @@ model.present = function(data) {
         model.email = data.email
     }
 
+    if (data.is_expired) {
+        model.is_expired = true;
+        model.is_error = false;
+        model.error = undefined;
+        model.username = data.username;
+        model.secret = data.secret;
+        model.logon_view = 'reset_form';
+        model.status = 'updated';
+    }
+
     if (data.is_reset_check) {
         if (data.status == 'ok') {
             model.is_error = false;
@@ -170,6 +181,7 @@ model.present = function(data) {
     }
 
     if (data.auth_user_id && model.status == 'reset_wait') {
+        model.is_expired = false;
         model.logon_view = 'reset_done';
         model.status = 'updated';
     }
@@ -229,17 +241,11 @@ state.representation = function(model) {
                     email: model.email,
                     username: model.username,
                     secret: model.secret,
-                    need_passcode: model.need_passcode
+                    need_passcode: model.need_passcode,
+                    is_expired: model.is_expired
                 }
             });
     }
-
-    // var representation = 'oops... something went wrong, the system is in an invalid state' ;
-    // if (state.ready(model)) {
-    //     representation = state.view.ready(model) ;
-    // }
-    // ...
-    // state.view.display(representation) ;
 };
 
 // Derive the current state of the system
@@ -364,11 +370,22 @@ actions.reminderResponse = function(data) {
 }
 
 actions.fetchError = function(_data) {
-    model.present({ is_error: true, error: 'timeout' });
+    model.present({ is_error: true, error: "timeout" });
 }
 
 actions.authError = function(data) {
-    model.present({ is_error: true, error: data.error });
+    if (data.error == "password_expired") {
+        model.present({
+            is_expired: true,
+            username: data.data.username,
+            secret: data.data.secret
+        });
+    } else {
+        model.present({
+            is_error: true,
+            error: data.error
+        });
+    }
 }
 
 actions.authUserId = function(data) {
@@ -391,7 +408,7 @@ actions.resetCodeCheck = function(data) {
 }
 
 actions.modelPing = function(data) {
-    model.present({ model: data.model, is_active: data.payload === 'pong' });
+    model.present({ model: data.model, is_active: data.payload === "pong" });
 }
 
 ////////////////////////////////////////////////////////////////////////////////

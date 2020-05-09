@@ -33,26 +33,27 @@ Create a site
     postgres=# GRANT ALL ON DATABASE zotonic TO zotonic;
     postgres=# \c zotonic
     postgres=# CREATE LANGUAGE "plpgsql";
+  
+  And quit postgres:
+  
+    postgres=# \q
 
-2. Edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
+2. Now that there is a database Zotonic can be started. We do this in debug mode
+   so that all console output is visible::
+
+    $ bin/zotonic debug
+
+3. In a new terminal window, Edit your ``/etc/hosts`` file, adding an entry for ``yoursite.test`` (the
    site hostname) to point at your local host::
 
      127.0.0.1   yoursite.test
 
-3. Finally, create a new Zotonic site, based on the ‘blog’ skeleton site::
+4. Create a new Zotonic site, based on the ‘blog’ skeleton site::
 
      $ bin/zotonic addsite -s blog yoursite
 
    .. note:: Zotonic has to be running for the ``addsite`` command to succeed.
 
-4. Then rebuild Zotonic::
-
-    $ cd dir/to/zotonic
-    $ make
-
-5. And (re)start Zotonic::
-
-    $ bin/zotonic debug
 
 5. Finally, point your browser to http://yoursite:8000 to see your new site.
    You can log into the admin at http://yoursite:8000/admin with the password
@@ -60,6 +61,18 @@ Create a site
    :file:`yoursite/priv/zotonic_site.config` in the :term:`zotonic user directory`.
 
    .. note:: If anything goes wrong, see the :ref:`ref-troubleshooting-installation`.
+
+
+You can stop Zotonic by typing twice Ctrl-C at the Erlang command prompt.
+
+If you want to start Zotonic in the background then use::
+
+  $ bin/zotonic start
+  
+This can be stopped with::
+
+  $ bin/zotonic stop
+
 
 .. _guide-site-anatomy:
 

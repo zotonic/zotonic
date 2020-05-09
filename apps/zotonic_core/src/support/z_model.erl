@@ -192,16 +192,10 @@ get_arg(Prop, undefined, Context) when is_atom(Prop) ->
 %%% ------------------------------ Internal functions ---------------------------
 
 
-%% @doc Return the topic for a model call. The topic has the format: m/mymodel/get/foo/bar
+%% @doc Return the topic for a model call. The topic has the format: model/mymodel/get/foo/bar
 -spec mqtt_topic( atom() | binary(), verb(), path() ) -> mqtt_sessions:topic().
 mqtt_topic(Model, Method, Path) ->
-    % Path = cowmachine_req:disp_path(Context),
-    % Parts = binary:split(Path, <<"/">>, [global]),
-    % Parts1 = lists:map( fun cow_qs:urldecode/1, Parts ),
-    Path1 = [ z_convert:to_binary(P) || P <- Path ],
-    [ <<"model">>, z_convert:to_binary(Model), z_convert:to_binary(Method) | Path1 ].
-
-
+    [ <<"model">>, z_convert:to_binary(Model), z_convert:to_binary(Method) | binarize(Path) ].
 
 % Map a verb to an model function.
 -spec map_verb( verb() ) -> model_callback().
@@ -210,12 +204,12 @@ map_verb(post) -> m_post;
 map_verb(delete) -> m_delete.
 
 
--spec model_call( module(), atom(), path(), mqtt_packet_map:mqtt_message(), z:context() ) -> {ok, term()} | {error, unacceptable | term()}.
+-spec model_call( module(), atom(), path(), mqtt_packet_map:mqtt_message(), z:context() ) -> {ok, term()} | ok | {error, unacceptable | term()}.
 model_call(Mod, m_get, Path, Msg, Context) ->
-    Mod:m_get(atomize(Path), Msg, Context);
+    Mod:m_get(binarize(Path), Msg, Context);
 model_call(Mod, Callback, Path, Msg, Context) ->
     try
-        Mod:Callback(atomize(Path), Msg, Context)
+        Mod:Callback(binarize(Path), Msg, Context)
     catch
         error:undef ->
             case erlang:function_exported(Mod, Callback, 3) of
@@ -227,15 +221,15 @@ model_call(Mod, Callback, Path, Msg, Context) ->
             end
     end.
 
-atomize(Path) ->
-    [ maybe_atom(P) || P <- Path ].
+-spec binarize( list() ) -> list( binary() | term() ).
+binarize(Path) ->
+    [ maybe_binary(P) || P <- Path ].
 
-maybe_atom(P) when is_binary(P) ->
-    try binary_to_existing_atom(P, utf8)
-    catch error:badarg -> P
-    end;
-maybe_atom(V) ->
-    V.
+maybe_binary(B) when is_binary(B) -> B;
+maybe_binary(undefined) -> <<>>;
+maybe_binary(A) when is_atom(A) -> atom_to_binary(A, utf8);
+maybe_binary(L) when is_list(L) -> unicode:characters_to_binary(L, unicode);
+maybe_binary(V) -> V.
 
 %% @doc Optionally dig deeper into the returned result if the path is not consumed completely.
 maybe_resolve(get, {ok, {Res, []}}, _Context) ->
@@ -245,7 +239,7 @@ maybe_resolve(get, {ok, {Res, Ks}}, Context) when is_list(Ks) ->
     {ok, Res1};
 maybe_resolve(_Verb, {ok, Res}, _Context) ->
     {ok, Res};
-% maybe_resolve(_Verb, ok, _Context) ->
-%     {ok, success};
+maybe_resolve(_Verb, ok, _Context) ->
+    {ok, <<>>};
 maybe_resolve(_Verb, {error, _} = Error, _Context) ->
     Error.

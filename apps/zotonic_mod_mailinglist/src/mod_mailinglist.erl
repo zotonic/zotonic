@@ -38,7 +38,6 @@
          observe_mailinglist_message/2,
          observe_email_bounced/2,
          event/2,
-         page_attachments/2,
          observe_admin_menu/3
         ]).
 
@@ -361,8 +360,11 @@ send_mailing_process(ListId, Recipients, PageId, Context) ->
         {list_id, ListId},
         {email_from, From}
     ],
-    [ send(Email, From, Options, Context) || Email <- Recipients ],
-    ok.
+    lists:foreach(
+        fun(Email) ->
+            send(Email, From, Options, Context)
+        end,
+        Recipients).
 
 
 send(undefined, _From, _Options, _Context) ->
@@ -380,7 +382,7 @@ send(Email, From, Options, Context) ->
             skip;
         Email1 ->
             Id = proplists:get_value(id, Options),
-            Attachments = mod_mailinglist:page_attachments(Id, Context),
+            Attachments = m_edge:objects(Id, hasdocument, Context),
             z_email:send(
                 #email{
                     to = Email1,
@@ -393,25 +395,6 @@ send(Email, From, Options, Context) ->
                     attachments = Attachments
                 },
                 Context)
-    end.
-
-%% @doc Return list of attachments for this page as a list of files. Attachments are outgoing 'hasdocument' edges.
-page_attachments(Id, Context) ->
-    AttIds = m_edge:objects(Id, hasdocument, Context),
-    lists:flatten([ as_upload(AId, Context) || AId <- AttIds ]).
-
-as_upload(Id, Context) ->
-    case m_media:get(Id, Context) of
-        undefined ->
-            [];
-        [] ->
-            [];
-        Media ->
-            #upload{
-                tmpfile = z_media_archive:abspath(proplists:get_value(filename, Media), Context),
-                mime = proplists:get_value(mime, Media),
-                filename = proplists:get_value(original_filename, Media)
-            }
     end.
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->

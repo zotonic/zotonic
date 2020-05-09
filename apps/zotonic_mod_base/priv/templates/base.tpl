@@ -7,9 +7,11 @@
       "css/z.growl.css"
       "css/z.modal.css"
   %}
+  {% block html_head_extra %}
+  {% endblock %}
 {% endblock %}
 
-{% block js_include %}
+{% block _js_include %}
   {% include "_js_include.tpl" %}
   {% script %}
 {% endblock%}

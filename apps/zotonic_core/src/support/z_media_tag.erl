@@ -30,6 +30,7 @@
     scomp_viewer/3,
     scomp_tag/3,
     scomp_url/3,
+    scomp_data_url/3,
 
     viewer/3,
     tag/3,
@@ -69,8 +70,25 @@ scomp_url(IdOrName, Options, Context) ->
             <<>>
     end.
 
+%% @doc Generate a 'data:' url for the given image.
+scomp_data_url(undefined, _Options, _Context) ->
+    <<>>;
+scomp_data_url(IdOrName, Options, Context) ->
+    % Generate the Url
+    case scomp_url(IdOrName, [ is_data_url | Options ], Context) of
+        <<>> ->
+            <<>>;
+        Url ->
+            % Fetch data from the url
+            case z_media_data:file_data_url(Url, Context) of
+                {ok, DataUrl} -> DataUrl;
+                {error, _} -> <<>>
+            end
+    end.
+
+
 %% @doc Generate a html fragment for displaying a medium.  This can generate audio or video player html.
--spec viewer(MediaReference, list(), z:context()) -> {ok, iodata()}
+-spec viewer(MediaReference, z_media_identify:media_info(), z:context()) -> {ok, iodata()}
     when MediaReference :: undefined
                          | m_rsc:resource_id()
                          | #rsc_list{}
@@ -89,23 +107,25 @@ viewer(Name, Options, Context) when is_atom(Name) ->
         {ok, Id} -> viewer(Id, Options, Context);
         _ -> {ok, <<>>}
     end;
+viewer([ Id | _ ], Options, Context) when is_integer(Id) ->
+    viewer(Id, Options, Context);
 viewer(Id, Options, Context) when is_integer(Id) ->
     case m_media:get(Id, Context) of
-        MediaProps when is_list(MediaProps) -> viewer(MediaProps, Options, Context);
-        undefined -> viewer1(Id, [], undefined, Options, Context)
+        MediaProps when is_map(MediaProps) -> viewer(MediaProps, Options, Context);
+        undefined -> viewer1(Id, #{}, undefined, Options, Context)
     end;
-viewer([{_Prop, _Value}|_] = Props, Options, Context) ->
-    Id = proplists:get_value(id, Props),
-    case proplists:get_value(filename, Props) of
+viewer(Props, Options, Context) when is_map(Props) ->
+    Id = maps:get(<<"id">>, Props, undefined),
+    case maps:get(<<"filename">>, Props, undefined) of
         None when None =:= <<>>; None =:= undefined; None =:= <<>> ->
             viewer1(Id, Props, undefined, Options, Context);
         Filename ->
             FilePath = filename_to_filepath(Filename, Context),
             viewer1(Id, Props, FilePath, Options, Context)
     end;
+viewer(<<"/", Filename/binary>>, Options, Context) ->
+    viewer(Filename, Options, Context);
 viewer(Filename, Options, Context) when is_binary(Filename) ->
-    viewer(binary_to_list(Filename), Options, Context);
-viewer(Filename, Options, Context) ->
     FilePath = filename_to_filepath(Filename, Context),
     case z_media_identify:identify(FilePath, Context) of
         {ok, Props} ->
@@ -120,7 +140,13 @@ viewer(Filename, Options, Context) ->
 %% check the normal image tag.
 viewer1(Id, Props, FilePath, Options, Context) ->
     Options1 = drop_undefined(Options),
-    case z_notifier:first(#media_viewer{id=Id, props=Props, filename=FilePath, options=Options1}, Context) of
+    case z_notifier:first(#media_viewer{
+            id = Id,
+            props = Props,
+            filename = FilePath,
+            options = Options1
+        }, Context)
+    of
         {ok, Html} -> {ok, Html};
         undefined -> tag(Props, Options1, Context)
     end.
@@ -128,7 +154,7 @@ viewer1(Id, Props, FilePath, Options, Context) ->
 
 %% @doc Generate a HTML image tag for the image with the filename and options. The medium _must_ be in
 %% a format for which we can generate a preview.  Note that this will never generate video or audio.
--spec tag(MediaReference, list(), z:context()) -> {ok, iodata()}
+-spec tag(MediaReference, Options :: list(), z:context()) -> {ok, iodata()}
     when MediaReference :: undefined
                          | m_rsc:resource_id()
                          | #rsc_list{}
@@ -138,6 +164,8 @@ tag(undefined, _Options, _Context) ->
     {ok, <<>>};
 tag([], _Options, _Context) ->
     {ok, <<>>};
+tag([ Id | _ ], Options, Context) when is_integer(Id) ->
+    tag(Id, Options, Context);
 tag(#rsc_list{list=[]}, _Options, _Context) ->
     {ok, <<>>};
 tag(#rsc_list{list=[Id|_]}, Options, Context) ->
@@ -149,24 +177,25 @@ tag(Name, Options, Context) when is_atom(Name) ->
     end;
 tag(Id, Options, Context) when is_integer(Id) ->
     tag(m_media:depiction(Id, Context), Options, Context);
-tag([{_Prop, _Value}|_] = Props, Options, Context) ->
-    case mediaprops_filename(proplists:get_value(id, Props), Props, Context) of
+tag(Props, Options, Context) when is_map(Props) ->
+    Id = maps:get(<<"id">>, Props, undefined),
+    case mediaprops_filename(Id, Props, Context) of
         None when None =:= []; None =:= <<>>; None =:= undefined ->
             {ok, <<>>};
         Filename ->
-            Options1 = opt_crop_center(proplists:get_value(id, Props), Options, Context),
+            Options1 = opt_crop_center(Id, Options, Context),
             tag1(Props, Filename, Options1, Context)
     end;
+tag(<<"/", Filename/binary>>, Options, Context) ->
+    tag(Filename, Options, Context);
 tag(Filename, Options, Context) when is_binary(Filename) ->
     FilePath = filename_to_filepath(Filename, Context),
     tag1(FilePath, Filename, Options, Context);
-tag(Filename, Options, Context) when is_list(Filename) ->
-    tag(list_to_binary(Filename), Options, Context);
 tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(FilePath, Filename, Options, Context).
 
 
--spec tag1( file:filename_all() | proplists:proplist(),
+-spec tag1( file:filename_all() | map(),
             file:filename_all() | {filepath, file:filename_all(), file:filename_all()},
             proplists:proplist(), z:context() )
         -> {ok, binary()}.
@@ -240,21 +269,26 @@ media_id([{_,_}|_] = List) ->
     proplists:get_value(id, List).
 
 %% @doc Give the filepath for the filename being served.
-%% @todo Ensure the file is really in the given directory (ie. no ..'s)
-filename_to_filepath(<<"/", _/binary>> = Filename, _Context) ->
-    Filename;
-filename_to_filepath(<<"lib/", RelFilename/binary>> = Filename, Context) ->
+filename_to_filepath(Filename, Context) ->
+    case binary:match(Filename, [ <<"../">>, <<"\\">> ]) of
+        nomatch -> filename_to_filepath_1(Filename, Context);
+        _ -> <<"error">>
+    end.
+
+filename_to_filepath_1(<<"/", Filename/binary>>, Context) ->
+    filename_to_filepath_1(Filename, Context);
+filename_to_filepath_1(<<"lib/", RelFilename/binary>> = Filename, Context) ->
     case z_module_indexer:find(lib, RelFilename, Context) of
         {ok, #module_index{filepath=Libfile}} -> Libfile;
         _ -> Filename
     end;
-filename_to_filepath(Filename, Context) ->
+filename_to_filepath_1(Filename, Context) ->
     filename:join([z_path:media_archive(Context), Filename]).
 
 
 %% @doc Give the base url for the filename being served using the 'image' dispatch rule
 filename_to_urlpath(Filename, Context) ->
-    z_dispatcher:url_for(image, [{star, iolist_to_binary(Filename)}], z_context:set_language(undefined, Context)).
+    z_dispatcher:url_for(image, [{star, Filename}], z_context:set_language(undefined, Context)).
 
 
 %% @spec url(MediaRef, Options, Context) -> {ok, Url::binary()} | {error, Reason}
@@ -268,8 +302,8 @@ url(Name, Options, Context) when is_atom(Name) ->
     end;
 url(Id, Options, Context) when is_integer(Id) ->
     url(m_media:depiction(Id, Context), Options, Context);
-url([{_Prop, _Value}|_] = Props, Options, Context) ->
-    Id = proplists:get_value(id, Props),
+url(Props, Options, Context) when is_map(Props) ->
+    Id = maps:get(<<"id">>, Props, undefined),
     case mediaprops_filename(Id, Props, Context) of
         None when None =:= []; None =:= <<>>; None =:= undefined ->
             {ok, <<>>};
@@ -278,7 +312,11 @@ url([{_Prop, _Value}|_] = Props, Options, Context) ->
             {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options1, Context),
             {ok, Url}
     end;
-url(Filename, Options, Context) ->
+url(Filename, Options, Context) when is_list(Filename) ->
+    url(list_to_binary(Filename), Options, Context);
+url(<<"/", Filename/binary>>, Options, Context) ->
+    url(Filename, Options, Context);
+url(Filename, Options, Context) when is_binary(Filename) ->
     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
     {ok, Url}.
 
@@ -302,24 +340,32 @@ url1(File, Options, Context) ->
 %         undefined -> undefined
 %     end;
 mediaprops_filename(undefined, Props, _Context) ->
-    case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-        [] -> z_convert:to_list(proplists:get_value(filename, Props));
+    case z_convert:to_binary(maps:get(<<"preview_filename">>, Props, undefined)) of
+        <<>> -> z_convert:to_binary(maps:get(<<"filename">>, Props, undefined));
         Filename -> Filename
     end;
 mediaprops_filename(Id, Props, Context) ->
     case z_notifier:first({media_stillimage, Id, Props}, Context) of
-        {ok, Filename} -> Filename;
-        _ -> case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-                 [] -> z_convert:to_list(proplists:get_value(filename, Props));
-                 Filename -> Filename
-             end
+        {ok, Filename} ->
+            Filename;
+        _ ->
+            case maps:get(<<"preview_filename">>, Props, undefined) of
+                undefined -> maps:get(<<"filename">>, Props, undefined);
+                <<>> -> maps:get(<<"filename">>, Props, undefined);
+                Filename -> Filename
+            end
     end.
 
 use_absolute_url(Options, Context) ->
-    case use_absolute(proplists:get_value(absolute_url, Options)) of
-        false -> false;
-        true -> true;
-        undefined -> z_convert:to_bool(z_context:get(absolute_url, Context))
+    case proplists:get_value(is_data_url, Options) of
+        true ->
+            false;
+        _ ->
+            case use_absolute(proplists:get_value(absolute_url, Options)) of
+                false -> false;
+                true -> true;
+                undefined -> z_convert:to_bool(z_context:get(absolute_url, Context))
+            end
     end.
 
 use_absolute(undefined) -> undefined;
@@ -330,32 +376,43 @@ use_absolute(false) -> false;
 use_absolute(A) -> z_convert:to_bool(A).
 
 
-url2(File, Options, Context) ->
-    Filename = z_convert:to_list(File),
-    {TagOpts, ImageOpts} = lists:partition(fun is_tagopt/1, Options),
-    % Map all ImageOpts to an opt string
-    MimeFile = z_media_identify:guess_mime(Filename),
-    {_Mime,Extension} = z_media_preview:out_mime(MimeFile, ImageOpts, Context),
-    case props2url(ImageOpts, Context) of
-        {no_checksum, UrlProps} ->
-            PropsQuoted = mochiweb_util:quote_plus(UrlProps),
-            {url, filename_to_urlpath(lists:flatten([Filename,PropsQuoted,Extension]), Context),
-                  TagOpts,
-                  ImageOpts};
-        {checksum, UrlProps} ->
-            Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
-            PropCheck = mochiweb_util:quote_plus(iolist_to_binary([UrlProps,$(,Checksum,$)])),
-            {url, filename_to_urlpath(lists:flatten([Filename,PropCheck,Extension]), Context),
-                  TagOpts,
-                  ImageOpts}
-    end.
+url2(Filename, Options, Context) ->
+    case lists:partition(fun is_tagopt/1, filter_options(Options)) of
+        {TagOpts, []} ->
+            {url, filename_to_urlpath(Filename, Context), TagOpts, []};
+        {TagOpts, ImageOpts} ->
+            % Map all ImageOpts to an opt string
+            MimeFile = z_media_identify:guess_mime(Filename),
+            {_Mime, Extension} = z_media_preview:out_mime(MimeFile, ImageOpts, Context),
+            case props2url(ImageOpts, Context) of
+                {no_checksum, UrlProps} ->
+                    PropsQuoted = z_url:url_encode(UrlProps),
+                    {url, filename_to_urlpath(iolist_to_binary([Filename,PropsQuoted,Extension]), Context),
+                          TagOpts,
+                          ImageOpts};
+                {checksum, UrlProps} ->
+                    Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
+                    PropCheck = z_url:url_encode(iolist_to_binary([UrlProps,$(,Checksum,$)])),
+                    {url, filename_to_urlpath(iolist_to_binary([Filename,PropCheck,Extension]), Context),
+                          TagOpts,
+                          ImageOpts}
+            end
+   end.
 
+filter_options(Options) ->
+    lists:filter(
+        fun
+            (is_data_url) -> false;
+            (_) -> true
+        end,
+        Options).
 
 is_tagopt({link,  _}) -> true;
 is_tagopt({alt,   _}) -> true;
 is_tagopt({title, _}) -> true;
 is_tagopt({class, _}) -> true;
 is_tagopt({style, _}) -> true;
+is_tagopt({loading, _}) -> true;
 is_tagopt({align, _}) -> true;  % HTML 1.0 for e-mails
 
 % Some preview args we definitely know exist (just an optimization)

@@ -154,14 +154,14 @@ media_import_md(ImgUrl, MD, Context) ->
         prio = 1,
         category = image,
         description = m_rsc:p_no_acl(image, title, Context),
-        rsc_props = [
-            {title, z_url_metadata:p(title, MD)},
-            {summary, z_url_metadata:p(summary, MD)},
-            {website, z_url_metadata:p(url, MD)}
-        ],
-        medium_props = [
-            {mime, <<"image/jpeg">>}
-        ],
+        rsc_props = #{
+            <<"title">> => z_url_metadata:p(title, MD),
+            <<"summary">> => z_url_metadata:p(summary, MD),
+            <<"website">> => z_url_metadata:p(url, MD)
+        },
+        medium_props = #{
+            <<"mime">> => <<"image/jpeg">>
+        },
         medium_url = ImgUrl
     }.
 
@@ -182,16 +182,16 @@ media_import_shared_data(#{<<"entry_data">> := #{<<"PostPage">> := PostPage}}, M
                 prio = 1,
                 category = image,
                 description = m_rsc:p_no_acl(image, title, Context),
-                rsc_props = [
-                    {title, CaptionTruncated},
-                    {summary, Summary},
-                    {website, z_url_metadata:p(url, MD)}
-                ],
-                medium_props = [
-                    {mime, <<"image/jpeg">>},
-                    {width, W},
-                    {height, H}
-                ],
+                rsc_props = #{
+                    <<"title">> => CaptionTruncated,
+                    <<"summary">> => Summary,
+                    <<"website">> => z_url_metadata:p(url, MD)
+                },
+                medium_props = #{
+                    <<"mime">> => <<"image/jpeg">>,
+                    <<"width">> => W,
+                    <<"height">> => H
+                },
                 medium_url = ImgUrl
             };
         true ->
@@ -201,16 +201,16 @@ media_import_shared_data(#{<<"entry_data">> := #{<<"PostPage">> := PostPage}}, M
                 prio = 1,
                 category = video,
                 description = m_rsc:p_no_acl(video, title, Context),
-                rsc_props = [
-                    {title, CaptionTruncated},
-                    {summary, Summary},
-                    {website, z_url_metadata:p(url, MD)}
-                ],
-                medium_props = [
-                    {mime, <<"video/mp4">>},
-                    {width, W},
-                    {height, H}
-                ],
+                rsc_props = #{
+                    <<"title">> => CaptionTruncated,
+                    <<"summary">> => Summary,
+                    <<"website">> => z_url_metadata:p(url, MD)
+                },
+                medium_props = #{
+                    <<"mime">> => <<"video/mp4">>,
+                    <<"width">> => W,
+                    <<"height">> => H
+                },
                 medium_url = VideoUrl,
                 preview_url = PreviewImgUrl
             }

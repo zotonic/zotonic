@@ -111,7 +111,7 @@ Imagine you wish to store whether resources are liked by users. No need to
 change the database schema, define the property or whatsoever. Just update the
 resource and set a custom ``is_liked`` property (using :ref:`model-rsc`)::
 
-    m_rsc:update(123, [{is_liked, true}], Context).
+    m_rsc:update(123, #{ <<"is_liked">> => true }, Context).
 
 ``is_liked=true`` will now be stored in the database for resource ``123``, so
 you can retrieve it like you would any other property::
@@ -131,7 +131,7 @@ Or, in a template:
 
 To remove the property, just store it as ``undefined``::
 
-    m_rsc:update(123, [{is_liked, undefined}], Context).
+    m_rsc:update(123, #{ <<"is_liked">> => undefined }, Context).
 
 This flexible approach is fine for custom properties that you only want to
 retrieve and display. However, if you need to *find* all liked resources, you

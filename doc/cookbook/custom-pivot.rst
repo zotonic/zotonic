@@ -28,7 +28,7 @@ names in the table definition, the table will be recreated and **the data inside
 To fill the pivot table with data when a resource gets saved, create a notification
 listener function ``observe_custom_pivot/2``::
 
-    observe_custom_pivot({custom_pivot, Id}, Context) ->
+    observe_custom_pivot(#custom_pivot{ id = Id }, Context) ->
         Requestor = m_rsc:p(Id, requestor, Context),
         {pivotname, [{requestor, Requestor}]}.
 

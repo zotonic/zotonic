@@ -53,37 +53,37 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ Name, tree | Rest ], _Msg, Context) -> {ok, {tree(Name, Context), Rest}};
-m_get([ Name, tree1 | Rest ], _Msg, Context) -> {ok, {tree1(Name, Context), Rest}};
-m_get([ Name, tree_flat | Rest ], _Msg, Context) -> {ok, {tree_flat(Name, Context), Rest}};
-m_get([ Name, menu | Rest ], _Msg, Context) -> {ok, {menu(Name, Context), Rest}};
+m_get([ Name, <<"tree">> | Rest ], _Msg, Context) -> {ok, {tree(Name, Context), Rest}};
+m_get([ Name, <<"tree1">> | Rest ], _Msg, Context) -> {ok, {tree1(Name, Context), Rest}};
+m_get([ Name, <<"tree_flat">> | Rest ], _Msg, Context) -> {ok, {tree_flat(Name, Context), Rest}};
+m_get([ Name, <<"menu">> | Rest ], _Msg, Context) -> {ok, {menu(Name, Context), Rest}};
 
-m_get([ Name, menu_ensured | Rest ], Msg, Context) ->
+m_get([ Name, <<"menu_ensured">> | Rest ], Msg, Context) ->
     {ok, _} = ensure(Name, Context),
-    m_get([ Name, menu | Rest ], Msg, Context);
-m_get([ Name, Id, menu_ensured | Rest ], Msg, Context) ->
+    m_get([ Name, <<"menu">> | Rest ], Msg, Context);
+m_get([ Name, Id, <<"menu_ensured">> | Rest ], Msg, Context) ->
     {ok, _} = ensure(Name, Context),
-    m_get([ Name, Id, menu | Rest ], Msg, Context);
+    m_get([ Name, Id, <<"menu">> | Rest ], Msg, Context);
 
-m_get([ Name, Id, tree | Rest ], _Msg, Context) ->
+m_get([ Name, Id, <<"tree">> | Rest ], _Msg, Context) ->
     V = case m_rsc:rid(Id, Context) of
         undefined -> undefined;
         RId -> tree({sub, Name, RId}, Context)
     end,
     {ok, {V, Rest}};
-m_get([ Name, Id, tree1 | Rest ], _Msg, Context) ->
+m_get([ Name, Id, <<"tree1">> | Rest ], _Msg, Context) ->
     V = case m_rsc:rid(Id, Context) of
         undefined -> undefined;
         RId -> tree1({sub, Name, RId}, Context)
     end,
     {ok, {V, Rest}};
-m_get([ Name, Id, tree_flat | Rest ], _Msg, Context) ->
+m_get([ Name, Id, <<"tree_flat">> | Rest ], _Msg, Context) ->
     V = case m_rsc:rid(Id, Context) of
         undefined -> undefined;
         RId -> tree_flat({sub, Name, RId}, Context)
     end,
     {ok, {V, Rest}};
-m_get([ Name, Id, menu | Rest ], _Msg, Context) ->
+m_get([ Name, Id, <<"menu">> | Rest ], _Msg, Context) ->
     V = case m_rsc:rid(Id, Context) of
         undefined -> undefined;
         RId -> menu({sub, Name, RId}, Context)
@@ -254,7 +254,7 @@ ensure(Name, CatId, Context) when is_binary(Name), is_integer(CatId) ->
         0 ->
             {ok, 0};
         _ ->
-            z_notifier:notify(#hierarchy_updated{root_id = Name, predicate = undefined}, Context),
+            z_notifier:notify_sync(#hierarchy_updated{root_id = Name, predicate = undefined}, Context),
             {ok, Total}
     end;
 ensure(Name, Category, Context) when not is_integer(Category) ->

@@ -116,7 +116,7 @@
 
 			{% if (id and id.is_editable) or m.acl.use.mod_email_status %}
 				<p>
-					<a href="#" class="btn btn-default btn-danger" id="{{ #doclear }}">
+					<a href="#" class="btn btn-default btn-success" id="{{ #doclear }}">
 						{_ Clear error flag for this email address. _}
 					</a>
 				</p>

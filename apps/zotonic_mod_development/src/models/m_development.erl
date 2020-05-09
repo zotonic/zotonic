@@ -30,18 +30,23 @@
     extract_records/1
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"is_dbtrace">> | Rest ], _Msg, Context) ->
+    {ok, {z_development_dbtrace:is_tracing(Context), Rest}};
 m_get([ Cfg | Rest ], _Msg, Context)
-    when Cfg =:= debug_includes;
-         Cfg =:= debug_blocks;
-         Cfg =:= enable_api;
-         Cfg =:= libsep ->
+    when Cfg =:= <<"debug_includes">>;
+         Cfg =:= <<"debug_blocks">>;
+         Cfg =:= <<"enable_api">>;
+         Cfg =:= <<"libsep">>;
+         Cfg =:= <<"nocache">> ->
     {ok, {m_config:get_boolean(mod_development, Cfg, Context), Rest}};
-m_get([ list_observers | Rest ], _Msg, Context) ->
+m_get([ <<"list_observers">> | Rest ], _Msg, Context) ->
     Observers = z_notifier:get_observers(Context),
     List = [ {atom_to_binary(Event, utf8), readable(Os)} || {Event, Os} <- Observers ],
     {ok, {List, Rest}};
-m_get([ record_info, Record | Rest ], _Msg, _Context) ->
+m_get([ <<"record_info">>, Record | Rest ], _Msg, _Context) ->
     RecInfo = case to_atom(Record) of
         {ok, Rec} ->
             case lookup_record(Rec) of
@@ -67,7 +72,7 @@ to_atom(Rec) when is_binary(Rec) ->
 
 readable(Os) ->
     lists:map(
-        fun({Prio, Obs}) ->
+        fun({Prio, Obs, _Pid}) ->
             {Prio, iolist_to_binary(readable_1(Obs))}
         end,
         Os).

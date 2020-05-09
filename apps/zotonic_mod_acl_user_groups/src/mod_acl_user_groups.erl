@@ -277,31 +277,33 @@ observe_hierarchy_updated(#hierarchy_updated{}, _Context) ->
     ok.
 
 %% @doc Add default content group when resource is inserted without one
--spec observe_rsc_insert(#rsc_insert{}, m_rsc:props(), #context{}) -> m_rsc:props().
+-spec observe_rsc_insert(#rsc_insert{}, m_rsc:props(), z:context()) -> m_rsc:props().
 observe_rsc_insert(#rsc_insert{props=RscProps}, InsertProps, Context) ->
-    case proplists:get_value(content_group_id, RscProps,
-            proplists:get_value(content_group_id, InsertProps))
+    case maps:get(<<"content_group_id">>, RscProps,
+            maps:get(<<"content_group_id">>, InsertProps, undefined))
     of
         undefined ->
-            CategoryId = proplists:get_value(category_id, InsertProps),
+            CategoryId = maps:get(<<"category_id">>, InsertProps),
             ContentGroupId = acl_user_groups_checks:default_content_group(CategoryId, Context),
-            [{content_group_id, ContentGroupId} | InsertProps];
+            InsertProps#{
+                <<"content_group_id">> => ContentGroupId
+            };
         _ ->
             InsertProps
     end.
 
 -spec observe_rsc_update(#rsc_update{}, {boolean(), m_rsc:props()}, z:context()) -> {boolean(), m_rsc:props()}.
 observe_rsc_update(#rsc_update{ props = PrevProps }, {_IsChanged, NewProps} = Acc, Context) ->
-    case proplists:is_defined(acl_mime_allowed, NewProps)
-        orelse proplists:is_defined(acl_upload_size, NewProps)
+    case maps:is_key(<<"acl_mime_allowed">>, NewProps)
+        orelse maps:is_key(<<"acl_upload_size">>, NewProps)
     of
         true ->
             case mod_acl_user_groups:is_acl_admin(Context) of
                 true ->
                     Acc;
                 false ->
-                    P1 = force_copy_prop(acl_mime_allowed, PrevProps, NewProps),
-                    P2 = force_copy_prop(acl_upload_size, PrevProps, P1),
+                    P1 = force_copy_prop(<<"acl_mime_allowed">>, PrevProps, NewProps),
+                    P2 = force_copy_prop(<<"acl_upload_size">>, PrevProps, P1),
                     {true, P2}
             end;
         false ->
@@ -309,16 +311,20 @@ observe_rsc_update(#rsc_update{ props = PrevProps }, {_IsChanged, NewProps} = Ac
     end.
 
 force_copy_prop(P, PrevProps, NewProps) ->
-    Curr1 = proplists:delete(P, NewProps),
-    case proplists:lookup(P, PrevProps) of
-        none -> Curr1;
-        PV -> [ PV | NewProps ]
+    case maps:find(P, PrevProps) of
+        error -> maps:remove(P, NewProps);
+        {ok, V} -> NewProps#{ P => V }
     end.
 
 
-observe_rsc_update_done(#rsc_update_done{id=Id, pre_is_a=PreIsA, post_is_a=PostIsA}=M, Context) ->
-    check_hasusergroup(Id, M#rsc_update_done.post_props, Context),
-    case  lists:member('acl_user_group', PreIsA)
+observe_rsc_update_done(#rsc_update_done{
+            id = Id,
+            pre_is_a = PreIsA,
+            post_is_a = PostIsA,
+            post_props = PostProps
+        }, Context) ->
+    check_hasusergroup(Id, PostProps, Context),
+    case lists:member('acl_user_group', PreIsA)
         orelse lists:member('acl_user_group', PostIsA)
     of
         true -> m_hierarchy:ensure('acl_user_group', Context);
@@ -443,21 +449,18 @@ signal_user_changed(UserId, Context) ->
     %     Sessions).
 
 %% @doc Ensure that the privacy property is set.
-observe_rsc_get(#rsc_get{}, [], _Context) ->
-    [];
-observe_rsc_get(#rsc_get{}, Props, Context) ->
-    case proplists:get_value(privacy, Props) of
+observe_rsc_get(#rsc_get{}, #{ <<"category_id">> := CatId } = Map, Context) ->
+    case maps:get(privacy, Map, undefined) of
         undefined ->
-            [
-                {privacy,
-                    case m_category:is_a_prim(proplists:get_value(category_id, Props), person, Context) of
+            Map#{
+                <<"privacy">> =>
+                    case m_category:is_a_prim(CatId, person, Context) of
                         true -> ?ACL_PRIVACY_COLLAB_MEMBER;
                         false -> ?ACL_PRIVACY_PUBLIC
-                    end}
-                | proplists:delete(privacy, Props)
-            ];
+                    end
+            };
         _ ->
-            Props
+            Map
     end.
 
 
@@ -802,8 +805,8 @@ manage_data(_Version, _Context) ->
 page_actions(Actions, Context) ->
     z_notifier:first(#page_actions{ actions = Actions }, Context).
 
-check_hasusergroup(UserId, P, Context) ->
-    HasUserGroup = proplists:get_all_values(hasusergroup, P),
+check_hasusergroup(UserId, RscProps, Context) ->
+    HasUserGroup = to_list( maps:get(<<"hasusergroup">>, RscProps, []) ),
     case length(HasUserGroup) of
         0 ->
             %% not submitted, do nothing
@@ -811,8 +814,17 @@ check_hasusergroup(UserId, P, Context) ->
         _ ->
             GroupIds = lists:map(
                 fun z_convert:to_integer/1,
-                lists:filter(fun(<<>>) -> false; (_) -> true end, HasUserGroup)),
+                lists:filter(
+                    fun
+                        (<<>>) -> false;
+                        (_) -> true
+                    end,
+                    HasUserGroup)),
             {ok, PredId} = m_predicate:name_to_id(hasusergroup, Context),
             m_edge:replace(UserId, PredId, GroupIds, Context)
     end.
+
+to_list(undefined) -> [];
+to_list(L) when is_list(L) -> L;
+to_list(V) -> [ V ].
 

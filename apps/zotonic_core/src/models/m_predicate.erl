@@ -49,19 +49,21 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([], _Msg, Context) ->
     {ok, {all(Context), []}};
-m_get([ all | Rest ], _Msg, Context) ->
+m_get([ <<"all">> | Rest ], _Msg, Context) ->
     {ok, {all(Context), Rest}};
-m_get([ is_used, Pred | Rest ], _Msg, Context) ->
+m_get([ <<"is_used">>, Pred | Rest ], _Msg, Context) ->
     {ok, {is_used(Pred, Context), Rest}};
-m_get([ object_category, Key | Rest ], _Msg, Context) ->
+m_get([ <<"object_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {object_category(Key, Context), Rest}};
-m_get([ subject_category, Key | Rest ], _Msg, Context) ->
+m_get([ <<"subject_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {subject_category(Key, Context), Rest}};
-m_get([ is_valid_object_category, Predicate, Category | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_object_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = object_category(Predicate, Context),
     IsValid = case lists:member({CatId}, ValidCats) of
         true ->
+            true;
+        false when ValidCats =:= [] ->
             true;
         false ->
             IsA = m_category:is_a(CatId, Context),
@@ -73,11 +75,13 @@ m_get([ is_valid_object_category, Predicate, Category | Rest ], _Msg, Context) -
                 IsA)
     end,
     {ok, {IsValid, Rest}};
-m_get([ is_valid_subject_category, Predicate, Category | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_subject_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = subject_category(Predicate, Context),
     IsValid = case lists:member({CatId}, ValidCats) of
         true ->
+            true;
+        false when ValidCats =:= [] ->
             true;
         false ->
             IsA = m_category:is_a(CatId, Context),
@@ -225,18 +229,18 @@ all(Context) ->
     z_depcache:memo(F, predicate, ?DAY, Context).
 
 %% @doc Insert a new predicate, sets some defaults.
--spec insert(binary()|list(), #context{}) -> {ok, integer()} | {error, any()}.
+-spec insert(binary()|list(), z:context()) -> {ok, integer()} | {error, any()}.
 insert(Title, Context) ->
     Name = z_string:to_name(Title),
     Uri  = "http://zotonic.net/predicate/" ++ Name,
-    Props = [
-        {title, Title},
-        {name, Name},
-        {uri, Uri},
-        {category, predicate},
-        {group, admins},
-        {is_published, true}
-    ],
+    Props = #{
+        <<"title">> => Title,
+        <<"name">> => Name,
+        <<"uri">> => Uri,
+        <<"category">> => predicate,
+        <<"group">> => admins,
+        <<"is_published">> => true
+    },
     case m_rsc:insert(Props, Context) of
         {ok, Id} ->
             flush(Context),
@@ -252,7 +256,7 @@ flush(Context) ->
 
 
 %% @doc Reset the list of valid subjects and objects.
--spec update_noflush(integer(), list(), list(), #context{}) -> ok.
+-spec update_noflush(integer(), list(), list(), z:context()) -> ok.
 update_noflush(Id, Subjects, Objects, Context) ->
     SubjectIds0 = [m_rsc:rid(N, Context) || N <- Subjects, N /= [], N /= <<>>],
     ObjectIds0 = [m_rsc:rid(N, Context) || N <- Objects, N /= [], N /= <<>>],
@@ -324,32 +328,35 @@ subject_category(Id, Context) ->
 %% @doc Return the list of predicates that are valid for the given resource id.
 %% Append all predicates that have no restrictions.
 for_subject(Id, Context) ->
-    {L, R} = cat_bounds(Context),
-    ValidIds = z_db:q("
-                select p.predicate_id
-                from predicate_category p,
-                     hierarchy pc,
-                     rsc r,
-                     hierarchy rc
-                where p.category_id = pc.id
-                  and pc.name = '$category'
-                  and r.category_id = rc.id
-                  and rc.name = '$category'
-                  and rc.nr >= pc.lft
-                  and rc.nr <= pc.rght
-                  and r.id = $1
-                  and is_subject = true
-                ", [Id], Context),
-    Valid = [ValidId || {ValidId} <- ValidIds],
-    NoRestrictionIds = z_db:q("
-                    select r.id
-                    from rsc r left join predicate_category p on p.predicate_id = r.id and p.is_subject = true
-                        join hierarchy c on (r.category_id = c.id and c.name = '$category')
-                    where p.predicate_id is null
-                      and $1 <= c.nr and c.nr <= $2
-                ", [L, R], Context),
-    NoRestriction = [NoRestrictionId || {NoRestrictionId} <- NoRestrictionIds],
-    Valid ++ NoRestriction.
+    F = fun() ->
+        {L, R} = cat_bounds(Context),
+        ValidIds = z_db:q("
+                    select p.predicate_id
+                    from predicate_category p,
+                         hierarchy pc,
+                         rsc r,
+                         hierarchy rc
+                    where p.category_id = pc.id
+                      and pc.name = '$category'
+                      and r.category_id = rc.id
+                      and rc.name = '$category'
+                      and rc.nr >= pc.lft
+                      and rc.nr <= pc.rght
+                      and r.id = $1
+                      and is_subject = true
+                    ", [Id], Context),
+        Valid = [ValidId || {ValidId} <- ValidIds],
+        NoRestrictionIds = z_db:q("
+                        select r.id
+                        from rsc r left join predicate_category p on p.predicate_id = r.id and p.is_subject = true
+                            join hierarchy c on (r.category_id = c.id and c.name = '$category')
+                        where p.predicate_id is null
+                          and $1 <= c.nr and c.nr <= $2
+                    ", [L, R], Context),
+        NoRestriction = [NoRestrictionId || {NoRestrictionId} <- NoRestrictionIds],
+        Valid ++ NoRestriction
+    end,
+    z_depcache:memo(F, {predicate_for_subject, Id}, ?WEEK, [predicare, category], Context).
 
 %% @doc Return the id of the predicate category
 -spec cat_id(#context{}) -> integer().

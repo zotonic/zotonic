@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2020 Marc Worrell
 %% @doc Handle HTTP authentication of users.
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -94,8 +94,11 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
         {ok, Context1} ->
             % - (set cookie in handlers - like device-id) --> needs notification
             Options = z_context:get(auth_options, Context, #{}),
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
-            status(Payload, Context2);
+            % Force reset of sid on logon
+            Options1 = maps:remove(sid, Options),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options1, Context1),
+            Context3 = maybe_setautologon(Payload, Context2),
+            return_status(Payload, Context3);
         {error, user_not_enabled} ->
             case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
                 false ->
@@ -111,16 +114,20 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
         %     { #{ status => error, error => pw }, Context }
     end;
 logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
+    % The password is expired and needs a reset - this is similar to password reset
     case m_identity:get_username(UserId, Context) of
         undefined ->
             { #{ status => error, error => pw }, Context };
-        _Username ->
-            { #{ status => error, error => password_expired }, Context }
+        Username ->
+            Code = m_authentication:set_reminder_secret(UserId, Context),
+            { #{ status => error, error => password_expired, username => Username, secret => Code }, Context }
     end;
 logon_1({error, ratelimit}, _Payload, Context) ->
     { #{ status => error, error => ratelimit }, Context };
-logon_1({error, need2fa}, _Payload, Context) ->
-    { #{ status => error, error => need2fa }, Context };
+logon_1({error, need_passcode}, _Payload, Context) ->
+    { #{ status => error, error => need_passcode }, Context };
+logon_1({error, passcode}, _Payload, Context) ->
+    { #{ status => error, error => passcode }, Context };
 logon_1({error, _Reason}, _Payload, Context) ->
     % Hide other error codes, map to generic 'pw' error
     { #{ status => error, error => pw }, Context };
@@ -145,7 +152,7 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
                 ],
                 Context),
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, AuthOptions, Context1),
-            status(Payload, Context2);
+            return_status(Payload, Context2);
         {error, _Reason} ->
             { #{ status => error, error => eacces }, Context }
     end;
@@ -158,7 +165,7 @@ switch_user(_Payload, Context) ->
 logoff(Payload, Context) ->
     Context1 = z_auth:logoff(Context),
     Context2 = z_authentication_tokens:reset_cookies(Context1),
-    status(Payload, Context2).
+    return_status(Payload, Context2).
 
 %% @doc Refresh the current authentication cookie
 -spec refresh( map(), z:context() ) -> { map(), z:context() }.
@@ -168,10 +175,9 @@ refresh(Payload, Context) ->
         _ -> #{}
     end,
     Context1 = z_authentication_tokens:refresh_auth_cookie(Options, Context),
-    status(Payload, Context1).
+    return_status(Payload, Context1).
 
 %% @doc Set an autologon cookie for the current user
-%% @todo Do not set the cookie if the user has 2fa enabled
 -spec setautologon( map(), z:context() ) -> { map(), z:context() }.
 setautologon(_Payload, Context) ->
     case z_acl:user(Context) of
@@ -181,6 +187,18 @@ setautologon(_Payload, Context) ->
             Context1 = z_authentication_tokens:set_autologon_cookie(UserId, Context),
             { #{ status => ok }, Context1 }
     end.
+
+%% @doc Set the autologon cookie for the user if the flag was speficied in the request.
+-spec maybe_setautologon( map(), z:context() ) -> z:context().
+maybe_setautologon(#{ <<"setautologon">> := SetAutoLogon }, Context) ->
+    case z_convert:to_bool(SetAutoLogon) of
+        true ->
+            z_authentication_tokens:set_autologon_cookie(z_acl:user(Context), Context);
+        false ->
+            z_authentication_tokens:reset_autologon_cookie(Context)
+    end;
+maybe_setautologon(_Payload, Context) ->
+    z_authentication_tokens:reset_autologon_cookie(Context).
 
 %% @doc Set an autologon cookie for the current user
 %% @todo Do not set the cookie if the user has 2fa enabled
@@ -261,6 +279,10 @@ reset_1(UserId, Username, Password, Context) ->
 %% @doc Return information about the current user and request language/timezone
 -spec status( map(), z:context() ) -> { map(), z:context() }.
 status(Payload, Context) ->
+    Context1 = z_authentication_tokens:ensure_auth_cookie(Context),
+    return_status(Payload, Context1).
+
+return_status(Payload, Context) ->
     Context1 = z_notifier:foldl(
         #request_context{
             phase = auth_status,

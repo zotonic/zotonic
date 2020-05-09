@@ -69,9 +69,12 @@ table th {
   vertical-align: top;
 }
 iframe,
-video,
 audio {
   max-width: 100%;
+}
+video {
+  max-width: 100%;
+  height: auto;
 }
 .unpublished,
 .unpublished a:not(.btn),
@@ -413,9 +416,9 @@ fieldset[disabled] .btn-primary.active {
   background-color: rgba(255, 255, 255, 0.8);
 }
 #dialog-new-rsc-tab .new-find-cols > .form-panel {
-  -ms-grid-column: 1;
+  -ms-grid-column: 2;
   -ms-grid-row: 1;
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 1;
   background-color: white;
   padding: 10px 15px 0 15px;
@@ -423,9 +426,9 @@ fieldset[disabled] .btn-primary.active {
   overflow-y: auto;
 }
 #dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper {
-  -ms-grid-column: 1;
+  -ms-grid-column: 2;
   -ms-grid-row: 1;
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 1;
   position: relative;
   background-color: white;
@@ -449,9 +452,9 @@ fieldset[disabled] .btn-primary.active {
   margin: 15px 0;
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results {
-  -ms-grid-column: 2;
+  -ms-grid-column: 1;
   -ms-grid-row: 1;
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 1;
   display: -ms-grid;
   -ms-grid-columns: 1fr;
@@ -462,8 +465,8 @@ fieldset[disabled] .btn-primary.active {
   max-height: 100%;
   padding: 10px 0 0 14px;
   margin-left: 0;
-  border-left: 1px solid rgba(215, 215, 215, 0.7);
-  background: linear-gradient(to right, #f8f8f8, white, white);
+  border-right: 1px solid rgba(215, 215, 215, 0.7);
+  background: linear-gradient(to left, #f8f8f8, white, white);
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results > .new-find-results-header {
   -ms-grid-column: 1;
@@ -482,6 +485,9 @@ fieldset[disabled] .btn-primary.active {
   padding-right: 15px;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+#dialog-new-rsc-tab .new-find-cols > .new-find-results > #dialog-rsc-new-found .item {
+  background-color: white;
 }
 #dialog-new-rsc-tab .new-find-cols > .new-find-results #dialog_new_rsc_results {
   margin-top: 0;
@@ -558,6 +564,16 @@ fieldset[disabled] .btn-primary.active {
 }
 #dialog_new_rsc_results .items .item .rsc-actions {
   text-align: right;
+}
+.panel-footer .inline-div {
+  display: inline-block;
+  margin-left: 20px;
+}
+.panel-footer .inline-div:first-child {
+  margin-top: 0;
+}
+.panel-footer .inline-div:last-child {
+  margin-bottom: 0;
 }
 .block-add-block {
   margin: 0 0 9px 0;
@@ -747,7 +763,6 @@ img.admin-leader-image {
   height: 60px;
 }
 .admin-edit-media {
-  display: inline-block;
   background: white;
   padding: 0;
   margin: 0 0 10px 0;
@@ -852,10 +867,6 @@ img.thumb {
 img {
   max-width: 100%;
   height: auto;
-}
-img.admin-list-overview {
-  width: 80px;
-  height: 60px;
 }
 .widget.admin-logon {
   margin: 100px auto;
@@ -1617,6 +1628,10 @@ ul.tree-list.connections-list {
 ul.tree-list.connections-list li.menu-item > div {
   overflow: hidden;
 }
+ul.tree-list.connections-list li.menu-item-alert {
+  padding: 10px;
+  text-align: center;
+}
 .widget {
   margin-bottom: 15px;
   border-bottom: none;
@@ -1900,7 +1915,7 @@ li h3.widget-header {
 .environment-acceptance body,
 .environment-education body,
 .environment-backup body {
-  padding-left: 28px;
+  padding-left: 24px;
 }
 @media (min-width: 480px) {
   .environment-development body::before,

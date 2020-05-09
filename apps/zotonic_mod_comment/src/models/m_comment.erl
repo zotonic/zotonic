@@ -46,30 +46,30 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ anonymous | Rest ], _Msg, Context) ->
+m_get([ <<"anonymous">> | Rest ], _Msg, Context) ->
     Anon = case m_config:get_value(mod_comment, anonymous, Context) of
         undefined -> true;
         V -> z_convert:to_bool(V)
     end,
     {ok, {Anon, Rest}};
-m_get([ moderate | Rest ], _Msg, Context) ->
+m_get([ <<"moderate">> | Rest ], _Msg, Context) ->
     Mod = case m_config:get_value(mod_comment, moderate, Context) of
         undefined -> false;
         <<>> -> false;
         V -> z_convert:to_bool(V)
     end,
     {ok, {Mod, Rest}};
-m_get([ rsc, Id | Rest ], _Msg, Context) ->
+m_get([ <<"rsc">>, Id | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true -> {ok, {list_rsc(Id, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ count, Id | Rest ], _Msg, Context) ->
+m_get([ <<"count">>, Id | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true -> {ok, {count_rsc(Id, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ get, CommentId | Rest ], _Msg, Context) ->
+m_get([ <<"get">>, CommentId | Rest ], _Msg, Context) ->
     case get(CommentId, Context) of
         undefined ->
             {ok, {undefined, Rest}};

@@ -64,4 +64,4 @@ You can stop the container using Ctrl+D at the Bash shell prompt.
 
 .. _zotonic/zotonic-dev: https://hub.docker.com/r/zotonic/zotonic-dev/
 .. _Docker Compose: https://docs.docker.com/compose/
-.. _download and install Docker: https://www.docker.com/products/docker
+.. _download and install Docker: https://www.docker.com/get-started

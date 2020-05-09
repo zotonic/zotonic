@@ -34,7 +34,7 @@ At the very start, the template parser resolves ``m.rsc`` to module ``m_rsc``. T
 
 This is the function specification of ``m_get``::
 
-    -spec m_get(Keys, Context) -> { term(), RestKeys } when
+    -spec m_get(Keys, _Msg, Context) -> { term(), RestKeys } when
         Keys :: list(),
         RestKeys :: list(),
         Context:: z:context().
@@ -98,17 +98,17 @@ We will write our model in module ``models/m_omdb.erl``. Let's first get the man
     -behaviour(gen_model).
 
     -export([
-        m_get/2
+        m_get/3
     ]).
 
     -include_lib("zotonic_core/include/zotonic.hrl").
 
     % ... We will add our m_get functions here
-    -spec m_get( list(), z:context() ) -> { term(), list() }.
-    m_get([ _ | Rest ], _Context) ->
-        {undefined, Rest};
-    m_get(_, _Context) ->
-        {undefined, []}.
+    -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> {ok, { term(), list() }} | {error, term()}.
+    m_get([ _ | Rest ], _Msg, _Context) ->
+        {ok, {undefined, Rest}};
+    m_get(_, _Msg, _Context) ->
+        {ok, {undefined, []}}.
 
 
 Querying the API
@@ -163,8 +163,8 @@ To illustrate the simplest ``m_get`` function, we add one to get the API url::
     -define(API_URL, "http://www.omdbapi.com/?").
 
     % Syntax: m.omdb.api_url
-    m_get([ api_url | Rest ], _Context) ->
-        {?API_URL, Rest};
+    m_get([ api_url | Rest ], _Msg, _Context) ->
+        {ok, {?API_URL, Rest}};
 
 The functions that will deliver our template interface are a bit more involved. From the template expressions we can discern 2 different patterns:
 
@@ -183,19 +183,19 @@ When an expression is parsed from left to right, each parsed part needs to be pa
 To parse the type, we add these functions to our module::
 
     % Syntax: m.omdb.movie[QueryString]
-    m_get([ movie, QueryString | Rest ], Context) when is_binary(QueryString) ->
+    m_get([ movie, QueryString | Rest ], _Msg, Context) when is_binary(QueryString) ->
         Query = [ {type, movie}, {title, QueryString} ],
-        {fetch_data(Query), []};
+        {ok, {fetch_data(Query), []}};
 
     % Syntax: m.omdb.series[QueryString]
-    m_get([ series, QueryString | Rest ], Context) when is_binary(QueryString) ->
+    m_get([ series, QueryString | Rest ], _Msg, Context) when is_binary(QueryString) ->
         Query = [ {type, series}, {title, QueryString} ],
-        {fetch_data(Query), []};
+        {ok, {fetch_data(Query), []}};
 
     % Syntax: m.omdb.episode[QueryString]
-    m_get([ episode, QueryString | Rest ], Context) when is_binary(QueryString) ->
+    m_get([ episode, QueryString | Rest ], _Msg, Context) when is_binary(QueryString) ->
         Query = [ {type, episode}, {title, QueryString} ],
-        {fetch_data(Query), []};
+        {ok, {fetch_data(Query), []}};
 
 
 Notice the ``| Rest`` in the patterns. This is needed for expressions like::
@@ -204,7 +204,7 @@ Notice the ``| Rest`` in the patterns. This is needed for expressions like::
 
 Which calls our ``m_get`` function as::
 
-    m_get([ series, <<"Dollhouse">>, title ], Context)
+    m_get([ series, <<"Dollhouse">>, title ], _Msg, Context)
 
 
 We can also pass:
@@ -218,14 +218,14 @@ Luckily, the movie IDs all start with "tt", so we can use pattern matching to di
 For the ID we recognize 2 situations - with or without a previously found value::
 
     % Syntax: m.omdb["tt1135300"]
-    m_get([ <<"tt", _/binary>> = Id | Rest ], Context) ->
+    m_get([ <<"tt", _/binary>> = Id | Rest ], _Msg, Context) ->
         Query = [ {id, Id} ],
-        {fetch_data(Query), []};
+        {ok, {fetch_data(Query), []}};
 
     % Syntax: m.omdb.sometype["tt1135300"]
     m_get([ sometype, <<"tt", _/binary>> = Id | Rest ], _Context) ->
         Query = [ {type, sometype}, {id, Id} ],
-        {fetch_data(Query), []}.
+        {ok, {fetch_data(Query), []}}.
 
 We need to place these two patterns above the title searches we already wrote
 
@@ -262,11 +262,11 @@ If we want to fetch the year of the first result we use::
 
 ... we get called as::
 
-    m_get([ <<"Alien">>, year ], Context).
+    m_get([ <<"Alien">>, year ], _Msg, Context).
 
 Which (after a search on the title "Alien") returns:
 
-    {SomeSearchResultList, [ year ]}.
+    {ok, {SomeSearchResultList, [ year ]}}.
 
 The ``[ year ]`` will then be used to lookup the year property of the found result.
 

@@ -26,7 +26,7 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--spec get(integer(), #context{}) -> undefined | list().
+-spec get(m_rsc:resource_id(), z:context()) -> undefined | list().
 get(Id, Context) ->
     z_db:assoc_row("select * from import_csv_data where id = $1", [Id], Context).
 

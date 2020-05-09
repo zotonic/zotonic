@@ -77,55 +77,55 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ tree | Rest ], _Msg, Context) ->
+m_get([ <<"tree">> | Rest ], _Msg, Context) ->
     {ok, {tree(Context), Rest}};
-m_get([ tree2 | Rest ], _Msg, Context) ->
+m_get([ <<"tree2">> | Rest ], _Msg, Context) ->
     {ok, {tree2(Context), Rest}};
-m_get([ menu | Rest ], _Msg, Context) ->
+m_get([ <<"menu">> | Rest ], _Msg, Context) ->
     {ok, {menu(Context), Rest}};
-m_get([ tree_flat | Rest ], _Msg, Context) ->
+m_get([ <<"tree_flat">> | Rest ], _Msg, Context) ->
     {ok, {tree_flat(Context), Rest}};
-m_get([ tree_flat_meta | Rest ], _Msg, Context) ->
+m_get([ <<"tree_flat_meta">> | Rest ], _Msg, Context) ->
     {ok, {tree_flat_meta(Context), Rest}};
-m_get([ is_used, Cat | Rest ], _Msg, Context) ->
+m_get([ <<"is_used">>, Cat | Rest ], _Msg, Context) ->
     {ok, {is_used(Cat, Context), Rest}};
-m_get([ Cat, path | Rest ], _Msg, Context) ->
+m_get([ Cat, <<"path">> | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> get_path(Id, Context);
         {error, _} -> undefined
     end,
     {ok, {V, Rest}};
-m_get([ Cat, is_a | Rest ], _Msg, Context) ->
+m_get([ Cat, <<"is_a">> | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> is_a(Id, Context);
         {error, _} -> undefined
     end,
     {ok, {V, Rest}};
-m_get([ Cat, tree | Rest ], _Msg, Context) ->
+m_get([ Cat, <<"tree">> | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> tree(Id, Context);
         {error, _} -> undefined
     end,
     {ok, {V, Rest}};
-m_get([ Cat, tree_flat | Rest ], _Msg, Context) ->
+m_get([ Cat, <<"tree_flat">> | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> tree_flat(Id, Context);
         {error, _} -> undefined
     end,
     {ok, {V, Rest}};
-m_get([ Cat, tree1 | Rest ], _Msg, Context) ->
+m_get([ Cat, <<"tree1">> | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> tree1(Id, Context);
         {error, _} -> undefined
     end,
     {ok, {V, Rest}};
-m_get([ Cat, tree2 | Rest ], _Msg, Context) ->
+m_get([ Cat, <<"tree2">> | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> tree2(Id, Context);
         {error, _} -> undefined
     end,
     {ok, {V, Rest}};
-m_get([ Cat, image | Rest ], _Msg, Context) ->
+m_get([ Cat, <<"image">> | Rest ], _Msg, Context) ->
     V = case name_to_id(Cat, Context) of
         {ok, Id} -> image(Id, Context);
         {error, _} -> undefined
@@ -857,6 +857,7 @@ renumber_pivot_task(Context) ->
             set_tree_dirty(false, Context),
             ok;
         Ids ->
+            lager:info("Category renumbering of ~p resources", [ length(Ids) ]),
             ok = z_db:transaction(fun(Ctx) ->
                 lists:foreach(
                     fun({Id, CatNr}) ->

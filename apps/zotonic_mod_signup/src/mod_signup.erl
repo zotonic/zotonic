@@ -209,19 +209,21 @@ ensure_identity(Id, {Type, Key, IsUnique, IsVerified}, Context) when is_binary(K
     m_identity:insert(Id, Type, Key, [{is_verified, IsVerified}, {is_unique, IsUnique}], Context).
 
 
+props_to_rsc(Props, IsVerified, Context) when is_list(Props) ->
+    {ok, PropsMap} = z_props:from_list(Props),
+    props_to_rsc(PropsMap, IsVerified, Context);
 props_to_rsc(Props, IsVerified, Context) ->
     Category = z_convert:to_atom(m_config:get_value(mod_signup, member_category, person, Context)),
     ContentGroup = z_convert:to_atom(m_config:get_value(mod_signup, content_group, undefined, Context)),
-    Props1 = [
-        {is_published, IsVerified},
-        {content_group, ContentGroup},
-        {category, Category},
-        {is_verified_account, IsVerified},
-        {creator_id, self},
-        {pref_language, z_context:language(Context)}
-        | Props
-    ],
-    case proplists:is_defined(title, Props1) of
+    Props1 = Props#{
+        <<"is_published">> => IsVerified,
+        <<"content_group">> => ContentGroup,
+        <<"category">> => Category,
+        <<"is_verified_account">> => IsVerified,
+        <<"creator_id">> => self,
+        <<"pref_language">> => z_context:language(Context)
+    },
+    case maps:is_key(<<"title">>, Props1) of
         true ->
             Props1;
         false ->
@@ -229,7 +231,9 @@ props_to_rsc(Props, IsVerified, Context) ->
                 {id, Props1}
             ],
             {Title, _} = z_template:render_to_iolist("_name.tpl", Vs, Context),
-            [ {title, iolist_to_binary(Title)} | Props1 ]
+            Props1#{
+                <<"title">> => iolist_to_binary(Title)
+            }
     end.
 
 
@@ -270,19 +274,19 @@ send_verify_email(UserId, Ident, Context) ->
 manage_schema(install, _Context) ->
     #datamodel{
         resources=[
-            {signup_tos, text, [
-                            {is_published, true},
-                            {page_path, "/terms"},
-                            {title, "Terms of Service"},
-                            {summary, <<"These Terms of Service (\"Terms\") govern your access to and use of the services and COMPANY’s web sites (the \"Services\"), and any information, text, graphics, or other materials uploaded, downloaded or appearing on the Services (collectively referred to as \"Content\"). Your access to and use of the Services is conditioned on your acceptance of and compliance with these Terms. By accessing or using the Services you agree to be bound by these Terms.">>},
-                            {body, "<h2>INSERT YOUR TERMS OF SERVICE HERE</h2>"}
-                        ]},
-            {signup_privacy, text, [
-                            {is_published, true},
-                            {page_path, "/privacy"},
-                            {title, "Privacy Policy"},
-                            {summary, <<"This Privacy Policy describes COMPANY’s policies and procedures on the collection, use and disclosure of your information. COMPANY receives your information through our various web sites, SMS, APIs, services and third-parties (\"Services\"). When using any of our Services you consent to the collection, transfer, manipulation, storage, disclosure and other uses of your information as described in this Privacy Policy. Irrespective of which country that you reside in or create information from, your information may be used by COMPANY in any country where COMPANY operates.">>},
-                            {body, "<h2>INSERT YOUR PRIVACY POLICY HERE</h2>"}
-                        ]}
+            {signup_tos, text, #{
+                <<"is_published">> => true,
+                <<"page_path">> => <<"/terms">>,
+                <<"title">> => <<"Terms of Service">>,
+                <<"summary">> => <<"These Terms of Service (\"Terms\") govern your access to and use of the services and COMPANY’s web sites (the \"Services\"), and any information, text, graphics, or other materials uploaded, downloaded or appearing on the Services (collectively referred to as \"Content\"). Your access to and use of the Services is conditioned on your acceptance of and compliance with these Terms. By accessing or using the Services you agree to be bound by these Terms.">>,
+                <<"body">> => <<"<h2>INSERT YOUR TERMS OF SERVICE HERE</h2>">>
+            }},
+            {signup_privacy, text, #{
+                <<"is_published">> => true,
+                <<"page_path">> => <<"/privacy">>,
+                <<"title">> => <<"Privacy Policy">>,
+                <<"summary">> => <<"This Privacy Policy describes COMPANY’s policies and procedures on the collection, use and disclosure of your information. COMPANY receives your information through our various web sites, SMS, APIs, services and third-parties (\"Services\"). When using any of our Services you consent to the collection, transfer, manipulation, storage, disclosure and other uses of your information as described in this Privacy Policy. Irrespective of which country that you reside in or create information from, your information may be used by COMPANY in any country where COMPANY operates.">>,
+                <<"body">> => <<"<h2>INSERT YOUR PRIVACY POLICY HERE</h2>">>
+            }}
         ]
     }.

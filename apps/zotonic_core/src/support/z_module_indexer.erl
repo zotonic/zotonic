@@ -30,6 +30,7 @@
 %% interface functions
 -export([
     new_ets/0,
+    reindex/0,
     reindex/1,
     index_ref/1,
     translations/1,
@@ -79,6 +80,11 @@ start_link(SiteProps) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, SiteProps, []).
 
+
+%% @doc Reindex all sites
+-spec reindex() -> ok.
+reindex() ->
+    z_sites_manager:foreach(fun reindex/1).
 
 %% @doc Reindex the list of all scomps, etc for the site in the context.
 -spec reindex(z:context()) -> ok.
@@ -273,6 +279,7 @@ handle_cast({scanned_items, Scanned}, State) ->
             z_depcache:set(module_index_ref, erlang:make_ref(), NewState#state.context),
             z_notifier:notify(module_reindexed, NewState#state.context),
             z_depcache:flush(module_index, NewState#state.context),
+            z_file_sup:refresh(),
             {noreply, NewState};
         false ->
             {noreply, State1}

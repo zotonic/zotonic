@@ -16,7 +16,8 @@
             <th>{_ Valid till _}</th>
             <td>
                 {% if cert.certificate.not_after|in_future %}
-                    {{ cert.certificate.not_after|date:"Y-m-d H:i" }}
+                    {{ cert.certificate.not_after|date:"Y-m-d H:i" }}<br>
+                    <span class="text-muted">{{ cert.certificate.not_after|timesince }}</span>
                 {% else %}
                     <span class="text-danger">
                         {{ cert.certificate.not_after|date:"Y-m-d H:i" }}

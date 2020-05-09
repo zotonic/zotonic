@@ -67,6 +67,36 @@
             {_ Enable API to recompile and build Zotonic _}
         </label>
     </div>
+
+    <div>
+        {% wire id="nocache"
+            action={config_toggle module="mod_development" key="nocache"}
+        %}
+        <label class="checkbox-inline">
+            <input type="checkbox" id="nocache" value="1" {% if m.development.nocache %}checked="checked"{% endif %} />
+            {_ Disable caching by the <tt>{% cache %}</tt> tag. _}
+        </label>
+    </div>
+
+    {% if m.modules.provided.server_storage %}
+        <div>
+            {% wire id="dbtrace"
+                    postback=`dbtrace_toggle`
+                    delegate=`z_development_dbtrace`
+            %}
+            <label class="checkbox-inline">
+                <input type="checkbox" id="dbtrace" value="1" {% if m.development.is_dbtrace %}checked="checked"{% endif %} />
+                {_ Trace all database queries for the current session _}
+            </label>
+        </div>
+    {% else %}
+        <div>
+            <p class="help-block">
+                <br>
+                {_ Enable <tt>mod_server_storage</tt> to use database query tracing. _}
+            </p>
+        </div>
+    {% endif %}
 </div>
 
 <h3>{_ Template debugging _}</h2>
@@ -78,15 +108,19 @@
             delegate=`z_development_template`
     %}
     <form id="explain-tpl" class="form-inline" method="GET" action="postback">
-        <select class="form-control" name="tpl_cat">
-            <option value="">{_ Optional category for catinclude _}</option>
-            <option disabled></option>
-            {% for c in m.category.tree_flat %}
-                <option value="{{ c.id.name }}">{{ c.indent }}{{ c.id.name }}</option>
-            {% endfor%}
-        </select>
-        <input class="form-control" type="text" name="tpl_name" placeholder="foo.tpl" value="" />
-        <button class="btn btn-default" type="submit">{_ Find _}</button>
+        <div class="form-group">
+            <select class="form-control" name="tpl_cat">
+                <option value="">{_ Optional category for catinclude _}</option>
+                <option disabled></option>
+                {% for c in m.category.tree_flat %}
+                    <option value="{{ c.id.name }}">{{ c.indent }}{{ c.id.name }}</option>
+                {% endfor%}
+            </select>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="tpl_name" placeholder="foo.tpl" value="" />
+        </div>
+        <button class="btn btn-primary" type="submit">{_ Find _}</button>
     </form>
 
     <div id="explain-tpl-output" style="display:none"></div>
@@ -110,12 +144,16 @@
             delegate=`z_development_dispatch`
     %}
     <form id="explain-dispatch" class="form-inline" method="GET" action="postback">
-        <select id="explain_protocol" name="explain_protocol" class="col-md-4 form-control">
-            <option value="http">http://{{ m.site.hostname }}</option>
-            <option value="https">https://{{ m.site.hostname }}</option>
-        </select>
-        <input class="form-control" type="text" id="explain_req" name="explain_req" placeholder="/foo/bar" value="" />
-        <button class="btn btn-default" type="submit">{_ Explain _}</button>
+        <div class="form-group">
+            <select id="explain_protocol" name="explain_protocol" class="col-md-4 form-control">
+                <option value="http">http://{{ m.site.hostname }}</option>
+                <option value="https">https://{{ m.site.hostname }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" id="explain_req" name="explain_req" placeholder="/foo/bar" value="" />
+        </div>
+        <button class="btn btn-primary" type="submit">{_ Explain _}</button>
     </form>
 
     <div id="explain-dispatch-output" style="display:none"></div>

@@ -38,15 +38,15 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ countries | Rest ], _Msg, Context) ->
+m_get([ <<"countries">> | Rest ], _Msg, Context) ->
     {ok, {countries(Context), Rest}};
-m_get([ country_name, Code | Rest ], _Msg, Context) ->
+m_get([ <<"country_name">>, Code | Rest ], _Msg, Context) ->
     {ok, {country_name(Code, Context), Rest}};
-m_get([ timezones | Rest ], _Msg, _Context) ->
+m_get([ <<"timezones">> | Rest ], _Msg, _Context) ->
     {ok, {timezones(), Rest}};
-m_get([ default_timezone | Rest ], _Msg, Context) ->
+m_get([ <<"default_timezone">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_l10n, timezone, Context), Rest}};
-m_get([ timezone_is_fixed | Rest ], _Msg, Context) ->
+m_get([ <<"timezone_is_fixed">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_l10n, timezone_is_fixed, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),

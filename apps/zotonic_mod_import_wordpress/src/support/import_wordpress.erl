@@ -105,18 +105,17 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
     IsPublished = map_wp_status(element_content("wp:status", Item)),
     PostParent = z_convert:to_integer(element_content("wp:post_parent", Item)),
 
-    Props =
-        [{title, maybe_replace_underscore(Title)},
-         {body, wp_embed_tags(Body)},
-         {summary, Summary},
-         {wp_link, Link},
-         {is_published, IsPublished},
-         {custom_slug, true},
-         {slug, element_content("wp:post_name", Item)},
-         {wp_post_id, element_content("wp:post_id", Item)},
-         {wp_post_parent, PostParent}
-        ],
-
+    Props = #{
+        <<"title">> => maybe_replace_underscore(Title),
+        <<"body">> => wp_embed_tags(Body),
+        <<"summary">> => Summary,
+        <<"wp_link">> => Link,
+        <<"is_published">> => IsPublished,
+        <<"custom_slug">> => true,
+        <<"slug">> => element_content("wp:post_name", Item),
+        <<"wp_post_id">> => element_content("wp:post_id", Item),
+        <<"wp_post_parent">> => PostParent
+    },
     Props1 = case xmerl_xpath:string("wp:attachment_url", Item) of
         [] -> Props;
         [U]->
@@ -126,19 +125,20 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
                     Filename = filename:join(z_path:files_subdir("wp-content", Context), Upath),
                     case filelib:is_regular(Filename) of
                         true ->
-                            [{media_file, z_convert:to_list(Filename)} | Props];
+                            Props#{ <<"media_file">> => Filename };
                         false ->
-                            [{media_url, z_convert:to_list(UText)} | Props]
+                            Props#{ <<"media_url">> => UText }
                     end;
                 _ ->
-                    [{media_url, z_convert:to_list(UText)} | Props]
+                    Props#{ <<"media_url">> => UText }
             end
     end,
 
     Props2 = case z_convert:to_datetime(z_convert:to_list(element_content("wp:post_date", Item))) of
-                 {{0,0,0},{0,0,0}} -> Props1;
-                 D ->
-                     [{publication_start, D}|Props1]
+                {{Y,_,_}, _} = PubDate when Y > 0 ->
+                    Props1#{ <<"publication_start">> => PubDate };
+                _  ->
+                    Props1
              end,
 
     Edges = [],
@@ -175,30 +175,25 @@ import_wxr_item(Item, {Data=#datamodel{resources=R,edges=E}, Base, Context}) ->
                          _ ->
                              Edges3
                      end,
-            Data2 = Data#datamodel{resources=[{Name,Cat,Props2}|R],edges=Edges4++E},
+            Data2 = Data#datamodel{
+                resources =[ {Name,Cat,Props2} | R ],
+                edges = Edges4 ++ E
+            },
             {Data2, Base, Context}
     end.
 
 maybe_replace_underscore(Title) ->
-    Ts = binary_to_list(Title),
-    case lists:any(fun(C) -> C == 32 end, Ts) of
-        true ->
-            Title;
-        false ->
-            list_to_binary(
-                lists:map(
-                    fun
-                        ($_) -> 32;
-                        (C) -> C
-                    end,
-                    Ts))
-    end.
+    binary:replace(Title, <<"_">>, <<" ">>, [global]).
 
 import_wxr_creator(Creator, {Data=#datamodel{resources=R}, Base, Context}) ->
-    Person = {get_xmltext(Creator),
-              person,
-              [{title, get_xmltext(Creator)}]},
-    Data2 = Data#datamodel{resources=[Person|R]},
+    Person = {
+        get_xmltext(Creator),
+        person,
+        #{
+            <<"title">> => get_xmltext(Creator)
+        }
+    },
+    Data2 = Data#datamodel{ resources = [ Person | R ] },
     {Data2, Base, Context}.
 
 
@@ -211,8 +206,15 @@ import_wxr_category(XmlCat, {Data=#datamodel{resources=R}, Base, Context}) ->
                   [] -> <<>>;
                   [El] -> get_xmltext(El)
               end,
-    Cat = {get_xmltext(Name), keyword, [{title, get_xmltext(Title)}, {summary, Summary}]},
-    Data2 = Data#datamodel{resources=[Cat|R]},
+    Cat = {
+        get_xmltext(Name),
+        keyword,
+        #{
+            <<"title">> => get_xmltext(Title),
+            <<"summary">> => Summary
+        }
+    },
+    Data2 = Data#datamodel{ resources = [ Cat | R ] },
     {Data2, Base, Context}.
 
 %% Parse the tags with with posts are tagged.
@@ -222,10 +224,16 @@ import_wxr_tag(XmlCat, {Data=#datamodel{resources=R}, Base, Context}) ->
         undefined ->
             {Data, Base, Context};
         Nm ->
-            Name = "tag_" ++ z_convert:to_list(Nm),
+            Name = <<"tag_", Nm/binary>>,
             Title = get_xmltext(XmlCat),
-            Cat = {Name, keyword, [{title, Title}]},
-            Data2 = Data#datamodel{resources=[Cat|R]},
+            Cat = {
+                Name,
+                keyword,
+                #{
+                    <<"title">> => Title
+                }
+            },
+            Data2 = Data#datamodel{ resources = [ Cat | R ] },
             {Data2, Base, Context}
     end.
 
@@ -265,10 +273,14 @@ collapse_xmltext(Content) ->
 %% @doc Given an XML element, get the value of an attribute.
 %% @spec xml_attrib(atom(), #xmlElement{}) -> binary() | undefined
 xml_attrib(Name, #xmlElement{attributes=Attrs}) ->
-    case lists:filter(fun(#xmlAttribute{name=Nm}) -> Nm =:= Name end, Attrs) of
-        [] -> undefined;
+    case lists:filter(
+        fun(#xmlAttribute{name=Nm}) -> Nm =:= Name end,
+        Attrs)
+    of
+        [] ->
+            undefined;
         [#xmlAttribute{value=Value}|_] ->
-            list_to_binary(Value)
+            unicode:characters_to_binary(Value)
     end.
 
 

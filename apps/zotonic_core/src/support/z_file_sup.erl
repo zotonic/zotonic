@@ -23,27 +23,51 @@
 -export([init/1]).
 
 -export([
-    ensure_file/4
+    ensure_file/4,
+    pause_file/4,
+    refresh/0
     ]).
 
 -define(SERVER, ?MODULE).
 
 ensure_file(Path, Root, OptFilters, Context) ->
+    {ok, Pid} = ensure_file_process(locate, Path, Root, OptFilters, Context),
+    lookup_file(Pid).
+
+pause_file(Path, Root, OptFilters, Context) ->
+    {ok, Pid} = ensure_file_process(paused, Path, Root, OptFilters, Context),
+    z_file_entry:pause(Pid).
+
+ensure_file_process(InitialState, Path, Root, OptFilters, Context) ->
     case z_file_entry:where(Path, Context) of
         Pid when is_pid(Pid) ->
-            lookup_file(Pid);
+            {ok, Pid};
         undefined ->
-            case supervisor:start_child(?SERVER, [Path, Root, OptFilters, Context]) of
+            case supervisor:start_child(?SERVER, [InitialState, Path, Root, OptFilters, Context]) of
                 {ok, Pid} ->
-                    lookup_file(Pid);
+                    {ok, Pid};
                 {error,{already_started, Pid}} ->
-                    lookup_file(Pid)
+                    {ok, Pid}
             end
     end.
 
 lookup_file(Pid) ->
     z_file_entry:lookup(Pid).
 
+
+%% @doc Flush all cached file entries, needed if some missing files are now
+%%      present.
+-spec refresh() -> ok.
+refresh() ->
+    Children = supervisor:which_children(?SERVER),
+    lists:foreach(
+        fun
+            ({_Id, Child, worker, _Modules}) ->
+                z_file_entry:force_stale(Child);
+            (_) ->
+                ok
+        end,
+        Children).
 
 start_link() ->
     supervisor:start_link({local, ?SERVER}, ?MODULE, []).

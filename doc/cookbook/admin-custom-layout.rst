@@ -48,9 +48,9 @@ For the sidebar area you can follow the same procedure. Of course you need to ke
 Category and instance
 ---------------------
 
-To show a block on a category edit page, but not on an instance of that category, check for ``r.is_a.meta``. To show the block "Features" on the category page we write::
+To show a block on a category edit page, but not on an instance of that category, check for ``id.is_a.meta``. To show the block "Features" on the category page we write::
 
-  {% if r.is_a.meta %}
+  {% if id.is_a.meta %}
   {% include "_admin_edit_meta_features.tpl" %}
   {% endif %}
 

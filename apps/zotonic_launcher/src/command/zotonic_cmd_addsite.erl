@@ -67,7 +67,8 @@ run_parse_args(Target, Args) ->
         {ok, {Options, [ Sitename ]}} ->
             case is_valid_sitename(Sitename) of
                 true ->
-                    addsite(Target, Sitename, Options);
+                    Options1 = maybe_default_hostname(Sitename, Options),
+                    addsite(Target, Sitename, Options1);
                 false ->
                     io:format(standard_error,
                               "Invalid site name \"~s\", only use 'a-z', followed by 'a-z', 'A-Z', '0-9' and '_' characters.~n"
@@ -94,6 +95,11 @@ is_valid_sitename(Sitename) ->
         {match, _} -> true;
         nomatch -> false
     end.
+
+maybe_default_hostname(Sitename, #{ hostname := undefined } = Options) ->
+    Options#{ hostname => Sitename ++ ".test" };
+maybe_default_hostname(_Sitename, Options) ->
+    Options.
 
 addsite(_Target, Sitename, #{ hostname := undefined }) ->
     io:format(standard_error, "Please specify the hostname, for example: -H ~s.test~n~n", [ Sitename ]),

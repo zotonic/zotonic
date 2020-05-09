@@ -5,7 +5,8 @@
             {% include "_l10n_timezone_options.tpl" timezone=m.l10n.default_timezone %}
         </select>
         {% wire id="pref_tz"
-            action={config_toggle module="mod_l10n" key="timezone"}
+                type="change"
+                action={config_toggle module="mod_l10n" key="timezone"}
         %}
 
         <p class="help-block">

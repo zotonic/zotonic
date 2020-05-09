@@ -154,7 +154,8 @@ model.present = function(data) {
                     cmd: "logon",
                     username: data.username,
                     password: data.password,
-                    passcode: data.passcode
+                    passcode: data.passcode,
+                    setautologon: !!data.setautologon
                 })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
@@ -205,7 +206,10 @@ model.present = function(data) {
         } else {
             model.state_change('auth_unknown');
         }
-        self.publish("model/auth/event/auth-error", { error: model.authentication_error });
+        self.publish("model/auth/event/auth-error", {
+            error: model.authentication_error,
+            data: data.data
+        });
     }
 
     if (data.is_auth_changed && state.authChanging(model)) {
@@ -414,7 +418,8 @@ actions.authLogonResponse = function(data) {
             model.present({
                     is_auth_error: true,
                     is_fetch_error: false,
-                    error: data.error
+                    error: data.error,
+                    data: data
                 });
             break;
         default:
@@ -444,7 +449,8 @@ actions.logon = function(data) {
         logon: true,
         username: data.username,
         password: data.password,
-        passcode: data.passcode
+        passcode: data.passcode,
+        setautologon: data.rememberme ? true : false
     };
     model.present(dataLogon)
 }
@@ -455,6 +461,7 @@ actions.logonForm = function(data) {
         username: data.value.username,
         password: data.value.password,
         passcode: data.value.passcode,
+        setautologon: data.value.rememberme ? true : false,
         onauth: data.value.onauth
     }
     model.present(dataLogon);
@@ -517,6 +524,7 @@ actions.resetPassword = function(msg) {
         password: msg.payload.password,
         secret: msg.payload.secret,
         passcode: msg.payload.passcode,
+        setautologon: msg.payload.rememberme ? true : false,
         onauth: msg.payload.onauth || null
     };
     model.present(data);

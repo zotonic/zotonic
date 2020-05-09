@@ -41,18 +41,33 @@ render_action(TriggerId, TargetId, Args, Context) ->
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={set_username_password, Id, OnDelete}}, Context) ->
-    {Username, Password} = case m_identity:get_username(Id, Context) of
-                                undefined -> {<<>>, <<>>};
-                                Name -> {Name, ?PASSWORD_DOTS}
-                            end,
+    Username = m_identity:get_username(Id, Context),
     Vars = [
         {delegate, atom_to_binary(?MODULE, 'utf8')},
         {id, Id},
         {username, Username},
-        {password, Password},
         {on_delete, OnDelete}
     ],
     z_render:dialog(?__("Set username / password", Context), "_action_dialog_set_username_password.tpl", Vars, Context);
+
+event(#postback{message={delete_username, Args}}, Context) ->
+    Id = m_rsc:rid(proplists:get_value(id, Args), Context),
+    case {z_acl:is_allowed(use, mod_admin_identity, Context), z_acl:user(Context)} of
+        {_, Id} ->
+            z_render:growl_error(?__("Sorry, you can not remove your own username.", Context), Context);
+        {true, _} when Id =:= 1 ->
+            z_render:growl_error(?__("The admin user can not be removed.", Context), Context);
+        {true, _} ->
+            case m_identity:delete_username(Id, Context) of
+                ok ->
+                    Context1 = z_render:growl(?__("Deleted the user account.", Context), Context),
+                    z_render:wire(proplists:get_all_values(on_delete, Args), Context1);
+                {error, _} ->
+                    z_render:growl_error(?__("You are not allowed to delete this user account.", Context), Context)
+            end;
+        {false, _} ->
+            z_render:growl_error(?__("Only an administrator or the user him/herself can set a password.", Context), Context)
+    end;
 
 event(#submit{message=set_username_password}, Context) ->
     Id = z_convert:to_integer(z_context:get_q(<<"id">>, Context)),
@@ -62,7 +77,7 @@ event(#submit{message=set_username_password}, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) orelse z_acl:user(Context) == Id of
         true ->
             case Password of
-                ?PASSWORD_DOTS ->
+                <<>> ->
                     % Only change the username
                     case m_identity:set_username(Id, Username, Context) of
                         ok ->
@@ -80,13 +95,13 @@ event(#submit{message=set_username_password}, Context) ->
                             z_render:growl_error(?__("The username is already in use, please try another.", Context), Context);
                         ok ->
                             case z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)) of
-                            true ->
-                                Vars = [{id, Id},
-                                        {username, Username},
-                                        {password, Password}],
-                                z_email:send_render(m_rsc:p(Id, email_raw, Context), "email_admin_new_user.tpl", Vars, Context);
-                            false ->
-                                nop
+                                true ->
+                                    Vars = [{id, Id},
+                                            {username, Username},
+                                            {password, Password}],
+                                    z_email:send_render(m_rsc:p(Id, email_raw, Context), "email_admin_new_user.tpl", Vars, Context);
+                                false ->
+                                    nop
                             end,
                             z_render:wire([
                                 {dialog_close, []},

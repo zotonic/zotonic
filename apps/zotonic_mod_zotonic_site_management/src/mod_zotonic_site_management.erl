@@ -54,14 +54,13 @@ event(#submit{message=addsite, form=Form}, Context) ->
         {ok, {Site, FinalOptions}} ->
             progress(Sitename, ?__("Starting the new site ...", Context), Context),
             ok = z_sites_manager:upgrade(),
-            ok = z_sites_manager:start(Site),
-            ok = z_sites_manager:await_startup(Site),
+            _ = z_sites_manager:start(Site),
             lager:info("[zotonic_site_status] Success creating site ~s", [Site]),
             case await(Site) of
                 ok ->
                     lager:info("[zotonic_site_status] Site ~s is running", [Site]),
-                    timer:sleep(2000),
                     SiteContext = z_context:new(Site),
+                    z_module_manager:upgrade_await(SiteContext),
                     Vars = [
                         {admin_url, abs_url_for(admin, SiteContext)},
                         {site_url, z_context:abs_url(<<"/">>, SiteContext)},
@@ -70,8 +69,8 @@ event(#submit{message=addsite, form=Form}, Context) ->
                     ],
                     Context1 = notice(Form, Site, ?__("Succesfully created the site.", Context), Context),
                     z_render:replace(Form, #render{vars=Vars, template="_addsite_success.tpl"}, Context1);
-                error ->
-                    lager:error("[zotonic_site_status] Newly created site ~s is NOT running", [Site]),
+                {error, StartError} ->
+                    lager:error("[zotonic_site_status] Newly created site ~s is NOT running (~p)", [Site, StartError]),
                     notice(Form, Site, ?__("Something is wrong, site is not starting. Please check the logs.", Context), Context)
             end;
         {error, Msg} when is_list(Msg); is_binary(Msg) ->
@@ -80,19 +79,30 @@ event(#submit{message=addsite, form=Form}, Context) ->
             notice(Form, Sitename, io_lib:format("~p", [Msg]), Context)
     end.
 
-%% @todo we need a better way to know if a site is up and running
+%% @doc Wait till the site is up and running. Timeout after 100 seconds.
 await(Site) ->
-    timer:sleep(1000),
     await(Site, 0).
 
 await(_Site, Tries) when Tries > 100 ->
-    error;
+    {error, timeout};
 await(Site, Tries) ->
+    timer:sleep(1000),
     case z_sites_manager:get_site_status(Site) of
-        {ok, running} -> ok;
-        _Other ->
-            timer:sleep(100),
-            await(Site, Tries+1)
+        {ok, running} ->
+            ok;
+        {ok, starting} ->
+            timer:sleep(1000),
+            await(Site, Tries+1);
+        {ok, new} ->
+            timer:sleep(1000),
+            await(Site, Tries+1);
+        {ok, retrying} ->
+            timer:sleep(1000),
+            await(Site, Tries+1);
+        {ok, Other} ->
+            {error, Other};
+        {error, _} = Error ->
+            Error
     end.
 
 abs_url_for(Dispatch, Context) ->

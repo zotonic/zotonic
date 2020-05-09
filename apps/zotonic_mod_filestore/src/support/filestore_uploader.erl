@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2020 Marc Worrell
 %% @doc Process uploading a file to a remote storage.
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@
     code_change/3,
     terminate/2,
 
-    force_stale/2
+    stale_file_entry/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -41,22 +41,26 @@
 -record(state, {
         id,
         path,
-        props,
+        media_info,
         context
     }).
 
-start_link(Id, Path, Props, Context) ->
+start_link(Id, Path, MediaInfo, Context) ->
     Path1 = z_convert:to_binary(Path),
-    gen_server:start_link({via, z_proc, {{upload, Path1}, Context}}, ?MODULE, [Id, Path1, Props, Context], []).
+    gen_server:start_link(
+        {via, z_proc, {{upload, Path1}, Context}},
+        ?MODULE,
+        [Id, Path1, MediaInfo, Context],
+        []).
 
-init([Id, Path, Props, Context]) ->
+init([Id, Path, MediaInfo, Context]) ->
     z_context:lager_md(Context),
     lager:debug("Started uploader for ~p", [Path]),
     gen_server:cast(self(), start),
     {ok, #state{
             id = Id,
             path = Path,
-            props = Props,
+            media_info = MediaInfo,
             context = Context
         }}.
 
@@ -64,31 +68,14 @@ handle_call(Msg, _From, State) ->
     lager:error("Unknown call: ~p", [Msg]),
     {reply, {error, unknown_msg}, State}.
 
-handle_cast(start, #state{id=Id, path=Path, context=Context, props=Props} = State) ->
+handle_cast(start, #state{path=Path, context=Context} = State) ->
     case m_filestore:lookup(Path, Context) of
-        undefined ->
-            RscId = proplists:get_value(id, Props),
-            case z_notifier:first(#filestore_credentials_lookup{id=RscId, path=Path}, Context) of
-                {ok, #filestore_credentials{} = Cred} ->
-                    case handle_upload(Path, Cred, Context) of
-                        ok ->
-                            m_filestore:dequeue(Id, Context),
-                            {stop, normal, State};
-                        fatal ->
-                            m_filestore:dequeue(Id, Context),
-                            {stop, normal, State};
-                        retry ->
-                            lager:debug("Filestore upload of ~p, sleeping 30m for retry.", [Path]),
-                            timer:send_after(?RETRY_DELAY, restart),
-                            {noreply, State, hibernate}
-                    end;
-                undefined ->
-                    lager:debug("Filestore no credentials found for ~p", [Path]),
-                    m_filestore:dequeue(Id, Context),
-                    {stop, normal, State}
-            end;
-        _Entry ->
-            m_filestore:dequeue(Id, Context),
+        {ok, Entry} ->
+            try_upload(Entry, State);
+        {error, enoent} ->
+            try_upload(undefined, State);
+        {error, _} = Error ->
+            lager:error("Filestore upload error reading for path ~p: ~p", [ Path, Error ]),
             {stop, normal, State}
     end;
 handle_cast(stop, State) ->
@@ -111,6 +98,42 @@ terminate(_Reason, _State) ->
 
 %%% ------ Support routines --------
 
+try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInfo} = State) ->
+    case m_filestore:is_upload_ok(MaybeEntry) of
+        true ->
+            RscId = maps:get(<<"id">>, MInfo, undefined),
+            case z_notifier:first(#filestore_credentials_lookup{id=RscId, path=Path}, Context) of
+                {ok, #filestore_credentials{} = Cred} ->
+                    case handle_upload(Path, Cred, Context) of
+                        ok ->
+                            m_filestore:dequeue(Id, Context),
+                            {stop, normal, State};
+                        fatal ->
+                            m_filestore:dequeue(Id, Context),
+                            {stop, normal, State};
+                        retry ->
+                            lager:info("Filestore upload of ~p, sleeping 30m for retry.", [Path]),
+                            timer:send_after(?RETRY_DELAY, restart),
+                            {noreply, State, hibernate}
+                    end;
+                undefined ->
+                    lager:info("Filestore no credentials found for ~p", [Path]),
+                    m_filestore:dequeue(Id, Context),
+                    {stop, normal, State}
+            end;
+        false ->
+            case m_filestore:is_download_ok(MaybeEntry) of
+                true ->
+                    % Already uploaded - we can safely delete the file.
+                    AbsPath = z_path:abspath(Path, Context),
+                    file:delete(AbsPath);
+                false ->
+                    ok
+            end,
+            m_filestore:dequeue(Id, Context),
+            {stop, normal, State}
+    end.
+
 handle_upload(Path, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),
     case file:read_file_info(AbsPath) of
@@ -131,18 +154,25 @@ handle_upload(Path, Cred, Context) ->
 do_upload(#filestore_credentials{service= <<"s3">>, location=Location, credentials=Cred}, Data) ->
     s3filez:put(Cred, Location, Data).
 
-%% @doc Remember the new location in the m_filestore, move the file to the filezcache and delete the archived file
+%% @doc Remember the new location in the m_filestore, move the file to the filezcache and delete the file
 finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, location=Location}, Context) ->
-    lager:debug("Moved ~p to ~p : ~p", [Path, Service, Location]),
+    lager:info("Filestore moved ~p to ~p : ~p", [Path, Service, Location]),
     FzCache = start_empty_cache_entry(Location),
     {ok, _} = m_filestore:store(Path, Size, Service, Location, Context),
+    % Make sure that the file entry is not serving the relocated file from the file system.
+    pause_file_entry(Path, Context),
+    AbsPathTmp = <<AbsPath/binary, "~">>,
+    _ = file:rename(AbsPath, AbsPathTmp),
+    % After the file entry is marked stale it will do a new lookup, and will find
+    % the file stored in the filecache.
+    stale_file_entry(Path, Context),
+    % The file entries are waiting for the cache process, which is monitoring the current process
     case FzCache of
         {ok, Pid} ->
-            force_stale(Path, Context),
-            filezcache_entry:store(Pid, {tmpfile, AbsPath});
+            ok = filezcache_entry:store(Pid, {tmpfile, AbsPathTmp});
         {error, _} = Error ->
-            lager:warning("Error moving to cache entry ~p (moving ~p): ~p", [Location, Path, Error]),
-            file:delete(AbsPath),
+            lager:warning("Filestore error moving to cache entry ~p (moving ~p): ~p", [Location, Path, Error]),
+            file:delete(AbsPathTmp),
             ok
     end;
 finish_upload({error, _} = Error, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context) ->
@@ -161,7 +191,10 @@ start_empty_cache_entry(Location) ->
             Error
     end.
 
-force_stale(Path, Context) ->
+pause_file_entry(Path, Context) ->
+    z_file_request:pause(file_entry_path(Path), Context).
+
+stale_file_entry(Path, Context) ->
     z_file_request:force_stale(file_entry_path(Path), Context).
 
 file_entry_path(<<"archive/", Path/binary>>) ->

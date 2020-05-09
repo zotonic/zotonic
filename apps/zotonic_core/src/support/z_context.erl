@@ -89,6 +89,8 @@
     client_id/1,
     client_topic/1,
 
+    session_id/1,
+
     set/3,
     set/2,
     get/2,
@@ -489,9 +491,10 @@ ensure_qs(#context{ props = Props } = Context) ->
             QPropsUrl = Props#{ q => PathArgs++Query },
             ContextQs = Context#context{ props = QPropsUrl },
             % Auth user via cookie - set language
-            ContextReq = z_notifier:foldl(#request_context{}, ContextQs, ContextQs),
+            ContextReq = z_notifier:foldl(#request_context{ phase = init }, ContextQs, ContextQs),
+            ContextReq2 = z_notifier:foldl(#request_context{ phase = refresh }, ContextReq, ContextReq),
             % Parse the POST body (if any)
-            {Body, ContextParsed} = parse_post_body(ContextReq),
+            {Body, ContextParsed} = parse_post_body(ContextReq2),
             QPropsAll = (ContextParsed#context.props)#{ q => PathArgs++Body++Query },
             ContextParsed#context{ props = QPropsAll }
     end.
@@ -744,6 +747,10 @@ lager_md(Context) ->
     lager_md([], Context).
 
 lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
+    SessionId = case session_id(Context) of
+        {ok, Sid} -> Sid;
+        {error, _} -> undefined
+    end,
     lager:md([
             {site, site(Context)},
             {user_id, Context#context.user_id},
@@ -752,8 +759,7 @@ lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
             {method, m_req:get(method, Context)},
             {remote_ip, m_req:get(peer, Context)},
             {is_ssl, m_req:get(is_ssl, Context)},
-            % {session_id, Context#context.session_id},
-            % {page_id, Context#context.page_id},
+            {session_id, SessionId},
             {req_id, m_req:get(req_id, Context)}
             | MetaData
         ]).
@@ -773,13 +779,25 @@ client_id(#context{ client_id = ClientId }) ->
 client_topic(#context{ client_topic = ClientTopic }) ->
     ClientTopic.
 
-%% @spec set(Key, Value, Context) -> Context
+%% @doc Return the unique random session id for the current client auth.
+%%      This session_id is re-assigned when the authentication of a client
+%%      changes.
+-spec session_id( z:context() ) -> {ok, binary()} | {error, no_session}.
+session_id(Context) ->
+    case get(auth_options, Context) of
+        #{ sid := Sid } ->
+            {ok, Sid};
+        _ ->
+            {error, no_session}
+    end.
+
 %% @doc Set the value of the context variable Key to Value
+-spec set( atom(), term(), z:context() ) -> z:context().
 set(Key, Value, #context{ props = Props } = Context) ->
     Context#context{ props = Props#{ Key => Value } }.
 
-%% @spec set(PropList, Context) -> Context
 %% @doc Set the value of the context variables to all {Key, Value} properties.
+-spec set( proplists:proplist(), z:context() ) -> z:context().
 set(PropList, Context) when is_list(PropList) ->
     NewProps = lists:foldl(
         fun
@@ -791,13 +809,13 @@ set(PropList, Context) when is_list(PropList) ->
     Context#context{ props = NewProps }.
 
 
-%% @spec get(Key, Context) -> Value | undefined
 %% @doc Fetch the value of the context variable Key, return undefined when Key is not found.
+-spec get( atom(), z:context() ) -> term() | undefined.
 get(Key, Context) ->
     get(Key, Context, undefined).
 
-%% @spec get(Key, Context, Default) -> Value | Default
 %% @doc Fetch the value of the context variable Key, return Default when Key is not found.
+-spec get( atom(), z:context(), term() ) -> term().
 get(Key, Context, Default) ->
     get_1(Key, Context, Default).
 
@@ -1003,11 +1021,40 @@ set_security_headers(Context) ->
         true -> Default;
         false -> [ {<<"x-frame-options">>, <<"sameorigin">>} | Default ]
     end,
-    SecurityHeaders = case z_notifier:first(#security_headers{ headers = Default1 }, Context) of
-        undefined -> Default1;
+    HSTSHeaders = case hsts_header(Context) of
+        {_,_} = H -> [ H | Default1 ];
+        _ -> Default1
+    end,
+    SecurityHeaders = case z_notifier:first(#security_headers{ headers = HSTSHeaders }, Context) of
+        undefined -> HSTSHeaders;
         Custom -> Custom
     end,
     cowmachine_req:set_resp_headers(SecurityHeaders, Context).
+
+%% @doc Create a hsts header based on the current settings. The result is cached
+%%      for quick access.
+-spec hsts_header( z:context() ) -> undefined | {_, _}.
+hsts_header(Context) ->
+    case z_convert:to_bool(m_config:get_value(site, hsts, false, Context)) of
+        true ->
+            F = fun() ->
+                MaxAge = z_convert:to_integer(m_config:get_value(site, hsts_maxage, ?HSTS_MAXAGE, Context)),
+                IncludeSubdomains = z_convert:to_bool(m_config:get_value(site, hsts_include_subdomains, false, Context)),
+                Preload = z_convert:to_bool(m_config:get_value(site, preload, false, Context)),
+                Options = case {IncludeSubdomains, Preload} of
+                    {true, true} -> <<"; includeSubDomains; preload">>;
+                    {true, _} -> <<"; includeSubDomains">>;
+                    {_, true} -> <<"; preload">>;
+                    {_, _} -> <<"">>
+                end,
+                HSTS = iolist_to_binary([ <<"max-age=">>, z_convert:to_binary(MaxAge), Options ]),
+                {<<"strict-transport-security">>, HSTS}
+            end,
+            z_depcache:memo(F, hsts_header, ?DAY, [config], Context);
+        false ->
+            undefined
+    end.
+
 
 %% @doc Set Cross-Origin Resource Sharing (CORS) headers. The caller must
 %%      specify default headers to be used in case there are no observers for

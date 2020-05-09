@@ -270,25 +270,32 @@ find_nested_value(V, [K|Ks], TplVars, Context) ->
     find_nested_value(find_value(K, V, TplVars, Context), Ks, TplVars, Context).
 
 
+-define(is_property_key(K), (is_binary(K) orelse is_atom(K))).
+-define(is_resource(K), (is_integer(K) orelse is_binary(K) orelse is_atom(K))).
+
 %% @doc Find the value of key in some structure.
 -spec find_value(Key :: term(), Vars :: term(), TplVars :: map(), Context :: term()) -> term().
 find_value(undefined, _, _TplVars, _Context) ->
     undefined;
 find_value(_, undefined, _TplVars, _Context) ->
     undefined;
-find_value(Key, [N|_], _TplVars, Context) when is_atom(Key), is_integer(N) ->
+find_value(Key, [N|_], _TplVars, Context) when ?is_property_key(Key), is_integer(N) ->
     % Assume a predicate/property lookup in a list of ids, map to lookup of first entry
     m_rsc:p(N, Key, Context);
-find_value(Key, Id, _TplVars, Context) when is_atom(Key), is_integer(Id) ->
+find_value(Key, Id, _TplVars, Context) when ?is_property_key(Key), ?is_resource(Id) ->
     % Property of a resource, just assume an integer is a rsc id
     m_rsc:p(Id, Key, Context);
-find_value(Key, RscName, _TplVars, Context) when is_atom(Key), is_atom(RscName) ->
-    % Property of a resource, just assume an integer is a rsc id
-    m_rsc:p(RscName, Key, Context);
 find_value(Name, [[{A,_}|_]|_] = Blocks, _TplVars, _Context ) when is_atom(A), not is_integer(Name) ->
-    % List of proplists - blocks in the rsc
+    % List of proplists - blocks in the old style list rsc
     NameB = z_convert:to_binary(Name),
     case lists:dropwhile(fun(Ps) -> proplists:get_value(name, Ps) =/= NameB end, Blocks) of
+        [] -> undefined;
+        [Block|_] -> Block
+    end;
+find_value(Name, [#{}|_] = Blocks, _TplVars, _Context ) when not is_integer(Name) ->
+    % List of maps - blocks in the rsc
+    NameB = z_convert:to_binary(Name),
+    case lists:dropwhile( fun (B) -> maps:get(<<"name">>, B, undefined) =/= NameB end, Blocks ) of
         [] -> undefined;
         [Block|_] -> Block
     end;
@@ -441,6 +448,8 @@ builtin_tag_1(image, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_tag(Expr, Args, Context);
 builtin_tag_1(image_url, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_url(Expr, Args, Context);
+builtin_tag_1(image_data_url, Expr, Args, _Vars, Context) ->
+    z_media_tag:scomp_data_url(Expr, Args, Context);
 builtin_tag_1(media, Expr, Args, _Vars, Context) ->
     z_media_tag:scomp_viewer(Expr, Args, Context);
 builtin_tag_1(Tag, _Expr, _Args, _Vars, Context) ->
@@ -474,7 +483,12 @@ cache_tag(MaxAge, Name, Args, Fun, TplVars, Context) ->
     end.
 
 do_cache(Args, Context) ->
-    do_cache1(z_convert:to_bool(proplists:get_value('if', Args, true)), Args, Context).
+    case z_convert:to_bool( m_config:get_value(mod_development, nocache, Context) ) of
+        true ->
+            false;
+        false ->
+            do_cache1(z_convert:to_bool(proplists:get_value('if', Args, true)), Args, Context)
+    end.
 
 do_cache1(true, Args, Context) ->
     case z_convert:to_bool(proplists:get_value(if_anonymous, Args, false)) of
@@ -555,8 +569,24 @@ to_render_result(#m_search_result{result=#search_result{result=Result}}, _TplVar
     io_lib:format("~p", [Result]);
 to_render_result(#rsc_list{list=L}, _TplVars, _Context) ->
     io_lib:format("~p", [L]);
-to_render_result({trans, _} = Trans, TplVars, Context) ->
+to_render_result(#trans{} = Trans, TplVars, Context) ->
     z_trans:lookup_fallback(Trans, set_context_vars(TplVars, Context));
+to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
+    % A list, which could be an unicode string but also a nested render result.
+    % Assume that all integers are meant to be unicode characters.
+    lists:map(
+        fun
+            (V) when is_integer(V), V >= 0, V =< 127 -> V;
+            (V) when is_integer(V), V >= 128 ->
+                try
+                    <<V/utf8>>
+                catch
+                    error:badarg -> integer_to_binary(V)
+                end;
+            (V) when is_binary(V) -> V;
+            (V) -> to_render_result(V, TplVars, Context)
+        end,
+        Vs);
 to_render_result(V, TplVars, Context) ->
     template_compiler_runtime:to_render_result(V, TplVars, Context).
 

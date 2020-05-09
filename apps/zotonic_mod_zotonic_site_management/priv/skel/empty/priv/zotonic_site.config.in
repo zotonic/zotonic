@@ -3,6 +3,10 @@
     %% This site is enabled or not.
     {enabled, true},
 
+    % DTAP status of this site
+    % One of: development, test, acceptance, production, education, or backup
+    {environment, development},
+
     %% Hostname on which this site runs
     {hostname, "%%SITEHOSTNAME%%"},
 
@@ -28,6 +32,7 @@
 
     %% Modules installed on site (re)start
     {modules, [
+        mod_cron,
         mod_base,
         mod_bootstrap,
         mod_menu,

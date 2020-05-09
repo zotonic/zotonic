@@ -50,10 +50,10 @@ event(#submit{message={duplicate_page, ActionProps}}, Context) ->
     Title   = z_context:get_q(<<"new_rsc_title">>, Context),
     IsPublished = z_context:get_q(<<"is_published">>, Context),
 
-    Props = [
-        {title, Title},
-        {is_published, IsPublished}
-    ],
+    Props = #{
+        <<"title">> => Title,
+        <<"is_published">> => IsPublished
+    },
     {ok, NewId} = m_rsc:duplicate(Id, Props, Context),
 
     % Close the dialog and redirect to the edit page of the new resource

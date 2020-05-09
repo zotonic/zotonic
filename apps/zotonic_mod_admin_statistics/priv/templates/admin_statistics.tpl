@@ -35,26 +35,28 @@
 
 <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
     <div class="panel panel-default">
-        <div class="panel-heading">Broker</div>
+        <div class="panel-heading">Database</div>
+
         <div class="panel-body">
             <table class="table table-condensed">
                 <thead></thead>
                 <tbody>
-                    {% for title, id in [ ["Sessions", "broker-session_count"],
-                                          ["Subscribes/min", "broker-subscribe_one"],
-                                          ["Publishes/min", "broker-publish_one"],
-                                          ["Subscribers", "broker-destinations"],
-                                          ["Nodes", "broker-nodes"],
-                                          ["Edges", "broker-edges"],
-                                          ["Wildcards", "broker-wildcards"],
-                                          ["Paths", "broker-paths"] ] %}
-                        {% include "_stat_row.tpl" %}
+                    {% for title, id in [ ["Requests", ""] ] %}
+                    {% include "_stat_row.tpl" %}
                     {% endfor %}
                 </tbody>
+                {% javascript %}
+                //$("#statistics-run_queue").data("render", render_value);
+                {% endjavascript %}
             </table>
         </div>
     </div>
 </div>
+
+<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+    {% include "stat_panel/broker.tpl" %}
+</div>
+
 
 <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
     <div class="panel panel-default">
@@ -258,27 +260,6 @@ function unit(u, per) {
     let collected = {};
 
     cotonic.broker.publish("model/ui/insert/the-stats", {initialData: "<tr><td>...</td></tr>", inner: true});
-
-    cotonic.broker.subscribe("bridge/origin/$SYS/site/blog/broker/+what", function(msg, args) {
-        switch(args.what) {
-            case "subscribe":
-                $("#broker-subscribe_one").html(msg.payload.one);
-                break;
-            case "publish":
-                $("#broker-publish_one").html(msg.payload.one);
-                break;
-            case "session_count":
-                $("#broker-session_count").html(msg.payload.count);
-                break;
-            case "router_info":
-                $("#broker-nodes").html(msg.payload.nodes);
-                $("#broker-edges").html(msg.payload.edges);
-                $("#broker-wildcards").html(msg.payload.wildcards);
-                $("#broker-paths").html(msg.payload.paths);
-                $("#broker-destinations").html(msg.payload.destinations);
-                break;
-        }
-    })
 
     cotonic.broker.subscribe("bridge/origin/$SYS/site/blog/cowmachine/+dispatch/+what", function(msg, args) {
         let c = collected[args.dispatch];

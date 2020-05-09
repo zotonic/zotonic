@@ -10,6 +10,10 @@
     %% CSS, Javascript and images from the "lib" module folders. Possibly more than one file combined in a single request.
     {lib, ["lib",'*'], controller_file, [ {root,[lib]}]},
 
+    %% Automatically minified CSS, Javascript from the "lib-min" module folders. %% The files are minified with the css and js minifier implementations in
+    %% git@github.com:zotonic/z_stdlib.git
+    {lib_min, ["lib-min",'*'], controller_file, [ {root,[lib]}, {minify, true} ]},
+
     {image, ["image",'*'], controller_file, []},
 
     {media_attachment, ["media","attachment","id",id], controller_file_id, [ {dispatch, media_attachment}]},

@@ -30,7 +30,7 @@
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 % Error, unknown lookup.
-m_get([ render | TemplatePath ], Msg, Context) when is_map(Msg) ->
+m_get([ <<"render">> | TemplatePath ], Msg, Context) when is_map(Msg) ->
     Template = to_template(TemplatePath),
     Payload = case maps:get(payload, Msg, #{}) of
         undefined -> #{};

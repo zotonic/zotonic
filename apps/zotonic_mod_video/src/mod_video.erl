@@ -31,8 +31,8 @@
 -define(SERVER, ?MODULE).
 
 -define(TEMP_IMAGE, <<"images/processing.gif">>).
-% -define(POSTER_IMAGE, <<"images/poster.png">>).
 -define(BROKEN_IMAGE, <<"images/broken.png">>).
+% -define(POSTER_IMAGE, <<"images/poster.png">>).
 
 -define(TASK_DELAY, 3600).
 
@@ -66,7 +66,7 @@ observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/mp4">>, 
 observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/x-mp4-broken">>}, Context) ->
     do_media_upload_broken(Context);
 observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/", _/binary>>, medium=Medium} = Upload, Context) ->
-    case proplists:get_value(is_video_ok, Medium) of
+    case maps:get(<<"is_video_ok">>, Medium, undefined) of
         true ->
             undefined;
         undefined ->
@@ -77,7 +77,7 @@ observe_media_upload_preprocess(#media_upload_preprocess{}, _Context) ->
 
 do_media_upload_preprocess(Upload, Context) ->
     case z_module_indexer:find(lib, ?TEMP_IMAGE, Context) of
-        {ok, #module_index{filepath=Filename}} ->
+        {ok, #module_index{ filepath = Filename }} ->
             ProcessNr = z_ids:identifier(20),
             PostFun = fun(InsId, InsMedium, InsContext) ->
                           ?MODULE:post_insert_fun(InsId, InsMedium, Upload, ProcessNr, InsContext)
@@ -88,16 +88,16 @@ do_media_upload_preprocess(Upload, Context) ->
                 file = undefined,
                 post_insert_fun = PostFun,
                 original_filename = undefined,
-                medium = [
-                    {preview_filename, <<"lib/", ?TEMP_IMAGE/binary>>},
-                    {preview_width, proplists:get_value(width, MInfo)},
-                    {preview_height, proplists:get_value(height, MInfo)},
-                    {width, proplists:get_value(width, MInfo)},
-                    {height, proplists:get_value(height, MInfo)},
-                    {is_deletable_preview, false},
-                    {is_video_processing, true},
-                    {video_processing_nr, ProcessNr}
-                ]
+                medium = #{
+                    <<"preview_filename">> => <<"lib/", ?TEMP_IMAGE/binary>>,
+                    <<"preview_width">> => maps:get(<<"width">>, MInfo, undefined),
+                    <<"preview_height">> => maps:get(<<"height">>, MInfo, undefined),
+                    <<"width">> => maps:get(<<"width">>, MInfo, undefined),
+                    <<"height">> => maps:get(<<"height">>, MInfo, undefined),
+                    <<"is_deletable_preview">> => false,
+                    <<"is_video_processing">> => true,
+                    <<"video_processing_nr">> => ProcessNr
+                }
             };
         {error, enoent} ->
             undefined
@@ -108,19 +108,19 @@ do_media_upload_broken(Context) ->
         {ok, #module_index{filepath=Filename}} ->
             {ok, MInfo} = z_media_identify:identify_file(Filename, Context),
             #media_upload_preprocess{
-               mime = <<"video/mp4">>,
-               file = undefined,
-               original_filename = undefined,
-               medium = [
-                         {preview_filename, <<"lib/", ?BROKEN_IMAGE/binary>>},
-                         {preview_width, proplists:get_value(width, MInfo)},
-                         {preview_height, proplists:get_value(height, MInfo)},
-                         {width, proplists:get_value(width, MInfo)},
-                         {height, proplists:get_value(height, MInfo)},
-                         {is_deletable_preview, false},
-                         {is_video_broken, true}
-                        ]
-              };
+                 mime = <<"video/mp4">>,
+                 file = undefined,
+                 original_filename = undefined,
+                 medium = #{
+                     <<"preview_filename">> => <<"lib/", ?BROKEN_IMAGE/binary>>,
+                     <<"preview_width">> => maps:get(<<"width">>, MInfo, undefined),
+                     <<"preview_height">> => maps:get(<<"height">>, MInfo, undefined),
+                     <<"width">> => maps:get(<<"width">>, MInfo, undefined),
+                     <<"height">> => maps:get(<<"height">>, MInfo, undefined),
+                     <<"is_deletable_preview">> => false,
+                     <<"is_video_broken">> => true
+              }
+            };
         {error, enoent} ->
             undefined
     end.
@@ -131,57 +131,71 @@ observe_media_upload_props(#media_upload_props{archive_file=undefined, mime= <<"
 observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <<"video/", _/binary>>}, Medium, Context) ->
     FileAbs = z_media_archive:abspath(File, Context),
     Info = video_info(FileAbs),
-    Info2 = case video_preview(FileAbs, Info) of                {ok, TmpFile} ->
-                    PreviewFilename = preview_filename(Id, Context),
-                    PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
-                    ok = z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context),
-                    _ = file:delete(TmpFile),
-                    [
-                        {preview_filename, PreviewFilename},
-                        {preview_width, proplists:get_value(width, Info)},
-                        {preview_height, proplists:get_value(height, Info)},
-                        {is_deletable_preview, true}
-                        | Info
-                    ];
-                {error, _} ->
-                    Info
-            end,
+    Info2 = case video_preview(FileAbs, Info) of
+        {ok, TmpFile} ->
+            PreviewFilename = preview_filename(Id, Context),
+            PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
+            ok = z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context),
+            _ = file:delete(TmpFile),
+            Info#{
+                <<"preview_filename">> => PreviewFilename,
+                <<"preview_width">> => maps:get(<<"width">>, Info, undefined),
+                <<"preview_height">> => maps:get(<<"height">>, Info, undefined),
+                <<"is_deletable_preview">> => true
+            };
+        {error, _} ->
+            Info
+    end,
     z_utils:props_merge(Info2, Medium);
 observe_media_upload_props(#media_upload_props{}, Medium, _Context) ->
     Medium.
 
 
 %% @doc Return the media viewer for the mp4 video
--spec observe_media_viewer(#media_viewer{}, #context{}) -> undefined | {ok, list()|binary()}.
+-spec observe_media_viewer(#media_viewer{}, z:context()) -> undefined | {ok, template_compiler:render_result()}.
 observe_media_viewer(#media_viewer{props=Props, options=Options}, Context) ->
-    case proplists:get_value(mime, Props) of
+    case maps:get(<<"mime">>, Props, undefined) of
         <<"video/mp4">> ->
-            {ok, z_template:render(#render{template="_video_viewer.tpl", vars=[{props,Props},{options,Options}]}, Context)};
+            Vars = [
+                {props, Props},
+                {options, Options}
+            ],
+            {ok, z_template:render(#render{template="_video_viewer.tpl", vars = Vars}, Context)};
         _ ->
             undefined
     end.
 
 
 %% @doc Return the filename of a still image to be used for image tags.
--spec observe_media_stillimage(#media_stillimage{}, #context{}) -> undefined | {ok, file:filename()}.
-observe_media_stillimage(#media_stillimage{props=Props}, _Context) ->
-    case proplists:get_value(mime, Props) of
-        <<"video/mp4">> ->
-            case z_convert:to_list(proplists:get_value(preview_filename, Props)) of
-                [] -> {ok, "lib/images/poster.png"};
-                PreviewFile -> {ok, PreviewFile}
-            end;
-        _ ->
-            undefined
-    end.
+-spec observe_media_stillimage(#media_stillimage{}, z:context()) -> undefined | {ok, file:filename_all()}.
+observe_media_stillimage(#media_stillimage{ props = #{ <<"mime">> := <<"video/mp4">> } = Props }, _Context) ->
+    case z_convert:to_binary(maps:get(<<"preview_filename">>, Props, undefined)) of
+        <<>> -> {ok, <<"lib/images/poster.png">>};
+        PreviewFile -> {ok, PreviewFile}
+    end;
+observe_media_stillimage(#media_stillimage{}, _Context) ->
+    undefined.
 
+%% --------------- Supervisor callbacks ---------------
 
 start_link(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     ensure_job_queues(),
     supervisor:start_link({local, z_utils:name_for_site(?SERVER, Context)}, ?MODULE, []).
 
+init([]) ->
+    Element = {z_video_convert, {z_video_convert, start_link, []},
+               temporary, brutal_kill, worker, [z_video_convert]},
+    Children = [Element],
+    RestartStrategy = {simple_one_for_one, 0, 1},
+    {ok, {RestartStrategy, Children}}.
+
+%% --------------- Support routines ---------------
+
 ensure_job_queues() ->
+  jobs:run(zotonic_singular_job, fun ensure_job_queues_1/0).
+
+ensure_job_queues_1() ->
     case jobs:queue_info(video_jobs) of
         undefined ->
             jobs:add_queue(video_jobs, [
@@ -208,14 +222,6 @@ ensure_job_queues() ->
         {queue, _} ->
             ok
     end.
-
-
-init([]) ->
-    Element = {z_video_convert, {z_video_convert, start_link, []},
-               temporary, brutal_kill, worker, [z_video_convert]},
-    Children = [Element],
-    RestartStrategy = {simple_one_for_one, 0, 1},
-    {ok, {RestartStrategy, Children}}.
 
 
 %% @doc The medium record has been inserted, queue a conversion
@@ -258,30 +264,29 @@ queue_path(Filename, Context) ->
 
 video_info(Path) ->
     Cmdline = case z_config:get(ffprobe_cmdline) of
-                  undefined -> ?FFPROBE_CMDLINE;
-                  <<>> -> ?FFPROBE_CMDLINE;
-                  "" -> ?FFPROBE_CMDLINE;
-                  CmdlineCfg -> z_convert:to_list(CmdlineCfg)
-              end,
+        undefined -> ?FFPROBE_CMDLINE;
+        <<>> -> ?FFPROBE_CMDLINE;
+        "" -> ?FFPROBE_CMDLINE;
+        CmdlineCfg -> z_convert:to_list(CmdlineCfg)
+    end,
     FfprobeCmd = lists:flatten([
-                                Cmdline, " ",
-                                z_utils:os_filename(Path)
-                               ]),
+           Cmdline, " ", z_utils:os_filename(Path)
+       ]),
     lager:debug("Video info: ~p", [FfprobeCmd]),
     JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
     try
         Ps = decode_json(JSONText),
         {Width, Height, Orientation} = fetch_size(Ps),
-        [
-         {duration, fetch_duration(Ps)},
-         {width, Width},
-         {height, Height},
-         {orientation, Orientation}
-        ]
+        #{
+            duration => fetch_duration(Ps),
+            width => Width,
+            height => Height,
+            orientation => Orientation
+        }
     catch
         error:E ->
             lager:warning("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
-            []
+            #{}
     end.
 
 decode_json(JSONText) ->
@@ -293,16 +298,16 @@ fetch_duration(_) ->
     0.
 
 fetch_size(#{<<"streams">> := Streams}) ->
-    [Video | _] = lists:dropwhile(
-                            fun({#{<<"codec_type">> := CodecType}}) ->
-                                    CodecType =/= <<"video">>
-                            end, Streams),
+    [ Video | _ ] = lists:dropwhile(
+        fun( { #{<<"codec_type">> := CodecType} } ) ->
+           CodecType =/= <<"video">>
+        end,
+        Streams),
     #{
         <<"width">> := Width,
         <<"height">> := Height,
         <<"tags">> := Tags
     } = Video,
-
     Orientation = orientation(Tags),
     case Orientation of
         6 -> {Height, Width, Orientation};
@@ -327,43 +332,44 @@ orientation(_) ->
     1.
 
 video_preview(MovieFile, Props) ->
-    Duration = proplists:get_value(duration, Props),
+    #{
+        duration := Duration,
+        orientation := Orientation
+    } = Props,
     Start = case Duration of
-                N when N =< 1 -> 0;
-                N when N =< 30 -> 1;
-                _ -> 10
-            end,
+        N when N =< 1 -> 0;
+        N when N =< 30 -> 1;
+        _ -> 10
+    end,
     Cmdline = case z_config:get(ffmpeg_preview_cmdline) of
-                  undefined -> ?PREVIEW_CMDLINE;
-                  <<>> -> ?PREVIEW_CMDLINE;
-                  "" -> ?PREVIEW_CMDLINE;
-                  CmdlineCfg -> z_convert:to_list(CmdlineCfg)
-              end,
+        undefined -> ?PREVIEW_CMDLINE;
+        <<>> -> ?PREVIEW_CMDLINE;
+        "" -> ?PREVIEW_CMDLINE;
+        CmdlineCfg -> z_convert:to_list(CmdlineCfg)
+    end,
     TmpFile = z_tempfile:new(),
     FfmpegCmd = z_convert:to_list(
-                  iolist_to_binary(
-                    [
-                     case string:str(Cmdline, "-itsoffset") of
-                        0 -> io_lib:format(Cmdline, [MovieFile]);
-                        _ -> io_lib:format(Cmdline, [Start, MovieFile])
-                     end,
-                     " ",
-                     orientation_to_transpose(proplists:get_value(orientation, Props)),
-                     z_utils:os_filename(TmpFile)
-                    ]
-                   )),
+        iolist_to_binary([
+            case string:str(Cmdline, "-itsoffset") of
+                0 -> io_lib:format(Cmdline, [MovieFile]);
+                _ -> io_lib:format(Cmdline, [Start, MovieFile])
+            end,
+            " ",
+            orientation_to_transpose(Orientation),
+            z_utils:os_filename(TmpFile)
+        ])),
     jobs:run(media_preview_jobs,
-             fun() ->
-                     lager:info("Video preview: ~p", [FfmpegCmd]),
-                     case os:cmd(FfmpegCmd) of
-                         [] ->
-                            lager:info("Preview ok, file: ~p", [TmpFile]),
-                            {ok, TmpFile};
-                         Other ->
-                            lager:warning("Video preview error: ~p", [Other]),
-                            {error, Other}
-                     end
-             end).
+        fun() ->
+            lager:info("Video preview: ~p", [FfmpegCmd]),
+            case os:cmd(FfmpegCmd) of
+                [] ->
+                   lager:info("Preview ok, file: ~p", [TmpFile]),
+                   {ok, TmpFile};
+                Other ->
+                   lager:warning("Video preview error: ~p", [Other]),
+                   {error, Other}
+            end
+        end).
 
 orientation_to_transpose(8) -> " -vf 'transpose=2' ";
 orientation_to_transpose(3) -> " -vf 'transpose=2,transpose=2' ";

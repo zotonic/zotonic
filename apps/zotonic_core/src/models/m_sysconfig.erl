@@ -30,9 +30,15 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ Key | Rest ], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
-        true -> {ok, {z_config:get(Key), Rest}};
-        false -> {error, eacces}
+    try
+        KeyAtom = erlang:binary_to_existing_atom(Key, utf8),
+        case z_acl:is_admin(Context) of
+            true -> {ok, {z_config:get(KeyAtom), Rest}};
+            false -> {error, eacces}
+        end
+    catch
+        error:badarg ->
+            {ok, {undefined, Rest}}
     end;
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),

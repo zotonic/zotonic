@@ -24,12 +24,14 @@
 -mod_description("Logs debug/info/warning messages into the site's database.").
 -mod_prio(1000).
 -mod_schema(1).
+-mod_depends([ cron ]).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 -export([
     observe_search_query/2,
+    observe_tick_1m/2,
     observe_tick_1h/2,
     pid_observe_zlog/3,
     observe_admin_menu/3,
@@ -79,6 +81,9 @@ pid_observe_zlog(Pid, #zlog{ props = #log_email{} = Msg }, _Context) ->
     gen_server:cast(Pid, {log, Msg});
 pid_observe_zlog(_Pid, #zlog{}, _Context) ->
     undefined.
+
+observe_tick_1m(tick_1m, Context) ->
+    check_db_pool_health(Context).
 
 observe_tick_1h(tick_1h, Context) ->
     m_log:periodic_cleanup(Context),
@@ -201,6 +206,33 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+%% @private Check the health of the db pool. When usage is to high a warning will be %% put in the log.
+check_db_pool_health(Context) ->
+    Site = z_context:site(Context),
+    Advice = "please increase the pool size.",
+    case exometer:get_value([zotonic, Site, db, pool_full], one) of
+        {ok, [{one, FullCounts}]} when FullCounts > 0 ->
+            z:error("Database pool is exhausted, ~s",
+                    [Advice],
+                    [{module, ?MODULE}, {line, ?LINE}],
+                    Context);
+        {ok, _} ->
+            ok;
+        {error, not_found} ->
+            ok
+    end,
+    case exometer:get_value([zotonic, Site, db, pool_high_usage], one) of
+        {ok, [{one, HighCounts}]} when HighCounts > 0 ->
+            z:info("Database pool usage is close to exhaustion, ~s", [Advice],
+                   [{module, ?MODULE}, {line, ?LINE}],
+                   Context);
+        {ok, _} ->
+            ok;
+        {error, not_found} ->
+            ok
+    end.
 
 
 handle_simple_log(#log_message{ user_id = UserId, type = Type, message = Msg, props = Props }, State) ->

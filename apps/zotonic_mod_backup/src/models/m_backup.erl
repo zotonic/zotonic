@@ -26,16 +26,16 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ admin_panel | Rest ], _Msg, Context) ->
+m_get([ <<"admin_panel">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_backup, admin_panel, Context), Rest}};
-m_get([ daily_dump | Rest ], _Msg, Context) ->
+m_get([ <<"daily_dump">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_backup, daily_dump, Context), Rest}};
-m_get([ list_backups | Rest ], _Msg, Context) ->
+m_get([ <<"list_backups">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true -> {ok, {mod_backup:list_backups(Context), Rest}};
         false -> {error, eacces}
     end;
-m_get([ is_backup_in_progress | Rest ], _Msg, Context) ->
+m_get([ <<"is_backup_in_progress">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true -> {ok, {mod_backup:backup_in_progress(Context), Rest}};
         false -> {error, eacces}

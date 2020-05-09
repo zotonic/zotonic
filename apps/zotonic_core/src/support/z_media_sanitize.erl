@@ -36,7 +36,7 @@ sanitize(#media_upload_preprocess{ mime = <<"text/csv">> } = PP, Context) ->
     sanitize_csv(PP, Context);
 sanitize(#media_upload_preprocess{ mime = <<"application/xml+html">> } = PP, Context) ->
     sanitize_html(PP, Context);
-sanitize(#media_upload_preprocess{mime = Mime} = PP, _Context) when is_binary(Mime)  ->
+sanitize(#media_upload_preprocess{ mime = Mime } = PP, _Context) when is_binary(Mime)  ->
     PP.
 
 sanitize_svg(#media_upload_preprocess{file=File} = PP) ->
@@ -44,7 +44,7 @@ sanitize_svg(#media_upload_preprocess{file=File} = PP) ->
     Svg = z_svg:sanitize(Bin),
     TmpFile = z_tempfile:new(".svg"),
     ok = file:write_file(TmpFile, Svg),
-    PP#media_upload_preprocess{file=TmpFile}.
+    PP#media_upload_preprocess{ file = TmpFile }.
 
 sanitize_html(#media_upload_preprocess{file=File} = PP, Context) ->
     {ok, Bin} = file:read_file(File),
@@ -61,10 +61,11 @@ sanitize_csv(#media_upload_preprocess{file=File} = PP, _Context) ->
 
 %% @doc Check the contents of an identified file, to see if it is acceptable for further processing.
 %%      Catches files that might be problematic for ImageMagick or other file processors.
--spec is_file_acceptable( file:filename_all(), list() ) -> boolean().
-is_file_acceptable(File, MediaProps) when is_list(MediaProps) ->
-    Mime = z_convert:to_binary(proplists:get_value(mime, MediaProps)),
-    is_file_acceptable_1(Mime, File, MediaProps).
+-spec is_file_acceptable( file:filename_all(), z_media_identify:media_info() ) -> boolean().
+is_file_acceptable(File, #{ <<"mime">> := Mime } = MediaProps) ->
+    is_file_acceptable_1(Mime, File, MediaProps);
+is_file_acceptable(_File, #{}) ->
+    true.
 
 % is_file_acceptable_1(<<"image/svg+xml">>, File, _MediaProps) ->
 %     {ok, Bin} = file:read_file(File),

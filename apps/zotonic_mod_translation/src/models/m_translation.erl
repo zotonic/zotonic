@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
+%% @copyright 2013-2020 Marc Worrell
 %%
 %% @doc Model for access to language lists etc
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -40,27 +40,29 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ rewrite_url | Rest ], _Msg, Context) ->
+m_get([ <<"rewrite_url">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_translation, rewrite_url, true, Context), Rest}};
-m_get([ force_default | Rest ], _Msg, Context) ->
-    {ok, {m_config:get_boolean(mod_translation, rewrite_url, false, Context), Rest}};
-m_get([ language | Rest ], _Msg, Context) ->
+m_get([ <<"force_default">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_translation, force_default, false, Context), Rest}};
+m_get([ <<"language">> | Rest ], _Msg, Context) ->
     {ok, {z_context:language(Context), Rest}};
-m_get([ language_list_configured | Rest ], _Msg, Context) ->
+m_get([ <<"language_list_configured">> | Rest ], _Msg, Context) ->
     {ok, {language_list_configured(Context), Rest}};
-m_get([ language_list_enabled | Rest ], _Msg, Context) ->
+m_get([ <<"language_list_enabled">> | Rest ], _Msg, Context) ->
     {ok, {language_list_enabled(Context), Rest}};
-m_get([ default_language | Rest ], _Msg, Context) ->
+m_get([ <<"language_list_editable">> | Rest ], _Msg, Context) ->
+    {ok, {language_list_editable(Context), Rest}};
+m_get([ <<"default_language">> | Rest ], _Msg, Context) ->
     {ok, {default_language(Context), Rest}};
-m_get([ main_languages | Rest ], _Msg, _Context) ->
+m_get([ <<"main_languages">> | Rest ], _Msg, _Context) ->
     {ok, {main_languages(), Rest}};
-m_get([ all_languages | Rest ], _Msg, _Context) ->
+m_get([ <<"all_languages">> | Rest ], _Msg, _Context) ->
     {ok, {all_languages(), Rest}};
-m_get([ enabled_language_codes | Rest ], _Msg, Context) ->
+m_get([ <<"enabled_language_codes">> | Rest ], _Msg, Context) ->
     {ok, {z_language:enabled_language_codes(Context), Rest}};
-m_get([ language_list | Rest ], _Msg, Context) ->
+m_get([ <<"language_list">> | Rest ], _Msg, Context) ->
     {ok, {z_language:language_list(Context), Rest}};
-m_get([ language_stemmer | Rest ], _Msg, Context) ->
+m_get([ <<"language_stemmer">> | Rest ], _Msg, Context) ->
     Stemmer = case m_config:get_value(i18n, language_stemmer, Context) of
         undefined -> default_language(Context);
         <<>> -> default_language(Context);
@@ -75,17 +77,39 @@ default_language(Context) ->
     z_language:default_language(Context).
 
 language_list_configured(Context) ->
+    Default = default_language(Context),
     Config = mod_translation:language_config(Context),
     List = lists:map(
-        fun({Code, IsEnabled}) ->
-            Props = z_language:properties(Code),
-            {Code, Props#{ is_enabled => IsEnabled} }
+        fun
+            ({Code, _}) when Code =:= Default ->
+                Props = z_language:properties(Code),
+                {Code, Props#{ is_enabled => true, is_editable => true, is_default => true } };
+            ({Code, true}) ->
+                Props = z_language:properties(Code),
+                {Code, Props#{ is_enabled => true, is_editable => true, is_default => false } };
+            ({Code, editable}) ->
+                Props = z_language:properties(Code),
+                {Code, Props#{ is_enabled => false, is_editable => true, is_default => false } };
+            ({Code, false}) ->
+                Props = z_language:properties(Code),
+                {Code, Props#{ is_enabled => false, is_editable => false, is_default => false } }
         end,
         Config),
-    sort(List).
+    % Ensure the default language is enabled
+    List1 = case Default =:= undefined orelse proplists:is_defined(Default, Config) of
+        true ->
+            List;
+        false ->
+            Props = z_language:properties(Default),
+            [ {Default, Props#{ is_enabled => true, is_editable => true, is_default => true } } | List ]
+    end,
+    sort(List1).
 
 language_list_enabled(Context) ->
 	sort_codes(mod_translation:enabled_languages(Context)).
+
+language_list_editable(Context) ->
+    sort_codes(mod_translation:editable_languages(Context)).
 
 main_languages() ->
     sort(z_language:main_languages()).

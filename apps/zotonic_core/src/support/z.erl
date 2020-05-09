@@ -36,26 +36,28 @@
     ld/0,
     ld/1,
 
+    reindex/0,
+
     shell_stopsite/1,
     shell_startsite/1,
     shell_restartsite/1,
 
     debug_msg/3,
 
-     log/3,
+    log/3,
 
-     debug/2,
-     debug/3,
-     debug/4,
-     info/2,
-     info/3,
-     info/4,
-     warning/2,
-     warning/3,
-     warning/4,
-     error/2,
-     error/3,
-     error/4
+    debug/2,
+    debug/3,
+    debug/4,
+    info/2,
+    info/3,
+    info/4,
+    warning/2,
+    warning/3,
+    warning/4,
+    error/2,
+    error/3,
+    error/4
 ]).
 
 -include("zotonic.hrl").
@@ -70,11 +72,13 @@
 
 -type context() :: #context{}.
 -type validation_error() :: invalid | novalue | {script, string()} | novalidator | string().
+-type trans() :: #trans{}.
 
 -type severity() :: debug | info | warning | error | fatal.
 
 -export_type([
     context/0,
+    trans/0,
     environment/0,
     validation_error/0,
     severity/0
@@ -118,6 +122,10 @@ flush(Context) ->
     z_depcache:flush(Context),
     z_dispatcher:reload(Context),
     n(module_ready, Context).
+
+%% @doc Reindex all sites, find new files.
+reindex() ->
+    z_module_indexer:reindex().
 
 %% @doc Full restart of Zotonic
 restart() ->

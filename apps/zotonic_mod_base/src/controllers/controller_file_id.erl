@@ -101,32 +101,27 @@ do_redirect(_Id, undefined, Context) ->
     {false, Context};
 do_redirect(undefined, _Medium, Context) ->
     {false, Context};
-do_redirect(_Id, Medium, Context) ->
-    case proplists:get_value(filename, Medium) of
-        <<>> ->
-            {false, Context};
-        undefined ->
-            {false, Context};
-        Filename ->
-            Dispatch = z_context:get(dispatch, Context, media_inline),
-            Args = z_context:get_all(Context),
-            Args1 = case z_context:get(qargs, Context) of
-                        undefined ->
-                            Args;
-                        true ->
-                            z_context:get_q_all(Context) ++ Args;
-                        ArgList when is_list(ArgList) ->
-                            [{K, z_context:get_q(K, Context)} || K <- ArgList ] ++ Args
-                    end,
-            Args2 = lists:foldl(fun(K, Acc) ->
-                                    proplists:delete(K, Acc)
-                                end,
-                                Args1,
-                                [ id, star, ?MODULE | z_dispatcher:dispatcher_args() ]),
-            Location = z_dispatcher:url_for(Dispatch, [{star, Filename}|Args2], Context),
-            {{true, z_context:abs_url(Location, Context)}, Context}
-    end.
-
+do_redirect(_Id, #{ <<"filename">> := Filename }, Context)
+    when is_binary(Filename), Filename =/= <<>> ->
+    Dispatch = z_context:get(dispatch, Context, media_inline),
+    Args = z_context:get_all(Context),
+    Args1 = case z_context:get(qargs, Context) of
+                undefined ->
+                    Args;
+                true ->
+                    z_context:get_q_all(Context) ++ Args;
+                ArgList when is_list(ArgList) ->
+                    [{K, z_context:get_q(K, Context)} || K <- ArgList ] ++ Args
+            end,
+    Args2 = lists:foldl(fun(K, Acc) ->
+                            proplists:delete(K, Acc)
+                        end,
+                        Args1,
+                        [ id, star, ?MODULE | z_dispatcher:dispatcher_args() ]),
+    Location = z_dispatcher:url_for(Dispatch, [{star, Filename}|Args2], Context),
+    {{true, z_context:abs_url(Location, Context)}, Context};
+do_redirect(_Id, _Medium, Context) ->
+    {false, Context}.
 
 get_id(Context) ->
     case z_context:get(id, Context) of

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2020 Marc Worrell
 %%
 %% @doc Locate a file and (if needed) generate a preview. Used by z_file_entry.erl
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ extract_filters(Path, OptFilters, Context) ->
                                 undefined -> [];
                                 _ -> OptFilters
                             end,
-                            {SafePath, OriginalFile, Filters1 ++ PreviewPropList};
+                            {SafePath, z_convert:to_binary(OriginalFile), Filters1 ++ PreviewPropList};
                         {error, _} ->
                             {SafePath, SafePath, OptFilters}
                     end
@@ -76,8 +76,6 @@ extract_filters(Path, OptFilters, Context) ->
     end.
 
 % Find all files, possibly starting a preview-request
-locate_source(NoRoots, Path, "lib/"++OriginalFile, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->
-    locate_source([lib], Path, OriginalFile, Filters, Context);
 locate_source(NoRoots, Path, <<"lib/",OriginalFile/binary>>, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->
     locate_source([lib], Path, OriginalFile, Filters, Context);
 locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= undefined; NoRoots =:= [] ->
@@ -85,7 +83,7 @@ locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= un
         {error, preview_source_gone} ->
             throw(preview_source_gone);
         {error, _} = Error->
-            lager:debug("Could not find ~p, error ~p, original ~p", [Path, Error, OriginalFile]),
+            lager:debug("Could not find '~s', error ~p, original '~s'", [Path, Error, OriginalFile]),
             #part_missing{file = Path};
         {ok, Loc} ->
             Loc
@@ -94,6 +92,9 @@ locate_source([ModuleIndex|Roots], Path, OriginalFile, Filters, Context) when is
     case locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) of
         {ok, Loc} ->
             Loc;
+        {error, eacces} ->
+            lager:info("No access to file '~s', original '~s'", [Path, OriginalFile]),
+            locate_source(Roots, Path, OriginalFile, Filters, Context);
         {error, enoent} ->
             locate_source(Roots, Path, OriginalFile, Filters, Context)
     end;
@@ -123,13 +124,13 @@ locate_source([DirName|Rs], Path, OriginalFile, Filters, Context) ->
 %%      Resized images are located in files/preview.
 locate_source_module_indexer(lib, Path, OriginalFile, [], Context) ->
     locate_source_module_indexer(lib, Path, OriginalFile, undefined, Context);
-locate_source_module_indexer(ModuleIndex, Path, _OriginalFile, undefined, Context) ->
-    case z_module_indexer:find(ModuleIndex, Path, Context) of
+locate_source_module_indexer(ModuleIndex, _Path, OriginalFile, undefined, Context) ->
+    case z_module_indexer:find(ModuleIndex, OriginalFile, Context) of
         {ok, #module_index{filepath=FoundFile}} ->
             part_file(FoundFile, []);
         {error, enoent} ->
             % Try to find ".tpl" version -> render and cache result
-            TplFile = <<Path/binary, ".tpl">>,
+            TplFile = <<OriginalFile/binary, ".tpl">>,
             case z_module_indexer:find(template, TplFile, Context) of
                 {ok, #module_index{} = M} ->
                     {ok, render(M, Context)};
@@ -138,13 +139,13 @@ locate_source_module_indexer(ModuleIndex, Path, _OriginalFile, undefined, Contex
             end
     end;
 locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) ->
-    case locate_in_filestore(Path, z_path:media_preview(Context), [], Context) of
+    case locate_in_filestore(Path, z_path:media_preview(Context), #{}, Context) of
         {ok, Part} ->
             {ok, Part};
         {error, enoent} ->
             case z_module_indexer:find(ModuleIndex, OriginalFile, Context) of
                 {ok, #module_index{filepath=FoundFile}} ->
-                    maybe_generate_preview(Path, FoundFile, Filters, [], Context);
+                    maybe_generate_preview(Path, FoundFile, Filters, #{}, Context);
                 {error, _} = Error ->
                     Error
             end
@@ -152,7 +153,7 @@ locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) 
 
 %% @doc Locate an uploaded file, stored in the archive.
 locate_source_uploaded(<<"preview/", _/binary>> = Path, OriginalFile, Filters, Context) ->
-    locate_source_uploaded_1([], Path, OriginalFile, Filters, Context);
+    locate_source_uploaded_1(#{}, Path, OriginalFile, Filters, Context);
 locate_source_uploaded(Path, OriginalFile, Filters, Context) ->
     case m_media:get_by_filename(OriginalFile, Context) of
         undefined ->
@@ -173,25 +174,26 @@ locate_source_uploaded_1(Medium, Path, OriginalFile, Filters, Context) ->
 
 locate_in_filestore(Path, InDir, Medium, Context) ->
     FSPath = z_convert:to_binary(filename:join(filename:basename(InDir), Path)),
+    OptRscId = maps:get(<<"id">>, Medium, undefined),
     case z_notifier:first(#filestore{action=lookup, path=FSPath}, Context) of
-        {ok, {filezcache, Pid, Opts}} when is_pid(Pid) ->
+        {ok, {filezcache, Pid, #{ created := Created, size := Size }}} when is_pid(Pid) ->
             {ok, #part_cache{
                 cache_pid=Pid,
-                cache_monitor=erlang:monitor(process, Pid),
-                modified=proplists:get_value(created, Opts),
-                acl=proplists:get_value(id, Medium),
-                size=proplists:get_value(size, Opts)
+                cache_monitor = erlang:monitor(process, Pid),
+                modified = Created,
+                acl = OptRscId,
+                size = Size
             }};
-        {ok, {filename, FoundFilename, Opts}} ->
-            part_file(FoundFilename, [{acl,proplists:get_value(id, Medium)}|Opts]);
-        {ok, {data, Data, Opts}} when is_list(Opts) ->
+        {ok, {filename, FoundFilename, #{ modified := Modified }}} ->
+            part_file(FoundFilename, [ {acl,OptRscId}, {modified, Modified} ]);
+        {ok, {data, Data, #{ modified := Modified }}} ->
             {ok, #part_data{
-                data=Data,
-                modified=proplists:get_value(modified, Opts),
-                acl=proplists:get_value(id, Medium)
+                data = Data,
+                modified = Modified,
+                acl = OptRscId
             }};
         undefined ->
-            part_file(filename:join(InDir, Path), [{acl,proplists:get_value(id, Medium)}])
+            part_file(filename:join(InDir, Path), [{acl,OptRscId}])
     end.
 
 part_missing(Filename) ->
@@ -201,6 +203,12 @@ part_missing(Filename) ->
 
 part_file(Filename, Opts) ->
     case file:read_file_info(Filename) of
+        {ok, #file_info{access = none}} ->
+            % No access
+            {error, eacces};
+        {ok, #file_info{access = write}} ->
+            % Only write access
+            {error, eacces};
         {ok, #file_info{size=Size, type=regular, mtime=MTime}} ->
             {ok, #part_file{
                     size=Size,
@@ -241,7 +249,7 @@ generate_preview(true, Path, OriginalFile, Filters, Medium, Context) ->
                 ok ->
                     FileStorePath = z_convert:to_binary(filename:join([filename:basename(PreviewDir), Path])),
                     z_notifier:first(#filestore{action=upload, path=FileStorePath}, Context),
-                    case proplists:get_value(id, Medium) of
+                    case maps:get(<<"id">>, Medium, undefined) of
                         undefined ->
                             part_file(PreviewFilePath, []);
                         RscId ->
@@ -272,7 +280,7 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
         {ok, #module_index{filepath=Path}} ->
             case z_media_preview:convert(z_convert:to_list(Path), Path, z_convert:to_list(PreviewFilePath), Filters, Context) of
                 ok ->
-                    case proplists:get_value(id, Medium) of
+                    case maps:get(<<"id">>, Medium, undefined) of
                         undefined ->
                             part_file(PreviewFilePath, []);
                         RscId ->
@@ -291,7 +299,7 @@ convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
 
 
 fetch_archive(File, Context) ->
-    case locate_in_filestore(File, z_path:media_archive(Context), [], Context) of
+    case locate_in_filestore(File, z_path:media_archive(Context), #{}, Context) of
         {ok, #part_file{filepath=Filename}} ->
             {ok, Filename};
         {ok, #part_cache{cache_pid=Pid}} ->

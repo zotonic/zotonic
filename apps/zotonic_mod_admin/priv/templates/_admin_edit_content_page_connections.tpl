@@ -41,7 +41,7 @@
 {% endwith %}
 {% if not hide_referrers %}
     <div class="form-group">
-       <a class="btn btn-default btn-sm" href="{% url admin_referrers id=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all referrers _}</a>
+       <a class="btn btn-default btn-sm" href="{% url admin_edges qhasobject=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all referrers _}</a>
     </div>
 {% endif %}
 {% endblock %}

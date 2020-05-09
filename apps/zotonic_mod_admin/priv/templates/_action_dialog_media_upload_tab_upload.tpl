@@ -31,6 +31,33 @@
                 </div>
             </div>
 
+            {% if not id %}
+                {% if subject_id %}
+                    <div class="form-group row">
+                        <div class="col-md-9 col-md-offset-3">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1">
+                                    {_ Delete after disconnecting from _} {{ subject_id.title }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="form-group row">
+                    <div class="col-md-9 col-md-offset-3">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
+                                    {% if subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}checked{% endif %}>
+                                {_ Published _}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="modal-footer">
                 {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
                 {% button class="btn btn-primary" type="submit" text=_"Upload file" %}

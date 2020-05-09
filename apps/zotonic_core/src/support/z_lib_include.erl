@@ -1,12 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% Date: 2009-07-22
-%% @copyright (c) 2009 Marc Worrell
+%% @copyright (c) 2009-2020 Marc Worrell
 %% @doc Support for the {% lib filename ... %} tag in the templates.
-%% Generates the <link /> or <script /> tag for css or js files.  Also
+%% Generates the &lt;link /&gt; or %lt;script /%gt; tag for css or js files.  Also
 %% adds the greatest modification date so that updates are loaded by
 %% the browser.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -66,8 +65,13 @@ url(Files, Args, Context) ->
 
 url_for(_F, [], _Ext, _Args, _Context) -> [];
 url_for(F, P, Ext, Args, Context) ->
-    [z_dispatcher:url_for(lib, url_for_args(F, P, Ext, Args, Context), Context)].
+    [z_dispatcher:url_for(lib(Context), url_for_args(F, P, Ext, Args, Context), Context)].
 
+lib(Context) ->
+    case z_convert:to_bool(m_site:get(minification_enabled, Context)) of
+        true -> lib_min;
+        false -> lib
+    end.
 
 tag1(Files, Args, Context) ->
     F = fun() ->
@@ -93,13 +97,13 @@ link_element(Css, CssPath, Args, Context) ->
            end,
     MediaAttr = [<<" media=\"">>, proplists:get_value(media, Args, "all"), $"],
     RelAttr = [<<" rel=\"">>, proplists:get_value(rel, Args, "stylesheet"), $"],
-    CssUrl = z_dispatcher:url_for(lib, url_for_args(Css, CssPath, <<".css">>, Args, Context), Context),
+    CssUrl = z_dispatcher:url_for(lib(Context), url_for_args(Css, CssPath, <<".css">>, Args, Context), Context),
     iolist_to_binary([<<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>, MediaAttr, TitleAttr, RelAttr, $/, $>]).
 
 script_element(_Js, [], _Args, _Context) ->
     [];
 script_element(Js, JsPath, Args, Context) ->
-    JsUrl = z_dispatcher:url_for(lib, url_for_args(Js, JsPath, <<".js">>, Args, Context), Context),
+    JsUrl = z_dispatcher:url_for(lib(Context), url_for_args(Js, JsPath, <<".js">>, Args, Context), Context),
     iolist_to_binary([<<"<script src=\"">>, JsUrl, <<"\" type=\"text/javascript\"></script>">>]).
 
 url_for_args(Files, JoinedPath, Extension, Args, Context) ->
@@ -122,92 +126,93 @@ collapsed_paths(Files) ->
 
 
 %% @doc Given the filepath of the request, return all files collapsed in the path.
-%% @spec uncollapse(string()|binary()) -> list()
+-spec uncollapse( string() | binary() ) -> [ binary() ].
 uncollapse(Path) when is_binary(Path) ->
-    add_extension(uncollapse_dirs(binary:split(Path, <<?SEP>>, [global])));
-uncollapse(Path) when is_list(Path) ->
-    add_extension(uncollapse_dirs(string:tokens(Path, [?SEP]))).
+    add_extension( uncollapse_dirs(binary:split(Path, <<?SEP>>, [global])) );
+uncollapse(Path) ->
+    uncollapse( z_convert:to_binary(Path) ).
 
 add_extension([]) ->
     [];
-add_extension([File]) ->
-    [File];
-add_extension([TimestampExt | Files]) ->
+add_extension([ File ]) ->
+    [ File ];
+add_extension([ TimestampExt | Files ]) ->
     Extension = filename:extension(TimestampExt),
-    lists:foldl(fun(F, Acc) -> [add_extension_1(F,Extension)|Acc] end, [], Files).
+    lists:foldl(
+        fun(F, Acc) ->
+            [ add_extension_1(F,Extension) | Acc ]
+        end,
+        [],
+        Files).
 
 add_extension_1(F, Ext) when is_binary(F) ->
     Ext1 = z_convert:to_binary(Ext),
-    <<F/binary, Ext1/binary>>;
-add_extension_1(F, Ext) when is_list(F) ->
-    F ++ Ext.
+    <<F/binary, Ext1/binary>>.
 
 uncollapse_dirs([]) ->
     [];
-uncollapse_dirs([File|Rest]) ->
+uncollapse_dirs([ File | Rest ]) ->
     case filename:dirname(File) of
-        [X] when X =:= $. orelse X =:= $/ ->
-            uncollapse_dirs(Rest, [], [File]);
         <<X>> when X =:= $. orelse X =:= $/ ->
-            uncollapse_dirs(Rest, [], [File]);
+            uncollapse_dirs(Rest, <<>>, [File]);
         N ->
             uncollapse_dirs(Rest, N, [File])
     end.
 
 uncollapse_dirs([], _Dirname, Acc) ->
     Acc;
-uncollapse_dirs([Rest], _Dirname, Acc) ->
-    uncollapse_dirs([], [], [Rest|Acc]);
-uncollapse_dirs([[$/|_]=File|Rest], _Dirname, Acc) ->
-    uncollapse_dirs(Rest, filename:dirname(File), [File|Acc]);
-uncollapse_dirs([<<$/,_/binary>>=File|Rest], _Dirname, Acc) ->
-    uncollapse_dirs(Rest, filename:dirname(File), [File|Acc]);
-uncollapse_dirs([File|Rest], Dirname, Acc) when is_list(File) ->
-    File1 = Dirname ++ [$/ | File],
-    uncollapse_dirs(Rest, filename:dirname(File1), [File1|Acc]);
-uncollapse_dirs([File|Rest], Dirname, Acc) when is_binary(File) ->
+uncollapse_dirs([ <<>> | Rest ], Dirname, Acc) ->
+    uncollapse_dirs(Rest, Dirname, Acc);
+uncollapse_dirs([ Rest ], _Dirname, Acc) ->
+    [ Rest | Acc ];
+uncollapse_dirs([ <<$/,_/binary>> = File | Rest ], _Dirname, Acc) ->
+    uncollapse_dirs(Rest, filename:dirname(File), [ File | Acc ]);
+uncollapse_dirs([ File | Rest ], Dirname, Acc) ->
     File1 = <<Dirname/binary, $/, File/binary>>,
-    uncollapse_dirs(Rest, filename:dirname(File1), [File1|Acc]).
+    uncollapse_dirs(Rest, filename:dirname(File1), [ File1 | Acc ]).
 
 
 %% @doc Try to remove directory names that are the same as the directory of the previous file in the list.
 collapse_dirs([]) ->
     [];
-collapse_dirs([File|Files]) ->
-    collapse_dirs(Files, binary:split(dirname(File), <<"/">>, [global]), [ensure_abspath(filename:rootname(File))]).
+collapse_dirs([ File | Files ]) ->
+    collapse_dirs(
+        Files,
+        binary:split( dirname( z_convert:to_binary(File)), <<"/">>, [global] ),
+        [ ensure_abspath(filename:rootname(File)) ]).
 
-    collapse_dirs([], _PrevTk, Acc) ->
-        lists:reverse(Acc);
-    collapse_dirs([File|Files], PrevTk, Acc) ->
-        FileTk = binary:split(dirname(File), <<"/">>, [global]),
-        case drop_prefix(PrevTk, FileTk) of
-            {[], []} ->
-                % File is in the same directory
-                collapse_dirs(Files, FileTk, [filename:rootname(filename:basename(File)) | Acc ]);
-            {[], B} ->
-                % File is in a subdirectory from A
-                RelFile = [ z_utils:combine($/, B), $/, filename:rootname(filename:basename(File))],
-                collapse_dirs(Files, FileTk, [RelFile | Acc]);
-            {_A, _B} ->
-                % File is in a (sub-)directory higher from the previous one, reset to top level
-                collapse_dirs(Files, FileTk, [ensure_abspath(filename:rootname(File)) | Acc ])
-        end.
+collapse_dirs([], _PrevTk, Acc) ->
+    lists:reverse(Acc);
+collapse_dirs([ File | Files ], PrevTk, Acc) ->
+    FileTk = binary:split( dirname(File), <<"/">>, [global] ),
+    case drop_prefix(PrevTk, FileTk) of
+        {[], []} ->
+            % File is in the same directory
+            collapse_dirs(Files, FileTk, [filename:rootname(filename:basename(File)) | Acc ]);
+        {[], B} ->
+            % File is in a subdirectory from A
+            RelFile = [ z_utils:combine($/, B), $/, filename:rootname(filename:basename(File))],
+            collapse_dirs(Files, FileTk, [RelFile | Acc]);
+        {_A, _B} ->
+            % File is in a (sub-)directory higher from the previous one, reset to top level
+            collapse_dirs(Files, FileTk, [ensure_abspath(filename:rootname(File)) | Acc ])
+    end.
 
-    drop_prefix([A|RestA], [A|RestB]) ->
-        drop_prefix(RestA, RestB);
-    drop_prefix(A, B) ->
-        {A, B}.
+drop_prefix([A|RestA], [A|RestB]) ->
+    drop_prefix(RestA, RestB);
+drop_prefix(A, B) ->
+    {A, B}.
 
-    dirname(F) ->
-        case filename:dirname(F) of
-            <<".">> -> [];
-            Dirname -> Dirname
-        end.
+dirname(F) ->
+    case filename:dirname(F) of
+        <<".">> -> <<>>;
+        Dirname -> Dirname
+    end.
 
-    ensure_abspath(<<$/, _/binary>> = File) ->
-        File;
-    ensure_abspath(File) ->
-        <<$/, File/binary>>.
+ensure_abspath(<<$/, _/binary>> = File) ->
+    File;
+ensure_abspath(File) ->
+    <<$/, File/binary>>.
 
 
 %% @doc Calculate a checksum of the mod times of the list of files.

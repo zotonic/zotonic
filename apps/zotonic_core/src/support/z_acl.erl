@@ -107,13 +107,15 @@ maybe_allowed(Action, Object, Context) ->
     z_notifier:first(#acl_is_allowed{action=Action, object=Object}, Context).
 
 %% @doc Check if an action on a property of a resource is allowed for the current actor.
--spec is_allowed_prop(action(), object(), atom(), z:context()) -> true | false | undefined.
+-spec is_allowed_prop(action(), object(), atom() | binary(), z:context()) -> true | false | undefined.
 is_allowed_prop(_Action, _Object, _Property, #context{ acl = admin }) ->
     true;
 is_allowed_prop(UpdateAction, _Object, _Property, #context{ acl_is_read_only = true }) when ?is_update_action(UpdateAction) ->
     false;
 is_allowed_prop(_Action, _Object, _Property, #context{ user_id = ?ACL_ADMIN_USER_ID }) ->
     true;
+is_allowed_prop(Action, Object, Property, Context) when is_atom(Property) ->
+    is_allowed_prop(Action, Object, atom_to_binary(Property, utf8), Context);
 is_allowed_prop(Action, Object, Property, Context) ->
     case z_notifier:first(#acl_is_allowed_prop{action=Action, object=Object, prop=Property}, Context) of
         undefined -> true; % Note, the default behaviour is different for props!
@@ -154,7 +156,7 @@ rsc_visible(RscName, Context) ->
 
 
 %% @doc Check if a property of the resource is visible for the current user
--spec rsc_prop_visible(m_rsc:resource(), atom(), z:context()) -> boolean().
+-spec rsc_prop_visible(m_rsc:resource(), atom() | binary(), z:context()) -> boolean().
 rsc_prop_visible(undefined, _Property, _Context) ->
     true;
 rsc_prop_visible(Id, _Property, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
@@ -163,6 +165,8 @@ rsc_prop_visible(_Id, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 rsc_prop_visible(_Id, _Property, #context{acl=admin}) ->
     true;
+rsc_prop_visible(Id, Property, Context) when is_atom(Property) ->
+    rsc_prop_visible(Id, atom_to_binary(Property, utf8), Context);
 rsc_prop_visible(Id, Property, Context) when is_integer(Id) ->
     case z_memo:is_enabled(Context) of
         true ->
@@ -187,7 +191,7 @@ rsc_prop_visible(RscName, Property, Context) ->
 -spec rsc_editable(m_rsc:resource(), z:context()) -> boolean().
 rsc_editable(undefined, _Context) ->
     false;
-rsc_editable(Id, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
+rsc_editable(Id, #context{user_id=Id}) when is_integer(Id) ->
     %% Can always edit myself
     true;
 rsc_editable(_Id, #context{acl=admin}) ->
@@ -207,9 +211,9 @@ rsc_deletable(undefined, _Context) ->
 rsc_deletable(_Id, #context{user_id=undefined}) ->
     false;
 rsc_deletable(Id, #context{acl=admin} = Context) ->
-    not z_convert:to_bool(m_rsc:p_no_acl(Id, is_protected, Context));
+    not z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_protected">>, Context));
 rsc_deletable(Id, Context) when is_integer(Id) ->
-    not z_convert:to_bool(m_rsc:p_no_acl(Id, is_protected, Context))
+    not z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_protected">>, Context))
         andalso is_allowed(delete, Id, Context);
 rsc_deletable(RscName, Context) ->
     case m_rsc:rid(RscName, Context) of

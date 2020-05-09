@@ -28,9 +28,9 @@
 -callback m_get( list(), opt_msg(), z:context() ) -> return().
 
 %% Routed from MQTT and API
--callback m_post( list( binary() ), opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
+-callback m_post( list( binary() ), opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
 
 %% Routed from MQTT and API
--callback m_delete( list( binary() ), opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
+-callback m_delete( list( binary() ), opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
 
 -optional_callbacks([ m_post/3, m_delete/3 ]).

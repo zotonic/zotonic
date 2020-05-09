@@ -35,16 +35,16 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ all | Rest ], _Msg, Context) ->
+m_get([ <<"all">> | Rest ], _Msg, Context) ->
     {ok, {all(Context), Rest}};
-m_get([ enabled | Rest ], _Msg, Context) ->
+m_get([ <<"enabled">> | Rest ], _Msg, Context) ->
     {ok, {enabled(Context), Rest}};
-m_get([ disabled | Rest ], _Msg, Context) ->
+m_get([ <<"disabled">> | Rest ], _Msg, Context) ->
     {ok, {disabled(Context), Rest}};
-m_get([ active, Module | Rest ], _Msg, Context) ->
+m_get([ <<"active">>, Module | Rest ], _Msg, Context) ->
     IsActive = lists:member(safe_to_atom(Module), active(Context)),
     {ok, {IsActive, Rest}};
-m_get([ info, Module | Rest ], _Msg, Context) ->
+m_get([ <<"info">>, Module | Rest ], _Msg, Context) ->
     M = safe_to_atom(Module),
     Info = [
         {enabled, lists:member(M, enabled(Context))},
@@ -53,6 +53,10 @@ m_get([ info, Module | Rest ], _Msg, Context) ->
         {prio, z_module_manager:prio(M)}
     ],
     {ok, {Info, Rest}};
+m_get([ <<"provided">>, Service | Rest ], _Msg, Context) ->
+    M = safe_to_atom(Service),
+    IsProvided = z_module_manager:is_provided(M, Context),
+    {ok, {IsProvided, Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

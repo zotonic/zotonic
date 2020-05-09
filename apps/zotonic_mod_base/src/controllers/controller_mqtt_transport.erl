@@ -38,6 +38,11 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+%% Connect should been done before this timeout (msec)
+-define(MQTT_CONNECT_TIMEOUT, 4000).
+
+%% Maximum size for the connect packet
+-define(MQTT_CONNECT_MAXSIZE, 1024).
 
 %% ---------------------------------------------------------------------------------------------
 %% Cowmachine controller callbacks
@@ -118,6 +123,7 @@ websocket_send_data(WsControllerPid, Data) ->
 websocket_init(Context) ->
     PrunedContext = z_context:prune_for_scomp(Context),
     PrunedContext1 = z_context:set(wsdata, <<>>, PrunedContext),
+    timer:send_after(?MQTT_CONNECT_TIMEOUT, connect_check),
     {ok, PrunedContext1}.
 
 %% @doc Handle a MQTT message from the browser
@@ -132,15 +138,25 @@ websocket_handle({binary, <<255, 254, 42, _, _>> = Ping}, Context) ->
 websocket_handle({binary, Data}, Context) ->
     handle_incoming_data(Data, Context);
 websocket_handle({ping, Opaque}, Context) ->
-    {reply, {pong, Opaque}, Context};
+    % Sanity check: check if our session is really attached to us - if not then stop.
+    case z_context:get(session_ref, Context) of
+        undefined ->
+            {reply, {pong, Opaque}, Context};
+        SessionRef ->
+            Self = self(),
+            case mqtt_sessions:get_transport(SessionRef) of
+                {ok, Self} ->
+                    {reply, {pong, Opaque}, Context};
+                _Other ->
+                    {stop, Context}
+            end
+    end;
 websocket_handle(Data, Context) ->
     lager:warning("MQTT websocket: non binary data received: ~p", [Data]),
-    {ok, Context}.
+    {stop, Context}.
 
-% websocket_info({reply, {fetch_queue, Pid}}, Context) ->
-%     {ok, Payload} = gen_server:call(Pid, fetch_queue),
-%     {reply, {binary, Payload}, Context};
 websocket_info({mqtt_transport, _SessionRef, Payload}, Context) when is_binary(Payload) ->
+    % Tell watchdog we are alive and well
     {reply, {binary, Payload}, Context};
 websocket_info({mqtt_transport, _SessionRef, disconnect}, Context) ->
     {stop, Context};
@@ -151,6 +167,15 @@ websocket_info({'DOWN', _MRef, process, Pid, _Reason}, Context) ->
         Pid -> {stop, Context};
         _Other -> {ok, Context}
     end;
+websocket_info(connect_check, Context) ->
+    % Stop if we didn't receive a connect packet with ?TIMEOUT_CONNECT msec
+    % after opening the ws connection
+    case z_context:get(session_ref, Context) of
+        undefined ->
+            {stop, Context};
+        _SessionRef ->
+            {ok, Context}
+    end;
 websocket_info(Msg, Context) ->
     lager:info("~p: Unknown message ~p", [?MODULE, Msg]),
     {ok, Context}.
@@ -159,6 +184,7 @@ websocket_info(Msg, Context) ->
 %% ---------------------------------------------------------------------------------------------
 %% Internal
 %% ---------------------------------------------------------------------------------------------
+
 
 -spec handle_incoming_data( binary(), z:context() ) -> {ok, z:context()} | {stop, z:context()}.
 handle_incoming_data(Data, Context) ->
@@ -177,7 +203,12 @@ handle_incoming_data(Data, Context) ->
 -spec handle_connect_data( binary(), z:context() ) -> {ok, z:context()} | {stop, z:context()}.
 handle_connect_data(Data, Context) ->
     WsData = z_context:get(wsdata, Context),
-    NewData = << WsData/binary, Data/binary >>,
+    handle_connect_data_1(<< WsData/binary, Data/binary >>, Context).
+
+handle_connect_data_1(NewData, Context) when size(NewData) > ?MQTT_CONNECT_MAXSIZE ->
+    lager:info("MQTT: refusing connect with large connect packet"),
+    {stop, Context};
+handle_connect_data_1(NewData, Context) ->
     MqttPool = z_context:site(Context),
     Options = #{
         connection_pid => self(),
@@ -197,6 +228,8 @@ handle_connect_data(Data, Context) ->
             Context2 = z_context:set(session_ref, SessionRef, Context1),
             handle_incoming_data(Rest, Context2);
         {error, incomplete_packet} ->
+            % Wait for more data, should be here within ?TIMEOUT_CONNECT msec
+            % otherwise we will disconnect
             Context1 = z_context:set(wsdata, NewData, Context),
             {ok, Context1};
         {error, expect_connect} ->

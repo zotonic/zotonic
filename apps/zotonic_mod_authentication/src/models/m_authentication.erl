@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2020 Marc Worrell
 %% @doc Model for mod_authentication
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@
     m_post/3,
 
     send_reminder/2,
+    set_reminder_secret/2,
 
     auth_token/2,
     cookie_token/2,
@@ -41,24 +42,27 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ authenticate, password | Rest ], #{ payload := Payload }, Context) when is_map(Payload) ->
+m_get([ <<"authenticate">>, <<"password">> | Rest ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case auth_tokens(Payload, Context) of
         {ok, Tk} -> {ok, {Tk, Rest}};
         {error, _} = Error -> Error
     end;
-m_get([ password_min_length | Rest ], _Msg, Context) ->
+m_get([ <<"password_min_length">> | Rest ], _Msg, Context) ->
     Len = case m_config:get_value(mod_authenticaton, password_min_length, Context) of
         undefined -> 6;
         <<>> -> 6;
         N -> z_convert:to_integer(N)
     end,
     {ok, {Len, Rest}};
+m_get([ <<"is_supported">>, <<"rememberme">> | Rest ], _Msg, Context) ->
+    IsSupported = z_db:has_connection(Context),
+    {ok, {IsSupported, Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
-m_post([ 'request-reminder' ], #{ payload := Payload }, Context) when is_map(Payload) ->
+m_post([ <<"request-reminder">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     request_reminder(Payload, Context);
 m_post(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p post: ~p", [?MODULE, Vs]),
@@ -108,14 +112,14 @@ lookup_email_identities(EmailOrUsername, Context) ->
     Us = m_identity:lookup_by_type_and_key_multi(username_pw, EmailOrUsername, Context),
     RscIds = lists:usort([ proplists:get_value(rsc_id, Row) || Row <- Es ++ Us ]),
     lists:filter(
-    fun (RscId) ->
-        case m_identity:get_username(RscId, Context) of
-            undefined -> false;
-            <<"admin">> -> false;
-            _ -> true
-        end
-    end,
-    RscIds).
+        fun (RscId) ->
+            case m_identity:get_username(RscId, Context) of
+                undefined -> false;
+                <<"admin">> -> false;
+                _ -> true
+            end
+        end,
+        RscIds).
 
 
 %% @doc Email a reset code to the user.
@@ -156,6 +160,7 @@ send_reminder(Id, Email, Context) ->
     end.
 
 %% @doc Set the unique reminder code for the account.
+-spec set_reminder_secret( m_rsc:resource_id(), z:context() ) -> binary().
 set_reminder_secret(Id, Context) ->
     Code = z_ids:id(24),
     ok = m_identity:set_by_type(Id, "logon_reminder_secret", Code, Context),
@@ -164,8 +169,8 @@ set_reminder_secret(Id, Context) ->
 
 %% @doc If authentication was possible, then return auth tokens and cookie url.
 -spec auth_tokens( map(), z:context() ) -> {ok, map()} | {error, term()}.
-auth_tokens( #{ <<"username">> := Username, <<"password">> := Password }, Context) ->
-    case m_identity:check_username_pw(Username, Password, Context) of
+auth_tokens( #{ <<"username">> := Username, <<"password">> := Password } = QArgs, Context) ->
+    case m_identity:check_username_pw(Username, Password, QArgs, Context) of
         {ok, UserId} ->
             UserSecret = user_auth_key(UserId, Context),
             {ok, #{

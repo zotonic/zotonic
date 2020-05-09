@@ -79,12 +79,30 @@ temp_beam(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
 
 beam_file(delete, _Application, _What, <<".beam">>, _Root, _Split, _Filename) ->
     ok;
+beam_file(create, _Application, {ebin, _EbinFile}, <<".beam">>, Root, _Split, _Filename) ->
+    case is_indexed_beam_file(Root) of
+        true ->
+            {ok, [
+                {zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]},
+                {z_module_indexer, reindex, []}
+            ]};
+        false ->
+            {ok, [
+                {zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]}
+            ]}
+    end;
 beam_file(_Verb, _Application, {ebin, _EbinFile}, <<".beam">>, Root, _Split, _Filename) ->
     {ok, [
         {zotonic_filehandler_compile, ld, [erlang:binary_to_atom(Root, utf8)]}
     ]};
 beam_file(_Verb, _Application, _What, _Ext, _Root, _Split, _Filename) ->
     false.
+
+is_indexed_beam_file(<<"mod_", _/binary>>) -> true;
+is_indexed_beam_file(<<"m_", _/binary>>) -> true;
+is_indexed_beam_file(<<"scomp_", _/binary>>) -> true;
+is_indexed_beam_file(<<"filter_", _/binary>>) -> true;
+is_indexed_beam_file(_) -> false.
 
 
 %% @doc Check for newly created/added Erlang applications
