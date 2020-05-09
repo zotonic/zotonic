@@ -326,6 +326,7 @@ maybe_set_sessions(SessionId, PageId, Context) ->
             Context)).
 
 maybe_logon(#context{session_pid=undefined} = Context) ->
+    z_notifier:map(session_process_init, Context),
     Context;
 maybe_logon(Context) ->
     UserId = z_acl:user(Context),
@@ -333,6 +334,7 @@ maybe_logon(Context) ->
         case z_context:get_session(auth_user_id, Context) of
             UserId when is_integer(UserId) ->
                 z_memo:set_userid(UserId),
+                z_notifier:map(session_process_init, Context),
                 Context;
             none when is_integer(UserId) ->
                 z_memo:set_userid(undefined),

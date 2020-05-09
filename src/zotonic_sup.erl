@@ -95,12 +95,18 @@ init([]) ->
                 {z_filewatcher_sup, start_link, []},
                 permanent, 10100, supervisor, dynamic},
 
+    % Modification time cache
+    MTime = {z_file_mtime,
+            {z_file_mtime, start_link, []},
+            permanent, 10100, worker, dynamic},
+
     Processes = [
                  Ids,
                  SmtpServer, SmtpReceiveServer,
                  FilesSup,
                  SitesSup,
-                 FSWatchSup| get_extensions()
+                 FSWatchSup,
+                 MTime | get_extensions()
                 ],
 
     %% Listen to IP address and Port

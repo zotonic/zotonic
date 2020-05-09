@@ -30,6 +30,8 @@
     pivot/2,
     pivot_delay/1,
     pivot_resource_update/4,
+    pivot_resource/2,
+
     queue_all/1,
     insert_queue/2,
 
@@ -63,6 +65,9 @@
 -define(PIVOT_POLL_INTERVAL_FAST, 2).
 -define(PIVOT_POLL_INTERVAL_SLOW, 20).
 
+% How many PIVOT_POLL_INTERVAL_SLOW we will skip on SQL errors (like timeouts)
+-define(BACKOFF_POLL_ERROR, 4).
+
 % Number of queued ids taken from the queue at one go
 -define(POLL_BATCH, 50).
 
@@ -76,7 +81,12 @@
 -define(TASK_MAX_RETRY, 10).
 
 
--record(state, {site, is_initial_delay=true, is_pivot_delay = false}).
+-record(state, {
+    site,
+    is_initial_delay = true,
+    is_pivot_delay = false,
+    backoff_counter = 0
+}).
 
 
 %% @doc Poll the pivot queue for the database in the context
@@ -108,7 +118,7 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
                         end, UpdateProps, [date_start, date_end, title]),
 
     {DateStart, DateEnd} = pivot_date(Props),
-    PivotTitle = truncate(get_pivot_title(Props), 100),
+    PivotTitle = truncate(get_pivot_title(Props), 60),
     Props1 = [
         {pivot_date_start, DateStart},
         {pivot_date_end, DateEnd},
@@ -119,10 +129,10 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
     ],
     z_notifier:foldr(#pivot_update{id=Id, raw_props=RawProps}, Props1, Context).
 
-    month_day(undefined) -> undefined;
-    month_day(?EPOCH_START) -> undefined;
-    month_day(?ST_JUTTEMIS) -> undefined;
-    month_day({{_Y,M,D}, _}) -> M*100+D.
+month_day(undefined) -> undefined;
+month_day(?EPOCH_START) -> undefined;
+month_day(?ST_JUTTEMIS) -> undefined;
+month_day({{_Y,M,D}, _}) -> M*100+D.
 
 
 %% @doc Rebuild the search index by queueing all resources for pivot.
@@ -293,8 +303,14 @@ handle_call(Message, _From, State) ->
 handle_cast(poll, #state{is_initial_delay=true} = State) ->
     {noreply, State};
 handle_cast(poll, State) ->
-    do_poll(z_context:new(State#state.site)),
-    {noreply, State};
+    try
+        do_poll(z_context:new(State#state.site)),
+        {noreply, State}
+    catch
+        ?WITH_STACKTRACE(Type, Err, Stack)
+            lager:error("Poll error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+            {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+    end;
 
 %% @doc Insert an id into the queue.
 handle_cast({insert_queue, Ids}, State) when is_list(Ids) ->
@@ -303,7 +319,10 @@ handle_cast({insert_queue, Ids}, State) when is_list(Ids) ->
     {noreply, State};
 
 %% @doc Requests for immediate pivot of a resource
-handle_cast({pivot, Id}, #state{is_initial_delay=true} = State) ->
+handle_cast({pivot, Id}, #state{ is_initial_delay = true } = State) ->
+    do_insert_queue([Id], z_context:new(State#state.site)),
+    {noreply, State};
+handle_cast({pivot, Id}, #state{ backoff_counter = Ct } = State) when Ct > 0 ->
     do_insert_queue([Id], z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, State) ->
@@ -322,15 +341,25 @@ handle_cast(Message, State) ->
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
-handle_info(poll, #state{is_pivot_delay=true} = State) ->
+handle_info(poll, #state{ is_pivot_delay = true } = State) ->
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {noreply, State#state{is_pivot_delay=false}};
+    {noreply, State#state{ is_pivot_delay = false}};
+handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
+    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+    {noreply, State#state{ backoff_counter = Ct - 1 }};
 handle_info(poll, State) ->
-    case do_poll(z_context:new(State#state.site)) of
-        true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
-        false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
-    end,
-    {noreply, State#state{is_initial_delay = false}};
+    try
+        case do_poll(z_context:new(State#state.site)) of
+            true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
+            false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
+        end,
+        {noreply, State#state{ is_initial_delay = false }}
+    catch
+        ?WITH_STACKTRACE(Type, Err, Stack)
+            lager:error("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
+            timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+            {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+    end;
 
 handle_info(_Info, State) ->
     {noreply, State}.
@@ -706,7 +735,7 @@ pivot_date(R) ->
 
 %% @doc Fetch the first title from the record for sorting.
 get_pivot_title(Id, Context) ->
-    z_string:to_lower(get_pivot_title([{title, m_rsc:p(Id, title, Context)}])).
+    z_string:truncate( z_string:to_lower(get_pivot_title([{title, m_rsc:p(Id, title, Context)}])), 50, <<>>).
 
 get_pivot_title(Props) ->
     case proplists:get_value(title, Props) of

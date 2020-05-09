@@ -23,6 +23,11 @@
 upper(undefined, _Context) ->
     undefined;
 upper(Input, _Context) when is_list(Input) or is_binary(Input) ->
-    z_string:to_upper(Input);
+    try
+        z_string:to_upper(Input)
+    catch
+        _:_ ->
+            z_string:to_upper(z_string:sanitize_utf8(Input))
+    end;
 upper(Input, Context) ->
     upper(erlydtl_runtime:to_list(Input, Context), Context).

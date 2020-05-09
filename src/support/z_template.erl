@@ -413,7 +413,7 @@ template_is_modified(Module, State) ->
 is_modified([]) ->
     false;
 is_modified([{File, DateTime}|Rest]) ->
-    case filelib:last_modified(File) of
+    case z_file_mtime:last_modified(File) of
         0 ->
             true;
         FileMod when FileMod =/= DateTime ->

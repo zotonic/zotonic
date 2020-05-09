@@ -20,7 +20,7 @@
 
 -author("Marc Worrell <marc@worrell.nl>").
 -mod_title("File Storage").
--mod_description("Store files on cloud storage services like Amazon S3 and GreenQloud").
+-mod_description("Store files on cloud storage services like Amazon S3 and Google Cloud Storage").
 -mod_prio(500).
 -mod_schema(2).
 -mod_provides([filestore]).
@@ -157,15 +157,20 @@ lookup(Path, Context) ->
     case m_filestore:lookup(Path, Context) of
         undefined ->
             undefined;
-        Props when is_list(Props) ->
-            {location, Location} = proplists:lookup(location, Props),
-            case filezcache:locate_monitor(Location) of
-                {ok, {file, _Size, Filename}} ->
-                    {ok, {filename, Filename, Props}};
-                {ok, {pid, Pid}} ->
-                    {ok, {filezcache, Pid, Props}};
-                {error, enoent} ->
-                    load_cache(Props, Context)
+        Entry ->
+            case m_filestore:is_download_ok(Entry) of
+                true ->
+                    {location, Location} = proplists:lookup(location, Entry),
+                    case filezcache:locate_monitor(Location) of
+                        {ok, {file, _Size, Filename}} ->
+                            {ok, {filename, Filename, Entry}};
+                        {ok, {pid, Pid}} ->
+                            {ok, {filezcache, Pid, Entry}};
+                        {error, enoent} ->
+                            load_cache(Entry, Context)
+                    end;
+                false ->
+                    undefined
             end
     end.
 
@@ -345,7 +350,7 @@ download_stream(Id, Path, LocalPath, Context, eof) ->
     ok = file:rename(temp_path(LocalPath), LocalPath),
     m_filestore:purge_move_to_local(Id, Context),
     filezcache:delete({z_context:site(Context), Path}),
-    filestore_uploader:force_stale(Path, Context);
+    filestore_uploader:stale_file_entry(Path, Context);
 download_stream(Id, _Path, LocalPath, Context, {error, _} = Error) ->
     lager:debug("Download error ~p file ~p", [Error, LocalPath]),
     file:delete(temp_path(LocalPath)),

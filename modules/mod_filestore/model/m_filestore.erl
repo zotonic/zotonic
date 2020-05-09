@@ -43,12 +43,20 @@
     store/5,
     lookup/2,
 
+    is_upload_ok/1,
+    is_download_ok/1,
+
     stats/1,
 
     install/2
     ]).
 
 -include_lib("zotonic.hrl").
+
+
+% It is ok to retry transient errors every 10 minutes
+-define(RETRY_TRANSIENT_ERRORS, 600).
+
 
 m_find_value(stats, #m{}, Context) ->
     stats(Context).
@@ -75,6 +83,8 @@ fetch_queue(Context) ->
 dequeue(Id, Context) ->
     z_db:q("delete from filestore_queue where id = $1", [Id], Context).
 
+
+-spec store( binary(), integer(), atom() | binary(), binary(), z:context() ) -> {ok, integer()}.
 store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(Size), is_binary(Location) ->
     z_db:transaction(fun(Ctx) ->
             case z_db:q1("select id from filestore where path=$1", [Path], Ctx) of
@@ -91,6 +101,7 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
                                 service = $2,
                                 size = $3,
                                 is_deleted = false,
+                                deleted = null,
                                 is_move_to_local = false,
                                 error = null,
                                 modified = now()
@@ -101,13 +112,47 @@ store(Path, Size, Service, Location, Context) when is_binary(Path), is_integer(S
             end
         end, Context).
 
+-spec lookup( binary(), z:context() ) -> undefined | proplists:proplist().
 lookup(Path, Context) ->
     z_db:assoc_row("select *
                     from filestore
                     where path = $1
-                      and error is null
                       and not is_deleted",
                    [Path], Context).
+
+%% Check if it is ok to upload to the location of this entry
+-spec is_upload_ok( undefined | proplists:proplist() ) -> boolean().
+is_upload_ok(undefined) ->
+    true;
+is_upload_ok(Props) ->
+    case proplists:get_value(error, Props) of
+        undefined -> false;
+        _Error -> true
+    end.
+
+%% Check if it is ok to upload to the location of this entry
+-spec is_download_ok( undefined | proplists:proplist() ) -> boolean().
+is_download_ok(undefined) ->
+    true;
+is_download_ok(Props) ->
+    Error = proplists:get_value(error, Props),
+    Modified = proplists:get_value(modified, Props),
+    is_download_ok(Error, Modified).
+
+is_download_ok(undefined, _Modified) ->
+    true;
+is_download_ok(_Error, Modified) ->
+    % Typical error when S3 can't find anything
+    % or when the credentials were wrong for some time
+    MTimestamp = z_datetime:datetime_to_timestamp(Modified),
+    Now = z_datetime:timestamp(),
+    case Now - MTimestamp of
+        Delta when Delta > ?RETRY_TRANSIENT_ERRORS ->
+            true;
+        _ ->
+            false
+    end.
+
 
 mark_error(Id, Error, Context) ->
     z_db:q("update filestore
@@ -213,7 +258,8 @@ fetch_move_to_local(Context) ->
 purge_move_to_local(Id, Context) ->
     z_db:q("update filestore
             set is_move_to_local = false,
-                is_deleted = true
+                is_deleted = true,
+                deleted = now()
             where id = $1", [Id], Context).
 
 stats(Context) ->

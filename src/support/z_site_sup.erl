@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% @doc Supervisor for a zotonic server. Starts webmachine, all base zotonic processes and the site supervisor.
+%% @copyright 2009-2020 Marc Worrell
+%% @doc Supervisor for a zotonic site.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -80,37 +80,15 @@ init(Site) ->
 %% @doc Called when the site installation is done, we can not add all other processes.
 -spec install_done(list()) -> ok.
 install_done(SiteProps) when is_list(SiteProps) ->
-    Session = {z_session_manager,
-                {z_session_manager, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
+    {host, Site} = proplists:lookup(host, SiteProps),
 
     Dispatcher = {z_dispatcher,
                 {z_dispatcher, start_link, [SiteProps]},
                 permanent, 5000, worker, dynamic},
 
-    Template = {z_template,
-                {z_template, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    MediaClass = {z_mediaclass,
-                {z_mediaclass, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    DropBox = {z_dropbox,
-                {z_dropbox, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    Pivot = {z_pivot_rsc,
-                {z_pivot_rsc, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    MediaCleanup = {z_media_cleanup_server,
-                {z_media_cleanup_server, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
-
-    EdgeLog = {z_edge_log_server,
-                {z_edge_log_server, start_link, [SiteProps]},
-                permanent, 5000, worker, dynamic},
+    SiteServices = {z_site_services_sup,
+                {z_site_services_sup, start_link, [SiteProps]},
+                permanent, 5000, supervisor, dynamic},
 
     ModuleIndexer = {z_module_indexer,
                 {z_module_indexer, start_link, [SiteProps]},
@@ -125,14 +103,13 @@ install_done(SiteProps) when is_list(SiteProps) ->
                     permanent, 5000, worker, dynamic},
 
     Processes = [
-            Session,
-            Dispatcher, Template, MediaClass, Pivot, DropBox,
-            MediaCleanup, EdgeLog,
-            ModuleIndexer, Modules,
+            Dispatcher,
+            SiteServices,
+            ModuleIndexer,
+            Modules,
             PostStartup
         ],
 
-    {host, Site} = proplists:lookup(host, SiteProps),
     Name = z_utils:name_for_site(?MODULE, Site),
     lists:foreach(
             fun(Child) ->

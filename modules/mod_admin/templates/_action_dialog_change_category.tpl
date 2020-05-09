@@ -4,7 +4,7 @@ id
 is_editable
 cat_id
 #}
-<p class="text-muted">{_ Category name: _} {{ cat_id.name }}</p>
+<p class="text-muted pull-right">{_ Category name: _} {{ cat_id.name }}</p>
 
 <h4>{_ About categories _}</h4>
 <p>{_ Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle. _}</p>
