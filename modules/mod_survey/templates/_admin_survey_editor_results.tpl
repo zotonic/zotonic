@@ -1,4 +1,4 @@
-{% with q.id|default:id as id %}
+{% with q.id|to_integer|default:id as id %}
 {% with m.survey.all_results[id] as r %}
 {% with r|first as columns %}
 {% with r|tail as results %}
