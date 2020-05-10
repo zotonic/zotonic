@@ -222,7 +222,8 @@ is_empty(0) -> true;
 is_empty(null) -> true;
 is_empty(_) -> false.
 
-get_connection(#context{db={Pool,_}}) ->
+get_connection(#context{db={Pool,_}}=Context) ->
+    z_stats:count_db_event(pool_checkout, Context),
     poolboy:checkout(Pool).
 
 return_connection(Worker, #context{db={Pool,_}}=Context) ->

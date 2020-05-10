@@ -26,7 +26,7 @@
                 {% endfor %}
             </tbody>
             {% javascript %}
-                $("#statistics-run_queue").data("render", render_value);
+                // $("#statistics-run_queue").data("render", render_value);
             {% endjavascript %}
         </table>
     </div>
@@ -34,25 +34,7 @@
 </div>
 
 <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-
-    <div class="panel panel-default">
-        <div class="panel-heading">Database</div>
-
-        <div class="panel-body">
-            <table class="table table-condensed">
-                <thead></thead>
-                <tbody>
-                    {% for title, id in [ ["Requests", ""] ] %}
-                    {% include "_stat_row.tpl" %}
-                    {% endfor %}
-                </tbody>
-                {% javascript %}
-                //$("#statistics-run_queue").data("render", render_value);
-                {% endjavascript %}
-            </table>
-        </div>
-    </div>
-
+    {% include "stat_panel/database.tpl" %}
 </div>
 
 <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
@@ -73,8 +55,8 @@
                     {% endfor %}
                 </tbody>
                 {% javascript %}
-                    $("#io-input").data("render", to_human);
-                    $("#io-output").data("render", to_human);
+                    // $("#io-input").data("render", to_human);
+                    // $("#io-output").data("render", to_human);
                 {% endjavascript %}
             </table>
         </div>
@@ -153,7 +135,7 @@ cotonic.broker.subscribe("bridge/origin/$SYS/erlang/+entry",
             let item = $(itemId);
             if(item.length > 0) {
                 // console.log(itemId, msg.payload[datapoints[i]]);
-                item.html(item.data('render')(msg.payload[datapoints[i]]));
+                // item.html(item.data('render')(msg.payload[datapoints[i]]));
             } else {
                 console.log("No place for", itemId, msg.payload[datapoints[i]]);
             }

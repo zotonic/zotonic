@@ -53,10 +53,6 @@ init_site(Host) ->
     ok = exometer:re_register([site, Host, broker, session_count],
                               {function, mqtt_sessions, session_count, [Host], match, count}, []),
 
-    %% Database metrics
-    exometer:re_register([zotonic, Host, db, requests], spiral, []),
-    exometer:re_register([zotonic, Host, db, duration], histogram, []),
-
     ok = exometer:re_register([site, Host, broker, router_info],
                               {function, mqtt_sessions, router_info, [Host], value, []}, []),
 
@@ -245,5 +241,6 @@ add_system_reporter() ->
 % @doc Count a db event, like pool_full, or pull_high_usage.
 count_db_event(Event, Context) when is_atom(Event) ->
     Site = z_context:site(Context),
-    ok = exometer:update_or_create([zotonic, Site, db, Event], 1, spiral, []).
+    ok = exometer:update_or_create([site, Site, db, Event]), 1, spiral, []).
+
 
