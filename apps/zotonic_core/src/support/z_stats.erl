@@ -157,7 +157,7 @@ handle_cowmachine_stats(MetricsData) ->
 %% @doc Count a db event, like pool_full, or pull_high_usage.
 count_db_event(Event, Context) when is_atom(Event) ->
     Site = z_context:site(Context),
-    ok = exometer:update_or_create([zotonic, Site, db, Event], 1, spiral, []).
+    ok = exometer:update_or_create([site, Site, db, Event]), 1, spiral, []).
 
 % Return the usage in percentage, for atoms, ports and processes.
 system_usage(atom) -> system_usage_helper(atom_count, atom_limit);
@@ -275,6 +275,7 @@ add_system_reporter() ->
 
 datapoints() ->
     [counter, spiral, gauge, histogram, meter].
+
 
 datapoints(counter) ->[value];
 datapoints(spiral) -> [count, one];
