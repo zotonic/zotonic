@@ -11,7 +11,7 @@
 {% if blk.explanation %}
      <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
 {% endif %}
-    <div class="{% if blk.validation == 'numericality' %}col-sm-2{% elseif blk.validation == 'phone' %}col-sm-6{% endif %}">
+    <div style="{% if blk.validation == 'numericality' %}width: 20%{% elseif blk.validation == 'phone' %}width: 60%{% endif %}">
     {% if blk.validation == "date" %}
         {% include "blocks/_block_view_survey_short_answer_date.tpl" %}
     {% else %}

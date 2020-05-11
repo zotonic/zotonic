@@ -47,7 +47,7 @@
 			{% endif %}
 
 			{% if not editing or pages > 1 %}
-				{% if not id.survey_autostart or page_nr > 1 %}
+				{% if not id.survey_is_autostart or page_nr > 1 %}
 					<a id="{{ #cancel }}" href="#" class="btn btn-default">{_ Stop _}</a>
 					{% wire id=#cancel action={confirm text=_"Are you sure you want to stop?" ok=_"Stop" cancel=_"Continue" action={redirect id=id}} %}
 				{% endif %}
