@@ -3,12 +3,13 @@
 {% block title %}{_ Referrers to _} {{ m.rsc[q.id].title }}{% endblock %}
 
 {% block content %}
-{% with m.search.paged[{referrers id=q.id page=q.page}] as result %}
+{% with m.rsc[q.id].id as object_id %}
+{% with m.search.paged[{referrers id=object_id page=q.page}] as result %}
 <div class="admin-header">
-    <h2 id="content-pager">{_ Referrers to _} <a href="{% url admin_edit_rsc id=q.id|to_integer %}">{{ m.rsc[q.id].title }}</a></h2>
+    <h2 id="content-pager">{_ Referrers to _} <a href="{% url admin_edit_rsc id=object_id %}">{{ object_id.title }}</a></h2>
 
     {% ifequal result.total 0 %}
-        <p>{_ There are no pages with a connection to the page _} “{{ m.rsc[q.id].title }}”</p>
+        <p>{_ There are no pages with a connection to the page _} “{{ object_id.title }}”</p>
     {% endifequal %}
 </div>
 
@@ -50,7 +51,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        {% pager result=result dispatch="admin_referrers" hide_single_page=1 id=q.id qargs %}
+        {% pager result=result dispatch="admin_referrers" hide_single_page=1 id=object_id qargs %}
     {% endifnotequal %}
 </div>
 {% endwith %}
