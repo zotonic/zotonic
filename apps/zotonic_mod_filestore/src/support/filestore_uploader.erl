@@ -42,18 +42,20 @@
         id,
         path,
         media_info,
+        lookup,
         context
     }).
 
 start_link(Id, Path, MediaInfo, Context) ->
     Path1 = z_convert:to_binary(Path),
+    PathLookup = m_filestore:lookup(Path1, Context),
     gen_server:start_link(
         {via, z_proc, {{upload, Path1}, Context}},
         ?MODULE,
-        [Id, Path1, MediaInfo, Context],
+        [Id, Path1, MediaInfo, PathLookup, Context],
         []).
 
-init([Id, Path, MediaInfo, Context]) ->
+init([Id, Path, MediaInfo, PathLookup, Context]) ->
     z_context:lager_md(Context),
     lager:debug("Started uploader for ~p", [Path]),
     gen_server:cast(self(), start),
@@ -61,6 +63,7 @@ init([Id, Path, MediaInfo, Context]) ->
             id = Id,
             path = Path,
             media_info = MediaInfo,
+            lookup = PathLookup,
             context = Context
         }}.
 
@@ -68,16 +71,14 @@ handle_call(Msg, _From, State) ->
     lager:error("Unknown call: ~p", [Msg]),
     {reply, {error, unknown_msg}, State}.
 
-handle_cast(start, #state{path=Path, context=Context} = State) ->
-    case m_filestore:lookup(Path, Context) of
-        {ok, Entry} ->
-            try_upload(Entry, State);
-        {error, enoent} ->
-            try_upload(undefined, State);
-        {error, _} = Error ->
-            lager:error("Filestore upload error reading for path ~p: ~p", [ Path, Error ]),
-            {stop, normal, State}
-    end;
+handle_cast(start, #state{lookup = {ok, Entry}} = State) ->
+    try_upload(Entry, State);
+handle_cast(start, #state{lookup = {error, enoent}} = State) ->
+    try_upload(undefined, State);
+handle_cast(start, #state{path = Path, lookup = {error, _} = Error} = State) ->
+    lager:error("Filestore upload error reading for path ~p: ~p", [ Path, Error ]),
+    {stop, normal, State};
+
 handle_cast(stop, State) ->
     {stop, normal, State};
 handle_cast(Msg, State) ->

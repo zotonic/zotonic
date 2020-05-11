@@ -79,7 +79,7 @@ observe_filestore(#filestore{action=upload, path=Path, mime=Mime}, Context) ->
     ok;
 observe_filestore(#filestore{action=delete, path=Path}, Context) ->
     Count = m_filestore:mark_deleted(Path, Context),
-    lager:debug("filestore: marked ~p entries as deleted for ~p", [Count, Path]),
+    lager:info("Filestore marked ~p entries as deleted for ~p", [Count, Path]),
     ok.
 
 observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, Context) ->
