@@ -25,6 +25,7 @@
     prep_answer_header/2,
     prep_answer/3,
     prep_block/2,
+    prep_totals/3,
     to_block/1
 ]).
 
@@ -67,3 +68,23 @@ to_block(Q) ->
     ].
 
 
+prep_totals(Block, [{_, Vals}], _) ->
+    case proplists:get_value(validation, Block) of
+        <<"numericality">> ->
+            lists:foldl(
+              fun({K, V}, Sum) ->
+                      try
+                          (z_convert:to_integer(K) * z_convert:to_integer(V)) + Sum
+                      catch
+                          error:badarith ->
+                              Sum
+                      end
+              end,
+              0,
+              Vals);
+        _ ->
+            undefined
+    end;
+
+prep_totals(_, _, _) ->
+    undefined.
