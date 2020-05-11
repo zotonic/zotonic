@@ -533,15 +533,19 @@ survey_totals(Id, Context) ->
             All = lists:map(fun(Block) ->
                                     Name = proplists:get_value(name, Block),
                                     Type = proplists:get_value(type, Block),
-                                    M = mod_survey:module_name(Type),
-                                    Value = case proplists:get_value(prep_totals, erlang:get_module_info(M, exports)) of
-                                                3 ->
-                                                    lager:warning("Name: ~p", [Name]),
-                                                    Vals = proplists:get_value(Name, Stats),
-                                                    M:prep_totals(Block, Vals, Context);
-                                                undefined ->
-                                                    undefined
-                                            end,
+                                    Value =
+                                        case mod_survey:module_name(Type) of
+                                            undefined ->
+                                                undefined;
+                                            M ->
+                                                case proplists:get_value(prep_totals, erlang:get_module_info(M, exports)) of
+                                                    3 ->
+                                                        Vals = proplists:get_value(Name, Stats),
+                                                        M:prep_totals(Block, Vals, Context);
+                                                    undefined ->
+                                                        undefined
+                                                end
+                                        end,
                                     {Name, Value}
                             end,
                             Blocks),

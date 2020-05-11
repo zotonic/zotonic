@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2015-03-04 16:58+0100\n"
+"PO-Revision-Date: 2020-05-09 19:31+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -18,23 +18,65 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/mod_survey/templates/survey_results_printable.tpl:9
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:23
+msgid "Add a question or block"
+msgstr "Voeg een vraag of een blok toe"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:13
+msgid "Add page"
+msgstr "Voeg pagina toe"
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:9
+msgid "Add page above"
+msgstr "Voeg pagina bovenaan toe"
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:10
+msgid "Add page below"
+msgstr "Voeg pagina onderaan toe"
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:51
+msgid "Add page jump"
+msgstr "Paginasprong"
+
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:7
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:27
+msgid "Add question"
+msgstr "Voeg vraag toe"
+
+#: modules/mod_survey/templates/_admin_survey_question_q.tpl:22
+msgid "Add question after"
+msgstr "Voeg vraag achteraan toe"
+
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:8
+msgid "Add questions by adding blocks with the menu."
+msgstr "Voeg vragen toe door blokken toe te voegen via het menu."
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:67
+msgid "Agree"
+msgstr "Mee eens"
+
+#: modules/mod_survey/templates/survey_results_printable.tpl:37
 msgid "All survey entries up until"
 msgstr "Alle survey inzendingen tot en met"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:34
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:35
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:43
 msgid "Allow multiple entries per user/browser"
 msgstr "Sta meedere keren invullen toe per gebruiker/browser."
 
-#: modules/mod_survey/templates/email_survey_result.tpl:12
+#: modules/mod_survey/templates/email_survey_result.tpl:29
 msgid "Answer"
 msgstr "Antwoord"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:24
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:19
+msgid "Answering"
+msgstr "Antwoorden"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:23
 msgid "Answers, one per line"
 msgstr "Antwoorden, één per regel"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:21
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:24
 msgid ""
 "Apple = Red<br/>\n"
 "Milk = White<br/>\n"
@@ -46,65 +88,95 @@ msgstr ""
 "Wenen = Oostenrijk<br />\n"
 "Vliegende Hollander = Wagner."
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:28
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:23
 msgid "April"
 msgstr "april"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:32
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:21
+msgid "Are you sure you want to delete this page jump?"
+msgstr "Weet je zeker dat je deze sprong wilt verwijderen?"
+
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:19
+msgid ""
+"Are you sure you want to delete this page?<br/>This also deletes all "
+"questions on this page."
+msgstr "Weet je zeker dat je deze pagina wilt weggooien? Hiermee verwijder je ook alle vragen op deze pagina."
+
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:20
+msgid "Are you sure you want to delete this question?"
+msgstr "Weet je zeker dat je deze vraag wilt weggooien?"
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:43
 msgid "Are you sure you want to stop?"
 msgstr "Weet je zeker dat je wilt stoppen?"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:32
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:27
 msgid "August"
 msgstr "augustus"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:24
+#: modules/mod_survey/templates/_survey_question_page.tpl:35
 msgid "Back"
 msgstr "Terug"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:3
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:3
+#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4
 msgid "Block"
 msgstr "Blok"
 
-#: modules/mod_survey/mod_survey.erl:104
+#: modules/mod_survey/mod_survey.erl:123
 msgid "Button"
 msgstr "Knop"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:33
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:34
 msgid "Button style"
 msgstr "Stijl knop"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:13
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:107
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
 msgid "Button text"
 msgstr "Knop label"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:19
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:146
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:16
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:22
 msgid "Cat = Picture"
 msgstr "Kat = Afbeelding"
 
-#: modules/mod_survey/mod_survey.erl:98
+#: modules/mod_survey/mod_survey.erl:117
 msgid "Category"
 msgstr "Categorie"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:32
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:55
 msgid "Category to choose from"
 msgstr "Categorie om uit te kiezen"
 
-#: modules/mod_survey/templates/email_survey_result.tpl:32
+#: modules/mod_survey/templates/email_survey_result.tpl:11
 msgid "Check the answer in the admin."
 msgstr "Controlleer het antwoord in de admin."
 
-#: modules/mod_survey/templates/_survey_results.tpl:6
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:74
+msgid "Chinese food is best for money"
+msgstr "Met chinees eten krijg je waar voor je geld"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:33
+msgid "Choices"
+msgstr "Keuzes"
+
+#: modules/mod_survey/templates/_survey_results.tpl:8
 msgid "Click here to download the results as a CSV file."
 msgstr "Klik hier om de resultaten te downloaden als CSV-bestand."
 
@@ -112,54 +184,92 @@ msgstr "Klik hier om de resultaten te downloaden als CSV-bestand."
 msgid "Close"
 msgstr "Sluiten"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:32
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:18
+msgid "Confirm"
+msgstr "Bevestig"
+
+#: modules/mod_survey/templates/_survey_question_page.tpl:43
 msgid "Continue"
 msgstr "Doorgaan"
 
-#: modules/mod_survey/mod_survey.erl:103
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:101
+msgid "Country"
+msgstr "Land"
+
+#: modules/mod_survey/mod_survey.erl:122
 msgid "Country select"
 msgstr "Landenselectie"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
 msgid "Danger"
 msgstr "Pas op"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:36
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:31
 msgid "December"
 msgstr "december"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:35
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
 msgid "Default"
 msgstr "Standaard"
 
 #: modules/mod_survey/templates/_admin_survey_editor_results.tpl:27
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:17
 msgid "Delete"
 msgstr "Verwijder"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:15
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:12
+msgid "Delete page"
+msgstr "Verwijder pagina"
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:7
+msgid "Delete page jump"
+msgstr "Verwijder paginasprong"
+
+#: modules/mod_survey/templates/_admin_survey_question_q.tpl:23
+msgid "Delete question"
+msgstr "Verwijder vraag"
+
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:6
+msgid "Description"
+msgstr "Omschrijving"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:61
+msgid "Disagree"
+msgstr "Mee oneens"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:40
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:17
 msgid "Do you like pea soup?"
 msgstr "Houd je van erwtensoep?"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:70
-msgid "Download CSV results"
-msgstr "CSV resultaten downloaden"
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:38
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:94
+msgid "Download CSV"
+msgstr "Download CSV"
 
-#: modules/mod_survey/templates/_survey_results.tpl:8
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:72
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:42
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:98
+msgid "Download Excel"
+msgstr "Download Excel"
+
+#: modules/mod_survey/templates/_survey_results.tpl:10
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:40
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:44
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:96
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:100
 msgid ""
 "Download will start in the background. Please check your download window."
 msgstr "De download start op de achtergrond, controleer je downloadvenster."
 
-#: modules/mod_survey/templates/_admin_survey_questions_edit.tpl:16
-msgid "Drag questions here."
-msgstr "Sleep vragen hierin."
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:40
+msgid "Drop-down menu"
+msgstr "Drop-down menu"
 
-#: modules/mod_survey/mod_survey.erl:83
-msgid "Email addresses"
+#: modules/mod_survey/mod_survey.erl:96 modules/mod_survey/mod_survey.erl:101
+msgid "E-mail addresses"
 msgstr "E-mail adressen"
 
 #: modules/mod_survey/templates/_admin_survey_editor_results.tpl:26
-#: modules/mod_survey/templates/_admin_survey_questions_edit.tpl:4
 msgid "Edit"
 msgstr "Bewerk"
 
@@ -167,61 +277,101 @@ msgstr "Bewerk"
 msgid "Edit survey result"
 msgstr "Toon/bewerk resultaten"
 
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:20
+msgid "End of questions"
+msgstr "Einde van de vragen"
+
 #: modules/mod_survey/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr "Fout"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:17
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:21
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:23
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:24
 msgid "Example:"
 msgstr "Voorbeeld:"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:18
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:19
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:32
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:20
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:37
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:19
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:25
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:19
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:32
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:21
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:35
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:37
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:23
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:40
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:28
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:18
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:21
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:21
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:29
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:22
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:28
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:22
 msgid "Explanation"
 msgstr "Uitleg"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
-msgid "Explanation text (optional)"
-msgstr "Uitlegtekst (optioneel)"
-
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:51
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:29
 #: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:13
 #: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:20
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:26
 msgid "False"
 msgstr "Onwaar"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:26
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:21
 msgid "February"
 msgstr "februari"
 
-#: modules/mod_survey/mod_survey.erl:107
+#: modules/mod_survey/mod_survey.erl:126
 msgid "File upload"
 msgstr "Bestandsupload"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:54
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:17
+msgid "Fill in the missing parts."
+msgstr "Vul de missende onderdelen in."
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:202
+msgid "Find page"
+msgstr "Zoek pagina"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:127
+msgid "First page in category"
+msgstr "Eerste pagina in categorie"
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:6
+msgid "Go to question"
+msgstr "Ga naar vraag"
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:91
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:79
 msgid "Handle this survey with"
 msgstr "Laat survey afhandelen door"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:16
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:71
+msgid "Handling"
+msgstr "Afhandeling"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:114
+msgid "Header"
+msgstr "Kop"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Help about surveys"
 msgstr "Hulp bij de vragenlijsten"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:41
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:52
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:57
 msgid "Hide progress information"
 msgstr "Verberg voortgangsindicator"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:15
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:17
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:40
+msgid "Hide the user’s id or browser-id from result exports"
+msgstr "Verberg gebruiker's ID uit de export"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:75
+msgid "I always eat with others"
+msgstr "Ik eet altijd met anderen"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:90
+msgid "I am"
+msgstr "Ik ben"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:21
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:23
 msgid ""
 "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] "
 "ice cream and my favorite color is [color      ]."
@@ -230,31 +380,52 @@ msgstr ""
 "[ijs=vanille|aardbei|chocolade|anders] ijs en mijn favoriete kleur is "
 "[kleur      ]."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:73
+msgid "I like Chinese restaurants"
+msgstr "Ik houd van chinese restaurants"
+
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:26
+msgid "Immediately start with the questions, no “Start” button"
+msgstr "Start gelijk met de vragen, geen startknop"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
 msgid "Informational"
 msgstr "Informeel"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:27
+msgid "Input value placeholder text"
+msgstr "Waarde voor tijdelijke aanduiding"
+
+#: modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:3
+#: modules/mod_survey/templates/_admin_survey_edit_email_text.tpl:8
+msgid "Introduction for confirmation email"
+msgstr "Introductie in bevestigingsemail"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
 msgid "Inverse"
 msgstr "Geinverteerd"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:25
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:20
 msgid "January"
 msgstr "Januari"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:31
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:26
 msgid "July"
 msgstr "juli"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:46
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:51
 msgid "Jump target"
 msgstr "Doen van sprong"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:30
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:52
+msgid "Jump to a question on a next page."
+msgstr "Spring naar een vraag op een volgende pagina"
+
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:25
 msgid "June"
 msgstr "juni"
 
-#: modules/mod_survey/mod_survey.erl:96
+#: modules/mod_survey/mod_survey.erl:115
 msgid "Likert"
 msgstr "Likert"
 
@@ -266,48 +437,56 @@ msgstr ""
 "Kies mogelijke antwoorden, één per regel. Gebruik <em>waarde#antwoord</em> "
 "om waardes te selecteren."
 
-#: modules/mod_survey/mod_survey.erl:102
+#: modules/mod_survey/mod_survey.erl:121
 msgid "Long answer"
 msgstr "Lang antwoord"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:64
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:117
+msgid ""
+"Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do "
+"eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
+msgstr ""
+
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:74
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:71
 msgid "Mail filled in surveys to"
 msgstr "Stuur ingevulde surveys naar"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:27
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:22
 msgid "March"
 msgstr "maart"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:15
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:79
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:17
 msgid "Match which answer fits best."
 msgstr "Kies welk antwoord het beste past."
 
-#: modules/mod_survey/mod_survey.erl:99
+#: modules/mod_survey/mod_survey.erl:118
 msgid "Matching"
 msgstr "Voldoet aan"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:29
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:24
 msgid "May"
 msgstr "mei"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:50
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:42
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:39
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:41
 msgid "Multiple answers possible"
 msgstr "Meerdere antwoorden mogelijk"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:39
+#: modules/mod_survey/mod_survey.erl:127
+msgid "Multiple choice"
+msgstr "Meerdere antwoorden"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:34
 msgid "Multiple page break blocks are merged into one."
 msgstr "Meerder pagina-onderbrekingen worden samengevoegd tot één."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:45
-msgid "Name of target question"
-msgstr "Naam van doelvraag"
-
-#: modules/mod_survey/mod_survey.erl:100
+#: modules/mod_survey/mod_survey.erl:119
 msgid "Narrative"
 msgstr "Verhalend"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:16
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Need more help?"
 msgstr "Meer hulp nodig?"
 
@@ -315,124 +494,199 @@ msgstr "Meer hulp nodig?"
 msgid "New survey result:"
 msgstr "Nieuw surveyresultaat:"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:36
-msgid "Next Question"
-msgstr "Volgende vraag"
+#: modules/mod_survey/templates/_survey_question_page.tpl:47
+msgid "Next"
+msgstr "Volgende"
 
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:129
+msgid "Next page in category"
+msgstr "Volgende pagina in categorie"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:43
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:13
 #: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:20
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:26
 msgid "No"
 msgstr "Nee"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:35
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:30
 msgid "November"
 msgstr "november"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:34
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:45
+msgid "Numeric input, show totals for this field in the survey results."
+msgstr "Numeriek veld, toon totalen voor dit veld in de resultaten."
+
+#: modules/mod_survey/templates/page_admin_frontend_edit.tpl:15
+msgid "OK"
+msgstr "OK"
+
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:29
 msgid "October"
 msgstr "oktober"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:34
 msgid "Only accept images."
 msgstr "Sta alleen afbeeldingen toe."
 
-#: modules/mod_survey/mod_survey.erl:105
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:125
+msgid "Options from a page category"
+msgstr "Opties van een paginacategorie"
+
+#: modules/mod_survey/mod_survey.erl:124
 msgid "Page break"
 msgstr "Pagina-onderbreking"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:14
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:12
 msgid "Page jump condition"
 msgstr "Paginasprong voorwaarde"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:15
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:16
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:28
+msgid "Please enter your information."
+msgstr "Voer je gegevens in."
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:17
 msgid "Please enter your name."
 msgstr "Voer je naam in."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:19
+#: modules/mod_survey/templates/_survey_question_page.tpl:30
+msgid "Please fill in all the required fields."
+msgstr "Voer a.u.b. alle verplichte velden in."
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:17
+msgid "Please make a choice."
+msgstr "Maak a.u.b. een keuze."
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:133
+msgid "Please upload your file."
+msgstr "Upload een afbeelding."
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:21
 msgid "Please upload your image."
 msgstr "Upload een afbeelding."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:15
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:34
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:17
 msgid "Please write an essay."
 msgstr "Schrijf een stuk tekst."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:36
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:38
 msgid "Primary"
 msgstr "Primair"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:78
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:50
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:106
 msgid "Printable list"
 msgstr "Afdrukbare lijst"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:15
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:15
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:47
+msgid "Progress"
+msgstr "Voortgang"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:17
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:17
 msgid "Prompt"
 msgstr "Vraag"
 
-#: modules/mod_survey/templates/email_survey_result.tpl:11
-#: modules/mod_survey/templates/_survey_question_page.tpl:9
+#: modules/mod_survey/templates/email_survey_result.tpl:28
 msgid "Question"
 msgstr "Vraag"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:35
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:59
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:8
+#: modules/mod_survey/templates/_admin_edit_blocks.survey.tpl:7
+msgid "Questions"
+msgstr "Vragen"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:82
+msgid "Red"
+msgstr "Rood"
+
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:52
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:34
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:52
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:51
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:37
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:40
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:43
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:52
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:55
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:53
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:30
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:48
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:33
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_matching.tpl:42
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:40
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:38
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:53
 msgid "Required, this question must be answered."
 msgstr "Verplicht, deze vraag moet beantwoord worden."
 
-#: modules/mod_survey/templates/_survey_results.tpl:2
-#: modules/mod_survey/templates/_survey_start.tpl:9
+#: modules/mod_survey/templates/_survey_results.tpl:4
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:9
+#: modules/mod_survey/templates/survey_results_printable.tpl:37
+#: modules/mod_survey/templates/_survey_start.tpl:15
 msgid "Results"
 msgstr "Resultaten"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:128
+msgid "Second page in category"
+msgstr "Tweede pagina in categorie"
 
 #: modules/mod_survey/templates/blocks/_block_view_survey_country.tpl:9
 msgid "Select country"
 msgstr "Selecteer land"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:16
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:71
+msgid "Select which you agree with."
+msgstr "Selecteer waar je het mee eens bent."
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:98
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_country.tpl:14
 msgid "Select your country"
 msgstr "Selecteer uw land"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:33
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:84
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:49
+msgid ""
+"Send confirmation to respondent (please add a question named <i>email</i>)"
+msgstr "Stuur bevestiging naar degene die de survey invult (voeg een vraag toe genaamd <i>email</i>)"
+
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer_date.tpl:28
 msgid "September"
 msgstr "september"
 
-#: modules/mod_survey/mod_survey.erl:101
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:7
+msgid "Settings"
+msgstr "Instellingen"
+
+#: modules/mod_survey/mod_survey.erl:120
 msgid "Short answer"
 msgstr "Kort antwoord"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:76
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:48
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:104
 msgid "Show email addresses"
 msgstr "Toon emailadressen"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:49
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:64
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:65
 msgid "Show progress bar"
 msgstr "Toon voortgang"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:45
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:58
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:61
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Toon voortgang als <em>Vraag 3/10</em>"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:27
-msgid "Show results to user after completion (only results for multiple choice questions are shown)"
+#: modules/mod_survey/templates/_admin_survey_settings_tab.tpl:29
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:37
+msgid ""
+"Show results to user after completion (only results for multiple choice "
+"questions are shown)"
 msgstr "Toon de resultaten van de vragenlijst aan de gebruiker aan het eind."
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:75
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:47
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:103
 msgid "Show survey results"
 msgstr " Toon resultaten"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:46
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:38
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:35
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:39
 msgid "Single answer possible"
 msgstr "Enkel antwoord mogelijk"
 
@@ -440,75 +694,89 @@ msgstr "Enkel antwoord mogelijk"
 msgid "Something went wrong"
 msgstr "Er ging iets mis"
 
-#: modules/mod_survey/templates/_survey_start.tpl:2
+#: modules/mod_survey/templates/_survey_start.tpl:8
 msgid "Start"
 msgstr "Beginnen"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:31
-#: modules/mod_survey/templates/_survey_question_page.tpl:32
-#: modules/mod_survey/mod_survey.erl:106
+#: modules/mod_survey/templates/_survey_question_page.tpl:42
+#: modules/mod_survey/templates/_survey_question_page.tpl:43
+#: modules/mod_survey/mod_survey.erl:125
 msgid "Stop"
 msgstr "Stoppen"
 
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:36
+msgid "Stop the survey after this page. No questions are submitted."
+msgstr "Stop de survey na deze pagina, zonder de vragen op te slaan."
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34
 #: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:20
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:31
 msgid "Strongly Agree"
 msgstr "Helemaal mee eens"
 
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:24
 #: modules/mod_survey/templates/blocks/_block_view_survey_likert.tpl:12
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:21
 msgid "Strongly Disagree"
 msgstr "Helemaal mee oneens"
 
-#: modules/mod_survey/templates/_survey_question_page.tpl:36
+#: modules/mod_survey/templates/_survey_question_page.tpl:47
 msgid "Submit"
 msgstr "Verstuur"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:54
 #: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:47
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:46
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:47
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:50
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_category.tpl:43
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:42
 msgid "Submit on clicking an option"
 msgstr "Versturen bij aanklikken van keuze"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:38
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Success"
 msgstr "Succes"
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:5
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:6
 msgid "Survey"
 msgstr "Vragenlijst"
 
-#: modules/mod_survey/mod_survey.erl:93
+#: modules/mod_survey/mod_survey.erl:112
 msgid "Survey Questions"
 msgstr "Vragen"
+
+#: modules/mod_survey/templates/admin_survey_editor.tpl:12
+#: modules/mod_survey/templates/admin_survey_editor.tpl:17
+msgid "Survey Results Editor"
+msgstr "Resultaten bewerken"
 
 #: modules/mod_survey/templates/admin_survey_editor.tpl:7
 msgid "Survey editor"
 msgstr "Vragen bewerken"
 
-#: modules/mod_survey/mod_survey.erl:75
+#: modules/mod_survey/mod_survey.erl:88
 msgid "Survey result deleted."
 msgstr "Resultaat verwijderd."
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:79
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:51
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:107
 msgid "Survey results editor"
 msgstr "Resultaten bewerken"
 
-#: modules/mod_survey/templates/_survey_end.tpl:1
+#: modules/mod_survey/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "Bedankt"
 
-#: modules/mod_survey/templates/_survey_end.tpl:3
-msgid ""
-"Thank you for filling in our survey."
+#: modules/mod_survey/templates/_survey_end.tpl:7
+msgid "Thank you for filling in our survey."
 msgstr "Bedankt voor het invullen van de vragenlijst."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:15
+#: modules/mod_survey/templates/email_survey_result.tpl:21
+msgid "Thank you for filling in:"
+msgstr "Bedankt voor het invullen van:"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:48
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:17
 msgid "The earth is flat."
 msgstr "De aarde is plat."
 
-#: modules/mod_survey/templates/email_survey_result.tpl:7
+#: modules/mod_survey/templates/email_survey_result.tpl:8
 msgid "The following survey has been filled in:"
 msgstr "De volgende survey is ingevuld:"
 
@@ -520,7 +788,7 @@ msgstr ""
 "Er is een fout opgetreden tijdens het afhandelen van de antwoorden. Dit "
 "spijt ons ten zeerste."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:12
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_upload.tpl:15
 msgid ""
 "This block show a file upload field. This can only be used as the last "
 "question of a survey. The default survey routines can’t handle file upload, "
@@ -531,44 +799,67 @@ msgstr ""
 "surveymodule kan geen bestanden aan, er moet een aparte\n"
 "survey-afhandelroutine worden gebruikt."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_stop.tpl:12
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_stop.tpl:10
 msgid ""
 "This block signals a stop in the flow. The user can't continue further and "
 "it is counted as a page break."
 msgstr ""
 "Dit blok geeft aan dat de survey ten einde is. De gebruiker kan niet verder."
 
-#: modules/mod_survey/mod_survey.erl:97
+#: modules/mod_survey/templates/_admin_survey_edit_feedback.tpl:13
+msgid "This text is shown after the survey has been submitted."
+msgstr "Deze tekst wordt getoond nadat de survey is verstuurd."
+
+#: modules/mod_survey/templates/_admin_frontend_edit.survey.tpl:17
+msgid "This text is shown as an introduction to the survey."
+msgstr "Deze tekst wordt getoond als een introductie op de survey."
+
+#: modules/mod_survey/mod_survey.erl:116
 msgid "Thurstone"
 msgstr "Vragen met puntenschaal"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:20
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:17
 msgid "To question"
 msgstr "Naar vraag"
 
+#: modules/mod_survey/templates/_admin_survey_question_page.tpl:14
+msgid "Toggle outline view"
+msgstr "Overzicht aan/uit"
+
+#: modules/mod_survey/templates/_survey_result_chart.tpl:28
+#: modules/mod_survey/templates/survey_results_printable.tpl:61
+msgid "Totals"
+msgstr "Totalen"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:50
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:24
 #: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:10
 #: modules/mod_survey/templates/blocks/_block_view_survey_truefalse.tpl:17
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:21
 msgid "True"
 msgstr "Waar"
 
-#: modules/mod_survey/mod_survey.erl:94
+#: modules/mod_survey/mod_survey.erl:113
 msgid "True/False"
 msgstr "Waar/Onwaar"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:32
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:38
 msgid "Validation"
 msgstr "Validatie"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:81
+msgid "Wagner"
+msgstr ""
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:15
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:59
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_likert.tpl:17
 msgid "Weasels make great pets."
 msgstr "Wezels zijn leuke huisdieren."
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:38
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid ""
 "When no condition is true then the question following this break will be the "
 "next page."
@@ -576,21 +867,26 @@ msgstr ""
 "Wanneer aan geen conditie is voldaan, is de vraag na deze onderbreking de "
 "volgende pagina."
 
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:42
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:25
 #: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:10
 #: modules/mod_survey/templates/blocks/_block_view_survey_yesno.tpl:17
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:21
 msgid "Yes"
 msgstr "Ja"
 
-#: modules/mod_survey/mod_survey.erl:95
+#: modules/mod_survey/mod_survey.erl:114
 msgid "Yes/No"
 msgstr "Ja/Nee"
 
-#: modules/mod_survey/templates/_survey_results.tpl:37
+#: modules/mod_survey/mod_survey.erl:659
+msgid "You are not allowed to change these results."
+msgstr "Het is U niet toegestaan de resultaten te bewerken."
+
+#: modules/mod_survey/templates/_survey_results.tpl:39
 msgid "You are not allowed to see the results of this survey."
 msgstr "Het is U niet toegestaan de resultaten van de vragenlijst te zien."
 
-#: modules/mod_survey/templates/_admin_edit_content.survey.tpl:16
+#: modules/mod_survey/templates/_admin_edit_content_survey_settings.tpl:8
 msgid ""
 "You can create your survey by adding blocks with questions below the body."
 msgstr ""
@@ -600,43 +896,87 @@ msgstr ""
 msgid "You need to give a name to every question."
 msgstr "Elke vraag moet een naam hebben."
 
-#: modules/mod_survey/templates/admin_survey_editor.tpl:15
-msgid "edit"
-msgstr "bewerk"
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:93
+msgid "chocolate"
+msgstr "chocolade"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:38
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:3
+msgid "goto"
+msgstr "ga naar"
+
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:94
+msgid "ice cream and my favorite color is"
+msgstr "ijs en mijn favoriete kleur is"
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:2
+msgid "if"
+msgstr "als"
+
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:45
 msgid "must be a date"
 msgstr "moet een datum zijn"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:36
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:23
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:33
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:43
 msgid "must be a number"
 msgstr "moet een numerieke waarde zijn"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:37
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:25
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:35
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:44
 msgid "must be a phone number"
 msgstr "moet een telefoonnummer zijn"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:35
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:21
+#: modules/mod_survey/templates/blocks/_block_view_survey_short_answer.tpl:31
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:42
 msgid "must be an e-mail address"
 msgstr "moet een e-mail adres zijn"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:23
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:34
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:19
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:29
 msgid "name"
 msgstr "naam"
 
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:17
-#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:29
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:14
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:25
 msgid "name >= 2"
 msgstr "naam >= 2"
 
-#: modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:15
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:33
+msgid "one per line"
+msgstr "één per regel"
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:3
+#: modules/mod_survey/templates/blocks/_admin_edit_block_li_survey_button.tpl:49
+msgid "question"
+msgstr "vraag"
+
+#: modules/mod_survey/templates/_admin_survey_question_j.tpl:2
+msgid "question == 1"
+msgstr "question == 1"
+
+#: modules/mod_survey/templates/blocks/_block_view_survey_multiple_choice.tpl:10
+#: modules/mod_survey/templates/blocks/_block_view_survey_narrative.tpl:16
 msgid "select…"
 msgstr "kies…"
 
-#: modules/mod_survey/templates/admin_survey_editor.tpl:12
-msgid "survey results editor"
-msgstr "resultaten bewerken"
+#: modules/mod_survey/templates/_admin_survey_question_editor.tpl:92
+msgid "years old. I like"
+msgstr "jaar oud. Ik houd van"
+
+#~ msgid "Explanation text (optional)"
+#~ msgstr "Uitlegtekst (optioneel)"
+
+#~ msgid "Name of target question"
+#~ msgstr "Naam van doelvraag"
+
+#~ msgid "edit"
+#~ msgstr "bewerk"
+
+#~ msgid "survey results editor"
+#~ msgstr "resultaten bewerken"
 
 #~ msgid ""
 #~ "Below you can define your survey. Drag items from the left to the right."
@@ -644,17 +984,8 @@ msgstr "resultaten bewerken"
 #~ "Hieronder kan je de vragenlijst maken. Sleep vraagtypes van de linkerkant "
 #~ "naar de rechterkant."
 
-#~ msgid "Cancel"
-#~ msgstr "Annuleren"
-
-#~ msgid "Choices"
-#~ msgstr "Keuzes"
-
 #~ msgid "Name"
 #~ msgstr "Naam"
-
-#~ msgid "Next"
-#~ msgstr "Volgende"
 
 #~ msgid ""
 #~ "Please enter a name of your question (for reporting), and the question "
