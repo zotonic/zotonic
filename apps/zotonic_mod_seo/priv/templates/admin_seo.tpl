@@ -110,7 +110,7 @@
                             <div class="col-md-8">
                                 <input type="text" id="seo_yandex-webmaster_verify" name="seo_yandex-webmaster_verify" value="{{ m.config.seo_yandex.webmaster_verify.value|escape }}" class="form-control" />
                                 <p class="help-block">
-                                    {_ Enter here the verification code for _} <a href="https://webmaster.yandex.com/sites/?noRedirect=yes&hostnameFilter=">{_ Yandex Webmaster _}</a>.<br/>
+                                    {_ Enter here the verification code for _} <a href="https://webmaster.yandex.com/sites/?noRedirect=yes&amp;hostnameFilter=">{_ Yandex Webmaster _}</a>.<br/>
                                     {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>937800ae8c5a6cbf</strong>.
                                 </p>
                             </div>
