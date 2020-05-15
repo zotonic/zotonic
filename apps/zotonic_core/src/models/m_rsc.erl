@@ -108,6 +108,12 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ Id, <<"is_cat">>, Key | Rest ], _Msg, Context) ->
     {ok, {is_cat(Id, Key, Context), Rest}};
+m_get([ Id, <<"is_a">>, Cat | Rest ], _Msg, Context) ->
+    IsA = m_rsc:is_a(Id, Cat, Context),
+    {ok, {IsA, Rest}};
+m_get([ Id, <<"is_a">> ], _Msg, Context) ->
+    IsA = m_rsc:is_a(Id, Context),
+    {ok, {IsA, []}};
 m_get([ Id, Key | Rest ], _Msg, Context) ->
     {ok, {p(Id, Key, Context), Rest}};
 m_get([ Id ], _Msg, Context) ->
@@ -581,7 +587,7 @@ p_no_acl(Id, <<"is_editable">>, Context) -> is_editable(Id, Context);
 p_no_acl(Id, <<"is_deletable">>, Context) -> is_deletable(Id, Context);
 p_no_acl(Id, <<"is_linkable">>, Context) -> is_linkable(Id, Context);
 p_no_acl(Id, <<"is_published_date">>, Context) -> is_published_date(Id, Context);
-p_no_acl(Id, <<"is_a">>, Context) -> [{C, true} || C <- is_a(Id, Context)];
+p_no_acl(Id, <<"is_a">>, Context) -> is_a(Id, Context);
 p_no_acl(Id, <<"exists">>, Context) -> exists(Id, Context);
 p_no_acl(Id, <<"page_url_abs">>, Context) ->
     case p_no_acl(Id, <<"page_path">>, Context) of

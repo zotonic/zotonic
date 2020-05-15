@@ -728,52 +728,39 @@ assure_categories(Name, Context) ->
     Cats = assure_cats_list(Name),
     Cats1 = assure_cat_flatten(Cats),
     lists:foldl(fun(C, Acc) ->
-                        case assure_category(C, Context) of
-                            undefined -> Acc;
-                            error -> ['$error'|Acc];
-                            {ok, N} -> [N|Acc]
-                        end
+                    case assure_category(C, Context) of
+                        undefined -> Acc;
+                        error -> ['$error'|Acc];
+                        {ok, N} -> [N|Acc]
+                    end
                 end,
                 [],
                 Cats1).
 
-assure_cats_list(Name) when is_list(Name) ->
-    case z_string:is_string(Name) of
-        true -> [ iolist_to_binary(Name) ];
-        false -> Name
-    end;
+%% Make a single category a list
+assure_cats_list(Names) when is_list(Names) ->
+    Names;
 assure_cats_list(Name) ->
     [ Name ].
 
-%% Flatten eventual lists of categories
+%% Split strings with comma separated lists of categories
 -spec assure_cat_flatten(any() | list()) -> list().
 assure_cat_flatten(Names) ->
-    lists:flatten([
-                     case is_list(N) of
-                         true ->
-                             case z_string:is_string(N) of
-                                 true -> binary:split(iolist_to_binary(N), <<",">>, [ global ]);
-                                 false -> assure_cat_flatten(N)
-                             end;
-                         false ->
-                             N
-                     end
-                     || N <- Names]).
+    lists:flatten(
+        lists:map(
+            fun
+                (S) when is_binary(S) ->
+                    binary:split(S, <<",">>, [ global ]);
+                (Name) ->
+                    Name
+            end,
+            Names)).
 
 %% Make sure the given name is a category.
-assure_category([], _) -> undefined;
-assure_category(<<>>, _) -> undefined;
 assure_category(undefined, _) -> undefined;
-assure_category([$'|_] = Name, Context) ->
-    case lists:last(Name) of
-        $' -> assure_category_1(z_string:trim(Name, $'), Context);
-        _ -> assure_category_1(Name, Context)
-    end;
-assure_category([$"|_] = Name, Context) ->
-    case lists:last(Name) of
-        $" -> assure_category_1(z_string:trim(Name, $"), Context);
-        _ -> assure_category_1(Name, Context)
-    end;
+assure_category(null, _) -> undefined;
+assure_category("", _) -> undefined;
+assure_category(<<>>, _) -> undefined;
 assure_category(<<$', _/binary>> = Name, Context) ->
     case binary:last(Name) of
         $' -> assure_category_1(z_string:trim(Name, $'), Context);

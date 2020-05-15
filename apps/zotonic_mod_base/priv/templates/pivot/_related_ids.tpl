@@ -8,6 +8,6 @@
 {% if id.content_group_id %}
     zpo{{ id.content_group_id }}
 {% endif %}
-{% for cat,_true in id.is_a %}
+{% for cat in id.is_a %}
     zpc{{ m.rsc[cat].id }}
 {% endfor %}
