@@ -29,6 +29,7 @@
     is_totp_enabled/2,
     is_valid_totp/3,
 
+    mode/1,
     user_mode/1,
 
     totp_image_url/2,
@@ -72,6 +73,8 @@ m_get([ <<"is_totp_requested">>, RequestKey | Rest ], _Msg, Context) ->
         _ -> false
     end,
     {ok, {IsRequested, Rest}};
+m_get([ <<"mode">> | Rest ], _Msg, Context) ->
+    {ok, {mode(Context), Rest}};
 m_get([ <<"user_mode">> | Rest ], _Msg, Context) ->
     {ok, {user_mode(Context), Rest}};
 m_get(_Path, _Msg, _Context) ->
@@ -118,6 +121,15 @@ is_totp_enabled(UserId, Context) ->
     case m_identity:get_rsc_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context) of
         [] -> false;
         [_] -> true
+    end.
+
+%% @doc Check the totp mode
+-spec mode( z:context() ) -> 0 | 1 | 2.
+mode(Context) ->
+    case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+        2 -> 2;
+        1 -> 1;
+        _ -> 0
     end.
 
 %% @doc Check the totp mode for the current user: 0 = optional, 1 = ask, 2 = required

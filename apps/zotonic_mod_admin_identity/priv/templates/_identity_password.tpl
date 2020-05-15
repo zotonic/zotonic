@@ -36,8 +36,8 @@
         </div>
     {% endif %}
 
-    {% if m.config.mod_admin_identity.password_regex.value %}
-        {% validate id="new_password" type={format pattern=m.config.mod_admin_identity.password_regex.value failure_message=_"This password does not meet the security requirements"} %}
+    {% if m.admin_identity.password_regex %}
+        {% validate id="new_password" type={format pattern=m.admin_identity.password_regex failure_message=_"This password does not meet the security requirements"} %}
     {% else %}
         {% validate id="new_password" type={length minimum=m.authentication.password_min_length} %}
     {% endif %}

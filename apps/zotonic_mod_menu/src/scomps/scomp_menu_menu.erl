@@ -48,10 +48,7 @@ vary(_Params, _Context) -> default.
 % id_prefix (used in template)
 render(Params, _Vars, Context) ->
     MenuId = m_rsc:rid(get_menu_id(Params, Context), Context),
-    Template = case z_convert:to_bool(proplists:get_value(is_superfish, Params, false)) of
-                    true -> proplists:get_value(template, Params, "_menu_superfish.tpl");
-                    false -> proplists:get_value(template, Params, "_menu.tpl")
-               end,
+    Template = proplists:get_value(template, Params, "_menu.tpl"),
     IdPrefix = proplists:get_value(id_prefix, Params, ""),
     Class = proplists:get_value(class, Params, "nav navbar-nav"),
     MaxDepth = proplists:get_value(maxdepth, Params, 999),

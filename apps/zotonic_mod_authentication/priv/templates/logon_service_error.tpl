@@ -9,7 +9,7 @@
 	<div class="container">
 		<h1>{_ You are about to create a new account. _}</h1>
 
-		<p>{_ Close this window and log in if you are already a user of _} {{ m.config.site.title.value }}</p>
+		<p>{_ Close this window and log in if you are already a user of _} {{ m.site.title }}</p>
 
 		{% wire id="signup_confirm"
 				type="submit"

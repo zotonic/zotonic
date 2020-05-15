@@ -638,7 +638,7 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
                 throw:{error, _} = Error -> {rollback, Error}
             end;
         {error, _} = Error ->
-            {rolback, Error}
+            {rollback, Error}
     end.
 
 escape_props(true, Props, Context) ->

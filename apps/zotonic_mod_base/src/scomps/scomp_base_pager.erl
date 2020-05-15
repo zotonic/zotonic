@@ -111,15 +111,16 @@ build_html(_Template, _Page, Pages, true, _Dispatch, _DispatchArgs, _Context) wh
     <<>>;
 build_html(Template, Page, Pages, _HideSinglePage, Dispatch, DispatchArgs, Context) ->
     {S,M,E} = pages(Page, Pages),
-    Urls = urls(S, M, E, Dispatch, DispatchArgs, Context),
+    DispatchQArgs = append_qargs(DispatchArgs, Context),
+    Urls = urls(S, M, E, Dispatch, DispatchQArgs, Context),
     Props = [
         {prev_url, case Page =< 1 of
                         true -> undefined;
-                        false ->  url_for(Dispatch, [{page,Page-1}|DispatchArgs], Context)
+                        false ->  url_for(Dispatch, [{page,Page-1}|DispatchQArgs], Context)
                    end},
         {next_url, case Page >= Pages of
                         true -> undefined;
-                        false ->  url_for(Dispatch, [{page,Page+1}|DispatchArgs], Context)
+                        false ->  url_for(Dispatch, [{page,Page+1}|DispatchQArgs], Context)
                    end},
         {pages, Urls},
         {page, Page},
@@ -135,8 +136,7 @@ url_for(page, Args, Context) ->
             z_dispatcher:url_for(page, Args, Context);
         Id ->
             Url = m_rsc:p(Id, page_url, Context),
-            ArgsWithQArgs = append_qargs(Args, Context),
-            ArgsEncoded = encode_args(proplists:delete(slug, proplists:delete(id, ArgsWithQArgs))),
+            ArgsEncoded = encode_args(proplists:delete(slug, proplists:delete(id, Args))),
             case binary:match(Url, <<"?">>) of
                 {_,_} ->
                     iolist_to_binary([ Url, $&, ArgsEncoded ]);
@@ -160,10 +160,10 @@ append_qargs(Args, Context) ->
             Args1 = proplists:delete(qargs, Args),
             Qs = z_context:get_q_all(Context),
             lists:foldr(fun
-                            ({[$q|_]=Key,_Value}=A, Acc) ->
+                            ({<<"q", _/binary>> = Key, _Value}=A, Acc) ->
                                 case proplists:is_defined(Key, Args) of
                                     true -> Acc;
-                                    false -> [A|Acc]
+                                    false -> [ A | Acc ]
                                 end;
                             (_, Acc) ->
                                 Acc

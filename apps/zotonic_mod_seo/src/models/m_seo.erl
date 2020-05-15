@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2020 Marc Worrell
 %% @doc Model for mod_seo
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,21 +18,25 @@
 
 -module(m_seo).
 
--behaviour (zotonic_model).
+-behaviour(zotonic_model).
 
 -export([ m_get/3 ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"noindex">> | Rest ], _Msg, Context) ->
-    {ok, {m_config:get_boolean(mod_seo, noindex, Context), Rest}};
+    {ok, {m_config:get_boolean(seo, noindex, Context), Rest}};
+m_get([ <<"keywords">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(seo, keywords, Context), Rest}};
 m_get([ <<"description">> | Rest ], _Msg, Context) ->
-    {ok, {m_config:get_value(mod_seo, description, Context), Rest}};
+    {ok, {m_config:get_value(seo, description, Context), Rest}};
 m_get([ <<"bing">>, <<"webmaster_verify">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_bing, webmaster_verify, Context), Rest}};
 m_get([ <<"google">>, <<"webmaster_verify">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_google, webmaster_verify, Context), Rest}};
 m_get([ <<"google">>, <<"analytics">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_google, analytics, Context), Rest}};
+m_get([ <<"yandex">>, <<"webmaster_verify">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(seo_yandex, webmaster_verify, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

@@ -29,7 +29,7 @@
                     action={config_toggle module="mod_auth2fa" key="mode"}
                 %}
                 <label class="radio-inline">
-                    <input name="2fa_mode" type="radio" id="opt2fa" value="0" {% if not m.config.mod_auth2fa.mode.value %}checked="checked"{% endif %} />
+                    <input name="2fa_mode" type="radio" id="opt2fa" value="0" {% if not m.auth2fa.mode %}checked="checked"{% endif %} />
                     {_ Optional _}
                 </label>
             </div>
@@ -39,7 +39,7 @@
                     action={config_toggle module="mod_auth2fa" key="mode"}
                 %}
                 <label class="radio-inline">
-                    <input name="2fa_mode" type="radio" id="ask2fa" value="1" {% if m.config.mod_auth2fa.mode.value  == '1' %}checked="checked"{% endif %} />
+                    <input name="2fa_mode" type="radio" id="ask2fa" value="1" {% if m.auth2fa.mode  == '1' %}checked="checked"{% endif %} />
                     {_ Ask after signing in _}
                 </label>
             </div>
@@ -49,7 +49,7 @@
                     action={config_toggle module="mod_auth2fa" key="mode"}
                 %}
                 <label class="radio-inline">
-                    <input name="2fa_mode" type="radio" id="force2fa" value="2" {% if m.config.mod_auth2fa.mode.value == '2' %}checked="checked"{% endif %} />
+                    <input name="2fa_mode" type="radio" id="force2fa" value="2" {% if m.auth2fa.mode == '2' %}checked="checked"{% endif %} />
                     {_ Force two-factor authentication _}
                 </label>
             </div>
