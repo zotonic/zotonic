@@ -80,6 +80,8 @@ prep_answer(Q, [{_Name, {undefined, Text}}|_], _Context) ->
 prep_answer(Q, [{_Name, {Value, _Text}}|_], _Context) ->
     prep(Q, [Value]).
 
+    prep(Q, []) ->
+        <<>>;
     prep(Q, Vs) ->
         case z_convert:to_bool(proplists:get_value(is_multiple, Q)) of
             false ->
@@ -97,4 +99,3 @@ prep_answer(Q, [{_Name, {Value, _Text}}|_], _Context) ->
 
 prep_block(Block, _Context) ->
     Block.
-

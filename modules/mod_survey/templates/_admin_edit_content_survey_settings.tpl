@@ -49,6 +49,13 @@
 		            {_ Send confirmation to respondent (please add a question named <i>email</i>) _}
 	            </label>
 	        </div>
+
+            <div class="checkbox">
+            	<label>
+                    <input type="checkbox" name="survey_is_disabled" id="survey_is_disabled" value="1" {% if id.survey_is_disabled %}checked="checked"{% endif %} />
+                    {_ Disabled, hide the survey form _}
+                </label>
+            </div>
 	    </div>
 
 	    <div class="col-lg-6 col-md-6">
@@ -109,4 +116,3 @@
     </div>
 </fieldset>
 {% endblock %}
-
