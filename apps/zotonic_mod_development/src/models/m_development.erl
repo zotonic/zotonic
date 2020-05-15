@@ -40,6 +40,7 @@ m_get([ Cfg | Rest ], _Msg, Context)
          Cfg =:= <<"debug_blocks">>;
          Cfg =:= <<"enable_api">>;
          Cfg =:= <<"libsep">>;
+         Cfg =:= <<"livereload">>;
          Cfg =:= <<"nocache">> ->
     {ok, {m_config:get_boolean(mod_development, Cfg, Context), Rest}};
 m_get([ <<"list_observers">> | Rest ], _Msg, Context) ->

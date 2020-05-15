@@ -3,17 +3,17 @@
     <link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url }}{% endblock %}" />
 {% endif %}
 
-{% if m.config.seo.noindex.value or noindex %}
+{% if m.seo.noindex or noindex %}
     <meta name="robots" content="noindex,nofollow" />
 {% elseif id and id.language and m.modules.active.mod_translation and not z_language|member:id.language %}
     {# Take one of the alternative urls, provided by mod_translation #}
     <meta name="robots" content="noindex" />
 {% else %}
-    {% with m.config.seo.keywords.value as keywords %}
-    {% with m.config.seo.description.value as description %}
+    {% with m.seo.keywords as keywords %}
+    {% with m.seo.description.value as description %}
         {% if id %}
             {% if m.rsc[id].seo_noindex %}
-                {% if not m.config.seo.noindex.value %}<meta name="robots" content="noindex" />{% endif %}
+                {% if not m.seo.noindex %}<meta name="robots" content="noindex" />{% endif %}
             {% else %}
                 {% with m.rsc[id].seo_keywords as seo_keywords %}
                     {% if seo_keywords %}
@@ -35,17 +35,17 @@
     {% endwith %}
     {% endwith %}
 {% endif %}
-{% if m.config.seo_bing.webmaster_verify.value as wmv %}
+{% if m.seo.bing.webmaster_verify as wmv %}
     <meta name="msvalidate.01" content="{{ wmv }}" />
 {% endif %}
-{% if m.config.seo_google.webmaster_verify.value as wmv %}
+{% if m.seo.google.webmaster_verify as wmv %}
     <meta name="google-site-verification" content="{{ wmv }}" />
 {% endif %}
-{% if m.config.seo_yandex.webmaster_verify.value as wmv %}
+{% if m.seo.yandex.webmaster_verify as wmv %}
     <meta name="yandex-verification" content="{{ wmv }}" />
 {% endif %}
 {% if not m.acl.is_admin and not notrack %}
-    {% if m.config.seo_google.analytics.value as ga %}
+    {% if m.seo.google.analytics as ga %}
         <script>
             var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
             var ga_options = {% include '_ga_params.tpl' %};

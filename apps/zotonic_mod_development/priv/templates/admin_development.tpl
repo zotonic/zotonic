@@ -53,7 +53,7 @@
                 };" }
         %}
         <label class="checkbox-inline">
-            <input type="checkbox" id="livereload" value="1" {% if m.config.mod_development.livereload.value %}checked="checked"{% endif %} />
+            <input type="checkbox" id="livereload" value="1" {% if m.development.livereload %}checked="checked"{% endif %} />
             {_ Live reload of changed CSS files. Reload page on change of templates or JavaScript. _}
         </label>
     </div>
