@@ -16,6 +16,8 @@ the `id` argument in the menu resource 55.
 If no argument is given, it takes menu from the resource with the name
 ``main_menu``.
 
+Instead of a single id it is possible to give a list of ids. The trail 
+for the first id that returns a trail in the menu is returned.
 
 Showing Menu Trail only for submenu items
 -----------------------------------------
