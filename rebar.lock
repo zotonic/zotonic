@@ -93,7 +93,7 @@
   0},
  {<<"template_compiler">>,
   {git,"https://github.com/zotonic/template_compiler.git",
-       {ref,"874fd3c40a798210acfe610d3082205292c43269"}},
+       {ref,"e6cd17025d914c318725a0e4d360e74598564a08"}},
   0},
  {<<"termit">>,{pkg,<<"termit">>,<<"1.0.0">>},0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
