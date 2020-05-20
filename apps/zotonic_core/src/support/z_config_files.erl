@@ -168,12 +168,12 @@ config_dir_find(Node) ->
 base_nodename(Node) ->
     lists:takewhile(fun(C) -> C =/= $@ end, atom_to_list(Node)).
 
-%% @doc List all (regular) files in a directory, skip hidden en temp files.
+%% @doc List all (regular) files in a directory, skip hidden and temp files.
 -spec files( file:filename_all() ) -> [ file:filename_all() ].
 files(Dir) ->
     files(Dir, "*").
 
-%% @doc List all (regular) files in a directory, skip hidden en temp files.
+%% @doc List all (regular) files in a directory, skip hidden and temp files.
 %%      Ensures the list of files is sorted in a consistent way.
 -spec files( file:filename_all(), string() ) -> [ file:filename_all() ].
 files(Dir, Wildcard) ->
