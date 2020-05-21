@@ -228,7 +228,15 @@ generate_self_signed(Hostname, Opts) ->
                 hostname => Hostname,
                 servername => server_name()
             },
-            zotonic_ssl_certs:ensure_self_signed(CertFile, KeyFile, Options);
+            case zotonic_ssl_certs:ensure_self_signed(CertFile, KeyFile, Options) of
+                ok ->
+                    {ok, [
+                        {certfile, CertFile},
+                        {keyfile, KeyFile}
+                    ]};
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             {error, {ensure_dir, Error, PemFile}}
     end.
