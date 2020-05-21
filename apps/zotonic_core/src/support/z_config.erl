@@ -149,9 +149,14 @@ map_ip_address(_Name, any) -> any;
 map_ip_address(_Name, "any") -> any;
 map_ip_address(_Name, "") -> any;
 map_ip_address(_Name, "*") -> any;
+map_ip_address(_Name, <<>>) -> any;
+map_ip_address(_Name, <<"any">>) -> any;
+map_ip_address(_Name, <<"*">>) -> any;
 map_ip_address(_Name, none) -> none;
 map_ip_address(_Name, "none") -> none;
-map_ip_address(_Name, IP) when is_tuple(IP) -> IP;
+map_ip_address(_Name, <<"none">>) -> none;
+map_ip_address(_Name, IP) when is_tuple(IP) ->
+    IP;
 map_ip_address(Name, IP) when is_list(IP) ->
     case getaddr(Name, IP) of
         {ok, IpN} -> IpN;
@@ -160,6 +165,8 @@ map_ip_address(Name, IP) when is_list(IP) ->
                         [Name, IP, Reason]),
             none
     end;
+map_ip_address(Name, IP) when is_binary(IP) ->
+    map_ip_address(Name, binary_to_list(IP));
 map_ip_address(smtp_spamd_ip, undefined) ->
     none;
 map_ip_address(Name, IP) ->

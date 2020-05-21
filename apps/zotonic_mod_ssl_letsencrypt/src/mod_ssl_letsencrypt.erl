@@ -334,13 +334,13 @@ do_load_cert(State) ->
     {certfile, CertFile} = proplists:lookup(certfile, Files),
     case filelib:is_file(CertFile) of
         true ->
-            case z_ssl_certs:decode_cert(CertFile) of
-                {ok, Props} ->
+            case zotonic_ssl_certs:decode_cert(CertFile) of
+                {ok, CertMap} ->
                     State#state{
                         cert_is_valid = true,
-                        cert_hostname = proplists:get_value(common_name, Props),
-                        cert_san = proplists:get_value(subject_alt_names, Props, []),
-                        cert_valid_till = proplists:get_value(not_after, Props)
+                        cert_hostname = maps:get(common_name, CertMap),
+                        cert_san = maps:get(subject_alt_names, CertMap, []),
+                        cert_valid_till = maps:get(not_after, CertMap)
                     };
                 {error, _} = Error ->
                     lager:error("Could not decode Letsencrypt crt file ~p",

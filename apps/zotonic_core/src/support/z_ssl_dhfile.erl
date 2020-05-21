@@ -36,15 +36,27 @@
 dh_options() ->
     [ {dhfile, dhfile()} ].
 
+%% @doc Check if the given file is a DH file.
 is_dhfile(Filename) ->
-    case file:read_file(Filename) of
-        {ok, <<"-----BEGIN DH PARAMETERS", _/binary>>} -> true;
-        _ -> false
+    zotonic_ssl_dhfile:is_dhfile(Filename).
+
+%% @doc Ensure that a DH file is generated. The 'ssl_dhgroup' config defines
+%% the group for the DH file, defaults to 'ffdhe3072'
+-spec ensure_dhfile() -> ok | {error, term()}.
+ensure_dhfile() ->
+    Filename = dhfile(),
+    case filelib:is_file(Filename) of
+        true ->
+            ok;
+        false ->
+            ok = z_filelib:ensure_dir(Filename),
+            Group = z_convert:to_atom(z_config:get(ssl_dhgroup, ?DEFAULT_DHGROUP)),
+            zotonic_ssl_dhfile:ensure_dhfile(dhfile(), Group)
     end.
 
-ensure_dhfile() ->
-    ensure_dhfile(dhfile()).
-
+%% @doc Return the filename of the DH file. Defaults to a file in the security
+%% directory. Can be configured differently using the 'ssl_dhfile' config.
+-spec dhfile() -> file:filename_all().
 dhfile() ->
     case z_config:get(ssl_dhfile) of
         undefined ->
@@ -60,70 +72,3 @@ dhfile() ->
         Filename ->
             Filename
     end.
-
-ensure_dhfile(Filename) ->
-    case filelib:is_file(Filename) of
-        true ->
-            ok;
-        false ->
-            ok = z_filelib:ensure_dir(Filename),
-            write_dhfile(Filename)
-    end.
-
-write_dhfile(Filename) ->
-    Param = z_convert:to_atom(z_config:get(ssl_dhgroup, ?DEFAULT_DHGROUP)),
-    lager:info("Writing DH key ~p to '~s'",
-               [Param, Filename]),
-    case file:write_file(Filename, dh_params(Param)) of
-        ok ->
-            _ = file:change_mode(Filename, 8#00600),
-            ok;
-        {error, Reason} ->
-            lager:error("Failed writing DH file in '~s' (error was ~p)",
-                        [Filename, Reason]),
-            {error, dhfile}
-    end.
-
-%%
-%% Recommended pre-configured DH groups per IETF (RFC 7919:
-%% https://tools.ietf.org/html/rfc7919).
-%%
-%% These values were obtained from
-%% https://wiki.mozilla.org/Security/Server_Side_TLS#ffdhe2048
-%%
-
-dh_params(ffdhe2048) ->
-    <<"-----BEGIN DH PARAMETERS-----\n",
-      "MIIBCAKCAQEA//////////+t+FRYortKmq/cViAnPTzx2LnFg84tNpWp4TZBFGQz\n",
-      "+8yTnc4kmz75fS/jY2MMddj2gbICrsRhetPfHtXV/WVhJDP1H18GbtCFY2VVPe0a\n",
-      "87VXE15/V8k1mE8McODmi3fipona8+/och3xWKE2rec1MKzKT0g6eXq8CrGCsyT7\n",
-      "YdEIqUuyyOP7uWrat2DX9GgdT0Kj3jlN9K5W7edjcrsZCwenyO4KbXCeAvzhzffi\n",
-      "7MA0BM0oNC9hkXL+nOmFg/+OTxIy7vKBg8P+OxtMb61zO7X8vC7CIAXFjvGDfRaD\n",
-      "ssbzSibBsu/6iGtCOGEoXJf//////////wIBAg==\n",
-      "-----END DH PARAMETERS-----">>;
-dh_params(ffdhe3072) ->
-    <<"-----BEGIN DH PARAMETERS-----\n",
-      "MIIBiAKCAYEA//////////+t+FRYortKmq/cViAnPTzx2LnFg84tNpWp4TZBFGQz\n",
-      "+8yTnc4kmz75fS/jY2MMddj2gbICrsRhetPfHtXV/WVhJDP1H18GbtCFY2VVPe0a\n",
-      "87VXE15/V8k1mE8McODmi3fipona8+/och3xWKE2rec1MKzKT0g6eXq8CrGCsyT7\n",
-      "YdEIqUuyyOP7uWrat2DX9GgdT0Kj3jlN9K5W7edjcrsZCwenyO4KbXCeAvzhzffi\n",
-      "7MA0BM0oNC9hkXL+nOmFg/+OTxIy7vKBg8P+OxtMb61zO7X8vC7CIAXFjvGDfRaD\n",
-      "ssbzSibBsu/6iGtCOGEfz9zeNVs7ZRkDW7w09N75nAI4YbRvydbmyQd62R0mkff3\n",
-      "7lmMsPrBhtkcrv4TCYUTknC0EwyTvEN5RPT9RFLi103TZPLiHnH1S/9croKrnJ32\n",
-      "nuhtK8UiNjoNq8Uhl5sN6todv5pC1cRITgq80Gv6U93vPBsg7j/VnXwl5B0rZsYu\n",
-      "N///////////AgEC\n",
-      "-----END DH PARAMETERS-----">>;
-dh_params(ffdhe4096) ->
-    <<"-----BEGIN DH PARAMETERS-----\n",
-    "MIICCAKCAgEA//////////+t+FRYortKmq/cViAnPTzx2LnFg84tNpWp4TZBFGQz\n",
-    "+8yTnc4kmz75fS/jY2MMddj2gbICrsRhetPfHtXV/WVhJDP1H18GbtCFY2VVPe0a\n",
-    "87VXE15/V8k1mE8McODmi3fipona8+/och3xWKE2rec1MKzKT0g6eXq8CrGCsyT7\n",
-    "YdEIqUuyyOP7uWrat2DX9GgdT0Kj3jlN9K5W7edjcrsZCwenyO4KbXCeAvzhzffi\n",
-    "7MA0BM0oNC9hkXL+nOmFg/+OTxIy7vKBg8P+OxtMb61zO7X8vC7CIAXFjvGDfRaD\n",
-    "ssbzSibBsu/6iGtCOGEfz9zeNVs7ZRkDW7w09N75nAI4YbRvydbmyQd62R0mkff3\n",
-    "7lmMsPrBhtkcrv4TCYUTknC0EwyTvEN5RPT9RFLi103TZPLiHnH1S/9croKrnJ32\n",
-    "nuhtK8UiNjoNq8Uhl5sN6todv5pC1cRITgq80Gv6U93vPBsg7j/VnXwl5B0rZp4e\n",
-    "8W5vUsMWTfT7eTDp5OWIV7asfV9C1p9tGHdjzx1VA0AEh/VbpX4xzHpxNciG77Qx\n",
-    "iu1qHgEtnmgyqQdgCpGBMMRtx3j5ca0AOAkpmaMzy4t6Gh25PXFAADwqTs6p+Y0K\n",
-    "zAqCkc3OyX3Pjsm1Wn+IpGtNtahR9EGC4caKAH5eZV9q//////////8CAQI=\n",
-    "-----END DH PARAMETERS-----">>.
