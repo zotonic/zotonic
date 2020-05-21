@@ -97,6 +97,7 @@
   0},
  {<<"termit">>,{pkg,<<"termit">>,<<"1.0.0">>},0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
+ {<<"zotonic_ssl">>,{pkg,<<"zotonic_ssl">>,<<"1.0.1">>},0},
  {<<"zotonic_stdlib">>,
   {git,"https://github.com/zotonic/z_stdlib.git",
        {ref,"67c4412463f07f0a080c3bec0a97d13aa3d1e942"}},
@@ -156,5 +157,6 @@
  {<<"ssl_verify_fun">>, <<"6EAF7AD16CB568BB01753DBBD7A95FF8B91C7979482B95F38443FE2C8852A79B">>},
  {<<"stacktrace_compat">>, <<"1C064BC1725F5BD6470853487AC7FBDA5D5E8745CE4B57D0AE71765C85B4414A">>},
  {<<"termit">>, <<"D463BDD0207EDD00942754D51FD822B981CDCE7FB774E9FF71D9F59429BCEF7A">>},
- {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>}]}
+ {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>},
+ {<<"zotonic_ssl">>, <<"D99885804C90CBB59D14BA9097101C64A2F1B09B9CBABEA463B52C576A88E359">>}]}
 ].

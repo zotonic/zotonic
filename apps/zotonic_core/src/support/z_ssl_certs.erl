@@ -29,11 +29,8 @@
     get_ssl_options/1,
     get_ssl_options/2,
 
-    ciphers/0,
-
     sni_self_signed/1,
-    ensure_self_signed/1,
-    decode_cert/1
+    ensure_self_signed/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -53,7 +50,7 @@ ssl_listener_options() ->
         {secure_renegotiate, true},
         {reuse_sessions, true},
         {honor_cipher_order, true},
-        {ciphers, ciphers()}
+        {ciphers, zotonic_ssl_certs:ciphers()}
     ]
     ++ CertOptions
     ++ z_ssl_dhfile:dh_options().
@@ -227,42 +224,17 @@ generate_self_signed(Hostname, Opts) ->
             _ = file:change_mode(filename:dirname(PemFile), 8#00700),
             KeyFile = filename:rootname(PemFile) ++ ".key",
             CertFile = proplists:get_value(certfile, Opts),
-            ServerName = z_convert:to_list( server_name() ),
-            Command = "openssl req -x509 -nodes"
-                    ++ " -days 3650"
-                    ++ " -sha256"
-                    ++ " -subj '/CN="++Hostname
-                             ++"/O="++ServerName
-                             ++"'"
-                    ++ " -newkey rsa:"++?BITS++" "
-                    ++ " -keyout "++z_utils:os_filename(KeyFile)
-                    ++ " -out "++z_utils:os_filename(CertFile),
-            lager:debug("SSL: ~p", [Command]),
-            Result = os:cmd(Command),
-            lager:debug("SSL: ~p", [Result]),
-            case file:read_file(KeyFile) of
-                {ok, <<"-----BEGIN PRIVATE KEY", _/binary>>} ->
-                    os:cmd("openssl rsa -in "++KeyFile++" -out "++PemFile),
-                    _ = file:change_mode(KeyFile, 8#00600),
-                    _ = file:change_mode(PemFile, 8#00600),
-                    _ = file:change_mode(CertFile, 8#00644),
-                    lager:info("SSL: Generated SSL self-signed certificate in '~s'", [KeyFile]),
-                    {ok, Opts};
-                {ok, <<"-----BEGIN RSA PRIVATE KEY", _/binary>>} ->
-                    file:rename(KeyFile, PemFile),
-                    _ = file:change_mode(PemFile, 8#00600),
-                    _ = file:change_mode(CertFile, 8#00644),
-                    lager:info("SSL: Generated SSL self-signed certificate in '~s'", [KeyFile]),
-                    {ok, Opts};
-                _Error ->
-                    lager:error("SSL: Failed generating self-signed ssl keys in '~s' (output was ~s)",
-                                [PemFile, Result]),
-                    {error, openssl}
-            end;
+            Options = #{
+                hostname => Hostname,
+                servername => server_name()
+            },
+            zotonic_ssl_certs:ensure_self_signed(CertFile, KeyFile, Options);
         {error, _} = Error ->
             {error, {ensure_dir, Error, PemFile}}
     end.
 
+%% @doc Return the name of the server, defaults to 'Zotonic' or
+%  the alphanumerical part of the server_header config.
 -spec server_name() -> binary().
 server_name() ->
     case z_convert:to_binary( z_config:get(server_header) ) of
@@ -283,90 +255,3 @@ filter_server_name(<<32, Rest/binary>>, Acc) ->
     filter_server_name(Rest, <<Acc/binary, 32>>);
 filter_server_name(<<_, Rest/binary>>, Acc) ->
     filter_server_name(Rest, Acc).
-
-
-%% @todo reorder cipher list? See: https://sparanoid.com/note/http2-and-ecdsa-cipher-suites/
-%% ECDHE-RSA-AES128-GCM-SHA256 and ECDHE-ECDSA-AES128-GCM-SHA256 should be at the top.
-%% Otherwise Chrome will give ERR_SPDY_INADEQUATE_TRANSPORT_SECURITY
-%% There is a problem with Firefox, which *needs* a cipher suite not implemented by Erlang
-%% https://github.com/tatsuhiro-t/lucid/blob/ce8654a75108c15cc786424b3faf1a8e945bfd53/README.rst#current-status
-ciphers() ->
-     [
-        "ECDHE-ECDSA-AES256-GCM-SHA384","ECDHE-RSA-AES256-GCM-SHA384",
-        "ECDHE-ECDSA-AES256-SHA384","ECDHE-RSA-AES256-SHA384", "ECDHE-ECDSA-DES-CBC3-SHA",
-        "ECDH-ECDSA-AES256-GCM-SHA384","ECDH-RSA-AES256-GCM-SHA384","ECDH-ECDSA-AES256-SHA384",
-        "ECDH-RSA-AES256-SHA384","DHE-DSS-AES256-GCM-SHA384","DHE-DSS-AES256-SHA256",
-        "AES256-GCM-SHA384","AES256-SHA256","ECDHE-ECDSA-AES128-GCM-SHA256",
-        "ECDHE-RSA-AES128-GCM-SHA256","ECDHE-ECDSA-AES128-SHA256","ECDHE-RSA-AES128-SHA256",
-        "ECDH-ECDSA-AES128-GCM-SHA256","ECDH-RSA-AES128-GCM-SHA256","ECDH-ECDSA-AES128-SHA256",
-        "ECDH-RSA-AES128-SHA256","DHE-DSS-AES128-GCM-SHA256","DHE-DSS-AES128-SHA256",
-        "AES128-GCM-SHA256","AES128-SHA256","ECDHE-ECDSA-AES256-SHA",
-        "ECDHE-RSA-AES256-SHA","DHE-DSS-AES256-SHA","ECDH-ECDSA-AES256-SHA",
-        "ECDH-RSA-AES256-SHA","AES256-SHA","ECDHE-ECDSA-AES128-SHA",
-        "ECDHE-RSA-AES128-SHA","DHE-DSS-AES128-SHA","ECDH-ECDSA-AES128-SHA",
-        "ECDH-RSA-AES128-SHA","AES128-SHA"
-    ].
-    % ssl:cipher_suites().
-
-
-%% @doc Decode a certificate file, return common_name, not_after etc.
--spec decode_cert(file:filename_all()) -> {ok, list()} | {error, not_a_certificate}.
-decode_cert(CertFile) ->
-    {ok, CertData} = file:read_file(CertFile),
-    PemEntries = public_key:pem_decode(CertData),
-    case public_key:pem_entry_decode(hd(PemEntries)) of
-        {'Certificate', #'TBSCertificate'{} = TBS, _, _} ->
-            #'Validity'{notAfter = NotAfter} = TBS#'TBSCertificate'.validity,
-            Subject = decode_subject(TBS#'TBSCertificate'.subject),
-            SANs = decode_sans(TBS#'TBSCertificate'.extensions),
-            {ok, [
-                {not_after, decode_time(NotAfter)},
-                {common_name, proplists:get_value(cn, Subject)},
-                {subject_alt_names, SANs}
-            ]};
-        _ ->
-            {error, not_a_certificate}
-    end.
-
-decode_time({utcTime, [Y1,Y2,_M1,_M2,_D1,_D2,_H1,_H2,_M3,_M4,_S1,_S2,$Z] = T}) ->
-    case list_to_integer([Y1,Y2]) of
-        N when N >= 50 ->
-            decode_time({generalTime, [$1,$9|T]});
-        _ ->
-            decode_time({generalTime, [$2,$0|T]})
-    end;
-decode_time({_,[Y1,Y2,Y3,Y4,M1,M2,D1,D2,H1,H2,M3,M4,S1,S2,$Z]}) ->
-    Year  = list_to_integer([Y1, Y2, Y3, Y4]),
-    Month = list_to_integer([M1, M2]),
-    Day   = list_to_integer([D1, D2]),
-    Hour  = list_to_integer([H1, H2]),
-    Min   = list_to_integer([M3, M4]),
-    Sec   = list_to_integer([S1, S2]),
-    {{Year, Month, Day}, {Hour, Min, Sec}}.
-
-decode_subject({rdnSequence, _} = R) ->
-    {rdnSequence, List} = pubkey_cert_records:transform(R, decode),
-    lists:foldl(
-            fun
-                (#'AttributeTypeAndValue'{type=?'id-at-commonName', value=CN}, Acc) ->
-                    [{cn, decode_value(CN)}|Acc];
-                (_, Acc) ->
-                    Acc
-            end,
-            [],
-            lists:flatten(List)).
-
-decode_sans([]) ->
-    [];
-decode_sans([#'Extension'{extnID=?'id-ce-subjectAltName', extnValue=V} | _]) ->
-    case 'OTP-PUB-KEY':decode('SubjectAltName', iolist_to_binary(V)) of
-        {ok, Vs} -> lists:map(fun decode_value/1, Vs);
-        _ -> []
-    end;
-decode_sans([_|Exts]) ->
-    decode_sans(Exts).
-
-decode_value({dNSName, Name}) -> iolist_to_binary(Name);
-decode_value({printableString, P}) -> iolist_to_binary(P);
-decode_value({utf8String, B}) -> B.
-

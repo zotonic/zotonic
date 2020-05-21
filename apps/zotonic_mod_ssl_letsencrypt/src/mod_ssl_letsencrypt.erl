@@ -334,7 +334,7 @@ do_load_cert(State) ->
     {certfile, CertFile} = proplists:lookup(certfile, Files),
     case filelib:is_file(CertFile) of
         true ->
-            case z_ssl_certs:decode_cert(CertFile) of
+            case zotonic_ssl_certs:decode_cert(CertFile) of
                 {ok, Props} ->
                     State#state{
                         cert_is_valid = true,
