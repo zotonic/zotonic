@@ -45,7 +45,7 @@ ssl_listener_options() ->
     {ok, Hostname} = inet:gethostname(),
     {ok, CertOptions} = ensure_self_signed(Hostname),
     [
-        {versions, ['tlsv1.2', 'tlsv1.1', 'tlsv1']},
+        {versions, [ 'tlsv1.2' ]},
         {sni_fun, fun ?MODULE:sni_fun/1},
         {secure_renegotiate, true},
         {reuse_sessions, true},
