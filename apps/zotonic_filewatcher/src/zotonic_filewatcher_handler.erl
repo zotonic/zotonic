@@ -57,6 +57,7 @@
         "|\\.#"
         "|\\.bea#"
         "|/priv/files/"
+        "|/priv/data/"
         "|/\\.git/"
         "|/\\.gitignore"
         "|\\.hg/"
