@@ -228,6 +228,27 @@
     edges = [] :: list()
 }).
 
+%% Record could be returned by #dispatch notification
+-record(dispatch_redirect, {
+    location = <<>> :: binary(),
+    is_permanent = false :: boolean()
+}).
+
+%% Record could be returned by #dispatch notification
+-record(dispatch_match, {
+    dispatch_name = undefined :: atom(),
+    mod :: atom(),
+    mod_opts = [] :: list(),
+    path_tokens = [] :: list(binary()),
+    bindings = [] :: list({atom(), binary() | true})
+}).
+
+%% Record could be returned by #dispatch notification
+-record(dispatch_rules, {
+    rules :: z_sites_dispatcher:site_dispatch_list() | undefined
+}).
+
+
 %% ACL administrator user id
 -define(ACL_ADMIN_USER_ID, 1).
 -define(ACL_ANY_USER_ID, -1).

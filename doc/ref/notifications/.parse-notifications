@@ -1,7 +1,7 @@
 #!/usr/bin/env escript
 
 main([]) ->
-    File = "../../apps/zotonic_core/include/zotonic_notifications.hrl",
+    File = "../../../apps/zotonic_core/include/zotonic_notifications.hrl",
     {ok, Epp} = epp:open(File, []),
     {ok, _} = epp:parse_erl_form(Epp),
     Comments = erl_comment_scan:file(File),
@@ -13,25 +13,21 @@ main([]) ->
         fun({Name, Doc, Fields}) ->
             io:format(" - Notification: ~p~n", [ Name ]),
 
-            %% Maybe generate meta file
-            MetaFilename = filename:join(["includes", "meta-" ++ Name ++ ".rst"]),
-            case filelib:is_file(MetaFilename) of
-                true -> ok;
-                false ->
-                    {ok, MetaFile} = file:open(MetaFilename, [write]),
-                    write_record_to_rst(MetaFile, {Name, Doc, Fields}),
-                    ok = file:close(MetaFile),
+            %% Always generate meta file
+            MetaFilename = filename:join(["notification", "meta-" ++ Name ++ ".rst"]),
+            {ok, MetaFile} = file:open(MetaFilename, [write]),
+            write_record_to_rst(MetaFile, {Name, Doc, Fields}),
+            ok = file:close(MetaFile),
 
-                    %% Only write the include file if it doesn't yet exist
-                    NotificationFilename = filename:join(["includes", Name ++ ".rst"]),
-                    case filelib:is_file(NotificationFilename) of
-                        true ->
-                            noop;
-                        false ->
-                            ok = file:write_file(NotificationFilename, [
-                                ".. include:: ./meta-", Name, ".rst", "\n\n"
-                            ])
-                    end
+            %% Only write the include file if it doesn't yet exist
+            NotificationFilename = filename:join(["notification", Name ++ ".rst"]),
+            case filelib:is_file(NotificationFilename) of
+                true ->
+                    noop;
+                false ->
+                    ok = file:write_file(NotificationFilename, [
+                        ".. include:: meta-", Name, ".rst", "\n\n"
+                    ])
             end
         end,
         Records
@@ -71,7 +67,15 @@ parse_record_field(_) ->
 parse_type({atom, _Line, Type}) ->
     atom_to_list(Type);
 parse_type({type, _Line, Type, _Props}) ->
-    atom_to_list(Type).
+    atom_to_list(Type);
+parse_type({remote_type, _Line, [
+        {atom, _Line1, Mod},
+        {atom, _Line2, Type},
+        []
+    ]}) ->
+    lists:flatten([
+        atom_to_list(Mod), $:, atom_to_list(Type), "()"
+    ]).
 
 find_comment(MatchLine, [{_PreviousLine, 1, 0, Previous}, {Line, 1, 0, _Comment}|_Comments]) when Line >= MatchLine ->
     Previous;

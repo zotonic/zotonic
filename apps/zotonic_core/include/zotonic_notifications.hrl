@@ -39,25 +39,6 @@
     tracer_pid = undefined :: pid() | undefined
 }).
 
-% Record could be returned by #dispatch
--record(dispatch_redirect, {
-    location = <<>> :: binary(),
-    is_permanent = false :: boolean()
-}).
-
-% Record could be returned by #dispatch
--record(dispatch_match, {
-    dispatch_name = undefined :: atom(),
-    mod :: atom(),
-    mod_opts = [] :: list(),
-    path_tokens = [] :: list(binary()),
-    bindings = [] :: list({atom(), binary() | true})
-}).
-
-% Record could be returned by #dispatch
--record(dispatch_rules, {
-    rules :: z_sites_dispatcher:site_dispatch_list() | undefined
-}).
 
 %% @doc Check and possibly modify the http response security headers
 %% All headers are in lowercase.
@@ -820,7 +801,7 @@
 
 %% @doc Render the javascript for a custom action event type.
 %% The custom event type must be a tuple, for example:
-%% <code>{% wire type={live id=myid} action={...} %}</code>
+%% ``{% wire type={live id=myid} action={...} %}</code>``
 %% Must return {ok, Javascript, Context}
 %% Type: first
 -record(action_event_type, {
