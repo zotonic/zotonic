@@ -1,9 +1,9 @@
 .. _guide-wires:
 
-* Module: :ref:`mod_wires`
-
 Wires
 =====
+
+* Module: :ref:`mod_wires`
 
 Wires are the older way to code actions and client/server interaction. It
 is now advised to use MQTT topics with :ref:`mod_mqtt` instead.
