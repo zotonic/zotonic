@@ -1,2 +1,2 @@
-.. include:: ./meta-auth_logoff_done.rst
+.. include:: meta-auth_logoff_done.rst
 

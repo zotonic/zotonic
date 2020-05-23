@@ -1,2 +1,2 @@
-.. include:: ./meta-admin_rscform.rst
+.. include:: meta-admin_rscform.rst
 

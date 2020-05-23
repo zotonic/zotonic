@@ -1,2 +1,2 @@
-.. include:: ./meta-rsc_upload.rst
+.. include:: meta-rsc_upload.rst
 

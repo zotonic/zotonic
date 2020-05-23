@@ -1,2 +1,2 @@
-.. include:: ./meta-rsc_property.rst
+.. include:: meta-rsc_property.rst
 

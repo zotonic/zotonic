@@ -1,2 +1,2 @@
-.. include:: ./meta-logon_actions.rst
+.. include:: meta-logon_actions.rst
 

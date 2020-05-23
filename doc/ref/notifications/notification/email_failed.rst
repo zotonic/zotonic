@@ -1,2 +1,2 @@
-.. include:: ./meta-email_failed.rst
+.. include:: meta-email_failed.rst
 

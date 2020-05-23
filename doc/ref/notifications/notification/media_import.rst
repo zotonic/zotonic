@@ -1,2 +1,2 @@
-.. include:: ./meta-media_import.rst
+.. include:: meta-media_import.rst
 

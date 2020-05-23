@@ -1,2 +1,2 @@
-.. include:: ./meta-acl_logoff.rst
+.. include:: meta-acl_logoff.rst
 

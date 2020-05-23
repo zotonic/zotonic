@@ -1,2 +1,2 @@
-.. include:: ./meta-tkvstore_get.rst
+.. include:: meta-tkvstore_get.rst
 

@@ -1,2 +1,2 @@
-.. include:: ./meta-email_bounced.rst
+.. include:: meta-email_bounced.rst
 

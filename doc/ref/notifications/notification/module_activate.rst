@@ -1,2 +1,2 @@
-.. include:: ./meta-module_activate.rst
+.. include:: meta-module_activate.rst
 

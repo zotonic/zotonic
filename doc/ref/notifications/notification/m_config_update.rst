@@ -1,2 +1,2 @@
-.. include:: ./meta-m_config_update.rst
+.. include:: meta-m_config_update.rst
 

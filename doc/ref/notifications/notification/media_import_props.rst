@@ -1,2 +1,2 @@
-.. include:: ./meta-media_import_props.rst
+.. include:: meta-media_import_props.rst
 

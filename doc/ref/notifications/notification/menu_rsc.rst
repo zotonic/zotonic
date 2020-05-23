@@ -1,2 +1,2 @@
-.. include:: ./meta-menu_rsc.rst
+.. include:: meta-menu_rsc.rst
 

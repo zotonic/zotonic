@@ -1,2 +1,2 @@
-.. include:: ./meta-email_status.rst
+.. include:: meta-email_status.rst
 

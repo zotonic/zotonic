@@ -1,2 +1,2 @@
-.. include:: ./meta-identity_verification.rst
+.. include:: meta-identity_verification.rst
 

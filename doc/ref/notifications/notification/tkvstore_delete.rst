@@ -1,2 +1,2 @@
-.. include:: ./meta-tkvstore_delete.rst
+.. include:: meta-tkvstore_delete.rst
 

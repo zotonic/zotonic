@@ -1,2 +1,2 @@
-.. include:: ./meta-email_drop_handler.rst
+.. include:: meta-email_drop_handler.rst
 

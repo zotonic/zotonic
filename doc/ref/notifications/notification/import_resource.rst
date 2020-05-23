@@ -1,2 +1,2 @@
-.. include:: ./meta-import_resource.rst
+.. include:: meta-import_resource.rst
 

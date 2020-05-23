@@ -1,2 +1,2 @@
-.. include:: ./meta-url_abs.rst
+.. include:: meta-url_abs.rst
 

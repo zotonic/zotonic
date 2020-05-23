@@ -1,2 +1,2 @@
-.. include:: ./meta-postback_event.rst
+.. include:: meta-postback_event.rst
 

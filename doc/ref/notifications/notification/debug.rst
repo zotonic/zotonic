@@ -1,2 +1,2 @@
-.. include:: ./meta-debug.rst
+.. include:: meta-debug.rst
 

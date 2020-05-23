@@ -1,2 +1,2 @@
-.. include:: ./meta-dispatch_match.rst
+.. include:: meta-dispatch_match.rst
 

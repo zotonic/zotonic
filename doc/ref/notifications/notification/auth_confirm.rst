@@ -1,2 +1,2 @@
-.. include:: ./meta-auth_confirm.rst
+.. include:: meta-auth_confirm.rst
 

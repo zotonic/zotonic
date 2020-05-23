@@ -1,4 +1,4 @@
-.. include:: ./meta-rsc_update_done.rst
+.. include:: meta-rsc_update_done.rst
 
 ``pre_is_a``
     List of resource categories before the update.

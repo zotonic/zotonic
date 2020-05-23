@@ -1,2 +1,2 @@
-.. include:: ./meta-auth_autologon.rst
+.. include:: meta-auth_autologon.rst
 

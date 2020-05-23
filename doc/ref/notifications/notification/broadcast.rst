@@ -1,2 +1,2 @@
-.. include:: ./meta-broadcast.rst
+.. include:: meta-broadcast.rst
 

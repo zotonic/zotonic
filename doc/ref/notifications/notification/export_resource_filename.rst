@@ -1,2 +1,2 @@
-.. include:: ./meta-export_resource_filename.rst
+.. include:: meta-export_resource_filename.rst
 

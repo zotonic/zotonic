@@ -1,2 +1,2 @@
-.. include:: ./meta-sanitize_element.rst
+.. include:: meta-sanitize_element.rst
 

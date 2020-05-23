@@ -1,2 +1,2 @@
-.. include:: ./meta-activity_send.rst
+.. include:: meta-activity_send.rst
 

@@ -1,2 +1,2 @@
-.. include:: ./meta-postback_notify.rst
+.. include:: meta-postback_notify.rst
 

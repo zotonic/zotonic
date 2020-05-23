@@ -1,2 +1,2 @@
-.. include:: ./meta-set_user_language.rst
+.. include:: meta-set_user_language.rst
 

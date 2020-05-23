@@ -1,2 +1,2 @@
-.. include:: ./meta-admin_edit_blocks.rst
+.. include:: meta-admin_edit_blocks.rst
 

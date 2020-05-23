@@ -1,2 +1,2 @@
-.. include:: ./meta-activity.rst
+.. include:: meta-activity.rst
 

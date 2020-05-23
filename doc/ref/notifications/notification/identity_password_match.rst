@@ -1,2 +1,2 @@
-.. include:: ./meta-identity_password_match.rst
+.. include:: meta-identity_password_match.rst
 

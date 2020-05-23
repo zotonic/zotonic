@@ -1,2 +1,2 @@
-.. include:: ./meta-module_deactivate.rst
+.. include:: meta-module_deactivate.rst
 

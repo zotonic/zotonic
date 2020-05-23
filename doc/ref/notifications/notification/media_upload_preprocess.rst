@@ -1,2 +1,2 @@
-.. include:: ./meta-media_upload_preprocess.rst
+.. include:: meta-media_upload_preprocess.rst
 

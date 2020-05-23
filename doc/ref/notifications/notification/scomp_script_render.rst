@@ -1,2 +1,2 @@
-.. include:: ./meta-scomp_script_render.rst
+.. include:: meta-scomp_script_render.rst
 

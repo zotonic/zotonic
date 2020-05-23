@@ -1,2 +1,2 @@
-.. include:: ./meta-dispatch_host.rst
+.. include:: meta-dispatch_host.rst
 

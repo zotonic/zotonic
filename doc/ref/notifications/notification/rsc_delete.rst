@@ -1,2 +1,2 @@
-.. include:: ./meta-rsc_delete.rst
+.. include:: meta-rsc_delete.rst
 

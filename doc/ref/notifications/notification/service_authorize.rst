@@ -1,2 +1,2 @@
-.. include:: ./meta-service_authorize.rst
+.. include:: meta-service_authorize.rst
 

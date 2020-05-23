@@ -1,4 +1,4 @@
-.. include:: ./meta-rsc_update.rst
+.. include:: meta-rsc_update.rst
 
 An updated resource is about to be persisted. Observe this notification to
 change the resource properties before they are persisted.

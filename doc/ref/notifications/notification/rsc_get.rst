@@ -1,2 +1,2 @@
-.. include:: ./meta-rsc_get.rst
+.. include:: meta-rsc_get.rst
 

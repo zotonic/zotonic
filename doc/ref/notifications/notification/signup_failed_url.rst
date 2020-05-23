@@ -1,2 +1,2 @@
-.. include:: ./meta-signup_failed_url.rst
+.. include:: meta-signup_failed_url.rst
 

@@ -1,2 +1,2 @@
-.. include:: ./meta-mailinglist_message.rst
+.. include:: meta-mailinglist_message.rst
 

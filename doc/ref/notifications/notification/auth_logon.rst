@@ -1,2 +1,2 @@
-.. include:: ./meta-auth_logon.rst
+.. include:: meta-auth_logon.rst
 

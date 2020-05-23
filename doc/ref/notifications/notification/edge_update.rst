@@ -1,2 +1,2 @@
-.. include:: ./meta-edge_update.rst
+.. include:: meta-edge_update.rst
 

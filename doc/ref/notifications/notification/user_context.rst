@@ -1,2 +1,2 @@
-.. include:: ./meta-user_context.rst
+.. include:: meta-user_context.rst
 

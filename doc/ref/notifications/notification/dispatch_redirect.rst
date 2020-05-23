@@ -1,2 +1,2 @@
-.. include:: ./meta-dispatch_redirect.rst
+.. include:: meta-dispatch_redirect.rst
 

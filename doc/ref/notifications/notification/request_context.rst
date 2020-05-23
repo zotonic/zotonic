@@ -1,2 +1,2 @@
-.. include:: ./meta-request_context.rst
+.. include:: meta-request_context.rst
 

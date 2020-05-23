@@ -1,2 +1,2 @@
-.. include:: ./meta-comment_insert.rst
+.. include:: meta-comment_insert.rst
 

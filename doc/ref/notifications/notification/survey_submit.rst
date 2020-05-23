@@ -1,2 +1,2 @@
-.. include:: ./meta-survey_submit.rst
+.. include:: meta-survey_submit.rst
 

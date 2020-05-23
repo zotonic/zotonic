@@ -1,2 +1,2 @@
-.. include:: ./meta-pivot_update.rst
+.. include:: meta-pivot_update.rst
 

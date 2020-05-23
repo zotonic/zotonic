@@ -1,2 +1,2 @@
-.. include:: ./meta-custom_pivot.rst
+.. include:: meta-custom_pivot.rst
 

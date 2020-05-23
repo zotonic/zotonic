@@ -1,4 +1,4 @@
-.. include:: ./meta-search_query.rst
+.. include:: meta-search_query.rst
 
 .. seealso::
 

@@ -1,2 +1,2 @@
-.. include:: ./meta-signup_done.rst
+.. include:: meta-signup_done.rst
 

@@ -1,2 +1,2 @@
-.. include:: ./meta-session_init.rst
+.. include:: meta-session_init.rst
 

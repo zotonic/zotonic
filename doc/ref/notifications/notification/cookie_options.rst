@@ -1,2 +1,2 @@
-.. include:: ./meta-cookie_options.rst
+.. include:: meta-cookie_options.rst
 

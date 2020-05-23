@@ -1,2 +1,2 @@
-.. include:: ./meta-mqtt_subscribe.rst
+.. include:: meta-mqtt_subscribe.rst
 

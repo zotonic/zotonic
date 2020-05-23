@@ -1,2 +1,2 @@
-.. include:: ./meta-multiupload.rst
+.. include:: meta-multiupload.rst
 

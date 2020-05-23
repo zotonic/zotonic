@@ -1,2 +1,2 @@
-.. include:: ./meta-email.rst
+.. include:: meta-email.rst
 

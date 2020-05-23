@@ -1,2 +1,2 @@
-.. include:: ./meta-edge_insert.rst
+.. include:: meta-edge_insert.rst
 

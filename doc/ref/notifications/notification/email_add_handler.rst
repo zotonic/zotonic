@@ -1,2 +1,2 @@
-.. include:: ./meta-email_add_handler.rst
+.. include:: meta-email_add_handler.rst
 

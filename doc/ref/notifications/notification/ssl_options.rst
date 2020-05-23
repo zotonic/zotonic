@@ -1,2 +1,2 @@
-.. include:: ./meta-ssl_options.rst
+.. include:: meta-ssl_options.rst
 

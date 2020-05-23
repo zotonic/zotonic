@@ -1,2 +1,2 @@
-.. include:: ./meta-logon_ready_page.rst
+.. include:: meta-logon_ready_page.rst
 

@@ -1,2 +1,2 @@
-.. include:: ./meta-dispatch_rewrite.rst
+.. include:: meta-dispatch_rewrite.rst
 

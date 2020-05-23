@@ -1,4 +1,4 @@
-.. include:: ./meta-edge_delete.rst
+.. include:: meta-edge_delete.rst
 
 Example
 """""""

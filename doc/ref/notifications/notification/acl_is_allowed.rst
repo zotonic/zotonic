@@ -1,4 +1,4 @@
-.. include:: ./meta-acl_is_allowed.rst
+.. include:: meta-acl_is_allowed.rst
 
 Example
 """""""

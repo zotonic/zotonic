@@ -1,2 +1,2 @@
-.. include:: ./meta-media_stillimage.rst
+.. include:: meta-media_stillimage.rst
 

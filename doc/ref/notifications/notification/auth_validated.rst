@@ -1,2 +1,2 @@
-.. include:: ./meta-auth_validated.rst
+.. include:: meta-auth_validated.rst
 

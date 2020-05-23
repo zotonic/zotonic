@@ -1,2 +1,2 @@
-.. include:: ./meta-rsc_query_item.rst
+.. include:: meta-rsc_query_item.rst
 

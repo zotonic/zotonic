@@ -1,1 +1,1 @@
-.. include:: ./meta-tick.rst
+.. include:: meta-tick.rst

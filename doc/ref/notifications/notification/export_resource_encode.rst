@@ -1,2 +1,2 @@
-.. include:: ./meta-export_resource_encode.rst
+.. include:: meta-export_resource_encode.rst
 

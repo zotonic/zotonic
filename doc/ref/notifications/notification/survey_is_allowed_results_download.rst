@@ -1,2 +1,2 @@
-.. include:: ./meta-survey_is_allowed_results_download.rst
+.. include:: meta-survey_is_allowed_results_download.rst
 

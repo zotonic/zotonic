@@ -1,2 +1,2 @@
-.. include:: ./meta-media_viewer.rst
+.. include:: meta-media_viewer.rst
 

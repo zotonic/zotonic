@@ -1,2 +1,2 @@
-.. include:: ./meta-acl_context_authenticated.rst
+.. include:: meta-acl_context_authenticated.rst
 

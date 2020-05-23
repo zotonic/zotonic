@@ -1,2 +1,2 @@
-.. include:: ./meta-signup_confirm_redirect.rst
+.. include:: meta-signup_confirm_redirect.rst
 

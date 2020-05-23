@@ -1,2 +1,2 @@
-.. include:: ./meta-acl_logon.rst
+.. include:: meta-acl_logon.rst
 

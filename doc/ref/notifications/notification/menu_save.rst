@@ -1,2 +1,2 @@
-.. include:: ./meta-menu_save.rst
+.. include:: meta-menu_save.rst
 

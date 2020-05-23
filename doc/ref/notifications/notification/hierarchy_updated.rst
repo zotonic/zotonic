@@ -1,2 +1,2 @@
-.. include:: ./meta-hierarchy_updated.rst
+.. include:: meta-hierarchy_updated.rst
 

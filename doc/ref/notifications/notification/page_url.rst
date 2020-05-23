@@ -1,2 +1,2 @@
-.. include:: ./meta-page_url.rst
+.. include:: meta-page_url.rst
 

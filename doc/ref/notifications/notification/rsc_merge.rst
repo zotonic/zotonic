@@ -1,2 +1,2 @@
-.. include:: ./meta-rsc_merge.rst
+.. include:: meta-rsc_merge.rst
 

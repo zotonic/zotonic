@@ -1,2 +1,2 @@
-.. include:: ./meta-rsc_insert.rst
+.. include:: meta-rsc_insert.rst
 

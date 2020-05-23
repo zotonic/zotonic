@@ -1,4 +1,4 @@
-.. include:: ./meta-admin_menu.rst
+.. include:: meta-admin_menu.rst
 
 Example
 """""""

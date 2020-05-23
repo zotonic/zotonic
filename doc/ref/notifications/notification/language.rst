@@ -1,2 +1,2 @@
-.. include:: ./meta-language.rst
+.. include:: meta-language.rst
 

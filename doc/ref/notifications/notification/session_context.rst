@@ -1,2 +1,2 @@
-.. include:: ./meta-session_context.rst
+.. include:: meta-session_context.rst
 

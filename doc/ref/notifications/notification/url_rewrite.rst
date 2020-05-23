@@ -1,2 +1,2 @@
-.. include:: ./meta-url_rewrite.rst
+.. include:: meta-url_rewrite.rst
 

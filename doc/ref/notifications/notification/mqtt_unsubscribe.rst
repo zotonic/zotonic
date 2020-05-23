@@ -1,2 +1,2 @@
-.. include:: ./meta-mqtt_unsubscribe.rst
+.. include:: meta-mqtt_unsubscribe.rst
 

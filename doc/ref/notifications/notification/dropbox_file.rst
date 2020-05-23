@@ -1,2 +1,2 @@
-.. include:: ./meta-dropbox_file.rst
+.. include:: meta-dropbox_file.rst
 

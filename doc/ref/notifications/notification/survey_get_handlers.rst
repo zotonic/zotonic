@@ -1,2 +1,2 @@
-.. include:: ./meta-survey_get_handlers.rst
+.. include:: meta-survey_get_handlers.rst
 

@@ -1,2 +1,2 @@
-.. include:: ./meta-rsc_pivot_done.rst
+.. include:: meta-rsc_pivot_done.rst
 

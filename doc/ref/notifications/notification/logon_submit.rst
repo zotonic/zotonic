@@ -1,2 +1,2 @@
-.. include:: ./meta-logon_submit.rst
+.. include:: meta-logon_submit.rst
 

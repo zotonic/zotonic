@@ -1,2 +1,2 @@
-.. include:: ./meta-acl_is_owner.rst
+.. include:: meta-acl_is_owner.rst
 

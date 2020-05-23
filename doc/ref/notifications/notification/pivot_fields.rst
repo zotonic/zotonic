@@ -1,2 +1,2 @@
-.. include:: ./meta-pivot_fields.rst
+.. include:: meta-pivot_fields.rst
 
