@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2017 Marc Worrell
+%% @copyright 2011-2020 Marc Worrell
 %% @doc Notifications used in Zotonic core
 
-%% Copyright 2011-2017 Marc Worrell
+%% Copyright 2011-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -39,11 +39,13 @@
     tracer_pid = undefined :: pid() | undefined
 }).
 
+% Record could be returned by #dispatch
 -record(dispatch_redirect, {
     location = <<>> :: binary(),
     is_permanent = false :: boolean()
 }).
 
+% Record could be returned by #dispatch
 -record(dispatch_match, {
     dispatch_name = undefined :: atom(),
     mod :: atom(),
@@ -52,37 +54,35 @@
     bindings = [] :: list({atom(), binary() | true})
 }).
 
+% Record could be returned by #dispatch
 -record(dispatch_rules, {
     rules :: z_sites_dispatcher:site_dispatch_list() | undefined
 }).
 
-%% @doc Check and possibly modify the http response security headers (first)
-%%      All headers are in lowercase.
+%% @doc Check and possibly modify the http response security headers
+%% All headers are in lowercase.
+%% Type: first
 -record(security_headers, { headers :: list( {binary(), binary()} ) }).
 
 %% @doc Set CORS headers on the HTTP response.
+%% Type: first
 -record(cors_headers, { headers :: list( {binary(), binary()} ) }).
 
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
-%% @doc A module has been activated and started. (notify)
+%% @doc A module has been activated and started.
+%% Type: notify
 -record(module_activate, {
     module :: atom(),
     pid :: pid()
 }).
 
-%% @doc A module has been stopped and deactivated. (notify)
+%% @doc A module has been stopped and deactivated.
+%% Type: notify
 -record(module_deactivate, {
     module :: atom()
 }).
 
-
-%% @doc Possibility to overrule a property of a resource (currently only the title)
--record(rsc_property, {
-    id :: m_rsc:resource(),
-    property :: atom(),
-    value :: term()
-}).
 
 %% @doc Get available content types and their dispatch rules
 %% Example: {"text/html", page}
@@ -100,11 +100,6 @@
     request_page = [] :: string()
 }).
 
-%% @doc Determine post-logon actions; args are the arguments passed to the logon
-%% submit wire
--record(logon_actions, {
-    args = [] :: list()
-}).
 
 %% @doc Handle a user logon. The posted query args are included.
 %% Type: first
@@ -163,6 +158,7 @@
 }).
 
 %% @doc Signal that a user has been signed up (map, result is ignored)
+%% Type: map
 -record(signup_done, {
     id :: m_rsc:resource(),
     is_verified :: boolean(),
@@ -171,11 +167,13 @@
 }).
 
 %% @doc Signal that a user has been confirmed. (map, result is ignored)
+%% Type: notify
 -record(signup_confirm, {
     id :: m_rsc:resource()
 }).
 
-%% @doc Fetch the page a user is redirected to after signing up with a confirmed identity (first)
+%% @doc Fetch the page a user is redirected to after signing up with a confirmed identity
+%% Type: first
 %% Return: a URL or ``undefined``
 -record(signup_confirm_redirect, {
     id :: m_rsc:resource()
@@ -238,6 +236,7 @@
 %% @doc Fold for mapping non-iolist output to iolist values.
 %%      Used when outputting a rendered HTML tree.
 %%      Folded accumulator is: { MixedHtml, Context }
+%% Type: foldl
 -record(output_html, { html :: term() }).
 
 
@@ -264,27 +263,8 @@
 }).
 
 
-%% @doc e-mail notification used by z_email and z_email_server.
--record(email, {
-    to = [] :: list() | binary(),
-    cc = [] :: list() | binary() | undefined,
-    bcc = [] :: list(),
-    from = <<>> :: binary() | string(),
-    reply_to,
-    headers = [] :: list(),
-    body,
-    raw,
-    subject :: iodata() | undefined,
-    text :: iodata() | undefined,
-    html :: iodata() | undefined,
-    text_tpl :: template_compiler:template() | undefined,
-    html_tpl :: template_compiler:template() | undefined,
-    vars = [] :: list(),
-    attachments = [] :: list(),
-    queue = false :: boolean()
-}).
-
 %% @doc Notification sent to a site when e-mail for that site is received
+%% Type: first
 -record(email_received, {
     to,
     from,
@@ -305,6 +285,7 @@
 % The {Notification, UserId, ResourceId} comes from m_email_receive_recipient:get_by_recipient/2.
 
 %% @doc Check if an email address is blocked
+%% Type: first
 -record(email_is_blocked, {
     recipient :: binary()
 }).
@@ -321,7 +302,7 @@
 %% @doc Bounced e-mail notification.  The recipient is the e-mail that is bouncing. When the
 %% the message_nr is unknown the it is set to 'undefined'. This can happen if it is a "late bounce".
 %% If the recipient is defined then the Context is the depickled z_email:send/2 context.
-%% (notify)
+%% Type: notify
 -record(email_bounced, {
     message_nr :: binary() | undefined,
     recipient :: binary() | undefined
@@ -364,15 +345,18 @@
 %% Use {single_test_address, Email} when sending to a specific e-mail address.
 -record(mailinglist_mailing, {list_id, page_id}).
 
-%% @doc Send a welcome or goodbye message to the given recipient. (notify).
+%% @doc Send a welcome or goodbye message to the given recipient.
 %% The recipient is either an e-mail address or a resource id.
 %% 'what' is send_welcome, send_confirm, send_goobye or silent.
+%% Type: notify
 -record(mailinglist_message, {what, list_id, recipient}).
 
-%% @doc Save (and update) the complete category hierarchy (notify)
+%% @doc Save (and update) the complete category hierarchy
+%% Type: notify
 -record(category_hierarchy_save, {tree}).
 
-%% @doc Save the menu tree of a menu resource (notify)
+%% @doc Save the menu tree of a menu resource
+%% Type: notify
 -record(menu_save, {id, tree}).
 
 %% @doc Signal that the hierarchy underneath a resource has been changed by mod_menu
@@ -386,6 +370,7 @@
 
 %% @doc Resource is read, opportunity to add computed fields
 %% Used in a foldr with the read properties as accumulator.
+%% Type: foldr
 -record(rsc_get, {
     id :: m_rsc:resource_id()
 }).
@@ -410,6 +395,7 @@
 
 %% @doc Map to signal merging two resources. Move any information from the loser to the
 %% winner. The loser will be deleted.
+%% Type: map
 -record(rsc_merge, {
     winner_id :: m_rsc:resource_id(),
     loser_id :: m_rsc:resource_id(),
@@ -456,7 +442,8 @@
     id :: m_rsc:resource_id()
 }).
 
-% foldl over the resource props map to extend/remove data to be pivoted
+%% @doc Fold over the resource props map to extend/remove data to be pivoted
+%% Type: foldl
 -record(pivot_rsc_data, {
     id :: m_rsc:resource_id()
 }).
@@ -469,8 +456,8 @@
 }).
 
 %% @doc Foldr to change or add pivot fields for the main pivot table.
-%%  The rsc contains all rsc properties for this resource, including pivot properties.
-%%  foldl with a map containing the pivot fields.
+%% The rsc contains all rsc properties for this resource, including pivot properties.
+%% Type: foldl with a map containing the pivot fields.
 -record(pivot_fields, {
     id :: m_rsc:resource_id(),
     raw_props :: m_rsc:props()
@@ -480,18 +467,19 @@
 %% Type: notify
 -record(rsc_pivot_done, {
     id :: m_rsc:resource_id(),
-    is_a = [] :: list()
+    is_a = [] :: list( atom() )
 }).
 
 
 %% @doc Sanitize an HTML element.
 %% Type: foldl
 -record(sanitize_element, {
-    element :: {binary(), list(), list()},
+    element :: {binary(), list( {binary(), binary()} ), list()},
     stack :: list()
 }).
 
-%% @doc Sanitize an embed url. The hostpart is of the format: <<"youtube.com/v...">>.
+%% @doc Sanitize an embed url. The hostpart is of the format: ``<<"youtube.com/v...">>``.
+%% Type: first
 %% Return: ``undefined``, ``false`` or a binary with a acceptable hostpath
 -record(sanitize_embed_url, {
     hostpath :: binary()
@@ -530,7 +518,8 @@
 }).
 
 %% @doc Filter the properties of a resource update, this is done on the raw data
-%% A foldr over the update property list.
+%% The fold argument is a property map
+%% Type: foldr
 -record(acl_rsc_update_check, {
     id :: m_rsc:resource_id() | 'insert_rsc'
 }).
@@ -613,6 +602,7 @@
 
 
 %% @doc Authentication against some (external or internal) service was validated
+%% Type: first
 -record(auth_validated, {
     service :: atom(),
     service_uid :: binary(),
@@ -655,18 +645,6 @@
         payload = undefined :: undefined | term()
     }).
 
-
-% %% @doc A new session has been intialized: session_pid is in the context.
-% %% Called for every request that has a session.
-% %% Type: notify
-% %% Return: ``#context{}``
-% -record(session_init, {}).
-
-% %% @doc Foldl over the context containing a new session.
-% %% Called for every request that has a session.
-% %% Type: foldl
-% %% Return: ``#context{}``
-% -record(session_init_fold, {}).
 
 %% @doc Check if a user is enabled. Enabled users are allowed to log in.
 %% Type: first
@@ -753,6 +731,7 @@
 %% @doc Notification for fetching #media_import_props{} from different modules.
 %% This is used by z_media_import.erl for fetching properties and medium information (map)
 %% about resources.
+%% Type: map
 -record(media_import, {
     url :: binary(),
     host_rev :: list(binary()),
@@ -760,6 +739,7 @@
     metadata :: tuple()
 }).
 
+% Return value of the media_import notification
 -record(media_import_props, {
     prio = 5 :: pos_integer(),      % 1 for perfect match (ie. host specific importer)
     category :: atom(),
@@ -815,8 +795,8 @@
 %% Return: return value is ignored
 -record(media_replace_file, {id, medium}).
 
-%% @doc Media update done notification.
-%% action is 'insert', 'update' or 'delete'
+%% @doc Media update done notification. action is 'insert', 'update' or 'delete'
+%% Type: notify
 -record(media_update_done, {action, id, pre_is_a, post_is_a, pre_props, post_props}).
 
 
@@ -831,6 +811,7 @@
 %% @doc Add extra javascript with the {% script %} tag. (map)
 %% Used to let modules inject extra javascript depending on the arguments of the {% script %} tag.
 %% Must return an iolist()
+%% Type: map()
 -record(scomp_script_render, {
     is_nostartup = false :: boolean(),
     args = [] :: list()
@@ -841,6 +822,7 @@
 %% The custom event type must be a tuple, for example:
 %% <code>{% wire type={live id=myid} action={...} %}</code>
 %% Must return {ok, Javascript, Context}
+%% Type: first
 -record(action_event_type, {
     event :: tuple(),
     trigger_id :: string(),
@@ -896,6 +878,7 @@
 }).
 
 %% @doc See if there is a 'still' image preview of a media item. (eg posterframe of a movie)
+%% Type: first
 %% Return:: ``{ok, ResourceId}`` or ``undefined``
 -record(media_stillimage, {
     id :: m_rsc:resource_id() | undefined,
@@ -920,24 +903,26 @@
 -record(survey_is_submit, {block = []}).
 
 %% @doc Put a value into the typed key/value store
+%% Type: notify
 -record(tkvstore_put, {type, key, value}).
 
 %% @doc Get a value from the typed key/value store
+%% Type: first
 -record(tkvstore_get, {type, key}).
 
 %% @doc Delete a value from the typed key/value store
+%% Type: notify
 -record(tkvstore_delete, {type, key}).
 
 %% @doc MQTT acl check, called via the normal acl notifications.
 %% Actions for these checks: subscribe, publish
+%% Type: first
 -record(acl_mqtt, {
     topic :: list( binary() ),
     is_wildcard :: boolean(),
     packet :: mqtt_packet_map:mqtt_packet()
 }).
 
-%% @doc Broadcast notification.
--record(broadcast, {title = [], message = [], is_html = false, stay = true, type = "error"}).
 
 %% @doc Internal message of mod_development. Start a stream with debug information to the user agent.
 %% 'target' is the id of the HTML element where the information is inserted.
@@ -949,6 +934,7 @@
 -record(debug, {what, arg = []}).
 
 %% @doc Broadcast some file changed, used for livereload by mod_development
+%% Type: first
 -record(filewatcher, {
     verb :: modify | create | delete,
     file :: binary(),
@@ -957,6 +943,7 @@
 }).
 
 %% @doc An external feed delivered a resource. First handler can import it.
+%% Type: first
 -record(import_resource, {
     source :: atom() | binary(),
     source_id :: integer() | binary(),

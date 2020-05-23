@@ -111,6 +111,27 @@
 }).
 
 
+%% @doc e-mail notification used by z_email and z_email_server.
+-record(email, {
+    to = [] :: list() | binary(),
+    cc = [] :: list() | binary() | undefined,
+    bcc = [] :: list(),
+    from = <<>> :: binary() | string(),
+    reply_to,
+    headers = [] :: list(),
+    body,
+    raw,
+    subject :: iodata() | undefined,
+    text :: iodata() | undefined,
+    html :: iodata() | undefined,
+    text_tpl :: template_compiler:template() | undefined,
+    html_tpl :: template_compiler:template() | undefined,
+    vars = [] :: list(),
+    attachments = [] :: list(),
+    queue = false :: boolean()
+}).
+
+
 %% Used for specifying resource id lists, as returned by object/subject lookup
 -record(rsc_list, {
     list :: list( m_rsc:resource_id() )
