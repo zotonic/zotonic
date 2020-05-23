@@ -8,14 +8,11 @@ User notifications
    notification/identity_password_match
    notification/identity_verification
    notification/identity_verified
-   notification/logon_actions
    notification/logon_ready_page
    notification/logon_submit
    notification/set_user_language
    notification/request_context
    notification/session_context
-   notification/session_init
-   notification/session_init_fold
    notification/signup
    notification/signup_check
    notification/signup_confirm

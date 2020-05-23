@@ -1013,7 +1013,31 @@
     state :: term()
 }).
 
+%% @doc Handle a javascript notification from the postback handler. The ``message`` is the the request,
+%% ``trigger`` the id of the element which triggered the postback, and ``target`` the
+%% id of the element which should receive possible updates. ``#postback_notify`` is also used as an event.
+%% Type: first
+%% Return: ``undefined`` or ``#context{}`` with the result of the postback
+-record(postback_notify, {
+    message,
+    trigger,
+    target,
+    data
+}).
+
+%% @doc Message sent by a user-agent on a postback event. Encapsulates the encoded postback and any
+%% additional data. This is handled by z_transport.erl, which will call the correct event/2 functions.
+%% Type: first
+-record(postback_event, {
+    postback,
+    trigger,
+    target,
+    triggervalue,
+    data
+}).
+
 
 % Simple mod_development notifications:
 % development_reload - Reload all template, modules etc
 % development_make - Perform a 'make' on Zotonic, reload all new beam files
+

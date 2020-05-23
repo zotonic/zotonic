@@ -10,7 +10,6 @@ Resource notifications
    notification/rsc_insert
    notification/rsc_merge
    notification/rsc_pivot_done
-   notification/rsc_property
    notification/rsc_query_item
    notification/rsc_update
    notification/rsc_update_done

@@ -2,17 +2,6 @@
 %%      These will be removed in a future update
 
 
-%% @doc Handle a javascript notification from the postback handler. The 'message' is the z_msg argument of
-%% the request. (first), 'trigger' the id of the element which triggered the postback, and 'target' the
-%% id of the element which should receive possible updates. Note: postback_notify is also used as an event.
-%% Return: ``undefined`` or ``#context{}`` with the result of the postback
--record(postback_notify, {message, trigger, target, data}).
-
-%% @doc Message sent by a user-agent on a postback event. Encapsulates the encoded postback and any
-%% additional data. This is handled by z_transport.erl, which will call the correct event/2 functions.
--record(postback_event, {postback, trigger, target, triggervalue, data}).
-
-
 %% Record used for transporting data between the user-agent and the server.
 %% This was part of the transport system, before the Cotonic/MQTT integration.
 -record(z_msg_v1, {
