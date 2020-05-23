@@ -1,42 +1,46 @@
 Other notifications
 -------------------
 
-.. include:: includes/action_event_type.rst
-.. include:: includes/activity.rst
-.. include:: includes/activity_send.rst
-.. include:: includes/admin_edit_blocks.rst
-.. include:: includes/admin_menu.rst
-.. include:: includes/admin_rscform.rst
-.. include:: includes/broadcast.rst
-.. include:: includes/category_hierarchy_save.rst
-.. include:: includes/comment_insert.rst
-.. include:: includes/cookie_options.rst
-.. include:: includes/debug.rst
-.. include:: includes/debug_stream.rst
-.. include:: includes/dispatch.rst
-.. include:: includes/dropbox_file.rst
-.. include:: includes/hierarchy_updated.rst
-.. include:: includes/language.rst
-.. include:: includes/m_config_update.rst
-.. include:: includes/m_config_update_prop.rst
-.. include:: includes/mailinglist_mailing.rst
-.. include:: includes/mailinglist_message.rst
-.. include:: includes/menu_rsc.rst
-.. include:: includes/menu_save.rst
-.. include:: includes/module_activate.rst
-.. include:: includes/module_deactivate.rst
-.. include:: includes/mqtt_subscribe.rst
-.. include:: includes/mqtt_unsubscribe.rst
-.. include:: includes/multiupload.rst
-.. include:: includes/postback_event.rst
-.. include:: includes/postback_notify.rst
-.. include:: includes/sanitize_element.rst
-.. include:: includes/sanitize_embed_url.rst
-.. include:: includes/scomp_script_render.rst
-.. include:: includes/search_query.rst
-.. include:: includes/service_authorize.rst
-.. include:: includes/ssl_options.rst
-.. include:: includes/tick.rst
-.. include:: includes/tkvstore_delete.rst
-.. include:: includes/tkvstore_get.rst
-.. include:: includes/tkvstore_put.rst
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   includes/action_event_type.rst
+   includes/activity.rst
+   includes/activity_send.rst
+   includes/admin_edit_blocks.rst
+   includes/admin_menu.rst
+   includes/admin_rscform.rst
+   includes/broadcast.rst
+   includes/category_hierarchy_save.rst
+   includes/comment_insert.rst
+   includes/cookie_options.rst
+   includes/debug.rst
+   includes/debug_stream.rst
+   includes/dispatch.rst
+   includes/dropbox_file.rst
+   includes/hierarchy_updated.rst
+   includes/language.rst
+   includes/m_config_update.rst
+   includes/m_config_update_prop.rst
+   includes/mailinglist_mailing.rst
+   includes/mailinglist_message.rst
+   includes/menu_rsc.rst
+   includes/menu_save.rst
+   includes/module_activate.rst
+   includes/module_deactivate.rst
+   includes/mqtt_subscribe.rst
+   includes/mqtt_unsubscribe.rst
+   includes/multiupload.rst
+   includes/postback_event.rst
+   includes/postback_notify.rst
+   includes/sanitize_element.rst
+   includes/sanitize_embed_url.rst
+   includes/scomp_script_render.rst
+   includes/search_query.rst
+   includes/service_authorize.rst
+   includes/ssl_options.rst
+   includes/tick.rst
+   includes/tkvstore_delete.rst
+   includes/tkvstore_get.rst
+   includes/tkvstore_put.rst

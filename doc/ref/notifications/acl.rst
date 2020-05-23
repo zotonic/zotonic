@@ -3,10 +3,14 @@
 ACL notifications
 -----------------
 
-.. include:: includes/acl_context_authenticated.rst
-.. include:: includes/acl_is_allowed.rst
-.. include:: includes/acl_is_allowed_prop.rst
-.. include:: includes/acl_is_owner.rst
-.. include:: includes/acl_logoff.rst
-.. include:: includes/acl_logon.rst
-.. include:: includes/acl_mqtt.rst
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   includes/acl_context_authenticated.rst
+   includes/acl_is_allowed.rst
+   includes/acl_is_allowed_prop.rst
+   includes/acl_is_owner.rst
+   includes/acl_logoff.rst
+   includes/acl_logon.rst
+   includes/acl_mqtt.rst
