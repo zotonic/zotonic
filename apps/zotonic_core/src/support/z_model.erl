@@ -211,13 +211,19 @@ model_call(Mod, Callback, Path, Msg, Context) ->
     try
         Mod:Callback(binarize(Path), Msg, Context)
     catch
-        error:undef ->
+        ?WITH_STACKTRACE(error, undef, StackTrace)
+            % Non m_get handlers are optional. We return an error if the 'undef'
+            % was caused by a non-exported function.
+            % If the function was exported then we raise pass the undef error
+            % to be handled by another routine.
+            % Note that for erlang:function_exported/3 to function the module
+            % should be loaded. The m_post/m_delete
             case erlang:function_exported(Mod, Callback, 3) of
                 false ->
                     lager:info("Model ~p does not export ~p", [ Mod, Callback ]),
                     {error, unacceptable};
                 true ->
-                    erlang:raise(error, undef, erlang:get_stacktrace())
+                    erlang:raise(error, undef, StackTrace)
             end
     end.
 

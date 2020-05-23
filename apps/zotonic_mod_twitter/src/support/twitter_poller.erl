@@ -66,8 +66,7 @@ poll(Context) ->
             Subscriptions),
         determine_next_delay(Status, Context)
     catch
-        Type:E ->
-            Trace = erlang:get_stacktrace(),
+        ?WITH_STACKTRACE(Type, E, Trace)
             lager:error("Twitter poller error: ~p:~p at ~p", [ Type, E, Trace ]),
             {delay, ?DELAY_EXCEPTION}
     end.
@@ -92,8 +91,7 @@ poll_next(SubId, Next, Context) ->
                         D
                 end
             catch
-                Type:E ->
-                    Trace = erlang:get_stacktrace(),
+                ?WITH_STACKTRACE(Type, E, Trace)
                     lager:error("Twitter (next) poller error: ~p:~p at ~p", [ Type, E, Trace ]),
                     {delay, ?DELAY_EXCEPTION}
             end;

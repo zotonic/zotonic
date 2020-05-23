@@ -66,6 +66,14 @@
     pid2event :: map()       % pid() => [ term() ]
 }).
 
+
+-ifdef(fun_stacktrace).
+-define(WITH_STACKTRACE(T, R, S), T:R -> S = erlang:get_stacktrace(),).
+-else.
+-define(WITH_STACKTRACE(T, R, S), T:R:S ->).
+-endif.
+
+
 %%====================================================================
 %% API
 %%====================================================================
@@ -438,11 +446,12 @@ observer_table_name(Name) when is_atom(Name) ->
 notify_observer(Msg, {_Prio, Pid, _OwnerPid}, true, ContextArg) when is_pid(Pid) ->
     try
         gen_server:call(Pid, {Msg, ContextArg}, ?TIMEOUT)
-    catch EM:E ->
-        Trace = erlang:get_stacktrace(),
-        lager:error("Error notifying ~p with event ~p. Error ~p:~p. Trace:~p",
-                    [Pid, Msg, EM, E, Trace]),
-        {error, {notify_observer, Pid, Msg, EM, E}}
+    catch
+        ?WITH_STACKTRACE(EM, E, Trace)
+            Trace = erlang:get_stacktrace(),
+            lager:error("Error notifying ~p with event ~p. Error ~p:~p. Trace:~p",
+                        [Pid, Msg, EM, E, Trace]),
+            {error, {notify_observer, Pid, Msg, EM, E}}
     end;
 notify_observer(Msg, {_Prio, Pid, _OwnerPid}, false, ContextArg) when is_pid(Pid) ->
     gen_server:cast(Pid, {Msg, ContextArg});
@@ -457,11 +466,11 @@ notify_observer(Msg, {_Prio, {M, F, As}, _OwnerPid}, _IsCall, ContextArg) ->
 notify_observer_fold(Msg, {_Prio, Pid, _OwnerPid}, Acc, ContextArg) when is_pid(Pid) ->
     try
         gen_server:call(Pid, {Msg, Acc, ContextArg}, ?TIMEOUT)
-    catch EM:E ->
-        Trace = erlang:get_stacktrace(),
-        lager:error("Error foloding ~p with event ~p. Error ~p:~p. Trace:~p",
-                    [Pid, Msg, EM, E, Trace]),
-        Acc
+    catch
+        ?WITH_STACKTRACE(EM, E, Trace)
+            lager:error("Error foloding ~p with event ~p. Error ~p:~p. Trace:~p",
+                        [Pid, Msg, EM, E, Trace]),
+            Acc
     end;
 notify_observer_fold(Msg, {_Prio, {M, F}, _OwnerPid}, Acc, ContextArg) ->
     erlang:apply(M, F, [ Msg, Acc, ContextArg ]);
