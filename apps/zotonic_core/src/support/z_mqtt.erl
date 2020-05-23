@@ -64,7 +64,7 @@
 -include_lib("zotonic.hrl").
 
 
--define(MQTT_CALL_TIMEOUT, 10000).
+-define(MQTT_CALL_TIMEOUT, 60000).
 
 
 -spec publish( topic(), term(), z:context()) -> ok | {error, term()}.
