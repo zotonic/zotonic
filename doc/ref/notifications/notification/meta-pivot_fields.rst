@@ -5,10 +5,11 @@ pivot_fields
 
 Foldr to change or add pivot fields for the main pivot table. 
 The rsc contains all rsc properties for this resource, including pivot properties. 
+Fold with a map containing the pivot fields. 
 
 
 Type: 
-    :ref:`notification-foldl with a map containing the pivot fields.`
+    :ref:`notification-foldl`
 
 Return: 
     

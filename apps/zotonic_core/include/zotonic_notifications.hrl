@@ -438,7 +438,8 @@
 
 %% @doc Foldr to change or add pivot fields for the main pivot table.
 %% The rsc contains all rsc properties for this resource, including pivot properties.
-%% Type: foldl with a map containing the pivot fields.
+%% Fold with a map containing the pivot fields.
+%% Type: foldl
 -record(pivot_fields, {
     id :: m_rsc:resource_id(),
     raw_props :: m_rsc:props()
