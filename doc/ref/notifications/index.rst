@@ -10,12 +10,13 @@ Zotonic sends. :ref:`Observe <guide-notifications-observe>` these notifications
 in your code to add custom functionality.
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :glob:
 
     acl
     auth
     dispatch-url
+    edge
     email
     import-export
     media

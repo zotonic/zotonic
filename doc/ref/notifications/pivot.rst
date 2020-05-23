@@ -1,9 +1,13 @@
 Pivot notifications
 -------------------
 
-.. include:: includes/pivot_fields.rst
-.. include:: includes/pivot_update.rst
-.. include:: includes/custom_pivot.rst
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   notification/pivot_fields
+   notification/pivot_update
+   notification/custom_pivot
 
 .. seealso::
 

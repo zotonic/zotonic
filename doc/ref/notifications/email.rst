@@ -1,12 +1,16 @@
 E-mail notifications
 --------------------
 
-.. include:: includes/email.rst
-.. include:: includes/email_add_handler.rst
-.. include:: includes/email_bounced.rst
-.. include:: includes/email_drop_handler.rst
-.. include:: includes/email_ensure_handler.rst
-.. include:: includes/email_failed.rst
-.. include:: includes/email_received.rst
-.. include:: includes/email_sent.rst
-.. include:: includes/email_status.rst
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   notification/email
+   notification/email_add_handler
+   notification/email_bounced
+   notification/email_drop_handler
+   notification/email_ensure_handler
+   notification/email_failed
+   notification/email_received
+   notification/email_sent
+   notification/email_status

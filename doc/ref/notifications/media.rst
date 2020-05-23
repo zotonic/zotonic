@@ -1,14 +1,18 @@
 Media notifications
 -------------------
 
-.. include:: includes/media_identify_extension.rst
-.. include:: includes/media_identify_file.rst
-.. include:: includes/media_import.rst
-.. include:: includes/media_import_props.rst
-.. include:: includes/media_replace_file.rst
-.. include:: includes/media_stillimage.rst
-.. include:: includes/media_update_done.rst
-.. include:: includes/media_upload_preprocess.rst
-.. include:: includes/media_upload_props.rst
-.. include:: includes/media_upload_rsc_props.rst
-.. include:: includes/media_viewer.rst
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   notification/media_identify_extension
+   notification/media_identify_file
+   notification/media_import
+   notification/media_import_props
+   notification/media_replace_file
+   notification/media_stillimage
+   notification/media_update_done
+   notification/media_upload_preprocess
+   notification/media_upload_props
+   notification/media_upload_rsc_props
+   notification/media_viewer

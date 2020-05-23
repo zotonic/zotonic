@@ -1,17 +1,17 @@
 Resource notifications
 ----------------------
 
-.. include:: includes/rsc_delete.rst
-.. include:: includes/rsc_get.rst
-.. include:: includes/rsc_insert.rst
-.. include:: includes/rsc_merge.rst
-.. include:: includes/rsc_pivot_done.rst
-.. include:: includes/rsc_property.rst
-.. include:: includes/rsc_query_item.rst
-.. include:: includes/rsc_update.rst
-.. include:: includes/rsc_update_done.rst
-.. include:: includes/rsc_upload.rst
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
-.. include:: includes/edge_delete.rst
-.. include:: includes/edge_insert.rst
-.. include:: includes/edge_update.rst
+   notification/rsc_delete
+   notification/rsc_get
+   notification/rsc_insert
+   notification/rsc_merge
+   notification/rsc_pivot_done
+   notification/rsc_property
+   notification/rsc_query_item
+   notification/rsc_update
+   notification/rsc_update_done
+   notification/rsc_upload

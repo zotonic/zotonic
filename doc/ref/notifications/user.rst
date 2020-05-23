@@ -1,23 +1,27 @@
 User notifications
 ------------------
 
-.. include:: includes/identity_password_match.rst
-.. include:: includes/identity_verification.rst
-.. include:: includes/identity_verified.rst
-.. include:: includes/logon_actions.rst
-.. include:: includes/logon_ready_page.rst
-.. include:: includes/logon_submit.rst
-.. include:: includes/set_user_language.rst
-.. include:: includes/request_context.rst
-.. include:: includes/session_context.rst
-.. include:: includes/session_init.rst
-.. include:: includes/session_init_fold.rst
-.. include:: includes/signup.rst
-.. include:: includes/signup_check.rst
-.. include:: includes/signup_confirm.rst
-.. include:: includes/signup_confirm_redirect.rst
-.. include:: includes/signup_done.rst
-.. include:: includes/signup_failed_url.rst
-.. include:: includes/signup_url.rst
-.. include:: includes/user_context.rst
-.. include:: includes/user_is_enabled.rst
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   notification/identity_password_match
+   notification/identity_verification
+   notification/identity_verified
+   notification/logon_actions
+   notification/logon_ready_page
+   notification/logon_submit
+   notification/set_user_language
+   notification/request_context
+   notification/session_context
+   notification/session_init
+   notification/session_init_fold
+   notification/signup
+   notification/signup_check
+   notification/signup_confirm
+   notification/signup_confirm_redirect
+   notification/signup_done
+   notification/signup_failed_url
+   notification/signup_url
+   notification/user_context
+   notification/user_is_enabled

@@ -1,15 +1,16 @@
 Dispatch notifications
 ----------------------
 
-.. include:: includes/content_types_dispatch.rst
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
-.. include:: includes/dispatch_host.rst
-.. include:: includes/dispatch_match.rst
-.. include:: includes/dispatch_redirect.rst
-.. include:: includes/dispatch_rewrite.rst
-
-.. include:: includes/page_url.rst
-
-.. include:: includes/url_abs.rst
-.. include:: includes/url_rewrite.rst
+   notification/content_types_dispatch
+   notification/dispatch_host
+   notification/dispatch_match
+   notification/dispatch_redirect
+   notification/dispatch_rewrite
+   notification/page_url
+   notification/url_abs
+   notification/url_rewrite
 

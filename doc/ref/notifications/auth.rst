@@ -3,14 +3,18 @@
 Authentication notifications
 ----------------------------
 
-.. include:: includes/auth_confirm.rst
-.. include:: includes/auth_confirm_done.rst
-.. include:: includes/auth_logon.rst
-.. include:: includes/auth_logon_done.rst
-.. include:: includes/auth_autologon.rst
-.. include:: includes/auth_logoff.rst
-.. include:: includes/auth_logoff_done.rst
-.. include:: includes/auth_validated.rst
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   notification/auth_confirm
+   notification/auth_confirm_done
+   notification/auth_logon
+   notification/auth_logon_done
+   notification/auth_autologon
+   notification/auth_logoff
+   notification/auth_logoff_done
+   notification/auth_validated
 
 .. seealso::
 
