@@ -14,6 +14,6 @@ Return:
 
 ``#export_resource_footer{}`` properties:
     - dispatch: ``atom``
-    - id: ``integer``
-    - content_type: ``string``
+    - id: ``m_rsc:resource_id()|undefined``
+    - content_type: ``binary``
     - state: ``term``

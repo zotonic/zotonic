@@ -3,7 +3,7 @@
 acl_context_authenticated
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Set the context to a typical authenticated uses. Used by m_acl.erl 
+Set the context to a typical authenticated user. Used by m_acl.erl 
 
 
 Type: 

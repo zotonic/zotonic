@@ -9,6 +9,7 @@ Import/export notifications
 
    notification/import_csv_definition
    notification/import_resource
+   notification/export_resource_content_disposition
    notification/export_resource_content_type
    notification/export_resource_data
    notification/export_resource_encode

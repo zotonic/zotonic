@@ -18,3 +18,4 @@ Return:
     - service_props: ``list``
     - props: ``list``
     - is_connect: ``boolean``
+    - is_signup_confirm: ``boolean``

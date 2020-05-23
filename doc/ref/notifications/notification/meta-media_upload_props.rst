@@ -16,5 +16,5 @@ Return:
 ``#media_upload_props{}`` properties:
     - id: ``integer|insert_rsc``
     - mime: ``binary``
-    - archive_file: ``unknown``
-    - options: ``unknown``
+    - archive_file: ``file:filename_all()|undefined``
+    - options: ``list``

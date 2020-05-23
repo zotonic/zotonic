@@ -8,10 +8,10 @@ Used in a foldr with the read properties as accumulator.
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-foldr`
 
 Return: 
     
 
 ``#rsc_get{}`` properties:
-    - id: ``unknown``
+    - id: ``m_rsc:resource_id()``

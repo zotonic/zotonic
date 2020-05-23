@@ -3,7 +3,9 @@
 edge_insert
 ^^^^^^^^^^^
 
-An edge has been inserted 
+An edge has been inserted. 
+Note that the Context for this notification does not have the user who 
+created the edge. 
 
 
 Type: 

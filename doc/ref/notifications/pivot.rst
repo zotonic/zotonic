@@ -6,6 +6,7 @@ Pivot notifications
    :glob:
 
    notification/pivot_fields
+   notification/pivot_rsc_data
    notification/pivot_update
    notification/custom_pivot
 

@@ -3,7 +3,7 @@
 sanitize_embed_url
 ^^^^^^^^^^^^^^^^^^
 
-Sanitize an embed url. The hostpart is of the format: <<"youtube.com/v...">>. 
+Sanitize an embed url. The hostpart is of the format: ``<<"youtube.com/v...">>``. 
 
 
 Type: 

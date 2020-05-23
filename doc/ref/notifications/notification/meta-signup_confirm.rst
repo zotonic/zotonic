@@ -7,7 +7,7 @@ Signal that a user has been confirmed. (map, result is ignored)
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
     

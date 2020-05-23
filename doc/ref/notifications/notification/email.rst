@@ -1,2 +1,0 @@
-.. include:: meta-email.rst
-

@@ -3,11 +3,11 @@
 category_hierarchy_save
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Save (and update) the complete category hierarchy (notify) 
+Save (and update) the complete category hierarchy 
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
     

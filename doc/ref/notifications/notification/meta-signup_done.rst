@@ -7,7 +7,7 @@ Signal that a user has been signed up (map, result is ignored)
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-map`
 
 Return: 
     

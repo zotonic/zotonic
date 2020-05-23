@@ -16,4 +16,4 @@ Return:
 ``#acl_is_allowed_prop{}`` properties:
     - action: ``view|update|delete|insert|atom``
     - object: ``term``
-    - prop: ``atom``
+    - prop: ``binary``

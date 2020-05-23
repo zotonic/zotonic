@@ -4,6 +4,8 @@ edge_update
 ^^^^^^^^^^^
 
 An edge has been updated 
+Note that the Context for this notification does not have the user who 
+updated the edge. 
 
 
 Type: 

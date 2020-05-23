@@ -4,6 +4,8 @@ edge_delete
 ^^^^^^^^^^^
 
 An edge has been deleted 
+Note that the Context for this notification does not have the user who 
+deleted the edge. 
 
 
 Type: 

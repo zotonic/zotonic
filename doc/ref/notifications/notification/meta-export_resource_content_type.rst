@@ -14,4 +14,4 @@ Return:
 
 ``#export_resource_content_type{}`` properties:
     - dispatch: ``atom``
-    - id: ``integer``
+    - id: ``m_rsc:resource_id()|undefined``

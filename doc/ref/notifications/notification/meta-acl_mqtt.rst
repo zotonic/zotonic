@@ -14,8 +14,6 @@ Return:
     
 
 ``#acl_mqtt{}`` properties:
-    - type: ``wildcard|direct``
-    - topic: ``binary``
-    - words: ``list``
-    - site: ``binary``
-    - page_id: ``undefined|binary``
+    - topic: ``list``
+    - is_wildcard: ``boolean``
+    - packet: ``mqtt_packet_map:mqtt_packet()``

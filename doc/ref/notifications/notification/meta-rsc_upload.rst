@@ -3,7 +3,7 @@
 rsc_upload
 ^^^^^^^^^^
 
-Upload and replace the the resource with the given data. The data is in the given format. 
+Upload and replace the resource with the given data. The data is in the given format. 
 Return {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt. 
 
 

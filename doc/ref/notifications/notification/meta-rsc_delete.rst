@@ -15,5 +15,5 @@ Return:
     
 
 ``#rsc_delete{}`` properties:
-    - id: ``unknown``
-    - is_a: ``unknown``
+    - id: ``m_rsc:resource_id()``
+    - is_a: ``list``

@@ -10,7 +10,8 @@ Type:
     :ref:`notification-first`
 
 Return: 
-    updated ``#context`` or ``undefined``
+    updated ``z:context()`` or ``undefined``
 
 ``#acl_logon{}`` properties:
-    - id: ``unknown``
+    - id: ``m_rsc:resource_id()``
+    - options: ``map``

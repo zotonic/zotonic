@@ -16,3 +16,4 @@ Return:
     - recipient: ``binary``
     - is_valid: ``boolean``
     - is_final: ``boolean``
+    - is_manual: ``boolean``

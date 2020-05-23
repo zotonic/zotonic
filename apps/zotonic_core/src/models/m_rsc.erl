@@ -656,7 +656,7 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
 
 
 p_cached(Id, Property, Context) ->
-    Value = case z_depcache:get(Id, Property, Context) of
+    case z_depcache:get(Id, Property, Context) of
         {ok, V} ->
             V;
         undefined ->
@@ -668,17 +668,6 @@ p_cached(Id, Property, Context) ->
                 Map ->
                     maps:get(Property, Map, undefined)
             end
-    end,
-    case Value of
-        undefined ->
-            % Unknown properties will be checked against the predicates, returns o(Predicate).
-            case m_predicate:is_predicate(Property, Context) of
-                true -> o(Id, Property, Context);
-                false ->
-                    undefined % z_notifier:first(#rsc_property{id=Id, property=Predicate}, Context)
-            end;
-        _ ->
-            Value
     end.
 
 

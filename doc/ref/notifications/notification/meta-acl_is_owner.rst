@@ -14,6 +14,6 @@ Return:
     ``true``, ``false`` or ``undefined`` to let the next observer decide
 
 ``#acl_is_owner{}`` properties:
-    - id: ``integer``
-    - creator_id: ``integer``
-    - user_id: ``integer``
+    - id: ``m_rsc:resource_id()``
+    - creator_id: ``m_rsc:resource_id()``
+    - user_id: ``m_rsc:resource_id()``

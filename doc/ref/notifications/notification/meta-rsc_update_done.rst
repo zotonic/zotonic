@@ -15,8 +15,8 @@ Return:
 
 ``#rsc_update_done{}`` properties:
     - action: ``insert|update|delete``
-    - id: ``m_rsc:resource()``
+    - id: ``m_rsc:resource_id()``
     - pre_is_a: ``list``
     - post_is_a: ``list``
-    - pre_props: ``list``
-    - post_props: ``list``
+    - pre_props: ``m_rsc:props()``
+    - post_props: ``m_rsc:props()``

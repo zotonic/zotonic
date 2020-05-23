@@ -14,5 +14,5 @@ Return:
     
 
 ``#media_stillimage{}`` properties:
-    - id: ``unknown``
-    - unknown: ``unknown``
+    - id: ``m_rsc:resource_id()|undefined``
+    - props: ``z_media_identify:media_info()``

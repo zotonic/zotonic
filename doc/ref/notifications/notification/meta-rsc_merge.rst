@@ -3,16 +3,17 @@
 rsc_merge
 ^^^^^^^^^
 
-Map to signal merging two resources. Move any information from the looser to the 
-winner. The looser will be deleted. 
+Map to signal merging two resources. Move any information from the loser to the 
+winner. The loser will be deleted. 
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-map`
 
 Return: 
     
 
 ``#rsc_merge{}`` properties:
-    - winner_id: ``integer``
-    - looser_id: ``integer``
+    - winner_id: ``m_rsc:resource_id()``
+    - loser_id: ``m_rsc:resource_id()``
+    - is_merge_trans: ``boolean``

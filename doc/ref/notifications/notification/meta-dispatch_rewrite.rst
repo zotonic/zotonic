@@ -14,5 +14,5 @@ Return:
 
 ``#dispatch_rewrite{}`` properties:
     - is_dir: ``boolean``
-    - path: ``string``
+    - path: ``binary``
     - host: ``unknown``

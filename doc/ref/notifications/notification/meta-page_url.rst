@@ -13,5 +13,5 @@ Return:
     ``{ok, Url}`` or ``undefined``
 
 ``#page_url{}`` properties:
-    - id: ``unknown``
-    - is_a: ``unknown``
+    - id: ``m_rsc:resource_id()``
+    - is_a: ``list``

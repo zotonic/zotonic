@@ -1,1 +1,0 @@
-.. include:: meta-tick.rst

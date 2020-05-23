@@ -111,6 +111,27 @@
 }).
 
 
+%% @doc e-mail notification used by z_email and z_email_server.
+-record(email, {
+    to = [] :: list() | binary(),
+    cc = [] :: list() | binary() | undefined,
+    bcc = [] :: list(),
+    from = <<>> :: binary() | string(),
+    reply_to,
+    headers = [] :: list(),
+    body,
+    raw,
+    subject :: iodata() | undefined,
+    text :: iodata() | undefined,
+    html :: iodata() | undefined,
+    text_tpl :: template_compiler:template() | undefined,
+    html_tpl :: template_compiler:template() | undefined,
+    vars = [] :: list(),
+    attachments = [] :: list(),
+    queue = false :: boolean()
+}).
+
+
 %% Used for specifying resource id lists, as returned by object/subject lookup
 -record(rsc_list, {
     list :: list( m_rsc:resource_id() )
@@ -206,6 +227,27 @@
     media = [] :: list(),
     edges = [] :: list()
 }).
+
+%% Record could be returned by #dispatch notification
+-record(dispatch_redirect, {
+    location = <<>> :: binary(),
+    is_permanent = false :: boolean()
+}).
+
+%% Record could be returned by #dispatch notification
+-record(dispatch_match, {
+    dispatch_name = undefined :: atom(),
+    mod :: atom(),
+    mod_opts = [] :: list(),
+    path_tokens = [] :: list(binary()),
+    bindings = [] :: list({atom(), binary() | true})
+}).
+
+%% Record could be returned by #dispatch notification
+-record(dispatch_rules, {
+    rules :: z_sites_dispatcher:site_dispatch_list() | undefined
+}).
+
 
 %% ACL administrator user id
 -define(ACL_ADMIN_USER_ID, 1).
