@@ -7,14 +7,14 @@ Authentication notifications
    :maxdepth: 1
    :glob:
 
-   includes/auth_confirm.rst
-   includes/auth_confirm_done.rst
-   includes/auth_logon.rst
-   includes/auth_logon_done.rst
-   includes/auth_autologon.rst
-   includes/auth_logoff.rst
-   includes/auth_logoff_done.rst
-   includes/auth_validated.rst
+   notification/auth_confirm
+   notification/auth_confirm_done
+   notification/auth_logon
+   notification/auth_logon_done
+   notification/auth_autologon
+   notification/auth_logoff
+   notification/auth_logoff_done
+   notification/auth_validated
 
 .. seealso::
 

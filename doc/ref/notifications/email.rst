@@ -5,12 +5,12 @@ E-mail notifications
    :maxdepth: 1
    :glob:
 
-   includes/email.rst
-   includes/email_add_handler.rst
-   includes/email_bounced.rst
-   includes/email_drop_handler.rst
-   includes/email_ensure_handler.rst
-   includes/email_failed.rst
-   includes/email_received.rst
-   includes/email_sent.rst
-   includes/email_status.rst
+   notification/email
+   notification/email_add_handler
+   notification/email_bounced
+   notification/email_drop_handler
+   notification/email_ensure_handler
+   notification/email_failed
+   notification/email_received
+   notification/email_sent
+   notification/email_status

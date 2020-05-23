@@ -5,6 +5,6 @@ Edge notifications
    :maxdepth: 1
    :glob:
 
-   includes/edge_delete.rst
-   includes/edge_insert.rst
-   includes/edge_update.rst
+   notification/edge_delete
+   notification/edge_insert
+   notification/edge_update

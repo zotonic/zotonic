@@ -5,9 +5,9 @@ Pivot notifications
    :maxdepth: 1
    :glob:
 
-   includes/pivot_fields.rst
-   includes/pivot_update.rst
-   includes/custom_pivot.rst
+   notification/pivot_fields
+   notification/pivot_update
+   notification/custom_pivot
 
 .. seealso::
 

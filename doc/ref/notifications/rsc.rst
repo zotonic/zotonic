@@ -5,13 +5,13 @@ Resource notifications
    :maxdepth: 1
    :glob:
 
-   includes/rsc_delete.rst
-   includes/rsc_get.rst
-   includes/rsc_insert.rst
-   includes/rsc_merge.rst
-   includes/rsc_pivot_done.rst
-   includes/rsc_property.rst
-   includes/rsc_query_item.rst
-   includes/rsc_update.rst
-   includes/rsc_update_done.rst
-   includes/rsc_upload.rst
+   notification/rsc_delete
+   notification/rsc_get
+   notification/rsc_insert
+   notification/rsc_merge
+   notification/rsc_pivot_done
+   notification/rsc_property
+   notification/rsc_query_item
+   notification/rsc_update
+   notification/rsc_update_done
+   notification/rsc_upload

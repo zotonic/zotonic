@@ -1,0 +1,2 @@
+.. include:: ./meta-activity.rst
+

@@ -5,12 +5,12 @@ Dispatch notifications
    :maxdepth: 1
    :glob:
 
-   includes/content_types_dispatch.rst
-   includes/dispatch_host.rst
-   includes/dispatch_match.rst
-   includes/dispatch_redirect.rst
-   includes/dispatch_rewrite.rst
-   includes/page_url.rst
-   includes/url_abs.rst
-   includes/url_rewrite.rst
+   notification/content_types_dispatch
+   notification/dispatch_host
+   notification/dispatch_match
+   notification/dispatch_redirect
+   notification/dispatch_rewrite
+   notification/page_url
+   notification/url_abs
+   notification/url_rewrite
 

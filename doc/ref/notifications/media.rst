@@ -5,14 +5,14 @@ Media notifications
    :maxdepth: 1
    :glob:
 
-   includes/media_identify_extension.rst
-   includes/media_identify_file.rst
-   includes/media_import.rst
-   includes/media_import_props.rst
-   includes/media_replace_file.rst
-   includes/media_stillimage.rst
-   includes/media_update_done.rst
-   includes/media_upload_preprocess.rst
-   includes/media_upload_props.rst
-   includes/media_upload_rsc_props.rst
-   includes/media_viewer.rst
+   notification/media_identify_extension
+   notification/media_identify_file
+   notification/media_import
+   notification/media_import_props
+   notification/media_replace_file
+   notification/media_stillimage
+   notification/media_update_done
+   notification/media_upload_preprocess
+   notification/media_upload_props
+   notification/media_upload_rsc_props
+   notification/media_viewer
