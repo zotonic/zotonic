@@ -3,8 +3,10 @@
 session_context
 ^^^^^^^^^^^^^^^
 
-Initialize a context from the current session. 
-Called for every request that has a session. 
+Refresh the context or request process for the given request or action 
+     Called for every request that is not anoymous and before every MQTT relay from 
+     the client.  Example: mod_development uses this to set flags in the process 
+     dictionary. 
 
 
 Type: 
@@ -14,4 +16,5 @@ Return:
     ``#context{}``
 
 ``#session_context{}`` properties:
-none
+    - request_type: ``http|mqtt``
+    - payload: ``union``

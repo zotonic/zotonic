@@ -14,6 +14,6 @@ Return:
 
 ``#media_viewer{}`` properties:
     - id: ``unknown``
-    - props: ``list``
-    - filename: ``unknown``
+    - props: ``z_media_identify:media_info()``
+    - filename: ``union``
     - options: ``list``

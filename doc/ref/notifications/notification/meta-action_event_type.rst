@@ -5,7 +5,7 @@ action_event_type
 
 Render the javascript for a custom action event type. 
 The custom event type must be a tuple, for example: 
-<code>{% wire type={live id=myid} action={...} %}</code> 
+``{% wire type={live id=myid} action={...} %}</code>`` 
 Must return {ok, Javascript, Context} 
 
 

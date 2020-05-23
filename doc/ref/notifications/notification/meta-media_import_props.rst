@@ -19,8 +19,8 @@ Return:
     - prio: ``pos_integer``
     - category: ``atom``
     - module: ``atom``
-    - description: ``binary|tuple``
-    - rsc_props: ``list``
-    - medium_props: ``list``
+    - description: ``binary|z:trans()``
+    - rsc_props: ``map``
+    - medium_props: ``z_media_identify:media_info()``
     - medium_url: ``binary``
-    - preview_url: ``binary``
+    - preview_url: ``binary|undefined``

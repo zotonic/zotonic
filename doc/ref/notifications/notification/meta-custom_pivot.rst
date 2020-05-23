@@ -16,4 +16,4 @@ Return:
     
 
 ``#custom_pivot{}`` properties:
-    - id: ``m_rsc:resource()``
+    - id: ``m_rsc:resource_id()``

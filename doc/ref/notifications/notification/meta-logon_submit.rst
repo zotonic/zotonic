@@ -14,4 +14,4 @@ Return:
     
 
 ``#logon_submit{}`` properties:
-    - query_args: ``list``
+    - payload: ``map``

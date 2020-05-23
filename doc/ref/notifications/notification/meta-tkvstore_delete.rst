@@ -7,7 +7,7 @@ Delete a value from the typed key/value store
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
     

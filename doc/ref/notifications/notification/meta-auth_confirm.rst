@@ -10,7 +10,7 @@ Type:
     :ref:`notification-foldl`
 
 Return: 
-    ``context{}``
+    ``z:context()``
 
 ``#auth_confirm{}`` properties:
 none

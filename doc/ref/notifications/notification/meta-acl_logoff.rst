@@ -10,7 +10,7 @@ Type:
     :ref:`notification-first`
 
 Return: 
-    updated ``#context{}`` or ``undefined``
+    updated ``z:context()`` or ``undefined``
 
 ``#acl_logoff{}`` properties:
 none

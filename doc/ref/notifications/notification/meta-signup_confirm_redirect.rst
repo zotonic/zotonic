@@ -3,7 +3,7 @@
 signup_confirm_redirect
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Fetch the page a user is redirected to after signing up with a confirmed identity (first) 
+Fetch the page a user is redirected to after signing up with a confirmed identity 
 
 
 Type: 

@@ -18,4 +18,4 @@ Return:
     - mime: ``binary``
     - archive_file: ``unknown``
     - options: ``list``
-    - medium: ``list``
+    - medium: ``z_media_identify:media_info()``

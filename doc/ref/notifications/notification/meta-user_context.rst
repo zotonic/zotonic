@@ -13,4 +13,4 @@ Return:
     
 
 ``#user_context{}`` properties:
-    - id: ``unknown``
+    - id: ``m_rsc:resource_id()``

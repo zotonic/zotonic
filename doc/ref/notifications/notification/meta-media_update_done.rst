@@ -3,12 +3,11 @@
 media_update_done
 ^^^^^^^^^^^^^^^^^
 
-Media update done notification. 
-action is 'insert', 'update' or 'delete' 
+Media update done notification. action is 'insert', 'update' or 'delete' 
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
     

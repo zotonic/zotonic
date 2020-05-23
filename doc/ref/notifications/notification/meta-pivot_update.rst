@@ -13,5 +13,5 @@ Return:
     
 
 ``#pivot_update{}`` properties:
-    - id: ``m_rsc:resource()``
-    - raw_props: ``list``
+    - id: ``m_rsc:resource_id()``
+    - raw_props: ``m_rsc:props()``

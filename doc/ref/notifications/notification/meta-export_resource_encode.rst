@@ -14,7 +14,7 @@ Return:
 
 ``#export_resource_encode{}`` properties:
     - dispatch: ``atom``
-    - id: ``integer``
-    - content_type: ``string``
+    - id: ``m_rsc:resource_id()|undefined``
+    - content_type: ``binary``
     - data: ``term``
     - state: ``term``

@@ -16,9 +16,9 @@ Return:
     modified ``#media_upload_preprocess{}``
 
 ``#media_upload_preprocess{}`` properties:
-    - id: ``integer|insert_rsc``
+    - id: ``union``
     - mime: ``binary``
-    - file: ``file:filename()``
-    - original_filename: ``file:filename()``
-    - medium: ``list``
-    - post_insert_fun: ``function``
+    - file: ``file:filename_all()|undefined``
+    - original_filename: ``file:filename_all()|undefined``
+    - medium: ``z_media_identify:media_info()``
+    - post_insert_fun: ``function|undefined``

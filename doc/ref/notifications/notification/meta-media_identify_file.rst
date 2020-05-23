@@ -13,6 +13,6 @@ Return:
     
 
 ``#media_identify_file{}`` properties:
-    - filename: ``unknown``
-    - original_filename: ``unknown``
-    - extension: ``unknown``
+    - filename: ``file:filename_all()``
+    - original_filename: ``binary``
+    - extension: ``binary``

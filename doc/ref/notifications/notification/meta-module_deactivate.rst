@@ -3,11 +3,11 @@
 module_deactivate
 ^^^^^^^^^^^^^^^^^
 
-A module has been stopped and deactivated. (notify) 
+A module has been stopped and deactivated. 
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
     

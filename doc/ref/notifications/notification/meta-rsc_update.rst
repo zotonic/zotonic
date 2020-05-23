@@ -19,5 +19,5 @@ Return:
 
 ``#rsc_update{}`` properties:
     - action: ``insert|update``
-    - id: ``m_rsc:resource()``
-    - props: ``list``
+    - id: ``m_rsc:resource_id()``
+    - props: ``m_rsc:props()``

@@ -15,4 +15,4 @@ Return:
     
 
 ``#user_is_enabled{}`` properties:
-    - id: ``unknown``
+    - id: ``m_rsc:resource_id()``

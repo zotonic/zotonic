@@ -3,13 +3,13 @@
 mailinglist_message
 ^^^^^^^^^^^^^^^^^^^
 
-Send a welcome or goodbye message to the given recipient. (notify). 
+Send a welcome or goodbye message to the given recipient. 
 The recipient is either an e-mail address or a resource id. 
 'what' is send_welcome, send_confirm, send_goobye or silent. 
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
     

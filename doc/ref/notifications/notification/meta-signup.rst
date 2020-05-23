@@ -14,7 +14,7 @@ Return:
     
 
 ``#signup{}`` properties:
-    - id: ``integer``
+    - id: ``m_rsc:resource_id()|undefined``
     - props: ``list``
     - signup_props: ``list``
     - request_confirm: ``boolean``

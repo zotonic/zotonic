@@ -9,7 +9,7 @@ Must return an iolist()
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-map()`
 
 Return: 
     

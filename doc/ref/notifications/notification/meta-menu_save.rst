@@ -3,11 +3,11 @@
 menu_save
 ^^^^^^^^^
 
-Save the menu tree of a menu resource (notify) 
+Save the menu tree of a menu resource 
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
     

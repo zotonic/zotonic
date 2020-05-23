@@ -3,11 +3,11 @@
 module_activate
 ^^^^^^^^^^^^^^^
 
-A module has been activated and started. (notify) 
+A module has been activated and started. 
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify`
 
 Return: 
     

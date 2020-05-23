@@ -3,14 +3,14 @@
 auth_logoff
 ^^^^^^^^^^^
 
-User is about to log off. Remove authentication from the current session. 
+User is about to log off. Modify (if needed) the logoff request context. 
 
 
 Type: 
     :ref:`notification-foldl`
 
 Return: 
-    ``context{}``
+    ``z:context()``
 
 ``#auth_logoff{}`` properties:
-none
+    - id: ``m_rsc:resource_id()|undefined``

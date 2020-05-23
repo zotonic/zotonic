@@ -13,5 +13,5 @@ Return:
     
 
 ``#rsc_pivot_done{}`` properties:
-    - id: ``m_rsc:resource()``
+    - id: ``m_rsc:resource_id()``
     - is_a: ``list``
