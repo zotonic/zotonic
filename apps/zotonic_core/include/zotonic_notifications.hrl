@@ -793,7 +793,7 @@
 %% @doc Add extra javascript with the {% script %} tag. (map)
 %% Used to let modules inject extra javascript depending on the arguments of the {% script %} tag.
 %% Must return an iolist()
-%% Type: map()
+%% Type: map
 -record(scomp_script_render, {
     is_nostartup = false :: boolean(),
     args = [] :: list()
