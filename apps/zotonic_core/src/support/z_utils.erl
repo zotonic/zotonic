@@ -133,7 +133,7 @@ pipeline_apply(F, As, AsLen) when is_function(F, AsLen) ->
     erlang:apply(F, As);
 pipeline_apply({M, F, A}, As, AsLen) when is_atom(M), is_atom(F), is_list(A) ->
     code:ensure_loaded(M),
-    case erlang:function_exported(M, F, AsLen ++ length(A)) of
+    case erlang:function_exported(M, F, AsLen + length(A)) of
         false ->
             case erlang:function_exported(M, F, length(A)) of
                 true ->

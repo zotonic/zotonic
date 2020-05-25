@@ -98,8 +98,9 @@ task_job(
                     z_db:delete(pivot_task_queue, TaskId, Context)
             end
     after
-        ok = gen_server:call(PivotPid, {task_done, TaskId, self()}, infinity)
-    end.
+        gen_server:call(PivotPid, {task_done, TaskId, self()}, infinity)
+    end,
+    ok.
 
 
 call_function(Module, Function, As, Context) ->
