@@ -163,6 +163,8 @@ process_done(ok, ProvidedCT, Context) ->
     % z_mqtt:publish response
     Body = z_controller_helper:encode_response(ProvidedCT, #{ status => ok }),
     {Body, Context};
+process_done({ok, #{ status := <<"error">>, message := Code }}, ProvidedCT, Context) when is_atom(Code) ->
+    process_done({error, Code}, ProvidedCT, Context);
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
@@ -195,6 +197,22 @@ error_response({error, enoent}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 404}, Context1};
+error_response({error, unknown_path}, CT, Context) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
+            status => <<"error">>,
+            error => <<"unknown_path">>,
+            message => <<"Not Found">>
+        }),
+    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
+    {{halt, 404}, Context1};
+error_response({error, unacceptable}, CT, Context) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
+            status => <<"error">>,
+            error => <<"unacceptable">>,
+            message => <<"Unacceptable Model Method">>
+        }),
+    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
+    {{halt, 400}, Context1};
 error_response({error, StatusCode}, CT, Context) when is_integer(StatusCode) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
