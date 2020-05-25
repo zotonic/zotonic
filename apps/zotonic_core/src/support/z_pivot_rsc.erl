@@ -69,9 +69,6 @@
 % How many PIVOT_POLL_INTERVAL_SLOW we will skip on SQL errors (like timeouts)
 -define(BACKOFF_POLL_ERROR, 4).
 
-% Max number of times a task will retry on fatal exceptions
--define(MAX_TASK_ERROR_COUNT, 5).
-
 % Number of queued ids taken from the queue at one go
 -define(POLL_BATCH, 50).
 
@@ -86,7 +83,9 @@
     site :: atom(),
     is_initial_delay = true :: boolean(),
     is_pivot_delay = false :: boolean(),
-    backoff_counter = 0 :: integer()
+    backoff_counter = 0 :: integer(),
+    task_pid :: undefined | pid(),
+    task_id :: undefined | integer()
 }).
 
 
@@ -346,30 +345,35 @@ init(Site) ->
         {module, ?MODULE}
       ]),
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {ok, #state{site=Site, is_initial_delay=true, is_pivot_delay=false}}.
+    {ok, #state{
+        site=Site,
+        is_initial_delay=true,
+        is_pivot_delay=false,
+        task_pid = undefined,
+        task_id = undefined
+    }}.
 
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
+%% @doc Handle task_done messages from task queue jobs
+handle_call({task_done, TaskId, _TaskPid}, _From, #state{ task_id = TaskId } = State) ->
+    {reply, ok, State#state{ task_id = undefined, task_pid = undefined }};
+handle_call({task_done, TaskId, _TaskPid}, _From, State) ->
+    lager:error("Pivot received unexpected 'task_done' from task job for task ~p",
+                [ TaskId ]),
+    {reply, {error, unknown_task, State}};
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 %% @doc Poll the queue for the default host
 handle_cast(poll, #state{is_initial_delay=true} = State) ->
     {noreply, State};
 handle_cast(poll, State) ->
     try
-        do_poll(z_context:new(State#state.site)),
-        {noreply, State}
+        {_IsPivoting, State1} = do_poll(State),
+        {noreply, State1}
     catch
         ?WITH_STACKTRACE(Type, Err, Stack)
             lager:error("Poll error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
@@ -398,14 +402,10 @@ handle_cast({pivot, Id}, State) when is_integer(Id) ->
 %% @doc Delay the next pivot, useful when performing big updates
 handle_cast(pivot_delay, State) ->
     {noreply, State#state{is_pivot_delay=true}};
-
-%% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
+
 %% @doc Handling all non call/cast messages
 handle_info(poll, #state{ is_pivot_delay = true } = State) ->
     timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
@@ -415,11 +415,12 @@ handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
     {noreply, State#state{ backoff_counter = Ct - 1 }};
 handle_info(poll, State) ->
     try
-        case do_poll(z_context:new(State#state.site)) of
+        {IsPivoting, State1} = do_poll(State),
+        case IsPivoting of
             true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
             false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
         end,
-        {noreply, State#state{is_initial_delay = false}}
+        {noreply, State1#state{ is_initial_delay = false }}
     catch
         ?WITH_STACKTRACE(Type, Err, Stack)
             lager:error("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
@@ -427,10 +428,17 @@ handle_info(poll, State) ->
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
     end;
 
+handle_info({'DOWN', _MRef, process, _Pid, _Reason}, #state{ task_pid = undefined } = State) ->
+    {noreply, State};
+handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ task_pid = Pid } = State) ->
+    lager:error("Pivot received unexpected DOWN with reason '~p' from task job for task ~p",
+                [ Reason, State#state.task_id ]),
+    {noreply, State#state{ task_id = undefined, task_pid = undefined }};
+
+
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -438,7 +446,6 @@ handle_info(_Info, State) ->
 terminate(_Reason, _State) ->
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
@@ -490,87 +497,17 @@ do_insert_queue(Ids, DueDate, Context) when is_list(Ids) ->
 
 
 %% @doc Poll a database for any queued updates.
-do_poll(Context) ->
+do_poll(State) ->
+    Context = z_acl:sudo( z_context:new(State#state.site) ),
+    State1 = maybe_start_task(State, Context),
     try
-        DidTask = do_next_task(Context),
-        do_poll_queue(Context) or DidTask
+        {do_poll_queue(Context) orelse is_pid(State1#state.task_pid), State1}
     catch
-        exit:{timeout, _} -> false;
-        throw:{error, econnrefused} -> false
+        exit:{timeout, _} ->
+            {false, State1};
+        throw:{error, econnrefused} ->
+            {false, State1}
     end.
-
-do_next_task(Context) ->
-    execute_task(poll_task(Context), Context).
-
-execute_task({TaskId, Module, Function, Args, ErrCt}, Context) ->
-    try
-        case erlang:apply(Module, Function, ensure_list(Args) ++ [Context]) of
-            {delay, Delay} ->
-                Due = if
-                        is_integer(Delay) ->
-                            calendar:gregorian_seconds_to_datetime(
-                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
-                        is_tuple(Delay) ->
-                            Delay
-                      end,
-                z_db:update(pivot_task_queue, TaskId, [ {due, Due} ], Context);
-            {delay, Delay, NewArgs} ->
-                Due = if
-                        is_integer(Delay) ->
-                            calendar:gregorian_seconds_to_datetime(
-                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
-                        is_tuple(Delay) ->
-                            Delay
-                      end,
-                Fields = #{
-                    <<"due">> => Due,
-                    <<"args">> => NewArgs
-                },
-                z_db:update(pivot_task_queue, TaskId, Fields, Context);
-            _OK ->
-                z_db:delete(pivot_task_queue, TaskId, Context)
-        end
-    catch
-        ?WITH_STACKTRACE(error, undef, Trace)
-            lager:error("Task ~p failed - undefined function, aborting: ~p:~p(~p) ~p",
-                        [TaskId, Module, Function, Args, Trace]),
-            z_db:delete(pivot_task_queue, TaskId, Context);
-        ?WITH_STACKTRACE(Error, Reason, Trace)
-            case ErrCt < ?MAX_TASK_ERROR_COUNT of
-                true ->
-                    RetryDue = calendar:gregorian_seconds_to_datetime(
-                            calendar:datetime_to_gregorian_seconds(calendar:universal_time())
-                            + task_retry_backoff(ErrCt)),
-                    lager:error("Task ~p failed - will retry ~p:~p(~p) ~p:~p on ~p ~p",
-                                [TaskId, Module, Function, Args, Error, Reason, RetryDue, Trace]),
-                    RetryFields = #{
-                        <<"due">> => RetryDue,
-                        <<"error_ct">> => ErrCt+1
-                    },
-                    z_db:update(pivot_task_queue, TaskId, RetryFields, Context);
-                false ->
-                    lager:error("Task ~p failed - aborting ~p:~p(~p) ~p:~p ~p",
-                                [TaskId, Module, Function, Args, Error, Reason, Trace]),
-                    z_db:delete(pivot_task_queue, TaskId, Context)
-            end
-    end,
-    true;
-execute_task(empty, _Context) ->
-    false.
-
-
-task_retry_backoff(0) -> 10;
-task_retry_backoff(1) -> 1800;
-task_retry_backoff(2) -> 7200;
-task_retry_backoff(3) -> 14400;
-task_retry_backoff(4) -> 12 * 3600;
-task_retry_backoff(N) -> (N-4) * 24 * 3600.
-
-
-
-ensure_list(L) when is_list(L) -> L;
-ensure_list(undefined) -> [];
-ensure_list(X) -> [X].
 
 do_poll_queue(Context) ->
     do_pivot_queued( fetch_queue(Context), Context ).
@@ -608,22 +545,52 @@ do_pivot_queued(Qs, Context) ->
 log_error(Id, Error, _Context) ->
     lager:warning("Pivot error ~p: ~p", [Id, Error]).
 
+
+maybe_start_task(#state{ task_pid = undefined } = State, Context) ->
+    case poll_task(Context) of
+        {ok, #{ task_id := TaskId } = Task} ->
+            case z_pivot_rsc_task_job:start_task(self(), Task, Context) of
+                {ok, TaskPid} ->
+                    erlang:monitor(process, TaskPid),
+                    State#state{ task_id = TaskId, task_pid = TaskPid };
+                {error, _} ->
+                    State
+            end;
+        {error, enoent} ->
+            State;
+        {error, nodb} ->
+            State;
+        {error, _} = Error ->
+            lager:error("Pivot could not check task queue: ~p", [ Error ]),
+            State
+    end;
+maybe_start_task(State, _Context) ->
+    State.
+
+
 %% @doc Fetch the next task uit de task queue, if any.
 poll_task(Context) ->
-    case z_db:q_row("
+    case z_db:qmap_row("
         select id, module, function, props
         from pivot_task_queue
         where due is null
            or due < current_timestamp
         order by due asc
-        limit 1", Context)
+        limit 1",
+        [],
+        [ {keys, atom} ],
+        Context)
     of
-        {Id, Module, Function, Props} ->
+        {ok, #{ id := Id, module := Module, function := Function, props := Props }} ->
             Args = get_args(Props),
             ErrCt = get_error_ct(Props),
-            {Id, z_convert:to_atom(Module), z_convert:to_atom(Function), Args, ErrCt};
-        undefined ->
-            empty
+            {ok, #{
+                task_id => Id,
+                mfa => {z_convert:to_atom(Module), z_convert:to_atom(Function), Args},
+                error_count => ErrCt
+            }};
+        {error, _} = Error ->
+            Error
     end.
 
 get_args(Props) when is_map(Props) ->
