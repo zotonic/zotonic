@@ -173,21 +173,22 @@ insert_queue(Ids, DueDate, Context) when is_list(Ids), is_tuple(DueDate) ->
 
 %% @doc Insert a slow running pivot task. For example syncing category numbers after an category update.
 insert_task(Module, Function, Context) ->
-    insert_task(Module, Function, undefined, [], Context).
+    insert_task_after(undefined, Module, Function, undefined, [], Context).
 
 %% @doc Insert a slow running pivot task. Use the UniqueKey to prevent double queued tasks.
 insert_task(Module, Function, UniqueKey, Context) ->
-    insert_task(Module, Function, UniqueKey, [], Context).
+    insert_task_after(undefined, Module, Function, UniqueKey, [], Context).
 
 %% @doc Insert a slow running pivot task with unique key and arguments.
-insert_task(Module, Function, undefined, Args, Context) ->
-    insert_task(Module, Function, binary_to_list(z_ids:id()), Args, Context);
 insert_task(Module, Function, UniqueKey, Args, Context) ->
     insert_task_after(undefined, Module, Function, UniqueKey, Args, Context).
 
 %% @doc Insert a slow running pivot task with unique key and arguments that should start after Seconds seconds.
 %%      Always delete any existing transaction, to prevent race conditions when the task is running
 %%      during this insert.
+insert_task_after(SecondsOrDate, Module, Function, undefined, ArgsFun, Context) ->
+    UniqueKey = z_ids:id(),
+    insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context);
 insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) when is_function(ArgsFun) ->
     Due = to_utc_date(SecondsOrDate),
     UniqueKeyBin = z_convert:to_binary(UniqueKey),

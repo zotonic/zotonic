@@ -23,6 +23,8 @@
 -include("zotonic.hrl").
 
 -export([
+    pipeline/2,
+
     get_value/2,
     get_value/3,
     are_equal/2,
@@ -90,12 +92,73 @@
     ensure_existing_module/1
 ]).
 
+%% @doc Apply a list of functions to a startlist of arguments.
+%% All functions must return: ok | {ok, term()} | {error, term()}.
+%% Execution stops if a function returns an error tuple.
+%% The return value of the last executed function is returned.
+-spec pipeline( list( PipelineFun ), list() ) -> ok | {ok, term()} | {error, term()}
+    when PipelineFun :: function()
+                      | mfa().
+pipeline(Fs, As) ->
+    pipeline_1(Fs, ok, As, length(As)).
 
+pipeline_1(_Fs, {error, _} = Error, _As, _AsLen) ->
+    Error;
+pipeline_1([], Result, _As, _AsLen) ->
+    Result;
+pipeline_1([ F | Fs ], ok, As, AsLen) ->
+    case pipeline_apply(F, As, AsLen) of
+        nofun ->
+            {error, F};
+        R ->
+            pipeline_1(Fs, R, As, AsLen)
+    end;
+pipeline_1([ F | Fs ], {ok, Result}, As, AsLen) ->
+    FRes = case pipeline_apply(F, [ Result | As ], AsLen + 1) of
+        nofun ->
+            case pipeline_apply(F, As, AsLen) of
+                nofun ->
+                    {error, F};
+                R ->
+                    R
+            end;
+        R ->
+            R
+    end,
+    pipeline_1(Fs, FRes, As, AsLen).
+
+pipeline_apply(F, _As, _AsLen) when is_function(F, 0) ->
+    F();
+pipeline_apply(F, As, AsLen) when is_function(F, AsLen) ->
+    erlang:apply(F, As);
+pipeline_apply({M, F, A}, As, AsLen) when is_atom(M), is_atom(F), is_list(A) ->
+    code:ensure_loaded(M),
+    case erlang:function_exported(M, F, AsLen ++ length(A)) of
+        false ->
+            case erlang:function_exported(M, F, length(A)) of
+                true ->
+                    erlang:apply(M, F, A);
+                false ->
+                    nofun
+            end;
+        true ->
+            erlang:apply(M, F, A ++ As)
+    end;
+pipeline_apply(_F, _As, _AsLen) ->
+    nofun.
+
+
+%% @doc Get a value from a map or a proplist. Return 'undefined' if
+%% The value was not present.
+-spec get_value( term(), map() | list() ) -> term().
 get_value(Key, Map) when is_map(Map) ->
     maps:get(Key, Map, undefined);
 get_value(Key, Map) when is_list(Map) ->
     proplists:get_value(Key, Map, undefined).
 
+%% @doc Get a value from a map or a proplist. Return the default value if
+%% The value was not present.
+-spec get_value( term(), map() | list(), term() ) -> term().
 get_value(Key, Map, Default) when is_map(Map) ->
     maps:get(Key, Map, Default);
 get_value(Key, Map, Default) when is_list(Map) ->

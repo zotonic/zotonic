@@ -138,8 +138,8 @@ queue_upload_all(Context) ->
     case testcred_file(S3Url, S3Key, S3Secret) of
         ok ->
             mod_filestore:queue_all(Context),
-            z_pivot_rsc:delete_task(?MODULE, task_file_to_local, filestore_file_to_local, Context),
-            z_pivot_rsc:insert_task_after(5, ?MODULE, task_file_to_remote, filestore_file_to_remote, [], Context),
+            z_pivot_rsc:delete_task(?MODULE, task_file_to_local, <<>>, Context),
+            z_pivot_rsc:insert_task_after(5, ?MODULE, task_file_to_remote, <<>>, [], Context),
             QueueCt = z_db:q1("select count(*) from filestore_queue", Context),
             z_render:wire([
                     {update, [{target, "s3queue"}, {text, z_convert:to_binary(QueueCt)}]},
@@ -157,8 +157,8 @@ queue_upload_all(Context) ->
 
 queue_local_all(Context) ->
     mod_filestore:queue_all_stop(Context),
-    z_pivot_rsc:delete_task(?MODULE, task_file_to_remote, filestore_file_to_remote, Context),
-    z_pivot_rsc:insert_task_after(5, ?MODULE, task_file_to_local, filestore_file_to_local, [], Context),
+    z_pivot_rsc:delete_task(?MODULE, task_file_to_remote, <<>>, Context),
+    z_pivot_rsc:insert_task_after(5, ?MODULE, task_file_to_local, <<>>, [], Context),
     QueueCt = z_db:q1("select count(*) from filestore where is_move_to_local and not is_deleted", Context),
     z_render:wire([
             {update, [{target, "s3queue-local"}, {text, z_convert:to_binary(QueueCt)}]},
