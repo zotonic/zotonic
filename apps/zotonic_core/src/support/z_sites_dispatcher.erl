@@ -399,7 +399,7 @@ fix_match_bindings(Ms, IsDir) ->
 
 fix_match_binding({'*', List}, IsDir) when is_list(List) ->
     List1 = [ cow_qs:urlencode(B) || B <- List ],
-    Path = z_utils:combine($/, List1),
+    Path = lists:join($/, List1),
     case IsDir of
         true -> {'*', iolist_to_binary([Path, $/])};
         false -> {'*', iolist_to_binary(Path)}

@@ -154,7 +154,7 @@ cleanup_element_attr({<<"class">>, Classes}) ->
     Classes1 = binary:split(Classes, <<" ">>, [global]),
     case lists:filter(fun is_acceptable_classname/1, Classes1) of
         [] -> false;
-        Cs -> {true, {<<"class">>, iolist_to_binary(z_utils:combine(32, Cs))}}
+        Cs -> {true, {<<"class">>, iolist_to_binary(lists:join(32, Cs))}}
     end;
 cleanup_element_attr({<<"style">>, <<"mso-", _/binary>>}) ->
     % This might need some extra parsing of the css.

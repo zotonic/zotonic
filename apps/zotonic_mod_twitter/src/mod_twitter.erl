@@ -184,7 +184,7 @@ manage_schema(Version, Context) ->
 %     end.
 
 % fetch_user_ids(Names, Context) ->
-%     NamesArg = iolist_to_binary(z_utils:combine(",", Names)),
+%     NamesArg = iolist_to_binary(lists:join(",", Names)),
 %     Args = [
 %         {"screen_name", z_convert:to_list(NamesArg)}
 %     ],

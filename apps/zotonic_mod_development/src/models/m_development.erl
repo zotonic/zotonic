@@ -89,7 +89,7 @@ readable_1({M, F}) ->
     ];
 readable_1({M, F, Args}) ->
     As = [ io_lib:format("~p", [A]) || A <- Args ],
-    As1 = z_utils:combine(", ", As),
+    As1 = lists:join(", ", As),
     [
         "<b>", z_html:escape(atom_to_binary(M, utf8)), "</b>",
         ":", z_html:escape(atom_to_binary(F, utf8)),

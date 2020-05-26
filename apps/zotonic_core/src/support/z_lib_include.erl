@@ -120,8 +120,8 @@ collapsed_paths(Files) ->
     {Css, Js} = split_css_js([ z_convert:to_binary(F) || F <- Files]),
     CssSort = collapse_dirs(Css),
     JsSort= collapse_dirs(Js),
-    CssPath = z_utils:combine(?SEP, CssSort),
-    JsPath = z_utils:combine(?SEP, JsSort),
+    CssPath = lists:join(?SEP, CssSort),
+    JsPath = lists:join(?SEP, JsSort),
     {Css, CssPath, Js, JsPath}.
 
 
@@ -191,7 +191,7 @@ collapse_dirs([ File | Files ], PrevTk, Acc) ->
             collapse_dirs(Files, FileTk, [filename:rootname(filename:basename(File)) | Acc ]);
         {[], B} ->
             % File is in a subdirectory from A
-            RelFile = [ z_utils:combine($/, B), $/, filename:rootname(filename:basename(File))],
+            RelFile = [ lists:join($/, B), $/, filename:rootname(filename:basename(File))],
             collapse_dirs(Files, FileTk, [RelFile | Acc]);
         {_A, _B} ->
             % File is in a (sub-)directory higher from the previous one, reset to top level

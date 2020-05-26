@@ -460,7 +460,7 @@ props2url(Props, Context) ->
     end.
 
 with_checksum(Size, Acc) ->
-    {checksum, iolist_to_binary([$(, z_utils:combine(")(", [Size|lists:reverse(Acc)]), $)])}.
+    {checksum, iolist_to_binary([$(, lists:join(")(", [Size|lists:reverse(Acc)]), $)])}.
 
 props2url([], Width, Height, Acc, _Context) ->
     {Width, Height, Acc};

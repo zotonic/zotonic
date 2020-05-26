@@ -151,7 +151,7 @@ validate(Val, Context) ->
 
 split_name_pickled(Val) ->
     [Pickled|Name] = lists:reverse(binary:split(Val, <<":">>, [global])),
-    Name1 = iolist_to_binary(z_utils:combine($,, lists:reverse(Name))),
+    Name1 = iolist_to_binary(lists:join($,, lists:reverse(Name))),
     {Name1, Pickled}.
 
 %% @doc Simple utility function to get the 'q' value of an argument. When the argument has a generated unique prefix then

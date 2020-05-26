@@ -272,7 +272,7 @@ search({match_objects, [{id_exclude, Exclude}, {ids, ObjectIds}]}, _OffsetLimit,
     ExcludeId = m_rsc:rid(Exclude, Context),
     ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- ObjectIds ],
     MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, ObjId =/= undefined ],
-    TsQuery = lists:flatten(z_utils:combine("|", MatchTerms)),
+    TsQuery = lists:flatten(lists:join("|", MatchTerms)),
     case TsQuery of
         [] ->
             #search_result{};
@@ -307,7 +307,7 @@ search({match_objects_cats, [{id,Id}]}, _OffsetLimit, Context) ->
     CatTerms = [ ["zpc",integer_to_list(CatId)] || CatId <- IsCats ],
     ObjectIds = m_edge:objects(Id, Context),
     ObjectTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds ],
-    TsQuery = lists:flatten(z_utils:combine("|", CatTerms++ObjectTerms)),
+    TsQuery = lists:flatten(lists:join("|", CatTerms++ObjectTerms)),
     case TsQuery of
         [] ->
             #search_result{};
