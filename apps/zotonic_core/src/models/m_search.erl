@@ -141,10 +141,10 @@ search(SearchName, IsPaged, Context) when is_binary(SearchName) ->
     case to_atom(SearchName) of
         {ok, Atom} ->
             case search({Atom, []}, IsPaged, Context) of
-                undefined ->
-                    try_rsc_search(SearchName, IsPaged, Context);
-                Result ->
-                    Result
+                {ok, _} = Result ->
+                    Result;
+                {error, _} ->
+                    try_rsc_search(SearchName, IsPaged, Context)
             end;
         error ->
             try_rsc_search(SearchName, IsPaged, Context)
