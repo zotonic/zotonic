@@ -84,8 +84,8 @@ m_get([ <<"reindex">> | Rest ], _Msg, Context) ->
             lager:info("Development API triggered module reindex and translation reload."),
             lists:map(
                 fun(Ctx) ->
-                    catch z_module_manager:reindex(Ctx),
-                    catch z_trans_server:load_translations(Ctx)
+                    z_module_indexer:reindex(Ctx),
+                    z_trans_server:load_translations(Ctx)
                 end,
                 z_sites_manager:get_site_contexts()),
             {ok, {<<"reindexed">>, Rest}};
