@@ -47,19 +47,80 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([ <<"paged">>, SearchProps | Rest ], _Msg, Context) ->
-    {ok, {search_pager(SearchProps, Context), Rest}};
+m_get([ <<"paged">>, SearchName | Rest ], _Msg, Context) when is_binary(SearchName) ->
+    case search(SearchName, true, Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, Result} ->
+            {ok, {Result, Rest}}
+    end;
+m_get([ <<"paged">>, {Name, Props} = SearchProps | Rest ], _Msg, Context) when is_list(Props), is_atom(Name) ->
+    case search(SearchProps, true, Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, Result} ->
+            {ok, {Result, Rest}}
+    end;
 m_get([ SearchName | Rest ], _Msg, Context) when is_binary(SearchName) ->
-    {ok, {search(SearchName, Context), Rest}};
-m_get([ SearchProps | Rest ], _Msg, Context) when is_tuple(SearchProps) ->
-    {ok, {search(SearchProps, Context), Rest}};
+    case search(SearchName, false, Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, Result} ->
+            {ok, {Result, Rest}}
+    end;
+m_get([ {Name, Props} = SearchProps | Rest ], _Msg, Context) when is_list(Props), is_atom(Name) ->
+    case search(SearchProps, false, Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, Result} ->
+            {ok, {Result, Rest}}
+    end;
+m_get([ <<"paged">> ], _Msg, Context) ->
+    case search({'query', [ {qargs, true} ]}, true, Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, Result} ->
+            {ok, {Result, []}}
+    end;
 m_get([], _Msg, Context) ->
-    {ok, {search({'query', [ {qargs, true} ]}, Context), []}}.
+    case search({'query', [ {qargs, true} ]}, false, Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, Result} ->
+            {ok, {Result, []}}
+    end.
+
+search(Search, Context) ->
+    case search(Search, false, Context) of
+        {ok, Result} ->
+            Result;
+        {error, _} ->
+            empty_result()
+    end.
+
+search_pager(Search, Context) ->
+    case search(Search, true, Context) of
+        {ok, Result} ->
+            Result;
+        {error, _} ->
+            empty_result()
+    end.
 
 
 %% @doc Perform a search, wrap the result in a m_search_result record
-%% @spec search(Search, Context) -> #m_search_result{}
-search({SearchName, Props}, Context) ->
+search({SearchName, Props}, true, Context) when is_atom(SearchName), is_list(Props) ->
+    {Page, PageLen, Props1} = get_paging_props(Props),
+    try
+        Result = z_search:search_pager({SearchName, Props1}, Page, PageLen, Context),
+        Total = Result#search_result.total,
+        {ok, #m_search_result{result=Result, total=Total, search_name=SearchName, search_props=Props1}}
+    catch
+        throw:Error ->
+            lager:error("Error in m.search[~p] error: ~p",
+                        [{SearchName, Props}, Error]),
+            {error, Error}
+    end;
+search({SearchName, Props}, false, Context) when is_atom(SearchName), is_list(Props) ->
     {Page, PageLen, Props1} = get_optional_paging_props(Props),
     try
         Result = z_search:search({SearchName, Props1}, {(Page - 1) * PageLen + 1, PageLen}, Context),
@@ -67,34 +128,34 @@ search({SearchName, Props}, Context) ->
             undefined -> length(Result#search_result.result);
             Total -> Total
         end,
-        #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props}
+        {ok, #m_search_result{result=Result, total=Total1, search_name=SearchName, search_props=Props}}
     catch
         throw:Error ->
             lager:error("Error in m.search[~p] error: ~p",
                         [{SearchName, Props}, Error]),
-            empty_result(SearchName, Props, PageLen)
+            {error, Error}
     end;
-search(SearchName, Context) when is_atom(SearchName) ->
-    search({SearchName, []}, Context);
-search(SearchName, Context) when is_binary(SearchName) ->
+search(SearchName, IsPaged, Context) when is_atom(SearchName) ->
+    search({SearchName, []}, IsPaged, Context);
+search(SearchName, IsPaged, Context) when is_binary(SearchName) ->
     case to_atom(SearchName) of
         {ok, Atom} ->
-            case search({Atom, []}, Context) of
+            case search({Atom, []}, IsPaged, Context) of
                 undefined ->
-                    try_rsc_search(SearchName, Context);
+                    try_rsc_search(SearchName, IsPaged, Context);
                 Result ->
                     Result
             end;
         error ->
-            try_rsc_search(SearchName, Context)
+            try_rsc_search(SearchName, IsPaged, Context)
     end.
 
-try_rsc_search(SearchName, Context) ->
+try_rsc_search(SearchName, IsPaged, Context) ->
     case m_rsc:rid(SearchName, Context) of
         undefined ->
             {error, enoent};
         RscId ->
-            search({'query', [ {query_id, RscId} ]}, Context)
+            search({'query', [ {query_id, RscId} ]}, IsPaged, Context)
     end.
 
 
@@ -105,37 +166,19 @@ to_atom(N) ->
         _:_ -> error
     end.
 
-
-%% @doc Perform a paged search, wrap the result in a m_search_result record
-%% @spec search_pager(Search, Context) -> #m_search_result{}
-search_pager({SearchName, Props}, Context) ->
-    {Page, PageLen, Props1} = get_paging_props(Props),
-    try
-        Result = z_search:search_pager({SearchName, Props1}, Page, PageLen, Context),
-        Total = Result#search_result.total,
-        #m_search_result{result=Result, total=Total, search_name=SearchName, search_props=Props1}
-    catch
-        throw:Error ->
-            lager:error("Error in m.search[~p] error: ~p",
-                        [{SearchName, Props}, Error]),
-            empty_result(SearchName, Props, PageLen)
-    end;
-search_pager(SearchName, Context) ->
-    search_pager({z_convert:to_atom(SearchName), []}, Context).
-
-empty_result(SearchName, Props, PageLen) ->
+empty_result() ->
     #m_search_result{
         result=#search_result{
-            result=[],
-            page=1,
-            pagelen=PageLen,
-            total=0,
-            all=[],
-            pages=1
+            result = [],
+            page = 1,
+            pagelen = 10,
+            total = 0,
+            all = [],
+            pages = 1
         },
-        total=0,
-        search_name=SearchName,
-        search_props=Props
+        total = 0,
+        search_name = error,
+        search_props = []
     }.
 
 

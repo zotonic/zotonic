@@ -16,8 +16,8 @@ Options
 This can toggle various development options:
 
 Show paths to included template files in generated templates
-    Checking this will add comments in the compiled templates. The comments will list the exact
-    file included at that point.
+  Checking this will add comments in the compiled templates. The comments will list the exact
+  file included at that point.
 
 Show defined blocks in generated templates
 	Checking this will add comments in the compiled templates. The comments will show the start and
@@ -28,8 +28,8 @@ Download css and javascript files as separate files (ie. don’t combine them in
 	mentioned in a single ``{% lib %}`` tag. This makes debugging those files easier but makes
 	loading pages slower as more requests will be done per page.
 
-Enable API to recompile & build Zotonic
-	The api on ``/api/model/development/get/recompile`` can be accessed to trigger a full
+Enable API to recompile &amp; build Zotonic
+  The api on ``/api/model/development/get/recompile`` can be accessed to trigger a full
   compilation and cache flush of Zotonic. This checkbox must be checked to enable this api.
 
 
