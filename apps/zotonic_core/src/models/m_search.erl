@@ -49,11 +49,12 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"paged">>, SearchProps | Rest ], _Msg, Context) ->
     {ok, {search_pager(SearchProps, Context), Rest}};
-m_get([ SearchProps | Rest ], _Msg, Context) ->
+m_get([ SearchName | Rest ], _Msg, Context) when is_binary(SearchName) ->
+    {ok, {search(SearchName, Context), Rest}};
+m_get([ SearchProps | Rest ], _Msg, Context) when is_tuple(SearchProps) ->
     {ok, {search(SearchProps, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
-    {error, unknown_path}.
+m_get([], _Msg, Context) ->
+    {ok, {search({'query', [ {qargs, true} ]}, Context), []}}.
 
 
 %% @doc Perform a search, wrap the result in a m_search_result record
@@ -73,8 +74,36 @@ search({SearchName, Props}, Context) ->
                         [{SearchName, Props}, Error]),
             empty_result(SearchName, Props, PageLen)
     end;
-search(SearchName, Context) ->
-    search({z_convert:to_atom(SearchName), []}, Context).
+search(SearchName, Context) when is_atom(SearchName) ->
+    search({SearchName, []}, Context);
+search(SearchName, Context) when is_binary(SearchName) ->
+    case to_atom(SearchName) of
+        {ok, Atom} ->
+            case search({Atom, []}, Context) of
+                undefined ->
+                    try_rsc_search(SearchName, Context);
+                Result ->
+                    Result
+            end;
+        error ->
+            try_rsc_search(SearchName, Context)
+    end.
+
+try_rsc_search(SearchName, Context) ->
+    case m_rsc:rid(SearchName, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            search({'query', [ {query_id, RscId} ]}, Context)
+    end.
+
+
+to_atom(N) ->
+    try
+        {ok, binary_to_existing_atom(N, utf8)}
+    catch
+        _:_ -> error
+    end.
 
 
 %% @doc Perform a paged search, wrap the result in a m_search_result record

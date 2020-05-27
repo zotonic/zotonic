@@ -29,8 +29,8 @@ Download css and javascript files as separate files (ie. don’t combine them in
 	loading pages slower as more requests will be done per page.
 
 Enable API to recompile & build Zotonic
-	The api on ``/api/development/recompile`` can be accessed to trigger a full compilation and cache flush
-	of Zotonic. This checkbox must be checked to enable this api.
+	The api on ``/api/model/development/get/recompile`` can be accessed to trigger a full
+  compilation and cache flush of Zotonic. This checkbox must be checked to enable this api.
 
 
 Template debugging

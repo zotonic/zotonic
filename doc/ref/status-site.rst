@@ -50,7 +50,7 @@ Zotonic sites are running::
 
     curl -k 'https://127.0.0.1:8443/api/model/zotonic_status/get/check'
 
-The option ``-k`` was used as the status site is using a self-signed
+The option ``-k`` was used because the status site is using a self-signed
 certificate.
 
 If all sites are running, it returns::
@@ -63,8 +63,7 @@ If one or more sites are failing then it returns::
 
 
 ``"Running"`` means that a site’s status is not ``"retrying"`` or ``"failed"``;
-it does not count sites that are manually stopped from the
-interface.
+it ignores sites that are manually stopped or disabled.
 
 This API service can be plugged in to a service like
 https://www.pingdom.com/ to monitor the availability of all hosted sites
