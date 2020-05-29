@@ -154,7 +154,8 @@ from_json(Context) ->
 from_qs(Context) ->
     Context1 = z_context:ensure_qs(Context),
     Qs = z_context:get_q_all_noz(Context1),
-    {z_props:from_qs(Qs), Context1}.
+    {ok, Props} = z_props:from_qs(Qs),
+    {Props, Context1}.
 
 -spec req_body( z:context() ) -> {binary(), z:context()}.
 req_body(Context) ->
