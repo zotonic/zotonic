@@ -28,7 +28,7 @@ access the attributes, use dot notation::
 
     {{ article.title }} was created by {{ article.author.last_name }}
 
-The variables that you add to your templates get their values from thee places:
+The variables that you add to your templates get their values from three places:
 
 * they can be :ref:`passed from controllers <guide-render>` when rendering the
   template;
