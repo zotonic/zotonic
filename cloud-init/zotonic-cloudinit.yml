@@ -37,6 +37,7 @@ packages:
   - clamav
   - clamav-daemon
   - ghostscript
+  - file
   - imagemagick
   - ffmpeg
 
