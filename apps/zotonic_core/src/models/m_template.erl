@@ -49,4 +49,4 @@ to_template([]) -> <<>>;
 to_template(List) ->
     L1 = lists:map(fun z_convert:to_binary/1, List),
     L2 = lists:filter(fun(B) -> B =/= <<>> end, L1),
-    iolist_to_binary( z_utils:combine($/, L2) ).
+    iolist_to_binary( lists:join($/, L2) ).

@@ -181,7 +181,7 @@ format_value(_K, V, _Context) when is_tuple(V) ->
     z_html:escape(iolist_to_binary(io_lib:format("~p", [V])));
 format_value(_K, V, Context) when is_list(V) ->
     iolist_to_binary(
-        z_utils:combine(
+        lists:join(
             ", ",
             [ format_value(none, A, Context) || A <- V ]));
 format_value(_K, A, _Context) ->
@@ -197,12 +197,12 @@ by_id(Id, Context) when is_integer(Id) ->
 
 
 format_blocks(Blocks, Context) ->
-    iolist_to_binary(z_utils:combine("\n\n--\n\n", [ format_block(B, Context) || B <- Blocks ])).
+    iolist_to_binary(lists:join("\n\n--\n\n", [ format_block(B, Context) || B <- Blocks ])).
 
 format_block(B, Context) when is_map(B) ->
     format_block(lists:sort( maps:to_list(B) ), Context);
 format_block(B, Context) ->
-    iolist_to_binary(z_utils:combine(
+    iolist_to_binary(lists:join(
             "\n",
             [
                 iolist_to_binary([z_convert:to_binary(K), ": ", format_value(K,V,Context)])

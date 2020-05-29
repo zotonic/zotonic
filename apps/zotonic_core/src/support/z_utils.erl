@@ -36,8 +36,7 @@
     checksum/2,
     checksum_assert/3,
     coalesce/1,
-    combine/2,
-    combine_defined/2,
+    join_defined/2,
     depickle/2,
     f/1,
     f/2,
@@ -494,7 +493,7 @@ js_escape1([H|T], Acc, OptContext) ->
     js_escape1(T, [H1|Acc], OptContext).
 
 js_array(L) ->
-    [ $[, combine($,,[ js_prop_value(undefined, V, undefined) || V <- L ]), $] ].
+    [ $[, lists:join($,,[ js_prop_value(undefined, V, undefined) || V <- L ]), $] ].
 
 
 %% @doc Create a javascript object from a proplist
@@ -509,13 +508,14 @@ js_object(L, [Key|T], Context) -> js_object(proplists:delete(Key,L), T, Context)
 
 %% recursively add all properties as object properties
 js_object1([], Acc, _OptContext) ->
-    [${, combine($,,lists:reverse(Acc)), $}];
+    [${, lists:join($,,lists:reverse(Acc)), $}];
 js_object1([{Key,Value}|T], Acc, OptContext) ->
     Prop = [atom_to_list(Key), $:, js_prop_value(Key, Value, OptContext)],
     js_object1(T, [Prop|Acc], OptContext).
 
 
 js_prop_value(_, undefined, _OptContext) -> <<"null">>;
+js_prop_value(_, null, _OptContext) -> <<"null">>;
 js_prop_value(_, true, _OptContext) -> <<"true">>;
 js_prop_value(_, false, _OptContext) -> <<"false">>;
 js_prop_value(_, Atom, _OptContext) when is_atom(Atom) -> [$",js_escape(erlang:atom_to_list(Atom)), $"];
@@ -574,14 +574,15 @@ is_proplist([]) -> true;
 is_proplist([{K,_}|R]) when is_atom(K) -> is_proplist(R);
 is_proplist(_) -> false.
 
-
-combine_defined(Sep, List) ->
-    List2 = lists:filter(fun(X) -> X /= undefined end, List),
-    combine(Sep, List2).
-
-combine(_Sep, []) -> [];
-combine(_Sep, [A]) -> [A];
-combine(Sep, [H|T]) -> [H, prefix(Sep, T)].
+join_defined(Sep, List) ->
+    List2 = lists:filter(
+        fun
+            (undefined) -> false;
+            (null) -> false;
+            (_) -> true
+        end,
+        List),
+    lists:join(Sep, List2).
 
 prefix(Sep, List) -> prefix(Sep,List,[]).
 
@@ -593,12 +594,14 @@ prefix(Sep, [H|T], Acc) -> prefix(Sep, T, [H,Sep|Acc]).
 coalesce([]) -> undefined;
 coalesce([H]) -> H;
 coalesce([undefined|T]) -> coalesce(T);
+coalesce([null|T]) -> coalesce(T);
 coalesce([[]|T]) -> coalesce(T);
 coalesce([H|_]) -> H.
 
 
 %% @doc Check if a value is 'empty'
 is_empty(undefined) -> true;
+is_empty(null) -> true;
 is_empty([]) -> true;
 is_empty(<<>>) -> true;
 is_empty({{9999,_,_},{_,_,_}}) -> true;

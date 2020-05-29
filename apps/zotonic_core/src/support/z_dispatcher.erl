@@ -497,7 +497,7 @@ make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) ->
                         S
                 end,
     UriParts = lists:map(ReplArgs, Pattern),
-    Uri      = [$/ | z_utils:combine($/, UriParts)],
+    Uri      = [$/ | lists:join($/, UriParts)],
     case QueryStringArgs of
         [] ->
             #dispatch_url{
@@ -524,7 +524,7 @@ path_argval('*', Args) ->
         undefined -> <<>>;
         L when is_list(L) ->
             List1 = [ cow_qs:urlencode(z_convert:to_binary(B)) || B <- L ],
-            z_utils:combine($/, List1);
+            lists:join($/, List1);
         V ->
             z_convert:to_binary(V)
     end;

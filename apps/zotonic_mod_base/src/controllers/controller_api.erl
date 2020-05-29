@@ -35,6 +35,8 @@
 % Default max body length (32MB) for API calls, this should be configurable.
 -define(MAX_BODY_LENGTH, 32*1024*1024).
 
+-define(is_http_status(Code), is_integer(Code), Code >= 200, Code < 600).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -spec service_available( z:context() ) -> {boolean(), z:context()}.
@@ -163,8 +165,12 @@ process_done(ok, ProvidedCT, Context) ->
     % z_mqtt:publish response
     Body = z_controller_helper:encode_response(ProvidedCT, #{ status => ok }),
     {Body, Context};
-process_done({ok, #{ status := <<"error">>, message := Code }}, ProvidedCT, Context) when is_atom(Code) ->
-    process_done({error, Code}, ProvidedCT, Context);
+process_done({ok, #{
+        status := <<"error">>,
+        error := _
+    } = Resp}, ProvidedCT, Context) ->
+    Body = z_controller_helper:encode_response(ProvidedCT, Resp),
+    {Body, Context};
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
@@ -172,7 +178,8 @@ process_done({ok, Resp}, ProvidedCT, Context) ->
 process_done({error, _} = Error, ProvidedCT, Context) ->
     error_response(Error, ProvidedCT, Context).
 
--spec error_response({error, term()}, cowmachine_req:media_type(), z:context()) -> {{halt, HttpCode :: pos_integer()}, z:context()}.
+-spec error_response({error, term()}, cowmachine_req:media_type(), z:context()) ->
+    {{halt, HttpCode :: pos_integer()}, z:context()}.
 error_response({error, payload}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
@@ -213,26 +220,18 @@ error_response({error, unacceptable}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 400}, Context1};
-error_response({error, StatusCode}, CT, Context) when is_integer(StatusCode) ->
+error_response({error, StatusCode}, CT, Context) when ?is_http_status(StatusCode) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
-            error => <<"error">>,
+            error => StatusCode,
             message => <<"Error ", (integer_to_binary(StatusCode))/binary>>
-        }),
-    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
-    {{halt, StatusCode}, Context1};
-error_response({error, {StatusCode, Reason, Message}}, CT, Context) when is_integer(StatusCode) ->
-    RespBody = z_controller_helper:encode_response(CT, #{
-            status => <<"error">>,
-            error => z_convert:to_binary(Reason),
-            message => z_convert:to_binary(Message)
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
 error_response({error, Reason}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
-            error => z_convert:to_binary(Reason),
+            error => Reason,
             message => <<"Internal Error">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
@@ -242,7 +241,7 @@ error_response({error, Reason}, CT, Context) ->
 %% @doc Event stream with messages sent to a subscribed topic
 event_stream(Context) ->
     % TODO: add streaming body function
-    {{halt, 500}, Context}.
+    {{halt, 501}, Context}.
 
 
 %% set in site config file

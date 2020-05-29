@@ -46,7 +46,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
 	%% Fetch all exported email addresses
 	Recipients = m_mailinglist:get_enabled_recipients(Id, Context),
-	Export = z_utils:combine([13,10], Recipients),
+	Export = lists:join([13,10], Recipients),
 	%% Set the content disposition filename
 	Filename = <<"mailinglist-", (z_string:to_slug(m_rsc:p(Id, title, Context)))/binary, ".csv">>,
 	Context1 = z_context:set_resp_header(

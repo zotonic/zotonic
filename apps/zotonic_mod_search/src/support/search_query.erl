@@ -238,7 +238,7 @@ parse_query([{hasanyobject, ObjPreds}|Rest], Context, Result) ->
     OPClauses = [ object_predicate_clause(Alias, Obj,Pred) || {Obj,Pred} <- OPs ],
     Where = lists:flatten([
                 "rsc.id in (select ", Alias ,".subject_id from edge ",Alias," where (",
-                    z_utils:combine(") or (", OPClauses),
+                    lists:join(") or (", OPClauses),
                 "))"
                 ]),
     Result1 = add_where(Where, Result),
@@ -475,7 +475,7 @@ parse_query([{match_objects, RId}|Rest], Context, Result) ->
 parse_query([{match_object_ids, ObjectIds} | Rest], Context, Result) ->
     ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- ObjectIds ],
     MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, is_integer(ObjId) ],
-    TsQuery = lists:flatten(z_utils:combine("|", MatchTerms)),
+    TsQuery = lists:flatten(lists:join("|", MatchTerms)),
     case TsQuery of
         [] ->
             #search_result{};

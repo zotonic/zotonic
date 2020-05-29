@@ -58,6 +58,40 @@ m_get([ <<"record_info">>, Record | Rest ], _Msg, _Context) ->
             undefined
     end,
     {ok, {RecInfo, Rest}};
+m_get([ <<"recompile">> | Rest ], _Msg, Context) ->
+    case m_config:get_boolean(mod_development, enable_api, Context) of
+        true ->
+            lager:info("Development API triggered recompilation."),
+            sidejob_supervisor:spawn(
+                    zotonic_sidejobs,
+                    {z, m, []}),
+            {ok, {<<"started">>, Rest}};
+        false ->
+            {error, disabled}
+    end;
+m_get([ <<"flush">> | Rest ], _Msg, Context) ->
+    case m_config:get_boolean(mod_development, enable_api, Context) of
+        true ->
+            lager:info("Development API triggered cache flush."),
+            z:flush(),
+            {ok, {<<"flushed">>, Rest}};
+        false ->
+            {error, disabled}
+    end;
+m_get([ <<"reindex">> | Rest ], _Msg, Context) ->
+    case m_config:get_boolean(mod_development, enable_api, Context) of
+        true ->
+            lager:info("Development API triggered module reindex and translation reload."),
+            lists:map(
+                fun(Ctx) ->
+                    z_module_indexer:reindex(Ctx),
+                    z_trans_server:load_translations(Ctx)
+                end,
+                z_sites_manager:get_site_contexts()),
+            {ok, {<<"reindexed">>, Rest}};
+        false ->
+            {error, disabled}
+    end;
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
@@ -89,7 +123,7 @@ readable_1({M, F}) ->
     ];
 readable_1({M, F, Args}) ->
     As = [ io_lib:format("~p", [A]) || A <- Args ],
-    As1 = z_utils:combine(", ", As),
+    As1 = lists:join(", ", As),
     [
         "<b>", z_html:escape(atom_to_binary(M, utf8)), "</b>",
         ":", z_html:escape(atom_to_binary(F, utf8)),

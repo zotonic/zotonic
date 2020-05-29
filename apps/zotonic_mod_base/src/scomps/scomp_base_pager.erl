@@ -173,7 +173,7 @@ append_qargs(Args, Context) ->
     end.
 
 encode_args(Args) ->
-    z_utils:combine($&, [
+    lists:join($&, [
         [z_url:url_encode(K), $=, z_url:url_encode(V)] || {K,V} <- Args
     ]).
 

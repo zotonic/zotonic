@@ -45,17 +45,25 @@ from the repository and then rebuild the system.
 Getting the global sites status
 -------------------------------
 
-The Zotonic status sites exposes a small API service which allows you
-to check whether all of your sites are still running::
+The Zotonic status site exposes an API service to check whether all
+Zotonic sites are running::
 
-  http://yourzotonichost.com/api/zotonic_status/check
+    curl -k 'https://127.0.0.1:8443/api/model/zotonic_status/get/check'
 
-It returns a JSON response of ``{"status":"ok"}`` when every Zotonic
-site is running.
+The option ``-k`` was used because the status site is using a self-signed
+certificate.
 
-``"Running"`` means that a site’s status is not ``"retrying"`` or ``"failed"``; so
-it does not count sites that you have manually stopped from the
-interface.
+If all sites are running, it returns::
+
+    {"result":"ok","status":"ok"}
+
+If one or more sites are failing then it returns::
+
+    {"error":"fail","message":"Not all sites are running.","status":"error"}
+
+
+``"Running"`` means that a site’s status is not ``"retrying"`` or ``"failed"``;
+it ignores sites that are manually stopped or disabled.
 
 This API service can be plugged in to a service like
 https://www.pingdom.com/ to monitor the availability of all hosted sites

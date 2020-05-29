@@ -1395,7 +1395,7 @@ encode_header({Header, [V|_] = Vs}) when is_list(V); is_binary(V); is_tuple(V) -
                             filter_ascii(Value)
                     end,
                     Vs),
-    [ Header, ": ", z_utils:combine(";\r\n  ", Hdr) ];
+    [ Header, ": ", lists:join(";\r\n  ", Hdr) ];
 encode_header({Header, Value})
     when Header =:= <<"To">>;
          Header =:= <<"From">>;
@@ -1416,7 +1416,7 @@ encode_header({Header, Value}) when is_atom(Header) ->
 
 encode_headers(Headers) ->
     iolist_to_binary([
-        z_utils:combine("\r\n", lists:map(fun encode_header/1, Headers))
+        lists:join("\r\n", lists:map(fun encode_header/1, Headers))
     ]).
 
 filter_ascii(Value) when is_list(Value) ->

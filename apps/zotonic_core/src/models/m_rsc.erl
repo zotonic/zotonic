@@ -292,7 +292,7 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
                 end,
                 AllCols),
             Query = iolist_to_binary([
-                "select ",z_utils:combine($,, DataCols),
+                "select ",lists:join($,, DataCols),
                 " from rsc where id = $1"
             ]),
             z_memo:set(rsc_raw_sql, Query),
