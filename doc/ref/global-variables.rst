@@ -1,7 +1,7 @@
 .. _ref-global-variables:
 
-Global variables
-================
+Global template variables
+=========================
 
 These variables are always available for
 :ref:`rendering in templates <template-variables>`.
