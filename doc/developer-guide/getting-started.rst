@@ -45,7 +45,9 @@ Cloud-Init
 
 A cloud-init file is supplied in `zotonic_launcher <https://github.com/zotonic/zotonic/blob/master/cloud-init/zotonic-cloudinit.yml>`_.
 
-This file can be used to install a VPS by providers that support cloud-init. Hetzner is one such provider.
+This file can be used to install a VPS by providers that support cloud-init. `Hetzner <https://hetzner.de/>`_
+and `Microsoft Azure <https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-automate-vm-deployment>`_
+are such providers.
 
 After the cloud-init is done with its installation a new server is up and running on port 80 and 443.
 It will be using a self-signed certificate, located in ``/home/zotonic/.zotonic/security/self-signed/``.
