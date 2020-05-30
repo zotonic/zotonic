@@ -41,6 +41,11 @@ repository’s `apps/` directory::
     should be used instead of the dependencies in ``rebar.lock`` or
     as mentioned in the ``rebar.config`` files of all other apps.
 
+``zotonic/bin/``
+
+    Shell scripts for the Zotonic :ref:`ref-cli` and scripts for maintaining
+    the translation ``.po`` files.
+
 ``zotonic/doc/``
 
     Documentation sources files.
