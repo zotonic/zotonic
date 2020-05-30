@@ -13,6 +13,7 @@ you through all aspects of the framework.
    introduction
    getting-started
    docker
+   directory-structure
    sites
    status-site
    controllers

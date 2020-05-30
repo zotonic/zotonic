@@ -17,7 +17,6 @@ All the nitty gritty details when the big picture has settled.
    global-variables
    models/index
    validators/index
-   directory-structure
    notifications/index
    installation/requirements
    configuration/index
