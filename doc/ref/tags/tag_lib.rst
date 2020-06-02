@@ -45,7 +45,7 @@ Accepted arguments are:
 |Option           |Default      |Description                                              |
 +=================+=============+=========================================================+
 |absolute_url     |false        |If true, prefix the generated URL with                   |
-|                 |             |"https://{hostname}/".                                    |
+|                 |             |"https://{hostname}/".                                   |
 +-----------------+-------------+---------------------------------------------------------+
 |title            |<empty>      |Specify a value for the title attribute of the link tag. |
 +-----------------+-------------+---------------------------------------------------------+
