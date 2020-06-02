@@ -190,4 +190,20 @@ limitations under the License.
         return this;
     };
 
+    // Make jQuery UI optional
+    if (typeof $.ui === 'undefined') {
+        $.ui = {
+            dialog: {}
+        };
+    }
+
+    if (typeof $.widget !== 'function')
+    {
+        $.widget = function( widgetName ) {
+            let name = widgetName.replace(/^ui\./, '');
+            $.ui[name] = {
+            };
+        }
+    }
+
 })(jQuery);
