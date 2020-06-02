@@ -29,19 +29,34 @@ Will output::
 
 The number at the end is the Unix modification time of the most recently changed file.
 
-The `lib` tag supports optional arguments to control the resulting html tag:
+The `lib` tag supports optional arguments to control the resulting html tag. The arguments are supplied
+after the list of files::
+
+  {% lib
+    "css/not-so-important-styles.css"
+    minify
+    async
+  %}
+
+
+Accepted arguments are:
 
 +-----------------+-------------+---------------------------------------------------------+
 |Option           |Default      |Description                                              |
 +=================+=============+=========================================================+
 |absolute_url     |false        |If true, prefix the generated URL with                   |
-|                 |             |"http://{hostname}/".                                    |
+|                 |             |"https://{hostname}/".                                    |
 +-----------------+-------------+---------------------------------------------------------+
 |title            |<empty>      |Specify a value for the title attribute of the link tag. |
 +-----------------+-------------+---------------------------------------------------------+
 |media            |"all"        |Specify value for the media attribute of the link tag.   |
 +-----------------+-------------+---------------------------------------------------------+
 |rel              |"stylesheet" |Specify value for the rel attribute of the link tag.     |
++-----------------+-------------+---------------------------------------------------------+
+|minify           |             |Force minification use as ``{% lib ... minify %}``       |
++-----------------+-------------+---------------------------------------------------------+
+|async            |             |Load css or javascript asynchronously, use as            |
+|                 |             | ``{% lib ... async %}``                                 |
 +-----------------+-------------+---------------------------------------------------------+
 
 .. seealso:: :ref:`mod_development`.

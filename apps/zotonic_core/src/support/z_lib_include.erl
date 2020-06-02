@@ -40,10 +40,10 @@ tag(Files, Context) ->
 
 %% @doc Generate the link and/or script tags for the given files.
 tag(Files, Args, Context) ->
-    case m_config:get_value(mod_development, libsep, Context) of
-        Empty when Empty == []; Empty == <<>>; Empty == undefined ->
+    case m_config:get_boolean(mod_development, libsep, Context) of
+        false ->
             tag1(Files, Args, Context);
-        _Other ->
+        true ->
             lists:foldr(fun(F, [Css,Js]) ->
                             [C,J] = tag1([F], Args, Context),
                             [[C|Css], [J|Js]]
@@ -65,10 +65,12 @@ url(Files, Args, Context) ->
 
 url_for(_F, [], _Ext, _Args, _Context) -> [];
 url_for(F, P, Ext, Args, Context) ->
-    [z_dispatcher:url_for(lib(Context), url_for_args(F, P, Ext, Args, Context), Context)].
+    [z_dispatcher:url_for(lib(Args, Context), url_for_args(F, P, Ext, Args, Context), Context)].
 
-lib(Context) ->
-    case z_convert:to_bool(m_site:get(minification_enabled, Context)) of
+lib(Args, Context) ->
+    case z_convert:to_bool( proplists:get_value(minify, Args, false))
+        orelse m_config:get_boolean(site, minification_enabled, Context)
+    of
         true -> lib_min;
         false -> lib
     end.
@@ -95,16 +97,60 @@ link_element(Css, CssPath, Args, Context) ->
            undefined -> [];
            TitleValue -> [<<" title=\"">>, TitleValue, $"]
            end,
-    MediaAttr = [<<" media=\"">>, proplists:get_value(media, Args, "all"), $"],
-    RelAttr = [<<" rel=\"">>, proplists:get_value(rel, Args, "stylesheet"), $"],
-    CssUrl = z_dispatcher:url_for(lib(Context), url_for_args(Css, CssPath, <<".css">>, Args, Context), Context),
-    iolist_to_binary([<<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>, MediaAttr, TitleAttr, RelAttr, $/, $>]).
+    Media = proplists:get_value(media, Args, <<"all">>),
+    Rel = proplists:get_value(rel, Args, <<"stylesheet">>),
+    CssUrl = z_dispatcher:url_for(
+        lib(Args, Context),
+        url_for_args(Css, CssPath, <<".css">>, Args, Context),
+        Context),
+    case z_convert:to_bool( proplists:get_value(async, Args, false)) of
+        true ->
+            iolist_to_binary([
+                <<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>,
+                   TitleAttr,
+                   <<" media=\"none\"">>,
+                   <<" onload=\"if(media!='">>, Media, <<"')media='">>, Media, <<"'\"">>,
+                   <<" rel=\"">>, Rel, $",
+                <<">">>,
+                <<"<noscript>">>,
+                    <<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>,
+                       TitleAttr,
+                       <<" media=\"">>, Media, $",
+                       <<" rel=\"">>, Rel, $",
+                    <<">">>,
+                <<"</noscript>">>
+
+            ]);
+        false ->
+            iolist_to_binary([
+                <<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>,
+                   TitleAttr,
+                   <<" media=\"">>, Media, $",
+                   <<" rel=\"">>, Rel, $",
+                <<">">>
+            ])
+    end.
 
 script_element(_Js, [], _Args, _Context) ->
     [];
 script_element(Js, JsPath, Args, Context) ->
-    JsUrl = z_dispatcher:url_for(lib(Context), url_for_args(Js, JsPath, <<".js">>, Args, Context), Context),
-    iolist_to_binary([<<"<script src=\"">>, JsUrl, <<"\" type=\"text/javascript\"></script>">>]).
+    JsUrl = z_dispatcher:url_for(
+        lib(Args, Context),
+        url_for_args(Js, JsPath, <<".js">>, Args, Context),
+        Context),
+    AsyncAttr = case z_convert:to_bool( proplists:get_value(async, Args, false)) of
+        true ->
+            <<" async ">>;
+        false ->
+            <<>>
+    end,
+    iolist_to_binary([
+            <<"<script src=\"">>, JsUrl, <<"\"">>,
+                AsyncAttr,
+                <<" type=\"text/javascript\"">>,
+            <<">">>,
+            <<"</script>">>
+        ]).
 
 url_for_args(Files, JoinedPath, Extension, Args, Context) ->
     AbsUrlArg = case proplists:get_value(absolute_url, Args, false) of
