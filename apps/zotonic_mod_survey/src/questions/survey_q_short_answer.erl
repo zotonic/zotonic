@@ -30,7 +30,7 @@
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 answer(Block, Answers, _Context) ->
-    Name = proplists:get_value(name, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
     case proplists:get_value(Name, Answers) of
         undefined ->
             {error, missing};
@@ -45,7 +45,7 @@ prep_chart(_Block, _Ans, _Context) ->
     undefined.
 
 prep_answer_header(Q, _Context) ->
-    proplists:get_value(name, Q).
+    maps:get(<<"name">>, Q, undefined).
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
@@ -58,11 +58,11 @@ prep_block(B, _Context) ->
 
 
 to_block(Q) ->
-    [
-        {type, survey_short_answer},
-        {is_required, Q#survey_question.is_required},
-        {name, z_convert:to_binary(Q#survey_question.name)},
-        {prompt, z_convert:to_binary(Q#survey_question.question)}
-    ].
+    #{
+        <<"type">> => <<"survey_short_answer">>,
+        <<"is_required">> => Q#survey_question.is_required,
+        <<"name">> => z_convert:to_binary(Q#survey_question.name),
+        <<"prompt">> => z_convert:to_binary(Q#survey_question.question)
+    }.
 
 

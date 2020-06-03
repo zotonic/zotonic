@@ -42,7 +42,7 @@ count_points([], _Blocks, PtAcc, AsAcc, _Context) ->
     {PtAcc, lists:reverse(AsAcc)};
 count_points([{Name,A}|As], Blocks, PtAcc, AsAcc, Context) ->
     Block = find_block(maps:get(<<"block">>, A, undefined), Blocks),
-    case z_convert:to_bool(maps:get(is_test, Block, false)) of
+    case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
         true ->
             % Check if given answer is correct
             Type = maps:get(<<"type">>, Block),

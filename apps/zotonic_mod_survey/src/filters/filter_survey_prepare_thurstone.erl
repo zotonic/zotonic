@@ -39,16 +39,16 @@ survey_prepare_thurstone_1(Blk, IsRandom, Context) ->
                 split_markers(split_lines(Answers))),
     case z_convert:to_bool(maps:get(<<"is_test">>, Blk, false)) of
         true ->
-            [
-                {is_test, true},
-                {is_test_direct, z_convert:to_bool(maps:get(<<"is_test_direct">>, Blk, false))},
-                {answers, Qs}
-            ];
+            #{
+                <<"is_test">> => true,
+                <<"is_test_direct">> => z_convert:to_bool(maps:get(<<"is_test_direct">>, Blk, false)),
+                <<"answers">> => Qs
+            };
         false ->
-            [
-                {is_test, false},
-                {answers, Qs}
-            ]
+            #{
+                <<"is_test">> => false,
+                <<"answers">> => Qs
+            }
     end.
 
 maybe_randomize(false, List) -> List;
@@ -77,17 +77,17 @@ split_marker(Line, N) ->
 split_marker_1(IsCorrect, Line, N) ->
     case split_kv(Line) of
         [Value,Option] ->
-            [
-                {value, Value},
-                {option, Option},
-                {is_correct, IsCorrect}
-            ];
+            #{
+                <<"value">> => Value,
+                <<"option">> => Option,
+                <<"is_correct">> => IsCorrect
+            };
         [Option] ->
-            [
-                {value, z_convert:to_binary(N)},
-                {option, Option},
-                {is_correct, IsCorrect}
-            ]
+            #{
+                <<"value">> => z_convert:to_binary(N),
+                <<"option">> => Option,
+                <<"is_correct">> => IsCorrect
+            }
     end.
 
 split_kv(Line) ->

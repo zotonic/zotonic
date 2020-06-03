@@ -34,18 +34,18 @@ survey_prepare_matching(Blk, Context) ->
     As1 = split_markers(As),
     case z_convert:to_bool(maps:get(<<"is_test">>, Blk, false)) of
         true ->
-            [
-                {is_test, true},
-                {is_test_direct, z_convert:to_bool(maps:get(<<"is_test_direct">>, Blk, false))},
-                {items, Qs1},
-                {options, z_utils:randomize(As1)}
-            ];
+            #{
+                <<"is_test">> => true,
+                <<"is_test_direct">> => z_convert:to_bool(maps:get(<<"is_test_direct">>, Blk, false)),
+                <<"items">> => Qs1,
+                <<"options">> => z_utils:randomize(As1)
+            };
         false ->
-            [
-                {is_test, false},
-                {items, Qs1},
-                {options, z_utils:randomize(As1)}
-            ]
+            #{
+                <<"is_test">> => false,
+                <<"items">> => Qs1,
+                <<"options">> => z_utils:randomize(As1)
+            }
     end.
 
 maybe_randomize(false, List) -> List;

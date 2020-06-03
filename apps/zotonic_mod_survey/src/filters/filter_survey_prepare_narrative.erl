@@ -27,9 +27,9 @@ survey_prepare_narrative(Blk, Context) ->
                     maps:get(<<"narrative">>, Blk, <<>>),
                     Context),
     {Parts, _Inputs} = parse(Narrative),
-    [
-        {parts, Parts}
-    ].
+    #{
+        <<"parts">> => Parts
+    }.
 
 
 parse(Text) ->

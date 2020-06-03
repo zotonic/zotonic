@@ -30,17 +30,17 @@
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 to_block(Q) ->
-    [
-        {type, survey_narrative},
-        {is_required, Q#survey_question.is_required},
-        {name, z_convert:to_binary(Q#survey_question.name)},
-        {narrative, z_convert:to_binary(Q#survey_question.text)}
-    ].
+    #{
+        <<"type">> => <<"survey_narrative">>,
+        <<"is_required">> => Q#survey_question.is_required,
+        <<"name">> => z_convert:to_binary(Q#survey_question.name),
+        <<"narrative">> => z_convert:to_binary(Q#survey_question.text)
+    }.
 
 
 answer(Block, Answers, Context) ->
     Narrative = z_trans:lookup_fallback(
-                    proplists:get_value(narrative, Block, <<>>),
+                    maps:get(<<"narrative">>, Block, <<>>),
                     Context),
     {_Parts, Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
     answer_inputs(Inputs, Answers, []).
@@ -66,13 +66,13 @@ prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, Answers, Context) ->
     Narrative = z_trans:lookup_fallback(
-                    proplists:get_value(narrative, Block, <<>>),
+                    maps:get(<<"narrative">>, Block, <<>>),
                     Context),
     {Parts, _Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
-    [
-        {question, result_title(Parts, [])},
-        {charts, [ prep_chart1(Parts, Ans) || Ans <- Answers ]}
-    ].
+    #{
+        <<"question">> => result_title(Parts, []),
+        <<"charts">> => [ prep_chart1(Parts, Ans) || Ans <- Answers ]
+    }.
 
 prep_chart1(Parts, {Name, Vals}) ->
         case find_select(Parts, Name) of
@@ -81,23 +81,23 @@ prep_chart1(Parts, {Name, Vals}) ->
                 Values = [ proplists:get_value(z_convert:to_binary(C), Vals, 0) || C <- LabelIndices ],
                 Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
                 Perc = [ round(V*100/Sum) || V <- Values ],
-                [
-                    {name, Nm},
-                    {values, lists:zip(LabelLabels, Values)},
-                    {type, "pie"},
-                    {data, [{L,P} || {L,P} <- lists:zip(LabelLabels, Perc), P /= 0]}
-                ];
+                #{
+                    <<"name">> => Nm,
+                    <<"values">> => lists:zip(LabelLabels, Values),
+                    <<"type">> => <<"pie">>,
+                    <<"data">> => [{L,P} || {L,P} <- lists:zip(LabelLabels, Perc), P /= 0]
+                };
             _ ->
                 undefined
         end.
 
 
 prep_answer_header(Block, _Context) ->
-    Parts = proplists:get_value(parts, Block),
+    Parts = maps:get(<<"parts">>, Block, []),
     [ z_convert:to_binary(Name) || {_, Name, _} <- Parts ].
 
 prep_answer(Block, Answers, _Context) ->
-    Parts = proplists:get_value(parts, Block),
+    Parts = maps:get(<<"parts">>, Block, []),
     [ z_convert:to_binary(value(Type, proplists:get_value(z_convert:to_binary(Name), Answers), TypeArgs)) || {Type, Name, TypeArgs} <- Parts ].
 
 is_answerable({html, _, _}) -> false;
@@ -110,7 +110,7 @@ value(_, {X, _}, _) -> X.
 
 prep_block(Block, Context) ->
     Narrative = z_trans:lookup_fallback(
-                    proplists:get_value(narrative, Block, <<>>),
+                    maps:get(<<"narrative">>, Block, <<>>),
                     Context),
     {Parts0, _Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
     Parts = [ Part || Part <- Parts0, is_answerable(Part) ],
@@ -132,7 +132,7 @@ find_select([_|Rest], Name) ->
 result_title([], Acc) ->
      lists:reverse(Acc);
 result_title([{input, _, _}|Parts], Acc) ->
-     result_title(Parts, ["…"|Acc]);
+     result_title(Parts, [<<"…"/utf8>>|Acc]);
 result_title([{html, _, Html}|Parts], Acc) ->
      result_title(Parts, [Html|Acc]);
 result_title([{select, Name, _}|Parts], Acc) ->

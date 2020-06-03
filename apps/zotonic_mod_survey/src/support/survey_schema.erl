@@ -184,10 +184,11 @@ val(Value, _) -> Value.
 map_questions_is_multi(Qs) ->
     lists:flatten([ map_question_is_multi(Q) || Q <- Qs ]).
 
+-spec map_question_is_multi({binary(), map()}) -> {binary(), boolean()} | [ {binary(), boolean()} ].
 map_question_is_multi({BlockName, Props}) ->
-    case z_convert:to_binary(proplists:get_value(type, Props)) of
+    case z_convert:to_binary(maps:get(<<"type">>, Props, undefined)) of
         <<"survey_narrative">> ->
-            Parts = proplists:get_value(parts, Props),
+            Parts = maps:get(<<"parts">>, Props, []),
             QNames = [ z_convert:to_binary(QName) || {_Type, QName, _Opts} <- Parts ],
             [ {QName, false} || QName <- QNames ];
         <<"survey_thurstone">> ->
@@ -196,7 +197,8 @@ map_question_is_multi({BlockName, Props}) ->
             {BlockName, true};
         <<"survey_", _/binary>> ->
             {BlockName, false};
-        _ -> []
+        _ ->
+            []
     end.
 
 get_questions(SurveyId, Context) ->
@@ -284,12 +286,13 @@ survey_to_blocks(Id, Context) ->
                 || QId <- QIds
             ],
             CurrBlocks = to_list(m_rsc:p_no_acl(Id, blocks, Context)),
-            m_rsc_update:update(Id,
-                                [
-                                    {survey, undefined},
-                                    {blocks, CurrBlocks++QBlocks}
-                                ],
-                                z_acl:sudo(Context)),
+            m_rsc_update:update(
+                Id,
+                #{
+                    <<"survey">> => undefined,
+                    <<"blocks">> => CurrBlocks++QBlocks
+                },
+                z_acl:sudo(Context)),
             ok
     end.
 
@@ -308,21 +311,21 @@ question_to_block(#survey_question{type=truefalse} = Q) -> survey_q_truefalse:to
 question_to_block(#survey_question{type=yesno} = Q) -> survey_q_yesno:to_block(Q);
 question_to_block(#survey_question{type=multiple_choice} = Q) -> survey_q_multiple_choice:to_block(Q);
 question_to_block(#survey_question{type=subhead, name=Name, question=Q}) ->
-    [
-        {type, header},
-        {name, z_convert:to_binary(Name)},
-        {header, z_convert:to_binary(Q)}
-    ];
+    #{
+        <<"type">> => <<"header">>,
+        <<"name">> => z_convert:to_binary(Name),
+        <<"header">> => z_convert:to_binary(Q)
+    };
 question_to_block(#survey_question{type=prompt, name=Name, question=Q}) ->
-    [
-        {type, text},
-        {name, z_convert:to_binary(Name)},
-        {body, z_convert:to_binary(["<p>",Q,"</p>"])}
-    ];
+    #{
+        <<"type">> =>  <<"text">>,
+        <<"name">> =>  z_convert:to_binary(Name),
+        <<"body">> =>  z_convert:to_binary(["<p>",Q,"</p>"])
+    };
 question_to_block(#survey_question{type=textblock, name=Name, question=Q}) ->
-    [
-        {type, text},
-        {name, z_convert:to_binary(Name)},
-        {body, z_convert:to_binary(["<p>",Q,"</p>"])}
-    ].
+    #{
+        <<"type">> => <<"text">>,
+        <<"name">> => z_convert:to_binary(Name),
+        <<"body">> => z_convert:to_binary(["<p>",Q,"</p>"])
+    }.
 
