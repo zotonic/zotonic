@@ -446,7 +446,7 @@ survey_stats(SurveyId, Context) ->
 
 count_answers([], Dict) -> Dict;
 count_answers([{Row}|Rows], Dict) ->
-    {answers, Answers} = proplists:lookup(answers, Row),
+    Answers = maps:get(<<"answers">>, Row),
     Dict1 = lists:foldl(
         fun
             ({QName, QAnswer}, Acc) ->
