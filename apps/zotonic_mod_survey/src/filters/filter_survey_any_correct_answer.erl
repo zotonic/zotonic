@@ -27,13 +27,13 @@
 survey_any_correct_answer(undefined, _Question, _Context) ->
     false;
 survey_any_correct_answer(Answer, Question, Context) when is_list(Answer) ->
-    case z_convert:to_bool(proplists:get_value(is_test, Question, Context)) of
+    case z_convert:to_bool(maps:get(<<"is_test">>, Question, false)) of
         true ->
-            QAnswers = proplists:get_value(answers, Question),
+            QAnswers = maps:get(<<"answers">>, Question, []),
             lists:any(
                 fun (Option) ->
-                    Val = proplists:get_value(value, Option),
-                    IsCorrect = proplists:get_value(is_correct, Option),
+                    Val = maps:get(<<"value">>, Option, undefined),
+                    IsCorrect = maps:get(<<"is_correct">>, Option, false),
                     case {member(Val, Answer), IsCorrect} of
                         {true, true} -> true;
                         _ -> false

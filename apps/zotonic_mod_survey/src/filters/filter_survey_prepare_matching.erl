@@ -24,19 +24,19 @@
 
 survey_prepare_matching(Blk, Context) ->
     Matching = z_trans:lookup_fallback(
-                    proplists:get_value(matching, Blk, <<>>),
+                    maps:get(<<"matching">>, Blk, <<>>),
                     Context),
     Pairs = maybe_randomize(
-                z_convert:to_bool(proplists:get_value(is_random, Blk)),
+                z_convert:to_bool(maps:get(<<"is_random">>, Blk, false)),
                 [ split_option(Line) || Line <- split_lines(Matching) ]),
     {Qs,As} = lists:unzip(Pairs),
     Qs1 = split_markers(Qs),
     As1 = split_markers(As),
-    case z_convert:to_bool(proplists:get_value(is_test, Blk)) of
+    case z_convert:to_bool(maps:get(<<"is_test">>, Blk, false)) of
         true ->
             [
                 {is_test, true},
-                {is_test_direct, z_convert:to_bool(proplists:get_value(is_test_direct, Blk))},
+                {is_test_direct, z_convert:to_bool(maps:get(<<"is_test_direct">>, Blk, false))},
                 {items, Qs1},
                 {options, z_utils:randomize(As1)}
             ];
@@ -52,25 +52,26 @@ maybe_randomize(false, List) -> List;
 maybe_randomize(true, List) -> z_utils:randomize(List).
 
 split_lines(Text) ->
-    Options = string:tokens(z_string:trim(z_convert:to_list(Text)), "\n"),
+    Options = binary:split(z_string:trim(Text), <<"\n">>, [ global ]),
     [ z_string:trim(Option) || Option <- Options ].
 
 split_option(Option) ->
-    {Q,M} = lists:splitwith(fun(C) -> C /= $= end, Option),
-    {z_string:trim(Q), z_string:trim(drop_eq(M))}.
-
-    drop_eq([$=|Rest]) -> Rest;
-    drop_eq(X) -> X.
+    case binary:split(Option, <<"=">>) of
+        [ Q, M ] ->
+            {z_string:trim(Q), z_string:trim(M)};
+        [ Q ] ->
+            {z_string:trim(Q), <<>>}
+    end.
 
 split_markers(Qs) ->
     split_markers(Qs, 1, []).
 
-    split_markers([], _N, Acc) ->
-        lists:reverse(Acc);
-    split_markers([[]|Qs], N, Acc) ->
-        split_markers(Qs, N, Acc);
-    split_markers([Opt|Qs], N, Acc) ->
-        split_markers(Qs, N+1, [split_marker(Opt, N)|Acc]).
+split_markers([], _N, Acc) ->
+    lists:reverse(Acc);
+split_markers([[]|Qs], N, Acc) ->
+    split_markers(Qs, N, Acc);
+split_markers([Opt|Qs], N, Acc) ->
+    split_markers(Qs, N+1, [split_marker(Opt, N)|Acc]).
 
 split_marker(X, N) ->
     case split_kv(z_convert:to_binary(X)) of

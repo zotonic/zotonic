@@ -143,7 +143,7 @@ v1_survey_results(SurveyId, Context) ->
             %           ]),
             % {Hs, Prompts, Sorted};
         undefined ->
-            {[], [], []}
+            []
     end.
 
 v1_row_to_v2(SurveyId, Qs, {{user, UserId, Persistent, IsAnonymous}, Created, Answers}) ->
@@ -202,7 +202,7 @@ map_question_is_multi({BlockName, Props}) ->
 get_questions(SurveyId, Context) ->
     case m_rsc:p(SurveyId, blocks, Context) of
         Blocks when is_list(Blocks) ->
-            [ {proplists:get_value(name, B), question_prepare(B, Context)} || B <- Blocks];
+            [ {maps:get(<<"name">>, B, undefined), question_prepare(B, Context)} || B <- Blocks];
         _ ->
             undefined
     end.
@@ -223,7 +223,7 @@ group_users(User, Created, [R|Rs], UserAcc, Acc) ->
     end.
 
 question_prepare(B, Context) ->
-    case mod_survey:module_name(proplists:get_value(type, B)) of
+    case mod_survey:module_name(maps:get(<<"type">>, B, undefined)) of
         undefined -> B;
         M -> M:prep_block(B, Context)
     end.
