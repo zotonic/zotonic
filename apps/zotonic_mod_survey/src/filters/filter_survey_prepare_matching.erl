@@ -22,6 +22,7 @@
     split_markers/1
 ]).
 
+-spec survey_prepare_matching( map(), z:context() ) -> map().
 survey_prepare_matching(Blk, Context) ->
     Matching = z_trans:lookup_fallback(
                     maps:get(<<"matching">>, Blk, <<>>),

@@ -49,7 +49,7 @@ parse(<<$[, T/binary>>, Acc, InputAcc) ->
             {select, z_convert:to_binary(Name), filter_survey_prepare_matching:split_markers(Options)};
         false ->
             Name = z_string:trim(Input1),
-            Length = length(Input1),
+            Length = size(Input1),
             {input, Name, Length}
     end,
     Acc1 = [Elt|Acc],

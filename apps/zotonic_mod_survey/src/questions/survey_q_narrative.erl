@@ -42,7 +42,7 @@ answer(Block, Answers, Context) ->
     Narrative = z_trans:lookup_fallback(
                     maps:get(<<"narrative">>, Block, <<>>),
                     Context),
-    {_Parts, Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
+    {_Parts, Inputs} = filter_survey_prepare_narrative:parse(Narrative),
     answer_inputs(Inputs, Answers, []).
 
 answer_inputs([], _Answers, Acc) ->
@@ -68,7 +68,7 @@ prep_chart(Block, Answers, Context) ->
     Narrative = z_trans:lookup_fallback(
                     maps:get(<<"narrative">>, Block, <<>>),
                     Context),
-    {Parts, _Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
+    {Parts, _Inputs} = filter_survey_prepare_narrative:parse(Narrative),
     #{
         <<"question">> => result_title(Parts, []),
         <<"charts">> => [ prep_chart1(Parts, Ans) || Ans <- Answers ]

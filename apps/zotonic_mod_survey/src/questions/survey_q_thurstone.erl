@@ -33,6 +33,7 @@
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 
+-spec answer( map(), list(), z:context() ) -> {ok, list()} | {error, missing}.
 answer(Block, Answers, Context) ->
     Name = maps:get(<<"name">>, Block, undefined),
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
@@ -57,6 +58,7 @@ is_defined_value(Val, [Opt|Options]) ->
         _ -> is_defined_value(Val, Options)
     end.
 
+-spec prep_chart( map(), list(), z:context() ) -> map() | undefined.
 prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, [{Name, {text, Vals0}}], Context) ->

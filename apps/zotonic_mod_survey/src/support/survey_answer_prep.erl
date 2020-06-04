@@ -94,11 +94,11 @@ escape_check([B|_] = L) when is_binary(B); is_list(B); is_tuple(B) ->
 escape_check(V) ->
     z_html:escape_check(V).
 
-qprops(Block) when is_list(Block) ->
-    lists:filter(fun keep_qprop/1, Block).
+qprops(Block) when is_map(Block) ->
+    maps:filter(fun keep_qprop/2, Block).
 
-keep_qprop({prompt, _}) -> true;
-keep_qprop(_) -> false.
+keep_qprop(<<"prompt">>, _) -> true;
+keep_qprop(_, _) -> false.
 
 answer_noempty(L) when is_list(L) -> [ A || A <- L, A /= <<>> ];
 answer_noempty(A) -> A.

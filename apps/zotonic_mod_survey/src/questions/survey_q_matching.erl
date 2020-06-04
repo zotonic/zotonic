@@ -38,6 +38,7 @@ to_block(Q) ->
         <<"matching">> => z_convert:to_binary(Q#survey_question.text)
     }.
 
+-spec answer( map(), list(), z:context() ) -> {ok, list()} | {error, missing}.
 answer(Block, Answers, Context) ->
     Name = maps:get(<<"name">>, Block, undefined),
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
@@ -63,6 +64,7 @@ ensure_option([Name|Ns], Options, Answers, Acc) ->
     end.
 
 
+-spec prep_chart( map(), list(), z:context() ) -> map() | undefined.
 prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, Answers, Context) ->

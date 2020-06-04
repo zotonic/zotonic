@@ -22,9 +22,11 @@
     survey_prepare_thurstone/3
 ]).
 
+-spec survey_prepare_thurstone( map(), z:context() ) -> map().
 survey_prepare_thurstone(Blk, Context) ->
     survey_prepare_thurstone(Blk, undefined, Context).
 
+-spec survey_prepare_thurstone( map(), boolean() | undefined, z:context() ) -> map().
 survey_prepare_thurstone(Blk, undefined, Context) ->
     survey_prepare_thurstone_1(Blk, maps:get(<<"is_random">>, Blk, false), Context);
 survey_prepare_thurstone(Blk, IsRandom, Context) ->
