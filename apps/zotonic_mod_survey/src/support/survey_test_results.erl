@@ -76,11 +76,10 @@ question_points(<<"survey_thurstone">>, A, Block, Context) ->
                 || Q <- QuestionOptions
             ],
             Points = erlang:max(0, sum(AnswerPoints)),
-            A1 = [
-                {points,Points},
-                {answer_points, AnswerPoints}
-                | A
-            ],
+            A1 = #{
+                <<"points">> => Points,
+                <<"answer_points">> => AnswerPoints
+            },
             {Points, A1};
         _ ->
             {0, A}

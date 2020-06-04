@@ -105,11 +105,11 @@ answer_noempty(A) -> A.
 
 block(Name, []) ->
     % Unknown block, but we have an answer, don't loose the answer.
-    [
-        {type, <<"survey_short_answer">>},
-        {name, z_html:escape_check(Name)},
-        {prompt, z_html:escape_check(Name)}
-    ];
+    #{
+        <<"type">> => <<"survey_short_answer">>,
+        <<"name">> => z_html:escape_check(Name),
+        <<"prompt">> => z_html:escape_check(Name)
+    };
 block(Name, [B|Rest]) ->
     case maps:get(<<"name">>, B, undefined) of
         Name -> B;
