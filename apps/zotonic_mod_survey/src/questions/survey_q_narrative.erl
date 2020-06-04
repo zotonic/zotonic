@@ -112,9 +112,9 @@ prep_block(Block, Context) ->
     Narrative = z_trans:lookup_fallback(
                     maps:get(<<"narrative">>, Block, <<>>),
                     Context),
-    {Parts0, _Inputs} = filter_survey_prepare_narrative:parse(z_convert:to_list(Narrative)),
+    {Parts0, _Inputs} = filter_survey_prepare_narrative:parse(Narrative),
     Parts = [ Part || Part <- Parts0, is_answerable(Part) ],
-    [{parts, Parts} | Block].
+    Block#{ <<"parts">> => Parts }.
 
 
 

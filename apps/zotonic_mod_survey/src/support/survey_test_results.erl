@@ -57,7 +57,7 @@ question_points(<<"survey_thurstone">>, A, Block, Context) ->
         GoodPoints when is_integer(GoodPoints) ->
             Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
             QuestionOptions = maps:get(<<"answers">>, Props, []),
-            Answered = make_list(proplists:get_value(answer, A)),
+            Answered = make_list(maps:get(<<"answer">>, A, undefined)),
             IsMulti = survey_q_thurstone:is_multiple(Block),
             WrongPoints = case IsMulti of
                 true ->

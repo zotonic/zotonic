@@ -121,7 +121,7 @@ answer(N, Block, Context) ->
 
 answer_1(<<"survey_thurstone">>, N, Block, Context) ->
     Prep = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-    Ans = proplists:get_value(answers, Prep),
+    Ans = maps:get(<<"answers">>, Prep, undefined),
     Ns = maybe_split(N),
     case is_list(Ns) of
         true -> [ thurs_answer(N1, Ans) || N1 <- Ns ];
