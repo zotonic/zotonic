@@ -490,7 +490,7 @@ indexof([ _ | Cols ], Col, N) -> indexof(Cols, Col, N+1).
 
 
 %% @doc get prepared questions from the blocks
--spec get_questions(m_rsc:resource_id(), z:context()) -> [{BlockName::binary(),list()}] | undefined.
+-spec get_questions(m_rsc:resource_id(), z:context()) -> [{BlockName::binary(),map()}] | undefined.
 get_questions(SurveyId, Context) ->
     case m_rsc:p(SurveyId, blocks, Context) of
         Blocks when is_list(Blocks) ->
