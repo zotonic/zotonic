@@ -32,4 +32,4 @@ content_type_label(ContentType, Context) ->
         <<".bin">> -> ContentType;
         <<".", Ext/binary>> -> Ext
     end,
-    ?__(Extension, Context).
+    z_string:to_upper(?__(Extension, Context)).

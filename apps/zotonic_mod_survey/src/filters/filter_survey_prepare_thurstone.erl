@@ -22,6 +22,8 @@
     survey_prepare_thurstone/3
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 -spec survey_prepare_thurstone( map(), z:context() ) -> map().
 survey_prepare_thurstone(Blk, Context) ->
     survey_prepare_thurstone(Blk, undefined, Context).
@@ -58,8 +60,13 @@ maybe_randomize(true, List) -> z_utils:randomize(List).
 
 split_lines(Text) ->
     Options = binary:split(z_string:trim(Text), <<"\n">>, [global]),
-    [ z_string:trim(Option) || Option <- Options ].
-
+    Lines = [ z_string:trim(Option) || Option <- Options ],
+    lists:filter(
+        fun
+            (<<>>) -> false;
+            (_) -> true
+        end,
+        Lines).
 
 split_markers(Qs) ->
     split_markers(Qs, 1, []).

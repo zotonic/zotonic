@@ -98,5 +98,11 @@
     </div>
     {% endwith %}
     {% endwith %}
+
+    {% if blk.explanation %}
+        <p class="help-block">
+            {{ blk.explanation }}
+        </p>
+    {% endif %}
 {% endif %}
 
