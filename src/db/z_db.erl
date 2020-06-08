@@ -391,14 +391,16 @@ insert(Table, Props, Context) when is_atom(Table) ->
 insert(Table, Props, Context) ->
     assert_table_name(Table),
     Cols = column_names(Table, Context),
-    InsertProps = prepare_cols(Cols, Props),
+    InsertProps = ?DEBUG(prepare_cols(Cols, Props)),
 
-    InsertProps1 = case proplists:get_value(props, InsertProps) of
-        undefined ->
-            InsertProps;
-        PropsCol ->
-            lists:keystore(props, 1, InsertProps, {props, ?DB_PROPS(cleanup_props(PropsCol))})
-    end,
+    InsertProps1 = case {proplists:get_value(props, InsertProps), proplists:get_value(props_json, InsertProps)} of
+                       {undefined, undefined} ->
+                           InsertProps;
+                       {PropsCol, undefined} ->
+                           lists:keystore(props, 1, InsertProps, {props, ?DB_PROPS(cleanup_props(PropsCol))});
+                       {_, PropsCol} ->
+                           lists:keystore(props_json, 1, InsertProps, {props_json, ?DB_PROPS_JSON(cleanup_props(PropsCol))})
+                   end,
 
     %% Build the SQL insert statement
     {ColNames,Parameters} = lists:unzip(InsertProps1),
@@ -503,16 +505,32 @@ select(Table, Id, Context) ->
 
     Props = case Row of
         [R] ->
-            case proplists:get_value(props, R) of
-                PropsCol when is_list(PropsCol) ->
-                    lists:keydelete(props, 1, R) ++ PropsCol;
-                _ ->
-                    R
+            Props1 = case proplists:get_value(props, R, not_found) of
+                         undefined -> lists:keydelete(props, 1, R);
+                         PropsCol when is_list(PropsCol) ->
+                             lists:keydelete(props, 1, R) ++ PropsCol;
+                         _ -> R
+                     end,
+
+            case proplists:get_value(props_json, Props1, not_found) of
+                undefined -> lists:keydelete(props_json, 1, Props1);
+                Bin when is_binary(Bin) ->
+                    {JP} = jiffy:decode(Bin, [{null_term, undefined}]),
+                    Normalised = [{maybe_to_atom(K), V} || {K, V} <- JP],
+                    lists:keydelete(props_json, 1, Props1) ++ Normalised;
+                _ -> Props1
             end;
         [] ->
             []
     end,
     {ok, Props}.
+
+maybe_to_atom(K) ->
+    try
+        binary_to_existing_atom(K, utf8)
+    catch
+        _:_ -> K
+    end.
 
 
 %% @doc Remove all undefined props, translate texts to binaries.
@@ -543,14 +561,23 @@ prepare_cols(Cols, Props) ->
         [] ->
             CProps;
         _  ->
-            PPropsMerged = case proplists:is_defined(props, CProps) of
-                            true ->
-                                FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
-                                lists:foldl(FReplace, proplists:get_value(props, CProps), PProps);
-                            false ->
-                                PProps
+
+            PPropsMerged = case proplists:is_defined(props, CProps)
+                                orelse proplists:is_defined(props_json, CProps) of
+                               true ->
+                                   FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
+                                   lists:foldl(FReplace, proplists:get_value(props_json, CProps),
+                                               lists:foldl(FReplace, proplists:get_value(props, CProps), PProps));
+                               false ->
+                                   PProps
                            end,
-            [{props, PPropsMerged} | proplists:delete(props, CProps)]
+
+            PropsType = case proplists:is_defined(props_json, Cols) of 
+                            true -> props_json;
+                            false -> props
+                        end,
+
+            [{PropsType, PPropsMerged} | proplists:delete(props_json, proplists:delete(props, CProps))]
     end.
 
 split_props(Props, Cols) ->
@@ -886,13 +913,25 @@ merge_props(List) ->
 merge_props([], Acc) ->
     lists:reverse(Acc);
 merge_props([R|Rest], Acc) ->
-    case proplists:get_value(props, R, undefined) of
+    Props = proplists:get_value(props, R, undefined), 
+    PropsJSON = proplists:get_value(props_json, R, undefined), 
+    R1 = lists:keydelete(props, 1, lists:keydelete(props_json, 1, R)), 
+    case Props of
         undefined ->
-            merge_props(Rest, [R|Acc]);
+            case PropsJSON of
+                <<>> ->
+                    merge_props(Rest, [R1|Acc]);
+                Bin when is_binary(Bin) ->
+                    {JP} = jiffy:decode(Bin, [{null_term, undefined}]),
+                    Normalised = [{maybe_to_atom(K), V} || {K, V} <- JP],
+                    merge_props(Rest, [R1 ++ Normalised|Acc]);
+                _ ->
+                    merge_props(Rest, [R1|Acc])
+            end;
         <<>> ->
-            merge_props(Rest, [R|Acc]);
+            merge_props(Rest, [R1|Acc]);
         Term when is_list(Term) ->
-            merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc])
+            merge_props(Rest, [R1 ++ Term|Acc])
     end.
 
 

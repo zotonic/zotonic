@@ -446,6 +446,10 @@ encode_value({term, undefined}) ->
 encode_value({term, Term}) ->
     B = term_to_binary(Term),
     <<?TERM_MAGIC_NUMBER, B/binary>>;
+encode_value({term_json, undefined}) ->
+    null;
+encode_value({term_json, Term}) ->
+    jiffy:encode({Term});
 encode_value(Value) ->
     Value.
 
