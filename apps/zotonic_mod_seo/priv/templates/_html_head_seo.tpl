@@ -1,6 +1,6 @@
 {% if id %}
-    <link rel="shortlink" href="{% block shortlink %}{% url id id=id %}{% endblock %}" />
-    <link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url }}{% endblock %}" />
+	<link rel="shortlink" href="{% block shortlink %}{% url id id=id use_absolute_url %}{% endblock %}" />
+	<link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url_abs }}{% endblock %}" />
 {% endif %}
 
 {% if m.seo.noindex or noindex %}
