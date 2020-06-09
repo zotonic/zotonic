@@ -334,6 +334,7 @@ is_private_property(<<"pivot_location_lat">>) -> true;
 is_private_property(<<"pivot_location_lng">>) -> true;
 is_private_property(<<"pivot_geocode">>) -> true;
 is_private_property(<<"pivot_geocode_qhash">>) -> true;
+is_private_property(<<"remote_ip">>) -> true;
 is_private_property(_) -> false.
 
 
