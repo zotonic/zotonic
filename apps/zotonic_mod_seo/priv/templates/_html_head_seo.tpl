@@ -1,5 +1,5 @@
 {% if id %}
-	<link rel="shortlink" href="{% block shortlink %}{% url id id=id use_absolute_url %}{% endblock %}" />
+	<link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}" />
 	<link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url_abs }}{% endblock %}" />
 {% endif %}
 
