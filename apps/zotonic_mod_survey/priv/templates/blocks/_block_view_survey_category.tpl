@@ -1,6 +1,6 @@
 {% include "_survey_block_name_check.tpl" %}
 {% if is_survey_answer_view %}
-    <div class="control-group survey-category">
+    <div class="form-group survey-category">
         <label class="control-label">{{ blk.prompt }}</label>
         {% with result.answers[blk.name].answer as ans %}
         {% with m.search[{all_bytitle cat=blk.category}] as list %}

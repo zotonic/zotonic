@@ -2,7 +2,7 @@
 
 {% if is_survey_answer_view %}
     {% with blk|survey_prepare_thurstone:0 as props %}
-        <div class="control-group survey-thurstone">
+        <div class="form-group survey-thurstone">
             <label class="control-label">{{ blk.prompt }}</label>
             {% with result.answers[blk.name].answer as ans %}
             <ul>
@@ -52,7 +52,7 @@
 {% else %}
     {% with blk|survey_prepare_thurstone as props %}
     {% with answers[blk.name]|survey_answer_split:blk as ans %}
-    <div class="control-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
+    <div class="form-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
         <label class="control-label">{{ blk.prompt }}</label>
         <div class="controls">
     {% if blk.input_type == 'multi' %}
