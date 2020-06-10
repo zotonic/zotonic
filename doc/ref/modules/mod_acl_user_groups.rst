@@ -176,7 +176,6 @@ The protected properties are:
  * pivot_location_lng
  * pivot_geocode
  * pivot_geocode_qhash
- * remote_ip
 
 
 .. _module-acl:
