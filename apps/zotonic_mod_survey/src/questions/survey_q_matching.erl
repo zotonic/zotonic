@@ -30,19 +30,20 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 to_block(Q) ->
-    [
-        {type, survey_matching},
-        {is_required, Q#survey_question.is_required},
-        {name, z_convert:to_binary(Q#survey_question.name)},
-        {prompt, z_convert:to_binary(Q#survey_question.question)},
-        {matching, z_convert:to_binary(Q#survey_question.text)}
-    ].
+    #{
+        <<"type">> => <<"survey_matching">>,
+        <<"is_required">> => Q#survey_question.is_required,
+        <<"name">> => z_convert:to_binary(Q#survey_question.name),
+        <<"prompt">> => z_convert:to_binary(Q#survey_question.question),
+        <<"matching">> => z_convert:to_binary(Q#survey_question.text)
+    }.
 
+-spec answer( map(), list(), z:context() ) -> {ok, list()} | {error, missing}.
 answer(Block, Answers, Context) ->
-    Name = proplists:get_value(name, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
-    Options = [ Val || {Val,_Text} <- proplists:get_value(options, Props) ],
-    Items = proplists:get_value(items, Props),
+    Options = [ Val || {Val,_Text} <- maps:get(<<"options">>, Props, []) ],
+    Items = maps:get(<<"items">>, Props, []),
     ItemNames = [ iolist_to_binary([Name, $_, KI]) || {KI,_} <- Items ],
     ensure_option(ItemNames, Options, Answers, []).
 
@@ -63,45 +64,47 @@ ensure_option([Name|Ns], Options, Answers, Acc) ->
     end.
 
 
+-spec prep_chart( map(), list(), z:context() ) -> map() | undefined.
 prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, Answers, Context) ->
-    Name = proplists:get_value(name, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
-    Items = proplists:get_value(items, Props),
+    Items = maps:get(<<"items">>, Props, []),
     ItemNames = [ iolist_to_binary([Name, $_, KI]) || {KI,_} <- Items ],
-    Labels = proplists:get_value(options, Props),
+    Labels = maps:get(<<"options">>, Props, []),
     LabelsB = [ Lab || {Lab, _} <- Labels ],
-    [
-        {question, proplists:get_value(prompt, Block)},
-        {charts, [ prep_chart1(ItemText, proplists:get_value(ItemName, Answers, []), LabelsB)
+    #{
+        <<"question">> => maps:get(<<"prompt">>, Block, undefined),
+        <<"charts">> => [
+                    prep_chart1(ItemText, proplists:get_value(ItemName, Answers, []), LabelsB)
                     || {ItemText,ItemName} <- lists:zip(Items, ItemNames)
-                 ]}
-    ].
+                 ]
+    }.
 
-    prep_chart1(_ItemText, undefined, _LabelsB) ->
-        undefined;
-    prep_chart1({_,ItemText}, Vals, LabelsB) ->
-        Values = [ proplists:get_value(C, Vals, 0) || C <- LabelsB ],
-        Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
-        Perc = [ round(V*100/Sum) || V <- Values ],
-        [
-            {question, ItemText},
-            {values, lists:zip(LabelsB, Values)},
-            {type, "pie"},
-            {data, [{L,P} || {L,P} <- lists:zip(LabelsB, Perc), P /= 0]}
-        ].
+prep_chart1(_ItemText, undefined, _LabelsB) ->
+    undefined;
+prep_chart1({_,ItemText}, Vals, LabelsB) ->
+    Values = [ proplists:get_value(C, Vals, 0) || C <- LabelsB ],
+    Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
+    Perc = [ round(V*100/Sum) || V <- Values ],
+    #{
+        <<"question">> => ItemText,
+        <<"values">> => lists:zip(LabelsB, Values),
+        <<"type">> => <<"pie">>,
+        <<"data">> => [{L,P} || {L,P} <- lists:zip(LabelsB, Perc), P /= 0]
+    }.
 
 
 prep_answer_header(Block, _Context) ->
-    Name = proplists:get_value(name, Block),
-    Items = proplists:get_value(items, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
+    Items = maps:get(<<"items">>, Block, []),
     [ iolist_to_binary([Name, $:, KI]) || {KI,_} <- Items ].
 
 
 prep_answer(Block, Answers, _Context) ->
-    Name = proplists:get_value(name, Block),
-    Items = proplists:get_value(items, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
+    Items = maps:get(<<"items">>, Block, []),
     ItemNames = [ iolist_to_binary([Name, $_, KI]) || {KI,_} <- Items ],
     [ prep_answer1(Item, Answers) || Item <- ItemNames ].
 
@@ -113,6 +116,6 @@ prep_answer1(Item, Answers) ->
 
 prep_block(Block, Context) ->
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
-    Props ++ Block.
+    maps:merge(Props, Block).
 
 

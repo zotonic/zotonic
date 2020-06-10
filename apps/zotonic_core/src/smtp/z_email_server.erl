@@ -131,8 +131,9 @@ tempfile() ->
     z_tempfile:tempfile(?TMPFILE_EXT).
 
 %% @doc Check if a file is a tempfile of the emailer
-is_tempfile(File) when is_list(File) ->
-    z_tempfile:is_tempfile(File) andalso filename:extension(File) =:= ?TMPFILE_EXT.
+is_tempfile(File) ->
+    z_tempfile:is_tempfile(File)
+    andalso z_convert:to_list(filename:extension(File)) =:= ?TMPFILE_EXT.
 
 %% @doc Return the max age of a tempfile
 is_tempfile_deletable(undefined) ->

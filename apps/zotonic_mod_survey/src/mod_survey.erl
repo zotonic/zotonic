@@ -337,25 +337,28 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
     end.
 
     get_args(Context) ->
-        Args = [ {z_convert:to_binary(K), z_convert:to_binary(V)}
-                || {K,V} <- z_context:get_q_all_noz(Context), not is_tuple(V)
-               ],
-        Submitter = proplists:get_value(<<"z_submitter">>, Args),
+        Args = [ {K,V} || {K,V} <- z_context:get_q_all_noz(Context), is_binary(V) ],
+        Submitter = z_context:get_q(<<"z_submitter">>, Context),
         Buttons = proplists:get_all_values(<<"survey$button">>, Args),
-        WithButtons = lists:foldl(fun(B, Acc) ->
-                                      case B of
-                                          Submitter -> [{B,<<"yes">>} | proplists:delete(B, Acc) ];
-                                          _ -> [{B, <<"no">>} | Acc]
-                                      end
-                                  end,
-                                  Args,
-                                  Buttons),
-        {proplists:delete(<<"z_submitter">>, proplists:delete(<<"survey$button">>, WithButtons)),
-         case lists:member(Submitter,Buttons) of
-             true -> Submitter;
-             false -> undefined
-         end}.
-
+        WithButtons = lists:foldl(
+            fun(B, Acc) ->
+                case B of
+                    Submitter ->
+                        [ {B,<<"yes">>} | proplists:delete(B, Acc) ];
+                    _ ->
+                        [ {B, <<"no">>} | Acc ]
+                end
+            end,
+            Args,
+            Buttons),
+        Args1 = lists:filter(
+            fun({K,_}) -> K =/= <<"survey$button">> end,
+            WithButtons),
+        Submitter1 = case lists:member(Submitter,Buttons) of
+            true -> Submitter;
+            false -> undefined
+        end,
+        {Args1, Submitter1}.
 
     group_multiselect([]) ->
         [];
@@ -425,6 +428,10 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Context) when
         end.
 
 
+    eval_page_jumps(stop, _Answers, _Context) ->
+        stop;
+    eval_page_jumps(submit, _Answers, _Context) ->
+        submit;
     eval_page_jumps({[], _Nr}, _Answers, _Context) ->
         submit;
     eval_page_jumps({[Q|L],Nr} = QsNr, Answers, Context) ->

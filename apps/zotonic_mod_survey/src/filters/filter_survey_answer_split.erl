@@ -22,7 +22,7 @@
 ]).
 
 survey_answer_split(V, _Block, _Context) when is_binary(V) ->
-    binstr:split(V, <<$#>>);
+    binary:split(V, <<$#>>);
 survey_answer_split(V, _Block, _Context) ->
     V.
 

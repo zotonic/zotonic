@@ -42,7 +42,8 @@
 -spec service_available( z:context() ) -> {boolean(), z:context()}.
 service_available(Context) ->
     Context1 = set_cors_header(Context),
-    {true, Context1}.
+    Context2 = z_context:set_noindex_header(true, Context1),
+    {true, Context2}.
 
 % Headers where already added in service_available/2
 -spec options( z:context() ) -> {list( binary() ), z:context()}.

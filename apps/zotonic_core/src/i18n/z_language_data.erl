@@ -823,6 +823,7 @@ languages_list() -> [
     ]},
     {<<"fa">>, [
         {language, <<"fa">>},
+        {direction, <<"RTL">>},
         {script, <<"Arab">>},
         {name, <<"فارسی"/utf8>>},
         {name_en, <<"Persian"/utf8>>}

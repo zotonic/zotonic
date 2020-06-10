@@ -22,33 +22,37 @@
     survey_prepare_thurstone/3
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
+-spec survey_prepare_thurstone( map(), z:context() ) -> map().
 survey_prepare_thurstone(Blk, Context) ->
     survey_prepare_thurstone(Blk, undefined, Context).
 
+-spec survey_prepare_thurstone( map(), boolean() | undefined, z:context() ) -> map().
 survey_prepare_thurstone(Blk, undefined, Context) ->
-    survey_prepare_thurstone_1(Blk, proplists:get_value(is_random, Blk, false), Context);
+    survey_prepare_thurstone_1(Blk, maps:get(<<"is_random">>, Blk, false), Context);
 survey_prepare_thurstone(Blk, IsRandom, Context) ->
     survey_prepare_thurstone_1(Blk, IsRandom, Context).
 
 survey_prepare_thurstone_1(Blk, IsRandom, Context) ->
     Answers = z_trans:lookup_fallback(
-                    proplists:get_value(answers, Blk, <<>>),
+                    maps:get(<<"answers">>, Blk, <<>>),
                     Context),
     Qs = maybe_randomize(
                 z_convert:to_bool(IsRandom),
                 split_markers(split_lines(Answers))),
-    case z_convert:to_bool(proplists:get_value(is_test, Blk)) of
+    case z_convert:to_bool(maps:get(<<"is_test">>, Blk, false)) of
         true ->
-            [
-                {is_test, true},
-                {is_test_direct, z_convert:to_bool(proplists:get_value(is_test_direct, Blk))},
-                {answers, Qs}
-            ];
+            #{
+                <<"is_test">> => true,
+                <<"is_test_direct">> => z_convert:to_bool(maps:get(<<"is_test_direct">>, Blk, false)),
+                <<"answers">> => Qs
+            };
         false ->
-            [
-                {is_test, false},
-                {answers, Qs}
-            ]
+            #{
+                <<"is_test">> => false,
+                <<"answers">> => Qs
+            }
     end.
 
 maybe_randomize(false, List) -> List;
@@ -56,8 +60,13 @@ maybe_randomize(true, List) -> z_utils:randomize(List).
 
 split_lines(Text) ->
     Options = binary:split(z_string:trim(Text), <<"\n">>, [global]),
-    [ z_string:trim(Option) || Option <- Options ].
-
+    Lines = [ z_string:trim(Option) || Option <- Options ],
+    lists:filter(
+        fun
+            (<<>>) -> false;
+            (_) -> true
+        end,
+        Lines).
 
 split_markers(Qs) ->
     split_markers(Qs, 1, []).
@@ -77,17 +86,17 @@ split_marker(Line, N) ->
 split_marker_1(IsCorrect, Line, N) ->
     case split_kv(Line) of
         [Value,Option] ->
-            [
-                {value, Value},
-                {option, Option},
-                {is_correct, IsCorrect}
-            ];
+            #{
+                <<"value">> => Value,
+                <<"option">> => Option,
+                <<"is_correct">> => IsCorrect
+            };
         [Option] ->
-            [
-                {value, z_convert:to_binary(N)},
-                {option, Option},
-                {is_correct, IsCorrect}
-            ]
+            #{
+                <<"value">> => z_convert:to_binary(N),
+                <<"option">> => Option,
+                <<"is_correct">> => IsCorrect
+            }
     end.
 
 split_kv(Line) ->

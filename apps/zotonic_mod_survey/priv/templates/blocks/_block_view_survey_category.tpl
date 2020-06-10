@@ -1,6 +1,6 @@
 {% include "_survey_block_name_check.tpl" %}
 {% if is_survey_answer_view %}
-    <div class="control-group survey-category">
+    <div class="form-group survey-category">
         <label class="control-label">{{ blk.prompt }}</label>
         {% with result.answers[blk.name].answer as ans %}
         {% with m.search[{all_bytitle cat=blk.category}] as list %}
@@ -17,7 +17,7 @@
 {% else %}
     {% with answers[blk.name]|survey_answer_split:blk as ans %}
     {% with m.search[{all_bytitle cat=blk.category}] as list %}
-    <div class="form-group survey-category type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}"|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
+    <div class="form-group survey-category type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
         <label class="control-label">{{ blk.prompt }}</label>
         <div>
         {% if blk.explanation %}

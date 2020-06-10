@@ -30,8 +30,8 @@
 
 
 answer(Block, Answers, _Context) ->
-    Name = proplists:get_value(name, Block),
-    case maps:get(Name, Answers, undefined) of
+    Name = maps:get(<<"name">>, Block, undefined),
+    case proplists:get_value(Name, Answers) of
         undefined ->
             {error, missing};
         Value ->
@@ -45,7 +45,7 @@ prep_chart(_Block, _Ans, _Context) ->
     undefined.
 
 prep_answer_header(Block, _Context) ->
-    proplists:get_value(name, Block).
+    maps:get(<<"name">>, Block, undefined).
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
@@ -58,10 +58,10 @@ prep_block(B, _Context) ->
 
 
 to_block(Q) ->
-    [
-        {type, survey_long_answer},
-        {is_required, Q#survey_question.is_required},
-        {name, z_convert:to_binary(Q#survey_question.name)},
-        {prompt, z_convert:to_binary(Q#survey_question.question)}
-    ].
+    #{
+        <<"type">> => <<"survey_long_answer">>,
+        <<"is_required">> => Q#survey_question.is_required,
+        <<"name">> => z_convert:to_binary(Q#survey_question.name),
+        <<"prompt">> => z_convert:to_binary(Q#survey_question.question)
+    }.
 

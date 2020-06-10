@@ -29,7 +29,7 @@
     <div class="controls">
         <input type="text" name="blocks[].test_points" id="{{ #test_points }}"
                class="input-small form-control" value="{{ blk.test_points }}" placeholder="1" />
-        {% validate id=#test_points name="block-"++name++"-test_points"
+        {% validate id=#test_points name="blocks[].test_points"
                     type={numericality minimum=0}
         %}
     </div>

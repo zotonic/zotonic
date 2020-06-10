@@ -303,7 +303,7 @@ drop_persist(C, Database, Schema) ->
         true ->
             case has_table(C, "comment", Database, Schema) of
                 true ->
-                    {ok, _, _} = epgsql:squery(C, "alter table comment drop constraint fk_comment_persistent_id"),
+                    {ok, _, _} = epgsql:squery(C, "alter table comment drop constraint if exists fk_comment_persistent_id"),
                     {ok, _, _} = epgsql:squery(C, "alter index fki_comment_persistent_id rename to comment_persistent_id_key"),
                     ok;
                 false ->

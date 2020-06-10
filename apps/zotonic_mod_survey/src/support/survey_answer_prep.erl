@@ -58,7 +58,7 @@ order_by_blocks(As, Bs) ->
 order_by_blocks(Rest, [], Acc) ->
     lists:reverse(Acc, Rest);
 order_by_blocks(As, [B|Bs], Acc) ->
-    Name = proplists:get_value(name, B),
+    Name = maps:get(<<"name">>, B),
     case proplists:lookup(Name, As) of
         none -> order_by_blocks(As, Bs, Acc);
         Answer -> order_by_blocks(proplists:delete(Name, As), Bs, [Answer|Acc])
@@ -67,7 +67,7 @@ order_by_blocks(As, [B|Bs], Acc) ->
 question(Name, Answer, Blocks, Context) ->
     Answer1 = answer_noempty(Answer),
     Block = block(Name, Blocks),
-    case z_convert:to_binary(proplists:get_value(type, Block)) of
+    case z_convert:to_binary(maps:get(<<"type">>, Block)) of
         <<"survey_country">> ->
             Country = l10n_iso2country:iso2country(Answer),
             [
@@ -94,34 +94,34 @@ escape_check([B|_] = L) when is_binary(B); is_list(B); is_tuple(B) ->
 escape_check(V) ->
     z_html:escape_check(V).
 
-qprops(Block) when is_list(Block) ->
-    lists:filter(fun keep_qprop/1, Block).
+qprops(Block) when is_map(Block) ->
+    maps:filter(fun keep_qprop/2, Block).
 
-keep_qprop({prompt, _}) -> true;
-keep_qprop(_) -> false.
+keep_qprop(<<"prompt">>, _) -> true;
+keep_qprop(_, _) -> false.
 
 answer_noempty(L) when is_list(L) -> [ A || A <- L, A /= <<>> ];
 answer_noempty(A) -> A.
 
 block(Name, []) ->
     % Unknown block, but we have an answer, don't loose the answer.
-    [
-        {type, <<"survey_short_answer">>},
-        {name, z_html:escape_check(Name)},
-        {prompt, z_html:escape_check(Name)}
-    ];
+    #{
+        <<"type">> => <<"survey_short_answer">>,
+        <<"name">> => z_html:escape_check(Name),
+        <<"prompt">> => z_html:escape_check(Name)
+    };
 block(Name, [B|Rest]) ->
-    case proplists:get_value(name, B) of
+    case maps:get(<<"name">>, B, undefined) of
         Name -> B;
         _ -> block(Name, Rest)
     end.
 
 answer(N, Block, Context) ->
-    answer_1(proplists:get_value(type, Block), N, Block, Context).
+    answer_1(maps:get(<<"type">>, Block, undefined), N, Block, Context).
 
 answer_1(<<"survey_thurstone">>, N, Block, Context) ->
     Prep = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-    Ans = proplists:get_value(answers, Prep),
+    Ans = maps:get(<<"answers">>, Prep, undefined),
     Ns = maybe_split(N),
     case is_list(Ns) of
         true -> [ thurs_answer(N1, Ans) || N1 <- Ns ];
@@ -129,13 +129,13 @@ answer_1(<<"survey_thurstone">>, N, Block, Context) ->
     end;
 answer_1(<<"survey_yesno">>, N, Block, Context) ->
     case z_convert:to_bool(N) of
-        true -> default(proplists:get_value(yes, Block), <<"yes">>, Context);
-        false -> default(proplists:get_value(no, Block), <<"no">>, Context)
+        true -> default(maps:get(<<"yes">>, Block, undefined), <<"yes">>, Context);
+        false -> default(maps:get(<<"no">>, Block, undefined), <<"no">>, Context)
     end;
 answer_1(<<"survey_truefalse">>, N, Block, Context) ->
     case z_convert:to_bool(N) of
-        true -> default(proplists:get_value(yes, Block), <<"true">>, Context);
-        false -> default(proplists:get_value(no, Block), <<"false">>, Context)
+        true -> default(maps:get(<<"yes">>, Block, undefined), <<"true">>, Context);
+        false -> default(maps:get(<<"no">>, Block, undefined), <<"false">>, Context)
     end;
 answer_1(_, N, _, _Context) ->
     N.

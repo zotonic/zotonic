@@ -30,15 +30,15 @@
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 to_block(Q) ->
-    [
-        {type, survey_likert},
-        {is_required, Q#survey_question.is_required},
-        {name, z_convert:to_binary(Q#survey_question.name)},
-        {prompt, z_convert:to_binary(Q#survey_question.question)}
-    ].
+    #{
+        <<"type">> => <<"survey_likert">>,
+        <<"is_required">> => Q#survey_question.is_required,
+        <<"name">> => z_convert:to_binary(Q#survey_question.name),
+        <<"prompt">> => z_convert:to_binary(Q#survey_question.question)
+    }.
 
 answer(Block, Answers, _Context) ->
-    Name = proplists:get_value(name, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
     case proplists:get_value(Name, Answers) of
         <<C>> when C >= $1, C =< $5 -> {ok, [{Name, C - $0}]};
         undefined -> {error, missing}
@@ -50,12 +50,12 @@ prep_chart(Block, [{_, Vals}], Context) ->
     Labels = [
         <<"5">>,<<"4">>,<<"3">>,<<"2">>,<<"1">>
     ],
-    Agree = case proplists:get_value(agree, Block) of
+    Agree = case maps:get(<<"agree">>, Block, undefined) of
         undefined -> ?__("Strongly Agree", Context);
         <<>> -> ?__("Strongly Agree", Context);
         Ag -> Ag
     end,
-    DisAgree = case proplists:get_value(disagree, Block) of
+    DisAgree = case maps:get(<<"disagree">>, Block, undefined) of
         undefined -> ?__("Strongly Disagree", Context);
         <<>> -> ?__("Strongly Disagree", Context);
         DisAg -> DisAg
@@ -70,15 +70,15 @@ prep_chart(Block, [{_, Vals}], Context) ->
     Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
-    [
-        {question, proplists:get_value(prompt, Block)},
-        {values, lists:zip(LabelsDisplay, Values)},
-        {type, "pie"},
-        {data, [{L,P} || {L,P} <- lists:zip(LabelsDisplay, Perc), P /= 0]}
-    ].
+    #{
+        <<"question">> => maps:get(<<"prompt">>, Block, undefined),
+        <<"values">> => lists:zip(LabelsDisplay, Values),
+        <<"type">> => <<"pie">>,
+        <<"data">> => [{L,P} || {L,P} <- lists:zip(LabelsDisplay, Perc), P /= 0]
+    }.
 
 prep_answer_header(Block, _Context) ->
-    proplists:get_value(name, Block).
+    maps:get(<<"name">>, Block, undefined).
 
 prep_answer(_Q, [], _Context) ->
     <<>>;

@@ -217,22 +217,21 @@ check_keyfile(Filename) ->
 
 -spec generate_self_signed( string(), proplists:proplist() ) -> {ok, list()} | {error, term()}.
 generate_self_signed(Hostname, Opts) ->
-    PemFile = proplists:get_value(keyfile, Opts),
+    {keyfile, PemFile} = proplists:lookup(keyfile, Opts),
     lager:info("Generating self-signed ssl keys in '~s'", [PemFile]),
     case z_filelib:ensure_dir(PemFile) of
         ok ->
             _ = file:change_mode(filename:dirname(PemFile), 8#00700),
-            KeyFile = filename:rootname(PemFile) ++ ".key",
-            CertFile = proplists:get_value(certfile, Opts),
+            {certfile, CertFile} = proplists:lookup(certfile, Opts),
             Options = #{
                 hostname => Hostname,
                 servername => server_name()
             },
-            case zotonic_ssl_certs:ensure_self_signed(CertFile, KeyFile, Options) of
+            case zotonic_ssl_certs:ensure_self_signed(CertFile, PemFile, Options) of
                 ok ->
                     {ok, [
                         {certfile, CertFile},
-                        {keyfile, KeyFile}
+                        {keyfile, PemFile}
                     ]};
                 {error, _} = Error ->
                     Error

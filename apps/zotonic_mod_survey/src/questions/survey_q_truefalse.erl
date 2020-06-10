@@ -30,7 +30,7 @@
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 answer(Block, Answers, _Context) ->
-    Name = proplists:get_value(name, Block),
+    Name = maps:get(<<"name">>, Block),
     case proplists:get_value(Name, Answers) of
         undefined -> {error, missing};
         V -> {ok, [{Name, z_convert:to_binary(z_convert:to_bool(V))}]}
@@ -46,15 +46,15 @@ prep_chart(Q, [{_, Vals}], Context) ->
     FalseP = 100 - TrueP,
     LabelTrue = get_label(yes, Q, Context),
     LabelFalse = get_label(no, Q, Context),
-    [
-     {question, proplists:get_value(prompt, Q)},
-     {values, [{LabelTrue, True}, {LabelFalse, False}]},
-     {type, "pie"},
-     {data, [[LabelTrue, TrueP], [LabelFalse, FalseP]]}
-    ].
+    #{
+        <<"question">> => maps:get(<<"prompt">>, Q, undefined),
+        <<"values">> => [{LabelTrue, True}, {LabelFalse, False}],
+        <<"type">> => <<"pie">>,
+        <<"data">> => [[LabelTrue, TrueP], [LabelFalse, FalseP]]
+    }.
 
 get_label(Label, Q, Context) ->
-    Trans = proplists:get_value(Label, Q, <<>>),
+    Trans = maps:get(Label, Q, <<>>),
     maybe_default(Label, z_trans:lookup_fallback(Trans, Context), Context).
 
 maybe_default(no, <<>>, Context) ->
@@ -65,7 +65,7 @@ maybe_default(_, Text, _Context) ->
     Text.
 
 prep_answer_header(Q, _Context) ->
-    proplists:get_value(name, Q).
+    maps:get(<<"name">>, Q, undefined).
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
@@ -77,9 +77,9 @@ prep_block(B, _Context) ->
 
 
 to_block(Q) ->
-    [
-        {type, survey_truefalse},
-        {is_required, Q#survey_question.is_required},
-        {name, z_convert:to_binary(Q#survey_question.name)},
-        {prompt, z_convert:to_binary(Q#survey_question.question)}
-    ].
+    #{
+        <<"type">> => <<"survey_truefalse">>,
+        <<"is_required">> => Q#survey_question.is_required,
+        <<"name">> => z_convert:to_binary(Q#survey_question.name),
+        <<"prompt">> => z_convert:to_binary(Q#survey_question.question)
+    }.
