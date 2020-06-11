@@ -1008,9 +1008,8 @@ equery2(DbDriver, C, Sql, Parameters, Timeout) ->
 
 
 json_encode(Term) ->
-    jiffy:encode({Term}).
+    jsxrecord:encode(Term).
 
 json_decode(JSON) ->
-    {Props} = jiffy:decode(JSON, [{null_term, undefined}]),
-    Props.
+    maps:to_list(jsxrecord:decode(JSON)).
 
