@@ -451,7 +451,7 @@ encode_value({term_json, undefined}) ->
 encode_value({term_json, []}) ->
     null;
 encode_value({term_json, Term}) ->
-    jiffy:encode({Term});
+    z_db:json_encode(Term);
 encode_value(Value) ->
     Value.
 
@@ -481,3 +481,4 @@ decode_value({{Y,Mm,D},{H,M,S}}) when is_float(S) ->
     {{Y,Mm,D},{H,M,trunc(S)}};
 decode_value(V) ->
     V.
+

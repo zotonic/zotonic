@@ -81,6 +81,7 @@
     drop_schema/1
 ]).
 
+-export([json_encode/1, json_decode/1]).
 
 -include_lib("zotonic.hrl").
 -include_lib("deps/epgsql/include/epgsql.hrl").
@@ -462,7 +463,7 @@ update(Table, Id, Parameters, Context) ->
                                                        NewProps1 = lists:keystore(props_json, 1, UpdateProps, {props_json, ?DB_PROPS_JSON(cleanup_props(NewProps))}),
                                                        [{props, undefined} | NewProps1];
                                                    {ok, _, JSON} when is_binary(JSON) ->
-                                                       {OldPropsJSON} = jiffy:decode(JSON, [{null_term, undefined}]),
+                                                       OldPropsJSON = json_decode(JSON),
                                                        NewProps = lists:foldl(FReplace, OldPropsJSON, proplists:get_value(props_json, UpdateProps)),
                                                        lists:keystore(props_json, 1, UpdateProps, {props_json, ?DB_PROPS_JSON(cleanup_props(NewProps))});
                                                    _ ->
@@ -471,7 +472,7 @@ update(Table, Id, Parameters, Context) ->
                                            {false, true} ->
                                                case equery1(DbDriver, C, "select props_json from \""++Table++"\" where id = $1", [Id]) of
                                                    {ok, JSON} when is_binary(JSON) ->
-                                                       {OldPropsJSON} = jiffy:decode(JSON, [{null_term, undefined}]),
+                                                       OldPropsJSON = json_decode(JSON),
                                                        NewProps = lists:foldl(FReplace, OldPropsJSON, proplists:get_value(props_json, UpdateProps)),
                                                        lists:keystore(props_json, 1, UpdateProps, {props_json, ?DB_PROPS_JSON(cleanup_props(NewProps))});
                                                    _ ->
@@ -544,7 +545,7 @@ select(Table, Id, Context) ->
             case proplists:get_value(props_json, Props1, not_found) of
                 undefined -> lists:keydelete(props_json, 1, Props1);
                 Bin when is_binary(Bin) ->
-                    {JP} = jiffy:decode(Bin, [{null_term, undefined}]),
+                    JP = json_decode(Bin),
                     Normalised = [{maybe_to_atom(K), V} || {K, V} <- JP],
                     lists:keydelete(props_json, 1, Props1) ++ Normalised;
                 _ -> Props1
@@ -949,7 +950,7 @@ merge_props([R|Rest], Acc) ->
                 <<>> ->
                     merge_props(Rest, [R1|Acc]);
                 Bin when is_binary(Bin) ->
-                    {JP} = jiffy:decode(Bin, [{null_term, undefined}]),
+                    JP = json_decode(Bin),
                     Normalised = [{maybe_to_atom(K), V} || {K, V} <- JP],
                     merge_props(Rest, [R1 ++ Normalised|Acc]);
                 _ ->
@@ -1006,4 +1007,10 @@ equery2(DbDriver, C, Sql, Parameters, Timeout) ->
     end.
 
 
+json_encode(Term) ->
+    jiffy:encode({Term}).
+
+json_decode(JSON) ->
+    {Props} = jiffy:decode(JSON, [{null_term, undefined}]),
+    Props.
 
