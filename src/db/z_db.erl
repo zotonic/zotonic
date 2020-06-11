@@ -392,7 +392,7 @@ insert(Table, Props, Context) when is_atom(Table) ->
 insert(Table, Props, Context) ->
     assert_table_name(Table),
     Cols = column_names(Table, Context),
-    InsertProps = ?DEBUG(prepare_cols(Cols, Props)),
+    InsertProps = prepare_cols(Cols, Props),
 
     InsertProps1 = case {proplists:get_value(props, InsertProps), proplists:get_value(props_json, InsertProps)} of
                        {undefined, undefined} ->
@@ -431,6 +431,8 @@ insert(Table, Props, Context) ->
 
 %% @doc Update a row in a table, merging the props list with any new props values
 -spec update(Table::atom(), Id::integer(), Parameters::list(), #context{}) -> {ok, RowsUpdated::integer()} | {error, term()}.
+update(_Table, _Id, [], _Context) ->
+    {error, no_parameters};
 update(Table, Id, Parameters, Context) when is_atom(Table) ->
     update(atom_to_list(Table), Id, Parameters, Context);
 update(Table, Id, Parameters, Context) ->
@@ -489,6 +491,7 @@ update(Table, Id, Parameters, Context) ->
         Sql = "update \""++Table++"\" set "
                  ++ string:join([ "\"" ++ atom_to_list(ColName) ++ "\" = $" ++ integer_to_list(Nr) || {ColName, Nr} <- ColNamesNr ], ", ")
                  ++ " where id = $1",
+
         case equery1(DbDriver, C, Sql, [Id | Params]) of
             {ok, _RowsUpdated} = Ok -> Ok;
             {error, Reason} = Error ->
