@@ -110,8 +110,8 @@
 
 %%% If you are running Zotonic behind a proxy then set this to the proxy's internal ip addresses.
 %%% The proxy must terminate SSL.
-%%% Possible values: none, local, any, ip_whitelist, or string with netmasks: "127.0.0.0/8,10.0.0.0/8"
-   %% {proxy_whitelist, local},
+%%% Possible values: none, local, any, ip_allowlist, or string with netmasks: "127.0.0.0/8,10.0.0.0/8"
+   %% {proxy_allowlist, local},
 
 %%% SMTP outbound relay configuration.
 %%% Zotonic will send email itself, enable a relay if outgoing port 25 traffic is blocked.
@@ -154,9 +154,9 @@
 %%% SMTP DNSBL Realtime DNS Block Lists and White Lists
 %%% These services are checked for DNSBL listings upon receiving email, set to an
 %%% empty list to disable the DNSBL checks. The default list is defined in
-%%% deps/z_stdlib/src/z_email_dnsbl.erl
-   %% {smtp_dnsbl, ["zen.spamhaus.org", "dnsbl.sorbs.net"]},
-   %% {smtp_dnswl, ["list.dnswl.org", "swl.spamhaus.org"]},
+%%% zotonic_stdlib/src/z_email_dnsbl.erl
+   %% {smtp_dns_blocklist, ["zen.spamhaus.org", "dnsbl.sorbs.net"]},
+   %% {smtp_dns_allowlist, ["list.dnswl.org", "swl.spamhaus.org"]},
 
 %%% ClamAV settings, used by mod_clamav for virus scanning.
 %%% Check your clamd config for the correct values.
@@ -165,8 +165,8 @@
    %% {clamav_port, 3310},
    %% {clamav_max_size, 26214400},
 
-%%% IP whitelist, used for accessing sites with a default "admin" password
-%%% The whitelist is one or more of the following values, separated with a comma:
+%%% IP allowlist, used for accessing sites with a default "admin" password
+%%% The allowlist is one or more of the following values, separated with a comma:
 %%%   - local
 %%%   - any
 %%%   - none
@@ -175,10 +175,10 @@
 %%%   - an ip address with mask: 192.168.0.0/16
 %%% The value 'local' is using an optimized matching method and equals to:
 %%%   - "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,169.254.0.0/16,::1,fd00::/8,fe80::/10,100.64.0.0/10"
-   %% {ip_whitelist, local},
+   %% {ip_allowlist, local},
 
-%%% Zotonic Status IP whitelist, used for restricting access to system management screens. Default no restriction.
-   %% {ip_whitelist_system_management, any},
+%%% Zotonic Status IP allowlist, used for restricting access to system management screens. Default no restriction.
+   %% {ip_allowlist_system_management, any},
 
 %%% Inet request backlog, increase when requests are being dropped.
    %% {inet_backlog, 500},

@@ -200,7 +200,7 @@ sanitize_z_media_arg(Key, Value) when is_integer(Value); is_boolean(Value) ->
 
 sanitize_script(Props, Context) ->
     Src = proplists:get_value(<<"src">>, Props),
-    case to_whitelisted(Src, Context) of
+    case to_allowed(Src, Context) of
         {ok, Url} ->
             {<<"script">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
         false ->
@@ -210,7 +210,7 @@ sanitize_script(Props, Context) ->
 
 sanitize_iframe(Props, Context) ->
     Src = proplists:get_value(<<"src">>, Props),
-    case to_whitelisted(Src, Context) of
+    case to_allowed(Src, Context) of
         {ok, Url} ->
             {<<"iframe">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
         false ->
@@ -224,7 +224,7 @@ sanitize_object(Props, Context) ->
         {ok, NewElement} ->
             NewElement;
         false ->
-            case to_whitelisted(Src, Context) of
+            case to_allowed(Src, Context) of
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"data">>, Props)], []};
                 false ->
@@ -239,7 +239,7 @@ sanitize_embed(Props, Context) ->
         {ok, NewElement} ->
             NewElement;
         false ->
-            case to_whitelisted(Src, Context) of
+            case to_allowed(Src, Context) of
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
                 false ->
@@ -284,13 +284,13 @@ maybe_append_flashvars(Url, <<>>) ->
 maybe_append_flashvars(Url, FlashVars) ->
     iolist_to_binary([ Url, $?, z_convert:to_binary(z_url:url_path_encode(FlashVars)) ]).
 
-to_whitelisted(undefined, _Context) ->
+to_allowed(undefined, _Context) ->
     false;
-to_whitelisted(Url, Context) ->
-    to_whitelist_1(binary:split(Url, <<"//">>), Context).
+to_allowed(Url, Context) ->
+    to_allowlist_1(binary:split(Url, <<"//">>), Context).
 
-to_whitelist_1([Proto,Loc], Context) when Proto =:= <<>>; Proto =:= <<"http:">>; Proto =:= <<"https:">> ->
-    case wl(Loc, Context) of
+to_allowlist_1([Proto,Loc], Context) when Proto =:= <<>>; Proto =:= <<"http:">>; Proto =:= <<"https:">> ->
+    case allowlist(Loc, Context) of
         {ok, Loc1} ->
             Proto1 = case preferred_protocol(Loc1) of
                         undefined -> Proto;
@@ -300,7 +300,7 @@ to_whitelist_1([Proto,Loc], Context) when Proto =:= <<>>; Proto =:= <<"http:">>;
         false ->
             false
     end;
-to_whitelist_1(_, _Context) ->
+to_allowlist_1(_, _Context) ->
     false.
 
 preferred_protocol(<<"www.youtube.", _/binary>>) -> <<"https:">>;
@@ -312,10 +312,10 @@ preferred_protocol(<<"www.flickr.", _/binary>>) -> <<"https:">>;
 preferred_protocol(_) -> undefined.
 
 
-wl(HostPath, Context) ->
+allowlist(HostPath, Context) ->
     case z_notifier:first(#sanitize_embed_url{hostpath=HostPath}, Context) of
         undefined ->
-            wl(HostPath);
+            allowlist(HostPath);
         false ->
             false;
         HostPath1 ->
@@ -323,48 +323,48 @@ wl(HostPath, Context) ->
     end.
 
 
-%% @doc Some whitelisted domains for embedding.
-wl(<<"youtu.be/", Rest/binary>>) -> {ok, <<"www.youtube.com/", Rest/binary>>};
-wl(<<"youtube.com/", Rest/binary>>) -> {ok, <<"www.youtube.com/", Rest/binary>>};
-wl(<<"www.youtube.com/", _/binary>> = Url) -> {ok, Url};
-wl(<<"player.vimeo.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"vimeo.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"www.slideshare.net/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"embed.spotify.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"api.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"w.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"cdn.knightlab.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"maps.google.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"www.google.com/maps/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"video.google.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"spreadsheets.google.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"docs.google.com/viewer?",  _/binary>> = Url) -> {ok, Url};
-wl(<<"vine.co/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"instagram.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"platform.instagram.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"www.hulu.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"www.metacafe.com/fplayer/", _/binary>> = Url) -> {ok, Url};
-wl(<<"www.flickr.com/", _/binary>> = Url) -> {ok, Url};
-wl(<<"flickrit.com/slideshowholder.php?", _/binary>> = Url) -> {ok, Url};
-wl(<<"flv.video.yandex.ru/", _/binary>> = Url) -> {ok, Url};
-wl(<<"www.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"assets.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"static.issuu.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"e.issuu.com/",  _/binary>> = Url) -> {ok, Url};
-wl(<<"cdn.embedly.com/", _/binary>> = Url) -> {ok, Url};
-wl(<<"vk.com/video_ext",  _/binary>> = Url) -> {ok, Url};
-wl(<<"platform.twitter.com/",  _/binary>> = Url) -> {ok, Url};
-wl(Url) ->
+%% @doc Some allowed domains for embedding.
+allowlist(<<"youtu.be/", Rest/binary>>) -> {ok, <<"www.youtube.com/", Rest/binary>>};
+allowlist(<<"youtube.com/", Rest/binary>>) -> {ok, <<"www.youtube.com/", Rest/binary>>};
+allowlist(<<"www.youtube.com/", _/binary>> = Url) -> {ok, Url};
+allowlist(<<"player.vimeo.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"vimeo.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"www.slideshare.net/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"embed.spotify.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"api.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"w.soundcloud.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"cdn.knightlab.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"maps.google.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"www.google.com/maps/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"video.google.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"spreadsheets.google.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"docs.google.com/viewer?",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"vine.co/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"instagram.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"platform.instagram.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"www.hulu.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"www.metacafe.com/fplayer/", _/binary>> = Url) -> {ok, Url};
+allowlist(<<"www.flickr.com/", _/binary>> = Url) -> {ok, Url};
+allowlist(<<"flickrit.com/slideshowholder.php?", _/binary>> = Url) -> {ok, Url};
+allowlist(<<"flv.video.yandex.ru/", _/binary>> = Url) -> {ok, Url};
+allowlist(<<"www.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"assets.tumblr.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"static.issuu.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"e.issuu.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"cdn.embedly.com/", _/binary>> = Url) -> {ok, Url};
+allowlist(<<"vk.com/video_ext",  _/binary>> = Url) -> {ok, Url};
+allowlist(<<"platform.twitter.com/",  _/binary>> = Url) -> {ok, Url};
+allowlist(Url) ->
     case lists:dropwhile(fun(Re) ->
                             re:run(Url, Re) =:= nomatch
                          end,
-                         wl_res())
+                         allowlist_res())
     of
         [] -> false;
         [_|_] -> {ok, Url}
     end.
 
-wl_res() ->
+allowlist_res() ->
     [
         <<"^[a-z0-9\\-]+\\.tumblr.com/post/[0-9]+/audio_player_iframe/.*">>,
         <<"cdn.embedly.com/widgets/media.html\\?src=http%3A%2F%2F[a-z0-9-]+\\.ak\\.instagram.com%2F">>

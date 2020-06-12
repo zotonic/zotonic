@@ -8,7 +8,7 @@
  {<<"color">>,{pkg,<<"erlang_color">>,<<"1.0.0">>},1},
  {<<"cowboy">>,{pkg,<<"cowboy">>,<<"2.7.0">>},1},
  {<<"cowlib">>,{pkg,<<"cowlib">>,<<"2.8.0">>},2},
- {<<"cowmachine">>,{pkg,<<"cowmachine">>,<<"1.3.0">>},0},
+ {<<"cowmachine">>,{pkg,<<"cowmachine">>,<<"1.4.0">>},0},
  {<<"depcache">>,
   {git,"https://github.com/zotonic/depcache.git",
        {ref,"6cb6115e970fa5722253310a3b9bef7be9963e4b"}},
@@ -61,7 +61,7 @@
  {<<"mqtt_packet_map">>,{pkg,<<"mqtt_packet_map">>,<<"1.1.0">>},1},
  {<<"mqtt_sessions">>,
   {git,"https://github.com/zotonic/mqtt_sessions.git",
-       {ref,"883b60c7ac00eeec34eb5b43be0ad9d8a4b92450"}},
+       {ref,"4128d789935254d7eea0dc38a7807f28ab059b6e"}},
   0},
  {<<"oauth">>,
   {git,"https://github.com/tim/erlang-oauth.git",
@@ -98,10 +98,7 @@
  {<<"termit">>,{pkg,<<"termit">>,<<"1.0.0">>},0},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
  {<<"zotonic_ssl">>,{pkg,<<"zotonic_ssl">>,<<"1.0.2">>},0},
- {<<"zotonic_stdlib">>,
-  {git,"https://github.com/zotonic/z_stdlib.git",
-       {ref,"67c4412463f07f0a080c3bec0a97d13aa3d1e942"}},
-  0}]}.
+ {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.2.2">>},0}]}.
 [
 {pkg_hash,[
  {<<"bcrypt">>, <<"6735F66D3A7309AF166CE660161009B7D9B9216508B8B2E6A0A9090AF35CB757">>},
@@ -113,7 +110,7 @@
  {<<"color">>, <<"145FE1D2E65C4516E4F03FEFCA6C2F47EBAD5899D978D70382A5CFE643E4AC9E">>},
  {<<"cowboy">>, <<"91ED100138A764355F43316B1D23D7FF6BDB0DE4EA618CB5D8677C93A7A2F115">>},
  {<<"cowlib">>, <<"FD0FF1787DB84AC415B8211573E9A30A3EBE71B5CBFF7F720089972B2319C8A4">>},
- {<<"cowmachine">>, <<"72559E8F30CC8CD0BBA0CA9999E694585CABB856D156D01BDC480C6EAD239473">>},
+ {<<"cowmachine">>, <<"22C372B82CC8B3577F475DF658B22FEAE8BB66BF9D6527DFAC27F4438C6009FE">>},
  {<<"dh_date">>, <<"5B0C286665E160DE44132552931BEF06B5CB2244D5BD20E333A686E9D8BF92E3">>},
  {<<"diffy">>, <<"1584C5CA54FF796EEAA00149D842DB580695D2843FB4BF0C279E017A37734E26">>},
  {<<"dispatch_compiler">>, <<"E55A3A7B5CC6F5F3887691FF600C177B52534504C8C67804DCE115B5756F2FA0">>},
@@ -158,5 +155,6 @@
  {<<"stacktrace_compat">>, <<"1C064BC1725F5BD6470853487AC7FBDA5D5E8745CE4B57D0AE71765C85B4414A">>},
  {<<"termit">>, <<"D463BDD0207EDD00942754D51FD822B981CDCE7FB774E9FF71D9F59429BCEF7A">>},
  {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>},
- {<<"zotonic_ssl">>, <<"CC03C4D598E467FEDB4399C97B9AFD68CED094652C79F45C8E88FD004DDA9641">>}]}
+ {<<"zotonic_ssl">>, <<"CC03C4D598E467FEDB4399C97B9AFD68CED094652C79F45C8E88FD004DDA9641">>},
+ {<<"zotonic_stdlib">>, <<"37545B356C89B0D94F6C7CF2D6B26AB008AB7BC4AB64E1EF824DC344123A3761">>}]}
 ].

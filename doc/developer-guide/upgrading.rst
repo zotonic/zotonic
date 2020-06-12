@@ -170,6 +170,17 @@ Configuration
 
     ZOTONIC_LISTEN_PORT=80 ZOTONIC_SSL_LISTEN_PORT=443 bin/zotonic start
 
+* Black/white-lists are now called block/allow-lists.
+
+  - ``proxy_whitelist`` is now ``proxy_allowlist``
+  - ``smtp_dnsbl`` is now ``smtp_dns_blocklist``
+  - ``smtp_dnswl`` is now ``smtp_dns_allowlist``
+  - ``ip_whitelist`` is now ``ip_allowlist``
+  - ``ip_whitelist_system_management`` is now ``ip_allowlist_system_management``
+
+  If an IP is on DNS allowlist then ``z_email_dnsbl:status/2`` returns now ``{ok, allowed}``.
+
+
 Errors
 ^^^^^^
 

@@ -1137,9 +1137,7 @@ msgid "Embed"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:25
-msgid ""
-"Embed code will be sanitized. Only whitelisted sites are allowed in embed "
-"codes."
+msgid "Embed code will be sanitized for allowed sites and html."
 msgstr ""
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:160
@@ -6719,7 +6717,6 @@ msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr ""
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:73
-#: apps/zotonic_mod_search/src/support/search_query.erl:789
 msgid "Unknown category"
 msgstr ""
 
@@ -6767,14 +6764,6 @@ msgstr ""
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "your Embedly app dashboard"
-msgstr ""
-
-#: apps/zotonic_mod_search/src/support/search_query.erl:964
-msgid "Unknown predicate"
-msgstr ""
-
-#: apps/zotonic_mod_search/src/support/search_query.erl:795
-msgid "is not a category"
 msgstr ""
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
