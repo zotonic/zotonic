@@ -161,6 +161,9 @@ get_by_filename(Filename, Context) ->
                     Medium;
                 {error, enoent} ->
                     z_depcache:set({medium, Filename}, undefined, ?HOUR, Context),
+                    undefined;
+                {error, nodb} ->
+                    z_depcache:set({medium, Filename}, undefined, ?HOUR, Context),
                     undefined
             end;
         {ok, Row} ->

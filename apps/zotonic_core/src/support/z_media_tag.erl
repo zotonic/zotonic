@@ -266,7 +266,11 @@ get_link(_Media, HRef, _Context) when is_binary(HRef); is_list(HRef) ->
     HRef.
 
 media_id([{_,_}|_] = List) ->
-    proplists:get_value(id, List).
+    proplists:get_value(id, List);
+media_id(#{ <<"id">> := Id }) ->
+    Id;
+media_id(_) ->
+    undefined.
 
 %% @doc Give the filepath for the filename being served.
 filename_to_filepath(Filename, Context) ->

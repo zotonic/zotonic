@@ -13,7 +13,7 @@
 <ul class="language-switch nav nav-list">
     {% for code,lang in m.translation.language_list_enabled %}
     	<li{% if z_language == code %} class="disabled"{% endif %}>
-    	    <a href="{% url language_select code=code p=q.p %}">{{ lang.name }}</a>
+    	    <a href="{% url language_select code=code p=q.p %}" rel="nofollow">{{ lang.name }}</a>
     	</li>
     {% endfor %}
 </ul>

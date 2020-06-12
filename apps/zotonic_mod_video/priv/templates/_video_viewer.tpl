@@ -12,12 +12,22 @@
 {% elseif props.is_video_broken %}
 	{% image props.preview_filename width=options.width height=options.height class=options.class %}
 {% elseif props.filename %}
-	<video id="{{ #video }}" style="max-width: 100%; height: auto;" poster="{% image_url props.id width=props.width height=props.height %}"
+	<video id="{{ #video }}" style="width: 100%; height: auto;"
+            {% if props.width and props.height %}
+                poster="{% image_url props.id width=props.width height=props.height %}"
+            {% else %}
+                poster="{% image_url props.id width=800 height=450 %}"
+            {% endif %}
 			controls
             {% if options.autoplay %}autoplay
             {% else %}preload="none"
             {% endif %}
-            width="{{ props.width }}" height="{{ props.height }}">
+            {% if props.width and props.height %}
+                width="{{ props.width }}" height="{{ props.height }}"
+            {% else %}
+                width="800" height="450"
+            {% endif %}
+        >
 		<source type="{{ props.mime }}" src="{% url media_inline star=props.filename %}" />
 	</video>
 {% endif %}
