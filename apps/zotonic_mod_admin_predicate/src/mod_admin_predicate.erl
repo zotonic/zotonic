@@ -147,17 +147,17 @@ take([Id|L], N, Acc) ->
 %% @doc Check if the update contains information for a predicate.  If so then update
 %% the predicate information in the db and remove it from the update props.
 observe_rsc_update(#rsc_update{id=Id}, {Changed, Props}, Context) ->
-    case       maps:is_key(<<"predicate_subject">>, Props)
-        orelse maps:is_key(<<"predicate_object">>, Props) of
+    case       maps:is_key(<<"predicate_subject_list">>, Props)
+        orelse maps:is_key(<<"predicate_object_list">>, Props) of
 
         true ->
-            Subjects = maps:get(<<"predicate_subject">>, Props, []),
-            Objects  = maps:get(<<"predicate_object">>, Props, []),
+            Subjects = maps:get(<<"predicate_subject_list">>, Props, []),
+            Objects  = maps:get(<<"predicate_object_list">>, Props, []),
             m_predicate:update_noflush(Id, Subjects, Objects, Context),
 
             Props1 = maps:without([
-                    <<"predicate_subject">>,
-                    <<"predicate_object">>
+                    <<"predicate_subject_list">>,
+                    <<"predicate_object_list">>
                 ], Props),
             {true, Props1};
         false ->
