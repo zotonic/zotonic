@@ -116,7 +116,7 @@ check_dnsbl(State) ->
     case z_email_dnsbl:status(State#state.peer, DNSBL, DNSWL) of
         {ok, notlisted} ->
             {ok, State};
-        {ok, whitelisted} ->
+        {ok, allowed} ->
             {ok, State};
         {ok, {blocked, Service}} ->
             lager:info("SMTP DNSBL check for ~s blocked by ~p -- closing connection with a 451",

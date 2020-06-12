@@ -1038,7 +1038,7 @@ list_dir(Path) when is_list(Path) ->
                 {ok, Fs} ->
                     Fs1 = lists:filter(
                         fun(F) ->
-                            not zotonic_filewatcher_handler:is_file_blacklisted(Dirname, F)
+                            not zotonic_filewatcher_handler:is_file_blocked(Dirname, F)
                         end,
                         Fs),
                     lists:map( fun normalize_path/1, Fs1 );

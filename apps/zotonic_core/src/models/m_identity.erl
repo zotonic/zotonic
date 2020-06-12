@@ -80,7 +80,7 @@
     delete/2,
     merge/3,
     is_reserved_name/1,
-    is_peer_whitelisted/1
+    is_peer_allowed/1
 ]).
 
 -export([
@@ -610,18 +610,18 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
     Password1 = z_convert:to_binary(Password),
     case z_convert:to_binary( m_site:get(admin_password, Context) ) of
         <<"admin">> when Password1 =:= <<"admin">> ->
-            % Only allow default password from whitelisted ip addresses
-            case is_peer_whitelisted(Context) of
+            % Only allow default password from allowed ip addresses
+            case is_peer_allowed(Context) of
                 true ->
                     z_db:q("update identity set visited = now() where id = 1", Context),
                     flush(1, Context),
                     {ok, 1};
                 false ->
                     lager:error(
-                        "admin login with default password from non whitelisted ip address ~p",
+                        "admin login with default password from non allowed ip address ~p",
                         [m_req:get(peer, Context)]
                     ),
-                    {error, peer_not_whitelisted}
+                    {error, peer_not_allowed}
             end;
         Password1 ->
             z_db:q("update identity set visited = now() where id = 1", Context),
@@ -659,15 +659,15 @@ check_username_pw_1(Username, Password, Context) ->
             end
     end.
 
-%% @doc Check if the tcp/ip peer address is a whitelisted ip address
-is_peer_whitelisted(Context) ->
-    z_ip_address:ip_match(m_req:get(peer_ip, Context), ip_whitelist(Context)).
+%% @doc Check if the tcp/ip peer address is a allowed ip address
+is_peer_allowed(Context) ->
+    z_ip_address:ip_match(m_req:get(peer_ip, Context), ip_allowlist(Context)).
 
-ip_whitelist(Context) ->
-    SiteWhitelist = m_config:get_value(site, ip_whitelist, Context),
-    case z_utils:is_empty(SiteWhitelist) of
-        true -> z_config:get(ip_whitelist);
-        false -> SiteWhitelist
+ip_allowlist(Context) ->
+    SiteAllowlist = m_config:get_value(site, ip_allowlist, Context),
+    case z_utils:is_empty(SiteAllowlist) of
+        true -> z_config:get(ip_allowlist);
+        false -> SiteAllowlist
     end.
 
 %% @doc Check is the password belongs to an user with the given e-mail address.

@@ -1,11 +1,11 @@
 .. include:: meta-sanitize_embed_url.rst
 
-This notification is used to sanitize and whitelist *embed urls* passed with the
+This notification is used to sanitize *embed urls* passed with the
 media import routines.
 
 .. highlight:: erlang
 
-Example usage in a module, where URLs from some public broadcasters are whitelisted::
+Example usage in a module, where URLs from some public broadcasters are allowed::
 
     -export([
         observe_sanitize_embed_url/2

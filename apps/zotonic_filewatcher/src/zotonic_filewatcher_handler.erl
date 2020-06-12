@@ -25,8 +25,8 @@
 -export([
     file_changed/2,
     re_exclude/0,
-    is_file_blacklisted/1,
-    is_file_blacklisted/2
+    is_file_blocked/1,
+    is_file_blocked/2
 ]).
 
 -export([
@@ -51,7 +51,7 @@
 
 
 %% Which files do we not consider at all in the file_changed handler
--define(FILENAME_BLACKLIST_RE,
+-define(FILENAME_BLOCKLIST_RE,
         "_flymake$"
         "|node_modules"
         "|\\.#"
@@ -90,7 +90,7 @@ file_changed(Verb, F) when is_list(F) ->
     file_changed(Verb, unicode:characters_to_binary(F));
 file_changed(Verb, F) when is_binary(F) ->
     lager:debug("[filewatcher] ~p of '~s'", [Verb, F]),
-    case is_file_blacklisted(F) of
+    case is_file_blocked(F) of
         true ->
             ok;
         false ->
@@ -99,48 +99,48 @@ file_changed(Verb, F) when is_binary(F) ->
 
 -spec re_exclude() -> string().
 re_exclude() ->
-    ?FILENAME_BLACKLIST_RE.
+    ?FILENAME_BLOCKLIST_RE.
 
--spec is_file_blacklisted(binary()|string()) -> boolean().
-is_file_blacklisted(<<".", _/binary>>) ->
+-spec is_file_blocked(binary()|string()) -> boolean().
+is_file_blocked(<<".", _/binary>>) ->
     true;
-is_file_blacklisted(<<>>) ->
+is_file_blocked(<<>>) ->
     true;
-is_file_blacklisted(F) when is_binary(F) ->
+is_file_blocked(F) when is_binary(F) ->
     case binary:last(F) of
         $# -> true;
         _ -> re:run(F, re_compiled()) =/= nomatch
     end;
-is_file_blacklisted("." ++ _) ->
+is_file_blocked("." ++ _) ->
     true;
-is_file_blacklisted("") ->
+is_file_blocked("") ->
     true;
-is_file_blacklisted(F) when is_list(F) ->
+is_file_blocked(F) when is_list(F) ->
     case lists:last(F) of
         $# -> true;
         _ -> re:run(F, re_compiled()) =/= nomatch
     end.
 
 re_compiled() ->
-    case erlang:get(blacklist_re) of
+    case erlang:get(blocklist_re) of
         undefined ->
-            {ok, RE} = re:compile(?FILENAME_BLACKLIST_RE),
-            erlang:put(blacklist_re, RE),
+            {ok, RE} = re:compile(?FILENAME_BLOCKLIST_RE),
+            erlang:put(blocklist_re, RE),
             RE;
         RE ->
             RE
     end.
 
 %% @doc Called by zotonic_filewatcher_handler
-is_file_blacklisted("priv", "files") -> true;
-is_file_blacklisted("priv", "mnesia") -> true;
-is_file_blacklisted("priv", "log") -> true;
-is_file_blacklisted(<<"priv">>, <<"files">>) -> true;
-is_file_blacklisted(<<"priv">>, <<"mnesia">>) -> true;
-is_file_blacklisted(<<"priv">>, <<"log">>) -> true;
-is_file_blacklisted(_Dir, "." ++ _) -> true;
-is_file_blacklisted(_Dir, <<".", _/binary>>) -> true;
-is_file_blacklisted(_Dir, File) -> is_file_blacklisted(File).
+is_file_blocked("priv", "files") -> true;
+is_file_blocked("priv", "mnesia") -> true;
+is_file_blocked("priv", "log") -> true;
+is_file_blocked(<<"priv">>, <<"files">>) -> true;
+is_file_blocked(<<"priv">>, <<"mnesia">>) -> true;
+is_file_blocked(<<"priv">>, <<"log">>) -> true;
+is_file_blocked(_Dir, "." ++ _) -> true;
+is_file_blocked(_Dir, <<".", _/binary>>) -> true;
+is_file_blocked(_Dir, File) -> is_file_blocked(File).
 
 
 %% ------------------------------ gen_server Callbacks -----------------------------

@@ -33,7 +33,7 @@
                 <div class="row content-area">
                     {% block content_area %}
                         {% block content_pre %}{% endblock %}
-                        {% if is_peer_whitelisted %}
+                        {% if is_peer_allowed %}
                             {% block content %}{% endblock %}
                             {% block sidebar %}{% endblock %}
                         {% endif %}

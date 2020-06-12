@@ -40,8 +40,8 @@
 %% @doc Copy some zotonic config settings over to other applications
 -spec init_app_env() -> ok.
 init_app_env() ->
-    application:set_env(cowmachine, proxy_whitelist, ?MODULE:get(proxy_whitelist)),
-    application:set_env(cowmachine, ip_whitelist, ?MODULE:get(ip_whitelist)),
+    application:set_env(cowmachine, proxy_allowlist, ?MODULE:get(proxy_allowlist)),
+    application:set_env(cowmachine, ip_allowlist, ?MODULE:get(ip_allowlist)),
     ok.
 
 
@@ -255,9 +255,9 @@ default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
 default(syslog_level) -> info;
 default(zotonic_apps) -> filename:join([ z_path:get_path(), "apps_user" ]);
-default(proxy_whitelist) -> local;
-default(ip_whitelist) -> local;
-default(ip_whitelist_system_management) -> any;
+default(proxy_allowlist) -> local;
+default(ip_allowlist) -> local;
+default(ip_allowlist_system_management) -> any;
 default(sessionjobs_limit) -> erlang:max(erlang:system_info(process_limit) div 10, 10000);
 default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 50000);
 default(server_header) -> "Zotonic";
@@ -333,9 +333,9 @@ all() ->
             syslog_opts,
             syslog_facility,
             syslog_level,
-            proxy_whitelist,
-            ip_whitelist,
-            ip_whitelist_system_management,
+            proxy_allowlist,
+            ip_allowlist,
+            ip_allowlist_system_management,
             sessionjobs_limit,
             sidejobs_limit,
             server_header,
