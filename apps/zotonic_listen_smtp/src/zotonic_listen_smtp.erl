@@ -111,8 +111,8 @@ handle_MAIL(From, State) ->
     check_dnsbl(State#state{from=From}).
 
 check_dnsbl(State) ->
-    DNSBL = z_config:get(smtp_dnsbl, z_email_dnsbl:dnsbl_list()),
-    DNSWL = z_config:get(smtp_dnswl, z_email_dnsbl:dnswl_list()),
+    DNSBL = z_config:get(smtp_dns_blocklist, z_email_dnsbl:dns_blocklist()),
+    DNSWL = z_config:get(smtp_dns_allowlist, z_email_dnsbl:dns_allowlist()),
     case z_email_dnsbl:status(State#state.peer, DNSBL, DNSWL) of
         {ok, notlisted} ->
             {ok, State};

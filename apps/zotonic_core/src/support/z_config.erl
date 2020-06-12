@@ -228,8 +228,8 @@ default(smtp_listen_ip) -> {127,0,0,1};
 default(smtp_listen_port) -> 2525;
 default(smtp_spamd_ip) -> none;
 default(smtp_spamd_port) -> 783;
-default(smtp_dnsbl) -> z_email_dnsbl:dnsbl_list();
-default(smtp_dnswl) -> z_email_dnsbl:dnswl_list();
+default(smtp_dns_blocklist) -> z_email_dnsbl:dns_blocklist();
+default(smtp_dns_allowlist) -> z_email_dnsbl:dns_allowlist();
 default(smtp_delete_sent_after) -> 240;
 default(mqtt_listen_ip) -> ?MODULE:get(listen_ip);
 default(mqtt_listen_ip6) -> ?MODULE:get(listen_ip6);
@@ -313,8 +313,8 @@ all() ->
             smtp_listen_port,
             smtp_spamd_ip,
             smtp_spamd_port,
-            smtp_dnsbl,
-            smtp_dnswl,
+            smtp_dns_blocklist,
+            smtp_dns_allowlist,
             smtp_delete_sent_after,
             mqtt_listen_ip,
             mqtt_listen_ip6,
