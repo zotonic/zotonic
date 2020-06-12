@@ -26,7 +26,7 @@
 
 survey_any_wrong_answer(undefined, _Question, _Context) ->
     false;
-survey_any_wrong_answer(Answer, Question, Context) when is_list(Answer) ->
+survey_any_wrong_answer(Answer, Question, _Context) when is_list(Answer) ->
     case z_convert:to_bool(maps:get(<<"is_test">>, Question, false)) of
         true ->
             QAnswers = maps:get(<<"answers">>, Question, []),

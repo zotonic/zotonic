@@ -83,7 +83,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	%% @todo Add the 'vary' headers to the cache key
 	RenderArgs = [ {id, Id} | z_context:get_all(Context1) ],
 	RenderFunc = fun() ->
-		Template = z_context:get(template, Context1, <<"page.tpl">>),
+		Template = z_context:get(template, Context1, {cat, <<"page.tpl">>}),
 	    z_template:render(Template, RenderArgs, Context1)
 	end,
 

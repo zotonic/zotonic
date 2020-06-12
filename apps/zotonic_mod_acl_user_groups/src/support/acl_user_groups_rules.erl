@@ -90,7 +90,11 @@ expand_module(State, UserTree, Context) ->
     Modules1 = [ {<<>>, Modules} | [ {z_convert:to_binary(M),[M]} || M <- Modules ] ],
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(module, State, Context)),
     Rules = expand_rule_rows(<<"module">>, Modules1, RuleRows, Context),
-    [ {M,A,GId,IsAllow} || {x,{M,A,_IsOwner,IsAllow},GId} <- expand_rules([{x,[]}], Rules, UserTree, Context) ].
+    lists:map(
+        fun({x,{M,A,_IsOwner,IsAllow},GId}) ->
+            {z_convert:to_atom(M),A,GId,IsAllow}
+        end,
+        expand_rules([{x,[]}], Rules, UserTree, Context)).
 
 -spec expand_collab(edit|publish, z:context()) -> list( collab_rule() ).
 expand_collab(State,Context) ->
