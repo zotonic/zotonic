@@ -67,10 +67,11 @@
 full(undefined, _Context) ->
     undefined;
 full(Id, Context) when is_integer(Id) ->
-    case m_rsc:exists(Id, Context) of
-        false -> undefined;
-        true ->
-            Rsc0 = m_rsc:get(Id, Context),
+    case m_rsc:get(Id, Context) of
+        undefined ->
+            % Access denied or not found
+            undefined;
+        Rsc0 ->
             Rsc1 = filter_empty(Rsc0),
 
             Rsc = Rsc1#{
