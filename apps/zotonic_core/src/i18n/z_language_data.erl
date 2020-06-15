@@ -1218,6 +1218,11 @@ languages_list() -> [
         {name, <<"Tiếng Việt"/utf8>>},
         {name_en, <<"Vietnamese"/utf8>>}
     ]},
+    {<<"xh">>, [
+        {language, <<"xh">>},
+        {name, <<"Xhosa"/utf8>>},
+        {name_en, <<"Xhosa"/utf8>>}
+    ]},
     {<<"zh">>, [
         {type, <<"macro_language">>},
         {language, <<"zh">>},
@@ -1355,7 +1360,6 @@ languages_list() -> [
 % vo: Volapuk
 % wa: Walloon
 % wo: Wolof
-% xh: Xhosa
 % yo: Yoruba
 % za: Zhuang
 % zu: Zulu
