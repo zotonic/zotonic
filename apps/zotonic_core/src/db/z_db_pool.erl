@@ -21,6 +21,7 @@
 -include_lib("zotonic.hrl").
 
 -define(DEFAULT_DB_DRIVER, z_db_pgsql).
+-define(DEFAULT_DB_MAX_CONNECTIONS, 20).
 -define(DB_POOL_HIGH_USAGE, 0.8).
 
 -export([
@@ -145,7 +146,7 @@ child_spec(Site, SiteProps) ->
             undefined;
         true ->
             %% Add a db pool to the site's processes
-            PoolSize  = proplists:get_value(db_max_connections, SiteProps, 10),
+            PoolSize  = proplists:get_value(db_max_connections, SiteProps, ?DEFAULT_DB_MAX_CONNECTIONS),
 
             Name = db_pool_name(Site),
 
