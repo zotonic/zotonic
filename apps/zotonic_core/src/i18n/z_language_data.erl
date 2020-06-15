@@ -1034,6 +1034,11 @@ languages_list() -> [
         {name, <<"한국어"/utf8>>},
         {name_en, <<"Korean"/utf8>>}
     ]},
+    {<<"ku">>, [
+        {language, <<"ku">>},
+        {name, <<"Kurdî‎"/utf8>>},
+        {name_en, <<"Kurdish"/utf8>>}
+    ]},
     {<<"lt">>, [
         {language, <<"lt">>},
         {name, <<"Lietuvių"/utf8>>},
@@ -1187,10 +1192,20 @@ languages_list() -> [
         {name, <<"српски"/utf8>>},
         {name_en, <<"Serbian"/utf8>>}
     ]},
+    {<<"su">>, [
+        {language, <<"su">>},
+        {name, <<"Sundanese"/utf8>>},
+        {name_en, <<"Sundanese"/utf8>>}
+    ]},
     {<<"sv">>, [
         {language, <<"sv">>},
         {name, <<"Svenska"/utf8>>},
         {name_en, <<"Swedish"/utf8>>}
+    ]},
+    {<<"sw">>, [
+        {language, <<"sw">>},
+        {name, <<"Kiswahili"/utf8>>},
+        {name_en, <<"Swahili"/utf8>>}
     ]},
     {<<"sq">>, [
         {language, <<"sq">>},
@@ -1234,6 +1249,11 @@ languages_list() -> [
         {language, <<"xh">>},
         {name, <<"Xhosa"/utf8>>},
         {name_en, <<"Xhosa"/utf8>>}
+    ]},
+    {<<"yo">>, [
+        {language, <<"yo">>},
+        {name, <<"Èdè Yorùbá"/utf8>>},
+        {name_en, <<"Yoruba"/utf8>>}
     ]},
     {<<"zh">>, [
         {type, <<"macro_language">>},
@@ -1314,7 +1334,6 @@ languages_list() -> [
 % km: Khmer Cambodian
 % kn: Kannada
 % ks: Kashmiri
-% ku: Kurdish
 % kv: Komi
 % kw: Cornish
 % ky: Kirghiz
@@ -1354,8 +1373,6 @@ languages_list() -> [
 % so: Somali
 % ss: Swati Siswati
 % st: Sesotho Sotho, Southern
-% su: Sundanese
-% sw: Swahili
 % te: Telugu
 % tg: Tajik
 % ti: Tigrinya
@@ -1372,7 +1389,6 @@ languages_list() -> [
 % vo: Volapuk
 % wa: Walloon
 % wo: Wolof
-% yo: Yoruba
 % za: Zhuang
 % zu: Zulu
 
