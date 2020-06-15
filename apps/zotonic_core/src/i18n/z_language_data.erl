@@ -1057,6 +1057,11 @@ languages_list() -> [
         {name, <<"Malti"/utf8>>},
         {name_en, <<"Maltese"/utf8>>}
     ]},
+    {<<"ms">>, [
+        {language, <<"ms">>},
+        {name, <<"Malay"/utf8>>},
+        {name_en, <<"Malay"/utf8>>}
+    ]},
     {<<"nl">>, [
         {language, <<"nl">>},
         {name, <<"Nederlands"/utf8>>},
@@ -1149,6 +1154,11 @@ languages_list() -> [
         {name, <<"русский язык"/utf8>>},
         {name_en, <<"Russian"/utf8>>}
     ]},
+    {<<"si">>, [
+        {language, <<"si">>},
+        {name, <<"Sinhalese"/utf8>>},
+        {name_en, <<"Sinhalese"/utf8>>}
+    ]},
     {<<"sk">>, [
         {language, <<"sk">>},
         {name, <<"Slovenčina"/utf8>>},
@@ -1175,11 +1185,21 @@ languages_list() -> [
         {name, <<"Shqip"/utf8>>},
         {name_en, <<"Albanian"/utf8>>}
     ]},
+    {<<"ta">>, [
+        {language, <<"ta">>},
+        {name, <<"Tamil"/utf8>>},
+        {name_en, <<"Tamil"/utf8>>}
+    ]},
     {<<"th">>, [
         {language, <<"th">>},
         {script, <<"Thai">>},
         {name, <<"ไทย"/utf8>>},
         {name_en, <<"Thai"/utf8>>}
+    ]},
+    {<<"tl">>, [
+        {language, <<"tl">>},
+        {name, <<"Tagalog"/utf8>>},
+        {name_en, <<"Tagalog"/utf8>>}
     ]},
     {<<"tr">>, [
         {language, <<"tr">>},
@@ -1197,6 +1217,11 @@ languages_list() -> [
         {region, <<"VN">>},
         {name, <<"Tiếng Việt"/utf8>>},
         {name_en, <<"Vietnamese"/utf8>>}
+    ]},
+    {<<"xh">>, [
+        {language, <<"xh">>},
+        {name, <<"Xhosa"/utf8>>},
+        {name_en, <<"Xhosa"/utf8>>}
     ]},
     {<<"zh">>, [
         {type, <<"macro_language">>},
@@ -1289,7 +1314,6 @@ languages_list() -> [
 % ml: Malayalam
 % mo: Moldavian
 % mr: Marathi
-% ms: Malay
 % my: Burmese
 % na: Nauru
 % nb: Norwegian Bokmål
@@ -1313,7 +1337,6 @@ languages_list() -> [
 % sd: Sindhi
 % se: Northern Sami
 % sg: Sango Sangro
-% si: Sinhalese
 % sm: Samoan
 % sn: Shona
 % so: Somali
@@ -1321,12 +1344,10 @@ languages_list() -> [
 % st: Sesotho Sotho, Southern
 % su: Sundanese
 % sw: Swahili
-% ta: Tamil
 % te: Telugu
 % tg: Tajik
 % ti: Tigrinya
 % tk: Turkmen
-% tl: Tagalog
 % tn: Tswana Setswana
 % to: Tonga
 % ts: Tsonga
@@ -1339,7 +1360,6 @@ languages_list() -> [
 % vo: Volapuk
 % wa: Walloon
 % wo: Wolof
-% xh: Xhosa
 % yo: Yoruba
 % za: Zhuang
 % zu: Zulu

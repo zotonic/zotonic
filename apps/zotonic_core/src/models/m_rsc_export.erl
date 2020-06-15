@@ -25,10 +25,10 @@
 %%   title := <<"Foo">>,
 %%    ...
 %%  },
-%%  medium := [
+%%  medium := #{
 %%   %% Medium properties, if the item has an embedded medium record.
-%%  ],
-%%  category => [,
+%%  },
+%%  category := [,
 %%   %% Category properties, if the item is a category.
 %%  ],
 %%  group := [
@@ -55,11 +55,17 @@
 -module(m_rsc_export).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
+-behaviour(zotonic_model).
+
 -export([
+    m_get/3,
     full/2
 ]).
 
 -include("zotonic_core/include/zotonic.hrl").
+
+m_get([ <<"full">>, Id | Rest ], _Msg, Context) ->
+    {ok, {full(Id, Context), Rest}}.
 
 
 %% @doc Get the full representation of a resource.
@@ -67,10 +73,11 @@
 full(undefined, _Context) ->
     undefined;
 full(Id, Context) when is_integer(Id) ->
-    case m_rsc:exists(Id, Context) of
-        false -> undefined;
-        true ->
-            Rsc0 = m_rsc:get(Id, Context),
+    case m_rsc:get(Id, Context) of
+        undefined ->
+            % Access denied or not found
+            undefined;
+        Rsc0 ->
             Rsc1 = filter_empty(Rsc0),
 
             Rsc = Rsc1#{
