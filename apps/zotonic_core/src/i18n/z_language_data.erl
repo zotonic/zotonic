@@ -99,8 +99,8 @@ make_mod() ->
 
 make_mod_1() ->
     case code:is_loaded(?MODULE_MAP) of
-        true -> ok;
-        false -> make_mod_reload()
+        false -> make_mod_reload();
+        {file, _} -> ok
     end.
 
 make_mod_reload() ->
