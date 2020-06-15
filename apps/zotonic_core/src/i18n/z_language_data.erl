@@ -42,7 +42,10 @@
 
         languages_map_flat/0,
         languages_map_main/0,
-        languages_list/0
+        languages_list/0,
+
+        make_mod/0,
+        make_mod_reload/0
     ]).
 
 -define(MODULE_MAP, 'z_language_data$map').
@@ -92,6 +95,15 @@ codes_atom() ->
 
 %% Generate and memorize a quick lookup map for language data.
 make_mod() ->
+    jobs:run(zotonic_singular_job, fun make_mod_1/0).
+
+make_mod_1() ->
+    case code:is_loaded(?MODULE_MAP) of
+        true -> ok;
+        false -> make_mod_reload()
+    end.
+
+make_mod_reload() ->
     Ls = [ K || {K, _} <- languages_list() ],
     LsA = [ binary_to_atom(K,utf8) || K <- Ls ],
     Fallback = fetch_fallbacks( languages_list() ),
