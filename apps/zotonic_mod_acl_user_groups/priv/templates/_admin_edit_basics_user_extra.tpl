@@ -5,7 +5,7 @@
         {% with id.o.hasusergroup|default:(m.identity[id].is_user|if:[m.rsc.acl_user_group_members.id]:[]) as ugs %}
 	        {% for cg in m.hierarchy.acl_user_group.tree_flat %}
 	            <div class="checkbox">
-			        <label>{{ cg.indent }} <input name="hasusergroup" value="{{ cg.id }}" type="checkbox" {% if cg.id|member:ugs %}checked="checked"{% endif %} /> {{ cg.id.title }}</label>
+			        <label>{{ cg.indent }} <input name="hasusergroup_list[]" value="{{ cg.id }}" type="checkbox" {% if cg.id|member:ugs %}checked="checked"{% endif %} /> {{ cg.id.title }}</label>
 	            </div>
 	        {% endfor %}
 	    {% endwith %}
