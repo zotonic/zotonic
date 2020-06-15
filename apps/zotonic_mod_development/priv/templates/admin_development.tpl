@@ -146,8 +146,8 @@
     <form id="explain-dispatch" class="form-inline" method="GET" action="postback">
         <div class="form-group">
             <select id="explain_protocol" name="explain_protocol" class="col-md-4 form-control">
-                <option value="http">http://{{ m.site.hostname }}</option>
                 <option value="https">https://{{ m.site.hostname }}</option>
+                <option value="http">http://{{ m.site.hostname }}</option>
             </select>
         </div>
         <div class="form-group">
