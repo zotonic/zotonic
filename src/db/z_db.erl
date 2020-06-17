@@ -318,7 +318,7 @@ q1(Sql, Parameters, Context, Timeout) ->
         (none) -> undefined;
         (C) ->
             DbDriver = z_context:db_driver(Context),
-            case equery1(DbDriver, C, Sql, Parameters, Timeout) of
+            case equery_n(1, DbDriver, C, Sql, Parameters, Timeout) of
                 {ok, Value} -> Value;
                 {error, noresult} -> undefined;
                 {error, Reason} = Error ->
@@ -446,8 +446,7 @@ update(Table, Id, Parameters, Context) ->
 
                 FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
 
-                UpdateProps1 = if
-                                   HasProps ->
+                UpdateProps1 = if HasProps ->
                                        % Merge the new props with the props in the database
                                        case equery1(DbDriver, C, "select props from \""++Table++"\" where id = $1", [Id]) of
                                            {ok, OldProps} when is_list(OldProps) ->
@@ -460,10 +459,12 @@ update(Table, Id, Parameters, Context) ->
                                        case {proplists:is_defined(props, Cols), proplists:is_defined(props_json, Cols)} of
                                            {true, true} ->
                                                case equery2(DbDriver, C, "select props, props_json from \""++Table++"\" where id = $1", [Id]) of
+                                                   % Move props to props_json
                                                    {ok, OldProps, _} when is_list(OldProps) ->
                                                        NewProps = lists:foldl(FReplace, OldProps, proplists:get_value(props_json, UpdateProps)),
                                                        NewProps1 = lists:keystore(props_json, 1, UpdateProps, {props_json, ?DB_PROPS_JSON(cleanup_props(NewProps))}),
                                                        [{props, undefined} | NewProps1];
+                                                   % Merge the new props with the props_json
                                                    {ok, _, JSON} when is_binary(JSON) ->
                                                        OldPropsJSON = json_decode(JSON),
                                                        NewProps = lists:foldl(FReplace, OldPropsJSON, proplists:get_value(props_json, UpdateProps)),
@@ -473,6 +474,7 @@ update(Table, Id, Parameters, Context) ->
                                                end;
                                            {false, true} ->
                                                case equery1(DbDriver, C, "select props_json from \""++Table++"\" where id = $1", [Id]) of
+                                                   % Merge the new props with props_json
                                                    {ok, JSON} when is_binary(JSON) ->
                                                        OldPropsJSON = json_decode(JSON),
                                                        NewProps = lists:foldl(FReplace, OldPropsJSON, proplists:get_value(props_json, UpdateProps)),
@@ -977,38 +979,32 @@ assoc1(DbDriver, C, Sql, Parameters, Timeout) ->
 
 
 equery1(DbDriver, C, Sql) ->
-    equery1(DbDriver, C, Sql, [], ?TIMEOUT).
+    equery_n(1, DbDriver, C, Sql, [], ?TIMEOUT).
 
 equery1(DbDriver, C, Sql, Parameters) when is_list(Parameters); is_tuple(Parameters) ->
-    equery1(DbDriver, C, Sql, Parameters, ?TIMEOUT);
+    equery_n(1, DbDriver, C, Sql, Parameters, ?TIMEOUT);
 equery1(DbDriver, C, Sql, Timeout) when is_integer(Timeout) ->
-    equery1(DbDriver, C, Sql, [], Timeout).
-
-equery1(DbDriver, C, Sql, Parameters, Timeout) ->
-    case DbDriver:equery(C, Sql, Parameters, Timeout) of
-        {ok, _Columns, []} -> {error, noresult};
-        {ok, _RowCount, _Columns, []} -> {error, noresult};
-        {ok, _Columns, [Row|_]} -> {ok, element(1, Row)};
-        {ok, _RowCount, _Columns, [Row|_]} -> {ok, element(1, Row)};
-        Other -> Other
-    end.
-
-
+    equery_n(1, DbDriver, C, Sql, [], Timeout).
 
 equery2(DbDriver, C, Sql, Parameters) when is_list(Parameters); is_tuple(Parameters) ->
-    equery2(DbDriver, C, Sql, Parameters, ?TIMEOUT);
+    equery_n(2, DbDriver, C, Sql, Parameters, ?TIMEOUT);
 equery2(DbDriver, C, Sql, Timeout) when is_integer(Timeout) ->
-    equery2(DbDriver, C, Sql, [], Timeout).
+    equery_n(2, DbDriver, C, Sql, [], Timeout).
 
-equery2(DbDriver, C, Sql, Parameters, Timeout) ->
+equery_n(N, DbDriver, C, Sql, Parameters, Timeout) ->
     case DbDriver:equery(C, Sql, Parameters, Timeout) of
         {ok, _Columns, []} -> {error, noresult};
         {ok, _RowCount, _Columns, []} -> {error, noresult};
-        {ok, _Columns, [Row|_]} -> {ok, element(1, Row), element(2, Row)};
-        {ok, _RowCount, _Columns, [Row|_]} -> {ok, element(1, Row), element(2, Row)};
+        {ok, _Columns, [Row|_]} -> row_elements(N, Row);
+        {ok, _RowCount, _Columns, [Row|_]} -> row_elements(N, Row);
         Other -> Other
     end.
 
+
+row_elements(1, Row) ->
+    {ok, element(1, Row)};
+row_elements(2, Row) ->
+    {ok, element(1, Row), element(2, Row)}.
 
 json_encode(Term) ->
     jsxrecord:encode(Term).
