@@ -73,6 +73,11 @@ The following environment variables influence how Zotonic starts up.
    * Defined when building Zotonic with ``make compile`` or ``./rebar3 compile``
    * Defined when starting Zotonic
 
+``ZOTONIC_PIDFILE``
+  Path to zotonic PID file. If set, Zotonic will create it at start and remove it before exit.
+  Note however that Erlang VM is not stopped at this moment and can last for several seconds.
+  See ``ZOTONIC_WAIT_VM`` to get rid of this.
+
 ``SNAME``
   The *short name* of the Zotonic Erlang node. This defaults to ``zotonic``. If a
   short name is defined then the Erlang node is started with ``-sname``. The name can
@@ -94,4 +99,4 @@ The following environment variables influence how Zotonic stops.
 
 ``ZOTONIC_WAIT_VM``
   If set to 1, ask launcher script to wait for total stop of Zotonic Erlang VM before exit.
-  This can be use to ensure all resources are freed before trying a new start.
+  This can be used to ensure all resources are freed before trying a new start.
