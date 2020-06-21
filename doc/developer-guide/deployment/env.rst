@@ -89,3 +89,9 @@ The following environment variables influence how Zotonic starts up.
 ``TMP``
   Where Zotonic puts temporary files. Examples are temporary files for image
   resizing or URL downloading.
+
+The following environment variables influence how Zotonic stops.
+
+``ZOTONIC_WAIT_VM``
+  If set to 1, ask launcher script to wait for total stop of Zotonic Erlang VM before exit.
+  This can be use to ensure all resources are freed before trying a new start.
