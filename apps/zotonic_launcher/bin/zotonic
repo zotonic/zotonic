@@ -1,23 +1,34 @@
 #!/usr/bin/env sh
 
-export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/../../..;pwd)}
-export ZOTONIC_BIN=$(cd `dirname $0`;pwd)
+if [ -z "$ZOTONIC" ]; then
+   readonly ZOTONIC=${ZOTONIC:=$(\cd `dirname $0`/../../..;\pwd)}
+   export ZOTONIC
+fi
+# Protect PATH and ZOTONIC environment variables to be changed at runtime
+readonly PATH
+for var in $(\env | \grep ZOTONIC_ | \cut -d '=' -f 1)
+do
+    readonly "${var}"
+    export "${var}"
+done
+readonly ZOTONIC_BIN=$(\cd `\dirname $0`;\pwd)
+export ZOTONIC_BIN
 
-cd $ZOTONIC
+cd $ZOTONIC || \exit 1
 
 case "$1" in
     start)
-        CMD="`$ZOTONIC_BIN/zotonic.escript start`"
-        eval $CMD
-        $ZOTONIC_BIN/zotonic.escript wait
+        CMD="$(${ZOTONIC_BIN}/zotonic.escript start)"
+        eval ${CMD}
+        ${ZOTONIC_BIN}/zotonic.escript wait
         ;;
     start_nodaemon|start-nodaemon)
-        CMD="`$ZOTONIC_BIN/zotonic.escript start_nodaemon`"
-        eval $CMD
+        CMD="$(${ZOTONIC_BIN}/zotonic.escript start_nodaemon)"
+        eval ${CMD}
         ;;
     debug)
-        CMD="`$ZOTONIC_BIN/zotonic.escript debug`"
-        $CMD
+        CMD="$(${ZOTONIC_BIN}/zotonic.escript debug)"
+        ${CMD}
         ;;
     runtests)
         export ZOTONIC_PORT=8040
@@ -26,11 +37,23 @@ case "$1" in
         export ZOTONIC_SSL_LISTEN_PORT=8043
         export ZOTONIC_SMTP_BOUNCE_PORT=2535
 
-        CMD="`$ZOTONIC_BIN/zotonic.escript runtests $@`"
-        eval $CMD
+        CMD="$(${ZOTONIC_BIN}/zotonic.escript runtests $@)"
+        \eval ${CMD}
         EXIT=$?
         ;;
+    stop)
+        if [ -s "$ZOTONIC_PIDFILE" ]; then
+            readonly PID=$(\cat "$ZOTONIC_PIDFILE")
+        fi
+        ${ZOTONIC_BIN}/zotonic.escript stop & 
+        \wait $!    
+        if [ ! -z "${PID}" ] && [ "${ZOTONIC_WAIT_VM:=0}" -eq "1" ]; then
+            \printf "%s" "Waiting for VM stop "
+            while \kill -0 ${PID} 2> /dev/null; do \printf "%s" "." ; \sleep 1; done;
+            \printf "%s\n" " OK"
+        fi
+        ;;
     *)
-        $ZOTONIC_BIN/zotonic.escript "$@"
+        ${ZOTONIC_BIN}/zotonic.escript "$@"
         ;;
 esac
