@@ -61,8 +61,8 @@ hostname:
         keepalive_timeout 65;
         gzip off;
 
+        ssl_protocols TLSv1.2;
         ssl_prefer_server_ciphers on;
-        ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # not possible to do exclusive
         ssl_ciphers 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4';
 
         # Disable preloading HSTS for now. Enable when you know that your
