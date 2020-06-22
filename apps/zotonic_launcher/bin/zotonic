@@ -15,6 +15,10 @@ case "$1" in
         CMD="`$ZOTONIC_BIN/zotonic.escript start_nodaemon`"
         eval $CMD
         ;;
+    shell)
+        CMD="$(${ZOTONIC_BIN}/zotonic.escript shell)"
+        eval ${CMD}
+        ;;
     debug)
         CMD="`$ZOTONIC_BIN/zotonic.escript debug`"
         $CMD

@@ -452,7 +452,7 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
 
 function z_unmask(id)
 {
-    if (id)
+    if (id && typeof id == "string")
     {
         var trigger;
         if (id.charAt(0) == ' ') {
@@ -467,7 +467,7 @@ function z_unmask(id)
 
 function z_unmask_error(id)
 {
-    if (id)
+    if (id && typeof id == "string")
     {
         var trigger;
         if (id.charAt(0) == ' ') {
@@ -475,7 +475,6 @@ function z_unmask_error(id)
         } else {
             trigger = $('#'+id);
         }
-        z_unmask(id);
         trigger.each(function() { try { $(this).unmask(); } catch (e) {}});
         trigger.each(function() { $(this).addClass("z_error_upload"); });
     }
