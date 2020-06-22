@@ -84,12 +84,12 @@ hostname:
             proxy_pass http://127.0.0.1:8000/;
             proxy_redirect off;
 
-            proxy_set_header  Host              $host;
+            proxy_set_header  Host              $http_host;
             proxy_set_header  X-Real-IP         $remote_addr;
             proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
             proxy_set_header  X-Forwarded-Proto $scheme;
-            proxy_set_header  Upgrade           $http_upgrade;
-            proxy_set_header  Connection        "upgrade";
+            proxy_pass_request_headers on;
+
 
             client_max_body_size       0;
             client_body_buffer_size    128k;
@@ -117,8 +117,8 @@ the proxy and backend. Also add X-Real-IP and X-Forwarded-For headers.
 Zotonic always redirects to HTTPS so the proxy needs to be configured for
 both HTTP and HTTPS.
 
-Zotonic also makes use of a websocket connection for MQTT messages
-under the ``/mqtt-transport`` location and so you have to pass the ``Upgrade``
+Zotonic makes use of a websocket connection for MQTT messages at the
+``/mqtt-transport`` endpoint, so you need to pass the ``Upgrade``
 and ``Connection`` headers.
 
 The ``/mqtt-transport`` endpoint is also used to POST uploaded files
