@@ -22,26 +22,23 @@
 %% API
 -export([run/1]).
 
+-include("../../include/zotonic_command.hrl").
+
 run(_) ->
-    case zotonic_command:net_start() of
-        ok ->
-            case zotonic_command:get_target_node() of
-                {ok, Target} ->
-                    case net_adm:ping(Target) of
-                        pong ->
-                            _ = supervisor:terminate_child(kernel_sup, user),
-                            Shell = user_drv:start(['tty_sl -c -e', {Target, shell, start, []}]),
-                            true = erlang:link(Shell),
-                            receive
-                                {'EXIT', Shell, _} ->
-                                    ok
-                            end;
-                        pang ->
-                            zotonic_command:format_error({error, pang})
-                    end;
-                {error, _} = Error ->
-                    zotonic_command:format_error(Error)
-            end;
+    case zotonic_command_nodename:nodename_target( list_to_atom(?DEFAULT_NODENAME) ) of
+        {ok, {shortnames, Nodename}} ->
+            shell_command("-sname", Nodename);
+        {ok, {longnames, Nodename}} ->
+            shell_command("-name", Nodename);
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.
+
+shell_command(SOpt, TargetNode) ->
+    TempNode = os:getpid()
+        ++ z_convert:to_list(z_ids:identifier(3))
+        ++ "-" ++ atom_to_list(TargetNode),
+    Cmd = "erl " ++ SOpt ++ " \"" ++ TempNode
+        ++ "\" -remsh \"" ++ atom_to_list(TargetNode) ++ "\""
+        ++ " -hidden",
+    io:format("~s", [ Cmd ]).
