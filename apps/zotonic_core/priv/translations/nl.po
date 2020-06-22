@@ -10,84 +10,84 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-02-25 16:46+0100\n"
+"PO-Revision-Date: 2020-06-22 16:42+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: apps/zotonic_core/src/support/z_media_import.erl:148
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Website"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268
+#: apps/zotonic_core/src/support/z_datetime.erl:272
 msgid "ago"
 msgstr "geleden"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 msgid "day"
 msgstr "dag"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 msgid "days"
 msgstr "dagen"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
+#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 msgid "hour"
 msgstr "uur"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
+#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "uren"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268
+#: apps/zotonic_core/src/support/z_datetime.erl:272
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "in"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 msgid "minute"
 msgstr "minuut"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "minuten"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:319
+#: apps/zotonic_core/src/support/z_datetime.erl:323
 msgid "moments"
 msgstr "net"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "month"
 msgstr "maand"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "months"
 msgstr "maanden"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268./apps/zotonic_core/src/support/z_datetime.erl:318
+#: apps/zotonic_core/src/support/z_datetime.erl:272./apps/zotonic_core/src/support/z_datetime.erl:322
 msgid "now"
 msgstr "nu"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:320./apps/zotonic_core/src/support/z_datetime.erl:323
+#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "second"
 msgstr "seconde"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:320./apps/zotonic_core/src/support/z_datetime.erl:323
+#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "seconds"
 msgstr "seconden"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330
+#: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "year"
 msgstr "jaar"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330
+#: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "years"
 msgstr "jaren"
 
@@ -469,9 +469,8 @@ msgid "Own content"
 msgstr "Eigen pagina’s"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:39
-#, fuzzy
 msgid "People who can view this page"
-msgstr "Definiëer wie deze pagina mag zien of wijzigen."
+msgstr "Mensen die deze pagina kunnen bekijken"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:13./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:135
 msgid "Permissions"
@@ -982,9 +981,8 @@ msgid "Close preview"
 msgstr "Sluit voorbeeld"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:23
-#, fuzzy
 msgid "Config Directory"
-msgstr "Configureren"
+msgstr "Configuratie Folder"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:38
 msgid "Confirm block removal"
@@ -1013,7 +1011,7 @@ msgstr "Connecties en sessies"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:54
 msgid "Copied download link to clipboard"
-msgstr "Download link is naar het prikbord gekopieerd."
+msgstr "Download-link is naar het prikbord gekopieerd"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:51
 msgid "Copy download link"
@@ -1086,9 +1084,8 @@ msgid "Date ranges"
 msgstr "Datumreeksen"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:219./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
-#, fuzzy
 msgid "Delete after disconnecting from"
-msgstr "Connectie verwijderd naar"
+msgstr "Verwijder na loskoppelen van"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:46
 msgid "Delete if no other page is connected to this page."
@@ -1176,7 +1173,6 @@ msgid "Embed"
 msgstr "Embed"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:25
-#, fuzzy
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr ""
 "De embedcode wordt gecontroleerd. Alleen geselecteerde sites zijn toegestaan."
@@ -1204,25 +1200,23 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:35
 msgid "Erlang Init Files"
-msgstr ""
+msgstr "Erlang Init Files"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:37
 msgid "Erlang Installation Root"
-msgstr ""
+msgstr "Erlang installatie folder"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
-#, fuzzy
 msgid "Erlang Version"
-msgstr "Editor versie"
+msgstr "Erlang Versie"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:146
 msgid "Error checking the website."
 msgstr "Fout bij het controleren van de website."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:172
-#, fuzzy
 msgid "Error creating the page."
-msgstr "Fout bij het invoegen van de pagina."
+msgstr "Fout bij het maken van de pagina."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:170
 msgid "Error uploading the file."
@@ -1249,9 +1243,8 @@ msgstr ""
 "categorie voertuig hebben met daarin subcategorieën auto en fiets."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:266
-#, fuzzy
 msgid "Existing pages"
-msgstr "Pagina bewerken"
+msgstr "Bestaande pagina's"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:161./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:137
 msgid "Failed to download the file."
@@ -1331,22 +1324,21 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:31
 msgid "Home Directory"
-msgstr ""
+msgstr "Home Folder"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:64
 msgid "IP Address"
 msgstr "IP-adres"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8
-#, fuzzy
 msgid ""
 "If a page has a publication date range then it will only be visible between "
 "the two dates. Note that if you are allowed to edit the page then you can "
 "always see it."
 msgstr ""
-"Wanneer een pagina een publicatie start- en eindatum heeft, is deze\n"
-"alleen zichtbaar tussen die periode. Echter, wanneer je de pagina mag\n"
-"bewerken, is deze voor jou altijd zichtbaar."
+"Wanneer een pagina een publicatie start- en eindatum heeft, is deze alleen "
+"zichtbaar tussen die periode. Echter, wanneer je de pagina mag bewerken, is "
+"deze voor jou altijd zichtbaar."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
@@ -1540,9 +1532,8 @@ msgid "No media found."
 msgstr "Geen media gevonden."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:48./apps/zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:50
-#, fuzzy
 msgid "No other pages found"
-msgstr "Geen pagina's gevonden."
+msgstr "Geen andere pagina's gevonden"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:63./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
@@ -1755,6 +1746,8 @@ msgid ""
 "SSL Application uses Erlang defaults, it is recommended to change this "
 "configuration in your <tt>erlang.config</tt>."
 msgstr ""
+"De SSL applicatie maakt gebruik van Erlang defaults, het is aan te raden om "
+"deze configuratie te wijzigen in uw <tt>erlang.config</tt>."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
 msgid "Save and View"
@@ -1788,7 +1781,7 @@ msgstr "Zoeken..."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:20
 msgid "Security Directory"
-msgstr ""
+msgstr "Veiligheids Folder"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:6
 msgid ""
@@ -1796,6 +1789,9 @@ msgid ""
 "zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</"
 "a>"
 msgstr ""
+"Zie ook: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/"
+"zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</"
+"a>"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
@@ -1829,7 +1825,7 @@ msgstr "Toon als"
 msgid "Show page on multiple paths"
 msgstr "Toon pagina op meerdere paginapaden"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:131
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:133
 msgid "Something went wrong. Sorry."
 msgstr "Er ging iets mis, onze excuses."
 
@@ -1850,11 +1846,10 @@ msgid "Standard"
 msgstr "Standaard"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:22
-#, fuzzy
 msgid "Start typing a title to create a new page or find existing pages"
 msgstr ""
-"Begin met het typen van een titel om nieuwe inhoud te creëren of om "
-"bestaande inhoud te vinden."
+"Start met het typen van een titel om een nieuwe pagina aan te maken of om "
+"bestaande pagina's te vinden"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
@@ -1952,9 +1947,8 @@ msgid "There are no pages with a connection to the page"
 msgstr "Er zijn geen andere pagina's die een connectie hebben naar de pagina"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:157
-#, fuzzy
 msgid "There is already a page with this name."
-msgstr "Er is al een bestand of map met de naam"
+msgstr "Er is al een pagina met deze naam."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:3
 msgid "This can't be undone. Your page will be lost forever."
@@ -2047,7 +2041,7 @@ msgstr "Navigatie open/dicht"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:24
 msgid "Too many connections, only the first and last 30 are shown."
-msgstr ""
+msgstr "Te veel verbindingen, alleen de eerste en laatste 30 worden getoond."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -2123,9 +2117,8 @@ msgid "View"
 msgstr "Bekijken"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:25
-#, fuzzy
 msgid "View all connections"
-msgstr "Paginaconnecties"
+msgstr "Bekijk alle connecties"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:15
 msgid "View all pages from this category"
@@ -2171,7 +2164,7 @@ msgstr "Website of Embed"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:33
 msgid "Work Directory"
-msgstr ""
+msgstr "Werk Folder"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
@@ -2209,9 +2202,8 @@ msgid "You don't have permission to change this media item."
 msgstr "Je hebt geen toestemming om dit mediabestand te bewerken."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
-#, fuzzy
 msgid "You don't have permission to create this page."
-msgstr "U heeft geen toestemming om deze categorie pagina's aan te maken."
+msgstr "Je hebt geen toestemming om deze pagina te maken."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:159./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:135
 msgid "You don't have the proper permissions to upload this type of file."
@@ -2230,9 +2222,8 @@ msgstr ""
 "vindbaar te maken."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
-#, fuzzy
 msgid "Zotonic Version"
-msgstr "Editor versie"
+msgstr "Zotone versie"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
@@ -2433,12 +2424,11 @@ msgstr "Alternatieve namen"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
-msgstr "Weet je zeker dat je deze configuratieregel wilt weggooien:"
+msgstr "Weet je zeker dat je deze configuratieregel wilt verwijderen:"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:8
-#, fuzzy
 msgid "Certificates provided by SSL modules"
-msgstr "SSL-certificaten die door SSL-modules worden geleverd"
+msgstr "Certificaten die door SSL-modules worden geleverd"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
 msgid "Config"
@@ -2512,7 +2502,7 @@ msgstr "Deze sleutel bestaat al, kies a.u.b. een andere naam voor de sleutel."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
-msgstr ""
+msgstr "De standaard directory voor alle site-certificaten is"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
@@ -2566,10 +2556,11 @@ msgid "Save &amp; view"
 msgstr "Opslaan en Bekijken"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:125
-#, fuzzy
 msgid ""
 " There are unsaved changes. Are you sure you want to leave without saving?"
-msgstr "Weet je zeker dat je terug wilt naar deze versie?"
+msgstr ""
+" Er zijn nog niet opgeslagen veranderingen. Weet je zeker dat je wilt "
+"vertrekken zonder te bewaren?"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:75
 msgid "This page"
@@ -2577,7 +2568,7 @@ msgstr "Deze pagina"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:123
 msgid "Yes, discard changes"
-msgstr ""
+msgstr "Ja, veranderingen weggooien"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:43
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
@@ -2590,7 +2581,7 @@ msgstr "(dat ben jij)"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:16
 msgid "A secure password is prefilled, replace if needed."
-msgstr ""
+msgstr "Een veilig wachtwoord is vooraf ingevuld, vervang het indien nodig."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:11
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
@@ -2670,9 +2661,8 @@ msgid "Delete this e-mail address"
 msgstr "Naam en e-mailadres verwijderen"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:63
-#, fuzzy
 msgid "Deleted the user account."
-msgstr "De mailinglijst is verwijderd."
+msgstr "De gebruikersaccount verwijderd."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
 msgid "Duplicate username, please choose another username."
@@ -2742,9 +2732,8 @@ msgstr ""
 "heeft iemand een fout gemaakt bij het invoeren van zijn of haar e-mailadres."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:33
-#, fuzzy
 msgid "Leave empty to not change the password."
-msgstr "als je het adminwachtwoord wilt wijzigen."
+msgstr "Laat leeg om het wachtwoord niet te wijzigen."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:14./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:14
 msgid "Log on as this user"
@@ -2808,9 +2797,8 @@ msgid "Please verify your e-mail address"
 msgstr "Bevestig je e-mailadres"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
-#, fuzzy
 msgid "Random secure password:"
-msgstr "Verander je wachtwoord"
+msgstr "Willekeurig veilig wachtwoord:"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:7
 msgid "Search users"
@@ -2850,9 +2838,8 @@ msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Sorry, deze gebruikersnaam is al in gebruik. Probeer een andere."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57
-#, fuzzy
 msgid "Sorry, you can not remove your own username."
-msgstr "Je kunt de admingebruiker niet verwijderen."
+msgstr "Sorry, je kan je eigen gebruikersnaam niet verwijderen."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
@@ -2865,9 +2852,8 @@ msgid "The address is invalid."
 msgstr "Het adres is ongeldig."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:59
-#, fuzzy
 msgid "The admin user can not be removed."
-msgstr "Dit kan niet ongedaan worden gemaakt."
+msgstr "De admin gebruiker kan niet worden verwijderd."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:108
 msgid "The new username/ password has been set."
@@ -2930,14 +2916,12 @@ msgid "Timezone"
 msgstr "Tijdzone"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:25
-#, fuzzy
 msgid "Type password to change password"
-msgstr "als je het adminwachtwoord wilt wijzigen."
+msgstr "Typ het wachtwoord om het te wijzigen"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:28
-#, fuzzy
 msgid "Use this password"
-msgstr "Gebruikersnaam / wachtwoord"
+msgstr "Gebruik dit wachtwoord"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:6
 msgid "User account"
@@ -3015,9 +2999,8 @@ msgid "You are not allowed to create the person page."
 msgstr "Je mag geen persoon-pagina maken."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:66
-#, fuzzy
 msgid "You are not allowed to delete this user account."
-msgstr "Het is niet toegestaan om het commentaar te verwijderen."
+msgstr "Het is niet toegestaan dit gebruikersaccount te verwijderen."
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:161./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:188./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:221
 msgid "You are not allowed to edit identities."
@@ -3294,21 +3277,19 @@ msgstr "Alle paginaconnecties"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
 msgid "Are you sure you want to delete"
-msgstr "Weet je zeker dat je deze pagina wilt verwijderen?"
+msgstr "Weet je zeker dat je wilt verwijderen:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:31
-#, fuzzy
 msgid "Are you sure you want to disconnect:"
-msgstr "Weet je zeker dat je deze pagina wilt verwijderen?"
+msgstr "Weet je zeker dat je de verbinding wilt verbreken:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
 msgid "Change the predicate on all existing page connections to:"
 msgstr "Verander het predicaat van alle bestaande paginaconnecties naar:"
 
 #: apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:69
-#, fuzzy
 msgid "Could not create the predicate."
-msgstr "Aanmaken van media-pagina niet gelukt."
+msgstr "Kon het predikaat niet maken."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:31
 msgid "Delete &amp; Change Connections"
@@ -3367,9 +3348,8 @@ msgid "Object"
 msgstr "Object"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:56
-#, fuzzy
 msgid "Only showing connections with:"
-msgstr "Alle paginaconnecties"
+msgstr "Toont alleen connecties met:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid ""
@@ -3413,9 +3393,8 @@ msgid "There are no page connections with this predicate."
 msgstr "Er zijn geen paginaconnecties met dit predicaat."
 
 #: apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:65
-#, fuzzy
 msgid "There is already a predicate with this name."
-msgstr "Er is al een bestand of map met de naam"
+msgstr "Er is al een predikaat met deze naam."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:15
 msgid ""
@@ -3441,9 +3420,8 @@ msgid "Valid between"
 msgstr "Geldig tussen"
 
 #: apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:67
-#, fuzzy
 msgid "You are not allowed to create this predicate."
-msgstr "Je mag dit media-item niet verwijderen."
+msgstr "Het is niet toegestaan om dit predikaat aan te maken."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 msgid ""
@@ -3458,14 +3436,12 @@ msgstr ""
 "wordt ingesteld, wordt er in alle categorieën gezocht."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
-#, fuzzy
 msgid "object"
-msgstr "Object"
+msgstr "object"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
-#, fuzzy
 msgid "subject"
-msgstr "Subject"
+msgstr "onderwerp"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
@@ -4461,9 +4437,8 @@ msgid "Kind regards,"
 msgstr "Met vriendelijke groet,"
 
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
-#, fuzzy
 msgid "No connection with server"
-msgstr "Geen paginaconnecties met het predicaat:"
+msgstr "Geen verbinding met de server"
 
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:67
@@ -4871,7 +4846,7 @@ msgstr "Ontwikkeling - Waarnemers"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:74
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
-msgstr ""
+msgstr "Schakel caching uit met de <tt>{% cache %}</tt> tag."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
 msgid "Dispatch rule debugging"
@@ -4892,6 +4867,8 @@ msgstr "Lege log"
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:93
 msgid "Enable <tt>mod_server_storage</tt> to use database query tracing."
 msgstr ""
+"Schakel <tt>mod_server_storage</tt> in om database query tracing te "
+"gebruiken."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:64
 msgid "Enable API to recompile and build Zotonic"
@@ -5039,7 +5016,7 @@ msgstr "Gereedschappen en instellingen die nuttig zijn voor siteontwikkeling."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:86
 msgid "Trace all database queries for the current session"
-msgstr ""
+msgstr "Traceer alle databasevragen voor de huidige sessie"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:56
 msgid "You are not allowed to use the dispatch debugging."
@@ -5277,7 +5254,7 @@ msgstr "Dit email adres is goed."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:178
 msgid "Total send errors"
-msgstr "Totaal aantal fouten"
+msgstr "Totaal aantal verzendingsfouten"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:159
 msgid "Total/Status"
@@ -5378,7 +5355,6 @@ msgid "Log in with Facebook"
 msgstr "Inloggen met Facebook"
 
 #: apps/zotonic_mod_facebook/priv/templates/_logon_extra_email_reset.tpl:2
-#, fuzzy
 msgid "Log on with Facebook"
 msgstr "Inloggen met Facebook"
 
@@ -5446,6 +5422,8 @@ msgstr "Na 3 maanden"
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr ""
+"Alle cloud-bestanden kunnen worden verplaatst naar het bestandssysteem op de "
+"server."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
 msgid "All cloud files will be queued for download."
@@ -5465,14 +5443,12 @@ msgstr ""
 "Alle geuploade en voorbeeldbestanden kunnen naar de Cloud worden verplaatst."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
-#, fuzzy
 msgid "Are you sure you want to move all files to the cloud?"
-msgstr "Weet je zeker dat je de deze taal wilt verwijderen: "
+msgstr "Weet u zeker dat u alle bestanden naar de cloud wilt verplaatsen?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
-#, fuzzy
 msgid "Are you sure you want to move all files to the server?"
-msgstr "Weet je zeker dat je alle regels wilt publiceren?"
+msgstr "Weet u zeker dat u alle bestanden naar de server wilt verplaatsen?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
 msgid "Base URL"
@@ -5539,6 +5515,8 @@ msgstr "Download wachtrij"
 msgid ""
 "Ensure yourself there is enough disk space before starting this process."
 msgstr ""
+"Zorg er zelf voor dat er voldoende schijfruimte is voordat u dit proces "
+"start."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
 msgid "Files"
@@ -5553,9 +5531,8 @@ msgid "Local Files"
 msgstr "Lokale bestanden"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:112
-#, fuzzy
 msgid "Media Resources"
-msgstr "Mediaeigenschappen"
+msgstr "Media"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "Move all S3 files to local"
@@ -5566,12 +5543,10 @@ msgid "Move all local files to S3"
 msgstr "Verplaats alle bestanden naar S3"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
-#, fuzzy
 msgid "Move files to cloud"
-msgstr "Verplaats alle bestanden naar de server"
+msgstr "Verplaats alle bestanden naar de cloud"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
-#, fuzzy
 msgid "Move files to local"
 msgstr "Verplaats alle bestanden naar de server"
 
@@ -5603,6 +5578,7 @@ msgstr "Opslag"
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:157
 msgid "There is a 10 minute wait before files are uploaded."
 msgstr ""
+"Er is een wachttijd van 10 minuten voordat de bestanden worden geüpload."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
 msgid "This will queue the files for later asynchronous upload."
@@ -5611,7 +5587,7 @@ msgstr ""
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:68
 msgid "Try to create a private bucket if the bucket does not exist"
-msgstr ""
+msgstr "Probeer een privé-bucket te maken als de bucket niet bestaat"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
 msgid "Upload Queue"
@@ -5734,7 +5710,6 @@ msgid "Log in with Instagram"
 msgstr "Inloggen met Instagram"
 
 #: apps/zotonic_mod_instagram/priv/templates/_logon_extra_email_reset.tpl:2
-#, fuzzy
 msgid "Log on with Instagram"
 msgstr "Inloggen met Instagram"
 
@@ -5987,7 +5962,6 @@ msgid "Log in with LinkedIn"
 msgstr "Inloggen met LinkedIn"
 
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra_email_reset.tpl:2
-#, fuzzy
 msgid "Log on with LinkedIn"
 msgstr "Inloggen met LinkedIn"
 
@@ -6040,7 +6014,6 @@ msgid "Email log"
 msgstr "E-mail log"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:38
-#, fuzzy
 msgid "Email status"
 msgstr "E-mail status"
 
@@ -6060,7 +6033,7 @@ msgstr "Filteren"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:46
 msgid "Identities"
-msgstr ""
+msgstr "Identiteiten"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:3./apps/zotonic_mod_logging/src/mod_logging.erl:98
 msgid "Log"
@@ -6116,7 +6089,7 @@ msgstr "Ontvangen"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
 msgid "Resources with email identity"
-msgstr ""
+msgstr "Pagina’s met e-mail identiteit"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Retry"
@@ -6151,9 +6124,8 @@ msgid "To"
 msgstr "Naar"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:69
-#, fuzzy
 msgid "Toggle non people"
-msgstr "Navigatie open/dicht"
+msgstr "Toon of verberg niet-mensen"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:165
@@ -6170,9 +6142,8 @@ msgid "User interface log"
 msgstr "Gebruikersinterface log"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:62
-#, fuzzy
 msgid "email verified"
-msgstr "Bevestigd"
+msgstr "e-mail geverifieerd"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:14
 msgid "<em>Add</em> all recipients to this list that are on the target list"
@@ -6272,7 +6243,7 @@ msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to"
-msgstr "Weet je zeker dat je de volgende mailing wilt cancellen:"
+msgstr "Weet je zeker dat je de volgende mailing wilt annuleren:"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:2
 msgid "Are you sure you want to delete the mailing list"
@@ -7154,6 +7125,7 @@ msgstr ""
 "Dit item staat al in de hiërarchie. Items kunnen maar 1 keer voor komen."
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:73
+#: apps/zotonic_mod_search/src/support/search_query.erl:789
 msgid "Unknown category"
 msgstr "Onbekende categorie"
 
@@ -7203,7 +7175,15 @@ msgstr "Je hebt geen rechten om de Embedly-instellingen te bewerken."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "your Embedly app dashboard"
-msgstr "Je Embedly app dashboard"
+msgstr "je Embedly app dashboard"
+
+#: apps/zotonic_mod_search/src/support/search_query.erl:964
+msgid "Unknown predicate"
+msgstr "Onbekend predicaat"
+
+#: apps/zotonic_mod_search/src/support/search_query.erl:795
+msgid "is not a category"
+msgstr "is geen categorie"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "Add a noindex, nofollow element to all pages."
@@ -7555,16 +7535,15 @@ msgstr "registreer voor een gebruikersnaam en wachtwoord"
 
 #: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:5
 msgid "Certificate Authority"
-msgstr ""
+msgstr "Certificaat Autoriteit"
 
 #: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:17
-#, fuzzy
 msgid "This certificate is located in"
-msgstr "De certificaten bevinden zich in"
+msgstr "Dit certificaat bevindt zich in"
 
 #: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:11
 msgid "This certificate is provided by a certificate authority."
-msgstr ""
+msgstr "Dit certificaat wordt verstrekt door een certificaatautoriteit."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:46
 msgid "Certificates are automatically renewed before they expire."
@@ -7581,22 +7560,23 @@ msgstr ""
 "nog eens."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:47
-#, fuzzy
 msgid ""
 "If there are problems requesting a Let’s Encrypt certificate then check:"
 msgstr ""
-"Sorry, er was een fout bij het ophalen van het Let's Encrypt certificaat."
+"Als er problemen zijn met het aanvragen van een Let's Encrypt-certificaat, "
+"controleer dan:"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:55
 msgid ""
 "If you want different hostnames in the certificate then request a new "
 "certificate below."
 msgstr ""
+"Als u andere hostnamen in het certificaat wilt hebben, vraag dan hieronder "
+"een nieuw certificaat aan."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:10
-#, fuzzy
 msgid "Let’s Encrypt Certificate"
-msgstr "SSL Let’s Encrypt certificaat"
+msgstr "Let’s Encrypt certificaat"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:4
 msgid "Let’s Encrypt certificate request was successful!"
@@ -7639,7 +7619,7 @@ msgstr "Certificaten worden aangevraagd"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:51
 msgid "Retry the request below."
-msgstr ""
+msgstr "Probeer het onderstaande verzoek opnieuw."
 
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141
 msgid "SSL Let’s Encrypt Certificate"
@@ -7990,6 +7970,9 @@ msgid ""
 "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. "
 "E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
 msgstr ""
+"Als u de <i>waarde</i> wilt opslaan maar het <i>antwoord</i> wilt tonen, "
+"gebruik dan de waarde#answer. Bijv. <i>2019#Afgestudeeerd in 2019</i> zal "
+"2019 worden opgeslagen in de resultaten."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:26./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
@@ -8372,9 +8355,8 @@ msgid "The earth is flat."
 msgstr "De aarde is plat."
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
-#, fuzzy
 msgid "The following has been filled in:"
-msgstr "De volgende survey is ingevuld:"
+msgstr "Het volgende is ingevuld:"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
@@ -8584,7 +8566,7 @@ msgstr "Weet je zeker dat je deze taal wilt verwijderen?"
 msgid "Available sub-languages"
 msgstr "Beschikbare subtalen"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:434
+#: apps/zotonic_mod_translation/src/mod_translation.erl:435
 msgid ""
 "Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
 "en/latest/developer-guide/translation.html\">gettext is not installed</a>."
@@ -8626,9 +8608,8 @@ msgid "Dutch"
 msgstr "Nederlands"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
-#, fuzzy
 msgid "Editable"
-msgstr "Bewerk toegangsregel"
+msgstr "Wijzigbaar"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:96
 msgid "English"
@@ -8685,12 +8666,16 @@ msgid ""
 "If a language is set to 'off' then edited texts will loose their translation "
 "in that lanuage."
 msgstr ""
+"Als een taal op 'uit' staat, verliezen bewerkte teksten hun vertaling in die "
+"taal."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
 msgid ""
 "If a language is set to 'view' or 'editable' then texts for that language "
 "are editable in the admin."
 msgstr ""
+"Als een taal is ingesteld op 'bekijken' of 'bewerkbaar' dan zijn teksten "
+"voor die taal bewerkbaar in de admin."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:116
 msgid ""
@@ -8730,9 +8715,8 @@ msgid "Norwegian"
 msgstr "Noors"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:26
-#, fuzzy
 msgid "Off"
-msgstr "Uitloggen"
+msgstr "Uit"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:9
 msgid "Part of"
@@ -8754,7 +8738,7 @@ msgstr ""
 "Herlaad alle vertalingen van de modules en de site. All templates worden "
 "opnieuw gecompileerd."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:445
+#: apps/zotonic_mod_translation/src/mod_translation.erl:446
 msgid "Reloading all .po files in the background."
 msgstr "Alle .po bestanden worden opnieuw geladen in een achtergrondproces."
 
@@ -8806,29 +8790,27 @@ msgstr "Selecteer je voorkeurstaal."
 msgid "Show the language in the URL"
 msgstr "Toon de taal in de URL"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:362./apps/zotonic_mod_translation/src/mod_translation.erl:409
-#, fuzzy
+#: apps/zotonic_mod_translation/src/mod_translation.erl:363./apps/zotonic_mod_translation/src/mod_translation.erl:410
 msgid "Sorry, could not change the language."
-msgstr "Sorry, je hebt geen toestemming om de taallijst te wijzigen."
+msgstr "Sorry, kon de taal niet veranderen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:536
-#, fuzzy
+#: apps/zotonic_mod_translation/src/mod_translation.erl:537
 msgid "Sorry, you can't disable the default language."
-msgstr "Sorry, je hebt geen toestemming om de standaardtaal uit te schakelen."
+msgstr "Sorry, je kunt de standaard taal niet uitschakelen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378./apps/zotonic_mod_translation/src/mod_translation.erl:389./apps/zotonic_mod_translation/src/mod_translation.erl:412
+#: apps/zotonic_mod_translation/src/mod_translation.erl:379./apps/zotonic_mod_translation/src/mod_translation.erl:390./apps/zotonic_mod_translation/src/mod_translation.erl:413
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Sorry, je hebt geen toestemming om de taallijst te wijzigen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:447
+#: apps/zotonic_mod_translation/src/mod_translation.erl:448
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Sorry, je hebt geen toestemming om talen opnieuw te laden."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:437
+#: apps/zotonic_mod_translation/src/mod_translation.erl:438
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Sorry, je hebt geen toestemming om talen te scannen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:365./apps/zotonic_mod_translation/src/mod_translation.erl:501
+#: apps/zotonic_mod_translation/src/mod_translation.erl:366./apps/zotonic_mod_translation/src/mod_translation.erl:502
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Sorry, je hebt geen toestemming om de standaard taal in te stellen."
 
@@ -8836,7 +8818,7 @@ msgstr "Sorry, je hebt geen toestemming om de standaard taal in te stellen."
 msgid "Spanish"
 msgstr "Spaans"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:431
+#: apps/zotonic_mod_translation/src/mod_translation.erl:432
 msgid "Started building the .pot files. This may take a while..."
 msgstr ""
 "Gestart met het genereren van .pot bestanden. Dit kan enige tijd duren..."
@@ -8867,9 +8849,9 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr "Vertaal deze pagina in andere talen."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:801
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:804
 msgid "Translation"
-msgstr "Vertalingen"
+msgstr "Vertaling"
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:6
 msgid "Translations"
@@ -8948,7 +8930,6 @@ msgid "Log in with Twitter"
 msgstr "Inloggen met Twitter"
 
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra_email_reset.tpl:2
-#, fuzzy
 msgid "Log on with Twitter"
 msgstr "Inloggen met Twitter"
 
@@ -9245,9 +9226,8 @@ msgid "The file or directory already exists:"
 msgstr "Het bestand of de map bestaat al:"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:56
-#, fuzzy
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
-msgstr "De hostnaam is onbekend, controleer uw DNS of /etc/hosts bestand."
+msgstr "De hostnaam is onbekend, controleer uw DNS of /etc/hosts bestand"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:462
 msgid "The parent directory does not exist:"
@@ -9339,7 +9319,6 @@ msgid "Flush and reload all settings, templates etc."
 msgstr "Flush en herlaad alle instellingen, sjablonen enz."
 
 #: apps/zotonic_site_status/priv/templates/error.400.tpl:11
-#, fuzzy
 msgid ""
 "If you feel that you are here by mistake,\n"
 "                please hit the \"back\" button in your browser or\n"
@@ -9350,7 +9329,6 @@ msgstr ""
 "                probeer een ander adres."
 
 #: apps/zotonic_site_status/priv/templates/home.tpl:14
-#, fuzzy
 msgid ""
 "If you feel that you are here by mistake,\n"
 "            please hit the \"back\" button in your browser or\n"
@@ -9432,7 +9410,6 @@ msgid "Waiting"
 msgstr "Wachtend"
 
 #: apps/zotonic_site_status/priv/templates/error.400.tpl:8
-#, fuzzy
 msgid ""
 "Welcome, visitor! The page you are\n"
 "                currently looking at is the default page for a\n"
@@ -9442,15 +9419,13 @@ msgid ""
 "                correctly."
 msgstr ""
 "Welkom, bezoeker! De pagina die u bent\n"
-"                waar momenteel naar wordt gekeken is de standaardpagina voor "
-"een\n"
-"                Zotonic web server. Het feit dat je ziet...\n"
+"                op dit moment kijken naar is de standaard pagina voor een\n"
+"                Zotonic webserver. Het feit dat je ziet\n"
 "                deze pagina kan betekenen dat de website die u bent\n"
 "                proberen te bezoeken is niet geconfigureerd\n"
-"                correct."
+"                goed."
 
 #: apps/zotonic_site_status/priv/templates/home.tpl:11
-#, fuzzy
 msgid ""
 "Welcome, visitor! The page you are\n"
 "            currently looking at is the default page for a\n"
@@ -9460,12 +9435,11 @@ msgid ""
 "            correctly."
 msgstr ""
 "Welkom, bezoeker! De pagina die u bent\n"
-"            waar momenteel naar wordt gekeken is de standaardpagina voor "
-"een\n"
-"            Zotonic web server. Het feit dat je ziet...\n"
+"            op dit moment kijken naar is de standaard pagina voor een\n"
+"            Zotonic webserver. Het feit dat je ziet\n"
 "            deze pagina kan betekenen dat de website die u bent\n"
 "   proberen te bezoeken is niet geconfigureerd\n"
-"            correct."
+"            goed."
 
 #: apps/zotonic_site_status/priv/templates/logon.tpl:34
 msgid "You can find the password in ~/.zotonic/[version]/zotonic.config."
@@ -9524,12 +9498,6 @@ msgstr "stop"
 
 #~ msgid "New page"
 #~ msgstr "Nieuwe pagina"
-
-#~ msgid "Unknown predicate"
-#~ msgstr "Onbekend predicaat"
-
-#~ msgid "is not a category"
-#~ msgstr "is geen categorie"
 
 #~ msgid ""
 #~ "List of possible answers, one per line. Use <em>value#answer</em> to "

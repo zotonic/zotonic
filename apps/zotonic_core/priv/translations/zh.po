@@ -24,75 +24,75 @@ msgstr ""
 msgid "Website"
 msgstr "网站"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268
+#: apps/zotonic_core/src/support/z_datetime.erl:272
 msgid "ago"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 #, fuzzy
 msgid "day"
 msgstr "五月"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 msgid "days"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
+#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 msgid "hour"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
+#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268
+#: apps/zotonic_core/src/support/z_datetime.erl:272
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 #, fuzzy
 msgid "in"
 msgstr "主要"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 msgid "minute"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:319
+#: apps/zotonic_core/src/support/z_datetime.erl:323
 #, fuzzy
 msgid "moments"
 msgstr "评论"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 #, fuzzy
 msgid "month"
 msgstr "每月"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 #, fuzzy
 msgid "months"
 msgstr "每月"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268./apps/zotonic_core/src/support/z_datetime.erl:318
+#: apps/zotonic_core/src/support/z_datetime.erl:272./apps/zotonic_core/src/support/z_datetime.erl:322
 msgid "now"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:320./apps/zotonic_core/src/support/z_datetime.erl:323
+#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "second"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:320./apps/zotonic_core/src/support/z_datetime.erl:323
+#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "seconds"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330
+#: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "year"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330
+#: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "years"
 msgstr ""
 
@@ -1863,7 +1863,7 @@ msgstr "显示为"
 msgid "Show page on multiple paths"
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:131
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:133
 msgid "Something went wrong. Sorry."
 msgstr "出错了。"
 
@@ -7191,6 +7191,7 @@ msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr ""
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:73
+#: apps/zotonic_mod_search/src/support/search_query.erl:789
 #, fuzzy
 msgid "Unknown category"
 msgstr "到分类"
@@ -7242,6 +7243,16 @@ msgstr "没有权限修改这个媒体条目。"
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "your Embedly app dashboard"
 msgstr ""
+
+#: apps/zotonic_mod_search/src/support/search_query.erl:964
+#, fuzzy
+msgid "Unknown predicate"
+msgstr "创建谓词"
+
+#: apps/zotonic_mod_search/src/support/search_query.erl:795
+#, fuzzy
+msgid "is not a category"
+msgstr "到分类"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "Add a noindex, nofollow element to all pages."
@@ -8646,7 +8657,7 @@ msgstr "确认删除语言"
 msgid "Available sub-languages"
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:434
+#: apps/zotonic_mod_translation/src/mod_translation.erl:435
 msgid ""
 "Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
 "en/latest/developer-guide/translation.html\">gettext is not installed</a>."
@@ -8816,7 +8827,7 @@ msgid ""
 "recompiled."
 msgstr "重新加载模块和站点的所有翻页。所有模版将被重新编译。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:445
+#: apps/zotonic_mod_translation/src/mod_translation.erl:446
 msgid "Reloading all .po files in the background."
 msgstr ""
 
@@ -8866,29 +8877,29 @@ msgstr "选择首选语言。"
 msgid "Show the language in the URL"
 msgstr "将当前语言表示在 URL 里"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:362./apps/zotonic_mod_translation/src/mod_translation.erl:409
+#: apps/zotonic_mod_translation/src/mod_translation.erl:363./apps/zotonic_mod_translation/src/mod_translation.erl:410
 #, fuzzy
 msgid "Sorry, could not change the language."
 msgstr "对不起，无法发送验证信息。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:536
+#: apps/zotonic_mod_translation/src/mod_translation.erl:537
 #, fuzzy
 msgid "Sorry, you can't disable the default language."
 msgstr "对不起，无法发送验证信息。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378./apps/zotonic_mod_translation/src/mod_translation.erl:389./apps/zotonic_mod_translation/src/mod_translation.erl:412
+#: apps/zotonic_mod_translation/src/mod_translation.erl:379./apps/zotonic_mod_translation/src/mod_translation.erl:390./apps/zotonic_mod_translation/src/mod_translation.erl:413
 msgid "Sorry, you don't have permission to change the language list."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:447
+#: apps/zotonic_mod_translation/src/mod_translation.erl:448
 msgid "Sorry, you don't have permission to reload translations."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:437
+#: apps/zotonic_mod_translation/src/mod_translation.erl:438
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:365./apps/zotonic_mod_translation/src/mod_translation.erl:501
+#: apps/zotonic_mod_translation/src/mod_translation.erl:366./apps/zotonic_mod_translation/src/mod_translation.erl:502
 msgid "Sorry, you don't have permission to set the default language."
 msgstr ""
 
@@ -8896,7 +8907,7 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:431
+#: apps/zotonic_mod_translation/src/mod_translation.erl:432
 msgid "Started building the .pot files. This may take a while..."
 msgstr ""
 
@@ -8923,7 +8934,7 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr "翻译本页面到其他语言"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:801
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:804
 msgid "Translation"
 msgstr "翻译"
 
@@ -9567,14 +9578,6 @@ msgstr ""
 
 #~ msgid "New page"
 #~ msgstr "新建页面"
-
-#, fuzzy
-#~ msgid "Unknown predicate"
-#~ msgstr "创建谓词"
-
-#, fuzzy
-#~ msgid "is not a category"
-#~ msgstr "到分类"
 
 #~ msgid "Active modules"
 #~ msgstr "已启用模块"

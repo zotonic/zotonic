@@ -24,74 +24,74 @@ msgstr ""
 msgid "Website"
 msgstr "Sitio web"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268
+#: apps/zotonic_core/src/support/z_datetime.erl:272
 msgid "ago"
 msgstr "hace"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 msgid "day"
 msgstr "día"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 #, fuzzy
 msgid "days"
 msgstr ""
 "<p>Tienes </b> <span class=\"pregcalc-result-w\">x</span> semanas y <span "
 "class=\"pregcalc-result-d\">x</span> días.</p>"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
+#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 msgid "hour"
 msgstr "horas"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
+#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "horas"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268
+#: apps/zotonic_core/src/support/z_datetime.erl:272
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "en"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 msgid "minute"
 msgstr "minuto"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "minutos"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:319
+#: apps/zotonic_core/src/support/z_datetime.erl:323
 #, fuzzy
 msgid "moments"
 msgstr "instantes"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "month"
 msgstr "mes"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "months"
 msgstr "meses"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268./apps/zotonic_core/src/support/z_datetime.erl:318
+#: apps/zotonic_core/src/support/z_datetime.erl:272./apps/zotonic_core/src/support/z_datetime.erl:322
 msgid "now"
 msgstr "ahora"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:320./apps/zotonic_core/src/support/z_datetime.erl:323
+#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "second"
 msgstr "segundo"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:320./apps/zotonic_core/src/support/z_datetime.erl:323
+#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "seconds"
 msgstr "Segundos"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330
+#: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "year"
 msgstr "año"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330
+#: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "years"
 msgstr "años"
 
@@ -2074,7 +2074,7 @@ msgstr "Mostrar alerta"
 msgid "Show page on multiple paths"
 msgstr "Mostrar la página en varias rutas"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:131
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:133
 #, fuzzy
 msgid "Something went wrong. Sorry."
 msgstr "Algo salió mal. Lo siento."
@@ -8222,6 +8222,7 @@ msgstr ""
 "aparecer una vez."
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:73
+#: apps/zotonic_mod_search/src/support/search_query.erl:789
 #, fuzzy
 msgid "Unknown category"
 msgstr "Categoría desconocida"
@@ -8284,6 +8285,15 @@ msgstr "No tiene permiso para cambiar la configuración de Embeddedly."
 #, fuzzy
 msgid "your Embedly app dashboard"
 msgstr "el panel de control de la aplicación Embedly"
+
+#: apps/zotonic_mod_search/src/support/search_query.erl:964
+#, fuzzy
+msgid "Unknown predicate"
+msgstr "Predicado desconocido"
+
+#: apps/zotonic_mod_search/src/support/search_query.erl:795
+msgid "is not a category"
+msgstr "no es una categoría"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "Add a noindex, nofollow element to all pages."
@@ -9858,7 +9868,7 @@ msgstr "¿Estás seguro de que quieres eliminar este idioma?"
 msgid "Available sub-languages"
 msgstr "Subidiomas disponibles"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:434
+#: apps/zotonic_mod_translation/src/mod_translation.erl:435
 #, fuzzy
 msgid ""
 "Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
@@ -10048,7 +10058,7 @@ msgstr ""
 "Recargue todas las traducciones de los módulos y del sitio. Todas las "
 "plantillas serán recompiladas."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:445
+#: apps/zotonic_mod_translation/src/mod_translation.erl:446
 #, fuzzy
 msgid "Reloading all .po files in the background."
 msgstr "Recargar todos los archivos.po en segundo plano."
@@ -10107,32 +10117,32 @@ msgstr "Seleccione su idioma preferido."
 msgid "Show the language in the URL"
 msgstr "Mostrar el idioma en la URL"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:362./apps/zotonic_mod_translation/src/mod_translation.erl:409
+#: apps/zotonic_mod_translation/src/mod_translation.erl:363./apps/zotonic_mod_translation/src/mod_translation.erl:410
 #, fuzzy
 msgid "Sorry, could not change the language."
 msgstr "Lo sentimos, no tiene permiso para cambiar la lista de idiomas."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:536
+#: apps/zotonic_mod_translation/src/mod_translation.erl:537
 #, fuzzy
 msgid "Sorry, you can't disable the default language."
 msgstr "Lo sentimos, no puedes deshabilitar el idioma por defecto."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378./apps/zotonic_mod_translation/src/mod_translation.erl:389./apps/zotonic_mod_translation/src/mod_translation.erl:412
+#: apps/zotonic_mod_translation/src/mod_translation.erl:379./apps/zotonic_mod_translation/src/mod_translation.erl:390./apps/zotonic_mod_translation/src/mod_translation.erl:413
 #, fuzzy
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Lo sentimos, no tiene permiso para cambiar la lista de idiomas."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:447
+#: apps/zotonic_mod_translation/src/mod_translation.erl:448
 #, fuzzy
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Lo sentimos, no tiene permiso para recargar las traducciones."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:437
+#: apps/zotonic_mod_translation/src/mod_translation.erl:438
 #, fuzzy
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Lo sentimos, no tiene permiso para escanear las traducciones."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:365./apps/zotonic_mod_translation/src/mod_translation.erl:501
+#: apps/zotonic_mod_translation/src/mod_translation.erl:366./apps/zotonic_mod_translation/src/mod_translation.erl:502
 #, fuzzy
 msgid "Sorry, you don't have permission to set the default language."
 msgstr ""
@@ -10142,7 +10152,7 @@ msgstr ""
 msgid "Spanish"
 msgstr "Español"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:431
+#: apps/zotonic_mod_translation/src/mod_translation.erl:432
 #, fuzzy
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Comenzó a construir los archivos.pot. Esto puede tardar un poco...."
@@ -10175,7 +10185,7 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr "Traducir esta página a otros idiomas."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:801
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:804
 msgid "Translation"
 msgstr "Traducción"
 
@@ -10942,13 +10952,6 @@ msgstr "Alto"
 #, fuzzy
 #~ msgid "New page"
 #~ msgstr "Nueva página"
-
-#, fuzzy
-#~ msgid "Unknown predicate"
-#~ msgstr "Predicado desconocido"
-
-#~ msgid "is not a category"
-#~ msgstr "no es una categoría"
 
 #, fuzzy
 #~ msgid ""

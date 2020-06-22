@@ -25,73 +25,73 @@ msgstr ""
 msgid "Website"
 msgstr "Witryna internetowa"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268
+#: apps/zotonic_core/src/support/z_datetime.erl:272
 msgid "ago"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 #, fuzzy
 msgid "day"
 msgstr "Maj"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
+#: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 msgid "days"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
+#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 msgid "hour"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
+#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268
+#: apps/zotonic_core/src/support/z_datetime.erl:272
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 #, fuzzy
 msgid "in"
 msgstr "Dane podstawowe"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 msgid "minute"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:322./apps/zotonic_core/src/support/z_datetime.erl:325
+#: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:319
+#: apps/zotonic_core/src/support/z_datetime.erl:323
 #, fuzzy
 msgid "moments"
 msgstr "Komentarze"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "month"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
+#: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "months"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:268./apps/zotonic_core/src/support/z_datetime.erl:318
+#: apps/zotonic_core/src/support/z_datetime.erl:272./apps/zotonic_core/src/support/z_datetime.erl:322
 msgid "now"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:320./apps/zotonic_core/src/support/z_datetime.erl:323
+#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "second"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:320./apps/zotonic_core/src/support/z_datetime.erl:323
+#: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "seconds"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330
+#: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "year"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:330
+#: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "years"
 msgstr ""
 
@@ -1873,7 +1873,7 @@ msgstr "Pokaż jako"
 msgid "Show page on multiple paths"
 msgstr ""
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:131
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:133
 msgid "Something went wrong. Sorry."
 msgstr "Coś poszło nie tak. Wybacz."
 
@@ -7277,6 +7277,7 @@ msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr ""
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:73
+#: apps/zotonic_mod_search/src/support/search_query.erl:789
 #, fuzzy
 msgid "Unknown category"
 msgstr "Do kategorii"
@@ -7328,6 +7329,16 @@ msgstr "Nie masz uprawnień do modyfikowania tego obiektu."
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "your Embedly app dashboard"
 msgstr ""
+
+#: apps/zotonic_mod_search/src/support/search_query.erl:964
+#, fuzzy
+msgid "Unknown predicate"
+msgstr "Stwórz predykat"
+
+#: apps/zotonic_mod_search/src/support/search_query.erl:795
+#, fuzzy
+msgid "is not a category"
+msgstr "Do kategorii"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "Add a noindex, nofollow element to all pages."
@@ -8738,7 +8749,7 @@ msgstr "Czy na pewno chcesz usunąć obsługę języka"
 msgid "Available sub-languages"
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:434
+#: apps/zotonic_mod_translation/src/mod_translation.erl:435
 msgid ""
 "Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
 "en/latest/developer-guide/translation.html\">gettext is not installed</a>."
@@ -8910,7 +8921,7 @@ msgstr ""
 "Przeładuje tłumaczenia serwisu i wszystkich modułów. Wszystkie szablony "
 "zostaną przebudowane."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:445
+#: apps/zotonic_mod_translation/src/mod_translation.erl:446
 msgid "Reloading all .po files in the background."
 msgstr ""
 
@@ -8961,29 +8972,29 @@ msgstr "Wybierz swój domyślny język."
 msgid "Show the language in the URL"
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:362./apps/zotonic_mod_translation/src/mod_translation.erl:409
+#: apps/zotonic_mod_translation/src/mod_translation.erl:363./apps/zotonic_mod_translation/src/mod_translation.erl:410
 #, fuzzy
 msgid "Sorry, could not change the language."
 msgstr "Wybacz, nie jestem w stanie wysłać wiadomości weryfikacyjnej"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:536
+#: apps/zotonic_mod_translation/src/mod_translation.erl:537
 #, fuzzy
 msgid "Sorry, you can't disable the default language."
 msgstr "Wybacz, nie jestem w stanie wysłać wiadomości weryfikacyjnej"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:378./apps/zotonic_mod_translation/src/mod_translation.erl:389./apps/zotonic_mod_translation/src/mod_translation.erl:412
+#: apps/zotonic_mod_translation/src/mod_translation.erl:379./apps/zotonic_mod_translation/src/mod_translation.erl:390./apps/zotonic_mod_translation/src/mod_translation.erl:413
 msgid "Sorry, you don't have permission to change the language list."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:447
+#: apps/zotonic_mod_translation/src/mod_translation.erl:448
 msgid "Sorry, you don't have permission to reload translations."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:437
+#: apps/zotonic_mod_translation/src/mod_translation.erl:438
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:365./apps/zotonic_mod_translation/src/mod_translation.erl:501
+#: apps/zotonic_mod_translation/src/mod_translation.erl:366./apps/zotonic_mod_translation/src/mod_translation.erl:502
 msgid "Sorry, you don't have permission to set the default language."
 msgstr ""
 
@@ -8991,7 +9002,7 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:431
+#: apps/zotonic_mod_translation/src/mod_translation.erl:432
 msgid "Started building the .pot files. This may take a while..."
 msgstr ""
 
@@ -9019,7 +9030,7 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr "Dodaj informację o innych wersjach językowych tej strony."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:801
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:804
 msgid "Translation"
 msgstr "Tłumaczenia"
 
@@ -9667,14 +9678,6 @@ msgstr ""
 
 #~ msgid "New page"
 #~ msgstr "Nowa strona"
-
-#, fuzzy
-#~ msgid "Unknown predicate"
-#~ msgstr "Stwórz predykat"
-
-#, fuzzy
-#~ msgid "is not a category"
-#~ msgstr "Do kategorii"
 
 #~ msgid "Active modules"
 #~ msgstr "Aktywne moduły"
