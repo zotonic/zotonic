@@ -1,5 +1,15 @@
 #!/usr/bin/env sh
 
-export ZOTONIC=${ZOTONIC:=$(cd `dirname $0`/..;pwd)}
+readonly ZOTONIC=${ZOTONIC:=$(\cd `\dirname $0`/..;\pwd)}
+export   ZOTONIC
 
-./apps/zotonic_launcher/bin/zotonic "$@"
+# Protect PATH and ZOTONIC environment variables to be changed at runtime
+readonly PATH
+for var in $(\env | \grep ZOTONIC_ | \cut -d '=' -f 1)
+do
+	readonly "${var}"
+	export "${var}"
+done
+# Start launcher
+cd ./apps/zotonic_launcher/bin/ || \exit 1
+exec ./zotonic "$@"
