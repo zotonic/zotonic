@@ -91,7 +91,7 @@ hostname:
             proxy_set_header  Upgrade           $http_upgrade;
             proxy_set_header  Connection        "upgrade";
 
-            client_max_body_size       50m;
+            client_max_body_size       0;
             client_body_buffer_size    128k;
 
             proxy_connect_timeout      90;
