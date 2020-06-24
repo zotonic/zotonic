@@ -14,6 +14,11 @@
 <div class="row">
 
 <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+    {% include "stat_panel/erlang.tpl" %}
+</div>
+
+{#
+<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
   <div class="panel panel-default">
     <div class="panel-heading">Run Queue</div>
 
@@ -32,6 +37,7 @@
     </div>
   </div>
 </div>
+#}
 
 <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
     <div class="panel panel-default">

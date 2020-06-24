@@ -276,7 +276,6 @@ add_system_reporter() ->
 datapoints() ->
     [counter, spiral, gauge, histogram, meter].
 
-
 datapoints(counter) ->[value];
 datapoints(spiral) -> [count, one];
 datapoints(gauge) -> [value];
