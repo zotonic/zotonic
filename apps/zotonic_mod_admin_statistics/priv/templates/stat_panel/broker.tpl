@@ -10,6 +10,7 @@
         ["Subscribes/min", "broker-subscribe_one"],
         ["Publishes/min", "broker-publish_one"],
         ["Subscribers", "broker-destinations"],
+        ["Details", ""],
         ["Nodes", "broker-nodes"],
         ["Edges", "broker-edges"],
         ["Wildcards", "broker-wildcards"],
