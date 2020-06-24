@@ -98,6 +98,10 @@
     drop_schema/1
 ]).
 
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
+
 -type sql() :: string() | iodata().
 -type query_error() :: nodb | enoent | epgsql:query_error() | term().
 -type query_timeout() :: integer().
@@ -624,6 +628,7 @@ insert(Table, Parameters, Context) ->
     assert_table_name(Table),
     Cols = column_names_bin(Table, Context),
     BinParams = ensure_binary_keys(Parameters),
+    ?DEBUG({Cols, BinParams}),
     case prepare_cols(Cols, BinParams) of
         {ok, InsertProps} ->
             InsertProps1 = case maps:find(<<"props">>, InsertProps) of
@@ -798,19 +803,25 @@ prepare_cols(Cols, Props) ->
                 0 ->
                     {ok, CProps};
                 _  ->
-                    PropsCol = case maps:get(<<"props">>, CProps, undefined) of
-                        PPs when is_list(PPs) ->
-                            maps:merge(z_props:from_props(PPs), PProps);
-                        PPs when is_map(PPs) ->
-                            maps:merge(PPs, PProps);
-                        _ ->
-                            PProps
-                    end,
-                    {ok, CProps#{ <<"props">> => PropsCol }}
+                    case lists:member(<<"props_json">>, Cols) of
+                        true ->
+                            PropsCol = merge_properties(maps:get(<<"props_json">>, CProps, undefined), PProps),
+                            {ok, CProps#{ <<"props_json">> => PropsCol }};
+                        false ->
+                            PropsCol = merge_properties(maps:get(<<"props">>, CProps, undefined), PProps),
+                            {ok, CProps#{ <<"props">> => PropsCol }}
+                    end
             end;
         {error, _} = Error ->
             Error
     end.
+
+merge_properties(Properties, Props) when is_list(Properties) ->
+    maps:merge(z_props:from_props(Properties), Props);
+merge_properties(Properties, Props) when is_map(Properties) ->
+    maps:merge(Properties, Props);
+merge_properties(_, Props) ->
+    Props.
 
 split_props(Props, Cols) ->
     {CProps, PProps} = lists:foldl(
@@ -830,7 +841,7 @@ split_props(Props, Cols) ->
         0 ->
             {ok, {CProps, PProps}};
         _  ->
-            case lists:member(<<"props">>, Cols) of
+            case lists:member(<<"props_json">>, Cols) orelse lists:member(<<"props">>, Cols) of
                 true ->
                     {ok, {CProps, PProps}};
                 false ->
@@ -1214,3 +1225,69 @@ equery1(DbDriver, C, Sql, Parameters, Timeout) ->
         {ok, _RowCount, _Columns, [Row|_]} -> {ok, element(1, Row)};
         Other -> Other
     end.
+
+
+-ifdef(TEST).
+
+prepare_cols_test() ->
+    ?assertEqual({ok, #{}}, prepare_cols([], #{})),
+
+    % Props go to the right place
+    ?assertEqual({ok, #{<<"a">> => <<"a value">>}},
+                 prepare_cols([<<"a">>, <<"b">>], #{<<"a">> => <<"a value">>})),
+    ?assertEqual({ok, #{<<"a">> => <<"a value">>, <<"b">> => <<"b value">>}},
+                 prepare_cols([<<"a">>, <<"b">>], #{<<"a">> => <<"a value">>,
+                                                    <<"b">> => <<"b value">>})),
+
+    % Column is not known
+    ?assertEqual({error, {unknown_column,[<<"c">>]}},
+                 prepare_cols([<<"a">>, <<"b">>], #{<<"a">> => <<"a value">>,
+                                                    <<"c">> => <<"c value">>})),
+
+    % When there is a props column, unknown properties go to that column.
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props">> => #{<<"c">> => <<"c value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>], #{<<"a">> => <<"a value">>,
+                                                                 <<"c">> => <<"c value">>})),
+
+    % An existing props map will be merged with any new values.
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props">> => #{<<"c">> => <<"c value">>,
+                                        <<"d">> => <<"d value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>],
+                              #{<<"a">> => <<"a value">>,
+                                <<"c">> => <<"c value">>,
+                                <<"props">> => #{<<"d">> => <<"d value">>}})),
+
+    % When there is a props_json column, unknown properties go to that column.
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props_json">> => #{<<"c">> => <<"c value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>, <<"props_json">>],
+                              #{<<"a">> => <<"a value">>,
+                                <<"c">> => <<"c value">>})),
+
+    % When there is a props_json column, that gets priority
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props_json">> => #{<<"c">> => <<"c value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>, <<"props_json">>],
+                              #{<<"a">> => <<"a value">>, <<"c">> => <<"c value">>})),
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props_json">> => #{<<"c">> => <<"c value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props_json">>],
+                              #{<<"a">> => <<"a value">>, <<"c">> => <<"c value">>})),
+
+    % existing props and props_json fields are merged
+    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
+                       <<"props_json">> => #{<<"c">> => <<"c value">>,
+                                             <<"e">> => <<"e value">>}}},
+                 prepare_cols([<<"a">>, <<"b">>, <<"props">>, <<"props_json">>],
+                              #{<<"a">> => <<"a value">>,
+                                <<"c">> => <<"c value">>,
+                                <<"props_json">> => #{<<"e">> => <<"e value">>}
+                               })),
+
+
+    ok.
+
+
+-endif.
