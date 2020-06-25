@@ -488,12 +488,19 @@ cols_map(Cols, Rows, IsMergeProps, Keys) ->
         fun(Row) ->
             lists:foldl(
                 fun
-                    ({Nr, <<"props">>}, Acc) when IsMergeProps ->
+                    ({Nr, Col}, Acc) when (Col =:= props_json orelse Col =:= <<"props_json">>) and IsMergeProps ->
+                        JSON = erlang:element(Nr, Row),
+                        case is_binary(JSON) of
+                            true ->
+                                map_merge_props(jsxrecord:decode(JSON), Acc);
+                            false ->
+                                Acc
+                        end;
+
+                    ({Nr, Col}, Acc) when (Col =:= props orelse Col =:= <<"props">>) and IsMergeProps ->
                         Props = erlang:element(Nr, Row),
                         map_merge_props(Props, Acc);
-                    ({Nr, props}, Acc) when IsMergeProps ->
-                        Props = erlang:element(Nr, Row),
-                        map_merge_props(Props, Acc);
+
                     ({Nr, Col}, Acc) ->
                         Acc#{ Col => erlang:element(Nr, Row) }
                 end,
