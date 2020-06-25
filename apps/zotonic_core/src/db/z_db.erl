@@ -82,6 +82,7 @@
     columns/2,
     column_names/2,
     column_names_bin/2,
+    get_current_props/3,
     update_sequence/3,
     prepare_database/1,
     table_exists/2,
@@ -656,7 +657,7 @@ insert(Table, Parameters, Context) ->
                                not HasPropsJSON and not HasProps ->
                                    InsertProps
                            end,
-            
+
             %% Build the SQL insert statement
             {ColNames, ColParams} = lists:unzip( maps:to_list(InsertProps1) ),
             Sql = iolist_to_binary([
@@ -706,22 +707,34 @@ update(Table, Id, Parameters, Context) when is_map(Parameters), is_list(Table) -
     case prepare_cols(Cols, BinParams) of
         {ok, UpdateProps} ->
             F = fun(C) ->
-                UpdateProps1 = case maps:get(<<"props">>, UpdateProps, undefined) of
-                    NewProps when is_map(NewProps) ->
-                        % Merge the new props with the props in the database
-                        case equery1(DbDriver, C, "select props from \""++Table++"\" where id = $1", [Id]) of
-                            {ok, OldProps} when is_list(OldProps) ->
-                                NewProps1 = maps:merge(z_props:from_props(OldProps), NewProps),
-                                UpdateProps#{ <<"props">> => ?DB_PROPS( filter_empty_props(NewProps1) ) };
-                            {ok, OldProps} when is_map(OldProps) ->
-                                NewProps1 = maps:merge(OldProps, NewProps),
-                                UpdateProps#{ <<"props">> => ?DB_PROPS( filter_empty_props(NewProps1) ) };
-                            _ ->
-                                UpdateProps#{ <<"props">> => ?DB_PROPS( filter_empty_props(NewProps) ) }
-                        end;
-                    _ ->
-                        UpdateProps
-                end,
+                HasProps = maps:is_key(<<"props">>, UpdateProps),
+                HasPropsJSON = maps:is_key(<<"props_json">>, UpdateProps),
+
+                UpdateProps1 = if HasPropsJSON ->
+                                      #{<<"props_json">> := NewProps} = UpdateProps,
+                                      P = case get_current_props(DbDriver, C, Table, Id, Context) of
+                                              {ok, OldProps} ->
+                                                  UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( maps:merge(OldProps, NewProps) ) };
+                                              _ ->
+                                                  UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( NewProps )}
+                                          end,
+                                      %% Clear the existing props column
+                                      case lists:member(<<"props">>, Cols) of
+                                          true -> P#{ <<"props">> => null };
+                                          false -> P
+                                      end;
+                                  HasProps ->
+                                      #{<<"props">> := NewProps} = UpdateProps,
+                                      case get_current_props(DbDriver, C, Table, Id, Context) of
+                                          {ok, OldProps} ->
+                                              UpdateProps#{ <<"props">> => ?DB_PROPS( maps:merge(OldProps, NewProps) )};
+                                          _ ->
+                                              UpdateProps#{ <<"props">> => ?DB_PROPS( NewProps )}
+                                      end;
+                                  not HasPropsJSON and not HasProps ->
+                                      UpdateProps
+                               end,
+
                 {ColNames,Params} = lists:unzip( maps:to_list(UpdateProps1) ),
                 ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
                 ColAssigns = [
@@ -744,6 +757,66 @@ update(Table, Id, Parameters, Context) when is_map(Parameters), is_list(Table) -
         {error, _} = Error ->
             Error
     end.
+
+get_current_props(Table, Id, Context) ->
+    DBDriver = z_context:db_driver(Context),
+    F = fun(C) ->
+                get_current_props(DBDriver, C, Table, Id, Context)
+        end,
+    with_connection(F, Context).
+
+get_current_props(DBDriver, Connection, Table, Id, Context) when is_atom(Table) ->
+    get_current_props(DBDriver, Connection, atom_to_list(Table), Id, Context);
+get_current_props(DBDriver, Connection, Table, Id, Context) ->
+    ColNames = column_names(Table, Context), 
+    get_current_props(DBDriver, Connection,
+                      lists:member(props_json, ColNames), lists:member(props, ColNames), Table, Id, Context).
+
+   
+get_current_props(_DBDriver, _Connection, false, false, _Table, _Id, _Context) ->
+    %% There is no props column
+    {error, no_properties};
+get_current_props(DBDriver, Connection, false, true, Table, Id, _Context) ->
+    %% There is only a props column.
+    case equery1(DBDriver, Connection, "select props from \"" ++ Table ++ "\" where id = $1", [Id]) of
+        {ok, Props} when is_list(Props) -> {ok, z_props:from_props(Props)};
+        {ok, Props} when is_map(Props) -> {ok, Props};
+        _E ->
+            {error, no_properties}
+    end;
+get_current_props(DBDriver, Connection, true, false, Table, Id, _Context) ->
+    %% There is only a props_json column
+    case equery1(DBDriver, Connection, "select props_json from \"" ++ Table ++ "\" where id = $1", [Id]) of
+        {ok, JSON} when is_binary(JSON) ->
+            {ok, jsxrecord:decode(JSON)};
+        _ ->
+            {error, no_properties}
+    end;
+get_current_props(DBDriver, Connection, true, true, Table, Id, _Context) ->
+    %% There is a props_json, and a props column.
+    R = case DBDriver:equery(Connection, "select props, props_json from \"" ++ Table ++ "\" where id = $1", [Id], ?TIMEOUT) of
+        {ok, _Columns, []} -> {error, noresult};
+        {ok, _RowCount, _Columns, []} -> {error, noresult};
+        {ok, _Columns, [Row|_]} -> {ok, element(1, Row), element(2, Row)};
+        {ok, _RowCount, _Columns, [Row|_]} -> {ok, element(1, Row), element(2, Row)};
+        Other -> Other
+    end,
+
+    case R of
+        {ok, Props, undefined} when is_list(Props) ->
+            {ok, z_props:from_props(Props)};
+        {ok, Props, undefined} when is_map(Props) ->
+            {ok, Props};
+        {ok, undefined, JSON} when is_binary(JSON) ->
+            {ok, jsxrecord:decode(JSON)};
+        {ok, Props, JSON} when is_list(Props) andalso is_binary(JSON) ->
+            {ok, maps:merge(z_props:from_props(Props), jsxrecord:decode(JSON))}; 
+        {ok, Props, JSON} when is_map(Props) andalso is_binary(JSON) ->
+            {ok, maps:merge(Props, jsxrecord:decode(JSON))}; 
+        _ ->
+            {error, no_properties}
+    end.
+
 
 ensure_binary_keys(Ps) ->
     maps:fold(
@@ -1241,6 +1314,10 @@ equery1(DbDriver, C, Sql, Parameters, Timeout) ->
         Other -> Other
     end.
 
+
+%%
+%% Tests
+%%
 
 -ifdef(TEST).
 
