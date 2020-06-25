@@ -628,20 +628,35 @@ insert(Table, Parameters, Context) ->
     assert_table_name(Table),
     Cols = column_names_bin(Table, Context),
     BinParams = ensure_binary_keys(Parameters),
-    ?DEBUG({Cols, BinParams}),
     case prepare_cols(Cols, BinParams) of
         {ok, InsertProps} ->
-            InsertProps1 = case maps:find(<<"props">>, InsertProps) of
-                {ok, PropsCol} when is_map(PropsCol) ->
-                    InsertProps#{
-                        <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
-                    };
-                {ok, _} ->
-                    InsertProps;
-                error ->
-                    InsertProps
-            end,
+            HasProps = maps:is_key(<<"props">>, InsertProps), 
+            HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps), 
 
+            InsertProps1 = if HasPropsJSON ->
+                                   #{<<"props_json">> := PropsJSONCol} = InsertProps,
+                                   case is_map(PropsJSONCol) of
+                                       true ->
+                                           InsertProps#{
+                                             <<"props_json">> => ?DB_PROPS_JSON(filter_empty_props(PropsJSONCol))
+                                            };
+                                       false ->
+                                           InsertProps
+                                   end;
+                               HasProps ->
+                                   #{<<"props">> := PropsCol} = InsertProps,
+                                   case is_map(PropsCol) of
+                                       true ->
+                                           InsertProps#{
+                                             <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
+                                            };
+                                       false ->
+                                           InsertProps
+                                   end;
+                               not HasPropsJSON and not HasProps ->
+                                   InsertProps
+                           end,
+            
             %% Build the SQL insert statement
             {ColNames, ColParams} = lists:unzip( maps:to_list(InsertProps1) ),
             Sql = iolist_to_binary([
