@@ -42,7 +42,7 @@ process(<<"POST">>, _AcceptedCT, _ProvidedCT, Context0) ->
     OurSignature = z_string:to_lower(
                         lists:flatten(
                             z_utils:hex_encode(
-                                crypto:hmac(sha, Secret, Body)))),
+                                crypto:mac(hmac, sha, Secret, Body)))),
     if
         XHubSignature =:= OurSignature ->
             lager:debug("[instagram] Hub push received."),
