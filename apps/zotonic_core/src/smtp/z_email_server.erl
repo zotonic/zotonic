@@ -872,8 +872,6 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
             end
     end.
 
-message({error, Reason}) ->
-    message(Reason);
 message(Message) ->
     try
         z_convert:to_binary(Message)
