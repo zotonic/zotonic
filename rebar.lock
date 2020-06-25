@@ -53,7 +53,7 @@
   {git,"https://github.com/zotonic/letsencrypt-erlang.git",
        {ref,"8a52d017e04d16c7f131277f9568e9b9a120bd77"}},
   0},
- {<<"locus">>,{pkg,<<"locus">>,<<"1.9.0-beta">>},0},
+ {<<"locus">>,{pkg,<<"locus">>,<<"1.12.0">>},0},
  {<<"meck">>,{pkg,<<"meck">>,<<"0.8.13">>},0},
  {<<"mimetypes">>,{pkg,<<"mimetypes">>,<<"1.1.0">>},0},
  {<<"mochiweb">>,{pkg,<<"mochiweb">>,<<"2.20.1">>},0},
@@ -95,6 +95,7 @@
        {ref,"e6cd17025d914c318725a0e4d360e74598564a08"}},
   0},
  {<<"termit">>,{pkg,<<"termit">>,<<"1.0.0">>},0},
+ {<<"tls_certificate_check">>,{pkg,<<"tls_certificate_check">>,<<"1.0.0">>},1},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
  {<<"zotonic_ssl">>,{pkg,<<"zotonic_ssl">>,<<"1.0.2">>},0},
  {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.2.2">>},0}]}.
@@ -134,7 +135,7 @@
  {<<"jsx">>, <<"D2F6E5F069C00266CAD52FB15D87C428579EA4D7D73A33669E12679E203329DD">>},
  {<<"jsxrecord">>, <<"7B5FC4690BC029435ACAC73A0501A21EA85AC8838050829CCBD6DF08E4CC37D1">>},
  {<<"lager">>, <<"3402B9A7E473680CA179FC2F1D827CAB88DD37DD1E6113090C6F45EF05228A1C">>},
- {<<"locus">>, <<"C7E36CC964457C04D6B07F60DBAD426A46729B545CA14414F1FB19F93E82EC2D">>},
+ {<<"locus">>, <<"6AC4ACE6407A9C960A3CE24E88A7735A4D2E273201A41BEC05FF2C3E85ADADB4">>},
  {<<"meck">>, <<"FFEDB39F99B0B99703B8601C6F17C7F76313EE12DE6B646E671E3188401F7866">>},
  {<<"mimetypes">>, <<"82D455AE77558C0B839D7EF8F862FB67AD4450CD394FC728F8D894078F95B40F">>},
  {<<"mochiweb">>, <<"E4DBD0ED716F076366ECF62ADA5755A844E1D95C781E8C77DF1D4114BE868CDF">>},
@@ -152,6 +153,7 @@
  {<<"ssl_verify_fun">>, <<"6EAF7AD16CB568BB01753DBBD7A95FF8B91C7979482B95F38443FE2C8852A79B">>},
  {<<"stacktrace_compat">>, <<"1C064BC1725F5BD6470853487AC7FBDA5D5E8745CE4B57D0AE71765C85B4414A">>},
  {<<"termit">>, <<"D463BDD0207EDD00942754D51FD822B981CDCE7FB774E9FF71D9F59429BCEF7A">>},
+ {<<"tls_certificate_check">>, <<"CFF7D51BF3DD633AA553961AA81554F5FF4A94D559C6B7BF89273A9594CFBB26">>},
  {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>},
  {<<"zotonic_ssl">>, <<"CC03C4D598E467FEDB4399C97B9AFD68CED094652C79F45C8E88FD004DDA9641">>},
  {<<"zotonic_stdlib">>, <<"37545B356C89B0D94F6C7CF2D6B26AB008AB7BC4AB64E1EF824DC344123A3761">>}]}
