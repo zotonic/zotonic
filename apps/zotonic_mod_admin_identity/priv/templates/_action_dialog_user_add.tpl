@@ -1,6 +1,8 @@
 
-{% wire id=#form type="submit" postback={user_add on_success=on_success} delegate=delegate %}
-<form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
+{% with #form as form %}
+
+{% wire id=form type="submit" postback={user_add on_success=on_success} delegate=delegate %}
+<form id="{{ form }}" method="POST" action="postback" class="form form-horizontal">
 
     <h4>{_ Name and e-mail address _}</h4>
     <p>
@@ -38,25 +40,32 @@
 	    </div>
     </div>
 
-    <div class="form-group row">
-	    <label class="control-label col-md-3" for="{{ #category }}">{_ Category _}</label>
-        <div class="col-md-9">
-            <select class="form-control" id="{{ #category }}" name="category">
-                {% with m.admin_identity.new_user_category as default_category %}
-                    {% for category in m.category.person.tree_flat %}
-                        {% if m.acl.is_allowed.insert[category.id] %}
-                            <option value="{{ category.id.name }}" {% if category.id.name == default_category %}selected{% endif %}>
-                                {{ category.indent }} {{ category.id.title }}
-                            </option>
-                        {% endif %}
-                    {% endfor %}
-                {% endwith %}
-            </select>
-	        {% validate id=#category name="category" type={presence} %}
-	    </div>
-    </div>
+    {% with m.rsc[m.admin_identity.new_user_category].id as cat_id %}
+    {% with m.rsc[m.admin_identity.new_user_content_group].id as cg_id %}
+        {% block category %}
+            <div class="form-group row">
+        	    <label class="control-label col-md-3" for="{{ #category }}">{_ Category _}</label>
+                <div class="col-md-9">
+                    <select class="form-control" id="{{ #category }}" name="category">
+                        {% for category in m.category.person.tree_flat %}
+                            {% if m.acl.is_allowed.insert[category.id] %}
+                                <option value="{{ category.id.name }}" {% if category.id == cat_id %}selected{% endif %}>
+                                    {{ category.indent }} {{ category.id.title }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+        	        {% validate id=#category name="category" type={presence} %}
+        	    </div>
+            </div>
+        {% endblock %}
+    {% endwith %}
+    {% endwith %}
 
     <hr />
+
+    {% block user_account %}
+    {% endblock %}
 
     <h4>{_ Username and password _}</h4>
 
@@ -68,4 +77,7 @@
     </div>
 
 </form>
+
+{% endwith %}
+
 
