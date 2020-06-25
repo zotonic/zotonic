@@ -62,8 +62,6 @@
     {% endwith %}
     {% endwith %}
 
-    <hr />
-
     {% block user_extra %}
     {% endblock %}
 

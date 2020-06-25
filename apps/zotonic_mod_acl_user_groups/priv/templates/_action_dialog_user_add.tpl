@@ -19,4 +19,7 @@
             {% endwith %}
         </div>
     </div>
+
+    {% inherit %}
+
 {% endblock %}
