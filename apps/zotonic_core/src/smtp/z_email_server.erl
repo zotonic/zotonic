@@ -800,7 +800,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                                 props=LogEmail#log_email{
                                                         severity = ?LOG_WARNING,
                                                         mailer_status = retry,
-                                                        mailer_message = z_convert:to_binary(Message),
+                                                        mailer_message = message(Message),
                                                         mailer_host = Host
                                                     }
                                               }, Context),
@@ -870,6 +870,16 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             catch gen_smtp_client:send({VERP, [Bcc], EncodedMail}, BccSmtpOpts)
                     end
             end
+    end.
+
+message({error, Reason}) ->
+    message(Reason);
+message(Message) ->
+    try
+        z_convert:to_binary(Message)
+    catch
+        _:_ ->
+            z_convert:to_binary( io_lib:format("~p", [Message]) )
     end.
 
 send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
