@@ -64,7 +64,7 @@
 
     <hr />
 
-    {% block user_account %}
+    {% block user_extra %}
     {% endblock %}
 
     <h4>{_ Username and password _}</h4>

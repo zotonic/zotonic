@@ -4,7 +4,7 @@
     {% include "_admin_catcg.tpl" cat_id=m.rsc.person.id form=form %}
 {% endblock %}
 
-{% block user_account %}
+{% block user_extra %}
     <h4>{_ User groups _}</h4>
 
     <div class="form-group row">
