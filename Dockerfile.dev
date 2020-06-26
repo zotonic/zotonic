@@ -1,4 +1,4 @@
-FROM erlang:21.3-alpine
+FROM erlang:22.3-alpine
 
 # This Docker image is used to run Zotonic inside the container
 # in conjunction with a postgresql container.
