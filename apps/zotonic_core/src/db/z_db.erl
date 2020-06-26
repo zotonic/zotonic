@@ -202,7 +202,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                                R
                         end
                     catch
-                        ?WITH_STACKTRACE(_, Why, S)
+                        _:Why:S ->
                             DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
                             {rollback, {Why, S}}
                     end

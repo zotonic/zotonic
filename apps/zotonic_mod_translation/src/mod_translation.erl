@@ -355,7 +355,7 @@ event(#postback{message={language_default, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             {code, LanguageCode} = proplists:lookup(code, Args),
-            case language_status(LanguageCode, true, Context) of
+            case language_status(LanguageCode, false, Context) of
                 ok ->
                     Context1 = set_default_language(LanguageCode, Context),
                     reload_table(Context1);
@@ -530,11 +530,12 @@ valid_config_language(Code, Context, Tries) ->
     end.
 
 %% @doc Set/reset the is_enabled flag of a language.
--spec language_status(atom(), boolean() | editable, z:context()) -> ok | {error, string()}.
+-spec language_status(atom(), boolean() | editable, z:context()) -> ok | {error, nolang|default}.
 language_status(Code, Status, Context) when is_atom(Code), is_atom(Status) ->
     case z_language:default_language(Context) of
         Code when Status =/= true ->
-            {error, ?__(<<"Sorry, you can't disable the default language.">>, Context)};
+            % Can't disable the default language
+            {error, default};
         Code ->
             ok;
         _ ->
@@ -549,8 +550,7 @@ language_status(Code, Status, Context) when is_atom(Code), is_atom(Status) ->
                     end,
                     set_language_config(CL2, Context);
                 false ->
-                    % Not a language - ignore
-                    ok
+                    {error, nolang}
             end
     end.
 

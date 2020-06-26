@@ -95,7 +95,7 @@ testcred(S3Url, S3Key, S3Secret, IsCreateBucket)
             Error
     end.
 
-testcred_file(S3Url, S3Key, S3Secret) 
+testcred_file(S3Url, S3Key, S3Secret)
     when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
     Cred = {S3Key, S3Secret},
     Url = <<S3Url/binary, $/, "-zotonic-filestore-test-file-">>,

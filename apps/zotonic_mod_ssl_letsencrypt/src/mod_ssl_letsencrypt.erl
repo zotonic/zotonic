@@ -484,7 +484,7 @@ check_keyfile(KeyFile, Context) ->
     end.
 
 %% @doc Ensure that we have a RSA key for Letsencrypt.
--spec ensure_key_file(z:context()}) -> {ok, string()} | {error, openssl|no_private_keys_found|need_rsa_private_key|term()}.
+-spec ensure_key_file(z:context()) -> {ok, string()} | {error, openssl|no_private_keys_found|need_rsa_private_key|term()}.
 ensure_key_file(Context) ->
     SSLDir = cert_dir(Context),
     KeyFile = filename:join(SSLDir, "letsencrypt_api.key"),

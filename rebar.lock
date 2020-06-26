@@ -51,7 +51,7 @@
  {<<"lager">>,{pkg,<<"lager">>,<<"3.8.0">>},0},
  {<<"letsencrypt">>,
   {git,"https://github.com/zotonic/letsencrypt-erlang.git",
-       {ref,"8a52d017e04d16c7f131277f9568e9b9a120bd77"}},
+       {ref,"a643c03b4137ce97c9aa08a2822e31b2e2222278"}},
   0},
  {<<"locus">>,{pkg,<<"locus">>,<<"1.12.0">>},0},
  {<<"meck">>,{pkg,<<"meck">>,<<"0.8.13">>},0},
@@ -80,7 +80,7 @@
  {<<"ranch">>,{pkg,<<"ranch">>,<<"1.7.1">>},0},
  {<<"recon">>,{pkg,<<"recon">>,<<"2.4.0">>},0},
  {<<"router">>,{pkg,<<"router">>,<<"1.0.4">>},1},
- {<<"s3filez">>,{pkg,<<"s3filez">>,<<"1.0.0">>},0},
+ {<<"s3filez">>,{pkg,<<"s3filez">>,<<"1.0.1">>},0},
  {<<"setup">>,{pkg,<<"setup">>,<<"2.0.2">>},1},
  {<<"shotgun">>,{pkg,<<"shotgun">>,<<"0.3.0">>},0},
  {<<"sidejob">>,{pkg,<<"sidejob">>,<<"2.1.0">>},0},
@@ -98,7 +98,7 @@
  {<<"tls_certificate_check">>,{pkg,<<"tls_certificate_check">>,<<"1.0.0">>},1},
  {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
  {<<"zotonic_ssl">>,{pkg,<<"zotonic_ssl">>,<<"1.0.2">>},0},
- {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.2.2">>},0}]}.
+ {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.2.3">>},0}]}.
 [
 {pkg_hash,[
  {<<"bcrypt">>, <<"3029C2D8F1C17DBC49507ED56585D9D94DF78E1DBB4A45CBDB0C835DAF52BA31">>},
@@ -146,7 +146,7 @@
  {<<"ranch">>, <<"6B1FAB51B49196860B733A49C07604465A47BDB78AA10C1C16A3D199F7F8C881">>},
  {<<"recon">>, <<"901FF78B39C754FB4D6FD72DCF0DBD398967BBD2E4D59C08D4D7AA44A73DE91D">>},
  {<<"router">>, <<"E9311B9D296B41C9484FC933EFD847F87E7DCBAD94DEE1566FB77570CA59EF2C">>},
- {<<"s3filez">>, <<"924D613F71D9021D648E1A9DFA85127DA7AD3C9785A79B5FDC353623E8627839">>},
+ {<<"s3filez">>, <<"6FA44883B376AE216A24CD721C34EC4B9F42F5AD80F7707C7E66B484697FBD1B">>},
  {<<"setup">>, <<"1203F4CDA11306C2E34434244576DED0A7BBFB0908D9A572356C809BD0CDF085">>},
  {<<"shotgun">>, <<"54EA3C243B65A935A3491A079A573C9D119A5EAF28BC2673893F8EEF66FDC053">>},
  {<<"sidejob">>, <<"5D6A7C9C620778CB1908E46B552D767DF2ED4D77070BB7B5B8773D4FF18D1D37">>},
@@ -156,5 +156,5 @@
  {<<"tls_certificate_check">>, <<"CFF7D51BF3DD633AA553961AA81554F5FF4A94D559C6B7BF89273A9594CFBB26">>},
  {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>},
  {<<"zotonic_ssl">>, <<"CC03C4D598E467FEDB4399C97B9AFD68CED094652C79F45C8E88FD004DDA9641">>},
- {<<"zotonic_stdlib">>, <<"37545B356C89B0D94F6C7CF2D6B26AB008AB7BC4AB64E1EF824DC344123A3761">>}]}
+ {<<"zotonic_stdlib">>, <<"4A33B60C82379169C9934CCD1FC9E512CA16B922E131AD6B6D26E562F66DF9CC">>}]}
 ].

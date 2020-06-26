@@ -72,7 +72,7 @@ inspect_data(B0) ->
                                     {length(Comma), Comma, $,},
                                     {length(SCol), SCol, $;}
                                 ])),
-            {ok, [ z_string:trim(C) || C <- Cols ], Sep};
+            {ok, [ z_string:trim( z_convert:to_binary(C) ) || C <- Cols ], Sep};
         _ ->
             lager:info("Invalid CSV file, could not fetch line with column defs (is there a LF or CR at the end?)"),
             {error, invalid_csv_file}

@@ -136,7 +136,7 @@ media_import(MD, Context) ->
                     try
                         media_import_shared_data(Props, MD, Context)
                     catch
-                        ?WITH_STACKTRACE(ErrType, Err, Trace)
+                        ErrType:Err:Trace ->
                             lager:error("Error in instagram json decoding ~p:~p @ ~p",
                                         [ErrType, Err, Trace]),
                             media_import_md(ImgUrl, MD, Context)
