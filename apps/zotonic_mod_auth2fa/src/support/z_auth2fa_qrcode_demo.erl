@@ -110,7 +110,7 @@ totp(Key, Period) ->
 
 %% @doc RFC-4226 "HOTP: An HMAC-Based One-Time Password Algorithm" http://tools.ietf.org/html/rfc4226
 hotp(Key, Count) when is_binary(Key), is_integer(Count) ->
-	HS = crypto:mac(hmac, sha, Key, <<Count:64>>),
+	HS = z_utils:hmac(sha, Key, <<Count:64>>),
 	<<_:19/binary, _:4, Offset:4>> = HS,
 	<<_:Offset/binary, _:1, P:31, _/binary>> = HS,
 	HOTP = integer_to_list(P rem 1000000),
