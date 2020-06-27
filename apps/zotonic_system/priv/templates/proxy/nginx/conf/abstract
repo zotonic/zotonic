@@ -1,0 +1,7 @@
+
+Package: proxy/nginx/conf 
+Version: 1.0.0
+Provides: /etc/nginx/nginx.conf
+Maintainer: Eric Pailleau <zotonic@crownedgrouse.com> 
+Homepage: http://nginx.org/en/docs/
+Description: Nginx configuration file for Zotonic proxying

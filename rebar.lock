@@ -39,7 +39,7 @@
   {git,"https://github.com/gen-smtp/gen_smtp.git",
        {ref,"d2d48603d321f404ad437f9153bb9cc7c384cfea"}},
   0},
- {<<"getopt">>,{pkg,<<"getopt">>,<<"1.0.1">>},1},
+ {<<"getopt">>,{pkg,<<"getopt">>,<<"1.0.1">>},0},
  {<<"goldrush">>,{pkg,<<"goldrush">>,<<"0.1.9">>},1},
  {<<"gproc">>,{pkg,<<"gproc">>,<<"0.8.0">>},0},
  {<<"gun">>,{pkg,<<"gun">>,<<"1.0.0-pre.1">>},1},
