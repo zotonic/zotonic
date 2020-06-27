@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-if [ -z "$ZOTONIC" ]; then
-   readonly ZOTONIC=${ZOTONIC:=$(\cd `dirname $0`/../../..;\pwd)}
+if [ -z "${ZOTONIC}" ]; then
+   readonly ZOTONIC=${ZOTONIC:=$(\cd `dirname -- "$0"`/../../..;\pwd)}
    export ZOTONIC
 fi
 # Protect PATH and ZOTONIC environment variables to be changed at runtime
@@ -11,10 +11,10 @@ do
     readonly "${var}"
     export "${var}"
 done
-readonly ZOTONIC_BIN=$(\cd `\dirname $0`;\pwd)
+readonly ZOTONIC_BIN=$(\cd `\dirname -- "$0"`;\pwd)
 export ZOTONIC_BIN
 
-cd $ZOTONIC || \exit 1
+cd -- "${ZOTONIC}" || \exit 1
 
 case "$1" in
     start)
@@ -46,8 +46,8 @@ case "$1" in
         EXIT=$?
         ;;
     stop)
-        if [ -s "$ZOTONIC_PIDFILE" ]; then
-            readonly PID=$(\cat "$ZOTONIC_PIDFILE")
+        if [ -s "${ZOTONIC_PIDFILE}" ]; then
+            readonly PID=$(\cat -- "${ZOTONIC_PIDFILE}")
         fi
         ${ZOTONIC_BIN}/zotonic.escript stop & 
         \wait $!    
