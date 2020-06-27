@@ -1,0 +1,13 @@
+%% -*- mode: erlang -*-
+{application, zotonic_system,
+ [{description, "Zotonic helper for system integration"},
+  {vsn, "git"},
+  {registered, []},
+  {applications, [
+      kernel, stdlib, getopt, yamerl
+  ]},
+  {env, []},
+  {modules,
+   [
+   ]}
+ ]}.

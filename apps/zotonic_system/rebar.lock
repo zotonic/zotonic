@@ -1,0 +1,8 @@
+{"1.1.0",
+[{<<"getopt">>,{pkg,<<"getopt">>,<<"1.0.1">>},0},
+ {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0}]}.
+[
+{pkg_hash,[
+ {<<"getopt">>, <<"C73A9FA687B217F2FF79F68A3B637711BB1936E712B521D8CE466B29CBF7808A">>},
+ {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>}]}
+].
