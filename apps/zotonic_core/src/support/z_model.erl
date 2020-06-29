@@ -211,19 +211,23 @@ model_call(Mod, Callback, Path, Msg, Context) ->
     try
         Mod:Callback(binarize(Path), Msg, Context)
     catch
-        ?WITH_STACKTRACE(error, Type, StackTrace)
-            case StackTrace of
+        error:function_clause:S ->
+            case S of
                 [ {Mod, Callback, _As, _Loc} | _ ] ->
-                    case Type of
-                        function_clause ->
-                            {error, unknown_path};
-                        undef ->
-                            {error, unacceptable};
-                        _ ->
-                            erlang:raise(error, function_clause, StackTrace)
-                    end;
+                    {error, unknown_path};
                 _ ->
-                    erlang:raise(error, function_clause, StackTrace)
+                    lager:error("Function clause in model call to ~p:~p(~p): ~p",
+                                [ Mod, Callback, Path, S ]),
+                    {error, function_clause}
+            end;
+        error:undef:S ->
+            case S of
+                [ {Mod, Callback, _As, _Loc} | _ ] ->
+                    {error, unknown_path};
+                _ ->
+                    lager:error("Undef in model call to ~p:~p(~p): ~p",
+                                [ Mod, Callback, Path, S ]),
+                    {error, undef}
             end
     end.
 

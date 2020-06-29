@@ -56,8 +56,8 @@ received(Recipient, ParsedEmail,
          {Type, Subtype}, Headers, Params,
          Body, Data) ->
     case get_site(Recipient) of
-        {ok, {LocalPart, LocalTags, Domain, Host}} ->
-            Context = z_context:new(Host),
+        {ok, {LocalPart, LocalTags, Domain, Site}} ->
+            Context = z_context:new(Site),
             z_notifier:notify(
                 #zlog{
                     props=#log_email{
@@ -106,7 +106,7 @@ received(Recipient, ParsedEmail,
     end.
 
 -spec get_site( binary() ) ->
-        {ok, {binary(), binary(), binary(), atom()}}
+        {ok, {binary(), [ binary() ], binary(), atom()}}
       | {error, unknown_host | not_running}.
 get_site(Recipient) ->
     [Username, Domain] = binstr:split(Recipient, <<"@">>, 2),

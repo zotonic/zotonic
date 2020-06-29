@@ -322,8 +322,6 @@ wait_for_running(Site, Timeout) when is_atom(Site) ->
         [{Site, Status}] -> wait_for_running_1(Site, Status, Timeout)
     end.
 
-wait_for_running_1(_Site, running, _Timeout) ->
-    ok;
 wait_for_running_1(Site, new, Timeout) when Timeout >= 0 ->
     start(Site),
     timer:sleep(1000),
@@ -333,6 +331,8 @@ wait_for_running_1(_Site, _Status, Timeout) when Timeout =< 0 ->
 wait_for_running_1(Site, failed, Timeout) ->
     Now = z_datetime:timestamp(),
     case gen_server:call(?MODULE, {get_status_start, Site}) of
+        {ok, {running, _RestartTime}} ->
+            ok;
         {ok, {failed, RestartTime}} when RestartTime =< Now + Timeout ->
             Sleep = erlang:max(1, RestartTime - Now + 1),
             timer:sleep(Sleep*1000),

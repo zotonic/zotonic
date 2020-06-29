@@ -171,7 +171,7 @@ can_handle(OriginalFilename, DataFile, Context) ->
     end.
 
 %% @doc Inspect the first line of a CSV file, extract the column headers
--spec inspect_file( file:filename_all() ) -> {ok, #filedef{}} | false.
+-spec inspect_file( file:filename_all() ) -> {ok, #filedef{}} | {error, term()}.
 inspect_file(Filename) ->
     case z_csv_parser:inspect_file(Filename) of
         {ok, Cols, Sep} ->

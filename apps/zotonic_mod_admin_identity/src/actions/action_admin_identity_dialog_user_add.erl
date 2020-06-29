@@ -48,36 +48,29 @@ event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
 
 %% @doc Create user resource and a password identity
 %% @spec event(Event, Context1) -> Context2
-event(#submit{message={user_add, Props}}, Context) ->
+event(#submit{message={user_add, Args}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
-            NameFirst = z_context:get_q_validated(<<"name_first">>, Context),
-            NamePrefix = z_context:get_q(<<"name_surname_prefix">>, Context, <<>>),
-            NameSur = z_context:get_q_validated(<<"name_surname">>, Context),
-            Category = z_context:get_q(<<"category">>, Context, person),
+            Username = z_context:get_q_validated(<<"new_username">>, Context),
+            Password = z_context:get_q_validated(<<"new_password">>, Context),
             Email = z_context:get_q_validated(<<"email">>, Context),
-            NameProps = #{
-                <<"name_first">> => NameFirst,
-                <<"name_surname_prefix">> => NamePrefix,
-                <<"name_surname">> => NameSur
-            },
+            Qs = z_context:get_q_all_noz(Context),
+            {ok, Props} = z_props:from_qs(Qs),
+            Props1 = maps:remove(<<"new_username">>, Props),
+            Props2 = maps:remove(<<"new_password">>, Props1),
+            Props3 = maps:remove(<<"send_welcome">>, Props2),
             Vs = [
-                {id, NameProps}
+                {id, Props3}
             ],
             {Title, _} = z_template:render_to_iolist("_name.tpl", Vs, Context),
-            PersonProps = NameProps#{
+            PersonProps = Props3#{
                 <<"is_published">> => true,
-                <<"category">> => Category,
                 <<"title">> => unicode:characters_to_binary(Title),
-                <<"email">> => Email,
                 <<"creator_id">> => self
             },
-
             F = fun(Ctx) ->
                 case m_rsc:insert(PersonProps, Ctx) of
                     {ok, PersonId} ->
-                        Username = z_context:get_q_validated(<<"new_username">>, Ctx),
-                        Password = z_context:get_q_validated(<<"new_password">>, Ctx),
                         case m_identity:set_username_pw(PersonId, Username, Password, Ctx) of
                             ok -> ok;
                             {error, PWReason} -> throw({error, PWReason})
@@ -86,8 +79,7 @@ event(#submit{message={user_add, Props}}, Context) ->
                             true ->
                                 Vars = [
                                     {id, PersonId},
-                                    {username, Username},
-                                    {password, Password}
+                                    {username, Username}
                                 ],
                                 z_email:send_render(Email, "email_admin_new_user.tpl", Vars, Context);
                             false ->
@@ -102,7 +94,7 @@ event(#submit{message={user_add, Props}}, Context) ->
             case z_db:transaction(F, Context) of
                 {ok, _PersonId} ->
                     Context1 = z_render:growl(["Created the user ",z_html:escape(Title), "."], Context),
-                    z_render:wire(proplists:get_all_values(on_success, Props), Context1);
+                    z_render:wire(proplists:get_all_values(on_success, Args), Context1);
                 {rollback, {Error, _CallStack}} ->
                     case Error of
                         {error, eexist} ->
@@ -110,7 +102,6 @@ event(#submit{message={user_add, Props}}, Context) ->
                         {error, eacces} ->
                             z_render:growl_error(?__("You are not allowed to create the person page.", Context), Context);
                         _OtherError ->
-                            ?DEBUG(Error),
                             z_render:growl_error(?__("Could not create the user. Sorry.", Context), Context)
                     end
             end;

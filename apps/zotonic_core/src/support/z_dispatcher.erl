@@ -150,8 +150,8 @@ abs_url(Url, Context) ->
     abs_url(Url, undefined, [], Context).
 
 %% @doc Fetch the dispatchlist for the site.
--spec dispatchinfo(#context{}|pid()|atom()) ->
-              {ok, atom(), binary()|string(), binary()|string(), list(), boolean(), list()}
+-spec dispatchinfo( z:context() | pid() | atom() ) ->
+              {ok, {atom(), binary()|string(), binary()|string(), list(), boolean(), list()}}
             | {error, noproc}.
 dispatchinfo(#context{dispatcher=Dispatcher}) ->
     dispatchinfo(Dispatcher);

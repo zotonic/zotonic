@@ -40,16 +40,23 @@ request_process(ModulePid, Hostname, SANs, LetsOpts) ->
                 san => SANs,
                 async => false
             },
-            {ok, _} = letsencrypt:start(LetsOpts),
-            Result = letsencrypt:make_cert(Hostname, CertOpts),
-            gen_server:cast(ModulePid, {complete, Result, self()}),
-            letsencrypt:stop(),
-            ok
+            case letsencrypt:start(LetsOpts) of
+                {ok, _}  ->
+                    Result = letsencrypt:make_cert(Hostname, CertOpts),
+                    gen_server:cast(ModulePid, {complete, Result, self()}),
+                    letsencrypt:stop(),
+                    ok;
+                {error, _} = Error ->
+                    Error
+            end
         end)
     of
-        aborted ->
-            lager:error("LetsEncrypt process aborted for: ~s", [ Hostname ]);
         ok ->
-            ok
+            ok;
+        {error, _} = Error ->
+            Error;
+        aborted ->
+            lager:error("LetsEncrypt process aborted for: ~s", [ Hostname ]),
+            {error, aborted}
     end.
 

@@ -75,11 +75,11 @@ task_job(
                 z_db:delete(pivot_task_queue, TaskId, Context)
         end
     catch
-        ?WITH_STACKTRACE(error, undef, Trace)
+        error:undef:Trace ->
             lager:error("Task ~p failed - undefined function, aborting: ~p:~p(~p) ~p",
                         [TaskId, Module, Function, Args, Trace]),
             z_db:delete(pivot_task_queue, TaskId, Context);
-        ?WITH_STACKTRACE(Error, Reason, Trace)
+        Error:Reason:Trace ->
             case ErrCt < ?MAX_TASK_ERROR_COUNT of
                 true ->
                     RetryDue = calendar:gregorian_seconds_to_datetime(

@@ -27,7 +27,6 @@ packages:
   - autoconf
   - libncurses5-dev
   - git
-  - erlang
   - postgresql
   - postgresql-client
   - curl
@@ -42,6 +41,11 @@ packages:
   - ffmpeg
 
 runcmd:
+  # Fetch erlang from erlang solutions
+  - wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | apt-key add -
+  - echo "deb https://packages.erlang-solutions.com/ubuntu bionic contrib" | tee /etc/apt/sources.list.d/erlang-solutions.list
+  - apt update
+  - apt-get -y install erlang
   # IP4 port mapping
   - iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8000
   - iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to 8443

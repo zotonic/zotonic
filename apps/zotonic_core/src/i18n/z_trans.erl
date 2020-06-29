@@ -218,7 +218,7 @@ lookup_fallback_language(Langs, Lang, Context) ->
 trans(#trans{ tr = Tr }, Lang) when is_atom(Lang) ->
     proplists:get_value(Lang, Tr);
 trans(Text, Lang) when is_atom(Lang) ->
-    Text;
+    z_convert:to_binary(Text);
 trans(Text, Context) ->
     trans(Text, z_context:language(Context), Context).
 
@@ -241,5 +241,6 @@ trans(Text, Language, Context) ->
     case translations(Text, Context) of
         #trans{ tr = Tr } ->
             proplists:get_value(Language, Tr, Text);
-        _ -> Text
+        _ ->
+            z_convert:to_binary(Text)
     end.

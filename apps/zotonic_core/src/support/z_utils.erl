@@ -77,6 +77,7 @@
     os_filename/1,
     pickle/2,
     prefix/2,
+    hmac/3,
     prop_delete/2,
     prop_replace/3,
     props_merge/2,
@@ -309,14 +310,14 @@ encode_value(Value, #context{} = Context) ->
 encode_value(Value, Secret) when is_list(Secret); is_binary(Secret) ->
     Salt = z_ids:rand_bytes(4),
     BinVal = erlang:term_to_binary(Value),
-    Hash = crypto:hmac(sha, Secret, [ BinVal, Salt ]),
+    Hash = hmac(sha, Secret, [ BinVal, Salt ]),
     base64:encode(iolist_to_binary([ 1, Salt, Hash, BinVal ])).
 
 decode_value(Data, #context{} = Context) ->
     decode_value(Data, z_ids:sign_key(Context));
 decode_value(Data, Secret) when is_list(Secret); is_binary(Secret) ->
     <<1, Salt:4/binary, Hash:20/binary, BinVal/binary>> = base64:decode(Data),
-    Hash = crypto:hmac(sha, Secret, [ BinVal, Salt ]),
+    Hash = hmac(sha, Secret, [ BinVal, Salt ]),
     erlang:binary_to_term(BinVal).
 
 encode_value_expire(Value, Date, Context) ->
@@ -328,6 +329,15 @@ decode_value_expire(Data, Context) ->
         false -> {error, expired};
         true -> {ok, Value}
     end.
+
+
+-ifdef(crypto_hmac).
+hmac(Type, Key, Data) ->
+    crypto:hmac(Type, Key, Data).
+-else.
+hmac(Type, Key, Data) ->
+    crypto:mac(hmac, Type, Key, Data).
+-endif.
 
 
 %%% CHECKSUM %%%
@@ -354,7 +364,7 @@ pickle(Data, Context) ->
     Nonce = z_ids:rand_bytes(4),
     Sign  = z_ids:sign_key(Context),
     SData = <<BData/binary, Nonce:4/binary>>,
-    <<Mac:16/binary>> = crypto:hmac(md5, Sign, SData),
+    <<Mac:16/binary>> = hmac(md5, Sign, SData),
     base64url:encode(<<Mac:16/binary, Nonce:4/binary, BData/binary>>).
 
 depickle(Data, Context) ->
@@ -362,7 +372,7 @@ depickle(Data, Context) ->
         <<Mac:16/binary, Nonce:4/binary, BData/binary>> = base64url:decode(Data),
         Sign  = z_ids:sign_key(Context),
         SData = <<BData/binary, Nonce:4/binary>>,
-        <<Mac:16/binary>> = crypto:hmac(md5, Sign, SData),
+        <<Mac:16/binary>> = hmac(md5, Sign, SData),
         erlang:binary_to_term(BData)
     catch
         _M:_E ->

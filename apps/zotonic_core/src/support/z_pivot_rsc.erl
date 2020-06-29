@@ -375,7 +375,7 @@ handle_cast(poll, State) ->
         {_IsPivoting, State1} = do_poll(State),
         {noreply, State1}
     catch
-        ?WITH_STACKTRACE(Type, Err, Stack)
+        Type:Err:Stack ->
             lager:error("Poll error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
     end;
@@ -422,7 +422,7 @@ handle_info(poll, State) ->
         end,
         {noreply, State1#state{ is_initial_delay = false }}
     catch
-        ?WITH_STACKTRACE(Type, Err, Stack)
+        Type:Err:Stack ->
             lager:error("Pivot error ~p:~p, backing off pivoting. Stack: ~p", [ Type, Err, Stack ]),
             timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
