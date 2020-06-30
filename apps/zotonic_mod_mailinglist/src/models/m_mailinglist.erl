@@ -54,12 +54,11 @@
     get_recipients_by_email/2,
     reset_log_email/3,
 
-    reset_bounced/2,
-    bounce_count/2,
-    list_bounced_recipients/2,
     recipient_set_operation/4,
 
-    normalize_email/1
+    normalize_email/1,
+
+    periodic_cleanup/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -92,11 +91,6 @@ m_get([ <<"confirm_key">>, ConfirmKey | Rest ], _Msg, Context) ->
 m_get([ <<"subscription">>, ListId, Email | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
         true -> {ok, {recipient_get(ListId, Email, Context), Rest}};
-        false -> {error, eacces}
-    end;
-m_get([ <<"bounce_reason">>, Email | Rest ], _Msg, Context) ->
-    case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> {ok, {bounce_reason(Email, Context), Rest}};
         false -> {error, eacces}
     end;
 m_get(Vs, _Msg, _Context) ->
@@ -543,38 +537,6 @@ get_recipients_by_email(Email, Context) ->
     [ Id || {Id} <- z_db:q("SELECT id FROM mailinglist_recipient WHERE email = $1", [Email1], Context) ].
 
 
-%% @doc Reset the bounced state for the given mailing list.
-reset_bounced(ListId, Context) ->
-    z_db:q("
-        UPDATE mailinglist_recipient
-        SET is_bounced = false
-        WHERE mailinglist_id = $1
-          AND is_enabled = true",
-        [ListId], Context).
-
-
-%% @doc Count the number of bounced email addresses for the mailinglist
-bounce_count(ListId, Context) ->
-    z_db:q1("
-        SELECT count(email)
-        FROM mailinglist_recipient
-        WHERE mailinglist_id = $1
-          AND is_bounced = true
-          AND is_enabled = true",
-        [ListId],
-        Context).
-
-%% @doc Get all email addresses for the given list which have the is_bounced flag set.
-list_bounced_recipients(ListId, Context) ->
-    z_db:qmap_props("
-        SELECT email
-        FROM mailinglist_recipient
-        WHERE mailinglist_id = $1
-          AND is_bounced = true
-          AND is_enabled = true",
-        [ListId],
-        Context).
-
 %% @doc Perform a set operation on two lists. The result of the
 %% operation gets stored in the first list.
 recipient_set_operation(Op, IdA, IdB, Context) when Op =:= union; Op =:= subtract; Op =:= intersection ->
@@ -594,14 +556,49 @@ get_email_set(ListId, Context) ->
         Es),
     sets:from_list(Normalized).
 
-bounce_reason(Email, Context) ->
-    z_db:assoc_row("
-        SELECT * FROM log_email
-        WHERE envelop_to = $1
-          AND mailer_status = 'bounce'
-        ORDER BY created DESC
-        LIMIT 1", [Email], Context).
-
-
 normalize_email(Email) ->
     z_convert:to_binary( z_string:trim( z_string:to_lower( Email ) ) ).
+
+
+
+%% @doc Periodically remove bouncing and disabled addresses from the mailinglist
+-spec periodic_cleanup(z:context()) -> ok.
+periodic_cleanup(Context) ->
+    % Remove disabled entries that were not updated for more than 3 months
+    z_db:q("
+        delete from mailinglist_recipient
+        where not is_enabled
+          and timestamp < now() - interval '3 months'",
+        Context),
+    % Remove entries that are invalid, blocked or bouncing
+    MaybeBouncing = z_db:q("
+        select r.email
+        from mailinglist_recipient r
+             join email_status s
+             on r.email = s.email
+        where s.modified < now() - interval '3 months'
+            and (  not s.is_valid
+                or s.is_blocked
+                or s.bounce >= s.modified
+                or s.error >= s.modified)
+        ",
+        Context,
+        300000),
+    Invalid = lists:filter(
+        fun({Email}) ->
+            m_email_status:is_ok_to_send(Email, Context)
+        end,
+        MaybeBouncing),
+    z_db:transaction(
+        fun(Ctx) ->
+            lists:foreach(
+                fun({Email}) ->
+                    z_db:q("
+                        delete from mailinglist_recipient
+                        where email = $1",
+                        [Email],
+                        Ctx)
+                end,
+                Invalid)
+        end,
+        Context).

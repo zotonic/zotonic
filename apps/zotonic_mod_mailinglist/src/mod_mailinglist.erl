@@ -23,8 +23,8 @@
 -mod_title("Mailing list").
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
--mod_schema(1).
--mod_depends([ admin, mod_wires, mod_logging ]).
+-mod_schema(2).
+-mod_depends([ admin, mod_wires, mod_logging, mod_email_status ]).
 -mod_provides([ mailinglist ]).
 
 %% gen_server exports
@@ -36,7 +36,7 @@
          manage_schema/2,
          observe_search_query/2,
          observe_mailinglist_message/2,
-         observe_email_bounced/2,
+         observe_tick_24h/2,
          event/2,
          observe_admin_menu/3
         ]).
@@ -48,7 +48,7 @@
 -record(state, {context}).
 
 %% @doc Install the tables needed for the mailinglist and return the rsc datamodel.
--spec manage_schema(install | pos_integer(), z:context()) -> ok.
+-spec manage_schema(install | pos_integer(), z:context()) -> #datamodel{}.
 manage_schema(install, Context) ->
     z_mailinglist_schema:manage_schema(install, Context).
 
@@ -59,15 +59,6 @@ observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _Offset
         from="mailinglist_recipient",
         where="mailinglist_id = $1",
         args=[Id],
-        order="email",
-        tables=[]
-    };
-observe_search_query({search_query, {mailinglist_bounced, [{list_id,ListId}, {mailing_id, Id}]}, _OffsetLimit}, _Context) ->
-    #search_sql{
-        select="distinct r.id, r.email, r.is_enabled",
-        from="mailinglist_recipient r, log_email l",
-        where="r.mailinglist_id = l.other_id AND r.mailinglist_id = $1 AND l.content_id = $2 AND r.email = l.envelop_to AND mailer_status='bounce'",
-        args=[ListId, Id],
         order="email",
         tables=[]
     };
@@ -91,21 +82,9 @@ observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, r
     z_email:send_render(proplists:get_value(email, Props), Template, [{list_id, ListId}, {recipient, Props}], Context),
     ok.
 
-
-%% @doc When an e-mail bounces, disable the corresponding recipients and mark them as bounced.
-observe_email_bounced(B=#email_bounced{}, Context) ->
-    Recipients = m_mailinglist:get_recipients_by_email(B#email_bounced.recipient, Context),
-    lists:foreach(
-        fun(Id) ->
-            Bounce = [
-                {is_enabled, false},
-                {is_bounced, true},
-                {bounce_time, calendar:universal_time()}
-            ],
-            m_mailinglist:update_recipient(Id, Bounce, Context)
-        end,
-        Recipients),
-    undefined. %% Let other bounce handlers do their thing
+%% @doc Every 24h cleanup the mailinglists recipients.
+observe_tick_24h(tick_24h, Context) ->
+    m_mailinglist:periodic_cleanup(Context).
 
 
 %% @doc Request confirmation of canceling this mailing.
@@ -166,22 +145,6 @@ event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
             z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
             Context1 = z_render:growl([?__("Sending the page to", Context), " ", Email, "..."], Context),
             z_render:wire([{dialog_close, []}], Context1);
-        false ->
-            z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
-    end;
-
-%% @doc Handle the test-sending of a page to a single address.
-event(#postback{message={resend_bounced, [{list_id, ListId}, {id, PageId}]}}, Context) ->
-    case is_allowed_mailing(ListId, Context) of
-        true ->
-            z_notifier:notify(#mailinglist_mailing{list_id={resend_bounced, ListId}, page_id=PageId}, Context),
-            case m_mailinglist:bounce_count(ListId, Context) of
-                0 ->
-                    z_render:growl_error(?__("No addresses selected", Context), Context);
-                _ ->
-                    Context1 = z_render:growl(?__("Resending bounced addresses...", Context), Context),
-                    z_render:wire([{dialog_close, []}], Context1)
-            end;
         false ->
             z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
     end;
@@ -360,17 +323,11 @@ send_mailing_process({single_test_address, Email}, PageId, Context) ->
         }
     },
     send_mailing_process(ListId, Recipients, PageId, Context);
-
-send_mailing_process({resend_bounced, ListId}, PageId, Context) ->
-    {ok, Bounced} = z_mailinglist_recipients:list_bounced_recipients(ListId, Context),
-    send_mailing_process(ListId, Bounced, PageId, Context);
-
 send_mailing_process(ListId, PageId, Context) ->
     {ok, Recipients} = z_mailinglist_recipients:list_recipients(ListId, Context),
     send_mailing_process(ListId, Recipients, PageId, Context).
 
 send_mailing_process(ListId, Recipients, PageId, Context) when is_map(Recipients) ->
-    m_mailinglist:reset_bounced(ListId, Context),
     From = m_mailinglist:get_email_from(ListId, Context),
     Options = [
         {id, PageId},

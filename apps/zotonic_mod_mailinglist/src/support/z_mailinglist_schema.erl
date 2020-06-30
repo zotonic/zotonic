@@ -28,76 +28,107 @@ datamodel() ->
     #datamodel{
         categories = [
             {mailinglist, undefined, [
-                            {title, "Mailing list"},
-                            {summary, "Mailing lists are used to send pages to groups of people."}
+                            {title, {trans, [
+                                {en, <<"Mailing List">>},
+                                {nl, <<"Mailinglijst">>}
+                            ]}},
+                            {summary, {trans, [
+                                {en, <<"Mailing lists are used to send pages to groups of people.">>},
+                                {nl, <<"Mailinglijsten worden gebruikt om pagina's naar groepen mensen te versturen.">>}
+                            ]}}
                         ]}
         ],
 
         % Any resource with an e-mail address can be a subscriber of a mailinglist
         predicates = [
             {subscriberof,
-                 [{title, <<"Subscriber of">>}],
-                 [{person, mailinglist}, {location, mailinglist}]},
-             {exsubscriberof,
-                  [{title, <<"Ex-subscriber of">>}],
-                  [{person, mailinglist}, {location, mailinglist}]}
+                [
+                    {title, {trans, [
+                        {en, <<"Subscriber of">>},
+                        {nl, <<"Abonnee">>}
+                    ]}}
+                ],
+                [ {person, mailinglist}, {location, mailinglist} ]},
+            {exsubscriberof,
+                [
+                    {title, {trans, [
+                        {en, <<"Ex-subscriber of">>},
+                        {nl, <<"Oud abonnee">>}
+                    ]}}
+                ],
+                [ {person, mailinglist}, {location, mailinglist} ]},
+            {hasattachment,
+                [
+                    {title, {trans, [
+                        {en, <<"Attachment">>},
+                        {nl, <<"Bijlage">>}
+                    ]}}
+                ],
+                [ {undefined, media} ]}
         ],
 
         resources = [
             {mailinglist_test, mailinglist, [
-                            {visible_for, 1},
-                            {title, "Test mailing list"},
-                            {summary, "This list is used for testing. Anyone who can see this mailing list can post to it. It should not be visible for the world."}
-                        ]}
+                {is_published, false},
+                {title, <<"Test mailing list">>},
+                {summary, <<"This list is used for testing. Anyone who can see this mailing list can post to it. It SHOULD NOT be visible for the world.">>}
+            ]}
         ]
     }.
 
 
-
 %% @doc Install the SQL tables to track recipients and scheduled mailings.
-manage_schema(install, Context) ->
+manage_schema(_What, Context) ->
     case z_db:table_exists(mailinglist_recipient, Context) of
         false ->
-            z_db:q("
-        				CREATE TABLE mailinglist_recipient (
-        					id serial NOT NULL,
-        					mailinglist_id INT NOT NULL,
-        					email character varying (200) NOT NULL,
-        					is_enabled boolean NOT NULL default true,
-                            is_bounced boolean NOT NULL default false,
-        					props bytea,
-        					confirm_key character varying (32) NOT NULL,
-        					timestamp timestamp with time zone NOT NULL DEFAULT now(),
-
-        					CONSTRAINT mailinglist_recipient_pkey PRIMARY KEY (id),
-        					CONSTRAINT mailinglist_recipient_mailinglist_id_email_key UNIQUE (mailinglist_id, email),
-        			        CONSTRAINT confirm_key_key UNIQUE (confirm_key),
-        					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
-        				      REFERENCES rsc (id)
-        				      ON UPDATE CASCADE ON DELETE CASCADE
-        				)", Context),
-
-            z_db:q("
-        				CREATE TABLE mailinglist_scheduled (
-        					page_id INT NOT NULL,
-        					mailinglist_id INT NOT NULL,
-
-        					CONSTRAINT mailinglist_scheduled_pkey PRIMARY KEY (page_id, mailinglist_id),
-        					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
-        				      REFERENCES rsc (id)
-        				      ON UPDATE CASCADE ON DELETE CASCADE,
-        					CONSTRAINT fk_page_id FOREIGN KEY (page_id)
-        				      REFERENCES rsc (id)
-        				      ON UPDATE CASCADE ON DELETE CASCADE
-        				)", Context);
+            do_install(Context);
         true ->
-            ok
+            CNs = z_db:column_names(mailinglist_recipient, Context),
+            case lists:member(is_bounced, CNs) of
+                true ->
+                    [] = z_db:q("
+                        alter table mailinglist_recipient
+                        drop column is_bounced",
+                        Context),
+                    z_db:flush(Context);
+                false ->
+                    ok
+            end
     end,
-    z_datamodel:manage(mod_mailinglist, datamodel(), Context),
+    datamodel().
+
+
+do_install(Context) ->
+    z_db:q("
+				CREATE TABLE mailinglist_recipient (
+					id serial NOT NULL,
+					mailinglist_id INT NOT NULL,
+					email character varying (200) NOT NULL,
+					is_enabled boolean NOT NULL default true,
+					props bytea,
+					confirm_key character varying (32) NOT NULL,
+					timestamp timestamp with time zone NOT NULL DEFAULT now(),
+
+					CONSTRAINT mailinglist_recipient_pkey PRIMARY KEY (id),
+					CONSTRAINT mailinglist_recipient_mailinglist_id_email_key UNIQUE (mailinglist_id, email),
+			        CONSTRAINT confirm_key_key UNIQUE (confirm_key),
+					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
+				      REFERENCES rsc (id)
+				      ON UPDATE CASCADE ON DELETE CASCADE
+				)", Context),
+
+    z_db:q("
+				CREATE TABLE mailinglist_scheduled (
+					page_id INT NOT NULL,
+					mailinglist_id INT NOT NULL,
+
+					CONSTRAINT mailinglist_scheduled_pkey PRIMARY KEY (page_id, mailinglist_id),
+					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
+				      REFERENCES rsc (id)
+				      ON UPDATE CASCADE ON DELETE CASCADE,
+					CONSTRAINT fk_page_id FOREIGN KEY (page_id)
+				      REFERENCES rsc (id)
+				      ON UPDATE CASCADE ON DELETE CASCADE
+				)", Context),
+    z_db:flush(Context),
     ok.
-
-
-%% Old upgraders, pre manage_schema/2.
-%%     z_db:q("alter table mailinglist_recipient add column props bytea", Context),
-%%     z_db:q("alter table mailinglist_recipient drop column user_id", Context),
-%%     z_db:q("alter table mailinglist_recipient add column is_bounced boolean not null default false", Context),

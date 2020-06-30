@@ -82,6 +82,7 @@
                             {% button class="btn btn-default btn-xs" text=_"delete" title=_"Remove this recipient. No undo possible." postback={recipient_delete recipient_id=rcpt_id target=#target.rcpt_id} %}
                         </div>
                         {{ email|truncate:35|escape|default:"-" }}
+                        {% include "_mailinglist_email_status_flag.tpl" email=email %}
                     </td>
                 </tr>
                 {% wire id=#enabled.rcpt_id postback={recipient_is_enabled_toggle recipient_id=rcpt_id} %}
