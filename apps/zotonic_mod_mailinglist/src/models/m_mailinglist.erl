@@ -55,7 +55,8 @@
     reset_log_email/3,
 
     reset_bounced/2,
-    get_bounced_recipients/2,
+    bounce_count/2,
+    list_bounced_recipients/2,
     recipient_set_operation/4,
 
     normalize_email/1
@@ -554,11 +555,27 @@ reset_bounced(ListId, Context) ->
         [ListId], Context).
 
 
-%% @doc Get all email addresses for the given list which have the is_bounced flag set.
-get_bounced_recipients(ListId, Context) ->
-    Emails = z_db:q("SELECT email FROM mailinglist_recipient WHERE mailinglist_id = $1 AND is_bounced = true AND is_enabled = true", [ListId], Context),
-    [ E || {E} <- Emails ].
+%% @doc Count the number of bounced email addresses for the mailinglist
+bounce_count(ListId, Context) ->
+    z_db:q1("
+        SELECT count(email)
+        FROM mailinglist_recipient
+        WHERE mailinglist_id = $1
+          AND is_bounced = true
+          AND is_enabled = true",
+        [ListId],
+        Context).
 
+%% @doc Get all email addresses for the given list which have the is_bounced flag set.
+list_bounced_recipients(ListId, Context) ->
+    z_db:qmap_props("
+        SELECT email
+        FROM mailinglist_recipient
+        WHERE mailinglist_id = $1
+          AND is_bounced = true
+          AND is_enabled = true",
+        [ListId],
+        Context).
 
 %% @doc Perform a set operation on two lists. The result of the
 %% operation gets stored in the first list.

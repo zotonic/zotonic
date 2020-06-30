@@ -20,7 +20,8 @@
 
 -export([
     count_recipients/2,
-    list_recipients/2
+    list_recipients/2,
+    list_bounced_recipients/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -48,6 +49,20 @@ count_recipients(ListId, Context) ->
         query_text => length(QueryIds)
     }.
 
+-spec list_bounced_recipients( m_rsc:resource(), z:context() ) -> {ok, map()}.
+list_bounced_recipients(List, Context) ->
+    ListId = m_rsc:rid(List, Context),
+    {ok, Recipients} = m_mailinglist:list_bounced_recipients(ListId, Context),
+    Rs = lists:foldl(
+        fun
+            (#{ <<"is_enabled">> := true, <<"email">> := Email } = R, Acc) ->
+                Acc#{ Email => R };
+            (_, Acc) ->
+                Acc
+        end,
+        #{},
+        Recipients),
+    {ok, Rs}.
 
 %% @doc Fetch all (enabled) recipients of a mailinglist.
 -spec list_recipients( m_rsc:resource(), z:context() ) -> {ok, map()}.

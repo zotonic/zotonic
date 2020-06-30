@@ -175,7 +175,7 @@ event(#postback{message={resend_bounced, [{list_id, ListId}, {id, PageId}]}}, Co
     case is_allowed_mailing(ListId, Context) of
         true ->
             z_notifier:notify(#mailinglist_mailing{list_id={resend_bounced, ListId}, page_id=PageId}, Context),
-            case length(m_mailinglist:get_bounced_recipients(ListId, Context)) of
+            case m_mailinglist:bounce_count(ListId, Context) of
                 0 ->
                     z_render:growl_error(?__("No addresses selected", Context), Context);
                 _ ->
@@ -355,13 +355,14 @@ send_mailing_process({single_test_address, Email}, PageId, Context) ->
     send_mailing_process(ListId, [Email], PageId, Context);
 
 send_mailing_process({resend_bounced, ListId}, PageId, Context) ->
-    send_mailing_process(ListId, m_mailinglist:get_bounced_recipients(ListId, Context), PageId, Context);
+    {ok, Bounced} = z_mailinglist_recipients:list_bounced_recipients(ListId, Context),
+    send_mailing_process(ListId, Bounced, PageId, Context);
 
 send_mailing_process(ListId, PageId, Context) ->
-    Recipients = z_mailinglist_recipients:list_recipients(ListId, Context),
+    {ok, Recipients} = z_mailinglist_recipients:list_recipients(ListId, Context),
     send_mailing_process(ListId, Recipients, PageId, Context).
 
-send_mailing_process(ListId, Recipients, PageId, Context) ->
+send_mailing_process(ListId, Recipients, PageId, Context) when is_map(Recipients) ->
     m_mailinglist:reset_bounced(ListId, Context),
     From = m_mailinglist:get_email_from(ListId, Context),
     Options = [
