@@ -86,50 +86,54 @@ class_to_opts(Class) ->
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-     #menu_item{id=admin_dashboard,
-                label=?__("Dashboard", Context),
-                url={admin} },
+     #menu_item{id = admin_dashboard,
+                label = ?__("Dashboard", Context),
+                url = admin },
 
      %% CONTENT %%
-     #menu_item{id=admin_content,
-                label=?__("Content", Context)},
+     #menu_item{id = admin_content,
+                label = ?__("Content", Context)},
 
-     #menu_item{id=admin_overview,
+     #menu_item{id = admin_overview,
+                parent = admin_content,
+                label = ?__("Pages", Context),
+                url = admin_overview_rsc,
+                sort = 1},
+     #menu_item{id = admin_media,
+                parent = admin_content,
+                label = ?__("Media", Context),
+                url = admin_media,
+                sort = 2},
+     #menu_separator{
                 parent=admin_content,
-                label=?__("Pages", Context),
-                url={admin_overview_rsc}},
-     #menu_item{id=admin_media,
-                parent=admin_content,
-                label=?__("Media", Context),
-                url={admin_media}},
-     #menu_separator{parent=admin_content}
+                sort = 10}
     ]
     ++ admin_menu_content_queries(Context) ++
     [
 
      %% STRUCTURE %%
-     #menu_item{id=admin_structure,
-                label=?__("Structure", Context)},
+     #menu_item{id = admin_structure,
+                label = ?__("Structure", Context)},
 
 
      %% MODULES %%
-     #menu_item{id=admin_modules,
-                label=?__("Modules", Context)},
+     #menu_item{id = admin_modules,
+                label = ?__("Modules", Context)},
 
 
      %% AUTH %%
-     #menu_item{id=admin_auth,
-                label=?__("Auth", Context)},
+     #menu_item{id = admin_auth,
+                label = ?__("Auth", Context)},
 
      %% SYSTEM %%
-     #menu_item{id=admin_system,
-                label=?__("System", Context)},
+     #menu_item{id = admin_system,
+                label = ?__("System", Context)},
 
-     #menu_item{id=admin_status,
-                parent=admin_system,
-                visiblecheck={acl, use, mod_admin_config},
-                label=?__("Status", Context),
-                url={admin_status}}
+     #menu_item{id = admin_status,
+                parent = admin_system,
+                visiblecheck = {acl, use, mod_admin_config},
+                label = ?__("Status", Context),
+                url = admin_status}
 
      |Acc].
 
@@ -149,7 +153,8 @@ admin_menu_content_queries(Context) ->
                 id = {admin_query, Id},
                 parent = admin_content,
                 label = Title,
-                url = {admin_overview_rsc, [{qquery_id, Id}]}
+                url = {admin_overview_rsc, [{qquery_id, Id}]},
+                sort = 10
             }
         end,
         Result1),
@@ -157,7 +162,7 @@ admin_menu_content_queries(Context) ->
         [] ->
             [];
         _ ->
-            CQ ++ [ #menu_separator{parent=admin_content} ]
+            CQ ++ [ #menu_separator{ parent = admin_content, sort = 10 } ]
     end.
 
 
