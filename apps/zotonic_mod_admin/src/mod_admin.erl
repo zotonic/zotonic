@@ -101,7 +101,8 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
      #menu_item{id=admin_media,
                 parent=admin_content,
                 label=?__("Media", Context),
-                url={admin_media}}
+                url={admin_media}},
+     #menu_separator{parent=admin_content}
     ]
     ++ admin_menu_content_queries(Context) ++
     [
@@ -137,19 +138,27 @@ admin_menu_content_queries(Context) ->
     #search_result{result=Result} = z_search:search({all_bytitle, [{cat,admin_content_query}]}, Context),
     AdminOverviewQueryId = m_rsc:rid(admin_overview_query, Context),
     Result1 = lists:filter(
-                    fun({_Title,Id}) ->
-                        Id =/= AdminOverviewQueryId
-                    end,
-                    Result),
-    lists:map(fun({Title, Id}) ->
-                #menu_item{
-                    id={admin_query, Id},
-                    parent=admin_content,
-                    label=Title,
-                    url={admin_overview_rsc, [{qquery_id, Id}]}
-                }
-              end,
-              Result1).
+        fun({_Title,Id}) ->
+            z_acl:rsc_visible(Id, Context)
+            andalso Id =/= AdminOverviewQueryId
+        end,
+        Result),
+    CQ = lists:map(
+        fun({Title, Id}) ->
+            #menu_item{
+                id = {admin_query, Id},
+                parent = admin_content,
+                label = Title,
+                url = {admin_overview_rsc, [{qquery_id, Id}]}
+            }
+        end,
+        Result1),
+    case CQ of
+        [] ->
+            [];
+        _ ->
+            CQ ++ [ #menu_separator{parent=admin_content} ]
+    end.
 
 
 observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
