@@ -292,6 +292,8 @@ find_value(Name, [[{A,_}|_]|_] = Blocks, _TplVars, _Context ) when is_atom(A), n
         [] -> undefined;
         [Block|_] -> Block
     end;
+find_value(Nr, [{A,_}|_] = List, _TplVars, _Context ) when is_integer(Nr), is_integer(A) ->
+    proplists:get_value(Nr, List);
 find_value(Name, [#{}|_] = Blocks, _TplVars, _Context ) when not is_integer(Name) ->
     % List of maps - blocks in the rsc
     NameB = z_convert:to_binary(Name),

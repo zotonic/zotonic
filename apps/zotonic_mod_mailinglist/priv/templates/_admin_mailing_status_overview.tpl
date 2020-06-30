@@ -2,13 +2,13 @@
 {% with m.mailinglist.rsc_stats[id] as rsc_stats %}
 {% with m.mailinglist.scheduled[id] as scheduled %}
 
+<h3>{_ Mailing lists _}</h3>
+
 {% if rsc_stats %}
 <p>{{ m.rsc[id].title }} {_ has been sent to the following lists: _}</p>
 {% else %}
 <p>{{ m.rsc[id].title }} {_ has never been sent yet. _}</p>
 {% endif %}
-<h3>{_ Mailing lists _}</h3>
-<hr/>
 
 <table class="table table-striped">
     <thead>

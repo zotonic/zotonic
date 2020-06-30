@@ -358,7 +358,7 @@ send_mailing_process({resend_bounced, ListId}, PageId, Context) ->
     send_mailing_process(ListId, m_mailinglist:get_bounced_recipients(ListId, Context), PageId, Context);
 
 send_mailing_process(ListId, PageId, Context) ->
-    Recipients = z_mailinglist_recipients:get_recipients(ListId, Context),
+    Recipients = z_mailinglist_recipients:list_recipients(ListId, Context),
     send_mailing_process(ListId, Recipients, PageId, Context).
 
 send_mailing_process(ListId, Recipients, PageId, Context) ->
@@ -369,7 +369,6 @@ send_mailing_process(ListId, Recipients, PageId, Context) ->
         {list_id, ListId},
         {email_from, From}
     ],
-    Recipients = z_mailinglist_recipients:list_recipients(ListId, Context),
     maps:fold(
         fun(Email, Recipient, _Acc) ->
             send(Email, Recipient, From, Options, Context)
