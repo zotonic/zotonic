@@ -24,6 +24,7 @@
 
     scan_lines/1,
     scan_lines/2,
+    parse_line/2,
     cleanup_field/1
 ]).
 

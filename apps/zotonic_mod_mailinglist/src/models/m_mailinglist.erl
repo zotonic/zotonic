@@ -416,11 +416,11 @@ lines_to_recipients([Line|Lines], Acc) ->
     %% Split every line on tab
     Trimmed = z_string:trim( z_convert:to_binary(Line) ),
     case z_csv_parser:parse_line(Trimmed, 9) of
-        [] ->
+        {ok, []} ->
             lines_to_recipients(Lines, Acc);
-        [<<>>] ->
+        {ok, [<<>>]} ->
             lines_to_recipients(Lines, Acc);
-        Row ->
+        {ok, Row} ->
             R = line_to_recipient(Row),
             lines_to_recipients(Lines, [R|Acc])
     end.

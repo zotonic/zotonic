@@ -328,7 +328,7 @@ import_file(TmpFile, IsTruncate, Id, Context) ->
     catch
         _: {badmatch, {rollback, {{case_clause, {error, #error{ codename = character_not_in_repertoire }}},_}}}->
             {error, "The encoding of the input file is not right. Please upload a file with UTF-8 encoding."};
-        _: _ ->
+        _: x ->
             {error, "Something unexpected went wrong while importing the recipients list."}
     end.
 
