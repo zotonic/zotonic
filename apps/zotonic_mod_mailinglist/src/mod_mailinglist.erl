@@ -351,8 +351,15 @@ send_mailing(ListId, PageId, Context) ->
 
 
 send_mailing_process({single_test_address, Email}, PageId, Context) ->
+    Email1 = m_mailinglist:normalize_email(Email),
     {ok, ListId} = m_rsc:name_to_id(mailinglist_test, Context),
-    send_mailing_process(ListId, [Email], PageId, Context);
+    Recipients = #{
+        Email1 => #{
+            <<"is_enabled">> => true,
+            <<"email">> => Email1
+        }
+    },
+    send_mailing_process(ListId, Recipients, PageId, Context);
 
 send_mailing_process({resend_bounced, ListId}, PageId, Context) ->
     {ok, Bounced} = z_mailinglist_recipients:list_bounced_recipients(ListId, Context),

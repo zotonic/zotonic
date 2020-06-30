@@ -100,14 +100,16 @@ mixin(#menu_item{ id = Id, url = UrlDef } = Item, All, Context) ->
 mixin(#menu_separator{ visiblecheck = C }, _All, _Context) ->
     {undefined, [ {separator, true}, {visiblecheck, C} ]}.
 
+item_url(undefined, _Context) ->
+    undefined;
 item_url(Rule, Context) when is_atom(Rule) ->
     z_dispatcher:url_for(Rule, Context);
 item_url({Rule}, Context) ->
     z_dispatcher:url_for(Rule, Context);
 item_url({Rule, Args}, Context) ->
     z_dispatcher:url_for(Rule, Args, Context);
-item_url(X, _) ->
-    X.
+item_url(URL, _Context) when is_list(URL); is_binary(URL) ->
+    URL.
 
 item_visible({_Key, ItemProps}, Context) ->
     case proplists:get_value(visiblecheck, ItemProps) of

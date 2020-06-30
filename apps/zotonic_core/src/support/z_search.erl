@@ -162,29 +162,50 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
     From1  = concat_sql_from(From),
     Where1 = case Where of
         [] -> [];
-        _ -> "where " ++ Where
+        _ -> [ "where ", Where ]
     end,
     Order1 = case Order of
         [] -> [];
-        _ -> "order by "++Order
+        _ -> [ "order by ", Order ]
     end,
     GroupBy1 = case GroupBy of
         [] -> [];
-        _ -> "group by "++GroupBy
+        _ -> [ "group by ", GroupBy ]
     end,
     {Parts, FinalArgs} = case SearchLimit of
         undefined ->
             case Limit1 of
                 undefined ->
                     %% No limit. Use with care.
-                    {["select", Select, "from", From1, Where1, GroupBy1, Order1], Args};
+                    {[
+                        "select", Select,
+                        "from", From1,
+                        Where1,
+                        GroupBy1,
+                        Order1
+                    ], Args};
                 {OffsetN, LimitN} ->
                     N = length(Args),
                     Args1 = Args ++ [OffsetN-1, LimitN],
-                    {["select", Select, "from", From1, Where1, GroupBy1, Order1, "offset", [$$|integer_to_list(N+1)], "limit", [$$|integer_to_list(N+2)]], Args1}
+                    {[
+                        "select", Select,
+                        "from", From1,
+                        Where1,
+                        GroupBy1,
+                        Order1,
+                        "offset", [$$|integer_to_list(N+1)],
+                        "limit", [$$|integer_to_list(N+2)]
+                    ], Args1}
             end;
         _ ->
-            {["select", Select, "from", From1, Where1, GroupBy1, Order1, SearchLimit], Args}
+            {[
+                "select", Select,
+                "from", From1,
+                Where1,
+                GroupBy1,
+                Order1,
+                SearchLimit
+            ], Args}
     end,
     {iolist_to_binary( lists:join(" ", Parts) ), FinalArgs}.
 
@@ -235,36 +256,44 @@ concat_where([W|Rest], Acc) ->
 
 
 %% @doc Process SQL from clause. We analyzing the input (it may be a string, list of #search_sql or/and other strings)
-%% @spec concat_sql_from(From) -> From1::string()
 concat_sql_from(From) ->
     Froms = concat_sql_from1(From),
-    string:join(Froms, ",").
+    lists:join(",", Froms).
 
-concat_sql_from1([H|_]=From) when is_integer(H) -> [From]; %% from is string?
-concat_sql_from1([#search_sql{} = From | T]) ->
+concat_sql_from1([ H | _ ] = From) when is_integer(H) ->
+    [ From ]; %% from is string?
+concat_sql_from1([ #search_sql{} = From | T ]) ->
     Subquery = case concat_sql_query(From, undefined) of
-	{SQL, []} -> "(" ++ SQL ++ ") AS z_"++binary_to_list(z_ids:id()); %% postgresql: alias for inner SELECT in FROM must be defined
-	{SQL, [{as, Alias}]} when is_list(Alias) -> "(" ++ SQL ++ ") AS " ++ Alias;
-	{_SQL, A} -> throw({badarg, "Use outer #search_sql.args to store args of inner #search_sql. Inner arg.list only can be equals to [] or to [{as, Alias=string()}] for aliasing innered select in FROM (e.g. FROM (SELECT...) AS Alias).", A})
+    	{SQL, []} ->
+            %% postgresql: alias for inner SELECT in FROM must be defined
+            iolist_to_binary([
+                "(", SQL, ") AS z_", z_ids:id()
+                ]);
+	   {SQL, [ {as, Alias} ]} when is_list(Alias); is_binary(Alias) ->
+            iolist_to_binary([
+                "(", SQL, ") AS ", Alias
+                ]);
+    	{_SQL, A} ->
+            throw({badarg, "Use outer #search_sql.args to store args of inner #search_sql. Inner arg.list only can be equals to [] or to [{as, Alias=string()}] for aliasing innered select in FROM (e.g. FROM (SELECT...) AS Alias).", A})
     end,
-    [Subquery | concat_sql_from1(T)];
-concat_sql_from1([{Source,Alias} | T]) ->
+    [ Subquery | concat_sql_from1(T) ];
+concat_sql_from1([ {Source,Alias} | T ]) ->
     Alias2 = case z_utils:is_empty(Alias) of
 	false -> " AS " ++ z_convert:to_list(Alias);
 	_     -> []
     end,
-    [concat_sql_from1(Source) ++ Alias2 | concat_sql_from1(T) ];
+    [ [ concat_sql_from1(Source), Alias2 ] | concat_sql_from1(T) ];
 concat_sql_from1([H|T]) ->
-    [concat_sql_from1(H) | concat_sql_from1(T)];
+    [ concat_sql_from1(H) | concat_sql_from1(T) ];
 concat_sql_from1([]) ->
     [];
-concat_sql_from1(Something) ->	%% make list for records or other stuff
-    concat_sql_from1([Something]).
+concat_sql_from1(Something) ->
+    % make list for records or other stuff
+    concat_sql_from1([ Something ]).
 
 
 
 %% @doc Create extra 'where' conditions for checking the access control
-%% @spec add_acl_check({Table, Alias}, Args, Q, Context) -> {Where, NewArgs}
 add_acl_check({rsc, Alias}, Args, Q, Context) ->
     add_acl_check_rsc(Alias, Args, Q, Context);
 add_acl_check(_, Args, _Q, _Context) ->

@@ -1,16 +1,16 @@
 
 -record(menu_item, {
-    id :: atom(),
-    parent :: atom() | undefined,
+    id :: term(),
+    parent :: term() | undefined,
     label :: binary() | string() | #trans{},
-    url :: atom() | {atom()} | {atom(), list()} | undefined,
+    url :: atom() | {atom()} | {atom(), list()} | string() | binary() | undefined,
     icon,
     visiblecheck,
     sort = 99999 :: non_neg_integer()
 }).
 
 -record(menu_separator, {
-    parent :: atom() | undefined,
+    parent :: term() | undefined,
     visiblecheck,
     sort = 99999 :: non_neg_integer()
 }).
