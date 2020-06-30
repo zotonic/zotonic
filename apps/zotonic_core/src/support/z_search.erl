@@ -34,6 +34,14 @@
 
 -include_lib("zotonic.hrl").
 
+-type search_query():: {atom(), list()}.
+-type search_offset() :: pos_integer() | {pos_integer(), pos_integer()}.
+
+-export_type([
+    search_query/0,
+    search_offset/0
+    ]).
+
 -define(OFFSET_LIMIT, {1,?SEARCH_PAGELEN}).
 -define(OFFSET_PAGING, {1,30000}).
 
@@ -87,7 +95,10 @@ search(Search, Context) ->
     search(Search, ?OFFSET_LIMIT, Context).
 
 %% @doc Perform the named search and its arguments
-%% @spec search({Name, SearchPropList}, {Offset, Limit}, #context{}) -> #search_result{}
+-spec search(search_query(), search_offset(), z:context() )
+    -> #search_result{}.
+search(Search, MaxRows, Context) when is_integer(MaxRows) ->
+    search(Search, {1, MaxRows}, Context);
 search({SearchName, Props} = Search, OffsetLimit, Context) ->
     Props1 = case proplists:get_all_values(cat, Props) of
         [] -> Props;
@@ -120,6 +131,8 @@ query_(Props, Context) ->
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement that still needs to be
 %% augmented with extra ACL checks.
 %% @spec search_result(Result, Limit, Context) -> #search_result{}
+-spec search_result( list() | #search_result{} | #search_sql{}, search_offset(), z:context() ) ->
+    #search_result{}.
 search_result(L, _Limit, _Context) when is_list(L) ->
     #search_result{result=L};
 search_result(#search_result{} = S, _Limit, _Context) ->
@@ -160,20 +173,20 @@ concat_sql_query(#search_sql{select=Select, from=From, where=Where, group_by=Gro
         _ -> "group by "++GroupBy
     end,
     {Parts, FinalArgs} = case SearchLimit of
-                             undefined ->
-                                 case Limit1 of
-                                     undefined ->
-                                         %% No limit. Use with care.
-                                         {["select", Select, "from", From1, Where1, GroupBy1, Order1], Args};
-                                     {OffsetN, LimitN} ->
-                                         N = length(Args),
-                                         Args1 = Args ++ [OffsetN-1, LimitN],
-                                         {["select", Select, "from", From1, Where1, GroupBy1, Order1, "offset", [$$|integer_to_list(N+1)], "limit", [$$|integer_to_list(N+2)]], Args1}
-                                 end;
-                             _ ->
-                                 {["select", Select, "from", From1, Where1, GroupBy1, Order1, SearchLimit], Args}
-                         end,
-    {string:join(Parts, " "), FinalArgs}.
+        undefined ->
+            case Limit1 of
+                undefined ->
+                    %% No limit. Use with care.
+                    {["select", Select, "from", From1, Where1, GroupBy1, Order1], Args};
+                {OffsetN, LimitN} ->
+                    N = length(Args),
+                    Args1 = Args ++ [OffsetN-1, LimitN],
+                    {["select", Select, "from", From1, Where1, GroupBy1, Order1, "offset", [$$|integer_to_list(N+1)], "limit", [$$|integer_to_list(N+2)]], Args1}
+            end;
+        _ ->
+            {["select", Select, "from", From1, Where1, GroupBy1, Order1, SearchLimit], Args}
+    end,
+    {iolist_to_binary( lists:join(" ", Parts) ), FinalArgs}.
 
 
 %% @doc Inject the ACL checks in the SQL query.

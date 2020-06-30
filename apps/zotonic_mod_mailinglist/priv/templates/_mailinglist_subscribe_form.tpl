@@ -35,18 +35,35 @@
 					<div>
 						<input class="form-control" id="{{ #name_surname_prefix }}" type="text" name="name_surname_prefix" value="{{ rcpt.props.name_surname_prefix|default:id.name_surname_prefix|default:q.name_surname_prefix }}" />
 					</div>
-					</div>
+				</div>
 
-				    <div class="form-group col-lg-6 col-md-6">
-					    <label class="control-label" for="{{ #name_surname }}">{_ Surname _}</label>
-						<div>
-					<input class="form-control" id="{{ #name_surname }}" type="text" name="name_surname" value="{{ rcpt.props.name_surname|default:id.name_surname|default:q.name_surname|escape }}" />
+			    <div class="form-group col-lg-6 col-md-6">
+				    <label class="control-label" for="{{ #name_surname }}">{_ Surname _}</label>
+					<div>
+						<input class="form-control" id="{{ #name_surname }}" type="text" name="name_surname" value="{{ rcpt.props.name_surname|default:id.name_surname|default:q.name_surname|escape }}" />
+					</div>
 				</div>
 			</div>
 
 			{% if not in_admin %}
 				{% validate id=#name_first name="name_first" type={presence} %}
 				{% validate id=#name_surname name="name_surname" type={presence} %}
+			{% endif %}
+
+			{% if in_admin and m.modules.active.mod_translation %}
+				<div class="form-group">
+				    <div class="form-group">
+				        <label class="control-label" for="pref_language">{_ Language _}</label>
+				        <div>
+				            <select class="form-control" name="pref_language">
+				                <option></option>
+				                {% for code,lang in m.translation.language_list_enabled %}
+				                    <option {% if rcpt.props.pref_language == code %}selected{% endif %} value="{{ code }}">{{ lang.name }}</a>
+				                {% endfor %}
+				            </select>
+				        </div>
+				    </div>
+				</div>
 			{% endif %}
 
 			{% if in_admin and not recipient_id and not m.rsc[id].mailinglist_private %}
@@ -61,7 +78,7 @@
 				{% endif %}
 
 				{% if recipient_id %}
-					{% button class="btn btn-primary" type="submit" text=_"Edit" %}
+					{% button class="btn btn-primary" type="submit" text=_"Save" %}
 				{% else %}
 					{% button class="btn btn-primary" type="submit" text=_"Subscribe" %}
 				{% endif %}

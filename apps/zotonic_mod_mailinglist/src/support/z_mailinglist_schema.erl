@@ -1,7 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2011-10-13
-
 %% @doc Schema definition for mailinglist module, including upgraders
 
 %% Copyright 2011 Arjan Scherpenisse
@@ -18,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(mod_mailinglist_schema).
+-module(z_mailinglist_schema).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -939,18 +939,13 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
 preflight_check_uri(_Id, _Props, _Context) ->
     ok.
 
-preflight_check_query(Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
-    case m_rsc:is_a(Id, 'query', Context) of
-        true ->
-            try
-                SearchContext = z_context:new( Context ),
-                search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
-                ok
-            catch
-                _: {error, {_, _}} ->
-                    {error, invalid_query}
-            end;
-        false ->
+preflight_check_query(_Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
+    try
+        SearchContext = z_context:new( Context ),
+        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
+        ok
+    catch
+        _: {error, {_, _}} ->
             {error, invalid_query}
     end;
 preflight_check_query(_Id, _Props, _Context) ->

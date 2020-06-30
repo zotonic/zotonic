@@ -32,7 +32,31 @@
 
     </div>
 
-    <p>{_ Number of recipients on this list: _} <b>{{ m.mailinglist.stats[id][1]|format_number }}</b></p>
+    {% with m.mailinglist.stats[id] as stats %}
+        <p>{_ Number of recipients on this list: _} <b>{{ stats.total|format_number }}</b></p>
+        <table class="table">
+            <tr>
+                <th>{_ Recipients _}</th>
+                <th>{_ Subscriber Edges _}</th>
+                <th>{_ Matched via Query _}</th>
+            </tr>
+            <tr>
+                <td>
+                    {{ stats.recipients|format_number }} <span class="text-muted">{_ see below _}</span>
+                </td>
+                <td>
+                    <a href="{% url admin_edges qhasobject=id qpredicate=`subscriberof` %}">
+                        {{ stats.subscriberof|format_number }} {_ pages _}
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url admin_overview_rsc qquery_id=id %}">
+                        {{ stats.query_text|format_number }} {_ pages _}
+                    </a>
+                </td>
+            </tr>
+        </table>
+    {% endwith %}
 </div>
 
 <div class="row">
