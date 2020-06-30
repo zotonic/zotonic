@@ -8,7 +8,7 @@
 		</p>
 	{% endif %}
 
-	<div id="mailinglist_subscribe_form" class="clearfix">
+	<div id="mailinglist_subscribe_form">
         {% if in_admin %}
 			{% include "_mailinglist_subscribe_form.tpl" id=id recipient_id=recipient_id make_person=make_person %}
         {% else %}

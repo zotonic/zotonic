@@ -2,7 +2,7 @@
 Params:
 qsort
 qcat
-custompivot
+qcustompivot
 #}
 <table class="table table-striped do_adminLinkedTable">
     <thead>

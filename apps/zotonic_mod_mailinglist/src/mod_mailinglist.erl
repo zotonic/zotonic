@@ -50,15 +50,15 @@
 %% @doc Install the tables needed for the mailinglist and return the rsc datamodel.
 -spec manage_schema(install | pos_integer(), z:context()) -> ok.
 manage_schema(install, Context) ->
-    mod_mailinglist_schema:manage_schema(install, Context).
+    z_mailinglist_schema:manage_schema(install, Context).
 
 
 observe_search_query({search_query, {mailinglist_recipients, [{id,Id}]}, _OffsetLimit}, _Context) ->
     #search_sql{
         select="id, email, is_enabled",
         from="mailinglist_recipient",
-		where="mailinglist_id = $1",
-		args=[Id],
+        where="mailinglist_id = $1",
+        args=[Id],
         order="email",
         tables=[]
     };
@@ -66,72 +66,81 @@ observe_search_query({search_query, {mailinglist_bounced, [{list_id,ListId}, {ma
     #search_sql{
         select="distinct r.id, r.email, r.is_enabled",
         from="mailinglist_recipient r, log_email l",
-		where="r.mailinglist_id = l.other_id AND r.mailinglist_id = $1 AND l.content_id = $2 AND r.email = l.envelop_to AND mailer_status='bounce'",
-		args=[ListId, Id],
+        where="r.mailinglist_id = l.other_id AND r.mailinglist_id = $1 AND l.content_id = $2 AND r.email = l.envelop_to AND mailer_status='bounce'",
+        args=[ListId, Id],
         order="email",
         tables=[]
     };
 observe_search_query(_, _) ->
-	undefined.
+    undefined.
 
 
 %% @doc Send status messages to a recipient.
 observe_mailinglist_message(#mailinglist_message{what=silent}, _Context) ->
-	ok;
+    ok;
 observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Props}, Context) ->
-	Email = proplists:get_value(email, Props),
-	z_email:send_render(Email, "email_mailinglist_goodbye.tpl", [{list_id, ListId}, {email, Email}, {recipient, Props}], Context),
-	ok;
+    Email = proplists:get_value(email, Props),
+    z_email:send_render(Email, "email_mailinglist_goodbye.tpl", [{list_id, ListId}, {email, Email}, {recipient, Props}], Context),
+    ok;
 observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, recipient=RecipientId}, Context) ->
-	Template = case Message of
-		send_welcome -> "email_mailinglist_welcome.tpl";
-		send_confirm -> "email_mailinglist_confirm.tpl"
-	end,
-	Props = m_mailinglist:recipient_get(RecipientId, Context),
-	z_email:send_render(proplists:get_value(email, Props), Template, [{list_id, ListId}, {recipient, Props}], Context),
-	ok.
+    Template = case Message of
+        send_welcome -> "email_mailinglist_welcome.tpl";
+        send_confirm -> "email_mailinglist_confirm.tpl"
+    end,
+    Props = m_mailinglist:recipient_get(RecipientId, Context),
+    z_email:send_render(proplists:get_value(email, Props), Template, [{list_id, ListId}, {recipient, Props}], Context),
+    ok.
 
 
 %% @doc When an e-mail bounces, disable the corresponding recipients and mark them as bounced.
 observe_email_bounced(B=#email_bounced{}, Context) ->
     Recipients = m_mailinglist:get_recipients_by_email(B#email_bounced.recipient, Context),
-    lists:foreach(fun(Id) -> m_mailinglist:update_recipient(Id, [{is_enabled, false}, {is_bounced, true}, {bounce_time, calendar:universal_time()}], Context) end, Recipients),
+    lists:foreach(
+        fun(Id) ->
+            Bounce = [
+                {is_enabled, false},
+                {is_bounced, true},
+                {bounce_time, calendar:universal_time()}
+            ],
+            m_mailinglist:update_recipient(Id, Bounce, Context)
+        end,
+        Recipients),
     undefined. %% Let other bounce handlers do their thing
 
 
 %% @doc Request confirmation of canceling this mailing.
 event(#postback{message={dialog_mailing_cancel_confirm, Args}}, Context) ->
-	{list_id, MailingId} = proplists:lookup(list_id, Args),
-	case is_allowed_mailing(MailingId, Context) of
-		true ->
-			z_render:dialog(
+    {list_id, MailingId} = proplists:lookup(list_id, Args),
+    case is_allowed_mailing(MailingId, Context) of
+        true ->
+            z_render:dialog(
                 ?__("Confirm mailing cancelation.", Context),
                 "_dialog_mailing_cancel_confirm.tpl",
                 Args,
                 Context);
-		false ->
-			z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
-	end;
+        false ->
+            z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
+    end;
 event(#postback{message={mailing_cancel, Args}}, Context) ->
-	MailingId = proplists:get_value(list_id, Args),
-	PageId = proplists:get_value(page_id, Args),
-	case is_allowed_mailing(MailingId, Context) and z_acl:rsc_visible(MailingId, Context) of
-		true ->
-			m_mailinglist:delete_scheduled(MailingId, PageId, Context),
-			z_render:growl(?__("The mailing has been canceled.", Context), Context);
-		false ->
-			z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
-	end;
+    MailingId = proplists:get_value(list_id, Args),
+    PageId = proplists:get_value(page_id, Args),
+    case is_allowed_mailing(MailingId, Context) and z_acl:rsc_visible(MailingId, Context) of
+        true ->
+            m_mailinglist:delete_scheduled(MailingId, PageId, Context),
+            z_render:growl(?__("The mailing has been canceled.", Context), Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
+    end;
 event(#postback{message={mailinglist_reset, Args}}, Context) ->
-	MailingId = proplists:get_value(list_id, Args),
-	PageId = proplists:get_value(page_id, Args),
-	case is_allowed_mailing(MailingId, Context) of
-		true ->
-			m_mailinglist:reset_log_email(MailingId, PageId, Context),
-			z_render:growl(?__("The statistics have been cleared.", Context), Context);
-		false ->
-			z_render:growl_error(?__("You are not allowed to reset this mailing.", Context), Context)
-	end;
+    MailingId = proplists:get_value(list_id, Args),
+    PageId = proplists:get_value(page_id, Args),
+    case is_allowed_mailing(MailingId, Context) of
+        true ->
+            m_mailinglist:reset_log_email(MailingId, PageId, Context),
+            z_render:growl(?__("The statistics have been cleared.", Context), Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to reset this mailing.", Context), Context)
+    end;
 
 %% @doc Handle upload of a new recipients list
 event(#submit{message={mailinglist_upload,[{id,MailingId}]}}, Context) ->
@@ -166,7 +175,7 @@ event(#postback{message={resend_bounced, [{list_id, ListId}, {id, PageId}]}}, Co
     case is_allowed_mailing(ListId, Context) of
         true ->
             z_notifier:notify(#mailinglist_mailing{list_id={resend_bounced, ListId}, page_id=PageId}, Context),
-            case length(m_mailinglist:get_bounced_recipients(ListId, Context)) of
+            case m_mailinglist:bounce_count(ListId, Context) of
                 0 ->
                     z_render:growl_error(?__("No addresses selected", Context), Context);
                 _ ->
@@ -235,30 +244,30 @@ init(Args) ->
 %%                                      {stop, Reason, State}
 %% @doc Handle a dropbox file with recipients.
 handle_call({{dropbox_file, File}, _SenderContext}, _From, State) ->
-	GetFiles = fun() ->
-		C = z_acl:sudo(State#state.context),
-		#search_result{result=Ids} = z_search:search({all, [{cat,mailinglist}]}, C),
-		[ {m_rsc:p(Id, mailinglist_dropbox_filename, C), Id} || Id <- Ids ]
-	end,
-	Files = z_depcache:memo(GetFiles, mailinglist_dropbox_filenames, ?WEEK, [mailinglist], State#state.context),
-	case proplists:get_value(list_to_binary(filename:basename(File)), Files) of
-		undefined ->
-			{reply, undefined, State};
-		ListId ->
-			HandleF = fun() ->
-				C = z_acl:sudo(State#state.context),
+    GetFiles = fun() ->
+        C = z_acl:sudo(State#state.context),
+        #search_result{result=Ids} = z_search:search({all, [{cat,mailinglist}]}, C),
+        [ {m_rsc:p(Id, mailinglist_dropbox_filename, C), Id} || Id <- Ids ]
+    end,
+    Files = z_depcache:memo(GetFiles, mailinglist_dropbox_filenames, ?WEEK, [mailinglist], State#state.context),
+    case proplists:get_value(list_to_binary(filename:basename(File)), Files) of
+        undefined ->
+            {reply, undefined, State};
+        ListId ->
+            HandleF = fun() ->
+                C = z_acl:sudo(State#state.context),
                 case import_file(File, true, ListId, C) of
                     ok ->
-        				z_email:send_admin(
+                        z_email:send_admin(
                           "mod_mailinglist: Import from dropbox",
                           ["Replaced all recipients of ", m_rsc:p(ListId, title, C), " with the contents of ", File, "."], State#state.context);
                     {error, Msg} ->
-        				z_email:send_admin("mod_mailinglist: Import from dropbox FAILED", Msg, State#state.context)
+                        z_email:send_admin("mod_mailinglist: Import from dropbox FAILED", Msg, State#state.context)
                 end
-			end,
-			spawn(HandleF),
-			{reply, ok, State}
-	end;
+            end,
+            spawn(HandleF),
+            {reply, ok, State}
+    end;
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
@@ -269,8 +278,8 @@ handle_call(Message, _From, State) ->
 %%                                  {stop, Reason, State}
 %% @doc Send a mailing.
 handle_cast({#mailinglist_mailing{list_id=ListId, page_id=PageId}, SenderContext}, State) ->
-	send_mailing(ListId, PageId, SenderContext),
-	{noreply, State};
+    send_mailing(ListId, PageId, SenderContext),
+    {noreply, State};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
@@ -312,14 +321,14 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Import a file, replacing the recipients of the list.
 import_file(TmpFile, IsTruncate, Id, Context) ->
-	{ok, Data} = file:read_file(TmpFile),
-	file:delete(TmpFile),
+    {ok, Data} = file:read_file(TmpFile),
+    file:delete(TmpFile),
     try
         ok = m_mailinglist:insert_recipients(Id, Data, IsTruncate, Context)
     catch
-        _: {badmatch, {rollback, {{case_clause, {error, #error{ codename = character_not_in_repertoire }}},_}}}->
+        _:{badmatch, {rollback, {{case_clause, {error, #error{ codename = character_not_in_repertoire }}},_}}}->
             {error, "The encoding of the input file is not right. Please upload a file with UTF-8 encoding."};
-        _: _ ->
+        _:_ ->
             {error, "Something unexpected went wrong while importing the recipients list."}
     end.
 
@@ -327,13 +336,13 @@ import_file(TmpFile, IsTruncate, Id, Context) ->
 
 %% @doc Check if there are any scheduled mailings waiting.
 poll_scheduled(Context) ->
-	case m_mailinglist:check_scheduled(Context) of
-		{ListId, PageId} ->
-			m_mailinglist:delete_scheduled(ListId, PageId, Context),
-			send_mailing(ListId, PageId, Context);
-		undefined ->
-			ok
-	end.
+    case m_mailinglist:check_scheduled(Context) of
+        {ListId, PageId} ->
+            m_mailinglist:delete_scheduled(ListId, PageId, Context),
+            send_mailing(ListId, PageId, Context);
+        undefined ->
+            ok
+    end.
 
 
 %% @doc Send the page to the mailinglist.
@@ -342,17 +351,25 @@ send_mailing(ListId, PageId, Context) ->
 
 
 send_mailing_process({single_test_address, Email}, PageId, Context) ->
+    Email1 = m_mailinglist:normalize_email(Email),
     {ok, ListId} = m_rsc:name_to_id(mailinglist_test, Context),
-    send_mailing_process(ListId, [Email], PageId, Context);
+    Recipients = #{
+        Email1 => #{
+            <<"is_enabled">> => true,
+            <<"email">> => Email1
+        }
+    },
+    send_mailing_process(ListId, Recipients, PageId, Context);
 
 send_mailing_process({resend_bounced, ListId}, PageId, Context) ->
-    send_mailing_process(ListId, m_mailinglist:get_bounced_recipients(ListId, Context), PageId, Context);
+    {ok, Bounced} = z_mailinglist_recipients:list_bounced_recipients(ListId, Context),
+    send_mailing_process(ListId, Bounced, PageId, Context);
 
 send_mailing_process(ListId, PageId, Context) ->
-    Recipients = m_mailinglist:get_enabled_recipients(ListId, Context) ++ m_edge:subjects(ListId, subscriberof, Context),
+    {ok, Recipients} = z_mailinglist_recipients:list_recipients(ListId, Context),
     send_mailing_process(ListId, Recipients, PageId, Context).
 
-send_mailing_process(ListId, Recipients, PageId, Context) ->
+send_mailing_process(ListId, Recipients, PageId, Context) when is_map(Recipients) ->
     m_mailinglist:reset_bounced(ListId, Context),
     From = m_mailinglist:get_email_from(ListId, Context),
     Options = [
@@ -360,52 +377,64 @@ send_mailing_process(ListId, Recipients, PageId, Context) ->
         {list_id, ListId},
         {email_from, From}
     ],
-    lists:foreach(
-        fun(Email) ->
-            send(Email, From, Options, Context)
+    maps:fold(
+        fun(Email, Recipient, _Acc) ->
+            send(Email, Recipient, From, Options, Context)
         end,
+        ok,
         Recipients).
 
-
-send(undefined, _From, _Options, _Context) ->
+send(undefined, _R, _From, _Options, _Context) ->
     skip;
-send(Id, From, Options, Context) when is_integer(Id) ->
-    Options1 = [
-        {recipient_id, Id}
-        | Options
-    ],
-    Email = m_rsc:p_no_acl(Id, email_raw, Context),
-    send(Email, From, Options1, Context);
-send(Email, From, Options, Context) ->
-    case z_convert:to_binary(z_string:trim(Email)) of
-        <<>> ->
-            skip;
-        Email1 ->
-            Id = proplists:get_value(id, Options),
-            Attachments = m_edge:objects(Id, hasdocument, Context),
-            z_email:send(
-                #email{
-                    to = Email1,
-                    from = From,
-                    html_tpl = {cat, "mailing_page.tpl"},
-                    vars = [
-                        {email, Email1}
-                        | Options
-                    ],
-                    attachments = Attachments
-                },
-                Context)
-    end.
+send(<<>>, _R, _From, _Options, _Context) ->
+    skip;
+send(_Email, RecipientId, From, Options, Context) when is_integer(RecipientId) ->
+    Email = m_rsc:p(RecipientId, email_raw, Context),
+    PageId = proplists:get_value(id, Options),
+    Attachments = m_edge:objects(PageId, hasdocument, Context),
+    z_email:send(
+        #email{
+            to = Email,
+            from = From,
+            html_tpl = {cat, "mailing_page.tpl"},
+            vars = [
+                {recipient_id, RecipientId},
+                {email, Email}
+                | Options
+            ],
+            attachments = Attachments
+        },
+        Context);
+send(Email, Recipient, From, Options, Context) when is_map(Recipient) ->
+    Context1 = case maps:get(<<"pref_language">>, Recipient, undefined) of
+        undefined ->
+            Context;
+        PrefLanguage ->
+            z_context:set_language(PrefLanguage, Context)
+    end,
+    PageId = proplists:get_value(id, Options),
+    Attachments = m_edge:objects(PageId, hasdocument, Context),
+    z_email:send(
+        #email{
+            to = Email,
+            from = From,
+            html_tpl = {cat, "mailing_page.tpl"},
+            vars = [
+                {email, Email}
+                | Options
+            ],
+            attachments = Attachments
+        },
+        Context1).
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-     #menu_item{id=admin_mailinglist,
-                parent=admin_content,
-                label=?__("Mailing lists", Context),
-                url={admin_mailinglist},
-                visiblecheck={acl, use, ?MODULE}}
-
-     |Acc].
-
-
-
+        #menu_item{
+            id = admin_mailinglist,
+            parent = admin_content,
+            label = ?__("Mailing lists", Context),
+            url = {admin_mailinglist},
+            visiblecheck = {acl, use, ?MODULE}
+        }
+        | Acc
+    ].
