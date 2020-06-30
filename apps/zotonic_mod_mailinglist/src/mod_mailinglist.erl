@@ -326,9 +326,9 @@ import_file(TmpFile, IsTruncate, Id, Context) ->
     try
         ok = m_mailinglist:insert_recipients(Id, Data, IsTruncate, Context)
     catch
-        _: {badmatch, {rollback, {{case_clause, {error, #error{ codename = character_not_in_repertoire }}},_}}}->
+        _:{badmatch, {rollback, {{case_clause, {error, #error{ codename = character_not_in_repertoire }}},_}}}->
             {error, "The encoding of the input file is not right. Please upload a file with UTF-8 encoding."};
-        _: x ->
+        _:_ ->
             {error, "Something unexpected went wrong while importing the recipients list."}
     end.
 

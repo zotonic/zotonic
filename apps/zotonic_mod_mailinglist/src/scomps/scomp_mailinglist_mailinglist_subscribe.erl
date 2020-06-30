@@ -49,9 +49,9 @@ event(#submit{message={recipient_add, Props}}, Context) ->
 			RecipientProps = [
 			    {user_id, undefined},
 			    {in_admin, InAdmin},
-			    {name_first, z_string:trim(z_context:get_q(name_first, Context, ""))},
-			    {name_surname_prefix, z_string:trim(z_context:get_q(name_surname_prefix, Context, ""))},
-			    {name_surname, z_string:trim(z_context:get_q(name_surname, Context, ""))},
+			    {name_first, sanitize(z_context:get_q(name_first, Context, ""))},
+			    {name_surname_prefix, sanitize(z_context:get_q(name_surname_prefix, Context, ""))},
+			    {name_surname, sanitize(z_context:get_q(name_surname, Context, ""))},
                 {pref_language, pref_language(Context)}
 			],
 			case m_mailinglist:insert_recipient(ListId, Email, RecipientProps, Notification, Context) of
@@ -92,9 +92,9 @@ event(#submit{message={recipient_edit, Props}}, Context) ->
                 {email, z_context:get_q_validated(email, Context)},
 			    {user_id, undefined},
 			    {in_admin, InAdmin},
-			    {name_first, z_string:trim(z_context:get_q(name_first, Context, ""))},
-			    {name_surname_prefix, z_string:trim(z_context:get_q(name_surname_prefix, Context, ""))},
-			    {name_surname, z_string:trim(z_context:get_q(name_surname, Context, ""))},
+			    {name_first, sanitize(z_context:get_q(name_first, Context, ""))},
+			    {name_surname_prefix, sanitize(z_context:get_q(name_surname_prefix, Context, ""))},
+			    {name_surname, sanitize(z_context:get_q(name_surname, Context, ""))},
                 {pref_language, pref_language(Context)}
 			],
             ok = m_mailinglist:update_recipient(RcptId, RecipientProps, Context),
@@ -109,6 +109,20 @@ event(#submit{message={recipient_edit, Props}}, Context) ->
 			        z_render:wire([ {slide_down, [{target, "mailinglist_subscribe_error"}]}], Context)
 			end
 	end.
+
+sanitize(undefined) ->
+    undefined;
+sanitize(B) when is_binary(B) ->
+    B1 = z_string:trim(B),
+    sanitize_1(B1, <<>>).
+
+sanitize_1(<<>>, Acc) ->
+    Acc;
+sanitize_1(<<C/utf8, Rest/binary>>, Acc) when C < 32 ->
+    sanitize_1(Rest, <<Acc/binary, " ">>);
+sanitize_1(<<C/utf8, Rest/binary>>, Acc) ->
+    sanitize_1(Rest, <<Acc/binary, C/utf8>>).
+
 
 pref_language(Context) ->
     Lang = z_context:get_q(pref_language, Context),
