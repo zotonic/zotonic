@@ -146,7 +146,7 @@ admin_menu_content_queries(Context) ->
                     id={admin_query, Id},
                     parent=admin_content,
                     label=Title,
-                    url={admin_overview_rsc, [{qquery, Id}]}
+                    url={admin_overview_rsc, [{qquery_id, Id}]}
                 }
               end,
               Result1).

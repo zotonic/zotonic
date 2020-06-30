@@ -54,7 +54,7 @@ qargs(Context) ->
     lists:filtermap(
                 fun
                     ({<<"qargs">>, _}) -> false;
-                    ({<<"qs">>, V}) -> {true, {"text", V}};
+                    ({<<"qs">>, V}) -> {true, {<<"text">>, V}};
                     ({<<"q", Term/binary>>, V}) -> {true, {Term, V}};
                     (_) -> false
                 end,
@@ -754,7 +754,9 @@ assure_cat_flatten(Names) ->
 assure_category(undefined, _) -> undefined;
 assure_category(null, _) -> undefined;
 assure_category("", _) -> undefined;
+assure_category("*", _) -> undefined;
 assure_category(<<>>, _) -> undefined;
+assure_category(<<"*">>, _) -> undefined;
 assure_category(<<$', _/binary>> = Name, Context) ->
     case binary:last(Name) of
         $' -> assure_category_1(z_string:trim(Name, $'), Context);
