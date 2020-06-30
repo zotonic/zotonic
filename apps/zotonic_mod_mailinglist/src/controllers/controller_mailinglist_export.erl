@@ -49,13 +49,12 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Export = lists:filtermap(
         fun
             (#{<<"is_enabled">> := true } = R) ->
-                Line = [
-                    maps:get(<<"email">>, R), 9,
-                    maps:get(<<"name_first">>, R, <<>>), 9,
-                    maps:get(<<"name_surname">>, R, <<>>), 9,
-                    maps:get(<<"name_surname_prefix">>, R, <<>>),
-                    13, 10
-                ],
+                Line = z_csv_writer:encode_line([
+                        maps:get(<<"email">>, R),
+                        maps:get(<<"name_first">>, R, <<>>),
+                        maps:get(<<"name_surname">>, R, <<>>),
+                        maps:get(<<"name_surname_prefix">>, R, <<>>)
+                    ], 9),
                 {true, Line};
             (_) ->
                 false

@@ -104,6 +104,8 @@ fetch_line(<<C, B/binary>>, Line) ->
 
 
 %% @doc Parse a line into its columns, using a character a separator.
+parse_line(Line, Sep) when is_binary(Line), is_integer(Sep) ->
+    parse_line_binary(Line, Sep, <<>>, []);
 parse_line(Line, Sep) when is_list(Line), is_integer(Sep) ->
     parse_line(Line, Sep, [], []).
 
@@ -114,6 +116,14 @@ parse_line([Sep|Rest], Sep, Col, Cols) ->
     parse_line(Rest, Sep, [], [z_csv_parser:cleanup_field(lists:reverse(Col))|Cols]);
 parse_line([C|Rest], Sep, Col, Cols) ->
     parse_line(Rest, Sep, [C|Col], Cols).
+
+%% @doc Try to parse the line with the given field escape and quote chars.
+parse_line_binary(<<>>, _Sep, Col, Cols) ->
+    {ok, lists:reverse([z_csv_parser:cleanup_field(Col)|Cols])};
+parse_line_binary(<<Sep, Rest/binary>>, Sep, Col, Cols) ->
+    parse_line_binary(Rest, Sep, <<>>, [z_csv_parser:cleanup_field(Col)|Cols]);
+parse_line_binary(<<C/utf8, Rest/binary>>, Sep, Col, Cols) ->
+    parse_line_binary(Rest, Sep, <<Col/binary, C/utf8>>, Cols).
 
 
 %% @doc Scan the file (or device) and return lines with fields.

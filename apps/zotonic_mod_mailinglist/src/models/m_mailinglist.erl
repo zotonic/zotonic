@@ -415,22 +415,36 @@ lines_to_recipients([], Acc) -> Acc;
 lines_to_recipients([Line|Lines], Acc) ->
     %% Split every line on tab
     Trimmed = z_string:trim( z_convert:to_binary(Line) ),
-    case binary:split(Trimmed, <<9>>, [ global ]) of
+    case z_csv_parser:parse_line(Trimmed, 9) of
         [] ->
             lines_to_recipients(Lines, Acc);
         [<<>>] ->
             lines_to_recipients(Lines, Acc);
-        Items0 ->
-            % Remove any " or ' quotes around the parts
-            Items = [ z_string:unquote(z_string:unquote(I, $'), $") || I <- Items0 ],
-            R = case length(Items) of
-                    1 -> [{email, hd(Items)}];
-                    2 -> [{email, hd(Items)}, {name_first, lists:nth(2, Items)}];
-                    3 -> [{email, hd(Items)}, {name_first, lists:nth(2, Items)}, {name_surname, lists:nth(3, Items)}];
-                    _ -> [{email, hd(Items)}, {name_first, lists:nth(2, Items)}, {name_surname, lists:nth(3, Items)}, {name_surname_prefix, lists:nth(4, Items)}]
-                end,
+        Row ->
+            R = line_to_recipient(Row),
             lines_to_recipients(Lines, [R|Acc])
     end.
+
+line_to_recipient([ Email ]) ->
+    [ {email, Email} ];
+line_to_recipient([ Email, NameFirst ]) ->
+    [
+        {email, Email},
+        {name_first, NameFirst}
+    ];
+line_to_recipient([ Email, NameFirst, NameLast ]) ->
+    [
+        {email, Email},
+        {name_first, NameFirst},
+        {name_surname, NameLast}
+    ];
+line_to_recipient([ Email, NameFirst, NameLast, NamePrefix | _ ]) ->
+    [
+        {email, Email},
+        {name_first, NameFirst},
+        {name_surname, NameLast},
+        {name_surname_prefix, NamePrefix}
+    ].
 
 %% @doc Insert a mailing to be send when the page becomes visible
 insert_scheduled(ListId, PageId, Context) ->
