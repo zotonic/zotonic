@@ -29,13 +29,6 @@
             <a href="{% url admin_mailinglist_recipients id=mid %}">{{ title|default:"untitled" }}</a>
         </td>
         <td>
-            {% if rsc_stats[mid].bounce %}
-                    {% button class="btn btn-default btn-xs"
-                              text=_"Bounces"
-                              title=_"View and edit the bounced addresses and re-send the mailing."
-                              action={dialog_open template="_dialog_mailing_bounces.tpl" title=_"Bounces" id=id mid=mid}
-                    %}
-            {% endif %}
             {% if mid|member:scheduled %}
                 {% button class="btn btn-default btn-xs"
                           text=_"cancel"
