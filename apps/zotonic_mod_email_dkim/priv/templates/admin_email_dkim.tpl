@@ -1,7 +1,7 @@
 {% extends "admin_base.tpl" %}
 
 {% block content %}
-    {% with m.notifier.first.dkim_admin_info as info %}
+    {% with m.email_dkim.admin_info as info %}
 
     <h1>{_ DKIM e-mail signing setup _}</h1>
 
