@@ -27,52 +27,52 @@
 datamodel() ->
     #datamodel{
         categories = [
-            {mailinglist, undefined, [
-                            {title, {trans, [
-                                {en, <<"Mailing List">>},
-                                {nl, <<"Mailinglijst">>}
-                            ]}},
-                            {summary, {trans, [
-                                {en, <<"Mailing lists are used to send pages to groups of people.">>},
-                                {nl, <<"Mailinglijsten worden gebruikt om pagina's naar groepen mensen te versturen.">>}
-                            ]}}
-                        ]}
+            {mailinglist, undefined, #{
+                <<"title">> => #trans{ tr = [
+                    {en, <<"Mailing List">>},
+                    {nl, <<"Mailinglijst">>}
+                ]},
+                <<"summary">> => #trans{ tr = [
+                    {en, <<"Mailing lists are used to send pages to groups of people.">>},
+                    {nl, <<"Mailinglijsten worden gebruikt om pagina's naar groepen mensen te versturen.">>}
+                ]}
+            }}
         ],
 
         % Any resource with an e-mail address can be a subscriber of a mailinglist
         predicates = [
             {subscriberof,
-                [
-                    {title, {trans, [
+                #{
+                    <<"title">> => #trans{ tr = [
                         {en, <<"Subscriber of">>},
                         {nl, <<"Abonnee">>}
-                    ]}}
-                ],
+                    ]}
+                },
                 [ {person, mailinglist}, {location, mailinglist} ]},
             {exsubscriberof,
-                [
-                    {title, {trans, [
+                #{
+                    <<"title">> => #trans{ tr = [
                         {en, <<"Ex-subscriber of">>},
                         {nl, <<"Oud abonnee">>}
-                    ]}}
-                ],
+                    ]}
+                },
                 [ {person, mailinglist}, {location, mailinglist} ]},
             {hasattachment,
-                [
-                    {title, {trans, [
+                #{
+                    <<"title">> => #trans{ tr = [
                         {en, <<"Attachment">>},
                         {nl, <<"Bijlage">>}
-                    ]}}
-                ],
+                    ]}
+                },
                 [ {undefined, media} ]}
         ],
 
         resources = [
-            {mailinglist_test, mailinglist, [
-                {is_published, false},
-                {title, <<"Test mailing list">>},
-                {summary, <<"This list is used for testing. Anyone who can see this mailing list can post to it. It SHOULD NOT be visible for the world.">>}
-            ]}
+            {mailinglist_test, mailinglist, #{
+                <<"is_published">> => false,
+                <<"title">> => <<"Test mailing list">>,
+                <<"summary">> => <<"This list is used for testing. Anyone who can see this mailing list can post to it. It SHOULD NOT be visible for the world.">>
+            }}
         ]
     }.
 
