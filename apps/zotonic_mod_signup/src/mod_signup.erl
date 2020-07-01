@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2013 Marc Worrell
+%% @copyright 2010-2020 Marc Worrell
 %% @doc Let new members register themselves.
-%% @todo Check person props before sign up
-%% @todo Add verification and verification e-mails (check for _Verified, add to m_identity)
 
-%% Copyright 2010-2013 Marc Worrell
+%% Copyright 2010-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,7 +23,7 @@
 -mod_description("Implements public sign up to register as member of this site.").
 -mod_prio(500).
 -mod_schema(1).
--mod_depends([base, authentication]).
+-mod_depends([ base, authentication, mod_server_storage ]).
 -mod_provides([signup]).
 
 
@@ -35,9 +33,8 @@
     observe_signup/2,
     observe_signup_url/2,
     observe_identity_verification/2,
-    observe_logon_ready_page/2
-]).
--export([
+    observe_logon_ready_page/2,
+
     signup/4,
     signup_existing/5,
     request_verification/2
@@ -53,8 +50,8 @@ observe_signup(#signup{id=UserId, props=Props, signup_props=SignupProps, request
 
 %% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.
 observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) ->
-    CheckId = binary_to_list(z_ids:id()),
-    % z_session:set(signup_xs, {CheckId, Props, SignupProps}, Context),
+    CheckId = z_ids:id(),
+    ok = m_server_storage:secure_store(CheckId, {CheckId, Props, SignupProps}, Context),
     {ok, z_dispatcher:url_for(signup, [{xs, CheckId}], Context)}.
 
 
@@ -78,12 +75,12 @@ observe_logon_ready_page(#logon_ready_page{request_page=Url}, _Context) ->
 
 
 %% @doc Sign up a new user.
--spec signup(list(), list(), boolean(), #context{}) -> {ok, integer()} | {error, term()}.
+-spec signup(list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
 signup(Props, SignupProps, RequestConfirm, Context) ->
     signup_existing(undefined, Props, SignupProps, RequestConfirm, Context).
 
 %% @doc Sign up a existing user
--spec signup_existing(integer()|undefined, list(), list(), boolean(), #context{}) -> {ok, integer()} | {error, term()}.
+-spec signup_existing(integer()|undefined, list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
 signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
@@ -98,15 +95,15 @@ request_verification(UserId, Context) ->
     Unverified = [ R || R <- m_identity:get_rsc(UserId, Context), proplists:get_value(is_verified, R) == false ],
     request_verification(UserId, Unverified, false, Context).
 
-    request_verification(_, [], false, _Context) ->
-        {error, no_verifiable_identities};
-    request_verification(_, [], true, _Context) ->
-        ok;
-    request_verification(UserId, [Ident|Rest], Requested, Context) ->
-        case z_notifier:first(#identity_verification{user_id=UserId, identity=Ident}, Context) of
-            ok -> request_verification(UserId, Rest, true, Context);
-            _ -> request_verification(UserId, Rest, Requested, Context)
-        end.
+request_verification(_, [], false, _Context) ->
+    {error, no_verifiable_identities};
+request_verification(_, [], true, _Context) ->
+    ok;
+request_verification(UserId, [Ident|Rest], Requested, Context) ->
+    case z_notifier:first(#identity_verification{user_id=UserId, identity=Ident}, Context) of
+        ok -> request_verification(UserId, Rest, true, Context);
+        _ -> request_verification(UserId, Rest, Requested, Context)
+    end.
 
 %%====================================================================
 %% support functions
