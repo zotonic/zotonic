@@ -192,7 +192,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
     end.
 
 update_new_props(Module, Id, NewProps, Options, Context) ->
-    case map_props( m_rsc:p(Id, <<"managed_props">>, Context) ) of
+    case map_props( m_rsc:p_no_acl(Id, <<"managed_props">>, Context) ) of
         undefined ->
             NewProps;
         PreviousProps ->
