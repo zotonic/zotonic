@@ -28,7 +28,11 @@ id
                     {{ id.title|striptags|default:("<em>" ++ _"untitled" ++ "</em>")}}
                 </h2>
                 <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">
-                    {_ Category: _} {{ cat_id.title }}
+                    <span class="text-muted">{_ Category: _}</span>
+                    {% for cid in m.category[cat_id].path|reversed %}
+                        {{ cid.title }} &gt;
+                    {% endfor %}
+                    {{ cat_id.title }}
                 </a>
                 {% wire id="changecategory"
                     action={dialog_open
