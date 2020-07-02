@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2020 Marc Worrell
 %% @doc Log record definitions for zotonic
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--define(LOG_FATAL, 0).
--define(LOG_ERROR, 1).
--define(LOG_WARNING, 2).
--define(LOG_INFO, 3).
--define(LOG_DEBUG, 4).
+-include_lib("kernel/include/logger.hrl").
 
+-define(LOG_LEVEL_FATAL, 0).
+-define(LOG_LEVEL_ERROR, 1).
+-define(LOG_LEVEL_WARNING, 2).
+-define(LOG_LEVEL_INFO, 3).
+-define(LOG_LEVEL_DEBUG, 4).
 
 -record(log_message, {
     type = error :: z:severity(),
@@ -32,7 +33,7 @@
 
 
 -record(log_email, {
-    severity = ?LOG_ERROR,
+    severity = ?LOG_LEVEL_ERROR,
     message_nr,
     mailer_status,      % sending, sent, error, retry, warning, bounce, received
     mailer_message,     % any text, to clarify the mailer_status
