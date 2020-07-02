@@ -1,0 +1,5 @@
+[
+    {oauth2_service_redirect, [ "oauth-service", "redirect" ],
+                              controller_oauth2_service_redirect,
+                              []}
+].

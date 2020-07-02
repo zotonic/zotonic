@@ -23,6 +23,7 @@
 -mod_title("Facebook").
 -mod_description("Adds Facebook login and other Facebook related features.").
 -mod_prio(400).
+-mod_depends([ admin, authentication, mod_oauth2 ]).
 
 -export([
     observe_search_query/2,
@@ -41,7 +42,7 @@
 
 
 %% @doc Return the facebook appid, secret and scope
-%% @spec get_config(Context) -> {AppId, Secret, Scope}
+-spec get_config(z:context()) -> {AppId::string(), Secret::string(), Scope::string()}.
 get_config(Context) ->
     { z_convert:to_list(m_config:get_value(mod_facebook, appid, Context)),
       z_convert:to_list(m_config:get_value(mod_facebook, appsecret, Context)),

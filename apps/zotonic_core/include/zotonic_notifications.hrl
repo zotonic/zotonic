@@ -588,8 +588,8 @@
 -record(auth_validated, {
     service :: atom(),
     service_uid :: binary(),
-    service_props = [] :: list(),
-    props = [] :: list({atom(), any()}),
+    service_props = #{} :: map(),
+    props = #{} :: m_rsc:props(),
     is_connect = false :: boolean(),
     is_signup_confirm = false :: boolean()
 }).
