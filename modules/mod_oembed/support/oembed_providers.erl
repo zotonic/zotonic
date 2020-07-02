@@ -82,7 +82,7 @@ list() ->
 
      #oembed_provider{
        url_re="^https?://(www\\.)?vimeo\\.com/.*",
-       endpoint_url="https://www.vimeo.com/api/oembed.json",
+       endpoint_url="https://vimeo.com/api/oembed.json",
        title="Vimeo"
      },
 
