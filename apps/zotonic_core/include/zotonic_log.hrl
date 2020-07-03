@@ -72,5 +72,5 @@
 %% Below is copied (and adapted) from Nitrogen, which is copyright 2008-2009 Rusty Klophaus
 
 %% Easy to use macros for debugging/development
--define(PRINT(Var), lager:info("DEBUG: ~p:~p - ~p: ~p~n", [?MODULE, ?LINE, ??Var, Var])).
+-define(PRINT(Var), ?LOG_INFO(#{ var => ??Var, value => Var })).
 -define(DEBUG(Msg), z:debug_msg(?MODULE, ?LINE, Msg)).
