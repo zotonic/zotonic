@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
-%% @doc Handle the OAuth redirect of the LinkedIn logon handshake.
-%% See https://developer.linkedin.com/documents/authentication
+%% @copyright 2014-2020 Marc Worrell
+%% @doc Handle the OAuth redirect of the OAuth logon handshake.
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(controller_oauth2_provider_redirect).
+-module(controller_oauth2_service_redirect).
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
