@@ -1,6 +1,6 @@
 {application, zotonic_mod_admin_config, [
     {description, "Allow admins to edit the system configuration."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

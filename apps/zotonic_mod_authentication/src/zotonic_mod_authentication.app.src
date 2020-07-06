@@ -1,6 +1,6 @@
 {application, zotonic_mod_authentication, [
     {description, "Handles authentication and identification of users."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [
         kernel, stdlib, termit,

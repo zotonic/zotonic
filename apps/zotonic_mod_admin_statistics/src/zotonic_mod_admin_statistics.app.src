@@ -1,6 +1,6 @@
 {application, zotonic_mod_admin_statistics, [
     {description, "Allow admins to view system statistics."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

@@ -1,6 +1,6 @@
 {application, zotonic_mod_backup, [
     {description, "Make a backup of the database and files."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core, zotonic_mod_admin]},
     {env, []},

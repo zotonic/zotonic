@@ -1,6 +1,6 @@
 {application, zotonic_mod_cron, [
     {description, "Periodic tasks and ticks for other modules."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

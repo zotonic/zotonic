@@ -1,6 +1,6 @@
 {application, zotonic_mod_seo, [
     {description, "Provides admin interface for the SEO modules."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

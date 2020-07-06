@@ -1,6 +1,6 @@
 {application, zotonic_mod_acl_mock, [
     {description, "Mock ACL routines for in the testsandbox."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [ kernel, stdlib, zotonic_core ]},
     {env, []},

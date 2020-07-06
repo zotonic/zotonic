@@ -1,6 +1,6 @@
 {application, %%SITE%%, [
     {description, "Default Zotonic webblog site"},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

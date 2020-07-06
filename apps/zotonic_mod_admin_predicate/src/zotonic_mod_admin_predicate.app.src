@@ -1,6 +1,6 @@
 {application, zotonic_mod_admin_predicate, [
     {description, "Adds support for editing predicates to the admin."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

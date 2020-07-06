@@ -1,6 +1,6 @@
 {application, zotonic_mod_zotonic_status_vcs, [
     {description, "Allows to update and rebuild sites and zotonic installs from git or mercurial. Used by zotonic_site_status."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
