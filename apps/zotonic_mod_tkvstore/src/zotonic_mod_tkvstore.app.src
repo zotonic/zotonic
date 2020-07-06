@@ -1,6 +1,6 @@
 {application, zotonic_mod_tkvstore, [
     {description, "Simple typed key/value store used to store structured data."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

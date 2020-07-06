@@ -1,6 +1,6 @@
 {application, zotonic_mod_import_wordpress, [
     {description, "Import your Wordpress blog into Zotonic using a .wxr file."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

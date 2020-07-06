@@ -1,6 +1,6 @@
 {application, zotonic_mod_acl_user_groups, [
     {description, "Zotonic module for organizing users into hierarchical groups"},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [ kernel, stdlib, zotonic_core ]},
     {env, []},

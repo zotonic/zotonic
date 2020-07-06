@@ -1,6 +1,6 @@
 {application, zotonic_mod_mqtt, [
     {description, "MQTT messaging, connecting server and browser."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

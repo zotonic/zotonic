@@ -1,6 +1,6 @@
 {application, zotonic_mod_editor_tinymce, [
     {description, "Rich Text Editor using TinyMCE."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

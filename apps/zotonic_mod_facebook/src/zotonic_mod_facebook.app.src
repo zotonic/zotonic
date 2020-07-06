@@ -1,6 +1,6 @@
 {application, zotonic_mod_facebook, [
     {description, "Adds Facebook login and other Facebook related features."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

@@ -1,6 +1,6 @@
 {application, zotonic_mod_base, [
     {description, "Basic scomps, actions and validators"},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

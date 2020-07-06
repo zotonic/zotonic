@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 {application, zotonic_core,
  [{description, "Zotonic Core Components"},
-  {vsn, "git"},
+  {vsn, {file, "../../VERSION"}},
   {modules, []},
   {registered, []},
   {env, []},

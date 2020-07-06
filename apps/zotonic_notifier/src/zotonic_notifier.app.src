@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 {application, zotonic_notifier,
  [{description, "Zotonic Notifier"},
-  {vsn, "git"},
+  {vsn, {file, "../../VERSION"}},
   {registered, []},
   {mod, {zotonic_notifier, []}},
   {env, []},

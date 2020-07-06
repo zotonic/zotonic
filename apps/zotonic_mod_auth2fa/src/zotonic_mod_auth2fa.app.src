@@ -1,6 +1,6 @@
 {application, zotonic_mod_auth2fa, [
     {description, "Add two-factor authentication using TOTP"},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

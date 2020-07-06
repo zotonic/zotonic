@@ -1,6 +1,6 @@
 {application, zotonic_mod_server_storage, [
     {description, "Server side data storage in sessions."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [
         kernel, stdlib,

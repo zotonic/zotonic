@@ -1,6 +1,6 @@
 {application, zotonic_mod_zotonic_site_management, [
     {description, "Manage Zotonic sites. Used by zotonic_site_status."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

@@ -1,6 +1,6 @@
 {application, zotonic_mod_video_embed, [
     {description, "Embed youtube, vimeo and other movies as media pages."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

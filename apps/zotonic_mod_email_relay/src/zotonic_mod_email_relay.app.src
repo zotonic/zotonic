@@ -1,6 +1,6 @@
 {application, zotonic_mod_email_relay, [
     {description, "Relay incoming e-mails for known users to their private e-mail address."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
