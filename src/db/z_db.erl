@@ -81,6 +81,7 @@
     drop_schema/1
 ]).
 
+-export([json_encode/1, json_decode/1]).
 
 -include_lib("zotonic.hrl").
 -include_lib("deps/epgsql/include/epgsql.hrl").
@@ -317,7 +318,7 @@ q1(Sql, Parameters, Context, Timeout) ->
         (none) -> undefined;
         (C) ->
             DbDriver = z_context:db_driver(Context),
-            case equery1(DbDriver, C, Sql, Parameters, Timeout) of
+            case equery_n(1, DbDriver, C, Sql, Parameters, Timeout) of
                 {ok, Value} -> Value;
                 {error, noresult} -> undefined;
                 {error, Reason} = Error ->
@@ -393,12 +394,14 @@ insert(Table, Props, Context) ->
     Cols = column_names(Table, Context),
     InsertProps = prepare_cols(Cols, Props),
 
-    InsertProps1 = case proplists:get_value(props, InsertProps) of
-        undefined ->
-            InsertProps;
-        PropsCol ->
-            lists:keystore(props, 1, InsertProps, {props, ?DB_PROPS(cleanup_props(PropsCol))})
-    end,
+    InsertProps1 = case {proplists:get_value(props, InsertProps), proplists:get_value(props_json, InsertProps)} of
+                       {undefined, undefined} ->
+                           InsertProps;
+                       {PropsCol, undefined} ->
+                           lists:keystore(props, 1, InsertProps, {props, ?DB_PROPS(cleanup_props(PropsCol))});
+                       {_, PropsCol} ->
+                           lists:keystore(props_json, 1, InsertProps, {props_json, ?DB_PROPS_JSON(cleanup_props(PropsCol))})
+                   end,
 
     %% Build the SQL insert statement
     {ColNames,Parameters} = lists:unzip(InsertProps1),
@@ -428,6 +431,8 @@ insert(Table, Props, Context) ->
 
 %% @doc Update a row in a table, merging the props list with any new props values
 -spec update(Table::atom(), Id::integer(), Parameters::list(), #context{}) -> {ok, RowsUpdated::integer()} | {error, term()}.
+update(_Table, _Id, [], _Context) ->
+    {error, no_parameters};
 update(Table, Id, Parameters, Context) when is_atom(Table) ->
     update(atom_to_list(Table), Id, Parameters, Context);
 update(Table, Id, Parameters, Context) ->
@@ -436,20 +441,51 @@ update(Table, Id, Parameters, Context) ->
     Cols         = column_names(Table, Context),
     UpdateProps  = prepare_cols(Cols, Parameters),
     F = fun(C) ->
-        UpdateProps1 = case proplists:is_defined(props, UpdateProps) of
-            true ->
-                % Merge the new props with the props in the database
-                case equery1(DbDriver, C, "select props from \""++Table++"\" where id = $1", [Id]) of
-                    {ok, OldProps} when is_list(OldProps) ->
-                        FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
-                        NewProps = lists:foldl(FReplace, OldProps, proplists:get_value(props, UpdateProps)),
-                        lists:keystore(props, 1, UpdateProps, {props, ?DB_PROPS(cleanup_props(NewProps))});
-                    _ ->
-                        lists:keystore(props, 1, UpdateProps, {props, ?DB_PROPS(proplists:get_value(props, UpdateProps))})
-                end;
-            false ->
-                UpdateProps
-        end,
+                HasProps = proplists:is_defined(props, UpdateProps),
+                HasPropsJSON = proplists:is_defined(props_json, UpdateProps),
+
+                FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
+
+                UpdateProps1 = if HasProps ->
+                                       % Merge the new props with the props in the database
+                                       case equery1(DbDriver, C, "select props from \""++Table++"\" where id = $1", [Id]) of
+                                           {ok, OldProps} when is_list(OldProps) ->
+                                               NewProps = lists:foldl(FReplace, OldProps, proplists:get_value(props, UpdateProps)),
+                                               lists:keystore(props, 1, UpdateProps, {props, ?DB_PROPS(cleanup_props(NewProps))});
+                                           _ ->
+                                               lists:keystore(props, 1, UpdateProps, {props, ?DB_PROPS(proplists:get_value(props, UpdateProps))})
+                                       end;
+                                   HasPropsJSON ->
+                                       case {proplists:is_defined(props, Cols), proplists:is_defined(props_json, Cols)} of
+                                           {true, true} ->
+                                               case equery2(DbDriver, C, "select props, props_json from \""++Table++"\" where id = $1", [Id]) of
+                                                   % Move props to props_json
+                                                   {ok, OldProps, _} when is_list(OldProps) ->
+                                                       NewProps = lists:foldl(FReplace, OldProps, proplists:get_value(props_json, UpdateProps)),
+                                                       NewProps1 = lists:keystore(props_json, 1, UpdateProps, {props_json, ?DB_PROPS_JSON(cleanup_props(NewProps))}),
+                                                       [{props, undefined} | NewProps1];
+                                                   % Merge the new props with the props_json
+                                                   {ok, _, JSON} when is_binary(JSON) ->
+                                                       OldPropsJSON = json_decode(JSON),
+                                                       NewProps = lists:foldl(FReplace, OldPropsJSON, proplists:get_value(props_json, UpdateProps)),
+                                                       lists:keystore(props_json, 1, UpdateProps, {props_json, ?DB_PROPS_JSON(cleanup_props(NewProps))});
+                                                   _ ->
+                                                       lists:keystore(props_json, 1, UpdateProps, {props_json, ?DB_PROPS_JSON(proplists:get_value(props_json, UpdateProps))})
+                                               end;
+                                           {false, true} ->
+                                               case equery1(DbDriver, C, "select props_json from \""++Table++"\" where id = $1", [Id]) of
+                                                   % Merge the new props with props_json
+                                                   {ok, JSON} when is_binary(JSON) ->
+                                                       OldPropsJSON = json_decode(JSON),
+                                                       NewProps = lists:foldl(FReplace, OldPropsJSON, proplists:get_value(props_json, UpdateProps)),
+                                                       lists:keystore(props_json, 1, UpdateProps, {props_json, ?DB_PROPS_JSON(cleanup_props(NewProps))});
+                                                   _ ->
+                                                       lists:keystore(props_json, 1, UpdateProps, {props_json, ?DB_PROPS_JSON(proplists:get_value(props_json, UpdateProps))})
+                                               end
+                                       end;
+                                   not HasProps and not HasPropsJSON ->
+                                       UpdateProps
+                               end,
 
         {ColNames,Params} = lists:unzip(UpdateProps1),
         ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
@@ -457,6 +493,7 @@ update(Table, Id, Parameters, Context) ->
         Sql = "update \""++Table++"\" set "
                  ++ string:join([ "\"" ++ atom_to_list(ColName) ++ "\" = $" ++ integer_to_list(Nr) || {ColName, Nr} <- ColNamesNr ], ", ")
                  ++ " where id = $1",
+
         case equery1(DbDriver, C, Sql, [Id | Params]) of
             {ok, _RowsUpdated} = Ok -> Ok;
             {error, Reason} = Error ->
@@ -503,16 +540,32 @@ select(Table, Id, Context) ->
 
     Props = case Row of
         [R] ->
-            case proplists:get_value(props, R) of
-                PropsCol when is_list(PropsCol) ->
-                    lists:keydelete(props, 1, R) ++ PropsCol;
-                _ ->
-                    R
+            Props1 = case proplists:get_value(props, R, not_found) of
+                         undefined -> lists:keydelete(props, 1, R);
+                         PropsCol when is_list(PropsCol) ->
+                             lists:keydelete(props, 1, R) ++ PropsCol;
+                         _ -> R
+                     end,
+
+            case proplists:get_value(props_json, Props1, not_found) of
+                undefined -> lists:keydelete(props_json, 1, Props1);
+                Bin when is_binary(Bin) ->
+                    JP = json_decode(Bin),
+                    Normalised = [{maybe_to_atom(K), V} || {K, V} <- JP],
+                    lists:keydelete(props_json, 1, Props1) ++ Normalised;
+                _ -> Props1
             end;
         [] ->
             []
     end,
     {ok, Props}.
+
+maybe_to_atom(K) ->
+    try
+        binary_to_existing_atom(K, utf8)
+    catch
+        _:_ -> K
+    end.
 
 
 %% @doc Remove all undefined props, translate texts to binaries.
@@ -543,14 +596,21 @@ prepare_cols(Cols, Props) ->
         [] ->
             CProps;
         _  ->
-            PPropsMerged = case proplists:is_defined(props, CProps) of
-                            true ->
-                                FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
-                                lists:foldl(FReplace, proplists:get_value(props, CProps), PProps);
-                            false ->
-                                PProps
+
+            PPropsMerged = case proplists:is_defined(props, CProps) orelse proplists:is_defined(props_json, CProps) of
+                               true ->
+                                   FReplace = fun ({P,_} = T, L) -> lists:keystore(P, 1, L, T) end,
+                                   lists:foldl(FReplace, proplists:get_value(props_json, CProps), lists:foldl(FReplace, proplists:get_value(props, CProps), PProps));
+                               false ->
+                                   PProps
                            end,
-            [{props, PPropsMerged} | proplists:delete(props, CProps)]
+
+            PropsType = case proplists:is_defined(props_json, Cols) of 
+                            true -> props_json;
+                            false -> props
+                        end,
+
+            [{PropsType, PPropsMerged} | proplists:delete(props_json, proplists:delete(props, CProps))]
     end.
 
 split_props(Props, Cols) ->
@@ -886,13 +946,25 @@ merge_props(List) ->
 merge_props([], Acc) ->
     lists:reverse(Acc);
 merge_props([R|Rest], Acc) ->
-    case proplists:get_value(props, R, undefined) of
+    Props = proplists:get_value(props, R, undefined), 
+    PropsJSON = proplists:get_value(props_json, R, undefined), 
+    R1 = lists:keydelete(props, 1, lists:keydelete(props_json, 1, R)), 
+    case Props of
         undefined ->
-            merge_props(Rest, [R|Acc]);
+            case PropsJSON of
+                <<>> ->
+                    merge_props(Rest, [R1|Acc]);
+                Bin when is_binary(Bin) ->
+                    JP = json_decode(Bin),
+                    Normalised = [{maybe_to_atom(K), V} || {K, V} <- JP],
+                    merge_props(Rest, [R1 ++ Normalised|Acc]);
+                _ ->
+                    merge_props(Rest, [R1|Acc])
+            end;
         <<>> ->
-            merge_props(Rest, [R|Acc]);
+            merge_props(Rest, [R1|Acc]);
         Term when is_list(Term) ->
-            merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc])
+            merge_props(Rest, [R1 ++ Term|Acc])
     end.
 
 
@@ -907,18 +979,36 @@ assoc1(DbDriver, C, Sql, Parameters, Timeout) ->
 
 
 equery1(DbDriver, C, Sql) ->
-    equery1(DbDriver, C, Sql, [], ?TIMEOUT).
+    equery_n(1, DbDriver, C, Sql, [], ?TIMEOUT).
 
 equery1(DbDriver, C, Sql, Parameters) when is_list(Parameters); is_tuple(Parameters) ->
-    equery1(DbDriver, C, Sql, Parameters, ?TIMEOUT);
+    equery_n(1, DbDriver, C, Sql, Parameters, ?TIMEOUT);
 equery1(DbDriver, C, Sql, Timeout) when is_integer(Timeout) ->
-    equery1(DbDriver, C, Sql, [], Timeout).
+    equery_n(1, DbDriver, C, Sql, [], Timeout).
 
-equery1(DbDriver, C, Sql, Parameters, Timeout) ->
+equery2(DbDriver, C, Sql, Parameters) when is_list(Parameters); is_tuple(Parameters) ->
+    equery_n(2, DbDriver, C, Sql, Parameters, ?TIMEOUT);
+equery2(DbDriver, C, Sql, Timeout) when is_integer(Timeout) ->
+    equery_n(2, DbDriver, C, Sql, [], Timeout).
+
+equery_n(N, DbDriver, C, Sql, Parameters, Timeout) ->
     case DbDriver:equery(C, Sql, Parameters, Timeout) of
         {ok, _Columns, []} -> {error, noresult};
         {ok, _RowCount, _Columns, []} -> {error, noresult};
-        {ok, _Columns, [Row|_]} -> {ok, element(1, Row)};
-        {ok, _RowCount, _Columns, [Row|_]} -> {ok, element(1, Row)};
+        {ok, _Columns, [Row|_]} -> row_elements(N, Row);
+        {ok, _RowCount, _Columns, [Row|_]} -> row_elements(N, Row);
         Other -> Other
     end.
+
+
+row_elements(1, Row) ->
+    {ok, element(1, Row)};
+row_elements(2, Row) ->
+    {ok, element(1, Row), element(2, Row)}.
+
+json_encode(Term) ->
+    jsxrecord:encode(Term).
+
+json_decode(JSON) ->
+    maps:to_list(jsxrecord:decode(JSON)).
+

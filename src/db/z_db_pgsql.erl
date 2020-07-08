@@ -446,6 +446,12 @@ encode_value({term, undefined}) ->
 encode_value({term, Term}) ->
     B = term_to_binary(Term),
     <<?TERM_MAGIC_NUMBER, B/binary>>;
+encode_value({term_json, undefined}) ->
+    null;
+encode_value({term_json, []}) ->
+    null;
+encode_value({term_json, Term}) ->
+    z_db:json_encode(Term);
 encode_value(Value) ->
     Value.
 
@@ -475,3 +481,4 @@ decode_value({{Y,Mm,D},{H,M,S}}) when is_float(S) ->
     {{Y,Mm,D},{H,M,trunc(S)}};
 decode_value(V) ->
     V.
+
