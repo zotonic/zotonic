@@ -809,6 +809,7 @@ get_current_props(DBDriver, Connection, true, true, Table, Id, _Context) ->
         Other -> Other
     end,
 
+    %% Merge the properties found in the columns, the props_json column gets priority.
     case R of
         {ok, Props, undefined} when is_list(Props) ->
             {ok, z_props:from_props(Props)};
@@ -1278,20 +1279,37 @@ merge_props(List) ->
 merge_props([], Acc) ->
     lists:reverse(Acc);
 merge_props([R|Rest], Acc) when is_list(R) ->
-    case proplists:get_value(props, R, undefined) of
-        undefined ->
+    case {proplists:get_value(props, R, undefined), proplists:get_value(props_json, R, undefined)} of
+        {Props, PropsJSON} when (Props == undefined orelse Props == <<>>) andalso (PropsJSON == undefined orelse PropsJSON == <<>>)  ->
             merge_props(Rest, [R|Acc]);
-        <<>> ->
-            merge_props(Rest, [R|Acc]);
-        Term when is_list(Term) ->
-            merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc]);
-        Term when is_map(Term) ->
-            T1 = lists:map(
-                fun({K,V}) ->
-                    {z_convert:to_atom(K), V}
-                end,
-                maps:to_list(Term)),
-            merge_props(Rest, [lists:keydelete(props, 1, R)++T1|Acc])
+        {Term, PropsJSON} when PropsJSON == undefined orelse PropsJSON == <<>> ->
+            case Term of
+                T when is_list(T) ->
+                    merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc]);
+                T when is_map(T) ->
+                    T1 = lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Term)),
+                    merge_props(Rest, [lists:keydelete(props, 1, R)++T1|Acc])
+            end;
+        {Term, PropsJSON} when Term == undefined orelse Term == <<>> ->
+            Map = jsxrecord:decode(PropsJSON),
+            T1 = lists:map(fun({K,V}) ->
+                                   {z_convert:to_atom(K), V}
+                           end,
+                           maps:to_list(Map)),
+            merge_props(Rest, [lists:keydelete(props_json, 1, R)++ T1| Acc]);
+        {Term, PropsJSON} ->
+            PropsTerm = case Term of
+                            L when is_list(L) ->
+                                L;
+                            M when is_map(M) ->
+                                lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Term))
+                        end,
+            PropsJSONTerm = lists:map(fun({K,V}) ->
+                                              {z_convert:to_atom(K), V}
+                                      end, maps:to_list(jsxrecord:decode(PropsJSON))),
+            PropsMerged = z_utils:props_merge(PropsJSONTerm, PropsTerm),
+
+            merge_props(Rest, [ lists:keydelete(props_json, 1, lists:keydelete(props, 1, R))  ++ PropsMerged | Acc])
     end.
 
 
@@ -1386,6 +1404,129 @@ prepare_cols_test() ->
                                })),
 
 
+    ok.
+
+merge_props_test() ->
+    M = merge_props([[{id,1},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props, undefined},
+                      {created,{{2020,6,25},{10,54,37}}},
+                      {props_json,undefined}],
+                     [{id,2},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props,#{<<"message">> => <<"test test">>}},
+                      {created,{{2020,6,25},{10,54,37}}},
+                      {props_json,undefined}],
+                     [{id,3},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props,[{message, <<"test test">>}]},
+                      {created,{{2020,6,25},{10,54,37}}},
+                      {props_json,undefined}],
+                     [{id,4},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props,undefined},
+                      {created,{{2020,6,25},{10,54,37}}},
+                      {props_json,<<"{\"message\": \"test test\"}">>}],
+                     [{id,5},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props,#{<<"message">> => <<"test test">>}},
+                      {created,{{2020,6,25},{11,54,55}}},
+                      {props_json,<<"{\"message\": \"123\"}">>}],
+                     [{id,6},
+                      {is_visible,true},
+                      {rsc_id,330},
+                      {user_id,undefined},
+                      {email,<<"test@example.com">>},
+                      {name,<<"foo">>},
+                      {keep_informed,false},
+                      {props, [{message,  <<"test test">>}, {extra, <<"hello">>} ]},
+                      {created,{{2020,6,25},{11,54,55}}},
+                      {props_json,<<"{\"message\": \"123\"}">>}] ]),
+    
+    ?assertEqual([[{id,1},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {props,undefined},
+                   {created,{{2020,6,25},{10,54,37}}},
+                   {props_json,undefined}],
+                  [{id,2},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {created,{{2020,6,25},{10,54,37}}},
+                   {props_json,undefined},
+                   {message,<<"test test">>}],
+                  [{id,3},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {created,{{2020,6,25},{10,54,37}}},
+                   {props_json,undefined},
+                   {message,<<"test test">>}],
+                  [{id,4},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {props,undefined},
+                   {created,{{2020,6,25},{10,54,37}}},
+                   {message,<<"test test">>}],
+                  [{id,5},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {created,{{2020,6,25},{11,54,55}}},
+                   {message,<<"123">>}],
+                  [{id,5},
+                   {is_visible,true},
+                   {rsc_id,330},
+                   {user_id,undefined},
+                   {email,<<"test@example.com">>},
+                   {name,<<"foo">>},
+                   {keep_informed,false},
+                   {created,{{2020,6,25},{11,54,55}}},
+                   {extra, <<"hello">>},
+                   {message,<<"123">>}]], M),
     ok.
 
 
