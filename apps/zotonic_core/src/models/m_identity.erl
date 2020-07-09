@@ -760,8 +760,10 @@ get_rsc_by_type_1(Id, Type, Context) ->
         Context
     ).
 
--spec get_rsc(m_rsc:resource_id(), atom(), #context{}) -> list() | undefined.
+-spec get_rsc(m_rsc:resource_id(), atom() | binary(), z:context()) -> list() | undefined.
 get_rsc(Id, Type, Context) when is_integer(Id), is_atom(Type) ->
+    get_rsc(Id, z_convert:to_binary(Type), Context);
+get_rsc(Id, Type, Context) when is_integer(Id), is_binary(Type) ->
     F = fun() ->
         get_rsc_1(Id, Type, Context)
     end,

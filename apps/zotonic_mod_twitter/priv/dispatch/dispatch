@@ -1,6 +1,6 @@
 %% -*- mode: erlang -*-
 [
-    {twitter_authorize, ["oauth-service", "authorize", "twitter" ],
-                         controller_oauth2_service_authorize,
-                         [ {service_module, z_twitter_oauth_service} ]}
+    {twitter_authorize, [ "oauth-service", "authorize", "twitter" ],
+                        controller_oauth2_service_authorize,
+                        [ {service_module, z_twitter_oauth_service} ]}
 ].

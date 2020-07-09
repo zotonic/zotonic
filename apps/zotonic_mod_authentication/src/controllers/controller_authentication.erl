@@ -61,6 +61,8 @@ handle_cmd(<<"logon">>, Payload, Context) ->
     logon(Payload, Context);
 handle_cmd(<<"switch_user">>, Payload, Context) ->
     switch_user(Payload, Context);
+handle_cmd(<<"onetime_token">>, Payload, Context) ->
+    onetime_token(Payload, Context);
 handle_cmd(<<"logoff">>, Payload, Context) ->
     logoff(Payload, Context);
 handle_cmd(<<"refresh">>, Payload, Context) ->
@@ -135,6 +137,16 @@ logon_1(undefined, _Payload, Context) ->
     lager:warning("Authentication error: #logon_submit{} returned undefined."),
     { #{ status => error, error => pw }, Context }.
 
+-spec onetime_token( map(), z:context() ) -> { map(), z:context() }.
+onetime_token(#{ <<"token">> := Token }, Context) ->
+    case z_authentication_tokens:decode_onetime_token(Token, Context) of
+        {ok, UserId} ->
+            logon_1({ok, UserId}, #{}, Context);
+        {error, _} ->
+            { #{ status => error, error => token }, Context }
+    end;
+onetime_token(_Payload, Context) ->
+    { #{ status => error, error => missing_token }, Context }.
 
 -spec switch_user( map(), z:context() ) -> { map(), z:context() }.
 switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(UserId) ->

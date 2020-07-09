@@ -60,7 +60,7 @@ Uses OAuth2 to:
  1. Click on button, this opens a new window
  2. In the window load a page, load a page that will redirect to the correct service:
 
-    {% url logon_service service='twitter' is_connect=is_connect %}
+    `{% url logon_service service='twitter' is_connect=is_connect %}`
 
     This URL and template are proviced by `mod_authentication`.
     The page then includes a template that will perform the correct redirect, the
@@ -80,10 +80,13 @@ Uses OAuth2 to:
        using a special one-time token. This sets a new z.auth cookie and forces all tabs
        to re-authenticate using the new user id. After the identity is changed the popup
        window is closed (using a data attribute on the body tag, handled by the ui model).
+
     b. If connect and all ok: the identity is added to the current user-id, popup-window is closed.
+
     c. If log in but needs confirmation: render a confirm template. The confirm button will
        send a message to the server to create the new user and then the server proceeds to
        step (a).
+
     d. On an error: display an error message.
 
  7. Any browser tab that was open will get a message via the ServiceWorker that the authentication

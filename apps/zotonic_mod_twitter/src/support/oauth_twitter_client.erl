@@ -25,6 +25,7 @@
     get_consumer/1,
     authorize_url/1,
     get_access_token/2,
+    get_access_token/3,
     request/4,
     request/5
 ]).
@@ -39,15 +40,16 @@ get_request_token(Context) ->
           Error
   end.
 
-
 authorize_url(Token) ->
     oauth:uri("https://api.twitter.com/oauth/authorize", [{"oauth_token", z_convert:to_list(Token)}]).
 
-
 get_access_token({RequestToken, RequestSecret}, Context) ->
     Verifier = z_context:get_q("oauth_verifier", Context),
+    get_access_token({RequestToken, RequestSecret}, Verifier, Context).
+
+get_access_token({RequestToken, RequestSecret}, Verifier, Context) ->
     Params = case z_utils:is_empty(Verifier) of
-                 false -> [{"oauth_verifier", Verifier}];
+                 false -> [{"oauth_verifier", z_convert:to_list(Verifier)}];
                  true -> []
              end,
     case oauth:get("https://api.twitter.com/oauth/access_token", Params, get_consumer(Context), RequestToken, RequestSecret) of

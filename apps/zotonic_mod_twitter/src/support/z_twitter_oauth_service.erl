@@ -19,14 +19,19 @@
 -module(z_twitter_oauth_service).
 
 -export([
+    title/1,
     oauth_version/0,
     authorize_url/3,
-    fetch_access_token/3,
+    fetch_access_token/5,
     auth_validated/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+%% @doc Return the service title for display in templates
+-spec title( z:context() ) -> binary().
+title(_Context) ->
+    <<"Twitter">>.
 
 %% @doc Return the major OAuth version being used
 -spec oauth_version() -> pos_integer().
@@ -34,40 +39,33 @@ oauth_version() ->
     1.
 
 %% @doc Return the authorization url for the OAuth permission dialog.
--spec authorize_url( binary(), binary(), z:context() ) -> binary().
+-spec authorize_url( binary(), binary(), z:context() ) -> {ok, map()}.
 authorize_url(RedirectUrl, _StateId, Context) ->
     {ok, RequestToken = {Token, _Secret}} = oauth_twitter_client:get_request_token(Context),
-    m_server_storage:secure_store(twitter_access_token, RequestToken, Context),
-    % Context1 = z_context:set_state_cookie({twitter, RequestToken, z_context:get_q_all_noz(Context)}, Context),
-    RedirectUrl = z_context:abs_url(
-                            z_dispatcher:url_for(twitter_redirect, Context),
-                            Context),
     Lang = z_context:get_q(<<"lang">>, Context, z_context:language(Context)),
-    iolist_to_binary([
-        oauth_twitter_client:authorize_url(Token),
-        "&oauth_callback=", z_url:url_encode(RedirectUrl),
-        "&lang=", z_url:url_encode(Lang)
-    ]).
+    {ok, #{
+        url => iolist_to_binary([
+                oauth_twitter_client:authorize_url(Token),
+                "&oauth_callback=", z_url:url_encode(RedirectUrl),
+                "&lang=", z_url:url_encode(Lang)
+            ]),
+        data => RequestToken
+    }}.
 
 %% @doc Exchange the code for an access token
--spec fetch_access_token( binary(), list(), z:context() ) -> {ok, map()} | {error, term()}.
-fetch_access_token(_Code, _Args, Context) ->
-    case z_utils:is_empty(z_context:get_q(<<"denied">>, Context)) of
+-spec fetch_access_token( binary(), term(), list(), map(), z:context() ) -> {ok, map()} | {error, term()}.
+fetch_access_token(_Code, {_, _} = RequestToken, _Args, QArgs, Context) ->
+    case z_utils:is_empty(maps:get(<<"denied">>, QArgs, <<>>)) of
         true ->
-            case m_server_storage:secure_lookup(twitter_access_token, Context) of
-                {ok, {_, _} = RequestToken} ->
-                    m_server_storage:secure_delete(twitter_access_token, Context),
-                    case oauth_twitter_client:get_access_token(RequestToken, Context) of
-                        {ok, {Token, Secret}} ->
-                            {ok, #{
-                                <<"access_token">> => z_convert:to_binary(Token),
-                                <<"token_secret">> => z_convert:to_binary(Secret)
-                            }};
-                        {error, _} = Error ->
-                            Error
-                    end;
-                {error, _} ->
-                    {error, request_token}
+            Verifier = maps:get(<<"oauth_verifier">>, QArgs, <<>>),
+            case oauth_twitter_client:get_access_token(RequestToken, Verifier, Context) of
+                {ok, {Token, Secret}} ->
+                    {ok, #{
+                        <<"access_token">> => z_convert:to_binary(Token),
+                        <<"token_secret">> => z_convert:to_binary(Secret)
+                    }};
+                {error, _} = Error ->
+                    Error
             end;
         false ->
             {error, denied}
@@ -84,15 +82,15 @@ user_data({error, _} = Error, _AccessToken, _Args) ->
     Error.
 
 auth_user(TWProps, AccessToken, Args) ->
-    TwitterUserId = unicode:characters_to_binary(proplists:get_value(id_str, TWProps)),
-    TwitterUserName = unicode:characters_to_binary(proplists:get_value(screen_name, TWProps)),
+    TwitterUserId = maps:get(<<"id_str">>, TWProps),
+    TwitterUserName = maps:get(<<"screen_name">>, TWProps),
     lager:debug("[twitter] Authenticating ~p ~p", [TwitterUserId, TWProps]),
     PersonProps = #{
-        <<"title">> => proplists:get_value(name, TWProps),
+        <<"title">> => maps:get(<<"name">>, TWProps),
         <<"website">> => <<"https://twitter.com/", TwitterUserName/binary>>,
-        <<"summary">> => proplists:get_value(description, TWProps),
-        <<"depiction_url">> => proplists:get_value(profile_image_url_https, TWProps,
-                                proplists:get_value(profile_image_url, TWProps))
+        <<"summary">> => maps:get(<<"description">>, TWProps),
+        <<"depiction_url">> => maps:get(<<"profile_image_url_https">>, TWProps,
+                                maps:get(<<"profile_image_url">>, TWProps))
     },
     AccessTokenData = [
         {access_token, AccessToken},

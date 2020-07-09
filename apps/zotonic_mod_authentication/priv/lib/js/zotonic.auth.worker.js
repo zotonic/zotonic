@@ -93,6 +93,11 @@ model.present = function(data) {
             actions.switchUser(msg.payload);
         });
 
+        // Onetime token
+        self.subscribe("model/auth/post/onetime-token", function(msg) {
+            actions.onetimeToken(msg);
+        });
+
         // Check reset codes
         self.subscribe("model/auth/post/reset-code-check", function(msg) {
             actions.resetCodeCheck(msg);
@@ -170,6 +175,20 @@ model.present = function(data) {
         fetchWithUA({
                     cmd: "switch_user",
                     user_id: data.user_id
+                })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authLogonResponse(body); })
+        .catch((e) => { actions.fetchError(); });
+    }
+
+    if (data.is_onetime_token) {
+        model.authentication_error = null;
+        model.onauth = null;
+        model.state_change('authenticating');
+
+        fetchWithUA({
+                    cmd: "onetime_token",
+                    token: data.token
                 })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
@@ -481,6 +500,14 @@ actions.logoff = function(data) {
 
 actions.keepAlive = function(_date) {
     model.present({ is_keep_alive: true });
+}
+
+actions.onetimeToken = function(msg) {
+    let onetime = {
+        is_onetime_token: true,
+        token: msg.payload.token
+    }
+    model.present(onetime);
 }
 
 actions.resetCodeCheck = function(msg) {

@@ -64,9 +64,45 @@ m_get(Vs, _Msg, _Context) ->
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
 m_post([ <<"request-reminder">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     request_reminder(Payload, Context);
+m_post([ <<"service-confirm">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case maps:get(<<"value">>, Payload, undefined) of
+        #{ <<"auth">> := AuthEncoded } ->
+            Secret = z_context:state_cookie_secret(Context),
+            case termit:decode_base64(AuthEncoded, Secret) of
+                {ok, AuthExp} ->
+                    case termit:check_expired(AuthExp) of
+                        {ok, Auth} ->
+                            handle_auth_confirm(Auth, Context);
+                        {error, _} = Error ->
+                            Error
+                    end;
+                {error, _} ->
+                    {error, illegal_auth}
+            end;
+        _ ->
+            {error, missing_auth}
+    end;
 m_post(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p post: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
+
+
+handle_auth_confirm(Auth, Context) ->
+    Auth1 = Auth#auth_validated{ is_signup_confirm = true },
+    case z_notifier:first(Auth1, Context) of
+        undefined ->
+            lager:warning("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
+            {error, nohandler};
+        {ok, UserId} ->
+            Token = z_authentication_tokens:encode_onetime_token(UserId, Context),
+            {ok, #{
+                result => token,
+                token => Token
+            }};
+        {error, _} = Err ->
+            lager:warning("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+            {error, signup}
+    end.
 
 
 %% @doc Send password reminders to everybody with the given email address

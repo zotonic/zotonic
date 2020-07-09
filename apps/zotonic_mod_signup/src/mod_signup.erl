@@ -164,7 +164,7 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
 maybe_add_depiction(Id, Props, Context) ->
     case m_edge:objects(Id, depiction, Context) of
         [] ->
-            case proplists:get_value(depiction_url, Props) of
+            case maps:get(<<"depiction_url">>, Props, undefined) of
                 Url when Url =/= <<>>, Url =/= [], Url =/= undefined ->
                     case m_media:insert_url(Url, z_acl:logon(Id, Context)) of
                         {ok, MediaId} ->

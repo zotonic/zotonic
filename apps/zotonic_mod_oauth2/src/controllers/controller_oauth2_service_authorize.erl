@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2013 Marc Worrell
+%% @copyright 2010-2020 Marc Worrell
 %% @doc Redirect to the authorize uri of external identity provider
 
 %% Copyright 2010-2020 Marc Worrell
@@ -20,41 +20,43 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    service_available/1,
-    resource_exists/1,
-    previously_existed/1,
-    moved_temporarily/1
-]).
+    process/4
+    ]).
 
+-define(SECRET_DATA_TTL, 3600).
 
-service_available(Context) ->
-    Context2 = z_context:ensure_qs(Context),
-    {true, Context2}.
+-include_lib("zotonic_core/include/zotonic.hrl").
 
-resource_exists(Context) ->
-    {false, Context}.
-
-previously_existed(Context) ->
-    {true, Context}.
-
-moved_temporarily(Context) ->
+process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     StateId = z_ids:id(),
     ServiceMod = z_context:get(service_module, Context),
-    StateData = {StateId, ServiceMod, z_context:get_q_all_noz(Context)},
-    Context1 = z_context:set_state_cookie(StateData, Context),
-    Location = redirect_location(StateId, Context),
-    {{true, Location}, Context1}.
+    case redirect_location(StateId, ServiceMod, Context) of
+        {ok, #{ url := Location } = Redir} when is_binary(Location) ->
+            ServiceData = maps:get(data, Redir, undefined),
+            StateData = {StateId, ServiceMod, ServiceData, z_context:get_q_all_noz(Context)},
+            Expires = termit:expiring(StateData, ?SECRET_DATA_TTL),
+            Secret = z_context:state_cookie_secret(Context),
+            Encoded = termit:encode_base64(Expires, Secret),
+            Args = #{
+                oauth_step => <<"authorize">>,
+                oauth_state_id => StateId,
+                oauth_state => Encoded,
+                authorize_url => Location
+            },
+            Vars = #{
+                service_name => ServiceMod:title(Context),
+                worker_args => Args
+            },
+            z_template:render_to_iolist("logon_service_oauth.tpl", Vars, Context);
+        {error, _} = Error ->
+            lager:error("Error with OAuth redirect for ~p: ~p", [ ServiceMod, Error ]),
+            Vars = #{
+                service => ServiceMod:title(Context)
+            },
+            z_template:render_to_iolist("logon_service_error.tpl", Vars, Context)
+    end.
 
-redirect_location(StateId, Context) ->
-    ServiceMod = z_context:get(service_module, Context),
-    redirect_location(ServiceMod:oauth_version(),  ServiceMod, StateId, Context).
-
-redirect_location(1, ServiceMod, StateId, Context) ->
-    RedirectUrl = z_context:abs_url(
-        z_dispatcher:url_for(oauth2_service_redirect, [ {state, StateId} ], Context),
-        Context),
-    ServiceMod:authorize_url(RedirectUrl, StateId, Context);
-redirect_location(2,  ServiceMod, StateId, Context) ->
+redirect_location(StateId, ServiceMod, Context) ->
     RedirectUrl = z_context:abs_url(
         z_dispatcher:url_for(oauth2_service_redirect, Context),
         Context),
