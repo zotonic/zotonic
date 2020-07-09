@@ -19,14 +19,19 @@
 -module(z_linkedin_oauth_service).
 
 -export([
+    title/1,
     oauth_version/0,
     authorize_url/3,
-    fetch_access_token/3,
+    fetch_access_token/4,
     auth_validated/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+%% @doc Return the service title for display in templates
+-spec title( z:context() ) -> binary().
+title(_Context) ->
+    <<"LinkedIn">>.
 
 %% @doc Return the major OAuth version being used
 -spec oauth_version() -> pos_integer().
@@ -34,21 +39,24 @@ oauth_version() ->
     2.
 
 %% @doc Return the authorization url for the OAuth permission dialog.
--spec authorize_url( binary(), binary(), z:context() ) -> binary().
+-spec authorize_url( binary(), binary(), z:context() ) -> {ok, map()}.
 authorize_url(RedirectUrl, StateId, Context) ->
     {AppId, _AppSecret, Scope} = mod_linkedin:get_config(Context),
-    iolist_to_binary([
-        <<"https://www.linkedin.com/uas/oauth2/authorization?response_type=code">>,
-        "&client_id=", z_url:url_encode(AppId),
-        "&redirect_uri=", z_url:url_encode(RedirectUrl),
-        "&state=", StateId,
-        "&scope=", z_url:url_encode(Scope)
-    ]).
+    {ok, #{
+        url => iolist_to_binary([
+            <<"https://www.linkedin.com/uas/oauth2/authorization?response_type=code">>,
+            "&client_id=", z_url:url_encode(AppId),
+            "&redirect_uri=", z_url:url_encode(RedirectUrl),
+            "&state=", StateId,
+            "&scope=", z_url:url_encode(Scope)
+        ]),
+        data => undefined
+    }}.
 
 
 %% @doc Exchange the code for an access token
--spec fetch_access_token( binary(), list(), z:context() ) -> {ok, map()} | {error, term()}.
-fetch_access_token(Code, _Args, Context) ->
+-spec fetch_access_token( binary(), term(), list(), z:context() ) -> {ok, map()} | {error, term()}.
+fetch_access_token(Code, _AuhData, _Args, Context) ->
     {AppId, AppSecret, _Scope} = mod_linkedin:get_config(Context),
     PK = z_context:get_q("pk", Context, []),
     RedirectUrl = z_context:abs_url(z_dispatcher:url_for(linkedin_redirect, [{pk,PK}], Context), Context),

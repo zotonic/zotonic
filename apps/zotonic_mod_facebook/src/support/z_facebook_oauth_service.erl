@@ -21,13 +21,19 @@
 -module(z_facebook_oauth_service).
 
 -export([
+    title/1,
     oauth_version/0,
     authorize_url/3,
-    fetch_access_token/3,
+    fetch_access_token/4,
     auth_validated/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+%% @doc Return the service title for display in templates
+-spec title( z:context() ) -> binary().
+title(_Context) ->
+    <<"Facebook">>.
 
 %% @doc Return the major OAuth version being used
 -spec oauth_version() -> pos_integer().
@@ -35,22 +41,25 @@ oauth_version() ->
     2.
 
 %% @doc Return the authorization url for the OAuth permission dialog.
--spec authorize_url( binary(), binary(), z:context() ) -> binary().
+-spec authorize_url( binary(), binary(), z:context() ) -> {ok, map()}.
 authorize_url(RedirectUrl, StateId, Context) ->
     {AppId, _AppSecret, Scope} = mod_facebook:get_config(Context),
-    iolist_to_binary([
-        <<"https://www.facebook.com/v2.9/dialog/oauth?client_id=">>,
-        z_url:url_encode(AppId),
-        "&redirect_uri=", z_url:url_encode(RedirectUrl),
-        "&display=popup",
-        "&response_type=code",
-        "&scope=", z_url:url_encode(Scope),
-        "&state=", StateId
-    ]).
+    {ok, #{
+        url => iolist_to_binary([
+            <<"https://www.facebook.com/v2.9/dialog/oauth?client_id=">>,
+            z_url:url_encode(AppId),
+            "&redirect_uri=", z_url:url_encode(RedirectUrl),
+            "&display=popup",
+            "&response_type=code",
+            "&scope=", z_url:url_encode(Scope),
+            "&state=", StateId
+        ]),
+        data => undefined
+    }}.
 
 %% @doc Exchange the code for an access token
--spec fetch_access_token( binary(), list(), z:context() ) -> {ok, map()} | {error, term()}.
-fetch_access_token(Code, _Args, Context) ->
+-spec fetch_access_token( binary(), term(), list(), z:context() ) -> {ok, map()} | {error, term()}.
+fetch_access_token(Code, _AuthData, _Args, Context) ->
     {AppId, AppSecret, _Scope} = mod_facebook:get_config(Context),
     RedirectUrl = z_context:abs_url(z_dispatcher:url_for(facebook_redirect, Context), Context),
     FacebookUrl = "https://graph.facebook.com/v2.9/oauth/access_token?client_id="

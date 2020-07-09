@@ -1,8 +1,3 @@
-{% with
-    "#55acee"
-    as
-    brand_color
-%}
 {% if m.twitter.useauth %}
 <li id="logon_twitter">
 	{% if is_connect and 'twitter'|member:identity_types %}
@@ -16,7 +11,7 @@
 		%}
 	{% else %}
 		<a href="{% url twitter_authorize is_connect=is_connect %}"
-		   class="btn z-btn-social do_popupwindow"
+		   class="btn z-btn-social"
 		   style="background-color: #55acee"
 		   data-onclick-topic="model/window/post/open"
 		>
@@ -27,4 +22,3 @@
 	{% endif %}
 </li>
 {% endif %}
-{% endwith %}
