@@ -59,7 +59,7 @@ displayed like this::
 .. seealso::
 
     * :ref:`mod_facebook`
-    * :ref:`mod_instagram`
+    * :ref:`mod_linkedin`
 
 .. _public (or unprotected): https://support.twitter.com/articles/20169886
 .. _Streaming API: https://dev.twitter.com/streaming/overview
