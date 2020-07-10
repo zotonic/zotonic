@@ -176,17 +176,23 @@ progress(0, _ContentLength, _Form, _Context) ->
     ok;
 progress(Percentage, ContentLength, Form, Context) when ContentLength > ?CHUNKSIZE*5 ->
     case proplists:get_value(<<"zotonic_topic_progress">>, Form#multipart_form.args) of
-        undefined ->
-            ok;
-        Topic ->
-            z_mqtt:publish(
-                Topic,
-                #{
-                    form_id => proplists:get_value(<<"z_trigger_id">>, Form#multipart_form.args),
-                    percentage => Percentage,
-                    content_length => ContentLength
-                },
-                Context)
+        Topic when is_binary(Topic) ->
+            case proplists:get_value(<<"zotonic_routing_id">>, Form#multipart_form.args) of
+                RoutingId when is_binary(RoutingId) ->
+                    Context1 = Context#context{ routing_id = RoutingId },
+                    z_mqtt:publish(
+                        Topic,
+                        #{
+                            form_id => proplists:get_value(<<"z_trigger_id">>, Form#multipart_form.args),
+                            percentage => Percentage,
+                            content_length => ContentLength
+                        },
+                        Context1);
+                _ ->
+                    ok
+            end;
+        _ ->
+            ok
     end;
 progress(_Percentage, _ContentLength, _Form, _Context) ->
     ok.

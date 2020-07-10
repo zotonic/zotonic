@@ -335,10 +335,12 @@ function z_transport(delegate, content_type, data, options)
         if (options.transport == 'form') {
             let prefix = window.sessionStorage.getItem("mqtt$clientBridgeTopic");
             prefix = JSON.parse(prefix);
+            let routing_id = prefix.match(/bridge\/([^\/]+)\//)[1];
             z_transport_form({
                 url: "/mqtt-transport/zotonic-transport/" + delegate,
                 postback: data,
                 options: options,
+                routing_id: routing_id,
                 progress_topic: prefix + "zotonic-transport/progress",
                 reply_topic: prefix + "zotonic-transport/eval"
             });
@@ -1129,6 +1131,12 @@ function z_transport_form(qmsg)
                         .attr('type', 'hidden')
                         .attr('name', 'zotonic_topic_progress')
                         .attr('value', qmsg.progress_topic)
+                     .prependTo(form)[0];
+
+        zmsgProgressTopic = $('<input />')
+                        .attr('type', 'hidden')
+                        .attr('name', 'zotonic_routing_id')
+                        .attr('value', qmsg.routing_id)
                      .prependTo(form)[0];
 
         zmsgTriggerId = $('<input />')

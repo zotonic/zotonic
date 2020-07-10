@@ -66,10 +66,14 @@ allowed_methods(Context) ->
     {[<<"GET">>, <<"POST">>], Context}.
 
 process(<<"POST">>, AcceptedCT, _ProvidedCT, Context) ->
-    Topic = z_context:get_q(<<"*">>, Context),
-    {Qs, Context1} = z_controller_helper:decode_request(AcceptedCT, Context),
-    z_mqtt:publish(Topic, Qs, Context1),
-    {true, Context1};
+    RoutingId = z_context:get_q(<<"zotonic_routing_id">>, Context),
+    Context1 = Context#context{
+        routing_id = RoutingId
+    },
+    Topic = z_context:get_q(<<"*">>, Context1),
+    {Qs, Context2} = z_controller_helper:decode_request(AcceptedCT, Context1),
+    z_mqtt:publish(Topic, Qs, Context2),
+    {true, Context2};
 process(<<"GET">>, _AcceptedCT, _ProvidedCT, Context) ->
     Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Rendered = z_template:render("error_websocket.tpl", z_context:get_all(Context2), Context2),
