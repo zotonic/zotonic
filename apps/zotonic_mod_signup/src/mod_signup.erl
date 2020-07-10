@@ -75,13 +75,17 @@ observe_logon_ready_page(#logon_ready_page{request_page=Url}, _Context) ->
 
 
 %% @doc Sign up a new user.
--spec signup(list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
+-spec signup(list(), list() | map(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
 signup(Props, SignupProps, RequestConfirm, Context) ->
     signup_existing(undefined, Props, SignupProps, RequestConfirm, Context).
 
 %% @doc Sign up a existing user
--spec signup_existing(integer()|undefined, list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
-signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) ->
+-spec signup_existing(integer()|undefined, map() | list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
+
+signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) when is_list(Props) ->
+    {ok, PropsMap} = z_props:from_list(Props),
+    signup_existing(UserId, PropsMap, SignupProps, RequestConfirm, Context);
+signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) when is_map(Props) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
         {ok, Props1, SignupProps1} ->
@@ -161,6 +165,7 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     end.
 
 %% @doc Optionally add a depiction using the 'depiction_url' in the user's props
+-spec maybe_add_depiction( m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
 maybe_add_depiction(Id, Props, Context) ->
     case m_edge:objects(Id, depiction, Context) of
         [] ->
@@ -174,7 +179,8 @@ maybe_add_depiction(Id, Props, Context) ->
                         {ok, MediaId} ->
                             lager:info("Added depiction from depiction_url for ~p: ~p",
                                        [Id, Url]),
-                            {ok, _} = m_edge:insert(Id, depiction, MediaId, Context);
+                            {ok, _} = m_edge:insert(Id, depiction, MediaId, Context),
+                            ok;
                         {error, _} = Error ->
                             lager:warning("Could not insert depiction_url for ~p: ~p ~p",
                                           [Id, Error, Url]),
@@ -213,7 +219,7 @@ ensure_identity(Id, {Type, Key, IsUnique, IsVerified}, Context) when is_binary(K
 props_to_rsc(Props, IsVerified, Context) when is_list(Props) ->
     {ok, PropsMap} = z_props:from_list(Props),
     props_to_rsc(PropsMap, IsVerified, Context);
-props_to_rsc(Props, IsVerified, Context) ->
+props_to_rsc(Props, IsVerified, Context) when is_map(Props) ->
     Category = z_convert:to_atom(m_config:get_value(mod_signup, member_category, person, Context)),
     ContentGroup = z_convert:to_atom(m_config:get_value(mod_signup, content_group, undefined, Context)),
     Props1 = Props#{

@@ -1008,7 +1008,7 @@ is_verified(RscId, Context) ->
 set_by_type(RscId, Type, Key, Context) ->
     set_by_type(RscId, Type, Key, [], Context).
 
--spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), list(), z:context()) -> ok.
+-spec set_by_type(m_rsc:resource_id(), string() | binary(), string() | binary(), term(), z:context()) -> ok.
 set_by_type(RscId, Type, Key, Props, Context) ->
     F = fun(Ctx) ->
         case z_db:q("

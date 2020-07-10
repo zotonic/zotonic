@@ -92,10 +92,10 @@ auth_user(TWProps, AccessToken, Args) ->
         <<"depiction_url">> => maps:get(<<"profile_image_url_https">>, TWProps,
                                 maps:get(<<"profile_image_url">>, TWProps))
     },
-    AccessTokenData = [
-        {access_token, AccessToken},
-        {screen_name, TwitterUserName}
-    ],
+    AccessTokenData = #{
+        <<"access_token">> => AccessToken,
+        <<"screen_name">> => TwitterUserName
+    },
     #auth_validated{
         service = twitter,
         service_uid = TwitterUserId,
