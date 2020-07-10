@@ -166,14 +166,18 @@ maybe_add_depiction(Id, Props, Context) ->
         [] ->
             case maps:get(<<"depiction_url">>, Props, undefined) of
                 Url when Url =/= <<>>, Url =/= [], Url =/= undefined ->
-                    case m_media:insert_url(Url, z_acl:logon(Id, Context)) of
+                    MediaProps = #{
+                        <<"is_dependent">> => true,
+                        <<"is_published">> => true
+                    },
+                    case m_media:insert_url(Url, MediaProps, z_acl:logon(Id, Context)) of
                         {ok, MediaId} ->
                             lager:info("Added depiction from depiction_url for ~p: ~p",
                                        [Id, Url]),
                             {ok, _} = m_edge:insert(Id, depiction, MediaId, Context);
                         {error, _} = Error ->
-                            lager:warning("Could not insert depiction_url for ~p: ~p",
-                                          [Id, Url]),
+                            lager:warning("Could not insert depiction_url for ~p: ~p ~p",
+                                          [Id, Error, Url]),
                             Error
                     end;
                 _ ->

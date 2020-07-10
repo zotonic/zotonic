@@ -22,14 +22,18 @@
 
 -export([
     m_get/3,
+    m_post/3,
 
-    m_post/3
+    redirect_url/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -define(SESSION_AUTH_TTL, 3600).
 
+m_get([ <<"redirect_url">> | Rest ], _Msg, Context) ->
+    Url = redirect_url(Context),
+    {ok, {Url, Rest}};
 m_get(_Path, _Msg, _Context) ->
     {error, notfound}.
 
@@ -52,6 +56,13 @@ m_post([ <<"oauth-redirect">> ], #{ payload := Payload }, Context) ->
         {error, _} ->
             {error, state_data}
     end.
+
+-spec redirect_url(z:context()) -> binary().
+redirect_url(Context) ->
+    Context1 = z_context:set_language('x-default', Context),
+    z_context:abs_url(
+        z_dispatcher:url_for(oauth2_service_redirect, Context1),
+        Context1).
 
 handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, Context) ->
     case ServiceMod:oauth_version() of

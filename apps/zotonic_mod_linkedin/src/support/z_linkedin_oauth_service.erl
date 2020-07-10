@@ -22,7 +22,7 @@
     title/1,
     oauth_version/0,
     authorize_url/3,
-    fetch_access_token/4,
+    fetch_access_token/5,
     auth_validated/3
 ]).
 
@@ -55,16 +55,15 @@ authorize_url(RedirectUrl, StateId, Context) ->
 
 
 %% @doc Exchange the code for an access token
--spec fetch_access_token( binary(), term(), list(), z:context() ) -> {ok, map()} | {error, term()}.
-fetch_access_token(Code, _AuhData, _Args, Context) ->
+-spec fetch_access_token( binary(), term(), list(), map(), z:context() ) -> {ok, map()} | {error, term()}.
+fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
     {AppId, AppSecret, _Scope} = mod_linkedin:get_config(Context),
-    PK = z_context:get_q("pk", Context, []),
-    RedirectUrl = z_context:abs_url(z_dispatcher:url_for(linkedin_redirect, [{pk,PK}], Context), Context),
+    RedirectUrl = m_oauth2_service:redirect_url(Context),
     LinkedInUrl = "https://www.linkedin.com/uas/oauth2/accessToken",
     Body = iolist_to_binary([
             "grant_type=authorization_code",
             "&client_id=", z_url:url_encode(AppId),
-            "&redirect_uri=", z_convert:to_list(z_url:url_encode(RedirectUrl)),
+            "&redirect_uri=", z_url:url_encode(RedirectUrl),
             "&client_secret=", z_url:url_encode(AppSecret),
             "&code=", z_url:url_encode(Code)
         ]),

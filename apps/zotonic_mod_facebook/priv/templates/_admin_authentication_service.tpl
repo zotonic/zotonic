@@ -6,7 +6,7 @@
                 <h3 class="widget-header"><span class="fa fa-facebook"></span> Facebook</h3>
                 <div class="widget-content">
                     <p class="help-block">
-                        {_ Application keys can be found in _} <a href="https://www.facebook.com/developers/apps.php" title="Developer Dashboard" target="_blank">{_ Your Facebook Developer Dashboard _}</a>
+                        {_ Application keys can be found in _} <a href="https://developers.facebook.com/apps/" title="Developer Dashboard" target="_blank">{_ Your Facebook Developer Dashboard _}</a>
                     </p>
 
                     <div class="form-group row">

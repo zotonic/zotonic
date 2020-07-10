@@ -24,7 +24,7 @@
     title/1,
     oauth_version/0,
     authorize_url/3,
-    fetch_access_token/4,
+    fetch_access_token/5,
     auth_validated/3
 ]).
 
@@ -58,38 +58,33 @@ authorize_url(RedirectUrl, StateId, Context) ->
     }}.
 
 %% @doc Exchange the code for an access token
--spec fetch_access_token( binary(), term(), list(), z:context() ) -> {ok, map()} | {error, term()}.
-fetch_access_token(Code, _AuthData, _Args, Context) ->
+-spec fetch_access_token( binary(), term(), list(), map(), z:context() ) -> {ok, map()} | {error, term()}.
+fetch_access_token(Code, _AuthData, _Args, _QArgs, Context) ->
     {AppId, AppSecret, _Scope} = mod_facebook:get_config(Context),
-    RedirectUrl = z_context:abs_url(z_dispatcher:url_for(facebook_redirect, Context), Context),
+    RedirectUrl = m_oauth2_service:redirect_url(Context),
     FacebookUrl = "https://graph.facebook.com/v2.9/oauth/access_token?client_id="
                 ++ z_url:url_encode(AppId)
-                ++ "&redirect_uri=" ++ z_convert:to_list(z_url:url_encode(RedirectUrl))
+                ++ "&redirect_uri=" ++ z_url:url_encode(RedirectUrl)
                 ++ "&client_secret=" ++ z_url:url_encode(AppSecret)
                 ++ "&code=" ++ z_url:url_encode(Code),
-    case httpc:request(FacebookUrl) of
-        {ok, {{_, 200, _}, Headers, Payload}} ->
-            #{
-                <<"access_token">> := AccessToken,
-                <<"expires">> := Expires
-            } = decode_access_token(proplists:get_value("content-type", Headers), Payload),
-            {ok, AccessToken, z_convert:to_integer(Expires)};
+    case httpc:request(get, {FacebookUrl, []}, httpc_http_options(), httpc_options()) of
+        {ok, {{_, 200, _}, _Headers, Payload}} ->
+            AccessData = #{
+                <<"access_token">> := _,
+                <<"expires_in">> := _,
+                <<"token_type">> := <<"bearer">>
+            } = z_json:decode(Payload),
+            {ok, AccessData};
         Other ->
             lager:error("[facebook] error fetching access token [code ~p] ~p", [Code, Other]),
             {error, {http_error, FacebookUrl, Other}}
     end.
 
-decode_access_token("application/json"++_, Payload) ->
-    z_json:decode(Payload);
-decode_access_token(_ContentType, Payload) ->
-    maps:from_list(mochiweb_util:parse_qs(Payload)).
-
-
 %% @doc Fetch the validated user data using the AccessToken
 auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Context) ->
     case fetch_user_data(AccessToken) of
         {ok, FBProps} ->
-            FacebookUserId = proplists:get_value(<<"id">>, FBProps),
+            FacebookUserId = maps:get(<<"id">>, FBProps),
             lager:debug("[facebook] Authenticating ~p ~p", [FacebookUserId, FBProps]),
             PersonProps = #{
                 <<"title">> => maps:get(<<"name">>, FBProps, undefined),
@@ -117,9 +112,9 @@ auth_validated(#{ <<"access_token">> := AccessToken } = AccessData, Args, _Conte
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    FacebookUrl = "https://graph.facebook.com/v2.9/me?fields=id,name,first_name,last_name,email&access_token="
+    FacebookUrl = "https://graph.facebook.com/v7.0/me?fields=id,name,first_name,last_name,email&access_token="
                     ++ z_url:url_encode(AccessToken),
-    case httpc:request(FacebookUrl) of
+    case httpc:request(get, {FacebookUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             Props = z_json:decode(Payload),
             {ok, Props};
@@ -127,3 +122,17 @@ fetch_user_data(AccessToken) ->
             lager:error("[facebook] error fetching user data [token ~p] ~p", [AccessToken, Other]),
             {error, {http_error, FacebookUrl, Other}}
     end.
+
+httpc_options() ->
+    [
+        {sync, true},
+        {body_format, binary}
+    ].
+
+httpc_http_options() ->
+    [
+        {timeout, 10000},
+        {connect_timeout, 10000},
+        {autoredirect, true},
+        {relaxed, true}
+    ].

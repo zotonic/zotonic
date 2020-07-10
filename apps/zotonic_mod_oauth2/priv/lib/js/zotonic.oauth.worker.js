@@ -32,8 +32,6 @@ var model = {
 
 model.present = function(data) {
 
-    console.log(data);
-
     if (state.start(model)) {
         switch (data.oauth_step) {
             case "authorize":

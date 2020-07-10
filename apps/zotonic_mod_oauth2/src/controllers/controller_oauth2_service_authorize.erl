@@ -57,7 +57,8 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     end.
 
 redirect_location(StateId, ServiceMod, Context) ->
-    RedirectUrl = z_context:abs_url(
-        z_dispatcher:url_for(oauth2_service_redirect, Context),
-        Context),
+    % Use the special x-default language to suppress adding the language to the
+    % the redirect url. If the language is added then every single language version
+    % of the redirect url must be configured at the external service.
+    RedirectUrl = m_oauth2_service:redirect_url(Context),
     ServiceMod:authorize_url(RedirectUrl, StateId, Context).
