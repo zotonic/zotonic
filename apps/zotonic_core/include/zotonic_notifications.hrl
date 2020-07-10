@@ -78,7 +78,7 @@
 %% Type: first
 %% Return: a URL or ``undefined``
 -record(logon_ready_page, {
-    request_page = <<>> :: binary()
+    request_page = <<>> :: binary() | undefined
 }).
 
 

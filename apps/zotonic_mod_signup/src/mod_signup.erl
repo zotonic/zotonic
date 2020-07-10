@@ -65,12 +65,12 @@ observe_identity_verification(#identity_verification{user_id=UserId, identity=Id
 
 
 %% @doc Return the url to redirect to when the user logged on, defaults to the user's personal page.
-observe_logon_ready_page(#logon_ready_page{request_page=[]}, Context) ->
+observe_logon_ready_page(#logon_ready_page{ request_page = None }, Context) when None =:= undefined; None =:= <<>> ->
     case z_auth:is_auth(Context) of
         true -> m_rsc:p(z_acl:user(Context), page_url, Context);
         false -> []
     end;
-observe_logon_ready_page(#logon_ready_page{request_page=Url}, _Context) ->
+observe_logon_ready_page(#logon_ready_page{ request_page = Url }, _Context) ->
     Url.
 
 
