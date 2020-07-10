@@ -78,7 +78,7 @@
 %% Type: first
 %% Return: a URL or ``undefined``
 -record(logon_ready_page, {
-    request_page = [] :: string()
+    request_page = <<>> :: binary()
 }).
 
 
@@ -104,11 +104,11 @@
 %% @doc Handle a signup of a user, return the follow on page for after the signup.
 %% Type: first
 %% Return ``{ok, Url}``
-%% 'props' is a proplist with properties for the person resource (email, name, etc)
+%% 'props' is a map with properties for the person resource (email, name, etc)
 %% 'signup_props' is a proplist with 'identity' definitions and optional follow on url 'ready_page'
 %% An identity definition is {Kind, Identifier, IsUnique, IsVerified}
 -record(signup_url, {
-    props = [] :: list(),
+    props = #{} :: map(),
     signup_props = [] :: list()
 }).
 
@@ -116,7 +116,7 @@
 %% Returns {ok, UserId} or {error, Reason}
 -record(signup, {
     id :: m_rsc:resource_id() | undefined,
-    props = [] :: list(),
+    props = #{} :: map(),
     signup_props = [] :: list(),
     request_confirm = false :: boolean()
 }).
@@ -134,7 +134,7 @@
 %% Type: foldl
 %% Return: ``{ok, Props, SignupProps}`` or ``{error, Reason}``
 -record(signup_check, {
-    props = [] :: list(),
+    props = #{} :: map(),
     signup_props = [] :: list()
 }).
 
@@ -143,7 +143,7 @@
 -record(signup_done, {
     id :: m_rsc:resource(),
     is_verified :: boolean(),
-    props :: list(),
+    props :: map(),
     signup_props :: list()
 }).
 
@@ -163,15 +163,22 @@
 %% @doc Notification to signal an inserted comment.
 %% 'comment_id' is the id of the inserted comment, 'id' is the id of the resource commented on.
 %% Type: notify
--record(comment_insert, {comment_id, id}).
+-record(comment_insert, {
+    comment_id :: integer(),
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Notify that the session's language has been changed
 %% Type: notify
--record(language, {language}).
+-record(language, {
+    language :: atom()
+}).
 
 %% @doc Set the language of the context to a user's prefered language
 %% Type: first
--record(set_user_language, {id}).
+-record(set_user_language, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Make a generated URL absolute, optionally called after url_rewrite by z_dispatcher
 %% Type: first
@@ -198,10 +205,15 @@
 
 %% @doc Used in the admin to fetch the possible blocks for display
 %% Type: foldl
--record(admin_edit_blocks, {id}).
+-record(admin_edit_blocks, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Used in the admin to process a submitted resource form
--record(admin_rscform, {id, is_a}).
+-record(admin_rscform, {
+    id :: m_rsc:resource_id(),
+    is_a :: list( atom() )
+}).
 
 %% @doc Used for fetching the menu in the admin.
 %% Type: foldl
@@ -218,7 +230,9 @@
 %%      Used when outputting a rendered HTML tree.
 %%      Folded accumulator is: { MixedHtml, Context }
 %% Type: foldl
--record(output_html, { html :: term() }).
+-record(output_html, {
+    html :: term()
+}).
 
 
 %% @doc An activity in Zotonic. When this is handled as a notification then return a list
