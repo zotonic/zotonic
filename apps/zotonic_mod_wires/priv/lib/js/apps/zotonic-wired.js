@@ -1139,12 +1139,6 @@ function z_transport_form(qmsg)
                         .attr('value', qmsg.progress_topic)
                      .prependTo(form)[0];
 
-        zmsgProgressTopic = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'zotonic_routing_id')
-                        .attr('value', qmsg.routing_id)
-                     .prependTo(form)[0];
-
         zmsgTriggerId = $('<input />')
                         .attr('type', 'hidden')
                         .attr('name', 'z_trigger_id')

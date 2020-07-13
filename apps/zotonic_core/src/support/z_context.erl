@@ -672,10 +672,13 @@ is_zotonic_arg(<<"zotonic_site">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch_path">>) -> true;
 is_zotonic_arg(<<"zotonic_dispatch_path_rewrite">>) -> true;
+is_zotonic_arg(<<"zotonic_ticket">>) -> true;
 is_zotonic_arg(<<"zotonic_http_", _/binary>>) -> true;
 is_zotonic_arg(<<"zotonic_topic_", _/binary>>) -> true;
 is_zotonic_arg(<<"postback">>) -> true;
 is_zotonic_arg(<<"triggervalue">>) -> true;
+is_zotonic_arg(<<"z_submitter">>) -> true;
+is_zotonic_arg(<<"z_postback">>) -> true;
 is_zotonic_arg(<<"z_trigger_id">>) -> true;
 is_zotonic_arg(<<"z_target_id">>) -> true;
 is_zotonic_arg(<<"z_delegate">>) -> true;
@@ -686,7 +689,6 @@ is_zotonic_arg(<<"z_pageid">>) -> true;
 is_zotonic_arg(<<"z_v">>) -> true;
 is_zotonic_arg(<<"z_msg">>) -> true;
 is_zotonic_arg(<<"z_comet">>) -> true;
-is_zotonic_arg(<<"z_submitter">>) -> true;
 is_zotonic_arg(_) -> false.
 
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}

@@ -38,8 +38,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Center = proplists:get_value(center, Args, 1),
     Callback = proplists:get_value(callback, Args),
     Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Center, Callback, Actions},
-        {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
-        {PostbackMsgJS, Context}.
+    {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
+    {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
@@ -62,7 +62,7 @@ event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, S
 
 event(#submit{message={media_upload, EventProps}}, Context) ->
     case z_context:get_q_validated(<<"upload_file">>, Context) of
-        #upload{ filename = OriginalFilename, tmpfile = TmpFile } ->
+        #upload{ filename = OriginalFilename } = Upload ->
             Props = case proplists:get_value(id, EventProps) of
                         undefined ->
                             Lang = z_context:language(Context),
@@ -82,9 +82,9 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                     end,
             handle_media_upload(EventProps, Context,
                                 %% insert fun
-                                fun(Ctx) -> m_media:insert_file(TmpFile, Props, Ctx) end,
+                                fun(Ctx) -> m_media:insert_file(Upload, Props, Ctx) end,
                                 %% replace fun
-                                fun(Id, Ctx) -> m_media:replace_file(TmpFile, Id, Props, Ctx) end);
+                                fun(Id, Ctx) -> m_media:replace_file(Upload, Id, Props, Ctx) end);
         _ ->
             z_render:growl("No file specified.", Context)
     end;

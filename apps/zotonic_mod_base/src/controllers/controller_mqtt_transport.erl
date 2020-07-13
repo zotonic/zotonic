@@ -74,7 +74,7 @@ malformed_request(Context) ->
     case cowmachine_req:method(Context) of
         <<"POST">> ->
             PathInfo = cowmachine_req:path_info(Context),
-            case maps:find(ticket, PathInfo) of
+            case maps:find(zotonic_ticket, PathInfo) of
                 {ok, Ticket} ->
                     case m_mqtt_ticket:exchange_ticket(Ticket, Context) of
                         {ok, TicketContext} ->

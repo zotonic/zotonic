@@ -1,6 +1,6 @@
 [
     {mqtt_transport, [ "mqtt-transport" ], controller_mqtt_transport, [] },
-    {mqtt_transport, [ "mqtt-transport", ticket, '*' ], controller_mqtt_transport, []},
+    {mqtt_transport, [ "mqtt-transport", zotonic_ticket, '*' ], controller_mqtt_transport, []},
 
     % Cotonic service worker
     {service_worker,
