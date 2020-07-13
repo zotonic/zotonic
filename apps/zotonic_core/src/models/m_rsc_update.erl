@@ -1300,6 +1300,7 @@ is_protected(<<"page_url">>, _IsNormal) -> true;
 is_protected(<<"medium">>, _IsNormal) -> true;
 is_protected(<<"pivot_", _binary>>, _IsNormal) -> true;
 is_protected(<<"computed_", _/binary>>, _IsNormal) -> true;
+is_protected(<<"*", _/binary>>, _IsNormal) -> true;
 is_protected(_, _IsNormal) -> false.
 
 is_trimmable(_, V) when not is_binary(V) -> false;

@@ -22,6 +22,7 @@
 -export([
     allowed_methods/1,
     content_types_accepted/1,
+    malformed_request/1,
     upgrades_provided/1,
     process/4,
     websocket_start/1,
@@ -65,15 +66,36 @@ content_types_accepted(Context) ->
 allowed_methods(Context) ->
     {[<<"GET">>, <<"POST">>], Context}.
 
+%% @doc On out-of-band POSTs there MUST be valid ticket. Check this ticket before
+%% accepting and parsing the 'multipart/form-data' request body.
+%%
+%% A ticket can be requested with m_mqtt_ticket.
+malformed_request(Context) ->
+    case cowmachine_req:method(Context) of
+        <<"POST">> ->
+            PathInfo = cowmachine_req:path_info(Context),
+            case maps:find(zotonic_ticket, PathInfo) of
+                {ok, Ticket} ->
+                    case m_mqtt_ticket:exchange_ticket(Ticket, Context) of
+                        {ok, TicketContext} ->
+                            Context1 = z_context:set_client_context(TicketContext, Context),
+                            {false, Context1};
+                        {error, enoent} ->
+                            lager:warning("MQTT transport with an unknown ticket from ~p", [ m_req:get(peer, Context) ]),
+                            {true, Context}
+                    end;
+                error ->
+                    {true, Context}
+            end;
+        _ ->
+            {false, Context}
+    end.
+
 process(<<"POST">>, AcceptedCT, _ProvidedCT, Context) ->
-    RoutingId = z_context:get_q(<<"zotonic_routing_id">>, Context),
-    Context1 = Context#context{
-        routing_id = RoutingId
-    },
-    Topic = z_context:get_q(<<"*">>, Context1),
-    {Qs, Context2} = z_controller_helper:decode_request(AcceptedCT, Context1),
-    z_mqtt:publish(Topic, Qs, Context2),
-    {true, Context2};
+    Topic = z_context:get_q(<<"*">>, Context),
+    {Qs, Context1} = z_controller_helper:decode_request(AcceptedCT, Context),
+    z_mqtt:publish(Topic, Qs, Context1),
+    {true, Context1};
 process(<<"GET">>, _AcceptedCT, _ProvidedCT, Context) ->
     Context2 = z_context:set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context),
     Rendered = z_template:render("error_websocket.tpl", z_context:get_all(Context2), Context2),
