@@ -88,6 +88,7 @@
 
     client_id/1,
     client_topic/1,
+    set_client_context/2,
 
     session_id/1,
 
@@ -778,6 +779,31 @@ client_id(#context{ client_id = ClientId }) ->
 -spec client_topic( z:context() ) -> mqtt_sessions:topic() | undefined.
 client_topic(#context{ client_topic = ClientTopic }) ->
     ClientTopic.
+
+%% @doc Merge a context with client information into a request context.
+%% This is used to merge a client context obtained from a MQTT ticket into
+%% the contex of an out of band MQTT post.
+%%
+%% Access control, timezone, language and client information is copied over
+%% from the client context to the request context.
+-spec set_client_context( ClientContext::z:context(), ReqContext::z:context() ) -> z:context().
+set_client_context(ClientContext, RequestContext) ->
+    Ctx = RequestContext#context{
+        client_id = ClientContext#context.client_id,
+        client_topic = ClientContext#context.client_topic,
+        routing_id = ClientContext#context.routing_id,
+        user_id = ClientContext#context.user_id,
+        acl = ClientContext#context.acl,
+        acl_is_read_only = ClientContext#context.acl_is_read_only,
+        tz = ClientContext#context.tz,
+        language = ClientContext#context.language
+    },
+    case maps:find(auth_options, ClientContext#context.props) of
+        {ok, AuthOptions} ->
+            z_context:set(auth_options, AuthOptions, Ctx);
+        error ->
+            Ctx
+    end.
 
 %% @doc Return the unique random session id for the current client auth.
 %%      This session_id is re-assigned when the authentication of a client

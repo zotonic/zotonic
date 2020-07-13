@@ -333,17 +333,23 @@ function z_transport(delegate, content_type, data, options)
     options = options || {};
     if ($('html').hasClass('ui-state-bridge-connected')) {
         if (options.transport == 'form') {
-            let prefix = window.sessionStorage.getItem("mqtt$clientBridgeTopic");
-            prefix = JSON.parse(prefix);
-            let routing_id = prefix.match(/bridge\/([^\/]+)\//)[1];
-            z_transport_form({
-                url: "/mqtt-transport/zotonic-transport/" + delegate,
-                postback: data,
-                options: options,
-                routing_id: routing_id,
-                progress_topic: prefix + "zotonic-transport/progress",
-                reply_topic: prefix + "zotonic-transport/eval"
-            });
+            cotonic.broker.call("bridge/origin/model/mqtt_ticket/post/new")
+                .then( function(msg) {
+                    if (msg.payload.status == 'ok') {
+                        const ticket = msg.payload.result;
+                        z_transport_form({
+                            url: "/mqtt-transport/" + ticket + "/zotonic-transport/" + delegate,
+                            postback: data,
+                            options: options,
+                            progress_topic: "~client/zotonic-transport/progress",
+                            reply_topic: "~client/zotonic-transport/eval"
+                        });
+
+                    } else {
+                        console.log("z_transport: could not obtain MQTT ticket for form post", [ msg.payload ]);
+                        z_transport_queue_add(delegate, content_type, data, options);
+                    }
+                });
         } else {
             cotonic.broker.publish(
                 "bridge/origin/zotonic-transport/" + delegate,
