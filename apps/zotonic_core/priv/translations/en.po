@@ -6,7 +6,6 @@
 # NB: Consider using poEdit <http://poedit.sourceforge.net>
 #
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -695,7 +694,7 @@ msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "insert (acl action)"
-msgstr ""
+msgstr "insert"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
 msgid "link (acl action)"
@@ -710,9 +709,8 @@ msgid "send this URL to somebody else for testing"
 msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
-#, fuzzy
 msgid "use (acl action)"
-msgstr "edit"
+msgstr "use"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid ""
@@ -1051,9 +1049,8 @@ msgid "Date ranges"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:219./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
-#, fuzzy
 msgid "Delete after disconnecting from"
-msgstr "delete"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:46
 msgid "Delete if no other page is connected to this page."
@@ -1449,9 +1446,8 @@ msgid "Name"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:39
-#, fuzzy
 msgid "Network Connections"
-msgstr "delete"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
 msgid "Next &gt;"
@@ -2040,9 +2036,8 @@ msgid "View"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:25
-#, fuzzy
 msgid "View all connections"
-msgstr "delete"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:15
 msgid "View all pages from this category"
@@ -2557,9 +2552,8 @@ msgid "Delete this e-mail address"
 msgstr ""
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:63
-#, fuzzy
 msgid "Deleted the user account."
-msgstr "delete"
+msgstr ""
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
 msgid "Duplicate username, please choose another username."
@@ -3151,9 +3145,8 @@ msgid "Delete &amp; Change Connections"
 msgstr ""
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:34
-#, fuzzy
 msgid "Delete All Connections"
-msgstr "delete"
+msgstr ""
 
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:79
 msgid "Delete is canceled, there are connections with this predicate."
@@ -7388,9 +7381,8 @@ msgid "Delete page jump"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:23
-#, fuzzy
 msgid "Delete question"
-msgstr "delete"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61
 msgid "Disagree"
@@ -7713,9 +7705,8 @@ msgid "Questions"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_checkbox.tpl:5
-#, fuzzy
 msgid "Quiz or test question"
-msgstr "delete"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Randomize answers"
@@ -8925,14 +8916,4 @@ msgstr ""
 msgid "stop"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Created new application."
-#~ msgstr "delete"
 
-#, fuzzy
-#~ msgid "Delete application"
-#~ msgstr "delete"
-
-#, fuzzy
-#~ msgid "Edit application"
-#~ msgstr "edit"
