@@ -89,7 +89,7 @@ init([ Site ]) ->
 handle_call({new_ticket, Context}, _From, #state{ tickets = Tickets } = State) ->
     Ticket = z_ids:id(32),
     Tickets1 = Tickets#{ Ticket => Context },
-    timer:send_after(?TICKET_TIMEOUT, {ticket_timeout, Ticket}),
+    {ok, _} = timer:send_after(?TICKET_TIMEOUT, {ticket_timeout, Ticket}),
     State1 = State#state{ tickets = Tickets1 },
     {reply, {ok, Ticket}, State1};
 
