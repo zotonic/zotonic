@@ -32,7 +32,8 @@
 
 -export([
     new_ticket/1,
-    exchange_ticket/2
+    exchange_ticket/2,
+    delete_ticket/2
     ]).
 
 % Unused tickets timeout in 30 seconds
@@ -61,6 +62,11 @@ exchange_ticket(Ticket, Context) ->
     Name = z_utils:name_for_site(?MODULE, Context),
     gen_server:call(Name, {exchange_ticket, Ticket}).
 
+%% @doc Delete a stored context record.
+-spec delete_ticket( binary(), z:context() ) -> ok | {error, term()}.
+delete_ticket(Ticket, Context) ->
+    Name = z_utils:name_for_site(?MODULE, Context),
+    gen_server:call(Name, {delete_ticket, Ticket}).
 
 %% @doc Starts the MQTT ticket server server
 start_link(Site) ->
@@ -92,6 +98,15 @@ handle_call({exchange_ticket, Ticket}, _From, #state{ tickets = Tickets } = Stat
         {ok, Context} ->
             Tickets1 = maps:remove(Ticket, Tickets),
             {reply, {ok, Context}, State#state{ tickets = Tickets1 }};
+        error ->
+            {reply, {error, enoent}, State}
+    end;
+
+handle_call({delete_ticket, Ticket}, _From, #state{ tickets = Tickets } = State) ->
+    case maps:find(Ticket, Tickets) of
+        {ok, _Context} ->
+            Tickets1 = maps:remove(Ticket, Tickets),
+            {reply, ok, State#state{ tickets = Tickets1 }};
         error ->
             {reply, {error, enoent}, State}
     end;
