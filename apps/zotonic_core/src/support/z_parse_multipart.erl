@@ -1,4 +1,4 @@
-%% @author Bob Ippolito <bob@mochimedia.com>, Marc Worrell <marc@worrell.nl>
+%% @author Bob Ippolito, Marc Worrell
 %% @copyright 2007 Mochi Media, Inc; 2009-2020 Marc Worrell
 %% @doc Parse multipart/form-data request bodies. Uses a callback function to receive the next parts, can call
 %% a progress function to report back the progress on receiving the data.
