@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018  Marc Worrell
-%% @doc Support for deprecated wires, actions, and transport.
+%% @copyright 2018-2020 Marc Worrell
+%% @doc Support for wires, actions, and transport.
 
-%% Copyright 2018 Marc Worrell
+%% Copyright 2018-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
