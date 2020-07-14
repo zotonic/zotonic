@@ -19,7 +19,7 @@
 -module(mod_wires).
 
 -mod_title("Wires and Actions").
--mod_description("[DEPRECATED] Wires, actions, and other embeddable JavaScript.").
+-mod_description("Wires, actions, and other embeddable JavaScript.").
 -mod_depends([ mod_mqtt ]).
 
 -export([
