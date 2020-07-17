@@ -355,7 +355,7 @@ event(#postback{message={language_default, Args}}, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             {code, LanguageCode} = proplists:lookup(code, Args),
-            case language_status(LanguageCode, false, Context) of
+            case language_status(LanguageCode, true, Context) of
                 ok ->
                     Context1 = set_default_language(LanguageCode, Context),
                     reload_table(Context1);
@@ -492,6 +492,7 @@ set_user_language(Code, Context) ->
 set_default_language(Code, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
+            ok = language_status(Code, true, Context),
             CodeB = z_convert:to_binary(Code),
             case m_config:get_value(i18n, language, Context) of
                 CodeB -> ok;
@@ -696,7 +697,9 @@ maybe_language_code(_) ->
 set_language_config(NewConfig, Context) ->
     case language_config(Context) of
         NewConfig -> ok;
-        _ ->  m_config:set_prop(i18n, languages, list, NewConfig, Context)
+        _ ->
+            SortedConfig = lists:sort(NewConfig),
+            m_config:set_prop(i18n, languages, list, SortedConfig, Context)
     end,
     z_memo:delete('mod_translation$enabled_languages'),
     ok.
