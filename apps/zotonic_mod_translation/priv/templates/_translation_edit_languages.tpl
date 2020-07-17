@@ -31,6 +31,9 @@
                 let vis = $(".language-tabs a:visible").get(0);
                 if (vis) {
                     vis.click();
+                } else {
+                    $(".tab-"+code).removeClass("active");
+                    $(".tab-pane.language-"+code).removeClass("active");
                 }
             }
         }
