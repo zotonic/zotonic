@@ -28,6 +28,7 @@
 
     language_list_configured/1,
     language_list_enabled/1,
+    language_list_editable/1,
     main_languages/0,
     all_languages/0,
 

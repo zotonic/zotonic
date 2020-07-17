@@ -9,7 +9,6 @@
     	           {% if code|member:r_lang or (not r_lang and z_language == code) %}checked="checked"{% endif %} />
     	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.name_en }}</span>
             </label>
-            {% wire id=#language.code action={toggle selector=[".tab-",code|make_list]} %}
             {% endif %}
         {% empty %}
             <div class="checkbox"><label><input type="checkbox" checked="checked" disabled="disabled"> {{ z_language }}</label></div>
@@ -17,4 +16,25 @@
     </div>
 </div>
 {% endwith %}
+
+{% javascript %}
+    $('#admin-translation-checkboxes input').on('change', function() {
+        let code = $(this).attr('value');
+        if ($(this).is(":checked")) {
+            $(".tab-"+code).show();
+            if (!$(".language-tabs .active a").is(":visible")) {
+                $(".tab-"+code+" a").get(0).click();
+            }
+        } else {
+            $(".tab-"+code).hide();
+            if ($(".tab-"+code).hasClass("active")) {
+                let vis = $(".language-tabs a:visible").get(0);
+                if (vis) {
+                    vis.click();
+                }
+            }
+        }
+    });
+{% endjavascript %}
+
 {% endblock %}
