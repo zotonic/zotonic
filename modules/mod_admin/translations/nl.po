@@ -1484,7 +1484,7 @@ msgstr ""
 
 #: modules/mod_admin/templates/_admin_status_alert.tpl:22
 msgid "Zotonic Version"
-msgstr "Zotone versie"
+msgstr "Zotonic versie"
 
 #: modules/mod_admin/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
