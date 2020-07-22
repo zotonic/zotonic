@@ -802,7 +802,7 @@ needs_rehash({hash, _, _}) ->
 -spec insert_single(m_rsc:resource(), atom(), binary(), #context{}) ->
     {ok, pos_integer()} | {error, invalid_key}.
 insert_single(Rsc, Type, Key, Context) ->
-    insert(Rsc, Type, Key, [], Context).
+    insert_single(Rsc, Type, Key, [], Context).
 
 insert_single(Rsc, Type, Key, Props, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
