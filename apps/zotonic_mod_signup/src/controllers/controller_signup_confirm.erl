@@ -51,7 +51,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 %% @doc Handle the submit of the signup form.
 event(#submit{}, Context) ->
-    Key = z_context:get_q(key, Context, []),
+    Key = z_context:get_q(<<"key">>, Context, <<>>),
     case confirm(Key, Context) of
         {ok, UserId} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),

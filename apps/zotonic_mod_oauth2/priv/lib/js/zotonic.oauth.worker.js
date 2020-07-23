@@ -124,7 +124,10 @@ model.present = function(data) {
                 case "token":
                     // Authenticated - exchange the token for a z.auth cookie.
                     self.publish("model/auth/post/onetime-token",
-                                 { token: data.payload.result.token });
+                                {
+                                    token: data.payload.result.token,
+                                    url: data.payload.result.url || undefined
+                                });
                     model.status = "authenticating";
                     break;
                 case "confirm":

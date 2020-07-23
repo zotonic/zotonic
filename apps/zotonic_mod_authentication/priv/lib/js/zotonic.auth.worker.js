@@ -188,7 +188,8 @@ model.present = function(data) {
 
         fetchWithUA({
                     cmd: "onetime_token",
-                    token: data.token
+                    token: data.token,
+                    url: data.url
                 })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
@@ -215,6 +216,11 @@ model.present = function(data) {
             model.state_change('auth_known');
         } else {
             model.state_change('auth_changing');
+        }
+        if (data.is_auth_error === false && data.url) {
+            self.publish("model/location/post/redirect", {
+                url: data.url
+            });
         }
     }
 
