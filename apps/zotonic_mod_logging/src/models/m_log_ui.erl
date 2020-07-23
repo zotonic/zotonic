@@ -78,7 +78,7 @@ insert_event(Props, Context) when is_list(Props) ->
     end.
 
 is_event_loggable(Props) ->
-    is_ignored_bot(proplists:get_value(<<"user_agent">>, Props)).
+    not is_ignored_bot(proplists:get_value(<<"user_agent">>, Props)).
 
 is_ignored_bot(undefined) ->
     false;
