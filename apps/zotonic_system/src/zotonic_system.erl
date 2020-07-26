@@ -251,11 +251,22 @@ zs_path(Opts)->
 	try
 		% Read stdin
 		Yaml = zotonic_system_lib:get_stdin(),
+		% Get servername from config
+		NodeName = 
+		case re:run(Yaml, "# Zotonic config for (.*):", [{capture, all_but_first, list}]) of
+			{match, Captured} -> Captured;
+			_ -> ""
+		end,
+		Extra = [{node_name, lists:flatten(NodeName)}],
+		% Start yamerl
 		ok   = application:start(yamerl),
+		% Parse Yaml
 		C    = yamerl_constr:string(Yaml),
+		% Get Zotonic conf as proplist
 		ZConf = lists:flatten(C),
 		?DEBUG(io_lib:format("~n~p",[ZConf])),
-		Conf  = zs_conf(ZConf),
+		% Merge all sources in a single one for rendering
+		Conf  = zs_conf(ZConf, Extra),
 		?INFO(io_lib:format("~n~p",[Conf])),
 	    show(Prefix, Conf)
 	catch
@@ -281,7 +292,7 @@ get_mode(Opts) ->
 	end.
 
 
-show(Path, _)
+show(Path, Conf)
 	-> 
 	% Display abstract on stderr
 	AbstFile = filename:join(Path, "abstract"),
@@ -298,15 +309,18 @@ show(Path, _)
 	% Display evaluated template on stdout
 	File = filename:join(Path, "file"),
 	{ok,[{_, CBin}]} = zotonic_system_lib:get_from_escript(File),
-	C = erlang:binary_to_list(CBin),
-	?PRINT_FILE(FileName, C),
+	%C = erlang:binary_to_list(CBin),
+	{ok, Module} = template_compiler:compile_binary(CBin, FileName, [], []),
+	?DEBUG({template_module, Module}),
+	IOList = Module:render(Conf, [], []),
+	?PRINT_FILE(FileName, io_lib:format("~ts",[IOList])),
 	ok.
 
 %%------------------------------------------------------------------------------
 %% @doc Compose config map for templates
 %% @end
 %%------------------------------------------------------------------------------
-zs_conf(ZConf) 
+zs_conf(ZConf, Extra) 
 	-> 
 	OSVars = {vars, lists:flatmap(fun(V) -> 
 			  [L, R] = string:split(V, "="),
@@ -319,10 +333,10 @@ zs_conf(ZConf)
 			   	end
 		      end, si_list())]},
 	OSConf = {os, lists:flatten([OSInfo] ++ [OSVars])},
-	lists:flatten([ZConf] ++ [OSConf]).
+	lists:flatten([ZConf] ++ [OSConf] ++ [Extra]).
 
 %%------------------------------------------------------------------------------
-%% @doc List of erlang:system_info/1 options
+%% @doc List of erlang:system_info/1 options for templates
 %%      @note : only system wide options should be used, and not options 
 %%              specific to current zotonic_system escript
 %% @end
@@ -394,7 +408,7 @@ si_list() ->
          %,start_time
          ,system_architecture
          %,system_logger
-         ,system_version
+         %,system_version
          %,threads
          %,thread_pool_size
          %,time_correction

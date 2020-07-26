@@ -4,7 +4,7 @@
   {vsn, "git"},
   {registered, []},
   {applications, [
-      kernel, stdlib, getopt, yamerl
+      kernel, stdlib, getopt, yamerl, template_compiler, lager, erlang_localtime, zotonic_stdlib
   ]},
   {env, []},
   {modules,
