@@ -9,6 +9,7 @@
 	"js/modules/z.notice.js"
 	"js/modules/z.imageviewer.js"
 	"js/modules/z.dialog.js"
+	"js/modules/z.popupwindow.js"
 	"js/modules/livevalidation-1.3.js"
 	"js/modules/jquery.loadmask.js"
 %}

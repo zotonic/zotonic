@@ -39,6 +39,9 @@
     encode_autologon_token/2,
     decode_autologon_token/2,
 
+    encode_onetime_token/2,
+    decode_onetime_token/2,
+
     session_expires/1,
     autologon_expires/1
 ]).
@@ -52,6 +55,8 @@
 -define(AUTOLOGON_COOKIE, <<"z.autologon">>).
 -define(AUTOLOGON_SECRET_LENGTH, 32).
 -define(AUTOLOGON_EXPIRE, 3600*8*180).          % autologon is 180 days valid
+
+-define(ONETIME_TOKEN_EXPIRE, 30).              % onetime tokens are valid for 30 secs
 
 
 -spec reset_cookies( z:context() ) -> z:context().
@@ -242,6 +247,38 @@ decode_autologon_token(AutoLogonCookie, Context) ->
                         _ ->
                             {error, user_secret}
                     end;
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _}  = Error ->
+            Error
+    end.
+
+
+-spec encode_onetime_token( m_rsc:resource_id(), z:context() ) -> binary().
+encode_onetime_token(UserId, Context) ->
+    Peer = m_req:get(peer_ip, Context),
+    Term = {onetime, UserId, user_secret(UserId, Context), user_autologon_secret(UserId, Context), Peer},
+    ExpTerm = termit:expiring(Term, ?ONETIME_TOKEN_EXPIRE),
+    termit:encode_base64(ExpTerm, autologon_secret(Context)).
+
+-spec decode_onetime_token( binary(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+decode_onetime_token(OnetimeToken, Context) ->
+    case termit:decode_base64(OnetimeToken, autologon_secret(Context)) of
+        {ok, ExpTerm} ->
+            Peer = m_req:get(peer_ip, Context),
+            case termit:check_expired(ExpTerm) of
+                {ok, {onetime, UserId, UserSecret, AutoLogonSecret, Peer}} ->
+                    US = user_secret(UserId, Context),
+                    AS = user_autologon_secret(UserId, Context),
+                    case {US, AS} of
+                        {UserSecret, AutoLogonSecret} when is_binary(UserSecret), is_binary(AutoLogonSecret) ->
+                            {ok, UserId};
+                        _ ->
+                            {error, user_secret}
+                    end;
+                {ok, _} ->
+                    {error, mismatch};
                 {error, _} = Error ->
                     Error
             end;

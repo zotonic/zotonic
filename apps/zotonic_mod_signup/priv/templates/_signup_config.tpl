@@ -17,7 +17,7 @@ style_width
     1,
     1,
     style_boxed|if_undefined:0,
-    style_width|if_undefined:"300px"
+    style_width
 as
     show_signup_name_title,
     show_signup_name_prefix,

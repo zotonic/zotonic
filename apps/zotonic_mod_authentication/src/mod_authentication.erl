@@ -142,7 +142,7 @@ observe_auth_validated(#auth_validated{} = Auth, Context) ->
 maybe_add_identity(undefined, Auth, Context) ->
     case auth_identity(Auth, Context) of
         undefined -> maybe_signup(Auth, Context);
-        Ps when is_list(Ps) -> logon_identity(Auth, Ps, Context)
+        Ps when is_list(Ps) -> update_identity(Auth, Ps, Context)
     end;
 maybe_add_identity(CurrUserId, Auth, Context) ->
     case auth_identity(Auth, Context) of
@@ -154,9 +154,9 @@ maybe_add_identity(CurrUserId, Auth, Context) ->
             {rsc_id, IdnRscId} = proplists:lookup(rsc_id, Ps),
             case {IdnRscId, Auth#auth_validated.is_connect} of
                 {CurrUserId, _} ->
-                    {ok, Context};
+                    {ok, CurrUserId};
                 {_UserId, false} ->
-                    logon_identity(Auth, Ps, Context);
+                    update_identity(Auth, Ps, Context);
                 {_UserId, true} ->
                     {error, duplicate}
             end
@@ -173,7 +173,7 @@ maybe_update_identity(_Ps, NewProps, IdnPs, Context) ->
     m_identity:set_by_type(UserId, Key, Type, NewProps, Context).
 
 
-logon_identity(Auth, IdnPs, Context) ->
+update_identity(Auth, IdnPs, Context) ->
     {propb, IdnPropb} = proplists:lookup(propb, IdnPs),
     {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
     maybe_update_identity(
@@ -181,12 +181,13 @@ logon_identity(Auth, IdnPs, Context) ->
         Auth#auth_validated.service_props,
         IdnPs,
         Context),
-    Context1 = z_acl:logon_prefs(UserId, Context),
-    z_authentication_tokens:set_auth_cookie(UserId, #{}, Context1).
+    {ok, UserId}.
+    % Context1 = z_acl:logon_prefs(UserId, Context),
+    % z_authentication_tokens:set_auth_cookie(UserId, #{}, Context1).
 
 
 maybe_signup(Auth, Context) ->
-    Email = proplists:get_value(email, Auth#auth_validated.props),
+    Email = maps:get(<<"email">>, Auth#auth_validated.props, undefined),
     case not Auth#auth_validated.is_connect
         andalso is_user_email_exists(Email, Context)
     of
@@ -214,12 +215,14 @@ try_signup(Auth, Context) ->
                         _ -> nop
                     end,
                     _ = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
-                    Context1 = z_acl:logon_prefs(NewUserId, Context),
-                    z_authentication_tokens:set_auth_cookie(NewUserId, #{}, Context1);
+                    {ok, NewUserId};
+                    % Context1 = z_acl:logon_prefs(NewUserId, Context),
+                    % z_authentication_tokens:set_auth_cookie(NewUserId, #{}, Context1);
                 {error, _Reason} = Error ->
                     Error;
                 undefined ->
                     % No signup accepted
+                    lager:info("Authentication not accepted because no signup handler defined for Auth ~p", [ Auth ]),
                     undefined
             end
     end.
@@ -233,7 +236,7 @@ is_user_email_exists(Email, Context) ->
     end.
 
 maybe_email_identity(Props) ->
-    case proplists:get_value(email, Props) of
+    case maps:get(<<"email">>, Props, undefined) of
         undefined -> [];
         Email -> [ {identity, {email, Email, false, false}} ]
     end.

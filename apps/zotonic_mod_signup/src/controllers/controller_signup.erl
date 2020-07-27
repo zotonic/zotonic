@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2013 Marc Worrell
+%% @copyright 2010-2020 Marc Worrell
 %% @doc Display a form to sign up.
 
-%% Copyright 2010-2013 Marc Worrell
+%% Copyright 2010-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
         <<>> ->
             [];
         Check ->
-            % Set in mod_signup when fetching singup_url
+            % Set in mod_signup when fetching signup_url
             case m_server_storage:secure_lookup(Check, Context) of
                 {ok, {Check, Props, SignupProps}} ->
                     [
@@ -175,7 +175,16 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
                 Url ->
                     Url
             end,
-            z_render:wire({redirect, [{location, Location}]}, ContextUser);
+            % Post a onetime-token to the auth worker on the page
+            % The auth worker will exchange it for a valid cookie and then perform
+            % the redirect to the url. 
+            Token = z_authentication_tokens:encode_onetime_token(UserId, ContextUser),
+            AuthMsg = #{
+                token => Token,
+                url => z_convert:to_binary( Location )
+            },
+            z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
+            z_render:wire({mask, []}, Context);
         false ->
             % User is not yet verified, send a verification message to the user's external identities
             case mod_signup:request_verification(UserId, Context) of

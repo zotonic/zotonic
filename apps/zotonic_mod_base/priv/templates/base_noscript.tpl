@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ z_language }}" class="environment-{{ m.site.environment }}">
+<html lang="{{ z_language }}" class="environment-{{ m.site.environment }}" {% block html_attr %}{% endblock %}>
 
 <head>
     <meta charset="utf-8" />
@@ -14,7 +14,9 @@
     {% endblock %}
 </head>
 
-<body class="{% block page_class %}{% endblock %}" data-cotonic-pathname-search="{% cotonic_pathname_search %}">
+<body class="{% block page_class %}{% endblock %}"
+      data-cotonic-pathname-search="{% cotonic_pathname_search %}"
+      {% block body_attr %}{% endblock %}>
     <div class="container">
         {% block content_area %}
            {% block content %}

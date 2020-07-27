@@ -127,6 +127,7 @@
 
     set_state_cookie/2,
     get_state_cookie/1,
+    state_cookie_secret/1,
     reset_state_cookie/1,
 
     cookie_domain/1

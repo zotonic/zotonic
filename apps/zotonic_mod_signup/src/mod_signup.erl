@@ -23,7 +23,7 @@
 -mod_description("Implements public sign up to register as member of this site.").
 -mod_prio(500).
 -mod_schema(1).
--mod_depends([ base, authentication, mod_server_storage ]).
+-mod_depends([ base, mod_authentication, mod_server_storage ]).
 -mod_provides([signup]).
 
 
@@ -65,23 +65,27 @@ observe_identity_verification(#identity_verification{user_id=UserId, identity=Id
 
 
 %% @doc Return the url to redirect to when the user logged on, defaults to the user's personal page.
-observe_logon_ready_page(#logon_ready_page{request_page=[]}, Context) ->
+observe_logon_ready_page(#logon_ready_page{ request_page = None }, Context) when None =:= undefined; None =:= <<>> ->
     case z_auth:is_auth(Context) of
         true -> m_rsc:p(z_acl:user(Context), page_url, Context);
         false -> []
     end;
-observe_logon_ready_page(#logon_ready_page{request_page=Url}, _Context) ->
+observe_logon_ready_page(#logon_ready_page{ request_page = Url }, _Context) ->
     Url.
 
 
 %% @doc Sign up a new user.
--spec signup(list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
+-spec signup(list(), list() | map(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
 signup(Props, SignupProps, RequestConfirm, Context) ->
     signup_existing(undefined, Props, SignupProps, RequestConfirm, Context).
 
 %% @doc Sign up a existing user
--spec signup_existing(integer()|undefined, list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
-signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) ->
+-spec signup_existing(integer()|undefined, map() | list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
+
+signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) when is_list(Props) ->
+    {ok, PropsMap} = z_props:from_list(Props),
+    signup_existing(UserId, PropsMap, SignupProps, RequestConfirm, Context);
+signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) when is_map(Props) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
         {ok, Props1, SignupProps1} ->
@@ -161,19 +165,25 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     end.
 
 %% @doc Optionally add a depiction using the 'depiction_url' in the user's props
+-spec maybe_add_depiction( m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
 maybe_add_depiction(Id, Props, Context) ->
     case m_edge:objects(Id, depiction, Context) of
         [] ->
-            case proplists:get_value(depiction_url, Props) of
+            case maps:get(<<"depiction_url">>, Props, undefined) of
                 Url when Url =/= <<>>, Url =/= [], Url =/= undefined ->
-                    case m_media:insert_url(Url, z_acl:logon(Id, Context)) of
+                    MediaProps = #{
+                        <<"is_dependent">> => true,
+                        <<"is_published">> => true
+                    },
+                    case m_media:insert_url(Url, MediaProps, z_acl:logon(Id, Context)) of
                         {ok, MediaId} ->
                             lager:info("Added depiction from depiction_url for ~p: ~p",
                                        [Id, Url]),
-                            {ok, _} = m_edge:insert(Id, depiction, MediaId, Context);
+                            {ok, _} = m_edge:insert(Id, depiction, MediaId, Context),
+                            ok;
                         {error, _} = Error ->
-                            lager:warning("Could not insert depiction_url for ~p: ~p",
-                                          [Id, Url]),
+                            lager:warning("Could not insert depiction_url for ~p: ~p ~p",
+                                          [Id, Error, Url]),
                             Error
                     end;
                 _ ->
@@ -209,7 +219,7 @@ ensure_identity(Id, {Type, Key, IsUnique, IsVerified}, Context) when is_binary(K
 props_to_rsc(Props, IsVerified, Context) when is_list(Props) ->
     {ok, PropsMap} = z_props:from_list(Props),
     props_to_rsc(PropsMap, IsVerified, Context);
-props_to_rsc(Props, IsVerified, Context) ->
+props_to_rsc(Props, IsVerified, Context) when is_map(Props) ->
     Category = z_convert:to_atom(m_config:get_value(mod_signup, member_category, person, Context)),
     ContentGroup = z_convert:to_atom(m_config:get_value(mod_signup, content_group, undefined, Context)),
     Props1 = Props#{

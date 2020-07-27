@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Marc Worrell <marc@worrell.nl>
+ * Copyright 2019-2020 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@
 var model = {
     status: 'start',
     logon_view: '',
-    is_connected: false,
     is_error: false,
     error: undefined,
     email: undefined,
@@ -32,12 +31,7 @@ var model = {
     secret: undefined,
     need_passcode: false,
     is_expired: false,
-
-    // Depends on these models, wait for a ping
-    depends: {
-        "location": false,
-        "auth": false
-    }
+    is_depends_provided: false
 };
 
 model.present = function(data) {
@@ -47,10 +41,6 @@ model.present = function(data) {
         self.subscribe(
             "model/auth-ui/post/view/+view",
             function(msg, bindings) { actions.view({ logon_view: bindings.view }); });
-
-        self.subscribe(
-            "$bridge/origin/status",
-            function(msg) { actions.setBridgeStatus(msg.payload); });
 
         self.subscribe(
             "model/auth/event/auth-error",
@@ -68,18 +58,14 @@ model.present = function(data) {
             "model/auth-ui/post/form/reset",
             function(msg) { actions.resetForm(msg.payload); });
 
-        self.subscribe(
-            "model/+model/event/ping",
-            function(msg, bindings) {
-                actions.modelPing({ model: bindings.model, payload: msg.payload });
-            });
-
-        self.publish("model/auth-ui/event/ping", "pong", { retain: true });
-
-        model.logon_view = data.logon_view || 'logon';
-        model.secret = data.secret;
-        model.username = data.username;
         model.status = "waiting";
+    }
+
+    if (data.is_depends_provided) {
+        model.is_depends_provided = true;
+        if (state.waiting(model)) {
+            model.status = 'active';
+        }
     }
 
     if ("is_error" in data) {
@@ -88,24 +74,14 @@ model.present = function(data) {
         model.status = 'updated';
     }
 
-    if ("model" in data) {
-        model.depends[data.model] = data.is_active;
-    }
-
-    if (typeof data.is_connected == "boolean") {
-        model.is_connected = data.is_connected;
-    }
-
-    if (model.status == 'waiting' && !state.waiting(model)) {
-        model.status = 'connected'
-    }
-
     if (data.is_view_loaded) {
         model.status = 'loaded';
     }
 
     if (typeof data.logon_view === "string") {
         model.logon_view = data.logon_view;
+        model.secret = data.secret || model.secret;
+        model.username = data.username || model.username;
         model.error = data.error || undefined;
         if (state.loaded(model)) {
             model.status = 'updated';
@@ -253,8 +229,8 @@ state.start = function(model) {
     return model.status === 'start';
 };
 
-state.connected = function(model) {
-    return model.status === 'connected';
+state.active = function(model) {
+    return model.status === 'active';
 }
 
 state.updated = function(model) {
@@ -266,11 +242,11 @@ state.loaded = function(model) {
 }
 
 state.waiting = function(model) {
-    return !model.is_connected || !model.depends.auth;
+    return !model.is_depends_provided;
 }
 
 state.running = function(model) {
-    return model.is_connected && model.depends.auth;
+    return model.is_depends_provided;
 }
 
 
@@ -279,7 +255,7 @@ state.running = function(model) {
 // an action needs to be invoked
 
 state.nextAction = function (model) {
-    if (state.connected(model) || state.updated(model)) {
+    if (state.updated(model)) {
         actions.loaded()
     }
     if (state.running(model) && model.logon_view == 'reset') {
@@ -304,19 +280,19 @@ var actions = {} ;
 
 actions.start = function(data) {
     data = data || {};
-    // TODO: wait for location model to be up and running
+    model.present(data);
+};
+
+actions.dependsProvided = function(_data) {
     self.call("model/location/get/q")
         .then(function(msg) {
+            let data = {};
+            data.is_depends_provided = true;
             data.logon_view = msg.payload.logon_view || "logon";
             data.secret = msg.payload.secret || undefined;
             data.username = msg.payload.u || undefined,
             model.present(data);
         });
-};
-
-actions.setBridgeStatus = function(data) {
-    const is_connected = data.is_connected || false;
-    model.present({ is_connected: is_connected });
 };
 
 actions.loaded = function(_data) {
@@ -325,7 +301,7 @@ actions.loaded = function(_data) {
 
 actions.view = function(data) {
     model.present(data);
-}
+};
 
 actions.reminderForm = function(data) {
     let dataReminder = {
@@ -333,7 +309,7 @@ actions.reminderForm = function(data) {
         email: data.value.email
     }
     model.present(dataReminder);
-}
+};
 
 actions.resetForm = function(data) {
     let dataReset = {
@@ -344,7 +320,7 @@ actions.resetForm = function(data) {
         setautologon: data.value.rememberme ? true : false
     }
     model.present(dataReset);
-}
+};
 
 actions.reminderResponse = function(data) {
     let payload = data.payload || {};
@@ -367,11 +343,11 @@ actions.reminderResponse = function(data) {
             console.log("Unkown reminderResponse payload", data);
             break;
     }
-}
+};
 
 actions.fetchError = function(_data) {
     model.present({ is_error: true, error: "timeout" });
-}
+};
 
 actions.authError = function(data) {
     if (data.error == "password_expired") {
@@ -386,11 +362,11 @@ actions.authError = function(data) {
             error: data.error
         });
     }
-}
+};
 
 actions.authUserId = function(data) {
     model.present({ auth_user_id: data });
-}
+};
 
 actions.resetCodeCheck = function(data) {
     self.call("model/auth/post/reset-code-check", { secret: data.secret, username: data.username } )
@@ -405,11 +381,8 @@ actions.resetCodeCheck = function(data) {
             };
             model.present(d)
         });
-}
+};
 
-actions.modelPing = function(data) {
-    model.present({ model: data.model, is_active: data.payload === "pong" });
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Worker Startup
@@ -419,4 +392,11 @@ self.on_connect = function() {
     actions.start({});
 }
 
-self.connect();
+self.on_depends_provided = function() {
+    actions.dependsProvided({});
+}
+
+self.connect({
+    depends: [ "bridge/origin", "model/auth", "model/location" ],
+    provides: [ "model/auth-ui" ]
+});

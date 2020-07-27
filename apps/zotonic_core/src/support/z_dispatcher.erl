@@ -430,7 +430,8 @@ dispatch_for_uri_lookup(DispatchList) ->
 
 dispatch_for_uri_lookup1([], Dict) ->
     Dict;
-dispatch_for_uri_lookup1([{Name, Pattern, _Resource, DispatchOptions}|T], Dict) ->
+dispatch_for_uri_lookup1([{Name, Pattern, Controller, DispatchOptions}|T], Dict)
+    when is_atom(Name), is_list(Pattern), is_atom(Controller), is_list(DispatchOptions) ->
     Vars  = lists:foldl(fun(A, Acc) when is_atom(A) -> [A|Acc];
                            ({A,_RegExp}, Acc) when is_atom(A) -> [A|Acc];
                            (_, Acc) -> Acc
@@ -441,7 +442,11 @@ dispatch_for_uri_lookup1([{Name, Pattern, _Resource, DispatchOptions}|T], Dict) 
                 true  -> dict:append(Name, {length(Vars), Vars, Pattern, DispatchOptions}, Dict);
                 false -> dict:store(Name, [{length(Vars), Vars, Pattern, DispatchOptions}], Dict)
             end,
-    dispatch_for_uri_lookup1(T, Dict1).
+    dispatch_for_uri_lookup1(T, Dict1);
+dispatch_for_uri_lookup1([IllegalDispatch|T], Dict) ->
+    lager:error("Dropping malformed dispatch rule: ~p", [ IllegalDispatch ]),
+    dispatch_for_uri_lookup1(T, Dict).
+
 
 
 
