@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Copyright (c) 2020, Eric Pailleau <zotonic@crownedgrouse.com>
+# This file is part of Zotonic and subject to the terms of the Apache 2 licence.
+
+
+_zotonic()
+{
+    local cur prev words cword
+    _init_completion || return
+
+    A=$(zotonic | grep -e "^   " | tr "\n" " ")
+    case $prev in
+    	zotonic)
+    	    COMPREPLY=( $(compgen -W "$A" -- "$cur") )
+    	    ;;
+        config)
+            COMPREPLY=( $(compgen -W 'all erlang zotonic' -- "$cur") ) && compopt -o nospace
+            ;;
+        *) 
+        	;;
+    esac
+} &&
+complete -F _zotonic zotonic

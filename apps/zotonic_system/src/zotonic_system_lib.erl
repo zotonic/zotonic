@@ -137,7 +137,7 @@ get_depth_after_prefix(Prefix, 0)
   % Get relative path after prefix
   Fun1 = fun({Path, _}, Acc) -> 
     case lists:prefix(Prefix, Path) of
-      false -> false ;
+      false -> [] ;
       true  -> PrS = filename:split(Prefix),
            PaS = filename:split(Path),
            Acc ++ [filename:join(PaS -- PrS)]
