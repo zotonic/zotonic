@@ -212,15 +212,15 @@ model.present = function(data) {
             model.authentication_error = null;
         }
         model.auth = data.auth_response;
+        if (data.is_auth_error === false && data.auth_response.url) {
+            self.publish("model/location/post/redirect", {
+                url: data.auth_response.url
+            });
+        }
         if (model.auth.user_id == previous_auth_user_id) {
             model.state_change('auth_known');
         } else {
             model.state_change('auth_changing');
-        }
-        if (data.is_auth_error === false && data.url) {
-            self.publish("model/location/post/redirect", {
-                url: data.url
-            });
         }
     }
 
@@ -511,7 +511,8 @@ actions.keepAlive = function(_date) {
 actions.onetimeToken = function(msg) {
     let onetime = {
         is_onetime_token: true,
-        token: msg.payload.token
+        token: msg.payload.token,
+        url: msg.payload.url
     }
     model.present(onetime);
 }

@@ -25,6 +25,7 @@ This action takes three possible arguments:
 ========  =================================================  =======
 Argument  Description                                        Example
 ========  =================================================  =======
+body      Mask the whole page                                body
 target    The id of the element to be masked.                target="search-form"
 message   Message to show next to the spinner image.         message="Searching..."
 delay     Delay (in milliseconds) before the mask is shown.  

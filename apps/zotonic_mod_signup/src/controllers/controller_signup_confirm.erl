@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-05-12
-%% @doc Display a form to sign up.
+%% @copyright 2010-2020 Marc Worrell
+%% @doc Handle the signup confirmation link
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,24 +28,9 @@
 
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    Context2 = z_context:ensure_qs(Context),
-    z_context:lager_md(Context2),
-    Key = z_context:get_q(<<"key">>, Context2, <<>>),
-    {Vars, ContextConfirm} = case Key of
-                                <<>> ->
-                                    {[], Context2};
-                                _ ->
-                                    case confirm(Key, Context2) of
-                                        {ok, UserId} ->
-                                            {ok, ContextUser} = z_auth:logon(UserId, Context2),
-                                            Location = confirm_location(UserId, ContextUser),
-                                            {[{user_id, UserId}, {location,Location}], ContextUser};
-                                        {error, _Reason} ->
-                                            {[{error, true}], Context2}
-                                    end
-                              end,
-    Rendered = z_template:render("signup_confirm.tpl", Vars, ContextConfirm),
-    z_context:output(Rendered, ContextConfirm).
+    z_context:lager_md(Context),
+    Rendered = z_template:render("signup_confirm.tpl", [], Context),
+    z_context:output(Rendered, Context).
 
 
 %% @doc Handle the submit of the signup form.
@@ -56,7 +40,16 @@ event(#submit{}, Context) ->
         {ok, UserId} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
             Location = confirm_location(UserId, ContextUser),
-            z_render:wire({redirect, [{location, Location}]}, ContextUser);
+            % Post a onetime-token to the auth worker on the page
+            % The auth worker will exchange it for a valid cookie and then perform
+            % the redirect to the url.
+            Token = z_authentication_tokens:encode_onetime_token(UserId, ContextUser),
+            AuthMsg = #{
+                token => Token,
+                url => z_convert:to_binary( Location )
+            },
+            z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
+            z_render:wire({mask, []}, Context);
         {error, _Reason} ->
             z_render:wire({show, [{target,"confirm_error"}]}, Context)
     end.
@@ -80,8 +73,8 @@ confirm(Key, Context) ->
             {ok, UserId}
     end.
 
-confirm_location(UserId, Context) ->
-    case z_notifier:first(#signup_confirm_redirect{id=UserId}, Context) of
-        undefined -> m_rsc:p(UserId, page_url, Context);
+confirm_location(UserId, ContextUser) ->
+    case z_convert:to_binary( z_notifier:first(#signup_confirm_redirect{ id = UserId }, ContextUser) ) of
+        <<>> -> m_rsc:p_no_acl(UserId, page_url, ContextUser);
         Loc -> Loc
     end.

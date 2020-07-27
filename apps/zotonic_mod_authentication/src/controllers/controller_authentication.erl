@@ -138,10 +138,10 @@ logon_1(undefined, _Payload, Context) ->
     { #{ status => error, error => pw }, Context }.
 
 -spec onetime_token( map(), z:context() ) -> { map(), z:context() }.
-onetime_token(#{ <<"token">> := Token }, Context) ->
+onetime_token(#{ <<"token">> := Token } = Payload, Context) ->
     case z_authentication_tokens:decode_onetime_token(Token, Context) of
         {ok, UserId} ->
-            logon_1({ok, UserId}, #{}, Context);
+            logon_1({ok, UserId}, Payload, Context);
         {error, _} ->
             { #{ status => error, error => token }, Context }
     end;
@@ -311,7 +311,8 @@ return_status(Payload, Context) ->
             language => z_context:language(Context1),
             timezone => z_context:tz(Context1)
         },
-        options => z_context:get(auth_options, Context1, #{})
+        options => z_context:get(auth_options, Context1, #{}),
+        url => maps:get(<<"url">>, Payload, undefined)
     },
     Status1 = case z_auth:is_auth(Context1) of
         true ->

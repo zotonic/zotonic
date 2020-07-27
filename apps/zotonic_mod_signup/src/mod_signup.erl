@@ -23,7 +23,7 @@
 -mod_description("Implements public sign up to register as member of this site.").
 -mod_prio(500).
 -mod_schema(1).
--mod_depends([ base, authentication, mod_server_storage ]).
+-mod_depends([ base, mod_authentication, mod_server_storage ]).
 -mod_provides([signup]).
 
 

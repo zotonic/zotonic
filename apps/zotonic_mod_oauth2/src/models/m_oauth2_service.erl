@@ -107,7 +107,7 @@ user_data({ok, Auth}, Context) ->
             lager:warning("Undefined auth_user return for user with props ~p", [Auth]),
             {error, auth_user_undefined};
         {ok, UserId} ->
-            % TODO: generate one time token to login for this user
+            % Generate one time token to login for this user
             Token = z_authentication_tokens:encode_onetime_token(UserId, Context),
             {ok, #{
                 result => token,
