@@ -38,6 +38,7 @@
           ,{target,  [category, app]}
 	    ]
 	   ).
+
 %%*** Main *********************************************************************
 -spec main(list()) -> ok | no_return().
 
@@ -93,36 +94,6 @@ my_halt(Exit) ->
 %%------------------------------------------------------------------------------
 zotonic_system_cmd(Args) -> ?TEST_HELP(?OptList, Args, zotonic_system).
 
-%%------------------------------------------------------------------------------
-%% @doc Check command line requirement depending options
-%% @end
-%%------------------------------------------------------------------------------
-check_requirements(Opts) ->
-   Fun = fun({K, L}) -> 
-   			case lists:member(K, Opts) of  
-   				false -> ok ;
-   				true  -> % Check presence of mandatory other options 
-   						Pred = fun(X) -> 
-   									case (lists:member(X, Opts) or lists:keymember(X, 1, Opts)) of
-   										true  -> true ;
-   										false -> 
-   											Ks = element(2, proplists:lookup(K, ?OptList)),
-   											Kl = element(3, proplists:lookup(K, ?OptList)),
-   											Rs = element(2, proplists:lookup(X, ?OptList)),
-   											Rl = element(3, proplists:lookup(X, ?OptList)),
-   											M = io_lib:format("Argument -~c/--~ts requires -~c/--~ts", [Ks, Kl, Rs, Rl]),
-   											?ERROR(M), 
-   											false
-   									end
-   						        end,
-   				        case lists:all(Pred, L) of
-   				        	true -> ok;
-   				        	false -> halt(1)
-   				        end
-   			end 
-   		end,
-   lists:foreach(Fun, ?Requires).
-
 %%******************************************************************************
 %%*** Version ******************************************************************
 %%******************************************************************************
@@ -152,6 +123,8 @@ get_version(Module) when is_atom(Module) ->
 %% @doc Main entry point
 %% @end
 %%------------------------------------------------------------------------------
+-spec zotonic_system(list()) -> ok.
+
 zotonic_system(Opts) ->
     % Initializations
 	zotonic_system_lib:set_verbosity(Opts),
@@ -159,7 +132,7 @@ zotonic_system(Opts) ->
 	_Output      = zotonic_system_lib:set_stdout(Opts),
 	?DEBUG(Opts),
 	% Check arguments dependances
-	check_requirements(Opts),
+	ok = check_requirements(Opts),
 	% Detect mode in arguments
 	Mode = get_mode(Opts),
     case Mode of
@@ -177,6 +150,8 @@ zotonic_system(Opts) ->
 %% @doc -L, --list        List all (category/app/target)
 %% @end
 %%------------------------------------------------------------------------------
+-spec zs_list(list()) -> ok.
+
 zs_list(_Opts) -> 
 	L1 = zotonic_system_lib:get_depth_after_prefix("zotonic_system/priv/templates", 0),
 	L = lists:usort(lists:flatmap(fun(X) -> [filename:dirname(X)] end, L1)),
@@ -189,6 +164,8 @@ zs_list(_Opts) ->
 %% @doc -C, --categories  List all categories
 %% @end
 %%------------------------------------------------------------------------------
+-spec zs_categories(list()) -> ok.
+
 zs_categories(_Opts) -> 
 	Cat = zotonic_system_lib:get_depth_after_prefix("zotonic_system/priv/templates", 1),
 	lists:foreach(fun(X) -> 
@@ -200,6 +177,8 @@ zs_categories(_Opts) ->
 %% @doc  -A, --apps        List all applications for a category (require -c)
 %% @end
 %%------------------------------------------------------------------------------
+-spec zs_apps(list()) -> ok.
+
 zs_apps(Opts)-> 
     {_, C} = lists:keyfind(category, 1, Opts),
     Prefix = filename:join(["zotonic_system/priv/templates", C]),
@@ -210,9 +189,12 @@ zs_apps(Opts)->
 	ok.
 
 %%------------------------------------------------------------------------------
-%% @doc -T, --targets     List all targets for a category and an application (require -a, -c).
+%% @doc -T, --targets     List all targets for a category and an application
+%%                        (require -a, -c).
 %% @end
 %%------------------------------------------------------------------------------
+-spec zs_targets(list()) -> ok.
+
 zs_targets(Opts)-> 
     {_, C} = lists:keyfind(category, 1, Opts),
     {_, A} = lists:keyfind(app, 1, Opts),
@@ -232,9 +214,7 @@ zs_target(Opts)->
     {_, A} = lists:keyfind(app, 1, Opts),
     {_, T} = lists:keyfind(target, 1, Opts),
     Prefix = filename:join(["zotonic_system/priv/templates", C, A, T]),
-	Targets = zotonic_system_lib:get_depth_after_prefix(Prefix, 0),
-	erlang:display(Targets),
-	ok.
+    zs_do(Prefix).
 
 %%------------------------------------------------------------------------------
 %% @doc -p, --path        Path to a category/app/target (see -L output)
@@ -243,6 +223,14 @@ zs_target(Opts)->
 zs_path(Opts)-> 
     {_, P} = lists:keyfind(path, 1, Opts),
     Prefix = filename:join(["zotonic_system/priv/templates", P]),
+    zs_do(Prefix).
+
+%%------------------------------------------------------------------------------
+%% @doc Treat a path package
+%% @end
+%%------------------------------------------------------------------------------
+zs_do(Prefix)
+	->
 	Targets = zotonic_system_lib:get_depth_after_prefix(Prefix, 0),
 	case (length(Targets) < 2 ) of
 		true -> ?FATAL("Invalid package");
@@ -291,7 +279,10 @@ get_mode(Opts) ->
 		_:R -> R
 	end.
 
-
+%%------------------------------------------------------------------------------
+%% @doc Evaluate template and show result
+%% @end
+%%------------------------------------------------------------------------------
 show(Path, Conf)
 	-> 
 	% Display abstract on stderr
@@ -309,7 +300,6 @@ show(Path, Conf)
 	% Display evaluated template on stdout
 	File = filename:join(Path, "file"),
 	{ok,[{_, CBin}]} = zotonic_system_lib:get_from_escript(File),
-	%C = erlang:binary_to_list(CBin),
 	{ok, Module} = template_compiler:compile_binary(CBin, FileName, [], []),
 	?DEBUG({template_module, Module}),
 	IOList = Module:render(Conf, [], []),
@@ -317,7 +307,7 @@ show(Path, Conf)
 	ok.
 
 %%------------------------------------------------------------------------------
-%% @doc Compose config map for templates
+%% @doc Merge config for templates
 %% @end
 %%------------------------------------------------------------------------------
 zs_conf(ZConf, Extra) 
@@ -334,6 +324,38 @@ zs_conf(ZConf, Extra)
 		      end, si_list())]},
 	OSConf = {os, lists:flatten([OSInfo] ++ [OSVars])},
 	lists:flatten([ZConf] ++ [OSConf] ++ [Extra]).
+
+%%------------------------------------------------------------------------------
+%% @doc Check command line requirement depending options
+%% @end
+%%------------------------------------------------------------------------------
+-spec check_requirements(list()) -> ok.
+
+check_requirements(Opts) ->
+   Fun = fun({K, L}) -> 
+   			case lists:member(K, Opts) of  
+   				false -> ok ;
+   				true  -> % Check presence of mandatory other options 
+   						Pred = fun(X) -> 
+   									case (lists:member(X, Opts) or lists:keymember(X, 1, Opts)) of
+   										true  -> true ;
+   										false -> 
+   											Ks = element(2, proplists:lookup(K, ?OptList)),
+   											Kl = element(3, proplists:lookup(K, ?OptList)),
+   											Rs = element(2, proplists:lookup(X, ?OptList)),
+   											Rl = element(3, proplists:lookup(X, ?OptList)),
+   											M = io_lib:format("Argument -~c/--~ts requires -~c/--~ts", [Ks, Kl, Rs, Rl]),
+   											?ERROR(M), 
+   											false
+   									end
+   						        end,
+   				        case lists:all(Pred, L) of
+   				        	true -> ok;
+   				        	false -> halt(1)
+   				        end
+   			end 
+   		end,
+   lists:foreach(Fun, ?Requires).
 
 %%------------------------------------------------------------------------------
 %% @doc List of erlang:system_info/1 options for templates
