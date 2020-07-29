@@ -64,10 +64,12 @@ get_from_escript(Prefix) ->
 %%------------------------------------------------------------------------------
 get_stdin()  -> get_stdin([]).
 
-get_stdin(F) ->  case io:get_chars('', 8192) of
-                         eof -> F ;
-                         T   -> get_stdin(F ++ T)
-                 end.
+get_stdin(F) ->  
+    {ok, TRef} = timer:exit_after(2000, self(),"No data in stdin"),
+    case io:get_chars('', 8192) of
+       eof -> timer:cancel(TRef), F ;
+       T   -> timer:cancel(TRef), get_stdin(F ++ T)
+    end.
 %%------------------------------------------------------------------------------
 %% @doc Set verbosity
 %%      Default to Warning

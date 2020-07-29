@@ -3,6 +3,7 @@
 %%% @author    Eric 'crownedgrouse' Pailleau <zotonic@crownedgrouse.com>
 %%% @copyright 2020 Eric Pailleau
 %%% @doc
+%%%      System integration helper script for Zotonic
 %%% @end
 %%%-----------------------------------------------------------------------------
 
