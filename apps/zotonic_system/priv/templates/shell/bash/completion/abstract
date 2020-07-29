@@ -6,15 +6,19 @@ Maintainer: Eric Pailleau <zotonic@crownedgrouse.com>
 Homepage: https://www.gnu.org/software/bash/
 Description: Bash completion script for Zotonic launcher script
  
- Add path to `zotonic` script (apps/zotonic_launcher/bin) to PATH.  
+ Add path to `zotonic` script ({/path/to}/apps/zotonic_launcher/bin) to environment variable PATH.  
  Create a directory for your bash completion scripts :
  
  $> mkdir ~/.bash_completion.d/
  
- Then edit a file ~/.bash_completion and add:
+ Then edit a file `~/.bash_completion` and add:
 
  ```
  for bcfile in ~/.bash_completion.d/* ; do
     . $bcfile
  done
  ```
+
+ Finally, open a new shell or update current shell by doing :
+
+ $> . ~/.bash_completion
