@@ -1,23 +1,53 @@
 #!/usr/bin/env bash
 # Copyright (c) 2020, Eric Pailleau <zotonic@crownedgrouse.com>
-# This file is part of Zotonic and subject to the terms of the Apache 2 licence.
-
+# This file is part of Zotonic and subject to the terms of the Apache 2.0 licence.
 
 _zotonic()
 {
     local cur prev words cword
     _init_completion || return
 
-    A=$(zotonic | grep -e "^   " | tr "\n" " ")
     case $prev in
-    	zotonic)
+       zotonic)
+            A=$(zotonic | grep -e "^   " | tr "\n" " ")
     	    COMPREPLY=( $(compgen -W "$A" -- "$cur") )
     	    ;;
         config)
             COMPREPLY=( $(compgen -W 'all erlang zotonic' -- "$cur") ) && compopt -o nospace
             ;;
+       addsite)
+            A=$(zotonic addsite | grep -e "^ -" | cut -d ' ' -f 2 )
+	    COMPREPLY=( $(compgen -W "$A" -- "$cur" ) )
+	    ;;
+        -s) 
+	    # Propose schemas
+            A="blog basesite empty nodb"
+	    COMPREPLY=( $(compgen -W "$A" -- "$cur" ) )
+	    ;;
+     -H|-h) 
+	    # Propose local hostnames
+	    COMPREPLY=( $(compgen -A hostname -- "$cur" ) )
+	    ;;
+        -u) 
+	    # Propose local users
+	    COMPREPLY=( $(compgen -A user -- "$cur" ) )
+	    ;;
+     -P|-p) 
+	    # Propose random passwords
+	    A=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w16 | head -n1)
+	    COMPREPLY=( $(compgen -W "$A" -- "$cur" ) )
+	    ;;
+    compilefile) 
+	    # Propose Erlang file only
+	    COMPREPLY=( $(compgen -A file -o default -X "!*.erl" -- "$cur" ) )
+            ;;
+   restartsite|siteconfig|siteconfigfiles|sitedir|sitetest|startsite|stopsite) 
+	    # Propose sites available
+	    A=$(zotonic config | grep zotonic_apps | cut -d ':' -f 2 | tr -d ' ' | xargs ls -1)
+	    COMPREPLY=( $(compgen -W "$A" -- "$cur" ) )
+	    ;;
         *) 
-        	;;
+            ;;
     esac
 } &&
 complete -F _zotonic zotonic
