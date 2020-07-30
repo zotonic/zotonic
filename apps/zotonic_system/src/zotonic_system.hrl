@@ -107,11 +107,11 @@ prefix(8) -> " #  ";
 prefix(9) -> " @  ";
 prefix(_) -> "".
 
-%% display timeinfo starting log level 6
+%% display timeinfo on trace level only
 timeinfo() -> 
-  case (get(verbosity) >= 8 ) of
+  case (get(verbosity) == 9 ) of
    false -> [] ;
-   true  -> zotonic_system_lib:format_date()++ " - "
+   true  -> zotonic_system_lib:format_date() ++ " - "
   end.
 
 %% Print content on stdout with markers on stderr, title free

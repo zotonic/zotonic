@@ -30,6 +30,7 @@
          ,{app,        $a,      "app",        string         , "Application"}
          ,{target,     $t,      "target",     string         , "Target (require -c, -a)"}
          ,{path,       $p,      "path",       string         , "Path to a category/app/target (see -L output)"}
+         ,{noop,       $n,      "noop",       undefined      , "Do not read stdin nor evaluate template"}
         ]).
 
 -define(Requires,
@@ -155,7 +156,7 @@ zotonic_system(Opts) ->
 
 zs_list(_Opts) -> 
 	L1 = zotonic_system_lib:get_depth_after_prefix("zotonic_system/priv/templates", 0),
-	L = lists:usort(lists:flatmap(fun(X) -> [filename:dirname(X)] end, L1)),
+	L  = lists:usort(lists:flatmap(fun(X) -> [filename:dirname(X)] end, L1)),
 	lists:foreach(fun(X) -> 
 					?STDERR(X) 
 					end, L),
@@ -183,7 +184,7 @@ zs_categories(_Opts) ->
 zs_apps(Opts)-> 
     {_, C} = lists:keyfind(category, 1, Opts),
     Prefix = filename:join(["zotonic_system/priv/templates", C]),
-	Apps = zotonic_system_lib:get_depth_after_prefix(Prefix, 1),
+	Apps   = zotonic_system_lib:get_depth_after_prefix(Prefix, 1),
 	lists:foreach(fun(X) -> 
 					?STDERR(X) 
 					end, Apps),
@@ -197,9 +198,9 @@ zs_apps(Opts)->
 -spec zs_targets(list()) -> ok.
 
 zs_targets(Opts)-> 
-    {_, C} = lists:keyfind(category, 1, Opts),
-    {_, A} = lists:keyfind(app, 1, Opts),
-    Prefix = filename:join(["zotonic_system/priv/templates", C, A]),
+    {_, C}  = lists:keyfind(category, 1, Opts),
+    {_, A}  = lists:keyfind(app, 1, Opts),
+    Prefix  = filename:join(["zotonic_system/priv/templates", C, A]),
 	Targets = zotonic_system_lib:get_depth_after_prefix(Prefix, 1),
 	lists:foreach(fun(X) -> 
 					?STDERR(X) 
@@ -224,7 +225,10 @@ zs_target(Opts)->
 zs_path(Opts)-> 
     {_, P} = lists:keyfind(path, 1, Opts),
     Prefix = filename:join(["zotonic_system/priv/templates", P]),
-    zs_do(Prefix).
+    case lists:member(noop, Opts) of
+    	false -> zs_do(Prefix) ;
+    	true  -> zs_noop(Prefix)
+    end.
 
 %%------------------------------------------------------------------------------
 %% @doc Treat a path package
@@ -253,11 +257,31 @@ zs_do(Prefix)
 		C    = yamerl_constr:string(Yaml),
 		% Get Zotonic conf as proplist
 		ZConf = lists:flatten(C),
-		?DEBUG(io_lib:format("~n~p",[ZConf])),
+		?DEBUG(io_lib:format("Yaml config:~n~p",[ZConf])),
 		% Merge all sources in a single one for rendering
 		Conf  = zs_conf(ZConf, Extra),
-		?INFO(io_lib:format("~n~p",[Conf])),
-	    show(Prefix, Conf)
+		?INFO(io_lib:format("Final config:~n~p",[Conf])),
+	    show(Prefix, Conf, false)
+	catch
+		_:R:S -> ?ERROR(R),
+				 ?DEBUG(S)
+	end,
+	ok.
+
+%%------------------------------------------------------------------------------
+%% @doc Do not treat a path package in real (noop)
+%% @end
+%%------------------------------------------------------------------------------
+zs_noop(Prefix)
+	->
+	?WARNING("Noop mode. Template won't be evaluated."),
+	Targets = zotonic_system_lib:get_depth_after_prefix(Prefix, 0),
+	case (length(Targets) < 2 ) of
+		true -> ?FATAL("Invalid package");
+		false -> ok
+	end,
+	try
+	    show(Prefix, [], true)
 	catch
 		_:R:S -> ?ERROR(R),
 				 ?DEBUG(S)
@@ -284,7 +308,7 @@ get_mode(Opts) ->
 %% @doc Evaluate template and show result
 %% @end
 %%------------------------------------------------------------------------------
-show(Path, Conf)
+show(Path, Conf, Noop)
 	-> 
 	% Display abstract on stderr
 	AbstFile = filename:join(Path, "abstract"),
@@ -301,10 +325,38 @@ show(Path, Conf)
 	% Display evaluated template on stdout
 	File = filename:join(Path, "file"),
 	{ok,[{_, CBin}]} = zotonic_system_lib:get_from_escript(File),
-	{ok, Module} = template_compiler:compile_binary(CBin, FileName, [], []),
-	?DEBUG({template_module, Module}),
-	IOList = Module:render(Conf, [], []),
-	?PRINT_FILE(FileName, io_lib:format("~ts",[IOList])),
+	% Searching all tags
+	Tags = 
+		case re:run(CBin, "{{(.*)}}", [{capture, all_but_first, list}]) of
+			{match, CapTags} -> CapTags;
+			_ -> ""
+		end,
+	Fun = fun(T) -> [H|_] = string:split(string:strip(T),"."),[H] end, 
+	Req = lists:flatmap(Fun, Tags),
+	?STDERR(io_lib:format("Requires: ~ts", [lists:join(", ", Req)])),
+	case Noop of
+		false ->
+			% Warn if available conf does not contain required tag prefix (zotonic, erlang, ...)
+			Pred = fun(T) -> 
+				case (lists:keymember(erlang:list_to_atom(T), 1, Conf) or 
+					  lists:keymember(T, 1, Conf)) of 
+							false -> ?NOTICE(io_lib:format("Missing: ~p", [T])),
+									 false; 
+							true  -> true 
+					 end 
+				end,
+			case lists:all(Pred, Req) of
+				false -> ?WARNING("Required configuration is missing") ;
+				true  -> ok
+			end,
+			{ok, Module} = template_compiler:compile_binary(CBin, FileName, [], []),
+			?DEBUG({template_module, Module}),
+			IOList = Module:render(Conf, [], []),
+			?PRINT_FILE(FileName, io_lib:format("~ts",[IOList]));
+		true ->
+			% Display non evaluated template
+			?PRINT_FILE(FileName, io_lib:format("~ts",[CBin]))
+	end,
 	ok.
 
 %%------------------------------------------------------------------------------
