@@ -77,7 +77,8 @@ get_stdin(F) ->
 %%------------------------------------------------------------------------------
 set_verbosity(Opts) ->
    V = case catch erlang:list_to_integer(proplists:get_value(verbose, Opts, "5")) of
-         X when is_integer(X) -> X ;
+         X when is_integer(X),(X < 10) -> X ;
+         X when is_integer(X),(X > 9)  -> ?WARNING("Invalid verbosity level. Switching to debug level 8."), 8 ;
          _                    -> 5
       end,
    put(verbosity, V).
@@ -139,8 +140,9 @@ get_depth_after_prefix(Prefix, 0)
   % Get relative path after prefix
   Fun1 = fun({Path, _}, Acc) -> 
     case lists:prefix(Prefix, Path) of
-      false -> [] ;
-      true  -> PrS = filename:split(Prefix),
+      false -> Acc ;
+      true  -> 
+           PrS = filename:split(Prefix),
            PaS = filename:split(Path),
            Acc ++ [filename:join(PaS -- PrS)]
     end
