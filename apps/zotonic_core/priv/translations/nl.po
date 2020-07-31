@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-06-22 16:42+0200\n"
+"PO-Revision-Date: 2020-07-31 16:24+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4\n"
 
 #: apps/zotonic_core/src/support/z_media_import.erl:148
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -177,7 +177,7 @@ msgstr ""
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:23
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:66
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:73
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:17
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:86./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
@@ -186,7 +186,7 @@ msgstr ""
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:100
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:60
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:146./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
@@ -196,7 +196,7 @@ msgstr "Annuleer"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:173./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:42
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:47
 #: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "Category"
 msgstr "Categorie"
@@ -418,7 +418,7 @@ msgid "Module"
 msgstr "Module"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:52
-#: apps/zotonic_mod_admin/src/mod_admin.erl:116
+#: apps/zotonic_mod_admin/src/mod_admin.erl:121
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7./apps/zotonic_mod_admin_modules/src/mod_admin_modules.erl:100
 msgid "Modules"
 msgstr "Modules"
@@ -516,6 +516,7 @@ msgstr "Regels teruggezet"
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:99
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:81
 msgid "Save"
 msgstr "Bewaar"
 
@@ -652,7 +653,7 @@ msgstr ""
 "Gebruik de volgende URL om te toegangsregels te testen voordat je ze "
 "publiceert."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:538
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:538
 msgid "User groups"
 msgstr "Gebruikersgroepen"
 
@@ -812,7 +813,7 @@ msgstr "Mediabestand toevoegen"
 msgid "Add media to body"
 msgstr "Mediabestand toevoegen aan pagina"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:452./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:466./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Connectie gemaakt naar"
 
@@ -899,7 +900,7 @@ msgstr "Laat Google deze pagina niet indexeren"
 msgid "Attached media"
 msgstr "Gekoppelde media"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:121
+#: apps/zotonic_mod_admin/src/mod_admin.erl:126
 msgid "Auth"
 msgstr "Authenticatie"
 
@@ -934,7 +935,7 @@ msgstr "De cache is geleegd."
 msgid "Category name:"
 msgstr "Naam categorie:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:39
 msgid "Category:"
 msgstr "Categorie:"
 
@@ -1106,10 +1107,9 @@ msgstr "Afhankelijk"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:22./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:25
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:11
-#: apps/zotonic_mod_instagram/priv/templates/_logon_extra_instagram.tpl:13
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:13
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:13
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
+#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
+#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
 msgstr "Ontkoppel"
 
@@ -1150,7 +1150,7 @@ msgstr "E-mailadres"
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_base_site/priv/templates/_meta.tpl:11
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:64./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:40
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:40
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:15
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:27
 msgid "Edit"
@@ -1177,7 +1177,7 @@ msgid "Embed code will be sanitized for allowed sites and html."
 msgstr ""
 "De embedcode wordt gecontroleerd. Alleen geselecteerde sites zijn toegestaan."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:160
+#: apps/zotonic_mod_admin/src/mod_admin.erl:174
 msgid "Embed page"
 msgstr "Pagina embedden"
 
@@ -1214,11 +1214,11 @@ msgstr "Erlang Versie"
 msgid "Error checking the website."
 msgstr "Fout bij het controleren van de website."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:172
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174
 msgid "Error creating the page."
 msgstr "Fout bij het maken van de pagina."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:170
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:169
 msgid "Error uploading the file."
 msgstr "Fout bij uploaden van bestand."
 
@@ -1246,7 +1246,7 @@ msgstr ""
 msgid "Existing pages"
 msgstr "Bestaande pagina's"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:161./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:137
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:160./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:137
 msgid "Failed to download the file."
 msgstr "Het downloaden van het mediabestand is mislukt."
 
@@ -1280,7 +1280,7 @@ msgid "Find page"
 msgstr "Zoek pagina"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:19
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:11
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:13
 msgid "First"
 msgstr "Eerste"
 
@@ -1305,20 +1305,21 @@ msgstr "Van"
 msgid "Go back."
 msgstr "Ga terug."
 
-#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/src/mod_admin.erl:158
+#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/src/mod_admin.erl:172
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:114
 msgid "Header"
 msgstr "Kop"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
-"its own line. For more information, see the <a href=\"http://zotonic.com/"
-"docs/latest/developer-guide/search.html#query-model-arguments"
+"its own line. For more information, see the <a href=\"https://docs.zotonic."
+"com/docs/latest/developer-guide/search.html#query-model-arguments"
 "\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
 "Hier kan je de argumenten van de zoekopdracht invoeren. Elk argument moet op "
-"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://"
+"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"https://docs-"
 "zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments"
 "\">documentatie over zoekopdrachten</a> op de Zotonic website."
 
@@ -1417,7 +1418,7 @@ msgstr "Maak"
 msgid "Make a new media item"
 msgstr "Maak een nieuw mediabestand"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:83
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:82
 msgid "Make a new page"
 msgstr "Maak een nieuwe pagina"
 
@@ -1431,7 +1432,7 @@ msgstr "Maak een nieuwe pagina of media-item"
 msgid "Matching"
 msgstr "Voldoet aan"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:57./apps/zotonic_mod_admin/src/mod_admin.erl:103
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:57./apps/zotonic_mod_admin/src/mod_admin.erl:104
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
 #: apps/zotonic_mod_base_site/priv/templates/page.collection.tpl:8
 msgid "Media"
@@ -1453,7 +1454,7 @@ msgstr ""
 msgid "Media file"
 msgstr "Mediabestand"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:147./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:121
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:146./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:121
 msgid "Media item created."
 msgstr "Media item gemaakt."
 
@@ -1649,10 +1650,12 @@ msgid "Published"
 msgstr "Gepubliceerd"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:28
 msgid "Query"
 msgstr "Zoekvraag"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:41
 msgid "Query preview"
 msgstr "Zoekvraag voorbeeld"
 
@@ -1698,7 +1701,7 @@ msgstr "Opmerkingen"
 msgid "Remove crop center"
 msgstr "Verwijder uitsnede-middelpunt"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:456
+#: apps/zotonic_mod_admin/src/mod_admin.erl:470
 msgid "Removed the connection to"
 msgstr "Connectie verwijderd naar"
 
@@ -1772,6 +1775,7 @@ msgid "Search other media"
 msgstr "Zoek naar andere mediabestanden"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:7
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:7
 msgid "Search query"
 msgstr "Zoekopdracht"
 
@@ -1833,15 +1837,15 @@ msgstr "Er ging iets mis, onze excuses."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:441
+#: apps/zotonic_mod_admin/src/mod_admin.erl:455
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:443
+#: apps/zotonic_mod_admin/src/mod_admin.erl:457
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Je hebt geen rechten om deze verbinding te verwijderen."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:157
+#: apps/zotonic_mod_admin/src/mod_admin.erl:171
 msgid "Standard"
 msgstr "Standaard"
 
@@ -1859,7 +1863,7 @@ msgstr "Begint"
 msgid "State"
 msgstr "Provincie"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:130
+#: apps/zotonic_mod_admin/src/mod_admin.erl:135
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:104
@@ -1875,7 +1879,7 @@ msgstr "Adresregel 1"
 msgid "Street Line 2"
 msgstr "Adresregel 2"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:111
+#: apps/zotonic_mod_admin/src/mod_admin.erl:116
 msgid "Structure"
 msgstr "Structuur"
 
@@ -1884,17 +1888,17 @@ msgid "Summary"
 msgstr "Samenvatting"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:31
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:19
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:21
 msgid "Sur. prefix"
 msgstr "Voorvoegsel"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:37
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:26
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:41
 msgid "Surname"
 msgstr "Achternaam"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:125
+#: apps/zotonic_mod_admin/src/mod_admin.erl:130
 msgid "System"
 msgstr "Systeem"
 
@@ -1915,10 +1919,11 @@ msgid "Templates will be recompiled."
 msgstr "De templates worden opnieuw gecompileerd."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:37
 msgid "Test query"
 msgstr "Test zoekopdracht"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:159
+#: apps/zotonic_mod_admin/src/mod_admin.erl:173
 msgid "Text"
 msgstr "Tekst"
 
@@ -1946,7 +1951,7 @@ msgstr ""
 msgid "There are no pages with a connection to the page"
 msgstr "Er zijn geen andere pagina's die een connectie hebben naar de pagina"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:157
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
 msgid "There is already a page with this name."
 msgstr "Er is al een pagina met deze naam."
 
@@ -1959,7 +1964,7 @@ msgstr ""
 msgid "This connection already exists."
 msgstr "Deze connectie bestaat al."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:165./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:141
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:164./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:141
 msgid "This file contains links to other files or locations."
 msgstr "Dit bestand bevat links naar andere bestanden of locaties."
 
@@ -1975,11 +1980,11 @@ msgstr "Dit bestand is niet gescand op virussen omdat het te groot is."
 msgid "This file has not been scanned for viruses."
 msgstr "Dit bestand is niet gescand op virussen."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:163./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:139
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:162./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:139
 msgid "This file is infected with a virus."
 msgstr "Dit bestand is geïnfecteerd met een virus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:167./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:143
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:166./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:143
 msgid "This file is too large."
 msgstr "Dit bestand is te groot."
 
@@ -2197,15 +2202,15 @@ msgstr "Je mag deze pagina niet verwijderen."
 msgid "You are not allowed to edit this page."
 msgstr "Je hebt geen rechten om deze pagina te bewerken."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:157./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:133
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:156./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:133
 msgid "You don't have permission to change this media item."
 msgstr "Je hebt geen toestemming om dit mediabestand te bewerken."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161
 msgid "You don't have permission to create this page."
 msgstr "Je hebt geen toestemming om deze pagina te maken."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:159./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:135
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:158./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:135
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Je hebt niet de juiste permissies om dit type bestand te uploaden."
 
@@ -2251,7 +2256,7 @@ msgstr "d M Y, H:i"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:112
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_bounces.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
 msgid "delete"
 msgstr "verwijder"
 
@@ -2262,7 +2267,6 @@ msgstr "bv. kan nog veranderen"
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:123./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:46
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_bounces.tpl:26
 msgid "edit"
 msgstr "bewerk"
 
@@ -2292,7 +2296,7 @@ msgstr "bewerkt door"
 msgid "name"
 msgstr "Achternaam"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_view_types.tpl:2./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:63
+#: apps/zotonic_mod_admin/priv/templates/_admin_view_types.tpl:2./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:62
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:19
 msgid "page"
 msgstr "pagina"
@@ -2314,7 +2318,7 @@ msgstr "systeeminhoud"
 msgid "undo"
 msgstr "ongedaan maken"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:35./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:39./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
 msgid "untitled"
 msgstr "zonder titel"
 
@@ -2543,6 +2547,7 @@ msgstr "Voeg pagina’s toe of klik op een pagina in het menu."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:59
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:27
 msgid "Language"
 msgstr "Taal"
@@ -2597,7 +2602,7 @@ msgstr "Nieuwe gebruiker toevoegen"
 msgid "Add e-mail address"
 msgstr "Naam en e-mailadres toevoegen"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:67
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:74
 msgid "Add user"
 msgstr "Gebruiker toevoegen"
 
@@ -2622,7 +2627,7 @@ msgstr "Geblokkeerd"
 msgid "Changed the username."
 msgstr "Gebruikersnaam veranderd."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:14./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:11
+#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:13./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:11
 msgid ""
 "Click OK to log on as this user. You will be redirected to the home page if "
 "this user has no rights to access the admin system."
@@ -2652,7 +2657,7 @@ msgstr ""
 msgid "Confirm user deletion"
 msgstr "Bevestig verwijderen van gebruiker"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:114
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:105
 msgid "Could not create the user. Sorry."
 msgstr "Kan de gebruiker niet maken."
 
@@ -2664,11 +2669,11 @@ msgstr "Naam en e-mailadres verwijderen"
 msgid "Deleted the user account."
 msgstr "De gebruikersaccount verwijderd."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:101
 msgid "Duplicate username, please choose another username."
 msgstr "Gebruikersnaam bestaat al, kies a.u.b. een andere."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:34
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:36
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:31
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:16./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:13
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:20
@@ -2677,6 +2682,7 @@ msgid "E-mail"
 msgstr "E-mail"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:38
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:4
 msgid "Email Status"
 msgstr "E-mail status"
 
@@ -2698,7 +2704,7 @@ msgstr ""
 "verschil tussen een gebruiker en een normale pagina is slechts dat een "
 "gebruiker een gebruikersnaam/wachtwoord heeft waarmee hij kan inloggen."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:7
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:9
 msgid ""
 "Give the name and the e-mail address of the new user. A <em>person</em> page "
 "will be created for this user."
@@ -2735,7 +2741,7 @@ msgstr ""
 msgid "Leave empty to not change the password."
 msgstr "Laat leeg om het wachtwoord niet te wijzigen."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:14./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:14
+#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:13./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:14
 msgid "Log on as this user"
 msgstr "Inloggen als deze gebruiker"
 
@@ -2747,7 +2753,7 @@ msgstr "Nieuwe gebruiker maken"
 msgid "My page"
 msgstr "Mijn pagina"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:5
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:7
 msgid "Name and e-mail address"
 msgstr "Naam en e-mailadres"
 
@@ -2768,7 +2774,7 @@ msgstr "Geen bevestigd e-mail adres. Voeg deze hieronder toe."
 msgid "One moment, please..."
 msgstr "Een ogenblik geduld…"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:118
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
 msgid "Only administrators can add users."
 msgstr "Alleen administrators kunnen gebruikers toevoegen."
 
@@ -2823,12 +2829,12 @@ msgstr "Stuur welkomstemail"
 msgid "Sent verification e-mail."
 msgstr "Bevestigingsemail is verstuurd."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:9./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:6./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:51
+#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:8./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:6./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:51
 msgid "Set username / password"
 msgstr "Gebruikersnaam / wachtwoord instellen"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:41
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:35./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:55./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:67
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:51
 msgid "Sorry"
 msgstr "Sorry"
 
@@ -2927,7 +2933,7 @@ msgstr "Gebruik dit wachtwoord"
 msgid "User account"
 msgstr "Gebruikersaccount"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:7
+#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:6
 msgid "User actions"
 msgstr "Gebruikersacties"
 
@@ -2942,7 +2948,7 @@ msgstr "Gebruikersnaam"
 msgid "Username / password"
 msgstr "Gebruikersnaam / wachtwoord"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:61
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:68
 msgid "Username and password"
 msgstr "Gebruikersnaam en wachtwoord"
 
@@ -2994,7 +3000,7 @@ msgstr ""
 "uitvoeren op het Zotonic systeem.<br /><br />Wat een gebruiker precies kan "
 "doen hangt samen met de groepen waar de gebruiker lid van is."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:111
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
 msgstr "Je mag geen persoon-pagina maken."
 
@@ -3054,7 +3060,7 @@ msgstr "Je gebruikersgegevens voor"
 msgid "Your user details are:"
 msgstr "Je gebruikersgegevens zijn:"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:19
 msgid "delete username"
 msgstr "Verwijder gebruikersnaam"
 
@@ -3661,7 +3667,7 @@ msgstr ""
 msgid "Access denied"
 msgstr "Toegang geweigerd"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:49
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:45
 msgid "Already Connected"
 msgstr "Al gelinkt"
 
@@ -3690,7 +3696,7 @@ msgstr ""
 msgid "Change password and Sign in"
 msgstr "Verander wachtwoord en login"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:40
 msgid "Change your permissions"
 msgstr "Verander je toegangsrechten"
 
@@ -3710,11 +3716,11 @@ msgstr ""
 "Klik op de link hieronder om een nieuw wachtwoord in te vullen. Als klikken "
 "niet werkt, kan je het complete adres kopiëren en plakken in je browser."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:76
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
 msgid "Close Window"
 msgstr "Sluit venster"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:12
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:7
 msgid "Close this window and log in if you are already a user of"
 msgstr "Sluit dit venster en log in als u al een gebruiker bent van"
 
@@ -3736,11 +3742,11 @@ msgstr ""
 "Het e-mailadres of het wachtwoord is onjuist. Controleer je gegevens en "
 "probeer het opnieuw."
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
 msgstr "Activeer <em>mod_facebook</em> om Facebook instellingen te zien."
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:32
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:40
 msgid "Enable <em>mod_twitter</em> to see Twitter settings."
 msgstr "Activeer <em>mod_twitter</em> om Twitter instellingen te zien."
 
@@ -3800,7 +3806,7 @@ msgstr "Wachtwoord vergeten?"
 msgid "Go back"
 msgstr "Ga terug"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:23./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:32
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:23./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:40
 msgid "Go to Modules"
 msgstr "Ga naar Modules"
 
@@ -3840,7 +3846,7 @@ msgstr ""
 msgid "I forgot my password"
 msgstr "Wachtwoord vergeten?"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:21
 msgid "I want to create a new account"
 msgstr "Ik wil een nieuw account aanmaken"
 
@@ -3891,6 +3897,11 @@ msgstr "Hulp nodig bij inloggen?"
 msgid "No Access"
 msgstr "Geen toegang"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:10
+#: apps/zotonic_mod_facebook/priv/templates/_logon_service.facebook.tpl:1
+msgid "One moment please"
+msgstr "Een ogenblik geduld"
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "Code"
@@ -3907,9 +3918,17 @@ msgstr "Voer de code in voor authenticatie in twee stappen."
 msgid "Please try again in"
 msgstr "Probeer het opnieuw in"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:71
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:55
 msgid "Please try again later."
 msgstr "Probeer het straks nog eens."
+
+#: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:13
+msgid "Redirecting to"
+msgstr "Doorsturen naar"
+
+#: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:15
+msgid "Redirecting..."
+msgstr "Doorsturen..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
 msgid "Repeat password"
@@ -3927,11 +3946,6 @@ msgstr "Verander wachtwoord en login"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:19./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
 msgid "Reset your password"
 msgstr "Verander je wachtwoord"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:57
-msgid "Safari 8 has a known problem with handling external authentications."
-msgstr ""
-"Safari 8 heeft een bekend probleem met het omgaan van externe authenticatie."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:69
 msgid "Send Verification Message"
@@ -3954,11 +3968,11 @@ msgstr "Uitloggen"
 msgid "Simply try again:"
 msgstr "Probeer het opnieuw:"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:51
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47
 msgid "Somebody else is already connected with this account on"
 msgstr "Iemand anders is al gelinkt met dit account op"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:27
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:27
 #: apps/zotonic_mod_survey/priv/templates/_survey_error.tpl:1
 msgid "Something went wrong"
 msgstr "Er ging iets mis"
@@ -3993,6 +4007,10 @@ msgstr ""
 "Het nieuwe wachtwoord moet anders zijn dan het vorige. Controleer uw "
 "gegevens en probeer het opnieuw."
 
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
+msgid "The redirect URL for OAuth configurations is:"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:21
 msgid ""
 "The signup module is enabled, users authenticating via the services below "
@@ -4013,17 +4031,9 @@ msgstr ""
 "De code voor authenticatie in twee stappen was verkeerd. Controleer je "
 "invoer en probeer opnieuw."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:69
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "There was a problem authenticating with"
 msgstr "Er was een probleem met de authenticatie met"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:59
-msgid ""
-"This can be resolved by changing the Cookies and website data settings in "
-"the Safari preferences."
-msgstr ""
-"Dit kan worden opgelost door het aanpassen van de instellingen van Cookies "
-"en website data in de Safari voorkeuren."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
@@ -4064,7 +4074,7 @@ msgstr "We hebben geen geldig e-mailadres van je."
 msgid "We have sent an email with a link to reset your password to"
 msgstr "We hebben een e-mail met verdere instructies gestuurd naar"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:10
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:5
 msgid "You are about to create a new account."
 msgstr "Je staat op het punt een nieuw account aan te maken."
 
@@ -4072,7 +4082,7 @@ msgstr "Je staat op het punt een nieuw account aan te maken."
 msgid "You are now signed in."
 msgstr "U bent nu aangemeld."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:37
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:37
 msgid "You have to share your email address to be able to sign in."
 msgstr "Je moet je e-mailadres delen om in te kunnen loggen."
 
@@ -4150,6 +4160,10 @@ msgstr "een uur"
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "of"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
+msgid "the service"
+msgstr "de dienst"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:8./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:8
 msgid "user@example.com"
@@ -4441,7 +4455,7 @@ msgid "No connection with server"
 msgstr "Geen verbinding met de server"
 
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:67
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
 msgid "OK"
 msgstr "OK"
@@ -4493,7 +4507,7 @@ msgid "Type"
 msgstr "Type"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:69
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
 msgid "error"
 msgstr "fout"
 
@@ -4575,7 +4589,6 @@ msgid "View in browser"
 msgstr "Bekijk in browser"
 
 #: apps/zotonic_mod_base_site/priv/templates/home.tpl:3
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:8
 msgid "Welcome"
 msgstr "Welkom"
 
@@ -4604,7 +4617,7 @@ msgid "Comments"
 msgstr "Reacties"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_bounces.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:48
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:72
 msgid "Email"
 msgstr "E-mail"
 
@@ -5164,7 +5177,6 @@ msgstr ""
 "controleren."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:187
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:35
 msgid "Bounces"
 msgstr "Bounces"
 
@@ -5221,6 +5233,7 @@ msgid "There are email problems."
 msgstr "Er zijn email problemen."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_flag.tpl:7./apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:108
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:7
 msgid "There are problems with this email address."
 msgstr "Er zijn problemen met dit emailadres."
 
@@ -5333,37 +5346,29 @@ msgid "App Secret"
 msgstr "App Secret"
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:9
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:10
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:9
 msgid "Application keys can be found in"
 msgstr "Applicatiesleutels kun je vinden in"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:16
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:17
 msgid "Connect with Facebook"
 msgstr "Verbinden met Facebook"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:7./apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:9
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:2./apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:4
 msgid "Disconnect from Facebook"
 msgstr "Ontkoppelen van Facebook"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:10
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:5
 msgid "Do you want to disconnect your Facebook account?"
 msgstr "Wil je ontkoppelen van je Facebook-account?"
 
-#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:16
+#: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:18
 msgid "Log in with Facebook"
 msgstr "Inloggen met Facebook"
 
 #: apps/zotonic_mod_facebook/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with Facebook"
 msgstr "Inloggen met Facebook"
-
-#: apps/zotonic_mod_facebook/priv/templates/_logon_service.facebook.tpl:1
-#: apps/zotonic_mod_instagram/priv/templates/_logon_service.instagram.tpl:1
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_service.linkedin.tpl:1
-#: apps/zotonic_mod_twitter/priv/templates/_logon_service.twitter.tpl:1
-msgid "One moment please"
-msgstr "Een ogenblik geduld"
 
 #: apps/zotonic_mod_facebook/priv/templates/_logon_service.facebook.tpl:2
 msgid "Redirecting to Facebook."
@@ -5373,7 +5378,7 @@ msgstr "We sturen je door naar Facebook."
 msgid "Save Facebook Settings"
 msgstr "Facebook-instellingen opslaan"
 
-#: apps/zotonic_mod_facebook/src/mod_facebook.erl:68
+#: apps/zotonic_mod_facebook/src/mod_facebook.erl:69
 msgid "Saved the Facebook settings."
 msgstr "Facebook-instellingen opgeslagen."
 
@@ -5385,7 +5390,7 @@ msgstr "Scope"
 msgid "Use Facebook authentication"
 msgstr "Authenticeren met Facebook"
 
-#: apps/zotonic_mod_facebook/src/mod_facebook.erl:70
+#: apps/zotonic_mod_facebook/src/mod_facebook.erl:71
 msgid "You don't have permission to change the Facebook settings."
 msgstr "Je hebt geen rechten om de Facebook-instellingen te bewerken.."
 
@@ -5676,95 +5681,6 @@ msgstr "WXR bestand"
 msgid "Wordpress import"
 msgstr "Wordpress import"
 
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:45
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:45
-msgid "Access Token"
-msgstr "Access Token"
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:15
-msgid "Client ID"
-msgstr "Client ID"
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:22
-msgid "Client Secret"
-msgstr "Client Secret"
-
-#: apps/zotonic_mod_instagram/priv/templates/_logon_extra_instagram.tpl:18
-msgid "Connect with Instagram"
-msgstr "Verbinden met Instagram"
-
-#: apps/zotonic_mod_instagram/priv/templates/_logon_extra_instagram.tpl:9./apps/zotonic_mod_instagram/priv/templates/_logon_extra_instagram.tpl:11
-msgid "Disconnect from Instagram"
-msgstr "Ontkoppelen van Instagram"
-
-#: apps/zotonic_mod_instagram/priv/templates/_logon_extra_instagram.tpl:12
-msgid "Do you want to disconnect your Instagram account?"
-msgstr "Wil je je Instagram-account ontkoppelen?"
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:53
-msgid "Follow tags"
-msgstr "Volg tags"
-
-#: apps/zotonic_mod_instagram/priv/templates/_logon_extra_instagram.tpl:18
-msgid "Log in with Instagram"
-msgstr "Inloggen met Instagram"
-
-#: apps/zotonic_mod_instagram/priv/templates/_logon_extra_email_reset.tpl:2
-msgid "Log on with Instagram"
-msgstr "Inloggen met Instagram"
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:68
-msgid "Photo import"
-msgstr "Importeer foto"
-
-#: apps/zotonic_mod_instagram/priv/templates/_logon_service.instagram.tpl:2
-msgid "Redirecting to Instagram."
-msgstr "We sturen je door naar Instagram."
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:84
-msgid "Save Instagram Settings"
-msgstr "Bewaar Instagram-instellingen"
-
-#: apps/zotonic_mod_instagram/src/mod_instagram.erl:81
-msgid "Saved the Instagram settings."
-msgstr "Instagram-instellingen opgeslagen."
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:58
-msgid "Separate tags with commas or newlines."
-msgstr "Scheid tags met komma’s of witregels."
-
-#: apps/zotonic_mod_instagram/priv/templates/_instagram_access_token.tpl:10
-msgid "To obtain an access token you need to connect with Instagram."
-msgstr "Om een accesstoken te verkrijgen moet je verbinden met Instagram."
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:33
-msgid "Use Instagram authentication"
-msgstr "Gebruik Instagram-authenticatie"
-
-#: apps/zotonic_mod_instagram/priv/templates/_instagram_access_token.tpl:5
-msgid "Use the access token for the Instagram account"
-msgstr "Gebruik het accesstoken voor de Instagram-account"
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:74
-msgid "Video import"
-msgstr "Importeer video"
-
-#: apps/zotonic_mod_instagram/src/mod_instagram.erl:83
-msgid "You don't have permission to change the Instagram settings."
-msgstr "Je hebt geen toestemming om de Instagram-instellingen te bewerken."
-
-#: apps/zotonic_mod_instagram/priv/templates/_logon_extra_email_reset.tpl:2
-msgid "You have coupled your <strong>Instagram</strong> account."
-msgstr "Je hebt je <strong>Instagram</strong>-account gekoppeld."
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:10
-msgid "Your Instagram Manage Clients page"
-msgstr "Je Instagram Manage Clients-pagina"
-
-#: apps/zotonic_mod_instagram/priv/templates/_admin_authentication_service.tpl:42
-msgid "Zotonic can import photos and videos with specific tags."
-msgstr "Zotonic kan foto’s importeren met bepaalde tags."
-
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
 msgstr "apr"
@@ -5945,29 +5861,25 @@ msgstr "middernacht"
 msgid "noon"
 msgstr "middag"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:18
+#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:19
 msgid "Connect with LinkedIn"
 msgstr "Verbinden met LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:9./apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:11
+#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:4./apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:6
 msgid "Disconnect from LinkedIn"
 msgstr "Ontkoppelen van LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:12
+#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:7
 msgid "Do you want to disconnect your LinkedIn account?"
 msgstr "Wil je je LinkedIn-account ontkoppelen?"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:18
+#: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:20
 msgid "Log in with LinkedIn"
 msgstr "Inloggen met LinkedIn"
 
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with LinkedIn"
 msgstr "Inloggen met LinkedIn"
-
-#: apps/zotonic_mod_linkedin/priv/templates/_logon_service.linkedin.tpl:2
-msgid "Redirecting to LinkedIn."
-msgstr "We sturen je door naar LinkedIn."
 
 #: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:40
 msgid "Save LinkedIn Settings"
@@ -6014,6 +5926,7 @@ msgid "Email log"
 msgstr "E-mail log"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:38
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "E-mail status"
 
@@ -6200,7 +6113,7 @@ msgstr "<p>Bedankt voor je aanmelding.</p>"
 msgid "<p>Thank you. You are now unsubscribed.</p>"
 msgstr "<p>Bedankt. Je bent nu afgemeld van de mailing.</p>"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:47
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
 msgid "Act"
 msgstr "Actief"
 
@@ -6219,10 +6132,6 @@ msgstr "Nieuwe ontvanger toegevoegd."
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist.tpl:14
 msgid "All mailing lists"
 msgstr "Alle mailinglijsten"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:65
-msgid "All processed"
-msgstr "Alles verwerkt"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:19
 msgid ""
@@ -6249,7 +6158,7 @@ msgstr "Weet je zeker dat je de volgende mailing wilt annuleren:"
 msgid "Are you sure you want to delete the mailing list"
 msgstr "Weet je zeker dat je de volgende mailinglijst wilt verwijderen:"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:49
 msgid ""
 "Are you sure you want to reset the statistics for this mailing? This means "
 "that if you send the mailing again afterwards, recipients might have gotten "
@@ -6271,7 +6180,7 @@ msgstr ""
 msgid "Cancel mailing"
 msgstr "Mailing annuleren"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:55
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Check to activate the e-mail address."
 msgstr "Vink aan om het e-mailadres actief te maken."
 
@@ -6293,7 +6202,7 @@ msgid ""
 " Click the button below to confirm your subscription to this mailing list."
 msgstr "Klik op de onderstaande knop om je aanmelding te bevestigen."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:53./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:63./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:65./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:67./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:68./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:69
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
 msgid "Click to view log entries"
 msgstr "Klik om e-mail log te bekijken"
 
@@ -6305,7 +6214,7 @@ msgstr "Combineer mailinglijst"
 msgid "Combine…"
 msgstr "Combineer…"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:108
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:96
 msgid "Confirm mailing cancelation."
 msgstr "Bevestig de annulering van de mailing."
 
@@ -6356,7 +6265,7 @@ msgstr "Download de lijst van actieve ontvangers."
 msgid "Downloading active recipients list. Check your download window."
 msgstr "Aan het downloaden. Let op je downloadvenster."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:40
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:36
 msgid "Dropbox filename (optional)"
 msgstr "Dropbox bestandsnaam (optioneel)"
 
@@ -6368,11 +6277,11 @@ msgstr "E-mailadres bijgewerkt"
 msgid "E-mail page"
 msgstr "Email pagina"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/phone/_share_page_email.tpl:1./apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:42
+#: apps/zotonic_mod_mailinglist/priv/templates/_share_page_email.tpl:1./apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:42
 msgid "E-mail this page"
 msgstr "Email deze pagina"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:56./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:52
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:52
 msgid "Edit recipient"
 msgstr "Bewerk ontvanger"
 
@@ -6387,7 +6296,7 @@ msgid ""
 msgstr ""
 "Geef het e-mailadres van de ontvanger. De naam van de ontvanger is optioneel."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:33
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
 msgid "Externally managed list &mdash; no (un)subscribe links"
 msgstr "In extern beheer &mdash; geen aan- of afmeldlinks"
 
@@ -6453,7 +6362,7 @@ msgstr "Mailinglijsten"
 msgid "Mailing list"
 msgstr "Mailinglijst"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:404
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:392
 msgid "Mailing lists"
 msgstr "Mailinglijsten"
 
@@ -6461,37 +6370,29 @@ msgstr "Mailinglijsten"
 msgid "Mailing status"
 msgstr "Mailing status"
 
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:16
+msgid "Mailings are sent to:"
+msgstr "Mailings worden verstuurd naar:"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:41
+msgid "Matched via Query"
+msgstr ""
+
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:14
 msgid "New mailing list"
 msgstr "Nieuwe mailinglijst"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:171
-msgid "No addresses selected"
-msgstr "Geen adres geselecteerd"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:79./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:54
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:83./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:53
 msgid "No items found"
 msgstr "Geen ontvangers gevonden"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:70
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:95
 msgid "No recipients"
 msgstr "Geen ontvangers"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:35
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Number of recipients on this list:"
 msgstr "Aantal geaddresseerden op deze lijst:"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_bounces.tpl:3
-msgid ""
-"On this page you see the addresses that have bounced. They have\n"
-"    been disabled by default. Please correct each address and check the\n"
-"    checkbox in front of the address to re-enable it. If an address is "
-"invalid, you can delete it."
-msgstr ""
-"Op deze pagina zie je de adressen die zijn gebounced. Ze zijn\n"
-"voorlopig op non-actief gesteld. Corrigeer de adressen en\n"
-"activeer ze weer door ze aan te vinken. Wanneer een adres ongeldig is,\n"
-"kan je het ook verwijderen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:26
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
@@ -6505,6 +6406,14 @@ msgstr "Bewerking"
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:22
 msgid "Our excuses for the inconvenience."
 msgstr "Onze excuses voor het ongemak."
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:19
+msgid "Pages that have the 'subscriberof' edge to the mailinglist."
+msgstr "Pagina's die de 'subscriberof’-connectie naar de mailinglijst hebben."
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:20
+msgid "Pages that match the query below."
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:47
 msgid "Perform operation"
@@ -6559,7 +6468,7 @@ msgstr "Lees deze pagina online."
 msgid "Recipient deleted."
 msgstr "Ontvanger verwijderd."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:38./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:43
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:38./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
 msgid "Recipients"
 msgstr "Ontvangers"
 
@@ -6575,13 +6484,9 @@ msgstr ""
 msgid "Recipients for"
 msgstr "Ontvangers voor"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
 msgid "Remove this recipient. No undo possible."
 msgstr "Verwijder deze ontvanger."
-
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:173
-msgid "Resending bounced addresses..."
-msgstr "Deze adressen opnieuw aan het versturen..."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:24
 msgid "Scheduled"
@@ -6643,11 +6548,11 @@ msgstr "Verstuur deze pagina naar een enkel e-mailadres."
 msgid "Send this page to the test mailing list."
 msgstr "Verstuur deze pagina naar de testmailinglijst."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:54
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:71
 msgid "Send welcome"
 msgstr "Verstuur welkomstbericht"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:23
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:21
 msgid "Sender address for e-mails (optional)"
 msgstr "Afzender adres voor mailings (optioneel)"
 
@@ -6659,7 +6564,7 @@ msgstr "Afzendernaam voor mailings (optioneel)"
 msgid "Sending the e-mail..."
 msgstr "Email versturen..."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:158
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:146
 msgid "Sending the page to"
 msgstr "Bezig met de pagina te versturen naar"
 
@@ -6691,13 +6596,21 @@ msgstr "Je aanmelding kan helaas niet bevestigd worden"
 msgid "Sorry, can’t find your subscription"
 msgstr "Je aanmelding is niet gevonden"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:66./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:83./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
 msgid "Subscribe"
 msgstr "Aanmelden"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
 msgstr "Aanmelden bij"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:40
+msgid "Subscriber Edges"
+msgstr "Abonnee Connecties"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:18
+msgid "Subscribers, added via the subscription form."
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -6721,7 +6634,7 @@ msgid ""
 "unsubscribed, or the mailing list has been deleted."
 msgstr "De afmeldlink is ongeldig. Misschien ben je al afgemeld."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:121
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:109
 msgid "The mailing has been canceled."
 msgstr "De mailing is geannuleerd."
 
@@ -6742,17 +6655,9 @@ msgstr ""
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "De lijst met ontvangers wordt ook verwijderd."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:131
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:119
 msgid "The statistics have been cleared."
 msgstr "De statistieken zijn gewist."
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_bounces.tpl:50
-msgid ""
-"There are no addresses eligible for re-sending. You seem to have already "
-"processed all bouncing addresses."
-msgstr ""
-"Er zijn geen e-mailadressen gevonden die opnieuw kunnen worden\n"
-"verstuurd. De bounces zijn blijkbaar al eerder afgehandeld."
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:53
 msgid "There is no mailing list with the name ‘mailinglist_test’."
@@ -6824,7 +6729,7 @@ msgstr "Meld je af van"
 msgid "Unsubscribe from mailing list"
 msgstr "Afmelden van mailinglijst"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:100
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:101
 msgid "Updated the recipient."
 msgstr "Nieuwe ontvanger bijgewerkt."
 
@@ -6839,11 +6744,6 @@ msgstr ""
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "Upload a list of recipients."
 msgstr "Upload de lijst met ontvangers."
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:34
-msgid "View and edit the bounced addresses and re-send the mailing."
-msgstr ""
-"Bekijk en bewerk de gebouncede adressen en verstuur de mailing opnieuw."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:19
 msgid "View this page as mailing."
@@ -6868,7 +6768,7 @@ msgid "You are not allowed to add or enable recipients."
 msgstr ""
 "Je hebt geen toestemming om ontvangers toe te voegen of actief te maken."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:113./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:123
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:101./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:111
 msgid "You are not allowed to cancel this mailing."
 msgstr "Je kunt deze mailing niet annuleren."
 
@@ -6876,11 +6776,11 @@ msgstr "Je kunt deze mailing niet annuleren."
 msgid "You are not allowed to delete the mailing list."
 msgstr "Het is niet toegestaan om de mailinglijst te verwijderen."
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:106
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:107
 msgid "You are not allowed to edit recipients."
 msgstr "Je hebt geen toestemming om ontvangers te bewerken."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:133./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:149
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:121./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:137
 msgid "You are not allowed to reset this mailing."
 msgstr "Je kunt deze mailing niet annuleren."
 
@@ -6888,7 +6788,7 @@ msgstr "Je kunt deze mailing niet annuleren."
 msgid "You are not allowed to send mail to the test mailing list."
 msgstr "Je hebt geen toestemming om e-mail te sturen naar de testmailinglijst."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:161./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:177
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:149
 msgid "You are not allowed to send this page."
 msgstr "Je mag deze pagina niet versturen."
 
@@ -6952,15 +6852,15 @@ msgstr ""
 "verstuurd naar het opgegeven adres. Als de mail niet aankomt, controleer dan "
 "de \"spam\" folder."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:68
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73
 msgid "bounced"
 msgstr "bounce"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:38./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:15
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:15
 msgid "cancel"
 msgstr "annuleer"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:47
 msgid "clear"
 msgstr "wissen"
 
@@ -6968,11 +6868,11 @@ msgstr "wissen"
 msgid "click here to unsubscribe."
 msgstr "hier klikken om je af te melden."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:8
 msgid "has been sent to the following lists:"
 msgstr "is verzonden naar de volgende mailinglijsten:"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
 msgid "has never been sent yet."
 msgstr "is nog nooit verstuurd."
 
@@ -6988,23 +6888,27 @@ msgstr "mailinglijst statuspagina"
 msgid "or copy and paste the address below in your browser."
 msgstr "of copy-paste het onderstaande adres in je browser."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:63
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:54
+msgid "pages"
+msgstr "pagina's"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71
 msgid "processed"
 msgstr "verwerkt"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:54./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:56
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:63./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:65
 msgid "scheduled"
 msgstr "ingepland"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:45
+msgid "see below"
+msgstr "zie hieronder"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:41
 msgid "send mailing"
 msgstr "verstuur mailing"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_bounces.tpl:45
-msgid "send mailing again to corrected addresses"
-msgstr "verstuur mailing naar gecorrigeerde adressen"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
 msgid "send to"
 msgstr "verstuur aan"
 
@@ -7132,6 +7036,10 @@ msgstr "Onbekende categorie"
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "MQTT publish en subscribe-acties debuggen in de Zotonic-console"
+
+#: apps/zotonic_mod_oauth2/priv/templates/logon_service_oauth_done.tpl:6
+msgid "Authenticating..."
+msgstr "Bezig met authenticeren..."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -7340,10 +7248,6 @@ msgstr "Jaarlijks"
 msgid "default"
 msgstr "standaard"
 
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
-msgid "Bring me to my profile page"
-msgstr "Terug naar mijn profielpagina"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
 msgstr "Lees onze voorwaarden en privacy reglement"
@@ -7352,11 +7256,11 @@ msgstr "Lees onze voorwaarden en privacy reglement"
 msgid "Choose a username and password"
 msgstr "Kies een gebruikersnaam en wachtwoord"
 
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:26
+#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:21
 msgid "Confirm key"
 msgstr "Bevestigingscode"
 
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:3./apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:15./apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:30
+#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:3./apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:7./apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:22
 msgid "Confirm my account"
 msgstr "Bevestig mijn account"
 
@@ -7408,7 +7312,7 @@ msgstr ""
 msgid "If you have already an account,"
 msgstr "Wanneer je al een account hebt"
 
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:17
+#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
 msgid ""
 "In your e-mail you received a confirmation key. Please copy it in the input "
 "field below."
@@ -7452,7 +7356,7 @@ msgstr "Aanmelden"
 msgid "Sign up with your e-mail address"
 msgstr "Aanmelden met je e-mailadres"
 
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:20
+#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
 msgstr "Sorry, de bevestigingscode is onbekend. Is deze goed gekopiëerd?"
 
@@ -7508,10 +7412,6 @@ msgstr "Je kan ook"
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Om je aan te melden moet je akkoord gaan met de gebruiksvoorwaarden."
-
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:10
-msgid "Your account is confirmed. You can now continue on our site."
-msgstr "Je account is bevestigd. Je kan nu verder gaan op onze website."
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "and enter the key"
@@ -8066,7 +7966,7 @@ msgstr "Nodig om te slagen"
 msgid "New result:"
 msgstr "Nieuw resultaat:"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:64
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
 msgstr "Volgende"
 
@@ -8294,7 +8194,7 @@ msgstr "Helemaal mee eens"
 msgid "Strongly Disagree"
 msgstr "Helemaal mee oneens"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:64
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
 msgid "Submit"
 msgstr "Verstuur"
 
@@ -8794,10 +8694,6 @@ msgstr "Toon de taal in de URL"
 msgid "Sorry, could not change the language."
 msgstr "Sorry, kon de taal niet veranderen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:537
-msgid "Sorry, you can't disable the default language."
-msgstr "Sorry, je kunt de standaard taal niet uitschakelen."
-
 #: apps/zotonic_mod_translation/src/mod_translation.erl:379./apps/zotonic_mod_translation/src/mod_translation.erl:390./apps/zotonic_mod_translation/src/mod_translation.erl:413
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Sorry, je hebt geen toestemming om de taallijst te wijzigen."
@@ -8810,7 +8706,7 @@ msgstr "Sorry, je hebt geen toestemming om talen opnieuw te laden."
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Sorry, je hebt geen toestemming om talen te scannen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:366./apps/zotonic_mod_translation/src/mod_translation.erl:502
+#: apps/zotonic_mod_translation/src/mod_translation.erl:366./apps/zotonic_mod_translation/src/mod_translation.erl:503
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Sorry, je hebt geen toestemming om de standaard taal in te stellen."
 
@@ -8849,7 +8745,7 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr "Vertaal deze pagina in andere talen."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:804
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:807
 msgid "Translation"
 msgstr "Vertaling"
 
@@ -8897,11 +8793,15 @@ msgstr "30 minuten"
 msgid "5 minutes"
 msgstr "5 minuten"
 
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:45
+msgid "Access Token"
+msgstr "Access Token"
+
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:51
 msgid "Access Token Secret"
 msgstr "Access Token Secret"
 
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:18
+#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:19
 msgid "Connect with Twitter"
 msgstr "Verbinden met Twitter"
 
@@ -8913,11 +8813,11 @@ msgstr "Consumer Key"
 msgid "Consumer Secret"
 msgstr "Consumer Secret"
 
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:9./apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:11
+#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:4./apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:6
 msgid "Disconnect from Twitter"
 msgstr "Ontkoppelen van Twitter"
 
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:12
+#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:7
 msgid "Do you want to disconnect your Twitter account?"
 msgstr "Wil je je Twitter-account ontkoppelen?"
 
@@ -8925,7 +8825,7 @@ msgstr "Wil je je Twitter-account ontkoppelen?"
 msgid "Follow tags/accounts"
 msgstr "Volg tags/accounts"
 
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:18
+#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:20
 msgid "Log in with Twitter"
 msgstr "Inloggen met Twitter"
 
@@ -8944,10 +8844,6 @@ msgid ""
 msgstr ""
 "Let op op dat deze gebruiker of organisatie <em>maak</em> rechten moet "
 "hebben op de <em>Tweet</em> categorie."
-
-#: apps/zotonic_mod_twitter/priv/templates/_logon_service.twitter.tpl:2
-msgid "Redirecting to Twitter."
-msgstr "We sturen je door naar Twitter."
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:90
 msgid "Save Twitter Settings"
@@ -9023,7 +8919,7 @@ msgstr "YouTube-video"
 msgid "Alert"
 msgstr "Aandacht"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:470
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:478
 msgid "A component of the path is not a directory:"
 msgstr "Een onderdeel van het pad is geen directory:"
 
@@ -9043,7 +8939,7 @@ msgstr "Alle bestanden en sjablonen zijn geplaatst op"
 msgid "Basic blogging site"
 msgstr "Basis blogging site"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:75
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:76
 msgid "Checking database ..."
 msgstr "Database controleren ...."
 
@@ -9055,32 +8951,32 @@ msgstr "PostgreSQL-databaseverbinding configureren"
 msgid "Congratulations, your site has been created and is now running."
 msgstr "Gefeliciteerd, uw site is gemaakt en draait nu."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:159
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:162
 msgid "Copy skeleton files ..."
 msgstr "Kopieer skeletbestanden...."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:139
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:142
 msgid "Could not check out Git repository:"
 msgstr "Kon Git repository niet uitchecken:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:95
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:96
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr ""
 "Kon geen verbinding maken met de 'postgres' database of de database aanmaken."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:474
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:483
 msgid "Could not create the file:"
 msgstr "Kon het bestand niet aanmaken:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:92
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:93
 msgid "Could not create the schema in the database."
 msgstr "Kon het schema niet maken in de database."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:380
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:383
 msgid "Could not create the site directory"
 msgstr "Kon de sitemap niet aanmaken"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:143
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:146
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "Kon de site niet verwijderen voor de Git checkout:"
 
@@ -9088,7 +8984,7 @@ msgstr "Kon de site niet verwijderen voor de Git checkout:"
 msgid "Database"
 msgstr "Database"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:466
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:473
 msgid "Disk full creating:"
 msgstr "Schijf vol bij aanmaken:"
 
@@ -9105,7 +9001,7 @@ msgid "Enter a valid hostname like \"www.example.com\" or \"test.local\"."
 msgstr ""
 "Voer een geldige hostnaam in zoals \"www.example.com\" of \"test.local\"."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:200
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:203
 msgid "Force compile all Erlang files ..."
 msgstr "Compileer alle Erlang bestanden ..."
 
@@ -9117,7 +9013,7 @@ msgstr "Git"
 msgid "Git URL"
 msgstr "Git URL"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:126
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:129
 msgid "Git checkout ..."
 msgstr "Git checkout ...."
 
@@ -9145,11 +9041,11 @@ msgstr ""
 "Zorg ervoor dat deze hostnaam een geldige DNS-entry heeft of wordt "
 "toegevoegd aan uw <tt>/etc/hosts</tt> bestand."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:454
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:458
 msgid "No permission to create the site directory at:"
 msgstr "Geen toestemming om de site directory aan te maken op:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:375
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:378
 msgid "Not allowed to create the site directory"
 msgstr "Het is niet toegestaan om de site directory aan te maken"
 
@@ -9189,7 +9085,7 @@ msgstr ""
 "PostgreSQL databaseverbinding. Het schema is standaard ingesteld op de "
 "hierboven ingevulde site-naam."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:48
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:49
 msgid "Resolving the hostname ..."
 msgstr "Opzoeken van de hostnaam...."
 
@@ -9221,15 +9117,15 @@ msgstr "Starten van de nieuwe site ..."
 msgid "Succesfully created the site."
 msgstr "De site is met succes gecreëerd."
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:458
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:463
 msgid "The file or directory already exists:"
 msgstr "Het bestand of de map bestaat al:"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:56
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:57
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "De hostnaam is onbekend, controleer uw DNS of /etc/hosts bestand"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:462
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:468
 msgid "The parent directory does not exist:"
 msgstr "De hoofdmap bestaat niet:"
 
@@ -9245,11 +9141,11 @@ msgstr "Het skelet biedt sjablonen en inhoud voor een site."
 msgid "There is already a file or directory named"
 msgstr "Er is al een bestand of map met de naam"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:427
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:430
 msgid "This name is reserved"
 msgstr "Deze naam is gereserveerd"
 
-#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:431
+#: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:434
 msgid "This name is taken by another Erlang module"
 msgstr "Deze naam is in gebruik door een andere Erlang-module"
 
@@ -9464,6 +9360,130 @@ msgstr "start"
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:37./apps/zotonic_site_status/priv/templates/_sites.tpl:42
 msgid "stop"
 msgstr "stop"
+
+#~ msgid "Safari 8 has a known problem with handling external authentications."
+#~ msgstr ""
+#~ "Safari 8 heeft een bekend probleem met het omgaan van externe "
+#~ "authenticatie."
+
+#~ msgid ""
+#~ "This can be resolved by changing the Cookies and website data settings in "
+#~ "the Safari preferences."
+#~ msgstr ""
+#~ "Dit kan worden opgelost door het aanpassen van de instellingen van "
+#~ "Cookies en website data in de Safari voorkeuren."
+
+#~ msgid "Client ID"
+#~ msgstr "Client ID"
+
+#~ msgid "Client Secret"
+#~ msgstr "Client Secret"
+
+#~ msgid "Connect with Instagram"
+#~ msgstr "Verbinden met Instagram"
+
+#~ msgid "Disconnect from Instagram"
+#~ msgstr "Ontkoppelen van Instagram"
+
+#~ msgid "Do you want to disconnect your Instagram account?"
+#~ msgstr "Wil je je Instagram-account ontkoppelen?"
+
+#~ msgid "Follow tags"
+#~ msgstr "Volg tags"
+
+#~ msgid "Log in with Instagram"
+#~ msgstr "Inloggen met Instagram"
+
+#~ msgid "Log on with Instagram"
+#~ msgstr "Inloggen met Instagram"
+
+#~ msgid "Photo import"
+#~ msgstr "Importeer foto"
+
+#~ msgid "Redirecting to Instagram."
+#~ msgstr "We sturen je door naar Instagram."
+
+#~ msgid "Save Instagram Settings"
+#~ msgstr "Bewaar Instagram-instellingen"
+
+#~ msgid "Saved the Instagram settings."
+#~ msgstr "Instagram-instellingen opgeslagen."
+
+#~ msgid "Separate tags with commas or newlines."
+#~ msgstr "Scheid tags met komma’s of witregels."
+
+#~ msgid "To obtain an access token you need to connect with Instagram."
+#~ msgstr "Om een accesstoken te verkrijgen moet je verbinden met Instagram."
+
+#~ msgid "Use Instagram authentication"
+#~ msgstr "Gebruik Instagram-authenticatie"
+
+#~ msgid "Use the access token for the Instagram account"
+#~ msgstr "Gebruik het accesstoken voor de Instagram-account"
+
+#~ msgid "Video import"
+#~ msgstr "Importeer video"
+
+#~ msgid "You don't have permission to change the Instagram settings."
+#~ msgstr "Je hebt geen toestemming om de Instagram-instellingen te bewerken."
+
+#~ msgid "You have coupled your <strong>Instagram</strong> account."
+#~ msgstr "Je hebt je <strong>Instagram</strong>-account gekoppeld."
+
+#~ msgid "Your Instagram Manage Clients page"
+#~ msgstr "Je Instagram Manage Clients-pagina"
+
+#~ msgid "Zotonic can import photos and videos with specific tags."
+#~ msgstr "Zotonic kan foto’s importeren met bepaalde tags."
+
+#~ msgid "Redirecting to LinkedIn."
+#~ msgstr "We sturen je door naar LinkedIn."
+
+#~ msgid "All processed"
+#~ msgstr "Alles verwerkt"
+
+#~ msgid "No addresses selected"
+#~ msgstr "Geen adres geselecteerd"
+
+#~ msgid ""
+#~ "On this page you see the addresses that have bounced. They have\n"
+#~ "    been disabled by default. Please correct each address and check the\n"
+#~ "    checkbox in front of the address to re-enable it. If an address is "
+#~ "invalid, you can delete it."
+#~ msgstr ""
+#~ "Op deze pagina zie je de adressen die zijn gebounced. Ze zijn\n"
+#~ "voorlopig op non-actief gesteld. Corrigeer de adressen en\n"
+#~ "activeer ze weer door ze aan te vinken. Wanneer een adres ongeldig is,\n"
+#~ "kan je het ook verwijderen."
+
+#~ msgid "Resending bounced addresses..."
+#~ msgstr "Deze adressen opnieuw aan het versturen..."
+
+#~ msgid ""
+#~ "There are no addresses eligible for re-sending. You seem to have already "
+#~ "processed all bouncing addresses."
+#~ msgstr ""
+#~ "Er zijn geen e-mailadressen gevonden die opnieuw kunnen worden\n"
+#~ "verstuurd. De bounces zijn blijkbaar al eerder afgehandeld."
+
+#~ msgid "View and edit the bounced addresses and re-send the mailing."
+#~ msgstr ""
+#~ "Bekijk en bewerk de gebouncede adressen en verstuur de mailing opnieuw."
+
+#~ msgid "send mailing again to corrected addresses"
+#~ msgstr "verstuur mailing naar gecorrigeerde adressen"
+
+#~ msgid "Bring me to my profile page"
+#~ msgstr "Terug naar mijn profielpagina"
+
+#~ msgid "Your account is confirmed. You can now continue on our site."
+#~ msgstr "Je account is bevestigd. Je kan nu verder gaan op onze website."
+
+#~ msgid "Sorry, you can't disable the default language."
+#~ msgstr "Sorry, je kunt de standaard taal niet uitschakelen."
+
+#~ msgid "Redirecting to Twitter."
+#~ msgstr "We sturen je door naar Twitter."
 
 #~ msgid ""
 #~ "Every page is categorized in exactly one category.  The category defines "
