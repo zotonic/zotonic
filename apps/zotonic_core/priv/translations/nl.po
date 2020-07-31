@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-06-22 16:42+0200\n"
+"PO-Revision-Date: 2020-07-31 16:24+0200\n"
 "Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4\n"
 
 #: apps/zotonic_core/src/support/z_media_import.erl:148
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -1312,7 +1312,6 @@ msgstr "Kop"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
-#, fuzzy
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
 "its own line. For more information, see the <a href=\"https://docs.zotonic."
@@ -1320,7 +1319,7 @@ msgid ""
 "\">documentation on the query arguments</a> on the Zotonic website."
 msgstr ""
 "Hier kan je de argumenten van de zoekopdracht invoeren. Elk argument moet op "
-"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"http://"
+"zijn eigen regel staan. Voor meer informatie, zie de <a href=\"https://docs-"
 "zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments"
 "\">documentatie over zoekopdrachten</a> op de Zotonic website."
 
@@ -3924,14 +3923,12 @@ msgid "Please try again later."
 msgstr "Probeer het straks nog eens."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:13
-#, fuzzy
 msgid "Redirecting to"
-msgstr "Stuur door naar"
+msgstr "Doorsturen naar"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:15
-#, fuzzy
 msgid "Redirecting..."
-msgstr "Doorsturen"
+msgstr "Doorsturen..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
 msgid "Repeat password"
@@ -4165,9 +4162,8 @@ msgid "or"
 msgstr "of"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
-#, fuzzy
 msgid "the service"
-msgstr "Externe diensten"
+msgstr "de dienst"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:8./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:8
 msgid "user@example.com"
@@ -6375,9 +6371,8 @@ msgid "Mailing status"
 msgstr "Mailing status"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:16
-#, fuzzy
 msgid "Mailings are sent to:"
-msgstr "Postadres"
+msgstr "Mailings worden verstuurd naar:"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:41
 msgid "Matched via Query"
@@ -6413,9 +6408,8 @@ msgid "Our excuses for the inconvenience."
 msgstr "Onze excuses voor het ongemak."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:19
-#, fuzzy
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
-msgstr "Je bent nu afgemeld van deze mailinglijst"
+msgstr "Pagina's die de 'subscriberof’-connectie naar de mailinglijst hebben."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:20
 msgid "Pages that match the query below."
@@ -6611,9 +6605,8 @@ msgid "Subscribe to"
 msgstr "Aanmelden bij"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:40
-#, fuzzy
 msgid "Subscriber Edges"
-msgstr "Abonnees"
+msgstr "Abonnee Connecties"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:18
 msgid "Subscribers, added via the subscription form."
@@ -6896,9 +6889,8 @@ msgid "or copy and paste the address below in your browser."
 msgstr "of copy-paste het onderstaande adres in je browser."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:54
-#, fuzzy
 msgid "pages"
-msgstr "pagina"
+msgstr "pagina's"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71
 msgid "processed"
@@ -6909,9 +6901,8 @@ msgid "scheduled"
 msgstr "ingepland"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:45
-#, fuzzy
 msgid "see below"
-msgstr "Als sub-item invoegen"
+msgstr "zie hieronder"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:41
 msgid "send mailing"
@@ -7047,9 +7038,8 @@ msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "MQTT publish en subscribe-acties debuggen in de Zotonic-console"
 
 #: apps/zotonic_mod_oauth2/priv/templates/logon_service_oauth_done.tpl:6
-#, fuzzy
 msgid "Authenticating..."
-msgstr "Geauthenticeerd"
+msgstr "Bezig met authenticeren..."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
