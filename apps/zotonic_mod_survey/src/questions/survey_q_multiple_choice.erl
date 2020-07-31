@@ -48,7 +48,7 @@ prep_totals(Block, [{_, Vals}], _) ->
                                 try
                                     (z_convert:to_integer(K) * z_convert:to_integer(V)) + Sum
                                 catch
-                                    error:badarg ->
+                                    error:badarith ->
                                         Sum
                                 end
                         end,

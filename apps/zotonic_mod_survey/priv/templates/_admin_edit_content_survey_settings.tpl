@@ -22,13 +22,17 @@
 	    <div class="col-lg-6 col-md-6">
             <div class="form-group checkbox">
             	<label>
-		            <input type="checkbox" name="survey_is_autostart" id="survey_is_autostart" value="1" {% if id.survey_is_autostart or (id.survey_is_autostart|is_undefined and id.is_a.poll) %}checked="checked"{% endif %} />
+		            <input type="checkbox" name="survey_is_autostart" id="survey_is_autostart" value="1" {% if id.survey_is_autostart or (id.survey_is_autostart|is_undefined and id.is_a.poll) %}checked{% endif %}>
 		            {_ Immediately start with the questions, no “Start” button _}
 	            </label>
             	<label>
-		            <input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent %}checked="checked"{% endif %} />
+		            <input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent %}checked{% endif %}>
 		            {_ Send confirmation to respondent (please add a question named <i>email</i>) _}
 	            </label>
+                <label>
+                    <input type="checkbox" name="survey_is_disabled" id="survey_is_disabled" value="1" {% if id.survey_is_disabled %}checked{% endif %}>
+                    {_ Disabled, hide the survey form _}
+                </label>
             </div>
 
             <div class="form-group">
