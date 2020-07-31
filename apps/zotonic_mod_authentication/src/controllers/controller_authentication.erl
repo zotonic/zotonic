@@ -212,8 +212,7 @@ maybe_setautologon(#{ <<"setautologon">> := SetAutoLogon }, Context) ->
 maybe_setautologon(_Payload, Context) ->
     z_authentication_tokens:reset_autologon_cookie(Context).
 
-%% @doc Set an autologon cookie for the current user
-%% @todo Do not set the cookie if the user has 2fa enabled
+%% @doc Reset the password for an user, using the mailed reset secret and (optional) 2FA code.
 -spec reset( map(), z:context() ) -> { map(), z:context() }.
 reset(#{
         <<"secret">> := Secret,
