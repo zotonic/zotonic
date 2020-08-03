@@ -8,14 +8,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-06-13 09:22+0100\n"
-"Last-Translator: Eric Pailleau <zotonic@crownedgrouse.com>\n"
+"PO-Revision-Date: 2020-08-03 10:24+0200\n"
+"Last-Translator: Marc Worrell <marc@worrell.nl>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.4\n"
 
 #: apps/zotonic_core/src/support/z_media_import.erl:148
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -4190,7 +4192,7 @@ msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
-msgstr ""
+msgstr "L'URL de redirection pour les configurations OAuth est:"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:21
 msgid ""
@@ -6624,7 +6626,7 @@ msgstr "Adresse Courrier"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:41
 msgid "Matched via Query"
-msgstr ""
+msgstr "Correspondance par requête"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:14
 msgid "New mailing list"
@@ -6663,7 +6665,7 @@ msgstr "Vous êtes désormais désabonné de la liste de diffusion"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:20
 msgid "Pages that match the query below."
-msgstr ""
+msgstr "Les pages qui correspondent à la requête ci-dessous."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:47
 msgid "Perform operation"
@@ -6864,7 +6866,7 @@ msgstr "Abonnés"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:18
 msgid "Subscribers, added via the subscription form."
-msgstr ""
+msgstr "Les abonnés, ajoutés via le formulaire d'abonnement."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -8014,7 +8016,7 @@ msgstr "Effacer la question"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:34
 msgid "Disabled, hide the survey form"
-msgstr ""
+msgstr "Désactivé, masquez le formulaire d’enquête"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61
 msgid "Disagree"
@@ -8198,6 +8200,9 @@ msgid ""
 "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do "
 "eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 msgstr ""
+"Lorem ipsum dolor sit amet, consectetur <em><u>adipisicing</u></em> elit, "
+"sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</"
+"u>."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
 msgid "Mail filled in surveys to"
