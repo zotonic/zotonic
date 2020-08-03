@@ -1,8 +1,18 @@
 {"1.1.0",
-[{<<"getopt">>,{pkg,<<"getopt">>,<<"1.0.1">>},0},
- {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0}]}.
+[{<<"erlang_localtime">>,{pkg,<<"erlang_localtime">>,<<"1.0.0">>},1},
+ {<<"getopt">>,{pkg,<<"getopt">>,<<"1.0.1">>},0},
+ {<<"goldrush">>,{pkg,<<"goldrush">>,<<"0.1.9">>},2},
+ {<<"lager">>,{pkg,<<"lager">>,<<"3.8.0">>},1},
+ {<<"template_compiler">>,{pkg,<<"template_compiler">>,<<"1.2.0">>},0},
+ {<<"yamerl">>,{pkg,<<"yamerl">>,<<"0.7.0">>},0},
+ {<<"zotonic_stdlib">>,{pkg,<<"zotonic_stdlib">>,<<"1.0.2">>},1}]}.
 [
 {pkg_hash,[
+ {<<"erlang_localtime">>, <<"497DFD4D13523D3E0EECDCB8D6D59857CF642A17A6BDC6133FF906FDAF2AEF21">>},
  {<<"getopt">>, <<"C73A9FA687B217F2FF79F68A3B637711BB1936E712B521D8CE466B29CBF7808A">>},
- {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>}]}
+ {<<"goldrush">>, <<"F06E5D5F1277DA5C413E84D5A2924174182FB108DABB39D5EC548B27424CD106">>},
+ {<<"lager">>, <<"3402B9A7E473680CA179FC2F1D827CAB88DD37DD1E6113090C6F45EF05228A1C">>},
+ {<<"template_compiler">>, <<"87CC8A336FBF92C26E61CB9AD7250D1ECFDFC76F5FFCE1CE33E2918C8FBC3032">>},
+ {<<"yamerl">>, <<"E51DBA652DCE74C20A88294130B48051EBBBB0BE7D76F22DE064F0F3CCF0AAF5">>},
+ {<<"zotonic_stdlib">>, <<"A9174EB6CD6CF9036A13BB4177DB425AF0522A3D9BEBD010AEABC21280DEE738">>}]}
 ].
