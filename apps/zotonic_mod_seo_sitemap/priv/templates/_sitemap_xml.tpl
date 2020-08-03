@@ -16,7 +16,7 @@
 	</url>
 
 	{% for id in result %}
-		{% if id.is_visible and not id.seo_noindex %}
+		{% if id.is_visible and not id.seo_noindex and not id.is_website_redirect %}
 			{% with id.page_url_abs as page_url %}
 			{% with id.category_id as category_id %}
 				{% if page_url /= "/" and (id.page_path /= "/" or is_i18n) %}
