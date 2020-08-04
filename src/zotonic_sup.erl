@@ -165,6 +165,7 @@ init([]) ->
     init_stats(),
     init_ua_classifier(),
     init_webmachine(),
+    init_jsxrecord(),
 
     spawn(fun() ->
                   timer:sleep(4000),
@@ -240,6 +241,12 @@ init_webmachine() ->
     set_webzmachine_default(webmachine_logger_module, z_stats),
     set_webzmachine_default(error_handler, controller),
     webmachine_sup:start_logger().
+
+%% @doc Let jsxrecord load the zotonic record definitions.
+init_jsxrecord() ->
+    erlang:spawn( fun() -> jsxrecord:load_records([ ?MODULE ]) end),
+    ok.
+
 
 set_webzmachine_default(Par, Def) ->
     case application:get_env(webzmachine, Par) of

@@ -234,6 +234,9 @@
 %% @doc Call the translate function, 2nd parameter is context
 -define(__(T,Context), z_trans:trans(T,Context)).
 
+%% @doc Extra trans record definition to ease JSON mapping of translatable strings
+-record(trans, { tr = [] :: list( {atom(), binary()} )}).
+
 %% The name of the session request parameter
 -define(SESSION_PAGE_Q, "z_pageid").
 
