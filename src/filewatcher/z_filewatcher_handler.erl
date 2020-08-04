@@ -158,10 +158,21 @@ handle_file(Verb, Basename, ".erl", F) when Verb =/= delete ->
 %% @doc SCSS / SASS files from lib/scss -> lib/css
 handle_file(_Verb, _Basename, SASS, F) when SASS =:= ".scss"; SASS =:= ".sass" ->
     InPath = filename:dirname(F),
+    {ok, Files} = file:list_dir(InPath),
+
+    MainScss = lists:filter(fun ([$_|_]) -> false;
+                                (E) -> lists:suffix(SASS, E)
+                            end, Files),
+
     OutPath = filename:join(filename:dirname(InPath), "css"),
     case filelib:is_dir(OutPath) of
         true ->
-            os:cmd("sass -C --sourcemap=none --update " ++ z_utils:os_escape(InPath) ++ ":" ++ z_utils:os_escape(OutPath));
+            lists:map(fun(MainFile) ->
+                              InFile = filename:join(InPath, MainFile),
+                              {OutFileBase, _} = lists:split(length(MainFile) - 4, MainFile),
+                              OutFile = filename:join(OutPath, OutFileBase ++ "css"),
+                              os:cmd("sassc --omit-map-comment " ++ z_utils:os_escape(InFile) ++ " " ++ z_utils:os_escape(OutFile))
+                      end, MainScss);
         false ->
             undefined
     end;
