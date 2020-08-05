@@ -24,6 +24,7 @@
 -export([
     start_link/0,
     init/1,
+    start_watchers/0,
     restart_watchers/0,
     watch_dirs/0,
     watch_dirs_expanded/0
@@ -38,7 +39,11 @@ start_link() ->
 
 %% @doc Return the filewatcher gen_server(s) to be used.
 init([]) ->
-    Children = children(z_config:get(filewatcher_enabled)),
+    Children = [
+        {zotonic_filewatcher_handler,
+          {zotonic_filewatcher_handler, start_link, []},
+          permanent, 5000, worker, [zotonic_filewatcher_handler]}
+    ],
     RestartStrategy = {one_for_all, 5, 10},
     {ok, {RestartStrategy, Children}}.
 
@@ -56,18 +61,28 @@ restart_watchers() ->
             ok
     end.
 
-children(true) ->
+start_watchers() ->
+    case z_config:get(filewatcher_enabled) of
+        true ->
+            Children = watcher_children(z_config:get(filewatcher_enabled)),
+            lists:foreach(
+                fun(ChildSpec) ->
+                    supervisor:start_child(?MODULE, ChildSpec)
+                end,
+                Children);
+        false ->
+            ok
+    end.
+
+watcher_children(true) ->
     Watchers = [
         zotonic_filewatcher_fswatch,
         zotonic_filewatcher_inotify
     ],
     which_watcher(Watchers);
-children(false) ->
+watcher_children(false) ->
     lager:debug("zotonic_filewatcher: disabled"),
     [
-        {zotonic_filewatcher_handler,
-          {zotonic_filewatcher_handler, start_link, []},
-          permanent, 5000, worker, [zotonic_filewatcher_handler]},
         {zotonic_filewatcher_beam_reloader,
           {zotonic_filewatcher_beam_reloader, start_link, [false]},
           permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]}
@@ -82,9 +97,6 @@ which_watcher([]) ->
             lager:warning("zotonic_filewatcher: please install fswatch or inotify-tools to automatically load changed files")
     end,
     [
-        {zotonic_filewatcher_handler,
-          {zotonic_filewatcher_handler, start_link, []},
-          permanent, 5000, worker, [zotonic_filewatcher_handler]},
         {zotonic_filewatcher_monitor,
           {zotonic_filewatcher_monitor, start_link, []},
           permanent, 5000, worker, [zotonic_filewatcher_monitor]},
@@ -96,9 +108,6 @@ which_watcher([M|Ms]) ->
     case M:is_installed() of
         true ->
             [
-                {zotonic_filewatcher_handler,
-                  {zotonic_filewatcher_handler, start_link, []},
-                  permanent, 5000, worker, [zotonic_filewatcher_handler]},
                 {zotonic_filewatcher_beam_reloader,
                   {zotonic_filewatcher_beam_reloader, start_link, [false]},
                   permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]},
