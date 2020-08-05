@@ -64,6 +64,7 @@
         "|/log/"
         "|\\.log$"
         "|\\.dump$"
+        "|/translations/.*\\.mo$"
         "|~$"
         "|\\.bck$"
         "|\\.swp$"
