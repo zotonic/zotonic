@@ -219,29 +219,37 @@ compile_yecc(Filename) ->
 %% @doc SCSS / SASS files from priv/lib-src/css/.../foo.sass -> priv/lib/css/.../foo.css
 compile_sass(Application, SrcPath) ->
     AppPriv = code:priv_dir(Application),
-    InPath = filename:join([AppPriv, "lib-src", SrcPath]),
-    DstPath = unicode:characters_to_list(filename:rootname(SrcPath)) ++ ".css",
-    OutPath = filename:join([ AppPriv, "lib", DstPath ]),
-    case is_newer(InPath, OutPath) of
-        true ->
-            case z_filelib:ensure_dir(OutPath) of
-                ok ->
-                    zotonic_filehandler:terminal_notifier("Sass: " ++ filename:basename(InPath)),
+    InPath = filename:dirname( filename:join([AppPriv, "lib-src", SrcPath]) ),
+    OutPath = filename:dirname( filename:join([AppPriv, "lib-src", SrcPath]) ),
+    SassExt = z_convert:to_list( filename:extension(SrcPath) ),
+    {ok, Files} = file:list_dir(InPath),
+    MainScss = lists:filter(
+        fun
+            ([$_|_]) -> false;
+            (E) -> lists:suffix(SassExt, E)
+        end,
+        Files),
+    case z_filelib:ensure_dir(OutPath) of
+        ok ->
+            lists:map(
+                fun(MainFile) ->
+                    zotonic_filehandler:terminal_notifier("Sass: " ++ MainFile),
+                    InFile = filename:join(InPath, MainFile),
+                    {OutFileBase, _} = lists:split(length(MainFile) - 4, MainFile),
+                    OutFile = filename:join(OutPath, OutFileBase ++ "css"),
                     Cmd = [
-                        "sass -C --sourcemap=none --update ",
-                        z_utils:os_escape(InPath),
-                        ":",
-                        z_utils:os_escape(OutPath)
+                        "sassc --omit-map-comment ",
+                        z_utils:os_escape(InFile),
+                        " ",
+                        z_utils:os_escape(OutFile)
                     ],
-                    zotonic_filehandler_compile:run_cmd(Cmd);
-                {error, _} = Error ->
-                    lager:error("Could not create directory for ~p", [OutPath]),
-                    Error
-            end;
-        false ->
-            ok
+                    zotonic_filehandler_compile:run_cmd(Cmd)
+               end,
+               MainScss);
+        {error, _} = Error ->
+            lager:error("Could not create directory for ~p", [OutPath]),
+            Error
     end.
-
 
 %% @doc LESS files from priv/lib-src/css/.../foo.less -> priv/lib/css/.../foo.css
 %%      Check for a 'config' file on the path, if present then that file is used
