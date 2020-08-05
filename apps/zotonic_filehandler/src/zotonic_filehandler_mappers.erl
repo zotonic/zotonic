@@ -222,13 +222,7 @@ compile_sass(Application, SrcPath) ->
     InPath = filename:dirname( filename:join([AppPriv, "lib-src", SrcPath]) ),
     OutPath = filename:dirname( filename:join([AppPriv, "lib-src", SrcPath]) ),
     SassExt = z_convert:to_list( filename:extension(SrcPath) ),
-    {ok, Files} = file:list_dir(InPath),
-    MainScss = lists:filter(
-        fun
-            ([$_|_]) -> false;
-            (E) -> lists:suffix(SassExt, E)
-        end,
-        Files),
+    MainScss = find_main_sass_files(AppPriv, SrcPath, SassExt),
     case z_filelib:ensure_dir(OutPath) of
         ok ->
             lists:map(
@@ -249,6 +243,29 @@ compile_sass(Application, SrcPath) ->
         {error, _} = Error ->
             lager:error("Could not create directory for ~p", [OutPath]),
             Error
+    end.
+
+find_main_sass_files(AppPriv, SrcPath, SassExt) ->
+    InPath = filename:dirname( filename:join([AppPriv, "lib-src", SrcPath]) ),
+    {ok, Files} = file:list_dir(InPath),
+    MainScss = lists:filter(
+        fun
+            ([$_|_]) -> false;
+            (E) -> lists:suffix(SassExt, E)
+        end,
+        Files),
+    case MainScss of
+        [] ->
+            case filename:dirname(SrcPath) of
+                <<".">> ->
+                    [];
+                "." ->
+                    [];
+                PDir ->
+                    find_main_sass_files(AppPriv, PDir, SassExt)
+            end;
+        _ ->
+            MainScss
     end.
 
 %% @doc LESS files from priv/lib-src/css/.../foo.less -> priv/lib/css/.../foo.css
