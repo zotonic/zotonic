@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2018 Marc Worrell
+%% @copyright 2015-2020 Marc Worrell
 %% @doc Check for changed files, notify the zotonic_filehandler of any changes
 
-%% Copyright 2015-2018 Marc Worrell
+%% Copyright 2015-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ children(false) ->
     ].
 
 which_watcher([]) ->
-    IsScannerEnabled = z_config:get(filewatcher_scanner_enabled, false),
+    IsScannerEnabled = z_config:get(filewatcher_scanner_enabled),
     case IsScannerEnabled of
         true ->
             lager:warning("zotonic_filewatcher: please install fswatch or inotify-tools to improve automatic loading of changed files");

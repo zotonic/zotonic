@@ -249,7 +249,8 @@ default(dbpassword) -> "zotonic";
 default(dbdatabase) -> "zotonic";
 default(dbschema) -> "public";
 default(filewatcher_enabled) -> true;
-default(filewatcher_scanner_enabled) -> false;
+default(filewatcher_scanner_enabled) -> true;
+default(filewatcher_scanner_interval) -> 10000;
 default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
@@ -329,6 +330,7 @@ all() ->
             ssl_dhfile,
             filewatcher_enabled,
             filewatcher_scanner_enabled,
+            filewatcher_scanner_interval,
             syslog_ident,
             syslog_opts,
             syslog_facility,
