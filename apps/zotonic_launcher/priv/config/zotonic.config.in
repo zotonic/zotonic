@@ -218,8 +218,13 @@
    %% {filewatcher_enabled, true},
 
 %%% Scan for changed files beam files if inotify and fswatch are not enabled
-%%% Enabling this will make the system slow, it is not advised on production systems.
-   %% {filewatcher_scanner_enabled, false},
+%%% Enabling this will make the system slower, it is advised to use inotify and/or fswatch
+   %% {filewatcher_scanner_enabled, true},
+
+%% Interval the manual directory scan for changes is made (if inotify and fswatch are not present).
+%% In milliseconds, lower values makes your system slower. With higher values updates to the source
+%% code will take longer to be detected.
+   %% {filewatcher_scanner_interval, 10000},
 
 %%% Maximum number of concurrent sidejob processes. Every client request sent over
 %%% Websocket is executed in a sidejob process. Default is 10% of the process_limit

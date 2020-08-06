@@ -32,6 +32,7 @@
     run_cmd/1,
     run_cmd/3,
     run_cmd_task/3,
+    run_cmd_task_buffalo/3,
 
     ld/0,
     ld/1,
@@ -182,7 +183,11 @@ run_cmd(Cmd, RunOpts, Opts) ->
         deadline => 2000,
         is_drop_running => true
     },
-    buffalo:queue({?MODULE, run_cmd_task, [ Cmd, RunOpts, Opts ]}, QueueOptions).
+    buffalo:queue({?MODULE, run_cmd_task_buffalo, [ Cmd, RunOpts, Opts ]}, QueueOptions).
+
+run_cmd_task_buffalo(Cmd, RunOpts, Opts) ->
+    run_cmd_task(Cmd, RunOpts, Opts),
+    ok.
 
 run_cmd_task(Cmd, RunOpts, Opts) ->
     try
