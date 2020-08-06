@@ -17,6 +17,7 @@
 
         <p>
             <a class="btn btn-default" href="{% url export_rsc_query type='csv' id=id %}">{_ Download CSV _}</a>
+            <a class="btn btn-default" href="{% url export_rsc_query type='json' id=id %}">{_ Download JSON _}</a>
             <a class="btn btn-default" href="{% url export_rsc_query type='xlsx' id=id %}">{_ Download Excel _}</a>
             <a class="btn btn-default" href="{% url export_rsc_query type='vevent' id=id %}">{_ Download Event _}</a>
         </p>
@@ -29,6 +30,7 @@
 
         <p>
             <a class="btn btn-default" href="{% url export_rsc_query type='csv' id=id %}">{_ Download CSV _}</a>
+            <a class="btn btn-default" href="{% url export_rsc_query type='json' id=id %}">{_ Download JSON _}</a>
             <a class="btn btn-default" href="{% url export_rsc_query type='xlsx' id=id %}">{_ Download Excel _}</a>
             {% if id.o.haspart[1].is_a.event %}
                 <a class="btn btn-default" href="{% url export_rsc_query type='vevent' id=id %}">{_ Download Event _}</a>
@@ -37,6 +39,7 @@
     {% else %}
         <p>
             <a class="btn btn-default" href="{% url export_rsc type='csv' id=id %}">{_ Download CSV _}</a>
+            <a class="btn btn-default" href="{% url export_rsc type='json' id=id %}">{_ Download JSON _}</a>
             <a class="btn btn-default" href="{% url export_rsc type='xlsx' id=id %}">{_ Download Excel _}</a>
             {% if id.is_a.event %}
                 <a class="btn btn-default" href="{% url export_rsc type='vevent' id=id %}">{_ Download Event _}</a>

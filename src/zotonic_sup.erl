@@ -242,10 +242,9 @@ init_webmachine() ->
     set_webzmachine_default(error_handler, controller),
     webmachine_sup:start_logger().
 
-%% @doc Let jsxrecord load the zotonic record definitions.
+%% @doc Let jsxrecord load some important record definitions.
 init_jsxrecord() ->
-    erlang:spawn( fun() -> jsxrecord:load_records([ ?MODULE ]) end),
-    ok.
+    z_jsxrecord:init().
 
 
 set_webzmachine_default(Par, Def) ->

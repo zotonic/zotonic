@@ -129,10 +129,8 @@ is_empty(_) -> false.
 
 do_body(#stream_state{is_query=true, id=Id} = StreamState, Context) ->
     #search_result{all=Ids} = z_search:search_pager({'query', [{query_id, Id}]}, 1, Context),
-    ?DEBUG(Ids),
     do_body_data(Ids, StreamState, Context);
 do_body(StreamState, Context) ->
-    ?DEBUG({do_body, StreamState}),
     case z_notifier:first(#export_resource_data{
                                 id=StreamState#stream_state.id,
                                 content_type=StreamState#stream_state.content_type,
