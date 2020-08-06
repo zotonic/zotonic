@@ -219,6 +219,7 @@ compile_yecc(Filename) ->
 %% @doc SCSS / SASS files from priv/lib-src/css/.../foo.sass -> priv/lib/css/.../foo.css
 compile_sass(Application, SrcPath) ->
     AppPriv = code:priv_dir(Application),
+    SrcFile = filename:join([ AppPriv, "lib-src", SrcPath]),
     SassExt = z_convert:to_list( filename:extension(SrcPath) ),
     MainScss = case filename:basename(SrcPath) of
         <<"_", _/binary>> ->
@@ -230,20 +231,25 @@ compile_sass(Application, SrcPath) ->
         fun(MainFile) ->
             InFile = filename:join([ AppPriv, "lib-src", MainFile]),
             OutPath = filename:join([ AppPriv, "lib", MainFile]),
-            case z_filelib:ensure_dir(OutPath) of
-                ok ->
-                    zotonic_filehandler:terminal_notifier("Sass: " ++ MainFile),
-                    OutFile = iolist_to_binary([ filename:rootname(OutPath), ".css" ]),
-                    Cmd = [
-                        "sassc --omit-map-comment ",
-                        z_utils:os_escape(InFile),
-                        " ",
-                        z_utils:os_escape(OutFile)
-                    ],
-                    zotonic_filehandler_compile:run_cmd(Cmd);
-                {error, _} = Error ->
-                    lager:error("Could not create directory for ~p", [OutPath]),
-                    Error
+            OutFile = iolist_to_binary([ filename:rootname(OutPath), ".css" ]),
+            case is_newer(SrcFile, OutFile) of
+                true ->
+                    case z_filelib:ensure_dir(OutPath) of
+                        ok ->
+                            zotonic_filehandler:terminal_notifier("Sass: " ++ MainFile),
+                            Cmd = [
+                                "sassc --omit-map-comment ",
+                                z_utils:os_escape(InFile),
+                                " ",
+                                z_utils:os_escape(OutFile)
+                            ],
+                            zotonic_filehandler_compile:run_cmd(Cmd);
+                        {error, _} = Error ->
+                            lager:error("Could not create directory for ~p", [OutPath]),
+                            Error
+                    end;
+                false ->
+                    ok
             end
        end,
        MainScss).

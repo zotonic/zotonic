@@ -96,12 +96,18 @@ which_watcher([]) ->
         false ->
             lager:warning("zotonic_filewatcher: please install fswatch or inotify-tools to automatically load changed files")
     end,
+    % Start the filewatcher process and the beam reloader.
+    % If the scanner is enabled then the beam reloader will tell the monitor which
+    % directories need to be watched.
+    MonitorOpts = [
+        {interval, z_config:get(filewatcher_scanner_interval)}
+    ],
     [
         {zotonic_filewatcher_monitor,
-          {zotonic_filewatcher_monitor, start_link, []},
+          {zotonic_filewatcher_monitor, start_link, [ MonitorOpts ]},
           permanent, 5000, worker, [zotonic_filewatcher_monitor]},
         {zotonic_filewatcher_beam_reloader,
-          {zotonic_filewatcher_beam_reloader, start_link, [IsScannerEnabled]},
+          {zotonic_filewatcher_beam_reloader, start_link, [ IsScannerEnabled ]},
           permanent, 5000, worker, [zotonic_filewatcher_beam_reloader]}
     ];
 which_watcher([M|Ms]) ->
