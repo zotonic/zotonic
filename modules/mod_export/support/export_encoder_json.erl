@@ -79,13 +79,7 @@ footer(Row, #state{is_raw=IsRaw}=State, _Context) ->
 
 
 json_encode(Data, true) -> Data;
-json_encode(Data, false) ->
-    try jsxrecord:encode(Data) of
-        Json -> Json
-    catch
-        _:_ ->
-            ?DEBUG({error, Data})
-    end.
+json_encode(Data, false) -> jsxrecord:encode(Data).
 
 
 optional_prefix_comma(Data, #state{prefix_comma=true}) -> <<",", Data/binary>>;
