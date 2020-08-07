@@ -43,6 +43,8 @@
     module_to_app/1,
     is_provided/2,
     get_provided/1,
+    get_provided/0,
+    get_depending/0,
     get_modules/1,
     get_modules_status/1,
     get_upgrade_status/1,
@@ -357,8 +359,44 @@ is_provided(Service, Context) ->
     gen_server:call(name(Context), {is_provided, Service}).
 
 %% @doc Return the list of all provided functionalities in running modules.
+-spec get_provided( z:context() ) -> list( atom() ).
 get_provided(Context) ->
     gen_server:call(name(Context), get_provided).
+
+
+%% @doc Return a table with per provision which modules provide it.
+-spec get_provided() -> #{ atom() := [ atom() ]}.
+get_provided() ->
+    lists:foldl(
+        fun({Module, _App, _Dir}, Acc) ->
+            {_Mod, _Deps, Provs} = dependencies(Module),
+            lists:foldl(
+                fun(Prov, PAcc) ->
+                    ProvidedBy = maps:get(Prov, PAcc, []),
+                    PAcc#{ Prov => [ Module | ProvidedBy ]}
+                end,
+                Acc,
+                lists:usort( [ Module | Provs ] ))
+        end,
+        #{},
+        scan()).
+
+%% @doc Return a table with per dependeny which modules depend on it.
+-spec get_depending() -> #{ atom() := [ atom() ]}.
+get_depending() ->
+    lists:foldl(
+        fun({Module, _App, _Dir}, Acc) ->
+            {_Mod, Deps, _Provs} = dependencies(Module),
+            lists:foldl(
+                fun(Dep, DAcc) ->
+                    DepOn = maps:get(Dep, DAcc, []),
+                    DAcc#{ Dep => [ Module | DepOn ]}
+                end,
+                Acc,
+                lists:usort( Deps ))
+        end,
+        #{},
+        scan()).
 
 
 %% @doc Return the status of all running modules.
