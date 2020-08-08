@@ -19,7 +19,7 @@
 -module(mod_zotonic_status_vcs).
 -author("Marc Worrell <marc@worrell.nl>").
 
--mod_title("Mercurial support").
+-mod_title("Version control support for Git and Mercurial").
 -mod_description("Allows to update and rebuild sites and zotonic installs from git or mercurial.").
 -mod_prio(500).
 
