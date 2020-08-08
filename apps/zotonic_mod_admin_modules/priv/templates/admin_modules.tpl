@@ -13,15 +13,18 @@
         <table class="table table-striped do_adminLinkedTable">
             <thead>
                 <tr>
-                    <th width="1%"></th>
-                    <th width="19%">{_ Title _}</th>
-                    <th width="45%">{_ Description _}</th>
-                    <th width="5%">{_ Prio _}</th>
-                    <th width="30%">{_ Author _}</th>
+                    <th></th>
+                    <th>{_ Module _}</th>
+                    <th>{_ Provides _}</th>
+                    <th>{_ Depends _}</th>
+                    <th>{_ Prio _}</th>
                 </tr>
             </thead>
 
             <tbody>
+            {% with m.modules.provided as current_provided %}
+            {% with m.modules.get_provided as provided %}
+            {% with m.modules.get_depending as depending %}
                 {% for sort, prio, module, props in modules %}
                     {% with configurable[module] as config_template %}
                         {% if config_template %}
@@ -32,10 +35,27 @@
                                 {% include "_icon_status.tpl" status_title=status[module] status=status[module] status_id=#status.module %}
                             </td>
                             <td>
-                                <strong>{{ props.mod_title|default:props.title }}</strong><br />
-                                <span class="text-muted">{{ module }}</span>
+                                <strong>{{ props.mod_title|default:props.title }}</strong><br>
+                                {{ props.mod_description|default:"-" }}<br>
                             </td>
-                            <td>{{ props.mod_description|default:"-" }}</td>
+                            <td>
+                                <nobr>{{ module }}</nobr>
+                                {% for m in props.mod_provides %}
+                                    {% if m /= module %}
+                                        <br><nobr><span class="text-muted">{{ m }}</span></nobr>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for m in props.mod_depends %}
+                                    {% if m|member:current_provided %}
+                                        <nobr><span class="text-success">√</span> {{ m }}</nobr>
+                                    {% else %}
+                                        <nobr><span class="text-danger">x</span> {{ m }}</nobr>
+                                    {% endif %}
+                                    {% if not forloop.last %}<br>{% endif %}
+                                {% endfor %}
+                            </td>
                             <td>{{ prio }}</td>
                             <td>
                                 <div class="pull-right buttons">
@@ -56,8 +76,6 @@
                                             action={toggle_class target=#li.module class="unpublished"} %}
                                     {% endif %}
                                 </div>
-
-                                {{ props.author|escape|default:"-" }}
                             </td>
                         </tr>
                     {% endwith %}
@@ -68,6 +86,9 @@
                         </td>
                     </tr>
                 {% endfor %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
             </tbody>
         </table>
 
