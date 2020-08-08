@@ -15,14 +15,14 @@
                 <tr>
                     <th></th>
                     <th>{_ Module _}</th>
-                    <th>{_ Provides _}</th>
                     <th>{_ Depends _}</th>
+                    <th>{_ Provides _}</th>
                     <th>{_ Prio _}</th>
                 </tr>
             </thead>
 
             <tbody>
-            {% with m.modules.provided as current_provided %}
+            {% with m.modules.provided as active_provided %}
             {% with m.modules.get_provided as provided %}
             {% with m.modules.get_depending as depending %}
                 {% for sort, prio, module, props in modules %}
@@ -39,21 +39,30 @@
                                 {{ props.mod_description|default:"-" }}<br>
                             </td>
                             <td>
-                                <nobr>{{ module }}</nobr>
-                                {% for m in props.mod_provides %}
-                                    {% if m /= module %}
-                                        <br><nobr><span class="text-muted">{{ m }}</span></nobr>
+                                {% for m in props.mod_depends %}
+                                    {% if m|member:active_provided %}
+                                        <nobr><span class="text-success">&check;</span> {{ m }}</nobr>
+                                    {% else %}
+                                        <nobr><span class="text-danger">&times; {{ m }}</span></nobr>
                                     {% endif %}
+                                    {% if not forloop.last %}<br>{% endif %}
                                 {% endfor %}
                             </td>
                             <td>
-                                {% for m in props.mod_depends %}
-                                    {% if m|member:current_provided %}
-                                        <nobr><span class="text-success">√</span> {{ m }}</nobr>
-                                    {% else %}
-                                        <nobr><span class="text-danger">x</span> {{ m }}</nobr>
+                                {% if depending[module] %}
+                                    <nobr><span class="text-success">&ofcir;</span> {{ module }}</span></nobr>
+                                {% else %}
+                                    <nobr><span class="text-muted">&cir; {{ module }}</span></nobr>
+                                {% endif %}
+                                {% for m in props.mod_provides %}
+                                    {% if m /= module %}
+                                        <br>
+                                        {% if depending[m] %}
+                                            <nobr><span class="text-success">&ofcir;</span> {{ m }}</nobr>
+                                        {% else %}
+                                            <nobr><span class="text-muted">&cir; {{ m }}</span></nobr>
+                                        {% endif %}
                                     {% endif %}
-                                    {% if not forloop.last %}<br>{% endif %}
                                 {% endfor %}
                             </td>
                             <td>{{ prio }}</td>
