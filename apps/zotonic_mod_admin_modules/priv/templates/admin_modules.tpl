@@ -17,7 +17,7 @@
                     <th>{_ Module _}</th>
                     <th>{_ Depends _}</th>
                     <th>{_ Provides _}</th>
-                    <th>{_ Prio _}</th>
+                    {% comment %}<th>{_ Prio _}</th>{% endcomment %}
                 </tr>
             </thead>
 
@@ -65,7 +65,7 @@
                                     {% endif %}
                                 {% endfor %}
                             </td>
-                            <td>{{ prio }}</td>
+                            {% comment %}<td>{{ prio }}</td>{% endcomment %}
                             <td>
                                 <div class="pull-right buttons">
                                     {% if props.is_active %}

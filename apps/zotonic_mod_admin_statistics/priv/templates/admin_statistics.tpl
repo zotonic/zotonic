@@ -6,48 +6,48 @@
 
 <div class="row">
 
-<div class="col-md-4 col-lg-4 col-sm-4 col-xs-">
+<div class="col-md-6 col-lg-6 col-sm-6 col-xs-">
   <div class="panel panel-default">
     <div class="panel-heading">System</div>
     <div class="panel-body">
         {% for id, name in [
-                ["erlang-stats-system_info-process_count", "Process Count"],
-                ["erlang-stats-statistics-run_queue", "Run Queue"],
-                ["erlang-stats-system_info-port_count", "Port Count"]] %}
+                ["stats-erlang-system_info-process_count", "Process Count"],
+                ["stats-erlang-statistics-run_queue", "Run Queue"],
+                ["stats-erlang-system_info-port_count", "Port Count"]] %}
             {% include "_stat_info.tpl" id=id name=name %}
         {% endfor %}
     </div>
   </div>
 </div>
 
-<div class="col-md-4 col-lg-4 col-sm-4">
+<div class="col-md-6 col-lg-6 col-sm-6">
   <div class="panel panel-default">
     <div class="panel-heading">I/O</div>
     <div class="panel-body">
         {% for id, name in [
-                ["erlang-stats-io-input", "Input"],
-                ["erlang-stats-io-output", "Output"]] %}
+                ["stats-erlang-io-input", "Input"],
+                ["stats-erlang-io-output", "Output"]] %}
             {% include "_stat_info.tpl" id=id name=name render="to_human" %}
         {% endfor %}
 
         {% for id, name in [
-                ["erlang-stats-network-tcp_port_count", "Open TCP Connections"]] %}
+                ["stats-erlang-network-tcp_port_count", "Open TCP Connections"]] %}
             {% include "_stat_info.tpl" id=id name=name %}
         {% endfor %}
     </div>
   </div>
 </div>
 
-<div class="col-md-4 col-lg-4 col-sm-4">
+<div class="col-md-6 col-lg-6 col-sm-6">
   <div class="panel panel-default">
     <div class="panel-heading">Memory</div>
     <div class="panel-body">
       {% for id, name in [
-                ["erlang-stats-memory-total", "Total"],
-                ["erlang-stats-memory-binary", "Binary"],
-                ["erlang-stats-memory-ets", "Ets"],
-                ["erlang-stats-memory-code", "Code"],
-                ["erlang-stats-memory-system", "System"]]  %}
+                ["stats-erlang-memory-total", "Total"],
+                ["stats-erlang-memory-binary", "Binary"],
+                ["stats-erlang-memory-ets", "Ets"],
+                ["stats-erlang-memory-code", "Code"],
+                ["stats-erlang-memory-system", "System"]]  %}
             {% include "_stat_info.tpl" id=id name=name render="to_human" %}
         {% endfor %}
     </div>
@@ -75,12 +75,20 @@ function to_human(value) {
 {% endjavascript %}
 
 {% javascript %}
-    cotonic.broker.subscribe("erlang/stats/#", function(msg) {
-        var item = $("#" + msg.topic.replace(/\//g, "-"));
-        if (item.length > 0) {
-            item.html(item.data('render')(msg.payload));
-        }
-    });
+    setTimeout(
+        function() {
+            cotonic.broker.subscribe("bridge/origin/stats/erlang/#", function(msg) {
+                console.log(msg);
+                var topic = msg.topic
+                    .replace("bridge/origin/", "")
+                    .replace(/\//g, "-");
+                console.log(topic);
+                var item = $("#" + topic);
+                if (item.length > 0) {
+                    item.html(item.data('render')(msg.payload));
+                }
+            });
+    }, 1000);
 {% endjavascript %}
 
 {% endblock %}
