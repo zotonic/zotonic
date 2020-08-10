@@ -408,7 +408,7 @@ preview_youtube(MediaId, InsertProps, Context) ->
             m_media:save_preview_url(MediaId, Url, Context)
     end.
 
-% @doc Fetch the preview image of a vimeo video. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
+% @doc Fetch the preview image of a vimeo video.
 % @todo Make this more robust wrt http errors.
 preview_vimeo(MediaId, InsertProps, Context) ->
     case z_convert:to_binary(maps:get(<<"video_embed_id">>, InsertProps, <<>>)) of
@@ -427,9 +427,10 @@ videoid_to_image(youtube, EmbedId) ->
     "https://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg";
 videoid_to_image(vimeo, EmbedId) ->
     JsonUrl = "https://vimeo.com/api/v2/video/" ++ z_convert:to_list(EmbedId) ++ ".json",
-    case httpc:request(JsonUrl) of
+    case httpc:request(get, {JsonUrl, []}, [], [ {body_format, binary} ]) of
         {ok, {{_Http, 200, _Ok}, _Header, Data}} ->
-            #{<<"thumbnail_large">> := Thumbnail} = z_json:decode(Data),
+            [ JSON | _ ] = z_json:decode(Data),
+            #{ <<"thumbnail_large">> := Thumbnail } = JSON,
             Thumbnail;
         {ok, {StatusCode, _Header, Data}} ->
             lager:warning("Vimeo metadata fetch returns ~p ~p", [StatusCode, Data]),

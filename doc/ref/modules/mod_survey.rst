@@ -80,11 +80,11 @@ This notification has the following fields:
 To intercept a survey submission you would observe this survey_submit
 notification, and return ``ok``::
 
-  observe_survey_submit(#survey_submit{id=SurveyId}, Context) ->
+  observe_survey_submit(#survey_submit{ id = SurveyId }, Context) ->
       ?DEBUG(SurveyId),
       ok.
 
-      
+
 Creating a custom survey handler
 --------------------------------
 
@@ -97,7 +97,7 @@ For instance, the following defines a handler called "email_me"::
 
   observe_survey_get_handlers(#survey_get_handlers{}, All, Context) ->
     [
-     {<<"email_me">>, "E-mail me when survey is submitted"}
+     {<<"email_me">>, ?__(<<"E-mail me when survey is submitted">>, Context)}
      | All
     ].
 
@@ -105,8 +105,8 @@ Each handler will show up in the dropdown list and the editor can pick
 which handler he wants. The value chosen is passed along in the
 ``handler`` property of the survey submission, and as such can be used
 to intercept the survey submission::
-    
-  observe_survey_submit(#survey_submit{handler= <<"email_me">>, id=SurveyId}, Context) ->
+
+  observe_survey_submit(#survey_submit{ handler = <<"email_me">>, id = SurveyId }, Context) ->
       %% Do something here for surveys which have 'email_me' selected as handler
       ok;
   observe_survey_submit(#survey_submit{}, _Context) ->

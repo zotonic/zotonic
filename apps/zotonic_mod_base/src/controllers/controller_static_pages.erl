@@ -260,8 +260,8 @@ check_resource_1(Context) ->
                 {ok, FullPath} ->
                     case filename:basename(FullPath, <<".tpl">>) of
                         <<"index.html">> ->
-                            case last(DispPath) /= $/
-                                andalso filename:basename(SafePath) /= <<"index.html">>
+                            case last(DispPath) =/= $/
+                                andalso filename:basename(SafePath) =/= <<"index.html">>
                             of
                                 true ->
                                     z_context:set([
@@ -291,17 +291,17 @@ check_resource_1(Context) ->
                     AllowDirIndex = z_context:get(allow_directory_index, Context, false),
                     case filelib:is_dir(Dir) andalso AllowDirIndex of
                         true ->
-                            case last(DispPath) /= $/ of
-                                true ->
+                            case last(DispPath) of
+                                $/ ->
+                                    z_context:set([
+                                            {path, SafePath},
+                                            {fullpath, Dir},
+                                            {mime, <<"text/html">>}
+                                        ], Context);
+                                _ ->
                                     z_context:set([
                                             {path, SafePath},
                                             {fullpath, redir}
-                                        ], Context);
-                                false ->
-                                    z_context:set([
-                                            {path, SafePath},
-                                            {fullpath, false},
-                                            {mime, <<"text/html">>}
                                         ], Context)
                             end;
                         false ->
@@ -425,11 +425,19 @@ directory_index_vars(FullPath, RelRoot, Context) ->
                 fun fileinfo_cmp/2,
                     lists:map(
                         fun fileinfo/1,
-                        lists:sort(z_utils:wildcard(filename:join(FullPath, <<"*">>))))),
+                        lists:sort( 
+                            wildcard(filename:join(FullPath, <<"*">>))
+                        )
+                    )
+            ),
     [{basename, filename:basename(FullPath)},
      {files, UpFileEntry ++ Files}
     ].
 
+wildcard(Filename) when is_binary(Filename) ->
+    z_utils:wildcard( unicode:characters_to_list(Filename) );
+wildcard(Filename) when is_list(Filename) ->
+    z_utils:wildcard( Filename ).
 
 fileinfo(F) ->
     fileinfo(F, filename:basename(F)).

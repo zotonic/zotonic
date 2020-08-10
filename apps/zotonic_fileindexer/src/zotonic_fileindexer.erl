@@ -28,6 +28,7 @@
     scan/2,
     scan/3,
 
+    flush/0,
     flush/1,
     flush/2
 ]).
@@ -62,6 +63,12 @@ scan(App, SubDir) when is_atom(App) ->
 -spec scan(atom(), file:filename_all(), string()|binary()|undefined) -> {ok, list( zotonic_fileindexer:fileindex() )} | {error, term()}.
 scan(App, SubDir, Pattern) when is_atom(App) ->
     zotonic_fileindexer_cache:find(App, SubDir, Pattern).
+
+
+%% @doc Clear the complete cache, force a rescan.
+-spec flush() -> ok.
+flush() ->
+    zotonic_fileindexer_cache:flush().
 
 %% @doc Clear the cache for the given application. Useful to force a rescan.
 -spec flush(atom()) -> ok.

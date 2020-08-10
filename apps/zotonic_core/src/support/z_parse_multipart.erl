@@ -1,9 +1,5 @@
-%% @author Bob Ippolito <bob@mochimedia.com>
-%% @copyright 2007 Mochi Media, Inc.
-%%
-%% @author Marc Worrell <marc@worrell.nl>
-%% Date: 2009-05-13
-%%
+%% @author Bob Ippolito, Marc Worrell
+%% @copyright 2007 Mochi Media, Inc; 2009-2020 Marc Worrell
 %% @doc Parse multipart/form-data request bodies. Uses a callback function to receive the next parts, can call
 %% a progress function to report back the progress on receiving the data.
 %%
@@ -12,6 +8,7 @@
 %% This is the MIT license.
 %%
 %% Copyright (c) 2007 Mochi Media, Inc.
+%% Copyright (c) 2009-2020 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -60,7 +57,7 @@
 
 %% @doc Receive and parse the form data in the request body.
 %% The progress function should accept the parameters [Percentage, Context]
--spec recv_parse(#context{}) -> {#multipart_form{}, #context{}}.
+-spec recv_parse( z:context() ) -> {#multipart_form{}, z:context()}.
 recv_parse(Context) ->
     {Form, ContextParsed} = parse_multipart_request(Context),
     if Form#multipart_form.file =/= undefined ->
@@ -176,9 +173,7 @@ progress(0, _ContentLength, _Form, _Context) ->
     ok;
 progress(Percentage, ContentLength, Form, Context) when ContentLength > ?CHUNKSIZE*5 ->
     case proplists:get_value(<<"zotonic_topic_progress">>, Form#multipart_form.args) of
-        undefined ->
-            ok;
-        Topic ->
+        Topic when is_binary(Topic) ->
             z_mqtt:publish(
                 Topic,
                 #{
@@ -186,7 +181,9 @@ progress(Percentage, ContentLength, Form, Context) when ContentLength > ?CHUNKSI
                     percentage => Percentage,
                     content_length => ContentLength
                 },
-                Context)
+                Context);
+        _ ->
+            ok
     end;
 progress(_Percentage, _ContentLength, _Form, _Context) ->
     ok.

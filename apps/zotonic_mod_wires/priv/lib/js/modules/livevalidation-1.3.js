@@ -77,7 +77,7 @@ LiveValidation.prototype = {
     asyncFieldClass: '', // was: z_async_validation
     fieldGroupClass: 'form-group',
     fieldGroupErrorClass: 'has-error',
-    fieldGroupSuccessClass: 'has-success',
+    fieldGroupSuccessClass: 'has-validated',
 
     /**
      *  initialises all of the properties and events

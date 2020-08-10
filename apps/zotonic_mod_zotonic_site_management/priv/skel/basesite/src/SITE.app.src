@@ -1,6 +1,6 @@
 {application, %%SITE%%, [
     {description, "Default Zotonic basesite"},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

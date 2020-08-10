@@ -1,7 +1,7 @@
 {% include "_survey_block_name_check.tpl" %}
 
 {% if is_survey_answer_view %}
-<div class="control-group survey-short-answer">
+<div class="form-group survey-short-answer">
     <label class="control-label" for="{{ #id }}">{{ blk.prompt }}</label>
     <p><b>{{ result.answers[blk.name].answer|escape|default:"-" }}</b></p>
 </div>

@@ -50,9 +50,8 @@ hostname:
         listen 80;
         listen   [::]:80 default_server ipv6only=on; ## listen for ipv6
 
-        listen 443 ssl;
-	# listen 443 ssl http2; ## enable http2
-        listen [::]:443 ssl ipv6only=on;
+        listen 443 ssl http2;
+        listen [::]:443 ssl http2 ipv6only=on;
 
         server_name  test.zotonic.com;
 
@@ -62,13 +61,13 @@ hostname:
         keepalive_timeout 65;
         gzip off;
 
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES128-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA128:DHE-RSA-AES128-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA128:ECDHE-RSA-AES128-SHA384:ECDHE-RSA-AES128-SHA128:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA128:DHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA384:AES128-GCM-SHA128:AES128-SHA128:AES128-SHA128:AES128-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
         ssl_prefer_server_ciphers on;
-        ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # not possible to do exclusive
-        ssl_ciphers 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4';
 
         # Disable preloading HSTS for now. Enable when you know that your
-	# server certs works. You can use the header line that includes
-	# the "preload" directive if you understand the implications.
+        # server certs works. You can use the header line that includes
+        # the "preload" directive if you understand the implications.
         # add_header Strict-Transport-Security "max-age=15768000; includeSubdomains"; # six months
         # add_header Strict-Transport-Security "max-age=15768000; includeSubdomains; preload";
 
@@ -76,21 +75,23 @@ hostname:
         ssl_session_timeout 5m;
 
         # create with: openssl dhparam -out /etc/nginx/dhparam.pem 2048
-        ssl_dhparam /etc/nginx/dhparam.pem;
+        # ssl_dhparam /etc/nginx/dhparam.pem;
 
         ssl_certificate /path/to/ssl.crt;
         ssl_certificate_key /path/to/ssl.key;
-	
+
         location / {
             proxy_pass http://127.0.0.1:8000/;
             proxy_redirect off;
 
-            proxy_set_header  Host              $host;
+            proxy_set_header  Host              $http_host;
             proxy_set_header  X-Real-IP         $remote_addr;
             proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
             proxy_set_header  X-Forwarded-Proto $scheme;
+            proxy_pass_request_headers on;
 
-            client_max_body_size       50m;
+
+            client_max_body_size       0;
             client_body_buffer_size    128k;
 
             proxy_connect_timeout      90;
@@ -103,22 +104,6 @@ hostname:
             proxy_temp_file_write_size 64k;
         }
 
-        # websocket
-        location /mqtt-transport {
-                 proxy_pass       http://127.0.0.1:8000/mqtt-transport;
-                 proxy_set_header Host      $host;
-                 proxy_set_header X-Real-IP $remote_addr;
-                 proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
-                 proxy_set_header X-Forwarded-Proto $scheme;
-                 proxy_http_version 1.1;
-                 proxy_set_header Upgrade $http_upgrade;
-                 proxy_set_header Connection "upgrade";
-                 proxy_set_header Sec-Websocket-Extensions $http_sec_websocket_extensions;
-                 proxy_set_header Sec-Websocket-Key $http_sec_websocket_key;
-                 proxy_set_header Sec-Websocket-Protocol $http_sec_websocket_protocol;
-                 proxy_set_header Sec-Websocket-Version $http_sec_websocket_version;
-        }
-
         location /close-connection {
              keepalive_timeout 0;
              empty_gif;
@@ -126,15 +111,18 @@ hostname:
   }
 
 Remember to add X-Forwarded-Proto to proxied header so that Zotonic
-knows that HTTPS is used before proxy even though HTTP is used between
-the proxy and backend. And also X-Real-IP and X-Forwarded-For headers.
+knows that HTTPS is used before the proxy even though HTTP is used between
+the proxy and backend. Also add X-Real-IP and X-Forwarded-For headers.
 
 Zotonic always redirects to HTTPS so the proxy needs to be configured for
 both HTTP and HTTPS.
 
-Zotonic also makes use of a websocket connection for MQTT messages
-under the ``/mqtt-transport`` location and so you have to add an extra
-proxy directive for this.
+Zotonic makes use of a websocket connection for MQTT messages at the
+``/mqtt-transport`` endpoint, so you need to pass the ``Upgrade``
+and ``Connection`` headers.
+
+The ``/mqtt-transport`` endpoint is also used to POST uploaded files
+using a HTML multi-part form post.
 
 See the `nginx documentation <http://nginx.org/en/docs/>`_ for more
 information on its configuration procedure.

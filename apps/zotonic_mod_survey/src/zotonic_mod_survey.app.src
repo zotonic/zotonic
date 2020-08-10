@@ -1,6 +1,6 @@
 {application, zotonic_mod_survey, [
     {description, "Create and publish questionnaires."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

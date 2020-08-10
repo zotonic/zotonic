@@ -35,12 +35,15 @@
 % Default max body length (32MB) for API calls, this should be configurable.
 -define(MAX_BODY_LENGTH, 32*1024*1024).
 
+-define(is_http_status(Code), is_integer(Code), Code >= 200, Code < 600).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -spec service_available( z:context() ) -> {boolean(), z:context()}.
 service_available(Context) ->
     Context1 = set_cors_header(Context),
-    {true, Context1}.
+    Context2 = z_context:set_noindex_header(true, Context1),
+    {true, Context2}.
 
 % Headers where already added in service_available/2
 -spec options( z:context() ) -> {list( binary() ), z:context()}.
@@ -49,7 +52,7 @@ options(Context) ->
 
 -spec allowed_methods( z:context() ) -> {[ binary() ], z:context()}.
 allowed_methods(Context) ->
-    {[ <<"GET">>, <<"POST">>, <<"DELETE">> ], Context}.
+    {[ <<"GET">>, <<"POST">>, <<"DELETE">>, <<"OPTONS">> ], Context}.
 
 -spec malformed_request( z:context() ) -> {boolean(), z:context()}.
 malformed_request(Context) ->
@@ -72,7 +75,8 @@ is_method_topic_match(<<"GET">>, [ <<"model">>, _Model, _ModelMethod | _ ]) -> f
 is_method_topic_match(<<"GET">>, _) -> true;
 is_method_topic_match(<<"DELETE">>, [ <<"model">>, _Model, <<"delete">> | _ ]) -> true;
 is_method_topic_match(<<"DELETE">>, _) -> false;
-is_method_topic_match(<<"POST">>, _) -> true.
+is_method_topic_match(<<"POST">>, _) -> true;
+is_method_topic_match(<<"OPTIONS">>, _) -> true.
 
 
 %% @doc Content types accepted for the post body
@@ -103,6 +107,8 @@ content_types_provided(Context) ->
 %% @doc Process the request, call MQTT and reply with the response
 -spec process( binary(), cowmachine_req:media_type() | undefined, cowmachine_req:media_type(), z:context() )
         -> {iodata(), z:context()} | {{halt, HttpCode :: pos_integer()}, z:context()}.
+process(<<"OPTIONS">>, _AcceptedCT, _ProvidedCT, Context) ->
+    {<<>>, Context};
 process(_Method, _AcceptedCT, {<<"text">>, <<"event-stream">>, _}, Context) ->
     case z_mqtt:subscribe(z_context:get(topic, Context), Context) of
         ok ->
@@ -163,6 +169,12 @@ process_done(ok, ProvidedCT, Context) ->
     % z_mqtt:publish response
     Body = z_controller_helper:encode_response(ProvidedCT, #{ status => ok }),
     {Body, Context};
+process_done({ok, #{
+        status := <<"error">>,
+        error := _
+    } = Resp}, ProvidedCT, Context) ->
+    Body = z_controller_helper:encode_response(ProvidedCT, Resp),
+    {Body, Context};
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
@@ -170,7 +182,8 @@ process_done({ok, Resp}, ProvidedCT, Context) ->
 process_done({error, _} = Error, ProvidedCT, Context) ->
     error_response(Error, ProvidedCT, Context).
 
--spec error_response({error, term()}, cowmachine_req:media_type(), z:context()) -> {{halt, HttpCode :: pos_integer()}, z:context()}.
+-spec error_response({error, term()}, cowmachine_req:media_type(), z:context()) ->
+    {{halt, HttpCode :: pos_integer()}, z:context()}.
 error_response({error, payload}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
@@ -195,26 +208,34 @@ error_response({error, enoent}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 404}, Context1};
-error_response({error, StatusCode}, CT, Context) when is_integer(StatusCode) ->
+error_response({error, unknown_path}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
-            error => <<"error">>,
-            message => <<"Error ", (integer_to_binary(StatusCode))/binary>>
+            error => <<"unknown_path">>,
+            message => <<"Not Found">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
-    {{halt, StatusCode}, Context1};
-error_response({error, {StatusCode, Reason, Message}}, CT, Context) when is_integer(StatusCode) ->
+    {{halt, 404}, Context1};
+error_response({error, unacceptable}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
-            error => z_convert:to_binary(Reason),
-            message => z_convert:to_binary(Message)
+            error => <<"unacceptable">>,
+            message => <<"Unacceptable Model Method">>
+        }),
+    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
+    {{halt, 400}, Context1};
+error_response({error, StatusCode}, CT, Context) when ?is_http_status(StatusCode) ->
+    RespBody = z_controller_helper:encode_response(CT, #{
+            status => <<"error">>,
+            error => StatusCode,
+            message => <<"Error ", (integer_to_binary(StatusCode))/binary>>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
 error_response({error, Reason}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             status => <<"error">>,
-            error => z_convert:to_binary(Reason),
+            error => Reason,
             message => <<"Internal Error">>
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
@@ -224,7 +245,7 @@ error_response({error, Reason}, CT, Context) ->
 %% @doc Event stream with messages sent to a subscribed topic
 event_stream(Context) ->
     % TODO: add streaming body function
-    {{halt, 500}, Context}.
+    {{halt, 501}, Context}.
 
 
 %% set in site config file
@@ -235,7 +256,8 @@ event_stream(Context) ->
 %%   {'Access-Control-Allow-Methods', undefined},
 %%   {'Access-Control-Allow-Headers', undefined}]
 set_cors_header(Context) ->
-    set_cors_header(z_convert:to_bool(m_site:get(service_api_cors, Context)), Context).
+    Context1 = cowmachine_req:remove_resp_header(<<"x-frame-options">>, Context),
+    set_cors_header(z_convert:to_bool(m_site:get(service_api_cors, Context1)), Context1).
 
 set_cors_header(true, Context) ->
     lists:foldl(
@@ -250,10 +272,12 @@ set_cors_header(true, Context) ->
                 end
             end,
             Context,
-            [{'Access-Control-Allow-Origin', <<"access-control-allow-origin">>, <<"*">>},
+            [{'Access-Control-Allow-Origin',      <<"access-control-allow-origin">>,      <<"*">>},
              {'Access-Control-Allow-Credentials', <<"access-control-allow-credentials">>, undefined},
-             {'Access-Control-Max-Age', <<"access-control-max-age">>, undefined},
-             {'Access-Control-Allow-Methods', <<"access-control-allow-methods">>, undefined},
-             {'Access-Control-Allow-Headers', <<"access-control-allow-headers">>, undefined}]);
+             {'Access-Control-Max-Age',           <<"access-control-max-age">>,           undefined},
+             {'Access-Control-Allow-Methods',     <<"access-control-allow-methods">>,     undefined},
+             {'Access-Control-Allow-Headers',     <<"access-control-allow-headers">>,     <<"*">>},
+             {'X-Permitted-Cross-Domain-Policies',<<"x-permitted-cross-domain-policies">>,<<"all">>}
+            ]);
 set_cors_header(false, Context) ->
     Context.

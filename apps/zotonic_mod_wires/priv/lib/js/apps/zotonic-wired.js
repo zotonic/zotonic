@@ -333,15 +333,23 @@ function z_transport(delegate, content_type, data, options)
     options = options || {};
     if ($('html').hasClass('ui-state-bridge-connected')) {
         if (options.transport == 'form') {
-            let prefix = window.sessionStorage.getItem("mqtt$clientBridgeTopic");
-            prefix = JSON.parse(prefix);
-            z_transport_form({
-                url: "/mqtt-transport/zotonic-transport/" + delegate,
-                postback: data,
-                options: options,
-                progress_topic: prefix + "zotonic-transport/progress",
-                reply_topic: prefix + "zotonic-transport/eval"
-            });
+            cotonic.broker.call("bridge/origin/model/mqtt_ticket/post/new")
+                .then( function(msg) {
+                    if (msg.payload.status == 'ok') {
+                        const ticket = msg.payload.result;
+                        z_transport_form({
+                            url: "/mqtt-transport/" + ticket + "/zotonic-transport/" + delegate,
+                            postback: data,
+                            options: options,
+                            progress_topic: "~client/zotonic-transport/progress",
+                            reply_topic: "~client/zotonic-transport/eval"
+                        });
+
+                    } else {
+                        console.log("z_transport: could not obtain MQTT ticket for form post", [ msg.payload ]);
+                        z_transport_queue_add(delegate, content_type, data, options);
+                    }
+                });
         } else {
             cotonic.broker.publish(
                 "bridge/origin/zotonic-transport/" + delegate,
@@ -452,7 +460,7 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
 
 function z_unmask(id)
 {
-    if (id)
+    if (id && typeof id == "string")
     {
         var trigger;
         if (id.charAt(0) == ' ') {
@@ -467,7 +475,7 @@ function z_unmask(id)
 
 function z_unmask_error(id)
 {
-    if (id)
+    if (id && typeof id == "string")
     {
         var trigger;
         if (id.charAt(0) == ' ') {
@@ -475,7 +483,6 @@ function z_unmask_error(id)
         } else {
             trigger = $('#'+id);
         }
-        z_unmask(id);
         trigger.each(function() { try { $(this).unmask(); } catch (e) {}});
         trigger.each(function() { $(this).addClass("z_error_upload"); });
     }

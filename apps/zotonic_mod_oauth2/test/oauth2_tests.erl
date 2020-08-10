@@ -11,10 +11,10 @@ oauth2_request_test() ->
     ok = z_module_manager:upgrade_await(Context),
 
     % Make a new OAuth2 token with full access to the admin (user 1) account
-    TPs = [
-        {is_read_only, false},
-        {is_full_access, true}
-    ],
+    TPs = #{
+        <<"is_read_only">> => false,
+        <<"is_full_access">> => true
+    },
 
     % Should have permission to make a token for user 1
     {error, eacces} = m_oauth2:insert(1, TPs, Context),

@@ -40,5 +40,5 @@ flatten_value(V, _Context) ->
 
 flatten_list(V, Context) ->
     Vs1 = [ flatten_value(X, Context) || X <- V ],
-    iolist_to_binary( z_utils:combine($,, Vs1) ).
+    iolist_to_binary( lists:join($,, Vs1) ).
 

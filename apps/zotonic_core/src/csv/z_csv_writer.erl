@@ -22,7 +22,9 @@
     sanitize/2,
 
     write_file/2,
-    write_file/3
+    write_file/3,
+
+    encode_line/2
     ]).
 
 -spec sanitize( file:filename(), file:filename() ) -> ok.
@@ -42,7 +44,7 @@ write_file(Filename, Data, Sep) when is_list(Data) ->
         {ok, Device} ->
             lists:map(
                 fun(Line) ->
-                    Bytes = encode(Line, Sep),
+                    Bytes = encode_line(Line, Sep),
                     file:write(Device, Bytes)
                 end,
                 Data),
@@ -52,11 +54,11 @@ write_file(Filename, Data, Sep) when is_list(Data) ->
             Error
     end.
 
-encode([], _Sep) ->
+encode_line([], _Sep) ->
     <<"\r\n">>;
-encode([V], _Sep) ->
+encode_line([V], _Sep) ->
     iolist_to_binary([ encode_value(V), <<"\r\n">> ]);
-encode([V|Xs], Sep) ->
+encode_line([V|Xs], Sep) ->
     iolist_to_binary([
         encode_value(V),
         [ [Sep, encode_value(X)] || X <- Xs ],

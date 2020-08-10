@@ -22,7 +22,7 @@ Params:
                 {% elseif forloop.counter == 31 %}
                     <li class="alert alert-info menu-item-alert">
                         <span class="glyphicon glyphicon-alert"></span> {_ Too many connections, only the first and last 30 are shown. _}
-                        <a class="btn btn-default btn-xs" href="{% url admin_edges qhassubject=id qpredicate=predicate %}">{_ View all connections _}</>
+                        <a class="btn btn-default btn-xs" href="{% url admin_edges qhassubject=id qpredicate=predicate %}">{_ View all connections _}</a>
                     </li>
                 {% endif %}
             {% endfor %}

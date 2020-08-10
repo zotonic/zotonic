@@ -8,20 +8,24 @@ functions on your Zotonic site.
 ``controller_api`` by default intercepts all URLs according to the
 patterns ``/api/:topic``.
 
+The topic can refer to a model. In this case the topic pattern is one of:
 
-.. _controller-api-nonstandard-url:
+ * ``/api/mymodel/get/foo/bar`` maps to ``m_mymodel:m_get([ <<"foo">>, <<"bar">> ], Msg, Context)``
+ * ``/api/mymodel/post/foo/bar`` maps to ``m_mymodel:m_delete([ <<"foo">>, <<"bar">> ], Msg, Context)``
+ * ``/api/mymodel/delete/foo/bar`` maps to ``m_mymodel:m_delete([ <<"foo">>, <<"bar">> ], Msg, Context)``
 
-Creating services at a non-standard URL
----------------------------------------
-.. versionadded:: 0.8
+In all case the ``Msg`` is an MQTT message map, with the ``payload`` set to the body of the received
+request.  In case of a GET or DELETE the payload is set to a map of the query arguments.
 
-It is possible to pre-fill the required `module` and `method`
-parameters so that you can use ``controller_api`` at another entry
-point. For instance, the following :ref:`dispatch rule <guide-dispatch>` is valid::
+Note that for a POST the payload might not be the complete message as additional query arguments are
+passed via ``z_context:get_q(<<"argument_name">>, Context)``. If the model function is called using MQTT,
+then all arguments are contained in the payload.
 
-    {dosomething,    ["do", "something"], controller_api, [{module, "foobar"}, {method, "test"}]}
+The API controller will publish a message to the topic, and wait for max 60 seconds for a response on the
+response topic.
 
-This would invoke the ``mod_foobar/services/service_foobar_test.erl`` service at the url `/do/something`,
+If there is a query argument ``response_topic`` then the API controller will only publish the
+message and immediately return.
 
 
 .. seealso:: :ref:`guide-dispatch` and :ref:`guide-controllers`.

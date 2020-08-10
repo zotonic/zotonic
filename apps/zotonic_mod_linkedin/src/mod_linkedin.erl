@@ -26,8 +26,8 @@
 -mod_title("LinkedIn").
 -mod_description("Use LinkedIn for logon.").
 -mod_prio(500).
--mod_depends([admin, authentication]).
--mod_provides([linkedin]).
+-mod_depends([ admin, authentication, mod_oauth2 ]).
+-mod_provides([ linkedin ]).
 
 %% interface functions
 -export([
@@ -65,7 +65,7 @@ is_setting(_) -> false.
 
 
 %% @doc Return the linkedin appid, secret and scope
-%% @spec get_config(Context) -> {AppId, Secret, Scope}
+-spec get_config(z:context()) -> {AppId::string(), Secret::string(), Scope::string()}.
 get_config(Context) ->
     { z_convert:to_list(m_config:get_value(mod_linkedin, appid, Context)),
       z_convert:to_list(m_config:get_value(mod_linkedin, appsecret, Context)),

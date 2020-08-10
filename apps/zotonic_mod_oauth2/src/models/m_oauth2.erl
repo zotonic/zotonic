@@ -87,7 +87,7 @@ list_tokens(undefined, _Context) ->
 
 
 -spec insert( m_rsc:resource_id(), map(), z:context() ) -> {ok, integer()} | {error, term()}.
-insert( UserId, Props, Context ) ->
+insert( UserId, Props, Context ) when is_map(Props) ->
     case is_allowed(UserId, Context) of
         true ->
             z_db:transaction(

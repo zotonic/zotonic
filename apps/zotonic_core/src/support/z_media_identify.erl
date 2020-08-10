@@ -362,7 +362,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                 end,
                 {ok, Props2}
             catch
-                ?WITH_STACKTRACE(X, B, Stacktrace)
+                X:B:Stacktrace ->
                     lager:info("identify of \"~s\" failed - ~p with ~p:~p in ~p",
                               [CleanedImageFile, CmdOutput, X, B, Stacktrace]),
                     {error, identify}
@@ -521,7 +521,7 @@ exif(File) ->
                 #{}
         end
     catch
-        ?WITH_STACKTRACE(A, B, Stacktrace)
+        A:B:Stacktrace ->
             lager:error("Error reading exif ~p:~p in ~p", [A,B,Stacktrace]),
             #{}
     end.

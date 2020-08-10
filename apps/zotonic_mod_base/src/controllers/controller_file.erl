@@ -242,7 +242,7 @@ drop_dotdot(Path) ->
         true ->
             Parts = binary:split(Path, <<"/">>, [global]),
             Parts1 = drop_dotdot_1(Parts, []),
-            rootless(iolist_to_binary(z_utils:combine($/, Parts1)))
+            rootless(iolist_to_binary(lists:join($/, Parts1)))
     end.
 
 drop_dotdot_1([], Acc) ->

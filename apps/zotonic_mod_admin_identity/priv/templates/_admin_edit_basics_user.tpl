@@ -1,6 +1,5 @@
 <fieldset class="form">
 
-
     {% if m.acl.is_allowed.use.mod_admin_identity or id == m.acl.user %}
         <div class="col-md-6">
             <div class="well">

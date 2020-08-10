@@ -1,4 +1,4 @@
-{% for cat,_true in id.is_a %}
+{% for cat in id.is_a %}
     {{ cat }}
     {% for z_language in id.language|default:[z_language] %}
         {{ m.rsc[cat].title }}

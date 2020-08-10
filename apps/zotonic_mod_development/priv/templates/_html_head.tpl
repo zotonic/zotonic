@@ -1,4 +1,4 @@
-{% if m.config.mod_development.livereload.value %}
+{% if m.development.livereload %}
     {% lib "js/livereload.js" %}
 
     <script type="text/javascript">

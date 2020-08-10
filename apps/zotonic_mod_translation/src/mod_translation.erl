@@ -318,9 +318,10 @@ observe_dispatch_rewrite(#dispatch_rewrite{is_dir=IsDir}, {Parts, Args} = Dispat
     case Parts of
         [<<"id">>, Other] ->
             case z_utils:only_digits(Other) of
-                true -> Dispatch;
+                true ->
+                    Dispatch;
                 false ->
-                    case is_enabled_language(id, Context) of
+                    case is_enabled_language(<<"id">>, Context) of
                         true -> {[Other], [{z_language, <<"id">>}|Args]};
                         false -> Dispatch
                     end
@@ -491,6 +492,7 @@ set_user_language(Code, Context) ->
 set_default_language(Code, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
+            ok = language_status(Code, true, Context),
             CodeB = z_convert:to_binary(Code),
             case m_config:get_value(i18n, language, Context) of
                 CodeB -> ok;
@@ -529,11 +531,12 @@ valid_config_language(Code, Context, Tries) ->
     end.
 
 %% @doc Set/reset the is_enabled flag of a language.
--spec language_status(atom(), boolean() | editable, z:context()) -> ok | {error, string()}.
+-spec language_status(atom(), boolean() | editable, z:context()) -> ok | {error, nolang|default}.
 language_status(Code, Status, Context) when is_atom(Code), is_atom(Status) ->
     case z_language:default_language(Context) of
         Code when Status =/= true ->
-            {error, ?__(<<"Sorry, you can't disable the default language.">>, Context)};
+            % Can't disable the default language
+            {error, default};
         Code ->
             ok;
         _ ->
@@ -548,8 +551,7 @@ language_status(Code, Status, Context) when is_atom(Code), is_atom(Status) ->
                     end,
                     set_language_config(CL2, Context);
                 false ->
-                    % Not a language - ignore
-                    ok
+                    {error, nolang}
             end
     end.
 
@@ -685,6 +687,8 @@ maybe_language_code(<<A,B,C>> = Code) when A >= $a, A =< $z, B >= $a, B =< $z, C
 maybe_language_code(<<$x,$-,_/binary>> = Code) ->
     % x-default, x-klingon, etc.
     z_language:is_valid(Code);
+maybe_language_code(Code) when is_atom(Code) ->
+    maybe_language_code( atom_to_binary(Code, utf8) );
 maybe_language_code(_) ->
     false.
 
@@ -693,7 +697,9 @@ maybe_language_code(_) ->
 set_language_config(NewConfig, Context) ->
     case language_config(Context) of
         NewConfig -> ok;
-        _ ->  m_config:set_prop(i18n, languages, list, NewConfig, Context)
+        _ ->
+            SortedConfig = lists:sort(NewConfig),
+            m_config:set_prop(i18n, languages, list, SortedConfig, Context)
     end,
     z_memo:delete('mod_translation$enabled_languages'),
     ok.

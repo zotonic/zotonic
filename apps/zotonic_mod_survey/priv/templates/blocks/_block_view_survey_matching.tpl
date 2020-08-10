@@ -2,7 +2,7 @@
 
 {% if is_survey_answer_view %}
     {% with blk|survey_prepare_matching as props %}
-        <div class="control-group survey-matching">
+        <div class="form-group survey-matching">
             <label class="control-label">{{ blk.prompt }}</label>
             <ul>
                 {% for val,item in props.items %}
@@ -19,7 +19,7 @@
     {% include "blocks/_block_view_survey_matching_test.tpl" %}
 {% else %}
     {% with blk|survey_prepare_matching as props %}
-    <div class="control-group survey-matching question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
+    <div class="form-group survey-matching question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
         <label class="control-label">{{ blk.prompt }}</label>
     {% if blk.explanation %}
          <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>

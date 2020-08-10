@@ -29,6 +29,7 @@
 -export([
     m_get/3,
 
+    otp_version/0,
     session_count/1,
     page_count/1,
     tcp_connection_count/0,
@@ -45,6 +46,29 @@ m_get(Path, Msg, Context) ->
         false -> {error, eacces}
     end.
 
+m_get_1([ <<"otp_version">> | Rest ], _Msg, _Context) ->
+    {ok, {otp_version(), Rest}};
+m_get_1([ <<"security_dir">> | Rest ], _Msg, _Context) ->
+    case z_config_files:security_dir() of
+        {ok, Dir} ->
+            {ok, {Dir, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
+m_get_1([ <<"config_dir">> | Rest ], _Msg, _Context) ->
+    case z_config_files:config_dir() of
+        {ok, Dir} ->
+            {ok, {Dir, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
+m_get_1([ <<"work_dir">> | Rest ], _Msg, _Context) ->
+    case file:get_cwd() of
+        {ok, Dir} ->
+            {ok, {unicode:characters_to_binary(Dir), Rest}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get_1([ <<"session_count">> | Rest ], _Msg, Context) ->
     {ok, {session_count(Context), Rest}};
 m_get_1([ <<"page_count">> | Rest ], _Msg, Context) ->
@@ -89,6 +113,19 @@ m_get_1(_Path, _Msg, _Context) ->
 % This includes local sockets.
 tcp_connection_count() ->
     length(recon:tcp()).
+
+%% @doc Return the exact OTP version.
+-spec otp_version() -> binary().
+otp_version() ->
+    OtpVersionFile = filename:join([
+        code:root_dir(),
+        "releases",
+        erlang:system_info(otp_release),
+        "OTP_VERSION"
+    ]),
+    {ok, Version} = file:read_file(OtpVersionFile),
+    z_string:trim(Version).
+
 
 % Return the number of sessions of this site. 
 session_count(Context) ->

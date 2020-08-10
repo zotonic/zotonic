@@ -30,7 +30,7 @@
 
 
 answer(Block, Answers, _Context) ->
-    Name = proplists:get_value(name, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
     case proplists:get_value(Name, Answers) of
         undefined ->
             {error, missing};
@@ -47,28 +47,28 @@ prep_chart(_Q, [], _Context) ->
 prep_chart(Block, [{Name, {text, Vals0}}], Context) ->
     prep_chart(Block, [{Name, Vals0}], Context);
 prep_chart(Block, [{_, Vals}], Context) ->
-    CatName = proplists:get_value(category, Block),
+    CatName = maps:get(<<"category">>, Block, undefined),
     {Titles, Labels0} = lists:unzip(all_in_cat(CatName, Context)),
     Labels = [ z_convert:to_binary(Id) || Id <- Labels0 ],
     Values = [ proplists:get_value(C, Vals, 0) || C <- Labels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
-    [
-        {question, proplists:get_value(prompt, Block)},
-        {values, lists:zip(Titles, Values)},
-        {type, "pie"},
-        {data, [{L,P} || {L,P} <- lists:zip(Titles, Perc), P /= 0]}
-    ].
+    #{
+        <<"question">> => maps:get(<<"prompt">>, Block, undefined),
+        <<"values">> => lists:zip(Titles, Values),
+        <<"type">> => <<"pie">>,
+        <<"data">> => [{L,P} || {L,P} <- lists:zip(Titles, Perc), P /= 0]
+    }.
 
 all_in_cat(CatName, Context) ->
     #search_result{result=List} = z_search:search({all_bytitle, [{cat, CatName}]}, Context),
     List.
 
 prep_answer_header(Q, Context) ->
-    Name = proplists:get_value(name, Q),
-    CatName = proplists:get_value(category, Q),
+    Name = maps:get(<<"name">>, Q, undefined),
+    CatName = maps:get(<<"category">>, Q, undefined),
     Labels = [ z_convert:to_binary(Id) || {_Title,Id} <- all_in_cat(CatName, Context)],
-    case z_convert:to_bool(proplists:get_value(is_multiple, Q)) of
+    case z_convert:to_bool(maps:get(<<"is_multiple">>, Q, false)) of
         true -> [ <<Name/binary, $:, Label/binary>> || Label <- Labels ];
         false -> Name
     end.
@@ -81,7 +81,7 @@ prep_answer(Q, [{_Name, Value}|_], _Context) ->
     prep(Q, [Value]).
 
 prep(Q, Vs) ->
-    case z_convert:to_bool(proplists:get_value(is_multiple, Q)) of
+    case z_convert:to_bool(maps:get(<<"is_multiple">>, Q, false)) of
         false ->
             hd(Vs);
         true ->
@@ -90,7 +90,7 @@ prep(Q, Vs) ->
                     true -> K;
                     false -> <<>>
                 end
-                || {K, _} <- proplists:get_value(answers, Q)
+                || {K, _} <- maps:get(<<"answers">>, Q, [])
             ]
     end.
 

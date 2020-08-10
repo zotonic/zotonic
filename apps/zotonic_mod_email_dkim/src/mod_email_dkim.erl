@@ -38,18 +38,12 @@ init(Context) ->
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-     #menu_item{id=admin_dkim,
-                parent=admin_modules,
-                label=?__("DKIM e-mail setup", Context),
-                url={admin_dkim},
-                visiblecheck={acl, use, mod_email_dkim}}
+     #menu_item{id = admin_dkim,
+                parent = admin_modules,
+                label = ?__("DKIM e-mail setup", Context),
+                url = admin_dkim,
+                visiblecheck = {acl, use, mod_email_dkim}}
      |Acc].
 
 observe_dkim_admin_info(dkim_admin_info, Context) ->
-    {Priv, Pub} = z_email_dkim:cert_files(Context),
-    [
-     {privkey_filepath, Priv},
-     {pubkey_filepath, Pub},
-     {dns_entry_domain, z_email_dkim:dns_entry_domain(Context)},
-     {dns_entry, z_email_dkim:dns_entry(Context)}
-    ].
+    m_email_dkim:admin_info(Context).

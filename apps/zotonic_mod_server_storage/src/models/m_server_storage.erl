@@ -177,7 +177,7 @@ secure_store(Key, Value, Context) ->
     end.
 
 %% @doc Find all keys in the secure session, without access via the model access functions.
--spec secure_lookup( z:context() ) -> ok | {error, no_session | not_found | term()}.
+-spec secure_lookup( z:context() ) -> {ok, term()} | {error, no_session | not_found | term()}.
 secure_lookup(Context) ->
     case z_context:session_id(Context) of
         {ok, Sid} ->
@@ -187,7 +187,7 @@ secure_lookup(Context) ->
     end.
 
 %% @doc Find a key in the secure session, without access via the model access functions.
--spec secure_lookup( term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
+-spec secure_lookup( term(), z:context() ) -> {ok, term()} | {error, no_session | not_found | term()}.
 secure_lookup(Key, Context) ->
     case z_context:session_id(Context) of
         {ok, Sid} ->
@@ -197,7 +197,7 @@ secure_lookup(Key, Context) ->
     end.
 
 %% @doc Delete a key from the session, without access via the model access functions.
--spec secure_delete( term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
+-spec secure_delete( term(), z:context() ) -> {ok, term()} | {error, no_session | not_found | term()}.
 secure_delete(Key, Context) ->
     case z_context:session_id(Context) of
         {ok, Sid} ->

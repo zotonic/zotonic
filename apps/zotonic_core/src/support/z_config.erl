@@ -40,8 +40,8 @@
 %% @doc Copy some zotonic config settings over to other applications
 -spec init_app_env() -> ok.
 init_app_env() ->
-    application:set_env(cowmachine, proxy_whitelist, ?MODULE:get(proxy_whitelist)),
-    application:set_env(cowmachine, ip_whitelist, ?MODULE:get(ip_whitelist)),
+    application:set_env(cowmachine, proxy_allowlist, ?MODULE:get(proxy_allowlist)),
+    application:set_env(cowmachine, ip_allowlist, ?MODULE:get(ip_allowlist)),
     ok.
 
 
@@ -149,9 +149,14 @@ map_ip_address(_Name, any) -> any;
 map_ip_address(_Name, "any") -> any;
 map_ip_address(_Name, "") -> any;
 map_ip_address(_Name, "*") -> any;
+map_ip_address(_Name, <<>>) -> any;
+map_ip_address(_Name, <<"any">>) -> any;
+map_ip_address(_Name, <<"*">>) -> any;
 map_ip_address(_Name, none) -> none;
 map_ip_address(_Name, "none") -> none;
-map_ip_address(_Name, IP) when is_tuple(IP) -> IP;
+map_ip_address(_Name, <<"none">>) -> none;
+map_ip_address(_Name, IP) when is_tuple(IP) ->
+    IP;
 map_ip_address(Name, IP) when is_list(IP) ->
     case getaddr(Name, IP) of
         {ok, IpN} -> IpN;
@@ -160,6 +165,8 @@ map_ip_address(Name, IP) when is_list(IP) ->
                         [Name, IP, Reason]),
             none
     end;
+map_ip_address(Name, IP) when is_binary(IP) ->
+    map_ip_address(Name, binary_to_list(IP));
 map_ip_address(smtp_spamd_ip, undefined) ->
     none;
 map_ip_address(Name, IP) ->
@@ -221,8 +228,8 @@ default(smtp_listen_ip) -> {127,0,0,1};
 default(smtp_listen_port) -> 2525;
 default(smtp_spamd_ip) -> none;
 default(smtp_spamd_port) -> 783;
-default(smtp_dnsbl) -> z_email_dnsbl:dnsbl_list();
-default(smtp_dnswl) -> z_email_dnsbl:dnswl_list();
+default(smtp_dns_blocklist) -> z_email_dnsbl:dns_blocklist();
+default(smtp_dns_allowlist) -> z_email_dnsbl:dns_allowlist();
 default(smtp_delete_sent_after) -> 240;
 default(mqtt_listen_ip) -> ?MODULE:get(listen_ip);
 default(mqtt_listen_ip6) -> ?MODULE:get(listen_ip6);
@@ -242,15 +249,16 @@ default(dbpassword) -> "zotonic";
 default(dbdatabase) -> "zotonic";
 default(dbschema) -> "public";
 default(filewatcher_enabled) -> true;
-default(filewatcher_scanner_enabled) -> false;
+default(filewatcher_scanner_enabled) -> true;
+default(filewatcher_scanner_interval) -> 10000;
 default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
 default(syslog_level) -> info;
 default(zotonic_apps) -> filename:join([ z_path:get_path(), "apps_user" ]);
-default(proxy_whitelist) -> local;
-default(ip_whitelist) -> local;
-default(ip_whitelist_system_management) -> any;
+default(proxy_allowlist) -> local;
+default(ip_allowlist) -> local;
+default(ip_allowlist_system_management) -> any;
 default(sessionjobs_limit) -> erlang:max(erlang:system_info(process_limit) div 10, 10000);
 default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 50000);
 default(server_header) -> "Zotonic";
@@ -306,8 +314,8 @@ all() ->
             smtp_listen_port,
             smtp_spamd_ip,
             smtp_spamd_port,
-            smtp_dnsbl,
-            smtp_dnswl,
+            smtp_dns_blocklist,
+            smtp_dns_allowlist,
             smtp_delete_sent_after,
             mqtt_listen_ip,
             mqtt_listen_ip6,
@@ -322,13 +330,14 @@ all() ->
             ssl_dhfile,
             filewatcher_enabled,
             filewatcher_scanner_enabled,
+            filewatcher_scanner_interval,
             syslog_ident,
             syslog_opts,
             syslog_facility,
             syslog_level,
-            proxy_whitelist,
-            ip_whitelist,
-            ip_whitelist_system_management,
+            proxy_allowlist,
+            ip_allowlist,
+            ip_allowlist_system_management,
             sessionjobs_limit,
             sidejobs_limit,
             server_header,

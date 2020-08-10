@@ -31,12 +31,12 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 to_block(Q) ->
-    [
-        {type, survey_page_break},
-        {name, z_convert:to_binary(Q#survey_question.name)},
-        {condition1, z_convert:to_binary(Q#survey_question.text)},
-        {target1, z_convert:to_binary(Q#survey_question.question)}
-    ].
+    #{
+        <<"type">> => <<"survey_page_break">>,
+        <<"name">> => z_convert:to_binary(Q#survey_question.name),
+        <<"condition1">> => z_convert:to_binary(Q#survey_question.text),
+        <<"target1">> => z_convert:to_binary(Q#survey_question.question)
+    }.
 
 
 answer(_Block, _Answers, _Context) ->

@@ -150,8 +150,8 @@ abs_url(Url, Context) ->
     abs_url(Url, undefined, [], Context).
 
 %% @doc Fetch the dispatchlist for the site.
--spec dispatchinfo(#context{}|pid()|atom()) ->
-              {ok, atom(), binary()|string(), binary()|string(), list(), boolean(), list()}
+-spec dispatchinfo( z:context() | pid() | atom() ) ->
+              {ok, {atom(), binary()|string(), binary()|string(), list(), boolean(), list()}}
             | {error, noproc}.
 dispatchinfo(#context{dispatcher=Dispatcher}) ->
     dispatchinfo(Dispatcher);
@@ -402,7 +402,7 @@ collect_dispatch_lists(Context) ->
 get_file_dispatch(File) ->
     try
         case filelib:is_regular(File)
-            andalso not zotonic_filewatcher_handler:is_file_blacklisted(File)
+            andalso not zotonic_filewatcher_handler:is_file_blocked(File)
         of
             true ->
                 Basename = filename:basename(File),
@@ -430,7 +430,8 @@ dispatch_for_uri_lookup(DispatchList) ->
 
 dispatch_for_uri_lookup1([], Dict) ->
     Dict;
-dispatch_for_uri_lookup1([{Name, Pattern, _Resource, DispatchOptions}|T], Dict) ->
+dispatch_for_uri_lookup1([{Name, Pattern, Controller, DispatchOptions}|T], Dict)
+    when is_atom(Name), is_list(Pattern), is_atom(Controller), is_list(DispatchOptions) ->
     Vars  = lists:foldl(fun(A, Acc) when is_atom(A) -> [A|Acc];
                            ({A,_RegExp}, Acc) when is_atom(A) -> [A|Acc];
                            (_, Acc) -> Acc
@@ -441,7 +442,11 @@ dispatch_for_uri_lookup1([{Name, Pattern, _Resource, DispatchOptions}|T], Dict) 
                 true  -> dict:append(Name, {length(Vars), Vars, Pattern, DispatchOptions}, Dict);
                 false -> dict:store(Name, [{length(Vars), Vars, Pattern, DispatchOptions}], Dict)
             end,
-    dispatch_for_uri_lookup1(T, Dict1).
+    dispatch_for_uri_lookup1(T, Dict1);
+dispatch_for_uri_lookup1([IllegalDispatch|T], Dict) ->
+    lager:error("Dropping malformed dispatch rule: ~p", [ IllegalDispatch ]),
+    dispatch_for_uri_lookup1(T, Dict).
+
 
 
 
@@ -497,7 +502,7 @@ make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) ->
                         S
                 end,
     UriParts = lists:map(ReplArgs, Pattern),
-    Uri      = [$/ | z_utils:combine($/, UriParts)],
+    Uri      = [$/ | lists:join($/, UriParts)],
     case QueryStringArgs of
         [] ->
             #dispatch_url{
@@ -524,7 +529,7 @@ path_argval('*', Args) ->
         undefined -> <<>>;
         L when is_list(L) ->
             List1 = [ cow_qs:urlencode(z_convert:to_binary(B)) || B <- L ],
-            z_utils:combine($/, List1);
+            lists:join($/, List1);
         V ->
             z_convert:to_binary(V)
     end;

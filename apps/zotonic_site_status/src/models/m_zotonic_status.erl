@@ -51,6 +51,17 @@ m_get([ <<"site_url">>, Site | Rest ], _Msg, Context) ->
         false ->
             {error, eacces}
     end;
+m_get([ <<"check">> | Rest ], _Msg, _Context) ->
+     case z_sites_manager:is_sites_running() of
+        true ->
+            {ok, {<<"ok">>, Rest}};
+        false ->
+            {error, #{
+                <<"status">> => <<"error">>,
+                <<"error">> => <<"fail">>,
+                <<"message">> => <<"Not all sites are running.">>
+            }}
+    end;
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

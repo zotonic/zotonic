@@ -27,18 +27,18 @@ The query-model is exposed to the browser in (currently) 2 URLs: the
 Atom feed module for creating a customized update feed, and the API
 for receiving lists of ids in JSON.
 
-Get all resource of the "documentation" category on zotonic.com:
+Get all resources of the "documentation" category on zotonic.com:
 
-http://zotonic.com/api/search?cat=documentation
+https://zotonic.com/api/model/search/get?qcat=documentation
 
 Get a feed of most recent documentation containing the word "filter":
 
-http://zotonic.com/feed/search?cat=documentation&text=filter
+https://zotonic.com/feed/search?cat=documentation&text=filter
 
 .. note::
 
    ``mod_atom_feed`` automatically sorts on last-modified date,
-   ``api/search`` doesn't.
+   ``api/model/search/get`` doesn't.
 
 
 Query arguments

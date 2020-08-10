@@ -18,10 +18,18 @@
 <div>
     {% if m.acl.use.mod_admin_config %}
         {% if m.modules.active.mod_signup %}
-            <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {_ The signup module is enabled, users authenticating via the services below are automatically signed up. _}</p>
+            <p><span class="glyphicon glyphicon-info-sign"></span> {_ The signup module is enabled, users authenticating via the services below are automatically signed up. _}</p>
         {% else %}
-            <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> {_ Enable the signup module to automatically sign up users that are authenticating via the services below. _} <a href="{% url admin_modules %}">{_ Go to Modules _}</a></p>
+            <p ><span class="glyphicon glyphicon-info-sign"></span> {_ Enable the signup module to automatically sign up users that are authenticating via the services below. _} <a href="{% url admin_modules %}">{_ Go to Modules _}</a></p>
         {% endif %}
+
+        {% if m.modules.active.mod_oauth2 %}
+            <p>
+                <span class="glyphicon glyphicon-info-sign"></span>
+                {_ The redirect URL for OAuth configurations is: _}
+                <tt>{{ m.oauth2_service.redirect_url }}</tt>
+            </p>
+            {% endif %}
 
         {% all include "_admin_authentication_service.tpl" %}
 

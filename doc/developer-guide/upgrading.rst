@@ -170,6 +170,17 @@ Configuration
 
     ZOTONIC_LISTEN_PORT=80 ZOTONIC_SSL_LISTEN_PORT=443 bin/zotonic start
 
+* Black/white-lists are now called block/allow-lists.
+
+  - ``proxy_whitelist`` is now ``proxy_allowlist``
+  - ``smtp_dnsbl`` is now ``smtp_dns_blocklist``
+  - ``smtp_dnswl`` is now ``smtp_dns_allowlist``
+  - ``ip_whitelist`` is now ``ip_allowlist``
+  - ``ip_whitelist_system_management`` is now ``ip_allowlist_system_management``
+
+  If an IP is on DNS allowlist then ``z_email_dnsbl:status/2`` returns now ``{ok, allowed}``.
+
+
 Errors
 ^^^^^^
 
@@ -212,16 +223,17 @@ JSON
 * ``{trans, _}`` tuples should now be unpacked by the client, before calling
   ``z_json:encode/1`` (previously ``z_json:to_mochijson/2``).
 
-Removed deprecated functions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Removed or deprecated functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Deprecated functions have been removed from ``z_utils``. Use the ``z_url`` and
   ``z_json`` modules instead.
 * Deprecated function ``z_utils:name_for_host/2`` has been removed; use
   ``z_utils:name_for_site/2`` instead.
-* The ``{% stream %}`` tag was removed.
+* The ``{% stream %}`` tag was removed, use MQTT websocket instead
 * Removed older TinyMCE versions 3.5.0 and 4.2.4.
-
+* ``z_utils:combine/2`` is removed, use ``lists:join/2`` instead.
+* ``z_utils:combine_defined/2`` is renamed to ``z_utils:join_defined/2``.
 
 Module schema and data initialization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

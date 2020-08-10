@@ -1,6 +1,6 @@
 {application, zotonic_mod_geoip, [
     {description, "Map IP addresses to geo locations.."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [
         kernel, stdlib,

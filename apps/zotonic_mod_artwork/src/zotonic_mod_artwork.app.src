@@ -1,6 +1,6 @@
 {application, zotonic_mod_artwork, [
     {description, "Art work for your site. Social icons, file icons etc."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

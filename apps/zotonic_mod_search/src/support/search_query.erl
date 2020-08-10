@@ -54,7 +54,7 @@ qargs(Context) ->
     lists:filtermap(
                 fun
                     ({<<"qargs">>, _}) -> false;
-                    ({<<"qs">>, V}) -> {true, {"text", V}};
+                    ({<<"qs">>, V}) -> {true, {<<"text">>, V}};
                     ({<<"q", Term/binary>>, V}) -> {true, {Term, V}};
                     (_) -> false
                 end,
@@ -238,7 +238,7 @@ parse_query([{hasanyobject, ObjPreds}|Rest], Context, Result) ->
     OPClauses = [ object_predicate_clause(Alias, Obj,Pred) || {Obj,Pred} <- OPs ],
     Where = lists:flatten([
                 "rsc.id in (select ", Alias ,".subject_id from edge ",Alias," where (",
-                    z_utils:combine(") or (", OPClauses),
+                    lists:join(") or (", OPClauses),
                 "))"
                 ]),
     Result1 = add_where(Where, Result),
@@ -386,21 +386,15 @@ parse_query([{qargs, Boolean}|Rest], Context, Result) ->
 %% query_id=<rsc id>
 %% Get the query terms from given resource ID, and use those terms.
 parse_query([{query_id, Id}|Rest], Context, Result) ->
-    case m_category:is_a(m_rsc:p(Id, category_id, Context), 'query', Context) of
-        true ->
-            QArgs = try
-                        parse_query_text(z_html:unescape(m_rsc:p(Id, 'query', Context)))
-                    catch
-                        throw:{error,{unknown_query_term,Term}} ->
-                            lager:error("[~p] Unknown query term in search query ~p: ~p",
-                                        [z_context:site(Context), Id, Term]),
-                            []
-                    end,
-            parse_query(QArgs ++ Rest, Context, Result);
-        false ->
-                                                % Fetch the id's haspart objects (assume a collection)
-            parse_query([{hassubject, [Id, haspart]} | Rest], Context, Result)
-    end;
+    QArgs = try
+                parse_query_text(z_html:unescape(m_rsc:p(Id, 'query', Context)))
+            catch
+                throw:{error,{unknown_query_term,Term}} ->
+                    lager:error("[~p] Unknown query term in search query ~p: ~p",
+                                [z_context:site(Context), Id, Term]),
+                    []
+            end,
+    parse_query(QArgs ++ Rest, Context, Result);
 
 %% rsc_id=<rsc id>
 %% Filter to *only* include the given rsc id. Can be used for resource existence check.
@@ -475,7 +469,7 @@ parse_query([{match_objects, RId}|Rest], Context, Result) ->
 parse_query([{match_object_ids, ObjectIds} | Rest], Context, Result) ->
     ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- ObjectIds ],
     MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, is_integer(ObjId) ],
-    TsQuery = lists:flatten(z_utils:combine("|", MatchTerms)),
+    TsQuery = lists:flatten(lists:join("|", MatchTerms)),
     case TsQuery of
         [] ->
             #search_result{};
@@ -728,52 +722,41 @@ assure_categories(Name, Context) ->
     Cats = assure_cats_list(Name),
     Cats1 = assure_cat_flatten(Cats),
     lists:foldl(fun(C, Acc) ->
-                        case assure_category(C, Context) of
-                            undefined -> Acc;
-                            error -> ['$error'|Acc];
-                            {ok, N} -> [N|Acc]
-                        end
+                    case assure_category(C, Context) of
+                        undefined -> Acc;
+                        error -> ['$error'|Acc];
+                        {ok, N} -> [N|Acc]
+                    end
                 end,
                 [],
                 Cats1).
 
-assure_cats_list(Name) when is_list(Name) ->
-    case z_string:is_string(Name) of
-        true -> [ iolist_to_binary(Name) ];
-        false -> Name
-    end;
+%% Make a single category a list
+assure_cats_list(Names) when is_list(Names) ->
+    Names;
 assure_cats_list(Name) ->
     [ Name ].
 
-%% Flatten eventual lists of categories
+%% Split strings with comma separated lists of categories
 -spec assure_cat_flatten(any() | list()) -> list().
 assure_cat_flatten(Names) ->
-    lists:flatten([
-                     case is_list(N) of
-                         true ->
-                             case z_string:is_string(N) of
-                                 true -> binary:split(iolist_to_binary(N), <<",">>, [ global ]);
-                                 false -> assure_cat_flatten(N)
-                             end;
-                         false ->
-                             N
-                     end
-                     || N <- Names]).
+    lists:flatten(
+        lists:map(
+            fun
+                (S) when is_binary(S) ->
+                    binary:split(S, <<",">>, [ global ]);
+                (Name) ->
+                    Name
+            end,
+            Names)).
 
 %% Make sure the given name is a category.
-assure_category([], _) -> undefined;
-assure_category(<<>>, _) -> undefined;
 assure_category(undefined, _) -> undefined;
-assure_category([$'|_] = Name, Context) ->
-    case lists:last(Name) of
-        $' -> assure_category_1(z_string:trim(Name, $'), Context);
-        _ -> assure_category_1(Name, Context)
-    end;
-assure_category([$"|_] = Name, Context) ->
-    case lists:last(Name) of
-        $" -> assure_category_1(z_string:trim(Name, $"), Context);
-        _ -> assure_category_1(Name, Context)
-    end;
+assure_category(null, _) -> undefined;
+assure_category("", _) -> undefined;
+assure_category("*", _) -> undefined;
+assure_category(<<>>, _) -> undefined;
+assure_category(<<"*">>, _) -> undefined;
 assure_category(<<$', _/binary>> = Name, Context) ->
     case binary:last(Name) of
         $' -> assure_category_1(z_string:trim(Name, $'), Context);

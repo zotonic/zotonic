@@ -19,8 +19,10 @@ parse(Expr) when is_binary(Expr) ->
     case template_compiler_scanner:scan(<<"{{", Expr/binary, "}}">>) of
         {ok, Tokens} ->
             case template_compiler_parser:parse(Tokens) of
-                {ok, {base, [Tree|_]}} -> {ok, simplify(Tree)};
-                Err -> Err
+                {ok, {base, [Tree|_]}} ->
+                    {ok, simplify(Tree)};
+                Err ->
+                    Err
             end;
         {error, _} = Error ->
             Error
@@ -31,9 +33,9 @@ parse(Expr) ->
 
 simplify({find_value, [Value]}) ->
     simplify(Value);
-simplify({expr, Op, Left, Right}) ->
+simplify({expr, {Op, _}, Left, Right}) ->
     {expr, z_convert:to_atom(Op), simplify(Left), simplify(Right)};
-simplify({expr, Op, Expr}) ->
+simplify({expr, {Op, _}, Expr}) ->
     {expr, z_convert:to_atom(Op), simplify(Expr)};
 simplify({identifier, _, <<"m">>}) ->
     m;
@@ -55,7 +57,7 @@ simplify({apply_filter, Expr, {filter, {identifier,_,Filter}, Args}}) ->
         z_convert:to_atom(Filter),
         simplify(Expr),
         [ simplify(Arg) || Arg <- Args ]};
-simplify({value, Expr, []}) ->
+simplify({value, _, Expr, []}) ->
     simplify(Expr).
 
 

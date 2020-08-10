@@ -28,6 +28,9 @@ m_get([ <<"pivot_queue_count">> | Rest ], _Msg, Context) ->
     end;
 m_get([ <<"rsc_dialog_is_published">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_admin, rsc_dialog_is_published, Context), Rest}};
+m_get([ <<"connect_created_me">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_admin, connect_created_me, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:info("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
+

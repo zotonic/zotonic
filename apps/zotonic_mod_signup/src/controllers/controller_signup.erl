@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2013 Marc Worrell
+%% @copyright 2010-2020 Marc Worrell
 %% @doc Display a form to sign up.
 
-%% Copyright 2010-2013 Marc Worrell
+%% Copyright 2010-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,15 +31,22 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context2 = z_context:ensure_qs(Context),
     z_context:lager_md(Context2),
     Vars = case z_context:get_q(<<"xs">>, Context2) of
-                undefined ->
-                    [];
-                Check ->
+        undefined ->
+            [];
+        <<>> ->
+            [];
+        Check ->
+            % Set in mod_signup when fetching signup_url
+            case m_server_storage:secure_lookup(Check, Context) of
+                {ok, {Check, Props, SignupProps}} ->
+                    [
+                        {xs_props, {Props, SignupProps}}
+                        | Props
+                    ];
+                {error, _} ->
                     []
-                    % case z_session:get(signup_xs, Context2) of
-                    %     {Check, Props, SignupProps} -> [ {xs_props, {Props,SignupProps}} | Props ];
-                    %     _ -> []
-                    % end
-            end,
+            end
+    end,
     % z_session:set(signup_xs, undefined, Context),
     Rendered = z_template:render(<<"signup.tpl">>, Vars, Context2),
     z_context:output(Rendered, Context2).
@@ -51,13 +58,18 @@ event(#submit{message={signup, Args}, form= <<"signup_form">>}, Context) ->
         {A,B} -> {A,B};
         undefined -> {undefined, undefined}
     end,
-    XsProps = case XsProps0 of undefined -> []; _ -> XsProps0 end,
+    XsProps = case is_list(XsProps0) of
+        false -> [];
+        true -> XsProps0
+    end,
 
     %% Call listeners to fetch the required signup form fields
-    FormProps0 = [{email, true},
-                  {name_first, true},
-                  {name_surname_prefix, false},
-                  {name_surname, true}],
+    FormProps0 = [
+        {email, true},
+        {name_first, true},
+        {name_surname_prefix, false},
+        {name_surname, true}
+    ],
     FormProps = z_notifier:foldr(signup_form_fields, FormProps0, Context),
 
     Props = lists:map(fun({Prop, Validate}) ->
@@ -71,27 +83,37 @@ event(#submit{message={signup, Args}, form= <<"signup_form">>}, Context) ->
             {email, Email} = proplists:lookup(email, Props),
             RequestConfirm = z_convert:to_bool(m_config:get_value(mod_signup, request_confirm, true, Context)),
             SignupProps = case is_set(XsSignupProps) of
-                              true ->
-                                  XsSignupProps;
-                              false ->
-                                  Username = case z_convert:to_bool(m_config:get_value(mod_signup, username_equals_email, false, Context)) of
-                                                 false -> z_string:trim(z_context:get_q_validated(<<"username">>, Context));
-                                                 true -> Email
-                                             end,
-                                  [ {identity, {username_pw,
-                                                {Username,
-                                                 z_context:get_q_validated(<<"password1">>, Context)},
-                                                true,
-                                                true}}
-                                  ]
-                            end,
+                true ->
+                    XsSignupProps;
+                false ->
+                    Username = case z_convert:to_bool(m_config:get_value(mod_signup, username_equals_email, false, Context)) of
+                        false -> z_string:trim(z_context:get_q_validated(<<"username">>, Context));
+                        true -> Email
+                    end,
+                    [
+                        {identity,
+                            {username_pw,
+                                {   Username,
+                                    z_context:get_q_validated(<<"password1">>, Context)},
+                                    true,
+                                    true}}
+                  ]
+            end,
             SignupProps1 = case Email of
-                [] -> SignupProps;
-                <<>> -> SignupProps;
-                _ ->  case has_email_identity(Email, SignupProps) of
-                        false -> [ {identity, {email, Email, false, false}} | SignupProps ];
-                        true -> SignupProps
-                      end
+                "" ->
+                    SignupProps;
+                <<>> ->
+                    SignupProps;
+                _ ->
+                    case has_email_identity(Email, SignupProps) of
+                        false ->
+                            [
+                                {identity, {email, Email, false, false}}
+                                | SignupProps
+                            ];
+                        true ->
+                            SignupProps
+                    end
             end,
             signup(Props, SignupProps1, RequestConfirm, Context);
         false ->
@@ -111,13 +133,13 @@ fetch_prop(Prop, Validated, SignupProps, Context) ->
     end.
 
 is_set(undefined) -> false;
-is_set([]) -> false;
+is_set("") -> false;
 is_set(<<>>) -> false;
 is_set(_) -> true.
 
 has_email_identity(_Email, []) -> false;
-has_email_identity(Email, [{identity, {email, Email, _, _}}|_]) -> true;
-has_email_identity(Email, [_|Rest]) -> has_email_identity(Email, Rest).
+has_email_identity(Email, [ {identity, {email, Email, _, _}} | _ ]) -> true;
+has_email_identity(Email, [ _ | Rest ]) -> has_email_identity(Email, Rest).
 
 
 %% @doc Sign up a new user. Check if the identity is available.
@@ -153,7 +175,16 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
                 Url ->
                     Url
             end,
-            z_render:wire({redirect, [{location, Location}]}, ContextUser);
+            % Post a onetime-token to the auth worker on the page
+            % The auth worker will exchange it for a valid cookie and then perform
+            % the redirect to the url. 
+            Token = z_authentication_tokens:encode_onetime_token(UserId, ContextUser),
+            AuthMsg = #{
+                token => Token,
+                url => z_convert:to_binary( Location )
+            },
+            z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
+            z_render:wire({mask, []}, Context);
         false ->
             % User is not yet verified, send a verification message to the user's external identities
             case mod_signup:request_verification(UserId, Context) of

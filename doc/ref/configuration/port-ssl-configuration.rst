@@ -31,7 +31,7 @@ on ports 80 and/or 443.
 The port configurations would be:
 
 +---------------+------------+-----------------+------+------------+-----------+-----------------+
-|Method         |listen_port | ssl_listen_port | port | ssl_port   | listen_ip | proxy_whitelist |
+|Method         |listen_port | ssl_listen_port | port | ssl_port   | listen_ip | proxy_allowlist |
 +===============+============+=================+======+============+===========+=================+
 |authbind       |80          | 443             | 80   | 443        | any       | none            |
 +---------------+------------+-----------------+------+------------+-----------+-----------------+
@@ -42,7 +42,7 @@ The port configurations would be:
 |http only      |8000        | none            | 80   | none       | 127.0.0.1 | none            |
 +---------------+------------+-----------------+------+------------+-----------+-----------------+
 
-For *Network Address Translation* (NAT), see the next section. The *proxy_whitelist* is explained
+For *Network Address Translation* (NAT), see the next section. The *proxy_allowlist* is explained
 in the section about proxies below.
 
 In the case of *iptables* we restrict Zotonic to listen on the local 127.0.0.1 address.
@@ -59,12 +59,12 @@ With *Network Address Translation* (NAT) the traffic is routed straight to the s
 mappings. This is typical for a situation where Zotonic runs on a local server behind a modem.
 
 +---------------+------------+-----------------+------+------------+-----------+-----------------+
-|Proxy method   |listen_port | ssl_listen_port | port | ssl_port   | listen_ip | proxy_whitelist |
+|Proxy method   |listen_port | ssl_listen_port | port | ssl_port   | listen_ip | proxy_allowlist |
 +===============+============+=================+======+============+===========+=================+
 |NAT (eg. modem)|8000        | 8443            | 80   | 443        | any       | none            |
 +---------------+------------+-----------------+------+------------+-----------+-----------------+
 
-The *proxy_whitelist* is explained in the section about proxies below.
+The *proxy_allowlist* is explained in the section about proxies below.
 
 Server behind a proxy like Nginx or HAProxy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -76,7 +76,7 @@ Typically the proxy connects to the default ports 8000 and 8443 on the Zotonic s
 The proxy itself could be running on the local server or another server.
 
 +---------------+------------+-----------------+------+------------+-----------+-----------------+
-|Proxy method   |listen_port | ssl_listen_port | port | ssl_port   | listen_ip | proxy_whitelist |
+|Proxy method   |listen_port | ssl_listen_port | port | ssl_port   | listen_ip | proxy_allowlist |
 +===============+============+=================+======+============+===========+=================+
 |localhost proxy|8000        | none            | 80   | 443        | 127.0.0.1 | local           |
 +---------------+------------+-----------------+------+------------+-----------+-----------------+
@@ -93,9 +93,9 @@ Everybody could add this header and then connect directly to the Zotonic server,
 wrong assumptions about the IP address of the visitor and if the visitor is on a secure connection.
 
 To prevent the visitor spoofing the *Forward* header, Zotonic will check if the *inside* address of the
-proxy (as seen from Zotonic, not from the visitor) is on a whitelist of allowed proxies.
+proxy (as seen from Zotonic, not from the visitor) is on a list of allowed proxies.
 
-This whitelist is specified in ``proxy_whitelist`` and can have the following values:
+This allowlist is specified in ``proxy_allowlist`` and can have the following values:
 
  * ``local`` - default, only LAN addresses can connect
  * ``none`` - no proxy exists, ignore proxy headers

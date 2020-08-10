@@ -229,7 +229,7 @@ do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Context) ->
 maybe_delete_dependent(Id, Context) ->
     case m_rsc:p_no_acl(Id, is_dependent, Context) of
         true ->
-            Key = iolist_to_binary([<<"delete_if_unconnected-">>, integer_to_list(Id)]),
+            Key = z_convert:to_binary(Id),
             z_pivot_rsc:insert_task_after(20, ?MODULE, delete_if_unconnected, Key, [Id], Context);
         _False ->
             ok

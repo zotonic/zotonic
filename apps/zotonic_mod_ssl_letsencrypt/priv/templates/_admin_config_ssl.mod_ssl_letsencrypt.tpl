@@ -42,5 +42,10 @@
                 {_ Only admnistrators can request certificates. _}
             </p>
         {% endif %}
+
+        <p class="help-block">
+            <i class="glyphicon glyphicon-info-sign"></i> {_ If there are problems requesting a Let’s Encrypt certificate then check: _}
+            <a target="_blank" href="https://letsdebug.net/">letsdebug.net</a>
+        </p>
     </div>
 </div>

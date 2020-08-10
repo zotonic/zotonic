@@ -13,12 +13,15 @@ you through all aspects of the framework.
    introduction
    getting-started
    docker
+   directory-structure
    sites
+   status-site
    controllers
    dispatch-rules
    resources
    templates
    media
+   icons
    forms-and-validation
    search
    translation
@@ -32,6 +35,7 @@ you through all aspects of the framework.
    logging
    testing
    deployment/index
+   troubleshooting
    contributing
    releasenotes/index
    upgrading

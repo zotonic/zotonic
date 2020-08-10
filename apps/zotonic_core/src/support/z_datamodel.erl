@@ -192,7 +192,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
     end.
 
 update_new_props(Module, Id, NewProps, Options, Context) ->
-    case m_rsc:p(Id, <<"managed_props">>, Context) of
+    case map_props( m_rsc:p_no_acl(Id, <<"managed_props">>, Context) ) of
         undefined ->
             NewProps;
         PreviousProps ->
@@ -226,14 +226,20 @@ update_new_props(Module, Id, NewProps, Options, Context) ->
                 NewProps)
     end.
 
+map_props(undefined) ->
+    undefined;
+map_props(Props) when is_map(Props) ->
+    Props;
+map_props(Props) when is_list(Props) ->
+    z_props:from_props(Props).
 
 maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
-    case lists:member(force_update, Options) of
+    case proplists:get_value(force_update, Options, false) of
         true ->
             lager:info("~p: ~p of ~p changed in database, forced update.", [Module, K, Id]),
             Props#{ K => V };
         false ->
-            lager:info("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]),
+            lager:debug("~p: ~p of ~p changed in database, not updating.", [Module, K, Id]),
             Props
     end.
 

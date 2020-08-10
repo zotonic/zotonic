@@ -1,6 +1,6 @@
 {application, zotonic_mod_mailinglist, [
     {description, "Mailing lists. Send a page to a list of recipients."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

@@ -1,5 +1,5 @@
 {% with blk|survey_prepare_matching as props %}
-    <div class="{% if blk.is_test_direct %}do_survey_test_feedback {% endif %}control-group survey-matching question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
+    <div class="{% if blk.is_test_direct %}do_survey_test_feedback {% endif %}form-group survey-matching question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
         <label class="control-label">{{ blk.prompt }}</label>
     {% if blk.explanation %}
          <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>

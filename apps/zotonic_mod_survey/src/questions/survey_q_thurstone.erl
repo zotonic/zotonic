@@ -33,10 +33,11 @@
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 
+-spec answer( map(), list(), z:context() ) -> {ok, list()} | {error, missing}.
 answer(Block, Answers, Context) ->
-    Name = proplists:get_value(name, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-    Options = proplists:get_value(answers, Props),
+    Options = maps:get(<<"answers">>, Props),
     case proplists:get_value(Name, Answers) of
         undefined ->
             {error, missing};
@@ -52,39 +53,42 @@ answer(Block, Answers, Context) ->
 
 is_defined_value(_Val, []) -> false;
 is_defined_value(Val, [Opt|Options]) ->
-    case proplists:get_value(value, Opt) of
+    case maps:get(<<"value">>, Opt) of
         Val -> true;
         _ -> is_defined_value(Val, Options)
     end.
 
+-spec prep_chart( map(), list(), z:context() ) -> map() | undefined.
 prep_chart(_Q, [], _Context) ->
     undefined;
 prep_chart(Block, [{Name, {text, Vals0}}], Context) ->
     prep_chart(Block, [{Name, Vals0}], Context);
 prep_chart(Block, [{_, Vals}], Context) ->
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-    Answers = proplists:get_value(answers, Props),
-    Labels = [ proplists:get_value(option, Ans) || Ans <- Answers ],
-    ValueLabels = [ proplists:get_value(value, Ans) || Ans <- Answers ],
+    Answers = maps:get(<<"answers">>, Props),
+    Labels = [ maps:get(<<"option">>, Ans) || Ans <- Answers ],
+    ValueLabels = [ maps:get(<<"value">>, Ans) || Ans <- Answers ],
     Values = [ proplists:get_value(C, Vals, 0) || C <- ValueLabels ],
     Sum = case lists:sum(Values) of 0 -> 1; N -> N end,
     Perc = [ round(V*100/Sum) || V <- Values ],
-    [
-        {question, proplists:get_value(prompt, Block)},
-        {values, lists:zip(Labels, Values)},
-        {type, "pie"},
-        {data, [{L,P} || {L,P} <- lists:zip(Labels, Perc), P /= 0]},
-        {answers, Answers}
-    ].
+    #{
+        <<"question">> => maps:get(<<"prompt">>, Block, undefined),
+        <<"values">> => lists:zip(Labels, Values),
+        <<"type">> => <<"pie">>,
+        <<"data">> => [{L,P} || {L,P} <- lists:zip(Labels, Perc), P /= 0],
+        <<"answers">> => Answers
+    }.
 
 prep_answer_header(Q, _Context) ->
-    Name = proplists:get_value(name, Q),
+    Name = maps:get(<<"name">>, Q, undefined),
     case is_multiple(Q) of
-        true -> [
-                <<Name/binary, $:, (proplists:get_value(value, Ans))/binary>>
-                || Ans <- proplists:get_value(answers, Q)
+        true ->
+            [
+                <<Name/binary, $:, (maps:get(<<"value">>, Ans))/binary>>
+                || Ans <- maps:get(<<"answers">>, Q, [])
             ];
-        false -> Name
+        false ->
+            Name
     end.
 
 prep_answer(PreppedBlock, [], Context) ->
@@ -104,13 +108,13 @@ prep(PreppedBlock, Vs, _Context) ->
         true ->
             [
                 begin
-                    K = proplists:get_value(value, Ans),
+                    K = maps:get(<<"value">>, Ans),
                     case lists:member(K, Vs) of
                         true -> K;
                         false -> <<>>
                     end
                 end
-                || Ans <- proplists:get_value(answers, PreppedBlock, [])
+                || Ans <- maps:get(<<"answers">>, PreppedBlock, [])
             ]
     end.
 
@@ -132,7 +136,7 @@ prep_score(PreppedBlock, StoredAnswer, _Context) ->
         true ->
             lists:flatten([
                 begin
-                    K = proplists:get_value(value, Ans),
+                    K = maps:get(<<"value">>, Ans),
                     case lists:member(K, Answer) of
                         true ->
                             [K, proplists:get_value(K, Points, 0)];
@@ -140,7 +144,7 @@ prep_score(PreppedBlock, StoredAnswer, _Context) ->
                             [<<>>, proplists:get_value(K, Points, 0)]
                     end
                 end
-                || Ans <- proplists:get_value(answers, PreppedBlock, [])
+                || Ans <- maps:get(<<"answers">>, PreppedBlock, [])
             ])
     end.
 
@@ -149,12 +153,12 @@ ensure_list(V) -> [V].
 
 
 is_multiple(Q) ->
-    case proplists:get_value(input_type, Q) of
+    case maps:get(<<"input_type">>, Q, undefined) of
         <<"multi">> ->
             true;
         undefined ->
             % Older surveys had the is_multiple property
-            z_convert:to_bool(proplists:get_value(is_multiple, Q));
+            z_convert:to_bool(maps:get(<<"is_multiple">>, Q, false));
         _ ->
             false
     end.
@@ -162,18 +166,18 @@ is_multiple(Q) ->
 
 prep_block(Block, Context) ->
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-    Props ++ Block.
+    maps:merge(Props, Block).
 
 
 to_block(Q) ->
-    [
-        {type, survey_thurstone},
-        {is_required, Q#survey_question.is_required},
-        {is_multiple, false},
-        {name, z_convert:to_binary(Q#survey_question.name)},
-        {prompt, z_convert:to_binary(Q#survey_question.question)},
-        {answers, z_convert:to_binary(Q#survey_question.text)}
-    ].
+    #{
+        <<"type">> => <<"survey_thurstone">>,
+        <<"is_required">> => Q#survey_question.is_required,
+        <<"is_multiple">> => false,
+        <<"name">> => z_convert:to_binary(Q#survey_question.name),
+        <<"prompt">> => z_convert:to_binary(Q#survey_question.question),
+        <<"answers">> => z_convert:to_binary(Q#survey_question.text)
+    }.
 
 test_max_points(Block) ->
     IsMultiple = is_multiple(Block),
@@ -190,10 +194,11 @@ test_max_points(Block) ->
     end.
 
 thurstone_options(Block) ->
-    case proplists:get_value(answers, Block, <<>>) of
+    case maps:get(<<"answers">>, Block, <<>>) of
         {trans, [{_,Text}|_]} ->
             binary:split(Text, <<"\n">>, [global]);
         Text when is_binary(Text) ->
             binary:split(Text, <<"\n">>, [global]);
-        _ -> []
+        _ ->
+            []
     end.

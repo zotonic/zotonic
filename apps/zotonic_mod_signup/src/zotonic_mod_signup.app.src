@@ -1,6 +1,6 @@
 {application, zotonic_mod_signup, [
     {description, "Implements public sign up to register as member of this site."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

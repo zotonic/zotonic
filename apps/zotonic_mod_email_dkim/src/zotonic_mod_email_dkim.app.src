@@ -1,6 +1,6 @@
 {application, zotonic_mod_email_dkim, [
     {description, "Signs outgoing e-mails with DomainKeys Identified Mail Signatures (RFC 6376)"},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

@@ -806,7 +806,7 @@ page_actions(Actions, Context) ->
     z_notifier:first(#page_actions{ actions = Actions }, Context).
 
 check_hasusergroup(UserId, RscProps, Context) ->
-    HasUserGroup = to_list( maps:get(<<"hasusergroup">>, RscProps, []) ),
+    HasUserGroup = to_list( maps:get(<<"hasusergroup_list">>, RscProps, []) ),
     case length(HasUserGroup) of
         0 ->
             %% not submitted, do nothing

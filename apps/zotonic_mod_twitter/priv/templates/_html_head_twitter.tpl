@@ -7,7 +7,7 @@
     <meta name="twitter:title" content="{{ id.title }}">
     <meta name="twitter:description" content="{{ id|summary:135 }}">
 	{% if id.depiction %}
-        <meta name="twitter:image" content="http://{{ m.site.hostname }}{% image_url id.depiction mediaclass="facebook-og" %}">
+        <meta name="twitter:image" content="{% image_url id.depiction mediaclass='meta-tag-image' absolute_url %}">
         <meta name="twitter:card" content="summary_large_image">
     {% else %}
         <meta name="twitter:card" content="summary">

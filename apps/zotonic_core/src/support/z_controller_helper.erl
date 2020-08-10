@@ -150,11 +150,12 @@ from_json(Context) ->
     Data = jsxrecord:decode(Body),
     {Data, Context1}.
 
-%% @doc Decode the incoming body
+%% @doc Make a map from the query arguments.
 from_qs(Context) ->
     Context1 = z_context:ensure_qs(Context),
-    Qs = z_context:get_q_all_noz(Context1),
-    {maps:from_list(Qs), Context1}.
+    Qs = z_context:get_q_all(Context1),
+    {ok, Props} = z_props:from_qs(Qs),
+    {Props, Context1}.
 
 -spec req_body( z:context() ) -> {binary(), z:context()}.
 req_body(Context) ->

@@ -836,7 +836,7 @@ renumber_if_dirty(Context) ->
 -spec renumber(z:context()) -> ok.
 renumber(Context) ->
     set_tree_dirty(true, Context),
-    z_pivot_rsc:insert_task_after(10, ?MODULE, renumber_pivot_task, "m_category:renumber", [], Context),
+    z_pivot_rsc:insert_task_after(10, ?MODULE, renumber_pivot_task, <<>>, [], Context),
     ok.
 
 %% @doc Resync all ids that have their pivot_category_nr changed.

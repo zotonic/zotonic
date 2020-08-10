@@ -61,6 +61,8 @@ handle_cmd(<<"logon">>, Payload, Context) ->
     logon(Payload, Context);
 handle_cmd(<<"switch_user">>, Payload, Context) ->
     switch_user(Payload, Context);
+handle_cmd(<<"onetime_token">>, Payload, Context) ->
+    onetime_token(Payload, Context);
 handle_cmd(<<"logoff">>, Payload, Context) ->
     logoff(Payload, Context);
 handle_cmd(<<"refresh">>, Payload, Context) ->
@@ -135,6 +137,16 @@ logon_1(undefined, _Payload, Context) ->
     lager:warning("Authentication error: #logon_submit{} returned undefined."),
     { #{ status => error, error => pw }, Context }.
 
+-spec onetime_token( map(), z:context() ) -> { map(), z:context() }.
+onetime_token(#{ <<"token">> := Token } = Payload, Context) ->
+    case z_authentication_tokens:decode_onetime_token(Token, Context) of
+        {ok, UserId} ->
+            logon_1({ok, UserId}, Payload, Context);
+        {error, _} ->
+            { #{ status => error, error => token }, Context }
+    end;
+onetime_token(_Payload, Context) ->
+    { #{ status => error, error => missing_token }, Context }.
 
 -spec switch_user( map(), z:context() ) -> { map(), z:context() }.
 switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(UserId) ->
@@ -200,8 +212,7 @@ maybe_setautologon(#{ <<"setautologon">> := SetAutoLogon }, Context) ->
 maybe_setautologon(_Payload, Context) ->
     z_authentication_tokens:reset_autologon_cookie(Context).
 
-%% @doc Set an autologon cookie for the current user
-%% @todo Do not set the cookie if the user has 2fa enabled
+%% @doc Reset the password for an user, using the mailed reset secret and (optional) 2FA code.
 -spec reset( map(), z:context() ) -> { map(), z:context() }.
 reset(#{
         <<"secret">> := Secret,
@@ -299,7 +310,8 @@ return_status(Payload, Context) ->
             language => z_context:language(Context1),
             timezone => z_context:tz(Context1)
         },
-        options => z_context:get(auth_options, Context1, #{})
+        options => z_context:get(auth_options, Context1, #{}),
+        url => maps:get(<<"url">>, Payload, undefined)
     },
     Status1 = case z_auth:is_auth(Context1) of
         true ->

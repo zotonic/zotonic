@@ -16,7 +16,7 @@
     {% endif %}
 </div>
 
-<p class="text-muted">
+<p class="help-block">
     <span class="glyphicon glyphicon-info-sign"></span> {_ The default directory for all site-certificates is  _}: <tt>{{ m.admin_config.security_dir|escape }}</tt>
 </p>
 

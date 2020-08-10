@@ -42,7 +42,10 @@
 
         languages_map_flat/0,
         languages_map_main/0,
-        languages_list/0
+        languages_list/0,
+
+        make_mod/0,
+        make_mod_reload/0
     ]).
 
 -define(MODULE_MAP, 'z_language_data$map').
@@ -92,6 +95,15 @@ codes_atom() ->
 
 %% Generate and memorize a quick lookup map for language data.
 make_mod() ->
+    jobs:run(zotonic_singular_job, fun make_mod_1/0).
+
+make_mod_1() ->
+    case code:is_loaded(?MODULE_MAP) of
+        false -> make_mod_reload();
+        {file, _} -> ok
+    end.
+
+make_mod_reload() ->
     Ls = [ K || {K, _} <- languages_list() ],
     LsA = [ binary_to_atom(K,utf8) || K <- Ls ],
     Fallback = fetch_fallbacks( languages_list() ),
@@ -823,6 +835,7 @@ languages_list() -> [
     ]},
     {<<"fa">>, [
         {language, <<"fa">>},
+        {direction, <<"RTL">>},
         {script, <<"Arab">>},
         {name, <<"فارسی"/utf8>>},
         {name_en, <<"Persian"/utf8>>}
@@ -1021,6 +1034,11 @@ languages_list() -> [
         {name, <<"한국어"/utf8>>},
         {name_en, <<"Korean"/utf8>>}
     ]},
+    {<<"ku">>, [
+        {language, <<"ku">>},
+        {name, <<"Kurdî‎"/utf8>>},
+        {name_en, <<"Kurdish"/utf8>>}
+    ]},
     {<<"lt">>, [
         {language, <<"lt">>},
         {name, <<"Lietuvių"/utf8>>},
@@ -1055,6 +1073,11 @@ languages_list() -> [
         {region, <<"MT">>},
         {name, <<"Malti"/utf8>>},
         {name_en, <<"Maltese"/utf8>>}
+    ]},
+    {<<"ms">>, [
+        {language, <<"ms">>},
+        {name, <<"Malay"/utf8>>},
+        {name_en, <<"Malay"/utf8>>}
     ]},
     {<<"nl">>, [
         {language, <<"nl">>},
@@ -1148,6 +1171,11 @@ languages_list() -> [
         {name, <<"русский язык"/utf8>>},
         {name_en, <<"Russian"/utf8>>}
     ]},
+    {<<"si">>, [
+        {language, <<"si">>},
+        {name, <<"Sinhalese"/utf8>>},
+        {name_en, <<"Sinhalese"/utf8>>}
+    ]},
     {<<"sk">>, [
         {language, <<"sk">>},
         {name, <<"Slovenčina"/utf8>>},
@@ -1164,21 +1192,41 @@ languages_list() -> [
         {name, <<"српски"/utf8>>},
         {name_en, <<"Serbian"/utf8>>}
     ]},
+    {<<"su">>, [
+        {language, <<"su">>},
+        {name, <<"Sundanese"/utf8>>},
+        {name_en, <<"Sundanese"/utf8>>}
+    ]},
     {<<"sv">>, [
         {language, <<"sv">>},
         {name, <<"Svenska"/utf8>>},
         {name_en, <<"Swedish"/utf8>>}
+    ]},
+    {<<"sw">>, [
+        {language, <<"sw">>},
+        {name, <<"Kiswahili"/utf8>>},
+        {name_en, <<"Swahili"/utf8>>}
     ]},
     {<<"sq">>, [
         {language, <<"sq">>},
         {name, <<"Shqip"/utf8>>},
         {name_en, <<"Albanian"/utf8>>}
     ]},
+    {<<"ta">>, [
+        {language, <<"ta">>},
+        {name, <<"Tamil"/utf8>>},
+        {name_en, <<"Tamil"/utf8>>}
+    ]},
     {<<"th">>, [
         {language, <<"th">>},
         {script, <<"Thai">>},
         {name, <<"ไทย"/utf8>>},
         {name_en, <<"Thai"/utf8>>}
+    ]},
+    {<<"tl">>, [
+        {language, <<"tl">>},
+        {name, <<"Tagalog"/utf8>>},
+        {name_en, <<"Tagalog"/utf8>>}
     ]},
     {<<"tr">>, [
         {language, <<"tr">>},
@@ -1196,6 +1244,16 @@ languages_list() -> [
         {region, <<"VN">>},
         {name, <<"Tiếng Việt"/utf8>>},
         {name_en, <<"Vietnamese"/utf8>>}
+    ]},
+    {<<"xh">>, [
+        {language, <<"xh">>},
+        {name, <<"Xhosa"/utf8>>},
+        {name_en, <<"Xhosa"/utf8>>}
+    ]},
+    {<<"yo">>, [
+        {language, <<"yo">>},
+        {name, <<"Èdè Yorùbá"/utf8>>},
+        {name_en, <<"Yoruba"/utf8>>}
     ]},
     {<<"zh">>, [
         {type, <<"macro_language">>},
@@ -1276,7 +1334,6 @@ languages_list() -> [
 % km: Khmer Cambodian
 % kn: Kannada
 % ks: Kashmiri
-% ku: Kurdish
 % kv: Komi
 % kw: Cornish
 % ky: Kirghiz
@@ -1288,7 +1345,6 @@ languages_list() -> [
 % ml: Malayalam
 % mo: Moldavian
 % mr: Marathi
-% ms: Malay
 % my: Burmese
 % na: Nauru
 % nb: Norwegian Bokmål
@@ -1312,20 +1368,15 @@ languages_list() -> [
 % sd: Sindhi
 % se: Northern Sami
 % sg: Sango Sangro
-% si: Sinhalese
 % sm: Samoan
 % sn: Shona
 % so: Somali
 % ss: Swati Siswati
 % st: Sesotho Sotho, Southern
-% su: Sundanese
-% sw: Swahili
-% ta: Tamil
 % te: Telugu
 % tg: Tajik
 % ti: Tigrinya
 % tk: Turkmen
-% tl: Tagalog
 % tn: Tswana Setswana
 % to: Tonga
 % ts: Tsonga
@@ -1338,8 +1389,6 @@ languages_list() -> [
 % vo: Volapuk
 % wa: Walloon
 % wo: Wolof
-% xh: Xhosa
-% yo: Yoruba
 % za: Zhuang
 % zu: Zulu
 

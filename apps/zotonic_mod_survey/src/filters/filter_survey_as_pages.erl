@@ -38,7 +38,7 @@ split([], Acc, Pages) ->
 split(Ps, Acc, Pages) ->
 	case lists:splitwith(fun is_page_end/1, Ps) of
 		{[], [Q|Ps1]} ->
-			case proplists:get_value(name, Q) of
+			case maps:get(<<"name">>, Q, undefined) of
 				<<"survey_feedback">> ->
 					split(Ps1, Acc, Pages);
 				_ ->
@@ -49,7 +49,7 @@ split(Ps, Acc, Pages) ->
 	end.
 
 is_page_end(P) ->
-	case proplists:get_value(type, P) of
+	case maps:get(<<"type">>, P, undefined) of
 		<<"survey_page_break">> -> true;
 		<<"survey_stop">> -> true;
 		_ -> false

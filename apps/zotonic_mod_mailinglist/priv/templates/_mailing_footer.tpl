@@ -16,7 +16,7 @@
 #}
 {% else %}
 	{% with m.mailinglist.subscription[list_id][email] as sub %}
-		<a href="http://{{ m.site.hostname }}{% url mailinglist_unsubscribe confirm_key=sub.confirm_key %}">{_ Please unsubscribe _}</a> {_ when you don't want to receive any further mail from this list. _}
+		<a href="{% url mailinglist_unsubscribe confirm_key=sub.confirm_key absolute_url %}">{_ Please unsubscribe _}</a> {_ when you don't want to receive any further mail from this list. _}
 	{% endwith %}
 {% endif %}
 </p>

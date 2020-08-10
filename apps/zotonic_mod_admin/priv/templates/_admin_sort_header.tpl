@@ -12,7 +12,6 @@
     field: database column
     caption: display text
     type: used to distinguish type "date" to set inital sort as descending
-    custompivot: the custom pivot
     qsort: the sort id passed in url param qsort
 #}
 {% with
@@ -60,7 +59,7 @@
             %}
                 <a href="{% url zotonic_dispatch|as_atom
                                     qsort=next_modifier_param_char++field
-                                    qcustompivot=custompivot|default:q.qcustompivot|urlencode
+                                    qcustompivot=q.qcustompivot
                                     qcat=q.qcat
                                     qs=q.qs
                          %}{{ url_append }}">{{ caption }}{{ status_modifier_char }}</a>

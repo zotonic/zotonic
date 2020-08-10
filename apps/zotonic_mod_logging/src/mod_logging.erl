@@ -123,8 +123,13 @@ is_ui_ratelimit_check(Context) ->
         true ->
             false;
         false ->
-            {ok, Pid} = z_module_manager:whereis(?MODULE, Context),
-            gen_server:call(Pid, is_ui_ratelimit_check)
+            case z_module_manager:whereis(?MODULE, Context) of
+                {ok, Pid} ->
+                    gen_server:call(Pid, is_ui_ratelimit_check);
+                {error, _} ->
+                    % Edge case - can happen when (re)starting of shutting down.
+                    false
+            end
     end.
 
 %%====================================================================

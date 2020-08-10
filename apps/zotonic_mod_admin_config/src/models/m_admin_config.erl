@@ -63,7 +63,7 @@ ssl_certificate({Module, observe_ssl_options}, Context) ->
         {ok, Options} when is_list(Options) ->
             case proplists:lookup(certfile, Options) of
                 {certfile, CertFile} ->
-                    case z_ssl_certs:decode_cert(CertFile) of
+                    case zotonic_ssl_certs:decode_cert(CertFile) of
                         {ok, CertProps} ->
                             modinfo(Module) ++ [
                                 {certificate, CertProps},
@@ -80,7 +80,7 @@ ssl_certificate({Module, observe_ssl_options}, Context) ->
 self_signed(Context) ->
     Options = z_ssl_certs:sni_self_signed(z_context:hostname(Context)),
     {certfile, CertFile} = proplists:lookup(certfile, Options),
-    case z_ssl_certs:decode_cert(CertFile) of
+    case zotonic_ssl_certs:decode_cert(CertFile) of
         {ok, CertProps} ->
             [
                 {is_zotonic_self_signed, true},

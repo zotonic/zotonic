@@ -296,7 +296,7 @@ map_prop(<<"actions">>, Actions, _Context) when is_list(Actions) ->
     Actions1 = lists:map(
         fun(A) -> z_convert:to_binary(A) end,
         Actions),
-    iolist_to_binary(z_utils:combine(",", Actions1));
+    iolist_to_binary(lists:join(",", Actions1));
 map_prop(_K, V, _Context) ->
     V.
 

@@ -294,39 +294,57 @@ delete(Id, Context) ->
             z_db:transaction(F, Context),
             z_edge_log_server:check(Context),
             ok;
-        AclError ->
-            {error, {acl, AclError}}
+        false ->
+            {error, eacces}
     end.
 
 %% @doc Delete an edge by subject, object and predicate id
--spec delete(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), any()) ->
-    ok | {error, atom()}.
+-spec delete(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), z:context()) -> ok | {error, atom()}.
 delete(SubjectId, Pred, ObjectId, Context) ->
     delete(SubjectId, Pred, ObjectId, [], Context).
 
-delete(SubjectId, Pred, ObjectId, Options, Context) ->
-    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
-    {ok, PredName} = m_predicate:id_to_name(PredId, Context),
-    case z_acl:is_allowed(
-        delete,
-        #acl_edge{subject_id = SubjectId, predicate = PredName, object_id = ObjectId},
-        Context
-    ) of
-        true ->
-            F = fun(Ctx) ->
-                z_db:q(
-                    "delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",
-                    [SubjectId, ObjectId, PredId],
-                    Ctx
-                )
-            end,
+-spec delete(m_rsc:resource(), m_rsc:resource(), m_rsc:resource(), list(), z:context()) -> ok | {error, atom()}.
+delete(SubjectId, Pred, ObjectId, _Options, Context) ->
+    case to_predicate(Pred, Context) of
+        {ok, PredId} ->
+            {ok, PredName} = m_predicate:id_to_name(PredId, Context),
+            case z_acl:is_allowed(
+                delete,
+                #acl_edge{ subject_id = SubjectId, predicate = PredName, object_id = ObjectId },
+                Context
+            ) of
+                true ->
+                    F = fun(Ctx) ->
+                        z_db:q(
+                            "delete from edge where subject_id = $1 and object_id = $2 and predicate_id = $3",
+                            [SubjectId, ObjectId, PredId],
+                            Ctx
+                        )
+                    end,
 
-            z_db:transaction(F, Context),
-            z_edge_log_server:check(Context),
-            ok;
-        AclError ->
-            {error, {acl, AclError}}
+                    z_db:transaction(F, Context),
+                    z_edge_log_server:check(Context),
+                    ok;
+                false ->
+                    {error, eacces}
+            end;
+        {error, _} = Error ->
+            Error
     end.
+
+to_predicate(Id, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RId ->
+            case m_rsc:is_a(RId, predicate, Context) of
+                true ->
+                    {ok, RId};
+                false ->
+                    {error, predicate}
+            end
+    end.
+
 
 
 %% @doc Delete multiple edges between the subject and the object

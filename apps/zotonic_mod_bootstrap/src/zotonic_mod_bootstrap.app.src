@@ -1,6 +1,6 @@
 {application, zotonic_mod_bootstrap, [
     {description, "Bootstrap provides simple and flexible HTML, CSS, and Javascript for popular user interface components and interactions."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

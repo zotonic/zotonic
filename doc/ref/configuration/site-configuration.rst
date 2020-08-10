@@ -172,15 +172,15 @@ to load the module. Example::
     ]},
 
 
-ip_whitelist
+ip_allowlist
 """"""""""""
 
 List of TCP/IP addresses and their netmasks. The default admin user password
-(“admin”) will only be accepted for an IP in thie whitelist. This protects
+(“admin”) will only be accepted for an IP in the allowlist. This protects
 development systems that are exposed to the internet. This can also be
 configured :ref:`globally <guide-configuration>`. Default::
 
-    {ip_whitelist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8"}
+    {ip_allowlist, "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,::1,fd00::/8"}
 
 smtphost
 """"""""

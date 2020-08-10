@@ -59,14 +59,22 @@ rebuild(ModulePid, State, Context) ->
 		fun(K0) ->
 			{IsAllow, K} = extract_is_allow(K0),
 			case K of
-				{CId, {CatId, insert, _IfOwner}, GId} ->
-					ets:insert(Table, {{CId, {CatId, insert, false}, GId}, IsAllow}),
-					ets:insert(Table, {{CId, {CatId, insert, true}, GId}, IsAllow}),
-					ets:insert(Table, {{CatId, insert, GId}, IsAllow}),
-					ets:insert(Table, {{CId, insert, GId}, IsAllow});
-				{CId, {_CatId, Action, _IfOwner}, GId} ->
-					ets:insert(Table, {K, IsAllow}),
-					ets:insert(Table, {{CId, Action, GId}, IsAllow});
+				{CId, {CatId, insert, _IfOwner}, GId} when IsAllow =:= true ->
+					% Also store generic allow rules, to allow for rough filtering
+					% on content group in for allowed actions.
+					ets:insert(Table, {{CId, {CatId, insert, false}, GId}, true}),
+					ets:insert(Table, {{CId, {CatId, insert, true}, GId}, true}),
+					ets:insert(Table, {{CatId, insert, GId}, true}),
+					ets:insert(Table, {{CId, insert, GId}, true});
+				{CId, {CatId, insert, _IfOwner}, GId} when IsAllow =:= false ->
+					% Only store specific deny rules
+					ets:insert(Table, {{CId, {CatId, insert, false}, GId}, false}),
+					ets:insert(Table, {{CId, {CatId, insert, true}, GId}, false});
+				{CId, {_CatId, Action, _IfOwner}, GId} when IsAllow =:= true ->
+					% Also store generic allow rules, to allow for rough filtering
+					% on content group in for allowed actions.
+					ets:insert(Table, {K, true}),
+					ets:insert(Table, {{CId, Action, GId}, true});
 				_ ->
 					ets:insert(Table, {K, IsAllow})
 			end

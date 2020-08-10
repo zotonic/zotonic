@@ -1,8 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2011-09-22
-%% @doc Redirect to the authorize uri of Twitter
-%% See: http://developers.facebook.com/docs/authentication/
+%% @doc OAuth interface for Twitter
 
 %% Copyright 2011 Arjan Scherpenisse
 %%
@@ -22,15 +20,15 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-
 -export([
-         get_request_token/1,
-         get_consumer/1,
-         authorize_url/1,
-         get_access_token/2,
-         request/4,
-         request/5
-        ]).
+    get_request_token/1,
+    get_consumer/1,
+    authorize_url/1,
+    get_access_token/2,
+    get_access_token/3,
+    request/4,
+    request/5
+]).
 
 
 get_request_token(Context) ->
@@ -42,15 +40,16 @@ get_request_token(Context) ->
           Error
   end.
 
-
 authorize_url(Token) ->
-  oauth:uri("https://api.twitter.com/oauth/authorize", [{"oauth_token", Token}]).
-
+    oauth:uri("https://api.twitter.com/oauth/authorize", [{"oauth_token", z_convert:to_list(Token)}]).
 
 get_access_token({RequestToken, RequestSecret}, Context) ->
     Verifier = z_context:get_q("oauth_verifier", Context),
+    get_access_token({RequestToken, RequestSecret}, Verifier, Context).
+
+get_access_token({RequestToken, RequestSecret}, Verifier, Context) ->
     Params = case z_utils:is_empty(Verifier) of
-                 false -> [{"oauth_verifier", Verifier}];
+                 false -> [{"oauth_verifier", z_convert:to_list(Verifier)}];
                  true -> []
              end,
     case oauth:get("https://api.twitter.com/oauth/access_token", Params, get_consumer(Context), RequestToken, RequestSecret) of
@@ -65,9 +64,23 @@ get_access_token({RequestToken, RequestSecret}, Context) ->
 request(get, ApiCall, {AccessToken, AccessSecret}, Context) ->
     request(get, ApiCall, [], {AccessToken, AccessSecret}, Context).
 request(get, ApiCall, Params, {AccessToken, AccessSecret}, Context) ->
-    handle_result(oauth:get("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret));
+    AccessToken1 = z_convert:to_list(AccessToken),
+    AccessSecret1 = z_convert:to_list(AccessSecret),
+    handle_result(
+        oauth:get(  "https://api.twitter.com/1.1/" ++ ApiCall ++ ".json",
+                    Params,
+                    get_consumer(Context),
+                    AccessToken1,
+                    AccessSecret1));
 request(post, ApiCall, Params, {AccessToken, AccessSecret}, Context) ->
-    handle_result(oauth:post("https://api.twitter.com/1.1/" ++ ApiCall ++ ".json", Params, get_consumer(Context), AccessToken, AccessSecret)).
+    AccessToken1 = z_convert:to_list(AccessToken),
+    AccessSecret1 = z_convert:to_list(AccessSecret),
+    handle_result(
+        oauth:post( "https://api.twitter.com/1.1/" ++ ApiCall ++ ".json",
+                    Params,
+                    get_consumer(Context),
+                    AccessToken1,
+                    AccessSecret1)).
 
 handle_result({ok, {{_, 200, _}, _Headers, Body}}) ->
     {ok, z_json:decode(z_convert:to_binary(Body))};

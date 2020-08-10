@@ -1,6 +1,6 @@
 {application, zotonic_mod_clamav, [
     {description, "Scan uploaded files for viruses and malware."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

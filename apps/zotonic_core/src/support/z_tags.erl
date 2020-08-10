@@ -68,7 +68,7 @@ display_property({Prop, Value}) when is_list(Value) ->
         true ->
             [32, correct_data(Prop), $=, $', Value, $'];
         false ->
-            [32, correct_data(Prop), $=, $', z_utils:combine_defined(32, Value), $']
+            [32, correct_data(Prop), $=, $', z_utils:join_defined(32, Value), $']
 	end;
 display_property({Prop, Value}) when is_atom(Value) ->
 	[32, correct_data(Prop), $=, $', atom_to_list(Value), $'];

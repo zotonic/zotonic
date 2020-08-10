@@ -34,7 +34,7 @@ event(#submit{message=explain_dispatch}, Context) ->
                     <<"GET">>,
                     z_context:hostname(Context),
                     ReqPath,
-                    Protocol =:= http,
+                    Protocol =:= https,
                     TracerPid),
             TracerPid ! {fetch, self()},
             receive

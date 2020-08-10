@@ -141,6 +141,7 @@ get_module(hierarchy, _Context) -> {ok, m_hierarchy};
 get_module(identity, _Context)  -> {ok, m_identity};
 get_module(media, _Context)     -> {ok, m_media};
 get_module(modules, _Context)   -> {ok, m_modules};
+get_module(mqtt_ticket, _Context)   -> {ok, m_mqtt_ticket};
 get_module(predicate, _Context) -> {ok, m_predicate};
 get_module(req, _Context)       -> {ok, m_req};
 get_module(rsc_gone, _Context)  -> {ok, m_rsc_gone};
@@ -156,6 +157,7 @@ get_module(<<"hierarchy">>, _Context) -> {ok, m_hierarchy};
 get_module(<<"identity">>, _Context)  -> {ok, m_identity};
 get_module(<<"media">>, _Context)     -> {ok, m_media};
 get_module(<<"modules">>, _Context)   -> {ok, m_modules};
+get_module(<<"mqtt_ticket">>, _Context)   -> {ok, m_mqtt_ticket};
 get_module(<<"predicate">>, _Context) -> {ok, m_predicate};
 get_module(<<"req">>, _Context)       -> {ok, m_req};
 get_module(<<"rsc_gone">>, _Context)  -> {ok, m_rsc_gone};
@@ -211,13 +213,23 @@ model_call(Mod, Callback, Path, Msg, Context) ->
     try
         Mod:Callback(binarize(Path), Msg, Context)
     catch
-        error:undef ->
-            case erlang:function_exported(Mod, Callback, 3) of
-                false ->
-                    lager:info("Model ~p does not export ~p", [ Mod, Callback ]),
-                    {error, unacceptable};
-                true ->
-                    erlang:raise(error, undef, erlang:get_stacktrace())
+        error:function_clause:S ->
+            case S of
+                [ {Mod, Callback, _As, _Loc} | _ ] ->
+                    {error, unknown_path};
+                _ ->
+                    lager:error("Function clause in model call to ~p:~p(~p): ~p",
+                                [ Mod, Callback, Path, S ]),
+                    {error, function_clause}
+            end;
+        error:undef:S ->
+            case S of
+                [ {Mod, Callback, _As, _Loc} | _ ] ->
+                    {error, unknown_path};
+                _ ->
+                    lager:error("Undef in model call to ~p:~p(~p): ~p",
+                                [ Mod, Callback, Path, S ]),
+                    {error, undef}
             end
     end.
 
@@ -228,7 +240,6 @@ binarize(Path) ->
 maybe_binary(B) when is_binary(B) -> B;
 maybe_binary(undefined) -> <<>>;
 maybe_binary(A) when is_atom(A) -> atom_to_binary(A, utf8);
-maybe_binary(L) when is_list(L) -> unicode:characters_to_binary(L, unicode);
 maybe_binary(V) -> V.
 
 %% @doc Optionally dig deeper into the returned result if the path is not consumed completely.

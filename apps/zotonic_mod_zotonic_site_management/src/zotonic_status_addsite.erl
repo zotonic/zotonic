@@ -26,7 +26,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -spec addsite(binary(), list(), z:context()) ->
-    {ok, {Site :: atom(), Options :: list()}} | {error, Reason :: list()}.
+    {ok, {Site :: atom(), Options :: list()}} | {error, term()}.
 addsite(Name, Options, Context) when is_binary(Name) ->
     % Check if name can used for the site (not z_, zotonic_, existing site, or existing module)
     case check_name(Name, Context) of
@@ -34,26 +34,27 @@ addsite(Name, Options, Context) when is_binary(Name) ->
             case filelib:is_file(site_dir(Name)) of
                 true ->
                     {error, iolist_to_binary([
-                        ?__("There is already a file or directory named", Context),
+                        ?__(<<"There is already a file or directory named">>, Context),
                         " ",
                         site_dir(Name)])};
                 false ->
                     addsite_check_hostname(Name, Options, Context)
             end;
-        {error, _} = Error -> Error
+        {error, _} = Error ->
+            Error
     end.
 
 % Check Hostname (must have DNS resolve)
 addsite_check_hostname(Name, Options, Context) ->
-    mod_zotonic_site_management:progress(Name, ?__("Resolving the hostname ...", Context), Context),
+    mod_zotonic_site_management:progress(Name, ?__(<<"Resolving the hostname ...">>, Context), Context),
     {hostname, HostPort} = proplists:lookup(hostname, Options),
-    [Host|_] = string:tokens(z_convert:to_list(HostPort), ":"),
-    case inet:gethostbyname(Host) of
+    [ Host | _ ] = binary:split( z_convert:to_binary(HostPort), <<":">> ),
+    case inet:gethostbyname( z_convert:to_list(Host) ) of
         {ok, _} ->
             addsite_check_db(Name, Options, Context);
         {error, nxdomain} ->
             Error = iolist_to_binary([
-                ?__("The hostname is unknown, check your DNS or /etc/hosts file", Context),
+                ?__(<<"The hostname is unknown, check your DNS or /etc/hosts file">>, Context),
                 ": ", Host
             ]),
             {error, Error}
@@ -61,8 +62,8 @@ addsite_check_hostname(Name, Options, Context) ->
 
 % Check if we can connect to the database
 
--spec addsite_check_db(binary(), proplists:proplist(), z:context()) ->
-    {ok, Site :: atom(), Options :: list()} | {error, Reason :: list()}.
+-spec addsite_check_db(binary(), list(), z:context()) ->
+    {ok, {atom(), list()}} | {error, term()}.
 addsite_check_db(Name, Options, Context) ->
     case z_convert:to_binary( proplists:get_value(skeleton, Options) ) of
         <<"nodb">> ->
@@ -72,7 +73,7 @@ addsite_check_db(Name, Options, Context) ->
             ],
             addsite_check_userdir(Name, Options1, Context);
         _ ->
-            mod_zotonic_site_management:progress(Name, ?__("Checking database ...", Context), Context),
+            mod_zotonic_site_management:progress(Name, ?__(<<"Checking database ...">>, Context), Context),
             DbDatabase = z_convert:to_list(get_fallback(dbdatabase, Options, z_config:get(dbdatabase))),
             ConnectOptions = [
                 {dbhost, z_convert:to_list(get_fallback(dbhost, Options, z_config:get(dbhost)))},
@@ -89,16 +90,16 @@ addsite_check_db(Name, Options, Context) ->
                         ok ->
                             addsite_check_userdir(Name, Options, Context);
                         {error, _} ->
-                            {error, ?__("Could not create the schema in the database.", Context)}
+                            {error, ?__(<<"Could not create the schema in the database.">>, Context)}
                     end;
                 {error, _} ->
-                    {error, ?__("Could not connect to 'postgres' database or create the database.", Context)}
+                    {error, ?__(<<"Could not connect to 'postgres' database or create the database.">>, Context)}
             end
     end.
 
 % Check if the user directory is writeable
--spec addsite_check_userdir(binary(), proplists:proplist(), z:context()) ->
-    {ok, {atom(), list()}} | {error, list()}.
+-spec addsite_check_userdir(binary(), list(), z:context()) ->
+    {ok, {atom(), list()}} | {error, term()}.
 addsite_check_userdir(Name, Options, Context) ->
     SiteDir = site_dir(Name),
     case file:make_dir(SiteDir) of
@@ -109,8 +110,10 @@ addsite_check_userdir(Name, Options, Context) ->
     end.
 
 % If Git: checkout from Git
+-spec addsite_check_git(binary(), list(), z:context()) ->
+    {ok, {atom(), list()}} | {error, term()}.
 addsite_check_git(Name, Options, Context) ->
-    case z_string:trim(proplists:get_value(git, Options, <<>>)) of
+    case z_string:trim( z_convert:to_binary( proplists:get_value(git, Options, <<>>) ) ) of
         <<>> ->
             SiteDir = site_dir(Name),
             Cmd = lists:flatten([
@@ -123,7 +126,7 @@ addsite_check_git(Name, Options, Context) ->
         Git ->
             case file:del_dir(site_dir(Name)) of
                 ok ->
-                    mod_zotonic_site_management:progress(Name, ?__("Git checkout ...", Context), Context),
+                    mod_zotonic_site_management:progress(Name, ?__(<<"Git checkout ...">>, Context), Context),
                     Cmd = lists:flatten([
                         "git clone -q --recurse-submodules ",
                         z_utils:os_filename(Git),
@@ -136,11 +139,11 @@ addsite_check_git(Name, Options, Context) ->
                         Error ->
                             lager:error("[zotonic_site_status] Could not checkout ~p to ~p: ~p",
                                         [Git, site_dir(Name), Error]),
-                            {error, [   ?__("Could not check out Git repository:", Context),
+                            {error, [   ?__(<<"Could not check out Git repository:">>, Context),
                                         " ", Error]}
                     end;
                 {error, Error} ->
-                    {error, [   ?__("Could not delete the site dir for the Git checkout:", Context),
+                    {error, [   ?__(<<"Could not delete the site dir for the Git checkout:">>, Context),
                                 " ", z_convert:to_binary(Error)]}
             end
     end.
@@ -156,7 +159,7 @@ addsite_check_skel(Name, Options, Context) ->
     end.
 
 addsite_copy_skel(Name, Options, Context) ->
-    mod_zotonic_site_management:progress(Name, ?__("Copy skeleton files ...", Context), Context),
+    mod_zotonic_site_management:progress(Name, ?__(<<"Copy skeleton files ...">>, Context), Context),
     SiteDir = site_dir(Name),
     case skel_dir(Options) of
         undefined ->
@@ -188,7 +191,7 @@ addsite_copy_skel(Name, Options, Context) ->
     end.
 
 % Compile
--spec addsite_compile(binary(), proplists:proplist(), z:context()) -> {ok, {atom(), list()}}.
+-spec addsite_compile(binary(), list(), z:context()) -> {ok, {atom(), list()}} | {error, term()}.
 addsite_compile(Name, Options, Context) ->
     Site = binary_to_atom(Name, utf8),
     case erlang:get(is_zotonic_command) of
@@ -197,7 +200,7 @@ addsite_compile(Name, Options, Context) ->
         _ ->
             mod_zotonic_site_management:progress(
                 Name,
-                ?__("Force compile all Erlang files ...", Context),
+                ?__(<<"Force compile all Erlang files ...">>, Context),
                 Context
             ),
             zotonic_filehandler:compile_all_sync(),
@@ -209,10 +212,10 @@ addsite_compile(Name, Options, Context) ->
                             {ok, {Site, Options}};
                         {error, {already_loaded, Site}} ->
                             {ok, {Site, Options}};
-                        Error ->
+                        {error, _} = Error ->
                             Error
                     end;
-                Error ->
+                {error, _} = Error ->
                     Error
             end
     end.
@@ -233,7 +236,7 @@ create_gitignore(SiteDir) ->
     file:write_file(filename:join([SiteDir, ".gitignore"]), GitIgnore).
 
 
--spec copy_skeleton_dir(file:filename(), file:filename(), list(), z:context()) -> ok | {error, Reason :: binary()}.
+-spec copy_skeleton_dir(file:filename_all(), file:filename_all(), list(), z:context()) -> ok | {error, Reason :: binary() | atom()}.
 copy_skeleton_dir(From, To, Options, Context) ->
     Files = filelib:wildcard(z_convert:to_list(filename:join(From, "*"))),
     lists:foldl(
@@ -256,7 +259,7 @@ copy_skeleton_dir(From, To, Options, Context) ->
                                                     lager:error("[zotonic_site_status] Error creating directory ~p: ~p",
                                                                 [ToPath, Error]),
                                                     {error, iolist_to_binary([
-                                                            ?__("Could not create the directory", Context),
+                                                            ?__(<<"Could not create the directory">>, Context),
                                                             " ",
                                                             ToPath
                                                         ])}
@@ -382,7 +385,7 @@ ensure_dir(Dir, Context) ->
                     Dir])}
     end.
 
--spec replace_tags(binary(), proplists:proplist()) -> list(binary()).
+-spec replace_tags(binary(), list()) -> list(binary()).
 replace_tags(Bin, Options) when is_binary(Bin) ->
     Parts = re:split(Bin, "(%%[A-Z]+%%)", [{return,binary}]),
     [map_tag(P, Options) || P <- Parts].
@@ -424,11 +427,11 @@ get_fallback(Opt, Options, Default) ->
 check_name(Name, Context) ->
     case is_reserved(Name) of
         true ->
-            {error, ?__("This name is reserved", Context)};
+            {error, ?__(<<"This name is reserved">>, Context)};
         false ->
             Name1 = binary_to_atom(Name, utf8),
             case is_module(Name1) of
-                true -> {error, ?__("This name is taken by another Erlang module", Context)};
+                true -> {error, ?__(<<"This name is taken by another Erlang module">>, Context)};
                 false -> ok
             end
     end.
@@ -451,26 +454,32 @@ is_reserved(_) -> false.
 
 
 error(eacces, SiteDir, Context) ->
-    {error, [   ?__("No permission to create the site directory at:", Context),
+    {error, iolist_to_binary([
+                ?__(<<"No permission to create the site directory at:">>, Context),
                 " ", SiteDir
-            ]};
+            ])};
 error(eexist, SiteDir, Context) ->
-    {error, [   ?__("The file or directory already exists:", Context),
+    {error, iolist_to_binary([
+                ?__(<<"The file or directory already exists:">>, Context),
                 " ", SiteDir
-            ]};
+            ])};
 error(enoent, SiteDir, Context) ->
-    {error, [   ?__("The parent directory does not exist:", Context),
+    {error, iolist_to_binary([
+                ?__(<<"The parent directory does not exist:">>, Context),
                 " ", SiteDir
-            ]};
+            ])};
 error(enospc, SiteDir, Context) ->
-    {error, [   ?__("Disk full creating:", Context),
+    {error, iolist_to_binary([
+                ?__("Disk full creating:", Context),
                 " ", SiteDir
-            ]};
+            ])};
 error(enotdir, SiteDir, Context) ->
-    {error, [   ?__("A component of the path is not a directory:", Context),
+    {error, iolist_to_binary([
+                ?__(<<"A component of the path is not a directory:">>, Context),
                 " ", SiteDir
-            ]};
+            ])};
 error(Error, SiteDir, Context) ->
-    {error, [   ?__("Could not create the file:", Context),
+    {error, iolist_to_binary([
+                ?__(<<"Could not create the file:">>, Context),
                 " ", SiteDir, " (", z_convert:to_binary(Error), ")"
-            ]}.
+            ])}.

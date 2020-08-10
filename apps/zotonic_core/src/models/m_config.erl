@@ -298,37 +298,54 @@ set_value_db(Module, Key, Value0, Context) ->
     end.
 
 %% @doc Set a "complex" config value.
--spec set_prop(atom()|binary(), atom()|binary(), atom()|binary(), term(), z:context()) -> ok.
+-spec set_prop(atom()|binary(), atom()|binary(), atom()|binary(), term(), z:context()) -> ok | {error, term()}.
 set_prop(Module, Key, Prop, PropValue, Context) ->
-    z_db:transaction(
+    Result = z_db:transaction(
         fun(Ctx) ->
-            case get_id(Module, Key, Ctx) of
-                undefined ->
+            PropB = z_convert:to_binary(Prop),
+            case z_db:qmap_props_row("
+                select *
+                from config
+                where module = $1
+                  and key = $2",
+                [ Module, Key ],
+                Ctx)
+            of
+                {error, enoent} ->
                     Ins = #{
                         <<"module">> => Module,
                         <<"key">> => Key,
                         z_convert:to_binary(Prop) => PropValue
                     },
                     z_db:insert(config, Ins, Ctx);
-                Id ->
+                {ok, #{ PropB := PropValue }} ->
+                    {ok, no_change};
+                {ok, #{ <<"id">> := Id } } ->
                     Upd = #{
-                        z_convert:to_binary(Prop) => PropValue
+                        PropB => PropValue
                     },
                     z_db:update(config, Id, Upd, Ctx)
             end
         end,
         Context),
     z_depcache:flush(config, Context),
-    z_notifier:notify(
-        #m_config_update_prop{module = Module, key = Key, prop = Prop, value = PropValue},
-        Context
-    ),
-    z:info(
-        "Configuration key '~s.~s' changed, new property '~p' value: ~p",
-        [ z_convert:to_binary(Module), z_convert:to_binary(Key), Prop, PropValue ],
-        [ {module, ?MODULE}, {line, ?LINE} ],
-        Context),
-    ok.
+    case Result of
+        {ok, no_change} ->
+            ok;
+        {ok, _} ->
+            z_notifier:notify(
+                #m_config_update_prop{module = Module, key = Key, prop = Prop, value = PropValue},
+                Context
+            ),
+            z:info(
+                "Configuration key '~s.~s' changed, update property '~p' value: ~p",
+                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Prop, PropValue ],
+                [ {module, ?MODULE}, {line, ?LINE} ],
+                Context),
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
 
 
 %% @doc Delete the specified module/key combination

@@ -26,4 +26,4 @@ survey_is_stop(Qs, _Context) ->
 	lists:any(fun is_stop/1, Qs).
 
 is_stop(Blk) ->
-	proplists:get_value(type, Blk) =:= <<"survey_stop">>.
+	maps:get(<<"type">>, Blk, undefined) =:= <<"survey_stop">>.

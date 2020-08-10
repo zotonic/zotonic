@@ -34,6 +34,15 @@ menu_trail(undefined, _Menu, _Context) ->
     undefined;
 menu_trail(Id, [{MenuId,Sub}|_] = Menu, Context) when is_integer(MenuId), is_list(Sub) ->
     trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context);
+menu_trail(Ids, Menu, Context) when is_list(Ids) ->
+    lists:foldl(
+        fun
+            (Id, []) -> menu_trail(Id, Menu, Context);
+            (Id, undefined) -> menu_trail(Id, Menu, Context);
+            (_Id, Trail) -> Trail
+        end,
+        undefined,
+        Ids);
 menu_trail(Id, MenuId, Context) ->
     Menu = mod_menu:get_menu(MenuId, Context),
     trail(m_rsc:rid(Id, Context), mod_menu:remove_invisible(Menu, Context), Context).

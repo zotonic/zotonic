@@ -57,20 +57,35 @@ insert(Props, Context) ->
 insert_event(Props, Context) when is_map(Props) ->
     insert_event(maps:to_list(Props), Context);
 insert_event(Props, Context) when is_list(Props) ->
-    UserId = z_acl:user(Context),
-    Props1 = lists:filter( fun filter_prop/1, Props ),
-    Props2 = lists:map( fun map_prop/1, Props1 ),
-    Type = case proplists:get_value(type, Props2) of
-        undefined -> <<"error">>;
-        T -> T
-    end,
-    Message = [
-        {user_id, UserId},
-        {type, Type},
-        {remote_ip, m_req:get(peer, Context)}
-    ] ++ proplists:delete(type, Props2),
-    MsgUserProps = maybe_add_user_props(Message, Context),
-    z_db:insert(log_ui, MsgUserProps, Context).
+    case is_event_loggable(Props) of
+        true ->
+            UserId = z_acl:user(Context),
+            Props1 = lists:filter( fun filter_prop/1, Props ),
+            Props2 = lists:map( fun map_prop/1, Props1 ),
+            Type = case proplists:get_value(type, Props2) of
+                undefined -> <<"error">>;
+                T -> T
+            end,
+            Message = [
+                {user_id, UserId},
+                {type, Type},
+                {remote_ip, m_req:get(peer, Context)}
+            ] ++ proplists:delete(type, Props2),
+            MsgUserProps = maybe_add_user_props(Message, Context),
+            z_db:insert(log_ui, MsgUserProps, Context);
+        false ->
+            {error, ignore}
+    end.
+
+is_event_loggable(Props) ->
+    not is_ignored_bot(proplists:get_value(<<"user_agent">>, Props)).
+
+is_ignored_bot(undefined) ->
+    false;
+is_ignored_bot(UserAgent) ->
+    % The Yandex bot has errors with the WebSocket connection
+    binary:match(UserAgent, <<"YandexMobileBot">>) /= nomatch
+    orelse binary:match(UserAgent, <<"YandexBot">>) /= nomatch.
 
 maybe_add_user_props(Props, Context) ->
     case proplists:get_value(user_id, Props) of

@@ -1,6 +1,6 @@
 {application, zotonic_mod_contact, [
     {description, "Simple contact form. Mails a contact form to the administrator user."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

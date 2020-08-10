@@ -22,6 +22,7 @@
 
 -export([
     find/3,
+    flush/0,
     flush/2,
 
     observe_zotonic_filehandler_map/2,
@@ -73,6 +74,10 @@ find_1(App, AppDir, SubDir, Pattern) ->
             {ok, Files}
     end.
 
+-spec flush() -> ok.
+flush() ->
+    gen_server:call(?MODULE, flush, infinity).
+
 -spec flush(atom(), file:filename_all()) -> ok.
 flush(App, SubDir) when is_atom(App) ->
     gen_server:call(?MODULE, {flush, App, unicode:characters_to_binary(SubDir)}, infinity).
@@ -119,6 +124,10 @@ handle_call({index, App, AppDir, SubDir, Pattern}, _From, State) ->
 
 handle_call({flush, App, SubDir}, _From, State) ->
     do_flush(App, SubDir),
+    {reply, ok, State};
+
+handle_call(flush, _From, State) ->
+    ets:delete_all_objects(?MODULE),
     {reply, ok, State};
 
 handle_call(_Cmd, _From, State) ->

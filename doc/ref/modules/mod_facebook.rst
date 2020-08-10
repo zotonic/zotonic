@@ -18,7 +18,7 @@ module needs the ‘email’ permission for login to work.
 
 .. seealso::
 
-    * :ref:`mod_instagram`
+    * :ref:`mod_linkedin`
     * :ref:`mod_twitter`
 
 .. _Facebook login: https://developers.facebook.com/docs/facebook-login/

@@ -315,7 +315,7 @@ loc(File,Line) -> {z_convert:to_list(File), integer_to_list(Line)}.
 simplify_args(N) when is_integer(N) -> undefined;
 simplify_args(L) ->
     As = [ simplify_arg(A) || A <- L ],
-    iolist_to_binary(["[ ", z_utils:combine(", ", As), " ]"]).
+    iolist_to_binary(["[ ", lists:join(", ", As), " ]"]).
 
 simplify_arg(N) when is_integer(N) -> integer_to_list(N);
 simplify_arg(A) when is_atom(A) -> atom_to_list(A);

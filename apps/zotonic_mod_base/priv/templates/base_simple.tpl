@@ -9,7 +9,7 @@
   %}
 {% endblock %}
 
-{% block js_include %}
+{% block _js_include %}
   {% include "_js_include.tpl" %}
   {% script %}
 {% endblock%}

@@ -383,7 +383,7 @@ prepare_results(SurveyId, Context) ->
             Stats = survey_stats(SurveyId, Context),
             [
                 begin
-                    Name = proplists:get_value(name, Block),
+                    Name = maps:get(<<"name">>, Block, undefined),
                     prepare_result(Block, proplists:get_value(Name, Stats), Context)
                 end
                 || Block <- Blocks
@@ -392,13 +392,13 @@ prepare_results(SurveyId, Context) ->
 
 %% @private
 prepare_result(Block, undefined, _Context) ->
-    Type = proplists:get_value(type, Block),
+    Type = maps:get(<<"type">>, Block, undefined),
     case mod_survey:module_name(Type) of
         undefined -> {undefined, undefined, Block};
         _ -> {undefined, undefined, undefined}
     end;
 prepare_result(Block, Stats, Context) ->
-    Type = proplists:get_value(type, Block),
+    Type = maps:get(<<"type">>, Block, undefined),
     {
       Stats,
       prep_chart(Type, Block, Stats, Context),
@@ -446,7 +446,7 @@ survey_stats(SurveyId, Context) ->
 
 count_answers([], Dict) -> Dict;
 count_answers([{Row}|Rows], Dict) ->
-    {answers, Answers} = proplists:lookup(answers, Row),
+    Answers = maps:get(<<"answers">>, Row),
     Dict1 = lists:foldl(
         fun
             ({QName, QAnswer}, Acc) ->
@@ -490,11 +490,11 @@ indexof([ _ | Cols ], Col, N) -> indexof(Cols, Col, N+1).
 
 
 %% @doc get prepared questions from the blocks
--spec get_questions(m_rsc:resource_id(), z:context()) -> [{BlockName::binary(),list()}] | undefined.
+-spec get_questions(m_rsc:resource_id(), z:context()) -> [{BlockName::binary(),map()}] | undefined.
 get_questions(SurveyId, Context) ->
     case m_rsc:p(SurveyId, blocks, Context) of
         Blocks when is_list(Blocks) ->
-            [ {proplists:get_value(name, B), question_prepare(B, Context)} || B <- Blocks];
+            [ {maps:get(<<"name">>, B, undefined), question_prepare(B, Context)} || B <- Blocks];
         _ ->
             undefined
     end.
@@ -575,7 +575,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) ->
 drop_hidden_results(NQs) ->
     lists:filter(
         fun ({_, Block}) ->
-            not z_convert:to_bool(proplists:get_value(is_hide_result, Block))
+            not z_convert:to_bool(maps:get(<<"is_hide_result">>, Block, false))
         end,
         NQs).
 
@@ -655,10 +655,7 @@ opt_totals(Points, MaxPoints, PassPercent) ->
     ].
 
 %% @doc private
-answer_row_question(_QAnswers, [], _IsTest, _Context) ->
-    [];
-answer_row_question(QAnswers, Q, false, Context) ->
-    Type = proplists:get_value(type, Q),
+answer_row_question(QAnswers, #{ <<"type">> := Type } = Q, false, Context) ->
     case mod_survey:module_name(Type) of
         undefined -> [];
         M ->
@@ -669,11 +666,11 @@ answer_row_question(QAnswers, Q, false, Context) ->
             M:prep_answer(Q, Answers, Context)
     end;
 answer_row_question(QAnswers, Q, true, Context) ->
-    case z_convert:to_bool(proplists:get_value(is_test, Q, false)) of
+    case z_convert:to_bool(maps:get(<<"is_test">>, Q, false)) of
         false ->
             answer_row_question(QAnswers, Q, false, Context);
         true ->
-            Type = proplists:get_value(type, Q),
+            Type = maps:get(<<"type">>, Q, undefined),
             case mod_survey:module_name(Type) of
                 undefined -> [];
                 M -> M:prep_answer_score(Q, QAnswers, Context)
@@ -682,19 +679,19 @@ answer_row_question(QAnswers, Q, true, Context) ->
 
 %% @doc private
 question_prepare(B, Context) ->
-    case mod_survey:module_name(proplists:get_value(type, B)) of
+    case mod_survey:module_name(maps:get(<<"type">>, B, undefined)) of
         undefined -> B;
         M -> M:prep_block(B, Context)
     end.
 
 %% @doc private
 answer_header(Block, MaxPoints, Context) ->
-    Type = proplists:get_value(type, Block),
+    Type = maps:get(<<"type">>, Block, undefined),
     case mod_survey:module_name(Type) of
         undefined -> [];
         M ->
             Hs = M:prep_answer_header(Block, Context),
-            case z_convert:to_bool(proplists:get_value(is_test, Block)) of
+            case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
                 true when MaxPoints > 0 ->
                     lists:flatten([
                             [H,<<"#">>]
@@ -709,10 +706,10 @@ ensure_list(L) when is_list(L) -> L;
 ensure_list(V) -> [V].
 
 answer_prompt(Block) ->
-    Type = proplists:get_value(type, Block),
+    Type = maps:get(<<"type">>, Block, undefined),
     case mod_survey:module_name(Type) of
         undefined -> [];
-        _M -> proplists:get_value(prompt, Block, <<>>)
+        _M -> maps:get(<<"prompt">>, Block, <<>>)
     end.
 
 -spec is_answer_user(integer(), z:context()) -> boolean().
@@ -839,7 +836,7 @@ survey_captions(Id, Context) ->
         Blocks when is_list(Blocks) ->
             [
                 {<<"created">>, ?__("Created", Context)} |
-                [ {proplists:get_value(name, Block), proplists:get_value(prompt, Block)} || Block <- Blocks ]
+                [ {maps:get(<<"name">>, Block, undefined), maps:get(<<"prompt">>, Block, undefined)} || Block <- Blocks ]
             ];
         _ ->
             []
@@ -853,8 +850,8 @@ survey_totals(Id, Context) ->
         Blocks when is_list(Blocks) ->
             All = lists:map(
                 fun(Block) ->
-                    Name = proplists:get_value(name, Block),
-                    Type = proplists:get_value(type, Block),
+                    Name = maps:get(<<"name">>, Block, undefined),
+                    Type = maps:get(<<"type">>, Block, undefined),
                     case mod_survey:module_name(Type) of
                         undefined -> undefined;
                         M ->

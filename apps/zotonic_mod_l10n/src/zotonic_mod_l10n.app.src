@@ -1,6 +1,6 @@
 {application, zotonic_mod_l10n, [
     {description, "Localization, timezones, translations for country names etc."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

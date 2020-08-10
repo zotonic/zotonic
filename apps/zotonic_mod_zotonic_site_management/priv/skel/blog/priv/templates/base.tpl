@@ -50,6 +50,14 @@
 						{% block content %}
 							<!-- The default content goes here. -->
 						{% endblock %}
+				        {% block below_body %}
+					        <!--
+					          The block 'below_body' is used by some modules to add
+					          content, it MUST be present to allow those modules to
+					          work properly.
+					          Example is 'mod_survey' which adds buttons for survey pages.
+					        -->
+				        {% endblock %}
 					</div>
 
 					<div id="sidebar" class="col-lg-4 col-md-4">

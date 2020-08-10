@@ -29,7 +29,7 @@
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 answer(Block, Answers, _Context) ->
-    Name = proplists:get_value(name, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
     case proplists:get_value(Name, Answers) of
         undefined ->
             {error, missing};
@@ -52,16 +52,16 @@ prep_chart(Q, Answers, Context) ->
     Total = Yes + No,
     YesP = round(Yes * 100 / Total),
     NoP = 100 - YesP,
-    [
-     {question, z_sanitize:html(proplists:get_value(prompt, Q), Context)},
-     {values, [ {Lab,Val} || {Lab,Val} <- [{"yes", Yes}, {"no", No}], Val /= 0 ]},
-     {type, "pie"},
-     {data, [ [Lab,Val] || [Lab,Val] <- [["yes", YesP], ["no", NoP]], Val /= 0 ]}
-    ].
+    #{
+        <<"question">> => z_sanitize:html(maps:get(<<"prompt">>, Q, undefined), Context),
+        <<"values">> => [ {Lab,Val} || {Lab,Val} <- [{"yes", Yes}, {"no", No}], Val /= 0 ],
+        <<"type">> => <<"pie">>,
+        <<"data">> => [ [Lab,Val] || [Lab,Val] <- [["yes", YesP], ["no", NoP]], Val /= 0 ]
+    }.
 
 
 prep_answer_header(Q, _Context) ->
-    proplists:get_value(name, Q).
+    maps:get(<<"name">>, Q, undefined).
 
 prep_answer(_Q, [], _Context) ->
     <<>>;

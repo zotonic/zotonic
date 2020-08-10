@@ -108,6 +108,12 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ Id, <<"is_cat">>, Key | Rest ], _Msg, Context) ->
     {ok, {is_cat(Id, Key, Context), Rest}};
+m_get([ Id, <<"is_a">>, Cat | Rest ], _Msg, Context) ->
+    IsA = m_rsc:is_a(Id, Cat, Context),
+    {ok, {IsA, Rest}};
+m_get([ Id, <<"is_a">> ], _Msg, Context) ->
+    IsA = m_rsc:is_a(Id, Context),
+    {ok, {IsA, []}};
 m_get([ Id, Key | Rest ], _Msg, Context) ->
     {ok, {p(Id, Key, Context), Rest}};
 m_get([ Id ], _Msg, Context) ->
@@ -286,7 +292,7 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
                 end,
                 AllCols),
             Query = iolist_to_binary([
-                "select ",z_utils:combine($,, DataCols),
+                "select ",lists:join($,, DataCols),
                 " from rsc where id = $1"
             ]),
             z_memo:set(rsc_raw_sql, Query),
@@ -581,7 +587,7 @@ p_no_acl(Id, <<"is_editable">>, Context) -> is_editable(Id, Context);
 p_no_acl(Id, <<"is_deletable">>, Context) -> is_deletable(Id, Context);
 p_no_acl(Id, <<"is_linkable">>, Context) -> is_linkable(Id, Context);
 p_no_acl(Id, <<"is_published_date">>, Context) -> is_published_date(Id, Context);
-p_no_acl(Id, <<"is_a">>, Context) -> [{C, true} || C <- is_a(Id, Context)];
+p_no_acl(Id, <<"is_a">>, Context) -> is_a(Id, Context);
 p_no_acl(Id, <<"exists">>, Context) -> exists(Id, Context);
 p_no_acl(Id, <<"page_url_abs">>, Context) ->
     case p_no_acl(Id, <<"page_path">>, Context) of
@@ -650,7 +656,7 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
 
 
 p_cached(Id, Property, Context) ->
-    Value = case z_depcache:get(Id, Property, Context) of
+    case z_depcache:get(Id, Property, Context) of
         {ok, V} ->
             V;
         undefined ->
@@ -662,17 +668,6 @@ p_cached(Id, Property, Context) ->
                 Map ->
                     maps:get(Property, Map, undefined)
             end
-    end,
-    case Value of
-        undefined ->
-            % Unknown properties will be checked against the predicates, returns o(Predicate).
-            case m_predicate:is_predicate(Property, Context) of
-                true -> o(Id, Property, Context);
-                false ->
-                    undefined % z_notifier:first(#rsc_property{id=Id, property=Predicate}, Context)
-            end;
-        _ ->
-            Value
     end.
 
 

@@ -138,13 +138,16 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
             <<>>
     end.
 
-props_to_map([], Map) ->
-    Map;
-props_to_map([{K,V}|Rest], Map) ->
-    props_to_map(Rest, Map#{K => V});
-props_to_map([K|Rest], Map) ->
-    props_to_map(Rest, Map#{K => true}).
-
+props_to_map(L, Map) ->
+    lists:foldr(
+        fun
+            ({K, V}, Acc) ->
+                Acc#{ K => V };
+            (K, Acc) ->
+                Acc#{ K => true }
+        end,
+        Map,
+        L).
 
 %% @todo Remove these functions, templates should not have any javascript etc. (call z_render for old style templates)
 %% @doc Render a template to an iolist().  This removes all scomp state etc from the rendered html and appends the

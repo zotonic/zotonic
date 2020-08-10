@@ -22,7 +22,7 @@
             <div class="col-md-9">
 		        <textarea type="text" class="col-lg-4 col-md-4 form-control do_autofocus" id="url" name="url" rows="3">{{ medium.media_import|escape }}</textarea>
 		        {% validate id="url" type={presence} %}
-		        <p class="help-block">{_ Embed code will be sanitized. Only whitelisted sites are allowed in embed codes. _}</p>
+		        <p class="help-block">{_ Embed code will be sanitized for allowed sites and html. _}</p>
             </div>
 		</div>
 

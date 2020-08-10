@@ -26,35 +26,33 @@
         </thead>
 
         <tbody>
-	    {% for title, id in m.search[{all_bytitle cat="mailinglist"}] %}
-	    <tr id="mailinglist-{{id}}" data-href="{% url admin_mailinglist_recipients id=id %}">
-		{% with m.rsc[id].is_editable as editable %}
-		    <td width="20%">{{ title|default:"untitled" }}</td>
-		    <td width="40%">{{ m.rsc[id].summary|default:"-" }}</td>
-		    {% with m.mailinglist.stats[id] as stats %}
-		    <td width="10%">{{ stats[1]|format_number }}</td>
-		    <td width="30%">
-		        <div class="pull-right buttons">
-		            <a class="btn btn-default btn-xs" href="{% url admin_mailinglist_recipients id=id %}">{_ Recipients _}</a>
-			        {% if editable %}
-                        <a class="btn btn-default btn-xs" href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
-    			    {% else %}
-                        <a class="btn btn-default btn-xs" href="{% url admin_edit_rsc id=id %}">{_ View _}</a>
-			        {% endif %}
-			        {% button class="btn btn-default btn-xs" text=_"Delete" postback={mailinglist_delete_confirm id=id} disabled=not editable %}
-		        </div>
-                {{ stats[2]|length|format_number }}
-                </td>
-		    {% endwith %}
-		{% endwith %}
-	    </tr>
-	    {% empty %}
-	    <tr>
-                <td colspan="4">
-		    {_ No items found _}
-                </td>
-            </tr>
-	    {% endfor %}
+    	    {% for title, id in m.search[{all_bytitle cat="mailinglist" pagelen=1000}] %}
+        	    <tr id="mailinglist-{{id}}" data-href="{% url admin_mailinglist_recipients id=id %}">
+            		{% with m.rsc[id].is_editable as editable %}
+            		    <td width="20%">{{ title|default:"untitled" }}</td>
+            		    <td width="40%">{{ m.rsc[id].summary|default:"-" }}</td>
+            		    {% with m.mailinglist.stats[id] as stats %}
+            		    <td width="10%">{{ stats.total|format_number }}</td>
+            		    <td width="30%">
+            		        <div class="pull-right buttons">
+            		            <a class="btn btn-default btn-xs" href="{% url admin_mailinglist_recipients id=id %}">{_ Recipients _}</a>
+            			        {% if editable %}
+                                    <a class="btn btn-default btn-xs" href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
+                			    {% else %}
+                                    <a class="btn btn-default btn-xs" href="{% url admin_edit_rsc id=id %}">{_ View _}</a>
+            			        {% endif %}
+            			        {% button class="btn btn-default btn-xs" text=_"Delete" postback={mailinglist_delete_confirm id=id} disabled=not editable %}
+            		        </div>
+                            {{ stats.scheduled|length|format_number }}
+                            </td>
+            		    {% endwith %}
+            		{% endwith %}
+        	    </tr>
+    	    {% empty %}
+        	    <tr>
+                    <td colspan="4"> {_ No items found _} </td>
+                </tr>
+    	    {% endfor %}
         </tbody>
     </table>
 </div>

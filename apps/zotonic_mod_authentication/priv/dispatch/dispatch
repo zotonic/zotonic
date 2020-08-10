@@ -13,9 +13,5 @@
  % Authentication API used by zotonic.auth.worker.js
  {logon_auth,       [ "zotonic-auth" ],     controller_authentication, []},
 
- % To be checked
- {logon_service,    ["logon", "service", service ], controller_template, [{template, "logon_service.tpl"}]},
-
-
  {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{template, "admin_authentication_services.tpl"}]}
 ].

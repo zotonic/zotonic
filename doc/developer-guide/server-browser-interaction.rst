@@ -207,5 +207,3 @@ The message queue is either ``session`` or ``page``. It defines which queue will
 be responsible for resending the message and where the ack message is received.
 If ``user`` is specified as queue then it will be replaced by ``session``.
 
-.. seealso:: :ref:`transport reference <ref-transport>`.
-

@@ -115,7 +115,7 @@ cg_move_and_delete(Ids, ToGroupId, Context) ->
     ok.
 
 in_content_groups(Ids, Context) ->
-    In = lists:flatten(z_utils:combine($,, [ integer_to_list(NId) || NId <- Ids ])),
+    In = lists:flatten(lists:join($,, [ integer_to_list(NId) || NId <- Ids ])),
     z_db:q("select id from rsc where content_group_id in ("++In++")", [], Context, 60000).
 
 delete_all([], _N, _Total, _Context) ->

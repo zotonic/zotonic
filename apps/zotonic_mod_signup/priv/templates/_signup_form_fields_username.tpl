@@ -27,11 +27,11 @@ show_signup_password2
             <div class="form-group" id="signup_password1">
                 <label for="password1" class="control-label">{_ Password _}</label>
                 <input class="form-control" id="password1" name="password1" type="password" value="" autocomplete="new-password" />
-                {% if m.config.mod_admin_identity.password_regex.value %}
+                {% if m.admin_identity.password_regex %}
                     {% validate id="password1"
                         type={presence failure_message=_"Enter a password"}
                         type={format
-                            pattern=m.config.mod_admin_identity.password_regex.value
+                            pattern=m.admin_identity.password_regex
                             failure_message=_"This password does not meet the security requirements"
                         }
                         only_on_blur

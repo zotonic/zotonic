@@ -1,6 +1,6 @@
 {application, zotonic_mod_ssl_ca, [
     {description, "Use SSL Certificate from Let's Encrypt."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

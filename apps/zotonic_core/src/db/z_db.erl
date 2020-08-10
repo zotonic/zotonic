@@ -202,7 +202,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                                R
                         end
                     catch
-                        ?WITH_STACKTRACE(_, Why, S)
+                        _:Why:S ->
                             DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
                             {rollback, {Why, S}}
                     end
@@ -640,9 +640,9 @@ insert(Table, Parameters, Context) ->
             {ColNames, ColParams} = lists:unzip( maps:to_list(InsertProps1) ),
             Sql = iolist_to_binary([
                 "insert into \"", Table, "\" (\"",
-                    z_utils:combine("\", \"", ColNames),
+                    lists:join("\", \"", ColNames),
                 "\") values (",
-                    z_utils:combine(", ", [ [$$ | integer_to_list(N)] || N <- lists:seq(1, length(ColParams)) ]),
+                    lists:join(", ", [ [$$ | integer_to_list(N)] || N <- lists:seq(1, length(ColParams)) ]),
                 ")"
             ]),
             FinalSql = case lists:member(<<"id">>, Cols) of
@@ -709,7 +709,7 @@ update(Table, Id, Parameters, Context) when is_map(Parameters), is_list(Table) -
                 ],
                 Sql = iolist_to_binary([
                     "update \"", Table, "\" set ",
-                    z_utils:combine(", ", ColAssigns),
+                    lists:join(", ", ColAssigns),
                     " where id = $1"
                 ]),
                 case equery1(DbDriver, C, Sql, [Id | Params]) of

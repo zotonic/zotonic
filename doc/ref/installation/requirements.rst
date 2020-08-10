@@ -21,15 +21,12 @@ installed:
 3. **PostgreSQL** version 8.4 or higher. Enable trust-authentication
    (username+password) in Postgres (see below).
 
-4. **PostgreSQL** version 8.4 or higher. Enable trust-authentication
-   (username+password) in Postgres (see below).
+4. **gcc** and **g++** For compiling dependencies like `erlexec`.
 
-5. **gcc** and **g++** For compiling dependencies like `erlexec`.
-
-6. **git** Zotonic comes with a few subprojects which are pulled from
+5. **git** Zotonic comes with a few subprojects which are pulled from
    the web with the ``git`` command.
 
-7. **gettext** For translation support.
+6. **gettext** For translation support.
 
 If you meet these requirements, head straight on to :ref:`guide-installation`,
 otherwise, read on below for the specifics on these.

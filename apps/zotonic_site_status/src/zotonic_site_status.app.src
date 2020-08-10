@@ -1,6 +1,6 @@
 {application, zotonic_site_status, [
     {description, "Default Zotonic site, used when no other site can handle the supplied Host."},
-    {vsn, "git"},
+    {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},

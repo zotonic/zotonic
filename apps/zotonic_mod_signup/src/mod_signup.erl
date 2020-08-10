@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2013 Marc Worrell
+%% @copyright 2010-2020 Marc Worrell
 %% @doc Let new members register themselves.
-%% @todo Check person props before sign up
-%% @todo Add verification and verification e-mails (check for _Verified, add to m_identity)
 
-%% Copyright 2010-2013 Marc Worrell
+%% Copyright 2010-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,7 +23,7 @@
 -mod_description("Implements public sign up to register as member of this site.").
 -mod_prio(500).
 -mod_schema(1).
--mod_depends([base, authentication]).
+-mod_depends([ base, mod_authentication, mod_server_storage ]).
 -mod_provides([signup]).
 
 
@@ -35,9 +33,8 @@
     observe_signup/2,
     observe_signup_url/2,
     observe_identity_verification/2,
-    observe_logon_ready_page/2
-]).
--export([
+    observe_logon_ready_page/2,
+
     signup/4,
     signup_existing/5,
     request_verification/2
@@ -53,8 +50,8 @@ observe_signup(#signup{id=UserId, props=Props, signup_props=SignupProps, request
 
 %% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.
 observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) ->
-    CheckId = binary_to_list(z_ids:id()),
-    % z_session:set(signup_xs, {CheckId, Props, SignupProps}, Context),
+    CheckId = z_ids:id(),
+    ok = m_server_storage:secure_store(CheckId, {CheckId, Props, SignupProps}, Context),
     {ok, z_dispatcher:url_for(signup, [{xs, CheckId}], Context)}.
 
 
@@ -68,23 +65,27 @@ observe_identity_verification(#identity_verification{user_id=UserId, identity=Id
 
 
 %% @doc Return the url to redirect to when the user logged on, defaults to the user's personal page.
-observe_logon_ready_page(#logon_ready_page{request_page=[]}, Context) ->
+observe_logon_ready_page(#logon_ready_page{ request_page = None }, Context) when None =:= undefined; None =:= <<>> ->
     case z_auth:is_auth(Context) of
         true -> m_rsc:p(z_acl:user(Context), page_url, Context);
         false -> []
     end;
-observe_logon_ready_page(#logon_ready_page{request_page=Url}, _Context) ->
+observe_logon_ready_page(#logon_ready_page{ request_page = Url }, _Context) ->
     Url.
 
 
 %% @doc Sign up a new user.
--spec signup(list(), list(), boolean(), #context{}) -> {ok, integer()} | {error, term()}.
+-spec signup(list(), list() | map(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
 signup(Props, SignupProps, RequestConfirm, Context) ->
     signup_existing(undefined, Props, SignupProps, RequestConfirm, Context).
 
 %% @doc Sign up a existing user
--spec signup_existing(integer()|undefined, list(), list(), boolean(), #context{}) -> {ok, integer()} | {error, term()}.
-signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) ->
+-spec signup_existing(integer()|undefined, map() | list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
+
+signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) when is_list(Props) ->
+    {ok, PropsMap} = z_props:from_list(Props),
+    signup_existing(UserId, PropsMap, SignupProps, RequestConfirm, Context);
+signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) when is_map(Props) ->
     ContextSudo = z_acl:sudo(Context),
     case check_signup(Props, SignupProps, ContextSudo) of
         {ok, Props1, SignupProps1} ->
@@ -98,15 +99,15 @@ request_verification(UserId, Context) ->
     Unverified = [ R || R <- m_identity:get_rsc(UserId, Context), proplists:get_value(is_verified, R) == false ],
     request_verification(UserId, Unverified, false, Context).
 
-    request_verification(_, [], false, _Context) ->
-        {error, no_verifiable_identities};
-    request_verification(_, [], true, _Context) ->
-        ok;
-    request_verification(UserId, [Ident|Rest], Requested, Context) ->
-        case z_notifier:first(#identity_verification{user_id=UserId, identity=Ident}, Context) of
-            ok -> request_verification(UserId, Rest, true, Context);
-            _ -> request_verification(UserId, Rest, Requested, Context)
-        end.
+request_verification(_, [], false, _Context) ->
+    {error, no_verifiable_identities};
+request_verification(_, [], true, _Context) ->
+    ok;
+request_verification(UserId, [Ident|Rest], Requested, Context) ->
+    case z_notifier:first(#identity_verification{user_id=UserId, identity=Ident}, Context) of
+        ok -> request_verification(UserId, Rest, true, Context);
+        _ -> request_verification(UserId, Rest, Requested, Context)
+    end.
 
 %%====================================================================
 %% support functions
@@ -164,19 +165,25 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     end.
 
 %% @doc Optionally add a depiction using the 'depiction_url' in the user's props
+-spec maybe_add_depiction( m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
 maybe_add_depiction(Id, Props, Context) ->
     case m_edge:objects(Id, depiction, Context) of
         [] ->
-            case proplists:get_value(depiction_url, Props) of
+            case maps:get(<<"depiction_url">>, Props, undefined) of
                 Url when Url =/= <<>>, Url =/= [], Url =/= undefined ->
-                    case m_media:insert_url(Url, z_acl:logon(Id, Context)) of
+                    MediaProps = #{
+                        <<"is_dependent">> => true,
+                        <<"is_published">> => true
+                    },
+                    case m_media:insert_url(Url, MediaProps, z_acl:logon(Id, Context)) of
                         {ok, MediaId} ->
                             lager:info("Added depiction from depiction_url for ~p: ~p",
                                        [Id, Url]),
-                            {ok, _} = m_edge:insert(Id, depiction, MediaId, Context);
+                            {ok, _} = m_edge:insert(Id, depiction, MediaId, Context),
+                            ok;
                         {error, _} = Error ->
-                            lager:warning("Could not insert depiction_url for ~p: ~p",
-                                          [Id, Url]),
+                            lager:warning("Could not insert depiction_url for ~p: ~p ~p",
+                                          [Id, Error, Url]),
                             Error
                     end;
                 _ ->
@@ -212,7 +219,7 @@ ensure_identity(Id, {Type, Key, IsUnique, IsVerified}, Context) when is_binary(K
 props_to_rsc(Props, IsVerified, Context) when is_list(Props) ->
     {ok, PropsMap} = z_props:from_list(Props),
     props_to_rsc(PropsMap, IsVerified, Context);
-props_to_rsc(Props, IsVerified, Context) ->
+props_to_rsc(Props, IsVerified, Context) when is_map(Props) ->
     Category = z_convert:to_atom(m_config:get_value(mod_signup, member_category, person, Context)),
     ContentGroup = z_convert:to_atom(m_config:get_value(mod_signup, content_group, undefined, Context)),
     Props1 = Props#{

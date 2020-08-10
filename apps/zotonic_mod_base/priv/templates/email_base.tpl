@@ -2,7 +2,7 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>{% block title_wrapper %}{% block title %}{_ Hello from Zotonic _}{% endblock %}{% endblock %}</title>
-	<base href="http://{{ m.site.hostname }}/" />
+	<base href="https://{{ m.site.hostname }}/" />
 	<base target="_blank" />
 	{% block email_styles %}{% include "_email_styles.tpl" %}{% endblock %}
 </head>
@@ -20,7 +20,7 @@
 				{% endblock %}
 				{% block closing %}
 					<p>{_ Kind regards, _}</p>
-					<p><a href="http://{{ m.site.hostname }}/">{{ m.site.title }}</a></p>
+					<p><a href="https://{{ m.site.hostname }}/">{{ m.site.title }}</a></p>
 				{% endblock %}
 				{% block disclaimer %}
 				{% endblock %}

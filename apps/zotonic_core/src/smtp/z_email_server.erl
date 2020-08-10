@@ -131,8 +131,9 @@ tempfile() ->
     z_tempfile:tempfile(?TMPFILE_EXT).
 
 %% @doc Check if a file is a tempfile of the emailer
-is_tempfile(File) when is_list(File) ->
-    z_tempfile:is_tempfile(File) andalso filename:extension(File) =:= ?TMPFILE_EXT.
+is_tempfile(File) ->
+    z_tempfile:is_tempfile(File)
+    andalso z_convert:to_list(filename:extension(File)) =:= ?TMPFILE_EXT.
 
 %% @doc Return the max age of a tempfile
 is_tempfile_deletable(undefined) ->
@@ -799,7 +800,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                                 props=LogEmail#log_email{
                                                         severity = ?LOG_WARNING,
                                                         mailer_status = retry,
-                                                        mailer_message = z_convert:to_binary(Message),
+                                                        mailer_message = message(Message),
                                                         mailer_host = Host
                                                     }
                                               }, Context),
@@ -869,6 +870,14 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                             catch gen_smtp_client:send({VERP, [Bcc], EncodedMail}, BccSmtpOpts)
                     end
             end
+    end.
+
+message(Message) ->
+    try
+        z_convert:to_binary(Message)
+    catch
+        _:_ ->
+            z_convert:to_binary( io_lib:format("~p", [Message]) )
     end.
 
 send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) ->
@@ -1395,7 +1404,7 @@ encode_header({Header, [V|_] = Vs}) when is_list(V); is_binary(V); is_tuple(V) -
                             filter_ascii(Value)
                     end,
                     Vs),
-    [ Header, ": ", z_utils:combine(";\r\n  ", Hdr) ];
+    [ Header, ": ", lists:join(";\r\n  ", Hdr) ];
 encode_header({Header, Value})
     when Header =:= <<"To">>;
          Header =:= <<"From">>;
@@ -1416,7 +1425,7 @@ encode_header({Header, Value}) when is_atom(Header) ->
 
 encode_headers(Headers) ->
     iolist_to_binary([
-        z_utils:combine("\r\n", lists:map(fun encode_header/1, Headers))
+        lists:join("\r\n", lists:map(fun encode_header/1, Headers))
     ]).
 
 filter_ascii(Value) when is_list(Value) ->

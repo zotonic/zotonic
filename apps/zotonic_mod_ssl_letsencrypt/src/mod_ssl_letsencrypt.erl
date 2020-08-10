@@ -334,13 +334,13 @@ do_load_cert(State) ->
     {certfile, CertFile} = proplists:lookup(certfile, Files),
     case filelib:is_file(CertFile) of
         true ->
-            case z_ssl_certs:decode_cert(CertFile) of
-                {ok, Props} ->
+            case zotonic_ssl_certs:decode_cert(CertFile) of
+                {ok, CertMap} ->
                     State#state{
                         cert_is_valid = true,
-                        cert_hostname = proplists:get_value(common_name, Props),
-                        cert_san = proplists:get_value(subject_alt_names, Props, []),
-                        cert_valid_till = proplists:get_value(not_after, Props)
+                        cert_hostname = maps:get(common_name, CertMap),
+                        cert_san = maps:get(subject_alt_names, CertMap, []),
+                        cert_valid_till = maps:get(not_after, CertMap)
                     };
                 {error, _} = Error ->
                     lager:error("Could not decode Letsencrypt crt file ~p",
@@ -460,7 +460,7 @@ cert_dir(Context) ->
 cert_temp_dir(Context) ->
     filename:join([cert_dir(Context), "tmp"]).
 
--spec check_keyfile(string(), #context{}) -> {ok, string()} | {error, openssl|no_private_keys_found|need_rsa_private_key|term()}.
+-spec check_keyfile(string(), z:context()) -> ok | {error, openssl|no_private_keys_found|need_rsa_private_key|term()}.
 check_keyfile(KeyFile, Context) ->
     Site = z_context:site(Context),
     Hostname = z_context:hostname(Context),
@@ -484,7 +484,7 @@ check_keyfile(KeyFile, Context) ->
     end.
 
 %% @doc Ensure that we have a RSA key for Letsencrypt.
--spec ensure_key_file(#context{}) -> {ok, string()} | {error, openssl|no_private_keys_found|need_rsa_private_key|term()}.
+-spec ensure_key_file(z:context()) -> {ok, string()} | {error, openssl|no_private_keys_found|need_rsa_private_key|term()}.
 ensure_key_file(Context) ->
     SSLDir = cert_dir(Context),
     KeyFile = filename:join(SSLDir, "letsencrypt_api.key"),
@@ -518,7 +518,7 @@ ensure_key_file(Context) ->
     end.
 
 % @doc Download the intermediate certificates
--spec download_cacert(#context{}) -> ok | {error, term()}.
+-spec download_cacert(z:context()) -> ok | {error, term()}.
 download_cacert(Context) ->
     case z_url_fetch:fetch(?CA_CERT_URL, []) of
         {ok, {_Url, Hs, _Size, Cert}} ->

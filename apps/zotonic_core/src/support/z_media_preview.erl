@@ -96,7 +96,7 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
         z_utils:os_filename(ConvertCmd), " ",
         opt_density(FileProps),
         z_utils:os_filename(InFile++infile_suffix(Mime)), " ",
-        lists:flatten(z_utils:combine(32, CmdArgs)), " ",
+        lists:flatten(lists:join(32, CmdArgs)), " ",
         z_utils:os_filename(OutFile)
     ]),
     case run_cmd(Cmd, OutFile) of

@@ -26,7 +26,7 @@
 {% if id.is_published and not id.publication_start|in_future %}
 <tr>
 	<td>
-		<p style="text-align: center;"><a href="http://{{ m.site.hostname }}{{ id.page_url }}" style="color: gray;">{_ Click here when you can’t read the message below. _}</a></p>
+		<p style="text-align: center;"><a href="{{ id.page_url_abs }}" style="color: gray;">{_ Click here when you can’t read the message below. _}</a></p>
 	</td>
 </tr>
 <tr>

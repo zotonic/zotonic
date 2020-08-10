@@ -47,7 +47,7 @@
 			{% endif %}
 
 			{% if not editing or pages > 1 %}
-				{% if not id.survey_autostart or page_nr > 1 %}
+				{% if not id.survey_is_autostart or page_nr > 1 %}
 					<a id="{{ #cancel }}" href="#" class="btn btn-default">{_ Stop _}</a>
 					{% wire id=#cancel action={confirm text=_"Are you sure you want to stop?" ok=_"Stop" cancel=_"Continue" action={redirect id=id}} %}
 				{% endif %}
@@ -61,7 +61,11 @@
 			{% else %}
 				{% with questions|last as last_q %}
 					{% if not editing and not questions|survey_is_submit and last_q.type /= "survey_stop" %}
-						<button type="submit" class="btn btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
+						{% if page_nr == pages %}
+							<button type="submit" class="btn btn-primary survey-submit">{_ Submit _}</button>
+						{% else %}
+							<button type="submit" class="btn btn-primary survey-next">{_ Next _}</button>
+						{% endif %}
 					{% endif %}
 				{% endwith %}
 			{% endif %}

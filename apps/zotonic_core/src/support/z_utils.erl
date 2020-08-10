@@ -23,6 +23,8 @@
 -include("zotonic.hrl").
 
 -export([
+    pipeline/2,
+
     get_value/2,
     get_value/3,
     are_equal/2,
@@ -34,8 +36,7 @@
     checksum/2,
     checksum_assert/3,
     coalesce/1,
-    combine/2,
-    combine_defined/2,
+    join_defined/2,
     depickle/2,
     f/1,
     f/2,
@@ -76,6 +77,7 @@
     os_filename/1,
     pickle/2,
     prefix/2,
+    hmac/3,
     prop_delete/2,
     prop_replace/3,
     props_merge/2,
@@ -90,12 +92,73 @@
     ensure_existing_module/1
 ]).
 
+%% @doc Apply a list of functions to a startlist of arguments.
+%% All functions must return: ok | {ok, term()} | {error, term()}.
+%% Execution stops if a function returns an error tuple.
+%% The return value of the last executed function is returned.
+-spec pipeline( list( PipelineFun ), list() ) -> ok | {ok, term()} | {error, term()}
+    when PipelineFun :: function()
+                      | mfa().
+pipeline(Fs, As) ->
+    pipeline_1(Fs, ok, As, length(As)).
 
+pipeline_1(_Fs, {error, _} = Error, _As, _AsLen) ->
+    Error;
+pipeline_1([], Result, _As, _AsLen) ->
+    Result;
+pipeline_1([ F | Fs ], ok, As, AsLen) ->
+    case pipeline_apply(F, As, AsLen) of
+        nofun ->
+            {error, F};
+        R ->
+            pipeline_1(Fs, R, As, AsLen)
+    end;
+pipeline_1([ F | Fs ], {ok, Result}, As, AsLen) ->
+    FRes = case pipeline_apply(F, [ Result | As ], AsLen + 1) of
+        nofun ->
+            case pipeline_apply(F, As, AsLen) of
+                nofun ->
+                    {error, F};
+                R ->
+                    R
+            end;
+        R ->
+            R
+    end,
+    pipeline_1(Fs, FRes, As, AsLen).
+
+pipeline_apply(F, _As, _AsLen) when is_function(F, 0) ->
+    F();
+pipeline_apply(F, As, AsLen) when is_function(F, AsLen) ->
+    erlang:apply(F, As);
+pipeline_apply({M, F, A}, As, AsLen) when is_atom(M), is_atom(F), is_list(A) ->
+    code:ensure_loaded(M),
+    case erlang:function_exported(M, F, AsLen + length(A)) of
+        false ->
+            case erlang:function_exported(M, F, length(A)) of
+                true ->
+                    erlang:apply(M, F, A);
+                false ->
+                    nofun
+            end;
+        true ->
+            erlang:apply(M, F, A ++ As)
+    end;
+pipeline_apply(_F, _As, _AsLen) ->
+    nofun.
+
+
+%% @doc Get a value from a map or a proplist. Return 'undefined' if
+%% The value was not present.
+-spec get_value( term(), map() | list() ) -> term().
 get_value(Key, Map) when is_map(Map) ->
     maps:get(Key, Map, undefined);
 get_value(Key, Map) when is_list(Map) ->
     proplists:get_value(Key, Map, undefined).
 
+%% @doc Get a value from a map or a proplist. Return the default value if
+%% The value was not present.
+-spec get_value( term(), map() | list(), term() ) -> term().
 get_value(Key, Map, Default) when is_map(Map) ->
     maps:get(Key, Map, Default);
 get_value(Key, Map, Default) when is_list(Map) ->
@@ -247,14 +310,14 @@ encode_value(Value, #context{} = Context) ->
 encode_value(Value, Secret) when is_list(Secret); is_binary(Secret) ->
     Salt = z_ids:rand_bytes(4),
     BinVal = erlang:term_to_binary(Value),
-    Hash = crypto:hmac(sha, Secret, [ BinVal, Salt ]),
+    Hash = hmac(sha, Secret, [ BinVal, Salt ]),
     base64:encode(iolist_to_binary([ 1, Salt, Hash, BinVal ])).
 
 decode_value(Data, #context{} = Context) ->
     decode_value(Data, z_ids:sign_key(Context));
 decode_value(Data, Secret) when is_list(Secret); is_binary(Secret) ->
     <<1, Salt:4/binary, Hash:20/binary, BinVal/binary>> = base64:decode(Data),
-    Hash = crypto:hmac(sha, Secret, [ BinVal, Salt ]),
+    Hash = hmac(sha, Secret, [ BinVal, Salt ]),
     erlang:binary_to_term(BinVal).
 
 encode_value_expire(Value, Date, Context) ->
@@ -266,6 +329,15 @@ decode_value_expire(Data, Context) ->
         false -> {error, expired};
         true -> {ok, Value}
     end.
+
+
+-ifdef(crypto_hmac).
+hmac(Type, Key, Data) ->
+    crypto:hmac(Type, Key, Data).
+-else.
+hmac(Type, Key, Data) ->
+    crypto:mac(hmac, Type, Key, Data).
+-endif.
 
 
 %%% CHECKSUM %%%
@@ -292,7 +364,7 @@ pickle(Data, Context) ->
     Nonce = z_ids:rand_bytes(4),
     Sign  = z_ids:sign_key(Context),
     SData = <<BData/binary, Nonce:4/binary>>,
-    <<Mac:16/binary>> = crypto:hmac(md5, Sign, SData),
+    <<Mac:16/binary>> = hmac(md5, Sign, SData),
     base64url:encode(<<Mac:16/binary, Nonce:4/binary, BData/binary>>).
 
 depickle(Data, Context) ->
@@ -300,7 +372,7 @@ depickle(Data, Context) ->
         <<Mac:16/binary, Nonce:4/binary, BData/binary>> = base64url:decode(Data),
         Sign  = z_ids:sign_key(Context),
         SData = <<BData/binary, Nonce:4/binary>>,
-        <<Mac:16/binary>> = crypto:hmac(md5, Sign, SData),
+        <<Mac:16/binary>> = hmac(md5, Sign, SData),
         erlang:binary_to_term(BData)
     catch
         _M:_E ->
@@ -431,7 +503,7 @@ js_escape1([H|T], Acc, OptContext) ->
     js_escape1(T, [H1|Acc], OptContext).
 
 js_array(L) ->
-    [ $[, combine($,,[ js_prop_value(undefined, V, undefined) || V <- L ]), $] ].
+    [ $[, lists:join($,,[ js_prop_value(undefined, V, undefined) || V <- L ]), $] ].
 
 
 %% @doc Create a javascript object from a proplist
@@ -446,13 +518,14 @@ js_object(L, [Key|T], Context) -> js_object(proplists:delete(Key,L), T, Context)
 
 %% recursively add all properties as object properties
 js_object1([], Acc, _OptContext) ->
-    [${, combine($,,lists:reverse(Acc)), $}];
+    [${, lists:join($,,lists:reverse(Acc)), $}];
 js_object1([{Key,Value}|T], Acc, OptContext) ->
     Prop = [atom_to_list(Key), $:, js_prop_value(Key, Value, OptContext)],
     js_object1(T, [Prop|Acc], OptContext).
 
 
 js_prop_value(_, undefined, _OptContext) -> <<"null">>;
+js_prop_value(_, null, _OptContext) -> <<"null">>;
 js_prop_value(_, true, _OptContext) -> <<"true">>;
 js_prop_value(_, false, _OptContext) -> <<"false">>;
 js_prop_value(_, Atom, _OptContext) when is_atom(Atom) -> [$",js_escape(erlang:atom_to_list(Atom)), $"];
@@ -511,14 +584,15 @@ is_proplist([]) -> true;
 is_proplist([{K,_}|R]) when is_atom(K) -> is_proplist(R);
 is_proplist(_) -> false.
 
-
-combine_defined(Sep, List) ->
-    List2 = lists:filter(fun(X) -> X /= undefined end, List),
-    combine(Sep, List2).
-
-combine(_Sep, []) -> [];
-combine(_Sep, [A]) -> [A];
-combine(Sep, [H|T]) -> [H, prefix(Sep, T)].
+join_defined(Sep, List) ->
+    List2 = lists:filter(
+        fun
+            (undefined) -> false;
+            (null) -> false;
+            (_) -> true
+        end,
+        List),
+    lists:join(Sep, List2).
 
 prefix(Sep, List) -> prefix(Sep,List,[]).
 
@@ -530,12 +604,14 @@ prefix(Sep, [H|T], Acc) -> prefix(Sep, T, [H,Sep|Acc]).
 coalesce([]) -> undefined;
 coalesce([H]) -> H;
 coalesce([undefined|T]) -> coalesce(T);
+coalesce([null|T]) -> coalesce(T);
 coalesce([[]|T]) -> coalesce(T);
 coalesce([H|_]) -> H.
 
 
 %% @doc Check if a value is 'empty'
 is_empty(undefined) -> true;
+is_empty(null) -> true;
 is_empty([]) -> true;
 is_empty(<<>>) -> true;
 is_empty({{9999,_,_},{_,_,_}}) -> true;

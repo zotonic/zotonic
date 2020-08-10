@@ -64,7 +64,7 @@
 -include_lib("zotonic.hrl").
 
 
--define(MQTT_CALL_TIMEOUT, 10000).
+-define(MQTT_CALL_TIMEOUT, 60000).
 
 
 -spec publish( topic(), term(), z:context()) -> ok | {error, term()}.
@@ -238,4 +238,4 @@ flatten_topic(T) when is_binary(T) ->
     T;
 flatten_topic(T) when is_list(T) ->
     T1 = lists:map(fun z_convert:to_binary/1, T),
-    iolist_to_binary( z_utils:combine_defined($/, T1) ).
+    iolist_to_binary( z_utils:join_defined($/, T1) ).

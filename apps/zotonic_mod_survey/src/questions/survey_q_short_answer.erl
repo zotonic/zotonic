@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2012 Marc Worrell
+%% @copyright 2011-2020 Marc Worrell
 
-%% Copyright 2011-2012 Marc Worrell
+%% Copyright 2011-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
     prep_answer_header/2,
     prep_answer/3,
     prep_block/2,
+    prep_totals/3,
     to_block/1
 ]).
 
@@ -30,7 +31,7 @@
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 answer(Block, Answers, _Context) ->
-    Name = proplists:get_value(name, Block),
+    Name = maps:get(<<"name">>, Block, undefined),
     case proplists:get_value(Name, Answers) of
         undefined ->
             {error, missing};
@@ -45,7 +46,7 @@ prep_chart(_Block, _Ans, _Context) ->
     undefined.
 
 prep_answer_header(Q, _Context) ->
-    proplists:get_value(name, Q).
+    maps:get(<<"name">>, Q, undefined).
 
 prep_answer(_Q, [], _Context) ->
     <<>>;
@@ -58,11 +59,25 @@ prep_block(B, _Context) ->
 
 
 to_block(Q) ->
-    [
-        {type, survey_short_answer},
-        {is_required, Q#survey_question.is_required},
-        {name, z_convert:to_binary(Q#survey_question.name)},
-        {prompt, z_convert:to_binary(Q#survey_question.question)}
-    ].
+    #{
+        <<"type">> => <<"survey_short_answer">>,
+        <<"is_required">> => Q#survey_question.is_required,
+        <<"name">> => z_convert:to_binary(Q#survey_question.name),
+        <<"prompt">> => z_convert:to_binary(Q#survey_question.question)
+    }.
 
 
+prep_totals(#{ <<"validation">> := <<"numericality">> }, [ {_, Vals} ], _) ->
+    lists:foldl(
+      fun({K, V}, Sum) ->
+              try
+                  (z_convert:to_integer(K) * z_convert:to_integer(V)) + Sum
+              catch
+                  error:badarith ->
+                      Sum
+              end
+      end,
+      0,
+      Vals);
+prep_totals(_, _, _) ->
+    undefined.

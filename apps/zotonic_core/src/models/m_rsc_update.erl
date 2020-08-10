@@ -638,7 +638,7 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
                 throw:{error, _} = Error -> {rollback, Error}
             end;
         {error, _} = Error ->
-            {rolback, Error}
+            {rollback, Error}
     end.
 
 escape_props(true, Props, Context) ->
@@ -939,18 +939,13 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
 preflight_check_uri(_Id, _Props, _Context) ->
     ok.
 
-preflight_check_query(Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
-    case m_rsc:is_a(Id, 'query', Context) of
-        true ->
-            try
-                SearchContext = z_context:new( Context ),
-                search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
-                ok
-            catch
-                _: {error, {_, _}} ->
-                    {error, invalid_query}
-            end;
-        false ->
+preflight_check_query(_Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
+    try
+        SearchContext = z_context:new( Context ),
+        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
+        ok
+    catch
+        _: {error, {_, _}} ->
             {error, invalid_query}
     end;
 preflight_check_query(_Id, _Props, _Context) ->
@@ -1305,6 +1300,7 @@ is_protected(<<"page_url">>, _IsNormal) -> true;
 is_protected(<<"medium">>, _IsNormal) -> true;
 is_protected(<<"pivot_", _binary>>, _IsNormal) -> true;
 is_protected(<<"computed_", _/binary>>, _IsNormal) -> true;
+is_protected(<<"*", _/binary>>, _IsNormal) -> true;
 is_protected(_, _IsNormal) -> false.
 
 is_trimmable(_, V) when not is_binary(V) -> false;

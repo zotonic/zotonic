@@ -47,7 +47,7 @@ is_authorized(Context) ->
     end.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    case zotonic_site_status:is_peer_whitelisted(Context) of
+    case zotonic_site_status:is_peer_allowed(Context) of
         false ->
             render_page(false, "logon.tpl", Context);
         true ->
@@ -63,11 +63,11 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
             end
     end.
 
-render_page(IsPeerWhitelisted, Template, Context) ->
+render_page(IsPeerAllowed, Template, Context) ->
     StatusCode = resp_code(Context),
     Vars = [
         {error_code, StatusCode},
-        {is_peer_whitelisted, IsPeerWhitelisted}
+        {is_peer_allowed, IsPeerAllowed}
         | z_context:get_all(Context)
     ],
     Rendered = z_template:render(Template, Vars, Context),
@@ -92,10 +92,10 @@ resp_code(Context) ->
             200
     end.
 
-status_page(IsPeerWhitelisted, Context) ->
+status_page(IsPeerAllowed, Context) ->
     Template = z_context:get(template, Context),
     Vars = [
-        {is_peer_whitelisted, IsPeerWhitelisted}
+        {is_peer_allowed, IsPeerAllowed}
     ] ++  z_context:get_all(Context),
     Rendered = z_template:render(Template, Vars, Context),
     z_context:output(Rendered, Context).

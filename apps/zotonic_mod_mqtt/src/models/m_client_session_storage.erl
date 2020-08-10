@@ -35,6 +35,8 @@
     delete_subkey/4
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 -type key() :: binary() | atom().
 
 -type value() :: number()

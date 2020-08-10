@@ -1,10 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2016 Arjan Scherpenisse
-%% Date: 2016-05-02
-%%
+%% @copyright 2016-2020 Arjan Scherpenisse
 %% @doc Support functions for signing e-mail messages using DKIM
 
-%% Copyright 2016 Arjan Scherpenisse
+%% Copyright 2016-2020 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,12 +35,12 @@ ensure_configured(Context) ->
 %% @doc Return a {Priv, Pub} tuple listing the paths to the private
 %% and public key files
 cert_files(Context) ->
-	 KeyDir = filename:join([z_path:site_dir(Context), "priv", "dkim"]),
-	 Sitename = z_convert:to_list(z_context:site(Context)),
-   {
-      filename:join(KeyDir, Sitename++".dkim.key"),
-      filename:join(KeyDir, Sitename++".dkim.pub")
-   }.
+    KeyDir = keydir(Context),
+    {filename:join(KeyDir, "dkim.key"), filename:join(KeyDir, "dkim.pub")}.
+
+keydir(Context) ->
+    {ok, SecurityDir} = z_config_files:security_dir(),
+    filename:join([ SecurityDir, z_context:site(Context), "dkim" ]).
 
 %% @doc Return the DNS domain that is used to place the TXT record in
 dns_entry_domain(Context) ->
@@ -58,16 +56,40 @@ dns_entry(Context) ->
 
 %% @doc Generate an RSA key using the openssl utility
 generate_key(Context) ->
+    maybe_move_0x_keys(Context),
     {PrivKeyFile, PubKeyFile} = cert_files(Context),
     ok = z_filelib:ensure_dir(PrivKeyFile),
     ok = z_filelib:ensure_dir(PubKeyFile),
     PrivKeyCmd = "openssl genrsa -out " ++ z_utils:os_filename(PrivKeyFile) ++ " 1024",
     os:cmd(PrivKeyCmd),
-    PubKeyCmd = "openssl rsa -in " ++ z_utils:os_filename(PrivKeyFile)
+    PubKeyCmd = "openssl rsa "
+        ++ " -in "  ++ z_utils:os_filename(PrivKeyFile)
         ++ " -out " ++ z_utils:os_filename(PubKeyFile)
         ++ " -pubout -outform PEM",
     os:cmd(PubKeyCmd),
+    file:change_mode(PrivKeyFile, 8#00700),
     ok.
+
+maybe_move_0x_keys(Context) ->
+    KeyDir = filename:join([ z_path:site_dir(Context), "priv", "dkim" ]),
+    Sitename = z_convert:to_list(z_context:site(Context)),
+    KeyFile = filename:join(KeyDir, Sitename++".dkim.key"),
+    PubFile = filename:join(KeyDir, Sitename++".dkim.pub"),
+    case filelib:is_regular(KeyFile) andalso filelib:is_regular(PubFile) of
+        true ->
+            {NewKey, NewPub} = cert_files(Context),
+            lager:info("Moving old DKIM keys to \"~s\"", [ filename:dirname(NewKey) ]),
+            z_filelib:ensure_dir(NewKey),
+            {ok, _} = file:copy(KeyFile, NewKey),
+            {ok, _} = file:copy(PubFile, NewPub),
+            file:delete(KeyFile),
+            file:delete(PubFile),
+            file:change_mode(KeyFile, 8#00700),
+            file:del_dir( filename:dirname(KeyFile) );
+        false ->
+            ok
+    end.
+
 
 %% @doc Create the options list which are passed to gen_smtp's mimemail:encode/2 function.
 mimemail_options(Context) ->
@@ -99,8 +121,8 @@ is_configured(Context) ->
 %% prevent file access on every mail sent.
 get_priv_key(Context) ->
     z_depcache:memo(
-      fun() ->
-              {PrivKeyFile, _} = cert_files(Context),
-              {ok, Contents} = file:read_file(PrivKeyFile),
-              Contents
-      end, dkim_priv_key, ?DAY, Context).
+        fun() ->
+            {PrivKeyFile, _} = cert_files(Context),
+            {ok, Contents} = file:read_file(PrivKeyFile),
+            Contents
+        end, dkim_priv_key, ?DAY, Context).

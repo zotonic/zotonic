@@ -1,6 +1,6 @@
 {% with blk|survey_prepare_thurstone as props %}
 {% with answers[blk.name]|survey_answer_split:blk as ans %}
-<div class="{% if blk.is_test_direct %}do_survey_test_feedback {% endif %}control-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
+<div class="{% if blk.is_test_direct %}do_survey_test_feedback {% endif %}form-group survey-thurstone type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
     <label class="control-label">{{ blk.prompt }}</label>
     <div class="controls">
 {% if blk.input_type == 'multi' %}

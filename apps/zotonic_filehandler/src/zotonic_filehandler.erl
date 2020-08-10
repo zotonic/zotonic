@@ -59,7 +59,7 @@ load_module(Module) ->
             Error
     end.
 
--spec compile_options(file:filename_all()) -> {ok, list()} | {error, term()}.
+-spec compile_options(file:filename_all()) -> {ok, list()} | false.
 compile_options(ErlangFile) ->
     zotonic_filehandler_compile:compile_options(ErlangFile).
 

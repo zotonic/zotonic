@@ -112,7 +112,8 @@ compile() ->
 %% @doc Reset all caches, reload the dispatch rules and rescan all modules.
 -spec flush() -> ok.
 flush() ->
-    [flush(C) || C <- z_sites_manager:get_site_contexts()],
+    zotonic_fileindexer:flush(),
+    [ flush(C) || C <- z_sites_manager:get_site_contexts() ],
     z_sites_dispatcher:update_dispatchinfo().
 
 -spec flush( atom() | z:context() ) -> ok.
@@ -125,6 +126,7 @@ flush(Context) ->
 
 %% @doc Reindex all sites, find new files.
 reindex() ->
+    zotonic_fileindexer:flush(),
     z_module_indexer:reindex().
 
 %% @doc Full restart of Zotonic

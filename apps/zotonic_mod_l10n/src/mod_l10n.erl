@@ -275,7 +275,7 @@ map_country(Prop, Rsc) ->
                 <<"belgie">> ->             Rsc#{ Prop => <<"be">>};
                 <<"belgique">> ->           Rsc#{ Prop => <<"be">>};
                 % typos
-                <<"netherlands">> ->        Rsc#{ Prop => <<"nl">>};
+                <<"nehterlands">> ->        Rsc#{ Prop => <<"nl">>};
                 % just keep as-is
                 _ -> Rsc
             end
