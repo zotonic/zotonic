@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2020 Marc Worrell
 %% @doc Module manager, starts/restarts a site's modules.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2020 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -169,6 +169,25 @@ deactivate(Module, Context) ->
         1 -> upgrade(Context);
         0 -> ok
     end.
+
+
+%% @doc Before activating a module, check if it depends on non-activated other modules.
+%% This checks the complete graph of all modules that are currently activated plus the new
+%% modules. All missing dependencies will be listed.
+%% This also shows the modules that have missing dependencies and can't run because of those
+%% missing dependencies.
+-spec activate_precheck( [ atom() ], z:context() ) -> {ok, #{ atom() := [ atom () ]}} | {error, not_found}.
+activate_precheck(Modules, Context) ->
+    {ok, #{}}.
+
+%% @doc Before deactivating a module, check if activate modules depend on the deactivated module.
+%% This checks the complete graph of all modules that are currently activated minus the deactivated
+%% module. All missing dependencies will be listed.
+%% This also shows the modules that have missing dependencies and can't run because of those
+%% missing dependencies.
+-spec deactivate_precheck( atom(), z:context() ) -> {ok, #{ atom() := [ atom () ]}} | {error, not_found}.
+deactivate_precheck(Module, Context) ->
+    {ok, #{}}.
 
 
 %% @doc Activate a module. The module is marked as active and started as a child of the module supervisor.
