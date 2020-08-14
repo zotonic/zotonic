@@ -1070,10 +1070,7 @@ function z_reload(args)
                             +"/"+args.z_language
                             +window.location.pathname;
                 }
-                if (window.location.search == "")
-                    window.location.href = href;
-                else
-                    window.location.href = href + "?" + window.location.search;
+                window.location.href = href + window.location.search;
             } else {
                 href = window.location.protocol+"//"+window.location.host+window.location.pathname;
                 if (window.location.search == "") {
@@ -1084,7 +1081,7 @@ function z_reload(args)
                         if (typeof loc_qs[prop] != "undefined" && typeof args[prop] == "undefined")
                             qs.push({name: prop, value: loc_qs[prop]});
                     }
-                    window.location.href = href+"?" + $.param(qs);
+                    window.location.href = href + "?" + $.param(qs);
                 }
             }
         }
