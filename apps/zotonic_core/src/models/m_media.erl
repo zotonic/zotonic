@@ -705,7 +705,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 medium_delete(RscId, Ctx),
                 {ok, RscId}
         end,
-        Medium2 = Medium#{ <<"id">> => Id },
+        Medium2 = Medium1#{ <<"id">> => Id },
         case medium_insert(Id, Medium2, Ctx) of
             {ok, _MediaId} ->
                 {ok, Id};

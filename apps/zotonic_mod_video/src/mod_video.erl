@@ -146,7 +146,7 @@ observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <
         {error, _} ->
             Info
     end,
-    z_utils:props_merge(Info2, Medium);
+    maps:merge(Medium, Info2);
 observe_media_upload_props(#media_upload_props{}, Medium, _Context) ->
     Medium.
 
@@ -278,10 +278,10 @@ video_info(Path) ->
         Ps = decode_json(JSONText),
         {Width, Height, Orientation} = fetch_size(Ps),
         #{
-            duration => fetch_duration(Ps),
-            width => Width,
-            height => Height,
-            orientation => Orientation
+            <<"duration">> => fetch_duration(Ps),
+            <<"width">> => Width,
+            <<"height">> => Height,
+            <<"orientation">> => Orientation
         }
     catch
         error:E ->

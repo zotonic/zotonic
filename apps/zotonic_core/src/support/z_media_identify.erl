@@ -138,8 +138,8 @@ identify_file_direct_1(File, OriginalFilename) ->
             identify_file_imagemagick(OsFamily, File, Mime);
         {ok, #{ <<"mime">> := <<"application/postscript">> = Mime }} ->
             identify_file_imagemagick(OsFamily, File, Mime);
-        {ok, Props} ->
-            Props
+        {ok, Props} = OK when is_map(Props) ->
+            OK
     end.
 
 -spec os_family() -> os_family().
