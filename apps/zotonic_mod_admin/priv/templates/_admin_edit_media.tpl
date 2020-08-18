@@ -13,16 +13,21 @@
 
     <p>
         {{ medium.mime }}
-        {% if medium.filename %}
-            {% if medium.width and medium.height %}
-                &ndash; {{ medium.width }} x {{ medium.height }} {_ pixels _}
-            {% endif %}
-            {% if medium.size %}
-                &ndash; {{ medium.size|filesizeformat }}
-            {% endif %}
-            &ndash; {{ medium.filename }}
+        {% if medium.width and medium.height %}
+            <span class="text-muted">&ndash;</span> {{ medium.width }} x {{ medium.height }} {_ pixels _}
         {% endif %}
-        &ndash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
+        {% if medium.duration %}
+            <span class="text-muted">&ndash;</span> {{ medium.duration|format_duration }}
+        {% endif %}
+        {% if medium.size %}
+            <span class="text-muted">&ndash;</span> {{ medium.size|filesizeformat }}
+        {% endif %}
+        <span class="text-muted">
+            {% if medium.filename %}
+                &ndash; {{ medium.filename }}
+            {% endif %}
+            &ndash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
+        </span>
     </p>
 
     <div class="admin-edit-media {% if id.is_a.image %}do_cropcenter{% endif %}" id="rsc-image" data-original-width="{{ medium.width }}">
