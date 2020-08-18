@@ -23,7 +23,6 @@
  	    <input type="text" id="new_rsc_title" name="title"
  	    	   value="{{ title|escape }}" class="do_autofocus form-control"
  	    	   placeholder="{_ Type title or filter existing content _}">
- 	    {% validate id="new_rsc_title" name="title" type={presence} only_on_submit %}
 	{% endblock %}
 </div>
 

@@ -282,6 +282,12 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                         _ -> <<"audio/wav">>
                     end,
                     {ok, #{ <<"mime">> => MWav }};
+                <<"audio/x-", _/binary>> ->
+                    MAudio = case guess_mime(OriginalFilename) of
+                        <<"audio/", _/binary>> = M -> M;
+                        _ -> Mime
+                    end,
+                    {ok, #{ <<"mime">> => MAudio }};
                 <<"video/x-ms-asf">> ->
                     MAsf = case guess_mime(OriginalFilename) of
                         <<"audio/", _/binary>> = M -> M;
@@ -471,6 +477,9 @@ extension(<<"image/jpeg">>, _PreferExtension) -> <<".jpg">>;
 extension(<<"application/vnd.ms-excel">>, _) -> <<".xls">>;
 extension(<<"text/plain">>, _PreferExtension) -> <<".txt">>;
 extension(<<"audio/wav">>, _PreferExtension) -> <<".wav">>;
+extension(<<"audio/x-m4a">>, _PreferExtension) -> <<".m4a">>;
+extension(<<"audio/mp4">>, _PreferExtension) -> <<".m4a">>;
+extension(<<"audio/mp4a-latm">>, _PreferExtension) -> <<".m4a">>;
 extension(Mime, undefined) ->
     Extensions = mimetypes:extensions(Mime),
     first_extension(Extensions);
@@ -500,6 +509,7 @@ guess_mime(File) ->
     maybe_map_mime(Mime).
 
 maybe_map_mime(<<"audio/x-wav">>) -> <<"audio/wav">>;
+maybe_map_mime(<<"audio/mp4a-latm">>) -> <<"audio/mp4">>;
 maybe_map_mime(Mime) -> Mime.
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge

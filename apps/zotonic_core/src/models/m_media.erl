@@ -494,16 +494,7 @@ insert_file_mime_ok(File, RscProps, MediaProps, Options, Context) ->
     RscProps1 = RscProps#{
         <<"is_published">> => IsPublished
     },
-    RscProps2 = case z_utils:is_empty(maps:get(<<"title">>, RscProps1, <<>>)) of
-        true ->
-            OriginalFilename = maps:get(<<"original_filename">>, MediaProps, undefined),
-            RscProps1#{
-                <<"title">> => filename_basename(OriginalFilename)
-            };
-        false ->
-            RscProps1
-    end,
-    replace_file_mime_ok(File, insert_rsc, RscProps2, MediaProps, Options, Context).
+    replace_file_mime_ok(File, insert_rsc, RscProps1, MediaProps, Options, Context).
 
 filename_basename(undefined) -> <<>>;
 filename_basename(Filename) ->
@@ -662,6 +653,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
         },
         Medium,
         Context),
+
     PropsM = z_notifier:foldl(
         #media_upload_rsc_props{
             id = RscId,
@@ -673,19 +665,29 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
         Props,
         Context),
 
+    PropsM1 = case RscId =:= rsc_insert andalso z_utils:is_empty(maps:get(<<"title">>, PropsM, <<>>)) of
+        true ->
+            OriginalFilename = maps:get(<<"original_filename">>, Medium1, undefined),
+            PropsM#{
+                <<"title">> => filename_basename(OriginalFilename)
+            };
+        false ->
+            PropsM
+    end,
+
     IsImport = proplists:is_defined(is_import, Opts),
     NoTouch = proplists:is_defined(no_touch, Opts),
 
     F = fun(Ctx) ->
         %% If the resource is in the media category, then move it to the correct sub-category depending
         %% on the mime type of the uploaded file.
-        Props1 = case maps:is_key(<<"category">>, PropsM)
-            orelse maps:is_key(<<"category_id">>, PropsM)
+        Props1 = case maps:is_key(<<"category">>, PropsM1)
+            orelse maps:is_key(<<"category_id">>, PropsM1)
         of
             true ->
-                PropsM;
+                PropsM1;
             false ->
-                PropsM#{
+                PropsM1#{
                     <<"category">> => mime_to_category(Mime)
                 }
         end,

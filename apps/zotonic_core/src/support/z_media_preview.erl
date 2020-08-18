@@ -95,7 +95,7 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
     Cmd = lists:flatten([
         z_utils:os_filename(ConvertCmd), " ",
         opt_density(FileProps),
-        z_utils:os_filename(InFile++infile_suffix(Mime)), " ",
+        z_utils:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(Mime) ), " ",
         lists:flatten(lists:join(32, CmdArgs)), " ",
         z_utils:os_filename(OutFile)
     ]),

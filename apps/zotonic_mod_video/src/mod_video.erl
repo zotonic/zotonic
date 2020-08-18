@@ -277,12 +277,17 @@ video_info(Path) ->
     try
         Ps = decode_json(JSONText),
         {Width, Height, Orientation} = fetch_size(Ps),
-        #{
+        Info = #{
             <<"duration">> => fetch_duration(Ps),
+            <<"bit_rate">> => fetch_bit_rate(Ps),
+            <<"tags">> => fetch_tags(Ps),
             <<"width">> => Width,
             <<"height">> => Height,
             <<"orientation">> => Orientation
-        }
+        },
+        maps:filter(
+            fun(_K, V) -> V =/= undefined end,
+            Info)
     catch
         error:E ->
             lager:warning("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
@@ -296,6 +301,20 @@ fetch_duration(#{<<"format">> := #{<<"duration">> := Duration}}) ->
     round(z_convert:to_float(Duration));
 fetch_duration(_) ->
     0.
+
+fetch_bit_rate(#{<<"format">> := #{<<"bit_rate">> := BitRate}}) ->
+    round(z_convert:to_float(BitRate));
+fetch_bit_rate(_) ->
+    undefined.
+
+fetch_tags(#{ <<"format">> := #{ <<"tags">> := Tags }}) when is_map(Tags) ->
+    maps:filter(fun is_tag_ok/2, Tags);
+fetch_tags(_) ->
+    undefined.
+
+is_tag_ok(<<"iTunSMPB">>, _) -> false;
+is_tag_ok(<<"iTunNORM">>, _) -> false;
+is_tag_ok(_, _) -> true.
 
 fetch_size(#{<<"streams">> := Streams}) ->
     [ Video | _ ] = lists:dropwhile(
