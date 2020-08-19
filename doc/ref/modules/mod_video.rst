@@ -31,8 +31,9 @@ Viewing
 ^^^^^^^
 
 The video module extends the ``{% media %}`` tag for viewing ``video/mp4`` videos.
-It uses the template ``_video_viewer.tpl`` for viewing.
-For the best viewing results it is best to add ``css/video.css`` to your included css files.
 
-.. seealso:: :ref:`mod_video_embed`, :ref:`tag-media`
+It uses the template ``_video_viewer.tpl`` for viewing.
+For the best viewing results, add ``css/video.css`` to your included css files.
+
+.. seealso:: :ref:`mod_video_embed`, :ref:`mod_oembed`, :ref:`mod_audio`, :ref:`tag-media`
 

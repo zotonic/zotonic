@@ -68,4 +68,6 @@ The following :ref:`model-config` options are supported:
   requested maximum height. Not set by default.
 
 
-.. todo:: Extend documentation
+
+.. seealso:: :ref:`mod_video_embed`, :ref:`mod_video`, :ref:`mod_audio`, :ref:`tag-media`
+
