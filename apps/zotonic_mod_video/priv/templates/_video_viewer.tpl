@@ -1,3 +1,9 @@
+{#
+    Video viewer template.
+
+    Used for {% media %} by mod_video to display media items with
+    the mime type "video/mp4"
+#}
 {% with props|default:(m.media[id]) as props %}
 {% if props.is_video_processing %}
 	<div id="{{ #video }}" class="video-processing">

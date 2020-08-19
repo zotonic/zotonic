@@ -1,3 +1,9 @@
+{#
+    Audio viewer template.
+
+    Used for {% media %} by mod_audio to display media items with
+    the mime type "audio/*"
+#}
 {% with props|default:(m.media[id]) as props %}
 {% if props.filename %}
     <audio id="{{ #audio }}" style="width: 100%; height: auto;"
