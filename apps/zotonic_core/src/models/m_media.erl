@@ -621,6 +621,8 @@ replace_file_sanitize(RscId, PreProc, Props, Opts, Context) ->
     PreProc1 = z_media_sanitize:sanitize(PreProc, Context),
     replace_file_db(RscId, PreProc1, Props, Opts, Context).
 
+-spec replace_file_db( m_rsc:resource_id() | insert_rsc, #media_upload_preprocess{}, map(), list(), z:context() ) ->
+    {ok, m_rsc:resource_id()} | {error, term()}.
 replace_file_db(RscId, PreProc, Props, Opts, Context) ->
     SafeRootName = z_string:to_rootname(PreProc#media_upload_preprocess.original_filename),
     PreferExtension = z_convert:to_binary(
@@ -665,7 +667,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
         Props,
         Context),
 
-    PropsM1 = case RscId =:= rsc_insert andalso z_utils:is_empty(maps:get(<<"title">>, PropsM, <<>>)) of
+    PropsM1 = case RscId =:= insert_rsc andalso z_utils:is_empty(maps:get(<<"title">>, PropsM, <<>>)) of
         true ->
             OriginalFilename = maps:get(<<"original_filename">>, Medium1, undefined),
             PropsM#{
@@ -748,8 +750,8 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 mqtt_event_info(NewMedium),
                 Context),
             {ok, Id};
-        {rollback, {{error, not_allowed}, _StackTrace}} ->
-            {error, not_allowed}
+        {rollback, {{error, Reason}, _StackTrace}} ->
+            {error, Reason}
     end.
 
 is_deletable_file(undefined, _Context) ->
