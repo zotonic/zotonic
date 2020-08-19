@@ -764,10 +764,11 @@
 
 %% @doc Notification that a medium file has been uploaded.
 %% This is the moment to change properties, modify the file etc.
+%% The folded accumulator is the map with updated medium properties.
 %% Type: foldl
-%% Return: modified ``#media_upload_props{}``
+%% Return: modified medium properties map
 -record(media_upload_props, {
-    id :: integer() | 'insert_rsc',
+    id :: m_rsc:resource_id() | insert_rsc,
     mime :: binary(),
     archive_file :: file:filename_all() | undefined,
     options :: list()
@@ -775,10 +776,11 @@
 
 %% @doc Notification that a medium file has been uploaded.
 %% This is the moment to change resource properties, modify the file etc.
+%% The folded accumulator is the map with updated resource properties.
 %% Type: foldl
-%% Return: modified ``#media_upload_rsc_props{}``
+%% Return: modified resource properties map
 -record(media_upload_rsc_props, {
-    id :: integer() | 'insert_rsc',
+    id :: m_rsc:resource_id() | insert_rsc,
     mime :: binary(),
     archive_file,
     options :: list(),
@@ -793,14 +795,21 @@
 
 %% @doc Media update done notification. action is 'insert', 'update' or 'delete'
 %% Type: notify
--record(media_update_done, {action, id, pre_is_a, post_is_a, pre_props, post_props}).
+-record(media_update_done, {
+    action :: insert | update | delete,
+    id :: m_rsc:resource_id(),
+    pre_is_a :: list( atom() ),
+    post_is_a :: list( atom() ),
+    pre_props :: map() | undefined,
+    post_props :: map() | undefined
+}).
 
 
 %% @doc Send a notification that the resource 'id' is added to the query query_id.
 %% Type: notify
 -record(rsc_query_item, {
-    query_id,
-    match_id
+    query_id :: m_rsc:resource_id(),
+    match_id :: m_rsc:resource_id()
 }).
 
 
@@ -831,7 +840,10 @@
 %% @doc Find an import definition for a CSV file by checking the filename of the to be imported file.
 %% Type: first
 %% Return: ``#import_csv_definition{}`` or ``undefined`` (in which case the column headers are used as property names)
--record(import_csv_definition, {basename, filename}).
+-record(import_csv_definition, {
+    basename :: binary(),
+    filename :: file:filename_all()
+}).
 
 
 %% @doc Handle an uploaded file which is part of a multiple file upload from a user-agent.
