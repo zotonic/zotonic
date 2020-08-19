@@ -9,7 +9,8 @@ Strings
    ../filter_append
    ../filter_capfirst
    ../filter_center
-   ../filter_log_format_stack
+   ../filter_filesizeformat
+   ../filter_format_duration
    ../filter_format_integer
    ../filter_format_number
    ../filter_format_price
@@ -17,6 +18,7 @@ Strings
    ../filter_is_valid_email
    ../filter_length
    ../filter_ljust
+   ../filter_log_format_stack
    ../filter_lower
    ../filter_replace_args
    ../filter_rjust
