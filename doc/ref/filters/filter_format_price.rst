@@ -16,4 +16,4 @@ An undefined price will have the output “-”.
 **Note:** the decimal separator is currently always a dot, independent of
 the user’s language.
 
-.. seealso:: :ref:`filter-format_number`, :ref:`filter-format_integer`
+.. seealso:: :ref:`filter-format_number`, :ref:`filter-format_integer`, :ref:`filter-format_duration`

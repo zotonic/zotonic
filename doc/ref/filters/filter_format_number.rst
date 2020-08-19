@@ -11,4 +11,4 @@ For example::
 
 When the value is the float ``12.0`` then the output is the list ``12.0``.
 
-.. seealso:: :ref:`filter-format_integer`, :ref:`filter-format_price`
+.. seealso:: :ref:`filter-format_integer`, :ref:`filter-format_price`, :ref:`filter-format_duration`, 
