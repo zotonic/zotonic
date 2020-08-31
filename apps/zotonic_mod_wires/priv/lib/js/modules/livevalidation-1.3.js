@@ -309,6 +309,7 @@ LiveValidation.prototype = {
                 case Validate.Presence:
                 case Validate.Confirmation:
                 case Validate.Acceptance:
+                case Validate.Custom:
                   this.displayMessageWhenEmpty = true;
                   break;
                 default:
