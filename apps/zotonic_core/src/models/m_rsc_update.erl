@@ -87,9 +87,9 @@ delete(Id, FollowUpId, Context)
         {true, true} ->
             case m_rsc:is_a(Id, category, Context) of
                 true ->
-                    m_category:delete(Id, undefined, Context);
+                    m_category:delete(Id, FollowUpId, Context);
                 false ->
-                    delete_nocheck(Id, Context)
+                    delete_nocheck(Id, FollowUpId, Context)
             end;
         {false, _} ->
             {error, eacces};
