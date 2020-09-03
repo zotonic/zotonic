@@ -65,11 +65,11 @@ page_path_test() ->
     C = z_context:new(zotonic_site_testsandbox),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
 
-    {ok, Id} = m_rsc:insert([
-            {title, "Hello."},
-            {category, text},
-            {page_path, "/foo/bar"}
-        ], AdminC),
+    {ok, Id} = m_rsc:insert(#{
+            <<"title">> => <<"Hello.">>,
+            <<"category">> => <<"text">>,
+            <<"page_path">> => <<"/foo/bar">>
+        }, AdminC),
     ?assertEqual(<<"/foo/bar">>, m_rsc:p(Id, page_path, AdminC)),
     ok = m_rsc:delete(Id, AdminC).
 
@@ -78,17 +78,16 @@ name_rid_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_context:new(zotonic_site_testsandbox),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
-    {ok, Id} = m_rsc:insert([
-            {title, <<"What’s in a name?"/utf8>>},
-            {category_id, text},
-            {name, rose}
-        ],
+    {ok, Id} = m_rsc:insert(#{
+            <<"title">> => <<"What’s in a name?"/utf8>>,
+            <<"category_id">> => <<"text">>,
+            <<"name">> => <<"rose">>
+        },
         AdminC),
-
-    m_rsc:get_raw(rose, AdminC),
+    % {ok, _} = m_rsc:get_raw(rose, AdminC),
     ok = m_rsc_update:flush(rose, AdminC),
-    {ok, Id} = m_rsc:update(rose, [], AdminC),
-    {ok, _DuplicateId} = m_rsc:duplicate(rose, [], AdminC),
+    {ok, Id} = m_rsc:update(rose, #{}, AdminC),
+    {ok, _DuplicateId} = m_rsc:duplicate(rose, #{}, AdminC),
     ok = m_rsc:delete(rose, AdminC).
 
 %% @doc Check normalization of dates
