@@ -5,7 +5,7 @@
 {% with m.mailinglist.subscription[list_id][email] as sub %}
 <tr>
 	<td id="content">
-		{% image id.depiction width=200 height=300 align="left" style="float: left; margin: 0 10px 10px 0; padding: 0; border: 0;" %}
+		{% image id.depiction width=200 height=300 align="left" style="float: left; margin: 0 16px 16px 0; padding: 0; border: 0;" %}
 		<h1>{{ id.title }}</h1>
 		{% if id.summary %}
 			<p><b>{{ id.summary }}</b></p>
@@ -21,35 +21,26 @@
 		{% if pid.depiction %}
 		<tr>
 			<td width="150" valign="top">
-				<a href="http://{{ m.site.hostname }}{{ pid.page_url }}">{% image pid.depiction width=150 style="border: 0"%}</a>
+				<a href="{{ pid.page_url_abs }}">{% image pid.depiction width=150 style="border: 0"%}</a>
 			</td>
 			<td width="15">&nbsp;</td>
 			<td valign="top">
-				<h2><a href="http://{{ m.site.hostname }}{{ pid.page_url }}">{{ pid.title }}</a></h2>
-				{% if pid.summary %}
-					<p>{{ pid.summary }}</p>
-				{% else %}
-					{{ pid.body }}
-				{% endif %}
+				<h2><a href="{{ pid.page_url_abs }}">{{ pid.title }}</a></h2>
+				<p>{{ pid|summary }}</p>
 			</td>
 		</tr>
 		{% else %}
 		<tr>
 			<td colspan="3" valign="top">
-				<h2><a href="http://{{ m.site.hostname }}{{ pid.page_url }}">{{ pid.title }}</a></h2>
-
-				{% if pid.summary %}
-					<p>{{ pid.summary }}</p>
-				{% else %}
-					{{ pid.body }}
-				{% endif %}
+				<h2><a href="{{ pid.page_url_abs }}">{{ pid.title }}</a></h2>
+				<p>{{ pid|summary }}</p>
 			</td>
 		</tr>
 		{% endif %}
 		{% endfor %}
 		</table>
 		<br/>
-	    <p><a href="http://{{ m.site.hostname }}">{_ Read this page on the web. _} &raquo;</a></p>
+	    <p><a href="{{ id.page_url_abs }}">{_ Read this page on the web. _} &raquo;</a></p>
 	</td>
 </tr>
 {% endwith %}

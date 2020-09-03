@@ -20,6 +20,11 @@
 	</td>
 </tr>
 {% endwith %}
+
+{% if not list_id %}
+	<br/>
+    <p><a href="{{ id.page_url_abs }}">{_ Read this page on the web. _} &raquo;</a></p>
+{% endif %}
 {% endblock %}
 
 
