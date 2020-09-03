@@ -76,7 +76,7 @@
 
 -include_lib("zotonic.hrl").
 
--type resource() :: resource_id() | list(digits()) | resource_name().
+-type resource() :: resource_id() | list(digits()) | resource_name() | undefined.
 -type resource_id() :: integer().
 -type resource_name() :: string() | binary() | atom().
 -type resource_uri() :: binary().
