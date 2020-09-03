@@ -8,13 +8,15 @@
 {% with m.mailinglist.subscription[list_id][email] as sub %}
 <tr>
 	<td id="content">
-		{% image id.depiction width=200 height=300 align="left" style="float: left; margin: 0 10px 10px 0; padding: 0; border: 0;" %}
+		{% image id.depiction width=200 height=300 align="left" style="float: left; margin: 0 16px 16px 0; padding: 0; border: 0;" %}
 		<h1>{{ id.title }}</h1>
 		{% if id.summary %}
 			<p><b>{{ id.summary }}</b></p>
 		{% endif %}
 		{{ id.body|show_media:"_body_media_mailing.tpl"|inject_recipientdetails:sub }}
-		{% include "_blocks.tpl" %}
+		{% if id.is_a.text %}
+			{% include "_blocks.tpl" %}
+		{% endif %}
 	</td>
 </tr>
 {% endwith %}
