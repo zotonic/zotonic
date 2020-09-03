@@ -278,6 +278,7 @@ get_raw(Id, Context) when is_integer(Id) ->
 get_raw_lock(Id, Context) ->
     get_raw(Id, true, Context).
 
+-spec get_raw(resource(), boolean(), z:context()) -> {ok, map()} | {error, term()}.
 get_raw(Id, IsLock, Context) when is_integer(Id) ->
     SQL = case z_memo:get(rsc_raw_sql) of
         undefined ->
