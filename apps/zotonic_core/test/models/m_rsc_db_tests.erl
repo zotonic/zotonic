@@ -84,7 +84,6 @@ name_rid_test() ->
             {name, rose}
         ],
         AdminC),
-
     m_rsc:get_raw(rose, AdminC),
     ok = m_rsc_update:flush(rose, AdminC),
     {ok, Id} = m_rsc:update(rose, [], AdminC),

@@ -47,7 +47,7 @@ watches_update(Id, Watches, Context) ->
         undefined ->
             proplists:delete(Id, Watches);
         Q ->
-            case z_convert:to_bool(m_rsc:p(Id, is_query_live, Context)) of
+            case z_convert:to_bool(m_rsc:p_no_acl(Id, is_query_live, Context)) of
                 true ->
                     try
                         Props = search_query:parse_query_text(z_html:unescape(Q)),
@@ -67,9 +67,9 @@ watches_remove(Id, Watches, _Context) ->
 %% @doc Check whether the given resource matches to the queries. Returns list of matching query resource ids.
 %% @spec check_rsc(Id, Watches, Context) -> list()
 check_rsc(Id, Watches, Context) ->
-    IsA = m_rsc:p(Id, is_a, Context),
-    Cats   = [ {cat, z_convert:to_binary(A)} || {A,_} <- IsA ],
-    CatsEx = [ {cat_exclude, z_convert:to_binary(A)} || {A,_} <- IsA ],
+    IsA = m_rsc:p_no_acl(Id, is_a, Context),
+    Cats   = [ {cat, z_convert:to_binary(A)} || A <- IsA ],
+    CatsEx = [ {cat_exclude, z_convert:to_binary(A)} || A <- IsA ],
     %% Pre-filter the list of queries according to category check
     W = lists:filter(fun({_, Props}) -> cat_matches(Cats, Props) andalso not(cat_matches(CatsEx, Props)) end, Watches),
     %% Filter the list by executing the query

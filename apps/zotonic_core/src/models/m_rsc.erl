@@ -268,14 +268,14 @@ filter_props_acl(Id, Props, Context) when is_map(Props) ->
 
 %% @doc Get the resource from the database, do not fetch the pivot fields and
 %%      do not use the cached result. The properties are NOT filtered by the ACL.
--spec get_raw(resource_id(), z:context()) -> {ok, map()} | {error, term()}.
+-spec get_raw(resource(), z:context()) -> {ok, map()} | {error, term()}.
 get_raw(Id, Context) when is_integer(Id) ->
     get_raw(Id, false, Context).
 
 %% @doc Same as get_raw/2 but also lock the resource for update.
 %%      The properties are NOT filtered by the ACL.
--spec get_raw_lock(resource_id(), z:context()) -> {ok, map()} | {error, term()}.
-get_raw_lock(Id, Context) when is_integer(Id) ->
+-spec get_raw_lock(resource(), z:context()) -> {ok, map()} | {error, term()}.
+get_raw_lock(Id, Context) ->
     get_raw(Id, true, Context).
 
 get_raw(Id, IsLock, Context) when is_integer(Id) ->
@@ -309,7 +309,11 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
             {ok, ensure_utc_dates(Map, Context)};
         {error, _} = Error ->
             Error
-    end.
+    end;
+get_raw(undefined, _IsLock, _Context) ->
+    {error, enoent};
+get_raw(Id, IsLock, Context) ->
+    get_raw(rid(Id, Context), IsLock, Context).
 
 %% Fix old records which had serialized data in localtime and no date_is_all_day flag
 ensure_utc_dates(#{ <<"tz">> := _ } = Map, _Context) ->
