@@ -160,7 +160,7 @@ get_enabled_recipients(ListId, Context) ->
         select email
         from mailinglist_recipient
         where mailinglist_id = $1
-          and is_enabled = true", [ListId], Context),
+          and is_enabled = true", [ z_convert:to_integer(ListId) ], Context),
     [ E || {E} <- Emails ].
 
 
@@ -171,7 +171,7 @@ list_recipients(ListId, Context) ->
         select *
         from mailinglist_recipient
         where mailinglist_id = $1",
-        [ListId], Context).
+        [ z_convert:to_integer(ListId) ], Context).
 
 -spec count_recipients( m_rsc:resource_id(), z:context() ) -> non_neg_integer().
 count_recipients(ListId, Context) ->
@@ -179,7 +179,7 @@ count_recipients(ListId, Context) ->
             select count(*)
             from mailinglist_recipient
             where mailinglist_id = $1",
-            [ListId],
+            [ z_convert:to_integer(ListId) ],
             Context).
 
 
@@ -188,7 +188,7 @@ recipient_is_enabled_toggle(RecipientId, Context) ->
     case z_db:q("
             update mailinglist_recipient
             set is_enabled = not is_enabled
-            where id = $1", [RecipientId], Context)
+            where id = $1", [ z_convert:to_integer(RecipientId) ], Context)
     of
         1 -> ok;
         0 -> {error, enoent}
@@ -196,10 +196,17 @@ recipient_is_enabled_toggle(RecipientId, Context) ->
 
 %% @doc Fetch the recipient record for the recipient id.
 recipient_get(RecipientId, Context) ->
-    z_db:assoc_row("select * from mailinglist_recipient where id = $1", [RecipientId], Context).
+    z_db:assoc_row("
+        select *
+        from mailinglist_recipient
+        where id = $1",
+        [ z_convert:to_integer(RecipientId) ],
+        Context).
 
 %% @doc Fetch the recipient record by e-mail address
 recipient_get(undefined, _Email, _Context) ->
+    undefined;
+recipient_get(<<>>, _Email, _Context) ->
     undefined;
 recipient_get(ListId, Email, Context) ->
     Email1 = normalize_email(Email),
@@ -207,7 +214,7 @@ recipient_get(ListId, Email, Context) ->
         select * from mailinglist_recipient
         where mailinglist_id = $1
           and email = $2",
-        [ListId, Email1], Context).
+        [ z_convert:to_integer(ListId), z_convert:to_binary(Email1) ], Context).
 
 
 %% @doc Delete a recipient without sending the recipient a goodbye e-mail.
