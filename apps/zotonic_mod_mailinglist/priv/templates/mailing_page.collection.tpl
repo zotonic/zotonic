@@ -17,7 +17,7 @@
 <tr>
 	<td>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		{% for pid in id.o.haspart|default:m.search[{query query_id=id}] %}
+		{% for pid in id.o.haspart|default:m.search[{query query_id=id pagelen=pagelen|default:20}] %}
 		{% if pid.depiction %}
 		<tr>
 			<td width="150" valign="top">
