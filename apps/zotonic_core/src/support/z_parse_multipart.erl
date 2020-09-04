@@ -71,23 +71,29 @@ recv_parse(Context) ->
 
 %% @doc Parse the multipart request
 parse_multipart_request(Context) ->
-    Length = binary_to_integer(cowmachine_req:get_req_header(<<"content-length">>, Context)),
-    Boundary = get_boundary(cowmachine_req:get_req_header(<<"content-type">>, Context)),
-    Prefix = <<"\r\n--", Boundary/binary>>,
-    BS = size(Boundary),
-    {Next, Chunk, Context1} = cowmachine_req:stream_req_body(?CHUNKSIZE, Context),
-    case Chunk of
-        <<"--", Boundary:BS/binary, "\r\n", Rest/binary>> ->
-            feed_mp(headers, #mp{boundary = Prefix,
-                                 length = size(Chunk),
-                                 content_length = Length,
-                                 buffer = Rest,
-                                 form = #multipart_form{},
-                                 next_chunk = Next,
-                                 context = Context1});
-        _ ->
-            lager:info(z_context:lager_md(Context), "Could not decode multipart (~p) chunk: ~p", [Boundary, Chunk]),
-            throw({stop_request, 400})
+    case cowmachine_req:get_req_header(<<"content-length">>, Context) of
+        undefined ->
+            lager:info(z_context:lager_md(Context), "Could not decode multipart: content-length header undefined"),
+            throw({stop_request, 400});
+        ContentLength ->
+            Length = binary_to_integer(ContentLength),
+            Boundary = get_boundary(cowmachine_req:get_req_header(<<"content-type">>, Context)),
+            Prefix = <<"\r\n--", Boundary/binary>>,
+            BS = size(Boundary),
+            {Next, Chunk, Context1} = cowmachine_req:stream_req_body(?CHUNKSIZE, Context),
+            case Chunk of
+                <<"--", Boundary:BS/binary, "\r\n", Rest/binary>> ->
+                    feed_mp(headers, #mp{boundary = Prefix,
+                                         length = size(Chunk),
+                                         content_length = Length,
+                                         buffer = Rest,
+                                         form = #multipart_form{},
+                                         next_chunk = Next,
+                                         context = Context1});
+                _ ->
+                    lager:info(z_context:lager_md(Context), "Could not decode multipart (~p) chunk: ~p", [Boundary, Chunk]),
+                    throw({stop_request, 400})
+            end
     end.
 
 
