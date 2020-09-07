@@ -451,8 +451,10 @@ update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{
     % Return the updated or inserted id
     {ok, NewId};
 update_result({rollback, {_Why, _} = Er}, _RscUpd, _Context) ->
+    lager:error(["Rolling back update: ~p"], Er),
     throw(Er);
 update_result({error, _} = Error, _RscUpd, _Context) ->
+    lager:error(["Error updating resource: ~p"], Error),
     throw(Error).
 
 
@@ -1570,4 +1572,3 @@ test() ->
 -spec local_now(z:context()) -> calendar:datetime().
 local_now(Context) ->
     z_datetime:to_local(erlang:universaltime(), Context).
-
