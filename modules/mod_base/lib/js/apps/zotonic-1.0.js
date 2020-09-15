@@ -576,10 +576,12 @@ function z_transport_session_status(data, msg)
                         z_session_status_ok(data.page_id, data.user_id);
                         break;
                     case 'auth_change':
-                        // The user-id of the session is changed.
-                        // A new session cookie might still be on its way, so wait a bit
                         if (data.page_id == z_pageid) {
-                            z_session_restart(z_pageid);
+                            // The user-id of the session is changed.
+                            // A new session cookie might still be on its way, so wait a bit
+                            setTimeout(function() {
+                                z_session_restart(z_pageid);
+                            }, 1000);
                         }
                         break;
                     default:
