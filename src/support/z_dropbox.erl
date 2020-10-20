@@ -32,7 +32,8 @@
 
 %% interface functions
 -export([
-    scan/1
+    scan/1,
+    append_file/2
 ]).
 
 %% internal
@@ -189,14 +190,19 @@ scan_directory(Dir) ->
     filelib:fold_files(Dir, "", true, fun(F,Acc) -> append_file(F, Acc) end, []).
 
 
-%% @todo Check if this is a file we are interested in, should not be part of a .svn or other directory
-append_file([$.|_Rest], Acc) ->
-    Acc;
-append_file(File, Acc) ->
-    case string:str(File, "/.") of
-        0 -> [File|Acc];
-        _ -> Acc
+%% @doc Check if this is a file we are interested in, should not be part of a .svn or other directory
+append_file(Filename, Acc) ->
+    Parts = filename:split(Filename),
+    case lists:any(fun is_dotfile/1, Parts) of
+        true -> Acc;
+        false -> [ Filename | Acc ]
     end.
+
+is_dotfile(<<"..">>) -> false;
+is_dotfile(<<".", _/binary>>) -> true;
+is_dotfile("..") -> false;
+is_dotfile("." ++ _) -> true;
+is_dotfile(_) -> false.
 
 
 min_age_check(File, MinAge, Acc) ->
