@@ -184,7 +184,7 @@ msgstr ""
 "actualmente publicada?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:30./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:240./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:30./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:23
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
@@ -206,7 +206,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:173./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:172./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:47
 #: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "Category"
@@ -592,7 +592,7 @@ msgid "Saved collaboration group settings"
 msgstr "Configuración de grupos de colaboración guardada"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:181./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:276
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:180./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:275
 msgid "Select category"
 msgstr "Seleccionar categoría"
 
@@ -928,7 +928,7 @@ msgstr "Agregar un nuevo archivo multimedia"
 msgid "Add a new media item"
 msgstr "Agregar un nuevo ítem de medios"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:101
 #, fuzzy
 msgid "Add media item"
 msgstr "Agregar elemento multimedia"
@@ -999,12 +999,12 @@ msgid "And media can also be viewed on their own page."
 msgstr ""
 "Y los medios de comunicación también se pueden ver en su propia página."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:285
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:284
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "Cualquier Categoría"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:279
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:278
 #, fuzzy
 msgid "Any valid for:"
 msgstr "Válido para:"
@@ -1102,7 +1102,7 @@ msgstr "Ciudad"
 msgid "Click here for more information"
 msgstr "Ocultar información de progreso"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:47
 #, fuzzy
 msgid "Click the image to set the cropping center."
 msgstr "Haga clic en la imagen para establecer el centro de recorte."
@@ -1149,7 +1149,7 @@ msgstr "Confirmar borrar"
 msgid "Confirm logoff"
 msgstr "Confirmar el cierre de sesión"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:243./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:242./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:47
 msgid "Connect"
 msgstr "Redes socialesConnectar"
 
@@ -1163,12 +1163,12 @@ msgstr "Conectar una página"
 msgid "Connections and Sessions"
 msgstr "Prueba de conexión"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:54
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:59
 #, fuzzy
 msgid "Copied download link to clipboard"
 msgstr "Copia del enlace de descarga al portapapeles"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:56
 #, fuzzy
 msgid "Copy download link"
 msgstr "Clic para descargar"
@@ -1193,7 +1193,7 @@ msgstr "Contar"
 msgid "Country"
 msgstr "País"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:242
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:241
 msgid "Create"
 msgstr "Crear"
 
@@ -1206,7 +1206,7 @@ msgstr "Creado el"
 msgid "Created by"
 msgstr "Creado  por"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:303
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:302
 #, fuzzy
 msgid "Created by me"
 msgstr "Creado"
@@ -1244,7 +1244,7 @@ msgstr "Rango de fechas"
 msgid "Date ranges"
 msgstr "Rangos de fechas"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:219./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:218./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
 #, fuzzy
 msgid "Delete after disconnecting from"
 msgstr "Se ha eliminado la conexión con"
@@ -1285,7 +1285,7 @@ msgstr "Descubra los medios"
 msgid "Do you want to remove this block?"
 msgstr "¿Desea eliminar este bloque?"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
 msgid "Download"
 msgstr "Descarga"
 
@@ -1419,7 +1419,7 @@ msgstr ""
 "Las categorías se definen jerárquicamente. De esta manera se puede tener una "
 "categoría de vehículos con subcategorías coche y bicicleta."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:266
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:265
 #, fuzzy
 msgid "Existing pages"
 msgstr "Editar página"
@@ -1570,7 +1570,7 @@ msgstr "Últimas personas modificadas"
 msgid "Latest modified texts"
 msgstr "Últimos textos modificados"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:243./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:242./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
 msgid "Link"
 msgstr "Enlace"
@@ -1617,7 +1617,7 @@ msgstr "Crear un nuevo ítem de medios"
 msgid "Make a new page"
 msgstr "Crear una nueva página"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:35./apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:4./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:4./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:85
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:71
 #, fuzzy
 msgid "Make a new page or media"
@@ -1650,7 +1650,7 @@ msgstr ""
 "documentos cargados. Los medios de comunicación se pueden adjuntar a las "
 "páginas."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
 msgid "Media file"
 msgstr "Archivo de medios"
 
@@ -1698,7 +1698,7 @@ msgstr "Modificado el"
 msgid "Modified:"
 msgstr "Modificado"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:204
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:203
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
@@ -1864,7 +1864,7 @@ msgstr "Período de publicación"
 msgid "Publish this page"
 msgstr "Publicar esta página"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:231./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:230./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:38
 msgid "Published"
 msgstr "Publicado"
@@ -1924,7 +1924,7 @@ msgstr "Reinstalar el modelo de datos del sitio"
 msgid "Remarks"
 msgstr "Comentarios"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:45
 #, fuzzy
 msgid "Remove crop center"
 msgstr "Quitar el centro de corte"
@@ -1948,7 +1948,7 @@ msgstr "Reemplazar"
 msgid "Replace current medium"
 msgstr "Sustituir el medio actual"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:59./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:101
 msgid "Replace this media item"
 msgstr "Reemplazar este ítem de medios"
 
@@ -2047,7 +2047,7 @@ msgstr "Seleccione una imagen conectada"
 msgid "Selected Categories"
 msgstr "Categorías seleccionadas"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:51
 #, fuzzy
 msgid "Selecting a file will make the page a media item."
 msgstr ""
@@ -2229,19 +2229,19 @@ msgstr "Esta conexión ya existe."
 msgid "This file contains links to other files or locations."
 msgstr "Este archivo contiene enlaces a otros archivos o ubicaciones."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:80
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:85
 #, fuzzy
 msgid "This file has been scanned for viruses."
 msgstr "El mailing ha sido cancelado."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:76
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:81
 #, fuzzy
 msgid "This file has not been scanned for viruses because it is too large."
 msgstr ""
 "Este archivo no ha sido analizado en busca de virus porque es demasiado "
 "grande."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:84
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:89
 #, fuzzy
 msgid "This file has not been scanned for viruses."
 msgstr "Este archivo no se puede importar."
@@ -2395,7 +2395,7 @@ msgstr "Página de usuario"
 msgid "Valid for:"
 msgstr "Válido para:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:42
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
@@ -2600,7 +2600,7 @@ msgstr "nombre"
 msgid "page"
 msgstr "página"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:17
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:13
 msgid "pixels"
 msgstr "píxeles"
@@ -2622,7 +2622,7 @@ msgstr "deshacer"
 msgid "untitled"
 msgstr "sin título"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:96
 msgid "uploaded on"
 msgstr "subido el"
 
@@ -3913,6 +3913,44 @@ msgstr "Asunto"
 #, fuzzy
 msgid "Statistics"
 msgstr "Estadísticas"
+
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
+msgid "Album"
+msgstr ""
+
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:25
+msgid "Album artist"
+msgstr ""
+
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:33
+msgid "Album is a compilation of songs by various artists"
+msgstr ""
+
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:19
+msgid "Artist"
+msgstr ""
+
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:37
+msgid "Composer"
+msgstr ""
+
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:58
+#, fuzzy
+msgid "Copyright"
+msgstr "Copy"
+
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:46
+msgid "Genre"
+msgstr ""
+
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:4
+#, fuzzy
+msgid "Media tags"
+msgstr "Título de medio"
+
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:52
+msgid "Track"
+msgstr ""
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:70
 #, fuzzy
@@ -6967,28 +7005,6 @@ msgstr ""
 "correo. Cualquier persona que pueda ver la lista de correo puede añadir una "
 "dirección de correo electrónico a la lista de correo.</p>"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:16
-#, fuzzy
-msgid "<p>Sorry, something went wrong. Please try again later.</p>"
-msgstr ""
-"<p>Lo siento, algo salió mal. Por favor, inténtelo de nuevo más tarde.</p>"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:21
-#, fuzzy
-msgid "<p>Sorry, something went wrong. Please try to re-subscribe.</p>"
-msgstr ""
-"<p>Lo siento, algo salió mal. Por favor, intente volver a suscribirse.</p>"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:20
-#, fuzzy
-msgid "<p>Thank you. You are now subscribed.</p>"
-msgstr "<p>Gracias. Ya está suscrito.</p>"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:15
-#, fuzzy
-msgid "<p>Thank you. You are now unsubscribed.</p>"
-msgstr "<p>Gracias. Usted ya no está suscrito.</p>"
-
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
 msgid "Act"
 msgstr "Actúa"
@@ -7078,7 +7094,7 @@ msgstr ""
 "Haga clic en <strong>cancelar la suscripción</strong> para darse de baja de "
 "la lista de correo."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:40
 #, fuzzy
 msgid "Click here when you can’t read the message below."
 msgstr "Haga clic aquí cuando no pueda leer el mensaje de abajo."
@@ -7330,7 +7346,7 @@ msgstr ""
 msgid "Operation"
 msgstr "Operación"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:24
 #, fuzzy
 msgid "Our excuses for the inconvenience."
 msgstr "Nuestras excusas por las molestias."
@@ -7403,7 +7419,7 @@ msgstr "Prefijo"
 msgid "Preview mailing"
 msgstr "Vista previa del correo"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:52
+#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:43./apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:28
 #, fuzzy
 msgid "Read this page on the web."
 msgstr "Lea esta página en la web."
@@ -7557,15 +7573,27 @@ msgstr ""
 "Lo siento, no he podido suscribirte a la lista de correo. Por favor, "
 "inténtelo de nuevo más tarde o con otra dirección de correo electrónico."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:25
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:26
 #, fuzzy
 msgid "Sorry, can’t confirm your subscription"
 msgstr "Lo sentimos, no puedo confirmar su suscripción"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:22
 #, fuzzy
 msgid "Sorry, can’t find your subscription"
 msgstr "Lo sentimos, no encuentro tu suscripción"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:17
+#, fuzzy
+msgid "Sorry, something went wrong. Please try again later."
+msgstr ""
+"<p>Lo siento, algo salió mal. Por favor, inténtelo de nuevo más tarde.</p>"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:22
+#, fuzzy
+msgid "Sorry, something went wrong. Please try to re-subscribe."
+msgstr ""
+"<p>Lo siento, algo salió mal. Por favor, intente volver a suscribirse.</p>"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:83./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
 msgid "Subscribe"
@@ -7591,7 +7619,17 @@ msgstr "Suscriptores, añadidos a través del formulario de suscripción."
 msgid "Target mailing list"
 msgstr "Lista de correo de destino"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:21
+#, fuzzy
+msgid "Thank you. You are now subscribed."
+msgstr "<p>Gracias. Ya está suscrito.</p>"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:16
+#, fuzzy
+msgid "Thank you. You are now unsubscribed."
+msgstr "<p>Gracias. Usted ya no está suscrito.</p>"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 #, fuzzy
 msgid ""
 "The confirmation key is unknown. Either you already confirmed or something "
@@ -7605,7 +7643,7 @@ msgstr ""
 msgid "The e-mails are being sent..."
 msgstr "Los correos electrónicos están siendo enviados...."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:21
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 #, fuzzy
 msgid ""
 "The key in your link does not match any subscription. Either you already "
@@ -7822,7 +7860,7 @@ msgstr "Usted ya no está suscrito a"
 msgid "You are now unsubscribed from the mailing list"
 msgstr "Ya no está suscrito a la lista de correo"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:29
 #, fuzzy
 msgid ""
 "You can try to re-subscribe to one of our mailing lists in the side column."
@@ -9202,6 +9240,11 @@ msgstr "Una vez y permitir la edición posterior"
 msgid "Once only per user/browser"
 msgstr "Una sola vez por usuario/navegador"
 
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
+#, fuzzy
+msgid "One answer per line."
+msgstr "uno por línea"
+
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 #, fuzzy
 msgid "Only accept images."
@@ -9655,8 +9698,8 @@ msgid "chocolate"
 msgstr "chocolate"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:3
-msgid "goto"
-msgstr "pasar a"
+msgid "go to"
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:94
 msgid "ice cream and my favorite color is"
@@ -10220,7 +10263,7 @@ msgstr "Usted ha acoplado su cuenta de <strong>Twitter</strong>."
 msgid "Your Twitter Application Management page"
 msgstr "Tu página de administración de aplicaciones de Twitter"
 
-#: apps/zotonic_mod_video/priv/templates/_video_viewer.tpl:5
+#: apps/zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 #, fuzzy
 msgid "Converting"
 msgstr "Conversión"
@@ -10762,6 +10805,9 @@ msgstr "Comenzar"
 #, fuzzy
 msgid "stop"
 msgstr "Alto"
+
+#~ msgid "goto"
+#~ msgstr "pasar a"
 
 #, fuzzy
 #~ msgid "Safari 8 has a known problem with handling external authentications."
