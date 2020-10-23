@@ -49,9 +49,9 @@ event(#submit{message={recipient_add, Props}}, Context) ->
 			RecipientProps = [
 			    {user_id, undefined},
 			    {in_admin, InAdmin},
-			    {name_first, sanitize(z_context:get_q(name_first, Context, ""))},
-			    {name_surname_prefix, sanitize(z_context:get_q(name_surname_prefix, Context, ""))},
-			    {name_surname, sanitize(z_context:get_q(name_surname, Context, ""))},
+			    {name_first, sanitize(z_context:get_q(name_first, Context, <<>>))},
+			    {name_surname_prefix, sanitize(z_context:get_q(name_surname_prefix, Context, <<>>))},
+			    {name_surname, sanitize(z_context:get_q(name_surname, Context, <<>>))},
                 {pref_language, pref_language(Context)}
 			],
 			case m_mailinglist:insert_recipient(ListId, Email, RecipientProps, Notification, Context) of
@@ -92,9 +92,9 @@ event(#submit{message={recipient_edit, Props}}, Context) ->
                 {email, z_context:get_q_validated(email, Context)},
 			    {user_id, undefined},
 			    {in_admin, InAdmin},
-			    {name_first, sanitize(z_context:get_q(name_first, Context, ""))},
-			    {name_surname_prefix, sanitize(z_context:get_q(name_surname_prefix, Context, ""))},
-			    {name_surname, sanitize(z_context:get_q(name_surname, Context, ""))},
+			    {name_first, sanitize(z_context:get_q(name_first, Context, <<>>))},
+			    {name_surname_prefix, sanitize(z_context:get_q(name_surname_prefix, Context, <<>>))},
+			    {name_surname, sanitize(z_context:get_q(name_surname, Context, <<>>))},
                 {pref_language, pref_language(Context)}
 			],
             ok = m_mailinglist:update_recipient(RcptId, RecipientProps, Context),
