@@ -318,7 +318,7 @@ is_tag_ok(_, _) -> true.
 
 fetch_size(#{<<"streams">> := Streams}) ->
     [ Video | _ ] = lists:dropwhile(
-        fun( { #{<<"codec_type">> := CodecType} } ) ->
+        fun( #{<<"codec_type">> := CodecType} ) ->
            CodecType =/= <<"video">>
         end,
         Streams),
@@ -352,8 +352,8 @@ orientation(_) ->
 
 video_preview(MovieFile, Props) ->
     #{
-        duration := Duration,
-        orientation := Orientation
+        <<"duration">> := Duration,
+        <<"orientation">> := Orientation
     } = Props,
     Start = case Duration of
         N when N =< 1 -> 0;
