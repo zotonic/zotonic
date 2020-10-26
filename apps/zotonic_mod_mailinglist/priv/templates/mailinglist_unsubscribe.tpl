@@ -2,7 +2,7 @@
 
 {% block title %}{_ Unsubscribe from mailing list _}{% endblock %}
 
-{% block main %}
+{% block content %}
 
 {% with m.mailinglist.confirm_key[q.confirm_key] as sub %}
 {% if sub and m.rsc[sub.mailinglist_id].is_a.mailinglist %}

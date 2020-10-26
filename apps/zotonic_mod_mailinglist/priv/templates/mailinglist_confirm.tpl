@@ -2,7 +2,7 @@
 
 {% block title %}{_ Confirm subscription _}{% endblock %}
 
-{% block main %}
+{% block content %}
 {% with m.mailinglist.confirm_key[q.confirm_key] as confirm %}
 	{% if confirm.mailinglist_id and confirm.email %}
 		<h1>{_ Subscribe to _} {{ m.rsc[confirm.mailinglist_id].title }}</h1>
