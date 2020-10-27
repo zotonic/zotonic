@@ -53,7 +53,7 @@ to_html(ReqData, Context) ->
                 Context2),
             z_context:output(Html, Context2);
         true ->
-            html(Context2)
+            html( z_context:ensure_all(Context2) )
     end,
     ?WM_REPLY(Result, ResultContext).
 
