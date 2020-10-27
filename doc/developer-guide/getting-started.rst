@@ -89,7 +89,7 @@ Preparation
 
 First prepare your system for running Zotonic. Zotonic needs:
 
-* Erlang 21 or higher
+* Erlang 21.3 or higher
 * PostgreSQL 9.4 or higher
 * ImageMagick 6.5 or higher for image resizing
 * Git for pulling in external dependencies

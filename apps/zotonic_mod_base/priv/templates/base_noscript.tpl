@@ -22,6 +22,8 @@
            {% block content %}
               {% block main %}{% endblock %}
            {% endblock %}
+           {% block below_body %}
+           {% endblock %}
         {% endblock %}
     </div>
 

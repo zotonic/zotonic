@@ -11,7 +11,7 @@
 		<span>{_ Converting _} …</span>
 	</div>
     {% javascript %}
-        {% wire type={mqtt topic=["model", "media", "event", props.id]}
+        {% wire type={mqtt topic=[ "bridge", "origin", "model", "media", "event", props.id, 'update']}
                 action={replace template="_video_viewer.tpl" target=#video options=options id=props.id}
         %}
     {% endjavascript %}

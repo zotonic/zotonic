@@ -160,7 +160,7 @@ remove_task(State) ->
 
 video_convert(QueuePath, Mime) ->
     Info = mod_video:video_info(QueuePath),
-    video_convert_1(QueuePath, maps:get(orientation, Info), Mime).
+    video_convert_1(QueuePath, maps:get(<<"orientation">>, Info), Mime).
 
 -define(CMDLINE,
         "ffmpeg -i "

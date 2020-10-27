@@ -34,28 +34,30 @@
 <div class="container">
 	{% block content_area %}
 		<div class="content" {% include "_language_attrs.tpl" language=z_language %}>
-		{% block content %}
-			{% block above %}
-				<div class="page-title">
-					<div class="{% if z_language|is_rtl %}col-lg-8 col-md-8{% endif %}">
-						{% include "_breadcrumb.tpl" %}
-						{% include "_title.tpl" %}
+			{% block content %}
+				{% block above %}
+					<div class="page-title">
+						<div class="{% if z_language|is_rtl %}col-lg-8 col-md-8{% endif %}">
+							{% include "_breadcrumb.tpl" %}
+							{% include "_title.tpl" %}
+						</div>
+					</div>
+				{% endblock %}
+				<div class="row">
+					<div class="main col-lg-8 col-md-8">
+						{% block main %}{% endblock %}
+					</div>
+
+					<div id="subnavbar" class="col-lg-4 col-md-4">
+						{% block subnavbar %}
+	                        {% include "_subnav.tpl" %}
+						{% endblock %}
 					</div>
 				</div>
+				{% block below %}{% endblock %}
 			{% endblock %}
-			<div class="row">
-				<div class="main col-lg-8 col-md-8">
-					{% block main %}{% endblock %}
-				</div>
-
-				<div id="subnavbar" class="col-lg-4 col-md-4">
-					{% block subnavbar %}
-                        {% include "_subnav.tpl" %}
-					{% endblock %}
-				</div>
-			</div>
-			{% block below %}{% endblock %}
-		{% endblock %}
+	        {% block below_body %}
+	        {% endblock %}
 		</div>
 	{% endblock %}
 	{% include "_footer.tpl" %}
