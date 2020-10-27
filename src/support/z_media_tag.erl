@@ -179,8 +179,15 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(MediaRef, Filename, Options, Context) ->
         Options1 = drop_undefined(Options),
         {url, Url, TagOpts, _ImageOpts} = url1(Filename, Options1, Context),
+        % Special 0.x global config to have the old behavior for image
+        % tags without width/height attributes.
+        DefaultNoWH = case z_config:get(media_tag_nowh) of
+            undefined -> false;
+            false -> false;
+            true -> true
+        end,
         % Expand the mediaclass for the correct size options
-        TagOpts1 = case z_convert:to_bool( proplists:get_value(nowh, Options1, false) ) of
+        TagOpts1 = case z_convert:to_bool( proplists:get_value(nowh, Options1, DefaultNoWH) ) of
             true ->
                 TagOpts;
             false ->
