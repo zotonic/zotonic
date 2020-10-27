@@ -1746,7 +1746,8 @@ function z_init_postback_forms()
             var transport    = '';
             var files        = $('input:file', theForm).fieldValue();
             var is_file_form = false;
-
+            var args;
+            
             if (!postback) {
                 postback = z_default_form_postback;
             }

@@ -42,10 +42,13 @@
  
  {media_inline, ["media","inline","id",id], controller_file_id, [ {dispatch, media_inline}, {ssl, any} ]},
  {media_inline, ["media","inline",'*'], controller_file, [ {content_disposition, inline}, {ssl, any} ]},
- 
+
  %% API access
  {api,     ["api",module,method], controller_api, [{ssl, any}]},
  {api,     ["api",module],        controller_api, [{ssl, any}]},
+ 
+ %% Upload files to the dropbox - the secret is configured in site.dropbox_upload_secret
+ {dropbox, [ "dropbox-upload", secret ], controller_dropbox_upload, []},
  
  %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
  {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}, {ssl, any} ]},
