@@ -21,12 +21,44 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    init/1,
+    to_html/2,
     html/1,
+    service_available/2,
+    charsets_provided/2,
     fetch_user_data/1,
     fetch_email_address/1
-    ]).
+]).
 
--include_lib("controller_html_helper.hrl").
+-include_lib("controller_webmachine_helper.hrl").
+-include_lib("include/zotonic.hrl").
+
+init(DispatchArgs) ->
+    {ok, DispatchArgs}.
+
+service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
+    Context  = z_context:new(ReqData, ?MODULE),
+    Context1 = z_context:set(DispatchArgs, Context),
+    ?WM_REPLY(true, Context1).
+
+charsets_provided(ReqData, Context) ->
+    {[{"utf-8", fun(X) -> X end}], ReqData, Context}.
+
+to_html(ReqData, Context) ->
+    Context1 = ?WM_REQ(ReqData, Context),
+    Context2 = z_context:ensure_qs( z_context:continue_session(Context1) ),
+    z_context:lager_md(Context2),
+    {Result, ResultContext} = case z_context:has_session(Context2) of
+        false ->
+            Html = z_template:render(
+                "logon_service_done.tpl",
+                [ {service, "LinkedIn"}, {try_reload, true} | z_context:get_all(Context2) ],
+                Context2),
+            z_context:output(Html, Context2);
+        true ->
+            html( z_context:ensure_all(Context2) )
+    end,
+    ?WM_REPLY(Result, ResultContext).
 
 html(Context) ->
     QState = z_context:get_q("state", Context),
