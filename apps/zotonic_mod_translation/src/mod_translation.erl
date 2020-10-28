@@ -350,7 +350,7 @@ event(#postback{message={set_language, Args}}, Context) ->
     Context1 = set_user_language(LanguageCode, Context),
     case m_rsc:rid( proplists:get_value(id, Args), Context1 ) of
         undefined -> reload_page(Context1);
-        RscId -> z_context:wire({redirect, [ {id, RscId} ]}, Context1)
+        RscId -> z_render:wire({redirect, [ {id, RscId} ]}, Context1)
     end;
 
 %% @doc Set the default language. Reloads the page to reflect the new setting.
