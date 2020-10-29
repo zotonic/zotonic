@@ -186,7 +186,7 @@ video_convert_1(QueuePath, Orientation, Mime) ->
               end,
     jobs:run(video_jobs,
              fun() ->
-                TransposeOption = mod_video:orientation_to_transpose(Orientation),
+                TransposeOption = z_video_preview:orientation_to_transpose(Orientation),
                 case maybe_reset_metadata(TransposeOption, QueuePath, Mime) of
                     {ok, QueuePath1} ->
                         TmpFile = z_tempfile:new(),
