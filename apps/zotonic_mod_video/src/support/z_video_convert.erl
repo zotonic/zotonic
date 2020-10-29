@@ -159,7 +159,7 @@ remove_task(State) ->
     mod_video:remove_task(State#state.queue_filename, Context).
 
 video_convert(QueuePath, Mime) ->
-    Info = mod_video:video_info(QueuePath),
+    Info = z_video_info:video_info(QueuePath),
     video_convert_1(QueuePath, maps:get(<<"orientation">>, Info), Mime).
 
 -define(CMDLINE,
