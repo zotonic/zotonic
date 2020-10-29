@@ -1,8 +1,9 @@
-    <link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}" />
 {% if id and id.is_a.query and q.page %}
     <link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url_abs }}{% endblock %}?page={{ q.page|escape }}" />
+    <link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}" />
 {% elseif id %}
 	<link rel="canonical" href="{% block canonical %}{{ m.rsc[id].page_url_abs }}{% endblock %}" />
+    <link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}" />
 {% endif %}
 {% if m.seo.noindex or noindex %}
     <meta name="robots" content="noindex,nofollow">
