@@ -105,6 +105,7 @@ event_1(#postback{ message={module_toggle, Module, _StatusId} }, Context) ->
             activate_module(Module, Context)
     end.
 
+-spec activate_module( atom(), z:context() ) -> z:context().
 activate_module(Module, Context) ->
     case z_module_manager:activate(Module, Context) of
         ok ->
@@ -113,10 +114,7 @@ activate_module(Module, Context) ->
             z_render:wire({alert, [ {text, ?__("Could not find the module.", Context)} ]}, Context)
     end.
 
+-spec deactivate_module( atom(), z:context() ) -> z:context().
 deactivate_module(Module, Context) ->
-    case z_module_manager:deactivate(Module, Context) of
-        ok ->
-            z_render:wire({reload, []}, Context);
-        {error, not_found} ->
-            z_render:wire({alert, [ {text, ?__("Could not find the module.", Context)} ]}, Context)
-    end.
+    ok = z_module_manager:deactivate(Module, Context),
+    z_render:wire({reload, []}, Context).

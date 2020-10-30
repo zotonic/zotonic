@@ -185,20 +185,17 @@ deactivate(Module, Context) ->
 activate_precheck(Module, Context) when is_atom(Module) ->
     activate_precheck([ Module ], Context);
 activate_precheck(Modules, Context) when is_list(Modules) ->
-    % 1. Fetch current module list
     Active = active(Context),
-    % 2. Add new modules to list
     Active1 = Active ++ Modules,
-    % 3. Build dependency graph and topological sort
     case dependency_sort(Active1) of
         {ok, Sorted} ->
-            % 4. Simulate module start, accumulate missing dependencies
             activate_precheck_1(Sorted, [], #{});
         {error, {cyclic, _}} = Error ->
             Error
     end.
 
-activate_precheck_1([], _Provided,Acc) ->
+-spec activate_precheck_1([ atom() ], [ atom() ], map() ) -> ok | {error, map()}.
+activate_precheck_1([], _Provided, Acc) ->
     case maps:size(Acc) of
         0 -> ok;
         _ -> {error, Acc}
@@ -224,14 +221,10 @@ activate_precheck_1([ M | Ms ], Provided, Acc) ->
         | {error, #{ atom() := [ atom () ]}}
         | {error, {cyclic, list()}}.
 deactivate_precheck(Module, Context) when is_atom(Module) ->
-    % 1. Fetch current module list
     Active = active(Context),
-    % 2. Remove module from list
     Active1 = Active -- [ Module ],
-    % 3. Build dependency graph
     case dependency_sort(Active1) of
         {ok, Sorted} ->
-            % 4. Simulate module start, accumulate missing dependencies
             activate_precheck_1(Sorted, [], #{});
         {error, {cyclic, _}} = Error ->
             Error
