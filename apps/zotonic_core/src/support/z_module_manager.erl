@@ -34,6 +34,8 @@
     deactivate/2,
     activate/2,
     activate_await/2,
+    activate_precheck/2,
+    deactivate_precheck/2,
     restart/2,
     module_reloaded/2,
     active/1,
@@ -176,19 +178,64 @@ deactivate(Module, Context) ->
 %% modules. All missing dependencies will be listed.
 %% This also shows the modules that have missing dependencies and can't run because of those
 %% missing dependencies.
--spec activate_precheck( [ atom() ], z:context() ) -> {ok, #{ atom() := [ atom () ]}} | {error, not_found}.
-activate_precheck(Modules, Context) ->
-    {ok, #{}}.
+-spec activate_precheck( atom() | [ atom() ], z:context() ) ->
+          ok
+        | {error, #{ atom() := [ atom () ]}}
+        | {error, {cyclic, list()}}.
+activate_precheck(Module, Context) when is_atom(Module) ->
+    activate_precheck([ Module ], Context);
+activate_precheck(Modules, Context) when is_list(Modules) ->
+    % 1. Fetch current module list
+    Active = active(Context),
+    % 2. Add new modules to list
+    Active1 = Active ++ Modules,
+    % 3. Build dependency graph and topological sort
+    case dependency_sort(Active1) of
+        {ok, Sorted} ->
+            % 4. Simulate module start, accumulate missing dependencies
+            activate_precheck_1(Sorted, [], #{});
+        {error, {cyclic, _}} = Error ->
+            Error
+    end.
 
-%% @doc Before deactivating a module, check if activate modules depend on the deactivated module.
+activate_precheck_1([], _Provided,Acc) ->
+    case maps:size(Acc) of
+        0 -> ok;
+        _ -> {error, Acc}
+    end;
+activate_precheck_1([ M | Ms ], Provided, Acc) ->
+    {M, MDep, MProv} = dependencies(M),
+    Missing = MDep -- Provided,
+    Provided1 = Provided ++ MProv,
+    Acc1 = case Missing of
+        [] -> Acc;
+        _ -> Acc#{ M => Missing }
+    end,
+    activate_precheck_1(Ms, Provided1, Acc1).
+
+
+%% @doc Before deactivating a module, check if active modules depend on the deactivated module.
 %% This checks the complete graph of all modules that are currently activated minus the deactivated
 %% module. All missing dependencies will be listed.
 %% This also shows the modules that have missing dependencies and can't run because of those
 %% missing dependencies.
--spec deactivate_precheck( atom(), z:context() ) -> {ok, #{ atom() := [ atom () ]}} | {error, not_found}.
-deactivate_precheck(Module, Context) ->
-    {ok, #{}}.
-
+-spec deactivate_precheck( atom(), z:context() ) ->
+          ok
+        | {error, #{ atom() := [ atom () ]}}
+        | {error, {cyclic, list()}}.
+deactivate_precheck(Module, Context) when is_atom(Module) ->
+    % 1. Fetch current module list
+    Active = active(Context),
+    % 2. Remove module from list
+    Active1 = Active -- [ Module ],
+    % 3. Build dependency graph
+    case dependency_sort(Active1) of
+        {ok, Sorted} ->
+            % 4. Simulate module start, accumulate missing dependencies
+            activate_precheck_1(Sorted, [], #{});
+        {error, {cyclic, _}} = Error ->
+            Error
+    end.
 
 %% @doc Activate a module. The module is marked as active and started as a child of the module supervisor.
 %% The module manager can be checked later to see if the module started or not.
@@ -524,6 +571,7 @@ prio_sort(Modules) ->
 
 
 %% @doc Sort all modules on their dependencies (with sub sort the module's priority)
+-spec dependency_sort( z:context() | list( atom() ) ) -> {ok, list(atom())} | {error, {cyclic, list()}}.
 dependency_sort(#context{} = Context) ->
     dependency_sort(active(Context));
 dependency_sort(Modules) when is_list(Modules) ->
@@ -532,6 +580,7 @@ dependency_sort(Modules) when is_list(Modules) ->
 
 
 %% @doc Return a module's dependencies as a tuple usable for z_toposort:sort/1.
+-spec dependencies({atom(), integer()} | atom()) -> {atom(), Depends::list(atom()), Provides::list(atom())}.
 dependencies({M, X}) ->
     {_, Ds, Ps} = dependencies(M),
     {{M,X}, Ds, Ps};
