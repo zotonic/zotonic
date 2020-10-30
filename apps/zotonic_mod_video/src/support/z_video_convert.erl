@@ -159,7 +159,7 @@ remove_task(State) ->
     mod_video:remove_task(State#state.queue_filename, Context).
 
 video_convert(QueuePath, Mime) ->
-    Info = mod_video:video_info(QueuePath),
+    Info = z_video_info:info(QueuePath),
     video_convert_1(QueuePath, maps:get(<<"orientation">>, Info), Mime).
 
 -define(CMDLINE,
@@ -186,7 +186,7 @@ video_convert_1(QueuePath, Orientation, Mime) ->
               end,
     jobs:run(video_jobs,
              fun() ->
-                TransposeOption = mod_video:orientation_to_transpose(Orientation),
+                TransposeOption = z_video_preview:orientation_to_transpose(Orientation),
                 case maybe_reset_metadata(TransposeOption, QueuePath, Mime) of
                     {ok, QueuePath1} ->
                         TmpFile = z_tempfile:new(),

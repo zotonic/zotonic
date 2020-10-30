@@ -337,7 +337,6 @@ handle_cast({delivery_report, What, OptRecipient, MsgIdHeader, OptStatusMessage}
     % Find the original message in our database of recent sent e-mail
     TrFun = fun()->
                     [QEmail] = mnesia:read(email_queue, MsgId),
-                    mnesia:delete_object(QEmail),
                     {(QEmail#email_queue.email)#email.to, QEmail#email_queue.pickled_context}
             end,
     case mnesia:transaction(TrFun) of
