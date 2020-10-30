@@ -5,7 +5,7 @@
 {% block content %}
     <div class="admin-header">
         <h2>{_ Modules _}</h2>
-        <p>{_ Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,
+        <p style="max-width: 100ch;">{_ Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,
             while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation. _}</p>
     </div>
 
@@ -30,7 +30,7 @@
                         {% if config_template %}
                             {% wire name="dialog-"|append:module action={dialog_open template=config_template title=props.mod_title|default:props.title module=module props=props} %}
                         {% endif %}
-                        <tr id="{{ #li.module }}" class="{% if not props.is_active %}unpublished{% endif %}" {% if config_template %}data-event="dialog-{{ module }}"{% endif %}>
+                        <tr class="{% if not props.is_active %}unpublished{% endif %}" {% if config_template %}data-event="dialog-{{ module }}"{% endif %}>
                             <td>
                                 {% include "_icon_status.tpl" status_title=status[module] status=status[module] status_id=#status.module %}
                             </td>
@@ -76,13 +76,13 @@
                                         {% endif %}
                                         {% button text=_"Deactivate"
                                             class="btn btn-default btn-xs"
-                                            action={module_toggle module=module status_id=#status.module}
-                                            action={toggle_class target=#li.module class="unpublished"} %}
+                                            action={module_toggle is_deactivate module=module}
+                                        %}
                                     {% else %}
                                         {% button text=_"Activate"
                                             class="btn btn-info btn-xs"
-                                            action={module_toggle module=module status_id=#status.module}
-                                            action={toggle_class target=#li.module class="unpublished"} %}
+                                            action={module_toggle is_activate module=module}
+                                        %}
                                     {% endif %}
                                 </div>
                             </td>
