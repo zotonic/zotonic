@@ -174,6 +174,7 @@ msgstr ""
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:73
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:17
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:86./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
@@ -394,6 +395,7 @@ msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
@@ -1951,7 +1953,6 @@ msgid "Timeout while trying to fetch data from the website."
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:4./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
 msgid "Title"
@@ -3062,35 +3063,64 @@ msgstr ""
 msgid "not implemented yet"
 msgstr ""
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:52
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:81
 msgid "Activate"
 msgstr ""
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
-msgid "Author"
-msgstr ""
-
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:43
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:72
 msgid "Configure"
 msgstr ""
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
+#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:113./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:121
+msgid "Could not find the module."
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:71
+msgid "Cyclic dependencies"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:76
 msgid "Deactivate"
 msgstr ""
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:32
-#: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
-msgid "Description"
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:3
+msgid "Deactivating this module will stop the following modules:"
 msgstr ""
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:66
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:9
+msgid "Dependencies"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
+msgid "Depends"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:28
+msgid "Do you still want to activate the module"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:11
+msgid "Do you still want to deactivate the module"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:62./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:87
+msgid "Module dependencies"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:1
+msgid "Modules are missing dependencies"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:93
 msgid "No modules found"
 msgstr ""
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
 msgid "Prio"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
+msgid "Provides"
 msgstr ""
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
@@ -3101,6 +3131,18 @@ msgstr ""
 msgid ""
 "Rescanning will rebuild the index of all modules, actions, templates etc. It "
 "will also reload all dispatch rules."
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
+msgid "The following modules will not start because they miss dependencies:"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
+msgid "There are modules depending on"
+msgstr ""
+
+#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:52
+msgid "You are not allowed to activate or deactivate modules."
 msgstr ""
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:8
@@ -5929,6 +5971,12 @@ msgstr ""
 msgid "Deleted the mailing list."
 msgstr ""
 
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:32
+#: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
+msgid "Description"
+msgstr ""
+
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Download all"
 msgstr ""
@@ -8035,7 +8083,7 @@ msgstr ""
 msgid "Available sub-languages"
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:435
+#: apps/zotonic_mod_translation/src/mod_translation.erl:438
 msgid ""
 "Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
 "en/latest/developer-guide/translation.html\">gettext is not installed</a>."
@@ -8195,7 +8243,7 @@ msgid ""
 "recompiled."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:446
+#: apps/zotonic_mod_translation/src/mod_translation.erl:449
 msgid "Reloading all .po files in the background."
 msgstr ""
 
@@ -8243,23 +8291,23 @@ msgstr ""
 msgid "Show the language in the URL"
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:363./apps/zotonic_mod_translation/src/mod_translation.erl:410
+#: apps/zotonic_mod_translation/src/mod_translation.erl:366./apps/zotonic_mod_translation/src/mod_translation.erl:413
 msgid "Sorry, could not change the language."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:379./apps/zotonic_mod_translation/src/mod_translation.erl:390./apps/zotonic_mod_translation/src/mod_translation.erl:413
+#: apps/zotonic_mod_translation/src/mod_translation.erl:382./apps/zotonic_mod_translation/src/mod_translation.erl:393./apps/zotonic_mod_translation/src/mod_translation.erl:416
 msgid "Sorry, you don't have permission to change the language list."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:448
+#: apps/zotonic_mod_translation/src/mod_translation.erl:451
 msgid "Sorry, you don't have permission to reload translations."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:438
+#: apps/zotonic_mod_translation/src/mod_translation.erl:441
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:366./apps/zotonic_mod_translation/src/mod_translation.erl:503
+#: apps/zotonic_mod_translation/src/mod_translation.erl:369./apps/zotonic_mod_translation/src/mod_translation.erl:506
 msgid "Sorry, you don't have permission to set the default language."
 msgstr ""
 
@@ -8267,7 +8315,7 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:432
+#: apps/zotonic_mod_translation/src/mod_translation.erl:435
 msgid "Started building the .pot files. This may take a while..."
 msgstr ""
 
@@ -8292,7 +8340,7 @@ msgstr ""
 msgid "Translate this page in other languages."
 msgstr ""
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:807
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:810
 msgid "Translation"
 msgstr ""
 

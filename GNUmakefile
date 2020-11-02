@@ -44,10 +44,10 @@ test: compile
 
 .PHONY: xref dialyzer
 
-xref: compile
+xref: $(REBAR)
 	./rebar3 xref
 
-dialyzer: compile
+dialyzer: $(REBAR)
 	./rebar3 dialyzer
 
 # Generate documentation

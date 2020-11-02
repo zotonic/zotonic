@@ -610,15 +610,15 @@ dialog(Title, Template, Vars, Context) ->
         {title, z_trans:lookup_fallback(Title, Context1)},
         {text, Html}
     ],
-    Args1 = case proplists:get_value(width, Vars) of
+    Args1 = case get_value(width, Vars) of
                 undefined -> Args;
                 Width -> [{width, Width} | Args]
             end,
-    Args2 = case proplists:get_value(class, Vars) of
+    Args2 = case get_value(class, Vars) of
                 undefined -> Args1;
                 Class -> [{addclass, Class} | Args1]
             end,
-    Args3 = case proplists:get_value(backdrop, Vars) of
+    Args3 = case get_value(backdrop, Vars) of
                 undefined -> Args2;
                 "true" -> [{backdrop, true} | Args2 ];
                 <<"true">> -> [{backdrop, true} | Args2 ];
@@ -627,11 +627,16 @@ dialog(Title, Template, Vars, Context) ->
                 static -> [ {backdrop, <<"static">>} | Args2 ];
                 Backdrop -> [{backdrop, Backdrop} | Args2]
             end,
-    Args4 = case proplists:get_value(center, Vars) of
+    Args4 = case get_value(center, Vars) of
                 undefined -> Args3;
                 Center -> [{center, Center} | Args3]
             end,
     wire({dialog, Args4}, Context1).
+
+get_value(K, Map) when is_map(Map) ->
+    maps:get(K, Map, undefined);
+get_value(K, List) when is_list(List) ->
+    proplists:get_value(K, List).
 
 dialog_close(Context) ->
     wire({dialog_close, []}, Context).

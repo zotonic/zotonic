@@ -22,19 +22,38 @@
     sort/1
 ]).
 
--type name() :: term().
--type topoitem() :: {Name::name(), Depends::list(), Provides::list()}.
+-type name() :: atom() | {atom(), term()}.
+-type cycles() :: list( list( name() ) ).
+-type topoitem() :: {Name::name(), Depends::list( atom() ), Provides::list( atom() )}.
+-type topoitems() :: list( topoitem() ).
 
-%% @doc Return the topological sort of a list.
--spec sort( [ topoitem() ] ) -> {error, {cyclic, [name()]}} | {ok, [name()]}.
-sort([]) ->
-    {ok, []};
+-export_type([
+    cycles/0,
+    name/0,
+    topoitem/0,
+    topoitems/0
+]).
+
+
+%% @doc Return the topological sort of a list of items.
+%% Each item lists its provisions and dependencies.
+-spec sort( topoitems() ) ->
+          {ok, list( name() )}
+        | {error, {cyclic, cycles()}}.
 sort(L) ->
     G = digraph:new(),
     Vs = [ {N, digraph:add_vertex(G)} || {N, _, _} <- L ],
     add_node(G, L, L, Vs).
 
 
+-spec add_node(
+            digraph:graph(),
+            topoitems(),
+            topoitems(),
+            list( {name(), digraph:vertex()} )
+        ) ->
+        { ok, list( name() )}
+        | {error, {cyclic, cycles()}}.
 add_node(G, _Nodes, [], Vs) ->
     case digraph_utils:is_acyclic(G) of
         true ->
@@ -60,8 +79,7 @@ add_node(G, Nodes, [{Node, Depends, _Provides}|L], Vs) ->
     ],
     add_node(G, Nodes, L, Vs).
 
-% find_node([], [], D) ->
-%     throw({error, {missing_provide, D}});
+-spec find_node( topoitems(), topoitems(), atom() ) -> list( name() ).
 find_node([], Fs, _D) ->
     Fs;
 find_node([{N, _, Provides}|L], Fs, D) ->
@@ -70,7 +88,7 @@ find_node([{N, _, Provides}|L], Fs, D) ->
         false -> find_node(L, Fs, D)
     end.
 
-
+-spec vertices_to_nodes( list( digraph:vertex() ), list( {name(), digraph:vertex()} )) -> list( name() ).
 vertices_to_nodes(Vertices, Nodes) ->
     [
         begin
