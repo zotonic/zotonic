@@ -177,7 +177,7 @@ connect(#{ type := connect, username := U, password := P }, IsSessionPresent, Op
     % The username might be something like: "example.com:localuser"
     Username = case binary:split(U, <<":">>) of
         [ _VHost, U1 ] -> U1;
-        U1 -> U1
+        _ -> U
     end,
     LogonArgs = #{
         <<"username">> => Username,
