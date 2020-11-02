@@ -53,8 +53,8 @@ event(Event, Context) ->
     end.
 
 %% @doc Activate or Deactivate a module.
-event_1(#postback{ message={module_activate, Module, _StatusId} }, Context) ->
-    case z_module_manager:activate_precheck(Module, Context) of
+event_1(#postback{ message={module_activate, Module, _StatusId} }, Context) when is_atom(Module) ->
+    case z_module_manager:activate_precheck([ Module ], Context) of
         ok ->
             activate_module(Module, Context);
         {error, Missing} when is_map(Missing) ->
@@ -76,11 +76,13 @@ event_1(#postback{ message={module_activate, Module, _StatusId} }, Context) ->
                 },
                 Context)
     end;
-event_1(#postback{ message={module_activate_confirm, [ {module, Module} ]} }, Context) ->
+event_1(#postback{ message={module_activate_confirm, [ {module, Module} ]} }, Context) when is_atom(Module) ->
     activate_module(Module, Context);
-event_1(#postback{ message={module_deactivate, Module, _StatusId} }, Context) ->
+event_1(#postback{ message={module_deactivate, Module, _StatusId} }, Context) when is_atom(Module) ->
     case z_module_manager:deactivate_precheck(Module, Context) of
         ok ->
+            deactivate_module(Module, Context);
+        {error, {cyclic, _Cycles}} ->
             deactivate_module(Module, Context);
         {error, Missing} when is_map(Missing) ->
             z_render:dialog(
@@ -90,13 +92,11 @@ event_1(#postback{ message={module_deactivate, Module, _StatusId} }, Context) ->
                     module => Module,
                     missing => Missing
                 },
-                Context);
-        {error, {cyclic, _Cycle}} ->
-            deactivate_module(Module, Context)
+                Context)
     end;
-event_1(#postback{ message={module_deactivate_confirm, [ {module, Module} ]} }, Context) ->
+event_1(#postback{ message={module_deactivate_confirm, [ {module, Module} ]} }, Context) when is_atom(Module) ->
     deactivate_module(Module, Context);
-event_1(#postback{ message={module_toggle, Module, _StatusId} }, Context) ->
+event_1(#postback{ message={module_toggle, Module, _StatusId} }, Context) when is_atom(Module) ->
     Active = z_module_manager:active(Context),
     case lists:member(Module, Active) of
         true ->
