@@ -51,6 +51,7 @@
     observe_rsc_get/3,
     observe_edge_insert/2,
     observe_edge_delete/2,
+    observe_manage_data/2,
     name/1,
     manage_schema/2,
     manage_data/2
@@ -549,6 +550,13 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                 visiblecheck={acl, use, mod_acl_user_groups}}
      |Acc].
 
+
+observe_manage_data(#manage_data{module = Module, props = {acl_rules, Rules}}, Context) ->
+    m_acl_rule:replace_managed(Rules, Module, Context);
+observe_manage_data(#manage_data{module = Module, props = {acl_hierarchy, Hierarchy}}, Context) ->
+    m_acl_rule:save_hierarchy(Hierarchy, Module, Context);
+observe_manage_data(#manage_data{}, _Context) ->
+    undefined.
 
 name(Context) ->
     z_utils:name_for_site(?MODULE, Context).
