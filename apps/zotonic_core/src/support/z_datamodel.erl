@@ -76,6 +76,8 @@ manage(Module, Datamodel, Options, Context) ->
         [ manage_medium(Module, Medium, Options, AdminContext)  || Medium <- Datamodel#datamodel.media ],
         flush(AdminContext),
         [ manage_edge(Module, Edge, Options, AdminContext)      || Edge   <- Datamodel#datamodel.edges ],
+        flush(AdminContext),
+        [ manage_data(Module, Data, AdminContext)               || Data   <- Datamodel#datamodel.data ],
         flush(AdminContext)
     end),
     ok.
@@ -266,6 +268,9 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
             }),
             ok
     end.
+
+manage_data(Module, Data, AdminContext) ->
+    z_notifier:first(#manage_data{module = Module, props = Data}, AdminContext).
 
 update_new_props(Module, Id, NewProps, Options, Context) ->
     case map_props( m_rsc:p_no_acl(Id, <<"managed_props">>, Context) ) of
