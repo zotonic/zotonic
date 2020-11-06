@@ -10,7 +10,7 @@
         </div>
         <div class="panel-body">
             <div class="table-responsive">
-                {% live template="_sites.tpl" topic="model/zotonic_status/event/sites_status" %}
+                {% live template="_sites.tpl" topic="bridge/origin/model/zotonic_status/event/sites_status" %}
             </div>
         </div>
     </div>

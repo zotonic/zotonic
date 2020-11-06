@@ -70,7 +70,7 @@
 {% endwith %}
 </form>
 
-{% wire type={mqtt topic=[ "model", "logging", "event", "#" ]}
+{% wire type={mqtt topic="bridge/origin/model/logging/event/#"}
         action={insert_top
                     target="log-area"
                     template="_admin_log_row.tpl"
