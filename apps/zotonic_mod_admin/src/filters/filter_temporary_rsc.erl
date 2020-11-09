@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015 Marc Worrell
-%% @doc Creates a temporary resource. If not modified within the session's life time then it will be deleted.
+%% @doc Creates a temporary resource. If not modified then it will be deleted.
 
 %% Copyright 2015 Marc Worrell
 %%
@@ -21,7 +21,7 @@
     temporary_rsc/2,
     temporary_rsc/3,
 
-    task_delete_inactive/3
+    task_delete_inactive/4
 ]).
 
 %% Check every hour if the page can be deleted.
@@ -30,16 +30,6 @@
 
 temporary_rsc(RscId, Context) ->
     temporary_rsc(RscId, {props, []}, Context).
-
-temporary_rsc(_RscId, _Props, _Context) ->
-    lager:error("~p is not yet implemented", [ ?MODULE ]),
-    <<>>.
-
-task_delete_inactive(_RscId, _ClientId, _Context) ->
-    lager:error("~p is not yet implemented", [ ?MODULE ]),
-    <<>>.
-
--ifdef(NOT_IMPLEMENTED).
 
 temporary_rsc(undefined, {props, Props}, Context) when is_list(Props) ->
     make_temporary_rsc(Props, Context);
@@ -51,21 +41,19 @@ temporary_rsc(<<>>, Props, Context) ->
     temporary_rsc(undefined, Props, Context);
 temporary_rsc([], Props, Context) ->
     temporary_rsc(undefined, Props, Context);
-temporary_rsc("xxx", Props, Context) ->
-    temporary_rsc(undefined, Props, Context);
 temporary_rsc(RscId, _Props, _Context) ->
     RscId.
 
-task_delete_inactive(RscId, ClientId, Context) ->
+task_delete_inactive(RscId, Key, SessionId, Context) ->
     case is_unmodified_rsc(RscId, Context) of
         true ->
-            case is_client_alive(ClientId, Context) of
-                false ->
+            case z_server_storage:secure_lookup(Key, SessionId, Context) of
+                {ok, RscId} ->
+                    {delay, ?INACTIVE_CHECK_DELAY};
+                _Other ->
                     lager:debug("Deleting unmodified temporary resource ~p", [RscId]),
                     ok = m_rsc:delete(RscId, z_acl:sudo(Context)),
-                    ok;
-                true ->
-                    {delay, ?INACTIVE_CHECK_DELAY}
+                    ok
             end;
         false ->
             ok
@@ -75,11 +63,11 @@ task_delete_inactive(RscId, ClientId, Context) ->
 %% --- internal functions ---
 
 make_temporary_rsc(Props, Context) ->
-    make_temporary_rsc( z_context:client_id(Context), Props, Context ).
+    make_temporary_rsc( z_context:session_id(Context), Props, Context ).
 
 make_temporary_rsc(undefined, _Props, _Context) ->
     undefined;
-make_temporary_rsc(ClientId, Props, Context) ->
+make_temporary_rsc(_SessionId, Props, Context) ->
     {Cat, Props1} = ensure_category(Props, Context),
     case m_rsc:rid(Cat, Context) of
         undefined ->
@@ -87,21 +75,25 @@ make_temporary_rsc(ClientId, Props, Context) ->
             undefined;
         CatId ->
             make_rsc(
-                    find_existing(ClientId, CatId, Context),
-                    ClientId, CatId, Props1,
+                    find_existing(CatId, Context),
+                    CatId, Props1,
                     Context)
     end.
 
-make_rsc({ok, RscId}, _ClientId, _CatId, _Props, _Context) ->
+make_rsc({ok, RscId}, _CatId, _Props, _Context) ->
     RscId;
-make_rsc({error, notfound}, ClientId, CatId, Props, Context) ->
+make_rsc({error, not_found}, CatId, Props, Context) ->
     case m_rsc:insert(Props, Context) of
         {ok, RscId} ->
-            z_session:set({temporary_rsc, CatId}, RscId, Context),
-            spawn_client_monitor(RscId, ClientId, Context),
+            Key = {temporary_rsc, CatId},
+            {ok, SessionId} = z_context:session_id(Context),
+            {ok, ClientId} = z_context:client_id(Context),
+            m_server_storage:secure_store(Key, RscId, Context),
             Args = [
                 RscId,
-                ClientId
+                Key,
+                ClientId,
+                SessionId
             ],
             z_pivot_rsc:insert_task_after(
                         ?INACTIVE_CHECK_DELAY,
@@ -112,63 +104,26 @@ make_rsc({error, notfound}, ClientId, CatId, Props, Context) ->
             lager:error("Can not make temporary resource error ~p on ~p", [Error, Props]),
             undefined
     end;
-make_rsc({error, _}, _ClientId, _CatId, _Props, _Context) ->
+make_rsc({error, _} = Error, _CatId, _Props, _Context) ->
+    lager:error("Can not make temporary resource error ~p on storage lookup", [ Error ]),
     undefined.
 
-
-spawn_client_monitor(RscId, ClientId, Context) ->
-    case mqtt_sessions_registry:find_session(z_context:site(Context), ClientId, Context) of
-        {ok, MqttSessionPid} ->
-            ContextAsync = z_context:prune_for_async(Context),
-            erlang:spawn(
-                    fun() ->
-                        client_monitor(RscId, MqttSessionPid, ContextAsync)
-                    end);
+%% If no user then limit to 1 temporary rsc per client
+find_existing(CatId, Context) ->
+    case m_server_storage:secure_lookup({temporary_rsc, CatId}, Context) of
+        {ok, RscId} when is_integer(RscId) ->
+            case is_unmodified_rsc(RscId, Context) of
+                true -> {ok, RscId};
+                false -> {error, not_found}
+            end;
+        {error, not_found} ->
+            {error, not_found};
         {error, _} = Error ->
             Error
     end.
 
-client_monitor(RscId, MqttSessionPid, Context) ->
-    erlang:monitor(process, MqttSessionPid),
-    receive
-        {'DOWN', _MRef, process, MqttSessionPid, _Reason} ->
-            delete_if_unmodified(RscId, Context)
-        after ?DELETE_TIMEOUT ->
-            delete_if_unmodified(RscId, Context)
-    end.
-
-delete_if_unmodified(RscId, Context) ->
-    case is_unmodified_rsc(RscId, Context) of
-        true ->
-            lager:debug("Deleting temporary resource ~p due to stopped page session", [RscId]),
-            m_rsc:delete(RscId, z_acl:sudo(Context));
-        false ->
-            ok
-    end.
-
-
-%% If no user then limit to 1 temporary rsc per client
-find_existing(undefined, _CatId, _Context) ->
-    {error, nosession};
-find_existing(_ClientId, CatId, Context) ->
-    case z_session:get({temporary_rsc, CatId}, Context) of
-        RscId when is_integer(RscId) ->
-            case is_unmodified_rsc(RscId, Context) of
-                true -> {ok, RscId};
-                false -> {error, notfound}
-            end;
-        undefined ->
-            {error, notfound}
-    end.
-
 is_unmodified_rsc(Id, Context) ->
     m_rsc:exists(Id, Context) andalso m_rsc:p_no_acl(Id, version, Context) =:= 1.
-
-is_client_alive(ClientId, Context) ->
-    case mqtt_sessions_registry:whois(z_context:site(Context), ClientId, Context) of
-        {ok, Pid} when is_pid(Pid) -> true;
-        {error, _} -> false
-    end.
 
 ensure_category(Props, Context) ->
     case cat(Props, Context) of
@@ -181,5 +136,3 @@ cat(Props, Context) ->
         undefined -> z_template_compiler_runtime:find_value(category_id, Props, #{}, Context);
         Cat -> Cat
     end.
-
--endif.

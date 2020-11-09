@@ -547,11 +547,15 @@
 %% @doc Confirm a user id.
 %% Type: foldl
 %% Return: ``z:context()``
--record(auth_confirm, {}).
+-record(auth_confirm, {
+    id :: m_rsc:resource_id(),
+}).
 
 %% @doc A user id has been confirmed.
 %% Type: notify
--record(auth_confirm_done, {}).
+-record(auth_confirm_done, {
+    id :: m_rsc:resource_id(),
+}).
 
 %% @doc First for logon of user with username, check for ratelimit, blocks etc.
 %%      Returns: 'undefined' | ok | {error, Reason}

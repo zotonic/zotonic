@@ -64,15 +64,14 @@ confirm(UserId, Context) ->
     % check if auth_user_id == userId??
     case is_enabled(UserId, Context) of
         true ->
-            Context1 = z_notifier:foldl(#auth_confirm{}, Context, Context),
-            z_notifier:notify(#auth_confirm_done{}, Context1),
+            Context1 = z_notifier:foldl(#auth_confirm{ id = UserId }, Context, Context),
+            z_notifier:notify(#auth_confirm_done{ id = UserId }, Context1),
             {ok, Context1};
         false ->
             {error, user_not_enabled}
     end.
 
-%% @doc Logon an user whose id we know, invalidate the current session id.
-%%      This sets a cookie with the new session id in the Context.
+%% @doc Logon an user whose id we know, set all user prefs in the context.
 -spec logon( m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, user_not_enabled}.
 logon(UserId, Context) ->
     case is_enabled(UserId, Context) of
