@@ -14,5 +14,4 @@ ACL notifications
    notification/acl_logoff
    notification/acl_logon
    notification/acl_mqtt
-   notification/acl_rsc_update_check
    notification/acl_user_groups

@@ -253,22 +253,34 @@
 -define(ACL_ADMIN_USER_ID, 1).
 -define(ACL_ANY_USER_ID, -1).
 
-%% ACL objects
+%% ACL objects for the #acl_is_allowed{} notification0
+
+%% Resource insert or update.
 -record(acl_rsc, {
+    id :: m_rsc:resource_id() | undefined,
     category :: atom(),
-    mime = undefined :: undefined | binary(),
-    size = undefined :: undefined | non_neg_integer(),
     props = #{} :: map()
 }).
 
+%% Edge insert and delete
 -record(acl_edge, {
     subject_id :: m_rsc:resource(),
     predicate :: pos_integer() | atom(),
     object_id :: m_rsc:resource()
 }).
+
+%% Media uploads
 -record(acl_media, {
     mime = <<"binary/octet-stream">> :: binary(),
     size = undefined :: undefined | non_neg_integer()
+}).
+
+%% MQTT acl check, called via the normal acl notifications.
+%% Actions for these checks: subscribe, publish
+-record(acl_mqtt, {
+    topic :: list( binary() ),
+    is_wildcard :: boolean(),
+    packet :: mqtt_packet_map:mqtt_packet()
 }).
 
 %% ACL notifications
@@ -324,11 +336,11 @@
 -define(YEAR, 31557600).
 
 %% Our default WWW-Authenticate header
--define(WWW_AUTHENTICATE, <<"OAuth-1.0">>).
+-define(WWW_AUTHENTICATE, <<"oauth2">>).
 
 %% The default maxage of HSTS. Set to 200 days.
  -define(HSTS_MAXAGE, 3600*24*200).
- 
+
 
 -include("zotonic_notifications.hrl").
 -include("zotonic_log.hrl").

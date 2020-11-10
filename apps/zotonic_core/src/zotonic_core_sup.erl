@@ -153,7 +153,6 @@ ensure_job_queue(Name, Options) ->
 
 %% @doc The supervisor for websocket requests and other transient processes.
 ensure_sidejobs() ->
-    sidejob:new_resource(zotonic_sessionjobs, sidejob_supervisor, z_config:get(sessionjobs_limit)),
     sidejob:new_resource(zotonic_sidejobs, sidejob_supervisor, z_config:get(sidejobs_limit)).
 
 
