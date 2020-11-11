@@ -573,6 +573,9 @@ to_render_result(#rsc_list{list=L}, _TplVars, _Context) ->
     io_lib:format("~p", [L]);
 to_render_result(#trans{} = Trans, TplVars, Context) ->
     z_trans:lookup_fallback(Trans, set_context_vars(TplVars, Context));
+to_render_result(R, _TplVars, _Context) when element(1,R) =:= render_state ->
+    % This is output from scomps or the filter show_media.
+    R;
 to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
     % A list, which could be an unicode string but also a nested render result.
     % Assume that all integers are meant to be unicode characters.

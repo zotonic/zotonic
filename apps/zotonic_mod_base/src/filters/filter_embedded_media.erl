@@ -30,7 +30,7 @@ embedded_media(Id, Context) ->
 
 embedded_media(undefined, _IsCheckBlocks, _Context) ->
     [];
-embedded_media({trans, _} = Tr, _IsCheckBlocks, Context) ->
+embedded_media(#trans{} = Tr, _IsCheckBlocks, Context) ->
     embedded_media_1(Tr, Context);
 embedded_media(Text, _IsCheckBlocks, Context) when is_binary(Text) ->
     embedded_media_1(Text, Context);
@@ -62,8 +62,11 @@ embedded_media_blocks_1(false, _Blocks, _Context) ->
 embedded_media_blocks_1(true, Blocks, Context) when is_list(Blocks) ->
     lists:flatten(
         lists:map(
-            fun(Block) ->
-                embedded_media_1(proplists:get_value(body, Block), Context)
+            fun
+                (#{ <<"body">> := BlockBody }) ->
+                    embedded_media_1(BlockBody, Context);
+                (_) ->
+                    []
             end,
             Blocks));
 embedded_media_blocks_1(true, _Blocks, _Context) ->
@@ -71,7 +74,7 @@ embedded_media_blocks_1(true, _Blocks, _Context) ->
 
 embedded_media_1(undefined, _Context) ->
     [];
-embedded_media_1({trans, _} = Tr, Context) ->
+embedded_media_1(#trans{} = Tr, Context) ->
     embedded_media_1(z_trans:lookup_fallback(Tr, Context), Context);
 embedded_media_1(Text, _Context) when is_binary(Text) ->
     case re:run(Text, "\\<\\!-- z-media ([0-9]+) ", [global, {capture, all_but_first, binary}]) of
