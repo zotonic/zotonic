@@ -39,8 +39,6 @@ render_tag(TagName, Props, Content) ->
 %%% Tags with child content %%%
 render_tag(TagName, Props, undefined, Context) ->
     render_tag(TagName, Props, Context);
-render_tag(TagName, Props, [], Context) ->
-    render_tag(TagName, Props, Context);
 render_tag(TagName, Props, Content, Context) ->
 	Render   = [ $<, TagName, write_props(Props), $>, Content, $<, $/, TagName, $> ],
 	z_render:render(Render, Context).
