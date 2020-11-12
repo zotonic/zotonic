@@ -170,14 +170,15 @@ stop(SessionId, Context) ->
 %%% ------------------------------------------------------------------------------------
 
 init([SessionId, Timeout, Maxsize]) ->
+    SessionTimeout = Timeout * 1000,
     {ok, #state{
         id = SessionId,
-        timeout = Timeout * 1000,
+        timeout = SessionTimeout,
         size = 0,
         maxsize = Maxsize,
         data = #{},
         secure = #{}
-    }, Timeout}.
+    }, SessionTimeout}.
 
 handle_call(lookup, _From, #state{ data = Data } = State) ->
     {reply, {ok, Data}, State, State#state.timeout};
