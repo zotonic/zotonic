@@ -303,7 +303,7 @@ merge(WinnerId, LoserId, Context) ->
 duplicate(FromId, ToId, Context) ->
     FromId1 = m_rsc:rid(FromId, Context),
     ToId1 = m_rsc:rid(ToId, Context),
-    case z_db:qmap_row("select * from medium where id = $1", [FromId1], Context) of
+    case z_db:qmap_props_row("select * from medium where id = $1", [FromId1], Context) of
         {ok, Ms} ->
             {ok, Ms1} = maybe_duplicate_file(Ms, Context),
             {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
