@@ -69,8 +69,9 @@ extract_filters(Path, OptFilters, Context) ->
                                 _ -> OptFilters
                             end,
                             {SafePath, z_convert:to_binary(OriginalFile), Filters1 ++ PreviewPropList};
-                        {error, _} ->
-                            {SafePath, SafePath, OptFilters}
+                        {error, Reason} ->
+                            lager:info("Dropping path ~p because error ~p", [ SafePath, Reason ]),
+                            part_missing(Path)
                     end
             end
     end.
