@@ -65,8 +65,9 @@ extract_filters(Path, OptFilters, Context) ->
                     case z_media_tag:url2props(SafePath, Context) of
                         {ok, {OriginalFile, PreviewPropList, _Checksum, _ChecksumBaseString}} ->
                             {SafePath, OriginalFile, case OptFilters of undefined -> []; _ -> OptFilters end ++ PreviewPropList};
-                        {error, _} ->
-                            {SafePath, SafePath, OptFilters}
+                        {error, Reason} ->
+                            lager:info("Dropping path ~p because error ~p", [ SafePath, Reason ]),
+                            part_missing(Path)
                     end
             end
     end.
