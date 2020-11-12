@@ -870,7 +870,7 @@ clean(Context) ->
 
 %% @doc Collect all scripts in the context, returns an iolist with javascript.
 -spec get_script( z:context() ) -> iolist().
-get_script(Context) ->
+get_script(#context{} = Context) ->
     RenderState = get_render_state(Context),
     RS1 = RenderState#render_state{
         scripts = [],
