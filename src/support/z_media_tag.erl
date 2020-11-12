@@ -392,6 +392,7 @@ is_tagopt({background, _}) -> false;
 is_tagopt({lossless, _}) -> false;
 is_tagopt({removebg, _}) -> false;
 is_tagopt({mediaclass, _}) -> false;
+is_tagopt({nowh, _}) -> false;
 % And be sure to keep the data-xxxx args in the tag
 is_tagopt({Prop, _}) ->
     case z_convert:to_list(Prop) of
@@ -451,6 +452,8 @@ props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
             lager:info("error looking up mediaclass ~p: ~p", [Class, Error]),
             props2url(Rest, Width, Height, Acc, Context)
     end;
+props2url([{nowh, _}|Rest], Width, Height, Acc, Context) ->
+    props2url(Rest, Width, Height, Acc, Context);
 props2url([{Prop}|Rest], Width, Height, Acc, Context) ->
     props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc], Context);
 props2url([{_Prop,undefined}|Rest], Width, Height, Acc, Context) ->
