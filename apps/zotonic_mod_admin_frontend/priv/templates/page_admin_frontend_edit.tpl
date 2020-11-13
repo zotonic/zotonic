@@ -120,6 +120,7 @@
 	{% include "_editor.tpl" is_editor_include %}
 
 	{% javascript %}
+		window.z_translations = window.z_translations || {};
 	    window.z_translations["Yes, discard changes"] = "{_ Yes, discard changes _}";
 	    window.z_translations["There are unsaved changes. Are you sure you want to leave without saving?"]
 	    	= "{_ There are unsaved changes. Are you sure you want to leave without saving? _}";
