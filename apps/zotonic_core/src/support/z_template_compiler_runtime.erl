@@ -61,7 +61,7 @@
 map_template(#template_file{} = Tpl, _Vars, _Context) ->
     {ok, Tpl};
 map_template({cat, Template}, Vars, Context) ->
-    case maps:get(id, Vars, undefined) of
+    case maps:get('$cat', Vars, undefined) of
         undefined -> map_template_1(Template, Context);
         Id -> map_template({cat, Template, Id}, Vars, Context)
     end;
@@ -74,7 +74,14 @@ map_template({cat, Template, Id}, _Vars, Context) ->
     end;
 map_template({overrules, Template, Filename}, _Vars, Context) ->
     Templates = z_module_indexer:find_all(template, Template, Context),
-    find_next_template(Filename, Templates);
+    case find_next_template(Filename, Templates) of
+        {ok, _} = Ok ->
+            Ok;
+        {error, enoent} ->
+            lager:warning("No template for overrules of \"~s\", filename \"~s\"",
+                          [ Template, Filename ]),
+            {error, enoent}
+    end;
 map_template(Template, _Vars, Context) ->
     map_template_1(Template, Context).
 

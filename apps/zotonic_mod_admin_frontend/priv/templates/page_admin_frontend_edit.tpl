@@ -5,6 +5,7 @@
 {% block html_head_extra %}
 	{% lib
 			"css/zp-menuedit.css"
+			"css/z.icons.css"
 			"css/zotonic-admin.css"
 			"admin-bootstrap3/css/bootstrap.css"
 			"css/admin-frontend.css"

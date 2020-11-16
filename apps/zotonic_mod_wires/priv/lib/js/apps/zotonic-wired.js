@@ -425,10 +425,7 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
 
     var postbackAttr = document.body.getAttribute("data-wired-postback");
     if (postbackAttr) {
-        extraParams.push({
-            name: "z_postback_data",
-            value: JSON.parse(postbackAttr)
-        });
+        extraParams.z_postback_date = JSON.parse(postbackAttr);
     }
 
     var pb_event = {

@@ -95,7 +95,7 @@
   0},
  {<<"template_compiler">>,
   {git,"https://github.com/zotonic/template_compiler.git",
-       {ref,"2916fc0d5379cba9e442311d75a27f8b036a3a37"}},
+       {ref,"a50e71aad3be0ffa980868bf85785bcec0927d17"}},
   0},
  {<<"termit">>,{pkg,<<"termit">>,<<"1.0.0">>},0},
  {<<"tls_certificate_check">>,{pkg,<<"tls_certificate_check">>,<<"1.0.0">>},1},

@@ -1604,7 +1604,7 @@ ul.tree-list li.menu-item.submenu-open > ul {
 ul.tree-list li.menu-item .warning {
   position: absolute;
   top: 12px;
-  right: 100px;
+  right: 120px;
 }
 ul.tree-list li.menu-item .btns {
   display: block;

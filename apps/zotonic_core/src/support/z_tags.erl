@@ -11,7 +11,7 @@
 -include("include/zotonic.hrl").
 
 -export([render_tag/2, render_tag/3, render_tag/4]).
--export([optional_escape/1]).
+-export([optional_escape_property/1]).
 
 %% @doc Render a tag with properties, return the tag text. div has special handling as <div/> is not allowed.
 render_tag("div", Props) ->

@@ -792,6 +792,8 @@ rid(<<>>, _Context) ->
     undefined;
 rid([], _Context) ->
     undefined;
+rid([X|_], _Context) when not is_integer(X) ->
+    undefined;
 rid(#trans{} = Tr, Context) ->
     rid(z_trans:lookup_fallback(Tr, Context), Context);
 rid(UniqueName, Context) ->
@@ -804,19 +806,26 @@ rid(UniqueName, Context) ->
 %% @doc Return the id of the resource with a certain unique name.
 -spec name_lookup(resource_name(), z:context()) -> resource_id() | undefined.
 name_lookup(Name, Context) ->
-    Lower = z_string:to_name(Name),
-    case z_depcache:get({rsc_name, Lower}, Context) of
-        {ok, undefined} ->
-            undefined;
-        {ok, Id} ->
-            Id;
-        undefined ->
-            Id = case z_db:q1("select id from rsc where name = $1", [Lower], Context) of
-                undefined -> undefined;
-                Value -> Value
-            end,
-            z_depcache:set({rsc_name, Lower}, Id, ?DAY, [Id, {rsc_name, Lower}], Context),
-            Id
+    try
+        z_string:to_name(Name)
+    of
+        Lower ->
+            case z_depcache:get({rsc_name, Lower}, Context) of
+                {ok, undefined} ->
+                    undefined;
+                {ok, Id} ->
+                    Id;
+                undefined ->
+                    Id = case z_db:q1("select id from rsc where name = $1", [Lower], Context) of
+                        undefined -> undefined;
+                        Value -> Value
+                    end,
+                    z_depcache:set({rsc_name, Lower}, Id, ?DAY, [Id, {rsc_name, Lower}], Context),
+                    Id
+            end
+    catch
+        error:badarg ->
+            undefined
     end.
 
 
