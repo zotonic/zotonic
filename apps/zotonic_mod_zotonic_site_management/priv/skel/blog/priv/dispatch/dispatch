@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 %% Dispatch rules for mod_zotonic.
 [
- {home,         [],                         controller_page,      [ {template, "home.tpl"}, {id, page_home} ]},
+ {home,         [],                         controller_template,  [ {template, "home.tpl"}, {id, page_home} ]},
  {article,      ["article", id, slug],      controller_page,      [ {template, "article.tpl"}, {cat, article} ]},
  {keyword,      ["by_keyword", id, slug],   controller_page,      [ {template, "by_keyword.tpl"} ]},
  
