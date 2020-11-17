@@ -60,11 +60,10 @@
             {ok, template_compiler:template_file()} | {error, enoent|term()}.
 map_template(#template_file{} = Tpl, _Vars, _Context) ->
     {ok, Tpl};
-map_template({cat, Template}, Vars, Context) ->
-    case maps:get('$cat', Vars, undefined) of
-        undefined -> map_template_1(Template, Context);
-        Id -> map_template({cat, Template, Id}, Vars, Context)
-    end;
+map_template({cat, Template}, #{ '$cat':= Cats }, Context) when is_list(Cats) ->
+    map_template_cat(Template, Cats, Context);
+map_template({cat, Template}, #{ 'id' := Id } = Vars, Context) ->
+    map_template({cat, Template, Id}, Vars, Context);
 map_template({cat, Template, [Cat|_] = IsA}, _Vars, Context) when is_atom(Cat); is_binary(Cat); is_list(Cat) ->
     map_template_cat(Template, IsA, Context);
 map_template({cat, Template, Id}, _Vars, Context) ->
@@ -524,7 +523,7 @@ spaceless_tag(Value, TplVars, Context) ->
 
 %% @doc Convert a value to a boolean.
 -spec to_bool(Value :: term(), Context :: term()) -> boolean().
-to_bool({trans, _} = Tr, Context) ->
+to_bool(#trans{} = Tr, Context) ->
     case z_trans:lookup_fallback(Tr, Context) of
         undefined -> false;
         <<>> -> false;
@@ -540,12 +539,13 @@ to_bool(Value, _Context) ->
 %% @doc Convert a value to a list.
 -spec to_list(Value :: term(), Context :: term()) -> list().
 to_list(undefined, _Context) -> [];
+to_list(<<>>, _Context) -> [];
 to_list(#rsc_list{list=L}, _Context) -> L;
 to_list(#search_result{result=L}, _Context) -> L;
 to_list(#m_search_result{result=Result}, Context) -> to_list(Result, Context);
 to_list(q, Context) -> z_context:get_q_all(Context);
 to_list(q_validated, _Context) -> [];
-to_list({trans, _}, _Context) -> [];
+to_list(#trans{}, _Context) -> [];
 to_list(V, Context) -> template_compiler_runtime:to_list(V, Context).
 
 

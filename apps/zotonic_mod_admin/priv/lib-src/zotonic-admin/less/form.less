@@ -44,3 +44,16 @@ option[value=""][disabled] {
 option {
     color: black;
 }
+
+fieldset,
+.form-group {
+    > label,
+    > label.radio,
+    > label.checkbox {
+        > input[type="checkbox"],
+        > input[type="radio"] {
+            position: relative;
+            margin-left: 0;
+        }
+    }
+}

@@ -238,7 +238,7 @@ compile_sass(Application, SrcPath) ->
                         ok ->
                             zotonic_filehandler:terminal_notifier("Sass: " ++ MainFile),
                             Cmd = [
-                                "sassc --omit-map-comment ",
+                                sass_command(),
                                 z_utils:os_escape(InFile),
                                 " ",
                                 z_utils:os_escape(OutFile)
@@ -253,6 +253,14 @@ compile_sass(Application, SrcPath) ->
             end
        end,
        MainScss).
+
+sass_command() ->
+    case os:find_executable("sassc") of
+        false ->
+            "sass --sourcemap=none --unix-newlines ";
+        _Sassc ->
+            "sassc --omit-map-comment "
+    end.
 
 find_main_sass_files(AppPriv, SrcPath, SassExt) when is_binary(SrcPath) ->
     InPath = filename:join([AppPriv, "lib-src", SrcPath]),

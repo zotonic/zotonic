@@ -2,8 +2,7 @@
 	$('.tree-list .active')
 		.removeClass('active');
 	$('.tree-list div[data-page-id="{{ id }}"]')
-		.addClass('active')
-		.closest('li')
+		.closest('.menu-item')
 		.addClass('active');
 	$('#save-buttons')
 		.hide()

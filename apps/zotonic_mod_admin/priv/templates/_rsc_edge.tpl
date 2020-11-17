@@ -13,7 +13,7 @@ Params:
         {% sortable id=#unlink_wrapper tag=edge_id %}
     {% endif %}
     <li id="{{ #unlink_wrapper }}" class="menu-item">
-        <div>
+        <div class="menu-wrapper">
             {% if not is_list_truncated %}
                <i class="z-icon z-icon-drag"></i>
             {% endif %}

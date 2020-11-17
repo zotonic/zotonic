@@ -79,7 +79,7 @@
 })();
 
 $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
-	var id = $(this).closest('div').data('page-id');
+	var id = $(this).closest('.menu-wrapper').data('page-id');
 	window.zMenuEditDone = function(id, title) {
 		$(".title-"+id).html(title);
 	};
