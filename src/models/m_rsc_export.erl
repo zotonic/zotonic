@@ -134,16 +134,21 @@ privacy_filter(Id, Export, Context) ->
             end
     end.
 
-privacy_filter(Export) ->
+privacy_filter([{_,_}|_]=Export) ->
     Drop = [
         email
     ],
-    lists:foldl(
-        fun(P, Acc) ->
-            proplists:delete(P, Acc)
+    lists:foldr(
+        fun({K,V}, Acc) ->
+            case lists:member(K, Drop) of
+                true -> [{K, null}|Acc];
+                false -> [{K, privacy_filter(V)}|Acc]
+            end
         end,
-        Drop,
-        Export).
+        [],
+      Export);
+privacy_filter(Export) ->
+    Export.
 
 %% @doc Given an edge record, add the resource uris for the object and the predicate.
 edge_details(Edge, Context) ->
