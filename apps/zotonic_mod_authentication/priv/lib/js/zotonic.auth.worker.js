@@ -484,8 +484,8 @@ actions.logonForm = function(data) {
     let dataLogon = {
         logon: true,
         username: data.value.username,
-        password: data.value.password,
-        passcode: data.value.passcode,
+        password: data.value.password || null,
+        passcode: data.value.passcode || null,
         setautologon: data.value.rememberme ? true : false,
         onauth: data.value.onauth
     }

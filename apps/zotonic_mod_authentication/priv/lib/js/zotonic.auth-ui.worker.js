@@ -31,7 +31,8 @@ var model = {
     secret: undefined,
     need_passcode: false,
     is_expired: false,
-    is_depends_provided: false
+    is_depends_provided: false,
+    options : {}
 };
 
 model.present = function(data) {
@@ -71,6 +72,7 @@ model.present = function(data) {
     if ("is_error" in data) {
         model.is_error = data.is_error;
         model.error = data.error;
+        model.options = data.options || {};
         model.status = 'updated';
     }
 
@@ -82,6 +84,7 @@ model.present = function(data) {
         model.logon_view = data.logon_view;
         model.secret = data.secret || model.secret;
         model.username = data.username || model.username;
+        model.options = data.options || {};
         model.error = data.error || undefined;
         if (state.loaded(model)) {
             model.status = 'updated';
@@ -117,6 +120,7 @@ model.present = function(data) {
         model.username = data.username;
         model.secret = data.secret;
         model.logon_view = 'reset_form';
+        model.options = data.options || {};
         model.status = 'updated';
     }
 
@@ -126,10 +130,12 @@ model.present = function(data) {
             model.error = undefined;
             model.need_passcode = data.need_passcode;
             model.username = data.username;
-            model.secret = data.secret
+            model.secret = data.secret;
+            model.options = data.options || {};
         } else {
             model.is_error = true;
-            model.error = data.error || "error"
+            model.error = data.error || "error";
+            model.options = data.options || {};
         }
         model.logon_view = 'reset_form';
     }
@@ -218,7 +224,8 @@ state.representation = function(model) {
                     username: model.username,
                     secret: model.secret,
                     need_passcode: model.need_passcode,
-                    is_expired: model.is_expired
+                    is_expired: model.is_expired,
+                    options: model.options
                 }
             });
     }
@@ -354,12 +361,14 @@ actions.authError = function(data) {
         model.present({
             is_expired: true,
             username: data.data.username,
-            secret: data.data.secret
+            secret: data.data.secret,
+            options: data.data.options || {}
         });
     } else {
         model.present({
             is_error: true,
-            error: data.error
+            error: data.error,
+            options: data.data.options || {}
         });
     }
 };

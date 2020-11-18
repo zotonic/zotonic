@@ -60,10 +60,12 @@
             {ok, template_compiler:template_file()} | {error, enoent|term()}.
 map_template(#template_file{} = Tpl, _Vars, _Context) ->
     {ok, Tpl};
-map_template({cat, Template}, #{ '$cat':= Cats }, Context) when is_list(Cats) ->
+map_template({cat, Template}, #{ '$cat' := Cats }, Context) when is_list(Cats) ->
     map_template_cat(Template, Cats, Context);
 map_template({cat, Template}, #{ 'id' := Id } = Vars, Context) ->
     map_template({cat, Template, Id}, Vars, Context);
+map_template({cat, Template}, _Vars, Context) ->
+    map_template_1(Template, Context);
 map_template({cat, Template, [Cat|_] = IsA}, _Vars, Context) when is_atom(Cat); is_binary(Cat); is_list(Cat) ->
     map_template_cat(Template, IsA, Context);
 map_template({cat, Template, Id}, _Vars, Context) ->

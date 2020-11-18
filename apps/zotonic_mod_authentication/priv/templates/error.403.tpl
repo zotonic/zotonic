@@ -7,7 +7,7 @@
 {% block content_area %}
     {% if m.req.referer %}
       <div class="z-logon-back">
-          <a rel="nofollow" href="{{ m.req.referer|escape }}" />{_ Go back _}</a>
+          <a rel="nofollow" href="#back" data-onclick-topic="model/location/post/redirect/back"/>{_ Go back _}</a>
       </div>
     {% endif %}
 

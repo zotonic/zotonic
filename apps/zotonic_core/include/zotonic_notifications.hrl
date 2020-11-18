@@ -89,6 +89,16 @@
     payload = #{} :: map()
 }).
 
+%% @doc Check for logon options, called if logon_submit returns `undefined`.
+%% This is used to fetch external (or local) authentication links for an
+%% username.
+%% Type: foldl
+%% Return:: ``map()``
+-record(logon_options, {
+    payload = #{} :: map()
+}).
+
+
 %% @doc Request to send a verification to the user. Return ok or an error
 %% Type: first
 %% Identity may be undefined, or is a identity used for the verification.

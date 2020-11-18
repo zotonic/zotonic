@@ -9,6 +9,10 @@ style_boxed: creates a background around the form
 
 #}
 
+{% javascript %}
+    sessionStorage.setItem('logonFormPage', '{{ page|escapejs }}');
+{% endjavascript %}
+
 <div id="signup_logon_box" class="z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}">
 {#
     Here the zotonic.auth-ui.worker.js loads the "_logon_box.tpl" with the correct
