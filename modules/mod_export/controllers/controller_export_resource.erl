@@ -109,8 +109,10 @@ set_filename(Id, ContentType, Dispatch, Context) ->
                     undefined -> "bin";
                     Exts -> binary_to_list(hd(Exts))
                 end,
-    {ok, Disposition} = z_notifier:first(#export_resource_content_disposition{id=Id, dispatch=Dispatch, content_type=ContentType}, Context),
-
+    Disposition = case z_notifier:first(#export_resource_content_disposition{id=Id, dispatch=Dispatch, content_type=ContentType}, Context) of
+        {ok, Disp} -> Disp;
+        undefined -> "attachment"
+    end,
     Filename = case z_notifier:first(#export_resource_filename{id=Id, dispatch=Dispatch, content_type=ContentType}, Context) of
         undefined ->
             Cat = m_rsc:p_no_acl(Id, category, Context),
