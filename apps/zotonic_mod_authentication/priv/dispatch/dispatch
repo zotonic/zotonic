@@ -1,7 +1,10 @@
 %% -*- mode: erlang -*-
 [
- {logoff,           ["logoff"], controller_logoff,   []},
+ {logoff,           ["logoff"],                           controller_logoff,   []},
  {logon,            ["logon"],                            controller_template, [ {template, "logon.tpl"} ]},
+
+ % Handles the redirect after a logon from the logon page
+ {logon_done,       ["logon", "done"],                    controller_logon_done, []},
 
  {logon_reminder,   ["logon", {logon_view, "reminder"}],  controller_template, [ {template, "logon.tpl"} ]},
  {logon_reset,      ["logon", {logon_view, "reset"}],     controller_template, [ {template, "logon.tpl"} ]},

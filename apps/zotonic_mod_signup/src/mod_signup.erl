@@ -68,10 +68,10 @@ observe_identity_verification(#identity_verification{user_id=UserId, identity=Id
 observe_logon_ready_page(#logon_ready_page{ request_page = None }, Context) when None =:= undefined; None =:= <<>> ->
     case z_auth:is_auth(Context) of
         true -> m_rsc:p(z_acl:user(Context), page_url, Context);
-        false -> []
+        false -> undefined
     end;
-observe_logon_ready_page(#logon_ready_page{ request_page = Url }, _Context) ->
-    Url.
+observe_logon_ready_page(#logon_ready_page{ request_page = _ }, _Context) ->
+    undefined.
 
 
 %% @doc Sign up a new user.

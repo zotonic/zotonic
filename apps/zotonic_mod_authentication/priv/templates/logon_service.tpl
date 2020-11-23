@@ -14,10 +14,4 @@
     {% else %}
         <p>{_ Redirecting... _}</p>
     {% endif %}
-
-{#
-    {% with service|default:q.service as qservice %}
-    	{% lazy template="_logon_service."++qservice++".tpl" service=qservice is_connect=q.is_connect %}
-    {% endwith %}
-#}
 {% endblock %}
