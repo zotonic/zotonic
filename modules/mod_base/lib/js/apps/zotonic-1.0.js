@@ -801,6 +801,8 @@ function z_transport_maybe_ack(msg)
 // If a transport times-out whilst in transit then it is reposted
 function z_transport_timeout(msg_id)
 {
+    z_log_error("Transport timeout for message: "+msg_id, "zotonic-1.0.js", 0, null);
+
     if (typeof z_transport_acks[msg_id] == 'object') {
         if (z_transport_acks[msg_id].timeout_count++ < TRANSPORT_TRIES) {
             // Requeue the request (if it is not waiting in the queue)
@@ -1348,8 +1350,7 @@ function z_websocket_stop()
         z_ws.close();
     } catch(e) {
         // closing an already closed ws can raise exceptions.
-    } 
-
+    }
     z_ws = undefined;
 }
 
@@ -1664,6 +1665,15 @@ Which should log it in a separate ui error log.
 var oldOnError = window.onerror;
 
 window.onerror = function(message, file, line, col, error) {
+    z_log_error(message, file, line, col, error);
+    if (oldOnError) {
+        return oldOnError(message, file, line, col, error);
+    } else {
+        return false;
+    }
+};
+
+function z_log_error ( message, file, line, col, error ) {
     if (!z_page_unloading) {
         let payload = {
             type: 'error',
@@ -1685,13 +1695,7 @@ window.onerror = function(message, file, line, col, error) {
             try { $("form.masked").unmask(); } catch (e) {}
         }
     }
-
-    if (oldOnError) {
-        return oldOnError(message, file, line, col, error);
-    } else {
-        return false;
-    }
-};
+}
 
 
 /* Form element validations
