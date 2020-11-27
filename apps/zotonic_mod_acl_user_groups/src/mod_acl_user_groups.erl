@@ -292,25 +292,21 @@ observe_rsc_insert(#rsc_insert{ props = RscProps }, InsertProps, Context) ->
 observe_rsc_update(_, {error, _} = Error, _Context) ->
     Error;
 observe_rsc_update(#rsc_update{ id = Id, props = PrevProps }, {ok, NewProps}, Context) ->
-    case acl_user_groups_checks:rsc_update_check(Id, NewProps, Context) of
-        {ok, NewProps1} ->
-            case maps:is_key(<<"acl_mime_allowed">>, NewProps1)
-                orelse maps:is_key(<<"acl_upload_size">>, NewProps1)
-            of
+    {ok, NewProps1} = acl_user_groups_checks:rsc_update_check(Id, NewProps, Context),
+    case maps:is_key(<<"acl_mime_allowed">>, NewProps1)
+        orelse maps:is_key(<<"acl_upload_size">>, NewProps1)
+    of
+        true ->
+            case mod_acl_user_groups:is_acl_admin(Context) of
                 true ->
-                    case mod_acl_user_groups:is_acl_admin(Context) of
-                        true ->
-                            {ok, NewProps1};
-                        false ->
-                            P1 = force_copy_prop(<<"acl_mime_allowed">>, PrevProps, NewProps1),
-                            P2 = force_copy_prop(<<"acl_upload_size">>, PrevProps, P1),
-                            {ok, P2}
-                    end;
+                    {ok, NewProps1};
                 false ->
-                    {ok, NewProps1}
+                    P1 = force_copy_prop(<<"acl_mime_allowed">>, PrevProps, NewProps1),
+                    P2 = force_copy_prop(<<"acl_upload_size">>, PrevProps, P1),
+                    {ok, P2}
             end;
-        {error, _} = Error ->
-            Error
+        false ->
+            {ok, NewProps1}
     end.
 
 force_copy_prop(P, PrevProps, NewProps) ->

@@ -65,9 +65,9 @@ task_delete_inactive(RscId, Key, SessionId, Context) ->
 make_temporary_rsc(Props, Context) ->
     make_temporary_rsc( z_context:session_id(Context), Props, Context ).
 
-make_temporary_rsc(undefined, _Props, _Context) ->
+make_temporary_rsc({error, _}, _Props, _Context) ->
     undefined;
-make_temporary_rsc(_SessionId, Props, Context) ->
+make_temporary_rsc({ok, _SessionId}, Props, Context) ->
     {Cat, Props1} = ensure_category(Props, Context),
     case m_rsc:rid(Cat, Context) of
         undefined ->

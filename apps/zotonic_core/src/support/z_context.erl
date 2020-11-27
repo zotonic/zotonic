@@ -775,14 +775,18 @@ lager_md(MetaData, #context{} = Context) when is_list(MetaData) ->
 
 
 %% @doc Return the current client id (if any)
--spec client_id( z:context() ) -> binary() | undefined.
-client_id(#context{ client_id = ClientId }) ->
-    ClientId.
+-spec client_id( z:context() ) -> {ok, binary()} | {error, no_client}.
+client_id(#context{ client_id = ClientId }) when is_binary(ClientId) ->
+    {ok, ClientId};
+client_id(#context{}) ->
+    {error, no_client}.
 
 %% @doc Return the current client bridge topic (if any)
--spec client_topic( z:context() ) -> mqtt_sessions:topic() | undefined.
-client_topic(#context{ client_topic = ClientTopic }) ->
-    ClientTopic.
+-spec client_topic( z:context() ) -> {ok, mqtt_sessions:topic()} | {error, no_client}.
+client_topic(#context{ client_topic = ClientTopic, client_id = ClientId }) when is_binary(ClientId) ->
+    {ok, ClientTopic};
+client_topic(#context{}) ->
+    {error, no_client}.
 
 %% @doc Merge a context with client information into a request context.
 %% This is used to merge a client context obtained from a MQTT ticket into

@@ -54,9 +54,9 @@ m_delete(_Path, _Msg, _Context) ->
 -spec new_ticket( z:context() ) -> {ok, binary()} | {error, term()}.
 new_ticket(Context) ->
     case z_context:client_id(Context) of
-        undefined ->
-            {error, no_client};
-        _ClientId ->
+        {error, _} = Error ->
+            Error;
+        {ok, _ClientId} ->
             z_mqtt_ticket:new_ticket(Context)
     end.
 

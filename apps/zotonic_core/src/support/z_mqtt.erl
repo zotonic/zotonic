@@ -248,9 +248,9 @@ flatten_topic(T) when is_list(T) ->
 -spec is_client_alive( z:context() ) -> boolean().
 is_client_alive(Context) ->
     case z_context:client_id(Context) of
-        undefined ->
+        {error, _} ->
             false;
-        ClientId ->
+        {ok, ClientId} ->
             case mqtt_sessions_registry:find_session(z_context:site(Context), ClientId) of
                 {ok, Pid} when is_pid(Pid) -> erlang:is_process_alive(Pid);
                 {error, _} -> false
@@ -261,8 +261,8 @@ is_client_alive(Context) ->
 -spec whereis_client( z:context() ) -> {ok, pid()} | {error, term()}.
 whereis_client(Context) ->
     case z_context:client_id(Context) of
-        undefined ->
-            {error, no_client};
-        ClientId ->
+        {error, _} = Error ->
+            Error;
+        {ok, ClientId} ->
             mqtt_sessions_registry:find_session(z_context:site(Context), ClientId)
     end.
