@@ -251,7 +251,7 @@ is_client_alive(Context) ->
         undefined ->
             false;
         ClientId ->
-            case mqtt_sessions_registry:whois(z_context:site(Context), ClientId, Context) of
+            case mqtt_sessions_registry:find_session(z_context:site(Context), ClientId) of
                 {ok, Pid} when is_pid(Pid) -> erlang:is_process_alive(Pid);
                 {error, _} -> false
             end
@@ -264,5 +264,5 @@ whereis_client(Context) ->
         undefined ->
             {error, no_client};
         ClientId ->
-            mqtt_sessions_registry:whois(z_context:site(Context), ClientId, Context)
+            mqtt_sessions_registry:find_session(z_context:site(Context), ClientId)
     end.

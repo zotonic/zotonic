@@ -496,7 +496,7 @@ fetch_content_group_id(Id, CatId, Props, Context) ->
     end.
 
 fetch_category_id(Id, Props, Context) ->
-    case maps:get(<<"category_id">>, Props) of
+    case maps:get(<<"category_id">>, Props, undefined) of
         N when is_integer(N) ->
             N;
         undefined ->
