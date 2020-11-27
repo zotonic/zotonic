@@ -54,6 +54,9 @@ m_get([ <<"password_min_length">> | Rest ], _Msg, Context) ->
         N -> z_convert:to_integer(N)
     end,
     {ok, {Len, Rest}};
+m_get([ <<"is_one_step_logon">> | Rest ], _Msg, Context) ->
+    IsOneStep = z_convert:to_bool( m_config:get_value(mod_authenticaton, is_one_step_logon, Context) ),
+    {ok, {IsOneStep, Rest}};
 m_get([ <<"is_supported">>, <<"rememberme">> | Rest ], _Msg, Context) ->
     IsSupported = z_db:has_connection(Context),
     {ok, {IsSupported, Rest}};

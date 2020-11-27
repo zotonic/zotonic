@@ -89,6 +89,16 @@
     payload = #{} :: map()
 }).
 
+%% @doc Check for logon options, called if logon_submit returns `undefined`.
+%% This is used to fetch external (or local) authentication links for an
+%% username.
+%% Type: foldl
+%% Return:: ``map()``
+-record(logon_options, {
+    payload = #{} :: map()
+}).
+
+
 %% @doc Request to send a verification to the user. Return ok or an error
 %% Type: first
 %% Identity may be undefined, or is a identity used for the verification.
@@ -400,11 +410,10 @@
 %% @doc An updated resource is about to be persisted.
 %% Observe this notification to change the resource properties before they are
 %% persisted.
-%% The props are the resource's props _before_ the update.
-%% The folded value is {IsChanged, UpdateProps} for the update itself.
-%% Set IsChanged to true if you modify the UpdateProps.
+%% The props are the resource's props _before_ the update, but _after_ filtering
+%% and sanitization.
 %% Type: foldr
-%% Return: ``{true, ChangedProps}`` or ``{false, Props}``
+%% Return: ``{ok, ChangedProps}`` or ``{error, term()}``
 -record(rsc_update, {
     action :: insert | update,
     id :: m_rsc:resource_id(),
@@ -513,13 +522,6 @@
     prop :: binary()
 }).
 
-%% @doc Filter the properties of a resource update, this is done on the raw data
-%% The fold argument is a property map
-%% Type: foldr
--record(acl_rsc_update_check, {
-    id :: m_rsc:resource_id() | 'insert_rsc'
-}).
-
 %% @doc Set the context to a typical authenticated user. Used by m_acl.erl
 %% Type: first
 %% Return: authenticated ``#context{}`` or ``undefined``
@@ -547,11 +549,15 @@
 %% @doc Confirm a user id.
 %% Type: foldl
 %% Return: ``z:context()``
--record(auth_confirm, {}).
+-record(auth_confirm, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc A user id has been confirmed.
 %% Type: notify
--record(auth_confirm_done, {}).
+-record(auth_confirm_done, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc First for logon of user with username, check for ratelimit, blocks etc.
 %%      Returns: 'undefined' | ok | {error, Reason}
@@ -921,16 +927,6 @@
 %% @doc Delete a value from the typed key/value store
 %% Type: notify
 -record(tkvstore_delete, {type, key}).
-
-%% @doc MQTT acl check, called via the normal acl notifications.
-%% Actions for these checks: subscribe, publish
-%% Type: first
--record(acl_mqtt, {
-    topic :: list( binary() ),
-    is_wildcard :: boolean(),
-    packet :: mqtt_packet_map:mqtt_packet()
-}).
-
 
 %% @doc Internal message of mod_development. Start a stream with debug information to the user agent.
 %% 'target' is the id of the HTML element where the information is inserted.

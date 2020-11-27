@@ -67,7 +67,7 @@ from_props_1(Ps) when is_list(Ps) ->
 from_props_1(P) ->
     P.
 
-from_prop({K, [ A | _ ] = Vs}) when is_list(A) ->
+from_prop({K, [ [{_,_}|_] | _ ] = Vs}) ->
     % This is typical for the 'blocks' property, which contains
     % a list of blocks. Where each block is a property list.
     {to_binary(K), lists:map(fun from_props_1/1, Vs)};

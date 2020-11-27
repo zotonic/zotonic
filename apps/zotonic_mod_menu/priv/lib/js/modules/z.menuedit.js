@@ -72,7 +72,7 @@ $.widget("ui.menuedit", {
         $(self.element).bind('sortupdate', self.options.update);
         $(self.element).nestedSortable(self.options);
     },
-    
+
     submenus: function() {
         $("li.menu-item", this.element).each(function() {
             var hasSub = $("li.menu-item:first", $(this)).length > 0;
@@ -101,7 +101,7 @@ $.widget("ui.menuedit", {
 $.ui.menuedit.defaults = {
 	disableNesting: "ui-nestedSortable-no-nesting",
 	forcePlaceholderSize: true,
-	handle: "div",
+	handle: ".menu-drag",
 	helper: "clone",
 	items: "li.menu-item",
 	maxLevels: 0,

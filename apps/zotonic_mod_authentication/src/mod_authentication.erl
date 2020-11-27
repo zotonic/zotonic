@@ -33,6 +33,7 @@
     observe_request_context/3,
     observe_auth_options_update/3,
     observe_logon_submit/2,
+    observe_logon_options/3,
     observe_admin_menu/3,
     observe_auth_validated/2
 ]).
@@ -98,28 +99,96 @@ observe_auth_options_update(#auth_options_update{ request_options = ROpts }, Acc
     end.
 
 %% @doc Check username/password against the identity tables.
-observe_logon_submit(#logon_submit{ payload = Args }, Context) ->
-    Username = maps:get(<<"username">>, Args, undefined),
-    Password = maps:get(<<"password">>, Args, undefined),
-    case is_binary(Username) andalso is_binary(Password) of
-        true ->
-            case m_identity:check_username_pw(Username, Password, Context) of
-                {ok, UserId} ->
-                    case Password of
-                        <<>> ->
-                            %% If empty password existed in identity table, prompt for a new password.
-                            {expired, UserId};
-                        _ ->
-                            {ok, UserId}
-                    end;
-                {error, {expired, UserId}} ->
+observe_logon_submit(#logon_submit{
+            payload = #{
+                <<"username">> := Username,
+                <<"password">> := Password
+            }
+        }, Context) when is_binary(Username), is_binary(Password) ->
+    case m_identity:check_username_pw(Username, Password, Context) of
+        {ok, UserId} ->
+            case Password of
+                <<>> ->
+                    %% If empty password existed in identity table, prompt for a new password.
                     {expired, UserId};
-                {error, _} = E ->
-                    E
+                _ ->
+                    {ok, UserId}
             end;
-        false ->
-            undefined
+        {error, {expired, UserId}} ->
+            {expired, UserId};
+        {error, _} = E ->
+            E
+    end;
+observe_logon_submit(#logon_submit{}, _Context) ->
+    undefined.
+
+observe_logon_options(#logon_options{
+            payload = #{
+                <<"username">> := Username,
+                <<"password">> := undefined
+            }
+        },
+        Acc,
+        Context) when is_binary(Username) ->
+    case z_string:to_lower( z_string:trim( Username ) ) of
+        <<>> ->
+            Acc;
+        UsernameOrEmail ->
+            % UserExternal = find_user_external(UsernameOrEmail, Page, Context),
+            % IsUserExternal = length(UserExternal) > 0,
+            % Pretend user exists if it is not an external user
+            % This prevents fishing for usernames
+            IsUserLocal = is_user_local(UsernameOrEmail, Context)
+                   orelse is_user_local_email(UsernameOrEmail, Context)
+                   orelse maps:get(is_user_local, Acc, false),
+            Acc#{
+                is_username_checked => true,
+                is_user_local => IsUserLocal,
+                username => UsernameOrEmail
+                % {is_user_external, IsUserExternal},
+                % {user_external, UserExternal},
+            }
+    end;
+observe_logon_options(#logon_options{}, Acc, _Context) ->
+    Acc.
+
+% %% Check if an LTI user or some other user by this handle is known.
+% find_user_external(Handle, Page, Context) ->
+%     z_notifier:foldl(
+%         {maxclass_auth_external, Handle, Page},
+%         [],
+%         Context).
+
+is_user_local(<<"admin">>, _Context) ->
+    true;
+is_user_local(Handle, Context) ->
+    case m_identity:lookup_by_username(Handle, Context) of
+        undefined -> false;
+        _Row -> true
     end.
+
+is_user_local_email(Handle, Context) ->
+    case binary:match(Handle, <<"@">>) of
+        nomatch ->
+            false;
+        _ ->
+            Rows = m_identity:lookup_by_type_and_key_multi(email, Handle, Context),
+            RscIds = lists:map(
+                fun(Row) ->
+                    proplists:get_value(rsc_id, Row)
+                end,
+                Rows),
+            lists:filter(
+                fun (RscId) ->
+                    case m_identity:get_username(RscId, Context) of
+                        undefined -> false;
+                        <<"admin">> -> false;
+                        _ -> true
+                    end
+                end,
+                RscIds)
+    end.
+
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [

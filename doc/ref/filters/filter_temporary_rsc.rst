@@ -4,8 +4,15 @@
 Creates a temporary resource if its input value is not defined.
 
 The created resource receives the properties of the second parameter.
-The resource is tied to the lifetime of the session, if the session stops then the
-resource is deleted if it has not been changed in the meantime.
+
+After the resource is created, every hour a check is made if the
+resource has been edited and still registered in the Server Storage.
+
+.. note::
+
+    ``mod_server_storage`` must be enabled for this filter to work.
+
+If the resource is abandoned and not changed since its creation, then it is automatically deleted.
 
 Only a single temporary resource can exist per category per session. Requesting
 a second resource of the same category for a session will return the earlier created
@@ -29,4 +36,4 @@ Example:
     {% endwith %}
 
 
-See :ref:`mod_admin`
+See :ref:`mod_admin`, :ref:`mod_server_storage`

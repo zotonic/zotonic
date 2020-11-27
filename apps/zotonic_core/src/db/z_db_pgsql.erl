@@ -297,6 +297,11 @@ handle_info({'DOWN', _Ref, process, _Pid, _Reason}, #state{ busy_pid = undefined
     % Might be a late down message from the busy pid, ignore.
     {noreply, State, timeout(State)};
 
+handle_info({'DOWN', _Ref, process, Pid, _Reason}, State) ->
+    % Stray 'DOWN' message, might be a race condition.
+    lager:info("SQL got 'DOWN' message from unknown process ~p in state ~p", [ Pid, State ]),
+    {noreply, State, timeout(State)};
+
 handle_info({'EXIT', _Pid, _Reason}, State) ->
     % Ignore - we have monitors for the connection and the request caller.
     {noreply, State};

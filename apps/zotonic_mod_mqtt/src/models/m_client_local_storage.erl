@@ -43,7 +43,10 @@
 
 -spec get( key(), z:context() ) -> {ok, value()} | {error, error()}.
 get(Key, Context) ->
-    get(Key, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> get(Key, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec get( key(), mqtt_sessions:topic(), z:context() ) -> {ok, value()} | {error, error()}.
 get(_Key, undefined, _Context) ->
@@ -55,7 +58,10 @@ get(Key, BridgeTopic, Context) ->
 
 -spec put( key(), value(), z:context() ) -> ok | {error, error()}.
 put(Key, Value, Context) ->
-    put(Key, Value, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> put(Key, Value, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec put( key(), value(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
 put(_Key, _Value, undefined, _Context) ->
@@ -68,7 +74,10 @@ put(Key, Value, BridgeTopic, Context) ->
 
 -spec delete( key(), z:context() ) -> ok | {error, error()}.
 delete(Key, Context) ->
-    delete(Key, z_context:client_topic(Context), Context).
+    case z_context:client_topic(Context) of
+        {ok, Topic} -> delete(Key, Topic, Context);
+        {error, _} = Error -> Error
+    end.
 
 -spec delete( key(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
 delete(_Key, undefined, _Context) ->

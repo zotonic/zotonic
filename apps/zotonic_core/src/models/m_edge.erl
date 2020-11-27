@@ -648,25 +648,29 @@ subject(Id, Pred, N, Context) ->
 
 %% @doc Return all object ids of an id with a certain predicate. The order of the ids is deterministic.
 %% @spec objects(Id, Pred, Context) -> List
--spec objects(m_rsc:resource(), atom() | pos_integer(), #context{}) -> list().
+-spec objects(m_rsc:resource(), atom() | pos_integer(), z:context()) -> list( m_rsc:resource_id() ).
 objects(_Id, undefined, _Context) ->
     [];
 objects(Id, Pred, Context) when is_integer(Pred) ->
-    case z_depcache:get({objects, Pred, Id}, Context) of
-        {ok, Objects} ->
-            Objects;
+    case m_rsc:rid(Id, Context) of
         undefined ->
-            {ok, SubjectId} = m_rsc:name_to_id(Id, Context),
-            Ids = z_db:q(
-                "select object_id from edge "
-                "where subject_id = $1 and predicate_id = $2 "
-                "order by seq,id",
-                [SubjectId, Pred],
-                Context
-            ),
-            Objects = [ObjId || {ObjId} <- Ids],
-            z_depcache:set({objects, Pred, Id}, Objects, ?DAY, [Id], Context),
-            Objects
+            [];
+        SubjectId ->
+            case z_depcache:get({objects, Pred, SubjectId}, Context) of
+                {ok, Objects} ->
+                    Objects;
+                undefined ->
+                    Ids = z_db:q(
+                        "select object_id from edge "
+                        "where subject_id = $1 and predicate_id = $2 "
+                        "order by seq,id",
+                        [SubjectId, Pred],
+                        Context
+                    ),
+                    Objects = [ObjId || {ObjId} <- Ids],
+                    z_depcache:set({objects, Pred, SubjectId}, Objects, ?DAY, [SubjectId], Context),
+                    Objects
+            end
     end;
 objects(Id, Pred, Context) ->
     case m_predicate:name_to_id(Pred, Context) of
@@ -681,20 +685,25 @@ objects(Id, Pred, Context) ->
 subjects(_Id, undefined, _Context) ->
     [];
 subjects(Id, Pred, Context) when is_integer(Pred) ->
-    case z_depcache:get({subjects, Pred, Id}, Context) of
-        {ok, Objects} ->
-            Objects;
+    case m_rsc:rid(Id, Context) of
         undefined ->
-            Ids = z_db:q(
-                "select subject_id from edge "
-                "where object_id = $1 and predicate_id = $2 "
-                "order by id",
-                [Id, Pred],
-                Context
-            ),
-            Subjects = [SubjId || {SubjId} <- Ids],
-            z_depcache:set({subjects, Pred, Id}, Subjects, ?HOUR, [Id], Context),
-            Subjects
+            [];
+        ObjectId ->
+            case z_depcache:get({subjects, Pred, ObjectId}, Context) of
+                {ok, Objects} ->
+                    Objects;
+                undefined ->
+                    Ids = z_db:q(
+                        "select subject_id from edge "
+                        "where object_id = $1 and predicate_id = $2 "
+                        "order by id",
+                        [ObjectId, Pred],
+                        Context
+                    ),
+                    Subjects = [SubjId || {SubjId} <- Ids],
+                    z_depcache:set({subjects, Pred, ObjectId}, Subjects, ?HOUR, [ObjectId], Context),
+                    Subjects
+            end
     end;
 subjects(Id, Pred, Context) ->
     case m_predicate:name_to_id(Pred, Context) of
@@ -774,7 +783,7 @@ subject_edge_ids(Id, Predicate, Context) ->
 
 
 %% @doc Return all object ids with edge properties
--spec object_edge_props(integer(), binary()|list()|atom()|integer(), #context{}) -> list().
+-spec object_edge_props(m_rsc:resource_id(), binary()|string()|atom()|integer(), z:context()) -> list().
 object_edge_props(Id, Predicate, Context) ->
     case m_predicate:name_to_id(Predicate, Context) of
         {ok, PredId} ->
@@ -794,7 +803,7 @@ object_edge_props(Id, Predicate, Context) ->
     end.
 
 %% @doc Return all subject ids with the edge properties
--spec subject_edge_props(integer(), binary()|list()|atom()|integer(), #context{}) -> list().
+-spec subject_edge_props(m_rsc:resource_id(), binary()|string()|atom()|integer(), z:context()) -> list().
 subject_edge_props(Id, Predicate, Context) ->
     case m_predicate:name_to_id(Predicate, Context) of
         {ok, PredId} ->
@@ -816,7 +825,7 @@ subject_edge_props(Id, Predicate, Context) ->
 
 %% @doc Reorder the edges so that the mentioned ids are in front, in the listed order.
 %% @spec update_sequence(Id, Predicate, ObjectIds, Context) -> ok | {error, Reason}
-update_sequence(Id, Pred, ObjectIds, Context) ->
+update_sequence(Id, Pred, ObjectIds, Context) when is_integer(Id) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             {ok, PredId} = m_predicate:name_to_id(Pred, Context),

@@ -167,7 +167,7 @@ make_unique() ->
     <<"t", Unique/binary>>.
 
 make_number(Max) ->
-    rand:uniform(Max+1).
+    rand:uniform(Max).
 
 -spec make_any_char_id(Length::integer()) -> binary().
 %% @doc Generate a random key consisting of numbers and upper and lower case

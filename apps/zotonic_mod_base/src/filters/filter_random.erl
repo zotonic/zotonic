@@ -33,14 +33,16 @@ random(In, Context) ->
 
 
 %% @doc create a sublist of using n random elements from source list
-random(N, _Count, _Context) when N == [] orelse N == undefined ->
+random([], _Count, _Context) ->
+    [];
+random(undefined, _Count, _Context) ->
     [];
 random(In, Count, _Context) when is_list(In) ->
     L = length(In),
     RandomizedIn = z_utils:randomize(In),
     if
-	Count >= L -> RandomizedIn;
-	true	   -> lists:nthtail(L - Count, RandomizedIn)
+	   Count >= L -> RandomizedIn;
+	   true	-> lists:nthtail(L - Count, RandomizedIn)
     end;
 random(In, Count, Context) ->
     random(z_template_compiler_runtime:to_list(In, Context), Count, Context).

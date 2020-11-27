@@ -1,7 +1,12 @@
 {% javascript %}
-	$('.tree-list .active').removeClass('active');
-	$('.tree-list div[data-page-id="{{ id }}"]').addClass('active');
-	$('#save-buttons').hide().fadeIn();
+	$('.tree-list .active')
+		.removeClass('active');
+	$('.tree-list div[data-page-id="{{ id }}"]')
+		.closest('.menu-item')
+		.addClass('active');
+	$('#save-buttons')
+		.hide()
+		.fadeIn();
 {% endjavascript %}
 
 {% block tinymce_init %}

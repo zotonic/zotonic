@@ -11,7 +11,7 @@
 -include("include/zotonic.hrl").
 
 -export([render_tag/2, render_tag/3, render_tag/4]).
--export([optional_escape/1]).
+-export([optional_escape_property/1]).
 
 %% @doc Render a tag with properties, return the tag text. div has special handling as <div/> is not allowed.
 render_tag("div", Props) ->
@@ -38,8 +38,6 @@ render_tag(TagName, Props, Content) ->
 
 %%% Tags with child content %%%
 render_tag(TagName, Props, undefined, Context) ->
-    render_tag(TagName, Props, Context);
-render_tag(TagName, Props, [], Context) ->
     render_tag(TagName, Props, Context);
 render_tag(TagName, Props, Content, Context) ->
 	Render   = [ $<, TagName, write_props(Props), $>, Content, $<, $/, TagName, $> ],
@@ -76,22 +74,11 @@ display_property({Prop, Value}) ->
 	[32, correct_data(Prop), $=, $', Value, $'].
 
 
-optional_escape_property({href, Uri}) -> {href, optional_escape(Uri)};
-optional_escape_property({src, Uri}) -> {src, optional_escape(Uri)};
-optional_escape_property({<<"src">>, Uri}) -> {<<"src">>, optional_escape(Uri)};
-optional_escape_property({<<"href">>, Uri}) -> {<<"href">>, optional_escape(Uri)};
+optional_escape_property({href, Uri}) -> {href, z_html:escape_check(Uri)};
+optional_escape_property({src, Uri}) -> {src, z_html:escape_check(Uri)};
+optional_escape_property({<<"href">>, Uri}) -> {<<"href">>, z_html:escape_check(Uri)};
+optional_escape_property({<<"src">>, Uri}) -> {<<"src">>, z_html:escape_check(Uri)};
 optional_escape_property(P) -> P.
-
-optional_escape(S) when is_list(S) ->
-    case string:chr(S, $&) of
-        0 -> S;
-        _ ->
-            case string:str(S, "&amp;") of
-                0 -> z_html_parse:escape(S);
-                _ -> S
-            end
-    end;
-optional_escape(S) -> S.
 
 
 % @doc Correct data_xxxx attributes, so that they are generated as data-xxxx

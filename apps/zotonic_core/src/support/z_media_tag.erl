@@ -434,6 +434,7 @@ is_tagopt({background, _}) -> false;
 is_tagopt({lossless, _}) -> false;
 is_tagopt({removebg, _}) -> false;
 is_tagopt({mediaclass, _}) -> false;
+is_tagopt({nowh, _}) -> false;
 % And be sure to keep the data-xxxx args in the tag
 is_tagopt({Prop, _}) ->
     case z_convert:to_list(Prop) of
@@ -490,6 +491,8 @@ props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
             ],
             props2url(Rest, Width, Height, [MC|Acc], Context)
     end;
+props2url([{nowh, _}|Rest], Width, Height, Acc, Context) ->
+    props2url(Rest, Width, Height, Acc, Context);
 props2url([{Prop}|Rest], Width, Height, Acc, Context) ->
     props2url(Rest, Width, Height, [atom_to_list(Prop)|Acc], Context);
 props2url([{_Prop,undefined}|Rest], Width, Height, Acc, Context) ->
@@ -504,62 +507,72 @@ props2url([{Prop,Value}|Rest], Width, Height, Acc, Context) ->
 %% @todo Map the extension to the format of the preview (.jpg or .png)
 -spec url2props( binary() | string(), z:context() ) ->
               {ok, {FilePath :: string(), Props :: list(), Checksum :: string(), ChecksumBaseString :: string()}}
-            | {error, no_lparen | checksum_invalid | badarg}.
+            | {error, no_lparen | checksum_invalid | extension_invalid | badarg}.
 url2props(Url, Context) when is_binary(Url) ->
     url2props(erlang:binary_to_list(Url), Context);
 url2props(Url, Context) ->
     {Filepath,Rest} = lists:splitwith(fun(C) -> C =/= $( end, Url),
     PropsRoot = filename:rootname(Rest),
     % Take the checksum from the string
-    case string:rchr(PropsRoot, $() of
-        0 ->
-            {error, no_lparen};
-        LastParen ->
-            case lists:last(PropsRoot) of
-                $) ->
-                    {Props,[$(|Check]} = lists:split(LastParen-1, PropsRoot),
-                    Check1 = string:strip(Check, right, $)),
-                    PropList = case Props of
-                                   "()" ++ _ -> [""|string:tokens(Props, ")(")];
-                                   _ -> string:tokens(Props, ")(")
-                               end,
-                    FileMime = z_media_identify:guess_mime(Rest),
-                    {_Mime, Extension} = z_media_preview:out_mime(FileMime, map_mime_props(PropList), Context),
-                    case {Check1,PropList} of
-                        {"mediaclass-"++_, []} ->
-                            % shorthand with only the mediaclass
-                            {ok, {Filepath,url2props1([Check1], []),none,none}};
+    FileMime = z_media_identify:guess_mime(Rest),
+    case is_valid_resize_mime(FileMime) of
+        true ->
+            case string:rchr(PropsRoot, $() of
+                0 ->
+                    {error, no_lparen};
+                LastParen ->
+                    case lists:last(PropsRoot) of
+                        $) ->
+                            {Props,[$(|Check]} = lists:split(LastParen-1, PropsRoot),
+                            Check1 = string:strip(Check, right, $)),
+                            PropList = case Props of
+                                           "()" ++ _ -> [""|string:tokens(Props, ")(")];
+                                           _ -> string:tokens(Props, ")(")
+                                       end,
+                            {_Mime, Extension} = z_media_preview:out_mime(FileMime, map_mime_props(PropList), Context),
+                            case {Check1,PropList} of
+                                {"mediaclass-"++_, []} ->
+                                    % shorthand with only the mediaclass
+                                    {ok, {Filepath,url2props1([Check1], []),none,none}};
+                                _ ->
+                                    % multiple args, also needs a checksum
+                                    try
+                                        z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
+                                        PropList1 = case PropList of
+                                                        [] ->
+                                                            [];
+                                                        [Size|RestProps]->
+                                                            {W,XH} = lists:splitwith(fun(C) -> C >= $0 andalso C =< $9 end, Size),
+                                                            SizeProps = case {W,XH} of
+                                                                            {"", "x"}            -> [];
+                                                                            {"", ""}             -> [];
+                                                                            {Width, ""}          -> [{width,list_to_integer(Width)}];
+                                                                            {Width, "x"}         -> [{width,list_to_integer(Width)}];
+                                                                            {"", [$x|Height]}    -> [{height,list_to_integer(Height)}];
+                                                                            {Width, [$x|Height]} -> [{width,list_to_integer(Width)},{height,list_to_integer(Height)}]
+                                                                        end,
+                                                            SizeProps ++ url2props1(RestProps, [])
+                                                    end,
+                                        {ok, {Filepath,PropList1,Check1,Props}}
+                                    catch
+                                        error:checksum_invalid ->
+                                            {error, checksum_invalid};
+                                        error:badarg ->
+                                            {error, badarg}
+                                    end
+                            end;
                         _ ->
-                            % multiple args, also needs a checksum
-                            try
-                                z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
-                                PropList1 = case PropList of
-                                                [] ->
-                                                    [];
-                                                [Size|RestProps]->
-                                                    {W,XH} = lists:splitwith(fun(C) -> C >= $0 andalso C =< $9 end, Size),
-                                                    SizeProps = case {W,XH} of
-                                                                    {"", "x"}            -> [];
-                                                                    {"", ""}             -> [];
-                                                                    {Width, ""}          -> [{width,list_to_integer(Width)}];
-                                                                    {Width, "x"}         -> [{width,list_to_integer(Width)}];
-                                                                    {"", [$x|Height]}    -> [{height,list_to_integer(Height)}];
-                                                                    {Width, [$x|Height]} -> [{width,list_to_integer(Width)},{height,list_to_integer(Height)}]
-                                                                end,
-                                                    SizeProps ++ url2props1(RestProps, [])
-                                            end,
-                                {ok, {Filepath,PropList1,Check1,Props}}
-                            catch
-                                error:checksum_invalid ->
-                                    {error, checksum_invalid};
-                                error:badarg ->
-                                    {error, badarg}
-                            end
-                    end;
-                _ ->
-                    {error, badarg}
-            end
+                            {error, badarg}
+                    end
+            end;
+        false ->
+            {error, extension_invalid}
     end.
+
+is_valid_resize_mime(<<"image/jpeg">>) -> true;
+is_valid_resize_mime(<<"image/gif">>) -> true;
+is_valid_resize_mime(<<"image/png">>) -> true;
+is_valid_resize_mime(_) -> false.
 
 map_mime_props(Props) ->
     [ map_mime_prop(P) || P <- Props ].

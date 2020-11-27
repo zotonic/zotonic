@@ -287,6 +287,12 @@ function z_notify(message, extraParams)
         trigger_id = params.z_trigger_id;
         delete params.z_trigger_id;
     }
+
+    var postbackAttr = document.body.getAttribute("data-wired-postback");
+    if (postbackAttr) {
+        params.z_postback_data = JSON.parse(postbackAttr);
+    }
+
     var notify = {
         _type: "postback_notify",
         message: message,
@@ -416,7 +422,11 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
         }
     }
     extraParams = extraParams || [];
-    // extraParams.push({name: 'triggervalue', value: triggervalue});
+
+    var postbackAttr = document.body.getAttribute("data-wired-postback");
+    if (postbackAttr) {
+        extraParams.z_postback_date = JSON.parse(postbackAttr);
+    }
 
     var pb_event = {
         _type: "postback_event",

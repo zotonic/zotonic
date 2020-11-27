@@ -79,7 +79,7 @@
 })();
 
 $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
-	var id = $(this).closest('div').data('page-id');
+	var id = $(this).closest('.menu-wrapper').data('page-id');
 	window.zMenuEditDone = function(id, title) {
 		$(".title-"+id).html(title);
 	};
@@ -113,10 +113,19 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				id: $menu_item.children('div').data('page-id')
 			});
 		{% else %}
-			$(this).closest('li.menu-item').fadeOut(500, function() {
-				$(this).remove();
-				$sorter.trigger('sortupdate')
-			});
+            var self = this;
+            z_dialog_confirm({
+                text: "{_ Are you sure you want to delete _}: "
+                    + "<b>" + $menu_item.find(".title").text() + "</b><br>"
+                    + "{_ and all indented items below it? _}<br><br><b>{_ THIS CAN NOT BE UNDONE! _}</b>",
+                ok: "{_ Delete _}",
+                on_confirm: function() {
+                    $(self).closest('li.menu-item').fadeOut(500, function() {
+                        $(self).remove();
+                        $sorter.trigger('sortupdate')
+                    });
+                }
+            })
 		{% endif %}
 	} else if (where == 'copy') {
 		z_transport("mod_menu", "ubf", {

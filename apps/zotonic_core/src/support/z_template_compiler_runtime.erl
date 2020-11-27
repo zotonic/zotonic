@@ -60,11 +60,12 @@
             {ok, template_compiler:template_file()} | {error, enoent|term()}.
 map_template(#template_file{} = Tpl, _Vars, _Context) ->
     {ok, Tpl};
-map_template({cat, Template}, Vars, Context) ->
-    case maps:get(id, Vars, undefined) of
-        undefined -> map_template_1(Template, Context);
-        Id -> map_template({cat, Template, Id}, Vars, Context)
-    end;
+map_template({cat, Template}, #{ '$cat' := Cats }, Context) when is_list(Cats) ->
+    map_template_cat(Template, Cats, Context);
+map_template({cat, Template}, #{ 'id' := Id } = Vars, Context) ->
+    map_template({cat, Template, Id}, Vars, Context);
+map_template({cat, Template}, _Vars, Context) ->
+    map_template_1(Template, Context);
 map_template({cat, Template, [Cat|_] = IsA}, _Vars, Context) when is_atom(Cat); is_binary(Cat); is_list(Cat) ->
     map_template_cat(Template, IsA, Context);
 map_template({cat, Template, Id}, _Vars, Context) ->
@@ -74,7 +75,14 @@ map_template({cat, Template, Id}, _Vars, Context) ->
     end;
 map_template({overrules, Template, Filename}, _Vars, Context) ->
     Templates = z_module_indexer:find_all(template, Template, Context),
-    find_next_template(Filename, Templates);
+    case find_next_template(Filename, Templates) of
+        {ok, _} = Ok ->
+            Ok;
+        {error, enoent} ->
+            lager:warning("No template for overrules of \"~s\", filename \"~s\"",
+                          [ Template, Filename ]),
+            {error, enoent}
+    end;
 map_template(Template, _Vars, Context) ->
     map_template_1(Template, Context).
 
@@ -517,7 +525,7 @@ spaceless_tag(Value, TplVars, Context) ->
 
 %% @doc Convert a value to a boolean.
 -spec to_bool(Value :: term(), Context :: term()) -> boolean().
-to_bool({trans, _} = Tr, Context) ->
+to_bool(#trans{} = Tr, Context) ->
     case z_trans:lookup_fallback(Tr, Context) of
         undefined -> false;
         <<>> -> false;
@@ -533,12 +541,13 @@ to_bool(Value, _Context) ->
 %% @doc Convert a value to a list.
 -spec to_list(Value :: term(), Context :: term()) -> list().
 to_list(undefined, _Context) -> [];
+to_list(<<>>, _Context) -> [];
 to_list(#rsc_list{list=L}, _Context) -> L;
 to_list(#search_result{result=L}, _Context) -> L;
 to_list(#m_search_result{result=Result}, Context) -> to_list(Result, Context);
 to_list(q, Context) -> z_context:get_q_all(Context);
 to_list(q_validated, _Context) -> [];
-to_list({trans, _}, _Context) -> [];
+to_list(#trans{}, _Context) -> [];
 to_list(V, Context) -> template_compiler_runtime:to_list(V, Context).
 
 
@@ -573,6 +582,9 @@ to_render_result(#rsc_list{list=L}, _TplVars, _Context) ->
     io_lib:format("~p", [L]);
 to_render_result(#trans{} = Trans, TplVars, Context) ->
     z_trans:lookup_fallback(Trans, set_context_vars(TplVars, Context));
+to_render_result(R, _TplVars, _Context) when element(1,R) =:= render_state ->
+    % This is output from scomps or the filter show_media.
+    R;
 to_render_result(Vs, TplVars, Context) when is_list(Vs) ->
     % A list, which could be an unicode string but also a nested render result.
     % Assume that all integers are meant to be unicode characters.

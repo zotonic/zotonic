@@ -66,7 +66,6 @@
     observe_acl_logon/2,
     observe_acl_logoff/2,
     observe_acl_context_authenticated/2,
-    observe_acl_rsc_update_check/3,
     observe_acl_user_groups/2,
     observe_acl_add_sql_check/2,
 
@@ -258,9 +257,6 @@ observe_acl_logoff(AclLogoff, Context) ->
 observe_acl_context_authenticated(_AclAuthenticated, Context) ->
     acl_user_groups_checks:acl_context_authenticated(Context).
 
-observe_acl_rsc_update_check(AclRscUpdateCheck, Props, Context) ->
-    acl_user_groups_checks:acl_rsc_update_check(AclRscUpdateCheck, Props, Context).
-
 observe_acl_user_groups(_AclUserGroups, Context) ->
     acl_user_groups_checks:user_groups_all(Context).
 
@@ -278,7 +274,7 @@ observe_hierarchy_updated(#hierarchy_updated{}, _Context) ->
 
 %% @doc Add default content group when resource is inserted without one
 -spec observe_rsc_insert(#rsc_insert{}, m_rsc:props(), z:context()) -> m_rsc:props().
-observe_rsc_insert(#rsc_insert{props=RscProps}, InsertProps, Context) ->
+observe_rsc_insert(#rsc_insert{ props = RscProps }, InsertProps, Context) ->
     case maps:get(<<"content_group_id">>, RscProps,
             maps:get(<<"content_group_id">>, InsertProps, undefined))
     of
@@ -292,22 +288,25 @@ observe_rsc_insert(#rsc_insert{props=RscProps}, InsertProps, Context) ->
             InsertProps
     end.
 
--spec observe_rsc_update(#rsc_update{}, {boolean(), m_rsc:props()}, z:context()) -> {boolean(), m_rsc:props()}.
-observe_rsc_update(#rsc_update{ props = PrevProps }, {_IsChanged, NewProps} = Acc, Context) ->
-    case maps:is_key(<<"acl_mime_allowed">>, NewProps)
-        orelse maps:is_key(<<"acl_upload_size">>, NewProps)
+-spec observe_rsc_update(#rsc_update{}, {ok, m_rsc:props()} | {error, term()}, z:context()) -> {ok, m_rsc:props()} | {error, term()}.
+observe_rsc_update(_, {error, _} = Error, _Context) ->
+    Error;
+observe_rsc_update(#rsc_update{ id = Id, props = PrevProps }, {ok, NewProps}, Context) ->
+    {ok, NewProps1} = acl_user_groups_checks:rsc_update_check(Id, NewProps, Context),
+    case maps:is_key(<<"acl_mime_allowed">>, NewProps1)
+        orelse maps:is_key(<<"acl_upload_size">>, NewProps1)
     of
         true ->
             case mod_acl_user_groups:is_acl_admin(Context) of
                 true ->
-                    Acc;
+                    {ok, NewProps1};
                 false ->
-                    P1 = force_copy_prop(<<"acl_mime_allowed">>, PrevProps, NewProps),
+                    P1 = force_copy_prop(<<"acl_mime_allowed">>, PrevProps, NewProps1),
                     P2 = force_copy_prop(<<"acl_upload_size">>, PrevProps, P1),
-                    {true, P2}
+                    {ok, P2}
             end;
         false ->
-            Acc
+            {ok, NewProps1}
     end.
 
 force_copy_prop(P, PrevProps, NewProps) ->

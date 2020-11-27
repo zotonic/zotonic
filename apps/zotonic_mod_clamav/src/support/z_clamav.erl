@@ -50,7 +50,7 @@ ping() ->
         _ -> pang
     end.
 
--spec scan_file( file:filename() ) -> ok | {error, noclamav | infected | av_sizelimit | term() }.
+-spec scan_file( file:filename_all() ) -> ok | {error, noclamav | infected | av_sizelimit | unknown | term() }.
 scan_file(Filename) ->
     MaxSize = max_size(),
     case filelib:file_size(Filename) of
@@ -70,7 +70,7 @@ scan_file(Filename) ->
             {error, av_sizelimit}
     end.
 
--spec scan( binary() ) -> ok | {error, noclamav | infected}.
+-spec scan( binary() ) -> ok | {error, noclamav | infected | unknown | term()}.
 scan( Data ) when is_binary(Data) ->
     MaxSize = max_size(),
     case size(Data) of
@@ -104,7 +104,7 @@ do_clam(Command, DataFun) ->
 
 %% @doc Check on the result of clamav
 handle_result({ok, <<"INSTREAM size limit exceeded", _/binary>>}) ->
-    {error, sizelimit};
+    {error, av_sizelimit};
 handle_result({ok, <<"stream: OK", _/binary>>}) ->
     ok;
 handle_result({ok, <<"stream: ", Msg/binary>>}) ->
@@ -115,6 +115,8 @@ handle_result({ok, <<"stream: ", Msg/binary>>}) ->
         {_, _} ->
             {error, infected}
     end;
+handle_result({error, econnrefused}) ->
+    {error, noclamav};
 handle_result({error, _} = Error) ->
     Error.
 

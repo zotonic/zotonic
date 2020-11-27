@@ -89,7 +89,8 @@ handle_cmd(Cmd, _Payload, Context) ->
 
 -spec logon( map(), z:context() ) -> { map(), z:context() }.
 logon(Payload, Context) ->
-    logon_1(z_notifier:first(#logon_submit{ payload = Payload }, Context), Payload, Context).
+    {Result, Context1} = logon_1(z_notifier:first(#logon_submit{ payload = Payload }, Context), Payload, Context),
+    maybe_add_logon_options(Result, Payload, Context1).
 
 logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
     case z_auth:logon(UserId, Context) of
@@ -134,8 +135,42 @@ logon_1({error, _Reason}, _Payload, Context) ->
     % Hide other error codes, map to generic 'pw' error
     { #{ status => error, error => pw }, Context };
 logon_1(undefined, _Payload, Context) ->
-    lager:warning("Authentication error: #logon_submit{} returned undefined."),
     { #{ status => error, error => pw }, Context }.
+
+-spec maybe_add_logon_options( map(), map(), z:context() ) -> { map(), z:context() }.
+maybe_add_logon_options(#{ error := ratelimit } = Result, _Payload, Context) ->
+    {Result, Context};
+maybe_add_logon_options(#{ status := error } = Result, Payload, Context) ->
+    Options = #{
+        is_username_checked => false,
+        is_user_local => false,
+        is_user_external => false,
+        username => maps:get(<<"username">>, Payload, undefined),
+        user_external => [],
+        page => maps:get(<<"page">>, Payload, undefined),
+        is_password_entered => not z_utils:is_empty(maps:get(<<"password">>, Payload, <<>>))
+    },
+    Options1 = z_notifier:foldr(#logon_options{ payload = Payload }, Options, Context),
+    Result1 = Result#{
+        options => Options1
+    },
+    case Options1 of
+        #{ is_user_external := true } -> {Result1, Context};
+        #{ is_user_local := true } -> {Result1, Context};
+        #{ is_user_local := false, is_user_external := false, username := Username }
+            when is_binary(Username), Username =/= <<>> ->
+            % Hide the fact an user is unknown, this prevents fishing for known usernames.
+            Options2 = Options1#{
+                is_user_local => true,
+                is_username_checked => true
+            },
+            {Result1#{ options => Options2 }, Context};
+        _ ->
+            {Result1, Context}
+    end;
+maybe_add_logon_options(#{ status := ok } = Result, _Payload, Context) ->
+    {Result, Context}.
+
 
 -spec onetime_token( map(), z:context() ) -> { map(), z:context() }.
 onetime_token(#{ <<"token">> := Token } = Payload, Context) ->

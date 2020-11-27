@@ -3,7 +3,7 @@ Add other login options
 #}
 <ul class="z-logon-extra">
     {% all include "_logon_extra.tpl" %}
-    <li class="text-muted z-logon-extra-separator">{_ or _}</li>
+    <li class="text-muted z-logon-extra-separator"><span>{_ or _}</span></li>
 </ul>
 
 {# Highlight the most recently used authentication method (if any) #}

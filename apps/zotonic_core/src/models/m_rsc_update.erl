@@ -502,7 +502,7 @@ update_editable_check(#rscupd{id = Id, is_acl_check = true} = RscUpd, PropsOrFun
         true ->
             update_normalize_props(RscUpd, PropsOrFun, Context);
         false ->
-            case m_rsc:p(Id, is_authoritative, Context) of
+            case m_rsc:p_no_acl(Id, is_authoritative, Context) of
                 false -> {error, non_authoritative};
                 true -> {error, eacces}
             end
@@ -756,17 +756,22 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
     UpdateProps1 = set_if_normal_update(RscUpd, <<"modified">>, erlang:universaltime(), UpdateProps),
     UpdateProps2 = set_if_normal_update(RscUpd, <<"modifier_id">>, z_acl:user(Context), UpdateProps1),
-    {IsForceUpdate, UpdatePropsN} = z_notifier:foldr(#rsc_update{
-                                            action = case IsInsert of
-                                                        true -> insert;
-                                                        false -> update
-                                                     end,
-                                            id = Id,
-                                            props = Raw
-                                        },
-                                        {IsInsert, UpdateProps2},
-                                        Context),
+    UpdResult = z_notifier:foldr(
+        #rsc_update{
+            action = case IsInsert of
+                        true -> insert;
+                        false -> update
+                     end,
+            id = Id,
+            props = Raw
+        },
+        {ok, UpdateProps2},
+        Context),
+    update_transaction_fun_db_1(UpdResult, Id, RscUpd, Raw, IsABefore, IsCatInsert, Context).
 
+update_transaction_fun_db_1({error, _} = Error, _Id, _RscUpd, _Raw, _IsABefore, _IsCatInsert, _Context) ->
+    Error;
+update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCatInsert, Context) ->
     % Pre-pivot of the category-id to the category sequence nr.
     UpdatePropsN1 = case maps:get(<<"category_id">>, UpdatePropsN, undefined) of
                         undefined ->
@@ -809,18 +814,27 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     NewPropsDiff = diff(NewPropsLangPruned, Raw),
 
     % 6. Perform optional update, check diff
-    case       RscUpd#rscupd.id =:= insert_rsc
-        orelse IsForceUpdate
-        orelse is_changed(Raw, NewPropsDiff)
-    of
+    IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
+    case is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context) of
         true ->
-            UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiff, Raw, Context),
-            {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
-            ok = update_page_path_log(Id, Raw, NewPropsDiff, Context),
-            {ok, Id, Raw, NewPropsDiff, IsABefore, IsCatInsert};
+            case (IsInsert orelse is_changed(Raw, NewPropsDiff)) of
+                true ->
+                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiff, Raw, Context),
+                    {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
+                    ok = update_page_path_log(Id, Raw, NewPropsDiff, Context),
+                    {ok, Id, Raw, NewPropsDiff, IsABefore, IsCatInsert};
+                false ->
+                    {ok, Id, notchanged}
+            end;
         false ->
-            {ok, Id, notchanged}
+            {error, eacces}
     end.
+
+is_update_allowed(true, Id, NewProps, Context) ->
+    z_acl:is_allowed(insert, #acl_rsc{ id = Id, props = NewProps }, Context);
+is_update_allowed(false, Id, NewProps, Context) ->
+    z_acl:is_allowed(update, #acl_rsc{ id = Id, props = NewProps }, Context).
+
 
 maybe_set_langs(#{ <<"language">> := Langs } = Props, NewLangs) when is_list(Langs) ->
     case Langs of

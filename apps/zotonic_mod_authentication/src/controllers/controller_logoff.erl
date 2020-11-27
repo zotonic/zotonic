@@ -33,4 +33,6 @@ previously_existed(Context) ->
 
 moved_temporarily(Context) ->
     Location = z_context:get_q(<<"p">>, Context, <<"/">>),
-    {{true, Location}, Context}.
+    LocationAbs = z_context:abs_url(Location, Context),
+    {{true, LocationAbs}, Context}.
+
