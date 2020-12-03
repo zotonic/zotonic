@@ -130,6 +130,8 @@ transport(Transport, Socket, _Self, Payload) when is_binary(Payload) ->
             Transport:close(Socket),
             Error
     end;
+transport(Transport, Socket, Self, {ok, Payload}) when is_binary(Payload) ->
+    transport(Transport, Socket, Self, Payload);
 transport(Transport, Socket, Self, disconnect) ->
     Transport:close(Socket),
     timer:apply_after(500, erlang, exit, [ Self, disconnect ]).
