@@ -392,7 +392,7 @@ reload_dispatch_list(#state{context=Context} = State) ->
 
 %% @doc Collect all dispatch lists.  Checks priv/dispatch for all dispatch list definitions.
 collect_dispatch_lists(Context) ->
-    ModDispOnPrio = lists:concat([ ModFiles || {_Mod, ModFiles} <- z_module_indexer:dispatch(Context) ]),
+    ModDispOnPrio = lists:concat([ lists:sort(ModFiles) || {_Mod, ModFiles} <- z_module_indexer:dispatch(Context) ]),
     Dispatch   = lists:map(fun get_file_dispatch/1, ModDispOnPrio),
     lists:flatten(Dispatch).
 
