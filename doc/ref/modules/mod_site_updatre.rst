@@ -43,6 +43,9 @@ The ``mod_site_update`` module is also used by the zotonic status site.
 
 Here the module adds buttons to update sites and a button to update the complete Zotonic system.
 
-This works well for smaller updates. Large updates that also change the datamodel or
-add new Erlang dependencies need more compilation and a system restart. So be careful with
-using this update button.
+Site updates get their datamodel fixed by automatic restarts of modules, ensure that you
+increment the ``-mod_schema(...)`` version number.
+
+Zotonic updates are a bit more complicated. Small updates will be fine. Large updates that
+also change the datamodel or add new Erlang dependencies need more compilation and a system
+restart. So be careful with using this update button.
