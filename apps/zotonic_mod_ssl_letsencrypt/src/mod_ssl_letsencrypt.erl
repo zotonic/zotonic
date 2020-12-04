@@ -366,7 +366,7 @@ handle_letsencrypt_result({ok, LEFiles}, State) ->
     Context = z_context:new(State#state.site),
     {ok, MyFiles} = cert_files_all(Context),
     {certfile, CertFile} = proplists:lookup(certfile, MyFiles),
-    {cacertfile, CaCertFile} = proplists:lookup(certfile, MyFiles),
+    {cacertfile, CaCertFile} = proplists:lookup(cacertfile, MyFiles),
     {keyfile, KeyFile} = proplists:lookup(keyfile, MyFiles),
     {CertData, IntermediateData} = split_cert_chain_file(maps:get(cert, LEFiles)),
     {ok, _} = file:write_file(CertFile, CertData),
