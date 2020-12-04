@@ -21,6 +21,7 @@
 
 -export([
          site_dir/1,
+         site_source_dir/1,
          module_dir/1,
          media_preview/1,
          media_archive/1,
@@ -42,6 +43,22 @@ site_dir(#context{ site = Site }) ->
 site_dir(Site) when is_atom(Site) ->
     code:lib_dir(Site).
 
+%% @doc Find the source directory of a site.
+-spec site_source_dir( z:context() | atom() ) -> file:filename_all() | {error, bad_name}.
+site_source_dir(#context{ site = Site }) ->
+    site_dir(Site);
+site_source_dir(Site) when is_atom(Site) ->
+    LibDir = z_utils:lib_dir(),
+    AppDir = filename:join([LibDir, "apps_user", Site]),
+    case filelib:is_dir(AppDir) of
+        true -> AppDir;
+        false ->
+            AppDir2 = filename:join([LibDir, "_checkouts", Site]),
+            case filelib:is_dir(AppDir2) of
+                true -> AppDir2;
+                false -> {error, bad_name}
+            end
+    end.
 
 %% @doc Return the path to the given module in the given context.
 %%      The module must have been compiled, so it is present in the code
