@@ -371,13 +371,16 @@ handle_letsencrypt_result({ok, LEFiles}, State) ->
     {CertData, IntermediateData} = split_cert_chain_file(maps:get(cert, LEFiles)),
     ok = file:write_file(CertFile, CertData),
     case IntermediateData of
-        none -> _ = file:delete(CaCertFile);
-        _ -> ok = file:write_file(CaCertFile, IntermediateData)
+        none ->
+            _ = file:delete(CaCertFile),
+            _ = download_cacert(Context);
+        _ ->
+            ok = file:write_file(CaCertFile, IntermediateData),
+            _ = file:change_mode(CaCertFile, 8#00644)
     end,
     {ok, _} = file:copy(maps:get(key, LEFiles), KeyFile),
     _ = file:change_mode(CertFile, 8#00644),
     _ = file:change_mode(KeyFile, 8#00600),
-    _ = download_cacert(Context),
     State#state{
         request_status = ok
     };
@@ -560,16 +563,9 @@ download_cacert(Context) ->
         {ok, {_Url, Hs, _Size, Cert}} ->
             case proplists:get_value("content-type", Hs) of
                 "application/x-x509-ca-cert" ->
-                    SSLDir = cert_dir(Context),
-                    Hostname = z_context:hostname(Context),
-                    CaCertFile = filename:join(SSLDir, <<Hostname/binary, ".ca.crt">>),
-                    case file:write_file(CaCertFile, Cert) of
-                        ok ->
-                            _ = file:change_mode(CaCertFile, 8#00644),
-                            ok;
-                        {error, _} = Error ->
-                            Error
-                    end;
+                    save_ca_cert(Cert, Context);
+                "application/x-pem-file" ->
+                    save_ca_cert(Cert, Context);
                 CT ->
                     lager:error("Download of ~p returned a content-type ~p",
                                 [?CA_CERT_URL, CT]),
@@ -581,3 +577,14 @@ download_cacert(Context) ->
             Error
     end.
 
+save_ca_cert(Cert, Context) ->
+    SSLDir = cert_dir(Context),
+    Hostname = z_context:hostname(Context),
+    CaCertFile = filename:join(SSLDir, <<Hostname/binary, ".ca.crt">>),
+    case file:write_file(CaCertFile, Cert) of
+        ok ->
+            _ = file:change_mode(CaCertFile, 8#00644),
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
