@@ -369,10 +369,10 @@ handle_letsencrypt_result({ok, LEFiles}, State) ->
     {cacertfile, CaCertFile} = proplists:lookup(cacertfile, MyFiles),
     {keyfile, KeyFile} = proplists:lookup(keyfile, MyFiles),
     {CertData, IntermediateData} = split_cert_chain_file(maps:get(cert, LEFiles)),
-    {ok, _} = file:write_file(CertFile, CertData),
+    ok = file:write_file(CertFile, CertData),
     case IntermediateData of
         none -> _ = file:delete(CaCertFile);
-        _ -> {ok, _} = file:write_file(CaCertFile, IntermediateData)
+        _ -> ok = file:write_file(CaCertFile, IntermediateData)
     end,
     {ok, _} = file:copy(maps:get(key, LEFiles), KeyFile),
     _ = file:change_mode(CertFile, 8#00644),
