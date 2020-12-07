@@ -16,7 +16,7 @@
 {% if m.acl.is_allowed.use.mod_admin_identity or id == m.acl.user %}
     <div class="form-group">
         <div id="auth2fa">
-            {% live template="_auth2fa_user_actions.tpl" id=id topic=[ "bridge", "origin", "model", "identity", "event", id, "#" %}
+            {% live template="_auth2fa_user_actions.tpl" id=id topic=[ "bridge", "origin", "model", "identity", "event", id, "#" ] %}
         </div>
     </div>
 {% endif %}
