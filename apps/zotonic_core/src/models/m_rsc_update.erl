@@ -657,26 +657,36 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
     % Allow the initial insertion props to be modified.
     CategoryId = z_convert:to_integer(maps:get(<<"category_id">>, Props)),
     InitProps = #{
+        <<"version">> => 0,
         <<"category_id">> => CategoryId,
-        <<"version">> => 0
+        <<"content_group_id">> => maps:get(<<"content_group_id">>, Props, undefined)
     },
     InsProps = z_notifier:foldr(#rsc_insert{ props = Props }, InitProps, Context),
 
-    % Check if the user is allowed to create the resource
+    % Create dummy resource with correct creator, category and content group.
+    % This resource will be updated with the other properties.
     InsertId = case maps:get(<<"creator_id">>, UpdateProps, undefined) of
                    self ->
-                       {ok, InsId} = z_db:insert(
+                        {ok, InsId} = z_db:insert(
                             rsc,
                             InsProps#{ <<"creator_id">> => undefined },
                             Context),
-                       1 = z_db:q("update rsc set creator_id = id where id = $1", [InsId], Context),
-                       InsId;
+                        1 = z_db:q("update rsc set creator_id = id where id = $1", [InsId], Context),
+                        InsId;
                    CreatorId when is_integer(CreatorId) ->
-                       {ok, InsId} = z_db:insert(
-                            rsc,
-                            InsProps#{ <<"creator_id">> => CreatorId },
-                            Context),
-                       InsId;
+                        {ok, InsId} = case z_acl:is_admin(Context) of
+                            true ->
+                                z_db:insert(
+                                    rsc,
+                                    InsProps#{ <<"creator_id">> => CreatorId },
+                                    Context);
+                            false ->
+                                z_db:insert(
+                                    rsc,
+                                    InsProps#{ <<"creator_id">> => z_acl:user(Context) },
+                                    Context)
+                        end,
+                        InsId;
                    undefined ->
                        {ok, InsId} = z_db:insert(
                             rsc,
