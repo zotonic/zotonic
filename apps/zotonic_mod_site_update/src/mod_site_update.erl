@@ -66,7 +66,7 @@ event(#postback{ message = {vcs_up, Args} }, Context) ->
                     case m_site_update:vcs_zotonic() of
                         {_, _} = VCS ->
                             async_notice('Zotonic', ?__("Fetching updates...", Context), Context),
-                            render_notice('Zotonic', m_site_update:update_vcs(VCS), Context);
+                            render_notice('Zotonic', m_site_update:update_vcs(VCS, Context), Context);
                         false ->
                             render_notice('Zotonic', ?__("Zotonic has not been checked out using version control.", Context), Context)
                     end;
