@@ -71,7 +71,7 @@
                         {% if args.subject_id %}
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1">
+                                    <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
                                     {_ Delete after disconnecting from _}: {{ args.subject_id.title }}
                                 </label>
                             </div>
