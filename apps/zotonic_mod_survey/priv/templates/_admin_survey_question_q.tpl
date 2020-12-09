@@ -1,15 +1,29 @@
-<li class="block" id="{{ #s }}">
+{% with is_new|if:element_id:#s as element_id %}
+
+{% if not is_new %}
+	<li class="block" id="{{ #s }}">
+{% endif %}
+
+    <!-- New block entry -->
+	<input type="hidden" name="blocks[]." value="">
+	<input type="hidden" class="block-type" name="blocks[].type" value="{{ blk.type|default:block_type }}" />
+
 	<div class="row">
-		<div class="col-lg-2 col-md-2">
-			<input name="block-{{ #s }}-name" type="text" class="input-block-level block-name {% if nosubmit %}nosubmit{% endif %}" placeholder="name" value="{{ blk.name }}" />
-			<label class="block-type">{% if blk and blk.type %}{{ blk.type|replace:"survey_":"" }}{% endif %}</label>
+		<div class="col-md-2">
+			<input name="blocks[].name"
+                   id="block-{{ #s }}-name"
+				   type="text"
+				   class="form-control block-name"
+				   placeholder="{_ name _}"
+				   value="{{ blk.name|escape }}"
+                   noautocomplete
+                   required
+			>
+			<label class="block-type">{{ blk.type|replace:"survey_":""|escape }}</label>
 		</div>
-		<div class="col-lg-10 col-md-10">
+		<div class="col-md-10">
 			<div class="block-options">
-			{% if blk and blk.type %}
-				<input type="hidden" class="block-type" name="block-{{#s}}-type" value="{{ blk.type }}" />
-				{% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=#s blk=blk id=id is_new=is_new %}
-			{% endif %}
+				{% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=element_id blk=blk id=id is_new=is_new %}
 			</div>
 		</div>
 	</div>
@@ -23,4 +37,19 @@
 			<li><a tabindex="-1" href="#question-delete">{_ Delete question _}</a></li>
 		</ul>
 	</div>
-</li>
+
+	{% if is_new %}
+	    {% javascript %}
+	        $("#{{ element_id }}").effect('highlight');
+	        setTimeout(function() {
+	            z_editor_init();
+	            z_admin_ensure_block_names();
+	        }, 100);
+	    {% endjavascript %}
+	{% endif %}
+
+{% if not is_new %}
+	</li>
+{% endif %}
+
+{% endwith %}

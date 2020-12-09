@@ -17,26 +17,32 @@
     </div>
 
     <div class="form-group view-expanded">
-        <label class="input inline">
-            <input type="text" id="block-{{name}}-disagree{{ lang_code_for_id }}" name="blocks[].disagree{{ lang_code_with_dollar }}"
-                  class="col-md-6 form-control" value="{{ blk.disagree[lang_code]  }}"
-                  placeholder="{_ Strongly Disagree _}" />
-        </label>
-        <label class="radio-inline"><input type="radio" name="{{ name }}" class="nosubmit" /> 1</label>
-        <label class="radio-inline"><input type="radio" name="{{ name }}" class="nosubmit" /> 2</label>
-        <label class="radio-inline"><input type="radio" name="{{ name }}" class="nosubmit" /> 3</label>
-        <label class="radio-inline"><input type="radio" name="{{ name }}" class="nosubmit" /> 4</label>
-        <label class="radio-inline"><input type="radio" name="{{ name }}" class="nosubmit" /> 5</label>
-        <label class="input inline">
-            <input type="text" id="block-{{name}}-agree{{ lang_code_for_id }}" name="blocks[].agree{{ lang_code_with_dollar }}"
-                  class="col-md-6 form-control" value="{{ blk.agree[lang_code]  }}"
-                  placeholder="{_ Strongly Agree _}" />
-        </label>
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" id="block-{{name}}-disagree{{ lang_code_for_id }}" name="blocks[].disagree{{ lang_code_with_dollar }}"
+                      class="form-control" value="{{ blk.disagree[lang_code]  }}"
+                      placeholder="{_ Strongly Disagree _}">
+            </div>
+            <div class="col-md-4">
+                <div style="text-align: center; font-size: 2em;">
+                    &#10112;&nbsp;&#10113;&nbsp;&#10114;&nbsp;&#10115;&nbsp;&#10116;
+                </div>
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="block-{{name}}-agree{{ lang_code_for_id }}" name="blocks[].agree{{ lang_code_with_dollar }}"
+                      class="form-control" value="{{ blk.agree[lang_code]  }}"
+                      placeholder="{_ Strongly Agree _}">
+            </div>
+        </div>
     </div>
 
     <div class="form-group view-expanded">
-       <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}" name="blocks[].explanation{{ lang_code_with_dollar }}" rows="2"
-              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
+       <textarea class="form-control"
+                 id="block-{{name}}-explanation{{ lang_code_for_id }}"
+                 name="blocks[].explanation{{ lang_code_with_dollar }}"
+                 rows="2"
+                 placeholder="{_ Explanation _} ({{ lang_code }})"
+        >{{ blk.explanation[lang_code]  }}</textarea>
     </div>
 
     {% else %}
