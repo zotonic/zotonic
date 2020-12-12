@@ -418,7 +418,7 @@ acl_update_check(insert, _Id, Props, Context) ->
     #{
         <<"category_id">> := CatId
     } = Props,
-    CGId = maps:get(<<"content_group_id">>, Props, undefined),
+    CGId = maps:get(<<"content_group_id">>, Props, default_content_group),
     case acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) of
         true ->
             true;
