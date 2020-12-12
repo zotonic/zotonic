@@ -416,9 +416,9 @@ acl_context_authenticated(#context{} = Context) ->
 
 acl_update_check(insert, _Id, Props, Context) ->
     #{
-        <<"category_id">> := CatId,
-        <<"content_group_id">> := CGId
+        <<"category_id">> := CatId
     } = Props,
+    CGId = maps:get(<<"content_group_id">>, Props, undefined),
     case acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) of
         true ->
             true;
