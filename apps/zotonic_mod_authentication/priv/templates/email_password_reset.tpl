@@ -33,5 +33,5 @@
 
 {% block disclaimer %}
 <p style="color: #666; font-size: 80%;">--<br/>
-{_ You receive this email because you or someone else requested a password reset for your account. You or the someone else either entered your username or email address. You will not receive any additional emails because of this request. _}</p>
+{_ You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request. _}</p>
 {% endblock %}
