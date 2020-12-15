@@ -533,7 +533,7 @@ url2props(Url, Context) ->
 is_valid_resize_mime("image/jpeg") -> true;
 is_valid_resize_mime("image/gif") -> true;
 is_valid_resize_mime("image/png") -> true;
-is_valid_resize_mime(X) -> ?DEBUG(X), false.
+is_valid_resize_mime(_Mime) -> false.
 
 map_mime_props(Props) ->
     [ map_mime_prop(P) || P <- Props ].
