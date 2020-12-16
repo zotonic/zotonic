@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 13:34\n"
+"PO-Revision-Date: 2020-12-16 14:31\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -210,7 +210,7 @@ msgstr ""
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:6
 msgid "Close"
-msgstr ""
+msgstr "ปิด"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:45
 msgid "Collaboration group managers"
@@ -846,7 +846,7 @@ msgstr ""
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:93
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:8./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:42
 msgid "Back"
-msgstr ""
+msgstr "ย้อนกลับ"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -5198,7 +5198,7 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:42
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:23
 msgid "April"
-msgstr ""
+msgstr "เมษายน"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:61
 msgid "Aug"
@@ -5207,7 +5207,7 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:46
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:27
 msgid "August"
-msgstr ""
+msgstr "สิงหาคม"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:24
 msgid "BCE"
@@ -5224,7 +5224,7 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:50
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:31
 msgid "December"
-msgstr ""
+msgstr "ธันวาคม"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:55
 msgid "Feb"
@@ -5233,7 +5233,7 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:40
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:21
 msgid "February"
-msgstr ""
+msgstr "กุมภาพันธ์"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:24
 msgid "Fix timezone, show all dates in the above timezone."
@@ -5241,7 +5241,7 @@ msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:33
 msgid "Friday"
-msgstr ""
+msgstr "วันศุกร์"
 
 #: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:8
 msgid "Here you can set the default localization configurations."
@@ -5254,7 +5254,7 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:39
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:20
 msgid "January"
-msgstr ""
+msgstr "มกราคม"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:60
 msgid "Jul"
@@ -5263,7 +5263,7 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:45
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:26
 msgid "July"
-msgstr ""
+msgstr "กรกฎาคม"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:59
 msgid "Jun"
@@ -5272,7 +5272,7 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:44
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:25
 msgid "June"
-msgstr ""
+msgstr "มิถุนายน"
 
 #: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:3
 msgid "L10N Configuration"
@@ -5289,16 +5289,16 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:41
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:22
 msgid "March"
-msgstr ""
+msgstr "มีนาคม"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:43./apps/zotonic_mod_l10n/src/support/l10n_date.erl:58
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:24
 msgid "May"
-msgstr ""
+msgstr "พฤษภาคม"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:29
 msgid "Monday"
-msgstr ""
+msgstr "วันจันทร์"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:64
 msgid "Nov"
@@ -5307,7 +5307,7 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:49
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:30
 msgid "November"
-msgstr ""
+msgstr "พฤศจิกายน"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:63
 msgid "Oct"
@@ -5316,11 +5316,11 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:48
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:29
 msgid "October"
-msgstr ""
+msgstr "ตุลาคม"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:34
 msgid "Saturday"
-msgstr ""
+msgstr "วันเสาร์"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:62
 msgid "Sep"
@@ -5329,11 +5329,11 @@ msgstr ""
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:47
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:28
 msgid "September"
-msgstr ""
+msgstr "กันยายน"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:35
 msgid "Sunday"
-msgstr ""
+msgstr "วันอาทิตย์"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:32
 msgid "This forces the timezone to the configured timezone. Irrespective of the timezone selected by the user or user-agent."
@@ -5345,15 +5345,15 @@ msgstr ""
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:32
 msgid "Thursday"
-msgstr ""
+msgstr "วันพฤหัสบดี"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:30
 msgid "Tuesday"
-msgstr ""
+msgstr "วันอังคาร"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:31
 msgid "Wednesday"
-msgstr ""
+msgstr "วันพุธ"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:20
 msgid "midnight"
@@ -6982,7 +6982,7 @@ msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
 msgid "Continue"
-msgstr ""
+msgstr "สานต่อ"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:156
 msgid "Country select"
@@ -7351,7 +7351,7 @@ msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:4./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results"
-msgstr ""
+msgstr "ผล"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:78./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:59
 msgid "Results from the respondent"
@@ -7371,7 +7371,7 @@ msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_country.tpl:23
 msgid "Select country"
-msgstr ""
+msgstr "เลือกประเทศ"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:71
 msgid "Select which you agree with."
@@ -7427,11 +7427,11 @@ msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:8
 msgid "Start"
-msgstr ""
+msgstr "เริ่มต้น"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:51./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52./apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Stop"
-msgstr ""
+msgstr "เลิก"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Stop the survey after this page. No questions are submitted."
@@ -7643,7 +7643,7 @@ msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:39
 msgid "must be a number"
-msgstr ""
+msgstr "จะต้องเป็นตัวเลข"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:31./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:41
 msgid "must be a phone number"
@@ -7651,7 +7651,7 @@ msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:37
 msgid "must be an e-mail address"
-msgstr ""
+msgstr "ต้องเป็นที่อยู่อีเมล"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:13./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:24
 msgid "name >= 2"
