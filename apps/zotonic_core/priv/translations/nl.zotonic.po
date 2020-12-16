@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 14:30\n"
+"PO-Revision-Date: 2020-12-16 15:30\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -5838,7 +5838,7 @@ msgstr "Aantal ontvangers op deze lijst:"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:26
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
-msgstr ""
+msgstr "Bewaar alleen ontvangers op deze lijst die op beide lijsten <em>staan</em>"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:9
 msgid "Operation"
@@ -6871,7 +6871,7 @@ msgstr "Je kunt dit wijzigen door <tt>poort</tt> in te stellen in het configurat
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:30
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr ""
+msgstr "U kunt dit veranderen door <tt>ssl_port</tt> in te stellen in het <tt>zotonic.config</tt> configuratiebestand."
 
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:142
 msgid "You need to be an administrator to request certificates."
@@ -7141,7 +7141,7 @@ msgstr "Ik hou van Chinese restaurants"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
-msgstr ""
+msgstr "Als u <i>waarde</i> wilt opslaan maar <i>antwoord</i>, gebruikt u waarde # antwoord. Bijv. <i>2019 # Afgestudeerd in 2019</i> slaat 2019 op in de resultaten."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:26./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
