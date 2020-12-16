@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 14:30\n"
+"PO-Revision-Date: 2020-12-16 15:30\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -8033,7 +8033,7 @@ msgstr "Максимальная задержка опроса"
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_edit_sidebar_twitter.tpl:16
 msgid "Note that this user or organization must have <em>create</em> rights on the <em>Tweet</em> category."
-msgstr ""
+msgstr "Обратите внимание, что у этого пользователя или организации должно быть <em>прав на создание</em> в категории <em>твита</em>."
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:90
 msgid "Save Twitter Settings"
