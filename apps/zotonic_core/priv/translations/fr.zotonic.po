@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 14:30\n"
+"PO-Revision-Date: 2020-12-16 15:30\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -2035,7 +2035,7 @@ msgstr "Vous êtes en train de monter un :"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:4
 msgid "You are editing the <b>Site Administrator Account</b>."
-msgstr ""
+msgstr "Vous modifiez le <b>Compte Administrateur de Site</b>."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "You are going to duplicate the page"
@@ -7137,7 +7137,7 @@ msgstr "J'aime les restaurants chinois"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
-msgstr ""
+msgstr "Si vous souhaitez stocker <i>valeur</i> mais afficher <i>réponse</i>, utilisez la valeur # réponse. Par exemple, <i>2019 # Diplômé en 2019</i> stockera 2019 dans les résultats."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:26./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
