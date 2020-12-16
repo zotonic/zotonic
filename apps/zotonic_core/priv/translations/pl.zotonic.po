@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 14:30\n"
+"PO-Revision-Date: 2020-12-16 15:30\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -7129,7 +7129,7 @@ msgstr "Jestem"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:22
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]."
-msgstr ""
+msgstr "Mam [age] lat. Lubię [lody = waniliowe | truskawkowe | czekoladowe | inne] lody, a moim ulubionym kolorem jest [kolor]."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
 msgid "I like Chinese restaurants"
