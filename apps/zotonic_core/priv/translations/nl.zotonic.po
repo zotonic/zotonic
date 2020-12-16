@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 20:40\n"
+"PO-Revision-Date: 2020-12-16 21:40\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -147,11 +147,11 @@ msgstr "Alle normale paginagroepen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:27
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Toegestane bestandstypen en mime-typen, apart met ',' - type 'geen' als er geen extra typen zijn toegestaan, laat leeg voor de standaardinstelling"
+msgstr "Toegestane bestandstypen en mime-typen, gescheiden met ',' — type 'geen' als er geen extra typen zijn toegestaan, laat leeg voor de standaardinstelling"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
-msgstr "Weet je zeker dat je de volgende gebruikersgroepen wilt verwijderen?"
+msgstr "Weet je zeker dat je de onderstaande gebruikersgroepen wilt verwijderen?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:7
 msgid "Are you sure you want to make all rules permanent?"
@@ -182,7 +182,7 @@ msgstr "Weet je zeker dat je alle regels wilt terugzetten naar de gepubliceerde 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:190
 msgid "Cancel"
-msgstr "Annuleren"
+msgstr "Annuleer"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:172./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
@@ -523,11 +523,11 @@ msgstr "Sorry, je hebt geen rechten om dit te verwijderen."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
-msgstr "Sorry, je hebt geen rechten om pagina’s in deze categorie en paginagroep toe te voegen."
+msgstr "Sorry, je hebt geen rechten om pagina’s van deze categorie in de geselecteerde paginagroep toe te voegen."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
-msgstr "Groep systeempagina’s"
+msgstr "Systeempagina’s groep"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:26
 msgid "Test ACL rules"
@@ -547,7 +547,7 @@ msgstr "De URL is één dag geldig."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:7
 msgid "The default upload size is:"
-msgstr "The standaard bestandsgrootte is:"
+msgstr "De standaard upload grootte is:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:47
 msgid "There are no users within these user groups."
@@ -555,7 +555,7 @@ msgstr "Deze gebruikersgroepen bevatten geen gebruikers"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:15
 msgid "These settings come into effect immediately, no publish of rules is needed,"
-msgstr "Deze instellingen treden onmiddellijk in werking, er is geen publicatie van regels nodig,"
+msgstr "Deze instellingen treden onmiddellijk in werking,  de regels hoeven niet gepubliceerd te worden."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:33
 msgid "They are managed by their own manager and use the access rules below."
@@ -590,7 +590,7 @@ msgstr "Regels uitproberen..."
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:126
 msgid "Upload settings saved"
-msgstr "Opgeslagen instellingen uploaden"
+msgstr "Uploadinstellingen opgeslagen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
@@ -614,7 +614,7 @@ msgstr "Welke versie van de toegangsregels wil je gebruiken?"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:40
 msgid "You are not allowed to move to this collaboration group."
-msgstr "Het is niet toegestaan om naar deze samenwerkingsgroep over te stappen."
+msgstr "Het is niet toegestaan om naar deze samenwerkingsgroep te verplaatsen."
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:57
 msgid "You are not allowed to perform this action"
@@ -634,7 +634,7 @@ msgstr "Je gebruikt nu de <b>testversie</b> van de toegangsregels."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
 msgid "You can switch back to the published access control rules by:"
-msgstr "Je kunt de gepubliceerde toegangsregels terugzetten door:"
+msgstr "Je kunt terug naar de gepubliceerde toegangsregels door:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
@@ -654,7 +654,7 @@ msgstr "op de knop ‘Gebruik gepubliceerde regels’ hieronder te klikken"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
 msgid "closing this browser tab"
-msgstr "deze browsertabblad sluiten"
+msgstr "dit browsertabblad te sluiten"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "delete (acl action)"
@@ -662,7 +662,7 @@ msgstr "verwijder"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "deny"
-msgstr "blokkeren"
+msgstr "blokkeer"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "edit (acl action)"
@@ -686,7 +686,7 @@ msgstr "alleen eigen pagina’s"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
-msgstr "naar iemand anders sturen."
+msgstr "stuur deze URL naar iemand anders om te testen"
 
 #: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
 msgid "use (acl action)"
@@ -694,7 +694,7 @@ msgstr "gebruik (acl actie)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "gebruik <b>Nieuw privévenster</b>"
+msgstr "gebruik <b>Nieuw privévenster</b> (controleer het menu <b>Bestand</b> van uw browser)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
@@ -911,15 +911,15 @@ msgstr "Klik om een voorbeeld te bekijken."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:89
 msgid "Close Sockets"
-msgstr "Contactdozen sluiten"
+msgstr "Sockets  sluiten"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
-msgstr "Sluit alle stopcontacten van ip-adressen die meer dan &gt; 250 open stopcontacten hebben."
+msgstr "Sluit alle sockets van ip-adressen die meer dan &gt; 250 open sockets hebben."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
 msgid "Close preview"
-msgstr "Voorbeschouwing sluiten"
+msgstr "Voorbeeld sluiten"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:23
 msgid "Config Directory"
@@ -948,11 +948,11 @@ msgstr "Paginaconnectie maken"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Connections and Sessions"
-msgstr "Aansluitingen en sessies"
+msgstr "Verbindingen en sessies"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:59
 msgid "Copied download link to clipboard"
-msgstr "Gekopieerde downloadlink naar klembord"
+msgstr "Download link naar klembord gekopieerd"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:56
 msgid "Copy download link"
@@ -964,7 +964,7 @@ msgstr "Kon geen verbinding maken met de website."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:9
 msgid "Could not detect anything to import on that URL or embed code."
-msgstr "Kon niets detecteren om te importeren op die URL of insluitcode."
+msgstr "Kon niets detecteren om te importeren op die URL of insluit code."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
 msgid "Count"
@@ -977,11 +977,11 @@ msgstr "Land"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:241
 msgid "Create"
-msgstr "Creëer"
+msgstr "Maak"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:10
 msgid "Create or find"
-msgstr "Creëren of vinden"
+msgstr "Maken of vinden"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 msgid "Created by"
@@ -1022,7 +1022,7 @@ msgstr "Datumbereik"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Date ranges"
-msgstr "Datumreeksen"
+msgstr "Datumbereiken"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:218./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
 msgid "Delete after disconnecting from"
@@ -1054,7 +1054,7 @@ msgstr "Ontkoppel"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Discover media"
-msgstr "Ontdek de media"
+msgstr "Ontdek media"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1097,7 +1097,7 @@ msgstr "Bewerk"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:70
 msgid "Edit:"
-msgstr "Bewerken:"
+msgstr "Bewerk:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:140
 msgid "Email address"
@@ -1105,15 +1105,15 @@ msgstr "E-mailadres"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:138
 msgid "Email address for public display"
-msgstr "E-mailadres voor openbare vertoning"
+msgstr "E-mailadres voor openbare weergave"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:5
 msgid "Embed"
-msgstr "Embedden"
+msgstr "Embed"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:25
 msgid "Embed code will be sanitized for allowed sites and html."
-msgstr "Embed code zal worden gezuiverd voor toegestane sites en html."
+msgstr "Embed code wordt opgeschoond voor toegestane sites en html."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:174
 msgid "Embed page"
@@ -1341,11 +1341,11 @@ msgstr "Mediabestanden"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Media URL"
-msgstr "URL van media"
+msgstr "Media-URL"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:60
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
-msgstr "Mediabestanden omvatten alle geuploade afbeeldingen, filmpjes en documenten. Ze kunnen worden gekoppeld aan pagina's."
+msgstr "Mediabestanden omvatten alle geüploade afbeeldingen, filmpjes en documenten. Ze kunnen worden gekoppeld aan pagina's."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
 msgid "Media file"
@@ -1440,11 +1440,11 @@ msgstr "Geen pagina's gevonden."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:61
 msgid "Number of open sockets grouped per ip-address (top 10)"
-msgstr "Aantal open stopcontacten gegroepeerd per ip-adres (top 10)"
+msgstr "Aantal open sockets gegroepeerd per ip-adres (top 10)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:47
 msgid "Page Count"
-msgstr "Pagina-telling"
+msgstr "Aantal pagina's"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:196
@@ -1469,7 +1469,7 @@ msgstr "Paginaslug"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:29
 msgid "Page title"
-msgstr "Paginatitel"
+msgstr "Pagina titel"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:99
 msgid "Pages"
@@ -1493,7 +1493,7 @@ msgstr "Lengte van pivot-wachtrij:"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:3
 msgid "Please fill in the title of the new page."
-msgstr "Vul a.u.b. de titel in van de nieuwe pagina."
+msgstr "Vul de titel van de nieuwe pagina in."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:188
 msgid "Postcode"
@@ -1523,7 +1523,7 @@ msgstr "Bescherm"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:41
 msgid "Protect from deletion"
-msgstr "Bescherm"
+msgstr "Bescherm tegen verwijderen"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:37
 msgid "Publication date of original article"
@@ -1859,11 +1859,11 @@ msgstr "Dit bestand is te groot."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
-msgstr "Dit is de inhoud van het systeem."
+msgstr "Dit is systeeminhoud."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:42
 msgid "This name is in use by another page."
-msgstr "Deze gebruikersnaam bestaat al, kies a.u.b. een andere."
+msgstr "Deze naam wordt door een andere pagina gebruikt."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:25
 msgid "This page has been deleted."
@@ -1871,7 +1871,7 @@ msgstr "Deze pagina is verwijderd."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:9
 msgid "This page holds a collection of administrative options to perform certain tasks on this Zotonic installation."
-msgstr "Deze pagina bevat een collectie van administratie taken."
+msgstr "Deze pagina bevat een verzameling van administratieve opties om bepaalde taken uit te voeren op deze Zotonic-installatie."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8
 msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
@@ -1879,7 +1879,7 @@ msgstr "Deze pagina kan verbindingen hebben naar andere pagina's. Bijvoorbeeld k
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
 msgid "This resource was created by the module"
-msgstr "Deze pagina was vanzelf aangemaakt door de module"
+msgstr "Deze pagina was aangemaakt door de module"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:66
 msgid "Till"
@@ -1887,7 +1887,7 @@ msgstr "Tot"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
 msgid "Timeout while trying to fetch data from the website."
-msgstr "Time-out terwijl u probeert gegevens van de website te halen."
+msgstr "Time-out tijdens het ophalen van gegevens van de website."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:4./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
@@ -1927,11 +1927,11 @@ msgstr "Unieke URI"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:19
 msgid "Unused"
-msgstr "Ongebruikte"
+msgstr "Ongebruikt"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:10
 msgid "Upload File"
-msgstr "Bestand uploaden"
+msgstr "Upload bestand"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
@@ -1945,7 +1945,7 @@ msgstr "Upload bestand"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:87
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
 msgid "Uploaded"
-msgstr "geupload"
+msgstr "Geüpload"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:23
 msgid "Usage"
@@ -2198,11 +2198,11 @@ msgstr "Categorieën"
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:12
 msgid "Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy."
-msgstr "Categoriëen worden gebruikt om pagina's op een logische manier van\\nelkaar te onderscheiden. Elke pagina in het systeem zit in precies één\\ncategorie. De categoriëen zijn hierarchiesch onderverdeeld. Op deze\\npagina kan je deze hierarchie bewerken."
+msgstr "Categoriëen worden gebruikt om pagina's op een logische manier van\\nelkaar te onderscheiden. Elke pagina in het systeem zit in precies één\\ncategorie. De categoriëen zijn hiërarchisch onderverdeeld. Op deze\\npagina kan je deze hiërarchie bewerken."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:3
 msgid "Category Hierarchy"
-msgstr "Categorie hierarchie"
+msgstr "Categorie hiërarchie"
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
@@ -2220,7 +2220,7 @@ msgstr "Het verwijderen is afgebroken, want er zijn nog pagina’s in de categor
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:27
 msgid "Drag categories to the place where you want them in the hierarchy."
-msgstr "Versleep categorieën naar de plaats waar je deze in de hierarchie wilt hebben."
+msgstr "Versleep categorieën naar de plaats waar je deze in de hiërarchie wilt hebben."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:21
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:45
@@ -2263,7 +2263,7 @@ msgstr "Alternatieve namen"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
-msgstr "Weet je zeker dat je het volgende item wilt weggooien:"
+msgstr "Weet je zeker dat je deze configuratieregel wilt weggooien:"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:8
 msgid "Certificates provided by SSL modules"
@@ -2285,7 +2285,7 @@ msgstr "Schakel <strong>mod_ssl_letsencrypt</strong> in om gratis SSL-certificat
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
 msgid "Hostname"
-msgstr "Gastheer/vrouw"
+msgstr "Hostnaam"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:15./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -2301,7 +2301,7 @@ msgstr "Bewerkt"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:66
 msgid "No configurations found."
-msgstr "Geen items gevonden."
+msgstr "Geen configuratieregels gevonden."
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:67
 msgid "Only administrators can change the configuration."
@@ -2317,7 +2317,7 @@ msgstr "Alleen beheerders kunnen configuratieregels toevoegen."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
-msgstr "Vul a.u.b. de module, sleutel en waarde in voor het nieuwe configuratieitem."
+msgstr "Vul de module, sleutel en waarde in voor de nieuwe configuratieregel."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
 msgid "SSL Certificates"
@@ -2333,7 +2333,7 @@ msgstr "Systeemconfiguratie"
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
-msgstr "Deze sleutel bestaat al, kies a.u.b. een andere naam voor de sleutel."
+msgstr "Deze sleutel bestaat al, kies een andere naam voor de sleutel."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
@@ -2341,11 +2341,11 @@ msgstr "De standaard directory voor alle site-certificaten is"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
-msgstr "Dit kan niet ongedaan worden: het item is voor altijd weg."
+msgstr "Dit kan niet ongedaan worden: de configuratieregel is voor altijd weg."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl.tpl:15
 msgid "This certificate is generated and signed by Zotonic. It will be used if no other certificates are available."
-msgstr "Dit certificaat wordt gegenereerd en ondertekend door Zotonic. Het wordt gebruikt als er geen andere certificaten beschikbaar zijn."
+msgstr "Dit certificaat is gegenereerd en ondertekend door Zotonic. Het wordt gebruikt als er geen andere certificaten beschikbaar zijn."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:10
 msgid "This is a list of the certificates provided by modules and the system. The first certificate will be used."
@@ -2353,7 +2353,7 @@ msgstr "Dit is een lijst van de certificaten die door de modules en het systeem 
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:31
 msgid "This module doesn’t supply a certificate."
-msgstr "Deze module levert geen certificaat op."
+msgstr "Deze module levert geen certificaten."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:16
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:37
