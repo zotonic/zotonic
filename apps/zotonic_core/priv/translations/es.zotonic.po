@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 14:30\n"
+"PO-Revision-Date: 2020-12-16 15:30\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -912,7 +912,7 @@ msgstr "Cerrar los enchufes"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
-msgstr ""
+msgstr "Cierre todos los sockets de las direcciones IP que tengan más de &gt; 250 sockets abiertos."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
 msgid "Close preview"
@@ -1228,7 +1228,7 @@ msgstr "Cabecera"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:24
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
-msgstr ""
+msgstr "Aquí puede editar los argumentos de la consulta de búsqueda. Cada argumento sigue su propia línea. Para obtener más información, consulte la documentación <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">sobre los argumentos de consulta</a> en el sitio web de Zotonic."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:31
 msgid "Home Directory"
