@@ -1,0 +1,3 @@
+files:
+  - source: /apps/zotonic_core/priv/translations/*.pot
+    translation: /apps/zotonic_core/priv/translations/%two_letters_code%.%file_name%.po
