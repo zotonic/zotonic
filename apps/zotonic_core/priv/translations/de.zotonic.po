@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 14:30\n"
+"PO-Revision-Date: 2020-12-16 15:30\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -6864,7 +6864,7 @@ msgstr "Das kann eine Weile dauern, bleiben Sie dran!"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:23
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr ""
+msgstr "Sie können dies ändern, indem Sie <tt>Port</tt> in der Konfigurationsdatei <tt>zotonic.config</tt> festlegen."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:30
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
