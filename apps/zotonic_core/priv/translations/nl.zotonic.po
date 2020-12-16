@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 22:40\n"
+"PO-Revision-Date: 2020-12-16 23:40\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -5614,11 +5614,11 @@ msgstr "Weet je zeker dat je de mailinglijst wilt verwijderen"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:49
 msgid "Are you sure you want to reset the statistics for this mailing? This means that if you send the mailing again afterwards, recipients might have gotten the mailing twice."
-msgstr "Weet u zeker dat u de statistieken voor deze mailing wilt resetten? Dit betekent dat als u de mailing achteraf opnieuw verstuurt, de ontvangers de mailing misschien twee keer hebben gekregen."
+msgstr "Weet je zeker dat je de statistieken voor deze mailing wilt resetten? Dit betekent dat als je de mailing achteraf opnieuw verstuurt, de ontvangers de mailing misschien twee keer hebben gekregen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:9
 msgid "Before you will receive any further mail you need to confirm your subscription."
-msgstr "Voordat u nog een mailtje ontvangt, moet u uw inschrijving bevestigen."
+msgstr "Voordat je nog een mailtje ontvangt, moet je je inschrijving bevestigen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:5
 msgid "Cancel mailing"
@@ -5626,11 +5626,11 @@ msgstr "Annuleer mailing"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Check to activate the e-mail address."
-msgstr "Vink aan om het email adres te activeren"
+msgstr "Vink aan om het e-mail adres te activeren"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
 msgid "Clear"
-msgstr "Duidelijk"
+msgstr "Wis"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:10
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
@@ -5638,11 +5638,11 @@ msgstr "Klik op <strong>uitschrijven</strong> om jezelf van de mailinglijst te v
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:40
 msgid "Click here when you can’t read the message below."
-msgstr "Klik hier als u het onderstaande bericht niet kunt lezen."
+msgstr "Klik hier als je het onderstaande bericht niet kunt lezen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid " Click the button below to confirm your subscription to this mailing list."
-msgstr " Klik op de onderstaande knop om uw inschrijving op deze mailinglijst te bevestigen."
+msgstr " Klik op de onderstaande knop om je inschrijving op deze mailinglijst te bevestigen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
 msgid "Click to view log entries"
@@ -5691,7 +5691,7 @@ msgstr "Alle ontvangers van deze lijst verwijderen?"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:50
 msgid "Deleted the mailing list."
-msgstr "De mailinglijst verwijderd."
+msgstr "De mailinglijst is verwijderd."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:32
@@ -5721,11 +5721,11 @@ msgstr "E-mailadres bijgewerkt"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mail_page_button.tpl:3
 msgid "E-mail page"
-msgstr "Email pagina"
+msgstr "E-mail pagina"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_share_page_email.tpl:1./apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:42
 msgid "E-mail this page"
-msgstr "Email deze pagina"
+msgstr "E-mail deze pagina"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:52
 msgid "Edit recipient"
@@ -5750,11 +5750,11 @@ msgstr "Voornaam"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "From now on you will receive mail from our mailing list."
-msgstr "Vanaf nu ontvangt u mail van onze mailinglijst."
+msgstr "Vanaf nu ontvang je mail van onze mailinglijst."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
 msgid "Give your e-mail address to subscribe to"
-msgstr "Geef je email adres om in te schrijven voor"
+msgstr "Geef je e-mailadres om in te schrijven voor"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:16
 msgid "Go to mailinglist page"
@@ -5782,8 +5782,8 @@ msgid "It appears you have sent\n"
 "    the recipients that did not yet receive the mail will get it. As a\n"
 "    safety-caution, it is impossible to send the same page twice to\n"
 "    the same e-mail address."
-msgstr "Het lijkt erop dat u\n"
-"    deze pagina al een keer naar deze lijst heeft gestuurd. Als je hem opnieuw verstuurt, krijgen alleen\n"
+msgstr "Het lijkt erop dat je\n"
+"    deze pagina al een keer naar deze lijst hebt gestuurd. Als je hem opnieuw verstuurt, krijgen alleen\n"
 "    de ontvangers die de mail nog niet hebben ontvangen. Als\n"
 "    veiligheidsmaatregel is het onmogelijk om dezelfde pagina twee keer naar\n"
 "    hetzelfde e-mailadres te sturen."
@@ -5794,7 +5794,7 @@ msgstr "Bewaar mailing"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:26
 msgid "Mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
@@ -5818,7 +5818,7 @@ msgstr "Mailings worden verstuurd naar:"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:41
 msgid "Matched via Query"
-msgstr "Matched via Query"
+msgstr "Matched met Query"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:14
 msgid "New mailing list"
@@ -5850,11 +5850,11 @@ msgstr "Onze excuses voor het ongemak."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:19
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
-msgstr "Pagina's die de 'subscriberof'-kant van de mailinglijst hebben."
+msgstr "Pagina's die de 'subscriberof'-connectie naar de mailinglijst hebben."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:20
 msgid "Pages that match the query below."
-msgstr "Pagina's die overeenkomen met de onderstaande vraag."
+msgstr "Pagina's die overeenkomen met de onderstaande zoekvraag."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:47
 msgid "Perform operation"
@@ -5874,11 +5874,11 @@ msgstr "Bevestig je inschrijving voor"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:5
 msgid "Please enter the e-mail address you want to send a test mail to."
-msgstr "Vul het email adres voor de test email in."
+msgstr "Vul het e-mailadres voor de test e-mail in."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:5
 msgid "Please enter the e-mail address you want to send this page to."
-msgstr "Vul het email adres om deze pagina heen te sturen in."
+msgstr "Vul het e-mailadres om deze pagina heen te sturen in."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "Please follow"
@@ -5915,7 +5915,7 @@ msgstr "Ontvangers"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:10
 msgid "Recipients are subscribed either as email-only (via a simple signup form), or as subscribed persons in the system."
-msgstr "Ontvangers worden geabonneerd als e-mail-only (via een eenvoudig aanmeldingsformulier), of als geabonneerde personen in het systeem."
+msgstr "Ontvangers zijn geabonneerd als e-mail-only (via een eenvoudig aanmeldingsformulier), of als geabonneerde personen in het systeem."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
 msgid "Recipients for"
@@ -5939,7 +5939,7 @@ msgstr "Selecteer…"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:18
 msgid "Send e-mail"
-msgstr "Verstuur email"
+msgstr "Verstuur e-mail"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
 msgid "Send mailing"
@@ -5963,7 +5963,7 @@ msgstr "Verstuur de mailing direct nadat het vakje \"gepubliceerd\" is aangevink
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:17
 msgid "Send the mailing right now, but do not include a link back to the website."
-msgstr "Stuur de mailing nu meteen door, maar neem geen link terug naar de website."
+msgstr "Verstuur de mailing meteen, maar voeg geen link terug naar de website toe."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:14
 msgid "Send this page to a mailinglist and view mailinglist statistics."
@@ -5971,7 +5971,7 @@ msgstr "Stuur deze pagina naar een mailinglijst en bekijk de statistieken van de
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:24./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
 msgid "Send this page to a single address"
-msgstr "Verstuur deze pagina naar een email adres"
+msgstr "Verstuur deze pagina naar een e-mailadres"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:16
 msgid "Send this page to the test mailing list."
@@ -5979,19 +5979,19 @@ msgstr "Verstuur deze pagina naar de test mailinglijst"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:71
 msgid "Send welcome"
-msgstr "Stuur welkomstemail"
+msgstr "Stuur welkomst e-mail"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:21
 msgid "Sender address for e-mails (optional)"
-msgstr "Afzender email adres voor de emails (optioneel)"
+msgstr "Afzender e-mailadres voor de e-mails (optioneel)"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:16
 msgid "Sender name for e-mails (optional)"
-msgstr "Afzendernaam voor de emails (optioneel)"
+msgstr "Afzendernaam voor de e-mails (optioneel)"
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:51
 msgid "Sending the e-mail..."
-msgstr "Email wordt verstuurd..."
+msgstr "E-mail wordt verstuurd..."
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:146
 msgid "Sending the page to"
@@ -6039,7 +6039,7 @@ msgstr "Abonneer op"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:40
 msgid "Subscriber Edges"
-msgstr "Abonnee Randen"
+msgstr "Abonnee connecties"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:18
 msgid "Subscribers, added via the subscription form."
@@ -6051,11 +6051,11 @@ msgstr "Doel mailinglijst"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:21
 msgid "Thank you. You are now subscribed."
-msgstr "Dank u wel. U bent nu ingeschreven."
+msgstr "Dank je wel. Je bent nu ingeschreven."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:16
 msgid "Thank you. You are now unsubscribed."
-msgstr "Dank u wel. U bent nu uitgeschreven."
+msgstr "Dank je wel. Je bent nu uitgeschreven."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "The confirmation key is unknown. Either you already confirmed or something else went wrong."
@@ -6063,11 +6063,11 @@ msgstr "De bevestigingscode is onbekend. Je bent al bevestigd of er ging iets mi
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:57
 msgid "The e-mails are being sent..."
-msgstr "De emails worden verstuurd..."
+msgstr "De e-mails worden verstuurd..."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
-msgstr "De sleutel in uw link komt niet overeen met een abonnement. Ofwel heeft u zich al afgemeld, ofwel is de mailinglijst verwijderd."
+msgstr "De sleutel in je link komt niet overeen met een abonnement. Je hebt je al afgemeld, of de mailinglijst is verwijderd."
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:109
 msgid "The mailing has been canceled."
@@ -6099,7 +6099,7 @@ msgstr "Dit kan niet ongedaan worden gemaakt"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:2
 msgid "This dialog lets you combine the recipients of this list with the recipients of another list. The result of this combination will be stored inside the current list, with the name"
-msgstr "In dit dialoogvenster kunt u de ontvangers van deze lijst combineren met de ontvangers van een andere lijst. Het resultaat van deze combinatie wordt opgeslagen in de huidige lijst, met de naam"
+msgstr "In dit dialoogvenster kan je de ontvangers van deze lijst combineren met de ontvangers van een andere lijst. Het resultaat van deze combinatie wordt opgeslagen in de huidige lijst, met de naam"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:4
 msgid "This is a \"private\", externally managed list. Recipients will not receive any subscribe/unsubscribe messages."
@@ -6107,7 +6107,7 @@ msgstr "Dit is een \"privé\", extern beheerde lijst. Ontvangers ontvangen geen 
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
 msgid "This overview allows you to send the current page to a group of recipients, grouped into mailing lists. Choose 'preview mailing' to open a popup window which shows how the mailing will look like when it is sent; choose 'send test mailing' to send it to the predefined list of test e-mail addresses. Choose 'edit' to go back to editing the page.  Each mailinglist is listed in the table below, together with statistics on when it was sent and to how many recipients."
-msgstr "Met dit overzicht kunt u de huidige pagina naar een groep ontvangers sturen, gegroepeerd in mailinglijsten. Kies 'preview-mailing' om een popup-venster te openen dat laat zien hoe de mailing eruit zal zien wanneer deze wordt verzonden; kies 'testmailing verzenden' om deze naar de vooraf gedefinieerde lijst met test-e-mailadressen te verzenden. Kies 'bewerken' om terug te gaan naar het bewerken van de pagina.  Elke mailinglijst staat in de onderstaande tabel, samen met de statistieken over wanneer de mailing is verstuurd en naar hoeveel ontvangers."
+msgstr "Met dit overzicht kan je de huidige pagina naar een groep ontvangers sturen, gegroepeerd in mailinglijsten. Kies 'preview-mailing' om een popup-venster te openen dat laat zien hoe de mailing eruit zal zien wanneer deze wordt verzonden; kies 'testmailing verzenden' om deze naar de vooraf gedefinieerde lijst met test-e-mailadressen te verzenden. Kies 'bewerken' om terug te gaan naar het bewerken van de pagina.  Elke mailinglijst staat in de onderstaande tabel, samen met de statistieken over wanneer de mailing is verstuurd en naar hoeveel ontvangers."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
 msgid "This page can be sent to different mailing lists."
@@ -6131,7 +6131,7 @@ msgstr "Uitschrijven van de mailinglijst"
 
 #: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:101
 msgid "Updated the recipient."
-msgstr "De ontvanger geüpdatet."
+msgstr "De ontvanger is bijgewerkt."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:4
 msgid "Upload a file with recipients. The file must contain a single e-mail address per line. The file’s character set must be utf-8."
@@ -6151,11 +6151,11 @@ msgstr "Welkom op"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:15
 msgid "When you don’t want to receive any mail then please ignore this message."
-msgstr "Wanneer u geen post wilt ontvangen, kunt u dit bericht negeren."
+msgstr "Wanneer je geen post wilt ontvangen, kan je dit bericht negeren."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:9
 msgid "When you don’t want to receive any more mail then"
-msgstr "Als u geen post meer wilt ontvangen dan"
+msgstr "Als je geen post meer wilt ontvangen dan"
 
 #: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
 msgid "You are not allowed to add or enable recipients."
@@ -6183,47 +6183,47 @@ msgstr "Je hebt geen rechten om deze pagina naar de test mailinglijst te sturen"
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:149
 msgid "You are not allowed to send this page."
-msgstr "U mag deze pagina niet versturen."
+msgstr "Je mag deze pagina niet versturen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:9
 msgid "You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients."
-msgstr "U mag de ontvangerslijst niet bekijken of bewerken. U moet toestemming hebben om de mailinglijst te wijzigen en de ontvangers te bekijken."
+msgstr "Je mag de ontvangerslijst niet bekijken of bewerken. Je moet toestemming hebben om de mailinglijst te wijzigen en de ontvangers te bekijken."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "You are now subscribed to our mailing list"
-msgstr "U bent nu ingeschreven op onze mailinglijst"
+msgstr "Je bent nu ingeschreven op onze mailinglijst"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:3
 msgid "You are now unsubscribed from"
-msgstr "U bent nu uitgeschreven van"
+msgstr "Je bent nu uitgeschreven van"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:8
 msgid "You are now unsubscribed from the mailing list"
-msgstr "U bent nu uitgeschreven van de mailinglijst"
+msgstr "Je bent nu uitgeschreven van de mailinglijst"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:29
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
-msgstr "U kunt proberen om u opnieuw in te schrijven op een van onze mailinglijsten in de zijkolom."
+msgstr "Je kan proberen om je opnieuw in te schrijven op een van onze mailinglijsten in de zijkolom."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
-msgstr "Je ontvangt deze email omdat je deze informatie wilde sturen. We hebben je email adres niet bewaard en je krijgt geen andere emails als gevolg van deze email."
+msgstr "Je ontvangt deze e-mail omdat je deze informatie wilde sturen. We hebben je e-mailadres niet bewaard en je krijgt geen andere e-mails als gevolg van deze e-mail."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:4
 msgid "You received this mail because you are subscribed to the mailing list"
-msgstr "U heeft deze mail ontvangen omdat u bent ingeschreven op de mailinglijst"
+msgstr "Je hebt deze mail ontvangen omdat je bent ingeschreven op de mailinglijst"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:7
 msgid "You will receive a confirmation in your e-mail."
-msgstr "U ontvangt een bevestiging in uw e-mail."
+msgstr "Je ontvangt een bevestiging in je e-mail."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:8
 msgid "You, or someone else, added your e-mail address to our mailing list"
-msgstr "Jij, of iemand anders, heeft je email adres toegevoegd aan onze mailinglijst"
+msgstr "Jij, of iemand anders, heeft je e-mailadres toegevoegd aan onze mailinglijst"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
-msgstr "Uw e-mailadres wordt toegevoegd aan de mailinglijst. Een bevestigingsmail wordt naar uw e-mailadres gestuurd en zal binnenkort arriveren. Wanneer u deze niet ontvangt, controleer dan uw spam-map."
+msgstr "Je e-mailadres wordt toegevoegd aan de mailinglijst. Een bevestigingsmail wordt naar je e-mailadres gestuurd en zal binnenkort arriveren. Wanneer je deze niet ontvangt, controleer dan je spam-map."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73
 msgid "bounced"
@@ -6231,7 +6231,7 @@ msgstr "teruggestuurd"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:15
 msgid "cancel"
-msgstr "annuleren"
+msgstr "annuleer"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:47
 msgid "clear"
@@ -6303,7 +6303,7 @@ msgstr "als je voortaan geen berichten van deze lijst wilt ontvangen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
-msgstr "met je emailadres"
+msgstr "met je e-mailadres"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:22
 msgid "Add after"
@@ -6311,7 +6311,7 @@ msgstr "Hierna toevoegen"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:20
 msgid "Add before"
-msgstr "Hiervoor toevoegen"
+msgstr "Hierboven toevoegen"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:21
 msgid "Add below"
@@ -6406,7 +6406,7 @@ msgstr "MQTT publish en subscribe-acties debuggen in de Zotonic-console"
 
 #: apps/zotonic_mod_oauth2/priv/templates/logon_service_oauth_done.tpl:6
 msgid "Authenticating..."
-msgstr "Authenticerend..."
+msgstr "Authenticeren..."
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -6414,7 +6414,7 @@ msgstr "De API-sleutel kan gevonden worden op"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_status.tpl:5
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
-msgstr "Probeer ingebedde video’s te corrigeren waarbij de vorige keer inbedden is mislukt."
+msgstr "Probeer embedded video’s te corrigeren waarbij de vorige keer embedden is mislukt."
 
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:274
 msgid "Attempting to fix ~p videos."
@@ -6462,7 +6462,7 @@ msgstr "Voeg een noindex, nofollow element aan alle pagina's toe."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97
 msgid "Bing Webmaster"
-msgstr "Bing Webmster"
+msgstr "Bing Webmaster"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93
 msgid "Bing Webmaster validation id"
@@ -6494,11 +6494,11 @@ msgstr "Google Analytics tracking code"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:78./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
 msgid "Google Webmaster Tools"
-msgstr "Google-webmasterhulpmiddelen"
+msgstr "Google Webmaster Tools"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
-msgstr "Hier vindt u instellingen voor het optimaliseren van het indexeren van uw site door zoekmachines."
+msgstr "Hier vind je instellingen om te optimaliseren hoe zoekmachines je website indexeren."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22
 msgid "Keywords"
@@ -6506,7 +6506,7 @@ msgstr "Trefwoorden"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:26
 msgid "Keywords to include on every page. Separate keywords with a \",\""
-msgstr "Zoekwoorden op te nemen op elke pagina. Scheid de trefwoorden met een \",\""
+msgstr "Trefwoorden voor op elke pagina. Scheid deze door een komma."
 
 #: apps/zotonic_mod_seo/src/mod_seo.erl:42
 msgid "SEO"
@@ -6518,11 +6518,11 @@ msgstr "Bewaar SEO instellingen"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:3./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:8
 msgid "Search Engine Optimization"
-msgstr "Zoekmachineoptimalisatie"
+msgstr "Zoekmachine optimalisatie"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:46
 msgid "The site configuration file allows this site to be indexed by search engines."
-msgstr "Met het configuratiebestand van de site kan deze site worden geïndexeerd door zoekmachines."
+msgstr "Het configuratiebestand van de site staat toe dat deze site wordt geïndexeerd door zoekmachines."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:44
 msgid "The site configuration file excludes this site from search engines."
@@ -6578,7 +6578,7 @@ msgstr "Sitemap-instellingen"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:4
 msgid "These settings apply to all pages of this category. They define hints for search engines indexing the site."
-msgstr "Deze instellingen gelden voor alle pagina’s in deze categorie. Ze betreffen hints voor zoekmachines die deze site indexeren."
+msgstr "Deze instellingen gelden voor alle pagina’s in deze categorie. Ze definiëren hints voor zoekmachines die de site indexeren."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:37
 msgid "Weekly (default)"
@@ -6614,7 +6614,7 @@ msgstr "Bevestig mijn account"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:1
 msgid "Confirm your account by email"
-msgstr "Bevestig je account via email"
+msgstr "Bevestig je account via e-mail"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:22./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:44
 msgid "Enter a name"
@@ -6626,11 +6626,11 @@ msgstr "Vul een gebruikersnaam in"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:59
 msgid "Enter a valid address"
-msgstr "Voer een geldig emailadres in"
+msgstr "Voer een geldig e-mailadres in"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:60
 msgid "Enter an e-mail address"
-msgstr "Vul een emailadres in"
+msgstr "Vul een e-mailadres in"
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
@@ -6646,7 +6646,7 @@ msgstr "Als de link niet werkt, ga dan naar de"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:5
 msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
-msgstr "Als je deze email niet in een paar minuten ontvangt, controleer dan je spamfolder."
+msgstr "Als je deze e-mail niet in een paar minuten ontvangt, controleer dan je spamfolder."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you have already an account,"
@@ -6670,7 +6670,7 @@ msgstr "Bevestig je account"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:3
 msgid "Please follow the instructions in the email we've sent you."
-msgstr "Volg de instructies in de email die we je net gestuurd hebben."
+msgstr "Volg de instructies in de e-mail die we je net gestuurd hebben."
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:10
 msgid "Please follow the link below."
@@ -6690,11 +6690,11 @@ msgstr "Registreer"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:11
 msgid "Sign up with your e-mail address"
-msgstr "Registreer je met je emailadres"
+msgstr "Registreer je met je e-mailadres"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
-msgstr "Sorry, de bevestigingscode is onbekend. Is hij correct gekopiëerd?"
+msgstr "Sorry, de bevestigingscode is onbekend. Is hij correct gekopieerd?"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:24
 msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
@@ -6787,23 +6787,23 @@ msgstr "Als u andere hostnamen in het certificaat wilt hebben, vraag dan hierond
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:10
 msgid "Let’s Encrypt Certificate"
-msgstr "Laten we het certificaat versleutelen"
+msgstr "Let’s Encrypt certificaat"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:4
 msgid "Let’s Encrypt certificate request was successful!"
-msgstr "Laten we Encrypt certificaat aanvraag was succesvol!"
+msgstr "Let’s Encrypt certificaat aanvraag was succesvol!"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:13
 msgid "Let’s Encrypt provides free SSL certificates for websites. Here you can request such a certificate."
-msgstr "Let's Encrypt biedt gratis SSL-certificaten voor websites. Hier kunt u zo'n certificaat aanvragen."
+msgstr "Let's Encrypt biedt gratis SSL-certificaten voor websites. Hier kan je zo een certificaat aanvragen."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:3
 msgid "Make sure your hostname is reachable and resolves to a routable address."
-msgstr "Zorg ervoor dat uw hostnaam bereikbaar is en oplost naar een routeerbaar adres."
+msgstr "Zorg ervoor dat je hostnaam bereikbaar is en verwijst naar een routeerbaar adres."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:42
 msgid "Only admnistrators can request certificates."
-msgstr "Alleen bewakers kunnen certificaten aanvragen."
+msgstr "Alleen beheerders kunnen certificaten aanvragen."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:15
 msgid "Read more at the Let’s Encrypt website"
@@ -6815,7 +6815,7 @@ msgstr "Vraag een certificaat aan"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:14
 msgid "Requesting a certificate from Let’s Encrypt for"
-msgstr "Een certificaat aanvragen bij Let's Encrypt for"
+msgstr "Een certificaat aanvragen bij Let's Encrypt voor"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_running.tpl:1
 msgid "Requesting certificates"
@@ -6827,7 +6827,7 @@ msgstr "Probeer het onderstaande verzoek opnieuw."
 
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141
 msgid "SSL Let’s Encrypt Certificate"
-msgstr "SSL laten we het certificaat versleutelen"
+msgstr "SSL Let’s Encrypt certificaat"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:9
 msgid "Sorry, there was an error fetching the Let’s Encrypt certificate."
@@ -6867,7 +6867,7 @@ msgstr "Dit kan een tijdje duren, wacht even!"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:23
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "Je kunt dit wijzigen door <tt>poort</tt> in te stellen in het configuratiebestand <tt>zotonic.config</tt> ."
+msgstr "Je kunt dit wijzigen door <tt>port</tt> in te stellen in het <tt>zotonic.config</tt> configuratiebestand."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:30
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -6875,7 +6875,7 @@ msgstr "U kunt dit veranderen door <tt>ssl_port</tt> in te stellen in het <tt>zo
 
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:142
 msgid "You need to be an administrator to request certificates."
-msgstr "U moet een beheerder zijn om certificaten aan te vragen."
+msgstr "Je moet een beheerder zijn om certificaten aan te vragen."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:47
 msgid "not reachable or local IP"
@@ -6955,7 +6955,7 @@ msgstr "Weet je zeker dat je deze vraag wilt verwijderen?"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:101
 msgid "Are you sure you want to delete this result?"
-msgstr "Weet u zeker dat u dit resultaat wilt verwijderen?"
+msgstr "Weet je zeker dat je dit resultaat wilt verwijderen?"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
 msgid "Are you sure you want to stop?"
@@ -6967,7 +6967,7 @@ msgstr "Knop"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:34
 msgid "Button style"
-msgstr "Stijl knop"
+msgstr "Knop stijl"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
 msgid "Button text"
@@ -6999,7 +6999,7 @@ msgstr "Landenselectie"
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:838
 msgid "Created"
-msgstr "Gemaakt op"
+msgstr "Gemaakt"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
 msgid "Danger"
@@ -7112,7 +7112,7 @@ msgstr "Hulp bij de vragenlijsten"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
-msgstr "Verberg je voor de resultaten"
+msgstr "Verberg in de resultaten"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:55./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:86
 msgid "Hide progress information"
@@ -7141,7 +7141,7 @@ msgstr "Ik hou van Chinese restaurants"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:26
 msgid "If you want to store <i>value</i> but show <i>answer</i>, use value#answer. E.g. <i>2019#Graduated in 2019</i> will store 2019 in the results."
-msgstr "Als u <i>waarde</i> wilt opslaan maar <i>antwoord</i>, gebruikt u waarde # antwoord. Bijv. <i>2019 # Afgestudeerd in 2019</i> slaat 2019 op in de resultaten."
+msgstr "Als je <i>waarde</i> wilt opslaan maar <i>antwoord</i>, gebruik je waarde # antwoord. Bijv. <i>2019 # Afgestudeerd in 2019</i> slaat 2019 op in de resultaten."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:26./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
@@ -7149,7 +7149,7 @@ msgstr "Begin direct met de vragen, geen “Start” knop."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
 msgid "Informational"
-msgstr "Informeel"
+msgstr "Informatief"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:26
 msgid "Input value placeholder text"
@@ -7165,11 +7165,11 @@ msgstr "Introductie voor de bevestigingsmail"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
 msgid "Inverse"
-msgstr "Geinverteerd"
+msgstr "Omgekeerd"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:51
 msgid "Jump target"
-msgstr "Doen van sprong"
+msgstr "Sprongdoel"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:52
 msgid "Jump to a question on a next page."
@@ -7189,7 +7189,7 @@ msgstr "Lang antwoord"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:117
 msgid "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
-msgstr "Lorem ipsum dolor sit amet, consectetur <em>adipiserend</em> elit, sed do eiusmod <b>tempor incidunt</b> ut labore et dolore <u>magna aliqua</u>."
+msgstr "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
 msgid "Mail filled in surveys to"
@@ -7213,11 +7213,11 @@ msgstr "Meerkeuze"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:43./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:40
 msgid "Multiple entries per user/browser"
-msgstr "Meerdere vermeldingen per gebruiker/browser"
+msgstr "Meerdere keren invullen per gebruiker/browser."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Multiple page break blocks are merged into one."
-msgstr "Meerder pagina-onderbrekingen worden samengevoegd tot één."
+msgstr "Meerdere pagina-onderbrekingen worden samengevoegd tot één."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:153
 msgid "Narrative"
@@ -7249,7 +7249,7 @@ msgstr "Nummerinvoer, toon totalen voor dit veld in de resultaten."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:46./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Once and allow editing afterwards"
-msgstr "Eenmaal en laat bewerken achteraf toe"
+msgstr "Eenmalig en laat bewerken achteraf toe"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:41./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:38
 msgid "Once only per user/browser"
@@ -7461,7 +7461,7 @@ msgstr "Verstuur"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:49
 msgid "Submit on clicking an option"
-msgstr "Versturen bij aanklikken van keuze"
+msgstr "Verstuur bij aanklikken van keuze"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_checkbox.tpl:22
 msgid "Subtract points for wrong answers (total never less than 0)"
@@ -7497,7 +7497,7 @@ msgstr "Resultaten bewerken"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:84./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "Test pass percentage"
-msgstr "Proefabonnement"
+msgstr "Test slagingspercentage"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:7
 msgid "Thank you for filling in our survey."
