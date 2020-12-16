@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 21:40\n"
+"PO-Revision-Date: 2020-12-16 22:40\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2366,7 +2366,7 @@ msgstr "Waarde"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
-msgstr "Voeg pagina’s toe of klik op een pagina om het menu."
+msgstr "Voeg pagina’s toe of klik op een pagina in het menu."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:59
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:22
@@ -2381,11 +2381,11 @@ msgstr "Laden ..."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:105./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
 msgid "Save &amp; view"
-msgstr "Opslaan en Bekijken"
+msgstr "Bewaar en bekijk"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:125
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
-msgstr " Er zijn nog niet opgeslagen veranderingen. Weet je zeker dat je wilt vertrekken zonder te sparen?"
+msgstr " Er zijn nog niet opgeslagen veranderingen. Weet je zeker dat je wilt vertrekken zonder te bewaren?"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:75
 msgid "This page"
@@ -2618,7 +2618,7 @@ msgstr "Bevestigingsemail is verstuurd."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:8./apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:6./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:51
 msgid "Set username / password"
-msgstr "Gebruikersnaam / wachtwoord instellen"
+msgstr "Stel gebruikersnaam / wachtwoord in"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:41
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:51
@@ -2632,7 +2632,7 @@ msgstr "Sorry, deze gebruikersnaam is al in gebruik. Probeer een andere."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:57
 msgid "Sorry, you can not remove your own username."
-msgstr "Sorry, u kunt uw eigen gebruikersnaam niet verwijderen."
+msgstr "Sorry, je kan je eigen gebruikersnaam niet verwijderen."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
@@ -2650,15 +2650,15 @@ msgstr "De admin gebruiker kan niet worden verwijderd."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:108
 msgid "The new username/ password has been set."
-msgstr "De nieuwe gebruikersnaam / het wachtwoord is ingesteld."
+msgstr "De nieuwe gebruikersnaam / wachtwoord is ingesteld."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:3
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
-msgstr "Het wachtwoord van de admingebruiker kan niet worden veranderd in de database. Pas daarvoor je siteconfiguratie aan in"
+msgstr "Het wachtwoord van de admin-gebruiker kan niet worden veranderd in de database. Pas daarvoor je siteconfiguratie aan in"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:89./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95
 msgid "The username is already in use, please try another."
-msgstr "Deze gebruikersnaam bestaat al, kies a.u.b. een andere."
+msgstr "Deze gebruikersnaam is al in gebruik, probeer een andere."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_delete_username.erl:46
 msgid "There is no username coupled to this person."
@@ -2704,7 +2704,7 @@ msgstr "Tijdzone"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:25
 msgid "Type password to change password"
-msgstr "Typ het wachtwoord om het te wijzigen"
+msgstr "Typ wachtwoord om het te wijzigen"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:28
 msgid "Use this password"
@@ -2743,11 +2743,11 @@ msgstr "Gebruikers"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:17
 msgid "Users Overview"
-msgstr "Gebruikers"
+msgstr "Gebruikersoverzicht"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21
 msgid "Verfied"
-msgstr "Geverifieerd"
+msgstr "Bevestigd"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
 msgid "Verified"
@@ -2803,7 +2803,7 @@ msgstr "Je moet een administrator zijn om gebruikers toe te voegen."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You receive this e-mail because you or someone else requested verification of your e-mail address. You or the someone else either entered your e-mail address. You will not receive any additional e-mails because of this request."
-msgstr "Je ontvangt deze e-mail omdat jij of iemand anders heeft verzocht dit e-mailadres te verifiëren. Jij of iemand anders heeft jouw e-mailadres ingevoerd. Je krijgt geen andere e-mails als gevolg van dit verificatieverzoek."
+msgstr "Je ontvangt deze e-mail omdat jij of iemand anders heeft verzocht dit e-mailadres te bevestigen. Jij of iemand anders heeft jouw e-mailadres ingevoerd. Je krijgt geen andere e-mails als gevolg van dit verzoek ter bevestiging.."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
@@ -2812,11 +2812,11 @@ msgstr "Je gebruikersnaam is"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:20
 msgid "Your address is now verified."
-msgstr "Je adres is nu geverifieerd."
+msgstr "Je adres is nu bevestigd."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:20
 msgid "Your e-mail address is now verified."
-msgstr "Je e-mailadres is nu geverifieerd."
+msgstr "Je e-mailadres is nu bevestigd."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
@@ -3054,7 +3054,7 @@ msgstr "Alla paginaconnecties"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
 msgid "Are you sure you want to delete"
-msgstr "Weet je zeker dat je deze pagina wilt verwijderen?"
+msgstr "Weet je zeker dat je wilt verwijderen:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:31
 msgid "Are you sure you want to disconnect:"
@@ -3066,7 +3066,7 @@ msgstr "Verander het predicaat van alle bestaande paginaconnecties naar:"
 
 #: apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:69
 msgid "Could not create the predicate."
-msgstr "Kon het predikaat niet maken."
+msgstr "Kon het predicaat niet maken."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:31
 msgid "Delete &amp; Change Connections"
@@ -3090,7 +3090,7 @@ msgstr "Vul de titel van het nieuwe predicaat in:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:26
 msgid "Filter on predicate"
-msgstr "Filteren op predicaat"
+msgstr "Filter op predicaat"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:20
 msgid "From category"
@@ -3106,7 +3106,7 @@ msgstr "Maak een nieuw predicaat"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:18
 msgid "Make predicate"
-msgstr "Predicaat maken"
+msgstr "Maak predicaat"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:68
 msgid "No page connections found."
@@ -3126,7 +3126,7 @@ msgstr "Object"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:56
 msgid "Only showing connections with:"
-msgstr "Alleen het tonen van connecties met:"
+msgstr "Toont alleen connecties met:"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
@@ -3162,7 +3162,7 @@ msgstr "Er zijn geen paginaconnecties met dit predicaat."
 
 #: apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:65
 msgid "There is already a predicate with this name."
-msgstr "Er bestaat al een predikaat met deze naam."
+msgstr "Er bestaat al een predicaat met deze naam."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:15
 msgid " This predicate can be used between two pages of the following categories."
@@ -3186,7 +3186,7 @@ msgstr "Geldig tussen"
 
 #: apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:67
 msgid "You are not allowed to create this predicate."
-msgstr "Het is niet toegestaan om dit predikaat aan te maken."
+msgstr "Het is niet toegestaan om dit predicaat aan te maken."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don't check anything then all categories are valid."
@@ -3194,7 +3194,7 @@ msgstr "Je kan instellen voor welke categorieën dit predicaat wordt getoond op 
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "object"
-msgstr "bezwaar maken"
+msgstr "object"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
 msgid "subject"
@@ -3432,11 +3432,11 @@ msgstr "Controleer je e-mail"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:22
 msgid "Checking the reset code…"
-msgstr "Het controleren van de reset-code…"
+msgstr "Reset-code controleren…"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:24
 msgid "Click on the link below to enter a new password. When clicking doesn't work, please copy and paste the whole link."
-msgstr "Klik op onderstaande link om een nieuw wachtwoord in te voeren. Als het klikken niet werkt, kopieer en plak dan de hele link."
+msgstr "Klik op de onderstaande link om een nieuw wachtwoord in te voeren. Als het klikken niet werkt, kopieer en plak dan de hele link."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
 msgid "Close Window"
@@ -3450,7 +3450,7 @@ msgstr "Sluit dit venster en log in als u al een gebruiker bent van"
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
 msgid "Confirm"
-msgstr "Bevestigen"
+msgstr "Bevestig"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
 msgid "Confirmation failure"
@@ -3483,7 +3483,7 @@ msgstr "Vul het nieuwe wachtwoord van je account in"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:2
 msgid "Enter your email address and we'll send you instructions how to reset your password."
-msgstr "In de e-mail staan instructies om je wachtwoord opnieuw in te stellen."
+msgstr "Voer je e-mailadres in en wij sturen je instructies om jouw wachtwoord opnieuw in te stellen.."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:14
 msgid "Enter your email address or username"
@@ -3493,7 +3493,7 @@ msgstr "Vul je e-mailadres of gebruikersnaam in"
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:118
 #: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Error"
-msgstr "Foutmelding"
+msgstr "Fout"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:129
 msgid "External Services"
@@ -3501,7 +3501,7 @@ msgstr "Externe diensten"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:26
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
-msgstr "Om veiligheidsredenen zijn codes om het wachtwoord opnieuw in te stellen beperkt geldig en kunnen zij slechts eenmaal gebruikt worden."
+msgstr "Om veiligheidsredenen zijn codes om het wachtwoord opnieuw in te stellen beperkt geldig en kunnen zij slechts één keer gebruikt worden."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
 msgid "Forgot your password?"
@@ -3538,7 +3538,7 @@ msgstr "Hoe je wachtwoord te veranderen"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:11
 msgid "However this email address does not belong to one of our registered users so you will not be able to change the password."
-msgstr "Dit e-mailadres behoort echter niet tot een van onze geregistreerde gebruikers, zodat u het wachtwoord niet kunt wijzigen."
+msgstr "Dit e-mailadres behoort echter niet tot één van onze geregistreerde gebruikers, zodat je het wachtwoord niet kunt wijzigen."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
 msgid "I forgot my password"
@@ -3550,7 +3550,7 @@ msgstr "Ik wil een nieuw account aanmaken"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:30
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
-msgstr "Als u geen wachtwoord reset heeft aangevraagd, kunt u deze e-mail veilig negeren. Misschien heeft iemand een fout gemaakt bij het typen van zijn of haar e-mail adres."
+msgstr "Als je geen wachtwoord reset heeft aangevraagd, kan je deze e-mail veilig negeren. Misschien heeft iemand een fout gemaakt bij het typen van zijn of haar e-mail adres."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:61./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
@@ -3558,7 +3558,7 @@ msgstr "Als je deze e-email niet in een paar minuten ontvangt, controleer dan je
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:13
 msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when signing up."
-msgstr "Als u denkt dat u een account heeft en deze e-mail verwachtte, probeer het dan opnieuw met het e-mailadres dat u bij het aanmelden heeft opgegeven."
+msgstr "Als je denkt dat je een account hebt en deze e-mail verwachtte, probeer het dan opnieuw met het e-mailadres dat je bij het aanmelden hebt opgegeven."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:76
 msgid "In the email you will find instructions on how to confirm your account."
@@ -3589,15 +3589,15 @@ msgstr "Een ogenblik geduld"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
-msgstr "Wachtwoord"
+msgstr "Toegangscode"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
-msgstr "Bevestig a.u.b. je"
+msgstr "Bevestig je"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:1
 msgid "Please enter the two-factor authentication passcode."
-msgstr "Voer de tweefactorige authenticatiecode in."
+msgstr "Voer de toegangscode voor tweefactorauthenticatie in."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
 msgid "Please try again in"
@@ -3853,7 +3853,7 @@ msgstr "Back-ups"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:74
 msgid "Changed configuration."
-msgstr "Veranderde configuratie."
+msgstr "Configuratie veranderd."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
 msgid "Changes since"
@@ -3873,7 +3873,7 @@ msgstr "Verwijderd"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:29
 msgid "Download backup file"
-msgstr "Backup bestand downloaden"
+msgstr "Download backup bestand"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Help about backup &amp; restore"
@@ -3917,11 +3917,11 @@ msgstr "Toon import/export paneel in de admin"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:60
 msgid "Sorry, there is no mudule that can import this."
-msgstr "Sorry, er is geen mudule die dit kan importeren."
+msgstr "Sorry, er is geen module die dit kan importeren."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:64./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:92
 msgid "Sorry, there was an error replacing your page."
-msgstr "Sorry, er was een fout bij het vervangen van uw pagina."
+msgstr "Sorry, er was een fout bij het vervangen van je pagina."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
 msgid "Sorry, this backup has been deleted."
@@ -3945,7 +3945,7 @@ msgstr "Sorry, je hebt geen toestemming om de configuratie te wijzigen."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45
 msgid "Start backup now"
-msgstr "Backup nu"
+msgstr "Start nu met de back-up"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
 msgid "Start database-only backup now"
@@ -3953,11 +3953,11 @@ msgstr "Backup alleen de database"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
-msgstr "Het \"pg_dump\" commando werd niet gevonden in het pad. Stel de \"pg_dump\" configuratietoets in op het pad naar pg_dump en keer terug naar deze pagina."
+msgstr "Het \"pg_dump\" commando werd niet gevonden in het pad. Stel de \"pg_dump\" configuratieregel in op het pad naar pg_dump en keer terug naar deze pagina."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:52
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
-msgstr "Het \"teer\"-commando werd niet in het pad gevonden. Stel de \"tar\"-configuratietoets in op het pad naar tar en keer terug naar deze pagina."
+msgstr "Het \"tar\"-commando werd niet in het pad gevonden. Stel de \"tar\"-configuratieregel in op het pad naar tar en keer terug naar deze pagina."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:41
 msgid "The backup comprises two parts, the database and the uploaded files."
@@ -3969,7 +3969,7 @@ msgstr "Deze versie is bewaard op"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
-msgstr "Deze site heeft cloud file store ingeschakeld, en er zijn <strong>1</strong> mediabestanden op dit systeem die alleen in de cloud zijn opgeslagen en niet op deze machine. Van deze bestanden wordt geen back-up gemaakt!"
+msgstr "Deze site heeft cloud file store ingeschakeld, en er zijn <strong>$1</strong> mediabestanden op dit systeem die alleen in de cloud zijn opgeslagen en niet op deze machine. Van deze bestanden wordt geen back-up gemaakt!"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
@@ -3987,7 +3987,7 @@ msgstr "Waarschuwing:"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:66./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:69./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:78
 msgid "You are not allowed to see the revisions"
-msgstr "U mag de herzieningen niet zien"
+msgstr "Je mag de revisies niet zien"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:42
 msgid "You can have 10 backups, older ones will be deleted automatically."
@@ -3995,15 +3995,15 @@ msgstr "Je kan 10 backups bewaren. Oudere worden automatisch verwijderd."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
-msgstr "Uw back-up is niet correct geconfigureerd. De back-upmodule zal niet werken totdat het probleem (de problemen) hieronder zijn opgelost:"
+msgstr "Uw back-up is niet correct geconfigureerd. De back-upmodule zal niet werken totdat het probleem (of problemen) hieronder zijn opgelost:"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:17
 msgid "download database"
-msgstr "database downloaden"
+msgstr "download database"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:19
 msgid "download files"
-msgstr "bestanden downloaden"
+msgstr "download bestanden"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
@@ -4023,7 +4023,7 @@ msgstr "CSV"
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
-msgstr "Excel-werkmap"
+msgstr "Excel Workbook"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:81
 msgid "File"
@@ -4261,7 +4261,7 @@ msgstr "Let op: Reacties worden gemodereerd"
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_comment.tpl:4
 msgid "Posted"
-msgstr "Geplaatst in"
+msgstr "Geplaatst"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:4
 msgid "Recent Comments"
@@ -4273,7 +4273,7 @@ msgstr "Recente reacties"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:31
 msgid "Require all comments to be reviewed by a moderator before displaying them on the public website"
-msgstr "Alle commentaren moeten worden goedgekeurd door een moderator voordat ze zichtbaar zijn op de publieke website"
+msgstr "Alle reacties moeten worden goedgekeurd door een moderator voordat ze zichtbaar zijn op de publieke website"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:21
 msgid "Save Comment Form settings"
@@ -4287,7 +4287,7 @@ msgstr "Instellingen"
 
 #: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:44
 msgid "The comment has been deleted."
-msgstr "De opmerking is verwijderd."
+msgstr "De reactie is verwijderd."
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:56
 msgid "There are no comments."
@@ -4295,15 +4295,15 @@ msgstr "Er zijn geen reacties"
 
 #: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:47
 msgid "You are not allowed to delete the comment."
-msgstr "Je mag deze opmerking niet verwijderen."
+msgstr "Je mag deze reactie niet verwijderen."
 
 #: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:79
 msgid "You are not allowed to toggle the comment."
-msgstr "Het is niet toegestaan om het commentaar te wijzigen."
+msgstr "Het is niet toegestaan om de reactie te wijzigen."
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:7./apps/zotonic_mod_comment/priv/templates/_comments_moderation.tpl:1
 msgid "Your comment has been saved and will be subject to moderation before it is displayed on the website"
-msgstr "Je commentaar is opgeslagen en zal worden bekeken door een moderator voordat zichtbaar wordt op de website"
+msgstr "Je reactie is opgeslagen en zal worden bekeken door een moderator voordat zichtbaar wordt op de website"
 
 #: apps/zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:4./apps/zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:15
 msgid "publish"
@@ -4347,7 +4347,7 @@ msgstr "Verwijderen is afgebroken, want er zijn nog pagina’s in deze paginagro
 
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:98
 msgid "Edit Page"
-msgstr "Pagina bewerken"
+msgstr "Bewerk pagina"
 
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:15
 msgid "Move all pages in these content groups to:"
@@ -4423,7 +4423,7 @@ msgstr "Actie"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
-msgstr "Hieronder vindt u de lijst met alle meldingen en de geïnstalleerde waarnemers."
+msgstr "Hieronder vindt je de lijst met alle notificaties en de geïnstalleerde observers."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:13
 msgid "Below you see in real time which templates are compiled and included."
@@ -4431,7 +4431,7 @@ msgstr "Hieronder zie je in realtime welke templates worden gecompileerd en inge
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:6
 msgid "Bindings"
-msgstr "Argumenten"
+msgstr "Bindingen"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:24./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:31./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:58
 msgid "Controller"
@@ -4443,11 +4443,11 @@ msgstr "Ontwikkeling"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:3
 msgid "Development - Observers"
-msgstr "Ontwikkeling - Waarnemers"
+msgstr "Ontwikkeling - Observers"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:74
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
-msgstr "Schakel caching uit met de tag <tt>{% cache %}</tt> ."
+msgstr "Schakel caching met de <tt>{% cache %}</tt>  tag uit."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
 msgid "Dispatch rule debugging"
@@ -4663,7 +4663,7 @@ msgstr "Tussen tekst"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:8
 msgid "Caption"
-msgstr "Titel"
+msgstr "Onderschrift"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:44
 msgid "Crop"
@@ -4675,7 +4675,7 @@ msgstr "Afbeelding bijsnijden"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:12
 msgid "Defaults to the summary of the media. Enter a single “-” to not display a caption."
-msgstr "Standaard is de samenvatting van de media. Voer een enkele \"-\" in om geen bijschrift weer te geven."
+msgstr "Standaard de samenvatting van de media. Voer een enkele \"-\" in om geen bijschrift weer te geven."
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:3
 msgid "Editor version"
@@ -4695,7 +4695,7 @@ msgstr "Link naar media of url hieronder"
 
 #: apps/zotonic_mod_editor_tinymce/src/mod_editor_tinymce.erl:40
 msgid "Media Properties"
-msgstr "Mediaeigenschappen"
+msgstr "Media-eigenschappen"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
 msgid "Medium"
@@ -4707,7 +4707,7 @@ msgstr "Klein"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:91
 msgid "Website. Leave empty for media link"
-msgstr "Website. Laat leeg voor media link"
+msgstr "Website. Laat leeg voor link naar media"
 
 #: apps/zotonic_mod_email_dkim/src/mod_email_dkim.erl:43
 msgid "DKIM e-mail setup"
@@ -4715,11 +4715,11 @@ msgstr "DKIM e-mailinstellingen"
 
 #: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:6
 msgid "DKIM e-mail signing setup"
-msgstr "DKIM e-mailinstellingen"
+msgstr "DKIM e-mail ondertekening instellingen"
 
 #: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:17
 msgid "The DNS entry should contain the following information:"
-msgstr "De DNS ingang moet de volgende informatie bevatten:"
+msgstr "De DNS instelling moet de volgende informatie bevatten:"
 
 #: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:10
 msgid "The location of these key files are the following:"
@@ -4739,7 +4739,7 @@ msgstr "Als alles is opgezet, kan je de <a href=\"http://dkimcore.org/c/keycheck
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:187
 msgid "Bounces"
-msgstr "Stuitert"
+msgstr "Teruggestuurd"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:120
 msgid "Clear error flag for this email address."
@@ -4771,11 +4771,11 @@ msgstr "Verstuurd naar dit adres"
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:69
 msgid "Sorry, you are not allowed to block this email address."
-msgstr "Sorry, u mag dit e-mailadres niet blokkeren."
+msgstr "Sorry, je mag dit e-mailadres niet blokkeren."
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:55
 msgid "Sorry, you are not allowed to reset this email address."
-msgstr "Sorry, je mag dit email adres niet resetten."
+msgstr "Sorry, je mag dit e-mailadres niet resetten."
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:64
 msgid "The email address has been blocked."
@@ -4783,7 +4783,7 @@ msgstr "Het e-mailadres is geblokkeerd."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:70./apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:144
 msgid "The email address has been cleared, new emails will be sent."
-msgstr "Dit email adres is gereset, email zal weer worden verstuurd."
+msgstr "Dit e-mailadres is gereset, email zal weer worden verstuurd."
 
 #: apps/zotonic_mod_email_status/src/mod_email_status.erl:50
 msgid "The email error flag has been cleared."
@@ -4791,12 +4791,12 @@ msgstr "De error status is gereset."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_flag.tpl:10
 msgid "There are email problems."
-msgstr "Er zijn email problemen."
+msgstr "Er zijn e-mail problemen."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_flag.tpl:7./apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:108
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:7
 msgid "There are problems with this email address."
-msgstr "Er zijn problemen met dit emailadres."
+msgstr "Er zijn problemen met dit e-mailadres."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:96
 msgid "There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully."
@@ -4812,19 +4812,19 @@ msgstr "Dit e-mailadres is geblokkeerd."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:152
 msgid "This email address is not valid."
-msgstr "Dit emailadres is ongeldig."
+msgstr "Dit e-mailadres is ongeldig."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:95
 msgid "This email address is now ok."
-msgstr "Dit emailadres is momenteel goed."
+msgstr "Dit e-mailadres is momenteel goed."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:101
 msgid "This email address is ok."
-msgstr "Dit email adres is goed."
+msgstr "Dit e-mailadres is goed."
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:178
 msgid "Total send errors"
-msgstr "Totaal aantal foutent"
+msgstr "Totaal aantal fouten"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:159
 msgid "Total/Status"
@@ -5045,7 +5045,7 @@ msgstr "Download wachtrij"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
 msgid "Ensure yourself there is enough disk space before starting this process."
-msgstr "Zorg er zelf voor dat er voldoende schijfruimte is voordat u met dit proces begint."
+msgstr "Zorg er zelf voor dat er voldoende schijfruimte is voordat je met dit proces begint."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
 msgid "Files"
@@ -5065,7 +5065,7 @@ msgstr "Media"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "Move all S3 files to local"
-msgstr "Verplaats alle bestanden naar de server"
+msgstr "Verplaats alle S3 bestanden naar de webserver"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:167
 msgid "Move all local files to S3"
@@ -5077,7 +5077,7 @@ msgstr "Bestanden naar de cloud verplaatsen"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
 msgid "Move files to local"
-msgstr "Verplaats bestanden naar lokaal"
+msgstr "Verplaats bestanden naar de webserver"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:82
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:40
@@ -5110,11 +5110,11 @@ msgstr "Er is een wachttijd van 10 minuten voordat de bestanden worden geüpload
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
 msgid "This will queue the files for later asynchronous upload."
-msgstr "Dit plaatst alle bestanden in een wachtrij voor later asynchrone upload."
+msgstr "Dit plaatst alle bestanden in een wachtrij voor latere asynchrone upload."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:68
 msgid "Try to create a private bucket if the bucket does not exist"
-msgstr "Probeer een eigen emmer te maken als de emmer niet bestaat."
+msgstr "Probeer een eigen bucket te maken als de bucket niet bestaat."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
 msgid "Upload Queue"
@@ -5130,7 +5130,7 @@ msgstr "Je hebt geen rechten om de instellingen te veranderen."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
-msgstr "Zotonic kun geuploade en bewerkte bestanden opslaan in de cloud. Hier kan je de locatie en toegang sleutels voor de cloud-dienst instellen."
+msgstr "Zotonic kun geüploade en bewerkte bestanden opslaan in de cloud. Hier kan je de locatie en toegangssleutels voor de cloud-dienst instellen."
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
@@ -5241,7 +5241,7 @@ msgstr "februari"
 
 #: apps/zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:24
 msgid "Fix timezone, show all dates in the above timezone."
-msgstr "Corrigeer de tijdzone door alle tijden in deze tijdzone te tonen."
+msgstr "Zet de tijdzone vast, toon alle tijden in de bovenstaande tijdzone.."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:33
 msgid "Friday"
@@ -5460,11 +5460,11 @@ msgstr "Logboek"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:3
 msgid "Log email"
-msgstr "Email-log"
+msgstr "Log e-mail"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:5
 msgid "Log incoming/outgoing e-mail"
-msgstr "Inkomend / uitgaand e-mail log"
+msgstr "Log inkomende / uitgaande e-mail"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:3./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:5./apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:7
 msgid "Log messages"
@@ -5472,11 +5472,11 @@ msgstr "Berichtenlog"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:3
 msgid "Log ui events"
-msgstr "Logboek van de evenementen"
+msgstr "Log ui-gebeurtenissen"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:5
 msgid "Log user interface events"
-msgstr "Logboekgebruikersinterfacegebeurtenissen"
+msgstr "Log gebruikersinterface gebeurtenissen"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:11
 msgid "Message log"
@@ -5484,7 +5484,7 @@ msgstr "Berichtenlog"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:105
 msgid "Message nr"
-msgstr "Nummer"
+msgstr "Bericht nr."
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:12./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:30
 msgid "Most recent messages"
@@ -5508,7 +5508,7 @@ msgstr "Ontvangen"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
 msgid "Resources with email identity"
-msgstr "Hulpmiddelen met e-mail identiteit"
+msgstr "Pagina’s met e-mail identiteit"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Retry"
@@ -5524,7 +5524,7 @@ msgstr "Verstuurd"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:21./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:103./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:21
 msgid "Severity"
-msgstr "Hevigheid"
+msgstr "Ernst"
 
 #: apps/zotonic_mod_logging/priv/templates/_admin_log_row.tpl:27./apps/zotonic_mod_logging/priv/templates/_admin_log_ui_row.tpl:32
 msgid "Site Administrator"
@@ -5544,7 +5544,7 @@ msgstr "Naar"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:69
 msgid "Toggle non people"
-msgstr "Schakelen van niet-mensen"
+msgstr "Wissel niet-mensen"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:165
@@ -5562,7 +5562,7 @@ msgstr "Logboek van de gebruikersinterface"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:62
 msgid "email verified"
-msgstr "per e-mail geverifieerd"
+msgstr "per e-mail bevestigd"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:14
 msgid "<em>Add</em> all recipients to this list that are on the target list"
