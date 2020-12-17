@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-17 21:00\n"
+"PO-Revision-Date: 2020-12-17 22:00\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3016,11 +3016,11 @@ msgstr "Biedt"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
 msgid "Rescan modules"
-msgstr "Modules scannen"
+msgstr "Scan modules opnieuw"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
-msgstr "Opnieuw scannen zal de index van alle modules, acties, templates etc. opnieuw opbouwen. Het zal ook alle dispatchregels herladen."
+msgstr "Opnieuw scannen zal de index van alle modules, acties, templates etc. opnieuw opbouwen. Ook alle dispatchregels worden herladen."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
@@ -3236,7 +3236,7 @@ msgstr "Genre"
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:4
 msgid "Media tags"
-msgstr "Media-etiketten"
+msgstr "Mediatags"
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:52
 msgid "Track"
@@ -3252,11 +3252,11 @@ msgstr "Vraag na aanmelding"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:43
 msgid "Changed the 2FA setting."
-msgstr "De 2FA-instelling gewijzigd."
+msgstr "De 2FA-instelling zijn gewijzigd."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:62
 msgid "Check the user groups for which two-factor authentication should be forced."
-msgstr "Controleer de gebruikersgroepen waarvoor de authenticatie met twee factoren moet worden geforceerd."
+msgstr "Markeer de gebruikersgroepen waarvoor de authenticatie met twee factoren moet worden geforceerd."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:22
 msgid "Default configuration"
@@ -3268,19 +3268,19 @@ msgstr "Definieer wie er gebruik moet maken van twee-factor-authenticatie, dit i
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:75
 msgid "Enable 2FA"
-msgstr "2FA inschakelen"
+msgstr "Schakel 2FA in"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:39
 msgid "Enable two-factor authentication..."
-msgstr "Maak twee-factor authenticatie mogelijk..."
+msgstr "Schakel twee-factor authenticatie in..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:53
 msgid "Force two-factor authentication"
-msgstr "Forceer de authenticatie met twee factoren"
+msgstr "Forceer de twee-factor authenticatie"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:9
 msgid "From now on an extra passcode is needed to sign in."
-msgstr "Vanaf nu is een extra wachtwoord nodig om in te loggen."
+msgstr "Vanaf nu is een extra toegangscode nodig om in te loggen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:42
 msgid "Generate barcode"
@@ -3324,7 +3324,7 @@ msgstr "Reset twee-factor..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
 msgid "Scan the two-factor authentication barcode with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
-msgstr "Scan de tweefactorige verificatiebarcode met een app zoals <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> of <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
+msgstr "Scan de barcode voor twee-factor authenticatie met een app zoals <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> of <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:25./apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:44
 msgid "Scan two-factor authentication barcode"
@@ -3332,15 +3332,15 @@ msgstr "Scan twee-factor authenticatie barcode"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:90
 msgid "Scan two-factor authentication passcode"
-msgstr "Scan twee-factor authenticatie wachtwoord"
+msgstr "Scan twee-factor authenticatie toegangscode"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:45
 msgid "Sorry, you are not allowed to change the 2FA settings."
-msgstr "Sorry, u mag de 2FA-instellingen niet wijzigen."
+msgstr "Sorry, je mag de 2FA-instellingen niet wijzigen."
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:59
 msgid "Sorry, you are not allowed to remove the 2FA."
-msgstr "Sorry, u mag de 2FA niet verwijderen."
+msgstr "Sorry, je mag de 2FA niet verwijderen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:9
 msgid "This will disable the two-factor authentication.<br>The old barcode will not be valid anymore."
@@ -3352,7 +3352,7 @@ msgstr "Dit zal een nieuwe barcode genereren voor twee-factor authenticatie.<br>
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:41
 msgid "This will generate a new barcode.<br>From then on you will need to use a passcode to sign in."
-msgstr "Dit zal een nieuwe barcode genereren.<br>Vanaf dat moment moet u een wachtwoord gebruiken om in te loggen."
+msgstr "Dit zal een nieuwe barcode genereren.<br>Vanaf dat moment moet je een toegangscode gebruiken om in te loggen."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
 msgid "Two-factor authentication"
@@ -3360,7 +3360,7 @@ msgstr "Twee-factor authenticatie"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "Two-factor authentication adds an extra check on sign in. The user will need to enter a code which is generated by an App on their telephone."
-msgstr "Twee-factor-authenticatie voegt een extra controle op de aanmelding toe. De gebruiker zal een code moeten invoeren die door een App op zijn telefoon wordt gegenereerd."
+msgstr "Twee-factor-authenticatie voegt een extra controle op de aanmelding toe. De gebruiker zal een toegangscode moeten invoeren die door een App op zijn telefoon wordt gegenereerd."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:7
 msgid "Two-factor authentication configuration"
@@ -3380,7 +3380,7 @@ msgstr "Configuratie van de gebruikersgroep"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:72
 msgid "You can add two-factor authentication to your account.<br>You will need an App on your Phone to scan the barcode and generate passcodes."
-msgstr "U kunt een twee-factor-authenticatie toevoegen aan uw account.<br>U hebt een App op uw telefoon nodig om de barcode te scannen en passcodes te genereren."
+msgstr "Je kan een twee-factor-authenticatie toevoegen aan je account.<br>Je hebt een App op je telefoon nodig om de barcode te scannen en toegangscodes te genereren."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:17
 msgid "You can use two-factor authentication apps such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>.\""
@@ -3388,7 +3388,7 @@ msgstr "Je kunt gebruik maken van twee-factor authenticatie apps zoals <a href=\
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
-msgstr "U moet de systeemconfiguratie kunnen bewerken om de tweefactorige authenticatieconfiguratie te kunnen bekijken of wijzigen."
+msgstr "Je moet de systeemconfiguratie mogen bewerken om de twee-factor-authenticatieconfiguratie te kunnen bekijken of wijzigen."
 
 #: apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:46
 msgid "Access denied"
@@ -3396,7 +3396,7 @@ msgstr "Toegang geweigerd"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:45
 msgid "Already Connected"
-msgstr "Al gelinkt"
+msgstr "Al verbonden"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 msgid "Authenticated"
@@ -4459,7 +4459,7 @@ msgstr "Download CSS- en JavaScript-bestanden afzonderlijk. Voeg ze niet samen i
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates.tpl:18
 msgid "Empty log"
-msgstr "Lege log"
+msgstr "Leeg logboek"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:93
 msgid "Enable <tt>mod_server_storage</tt> to use database query tracing."
@@ -4635,7 +4635,7 @@ msgstr "notificatie"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:48
 msgid "notification, checking first return"
-msgstr "notificatie, controleer eerste return"
+msgstr "notificatie, controleer eerste resultaat"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 msgid "redirects"
@@ -4643,7 +4643,7 @@ msgstr "doorverwijzingen"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:28
 msgid "Add link"
-msgstr "Link toevoegen"
+msgstr "Voeg link toe"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:32
 msgid "Aligned left"
@@ -4853,7 +4853,7 @@ msgstr "Kalender"
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:127./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
 msgid "Download CSV"
-msgstr "CSV downloaden"
+msgstr "Download CSV"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:21./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:34./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:42
 msgid "Download Event"
@@ -4886,7 +4886,7 @@ msgstr "Exporteer"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:6
 msgid "Help about export"
-msgstr "Hulp over exporteren"
+msgstr "Hulp bij exporteren"
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:13
 msgid "App ID."
@@ -4915,11 +4915,11 @@ msgstr "Wil je ontkoppelen van je Facebook-account?"
 
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:18
 msgid "Log in with Facebook"
-msgstr "Inloggen met Facebook"
+msgstr "Log in met Facebook"
 
 #: apps/zotonic_mod_facebook/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with Facebook"
-msgstr "Aanmelden met Facebook"
+msgstr "Log in met Facebook"
 
 #: apps/zotonic_mod_facebook/priv/templates/_logon_service.facebook.tpl:2
 msgid "Redirecting to Facebook."
@@ -4927,15 +4927,15 @@ msgstr "We sturen je door naar Facebook."
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:46
 msgid "Save Facebook Settings"
-msgstr "Facebook-instellingen opslaan"
+msgstr "Bewaar Facebook-instellingen"
 
 #: apps/zotonic_mod_facebook/src/mod_facebook.erl:69
 msgid "Saved the Facebook settings."
-msgstr "Facebook-instellingen opgeslagen."
+msgstr "Facebook-instellingen bewaard."
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:27
 msgid "Scope"
-msgstr "Toepassingsgebied"
+msgstr "Scope"
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:38
 msgid "Use Facebook authentication"
@@ -4989,7 +4989,7 @@ msgstr "Alle bestanden worden in een wachtrij geplaatst, uploads starten over 10
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
 msgid "All local uploaded and preview files can be moved to the cloud."
-msgstr "Alle geuploade en voorbeeldbestanden kunnen naar de Cloud worden verplaatst."
+msgstr "Alle geüploade en voorbeeldbestanden kunnen naar de Cloud worden verplaatst."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "Are you sure you want to move all files to the cloud?"
@@ -5417,11 +5417,11 @@ msgstr "Je hebt je <strong>LinkedIn</strong>-account gekoppeld."
 
 #: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:10
 msgid "Your LinkedIn Developer Network"
-msgstr "Uw LinkedIn-ontwikkelaarsnetwerk"
+msgstr "Je LinkedIn Developer Network"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
 msgid "Bounce"
-msgstr "Bounce"
+msgstr "Teruggestuurd"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:121
 msgid "Debug"
@@ -5448,7 +5448,7 @@ msgstr "Fataal"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:156./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
 msgid "Filter"
-msgstr "Filteren"
+msgstr "Filter"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:46
 msgid "Identities"
@@ -5532,11 +5532,11 @@ msgstr "Sitebeheerder"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:24
 msgid "Stack"
-msgstr "Stapel"
+msgstr "Stack"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
 msgid "Template"
-msgstr "Sjabloon"
+msgstr "Template"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:106
 msgid "To"
@@ -5578,7 +5578,7 @@ msgstr "<h3>Ontvangers</h3><p>Om de ontvangers van de mailinglijst toe te voegen
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
 msgid "Act"
-msgstr "Wet"
+msgstr "Actie"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Add a new recipient."
@@ -7225,7 +7225,7 @@ msgstr "Verhalend"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:27./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:46
 msgid "Needed for pass"
-msgstr "Noodzakelijk voor pas"
+msgstr "Noodzakelijk voor slagen"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:3
 msgid "New result:"
@@ -7277,7 +7277,7 @@ msgstr "Paginasprong voorwaarde"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:539
 msgid "Passed"
-msgstr "Gepasseerd"
+msgstr "Geslaagd"
 
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:541
 msgid "Percent"
@@ -7349,7 +7349,7 @@ msgstr "Quiz of testvraag"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:57
 msgid "Randomize answers"
-msgstr "Willekeurige antwoorden"
+msgstr "Willekeurige antwoord volgorde"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:82
 msgid "Red"
@@ -7624,7 +7624,7 @@ msgstr "Je kan je vragenlijst samenstellen door blokken toe te voegen via het me
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:21
 msgid "You must have edit permission on the survey to edit its results."
-msgstr "U moet toestemming hebben om de resultaten van de enquête te bewerken."
+msgstr "Je moet toestemming hebben om de resultaten van de vragenlijst te bewerken."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "You need to give a name to every question."
@@ -7632,7 +7632,7 @@ msgstr "Elke vraag moet een naam hebben."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:31./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
 msgid "Your result"
-msgstr "Uw resultaat"
+msgstr "Jouw resultaat"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:93
 msgid "chocolate"
@@ -7664,7 +7664,7 @@ msgstr "moet een telefoonnummer zijn"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:37
 msgid "must be an e-mail address"
-msgstr "moet een e-mail adres zijn"
+msgstr "moet een e-mailadres zijn"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:13./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:24
 msgid "name >= 2"
@@ -7672,7 +7672,7 @@ msgstr "naam >= 2"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:31
 msgid "one per line"
-msgstr "Antwoorden, één per regel"
+msgstr "één per regel"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:3./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49
 msgid "question"
@@ -7692,7 +7692,7 @@ msgstr "jaar oud. Ik hou van"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:14./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:15
 msgid "Add language"
-msgstr "Taal toevoegen"
+msgstr "Voeg taal toe"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:24
 msgid "Added"
@@ -7720,11 +7720,11 @@ msgstr "Code"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:1
 msgid "Copy texts from a language to the currently selected language."
-msgstr "Kopieer teksten in één taal naar de geselecteerde talen."
+msgstr "Kopieer teksten vanaf een taal naar de momenteel geselecteerde taal."
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:22
 msgid "Copy translation"
-msgstr "Kopieer vertalingen"
+msgstr "Kopieer vertaling"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:95
 msgid "Danish"
@@ -7756,7 +7756,7 @@ msgstr "Engels"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:53
 msgid "Fallback language"
-msgstr "Reservetaal"
+msgstr "Terugvaltaal"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:98
 msgid "Finnish"
@@ -7776,7 +7776,7 @@ msgstr "Frans"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:139
 msgid "Generate .pot files"
-msgstr "Pot-bestanden genereren"
+msgstr "Genereer .pot-bestanden"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
 msgid "German"
@@ -7784,7 +7784,7 @@ msgstr "Duits"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:3
 msgid "Heads up! Removing this language will <strong>not</strong> delete any of the existing translations. But until you add (and activate) the language again, you will not be able to select or edit content written in this language."
-msgstr "Let op! Met het verwijderen van deze taal zullen bestaande vertalingen <em>niet</em> worden verwijderd. Maar totdat je de taal weer activeert, zul je content niet in deze taal kunnen bewerken."
+msgstr "Let op! Met het verwijderen van deze taal zullen bestaande vertalingen <em>niet</em> worden verwijderd. Maar totdat je de taal weer activeert, kan je content niet in deze taal bewerken."
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "Help about translations"
@@ -7804,7 +7804,7 @@ msgstr "Als een taal is ingesteld op 'bekijken' of 'bewerkbaar' dan zijn teksten
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:116
 msgid "If you change the stemmer language then you will need to reindex all data."
-msgstr "Als je de stamtaal verandert, moet je de zoekindex opnieuw indexeren."
+msgstr "Als je de stemmer-taal verandert, moet je de zoekindex opnieuw opbouwen."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:102
 msgid "Italian"
@@ -8028,11 +8028,11 @@ msgstr "Volg tags/accounts"
 
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:20
 msgid "Log in with Twitter"
-msgstr "Inloggen met Twitter"
+msgstr "Log in met Twitter"
 
 #: apps/zotonic_mod_twitter/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with Twitter"
-msgstr "Aanmelden met Twitter"
+msgstr "Log in met Twitter"
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:67
 msgid "Maximum poll delay"
@@ -8040,19 +8040,19 @@ msgstr "Maximale poll vertraging"
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_edit_sidebar_twitter.tpl:16
 msgid "Note that this user or organization must have <em>create</em> rights on the <em>Tweet</em> category."
-msgstr "Merk op dat deze gebruiker of organisatie <em></em> rechten moet hebben op de categorie <em>Tweet</em> ."
+msgstr "Merk op dat deze gebruiker of organisatie <em>maak</em> rechten moet hebben op de categorie <em>Tweet</em> ."
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:90
 msgid "Save Twitter Settings"
-msgstr "Twitter-instellingen bewaren"
+msgstr "Bewaar Twitter-instellingen"
 
 #: apps/zotonic_mod_twitter/src/mod_twitter.erl:76
 msgid "Saved the Twitter settings."
-msgstr "Twitter-instellingen opgeslagen."
+msgstr "Twitter-instellingen bewaard."
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:62
 msgid "Separate #tags, @usernames and phrases with commas or newlines."
-msgstr "Scheid #tags, @gebruikersnamen en zitten met komma’s of witregels."
+msgstr "Scheid #tags, @gebruikersnamen en woordgroepenmet komma’s of witregels."
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:42
 msgid "To import tweets, Zotonic needs an access token and secret. You can find these on the <b>Keys and Access Tokens</b> tab on your Twitter application page."
@@ -8060,15 +8060,15 @@ msgstr "Om tweets te importeren heeft Zotonic een access token en secret nodig. 
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_edit_sidebar_twitter.tpl:4
 msgid "Twitter Account"
-msgstr "Twitteraccount"
+msgstr "Twitter account"
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:82
 msgid "Twitter is periodically polled for new content. If there is no content then the waiting period will be extended up to this maximum."
-msgstr "Twitter wordt periodiek opgepiept voor nieuwe content. Als er geen content is, wordt de wachttijd tot dit maximum verlengd."
+msgstr "Twitter wordt periodiek bevraagd voor nieuwe content. Als er geen content is, wordt de wachttijd tot dit maximum verlengd."
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_edit_sidebar_twitter.tpl:15
 msgid "Use <tt>@foobar</tt> or <tt>foobar</tt> to import all recent and future tweets from \"foobar\"."
-msgstr "Gebruik <tt>@foobar</tt> of <tt>foobar</tt> om alle recente en toekomstige tweets uit \"foobar\" te importeren."
+msgstr "Gebruik <tt>@foobar</tt> of <tt>foobar</tt> om alle recente en toekomstige tweets van \"foobar\" te importeren."
 
 #: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:33
 msgid "Use Twitter authentication"
@@ -8108,15 +8108,15 @@ msgstr "Een component van het pad is geen directory:"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Add Site"
-msgstr "Site toevoegen"
+msgstr "Voeg site toe"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:4./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:9
 msgid "Add or checkout a new site"
-msgstr "Een nieuwe site toevoegen of afrekenen"
+msgstr "Voeg een nieuwe site toe"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:20
 msgid "All the files and templates are placed at"
-msgstr "Alle bestanden en sjablonen zijn geplaatst op"
+msgstr "Alle bestanden en templates zijn geplaatst in"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:63
 msgid "Basic blogging site"
@@ -8124,15 +8124,15 @@ msgstr "Basis blogging site"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:76
 msgid "Checking database ..."
-msgstr "Het controleren van de database ..."
+msgstr "Controleren van de database ..."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:112
 msgid "Configure PostgreSQL Database Connection"
-msgstr "PostgreSQL Databaseverbinding configureren"
+msgstr "Configureer PostgreSQL Databaseverbinding"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:3
 msgid "Congratulations, your site has been created and is now running."
-msgstr "Gefeliciteerd, uw site is gemaakt en draait nu."
+msgstr "Gefeliciteerd, je site is gemaakt en draait nu."
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:162
 msgid "Copy skeleton files ..."
@@ -8140,7 +8140,7 @@ msgstr "Kopieer skeletbestanden ..."
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:142
 msgid "Could not check out Git repository:"
-msgstr "Ik kon Git repository niet bekijken:"
+msgstr "Kon Git repository niet uitchecken:"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:96
 msgid "Could not connect to 'postgres' database or create the database."
@@ -8160,7 +8160,7 @@ msgstr "Kon de site directory niet aanmaken"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:146
 msgid "Could not delete the site dir for the Git checkout:"
-msgstr "Kon de site dir voor de Git kassa niet verwijderen:"
+msgstr "Kon de site dir voor de Git checkout niet verwijderen:"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:121
 msgid "Database"
@@ -8168,7 +8168,7 @@ msgstr "Database"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:473
 msgid "Disk full creating:"
-msgstr "Schijf vol met creëren:"
+msgstr "Schijf vol tijdens maken:"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:65
 msgid "Empty site without database connection"
@@ -8176,7 +8176,7 @@ msgstr "Lege site zonder databaseverbinding"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:64
 msgid "Empty site, no templates etc."
-msgstr "Lege site, geen sjablonen enz."
+msgstr "Lege site, geen templates enz."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:44
 msgid "Enter a valid hostname like \"www.example.com\" or \"test.local\"."
@@ -8184,7 +8184,7 @@ msgstr "Voer een geldige hostnaam in zoals \"www.example.com\" of \"test.local\"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:203
 msgid "Force compile all Erlang files ..."
-msgstr "Forceer alle Erlang bestanden ..."
+msgstr "Forceer compilatie van alle Erlang bestanden ..."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:75
 msgid "Git"
@@ -8196,7 +8196,7 @@ msgstr "Git-URL"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:129
 msgid "Git checkout ..."
-msgstr "Git kassa..."
+msgstr "Git checkout..."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:11
 msgid "Go to the admin interface at"
@@ -8204,11 +8204,11 @@ msgstr "Ga naar de admin-interface op"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:132
 msgid "Host"
-msgstr "Gastheer"
+msgstr "Host"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:39
 msgid "Host name"
-msgstr "Gastheernaam"
+msgstr "Hostnaam"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:14
 msgid "Log on with username <b>admin</b> and password"
@@ -8216,7 +8216,7 @@ msgstr "Log in met gebruikersnaam <b>admin</b> en wachtwoord"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:49
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
-msgstr "Zorg ervoor dat deze hostnaam een geldig DNS-gegeven heeft of wordt toegevoegd aan uw <tt>/etc/hosts</tt> bestand."
+msgstr "Zorg ervoor dat deze hostnaam een geldige DNS-instelling heeft of voeg deze toe aan je <tt>/etc/hosts</tt> bestand."
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:458
 msgid "No permission to create the site directory at:"
@@ -8442,7 +8442,7 @@ msgstr "Gestopt"
 
 #: apps/zotonic_site_status/priv/templates/error.503.tpl:12
 msgid "The site you are trying to visit is experiencing some problems. Please try again later."
-msgstr "De site die u probeert te bezoeken heeft een aantal problemen. Probeer het later nog eens."
+msgstr "De site die u probeert te bezoeken ondervindt momenteel problemen. Probeer het later nog eens."
 
 #: apps/zotonic_site_status/priv/templates/logon.tpl:33
 msgid "This password is not correct."
@@ -8450,7 +8450,7 @@ msgstr "Dit wachtwoord is niet correct."
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:5
 msgid "URL"
-msgstr "URL\\n"
+msgstr "URL"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:73
 msgid "Visit the admin page for this site."
@@ -8458,7 +8458,7 @@ msgstr "Bezoek de admin pagina voor deze site."
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:14
 msgid "Waiting"
-msgstr "Wachtend op"
+msgstr "Aan het wachten"
 
 #: apps/zotonic_site_status/priv/templates/error.400.tpl:8
 msgid "Welcome, visitor! The page you are\n"
@@ -8490,7 +8490,7 @@ msgstr "Welkom, bezoeker! De pagina die u momenteel\n"
 
 #: apps/zotonic_site_status/priv/templates/logon.tpl:34
 msgid "You can find the password in ~/.zotonic/[version]/zotonic.config."
-msgstr "U kunt het wachtwoord vinden in ~/.zotonic/[version]/zotonic.config."
+msgstr "Je kan het wachtwoord vinden in ~/.zotonic/[version]/zotonic.config."
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:71
 msgid "admin"
@@ -8498,11 +8498,11 @@ msgstr "admin"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:63
 msgid "flush"
-msgstr "doorspoelen"
+msgstr "cache legen"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:50./apps/zotonic_site_status/priv/templates/_sites.tpl:55
 msgid "restart"
-msgstr "herstarten"
+msgstr "herstart"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:29
 msgid "start"
