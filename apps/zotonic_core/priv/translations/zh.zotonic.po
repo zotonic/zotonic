@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 15:31\n"
+"PO-Revision-Date: 2020-12-17 11:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -413,7 +413,7 @@ msgstr "移到另一个地方"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Need more help?"
-msgstr "需要更多帮助？"
+msgstr "更多帮助？"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:14
 msgid "No ACL rules"
@@ -726,7 +726,7 @@ msgstr "+ 添加块"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>第一个</strong> 也称为名字，前名或基督名字。<br/><strong>中</strong> 通常简称为首字母，如 <em>约翰-D-洛克菲勒</em>。<br/><strong>姓前缀</strong> 如荷兰语 <em>van，van de，der</em>。<br/><strong>姓</strong> 又称家名或姓。"
+msgstr "<strong>名字</strong>对应英文的 First Name。<br/><strong>中名</strong>在中文姓名中一般不常见，英文姓名中例如 <em>John D. Rockefeller</em>。<br/><strong>姓前缀</strong>在中文中不常见，荷兰文姓名例如 <em>van, van de, der</em>。<br/><strong>姓</strong>对应与英文的 Last Name。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:10
 msgid "About categories"
@@ -892,7 +892,7 @@ msgstr "从本页面的媒体条目中选择一个，插入到正文文本中。
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:181
 msgid "City"
-msgstr "市/区/县"
+msgstr "城市"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:11
 msgid "Click here for more information"
@@ -1155,11 +1155,11 @@ msgstr "上传文件出错。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone’s life."
-msgstr "每个页面都可以有一个日期范围。例如如果页面是一个事件或某人的生活描述。"
+msgstr "每个页面都可以有一个日期范围。例如当页面表示一个事件或者某人的生平时。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
-msgstr "每一个页面都被准确地归为一个类别。类别定义了页面所代表的内容。例如，一个事件，一个产品或一个人。类别是按层次定义的。这样，你可以有一个车辆类别，并有汽车和自行车的子类别。"
+msgstr "每个页面只属于一个分类。分类定义了页面代表了什么。例如事件、产品或是人。分类是树状的，也就是说你可以有一个“交通工具”分类，然后其下有子分类“汽车”和“自行车”。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:265
 msgid "Existing pages"
@@ -1205,7 +1205,7 @@ msgstr "名字"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:24
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
-msgstr "刷新所有URL调度规则、模板和库缓存以及其他内存缓存数据。"
+msgstr "刷新所有的 URL 调度规则，模版以及缓存数据。"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:23
 msgid "Flush system caches"
@@ -1214,7 +1214,7 @@ msgstr "清理系统缓存"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:58
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:107
 msgid "From"
-msgstr "起始"
+msgstr "来自"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 msgid "Go back."
@@ -1246,7 +1246,7 @@ msgstr "如果一个页面有一个发布日期范围，那么它将只在两个
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:120
 msgid "Info"
-msgstr "信息"
+msgstr "消息"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:8
 msgid "Info link with modal popup"
@@ -1288,7 +1288,7 @@ msgstr "鏈接"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:37
 msgid "Live query, send notifications when matching items are updated or inserted."
-msgstr "实时查询，当匹配的项目更新或插入时发送通知。"
+msgstr "实时查询，当匹配条目被上传或是插入时候发出通知。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:5./apps/zotonic_site_status/priv/templates/_navbar.tpl:34
@@ -1338,11 +1338,11 @@ msgstr "媒体"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Media URL"
-msgstr "媒体网址"
+msgstr "媒体 URL"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:60
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
-msgstr "媒体包括所有上传的图像、电影和文档。媒体可以附加到页面上。"
+msgstr "媒体包括所有上传的图片，视频以及文档。媒体可以被附加到页面上。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
 msgid "Media file"
@@ -1454,7 +1454,7 @@ msgstr "页面描述"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:42
 msgid "Page keywords"
-msgstr "页面关键词"
+msgstr "页面关键字"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:17
 msgid "Page path"
@@ -1555,7 +1555,7 @@ msgstr "查询预览"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:42
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
-msgstr "通过将数据库中的所有页面和数据放入索引器队列中，重建所有搜索-索引。这可能需要很长的时间"
+msgstr "将所有数据库中的页面和数据重新放入索引队列中，重建所有检索索引。这可能会耗费相当长的时间。"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:33
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:120
@@ -1564,7 +1564,7 @@ msgstr "重建检索索引"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Recalculate the numbering of the category tree. This can take a long time."
-msgstr "重新计算类别树的编号。这可能需要很长的时间。"
+msgstr "重新计算分类树。这可能会耗费一定的时间。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
@@ -1867,11 +1867,11 @@ msgstr "本页已被删除。"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:9
 msgid "This page holds a collection of administrative options to perform certain tasks on this Zotonic installation."
-msgstr "这个页面包含了一系列的管理选项，用来执行Zotonic安装的某些任务。"
+msgstr "本页面包含一些管理选项，用于执行相关操作。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8
 msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
-msgstr "这个页面是可以和别人连接的。例如，你可以把它与一个演员或一个品牌连接起来。"
+msgstr "本页面可以连接到其他页面。例如你可以链接到作者或者品牌页面。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
 msgid "This resource was created by the module"
@@ -1941,7 +1941,7 @@ msgstr "上传文件"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:87
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
 msgid "Uploaded"
-msgstr "已上传"
+msgstr "上传时间"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:23
 msgid "Usage"
@@ -2073,7 +2073,7 @@ msgstr "你没有权限执行这个动作。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:6
 msgid "You have to specify a description of the file to make it easier to find and share."
-msgstr "你必须指定文件的描述，以便于查找和分享。"
+msgstr "请指定文件的描述信息，让查找和共享更方便。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
 msgid "Zotonic Version"
@@ -2194,7 +2194,7 @@ msgstr "分类"
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:12
 msgid "Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy."
-msgstr "类别是用来对所有页面进行分类的。每个页面只属于一个类别。<br/>类别是在一个层次结构中定义的。在这里你可以改变这个层次结构。"
+msgstr "分类用于用于所有页面的分类管理。每个页面只能属于一个分类。<br />分类定义通过层级来定义，在这里你可以修改层级关系。"
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:3
 msgid "Category Hierarchy"
@@ -2453,7 +2453,7 @@ msgstr "点击下面的链接来确认这个电子邮件地址是否正确，当
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:10
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
-msgstr "点击 \"删除 \"来删除此人的任何现有用户名/密码，此人将不再是用户。"
+msgstr "使用“删除”来删除人员的用户名/密码，这样人员就不再是用户。"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_delete_username.erl:53
 msgid "Confirm user deletion"
@@ -2498,7 +2498,7 @@ msgstr "每一个页面/人都可以在编辑页面上成为用户。用户和�
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:9
 msgid "Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user."
-msgstr "给予新用户的姓名和电子邮件地址。将为该用户创建一个 <em>人</em> 页。"
+msgstr "设置新用户的名字和 e-mail 地址。系统会自动为他创建一个<em>人员</em>页面。"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:6
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:7./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:15
@@ -2634,7 +2634,7 @@ msgstr "对不起，你不能删除自己的用户名。"
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
-msgstr "谢谢你"
+msgstr "谢谢"
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:214
 msgid "The address is invalid."
@@ -2650,7 +2650,7 @@ msgstr "新用户名/密码设置成功。"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:3
 msgid "The password of the admin user cannot be changed in the database. Please edit your site's configuration file at"
-msgstr "管理员用户的密码不能在数据库中更改。请编辑您网站的配置文件"
+msgstr "管理员用户的密码不能在数据库中修改，请修改站点的配置文件"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:89./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:95
 msgid "The username is already in use, please try another."
@@ -2767,7 +2767,7 @@ msgstr "查看邮件状态"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
-msgstr "当您将凭证添加到一个人身上时，这个人就成为了一个用户。一个人或一台机器可以用这些凭证登录到您的Zotonic系统中并进行操作。<br/><br/>用户可以做的事情取决于用户所加入的组。"
+msgstr "当一个人员被添加认证信息后，他就成为一个用户。这样自然人或者机器就可以通过这些认证信息来登录你的 Zotonic 系统执行操作。<br /></br />用户可执行的操作依赖于他所在的用户组。"
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3152,7 +3152,7 @@ msgstr "课题"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:54
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
-msgstr "这个谓词的方向（从/到）与正常定义相反。"
+msgstr "本谓词的方向（从/到）为通用定义所保留。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:43
 msgid "There are no page connections with this predicate."
@@ -3188,7 +3188,7 @@ msgstr "你不允许创建这个谓词。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don't check anything then all categories are valid."
-msgstr "你可以定义哪些类别的谓词显示在编辑页面上。  你也可以定义当搜索要连接的页面时，会发现哪些类别的对象。当你不检查任何东西时，那么所有类别都是有效的。"
+msgstr "你可以定义本谓词显示在哪些分类的编辑页面中。同时也可以定义搜索连接页面时显示哪些分类对象。如果不选择的话，则表示所有分类可用。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "object"
@@ -3499,7 +3499,7 @@ msgstr "外部服务"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:26
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
-msgstr "出于安全考虑，密码重置码只在有限的时间内保存，只能使用一次。"
+msgstr "为了确保安全，密码重设码只在有限时间内可用，而且只能被使用一次。"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
 msgid "Forgot your password?"
@@ -3658,7 +3658,7 @@ msgstr "有人已经和这个账号联系上了"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:27
 #: apps/zotonic_mod_survey/priv/templates/_survey_error.tpl:1
 msgid "Something went wrong"
-msgstr "出了点问题"
+msgstr "出错"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
@@ -3724,7 +3724,7 @@ msgstr "双因素密码"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use some non alphabetical characters or digits to make it harder to guess."
-msgstr "使用一些非字母的字符或数字，使其更难猜测。"
+msgstr "请不要使用纯字母或者纯数字的密码。"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:66
 msgid "Verify your account"
@@ -3732,7 +3732,7 @@ msgstr "验证您的账户"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:82
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
-msgstr "我们似乎没有任何有效的电子邮件地址或其他电子通信地址的你。"
+msgstr "没有找到任何关于你的可用 e-mail 地址信息或是其他电子联系方式。"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:60
 msgid "We have sent an email with a link to reset your password to"
@@ -3761,7 +3761,7 @@ msgstr "您需要被允许编辑系统配置以查看或更改配置的App Keys�
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:36
 msgid "You receive this email because you or someone else requested a password reset for your account. You or the someone else either entered your username or email address. You will not receive any additional emails because of this request."
-msgstr "您之所以收到这封邮件，是因为您或其他人要求为您的账户重置密码。您或其他人输入了您的用户名或电子邮件地址。您将不会因为此请求而收到任何额外的电子邮件。"
+msgstr "你收到本邮件是因为有人通过输入用户名或者 e-mail 地址请求重置你的账户密码.你不会因此收到其他邮件。"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
@@ -3819,19 +3819,19 @@ msgstr "user@example.com"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:3
 msgid "Admin Backups"
-msgstr "管理员备份"
+msgstr "管理备份"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:28
 msgid "Are you sure you want to revert to this version?"
-msgstr "你确定要恢复到这个版本吗？"
+msgstr "确认恢复到这个版本？"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:41
 msgid "At any moment you can make a backup of your system."
-msgstr "您可以在任何时候对您的系统进行备份。"
+msgstr "任何时候你都可以创建系统的备份。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:44
 msgid "Back to the edit page"
-msgstr "返回编辑页面"
+msgstr "回到编辑页面"
 
 #: apps/zotonic_mod_backup/src/mod_backup.erl:67
 msgid "Backup"
@@ -3839,11 +3839,11 @@ msgstr "备份"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:11
 msgid "Backup &amp; Restore"
-msgstr "备份 &amp; 还原。"
+msgstr "备份 &amp; 恢复"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:11
 msgid "Backup and restore options for your content."
-msgstr "为您的内容提供备份和恢复选项。"
+msgstr "站点内容的备份和恢复选项。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:9
 msgid "Backups"
@@ -3859,11 +3859,11 @@ msgstr "变化自"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:42
 msgid "Check and possibly restore an earlier version of your page."
-msgstr "检查并可能恢复你的页面的早期版本。"
+msgstr "检查并恢复到页面的先前版本。"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
-msgstr "点击 <b>列出并恢复早期版本</b> ，即可查看本页早期保存的版本。<br/>您也可以将一个页面的完整内容保存到一个文件中。稍后您可以重新加载这个文件，替换当前页面的内容。请注意，该文件不包含您未保存的更改。连接和媒体也不会被保存。"
+msgstr "点击<b>列出并恢复到之前的版本</b>来预览本页面的之前保存版本。<br />你也可以把页面的完整内容保存到文件。随后重加载这个文件，替换当前页面内容。注意文件不会包含你未保存的改动。链接和媒体不会一同保存"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Deleted"
@@ -3875,27 +3875,27 @@ msgstr "下载备份文件"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Help about backup &amp; restore"
-msgstr "关于备份 &amp; 还原的帮助。"
+msgstr "备份 &amp; 恢复帮助。"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:24
 msgid "List and restore an earlier version"
-msgstr "列出并恢复早期版本"
+msgstr "列出并恢复到之前的版本"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:33
 msgid "Make a daily backup of the database and uploaded files."
-msgstr "每天对数据库和上传的文件进行备份。"
+msgstr "对数据库和上传文件每天做备份。"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:29
 msgid "No backups present."
-msgstr "目前没有备份。"
+msgstr "没有提供备份。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:68
 msgid "Previous"
-msgstr "上一篇"
+msgstr "前一页"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:34./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
-msgstr "还原备份"
+msgstr "从备份恢复"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version…"
@@ -3911,7 +3911,7 @@ msgstr " 选择您要上传的备份文件。文件必须是 .bert 文件。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:26
 msgid "Show import/export panel in the admin."
-msgstr "在管理界面显示导入/导出面板。"
+msgstr "在控制台显示导入/导出面板。"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:60
 msgid "Sorry, there is no mudule that can import this."
@@ -3943,7 +3943,7 @@ msgstr "对不起，你没有权限更改配置。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45
 msgid "Start backup now"
-msgstr "现在开始备份"
+msgstr "现在备份"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
 msgid "Start database-only backup now"
@@ -3951,15 +3951,15 @@ msgstr "现在开始只备份数据库"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
-msgstr "在路径中没有找到 \"pg_dump \"命令。将 \"pg_dump \"的配置键设置为pg_dump的路径，然后返回本页面。"
+msgstr "PATH 中找不到 \"pg_dump\" 命令。请设置 \"pg_dump\" 配置 key 为 pg_dump 的路径然后回到本页面。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:52
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
-msgstr "在路径中没有找到 \"tar \"命令。将 \"tar \"配置键设置为tar的路径，然后返回本页面。"
+msgstr "命令 \"tar\" 没有在搜索路径中找到。请设置 \"tar\" 的配置项然后返回本页面。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:41
 msgid "The backup comprises two parts, the database and the uploaded files."
-msgstr "备份包括两部分，数据库和上传的文件。"
+msgstr "备份包括两部分，数据库和上传文件。"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
@@ -3971,7 +3971,7 @@ msgstr "该站点已启用云文件存储，并且此系统上有 <strong>$ 1</s
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
-msgstr "这将用备份文件的内容覆盖你的页面。"
+msgstr "这将会使用备份文件内容覆盖你的页面。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
@@ -3989,11 +3989,11 @@ msgstr "您不允许查看修改的内容"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:42
 msgid "You can have 10 backups, older ones will be deleted automatically."
-msgstr "您可以有10个备份，旧的备份会自动删除。"
+msgstr "你可以拥有 10 个备份，旧的备份将会被自动删除。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
-msgstr "您的备份配置不正确。在解决以下问题之前，备份模块将无法工作。"
+msgstr "备份没有被正确配置。backup 模块需要你先解决如下问题："
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:17
 msgid "download database"
@@ -4005,7 +4005,7 @@ msgstr "下载文件"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
-msgstr "本次备份正在进行中"
+msgstr "备份正在执行中"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:5
 msgid "# Pages"
@@ -4030,7 +4030,7 @@ msgstr "文件"
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:14
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:4
 msgid "Filename"
-msgstr "文件名"
+msgstr "文件"
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:28
 msgid "Folder"
@@ -4072,7 +4072,7 @@ msgstr "与服务器无连接"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
 msgid "OK"
-msgstr "好"
+msgstr "成功"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
@@ -4110,7 +4110,7 @@ msgstr "该页不存在"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:19
 msgid "This is the base message. When you receive this text then the template builder did not overrule the <tt>body</tt> block."
-msgstr "这是基本信息。当你收到这段文字时，那么模板构建器没有覆盖 <tt>体</tt> 块。"
+msgstr "这个是原始信息。当你看到这个信息的时候表示模版作者没有覆盖 <tt>body</tt> 块。"
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
@@ -4237,7 +4237,7 @@ msgstr "通用评论表单设置"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:17
 msgid "Here you find settings to configure the comment module to suit your needs."
-msgstr "在这里你可以找到设置，以配置评论模块，以满足你的需求。"
+msgstr "这里可以配置评论模块。"
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:62
 msgid "Log on or sign up to comment"
@@ -4247,7 +4247,7 @@ msgstr "登录或注册并评论"
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:22./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log.tpl:38./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
 msgid "Message"
-msgstr "消息"
+msgstr "信息内容"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:33
 msgid "Moderate comments"
@@ -4271,7 +4271,7 @@ msgstr "最近评论"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:31
 msgid "Require all comments to be reviewed by a moderator before displaying them on the public website"
-msgstr "要求所有评论在公开网站上展示之前，必须经过主持人的审查。"
+msgstr "所有评论都需要审核员审核后才会在网站上公开显示。"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:21
 msgid "Save Comment Form settings"
@@ -4301,7 +4301,7 @@ msgstr "你不允许切换评论。"
 
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:7./apps/zotonic_mod_comment/priv/templates/_comments_moderation.tpl:1
 msgid "Your comment has been saved and will be subject to moderation before it is displayed on the website"
-msgstr "您的评论已被保存，并将在网站上显示之前接受审核。"
+msgstr "您的评论将在审核后发布"
 
 #: apps/zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:4./apps/zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:15
 msgid "publish"
@@ -4313,23 +4313,23 @@ msgstr "取消发布"
 
 #: apps/zotonic_mod_contact/priv/templates/email_contact.tpl:6
 msgid "Hello, the contact form of"
-msgstr "你好，联系表格中的"
+msgstr "你好，联系表单"
 
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:32
 msgid "Thank you!"
-msgstr "谢谢你！"
+msgstr "谢谢！"
 
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:33
 msgid "Your message has been submitted! We’ll get in touch soon."
-msgstr "您的信息已经提交我们会尽快与您联系。"
+msgstr "您的信息已经被提交！我们将尽快联系您。"
 
 #: apps/zotonic_mod_contact/priv/templates/email_contact.tpl:3
 msgid "contact form on"
-msgstr "联系表"
+msgstr "联系表单在"
 
 #: apps/zotonic_mod_contact/priv/templates/email_contact.tpl:6
 msgid "has been submitted."
-msgstr "已提交。"
+msgstr "已被提交。"
 
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:1
 msgid "Are you sure you want to delete the following content groups:"
@@ -4376,7 +4376,7 @@ msgstr "本页属于组。"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
-msgstr "行动"
+msgstr "动作"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:3
 msgid "Admin Custom Redirects"
@@ -5132,7 +5132,7 @@ msgstr "Zotonic可以在云端存储上传和调整大小的文件。在这里�
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
-msgstr "导入CSV文件"
+msgstr "导入 CSV 文件"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import.tpl:8./apps/zotonic_mod_import_csv/src/mod_import_csv.erl:74
 msgid "Import content"
@@ -5145,7 +5145,7 @@ msgstr "从CSV文件导入数据。"
 #: apps/zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:20
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:19
 msgid "Import previously deleted items again"
-msgstr "再次导入之前删除的项目"
+msgstr "重新导入之前被删除的条目"
 
 #: apps/zotonic_mod_import_csv/src/mod_import_csv.erl:107
 msgid "Only admins can import CSV files."
@@ -5153,7 +5153,7 @@ msgstr "只有管理员才能导入CSV文件。"
 
 #: apps/zotonic_mod_import_csv/src/mod_import_csv.erl:98./apps/zotonic_mod_import_csv/src/mod_import_csv.erl:100
 msgid "Please hold on while the file is importing. You will get a notification when it is ready."
-msgstr "文件导入时请稍等。当它准备好时，你会得到一个通知。"
+msgstr "请等待文件导入完成。完成后你将看到通知。"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:9
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:7
@@ -5171,27 +5171,27 @@ msgstr "该文件不能被导入。"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:2
 msgid "Upload a CSV file from your computer."
-msgstr "从电脑上传CSV文件。"
+msgstr "从本机上传一个 CSV 文件。"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Import WXR file"
-msgstr "导入WXR文件"
+msgstr "导入 WXR 文件"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
 msgid "Import a Wordpress WXR export file into Zotonic."
-msgstr "将Wordpress WXR导出文件导入到Zotonic中。"
+msgstr "导入一个 Wordpress WXR 文件到 Zotonic。"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
 msgid "Upload a wordpress WXR file from your computer."
-msgstr "从电脑上传wordpress WXR文件。"
+msgstr "从本机上传一个 Wordpress WXR 文件。"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:9
 msgid "WXR file"
-msgstr "WXR文件"
+msgstr "WXR 文件"
 
 #: apps/zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Wordpress import"
-msgstr "Wordpress导入"
+msgstr "Wordpress 导入"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
@@ -5572,15 +5572,15 @@ msgstr " <em>从这个列表中删除</em> 目标列表中的所有收件人。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>收件人</h3><p>要添加、删除或查看邮件列表收件人，请点击 \"显示所有收件人 \"链接。</p><h3>发件人名称和电子邮件地址</h3><p>发件人名称和电子邮件地址可以为每个邮件列表设置。这默认为配置键 <tt>site.email_from</tt>。  发送邮件的 <i>From</i> 将被设置为发件人名称和地址。</p><h3>自动上传收件人列表</h3><p>dropbox文件名用于自动上传完整的收件人列表。该文件名必须与上传的收件人列表的文件名一致。完整的收件人列表将被替换为dropbox文件中的收件人。</p><h3>访问控制</h3><p>每个可以编辑邮件列表的人都可以向邮件列表发送页面。每个可以查看邮件列表的人都可以向邮件列表添加电子邮件地址。</p>。"
+msgstr "<h3>收件人</h3><p>添加，删除或查看收件人列表，请点击“显示所有收件人”链接。</p><h3>发送者名字及 e-mail 地址</h3><p>发送者名字可以针对每个邮件列表设置，默认是配置 key <tt>site.email_from</tt>。E-mail 的<i>发送者</i>将被设置为发送者名字和地址。</p><h3>自动上传收件人列表</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>访问控制</h3><p>任何可以编辑邮件列表的人可以给邮件列表发送页面。任何可以查看邮件列表的人可以添加地址到邮件列表。</p>"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
 msgid "Act"
-msgstr "法"
+msgstr "启用"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Add a new recipient."
-msgstr "添加一个新的收件人。"
+msgstr "添加新收件人"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:45
 msgid "Add recipient"
@@ -5588,7 +5588,7 @@ msgstr "添加收件人"
 
 #: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:61
 msgid "Added the recipient."
-msgstr "添加了收件人。"
+msgstr "收件人已添加。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist.tpl:14
 msgid "All mailing lists"
@@ -5596,27 +5596,27 @@ msgstr "所有邮件列表"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:19
 msgid "All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line."
-msgstr "邮件列表的所有收件人。您可以上传或下载该列表，该列表必须是一个文件，每行有一个电子邮件地址。"
+msgstr "邮件列表的所有收件人。你可以上传或者下载这个列表，文件每行包含一个 e-mail 地址。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
-msgstr "任何页面都可以作为邮件发送。您可以从任何编辑页面发送邮件。在这个页面上，您可以添加或删除邮件列表和他们的收件人。"
+msgstr "任何页面都可以通过邮件发送。你可以从任意编辑页面发送邮件。本页面你可以添加或删除邮件列表以及其中收件人。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to"
-msgstr "你确定你要取消邮寄给"
+msgstr "确认取消发送邮件给"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:2
 msgid "Are you sure you want to delete the mailing list"
-msgstr "你确定要删除邮件列表吗？"
+msgstr "确认需要删除邮件列表"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:49
 msgid "Are you sure you want to reset the statistics for this mailing? This means that if you send the mailing again afterwards, recipients might have gotten the mailing twice."
-msgstr "您确定要重新设置这封邮件的统计数据吗？这意味着，如果您之后再次发送邮件，收件人可能已经收到了两次邮件。"
+msgstr "确认重置本邮件统计？这意味着之后如果你再次发送邮件，收件人可能会收到两次同样邮件。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:9
 msgid "Before you will receive any further mail you need to confirm your subscription."
-msgstr "在您收到任何进一步的邮件之前，您需要确认您的订阅。"
+msgstr "你在收到邮件之前需要确认订阅。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:5
 msgid "Cancel mailing"
@@ -5624,19 +5624,19 @@ msgstr "取消邮寄"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Check to activate the e-mail address."
-msgstr "勾选激活电子邮件地址。"
+msgstr "选取以激活 e-mail 地址。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
 msgid "Clear"
-msgstr "清楚"
+msgstr "清除"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:10
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
-msgstr "点击 <strong>取消订阅</strong> 将自己从邮件列表中删除。"
+msgstr "点击<strong>取消订阅</strong>将你从邮件列表中删除。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:40
 msgid "Click here when you can’t read the message below."
-msgstr "当你看不清下面的信息时，请点击这里。"
+msgstr "如果你不能看到下面的信息，请点击这里。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid " Click the button below to confirm your subscription to this mailing list."
@@ -5660,7 +5660,7 @@ msgstr "确认邮件取消。"
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:45
 msgid "Confirm sending to mailinglist"
-msgstr "确认发送至邮件列表"
+msgstr "确认发送给邮件列表"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:3
 msgid "Confirm subscription"
@@ -5681,11 +5681,11 @@ msgstr "亲爱的"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:19
 msgid "Delete all current recipients before adding the file."
-msgstr "在添加文件之前，删除所有当前的收件人。"
+msgstr "添加文件前删除所有当前收件人。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
 msgid "Delete all recipients from this list?"
-msgstr "删除此名单中的所有收件人？"
+msgstr "从列表中删除所有收件人？"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:50
 msgid "Deleted the mailing list."
@@ -5699,19 +5699,19 @@ msgstr "描述"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Download all"
-msgstr "下载所有"
+msgstr "全部下载"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Download list of all active recipients."
-msgstr "下载所有有效接收者的名单。"
+msgstr "下载所有活动收件人列表。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Downloading active recipients list. Check your download window."
-msgstr "下载活动接收者名单。请检查您的下载窗口。"
+msgstr "下载活动收件人列表。请检查下载窗口。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:36
 msgid "Dropbox filename (optional)"
-msgstr "Dropbox文件名（可选"
+msgstr "Dropbox 文件名（可选）"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:63
 msgid "E-mail address updated"
@@ -5727,52 +5727,52 @@ msgstr "通过电子邮件发送此页面"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:52
 msgid "Edit recipient"
-msgstr "编辑收件人"
+msgstr "编辑接收人"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:20
 msgid "Edit the mailing list &raquo;"
-msgstr "编辑邮件列表 &raquo;。"
+msgstr "编辑邮件列表 &raquo;"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:2
 msgid "Enter the e-mail address of the recipient. The name of the recipient is optional."
-msgstr "输入收件人的电子邮件地址。收件人的姓名是可选的。"
+msgstr "输入收件人的 e-mail 地址，收件人姓名是可选的。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
 msgid "Externally managed list &mdash; no (un)subscribe links"
-msgstr "外部管理的列表 &mdash; 没有（未）订阅链接"
+msgstr "外部管理的列表 &mdash; 没有订阅（取消订阅）链接"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
 msgid "First name"
-msgstr "名"
+msgstr "名字"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "From now on you will receive mail from our mailing list."
-msgstr "从现在起，您将收到我们的邮件列表中的邮件。"
+msgstr "从现在开始你将会收到来自我们邮件列表的邮件。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:6
 msgid "Give your e-mail address to subscribe to"
-msgstr "请提供您的电子邮件地址，以便订阅"
+msgstr "请输入你的 e-mail 地址来订阅"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:16
 msgid "Go to mailinglist page"
-msgstr "进入邮件列表页面"
+msgstr "前往邮件列表页面"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:6
 msgid "Hello,"
-msgstr "你好啊"
+msgstr "你好，"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "Help about mailing lists"
-msgstr "关于邮件列表的帮助"
+msgstr "邮件列表帮助。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
 msgid "Help about the mailing page"
-msgstr "关于邮件页面的帮助"
+msgstr "邮寄页面帮助。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:8
 msgid "Hope to see you again."
-msgstr "希望能再见到你。"
+msgstr "期望再次见到您。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:6
 msgid "It appears you have sent\n"
@@ -5780,11 +5780,7 @@ msgid "It appears you have sent\n"
 "    the recipients that did not yet receive the mail will get it. As a\n"
 "    safety-caution, it is impossible to send the same page twice to\n"
 "    the same e-mail address."
-msgstr "您似乎已经向这个列表发送过一次\n"
-"    这个页面。如果您再次发送，只有\n"
-"    尚未收到邮件的收件人才会收到。\n"
-"    安全起见，不可能将同一个页面发送两次到\n"
-"    同一个电子邮件地址。"
+msgstr "你已经给这个列表发送过了本页面，如果你选择再次发送，那么只有没有收到过邮件的收件人会被发送。作为安全设置，无法给同样的 e-mail 地址再次发送相同页面。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:4
 msgid "Keep mailing"
@@ -5808,7 +5804,7 @@ msgstr "邮件列表"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:3
 msgid "Mailing status"
-msgstr "邮寄状况"
+msgstr "邮寄状态"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:16
 msgid "Mailings are sent to:"
@@ -5820,15 +5816,15 @@ msgstr "通过查询匹配"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:14
 msgid "New mailing list"
-msgstr "新邮件列表"
+msgstr "新建邮件列表"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:83./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:53
 msgid "No items found"
-msgstr "没有找到项目"
+msgstr "没有找到"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:95
 msgid "No recipients"
-msgstr "无收件人"
+msgstr "没有收件人"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Number of recipients on this list:"
@@ -5844,7 +5840,7 @@ msgstr "运作"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:24
 msgid "Our excuses for the inconvenience."
-msgstr "我们的借口是不便。"
+msgstr "对此带来的不便我们表示抱歉。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:19
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -5860,27 +5856,27 @@ msgstr "进行操作"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:3
 msgid "Please confirm that you want to send the page"
-msgstr "请确认您要发送的页面"
+msgstr "请确认你需要发送页面"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:12
 msgid "Please confirm your subscription"
-msgstr "请确认您的订阅"
+msgstr "请确认你的订阅"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:3
 msgid "Please confirm your subscription on"
-msgstr "请确认您的订阅"
+msgstr "请确认你订阅了"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:5
 msgid "Please enter the e-mail address you want to send a test mail to."
-msgstr "请输入您想发送测试邮件的电子邮件地址。"
+msgstr "请输入需要接收测试邮件的目的地址。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:5
 msgid "Please enter the e-mail address you want to send this page to."
-msgstr "请输入您想发送此页面的电子邮件地址。"
+msgstr "请输入本页面发送的目标 e-mail 地址。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "Please follow"
-msgstr "请遵循"
+msgstr "请按照"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:6
 msgid "Please note:"
@@ -5893,7 +5889,7 @@ msgstr "请取消订阅"
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:34
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:31
 msgid "Prefix"
-msgstr "前缀"
+msgstr "称呼"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:21./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:15
 msgid "Preview mailing"
@@ -5901,7 +5897,7 @@ msgstr "预览邮件"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:43./apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:28
 msgid "Read this page on the web."
-msgstr "在网络上阅读这个页面。"
+msgstr "在网页上阅读本页面。"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:67
 msgid "Recipient deleted."
@@ -5909,27 +5905,27 @@ msgstr "收件人被删除。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:38./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
 msgid "Recipients"
-msgstr "受益人"
+msgstr "收件人"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:10
 msgid "Recipients are subscribed either as email-only (via a simple signup form), or as subscribed persons in the system."
-msgstr "收件人可以只通过电子邮件（通过一个简单的注册表格）或作为系统中的订阅者进行订阅。"
+msgstr "收件人可以通过 email 方式（简单的注册表单），或者是系统中成员的方式来订阅。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
 msgid "Recipients for"
-msgstr "受益人"
+msgstr "收件人位于"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
 msgid "Remove this recipient. No undo possible."
-msgstr "移除这个收件人。不可能撤销。"
+msgstr "删除这个收件人，无法撤销。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:24
 msgid "Scheduled"
-msgstr "计划中的"
+msgstr "计划中"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
 msgid "See the"
-msgstr "见"
+msgstr "查看"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
 msgid "Select..."
@@ -5937,7 +5933,7 @@ msgstr "选择..."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:18
 msgid "Send e-mail"
-msgstr "发送电子邮件"
+msgstr "发送 e-mail"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
 msgid "Send mailing"
@@ -5953,43 +5949,43 @@ msgstr "发送测试到地址"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:22
 msgid "Send the mailing automatically after the publication start date of"
-msgstr "的出版开始日期后自动发送邮件。"
+msgstr "自动发送邮件在发布日期"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:20
 msgid "Send the mailing immediately after the \"published\" checkbox has been checked in the edit page."
-msgstr "在编辑页面选中 \"已发布 \"复选框后，立即发送邮件。"
+msgstr "编辑页面中 \"发布\" 被选中后立即发送邮件。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:17
 msgid "Send the mailing right now, but do not include a link back to the website."
-msgstr "现在就发送邮件，但不要附上网站链接。"
+msgstr "立即发送邮件，但是不会带有到内容的网页链接。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:14
 msgid "Send this page to a mailinglist and view mailinglist statistics."
-msgstr "将此页面发送至邮件列表并查看邮件列表统计。"
+msgstr "发送本页面到邮件列表，并查看邮件列表统计。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:24./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
 msgid "Send this page to a single address"
-msgstr "将此页面发送到单个地址"
+msgstr "发送本页面到单个地址"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:16
 msgid "Send this page to the test mailing list."
-msgstr "将此页面发送到测试邮件列表。"
+msgstr "发送本页面到测试邮件列表。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:71
 msgid "Send welcome"
-msgstr "发送欢迎信"
+msgstr "发送欢迎消息"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:21
 msgid "Sender address for e-mails (optional)"
-msgstr "电子邮件的发件人地址(可选)"
+msgstr "E-mail 的发送者地址（可选）"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:16
 msgid "Sender name for e-mails (optional)"
-msgstr "电子邮件的发件人名称（可选"
+msgstr "E-mail 的发送者名字（可选）"
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:51
 msgid "Sending the e-mail..."
-msgstr "发邮件..."
+msgstr "发送 e-mail ..."
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:146
 msgid "Sending the page to"
@@ -5997,23 +5993,23 @@ msgstr "发送页面到"
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:47
 msgid "Sending the page to the test mailing list..."
-msgstr "将页面发送到测试邮件列表... ..."
+msgstr "正在将页面发送到测试邮件列表..."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:19
 msgid "Sent on"
-msgstr "发送日期"
+msgstr "发送时间"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:13
 msgid "Show all recipients &raquo;"
-msgstr "显示所有收件人 &raquo;。"
+msgstr "显示所有收件人 &raquo;"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:27
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
-msgstr "抱歉，我无法将您订阅到邮件列表。请稍后再试，或用另一个电子邮件地址。"
+msgstr "对不起，无法完成您的订阅。请稍后重试或使用其他 e-mail 地址。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:26
 msgid "Sorry, can’t confirm your subscription"
-msgstr "抱歉，无法确认您的订阅"
+msgstr "对不起，无法确认您的订阅"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:22
 msgid "Sorry, can’t find your subscription"
@@ -6033,7 +6029,7 @@ msgstr "订阅"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
 msgid "Subscribe to"
-msgstr "订阅"
+msgstr "订阅到"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:40
 msgid "Subscriber Edges"
@@ -6057,15 +6053,15 @@ msgstr "谢谢你，你现在已经取消订阅了。您现在已取消订阅。
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "The confirmation key is unknown. Either you already confirmed or something else went wrong."
-msgstr "确认键未知。要么是你已经确认过了，要么就是出了其他问题。"
+msgstr "确认 key 未知。可能是您已经确认过或是系统错误。"
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:57
 msgid "The e-mails are being sent..."
-msgstr "电子邮件正在发送..."
+msgstr "E-mail 正在被发送..."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
-msgstr "您的链接中的密钥不符合任何订阅。要么是您已经退订，要么是邮件列表已被删除。"
+msgstr "您链接中的 key 不匹配任何订阅。可能是您已经取消订阅，或者是邮件列表已被删除。"
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:109
 msgid "The mailing has been canceled."
@@ -6073,15 +6069,15 @@ msgstr "该邮件已被取消。"
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:60
 msgid "The mailing will be send when the page becomes visible."
-msgstr "当页面变得可见时，邮件将被发送。"
+msgstr "邮件将会在页面可见后被发送。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
-msgstr "您想发送电子邮件的页面还没有发布。您想做什么？"
+msgstr "你需要发送的页面还没有被发布。请选择发布方式。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
-msgstr "邮件列表的收件人名单也将被删除。"
+msgstr "邮件列表中的收件人也会被一同删除。"
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:119
 msgid "The statistics have been cleared."
@@ -6089,11 +6085,11 @@ msgstr "统计数据已被清除。"
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:53
 msgid "There is no mailing list with the name ‘mailinglist_test’."
-msgstr "没有名为'mailinglist_test'的邮件列表。"
+msgstr "没有找到名为 ‘mailinglist_test’ 的邮件列表。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:6
 msgid "This can not be undone"
-msgstr "这是无法挽回的"
+msgstr "操作无法撤销"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:2
 msgid "This dialog lets you combine the recipients of this list with the recipients of another list. The result of this combination will be stored inside the current list, with the name"
@@ -6101,19 +6097,19 @@ msgstr "此对话框可让您将此列表的收件人与另一个列表的收件
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:4
 msgid "This is a \"private\", externally managed list. Recipients will not receive any subscribe/unsubscribe messages."
-msgstr "这是一个 \"私人 \"的，由外部管理的列表，收件人不会收到任何订阅/取消订阅的信息。收件人不会收到任何订阅/取消订阅的消息。"
+msgstr "这是一个“私有的”，外部管理的列表。收件人不会收到任何订阅、取消订阅信息。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
 msgid "This overview allows you to send the current page to a group of recipients, grouped into mailing lists. Choose 'preview mailing' to open a popup window which shows how the mailing will look like when it is sent; choose 'send test mailing' to send it to the predefined list of test e-mail addresses. Choose 'edit' to go back to editing the page.  Each mailinglist is listed in the table below, together with statistics on when it was sent and to how many recipients."
-msgstr "该概览允许您将当前页面发送给一组收件人，并将其归入邮件列表。选择 \"预览邮件 \"打开一个弹出窗口，显示邮件发送时的样子；选择 \"发送测试邮件 \"将其发送到预定义的测试电子邮件地址列表。选择 \"编辑 \"回到编辑页面。  每一个邮件列表都会在下面的表格中列出，以及关于何时发送和发送给多少收件人的统计数据。"
+msgstr "这里可以将当前页面发送给一组收件人，这些收件人通过邮件列表分组。选择“预览邮件”来预览即将发送的邮件；选择“发送测试邮件”来将内容发送给预先定义的测试 e-mail 地址。选择“编辑”回到编辑页面。邮件列表在下面列出，同时还列出了相关的统计信息。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
 msgid "This page can be sent to different mailing lists."
-msgstr "这个页面可以发送到不同的邮件列表。"
+msgstr "页面可以被发送给不同的邮件列表。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:6
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
-msgstr "如果您想让收件人收到欢迎邮件，请勾选该复选框。"
+msgstr "如果你需要收到欢迎消息，请选取。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
 msgid "Unsubscribe"
@@ -6121,23 +6117,23 @@ msgstr "取消订阅"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "Unsubscribe from"
-msgstr "取消订阅"
+msgstr "取消订阅自"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
-msgstr "取消订阅邮件列表"
+msgstr "取消邮件列表订阅"
 
 #: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:101
 msgid "Updated the recipient."
-msgstr "更新了收件人。"
+msgstr "更新收件人。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:4
 msgid "Upload a file with recipients. The file must contain a single e-mail address per line. The file’s character set must be utf-8."
-msgstr "上传一个有收件人的文件。文件每行必须包含一个电子邮件地址。文件的字符集必须是utf-8。"
+msgstr "上传一个收件人文件。文件必须每行包含一个 e-mail 地址。文件编码必须是 utf-8。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "Upload a list of recipients."
-msgstr "上传收件人名单。"
+msgstr "上传收件人列表。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:19
 msgid "View this page as mailing."
@@ -6149,15 +6145,15 @@ msgstr "欢迎来到"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:15
 msgid "When you don’t want to receive any mail then please ignore this message."
-msgstr "当您不想收到任何邮件时，请忽略此信息。"
+msgstr "当你不想收到任何邮件，请忽略本消息。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:9
 msgid "When you don’t want to receive any more mail then"
-msgstr "当你不想再收到任何邮件时，那么"
+msgstr "如果你不想再收到邮件，那么"
 
 #: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:79
 msgid "You are not allowed to add or enable recipients."
-msgstr "您不允许添加或启用收件人。"
+msgstr "不允许添加或启用收件人。"
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:101./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:111
 msgid "You are not allowed to cancel this mailing."
@@ -6169,7 +6165,7 @@ msgstr "您不能删除邮件列表。"
 
 #: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:107
 msgid "You are not allowed to edit recipients."
-msgstr "您不允许编辑收件人。"
+msgstr "不允许编辑收件人。"
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:121./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:137
 msgid "You are not allowed to reset this mailing."
@@ -6177,7 +6173,7 @@ msgstr "您不允许重新设置此邮件。"
 
 #: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:50
 msgid "You are not allowed to send mail to the test mailing list."
-msgstr "您不允许向测试邮件列表发送邮件。"
+msgstr "不允许发送邮件给测试邮件地址。"
 
 #: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:149
 msgid "You are not allowed to send this page."
@@ -6185,47 +6181,47 @@ msgstr "您不允许发送此页面。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:9
 msgid "You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients."
-msgstr "您不能查看或编辑收件人名单。您需要拥有邮件列表的编辑权限才能更改和查看收件人。"
+msgstr "不允许查看或编辑收件人列表。你需要获取邮件的编辑权限。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "You are now subscribed to our mailing list"
-msgstr "您现在已经订阅了我们的邮件列表"
+msgstr "你已订阅我们的邮件列表"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:3
 msgid "You are now unsubscribed from"
-msgstr "您现在已取消订阅"
+msgstr "你已经取消订阅了"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:8
 msgid "You are now unsubscribed from the mailing list"
-msgstr "您现在已经取消了对邮件列表的订阅。"
+msgstr "你已经取消订阅了邮件列表"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:29
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
-msgstr "您可以尝试在侧栏中重新订阅我们的邮件列表。"
+msgstr "你可以尝试在侧边栏重新订阅我们的邮件列表。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
-msgstr "您收到这封邮件是因为有人想给您发送这些信息。我们没有储存您的电子邮件地址，也不会因为这封邮件而向您发送任何其他邮件。"
+msgstr "你收到本邮件是因为有人给你发送了本信息。我们不会保存你的 e-mail 地址，也不会由此发送给你其他邮件。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:4
 msgid "You received this mail because you are subscribed to the mailing list"
-msgstr "您之所以收到这封邮件，是因为您已经订阅了邮件列表。"
+msgstr "你收到本邮件是因为你订阅了邮件列表"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:7
 msgid "You will receive a confirmation in your e-mail."
-msgstr "您将在您的电子邮件中收到确认。"
+msgstr "你将收到一封确认邮件。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:8
 msgid "You, or someone else, added your e-mail address to our mailing list"
-msgstr "您或其他人将您的电子邮件地址添加到我们的邮件列表中。"
+msgstr "你或者是其他人，将你的 e-mail 地址加入到了我们的邮件列表中"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
-msgstr "您的电子邮件地址被添加到邮件列表中。我们会向您的电子邮件地址发送一封确认邮件，并将很快到达。如果您没有收到，请检查您的垃圾邮件文件夹。"
+msgstr "你的 e-mail 地址已经被加入了邮件列表。我们已经给您的地址发送了一封确认邮件，如果没有收到，请检查垃圾邮件过滤。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73
 msgid "bounced"
-msgstr "蹦蹦跳跳"
+msgstr "退信"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:15
 msgid "cancel"
@@ -6233,7 +6229,7 @@ msgstr "取消"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:47
 msgid "clear"
-msgstr "清楚"
+msgstr "清除"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:9
 msgid "click here to unsubscribe."
@@ -6241,11 +6237,11 @@ msgstr "点击这里取消订阅。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:8
 msgid "has been sent to the following lists:"
-msgstr "已发给下列名单："
+msgstr "已被发送到下列列表："
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
 msgid "has never been sent yet."
-msgstr "还没有发出去。"
+msgstr "没有被发送。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
@@ -6257,7 +6253,7 @@ msgstr "邮件列表状态页"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "or copy and paste the address below in your browser."
-msgstr "或在浏览器中复制并粘贴以下地址。"
+msgstr "或拷贝并粘贴地址到下面。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:54
 msgid "pages"
@@ -6265,11 +6261,11 @@ msgstr "页面"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71
 msgid "processed"
-msgstr "加工"
+msgstr "已处理"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:63./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:65
 msgid "scheduled"
-msgstr "预定的"
+msgstr "已排期"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:45
 msgid "see below"
@@ -6277,7 +6273,7 @@ msgstr "见下文"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:41
 msgid "send mailing"
-msgstr "邮寄"
+msgstr "发送邮件"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
 msgid "send to"
@@ -6285,23 +6281,23 @@ msgstr "送去"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
 msgid "subscribing persons &raquo;"
-msgstr "签署人 &raquo;。"
+msgstr "订阅人 &raquo;"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "this link to confirm"
-msgstr "此链接确认"
+msgstr "这个链接来确认"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:3
 msgid "to the list"
-msgstr "列表"
+msgstr "到列表"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:19
 msgid "when you don't want to receive any further mail from this list."
-msgstr "当你不想再收到这个名单的任何邮件时。"
+msgstr "当你不想再收到列表的其他邮件时。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
-msgstr "与您的电子邮件地址"
+msgstr "使用你的 e-mail 地址"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:22
 msgid "Add after"
@@ -6341,7 +6337,7 @@ msgstr "复制"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:20
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
-msgstr "点击 <strong>添加菜单项</strong> 或 <strong>菜单项</strong> 添加页面。"
+msgstr "点击 <strong>添加菜单条目</strong> 或 <strong>菜单条目</strong> 来添加页面。"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:25
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
@@ -6358,7 +6354,7 @@ msgstr "拖动元素到这里来删除"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:21
 msgid "Drag menu items in the menu up, down, left or right to structure the menu."
-msgstr "在菜单中向上、向下、向左或向右拖动菜单项来构建菜单。"
+msgstr "可以上下左右拖动菜单条目来调整结构。"
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:51
 msgid "Drag pages to the place where you want them in the hierarchy."
@@ -6496,7 +6492,7 @@ msgstr "Google 站长工具"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
-msgstr "在这里你可以找到优化搜索引擎对你的网站进行索引的设置。"
+msgstr "这里可以设置优化站点被搜索引擎收录相关内容。"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22
 msgid "Keywords"
@@ -6504,7 +6500,7 @@ msgstr "关键词"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:26
 msgid "Keywords to include on every page. Separate keywords with a \",\""
-msgstr "关键词要包含在每个页面上。用\", \"分隔关键词"
+msgstr "每个页面都会包含的关键字。使用半角逗号 \",\" 分割。"
 
 #: apps/zotonic_mod_seo/src/mod_seo.erl:42
 msgid "SEO"
@@ -6576,7 +6572,7 @@ msgstr "站点地图设置"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:4
 msgid "These settings apply to all pages of this category. They define hints for search engines indexing the site."
-msgstr "这些设置适用于该类别的所有页面。它们定义了搜索引擎索引网站的提示。"
+msgstr "这些设置对分类的所有页面有效，它们定义了搜索引擎索引本站的隐含规则。"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:37
 msgid "Weekly (default)"
@@ -6592,15 +6588,15 @@ msgstr "默认"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
 msgid "Check our Terms of Service and Privacy policies"
-msgstr "查看我们的服务条款和隐私政策"
+msgstr "阅读服务条款和隐私政策"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:10
 msgid "Choose a username and password"
-msgstr "选择一个用户名和密码"
+msgstr "选择用户名和密码"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:21
 msgid "Confirm key"
-msgstr "确认键"
+msgstr "确认 key"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:3./apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:7./apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:22
 msgid "Confirm my account"
@@ -6632,7 +6628,7 @@ msgstr "请输入电子邮件地址"
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
-msgstr "希望能尽快见到你。"
+msgstr "希望很快见到你。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:22
 msgid "I agree to the"
@@ -6640,7 +6636,7 @@ msgstr "我同意"
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "If the link does not work then you can go to"
-msgstr "如果链接不起作用，那么你可以去到"
+msgstr "如果链接无法使用，那么你可以"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:5
 msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
@@ -6648,15 +6644,15 @@ msgstr "如果您在几分钟内没有收到邮件，请检查您的垃圾邮件
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you have already an account,"
-msgstr "如果您已经有一个账户。"
+msgstr "已经有账户，"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
 msgid "In your e-mail you received a confirmation key. Please copy it in the input field below."
-msgstr "在您的电子邮件中，您收到了一个确认密钥。请将其复制到下面的输入栏中。"
+msgstr "在 e-mail 中你将获得一个确认码，请复制到下面的输入框中。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:38
 msgid "Last name"
-msgstr "姓氏"
+msgstr "姓"
 
 #: apps/zotonic_mod_signup/priv/templates/_logon_link.tpl:2
 msgid "No account yet?"
@@ -6664,7 +6660,7 @@ msgstr "还没有账户？"
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:3
 msgid "Please confirm your account"
-msgstr "请确认您的账户"
+msgstr "请确认账户。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:3
 msgid "Please follow the instructions in the email we've sent you."
@@ -6672,15 +6668,15 @@ msgstr "请按照我们发给您的电子邮件中的说明进行操作。"
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:10
 msgid "Please follow the link below."
-msgstr "请按照下面的链接。"
+msgstr "请点击下面的链接。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "Privacy policies"
-msgstr "隐私政策"
+msgstr "隐私条款"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields.tpl:5./apps/zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
-msgstr "注册"
+msgstr "注册 "
 
 #: apps/zotonic_mod_signup/priv/templates/_logon_link.tpl:2./apps/zotonic_mod_signup/priv/templates/_signup_title.tpl:1
 msgid "Sign up"
@@ -6692,11 +6688,11 @@ msgstr "用您的电子邮件地址注册"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
-msgstr "对不起，我不知道那个确认码。你复制正确吗？"
+msgstr "对不起，确认码错误，请确认复制正确。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:24
 msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
-msgstr "对不起，在你的服务提供商那里，已经有一个账户与你的账户绑定了。也许你的帐户在这里被暂停。"
+msgstr "对不起，你的账户已经存在。可能您的账户已经被挂起。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:22
 msgid "Terms of Service"
@@ -6704,7 +6700,7 @@ msgstr "服务条款"
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
-msgstr "感谢您在我们的网站注册。在您使用之前，我们要求您确认您的账户。"
+msgstr "感谢您注册本站点。接下来将需要您在使用账户前对账户进行确认。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:60
 msgid "This does not match the first password"
@@ -6716,7 +6712,7 @@ msgstr " 要注册，您必须同意服务条款和隐私政策。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
 msgid "Verify password"
-msgstr "验证密码"
+msgstr "确认密码"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:13
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
@@ -6724,7 +6720,7 @@ msgstr "我们会非常谨慎地处理所有提供给我们的信息，未经您
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
-msgstr "您还可以"
+msgstr "你也可以"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
@@ -6732,15 +6728,15 @@ msgstr "您必须同意这些条款才能注册。"
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "and enter the key"
-msgstr "并输入钥匙"
+msgstr "并输入 key"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
-msgstr "和"
+msgstr "以及"
 
 #: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "in the input field."
-msgstr "在输入栏中。"
+msgstr "在输入框中。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "sign in"
@@ -6748,7 +6744,7 @@ msgstr "登录"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "sign up for a username and password"
-msgstr "注册一个用户名和密码"
+msgstr "注册"
 
 #: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:5
 msgid "Certificate Authority"
@@ -6920,11 +6916,11 @@ msgstr "同意"
 
 #: apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "All survey entries up until"
-msgstr "所有调查项目直至"
+msgstr "所有问卷调查条目直到"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
 msgid "Answer"
-msgstr "答案"
+msgstr "回答"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:19
 msgid "Answering"
@@ -6956,7 +6952,7 @@ msgstr "你确定要删除这个结果吗？"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
 msgid "Are you sure you want to stop?"
-msgstr "你确定要停下来吗？"
+msgstr "你确认需要中止？"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:157
 msgid "Button"
@@ -6964,7 +6960,7 @@ msgstr "按钮"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:34
 msgid "Button style"
-msgstr "钮扣式"
+msgstr "按钮样式"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
 msgid "Button text"
@@ -6972,11 +6968,11 @@ msgstr "按钮文本"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:68
 msgid "Category to choose from"
-msgstr "类别选择"
+msgstr "从中选择一个分类"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:11
 msgid "Check the answer in the admin."
-msgstr "在管理中查看答案。"
+msgstr "在管理页面中检查答案。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:74
 msgid "Chinese food is best for money"
@@ -7029,7 +7025,7 @@ msgstr "不同意"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Do you like pea soup?"
-msgstr "你喜欢喝豌豆汤吗？"
+msgstr "你喜欢喝紫菜汤么？"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:129./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:133./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid " Download will start in the background. Please check your download window."
@@ -7045,7 +7041,7 @@ msgstr "电子邮件地址"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:28
 msgid "Edit survey result"
-msgstr "編輯調查結果"
+msgstr "编辑问卷调查结果"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:20
 msgid "End of questions"
@@ -7057,11 +7053,11 @@ msgstr "例如："
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
 msgid "Explanation"
-msgstr "解释"
+msgstr "解释说明"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:51./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:8./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
 msgid "False"
-msgstr "假的"
+msgstr "否"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:4
 msgid "Feedback if correct"
@@ -7097,7 +7093,7 @@ msgstr "进入问题"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:112./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
 msgid "Handle this survey with"
-msgstr "处理这项调查时"
+msgstr "处理问卷调查使用"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
 msgid "Handling"
@@ -7105,7 +7101,7 @@ msgstr "处理"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Help about surveys"
-msgstr "关于调查的帮助"
+msgstr "问卷调查帮助"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
@@ -7129,7 +7125,7 @@ msgstr "我是"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:22
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]."
-msgstr "我是 [age] 岁。我喜欢[冰淇淋=香草|草莓|巧克力|其他]冰淇淋，我最喜欢的颜色是[颜色]。"
+msgstr "我[age]岁了，喜欢吃[food      ]，最喜欢的颜色是[color=红|黄|蓝|紫|粉]色。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
 msgid "I like Chinese restaurants"
@@ -7145,7 +7141,7 @@ msgstr "立即开始做题，不需要 \"开始 \"按钮"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
 msgid "Informational"
-msgstr "信息性"
+msgstr "提示"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:26
 msgid "Input value placeholder text"
@@ -7161,11 +7157,11 @@ msgstr "确认邮件介绍"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
 msgid "Inverse"
-msgstr "逆向"
+msgstr "反色"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:51
 msgid "Jump target"
-msgstr "跳跃目标"
+msgstr "跳转目标"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:52
 msgid "Jump to a question on a next page."
@@ -7189,7 +7185,7 @@ msgstr "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed d
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103
 msgid "Mail filled in surveys to"
-msgstr "将填写好的调查问卷邮寄到"
+msgstr "将填好的调查结果发送到"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:108
 msgid "Mail results to"
@@ -7197,11 +7193,11 @@ msgstr "将结果邮寄给"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Match which answer fits best."
-msgstr "匹配哪个答案最合适。"
+msgstr "选择最合适的答案。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:49
 msgid "Multiple answers possible"
-msgstr "可以有多个答案"
+msgstr "允许选择多个答案"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Multiple choice"
@@ -7213,7 +7209,7 @@ msgstr "每个用户/浏览器的多个条目"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Multiple page break blocks are merged into one."
-msgstr "多个分页块合并为一个。"
+msgstr "多个页面块会被合成一个。"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:153
 msgid "Narrative"
@@ -7229,7 +7225,7 @@ msgstr "新的结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
-msgstr "下一个"
+msgstr "下一页"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:129
 msgid "Next page in category"
@@ -7237,7 +7233,7 @@ msgstr "下一页的类别"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:43./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
-msgstr "没有"
+msgstr "否"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
 msgid "Numeric input, show totals for this field in the survey results."
@@ -7269,7 +7265,7 @@ msgstr "页面中断"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:11
 msgid "Page jump condition"
-msgstr "跳页条件"
+msgstr "页面跳转条件"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:539
 msgid "Passed"
@@ -7285,11 +7281,11 @@ msgstr "请输入您的信息。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:16
 msgid "Please enter your name."
-msgstr "请输入您的姓名。"
+msgstr "请输入你的名字。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:31
 msgid "Please fill in all the required fields."
-msgstr "请填写所有必填项。"
+msgstr "请填写所有必填项目。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:16
 msgid "Please make a choice."
@@ -7301,11 +7297,11 @@ msgstr "请上传您的文件。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:20
 msgid "Please upload your image."
-msgstr "请上传您的图片。"
+msgstr "请上传图片。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
 msgid "Please write an essay."
-msgstr "请写一篇文章。"
+msgstr "请写个随笔。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:23./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:42
 msgid "Points"
@@ -7317,11 +7313,11 @@ msgstr "每个答案的分数"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:38
 msgid "Primary"
-msgstr "小学"
+msgstr "主要"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:139./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
 msgid "Printable list"
-msgstr "可打印的清单"
+msgstr "可打印列表"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:81
 msgid "Progress"
@@ -7353,11 +7349,11 @@ msgstr "红色"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
 msgid "Required, this question must be answered."
-msgstr "必须的，这个问题必须回答。"
+msgstr "必须填写"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:4./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results"
-msgstr "结果"
+msgstr "查看结果"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:78./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:59
 msgid "Results from the respondent"
@@ -7385,7 +7381,7 @@ msgstr "选择您同意的内容。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
-msgstr "选择您的国家"
+msgstr "选择你的国家"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:30
 msgid "Send confirmation to respondent (please add a question named <i>email</i>)"
@@ -7405,7 +7401,7 @@ msgstr "短答案"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:137./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
 msgid "Show email addresses"
-msgstr "显示电子邮件地址"
+msgstr "显示 e-mail 地址"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:63./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:98
 msgid "Show progress bar"
@@ -7413,7 +7409,7 @@ msgstr "显示进度条"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:59./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
 msgid "Show progress information as “<em>Question 3/10</em>”"
-msgstr "显示进度信息为\"<em>问题 3/10</em>\""
+msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:46
 msgid "Show results"
@@ -7425,11 +7421,11 @@ msgstr "显示结果（仅限管理员"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:136
 msgid "Show survey results"
-msgstr "顯示調查結果"
+msgstr "显示问卷调查结果"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:47
 msgid "Single answer possible"
-msgstr "可能的单一答案"
+msgstr "只允许选择一个答案"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:8
 msgid "Start"
@@ -7445,11 +7441,11 @@ msgstr "过了这个页面就停止调查。没有提交问题。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:33./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
-msgstr "非常同意"
+msgstr "强烈同意"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:23./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:59./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:60
 msgid "Strongly Disagree"
-msgstr "非常不同意"
+msgstr "强烈不同意"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:65
 msgid "Submit"
@@ -7457,7 +7453,7 @@ msgstr "提交"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:49
 msgid "Submit on clicking an option"
-msgstr "点击一个选项后提交"
+msgstr "点击选项时提交"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_checkbox.tpl:22
 msgid "Subtract points for wrong answers (total never less than 0)"
@@ -7465,11 +7461,11 @@ msgstr "错答减分（总分不低于0分）。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Success"
-msgstr "成功案例"
+msgstr "成功"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:6
 msgid "Survey"
-msgstr "调查"
+msgstr "问卷调查"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:146
 msgid "Survey Questions"
@@ -7481,7 +7477,7 @@ msgstr "调查结果编辑"
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:7
 msgid "Survey editor"
-msgstr "调查编辑"
+msgstr "问卷调查编辑器"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:119
 msgid "Survey result deleted."
@@ -7489,7 +7485,7 @@ msgstr "问卷调查结果已经删除。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:140
 msgid "Survey results editor"
-msgstr "调查结果编辑"
+msgstr "问卷调查结果编辑器"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:84./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "Test pass percentage"
@@ -7497,7 +7493,7 @@ msgstr "考试合格率"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:7
 msgid "Thank you for filling in our survey."
-msgstr "谢谢您填写我们的调查问卷。"
+msgstr "谢谢你填写我们的问卷调查。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:73./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
 msgid "Thank you text only"
@@ -7509,7 +7505,7 @@ msgstr "谢谢你的短信。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "The earth is flat."
-msgstr "地球是平的。"
+msgstr "地球是方的。"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:21
 msgid "The following has been filled in:"
@@ -7521,15 +7517,15 @@ msgstr "结果已经保存下来了。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid "There was an error while handling your answers. We are terribly sorry about this."
-msgstr "在处理您的答案时出现了错误。我们对此感到非常抱歉。"
+msgstr "处理回答时出错。我们对此感到万分抱歉。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a survey. The default survey routines can’t handle file upload, you will need to add your own survey handler to your site or module."
-msgstr "此块显示一个文件上传字段。这只能作为调查问卷的最后一个问题使用。默认的调查程序不能处理文件上传，您需要将自己的调查处理程序添加到您的网站或模块中。"
+msgstr "本块是一个文件上传域，只能被用做问卷调查的最后一个问题。默认的调查处理器无法处理文件上传，你需要为站点或模块添加自己的问卷调查处理器。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_stop.tpl:9
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
-msgstr "该块标志着流程的停止。用户不能再继续下去，它被视为一个页面中断。"
+msgstr "这个块表示流程暂停，用户只有"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:8
 msgid "This is a result for:"
@@ -7549,7 +7545,7 @@ msgstr "瑟斯顿量表"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:16
 msgid "To question"
-msgstr "疑问"
+msgstr "跳转到问题"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:14
 msgid "Toggle outline view"
@@ -7577,7 +7573,7 @@ msgstr "瓦格纳"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
 msgid "Weasels make great pets."
-msgstr "黄鼠狼是很好的宠物。"
+msgstr "猫是人类最好的朋友。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
 msgid "When finished show"
@@ -7585,11 +7581,11 @@ msgstr "完成后显示"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:32
 msgid "When no condition is true then the question following this break will be the next page."
-msgstr "当没有条件为真时，那么这个断句后面的问题将是下一页。"
+msgstr "当没有条件成立时，所有此中断后面的问题将成为下个页面。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
-msgstr "是的，是的"
+msgstr "是"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:148
 msgid "Yes/No"
@@ -7609,11 +7605,11 @@ msgstr "你不允许改变这些结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:74
 msgid "You are not allowed to see the results of this survey."
-msgstr "你不允许看到这个调查的结果。"
+msgstr "不允许查看问卷调查的结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "You can create your survey by adding blocks with questions below the body."
-msgstr "您可以通过在正文下方添加带有问题的块来创建调查问卷。"
+msgstr "请通过在正文后添加块来创建问卷调查。"
 
 #: apps/zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:21
 msgid "You must have edit permission on the survey to edit its results."
@@ -7621,7 +7617,7 @@ msgstr "您必须拥有调查问卷的编辑权限才能编辑其结果。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "You need to give a name to every question."
-msgstr "你需要给每个问题起一个名字。"
+msgstr "你需要给每个问题指定一个名字。"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:31./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
 msgid "Your result"
@@ -7649,7 +7645,7 @@ msgstr "必须是日期"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:39
 msgid "must be a number"
-msgstr "一定是个数字"
+msgstr "必须是数字"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:31./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:41
 msgid "must be a phone number"
@@ -7657,7 +7653,7 @@ msgstr "必须是电话号码"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:37
 msgid "must be an e-mail address"
-msgstr "必须是电子邮件地址"
+msgstr "必须是 e-mail 地址"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:13./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:24
 msgid "name >= 2"
@@ -7677,7 +7673,7 @@ msgstr "问题=1"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_multiple_choice.tpl:16./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_narrative.tpl:23
 msgid "select…"
-msgstr "选择…。"
+msgstr "选择..."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
 msgid "years old. I like"
@@ -7849,7 +7845,7 @@ msgstr "重新加载翻译"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:150
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
-msgstr "重新加载模块和网站的所有翻译。所有模板将被重新编译。"
+msgstr "重新加载模块和站点的所有翻页。所有模版将被重新编译。"
 
 #: apps/zotonic_mod_translation/src/mod_translation.erl:449
 msgid "Reloading all .po files in the background."
@@ -7933,7 +7929,7 @@ msgstr "选择语言的黄金法则是简单。如果可以的话，请坚持使
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "The title, body and other texts can be translated in different languages. Here you can select which languages will be used."
-msgstr "标题、正文和其他文本可以翻译成不同的语言。在这里，您可以选择要使用的语言。"
+msgstr "标题，正文以及其他文本都可以被翻译为多种语言。这里你可以设置使用哪些语言。"
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "Translate this page in other languages."
