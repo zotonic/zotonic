@@ -559,27 +559,28 @@ import_rule_1(Kind, Rule, Context) when is_map(Rule) ->
     end.
 
 ids_to_names(Rows, Context) ->
-    [
-        begin
-            R1 = proplists:delete(id, R),
+    lists:map(
+        fun(R) ->
+            R1 = maps:remove(<<"id">>, R),
             ids_to_names_row(R1, Context)
-        end
-        || R <- Rows
-    ].
+        end,
+        Rows).
 
-ids_to_names_row(R, Context) ->
+ids_to_names_row(R, Context) when is_map(R) ->
     lists:foldl(
         fun(K, Acc) ->
-            case proplists:get_value(K, Acc) of
+            case maps:get(K, Acc, undefined) of
                 Id when is_integer(Id) ->
                     case m_rsc:p_no_acl(Id, name, Context) of
                         undefined ->
-                            % Problem this rule might be skipped on import
-                            z_utils:prop_replace(K,
-                                                {id, z_context:site(Context), m_rsc:is_a(Id, Context), Id},
-                                                Acc);
+                            % Problem, this rule might be skipped on import
+                            Acc#{
+                                K => {id, z_context:site(Context), m_rsc:is_a(Id, Context), Id}
+                            };
                         Name ->
-                            z_utils:prop_replace(K, Name, Acc)
+                            Acc#{
+                                K => Name
+                            }
                     end;
                 undefined ->
                     Acc
@@ -589,35 +590,34 @@ ids_to_names_row(R, Context) ->
         fields()).
 
 names_to_ids(Rows, Context) ->
-    [
-        begin
-            R1 = proplists:delete(id, R),
+    lists:map(
+        fun(R) ->
+            R1 = maps:remove(<<"id">>, R),
             names_to_ids_row(R1, Context)
-        end
-        || R <- Rows
-    ].
+        end,
+        Rows).
 
-names_to_ids_row(R, Context) ->
+names_to_ids_row(R, Context) when is_map(R) ->
     lists:foldl(
       fun
-        (actions, Acc) ->
-            A1 = implode_actions(proplists:get_value(actions, Acc)),
-            z_utils:prop_replace(actions, A1, Acc);
+        (<<"actions">>, Acc) ->
+            A1 = implode_actions(maps:get(<<"actions">>, Acc)),
+            Acc#{ <<"actions">> => A1 };
         (K, Acc) ->
-            case proplists:get_value(K, Acc) of
+            case maps:get(K, Acc, undefined) of
                 Value when is_binary(Value) ->
                     case m_rsc:rid(Value, Context) of
                         undefined ->
                             case lists:member(K, [creator_id, modifier_id]) of
                                 true ->
-                                    z_utils:prop_replace(K, undefined, Acc);
+                                    Acc#{ K => undefined };
                                 false ->
                                     lager:notice("ACL import dropping rule, due to missing ~p ~p: ~p",
                                                  [K, Value, R]),
-                                    []
+                                    #{}
                             end;
                         Id ->
-                            z_utils:prop_replace(K, Id, Acc)
+                            Acc#{ K => Id }
                     end;
                 {id, Host, IsA, Id} ->
                     MyHost = z_context:site(Context),
@@ -625,30 +625,32 @@ names_to_ids_row(R, Context) ->
                     case {MyHost, MyIsA} of
                         {Host, IsA} ->
                             Acc;
+                        _ when K =:= <<"creator_id">>; K =:= <<"modifier_id">> ->
+                            Acc#{ K => undefined };
                         _ ->
-                            case lists:member(K, [creator_id, modifier_id]) of
-                                true ->
-                                    z_utils:prop_replace(K, undefined, Acc);
-                                false ->
-                                    lager:notice("ACL import dropping rule, due to missing ~p ~p: ~p",
-                                                 [K, Id, R]),
-                                    []
-                            end
+                            lager:notice("ACL import dropping rule, due to missing ~p ~p: ~p",
+                                         [K, Id, R]),
+                            #{}
                     end;
                 undefined ->
                     Acc
             end
       end,
       R,
-      [actions|fields()]).
+      [ <<"actions">> | fields() ]).
 
 fields() ->
-    [acl_user_group_id, category_id, content_group_id, creator_id, modifier_id].
+    [
+        <<"acl_user_group_id">>,
+        <<"category_id">>,
+        <<"content_group_id">>,
+        <<"creator_id">>,
+        <<"modifier_id">>
+    ].
 
 implode_actions(L) ->
-    string:join(
-      [z_convert:to_list(K) || {K, true} <- L],
-      ",").
+    Keys = [ z_convert:to_binary(K) || {K, true} <- L ],
+    iolist_to_binary( lists:join($,, Keys) ).
 
 %% @doc Delete ACL rules that are managed by a module
 -spec delete_managed(atom(), #context{}) -> integer().

@@ -281,14 +281,15 @@ sudo(Context) ->
 
 -spec set_admin(z:context()) -> z:context().
 set_admin(#context{ acl = undefined } = Context) ->
-    Context#context{acl = admin, user_id = ?ACL_ADMIN_USER_ID};
+    Context#context{ acl = admin, user_id = ?ACL_ADMIN_USER_ID };
 set_admin(Context) ->
-    Context#context{acl = admin}.
+    Context#context{ acl = admin }.
 
 %% @doc Check if the current user is an admin or a sudo action
 -spec is_admin( z:context() ) -> boolean().
-is_admin(#context{user_id = ?ACL_ADMIN_USER_ID}) -> true;
-is_admin(#context{acl = admin}) -> true;
+is_admin(#context{ acl = undefined, user_id = undefinded }) -> false;
+is_admin(#context{ user_id = ?ACL_ADMIN_USER_ID }) -> true;
+is_admin(#context{ acl = admin }) -> true;
 is_admin(Context) -> is_allowed(use, mod_admin_config, Context).
 
 
@@ -309,8 +310,10 @@ anondo(Context) ->
     set_anonymous(Context).
 
 -spec set_anonymous( z:context() ) -> z:context().
+set_anonymous(#context{ acl = undefined, user_id = undefined } = Context) ->
+    Context;
 set_anonymous(Context) ->
-    Context#context{acl=undefined, user_id=undefined}.
+    Context#context{ acl = undefined, user_id = undefined }.
 
 
 %% @doc Log the user with the id on, fill the acl field of the context
