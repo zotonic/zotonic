@@ -287,9 +287,9 @@ set_admin(Context) ->
 
 %% @doc Check if the current user is an admin or a sudo action
 -spec is_admin( z:context() ) -> boolean().
-is_admin(#context{ acl = undefined, user_id = undefinded }) -> false;
 is_admin(#context{ user_id = ?ACL_ADMIN_USER_ID }) -> true;
 is_admin(#context{ acl = admin }) -> true;
+is_admin(#context{ acl = undefined, user_id = undefined }) -> false;
 is_admin(Context) -> is_allowed(use, mod_admin_config, Context).
 
 
