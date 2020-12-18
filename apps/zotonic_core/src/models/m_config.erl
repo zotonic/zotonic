@@ -48,17 +48,17 @@
 m_get([], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {all(Context), []}};
-        false -> {ok, {[], []}}
+        false -> {error, eacces}
     end;
 m_get([ Module ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {get(Module, Context), []}};
-        false -> {ok, {[], []}}
+        false -> {error, eacces}
     end;
 m_get([ Module, Key | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {get(Module, Key, Context), Rest}};
-        false -> {ok, {[], Rest}}
+        false -> {error, eacces}
     end;
 m_get(Vs, _Msg, _Context) ->
     lager:error("Unknown ~p lookup: ~p", [?MODULE, Vs]),
