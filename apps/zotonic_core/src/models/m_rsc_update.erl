@@ -832,7 +832,8 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
                     UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiff, Raw, Context),
                     {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
                     ok = update_page_path_log(Id, Raw, NewPropsDiff, Context),
-                    {ok, Id, Raw, NewPropsDiff, IsABefore, IsCatInsert};
+                    NewPropsFinal = maps:merge(NewPropsLangPruned, UpdatePropsPrePivoted),
+                    {ok, Id, Raw, NewPropsFinal, IsABefore, IsCatInsert};
                 false ->
                     {ok, Id, notchanged}
             end;
