@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-17 15:30\n"
+"PO-Revision-Date: 2020-12-18 02:20\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -90,15 +90,15 @@ msgstr "anos"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
-msgstr "regras do LCA"
+msgstr "Regras LCA"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:9
 msgid "ACL rules file"
-msgstr "ficheiro de regras do LCA"
+msgstr "Arquivos de regras do LCA"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:4./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:10./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:41./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:21
 msgid "ACL user group"
-msgstr "grupo de usuários do ACL"
+msgstr "Grupo de usuários ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
@@ -109,7 +109,7 @@ msgstr "Controle de acesso"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:34./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:547
 msgid "Access control rules"
-msgstr "Regras de controlo de acesso"
+msgstr "Regras de controle de acesso"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:21./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:24
 msgid "Add Rule"
@@ -135,7 +135,7 @@ msgstr "Todos os Módulos"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:9./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:9
 msgid "All User Groups"
-msgstr "Todos os Grupos de Utilizadores"
+msgstr "Todos os Grupos de Usuários"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:29./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:18
 msgid "All collaboration groups"
@@ -147,7 +147,7 @@ msgstr "Todos os grupos de conteúdo normal"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:27
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Tipos de arquivo e mímica permitidos, separados com ',' - digite 'nenhum' se nenhum tipo extra for permitido, deixe em branco para o padrão"
+msgstr "Tipos de arquivo e mime permitidos, separados com ',' - digite 'none' se nenhum tipo extra for permitido, deixe em branco para o padrão"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
