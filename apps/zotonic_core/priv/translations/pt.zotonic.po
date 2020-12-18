@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-18 02:20\n"
+"PO-Revision-Date: 2020-12-18 03:20\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -159,7 +159,7 @@ msgstr "Tens a certeza que queres tornar todas as regras permanentes?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:38
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
-msgstr "Você tem certeza de que quer restaurar todas as regras do ACL à sua versão publicada atualmente?"
+msgstr "Você tem certeza de que quer restaurar todas as regras do LCA à sua versão publicada atualmente?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:30./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
@@ -256,7 +256,7 @@ msgstr "Regras de conteúdo para membros e gerentes de grupos de colaboração"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:42
 msgid "Could not move to collaboration group."
-msgstr "Não podia passar para o grupo de colaboração."
+msgstr "Não foi possível mover para o grupo de colaboração."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
@@ -275,30 +275,30 @@ msgstr "Definir quem pode visualizar ou editar esta página."
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:44
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
-msgstr "Eliminar"
+msgstr "Excluir"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 msgid "Delete all user groups"
-msgstr "Eliminar todos os grupos de utilizadores"
+msgstr "Excluir todos os grupos de utilizadores"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:132
 msgid "Delete is canceled, there are users in the user groups."
-msgstr "Eliminar é cancelado, há utilizadores nos grupos de utilizadores."
+msgstr "A exclusão foi cancelada, há usuários nos grupos de utilizadores."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:37
 msgid "Delete user group and move users"
-msgstr "Eliminar grupo de usuários e mover usuários"
+msgstr "Excluir grupo de usuários e mover usuários"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:160
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:75./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:86./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:92
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:79./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:107
 msgid "Deleting..."
-msgstr "Eliminar..."
+msgstr "Excluindo..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:45
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "Editar &amp; direitos de link sobre os grupos de colaboração"
+msgstr "Permissão de editar &amp; vincular nos grupos de colaboração"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:47
 msgid "Edit Rule"
@@ -310,15 +310,15 @@ msgstr "Editar o grupo de colaboração"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "Digite extensões (como <tt>.png</tt>), tipos de mímica (como <tt>image/png</tt>) ou uma das seguintes:"
+msgstr "Digite extensões (como <tt>.png</tt>), tipos mime (como <tt>image/png</tt>) ou uma das seguintes:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "Regras de edição de exportação"
+msgstr "Exportar regras de edição"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "Os tipos de arquivo seguem a hierarquia do grupo. Os grupos derivados herdam as opções de mímica de seus antepassados."
+msgstr "Os tipos de arquivo seguem a hierarquia do grupo. Os grupos derivados herdam as opções de mime de seus ancestrais."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:55
 msgid "File uploads"
@@ -334,7 +334,7 @@ msgstr "Os gerentes de grupo podem editar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:60
 msgid "Group managers can link"
-msgstr "Os gestores do grupo podem ligar"
+msgstr "Os gestores do grupo podem vincular"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:53
 msgid "Group members and managers can edit"
@@ -342,7 +342,7 @@ msgstr "Os membros e gerentes do grupo têm autoridade para editar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:61
 msgid "Group members and managers can link"
-msgstr "Os membros e gestores do grupo podem ligar"
+msgstr "Os membros e gestores do grupo podem vincular"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 msgid "Import"
@@ -354,7 +354,7 @@ msgstr "Importar regras de edição..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
-msgstr "Importar versão de edição das regras ACL"
+msgstr "Importar versão editada das regras  LCA"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:136
 msgid "Importing, the list of rules will refresh after importing."
@@ -421,7 +421,7 @@ msgstr "Sem regras de LCA"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:153
 msgid "Not all user groups could be deleted."
-msgstr "Nem todos os grupos de usuários podem ser excluídos."
+msgstr "Nem todos os grupos de usuários puderam ser excluídos."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:72
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:41
@@ -430,7 +430,7 @@ msgstr "Não é permitido."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
 msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
-msgstr "Ou clique em <strong>Apagar todos os grupos de utilizadores</strong> para desligar todos os utilizadores e apagar os grupos de utilizadores."
+msgstr "Ou clique em <strong>Apagar todos os grupos de utilizadores</strong> para desconectar todos os utilizadores e apagar os grupos de utilizadores."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:122
 msgid "Own content"
@@ -446,7 +446,7 @@ msgstr "Permissões"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:45
 msgid "Please select a collaboration_group"
-msgstr "Por favor, selecione um grupo_de_colaboração"
+msgstr "Por favor, selecione um grupo de colaboração"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:46
 msgid "Private"
@@ -454,15 +454,15 @@ msgstr "Particular"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:50
 msgid "Private properties are email, phone, visiting address, and date range."
-msgstr "Os imóveis privados são e-mail, telefone, endereço de visita e intervalo de datas."
+msgstr "Propriedades privadas são e-mail, telefone, endereço de visita e intervalo de datas."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:4
 msgid "Publish"
-msgstr "Publique"
+msgstr "Publicar"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:106
 msgid "Publish successful"
-msgstr "Publicar com sucesso"
+msgstr "Publicado com sucesso"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
@@ -494,7 +494,7 @@ msgstr "Salvar Permissões de Upload"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:143
 msgid "Saved collaboration group settings"
-msgstr "Configurações salvas do grupo de colaboração"
+msgstr "Configurações do grupo de colaboração salvas"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:180./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:275
@@ -511,7 +511,7 @@ msgstr "Mostrar propriedades privadas para"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:98
 msgid "Show this ACL user group first:"
-msgstr "Mostrar primeiro este grupo de utilizadores ACL:"
+msgstr "Mostre este grupo de usuários LCA primeiro:"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:111./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:127
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
@@ -519,11 +519,11 @@ msgstr "Mostrar primeiro este grupo de utilizadores ACL:"
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
 #: apps/zotonic_mod_menu/src/mod_menu.erl:123
 msgid "Sorry, you are not allowed to delete this."
-msgstr "Desculpe, não está autorizado a apagar isto."
+msgstr "Desculpe, você não tem permissão para excxluir isto."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
-msgstr "Desculpe, você não está autorizado a inserir páginas desta categoria no grupo de conteúdo selecionado."
+msgstr "Desculpe, você não tem permissão para inserir páginas desta categoria no grupo de conteúdo selecionado."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
@@ -535,7 +535,7 @@ msgstr "Testar as regras do LCA"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:3./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:6
 msgid "Test Access Control Rules"
-msgstr "Regras de controle de acesso de teste"
+msgstr "Testar Regras de Controle de Acesso"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:44
 msgid "The URL is only valid for one day."
@@ -555,7 +555,7 @@ msgstr "Não há utilizadores dentro destes grupos de utilizadores."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:15
 msgid "These settings come into effect immediately, no publish of rules is needed,"
-msgstr "Estas configurações entram em vigor imediatamente, não é necessária a publicação de regras,"
+msgstr "Essas configurações entram em vigor imediatamente, nenhuma publicação de regras é necessária,"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:33
 msgid "They are managed by their own manager and use the access rules below."
@@ -574,11 +574,11 @@ msgstr "Esta página é uma"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
-msgstr "Esta regra é gerida por módulo"
+msgstr "Esta regra é gerida pelo módulo"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:17
 msgid "Try ACL rules"
-msgstr "Tente as regras do LCA"
+msgstr "Tente as regras LCA"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:42
 msgid "Try a different combination of category and content group."
@@ -783,7 +783,7 @@ msgstr "O dia todo"
 #: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:73./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:96
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All media"
-msgstr "Todos os meios de comunicação"
+msgstr "Todas as mídias"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:95
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:81
@@ -792,11 +792,11 @@ msgstr "Todas as páginas"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:25
 msgid "All sites have been flushed."
-msgstr "Todos os locais foram lavados."
+msgstr "Todos os sites foram liberados."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:11
 msgid "Allocated"
-msgstr "Atribuído"
+msgstr "Alocado"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:32
 msgid "Alternative telephone"
@@ -821,7 +821,7 @@ msgstr "De qualquer um."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 msgid "Are you sure you want to delete the page"
-msgstr "Tem a certeza que quer apagar a página"
+msgstr "Tem a certeza que quer excluir a página"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:72
 msgid "Are you sure you want to exit the admin interface?"
@@ -829,11 +829,11 @@ msgstr "Tem certeza de que deseja sair da interface de administração?"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 msgid "Aside"
-msgstr "Além de"
+msgstr "Ao lado"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:101
 msgid "Ask google to not index this page"
-msgstr "Peça ao google para não indexar esta página"
+msgstr "Peça ao Google para não indexar esta página"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:48./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
@@ -864,11 +864,11 @@ msgstr "Nome do bloco"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:10
 msgid "Block quote"
-msgstr "Bloco de cotação"
+msgstr "Bloco de citação"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:31
 msgid "Caches have been flushed."
-msgstr "As caches foram enxaguadas."
+msgstr "Os caches foram liberados."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:8
 msgid "Category name:"
@@ -896,11 +896,11 @@ msgstr "Cidade"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:11
 msgid "Click here for more information"
-msgstr "Clique aqui para mais informações"
+msgstr "Clique aqui para obter mais informações"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:47
 msgid "Click the image to set the cropping center."
-msgstr "Clique na imagem para definir o centro de recorte."
+msgstr "Clique na imagem para definir o centro de corte."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:11
 msgid "Click to preview."
@@ -908,19 +908,19 @@ msgstr "Clique para pré-visualizar."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:89
 msgid "Close Sockets"
-msgstr "Tomadas de Fecho"
+msgstr "Fechar Sockets"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
-msgstr "Feche todas as tomadas de endereços ip que tenham mais de &gt; 250 tomadas abertas."
+msgstr "Feche todos os sockets de endereços IP que tenham mais de &gt; 250 sockets abertos."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
 msgid "Close preview"
-msgstr "Pré-visualização completa"
+msgstr "Fechar pré-visualização"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:23
 msgid "Config Directory"
-msgstr "Config Diretório"
+msgstr "Diretório de Configuração"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:38
 msgid "Confirm block removal"
@@ -929,15 +929,15 @@ msgstr "Confirmar remoção de bloco"
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_delete_rsc.erl:48
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_delete.erl:46
 msgid "Confirm delete"
-msgstr "Confirmar apagar"
+msgstr "Confirma excluir"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:72
 msgid "Confirm logoff"
-msgstr "Confirmar logoff"
+msgstr "Confirma logoff"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:242./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:47
 msgid "Connect"
-msgstr "Ligue"
+msgstr "Vincular"
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:9
 msgid "Connect a page"
@@ -961,11 +961,11 @@ msgstr "Não foi possível conectar-se ao site."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:9
 msgid "Could not detect anything to import on that URL or embed code."
-msgstr "Não foi possível detectar nada para importar naquele URL ou código embutido."
+msgstr "Não foi possível detectar nada para importar nesse URL ou código de incorporação."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
 msgid "Count"
-msgstr "Conde"
+msgstr "Contagem"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:66
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:101
