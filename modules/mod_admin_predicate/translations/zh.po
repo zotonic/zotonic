@@ -20,15 +20,6 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: modules/mod_admin_predicate/templates/admin_predicate.tpl:11
-msgid ""
-"A predicate denotes traits or aspects of a page and expresses a relationship "
-"between two pages.\n"
-"    The relation is always directed, from the subject to the object.<br/"
-">Predicates are defined in ontologies like <a href=\"http://sioc-project.org/"
-"\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
-msgstr "谓词"
-
 #: modules/mod_admin_predicate/templates/_action_dialog_predicate_delete.tpl:3
 msgid "Are you sure you want to delete the predicate"
 msgstr "确认删除谓词"
