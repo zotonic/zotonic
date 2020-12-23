@@ -65,20 +65,27 @@ do_redirect(Context) ->
                         undefined -> Args;
                         Id -> [ {id, Id} | proplists:delete(id, Args) ]
                     end,
+                    Args2 = lists:foldl(
+                        fun(A, Acc) ->
+                            proplists:delete(A, Acc)
+                        end,
+                        Args1,
+                        [ is_permanent, url, dispatch, qargs, acl ]),
                     QArgs = case z_context:get(qargs, Context) of
                                 undefined ->
                                     [];
                                 ArgList when is_list(ArgList) ->
                                     [ {K, z_context:get_q(K, Context, <<>>)} || K <- ArgList ]
                             end,
-					Args2 = lists:foldl(fun(K, Acc) ->
+					Args3 = lists:foldl(fun(K, Acc) ->
 											proplists:delete(K, Acc)
 										end,
-										QArgs ++ Args1,
+										QArgs ++ Args2,
 										z_dispatcher:dispatcher_args()),
-					 z_html:unescape( z_dispatcher:url_for(Dispatch, Args2, Context) )
+					 z_html:unescape( z_dispatcher:url_for(Dispatch, Args3, Context) )
 			end;
 		Url ->
 			Url
 	end,
 	{{true, z_context:abs_url(Location, Context)}, Context}.
+

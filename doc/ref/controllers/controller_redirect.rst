@@ -47,10 +47,15 @@ It has the following dispatch options:
 |is_permanent     |Use a permanent (301) or temporary  |{is_permanent, false}  |
 |                 |redirect (307). Defaults to false.  |                       |
 +-----------------+------------------------------------+-----------------------+
+|acl              |Perform access control check before |{acl, is_auth}         |
+|                 |redirect. Defaults to no check.     |                       |
++-----------------+------------------------------------+-----------------------+
 
 This controller does only handle request arguments that are
 specifically noted in the "qargs" list (and then only when the
 "dispatch" argument is set).
+
+.. include:: acl_options.rst
 
 Example
 -------
