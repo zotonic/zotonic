@@ -121,7 +121,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
                 ok: "{_ Delete _}",
                 on_confirm: function() {
                     $(self).closest('li.menu-item').fadeOut(500, function() {
-                        $(self).remove();
+                        $(this).remove();
                         $sorter.trigger('sortupdate')
                     });
                 }

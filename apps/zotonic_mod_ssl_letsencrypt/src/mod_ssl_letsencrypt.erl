@@ -364,14 +364,23 @@ handle_letsencrypt_result({ok, LEFiles}, State) ->
     lager:info("Letsencrypt successfully requested cert for ~p ~p",
                [State#state.request_hostname, State#state.request_san]),
     Context = z_context:new(State#state.site),
-    {ok, MyFiles} = cert_files(Context),
+    {ok, MyFiles} = cert_files_all(Context),
     {certfile, CertFile} = proplists:lookup(certfile, MyFiles),
+    {cacertfile, CaCertFile} = proplists:lookup(cacertfile, MyFiles),
     {keyfile, KeyFile} = proplists:lookup(keyfile, MyFiles),
-    {ok, _} = file:copy(maps:get(cert, LEFiles), CertFile),
+    {CertData, IntermediateData} = split_cert_chain_file(maps:get(cert, LEFiles)),
+    ok = file:write_file(CertFile, CertData),
+    case IntermediateData of
+        none ->
+            _ = file:delete(CaCertFile),
+            _ = download_cacert(Context);
+        _ ->
+            ok = file:write_file(CaCertFile, IntermediateData),
+            _ = file:change_mode(CaCertFile, 8#00644)
+    end,
     {ok, _} = file:copy(maps:get(key, LEFiles), KeyFile),
     _ = file:change_mode(CertFile, 8#00644),
     _ = file:change_mode(KeyFile, 8#00600),
-    _ = download_cacert(Context),
     State#state{
         request_status = ok
     };
@@ -410,6 +419,27 @@ start_cert_request(_Hostname, _SANs, #state{request_letsencrypt_pid = _Pid} = St
     {error, already_started, State}.
 
 
+%% @doc Split the returned cert data in the certificate and the intermediate chain certs.
+split_cert_chain_file(File) ->
+    {ok, Data} = file:read_file(File),
+    Parts = binary:split(Data, <<"-----END CERTIFICATE-----">>, [ global ]),
+    Parts1 = lists:filtermap(
+        fun(D) ->
+            case z_string:trim(D) of
+                <<>> -> false;
+                D1 -> {true, <<D1/binary, 10, "-----END CERTIFICATE-----", 10>>}
+            end
+        end,
+        Parts),
+    case Parts1 of
+        [ Cert ] ->
+            {Cert, none};
+        [ Cert | Chain ] ->
+            Chain1 = lists:join(<<10>>, Chain),
+            {Cert, iolist_to_binary(Chain1)}
+    end.
+
+
 ssl_options(Context) ->
     {ok, CertFiles} = cert_files(Context),
     CertFile = proplists:get_value(certfile, CertFiles),
@@ -446,6 +476,15 @@ cert_files(Context) ->
         false -> {ok, Files};
         true -> {ok, [{cacertfile, CaCertFile} | Files]}
     end.
+
+cert_files_all(Context) ->
+    SSLDir = cert_dir(Context),
+    Hostname = z_context:hostname(Context),
+    {ok, [
+        {certfile, z_convert:to_list(filename:join(SSLDir, <<Hostname/binary, ".crt">>))},
+        {cacertfile, z_convert:to_list(filename:join(SSLDir, <<Hostname/binary, ".ca.crt">>))},
+        {keyfile, z_convert:to_list(filename:join(SSLDir, <<Hostname/binary, ".key">>))}
+    ]}.
 
 cert_dir(Context) ->
     PrivSSLDir = filename:join([z_path:site_dir(Context), "priv", "security", "letsencrypt"]),
@@ -524,16 +563,9 @@ download_cacert(Context) ->
         {ok, {_Url, Hs, _Size, Cert}} ->
             case proplists:get_value("content-type", Hs) of
                 "application/x-x509-ca-cert" ->
-                    SSLDir = cert_dir(Context),
-                    Hostname = z_context:hostname(Context),
-                    CaCertFile = filename:join(SSLDir, <<Hostname/binary, ".ca.crt">>),
-                    case file:write_file(CaCertFile, Cert) of
-                        ok ->
-                            _ = file:change_mode(CaCertFile, 8#00644),
-                            ok;
-                        {error, _} = Error ->
-                            Error
-                    end;
+                    save_ca_cert(Cert, Context);
+                "application/x-pem-file" ->
+                    save_ca_cert(Cert, Context);
                 CT ->
                     lager:error("Download of ~p returned a content-type ~p",
                                 [?CA_CERT_URL, CT]),
@@ -545,3 +577,14 @@ download_cacert(Context) ->
             Error
     end.
 
+save_ca_cert(Cert, Context) ->
+    SSLDir = cert_dir(Context),
+    Hostname = z_context:hostname(Context),
+    CaCertFile = filename:join(SSLDir, <<Hostname/binary, ".ca.crt">>),
+    case file:write_file(CaCertFile, Cert) of
+        ok ->
+            _ = file:change_mode(CaCertFile, 8#00644),
+            ok;
+        {error, _} = Error ->
+            Error
+    end.

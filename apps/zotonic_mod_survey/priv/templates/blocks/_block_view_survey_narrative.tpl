@@ -1,5 +1,5 @@
 <div class="form-group">
-	{% if blk.prompt %}
+	{% if blk.prompt and not is_hide_prompt %}
 		<label class="control-label" for="{{ #id }}">{{ blk.prompt }}</label>
 	{% endif %}
 	<p class="survey-narrative question-{{ nr }}">

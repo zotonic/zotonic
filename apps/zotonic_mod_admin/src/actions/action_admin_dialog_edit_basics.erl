@@ -83,8 +83,6 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
     Props = controller_admin_edit:filter_props(Post),
     Props1 = maybe_add_language(Id, proplists:delete(<<"id">>, Props), Context),
 
-io:format("~p~n", [ Props1 ]),
-
     case m_rsc:update(Id, Props1, Context) of
         {ok, _} ->
             Vars = case EdgeId of

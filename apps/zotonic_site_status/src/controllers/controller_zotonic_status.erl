@@ -141,34 +141,21 @@ event(#postback{message={site_admin, [{site,Site}]}}, Context) when is_atom(Site
 % %% Stream process to update the page when data changes
 % %% -----------------------------------------------------------------------------------------------
 
-% start_stream(SitesStatus, Context) ->
-%     z_session_page:spawn_link(?MODULE, updater, [SitesStatus, Context], Context).
+render_notice(Site, Notice, Context) ->
+    z_render:wire( notice(Site, Notice), Context ).
 
-% % @todo Instead of polling we should observe the system wide notifications (that will be implemented)
-% -spec updater(any(), z:context()) -> z:context().
-% updater(SitesStatus, Context) ->
-%     Context1 = z_auth:logon_from_session(Context),
-%     timer:sleep(1000),
-%     z_sites_manager:upgrade(),
-%     NewStatus = m_zotonic_status:get_sites_status(),
-%     case NewStatus /= SitesStatus of
-%         true ->
-%             Context2 = render_update(NewStatus, Context1),
-%             ?MODULE:updater(NewStatus, Context2);
-%         false ->
-%             ?MODULE:updater(SitesStatus, Context1)
-%     end.
-
-% -spec render_update(list(), z:context()) -> z:context().
-% render_update(SitesStatus, Context) ->
-%     Vars = [
-%         {has_user, z_acl:user(Context)},
-%         {configs, m_zotonic_status:get_sites_config()},
-%         {sites, SitesStatus}
-%     ],
-%     Actions = {update, [ {target, "sites"}, {template, "_sites.tpl"} ] ++ Vars },
-%     z_notifier:notify( #page_actions{ actions = Actions }, Context ).
-
-
-render_notice(SiteName, Text, Context) ->
-     mod_zotonic_status_vcs:render_notice(SiteName, Text, Context).
+% @doc Actions to show a notice.
+-spec notice(atom(), iodata()) -> list().
+notice(SiteName, Text) ->
+    [
+        {insert_top, [
+            {target, "notices"},
+            {template, "_notice.tpl"},
+            {site, SiteName},
+            {notice, Text}
+        ]},
+        {fade_out, [
+            {selector, "#notices > div:gt(0)"},
+            {speed, 2000}
+        ]}
+    ].

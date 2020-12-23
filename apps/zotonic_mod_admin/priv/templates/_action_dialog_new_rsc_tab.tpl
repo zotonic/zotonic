@@ -214,7 +214,7 @@
 	                    <div class="col-md-9 col-md-offset-3">
 	                        <div class="checkbox">
 	                            <label>
-	                                <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1">
+	                                <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
 	                                {_ Delete after disconnecting from _}: {{ subject_id.title }}
 	                            </label>
 	                        </div>

@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
-DIR=`dirname $0`
+echo "Disabled: translation is done via Crowdin at https://crowdin.com/project/zotonic"
 
-cd $DIR/../apps/zotonic_core/priv/translations
+# DIR=`dirname $0`
 
-echo "Merging apps/zotonic_core/priv/translations/zotonic.pot into language files"
-echo
+# cd $DIR/../apps/zotonic_core/priv/translations
 
-for i in *.po
-do
-    echo "Updating: $i"
-    msgmerge -U $i zotonic.pot
-done
+# echo "Merging apps/zotonic_core/priv/translations/zotonic.pot into language files"
+# echo
+
+# for i in *.po
+# do
+#     echo "Updating: $i"
+#     msgmerge -U $i zotonic.pot
+# done
 

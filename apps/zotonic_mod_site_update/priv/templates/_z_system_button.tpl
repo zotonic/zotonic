@@ -5,7 +5,7 @@
             {_ Perform a version update of Zotonic (through git) _}
         </p>
     </a>
-    {% wire id="vcs" delegate=`mod_zotonic_status_vcs` postback={vcs_up zotonic} %}
+    {% wire id="vcs" delegate=`mod_site_update` postback={vcs_up zotonic} %}
 {% endif %}
 
 <a id="rebuild" href="#" class="list-group-item">
@@ -14,4 +14,4 @@
         {_ Recompile changed Erlang files in the background _}
     </p>
 </a>
-{% wire id="rebuild" delegate="mod_zotonic_status_vcs" postback="make" %}
+{% wire id="rebuild" delegate=`mod_site_update` postback="make" %}

@@ -99,7 +99,7 @@ search(Search, Context) ->
     -> #search_result{}.
 search(Search, MaxRows, Context) when is_integer(MaxRows) ->
     search(Search, {1, MaxRows}, Context);
-search({SearchName, Props} = Search, OffsetLimit, Context) ->
+search({SearchName, Props}, OffsetLimit, Context) ->
     Props1 = case proplists:get_all_values(cat, Props) of
         [] -> Props;
         [[]] -> Props;
@@ -114,7 +114,7 @@ search({SearchName, Props} = Search, OffsetLimit, Context) ->
     Q = #search_query{search={SearchName, PropsSorted}, offsetlimit=OffsetLimit},
     case z_notifier:first(Q, Context) of
         undefined ->
-            lager:info("z_search: ignored unknown search query ~p", [ Search ]),
+            lager:info("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
             #search_result{};
         Result ->
             search_result(Result, OffsetLimit, Context)

@@ -8,6 +8,7 @@ params:
 - tabs_enabled (optional): list of tab names: ["new", "depiction", "find",  "upload", "url"]
 - tab (optional)
 - autoclose (optional - defaults to false)
+- dependent (optional - defaults to false)
 - nocatselect (optional - defaults to false)
 - is_zlink (optional) set by the tinyMCE 'zlink' plugin
 - is_zmedia (optional) set by the tinyMCE 'zmedia' plugin

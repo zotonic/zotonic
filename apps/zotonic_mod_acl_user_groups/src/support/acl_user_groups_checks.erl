@@ -416,12 +416,12 @@ acl_context_authenticated(#context{} = Context) ->
 
 acl_update_check(insert, _Id, Props, Context) ->
     #{
-        <<"category_id">> := CatId,
-        <<"content_group_id">> := CGId
+        <<"category_id">> := CatId
     } = Props,
+    CGId = maps:get(<<"content_group_id">>, Props, default_content_group),
     case acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) of
         true ->
-            undefined;
+            true;
         false ->
             lager:debug("[acl_user_group] denied user ~p insert of category ~p in content-group ~p",
                         [z_acl:user(Context), CatId, CGId]),
@@ -434,7 +434,7 @@ acl_update_check(update, Id, Props, Context) ->
     } = Props,
     case acl_rsc_update_check_1(Id, CGId, CatId, Context) of
         true ->
-            undefined;
+            true;
         false ->
             lager:debug("[acl_user_group] denied user ~p update on ~p of category ~p in content-group ~p",
                         [z_acl:user(Context), Id, CatId, CGId]),

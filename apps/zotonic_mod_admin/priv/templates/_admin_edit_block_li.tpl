@@ -1,7 +1,8 @@
 <li id="{{ #block }}" class="block do_adminwidget" data-minifier="1">
 
     <!-- New block entry -->
-    <input type="hidden" name="blocks[]." value="" />
+    <input type="hidden" name="blocks[]." value="">
+    <input type="hidden" class="block-type" name="blocks[].type" value="{{ blk.type }}">
 
     <!-- The widget with the name, includes the specific fields for the block type -->
     <div class="widget">
@@ -10,13 +11,11 @@
             <input type="text"
                    class="block-name"
                    name="blocks[].name"
-                   id="block-{{ #s }}-name"
                    value="{{ blk.name|escape }}"
                    title="{_ Block name _}"
                    placeholder="{_ name _}"
                    noautocomplete
             >
-            <input type="hidden" class="block-type" id="block-{{ #s }}-type" name="blocks[].type" value="{{ blk.type }}">
             &nbsp;
             {{ blk.type|make_list|capfirst|replace:"_":" " }} {_ block _}
             <a title="{_ Disconnect _}" class="z-btn-remove block-remove"></a>

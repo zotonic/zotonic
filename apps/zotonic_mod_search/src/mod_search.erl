@@ -300,6 +300,40 @@ search({match_objects, [{cat,Cat},{id,Id}]}, OffsetLimit, Context) ->
         #search_sql{} = Search -> Search#search_sql{cats=[{"r", Cat}]};
         Result -> Result
     end;
+search({match_objects, [{content_group, CG}, {id_exclude, Exclude}, {ids, ObjectIds}]}, _OffsetLimit, Context) ->
+    CGId = m_rsc:rid(CG, Context),
+    ExcludeId = m_rsc:rid(Exclude, Context),
+    ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- ObjectIds ],
+    MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, ObjId =/= undefined ],
+    TsQuery = lists:flatten(lists:join("|", MatchTerms)),
+    case TsQuery of
+        [] ->
+            #search_result{};
+        _ when is_integer(ExcludeId) ->
+            #search_sql{
+                select="r.id, ts_rank(pivot_rtsv, query) AS rank",
+                from="rsc r, to_tsquery($1) query",
+                where=" r.content_group_id = $3 and query @@ pivot_rtsv and id <> $2",
+                order="rank desc, r.publication_start desc",
+                args=[TsQuery, z_convert:to_integer(ExcludeId), CGId],
+                tables=[{rsc,"r"}]
+            };
+        _ ->
+            #search_sql{
+                select="r.id, ts_rank(pivot_rtsv, query) AS rank",
+                from="rsc r, to_tsquery($1) query",
+                where=" r.content_group_id = $2 and query @@ pivot_rtsv",
+                order="rank desc, r.publication_start desc",
+                args=[TsQuery, CGId],
+                tables=[{rsc,"r"}]
+            }
+    end;
+search({match_objects, [{cat,Cat},{content_group,CG},{id,Id}]}, OffsetLimit, Context) ->
+    ObjectIds = m_edge:objects(Id, Context),
+    case search({match_objects, [{content_group,CG},{id_exclude, Id}, {ids, ObjectIds}]}, OffsetLimit, Context) of
+        #search_sql{} = Search -> Search#search_sql{cats=[{"r", Cat}]};
+        Result -> Result
+    end;
 
 %% @doc Return the rsc records that have similar objects
 search({match_objects_cats, [{id,Id}]}, _OffsetLimit, Context) ->

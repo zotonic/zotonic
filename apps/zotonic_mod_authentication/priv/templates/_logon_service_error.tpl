@@ -19,7 +19,7 @@
             >
                 <input type="hidden" name="auth" value="{{ q.auth|escape }}">
                 <button class="btn btn-primary" type="submit">{_ I want to create a new account _}</button>
-                <a class="btn btn-default" href="#" data-onclick-topic="model/window/post/close">{_ Close Window _}</a>
+                <a class="btn btn-default" href="#" data-onclick-topic="model/window/post/close">{_ Close window _}</a>
             </form>
 
             <div class="padding alert alert-danger" style="display:none" id="signup_error">
@@ -42,7 +42,7 @@
             </div>
         {% elseif qerror == "duplicate" %}
             <div class="container">
-                <h1>{_ Already Connected _}</h1>
+                <h1>{_ Already connected _}</h1>
 
                 <p class="alert">{_ Somebody else is already connected with this account on _} {{ service|default:_"the service" }}</p>
             </div>
@@ -57,7 +57,7 @@
         {% endif %}
 
         <p>
-            <a class="btn" href="#" data-onclick-topic="model/window/post/close">{_ Close Window _}</a>
+            <a class="btn" href="#" data-onclick-topic="model/window/post/close">{_ Close window _}</a>
         </p>
     {% endif %}
 

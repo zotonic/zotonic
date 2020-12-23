@@ -281,28 +281,33 @@ function z_event(name, extraParams)
 function z_notify(message, extraParams)
 {
     var trigger_id = '';
+    var target_id;
     var params = extraParams || [];
+    var delegate = params.z_delegate || 'notify';
 
-    if (typeof params == 'object' && params.z_trigger_id !== undefined) {
-        trigger_id = params.z_trigger_id;
-        delete params.z_trigger_id;
+    if (typeof params == 'object') {
+        if (params.z_trigger_id !== undefined) {
+            trigger_id = params.z_trigger_id;
+            delete params.z_trigger_id;
+        }
+        target_id = params.z_target_id || undefined;
     }
+    params = ensure_name_value(params);
 
     var postbackAttr = document.body.getAttribute("data-wired-postback");
     if (postbackAttr) {
-        params.z_postback_data = JSON.parse(postbackAttr);
+        params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
     }
 
     var notify = {
         _type: "postback_notify",
         message: message,
         trigger: trigger_id,
-        target: params.z_target_id || undefined,
+        target: target_id,
         data: {
-            q: ensure_name_value(params) || []
+            q: params
         }
     };
-    var delegate = params.z_delegate || 'notify';
     var options = {
         trigger_id: trigger_id
     };
@@ -402,7 +407,11 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
 {
     var triggervalue = '';
     var trigger;
+    var target_id;
 
+    if (typeof extraParams == 'object') {
+        target_id = extraParams.z_target_id || undefined;
+    }
     if (transport === true) {
         transport = 'ajax';
     }
@@ -421,21 +430,22 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
             }
         }
     }
-    extraParams = extraParams || [];
+    params = extraParams || [];
+    params = ensure_name_value(params);
 
     var postbackAttr = document.body.getAttribute("data-wired-postback");
     if (postbackAttr) {
-        extraParams.z_postback_date = JSON.parse(postbackAttr);
+        params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
     }
 
     var pb_event = {
         _type: "postback_event",
         postback: postback,
         trigger: trigger_id,
-        target: extraParams.target_id || undefined,
+        target: target_id,
         triggervalue: triggervalue,
         data: {
-            q: ensure_name_value(extraParams) || []
+            q: params
         }
     };
 

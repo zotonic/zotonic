@@ -178,7 +178,7 @@ is_user_local_email(Handle, Context) ->
                     proplists:get_value(rsc_id, Row)
                 end,
                 Rows),
-            lists:filter(
+            lists:any(
                 fun (RscId) ->
                     case m_identity:get_username(RscId, Context) of
                         undefined -> false;

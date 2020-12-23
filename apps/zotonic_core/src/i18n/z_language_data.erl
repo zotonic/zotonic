@@ -1239,6 +1239,12 @@ languages_list() -> [
         {name, <<"українська"/utf8>>},
         {name_en, <<"Ukrainian"/utf8>>}
     ]},
+    {<<"ur">>, [
+        {language, <<"ur">>},
+        % {script, <<"Nastaʼlīq"/utf8>>},
+        {name, <<"اُردُو"/utf8>>},
+        {name_en, <<"Urdu"/utf8>>}
+    ]},
     {<<"vi">>, [
         {language, <<"vi">>},
         {region, <<"VN">>},
@@ -1384,7 +1390,6 @@ languages_list() -> [
 % tw: Twi
 % ty: Tahitian
 % ug: Uighur
-% ur: Urdu
 % uz: Uzbek
 % vo: Volapuk
 % wa: Walloon
