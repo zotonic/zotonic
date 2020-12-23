@@ -47,7 +47,7 @@ The output should be something like::
 
 (Press ctrl+c twice to exit)
 
-If your version is below release **22.3**, you need to upgrade. If
+If your version is below release **21.3**, you need to upgrade. If
 you don't have Erlang installed, we recommend downloading a build for
 your operating system from the Erlang Solutions website:
 
