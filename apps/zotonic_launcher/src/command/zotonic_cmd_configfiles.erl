@@ -20,7 +20,10 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "List Zotonic config files being used.".
 
 run(_) ->
     case zotonic_command:net_start() of

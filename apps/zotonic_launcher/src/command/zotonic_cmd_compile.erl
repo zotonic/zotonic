@@ -20,7 +20,13 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([
+    info/0,
+    run/1
+]).
+
+info() ->
+    "Compile all modified erlang files in the background.".
 
 run(_) ->
     case zotonic_command:net_start() of

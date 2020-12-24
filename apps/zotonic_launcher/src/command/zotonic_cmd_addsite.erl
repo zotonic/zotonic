@@ -20,9 +20,16 @@
 -author("Marc Worrell").
 
 %% API
--export([run/1]).
+-export([
+    info/0,
+    usage/0,
+    run/1
+]).
 
 -define(SKEL, blog).
+
+info() ->
+    "Add a site and install database".
 
 usage() ->
     io:format("Usage: zotonic addsite [options] <site_name> ~n~n"),

@@ -20,7 +20,10 @@
 -author("Marc Worrell").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Connect to PostgreSQL using the Zotonic database configuration.".
 
 run(_) ->
     case zotonic_command:get_target_node() of

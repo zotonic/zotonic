@@ -20,7 +20,10 @@
 -author("Marc Worrell").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Test if the Zotonic config files can be read.".
 
 run(_) ->
     case zotonic_command:get_target_node() of

@@ -20,7 +20,10 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Create the PostgreSQL database and schema for a site.".
 
 run([ Site ]) ->
     case zotonic_command:net_start() of

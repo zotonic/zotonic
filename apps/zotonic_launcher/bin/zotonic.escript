@@ -52,13 +52,27 @@ usage() ->
 
     io:format("USAGE: ~s (options) [command] ~n~n", [ filename:rootname(escript:script_name()) ]),
     io:format("Where [command] is one of: ~n"),
-    lists:map(fun(Cmd) -> io:format("   ~s~n", [Cmd]) end, lists:sort(CommandNames)),
+    lists:map(fun(Cmd) -> io:format("   ~-16s ~s~n", [Cmd, command_info(Cmd)]) end, lists:sort(CommandNames)),
     io:format("~n"),
     io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n~n"),
     io:format("Options: ~n"),
     io:format("  -v : Prints Zotonic version ~n~n").
 
+command_info(Cmd) ->
+    CommandMod = binary_to_atom(<<"zotonic_cmd_", Cmd/binary>>, utf8),
+    case code:ensure_loaded(CommandMod) of
+        {module, CommandMod} ->
+            try
+                apply(CommandMod, info, [])
+            catch
+                _:_ -> ""
+            end;
+        {error, _} ->
+            "*could not load module " ++ atom_to_list(CommandMod) ++ "*"
+    end.
+
 main([]) ->
+    load_mod_paths(),
     usage();
 
 main([ Command | T ]) ->
