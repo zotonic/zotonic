@@ -59,7 +59,7 @@ create_empty(Uri, Props, Context) ->
 
 %% @doc Import given resource. resource must already exist and be
 %% non-authoritative. URIs must match.
--spec import(m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, atom()}.
+-spec import(map(), z:context()) -> {ok, m_rsc:resource_id()} | {error, atom()}.
 import(RscImport, Context) when is_list(RscImport) ->
     {ok, RscMap} = z_props:from_list(RscImport),
     import(RscMap, Context);
