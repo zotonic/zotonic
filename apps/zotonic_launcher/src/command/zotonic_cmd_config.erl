@@ -20,8 +20,11 @@
 -author("Marc Worrell").
 
 %% API
--export([run/1]).
 -export([pretty_print_value/2]).
+-export([info/0, run/1]).
+
+info() ->
+    "Show Zotonic and Erlang configuration.".
 
 run([ "all" ]) ->
     show(all);

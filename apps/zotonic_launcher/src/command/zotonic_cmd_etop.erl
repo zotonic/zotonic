@@ -19,7 +19,10 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Show top processes running in the Erlang VM.".
 
 run(_) ->
     case zotonic_command:net_start() of

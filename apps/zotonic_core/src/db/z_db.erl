@@ -938,7 +938,7 @@ update_sequence(Table, Ids, Context) ->
     with_connection(F, Context).
 
 %% @doc Create database and schema if they do not yet exist
--spec prepare_database(#context{}) -> ok | {error, term()}.
+-spec prepare_database(z:context()) -> ok | {error, term()}.
 prepare_database(Context) ->
     Options = z_db_pool:get_database_options(Context),
     Site = z_context:site(Context),

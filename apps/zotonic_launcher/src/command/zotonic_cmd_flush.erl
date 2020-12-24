@@ -19,7 +19,10 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Flush all caches of all sites or a specific site.".
 
 run([ Site ]) ->
     SiteName = list_to_atom(Site),

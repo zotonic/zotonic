@@ -20,7 +20,10 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Force reload of an Erlang module.".
 
 run(_) ->
     case zotonic_command:net_start() of

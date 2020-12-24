@@ -46,14 +46,16 @@ modify_rsc_test() ->
     ?assertEqual(true, z_acl:rsc_editable(Id, AdminC)),
 
     %% Context must not be admin context, as admins are allowed to update non-authoritative resources
-    ?assertEqual({error, non_authoritative}, m_rsc:update(Id, [{title, <<"foo">>}], C)),
+    ?assertEqual({error, non_authoritative}, m_rsc:update(Id, #{ <<"title">> => <<"foo">> }, C)),
 
-    RscImport = [{uri, <<"http://foo.com/id/333">>},
-                 {rsc, [{title, <<"Hello!">>},
-                        {summary, <<"This is the summary.">>},
-                        {body, <<"This is a <strong>statement</strong>.">>}
-                       ]}
-                ],
+    RscImport = #{
+        <<"uri">> => <<"http://foo.com/id/333">>,
+        <<"rsc">> => #{
+            <<"title">> => <<"Hello!">>,
+            <<"summary">> => <<"This is the summary.">>,
+            <<"body">> => <<"This is a <strong>statement</strong>.">>
+        }
+    },
     ?assertEqual({error, eacces}, m_rsc_import:import(RscImport, C)),
 
     {ok, NewId} = m_rsc_import:import(RscImport, SudoC),

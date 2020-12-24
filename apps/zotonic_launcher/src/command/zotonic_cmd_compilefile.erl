@@ -20,7 +20,10 @@
 -author("Marc Worrell").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Compile a specific erlang file.".
 
 run([ File ]) ->
     case zotonic_command:net_start() of

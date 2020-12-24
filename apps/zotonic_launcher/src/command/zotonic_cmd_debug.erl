@@ -20,7 +20,10 @@
 -author("Blaise").
 
 %% API
--export([run/1]).
+-export([info/0, run/1]).
+
+info() ->
+    "Start Zotonic in the foreground with the Erlang shell.".
 
 run(_) ->
     case zotonic_launcher_app:is_root() of
