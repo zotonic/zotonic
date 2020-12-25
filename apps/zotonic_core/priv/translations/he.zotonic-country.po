@@ -1,0 +1,738 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: 2011-03-17 14:53\n"
+"PO-Revision-Date: 2020-12-17 14:30\n"
+"Last-Translator: Michael Connors <michael@bring42.net>\n"
+"Language-Team: Hebrew\n"
+"Language: he_IL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
+"X-Crowdin-Project: zotonic\n"
+"X-Crowdin-Project-ID: 3405\n"
+"X-Crowdin-Language: he\n"
+"X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-country.pot\n"
+"X-Crowdin-File-ID: 8694\n"
+
+msgid "Afghanistan"
+msgstr "אפגניסטן"
+
+msgid "Albania"
+msgstr "אלבניה"
+
+msgid "Algeria"
+msgstr "אלג'יריה"
+
+msgid "American Samoa"
+msgstr "סמואה האמריקנית"
+
+msgid "Andorra"
+msgstr "אנדורה"
+
+msgid "Angola"
+msgstr "אנגולה"
+
+msgid "Anguilla"
+msgstr "אנגווילה"
+
+msgid "Antarctica"
+msgstr "אנטארקטיקה"
+
+msgid "Antigua and Barbuda"
+msgstr "אנטיגואה וברבודה"
+
+msgid "Argentina"
+msgstr "ארגנטינה"
+
+msgid "Armenia"
+msgstr "אַרְמֶנִיָה"
+
+msgid "Aruba"
+msgstr "ארובה"
+
+msgid "Australia"
+msgstr "אוֹסטְרַלִיָה"
+
+msgid "Austria"
+msgstr "אוֹסְטְרֵיָה"
+
+msgid "Azerbaijan"
+msgstr "אזרבייג'ן"
+
+msgid "Bahamas"
+msgstr "איי בהאמה"
+
+msgid "Bahrain"
+msgstr "בחריין"
+
+msgid "Bangladesh"
+msgstr "בנגלדש"
+
+msgid "Barbados"
+msgstr "ברבדוס"
+
+msgid "Belarus"
+msgstr "בלארוס"
+
+msgid "Belgium"
+msgstr "בלגיה"
+
+msgid "Belize"
+msgstr "בליז"
+
+msgid "Benin"
+msgstr "בנין"
+
+msgid "Bermuda"
+msgstr "ברמודה"
+
+msgid "Bhutan"
+msgstr "בהוטן"
+
+msgid "Bolivia"
+msgstr "בוליביה"
+
+msgid "Bosnia-Herzegovina"
+msgstr "בוסניה-הרצגובינה"
+
+msgid "Botswana"
+msgstr "בוצואנה"
+
+msgid "Bouvet Island"
+msgstr "האי בובוט"
+
+msgid "Brazil"
+msgstr "בְּרָזִיל"
+
+msgid "British Indian Ocean Territory"
+msgstr "הטריטוריה הבריטית באוקיאנוס ההודי"
+
+msgid "Brunei Darussalam"
+msgstr "ברוניי דארוסלאם"
+
+msgid "Bulgaria"
+msgstr "בולגריה"
+
+msgid "Burkina Faso"
+msgstr "בורקינה פאסו"
+
+msgid "Burundi"
+msgstr "בורונדי"
+
+msgid "Cambodia"
+msgstr "קמבודיה"
+
+msgid "Cameroon"
+msgstr "קמרון"
+
+msgid "Canada"
+msgstr "קנדה"
+
+msgid "Cape Verde"
+msgstr "קייפ ורדה"
+
+msgid "Cayman Islands"
+msgstr "איי קיימן"
+
+msgid "Central African Republic"
+msgstr "הרפובליקה המרכז - אפריקאית"
+
+msgid "Chad"
+msgstr "צ'אד"
+
+msgid "Chile"
+msgstr "צ'ילה"
+
+msgid "China"
+msgstr "חרסינה"
+
+msgid "Christmas Island"
+msgstr "אי חג המולד"
+
+msgid "Cocos (Keeling) Islands"
+msgstr "איי קוקוס (קילינג)"
+
+msgid "Colombia"
+msgstr "קולומביה"
+
+msgid "Comoros"
+msgstr "קומורו"
+
+msgid "Congo"
+msgstr "קונגו"
+
+msgid "Congo, The Democratic Republic of the"
+msgstr "קונגו, הרפובליקה הדמוקרטית של"
+
+msgid "Cook Islands"
+msgstr "איי קוק"
+
+msgid "Costa Rica"
+msgstr "קוסטה ריקה"
+
+msgid "Croatia"
+msgstr "קרואטיה"
+
+msgid "Cuba"
+msgstr "קובה"
+
+msgid "Cyprus"
+msgstr "קַפרִיסִין"
+
+msgid "Czech Republic"
+msgstr "הרפובליקה הצ'כית"
+
+msgid "Denmark"
+msgstr "דנמרק"
+
+msgid "Djibouti"
+msgstr "ג'יבוטי"
+
+msgid "Dominica"
+msgstr "דומיניקה"
+
+msgid "Dominican Republic"
+msgstr "הרפובליקה הדומיניקנית"
+
+msgid "East Timor"
+msgstr "מזרח טימור"
+
+msgid "Ecuador"
+msgstr "אקוודור"
+
+msgid "Egypt"
+msgstr "מִצְרַיִם"
+
+msgid "El Salvador"
+msgstr "אל סלבדור"
+
+msgid "Equatorial Guinea"
+msgstr "גיניאה המשוונית"
+
+msgid "Eritrea"
+msgstr "אריתריאה"
+
+msgid "Estonia"
+msgstr "אסטוניה"
+
+msgid "Ethiopia"
+msgstr "אֶתִיוֹפִּיָה"
+
+msgid "Falkland Islands (Malvinas)"
+msgstr "איי פוקלנד (מלווינס)"
+
+msgid "Faroe Islands"
+msgstr "איי פרו"
+
+msgid "Fiji"
+msgstr "פיג'י"
+
+msgid "Finland"
+msgstr "פינלנד"
+
+msgid "France"
+msgstr "צָרְפַת"
+
+msgid "French Guiana"
+msgstr "גיאנה הצרפתית"
+
+msgid "Gabon"
+msgstr "גבון"
+
+msgid "Gambia"
+msgstr "גמביה"
+
+msgid "Gaza Strip Administered by Israel"
+msgstr "רצועת עזה המנוהלת על ידי ישראל"
+
+msgid "Georgia"
+msgstr "ג'ורג'יה"
+
+msgid "Germany"
+msgstr "גֶרמָנִיָה"
+
+msgid "Ghana"
+msgstr "גאנה"
+
+msgid "Gibraltar"
+msgstr "גיברלטר"
+
+msgid "Great Britain"
+msgstr "בריטניה הגדולה"
+
+msgid "Greece"
+msgstr "יָוָן"
+
+msgid "Greenland"
+msgstr "גרינלנד"
+
+msgid "Grenada"
+msgstr "גרנדה"
+
+msgid "Guadeloupe"
+msgstr "גוואדלופ"
+
+msgid "Guam"
+msgstr "גואם"
+
+msgid "Guatemala"
+msgstr "גואטמלה"
+
+msgid "Guinea"
+msgstr "גינאה"
+
+msgid "Guinea Bissau"
+msgstr "גינאה ביסאו"
+
+msgid "Guyana"
+msgstr "גיאנה"
+
+msgid "Haiti"
+msgstr "האיטי"
+
+msgid "Heard and McDonald Islands"
+msgstr "איי הרד ומקדונלד"
+
+msgid "Holy See (Vatican City State)"
+msgstr "הכס הקדוש (מדינת הוותיקן)"
+
+msgid "Honduras"
+msgstr "הונדורס"
+
+msgid "Hong Kong"
+msgstr "הונג קונג"
+
+msgid "Hungary"
+msgstr "הונגריה"
+
+msgid "Iceland"
+msgstr "אִיסלַנד"
+
+msgid "India"
+msgstr "הוֹדוּ"
+
+msgid "Indonesia"
+msgstr "אִינדוֹנֵזִיָה"
+
+msgid "Iran"
+msgstr "איראן"
+
+msgid "Iraq"
+msgstr "עִירַאק"
+
+msgid "Ireland"
+msgstr "אירלנד"
+
+msgid "Israel"
+msgstr "ישראל"
+
+msgid "Italy"
+msgstr "אִיטַלִיָה"
+
+msgid "Ivory Coast (Cote D'Ivoire)"
+msgstr "חוף השנהב (חוף השנהב)"
+
+msgid "Jamaica"
+msgstr "ג'מייקה"
+
+msgid "Japan"
+msgstr "יפן"
+
+msgid "Jordan"
+msgstr "יַרדֵן"
+
+msgid "Kazakhstan"
+msgstr "קזחסטן"
+
+msgid "Kenya"
+msgstr "קניה"
+
+msgid "Kiribati"
+msgstr "קיריבטי"
+
+msgid "Kuwait"
+msgstr "כווית"
+
+msgid "Kyrgyzstan"
+msgstr "קירגיזסטן"
+
+msgid "Laos"
+msgstr "לאוס"
+
+msgid "Latvia"
+msgstr "לטביה"
+
+msgid "Lebanon"
+msgstr "לבנון"
+
+msgid "Lesotho"
+msgstr "לסוטו"
+
+msgid "Liberia"
+msgstr "ליבריה"
+
+msgid "Libya"
+msgstr "לוב"
+
+msgid "Liechtenstein"
+msgstr "ליכטנשטיין"
+
+msgid "Lithuania"
+msgstr "ליטא"
+
+msgid "Luxembourg"
+msgstr "לוקסמבורג"
+
+msgid "Macao"
+msgstr "מקאו"
+
+msgid "Macedonia"
+msgstr "מוּקדוֹן"
+
+msgid "Madagascar"
+msgstr "מדגסקר"
+
+msgid "Malawi"
+msgstr "מלאווי"
+
+msgid "Malaysia"
+msgstr "מלזיה"
+
+msgid "Maldives"
+msgstr "האיים המלדיביים"
+
+msgid "Mali"
+msgstr "מאלי"
+
+msgid "Malta"
+msgstr "מלטה"
+
+msgid "Marshall Islands"
+msgstr "איי מרשל"
+
+msgid "Martinique"
+msgstr "מרטיניק"
+
+msgid "Mauritania"
+msgstr "מאוריטניה"
+
+msgid "Mauritius"
+msgstr "מאוריציוס"
+
+msgid "Mayotte"
+msgstr "מיוט"
+
+msgid "Mexico"
+msgstr "מקסיקו"
+
+msgid "Micronesia"
+msgstr "מיקרונזיה"
+
+msgid "Moldova"
+msgstr "מולדובה"
+
+msgid "Monaco"
+msgstr "מונקו"
+
+msgid "Mongolia"
+msgstr "מונגוליה"
+
+msgid "Montserrat"
+msgstr "מונטסראט"
+
+msgid "Morocco"
+msgstr "מָרוֹקוֹ"
+
+msgid "Mozambique"
+msgstr "מוזמביק"
+
+msgid "Myanmar"
+msgstr "מיאנמר"
+
+msgid "Namibia"
+msgstr "נמיביה"
+
+msgid "Nauru"
+msgstr "נאורו"
+
+msgid "Nepal"
+msgstr "נפאל"
+
+msgid "Netherlands"
+msgstr "הולנד"
+
+msgid "Netherlands Antilles"
+msgstr "האנטילים ההולנדיים"
+
+msgid "New Caledonia"
+msgstr "קלדוניה החדשה"
+
+msgid "New Zealand"
+msgstr "ניו זילנד"
+
+msgid "Nicaragua"
+msgstr "ניקרגואה"
+
+msgid "Niger"
+msgstr "ניז'ר"
+
+msgid "Nigeria"
+msgstr "ניגריה"
+
+msgid "Niue"
+msgstr "ניואה"
+
+msgid "Norfolk Island"
+msgstr "האי נורפולק"
+
+msgid "North Korea"
+msgstr "צפון קוריאה"
+
+msgid "Northern Mariana Islands"
+msgstr "איי מריאנה הצפוניים"
+
+msgid "Norway"
+msgstr "נורווגיה"
+
+msgid "Oman"
+msgstr "עומאן"
+
+msgid "Pakistan"
+msgstr "פקיסטן"
+
+msgid "Palau"
+msgstr "פלאו"
+
+msgid "Panama"
+msgstr "פנמה"
+
+msgid "Papua New Guinea"
+msgstr "פפואה גינאה החדשה"
+
+msgid "Paraguay"
+msgstr "פרגוואי"
+
+msgid "Peru"
+msgstr "פרו"
+
+msgid "Philippines"
+msgstr "הפיליפינים"
+
+msgid "Pitcairn Island"
+msgstr "האי פיטקארן"
+
+msgid "Poland"
+msgstr "פּוֹלִין"
+
+msgid "French Polynesia"
+msgstr "פולינזיה הצרפתית"
+
+msgid "Portugal"
+msgstr "פּוֹרטוּגָל"
+
+msgid "Puerto Rico"
+msgstr "פוארטו ריקו"
+
+msgid "Qatar"
+msgstr "קטאר"
+
+msgid "Reunion"
+msgstr "איחוד"
+
+msgid "Romania"
+msgstr "רומניה"
+
+msgid "Russian Federation"
+msgstr "הפדרציה הרוסית"
+
+msgid "Rwanda"
+msgstr "רואנדה"
+
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "דרום ג'ורג'יה ואיי הכריכים הדרומיים"
+
+msgid "Saint Helena"
+msgstr "סנט הלנה"
+
+msgid "Saint Kitts and Nevis Anguilla"
+msgstr "סנט קיטס ונוויס אנגווילה"
+
+msgid "Saint Lucia"
+msgstr "סנט לוסיה"
+
+msgid "Saint Pierre and Miquelon"
+msgstr "סן פייר ומיקלון"
+
+msgid "Sao Tome and Principe"
+msgstr "סאו טומה ופרינסיפה"
+
+msgid "Saint Vincent and Grenadines"
+msgstr "סנט וינסנט והגרנדינים"
+
+msgid "Samoa"
+msgstr "סמואה"
+
+msgid "San Marino"
+msgstr "סן מרינו"
+
+msgid "Saudi Arabia"
+msgstr "ערב הסעודית"
+
+msgid "Senegal"
+msgstr "סנגל"
+
+msgid "Seychelles"
+msgstr "סיישל"
+
+msgid "Sierra Leone"
+msgstr "סיירה לאונה"
+
+msgid "Singapore"
+msgstr "סינגפור"
+
+msgid "Slovakia"
+msgstr "סלובקיה"
+
+msgid "Slovenia"
+msgstr "סלובניה"
+
+msgid "Solomon Islands"
+msgstr "איי שלמה"
+
+msgid "Somalia"
+msgstr "סומליה"
+
+msgid "South Africa"
+msgstr "דרום אפריקה"
+
+msgid "South Korea"
+msgstr "דרום קוריאה"
+
+msgid "Spain"
+msgstr "סְפָרַד"
+
+msgid "Sri Lanka"
+msgstr "סרי לנקה"
+
+msgid "Sudan"
+msgstr "סודן"
+
+msgid "Suriname"
+msgstr "סורינאם"
+
+msgid "Svalbard and Jan Mayen Islands"
+msgstr "איי סוולבארד ויאן מאיין"
+
+msgid "Swaziland"
+msgstr "סווזילנד"
+
+msgid "Sweden"
+msgstr "שבדיה"
+
+msgid "Switzerland"
+msgstr "שוויץ"
+
+msgid "Syria"
+msgstr "סוּריָה"
+
+msgid "Tajikistan"
+msgstr "טג'יקיסטן"
+
+msgid "Taiwan"
+msgstr "טייוואן"
+
+msgid "Tanzania"
+msgstr "טנזניה"
+
+msgid "Thailand"
+msgstr "תאילנד"
+
+msgid "Togo"
+msgstr "ללכת"
+
+msgid "Tokelau"
+msgstr "טוקלאו"
+
+msgid "Tonga"
+msgstr "טונגה"
+
+msgid "Trinidad and Tobago"
+msgstr "טרינידד וטובגו"
+
+msgid "Tunisia"
+msgstr "תוניסיה"
+
+msgid "Turkey"
+msgstr "טורקיה"
+
+msgid "Turkmenistan"
+msgstr "טורקמניסטן"
+
+msgid "Turks and Caicos Islands"
+msgstr "איי טורקס וקאיקוס"
+
+msgid "Tuvalu"
+msgstr "טובאלו"
+
+msgid "Uganda"
+msgstr "אוגנדה"
+
+msgid "Ukraine"
+msgstr "אוקראינה"
+
+msgid "United Arab Emirates"
+msgstr "איחוד האמירויות הערביות"
+
+msgid "United Kingdom"
+msgstr "הממלכה המאוחדת"
+
+msgid "United States"
+msgstr "ארצות הברית"
+
+msgid "Uruguay"
+msgstr "אורוגוואי"
+
+msgid "Uzbekistan"
+msgstr "אוזבקיסטן"
+
+msgid "Vanuatu"
+msgstr "ונואטו"
+
+msgid "Venezuela"
+msgstr "ונצואלה"
+
+msgid "Vietnam"
+msgstr "וייטנאם"
+
+msgid "Virgin Islands (British)"
+msgstr "איי הבתולה (בריטים)"
+
+msgid "Virgin Islands (USA)"
+msgstr "איי הבתולה (ארה\"ב)"
+
+msgid "Wallis and Futuna Islands"
+msgstr "איי וואליס ופוטונה"
+
+msgid "West Bank Administered by Israel"
+msgstr "הגדה המערבית מנוהלת על ידי ישראל"
+
+msgid "Western Sahara"
+msgstr "סהרה המערבית"
+
+msgid "Yemen"
+msgstr "תֵימָן"
+
+msgid "Serbia and Montenegro"
+msgstr "סרביה ומונטנגרו"
+
+msgid "Zaire"
+msgstr "זאיר"
+
+msgid "Zambia"
+msgstr "זמביה"
+
+msgid "Zimbabwe"
+msgstr "זימבבואה"
+
