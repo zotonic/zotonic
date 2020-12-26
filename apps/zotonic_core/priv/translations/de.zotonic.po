@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-26 16:30\n"
+"PO-Revision-Date: 2020-12-26 17:30\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -214,11 +214,11 @@ msgstr "Schließen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:45
 msgid "Collaboration group managers"
-msgstr "Leiter von Kollaborationsgruppen"
+msgstr "Manager von Zusammenarbeitsgruppen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:44
 msgid "Collaboration group members"
-msgstr "Mitglieder der Kollaborationsgruppe"
+msgstr "Mitglieder der Zusammenartbeitsgruppe"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:49./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
@@ -231,7 +231,7 @@ msgstr "Kollaborationsgruppen werden hinzugefügt, indem eine neue Seite in der 
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:32
 msgid "Collaboration groups are user groups where all content belongs to the group."
-msgstr "Kollaborationsgruppen sind Benutzergruppen, bei denen alle Inhalte zur Gruppe gehören."
+msgstr "Zusammenarbeitsgruppen sind Benutzergruppen, bei denen alle Inhalte zur Gruppe gehören."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
@@ -252,7 +252,7 @@ msgstr "Inhaltsgruppen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:78
 msgid "Content rules for collaboration group members and managers"
-msgstr "Inhaltsregeln für Mitglieder von Kollaborationsgruppen und Manager"
+msgstr "Inhaltsregeln für Mitglieder und Managers von Zusammenarbeitsgruppen"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:42
 msgid "Could not move to collaboration group."
@@ -261,7 +261,7 @@ msgstr "Konnte nicht in die Zusammenarbeitsgruppe verschoben werden."
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
 msgid "Define who can see or edit this page."
-msgstr "Geben Sie an, wer diese Seite sehen oder editieren kann."
+msgstr "Gebe an, wer diese Seite sehen oder editieren kann."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:158
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71
@@ -298,7 +298,7 @@ msgstr "Löschen..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:45
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "Bearbeiten von &amp; Verknüpfungsrechten auf den Kollaborationsgruppen"
+msgstr "Bearbeiten von &amp; Verknüpfungsrechten auf den Zusammenarbeitsgruppen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:47
 msgid "Edit Rule"
@@ -306,7 +306,7 @@ msgstr "Regel bearbeiten"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:49
 msgid "Edit the collaboration group"
-msgstr "Bearbeiten Sie die Kollaborationsgruppe"
+msgstr "Bearbeite die Zusammenarbeitsgruppe"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
@@ -326,23 +326,23 @@ msgstr "Datei-Uploads"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:70
 msgid "Find collaboration group"
-msgstr "Kollaborationsgruppe finden"
+msgstr "Zusammenarbeitsgruppe finden"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:52
 msgid "Group managers can edit"
-msgstr "Gruppenmanager können bearbeiten"
+msgstr "Gruppenmanager dürfen bearbeiten"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:60
 msgid "Group managers can link"
-msgstr "Gruppenmanager können verknüpfen"
+msgstr "Gruppenmanager dürfen verknüpfen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:53
 msgid "Group members and managers can edit"
-msgstr "Gruppenmitglieder und Manager können bearbeiten"
+msgstr "Gruppenmitglieder und Manager dürfen bearbeiten"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:61
 msgid "Group members and managers can link"
-msgstr "Gruppenmitglieder und Manager können sich"
+msgstr "Gruppenmitglieder und Manager dürfen verknüpfen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 msgid "Import"
@@ -446,7 +446,7 @@ msgstr "Permissions"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:45
 msgid "Please select a collaboration_group"
-msgstr "Bitte wählen Sie eine collaboration_group"
+msgstr "Bitte wähle eine Zusammenarbeitsgruppe"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:46
 msgid "Private"
@@ -511,7 +511,7 @@ msgstr "Private Eigenschaften anzeigen an"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:98
 msgid "Show this ACL user group first:"
-msgstr "Zeigen Sie diese ACL-Benutzergruppe zuerst an:"
+msgstr "Zeige diese ACL-Benutzergruppe zuerst an:"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:111./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:127
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
@@ -523,7 +523,7 @@ msgstr "Sorry, Sie dürfen das nicht löschen."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
-msgstr "Es ist leider nicht möglich, Seiten dieser Kategorie in die ausgewählte Inhaltsgruppe einzufügen."
+msgstr "Leider dürfen Sie keine Seiten dieser Kategorie in die ausgewählte Inhaltsgruppe einfügen."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
@@ -602,7 +602,7 @@ msgstr "Veröffentlichte Regeln verwenden"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
-msgstr "Verwenden Sie die folgende URL, um die Zugriffskontrollregeln zu testen, bevor Sie sie veröffentlichen."
+msgstr "Verwende die folgende URL, um die Zugriffskontrollregeln zu testen, bevor veröffentlichung."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:538
 msgid "User groups"
@@ -614,7 +614,7 @@ msgstr "Welche Version der ACL-Regeln möchten Sie verwenden?"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:40
 msgid "You are not allowed to move to this collaboration group."
-msgstr "Es ist Ihnen nicht erlaubt, in diese Collaboration Group zu wechseln."
+msgstr "Sie dürfen nicht zu dieser Zusammenarbeitsgruppe wechseln."
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:57
 msgid "You are not allowed to perform this action"
@@ -666,7 +666,7 @@ msgstr "verweigern"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "edit (acl action)"
-msgstr "bearbeiten (Acl-Aktion)"
+msgstr "bearbeiten"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:21
 msgid "in the group"
@@ -674,7 +674,7 @@ msgstr "in der Gruppe"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "insert (acl action)"
-msgstr "einfügen (Acl-Aktion)"
+msgstr "einfügen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
 msgid "link (acl action)"
@@ -686,15 +686,15 @@ msgstr "eigene verwalten"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
-msgstr "Senden Sie diese URL zum Testen an eine andere Person"
+msgstr "Sende diese URL zum Testen an eine andere Person"
 
 #: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
 msgid "use (acl action)"
-msgstr "verwenden (acl-aktion)"
+msgstr "verwenden"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "Verwenden Sie <b>Neues privates Fenster</b> (prüfen Sie das Menü <b>Datei</b> Ihres Browsers)"
+msgstr "Verwende <b>Neues privates Fenster</b> (prüfe das Menü <b>Datei</b> Ihres Browsers)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
@@ -702,11 +702,11 @@ msgstr "einen anderen Browser verwenden (z. B. Chrome, wenn Sie jetzt Firefox ve
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
 msgid "view (acl action)"
-msgstr "Ansicht (Acl-Aktion)"
+msgstr "Ansehen"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:107
 msgid "&lt; Prev"
-msgstr "&lt; Prev"
+msgstr "&lt; Zurück"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71
 msgid "(private)"
@@ -718,11 +718,11 @@ msgstr "(öffentlich)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:38
 msgid "+ add"
-msgstr "hinzufügen"
+msgstr "+ hinzufügen"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_addblock.tpl:5
 msgid "+ add block"
-msgstr "Block hinzufügen"
+msgstr "+ Block hinzufügen"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
