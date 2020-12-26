@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-17 11:40\n"
+"PO-Revision-Date: 2020-12-26 16:30\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,7 @@ msgstr "Minute"
 #: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
-msgstr "minuten"
+msgstr "Minuten"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:323
 msgid "moments"
@@ -70,7 +70,7 @@ msgstr "Monate"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:272./apps/zotonic_core/src/support/z_datetime.erl:322
 msgid "now"
-msgstr "jetzt"
+msgstr "Jetzt"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "second"
@@ -78,7 +78,7 @@ msgstr "Sekunde"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "seconds"
-msgstr "sekunden"
+msgstr "Sekunden"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "year"
@@ -147,7 +147,7 @@ msgstr "Alle normalen Inhaltsgruppen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:27
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Erlaubte Datei- und Mime-Typen, getrennt durch ',' - geben Sie 'none' ein, wenn keine zusätzlichen Typen erlaubt sind, lassen Sie es leer für den Standard"
+msgstr "Erlaubte Datei- und Mime-Typen, getrennt durch ',' - gebe 'none' ein, wenn keine zusätzlichen Typen erlaubt sind, lass es leer für den Standard"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
