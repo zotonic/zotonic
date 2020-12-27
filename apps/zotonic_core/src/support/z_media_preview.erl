@@ -467,6 +467,8 @@ filter2arg({extent, _}, Width, Height, _AllFilters) ->
 filter2arg({extent, _, _}, Width, Height, _AllFilters) ->
     {Width, Height, []};
 filter2arg(upscale, Width, Height, _AllFilters) ->
+    {Width, Height, []};
+filter2arg(nowh, Width, Height, _AllFilters) ->
     {Width, Height, []}.
 
 

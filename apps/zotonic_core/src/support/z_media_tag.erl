@@ -205,11 +205,11 @@ tag1(MediaRef, Filename, Options, Context) ->
     Options1 = drop_undefined(Options),
     {url, Url, TagOpts, _ImageOpts} = url1(Filename, Options1, Context),
     % Expand the mediaclass for the correct size options
-    TagOpts1 = case z_convert:to_bool( proplists:get_value(nowh, Options1, false) ) of
+    {ok, SizeOptions} = z_mediaclass:expand_mediaclass(Options1, Context),
+    TagOpts1 = case z_convert:to_bool( proplists:get_value(nowh, SizeOptions, false) ) of
         true ->
             TagOpts;
         false ->
-            {ok, SizeOptions} = z_mediaclass:expand_mediaclass(Options1, Context),
             % Calculate the default width/height
             case z_media_preview:size(MediaRef, SizeOptions, Context) of
                 {size, Width, Height, _Mime} ->
