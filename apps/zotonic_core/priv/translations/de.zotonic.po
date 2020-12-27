@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-26 23:20\n"
+"PO-Revision-Date: 2020-12-27 14:10\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -350,7 +350,7 @@ msgstr "Importieren"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "Bearbeitungsregeln importieren..."
+msgstr "Bearbeitungsversion der Regeln importieren..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
@@ -434,7 +434,7 @@ msgstr "Oder klicken Sie auf <strong>Alle Benutzergruppen löschen</strong> , um
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:122
 msgid "Own content"
-msgstr "Eigene Inhalte"
+msgstr "Eigener Inhalt"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:39
 msgid "People who can view this page"
