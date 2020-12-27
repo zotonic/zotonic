@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-27 15:10\n"
+"PO-Revision-Date: 2020-12-27 21:10\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -658,7 +658,7 @@ msgstr "Schließen dieser Browser-Registerkarte"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "delete (acl action)"
-msgstr "löschen (Acl-Aktion)"
+msgstr "löschen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "deny"
@@ -678,7 +678,7 @@ msgstr "einfügen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
 msgid "link (acl action)"
-msgstr "Link (Acl-Aktion)"
+msgstr "verbinden"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:127
 msgid "manage own"
@@ -734,7 +734,7 @@ msgstr "Über Kategorien"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
-msgstr "Fügen Sie eine Verbindung hinzu:"
+msgstr "Verbindung hinzufügen:"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:59
 msgid "Add a new media file"
@@ -762,7 +762,7 @@ msgstr "Adresse"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_base.tpl:5
 msgid "Admin"
-msgstr "Verwaltung"
+msgstr "Admin"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_logon.tpl:4
 msgid "Admin log on"
@@ -6828,7 +6828,7 @@ msgstr "SSL Let's Encrypt-Zertifikat"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:9
 msgid "Sorry, there was an error fetching the Let’s Encrypt certificate."
-msgstr "Sorry, es gab einen Fehler beim Abrufen des Let's Encrypt-Zertifikats."
+msgstr "Sorry, es gab einen Fehler beim Anfordern des Let's Encrypt-Zertifikats."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_running.tpl:4
 msgid "The certificate status will be updated when the request finishes."
