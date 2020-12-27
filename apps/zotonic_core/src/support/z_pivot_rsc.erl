@@ -47,6 +47,8 @@
     get_task/4,
     delete_task/3,
     delete_task/4,
+    list_tasks/1,
+    delete_tasks/1,
 
     stemmer_language/1,
     stemmer_language_config/1,
@@ -317,6 +319,14 @@ delete_task(Module, Function, UniqueKey, Context) ->
     z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
            [Module, Function, UniqueKeyBin],
            Context).
+
+-spec list_tasks( z:context() ) -> {ok, list( map() )} | {error, term()}.
+list_tasks(Context) ->
+    z_db:qmap("select * from pivot_task_queue", Context).
+
+-spec delete_tasks( z:context() ) -> non_neg_integer().
+delete_tasks(Context) ->
+    z_db:q("delete from pivot_task_queue", Context).
 
 
 %%====================================================================
