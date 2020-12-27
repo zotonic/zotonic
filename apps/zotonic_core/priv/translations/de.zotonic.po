@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-27 22:10\n"
+"PO-Revision-Date: 2020-12-27 23:10\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -2755,7 +2755,7 @@ msgstr "Überprüfen"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:3
 msgid "Verify Address |"
-msgstr "Adresse bestätigen"
+msgstr "Adresse bestätigen |"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
 msgid "Verifying..."
@@ -3104,7 +3104,7 @@ msgstr "Neues Prädikat erstellen"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:18
 msgid "Make predicate"
-msgstr "Neues Prädikat erstellen"
+msgstr "Prädikat erstellen"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:68
 msgid "No page connections found."
@@ -3136,7 +3136,7 @@ msgstr "Übersicht der Seitenanschlüsse"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections with the predicate"
-msgstr "Seitenanschlüsse mit dem Prädikat"
+msgstr "Seitenverbindungen mit dem Prädikat"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:191
 msgid "Predicates"
@@ -3148,7 +3148,7 @@ msgstr "Mit diesem Prädikat dürfen Sie leider keine Verbindungen einfügen."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
-msgstr "Thema"
+msgstr "Subjekt"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:54
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
@@ -3246,7 +3246,7 @@ msgstr "Zwei-Faktor-Authentifizierung hinzufügen"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:43
 msgid "Ask after signing in"
-msgstr "Fragen Sie nach der Anmeldung"
+msgstr "Nach der Anmeldung fragen"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:43
 msgid "Changed the 2FA setting."
@@ -3410,7 +3410,7 @@ msgstr "Autorisierend..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:84./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
-msgstr "Zurück zum Anmelden"
+msgstr "Zurück zur Anmeldung"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:17
 msgid "Below are your account details and a link to set a new password."
@@ -3448,7 +3448,7 @@ msgstr "Schließen Sie dieses Fenster und melden Sie sich an, wenn Sie bereits e
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:36
 msgid "Confirm"
-msgstr "Bestätigen Sie"
+msgstr "Bestätigen"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
 msgid "Confirmation failure"
@@ -3927,7 +3927,7 @@ msgstr "Sorry, dieses Backup wurde gelöscht."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:95
 msgid "Sorry, this backup is not valid."
-msgstr "Diese Sicherung ist leider nicht gültig."
+msgstr "Dieses Backup ist leider nicht gültig."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:62
 msgid "Sorry, this is not a backup file or it is corrupted."
@@ -4163,7 +4163,7 @@ msgstr "Links"
 
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:8
 msgid "Mime"
-msgstr "Pantomime"
+msgstr "Mime"
 
 #: apps/zotonic_mod_base_site/priv/templates/page.query.tpl:8./apps/zotonic_mod_base_site/priv/templates/search.tpl:18
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:20
