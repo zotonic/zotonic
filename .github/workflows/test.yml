@@ -39,7 +39,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          # Maps tcp port 5432 on service container to the host
           - 5432:5432
 
     steps:
@@ -53,12 +52,8 @@ jobs:
         run: make
       - name: Test
         run: |
+          bin/zotonic connectdb
           chown -R zotonic .
-          ZOTONIC_DBHOST=127.0.0.1 bin/zotonic connectdb
-          sudo -u zotonic bin/zotonic connectdb
-
+          sudo -u zotonic bin/zotonic runtests
       - name: XRef
         run: make xref
-
-
-          # sudo -u zotonic bin/zotonic runtests
