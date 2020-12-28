@@ -48,7 +48,7 @@ jobs:
         run: |
           apt-get update
           apt-get -y install sudo
-          adduser --no-create-home --system --disabled-login zotonic
+          adduser --disabled-login zotonic
       - name: Compile
         run: make
       - name: Test
