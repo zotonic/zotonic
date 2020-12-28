@@ -53,8 +53,7 @@ jobs:
       - name: Test
         run: |
           ZOTONIC_DBHOST=postgres bin/zotonic connectdb
-          bin/zotonic connectdb
           chown -R zotonic .
-          sudo -u zotonic bin/zotonic runtests
+          sudo -u zotonic bash -c "ZOTONIC_DBHOST=postgres bin/zotonic runtests"
       - name: XRef
         run: make xref
