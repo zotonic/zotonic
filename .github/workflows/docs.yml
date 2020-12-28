@@ -26,6 +26,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Compile
+        run: make
       - name: EDocs
         run: make edocs
       - name: PIP install
