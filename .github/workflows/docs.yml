@@ -41,4 +41,4 @@ jobs:
       - name: Erlang stubs
         run: make -C doc/ erlang-stubs
       - name: Html stubs
-        run: make -C doc/ SPHINXOPTS='-nW' html-with-stub
+        run: make -C doc/ SPHINXOPTS='-nW' html-with-stubs
