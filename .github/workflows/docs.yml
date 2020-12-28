@@ -26,12 +26,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+      - name: PIP install
+        run: pip install --user -r doc/requirements.txt
       - name: Compile
         run: make
       - name: EDocs
         run: make edocs
-      - name: PIP install
-        run: pip install --user -r doc/requirements.txt
       - name: Erlang stubs
         run: make -C doc/ erlang-stubs
       - name: Html stubs
