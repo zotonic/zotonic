@@ -33,8 +33,7 @@ jobs:
         run: |
           apt-get update
           apt-get -y install python-pip
-          pip install --user -r doc/requirements.txt
-          export PATH="/github/home/.local/bin:$PATH"
+          pip install -r doc/requirements.txt
       - name: Compile
         run: make
       - name: EDocs
