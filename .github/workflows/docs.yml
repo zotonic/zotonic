@@ -32,6 +32,7 @@ jobs:
           architecture: 'x64'
       - name: PIP install
         run: |
+          sudo apt-get install pip3
           pip3 --version
           pip3 install --user -r doc/requirements.txt
       - name: Compile
