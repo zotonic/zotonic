@@ -96,14 +96,27 @@ get_pidfile() ->
             File
     end.
 
--spec write_pidfile() -> ok.
+-spec write_pidfile() -> ok | {error, term()}.
 write_pidfile() ->
-    {ok, F} = file:open(get_pidfile(), [write]),
-    ok = file:write(F, os:getpid()),
-    ok = file:close(F).
+    case file:open(get_pidfile(), [write]) of
+        {ok, F} ->
+            ok = file:write(F, os:getpid()),
+            ok = file:close(F);
+        {error, Reason} ->
+            lager:error("Could not write ZOTONIC_PIDFILE \"~s\" error: ~p",
+                        [get_pidfile(), Reason]),
+            {error, Reason}
+    end.
 
 
--spec remove_pidfile() -> ok.
+-spec remove_pidfile() -> ok | {error, term()}.
 remove_pidfile() ->
-    ok = file:delete(get_pidfile()).
+    case file:delete(get_pidfile()) of
+        ok ->
+            ok;
+        {error, Reason} ->
+            lager:error("Could not delete ZOTONIC_PIDFILE \"~s\" error: ~p",
+                        [get_pidfile(), Reason]),
+            {error, Reason}
+    end.
 
