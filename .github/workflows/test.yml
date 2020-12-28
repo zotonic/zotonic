@@ -53,7 +53,7 @@ jobs:
         run: make
       - name: Test
         run: |
-          chown -R zotonic *
+          chown -R zotonic .
           sudo -u zotonic bin/zotonic runtests
       - name: XRef
         run: make xref
