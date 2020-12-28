@@ -54,7 +54,7 @@ jobs:
       - name: Test
         run: |
           chown -R zotonic .
-          bin/zotonic connectdb
+          ZOTONIC_DBHOST=127.0.0.1 bin/zotonic connectdb
           sudo -u zotonic bin/zotonic connectdb
 
       - name: XRef
