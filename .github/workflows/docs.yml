@@ -26,7 +26,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
       - name: PIP install
         run: pip install --user -r doc/requirements.txt
       - name: Compile
