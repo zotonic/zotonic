@@ -10,17 +10,6 @@ on:
   pull_request:
     branches: [ master ]
 
-# Start PostgreSQL wth 'zotonic' as the default user.
-services:
-  postgres:
-    image: postgres:11
-    ports:
-      - 5432:5432
-    env:
-      POSTGRES_DB: zotonic
-      POSTGRES_USER: zotonic
-      POSTGRES_PASSWORD: ''
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   linux:
@@ -35,11 +24,31 @@ jobs:
     container:
       image: erlang:${{ matrix.otp_version }}
 
+    # Start PostgreSQL wth 'zotonic' as the default user.
+    services:
+      postgres:
+        image: postgres:11
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: zotonic
+          POSTGRES_USER: zotonic
+          POSTGRES_PASSWORD: ''
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v2
       - name: Compile
         run: make
       - name: Test
         run: make test
+        env:
+          ZOTONIC_DBHOST: postgres
+          ZOTONIC_DBPORT: 5432
       - name: XRef
         run: make xref

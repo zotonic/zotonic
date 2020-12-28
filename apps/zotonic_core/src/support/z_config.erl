@@ -115,6 +115,18 @@ get(zotonic_apps) ->
         "" -> default(zotonic_apps);
         ZC -> ZC
     end;
+get(dbhost) ->
+    case os:getenv("ZOTONIC_DBHOST") of
+        false -> default(dbhost);
+        "" -> default(dbhost);
+        DBHost -> DBHost
+    end;
+get(dbport) ->
+    case os:getenv("ZOTONIC_DBPORT") of
+        false -> default(dbport);
+        "" -> default(dbport);
+        DBPort -> list_to_integer(DBPort)
+    end;
 get(Key) ->
     ?MODULE:get(Key, default(Key)).
 
