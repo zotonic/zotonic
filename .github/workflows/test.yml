@@ -52,6 +52,6 @@ jobs:
       - name: Compile
         run: make
       - name: Test
-        run: sudo -u zotonic make test
+        run: sudo -u zotonic bin/zotonic runtests
       - name: XRef
         run: make xref
