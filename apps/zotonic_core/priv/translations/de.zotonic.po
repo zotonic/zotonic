@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-27 23:10\n"
+"PO-Revision-Date: 2020-12-28 00:10\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -4481,7 +4481,7 @@ msgstr "Endgültiger Versand"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
 msgid "Find"
-msgstr "Finden Sie"
+msgstr "Finden"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:101
 msgid "Find a template, check which template will be selected"
@@ -4665,7 +4665,7 @@ msgstr "Beschriftung"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:44
 msgid "Crop"
-msgstr "Kulturpflanzen"
+msgstr "Abschneiden"
 
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:49
 msgid "Crop image"
@@ -4737,7 +4737,7 @@ msgstr "Wenn alles eingerichtet ist, können Sie die Website <a href=\"http://dk
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:187
 msgid "Bounces"
-msgstr "Prellböcke"
+msgstr "Bounces"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:120
 msgid "Clear error flag for this email address."
@@ -4830,7 +4830,7 @@ msgstr "Gesamt/Status"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:43
 msgid "Unblock"
-msgstr "entsperren"
+msgstr "Entsperren"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:110
 msgid "We are retrying email delivery."
@@ -5011,7 +5011,7 @@ msgstr "Cloud-Dateispeicher"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:3./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
 msgid "Cloud File Store Configuration"
-msgstr "Konfiguration des Cloud File Store"
+msgstr "Konfiguration des Cloud-Dateispeicher"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:114
 msgid "Cloud Files"
@@ -5213,15 +5213,15 @@ msgstr "August"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:24
 msgid "BCE"
-msgstr "BCE"
+msgstr "v.u.Z."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:26
 msgid "CE"
-msgstr "CE"
+msgstr "u.Z."
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
-msgstr "Dez."
+msgstr "Dez"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:50
 #: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:31
@@ -5442,7 +5442,7 @@ msgstr "Gescheitert"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:117
 msgid "Fatal"
-msgstr "Tödlich"
+msgstr "Fatal"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:156./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
 msgid "Filter"
@@ -5576,7 +5576,7 @@ msgstr "<h3>Empfänger</h3><p>Um die Empfänger der Mailingliste hinzuzufügen, 
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
 msgid "Act"
-msgstr "Gesetz"
+msgstr "Akt"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Add a new recipient."
@@ -6383,7 +6383,7 @@ msgstr "Menü"
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:27
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
 msgid "Remove"
-msgstr "entfernen"
+msgstr "Entfernen"
 
 #: apps/zotonic_mod_menu/src/mod_menu.erl:101
 msgid "Sorry, can’t copy that page."
@@ -6400,7 +6400,7 @@ msgstr "Unbekannte Kategorie"
 
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
-msgstr "Debuggen von MQTT-Publishing- und Subscribe-Aktionen in der Zotonic-Konsole"
+msgstr "Debuggen von MQTT-Publish- und Subscribe-Aktionen in der Zotonic-Konsole"
 
 #: apps/zotonic_mod_oauth2/priv/templates/logon_service_oauth_done.tpl:6
 msgid "Authenticating..."
@@ -7065,7 +7065,7 @@ msgstr "Falsch"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:4
 msgid "Feedback if correct"
-msgstr "Rückmeldung bei Richtigkeit"
+msgstr "Rückmeldung wenn richtig"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_block_test_feedback.tpl:11
 msgid "Feedback if wrong"
@@ -7101,7 +7101,7 @@ msgstr "Behandeln Sie diese Umfrage mit"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
 msgid "Handling"
-msgstr "Handhabung"
+msgstr "Verarbeitung"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:8
 msgid "Help about surveys"
