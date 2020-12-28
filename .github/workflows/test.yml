@@ -44,12 +44,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Add user Zotonic
+        run: |
+          apt-get update
+          apt-get -y install sudo
+          adduser --no-create-home --system --disabled-login zotonic
       - name: Compile
         run: make
       - name: Test
-        run: |
-          apt-get -y install sudo
-          adduser --no-create-home --system --disabled-login zotonic
-          sudo -u zotonic make test
+        run: sudo -u zotonic make test
       - name: XRef
         run: make xref
