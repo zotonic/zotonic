@@ -47,6 +47,8 @@ jobs:
       - name: Compile
         run: make
       - name: Test
-        run: make test
+        run: |
+          adduser --no-create-home --system --disabled-login zotonic
+          sudo -u zotonic make test
       - name: XRef
         run: make xref
