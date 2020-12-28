@@ -31,7 +31,9 @@ jobs:
           python-version: '3.x'
           architecture: 'x64'
       - name: PIP install
-        run: pip install --user -r doc/requirements.txt
+        run: |
+          pip freeze
+          pip install --user -r doc/requirements.txt
       - name: Compile
         run: make
       - name: EDocs
