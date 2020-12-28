@@ -48,7 +48,7 @@ jobs:
         run: make
       - name: Test
         run: |
-          apt-get install sudo
+          apt-get -y install sudo
           adduser --no-create-home --system --disabled-login zotonic
           sudo -u zotonic make test
       - name: XRef
