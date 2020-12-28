@@ -54,6 +54,11 @@ jobs:
       - name: Test
         run: |
           chown -R zotonic .
-          sudo -u zotonic bin/zotonic runtests
+          bin/zotonic connectdb
+          sudo -u zotonic bin/zotonic connectdb
+
       - name: XRef
         run: make xref
+
+
+          # sudo -u zotonic bin/zotonic runtests

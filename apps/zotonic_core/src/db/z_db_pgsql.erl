@@ -380,7 +380,6 @@ connect_1(Args, RetryCt, MRef) ->
     Username = get_arg(dbuser, Args),
     Password = get_arg(dbpassword, Args),
     Schema = get_arg(dbschema, Args),
-    ?DEBUG(Args),
     try
         case epgsql:connect(Hostname, Username, Password,
                            [{database, Database}, {port, Port}]) of
