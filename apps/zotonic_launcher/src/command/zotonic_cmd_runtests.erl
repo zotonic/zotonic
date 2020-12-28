@@ -31,7 +31,7 @@ run(Args) ->
     Tests = Args -- [ "runtests" ],
     {ok, BaseCmd} = zotonic_command:base_cmd_test(),
     Cmd = BaseCmd
-        ++ " -sasl errlog_type error -s zotonic "
+        ++ " -sasl errlog_type error -s zotonic -noshell "
         ++ "-eval 'zotonic:runtests(["++tests(Tests)++"])'",
     io:format("~s", [ Cmd ]).
 
