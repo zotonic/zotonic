@@ -52,9 +52,23 @@ content_types_provided(Context) ->
     ], Context}.
 
 process(<<"POST">>, AcceptedCT, ProvidedCT, Context) ->
-    {Payload, Context1} = z_controller_helper:decode_request(AcceptedCT, Context),
-    {Result, Context2} = handle_cmd( maps:get(<<"cmd">>, Payload, undefined), Payload, Context1 ),
-    {z_controller_helper:encode_response(ProvidedCT, Result), Context2}.
+    case fetch_body(AcceptedCT, Context) of
+        {ok, {Payload, Context1}} ->
+            {Result, Context2} = handle_cmd( maps:get(<<"cmd">>, Payload, undefined), Payload, Context1 ),
+            {z_controller_helper:encode_response(ProvidedCT, Result), Context2};
+        {error, timeout} ->
+            {{halt, 500}, Context}
+    end.
+
+fetch_body(AcceptedCT, Context) ->
+    try
+        Ret = z_controller_helper:decode_request(AcceptedCT, Context),
+        {ok, Ret}
+    catch
+        exit:timeout ->
+            % Timeout reading the request body
+            {error, timeout}
+    end.
 
 -spec handle_cmd( binary(), map(), z:context() ) -> { map(), z:context() }.
 handle_cmd(<<"logon">>, Payload, Context) ->
