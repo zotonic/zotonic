@@ -49,7 +49,7 @@ count_recipients(ListId, Context) ->
     }.
 
 %% @doc Fetch all (enabled) recipients of a mailinglist.
--spec list_recipients( m_rsc:resource(), z:context() ) -> {ok, map()}.
+-spec list_recipients( m_rsc:resource(), z:context() ) -> map().
 list_recipients(List, Context) ->
     ListId = m_rsc:rid(List, Context),
     {ok, Recipients} = m_mailinglist:list_recipients(ListId, Context),
