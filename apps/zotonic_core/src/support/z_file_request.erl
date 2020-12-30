@@ -33,7 +33,7 @@
     content_file/2,
     is_visible/2,
 
-    %% Exported for webzmachine streaming
+    %% Exported for cowmachine streaming
     stream_many_parts/2
     ]).
 

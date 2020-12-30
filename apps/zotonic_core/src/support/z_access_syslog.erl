@@ -24,7 +24,6 @@
 -export([start_link/0, start_link/4, log_access/1]).
 
 -include_lib("zotonic.hrl").
-% -include_lib("webzmachine/include/webmachine_logger.hrl").
 
 %% gen_server exports
 

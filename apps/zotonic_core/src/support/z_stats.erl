@@ -35,16 +35,23 @@ init() ->
     ok.
 
 init_site(Host) ->
-    %% Webzmachine metrics
-    exometer:re_register([zotonic, Host, webzmachine, requests], counter, []),
-    exometer:re_register([zotonic, Host, webzmachine, duration], histogram, []),
-    exometer:re_register([zotonic, Host, webzmachine, data_out], counter, []),
+    %% Cowmachine/HTTP metrics
+    exometer:re_register([zotonic, Host, http, requests], counter, []),
+    exometer:re_register([zotonic, Host, http, duration], histogram, []),
+    exometer:re_register([zotonic, Host, http, data_out], counter, []),
 
+    %% MQTT metrics
+    exometer:re_register([zotonic, Host, mqtt, connects], counter, []),
+
+    %% Misc metrics
     exometer:re_register([zotonic, Host, depcache, evictions], counter, []),
 
     %% Database metrics
     exometer:re_register([zotonic, Host, db, requests], spiral, []),
+    exometer:re_register([zotonic, Host, db, pool_full], spiral, []),
+    exometer:re_register([zotonic, Host, db, pool_high_usage], spiral, []),
     exometer:re_register([zotonic, Host, db, duration], histogram, []),
+    exometer:re_register([zotonic, Host, db, connection_wait], histogram, []),
 
     %% Session metrics
     exometer:re_register([zotonic, Host, session, sessions], gauge, []),
@@ -65,8 +72,8 @@ log_access(_LogData) ->
 %     try
 %         %% The request has already been counted by z_sites_dispatcher.
 %         Host = webmachine_logger:get_metadata(zotonic_host, LogData),
-%         exometer:update([zotonic, Host, webzmachine, duration], timer:now_diff(FinishTime, StartTime)),
-%         exometer:update([zotonic, Host, webzmachine, data_out], ResponseLength)
+%         exometer:update([zotonic, Host, http, duration], timer:now_diff(FinishTime, StartTime)),
+%         exometer:update([zotonic, Host, http, data_out], ResponseLength)
 %     after
 %         z_access_syslog:log_access(LogData)
 %     end.
