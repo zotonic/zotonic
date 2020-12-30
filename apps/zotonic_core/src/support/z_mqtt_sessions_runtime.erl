@@ -66,6 +66,7 @@ pool_default() ->
 
 -spec new_user_context( atom(), binary(), mqtt_sessions:session_options() ) -> z:context().
 new_user_context( Site, ClientId, SessionOptions ) ->
+    exometer:update([zotonic, Site, mqtt, connects], 1),
     Context = z_context:new(Site),
     Context1 = Context#context{
         client_topic = [ <<"bridge">>, ClientId ],
