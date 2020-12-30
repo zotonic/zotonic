@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/zotonic/zotonic.svg?branch=0.x)](https://travis-ci.org/zotonic/zotonic)
-[![GitHub release](https://img.shields.io/github/release/zotonic/zotonic.svg?maxAge=3600?style=flat-square)](../../releases)
+![Build 0.x](https://github.com/zotonic/zotonic/workflows/Build%200.x/badge.svg?branch=0.x)[![GitHub release](https://img.shields.io/github/release/zotonic/zotonic.svg?maxAge=3600?style=flat-square)](../../releases)
 [![Join the chat at https://gitter.im/zotonic/zotonic](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zotonic/zotonic?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Zotonic
