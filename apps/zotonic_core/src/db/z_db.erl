@@ -240,16 +240,17 @@ has_connection(Context) ->
 
 
 %% @doc Transaction handler safe function for fetching a db connection
+-spec get_connection( z:context() ) -> {ok, pid()} | {error, nodatabase | none | full}.
 get_connection(#context{dbc=undefined} = Context) ->
     case has_connection(Context) of
         true ->
             set_dbtrace_flag(Context),
             z_db_pool:get_connection(Context);
         false ->
-            none
+            {error, nodatabase}
     end;
 get_connection(Context) ->
-    Context#context.dbc.
+    {ok, Context#context.dbc}.
 
 set_dbtrace_flag(Context) ->
     case erlang:get(is_dbtrace) of
@@ -276,9 +277,11 @@ return_connection(_C, _Context) ->
 with_connection(F, Context) ->
     with_connection(F, get_connection(Context), Context).
 
-with_connection(F, none, _Context) ->
+with_connection(F, {error, nodatabase}, _Context) ->
     F(none);
-with_connection(F, Connection, Context) when is_pid(Connection) ->
+with_connection(_F, {error, _} = Error, _Context) ->
+    Error;
+with_connection(F, {ok, Connection}, Context) when is_pid(Connection) ->
     exometer:update([zotonic, z_context:site(Context), db, requests], 1),
     try
         {Time, Result} = timer:tc(F, [Connection]),
