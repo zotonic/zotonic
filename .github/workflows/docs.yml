@@ -1,6 +1,6 @@
-# Test the build
+# Run documentation generation checks
 
-name: Build 0.x
+name: Docs 0.x
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -13,12 +13,12 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   linux:
-    name: Build on OTP ${{ matrix.otp_version }}
+    name: Docs on OTP ${{ matrix.otp_version }}
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        otp_version: [20.3,21.3,22.3]
+        otp_version: [22.3]
         os: [ubuntu-latest]
 
     container:
@@ -26,10 +26,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Add user Zotonic
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: PIP install
         run: |
-          apt-get update
-          apt-get -y install sudo
-          adduser --disabled-login zotonic
-      - name: Compile
-        run: make
+          python -m pip install --upgrade pip
+          pip install -r doc/requirements.txt
+      - name: Docs
+        run: |
+          make -C doc/ stubs
+          make -C doc/ SPHINXOPTS='-nW' html
