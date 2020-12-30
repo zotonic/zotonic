@@ -59,7 +59,7 @@ observe_request_context(#request_context{ phase = auth_status, document = #{ <<"
         true ->
             Context;
         false ->
-            Tz = maps:get(<<"user_agent">>, TzData),
+            Tz = maps:get(<<"user_agent">>, TzData, <<>>),
 
             % Check the user-agent timezone against the user's or the cookie's timezone
             % Optionally initialize the user's timezone (if not set)
@@ -187,6 +187,8 @@ set_user_timezone(Tz, Context) ->
 
 
 %% @doc Set the timezone of the user. Only done when the found timezone is a known timezone.
+try_set_timezone(<<>>, Context) ->
+    Context;
 try_set_timezone(Tz, Context) ->
     case m_l10n:is_timezone(Tz) of
         true -> set_timezone(Tz, Context);

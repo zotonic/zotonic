@@ -324,7 +324,7 @@ send_mailing_process({single_test_address, Email}, PageId, Context) ->
     },
     send_mailing_process(ListId, Recipients, PageId, Context);
 send_mailing_process(ListId, PageId, Context) ->
-    {ok, Recipients} = z_mailinglist_recipients:list_recipients(ListId, Context),
+    Recipients = z_mailinglist_recipients:list_recipients(ListId, Context),
     send_mailing_process(ListId, Recipients, PageId, Context).
 
 send_mailing_process(ListId, Recipients, PageId, Context) when is_map(Recipients) ->

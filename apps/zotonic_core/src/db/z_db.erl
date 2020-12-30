@@ -631,6 +631,11 @@ insert(Table, Parameters, Context) ->
                     InsertProps#{
                         <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
                     };
+                {ok, [ {_, _} | _ ] = PropsCol} ->
+                    Props1 = z_props:from_props(PropsCol),
+                    InsertProps#{
+                        <<"props">> => ?DB_PROPS(filter_empty_props(Props1))
+                    };
                 {ok, _} ->
                     InsertProps;
                 error ->
@@ -687,18 +692,11 @@ update(Table, Id, Parameters, Context) when is_map(Parameters), is_list(Table) -
         {ok, UpdateProps} ->
             F = fun(C) ->
                 UpdateProps1 = case maps:get(<<"props">>, UpdateProps, undefined) of
-                    NewProps when is_map(NewProps) ->
+                    NewProps when is_map(NewProps); is_list(NewProps) ->
                         % Merge the new props with the props in the database
-                        case equery1(DbDriver, C, "select props from \""++Table++"\" where id = $1", [Id]) of
-                            {ok, OldProps} when is_list(OldProps) ->
-                                NewProps1 = maps:merge(z_props:from_props(OldProps), NewProps),
-                                UpdateProps#{ <<"props">> => ?DB_PROPS( filter_empty_props(NewProps1) ) };
-                            {ok, OldProps} when is_map(OldProps) ->
-                                NewProps1 = maps:merge(OldProps, NewProps),
-                                UpdateProps#{ <<"props">> => ?DB_PROPS( filter_empty_props(NewProps1) ) };
-                            _ ->
-                                UpdateProps#{ <<"props">> => ?DB_PROPS( filter_empty_props(NewProps) ) }
-                        end;
+                        UpdateProps#{
+                            <<"props">> => ?DB_PROPS( update_merge_props(DbDriver, C, Table, Id, NewProps) )
+                        };
                     _ ->
                         UpdateProps
                 end,
@@ -724,6 +722,20 @@ update(Table, Id, Parameters, Context) when is_map(Parameters), is_list(Table) -
         {error, _} = Error ->
             Error
     end.
+
+update_merge_props(DbDriver, C, Table, Id, NewProps) when is_map(NewProps) ->
+    Merged = case equery1(DbDriver, C, "select props from \""++Table++"\" where id = $1", [Id]) of
+        {ok, OldProps} when is_list(OldProps) ->
+            maps:merge(z_props:from_props(OldProps), NewProps);
+        {ok, OldProps} when is_map(OldProps) ->
+            maps:merge(OldProps, NewProps);
+        _ ->
+            NewProps
+    end,
+    filter_empty_props(Merged);
+update_merge_props(DbDriver, C, Table, Id, NewProps) when is_list(NewProps) ->
+    Props1 = z_props:from_props(NewProps),
+    update_merge_props(DbDriver, C, Table, Id, Props1).
 
 ensure_binary_keys(Ps) ->
     maps:fold(

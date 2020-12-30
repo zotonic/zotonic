@@ -60,27 +60,36 @@ get_access_token({RequestToken, RequestSecret}, Verifier, Context) ->
             Error
     end.
 
-
 request(get, ApiCall, {AccessToken, AccessSecret}, Context) ->
     request(get, ApiCall, [], {AccessToken, AccessSecret}, Context).
 request(get, ApiCall, Params, {AccessToken, AccessSecret}, Context) ->
-    AccessToken1 = z_convert:to_list(AccessToken),
-    AccessSecret1 = z_convert:to_list(AccessSecret),
-    handle_result(
-        oauth:get(  "https://api.twitter.com/1.1/" ++ ApiCall ++ ".json",
-                    Params,
-                    get_consumer(Context),
-                    AccessToken1,
-                    AccessSecret1));
+    case get_consumer(Context) of
+        undefined ->
+            {error, no_tokens};
+        Consumer ->
+            AccessToken1 = z_convert:to_list(AccessToken),
+            AccessSecret1 = z_convert:to_list(AccessSecret),
+            handle_result(
+                oauth:get(  "https://api.twitter.com/1.1/" ++ ApiCall ++ ".json",
+                            Params,
+                            Consumer,
+                            AccessToken1,
+                            AccessSecret1))
+    end;
 request(post, ApiCall, Params, {AccessToken, AccessSecret}, Context) ->
-    AccessToken1 = z_convert:to_list(AccessToken),
-    AccessSecret1 = z_convert:to_list(AccessSecret),
-    handle_result(
-        oauth:post( "https://api.twitter.com/1.1/" ++ ApiCall ++ ".json",
-                    Params,
-                    get_consumer(Context),
-                    AccessToken1,
-                    AccessSecret1)).
+    case get_consumer(Context) of
+        undefined ->
+            {error, no_tokens};
+        Consumer ->
+            AccessToken1 = z_convert:to_list(AccessToken),
+            AccessSecret1 = z_convert:to_list(AccessSecret),
+            handle_result(
+                oauth:post( "https://api.twitter.com/1.1/" ++ ApiCall ++ ".json",
+                            Params,
+                            Consumer,
+                            AccessToken1,
+                            AccessSecret1))
+    end.
 
 handle_result({ok, {{_, 200, _}, _Headers, Body}}) ->
     {ok, z_json:decode(z_convert:to_binary(Body))};
