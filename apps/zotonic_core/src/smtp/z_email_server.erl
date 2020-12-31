@@ -966,7 +966,7 @@ ensure_brackets(Email) when is_binary(Email) ->
             <<Name/binary, " <", Email/binary, $>>>
     end;
 ensure_brackets(Email) ->
-    ensure_brackets(z_convert:to_email(Email)).
+    ensure_brackets(z_convert:to_binary(Email)).
 
 date(Context) ->
     iolist_to_binary(z_datetime:format("r", z_context:set_language(en, Context))).
