@@ -56,12 +56,12 @@ observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/mp4">>, 
     undefined;
 observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/x-mp4-broken">>}, Context) ->
     do_media_upload_broken(Context);
-observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/", _/binary>>, medium=Medium, file=File} = Upload, Context) ->
+observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/", _/binary>> = Mime, medium=Medium, file=File} = Upload, Context) ->
     case maps:get(<<"is_video_ok">>, Medium, undefined) of
         true ->
             undefined;
         undefined ->
-            case is_video_process_needed(File) of
+            case is_video_process_needed(Mime, File) of
                 true ->
                     do_media_upload_preprocess(Upload, Context);
                 false ->
@@ -71,13 +71,16 @@ observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/", _/bin
 observe_media_upload_preprocess(#media_upload_preprocess{}, _Context) ->
     undefined.
 
-is_video_process_needed(File) ->
+%% @doc Do not process landscape mp4 files with aac/h264 codecs.
+is_video_process_needed(<<"video/mp4">>, File) ->
     Info = z_video_info:info(File),
     not (
                 is_orientation_ok(Info)
         andalso is_audio_ok(Info)
         andalso is_video_ok(Info)
-    ).
+    );
+is_video_process_needed(_Mime, _File) ->
+    true.
 
 is_orientation_ok(#{ <<"orientation">> := 1 }) -> true;
 is_orientation_ok(#{ <<"orientation">> := undefined }) -> true;
