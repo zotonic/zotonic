@@ -550,19 +550,43 @@ replace_file(File, RscId, RscProps, MInfo, Opts, Context) ->
 
 replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context) ->
     Mime = maps:get(<<"mime">>, MediaProps, undefined),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = RscProps}, Context) andalso
-        z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
+    case z_acl:is_allowed(insert, #acl_media{ mime = Mime, size = filelib:file_size(File) }, Context) of
         true ->
             replace_file_mime_ok(File, RscId, RscProps, MediaProps, Opts, Context);
         false ->
             {error, file_not_allowed}
     end.
 
-%% @doc Replace the file, no mime check needed.
+%% @doc Check the ACL for the category/content-group combination.
+replace_file_mime_ok(File, insert_rsc, RscProps, MediaProps, Opts, Context) ->
+    % The category/content-group is also checked during the m_rsc:insert/2 call.
+    % This is an early check to prevent preprocessing files for resources that
+    % are not allowed to be created.
+    CatId = case maps:find(<<"category_id">>, RscProps) of
+        {ok, CId} ->
+            CId;
+        error ->
+            case maps:find(<<"category">>, RscProps) of
+                {ok, CName} ->
+                    m_rsc:rid(CName, Context);
+                error ->
+                    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+                    m_rsc:rid(mime_to_category(Mime), Context)
+            end
+    end,
+    case m_category:id_to_name(CatId, Context) of
+        undefined ->
+            {error, eacces};
+        Cat ->
+            case z_acl:is_allowed(insert, #acl_rsc{ category = Cat, props = RscProps }, Context) of
+                true ->
+                    replace_file_acl_ok(File, insert_rsc, RscProps, MediaProps, Opts, Context);
+                false ->
+                    {error, eacces}
+            end
+    end;
 replace_file_mime_ok(File, RscId, RscProps, MediaProps, Opts, Context) ->
-    case RscId =:= insert_rsc
-        orelse z_acl:rsc_editable(RscId, Context)
-        orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
+    case z_acl:rsc_editable(RscId, Context) of
         true ->
             replace_file_acl_ok(File, RscId, RscProps, MediaProps, Opts, Context);
         false ->

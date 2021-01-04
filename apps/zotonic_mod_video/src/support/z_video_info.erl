@@ -82,7 +82,7 @@ is_tag_ok(<<"iTunSMPB">>, _) -> false;
 is_tag_ok(<<"iTunNORM">>, _) -> false;
 is_tag_ok(_, _) -> true.
 
-fetch_size(#{<<"streams">> := Streams}) ->
+fetch_size(#{ <<"streams">> := Streams }) ->
     [ Video | _ ] = lists:dropwhile(
         fun( #{<<"codec_type">> := CodecType} ) ->
            CodecType =/= <<"video">>
@@ -90,15 +90,17 @@ fetch_size(#{<<"streams">> := Streams}) ->
         Streams),
     #{
         <<"width">> := Width,
-        <<"height">> := Height,
-        <<"tags">> := Tags
+        <<"height">> := Height
     } = Video,
+    Tags = maps:get(<<"tags">>, Video, undefined),
     Orientation = orientation(Tags),
     case Orientation of
         6 -> {Height, Width, Orientation};
         8 -> {Height, Width, Orientation};
         _ -> {Width, Height, Orientation}
-    end.
+    end;
+fetch_size(#{ <<"width">> := Width, <<"heigth">> := Height }) ->
+    {z_convert:to_integer(Height), z_convert:to_integer(Width), 1}.
 
 
 orientation(#{<<"rotate">> := Angle}) ->
