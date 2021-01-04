@@ -853,9 +853,7 @@ columns(Table, Context) ->
     {Schema, Table1, _QTab} = quoted_table_name(Table),
     columns(Schema, Table1, Context).
 
--spec columns(schema_name(), table_name(), z:context()) -> list( #column_def{} ).
-columns(Schema, Table, Context) when is_atom(Table) ->
-    columns(Schema, atom_to_list(Table), Context);
+-spec columns(schema_name(), string(), z:context()) -> list( #column_def{} ).
 columns(Schema, Table, Context) when is_list(Table) ->
     assert_table_name(Table),
     Options = z_db_pool:get_database_options(Context),
