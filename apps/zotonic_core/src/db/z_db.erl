@@ -683,7 +683,7 @@ insert(Table, Parameters, Context) ->
 -spec update(table_name(), id(), props(), z:context()) -> {ok, RowsUpdated::integer()} | {error, term()}.
 update(Table, Id, Parameters, Context) when is_list(Parameters) ->
     update(Table, Id, z_props:from_props(Parameters), Context);
-update(Table, Id, Parameters, Context) when is_map(Parameters), is_list(Table) ->
+update(Table, Id, Parameters, Context) when is_map(Parameters) ->
     {Schema, Tab, QTab} = quoted_table_name(Table),
     DbDriver = z_context:db_driver(Context),
     Cols = column_names_bin(Schema, Tab, Context),
@@ -855,8 +855,7 @@ columns(Table, Context) ->
 
 -spec columns(schema_name(), table_name(), z:context()) -> list( #column_def{} ).
 columns(Schema, Table, Context) when is_atom(Table) ->
-    TableS = atom_to_list(Table),
-    columns(Schema, TableS, Context);
+    columns(Schema, atom_to_list(Table), Context);
 columns(Schema, Table, Context) when is_list(Table) ->
     assert_table_name(Table),
     Options = z_db_pool:get_database_options(Context),
