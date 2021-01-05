@@ -34,11 +34,28 @@
 -define(SEP, $~).
 -define(TAG_CACHE_TIME, 60). % Cache generated link and script tags for 1 minute.
 
+-type option() :: minify
+                | {minify, boolean()}
+                | async
+                | {async, boolean()}
+                | absolute_url
+                | {absolute_url, boolean()}
+                | {media, binary()}
+                | {rel, binary()}
+                | {title, binary()}.
+
+-type options() :: [ option() ].
+
+-export_type([option/0, options/0]).
+
+
 %% @doc Generate the link and/or script tags for the given files.
+-spec tag( [ binary() ], z:context() ) -> [ binary() ].
 tag(Files, Context) ->
     tag(Files, [], Context).
 
 %% @doc Generate the link and/or script tags for the given files.
+-spec tag( [ binary() ], options(), z:context() ) -> [ binary() ].
 tag(Files, Args, Context) ->
     case m_config:get_boolean(mod_development, libsep, Context) of
         false ->
@@ -52,20 +69,32 @@ tag(Files, Args, Context) ->
                          Files)
     end.
 
-%% @doc Generate a url with the given files.
+%% @doc Generate urls for the given files, js and css files are separated.
+-spec url( [ binary() ], z:context() ) -> [ binary() ].
 url(Files, Context) ->
     url(Files, [], Context).
 
-%% @doc Generate a url with the given files.
+%% @doc Generate urls for the given files, js and css files are separated.
+-spec url( [ binary() ], options(), z:context() ) -> [ binary() ].
 url(Files, Args, Context) ->
-    {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
-    CssFiles = url_for(Css, CssPath, <<".css">>, Args, Context),
-    JsFiles = url_for(Js, JsPath, <<".js">>, Args, Context),
-    CssFiles ++ JsFiles.
+    case split_css_js(Files) of
+        {[], []} ->
+            [];
+        {CssFiles, []} ->
+            [ url_for(CssFiles, <<".css">>, Args, Context) ];
+        {[], JsFiles} ->
+            [ url_for(JsFiles, <<".js">>, Args, Context) ];
+        {CssFiles, JsFiles} ->
+            [ url_for(CssFiles, <<".css">>, Args, Context)
+            , url_for(JsFiles, <<".js">>, Args, Context)
+            ]
+    end.
 
-url_for(_F, [], _Ext, _Args, _Context) -> [];
-url_for(F, P, Ext, Args, Context) ->
-    [z_dispatcher:url_for(lib(Args, Context), url_for_args(F, P, Ext, Args, Context), Context)].
+-spec url_for( list( binary() ), binary(), options(), z:context() ) -> binary().
+url_for([], _Ext, _Args, _Context) ->
+    <<>>;
+url_for(P, Ext, Args, Context) ->
+    z_dispatcher:url_for(lib(Args, Context), url_for_args(P, Ext, Args, Context), Context).
 
 lib(Args, Context) ->
     case z_convert:to_bool( proplists:get_value(minify, Args, false))
@@ -77,10 +106,10 @@ lib(Args, Context) ->
 
 tag1(Files, Args, Context) ->
     F = fun() ->
-            {Css, CssPath, Js, JsPath} = collapsed_paths(Files),
+            {CssFiles, JsFiles} = split_css_js(Files),
             NoLangContext = z_context:set_language(undefined, Context),
-            [link_element(Css, CssPath, Args, NoLangContext),
-             script_element(Js, JsPath, Args, NoLangContext)]
+            [link_element(CssFiles, Args, NoLangContext),
+             script_element(JsFiles, Args, NoLangContext)]
     end,
     case z_module_manager:active(mod_development, Context) of
         false ->
@@ -90,9 +119,9 @@ tag1(Files, Args, Context) ->
     end.
 
 
-link_element(_Css, [], _Args, _Context) ->
+link_element([], _Args, _Context) ->
     [];
-link_element(Css, CssPath, Args, Context) ->
+link_element(CssFiles, Args, Context) ->
     TitleAttr = case proplists:get_value(title, Args, undefined) of
            undefined -> [];
            TitleValue -> [<<" title=\"">>, TitleValue, $"]
@@ -101,7 +130,7 @@ link_element(Css, CssPath, Args, Context) ->
     Rel = proplists:get_value(rel, Args, <<"stylesheet">>),
     CssUrl = z_dispatcher:url_for(
         lib(Args, Context),
-        url_for_args(Css, CssPath, <<".css">>, Args, Context),
+        url_for_args(CssFiles, <<".css">>, Args, Context),
         Context),
     case z_convert:to_bool( proplists:get_value(async, Args, false)) of
         true ->
@@ -131,18 +160,16 @@ link_element(Css, CssPath, Args, Context) ->
             ])
     end.
 
-script_element(_Js, [], _Args, _Context) ->
+script_element([], _Args, _Context) ->
     [];
-script_element(Js, JsPath, Args, Context) ->
+script_element(JsFiles, Args, Context) ->
     JsUrl = z_dispatcher:url_for(
         lib(Args, Context),
-        url_for_args(Js, JsPath, <<".js">>, Args, Context),
+        url_for_args(JsFiles, <<".js">>, Args, Context),
         Context),
     AsyncAttr = case z_convert:to_bool( proplists:get_value(async, Args, false)) of
-        true ->
-            <<" async ">>;
-        false ->
-            <<>>
+        true -> <<" async ">>;
+        false -> <<>>
     end,
     iolist_to_binary([
             <<"<script src=\"">>, JsUrl, <<"\"">>,
@@ -152,23 +179,16 @@ script_element(Js, JsPath, Args, Context) ->
             <<"</script>">>
         ]).
 
-url_for_args(Files, JoinedPath, Extension, Args, Context) ->
+url_for_args(Files, Extension, Args, Context) ->
     AbsUrlArg = case proplists:get_value(absolute_url, Args, false) of
         false -> [];
-        true -> [absolute_url]
+        true -> [ absolute_url ]
     end,
-    Checksum = checksum(Files, Context),
-    <<$/,Path/binary>> = iolist_to_binary(JoinedPath),
+    {Checksum, FoundFiles} = checksum(Files, Context),
+    Sort = collapse_dirs(FoundFiles),
+    Joined = lists:join(?SEP, Sort),
+    <<$/,Path/binary>> = iolist_to_binary(Joined),
     [{star, iolist_to_binary([Path, ?SEP, integer_to_binary(Checksum), Extension])} | AbsUrlArg].
-
-%% @doc Make the collapsed paths for the js and the css files.
-collapsed_paths(Files) ->
-    {Css, Js} = split_css_js([ z_convert:to_binary(F) || F <- Files]),
-    CssSort = collapse_dirs(Css),
-    JsSort= collapse_dirs(Js),
-    CssPath = lists:join(?SEP, CssSort),
-    JsPath = lists:join(?SEP, JsSort),
-    {Css, CssPath, Js, JsPath}.
 
 
 %% @doc Given the filepath of the request, return all files collapsed in the path.
@@ -263,19 +283,32 @@ ensure_abspath(File) ->
 
 %% @doc Calculate a checksum of the mod times of the list of files.
 checksum(Files, Context) ->
-    checksum(Files, {0, 0}, Context).
+    checksum(Files, [], {0, 0}, Context).
 
-checksum([], State, _Context) ->
-    fletcher_final(State);
-checksum([File|Files], State, Context) ->
+checksum([], FoundFiles, State, _Context) ->
+    {fletcher_final(State), FoundFiles};
+checksum([File|Files], FoundFiles, State, Context) ->
     case z_module_indexer:find(lib, File, Context) of
         {ok, #module_index{filepath=FilePath}} ->
             State1 = dt_checksum(last_modified(FilePath), State),
-            checksum(Files, State1, Context);
+            checksum(Files, [ File | FoundFiles ], State1, Context);
         {error, enoent} ->
-            %% Not found, skip the file
-            lager:warning("lib file not found: ~s", [File]),
-            checksum(Files, State, Context)
+            case File of
+                <<"lib/", File1/binary>> ->
+                    case z_module_indexer:find(lib, File1, Context) of
+                        {ok, #module_index{filepath=FilePath}} ->
+                            State1 = dt_checksum(last_modified(FilePath), State),
+                            checksum(Files, [ File1 | FoundFiles ], State1, Context);
+                        {error, enoent} ->
+                            %% Not found, skip the file
+                            lager:warning("lib file not found: ~s", [File]),
+                            checksum(Files, [ File | FoundFiles ], State, Context)
+                    end;
+                _ ->
+                    %% Not found, skip the file
+                    lager:warning("lib file not found: ~s", [File]),
+                    checksum(Files, [ File | FoundFiles ], State, Context)
+            end
     end.
 
 last_modified(FilePath) ->
@@ -300,13 +333,16 @@ fletcher_sum(Val, {Sum1, Sum2}) ->
 split_css_js(Files) ->
     split_css_js(Files, [], []).
 
-    split_css_js([], CssAcc, JsAcc) ->
-        {lists:reverse(CssAcc), lists:reverse(JsAcc)};
-    split_css_js([<<$/,File/binary>>|Rest], CssAcc, JsAcc) ->
-        split_css_js([File|Rest], CssAcc, JsAcc);
-    split_css_js([File|Rest], CssAcc, JsAcc) ->
-        case filename:extension(File) of
-            <<".css">> -> split_css_js(Rest, [File|CssAcc], JsAcc);
-            <<".js">>  -> split_css_js(Rest, CssAcc, [File|JsAcc]);
-            _ -> split_css_js(Rest, CssAcc, JsAcc)
-        end.
+split_css_js([], CssAcc, JsAcc) ->
+    {lists:reverse(CssAcc), lists:reverse(JsAcc)};
+split_css_js([<<$/,File/binary>>|Rest], CssAcc, JsAcc) ->
+    split_css_js([File|Rest], CssAcc, JsAcc);
+split_css_js([File|Rest], CssAcc, JsAcc) when is_binary(File) ->
+    case filename:extension(File) of
+        <<".css">> -> split_css_js(Rest, [File|CssAcc], JsAcc);
+        <<".js">>  -> split_css_js(Rest, CssAcc, [File|JsAcc]);
+        _ -> split_css_js(Rest, CssAcc, JsAcc)
+    end;
+split_css_js([File|Rest], CssAcc, JsAcc) ->
+    FileB = z_convert:to_binary(File),
+    split_css_js([FileB|Rest], CssAcc, JsAcc).
