@@ -184,8 +184,8 @@ dispatch_url(Url) ->
             case z_sites_dispatcher:get_site_for_hostname(Host) of
                 {ok, Site} ->
                     dispatch_path(Path, Site);
-                {error, _} = Error ->
-                    Error
+                undefined ->
+                    {error, unknown_host}
             end;
         _ ->
             {error, url}
