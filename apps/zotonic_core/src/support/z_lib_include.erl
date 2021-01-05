@@ -50,12 +50,12 @@
 
 
 %% @doc Generate the link and/or script tags for the given files.
--spec tag( [ binary() ], z:context() ) -> [ binary() ].
+-spec tag( [ binary() ], z:context() ) -> [ [ binary() ] ].
 tag(Files, Context) ->
     tag(Files, [], Context).
 
 %% @doc Generate the link and/or script tags for the given files.
--spec tag( [ binary() ], options(), z:context() ) -> [ binary() ].
+-spec tag( [ binary() ], options(), z:context() ) -> [ [ binary() ] ].
 tag(Files, Args, Context) ->
     case m_config:get_boolean(mod_development, libsep, Context) of
         false ->
