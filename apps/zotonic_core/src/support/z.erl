@@ -185,7 +185,12 @@ dispatch_url(Url) ->
                 {ok, Site} ->
                     dispatch_path(Path, Site);
                 undefined ->
-                    {error, unknown_host}
+                    case z_sites_dispatcher:get_fallback_site() of
+                        {ok, FallbackSite} ->
+                            dispatch_path(Path, FallbackSite);
+                        undefined ->
+                            {error, unknown_host}
+                    end
             end;
         _ ->
             {error, url}
