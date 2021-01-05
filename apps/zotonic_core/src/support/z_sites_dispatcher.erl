@@ -93,12 +93,30 @@
 -type redirect_protocol() :: {redirect_protocol, http|https, Host :: binary(), IsPermanent :: boolean()}.
 -type stop_request() :: {stop_request, pos_integer()}.
 
+-type trace_step() :: undefined
+                    | match
+                    | try_match
+                    | dispatch_rewrite
+                    | forced_protocol_switch
+                    | notify_dispatch
+                    | rewrite_id
+                    | rewrite_match
+                    | rewrite_nomatch.
+
+-type trace() :: #{
+    path := binary() | [ binary() ] | undefined,
+    step := trace_step(),
+    args := proplists:proplist()
+}.
+
 -export_type([
     dispatch_rule/0,
     redirect/0,
     redirect_protocol/0,
     stop_request/0,
-    hostname/0
+    hostname/0,
+    trace_step/0,
+    trace/0
 ]).
 
 %%====================================================================
@@ -213,47 +231,22 @@ dispatch(Method, Host, Path, IsSsl, OptTracerPid) when is_boolean(IsSsl) ->
     dispatch_1(DispReq, undefined, undefined).
 
 
--spec dispatch_trace( binary(), z:context() ) -> {ok, term()} | {error, timeout}.
+-spec dispatch_trace( binary(), z:context() ) -> {ok, [ trace() ]} | {error, timeout}.
 dispatch_trace(Path, Context) ->
     dispatch_trace(https, Path, Context).
 
--spec dispatch_trace( http | https, binary(), z:context() ) -> {ok, term()} | {error, timeout}.
+-spec dispatch_trace( http | https, binary(), z:context() ) -> {ok, [ trace() ]} | {error, timeout}.
 dispatch_trace(Protocol, Path, Context) ->
     TracerPid = erlang:spawn_link(fun tracer/0),
     AbsPath = ensure_abs(Path),
     dispatch(<<"GET">>, z_context:hostname(Context), AbsPath, Protocol =:= https, TracerPid),
     TracerPid ! {fetch, self()},
     receive
-        {trace, Trace} ->
-            {ok, Trace}
+        {final_trace, Traces} ->
+            {ok, Traces}
         after 5000 ->
             {error, timeout}
     end.
-
-ensure_abs(<<>>) -> <<"/">>;
-ensure_abs(<<$/, _/binary>> = P) -> P;
-ensure_abs(P) -> <<$/, P/binary>>.
-
-tracer() ->
-    tracer_loop([]).
-
-tracer_loop(Acc) ->
-    receive
-        {trace, Path, What, Args} ->
-            Trace = {trace, maybe_flatten(Path), What, Args},
-            tracer_loop([Trace|Acc]);
-        {fetch, Pid} ->
-            Acc1 = lists:reverse(Acc),
-            Pid ! {trace, Acc1}
-    end.
-
-maybe_flatten(undefined) -> undefined;
-maybe_flatten(Path) when is_binary(Path) -> Path;
-maybe_flatten([X|_] = Path) when is_binary(X) -> Path;
-maybe_flatten([X|_] = Path) when is_integer(X) -> z_convert:to_binary(Path);
-maybe_flatten([]) -> <<>>.
-
-
 
 %% @doc Retrieve the fallback site.
 -spec get_fallback_site() -> {ok, atom()} | undefined.
@@ -274,6 +267,32 @@ get_site_for_hostname(Hostname) ->
 %%====================================================================
 %% Internal functions
 %%====================================================================
+
+ensure_abs(<<>>) -> <<"/">>;
+ensure_abs(<<$/, _/binary>> = P) -> P;
+ensure_abs(P) -> <<$/, P/binary>>.
+
+tracer() ->
+    tracer_loop([]).
+
+tracer_loop(Acc) ->
+    receive
+        #{ path := Path } = Trace when is_map(Trace) ->
+            TraceFlatten = Trace#{
+                path => maybe_flatten(Path)
+            },
+            tracer_loop([TraceFlatten|Acc]);
+        {fetch, Pid} ->
+            Acc1 = lists:reverse(Acc),
+            Pid ! {final_trace, Acc1}
+    end.
+
+maybe_flatten(undefined) -> undefined;
+maybe_flatten(Path) when is_binary(Path) -> Path;
+maybe_flatten([X|_] = Path) when is_binary(X) -> Path;
+maybe_flatten([X|_] = Path) when is_integer(X) -> z_convert:to_binary(Path);
+maybe_flatten([]) -> <<>>.
+
 
 set_server_header(Req) ->
     cowboy_req:set_resp_header(<<"server">>, cowmachine_response:server_header(), Req).
@@ -867,8 +886,8 @@ collect_dispatchrules(Site) ->
     end.
 
 %% @doc Fetch dispatch rules for a specific site.
-fetch_dispatchinfo(Site) ->
-    Name = z_utils:name_for_site(z_dispatcher, Site),
+fetch_dispatchinfo(SiteOrContext) ->
+    Name = z_utils:name_for_site(z_dispatcher, SiteOrContext),
     case z_dispatcher:dispatchinfo(Name) of
         {ok, {Site, Hostname, SmtpHost, Hostalias, Redirect, DispatchList}} ->
             {ok, #site_dispatch_list{
@@ -909,7 +928,12 @@ filter_rules(Rules, Site) ->
 trace(undefined, _PathTokens, _What, _Args) ->
     ok;
 trace(TracerPid, PathTokens, What, Args) ->
-    TracerPid ! {trace, PathTokens, What, Args},
+    Trace = #{
+        path => PathTokens,
+        step => What,
+        args => Args
+    },
+    TracerPid ! Trace,
     ok.
 
 trace_final(TracerPid, #dispatch_controller{

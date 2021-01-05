@@ -25,24 +25,32 @@
 info() ->
     "Show dispatch information for a site or url.".
 
-run([ "http:" ++ _ = URL ]) ->
-    dispatch_url(URL);
-run([ "https:" ++ _ = URL ]) ->
-    dispatch_url(URL);
+run([ "http:" ++ _ = Url ]) ->
+    dispatch_url(Url);
+run([ "https:" ++ _ = Url ]) ->
+    dispatch_url(Url);
 run([ Site ]) ->
     dispatch_site_list(Site);
+run([ Site, "detail" ]) ->
+    dispatch_site_detail(Site);
 run([ Site, Path ]) ->
     dispatch_site_path(Site, Path);
 run(_) ->
-    io:format("USAGE: dispatch <site_name> [path]~n"),
+    io:format("USAGE: dispatch <site_name> [path|detail]~n"),
     io:format("       dispatch <URL>~n"),
     halt().
 
-dispatch_url(URL) ->
+dispatch_url(Url) ->
     case zotonic_command:net_start() of
         ok ->
-            Res = zotonic_command:rpc(zotonic_filehandler_compile, ld, []),
-            io:format("~p~n", [ Res ]);
+            UrlBin = unicode:characters_to_binary(Url, utf8),
+            case zotonic_command:rpc(z, dispatch_url, [ UrlBin ]) of
+                {ok, Trace} ->
+                    io:format("# Dispatch trace for \"~s\"~n", [ UrlBin ]),
+                    pretty_print_trace(Trace);
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.
@@ -50,17 +58,191 @@ dispatch_url(URL) ->
 dispatch_site_list(Site) ->
     case zotonic_command:net_start() of
         ok ->
-            Res = zotonic_command:rpc(zotonic_filehandler_compile, ld, []),
-            io:format("~p~n", [ Res ]);
+            SiteName = list_to_atom(Site),
+            case zotonic_command:rpc(z, dispatch_list, [ SiteName ]) of
+                {ok, #{
+                    hostname := Hostname,
+                    smtphost := _SmtpHost,
+                    hostalias := _Hostalias,
+                    is_redirect := _IsRedirect,
+                    dispatch_list := DispatchList
+                }} ->
+                    io:format("# Dispatch rules for ~p: ~s~n", [ SiteName, Hostname ]),
+                    DL = lists:map(
+                        fun(#{
+                            dispatch := Dispatch,
+                            controller := Controller,
+                            controller_options := _ControllerOptions,
+                            path := Path
+                        }) ->
+                            {
+                                pretty_controller_path(Path),
+                                z_convert:to_binary(Dispatch),
+                                z_convert:to_binary(Controller)
+                            }
+                        end,
+                        DispatchList),
+                    print_table(DL),
+                    ok;
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.
 
-dispatch_site_path(Site, Path) ->
+dispatch_site_detail(Site) ->
     case zotonic_command:net_start() of
         ok ->
-            Res = zotonic_command:rpc(zotonic_filehandler_compile, ld, []),
-            io:format("~p~n", [ Res ]);
+            SiteName = list_to_atom(Site),
+            case zotonic_command:rpc(z, dispatch_list, [ SiteName ]) of
+                {ok, #{
+                    hostname := Hostname,
+                    smtphost := SmtpHost,
+                    hostalias := Hostalias,
+                    is_redirect := IsRedirect,
+                    dispatch_list := DispatchList
+                }} ->
+                    io:format("# Dispatch rules for ~p~n", [ SiteName ]),
+                    io:format("hostname: \"~s\"~n", [ Hostname ]),
+                    case Hostalias of
+                        [] -> ok;
+                        undefined -> ok;
+                        _ ->
+                            io:format("hostalias:~n"),
+                            lists:foreach(
+                                fun(A) ->
+                                    io:format("  - \"~s\"~n", [ A ])
+                                end,
+                                Hostalias)
+                    end,
+                    case SmtpHost of
+                        undefined -> ok;
+                        _ -> io:format("smtphost: \"~s\"~n", [ SmtpHost ])
+                    end,
+                    io:format("redirect: ~p~n", [ z_convert:to_bool(IsRedirect) ]),
+                    io:format("dispatch_rules:~n"),
+                    lists:map(
+                        fun(#{
+                            dispatch := Dispatch,
+                            controller := Controller,
+                            controller_options := ControllerOptions,
+                            path := Path
+                        }) ->
+                            io:format("  - ~p~n", [ Dispatch ]),
+                            io:format("    path: \"~s\"~n", [ pretty_controller_path(Path) ]),
+                            io:format("    controller: ~p~n", [ Controller ]),
+                            io:format("    options:"),
+                            pretty_print_proplist(2, ControllerOptions)
+                        end,
+                        DispatchList),
+                    ok;
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.
+
+pretty_controller_path([]) ->
+    <<"/">>;
+pretty_controller_path(Path) ->
+    Mapped = lists:map(
+        fun
+            (S) when is_list(S) -> unicode:characters_to_binary(S, utf8);
+            (S) when is_binary(S) -> S;
+            ('*') -> "*";
+            (A) when is_atom(A) -> [ $:, atom_to_binary(A, utf8) ];
+            ({A, Pattern}) when is_atom(A), is_list(Pattern) ->
+                [ $:, atom_to_binary(A, utf8), $:, Pattern ];
+            (Other) -> io_lib:format("~p", [ Other ])
+        end,
+        Path),
+    Mapped1 = [ [ $/, P ] || P <- Mapped ],
+    iolist_to_binary(Mapped1).
+
+dispatch_site_path(Site, Path) ->
+    case zotonic_command:net_start() of
+        ok ->
+            SiteName = list_to_atom(Site),
+            PathBin = unicode:characters_to_binary(Path, utf8),
+            case zotonic_command:rpc(z, dispatch_path, [ PathBin, SiteName ]) of
+                {ok, Trace} ->
+                    io:format("# Dispatch trace for ~p: \"~s\"~n", [ SiteName, PathBin ]),
+                    pretty_print_trace(Trace);
+                {error, _} = Error ->
+                    zotonic_command:format_error(Error)
+            end;
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end.
+
+pretty_print_trace([]) ->
+    io:format("~n");
+pretty_print_trace([ #{ args := Args, path := Path, step := Step } | Trace ]) ->
+    io:format("- ~p:", [ Step ]),
+    case Path of
+        undefined -> ok;
+        _ when is_list(Path) -> io:format("~n    dispatch_path: \"/~s\"", [ lists:join($/, Path) ]);
+        _ when is_binary(Path) -> io:format("~n    dispatch_path: \"~s\"", [ Path ])
+    end,
+    pretty_print_proplist(1, Args),
+    pretty_print_trace(Trace).
+
+pretty_print_value(_Indent, V) when is_atom(V); is_integer(V) ->
+    io:format("~p~n", [ V ]);
+pretty_print_value(_indent, V) when is_binary(V) ->
+    io:format("\"~s\"~n", [ V ]);
+pretty_print_value(Indent, [ X | _ ] = L) when not is_integer(X) ->
+    pretty_print_proplist(Indent, L);
+pretty_print_value(_Indent, V) when is_list(V) ->
+    io:format("~s~n", [ V ]);
+pretty_print_value(_Indent, V) ->
+    io:format("~p~n", [ V ]).
+
+
+pretty_print_proplist(Indent, L) ->
+    io:format("~n"),
+    lists:map(
+        fun
+            ({path, [ X | _] = P}) when is_integer(X) ->
+                io:format("~spath: \"~s\"~n", [ indent(Indent), P ]);
+            ({P, DP}) when P =:= zotonic_dispatch_path; P =:= path ->
+                DP1 = lists:map(
+                    fun(V) ->
+                        z_convert:to_list(V)
+                    end,
+                    DP),
+                io:format("~spath: ~p~n", [ indent(Indent), DP1 ]);
+            ({K,V}) ->
+                io:format("~s~p: ", [ indent(Indent), K ]),
+                pretty_print_value(Indent+1, V);
+            (K) when is_atom(K) ->
+                io:format("~s~p: true~n", [ indent(Indent), K ]);
+            (K) when is_binary(K) ->
+                io:format("~s - ~s~n", [ indent(Indent), K ])
+        end,
+        L).
+
+indent(0) ->
+    "";
+indent(N) ->
+    "    " ++ indent(N-1).
+
+
+print_table([]) ->
+    io:format("~n");
+print_table(DL) ->
+    W1 = colsize(1, DL, 1),
+    W2 = colsize(2, DL, 1),
+    lists:map(
+        fun({C1, C2, C3}) ->
+            io:format("~*.s ~*.s ~s~n", [ -W1, C1, -W2, C2, C3 ] )
+        end,
+        DL).
+
+colsize(_N, [], W) ->
+    W;
+colsize(N, [ T | Ts ], W) ->
+    W1 = erlang:max(W, size( erlang:element(N, T))),
+    colsize(N, Ts, W1).
