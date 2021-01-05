@@ -34,6 +34,8 @@
 -export([
     dispatch/2,
     dispatch/5,
+    dispatch_trace/2,
+    dispatch_trace/3,
     get_fallback_site/0,
     get_site_for_hostname/1,
     update_hosts/0,
@@ -209,6 +211,48 @@ dispatch(Method, Host, Path, IsSsl, OptTracerPid) when is_boolean(IsSsl) ->
         tracer_pid = OptTracerPid
     },
     dispatch_1(DispReq, undefined, undefined).
+
+
+-spec dispatch_trace( binary(), z:context() ) -> {ok, term()} | {error, timeout}.
+dispatch_trace(Path, Context) ->
+    dispatch_trace(https, Path, Context).
+
+-spec dispatch_trace( http | https, binary(), z:context() ) -> {ok, term()} | {error, timeout}.
+dispatch_trace(Protocol, Path, Context) ->
+    TracerPid = erlang:spawn_link(fun tracer/0),
+    AbsPath = ensure_abs(Path),
+    dispatch(<<"GET">>, z_context:hostname(Context), AbsPath, Protocol =:= https, TracerPid),
+    TracerPid ! {fetch, self()},
+    receive
+        {trace, Trace} ->
+            {ok, Trace}
+        after 5000 ->
+            {error, timeout}
+    end.
+
+ensure_abs(<<>>) -> <<"/">>;
+ensure_abs(<<$/, _/binary>> = P) -> P;
+ensure_abs(P) -> <<$/, P/binary>>.
+
+tracer() ->
+    tracer_loop([]).
+
+tracer_loop(Acc) ->
+    receive
+        {trace, Path, What, Args} ->
+            Trace = {trace, maybe_flatten(Path), What, Args},
+            tracer_loop([Trace|Acc]);
+        {fetch, Pid} ->
+            Acc1 = lists:reverse(Acc),
+            Pid ! {trace, Acc1}
+    end.
+
+maybe_flatten(undefined) -> undefined;
+maybe_flatten(Path) when is_binary(Path) -> Path;
+maybe_flatten([X|_] = Path) when is_binary(X) -> Path;
+maybe_flatten([X|_] = Path) when is_integer(X) -> z_convert:to_binary(Path);
+maybe_flatten([]) -> <<>>.
+
 
 
 %% @doc Retrieve the fallback site.
