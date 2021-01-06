@@ -20,18 +20,20 @@
 			{% if t.step == `try_match` %}
 				{_ Start matching dispatch rules _}
 			{% elseif t.step == `match` %}
-				{_ Found matching dispatch rule _}: <tt>{{ t.args.dispatch }}</tt><br/>
+				{_ Found matching dispatch rule _}: <b>{{ t.args.dispatch }}</b>
+					&nbsp; <span class="text-muted">{{ t.args.controller_options.zotonic_dispatch_module }} &rarr; {{ t.args.controller_options.zotonic_dispatch_file }}</span>
+				<br/>
 				{_ Controller _}: <tt>{{ t.args.controller }}</tt>
-				{% if t.args.controller_args %}
+				{% if t.args.controller_options %}
 					<br/>{_ Options _}:
-					{% print t.args.controller_args %}
+					{% print t.args.controller_options %}
 				{% endif %}
 			{% elseif t.step == `dispatch` %}
 				{_ Final dispatch_}<br/>
 				{_ Controller _}: <tt>{{ t.args.controller }}</tt>
-				{% if t.args.controller_args %}
+				{% if t.args.controller_options %}
 					<br/>{_ Options _}:
-					{% print t.args.controller_args %}
+					{% print t.args.controller_options %}
 				{% endif %}
 			{% elseif t.step == `protocol_switch` %}
 				{_ Switch protocol to _}: {{ t.args.protocol }}<br/>
@@ -56,9 +58,9 @@
 			{% elseif t.step == `rewrite_match` %}
 				<tt>#dispatch{}</tt> {_ found dispatch rule _}: <tt>{{ t.args.dispatch }}</tt><br/>
 				{_ Controller _}: <tt>{{ t.args.controller }}</tt>
-				{% if t.args.controller_args %}
+				{% if t.args.controller_options %}
 					<br/>{_ Options _}:
-					{% print t.args.controller_args %}
+					{% print t.args.controller_options %}
 				{% endif %}
 			{% elseif t.step == `rewrite_nomatch` %}
 				<tt>#dispatch{}</tt> {_ found no match _}
