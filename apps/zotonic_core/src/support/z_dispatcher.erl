@@ -392,14 +392,20 @@ reload_dispatch_list(#state{context=Context} = State) ->
 
 %% @doc Collect all dispatch lists.  Checks priv/dispatch for all dispatch list definitions.
 collect_dispatch_lists(Context) ->
-    ModDispOnPrio = lists:concat([ lists:sort(ModFiles) || {_Mod, ModFiles} <- z_module_indexer:dispatch(Context) ]),
-    Dispatch   = lists:map(fun get_file_dispatch/1, ModDispOnPrio),
+    ModDispOnPrio = lists:concat(
+        lists:map(
+            fun({Mod, ModFiles}) ->
+                lists:sort( [ {F, Mod} || F <- ModFiles ] )
+            end,
+            z_module_indexer:dispatch(Context))
+        ),
+    Dispatch = lists:map(fun get_file_dispatch/1, ModDispOnPrio),
     lists:flatten(Dispatch).
 
 
 %% @doc Read a dispatch file, the file should contain a valid Erlang dispatch datastructure.
 %% @spec get_file_dispatch(filename()) -> DispatchList
-get_file_dispatch(File) ->
+get_file_dispatch({File, Mod}) ->
     try
         case filelib:is_regular(File)
             andalso not zotonic_filewatcher_handler:is_file_blocked(File)
@@ -411,7 +417,7 @@ get_file_dispatch(File) ->
                         [];
                     _Other  ->
                         {ok, Disp} = file:consult(File),
-                        Disp
+                        add_mod_to_options(Disp, Mod, filename:basename(File))
                 end;
             false ->
                 []
@@ -422,6 +428,22 @@ get_file_dispatch(File) ->
             throw({error, "Parse error in " ++ z_convert:to_list(File)})
     end.
 
+add_mod_to_options(Disp, Mod, Filename) ->
+    F = z_convert:to_binary(Filename),
+    lists:map(
+        fun(Ds) ->
+            lists:map(
+                fun({Name, Path, Controller, Opts}) ->
+                    Opts1 = [
+                        {zotonic_dispatch_module, Mod},
+                        {zotonic_dispatch_file, F}
+                        | Opts
+                    ],
+                    {Name, Path, Controller, Opts1}
+                end,
+                Ds)
+        end,
+        Disp).
 
 %% @doc Transform the dispatchlist into a datastructure for building uris from name/vars
 %% Datastructure needed is:   name -> [vars, pattern]

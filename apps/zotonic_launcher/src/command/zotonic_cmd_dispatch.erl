@@ -68,21 +68,25 @@ dispatch_site_list(Site) ->
                     dispatch_list := DispatchList
                 }} ->
                     io:format("# Dispatch rules for ~p: ~s~n", [ SiteName, Hostname ]),
+                    io:format("# First matching rule is used.~n"),
                     DL = lists:map(
                         fun(#{
                             dispatch := Dispatch,
                             controller := Controller,
-                            controller_options := _ControllerOptions,
+                            controller_options := ControllerOptions,
                             path := Path
                         }) ->
                             {
                                 pretty_controller_path(Path),
                                 z_convert:to_binary(Dispatch),
+                                z_convert:to_binary(proplists:get_value(zotonic_dispatch_module, ControllerOptions)),
                                 z_convert:to_binary(Controller)
                             }
                         end,
                         DispatchList),
-                    print_table(DL),
+                    print_table(
+                        [ "Path", "Dispatch", "Module", "Controller" ],
+                        DL),
                     ok;
                 {error, _} = Error ->
                     zotonic_command:format_error(Error)
@@ -207,7 +211,7 @@ pretty_print_proplist(Indent, L) ->
         fun
             ({path, [ X | _] = P}) when is_integer(X) ->
                 io:format("~spath: \"~s\"~n", [ indent(Indent), P ]);
-            ({P, DP}) when P =:= zotonic_dispatch_path; P =:= path ->
+            ({P, DP}) when P =:= zotonic_dispatch_path; P =:= path, is_list(DP) ->
                 DP1 = lists:map(
                     fun(V) ->
                         z_convert:to_list(V)
@@ -230,16 +234,33 @@ indent(N) ->
     "    " ++ indent(N-1).
 
 
-print_table([]) ->
+print_table(_Hs, []) ->
     io:format("~n");
-print_table(DL) ->
+print_table(Hs, DL) ->
     W1 = colsize(1, DL, 1),
     W2 = colsize(2, DL, 1),
+    W3 = colsize(3, DL, 1),
+    W4 = colsize(4, DL, 1),
+    io:format("~*.s ~*.s ~*.s ~s~n", [
+        -W1, lists:nth(1, Hs),
+        -W2, lists:nth(2, Hs),
+        -W3, lists:nth(3, Hs),
+        lists:nth(4, Hs)
+        ]),
+    io:format("~*.s ~*.s ~*.s ~s~n", [
+        -W1, sep(W1, ""),
+        -W2, sep(W2, ""),
+        -W3, sep(W3, ""),
+        sep(W4, "")
+        ]),
     lists:map(
-        fun({C1, C2, C3}) ->
-            io:format("~*.s ~*.s ~s~n", [ -W1, C1, -W2, C2, C3 ] )
+        fun({C1, C2, C3, C4}) ->
+            io:format("~*.s ~*.s ~*.s ~s~n", [ -W1, C1, -W2, C2, -W3, C3, C4 ] )
         end,
         DL).
+
+sep(0, Acc) -> Acc;
+sep(N, Acc) -> sep(N-1, [ $= | Acc ]).
 
 colsize(_N, [], W) ->
     W;
