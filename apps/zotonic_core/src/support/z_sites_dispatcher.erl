@@ -155,6 +155,13 @@ execute(Req, Env) ->
         #dispatch_controller{} = Match ->
             Context = Match#dispatch_controller.context,
             BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
+            cowboy_req:cast({set_options, #{
+                metrics_user_data => #{
+                    site => z_context:site(Context),
+                    controller => Match#dispatch_controller.controller,
+                    dispatch_rule => Match#dispatch_controller.dispatch_rule
+                }
+            }}, Req),
             {ok, Req#{
                 bindings => BindingsMap
             }, Env#{
