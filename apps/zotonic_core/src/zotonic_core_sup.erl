@@ -29,6 +29,8 @@
 %% supervisor callbacks
 -export([ init/1 ]).
 
+-define(LOG_METRICS_BUFFER_SIZE, 1000).
+
 %% @doc Start the main zotonic supervisor and some helpers
 -spec start_link(list()) -> {ok, pid()}.
 start_link(Options) ->
@@ -52,6 +54,16 @@ init([]) ->
     spawn_delayed_status(),
     z_filehandler:start_observers(),
     Processes = [
+        % Ring buffer for http request logs
+        {ringbuffer,
+            {ringbuffer_process, start_link, [zotonic_http_metrics, ?LOG_METRICS_BUFFER_SIZE]},
+            permanent, 5000, worker, [ ringbuffer_process ]},
+
+        % Http request log handling. Accepts priority list of buffers to consume.
+        {z_http_metrics_consumer,
+            {z_log_http_metrics, start_link, [ [ zotonic_http_metrics ] ]},
+            permanent, 5000, worker, [z_log_http_metrics]},
+
         % Access Logger
         {z_access_syslog,
             {z_access_syslog, start_link, []},

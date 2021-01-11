@@ -21,6 +21,7 @@
                   jsxrecord,
                   yamerl,
                   mqtt_sessions,
+                  ringbuffer,
                   zotonic_notifier
   ]}
  ]}.

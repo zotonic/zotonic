@@ -56,6 +56,14 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
                 undefined -> Ctx1;
                 HttpAccept -> set_accept_context(HttpAccept, Ctx1)
             end
+        end,
+        on_handled => fun(Ctx) ->
+            z_context:set_req_metrics(#{
+                    user_id => z_acl:user(Ctx),
+                    language => z_context:language(Ctx),
+                    timezone => z_context:tz(Ctx)
+                }, Ctx),
+            Ctx
         end
     },
     cowmachine:request(Context4, Options).

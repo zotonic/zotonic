@@ -34,8 +34,7 @@
 -export([
     start_http_listeners/0,
     stop_http_listeners/0,
-    await/0,
-    metrics_callback/1
+    await/0
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -295,22 +294,9 @@ cowboy_options() ->
         middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
         stream_handlers => [ cowboy_metrics_h, cowboy_stream_h ],
         request_timeout => ?HTTP_REQUEST_TIMEOUT,
-        metrics_callback => fun ?MODULE:metrics_callback/1,
+        metrics_callback => fun zotonic_listen_http_metrics:metrics_callback/1,
         env => #{}
     }.
-
-%% @doc Cowboy metrics callback. For docs about the argument see:
-%% https://ninenines.eu/docs/en/cowboy/2.8/manual/cowboy_metrics_h/
-metrics_callback(#{ user_data := UserData }) ->
-    % user_data =>
-    %     #{
-    %         controller => controller_page,
-    %         dispatch_rule => home,
-    %         site => womenonwaves2
-    %     }
-    io:format("~p", [ UserData ]),
-    ok.
-
 
 %% @todo Exclude platforms that do not support raw ipv6 socket options
 -spec ipv6_supported() -> boolean().

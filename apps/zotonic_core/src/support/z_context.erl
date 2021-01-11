@@ -115,6 +115,8 @@
 
     get_req_path/1,
 
+    set_req_metrics/2,
+
     set_nocache_headers/1,
     set_noindex_header/1,
     set_noindex_header/2,
@@ -997,6 +999,13 @@ get_req_header(Header, #context{cowreq=Req} = Context) when is_map(Req) ->
 get_req_path(#context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:raw_path(Context).
 
+%% @doc Add metrics data to the Cowboy request, will be added to the metrics notifications.
+-spec set_req_metrics( map(), z:context() ) -> ok.
+set_req_metrics(Metrics, #context{ cowreq = Req }) when is_map(Req), is_map(Metrics) ->
+    cowboy_req:cast({set_options, #{ metrics_user_data => Metrics }}, Req),
+    ok;
+set_req_metrics(_Metrics, _Context) ->
+    ok.
 
 %% @doc Fetch the cookie domain, defaults to 'undefined' which will equal the domain
 %% to the domain of the current request.
