@@ -1,0 +1,12 @@
+{application, zotonic_mod_syslog, [
+    {description, "Log http requests to the syslog."},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [kernel, stdlib, syslog, zotonic_core]},
+    {mod, {z_syslog_app, []}},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2020 Marc Worrell
+%% @copyright 2011-2021 Marc Worrell
 %% @doc Notifications used in Zotonic core
 
-%% Copyright 2011-2020 Marc Worrell
+%% Copyright 2011-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -48,6 +48,17 @@
 %% @doc Set CORS headers on the HTTP response.
 %% Type: first
 -record(cors_headers, { headers :: list( {binary(), binary()} ) }).
+
+
+%% @doc Access log event for http. Called from the z_stats.
+%% Type: notify_sync
+-record(http_log_access, {
+    timestamp :: erlang:timestamp(),
+    status :: undefined | non_neg_integer(),
+    status_category :: 'xxx' | '1xx' | '2xx' | '3xx' | '4xx' | '5xx',
+    method :: binary(),
+    metrics :: map()
+}).
 
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 

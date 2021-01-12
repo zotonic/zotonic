@@ -40,7 +40,7 @@ start_link(Options) ->
     z_config:init_app_env(),
     zotonic_core:setup(),
     zotonic_filewatcher_sup:start_watchers(),
-    z_stats:init(),
+    z_stats:init_system(),
     z_tempfile_cleanup:start(),
     ensure_job_queues(),
     ensure_sidejobs(),
@@ -59,15 +59,10 @@ init([]) ->
             {ringbuffer_process, start_link, [zotonic_http_metrics, ?LOG_METRICS_BUFFER_SIZE]},
             permanent, 5000, worker, [ ringbuffer_process ]},
 
-        % Http request log handling. Accepts priority list of buffers to consume.
-        {z_http_metrics_consumer,
-            {z_log_http_metrics, start_link, [ [ zotonic_http_metrics ] ]},
-            permanent, 5000, worker, [z_log_http_metrics]},
-
-        % Access Logger
-        {z_access_syslog,
-            {z_access_syslog, start_link, []},
-            permanent, 5000, worker, [z_access_syslog, z_buffered_worker]},
+        % Http request metrics handling. Accepts priority list of buffers to consume.
+        {z_stats,
+            {z_stats, start_link, [ [ zotonic_http_metrics ] ]},
+            permanent, 5000, worker, [z_stats]},
 
         % SMTP gen_server for sending emails
         {z_email_server,

@@ -22,6 +22,7 @@
 -export([
     new/1,
     new/2,
+    new/3,
 
     new_tests/0,
 
@@ -176,6 +177,14 @@ new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
     Context#context{
         language = [ Lang ],
         tz = tz_config(Context)
+    }.
+
+-spec new( Site :: atom(), Language :: atom(), Timezone :: binary() ) -> z:context().
+new(Site, Lang, Timezone) when is_atom(Site), is_atom(Lang), is_binary(Timezone) ->
+    Context = set_server_names(#context{ site = Site }),
+    Context#context{
+        language = [ Lang ],
+        tz = Timezone
     }.
 
 

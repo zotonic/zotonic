@@ -225,17 +225,17 @@ get_connection(#context{db={Pool,_}} = Context) ->
     case timer:tc(fun() -> poolboy:checkout(Pool) end) of
         {Time, full} ->
             % No connections for > 5secs, really full
-            z_stats:count_db_event(pool_full, Context),
-            exometer:update([zotonic, z_context:site(Context), db, connection_wait], Time),
+            z_stats:record_event(db, pool_full, Context),
+            z_stats:record_duration(db, connection_wait, Time, Context),
             {error, full};
         {Time, Pid} when is_pid(Pid), Time > 10000 ->
             % Start warning if we have to wait > 10 msec for a connection
-            z_stats:count_db_event(pool_high_usage, Context),
-            exometer:update([zotonic, z_context:site(Context), db, connection_wait], Time),
+            z_stats:record_event(db, pool_high_usage, Context),
+            z_stats:record_duration(db, connection_wait, Time, Context),
             {ok, Pid};
         {Time, Pid} when is_pid(Pid) ->
             % All ok, we quickly got a connection, so no overload.
-            exometer:update([zotonic, z_context:site(Context), db, connection_wait], Time),
+            z_stats:record_duration(db, connection_wait, Time, Context),
             {ok, Pid}
     end;
 get_connection(_Context) ->

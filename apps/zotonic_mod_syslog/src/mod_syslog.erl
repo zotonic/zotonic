@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
-%% @doc Consumes the http metrics from the http log buffers
+%% @doc Log http requests to the syslog.
 
 %% Copyright 2021 Marc Worrell
 %%
@@ -16,14 +16,19 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_log_http_metrics).
--author('Marc Worrell <marc@worrell.nl>').
+-module(mod_syslog).
+-author("Marc Worrell <marc@worrell.nl>").
 
--behaviour(gen_server).
+-mod_title("Syslog").
+-mod_description("Log http requests to the syslog.").
+-mod_depends([]).
+-mod_provides([]).
 
 -export([
-    start_link/1
+    observe_http_log_access/2
 ]).
 
--export([ init/1 ]).
+-include_lib("zotonic_core/include/zotonic.hrl").
 
+observe_http_log_access(#http_log_access{} = Log, _Context) ->
+    z_syslog_logger:log(Log).

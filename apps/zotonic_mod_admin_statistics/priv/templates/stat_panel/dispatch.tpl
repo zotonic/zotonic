@@ -24,7 +24,7 @@ let collected = {};
 
 cotonic.broker.publish("model/ui/insert/the-stats", {initialData: "<tr><td>...</td></tr>", inner: true});
 
-cotonic.broker.subscribe("bridge/origin/$SYS/site/blog/cowmachine/+dispatch/+what",
+cotonic.broker.subscribe("bridge/origin/$SYS/site/blog/http/+dispatch/+what",
     function(msg, args) {
         let c = collected[args.dispatch];
         if(!c) {
