@@ -286,7 +286,7 @@ checksum(Files, Context) ->
     checksum(Files, [], {0, 0}, Context).
 
 checksum([], FoundFiles, State, _Context) ->
-    {fletcher_final(State), FoundFiles};
+    {fletcher_final(State), lists:reverse(FoundFiles)};
 checksum([File|Files], FoundFiles, State, Context) ->
     case z_module_indexer:find(lib, File, Context) of
         {ok, #module_index{filepath=FilePath}} ->
