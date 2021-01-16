@@ -163,7 +163,7 @@ report_skipped(Count) -> record_count(stats, skipped, Count, zotonic).
 %% @doc Collect log data from cowmachine and update cowmachine metrics
 %%
 %% The log entry from zotonic_listen_http_metrics is:
-%% <code>
+%% ```
 %% Log = #{
 %%     site => Site,
 %%     reason => Reason,
@@ -181,7 +181,7 @@ report_skipped(Count) -> record_count(stats, skipped, Count, zotonic).
 %%     referer => cowboy_req:header(<<"referer">>, Req),
 %%     metrics => UserData#{ peer_ip => PeerIP }
 %% }
-%% </code>
+%% '''
 log_access(#{
         site := Site,
         req_start := ReqStart,
