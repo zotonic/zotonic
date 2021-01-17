@@ -322,7 +322,8 @@ vm_stats() ->
         },
         {
             [erlang, io],
-            {function, erlang, statistics, [io], match, {{'_', input}, {'_', output}}}
+            {function, erlang, statistics, [io], match, {{'_', input}, {'_', output}}},
+            []
         }
     ].
 
