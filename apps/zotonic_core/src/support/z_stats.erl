@@ -58,6 +58,9 @@
 -define(BATCH_SIZE, 200).
 
 
+%% Tell dialyzer to not complain about an improper list in a match expression.
+-dialyzer({[ no_return, nowarn_function ], setup_system_reporter/0}).
+
 %% -------------------------------------------------------------------------------------------------
 %% API functions
 %% -------------------------------------------------------------------------------------------------
@@ -73,21 +76,33 @@ init_system() ->
     ok.
 
 % @doc Setup stats for each site.
-init_site(Host) ->
-    Context = z_context:new(Host),
+init_site(Site) ->
+    lists:foreach(
+        fun({Path, Stat, Options}) ->
+            ok = exometer:re_register(Path, Stat, Options)
+        end,
+        site_stats( Site )).
 
-    % Keep track of the size of the depcache
-    ok = exometer:re_register([site, Host, depcache, size],
-                              {function, z_depcache, size, [Context], match, size}, []),
-
-    % And some basic broker statistics
-    ok = exometer:re_register([site, Host, broker, session_count],
-                              {function, mqtt_sessions, session_count, [Host], match, count}, []),
-
-    ok = exometer:re_register([site, Host, broker, router_info],
-                              {function, mqtt_sessions, router_info, [Host], value, []}, []),
-
-    ok.
+site_stats( Site ) ->
+    [
+        % Keep track of the size of the depcache
+        {
+            [site, Site, depcache, size],
+            {function, z_depcache, size, [ z_context:new(Site) ], match, size},
+            []
+        },
+        % And some basic broker statistics
+        {
+            [site, Site, broker, session_count],
+            {function, mqtt_sessions, session_count, [Site], match, count},
+            []
+        },
+        {
+            [site, Site, broker, router_info],
+            {function, mqtt_sessions, router_info, [Site], value, []},
+            []
+        }
+    ].
 
 % @doc Count a event
 record_event(System, What, #context{}=Context) ->
@@ -262,32 +277,54 @@ system_memory_usage_helper(Type) ->
 
 % @private vm_stats
 create_vm_metrics() ->
-    ok = exometer:new([erlang, memory],
-                      {function, erlang, memory, [], value, []}),
+    lists:foreach(
+        fun({Path, Stat, Options}) ->
+            ok = exometer:re_register(Path, Stat, Options)
+        end,
+        vm_stats()).
 
-    ok = exometer:new([erlang, usage],
-                      {function, z_stats, system_usage, ['$dp'], value,
-                       [atom, process, port,
-                        ets_memory, binary_memory, code_memory, process_memory, atom_memory]}),
-
-    ok = exometer:new([erlang, system],
-                      {function, erlang, system_info, ['$dp'], value,
-                       [process_count, process_limit,
-                        port_count, port_limit,
-                        atom_count, atom_limit
-                       ]}),
-
-    ok = exometer:new([erlang, statistics],
-                      {function, erlang, statistics, ['$dp'], value,
-                       [run_queue]}),
-
-    ok = exometer:new([erlang, gc],
-                      {function, erlang, statistics, [garbage_collection],
-                       match, {total_coll, rec_wrd, '_'}}),
-
-    ok = exometer:new([erlang, io],
-                      {function, erlang, statistics, [io], match,
-                       {{'_', input}, {'_', output}}}).
+vm_stats() ->
+    [
+        {
+            [erlang, memory],
+            {function, erlang, memory, [], value, []},
+            []
+        },
+        {
+            [erlang, usage],
+            {function, z_stats, system_usage, ['$dp'], value,
+                [
+                    atom, process, port, ets_memory, binary_memory,
+                    code_memory, process_memory, atom_memory
+                ]
+            },
+            []
+        },
+        {
+            [erlang, system],
+            {function, erlang, system_info, ['$dp'], value,
+                [
+                    process_count, process_limit, port_count, port_limit,
+                    atom_count, atom_limit
+                ]
+            },
+            []
+        },
+        {
+            [erlang, statistics],
+            {function, erlang, statistics, ['$dp'], value, [run_queue]},
+            []
+        },
+        {
+            [erlang, gc],
+            {function, erlang, statistics, [garbage_collection], match, {total_coll, rec_wrd, '_'}},
+            []
+        },
+        {
+            [erlang, io],
+            {function, erlang, statistics, [io], match, {{'_', input}, {'_', output}}}
+        }
+    ].
 
 
 % @private Setup mqtt reporter
