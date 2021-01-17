@@ -56,12 +56,16 @@ init([]) ->
     Processes = [
         % Ring buffer for http request logs
         {ringbuffer,
-            {ringbuffer_process, start_link, [zotonic_http_metrics, ?LOG_METRICS_BUFFER_SIZE]},
+            {ringbuffer_process, start_link, [ zotonic_http_metrics_normal, ?LOG_METRICS_BUFFER_SIZE ]},
+            permanent, 5000, worker, [ ringbuffer_process ]},
+
+        {ringbuffer,
+            {ringbuffer_process, start_link, [ zotonic_http_metrics_prio, ?LOG_METRICS_BUFFER_SIZE ]},
             permanent, 5000, worker, [ ringbuffer_process ]},
 
         % Http request metrics handling. Accepts priority list of buffers to consume.
         {z_stats,
-            {z_stats, start_link, [ [ zotonic_http_metrics ] ]},
+            {z_stats, start_link, [ [ zotonic_http_metrics_prio, zotonic_http_metrics_prio ] ]},
             permanent, 5000, worker, [z_stats]},
 
         % SMTP gen_server for sending emails

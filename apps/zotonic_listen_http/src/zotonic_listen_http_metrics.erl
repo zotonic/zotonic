@@ -95,11 +95,18 @@ metrics_callback(#{
         referer => cowboy_req:header(<<"referer">>, Req),
         metrics => UserData#{ peer_ip => PeerIP }
     },
-    ringbuffer:write(zotonic_http_metrics, Log);
+    ringbuffer:write(queue(StatusCategory), Log);
 metrics_callback(_Metrics) ->
     % Early failure.
     % TODO: Should also be logged.
     ok.
+
+queue('xxx') -> zotonic_http_metrics_normal;
+queue('1xx') -> zotonic_http_metrics_normal;
+queue('2xx') -> zotonic_http_metrics_normal;
+queue('3xx') -> zotonic_http_metrics_normal;
+queue('4xx') -> zotonic_http_metrics_prio;
+queue('5xx') -> zotonic_http_metrics_prio.
 
 http_status_category(switch_protocol, _) -> '1xx';
 http_status_category(_, X) when X < 300 -> '2xx';
