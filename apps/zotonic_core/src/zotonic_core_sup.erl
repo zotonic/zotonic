@@ -55,11 +55,11 @@ init([]) ->
     z_filehandler:start_observers(),
     Processes = [
         % Ring buffer for http request logs
-        {ringbuffer,
+        {ringbuffer_normal,
             {ringbuffer_process, start_link, [ zotonic_http_metrics_normal, ?LOG_METRICS_BUFFER_SIZE ]},
             permanent, 5000, worker, [ ringbuffer_process ]},
 
-        {ringbuffer,
+        {ringbuffer_prio,
             {ringbuffer_process, start_link, [ zotonic_http_metrics_prio, ?LOG_METRICS_BUFFER_SIZE ]},
             permanent, 5000, worker, [ ringbuffer_process ]},
 
