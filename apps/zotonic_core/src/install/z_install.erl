@@ -124,7 +124,7 @@ model_pgsql() ->
       version int NOT NULL DEFAULT 1,
       category_id int NOT NULL,
       visible_for int NOT NULL DEFAULT 0, -- 0 = public, > 1 defined by ACL module
-      language character varying(10)[];
+      language character varying(10)[],
       slug character varying(80) NOT NULL DEFAULT ''::character varying,
       props bytea,
       created timestamp with time zone NOT NULL DEFAULT now(),
