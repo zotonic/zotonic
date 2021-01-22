@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2016 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
 %%
 %% @doc Initialize the database with start data.
 
-%% Copyright 2009-2016 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,17 +57,19 @@ install_category(C) ->
 
     %% "http://purl.org/dc/terms/DCMIType" ?
     {ok, 1} = z_db:equery("
-            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props)
-            values (116, true, 0, 116, 'category', $1, $2)
+            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props, language)
+            values (116, true, 0, 116, 'category', $1, $2, $3)
             ", [    undefined,
-                    ?DB_PROPS([{title, {trans, [{en, <<"Category">>}, {nl, <<"Categorie">>}]}}])
+                    ?DB_PROPS([{title, {trans, [{en, <<"Category">>}, {nl, <<"Categorie">>}]}}]),
+                    [ <<"nl">>, <<"en">> ]
                 ], C),
 
     {ok, 1} = z_db:equery("
-            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props)
-            values (115, true, 0, 116, 'meta', $1, $2)
+            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props, language)
+            values (115, true, 0, 116, 'meta', $1, $2, $3)
             ", [    undefined,
-                    ?DB_PROPS([{title, {trans, [{en, <<"Meta">>}, {nl, <<"Meta">>}]}}])
+                    ?DB_PROPS([{title, {trans, [{en, <<"Meta">>}, {nl, <<"Meta">>}]}}]),
+                    [ <<"nl">>, <<"en">> ]
                 ], C),
 
     %% Now that we have the category "category" we can insert all other categories.
@@ -107,10 +109,11 @@ install_category(C) ->
     ],
 
     InsertCatFun = fun({Id, ParentId, Nr, Lvl, Left, Right, Name, Protected, Uri, Props}) ->
+        Language = [ <<"nl">>, <<"en">> ],
         {ok, 1} = z_db:equery("
-                insert into rsc (id, visible_for, category_id, is_protected, name, uri, props)
-                values ($1, 0, 116, $2, $3, $4, $5)
-                ", [ Id, Protected, Name, Uri, ?DB_PROPS(Props) ], C),
+                insert into rsc (id, visible_for, category_id, is_protected, name, uri, props, language)
+                values ($1, 0, 116, $2, $3, $4, $5, $6)
+                ", [ Id, Protected, Name, Uri, ?DB_PROPS(Props), Language ], C),
         {ok, 1} = z_db:equery("
                 insert into hierarchy (name, id, parent_id, nr, lvl, lft, rght)
                 values ('$category', $1, $2, $3, $4, $5, $6)",
@@ -124,15 +127,15 @@ install_category(C) ->
 %% @todo Add the hostname to the uri
 install_rsc(C) ->
     lager:info("Inserting base resources (admin, etc.)"),
+    Language = [ <<"nl">>, <<"en">> ],
     Rsc = [
         % id  vsfr  cat   protect name,         props
         [   1,  0,  102,  true,    "administrator",   ?DB_PROPS([{title,<<"Site Administrator">>}]) ]
     ],
-
     [ {ok,1} = z_db:equery("
-            insert into rsc (id, visible_for, category_id, is_protected, name, props)
-            values ($1, $2, $3, $4, $5, $6)
-            ", R, C) || R <- Rsc ],
+            insert into rsc (id, visible_for, category_id, is_protected, name, props, language)
+            values ($1, $2, $3, $4, $5, $6, $7)
+            ", R ++ [ Language ], C) || R <- Rsc ],
     {ok, _} = z_db:equery("update rsc set creator_id = 1, modifier_id = 1, is_published = true", C),
     ok.
 
@@ -164,11 +167,12 @@ install_predicate(C) ->
     ],
 
     CatId   = z_db:q1("select id from rsc where name = 'predicate'", C),
+    Language = [ <<"nl">>, <<"en">> ],
 
     [ {ok,1} = z_db:equery("
-            insert into rsc (id, visible_for, is_protected, name, uri, props, category_id, is_published, creator_id, modifier_id)
-            values ($1, 0, $2, $3, $4, $5, $6, true, 1, 1)
-            ", R ++ [CatId], C) || R <- Preds],
+            insert into rsc (id, visible_for, is_protected, name, uri, props, category_id, is_published, creator_id, modifier_id, language)
+            values ($1, 0, $2, $3, $4, $5, $6, true, 1, 1, $7)
+            ", R ++ [CatId, Language], C) || R <- Preds],
 
     ObjSubj = [
         [300, true,  104], %  text   -> about     -> _

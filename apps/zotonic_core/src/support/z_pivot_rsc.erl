@@ -608,8 +608,8 @@ get_args(Props) when is_map(Props) ->
 get_args(Props) when is_list(Props) ->
     % deprecated task queue entries
     proplists:get_value(args, Props, []);
-get_args(_) ->
-    undefined.
+get_args(undefined) ->
+    [].
 
 get_error_ct(Props) when is_map(Props) ->
     maps:get(<<"error_ct">>, Props, 0);

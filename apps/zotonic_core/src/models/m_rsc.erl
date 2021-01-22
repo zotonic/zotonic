@@ -307,7 +307,7 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
     end,
     case z_db:qmap_props_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
         {ok, Map} ->
-            {ok, ensure_utc_dates(Map, Context)};
+            {ok, map_language_atoms( ensure_utc_dates(Map, Context) )};
         {error, _} = Error ->
             Error
     end;
@@ -315,6 +315,21 @@ get_raw(undefined, _IsLock, _Context) ->
     {error, enoent};
 get_raw(Id, IsLock, Context) ->
     get_raw(rid(Id, Context), IsLock, Context).
+
+%% The languages are stored as a psql array, map to the internal atom
+%% representation. On update this is mapped to binaries in z_db:update/3.
+map_language_atoms(#{ <<"language">> := Lang } = Map) when is_list(Lang) ->
+    Lang1 = lists:filtermap(
+        fun(Iso) ->
+            case z_language:to_language_atom(Iso) of
+                {ok, IsoAtom} -> {true, IsoAtom};
+                {error, _} -> false
+            end
+        end,
+        Lang),
+    Map#{ <<"language">> => Lang1 };
+map_language_atoms(Map) ->
+    Map#{ <<"language">> => [] }.
 
 %% Fix old records which had serialized data in localtime and no date_is_all_day flag
 ensure_utc_dates(#{ <<"tz">> := _ } = Map, _Context) ->

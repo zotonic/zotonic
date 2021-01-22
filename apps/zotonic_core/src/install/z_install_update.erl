@@ -18,7 +18,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_installer).
+-module(z_install_update).
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(gen_server).
@@ -269,6 +269,7 @@ upgrade(C, Database, Schema) ->
     ok = drop_persist(C, Database, Schema),
     ok = publication_start_nullable(C, Database, Schema),
     ok = key_changes_v1_0(C, Database, Schema),
+    ok = rsc_language(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -724,3 +725,22 @@ key_changes_v1_0(C, Database, Schema) ->
             {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)")
     end,
     ok.
+
+
+rsc_language(C, Database, Schema) ->
+    case has_column(C, "rsc", "language", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            lager:info("Upgrade: adding language column to database ~s ~s.rsc", [ Database, Schema ]),
+            {ok, [], []} = epgsql:squery(C, "alter table rsc "
+                                        "add column language character varying(10)[] not null default '{}'"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_language_key ON rsc USING gin(language)"),
+
+            {ok, _} = epgsql:equery(C, "
+                            insert into pivot_task_queue (module, function, key)
+                            values ('z_install_update_task', 'init_language', $1)
+                            ",
+                            [ z_ids:id() ]),
+            ok
+    end.
