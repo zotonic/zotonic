@@ -463,12 +463,11 @@ language
 ^^^^^^^^
 
 Find resources with a certain language. The language must be a valid ISO 639-1 language
-code. Example::
+code. Search terms with invalid language codes are ignored.
+
+Find all resources with a German translation::
 
     language=de
-
-This will return all resources which have a German translation. Search term with
-invalid language codes are ignored.
 
 
 Filter behaviour
