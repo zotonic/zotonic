@@ -193,6 +193,8 @@ url_for_args(Files, Extension, Args, Context) ->
 
 %% @doc Given the filepath of the request, return all files collapsed in the path.
 -spec uncollapse( string() | binary() ) -> [ binary() ].
+uncollapse(<<>>) ->
+    [];
 uncollapse(Path) when is_binary(Path) ->
     add_extension( uncollapse_dirs(binary:split(Path, <<?SEP>>, [global])) );
 uncollapse(Path) ->
