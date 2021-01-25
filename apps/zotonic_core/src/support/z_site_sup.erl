@@ -88,12 +88,12 @@ install_phase1(Site) ->
 
 start_installer_processes(SiteSupName, SiteProps) ->
     % The installer needs the database pool, depcache and translation.
-    InstallerModule = proplists:get_value(installer, SiteProps, z_installer),
+    InstallerModule = proplists:get_value(installer, SiteProps, z_install_update),
     Processes = [
         {z_depcache,
             {z_depcache, start_link, [SiteProps]},
             permanent, 5000, worker, dynamic},
-        {z_installer,
+        {z_install_update,
             {InstallerModule, start_link, [SiteProps]},
             permanent, 1, worker, dynamic}
     ],

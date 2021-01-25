@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %%
 %% @doc Install Zotonic, loads the datamodel into the database
 %% Assumes the database has already been created (which normally needs superuser permissions anyway)
@@ -7,7 +7,7 @@
 %% CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
 %% CREATE LANGUAGE "plpgsql";
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -124,6 +124,7 @@ model_pgsql() ->
       version int NOT NULL DEFAULT 1,
       category_id int NOT NULL,
       visible_for int NOT NULL DEFAULT 0, -- 0 = public, > 1 defined by ACL module
+      language character varying(16)[],
       slug character varying(80) NOT NULL DEFAULT ''::character varying,
       props bytea,
       created timestamp with time zone NOT NULL DEFAULT now(),
@@ -179,6 +180,7 @@ model_pgsql() ->
      "CREATE INDEX fki_rsc_modifier_id ON rsc (modifier_id)",
      "CREATE INDEX fki_rsc_category_id ON rsc (category_id)",
 
+     "CREATE INDEX rsc_language_key ON rsc USING gin(language)",
      "CREATE INDEX rsc_pivot_tsv_key ON rsc USING gin(pivot_tsv)",
      "CREATE INDEX rsc_pivot_rtsv_key ON rsc USING gin(pivot_rtsv)",
 

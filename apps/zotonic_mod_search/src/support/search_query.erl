@@ -133,6 +133,7 @@ request_arg(<<"qargs">>)               -> qargs;
 request_arg(<<"query_id">>)            -> query_id;
 request_arg(<<"rsc_id">>)              -> rsc_id;
 request_arg(<<"name">>)                -> name;
+request_arg(<<"language">>)            -> language;
 request_arg(<<"sort">>)                -> sort;
 request_arg(<<"asort">>)               -> asort;
 request_arg(<<"zsort">>)               -> zsort;
@@ -415,6 +416,19 @@ parse_query([{name, Name}|Rest], Context, Result) ->
             {Arg, Result1} = add_arg(Name2, Result),
             Result2 = add_where("rsc.name like " ++ Arg, Result1),
             parse_query(Rest, Context, Result2)
+    end;
+
+%% language=<iso-code>
+%% Filter on the presence of a translation
+parse_query([{language, Lang}|Rest], Context, Result) ->
+    case z_language:to_language_atom(Lang) of
+        {ok, Code} ->
+            {Arg, Result1} = add_arg([ z_convert:to_binary(Code) ], Result),
+            Result2 = add_where("rsc.language @> " ++ Arg, Result1),
+            parse_query(Rest, Context, Result2);
+        {error, _} ->
+            % Unknown iso code, ignore
+            parse_query(Rest, Context, Result)
     end;
 
 %% sort=fieldname

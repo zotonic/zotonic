@@ -452,12 +452,22 @@ Select items which are member of the given content group (or one of its children
 name
 ^^^^
 
-Find resource with a matching unique name. A wildcard can be defined, for example::
+Find resources with a matching unique name. A wildcard can be defined, for example::
 
     name=page_*
 
 Searching on an empty name or just ``*`` will return all resources with a defined name.
 The given name will be trimmed and converted to lowercase before searching.
+
+language
+^^^^^^^^
+
+Find resources with a certain language. The language must be a valid ISO 639-1 language
+code. Search terms with invalid language codes are ignored.
+
+Find all resources with a German translation::
+
+    language=de
 
 
 Filter behaviour

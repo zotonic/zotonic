@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-07
-%%
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Interface to database, uses database definition from Context
 
-%% Copyright 2009-2014 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -694,13 +692,16 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
                 UpdateProps1 = case maps:get(<<"props">>, UpdateProps, undefined) of
                     NewProps when is_map(NewProps); is_list(NewProps) ->
                         % Merge the new props with the props in the database
+                        MergedProps = update_merge_props(DbDriver, C, Table, Id, NewProps),
+                        MergedProps1 = maps:without(Cols, MergedProps),
                         UpdateProps#{
-                            <<"props">> => ?DB_PROPS( update_merge_props(DbDriver, C, Table, Id, NewProps) )
+                            <<"props">> => ?DB_PROPS( MergedProps1 )
                         };
                     _ ->
                         UpdateProps
                 end,
-                {ColNames,Params} = lists:unzip( maps:to_list(UpdateProps1) ),
+                UpdateProps2 = update_map_atom_arrays(UpdateProps1),
+                {ColNames,Params} = lists:unzip( maps:to_list(UpdateProps2) ),
                 ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
                 ColAssigns = [
                     ["\"", ColName, "\" = $", integer_to_list(Nr)]
@@ -723,8 +724,19 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
             Error
     end.
 
+update_map_atom_arrays(Props) ->
+    maps:map(
+        fun
+            (_K, [ A | _ ] = V) when is_atom(A) ->
+                [ atom_to_binary(X, utf8) || X <- V ];
+            (_K, V) ->
+                V
+        end,
+        Props).
+
 update_merge_props(DbDriver, C, QTab, Id, NewProps) when is_map(NewProps) ->
-    Merged = case equery1(DbDriver, C, "select props from "++QTab++" where id = $1", [Id]) of
+    QTab1 = z_convert:to_list(QTab),
+    Merged = case equery1(DbDriver, C, "select props from "++QTab1++" where id = $1", [Id]) of
         {ok, OldProps} when is_list(OldProps) ->
             maps:merge(z_props:from_props(OldProps), NewProps);
         {ok, OldProps} when is_map(OldProps) ->
