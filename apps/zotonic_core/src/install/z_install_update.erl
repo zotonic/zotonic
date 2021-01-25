@@ -734,7 +734,7 @@ rsc_language(C, Database, Schema) ->
         false ->
             lager:info("Upgrade: adding language column to database ~s ~s.rsc", [ Database, Schema ]),
             {ok, [], []} = epgsql:squery(C, "alter table rsc "
-                                        "add column language character varying(10)[] not null default '{}'"),
+                                        "add column language character varying(16)[] not null default '{}'"),
             {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_language_key ON rsc USING gin(language)"),
 
             {ok, _} = epgsql:equery(C, "

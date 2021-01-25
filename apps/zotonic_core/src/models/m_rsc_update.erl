@@ -355,7 +355,7 @@ flush(Id, CatList, Context) ->
 duplicate(Id, DupProps, Context) when is_list(DupProps) ->
     {ok, DupMap} = z_props:from_list(DupProps),
     duplicate(Id, DupMap, Context);
-duplicate(Id, DupProps, Context) ->
+duplicate(Id, DupProps, Context) when is_integer(Id) ->
     case z_acl:rsc_visible(Id, Context) of
         true ->
             case m_rsc:get_raw(Id, Context) of
@@ -394,7 +394,11 @@ duplicate(Id, DupProps, Context) ->
             end;
         false ->
             {error, eacces}
-    end.
+    end;
+duplicate(undefined, _DupProps, _Context) ->
+    {error, enoent};
+duplicate(Id, DupProps, Context) ->
+    duplicate(m_rsc:rid(Id, Context), DupProps, Context).
 
 %% @doc Update a resource
 -spec update(

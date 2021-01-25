@@ -128,3 +128,25 @@ normalize_date_props_test() ->
     ?assertEqual({{1999, 12, 31}, {0, 0, 0}}, maps:get(<<"date_start">>, OutPropsE)),
 
     ok.
+
+
+%% @doc Test the language array
+language_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo( z_context:new(zotonic_site_testsandbox) ),
+    Props = #{
+        <<"category">> => other,
+        <<"is_published">> => true,
+        <<"language">> => [ 'zh-hant-hk', en ],
+        <<"title">> => #trans{
+            tr = [ {en, <<"Hello">>}, {'zh-hant-hk', <<"香港"/utf8>>}]
+        }
+    },
+    {ok, Id} = m_rsc:insert(Props, C),
+    ?assertEqual( m_rsc:rid(other, C), m_rsc:p(Id, category_id, C) ),
+    ?assertEqual( [ 'en', 'zh-hant-hk'], m_rsc:p(Id, language, C) ),
+    Lng = z_db:q1("select language from rsc where id = $1", [ Id ], C),
+    ?assertEqual( [ <<"en">>, <<"zh-hant-hk">> ], Lng ),
+    m_rsc:delete(Id, C),
+    ok.
+
