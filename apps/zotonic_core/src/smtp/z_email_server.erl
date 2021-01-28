@@ -566,10 +566,9 @@ reply_email(MessageId, Context) when is_binary(MessageId) ->
 
 % The 'From' is either the message id (and bounce domain) or the set from.
 get_email_from(EmailFrom, VERP, State, Context) ->
-    From = case EmailFrom of
-        L when L =:= [] orelse L =:= undefined orelse L =:= <<>> ->
-            get_email_from(Context);
-        _ -> EmailFrom
+    From = case z_convert:to_binary(EmailFrom) of
+        <<>> -> get_email_from(Context);
+        L -> L
     end,
     {FromName, FromEmail} = z_email:split_name_email(From),
     case State#state.smtp_verp_as_from of
@@ -584,12 +583,12 @@ get_email_from(EmailFrom, VERP, State, Context) ->
 % When the 'From' is not the VERP then the 'From' is derived from the site
 get_email_from(Context) ->
     %% Let the default be overruled by the config setting
-    case m_config:get_value(site, email_from, Context) of
-        undefined ->
+    case z_convert:to_binary( m_config:get_value(site, email_from, Context) ) of
+        <<>>  ->
             EmailDomain = z_email:email_domain(Context),
             <<"noreply@", EmailDomain/binary>>;
         EmailFrom ->
-            z_convert:to_binary(EmailFrom)
+            EmailFrom
     end.
 
 % Unique message-id, depends on bounce domain
