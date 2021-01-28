@@ -1,0 +1,5 @@
+%% -*- mode: erlang -*-
+%% Dispatch rule for overview of configuration settings.
+[
+ {admin_email, ["admin", "email"],  controller_admin, [ {template, "admin_email.tpl"}, seo_noindex ]}
+].

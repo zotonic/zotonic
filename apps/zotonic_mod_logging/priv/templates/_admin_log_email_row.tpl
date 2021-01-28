@@ -86,3 +86,13 @@
         {{ result_row.created|date:"Y-m-d H:i:s" }}
     </td>
 </tr>
+{% if result_row.mailer_message or result_row.mailer_host %}
+<tr class="{% if result_row.severity <= 1 %}log-error{% endif %}{% if result_row.severity == 2 %}log-warning{% endif %}" >
+    <td style="border-top: none"></td>
+    <td colspan="8" style="border-top: none; padding-top: 0;">
+        <span class="text-muted">
+            <b>{{ result_row.mailer_host|escape }}</b> {{ result_row.mailer_message|default:"-"|escape|linebreaksbr }}
+        </span>
+    </td>
+</tr>
+{% endif %}

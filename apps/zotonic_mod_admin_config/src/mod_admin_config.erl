@@ -53,16 +53,26 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
      |Acc].
 
 event(#submit{message={config_save, Args}}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
+    case z_acl:is_admin(Context) of
         true ->
-            {module, Module} = proplists:lookup(module, Args),
-            Mod = z_convert:to_atom(Module),
+            Module = z_convert:to_atom( proplists:get_value(module, Args, undefined) ),
             Qs = z_context:get_q_all_noz(Context),
-            lists:foreach(fun({Key, Value}) ->
-                             m_config:set_value(Mod, z_convert:to_atom(Key), Value, Context)
-                          end,
-                          Qs),
-            z_render:wire(proplists:get_all_values(on_success, Args), Context);
+            lists:foreach(
+                fun({Key, Value}) ->
+                    {M, K} = split_key(Module, Key),
+                    m_config:set_value(M, K, Value, Context)
+                end,
+                Qs),
+            Context1 = z_render:growl("Saved the configuration.", Context),
+            z_render:wire(proplists:get_all_values(on_success, Args), Context1);
         false ->
-            z_render:growl_error("Only administrators can delete configurations.", Context)
+            z_render:growl_error("Only administrators can update configurations.", Context)
+    end.
+
+split_key(Module, Key) ->
+    case binary:split(Key, <<".">>) of
+        [ M, K ] ->
+            {M, K};
+        [ K ] ->
+            {Module, K}
     end.
