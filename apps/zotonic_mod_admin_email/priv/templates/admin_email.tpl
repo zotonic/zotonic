@@ -135,6 +135,16 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <label class="control-label col-md-3">{_ Email FROM _}</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="site.email_from" value="{{ m.config.site.email_from.value|escape }}" placeholder="noreply@{{ m.site.hostname|escape }}">
+                        <p class="help-block">
+                            {_ The default FROM address for emails. Defaults to _} &lt;noreply@{{ m.site.hostname|escape }}&gt;
+                        </p>
+                    </div>
+                </div>
+
                 <div class="form-actions row">
                     <div class="col-md-offset-3 col-md-9">
                         <button type="submit" class="btn btn-primary">{_ Save _}</button>
