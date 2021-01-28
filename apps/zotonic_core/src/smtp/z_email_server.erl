@@ -775,7 +775,7 @@ relay_site_options(_State, Context) ->
                     ]
             end,
             {true, [
-                {smtp_host, SmtpHost},
+                {relay, SmtpHost},
                 {port, Port},
                 {ssl, SSL}
             ] ++ Creds};
