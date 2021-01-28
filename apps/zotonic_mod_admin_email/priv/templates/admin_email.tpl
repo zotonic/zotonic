@@ -106,7 +106,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="control-label col-md-offset-3 col-md-6">
-                            <input type="checkbox" name="site.smtp_relay_ssl" value="1" {% if m.config.site.smtp_ssl %}checked{% endif %}> {_ Always use SSL _}
+                            <input type="checkbox" name="site.smtp_relay_ssl" value="1" {% if m.config.site.smtp_relay_ssl.value %}checked{% endif %}> {_ Always use SSL _}
                         </label>
                     </div>
                 {% endif %}
