@@ -751,11 +751,11 @@ relay_site_options(#state{ smtp_relay = true } = State, _Context) ->
 relay_site_options(_State, Context) ->
     case m_config:get_boolean(site, smtp_relay, Context) of
         true ->
-            SmtpHost = case z_convert:to_binary( m_config:get_value(site, smtp_host, Context) ) of
+            SmtpHost = case z_convert:to_binary( m_config:get_value(site, smtp_relay_host, Context) ) of
                 <<>> -> "localhost";
                 SHost -> z_convert:to_list(SHost)
             end,
-            Port = case z_convert:to_binary( m_config:get_value(site, smtp_port, Context) ) of
+            Port = case z_convert:to_binary( m_config:get_value(site, smtp_relay_port, Context) ) of
                 <<>> -> 25;
                 SPort ->
                     try
@@ -764,15 +764,15 @@ relay_site_options(_State, Context) ->
                         _:_ -> 25
                     end
             end,
-            SSL = m_config:get_boolean(site, ssl, Context),
-            Creds = case z_convert:to_binary( m_config:get_value(site, smtp_username, Context) ) of
+            SSL = m_config:get_boolean(site, smtp_relay_ssl, Context),
+            Creds = case z_convert:to_binary( m_config:get_value(site, smtp_relay_username, Context) ) of
                 <<>> ->
                     [];
                 Username ->
                     [
                         {auth, always},
                         {username, z_convert:to_list(Username)},
-                        {password, z_convert:to_list(m_config:get_value(site, smtp_password, Context))}
+                        {password, z_convert:to_list(m_config:get_value(site, smtp_relay_password, Context))}
                     ]
             end,
             {true, [

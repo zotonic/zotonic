@@ -83,30 +83,30 @@
                     <div class="form-group row ">
                         <label class="control-label col-md-3">{_ Relay hostname _}</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="site.smtp_host" value="{{ m.config.site.smtp_host.value|default:'localhost'|escape }}">
+                            <input type="text" class="form-control" name="site.smtp_relay_host" value="{{ m.config.site.smtp_relay_host.value|default:'localhost'|escape }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="control-label col-md-3">{_ Relay port _}</label>
                         <div class="col-md-3">
-                            <input type="number" class="form-control" name="site.smtp_port" value="{{ m.config.site.smtp_port.value|default:'25'|escape }}">
+                            <input type="number" class="form-control" name="site.smtp_relay_port" value="{{ m.config.site.smtp_relay_port.value|default:'25'|escape }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="control-label col-md-3">{_ Username _}</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="site.smtp_username" value="{{ m.config.site.smtp_username.value|escape }}" autocomplete="off">
+                            <input type="text" class="form-control" name="site.smtp_relay_username" value="{{ m.config.site.smtp_relay_username.value|escape }}" autocomplete="off">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="control-label col-md-3">{_ Password _}</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="site.smtp_password" value="{{ m.config.site.smtp_password.value|escape }}" autocomplete="off">
+                            <input type="text" class="form-control" name="site.smtp_relay_password" value="{{ m.config.site.smtp_relay_password.value|escape }}" autocomplete="off">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="control-label col-md-offset-3 col-md-6">
-                            <input type="checkbox" name="site.smtp_ssl" value="1" {% if m.config.site.smtp_ssl %}checked{% endif %}> {_ Always use SSL _}
+                            <input type="checkbox" name="site.smtp_relay_ssl" value="1" {% if m.config.site.smtp_ssl %}checked{% endif %}> {_ Always use SSL _}
                         </label>
                     </div>
                 {% endif %}
@@ -126,7 +126,7 @@
                 <div class="form-group row">
                     <label class="control-label col-md-3">{_ SMTP Hostname _}</label>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" name="site.smtp_hostname" value="{{ m.config.site.smtp_hostname.value|escape }}" placeholder="{{ m.site.hostname|escape }}">
+                        <input type="text" class="form-control" name="site.smtphost" value="{{ m.config.site.smtphost.value|escape }}" placeholder="{{ m.site.hostname|escape }}">
                         <p class="help-block">
                             {_ Domain for all generated from- and envelop-addresses. _}
                             {_ Defaults to the hostname of the site. _}<br>
