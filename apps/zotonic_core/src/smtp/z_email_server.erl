@@ -771,7 +771,7 @@ relay_site_options(_State, Context) ->
                     [
                         {auth, always},
                         {username, z_convert:to_list(Username)},
-                        {password, z_convert:to_list(m_config:get_value(site, smtp_password))}
+                        {password, z_convert:to_list(m_config:get_value(site, smtp_password, Context))}
                     ]
             end,
             {true, [
