@@ -77,7 +77,7 @@
                     </p>
                     <div class="form-group row">
                         <label class="control-label col-md-offset-3 col-md-6">
-                            <input type="checkbox" name="smtp_relay" {% if m.config.site.smtp_relay %}checked{% endif %}> {_ Use relay to send email _}
+                            <input type="checkbox" name="smtp_relay" value="1" {% if m.config.site.smtp_relay.value %}checked{% endif %}> {_ Use relay to send email _}
                         </label>
                     </div>
                     <div class="form-group row ">
