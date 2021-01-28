@@ -142,6 +142,8 @@
                 </div>
             </form>
 
+            <p><br></p>
+
         {% else %}
             <p class="alert alert-danger">
                 {_ You must be an administrator to view or change the email configuration. _}
@@ -163,7 +165,7 @@
                         delegate=`mod_admin_email`
                 %}
                 <form id="test-email" class="form form-inline" action="postback">
-                    <input type="email" class="form-control" name="email" value="">
+                    <input type="email" class="form-control" name="email" value="" placeholder="{_ test@example.com _}">
                     <button type="submit" name="send" class="btn btn-primary">{_ Send _}</button>
                     <button type="submit" name="status" class="btn btn-default">{_ View email status _}</button>
                 </form>

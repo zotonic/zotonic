@@ -69,7 +69,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
         #menu_item{id=admin_email,
                 parent=admin_system,
-                label=?__("Email settings", Context),
+                label=?__("Email configuration", Context),
                 url={admin_email},
                 visiblecheck={acl, use, mod_admin_config}}
 
