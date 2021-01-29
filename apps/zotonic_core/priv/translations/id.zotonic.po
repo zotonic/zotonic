@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 10:54\n"
+"PO-Revision-Date: 2021-01-29 11:52\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -6954,7 +6954,7 @@ msgstr "Lakukan update versi Zotonic (melalui git)"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:53
 msgid "Ready with fetch from version control."
-msgstr ""
+msgstr "Siap dengan pengambilan dari kontrol versi."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
@@ -6968,31 +6968,31 @@ msgstr "Kompilasi ulang mengubah file Erlang di latar belakang"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
-msgstr ""
+msgstr "Token API pembaruan situs"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:9
 msgid "Site update is not available as the site does not use a known version control system, like git."
-msgstr ""
+msgstr "Pembaruan situs tidak tersedia karena situs tidak menggunakan sistem kontrol versi yang dikenal, seperti git."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:94./apps/zotonic_mod_site_update/src/mod_site_update.erl:106
 msgid "Sorry this can only be run from the Zotonic status site"
-msgstr ""
+msgstr "Maaf ini hanya dapat dijalankan dari situs status Zotonic"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:58
 msgid "Sorry, this site is not from a known version control system"
-msgstr ""
+msgstr "Maaf, situs ini bukan dari sistem kontrol versi yang dikenal"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
-msgstr ""
+msgstr "Token ini digunakan untuk mengamankan panggilan API webhook untuk memperbarui situs web ini dengan dorongan kode ke Github (atau layanan serupa seperti BitBucket)."
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
 msgid "To run the webhook update, configure your service to POST to the following URL:"
-msgstr ""
+msgstr "Untuk menjalankan pembaruan webhook, konfigurasikan layanan Anda ke POST ke URL berikut:"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:90
 msgid "Unknown site or no version control folder present."
-msgstr ""
+msgstr "Situs tidak dikenal atau tidak ada folder kontrol versi."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
@@ -7001,15 +7001,15 @@ msgstr "Perbaharui Zotonic"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 msgid "Update site"
-msgstr ""
+msgstr "Perbarui situs"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Update the site and templates from the version control system."
-msgstr ""
+msgstr "Perbarui situs dan templat dari sistem kontrol versi."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:76
 msgid "Zotonic has not been checked out using version control."
-msgstr ""
+msgstr "Zotonic belum diperiksa menggunakan kontrol versi."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
