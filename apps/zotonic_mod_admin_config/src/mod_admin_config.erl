@@ -39,20 +39,26 @@
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-     #menu_item{id=admin_config_ssl,
-                parent=admin_system,
-                label=?__("SSL Certificates", Context),
-                url={admin_config_ssl},
-                visiblecheck={acl, use, mod_admin_config}},
-     #menu_item{id=admin_config,
-                parent=admin_system,
-                label=?__("Config", Context),
-                url={admin_config},
-                visiblecheck={acl, use, mod_admin_config}}
+        #menu_item{ id=admin_config_email,
+                    parent=admin_system,
+                    label=?__("Email configuration", Context),
+                    url={admin_config_email},
+                    visiblecheck={acl, use, mod_admin_config}}
+        #menu_item{ id=admin_config_ssl,
+                    parent=admin_system,
+                    label=?__("SSL Certificates", Context),
+                    url={admin_config_ssl},
+                    visiblecheck={acl, use, mod_admin_config}},
+        #menu_item{ id=admin_config,
+                    parent=admin_system,
+                    label=?__("Config", Context),
+                    url={admin_config},
+                    visiblecheck={acl, use, mod_admin_config}}
 
      |Acc].
 
-event(#submit{message={config_save, Args}}, Context) ->
+
+event(#submit{ message = {config_save, Args} }, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             Module = z_convert:to_atom( proplists:get_value(module, Args, undefined) ),
@@ -67,6 +73,35 @@ event(#submit{message={config_save, Args}}, Context) ->
             z_render:wire(proplists:get_all_values(on_success, Args), Context1);
         false ->
             z_render:growl_error("Only administrators can update configurations.", Context)
+    end;
+event(#submit{ message = {test_email, []} }, Context) ->
+    Email = z_string:trim( z_context:get_q(<<"email">>, Context) ),
+    case z_context:get_q(<<"send">>, Context) of
+        <<>> ->
+            {ok, MsgNr} = z_email:send(#email{
+                    to = Email,
+                    html_tpl = "email_test.tpl",
+                    vars = []
+                }, Context),
+            Context1 = z_render:update(
+                "email_test_result",
+                #render{
+                    template = "_admin_config_email_test_result.tpl",
+                    vars = [
+                        {email, Email},
+                        {msg_nr, MsgNr}
+                    ]
+                },
+                Context),
+            z_render:growl([
+                ?__("Sent email to", Context), " ", z_html:escape(Email)
+                ], Context1);
+        undefined ->
+            z_render:dialog(
+                ?__("View email status", Context),
+                "_dialog_email_status.tpl",
+                [ {email, Email} ],
+                Context)
     end.
 
 split_key(Module, Key) ->

@@ -24,9 +24,9 @@
 {% for cert in m.admin_config.ssl_certificates %}
     <div class="col-md-6">
         {% if cert.is_zotonic_self_signed %}
-            {% include "_admin_config_ssl.tpl" nr=forloop.counter %}
+            {% include "_admin_config_ssl_panel.tpl" nr=forloop.counter %}
         {% else %}
-            {% catinclude "_admin_config_ssl.tpl" [cert.module] cert=cert nr=forloop.counter %}
+            {% catinclude "_admin_config_ssl_panel.tpl" [cert.module] cert=cert nr=forloop.counter %}
         {% endif %}
     </div>
 {% endfor %}

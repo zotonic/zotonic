@@ -164,7 +164,10 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="panel-title">{_ Send a test email _}</div>
+                <h3 class="panel-title">
+                    {_ Send a test email _}
+                    <span class="text-muted pull-right">mod_admin_config</span>
+                </h3>
             </div>
             <div class="panel-body">
                 <p>{_ Send a test email or check the status of an email address. _}</p>
@@ -177,14 +180,16 @@
                 <form id="test-email" class="form form-inline" action="postback">
                     <input type="email" class="form-control" name="email" value="" placeholder="{_ test@example.com _}">
                     <button type="submit" name="send" class="btn btn-primary">{_ Send _}</button>
-                    <button type="submit" name="status" class="btn btn-default">{_ View email status _}</button>
+                    {% if m.modules.active.mod_email_status %}
+                        <button type="submit" name="status" class="btn btn-default">{_ View email status _}</button>
+                    {% endif %}
                 </form>
 
                 <div id="email_test_result"></div>
             </div>
         </div>
 
-        {% all include "_admin_email_panel.tpl" %}
+        {% all include "_admin_config_email_panel.tpl" %}
 
         {#
             TODO:
