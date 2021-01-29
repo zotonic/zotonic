@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-21 21:39\n"
+"PO-Revision-Date: 2021-01-29 10:54\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -102,12 +102,12 @@ msgstr "группа пользователей ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:61
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "Управление доступом"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:34./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:547
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:34./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
 msgid "Access control rules"
 msgstr "Правила доступа"
 
@@ -120,7 +120,7 @@ msgid "Add links to the collaboration group"
 msgstr "Добавить ссылки на группу сотрудничества"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:112
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
 msgid "All"
 msgstr "Все"
 
@@ -165,12 +165,12 @@ msgstr "Вы уверены, что хотите восстановить все
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:30./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:23
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:87./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:89./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:91
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:73
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:17
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:86./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:87./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -178,7 +178,7 @@ msgstr "Вы уверены, что хотите восстановить все
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:146./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:190
 msgid "Cancel"
@@ -201,13 +201,14 @@ msgstr "Изменение категории и/или группы содер�
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:65./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:66./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:68
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:13./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:28
 #: apps/zotonic_mod_base_site/priv/templates/_dialog_share_page.tpl:19
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
+#: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:6
 msgid "Close"
 msgstr "Закрыть"
@@ -220,7 +221,7 @@ msgstr "Менеджеры групп сотрудничества"
 msgid "Collaboration group members"
 msgstr "Члены группы сотрудничества"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:49./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:49./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:542
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "Группы сотрудничества"
@@ -235,7 +236,7 @@ msgstr "Группы сотрудничества - это группы поль
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:56
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:61
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
 msgid "Content"
 msgstr "Контент"
@@ -273,6 +274,7 @@ msgstr "Определить, кто сможет просматривать и�
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:49./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:71./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:92
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:44
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:121
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "Удалить"
@@ -281,7 +283,7 @@ msgstr "Удалить"
 msgid "Delete all user groups"
 msgstr "Удалить все группы пользователей"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:132
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:131
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "Удаление отменяется, есть пользователи в группах пользователей."
 
@@ -289,7 +291,7 @@ msgstr "Удаление отменяется, есть пользователи
 msgid "Delete user group and move users"
 msgstr "Удалить группу пользователей и переместить пользователей"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:160
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:159
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:75./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:86./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:92
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:79./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:107
@@ -419,12 +421,12 @@ msgstr "Нужна помощь?"
 msgid "No ACL rules"
 msgstr "Нет ACL правил"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:153
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:152
 msgid "Not all user groups could be deleted."
 msgstr "Не все группы пользователей могут быть удалены."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:72
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:41
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:41
 msgid "Not allowed."
 msgstr "Не разрешено."
 
@@ -479,8 +481,8 @@ msgstr "Перевернутые правила"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:66
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:24
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:102./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:24./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:150
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:99
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
@@ -513,7 +515,7 @@ msgstr "Показать частную собственность в"
 msgid "Show this ACL user group first:"
 msgstr "Сначала покажите эту группу пользователей ACL:"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:111./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:127
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:110./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:126
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
@@ -604,7 +606,7 @@ msgstr "Использовать опубликованные правила"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Используйте следующий URL для проверки правил контроля доступа перед их публикацией."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:538
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:537
 msgid "User groups"
 msgstr "группы пользователей"
 
@@ -835,7 +837,7 @@ msgstr "Примечание"
 msgid "Ask google to not index this page"
 msgstr "Не индексировать эту страницу в поисковых системах"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:48./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Прикрепленные материалы"
 
@@ -968,15 +970,15 @@ msgid "Count"
 msgstr "Посчитать"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:66
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:101
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "Страна"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:241
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:43./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:241
 msgid "Create"
 msgstr "Создать"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:55./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:10
 msgid "Create or find"
 msgstr "Создать или найти"
 
@@ -1041,7 +1043,7 @@ msgstr "Удалено."
 msgid "Dependent"
 msgstr "Зависимый"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:22./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:25
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
@@ -1061,7 +1063,7 @@ msgstr "Вы желаете удалить этот блок?"
 msgid "Download"
 msgstr "Скачать"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:9
 msgid "Drag to change position"
 msgstr "Перетащите для смены положения"
 
@@ -1087,7 +1089,7 @@ msgstr "электронный адрес"
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_base_site/priv/templates/_meta.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:40
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:15
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:27
 msgid "Edit"
 msgstr "Изменить"
@@ -1117,7 +1119,7 @@ msgid "Embed page"
 msgstr "Встроить страницу"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:179
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:223
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:228
 msgid "Embedded Content"
 msgstr "Встроенный контент"
 
@@ -1189,12 +1191,12 @@ msgstr "Фильтр категорий"
 msgid "Filter on content group"
 msgstr "Фильтр по группе содержания"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:59
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:60
 msgid "Find Page"
 msgstr "Найти страницу"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:106
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:201
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:207
 msgid "Find page"
 msgstr "Найти страницу"
 
@@ -1221,7 +1223,7 @@ msgid "Go back."
 msgstr "Перейти назад."
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/src/mod_admin.erl:172
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:114
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:116
 msgid "Header"
 msgstr "Заголовок"
 
@@ -1444,7 +1446,7 @@ msgid "Page Count"
 msgstr "Количество страниц"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:196
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:198
 msgid "Page connections"
 msgstr "Связи страницы"
 
@@ -1539,7 +1541,7 @@ msgid "Publish this page"
 msgstr "Опубликовать эту страницу"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:230./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:38
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:43
 msgid "Published"
 msgstr "Опубликовано"
 
@@ -1635,12 +1637,12 @@ msgid "Save and View"
 msgstr "Сохранить и Просмотреть"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:105./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:110./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "Save and view the page."
 msgstr "Сохранить и просмотреть страницу."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:102./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
 msgid "Save this page."
 msgstr "Сохранить эту страницу."
 
@@ -1701,7 +1703,7 @@ msgstr "Показать как"
 msgid "Show page on multiple paths"
 msgstr "Показать страницу на нескольких путях"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:133
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:131
 msgid "Something went wrong. Sorry."
 msgstr "Что-то пошло не так. Извините."
 
@@ -1968,7 +1970,7 @@ msgid "Valid for:"
 msgstr "Действителен для:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:112
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:42
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "View"
@@ -1987,7 +1989,7 @@ msgid "View all referrers"
 msgstr "Просмотр всех связей"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:112
 msgid "View this page."
 msgstr "Просмотреть эту страницу."
 
@@ -2016,7 +2018,7 @@ msgstr "Внимание!"
 msgid "Website for clicks on image"
 msgstr "Ссылка для нажатий на изображении"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:64./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:15./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:16
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:15./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:16
 msgid "Website or Embed"
 msgstr "Веб-сайт или Embed"
 
@@ -2083,7 +2085,7 @@ msgstr "Сотоническая версия"
 msgid "add media item"
 msgstr "добавить материал"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:20
 msgid "block"
 msgstr "блок"
 
@@ -2141,7 +2143,7 @@ msgid "modified by"
 msgstr "изменённый"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:16
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "name"
 msgstr "имя"
 
@@ -2244,6 +2246,10 @@ msgstr "В этих категориях нет страниц."
 msgid "Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove categories."
 msgstr "Используйте кнопку <i class=\"glyphicon glyphicon-cog\"></i> для добавления или удаления категорий."
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
+msgid "A copy of all email is sent to"
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
 msgstr "Добавить параметр"
@@ -2252,10 +2258,18 @@ msgstr "Добавить параметр"
 msgid "Add key"
 msgstr "Добавить ключ"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
+msgid "All email is sent to"
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
 msgid "Alternative names"
 msgstr "Альтернативные имена"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:70./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:109
+msgid "Always use SSL"
+msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
@@ -2265,23 +2279,59 @@ msgstr "Вы уверены, что желаете удалить парамет
 msgid "Certificates provided by SSL modules"
 msgstr "Сертификаты, предоставляемые модулями SSL"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
 msgid "Config"
 msgstr "Параметры"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:31
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:48
 msgid "Configuration"
 msgstr "Конфигурация"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:132
+msgid "Defaults to the hostname of the site."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
+msgid "Domain for all generated from- and envelop-addresses."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
+msgid "E-mail override"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+msgid "Email FROM"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+msgid "Email configuration"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:8
+msgid "Email configuration and settings"
+msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:13
 msgid "Enable <strong>mod_ssl_letsencrypt</strong> to request free SSL certificates from"
 msgstr "Включите <strong>mod_ssl_letsencrypt</strong> для запроса бесплатных SSL-сертификатов от"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
+msgid "Here you can see all the email configurations and send test emails."
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
 msgid "Hostname"
 msgstr "Имя хоста"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:133
+msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
+msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
+msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:15./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -2311,25 +2361,85 @@ msgstr "Только администраторы могут удалять па
 msgid "Only an administrator can add configuration keys."
 msgstr "Только администраторы могут добавлять параметры."
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:102
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:12
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:114./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
+msgid "Password"
+msgstr "Пароль"
+
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
 msgstr "Пожалуйста, укажите имя модуля, ключ и значение для нового параметра."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:51./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
+msgid "Relay hostname"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:90
+msgid "Relay port"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:127
+msgid "SMTP Hostname"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
 msgid "SSL Certificates"
 msgstr "SSL-сертификаты"
 
-#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl.tpl:6
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:6
 msgid "Self signed certificate"
 msgstr "Самоподписанный сертификат"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
+#: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
+#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
+#: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
+#: apps/zotonic_mod_contact/priv/templates/contact.tpl:27
+msgid "Send"
+msgstr "Отправить"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:168
+msgid "Send a test email"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:173
+msgid "Send a test email or check the status of an email address."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:4
+msgid "Sent an email to"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
+msgid "Sent email to"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:7
+msgid "Show log for message"
+msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
 msgid "System Configuration"
 msgstr "Системная конфигурация"
 
+#: apps/zotonic_mod_admin_config/priv/templates/email_test.tpl:3
+msgid "Test email from"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:42
+msgid "The Zotonic system configuration is set to use a SMTP relay."
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
 msgstr "Параметр уже существует, пожалуйста, задайте другое имя ключа."
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:143
+msgid "The default FROM address for emails. Defaults to"
+msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
@@ -2339,7 +2449,7 @@ msgstr "Каталог по умолчанию для всех сайтов-се
 msgid "This can't be undone. The configuration key will be lost forever."
 msgstr "Это действие нельзя отменить. Ключ конфигурации будет безвозвратно удален."
 
-#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl.tpl:15
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:15
 msgid "This certificate is generated and signed by Zotonic. It will be used if no other certificates are available."
 msgstr "Этот сертификат генерируется и подписывается компанией Zotonic. Он будет использоваться, если другие сертификаты недоступны."
 
@@ -2347,9 +2457,29 @@ msgstr "Этот сертификат генерируется и подписы
 msgid "This is a list of the certificates provided by modules and the system. The first certificate will be used."
 msgstr "Это список сертификатов, предоставляемых модулями и системой. Будет использован первый сертификат."
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:17./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:25./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
+msgid "This is a setting in the system configuration and can not be overruled."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:76
+msgid "This is useful if this server is not allowed to send email or to use servers with a better reputation."
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:31
 msgid "This module doesn’t supply a certificate."
 msgstr "Этот модуль не предоставляет сертификат."
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:47./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:80
+msgid "Use relay to send email"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:63./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:96
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
+#: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:11
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
+msgid "Username"
+msgstr "Имя пользователя"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:16
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:37
@@ -2360,38 +2490,55 @@ msgstr "действительный до"
 msgid "Value"
 msgstr "Значение"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:184./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
+msgid "View email status"
+msgstr "Просмотр статуса электронной почты"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:159
+msgid "You must be an administrator to view or change the email configuration."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
+msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:181
+msgid "test@example.com"
+msgstr ""
+
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
 msgstr "Добавьте страницы или нажмите на страницу в меню."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:59
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:64
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:27
 msgid "Language"
 msgstr "Язык"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:31./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:42
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:32./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:43
 msgid "Loading ..."
 msgstr "Загрузка..."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:105./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:110./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "Save &amp; view"
 msgstr "Сохранить &amp; вид"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:125
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:127
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr " Есть несохраненные изменения. Ты уверен, что хочешь уйти без спасения?"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:75
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:76
 msgid "This page"
 msgstr "эта страница"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:123
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:125
 msgid "Yes, discard changes"
 msgstr "Да, отбрасывайте изменения"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:43
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:48
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "до"
@@ -2448,8 +2595,8 @@ msgid "Click OK to log on as this user. You will be redirected to the home page 
 msgstr "Нажмите OK, чтобы войти в систему под этим пользователем. Вы будете перенаправлены на главную страницу, если у этого пользователя нет прав доступа к системе администрирования."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
-msgid "Click on the link below to confirm that this e-mail address is correct, when clicking doesn't work then you can copy and paste the complete address to your browser."
-msgstr "Нажмите на ссылку ниже, чтобы подтвердить, что этот адрес электронной почты является правильным, когда нажатие не работает, то вы можете скопировать и вставить полный адрес в ваш браузер."
+msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
+msgstr ""
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:10
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
@@ -2518,8 +2665,8 @@ msgid "Home"
 msgstr "Домой"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:20
-msgid "If you don't know this site then you can ignore this e-mail. Maybe someone made an error typing his or her e-mail address."
-msgstr "Если вы не знаете этот сайт, то можете проигнорировать это письмо. Может быть, кто-то допустил ошибку, набрав свой адрес электронной почты."
+msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
+msgstr ""
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:33
 msgid "Leave empty to not change the password."
@@ -2574,16 +2721,9 @@ msgstr "Только администратор может удалять уче
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "Только администратор или сам пользователь может устанавливать пароль."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:12
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:14./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
-msgid "Password"
-msgstr "Пароль"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
-msgid "Please verify your e-mail address"
-msgstr "Пожалуйста, проверьте ваш адрес электронной почты"
+msgid "Please verify your email address"
+msgstr ""
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
 msgid "Random secure password:"
@@ -2592,13 +2732,6 @@ msgstr "Случайный пароль:"
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:7
 msgid "Search users"
 msgstr "Пользователи сервиса поиска"
-
-#: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
-#: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
-#: apps/zotonic_mod_contact/priv/templates/contact.tpl:27
-msgid "Send"
-msgstr "Отправить"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:23./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:46
 msgid "Send verification e-mail"
@@ -2665,8 +2798,8 @@ msgid "This can't be undone. The username and password will be lost forever."
 msgstr "Это действие нельзя отменить. Имя и пароль будут безвозвратно удалены."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
-msgid "This e-mail address was added to your personal information on"
-msgstr "Этот адрес электронной почты был добавлен в вашу личную информацию по адресу"
+msgid "This email address was added to your personal information on"
+msgstr ""
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:154
 msgid "This is not a valid e-mail address."
@@ -2714,13 +2847,6 @@ msgstr "аккаунт пользователя"
 msgid "User actions"
 msgstr "действия пользователя"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
-#: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:5./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:8
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
-msgid "Username"
-msgstr "Имя пользователя"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:6
 msgid "Username / password"
 msgstr "Логин / пароль"
@@ -2761,10 +2887,6 @@ msgstr "Проверить адрес |"
 msgid "Verifying..."
 msgstr "Проверяю..."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
-msgid "View email status"
-msgstr "Просмотр статуса электронной почты"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
 msgstr "Когда вы добавляете учетные данные к человеку, он становится пользователем. Человек или машина может войти с этими учетными данными и выполнить действия в вашей системе Zotonic.<br/><br/>То, что может сделать пользователь, зависит от групп, в которые он входит."
@@ -2798,8 +2920,8 @@ msgid "You need to be an administrator to add users."
 msgstr "Вы должны быть администратором для добавления пользователей."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
-msgid "You receive this e-mail because you or someone else requested verification of your e-mail address. You or the someone else either entered your e-mail address. You will not receive any additional e-mails because of this request."
-msgstr "Вы получили это электронное сообщение, потому что Вы или кто-то другой запросили подтверждение Вашего электронного адреса. Вы или кто-то другой ввели свой адрес электронной почты. В связи с этим запросом Вы не будете получать никаких дополнительных электронных писем."
+msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
+msgstr ""
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
@@ -2958,7 +3080,7 @@ msgstr "Включить"
 msgid "Configure"
 msgstr "Настройка"
 
-#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:113./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:121
+#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:114
 msgid "Could not find the module."
 msgstr "Не смог найти модуль."
 
@@ -2990,7 +3112,7 @@ msgstr "Вы все еще хотите активировать модуль"
 msgid "Do you still want to deactivate the module"
 msgstr "Вы все еще хотите отключить модуль."
 
-#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:62./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:87
+#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:62./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:89
 msgid "Module dependencies"
 msgstr "Зависимости модуля"
 
@@ -3051,6 +3173,7 @@ msgid "All page connections"
 msgstr "Все соединения страницы"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:118
 msgid "Are you sure you want to delete"
 msgstr "Вы уверены, что хотите удалить"
 
@@ -3138,7 +3261,7 @@ msgstr "Обзор соединений на странице"
 msgid "Page connections with the predicate"
 msgstr "Соединения страницы с предикатом"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:191
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:193
 msgid "Predicates"
 msgstr "Предикаты"
 
@@ -3393,8 +3516,8 @@ msgid "Access denied"
 msgstr "Доступ запрещен"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:45
-msgid "Already Connected"
-msgstr "Уже подключен"
+msgid "Already connected"
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 msgid "Authenticated"
@@ -3408,7 +3531,7 @@ msgstr "Аутентификация была проведена с"
 msgid "Authorizing..."
 msgstr "Разрешаю..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:84./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:63./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
 msgstr "Вернуться к форме входа"
 
@@ -3424,11 +3547,11 @@ msgstr "Изменить пароль и войти"
 msgid "Change your permissions"
 msgstr "Изменить разрешения"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:59./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:75
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:60./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:76
 msgid "Check your email"
 msgstr "Проверьте свой e-mail!"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:22
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:23
 msgid "Checking the reset code…"
 msgstr "Проверка кода сброса…."
 
@@ -3436,13 +3559,13 @@ msgstr "Проверка кода сброса…."
 msgid "Click on the link below to enter a new password. When clicking doesn't work, please copy and paste the whole link."
 msgstr "Нажмите на ссылку ниже, чтобы ввести новый пароль. Если нажатие не работает, пожалуйста, скопируйте и вставьте всю ссылку."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
-msgid "Close Window"
-msgstr "Закрыть окно"
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:7
 msgid "Close this window and log in if you are already a user of"
 msgstr "Закройте это окно и войдите в систему, если вы уже являетесь пользователем"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
+msgid "Close window"
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -3455,8 +3578,8 @@ msgid "Confirmation failure"
 msgstr "Ошибка подтверждения"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
-msgid "Either the email or the password you entered is incorrect. Please check your entry and try again."
-msgstr "Введенный вами адрес электронной почты или пароль неверны. Пожалуйста, проверьте вашу запись и попробуйте еще раз."
+msgid "Either the email or the password you entered is incorrect. Please try again."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
@@ -3479,13 +3602,13 @@ msgstr "Введите пароль"
 msgid "Enter the new password for your account"
 msgstr "Введите новый пароль для вашей учетной записи"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:2
-msgid "Enter your email address and we'll send you instructions how to reset your password."
-msgstr "Введите адрес электронной почты, и мы вышлем вам инструкции по сбросу пароля."
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:14
 msgid "Enter your email address or username"
 msgstr "Введите адрес электронной почты или имя пользователя"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:2
+msgid "Enter your email address to receive instructions on how to reset your password."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:118
@@ -3493,7 +3616,7 @@ msgstr "Введите адрес электронной почты или им�
 msgid "Error"
 msgstr "Ошибка"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:129
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:198
 msgid "External Services"
 msgstr "Внешние службы"
 
@@ -3514,15 +3637,15 @@ msgstr "возвращаться"
 msgid "Go to Modules"
 msgstr "Перейти к модулям"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:52
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53
 msgid "Go to the admin"
 msgstr "Обратиться к администратору"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:44
 msgid "Go to the home page"
 msgstr "Перейти на главную страницу"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:47
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:48
 msgid "Go to the your profile page"
 msgstr "Зайдите на страницу своего профиля"
 
@@ -3550,7 +3673,7 @@ msgstr "Я хочу создать новый аккаунт"
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
 msgstr "Если вы не запросили сброс пароля, вы можете безопасно проигнорировать это письмо. Возможно, кто-то допустил ошибку, набрав свой адрес электронной почты."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:61./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "Если Вы не получите письмо в течение нескольких минут, проверьте папку \"Спам\"."
 
@@ -3558,13 +3681,17 @@ msgstr "Если Вы не получите письмо в течение не�
 msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when signing up."
 msgstr "Если вы думаете, что у вас есть аккаунт и вы ожидали этого письма, пожалуйста, попробуйте еще раз использовать адрес электронной почты, который вы указали при регистрации."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:76
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "В сообщении указаны инструкции по активации вашей учетной записи."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:135./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "Держите меня в курсе"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
+msgid "Log on with"
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:44./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:48
@@ -3574,6 +3701,11 @@ msgstr "Минимальные символы:"
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:5./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:5./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:12
 msgid "Need help signing in?"
 msgstr "Нужна помощь в регистрации?"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:156
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
+msgid "Next"
+msgstr "Следующий"
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:3
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:3./apps/zotonic_mod_base/priv/templates/error.403.tpl:18./apps/zotonic_mod_base/priv/templates/error.tpl:7
@@ -3585,7 +3717,11 @@ msgstr "Нет доступа"
 msgid "One moment please"
 msgstr "Одну минуту, пожалуйста"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:64
+msgid "Other username or email"
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "Пасскод"
 
@@ -3626,15 +3762,15 @@ msgstr "Повторите ваш пароль"
 msgid "Reset password and Sign in"
 msgstr "Сбросить пароль и войти"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:19./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
 msgid "Reset your password"
 msgstr "Сброс пароля"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:69
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "Send Verification Message"
 msgstr "Получить код проверки"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:44./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:150./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "Вход"
@@ -3664,7 +3800,7 @@ msgstr "Что-то пошло не так"
 msgid "Something went wrong, please try again later."
 msgstr "Что-то пошло не так, пожалуйста, попробуйте позже."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:81
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:82
 msgid "Sorry, could not send the verification message."
 msgstr "Извините, не удалось отправить сообщение для проверки."
 
@@ -3676,13 +3812,17 @@ msgstr "Простите, слишком много попыток"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Извините, ваш код для сброса пароля неверен или истек"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133
+msgid "Stay logged on unless I log off."
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
 msgstr "Адрес e-mail, соответствующий вашей учетной записи:"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
-msgid "The new password must be different from the previous one. Please check your entry and try again."
-msgstr "Новый пароль должен отличаться от предыдущего. Пожалуйста, проверьте вашу запись и попробуйте еще раз."
+msgid "The new password must be different from the previous one. Please and try again."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -3697,8 +3837,8 @@ msgid "The two passwords should be equal. Please retype them."
 msgstr "Пароли должны совпадать. Пожалуйста, введите их снова."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
-msgid "The two-factor authentication passcode did not match. Please check your entry and try again."
-msgstr "Двухфакторный код аутентификации не совпал. Пожалуйста, проверьте вашу запись и попробуйте еще раз."
+msgid "The two-factor authentication passcode did not match. Please try again."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "There was a problem authenticating with"
@@ -3718,7 +3858,7 @@ msgstr "Для просмотра этой страницы необходимо
 msgid "Too many retries."
 msgstr "Слишком много попыток."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "двухфакторный пароль"
 
@@ -3726,15 +3866,19 @@ msgstr "двухфакторный пароль"
 msgid "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "Используйте некоторые не алфавитные символы или цифры, чтобы затруднить догадку."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:66
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:52./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:68
+msgid "Username or email"
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
 msgid "Verify your account"
 msgstr "Проверьте свой аккаунт"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:82
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
 msgstr "Похоже, что у нас нет действительного адреса электронной почты или другого электронного адреса для связи с вами."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:60
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:61
 msgid "We have sent an email with a link to reset your password to"
 msgstr "Мы отправили письмо по электронной почте со ссылкой для сброса вашего пароля на"
 
@@ -3742,9 +3886,13 @@ msgstr "Мы отправили письмо по электронной поч�
 msgid "You are about to create a new account."
 msgstr "Вы собираетесь создать новый аккаунт."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:39
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:40
 msgid "You are now signed in."
 msgstr "Теперь вы подписаны."
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
+msgid "You can log in using the following external service"
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:37
 msgid "You have to share your email address to be able to sign in."
@@ -3760,14 +3908,14 @@ msgid "You need to be allowed to edit the system configuration to view or change
 msgstr "Для просмотра или изменения настроенных Клавиш приложений необходимо иметь возможность редактировать конфигурацию системы."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:36
-msgid "You receive this email because you or someone else requested a password reset for your account. You or the someone else either entered your username or email address. You will not receive any additional emails because of this request."
-msgstr "Вы получили это электронное сообщение, потому что вы или кто-то другой запросили сброс пароля для вашего аккаунта. Вы или кто-то другой ввели ваше имя пользователя или адрес электронной почты. В связи с этим запросом Вы не будете получать никаких дополнительных электронных писем."
+msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
 msgstr "Тебе нужно будет создать новую."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "Ты почти закончил! Чтобы удостовериться, что вы действительно вы, мы просим вас подтвердить вашу учетную запись с вашего адреса электронной почты."
 
@@ -3787,7 +3935,7 @@ msgstr "Ваш адрес электронной почты или имя пол
 msgid "Your new password is too short."
 msgstr "Вы указали слишком короткий пароль."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:37
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38
 msgid "Your password has been reset"
 msgstr "Ваш пароль был сброшен"
 
@@ -3804,10 +3952,18 @@ msgstr "Ваш пароль слишком короткий."
 msgid "an hour"
 msgstr "час"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
+msgid "external service"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "или"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:103
+msgid "or you can enter the password that you have for"
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "the service"
@@ -4431,9 +4587,13 @@ msgstr "Здесь в режиме реального времени отобр�
 msgid "Bindings"
 msgstr "Переплеты"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:24./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:31./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:58
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
 msgstr "Контроллер"
+
+#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:45
+msgid "Could not fetch tracer output, please try again."
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
 msgid "Development"
@@ -4475,7 +4635,7 @@ msgstr "Событие"
 msgid "Explain"
 msgstr "Объяснить"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:30
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
 msgid "Final dispatch"
 msgstr "Окончательная отправка"
 
@@ -4487,7 +4647,7 @@ msgstr "Найти"
 msgid "Find a template, check which template will be selected"
 msgstr "Найдите шаблон, проверьте, какой из них будет выбран."
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
 msgid "Forced switch of protocol to"
 msgstr "Принудительное переключение протокола на"
 
@@ -4507,7 +4667,7 @@ msgstr "Введение"
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "Перезагрузка измененных CSS-файлов в реальном времени. Перезагрузка страницы по изменению шаблонов или JavaScript."
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:67./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
 msgid "Location"
 msgstr "Местоположение"
 
@@ -4515,15 +4675,15 @@ msgstr "Местоположение"
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Соответствие URL запроса, отображение соответствующего правила отправки."
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:38./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:41
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "New host"
 msgstr "Новый хозяин"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:46./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:48./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
 msgid "New path"
 msgstr "Новый путь"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
 msgid "No matching dispatch rule found"
 msgstr "Правило отправки не найдено"
 
@@ -4539,11 +4699,11 @@ msgstr "Наблюдатели"
 msgid "Optional category for catinclude"
 msgstr "Дополнительная категория для котинусов"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
 msgid "Options"
 msgstr "Опции"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:71./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:77
 msgid "Permanent redirect"
 msgstr "Постоянная переадресация"
 
@@ -4551,7 +4711,7 @@ msgstr "Постоянная переадресация"
 msgid "Recompile Templates"
 msgstr "Пересобрать шаблоны"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:74
 msgid "Redirect"
 msgstr "Перенаправить"
 
@@ -4583,7 +4743,7 @@ msgstr "Начать согласование правил отправки"
 msgid "Subscribers"
 msgstr "Абоненты"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:37
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
 msgid "Switch protocol to"
 msgstr "Переключить протокол на"
 
@@ -4595,7 +4755,7 @@ msgstr "Отладка шаблона"
 msgid "Template path"
 msgstr "Шаблонная дорожка"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "This resource is unknown or does not have a URI"
 msgstr "Этот ресурс неизвестен или не имеет URI"
 
@@ -4607,7 +4767,7 @@ msgstr "Инструменты и настройки, полезные для р
 msgid "Trace all database queries for the current session"
 msgstr "Отслеживать все запросы к БД для текущей сессии."
 
-#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:56
+#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:48
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "Вы не имеете права использовать отладку диспетчерской службы."
 
@@ -4615,27 +4775,27 @@ msgstr "Вы не имеете права использовать отладк�
 msgid "You are not allowed to use the template debugging."
 msgstr "Вы не имеете права использовать отладку шаблонов."
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:57
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
 msgid "found dispatch rule"
 msgstr "найденное отправительское правило"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 msgid "found no match"
 msgstr "не найдено совпадений"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
 msgid "found resource id"
 msgstr "идентификатор найденного ресурса"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
 msgid "notification"
 msgstr "сообщение"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:48
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
 msgid "notification, checking first return"
 msgstr "уведомление, проверка первого возврата"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:68
 msgid "redirects"
 msgstr "перенаправляет"
 
@@ -4707,31 +4867,27 @@ msgstr "Маленький"
 msgid "Website. Leave empty for media link"
 msgstr "Веб-сайт. Оставить пустым для медиа-ссылки"
 
-#: apps/zotonic_mod_email_dkim/src/mod_email_dkim.erl:43
-msgid "DKIM e-mail setup"
-msgstr "настройка электронной почты DKIM"
-
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:6
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
 msgid "DKIM e-mail signing setup"
 msgstr "Настройка подписания электронной почты DKIM"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:17
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:22
 msgid "The DNS entry should contain the following information:"
 msgstr "Запись в DNS должна содержать следующую информацию:"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:10
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:15
 msgid "The location of these key files are the following:"
 msgstr "Расположение этих ключевых файлов выглядит следующим образом:"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:9
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:14
 msgid "The module has generated an RSA keypair for you which will be used when signing outgoing emails."
 msgstr "Модуль сгенерировал для вас пару RSA-ключей, которая будет использоваться при подписании исходящих писем."
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:16
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:21
 msgid "To finalize the DKIM configuration, you need to add an DNS entry TXT record to the following domain:"
 msgstr "Чтобы завершить настройку DKIM, необходимо добавить запись TXT DNS в следующем домене:"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:22
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:27
 msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
 msgstr "Когда все будет установлено, вы можете использовать <a href=\"http://dkimcore.org/c/keycheck\">вебсайт DKIM-клавиатуры</a> для проверки записи DKIM вашего домена."
 
@@ -5280,7 +5436,7 @@ msgstr "Июня"
 msgid "L10N Configuration"
 msgstr "L10N Конфигурация"
 
-#: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:7./apps/zotonic_mod_l10n/src/mod_l10n.erl:208
+#: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:7./apps/zotonic_mod_l10n/src/mod_l10n.erl:210
 msgid "Localization"
 msgstr "Локализация"
 
@@ -5417,7 +5573,7 @@ msgstr "Вы подключили вашу учетную запись <strong>L
 msgid "Your LinkedIn Developer Network"
 msgstr "Ваша сеть разработчиков LinkedIn"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:131
 msgid "Bounce"
 msgstr "Возвращено"
 
@@ -5434,7 +5590,7 @@ msgstr "Журнал e-mail"
 msgid "Email status"
 msgstr "Статус электронной почты"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:17./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:36
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:17
 msgid "Failed"
@@ -5444,7 +5600,7 @@ msgstr "Неудачно"
 msgid "Fatal"
 msgstr "Фатальная ошибка"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:156./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
 msgid "Filter"
 msgstr "Фильтр"
 
@@ -5492,7 +5648,7 @@ msgstr "Последние сообщения"
 msgid "Most recent user interface events"
 msgstr "Последние события в пользовательском интерфейсе"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:59./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:174./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:59./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
 msgid "No log messages."
 msgstr "Отсутствуют сообщения в журнале."
 
@@ -5500,15 +5656,19 @@ msgstr "Отсутствуют сообщения в журнале."
 msgid "Other"
 msgstr "Прочее"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:131
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
 msgid "Received"
 msgstr "Получено"
+
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
+msgid "Relayed"
+msgstr ""
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
 msgid "Resources with email identity"
 msgstr "Ресурсы с электронной почтой"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Retry"
 msgstr "Повторная попытка"
 
@@ -6303,15 +6463,15 @@ msgstr "когда ты не хочешь больше получать почт
 msgid "with your e-mail address"
 msgstr "с вашим электронным адресом"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:22
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:30
 msgid "Add after"
 msgstr "Добавить впереди"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:20
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:28
 msgid "Add before"
 msgstr "Добавить сзади"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:21
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:29
 msgid "Add below"
 msgstr "Добавить внутри"
 
@@ -6343,7 +6503,7 @@ msgstr "COPY"
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Нажмите на <strong>Добавить пункт меню</strong> или <strong>пункт меню</strong> , чтобы добавить страницы."
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:25
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr "Копировать"
@@ -6380,7 +6540,7 @@ msgstr "Иерархия для"
 msgid "Menu"
 msgstr "Меню"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:27
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
 msgid "Remove"
 msgstr "Удалить"
@@ -6389,7 +6549,11 @@ msgstr "Удалить"
 msgid "Sorry, can’t copy that page."
 msgstr "Простите, не могу скопировать эту страницу."
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:157
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
+msgid "THIS CAN NOT BE UNDONE!"
+msgstr ""
+
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:166
 msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr "Этот пункт уже находится в иерархии. Каждый пункт может появиться только один раз."
 
@@ -6397,6 +6561,10 @@ msgstr "Этот пункт уже находится в иерархии. Ка�
 #: apps/zotonic_mod_search/src/support/search_query.erl:789
 msgid "Unknown category"
 msgstr "Неизвестная категория"
+
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
+msgid "and all indented items below it?"
+msgstr ""
 
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
@@ -6414,7 +6582,7 @@ msgstr "API Ключ можно найти на"
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "Попытка исправить встроенные видео, для которых ранее не удавалось встроить OEmbed."
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:274
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:279
 msgid "Attempting to fix ~p videos."
 msgstr "Попытка исправить ~p видео."
 
@@ -6426,7 +6594,7 @@ msgstr "Не удалось вставить медиа-элемент с код
 msgid "Fix embedded videos"
 msgstr "Исправить встроенное видео"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:271
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:276
 msgid "No embedded videos found which need fixing."
 msgstr "Встроенное видео не найдено, которое нуждается в исправлении."
 
@@ -6434,11 +6602,11 @@ msgstr "Встроенное видео не найдено, которое ну
 msgid "Save Embedly Key"
 msgstr "Сохранить ключ Эмбедли"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:283
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:288
 msgid "Saved the Embedly settings."
 msgstr "Сохранены настройки Embedly."
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:285
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:290
 msgid "You don't have permission to change the Embedly settings."
 msgstr "У вас нет разрешения изменять настройки Embedly."
 
@@ -6750,15 +6918,113 @@ msgstr "входить в систему"
 msgid "sign up for a username and password"
 msgstr "зарегистрироваться под именем пользователя и паролем"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:5
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:104
+msgid "Building Zotonic in the background..."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:55
+msgid "Error during fetch from version control."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:73
+msgid "Error running Zotonic update"
+msgstr ""
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:87
+msgid "Error running site update"
+msgstr ""
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:48
+msgid "Fetching updates from the version control..."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:68./apps/zotonic_mod_site_update/src/mod_site_update.erl:82
+msgid "Fetching updates..."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
+msgid "Perform a version control (git/mercurial) update this site."
+msgstr "Выполните обновление версии (git/mercurial) этого сайта."
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:5
+msgid "Perform a version update of Zotonic (through git)"
+msgstr "Выполните обновление версии Zotonic (через git)."
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:53
+msgid "Ready with fetch from version control."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
+msgid "Rebuild Zotonic"
+msgstr "Перестроить зотонический"
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:14
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:14
+msgid "Recompile changed Erlang files in the background"
+msgstr "Перекомпилировать измененные файлы Erlang в фоновом режиме"
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
+msgid "Site update API token"
+msgstr ""
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:9
+msgid "Site update is not available as the site does not use a known version control system, like git."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:94./apps/zotonic_mod_site_update/src/mod_site_update.erl:106
+msgid "Sorry this can only be run from the Zotonic status site"
+msgstr ""
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:58
+msgid "Sorry, this site is not from a known version control system"
+msgstr ""
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
+msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
+msgid "To run the webhook update, configure your service to POST to the following URL:"
+msgstr ""
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:90
+msgid "Unknown site or no version control folder present."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
+msgid "Update Zotonic"
+msgstr "Обновление Zotonic"
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
+msgid "Update site"
+msgstr ""
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
+msgid "Update the site and templates from the version control system."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:76
+msgid "Zotonic has not been checked out using version control."
+msgstr ""
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
+msgid "update"
+msgstr "обновление"
+
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:5
 msgid "Certificate Authority"
 msgstr "центр сертификации"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:17
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:17
 msgid "This certificate is located in"
 msgstr "Этот сертификат находится в"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:11
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:11
 msgid "This certificate is provided by a certificate authority."
 msgstr "Данный сертификат предоставляется центром сертификации."
 
@@ -6774,7 +7040,7 @@ msgstr "Проверьте следующие урны:"
 msgid "Could not start fetching the SSL certificate. Try again later."
 msgstr "Не смог начать получать SSL-сертификат. Попробуйте позже."
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:47
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:47
 msgid "If there are problems requesting a Let’s Encrypt certificate then check:"
 msgstr "Если есть проблемы с запросом сертификата \"Давайте зашифровать\", проверьте:"
 
@@ -6782,7 +7048,7 @@ msgstr "Если есть проблемы с запросом сертифик�
 msgid "If you want different hostnames in the certificate then request a new certificate below."
 msgstr "Если вы хотите, чтобы в сертификате были разные имена узлов, то запросите новый сертификат ниже."
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:10
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:10
 msgid "Let’s Encrypt Certificate"
 msgstr "Давайте зашифруем сертификат"
 
@@ -6790,7 +7056,7 @@ msgstr "Давайте зашифруем сертификат"
 msgid "Let’s Encrypt certificate request was successful!"
 msgstr "Запрос сертификата Encrypt прошел успешно!"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:13
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:13
 msgid "Let’s Encrypt provides free SSL certificates for websites. Here you can request such a certificate."
 msgstr "Давайте Encrypt предоставляет бесплатные SSL-сертификаты для веб-сайтов. Здесь вы можете запросить такой сертификат."
 
@@ -6798,11 +7064,11 @@ msgstr "Давайте Encrypt предоставляет бесплатные S
 msgid "Make sure your hostname is reachable and resolves to a routable address."
 msgstr "Убедитесь, что имя хоста доступно и преобразуется в адрес с маршрутизацией."
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:42
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:42
 msgid "Only admnistrators can request certificates."
 msgstr "Сертификаты могут запрашиваться только адмистраторами."
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:15
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:15
 msgid "Read more at the Let’s Encrypt website"
 msgstr "Узнайте больше на сайте \"Давайте шифровать\"."
 
@@ -6838,15 +7104,15 @@ msgstr "Статус сертификата будет обновлен по о�
 msgid "The checked hostnames will be added to the certificate."
 msgstr "Проверенные имена хостов будут добавлены в сертификат."
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:37
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:37
 msgid "The errors above need to be corrected before a certificate can be requested."
 msgstr "Вышеуказанные ошибки необходимо исправить, прежде чем запрашивать сертификат."
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:22
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:22
 msgid "The port for HTTP requests must be 80, it is now"
 msgstr "Порт для HTTP-запросов должен быть 80, это сейчас"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:29
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:29
 msgid "The port for HTTPS requests must be 443, it is now"
 msgstr "Порт для HTTPS запросов должен быть 443, это сейчас"
 
@@ -6862,11 +7128,11 @@ msgstr "Нет никакого сертификата от \"Давайте ш�
 msgid "This might take a while, hang on!"
 msgstr "Это может занять некоторое время, подожди!"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:23
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:23
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
 msgstr "Вы можете изменить это, установив <tt>порт</tt> в конфигурационном файле <tt>zotonic.config</tt> ."
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:30
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:30
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
 msgstr "Вы можете изменить это, установив <tt>ssl_port</tt> в конфигурационном файле <tt>zotonic.config</tt> ."
 
@@ -6878,7 +7144,7 @@ msgstr "Для запроса сертификатов необходимо бы
 msgid "not reachable or local IP"
 msgstr "недоступный или локальный IP"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:23
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
 msgstr "Добавить вопрос или блок"
 
@@ -6902,7 +7168,7 @@ msgstr "Добавить переход на страницу"
 msgid "Add question"
 msgstr "Добавить вопрос"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:22
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:36
 msgid "Add question after"
 msgstr "Добавить вопрос после"
 
@@ -6914,7 +7180,7 @@ msgstr "Добавляйте вопросы, добавляя блоки с по
 msgid "Aggregated results from all respondents (only results for multiple choice questions are shown)"
 msgstr "Агрегированные результаты по всем респондентам (показываются только результаты по вопросам с множественными вариантами ответа)."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:69
 msgid "Agree"
 msgstr "Согласиться"
 
@@ -6966,7 +7232,7 @@ msgstr "Кнопка"
 msgid "Button style"
 msgstr "Вид кнопки"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:109./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
 msgid "Button text"
 msgstr "Текст кнопки"
 
@@ -6978,7 +7244,7 @@ msgstr "Категория для выбора"
 msgid "Check the answer in the admin."
 msgstr "Проверить ответ в панели администратора."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:74
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76
 msgid "Chinese food is best for money"
 msgstr "Китайская еда лучше всего за деньги"
 
@@ -7015,7 +7281,7 @@ msgstr "Удалить страницу"
 msgid "Delete page jump"
 msgstr "Удалить прыжок страницы"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:23
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:37
 msgid "Delete question"
 msgstr "Удалить вопрос"
 
@@ -7023,11 +7289,11 @@ msgstr "Удалить вопрос"
 msgid "Disabled, hide the survey form"
 msgstr "Инвалиды, скрыть форму опроса"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:63
 msgid "Disagree"
 msgstr "Не согласен"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Do you like pea soup?"
 msgstr "Вы любите гороховый суп?"
 
@@ -7055,11 +7321,11 @@ msgstr "Конец вопросов"
 msgid "Example:"
 msgstr "Например:"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
 msgid "Explanation"
 msgstr "Объяснение"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:51./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:8./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:8./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
 msgid "False"
 msgstr "Ложь"
 
@@ -7083,7 +7349,7 @@ msgstr "Заполнить форму"
 msgid "Fill in the missing parts."
 msgstr "Заполните недостающие части."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:129
 msgid "First page in category"
 msgstr "Первая страница в категории"
 
@@ -7107,7 +7373,7 @@ msgstr "Обработка"
 msgid "Help about surveys"
 msgstr "Справка об анкетах"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
 msgstr "Скрыть от результатов"
 
@@ -7119,11 +7385,11 @@ msgstr "Прятать информацию о прогрессе"
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "Скрыть идентификатор пользователя или идентификатор браузера от экспорта результатов."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77
 msgid "I always eat with others"
 msgstr "Я всегда ем с другими"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:90
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
 msgid "I am"
 msgstr "я"
 
@@ -7131,7 +7397,7 @@ msgstr "я"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]."
 msgstr "Мне [age] лет. Я люблю [icecream=ванильное|клубничное|шоколадное|другое] мороженое, и мой любимый цвет — [color      ]."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75
 msgid "I like Chinese restaurants"
 msgstr "Мне нравятся китайские рестораны"
 
@@ -7183,7 +7449,7 @@ msgstr "Шкала Лайкерта"
 msgid "Long answer"
 msgstr "Длинный ответ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:117
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:119
 msgid "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 msgstr "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 
@@ -7195,7 +7461,7 @@ msgstr "Отправить заполненные анкеты по e-mail"
 msgid "Mail results to"
 msgstr "Результаты отправки по почте"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Match which answer fits best."
 msgstr "Сопоставьте наиболее подходящий вариант."
 
@@ -7227,15 +7493,11 @@ msgstr "Необходимый пропуск"
 msgid "New result:"
 msgstr "Новый результат:"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
-msgid "Next"
-msgstr "Следующий"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:129
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
 msgid "Next page in category"
 msgstr "Следующая страница в категории"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:43./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "Нет"
 
@@ -7259,7 +7521,7 @@ msgstr "Один ответ на каждую строку."
 msgid "Only accept images."
 msgstr "Принимать только изображения."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:125
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
 msgid "Options from a page category"
 msgstr "Параметры из категории страницы"
 
@@ -7279,7 +7541,7 @@ msgstr "Прошел"
 msgid "Percent"
 msgstr "Процент"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
 msgid "Please enter your information."
 msgstr "Пожалуйста, введите ваши данные."
 
@@ -7295,7 +7557,7 @@ msgstr "Пожалуйста, заполните все необходимые �
 msgid "Please make a choice."
 msgstr "Пожалуйста, сделайте выбор."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:133
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
 msgid "Please upload your file."
 msgstr "Пожалуйста, загрузите ваш файл."
 
@@ -7303,7 +7565,7 @@ msgstr "Пожалуйста, загрузите ваш файл."
 msgid "Please upload your image."
 msgstr "Пожалуйста, загрузите изображение."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
 msgid "Please write an essay."
 msgstr "Пожалуйста, напишите эссе."
 
@@ -7347,11 +7609,11 @@ msgstr "Викторина или вопрос теста"
 msgid "Randomize answers"
 msgstr "Случайные ответы"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:82
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84
 msgid "Red"
 msgstr "Красный"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
 msgid "Required, this question must be answered."
 msgstr "Ответ на вопрос обязателен."
 
@@ -7371,7 +7633,7 @@ msgstr "Сохранен"
 msgid "Score"
 msgstr "Оценка"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:128
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "Second page in category"
 msgstr "Вторая страница в категории"
 
@@ -7379,11 +7641,11 @@ msgstr "Вторая страница в категории"
 msgid "Select country"
 msgstr "Укажите страну"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:71
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
 msgid "Select which you agree with."
 msgstr "Выберите то, с чем вы согласны."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
 msgstr "Укажите вашу страну"
 
@@ -7443,11 +7705,11 @@ msgstr "Остановить"
 msgid "Stop the survey after this page. No questions are submitted."
 msgstr "Остановите опрос после этой страницы. Вопросы не задаются."
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:33./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
 msgstr "Полностью согласен(на)"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:23./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:59./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:60
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:59./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:60
 msgid "Strongly Disagree"
 msgstr "Полностью не согласен(на)"
 
@@ -7503,11 +7765,11 @@ msgstr "Спасибо за заполнение нашей анкеты."
 msgid "Thank you text only"
 msgstr "Только смс-ки."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:14
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "Thank you text."
 msgstr "Спасибо за сообщение."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "The earth is flat."
 msgstr "Земля плоская."
 
@@ -7535,7 +7797,7 @@ msgstr "Этот блок сигнализирует останов выполн
 msgid "This is a result for:"
 msgstr "Это результат для:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:14
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
 msgstr "Этот текст отображается после отправки опроса."
 
@@ -7559,7 +7821,7 @@ msgstr "Переключение между контурами"
 msgid "Totals"
 msgstr "Итоговый показатель"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:23./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:7./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:7./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:23./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:7./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:7./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
 msgid "True"
 msgstr "Истина"
 
@@ -7571,11 +7833,11 @@ msgstr "Истина/Ложь"
 msgid "Validation"
 msgstr "Проверка"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:83
 msgid "Wagner"
 msgstr "Вагнер"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
 msgid "Weasels make great pets."
 msgstr "Ласки — отличные питомцы."
 
@@ -7587,7 +7849,7 @@ msgstr "По окончании шоу"
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "Когда ни одно из условий не истинно, следующий за этим элементом вопрос будет на следующей странице."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "Да"
 
@@ -7627,7 +7889,7 @@ msgstr "Нужно указать название для каждого воп�
 msgid "Your result"
 msgstr "Ваш результат"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:93
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:95
 msgid "chocolate"
 msgstr "шоколад"
 
@@ -7635,7 +7897,7 @@ msgstr "шоколад"
 msgid "go to"
 msgstr "идти"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:94
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
 msgid "ice cream and my favorite color is"
 msgstr "мороженое и мой любимый цвет"
 
@@ -7679,7 +7941,7 @@ msgstr "вопрос == 1"
 msgid "select…"
 msgstr "выберите…"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:94
 msgid "years old. I like"
 msgstr "в возрасте. Мне нравится"
 
@@ -8083,11 +8345,11 @@ msgstr "Ваша страница управления приложениями 
 msgid "Converting"
 msgstr "Преобразование"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:185
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:186
 msgid "Vimeo Video"
 msgstr "Видеозапись"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:183
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:184
 msgid "Youtube Video"
 msgstr "Youtube Video"
 
@@ -8326,30 +8588,6 @@ msgstr "Вы можете посетить ваш сайт:"
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:1
 msgid "Your site is ready"
 msgstr "Ваш сайт готов"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
-msgid "Perform a version control (git/mercurial) update this site."
-msgstr "Выполните обновление версии (git/mercurial) этого сайта."
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:5
-msgid "Perform a version update of Zotonic (through git)"
-msgstr "Выполните обновление версии Zotonic (через git)."
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
-msgid "Rebuild Zotonic"
-msgstr "Перестроить зотонический"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:14
-msgid "Recompile changed Erlang files in the background"
-msgstr "Перекомпилировать измененные файлы Erlang в фоновом режиме"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
-msgid "Update Zotonic"
-msgstr "Обновление Zotonic"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
-msgid "update"
-msgstr "обновление"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:54
 msgid "Are you sure you want to restart the site:"
