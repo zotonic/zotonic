@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 10:54\n"
+"PO-Revision-Date: 2021-01-29 11:52\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -2248,7 +2248,7 @@ msgstr "Använda <i class=\"glyphicon glyphicon-cog\"> knappen för att lägga t
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
 msgid "A copy of all email is sent to"
-msgstr ""
+msgstr "En kopia av alla e-postmeddelanden skickas till"
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
@@ -2260,7 +2260,7 @@ msgstr "Lägg till nyckel"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
 msgid "All email is sent to"
-msgstr ""
+msgstr "All e-post skickas till"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
@@ -2269,7 +2269,7 @@ msgstr "Alternativa namn"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:70./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:109
 msgid "Always use SSL"
-msgstr ""
+msgstr "Använd alltid SSL"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
@@ -2290,27 +2290,27 @@ msgstr "Konfiguration"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:132
 msgid "Defaults to the hostname of the site."
-msgstr ""
+msgstr "Standardvärden för webbplatsens värdnamn."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
 msgid "Domain for all generated from- and envelop-addresses."
-msgstr ""
+msgstr "Domän för alla genererade från- och kuvertadresser."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
 msgid "E-mail override"
-msgstr ""
+msgstr "E-post åsidosättande"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 msgid "Email FROM"
-msgstr ""
+msgstr "E-post FRÅN"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
 msgid "Email configuration"
-msgstr ""
+msgstr "E-postkonfiguration"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:8
 msgid "Email configuration and settings"
-msgstr ""
+msgstr "E-postkonfiguration och inställningar"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:13
 msgid "Enable <strong>mod_ssl_letsencrypt</strong> to request free SSL certificates from"
@@ -2318,7 +2318,7 @@ msgstr "Aktivera <strong>mod_ssl_letsencrypt</strong> till begäran gratis SSL c
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
 msgid "Here you can see all the email configurations and send test emails."
-msgstr ""
+msgstr "Här kan du se alla e-postkonfigurationer och skicka test-e-postmeddelanden."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
@@ -2327,11 +2327,11 @@ msgstr "Värdnamn"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:133
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
-msgstr ""
+msgstr "Om du ändrar detta kan du behöva begära ett nytt SSL-certifikat som inkluderar detta värdnamn."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
-msgstr ""
+msgstr "Det är möjligt att fånga upp all e-post och skicka den till en enda adress. Konfigurera den här adressen här."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:15./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -2375,15 +2375,15 @@ msgstr "Vänligen fyll i modulen, nyckel och värde för den nya konfigurationen
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:51./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
 msgid "Relay hostname"
-msgstr ""
+msgstr "Relä värdnamn"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:90
 msgid "Relay port"
-msgstr ""
+msgstr "Reläport"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:127
 msgid "SMTP Hostname"
-msgstr ""
+msgstr "SMTP-värdnamn"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
 msgid "SSL Certificates"
@@ -2403,23 +2403,23 @@ msgstr "Skicka"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:168
 msgid "Send a test email"
-msgstr ""
+msgstr "Skicka ett test-e-postmeddelande"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:173
 msgid "Send a test email or check the status of an email address."
-msgstr ""
+msgstr "Skicka ett test-e-postmeddelande eller kontrollera status för en e-postadress."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:4
 msgid "Sent an email to"
-msgstr ""
+msgstr "Skickat ett mejl till"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
 msgid "Sent email to"
-msgstr ""
+msgstr "Skickat e-post till"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:7
 msgid "Show log for message"
-msgstr ""
+msgstr "Visa logg för meddelande"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
 msgid "System Configuration"
@@ -2427,11 +2427,11 @@ msgstr "Systemkonfiguration"
 
 #: apps/zotonic_mod_admin_config/priv/templates/email_test.tpl:3
 msgid "Test email from"
-msgstr ""
+msgstr "Testa e-post från"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:42
 msgid "The Zotonic system configuration is set to use a SMTP relay."
-msgstr ""
+msgstr "Zotonic-systemkonfigurationen är inställd på att använda ett SMTP-relä."
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
@@ -2439,7 +2439,7 @@ msgstr "Config-knappen finns redan, välj en annan nyckel namn."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:143
 msgid "The default FROM address for emails. Defaults to"
-msgstr ""
+msgstr "Standard-FROM-adressen för e-post. Standardvärden är"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
@@ -2459,11 +2459,11 @@ msgstr "Detta är en lista över de certifikat som tillhandahålls av moduler oc
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:17./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:25./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
 msgid "This is a setting in the system configuration and can not be overruled."
-msgstr ""
+msgstr "Detta är en inställning i systemkonfigurationen och kan inte åsidosättas."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:76
 msgid "This is useful if this server is not allowed to send email or to use servers with a better reputation."
-msgstr ""
+msgstr "Detta är användbart om den här servern inte får skicka e-post eller använda servrar med bättre rykte."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:31
 msgid "This module doesn’t supply a certificate."
@@ -2471,7 +2471,7 @@ msgstr "Denna modul inte tillhandahålla ett certifikat."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:47./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:80
 msgid "Use relay to send email"
-msgstr ""
+msgstr "Använd relä för att skicka e-post"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:63./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:96
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
@@ -2497,15 +2497,15 @@ msgstr "Visa e-poststatus"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:159
 msgid "You must be an administrator to view or change the email configuration."
-msgstr ""
+msgstr "Du måste vara administratör för att kunna se eller ändra e-postkonfigurationen."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
-msgstr ""
+msgstr "Zotonic skickar e-post med en inbyggd e-postserver. Du kan skicka e-postmeddelandet via ett externt relä."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:181
 msgid "test@example.com"
-msgstr ""
+msgstr "test@example.com"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
@@ -2596,7 +2596,7 @@ msgstr "Klicka OK för att logga in som den här användaren. Du kommer att omdi
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
 msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
-msgstr ""
+msgstr "Klicka på länken för att bekräfta din e-postadress. Kopiera hela länken och klistra in den i din webbläsare om det inte fungerar."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:10
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
@@ -2666,7 +2666,7 @@ msgstr "Hem"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:20
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
-msgstr ""
+msgstr "Om du inte känner till den här webbplatsen kan du ignorera det här e-postmeddelandet. Kanske gjorde någon ett fel."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:33
 msgid "Leave empty to not change the password."
@@ -2723,7 +2723,7 @@ msgstr "Endast en administratör eller användare själv kan ställa in ett lös
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
 msgid "Please verify your email address"
-msgstr ""
+msgstr "Vänligen verifiera din email adress"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
 msgid "Random secure password:"
@@ -2799,7 +2799,7 @@ msgstr "Detta kan inte ångras. Användarnamn och lösenord kommer att gå förl
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
 msgid "This email address was added to your personal information on"
-msgstr ""
+msgstr "Den här e-postadressen har lagts till i din personliga information den"
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:154
 msgid "This is not a valid e-mail address."
@@ -2921,7 +2921,7 @@ msgstr "Du måste vara administratör för att lägga till användare."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
-msgstr ""
+msgstr "Du fick det här e-postmeddelandet eftersom du verifierade din e-postadress. Du kommer inte att få några ytterligare e-postmeddelanden på grund av denna begäran."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
@@ -3517,7 +3517,7 @@ msgstr "Tillträde beviljas ej"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:45
 msgid "Already connected"
-msgstr ""
+msgstr "Redan ansluten"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 msgid "Authenticated"
@@ -3565,7 +3565,7 @@ msgstr "Stänga det här fönstret och logga in om du redan är en användare av
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
 msgid "Close window"
-msgstr ""
+msgstr "Stäng fönstret"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -3579,7 +3579,7 @@ msgstr "Bekräftelsefel"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Either the email or the password you entered is incorrect. Please try again."
-msgstr ""
+msgstr "Antingen e-postadressen eller lösenordet som du angav är felaktiga. Var god försök igen."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
@@ -3608,7 +3608,7 @@ msgstr "Ange din e-postadress eller användarnamn"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:2
 msgid "Enter your email address to receive instructions on how to reset your password."
-msgstr ""
+msgstr "Ange din e-postadress för att få instruktioner om hur du återställer ditt lösenord."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:118
@@ -3691,7 +3691,7 @@ msgstr "Håll mig inloggad"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
 msgid "Log on with"
-msgstr ""
+msgstr "Logga in med"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:44./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:48
@@ -3719,7 +3719,7 @@ msgstr "Ett ögonblick tack"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:64
 msgid "Other username or email"
-msgstr ""
+msgstr "Annat användarnamn eller e-post"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
@@ -3814,7 +3814,7 @@ msgstr "Tyvärr, din återställning av lösenord kod är okänd eller har löpt
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133
 msgid "Stay logged on unless I log off."
-msgstr ""
+msgstr "Håll dig inloggad såvida jag inte loggar av."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
@@ -3822,7 +3822,7 @@ msgstr "Den e-postadress som är associerad med ditt konto"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
 msgid "The new password must be different from the previous one. Please and try again."
-msgstr ""
+msgstr "Det nya lösenordet måste skilja sig från det föregående. Snälla och försök igen."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -3838,7 +3838,7 @@ msgstr "De två lösenorden bör vara lika. Vänligen skriv det."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
 msgid "The two-factor authentication passcode did not match. Please try again."
-msgstr ""
+msgstr "Tvåfaktorsautentiseringslösenordet matchade inte. Var god försök igen."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "There was a problem authenticating with"
@@ -3868,7 +3868,7 @@ msgstr "Använda några icke alfabetiska tecken eller siffror för att göra det
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:52./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:68
 msgid "Username or email"
-msgstr ""
+msgstr "Användarnamn eller e-mail"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
 msgid "Verify your account"
@@ -3892,7 +3892,7 @@ msgstr "Du är nu inloggad."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
 msgid "You can log in using the following external service"
-msgstr ""
+msgstr "Du kan logga in med följande externa tjänst"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:37
 msgid "You have to share your email address to be able to sign in."
@@ -3909,7 +3909,7 @@ msgstr "Du måste ha rätt att redigera systemkonfigurationen för att se eller 
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:36
 msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
-msgstr ""
+msgstr "Du fick det här e-postmeddelandet eftersom du begärde en lösenordsåterställning för ditt konto genom att ange ditt användarnamn eller e-postadress. Du kommer inte att få några ytterligare e-postmeddelanden på grund av denna begäran."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
@@ -3954,7 +3954,7 @@ msgstr "en timma"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
 msgid "external service"
-msgstr ""
+msgstr "extern tjänst"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
@@ -3963,7 +3963,7 @@ msgstr "eller"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:103
 msgid "or you can enter the password that you have for"
-msgstr ""
+msgstr "eller så kan du ange lösenordet du har till"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "the service"
@@ -4593,7 +4593,7 @@ msgstr "Kontroller"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:45
 msgid "Could not fetch tracer output, please try again."
-msgstr ""
+msgstr "Det gick inte att hämta spårningsutdata. Försök igen."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
 msgid "Development"
@@ -5662,7 +5662,7 @@ msgstr "Mottagen"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
 msgid "Relayed"
-msgstr ""
+msgstr "Vidarebefordrad"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
 msgid "Resources with email identity"
@@ -6551,7 +6551,7 @@ msgstr "Jag kan tyvärr inte kopiera den sidan."
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
 msgid "THIS CAN NOT BE UNDONE!"
-msgstr ""
+msgstr "DETTA KAN INTE GÖRAS OGJORT!"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:166
 msgid "This item is already in the hierarchy. Every item can only occur once."
@@ -6564,7 +6564,7 @@ msgstr "Okänd kategori"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
 msgid "and all indented items below it?"
-msgstr ""
+msgstr "och alla indragna föremål under det?"
 
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
@@ -6920,27 +6920,27 @@ msgstr "registrera dig för ett användarnamn och lösenord"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:104
 msgid "Building Zotonic in the background..."
-msgstr ""
+msgstr "Bygga Zotonic i bakgrunden ..."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:55
 msgid "Error during fetch from version control."
-msgstr ""
+msgstr "Fel vid hämtning från versionskontroll."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:73
 msgid "Error running Zotonic update"
-msgstr ""
+msgstr "Fel vid körning av Zotonic-uppdatering"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:87
 msgid "Error running site update"
-msgstr ""
+msgstr "Fel vid körning av webbplatsuppdatering"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:48
 msgid "Fetching updates from the version control..."
-msgstr ""
+msgstr "Hämtar uppdateringar från versionskontrollen ..."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:68./apps/zotonic_mod_site_update/src/mod_site_update.erl:82
 msgid "Fetching updates..."
-msgstr ""
+msgstr "Hämtar uppdateringar ..."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
@@ -6954,7 +6954,7 @@ msgstr "Utför en versionuppdatering av Zotonic (genom git)"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:53
 msgid "Ready with fetch from version control."
-msgstr ""
+msgstr "Redo med hämtning från versionskontroll."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
@@ -6968,31 +6968,31 @@ msgstr "Kompilera om ändrade Erlang-filer i bakgrunden"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
-msgstr ""
+msgstr "API-token för webbplatsuppdatering"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:9
 msgid "Site update is not available as the site does not use a known version control system, like git."
-msgstr ""
+msgstr "Webbplatsuppdatering är inte tillgänglig eftersom webbplatsen inte använder ett känt versionskontrollsystem, som git."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:94./apps/zotonic_mod_site_update/src/mod_site_update.erl:106
 msgid "Sorry this can only be run from the Zotonic status site"
-msgstr ""
+msgstr "Tyvärr kan detta bara köras från Zotonic-statuswebbplatsen"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:58
 msgid "Sorry, this site is not from a known version control system"
-msgstr ""
+msgstr "Tyvärr, den här webbplatsen kommer inte från ett känt versionskontrollsystem"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
-msgstr ""
+msgstr "Denna token används för att säkra webhook API-samtalet för uppdatering av denna webbplats på en kodtryckning till Github (eller liknande tjänster som BitBucket)."
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
 msgid "To run the webhook update, configure your service to POST to the following URL:"
-msgstr ""
+msgstr "För att köra webbhook-uppdateringen, konfigurera din tjänst till POST till följande URL:"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:90
 msgid "Unknown site or no version control folder present."
-msgstr ""
+msgstr "Okänd webbplats eller ingen mapp för versionskontroll närvarande."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
@@ -7001,15 +7001,15 @@ msgstr "Uppdatera Zotonic"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 msgid "Update site"
-msgstr ""
+msgstr "Uppdatera webbplats"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Update the site and templates from the version control system."
-msgstr ""
+msgstr "Uppdatera webbplatsen och mallarna från versionskontrollsystemet."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:76
 msgid "Zotonic has not been checked out using version control."
-msgstr ""
+msgstr "Zotonic har inte checkats ut med versionskontroll."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
