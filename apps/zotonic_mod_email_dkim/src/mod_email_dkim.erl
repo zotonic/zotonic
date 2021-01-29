@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2016 Arjan Scherpenisse
+%% @copyright 2016-2021 Arjan Scherpenisse
 %% @doc DKIM signing of outgoing emails
 
-%% Copyright 2016 Arjan Scherpenisse
+%% Copyright 2016-2021 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,26 +24,15 @@
 -mod_prio(500).
 
 -export([
-         init/1,
-         observe_admin_menu/3,
-         observe_dkim_admin_info/2
-        ]).
+    init/1,
+    observe_dkim_admin_info/2
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 init(Context) ->
     z_email_dkim:ensure_configured(Context),
     ok.
-
-observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [
-     #menu_item{id = admin_dkim,
-                parent = admin_modules,
-                label = ?__("DKIM e-mail setup", Context),
-                url = admin_dkim,
-                visiblecheck = {acl, use, mod_email_dkim}}
-     |Acc].
 
 observe_dkim_admin_info(dkim_admin_info, Context) ->
     m_email_dkim:admin_info(Context).
