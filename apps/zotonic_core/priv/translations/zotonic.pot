@@ -439,7 +439,7 @@ msgid "Not all user groups could be deleted."
 msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:72
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:41
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:41
 msgid "Not allowed."
 msgstr ""
 
@@ -496,8 +496,7 @@ msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:66
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:24
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:140
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:24./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:150
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:99
@@ -2323,6 +2322,10 @@ msgid ""
 "categories."
 msgstr ""
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
+msgid "A copy of all email is sent to"
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
 msgstr ""
@@ -2331,9 +2334,17 @@ msgstr ""
 msgid "Add key"
 msgstr ""
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
+msgid "All email is sent to"
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
 msgid "Alternative names"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:70./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:109
+msgid "Always use SSL"
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
@@ -2344,14 +2355,37 @@ msgstr ""
 msgid "Certificates provided by SSL modules"
 msgstr ""
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
 msgid "Config"
 msgstr ""
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:31
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:31
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:48
 msgid "Configuration"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:132
+msgid "Defaults to the hostname of the site."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
+msgid "Domain for all generated from- and envelop-addresses."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
+msgid "E-mail override"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+msgid "Email FROM"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+msgid "Email configuration"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:8
+msgid "Email configuration and settings"
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:13
@@ -2360,9 +2394,25 @@ msgid ""
 "from"
 msgstr ""
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
+msgid "Here you can see all the email configurations and send test emails."
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
 msgid "Hostname"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:133
+msgid ""
+"If you change this then you might need to request a new SSL certificate that "
+"includes this hostname."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
+msgid ""
+"It is possible to intercept all email and send it to a single address. "
+"Configure this address here."
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:15./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
@@ -2393,24 +2443,84 @@ msgstr ""
 msgid "Only an administrator can add configuration keys."
 msgstr ""
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:102
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:12
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:114./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
+msgid "Password"
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
 msgstr ""
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:51./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
+msgid "Relay hostname"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:90
+msgid "Relay port"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:127
+msgid "SMTP Hostname"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
 msgid "SSL Certificates"
 msgstr ""
 
-#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl.tpl:6
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:6
 msgid "Self signed certificate"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
+#: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
+#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
+#: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
+#: apps/zotonic_mod_contact/priv/templates/contact.tpl:27
+msgid "Send"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:168
+msgid "Send a test email"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:173
+msgid "Send a test email or check the status of an email address."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:4
+msgid "Sent an email to"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
+msgid "Sent email to"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:7
+msgid "Show log for message"
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
 msgid "System Configuration"
 msgstr ""
 
+#: apps/zotonic_mod_admin_config/priv/templates/email_test.tpl:3
+msgid "Test email from"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:42
+msgid "The Zotonic system configuration is set to use a SMTP relay."
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:143
+msgid "The default FROM address for emails. Defaults to"
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
@@ -2421,7 +2531,7 @@ msgstr ""
 msgid "This can't be undone. The configuration key will be lost forever."
 msgstr ""
 
-#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl.tpl:15
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:15
 msgid ""
 "This certificate is generated and signed by Zotonic. It will be used if no "
 "other certificates are available."
@@ -2433,8 +2543,30 @@ msgid ""
 "first certificate will be used."
 msgstr ""
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:17./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:25./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
+msgid "This is a setting in the system configuration and can not be overruled."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:76
+msgid ""
+"This is useful if this server is not allowed to send email or to use servers "
+"with a better reputation."
+msgstr ""
+
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:31
 msgid "This module doesn’t supply a certificate."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:47./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:80
+msgid "Use relay to send email"
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:63./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:96
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
+#: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:11
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
+msgid "Username"
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:16
@@ -2446,148 +2578,22 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:24
-msgid "A copy of all email is sent to"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:16
-msgid "All email is sent to"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:70./apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:109
-msgid "Always use SSL"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:132
-msgid "Defaults to the hostname of the site."
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:131
-msgid "Domain for all generated from- and envelop-addresses."
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:116
-msgid "E-mail override"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:3./apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:8
-msgid "Email configuration and settings"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/src/mod_admin_email.erl:72
-msgid "Email settings"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:10
-msgid "Here you can see all the email configurations and send test emails."
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:133
-msgid ""
-"If you change this then you might need to request a new SSL certificate that "
-"includes this hostname."
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:120
-msgid ""
-"It is possible to intercept all email and send it to a single address. "
-"Configure this address here."
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:102
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:12
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:114./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
-msgid "Password"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:51./apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:84
-msgid "Relay hostname"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:57./apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:90
-msgid "Relay port"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:127
-msgid "SMTP Hostname"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:169
-#: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
-#: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
-#: apps/zotonic_mod_contact/priv/templates/contact.tpl:27
-msgid "Send"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:157
-msgid "Send a test email"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:160
-msgid "Send a test email or check the status of an email address."
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/_admin_email_test_result.tpl:4
-msgid "Sent an email to"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/src/mod_admin_email.erl:58
-msgid "Sent email to"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/_admin_email_test_result.tpl:7
-msgid "Show log for message"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/email_test.tpl:3
-msgid "Test email from"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:42
-msgid "The Zotonic system configuration is set to use a SMTP relay."
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:17./apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:25./apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:43
-msgid "This is a setting in the system configuration and can not be overruled."
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:76
-msgid ""
-"This is useful if this server is not allowed to send email or to use servers "
-"with a better reputation."
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:47./apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:80
-msgid "Use relay to send email"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:63./apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:96
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
-#: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:11
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
-msgid "Username"
-msgstr ""
-
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:170./apps/zotonic_mod_admin_email/src/mod_admin_email.erl:62
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:184./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr ""
 
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:149
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:159
 msgid "You must be an administrator to view or change the email configuration."
 msgstr ""
 
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:75
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
 msgid ""
 "Zotonic sends email using a built-in email server. You can send the email "
 "via an external relay."
 msgstr ""
 
-#: apps/zotonic_mod_admin_email/priv/templates/admin_email.tpl:168
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:181
 msgid "test@example.com"
 msgstr ""
 
@@ -5091,35 +5097,31 @@ msgstr ""
 msgid "Website. Leave empty for media link"
 msgstr ""
 
-#: apps/zotonic_mod_email_dkim/src/mod_email_dkim.erl:43
-msgid "DKIM e-mail setup"
-msgstr ""
-
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:6
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
 msgid "DKIM e-mail signing setup"
 msgstr ""
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:17
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:22
 msgid "The DNS entry should contain the following information:"
 msgstr ""
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:10
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:15
 msgid "The location of these key files are the following:"
 msgstr ""
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:9
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:14
 msgid ""
 "The module has generated an RSA keypair for you which will be used when "
 "signing outgoing emails."
 msgstr ""
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:16
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:21
 msgid ""
 "To finalize the DKIM configuration, you need to add an DNS entry TXT record "
 "to the following domain:"
 msgstr ""
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:22
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:27
 msgid ""
 "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck"
 "\">DKIM keycheck</a> website to verify your domain's DKIM record."
@@ -7364,15 +7366,15 @@ msgstr ""
 msgid "update"
 msgstr ""
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:5
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:5
 msgid "Certificate Authority"
 msgstr ""
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:17
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:17
 msgid "This certificate is located in"
 msgstr ""
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:11
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:11
 msgid "This certificate is provided by a certificate authority."
 msgstr ""
 
@@ -7388,7 +7390,7 @@ msgstr ""
 msgid "Could not start fetching the SSL certificate. Try again later."
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:47
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:47
 msgid ""
 "If there are problems requesting a Let’s Encrypt certificate then check:"
 msgstr ""
@@ -7399,7 +7401,7 @@ msgid ""
 "certificate below."
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:10
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:10
 msgid "Let’s Encrypt Certificate"
 msgstr ""
 
@@ -7407,7 +7409,7 @@ msgstr ""
 msgid "Let’s Encrypt certificate request was successful!"
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:13
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:13
 msgid ""
 "Let’s Encrypt provides free SSL certificates for websites. Here you can "
 "request such a certificate."
@@ -7418,11 +7420,11 @@ msgid ""
 "Make sure your hostname is reachable and resolves to a routable address."
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:42
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:42
 msgid "Only admnistrators can request certificates."
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:15
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:15
 msgid "Read more at the Let’s Encrypt website"
 msgstr ""
 
@@ -7458,16 +7460,16 @@ msgstr ""
 msgid "The checked hostnames will be added to the certificate."
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:37
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:37
 msgid ""
 "The errors above need to be corrected before a certificate can be requested."
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:22
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:22
 msgid "The port for HTTP requests must be 80, it is now"
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:29
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:29
 msgid "The port for HTTPS requests must be 443, it is now"
 msgstr ""
 
@@ -7485,13 +7487,13 @@ msgstr ""
 msgid "This might take a while, hang on!"
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:23
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:23
 msgid ""
 "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> "
 "configuration file."
 msgstr ""
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:30
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:30
 msgid ""
 "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</"
 "tt> configuration file."
