@@ -175,7 +175,7 @@
                 {% wire id="test-email"
                         type="submit"
                         postback={test_email}
-                        delegate=`mod_admin_email`
+                        delegate=`mod_admin_config`
                 %}
                 <form id="test-email" class="form form-inline" action="postback">
                     <input type="email" class="form-control" name="email" value="" placeholder="{_ test@example.com _}">
