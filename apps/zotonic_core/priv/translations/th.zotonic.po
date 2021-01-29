@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2020-12-16 15:31\n"
+"PO-Revision-Date: 2021-01-29 11:52\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -102,12 +102,12 @@ msgstr "กลุ่มผู้ใช้ ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:61
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "การควบคุมการเข้าถึง"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:34./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:547
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:34./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
 msgid "Access control rules"
 msgstr "กฎการควบคุมการเข้าถึง"
 
@@ -120,7 +120,7 @@ msgid "Add links to the collaboration group"
 msgstr "เพิ่มลิงก์ไปยังกลุ่มการทำงานร่วมกัน"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:112
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
 msgid "All"
 msgstr "ทั้งหมด"
 
@@ -165,12 +165,12 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:30./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:23
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:87./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:89./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:91
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:73
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:17
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:86./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:87./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -178,7 +178,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:146./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:190
 msgid "Cancel"
@@ -201,13 +201,14 @@ msgstr "เปลี่ยนหมวดหมู่และ / หรือก
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:65./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:66./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:68
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:13./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:28
 #: apps/zotonic_mod_base_site/priv/templates/_dialog_share_page.tpl:19
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
+#: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:6
 msgid "Close"
 msgstr "ปิด"
@@ -220,7 +221,7 @@ msgstr "ผู้จัดการกลุ่มความร่วมมื
 msgid "Collaboration group members"
 msgstr "สมาชิกกลุ่มการทำงานร่วมกัน"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:49./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:49./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:542
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "กลุ่มการทำงานร่วมกัน"
@@ -235,7 +236,7 @@ msgstr "กลุ่มการทำงานร่วมกันคือก
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:56
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:61
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
 msgid "Content"
 msgstr "เนื้อหา"
@@ -273,6 +274,7 @@ msgstr "กำหนดว่าใครสามารถดูหรือแ
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:49./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:71./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:92
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:44
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:121
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "ลบ"
@@ -281,7 +283,7 @@ msgstr "ลบ"
 msgid "Delete all user groups"
 msgstr "ลบกลุ่มผู้ใช้ทั้งหมด"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:132
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:131
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "ลบถูกยกเลิกมีผู้ใช้ในกลุ่มผู้ใช้"
 
@@ -289,7 +291,7 @@ msgstr "ลบถูกยกเลิกมีผู้ใช้ในกลุ
 msgid "Delete user group and move users"
 msgstr "ลบกลุ่มผู้ใช้และย้ายผู้ใช้"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:160
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:159
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:75./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:86./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:92
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:79./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:107
@@ -419,12 +421,12 @@ msgstr "ต้องการความช่วยเหลือเพิ่
 msgid "No ACL rules"
 msgstr "ไม่มีกฎ ACL"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:153
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:152
 msgid "Not all user groups could be deleted."
 msgstr "ไม่สามารถลบกลุ่มผู้ใช้ทั้งหมดได้"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:72
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:41
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:41
 msgid "Not allowed."
 msgstr "ไม่ได้รับอนุญาต."
 
@@ -479,8 +481,8 @@ msgstr "กฎที่เปลี่ยนกลับ"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:66
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:24
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:102./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:24./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:150
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:99
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
@@ -513,7 +515,7 @@ msgstr "แสดงคุณสมบัติส่วนตัวให้"
 msgid "Show this ACL user group first:"
 msgstr "แสดงกลุ่มผู้ใช้ ACL นี้ก่อน:"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:111./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:127
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:110./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:126
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
@@ -604,7 +606,7 @@ msgstr "ใช้กฎที่เผยแพร่"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "ใช้ URL ต่อไปนี้เพื่อทดสอบกฎการควบคุมการเข้าถึงก่อนเผยแพร่"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:538
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:537
 msgid "User groups"
 msgstr "กลุ่มผู้ใช้"
 
@@ -835,7 +837,7 @@ msgstr "นอกจากนี้"
 msgid "Ask google to not index this page"
 msgstr "ขอให้ Google อย่าจัดทำดัชนีหน้านี้"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:48./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "สื่อที่แนบมา"
 
@@ -968,15 +970,15 @@ msgid "Count"
 msgstr "นับ"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:66
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:101
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "ประเทศ"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:241
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:43./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:241
 msgid "Create"
 msgstr "สร้าง"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:55./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:10
 msgid "Create or find"
 msgstr "สร้างหรือค้นหา"
 
@@ -1041,7 +1043,7 @@ msgstr "ลบแล้ว"
 msgid "Dependent"
 msgstr "ขึ้นอยู่กับ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:22./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:25
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
@@ -1061,7 +1063,7 @@ msgstr "คุณต้องการลบบล็อกนี้หรือ
 msgid "Download"
 msgstr "ดาวน์โหลด"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:9
 msgid "Drag to change position"
 msgstr "ลากเพื่อเปลี่ยนตำแหน่ง"
 
@@ -1087,7 +1089,7 @@ msgstr "ที่อยู่อีเมล"
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_base_site/priv/templates/_meta.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:40
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:15
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:27
 msgid "Edit"
 msgstr "แก้ไข"
@@ -1117,7 +1119,7 @@ msgid "Embed page"
 msgstr "ฝังหน้า"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:179
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:223
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:228
 msgid "Embedded Content"
 msgstr "เนื้อหาที่ฝัง"
 
@@ -1189,12 +1191,12 @@ msgstr "กรองหมวดหมู่"
 msgid "Filter on content group"
 msgstr "กรองกลุ่มเนื้อหา"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:59
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:60
 msgid "Find Page"
 msgstr "ค้นหาหน้า"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:106
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:201
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:207
 msgid "Find page"
 msgstr "ค้นหาหน้า"
 
@@ -1221,7 +1223,7 @@ msgid "Go back."
 msgstr "กลับไป."
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/src/mod_admin.erl:172
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:114
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:116
 msgid "Header"
 msgstr "หัวข้อ"
 
@@ -1444,7 +1446,7 @@ msgid "Page Count"
 msgstr "จำนวนหน้า"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:196
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:198
 msgid "Page connections"
 msgstr "การเชื่อมต่อเพจ"
 
@@ -1539,7 +1541,7 @@ msgid "Publish this page"
 msgstr "เผยแพร่หน้านี้"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:230./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:38
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:43
 msgid "Published"
 msgstr "เผยแพร่แล้ว"
 
@@ -1635,12 +1637,12 @@ msgid "Save and View"
 msgstr "บันทึกและดู"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:105./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:110./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "Save and view the page."
 msgstr "บันทึกและดูหน้า"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:102./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
 msgid "Save this page."
 msgstr "บันทึกหน้านี้"
 
@@ -1701,7 +1703,7 @@ msgstr "แสดงเป็น"
 msgid "Show page on multiple paths"
 msgstr "แสดงเพจในหลายเส้นทาง"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:133
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:131
 msgid "Something went wrong. Sorry."
 msgstr "อะไรบางอย่างผิดปกติ. ขออภัย."
 
@@ -1968,7 +1970,7 @@ msgid "Valid for:"
 msgstr "ใช้ได้สำหรับ:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:112
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:42
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "View"
@@ -1987,7 +1989,7 @@ msgid "View all referrers"
 msgstr "ดูผู้อ้างอิงทั้งหมด"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:112
 msgid "View this page."
 msgstr "ดูหน้านี้"
 
@@ -2016,7 +2018,7 @@ msgstr "คำเตือน!"
 msgid "Website for clicks on image"
 msgstr "เว็บไซต์สำหรับคลิกที่ภาพ"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:64./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:15./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:16
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:15./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:16
 msgid "Website or Embed"
 msgstr "เว็บไซต์หรือฝัง"
 
@@ -2083,7 +2085,7 @@ msgstr "เวอร์ชัน Zotonic"
 msgid "add media item"
 msgstr "เพิ่มรายการสื่อ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:20
 msgid "block"
 msgstr "บล็อก"
 
@@ -2141,7 +2143,7 @@ msgid "modified by"
 msgstr "แก้ไขโดย"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:16
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "name"
 msgstr "ชื่อ"
 
@@ -2244,6 +2246,10 @@ msgstr "ไม่มีหน้าในหมวดหมู่เหล่า
 msgid "Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove categories."
 msgstr "ใช้ปุ่ม <i class=\"glyphicon glyphicon-cog\"></i> เพื่อเพิ่มหรือลบหมวดหมู่"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
+msgid "A copy of all email is sent to"
+msgstr "สำเนาอีเมลทั้งหมดจะถูกส่งไปที่"
+
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
 msgstr "เพิ่มคีย์การกำหนดค่า"
@@ -2252,10 +2258,18 @@ msgstr "เพิ่มคีย์การกำหนดค่า"
 msgid "Add key"
 msgstr "เพิ่มคีย์"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
+msgid "All email is sent to"
+msgstr "อีเมลทั้งหมดจะถูกส่งไปที่"
+
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
 msgid "Alternative names"
 msgstr "ชื่อทางเลือก"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:70./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:109
+msgid "Always use SSL"
+msgstr "ใช้ SSL เสมอ"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
@@ -2265,23 +2279,59 @@ msgstr "แน่ใจไหมว่าต้องการลบคีย์
 msgid "Certificates provided by SSL modules"
 msgstr "ใบรับรองจากโมดูล SSL"
 
-#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
 msgid "Config"
 msgstr "Config"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:31
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:48
 msgid "Configuration"
 msgstr "การกำหนดค่า"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:132
+msgid "Defaults to the hostname of the site."
+msgstr "ค่าเริ่มต้นเป็นชื่อโฮสต์ของไซต์"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
+msgid "Domain for all generated from- and envelop-addresses."
+msgstr "โดเมนสำหรับทั้งหมดที่สร้างจากที่อยู่และซองจดหมาย"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
+msgid "E-mail override"
+msgstr "ลบล้างอีเมล"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+msgid "Email FROM"
+msgstr "อีเมลจาก"
+
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+msgid "Email configuration"
+msgstr "การกำหนดค่าอีเมล"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:8
+msgid "Email configuration and settings"
+msgstr "การกำหนดค่าและการตั้งค่าอีเมล"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:13
 msgid "Enable <strong>mod_ssl_letsencrypt</strong> to request free SSL certificates from"
 msgstr "เปิดใช้งาน <strong>mod_ssl_letsencrypt</strong> เพื่อขอใบรับรอง SSL ฟรีจาก"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
+msgid "Here you can see all the email configurations and send test emails."
+msgstr "คุณสามารถดูการกำหนดค่าอีเมลทั้งหมดและส่งอีเมลทดสอบได้ที่นี่"
+
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
 msgid "Hostname"
 msgstr "ชื่อโฮสต์"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:133
+msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
+msgstr "หากคุณเปลี่ยนแปลงสิ่งนี้คุณอาจต้องขอใบรับรอง SSL ใหม่ที่มีชื่อโฮสต์นี้"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
+msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
+msgstr "เป็นไปได้ที่จะดักฟังอีเมลทั้งหมดและส่งไปยังที่อยู่เดียว กำหนดค่าที่อยู่นี้ที่นี่"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:15./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -2311,25 +2361,85 @@ msgstr "เฉพาะผู้ดูแลระบบเท่านั้น
 msgid "Only an administrator can add configuration keys."
 msgstr "มีเพียงผู้ดูแลระบบเท่านั้นที่สามารถเพิ่มคีย์การกำหนดค่าได้"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:102
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:12
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:114./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
+msgid "Password"
+msgstr "รหัสผ่าน"
+
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
 msgstr "โปรดกรอกโมดูลคีย์และค่าสำหรับคีย์การกำหนดค่าใหม่"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:51./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
+msgid "Relay hostname"
+msgstr "ชื่อโฮสต์รีเลย์"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:90
+msgid "Relay port"
+msgstr "พอร์ตรีเลย์"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:127
+msgid "SMTP Hostname"
+msgstr "ชื่อโฮสต์ SMTP"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
 msgid "SSL Certificates"
 msgstr "ใบรับรอง SSL"
 
-#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl.tpl:6
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:6
 msgid "Self signed certificate"
 msgstr "ใบรับรองที่ลงนามด้วยตนเอง"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
+#: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
+#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
+#: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
+#: apps/zotonic_mod_contact/priv/templates/contact.tpl:27
+msgid "Send"
+msgstr "ส่ง"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:168
+msgid "Send a test email"
+msgstr "ส่งอีเมลทดสอบ"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:173
+msgid "Send a test email or check the status of an email address."
+msgstr "ส่งอีเมลทดสอบหรือตรวจสอบสถานะของที่อยู่อีเมล"
+
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:4
+msgid "Sent an email to"
+msgstr "ส่งอีเมลไปที่"
+
+#: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
+msgid "Sent email to"
+msgstr "ส่งอีเมลไปที่"
+
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:7
+msgid "Show log for message"
+msgstr "แสดงบันทึกข้อความ"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
 msgid "System Configuration"
 msgstr "การกำหนดค่าระบบ"
 
+#: apps/zotonic_mod_admin_config/priv/templates/email_test.tpl:3
+msgid "Test email from"
+msgstr "ทดสอบอีเมลจาก"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:42
+msgid "The Zotonic system configuration is set to use a SMTP relay."
+msgstr "การกำหนดค่าระบบ Zotonic ถูกตั้งค่าให้ใช้รีเลย์ SMTP"
+
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
 msgstr "มีคีย์การกำหนดค่าอยู่แล้วโปรดเลือกชื่อคีย์อื่น"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:143
+msgid "The default FROM address for emails. Defaults to"
+msgstr "ที่อยู่เริ่มต้นสำหรับอีเมล ค่าเริ่มต้นเป็น"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
@@ -2339,7 +2449,7 @@ msgstr "ไดเรกทอรีเริ่มต้นสำหรับใ
 msgid "This can't be undone. The configuration key will be lost forever."
 msgstr "การดำเนินการนี้ไม่สามารถยกเลิกได้ คีย์การกำหนดค่าจะหายไปตลอดกาล"
 
-#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl.tpl:15
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:15
 msgid "This certificate is generated and signed by Zotonic. It will be used if no other certificates are available."
 msgstr "ใบรับรองนี้สร้างและลงนามโดย Zotonic จะใช้หากไม่มีใบรับรองอื่น ๆ"
 
@@ -2347,9 +2457,29 @@ msgstr "ใบรับรองนี้สร้างและลงนาม
 msgid "This is a list of the certificates provided by modules and the system. The first certificate will be used."
 msgstr "นี่คือรายการใบรับรองที่จัดเตรียมโดยโมดูลและระบบ ใบแรกจะถูกใช้"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:17./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:25./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
+msgid "This is a setting in the system configuration and can not be overruled."
+msgstr "นี่คือการตั้งค่าในการกำหนดค่าระบบและไม่สามารถลบล้างได้"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:76
+msgid "This is useful if this server is not allowed to send email or to use servers with a better reputation."
+msgstr "สิ่งนี้มีประโยชน์หากเซิร์ฟเวอร์นี้ไม่ได้รับอนุญาตให้ส่งอีเมลหรือใช้เซิร์ฟเวอร์ที่มีชื่อเสียงดีกว่า"
+
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:31
 msgid "This module doesn’t supply a certificate."
 msgstr "โมดูลนี้ไม่ได้ให้ใบรับรอง"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:47./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:80
+msgid "Use relay to send email"
+msgstr "ใช้รีเลย์เพื่อส่งอีเมล"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:63./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:96
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
+#: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:11
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
+msgid "Username"
+msgstr "ชื่อผู้ใช้"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:16
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:37
@@ -2360,38 +2490,55 @@ msgstr "ใช้ได้ถึง"
 msgid "Value"
 msgstr "มูลค่า"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:184./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
+msgid "View email status"
+msgstr "ดูสถานะอีเมล"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:159
+msgid "You must be an administrator to view or change the email configuration."
+msgstr "คุณต้องเป็นผู้ดูแลระบบเพื่อดูหรือเปลี่ยนการกำหนดค่าอีเมล"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
+msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
+msgstr "Zotonic ส่งอีเมลโดยใช้เซิร์ฟเวอร์อีเมลในตัว คุณสามารถส่งอีเมลผ่านรีเลย์ภายนอก"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:181
+msgid "test@example.com"
+msgstr "test@example.com"
+
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
 msgstr "เพิ่มเพจหรือคลิกที่เพจในเมนู"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:59
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:64
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:27
 msgid "Language"
 msgstr "ภาษา"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:31./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:42
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:32./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:43
 msgid "Loading ..."
 msgstr "กำลังโหลด ..."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:105./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:81
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:110./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "Save &amp; view"
 msgstr "บันทึก &amp; มุมมอง"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:125
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:127
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr " มีการเปลี่ยนแปลงที่ไม่ได้บันทึก แน่ใจไหมว่าต้องการออกโดยไม่บันทึก"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:75
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:76
 msgid "This page"
 msgstr "หน้านี้"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:123
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:125
 msgid "Yes, discard changes"
 msgstr "ใช่ยกเลิกการเปลี่ยนแปลง"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:43
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:48
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "จนถึง"
@@ -2448,8 +2595,8 @@ msgid "Click OK to log on as this user. You will be redirected to the home page 
 msgstr "คลิกตกลงเพื่อเข้าสู่ระบบในฐานะผู้ใช้นี้ คุณจะถูกเปลี่ยนเส้นทางไปยังโฮมเพจหากผู้ใช้รายนี้ไม่มีสิทธิ์ในการเข้าถึงระบบผู้ดูแลระบบ"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
-msgid "Click on the link below to confirm that this e-mail address is correct, when clicking doesn't work then you can copy and paste the complete address to your browser."
-msgstr "คลิกที่ลิงค์ด้านล่างเพื่อยืนยันว่าที่อยู่อีเมลนี้ถูกต้องเมื่อคลิกไม่ได้ผลคุณสามารถคัดลอกและวางที่อยู่ทั้งหมดลงในเบราว์เซอร์ของคุณได้"
+msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
+msgstr "คลิกที่ลิงค์เพื่อยืนยันที่อยู่อีเมลของคุณ คัดลอกลิงก์ทั้งหมดแล้ววางในเบราว์เซอร์ของคุณหากไม่ได้ผล"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:10
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
@@ -2518,8 +2665,8 @@ msgid "Home"
 msgstr "บ้าน"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:20
-msgid "If you don't know this site then you can ignore this e-mail. Maybe someone made an error typing his or her e-mail address."
-msgstr "หากคุณไม่รู้จักไซต์นี้คุณสามารถเพิกเฉยต่ออีเมลนี้ได้ อาจมีคนพิมพ์ที่อยู่อีเมลผิดพลาด"
+msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
+msgstr "หากคุณไม่รู้จักไซต์นี้โปรดเพิกเฉยต่ออีเมลนี้ อาจมีคนทำผิดพลาด"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:33
 msgid "Leave empty to not change the password."
@@ -2574,15 +2721,8 @@ msgstr "มีเพียงผู้ดูแลระบบเท่านั
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "มีเพียงผู้ดูแลระบบหรือผู้ใช้เท่านั้นที่สามารถตั้งรหัสผ่านได้"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:12
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:14./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
-msgid "Password"
-msgstr "รหัสผ่าน"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
-msgid "Please verify your e-mail address"
+msgid "Please verify your email address"
 msgstr "โปรดยืนยันที่อยู่อีเมลของคุณ"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
@@ -2592,13 +2732,6 @@ msgstr "รหัสผ่านที่ปลอดภัยแบบสุ่
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:7
 msgid "Search users"
 msgstr "ค้นหาผู้ใช้"
-
-#: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
-#: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
-#: apps/zotonic_mod_contact/priv/templates/contact.tpl:27
-msgid "Send"
-msgstr "ส่ง"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:23./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:46
 msgid "Send verification e-mail"
@@ -2665,7 +2798,7 @@ msgid "This can't be undone. The username and password will be lost forever."
 msgstr "การดำเนินการนี้ไม่สามารถยกเลิกได้ ชื่อผู้ใช้และรหัสผ่านจะหายไปตลอดกาล"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
-msgid "This e-mail address was added to your personal information on"
+msgid "This email address was added to your personal information on"
 msgstr "ที่อยู่อีเมลนี้ถูกเพิ่มในข้อมูลส่วนบุคคลของคุณเมื่อวันที่"
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:154
@@ -2714,13 +2847,6 @@ msgstr "บัญชีผู้ใช้"
 msgid "User actions"
 msgstr "การกระทำของผู้ใช้"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
-#: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:5./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:8
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
-msgid "Username"
-msgstr "ชื่อผู้ใช้"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:6
 msgid "Username / password"
 msgstr "ชื่อผู้ใช้รหัสผ่าน"
@@ -2761,10 +2887,6 @@ msgstr "ยืนยันที่อยู่ |"
 msgid "Verifying..."
 msgstr "กำลังตรวจสอบ ..."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
-msgid "View email status"
-msgstr "ดูสถานะอีเมล"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:8
 msgid "When you add credentials to a person then the person becomes an user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What an user can do depends on the groups the user is member of."
 msgstr "เมื่อคุณเพิ่มข้อมูลรับรองให้กับบุคคลบุคคลนั้นจะกลายเป็นผู้ใช้ บุคคลหรือเครื่องจักรสามารถเข้าสู่ระบบด้วยข้อมูลประจำตัวเหล่านั้นและดำเนินการกับระบบ Zotonic ของคุณ<br/><br/>สิ่งที่ผู้ใช้สามารถทำได้ขึ้นอยู่กับกลุ่มที่ผู้ใช้เป็นสมาชิก"
@@ -2798,8 +2920,8 @@ msgid "You need to be an administrator to add users."
 msgstr "คุณต้องเป็นผู้ดูแลระบบเพื่อเพิ่มผู้ใช้"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
-msgid "You receive this e-mail because you or someone else requested verification of your e-mail address. You or the someone else either entered your e-mail address. You will not receive any additional e-mails because of this request."
-msgstr "คุณได้รับอีเมลนี้เนื่องจากคุณหรือบุคคลอื่นร้องขอการยืนยันที่อยู่อีเมลของคุณ คุณหรือบุคคลอื่นป้อนที่อยู่อีเมลของคุณ คุณจะไม่ได้รับอีเมลเพิ่มเติมเนื่องจากคำขอนี้"
+msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
+msgstr "คุณได้รับอีเมลนี้เนื่องจากคุณได้ยืนยันที่อยู่อีเมลของคุณ คุณจะไม่ได้รับอีเมลเพิ่มเติมใด ๆ เนื่องจากคำขอนี้"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
@@ -2958,7 +3080,7 @@ msgstr "เปิดใช้งาน"
 msgid "Configure"
 msgstr "กำหนดค่า"
 
-#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:113./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:121
+#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:114
 msgid "Could not find the module."
 msgstr "ไม่พบโมดูล"
 
@@ -2990,7 +3112,7 @@ msgstr "คุณยังต้องการเปิดใช้งานโ
 msgid "Do you still want to deactivate the module"
 msgstr "คุณยังต้องการปิดใช้งานโมดูลหรือไม่"
 
-#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:62./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:87
+#: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:62./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:89
 msgid "Module dependencies"
 msgstr "การขึ้นต่อกันของโมดูล"
 
@@ -3051,6 +3173,7 @@ msgid "All page connections"
 msgstr "การเชื่อมต่อเพจทั้งหมด"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:118
 msgid "Are you sure you want to delete"
 msgstr "คุณแน่ใจหรือว่าต้องการลบ"
 
@@ -3138,7 +3261,7 @@ msgstr "ภาพรวมการเชื่อมต่อเพจ"
 msgid "Page connections with the predicate"
 msgstr "การเชื่อมต่อเพจกับเพรดิเคต"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:191
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:193
 msgid "Predicates"
 msgstr "เปรต"
 
@@ -3393,7 +3516,7 @@ msgid "Access denied"
 msgstr "ปฏิเสธการเข้าใช้"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:45
-msgid "Already Connected"
+msgid "Already connected"
 msgstr "เชื่อมต่อแล้ว"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
@@ -3408,7 +3531,7 @@ msgstr "ได้ทำการตรวจสอบความถูกต้
 msgid "Authorizing..."
 msgstr "กำลังอนุญาต ..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:84./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:63./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
 msgstr "กลับไปลงชื่อเข้าใช้"
 
@@ -3424,11 +3547,11 @@ msgstr "เปลี่ยนรหัสผ่านและลงชื่อ
 msgid "Change your permissions"
 msgstr "เปลี่ยนสิทธิ์ของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:59./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:75
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:60./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:76
 msgid "Check your email"
 msgstr "ตรวจสอบอีเมลของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:22
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:23
 msgid "Checking the reset code…"
 msgstr "ตรวจสอบรหัสรีเซ็ต…"
 
@@ -3436,13 +3559,13 @@ msgstr "ตรวจสอบรหัสรีเซ็ต…"
 msgid "Click on the link below to enter a new password. When clicking doesn't work, please copy and paste the whole link."
 msgstr "คลิกที่ลิงค์ด้านล่างเพื่อป้อนรหัสผ่านใหม่ เมื่อคลิกไม่ได้โปรดคัดลอกและวางลิงก์ทั้งหมด"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
-msgid "Close Window"
-msgstr "ปิดหน้าต่าง"
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:7
 msgid "Close this window and log in if you are already a user of"
 msgstr "ปิดหน้าต่างนี้และเข้าสู่ระบบหากคุณเป็นผู้ใช้อยู่แล้ว"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
+msgid "Close window"
+msgstr "ปิดหน้าต่าง"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -3455,8 +3578,8 @@ msgid "Confirmation failure"
 msgstr "การยืนยันล้มเหลว"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
-msgid "Either the email or the password you entered is incorrect. Please check your entry and try again."
-msgstr "อีเมลหรือรหัสผ่านที่คุณป้อนไม่ถูกต้อง โปรดตรวจสอบรายการของคุณและลองอีกครั้ง"
+msgid "Either the email or the password you entered is incorrect. Please try again."
+msgstr "อีเมลหรือรหัสผ่านที่คุณป้อนไม่ถูกต้อง กรุณาลองอีกครั้ง."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
@@ -3479,13 +3602,13 @@ msgstr "ป้อนรหัสผ่าน"
 msgid "Enter the new password for your account"
 msgstr "ป้อนรหัสผ่านใหม่สำหรับบัญชีของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:2
-msgid "Enter your email address and we'll send you instructions how to reset your password."
-msgstr "ป้อนที่อยู่อีเมลของคุณแล้วเราจะส่งคำแนะนำในการรีเซ็ตรหัสผ่านของคุณ"
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:14
 msgid "Enter your email address or username"
 msgstr "ป้อนที่อยู่อีเมลหรือชื่อผู้ใช้ของคุณ"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:2
+msgid "Enter your email address to receive instructions on how to reset your password."
+msgstr "ป้อนที่อยู่อีเมลของคุณเพื่อรับคำแนะนำในการรีเซ็ตรหัสผ่าน"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:118
@@ -3493,7 +3616,7 @@ msgstr "ป้อนที่อยู่อีเมลหรือชื่อ
 msgid "Error"
 msgstr "ข้อผิดพลาด"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:129
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:198
 msgid "External Services"
 msgstr "บริการภายนอก"
 
@@ -3514,15 +3637,15 @@ msgstr "กลับไป"
 msgid "Go to Modules"
 msgstr "ไปที่โมดูล"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:52
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53
 msgid "Go to the admin"
 msgstr "ไปที่ผู้ดูแลระบบ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:44
 msgid "Go to the home page"
 msgstr "ไปที่โฮมเพจ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:47
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:48
 msgid "Go to the your profile page"
 msgstr "ไปที่หน้าโปรไฟล์ของคุณ"
 
@@ -3550,7 +3673,7 @@ msgstr "ฉันต้องการสร้างบัญชีใหม่
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
 msgstr "หากคุณไม่ได้ขอรีเซ็ตรหัสผ่านคุณสามารถเพิกเฉยต่ออีเมลนี้ได้ อาจมีบางคนพิมพ์ที่อยู่อีเมลผิดพลาด"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:61./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "หากคุณไม่ได้รับอีเมลภายในสองสามนาทีโปรดตรวจสอบโฟลเดอร์สแปมของคุณ"
 
@@ -3558,13 +3681,17 @@ msgstr "หากคุณไม่ได้รับอีเมลภายใ
 msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when signing up."
 msgstr "หากคุณคิดว่าคุณมีบัญชีและคาดหวังว่าจะได้รับอีเมลนี้โปรดลองอีกครั้งโดยใช้ที่อยู่อีเมลที่คุณให้ไว้เมื่อลงชื่อสมัครใช้"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:76
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "ในอีเมลคุณจะพบคำแนะนำเกี่ยวกับวิธียืนยันบัญชีของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:135./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "ให้ฉันลงชื่อเข้าใช้"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
+msgid "Log on with"
+msgstr "เข้าสู่ระบบด้วย"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:44./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:48
@@ -3574,6 +3701,11 @@ msgstr "อักขระขั้นต่ำ:"
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:5./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:5./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:12
 msgid "Need help signing in?"
 msgstr "ต้องการความช่วยเหลือในการลงชื่อเข้าใช้?"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:156
+#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
+msgid "Next"
+msgstr "ต่อไป"
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:3
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:3./apps/zotonic_mod_base/priv/templates/error.403.tpl:18./apps/zotonic_mod_base/priv/templates/error.tpl:7
@@ -3585,7 +3717,11 @@ msgstr "ไม่มีการเข้าถึง"
 msgid "One moment please"
 msgstr "กรุณารอซักครู่"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:64
+msgid "Other username or email"
+msgstr "ชื่อผู้ใช้หรืออีเมลอื่น ๆ"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "รหัสผ่าน"
 
@@ -3626,15 +3762,15 @@ msgstr "ใส่รหัสผ่านของคุณซ้ำ"
 msgid "Reset password and Sign in"
 msgstr "รีเซ็ตรหัสผ่านและลงชื่อเข้าใช้"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:19./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
 msgid "Reset your password"
 msgstr "รีเซ็ตรหัสผ่านของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:69
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "Send Verification Message"
 msgstr "ส่งข้อความยืนยัน"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:44./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:150./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "เข้าสู่ระบบ"
@@ -3664,7 +3800,7 @@ msgstr "อะไรบางอย่างผิดปกติ"
 msgid "Something went wrong, please try again later."
 msgstr "เกิดข้อผิดพลาดโปรดลองอีกครั้งในภายหลัง"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:81
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:82
 msgid "Sorry, could not send the verification message."
 msgstr "ขออภัยไม่สามารถส่งข้อความยืนยันได้"
 
@@ -3676,13 +3812,17 @@ msgstr "ขออภัยมีการลองซ้ำมากเกิน
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "ขออภัยรหัสรีเซ็ตรหัสผ่านของคุณไม่เป็นที่รู้จักหรือหมดอายุ"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133
+msgid "Stay logged on unless I log off."
+msgstr "อยู่ในระบบต่อไปจนกว่าฉันจะออกจากระบบ"
+
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
 msgstr "ที่อยู่อีเมลที่เชื่อมโยงกับบัญชีของคุณคือ"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
-msgid "The new password must be different from the previous one. Please check your entry and try again."
-msgstr "รหัสผ่านใหม่ต้องแตกต่างจากรหัสก่อนหน้านี้ โปรดตรวจสอบรายการของคุณและลองอีกครั้ง"
+msgid "The new password must be different from the previous one. Please and try again."
+msgstr "รหัสผ่านใหม่ต้องแตกต่างจากรหัสก่อนหน้านี้ กรุณาลองใหม่อีกครั้ง"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -3697,8 +3837,8 @@ msgid "The two passwords should be equal. Please retype them."
 msgstr "รหัสผ่านทั้งสองควรเท่ากัน กรุณาพิมพ์ใหม่"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
-msgid "The two-factor authentication passcode did not match. Please check your entry and try again."
-msgstr "รหัสผ่านการตรวจสอบสิทธิ์แบบสองปัจจัยไม่ตรงกัน โปรดตรวจสอบรายการของคุณและลองอีกครั้ง"
+msgid "The two-factor authentication passcode did not match. Please try again."
+msgstr "รหัสผ่านการตรวจสอบสิทธิ์แบบสองปัจจัยไม่ตรงกัน กรุณาลองอีกครั้ง."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "There was a problem authenticating with"
@@ -3718,7 +3858,7 @@ msgstr "หากต้องการดูหน้านี้คุณต้
 msgid "Too many retries."
 msgstr "ลองซ้ำมากเกินไป"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "รหัสผ่านสองปัจจัย"
 
@@ -3726,15 +3866,19 @@ msgstr "รหัสผ่านสองปัจจัย"
 msgid "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "ใช้อักขระหรือตัวเลขที่ไม่ใช่ตัวอักษรเพื่อให้คาดเดาได้ยากขึ้น"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:66
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:52./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:68
+msgid "Username or email"
+msgstr "ชื่อผู้ใช้หรืออีเมล"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
 msgid "Verify your account"
 msgstr "ตรวจสอบบัญชีของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:82
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
 msgstr "ดูเหมือนว่าเราจะไม่มีที่อยู่อีเมลที่ถูกต้องหรือที่อยู่การสื่อสารทางอิเล็กทรอนิกส์อื่น ๆ ของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:60
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:61
 msgid "We have sent an email with a link to reset your password to"
 msgstr "เราได้ส่งอีเมลพร้อมลิงก์สำหรับรีเซ็ตรหัสผ่านของคุณไปที่"
 
@@ -3742,9 +3886,13 @@ msgstr "เราได้ส่งอีเมลพร้อมลิงก์
 msgid "You are about to create a new account."
 msgstr "คุณกำลังจะสร้างบัญชีใหม่"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:39
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:40
 msgid "You are now signed in."
 msgstr "คุณลงชื่อเข้าใช้แล้ว"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
+msgid "You can log in using the following external service"
+msgstr "คุณสามารถเข้าสู่ระบบโดยใช้บริการภายนอกต่อไปนี้"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:37
 msgid "You have to share your email address to be able to sign in."
@@ -3760,14 +3908,14 @@ msgid "You need to be allowed to edit the system configuration to view or change
 msgstr "คุณต้องได้รับอนุญาตให้แก้ไขการกำหนดค่าระบบเพื่อดูหรือเปลี่ยน App Keys ที่กำหนดค่าไว้"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:36
-msgid "You receive this email because you or someone else requested a password reset for your account. You or the someone else either entered your username or email address. You will not receive any additional emails because of this request."
-msgstr "คุณได้รับอีเมลนี้เนื่องจากคุณหรือบุคคลอื่นขอรีเซ็ตรหัสผ่านสำหรับบัญชีของคุณ คุณหรือบุคคลอื่นป้อนชื่อผู้ใช้หรือที่อยู่อีเมลของคุณ คุณจะไม่ได้รับอีเมลเพิ่มเติมใด ๆ เนื่องจากคำขอนี้"
+msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
+msgstr "คุณได้รับอีเมลนี้เนื่องจากคุณขอรีเซ็ตรหัสผ่านสำหรับบัญชีของคุณโดยป้อนชื่อผู้ใช้หรือที่อยู่อีเมลของคุณ คุณจะไม่ได้รับอีเมลเพิ่มเติมใด ๆ เนื่องจากคำขอนี้"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
 msgstr "คุณจะต้องสร้างใหม่"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "เกือบเสร็จแล้ว! เพื่อให้แน่ใจว่าคุณเป็นคุณจริงๆเราขอให้คุณยืนยันบัญชีของคุณจากที่อยู่อีเมลของคุณ"
 
@@ -3787,7 +3935,7 @@ msgstr "อีเมลหรือชื่อผู้ใช้ของคุ
 msgid "Your new password is too short."
 msgstr "รหัสผ่านใหม่ของคุณสั้นเกินไป"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:37
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38
 msgid "Your password has been reset"
 msgstr "รีเซ็ตรหัสผ่านของคุณแล้ว"
 
@@ -3804,10 +3952,18 @@ msgstr "รหัสผ่านของคุณสั้นเกินไป
 msgid "an hour"
 msgstr "หนึ่งชั่วโมง"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
+msgid "external service"
+msgstr "บริการภายนอก"
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "หรือ"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:103
+msgid "or you can enter the password that you have for"
+msgstr "หรือคุณสามารถป้อนรหัสผ่านที่คุณมีสำหรับ"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "the service"
@@ -4431,9 +4587,13 @@ msgstr "ด้านล่างนี้คุณจะเห็นแบบเ
 msgid "Bindings"
 msgstr "การผูก"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:24./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:31./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:58
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "Controller"
 msgstr "ตัวควบคุม"
+
+#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:45
+msgid "Could not fetch tracer output, please try again."
+msgstr "ไม่สามารถดึงเอาต์พุตตัวติดตามโปรดลองอีกครั้ง"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
 msgid "Development"
@@ -4475,7 +4635,7 @@ msgstr "เหตุการณ์"
 msgid "Explain"
 msgstr "อธิบาย"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:30
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
 msgid "Final dispatch"
 msgstr "การจัดส่งขั้นสุดท้าย"
 
@@ -4487,7 +4647,7 @@ msgstr "หา"
 msgid "Find a template, check which template will be selected"
 msgstr "ค้นหาเทมเพลตตรวจสอบว่าจะเลือกเทมเพลตใด"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
 msgid "Forced switch of protocol to"
 msgstr "บังคับให้เปลี่ยนโปรโตคอลเป็น"
 
@@ -4507,7 +4667,7 @@ msgstr "วิปัสสนา"
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "โหลดไฟล์ CSS ที่เปลี่ยนแปลงแบบสด โหลดหน้าซ้ำเมื่อเปลี่ยนเทมเพลตหรือ JavaScript"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:67./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
 msgid "Location"
 msgstr "สถานที่"
 
@@ -4515,15 +4675,15 @@ msgstr "สถานที่"
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "จับคู่ URL คำขอแสดงกฎการจัดส่งที่ตรงกัน"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:38./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:41
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "New host"
 msgstr "โฮสต์ใหม่"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:46./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:48./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
 msgid "New path"
 msgstr "เส้นทางใหม่"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
 msgid "No matching dispatch rule found"
 msgstr "ไม่พบกฎการจัดส่งที่ตรงกัน"
 
@@ -4539,11 +4699,11 @@ msgstr "ผู้สังเกตการณ์"
 msgid "Optional category for catinclude"
 msgstr "หมวดหมู่เสริมสำหรับ catinclude"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
 msgid "Options"
 msgstr "ตัวเลือก"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:71./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:77
 msgid "Permanent redirect"
 msgstr "เปลี่ยนเส้นทางถาวร"
 
@@ -4551,7 +4711,7 @@ msgstr "เปลี่ยนเส้นทางถาวร"
 msgid "Recompile Templates"
 msgstr "คอมไพล์เทมเพลต"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:74
 msgid "Redirect"
 msgstr "เปลี่ยนเส้นทาง"
 
@@ -4583,7 +4743,7 @@ msgstr "เริ่มจับคู่กฎการจัดส่ง"
 msgid "Subscribers"
 msgstr "สมาชิก"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:37
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
 msgid "Switch protocol to"
 msgstr "เปลี่ยนโปรโตคอลเป็น"
 
@@ -4595,7 +4755,7 @@ msgstr "การดีบักเทมเพลต"
 msgid "Template path"
 msgstr "เส้นทางเทมเพลต"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "This resource is unknown or does not have a URI"
 msgstr "ทรัพยากรนี้ไม่เป็นที่รู้จักหรือไม่มี URI"
 
@@ -4607,7 +4767,7 @@ msgstr "เครื่องมือและการตั้งค่าท
 msgid "Trace all database queries for the current session"
 msgstr "ติดตามการสืบค้นฐานข้อมูลทั้งหมดสำหรับเซสชันปัจจุบัน"
 
-#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:56
+#: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:48
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "คุณไม่ได้รับอนุญาตให้ใช้การดีบักการจัดส่ง"
 
@@ -4615,27 +4775,27 @@ msgstr "คุณไม่ได้รับอนุญาตให้ใช้
 msgid "You are not allowed to use the template debugging."
 msgstr "คุณไม่ได้รับอนุญาตให้ใช้การดีบักเทมเพลต"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:57
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
 msgid "found dispatch rule"
 msgstr "พบกฎการจัดส่ง"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 msgid "found no match"
 msgstr "ไม่พบรายการที่ตรงกัน"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
 msgid "found resource id"
 msgstr "พบรหัสทรัพยากร"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
 msgid "notification"
 msgstr "การแจ้งเตือน"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:48
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
 msgid "notification, checking first return"
 msgstr "การแจ้งเตือนการตรวจสอบการกลับมาครั้งแรก"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:68
 msgid "redirects"
 msgstr "เปลี่ยนเส้นทาง"
 
@@ -4707,31 +4867,27 @@ msgstr "เล็ก"
 msgid "Website. Leave empty for media link"
 msgstr "เว็บไซต์. เว้นว่างไว้สำหรับลิงก์สื่อ"
 
-#: apps/zotonic_mod_email_dkim/src/mod_email_dkim.erl:43
-msgid "DKIM e-mail setup"
-msgstr "การตั้งค่าอีเมล DKIM"
-
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:6
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
 msgid "DKIM e-mail signing setup"
 msgstr "การตั้งค่าการลงนามอีเมล DKIM"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:17
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:22
 msgid "The DNS entry should contain the following information:"
 msgstr "รายการ DNS ควรมีข้อมูลต่อไปนี้:"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:10
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:15
 msgid "The location of these key files are the following:"
 msgstr "ตำแหน่งของไฟล์สำคัญเหล่านี้มีดังต่อไปนี้:"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:9
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:14
 msgid "The module has generated an RSA keypair for you which will be used when signing outgoing emails."
 msgstr "โมดูลได้สร้างคู่คีย์ RSA สำหรับคุณซึ่งจะใช้เมื่อลงชื่อเข้าใช้อีเมลขาออก"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:16
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:21
 msgid "To finalize the DKIM configuration, you need to add an DNS entry TXT record to the following domain:"
 msgstr "ในการสิ้นสุดการกำหนดค่า DKIM คุณต้องเพิ่มระเบียน TXT รายการ DNS ในโดเมนต่อไปนี้:"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/admin_email_dkim.tpl:22
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:27
 msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
 msgstr "เมื่อตั้งค่าทั้งหมดแล้วคุณสามารถใช้เว็บไซต์ <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> เพื่อยืนยันระเบียน DKIM ของโดเมนของคุณ"
 
@@ -5280,7 +5436,7 @@ msgstr "มิถุนายน"
 msgid "L10N Configuration"
 msgstr "การกำหนดค่า L10N"
 
-#: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:7./apps/zotonic_mod_l10n/src/mod_l10n.erl:208
+#: apps/zotonic_mod_l10n/priv/templates/admin_l10n.tpl:7./apps/zotonic_mod_l10n/src/mod_l10n.erl:210
 msgid "Localization"
 msgstr "การแปล"
 
@@ -5417,7 +5573,7 @@ msgstr "คุณได้เชื่อมต่อกับ <strong>LinkedIn<
 msgid "Your LinkedIn Developer Network"
 msgstr "เครือข่ายนักพัฒนา LinkedIn ของคุณ"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:131
 msgid "Bounce"
 msgstr "ตีกลับ"
 
@@ -5434,7 +5590,7 @@ msgstr "บันทึกอีเมล"
 msgid "Email status"
 msgstr "สถานะอีเมล"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 #: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:17./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:36
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:17
 msgid "Failed"
@@ -5444,7 +5600,7 @@ msgstr "ล้มเหลว"
 msgid "Fatal"
 msgstr "ร้ายแรง"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:156./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:44./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
 msgid "Filter"
 msgstr "กรอง"
 
@@ -5492,7 +5648,7 @@ msgstr "ข้อความล่าสุด"
 msgid "Most recent user interface events"
 msgstr "เหตุการณ์ส่วนติดต่อผู้ใช้ล่าสุด"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:59./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:174./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:59./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:175./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
 msgid "No log messages."
 msgstr "ไม่มีข้อความบันทึก"
 
@@ -5500,15 +5656,19 @@ msgstr "ไม่มีข้อความบันทึก"
 msgid "Other"
 msgstr "อื่น ๆ"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:131
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
 msgid "Received"
 msgstr "ได้รับ"
+
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
+msgid "Relayed"
+msgstr "ถ่ายทอด"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
 msgid "Resources with email identity"
 msgstr "ทรัพยากรที่มีข้อมูลประจำตัวอีเมล"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
+#: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Retry"
 msgstr "ลองอีกครั้ง"
 
@@ -6303,15 +6463,15 @@ msgstr "เมื่อคุณไม่ต้องการรับจดห
 msgid "with your e-mail address"
 msgstr "ด้วยที่อยู่อีเมลของคุณ"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:22
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:30
 msgid "Add after"
 msgstr "เพิ่มหลัง"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:20
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:28
 msgid "Add before"
 msgstr "แอดก่อน"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:21
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:29
 msgid "Add below"
 msgstr "เพิ่มด้านล่าง"
 
@@ -6343,7 +6503,7 @@ msgstr "สำเนา"
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "คลิกที่ <strong>เพิ่มรายการเมนู</strong> หรือ <strong>รายการเมนู</strong> เพื่อเพิ่มหน้า"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:25
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr "สำเนา"
@@ -6380,7 +6540,7 @@ msgstr "ลำดับชั้นสำหรับ"
 msgid "Menu"
 msgstr "เมนู"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:27
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
 msgid "Remove"
 msgstr "ลบ"
@@ -6389,7 +6549,11 @@ msgstr "ลบ"
 msgid "Sorry, can’t copy that page."
 msgstr "ขออภัยไม่สามารถคัดลอกหน้านั้นได้"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:157
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
+msgid "THIS CAN NOT BE UNDONE!"
+msgstr "สิ่งนี้ไม่สามารถยกเลิกได้!"
+
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:166
 msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr "รายการนี้อยู่ในลำดับชั้นแล้ว ทุกรายการสามารถเกิดขึ้นได้เพียงครั้งเดียว"
 
@@ -6397,6 +6561,10 @@ msgstr "รายการนี้อยู่ในลำดับชั้น
 #: apps/zotonic_mod_search/src/support/search_query.erl:789
 msgid "Unknown category"
 msgstr "หมวดหมู่ที่ไม่รู้จัก"
+
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
+msgid "and all indented items below it?"
+msgstr "และรายการที่เยื้องด้านล่างทั้งหมด?"
 
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
@@ -6414,7 +6582,7 @@ msgstr "คีย์ API สามารถพบได้บน"
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "พยายามแก้ไขวิดีโอแบบฝังที่การฝัง OEmbed ล้มเหลวก่อนหน้านี้"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:274
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:279
 msgid "Attempting to fix ~p videos."
 msgstr "กำลังพยายามแก้ไขวิดีโอ ~ p"
 
@@ -6426,7 +6594,7 @@ msgstr "การฝังรายการสื่อล้มเหลวด
 msgid "Fix embedded videos"
 msgstr "แก้ไขวิดีโอที่ฝัง"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:271
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:276
 msgid "No embedded videos found which need fixing."
 msgstr "ไม่พบวิดีโอแบบฝังที่ต้องแก้ไข"
 
@@ -6434,11 +6602,11 @@ msgstr "ไม่พบวิดีโอแบบฝังที่ต้อง
 msgid "Save Embedly Key"
 msgstr "บันทึก Embedly Key"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:283
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:288
 msgid "Saved the Embedly settings."
 msgstr "บันทึกการตั้งค่าแบบฝัง"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:285
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:290
 msgid "You don't have permission to change the Embedly settings."
 msgstr "คุณไม่มีสิทธิ์เปลี่ยนการตั้งค่าแบบฝัง"
 
@@ -6750,15 +6918,113 @@ msgstr "เข้าสู่ระบบ"
 msgid "sign up for a username and password"
 msgstr "ลงทะเบียนสำหรับชื่อผู้ใช้และรหัสผ่าน"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:5
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:104
+msgid "Building Zotonic in the background..."
+msgstr "กำลังสร้าง Zotonic ในพื้นหลัง ..."
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:55
+msgid "Error during fetch from version control."
+msgstr "เกิดข้อผิดพลาดระหว่างการดึงข้อมูลจากการควบคุมเวอร์ชัน"
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:73
+msgid "Error running Zotonic update"
+msgstr "เกิดข้อผิดพลาดในการเรียกใช้การอัปเดต Zotonic"
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:87
+msgid "Error running site update"
+msgstr "เกิดข้อผิดพลาดในการเรียกใช้การอัปเดตไซต์"
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:48
+msgid "Fetching updates from the version control..."
+msgstr "กำลังดึงข้อมูลอัปเดตจากการควบคุมเวอร์ชัน ..."
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:68./apps/zotonic_mod_site_update/src/mod_site_update.erl:82
+msgid "Fetching updates..."
+msgstr "กำลังเรียกข้อมูลอัปเดต ..."
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
+msgid "Perform a version control (git/mercurial) update this site."
+msgstr "ดำเนินการควบคุมเวอร์ชัน (git / mercurial) อัปเดตไซต์นี้"
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:5
+msgid "Perform a version update of Zotonic (through git)"
+msgstr "ทำการอัปเดตเวอร์ชันของ Zotonic (ผ่าน git)"
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:53
+msgid "Ready with fetch from version control."
+msgstr "พร้อมกับการดึงข้อมูลจากการควบคุมเวอร์ชัน"
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
+msgid "Rebuild Zotonic"
+msgstr "สร้าง Zotonic ใหม่"
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:14
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:14
+msgid "Recompile changed Erlang files in the background"
+msgstr "คอมไพล์ไฟล์ Erlang ที่เปลี่ยนแปลงในพื้นหลัง"
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
+msgid "Site update API token"
+msgstr "โทเค็น API การอัปเดตไซต์"
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:9
+msgid "Site update is not available as the site does not use a known version control system, like git."
+msgstr "การอัปเดตไซต์ไม่พร้อมใช้งานเนื่องจากไซต์ไม่ได้ใช้ระบบควบคุมเวอร์ชันที่รู้จักเช่น git"
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:94./apps/zotonic_mod_site_update/src/mod_site_update.erl:106
+msgid "Sorry this can only be run from the Zotonic status site"
+msgstr "ขออภัยสิ่งนี้สามารถเรียกใช้ได้จากไซต์สถานะ Zotonic เท่านั้น"
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:58
+msgid "Sorry, this site is not from a known version control system"
+msgstr "ขออภัยไซต์นี้ไม่ได้มาจากระบบควบคุมเวอร์ชันที่รู้จัก"
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
+msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
+msgstr "โทเค็นนี้ใช้เพื่อรักษาความปลอดภัยการเรียก API ของเว็บฮุคสำหรับการอัปเดตเว็บไซต์นี้ด้วยการกดรหัสไปยัง Github (หรือบริการที่คล้ายกันเช่น BitBucket)"
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
+msgid "To run the webhook update, configure your service to POST to the following URL:"
+msgstr "ในการรันการอัปเดต webhook ให้กำหนดค่าบริการของคุณเป็น POST เป็น URL ต่อไปนี้:"
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:90
+msgid "Unknown site or no version control folder present."
+msgstr "ไซต์ที่ไม่รู้จักหรือไม่มีโฟลเดอร์ควบคุมเวอร์ชันอยู่"
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
+msgid "Update Zotonic"
+msgstr "อัปเดต Zotonic"
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
+msgid "Update site"
+msgstr "อัปเดตไซต์"
+
+#: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
+msgid "Update the site and templates from the version control system."
+msgstr "อัปเดตไซต์และเทมเพลตจากระบบควบคุมเวอร์ชัน"
+
+#: apps/zotonic_mod_site_update/src/mod_site_update.erl:76
+msgid "Zotonic has not been checked out using version control."
+msgstr "Zotonic ไม่ได้รับการตรวจสอบโดยใช้การควบคุมเวอร์ชัน"
+
+#: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
+msgid "update"
+msgstr "อัพเดต"
+
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:5
 msgid "Certificate Authority"
 msgstr "ผู้ออกใบรับรอง"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:17
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:17
 msgid "This certificate is located in"
 msgstr "ใบรับรองนี้อยู่ใน"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl.mod_ssl_ca.tpl:11
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:11
 msgid "This certificate is provided by a certificate authority."
 msgstr "ใบรับรองนี้จัดทำโดยผู้ออกใบรับรอง"
 
@@ -6774,7 +7040,7 @@ msgstr "ตรวจสอบ URL ต่อไปนี้:"
 msgid "Could not start fetching the SSL certificate. Try again later."
 msgstr "ไม่สามารถเริ่มดึงใบรับรอง SSL โปรดลองอีกครั้งในภายหลัง"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:47
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:47
 msgid "If there are problems requesting a Let’s Encrypt certificate then check:"
 msgstr "หากมีปัญหาในการขอใบรับรอง Let's Encrypt ให้ตรวจสอบ:"
 
@@ -6782,7 +7048,7 @@ msgstr "หากมีปัญหาในการขอใบรับรอ
 msgid "If you want different hostnames in the certificate then request a new certificate below."
 msgstr "หากคุณต้องการชื่อโฮสต์อื่นในใบรับรองให้ขอใบรับรองใหม่ด้านล่าง"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:10
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:10
 msgid "Let’s Encrypt Certificate"
 msgstr "มาเข้ารหัสใบรับรองกันเถอะ"
 
@@ -6790,7 +7056,7 @@ msgstr "มาเข้ารหัสใบรับรองกันเถอ
 msgid "Let’s Encrypt certificate request was successful!"
 msgstr "ขอเข้ารหัสใบรับรองสำเร็จ!"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:13
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:13
 msgid "Let’s Encrypt provides free SSL certificates for websites. Here you can request such a certificate."
 msgstr "Let's Encrypt ให้บริการใบรับรอง SSL ฟรีสำหรับเว็บไซต์ คุณสามารถขอใบรับรองดังกล่าวได้ที่นี่"
 
@@ -6798,11 +7064,11 @@ msgstr "Let's Encrypt ให้บริการใบรับรอง SSL �
 msgid "Make sure your hostname is reachable and resolves to a routable address."
 msgstr "ตรวจสอบว่าชื่อโฮสต์ของคุณสามารถเข้าถึงได้และเปลี่ยนเป็นที่อยู่ที่กำหนดเส้นทางได้"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:42
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:42
 msgid "Only admnistrators can request certificates."
 msgstr "เฉพาะผู้ดูแลระบบเท่านั้นที่สามารถขอใบรับรองได้"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:15
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:15
 msgid "Read more at the Let’s Encrypt website"
 msgstr "อ่านเพิ่มเติมได้ที่เว็บไซต์ Let's Encrypt"
 
@@ -6838,15 +7104,15 @@ msgstr "สถานะใบรับรองจะอัปเดตเมื
 msgid "The checked hostnames will be added to the certificate."
 msgstr "ชื่อโฮสต์ที่ตรวจสอบจะถูกเพิ่มลงในใบรับรอง"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:37
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:37
 msgid "The errors above need to be corrected before a certificate can be requested."
 msgstr "ข้อผิดพลาดข้างต้นจำเป็นต้องได้รับการแก้ไขก่อนจึงจะสามารถขอใบรับรองได้"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:22
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:22
 msgid "The port for HTTP requests must be 80, it is now"
 msgstr "พอร์ตสำหรับคำขอ HTTP ต้องเป็น 80 ตอนนี้"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:29
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:29
 msgid "The port for HTTPS requests must be 443, it is now"
 msgstr "พอร์ตสำหรับคำขอ HTTPS ต้องเป็น 443 ตอนนี้"
 
@@ -6862,11 +7128,11 @@ msgstr "ไม่มีใบรับรองจาก Let's Encrypt คุณ
 msgid "This might take a while, hang on!"
 msgstr "อาจใช้เวลาสักครู่โปรดรอ!"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:23
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:23
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
 msgstr "คุณสามารถเปลี่ยนแปลงได้โดยตั้งค่า <tt>พอร์ต</tt> ในไฟล์คอนฟิกูเรชัน <tt>zotonic.config</tt>"
 
-#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl.mod_ssl_letsencrypt.tpl:30
+#: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:30
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
 msgstr "คุณสามารถเปลี่ยนแปลงได้โดยการตั้งค่า <tt>ssl_port</tt> ในไฟล์คอนฟิกูเรชัน <tt>zotonic.config</tt>"
 
@@ -6878,7 +7144,7 @@ msgstr "คุณต้องเป็นผู้ดูแลระบบเพ
 msgid "not reachable or local IP"
 msgstr "ไม่สามารถเข้าถึงได้หรือ IP ในเครื่อง"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:23
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:25
 msgid "Add a question or block"
 msgstr "เพิ่มคำถามหรือบล็อก"
 
@@ -6902,7 +7168,7 @@ msgstr "เพิ่มหน้ากระโดด"
 msgid "Add question"
 msgstr "เพิ่มคำถาม"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:22
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:36
 msgid "Add question after"
 msgstr "เพิ่มคำถามหลัง"
 
@@ -6914,7 +7180,7 @@ msgstr "เพิ่มคำถามโดยเพิ่มบล็อคด
 msgid "Aggregated results from all respondents (only results for multiple choice questions are shown)"
 msgstr "ผลลัพธ์โดยรวมจากผู้ตอบทั้งหมด (แสดงเฉพาะผลลัพธ์สำหรับคำถามปรนัยเท่านั้น)"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:69
 msgid "Agree"
 msgstr "ตกลง"
 
@@ -6966,7 +7232,7 @@ msgstr "ปุ่ม"
 msgid "Button style"
 msgstr "ลักษณะปุ่ม"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:109./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
 msgid "Button text"
 msgstr "ข้อความปุ่ม"
 
@@ -6978,7 +7244,7 @@ msgstr "หมวดหมู่ให้เลือก"
 msgid "Check the answer in the admin."
 msgstr "ตรวจสอบคำตอบในแอดมิน"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:74
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76
 msgid "Chinese food is best for money"
 msgstr "อาหารจีนดีที่สุดสำหรับเงิน"
 
@@ -7015,7 +7281,7 @@ msgstr "ลบหน้า"
 msgid "Delete page jump"
 msgstr "ลบหน้ากระโดด"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:23
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:37
 msgid "Delete question"
 msgstr "ลบคำถาม"
 
@@ -7023,11 +7289,11 @@ msgstr "ลบคำถาม"
 msgid "Disabled, hide the survey form"
 msgstr "ปิดใช้งานซ่อนแบบสำรวจ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:63
 msgid "Disagree"
 msgstr "ไม่เห็นด้วย"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Do you like pea soup?"
 msgstr "คุณชอบซุปถั่วไหม?"
 
@@ -7055,11 +7321,11 @@ msgstr "สิ้นสุดคำถาม"
 msgid "Example:"
 msgstr "ตัวอย่าง:"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:20./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:36
 msgid "Explanation"
 msgstr "คำอธิบาย"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:51./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:8./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:8./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
 msgid "False"
 msgstr "เท็จ"
 
@@ -7083,7 +7349,7 @@ msgstr "กรอก"
 msgid "Fill in the missing parts."
 msgstr "เติมเต็มในส่วนที่ขาด"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:129
 msgid "First page in category"
 msgstr "หน้าแรกในหมวดหมู่"
 
@@ -7107,7 +7373,7 @@ msgstr "การจัดการ"
 msgid "Help about surveys"
 msgstr "ความช่วยเหลือเกี่ยวกับการสำรวจ"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:63./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:46./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:71./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:63
 msgid "Hide from results"
 msgstr "ซ่อนจากผลลัพธ์"
 
@@ -7119,11 +7385,11 @@ msgstr "ซ่อนข้อมูลความคืบหน้า"
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "ซ่อนรหัสของผู้ใช้หรือรหัสเบราว์เซอร์จากการส่งออกผลลัพธ์"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77
 msgid "I always eat with others"
 msgstr "ฉันกินข้าวกับคนอื่นตลอด"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:90
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
 msgid "I am"
 msgstr "ฉัน"
 
@@ -7131,7 +7397,7 @@ msgstr "ฉัน"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color      ]."
 msgstr "ฉันอายุ [age] ปี ฉันชอบไอศกรีม [icecream = vanilla | strawberry | chocolate | other] และสีที่ฉันชอบคือ [color]"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:75
 msgid "I like Chinese restaurants"
 msgstr "ฉันชอบร้านอาหารจีน"
 
@@ -7183,7 +7449,7 @@ msgstr "ลิเคิร์ท"
 msgid "Long answer"
 msgstr "คำตอบยาว"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:117
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:119
 msgid "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 msgstr "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 
@@ -7195,7 +7461,7 @@ msgstr "จดหมายที่กรอกแบบสำรวจถึง
 msgid "Mail results to"
 msgstr "ส่งผลลัพธ์ไปที่"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Match which answer fits best."
 msgstr "จับคู่คำตอบที่เหมาะสมที่สุด"
 
@@ -7227,15 +7493,11 @@ msgstr "จำเป็นสำหรับการส่งผ่าน"
 msgid "New result:"
 msgstr "ผลลัพธ์ใหม่:"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
-msgid "Next"
-msgstr "ต่อไป"
-
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:129
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
 msgid "Next page in category"
 msgstr "หน้าถัดไปในหมวดหมู่"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:43./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "ไม่"
 
@@ -7259,7 +7521,7 @@ msgstr "หนึ่งคำตอบต่อบรรทัด"
 msgid "Only accept images."
 msgstr "ยอมรับเฉพาะรูปภาพ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:125
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
 msgid "Options from a page category"
 msgstr "ตัวเลือกจากหมวดหมู่หน้า"
 
@@ -7279,7 +7541,7 @@ msgstr "ผ่านไป"
 msgid "Percent"
 msgstr "เปอร์เซ็นต์"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:30
 msgid "Please enter your information."
 msgstr "กรุณากรอกข้อมูลของคุณ"
 
@@ -7295,7 +7557,7 @@ msgstr "กรุณากรอกข้อมูลในฟิลด์ที
 msgid "Please make a choice."
 msgstr "โปรดเลือก"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:133
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
 msgid "Please upload your file."
 msgstr "โปรดอัปโหลดไฟล์ของคุณ"
 
@@ -7303,7 +7565,7 @@ msgstr "โปรดอัปโหลดไฟล์ของคุณ"
 msgid "Please upload your image."
 msgstr "โปรดอัปโหลดภาพของคุณ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:16
 msgid "Please write an essay."
 msgstr "กรุณาเขียนเรียงความ"
 
@@ -7347,11 +7609,11 @@ msgstr "แบบทดสอบหรือคำถามทดสอบ"
 msgid "Randomize answers"
 msgstr "สุ่มคำตอบ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:82
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84
 msgid "Red"
 msgstr "แดง"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
 msgid "Required, this question must be answered."
 msgstr "จำเป็นต้องตอบคำถามนี้"
 
@@ -7371,7 +7633,7 @@ msgstr "บันทึกแล้ว"
 msgid "Score"
 msgstr "คะแนน"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:128
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "Second page in category"
 msgstr "หน้าที่สองในหมวดหมู่"
 
@@ -7379,11 +7641,11 @@ msgstr "หน้าที่สองในหมวดหมู่"
 msgid "Select country"
 msgstr "เลือกประเทศ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:71
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
 msgid "Select which you agree with."
 msgstr "เลือกสิ่งที่คุณเห็นด้วย"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
 msgstr "เลือกประเทศของคุณ"
 
@@ -7443,11 +7705,11 @@ msgstr "เลิก"
 msgid "Stop the survey after this page. No questions are submitted."
 msgstr "หยุดการสำรวจหลังจากหน้านี้ ไม่มีการส่งคำถาม"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:33./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:40./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:54./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
 msgstr "เห็นด้วยอย่างยิ่ง"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:23./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:59./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:60
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:8./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:59./apps/zotonic_mod_survey/src/questions/survey_q_likert.erl:60
 msgid "Strongly Disagree"
 msgstr "ไม่เห็นด้วยอย่างยิ่ง"
 
@@ -7503,11 +7765,11 @@ msgstr "ขอขอบคุณที่ตอบแบบสำรวจขอ
 msgid "Thank you text only"
 msgstr "ข้อความขอบคุณเท่านั้น"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:14
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "Thank you text."
 msgstr "ขอบคุณข้อความ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "The earth is flat."
 msgstr "พื้นโลกแบน"
 
@@ -7535,7 +7797,7 @@ msgstr "บล็อกนี้ส่งสัญญาณให้หยุด
 msgid "This is a result for:"
 msgstr "นี่เป็นผลลัพธ์สำหรับ:"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:14
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
 msgstr "ข้อความนี้จะแสดงหลังจากส่งแบบสำรวจแล้ว"
 
@@ -7559,7 +7821,7 @@ msgstr "สลับมุมมองเค้าร่าง"
 msgid "Totals"
 msgstr "ผลรวม"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:23./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:7./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:7./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:23./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:7./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:7./apps/zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
 msgid "True"
 msgstr "จริง"
 
@@ -7571,11 +7833,11 @@ msgstr "ถูกผิด"
 msgid "Validation"
 msgstr "การตรวจสอบ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:83
 msgid "Wagner"
 msgstr "แว็กเนอร์"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:61./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
 msgid "Weasels make great pets."
 msgstr "วีเซิลเป็นสัตว์เลี้ยงที่ยอดเยี่ยม"
 
@@ -7587,7 +7849,7 @@ msgstr "เมื่อเสร็จสิ้นการแสดง"
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "เมื่อไม่มีเงื่อนไขใดเป็นจริงคำถามต่อจากช่วงพักนี้จะเป็นหน้าถัดไป"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:44./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:24./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:22./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:29./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "ใช่"
 
@@ -7627,7 +7889,7 @@ msgstr "คุณต้องตั้งชื่อให้กับทุก
 msgid "Your result"
 msgstr "ผลลัพธ์ของคุณ"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:93
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:95
 msgid "chocolate"
 msgstr "ช็อคโกแลต"
 
@@ -7635,7 +7897,7 @@ msgstr "ช็อคโกแลต"
 msgid "go to"
 msgstr "ไปที่"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:94
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
 msgid "ice cream and my favorite color is"
 msgstr "ไอศกรีมและสีโปรดของฉันคือ"
 
@@ -7679,7 +7941,7 @@ msgstr "คำถาม == 1"
 msgid "select…"
 msgstr "เลือก…"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:92
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:94
 msgid "years old. I like"
 msgstr "ปี. ฉันชอบ"
 
@@ -8083,11 +8345,11 @@ msgstr "หน้าการจัดการแอปพลิเคชัน
 msgid "Converting"
 msgstr "กำลังแปลง"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:185
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:186
 msgid "Vimeo Video"
 msgstr "วิดีโอ Vimeo"
 
-#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:183
+#: apps/zotonic_mod_video_embed/src/mod_video_embed.erl:184
 msgid "Youtube Video"
 msgstr "วิดีโอ Youtube"
 
@@ -8326,30 +8588,6 @@ msgstr "คุณสามารถเยี่ยมชมเว็บไซต
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:1
 msgid "Your site is ready"
 msgstr "ไซต์ของคุณพร้อมแล้ว"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
-msgid "Perform a version control (git/mercurial) update this site."
-msgstr "ดำเนินการควบคุมเวอร์ชัน (git / mercurial) อัปเดตไซต์นี้"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:5
-msgid "Perform a version update of Zotonic (through git)"
-msgstr "ทำการอัปเดตเวอร์ชันของ Zotonic (ผ่าน git)"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
-msgid "Rebuild Zotonic"
-msgstr "สร้าง Zotonic ใหม่"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:14
-msgid "Recompile changed Erlang files in the background"
-msgstr "คอมไพล์ไฟล์ Erlang ที่เปลี่ยนแปลงในพื้นหลัง"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
-msgid "Update Zotonic"
-msgstr "อัปเดต Zotonic"
-
-#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
-msgid "update"
-msgstr "อัพเดต"
 
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:54
 msgid "Are you sure you want to restart the site:"
