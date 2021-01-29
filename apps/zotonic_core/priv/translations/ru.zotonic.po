@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 10:54\n"
+"PO-Revision-Date: 2021-01-29 11:52\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -2248,7 +2248,7 @@ msgstr "Используйте кнопку <i class=\"glyphicon glyphicon-cog\"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
 msgid "A copy of all email is sent to"
-msgstr ""
+msgstr "Копия всего электронного письма отправляется на адрес"
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
@@ -2260,7 +2260,7 @@ msgstr "Добавить ключ"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
 msgid "All email is sent to"
-msgstr ""
+msgstr "Все письма отправляются на"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
@@ -2269,7 +2269,7 @@ msgstr "Альтернативные имена"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:70./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:109
 msgid "Always use SSL"
-msgstr ""
+msgstr "Всегда используйте SSL"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
@@ -2290,27 +2290,27 @@ msgstr "Конфигурация"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:132
 msgid "Defaults to the hostname of the site."
-msgstr ""
+msgstr "По умолчанию используется имя хоста сайта."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
 msgid "Domain for all generated from- and envelop-addresses."
-msgstr ""
+msgstr "Домен для всех сгенерированных адресов отправителя и конверта."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
 msgid "E-mail override"
-msgstr ""
+msgstr "E-mail override"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 msgid "Email FROM"
-msgstr ""
+msgstr "Электронная почта ОТ"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
 msgid "Email configuration"
-msgstr ""
+msgstr "Конфигурация электронной почты"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:8
 msgid "Email configuration and settings"
-msgstr ""
+msgstr "Конфигурация и настройки электронной почты"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:13
 msgid "Enable <strong>mod_ssl_letsencrypt</strong> to request free SSL certificates from"
@@ -2318,7 +2318,7 @@ msgstr "Включите <strong>mod_ssl_letsencrypt</strong> для запро�
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
 msgid "Here you can see all the email configurations and send test emails."
-msgstr ""
+msgstr "Здесь вы можете увидеть все конфигурации электронной почты и отправить тестовые письма."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
@@ -2327,11 +2327,11 @@ msgstr "Имя хоста"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:133
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
-msgstr ""
+msgstr "Если вы измените это, вам может потребоваться запросить новый сертификат SSL, включающий это имя хоста."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
-msgstr ""
+msgstr "Можно перехватить всю электронную почту и отправить ее на один адрес. Настройте этот адрес здесь."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:15./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -2375,15 +2375,15 @@ msgstr "Пожалуйста, укажите имя модуля, ключ и з
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:51./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
 msgid "Relay hostname"
-msgstr ""
+msgstr "Имя хоста ретрансляции"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:90
 msgid "Relay port"
-msgstr ""
+msgstr "Релейный порт"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:127
 msgid "SMTP Hostname"
-msgstr ""
+msgstr "Имя хоста SMTP"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
 msgid "SSL Certificates"
@@ -2403,23 +2403,23 @@ msgstr "Отправить"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:168
 msgid "Send a test email"
-msgstr ""
+msgstr "Отправить тестовое письмо"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:173
 msgid "Send a test email or check the status of an email address."
-msgstr ""
+msgstr "Отправьте тестовое электронное письмо или проверьте статус электронного адреса."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:4
 msgid "Sent an email to"
-msgstr ""
+msgstr "Отправлено письмо на адрес"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
 msgid "Sent email to"
-msgstr ""
+msgstr "Отправлено письмо на адрес"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:7
 msgid "Show log for message"
-msgstr ""
+msgstr "Показать журнал сообщений"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
 msgid "System Configuration"
@@ -2427,11 +2427,11 @@ msgstr "Системная конфигурация"
 
 #: apps/zotonic_mod_admin_config/priv/templates/email_test.tpl:3
 msgid "Test email from"
-msgstr ""
+msgstr "Тестовое письмо от"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:42
 msgid "The Zotonic system configuration is set to use a SMTP relay."
-msgstr ""
+msgstr "Конфигурация системы Zotonic настроена на использование реле SMTP."
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
@@ -2439,7 +2439,7 @@ msgstr "Параметр уже существует, пожалуйста, за
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:143
 msgid "The default FROM address for emails. Defaults to"
-msgstr ""
+msgstr "Адрес ОТ по умолчанию для писем. По умолчанию"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
@@ -2459,11 +2459,11 @@ msgstr "Это список сертификатов, предоставляем
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:17./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:25./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
 msgid "This is a setting in the system configuration and can not be overruled."
-msgstr ""
+msgstr "Это параметр конфигурации системы, и его нельзя изменить."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:76
 msgid "This is useful if this server is not allowed to send email or to use servers with a better reputation."
-msgstr ""
+msgstr "Это полезно, если этому серверу не разрешено отправлять электронную почту или использовать серверы с лучшей репутацией."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:31
 msgid "This module doesn’t supply a certificate."
@@ -2471,7 +2471,7 @@ msgstr "Этот модуль не предоставляет сертифика
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:47./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:80
 msgid "Use relay to send email"
-msgstr ""
+msgstr "Использовать реле для отправки электронной почты"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:63./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:96
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
@@ -2497,15 +2497,15 @@ msgstr "Просмотр статуса электронной почты"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:159
 msgid "You must be an administrator to view or change the email configuration."
-msgstr ""
+msgstr "Вы должны быть администратором, чтобы просматривать или изменять конфигурацию электронной почты."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
-msgstr ""
+msgstr "Zotonic отправляет электронную почту через встроенный почтовый сервер. Вы можете отправить электронное письмо через внешнее реле."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:181
 msgid "test@example.com"
-msgstr ""
+msgstr "test@example.com"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
@@ -2596,7 +2596,7 @@ msgstr "Нажмите OK, чтобы войти в систему под эти
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
 msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
-msgstr ""
+msgstr "Щелкните ссылку, чтобы подтвердить свой адрес электронной почты. Скопируйте всю ссылку и вставьте ее в свой браузер, если это не сработает."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:10
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
@@ -2666,7 +2666,7 @@ msgstr "Домой"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:20
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
-msgstr ""
+msgstr "Если вы не знаете этот сайт, не обращайте внимания на это письмо. Может кто ошибся."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:33
 msgid "Leave empty to not change the password."
@@ -2723,7 +2723,7 @@ msgstr "Только администратор или сам пользоват
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
 msgid "Please verify your email address"
-msgstr ""
+msgstr "Пожалуйста, подтвердите свой адрес электронной почты"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
 msgid "Random secure password:"
@@ -2799,7 +2799,7 @@ msgstr "Это действие нельзя отменить. Имя и пар�
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
 msgid "This email address was added to your personal information on"
-msgstr ""
+msgstr "Этот адрес электронной почты был добавлен к вашей личной информации на"
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:154
 msgid "This is not a valid e-mail address."
@@ -2921,7 +2921,7 @@ msgstr "Вы должны быть администратором для доб�
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
-msgstr ""
+msgstr "Вы получили это письмо, потому что подтвердили свой адрес электронной почты. Вы не будете получать никаких дополнительных писем из-за этого запроса."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
@@ -3517,7 +3517,7 @@ msgstr "Доступ запрещен"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:45
 msgid "Already connected"
-msgstr ""
+msgstr "Уже подключен"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 msgid "Authenticated"
@@ -3565,7 +3565,7 @@ msgstr "Закройте это окно и войдите в систему, е
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
 msgid "Close window"
-msgstr ""
+msgstr "Закрыть окно"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -3579,7 +3579,7 @@ msgstr "Ошибка подтверждения"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Either the email or the password you entered is incorrect. Please try again."
-msgstr ""
+msgstr "Вы ввели неверный адрес электронной почты или пароль. Пожалуйста, попробуйте еще раз."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
@@ -3608,7 +3608,7 @@ msgstr "Введите адрес электронной почты или им�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:2
 msgid "Enter your email address to receive instructions on how to reset your password."
-msgstr ""
+msgstr "Введите свой адрес электронной почты, чтобы получить инструкции по изменению пароля."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:118
@@ -3691,7 +3691,7 @@ msgstr "Держите меня в курсе"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
 msgid "Log on with"
-msgstr ""
+msgstr "Войти через"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:44./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:48
@@ -3719,7 +3719,7 @@ msgstr "Одну минуту, пожалуйста"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:64
 msgid "Other username or email"
-msgstr ""
+msgstr "Другое имя пользователя или адрес электронной почты"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
@@ -3814,7 +3814,7 @@ msgstr "Извините, ваш код для сброса пароля нев�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133
 msgid "Stay logged on unless I log off."
-msgstr ""
+msgstr "Оставайтесь в системе, пока я не выйду из системы."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
@@ -3822,7 +3822,7 @@ msgstr "Адрес e-mail, соответствующий вашей учетн�
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
 msgid "The new password must be different from the previous one. Please and try again."
-msgstr ""
+msgstr "Новый пароль должен отличаться от предыдущего. Пожалуйста, попробуйте еще раз."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -3838,7 +3838,7 @@ msgstr "Пароли должны совпадать. Пожалуйста, вв
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
 msgid "The two-factor authentication passcode did not match. Please try again."
-msgstr ""
+msgstr "Код доступа двухфакторной аутентификации не соответствует. Пожалуйста, попробуйте еще раз."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "There was a problem authenticating with"
@@ -3868,7 +3868,7 @@ msgstr "Используйте некоторые не алфавитные си
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:52./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:68
 msgid "Username or email"
-msgstr ""
+msgstr "Имя пользователя или адрес электронной почты"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
 msgid "Verify your account"
@@ -3892,7 +3892,7 @@ msgstr "Теперь вы подписаны."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
 msgid "You can log in using the following external service"
-msgstr ""
+msgstr "Вы можете войти в систему, используя следующую внешнюю службу"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:37
 msgid "You have to share your email address to be able to sign in."
@@ -3909,7 +3909,7 @@ msgstr "Для просмотра или изменения настроенны
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:36
 msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
-msgstr ""
+msgstr "Вы получили это письмо, потому что запросили сброс пароля для своей учетной записи, указав свое имя пользователя или адрес электронной почты. Вы не будете получать никаких дополнительных писем из-за этого запроса."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
@@ -3954,7 +3954,7 @@ msgstr "час"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
 msgid "external service"
-msgstr ""
+msgstr "внешняя служба"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
@@ -3963,7 +3963,7 @@ msgstr "или"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:103
 msgid "or you can enter the password that you have for"
-msgstr ""
+msgstr "или вы можете ввести пароль, который у вас есть для"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "the service"
@@ -4593,7 +4593,7 @@ msgstr "Контроллер"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:45
 msgid "Could not fetch tracer output, please try again."
-msgstr ""
+msgstr "Не удалось получить выходные данные трассировщика, попробуйте еще раз."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
 msgid "Development"
@@ -5662,7 +5662,7 @@ msgstr "Получено"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
 msgid "Relayed"
-msgstr ""
+msgstr "Реле"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
 msgid "Resources with email identity"
@@ -6551,7 +6551,7 @@ msgstr "Простите, не могу скопировать эту стран
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
 msgid "THIS CAN NOT BE UNDONE!"
-msgstr ""
+msgstr "ЭТО НЕ МОЖЕТ БЫТЬ ОТМЕНЕНО!"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:166
 msgid "This item is already in the hierarchy. Every item can only occur once."
@@ -6564,7 +6564,7 @@ msgstr "Неизвестная категория"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
 msgid "and all indented items below it?"
-msgstr ""
+msgstr "и все элементы с отступом под ним?"
 
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
@@ -6920,27 +6920,27 @@ msgstr "зарегистрироваться под именем пользов�
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:104
 msgid "Building Zotonic in the background..."
-msgstr ""
+msgstr "Создание Zotonic в фоновом режиме ..."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:55
 msgid "Error during fetch from version control."
-msgstr ""
+msgstr "Ошибка при загрузке из системы контроля версий."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:73
 msgid "Error running Zotonic update"
-msgstr ""
+msgstr "Ошибка при запуске Zotonic update"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:87
 msgid "Error running site update"
-msgstr ""
+msgstr "Ошибка при запуске обновления сайта"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:48
 msgid "Fetching updates from the version control..."
-msgstr ""
+msgstr "Получение обновлений из системы контроля версий ..."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:68./apps/zotonic_mod_site_update/src/mod_site_update.erl:82
 msgid "Fetching updates..."
-msgstr ""
+msgstr "Получение обновлений ..."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
@@ -6954,7 +6954,7 @@ msgstr "Выполните обновление версии Zotonic (через
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:53
 msgid "Ready with fetch from version control."
-msgstr ""
+msgstr "Готово с выборкой из системы контроля версий."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
@@ -6968,31 +6968,31 @@ msgstr "Перекомпилировать измененные файлы Erlan
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
-msgstr ""
+msgstr "Токен API обновления сайта"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:9
 msgid "Site update is not available as the site does not use a known version control system, like git."
-msgstr ""
+msgstr "Обновление сайта недоступно, так как сайт не использует известную систему контроля версий, например git."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:94./apps/zotonic_mod_site_update/src/mod_site_update.erl:106
 msgid "Sorry this can only be run from the Zotonic status site"
-msgstr ""
+msgstr "Извините, это можно запустить только с сайта статуса Zotonic"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:58
 msgid "Sorry, this site is not from a known version control system"
-msgstr ""
+msgstr "Извините, этот сайт не из известной системы контроля версий"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
-msgstr ""
+msgstr "Этот токен используется для защиты вызова API веб-перехватчика для обновления этого веб-сайта при отправке кода на Github (или аналогичные службы, такие как BitBucket)."
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
 msgid "To run the webhook update, configure your service to POST to the following URL:"
-msgstr ""
+msgstr "Чтобы запустить обновление веб-перехватчика, настройте службу на POST по следующему URL-адресу:"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:90
 msgid "Unknown site or no version control folder present."
-msgstr ""
+msgstr "Неизвестный сайт или папка управления версиями отсутствует."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
@@ -7001,15 +7001,15 @@ msgstr "Обновление Zotonic"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 msgid "Update site"
-msgstr ""
+msgstr "Обновить сайт"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Update the site and templates from the version control system."
-msgstr ""
+msgstr "Обновите сайт и шаблоны из системы контроля версий."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:76
 msgid "Zotonic has not been checked out using version control."
-msgstr ""
+msgstr "Zotonic не проверялся с помощью контроля версий."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
