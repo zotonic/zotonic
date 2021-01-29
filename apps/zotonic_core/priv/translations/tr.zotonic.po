@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 10:54\n"
+"PO-Revision-Date: 2021-01-29 11:52\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -2248,7 +2248,7 @@ msgstr "Kategori eklemek yada kaldırmak için <i class=\"glyphicon glyphicon-co
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
 msgid "A copy of all email is sent to"
-msgstr ""
+msgstr "Tüm e-postaların bir kopyası adresine gönderilir"
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
@@ -2260,7 +2260,7 @@ msgstr "Anahtar ekle"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
 msgid "All email is sent to"
-msgstr ""
+msgstr "Tüm e-postalar şu adrese gönderilir:"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
@@ -2269,7 +2269,7 @@ msgstr "Alternatif isimler"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:70./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:109
 msgid "Always use SSL"
-msgstr ""
+msgstr "Her zaman SSL kullan"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
@@ -2290,27 +2290,27 @@ msgstr "Yapılandırma"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:132
 msgid "Defaults to the hostname of the site."
-msgstr ""
+msgstr "Sitenin ana bilgisayar adına varsayılan."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
 msgid "Domain for all generated from- and envelop-addresses."
-msgstr ""
+msgstr "Tüm oluşturulan ve zarf adresleri için alan."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
 msgid "E-mail override"
-msgstr ""
+msgstr "E-posta geçersiz kılma"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 msgid "Email FROM"
-msgstr ""
+msgstr "Tarafından eposta"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:44
 msgid "Email configuration"
-msgstr ""
+msgstr "E-posta yapılandırması"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:8
 msgid "Email configuration and settings"
-msgstr ""
+msgstr "E-posta yapılandırması ve ayarları"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:13
 msgid "Enable <strong>mod_ssl_letsencrypt</strong> to request free SSL certificates from"
@@ -2318,7 +2318,7 @@ msgstr "Bedava SSL sertifikaları istemek için <strong>mod_ssl_letsencrypt</str
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
 msgid "Here you can see all the email configurations and send test emails."
-msgstr ""
+msgstr "Burada tüm e-posta yapılandırmalarını görebilir ve test e-postaları gönderebilirsiniz."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
@@ -2327,11 +2327,11 @@ msgstr "Ana Bilgisayar Adı"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:133
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
-msgstr ""
+msgstr "Bunu değiştirirseniz, bu ana bilgisayar adını içeren yeni bir SSL sertifikası istemeniz gerekebilir."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
-msgstr ""
+msgstr "Tüm e-postaları kesmek ve tek bir adrese göndermek mümkündür. Bu adresi burada yapılandırın."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:15./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -2375,15 +2375,15 @@ msgstr "Yeni yapılandırma anahtarı için modül, anahtar ve değer alanların
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:51./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
 msgid "Relay hostname"
-msgstr ""
+msgstr "Geçiş ana bilgisayar adı"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:90
 msgid "Relay port"
-msgstr ""
+msgstr "Röle bağlantı noktası"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:127
 msgid "SMTP Hostname"
-msgstr ""
+msgstr "SMTP Ana Bilgisayar Adı"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:49
 msgid "SSL Certificates"
@@ -2403,23 +2403,23 @@ msgstr "Gönder"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:168
 msgid "Send a test email"
-msgstr ""
+msgstr "Bir test e-postası gönderin"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:173
 msgid "Send a test email or check the status of an email address."
-msgstr ""
+msgstr "Bir test e-postası gönderin veya bir e-posta adresinin durumunu kontrol edin."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:4
 msgid "Sent an email to"
-msgstr ""
+msgstr "Adresine bir e-posta gönderildi"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:97
 msgid "Sent email to"
-msgstr ""
+msgstr "Adresine e-posta gönderildi"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:7
 msgid "Show log for message"
-msgstr ""
+msgstr "Mesaj günlüğünü göster"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
 msgid "System Configuration"
@@ -2427,11 +2427,11 @@ msgstr "Sitem yapılandırması"
 
 #: apps/zotonic_mod_admin_config/priv/templates/email_test.tpl:3
 msgid "Test email from"
-msgstr ""
+msgstr "Tarafından gönderilen test e-postası"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:42
 msgid "The Zotonic system configuration is set to use a SMTP relay."
-msgstr ""
+msgstr "Zotonic sistem yapılandırması bir SMTP geçişi kullanacak şekilde ayarlanmıştır."
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:61
 msgid "The config key already exists, please choose another key name."
@@ -2439,7 +2439,7 @@ msgstr "Bu isimde bir yapılandırma anahtarı zaten var, lütfen başka bir isi
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:143
 msgid "The default FROM address for emails. Defaults to"
-msgstr ""
+msgstr "E-postalar için varsayılan KİMDEN adresi. Varsayılan değer"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
@@ -2459,11 +2459,11 @@ msgstr "Bu, modüller ve sistem tarafından sağlanan sertifikaların bir listes
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:17./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:25./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
 msgid "This is a setting in the system configuration and can not be overruled."
-msgstr ""
+msgstr "Bu, sistem konfigürasyonundaki bir ayardır ve geçersiz sayılamaz."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:76
 msgid "This is useful if this server is not allowed to send email or to use servers with a better reputation."
-msgstr ""
+msgstr "Bu sunucunun e-posta göndermesine veya daha iyi itibara sahip sunucuları kullanmasına izin verilmiyorsa bu yararlıdır."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:31
 msgid "This module doesn’t supply a certificate."
@@ -2471,7 +2471,7 @@ msgstr "Bu modül bir sertifika sağlamıyor."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:47./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:80
 msgid "Use relay to send email"
-msgstr ""
+msgstr "E-posta göndermek için geçiş kullanın"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:63./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:96
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
@@ -2497,15 +2497,15 @@ msgstr "E-posta durumunu görüntüle"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:159
 msgid "You must be an administrator to view or change the email configuration."
-msgstr ""
+msgstr "E-posta yapılandırmasını görüntülemek veya değiştirmek için yönetici olmanız gerekir."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
-msgstr ""
+msgstr "Zotonic, yerleşik bir e-posta sunucusu kullanarak e-posta gönderir. E-postayı harici bir aktarma yoluyla gönderebilirsiniz."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:181
 msgid "test@example.com"
-msgstr ""
+msgstr "test@example.com"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
@@ -2596,7 +2596,7 @@ msgstr "Bu kullanıcı hesabıyla oturum açmak için Tamam'a tıklayın. Bu kul
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
 msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
-msgstr ""
+msgstr "E-posta adresinizi onaylamak için bağlantıya tıklayın. Bu işe yaramazsa bağlantının tamamını kopyalayın ve tarayıcınıza yapıştırın."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:10
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
@@ -2666,7 +2666,7 @@ msgstr "Ana sayfa"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:20
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
-msgstr ""
+msgstr "Bu siteyi bilmiyorsanız, lütfen bu e-postayı dikkate almayın. Belki birisi hata yapmıştır."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:33
 msgid "Leave empty to not change the password."
@@ -2723,7 +2723,7 @@ msgstr "Sadece bir yönetici veya kullanıcının kendisi bir şifre oluşturabi
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
 msgid "Please verify your email address"
-msgstr ""
+msgstr "Lütfen email adresini doğrula"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
 msgid "Random secure password:"
@@ -2799,7 +2799,7 @@ msgstr "Geri alınamaz. Kullanıcı adı ve şifre kaybedilir."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
 msgid "This email address was added to your personal information on"
-msgstr ""
+msgstr "Bu e-posta adresi kişisel bilgilerinize eklendi"
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:154
 msgid "This is not a valid e-mail address."
@@ -2921,7 +2921,7 @@ msgstr "Kullanıcı eklemek için bir yönetici olmalısınız."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
-msgstr ""
+msgstr "Bu e-postayı, e-posta adresinizi doğruladığınız için aldınız. Bu istek nedeniyle başka e-posta almayacaksınız."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
@@ -3517,7 +3517,7 @@ msgstr "Erişim reddedildi"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:45
 msgid "Already connected"
-msgstr ""
+msgstr "Zaten bağlı"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 msgid "Authenticated"
@@ -3565,7 +3565,7 @@ msgstr "Bu pencereyi kapatın ve zaten kullanıcısı iseniz giriş yapın"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
 msgid "Close window"
-msgstr ""
+msgstr "Pencereyi kapat"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -3579,7 +3579,7 @@ msgstr "Onaylama hatası"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Either the email or the password you entered is incorrect. Please try again."
-msgstr ""
+msgstr "Girdiğiniz e-posta veya şifre yanlış. Lütfen tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
 msgid "Enable <em>mod_facebook</em> to see Facebook settings."
@@ -3608,7 +3608,7 @@ msgstr "E-posta adresinizi yada kullanıcı adınızı girin"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:2
 msgid "Enter your email address to receive instructions on how to reset your password."
-msgstr ""
+msgstr "Parolanızı nasıl sıfırlayacağınızla ilgili talimatları almak için e-posta adresinizi girin."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:118
@@ -3691,7 +3691,7 @@ msgstr "Oturumumu açık tut"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
 msgid "Log on with"
-msgstr ""
+msgstr "İle oturum açın"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:44./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:48
@@ -3719,7 +3719,7 @@ msgstr "Bir saniye lütfen"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:64
 msgid "Other username or email"
-msgstr ""
+msgstr "Diğer kullanıcı adı veya e-posta"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
@@ -3814,7 +3814,7 @@ msgstr "Üzgünüz, şifre sıfırlama kodunuz yanlış ya da süresi dolmuş"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133
 msgid "Stay logged on unless I log off."
-msgstr ""
+msgstr "Oturumu kapatmadığım sürece oturumunuz açık kalsın."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:20
 msgid "The email address associated with your account is"
@@ -3822,7 +3822,7 @@ msgstr "Hesabınıza bağlı e-posta adresi"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
 msgid "The new password must be different from the previous one. Please and try again."
-msgstr ""
+msgstr "Yeni şifre öncekinden farklı olmalıdır. Lütfen ve tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -3838,7 +3838,7 @@ msgstr "İki şifre birbirinin aynı olmalı. Lütfen tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
 msgid "The two-factor authentication passcode did not match. Please try again."
-msgstr ""
+msgstr "İki faktörlü kimlik doğrulama parolası eşleşmedi. Lütfen tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "There was a problem authenticating with"
@@ -3868,7 +3868,7 @@ msgstr "Harf dışında karakterler yada sayılar kullanarak tahmin edilebilmesi
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:52./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:68
 msgid "Username or email"
-msgstr ""
+msgstr "Kullanıcı adı ya da email"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
 msgid "Verify your account"
@@ -3892,7 +3892,7 @@ msgstr "Şimdi giriş yaptınız."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
 msgid "You can log in using the following external service"
-msgstr ""
+msgstr "Aşağıdaki harici hizmeti kullanarak giriş yapabilirsiniz"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:37
 msgid "You have to share your email address to be able to sign in."
@@ -3909,7 +3909,7 @@ msgstr "Uygulama anahtarını görüntülemek yada değiştirmek için sistem ay
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:36
 msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
-msgstr ""
+msgstr "Bu e-postayı, kullanıcı adınızı veya e-posta adresinizi girerek hesabınız için bir şifre sıfırlama talep ettiğiniz için aldınız. Bu istek nedeniyle başka e-posta almayacaksınız."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:5
 msgid "You'll need to create a new one."
@@ -3954,7 +3954,7 @@ msgstr "bir saat"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
 msgid "external service"
-msgstr ""
+msgstr "dış hizmet"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
@@ -3963,7 +3963,7 @@ msgstr "ya da"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:103
 msgid "or you can enter the password that you have for"
-msgstr ""
+msgstr "veya sahip olduğunuz şifreyi girebilirsiniz"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "the service"
@@ -4593,7 +4593,7 @@ msgstr "Kontrolcü"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:45
 msgid "Could not fetch tracer output, please try again."
-msgstr ""
+msgstr "İzleme çıktısı alınamadı, lütfen tekrar deneyin."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:246
 msgid "Development"
@@ -5662,7 +5662,7 @@ msgstr "Alınan"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
 msgid "Relayed"
-msgstr ""
+msgstr "Relayed"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
 msgid "Resources with email identity"
@@ -6551,7 +6551,7 @@ msgstr "Üzgünüz, bu sayfa kopyalanamıyor."
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
 msgid "THIS CAN NOT BE UNDONE!"
-msgstr ""
+msgstr "BU GERİ ALINAMAZ!"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:166
 msgid "This item is already in the hierarchy. Every item can only occur once."
@@ -6564,7 +6564,7 @@ msgstr "Bilinmeyen kategori"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:120
 msgid "and all indented items below it?"
-msgstr ""
+msgstr "ve altındaki tüm girintili öğeler?"
 
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
@@ -6920,27 +6920,27 @@ msgstr "kullanıcı adı ve şifre için kayıt olun"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:104
 msgid "Building Zotonic in the background..."
-msgstr ""
+msgstr "Arka planda Zotonic inşa ediliyor ..."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:55
 msgid "Error during fetch from version control."
-msgstr ""
+msgstr "Sürüm kontrolünden alınırken hata oluştu."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:73
 msgid "Error running Zotonic update"
-msgstr ""
+msgstr "Zotonic güncellemesi çalıştırılırken hata oluştu"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:87
 msgid "Error running site update"
-msgstr ""
+msgstr "Site güncellemesi çalıştırılırken hata oluştu"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:48
 msgid "Fetching updates from the version control..."
-msgstr ""
+msgstr "Sürüm kontrolünden güncellemeler alınıyor ..."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:68./apps/zotonic_mod_site_update/src/mod_site_update.erl:82
 msgid "Fetching updates..."
-msgstr ""
+msgstr "Güncellemeler alınıyor ..."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
@@ -6954,7 +6954,7 @@ msgstr "Zotonic için sürüm güncellemesi yapın (git vasıtası ile)"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:53
 msgid "Ready with fetch from version control."
-msgstr ""
+msgstr "Sürüm kontrolünden getirmeye hazır."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
@@ -6968,31 +6968,31 @@ msgstr "Değiştirilen Erlang dosyalarını arka planda yeniden oluştur"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
-msgstr ""
+msgstr "Site güncelleme API simgesi"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:9
 msgid "Site update is not available as the site does not use a known version control system, like git."
-msgstr ""
+msgstr "Site, git gibi bilinen bir sürüm kontrol sistemi kullanmadığından site güncellemesi mevcut değildir."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:94./apps/zotonic_mod_site_update/src/mod_site_update.erl:106
 msgid "Sorry this can only be run from the Zotonic status site"
-msgstr ""
+msgstr "Üzgünüz, bu sadece Zotonic durum sitesinden çalıştırılabilir"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:58
 msgid "Sorry, this site is not from a known version control system"
-msgstr ""
+msgstr "Üzgünüz, bu site bilinen bir sürüm kontrol sisteminden değil"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
-msgstr ""
+msgstr "Bu simge, bu web sitesini Github'a (veya BitBucket gibi benzer hizmetlere) gönderilen bir kodla güncellemek için webhook API çağrısını güvence altına almak için kullanılır."
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
 msgid "To run the webhook update, configure your service to POST to the following URL:"
-msgstr ""
+msgstr "Webhook güncellemesini çalıştırmak için hizmetinizi aşağıdaki URL'ye POST yapacak şekilde yapılandırın:"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:90
 msgid "Unknown site or no version control folder present."
-msgstr ""
+msgstr "Bilinmeyen site veya sürüm kontrol klasörü yok."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
@@ -7001,15 +7001,15 @@ msgstr "Zotonic'i Güncelle"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 msgid "Update site"
-msgstr ""
+msgstr "Siteyi güncelle"
 
 #: apps/zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Update the site and templates from the version control system."
-msgstr ""
+msgstr "Siteyi ve şablonları sürüm kontrol sisteminden güncelleyin."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:76
 msgid "Zotonic has not been checked out using version control."
-msgstr ""
+msgstr "Zotonic, sürüm kontrolü kullanılarak teslim alınmadı."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 #: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
