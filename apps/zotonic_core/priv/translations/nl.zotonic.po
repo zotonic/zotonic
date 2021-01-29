@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 10:55\n"
+"PO-Revision-Date: 2021-01-29 16:42\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2252,7 +2252,7 @@ msgstr "Gebruik de knop <i class=\"glyphicon glyphicon-cog\"></i> om categorieë
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
 msgid "A copy of all email is sent to"
-msgstr "Er wordt een kopie van alle e-mail verzonden naar"
+msgstr "Een kopie van alle e-mail wordt verzonden naar"
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
@@ -2322,7 +2322,7 @@ msgstr "Schakel <strong>mod_ssl_letsencrypt</strong> in om gratis SSL-certificat
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
 msgid "Here you can see all the email configurations and send test emails."
-msgstr "Hier kunt u alle e-mailconfiguraties zien en test-e-mails verzenden."
+msgstr "Hier kan je alle e-mailconfiguraties zien en test e-mails verzenden."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
@@ -2331,7 +2331,7 @@ msgstr "Hostnaam"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:133
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
-msgstr "Als u dit wijzigt, moet u mogelijk een nieuw SSL-certificaat aanvragen dat deze hostnaam bevat."
+msgstr "Als je dit wijzigt, moet je mogelijk een nieuw SSL-certificaat aanvragen dat deze hostnaam bevat."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
@@ -2379,11 +2379,11 @@ msgstr "Vul de module, sleutel en waarde in voor de nieuwe configuratieregel."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:51./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
 msgid "Relay hostname"
-msgstr "Hostnaam van relay"
+msgstr "Relay hostnaam"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:90
 msgid "Relay port"
-msgstr "Relaispoort"
+msgstr "Relay poort"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:127
 msgid "SMTP Hostname"
@@ -2411,7 +2411,7 @@ msgstr "Stuur een testmail"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:173
 msgid "Send a test email or check the status of an email address."
-msgstr "Stuur een test-e-mail of controleer de status van een e-mailadres."
+msgstr "Stuur een test e-mail of controleer de status van een e-mailadres."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:4
 msgid "Sent an email to"
@@ -2505,7 +2505,7 @@ msgstr "U moet een beheerder zijn om de e-mailconfiguratie te bekijken of te wij
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
-msgstr "Zotonic verzendt e-mail met behulp van een ingebouwde e-mailserver. U kunt de e-mail verzenden via een extern relais."
+msgstr "Zotonic verzendt e-mail met behulp van een ingebouwde e-mailserver. Je kan de e-mail verzenden via een externe doorstuurdienst (relay)."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:181
 msgid "test@example.com"
@@ -3567,7 +3567,7 @@ msgstr "Sluit dit venster en log in als u al een gebruiker bent van"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:60
 msgid "Close window"
-msgstr "Venster sluiten"
+msgstr "Sluit venster"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25./apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -3965,7 +3965,7 @@ msgstr "of"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:103
 msgid "or you can enter the password that you have for"
-msgstr "of u kunt het wachtwoord invoeren dat u voor heeft"
+msgstr "of je kan het wachtwoord invoeren dat je hebt voor"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "the service"
