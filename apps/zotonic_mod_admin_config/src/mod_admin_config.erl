@@ -43,7 +43,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                     parent=admin_system,
                     label=?__("Email configuration", Context),
                     url={admin_config_email},
-                    visiblecheck={acl, use, mod_admin_config}}
+                    visiblecheck={acl, use, mod_admin_config}},
         #menu_item{ id=admin_config_ssl,
                     parent=admin_system,
                     label=?__("SSL Certificates", Context),
