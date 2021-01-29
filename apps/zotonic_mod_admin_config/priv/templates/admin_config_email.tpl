@@ -178,7 +178,7 @@
                         delegate=`mod_admin_config`
                 %}
                 <form id="test-email" class="form form-inline" action="postback">
-                    <input type="email" class="form-control" name="email" value="" placeholder="{_ test@example.com _}">
+                    <input type="email" required class="form-control" name="email" value="" placeholder="{_ test@example.com _}">
                     <button type="submit" name="send" class="btn btn-primary">{_ Send _}</button>
                     {% if m.modules.active.mod_email_status %}
                         <button type="submit" name="status" class="btn btn-default">{_ View email status _}</button>
