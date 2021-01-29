@@ -1,6 +1,7 @@
 %% -*- mode: erlang -*-
 %% Dispatch rule for overview of configuration settings.
 [
- {admin_config,     ["admin", "config"], controller_admin_config, [ seo_noindex ]},
- {admin_config_ssl, ["admin", "ssl"],    controller_admin,        [ {template, "admin_config_ssl.tpl"}, seo_noindex ]}
+ {admin_config,       ["admin", "config"], controller_admin_config, [ seo_noindex ]},
+ {admin_config_ssl,   ["admin", "ssl"],    controller_admin,        [ {template, "admin_config_ssl.tpl"}, seo_noindex ]},
+ {admin_config_email, ["admin", "email"],  controller_admin,        [ {template, "admin_config_email.tpl"}, seo_noindex ]}
 ].

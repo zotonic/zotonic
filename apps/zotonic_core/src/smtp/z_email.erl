@@ -54,9 +54,9 @@
 % The email domain depends on the site sending the e-mail
 -spec email_domain(z:context()) -> binary().
 email_domain(Context) ->
-    case m_config:get_value(site, smtphost, Context) of
-        undefined -> z_context:hostname(Context);
-        SmtpHost -> z_convert:to_binary(SmtpHost)
+    case z_convert:to_binary( m_config:get_value(site, smtphost, Context) ) of
+        <<>> -> z_context:hostname(Context);
+        SmtpHost -> SmtpHost
     end.
 
 % Ensure that the sites's domain is attached to the email address.

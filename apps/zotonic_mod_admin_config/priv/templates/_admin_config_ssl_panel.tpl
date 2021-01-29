@@ -7,7 +7,7 @@
             {% else %}
                 {{ cert.mod_title }}
             {% endif %}
-            <span class="text-muted pull-right">{{ cert.module }}</span>
+            <span class="text-muted pull-right">{{ cert.module|default:"zotonic" }}</span>
         </h3>
     </div>
     <div class="panel-body">

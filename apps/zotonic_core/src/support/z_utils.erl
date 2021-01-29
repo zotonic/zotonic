@@ -24,7 +24,7 @@
 
 -export([
     pipeline/2,
-
+    write_terms/2,
     get_value/2,
     get_value/3,
     are_equal/2,
@@ -148,6 +148,14 @@ pipeline_apply(_F, _As, _AsLen) ->
     nofun.
 
 
+%% @doc Write a file that is readable by file:consult/1
+-spec write_terms( file:filename_all(), list(term()) ) -> ok | {error, term()}.
+write_terms(Filename, List) when is_list(List) ->
+    Format = fun(Term) -> io_lib:format("~tp.~n", [Term]) end,
+    Text = unicode:characters_to_binary(lists:map(Format, List)),
+    file:write_file(Filename, Text).
+
+
 %% @doc Get a value from a map or a proplist. Return 'undefined' if
 %% The value was not present.
 -spec get_value( term(), map() | list() ) -> term().
@@ -167,7 +175,7 @@ get_value(Key, Map, Default) when is_list(Map) ->
 
 %%% FORMAT %%%
 f(S) -> f(S, []).
-f(S, Args) -> lists:flatten(io_lib:format(S, Args)).
+f(S, Args) -> iolist_to_binary( io_lib:format(S, Args) ).
 
 
 %% @doc Return an abspath to a directory relative to the application root.
