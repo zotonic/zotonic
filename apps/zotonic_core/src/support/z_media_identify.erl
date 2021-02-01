@@ -480,6 +480,7 @@ extension(<<"audio/wav">>, _PreferExtension) -> <<".wav">>;
 extension(<<"audio/x-m4a">>, _PreferExtension) -> <<".m4a">>;
 extension(<<"audio/mp4">>, _PreferExtension) -> <<".m4a">>;
 extension(<<"audio/mp4a-latm">>, _PreferExtension) -> <<".m4a">>;
+extension(<<"application/pgp-keys">>, _PreferExtension) -> <<".asc">>;
 extension(Mime, undefined) ->
     Extensions = mimetypes:extensions(Mime),
     first_extension(Extensions);
