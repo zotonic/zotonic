@@ -430,6 +430,8 @@ extension("text/plain", _PreferExtension) -> ".txt";
 extension(<<"text/plain">>, _PreferExtension) -> ".txt";
 extension("audio/wav", _PreferExtension) -> ".wav";
 extension(<<"audio/wav">>, _PreferExtension) -> ".wav";
+extension("application/pgp-keys", _PreferExtension) -> ".asc";
+extension(<<"application/pgp-keys">>, _PreferExtension) -> ".asc";
 extension(Mime, PreferExtension) ->
     Extensions = mimetypes:extensions(z_convert:to_binary(Mime)),
     case PreferExtension of
