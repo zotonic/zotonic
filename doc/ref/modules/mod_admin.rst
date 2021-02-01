@@ -252,4 +252,8 @@ The ``depiction`` is used for the TinyMCE image-link dialog; it shows all media 
 The ``mod_admin.rsc_dialog_is_published`` defines the default *is_published* state for new resources being mad in the *new* tab.
 Setting this key to `1` will check the *is_published* checkbox.
 
+The ``mod_admin.edge_list_max_length`` defines the maximum number of connections shown per predicate in the
+connection list sidebar. If there are more connections then the list truncated, and the message _Too many connections, only the first and last are shown._ is displayed. The default is 100 connections.
+
+
 .. seealso:: :ref:`filter-if_undefined`
