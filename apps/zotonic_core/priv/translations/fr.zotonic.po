@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 10:55\n"
+"PO-Revision-Date: 2021-02-01 15:10\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -718,7 +718,7 @@ msgstr "(privé)"
 msgid "(public)"
 msgstr "(public)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
 msgstr "+ ajouter"
 
@@ -734,7 +734,7 @@ msgstr "<strong>Prénom</strong>Votre premier prénom<br/><strong>Autres prénom
 msgid "About categories"
 msgstr "A propos des catégories"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
 msgstr "Ajouter une connexion:"
 
@@ -1902,9 +1902,9 @@ msgstr "Changer le menu déroulant"
 msgid "Toggle navigation"
 msgstr "Changer la navigation"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:24
-msgid "Too many connections, only the first and last 30 are shown."
-msgstr "Trop de connexions, seul la première et les 30 dernières sont affichées."
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
+msgid "Too many connections, only the first and last are shown."
+msgstr "Trop de connexions, seules la première et la dernière sont affichées."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -1976,7 +1976,7 @@ msgstr "Valable:"
 msgid "View"
 msgstr "Voir"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Voir toutes les connexions"
 

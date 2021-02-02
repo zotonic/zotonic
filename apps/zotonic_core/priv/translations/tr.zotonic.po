@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 11:52\n"
+"PO-Revision-Date: 2021-02-01 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -718,7 +718,7 @@ msgstr "(özel)"
 msgid "(public)"
 msgstr "(halka açık)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
 msgstr "+ ekle"
 
@@ -734,7 +734,7 @@ msgstr "<strong>İlk</strong> konulan isim, ön isim veya vaftiz ismi olarak da 
 msgid "About categories"
 msgstr "Kategoriler hakkında"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
 msgstr "Bir bağlantı ekleyin:"
 
@@ -1902,9 +1902,9 @@ msgstr "Açılır menüyü aç/kapat"
 msgid "Toggle navigation"
 msgstr "Gezinmeyi aç/kapat"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:24
-msgid "Too many connections, only the first and last 30 are shown."
-msgstr "Çok fazla bağlantı, yalnızca ilk ve son 30 adet gösterilir."
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
+msgid "Too many connections, only the first and last are shown."
+msgstr "Çok fazla bağlantı, yalnızca ilk ve sonuncusu gösterilir."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -1976,7 +1976,7 @@ msgstr "Geçerli:"
 msgid "View"
 msgstr "Görüntüle"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Tüm bağlantıları görüntüleyin"
 

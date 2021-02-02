@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 11:52\n"
+"PO-Revision-Date: 2021-02-01 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -718,7 +718,7 @@ msgstr "(pribadi)"
 msgid "(public)"
 msgstr "(publik)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
 msgstr "+ Tambahkan"
 
@@ -734,7 +734,7 @@ msgstr "<strong>Pertama</strong> juga dikenal sebagai nama, nama kecil atau nama
 msgid "About categories"
 msgstr "Tentang kategori"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
 msgstr "Tambahkan sebuah koneksi:"
 
@@ -1902,9 +1902,9 @@ msgstr "Beralih dropdown"
 msgid "Toggle navigation"
 msgstr "Beralih navigasi"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:24
-msgid "Too many connections, only the first and last 30 are shown."
-msgstr "Terlalu banyak sambungan, hanya 30 sambungan pertama dan terakhir yang ditampilkan."
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
+msgid "Too many connections, only the first and last are shown."
+msgstr "Terlalu banyak sambungan, hanya yang pertama dan terakhir yang ditampilkan."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -1976,7 +1976,7 @@ msgstr "Berlaku untuk:"
 msgid "View"
 msgstr "Tampilan"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Lihat semua koneksi"
 

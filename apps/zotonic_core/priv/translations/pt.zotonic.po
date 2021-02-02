@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 10:54\n"
+"PO-Revision-Date: 2021-02-01 15:10\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -718,7 +718,7 @@ msgstr "(privado)"
 msgid "(public)"
 msgstr "(público)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
 msgstr "adicionar"
 
@@ -734,7 +734,7 @@ msgstr "<strong>Primeiro</strong> também conhecido como nome próprio, nome pr�
 msgid "About categories"
 msgstr "Sobre as categorias"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
 msgstr "Acrescente uma ligação:"
 
@@ -1902,9 +1902,9 @@ msgstr "Alternar dropdown"
 msgid "Toggle navigation"
 msgstr "Alternar a navegação"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:24
-msgid "Too many connections, only the first and last 30 are shown."
-msgstr "Demasiadas ligações, apenas a primeira e a última 30 são mostradas."
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
+msgid "Too many connections, only the first and last are shown."
+msgstr "Muitas conexões, apenas a primeira e a última são mostradas."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -1976,7 +1976,7 @@ msgstr "Válido para:"
 msgid "View"
 msgstr "Ver"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Ver todas as ligações"
 

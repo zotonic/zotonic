@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 11:52\n"
+"PO-Revision-Date: 2021-02-01 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -718,7 +718,7 @@ msgstr "(privat)"
 msgid "(public)"
 msgstr "(offentlig)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
 msgstr "+ lägg till"
 
@@ -734,7 +734,7 @@ msgstr "<strong>Första</strong> även känd som förnamn, efternamn eller Chris
 msgid "About categories"
 msgstr "Om kategorier"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
 msgstr "Lägg till en anslutning:"
 
@@ -1902,9 +1902,9 @@ msgstr "Växla rullgardinsmenyn"
 msgid "Toggle navigation"
 msgstr "Växla navigering"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:24
-msgid "Too many connections, only the first and last 30 are shown."
-msgstr "För många anslutningar visas bara de första och sista 30."
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
+msgid "Too many connections, only the first and last are shown."
+msgstr "För många anslutningar, endast den första och den sista visas."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -1976,7 +1976,7 @@ msgstr "Giltig för:"
 msgid "View"
 msgstr "Se"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Visa alla anslutningar"
 

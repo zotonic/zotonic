@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 10:54\n"
+"PO-Revision-Date: 2021-02-01 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -718,7 +718,7 @@ msgstr "(privaatne)"
 msgid "(public)"
 msgstr "(avalik)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
 msgstr "+ lisa"
 
@@ -734,7 +734,7 @@ msgstr "<strong>Esimene</strong> tuntud ka eesnime, eesnime või ristinimena.<br
 msgid "About categories"
 msgstr "Kategooriate kohta"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
 msgstr "Ühenduse lisamine:"
 
@@ -1902,9 +1902,9 @@ msgstr "Lülita rippmenüü sisse"
 msgid "Toggle navigation"
 msgstr "Lülita navigeerimine sisse"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:24
-msgid "Too many connections, only the first and last 30 are shown."
-msgstr "Liiga palju ühendusi, kuvatakse ainult esimesed ja viimased 30."
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
+msgid "Too many connections, only the first and last are shown."
+msgstr "Liiga palju ühendusi, kuvatakse ainult esimene ja viimane."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -1976,7 +1976,7 @@ msgstr "Kehtiv:"
 msgid "View"
 msgstr "Vaade"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Kuva kõik ühendused"
 

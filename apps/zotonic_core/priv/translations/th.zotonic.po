@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-01-29 11:52\n"
+"PO-Revision-Date: 2021-02-01 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -718,7 +718,7 @@ msgstr "(เอกชน)"
 msgid "(public)"
 msgstr "(สาธารณะ)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
 msgstr "+ เพิ่ม"
 
@@ -734,7 +734,7 @@ msgstr "<strong>First</strong> หรือที่เรียกว่าช�
 msgid "About categories"
 msgstr "เกี่ยวกับหมวดหมู่"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
 msgstr "เพิ่มการเชื่อมต่อ:"
 
@@ -1902,9 +1902,9 @@ msgstr "สลับรายการแบบเลื่อนลง"
 msgid "Toggle navigation"
 msgstr "ไม่ต้องสลับช่องทาง"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:24
-msgid "Too many connections, only the first and last 30 are shown."
-msgstr "การเชื่อมต่อมากเกินไประบบจะแสดงเฉพาะ 30 รายการแรกและรายการสุดท้ายเท่านั้น"
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
+msgid "Too many connections, only the first and last are shown."
+msgstr "การเชื่อมต่อมากเกินไประบบจะแสดงเฉพาะรายการแรกและรายการสุดท้ายเท่านั้น"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -1976,7 +1976,7 @@ msgstr "ใช้ได้สำหรับ:"
 msgid "View"
 msgstr "ดู"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "ดูการเชื่อมต่อทั้งหมด"
 
