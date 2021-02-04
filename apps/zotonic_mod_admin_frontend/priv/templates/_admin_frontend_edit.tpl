@@ -15,6 +15,7 @@
 
 {% block rscform %}
 
+{% with id.is_editable as is_editable %}
 {% with id.is_a|default:(m.category[cat].is_a) as cats %}
 {% wire id="rscform"
 		type="submit"
@@ -128,6 +129,7 @@
 		{% endblock %}
 	</div>
 </form>
+{% endwith %}
 {% endwith %}
 
 {% javascript %}
