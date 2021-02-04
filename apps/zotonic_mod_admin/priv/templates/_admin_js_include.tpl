@@ -34,6 +34,8 @@
     "js/modules/livevalidation-1.3.js"
     "js/modules/jquery.loadmask.js"
     "js/modules/jquery.timepicker.min.js"
+
+    minify
 %}
 
 {% all include "_admin_lib_js.tpl" %}
