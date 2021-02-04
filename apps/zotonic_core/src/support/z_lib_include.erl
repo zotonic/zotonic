@@ -97,9 +97,10 @@ url_for(P, Ext, Args, Context) ->
     z_dispatcher:url_for(lib(Args, Context), url_for_args(P, Ext, Args, Context), Context).
 
 lib(Args, Context) ->
-    case z_convert:to_bool( proplists:get_value(minify, Args, false))
-        orelse m_config:get_boolean(site, minification_enabled, Context)
-    of
+    MinifyRequested = z_convert:to_bool( proplists:get_value(minify, Args, false))
+               orelse m_config:get_boolean(site, minification_enabled, Context),
+    IsLiveReload = m_config:get_boolean(mod_development, livereload, Context),
+    case MinifyRequested and not IsLiveReload of
         true -> lib_min;
         false -> lib
     end.
