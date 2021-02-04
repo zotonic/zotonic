@@ -98,6 +98,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	var $menu_item = $a.closest('li.menu-item');
 	var $sorter = $('#{{ in_sorter }}');
 	var $menuedit = $a.closest(".do_menuedit");
+    var options = $sorter.data().uiMenuedit.options;
 
 	if ($menuedit.length === 0) {
 		$menuedit = $(".do_menuedit", $a.closest("div"));
@@ -130,7 +131,8 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	} else if (where == 'copy') {
 		z_transport("mod_menu", "ubf", {
 			cmd: "copy",
-			id: $menu_item.children('div').data('page-id')
+			id: $menu_item.children('div').data('page-id'),
+            template: options.item_template || ""
 		});
 	} else {
 		window.zMenuEditDone = function(v) {
@@ -156,7 +158,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				}
 				$sorter.trigger('sortupdate');
                 cotonic.broker.publish("menu/insert", {
-                    menu_id: '{{ menu_id }}',
+                    menu_id: '{{ menu_id }}'
                 });
 			};
 
@@ -172,7 +174,8 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 			z_transport("mod_menu", "ubf", {
 					cmd: "menu-item-render",
 					id: v.object_id,
-					callback: "window.zMenuNewItem"
+					callback: "window.zMenuNewItem",
+                    template: options.item_template || ""
 				});
 		};
 		z_event("admin-menu-select", {tab: "{{ connect_tab|default:"find" }}"});

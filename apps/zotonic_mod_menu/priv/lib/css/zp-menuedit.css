@@ -31,14 +31,15 @@ ul.tree-list li div.menu-wrapper {
   display: grid;
   grid-template-columns: auto auto 1fr auto auto;
   grid-template-rows: minmax(34px, auto);
-  border: 1px solid #e0e0e0;
+  border: 1px solid #aaa;
   line-height: 34px;
+  border-radius: 4px;
 }
-ul.tree-list li div.menu-wrapper .menu-drag,
-ul.tree-list li div.menu-wrapper > .z-icon-drag {
+ul.tree-list li div.menu-wrapper .menu-drag {
   grid-column: 1;
   cursor: move;
-  padding: 0 10px;
+  background: repeat-y url("/lib/images/grippy2.png") 3px 0;
+  padding: 10px;
 }
 ul.tree-list li div.menu-wrapper .menu-toggle {
   grid-column: 2;
