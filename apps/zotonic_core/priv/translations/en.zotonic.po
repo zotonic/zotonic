@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-04 13:53\n"
+"PO-Revision-Date: 2021-02-04 16:03\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -281,34 +281,34 @@ msgstr "Delete"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 msgid "Delete all user groups"
-msgstr "Menghapus semua kelompok pengguna"
+msgstr "Delete all user groups"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:131
 msgid "Delete is canceled, there are users in the user groups."
-msgstr "Menghapus dibatalkan, ada pengguna dalam kelompok pengguna."
+msgstr "Delete is canceled, there are users in the user groups."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:37
 msgid "Delete user group and move users"
-msgstr "Menghapus grup pengguna dan memindahkan pengguna"
+msgstr "Delete user group and move users"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:159
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:75./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:86./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:92
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:79./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:107
 msgid "Deleting..."
-msgstr "Menghapus..."
+msgstr "Deleting..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:45
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "Mengedit &amp; link-hak atas kolaborasi kelompok"
+msgstr "Edit &amp; link rights on the collaboration groups"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:47
 msgid "Edit Rule"
-msgstr "Mengedit Aturan"
+msgstr "Edit Rule"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:49
 msgid "Edit the collaboration group"
-msgstr "Edit kolaborasi kelompok"
+msgstr "Edit the collaboration group"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
@@ -316,7 +316,7 @@ msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "Ekspor mengedit aturan"
+msgstr "Export edit rules"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
@@ -324,31 +324,31 @@ msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:55
 msgid "File uploads"
-msgstr "Upload File"
+msgstr "File uploads"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:70
 msgid "Find collaboration group"
-msgstr "Menemukan kolaborasi kelompok"
+msgstr "Find collaboration group"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:52
 msgid "Group managers can edit"
-msgstr "Manajer grup dapat mengedit"
+msgstr "Group managers can edit"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:60
 msgid "Group managers can link"
-msgstr "Manajer grup dapat link"
+msgstr "Group managers can link"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:53
 msgid "Group members and managers can edit"
-msgstr "Anggota kelompok dan manajer dapat mengedit"
+msgstr "Group members and managers can edit"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:61
 msgid "Group members and managers can link"
-msgstr "Anggota kelompok dan manajer dapat link"
+msgstr "Group members and managers can link"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 msgid "Import"
-msgstr "Impor"
+msgstr "Import"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
@@ -525,11 +525,11 @@ msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:40
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
-msgstr "Maaf, anda tidak dibenarkan untuk memasukkan halaman kategori ini ke dalam kandungan yang dipilih kumpulan."
+msgstr "Sorry, you are not allowed to insert pages of this category into the selected content group."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
-msgstr "Sistem kandungan kumpulan"
+msgstr "System content groups"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:26
 msgid "Test ACL rules"
@@ -553,7 +553,7 @@ msgstr "The default upload size is:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:47
 msgid "There are no users within these user groups."
-msgstr "Tidak ada pengguna dalam kumpulan-kumpulan pengguna."
+msgstr "There are no users within these user groups."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:15
 msgid "These settings come into effect immediately, no publish of rules is needed,"
@@ -561,7 +561,7 @@ msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:33
 msgid "They are managed by their own manager and use the access rules below."
-msgstr "Mereka diuruskan oleh mereka sendiri pengurus dan menggunakan peraturan akses di bawah."
+msgstr "They are managed by their own manager and use the access rules below."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:33
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:35
@@ -584,7 +584,7 @@ msgstr "Try ACL rules"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
 msgid "Try a different combination of category and content group."
-msgstr "Cuba kombinasi yang berbeza kategori dan kumpulan kandungan."
+msgstr "Try a different combination of category and content group."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:14
 msgid "Try rules..."
@@ -596,7 +596,7 @@ msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "Naik ACL peraturan file yang anda sebelum ini diekspor. Perhatian: semua peraturan semasa akan <b>digantikan</b> oleh peraturan definisi file yang di-upload."
+msgstr "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
 msgid "Use published rules"
@@ -604,7 +604,7 @@ msgstr "Use published rules"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
-msgstr "Gunakan berikut gagal untuk menguji kawalan akses peraturan sebelum menerbitkan mereka."
+msgstr "Use the following URL to test the access control rules before publishing them."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:537
 msgid "User groups"
@@ -612,19 +612,19 @@ msgstr "User groups"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
 msgid "Which version of the ACL rules do you want to use?"
-msgstr "Mana versi ACL peraturan apakah anda ingin menggunakan ini?"
+msgstr "Which version of the ACL rules do you want to use?"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:40
 msgid "You are not allowed to move to this collaboration group."
-msgstr "Anda tidak dibenarkan untuk bergerak untuk kerjasama ini kumpulan."
+msgstr "You are not allowed to move to this collaboration group."
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:57
 msgid "You are not allowed to perform this action"
-msgstr "Anda tidak dibenarkan untuk melakukan aksi ini"
+msgstr "You are not allowed to perform this action"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:73
 msgid "You are not allowed to view this page."
-msgstr "Anda tidak dibenarkan untuk melihat halaman ini."
+msgstr "You are not allowed to view this page."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
 msgid "You are using the <b>published</b> version of the access control rules."
@@ -636,7 +636,7 @@ msgstr "You are using the <b>test</b> version of the access control rules."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
 msgid "You can switch back to the published access control rules by:"
-msgstr "Anda boleh menukar kembali ke diterbitkan kawalan akses peraturan oleh:"
+msgstr "You can switch back to the published access control rules by:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
@@ -644,7 +644,7 @@ msgstr "You can:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
 msgid "You have to use a special URL, as provided by the an editor or administrator."
-msgstr "Anda perlu menggunakan khas URL, seperti yang disediakan oleh seorang editor atau administrator."
+msgstr "You have to use a special URL, as provided by the an editor or administrator."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:90
 msgid "all"
@@ -740,7 +740,7 @@ msgstr "Add a connection:"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:59
 msgid "Add a new media file"
-msgstr "Menambahkan media baru item"
+msgstr "Add a new media file"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:19
 msgid "Add a new media item"
@@ -823,11 +823,11 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 msgid "Are you sure you want to delete the page"
-msgstr "Adakah anda pasti anda mahu untuk menghapus halaman"
+msgstr "Are you sure you want to delete the page"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:72
 msgid "Are you sure you want to exit the admin interface?"
-msgstr "Adakah anda pasti anda mahu untuk keluar dari muka admin?"
+msgstr "Are you sure you want to exit the admin interface?"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 msgid "Aside"
@@ -890,7 +890,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
-msgstr "Memilih item media dari halaman ini untuk memasukkan dalam teks badan."
+msgstr "Choose a media item from this page to insert in the body text."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:92./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:151./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152
 msgid "City"
@@ -963,7 +963,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:9
 msgid "Could not detect anything to import on that URL or embed code."
-msgstr "Tidak boleh mengesan apapun untuk import pada yang URL atau membenamkan kod."
+msgstr "Could not detect anything to import on that URL or embed code."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
 msgid "Count"
@@ -1029,7 +1029,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:46
 msgid "Delete if no other page is connected to this page."
-msgstr "Bersihkan jika tidak ada yang lain halaman disambungkan ke halaman ini."
+msgstr "Delete if no other page is connected to this page."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
 msgid "Delete this page."
@@ -1057,7 +1057,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
-msgstr "Apakah anda ingin membuang blok ini?"
+msgstr "Do you want to remove this block?"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
 msgid "Download"
@@ -1129,7 +1129,7 @@ msgstr "Emergency telephone"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:17
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
-msgstr "Masukkan URL atau membenamkan kod. Ia akan dianalisis dan kau boleh memilih cara untuk import data."
+msgstr "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:36
 msgid "Erlang Init Files"
@@ -1157,11 +1157,11 @@ msgstr "Error uploading the file."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8
 msgid "Every page can have a date range. For example if the page is an event or description of someone’s life."
-msgstr "Setiap halaman boleh ada kencan lingkungan. Sebagai contoh, jika halaman adalah satu acara atau keterangan hidup seseorang."
+msgstr "Every page can have a date range. For example if the page is an event or description of someone’s life."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
-msgstr "Setiap halaman dikategorikan di betul-betul satu kategori. Kategori mendefinisikan apa yang halaman mewakili. Sebagai contoh acara, produk atau seseorang. Kategori hierarki jelas. Dengan cara itu anda boleh mempunyai kenderaan kategori dengan sub kereta dan sepeda."
+msgstr "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:252
 msgid "Existing pages"
@@ -1173,7 +1173,7 @@ msgstr "Failed to download the file."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:38
 msgid "Featured"
-msgstr "Fitur"
+msgstr "Featured"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:4./apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
 msgid "Features"
@@ -1290,7 +1290,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:37
 msgid "Live query, send notifications when matching items are updated or inserted."
-msgstr "Hidup pertanyaan, hantar pemberitahuan apabila hampir sama barang-barang dikemaskini atau dimasukkan."
+msgstr "Live query, send notifications when matching items are updated or inserted."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
 #: apps/zotonic_site_status/priv/templates/_menu.tpl:5./apps/zotonic_site_status/priv/templates/_navbar.tpl:34
@@ -1344,7 +1344,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:60
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
-msgstr "Media merangkumi semua upload gambar, filem dan dokumen. Media boleh melekat ke halaman."
+msgstr "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:42
 msgid "Media file"
@@ -1418,7 +1418,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:18
 msgid "No features are enabled for this meta-resource."
-msgstr "Tidak ada ciri-ciri dibolehkan untuk ini meta-sumber."
+msgstr "No features are enabled for this meta-resource."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:85
 msgid "No items"
@@ -1557,7 +1557,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:40
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
-msgstr "Membina semula semua mencari-indeks dengan meletakkan semua halaman dan data dari pangkalan data dalam indexer barisan. Ini dapat mengambil waktu yang lama!"
+msgstr "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
@@ -1566,7 +1566,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:46
 msgid "Recalculate the numbering of the category tree. This can take a long time."
-msgstr "Mengira nombor kategori pohon. Ini bisa mengambil masa yang lama."
+msgstr "Recalculate the numbering of the category tree. This can take a long time."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
@@ -1622,7 +1622,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Runs the schema install command from the site's module again."
-msgstr "Berjalan skema memasang perintah dari tapak modul lagi."
+msgstr "Runs the schema install command from the site's module again."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:6
 msgid "SEO Content"
@@ -1673,11 +1673,11 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
-msgstr "Pilih yang terhubung gambar"
+msgstr "Select a connected image"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:42
 msgid "Selected Categories"
-msgstr "Kategori Yang Dipilih"
+msgstr "Selected Categories"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:50
 msgid "Selecting a file will make the page a media item."
@@ -1689,35 +1689,35 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:36
 msgid "Short title"
-msgstr "Judul singkat"
+msgstr "Short title"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_features.category.tpl:8
 msgid "Show address on edit page"
-msgstr "Tampilkan alamat pada halaman edit"
+msgstr "Show address on edit page"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:3
 msgid "Show as"
-msgstr "Menunjukkan sebagai"
+msgstr "Show as"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:31
 msgid "Show page on multiple paths"
-msgstr "Tampilkan halaman pada beberapa jalur"
+msgstr "Show page on multiple paths"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:131
 msgid "Something went wrong. Sorry."
-msgstr "Sesuatu yang tidak beres. Maaf."
+msgstr "Something went wrong. Sorry."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
 msgid "Sorry, you don't have permission to add the connection."
-msgstr "Maaf, anda tidak memiliki izin untuk menambah koneksi."
+msgstr "Sorry, you don't have permission to add the connection."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:462
 msgid "Sorry, you have no permission to add the connection."
-msgstr "Maaf, anda tidak memiliki izin untuk menambah koneksi."
+msgstr "Sorry, you have no permission to add the connection."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:464
 msgid "Sorry, you have no permission to delete the connection."
-msgstr "Maaf, Anda tidak memiliki izin untuk menghapus koneksi."
+msgstr "Sorry, you have no permission to delete the connection."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:171
 msgid "Standard"
@@ -1729,11 +1729,11 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
-msgstr "Dimulai"
+msgstr "Starts"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
 msgid "State"
-msgstr "Negara"
+msgstr "State"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:135
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
@@ -1753,26 +1753,26 @@ msgstr "Street Line 2"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:116
 msgid "Structure"
-msgstr "Struktur"
+msgstr "Structure"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:23
 msgid "Summary"
-msgstr "Ringkasan"
+msgstr "Summary"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:28
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
 msgid "Sur. prefix"
-msgstr "Sur. awalan"
+msgstr "Sur. prefix"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:30
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:41
 msgid "Surname"
-msgstr "Nama"
+msgstr "Surname"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:130
 msgid "System"
-msgstr "Sistem"
+msgstr "System"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:3
 msgid "System Status"
@@ -1780,20 +1780,20 @@ msgstr "Status Sistem"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:8
 msgid "System administration"
-msgstr "Sistem administrasi"
+msgstr "System administration"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
-msgstr "Telepon"
+msgstr "Telephone"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:37
 msgid "Templates will be recompiled."
-msgstr "Template yang akan dikompilasi ulang."
+msgstr "Templates will be recompiled."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:30
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:37
 msgid "Test query"
-msgstr "Uji kueri"
+msgstr "Test query"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:173
 msgid "Text"
@@ -1801,23 +1801,23 @@ msgstr "Text"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
 msgid "The category tree is rebuilding. This can take a long time."
-msgstr "Kategori pohon adalah membangun kembali. Hal ini dapat memakan waktu yang lama."
+msgstr "The category tree is rebuilding. This can take a long time."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
-msgstr "Halaman"
+msgstr "The page"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:44
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
-msgstr "Pencarian indeks pembangunan kembali. Tergantung pada ukuran database, hal ini dapat memakan waktu yang lama."
+msgstr "The search index is rebuilding. Depending on the database size, this can take a long time."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:50
 msgid "The site’s data is being reinstalled. Watch the console for messages"
-msgstr "Data situs telah diinstal ulang. Tonton konsol untuk pesan"
+msgstr "The site’s data is being reinstalled. Watch the console for messages"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:12
 msgid "There are no pages with a connection to the page"
-msgstr "Tidak ada halaman dengan sambungan ke halaman yang"
+msgstr "There are no pages with a connection to the page"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
 msgid "There is already a page with this name."
@@ -1825,11 +1825,11 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:3
 msgid "This can't be undone. Your page will be lost forever."
-msgstr "Ini tidak dapat dibatalkan. Halaman anda akan hilang selamanya."
+msgstr "This can't be undone. Your page will be lost forever."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:83
 msgid "This connection already exists."
-msgstr "Hubungan ini sudah ada."
+msgstr "This connection already exists."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:164./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:141
 msgid "This file contains links to other files or locations."
@@ -1861,37 +1861,37 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:42
 msgid "This name is in use by another page."
-msgstr "Nama ini digunakan oleh halaman lain."
+msgstr "This name is in use by another page."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:25
 msgid "This page has been deleted."
-msgstr "Halaman ini telah dihapus."
+msgstr "This page has been deleted."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:9
 msgid "This page holds a collection of administrative options to perform certain tasks on this Zotonic installation."
-msgstr "Halaman ini memegang koleksi administratif pilihan untuk melakukan tugas-tugas tertentu pada Zotonic instalasi."
+msgstr "This page holds a collection of administrative options to perform certain tasks on this Zotonic installation."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8
 msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
-msgstr "Halaman ini dapat terhubung ke orang lain. Misalnya anda dapat menghubungkannya ke seorang aktor atau merek."
+msgstr "This page is able to connect to others. For example you can connect it to an actor or a brand."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51
 msgid "This resource was created by the module"
-msgstr "Sumber daya ini diciptakan oleh modul"
+msgstr "This resource was created by the module"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:66
 msgid "Till"
-msgstr "Sampai"
+msgstr "Till"
 
 #: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
 msgid "Timeout while trying to fetch data from the website."
-msgstr "Timeout ketika mencoba untuk mengambil data dari website."
+msgstr "Timeout while trying to fetch data from the website."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
-msgstr "Judul"
+msgstr "Title"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:5
 msgid "Toggle dropdown"
@@ -1909,7 +1909,7 @@ msgstr ""
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:8
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
-msgstr "Ketik teks untuk pencarian"
+msgstr "Type text to search"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:25
 msgid "Type title or filter existing content"
@@ -1917,11 +1917,11 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "Unique name"
-msgstr "Nama unik"
+msgstr "Unique name"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Unique uri"
-msgstr "Unik uri"
+msgstr "Unique uri"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:19
 msgid "Unused"
@@ -1933,7 +1933,7 @@ msgstr "Upload File"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
-msgstr "Meng-Upload file dari komputer anda."
+msgstr "Upload a file from your computer."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:63
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
@@ -2210,41 +2210,41 @@ msgstr ""
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:42
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:40
 msgid "Delete All Pages"
-msgstr "Menghapus Semua halaman"
+msgstr "Delete All Pages"
 
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:71
 msgid "Delete is canceled, there are pages in the category."
-msgstr "Menghapus dibatalkan, ada halaman-halaman di kategori ini."
+msgstr "Delete is canceled, there are pages in the category."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:27
 msgid "Drag categories to the place where you want them in the hierarchy."
-msgstr "Drag kategori ke tempat di mana anda ingin mereka dalam hirarki."
+msgstr "Drag categories to the place where you want them in the hierarchy."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:21
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:45
 msgid "How does this work?"
-msgstr "Bagaimana apakah ini bekerja?"
+msgstr "How does this work?"
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:17
 msgid "Move all pages in these categories to:"
-msgstr "Memindahkan semua halaman di kategori ini:"
+msgstr "Move all pages in these categories to:"
 
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:87
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:93
 msgid "Not all resources could be deleted."
-msgstr "Tidak semua sumber daya bisa dihapus."
+msgstr "Not all resources could be deleted."
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:33
 msgid "Or click <strong>Delete All Pages</strong> to delete all pages in the categories."
-msgstr "Atau klik <strong>Hapus Semua Halaman</strong> untuk menghapus semua halaman dalam kategori."
+msgstr "Or click <strong>Delete All Pages</strong> to delete all pages in the categories."
 
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:49
 msgid "There are no pages in these categories."
-msgstr "Tidak ada halaman-halaman di kategori ini."
+msgstr "There are no pages in these categories."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:24
 msgid "Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove categories."
-msgstr "Menggunakan <i class=\"glyphicon glyphicon-cog\"></i> tombol untuk menambah atau menghapus kategori."
+msgstr "Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove categories."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
 msgid "A copy of all email is sent to"
@@ -2252,11 +2252,11 @@ msgstr ""
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
-msgstr "Tambahkan konfigurasi kunci"
+msgstr "Add configuration key"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:25
 msgid "Add key"
-msgstr "Tambahkan kunci"
+msgstr "Add key"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
 msgid "All email is sent to"
