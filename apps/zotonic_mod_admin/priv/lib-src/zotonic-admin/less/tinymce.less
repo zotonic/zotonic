@@ -34,10 +34,31 @@ table.mceLayout, textarea.tinyMCE {
 
 div.widget-content .mce-tinymce.mce-container {
     border: 0;
-    margin: 0 -4px 0 -4px; /* makes it fill the whole widget-content area */
 }
 
 /* sets tinyMCE font size in admin */
-div.widget-content .mce-container, div.widget-content .mce-container *, div.widget-content .mce-widget, div.widget-content .mce-widget *, div.widget-content .mce-reset {
+div.widget-content .mce-container,
+div.widget-content .mce-container *,
+div.widget-content .mce-widget,
+div.widget-content .mce-widget *,
+div.widget-content .mce-reset {
     font-size: 13px;
+}
+
+.mce-container {
+    border: none;
+    .mce-panel {
+        border: none;
+    }
+
+    .mce-statusbar {
+        border-bottom: 0;
+        border-top: 1px solid @gray-lighter;
+
+        .mce-path-item {
+            background: @gray-lighter;
+            border-radius: 5px;
+            padding: 2px 6px;
+        }
+    }
 }

@@ -11,7 +11,8 @@
         <meta name="description" content="" />
 
         {% lib
-            "admin-bootstrap3/css/bootstrap.min.css"
+            "css/admin-bootstrap3.css"
+            minify
         %}
 
         {% lib
@@ -24,6 +25,7 @@
             "css/logon.css"
             "css/jquery.loadmask.css"
             "css/zotonic-admin.css"
+            minify
         %}
 
         {% all include "_html_head.tpl" %}

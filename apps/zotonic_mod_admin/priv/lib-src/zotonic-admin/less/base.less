@@ -1,6 +1,6 @@
 body {
     color: @textColorDark;
-    background-color: #fff;
+    background-color: @body-bg;
 
     &.wait {
         cursor: wait;
@@ -79,6 +79,12 @@ video {
 .admin-container {
     margin: @baseMargin;
     margin-top: @topbarHeight + @topbarBottomMargin;
+
+    > table {
+        background-color: white;
+        border-radius: @radiusWidget;
+        border-bottom: 0;
+    }
 }
 
 .admin-padding {

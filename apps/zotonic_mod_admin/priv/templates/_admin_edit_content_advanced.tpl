@@ -11,34 +11,34 @@
 {% block widget_id %}edit-advanced{% endblock %}
 
 {% block widget_content %}
-<fieldset class="form-horizontal">
     {% if id.is_authoritative %}
-	    <div class="form-group row">
-		    <label class="control-label col-md-3" for="field-page-path">{_ Page path _}</label>
-            <div class="col-md-9">
-		        <input class="form-control" type="text" id="field-page-path" name="page_path" value="{{ id.page_path }}" {% if not id.is_editable %}disabled="disabled"{% endif %}  {% include "_language_attrs.tpl" language=`en` %} placeholder="{{ id.default_page_url|escape }}" />
-            </div>
+	    <div class="form-group label-floating">
+	        <input class="form-control" type="text" id="field-page-path" name="page_path" value="{{ id.page_path }}"
+                {% if not id.is_editable %}disabled="disabled"{% endif %}
+                {% include "_language_attrs.tpl" language=`en` %}
+                placeholder="{_ Page path _} &mdash; {{ id.default_page_url|escape }}"
+            >
+            <label class="control-label" for="field-page-path">{_ Page path _}</label>
 	    </div>
 
-        <div class="form-group row">
-            <div class="col-md-9 col-md-offset-3 checkbox">
-                <label class="control-label">
-                    <input type="checkbox" id="field-is-page-path-multiple"
-                        name="is_page_path_multiple" value="1"
-                        {% if id.is_page_path_multiple %}checked{% endif %}
-                        {% if not id.is_editable %}disabled="disabled"{% endif %}
-                    />
-                    {_ Show page on multiple paths _}
-                </label>
-            </div>
+        <div class="form-group">
+            <label class="control-label">
+                <input type="checkbox" id="field-is-page-path-multiple"
+                    name="is_page_path_multiple" value="1"
+                    {% if id.is_page_path_multiple %}checked{% endif %}
+                    {% if not id.is_editable %}disabled="disabled"{% endif %}
+                />
+                {_ Show page on multiple paths _}
+            </label>
         </div>
 
-	    <div class="form-group row">
+	    <div class="form-group label-floating">
 	        {% if m.acl.use.mod_admin_config %}
-	            <label class="control-label col-md-3" for="field-name">{_ Unique name _}</label>
-                <div class="col-md-9">
-	                <input class="form-control" type="text" id="name" name="name" value="{{ id.name }}" {% if not id.is_editable or id == 1 %}disabled="disabled"{% endif %} {% include "_language_attrs.tpl" language=`en` %}/>
-                </div>
+                <input class="form-control" type="text" id="name" name="name" value="{{ id.name }}" {% if not id.is_editable or id == 1 %}disabled="disabled"{% endif %}
+                {% include "_language_attrs.tpl" language=`en` %}
+                placeholder="{_ Unique name _}" 
+                >
+                <label class="control-label" for="field-name">{_ Unique name _}</label>
                 {% validate id="name" type={name_unique id=id failure_message=_"This name is in use by another page."} %}
 	        {% else %}
 	            &nbsp;
@@ -53,16 +53,14 @@
 
     {% if m.acl.use.mod_admin_config %}
 	    {% if id.is_a.meta or not id.is_authoritative %}
-	        <div class="form-group row">
-                <label class="control-label col-md-3" for="field-uri">{_ Unique uri _}</label>
-                <div class="col-md-9">
-                    <input class="form-control" type="text" id="field-uri" name="uri" value="{{ id.uri }}" {% if not id.is_editable %}disabled="disabled"{% endif %} />
-                </div>
+	        <div class="form-group label-floating">
+                <input class="form-control" type="text" id="field-uri" name="uri" value="{{ id.uri }}" {% if not id.is_editable %}disabled="disabled"{% endif %}
+                placeholder="{_ Unique uri _}">
+                <label class="control-label" for="field-uri">{_ Unique uri _}</label>
             </div>
 	    {% endif %}
     {% endif %}
 
     {% block edit_advanced_extra %}
     {% endblock %}
-</fieldset>
 {% endblock %}

@@ -258,4 +258,7 @@ determine_next_delay(ok, Context) ->
             {delay, max( min(?DELAY_MINIMUM, Secs - Now), ?DELAY_MAXIMUM )}
     end;
 determine_next_delay({delay, Secs}, _Context) ->
-    {delay, max( Secs, ?DELAY_MAXIMUM )}.
+    {delay, max( Secs, ?DELAY_MAXIMUM )};
+determine_next_delay({error, _}, _Context) ->
+    {delay, ?DELAY_MAXIMUM}.
+

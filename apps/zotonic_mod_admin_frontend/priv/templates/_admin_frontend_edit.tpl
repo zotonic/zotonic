@@ -88,10 +88,24 @@
 		</div>
 		{% block meta_panels %}{% endblock %}
 		<div class="tab-pane" id="meta-language">
-			{% optional include "_translation_edit_languages.tpl" %}
+			<div class="widget">
+			    <div class="widget-header">
+			        {_ Language _}
+			    </div>
+			    <div class="widget-content">
+					{% optional include "_translation_edit_languages.tpl" %}
+				</div>
+			</div>
 		</div>
 		<div class="tab-pane" id="meta-acl">
-			{% optional include "_admin_edit_visible_for.tpl" id=id is_admin_frontend %}
+			<div class="widget">
+			    <div class="widget-header">
+			        {_ Access control _}
+			    </div>
+			    <div class="widget-content">
+					{% optional include "_admin_edit_visible_for.tpl" id=id is_admin_frontend %}
+				</div>
+			</div>
 		</div>
 	</div>
 

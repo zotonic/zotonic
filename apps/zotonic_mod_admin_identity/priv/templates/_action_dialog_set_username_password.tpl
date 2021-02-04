@@ -12,7 +12,7 @@
     </p>
 
     {% wire id=#form type="submit" postback="set_username_password" delegate=delegate %}
-    <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
+    <form id="{{ #form }}" method="POST" action="postback" class="form">
         <input type="hidden" name="id" value="{{ id }}" />
 
         {% include "_identity_password.tpl" %}

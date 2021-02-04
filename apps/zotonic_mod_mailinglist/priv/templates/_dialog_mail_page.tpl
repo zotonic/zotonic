@@ -4,12 +4,10 @@
 
     <p>{_ Please enter the e-mail address you want to send this page to. _}</p>
 
-    <div class="control-label">
+    <div class="label-floating">
+        <input id="{{ #email }}" type="email" value="" class="form-control" autofocus name="email" value="" required placeholder="{_ E-mail _}">
         <label class="control-label" for="email">{_ E-mail _}</label>
-        <div>
-            <input id="{{ #email }}" type="text" value="" class="input-xlarge form-control" autofocus name="email" value="" />
-            {% validate id=#email name="email" type={presence} type={email} %}
-        </div>
+        {% validate id=#email name="email" type={presence} type={email} %}
     </div>
 
     <div class="modal-footer">

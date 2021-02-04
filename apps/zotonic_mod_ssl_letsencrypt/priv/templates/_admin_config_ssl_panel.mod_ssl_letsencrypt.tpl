@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="widget">
     <a href="https://letsencrypt.org/" target="_blank">
         <img src="/lib/images/letsencrypt-logo-horizontal.png"
              alt="{_ Let’s Encrypt Certificate _}"
@@ -6,10 +6,10 @@
              class="pull-right">
     </a>
 
-    <div class="panel-heading">
-        <h3 class="panel-title">{{ nr }}. {_ Let’s Encrypt Certificate _}</h3>
+    <div class="widget-header">
+        {{ nr }}. {_ Let’s Encrypt Certificate _}
     </div>
-    <div class="panel-body">
+    <div class="widget-content">
         <p>{_ Let’s Encrypt provides free SSL certificates for websites. Here you can request such a certificate. _}</p>
 
         <p><a href="https://letsencrypt.org/" target="_blank">{_ Read more at the Let’s Encrypt website _} &raquo;</a></p>

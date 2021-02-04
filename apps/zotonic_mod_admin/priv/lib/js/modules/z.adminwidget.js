@@ -21,9 +21,9 @@ limitations under the License.
 
 ---------------------------------------------------------- */
 
-$.widget("z.adminwidget", 
+$.widget("z.adminwidget",
 {
-    _init: function() 
+    _init: function()
     {
         var self = this;
         self.element.addClass("widget-active");
@@ -39,17 +39,27 @@ $.widget("z.adminwidget",
         self.tabs = self.element.find(".language-tabs");
         var doMinify = self.options.minifier || $(self.element).attr("data-minifier");
         if (doMinify) {
-            self.icon = $("<i>").appendTo(self.tools).css("cursor", "pointer");            
+            self.icon = $("<i>").appendTo(self.tools).css("cursor", "pointer");
             self.header
                 .on("mouseover", function(){self.icon.addClass('white');})
                 .on("mouseout", function(){self.icon.removeClass('white');})
                 .attr("title", z_translate("Click to toggle"))
                 .click(function(ev){self.toggle(ev);});
+
+            var id = self.element.attr("id");
+            cotonic.broker.call("model/sessionStorage/get/adminwidget-"+id)
+                .then(function(msg) {
+                    var minified = self.options.minifiedOnInit && self.options.minifier;
+                    if (typeof msg.payload == 'boolean') {
+                        minified = !msg.payload;
+                    }
+                    self.setVisible(!minified, true);
+                });
+            cotonic.broker.subscribe("model/sessionStorage/event/adminwidget-"+id,
+                function(msg) {
+                    self.setVisible(!!msg.payload);
+                });
         }
-        if (self.options.minifiedOnInit && self.options.minifier)
-            self.hide(true);
-        else
-            self.show(true);
     },
 
     toggle: function(ev) {
@@ -58,8 +68,7 @@ $.widget("z.adminwidget",
             ||  $(ev.target).hasClass('z-icon-minus')) {
             var self = this;
             var id = self.element.attr("id");
-            self.setVisible(!self.showing);
-            // if (id) z_event("adminwidget_toggle", {id: id, showing: self.showing});
+            cotonic.broker.publish("model/sessionStorage/post/adminwidget-"+id, !self.showing);
             ev.stopPropagation();
         }
     },
@@ -68,7 +77,7 @@ $.widget("z.adminwidget",
         var self = this;
         v ? self.show(skipAnim) : self.hide(skipAnim);
     },
-    
+
     hide: function(skipAnim) {
         var self = this;
         if (skipAnim) {

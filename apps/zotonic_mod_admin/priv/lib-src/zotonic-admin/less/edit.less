@@ -54,25 +54,27 @@ body {
 ul.media {
     @_item_spacing: 10px;
     margin: 0;
-    
+
     > li {
         @_padding: 5px;
         @_image_width: 180px; // set in mediaclass.config
         @_image_height: 180px; // set in mediaclass.config
-        @_width: @_image_width + 2 * @_padding + 2; // add border
-        @_height: @_image_height + 2 * @_padding + 2 + 30;
-        
+
+        @_width: @_image_width; // add border
+        @_height: @_image_height;
+
         margin: 0 @_item_spacing @_item_spacing 0;
-        background: #fff;
+        background: @gray;
         width: @_width;
         height: @_height;
         float: left;
         position: relative;
-        padding: @_padding;
-        border: 1px solid @borderColorMedium;
-        #3L > .border-radius(@radiusBlockElement);
-        #3L > .box-shadow(none);
-        
+        // padding: @_padding;
+        // border: 1px solid @borderColorMedium;
+        border-radius: @radiusBlockElement;
+        position: relative;
+        overflow: hidden;
+
         &.sortable {
             cursor: move;
         }
@@ -82,34 +84,49 @@ ul.media {
         }
         img {
             display: block;
+            width: 100%;
+            height: 100%;
+
             border: 1px solid @borderColorLight; 
-            max-width: @_image_width;
-            margin: auto;
+            // max-width: @_image_width;
+            // margin: auto;
         }
         .z-btn-remove {
             position: absolute;
-            bottom: 0;
-            right: 0;
+            top: 6px;
+            right: 6px;
+            background: rgb(240,240,240,0.5);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+
+            &::before {
+                font-size: 20px;
+            }
         }
         .bottom {
             position: absolute;
-            bottom: @_padding;
-            left: @_padding;
-            right: @_padding;
-            
+            padding: @_padding;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255,255,255,0.5);
+
             .caption {
                 height: @roundBtnSize;
                 overflow: hidden;
-                
+
                 a {
                     word-break: break-all;
                     display: block;
                     height: @roundBtnSize;
                     max-height: @roundBtnSize;
-                    overflow: hidden;
+                    text-overflow: ellipsis;
                     line-height: @roundBtnSize;
                     width: @_image_width - @roundBtnSize - 3;
                     vertical-align: text-top;
+                    color: white;
+                    mix-blend-mode: difference;
                 }
             }
         }

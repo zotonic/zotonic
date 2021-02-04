@@ -14,7 +14,7 @@
 	}
 	delegate=delegate|default:`action_admin_dialog_new_rsc`
 %}
-<form id="dialog-new-rsc-tab" method="POST" action="postback" class="form form-horizontal">
+<form id="dialog-new-rsc-tab" method="POST" action="postback" class="form">
 
 <div class="admin-padding">
  	{% block rsc_props_title %}
@@ -31,7 +31,6 @@
 		{% with 'dialog-new-rsc-tab' as form %}
 
 			{% block new_rsc_header %}
- 				<h4>{_ Make a new page or media _}</h4>
  			{% endblock %}
 
 			{% if (not nocatselect or m.category[cat].is_a.media)
@@ -39,14 +38,14 @@
 						or (subject_id and m.predicate.is_valid_object_subcategory[predicate][`media`])
 						or (object_id and m.predicate.is_valid_subject_subcategory[predicate][`media`]))
 			%}
-		        <div class="form-group row" id="new-rsc-tab-upload">
-		            <label class="control-label col-md-3" for="upload_file">{_ Media file _}</label>
-		            <div class="col-md-9">
+		        <div class="form-group" id="new-rsc-tab-upload">
+		            <label class="control-label" for="upload_file">{_ Media file _}</label>
+		            <div>
 						<div id="upload_file_preview" style="display: none;">
 							<img src="" class="thumbnail" style="max-height:200px">
 						</div>
 		                <input type="file" class="form-control" id="upload_file" name="upload_file">
-		                <p class="help-block">
+		                <p class="help-block text-muted">
 		                	<span class="glyphicon glyphicon-info-sign"></span>
 		                	{_ Selecting a file will make the page a media item. _}
 		                </p>
@@ -168,69 +167,57 @@
 
 			{# Category selects #}
 			{% block category %}
-				<div class="form-group row">
-				    <label class="control-label col-md-3" for="{{ #category }}">{_ Category _}</label>
-				    <div class="col-md-9">
-					    {% if cat and nocatselect %}
-						    <input class="form-control" type="text" readonly value="{{ m.rsc[cat].title }}">
-						    <input type="hidden" name="category_id" value="{{ cat }}">
-					    {% else %}
-						    {% block category_select %}
-						        <select class="form-control" id="{{ #category }}" name="category_id" required>
-								    <option value="" disabled {% if not cat %}selected{% endif %}>{_ Select category _}</option>
-						            {% for c in m.category.tree_flat %}
-						                {% if m.acl.insert[c.id.name|as_atom]
-						                	  and (not subject_id or predicate|is_undefined or m.predicate.is_valid_object_category[predicate][c.id])
-						                	  and (not object_id  or predicate|is_undefined or m.predicate.is_valid_subject_category[predicate][c.id])
-						                %}
-						                    <option value="{{c.id}}" {% if c.id == cat %}selected{% endif %}>
-							                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
-						                    </option>
-						                {% endif %}
-						            {% endfor %}
-						        </select>
-								{% validate id=#category name="category_id" type={presence} only_on_submit %}
-						    {% endblock %}
-					    {% endif %}
-				    </div>
+				<div class="form-group">
+				    <label class="control-label" for="{{ #category }}">{_ Category _}</label>
+				    {% if cat and nocatselect %}
+					    <input class="form-control" type="text" readonly value="{{ m.rsc[cat].title }}">
+					    <input type="hidden" name="category_id" value="{{ cat }}">
+				    {% else %}
+					    {% block category_select %}
+					        <select class="form-control" id="{{ #category }}" name="category_id" required>
+							    <option value="" disabled {% if not cat %}selected{% endif %}>{_ Select category _}</option>
+					            {% for c in m.category.tree_flat %}
+					                {% if m.acl.insert[c.id.name|as_atom]
+					                	  and (not subject_id or predicate|is_undefined or m.predicate.is_valid_object_category[predicate][c.id])
+					                	  and (not object_id  or predicate|is_undefined or m.predicate.is_valid_subject_category[predicate][c.id])
+					                %}
+					                    <option value="{{c.id}}" {% if c.id == cat %}selected{% endif %}>
+						                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
+					                    </option>
+					                {% endif %}
+					            {% endfor %}
+					        </select>
+							{% validate id=#category name="category_id" type={presence} only_on_submit %}
+					    {% endblock %}
+				    {% endif %}
 				</div>
 			{% endblock %}
 
 			{% all include "_dialog_new_rsc_extra.tpl" %}
 
 		    {% if cat.name == 'category' or cat.name == 'predicate' %}
-			    <div class="form-group row">
+			    <div class="form-group label-floating">
+			        <input class="form-control" type="text" id="{{ #name }}" name="name" value="" placeholder="{_ Name _}">
+				    {% validate id=#name name="name" type={presence} %}
 			        <label class="control-label col-md-3" for="{{ #name }}">{_ Name _}</label>
-			        <div class="col-md-9">
-				        <input class="form-control" type="text" id="{{ #name }}" name="name" value="">
-					    {% validate id=#name name="name" type={presence} %}
-			        </div>
 			    </div>
 		    {% endif %}
 
 			{% block rsc_props %}
 	            {% if subject_id %}
-	                <div class="form-group row">
-	                    <div class="col-md-9 col-md-offset-3">
-	                        <div class="checkbox">
-	                            <label>
-	                                <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
-	                                {_ Delete after disconnecting from _}: {{ subject_id.title }}
-	                            </label>
-	                        </div>
-	                    </div>
+	                <div class="form-group">
+                        <label class="checkbox">
+                            <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
+                            {_ Delete after disconnecting from _}: {{ subject_id.title }}
+                        </label>
 	                </div>
 	            {% endif %}
-				<div class="form-group row">
-					<div class="col-md-9 col-md-offset-3">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" id="{{ #published }}" name="is_published" value="1"
-									{% if subject_id or m.admin.rsc_dialog_is_published %}checked{% endif %}>
-								{_ Published _}
-							</label>
-						</div>
-					</div>
+				<div class="form-group">
+					<label class="checkbox">
+						<input type="checkbox" id="{{ #published }}" name="is_published" value="1"
+							{% if subject_id or m.admin.rsc_dialog_is_published %}checked{% endif %}>
+						{_ Published _}
+					</label>
 				</div>
 			{% endblock %}
 
@@ -271,27 +258,29 @@
 			<div class="row">
 				{% if not nocatselect or not cat %}
 					<div class="col-sm-6">
-				        <select class="form-control nosubmit" id="{{ #find_category }}" name="find_category">
-						    <option value="" disabled {% if not cat %}selected{% endif %}>{_ Select category _}</option>
-				        	{% if predicate %}
-				        		<option value="p:{{ predicate }}" selected>
-					        		{_ Any valid for: _} {{ m.rsc[predicate].title }}
-					        	</option>
-					        	<option disabled>
-					        	</option>
-				        	{% else %}
-				        		<option value="*" selected>
-					        		{_ Any category _}
-					        	</option>
-					        	<option disabled>
-					        	</option>
-				        	{% endif %}
-				            {% for c in m.category.tree_flat_meta %}
-			                    <option value="{{c.id}}" {% if c.id == cat %}selected{% endif %}>
-				                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
-			                    </option>
-				            {% endfor %}
-				        </select>
+					    {% block category_find %}
+					        <select class="form-control nosubmit" id="{{ #find_category }}" name="find_category">
+							    <option value="" disabled {% if not cat %}selected{% endif %}>{_ Select category _}</option>
+					        	{% if predicate %}
+					        		<option value="p:{{ predicate }}" selected>
+						        		{_ Any valid for: _} {{ m.rsc[predicate].title }}
+						        	</option>
+						        	<option disabled>
+						        	</option>
+					        	{% else %}
+					        		<option value="*" selected>
+						        		{_ Any category _}
+						        	</option>
+						        	<option disabled>
+						        	</option>
+					        	{% endif %}
+					            {% for c in m.category.tree_flat_meta %}
+				                    <option value="{{c.id}}" {% if c.id == cat %}selected{% endif %}>
+					                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
+				                    </option>
+					            {% endfor %}
+					        </select>
+					    {% endblock %}
 					</div>
 				{% endif %}
 				<div class="col-sm-6">
@@ -397,7 +386,7 @@
 					var val = $(this).val();
 					if (val !== null && val != catInitial) {
 						catInitial = val;
-						$('#{{ #find_category }}').val(val).change();
+						$('#{{ #newform }} select[name="find_category"]').val(val).change();
 					}
 				});
 
