@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-01 15:09\n"
+"PO-Revision-Date: 2021-02-04 13:53\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Language: id_ID\n"
 
 #: apps/zotonic_core/src/support/z_media_import.erl:148
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Situs web"
 
@@ -102,7 +102,7 @@ msgstr "Kelompok pengguna ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "Kontrol akses"
@@ -162,21 +162,21 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Apakah anda yakin ingin mengembalikan semua peraturan ACL ke versi yang saat ini dipublikasikan?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:30./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:226./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:23
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:87./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:89./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:91
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:73
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:69
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
-#: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:17
+#: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:87./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:100
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:135./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:143
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:55./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
@@ -185,8 +185,8 @@ msgid "Cancel"
 msgstr "Batal"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:172./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "Category"
 msgstr "Ketegori"
@@ -241,7 +241,7 @@ msgstr "Kerjasama kelompok adalah kelompok pengguna di mana semua konten milik k
 msgid "Content"
 msgstr "Konten"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:14./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:3./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:12./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 msgid "Content group"
 msgstr "Konten grup"
 
@@ -271,9 +271,9 @@ msgstr "Menentukan siapa yang bisa melihat atau mengedit halaman ini."
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:8./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:25./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:168
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:47
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:51
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:49./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:71./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:92
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:51./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:73./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:94
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:44
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:121
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
@@ -383,8 +383,8 @@ msgid "Members of same user group"
 msgstr "Anggota dari kelompok pengguna yang sama"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
@@ -401,7 +401,7 @@ msgstr "Modul"
 msgid "Move all users within these user groups to:"
 msgstr "Memindahkan semua pengguna dalam kelompok-kelompok pengguna untuk:"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:20./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:27
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:19./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:26
 msgid "Move to another"
 msgstr "Pindah ke yang lain"
 
@@ -480,11 +480,11 @@ msgid "Reverted rules"
 msgstr "Aturan yang dikembalikan"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:66
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:42./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:24./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:150
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:151
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:121./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:99
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:81
 msgid "Save"
@@ -499,7 +499,7 @@ msgid "Saved collaboration group settings"
 msgstr "Disimpan kolaborasi pengaturan grup"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:180./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:275
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:178./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263
 msgid "Select category"
 msgstr "Pilih Kategori"
 
@@ -523,7 +523,7 @@ msgstr "Tunjukkan grup pengguna ACL ini terlebih dahulu:"
 msgid "Sorry, you are not allowed to delete this."
 msgstr "Maaf, anda tidak diizinkan untuk menghapus ini."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:40
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
 msgstr "Maaf, anda tidak diperbolehkan untuk menyisipkan halaman dari kategori ini ke konten yang dipilih kelompok."
 
@@ -582,7 +582,7 @@ msgstr "Aturan ini dikelola oleh modul"
 msgid "Try ACL rules"
 msgstr "Cobalah aturan ACL"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:42
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
 msgid "Try a different combination of category and content group."
 msgstr "Cobalah sebuah kombinasi berbeda dari kategori dan kelompok konten."
 
@@ -710,11 +710,11 @@ msgstr "lihat (tindakan acl)"
 msgid "&lt; Prev"
 msgstr "&lt; Sebelumnya"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
 msgid "(private)"
 msgstr "(pribadi)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:133
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
 msgid "(public)"
 msgstr "(publik)"
 
@@ -754,7 +754,7 @@ msgstr "Tambahkan item media"
 msgid "Add media to body"
 msgstr "tambahkan media untuk tubuh"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:466./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:473./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Menambahkan koneksi ke"
 
@@ -800,7 +800,7 @@ msgstr "Semua situs telah dibilas."
 msgid "Allocated"
 msgstr "Dialokasikan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:29
 msgid "Alternative telephone"
 msgstr "Telepon alternatif"
 
@@ -808,12 +808,12 @@ msgstr "Telepon alternatif"
 msgid "And media can also be viewed on their own page."
 msgstr "Dan media juga bisa dilihat pada halaman mereka sendiri."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:284
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:272
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "Kategori apapun"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:278
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:266
 msgid "Any valid for:"
 msgstr "Semua valid untuk:"
 
@@ -833,7 +833,7 @@ msgstr "Apakah anda yakin ingin keluar dari antarmuka admin?"
 msgid "Aside"
 msgstr "Selain"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:101
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:91
 msgid "Ask google to not index this page"
 msgstr "Minta google untuk tidak mengindeks halaman ini"
 
@@ -884,7 +884,7 @@ msgstr "Kategori:"
 msgid "Change category"
 msgstr "Ganti kategori"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:34
 msgid "Change the category of this page"
 msgstr "Mengubah kategori pada halaman ini"
 
@@ -892,7 +892,7 @@ msgstr "Mengubah kategori pada halaman ini"
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Memilih media item dari halaman ini untuk menyisipkan dalam tubuh teks."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:108./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:181
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:92./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:151./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152
 msgid "City"
 msgstr "Kota"
 
@@ -920,7 +920,7 @@ msgstr "Tutup semua soket dari alamat ip yang memiliki lebih dari &gt; 250 soket
 msgid "Close preview"
 msgstr "Tutup pratinjau"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:24
 msgid "Config Directory"
 msgstr "Direktori Konfigurasi"
 
@@ -937,7 +937,7 @@ msgstr "Konfirmasi hapus"
 msgid "Confirm logoff"
 msgstr "konfirmasi keluar"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:242./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:229./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:47
 msgid "Connect"
 msgstr "Menghubung"
 
@@ -969,12 +969,12 @@ msgstr "Tidak dapat mendeteksi apapun untuk mengimpor pada URL tersebut atau men
 msgid "Count"
 msgstr "Menghitung"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:66
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:121./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:66
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
 msgid "Country"
 msgstr "Negara"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:43./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:241
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:43./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:228
 msgid "Create"
 msgstr "Membuat"
 
@@ -986,12 +986,12 @@ msgstr "Buat atau temukan"
 msgid "Created by"
 msgstr "Dibuat oleh"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:302
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:291
 msgid "Created by me"
 msgstr "Dibuat oleh saya"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:17./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
-#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
+#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51
 msgid "Created on"
 msgstr "Dibuat pada"
 
@@ -999,7 +999,7 @@ msgstr "Dibuat pada"
 msgid "Created:"
 msgstr "Dibuat:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:84
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
 msgid "Customize page slug"
 msgstr "Sesuaikan halaman slug"
 
@@ -1023,7 +1023,7 @@ msgstr "Rentang tanggal"
 msgid "Date ranges"
 msgstr "Rentang tanggal"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:218./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:211./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
 msgid "Delete after disconnecting from"
 msgstr "Hapus setelah memutuskan sambungan dari"
 
@@ -1043,7 +1043,7 @@ msgstr "Hapus."
 msgid "Dependent"
 msgstr "Tergantung"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:23./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:19
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28./apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: apps/zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:6
 #: apps/zotonic_mod_linkedin/priv/templates/_logon_extra.tpl:8
@@ -1051,7 +1051,7 @@ msgstr "Tergantung"
 msgid "Disconnect"
 msgstr "Putuskan"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:32
 msgid "Discover media"
 msgstr "Temukan media"
 
@@ -1079,7 +1079,7 @@ msgstr "Halaman duplikat"
 msgid "Duplicate this page."
 msgstr "Gandakan halaman ini."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address_email.tpl:2
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address_email.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address_email.tpl:4
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:2
 msgid "E-mail address"
 msgstr "Alamat surel"
@@ -1088,7 +1088,7 @@ msgstr "Alamat surel"
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_base_site/priv/templates/_meta.tpl:11
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:40
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:27
 msgid "Edit"
@@ -1098,11 +1098,11 @@ msgstr "Sunting"
 msgid "Edit:"
 msgstr "Sunting:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:140
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115
 msgid "Email address"
 msgstr "Alamat surel"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:138
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:117
 msgid "Email address for public display"
 msgstr "Alamat surel untuk tampilan umum"
 
@@ -1110,7 +1110,7 @@ msgstr "Alamat surel untuk tampilan umum"
 msgid "Embed"
 msgstr "Menanamkan"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Kode sematan akan dibersihkan untuk situs yang diizinkan dan html."
 
@@ -1123,7 +1123,7 @@ msgstr "Cantumkan halaman"
 msgid "Embedded Content"
 msgstr "Konten Tertanam"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
 msgid "Emergency telephone"
 msgstr "Telepon darurat"
 
@@ -1131,15 +1131,15 @@ msgstr "Telepon darurat"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Masukkan URL atau kode embed. Itu akan dianalisis dan anda dapat memilih cara untuk mengimpor data."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:36
 msgid "Erlang Init Files"
 msgstr "File Erlang Init"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:38
 msgid "Erlang Installation Root"
 msgstr "Root Instalasi Erlang"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:18
 msgid "Erlang Version"
 msgstr "Versi Erlang"
 
@@ -1163,7 +1163,7 @@ msgstr "Setiap halaman dapat memiliki sebuah rentang tanggal. Sebagai contoh jik
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
 msgstr "Setiap halaman dikategorikan dalam satu kategori secara tepat. Kategori mendefinisikan apa yang mewakili halaman. Sebagai contoh sebuah peristiwa, sebuah produk atau seseorang. Kategori tersebut didefinisikan secara hirarkis. Dengan cara itu anda dapat memiliki sebuah kategori kendaraan dengan subkategori mobil dan sepeda."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:265
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:252
 msgid "Existing pages"
 msgstr "Halaman yang ada"
 
@@ -1200,8 +1200,8 @@ msgstr "Temukan Halaman"
 msgid "Find page"
 msgstr "Temukan Halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:19
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:15./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:16
 msgid "First"
 msgstr "Pertama"
 
@@ -1222,7 +1222,7 @@ msgstr "Dari"
 msgid "Go back."
 msgstr "Mundur."
 
-#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/src/mod_admin.erl:172
+#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22./apps/zotonic_mod_admin/src/mod_admin.erl:172
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:116
 msgid "Header"
 msgstr "Judul"
@@ -1232,7 +1232,7 @@ msgstr "Judul"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Di sini Anda dapat mengedit argumen kueri penelusuran. Setiap argumen memiliki alurnya sendiri. Untuk informasi selengkapnya, lihat dokumentasi <a href=\"https://docs.zotonic.com/docs/latest/developer-guide/search.html#query-model-arguments\">pada argumen kueri</a> di situs web Zotonic."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:31
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:32
 msgid "Home Directory"
 msgstr "Direktori Rumah"
 
@@ -1244,7 +1244,7 @@ msgstr "Alamat IP"
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "Jika halaman memiliki rentang tanggal publikasi, maka itu hanya akan terlihat di antara dua tanggal. Perhatikan bahwa jika Anda diizinkan untuk mengedit halaman, Anda selalu dapat melihatnya."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:120
 msgid "Info"
@@ -1283,7 +1283,7 @@ msgstr "Modifikasi orang terbaru"
 msgid "Latest modified texts"
 msgstr "Modifikasi teks terbaru"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:242./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:229./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
 msgid "Link"
 msgstr "Tautan"
@@ -1301,7 +1301,7 @@ msgstr "Keluar"
 msgid "Log on to"
 msgstr "Log on untuk"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:133
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
 msgid "Mailing address"
 msgstr "Alamat pengiriman"
 
@@ -1322,7 +1322,7 @@ msgstr "Membuat sebuah item media baru"
 msgid "Make a new page"
 msgstr "Buat sebuah halaman baru"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:4./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:4./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:85
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:71
 msgid "Make a new page or media"
 msgstr "Membuat sebuah halaman baru atau media"
@@ -1338,15 +1338,15 @@ msgstr "Pencocokan"
 msgid "Media"
 msgstr "Media"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
-msgid "Media URL"
-msgstr "URL Media"
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:23
+msgid "Media URL or HTML"
+msgstr "URL Media atau HTML"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:60
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "Media mencakup semua upload gambar, film dan dokumen. Media dapat dilampirkan ke halaman."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:42
 msgid "Media file"
 msgstr "Berkas Media"
 
@@ -1366,7 +1366,7 @@ msgstr "Judul media"
 msgid "Memory"
 msgstr "Penyimpanan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:24
 msgid "Middle"
 msgstr "Tengah"
 
@@ -1374,7 +1374,7 @@ msgstr "Tengah"
 msgid "Mine"
 msgstr "Tambang"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:22
 msgid "Mobile"
 msgstr "Mobile"
 
@@ -1383,7 +1383,7 @@ msgid "Modified by"
 msgstr "Dimodifikasi oleh"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
-#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:53
+#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 msgid "Modified on"
 msgstr "Dimodifikasi pada"
 
@@ -1391,9 +1391,9 @@ msgstr "Dimodifikasi pada"
 msgid "Modified:"
 msgstr "Dimodifikasi:"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:203
-#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:200./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:202
+#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:533
@@ -1424,7 +1424,7 @@ msgstr "Tidak ada fitur yang diaktifkan untuk meta-sumber daya."
 msgid "No items"
 msgstr "Tidak ada item"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:132
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:131
 msgid "No media found."
 msgstr "Tidak ada media yang ditemukan."
 
@@ -1450,23 +1450,23 @@ msgstr "Jumlah Halaman"
 msgid "Page connections"
 msgstr "Halaman koneksi"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:57./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:59
 msgid "Page description"
 msgstr "Deskripsi halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:46./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:48
 msgid "Page keywords"
 msgstr "Kata kunci halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:21
 msgid "Page path"
 msgstr "Halaman path"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:16
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
 msgstr "Halaman slug"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:29
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:36
 msgid "Page title"
 msgstr "Judul halaman"
 
@@ -1494,7 +1494,7 @@ msgstr "Pivot antrian menghitung ukuran:"
 msgid "Please fill in the title of the new page."
 msgstr "Silahkan isi judul halaman baru."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:115./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:188
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:97./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:98./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:157
 msgid "Postcode"
 msgstr "Kode pos"
 
@@ -1503,7 +1503,7 @@ msgstr "Kode pos"
 msgid "Predicate"
 msgstr "Predikat"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:83
 #: apps/zotonic_mod_base_site/priv/templates/page.media.tpl:31
 msgid "Preview"
 msgstr "Tinjauan"
@@ -1540,7 +1540,7 @@ msgstr "Periode publikasi"
 msgid "Publish this page"
 msgstr "Publikasikan halaman ini"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:230./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:219./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:43
 msgid "Published"
 msgstr "Dipublikasikan"
@@ -1555,16 +1555,16 @@ msgstr "Pertanyaan"
 msgid "Query preview"
 msgstr "Pratinjau permintaan"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:40
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Membangun kembali semua pencarian-indeks dengan menempatkan semua halaman dan data dari database di pengindeks antrian. Ini dapat mengambil waktu yang lama!"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:33
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:120
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:31
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:122
 msgid "Rebuild search indices"
 msgstr "Membangun kembali indeks pencarian"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:50
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:46
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Menghitung ulang penomoran dari kategori pohon. Hal ini dapat memakan waktu yang lama."
 
@@ -1572,7 +1572,7 @@ msgstr "Menghitung ulang penomoran dari kategori pohon. Hal ini dapat memakan wa
 msgid "Redirect to above website on page view"
 msgstr "Pengalihan ke atas website pada tampilan halaman"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:62
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:52
 msgid "Redirect to website on page view"
 msgstr "Arahkan ulang ke situs web pada tampilan halaman"
 
@@ -1580,7 +1580,7 @@ msgstr "Arahkan ulang ke situs web pada tampilan halaman"
 msgid "Referrers to"
 msgstr "Perujuk untuk"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:56
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Reinstall site datamodel"
 msgstr "Pasang ulang datamodel situs"
 
@@ -1592,11 +1592,11 @@ msgstr "Menandai ulang"
 msgid "Remove crop center"
 msgstr "Memindahkan tanaman pusat"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:470
+#: apps/zotonic_mod_admin/src/mod_admin.erl:477
 msgid "Removed the connection to"
 msgstr "Menghapus koneksi ke"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:49
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:45
 msgid "Renumber category tree"
 msgstr "Memberi nomor kategori pohon"
 
@@ -1620,7 +1620,7 @@ msgstr "Sumber daya dalam <i>meta</i> kategori dapat memiliki 'fitur': sumber da
 msgid "Retrieving status..."
 msgstr "Mengambil status..."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:51
 msgid "Runs the schema install command from the site's module again."
 msgstr "Menjalankan skema menginstal perintah dari situs ini modul lagi."
 
@@ -1637,12 +1637,12 @@ msgid "Save and View"
 msgstr "Simpan dan lihat"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:110./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "Save and view the page."
 msgstr "Simpan dan lihat halamannya."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:121./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
 msgid "Save this page."
 msgstr "Simpan halaman ini."
 
@@ -1663,7 +1663,7 @@ msgstr "Pertanyaan penelusuran"
 msgid "Search..."
 msgstr "Cari..."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:21
 msgid "Security Directory"
 msgstr "Direktori Keamanan"
 
@@ -1679,7 +1679,7 @@ msgstr "Pilih yang terhubung gambar"
 msgid "Selected Categories"
 msgstr "Kategori yang Dipilih"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:50
 msgid "Selecting a file will make the page a media item."
 msgstr "Memilih file akan membuat halaman tersebut menjadi item media."
 
@@ -1687,7 +1687,7 @@ msgstr "Memilih file akan membuat halaman tersebut menjadi item media."
 msgid "Session Count"
 msgstr "Hitungan Sesi"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:36
 msgid "Short title"
 msgstr "Judul singkat"
 
@@ -1711,11 +1711,11 @@ msgstr "Sesuatu yang salah. Maaf."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Maaf, anda tidak memiliki izin untuk menambahkan koneksi."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:455
+#: apps/zotonic_mod_admin/src/mod_admin.erl:462
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Maaf, anda tidak memiliki izin untuk menambah koneksi."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:457
+#: apps/zotonic_mod_admin/src/mod_admin.erl:464
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Maaf, anda tidak memiliki izin untuk menghapus koneksi."
 
@@ -1731,7 +1731,7 @@ msgstr "Mulailah mengetik judul untuk membuat halaman baru atau menemukan halama
 msgid "Starts"
 msgstr "Dimulai"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:124./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:197
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
 msgid "State"
 msgstr "Negara"
 
@@ -1743,11 +1743,11 @@ msgstr "Negara"
 msgid "Status"
 msgstr "Status"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:166
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:81./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:82./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:140./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:141
 msgid "Street Line 1"
 msgstr "Jalan jalur 1"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:100./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:173
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:86./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:87./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:145./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:146
 msgid "Street Line 2"
 msgstr "Jalan Jalur 2"
 
@@ -1755,17 +1755,17 @@ msgstr "Jalan Jalur 2"
 msgid "Structure"
 msgstr "Struktur"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:23
 msgid "Summary"
 msgstr "Ringkasan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:31
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:28
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
 msgid "Sur. prefix"
 msgstr "Sur. awalan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:37
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:30
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:41
 msgid "Surname"
 msgstr "Nama keluarga"
@@ -1782,7 +1782,7 @@ msgstr "Status sistem"
 msgid "System administration"
 msgstr "Sistem administrasi"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
 msgid "Telephone"
 msgstr "Telepon"
 
@@ -1887,9 +1887,9 @@ msgstr "Sampai"
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Waktu habis ketika mencoba untuk mengambil data dari website."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:4./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:85./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
-#: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
 msgstr "Judul"
 
@@ -1915,11 +1915,11 @@ msgstr "Ketik teks untuk pencarian"
 msgid "Type title or filter existing content"
 msgstr "Ketik judul atau filter konten yang ada"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "Unique name"
 msgstr "Nama yang unik"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Unique uri"
 msgstr "Unik uri"
 
@@ -1940,7 +1940,7 @@ msgstr "Unggah sebuah berkas dari komputer anda."
 msgid "Upload file"
 msgstr "Unggah Berkas"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:87
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
 msgid "Uploaded"
 msgstr "Unggahan"
@@ -1970,9 +1970,9 @@ msgid "Valid for:"
 msgstr "Berlaku untuk:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:112
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:42
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "View"
 msgstr "Tampilan"
 
@@ -1989,7 +1989,7 @@ msgid "View all referrers"
 msgstr "Lihat semua perujuk"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:112
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126
 msgid "View this page."
 msgstr "Lihat halaman ini."
 
@@ -2001,11 +2001,11 @@ msgstr "Terlihat dari"
 msgid "Visible till"
 msgstr "Terlihat sampai"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:79./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:73./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:39
 msgid "Visit full edit page"
 msgstr "Kunjungi halaman sunting penuh"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
 msgid "Visiting address"
 msgstr "Alamat kunjungan"
 
@@ -2022,7 +2022,7 @@ msgstr "Situs web untuk klik pada gambar"
 msgid "Website or Embed"
 msgstr "Situ web atau Embed"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:33
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:34
 msgid "Work Directory"
 msgstr "Direktori Kerja"
 
@@ -2077,7 +2077,7 @@ msgstr "Anda tidak memiliki izin untuk melakukan tindakan ini."
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "Anda harus menentukan deskripsi berkas agar lebih mudah ditemukan dan dibagikan."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
 msgid "Zotonic Version"
 msgstr "Versi Zotonik"
 
@@ -2097,15 +2097,15 @@ msgstr "oleh"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:51./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:55
-#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:67./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:69
+#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:66./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:68
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:22
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:112
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:111
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
 msgid "delete"
@@ -2115,9 +2115,9 @@ msgstr "hapus"
 msgid "e.g. might change"
 msgstr "misalnya mungkin mengubah"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:123./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
-#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:46
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:122./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 msgid "edit"
 msgstr "sunting"
 
@@ -2169,7 +2169,7 @@ msgstr "konten sistem"
 msgid "undo"
 msgstr "membatalkan"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:39./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:39./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:22./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
 msgid "untitled"
 msgstr "tanpa judul"
 
@@ -2254,7 +2254,7 @@ msgstr "Salinan dari semua email dikirim ke"
 msgid "Add configuration key"
 msgstr "Tambahkan kunci konfigurasi"
 
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:31
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:25
 msgid "Add key"
 msgstr "Tambahkan kunci"
 
@@ -2267,7 +2267,7 @@ msgstr "Semua email dikirim ke"
 msgid "Alternative names"
 msgstr "Nama Alternatif"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:70./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:109
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:71./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:110
 msgid "Always use SSL"
 msgstr "Selalu gunakan SSL"
 
@@ -2283,24 +2283,24 @@ msgstr "Sertifikat disediakan oleh modul SSL"
 msgid "Config"
 msgstr "Konfigurasi"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:31
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:48
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:50
 msgid "Configuration"
 msgstr "Konfigurasi"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:132
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:133
 msgid "Defaults to the hostname of the site."
 msgstr "Default ke nama host situs."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:132
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "Domain untuk semua yang dihasilkan dari- dan alamat-amplop."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:117
 msgid "E-mail override"
 msgstr "Timpa email"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:140
 msgid "Email FROM"
 msgstr "Email DARI"
 
@@ -2325,15 +2325,15 @@ msgstr "Di sini Anda dapat melihat semua konfigurasi email dan mengirim email uj
 msgid "Hostname"
 msgstr "Nama host"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:133
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:134
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
 msgstr "Jika Anda mengubahnya, Anda mungkin perlu meminta sertifikat SSL baru yang menyertakan nama host ini."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:121
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
 msgstr "Dimungkinkan untuk mencegat semua email dan mengirimkannya ke satu alamat. Konfigurasikan alamat ini di sini."
 
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:15./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:11./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
 msgstr "Kunci"
 
@@ -2361,9 +2361,9 @@ msgstr "Hanya administrasi yang dapat menghapus konfigurasi."
 msgid "Only an administrator can add configuration keys."
 msgstr "Hanya administrator yang dapat menambahkan tombol konfigurasi."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:102
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:12
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:114./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:103
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:116./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
 msgid "Password"
@@ -2373,15 +2373,15 @@ msgstr "Kata sandi"
 msgid "Please fill in the module, key and value for the new configuration key."
 msgstr "Silahkan isi modul, kunci dan nilai untuk konfigurasi baru kunci."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:51./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:84
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:52./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:85
 msgid "Relay hostname"
 msgstr "Relay nama host"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:57./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:90
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:58./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91
 msgid "Relay port"
 msgstr "Port relai"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:127
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:128
 msgid "SMTP Hostname"
 msgstr "Nama Host SMTP"
 
@@ -2389,11 +2389,11 @@ msgstr "Nama Host SMTP"
 msgid "SSL Certificates"
 msgstr "Sertifikat SSL"
 
-#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:6
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:5
 msgid "Self signed certificate"
 msgstr "Sertifikat yang ditandatangani sendiri"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:183
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -2401,11 +2401,11 @@ msgstr "Sertifikat yang ditandatangani sendiri"
 msgid "Send"
 msgstr "Kirim"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:168
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "Send a test email"
 msgstr "Kirim email percobaan"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:173
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:174
 msgid "Send a test email or check the status of an email address."
 msgstr "Kirim email percobaan atau periksa status alamat email."
 
@@ -2429,7 +2429,7 @@ msgstr "Konfigurasi sistem"
 msgid "Test email from"
 msgstr "Uji email dari"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:42
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
 msgid "The Zotonic system configuration is set to use a SMTP relay."
 msgstr "Konfigurasi sistem Zotonic diatur untuk menggunakan relai SMTP."
 
@@ -2437,7 +2437,7 @@ msgstr "Konfigurasi sistem Zotonic diatur untuk menggunakan relai SMTP."
 msgid "The config key already exists, please choose another key name."
 msgstr "Config kunci sudah tersedia, silahkan pilih kunci nama yang lain."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:143
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:144
 msgid "The default FROM address for emails. Defaults to"
 msgstr "Alamat FROM default untuk email. Default-nya adalah"
 
@@ -2449,7 +2449,7 @@ msgstr "Direktori default untuk semua sertifikat situs adalah"
 msgid "This can't be undone. The configuration key will be lost forever."
 msgstr "Ini tidak bisa dibatalkan. Tombol konfigurasi akan hilang selamanya."
 
-#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:15
+#: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:13
 msgid "This certificate is generated and signed by Zotonic. It will be used if no other certificates are available."
 msgstr "Sertifikat ini dibuat dan ditandatangani oleh Zotonic. Ini akan digunakan jika tidak ada sertifikat lain yang tersedia."
 
@@ -2457,11 +2457,11 @@ msgstr "Sertifikat ini dibuat dan ditandatangani oleh Zotonic. Ini akan digunaka
 msgid "This is a list of the certificates provided by modules and the system. The first certificate will be used."
 msgstr "Ini adalah daftar sertifikat yang disediakan oleh modul dan sistem. Sertifikat pertama akan digunakan."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:17./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:25./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:43
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:17./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:25./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:44
 msgid "This is a setting in the system configuration and can not be overruled."
 msgstr "Ini adalah pengaturan dalam konfigurasi sistem dan tidak dapat dibatalkan."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:76
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:77
 msgid "This is useful if this server is not allowed to send email or to use servers with a better reputation."
 msgstr "Ini berguna jika server ini tidak diizinkan untuk mengirim email atau menggunakan server dengan reputasi yang lebih baik."
 
@@ -2469,12 +2469,12 @@ msgstr "Ini berguna jika server ini tidak diizinkan untuk mengirim email atau me
 msgid "This module doesn’t supply a certificate."
 msgstr "Modul ini tidak menyediakan sertifikat."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:47./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:80
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:48./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:81
 msgid "Use relay to send email"
 msgstr "Gunakan relai untuk mengirim email"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:63./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:96
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:51./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:64./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:97
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50./apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:19
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:11
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
@@ -2486,24 +2486,24 @@ msgstr "Nama pengguna"
 msgid "Valid till"
 msgstr "Berlaku sampai"
 
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:16./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:23./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:16./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:17./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:19./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 msgid "Value"
 msgstr "Nilai"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:184./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:185./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:101
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Lihat status email"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:159
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "Anda harus menjadi administrator untuk melihat atau mengubah konfigurasi email."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:76
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic mengirim email menggunakan server email bawaan. Anda dapat mengirim email melalui relai eksternal."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:181
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
 msgid "test@example.com"
 msgstr "test@example.com"
 
@@ -2511,10 +2511,10 @@ msgstr "test@example.com"
 msgid "Add pages or click on a page in the menu."
 msgstr "Tambahkan halaman atau klik pada sebuah halaman di menu."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:64
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:64./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:93
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:27
+#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
 msgid "Language"
 msgstr "Bahasa"
 
@@ -2522,7 +2522,7 @@ msgstr "Bahasa"
 msgid "Loading ..."
 msgstr "Memuat..."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:110./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "Save &amp; view"
 msgstr "Simpan &amp; tampikan"
 
@@ -2543,15 +2543,15 @@ msgstr "Ya, buang perubahan"
 msgid "till"
 msgstr "sampai"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:65
+#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:64
 msgid "(that's you)"
 msgstr "(itu anda)"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:16
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:13
 msgid "A secure password is prefilled, replace if needed."
 msgstr "Kata sandi aman sudah diisi sebelumnya, ganti jika perlu."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:11
+#: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:12
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:21
 msgid "Add"
@@ -2561,15 +2561,15 @@ msgstr "Tambah"
 msgid "Add a new user"
 msgstr "Tambah pengguna baru"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:9
+#: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:10
 msgid "Add e-mail address"
 msgstr "Tambah alamat e-mail"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:74
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:70
 msgid "Add user"
 msgstr "Tambah pengguna"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:41
+#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:40
 msgid "Also show persons without user account"
 msgstr "Juga menunjukkan orang-orang tanpa akun pengguna"
 
@@ -2622,10 +2622,10 @@ msgstr "Menghapus akun pengguna."
 msgid "Duplicate username, please choose another username."
 msgstr "Duplikat nama pengguna, silahkan pilih nama pengguna yang lain."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:36
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:36./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:38
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:31
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:16./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:13
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:20
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:53
 msgid "E-mail"
 msgstr "E-mail"
@@ -2668,7 +2668,7 @@ msgstr "Beranda"
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
 msgstr "Jika Anda tidak mengetahui situs ini, harap abaikan email ini. Mungkin seseorang membuat kesalahan."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:33
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:28
 msgid "Leave empty to not change the password."
 msgstr "Biarkan kosong untuk tidak mengubah kata sandi."
 
@@ -2688,12 +2688,12 @@ msgstr "Halaman saya"
 msgid "Name and e-mail address"
 msgstr "Nama dan alamat e-mail"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:22
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:20
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:10./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "Kata sandi baru"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:85
+#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:84
 msgid "No users found."
 msgstr "Pengguna tidak ditemukan."
 
@@ -2725,7 +2725,7 @@ msgstr "Hanya pengelola atau pengguna yang bisa mengatur kata sandi."
 msgid "Please verify your email address"
 msgstr "Harap verifikasi alamat email Anda"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:22
 msgid "Random secure password:"
 msgstr "Kata sandi aman acak:"
 
@@ -2737,7 +2737,7 @@ msgstr "Cari pengguna"
 msgid "Send verification e-mail"
 msgstr "Kirim email verifikasi"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:51
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:43
 msgid "Send welcome e-mail"
 msgstr "Kirimkan e-mail selamat datang"
 
@@ -2805,7 +2805,7 @@ msgstr "Alamat email ini telah ditambahkan ke informasi pribadi Anda pada"
 msgid "This is not a valid e-mail address."
 msgstr "Ini bukan alamat e-mail yang sah."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:40
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:34
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:35
 msgid "This password does not meet the security requirements"
 msgstr "Kata sandi ini tidak memenuhi persyaratan keamanan"
@@ -2831,11 +2831,11 @@ msgstr "Ini akan mengirim e-mail verifikasi ke "
 msgid "Timezone"
 msgstr "Zona waktu"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:25
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 msgid "Type password to change password"
 msgstr "Ketik kata sandi untuk mengubah kata sandi"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:28
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:23
 msgid "Use this password"
 msgstr "Gunakan sandi ini"
 
@@ -2851,7 +2851,7 @@ msgstr "Tindakan pengguna"
 msgid "Username / password"
 msgstr "Nama pengguna / kata sandi"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:68
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:64
 msgid "Username and password"
 msgstr "Nama pengguna dan kata sandi"
 
@@ -2952,7 +2952,7 @@ msgstr "hapus nama pengguna"
 msgid "if you want to change the admin password."
 msgstr "jika anda ingin mengubah kata sandi admin."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:74
+#: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:73
 msgid "set username / password"
 msgstr "mengatur nama pengguna / kata sandi"
 
@@ -3072,11 +3072,11 @@ msgstr "Anda tidak memiliki izin untuk menyunting pemenang."
 msgid "not implemented yet"
 msgstr "belum diimplementasikan"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:81
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:80
 msgid "Activate"
 msgstr "Aktifasi"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:72
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
 msgid "Configure"
 msgstr "Mengkonfigurasi"
 
@@ -3088,7 +3088,7 @@ msgstr "Tidak dapat menemukan modul."
 msgid "Cyclic dependencies"
 msgstr "Dependensi siklik"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:76
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:75
 msgid "Deactivate"
 msgstr "Menonaktifkan"
 
@@ -3100,7 +3100,7 @@ msgstr "Menonaktifkan modul ini akan menghentikan modul berikut:"
 msgid "Dependencies"
 msgstr "Dependensi"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 msgid "Depends"
 msgstr "Tergantung"
 
@@ -3120,15 +3120,15 @@ msgstr "Ketergantungan modul"
 msgid "Modules are missing dependencies"
 msgstr "Modul tidak memiliki dependensi"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:93
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:92
 msgid "No modules found"
 msgstr "Tidak ada modul yang ditemukan"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
 msgid "Prio"
 msgstr "Prio"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Provides"
 msgstr "Menyediakan"
 
@@ -3224,7 +3224,7 @@ msgstr "Bantuan tentang predikat"
 msgid "Make a new predicate"
 msgstr "Buatlah predikat baru"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:18
+#: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:16
 msgid "Make predicate"
 msgstr "Buatlah predikat"
 
@@ -3236,7 +3236,7 @@ msgstr "Tidak ada sambungan halaman yang ditemukan."
 msgid "No page connections with the predicate:"
 msgstr "Tidak ada koneksi halaman dengan predikat:"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:54
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
 msgid "No predicates found."
 msgstr "Tidak ada predikat yang ditemukan."
 
@@ -3292,7 +3292,7 @@ msgstr " Predikat ini dapat digunakan di antara dua halaman dari kategori beriku
 msgid "To category"
 msgstr "Untuk kategori"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:29
+#: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
 msgid "URI"
 msgstr "URl"
 
@@ -3326,31 +3326,31 @@ msgstr "subyek"
 msgid "Statistics"
 msgstr "Statistik"
 
-#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
 msgstr "Album"
 
-#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:25
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:21./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:22
 msgid "Album artist"
 msgstr "Artis Album"
 
-#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:33
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:27
 msgid "Album is a compilation of songs by various artists"
 msgstr "Album merupakan kompilasi lagu-lagu dari berbagai artis"
 
-#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:19
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:17./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:18
 msgid "Artist"
 msgstr "Artis"
 
-#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:37
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:31./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:32
 msgid "Composer"
 msgstr "Komposer"
 
-#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:58
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:46./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:47
 msgid "Copyright"
 msgstr "hak cipta"
 
-#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:46
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:38./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:39
 msgid "Genre"
 msgstr "Aliran"
 
@@ -3358,7 +3358,7 @@ msgstr "Aliran"
 msgid "Media tags"
 msgstr "Tag media"
 
-#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:52
+#: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:42./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:43
 msgid "Track"
 msgstr "Jalur"
 
@@ -3684,11 +3684,11 @@ msgstr "Jika Anda merasa memiliki akun dan mengharapkan email ini, silakan coba 
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "Di email anda akan menemukan petunjuk cara mengonfirmasi akun anda."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:135./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "Biarkan saya tetap masuk"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:97
 msgid "Log on with"
 msgstr "Masuk dengan"
 
@@ -3701,7 +3701,7 @@ msgstr "Karakter minimum:"
 msgid "Need help signing in?"
 msgstr "Butuh bantuan masuk?"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:156
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:158
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
 msgstr "Selanjutnya"
@@ -3716,11 +3716,11 @@ msgstr "Tidak ada Akses"
 msgid "One moment please"
 msgstr "Tolong tunggu sebentar"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:64
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:66
 msgid "Other username or email"
 msgstr "Nama pengguna atau email lain"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "Kode sandi"
 
@@ -3769,7 +3769,7 @@ msgstr "Atur ulang kata sandi anda"
 msgid "Send Verification Message"
 msgstr "Kirim pesan verifikasi"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:150./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:152./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "Masuk"
@@ -3811,7 +3811,7 @@ msgstr "Maaf, terlalu banyak percobaan ulang"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Maaf, kata sandi reset kode yang tidak diketahui atau kadaluarsa"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:135
 msgid "Stay logged on unless I log off."
 msgstr "Tetap masuk kecuali saya keluar."
 
@@ -3857,7 +3857,7 @@ msgstr "Untuk melihat halaman ini, anda harus memiliki hak akses."
 msgid "Too many retries."
 msgstr "Terlalu banyak percobaan ulang."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:125./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "Kode sandi dua faktor"
 
@@ -3865,7 +3865,7 @@ msgstr "Kode sandi dua faktor"
 msgid "Use some non alphabetical characters or digits to make it harder to guess."
 msgstr "Menggunakan beberapa non abjad karakter atau digit untuk membuatnya lebih sulit untuk menebak."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:52./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:68
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:52./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:70
 msgid "Username or email"
 msgstr "Username atau email"
 
@@ -3889,7 +3889,7 @@ msgstr "Anda adalah tentang untuk membuat akun baru."
 msgid "You are now signed in."
 msgstr "Anda sekarang sudah masuk."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:90
 msgid "You can log in using the following external service"
 msgstr "Anda dapat masuk menggunakan layanan eksternal berikut"
 
@@ -3951,7 +3951,7 @@ msgstr "Kata sandi anda terlalu pendek."
 msgid "an hour"
 msgstr "satu jam"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:95
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:97
 msgid "external service"
 msgstr "layanan eksternal"
 
@@ -3960,7 +3960,7 @@ msgstr "layanan eksternal"
 msgid "or"
 msgstr "atau"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:103
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:105
 msgid "or you can enter the password that you have for"
 msgstr "atau Anda dapat memasukkan kata sandi yang Anda miliki"
 
@@ -3980,7 +3980,7 @@ msgstr "Admin cadangan"
 msgid "Are you sure you want to revert to this version?"
 msgstr "Apakah anda yakin anda ingin kembali kedalam versi ini?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:41
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
 msgid "At any moment you can make a backup of your system."
 msgstr "Setiap saat anda bisa membuat cadangan sistem anda."
 
@@ -4036,7 +4036,7 @@ msgstr "Bantuan tentang backup &amp; mengembalikan"
 msgid "List and restore an earlier version"
 msgstr "Daftar dan kembalikan versi sebelumnya"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:33
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:38
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Membuat daily backup database dan mengunggah file."
 
@@ -4064,7 +4064,7 @@ msgstr "Revisi untuk"
 msgid " Select the backup file you want to upload. The file must be a .bert file."
 msgstr " Pilih file cadangan yang ingin anda unggah. File harus .bert file."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:26
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
 msgid "Show import/export panel in the admin."
 msgstr "Tampilkan impor/ekspor pada panel admin."
 
@@ -4096,23 +4096,23 @@ msgstr "Maaf, Anda tidak memiliki izin untuk mengubah halaman ini."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Maaf, Anda tidak memiliki izin untuk mengubah konfigurasi."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:56
 msgid "Start backup now"
 msgstr "Mulai backup sekarang"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:46
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57
 msgid "Start database-only backup now"
 msgstr "Mulai backup database saja sekarang"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
 msgid "The \"pg_dump\" command was not found in the path. Set the \"pg_dump\" config key to the path to pg_dump and return to this page."
 msgstr "Perintah \"pg_dump\" tidak ditemukan di Path. Setelan tombol konfigurasi \"pg_dump\" ke path ke pg_dump dan kembali ke halaman ini."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:52
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:64
 msgid "The \"tar\" command was not found in the path. Set the \"tar\" config key to the path to tar and return to this page."
 msgstr "\"Tar\" perintah tidak ditemukan di jalan. Mengatur \"tar\" config kunci ke jalan tar dan kembali ke halaman ini."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:41
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:50
 msgid "The backup comprises two parts, the database and the uploaded files."
 msgstr "Cadangan terdiri dari dua bagian, database dan file upload."
 
@@ -4120,7 +4120,7 @@ msgstr "Cadangan terdiri dari dua bagian, database dan file upload."
 msgid "This is the version saved on"
 msgstr "Ini adalah versi yang disimpan di"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:63
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:75
 msgid "This site has cloud file store enabled, and there are <strong>$1</strong> media files on this system that are only stored in the cloud and not on this machine. These files will not backed up!"
 msgstr "Situs ini memiliki file awan toko diaktifkan, dan ada <strong>$1</strong> file media pada sistem ini yang hanya dapat disimpan di awan dan tidak di mesin ini. File-file ini tidak akan didukung!"
 
@@ -4128,13 +4128,13 @@ msgstr "Situs ini memiliki file awan toko diaktifkan, dan ada <strong>$1</strong
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Ini akan menimpa anda pada halaman dengan isi dari file cadangan."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:73
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:119
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Peringatan"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
 msgid "Warning:"
 msgstr "Peringatan:"
 
@@ -4142,11 +4142,11 @@ msgstr "Peringatan:"
 msgid "You are not allowed to see the revisions"
 msgstr "Anda tidak diizinkan untuk melihat revisi"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:42
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:51
 msgid "You can have 10 backups, older ones will be deleted automatically."
 msgstr "Anda dapat memiliki 10 cadangan, yang lebih tua akan dihapus secara otomatis."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Cadangan Anda tidak dikonfigurasi dengan benar Modul cadangan tidak akan berfungsi sampai masalah (s) di bawah ini telah diselesaikan:"
 
@@ -4386,7 +4386,7 @@ msgstr "Komentar"
 msgid "Email"
 msgstr "Email"
 
-#: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:26
+#: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:21
 msgid "General Comment Form Settings"
 msgstr "Komentar Umum bentuk pengaturan"
 
@@ -4404,7 +4404,7 @@ msgstr "Masuk atau mendaftar untuk komentar"
 msgid "Message"
 msgstr "Pesan"
 
-#: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:33
+#: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:28
 msgid "Moderate comments"
 msgstr "Komentar Moderator"
 
@@ -4424,16 +4424,16 @@ msgstr "Komentar terakhir"
 msgid "Recent comments"
 msgstr "Komentar terakhir"
 
-#: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:31
+#: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:26
 msgid "Require all comments to be reviewed by a moderator before displaying them on the public website"
 msgstr "Memerlukan semua komentar untuk bisa ditinjau oleh moderator sebelum menampilkannya pada situs web publik"
 
-#: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:21
+#: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:33
 msgid "Save Comment Form settings"
 msgstr "Simpan Form Komentar pengaturan"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:13./apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:12
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:12
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:14
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:6
 msgid "Settings"
 msgstr "Pengaturan"
@@ -4526,7 +4526,7 @@ msgstr "Tidak ada halaman dalam konten ini memiliki."
 msgid "This page is part of the group:"
 msgstr "Halaman ini adalah bagian dari grup:"
 
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:25
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:152
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
@@ -4537,7 +4537,7 @@ msgstr "Tindakan"
 msgid "Admin Custom Redirects"
 msgstr "Admin Kustom Pengalihan"
 
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:21
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:23
 msgid "Domain"
 msgstr "Domain"
 
@@ -4545,16 +4545,16 @@ msgstr "Domain"
 msgid "Domains and redirects"
 msgstr "Domain dan pengalihan"
 
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:22
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
 msgstr "Jalur"
 
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:45./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:67./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:88
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:26./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:47./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:69./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:90
 msgid "Permanent"
 msgstr "Permanen"
 
-#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:23
+#: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:25
 msgid "Redirect to"
 msgstr "Dialihkan ke"
 
@@ -4602,15 +4602,15 @@ msgstr "Pengembangan"
 msgid "Development - Observers"
 msgstr "Pengembangan - Pengamat"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:74
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:66
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "Nonaktifkan caching dengan tag <tt>{% cache %}</tt>."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:134
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
 msgstr "Pengiriman aturan debugging"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:43
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:41
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "Download file CSS dan JavaScript sebagai file terpisah. Jangan menggabungkan mereka dalam satu URL."
 
@@ -4618,11 +4618,11 @@ msgstr "Download file CSS dan JavaScript sebagai file terpisah. Jangan menggabun
 msgid "Empty log"
 msgstr "Log kosong"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:93
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:81
 msgid "Enable <tt>mod_server_storage</tt> to use database query tracing."
 msgstr "Aktifkan <tt>mod_server_storage</tt> untuk menggunakan pelacakan kueri database."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:64
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Aktifkan API untuk mengkompilasi ulang dan membangun Zotonic"
 
@@ -4630,7 +4630,7 @@ msgstr "Aktifkan API untuk mengkompilasi ulang dan membangun Zotonic"
 msgid "Event"
 msgstr "Peristiwa"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:145
 msgid "Explain"
 msgstr "Menjelaskan"
 
@@ -4638,11 +4638,11 @@ msgstr "Menjelaskan"
 msgid "Final dispatch"
 msgstr "Akhir pengiriman"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:120
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:111
 msgid "Find"
 msgstr "Menemukan"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:101
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:92
 msgid "Find a template, check which template will be selected"
 msgstr "Menemukan template, cek template yang bisa dipilih"
 
@@ -4658,11 +4658,11 @@ msgstr "Menemukan aturan pengiriman yang cocok"
 msgid "Included templates"
 msgstr "Template yang disertakan"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:160
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:156
 msgid "Introspection"
 msgstr "Introspeksi"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:54
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:50
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "Reload langsung dari file CSS yang diubah. Muat ulang halaman saat mengganti template atau JavaScript."
 
@@ -4670,7 +4670,7 @@ msgstr "Reload langsung dari file CSS yang diubah. Muat ulang halaman saat mengg
 msgid "Location"
 msgstr "Lokasi"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:137
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:129
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Sesuai permintaan URL, tampilan sesuai aturan pengiriman."
 
@@ -4694,7 +4694,7 @@ msgstr "Tidak ditemukan"
 msgid "Observers"
 msgstr "Pengamat"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:110
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:101
 msgid "Optional category for catinclude"
 msgstr "Kategori opsional untuk catinclude"
 
@@ -4714,7 +4714,7 @@ msgstr "Kompilasi Ulang Template"
 msgid "Redirect"
 msgstr "Pengalihan"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:165
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
 msgid "Show an overview of all observers."
 msgstr "Tunjukkan gambaran umum dari semua pengamat."
 
@@ -4722,11 +4722,11 @@ msgstr "Tunjukkan gambaran umum dari semua pengamat."
 msgid "Show defined blocks in generated templates"
 msgstr "Tampilkan didefinisikan blok dihasilkan template"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Show internals of Zotonic and the modules"
 msgstr "Tunjukkan internal Zotonic dan modulnya"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:22
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:24
 msgid "Show paths to included template files in generated templates"
 msgstr "Menunjukkan jalan untuk menyertakan file template pada template yang dihasilkan"
 
@@ -4746,7 +4746,7 @@ msgstr "Subscriber"
 msgid "Switch protocol to"
 msgstr "Aktifkan protokol ke"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:99
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:89
 msgid "Template debugging"
 msgstr "Template debugging"
 
@@ -4762,7 +4762,7 @@ msgstr "Sumber ini tidak diketahui atau tidak memiliki URI"
 msgid "Tools and settings that are useful for site development."
 msgstr "Alat dan pengaturan yang berguna untuk pengembangan situs."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:86
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:76
 msgid "Trace all database queries for the current session"
 msgstr "Lacak semua kueri database untuk sesi saat ini"
 
@@ -4866,27 +4866,27 @@ msgstr "Kecil"
 msgid "Website. Leave empty for media link"
 msgstr "Situs web. Biarkan kosong untuk media link"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
 msgid "DKIM e-mail signing setup"
 msgstr "Setup penandatanganan e-mail DKIM"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:22
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:20
 msgid "The DNS entry should contain the following information:"
 msgstr "Entri DNS harus berisi informasi berikut:"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:15
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:13
 msgid "The location of these key files are the following:"
 msgstr "Maaf, anda tidak memiliki izin untuk mengubah konfigurasi:"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:14
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
 msgid "The module has generated an RSA keypair for you which will be used when signing outgoing emails."
 msgstr "Modul ini telah menghasilkan keypair RSA bagi Anda yang akan digunakan saat mengirim email keluar."
 
-#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:21
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:19
 msgid "To finalize the DKIM configuration, you need to add an DNS entry TXT record to the following domain:"
 msgstr "Untuk menyelesaikan konfigurasi DKIM, anda perlu menambahkan sebuah entri rekaman DNS TXT untuk domain berikut:"
 
-#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:27
+#: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:25
 msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
 msgstr "Ketika semuanya siap, anda dapat menggunakan <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> situs web untuk memverifikasi domain rekaman DKIM anda."
 
@@ -5041,11 +5041,11 @@ msgstr "Ekspor"
 msgid "Help about export"
 msgstr "Bantuan tentang ekspor"
 
-#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:13
+#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:15
 msgid "App ID."
 msgstr "App ID."
 
-#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:20
+#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:20
 msgid "App Secret"
 msgstr "Rahasia Aplikasi"
 
@@ -5078,7 +5078,7 @@ msgstr "Masuk dengan Facebook"
 msgid "Redirecting to Facebook."
 msgstr "Mengalihkan ke Facebook."
 
-#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:46
+#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:36
 msgid "Save Facebook Settings"
 msgstr "Simpan Pengaturan Facebook"
 
@@ -5086,11 +5086,11 @@ msgstr "Simpan Pengaturan Facebook"
 msgid "Saved the Facebook settings."
 msgstr "Menyimpan pengaturan Facebook."
 
-#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:27
+#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:24./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:25
 msgid "Scope"
 msgstr "Cakupan"
 
-#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:38
+#: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:31
 msgid "Use Facebook authentication"
 msgstr "Gunakan otentikasi Facebook"
 
@@ -5107,8 +5107,8 @@ msgid "Your Facebook Developer Dashboard"
 msgstr "Dasbor Pengembang Facebook anda"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:42
-#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:14
-#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:13
+#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:15
+#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:13./apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:14
 msgid "API Key"
 msgstr "Kunci API"
 
@@ -5285,7 +5285,7 @@ msgstr "Anda tidak diizinkan untuk mengubah pengaturan ini."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic dapat menyimpan berkas yang diunggah dan diubah ukurannya dalam awan. Di sini anda dapat mengkonfigurasi lokasi dan tombol akses untuk layanan awan."
 
-#: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
+#: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
 msgstr "Impor berkas CSV"
 
@@ -5293,7 +5293,7 @@ msgstr "Impor berkas CSV"
 msgid "Import content"
 msgstr "Impor konten"
 
-#: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:5
+#: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:7
 msgid "Import data from a CSV file."
 msgstr "Impor data dari sebuah berkas CSV."
 
@@ -5540,7 +5540,7 @@ msgstr "Masuk dengan Linkedln"
 msgid "Log on with LinkedIn"
 msgstr "Masuk dengan LinkedIn"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:40
+#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:31
 msgid "Save LinkedIn Settings"
 msgstr "Simpan Pengaturan LinkedIn"
 
@@ -5548,11 +5548,11 @@ msgstr "Simpan Pengaturan LinkedIn"
 msgid "Saved the LinkedIn settings."
 msgstr "Menyimpan setelan LinkedIn."
 
-#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:21
+#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:20
 msgid "Secret Key"
 msgstr "Kunci Rahasia"
 
-#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:32
+#: apps/zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:26
 msgid "Use LinkedIn authentication"
 msgstr "Gunakan otentikasi LinkedIn"
 
@@ -5850,8 +5850,8 @@ msgstr "Hapus semua penerima dari daftar ini?"
 msgid "Deleted the mailing list."
 msgstr "Menghapus milis."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:32
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:30./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:32
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
 msgid "Description"
 msgstr "Deskripsi"
@@ -5981,7 +5981,7 @@ msgstr "Dicocokkan melalui Query"
 msgid "New mailing list"
 msgstr "Daftar surat baru"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:83./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:53
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:83./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:52
 msgid "No items found"
 msgstr "Tidak ditemukan item"
 
@@ -6066,7 +6066,7 @@ msgstr "Baca halaman ini di web."
 msgid "Recipient deleted."
 msgstr "Penerima dihapus."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:38./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
 msgid "Recipients"
 msgstr "Penerima"
 
@@ -6082,7 +6082,7 @@ msgstr "Penerima untuk"
 msgid "Remove this recipient. No undo possible."
 msgstr "Menghapus penerima. Tidak mungkin ada yang melepaskan."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:24
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23
 msgid "Scheduled"
 msgstr "Terjadwal"
 
@@ -6094,7 +6094,7 @@ msgstr "Lihat"
 msgid "Select..."
 msgstr "Pilih..."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:18
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:15./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:14
 msgid "Send e-mail"
 msgstr "Kirim e-mail"
 
@@ -6598,7 +6598,7 @@ msgstr "Memperbaiki video yang tertanam"
 msgid "No embedded videos found which need fixing."
 msgstr "Tidak ditemukan video tertanam yang memerlukan perbaikan."
 
-#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:21
+#: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:18
 msgid "Save Embedly Key"
 msgstr "Menyimpan kunci Embedly"
 
@@ -6626,27 +6626,27 @@ msgstr "bukan sebuah kategori"
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Tambahkan noindex, elemen untuk semua halaman nofollow."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:86
 msgid "Bing Webmaster validation id"
 msgstr "Bing Webmaster validasi id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Salin nilai dari atribut isi dalam meta tag yang diberikan oleh Google."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:36
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:33
 msgid "Description to include on every page"
 msgstr "Deskripsi untuk memasukkan pada setiap halaman"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Enter here the verification code for"
 msgstr "Masukkan di sini kode verifikasi untuk"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:54
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:49
 msgid "Exclude this site from search engines"
 msgstr "Mengecualikan situs ini dari search engine"
 
@@ -6654,11 +6654,11 @@ msgstr "Mengecualikan situs ini dari search engine"
 msgid "General SEO Optimization"
 msgstr "Optimasi SEO Umum"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:67
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:63./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:64
 msgid "Google Analytics tracking id"
 msgstr "Id pelacakan Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:78./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "Google Webmaster Tools"
 msgstr "Alat Webmaster Google"
 
@@ -6666,11 +6666,11 @@ msgstr "Alat Webmaster Google"
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "Di sini anda dapat menemukan pengaturan untuk mengoptimalkan mengindeks situs anda dengan mesin pencari."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:22./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords"
 msgstr "Kata kunci"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:26
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:25
 msgid "Keywords to include on every page. Separate keywords with a \",\""
 msgstr "Kata kunci untuk disertakan di setiap halaman. Pisahkan kata kunci dengan \",\""
 
@@ -6678,7 +6678,7 @@ msgstr "Kata kunci untuk disertakan di setiap halaman. Pisahkan kata kunci denga
 msgid "SEO"
 msgstr "SEO"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115
 msgid "Save SEO settings"
 msgstr "Simpan pengaturan SEO"
 
@@ -6686,31 +6686,31 @@ msgstr "Simpan pengaturan SEO"
 msgid "Search Engine Optimization"
 msgstr "Optimisasi Mesin Pencari"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:46
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:42
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "File konfigurasi situs memungkinkan situs ini diindeks oleh mesin pencari."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:44
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:40
 msgid "The site configuration file excludes this site from search engines."
 msgstr "File konfigurasi situs mengecualikan situs ini dari mesin pencari."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:67
 msgid "Where can I find my tracking script?"
 msgstr "Di mana saya dapat menemukan tracking script?"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:109
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:99./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
 msgid "Yandex Webmaster validation id"
 msgstr "ID validasi Webmaster Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:114
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Anda menemukan id ini di isi atribut dari tag meta, memiliki format"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:71
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 msgid "You find this id in the tracking script, it has the format"
 msgstr "Anda menemukan id ini dalam skrip pelacakan, memiliki format"
 
@@ -7016,15 +7016,15 @@ msgstr "Zotonic belum diperiksa menggunakan kontrol versi."
 msgid "update"
 msgstr "perbarui"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:5
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"
 msgstr "Otoritas Sertifikat"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:17
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:15
 msgid "This certificate is located in"
 msgstr "Sertifikat ini terletak di"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:11
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:9
 msgid "This certificate is provided by a certificate authority."
 msgstr "Sertifikat ini disediakan oleh otoritas sertifikat."
 
@@ -7269,7 +7269,7 @@ msgid "Danger"
 msgstr "Bahaya"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "Default"
 msgstr "Standar"
 
@@ -7969,7 +7969,7 @@ msgstr "Tersedia sub-bahasa"
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Tidak dapat membuat file terjemahan karena <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\"> gettext tidak terpasang </a>."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:29
 msgid "Code"
 msgstr "Kode"
 
@@ -7981,7 +7981,7 @@ msgstr "Copy teks dari suatu bahasa ke bahasa yang dipilih saat ini."
 msgid "Copy translation"
 msgstr "Salin terjemahan"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:95
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:97
 msgid "Danish"
 msgstr "Denmark"
 
@@ -7997,15 +7997,15 @@ msgstr "Rincian"
 msgid "Developer Documentation"
 msgstr "Dokumentasi pengembang"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:97
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:99
 msgid "Dutch"
 msgstr "Belanda"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:26
 msgid "Editable"
 msgstr "Dapat diedit"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:96
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:98
 msgid "English"
 msgstr "Inggris"
 
@@ -8013,27 +8013,27 @@ msgstr "Inggris"
 msgid "Fallback language"
 msgstr "Bahasa Fallback"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:98
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
 msgid "Finnish"
 msgstr "Finlandia"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:132
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:137
 msgid "For Developers"
 msgstr "Untuk pengembang"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:75
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:77
 msgid "For new visitors, set the language to the default language"
 msgstr "Bagi pengunjung baru, mengatur bahasa untuk bahasa default"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:99
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:101
 msgid "French"
 msgstr "Perancis"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:139
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:143
 msgid "Generate .pot files"
 msgstr "Menghasilkan berkas .pot"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:100
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:102
 msgid "German"
 msgstr "Jerman"
 
@@ -8045,23 +8045,23 @@ msgstr "Kepala ke atas! Menghapus bahasa ini akan <strong>tidak</strong> menghap
 msgid "Help about translations"
 msgstr "Bantuan tentang terjemahan"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:101
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:103
 msgid "Hungarian"
 msgstr "Bahasa Hungaria"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
 msgid "If a language is set to 'off' then edited texts will loose their translation in that lanuage."
 msgstr "Jika suatu bahasa disetel ke 'mati' maka teks yang diedit akan kehilangan terjemahannya dalam bahasa itu."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
 msgstr "Jika suatu bahasa disetel ke 'view' atau 'editable' maka teks untuk bahasa itu dapat diedit di admin."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:116
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:118
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Jika anda mengubah stemmer bahasa maka anda akan perlu untuk reindex semua data."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:102
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:104
 msgid "Italian"
 msgstr "Italia"
 
@@ -8069,7 +8069,7 @@ msgstr "Italia"
 msgid "Language in URL"
 msgstr "Bahasa dalam URL"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:86
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:88
 msgid "Language used for stemming of the search indices"
 msgstr "Bahasa yang digunakan untuk yang berasal dari indeks pencarian"
 
@@ -8089,11 +8089,11 @@ msgstr "Nama dalam menu"
 msgid "No languages configured."
 msgstr "Tidak ada bahasa yang dikonfigurasi."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:103
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:105
 msgid "Norwegian"
 msgstr "Norwegia"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:26
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:27
 msgid "Off"
 msgstr "Mati"
 
@@ -8101,15 +8101,15 @@ msgstr "Mati"
 msgid "Part of"
 msgstr "Bagian dari"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:34./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:29
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:34./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:30
 msgid "Region"
 msgstr "Wilayah"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:148
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:152
 msgid "Reload Translations"
 msgstr "Memuat Ulang Terjemahan"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:150
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:154
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Reload semua terjemahan dari modul dan situs. Semua template yang akan dikompilasi ulang."
 
@@ -8121,19 +8121,19 @@ msgstr "Muat ulang semua file .po di latar belakang."
 msgid "Remove language"
 msgstr "Hapus bahasa"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:104
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
 msgid "Romanian"
 msgstr "Romania"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:105
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:107
 msgid "Russian"
 msgstr "Rusia"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:141
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:145
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
 msgstr "Memindai semua template untuk tag terjemahan dan hasilkan .file pot yang dapat digunakan untuk menerjemahkan template. <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext paket yang harus diinstal</a>."
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:40./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:30
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:40./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:31
 msgid "Script"
 msgstr "Script"
 
@@ -8153,7 +8153,7 @@ msgstr "Pilih bahasa untuk menyalin dari:"
 msgid "Select your preferred language."
 msgstr "Pilih bahasa yang anda inginkan."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:62
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:64
 msgid "Show the language in the URL"
 msgstr "Menunjukkan bahasa di URL"
 
@@ -8177,7 +8177,7 @@ msgstr "Maaf, anda tidak memiliki izin untuk scan untuk terjemahan."
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Maaf, anda tidak memiliki izin untuk mengatur bahasa default."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:108
 msgid "Spanish"
 msgstr "Spanyol"
 
@@ -8185,7 +8185,7 @@ msgstr "Spanyol"
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Mulai membangun .file pot. Ini mungkin mengambil beberapa saat..."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:107
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:109
 msgid "Swedish"
 msgstr "Swedia"
 
@@ -8209,7 +8209,7 @@ msgstr "Terjemahan"
 msgid "Translations"
 msgstr "Terjemahan"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:108
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:110
 msgid "Turkish"
 msgstr "Turki"
 
@@ -8217,43 +8217,43 @@ msgstr "Turki"
 msgid "not enabled"
 msgstr "tidak diaktifkan"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:77
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:62
 msgid "1 hour"
 msgstr "1 jam"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:71
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:56
 msgid "1 minute"
 msgstr "1 menit"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:74
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:59
 msgid "10 minutes"
 msgstr "10 menit"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:75
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:60
 msgid "15 minutes"
 msgstr "15 menit"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:78
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:63
 msgid "2 hours"
 msgstr "2 jam"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:72
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:57
 msgid "2 minutes"
 msgstr "2 menit"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:76
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:61
 msgid "30 minutes"
 msgstr "30 menit"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:73
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:58
 msgid "5 minutes"
 msgstr "5 menit"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:45
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:37./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:38
 msgid "Access Token"
 msgstr "Akses Token"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:51
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:41./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:42
 msgid "Access Token Secret"
 msgstr "Akses Rahasia Token"
 
@@ -8261,11 +8261,11 @@ msgstr "Akses Rahasia Token"
 msgid "Connect with Twitter"
 msgstr "Terhubung dengan Twitter"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:15
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:15./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:16
 msgid "Consumer Key"
 msgstr "Kunci Konsumen"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:22
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:20./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:21
 msgid "Consumer Secret"
 msgstr "Rahasi Konsumen"
 
@@ -8277,7 +8277,7 @@ msgstr "Putuskan dari Twitter"
 msgid "Do you want to disconnect your Twitter account?"
 msgstr "Apakah Anda ingin memutuskan akun Twitter Anda?"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:57
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:45./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:46
 msgid "Follow tags/accounts"
 msgstr "Ikuti Tag/akun"
 
@@ -8289,7 +8289,7 @@ msgstr "Masuk dengan Twitter"
 msgid "Log on with Twitter"
 msgstr "Masuk dengan Twitter"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:67
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:53
 msgid "Maximum poll delay"
 msgstr "Penundaan polling maksimum"
 
@@ -8297,7 +8297,7 @@ msgstr "Penundaan polling maksimum"
 msgid "Note that this user or organization must have <em>create</em> rights on the <em>Tweet</em> category."
 msgstr "Perhatikan bahwa pengguna atau organisasi ini harus memiliki hak <em>buat</em> pada kategori <em>Tweet</em>."
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:90
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:73
 msgid "Save Twitter Settings"
 msgstr "Simpan pengaturan Twitter"
 
@@ -8305,11 +8305,11 @@ msgstr "Simpan pengaturan Twitter"
 msgid "Saved the Twitter settings."
 msgstr "Menyimpan pengaturan Twitter."
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:62
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:49
 msgid "Separate #tags, @usernames and phrases with commas or newlines."
 msgstr "Pisahkan #tags, @usernames dan frase dengan koma atau baris baru."
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:42
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:34
 msgid "To import tweets, Zotonic needs an access token and secret. You can find these on the <b>Keys and Access Tokens</b> tab on your Twitter application page."
 msgstr "Untuk mengimpor tweet, Zotonic membutuhkan akses token dan rahasia. Anda dapat menemukan ini di <b>Kunci dan Akses Token</b> tab pada aplikasi Twitter anda halaman."
 
@@ -8317,7 +8317,7 @@ msgstr "Untuk mengimpor tweet, Zotonic membutuhkan akses token dan rahasia. Anda
 msgid "Twitter Account"
 msgstr "Akun Twitter"
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:82
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:67
 msgid "Twitter is periodically polled for new content. If there is no content then the waiting period will be extended up to this maximum."
 msgstr "Twitter secara berkala melakukan polling untuk konten baru. Jika tidak ada konten maka masa tunggu akan diperpanjang hingga maksimum."
 
@@ -8325,7 +8325,7 @@ msgstr "Twitter secara berkala melakukan polling untuk konten baru. Jika tidak a
 msgid "Use <tt>@foobar</tt> or <tt>foobar</tt> to import all recent and future tweets from \"foobar\"."
 msgstr "Gunakan <tt>@foobar</tt> atau <tt>foobar</tt> untuk mengimpor semua tweet terbaru dan mendatang dari \"foobar\"."
 
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:33
+#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:27
 msgid "Use Twitter authentication"
 msgstr "Gunakan otentifikasi Twitter"
 
