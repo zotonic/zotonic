@@ -1,7 +1,7 @@
 {% include "_js_include_jquery.tpl" %}
 
 {% lib
-    "admin-bootstrap3/js/bootstrap.min.js"
+    "js/bootstrap3/bootstrap.min.js"
 %}
 
 {% lib

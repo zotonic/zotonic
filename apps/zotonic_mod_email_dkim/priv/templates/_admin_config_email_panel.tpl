@@ -1,14 +1,12 @@
 {#
  # Shown on the mod_admin_config email configuration page
  #}
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            {_ DKIM e-mail signing setup _}
-            <span class="text-muted pull-right">mod_email_dkim</span>
-        </h3>
+<div class="widget">
+    <div class="widget-header">
+        {_ DKIM e-mail signing setup _}
+        <span class="text-muted pull-right">mod_email_dkim</span>
     </div>
-    <div class="panel-body">
+    <div class="widget-content">
     {% with m.email_dkim.admin_info as info %}
         <p>
             {_ The module has generated an RSA keypair for you which will be used when signing outgoing emails. _}
@@ -25,6 +23,6 @@
         <pre>{{ info.dns_entry }}</pre>
 
         <p>{_ When all is setup, you can use the <a href="http://dkimcore.org/c/keycheck">DKIM keycheck</a> website to verify your domain's DKIM record. _}</p>
-
     {% endwith %}
+    </div>
 </div>

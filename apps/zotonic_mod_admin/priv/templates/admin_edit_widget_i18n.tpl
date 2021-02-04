@@ -25,9 +25,7 @@
 
 		{% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
 
-		<div class="tab-content widget-content nolang_before">
-            {% block widget_content_nolang_before %}{% endblock %}
-        </div>
+		<div class="tab-content widget-content nolang_before">{% block widget_content_nolang_before %}{% endblock %}</div>
 
 		<div class="tab-content widget-content">
 			{% for lang_code,lang in m.translation.language_list_enabled %}
@@ -46,9 +44,7 @@
 			{% endfor %}
 		</div>
 
-		<div class="tab-content widget-content nolang">
-            {% block widget_content_nolang %}{% endblock %}
-        </div>
+		<div class="tab-content widget-content nolang">{% block widget_content_nolang %}{% endblock %}</div>
 	</div>
 	{% block widget_after %}{% endblock %}
 

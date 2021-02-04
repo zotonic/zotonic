@@ -10,44 +10,46 @@
     </p>
 </div>
 
-<div class="well">
+<div class="well z-button-row">
     {% button class="btn btn-primary" text=_"Add language"
         action={dialog_open title=_"Add language" template="_dialog_language_edit.tpl" new}
     %}
 </div>
 
-<div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th width="10%">{_ Default _}</th>
-                <th width="5%">{_ View _}</th>
-                <th width="5%">{_ Editable _}</th>
-                <th width="5%">{_ Off _}</th>
-                <th width="20%">{_ Language _}</th>
-                <th width="10%">{_ Code _}</th>
-                <th width="10%">{_ Region _}</th>
-                <th width="10%">{_ Script _}</th>
-                <th></th>
-            </tr>
-        </thead>
+<div class="widget">
+    <div class="widget-content">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="10%">{_ Default _}</th>
+                    <th width="5%">{_ View _}</th>
+                    <th width="5%">{_ Editable _}</th>
+                    <th width="5%">{_ Off _}</th>
+                    <th width="20%">{_ Language _}</th>
+                    <th width="10%">{_ Code _}</th>
+                    <th width="10%">{_ Region _}</th>
+                    <th width="10%">{_ Script _}</th>
+                    <th></th>
+                </tr>
+            </thead>
 
-        <tbody id="translation-language-status">
-            {% include "_translation_language_status.tpl" %}
-        </tbody>
-    </table>
+            <tbody id="translation-language-status">
+                {% include "_translation_language_status.tpl" %}
+            </tbody>
+        </table>
 
-    <p class="help-block">
-        {_ If a language is set to 'view' or 'editable' then texts for that language are editable in the admin. _}<br>
-        {_ If a language is set to 'off' then edited texts will loose their translation in that lanuage. _}
-    </p>
-
+        <p class="help-block">
+            {_ If a language is set to 'view' or 'editable' then texts for that language are editable in the admin. _}<br>
+            {_ If a language is set to 'off' then edited texts will loose their translation in that lanuage. _}
+        </p>
+    </div>
 </div>
 
-<div>
-    <h3>{_ Configuration _}</h3>
-
-    <div class="well">
+<div class="widget">
+    <div class="widget-header">
+        {_ Configuration _}
+    </div>
+    <div class="widget-content">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -128,11 +130,13 @@
             </div>
         </div>
     </div>
+</div>
 
-    <h3>{_ For Developers _}</h3>
-
-    <div class="well">
-
+<div class="widget">
+    <div class="widget-header">
+        {_ For Developers _}
+    </div>
+    <div class="widget-content">
         {% if m.acl.is_admin or m.acl.use.mod_development %}
             <div class="form-group">
                 <div>
@@ -150,9 +154,7 @@
                 <span class="help-block">{_ Reload all translations from the modules and site. All templates will be recompiled. _}</span>
             </div>
         </div>
-
     </div>
-
 </div>
 
 {% endblock %}

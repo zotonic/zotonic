@@ -1,22 +1,20 @@
 {% wire id=#form type="submit" postback={config_edit module=module key=key on_success=on_success} delegate=delegate %}
-<form id="{{ #form }}" method="POST" action="postback" class="form  form-horizontal">
-    <div class="form-group row">
-        <label class="control-label col-md-3" for="{{ #module }}">{_ Module _}</label>
-        <div class="col-md-4">
-            <input type="text" id="{{ #module }}" name="module" value="{{ module|escape }}" class="input-xlarge form-control" />
-        </div>
+<form id="{{ #form }}" method="POST" action="postback" class="form">
+    <div class="form-group label-floating">
+        <input type="text" id="{{ #module }}" name="module" value="{{ module|escape }}" class="form-control"  required placeholder="{_ Module _}" pattern="[a-zA-Z0-9_]+">
+        <label class="control-label" for="{{ #module }}">{_ Module _}</label>
+        {% validate id=#module name="module" type={presence} %}
     </div>
-    <div class="form-group row">
-        <label class="control-label col-md-3" for="{{ #key }}">{_ Key _}</label>
-        <div class="col-md-4">
-            <input type="text" id="{{ #key }}" name="key" value="{{ key|escape }}" class="input-xlarge form-control" />
-        </div>
+
+    <div class="form-group label-floating">
+        <input class="form-control" type="text" id="{{ #key }}" name="key" value="{{ key|escape }}" required pattern="[a-zA-Z0-9_]+" placeholder="{_ Key _}">
+        <label class="control-label" for="{{ #key }}">{_ Key _}</label>
+        {% validate id=#key name="key" type={presence} %}
     </div>
-    <div class="form-group row">
-        <label class="control-label col-md-3" for="{{ #value }}">{_ Value _}</label>
-        <div class="col-md-9">
-            <input type="text" id="{{ #value }}" name="val" value="{{ value|escape }}" class="input-xlarge do_autofocus form-control" />
-        </div>
+
+    <div class="form-group label-floating">
+        <input class="form-control" type="text" id="{{ #value }}" name="val" value="{{ value|escape }}" placeholder="{_ Value _}" autofocus>
+        <label class="control-label" for="{{ #value }}">{_ Value _}</label>
     </div>
 
     <div class="modal-footer">

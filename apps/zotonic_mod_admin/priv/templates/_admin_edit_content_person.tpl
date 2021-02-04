@@ -15,29 +15,21 @@
 {% block widget_content %}
 <fieldset>
     <div class="row">
-        <div class="form-group col-lg-4 col-md-4">
+        <div class="form-group col-lg-4 col-md-4 label-floating">
+            <input class="form-control" id="name_first" type="text" name="name_first" value="{{ id.name_first }}" placeholder="{_ First _}">
             <label class="control-label" for="name_first">{_ First _}</label>
-            <div>
-                <input class="form-control" id="name_first" type="text" name="name_first" value="{{ id.name_first }}" />
-            </div>
         </div>
-        <div class="form-group col-lg-2 col-md-2">
+        <div class="form-group col-lg-2 col-md-2 label-floating">
+            <input class="form-control" id="name_middle" type="text" name="name_middle" value="{{ id.name_middle }}" placeholder="{_ Middle _}">
             <label class="control-label" for="name_middle">{_ Middle _}</label>
-            <div>
-                <input class="form-control" id="name_middle" type="text" name="name_middle" value="{{ id.name_middle }}" />
-            </div>
         </div>
-        <div class="form-group col-lg-2 col-md-2">
+        <div class="form-group col-lg-2 col-md-2 label-floating">
+            <input class="form-control" id="name_surname_prefix" type="text" name="name_surname_prefix" value="{{ id.name_surname_prefix }}" placeholder="{_ Sur. prefix _}">
             <label class="control-label" for="name_surname_prefix">{_ Sur. prefix _}</label>
-            <div>
-                <input class="form-control" id="name_surname_prefix" type="text" name="name_surname_prefix" value="{{ id.name_surname_prefix }}" />
-            </div>
         </div>
-        <div class="form-group col-lg-4 col-md-4">
+        <div class="form-group col-lg-4 col-md-4 label-floating">
+            <input class="form-control" id="name_surname" type="text" name="name_surname" value="{{ id.name_surname }}" placeholder="{_ Surname _}">
             <label class="control-label" for="name_surname">{_ Surname _}</label>
-            <div>
-                <input class="form-control" id="name_surname" type="text" name="name_surname" value="{{ id.name_surname }}" />
-            </div>
         </div>
     </div>
 </fieldset>

@@ -48,7 +48,7 @@
     </div>
 {% else %}
     {% if q.options.is_username_checked %}
-        <div class="form-group" style="display:none">
+        <div class="form-group hidden">
             <label for="username" class="control-label">{_ Username or email _}</label>
             <input type="text"
                    id="username"
@@ -56,10 +56,12 @@
                    value="{{ q.options.username|default:q.username|escape }}"
                    class="form-control"
                    autocapitalize="off"
-                   required autocomplete="username"
+                   required
+                   autocomplete="off"
+                   tabindex="-1"
             >
         </div>
-        <p class="clearfix" style="overflow:hidden">
+        <p class="clearfix hidden">
             <b>{{ q.options.username|escape }}</b>
             <a class="pull-right" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Other username or email _}</a>
         </p>

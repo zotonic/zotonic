@@ -12,19 +12,20 @@
 						discover_elt=#discover}
 		delegate=`z_admin_media_discover`
 	%}
-	<form id="{{ #urlform }}" method="POST" action="postback" class="form form-horizontal">
+	<form id="{{ #urlform }}" method="POST" action="postback" class="form">
 		<p>
 		    {_ Enter a URL or embed code. It will be analyzed and you can choose how to import the data. _}
 		</p>
 
-		<div class="form-group row">
-		    <label class="control-label col-md-3" for="url">{_ Media URL _}</label>
-            <div class="col-md-9">
-		        <textarea type="text" class="form-control do_autofocus" id="url" name="url" rows="3">{{ medium.media_import|escape }}</textarea>
-		        {% validate id="url" type={presence} %}
-		        <p class="help-block">{_ Embed code will be sanitized for allowed sites and html. _}</p>
-            </div>
+		<div class="form-group label-floating">
+	        <textarea type="text" class="form-control do_autofocus" id="url" name="url" rows="3" placeholder="{_ Media URL or HTML _}">{{ medium.media_import|escape }}</textarea>
+	        {% validate id="url" type={presence} %}
+		    <label class="control-label" for="url">{_ Media URL or HTML _}</label>
 		</div>
+		<p class="help-block">
+			<span class="glyphicon glyphicon-info-sign"></span>
+			{_ Embed code will be sanitized for allowed sites and html. _}
+		</p>
 
 		<div class="modal-footer">
 		    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}

@@ -1,5 +1,6 @@
 {% with m.identity[id].all.email as idns %}
-<label class="control-label" for="{{ #email }}">{_ E-mail address _}</label>
+{% comment %}<label for="{{ #email }}">{_ E-mail address _}</label>
+{% endcomment %}
 <div id="{{ #email_idns }}">
 	<div id="{{ #email_list }}">
 		{% include "_identity_verify_table.tpl" identities=idns %}

@@ -1,0 +1,98 @@
+/* Zotonic admin scss main file, setting our preferences. */
+
+ /* import the necessary Bootstrap files */
+
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/variables";
+
+/* -------begin customization-------- */
+
+
+$brand-primary:     #0fa2db;
+$brand-success:     #5cb85c;
+$brand-info:        #5bc0de;
+$brand-warning:     #f0ad4e;
+$brand-danger:      #d9534f;
+
+$body-bg:           #f8f8f8;
+
+$gray-base:         #000 !default;
+$gray-darker:       lighten($gray-base, 13.5%); // #222
+$gray-dark:         lighten($gray-base, 20%);   // #333
+$gray:              lighten($gray-base, 33.5%); // #555
+$gray-light:        lighten($gray-base, 46.7%); // #777
+$gray-lighter:      lighten($gray-base, 69%);   // #b0b0b0
+$gray-lightest:     lighten($gray-base, 93.5%); // #eee
+
+$icon-font-path: "/lib/fonts/";
+
+$input-border-radius:         0;
+$input-border-radius-large:   0;
+$input-border-radius-small:   0;
+
+
+/* -------end customization-------- */
+
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/variables";
+
+/* Zotonic definitions */
+@import "zotonic/forms";
+
+/* finally, import Bootstrap to set the changes! */
+
+// Core variables and mixins
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/mixins";
+
+// Reset and dependencies
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/normalize";
+// @import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/print";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/glyphicons";
+
+// Core CSS
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/scaffolding";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/type";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/code";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/grid";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/tables";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/forms";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/buttons";
+
+// Components
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/component-animations";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/dropdowns";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/button-groups";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/input-groups";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/navs";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/navbar";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/breadcrumbs";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/pagination";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/pager";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/labels";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/badges";
+// @import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/jumbotron";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/thumbnails";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/alerts";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/progress-bars";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/media";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/list-group";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/panels";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/responsive-embed";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/wells";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/close";
+
+// Components w/ JavaScript
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/modals";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/tooltip";
+// @import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/popovers";
+// @import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/carousel";
+
+// Utility classes
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/utilities";
+@import "bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/responsive-utilities";
+
+
+/* -------begin customization-------- */
+/* create new custom classes from existing classes */
+
+
+/* -------end customization-------- */
+

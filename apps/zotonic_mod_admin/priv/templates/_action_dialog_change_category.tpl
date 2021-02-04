@@ -26,15 +26,13 @@ cat_id
     {% block form %}
         {% wire id=#form type="submit" postback="rscform" action={dialog_close} delegate="controller_admin_edit" %}
         <form id="{{ #form }}" method="POST" action="postback" class="form">
-            <fieldset class="form-horizontal">
+            <fieldset>
 
                 <input type="hidden" name="id" value="{{ id }}" />
 
-                <div class="form-group row">
-                    <div class="col-md-12">
-                        <h4>{_ Change the category of this page _}</h4>
-                        {% include "_admin_category_dropdown.tpl" id=id cat_id=cat_id %}
-                    </div>
+                <div class="form-group">
+                    <h4>{_ Change the category of this page _}</h4>
+                    {% include "_admin_category_dropdown.tpl" id=id cat_id=cat_id %}
                 </div>
 
                 <div class="modal-footer clearfix">

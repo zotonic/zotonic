@@ -7,7 +7,7 @@
 			"css/zp-menuedit.css"
 			"css/z.icons.css"
 			"css/zotonic-admin.css"
-			"admin-bootstrap3/css/bootstrap.css"
+			"css/admin-bootstrap3.css"
 			"css/admin-frontend.css"
 			"css/jquery-ui.datepicker.css"
             "css/jquery.timepicker.css"

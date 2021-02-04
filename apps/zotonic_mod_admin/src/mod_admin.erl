@@ -220,9 +220,9 @@ event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
 event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=TargetId}, Context)
     when Trigger =:= <<"dialog-new-rsc-tab">>; Trigger =:= <<"dialog-connect-find">> ->
     % Find pages matching the search criteria.
-    CreatorId = z_convert:to_integer(z_context:get_q(find_creator_id, Context)),
-    SubjectId = z_convert:to_integer(z_context:get_q(subject_id, Context)),
-    ObjectId = z_convert:to_integer(z_context:get_q(object_id, Context)),
+    CreatorId = z_convert:to_integer(z_context:get_q(<<"find_creator_id">>, Context)),
+    SubjectId = z_convert:to_integer(z_context:get_q(<<"subject_id">>, Context)),
+    ObjectId = z_convert:to_integer(z_context:get_q(<<"object_id">>, Context)),
     Predicate = z_convert:to_binary(z_context:get_q(<<"predicate">>, Context, <<>>)),
     PredicateId = m_rsc:rid(Predicate, Context),
     TextL = lists:foldl(
@@ -237,25 +237,32 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
             end
         end,
         [],
-        [ find_text, title, new_rsc_title, name_first, name_surname, email ]),
+        [
+            <<"find_text">>, <<"title">>, <<"new_rsc_title">>,
+            <<"name_first">>, <<"name_surname">>, <<"email">>
+        ]),
     Text = iolist_to_binary(TextL),
-    Category = case z_context:get_q(find_category, Context) of
-        undefined -> z_context:get_q(category_id, Context);
-        <<>> -> z_context:get_q(category_id, Context);
+    Category = case z_context:get_q(<<"find_category">>, Context) of
+        undefined -> z_context:get_q(<<"category_id">>, Context);
+        <<>> -> z_context:get_q(<<"category_id">>, Context);
         Cat -> Cat
     end,
     Cats = case z_convert:to_binary(Category) of
-                <<"p:", Predicate/binary>> -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
-                <<>> when PredicateId =/= undefined -> feedback_categories(SubjectId, Predicate, ObjectId, Context);
+                <<"p:", Predicate/binary>> ->
+                    feedback_categories(SubjectId, Predicate, ObjectId, Context);
+                <<>> when PredicateId =/= undefined ->
+                    feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<>> -> [];
                 <<"*">> -> [];
-                CatId -> [ {m_rsc:rid(CatId, Context)} ]
+                CIds ->
+                    CatIds = binary:split(CIds, <<",">>, [ global ]),
+                    [ {m_rsc:rid(CatId, Context)} || CatId <- CatIds, CatId =/= <<>> ]
            end,
     Vars = [
         {creator_id, CreatorId},
         {subject_id, SubjectId},
         {cat, Cats},
-        {cat_exclude, z_context:get_q(cat_exclude, Context)},
+        {cat_exclude, z_context:get_q(<<"cat_exclude">>, Context)},
         {predicate, Predicate},
         {text, Text},
         {is_multi_cat, length(Cats) > 1},
@@ -263,8 +270,8 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
             [{CId}] -> CId;
             _ -> undefined
         end},
-        {is_zlink, z_convert:to_bool( z_context:get_q(is_zlink, Context) )}
-    ] ++ case z_context:get_q(find_cg, Context) of
+        {is_zlink, z_convert:to_bool( z_context:get_q(<<"is_zlink">>, Context) )}
+    ] ++ case z_context:get_q(<<"find_cg">>, Context) of
         <<>> -> [];
         "" -> [];
         undefined -> [];

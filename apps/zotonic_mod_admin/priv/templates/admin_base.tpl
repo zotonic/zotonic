@@ -11,7 +11,7 @@
         <meta name="description" content="" />
 
         {% lib
-            "admin-bootstrap3/css/bootstrap.min.css"
+            "css/admin-bootstrap3.css"
         %}
 
         {% lib

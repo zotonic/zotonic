@@ -1,11 +1,15 @@
 
 .widget {
+    background-color: white;
     margin-bottom: @widgetVerticalPadding;
     border-bottom: none;
-    #3L > .border-radius(@radiusWidget);
+    border-radius: @radiusWidget;
     #3L > .clearfix;
 
-    &,
+    .widget {
+        margin-bottom: 0;
+    }
+
     &.dark {
         background-color: @backgroundColorMedium;
     }
@@ -17,6 +21,10 @@
     .widget-content {
         position: relative;
         padding: @widgetVerticalPadding @widgetSidePadding 0 @widgetSidePadding;
+        // padding: 10px;
+        border-radius: 0 0 @radiusWidget @radiusWidget;
+        // border: 1px solid @borderColorLight;
+        border-top: none;
 
         &.widget-content-full {
             padding: 0;
@@ -38,6 +46,11 @@
 
         hr {
             margin: 15px -@widgetSidePadding;
+        }
+
+        .mce-tinymce {
+            margin: 0 -@widgetSidePadding;
+            width: auto !important;
         }
 
         // nested content blocks
@@ -75,6 +88,11 @@
             margin-bottom: @widgetVerticalPadding;
         }
     }
+
+    .widget-content:empty {
+        padding: 0;
+    }
+
     .tab-pane {
         padding-top: @widgetVerticalPadding;
     }
@@ -85,7 +103,7 @@
     .widget-header,
     .widget-section-header {
         &:extend(.admin-text-header);
-        font-weight: normal;
+        font-weight: bold;
     }
 
     .widget-section-header {
@@ -97,8 +115,11 @@
         padding: @widgetVerticalPadding @widgetSidePadding;
         #3L > .user-select(none);
         text-shadow: @darkOnLightTextShadow;
-        font-size: @font-size-base;
+        font-size: @font-size-large;
+        font-weight: normal;
         line-height: 16px; // make room for widget-header-tools
+        // background-color: @backgroundColorMedium;
+        border-radius: @radiusWidget;
 
         .z-btn-remove {
             display: block;
@@ -141,20 +162,20 @@
         @_transitionEffect: ease-in-out;
         @_color: @backgroundColorLightest;
 
-        background-color: @_color;
-        #3L > .border-radius(@radiusWidget);
-        #3L > .transition(background @_transitionDuration @_transitionEffect);
+        // background-color: @_color;
+        // #3L > .transition(background @_transitionDuration @_transitionEffect);
 
         .widget-header {
-            background-color: @_color;
-            #3L > .border-radius(@radiusWidget @radiusWidget 0);
-            #3L > .transition(background @_transitionDuration @_transitionEffect);
+            // background-color: @_color;
+            // #3L > .transition(background @_transitionDuration @_transitionEffect);
         }
     }
 
     &.widget-expanded,
     &.dark.widget-expanded {
         .widget-header {
+            border-radius: @radiusWidget @radiusWidget 0 0;
+
             .widget-header-tools {
                 .z-btn-help {
                     color: @colorLink;
@@ -176,7 +197,7 @@
         height: @_size;
         background-color: #333;
         border-color: #fff;
-        #3L > .border-radius(@_size/2);
+        border-radius: (@_size/2);
     }
 
     .navbar {
@@ -190,19 +211,17 @@
     .widget-header:hover {
         @_transitionDuration: .1s;
         @_transitionEffect: ease-in-out;
-        background-color: @backgroundColorMedium;
+        // background-color: @backgroundColorMedium;
         #3L > .transition(background @_transitionDuration @_transitionEffect);
         cursor: pointer;
     }
 }
 
-.dashboard .widget {
-    background-color: @backgroundColorLightest;
-}
 
 li {
     > .widget {
-        #3L > .border-radius(0 0 @radiusWidget @radiusWidget);
+        border-radius: 5px;
+        // #3L > .border-radius(0 0 @radiusWidget @radiusWidget);
     }
 
     h3.widget-header {
@@ -216,7 +235,8 @@ li {
     &:extend(.minimalTabs all);
 
     &.language-tabs {
-        background: @backgroundColorMediumDark;
+        // background: @backgroundColorMediumDark;
+        border-bottom: 1px solid @borderColorLight;
     }
 }
 

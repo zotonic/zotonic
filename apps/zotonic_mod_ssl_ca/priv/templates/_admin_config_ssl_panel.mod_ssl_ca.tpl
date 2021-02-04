@@ -1,12 +1,10 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            {{ nr }}.
-            {_ Certificate Authority _}
-            <span class="text-muted pull-right">{{ cert.module }}</span>
-        </h3>
+<div class="widget">
+    <div class="widget-header">
+        {{ nr }}.
+        {_ Certificate Authority _}
+        <span class="text-muted pull-right">{{ cert.module }}</span>
     </div>
-    <div class="panel-body">
+    <div class="widget-content">
         <p>
             {_ This certificate is provided by a certificate authority. _}
         </p>
