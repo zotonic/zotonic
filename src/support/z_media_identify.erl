@@ -510,7 +510,7 @@ exif_subject_point(Exif, Orientation, Width, Height) ->
     Point1 = maybe_resize_point(Point, Exif, Width, Height),
     maybe_rotate(Orientation, Point1, Width, Height).
 
-extract_subject_point(undefind) ->
+extract_subject_point(undefined) ->
     undefined;
 extract_subject_point(Exif) ->
     case proplists:get_value(subject_area, Exif) of
