@@ -1,10 +1,11 @@
 ul.tree-list {
     li.menu-item {
         > div {
-            #3L > .gradient(#ffffff, @backgroundColorLightest);
+            background-color: #fefefe;
+            // #3L > .gradient(#ffffff, @backgroundColorLightest);
 
             &:hover {
-                #3L > .gradient(@backgroundColorLightest, @backgroundColorInteractiveLight);
+                // #3L > .gradient(@backgroundColorLightest, @backgroundColorInteractiveLight);
             }
 
             > a {
@@ -16,6 +17,19 @@ ul.tree-list {
                 }
             }
         }
+
+        ul {
+            li:first-child {
+                margin-top: 1px;
+            }
+            li:last-child {
+                margin-bottom: 2px;
+            }
+        }
+    }
+
+    li.menu-item + li.menu-item {
+        margin-top: -1px;
     }
 
     &.categories {

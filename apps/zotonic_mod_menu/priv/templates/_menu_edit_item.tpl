@@ -1,9 +1,7 @@
 {% if id %}
 <li id="{{ #menu.c }}-{{ id }}" class="menu-item {% if action == `down` %}has-submenu{% endif %} submenu-open">
 	<div id="{{ menu_id|default:#menu.id }}" data-page-id="{{ id }}" class="menu-wrapper">
-        <div class="menu-drag">
-            <i class="z-icon z-icon-drag"></i>
-        </div>
+        <div class="menu-drag"></div>
 
 		<a class="menu-toggle" href="#toggle">
             <i class="menu-expand z-icon z-icon-plus"></i>

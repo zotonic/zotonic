@@ -1530,16 +1530,7 @@ div.widget-content .mce-reset {
   padding: 2px 6px;
 }
 ul.tree-list li.menu-item > div {
-  background-image: -moz-linear-gradient(top, #ffffff 0%, #f5f5f5 100%);
-  background-image: -webkit-linear-gradient(top, #ffffff 0%, #f5f5f5 100%);
-  background-image: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f5f5f5', GradientType=0);
-}
-ul.tree-list li.menu-item > div:hover {
-  background-image: -moz-linear-gradient(top, #f5f5f5 0%, #f5f5f5 100%);
-  background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #f5f5f5 100%);
-  background-image: linear-gradient(to bottom, #f5f5f5 0%, #f5f5f5 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#f5f5f5', GradientType=0);
+  background-color: #fefefe;
 }
 ul.tree-list li.menu-item > div > a {
   color: #777;
@@ -1547,6 +1538,15 @@ ul.tree-list li.menu-item > div > a {
 ul.tree-list li.menu-item > div > a:hover {
   color: #222;
   text-decoration: none;
+}
+ul.tree-list li.menu-item ul li:first-child {
+  margin-top: 1px;
+}
+ul.tree-list li.menu-item ul li:last-child {
+  margin-bottom: 2px;
+}
+ul.tree-list li.menu-item + li.menu-item {
+  margin-top: -1px;
 }
 ul.tree-list.categories {
   padding-bottom: 40px;
