@@ -38,14 +38,17 @@ ul.blocks.ui-sortable .widget-header:before {
   font-weight: normal;
   font-style: normal;
 }
-body {
+body,
+body.page-edit {
   color: #222;
   background-color: #f2f1f0;
 }
-body.wait {
+body.wait,
+body.page-edit.wait {
   cursor: wait;
 }
-body.wait .btn {
+body.wait .btn,
+body.page-edit.wait .btn {
   cursor: wait;
 }
 @media (max-width: 991px) {
