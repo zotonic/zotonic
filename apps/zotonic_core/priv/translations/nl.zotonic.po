@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-04 13:53\n"
+"PO-Revision-Date: 2021-02-07 16:10\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2727,7 +2727,7 @@ msgstr "Alleen een beheerder of de gebruiker zelf kan het wachtwoord instellen."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
 msgid "Please verify your email address"
-msgstr "Verifieer uw email adres alstublieft"
+msgstr "Verifieer uw e-mailadres alstublieft"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:22
 msgid "Random secure password:"
@@ -3870,7 +3870,7 @@ msgstr "Gebruik bijzondere symbolen of cijfers om het moeilijker te maken om te 
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:52./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:70
 msgid "Username or email"
-msgstr "Gebruikersnaam of email"
+msgstr "Gebruikersnaam of e-mail"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
 msgid "Verify your account"
@@ -3965,7 +3965,7 @@ msgstr "of"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:105
 msgid "or you can enter the password that you have for"
-msgstr "of je kan het wachtwoord invoeren dat je hebt voor"
+msgstr "of u kunt het wachtwoord invoeren dat u heeft voor"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "the service"
