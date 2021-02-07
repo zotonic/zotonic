@@ -29,7 +29,7 @@ The simplest controller to serve HTML::
 
    -module(controller_example).
 
-   -export([ process/4 ])
+   -export([ process/4 ]).
 
    process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
        {<<"<h1>Hello</h1>">>, Context}.
