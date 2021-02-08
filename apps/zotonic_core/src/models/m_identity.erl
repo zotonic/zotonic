@@ -876,13 +876,18 @@ insert_1(Rsc, Type, Key, Props, Context) ->
             {ok, IdnId}
     end.
 
+-spec is_valid_key( binary() | atom(),  undefined | binary() | string(), z:context() ) -> boolean().
 is_valid_key(_Type, undefined, _Context) ->
     false;
 is_valid_key(email, Key, _Context) ->
     z_email_utils:is_email(Key);
 is_valid_key(username_pw, Key, _Context) ->
     not is_reserved_name(Key);
-is_valid_key(Type, _Key, _Context) when is_atom(Type) ->
+is_valid_key(<<"email">>, Key, Context) ->
+    is_valid_key(email, Key, Context);
+is_valid_key(<<"username_pw">>, Key, Context) ->
+    is_valid_key(username_pw, Key, Context);
+is_valid_key(Type, _Key, _Context) when is_atom(Type); is_binary(Type) ->
     true.
 
 normalize_key(_Type, undefined) -> undefined;
