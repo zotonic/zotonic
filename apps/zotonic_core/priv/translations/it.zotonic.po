@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-08 12:07\n"
+"PO-Revision-Date: 2021-02-08 13:26\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -105,11 +105,11 @@ msgstr "Gruppo di utenti ACL"
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
-msgstr "Controllo dell'accesso"
+msgstr "Controllo di accesso"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:34./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
 msgid "Access control rules"
-msgstr "Regole di controllo dell'accesso"
+msgstr "Regole di controllo degli accessi"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:21./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:24
 msgid "Add Rule"
@@ -182,7 +182,7 @@ msgstr "Sei sicuro di voler ripristinare tutte le regole ACL alla loro versione 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:190
 msgid "Cancel"
-msgstr "Cancella"
+msgstr "Annulla"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
@@ -257,7 +257,7 @@ msgstr "Regole di contenuto per i membri del gruppo di collaborazione e i manage
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:42
 msgid "Could not move to collaboration group."
-msgstr "Impossibile passare al gruppo di collaborazione."
+msgstr "Impossibile spostare al gruppo di collaborazione."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
@@ -277,26 +277,26 @@ msgstr "Definisci chi può vedere o modificare questa pagina."
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:121
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
-msgstr "Cancellare"
+msgstr "Eliminare"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 msgid "Delete all user groups"
-msgstr "Cancellare tutti i gruppi di utenti"
+msgstr "Eliminare tutti i gruppi di utenti"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:131
 msgid "Delete is canceled, there are users in the user groups."
-msgstr "La cancellazione è annullata, ci sono utenti nei gruppi di utenti."
+msgstr "L'eliminazione è annullata, ci sono utenti nei gruppi di utenti."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:37
 msgid "Delete user group and move users"
-msgstr "Cancellare il gruppo di utenti e spostare gli utenti"
+msgstr "Eliminare il gruppo di utenti e spostare gli utenti"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:159
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:75./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:86./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:92
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:79./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:107
 msgid "Deleting..."
-msgstr "Cancellazione..."
+msgstr "Eliminazione in corso..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:45
 msgid "Edit &amp; link rights on the collaboration groups"
@@ -312,7 +312,7 @@ msgstr "Modifica il gruppo di collaborazione"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "Inserite le estensioni (come <tt>.png</tt>), i tipi mime (come <tt>image/png</tt>) o uno di:"
+msgstr "Inserire le estensioni (come <tt>.png</tt>), i tipi mime (come <tt>image/png</tt>) o uno tra:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
@@ -320,7 +320,7 @@ msgstr "Esportazione delle regole di modifica"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "I tipi di file seguono la gerarchia dei gruppi. I gruppi derivati ereditano le impostazioni mime dal loro antenato."
+msgstr "I tipi di file seguono la gerarchia dei gruppi. I gruppi derivati ereditano le impostazioni MIME dal loro antenato."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:55
 msgid "File uploads"
@@ -348,19 +348,19 @@ msgstr "I membri del gruppo e i manager possono collegare"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 msgid "Import"
-msgstr "Importazione"
+msgstr "Importare"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "Importazione di regole di modifica..."
+msgstr "Importa regole..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
-msgstr "Importazione della versione di modifica delle regole ACL"
+msgstr "Importa regole ACL precedentemente salvate"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:136
 msgid "Importing, the list of rules will refresh after importing."
-msgstr "Importando, la lista delle regole si aggiornerà dopo l'importazione."
+msgstr "Importazione in corso, la lista delle regole si aggiornerà dopo l'importazione."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:40./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:17
 msgid "Keep"
