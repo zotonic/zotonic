@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-08 13:26\n"
+"PO-Revision-Date: 2021-02-09 08:04\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -94,7 +94,7 @@ msgstr "Regole ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:9
 msgid "ACL rules file"
-msgstr "File di regole ACL"
+msgstr "File delle regole ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:4./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:10./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:41./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:21
 msgid "ACL user group"
@@ -105,7 +105,7 @@ msgstr "Gruppo di utenti ACL"
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
-msgstr "Controllo di accesso"
+msgstr "Controllo degli accessi"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:34./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
 msgid "Access control rules"
@@ -147,7 +147,7 @@ msgstr "Tutti i gruppi di contenuto normale"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:27
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Tipi di file e mime consentiti, separati con ',' - digitare 'none' se non sono consentiti tipi extra, lasciare vuoto per il default"
+msgstr "Tipi di file e MIME consentiti, separati con ',' - digitare 'none' se non sono consentiti tipi extra, lasciare vuoto per il valore predefinito"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
@@ -193,11 +193,11 @@ msgstr "Categoria"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:29
 msgid "Category &amp; Content group"
-msgstr "Categoria &amp; Gruppo di contenuto"
+msgstr "Categoria &amp; Gruppo di contenuti"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:26
 msgid "Change category and/or content group..."
-msgstr "Cambia categoria e/o gruppo di contenuto..."
+msgstr "Cambia categoria e/o gruppo di contenuti..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
@@ -211,11 +211,11 @@ msgstr "Cambia categoria e/o gruppo di contenuto..."
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:6
 msgid "Close"
-msgstr "Chiudere"
+msgstr "Chiudi"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:45
 msgid "Collaboration group managers"
-msgstr "Gestori di gruppi di collaborazione"
+msgstr "Gestori del gruppo di collaborazione"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:44
 msgid "Collaboration group members"
@@ -243,13 +243,13 @@ msgstr "Contenuto"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:12./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 msgid "Content group"
-msgstr "Gruppo di contenuto"
+msgstr "Gruppo di contenuti"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:55
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:184
 msgid "Content groups"
-msgstr "Gruppi di contenuto"
+msgstr "Gruppi di contenuti"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:78
 msgid "Content rules for collaboration group members and managers"
