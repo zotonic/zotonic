@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-09 08:04\n"
+"PO-Revision-Date: 2021-02-09 09:28\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -328,19 +328,19 @@ msgstr "Caricamenti di file"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:70
 msgid "Find collaboration group"
-msgstr "Trova il gruppo di collaborazione"
+msgstr "Trova gruppo di collaborazione"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:52
 msgid "Group managers can edit"
-msgstr "I manager di gruppo possono modificare"
+msgstr "I gestori del gruppo possono modificare"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:60
 msgid "Group managers can link"
-msgstr "I manager di gruppo possono collegare"
+msgstr "I gestori del gruppo possono creare collegamenti"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:53
 msgid "Group members and managers can edit"
-msgstr "I membri del gruppo e i manager possono modificare"
+msgstr "I membri e i gestori del gruppo possono modificare"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:61
 msgid "Group members and managers can link"
@@ -399,7 +399,7 @@ msgstr "Moduli"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:15
 msgid "Move all users within these user groups to:"
-msgstr "Sposta tutti gli utenti all'interno di questi gruppi di utenti in:"
+msgstr "Sposta tutti gli utenti all'interno di questi gruppi in:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:19./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:26
 msgid "Move to another"
@@ -423,7 +423,7 @@ msgstr "Nessuna regola ACL"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:152
 msgid "Not all user groups could be deleted."
-msgstr "Non tutti i gruppi di utenti possono essere cancellati."
+msgstr "Non è stato possibile eliminare tutti i gruppi di utenti."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:72
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:41
@@ -440,7 +440,7 @@ msgstr "Contenuto proprio"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:39
 msgid "People who can view this page"
-msgstr "Persone che possono vedere questa pagina"
+msgstr "Persone che possono visualizzare questa pagina"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:13./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:135
 msgid "Permissions"
@@ -469,7 +469,7 @@ msgstr "Pubblicare con successo"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
 msgid "Revert"
-msgstr "Revert"
+msgstr "Ripristina"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:35./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:39
 msgid "Revert back to published version"
@@ -477,7 +477,7 @@ msgstr "Torna alla versione pubblicata"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:100
 msgid "Reverted rules"
-msgstr "Regole invertite"
+msgstr "Regole ripristinate"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:66
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
@@ -533,7 +533,7 @@ msgstr "Gruppi di contenuto del sistema"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:26
 msgid "Test ACL rules"
-msgstr "Test delle regole ACL"
+msgstr "Regole ACL di test"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:3./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:6
 msgid "Test Access Control Rules"
@@ -553,7 +553,7 @@ msgstr "La dimensione predefinita dell'upload è:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:47
 msgid "There are no users within these user groups."
-msgstr "Non ci sono utenti all'interno di questi gruppi di utenti."
+msgstr "Non ci sono utenti all'interno di questi gruppi."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:15
 msgid "These settings come into effect immediately, no publish of rules is needed,"
@@ -584,7 +584,7 @@ msgstr "Prova le regole ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
 msgid "Try a different combination of category and content group."
-msgstr "Prova una combinazione diversa di categoria e gruppo di contenuto."
+msgstr "Prova una diversa combinazione di categoria e gruppo di contenuto."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:14
 msgid "Try rules..."
@@ -620,7 +620,7 @@ msgstr "Non sei autorizzato a spostarti in questo gruppo di collaborazione."
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:57
 msgid "You are not allowed to perform this action"
-msgstr "Non ti è permesso eseguire questa azione"
+msgstr "Non sei autorizzato a eseguire questa azione"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:73
 msgid "You are not allowed to view this page."
@@ -632,7 +632,7 @@ msgstr "Stai usando la versione <b>pubblicata</b> delle regole di controllo dell
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:10
 msgid "You are using the <b>test</b> version of the access control rules."
-msgstr "Stai usando la versione <b>test</b> delle regole di controllo dell'accesso."
+msgstr "Stai usando la versione <b>di test</b> delle regole di controllo dell'accesso."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
 msgid "You can switch back to the published access control rules by:"
