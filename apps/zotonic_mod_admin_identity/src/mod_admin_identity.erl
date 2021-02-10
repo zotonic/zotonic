@@ -223,7 +223,13 @@ event(#postback{message={identity_add, Args}}, Context) ->
 
 %% Log on as this user
 event(#postback{message={switch_user, [{id, Id}]}}, Context) ->
-    case z_auth:switch_user(Id, Context) of
+    ContextSwitch = case z_context:get(auth_options, Context) of
+        #{ sudo_user_id := SUid } when is_integer(SUid) ->
+            z_acl:logon(SUid, Context);
+        _ ->
+            Context
+    end,
+    case z_auth:switch_user(Id, ContextSwitch) of
         ok ->
             % Changing the authenticated will force all connected pages to reload or change.
             % After this we can't send any replies any more, as the pages are disconnecting.

@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %% Date: 2009-04-24
 %%
 %% @doc Handle authentication of zotonic users.  Also shows the logon screen when authentication is required.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@
 
     logon/2,
     logon_switch/2,
+    logon_switch/3,
     confirm/2,
     logon_pw/3,
     logoff/1,
@@ -95,23 +96,39 @@ logon_switch(UserId, Context) ->
             {error, eacces}
     end.
 
-
-%% @doc Request the client's auth worker to re-authenticate as a new user
--spec switch_user( m_rsc:resource_id(), z:context() ) -> ok | {error, eacces}.
-switch_user(1, _Context) ->
-    {error, eacces};
-switch_user(UserId, Context) when is_integer(UserId) ->
-    case z_acl:is_admin(Context) of
+%% @doc Allow an admin user to switch to another user account.
+-spec logon_switch( m_rsc:resource_id(), m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, eacces}.
+logon_switch(UserId, SudoUserId, Context) ->
+    case m_rsc:exists(UserId, Context) andalso z_acl:is_admin( z_acl:logon(SudoUserId, Context) ) of
         true ->
-            z_mqtt:publish(
-                    [ <<"~client">>, <<"model">>, <<"auth">>, <<"post">>, <<"switch-user">> ],
-                    #{ user_id => UserId },
-                    Context),
-            ok;
+            Context1 = z_acl:logon_prefs(UserId, Context),
+            Context2 = z_notifier:foldl(#auth_logon{ id = UserId }, Context1, Context1),
+            {ok, Context2};
         false ->
             {error, eacces}
     end.
 
+
+%% @doc Request the client's auth worker to re-authenticate as a new user
+-spec switch_user( m_rsc:resource_id(), z:context() ) -> ok | {error, eacces}.
+switch_user(UserId, Context) when is_integer(UserId) ->
+    CurrentUser = z_acl:user(Context),
+    case UserId of
+        1 when CurrentUser =/= 1 ->
+            % Only the admin is allowed to switch back to admin
+            {error, eacces};
+        _ ->
+            case z_acl:is_admin(Context) of
+                true ->
+                    z_mqtt:publish(
+                            [ <<"~client">>, <<"model">>, <<"auth">>, <<"post">>, <<"switch-user">> ],
+                            #{ user_id => UserId },
+                            Context),
+                    ok;
+                false ->
+                    {error, eacces}
+            end
+    end.
 
 %% @doc Forget about the user being logged on.
 -spec logoff(z:context()) -> z:context().

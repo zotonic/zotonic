@@ -200,7 +200,8 @@ onetime_token(_Payload, Context) ->
 -spec switch_user( map(), z:context() ) -> { map(), z:context() }.
 switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(UserId) ->
     AuthOptions = z_context:get(auth_options, Context, #{}),
-    case z_auth:logon_switch(UserId, Context) of
+    SudoUserId = maps:get(sudo_user_id, AuthOptions, z_acl:user(Context)),
+    case z_auth:logon_switch(UserId, SudoUserId, Context) of
         {ok, Context1} ->
             z:warning(
                 "Sudo as user ~p (~s) by user ~p (~s)",
@@ -212,7 +213,11 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
                     {module, ?MODULE}, {line, ?LINE}, {auth_user_id, UserId}
                 ],
                 Context),
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, AuthOptions, Context1),
+            Options1 = maps:remove(sid,AuthOptions),
+            Options2 = Options1#{
+                sudo_user_id => SudoUserId
+            },
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, Context1),
             return_status(Payload, Context2);
         {error, _Reason} ->
             { #{ status => error, error => eacces }, Context }
