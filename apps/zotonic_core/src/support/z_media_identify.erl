@@ -481,6 +481,7 @@ extension(<<"audio/x-m4a">>, _PreferExtension) -> <<".m4a">>;
 extension(<<"audio/mp4">>, _PreferExtension) -> <<".m4a">>;
 extension(<<"audio/mp4a-latm">>, _PreferExtension) -> <<".m4a">>;
 extension(<<"application/pgp-keys">>, _PreferExtension) -> <<".asc">>;
+extension(<<"application/x-bert">>, _PreferExtension) -> <<".bert">>;
 extension(Mime, undefined) ->
     Extensions = mimetypes:extensions(Mime),
     first_extension(Extensions);
@@ -506,8 +507,14 @@ first_extension([ Ext | _ ]) ->
 %% @doc  Guess the mime type of a file by the extension of its filename.
 -spec guess_mime( file:filename_all() ) -> mime_type().
 guess_mime(File) ->
-    [Mime|_] = mimetypes:path_to_mimes(z_string:to_lower(File)),
-    maybe_map_mime(Mime).
+    case filename:extension( z_string:to_lower(File) ) of
+        <<".bert">> -> <<"application/x-bert">>;
+        <<".", Ext/binary>> ->
+            [Mime|_] = mimetypes:ext_to_mimes(Ext),
+            maybe_map_mime(Mime);
+        _ ->
+            <<"application/octet-stream">>
+    end.
 
 maybe_map_mime(<<"audio/x-wav">>) -> <<"audio/wav">>;
 maybe_map_mime(<<"audio/mp4a-latm">>) -> <<"audio/mp4">>;
