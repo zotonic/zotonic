@@ -14,11 +14,11 @@
     <div class="form-group">
         <input type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}"
                name="blocks[].prompt{{ lang_code_with_dollar }}"
-               class="col-md-8 form-control" value="{{ blk.prompt[lang_code]  }}"
-               placeholder="{_ Button text _} ({{ lang_code }})" />
+               class="form-control" value="{{ blk.prompt[lang_code]  }}"
+               placeholder="{_ Button text _} ({{ lang_code }})">
     </div>
 
-    <div class="form-group view-expanded">
+    <div class="form-group">
        <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}"
                  name="blocks[].explanation{{ lang_code_with_dollar }}" rows="2"
                  placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>

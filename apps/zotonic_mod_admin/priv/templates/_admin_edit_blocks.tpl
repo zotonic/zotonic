@@ -19,7 +19,7 @@
 {% javascript %}
 $('#edit-blocks').sortable({
     helper: 'clone',
-    handle: '.widget-header',
+    handle: '.drag-handle',
     revert: 'invalid',
     axis: 'y',
     start: function(event, ui) {

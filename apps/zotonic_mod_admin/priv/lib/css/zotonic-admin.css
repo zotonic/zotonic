@@ -15,20 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
-ul.blocks.ui-sortable .widget-header:before {
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  display: inline-block;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-ul.blocks.ui-sortable .widget-header:before {
-  font-family: "Zotonic";
-}
 /* FONT PATH
  * -------------------------- */
 @font-face {
@@ -599,21 +585,6 @@ ul.blocks.ui-sortable > li {
 }
 ul.blocks.ui-sortable .widget-header {
   position: relative;
-  cursor: move;
-  padding-left: 25px;
-}
-ul.blocks.ui-sortable .widget-header:before {
-  content: "\e60b";
-}
-ul.blocks.ui-sortable .widget-header:before {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-  line-height: 16px;
-  left: 15px;
-  top: 15px;
-  color: #999;
 }
 ul.blocks.ui-sortable .form-control.block-name {
   background-color: transparent;
@@ -621,6 +592,39 @@ ul.blocks.ui-sortable .form-control.block-name {
 }
 ul.blocks.ui-sortable .form-control.block-name:focus {
   background-color: #fff;
+}
+ul.blocks.ui-sortable > li > .widget {
+  display: -ms-grid;
+  -ms-grid-columns: auto 1fr;
+  -ms-grid-rows: auto 1fr;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+}
+ul.blocks.ui-sortable > li > .widget > .drag-handle {
+  -ms-grid-column: 1;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 3;
+  grid-column: 1;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  cursor: move;
+  background: repeat-y url("/lib/images/grippy2.png") 3px 0;
+  padding: 10px;
+  cursor: drag;
+}
+ul.blocks.ui-sortable > li > .widget > .widget-header {
+  -ms-grid-column: 2;
+  -ms-grid-row: 1;
+  grid-column: 2;
+  grid-row: 1;
+  padding-left: 5px;
+}
+ul.blocks.ui-sortable > li > .widget > .widget {
+  -ms-grid-column: 2;
+  -ms-grid-row: 2;
+  grid-column: 2;
+  grid-row: 2;
 }
 .admin-edit-media {
   position: relative;
