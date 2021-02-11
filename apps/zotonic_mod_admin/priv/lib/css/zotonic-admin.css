@@ -1904,6 +1904,9 @@ ul.tree-list.connections-list {
 .widget .widget-content > :last-child {
   margin-bottom: 15px;
 }
+.widget .widget-content > .pull-right {
+  margin-left: 10px;
+}
 .widget .widget-content:empty {
   padding: 0;
 }
