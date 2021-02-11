@@ -90,7 +90,6 @@ hostname:
             proxy_set_header  X-Forwarded-Proto $scheme;
             proxy_pass_request_headers on;
 
-
             client_max_body_size       0;
             client_body_buffer_size    128k;
 
@@ -102,6 +101,21 @@ hostname:
             proxy_buffers              4 32k;
             proxy_busy_buffers_size    64k;
             proxy_temp_file_write_size 64k;
+        }
+
+        location /mqtt-transport {
+            proxy_pass http://127.0.0.1:8000/mqtt-transport;
+
+            proxy_http_version 1.1;
+
+            proxy_set_header Host              $host;
+            proxy_set_header X-Real-IP         $remote_addr;
+            proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Upgrade           $http_upgrade;
+            proxy_set_header Connection        "upgrade";
+
+            proxy_pass_request_headers on;
         }
 
         location /close-connection {
