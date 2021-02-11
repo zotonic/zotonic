@@ -108,17 +108,12 @@ hostname:
 
             proxy_http_version 1.1;
 
-            proxy_set_header Host                     $host;
-            proxy_set_header X-Real-IP                $remote_addr;
-            proxy_set_header X-Forwarded-For          $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto        $scheme;
-
-            proxy_set_header Upgrade                  $http_upgrade;
-            proxy_set_header Connection               "upgrade";
-            proxy_set_header Sec-Websocket-Extensions $http_sec_websocket_extensions;
-            proxy_set_header Sec-Websocket-Key        $http_sec_websocket_key;
-            proxy_set_header Sec-Websocket-Protocol   $http_sec_websocket_protocol;
-            proxy_set_header Sec-Websocket-Version    $http_sec_websocket_version;
+            proxy_set_header Host              $host;
+            proxy_set_header X-Real-IP         $remote_addr;
+            proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Upgrade           $http_upgrade;
+            proxy_set_header Connection        "upgrade";
 
             proxy_pass_request_headers on;
         }
