@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2018 Marc Worrell
+%% @copyright 2010-2021 Marc Worrell
 %% @doc Handle generic upload of encoded blobs with a resource (from deprecated mod_rest)
 %% @todo Should be replaced with m_rsc:m_post/3 handling
 
-%% Copyright 2010-2018 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ rsc_upload(#rsc_upload{id=Id, format=bert, data=Data}, Context) ->
             rsc_upload(Id, Props, Context);
         [ {Prop,_} | _ ] = Props when is_list(Props), is_atom(Prop) ->
             rsc_upload(Id, Props, Context);
+        [ Props ] when is_map(Props) ->
+            rsc_upload(Id, Props, Context);
         _ ->
             {error, badarg}
     end.
@@ -39,14 +41,36 @@ rsc_upload(undefined, Props, Context) ->
 rsc_upload(Id, Props, Context) when is_integer(Id) ->
     m_rsc_update:update(Id, update_props(Props, Context), [{escape_texts, false}, is_import], Context).
 
-update_props(Props, Context) ->
+update_props(Props, Context) when is_map(Props) ->
+    UpdateProps = maps:filter(
+        fun(K, _V) ->
+            is_updateable(K)
+        end,
+        Props),
+    UpdateProps#{
+        <<"category">> => map_category(Props, Context)
+    };
+update_props(Props, Context) when is_list(Props) ->
     UpdateProps = lists:filter(fun({K,_}) ->
                                     is_updateable(z_convert:to_binary(K))
                                end,
                                Props),
     [{category, map_category(Props, Context)} | UpdateProps ].
 
-map_category(Props, Context) ->
+map_category(#{ <<"computed_category">> := CompCat }, Context) when is_list(CompCat) ->
+    case lists:dropwhile(fun(Name) ->
+                            case m_category:name_to_id(Name, Context) of
+                                {ok, _} -> false;
+                                {error, _} -> true
+                            end
+                         end,
+                         CompCat) of
+        [] -> other;
+        [N|_] -> N
+    end;
+map_category(Props, _Context) when is_map(Props) ->
+    other;
+map_category(Props, Context) when is_list(Props) ->
     case proplists:get_value(computed_category, Props) of
         undefined ->
             other;
