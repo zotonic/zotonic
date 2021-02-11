@@ -684,6 +684,9 @@ body.system-content .system-content-warning {
   margin-top: -24px;
   margin-bottom: 20px;
 }
+.tab-pane > .nav-tabs {
+  margin-top: 10px;
+}
 ul.media {
   margin: 0;
 }
