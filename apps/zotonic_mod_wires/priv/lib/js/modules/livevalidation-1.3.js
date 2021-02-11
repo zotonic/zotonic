@@ -72,9 +72,9 @@ LiveValidation.prototype = {
     validClass: '', // was: z_valid
     invalidClass: 'z_invalid', // used ny mod_survey
     messageClass: 'z_validation help-block',
-    validFieldClass: '', // was: z_valid_field
-    invalidFieldClass: '', // was: form-field-error
-    asyncFieldClass: '', // was: z_async_validation
+    validFieldClass: 'valid', // was: z_valid_field
+    invalidFieldClass: 'invalid', // was: form-field-error
+    asyncFieldClass: 'validating', // was: z_async_validation
     fieldGroupClass: 'form-group',
     fieldGroupErrorClass: 'has-error',
     fieldGroupSuccessClass: 'has-validated',
@@ -559,36 +559,53 @@ LiveValidation.prototype = {
      */
     addFieldClass: function(){
         this.removeFieldClass();
-        if(!this.validationFailed){
-            if(this.displayMessageWhenEmpty || this.element.value !== ''){
-                $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
-                    .closest('.' + this.fieldGroupClass).addClass(this.fieldGroupSuccessClass);
+        if (!this.validationFailed){
+            if (this.displayMessageWhenEmpty || this.element.value !== ''){
+                $(this.element)
+                    .closest('.' + this.fieldGroupClass)
+                    .addClass(this.fieldGroupSuccessClass);
+
+                $('label[for="'+this.element.id+'"]')
+                    .addClass(this.validFieldClass);
+
                 switch (this.elementType) {
                 case LiveValidation.RADIO:
                 case LiveValidation.CHECKBOX:
-                    $('input[name="'+this.element.name+'"]').closest('label').addClass(this.validFieldClass);
+                    $('input[name="'+this.element.name+'"]')
+                      .addClass(this.validFieldClass)
+                      .closest('label')
+                      .addClass(this.validFieldClass);
                     break;
                 case LiveValidation.FORM:
                     break;
                 default:
-                    $(this.element).addClass(this.validFieldClass);
+                    $(this.element)
+                      .addClass(this.validFieldClass);
                     break;
                 }
             }
-        }else{
-            $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
-                    .closest('.' + this.fieldGroupClass).removeClass(this.fieldGroupSuccessClass).addClass(this.fieldGroupErrorClass);
-            $('label[for="'+this.element.id+'"]').addClass(this.invalidFieldClass);
+        } else {
+            $(this.element)
+                .closest('.' + this.fieldGroupClass)
+                .addClass(this.fieldGroupErrorClass);
+
+            $('label[for="'+this.element.id+'"]')
+                .removeClass(this.validFieldClass)
+                .addClass(this.invalidFieldClass);
 
             switch (this.elementType) {
             case LiveValidation.RADIO:
             case LiveValidation.CHECKBOX:
-                $('input[name="'+this.element.name+'"]').closest('label').addClass(this.invalidFieldClass);
+                $('input[name="'+this.element.name+'"]')
+                  .addClass(this.invalidFieldClass)
+                  .closest('label')
+                  .addClass(this.invalidFieldClass);
                 break;
             case LiveValidation.FORM:
                 break;
             default:
-                $(this.element).addClass(this.invalidFieldClass);
+                $(this.element)
+                  .addClass(this.invalidFieldClass);
                 break;
             }
         }
@@ -615,18 +632,29 @@ LiveValidation.prototype = {
      *  removes the class that has been applied to the field to indicate if valid or not
      */
     removeFieldClass: function(){
-        $('input[name="'+this.element.name+'"],select[name="'+this.element.name+'"],textarea[name="'+this.element.name+'"]')
-                .closest('.' + this.fieldGroupClass).removeClass(this.fieldGroupSuccessClass).removeClass(this.fieldGroupErrorClass);
-        $('label[for="'+this.element.id+'"]').removeClass(this.invalidFieldClass);
+        $(this.element)
+          .closest('.' + this.fieldGroupClass)
+          .removeClass(this.fieldGroupSuccessClass)
+          .removeClass(this.fieldGroupErrorClass);
+
+        $('label[for="'+this.element.id+'"]')
+          .removeClass(this.validFieldClass)
+          .removeClass(this.invalidFieldClass);
+
         switch (this.elementType) {
         case LiveValidation.RADIO:
         case LiveValidation.CHECKBOX:
-            $('input[name="'+this.element.name+'"]').closest('label').removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
+            $('input[name="'+this.element.name+'"]')
+              .closest('label')
+              .removeClass(this.invalidFieldClass)
+              .removeClass(this.validFieldClass);
             break;
         case LiveValidation.FORM:
             break;
         default:
-            $(this.element).removeClass(this.invalidFieldClass).removeClass(this.validFieldClass);
+            $(this.element)
+              .removeClass(this.invalidFieldClass)
+              .removeClass(this.validFieldClass);
             break;
         }
     },

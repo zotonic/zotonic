@@ -19,7 +19,7 @@
 		            {% if is_survey_answer_view %}
 		                <b>{{ value[result.answers[name].answer]|escape|default:"-" }}</b>
 		            {% else %}
-		    			<select id="{{ #sel.index }}" name="{{ name }}">
+		    			<select id="{{ #sel.index }}" name="{{ name }}" class="form-control inline">
 		                    {% if blk.is_required %}<option value="">{_ select… _}</option>{% endif %}
 		    				{% for v,p in value %}
 		    					<option {% if v == "" %}disabled="disabled"{% else %}{% if ans == v %}selected="selected"{% endif %}{% endif %} value="{{v|escape}}">
