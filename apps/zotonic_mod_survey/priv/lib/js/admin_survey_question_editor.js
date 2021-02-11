@@ -220,7 +220,7 @@ ZSurveyEditor.prototype.set_page_sorters = function(p) {
 	});
 	$(".jump-list", p).sortable({
 		helper: 'clone',
-		//handle: '.widget-header',
+		handle: '.drag-handle',
 		revert: 'invalid',
 		connectWith: ".jump-list",
 		axis: 'y'

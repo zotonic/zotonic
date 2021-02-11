@@ -36,8 +36,8 @@ ol.pages {
         list-style: none;
 
         &:before  {
-            content:counter(pages);
-            counter-increment:pages;
+            content: counter(pages);
+            counter-increment: pages;
             padding-right: 0.5em;
             position: absolute;
             left: -0.5em;
@@ -64,11 +64,44 @@ ol.pages {
 .jump-list {
     padding: 0.5em;
     margin-left: 12px;
-    min-height: 2em;
-    background-color: #fcfcfc;
+    // min-height: 2em;
     list-style: none;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
+
+    .page-jump {
+        background-color: #fcfcfc;
+
+        display: -ms-grid;
+        -ms-grid-columns: auto 1fr;
+        -ms-grid-rows: auto;
+
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto;
+
+        > .drag-handle {
+            -ms-grid-column: 1;
+            -ms-grid-row: 1;
+
+            grid-column: 1;
+            grid-row-start: 1;
+
+            cursor: move;
+            background: repeat-y url("/lib/images/grippy2.png") 3px 0;
+            padding: 15px;
+            cursor: drag;
+        }
+
+        > .page-jump-details {
+            -ms-grid-column: 2;
+            -ms-grid-row: 1;
+
+            grid-column: 2;
+            grid-row-start: 1;
+
+        }
+    }
 }
 
 .question-list {
