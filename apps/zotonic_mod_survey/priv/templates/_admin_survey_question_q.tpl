@@ -4,6 +4,8 @@
 	<li class="block" id="{{ #s }}">
 {% endif %}
 
+	<div class="drag-handle"></div>
+
     <!-- New block entry -->
 	<input type="hidden" name="blocks[]." value="">
 	<input type="hidden" class="block-type" name="blocks[].type" value="{{ blk.type|default:block_type }}" />

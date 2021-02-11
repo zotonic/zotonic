@@ -15,7 +15,7 @@
         <div class="col-lg-4 col-md-4">
             <label>{_ To question _}</label>
             <input class="form-control" type="text" id="block-{{name}}-target1" name="blocks[].target1" value="{{ blk.target1 }}"
-                   placeholder="{_ name _}" />
+                   placeholder="{_ Question label _}" />
         </div>
     </div>
     <div class="row">
@@ -25,7 +25,7 @@
         </div>
         <div class="col-lg-4 col-md-4">
             <input class="form-control" type="text" id="block-{{name}}-target2" name="blocks[].target2" value="{{ blk.target2 }}"
-                   placeholder="{_ name _}" />
+                   placeholder="{_ Question label _}" />
         </div>
     </div>
     <p class="help-block">

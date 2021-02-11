@@ -457,12 +457,14 @@ appear_after(TargetId, Html, Context) ->
 
 %% @doc Set the contents of an iframe to the generated html.
 update_iframe(IFrameId, Html, Context) ->
-    {Html1, RS1} = render_html(Html, Context),
+    {Html1, Context1} = render_html(Html, Context),
     Update = [
         <<"z_update_iframe('">>,IFrameId,
         <<"','">>, z_utils:js_escape(Html1), <<"');">>
     ],
-    RS1#render_state{ updates = [ {Update} | RS1#render_state.updates ] }.
+    RS = get_render_state(Context1),
+    RS1 = RS#render_state{ updates = [ {Update} | RS#render_state.updates ] },
+    set_render_state(RS1, Context1).
 
 %% @doc Set the contents of all elements matching the css selector to the the html fragment
 update_selector(CssSelector, Html, Context) ->

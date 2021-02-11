@@ -6,6 +6,8 @@
 
     <!-- The widget with the name, includes the specific fields for the block type -->
     <div class="widget">
+        <div class="drag-handle"></div>
+
         <div class="widget-header label-floating" title="{_ Drag to change position _}">
             &nbsp;
             <input type="text"

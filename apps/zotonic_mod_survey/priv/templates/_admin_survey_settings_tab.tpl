@@ -61,16 +61,14 @@
 					</select>
 				</div>
 			</div>
-			<div class="control-group">
+			<div class="control-group label-floating">
+		        <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}" 
+		               class="input-small" value="{{ id.survey_test_percentage }}" placeholder="{_ Test pass percentage _}" /> %
 			    <label class="control-label">{_ Test pass percentage _}</label>
-			    <div class="controls">
-			        <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}" 
-			               class="input-small" value="{{ id.survey_test_percentage }}" placeholder="" /> %
-			        {% validate id=#survey_test_percentage name="survey_test_percentage"
-			        			type={numericality minimum=0 maximum=100}
-			        %}
-			        <p class="help-block muted">{_ Leave empty if there are no test questions. _}</p>
-			    </div>
+		        {% validate id=#survey_test_percentage name="survey_test_percentage"
+		        			type={numericality minimum=0 maximum=100}
+		        %}
+		        <p class="help-block muted">{_ Leave empty if there are no test questions. _}</p>
 			</div>
 		{% else %}
 			<input type="hidden" name="survey_show_results" id="survey_show_results" value="1" />
@@ -104,14 +102,12 @@
 	<fieldset>
 		<legend style="margin-bottom: 0">{_ Handling _}</legend>
 
-		<div class="form-group">
+		<div class="form-group label-floating">
+			<input type="text" class="form-control" name="survey_email" id="survey_email" value="{{ id.survey_email }}" placeholder="{_ Mail results to _}" />
 			<label class="control-label">{_ Mail results to _}</label>
-			<div>
-				<input type="text" class="col-md-8 form-control" name="survey_email" id="survey_email" value="{{ id.survey_email }}" placeholder="email@example.com" />
-				<p class="help-block">
-					{_ Separate multiple email addresses with a comma. _}
-				</p>
-			</div>
+			<p class="help-block">
+				{_ Separate multiple email addresses with a comma. _}
+			</p>
 		</div>
 
 		<div class="form-group">

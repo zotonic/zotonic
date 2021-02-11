@@ -60,12 +60,34 @@ event(#submit{message={restore, Args}}, Context) ->
                     z_render:growl_error(?__("Sorry, there is no mudule that can import this.", Context), Context);
                 {error, badarg} ->
                     z_render:growl_error(?__("Sorry, this is not a backup file or it is corrupted.", Context), Context);
+                {error, Reason} ->
+                    Message = error_message(Reason, Context),
+                    z_render:growl_error(Message, Context);
                 _Other ->
                     z_render:growl_error(?__("Sorry, there was an error replacing your page.", Context), Context)
             end;
         false ->
             z_render:growl_error(?__("Sorry, you don't have permission to change this page.", Context), Context)
     end.
+
+error_message(duplicate_name, Context) ->
+    ?__("There is already a page with this name.", Context);
+error_message(eacces, Context) ->
+    ?__("You don't have permission to create this page.", Context);
+error_message(file_not_allowed, Context) ->
+    ?__("You don't have the proper permissions to upload this type of file.", Context);
+error_message(download_failed, Context) ->
+    ?__("Failed to download the file.", Context);
+error_message(infected, Context) ->
+    ?__("This file is infected with a virus.", Context);
+error_message(av_external_links, Context) ->
+    ?__("This file contains links to other files or locations.", Context);
+error_message(sizelimit, Context) ->
+    ?__("This file is too large.", Context);
+error_message(_R, Context) ->
+    lager:warning("Unknown page creation or upload error: ~p", [_R]),
+    ?__("Error creating the page.", Context).
+
 
 set_config(What, Context) ->
     case z_acl:is_admin(Context) of
