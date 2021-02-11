@@ -34,19 +34,6 @@
                     {_ Disabled, hide the survey form _}
                 </label>
             </div>
-
-            <div class="form-group">
-                <label class="control-label">{_ Fill in _}</label>
-                <select name="survey_multiple" id="survey_multiple">
-                    <option value="0">{_ Once only per user/browser _}</option>
-                    <option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
-                        {_ Multiple entries per user/browser _}
-                    </option>
-                    <option value="2" {% if id.survey_multiple == 2 %}selected{% endif %}>
-                        {_ Once and allow editing afterwards _}
-                    </option>
-                </select>
-            </div>
 	    </div>
 
 	    <div class="col-lg-6 col-md-6">
@@ -64,6 +51,25 @@
 		        </label></div>
 	    </div>
     </div>
+
+
+    <div class="form-group row">
+        <div class="form-group">
+            <label class="control-label col-md-3">{_ Fill in _}</label>
+            <div class="col-md-6">
+                <select name="survey_multiple" id="survey_multiple" class="form-control">
+                    <option value="0">{_ Once only per user/browser _}</option>
+                    <option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
+                        {_ Multiple entries per user/browser _}
+                    </option>
+                    <option value="2" {% if id.survey_multiple == 2 %}selected{% endif %}>
+                        {_ Once and allow editing afterwards _}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
 
     {% if not id.is_a.poll %}
         <div class="form-group row">
