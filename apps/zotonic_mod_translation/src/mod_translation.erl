@@ -60,6 +60,7 @@
     url_strip_language/1,
     valid_config_language/2,
 
+    available_translations/1,
     acceptable_languages/1,
 
     init/1,
@@ -107,20 +108,8 @@ init_config_languages(Context) ->
 
 %% @doc Return the list of available languages, enable the default language.
 default_languages(Context) ->
-    List = [
-        {ar, false},
-        {de, false},
-        {en, false},
-        {es, false},
-        {et, false},
-        {fr, false},
-        {nl, false},
-        {pl, false},
-        {'pt-br', false},
-        {ru, false},
-        {tr, false},
-        {zh, false}
-    ],
+    Codes = available_translations(Context),
+    List = [ {C, false} || C <- Codes ],
     EnabledLang = case m_config:get_value(i18n, language, Context) of
         undefined -> en;
         <<>> -> en;
@@ -128,6 +117,16 @@ default_languages(Context) ->
     end,
     List1 = proplists:delete(EnabledLang, List),
     lists:sort( [ {EnabledLang, true} | List1 ]).
+
+
+%% @doc Fetch the available translations by checking for all .po files in zotonic_core
+-spec available_translations(z:context()) -> list( atom() ).
+available_translations(Context) ->
+    ModPoFiles = z_module_indexer:translations(Context),
+    PoFiles = proplists:get_value(zotonic_core, ModPoFiles, []),
+    lists:filter(
+        fun z_language:is_valid/1, lists:usort([ C || {C, _File} <- PoFiles ])
+    ).
 
 
 %% @doc Set the language of the context. Sets to the given language if the language exists
