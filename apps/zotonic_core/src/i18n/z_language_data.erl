@@ -1268,54 +1268,11 @@ languages_list() -> [
         {name, <<"中文"/utf8>>},
         {name_en, <<"Chinese (Simplified)"/utf8>>},
         {sublanguages, [
-            {<<"zh-hans">>, [
+            {<<"zh-tw">>, [
                 {language, <<"zh">>},
-                {script, <<"Hans">>},
-                {name, <<"简体中文"/utf8>>},
-                {name_en, <<"Chinese (Simplified)"/utf8>>}
-            ]},
-            {<<"zh-hans-cn">>, [
-                {language, <<"zh-hans">>},
-                {region, <<"CN">>},
-                {script, <<"Hans">>},
-                {name, <<"中国大陆简体脚本"/utf8>>},
-                {name_en, <<"Chinese - Mainland (Simplified)"/utf8>>}
-            ]},
-            {<<"zh-hans-sg">>, [
-                {language, <<"zh-hans">>},
-                {region, <<"SG">>},
-                {script, <<"Hans">>},
-                {name, <<"新加坡中国简体脚本"/utf8>>},
-                {name_en, <<"Chinese - Singapore (Simplified)"/utf8>>}
-            ]}
-        ]}
-    ]},
-    {<<"zh-hant">>, [
-        {language, <<"zh-hant">>},
-        {script, <<"Hant">>},
-        {name, <<"中國傳統的腳本"/utf8>>},
-        {name_en, <<"Chinese (Traditional)"/utf8>>},
-        {sublanguages, [
-            {<<"zh-hant-hk">>, [
-                {language, <<"zh-hant">>},
-                {region, <<"HK">>},
                 {script, <<"Hant">>},
-                {name, <<"香港中國傳統腳本"/utf8>>},
-                {name_en, <<"Chinese - Hong Kong (Traditional)"/utf8>>}
-            ]},
-            {<<"zh-hant-mo">>, [
-                {language, <<"zh-hant">>},
-                {region, <<"MO">>},
-                {script, <<"Hant">>},
-                {name, <<"澳門中國人在傳統的腳本"/utf8>>},
-                {name_en, <<"Chinese - Macau (Traditional)"/utf8>>}
-            ]},
-            {<<"zh-hant-tw">>, [
-                {language, <<"zh-hant">>},
-                {region, <<"TW">>},
-                {script, <<"Hant">>},
-                {name, <<"台灣中國傳統腳本"/utf8>>},
-                {name_en, <<"Chinese - Taiwan (Traditional)"/utf8>>}
+                {name, <<"中國傳統的腳本"/utf8>>},
+                {name_en, <<"Chinese (Traditional)"/utf8>>}
             ]}
         ]}
     ]}

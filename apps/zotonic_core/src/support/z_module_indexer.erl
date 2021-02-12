@@ -358,8 +358,12 @@ dispatch1(Context) ->
 tag_with_lang(POFiles) ->
     [ {pofile_to_lang(POFile), POFile} || POFile <- POFiles ].
 
+%% @doc Fetch the language code from the filename.
+%% The filename is always like: zh-TW.something.po
+%% In Zotonic we always use the lowercased language code.
 pofile_to_lang(POFile) ->
-    erlang:binary_to_atom(hd(binary:split(filename:basename(POFile), <<".">>)), 'utf8').
+    Code = hd( binary:split(filename:basename(POFile), <<".">>) ),
+    erlang:binary_to_atom(z_string:to_lower(Code), 'utf8').
 
 %% @doc Find all scomps etc in a lookup list
 lookup_all(true, List) ->
