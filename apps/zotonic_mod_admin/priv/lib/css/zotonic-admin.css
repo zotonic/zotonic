@@ -1901,9 +1901,6 @@ ul.tree-list.connections-list {
 .widget .widget-content h6:not(.panel-heading .widget .widget-content h6):first-of-type {
   margin-top: 0;
 }
-.widget .widget-content > :last-child {
-  margin-bottom: 15px;
-}
 .widget .widget-content > .pull-right {
   margin-left: 10px;
 }
@@ -1995,9 +1992,6 @@ ul.tree-list.connections-list {
   -webkit-transition: background 0.1s ease-in-out;
   transition: background 0.1s ease-in-out;
   cursor: pointer;
-}
-li > .widget {
-  border-radius: 5px;
 }
 li h3.widget-header {
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
