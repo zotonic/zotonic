@@ -1,3 +1,9 @@
 files:
   - source: /apps/zotonic_core/priv/translations/*.pot
     translation: /apps/zotonic_core/priv/translations/%two_letters_code%.%file_name%.po
+    languages_mapping:
+      two_letters_code:
+        es-ES: es
+        pt-PT: pt
+        zh-CN: zh
+        zh-TW: zh-tw
