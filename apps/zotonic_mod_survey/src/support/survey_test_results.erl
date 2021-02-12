@@ -29,7 +29,7 @@ max_points_block(Block) ->
     end.
 
 %% @doc Check all questions if they are test questions an calculate the test result.
--spec calc_test_results(integer(), list(), #context{}) -> {integer(), #context{}}.
+-spec calc_test_results(m_rsc:resource_id(), list( proplists:proplist() ), z:context()) -> {integer(), z:context()}.
 calc_test_results(SurveyId, Answers, Context) ->
     case m_rsc:p_no_acl(SurveyId, blocks, Context) of
         Blocks when is_list(Blocks)->
@@ -41,7 +41,7 @@ calc_test_results(SurveyId, Answers, Context) ->
 count_points([], _Blocks, PtAcc, AsAcc, _Context) ->
     {PtAcc, lists:reverse(AsAcc)};
 count_points([{Name,A}|As], Blocks, PtAcc, AsAcc, Context) ->
-    Block = find_block(maps:get(<<"block">>, A, undefined), Blocks),
+    Block = find_block(proplists:get_value(block, A), Blocks),
     case z_convert:to_bool(maps:get(<<"is_test">>, Block, false)) of
         true ->
             % Check if given answer is correct
@@ -52,12 +52,13 @@ count_points([{Name,A}|As], Blocks, PtAcc, AsAcc, Context) ->
             count_points(As, Blocks, PtAcc, [{Name,A}|AsAcc], Context)
     end.
 
+-spec question_points(binary(), proplists:proplist(), map(), z:context()) -> {integer(), proplists:proplist()}.
 question_points(<<"survey_thurstone">>, A, Block, Context) ->
     case block_test_points(Block) of
         GoodPoints when is_integer(GoodPoints) ->
             Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
             QuestionOptions = maps:get(<<"answers">>, Props, []),
-            Answered = make_list(maps:get(<<"answer">>, A, undefined)),
+            Answered = make_list(proplists:get_value(answer, A)),
             IsMulti = survey_q_thurstone:is_multiple(Block),
             WrongPoints = case IsMulti of
                 true ->
@@ -76,10 +77,11 @@ question_points(<<"survey_thurstone">>, A, Block, Context) ->
                 || Q <- QuestionOptions
             ],
             Points = erlang:max(0, sum(AnswerPoints)),
-            A1 = #{
-                <<"points">> => Points,
-                <<"answer_points">> => AnswerPoints
-            },
+            A1 = [
+                {points, Points},
+                {answer_points, AnswerPoints}
+                | A
+            ],
             {Points, A1};
         _ ->
             {0, A}

@@ -267,7 +267,12 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
         Context)
     of
         1 ->
-            {UserId,Persistent} = z_db:q_row("select user_id, persistent from survey_answers where id = $1", [AnswerId], Context),
+            {UserId,Persistent} = z_db:q_row("
+                select user_id, persistent
+                from survey_answers
+                where id = $1",
+                [AnswerId],
+                Context),
             publish(SurveyId, UserId, Persistent, Context),
             {ok, AnswerId};
         0 ->
