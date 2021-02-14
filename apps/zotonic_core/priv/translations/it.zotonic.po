@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-14 08:30\n"
+"PO-Revision-Date: 2021-02-14 11:24\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1205,7 +1205,7 @@ msgstr "Trova la pagina"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:20
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:15./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:16
 msgid "First"
-msgstr "Prima"
+msgstr "Nome"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:24
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
