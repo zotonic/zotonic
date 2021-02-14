@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-14 08:12\n"
+"PO-Revision-Date: 2021-02-14 08:22\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -866,7 +866,7 @@ msgstr "Nome del blocco"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:10
 msgid "Block quote"
-msgstr "Citazione del blocco"
+msgstr "Citazione"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:31
 msgid "Caches have been flushed."
@@ -1112,7 +1112,7 @@ msgstr "Incorporare"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
 msgid "Embed code will be sanitized for allowed sites and html."
-msgstr "Il codice embed sarà sterilizzato per i siti consentiti e l'html."
+msgstr "Il codice per l'incorporazione sarà sanificato per i siti e l'html consentiti."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:174
 msgid "Embed page"
@@ -1129,7 +1129,7 @@ msgstr "Telefono d'emergenza"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:17
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
-msgstr "Inserisci un URL o un codice embed. Verrà analizzato e potrai scegliere come importare i dati."
+msgstr "Inserisci un URL o un codice per l'incorporazione. Verrà analizzato e potrai scegliere come importare i dati."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:36
 msgid "Erlang Init Files"
@@ -1466,7 +1466,7 @@ msgstr "Percorso della pagina"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
-msgstr "Lumaca di pagina"
+msgstr "Nome univoco (slug) della pagina"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:36
 msgid "Page title"
@@ -6397,7 +6397,7 @@ msgstr "rimbalzato"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:34./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:15
 msgid "cancel"
-msgstr "cancellare"
+msgstr "Annulla"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:47
 msgid "clear"
