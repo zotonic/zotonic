@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-14 12:11\n"
+"PO-Revision-Date: 2021-02-14 12:55\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1053,7 +1053,7 @@ msgstr "Scollegare"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:32
 msgid "Discover media"
-msgstr "Scoprire i media"
+msgstr "Scopri il contenuto"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
 msgid "Do you want to remove this block?"
@@ -1069,7 +1069,7 @@ msgstr "Trascinare per cambiare posizione"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:76./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:79
 msgid "Duplicate"
-msgstr "Duplicato"
+msgstr "Duplica"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:30./apps/zotonic_mod_admin/src/actions/action_admin_dialog_duplicate_rsc.erl:45
 msgid "Duplicate page"
@@ -1520,7 +1520,7 @@ msgstr "Procedere con cautela:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:43
 msgid "Protect"
-msgstr "Proteggere"
+msgstr "Protetto"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:41
 msgid "Protect from deletion"
@@ -1923,11 +1923,11 @@ msgstr "Digita il titolo o filtra il contenuto esistente"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "Unique name"
-msgstr "Nome unico"
+msgstr "Nome univoco"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Unique uri"
-msgstr "Uri unico"
+msgstr "Uri univoco"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:19
 msgid "Unused"
@@ -2013,7 +2013,7 @@ msgstr "Visita la pagina di modifica completa"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
 msgid "Visiting address"
-msgstr "Indirizzo di visita"
+msgstr "Indirizzo per il pubblico"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
@@ -2628,7 +2628,7 @@ msgstr "Cancellato l'account utente."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:101
 msgid "Duplicate username, please choose another username."
-msgstr "Nome utente duplicato, per favore scegli un altro nome utente."
+msgstr "Nome utente già in uso, per favore scegli un altro nome utente."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:36./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:38
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:31
@@ -2994,7 +2994,7 @@ msgstr "Modifica pagina"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:9
 msgid "Find page to merge with:"
-msgstr "Trova la pagina con cui unirsi:"
+msgstr "Trova la pagina da unire a:"
 
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:42
 msgid "Left"
@@ -7951,7 +7951,7 @@ msgstr "anni. Mi piace"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:14./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:15
 msgid "Add language"
-msgstr "Aggiungere la lingua"
+msgstr "Aggiungi lingua"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:24
 msgid "Added"
@@ -8027,7 +8027,7 @@ msgstr "Per gli sviluppatori"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:77
 msgid "For new visitors, set the language to the default language"
-msgstr "Per i nuovi visitatori, imposta la lingua su quella predefinita"
+msgstr "Per i nuovi visitatori, imposta la lingua a quella predefinita"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:101
 msgid "French"
@@ -8059,7 +8059,7 @@ msgstr "Se una lingua è impostata su 'off', i testi modificati perderanno la lo
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:42
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
-msgstr "Se una lingua è impostata su \"visualizza\" o \"modificabile\", allora i testi per quella lingua sono modificabili nell'amministrazione."
+msgstr "Se una lingua è impostata su \"visualizza\" o \"modificabile\", allora i testi per quella lingua sono modificabili nel pannello di amministrazione."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:118
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -8123,7 +8123,7 @@ msgstr "Ricarica tutti i file .po in background."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:47
 msgid "Remove language"
-msgstr "Rimuovere la lingua"
+msgstr "Rimuovi lingua"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:106
 msgid "Romanian"
