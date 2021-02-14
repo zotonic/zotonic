@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-12 09:39\n"
+"PO-Revision-Date: 2021-02-14 08:00\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -3634,7 +3634,7 @@ msgstr "Per ragioni di sicurezza, i codici di reset della password sono conserva
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
 msgid "Forgot your password?"
-msgstr "Hai dimenticato la tua password?"
+msgstr "Hai dimenticato la password?"
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:10
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:13
@@ -3671,7 +3671,7 @@ msgstr "Tuttavia questo indirizzo e-mail non appartiene a uno dei nostri utenti 
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
 msgid "I forgot my password"
-msgstr "Ho dimenticato la mia password"
+msgstr "Ho dimenticato la password"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:21
 msgid "I want to create a new account"
