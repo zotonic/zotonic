@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-14 08:22\n"
+"PO-Revision-Date: 2021-02-14 08:30\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -732,7 +732,7 @@ msgstr "<strong>Primo</strong> conosciuto anche come nome, nome o cognome.<br/><
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:10
 msgid "About categories"
-msgstr "Circa le categorie"
+msgstr "Informazioni sulle categorie"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
 msgid "Add a connection:"
@@ -1001,7 +1001,7 @@ msgstr "Creato:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:78
 msgid "Customize page slug"
-msgstr "Personalizzare lo slug della pagina"
+msgstr "Personalizzare il nome univoco (slug) della pagina"
 
 #: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:90
 msgid "Dashboard"
@@ -1162,7 +1162,7 @@ msgstr "Ogni pagina può avere un intervallo di date. Per esempio se la pagina �
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
-msgstr "Ogni pagina è categorizzata esattamente in una categoria. La categoria definisce ciò che la pagina rappresenta. Per esempio un evento, un prodotto o una persona. Le categorie sono definite gerarchicamente. In questo modo si può avere una categoria veicoli con sottocategorie auto e bicicletta."
+msgstr "Ogni pagina è classificata in una e una sola categoria. La categoria definisce cosa rappresenta la pagina, ad esempio un evento, un prodotto o una persona. Le categorie sono definite gerarchicamente, in questo modo puoi avere una categoria di veicoli con sottocategorie auto e biciclette."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:252
 msgid "Existing pages"
@@ -1466,7 +1466,7 @@ msgstr "Percorso della pagina"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
-msgstr "Nome univoco (slug) della pagina"
+msgstr "Nome univoco della pagina (slug)"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:36
 msgid "Page title"
