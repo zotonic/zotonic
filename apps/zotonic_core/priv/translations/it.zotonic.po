@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-14 08:00\n"
+"PO-Revision-Date: 2021-02-14 08:12\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -2260,7 +2260,7 @@ msgstr "Una copia di tutte le e-mail viene inviata a"
 
 #: apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:45
 msgid "Add configuration key"
-msgstr "Aggiungi la chiave di configurazione"
+msgstr "Aggiungi chiave di configurazione"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:25
 msgid "Add key"
@@ -2281,7 +2281,7 @@ msgstr "Usa sempre SSL"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
-msgstr "Sei sicuro di voler cancellare la chiave di configurazione"
+msgstr "Sei sicuro di voler eliminare la chiave di configurazione"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:8
 msgid "Certificates provided by SSL modules"
@@ -2289,7 +2289,7 @@ msgstr "Certificati forniti dai moduli SSL"
 
 #: apps/zotonic_mod_admin_config/src/mod_admin_config.erl:54
 msgid "Config"
-msgstr "Config"
+msgstr "Configurazioni"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:3./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:50
@@ -2347,7 +2347,7 @@ msgstr "Chiave"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
 msgid "Make a new config setting"
-msgstr "Fare una nuova impostazione di configurazione"
+msgstr "Crea una nuova chiave di configurazione"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
 msgid "Modified"
@@ -2431,7 +2431,7 @@ msgstr "Mostra il log del messaggio"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
 msgid "System Configuration"
-msgstr "Configurazione del sistema"
+msgstr "Configurazioni di sistema"
 
 #: apps/zotonic_mod_admin_config/priv/templates/email_test.tpl:3
 msgid "Test email from"
@@ -3541,7 +3541,7 @@ msgstr "Autorizzare..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:63./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
-msgstr "Torna all'accesso"
+msgstr "Torna alla pagina di accesso"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:17
 msgid "Below are your account details and a link to set a new password."
