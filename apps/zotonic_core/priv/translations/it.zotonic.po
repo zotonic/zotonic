@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-14 11:40\n"
+"PO-Revision-Date: 2021-02-14 12:11\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -728,7 +728,7 @@ msgstr "aggiungi blocco"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>Primo</strong> conosciuto anche come nome, nome o cognome.<br/><strong>Medio</strong> spesso abbreviato in un'iniziale come in <em>John D. Rockefeller</em>.<br/><strong>Prefisso del cognome</strong> come l'olandese <em>van, van de, der</em>.<br/><strong>Cognome</strong> conosciuto anche come nome di famiglia o cognome."
+msgstr "<strong>Nome</strong> detto anche nome di battesimo o prenome.<br/><strong>Cognome intermedio</strong> spesso abbreviato negli USA in un'iniziale come in <em>John D. Rockefeller</em>.<br/><strong>Prefisso del cognome</strong> come l'olandese <em>van, van de, der</em>.<br/><strong>Cognome</strong>."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:10
 msgid "About categories"
@@ -1378,7 +1378,7 @@ msgstr "Il mio"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:22
 msgid "Mobile"
-msgstr "Mobile"
+msgstr "Cellulare"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:23./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 msgid "Modified by"
@@ -1764,7 +1764,7 @@ msgstr "Riassunto"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:28
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
 msgid "Sur. prefix"
-msgstr "Prefisso"
+msgstr "Prefisso (es. Van, Der)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:30
@@ -6061,7 +6061,7 @@ msgstr "Si prega di annullare l'iscrizione"
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:34
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:31
 msgid "Prefix"
-msgstr "Prefisso"
+msgstr "Prefisso (es. Van, Der)"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:21./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:15
 msgid "Preview mailing"
