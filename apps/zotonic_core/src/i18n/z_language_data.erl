@@ -57,7 +57,7 @@ is_language( Lang ) when is_atom(Lang); is_binary(Lang) ->
 is_language( Lang ) when is_list(Lang) ->
     is_language(z_convert:to_binary(Lang)).
 
--spec to_language_atom( z_language:language() ) -> boolean().
+-spec to_language_atom( z_language:language() ) -> {ok, atom()} | {error, not_a_language}.
 to_language_atom( Lang ) when is_atom(Lang); is_binary(Lang) ->
     case maps:find(Lang, languages_map_flat()) of
         {ok, #{ code_atom := Code }} -> {ok, Code};
