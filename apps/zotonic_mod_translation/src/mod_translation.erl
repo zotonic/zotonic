@@ -469,7 +469,7 @@ event(#postback{message={translation_reload, _Args}}, Context) ->
 %%      For instance: `<<"/nl-nl/admin/translation">>' becomes `<<"/admin/translation">>'
 url_strip_language(<<"/", Path/binary>> = Url) ->
     case binary:split(Path, <<"/">>) of
-        [ MaybeLang | <<"/", _/binary>> = Rest ] ->
+        [ MaybeLang, <<"/", _/binary>> = Rest ] ->
             case z_language:is_valid(MaybeLang) of
                 true -> Rest;
                 false -> Url
