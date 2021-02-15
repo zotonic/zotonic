@@ -36,6 +36,7 @@
 
 -export([
         is_language/1,
+        to_language_atom/1,
         fallback/1,
         codes_bin/0,
         codes_atom/0,
@@ -54,6 +55,20 @@
 is_language( Lang ) when is_atom(Lang); is_binary(Lang) ->
     maps:is_key(Lang, languages_map_flat());
 is_language( Lang ) when is_list(Lang) ->
+    is_language(z_convert:to_binary(Lang)).
+
+-spec to_language_atom( z_language:language() ) -> {ok, atom()} | {error, not_a_language}.
+to_language_atom( Lang ) when is_atom(Lang); is_binary(Lang) ->
+    case maps:find(Lang, languages_map_flat()) of
+        {ok, #{ code_atom := Code }} -> {ok, Code};
+        error ->
+            Lower = z_string:to_lower(z_convert:to_binary(Lang)),
+            case maps:find(Lower, languages_map_flat()) of
+                {ok, #{ code_atom := Code }} -> {ok, Code};
+                error -> {error, not_a_language}
+            end
+    end;
+to_language_atom( Lang ) when is_list(Lang) ->
     is_language(z_convert:to_binary(Lang)).
 
 
@@ -117,19 +132,32 @@ fetch_fallbacks(List) ->
 
 fetch_fallback([], _Path, Acc) ->
     Acc;
-fetch_fallback([ {CodeBin, Props} | List ], Path, Acc) ->
+fetch_fallback([ {CodeBin, Props} | List ], Path0, Acc) ->
+    Path = case proplists:get_value(fallback, Props) of
+        undefined -> Path0;
+        Fallback -> [ z_convert:to_atom(Fallback) | Path0 ]
+    end,
     CodeAtom = z_convert:to_atom(CodeBin),
-    PathR = lists:reverse(Path),
     Acc1 = Acc#{
-        CodeBin => PathR,
-        CodeAtom => PathR
+        CodeBin => Path,
+        CodeAtom => Path
     },
     Sub = proplists:get_value(sublanguages, Props, []),
     Acc2 = fetch_fallback(Sub, [ CodeAtom | Path ], Acc1),
-    fetch_fallback(List, Path, Acc2).
+    Acc3 = lists:foldl(
+        fun(Alias, AliasAcc) ->
+            AAtom = binary_to_atom(Alias, utf8),
+            AliasAcc#{
+                AAtom => Path,
+                Alias => Path
+            }
+        end,
+        Acc2,
+        proplists:get_value(alias, Props, [])),
+    fetch_fallback(List, Path0, Acc3).
 
-as_map_flat() ->
-    as_map_flat(languages_list(), [], #{}).
+as_map_flat(Fallback) ->
+    as_map_flat(languages_list(), Fallback, #{}).
 
 as_map_flat(List, Fallback, Map) ->
     lists:foldl(
@@ -140,7 +168,17 @@ as_map_flat(List, Fallback, Map) ->
                 CodeAtom => MapProps,
                 Code => MapProps
             },
-            as_map_flat(proplists:get_value(sublanguages, Props, []), Fallback, Acc1)
+            Acc2 = lists:foldl(
+                fun(Alias, AliasAcc) ->
+                    AAtom = binary_to_atom(Alias, utf8),
+                    AliasAcc#{
+                        AAtom => MapProps,
+                        Alias => MapProps
+                    }
+                end,
+                Acc1,
+                proplists:get_value(alias, Props, [])),
+            as_map_flat(proplists:get_value(sublanguages, Props, []), Fallback, Acc2)
         end,
         Map,
         List).
@@ -148,14 +186,16 @@ as_map_flat(List, Fallback, Map) ->
 as_map_flat_props(CodeAtom, Props, Fallback) ->
     M = maps:from_list(Props),
     M#{
+        code_atom => CodeAtom,
+        code_bin => atom_to_binary(CodeAtom, utf8),
         language_atom => binary_to_atom( maps:get(language, M), utf8 ),
-        sublanguages => as_atom_map(maps:get(sublanguages, M, []), [ CodeAtom | Fallback ], #{}),
-        fallback => Fallback,
+        sublanguages => as_atom_map(maps:get(sublanguages, M, []), Fallback, #{}),
+        fallback => maps:get(CodeAtom, Fallback),
         sort_key => z_string:to_lower( proplists:get_value(name_en, Props) )
     }.
 
-as_atom_map() ->
-    as_atom_map(languages_list(), [], #{}).
+as_atom_map(Fallback) ->
+    as_atom_map(languages_list(), Fallback, #{}).
 
 as_atom_map(List, Fallback, Map) ->
     lists:foldl(
@@ -173,8 +213,8 @@ as_atom_map_props(CodeAtom, Props, Fallback) ->
     M = maps:from_list(Props),
     M#{
         language_atom => binary_to_atom( maps:get(language, M), utf8 ),
-        sublanguages => as_atom_map(maps:get(sublanguages, M, []), [ CodeAtom | Fallback ], #{}),
-        fallback => Fallback,
+        sublanguages => as_atom_map(maps:get(sublanguages, M, []), Fallback, #{}),
+        fallback => maps:get(CodeAtom, Fallback),
         sort_key => z_string:to_lower( proplists:get_value(name_en, Props) )
     }.
 
@@ -210,10 +250,10 @@ term_to_abstract(Module, Ls, LsA, Fallback) ->
     % Functions
     erl_syntax:function(
         erl_syntax:atom(languages_map_flat),
-        [ erl_syntax:clause([], none, [ erl_syntax:abstract( as_map_flat() )]) ]),
+        [ erl_syntax:clause([], none, [ erl_syntax:abstract( as_map_flat(Fallback) )]) ]),
     erl_syntax:function(
         erl_syntax:atom(languages_map_main),
-        [ erl_syntax:clause([], none, [erl_syntax:abstract( as_atom_map() )]) ]),
+        [ erl_syntax:clause([], none, [erl_syntax:abstract( as_atom_map(Fallback) )]) ]),
     erl_syntax:function(
         erl_syntax:atom(fallback),
         [ erl_syntax:clause([], none, [erl_syntax:abstract(Fallback)]) ]),
@@ -1262,19 +1302,28 @@ languages_list() -> [
         {name_en, <<"Yoruba"/utf8>>}
     ]},
     {<<"zh">>, [
-        {type, <<"macro_language">>},
         {language, <<"zh">>},
+        {alias, [
+            <<"zh-hans">>,
+            <<"zh-hans-cn">>, <<"zh-cn">>,
+            <<"zh-hans-sg">>, <<"zh-sg">>
+        ]},
         {script, <<"Hans">>},
         {name, <<"中文"/utf8>>},
         {name_en, <<"Chinese (Simplified)"/utf8>>},
-        {sublanguages, [
-            {<<"zh-tw">>, [
-                {language, <<"zh">>},
-                {script, <<"Hant">>},
-                {name, <<"中國傳統的腳本"/utf8>>},
-                {name_en, <<"Chinese (Traditional)"/utf8>>}
-            ]}
-        ]}
+        {fallback, <<"zh-hant">>}
+    ]},
+    {<<"zh-hant">>, [
+        {language, <<"zh-hant">>},
+        {alias, [
+            <<"zh-hk">>, <<"zh-hant-hk">>,
+            <<"zh-tw">>, <<"zh-hant-tw">>,
+            <<"zh-mo">>, <<"zh-hant-mo">>
+        ]},
+        {script, <<"Hant">>},
+        {name, <<"中國傳統的腳本"/utf8>>},
+        {name_en, <<"Chinese (Traditional)"/utf8>>},
+        {fallback, <<"zh">>}
     ]}
 ].
 

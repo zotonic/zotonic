@@ -16,7 +16,7 @@ is_sublanguage
 %}
 <div id="dialog_language_edit_content">
     {% if not initial_lang_code %}
-        <a href="" id="mod_translation_details_back">{_ All languages _}</a>
+        <a href="" id="mod_translation_details_back">&lt; {_ All languages _}</a>
         {% wire id="mod_translation_details_back"
             action={replace
                 template="_dialog_language_edit_list.tpl"

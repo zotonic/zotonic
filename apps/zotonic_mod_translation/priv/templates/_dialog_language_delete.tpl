@@ -4,5 +4,5 @@
 
 <div class="modal-footer">
     {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-    {% button class="btn btn-primary" postback={language_delete code=code} delegate="mod_translation" text=_"Remove" %}
+    {% button class="btn btn-danger" postback={language_delete code=code} delegate="mod_translation" text=_"Remove" %}
 </div>

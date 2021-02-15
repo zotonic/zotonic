@@ -606,7 +606,13 @@ render_html_opt_all(true, Template, Vars, Context) ->
 dialog(undefined, Template, Vars, Context) ->
     dialog(<<>>, Template, Vars, Context);
 dialog(Title, Template, Vars, Context) ->
-    MixedHtml = z_template:render(Template, Vars, Context),
+    IsCatinclude = z_convert:to_bool(get_value(catinclude, Vars)),
+    Template1 = case Template of
+        {cat, _} -> Template;
+        _ when IsCatinclude -> {cat, Template};
+        _ -> Template
+    end,
+    MixedHtml = z_template:render(Template1, Vars, Context),
     {Html, Context1} = render_to_iolist(MixedHtml, Context),
     Args = [
         {title, z_trans:lookup_fallback(Title, Context1)},

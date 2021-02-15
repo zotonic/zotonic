@@ -35,6 +35,8 @@
     {% wire name="admin-menu-select"
             action={dialog_open
                 template="_action_dialog_connect.tpl"
+                catinclude
+                id=tree_id
                 title=_"Add menu item"
                 callback="window.zMenuEditDone"
                 category=cat_id

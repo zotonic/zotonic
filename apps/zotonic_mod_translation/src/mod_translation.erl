@@ -227,10 +227,13 @@ maybe_accept_header(Context) ->
         AcceptHeader ->
             Acceptable = acceptable_languages(Context),
             case cowmachine_accept_language:accept_header(Acceptable, AcceptHeader) of
-                {ok, Lang} -> set_language(binary_to_atom(Lang, utf8), Context);
+                {ok, Lang} -> accept_language(Lang, Context);
                 {error, _} -> Context
             end
     end.
+
+accept_language(Code, Context) ->
+    set_language(maps:get(code_atom, z_language:properties(Code)), Context).
 
 % Fetch the list of acceptable languages and their fallback languages.
 % Store this in the depcache (and memo) for quick(er) lookups.
@@ -239,12 +242,22 @@ acceptable_languages(Context) ->
     z_depcache:memo(
         fun() ->
             Enabled = enabled_languages(Context),
-            lists:map(
-                fun(Code) ->
+            lists:foldl(
+                fun(Code, Acc) ->
+                    LangProps = z_language:properties(Code),
                     Lang = atom_to_binary(Code, utf8),
                     Fs = z_language:fallback_language(Code),
-                    {Lang, [ atom_to_binary(F, utf8) || F <- Fs ]}
+                    FsAsBin = [ z_convert:to_binary(F) || F <- Fs ],
+                    Acc1 = [ {Lang, FsAsBin} | Acc ],
+                    lists:foldl(
+                        fun(Alias, AliasAcc) ->
+                            AliasBin = z_convert:to_binary(Alias),
+                            [ {AliasBin, FsAsBin} | AliasAcc ]
+                        end,
+                        Acc1,
+                        maps:get(alias, LangProps, []))
                 end,
+                [],
                 Enabled)
         end,
         acceptable_languages,
@@ -387,7 +400,8 @@ event(#postback{message={language_delete, Args}}, Context) ->
         true ->
             {code, LanguageCode} = proplists:lookup(code, Args),
             Context1 = language_delete(LanguageCode, Context),
-            reload_table(Context1);
+            Context2 = reload_table(Context1),
+            z_render:dialog_close(Context2);
         false ->
             z_render:growl_error(?__(<<"Sorry, you don't have permission to change the language list.">>, Context), Context)
     end;
@@ -453,19 +467,16 @@ event(#postback{message={translation_reload, _Args}}, Context) ->
 
 %% @doc Strip the language code from the location (if the language code is recognized).
 %%      For instance: `<<"/nl-nl/admin/translation">>' becomes `<<"/admin/translation">>'
-url_strip_language(<<$/, A, B, $/, Rest/binary>> = Url) ->
-    url_strip_language1(Url, [A, B], Rest);
-url_strip_language(<<$/, A, B, $-, C, D, $/, Rest/binary>> = Url) ->
-    url_strip_language1(Url, [A, B, <<"-">>, C, D], Rest);
-url_strip_language(Url) ->
-    Url.
-
-url_strip_language1(Url, LanguageCode, Rest) when is_binary(Url) ->
-    case z_language:is_valid(LanguageCode) of
-        true -> <<$/, Rest/binary>>;
-        false -> Url
+url_strip_language(<<"/", Path/binary>> = Url) ->
+    case binary:split(Path, <<"/">>) of
+        [ MaybeLang, <<"/", _/binary>> = Rest ] ->
+            case z_language:is_valid(MaybeLang) of
+                true -> Rest;
+                false -> Url
+            end;
+        _ ->
+            Url
     end.
-
 
 %% @doc Set the language, as selected by the user. Persist this choice.
 -spec set_user_language(atom(), z:context()) -> z:context().

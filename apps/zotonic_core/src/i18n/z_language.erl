@@ -74,18 +74,16 @@ default_language(Context) ->
 is_valid(Code) ->
     z_language_data:is_language(Code).
 
-%% @doc Translate a language-code to an atom.
+%% @doc Translate a language-code to an atom; only return known codes.
+%% Also map aliased language codes to their preferred format. Eg. 'zh-tw' to 'zh-hant'
 -spec to_language_atom( language() ) -> {ok, language()} | {error, not_a_language}.
-to_language_atom(Code) when is_binary(Code) ->
-    case is_valid(Code) of
-        false -> {error, not_a_language};
-        true -> {ok, z_convert:to_atom(Code)}
-    end;
+to_language_atom(Code) when is_binary(Code); is_atom(Code) ->
+    z_language_data:to_language_atom(Code);
 to_language_atom(Code) ->
     to_language_atom(z_convert:to_binary(Code)).
 
 
-%% @doc Return the list of fallback languages (atoms) for the lanaguage.
+%% @doc Return the list of fallback languages (atoms) for the language.
 -spec fallback_language( language() ) -> [ language_code() ].
 fallback_language(Code) ->
     z_language_data:fallback(Code).
