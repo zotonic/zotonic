@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-12 12:56\n"
+"PO-Revision-Date: 2021-02-15 07:06\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: apps/zotonic_core/src/support/z_media_import.erl:148
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
-msgstr "网站"
+msgstr "網站"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:272
 msgid "ago"
@@ -27,20 +27,20 @@ msgstr "以前"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 msgid "day"
-msgstr "天"
+msgstr "日"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:330./apps/zotonic_core/src/support/z_datetime.erl:333
 msgid "days"
-msgstr "日子"
+msgstr "日"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 msgid "hour"
-msgstr "小时"
+msgstr "小時"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
-msgstr "数小时"
+msgstr "小時"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:272
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
@@ -49,28 +49,28 @@ msgstr "在"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 msgid "minute"
-msgstr "分钟"
+msgstr "分鐘"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
-msgstr "数分钟"
+msgstr "分鐘"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:323
 msgid "moments"
-msgstr "瞬间"
+msgstr "片刻"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "month"
-msgstr "月份"
+msgstr "月"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "months"
-msgstr "数月"
+msgstr "月"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:272./apps/zotonic_core/src/support/z_datetime.erl:322
 msgid "now"
-msgstr "现在"
+msgstr "現在"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "second"
@@ -78,7 +78,7 @@ msgstr "秒"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "seconds"
-msgstr "数秒"
+msgstr "秒鐘"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "year"
@@ -86,19 +86,19 @@ msgstr "年"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "years"
-msgstr "数年"
+msgstr "年"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
-msgstr "ACL 规则"
+msgstr "控制允許流覽的用戶 (ACL) 的規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:9
 msgid "ACL rules file"
-msgstr "ACL 规则文件"
+msgstr "控制允許流覽的用戶的規則的記錄文件"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:4./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:10./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:41./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:21
 msgid "ACL user group"
-msgstr "ACL 用户群"
+msgstr "控制允許流覽的用戶組"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
@@ -109,7 +109,7 @@ msgstr "允許流覽的控制管理"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:34./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
 msgid "Access control rules"
-msgstr "通过规则控制"
+msgstr "允許流覽的控制規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:21./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:24
 msgid "Add Rule"
@@ -117,7 +117,7 @@ msgstr "增加规则"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:57
 msgid "Add links to the collaboration group"
-msgstr "增加对合作团队的链接"
+msgstr "添加聯結(links)到合作夥伴群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:112
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
@@ -131,11 +131,11 @@ msgstr "所有分类"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:17
 msgid "All Modules"
-msgstr "全部模块"
+msgstr "所有模塊"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:9./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:9
 msgid "All User Groups"
-msgstr "全部用户群"
+msgstr "所有用戶組"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:29./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:18
 msgid "All collaboration groups"
