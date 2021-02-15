@@ -606,7 +606,7 @@ render_html_opt_all(true, Template, Vars, Context) ->
 dialog(undefined, Template, Vars, Context) ->
     dialog(<<>>, Template, Vars, Context);
 dialog(Title, Template, Vars, Context) ->
-    IsCatinclude = z_convert:to_bool(proplists:get_value(catinclude, Vars, false)),
+    IsCatinclude = z_convert:to_bool(get_value(catinclude, Vars)),
     Template1 = case Template of
         {cat, _} -> Template;
         _ when IsCatinclude -> {cat, Template};
