@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-15 07:06\n"
+"PO-Revision-Date: 2021-02-15 07:52\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -127,7 +127,7 @@ msgstr "所有"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:35
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:44./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:69
 msgid "All Categories"
-msgstr "所有分类"
+msgstr "所有分類"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:17
 msgid "All Modules"
@@ -139,27 +139,27 @@ msgstr "所有用戶組"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:29./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:18
 msgid "All collaboration groups"
-msgstr "全部合作团队"
+msgstr "所有合作夥伴群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:15
 msgid "All normal content groups"
-msgstr "所有普通内容群组"
+msgstr "所有標準内容組"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:27
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "允许的文件和mime类型，用','分开--如果不允许额外的类型，就输入'none'，默认情况下留空。"
+msgstr "允許的文件以及 mime 種類，用'，'分開 - 輸入'無'，如果沒有附加的輸入 '允許'，如果是默許的則留下空白"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
-msgstr "你确定你要删除以下的用户群组"
+msgstr "您確定要刪除以下用戶組嗎："
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:7
 msgid "Are you sure you want to make all rules permanent?"
-msgstr "你确定你要让所有规矩永久化"
+msgstr "您確定要使所有規則永久化嗎？"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:38
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
-msgstr "你确定你要恢复所有的ACL规则到他们的最新发布版本"
+msgstr "您確定要將所有ACL規則還原到其當前發布的版本嗎？"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:226./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
@@ -189,15 +189,15 @@ msgstr "取消"
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "Category"
-msgstr "分类"
+msgstr "分類"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:29
 msgid "Category &amp; Content group"
-msgstr "分类 &amp; 内容群组"
+msgstr "分類 & 内容組"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:26
 msgid "Change category and/or content group..."
-msgstr "更改类别和/或内容群组"
+msgstr "改變分類 以及/或 内容組..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
@@ -211,28 +211,28 @@ msgstr "更改类别和/或内容群组"
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:6
 msgid "Close"
-msgstr "关闭"
+msgstr "關閉"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:45
 msgid "Collaboration group managers"
-msgstr "合作团队经理"
+msgstr "合作夥伴群經理"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:44
 msgid "Collaboration group members"
-msgstr "合作团队成员"
+msgstr "合作夥伴群成員"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:49./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:542
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
-msgstr "合作团队"
+msgstr "合作夥伴群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:34
 msgid "Collaboration groups are added by creating a new page in the category:"
-msgstr "合作团队是通过在分类区里面创建一个新页面而被添加的"
+msgstr "經由在這個分类中開設新的網頁來添加合作夥伴群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:32
 msgid "Collaboration groups are user groups where all content belongs to the group."
-msgstr "合作团队亦是用户群，所有的内容都属于那个团队"
+msgstr "合作夥伴群如同用戶群，所有的内容屬於這個群體"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
@@ -243,21 +243,21 @@ msgstr "内容"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:12./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 msgid "Content group"
-msgstr "内容群"
+msgstr "内容群組"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:55
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:184
 msgid "Content groups"
-msgstr "数个内容群"
+msgstr "内容群組"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:78
 msgid "Content rules for collaboration group members and managers"
-msgstr "制定给合作团队的成员和经理的内容规则"
+msgstr "合作夥伴群成員以及經理處理内容的規則"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:42
 msgid "Could not move to collaboration group."
-msgstr "无法移至合作团队"
+msgstr "無法轉移去合作夥伴群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
@@ -281,58 +281,58 @@ msgstr "删除"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 msgid "Delete all user groups"
-msgstr "删除所有用户群"
+msgstr "删除所有用戶組"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:131
 msgid "Delete is canceled, there are users in the user groups."
-msgstr "删除被取消，用户群里有用户"
+msgstr "取消删除, 用戶組裏還有用戶"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:37
 msgid "Delete user group and move users"
-msgstr "删除用户群并且移开用户"
+msgstr "删除用戶組並轉移用戶們"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:159
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:75./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:86./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:92
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:79./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:107
 msgid "Deleting..."
-msgstr "删除中"
+msgstr "删除中..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:45
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "编辑 &amp; 对合作团队的权利连接"
+msgstr "修改合作夥伴群的聯結的權利"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:47
 msgid "Edit Rule"
-msgstr "编辑规矩"
+msgstr "編輯規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:49
 msgid "Edit the collaboration group"
-msgstr "编辑合作团队"
+msgstr "修改合作夥伴群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "输入扩展名(如 <tt>.png</tt>)、mime类型(如 <tt>image/png</tt>)或其中之一。"
+msgstr "輸入擴展名單 (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) 或是以下之一:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "输出编辑规则"
+msgstr "輸出编辑规则"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "文件类型遵循组的层次结构。派生组继承了其祖先的mime设置。"
+msgstr "文件種類依照群組的層次，衍生群組繼承原生階層的 mime 設定"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:55
 msgid "File uploads"
-msgstr "文件上传"
+msgstr "文件上傳"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:70
 msgid "Find collaboration group"
-msgstr "寻找合作团队"
+msgstr "尋找合作夥伴群組"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:52
 msgid "Group managers can edit"
-msgstr "团队经理可以编辑"
+msgstr "群組管理員可以編輯"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:60
 msgid "Group managers can link"
