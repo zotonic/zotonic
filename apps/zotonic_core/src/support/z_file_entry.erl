@@ -213,14 +213,14 @@ locate(timeout, _, State) ->
                 Size = total_size(Sources),
                 ModifiedUTC = hd(calendar:local_time_to_universal_time_dst(Modified)),
                 State1 = State#state{
-                    is_found=true,
-                    gzip_part=undefined,
-                    mime=Mime,
-                    size=Size,
-                    parts=Sources,
-                    modified=Modified,
-                    modifiedUTC=ModifiedUTC,
-                    index_ref=IndexRef
+                    is_found = true,
+                    gzip_part = undefined,
+                    mime = mime_part(State#state.image_filters, Sources, Mime),
+                    size = Size,
+                    parts = Sources,
+                    modified = Modified,
+                    modifiedUTC = ModifiedUTC,
+                    index_ref = IndexRef
                 },
                 {next_state, content_encoding_gzip, reply_waiting(State1), 0}
         end
@@ -434,6 +434,10 @@ newest_part([#part_data{modified=M1}|Ps], M) when M =/= undefined, M1 > M ->
 newest_part([_|Ps], M) ->
     newest_part(Ps, M).
 
+mime_part(undefined, [ #part_file{mime = Mime} ], _) when is_binary(Mime) -> Mime;
+mime_part(undefined, [ #part_cache{mime = Mime} ], _) when is_binary(Mime) -> Mime;
+mime_part(undefined, [ #part_data{mime = Mime} ], _) when is_binary(Mime) -> Mime;
+mime_part(_, _, Mime) -> Mime.
 
 total_size(Parts) ->
     lists:sum([ part_size(P) || P <- Parts ]).

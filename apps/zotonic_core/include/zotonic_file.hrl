@@ -57,19 +57,22 @@
         modified,               % modification time for this entry
         cache_pid,              % pid of cache entry
         cache_monitor,          % monitor of cache entry
-        size
+        size,
+        mime                    % optional mime type
     }).
 -record(part_file, {
         acl,                    % optional associated resource id or module, for acl checks
         modified,               % modification time for this entry
         mtime,                  % modification time of the file
         filepath,               % path to static file
-        size                    % size of this file (needed for sendfile)
+        size,                   % size of this file (needed for sendfile)
+        mime                    % optional mime type
     }).
 -record(part_data, {
         acl,                    % optional associated resource id or module, for acl checks
         modified,               % modification time for this entry
-        data                    % binary data
+        data,                   % binary data
+        mime                    % optional mime type
     }).
 
 -record(part_missing, {
