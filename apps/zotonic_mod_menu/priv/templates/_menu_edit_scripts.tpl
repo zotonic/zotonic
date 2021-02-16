@@ -78,6 +78,10 @@
 			}, 150);
 		}
 	});
+
+    cotonic.broker.subscribe("menu/edit", function(msg, bindings) {
+        z_event("admin-menu-edit", { id: msg.payload.id, tree_id: {{ tree_id|default:"undefined" }} });
+    });
 })();
 
 $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {

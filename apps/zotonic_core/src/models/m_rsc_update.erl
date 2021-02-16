@@ -376,10 +376,7 @@ duplicate(Id, DupProps, Context) when is_integer(Id) ->
                             <<"uri">> => undefined,
                             <<"page_path">> => undefined,
                             <<"is_authoritative">> => true,
-                            <<"is_protected">> => false,
-                            <<"title_slug">> => undefined,
-                            <<"slug">> => undefined,
-                            <<"custom_slug">> => false
+                            <<"is_protected">> => false
                         }),
                     case insert(InsProps, [{escape_texts, false}], Context) of
                         {ok, NewId} ->
