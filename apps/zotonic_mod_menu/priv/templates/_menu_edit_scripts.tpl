@@ -131,7 +131,8 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
                         $(this).remove();
                         $sorter.trigger('sortupdate')
                     });
-                }
+                },
+                is_danger: true
             })
 		{% endif %}
 	} else if (where == 'copy') {

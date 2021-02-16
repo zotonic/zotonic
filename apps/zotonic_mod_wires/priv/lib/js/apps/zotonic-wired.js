@@ -121,19 +121,23 @@ function z_dialog_close()
 function z_dialog_confirm(options)
 {
     var html,
-        backdrop;
+        backdrop,
+        is_danger,
+        btn_class;
 
     if (typeof options.backdrop == 'undefined') {
         backdrop = options.backdrop
     } else {
         backdrop = true;
     }
+    is_danger = options.is_danger || false;
+    btn_class = is_danger ? "btn-danger" : "btn-default";
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-default z-dialog-cancel-button">'
          + (options.cancel||z_translate('Cancel'))
          + '</button>'
-         + '<button class="btn btn-primary z-dialog-ok-button">'
+         + '<button class="btn '+btn_class+' z-dialog-ok-button">'
          + (options.ok||z_translate('OK'))
          + '</button>'
          + '</div>';
