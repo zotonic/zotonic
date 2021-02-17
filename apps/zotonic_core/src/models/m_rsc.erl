@@ -229,8 +229,9 @@ get_cached_unsafe(Id, Context) when is_integer(Id) ->
             % Crash on database errors - we don't want errors to
             % be cached in the depcache.
             case get_raw(Id, false, Context) of
-                {ok, Props} ->
-                    z_notifier:foldr(#rsc_get{ id = Id }, Props, Context);
+                {ok, Map} ->
+                    MapDT = ensure_utc_dates(Map, Context),
+                    z_notifier:foldr(#rsc_get{ id = Id }, MapDT, Context);
                 {error, nodb} ->
                     undefined;
                 {error, enoent} ->
@@ -307,7 +308,7 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
     end,
     case z_db:qmap_props_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
         {ok, Map} ->
-            {ok, map_language_atoms( ensure_utc_dates(Map, Context) )};
+            {ok, map_language_atoms(Map)};
         {error, _} = Error ->
             Error
     end;
