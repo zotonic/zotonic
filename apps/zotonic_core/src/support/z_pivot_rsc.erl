@@ -27,6 +27,7 @@
 %% interface functions
 -export([
     poll/1,
+    status/1,
     pivot/2,
     pivot_delay/1,
     pivot_resource_update/4,
@@ -96,6 +97,10 @@
 poll(Context) ->
     gen_server:cast(Context#context.pivot_server, poll).
 
+
+-spec status( z:context() ) -> {ok, map()} | {error, term()}.
+status(Context) ->
+    gen_server:call(Context#context.pivot_server, status).
 
 %% @doc An immediate pivot request for a resource
 -spec pivot(integer(), #context{}) -> ok.
@@ -371,6 +376,16 @@ handle_call({task_done, TaskId, _TaskPid}, _From, State) ->
     lager:error("Pivot received unexpected 'task_done' from task job for task ~p",
                 [ TaskId ]),
     {reply, {error, unknown_task, State}};
+
+handle_call(status, _From, State) ->
+    Status = #{
+        site => State#state.site,
+        is_initial_delay => State#state.is_initial_delay,
+        is_pivot_delay => State#state.is_pivot_delay,
+        task_pid => State#state.task_pid,
+        task_id => State#state.task_id
+    },
+    {reply, {ok, Status}, State};
 
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
