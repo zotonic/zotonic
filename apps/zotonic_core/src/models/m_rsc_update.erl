@@ -748,12 +748,12 @@ update_transaction_fun_expected(#rscupd{expected = Expected} = RscUpd, Id, Props
 check_expected(_Raw, [], _Context) ->
     ok;
 check_expected(Raw, [{Key, F} | Es], Context) when is_function(F) ->
-    case F(Key, Raw, Context) of
+    case F(z_convert:to_binary(Key), Raw, Context) of
         true -> check_expected(Raw, Es, Context);
         false -> {error, {expected, Key, maps:get(Key, Raw, undefined)}}
     end;
 check_expected(Raw, [{Key, Value} | Es], Context) ->
-    case maps:get(Key, Raw, undefined) of
+    case maps:get(z_convert:to_binary(Key), Raw, undefined) of
         Value -> check_expected(Raw, Es, Context);
         Other -> {error, {expected, Key, Other}}
     end.
