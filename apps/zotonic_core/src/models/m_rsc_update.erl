@@ -428,6 +428,10 @@ update(Id, Props, Context) ->
         z:context()
     ) ->
     {ok, m_rsc:resource_id()} | {error, term()}.
+update(Id, Props, false, Context) ->
+    update(Id, Props, [{escape_texts, false}], Context);
+update(Id, Props, true, Context) ->
+    update(Id, Props, [{escape_texts, true}], Context);
 update(Id, Props, Options, Context) when is_list(Props) ->
     {ok, Props1} = z_props:from_list(Props),
     OptionsTz = case proplists:lookup(tz, Options) of
@@ -452,16 +456,23 @@ update(Id, Props, Options, Context) when is_list(Props) ->
             end
     end,
     update(Id, Props1, OptionsTz, Context);
-update(Id, Props, false, Context) ->
-    update(Id, Props, [{escape_texts, false}], Context);
-update(Id, Props, true, Context) ->
-    update(Id, Props, [{escape_texts, true}], Context);
 update(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
-    Tz = case is_map(PropsOrFun) of
+    Tz0 = case is_map(PropsOrFun) of
         true ->
-            proplists:get_value(tz, Options, maps:get(<<"tz">>, PropsOrFun, undefined));
+            % Timezone in the update props is leading over the timezone in the options
+            case maps:get(<<"tz">>, PropsOrFun, undefined) of
+                undefined -> proplists:get_value(tz, Options, <<"UTC">>);
+                <<>> -> proplists:get_value(tz, Options, <<"UTC">>);
+                PropTz -> PropTz
+            end;
         false ->
-            proplists:get_value(tz, Options)
+            proplists:get_value(tz, Options, <<"UTC">>)
+    end,
+    % Sanity fallback for 'undefined' tz in the options
+    Tz = case Tz0 of
+        undefined -> <<"UTC">>;
+        <<>> -> <<"UTC">>;
+        _ -> Tz0
     end,
     RscUpd = #rscupd{
         id = Id,
@@ -824,15 +835,25 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
     % 5. Diff the update
     NewPropsDiff = diff(NewPropsLangPruned, Raw),
 
-    % 6. Perform optional update, check diff
+    % 6. Ensure that there is a Timezone set in the saved resource
+    PropsTz = maps:get(<<"tz">>, NewPropsDiff, undefined),
+    MapsTz = maps:get(<<"tz">>, Raw, undefined),
+    NewPropsDiffTz = case {MapsTz, PropsTz} of
+        {undefined, undefined} ->
+            NewPropsDiff#{ <<"tz">> => RscUpd#rscupd.tz };
+        _ ->
+            NewPropsDiff
+    end,
+
+    % 7. Perform optional update, check diff
     IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
     case is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context) of
         true ->
-            case (IsInsert orelse is_changed(Raw, NewPropsDiff)) of
+            case (IsInsert orelse is_changed(Raw, NewPropsDiffTz)) of
                 true ->
-                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiff, Raw, Context),
+                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiffTz, Raw, Context),
                     {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
-                    ok = update_page_path_log(Id, Raw, NewPropsDiff, Context),
+                    ok = update_page_path_log(Id, Raw, NewPropsDiffTz, Context),
                     NewPropsFinal = maps:merge(NewPropsLangPruned, UpdatePropsPrePivoted),
                     {ok, Id, Raw, NewPropsFinal, IsABefore, IsCatInsert};
                 false ->
