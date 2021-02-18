@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Marc Worrell <marc@worrell.nl>
+ * Copyright 2019-2021 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 "use strict";
 
 // Period between checking with the server if the authentication is still valid.
-var AUTH_CHECK_PERIOD = 30000;
+var AUTH_CHECK_PERIOD = 30;
 
 // TODO:
 // - recheck auth after ws connect and no recent auth check (or failed check)
@@ -56,7 +56,9 @@ var model = {
             username: null,
             preferences: {
             }
-        }
+        },
+        auth_check_timer: null,
+        next_check: 0
     };
 
 model.present = function(data) {
@@ -70,6 +72,11 @@ model.present = function(data) {
 
         // Synchronize tabs and windows of same user-agent
         self.subscribe("model/serviceWorker/event/broadcast/auth-sync", function(msg) {
+            actions.authCheck();
+        });
+
+        // Self or applicaton requested check on the cookie
+        self.subscribe("model/auth/post/check", function(msg) {
             actions.authCheck();
         });
 
@@ -114,11 +121,12 @@ model.present = function(data) {
             }
         });
 
-       self.publish("model/auth/event/ping", "pong", { retain: true });
+        self.publish("model/auth/event/ping", "pong", { retain: true });
     }
 
     if ("is_fetch_error" in data) {
         model.is_fetch_error = data.is_fetch_error;
+        model.next_check = Math.floor(Math.random() * AUTH_CHECK_PERIOD);
     }
 
     if (state.start(model) || ("user_id" in data && data.user_id !== model.auth.user_id)) {
@@ -137,6 +145,7 @@ model.present = function(data) {
             auth_check_cmd = 'refresh';
         }
         model.is_keep_alive = false;
+
         fetchWithUA({ cmd: auth_check_cmd })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authResponse(body); })
@@ -207,20 +216,42 @@ model.present = function(data) {
         .catch((e) => { actions.fetchError(); });
     }
 
-    if ("auth_response" in data && data.auth_response.status == 'ok') {
-        if (data.is_auth_error === false) {
-            model.authentication_error = null;
-        }
-        model.auth = data.auth_response;
-        if (data.is_auth_error === false && data.auth_response.url) {
-            self.publish("model/location/post/redirect", {
-                url: data.auth_response.url
-            });
-        }
-        if (model.auth.user_id == previous_auth_user_id) {
-            model.state_change('auth_known');
+    if ("auth_response" in data) {
+        if (data.auth_response.status == 'ok') {
+            if (data.is_auth_error === false) {
+                model.authentication_error = null;
+            }
+            model.auth = data.auth_response;
+            if (data.is_auth_error === false && data.auth_response.url) {
+                self.publish("model/location/post/redirect", {
+                    url: data.auth_response.url
+                });
+            }
+            if (model.auth.user_id == previous_auth_user_id) {
+                model.state_change('auth_known');
+            } else {
+                model.state_change('auth_changing');
+            }
+
+            model.next_check = AUTH_CHECK_PERIOD;
+            if (data.auth_response.expires) {
+                let timeout = data.auth_response.expires;
+
+                if (timeout < model.next_check) {
+                    timeout = Math.max(0, timeout - 1);
+                } else {
+                    // Check the status somewhere in the last quarter of the
+                    // expirarion period. Use random to prevent multiple tabs
+                    // checking at the same time.
+                    let t = Math.floor(Math.random() * Math.floor(timeout/4));
+                    timeout = Math.max(1, timeout - t - 4);
+                }
+                model.next_check = timeout;
+            } else {
+                model.next_check = Math.floor(Math.random() * AUTH_CHECK_PERIOD);
+            }
         } else {
-            model.state_change('auth_changing');
+            model.next_check = Math.floor(Math.random() * AUTH_CHECK_PERIOD);
         }
     }
 
@@ -259,6 +290,19 @@ model.present = function(data) {
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
         .catch((e) => { actions.fetchError(); });
+    }
+
+    if (model.next_check > 0) {
+        if (model.auth_check_timer) {
+            clearTimeout(model.auth_check_timer);
+        }
+        model.auth_check_timer = setTimeout(
+            function() {
+                model.auth_check_timer = null;
+                self.publish("model/auth/post/check", {});
+            },
+            model.next_check * 1000);
+        model.next_check = 0;
     }
 
     // console.log("AUTH state", model);
@@ -320,7 +364,7 @@ var state =  { view: view} ;
 
 model.state = state ;
 
-// Derive the state representation as a function of the systen control state
+// Derive the state representation as a function of the system control state
 state.representation = function(model) {
     self.publish('model/auth/event/auth', model.auth);
 
@@ -570,7 +614,6 @@ actions.resetPassword = function(msg) {
 
 self.on_connect = function() {
     setTimeout(function() { actions.start(); }, 0);
-    setInterval(function() { actions.authCheck(); }, AUTH_CHECK_PERIOD);
 }
 
 self.connect();
