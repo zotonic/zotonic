@@ -66,10 +66,14 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback
         {callback, Callback},
         {center, 0}
     ],
+    Title = case m_rsc:p(ObjectId, title, Context) of
+        undefined -> ?__("Untitled", Context);
+        T -> T
+    end,
     DialogTitle = iolist_to_binary([
         ?__("Edit:", Context),
         " ",
-        z_trans:lookup_fallback(m_rsc:p(ObjectId, title, Context), Context)
+        z_convert:to_binary( z_trans:lookup_fallback(Title, Context) )
     ]),
     z_render:dialog(DialogTitle, {cat, "_action_dialog_edit_basics.tpl"}, Vars, Context);
 

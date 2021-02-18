@@ -466,7 +466,10 @@ do_link_unlink_error(true, Context) ->
 
 do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId, Callback, Context) ->
     ContextP = context_language(Context),
-    Title = m_rsc:p(ObjectId, title, Context),
+    Title = case m_rsc:p(ObjectId, title, Context) of
+        undefined -> ?__("Untitled", Context);
+        T -> T
+    end,
     Context1 = case {IsNew, IsDelete} of
         {true,false} ->
             z_render:growl([
