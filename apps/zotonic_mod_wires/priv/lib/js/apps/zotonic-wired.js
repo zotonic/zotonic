@@ -43,11 +43,7 @@ var z_transport_queue       = [];
 /* Startup
 ---------------------------------------------------------- */
 
-if (typeof cotonic === 'undefined') {
-    window.addEventListener('cotonic-ready', function() { zotonic_startup()() });
-} else {
-    zotonic_startup();
-}
+cotonic.ready.then(function() { zotonic_startup() });
 
 function zotonic_startup() {
     // Initialize the wires if the bridge is starting up
@@ -348,7 +344,7 @@ function z_transport(delegate, content_type, data, options)
     options = options || {};
     if ($('html').hasClass('ui-state-bridge-connected')) {
         if (options.transport == 'form') {
-            cotonic.broker.call("bridge/origin/model/mqtt_ticket/post/new")
+            cotonic.broker.call("$promised/bridge/origin/model/mqtt_ticket/post/new")
                 .then( function(msg) {
                     if (msg.payload.status == 'ok') {
                         const ticket = msg.payload.result;
@@ -367,7 +363,7 @@ function z_transport(delegate, content_type, data, options)
                 });
         } else {
             cotonic.broker.publish(
-                "bridge/origin/zotonic-transport/" + delegate,
+                "$promised/bridge/origin/zotonic-transport/" + delegate,
                 data,
                 { qos: 1 });
         }
