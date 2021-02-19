@@ -50,9 +50,7 @@ render(Params, _Vars, Context) ->
             ],
             {ok, [
                 <<"<script type='text/javascript'>">>,
-                    <<"if (typeof cotonic === 'undefined') { ">>,
-                        <<"window.addEventListener('cotonic-ready', function() {">>, Spawn, <<"}, false); ">>,
-                    <<"} else { ">>, Spawn, <<" } ">>,
+                    <<"cotonic.ready.then(function() { ">>, Spawn, <<"});">>,
                 <<"</script>">>
             ]}
     end.

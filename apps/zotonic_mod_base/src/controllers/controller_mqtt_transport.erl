@@ -40,7 +40,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% Connect should been done before this timeout (msec)
--define(MQTT_CONNECT_TIMEOUT, 4000).
+-define(MQTT_CONNECT_TIMEOUT, 30000).
 
 %% Maximum size for the connect packet
 -define(MQTT_CONNECT_MAXSIZE, 1024).

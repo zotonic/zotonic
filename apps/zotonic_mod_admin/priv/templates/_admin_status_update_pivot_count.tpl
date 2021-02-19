@@ -29,7 +29,7 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
     };
 
     requestUpdate = function () {
-        cotonic.broker.call("bridge/origin/model/admin/get/pivot_queue_count", {})
+        cotonic.broker.call("$promised/bridge/origin/model/admin/get/pivot_queue_count", {})
             .then(function(msg) {
                 if (msg.payload.status == 'ok') {
                     updateFeedback(msg.payload.result);
