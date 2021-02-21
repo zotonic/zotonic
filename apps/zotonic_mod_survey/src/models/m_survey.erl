@@ -248,25 +248,18 @@ replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
     end;
 replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
-    case z_db:q("
-        update survey_answers
-        set props = $1,
-            points = $2,
-            modifier_id = $3,
-            modified = now()
-        where id = $4
-          and survey_id = $5
-        ",
+    case z_db:update(
+        survey_answers,
+        AnswerId,
         [
-            ?DB_PROPS([{answers, AnswersPoints}]),
-            Points,
-            z_acl:user(Context),
-            AnswerId,
-            SurveyId
+            {modified, {erlang:date(), erlang:time()}},
+            {modifier_id, z_acl:user(Context)},
+            {points, Points},
+            {answers, AnswersPoints}
         ],
         Context)
     of
-        1 ->
+        {ok, 1} ->
             {UserId,Persistent} = z_db:q_row("
                 select user_id, persistent
                 from survey_answers
@@ -275,7 +268,8 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
                 Context),
             publish(SurveyId, UserId, Persistent, Context),
             {ok, AnswerId};
-        0 ->
+        {error, Reason} ->
+            lager:error("update error: ~p", [Reason]),
             {error, enoent}
     end.
 
