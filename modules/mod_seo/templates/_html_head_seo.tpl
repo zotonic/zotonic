@@ -21,7 +21,7 @@
 					{% else %}
 						<meta name="keywords" content="{% for predicate in id.op %}{% if predicate /= "depiction" %}{% for oid in id.o[predicate] %}{{ oid.title }}, {% endfor %}{% endif %}{% endfor %}{{ keywords }}" />
 					{% endif %}
-					<meta name="description" content="{{ id.seo_desc|default:id|summary }}" />
+					<meta name="description" content="{{ id.seo_desc|default:(id|summary) }}" />
 				{% endwith %}
 			{% endif %}
 		{% else %}
