@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-24 00:00\n"
+"PO-Revision-Date: 2021-02-24 07:39\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -58,7 +58,7 @@ msgstr "минут"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:323
 msgid "moments"
-msgstr "моменты"
+msgstr "несколько секунд"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "month"
@@ -78,7 +78,7 @@ msgstr "секунда"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "seconds"
-msgstr "секунды"
+msgstr "секунд"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "year"
