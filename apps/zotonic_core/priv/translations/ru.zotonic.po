@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-24 07:39\n"
+"PO-Revision-Date: 2021-02-24 11:11\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -86,7 +86,7 @@ msgstr "год"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "years"
-msgstr "годы"
+msgstr "лет"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
