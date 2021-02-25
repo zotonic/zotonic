@@ -4,24 +4,25 @@
 -include("zotonic.hrl").
 
 
--define(PROPERTIES_LANGUAGE_CODE, <<"hr">>).
+-define(PROPERTIES_LANGUAGE_CODE, <<"pa">>).
 -define(EXPECTED_PROPERTIES,
     [
-        {language, <<"hr">>},
-        {name, <<"Hrvatski"/utf8>>},
-        {name_en, <<"Croatian"/utf8>>},
+        {language, <<"pa">>},
+        {script, <<"Arab">>},
+        {name, <<"ਪੰਜਾਬੀ"/utf8>>},
+        {name_en, <<"Punjabi"/utf8>>},
         {sublanguages, [
-            {<<"hr-ba">>, [
-                {language, <<"hr">>},
-                {region, <<"BA">>},
-                {name, <<"hrvatski - Bosna i Hercegovina"/utf8>>},
-                {name_en, <<"Croatian - Bosnia and Herzegovina"/utf8>>}
+            {<<"pa-arab">>, [
+                {language, <<"pa">>},
+                {script, <<"Arab">>},
+                {name, <<"ابی"/utf8>>},
+                {name_en, <<"Punjabi - Arab"/utf8>>}
             ]},
-            {<<"hr-hr">>, [
-                {language, <<"hr">>},
-                {region, <<"HR">>},
-                {name, <<"hrvatski - Hrvatska"/utf8>>},
-                {name_en, <<"Croatian - Croatia"/utf8>>}
+            {<<"pa-guru">>, [
+                {language, <<"pa">>},
+                {script, <<"Guru">>},
+                {name, <<"ਪੰਜਾਬੀ ਦੇ - ਗੁਰਮੁਖੀ"/utf8>>},
+                {name_en, <<"Punjabi - Arab"/utf8>>}
             ]}
         ]}
     ]).
@@ -39,9 +40,9 @@ test_get_english_name_1() ->
     ?assertEqual(Expected, Result).
 
 test_get_english_name_2() ->
-    Code = <<"hr-hr">>,
+    Code = <<"pa-guru">>,
     Result = z_language:english_name(Code),
-    Expected = <<"Croatian - Croatia">>,
+    Expected = <<"Punjabi - Arab">>,
     ?assertEqual(Expected, Result).
 
 
