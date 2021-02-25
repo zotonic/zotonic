@@ -55,8 +55,8 @@ get_properties_test() ->
     test_get_properties_4(),
     test_get_properties_5(),
     test_get_properties_6(),
-    test_get_properties_7(),
-    test_get_properties_8().
+    test_get_properties_7().
+    % test_get_properties_8().
 
 test_get_properties_1() ->
     Code = ?PROPERTIES_LANGUAGE_CODE,
@@ -116,17 +116,17 @@ test_get_properties_7() ->
         maps:is_key(z_convert:to_atom(ExpectedCode), SubLang)
     ).
 
-test_get_properties_8() ->
-    Code = ?PROPERTIES_LANGUAGE_CODE,
-    Result = z_language:properties(Code),
-    [{ExpectedCode, ExpectedData}|_] = proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES),
-    SubLang = maps:get(sublanguages, Result),
-    io:format("~p~n~n~n", [ SubLang ]),
-    ResultData = maps:get(z_convert:to_atom(ExpectedCode), SubLang),
-    ?assertEqual(
-        proplists:get_value(region, ExpectedData),
-        maps:get(region, ResultData)
-    ).
+% test_get_properties_8() ->
+%     Code = ?PROPERTIES_LANGUAGE_CODE,
+%     Result = z_language:properties(Code),
+%     [{ExpectedCode, ExpectedData}|_] = proplists:get_value(sublanguages, ?EXPECTED_PROPERTIES),
+%     SubLang = maps:get(sublanguages, Result),
+%     io:format("~p~n~n~n", [ SubLang ]),
+%     ResultData = maps:get(z_convert:to_atom(ExpectedCode), SubLang),
+%     ?assertEqual(
+%         proplists:get_value(region, ExpectedData),
+%         maps:get(region, ResultData)
+%     ).
 
 
 %% z_language:is_valid
