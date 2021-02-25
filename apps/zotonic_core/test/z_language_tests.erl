@@ -4,34 +4,24 @@
 -include("zotonic.hrl").
 
 
--define(PROPERTIES_LANGUAGE_CODE, <<"zh-hant">>).
+-define(PROPERTIES_LANGUAGE_CODE, <<"hr">>).
 -define(EXPECTED_PROPERTIES,
     [
-        {language, <<"zh-hant">>},
-        {script, <<"Hant">>},
-        {name, <<"中國傳統的腳本"/utf8>>},
-        {name_en, <<"Chinese (Traditional)"/utf8>>},
+        {language, <<"hr">>},
+        {name, <<"Hrvatski"/utf8>>},
+        {name_en, <<"Croatian"/utf8>>},
         {sublanguages, [
-            {<<"zh-hant-hk">>, [
-                {language, <<"zh-hant">>},
-                {region, <<"HK">>},
-                {script, <<"Hant">>},
-                {name, <<"香港中國傳統腳本"/utf8>>},
-                {name_en, <<"Chinese - Hong Kong (Traditional)"/utf8>>}
+            {<<"hr-ba">>, [
+                {language, <<"hr">>},
+                {region, <<"BA">>},
+                {name, <<"hrvatski - Bosna i Hercegovina"/utf8>>},
+                {name_en, <<"Croatian - Bosnia and Herzegovina"/utf8>>}
             ]},
-            {<<"zh-hant-mo">>, [
-                {language, <<"zh-hant">>},
-                {region, <<"MO">>},
-                {script, <<"Hant">>},
-                {name, <<"澳門中國人在傳統的腳本"/utf8>>},
-                {name_en, <<"Chinese - Macau (Traditional)"/utf8>>}
-            ]},
-            {<<"zh-hant-tw">>, [
-                {language, <<"zh-hant">>},
-                {region, <<"TW">>},
-                {script, <<"Hant">>},
-                {name, <<"台灣中國傳統腳本"/utf8>>},
-                {name_en, <<"Chinese - Taiwan (Traditional)"/utf8>>}
+            {<<"hr-hr">>, [
+                {language, <<"hr">>},
+                {region, <<"HR">>},
+                {name, <<"hrvatski - Hrvatska"/utf8>>},
+                {name_en, <<"Croatian - Croatia"/utf8>>}
             ]}
         ]}
     ]).
@@ -49,9 +39,9 @@ test_get_english_name_1() ->
     ?assertEqual(Expected, Result).
 
 test_get_english_name_2() ->
-    Code = <<"zh-hant-hk">>,
+    Code = <<"hr-hr">>,
     Result = z_language:english_name(Code),
-    Expected = <<"Chinese - Hong Kong (Traditional)">>,
+    Expected = <<"Croatian - Croatia">>,
     ?assertEqual(Expected, Result).
 
 
