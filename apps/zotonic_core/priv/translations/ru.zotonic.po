@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-12 09:39\n"
+"PO-Revision-Date: 2021-02-24 16:24\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -45,20 +45,20 @@ msgstr "часов"
 #: apps/zotonic_core/src/support/z_datetime.erl:272
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
-msgstr "на сайте"
+msgstr "в"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 msgid "minute"
-msgstr "минутный"
+msgstr "минута"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
-msgstr "протокол"
+msgstr "минут"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:323
 msgid "moments"
-msgstr "моменты"
+msgstr "несколько секунд"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "month"
@@ -66,19 +66,19 @@ msgstr "месяц"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:332./apps/zotonic_core/src/support/z_datetime.erl:335
 msgid "months"
-msgstr "месяцы"
+msgstr "месяцев"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:272./apps/zotonic_core/src/support/z_datetime.erl:322
 msgid "now"
-msgstr "теперь"
+msgstr "сейчас"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "second"
-msgstr "второй"
+msgstr "секунда"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:324./apps/zotonic_core/src/support/z_datetime.erl:327
 msgid "seconds"
-msgstr "секунды"
+msgstr "секунд"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "year"
@@ -86,15 +86,15 @@ msgstr "год"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:334
 msgid "years"
-msgstr "годы"
+msgstr "лет"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
-msgstr "ACL правила"
+msgstr "Правила ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:9
 msgid "ACL rules file"
-msgstr "файл ACL-правил"
+msgstr "Файл правил ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:4./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:10./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:41./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:21
 msgid "ACL user group"

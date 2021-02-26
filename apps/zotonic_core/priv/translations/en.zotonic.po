@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-12 09:39\n"
+"PO-Revision-Date: 2021-02-25 15:44\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -40,7 +40,7 @@ msgstr "hour"
 #: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
-msgstr "hour"
+msgstr "hours"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:272
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
