@@ -58,7 +58,7 @@ var startUploader = function(fileIndex) {
 
     xhr.open("post", url);
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
-    xhr.setRequestHeader("x-fileuploader", "1");
+    xhr.setRequestHeader("x-no-cache", "1");
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status >= 200 && xhr.status < 300) {
