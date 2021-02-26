@@ -55,10 +55,10 @@ preview(MovieFile, Props) ->
         ])),
     jobs:run(media_preview_jobs,
         fun() ->
-            lager:info("Video preview: ~p", [FfmpegCmd]),
+            lager:debug("Video preview: ~p", [FfmpegCmd]),
             case os:cmd(FfmpegCmd) of
                 [] ->
-                   lager:info("Preview ok, file: ~p", [TmpFile]),
+                   lager:debug("Preview ok, file: ~p", [TmpFile]),
                    {ok, TmpFile};
                 Other ->
                    lager:warning("Video preview error: ~p", [Other]),

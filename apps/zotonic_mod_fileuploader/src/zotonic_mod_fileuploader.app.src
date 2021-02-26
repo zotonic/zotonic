@@ -1,0 +1,11 @@
+{application, zotonic_mod_fileuploader, [
+    {description, "Upload files via MQTT"},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [ kernel, stdlib, zotonic_core, jsxrecord ]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/zotonic/zotonic"}]}
+]}.

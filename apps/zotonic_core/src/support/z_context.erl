@@ -78,6 +78,7 @@
     get_q_all/2,
     get_q_all_noz/1,
     get_q_validated/2,
+    set_q_all/2,
 
     q_upload_keepalive/2,
 
@@ -550,7 +551,7 @@ set_render_state(RS, Context) ->
 
 %% @doc Set the value of a request parameter argument
 %%      Always filter the #upload{} arguments to prevent upload of non-temp files.
--spec set_q(binary() | string(), any(), z:context()) -> z:context().
+-spec set_q(binary()|string()|atom(), z:qvalue(), z:context()) -> z:context().
 set_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
     set_q(Key, Upload#upload{ tmpfile = undefined }, Context);
 set_q(Key, Value, Context) when is_binary(Key) ->
@@ -561,7 +562,7 @@ set_q(Key, Value, Context) ->
     set_q(z_convert:to_binary(Key), Value, Context).
 
 %% @doc Set the value of multiple request parameter arguments
--spec set_q( list(), z:context() ) -> z:context().
+-spec set_q( list( {binary()|string()|atom(), z:qvalue()} ) | map(), z:context() ) -> z:context().
 set_q(KVs, Context) when is_map(KVs) ->
     maps:fold(
         fun(K, V, Ctx) ->
@@ -579,7 +580,7 @@ set_q(KVs, Context) when is_list(KVs) ->
 
 %% @doc Add the value of a request parameter argument
 %%      Always filter the #upload{} arguments to prevent upload of non-temp files.
--spec add_q(binary() | string(), any(), z:context()) -> z:context().
+-spec add_q(binary()|string()|atom(), z:qvalue(), z:context()) -> z:context().
 add_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
     add_q(Key, Upload#upload{ tmpfile = undefined }, Context);
 add_q(Key, Value, Context) when is_binary(Key) ->
@@ -600,7 +601,7 @@ add_q(KVs, Context) ->
 
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
 %%      Note that this can also be populated from a JSON MQTT call, and as such contain arbitrary data.
--spec get_q(string()|atom()|binary()|list(), z:context()) -> undefined | binary() | string() | #upload{} | list() | term().
+-spec get_q(string()|atom()|binary()|list(), z:context()) -> undefined | z:qvalue().
 get_q([Key|_] = Keys, Context) when is_list(Key); is_atom(Key); is_binary(Key) ->
     lists:foldl(fun(K, Acc) ->
                     case get_q(K, Context) of
@@ -623,7 +624,7 @@ get_q(Key, #context{ props = Props }) ->
 
 
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
--spec get_q(binary()|string()|atom(), z:context(), term()) -> binary() | string() | #upload{} | term().
+-spec get_q(binary()|string()|atom(), z:context(), term()) -> z:qvalue().
 get_q(Key, Context, Default) when is_list(Key) ->
     case get_q(list_to_binary(Key), Context, Default) of
         Value when is_binary(Value) -> binary_to_list(Value);
@@ -637,16 +638,20 @@ get_q(Key, #context{ props = Props }, Default) ->
 
 
 %% @doc Get all parameters.
--spec get_q_all(z:context()) -> list({binary(), binary()|#upload{}}).
+-spec get_q_all(z:context()) -> list({binary(), z:qvalue()}).
 get_q_all(#context{ props = Props }) ->
     case maps:find(q, Props) of
         {ok, Qs} -> Qs;
         error -> []
     end.
 
+%% @doc Replace all parameters.
+-spec set_q_all(list({binary(), z:qvalue()}), z:context()) -> z:context().
+set_q_all(QArgs, #context{ props = Props } = Context) when is_list(QArgs) ->
+    Context#context{ props = Props#{ q => QArgs }}.
 
 %% @doc Get the all the parameters with the same name, returns the empty list when non found.
--spec get_q_all(string()|atom()|binary(), z:context()) -> list().
+-spec get_q_all(string()|atom()|binary(), z:context()) -> list( z:qvalue() ).
 get_q_all(Key, Context) when is_list(Key) ->
     Values = get_q_all(z_convert:to_binary(Key), Context),
     [
@@ -664,7 +669,7 @@ get_q_all(Key, #context{ props = Props }) ->
 
 
 %% @doc Get all query/post args, filter the zotonic internal args.
--spec get_q_all_noz(z:context()) -> list({binary(), term()}).
+-spec get_q_all_noz(z:context()) -> list({binary(), z:qvalue()}).
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, z_context:get_q_all(Context)).
 
@@ -695,7 +700,7 @@ is_zotonic_arg(_) -> false.
 
 %% @doc Fetch a query parameter and perform the validation connected to the parameter. An exception {not_validated, Key}
 %%      is thrown when there was no validator, when the validator is invalid or when the validation failed.
--spec get_q_validated(string()|atom()|binary(), z:context()) -> string() | term() | undefined.
+-spec get_q_validated(string()|atom()|binary(), z:context()) -> z:qvalue() | undefined.
 get_q_validated([Key|_] = Keys, Context) when is_list(Key); is_atom(Key) ->
     lists:foldl(fun (K, Acc) ->
                     case get_q_validated(K, Context) of

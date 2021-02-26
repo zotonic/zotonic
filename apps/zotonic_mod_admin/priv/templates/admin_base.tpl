@@ -60,5 +60,8 @@
     {% block editor %}{% endblock %}
 
     {% script %}
+
+    {% optional include "_fileuploader_worker.tpl" %}
+
 </body>
 </html>

@@ -1,0 +1,3 @@
+[
+    {fileuploader, [ "fileuploader", "upload", name ], controller_fileuploader, []}
+].

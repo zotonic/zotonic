@@ -637,7 +637,7 @@
     }).
 
 %% @doc Refresh the context or request process for the given request or action
-%%      Called for every request that is not anoymous and before every MQTT relay from
+%%      Called for every request that is not anonymous and before every MQTT relay from
 %%      the client.  Example: mod_development uses this to set flags in the process
 %%      dictionary.
 %% Type: foldl
@@ -647,6 +647,12 @@
         payload = undefined :: undefined | term()
     }).
 
+%% @doc Called just before validation of all query arguments by z_validation.
+%%      This is the moment to filter any illegal arguments or change query
+%%      arguments.
+%% Type: foldl
+%% Return: ``{ok, list( {binary(), z:qvalue()} )} | {error, term()}``
+-record(validate_query_args, {}).
 
 %% @doc Check if a user is enabled. Enabled users are allowed to log in.
 %% Type: first

@@ -27,7 +27,8 @@
     get_id/1,
     get_configured_id/1,
     decode_request/2,
-    encode_response/2
+    encode_response/2,
+    req_body/1
  ]).
 
 % Default max body length (32MB) for HTTP requests, this should be configurable.
