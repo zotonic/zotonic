@@ -8,14 +8,16 @@ Topics
 
 ``model/fileuploader/post/new`` starts a new fileupload.
 
-The posted message must include the filename and the file size::
+The posted message must include the filename and the file size:
+
+.. code-block:: json
 
     {
         filename: "test.jpg",
         size: 1000
     }
 
-The upload URL and current status is returned::
+The upload URL and current status is returned:
 
 .. code-block:: json
 
