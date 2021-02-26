@@ -137,16 +137,16 @@ language_test() ->
     Props = #{
         <<"category">> => other,
         <<"is_published">> => true,
-        <<"language">> => [ 'zh-hant-hk', en ],
+        <<"language">> => [ 'zh-hant', en ],
         <<"title">> => #trans{
-            tr = [ {en, <<"Hello">>}, {'zh-hant-hk', <<"香港"/utf8>>}]
+            tr = [ {en, <<"Hello">>}, {'zh-hant', <<"香港"/utf8>>}]
         }
     },
     {ok, Id} = m_rsc:insert(Props, C),
     ?assertEqual( m_rsc:rid(other, C), m_rsc:p(Id, category_id, C) ),
-    ?assertEqual( [ 'en', 'zh-hant-hk'], m_rsc:p(Id, language, C) ),
+    ?assertEqual( [ 'en', 'zh-hant' ], m_rsc:p(Id, language, C) ),
     Lng = z_db:q1("select language from rsc where id = $1", [ Id ], C),
-    ?assertEqual( [ <<"en">>, <<"zh-hant-hk">> ], Lng ),
+    ?assertEqual( [ <<"en">>, <<"zh-hant">> ], Lng ),
     m_rsc:delete(Id, C),
     ok.
 

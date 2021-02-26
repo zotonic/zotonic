@@ -467,11 +467,12 @@ event(#postback{message={translation_reload, _Args}}, Context) ->
 
 %% @doc Strip the language code from the location (if the language code is recognized).
 %%      For instance: `<<"/nl-nl/admin/translation">>' becomes `<<"/admin/translation">>'
+-spec url_strip_language(binary()) -> binary().
 url_strip_language(<<"/", Path/binary>> = Url) ->
     case binary:split(Path, <<"/">>) of
-        [ MaybeLang, <<"/", _/binary>> = Rest ] ->
+        [ MaybeLang, Rest ] ->
             case z_language:is_valid(MaybeLang) of
-                true -> Rest;
+                true -> <<"/", Rest/binary>>;
                 false -> Url
             end;
         _ ->

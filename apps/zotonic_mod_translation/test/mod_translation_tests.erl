@@ -9,7 +9,7 @@ url_strip_language_test() ->
     test_url_strip_language2().
 
 test_url_strip_language1() ->
-    Location = <<"/nl-nl/admin/translation">>,
+    Location = <<"/zh-hant/admin/translation">>,
     Result = mod_translation:url_strip_language(Location),
     Expected = <<"/admin/translation">>,
     ?assertEqual(Expected, Result).
