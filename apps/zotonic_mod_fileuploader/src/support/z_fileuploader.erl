@@ -99,7 +99,7 @@ stop(Name) when is_binary(Name) ->
     end.
 
 
--spec upload( pid() | binary(), non_neg_integer(), binary() ) -> ok | {error, term()}.
+-spec upload( pid() | binary(), non_neg_integer(), binary() ) -> {ok, map()} | {error, term()}.
 upload(Pid, Offset, Data) when is_pid(Pid) ->
     gen_server:call(Pid, {upload, Offset, Data});
 upload(Name, Offset, Data) when is_binary(Name) ->
