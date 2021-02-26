@@ -10,7 +10,7 @@ Topics
 
 The posted message must include the filename and the file size:
 
-.. code-block:: json
+.. code-block:: javascript
 
     {
         filename: "test.jpg",
