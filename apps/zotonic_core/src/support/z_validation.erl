@@ -79,37 +79,48 @@ rename_args([H|T], Acc) ->
 validate_query_args(Context) ->
     case z_context:get(q_validated, Context) of
         undefined ->
-            Validations = z_context:get_q_all(<<"z_v">>, Context),
-            {Validated,Context1} = lists:foldl(
-                                            fun(X, {Acc, Ctx}) ->
-                                                {XV, Ctx1} = validate(X,Ctx),
-                                                {[XV|Acc], Ctx1}
-                                            end,
-                                            {[], Context},
-                                            Validations),
+            QArgs = z_context:get_q_all(Context),
+            case z_notifier:foldl(#validate_query_args{}, {ok, QArgs}, Context) of
+                {ok, QArgsValidated} ->
+                    ContextNotifier = z_context:set_q_all(QArgsValidated, Context),
 
-            % format is like: [{<<"email">>,{ok,<<"me@example.com">>}}]
-            % Grep all errors, make scripts for the context var
-            % Move all ok values to the q_validated dict
-            IsError  = fun
-                            ({_Id, {error, _, _}}) -> true;
-                            (_X) -> false
-                       end,
-            GetValue = fun
-                            ({Id, {ok, Value}}) when is_tuple(Value) -> {Id, Value};
-                            ({Id, {ok, Value}}) when is_list(Value) -> {Id, iolist_to_binary(Value)};
-                            ({Id, {ok, Value}}) when is_binary(Value) -> {Id, Value}
-                       end,
+                    Validations = z_context:get_q_all(<<"z_v">>, ContextNotifier),
 
-            {Errors,Values} = lists:partition(IsError, Validated),
-            QsValidated     = lists:map(GetValue, Values),
+                    {Validated,Context1} = lists:foldl(
+                                                    fun(X, {Acc, Ctx}) ->
+                                                        {XV, Ctx1} = validate(X,Ctx),
+                                                        {[XV|Acc], Ctx1}
+                                                    end,
+                                                    {[], ContextNotifier},
+                                                    Validations),
 
-            Context2 = z_context:set(q_validated, QsValidated, Context1),
-            Context3 = report_errors(Errors, Context2),
+                    % format is like: [{<<"email">>,{ok,<<"me@example.com">>}}]
+                    % Grep all errors, make scripts for the context var
+                    % Move all ok values to the q_validated dict
+                    IsError  = fun
+                                    ({_Id, {error, _, _}}) -> true;
+                                    (_X) -> false
+                               end,
+                    GetValue = fun
+                                    ({Id, {ok, Value}}) when is_tuple(Value) -> {Id, Value};
+                                    ({Id, {ok, Value}}) when is_list(Value) -> {Id, iolist_to_binary(Value)};
+                                    ({Id, {ok, Value}}) when is_binary(Value) -> {Id, Value}
+                               end,
 
-            case Errors of
-                [] -> {ok, Context3};
-                _  -> {error, Context3}
+                    {Errors,Values} = lists:partition(IsError, Validated),
+                    QsValidated     = lists:map(GetValue, Values),
+
+                    Context2 = z_context:set(q_validated, QsValidated, Context1),
+                    Context3 = report_errors(Errors, Context2),
+
+                    case Errors of
+                        [] -> {ok, Context3};
+                        _  -> {error, Context3}
+                    end;
+                {error, Reason} ->
+                    lager:error("Error validating query args: ~p", [ Reason ]),
+                    % TODO: add a generic validation error
+                    {error, Context}
             end;
         _ ->
             {ok, Context}

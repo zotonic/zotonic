@@ -75,8 +75,9 @@
                     | backup.
 
 -type context() :: #context{}.
--type validation_error() :: invalid | novalue | {script, string()} | novalidator | string().
+-type validation_error() :: invalid | novalue | {script, iodata()} | novalidator | string().
 -type trans() :: #trans{}.
+-type qvalue() :: binary() | string() | #upload{} | term().
 
 -type severity() :: debug | info | warning | error | fatal.
 
@@ -85,7 +86,8 @@
     trans/0,
     environment/0,
     validation_error/0,
-    severity/0
+    severity/0,
+    qvalue/0
 ]).
 
 % @doc Return a new context
