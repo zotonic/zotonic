@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-24 16:24\n"
+"PO-Revision-Date: 2021-02-28 00:50\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "Все нормальные группы содержания"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:27
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Разрешенные типы файлов и пантомимы, отдельно с помощью ',' - введите 'none', если не разрешены дополнительные типы, оставьте по умолчанию пустым"
+msgstr "Разрешёные типы файлов и типы MIME, через запятую. Если дополнительные типы не разрешены - введите 'none'. Чтобы оставить значение по умолчанию - оставьте пустым."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
