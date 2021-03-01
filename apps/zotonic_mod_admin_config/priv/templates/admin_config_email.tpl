@@ -80,7 +80,7 @@
                                 <label class="control-label">{_ Relay hostname _}</label>
                             </div>
                             <div class="form-group label-floating">
-                                <input type="number" class="form-control" name="site.smtp_relay_port" value="{{ m.config.site.smtp_relay_port.value|default:'25'|escape }}" placeholder="{_ Relay port _}">
+                                <input type="number" class="form-control" name="site.smtp_relay_port" value="{{ m.config.site.smtp_relay_port.value|escape }}" placeholder="{_ Relay port _}">
                                 <label class="control-label">{_ Relay port _}</label>
                             </div>
                             <div class="form-group label-floating">
@@ -118,8 +118,8 @@
                             </p>
                         </div>
 
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="site.email_from" value="{{ m.config.site.email_from.value|escape }}" placeholder="noreply@{{ m.site.hostname|escape }}" placeholder="{_ Email FROM _}">
+                        <div class="form-group label-floating">
+                            <input type="text" class="form-control" name="site.email_from" value="{{ m.config.site.email_from.value|escape }}" placeholder="{_ Email FROM _}">
                             <label class="control-label">{_ Email FROM _}</label>
                             <p class="help-block">
                                 {_ The default FROM address for emails. Defaults to _} &lt;noreply@{{ m.site.hostname|escape }}&gt;
