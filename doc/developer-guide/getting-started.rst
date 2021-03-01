@@ -109,7 +109,7 @@ https://www.erlang-solutions.com/downloads/download-erlang-otp
 
 The other requirements are easily fetched with ``apt``::
 
-  sudo sudo apt-get install gcc g++ build-essential git imagemagick postgresql
+  sudo apt-get install gcc g++ build-essential git imagemagick postgresql
 
 macOS
 """""

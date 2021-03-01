@@ -13,7 +13,7 @@ Model modules
 
 Models are Erlang modules that are prefixed with ``m_`` and stored in your main module's subdirectory `models`. For example, the model to access Zotonic resources (syntax ``m.rsc.property``) is written in ``models/m_rsc.erl``.
 
-Each model module is required to implement one function (as defined behavior in ``gen_model.erl``):
+Each model module is required to implement one function (as defined behavior in ``zotonic_model.erl``):
 
 * m_get/2
 
@@ -95,7 +95,7 @@ Model skeleton
 We will write our model in module ``models/m_omdb.erl``. Let's first get the mandatory elements out of the way::
 
     -module(m_omdb).
-    -behaviour(gen_model).
+    -behaviour(zotonic_model).
 
     -export([
         m_get/3
