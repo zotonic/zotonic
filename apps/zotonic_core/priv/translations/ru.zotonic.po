@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-02-24 16:24\n"
+"PO-Revision-Date: 2021-02-28 13:18\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -143,11 +143,11 @@ msgstr "Все группы сотрудничества"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:15
 msgid "All normal content groups"
-msgstr "Все нормальные группы содержания"
+msgstr "Все нормальные группы контента"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:27
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Разрешенные типы файлов и пантомимы, отдельно с помощью ',' - введите 'none', если не разрешены дополнительные типы, оставьте по умолчанию пустым"
+msgstr "Разрешёные типы файлов и типы MIME, через запятую. Если дополнительные типы не разрешены - введите 'none'. Чтобы оставить значение по умолчанию - оставьте пустым."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
@@ -159,7 +159,7 @@ msgstr "Ты уверен, что хочешь сделать все прави�
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:38
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
-msgstr "Вы уверены, что хотите восстановить все ACL правила до их текущей версии?"
+msgstr "Вы уверены, что хотите восстановить все правила ACL до их версии, опубикованной на данный момент?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:226./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
@@ -193,11 +193,11 @@ msgstr "Категория"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:29
 msgid "Category &amp; Content group"
-msgstr "Категория &amp; Контентная группа"
+msgstr "Категория &amp; Группа контента"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:26
 msgid "Change category and/or content group..."
-msgstr "Изменение категории и/или группы содержания..."
+msgstr "Изменить категорию и/или группу контента..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
