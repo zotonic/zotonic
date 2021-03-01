@@ -34,6 +34,7 @@
     generate_message_id/0,
     send/2,
     send/3,
+    poll/0,
 
     tempfile/0,
     is_tempfile/1,
@@ -65,7 +66,7 @@
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override,
-                sending=[], delete_sent_after}).
+                sending=[], delete_sent_after, poll_ref}).
 -record(email_queue, {id, retry_on=inc_timestamp(os:timestamp(), 1), retry=0,
                       recipient, email, created=os:timestamp(), sent,
                       pickled_context}).
@@ -198,6 +199,13 @@ recipient_email_address(Recipient) ->
     {_RcptName, RecipientEmail} = z_email:split_name_email(Recipient2),
     z_string:to_lower(RecipientEmail).
 
+
+%% @doc Force a poll to send new email
+-spec poll() -> ok.
+poll() ->
+    ?MODULE ! poll,
+    ok.
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -209,8 +217,9 @@ recipient_email_address(Recipient) ->
 %% @doc Initiates the server.
 init(_Args) ->
     ok = create_email_queue(),
-    timer:send_interval(5000, poll),
-    State = update_config(#state{}),
+    State = update_config(#state{
+        poll_ref = timer:send_after(30000, poll)
+    }),
     process_flag(trap_exit, true),
     {ok, State}.
 
@@ -365,9 +374,17 @@ handle_cast(Message, State) ->
 %%                                   {stop, Reason, State}
 %% @doc Poll the database queue for any retrys.
 handle_info(poll, State) ->
-    State1 = poll_queued(State),
+    _ = timer:cancel(State#state.poll_ref),
+    {IsSending, State1} = poll_queued(State),
+    Time = case IsSending of
+        false -> 10000;
+        true -> 2000
+    end, 
+    State2 = State1#state{
+        poll_ref = timer:send_after(Time, poll)
+    },
     z_utils:flush_message(poll),
-    {noreply, State1};
+    {noreply, State2};
 
 %% @doc Spawned process has crashed. Clear it from the sending list.
 handle_info({'EXIT', Pid, _Reason}, State) ->
@@ -630,19 +647,38 @@ spawn_send(Id, Recipient, Email, RetryCt, Context, State) ->
     end.
 
 spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
-    case is_sender_enabled(Email, Context) of
-        true ->
-            case is_valid_email(Recipient) of
+    case check_templates(Email, Context) of
+        ok ->
+            case is_sender_enabled(Email, Context) of
                 true ->
-                    spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State);
+                    case is_valid_email(Recipient) of
+                        true ->
+                            spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State);
+                        false ->
+                            %% delete email from the queue and notify the system
+                            delete_email(illegal_address, Id, Recipient, Email, Context),
+                            State
+                    end;
                 false ->
-                    %% delete email from the queue and notify the system
-                    delete_email(illegal_address, Id, Recipient, Email, Context),
+                    delete_email(sender_disabled, Id, Recipient, Email, Context),
                     State
             end;
-        false ->
-            delete_email(sender_disabled, Id, Recipient, Email, Context),
+        {error, Template} ->
+            lager:warning("Delayed sending email because template is not available: ~p", [ Template ]),
             State
+    end.
+
+check_templates(#email{ text_tpl = Tpl1, html_tpl = Tpl2 }, Context) ->
+    check_templates_1([ Tpl1, Tpl2 ], Context).
+
+check_templates_1([], _Context) ->
+    ok;
+check_templates_1([ undefined | Ts ], Context) ->
+    check_templates_1(Ts, Context);
+check_templates_1([ T | Ts ], Context) ->
+    case z_module_indexer:find(template, T, Context) of
+        {ok, _} -> check_templates_1(Ts, Context);
+        {error, _} -> {error, T}
     end.
 
 drop_blocked_email(Id, Recipient, Email, Context) ->
@@ -1342,7 +1378,7 @@ delete_failed_messages(StatusSites) ->
 
 %% Fetch a batch of messages for sending
 send_next_batch(MaxListSize, _StatusSites, State) when MaxListSize =< 0 ->
-    State;
+    {false, State};
 send_next_batch(MaxListSize, StatusSites, State) ->
     Now = os:timestamp(),
     FetchTransFun =
@@ -1371,11 +1407,11 @@ send_next_batch(MaxListSize, StatusSites, State) ->
         end,
     case mnesia:transaction(FetchTransFun) of
         {atomic, []} ->
-            State;
+            {false, State};
         {atomic, Ms} ->
             %% send the fetched messages
             State2 = update_config(State),
-            lists:foldl(
+            State3 = lists:foldl(
                 fun(QEmail, St) ->
                     update_retry(QEmail),
                     spawn_send( QEmail#email_queue.id,
@@ -1386,11 +1422,12 @@ send_next_batch(MaxListSize, StatusSites, State) ->
                                 St)
                 end,
                 State2,
-                Ms);
+                Ms),
+            {true, State3};
         {aborted, Reason} ->
             lager:info("[smtp] Could not fetch next messages to be sent: ~p",
                        [ Reason ]),
-            State
+            {false, State}
     end.
 
 
