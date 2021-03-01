@@ -62,54 +62,55 @@
 
 {% javascript %}
 
-(function() {
-	var sortupdater = undefined;
+cotonic.ready.then(
+    function() {
+    	var sortupdater = undefined;
 
-	cotonic.broker.subscribe("bridge/origin/model/rsc/event/+id/delete", function(args, bindings) {
-        var id = parseInt(bindings.id);
-		var elts = $('#{{ menu_id }} [data-page-id='+bindings.id+']').closest('li.menu-item');
-		if (elts.length) {
-			elts.remove();
-			if (sortupdater) {
-				clearTimeout(sortupdater);
-			}
-			sortupdater = setTimeout(function() {
-				$('#{{ in_sorter }}').trigger('sortupdate');
-			}, 150);
-		}
-	});
+    	cotonic.broker.subscribe("bridge/origin/model/rsc/event/+id/delete", function(args, bindings) {
+            var id = parseInt(bindings.id);
+    		var elts = $('#{{ menu_id }} [data-page-id='+bindings.id+']').closest('li.menu-item');
+    		if (elts.length) {
+    			elts.remove();
+    			if (sortupdater) {
+    				clearTimeout(sortupdater);
+    			}
+    			sortupdater = setTimeout(function() {
+    				$('#{{ in_sorter }}').trigger('sortupdate');
+    			}, 150);
+    		}
+    	});
 
-    cotonic.broker.subscribe("menu/edit", function(msg, bindings) {
-        z_event("admin-menu-edit", { id: msg.payload.id, tree_id: {{ tree_id|default:"undefined" }} });
+        cotonic.broker.subscribe("menu/edit", function(msg, bindings) {
+            z_event("admin-menu-edit", { id: msg.payload.id, tree_id: {{ tree_id|default:"undefined" }} });
+        });
+
+        cotonic.broker.subscribe("menu/edit/insert-below", function(msg, bindings) {
+            var parent_id = msg.payload.parent_id;
+            var sub_id = msg.payload.sub_id;
+            var $menu_item = $('#{{ menu_id }} ul.tree-list li [data-page-id='+parent_id+']').closest(".menu-item");
+            var $sorter = $('#{{ in_sorter }}');
+            var options = $sorter.data().uiMenuedit.options;
+
+            window.zMenuNewItem = function(rsc_id, html) {
+                $submenu = $(">ul", $menu_item);
+                if ($submenu.length > 0) {
+                    $submenu.append(html);
+                } else {
+                    $menu_item.append("<ul>"+html+"</ul>");
+                }
+                $menu_item
+                    .addClass("has-submenu")
+                    .addClass("submenu-open");
+                $sorter.trigger('sortupdate');
+            };
+            z_transport("mod_menu", "ubf", {
+                    cmd: "menu-item-render",
+                    id: sub_id,
+                    callback: "window.zMenuNewItem",
+                    template: options.item_template || ""
+                });
+        });
     });
-
-    cotonic.broker.subscribe("menu/edit/insert-below", function(msg, bindings) {
-        var parent_id = msg.payload.parent_id;
-        var sub_id = msg.payload.sub_id;
-        var $menu_item = $('#{{ menu_id }} ul.tree-list li [data-page-id='+parent_id+']').closest(".menu-item");
-        var $sorter = $('#{{ in_sorter }}');
-        var options = $sorter.data().uiMenuedit.options;
-
-        window.zMenuNewItem = function(rsc_id, html) {
-            $submenu = $(">ul", $menu_item);
-            if ($submenu.length > 0) {
-                $submenu.append(html);
-            } else {
-                $menu_item.append("<ul>"+html+"</ul>");
-            }
-            $menu_item
-                .addClass("has-submenu")
-                .addClass("submenu-open");
-            $sorter.trigger('sortupdate');
-        };
-        z_transport("mod_menu", "ubf", {
-                cmd: "menu-item-render",
-                id: sub_id,
-                callback: "window.zMenuNewItem",
-                template: options.item_template || ""
-            });
-    });
-})();
 
 $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 	var id = $(this).closest('.menu-wrapper').data('page-id');

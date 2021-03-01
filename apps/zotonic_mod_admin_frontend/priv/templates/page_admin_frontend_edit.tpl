@@ -30,9 +30,6 @@
 				{% block editcol %}
 					{% if id %}
 						<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
-						{% javascript %}
-							document.z_default_edit_id = {{ id }};
-						{% endjavascript %}
 					{% else %}
 						{% include "_admin_frontend_nopage.tpl" tree_id=tree_id %}
 					{% endif %}
@@ -41,16 +38,20 @@
 			{% elseif id %}
 				<div class="col-lg-12 col-md-12" id="editcol">
 					<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
-					{% javascript %}
-						document.z_default_edit_id = {{ id }};
-					{% endjavascript %}
 				</div>
 			{% endif %}
+
+            {% include "_admin_edit_js.tpl" %}
+            {% javascript %}
+            	cotonic.ready.then( function() {
+	                cotonic.broker.publish("$promised/menu/edit-default", { id: {{ id|default:"undefined" }} });
+	            });
+            {% endjavascript %}
+
 		{% endwith %}
 	</div>
 	{% endwith %}
 	{% endwith %}
-	{% include "_admin_edit_js.tpl" %}
 {% endblock %}
 
 {% block navbar %}
