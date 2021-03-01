@@ -102,7 +102,8 @@ ul.media > li.ui-sortable-placeholder {
   margin: 15px;
   margin-top: 76px;
 }
-.admin-container > table {
+.admin-container > table,
+.admin-container > form > table {
   background-color: white;
   border-radius: 10px;
   border-bottom: 0;
@@ -1963,6 +1964,9 @@ ul.tree-list.connections-list {
   height: 16px;
   line-height: 16px;
   text-shadow: none;
+}
+.widget .widget-header .text-muted.pull-right {
+  font-size: 12px;
 }
 .widget.widget-expanded .widget-header,
 .widget.dark.widget-expanded .widget-header {
