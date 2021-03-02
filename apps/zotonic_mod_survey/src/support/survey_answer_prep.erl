@@ -142,8 +142,8 @@ answer_1(_, N, _, _Context) ->
 
 thurs_answer(V, []) -> V;
 thurs_answer(V, [A|As]) ->
-    case proplists:get_value(value, A) of
-        V -> proplists:get_value(option, A);
+    case maps:get(<<"value">>, A, undefined) of
+        V -> maps:get(<<"option">>, A);
         _ -> thurs_answer(V, As)
     end.
 
