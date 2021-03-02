@@ -338,8 +338,8 @@ find_answer_id(SurveyId, UserId, _PersistendId, Context) ->
             [SurveyId, UserId],
             Context).
 
--spec insert_survey_submission(m_rsc:resource_id(), undefined | m_rsc:resource_id(), binary(), list(), z:context() ) ->
-    {ok, pos_integer()|undefined} | {error, term()}.
+-spec insert_survey_submission_1(m_rsc:resource_id(), undefined | m_rsc:resource_id(), binary(), list(), z:context() )
+    -> {ok, pos_integer()|undefined} | {error, term()}.
 insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
     Result = z_db:insert(
