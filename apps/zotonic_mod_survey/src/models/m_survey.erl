@@ -254,10 +254,10 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) when is_integer(
         survey_answers,
         AnswerId,
         #{
-            modified => erlang:universaltime(),
-            modifier_id => z_acl:user(Context),
-            points => Points,
-            answers => AnswersPoints
+            <<"modified">> => erlang:universaltime(),
+            <<"modifier_id">> => z_acl:user(Context),
+            <<"points">> => Points,
+            <<"answers">> => AnswersPoints
         },
         Context)
     of
@@ -347,12 +347,12 @@ insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) 
     Result = z_db:insert(
         survey_answers,
         #{
-            survey_id => SurveyId,
-            user_id => undefined,
-            persistent => PersistentId,
-            is_anonymous => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
-            points => Points,
-            answers => AnswersPoints
+            <<"survey_id">> => SurveyId,
+            <<"user_id">> => undefined,
+            <<"persistent">> => PersistentId,
+            <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            <<"points">> => Points,
+            <<"answers">> => AnswersPoints
         },
         Context),
     publish(SurveyId, undefined, PersistentId, Context),
@@ -362,12 +362,12 @@ insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
     Result = z_db:insert(
         survey_answers,
         #{
-            survey_id => SurveyId,
-            user_id => UserId,
-            persistent => undefined,
-            is_anonymous => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
-            points => Points,
-            answers => AnswersPoints
+            <<"survey_id">> => SurveyId,
+            <<"user_id">> => UserId,
+            <<"persistent">> => undefined,
+            <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            <<"points">> => Points,
+            <<"answers">> => AnswersPoints
         },
         Context),
     publish(SurveyId, UserId, undefined, Context),
