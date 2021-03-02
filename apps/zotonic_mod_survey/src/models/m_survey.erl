@@ -232,6 +232,8 @@ did_survey(SurveyId, Context) ->
 
 
 %% @doc Replace a survey answer
+-spec replace_survey_submission( integer(), {user, m_rsc:resource_id()} | integer(), list(), z:context() )
+     -> {ok, integer()} | {error, term()}.
 replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
     case z_db:q1("
         select id
@@ -246,7 +248,7 @@ replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
         AnswerId when is_integer(AnswerId) ->
             replace_survey_submission(SurveyId, AnswerId, Answers, Context)
     end;
-replace_survey_submission(SurveyId, AnswerId, Answers, Context) ->
+replace_survey_submission(SurveyId, AnswerId, Answers, Context) when is_integer(AnswerId) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
     case z_db:update(
         survey_answers,

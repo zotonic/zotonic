@@ -29,7 +29,7 @@ max_points_block(Block) ->
     end.
 
 %% @doc Check all questions if they are test questions an calculate the test result.
--spec calc_test_results(m_rsc:resource_id(), list( proplists:proplist() ), z:context()) -> {integer(), z:context()}.
+-spec calc_test_results(m_rsc:resource_id(), list( proplists:proplist() ), z:context()) -> {integer(), list()}.
 calc_test_results(SurveyId, Answers, Context) ->
     case m_rsc:p_no_acl(SurveyId, blocks, Context) of
         Blocks when is_list(Blocks)->
