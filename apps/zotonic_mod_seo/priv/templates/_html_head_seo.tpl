@@ -19,19 +19,19 @@
             {% else %}
                 {% with m.rsc[id].seo_keywords as seo_keywords %}
                     {% if seo_keywords %}
-                        <meta name="keywords" content="{{ seo_keywords }}, {{ keywords }}">
+                        <meta name="keywords" content="{{ seo_keywords }}, {{ keywords|escape }}">
                     {% else %}
-                        <meta name="keywords" content="{% for oid in id.o.subject %}{{ oid.title }}, {% endfor %}{{ keywords }}">
+                        <meta name="keywords" content="{% for oid in id.o.subject %}{{ oid.title }}, {% endfor %}{{ keywords|escape }}">
                     {% endif %}
-                    <meta name="description" content="{{ id.seo_desc|default:id.summary|default:description|escape }}">
+                    <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:(description|escape) }}">
                 {% endwith %}
             {% endif %}
         {% else %}
             {% if keywords %}
-                <meta name="keywords" content="{{ keywords }}">
+                <meta name="keywords" content="{{ keywords|escape }}">
             {% endif %}
             {% if description %}
-                <meta name="description" content="{{ description }}">
+                <meta name="description" content="{{ description|escape }}">
             {% endif %}
         {% endif %}
     {% endwith %}
