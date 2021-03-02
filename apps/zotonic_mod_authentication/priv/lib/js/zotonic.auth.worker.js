@@ -612,8 +612,9 @@ actions.resetPassword = function(msg) {
 // Worker Startup
 //
 
-self.on_connect = function() {
-    setTimeout(function() { actions.start(); }, 0);
-}
-
-self.connect();
+self.connect({
+    depends: [ "model/sessionStorage" ],
+    provides: [ "model/auth" ]
+}).then( function() {
+    actions.start();
+});

@@ -27,7 +27,7 @@ var model = {
     state_data: undefined,
     state_id: undefined,
     status: 'start',
-    is_depends_provided: false
+    is_connected: false
 };
 
 model.present = function(data) {
@@ -46,11 +46,7 @@ model.present = function(data) {
                 break;
         }
         model.oauth_step = data.oauth_step;
-        model.status = "waiting";
-    }
-
-    if (data.is_depends_provided) {
-        model.is_depends_provided = true;
+        model.is_connected = true;
 
         self.subscribe('model/auth/event/auth-user-id',
                        function(msg) {
@@ -62,17 +58,15 @@ model.present = function(data) {
                             actions.authServiceConfirm(msg.payload);
                        });
 
-        if (state.waiting(model)) {
-            if (model.oauth_step == "authorize") {
-                model.status = "storing";
-                self.call("model/sessionStorage/post/oauth-data",
-                          { id: model.state_id, data: model.state_data })
-                    .then( function() { actions.redirect(); } )
-            } else {
-                model.status = "fetching";
-                self.call("model/sessionStorage/get/oauth-data")
-                    .then( function(msg) { actions.oauth_data(msg); } )
-            }
+        if (model.oauth_step == "authorize") {
+            model.status = "storing";
+            self.call("model/sessionStorage/post/oauth-data",
+                      { id: model.state_id, data: model.state_data })
+                .then( function() { actions.redirect(); } )
+        } else {
+            model.status = "fetching";
+            self.call("model/sessionStorage/get/oauth-data")
+                .then( function(msg) { actions.oauth_data(msg); } )
         }
     }
 
@@ -200,10 +194,6 @@ model.state = state ;
 
 // Derive the state representation as a function of the systen control state
 state.representation = function(model) {
-    if (state.waiting(model)) {
-        // ...
-    }
-
     if (state.running(model)) {
         // ...
     }
@@ -216,10 +206,6 @@ state.start = function(model) {
 
 state.active = function(model) {
     return model.status === 'active';
-};
-
-state.waiting = function(model) {
-    return model.status == 'waiting';
 };
 
 state.fetching = function(model) {
@@ -263,12 +249,6 @@ actions.init = function(data) {
     model.present(data);
 };
 
-actions.dependsProvided = function() {
-    let data = {};
-    data.is_depends_provided = true;
-    model.present(data);
-};
-
 actions.redirect = function() {
     let data = {};
     data.is_redirect = true;
@@ -304,18 +284,12 @@ actions.authServiceConfirm = function(payload) {
 // Worker Startup
 //
 
-self.worker_init = function(args) {
-    actions.init(args);
-}
-
-self.on_connect = function() {
-}
-
-self.on_depends_provided = function() {
-    actions.dependsProvided();
-}
-
 self.connect({
     depends: [ "bridge/origin", "model/auth", "model/location", "model/sessionStorage" ],
     provides: [ ]
-});
+}).then(
+    function(args) {
+        actions.init(args);
+    }
+);
+

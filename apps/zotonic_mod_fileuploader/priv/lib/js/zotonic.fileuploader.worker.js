@@ -419,14 +419,11 @@ self.worker_init = function(args) {
     actions.init(args);
 }
 
-self.on_connect = function() {
-}
-
-self.on_depends_provided = function() {
-    actions.dependsProvided();
-}
-
 self.connect({
     depends: [ "bridge/origin", ],
     provides: [ "fileuploader" ]
-});
+}).then(
+    function() {
+        actions.dependsProvided();
+    }
+);

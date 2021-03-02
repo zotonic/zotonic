@@ -31,7 +31,7 @@ var model = {
     secret: undefined,
     need_passcode: false,
     is_expired: false,
-    is_depends_provided: false,
+    is_location_provided: false,
     options : {}
 };
 
@@ -60,10 +60,21 @@ model.present = function(data) {
             function(msg) { actions.resetForm(msg.payload); });
 
         model.status = "waiting";
+
+        self.call("model/location/get/q")
+            .then(function(msg) {
+                let data = {};
+                data.is_location_provided = true;
+                data.logon_view = msg.payload.logon_view || "logon";
+                data.secret = msg.payload.secret || undefined;
+                data.username = msg.payload.u || undefined,
+                model.present(data);
+            });
     }
 
-    if (data.is_depends_provided) {
-        model.is_depends_provided = true;
+    if (data.is_location_provided) {
+        console.log(data);
+        model.is_location_provided = true;
         if (state.waiting(model)) {
             model.status = 'active';
         }
@@ -249,11 +260,11 @@ state.loaded = function(model) {
 }
 
 state.waiting = function(model) {
-    return !model.is_depends_provided;
+    return !model.is_location_provided;
 }
 
 state.running = function(model) {
-    return model.is_depends_provided;
+    return model.is_location_provided;
 }
 
 
@@ -288,18 +299,6 @@ var actions = {} ;
 actions.start = function(data) {
     data = data || {};
     model.present(data);
-};
-
-actions.dependsProvided = function(_data) {
-    self.call("model/location/get/q")
-        .then(function(msg) {
-            let data = {};
-            data.is_depends_provided = true;
-            data.logon_view = msg.payload.logon_view || "logon";
-            data.secret = msg.payload.secret || undefined;
-            data.username = msg.payload.u || undefined,
-            model.present(data);
-        });
 };
 
 actions.loaded = function(_data) {
@@ -397,15 +396,9 @@ actions.resetCodeCheck = function(data) {
 // Worker Startup
 //
 
-self.on_connect = function() {
-    actions.start({});
-}
-
-self.on_depends_provided = function() {
-    actions.dependsProvided({});
-}
-
 self.connect({
-    depends: [ "bridge/origin", "model/auth", "model/location" ],
+    depends: [ "bridge/origin", "model/auth", "model/location", "model/sessionStorage" ],
     provides: [ "model/auth-ui" ]
-});
+}).then(
+    function() { actions.start({}); }
+);
