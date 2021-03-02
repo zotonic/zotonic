@@ -278,6 +278,9 @@ Templates
   the unique name is ``my_unique_name`` and the template is ``page.tpl``):
   ``page.name.my_unique_name.tpl`` and **not** anymore for ``page.my_unique_name.tpl``.
   Rename your templates accordingly.
+* The category property ``feature_show_address`` property is now called ``is_feature_show_address``. All
+  feature properties should be called ``is_feature_...`` to obtain a proper boolean value
+  after the category edit form is saved.
 
 Port, proxies and SSL certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

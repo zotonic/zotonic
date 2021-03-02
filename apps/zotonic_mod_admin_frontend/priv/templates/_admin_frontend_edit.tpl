@@ -72,7 +72,7 @@
 			{% block edit_blocks %}
 				{% catinclude "_admin_edit_basics.tpl" cats %}
 
-				{% if id.category_id.feature_show_address %}
+				{% if id.category_id.is_feature_show_address|if_undefined:true %}
 					{% catinclude "_admin_edit_content_address.tpl" cats %}
 				{% endif %}
 
