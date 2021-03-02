@@ -104,9 +104,8 @@ is_answerable({html, _, _}) -> false;
 is_answerable(_) -> true.
 
 value(_, undefined, _) -> <<>>;
-value(_, {undefined, X}, _) -> X;
-value(select, {V, _}, T) -> proplists:get_value(V, T, V);
-value(_, {X, _}, _) -> X.
+value(select, V, Options) -> proplists:get_value(V, Options, V);
+value(_, X, _) -> X.
 
 prep_block(Block, Context) ->
     Narrative = z_trans:lookup_fallback(

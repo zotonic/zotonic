@@ -714,7 +714,8 @@ admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actio
         orelse (
             z_convert:to_integer(m_rsc:p(SurveyId,<<"survey_multiple">>, Context)) =:= 2
             andalso is_answer_user(AnswerId, Context))
-    of        true ->
+    of
+        true ->
             {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
             m_survey:replace_survey_submission(SurveyId, AnswerId, StorageAnswers, Context),
@@ -736,7 +737,14 @@ admin_edit_survey_result(SurveyId, Questions, Answers, {editing, AnswerId, Actio
                                 ]
                             },
                             Context1);
-                _ ->
+                undefined ->
+                    #render{
+                        template="_survey_end_edit.tpl",
+                        vars=[
+                            {id, SurveyId}, {inline, true}, {is_editing, true}
+                        ]
+                    };
+                _ when is_list(Actions); is_tuple(Actions) ->
                     z_render:wire(Actions, Context)
             end;
         false ->

@@ -54,7 +54,12 @@ poll(Context) ->
                         ok ->
                             ok;
                         {error, _} = Error ->
-                            lager:error("Twitter poller error for ~p: ~p", [ Sub, Error ]),
+                            lager:error("Twitter poller (~p) of \"~s\" error: ~p",
+                                        [
+                                            proplists:get_value(id, Sub),
+                                            proplists:get_value(key, Sub),
+                                            Error
+                                        ]),
                             Error;
                         {delay, _} = D ->
                             D

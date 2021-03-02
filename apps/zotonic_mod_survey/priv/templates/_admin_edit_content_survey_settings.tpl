@@ -52,11 +52,10 @@
 	    </div>
     </div>
 
-
-    <div class="form-group row">
-        <div class="form-group">
-            <label class="control-label col-md-3">{_ Fill in _}</label>
-            <div class="col-md-6">
+    <div class="row">
+        <div class="form-group col-md-6">
+            <div class="form-group">
+                <label class="control-label">{_ Fill in _}</label>
                 <select name="survey_multiple" id="survey_multiple" class="form-control">
                     <option value="0">{_ Once only per user/browser _}</option>
                     <option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
@@ -68,13 +67,18 @@
                 </select>
             </div>
         </div>
+        <div class="form-group col-md-6 label-floating">
+            <input type="text" class="form-control" name="survey_email" id="survey_email" value="{{ id.survey_email }}" placeholder="{_ Mail filled in surveys to _}">
+            <label class="control-label">{_ Mail filled in surveys to _}</label>
+            <p class="help-block muted">{_ Separate multiple email addresses with a comma. _}</p>
+        </div>
     </div>
 
 
     {% if not id.is_a.poll %}
-        <div class="form-group row">
-            <label class="control-label col-md-3">{_ When finished show _}</label>
-            <div class="col-md-6">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="control-label">{_ When finished show _}</label>
                 <select class="form-control" name="survey_show_results" id="survey_show_results">
                     <option value="">{_ Thank you text only _}</option>
                     <option value="1" {% if id.survey_show_results == 1 %}selected{% endif %}>
@@ -85,14 +89,12 @@
                     </option>
                 </select>
             </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-md-3">{_ Test pass percentage _}</label>
-            <div class="col-md-6">
-                <div class="input-group">
+            <div class="form-group col-md-6">
+                <div class="input-group label-floating">
                     <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}"
                            class="input-small form-control" value="{{ id.survey_test_percentage }}"
-                           placeholder="" />
+                           placeholder="{_ Test pass percentage _}" />
+                    <label class="control-label">{_ Test pass percentage _}</label>
                     <div class="input-group-addon">%</div>
                 </div>
                 {% validate id=#survey_test_percentage name="survey_test_percentage"
@@ -105,25 +107,18 @@
         <input type="hidden" name="survey_show_results" id="survey_show_results" value="1" />
     {% endif %}
 
-    <div class="form-group row">
-	    <label class="control-label col-md-3">{_ Mail filled in surveys to _}</label>
-	    <div class="col-md-6">
-		    <input type="text" class="form-control" name="survey_email" id="survey_email" value="{{ id.survey_email }}" />
-            <p class="help-block muted">{_ Separate multiple email addresses with a comma. _}</p>
-	    </div>
-    </div>
 
-    {% if m.survey.handlers|length %}
-        <div class="form-group row">
-	        <label class="control-label col-md-3">{_ Handle this survey with _}</label>
-	        <div class="col-md-6">
+    {% if not m.survey.handlers|length %}
+        <div class="row">
+            <div class="form-group col-md-6">
+    	        <label class="control-label">{_ Handle this survey with _}</label>
 		        <select class="form-control" name="survey_handler" id="survey_handler">
 			        <option value=""></option>
 			        {% for val,desc in m.survey.handlers %}
 				        <option value="{{ val }}" {% if id.survey_handler == val %}selected{% endif %}>{{ desc }}</option>
 			        {% endfor %}
 		        </select>
-	        </div>
+            </div>
         </div>
     {% endif %}
 
