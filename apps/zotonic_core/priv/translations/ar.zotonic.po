@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-01 16:08\n"
+"PO-Revision-Date: 2021-03-02 12:40\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -1011,7 +1011,7 @@ msgstr "لوحة التحكم"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:533./apps/zotonic_mod_survey/src/models/m_survey.erl:536
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:529./apps/zotonic_mod_survey/src/models/m_survey.erl:532
 msgid "Date"
 msgstr "التاريخ"
 
@@ -1398,7 +1398,7 @@ msgstr "تم تعديله:"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:538
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:534
 msgid "Name"
 msgstr "الاسم"
 
@@ -5014,7 +5014,7 @@ msgid "Calendar"
 msgstr "التقويم"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:133./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:128./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
 msgid "Download CSV"
 msgstr "تنزيل ملف CSV"
 
@@ -5023,7 +5023,7 @@ msgid "Download Event"
 msgstr "تحميل الحدث"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:32./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:40
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:137./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:132./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
 msgid "Download Excel"
 msgstr "قم بتنزيل Excel"
 
@@ -5719,7 +5719,7 @@ msgid "User"
 msgstr "المستعمل"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:537
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:533
 msgid "User Id"
 msgstr "معرف المستخدم"
 
@@ -7185,7 +7185,7 @@ msgstr "أضف السؤال بعد ذلك"
 msgid "Add questions by adding blocks with the menu."
 msgstr "أضف أسئلة عن طريق إضافة كتل مع القائمة."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:56
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:85./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:56
 msgid "Aggregated results from all respondents (only results for multiple choice questions are shown)"
 msgstr "النتائج المجمعة من جميع المستجيبين (تظهر فقط نتائج أسئلة الاختيار من متعدد)"
 
@@ -7269,7 +7269,7 @@ msgstr "استمر"
 msgid "Country select"
 msgstr "اختر البلد"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:843
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:839
 msgid "Created"
 msgstr "خلقت"
 
@@ -7310,7 +7310,7 @@ msgstr "تعارض"
 msgid "Do you like pea soup?"
 msgstr "هل تحب حساء البازلاء؟"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:135./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:139./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid " Download will start in the background. Please check your download window."
 msgstr " سيبدأ التنزيل في الخلفية. يرجى التحقق من نافذة التنزيل الخاصة بك."
 
@@ -7374,7 +7374,7 @@ msgstr "للاختبار أو الاختبار ، ضع علامة \"*\" على �
 msgid "Go to question"
 msgstr "انتقل إلى السؤال"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:118./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:124
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:114./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:124
 msgid "Handle this survey with"
 msgstr "تعامل مع هذا الاستطلاع باستخدام"
 
@@ -7446,7 +7446,7 @@ msgstr "معكوس"
 msgid "Jump to a question on a next page."
 msgstr "القفز إلى سؤال في الصفحة التالية."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:101./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Leave empty if there are no test questions."
 msgstr "اتركه فارغًا إذا لم تكن هناك أسئلة اختبار."
 
@@ -7462,7 +7462,7 @@ msgstr "اجابة طويلة"
 msgid "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 msgstr "Lorem ipsum dolor sit amet، consectetur <em>adipisicing</em> elit، sed do eiusmod <b>tempor incidunt</b> ut labore et dolore <u>magna aliqua</u>."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:109
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:72
 msgid "Mail filled in surveys to"
 msgstr "شغل البريد في الاستطلاعات إلى"
 
@@ -7482,7 +7482,7 @@ msgstr "إجابات متعددة ممكنة"
 msgid "Multiple choice"
 msgstr "متعدد الخيارات"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:63./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:40
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:40
 msgid "Multiple entries per user/browser"
 msgstr "إدخالات متعددة لكل مستخدم / متصفح"
 
@@ -7514,11 +7514,11 @@ msgstr "لا"
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "إدخال رقمي ، إظهار الإجماليات لهذا الحقل في نتائج الاستطلاع."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:65./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Once and allow editing afterwards"
 msgstr "مرة واحدة والسماح بالتحرير بعد ذلك"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:61./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:38
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:38
 msgid "Once only per user/browser"
 msgstr "مرة واحدة فقط لكل مستخدم / متصفح"
 
@@ -7542,11 +7542,11 @@ msgstr "فاصل صفحة"
 msgid "Page jump condition"
 msgstr "شرط الانتقال إلى الصفحة"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:544
+#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:540
 msgid "Passed"
 msgstr "تم الاجتياز بنجاح"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:546
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:542
 msgid "Percent"
 msgstr "نسبه مئويه"
 
@@ -7590,7 +7590,7 @@ msgstr "نقاط لكل إجابة"
 msgid "Primary"
 msgstr "ابتدائي"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:145./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:140./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
 msgid "Printable list"
 msgstr "قائمة قابلة للطباعة"
 
@@ -7634,7 +7634,7 @@ msgstr "مطلوب ، يجب الإجابة على هذا السؤال."
 msgid "Results"
 msgstr "النتائج"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:84./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:59
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:88./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:59
 msgid "Results from the respondent"
 msgstr "النتائج من المستفتى"
 
@@ -7642,7 +7642,7 @@ msgstr "النتائج من المستفتى"
 msgid "Saved"
 msgstr "تم الحفظ"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:545
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:541
 msgid "Score"
 msgstr "أحرز هدفا"
 
@@ -7670,7 +7670,7 @@ msgstr "إرسال تأكيد إلى المستجيب (الرجاء إضافة �
 msgid "Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”)."
 msgstr "أرسل تأكيدًا بالنتائج إلى عنوان البريد الإلكتروني الذي تم إدخاله في هذا النموذج (يجب عليك تضمين سؤال بعنوان \"بريد إلكتروني\")."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:112./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:73./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Separate multiple email addresses with a comma."
 msgstr "افصل بين عناوين البريد الإلكتروني المتعددة بفاصلة."
 
@@ -7678,7 +7678,7 @@ msgstr "افصل بين عناوين البريد الإلكتروني المت�
 msgid "Short answer"
 msgstr "اجابة قصيرة"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:143./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:138./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
 msgid "Show email addresses"
 msgstr "إظهار عناوين البريد الإلكتروني"
 
@@ -7698,7 +7698,7 @@ msgstr "أظهر النتائج"
 msgid "Show results (admin only)"
 msgstr "إظهار النتائج (المسؤول فقط)"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:142
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:137
 msgid "Show survey results"
 msgstr "إظهار نتائج الاستطلاع"
 
@@ -7758,11 +7758,11 @@ msgstr "محرر الاستطلاع"
 msgid "Survey result deleted."
 msgstr "تم حذف نتيجة الاستطلاع."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:146
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:141
 msgid "Survey results editor"
 msgstr "محرر نتائج الاستطلاع"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:90./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Test pass percentage"
 msgstr "نسبة نجاح الاختبار"
 
@@ -7770,7 +7770,7 @@ msgstr "نسبة نجاح الاختبار"
 msgid "Thank you for filling in our survey."
 msgstr "شكرا لملء الاستبيان الخاص بنا."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:79./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:83./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
 msgid "Thank you text only"
 msgstr "شكرا لك النص فقط"
 
@@ -7850,7 +7850,7 @@ msgstr "فاغنر"
 msgid "Weasels make great pets."
 msgstr "ابن عرس يصنع حيوانات أليفة رائعة."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:76./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
 msgid "When finished show"
 msgstr "عند الانتهاء من العرض"
 
@@ -7874,7 +7874,7 @@ msgstr "لقد ملأت هذا بالفعل ، لكن يمكنك تغيير إج
 msgid "You already filled this in."
 msgstr "لقد ملأت هذا بالفعل."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:743
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:751
 msgid "You are not allowed to change these results."
 msgstr "لا يسمح لك بتغيير هذه النتائج."
 

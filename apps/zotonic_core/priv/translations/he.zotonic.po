@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-01 16:08\n"
+"PO-Revision-Date: 2021-03-02 12:40\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1011,7 +1011,7 @@ msgstr "לוּחַ מַחווָנִים"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:533./apps/zotonic_mod_survey/src/models/m_survey.erl:536
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:529./apps/zotonic_mod_survey/src/models/m_survey.erl:532
 msgid "Date"
 msgstr "תַאֲרִיך"
 
@@ -1398,7 +1398,7 @@ msgstr "שונה:"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:538
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:534
 msgid "Name"
 msgstr "שֵׁם"
 
@@ -5014,7 +5014,7 @@ msgid "Calendar"
 msgstr "לוּחַ שָׁנָה"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:133./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:128./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:37
 msgid "Download CSV"
 msgstr "הורד CSV"
 
@@ -5023,7 +5023,7 @@ msgid "Download Event"
 msgstr "הורד אירוע"
 
 #: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:32./apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:40
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:137./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:132./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:41
 msgid "Download Excel"
 msgstr "הורד את Excel"
 
@@ -5719,7 +5719,7 @@ msgid "User"
 msgstr "מִשׁתַמֵשׁ"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:537
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:533
 msgid "User Id"
 msgstr "תעודת זהות של משתמש"
 
@@ -7185,7 +7185,7 @@ msgstr "הוסף שאלה אחרי"
 msgid "Add questions by adding blocks with the menu."
 msgstr "הוסף שאלות על ידי הוספת בלוקים עם התפריט."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:56
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:85./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:56
 msgid "Aggregated results from all respondents (only results for multiple choice questions are shown)"
 msgstr "תוצאות מצטברות מכל הנשאלים (רק תוצאות לשאלות רב ברירה מוצגות)"
 
@@ -7269,7 +7269,7 @@ msgstr "לְהַמשִׁיך"
 msgid "Country select"
 msgstr "בחר מדינה"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:843
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:839
 msgid "Created"
 msgstr "נוצר"
 
@@ -7310,7 +7310,7 @@ msgstr "לא מסכים"
 msgid "Do you like pea soup?"
 msgstr "אוהבים מרק אפונה?"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:135./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:139./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid " Download will start in the background. Please check your download window."
 msgstr " ההורדה תתחיל ברקע. אנא בדוק את חלון ההורדה שלך."
 
@@ -7374,7 +7374,7 @@ msgstr "לחידון או למבחן, סמן את התשובות הנכונות 
 msgid "Go to question"
 msgstr "לך לשאלה"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:118./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:124
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:114./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:124
 msgid "Handle this survey with"
 msgstr "לטפל בסקר זה עם"
 
@@ -7446,7 +7446,7 @@ msgstr "הפוך"
 msgid "Jump to a question on a next page."
 msgstr "קפצו לשאלה בעמוד הבא."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:101./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:103./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Leave empty if there are no test questions."
 msgstr "השאר ריק אם אין שאלות מבחן."
 
@@ -7462,7 +7462,7 @@ msgstr "תשובה ארוכה"
 msgid "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>tempor incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 msgstr "Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod <b>temporid incididunt</b> ut labore et dolore <u>magna aliqua</u>."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:109
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:72
 msgid "Mail filled in surveys to"
 msgstr "דואר מילא סקרים אל"
 
@@ -7482,7 +7482,7 @@ msgstr "תשובות מרובות אפשריות"
 msgid "Multiple choice"
 msgstr "בחירה מרובה"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:63./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:40
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:40
 msgid "Multiple entries per user/browser"
 msgstr "מספר ערכים לכל משתמש / דפדפן"
 
@@ -7514,11 +7514,11 @@ msgstr "לא"
 msgid "Numeric input, show totals for this field in the survey results."
 msgstr "קלט מספרי, מראה סיכומים עבור שדה זה בתוצאות הסקר."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:65./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Once and allow editing afterwards"
 msgstr "פעם אחת ומאפשרים עריכה לאחר מכן"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:61./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:38
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:60./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:38
 msgid "Once only per user/browser"
 msgstr "פעם אחת בלבד למשתמש / דפדפן"
 
@@ -7542,11 +7542,11 @@ msgstr "מעבר דף"
 msgid "Page jump condition"
 msgstr "מצב קפיצה לדף"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:544
+#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:540
 msgid "Passed"
 msgstr "עבר"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:546
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:542
 msgid "Percent"
 msgstr "אָחוּז"
 
@@ -7590,7 +7590,7 @@ msgstr "נקודות לתשובה"
 msgid "Primary"
 msgstr "יְסוֹדִי"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:145./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:140./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:49
 msgid "Printable list"
 msgstr "רשימה להדפסה"
 
@@ -7634,7 +7634,7 @@ msgstr "חובה, יש לענות על שאלה זו."
 msgid "Results"
 msgstr "תוצאות"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:84./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:59
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:88./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:59
 msgid "Results from the respondent"
 msgstr "תוצאות מהמשיבה"
 
@@ -7642,7 +7642,7 @@ msgstr "תוצאות מהמשיבה"
 msgid "Saved"
 msgstr "שמור"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:545
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:541
 msgid "Score"
 msgstr "ציון"
 
@@ -7670,7 +7670,7 @@ msgstr "שלח אישור למשיב (אנא הוסף שאלה בשם <i>דוא\
 msgid "Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”)."
 msgstr "שלח אישור עם התוצאות לכתובת הדוא\"ל שהוזנה בטופס זה (עליך לכלול שאלה שכותרתה \"דוא\"ל\")."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:112./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:73./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Separate multiple email addresses with a comma."
 msgstr "הפרד מספר כתובות דוא\"ל באמצעות פסיק."
 
@@ -7678,7 +7678,7 @@ msgstr "הפרד מספר כתובות דוא\"ל באמצעות פסיק."
 msgid "Short answer"
 msgstr "תשובה קצרה"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:143./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:138./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:47
 msgid "Show email addresses"
 msgstr "הצג כתובות דוא\"ל"
 
@@ -7698,7 +7698,7 @@ msgstr "הראה תוצאות"
 msgid "Show results (admin only)"
 msgstr "הצג תוצאות (מנהל בלבד)"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:142
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:137
 msgid "Show survey results"
 msgstr "הראה תוצאות סקר"
 
@@ -7758,11 +7758,11 @@ msgstr "עורך הסקר"
 msgid "Survey result deleted."
 msgstr "תוצאת הסקר נמחקה."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:146
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:141
 msgid "Survey results editor"
 msgstr "עורך תוצאות הסקר"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:90./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:96./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:97./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:66./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Test pass percentage"
 msgstr "אחוזי מבחן לעבור"
 
@@ -7770,7 +7770,7 @@ msgstr "אחוזי מבחן לעבור"
 msgid "Thank you for filling in our survey."
 msgstr "תודה על מילוי הסקר שלנו."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:79./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:83./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
 msgid "Thank you text only"
 msgstr "תודה לך טקסט בלבד"
 
@@ -7850,7 +7850,7 @@ msgstr "וגנר"
 msgid "Weasels make great pets."
 msgstr "סמור הוא חיות מחמד נהדרות."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:76./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:81./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
 msgid "When finished show"
 msgstr "בסיום המופע"
 
@@ -7874,7 +7874,7 @@ msgstr "כבר מילאת את זה, אבל אתה יכול לשנות את הת
 msgid "You already filled this in."
 msgstr "כבר מילאת את זה."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:743
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:751
 msgid "You are not allowed to change these results."
 msgstr "אינך רשאי לשנות תוצאות אלה."
 
