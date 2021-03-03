@@ -115,7 +115,7 @@ cotonic.ready.then(
 $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
 	var id = $(this).closest('.menu-wrapper').data('page-id');
 	window.zMenuEditDone = function(id, title) {
-		$(".title-"+id).html(title);
+		$(".title-"+id+" .menu-label").html(title);
 	};
 	z_event("admin-menu-edit", { id: id, tree_id: {{ tree_id|default:"undefined" }} });
 	e.preventDefault();
@@ -151,7 +151,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
             var self = this;
             z_dialog_confirm({
                 text: "{_ Are you sure you want to delete _}: "
-                    + "<b>" + $menu_item.find(".title").text() + "</b><br>"
+                    + "<b>" + $menu_item.find(".menu-label").html() + "</b><br>"
                     + "{_ and all indented items below it? _}<br><br><b>{_ THIS CAN NOT BE UNDONE! _}</b>",
                 ok: "{_ Delete _}",
                 on_confirm: function() {
