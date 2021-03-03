@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-02 21:00\n"
+"PO-Revision-Date: 2021-03-03 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -320,7 +320,7 @@ msgstr "Правила экспорта"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "Типы файлов следуют иерархии групп. Производные группы наследуют настройки пантомимы от своего предка."
+msgstr "Типы файлов следуют иерархии групп. Производные группы наследуют настройки типов MIME от своего предка."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:55
 msgid "File uploads"
@@ -328,7 +328,7 @@ msgstr "Загрузки файлов"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:70
 msgid "Find collaboration group"
-msgstr "Найти группу по сотрудничеству"
+msgstr "Найти группу сотрудничества"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:52
 msgid "Group managers can edit"
