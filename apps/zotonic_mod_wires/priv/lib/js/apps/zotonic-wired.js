@@ -131,7 +131,7 @@ function z_dialog_confirm(options)
         backdrop = true;
     }
     is_danger = options.is_danger || false;
-    btn_class = is_danger ? "btn-danger" : "btn-default";
+    btn_class = is_danger ? "btn-danger" : "btn-primary";
     html = '<div class="confirm">' + options.text + '</div>'
          + '<div class="modal-footer">'
          + '<button class="btn btn-default z-dialog-cancel-button">'

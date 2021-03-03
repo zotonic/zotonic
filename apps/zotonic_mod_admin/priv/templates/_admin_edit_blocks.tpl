@@ -39,6 +39,7 @@ $('#edit-blocks').sortable({
         text: '<p>{_ Do you want to remove this block? _}</p>',
         cancel: '{_ Cancel _}',
         ok: '{_ Delete _}',
+        is_danger: true,
         on_confirm: function() {
             $block
                 .fadeTo('fast', 0.0)
