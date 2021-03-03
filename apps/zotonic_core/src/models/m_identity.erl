@@ -49,6 +49,9 @@
     get_rsc_by_type/3,
     get_rsc/3,
 
+    is_email_verified/1,
+    is_email_verified/2,
+
     is_valid_key/3,
     normalize_key/2,
 
@@ -106,6 +109,8 @@ m_get([ <<"lookup">>, Type, Key | Rest ], _Msg, Context) ->
 m_get([ <<"generate_password">> | Rest ], _Msg, _Context) ->
     Password = iolist_to_binary([ z_ids:id(5), $-, z_ids:id(5), $-, z_ids:id(5) ]),
     {ok, {Password, Rest}};
+m_get([ <<"is_email_verified">> | Rest ], _Msg, Context) ->
+    {ok, {is_email_verified(Context), Rest}};
 m_get([ Id, <<"is_user">> | Rest ], _Msg, Context) ->
     IsUser = case z_acl:rsc_visible(Id, Context) of
         true -> is_user(Id, Context);
@@ -733,7 +738,7 @@ get_rsc_types(Id, Context) ->
 -spec get_rsc_by_type(m_rsc:resource(), atom(), #context{}) -> list().
 get_rsc_by_type(Id, email, Context) ->
     Idns = get_rsc_by_type_1(Id, email, Context),
-    case normalize_key(email, m_rsc:p_no_acl(Id, email, Context)) of
+    case normalize_key(email, m_rsc:p_no_acl(Id, email_raw, Context)) of
         undefined ->
             Idns;
         Email ->
@@ -776,6 +781,34 @@ get_rsc_1(Id, Type, Context) ->
         Context
     ).
 
+
+%% @doc Check if the primary email address of the user is verified.
+is_email_verified(Context) ->
+    is_email_verified(z_acl:user(Context), Context).
+
+is_email_verified(UserId, Context) ->
+    case m_rsc:p_no_acl(UserId, email_raw, Context) of
+        undefined -> false;
+        <<>> -> false;
+        Email ->
+            z_depcache:memo(
+                fun() ->
+                    E = normalize_key(email, Email),
+                    z_convert:to_bool(
+                        z_db:q1("
+                            select is_verified
+                            from identity
+                            where rsc_id = $1
+                              and type = $2
+                              and key = $3",
+                           [UserId, <<"email">>, E],
+                           Context) )
+                end,
+                {emaiL_verified, UserId},
+                3600,
+                [ UserId ],
+                Context)
+    end.
 
 %% @doc Hash a password, using bcrypt
 -spec hash(password()) -> bcrypt_hash().
@@ -942,7 +975,7 @@ set_verified(Id, Context) ->
                     Context)
             of
                 1 ->
-                    flush(Id, Context),
+                    flush(RscId, Context),
                     z_mqtt:publish(
                         [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
                         #{
