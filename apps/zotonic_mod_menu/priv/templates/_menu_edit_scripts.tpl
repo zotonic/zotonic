@@ -193,7 +193,8 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 				}
 				$sorter.trigger('sortupdate');
                 cotonic.broker.publish("menu/insert", {
-                    menu_id: '{{ menu_id }}'
+                    menu_id: '{{ menu_id }}',
+                    id: rsc_id
                 });
 			};
 
