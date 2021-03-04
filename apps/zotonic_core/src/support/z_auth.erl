@@ -28,6 +28,7 @@
     logon/2,
     logon_switch/2,
     logon_switch/3,
+    logon_redirect/3,
     confirm/2,
     logon_pw/3,
     logoff/1,
@@ -108,6 +109,18 @@ logon_switch(UserId, SudoUserId, Context) ->
             {error, eacces}
     end.
 
+%% @doc Logon an user and redirect the user agent. The MQTT websocket MUST be connected.
+-spec logon_redirect( m_rsc:resource_id(), binary() | undefined, z:context() ) -> ok.
+logon_redirect(UserId, Url, Context) ->
+    Token = z_authentication_tokens:encode_onetime_token(UserId, Context),
+    z_mqtt:publish(
+        [ <<"~client">>, <<"model">>, <<"auth">>, <<"post">>, <<"onetime-token">> ],
+        #{
+            token => Token,
+            url => Url
+        },
+        Context),
+    ok.
 
 %% @doc Request the client's auth worker to re-authenticate as a new user
 -spec switch_user( m_rsc:resource_id(), z:context() ) -> ok | {error, eacces}.
