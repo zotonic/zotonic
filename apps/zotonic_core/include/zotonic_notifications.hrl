@@ -622,6 +622,24 @@
         request_options = #{} :: map()
     }).
 
+%% @doc Send a request to the client to login an user. The zotonic.auth.worker.js will
+%%      send a request to controller_authentication to exchange the one time token with
+%%      a z.auth cookie for the given user. The client will redirect to the Url.
+%% Type: first
+%% Return: ``ok | {error, term()}``
+-record(auth_client_logon_user, {
+        user_id :: m_rsc:resource_id(),
+        url = <<"#reload">> :: binary() | undefined
+    }).
+
+%% @doc Send a request to the client to switch users. The zotonic.auth.worker.js will
+%%      send a request to controller_authentication to perform the switch.
+%% Type: first
+%% Return: ``ok | {error, term()}``
+-record(auth_client_switch_user, {
+        user_id :: m_rsc:resource_id()
+    }).
+
 %% @doc Called during different moments of the request.
 %%      * init - called on every http request
 %%      * refresh - called after init and on mqtt context updates

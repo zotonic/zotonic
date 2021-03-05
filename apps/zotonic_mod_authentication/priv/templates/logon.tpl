@@ -12,11 +12,15 @@
 {% endblock %}
 
 {% block html_attr %}
-    {% if {logon_done p=q.p}|url as logon_done_url %}
-        data-onauth="{{ logon_done_url|escape }}"
-    {% else %}
-        data-onauth="{{ q.p|default:"#reload"|escape }}"
-    {% endif %}
+    {% with page|default:q.p as page %}
+        {% if page == "#reload" or error_code == 401 %}
+            data-onauth="#reload"
+        {% elseif {logon_done p=page}|url as logon_done_url %}
+            data-onauth="{{ logon_done_url|escape }}"
+        {% else %}
+            data-onauth="{{ page|default:"#reload"|escape }}"
+        {% endif %}
+    {% endwith %}
 {% endblock %}
 
 {% block content_area %}
