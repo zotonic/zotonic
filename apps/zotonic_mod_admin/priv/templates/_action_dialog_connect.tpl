@@ -49,15 +49,19 @@ find params:
                         <a data-toggle="tab" href="#{{ #tab }}-depiction">{_ Attached media _}</a>
                     </li>
                 {% endif %}
-                {% if not tabs_enabled or "new"|member:tabs_enabled %}
-                    <li {% if not tab or tab == "new" or tab == "find" or tab == "upload" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-findnew">
-                            {_ Create or find _}
-                        </a>
-                    </li>
-                {% elseif tabs_enabled and "find"|member:tabs_enabled %}
+                {% if not tabs_enabled or "find"|member:tabs_enabled %}
                     <li {% if tab == "find" %}class="active"{% endif %}>
                         <a data-toggle="tab" href="#{{ #tab }}-find">{_ Find Page _}</a>
+                    </li>
+                {% endif %}
+                {% if not tabs_enabled or "new"|member:tabs_enabled %}
+                    <li {% if not tab or tab == "new" %}class="active"{% endif %}>
+                        <a data-toggle="tab" href="#{{ #tab }}-findnew">{_ New Page _}</a>
+                    </li>
+                {% endif %}
+                {% if not tabs_enabled or "upload"|member:tabs_enabled %}
+                    <li {% if tab == "upload" %}class="active"{% endif %}>
+                        <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload _}</a>
                     </li>
                 {% endif %}
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
@@ -110,6 +114,19 @@ find params:
                     title=""
                 %}
             {% endif %}
+            {% if not tabs_enabled or "find"|member:tabs_enabled %}
+                {% include "_action_dialog_connect_tab_find.tpl"
+                    tab=#tab
+                    predicate=predicate
+                    delegate=delegate
+                    subject_id=subject_id
+                    object_id=object_id
+                    is_active=(tab == "find")
+                    title=""
+                    cat=cat
+                    content_group=content_group
+                %}
+            {% endif %}
             {% if not tabs_enabled or "new"|member:tabs_enabled %}
                 {% include "_action_dialog_connect_tab_findnew.tpl"
                     tab=#tab
@@ -117,19 +134,20 @@ find params:
                     delegate=delegate
                     subject_id=subject_id
                     object_id=object_id
-                    is_active=(not tab or tab == "new" or tab == "find" or tab == "upload")
+                    is_active=(not tab or tab == "new")
                     title=""
                     cat=cat
                     content_group=content_group
                 %}
-            {% elseif tabs_enabled and "find"|member:tabs_enabled %}
-                {% include "_action_dialog_connect_tab_find.tpl"
+            {% endif %}
+            {% if not tabs_enabled or "upload"|member:tabs_enabled %}
+                {% include "_action_dialog_media_upload_tab_upload.tpl"
                     tab=#tab
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id
                     object_id=object_id
-                    is_active=`true`
+                    is_active=(tab == "upload")
                     title=""
                     cat=cat
                     content_group=content_group

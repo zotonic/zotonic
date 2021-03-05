@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-27
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Open a dialog with some fields to upload a new media.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -48,6 +47,7 @@ event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, S
     Vars = [
         {delegate, atom_to_list(?MODULE)},
         {id, Id},
+        {is_replace_medium, is_integer(Id)},
         {subject_id, SubjectId},
         {title, Title},
         {actions, Actions},
@@ -61,10 +61,12 @@ event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, S
 
 
 event(#submit{message={media_upload, EventProps}}, Context) ->
-    case z_context:get_q_validated(<<"upload_file">>, Context) of
+    case z_context:get_q(<<"upload_file">>, Context) of
         #upload{ filename = OriginalFilename } = Upload ->
-            Props = case proplists:get_value(id, EventProps) of
-                        undefined ->
+            Props = case z_convert:to_bool( proplists:get_value(is_replace_medium, EventProps) ) of
+                        true ->
+                            [{original_filename, OriginalFilename}];
+                        false ->
                             Lang = z_context:language(Context),
                             Title = z_context:get_q(<<"new_media_title">>, Context),
                             NewTitle = case z_utils:is_empty(Title) of
@@ -76,9 +78,7 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                                 <<"language">> => [Lang],
                                 <<"original_filename">> => OriginalFilename
                             },
-                            add_content_group(EventProps, Props0, Context);
-                        _Id ->
-                            [{original_filename, OriginalFilename}]
+                            add_content_group(EventProps, Props0, Context)
                     end,
             handle_media_upload(EventProps, Context,
                                 %% insert fun
@@ -128,24 +128,25 @@ content_group_id(ContentGroupId, _SubjectId, _Context) ->
 handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
-    case Id of
-        %% Create a new media page
-        undefined ->
-            case InsertFun(Context) of
-                {ok, MediaId} ->
-                    action_admin_dialog_new_rsc:do_new_page_actions(MediaId, EventProps, Context);
-                {error, R} ->
-                    z_render:growl_error(error_message(R, Context), Context)
-            end;
-
+    IsReplaceMedium = z_convert:to_bool( proplists:get_value(is_replace_medium, EventProps) ),
+    case IsReplaceMedium of
         %% Replace attached medium with the uploaded file (skip any edge requests)
-        N when is_integer(N) ->
+        true when is_integer(Id) ->
             case ReplaceFun(Id, Context) of
                 {ok, _} ->
                     z_render:wire([
                             {growl, [{text, ?__("Media item created.", Context)}]},
                             {dialog_close, []}
                             | Actions], Context);
+                {error, R} ->
+                    z_render:growl_error(error_message(R, Context), Context)
+            end;
+
+        %% Create a new media page
+        false ->
+            case InsertFun(Context) of
+                {ok, MediaId} ->
+                    action_admin_dialog_new_rsc:do_new_page_actions(MediaId, EventProps, Context);
                 {error, R} ->
                     z_render:growl_error(error_message(R, Context), Context)
             end

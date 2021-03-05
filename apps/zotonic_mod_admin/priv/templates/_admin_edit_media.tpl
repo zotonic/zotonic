@@ -71,6 +71,7 @@
                 element="a"
         	    action={dialog_media_upload
                     id=id
+                    is_replace
                     action={update
                         target="media-edit-view"
                         template="_admin_edit_media_all.tpl"

@@ -115,7 +115,7 @@
                         {% endif %}
                     {% endwith %}
 
-                    <button type="submit" class="btn btn-primary pull-right">{% if args.id %}{_ Replace _}{% else %}{_ Make _}{% endif %} {{ mi.description }}</button>
+                    <button type="submit" class="btn btn-primary pull-right">{% if args.is_replace_medium %}{_ Replace _}{% else %}{_ Make _}{% endif %} {{ mi.description }}</button>
                 </div>
             </form>
         </div>

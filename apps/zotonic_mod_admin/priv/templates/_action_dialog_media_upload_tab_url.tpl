@@ -6,6 +6,9 @@
 						object_id=object_id
 						predicate=predicate
 						id=id
+						is_zlink=is_zlink
+						is_zmedia=is_zmedia
+						is_replace_medium=is_replace_medium
 						redirect=redirect|if_undefined:(not stay)
 						content_group_id=content_group_id
 						actions=actions callback=callback

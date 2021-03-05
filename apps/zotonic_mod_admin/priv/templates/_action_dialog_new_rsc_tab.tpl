@@ -15,20 +15,20 @@
 	delegate=delegate|default:`action_admin_dialog_new_rsc`
 %}
 <form id="dialog-new-rsc-tab" method="POST" action="postback" class="form">
-
-<div class="admin-padding">
- 	{% block rsc_props_title %}
- 		{# The new resource title, also used for the feedback search #}
- 	    <label for="new_rsc_title">{_ Start typing a title to create a new page or find existing pages _}</label>
- 	    <input type="text" id="new_rsc_title" name="title"
- 	    	   value="{{ title|escape }}" class="do_autofocus form-control"
- 	    	   placeholder="{_ Type title or filter existing content _}">
-	{% endblock %}
-</div>
-
 <div class="new-find-cols">
 	<div id="{{ #newform }}" class="form-panel">
 		{% with 'dialog-new-rsc-tab' as form %}
+
+		 	{% block rsc_props_title %}
+			 	<div class="form-group label-floating">
+			 		{# The new resource title, also used for the feedback search #}
+			 	    <input type="text" id="new_rsc_title" name="title"
+			 	    	   value="{{ title|escape }}" class="form-control do_autofocus"
+			 	    	   placeholder="{_ Title _}"
+			 	    	   autofocus>
+			 	    <label for="new_rsc_title">{_ Title _}</label>
+			 	</div>
+			{% endblock %}
 
 			{% block new_rsc_header %}
  			{% endblock %}
@@ -54,6 +54,7 @@
 		                {% endif %}
 		            </div>
 		            {% javascript %}
+					(function() {
 		            	function file_category ( basename ) {
 		            		var extension = basename.replace(/((.*)\.)*/, '');
 		            		switch (extension.toLowerCase()) {
@@ -83,7 +84,7 @@
 		            			case 'png': return true;
 		            			case 'gif': return true;
 		            			case 'pdf':
-		            				// TODO: Works on macOS / iOS
+		            				// TODO: PDFs can be previewed on macOS / iOS
 		            				return false;
 		            			default:
 		            				return false;
@@ -91,17 +92,33 @@
 		            	}
 
 		            	window.z_upload_title = '';
-		            	$('#upload_file').on('change', function() {
-	            			var filename = $('#upload_file').val();
-	            			var basename = filename.replace(/^([^\\/]*[\\/])*/, '');
-	            			var rootname = basename.replace(/\.[a-zA-Z0-9]{1,4}$/, '');
-	            			var new_cat = '{{ m.rsc.media.id }}';
+		            	let upl = document.getElementById('upload_file');
+		            	upl.addEventListener('change', function() {
+		            		let files = upl.files;
+	            			let new_cat;
+	            			let basename;
 
-		            		switch (file_category(basename)) {
-		            			case 'image': new_cat = '{{ m.rsc.image.id }}'; break;
-		            			case 'audio': new_cat = '{{ m.rsc.audio.id }}'; break;
-		            			case 'video': new_cat = '{{ m.rsc.video.id }}'; break;
-		            			case 'document': new_cat = '{{ m.rsc.document.id }}'; break;
+		            		if (files.length > 0) {
+		            			let type = files[0].type;
+		            			let type0 = type.split("/")[0];
+
+		            			switch (type0) {
+			            			case 'image': new_cat = '{{ m.rsc.image.id }}'; break;
+			            			case 'audio': new_cat = '{{ m.rsc.audio.id }}'; break;
+			            			case 'video': new_cat = '{{ m.rsc.video.id }}'; break;
+			            			default:
+					            		switch (file_category(files[0].name)) {
+					            			case 'image': new_cat = '{{ m.rsc.image.id }}'; break;
+					            			case 'audio': new_cat = '{{ m.rsc.audio.id }}'; break;
+					            			case 'video': new_cat = '{{ m.rsc.video.id }}'; break;
+					            			case 'document': new_cat = '{{ m.rsc.document.id }}'; break;
+					            			default:
+					            				new_cat = '{{ m.rsc.media.id }}';
+					            				break;
+					            		}
+		            			}
+		            			let basename = files[0].name.replace(/^([^\\/]*[\\/])*/, '');
+		            			rootname = basename.replace(/\.[a-zA-Z0-9]{1,4}$/, '');
 		            		}
 
 		            		if ($('#{{ form }} select[name=category_id] option[value='+new_cat+']').length > 0) {
@@ -110,12 +127,17 @@
 			            			.change();
 		            		}
 
-		            		if ($('#new_rsc_title').val() == '' || $('#new_rsc_title').val() == window.z_upload_title) {
-		            			$('#new_rsc_title').val(rootname).change().focus();
+		            		let new_rsc_title = document.getElementById('new_rsc_title');
+		            		let new_title = new_rsc_title.value;
+
+		            		if (new_title == '' || new_title == window.z_upload_title) {
+		            			new_rsc_title.setAttribute('value', rootname);
+		            			new_rsc_title.focus();
+		            			new_rsc_title.select();
 		            			window.z_upload_title = rootname;
 		            		}
 
-		            		if (is_viewable(basename)) {
+		            		if (is_viewable(files[0].name)) {
 							    var reader = new FileReader();
 							    reader.onload = function (e) {
 							        $("#upload_file_preview img").attr('src', e.target.result);
@@ -126,10 +148,8 @@
 						        $("#upload_file_preview").hide();
 							}
 		            	});
-		            {% endjavascript %}
 
-		            {# Hide/show media upload depending on the selected category #}
-					{% javascript %}
+			            // Hide/show media upload depending on the selected category
 						var media_cats = [
 							{{ m.rsc.media.id }}
 							{% for c in m.category.media.tree_flat %}
@@ -161,6 +181,7 @@
 									.addClass('nosubmit');
 							}
 						});
+		            })();
 					{% endjavascript %}
 		        </div>
 	        {% endif %}
@@ -249,49 +270,21 @@
 
 	    <div class="new-find-results-header">
 
-			<h4>{_ Existing pages _}</h4>
+			<h4>{_ Existing pages _} <small class="text-muted">{_ Click to preview. _}</small></h4>
 
 			<p id="new-find-results-description" class="text-muted">
 				{% include "_action_dialog_new_rsc_tab_find_description.tpl" %}
 			</p>
 
-			<div class="row">
-				{% if not nocatselect or not cat %}
-					<div class="col-sm-6">
-					    {% block category_find %}
-					        <select class="form-control nosubmit" id="{{ #find_category }}" name="find_category">
-							    <option value="" disabled {% if not cat %}selected{% endif %}>{_ Select category _}</option>
-					        	{% if predicate %}
-					        		<option value="p:{{ predicate }}" selected>
-						        		{_ Any valid for: _} {{ m.rsc[predicate].title }}
-						        	</option>
-						        	<option disabled>
-						        	</option>
-					        	{% else %}
-					        		<option value="*" selected>
-						        		{_ Any category _}
-						        	</option>
-						        	<option disabled>
-						        	</option>
-					        	{% endif %}
-					            {% for c in m.category.tree_flat_meta %}
-				                    <option value="{{c.id}}" {% if c.id == cat %}selected{% endif %}>
-					                    {{ c.indent }}{{ c.id.title|default:c.id.name }}
-				                    </option>
-					            {% endfor %}
-					        </select>
-					    {% endblock %}
-					</div>
-				{% endif %}
-				<div class="col-sm-6">
-		        	<label class="checkbox-inline">
-		        		<input type="checkbox" class="nosubmit" id="{{ #find_me }}"
-		        			   name="find_creator_id" value="{{ m.acl.user }}"
-		        			   {% if m.admin.connect_created_me %}checked{% endif %}>
-		        		{_ Created by me _}
-		        	</label>
-		        </div>
-	        </div>
+		    {% block category_find %}
+		    {% endblock %}
+
+        	<label class="checkbox-inline">
+        		<input type="checkbox" class="nosubmit" id="{{ #find_me }}"
+        			   name="find_creator_id" value="{{ m.acl.user }}"
+        			   {% if m.admin.connect_created_me %}checked{% endif %}>
+        		{_ Created by me _}
+        	</label>
 
         	{% javascript %}
         		switch (window.sessionStorage.getItem('dialog_connect_created_me')) {
@@ -386,7 +379,6 @@
 					var val = $(this).val();
 					if (val !== null && val != catInitial) {
 						catInitial = val;
-						$('#{{ #newform }} select[name="find_category"]').val(val).change();
 					}
 				});
 
