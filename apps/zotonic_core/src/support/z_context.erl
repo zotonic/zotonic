@@ -299,9 +299,10 @@ is_request(#context{}) -> true.
 %% @doc Check if the current context has an active MQTT session.
 %%      This is never true for the first request.
 -spec is_session( z:context() ) -> boolean().
+is_session(#context{ client_topic = undefined }) ->
+    false;
 is_session(#context{ client_topic = ClientTopic }) ->
-    is_binary(ClientTopic).
-
+    is_list(ClientTopic).
 
 %% @doc Minimal prune, for ensuring that the context can safely used in two processes
 -spec prune_for_spawn( z:context() ) -> z:context().
@@ -788,7 +789,9 @@ client_id(#context{}) ->
 
 %% @doc Return the current client bridge topic (if any)
 -spec client_topic( z:context() ) -> {ok, mqtt_sessions:topic()} | {error, no_client}.
-client_topic(#context{ client_topic = ClientTopic, client_id = ClientId }) when is_binary(ClientId) ->
+client_topic(#context{ client_topic = ClientTopic, client_id = ClientId }) when is_binary(ClientId), is_binary(ClientTopic) ->
+    {ok, mqtt_packet_map_topic:normalize_topic(ClientTopic)};
+client_topic(#context{ client_topic = ClientTopic, client_id = ClientId }) when is_binary(ClientId), is_list(ClientTopic) ->
     {ok, ClientTopic};
 client_topic(#context{}) ->
     {error, no_client}.

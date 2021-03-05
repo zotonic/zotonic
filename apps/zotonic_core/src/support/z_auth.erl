@@ -110,37 +110,28 @@ logon_switch(UserId, SudoUserId, Context) ->
     end.
 
 %% @doc Logon an user and redirect the user agent. The MQTT websocket MUST be connected.
--spec logon_redirect( m_rsc:resource_id(), binary() | undefined, z:context() ) -> ok.
+-spec logon_redirect( m_rsc:resource_id(), binary() | undefined, z:context() ) -> ok | {error, term()}.
 logon_redirect(UserId, Url, Context) ->
-    Token = z_authentication_tokens:encode_onetime_token(UserId, Context),
-    z_mqtt:publish(
-        [ <<"~client">>, <<"model">>, <<"auth">>, <<"post">>, <<"onetime-token">> ],
-        #{
-            token => Token,
-            url => Url
-        },
-        Context),
-    ok.
+    case z_notifier:first(#auth_client_logon_user{
+            user_id = UserId,
+            url = Url
+        }, Context)
+    of
+        undefined -> {error, no_handler};
+        ok -> ok;
+        {error, _} = Error -> Error
+    end.
 
 %% @doc Request the client's auth worker to re-authenticate as a new user
 -spec switch_user( m_rsc:resource_id(), z:context() ) -> ok | {error, eacces}.
 switch_user(UserId, Context) when is_integer(UserId) ->
-    CurrentUser = z_acl:user(Context),
-    case UserId of
-        1 when CurrentUser =/= 1 ->
-            % Only the admin is allowed to switch back to admin
-            {error, eacces};
-        _ ->
-            case z_acl:is_admin(Context) of
-                true ->
-                    z_mqtt:publish(
-                            [ <<"~client">>, <<"model">>, <<"auth">>, <<"post">>, <<"switch-user">> ],
-                            #{ user_id => UserId },
-                            Context),
-                    ok;
-                false ->
-                    {error, eacces}
-            end
+    case z_notifier:first(#auth_client_switch_user{
+            user_id = UserId
+        }, Context)
+    of
+        undefined -> {error, no_handler};
+        ok -> ok;
+        {error, _} = Error -> Error
     end.
 
 %% @doc Forget about the user being logged on.

@@ -35,7 +35,9 @@
     observe_logon_submit/2,
     observe_logon_options/3,
     observe_admin_menu/3,
-    observe_auth_validated/2
+    observe_auth_validated/2,
+    observe_auth_client_logon_user/2,
+    observe_auth_client_switch_user/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -151,6 +153,53 @@ observe_logon_options(#logon_options{
     end;
 observe_logon_options(#logon_options{}, Acc, _Context) ->
     Acc.
+
+
+%% @doc Send a request to the client to login an user. The zotonic.auth.worker.js will
+%% send a request to controller_authentication to exchange the one time token with
+%% a z,auth cookie for the given user. The client will redirect to the Url.
+observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url }, Context) ->
+    case z_context:client_topic(Context) of
+        {ok, ClientTopic} ->
+            Token = z_authentication_tokens:encode_onetime_token(UserId, Context),
+            z_mqtt:publish(
+                ClientTopic ++ [ <<"model">>, <<"auth">>, <<"post">>, <<"onetime-token">> ],
+                #{
+                    token => Token,
+                    url => Url
+                },
+                Context),
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Send a request to the client to switch users. The zotonic.auth.worker.js will
+%% send a request to controller_authentication to perform the switch.
+observe_auth_client_switch_user(#auth_client_switch_user{ user_id = UserId }, Context) ->
+    CurrentUser = z_acl:user(Context),
+    case UserId of
+        1 when CurrentUser =/= 1 ->
+            % Only the admin is allowed to switch back to admin
+            {error, eacces};
+        _ ->
+            case z_acl:is_admin(Context) of
+                true ->
+                    case z_context:client_topic(Context) of
+                        {ok, ClientTopic} ->
+                            z_mqtt:publish(
+                                    ClientTopic ++ [ <<"model">>, <<"auth">>, <<"post">>, <<"switch-user">> ],
+                                    #{ user_id => UserId },
+                                    Context),
+                            ok;
+                        {error, _} = Error ->
+                            Error
+                    end;
+                false ->
+                    {error, eacces}
+            end
+    end.
+
 
 % %% Check if an LTI user or some other user by this handle is known.
 % find_user_external(Handle, Page, Context) ->
