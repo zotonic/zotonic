@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-06 22:49\n"
+"PO-Revision-Date: 2021-03-06 22:59\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -464,7 +464,7 @@ msgstr "Опубликовать"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:106
 msgid "Publish successful"
-msgstr "Опубликовать успешный"
+msgstr "Опубликовано успешно"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
