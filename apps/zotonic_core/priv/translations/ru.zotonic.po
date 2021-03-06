@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-06 19:52\n"
+"PO-Revision-Date: 2021-03-06 20:00\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -423,7 +423,7 @@ msgstr "Нет правил ACL"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:152
 msgid "Not all user groups could be deleted."
-msgstr "Не все группы пользователей могут быть удалены."
+msgstr "Не все группы пользователей могли быть удалены"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:72
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:41
