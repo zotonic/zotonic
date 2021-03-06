@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-06 20:00\n"
+"PO-Revision-Date: 2021-03-06 20:50\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -436,7 +436,7 @@ msgstr "Или нажмите <strong>Удалить все группы пол�
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:122
 msgid "Own content"
-msgstr "Собственное содержание"
+msgstr "Собственный контент"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:39
 msgid "People who can view this page"
