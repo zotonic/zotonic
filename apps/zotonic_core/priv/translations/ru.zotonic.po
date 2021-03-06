@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-06 20:59\n"
+"PO-Revision-Date: 2021-03-06 22:49\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -456,7 +456,7 @@ msgstr "Частный"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:50
 msgid "Private properties are email, phone, visiting address, and date range."
-msgstr "Частная недвижимость - это электронная почта, телефон, адрес для посещения и диапазон дат."
+msgstr "Приватные свойства - это электронная почта, телефон, адрес для посещения и диапазон дат."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:4
 msgid "Publish"
