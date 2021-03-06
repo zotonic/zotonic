@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-06 23:39\n"
+"PO-Revision-Date: 2021-03-06 23:47\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -496,7 +496,7 @@ msgstr "Сохранить разрешения на загрузку"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:143
 msgid "Saved collaboration group settings"
-msgstr "Сохраненные настройки групп сотрудничества"
+msgstr "Настройки групп сотрудничества сохранены"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:178./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263
