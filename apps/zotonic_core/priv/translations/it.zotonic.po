@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-07 16:05\n"
+"PO-Revision-Date: 2021-03-07 16:16\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -4494,7 +4494,7 @@ msgstr "modulo di contatto su"
 
 #: apps/zotonic_mod_contact/priv/templates/email_contact.tpl:6
 msgid "has been submitted."
-msgstr "è stato presentato."
+msgstr "è stato inviato."
 
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:1
 msgid "Are you sure you want to delete the following content groups:"
@@ -7452,7 +7452,7 @@ msgstr "Lascia vuoto se non ci sono domande del test."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
-msgstr "Likert"
+msgstr "Scala Likert"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "Long answer"
@@ -7628,7 +7628,7 @@ msgstr "Rosso"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
 msgid "Required, this question must be answered."
-msgstr "Richiesto, bisogna rispondere a questa domanda."
+msgstr "È obbligatorio rispondere a questa domanda."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:4./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results"
@@ -7776,7 +7776,7 @@ msgstr "Solo testo di ringraziamento"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "Thank you text."
-msgstr "Grazie al testo."
+msgstr "Testo di ringraziamento."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "The earth is flat."
@@ -7808,7 +7808,7 @@ msgstr "Questo è un risultato per:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
-msgstr "Questo testo viene mostrato dopo che il sondaggio è stato presentato."
+msgstr "Questo testo viene mostrato dopo l'invio del sondaggio."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:16
 msgid "This text is shown as an introduction to the survey."
