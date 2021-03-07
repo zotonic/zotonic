@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-07 16:28\n"
+"PO-Revision-Date: 2021-03-07 19:15\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1441,7 +1441,7 @@ msgstr "Nessuna pagina trovata."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:61
 msgid "Number of open sockets grouped per ip-address (top 10)"
-msgstr "Numero di socket aperti raggruppati per indirizzo IP (top 10)"
+msgstr "Numero di socket aperti raggruppati per indirizzo IP (primi 10)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:47
 msgid "Page Count"
@@ -6486,7 +6486,7 @@ msgstr "Aggiungi qui sotto"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:14./apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:30
 msgid "Add bottom"
-msgstr "Aggiungere il fondo"
+msgstr "Aggiungere in fondo"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:7
 msgid "Add category"
@@ -6502,7 +6502,7 @@ msgstr "Aggiungi voce di menu"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:13./apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:29
 msgid "Add top"
-msgstr "Aggiungi top"
+msgstr "Aggiungere in cima"
 
 #: apps/zotonic_mod_menu/src/mod_menu.erl:140
 msgid "COPY"
@@ -6929,7 +6929,7 @@ msgstr "registrarsi per un nome utente e una password"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:104
 msgid "Building Zotonic in the background..."
-msgstr "Costruire Zotonic sullo sfondo..."
+msgstr "Sto compilando Zotonic in background..."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:55
 msgid "Error during fetch from version control."
