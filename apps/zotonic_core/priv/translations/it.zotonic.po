@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-02 12:40\n"
+"PO-Revision-Date: 2021-03-07 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -7392,7 +7392,7 @@ msgstr "Nascondi dai risultati"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:42./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:84
 msgid "Hide progress information"
-msgstr "Nascondere le informazioni sul progresso"
+msgstr "Nascondere le informazioni sull'avanzamento"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:29
 msgid "Hide the user’s id or browser-id from result exports"
@@ -7484,7 +7484,7 @@ msgstr "Scelta multipla"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:40
 msgid "Multiple entries per user/browser"
-msgstr "Più voci per utente/browser"
+msgstr "Più volte per utente/browser"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Multiple page break blocks are merged into one."
@@ -7596,7 +7596,7 @@ msgstr "Lista stampabile"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:79
 msgid "Progress"
-msgstr "Progresso"
+msgstr "Avanzamento"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:16./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
 msgid "Prompt"
@@ -7664,7 +7664,7 @@ msgstr "Seleziona il tuo paese"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:30
 msgid "Send confirmation to respondent (please add a question named <i>email</i>)"
-msgstr "Inviare la conferma al rispondente (aggiungere una domanda chiamata <i>email</i>)"
+msgstr "Inviare una conferma all'intervistato (aggiungere una domanda chiamata <i>email</i>)"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:117
 msgid "Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”)."
@@ -7688,7 +7688,7 @@ msgstr "Mostra la barra di avanzamento"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:46./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:90
 msgid "Show progress information as “<em>Question 3/10</em>”"
-msgstr "Mostra le informazioni sul progresso come \"<em>Domanda 3/10</em>\""
+msgstr "Mostra le informazioni sull'avanzamento come \"<em>Domanda 3/10</em>\""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:46
 msgid "Show results"
