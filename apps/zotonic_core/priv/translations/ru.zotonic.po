@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-08 07:40\n"
+"PO-Revision-Date: 2021-03-08 07:47\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -557,7 +557,7 @@ msgstr "Внутри этих групп пользователей нет по�
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:15
 msgid "These settings come into effect immediately, no publish of rules is needed,"
-msgstr "Эти настройки вступают в силу немедленно, никакой публикации правил не требуется,"
+msgstr "Эти настройки вступают в силу немедленно, публикация правил не требуется,"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:33
 msgid "They are managed by their own manager and use the access rules below."
