@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-08 20:04\n"
+"PO-Revision-Date: 2021-03-08 20:31\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -596,7 +596,7 @@ msgstr "Настройки загрузки сохранены"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "Загрузите файл ACL правил, который вы ранее экспортировали. Замечание: все текущие правила будут <b>заменены</b> на файл с определением правила, который будет загружен."
+msgstr "Загрузите файл правил ACL, который вы ранее экспортировали. Замечание: все текущие правила будут <b>заменены</b> правилами из загруженного файла с определениями."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
 msgid "Use published rules"
@@ -608,11 +608,11 @@ msgstr "Используйте следующий URL для проверки п
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:537
 msgid "User groups"
-msgstr "группы пользователей"
+msgstr "Группы пользователей"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
 msgid "Which version of the ACL rules do you want to use?"
-msgstr "Какую версию ACL правил вы хотите использовать?"
+msgstr "Какую версию правил ACL вы хотите использовать?"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:40
 msgid "You are not allowed to move to this collaboration group."
