@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-08 20:31\n"
+"PO-Revision-Date: 2021-03-08 20:57\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -620,11 +620,11 @@ msgstr "Вы не имеете права переходить в эту гру�
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:57
 msgid "You are not allowed to perform this action"
-msgstr "Вы не имеете права выполнять это действие"
+msgstr "Вам не разрешено выполнять это действие"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:73
 msgid "You are not allowed to view this page."
-msgstr "Просмотр этой страницы запрещен."
+msgstr "Вам не разрешено просматривать эту страницу."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
 msgid "You are using the <b>published</b> version of the access control rules."
@@ -632,7 +632,7 @@ msgstr "Вы используете <b>опубликованную</b> верс
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:10
 msgid "You are using the <b>test</b> version of the access control rules."
-msgstr "Вы используете <b>тест</b> версия правил контроля доступа."
+msgstr "Вы используете <b>тестовую</b> версию правил контроля доступа."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
 msgid "You can switch back to the published access control rules by:"
@@ -640,7 +640,7 @@ msgstr "Вы можете вернуться к опубликованным п�
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
-msgstr "Ты можешь:"
+msgstr "Вы можете:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
 msgid "You have to use a special URL, as provided by the an editor or administrator."
@@ -648,7 +648,7 @@ msgstr "Вы должны использовать специальный URL, �
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:90
 msgid "all"
-msgstr "весь"
+msgstr "все"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:20
 msgid "clicking on <b>Use published rules</b> below"
@@ -656,7 +656,7 @@ msgstr "нажав на <b>Использовать опубликованные
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
 msgid "closing this browser tab"
-msgstr "закрытие вкладки браузера"
+msgstr "закрыв эту вкладку браузера"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "delete (acl action)"
