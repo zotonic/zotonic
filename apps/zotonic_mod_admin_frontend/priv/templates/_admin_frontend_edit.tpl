@@ -11,6 +11,7 @@
 
 {% block tinymce_init %}
 	{% catinclude "_admin_frontend_tinymce_init.tpl" id tree_id=tree_id %}
+	{% include "_editor.tpl" is_editor_include %}
 {% endblock %}
 
 {% block rscform %}
