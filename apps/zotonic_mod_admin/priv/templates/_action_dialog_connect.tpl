@@ -21,6 +21,9 @@ find params:
 - category (optional) (string/id) preselect the category dropdown
 - content_group (optional) can also be the string "me" to search on user created content
 #}
+
+{% block dialog %}
+
 {% if not intent|member:[ 'select', 'create', 'connect' ] %}
     <p class="alert alert-danger">
         Please specify the <b>intent</b> argument when using the <b>_action_dialog_connect.tpl</b>.<br>
@@ -197,3 +200,5 @@ find params:
 {% endwith %}
 
 {% endif %}
+
+{% endblock %}
