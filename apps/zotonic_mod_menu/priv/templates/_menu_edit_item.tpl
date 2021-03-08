@@ -10,7 +10,9 @@
 
 	    <div class="menu-title title-{{id}} menu-edit">
 	    	{% image id mediaclass="admin-list-dashboard" %}
-	    	<span class="menu-label">{{ id.short_title|default:id.title }}</span>
+	    	<span class="menu-label">
+                {% live template="_title.tpl" element="span" topic=id id=id %}
+            </span>
 	    	<span class="category">{{ id.category_id.title }}</span>
 	    </div>
 

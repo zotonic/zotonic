@@ -15,7 +15,7 @@
 {% block widget_content %}
     <ul class="tree-list connections-list">
         {% for s_id in m.search[{query hasobject=id sort="-seq" pagelen=10}] %}
-            {% with forloop.index as index %}
+            {% with forloop.counter as index %}
             <li id="{{ #unlink_wrapper }}" class="menu-item">
                 <div class="menu-wrapper">
                     <a id="{{ #edit.index }}" href="{% url admin_edit_rsc id=s_id %}" title="{_ Edit _}">
