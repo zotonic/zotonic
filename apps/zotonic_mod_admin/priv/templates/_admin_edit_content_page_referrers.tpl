@@ -15,13 +15,18 @@
 {% block widget_content %}
     <ul class="tree-list connections-list">
         {% for s_id in m.search[{query hasobject=id sort="-seq" pagelen=10}] %}
+            {% with forloop.index as index %}
             <li id="{{ #unlink_wrapper }}" class="menu-item">
                 <div class="menu-wrapper">
-                    <a id="{{ #edit }}" href="{% url admin_edit_rsc id=s_id %}" title="{_ Edit _}">
+                    <a id="{{ #edit.index }}" href="{% url admin_edit_rsc id=s_id %}" title="{_ Edit _}">
                         {% catinclude "_rsc_edge_item.tpl" s_id %}
                     </a>
+                    {% wire id=#edit.index
+                        action={dialog_edit_basics id=s_id}
+                    %}
                 </div>
             </li>
+            {% endwith %}
         {% endfor %}
     </ul>
 

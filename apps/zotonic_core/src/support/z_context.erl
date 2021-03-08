@@ -469,14 +469,6 @@ depickle_site({pickled_context, Site, _UserId, _Language, _Tz, _VisitorId}) ->
     Site.
 
 
-% %% @doc After ensuring a session, try to log on from the user-id stored in the session
-% maybe_logon_from_session(#context{user_id=undefined} = Context) ->
-%     Context1 = z_auth:logon_from_session(Context),
-%     Context2 = z_notifier:foldl(#session_context{}, Context1, Context1),
-%     set_nocache_headers(Context2);
-% maybe_logon_from_session(Context) ->
-%     Context.
-
 -spec output( MixedHtml::term(), z:context() ) -> {iolist(), z:context()}.
 output(MixedHtml, Context) ->
     z_output_html:output(MixedHtml, Context).
@@ -1044,7 +1036,7 @@ parse_post_body(Context) ->
 -spec set_nocache_headers(z:context()) -> z:context().
 set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
     cowmachine_req:set_resp_headers([
-            {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, post-check=0, pre-check=0">>},
+            {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, private, post-check=0, pre-check=0">>},
             {<<"expires">>, <<"Wed, 10 Dec 2008 14:30:00 GMT">>},
             {<<"p3p">>, <<"CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"">>},
             {<<"pragma">>, <<"nocache">>}

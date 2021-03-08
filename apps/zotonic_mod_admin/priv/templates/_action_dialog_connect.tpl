@@ -1,6 +1,6 @@
 {#
 params:
-- intent: the purpose of this dialog, one of: "select", "create", "connect"
+- intent: the purpose of this dialog, one of: "select", "create", "connect" (and "update" for media dialog)
 - callback (optional)
 - language (optional)
 - actions (optional)

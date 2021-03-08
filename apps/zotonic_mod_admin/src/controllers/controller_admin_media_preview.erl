@@ -27,7 +27,9 @@
     ]).
 
 service_available(Context) ->
-    {true, z_context:set_noindex_header(Context)}.
+    Context1 = z_context:set_noindex_header(Context),
+    Context2 = z_context:set_nocache_headers(Context1),
+    {true, Context2}.
 
 resource_exists(Context) ->
     case z_context:get_q(<<"id">>, Context) of

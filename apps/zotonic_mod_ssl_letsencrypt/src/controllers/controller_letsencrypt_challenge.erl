@@ -20,10 +20,16 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    service_available/1,
     allowed_methods/1,
     content_types_provided/1,
     process/4
 ]).
+
+service_available(Context) ->
+    Context1 = z_context:set_noindex_header(Context),
+    Context2 = z_context:set_nocache_headers(Context1),
+    {true, Context2}.
 
 allowed_methods(Context) ->
     {[ <<"GET">> ], Context}.

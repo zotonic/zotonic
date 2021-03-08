@@ -20,12 +20,18 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    service_available/1,
     is_authorized/1,
     event/2,
     process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+service_available(Context) ->
+    Context1 = z_context:set_noindex_header(Context),
+    Context2 = z_context:set_nocache_headers(Context1),
+    {true, Context2}.
 
 is_authorized(Context) ->
     z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_backup)} ], Context).

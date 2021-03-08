@@ -26,7 +26,9 @@
     ]).
 
 service_available(Context) ->
-    {true, z_context:set_noindex_header(Context)}.
+    Context1 = z_context:set_noindex_header(Context),
+    Context2 = z_context:set_nocache_headers(Context1),
+    {true, Context2}.
 
 is_authorized(Context) ->
     z_controller_helper:is_authorized([{use, z_context:get(acl_module, Context, mod_admin)}], Context).
