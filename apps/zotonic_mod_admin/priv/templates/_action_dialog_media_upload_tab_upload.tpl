@@ -13,7 +13,6 @@
                     predicate=predicate
                     actions=actions
                     id=id
-                    is_replace_medium=is_replace_medium
                     subject_id=subject_id
                     redirect=redirect|if_undefined:(not stay)
                     content_group_id=content_group_id
