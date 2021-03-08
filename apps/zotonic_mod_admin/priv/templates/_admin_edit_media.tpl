@@ -71,7 +71,7 @@
                 element="a"
         	    action={dialog_media_upload
                     id=id
-                    is_replace
+                    intent="update"
                     action={update
                         target="media-edit-view"
                         template="_admin_edit_media_all.tpl"
@@ -109,6 +109,7 @@
                 element="a"
     	        action={dialog_media_upload
     	            id=id
+                    intent="update"
     	            action={update
     	                target="media-edit-view"
     	                template="_admin_edit_media_all.tpl"

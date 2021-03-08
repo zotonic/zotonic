@@ -67,7 +67,7 @@
                         </p>
                     {% endif %}
 
-                    {% if not args.id %}
+                    {% if args.intent != 'update' %}
                         {% if args.subject_id %}
                             <div class="checkbox">
                                 <label>
@@ -91,13 +91,13 @@
 
                 <div class="panel-footer clearfix">
                     <a href="#" id="{{ #back.index }}" class="btn btn-default">{_ Back _}</a>
-                    {% wire id=#back.index 
+                    {% wire id=#back.index
                             action={hide target=discover_id}
                             action={fade_in target=form_id}
                     %}
 
                     {% with index-1,
-                            index+1 
+                            index+1
                          as prev,
                             next
                     %}
@@ -115,7 +115,7 @@
                         {% endif %}
                     {% endwith %}
 
-                    <button type="submit" class="btn btn-primary pull-right">{% if args.is_replace_medium %}{_ Replace _}{% else %}{_ Make _}{% endif %} {{ mi.description }}</button>
+                    <button type="submit" class="btn btn-primary pull-right">{% if args.intent == 'update' %}{_ Replace _}{% else %}{_ Make _}{% endif %} {{ mi.description }}</button>
                 </div>
             </form>
         </div>

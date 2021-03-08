@@ -8,6 +8,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
 {% wire name="zmedia"
     action={
         dialog_open
+        intent="connect"
         template="_action_dialog_connect.tpl"
         title=_"Insert image"
         width="large"
@@ -24,6 +25,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
 {% wire name="zlink"
     action={
         dialog_open
+        intent="select"
         template="_action_dialog_connect.tpl"
         title=_"Add link"
         width="large"

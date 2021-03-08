@@ -34,14 +34,14 @@
                     list_id=list_id
                 %}
 
-                <hr />
+                <hr>
             {% endifnotequal %}
         {% endif %}
     {% endfor %}
 {% endwith %}
-{% if not hide_referrers %}
-    <div class="form-group">
-       <a class="btn btn-default btn-sm" href="{% url admin_edges qhasobject=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all referrers _}</a>
-    </div>
-{% endif %}
+
+<div class="form-group">
+   <a class="btn btn-default btn-sm" href="{% url admin_edges qhassubject=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all connections _}</a>
+</div>
+
 {% endblock %}

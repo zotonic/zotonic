@@ -2,6 +2,8 @@
 params:
 - tabs_enabled (optional): list of tab names: ["new", "depiction", "find",  "upload", "url"]
 #}
+{% with 'create' as intent %}
+
 {% if not (tabs_enabled and tabs_enabled|length == 1) %}
     <ul class="nav nav-pills">
         {% if not tabs_enabled or "new"|member:tabs_enabled %}
@@ -40,3 +42,5 @@ params:
     {% endif %}
     {% all include "_media_upload_panel.tpl" tab=#tab %}
 </div>
+
+{% endwith %}

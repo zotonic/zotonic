@@ -19,6 +19,7 @@
                     <a class="btn btn-default" id="{{ #connect }}" href="#connect"><i class="icon glyphicon glyphicon-camera"></i> {_ add media item _}</a>
                     {% wire id=#connect
                         action={dialog_open
+                            intent="link"
                             template="_action_dialog_connect.tpl"
                             title=[_"Add a connection: ", id.depiction.title]
                             subject_id=id

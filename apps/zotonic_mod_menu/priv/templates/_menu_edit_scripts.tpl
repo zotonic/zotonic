@@ -3,6 +3,7 @@
     {% wire name="admin-menu-select"
             action={
                 dialog_open
+                intent="select"
                 template="_action_dialog_connect.tpl"
                 title=_"Add category"
                 callback="window.zMenuEditDone"
@@ -19,6 +20,7 @@
     {% wire name="admin-menu-select"
             action={
                 dialog_open
+                intent="select"
                 template="_action_dialog_connect.tpl"
                 title=_"Add item"
                 callback="window.zMenuEditDone"
@@ -34,6 +36,7 @@
 	{# Menu - items can appear multiple times #}
     {% wire name="admin-menu-select"
             action={dialog_open
+                intent="select"
                 template="_action_dialog_connect.tpl"
                 catinclude
                 id=tree_id

@@ -32,6 +32,7 @@
 	            result=result
 	            target="dialog_new_rsc_loop_results"
 				template="_action_dialog_new_rsc_tab_find_results_loop.tpl"
+                intent=intent
                 predicate=predicate|as_atom
                 subject_id=subject_id
                 object_id=object_id

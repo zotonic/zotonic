@@ -247,7 +247,8 @@
 				    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 				    <button class="btn btn-primary" type="submit">
 				    	{_ Create _} {{ catname }}
-				    	{% if is_zlink %} &amp; {_ Link _}{% elseif subject_id or object_id %} &amp; {_ Connect _}{% endif %}
+				    	{% if intent == 'connect' %} &amp; {_ Connect _}
+				    	{% elseif intent == 'select' %} &amp; {_ Select _}{% endif %}
 				    </button>
 			    </div>
 			{% endblock %}
@@ -261,6 +262,7 @@
 
 		{# following hidden fields are for the feedback #}
 		{% block feedback_query_fields %}
+ 			<input type="hidden" class="nosubmit" name="intent" value="{{ intent|escape }}">
  			<input type="hidden" class="nosubmit" name="subject_id" value="{{ subject_id|escape }}">
  		    <input type="hidden" class="nosubmit" name="object_id" value="{{ object_id|escape }}">
  			<input type="hidden" class="nosubmit" name="predicate" value="{{ predicate|escape|default:'' }}">
@@ -316,6 +318,7 @@
 		    	target=#view
 		    	newform=#newform
 		    	template="_action_dialog_new_rsc_tab_preview.tpl"
+		    	intent=intent
 	            id=id
 	            subject_id=subject_id
 	            object_id=object_id
@@ -384,11 +387,12 @@
 
 		{% endjavascript %}
 
-		{% if subject_id or object_id or is_zlink %}
+		{% if intent == "connect" or intent == "select" %}
 			{% wire name="dialog_new_rsc_find"
 			    action={postback
 			        delegate=delegate|default:`mod_admin`
 			        postback={admin_connect_select
+			        	intent=intent
 			            id=id
 			            subject_id=subject_id
 			            object_id=object_id

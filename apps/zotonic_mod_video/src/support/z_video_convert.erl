@@ -103,7 +103,7 @@ do_convert(QueuePath, State) ->
     end.
 
 -spec insert_movie(file:filename_all(), #state{}) -> {ok, m_rsc:resource_id()} | {error, atom()}.
-insert_movie(Filename, State) ->
+insert_movie(TmpFile, State) ->
     Context = z_context:depickle(State#state.pickled_context),
     case is_current_upload(State, Context) of
         true ->
@@ -112,7 +112,7 @@ insert_movie(Filename, State) ->
                 <<"is_video_ok">> => true
             },
             m_media:replace_file(
-                #upload{filename=OrgFile, tmpfile=Filename},
+                #upload{filename=OrgFile, tmpfile=TmpFile},
                 State#state.id,
                 #{},
                 PropsMedia,

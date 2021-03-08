@@ -2,6 +2,7 @@
 <div class="tab-pane" id="{{ tab }}-url">
 	{% wire id=#urlform type="submit"
 		postback={media_url_embed
+						intent=intent
 						subject_id=subject_id
 						object_id=object_id
 						predicate=predicate

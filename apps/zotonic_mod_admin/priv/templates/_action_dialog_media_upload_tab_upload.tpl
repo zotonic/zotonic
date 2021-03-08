@@ -9,6 +9,7 @@
 
     {% wire id=#form type="submit"
         postback={media_upload
+                    intent=intent
                     predicate=predicate
                     actions=actions
                     id=id
@@ -21,7 +22,7 @@
     %}
     <form id="{{ #form }}" method="POST" action="postback" class="form">
         <fieldset>
-            {% if not id %}
+            {% if intent != 'update' %}
                 <div class="form-group label-floating">
                     <input type="text" class="do_autofocus form-control" id="new_media_title" name="new_media_title" value="{{ title|escape }}" placeholder="{_ Media title _}" autofocus>
                     <label class="control-label" for="new_media_title">{_ Media title _}</label>
@@ -37,7 +38,7 @@
                 <label class="control-label" for="{{ #upload_file }}">{_ Media file _}</label>
             </div>
 
-            {% if not id %}
+            {% if intent != 'update' %}
                 {% if subject_id %}
                     <div class="form-group">
                         <div class="checkbox">

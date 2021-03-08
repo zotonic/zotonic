@@ -1,5 +1,6 @@
 {#
 params:
+- intent: the purpose of this dialog, one of: "select", "create", "connect"
 - callback (optional)
 - language (optional)
 - actions (optional)
@@ -19,6 +20,13 @@ find params:
 - category (optional) (string/id) preselect the category dropdown
 - content_group (optional) can also be the string "me" to search on user created content
 #}
+{% if not intent|member:[ 'select', 'create', 'connect' ] %}
+    <p class="alert alert-danger">
+        Please specify the <b>intent</b> argument when using the <b>_action_dialog_connect.tpl</b>.<br>
+        It should be one of: <b>select</b>, <b>create</b> or <b>connect</b>
+    </p>
+{% else %}
+
 {% with
     callback|default:q.callback,
     language|default:(q.language|escape)|default:z_language,
@@ -180,3 +188,5 @@ find params:
 {% endwith %}
 {% endwith %}
 {% endwith %}
+
+{% endif %}

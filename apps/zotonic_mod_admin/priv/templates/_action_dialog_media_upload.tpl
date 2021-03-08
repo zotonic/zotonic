@@ -1,7 +1,15 @@
 {#
 params:
+- intent: purpose of this dialog 'create', 'connect', 'select', 'update'
 - tabs_enabled (optional): list of tab names: ["new", "depiction", "find",  "upload", "url"]
 #}
+{% if not intent|member:[ 'select', 'create', 'connect', 'update' ] %}
+    <p class="alert alert-danger">
+        Please specify the <b>intent</b> argument when using the <b>_action_dialog_media_upload.tpl</b>.<br>
+        It should be one of: <b>update</b>, <b>select</b>, <b>create</b> or <b>connect</b>
+    </p>
+{% else %}
+
 <div id="{{ #tab }}">
     {% if not (tabs_enabled and tabs_enabled|length == 1) %}
         <ul class="nav nav-pills">
@@ -28,3 +36,5 @@ params:
         {% all include "_media_upload_panel.tpl" tab=#tab %}
     </div>
 </div>
+
+{% endif %}
