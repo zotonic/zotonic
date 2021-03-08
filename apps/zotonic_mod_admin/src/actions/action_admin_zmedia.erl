@@ -32,8 +32,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, Context}.
 
 
-%% @doc Unlink the edge, on success show an undo message in the element with id "unlink-message"
-%% @spec event(Event, Context1) -> Context2
+%% @doc Show the add/edit media dialog
 event(#postback{message={zmedia_choose, Args}}, Context) ->
     z_render:dialog("Add/edit media", "_action_dialog_zmedia_choose.tpl", Args, Context).
 

@@ -20,12 +20,18 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    service_available/1,
     resource_exists/1,
     previously_existed/1,
     moved_temporarily/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+service_available(Context) ->
+    Context1 = z_context:set_noindex_header(Context),
+    Context2 = z_context:set_nocache_headers(Context1),
+    {true, Context2}.
 
 %% @doc Force a redirect by stating that the resource moved to a new location.
 -spec resource_exists( z:context() ) -> {boolean(), z:context()}.

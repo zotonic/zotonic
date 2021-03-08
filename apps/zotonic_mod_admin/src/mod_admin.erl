@@ -259,6 +259,7 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
                     [ {m_rsc:rid(CatId, Context)} || CatId <- CatIds, CatId =/= <<>> ]
            end,
     Vars = [
+        {intent, z_context:get_q(<<"intent">>, Context)},
         {creator_id, CreatorId},
         {subject_id, SubjectId},
         {cat, Cats},

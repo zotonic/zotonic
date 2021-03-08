@@ -21,8 +21,9 @@
 
             {% wire id=#collab_select
                     action={dialog_open
-                            subject_id=id
+                            intent="select"
                             template="_action_dialog_connect.tpl"
+                            subject_id=id
                             title=[_"Move to another", " ", m.rsc.acl_collaboration_group.title]
                             category=`acl_collaboration_group`
                             tabs_enabled=["find"]

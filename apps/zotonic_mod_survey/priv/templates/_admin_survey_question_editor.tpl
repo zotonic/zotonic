@@ -201,6 +201,7 @@
 
 {% wire name="admin-q-block-connect"
         action={dialog_open
+        			intent="select"
                     subject_id=id
                     predicate=""
                     template="_action_dialog_connect.tpl"

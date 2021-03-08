@@ -74,7 +74,15 @@ render_page(IsPeerAllowed, Template, Context) ->
     {Output, OutputContext} = z_context:output(Rendered, Context),
     Context1 = cowmachine_req:set_response_code(StatusCode, OutputContext),
     Context2 = cowmachine_req:set_resp_body(Output, Context1),
-    {{halt, StatusCode}, Context2}.
+    Context3 = case StatusCode of
+        200 ->
+            z_context:set_noindex_header(
+                z_context:set_nocache_headers(Context2)
+            );
+        _ ->
+            Context2
+    end,
+    {{halt, StatusCode}, Context3}.
 
 resp_code(Context) ->
     case z_context:get(is_fallback_template, Context) of

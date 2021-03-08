@@ -8,26 +8,36 @@
     </p>
 
     {% wire id=#form type="submit"
-        postback={media_upload predicate=predicate actions=actions id=id subject_id=subject_id 
-                    redirect=redirect|if_undefined:(not stay) content_group_id=content_group_id callback=callback}
+        postback={media_upload
+                    intent=intent
+                    predicate=predicate
+                    actions=actions
+                    id=id
+                    subject_id=subject_id
+                    redirect=redirect|if_undefined:(not stay)
+                    content_group_id=content_group_id
+                    callback=callback}
         delegate=`action_admin_dialog_media_upload`
     %}
     <form id="{{ #form }}" method="POST" action="postback" class="form">
         <fieldset>
-            {% if not id %}
+            {% if intent != 'update' %}
                 <div class="form-group label-floating">
-                    <input type="text" class="do_autofocus form-control" id="new_media_title" name="new_media_title" value="{{ title|escape }}" placeholder="{_ Media title _}">
+                    <input type="text" class="do_autofocus form-control" id="new_media_title" name="new_media_title" value="{{ title|escape }}" placeholder="{_ Media title _}" autofocus>
                     <label class="control-label" for="new_media_title">{_ Media title _}</label>
                 </div>
             {% endif %}
 
-            <div class="form-group label-floating">
-                <input type="file" class="form-control" id="{{ #upload_file }}" name="upload_file" placeholder="{_ Media file _}">
-                <label class="control-label" for="{{ #upload_file }}">{_ Media file _}</label>
-                {% validate id=#upload_file name="upload_file" type={presence} %}
+            <div id="{{ #upload_file_preview }}" style="display: none;">
+                <img src="" class="thumbnail" style="max-height:200px">
             </div>
 
-            {% if not id %}
+            <div class="form-group label-floating">
+                <input type="file" class="form-control" id="{{ #upload_file }}" name="upload_file" placeholder="{_ Media file _}" required>
+                <label class="control-label" for="{{ #upload_file }}">{_ Media file _}</label>
+            </div>
+
+            {% if intent != 'update' %}
                 {% if subject_id %}
                     <div class="form-group">
                         <div class="checkbox">
@@ -57,4 +67,30 @@
         </fieldset>
     </form>
 </div>
+
+{% javascript %}
+(function() {
+    let upl = document.getElementById('{{ #upload_file }}');
+    let preview = document.getElementById('{{ #upload_file_preview }}');
+    let preview_img = document.querySelector('#{{ #upload_file_preview }} img')
+
+    upl.addEventListener('change', function() {
+        let files = upl.files;
+        if (files.length > 0) {
+            if (files[0].type.split("/")[0] == "image") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview_img.setAttribute('src', e.target.result);
+                    preview.setAttribute('style', '');
+                };
+                reader.readAsDataURL($(this)[0].files[0]);
+            } else {
+                preview.setAttribute('style', 'display: none');
+            }
+        }
+    });
+})();
+{% endjavascript %}
+
+
 {% endblock %}

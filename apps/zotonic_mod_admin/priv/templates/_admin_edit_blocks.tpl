@@ -101,6 +101,7 @@ $('#edit-blocks-wrapper').on('click', '.rsc-item h5 a', function(event) {
 
 {% wire name="admin-block-connect"
     action={dialog_open
+        intent="select"
         subject_id=id
         predicate=""
         template="_action_dialog_connect.tpl"

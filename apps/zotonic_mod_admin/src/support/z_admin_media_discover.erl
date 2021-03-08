@@ -55,14 +55,15 @@ event(#submit{message={media_url_import, Args}}, Context) ->
     {args, ArgsEmbed} = proplists:lookup(args, Args),
     {media, MediaImport} = proplists:lookup(media, Args),
     Id = m_rsc:rid( proplists:get_value(id, ArgsEmbed), Context),
-    Result = case Id of
-    undefined->
-        RscProps = media_insert_rsc_props(ArgsEmbed, Context),
-        z_media_import:insert(MediaImport, RscProps, Context);
-    Id when is_integer(Id) ->
-        z_media_import:update(Id, MediaImport, Context)
+    Intent = proplists:get_value(intent, ArgsEmbed),
+    Result = case Intent of
+        <<"update">> when is_integer(Id) ->
+            z_media_import:update(Id, MediaImport, Context);
+        _ ->
+            RscProps = media_insert_rsc_props(ArgsEmbed, Context),
+            z_media_import:insert(MediaImport, RscProps, Context)
     end,
-    handle_media_upload_args(Id, Result, ArgsEmbed, Context).
+    handle_media_upload_args(Intent, Id, Result, ArgsEmbed, Context).
 
 media_insert_rsc_props(ArgsEmbed, Context) ->
     SubjectId = m_rsc:rid(proplists:get_value(subject_id, ArgsEmbed), Context),
@@ -111,17 +112,17 @@ get_q(P, Default, Context) ->
     end.
 
 %% Handling the media upload (Slightly adapted from action_admin_dialog_media_upload)
-handle_media_upload_args(undefined, {ok, NewId}, EventProps, Context) ->
-    %% Create a new media page
-    action_admin_dialog_new_rsc:do_new_page_actions(NewId, EventProps, Context);
-handle_media_upload_args(Id, {ok, _}, EventProps, Context) when is_integer(Id) ->
+handle_media_upload_args(<<"update">>, Id, {ok, _}, EventProps, Context) when is_integer(Id) ->
     %% Replace attached medium with the uploaded file (skip any edge requests)
     Actions = proplists:get_value(actions, EventProps, []),
     z_render:wire([
             {growl, [{text, ?__("Media item created.", Context)}]},
             {dialog_close, []}
             | Actions], Context);
-handle_media_upload_args(Id, {error, R}, _EventProps, Context) when is_integer(Id) ->
+handle_media_upload_args(_Intent, _Id, {ok, NewId}, EventProps, Context) ->
+    %% Create a new media page - connect and perform post actions
+    action_admin_dialog_new_rsc:do_new_page_actions(NewId, EventProps, Context);
+handle_media_upload_args(_Intent, Id, {error, R}, _EventProps, Context) when is_integer(Id) ->
     z_render:growl_error(error_message(R, Context), Context).
 
 %% @doc Return a sane upload error message

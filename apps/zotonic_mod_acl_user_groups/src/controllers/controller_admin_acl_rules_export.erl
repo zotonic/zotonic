@@ -2,12 +2,18 @@
 -module(controller_admin_acl_rules_export).
 
 -export([
-         is_authorized/1,
-         content_types_provided/1,
-         process/4
-        ]).
+        service_available/1,
+        is_authorized/1,
+        content_types_provided/1,
+        process/4
+    ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+service_available(Context) ->
+    Context1 = z_context:set_noindex_header(Context),
+    Context2 = z_context:set_nocache_headers(Context1),
+    {true, Context2}.
 
 is_authorized(Context) ->
     z_controller_helper:is_authorized([ {use, mod_acl_user_groups} ], Context).

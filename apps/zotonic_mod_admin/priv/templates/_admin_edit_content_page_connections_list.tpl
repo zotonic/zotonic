@@ -46,6 +46,7 @@ Config key:
        id=#connect.predicate
        action={
           dialog_open
+          intent="connect"
           template="_action_dialog_connect.tpl"
           title=dialog_title_add|default:[_"Add a connection:", " ", predicate.title]
           subject_id=id

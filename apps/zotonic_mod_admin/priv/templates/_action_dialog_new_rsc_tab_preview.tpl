@@ -6,6 +6,7 @@
         target=#view
         newform=#newform
         template="_rsc_preview_panel.tpl"
+        intent=intent
         id=id
         subject_id=subject_id
         object_id=object_id
@@ -15,7 +16,6 @@
         action=action
         actions=actions
         autoclose=autoclose
-        is_zlink
 #}
 
 {% with m.rsc[q.select_id].id as id %}
@@ -34,16 +34,14 @@
         {% wire id=#cancel action={trigger_event name='dialog_new_rsc_preview_close'} %}
 
         {% if id.is_editable %}
-            {% with not is_zlink and not predicate as is_primary %}
-                <a href="#" class="btn {% if is_primary %}btn-primary{% else %}btn-default{% endif %} action-edit">
-                    {_ Visit full edit page _}
-                </a>
-            {% endwith %}
+            <a href="#" class="btn {% if intent == "create" %}btn-primary{% else %}btn-default{% endif %} action-edit">
+                {_ Visit full edit page _}
+            </a>
         {% endif %}
 
-        {% if is_zlink %}
+        {% if intent == "select" %}
             <a href="#" class="btn btn-primary action-connect">{_ Link _}</a>
-        {% elseif predicate and is_linkable %}
+        {% elseif intent == "connect" and is_linkable %}
             <a href="#" class="btn btn-primary action-connect">{_ Connect _}</a>
         {% endif %}
     </div>
