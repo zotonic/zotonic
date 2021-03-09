@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-02 12:40\n"
+"PO-Revision-Date: 2021-03-07 19:15\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1441,7 +1441,7 @@ msgstr "Nessuna pagina trovata."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:61
 msgid "Number of open sockets grouped per ip-address (top 10)"
-msgstr "Numero di socket aperti raggruppati per indirizzo IP (top 10)"
+msgstr "Numero di socket aperti raggruppati per indirizzo IP (primi 10)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:47
 msgid "Page Count"
@@ -4494,7 +4494,7 @@ msgstr "modulo di contatto su"
 
 #: apps/zotonic_mod_contact/priv/templates/email_contact.tpl:6
 msgid "has been submitted."
-msgstr "è stato presentato."
+msgstr "è stato inviato."
 
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:1
 msgid "Are you sure you want to delete the following content groups:"
@@ -6486,7 +6486,7 @@ msgstr "Aggiungi qui sotto"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:14./apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:30
 msgid "Add bottom"
-msgstr "Aggiungere il fondo"
+msgstr "Aggiungere in fondo"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:7
 msgid "Add category"
@@ -6502,7 +6502,7 @@ msgstr "Aggiungi voce di menu"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:13./apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:29
 msgid "Add top"
-msgstr "Aggiungi top"
+msgstr "Aggiungere in cima"
 
 #: apps/zotonic_mod_menu/src/mod_menu.erl:140
 msgid "COPY"
@@ -6929,7 +6929,7 @@ msgstr "registrarsi per un nome utente e una password"
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:104
 msgid "Building Zotonic in the background..."
-msgstr "Costruire Zotonic sullo sfondo..."
+msgstr "Sto compilando Zotonic in background..."
 
 #: apps/zotonic_mod_site_update/src/mod_site_update.erl:55
 msgid "Error during fetch from version control."
@@ -7392,7 +7392,7 @@ msgstr "Nascondi dai risultati"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:42./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:84
 msgid "Hide progress information"
-msgstr "Nascondere le informazioni sul progresso"
+msgstr "Nascondere le informazioni sull'avanzamento"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:29
 msgid "Hide the user’s id or browser-id from result exports"
@@ -7452,7 +7452,7 @@ msgstr "Lascia vuoto se non ci sono domande del test."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:149
 msgid "Likert"
-msgstr "Likert"
+msgstr "Scala Likert"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:155
 msgid "Long answer"
@@ -7484,7 +7484,7 @@ msgstr "Scelta multipla"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:62./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:40
 msgid "Multiple entries per user/browser"
-msgstr "Più voci per utente/browser"
+msgstr "Più volte per utente/browser"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Multiple page break blocks are merged into one."
@@ -7596,11 +7596,11 @@ msgstr "Lista stampabile"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:79
 msgid "Progress"
-msgstr "Progresso"
+msgstr "Avanzamento"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:16./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
 msgid "Prompt"
-msgstr "Prompt"
+msgstr "Richiesta"
 
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:66
 msgid "Question"
@@ -7628,7 +7628,7 @@ msgstr "Rosso"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:57./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:56
 msgid "Required, this question must be answered."
-msgstr "Richiesto, bisogna rispondere a questa domanda."
+msgstr "È obbligatorio rispondere a questa domanda."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:9./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:4./apps/zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results"
@@ -7664,7 +7664,7 @@ msgstr "Seleziona il tuo paese"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:30
 msgid "Send confirmation to respondent (please add a question named <i>email</i>)"
-msgstr "Inviare la conferma al rispondente (aggiungere una domanda chiamata <i>email</i>)"
+msgstr "Inviare una conferma all'intervistato (aggiungere una domanda chiamata <i>email</i>)"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:117
 msgid "Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”)."
@@ -7688,7 +7688,7 @@ msgstr "Mostra la barra di avanzamento"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:46./apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:90
 msgid "Show progress information as “<em>Question 3/10</em>”"
-msgstr "Mostra le informazioni sul progresso come \"<em>Domanda 3/10</em>\""
+msgstr "Mostra le informazioni sull'avanzamento come \"<em>Domanda 3/10</em>\""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:46
 msgid "Show results"
@@ -7776,7 +7776,7 @@ msgstr "Solo testo di ringraziamento"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "Thank you text."
-msgstr "Grazie al testo."
+msgstr "Testo di ringraziamento."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:50./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "The earth is flat."
@@ -7808,7 +7808,7 @@ msgstr "Questo è un risultato per:"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the survey has been submitted."
-msgstr "Questo testo viene mostrato dopo che il sondaggio è stato presentato."
+msgstr "Questo testo viene mostrato dopo l'invio del sondaggio."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:16
 msgid "This text is shown as an introduction to the survey."
