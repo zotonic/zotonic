@@ -1,7 +1,7 @@
 
 .. include:: meta-mod_fileuploader.rst
 
-Upload files used a parallel web worker.
+Upload files using a parallel web worker.
 
 This module provides a web worker and server logic to quickly upload files.
 
@@ -23,7 +23,7 @@ Files are send to the webworker on the topic ``model/fileuploader/post/new``:
             }
         ],
         ready_msg: {
-            foo: "bar",                 // Anything you want to sent if all is uploaded
+            foo: "bar",                 // Anything you want to send if all files are uploaded
             files: []                   // This will be set by the worker
         },
         ready_topic: "bridge/origin/foo/bar",
@@ -36,7 +36,7 @@ Files are send to the webworker on the topic ``model/fileuploader/post/new``:
         progress_topic: "zotonic-transport/progress"
     };
 
-The files returned will be:
+The files returned in the ``ready_mdg`` will be:
 
 .. code-block:: javascript
 
