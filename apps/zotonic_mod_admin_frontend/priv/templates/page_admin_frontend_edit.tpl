@@ -74,7 +74,7 @@
 			{% else %}
 				<div class="col-lg-12 col-md-12" id="save-buttons" style="display:none">
 			{% endif %}
-				<span class="navbar-brand visible-desktop">{_ This page _}</span>
+				<span class="navbar-brand visible-lg visible-md">{_ This page _}</span>
 
 				{% button class="btn btn-primary" text=_"Save" title=_"Save this page."
 						  action={script script="$('#save_stay').click();"}
