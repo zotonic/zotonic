@@ -35,6 +35,7 @@ Files are sent to the webworker on the topic ``model/fileuploader/post/new``:
         },
         progress_topic: "zotonic-transport/progress"
     };
+    cotonic.broker.publish("model/fileuploader/post/new", msg);
 
 The files returned in the ``ready_mdg`` will be:
 
