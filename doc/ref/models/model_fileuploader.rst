@@ -43,11 +43,11 @@ Status ``"error"`` is returned if the name is unknown or any error occured.
 
 
 
-``model/fileuploader/post/delete/:name`` delete a fileupload.
+``model/fileuploader/post/delete/+name`` delete a fileupload.
 
-``model/fileuploader/post/upload/:name/:offset`` upload data to a fileupload.
+``model/fileuploader/post/upload/+name/+offset`` upload data to a fileupload.
 
 The offset must be an integer and the message payload must be binary data.
 
-``model/fileuploader/get/status/:name`` fetch the current fileupload status.
+``model/fileuploader/get/status/+name`` fetch the current fileupload status.
 
