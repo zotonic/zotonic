@@ -9,7 +9,7 @@ The web worker sends files in 128KB parts to the server, the server recombines a
 to a single file. The web worker is using multiple parallel uploaders to make optimal use
 of the available bandwidth.
 
-Files are send to the webworker on the topic ``model/fileuploader/post/new``:
+Files are sent to the webworker on the topic ``model/fileuploader/post/new``:
 
 .. code-block:: javascript
 
