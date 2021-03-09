@@ -37,7 +37,7 @@ Files are sent to the webworker on the topic ``model/fileuploader/post/new``:
     };
     cotonic.broker.publish("model/fileuploader/post/new", msg);
 
-The files returned in the ``ready_mdg`` will be:
+The files received with the ``ready_msg`` on the ``ready_topic`` will be:
 
 .. code-block:: javascript
 
