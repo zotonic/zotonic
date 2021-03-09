@@ -10,6 +10,7 @@
 						is_zlink=is_zlink
 						is_zmedia=is_zmedia
 						redirect=redirect|if_undefined:(not stay)
+						dependent=dependent
 						content_group_id=content_group_id
 						actions=actions callback=callback
 						discover_elt=#discover}
