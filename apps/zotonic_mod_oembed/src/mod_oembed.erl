@@ -227,14 +227,16 @@ observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
                 module = ?MODULE,
                 description = ?__("Embedded Content", Context),
                 rsc_props = #{
-                    <<"title">> => first([
-                            maps:get(<<"title">>, Json, undefined),
-                            z_url_metadata:p(title, MD)
-                        ]),
-                    <<"summary">> => first([
-                            maps:get(<<"description">>, Json, undefined),
-                            z_url_metadata:p(summary, MD)
-                        ]),
+                    <<"title">> => z_html:unescape(
+                            first([
+                                maps:get(<<"title">>, Json, undefined),
+                                z_url_metadata:p(title, MD)
+                            ])),
+                    <<"summary">> => z_html:unescape(
+                            first([
+                                maps:get(<<"description">>, Json, undefined),
+                                z_url_metadata:p(summary, MD)
+                            ])),
                     <<"website">> => Url
                 },
                 medium_props = #{
