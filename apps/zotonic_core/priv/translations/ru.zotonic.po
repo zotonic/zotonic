@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-09 06:29\n"
+"PO-Revision-Date: 2021-03-09 06:50\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -692,19 +692,19 @@ msgstr "отправьте этот URL кому-нибудь другому д�
 
 #: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
 msgid "use (acl action)"
-msgstr "использовать (acl действие)"
+msgstr "использовать (действие в acl)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "используйте <b>Новое личное окно</b> (проверьте <b>Файл</b> меню вашего браузера)"
+msgstr "используйте <b>Новое приватное окно</b> (проверьте в меню <b>Файл</b> вашего браузера)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
-msgstr "используйте другой браузер (например, Chrome, если вы сейчас используете Firefox)."
+msgstr "используйте другой браузер (например, Chrome, если сейчас вы используете Firefox)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:68./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
 msgid "view (acl action)"
-msgstr "вид (acl действие)"
+msgstr "просматривать (действие в acl)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:107
 msgid "&lt; Prev"
