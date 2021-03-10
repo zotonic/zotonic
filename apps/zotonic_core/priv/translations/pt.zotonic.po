@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-10 12:29\n"
+"PO-Revision-Date: 2021-03-10 12:48\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -1021,7 +1021,7 @@ msgstr "Apagar se nenhuma outra página estiver ligada a esta página."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:46./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:232./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
 msgid "Delete if not connected anymore"
-msgstr ""
+msgstr "Excluir se não estiver mais conectado"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
 msgid "Delete this page."
@@ -1187,7 +1187,7 @@ msgstr "Filtro no grupo de conteúdo"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:68
 msgid "Find Media"
-msgstr ""
+msgstr "Encontrar mídia"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:69
 msgid "Find Page"
@@ -1404,7 +1404,7 @@ msgstr "Conexões de rede"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
-msgstr ""
+msgstr "Nova página"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
 msgid "Next &gt;"
@@ -1466,7 +1466,7 @@ msgstr "Caminho da página"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "Page referrers"
-msgstr ""
+msgstr "Referenciadores de página"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
@@ -1576,7 +1576,7 @@ msgstr "Recalcule a numeração da árvore de categorias. Isto pode demorar muit
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:6
 msgid "Recent referrers"
-msgstr ""
+msgstr "Referenciadores recentes"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
@@ -1683,7 +1683,7 @@ msgstr "Veja também: <a href=\"http://docs.zotonic.com/en/stable/ref/configurat
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
 msgid "Select"
-msgstr ""
+msgstr "Selecione"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
@@ -1879,7 +1879,7 @@ msgstr "Este nome está em uso por outra página."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
-msgstr ""
+msgstr "Esta página pode ser conectada a partir de outras páginas. Por exemplo, pode ser o autor de um artigo."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
 msgid "This page has been deleted."
@@ -1948,7 +1948,7 @@ msgstr "Não utilizado"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
-msgstr ""
+msgstr "Envio"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
