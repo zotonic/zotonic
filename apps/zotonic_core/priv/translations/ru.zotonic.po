@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-09 21:44\n"
+"PO-Revision-Date: 2021-03-10 09:52\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -728,7 +728,7 @@ msgstr "+ добавить блок"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>Первый</strong> , также известный как имя, фамилия или имя Христа.<br/><strong>Серединный</strong> часто сокращается до исходного, как в <em>Джон Д. Рокфеллер</em>.<br/><strong>Префикс имени</strong> подобно голландскому <em>van, van de, der</em>.<br/><strong>Фамилия</strong> также известна как фамилия или имя."
+msgstr "<strong>Первое имя</strong>, также называемое личное имя или имя, данное при рождении.<br/><strong>Отчество</strong> или второе (среднее) имя, часто сокращается до инициала, как в <em>Джон Д. Рокфеллер</em>.<br/><strong>Префикс фамилии</strong>, наподобие голландских <em>\"ван\", \"ван де\" или \"дер\"</em>.<br/><strong>Фамилия</strong>, также называемая родовое или последнее имя."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:10
 msgid "About categories"
