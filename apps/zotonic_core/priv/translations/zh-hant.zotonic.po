@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-10 12:28\n"
+"PO-Revision-Date: 2021-03-10 12:48\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -1021,7 +1021,7 @@ msgstr "如果没有其他页面连接到这个页面，则删除。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:46./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:232./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
 msgid "Delete if not connected anymore"
-msgstr ""
+msgstr "如果不再連接，則刪除"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
 msgid "Delete this page."
@@ -1187,7 +1187,7 @@ msgstr "筛选内容组"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:68
 msgid "Find Media"
-msgstr ""
+msgstr "查找媒體"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:69
 msgid "Find Page"
@@ -1404,7 +1404,7 @@ msgstr "网络连接"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
-msgstr ""
+msgstr "新一頁"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
 msgid "Next &gt;"
@@ -1466,7 +1466,7 @@ msgstr "页面路径"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "Page referrers"
-msgstr ""
+msgstr "頁面引薦來源"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
@@ -1576,7 +1576,7 @@ msgstr "重新计算分类树。这可能会耗费一定的时间。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:6
 msgid "Recent referrers"
-msgstr ""
+msgstr "最近的推薦人"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
@@ -1683,7 +1683,7 @@ msgstr "也请参见。 <a href=\"http://docs.zotonic.com/en/stable/ref/configur
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
 msgid "Select"
-msgstr ""
+msgstr "選擇"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
@@ -1879,7 +1879,7 @@ msgstr "这个名字被另一个页面使用。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
-msgstr ""
+msgstr "該頁面可以與其他頁面連接。例如，它可能是文章的作者。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
 msgid "This page has been deleted."
@@ -1948,7 +1948,7 @@ msgstr "未使用"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
-msgstr ""
+msgstr "上載"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
