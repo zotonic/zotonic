@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-02 12:40\n"
+"PO-Revision-Date: 2021-03-10 12:49\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -102,7 +102,7 @@ msgstr "ACL-användargrupp"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:104
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:105
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "Åtkomstkontroll"
@@ -162,7 +162,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Are you sure you want to restore all ACL rules to their currently published version?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:226./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:64./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:247./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -185,7 +185,7 @@ msgid "Cancel"
 msgstr "Avbryt"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "Category"
@@ -236,7 +236,7 @@ msgstr "Samarbete-grupper är grupper av användare där allt innehåll tillhör
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:62
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:63
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
 msgid "Content"
 msgstr "Innehåll"
@@ -274,7 +274,7 @@ msgstr "Ange vem som kan se eller redigera den här sidan."
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:51./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:73./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:94
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:156
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:159
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "Ta bort"
@@ -401,12 +401,12 @@ msgstr "Moduler"
 msgid "Move all users within these user groups to:"
 msgstr "Flytta alla användare inom dessa användargrupper till:"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:19./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:26
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:19./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:27
 msgid "Move to another"
 msgstr "Flytta till en annan"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
@@ -482,7 +482,7 @@ msgstr "Återställda regler"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:66
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:122./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
@@ -499,7 +499,7 @@ msgid "Saved collaboration group settings"
 msgstr "Sparade samarbetsgruppsinställningar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:178./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:199
 msgid "Select category"
 msgstr "Välj kategori"
 
@@ -523,7 +523,7 @@ msgstr "Visa den här ACL-användargruppen först:"
 msgid "Sorry, you are not allowed to delete this."
 msgstr "Ledsen, du är inte tillåtet att ta bort detta."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:40
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
 msgstr "Ledsen, du är inte tillåtet att infoga sidor av denna kategori i innehållet i den markerade gruppen."
 
@@ -582,7 +582,7 @@ msgstr "Denna regel är förvaltas av modul"
 msgid "Try ACL rules"
 msgstr "Prova ACL-regler"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:42
 msgid "Try a different combination of category and content group."
 msgstr "Prova en annan kombination av kategori och innehållsgrupp."
 
@@ -734,11 +734,11 @@ msgstr "<strong>Första</strong> även känd som förnamn, efternamn eller Chris
 msgid "About categories"
 msgstr "Om kategorier"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
 msgid "Add a connection:"
 msgstr "Lägg till en anslutning:"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:59
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:63
 msgid "Add a new media file"
 msgstr "Lägg till en ny mediefil"
 
@@ -746,7 +746,7 @@ msgstr "Lägg till en ny mediefil"
 msgid "Add a new media item"
 msgstr "Lägg till ett nytt medieobjekt"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:101
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:102
 msgid "Add media item"
 msgstr "Lägg till medieobjekt"
 
@@ -754,7 +754,7 @@ msgstr "Lägg till medieobjekt"
 msgid "Add media to body"
 msgstr "Lägg till media till brödtexten"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:476./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:477./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Lade till anslutningen till"
 
@@ -808,14 +808,10 @@ msgstr "Alternativt telefonnummer"
 msgid "And media can also be viewed on their own page."
 msgstr "Och medier kan också ses på deras egen sida."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:272
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:20
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "Vilken kategori som helst"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:266
-msgid "Any valid for:"
-msgstr "Alla giltiga för:"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:44
 msgid "Anybody’s"
@@ -837,7 +833,7 @@ msgstr "Åt sidan"
 msgid "Ask google to not index this page"
 msgstr "Be google att inte indexera den här sidan"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Bifogade media"
 
@@ -904,7 +900,7 @@ msgstr "Klicka här för mer information"
 msgid "Click the image to set the cropping center."
 msgstr "Klicka på bilden för att ställa in beskärning center."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:11
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:275
 msgid "Click to preview."
 msgstr "Klicka för att förhandsgranska."
 
@@ -937,7 +933,7 @@ msgstr "Bekräfta radering"
 msgid "Confirm logoff"
 msgstr "Bekräfta avloggning"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:229./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:250./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
 msgstr "Ansluta"
 
@@ -957,7 +953,7 @@ msgstr "Kopierad nedladdningslänk till urklipp"
 msgid "Copy download link"
 msgstr "Kopiera nedladdningslänk"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:129
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:130
 msgid "Could not connect to the website."
 msgstr "Kunde inte ansluta till webbplatsen."
 
@@ -974,19 +970,15 @@ msgstr "Räkna"
 msgid "Country"
 msgstr "Land"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:43./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:228
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:57./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:249
 msgid "Create"
 msgstr "Skapa"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:55./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:10
-msgid "Create or find"
-msgstr "Skapa eller hitta"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 msgid "Created by"
 msgstr "Skapad av"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:291
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:288
 msgid "Created by me"
 msgstr "Skapad av mig"
 
@@ -1011,7 +1003,7 @@ msgstr "Instrumentpanel"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:529./apps/zotonic_mod_survey/src/models/m_survey.erl:532
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:531./apps/zotonic_mod_survey/src/models/m_survey.erl:534
 msgid "Date"
 msgstr "Datum"
 
@@ -1023,19 +1015,19 @@ msgstr "Datumintervall"
 msgid "Date ranges"
 msgstr "Datumintervall"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:211./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
-msgid "Delete after disconnecting from"
-msgstr "Radera efter koppling från"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:46
 msgid "Delete if no other page is connected to this page."
 msgstr "Ta bort om inga andra sidan är ansluten till denna sida."
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:46./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:232./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
+msgid "Delete if not connected anymore"
+msgstr "Ta bort om den inte är ansluten längre"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
 msgid "Delete this page."
 msgstr "Ta bort den här sidan."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
 msgid "Deleted."
 msgstr "Raderade."
 
@@ -1051,7 +1043,7 @@ msgstr "Beroende"
 msgid "Disconnect"
 msgstr "Koppla från"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
 msgstr "Upptäck media"
 
@@ -1084,12 +1076,12 @@ msgstr "Duplicera denna sida."
 msgid "E-mail address"
 msgstr "E-postadress"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_base_site/priv/templates/_meta.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:21
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:27
 msgid "Edit"
 msgstr "Redigera"
@@ -1110,7 +1102,7 @@ msgstr "E-postadress för offentlig visning"
 msgid "Embed"
 msgstr "Bädda in"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Bädda in koden kommer att desinficeras för tillåtna webbplatser och html."
 
@@ -1118,7 +1110,7 @@ msgstr "Bädda in koden kommer att desinficeras för tillåtna webbplatser och h
 msgid "Embed page"
 msgstr "Bädda in sidan"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:179
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:180
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:228
 msgid "Embedded Content"
 msgstr "Inbäddat innehåll"
@@ -1127,7 +1119,7 @@ msgstr "Inbäddat innehåll"
 msgid "Emergency telephone"
 msgstr "Nödtelefonnummer"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Ange en URL-adress eller bädda in kod. Det kommer att analyseras och du kan själv välja hur du vill importera data."
 
@@ -1143,16 +1135,16 @@ msgstr "Erlang installationsrot"
 msgid "Erlang Version"
 msgstr "Erlang-version"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:146
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Error checking the website."
 msgstr "Felkontroll webbplatsen."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:89
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Error creating the page."
 msgstr "Fel vid skapande av sidan."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:169
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:170
 msgid "Error uploading the file."
 msgstr "Fel vid uppladdningen av filen."
 
@@ -1164,12 +1156,12 @@ msgstr "Varje sida kan ha en datumintervall. Till exempel om sidan är en hände
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
 msgstr "Varje sida är kategoriserade i exakt en kategori. Den kategori som definierar vad sidan står för. Till exempel, en händelse, en produkt eller en person. Kategorierna är hierarkiskt definierade. På så sätt kan du ha en kategori fordon med underkategorier bil och cykel."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:252
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:275
 msgid "Existing pages"
 msgstr "Befintliga sidor"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:160./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:137
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:161./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:138
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Failed to download the file."
 msgstr "Gick inte att ladda ner filen."
 
@@ -1193,12 +1185,16 @@ msgstr "Filtrera på kategori"
 msgid "Filter on content group"
 msgstr "Filtrera på innehållsgrupp"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:68
+msgid "Find Media"
+msgstr "Hitta media"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:69
 msgid "Find Page"
 msgstr "Hitta sida"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:106
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:207
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:108
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:208
 msgid "Find page"
 msgstr "Hitta sida"
 
@@ -1285,7 +1281,7 @@ msgstr "Senast modifierade personer"
 msgid "Latest modified texts"
 msgstr "Senaste modifierade texter"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:229./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
 msgid "Link"
 msgstr "Länk"
@@ -1340,7 +1336,7 @@ msgstr "Motsvarande"
 msgid "Media"
 msgstr "Media"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
 msgid "Media URL or HTML"
 msgstr "Media-URL eller HTML"
 
@@ -1348,11 +1344,11 @@ msgstr "Media-URL eller HTML"
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "Media omfattar alla uppladdade bilder, filmer och dokument. Media kan kopplas till sidor."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:26./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:42
 msgid "Media file"
 msgstr "Mediefil"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:146./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:121
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:140./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:119
 msgid "Media item created."
 msgstr "Media-objekt skapat."
 
@@ -1360,7 +1356,7 @@ msgstr "Media-objekt skapat."
 msgid "Media on this page"
 msgstr "Media på denna sida"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:19./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:26./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
 msgid "Media title"
 msgstr "Medietitel"
 
@@ -1393,18 +1389,22 @@ msgstr "Ändrad den"
 msgid "Modified:"
 msgstr "Ändrad:"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:200./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:202
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:534
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:536
 msgid "Name"
 msgstr "namn"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:39
 msgid "Network Connections"
 msgstr "Nätverkskopplingar"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+msgid "New Page"
+msgstr "Ny sida"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
 msgid "Next &gt;"
@@ -1463,6 +1463,10 @@ msgstr "Sidnyckelord"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:21
 msgid "Page path"
 msgstr "Sidan sökväg"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
+msgid "Page referrers"
+msgstr "Sidhänvisare"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
@@ -1542,8 +1546,8 @@ msgstr "Publikationsperiod"
 msgid "Publish this page"
 msgstr "Publicera den här sidan"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:47./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:219./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:57./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:240./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:45
 msgid "Published"
 msgstr "Publicerad"
 
@@ -1570,6 +1574,10 @@ msgstr "Bygga sökning index"
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "Räkna numreringen av kategori träd. Detta kan ta lång tid."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:6
+msgid "Recent referrers"
+msgstr "Senaste hänvisningar"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
 msgstr "Omdirigera till ovanstående webbplats på sidan visa"
@@ -1594,7 +1602,7 @@ msgstr "Anmärkningar"
 msgid "Remove crop center"
 msgstr "Ta bort gröda center"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:480
+#: apps/zotonic_mod_admin/src/mod_admin.erl:481
 msgid "Removed the connection to"
 msgstr "Bort anslutningen till"
 
@@ -1606,11 +1614,11 @@ msgstr "Ändra kategori träd"
 msgid "Replace"
 msgstr "Byta ut"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:59
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:63
 msgid "Replace current medium"
 msgstr "Ersätta nuvarande medium"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:101
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:102
 msgid "Replace this media item"
 msgstr "Byt ut detta medieobjekt"
 
@@ -1639,12 +1647,12 @@ msgid "Save and View"
 msgstr "Spara och visa"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:125./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save and view the page."
 msgstr "Spara och visa sidan."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:122./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 msgid "Save this page."
 msgstr "Spara den här sidan."
 
@@ -1672,6 +1680,10 @@ msgstr "Säkerhetskatalog"
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:6
 msgid "See also: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
 msgstr "Se även: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">erlang.config-filen</a>"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
+msgid "Select"
+msgstr "Välj"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
@@ -1713,21 +1725,17 @@ msgstr "Något gick fel. Förlåt."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Tyvärr, du har inte behörighet att lägga till anslutningen."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:462
+#: apps/zotonic_mod_admin/src/mod_admin.erl:463
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Tyvärr, du har inte behörighet att lägga till anslutningen."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:464
+#: apps/zotonic_mod_admin/src/mod_admin.erl:465
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Tyvärr, du har inte behörighet att ta bort anslutningen."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:171
 msgid "Standard"
 msgstr "Standard"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:22
-msgid "Start typing a title to create a new page or find existing pages"
-msgstr "Börja skriva en titel för att skapa en ny sida eller hitta befintliga sidor"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
@@ -1822,7 +1830,7 @@ msgid "There are no pages with a connection to the page"
 msgstr "Det finns inga sidor med en anslutning till den sida"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:74
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
 msgid "There is already a page with this name."
 msgstr "Det finns redan en sida med detta namn."
 
@@ -1834,30 +1842,30 @@ msgstr "Detta kan inte ångras. din sida kommer att vara förlorade för alltid.
 msgid "This connection already exists."
 msgstr "Detta samband finns redan."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:164./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:141
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:165./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:142
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
 msgid "This file contains links to other files or locations."
 msgstr "Den här filen innehåller länkar till andra filer eller platser."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:86
 msgid "This file has been scanned for viruses."
 msgstr "Den här filen har skannats efter virus."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:82
 msgid "This file has not been scanned for viruses because it is too large."
 msgstr "Den här filen har inte skannats efter virus eftersom den är för stor."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:89
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:90
 msgid "This file has not been scanned for viruses."
 msgstr "Den här filen har inte skannats efter virus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:162./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:139
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:163./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:140
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
 msgid "This file is infected with a virus."
 msgstr "Den här filen är infekterad med ett virus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:166./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:143
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:167./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:144
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
 msgid "This file is too large."
 msgstr "Den här filen är för stor."
 
@@ -1869,7 +1877,11 @@ msgstr "Detta är systeminnehåll."
 msgid "This name is in use by another page."
 msgstr "Detta namn används av en annan sida."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
+msgid "This page can be connected from other pages. For example it could be an author of an article."
+msgstr "Denna sida kan anslutas från andra sidor. Det kan till exempel vara författare till en artikel."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
 msgid "This page has been deleted."
 msgstr "Den här sidan har raderats."
 
@@ -1889,11 +1901,11 @@ msgstr "Denna resurs skapades av modulen"
 msgid "Till"
 msgstr "Till"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:132
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Timeout samtidigt som du försöker hämta data från webbplatsen."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
@@ -1917,10 +1929,6 @@ msgstr "För många anslutningar, endast den första och den sista visas."
 msgid "Type text to search"
 msgstr "Skriv text för att söka"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:25
-msgid "Type title or filter existing content"
-msgstr "Skriv titel eller filtrera befintligt innehåll"
-
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "Unique name"
 msgstr "Unikt namn"
@@ -1929,7 +1937,7 @@ msgstr "Unikt namn"
 msgid "Unique uri"
 msgstr "Unik uri"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:470./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
+#: apps/zotonic_mod_admin/src/mod_admin.erl:471./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "Untitled"
 msgstr "Ofrälse"
@@ -1938,7 +1946,11 @@ msgstr "Ofrälse"
 msgid "Unused"
 msgstr "Oanvänd"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
+msgid "Upload"
+msgstr "Ladda upp"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
 msgstr "Ladda upp fil"
 
@@ -1946,7 +1958,7 @@ msgstr "Ladda upp fil"
 msgid "Upload a file from your computer."
 msgstr "Ladda upp en fil från din dator."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:65
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "Upload file"
 msgstr "Ladda upp fil"
@@ -1960,7 +1972,7 @@ msgstr "Uppladdad"
 msgid "Usage"
 msgstr "Användande"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
 msgstr "Använd autocompleter att söka media i denna webbplats."
 
@@ -1981,13 +1993,13 @@ msgid "Valid for:"
 msgstr "Giltig för:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "View"
 msgstr "Se"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:44./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Visa alla anslutningar"
 
@@ -1995,12 +2007,12 @@ msgstr "Visa alla anslutningar"
 msgid "View all pages from this category"
 msgstr "Visa alla sidor av denna kategori"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:34
 msgid "View all referrers"
 msgstr "Visa alla hänvisare"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128
 msgid "View this page."
 msgstr "Visa den här sidan."
 
@@ -2012,7 +2024,7 @@ msgstr "Synlig från"
 msgid "Visible till"
 msgstr "Synlig till"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:73./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:73./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:38
 msgid "Visit full edit page"
 msgstr "Besök hela redigeringssidan"
 
@@ -2029,7 +2041,7 @@ msgstr "Varning!"
 msgid "Website for clicks on image"
 msgstr "Webbplats för klick på bilden"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:15./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:16
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "Webbplats eller Bädda in"
 
@@ -2068,17 +2080,17 @@ msgstr "Det är inte tillåtet att ta bort denna sida."
 msgid "You are not allowed to edit this page."
 msgstr "Du är inte tillåten att ändra denna sida."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:156./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:133
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:157./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "You don't have permission to change this media item."
 msgstr "Du har inte behörighet att ändra detta media artikel."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:76
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82
 msgid "You don't have permission to create this page."
 msgstr "Du har inte behörighet att skapa den här sidan."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:158./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:135
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:78
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:159./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:136
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Du inte har rätt behörighet för att ladda upp den här typen av fil."
 
@@ -2186,7 +2198,7 @@ msgstr "ångra"
 msgid "untitled"
 msgstr "ofrälse"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:97
 msgid "uploaded on"
 msgstr "laddat upp den"
 
@@ -2524,7 +2536,7 @@ msgstr "test@example.com"
 msgid "Add pages or click on a page in the menu."
 msgstr "Lägga till sidor eller klicka på en sida i menyn."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:65./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:94
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:95
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
@@ -2535,7 +2547,7 @@ msgstr "Språk"
 msgid "Loading ..."
 msgstr "Läser in ..."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:125./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
 msgstr "Spara &amp; vy"
 
@@ -2551,7 +2563,7 @@ msgstr "Denna sida"
 msgid "Yes, discard changes"
 msgstr "Ja, kassera ändringar"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:49
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:50
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "till"
@@ -3186,7 +3198,7 @@ msgid "All page connections"
 msgstr "Alla sidanslutningar"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:153
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:156
 msgid "Are you sure you want to delete"
 msgstr "Är du säker att du vill radera"
 
@@ -3625,7 +3637,7 @@ msgstr "Ange din e-postadress för att få instruktioner om hur du återställer
 msgid "Error"
 msgstr "Fel"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:198
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
 msgid "External Services"
 msgstr "Externa tjänster"
 
@@ -4014,7 +4026,7 @@ msgstr "Säkerhetskopiering och återställning alternativ för ditt innehåll."
 msgid "Backups"
 msgstr "Säkerhetskopior"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:96
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:102
 msgid "Changed configuration."
 msgstr "Ändrad konfiguration."
 
@@ -4078,31 +4090,31 @@ msgstr " Välj den säkerhetskopia som du vill ladda upp. Filen måste vara en .
 msgid "Show import/export panel in the admin."
 msgstr "Visa import/export av panel i admin."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:60
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
 msgid "Sorry, there is no mudule that can import this."
 msgstr "Ledsen, det finns ingen modul som kan importera detta."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:67./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:92
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
 msgid "Sorry, there was an error replacing your page."
 msgstr "Beklagar, det uppstod ett fel ersätta din sida."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:104
 msgid "Sorry, this backup has been deleted."
 msgstr "Tyvärr, backup har tagits bort."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:95
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:101
 msgid "Sorry, this backup is not valid."
 msgstr "Den här säkerhetskopian är tyvärr inte giltig."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:62
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:68
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "Sorry, detta är inte en backup-fil eller om den är skadad."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:70
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:76
 msgid "Sorry, you don't have permission to change this page."
 msgstr "Tyvärr, du har inte behörighet att ändra denna sida."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:98
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:104
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Tyvärr, du har inte behörighet att ändra denna sida."
 
@@ -4148,7 +4160,7 @@ msgstr "Varning"
 msgid "Warning:"
 msgstr "Varning:"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:66./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:69./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:78
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:84
 msgid "You are not allowed to see the revisions"
 msgstr "Du får inte ser ändringarna"
 
@@ -4448,7 +4460,7 @@ msgstr "Spara inställningar för kommentarformulär"
 msgid "Settings"
 msgstr "inställningar"
 
-#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:44
+#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:50
 msgid "The comment has been deleted."
 msgstr "Kommentaren har tagits bort."
 
@@ -4456,11 +4468,11 @@ msgstr "Kommentaren har tagits bort."
 msgid "There are no comments."
 msgstr "Det finns inga kommentarer."
 
-#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:47
+#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:53
 msgid "You are not allowed to delete the comment."
 msgstr "Du får inte ta bort kommentaren."
 
-#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:79
+#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:85
 msgid "You are not allowed to toggle the comment."
 msgstr "Du får inte byta kommentar."
 
@@ -4808,7 +4820,7 @@ msgstr "anmälan, kontrollera första retur"
 msgid "redirects"
 msgstr "omdirigeringar"
 
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:28
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:31
 msgid "Add link"
 msgstr "Lägg till länk"
 
@@ -4848,7 +4860,7 @@ msgstr "Standard är sammanfattningen av media. Ange en enda “-” för att in
 msgid "Editor version"
 msgstr "Editor-version"
 
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:12
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:13
 msgid "Insert image"
 msgstr "Infoga bild"
 
@@ -5719,7 +5731,7 @@ msgid "User"
 msgstr "Användare"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:533
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:535
 msgid "User Id"
 msgstr "Användar ID"
 
@@ -5751,7 +5763,7 @@ msgstr "spela teater"
 msgid "Add a new recipient."
 msgstr "Lägg till en ny mottagare."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:45
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
 msgid "Add recipient"
 msgstr "Lägg till en mottagare"
 
@@ -5839,7 +5851,7 @@ msgstr "Bekräfta prenumerationen"
 msgid "Could not add the recipient."
 msgstr "Det gick inte att lägga till mottagaren."
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:57
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:63
 msgid "Could not delete the mailing list."
 msgstr "Det gick inte att ta bort e-postlistan."
 
@@ -5856,7 +5868,7 @@ msgstr "Ta bort alla nuvarande mottagare innan du lägger till filen."
 msgid "Delete all recipients from this list?"
 msgstr "Ta bort alla mottagare från den här listan?"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:50
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:56
 msgid "Deleted the mailing list."
 msgstr "Borttagen e-postlistan."
 
@@ -5882,7 +5894,7 @@ msgstr "Hämtar listan över aktiva mottagare. Kontrollera ditt nedladdningsfön
 msgid "Dropbox filename (optional)"
 msgstr "Dropbox filnamn (valfritt)"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:63
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
 msgid "E-mail address updated"
 msgstr "E-postadressen uppdaterad"
 
@@ -5894,7 +5906,7 @@ msgstr "E-post sida"
 msgid "E-mail this page"
 msgstr "E-posta den här sidan"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:52
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
 msgid "Edit recipient"
 msgstr "Redigera mottagaren"
 
@@ -6072,7 +6084,7 @@ msgstr "Förhandsgranska utskick"
 msgid "Read this page on the web."
 msgstr "Läs den här sidan på webben."
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:67
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
 msgid "Recipient deleted."
 msgstr "Mottagaren raderad."
 
@@ -6332,7 +6344,7 @@ msgstr "Du får inte lägga till eller aktivera mottagare."
 msgid "You are not allowed to cancel this mailing."
 msgstr "Du får inte avbryta denna utskick."
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:54
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:60
 msgid "You are not allowed to delete the mailing list."
 msgstr "Du får inte ta bort e-postlistan."
 
@@ -6472,15 +6484,15 @@ msgstr "när du inte vill få ytterligare e-post från den här listan."
 msgid "with your e-mail address"
 msgstr "med din e-postadress"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:28
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:30
 msgid "Add after"
 msgstr "Lägg till efter"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:26
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:28
 msgid "Add before"
 msgstr "Lägg till innan"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:27
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:29
 msgid "Add below"
 msgstr "Lägg till nedan"
 
@@ -6488,15 +6500,15 @@ msgstr "Lägg till nedan"
 msgid "Add bottom"
 msgstr "Lägg till botten"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:7
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:8
 msgid "Add category"
 msgstr "Lägg till Kategori"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:23
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:25
 msgid "Add item"
 msgstr "Lägg till vara"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:10./apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:40
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:10./apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:43
 msgid "Add menu item"
 msgstr "Lägg till menyalternativ"
 
@@ -6512,7 +6524,7 @@ msgstr "KOPIERA"
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Klicka på <strong>Lägg till menyalternativ</strong> eller <strong>Menyalternativ</strong> att lägga till sidor."
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:31
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr "Kopiera"
@@ -6549,7 +6561,7 @@ msgstr "Hierarki för"
 msgid "Menu"
 msgstr "Meny"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
 msgid "Remove"
 msgstr "Avlägsna"
@@ -6558,11 +6570,11 @@ msgstr "Avlägsna"
 msgid "Sorry, can’t copy that page."
 msgstr "Jag kan tyvärr inte kopiera den sidan."
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:155
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
 msgid "THIS CAN NOT BE UNDONE!"
 msgstr "DETTA KAN INTE GÖRAS OGJORT!"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:203
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:207
 msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr "Det här objektet finns redan i hierarkin. Varje artikel kan bara förekomma en gång."
 
@@ -6571,7 +6583,7 @@ msgstr "Det här objektet finns redan i hierarkin. Varje artikel kan bara förek
 msgid "Unknown category"
 msgstr "Okänd kategori"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:155
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
 msgid "and all indented items below it?"
 msgstr "och alla indragna föremål under det?"
 
@@ -6591,7 +6603,7 @@ msgstr "API-nyckel finns på"
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "Försök att fixa inbäddade videor för vilka OEmbed-inbäddning misslyckades tidigare."
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:279
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:281
 msgid "Attempting to fix ~p videos."
 msgstr "Försöker fixa ~ p-videor."
 
@@ -6603,7 +6615,7 @@ msgstr "Inbäddning av medieobjekt misslyckades med HTTP-kod"
 msgid "Fix embedded videos"
 msgstr "Fixa inbäddade videor"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:276
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:278
 msgid "No embedded videos found which need fixing."
 msgstr "Inga inbäddade videor hittades som behöver åtgärdas."
 
@@ -6611,11 +6623,11 @@ msgstr "Inga inbäddade videor hittades som behöver åtgärdas."
 msgid "Save Embedly Key"
 msgstr "Spara Embedly Key"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:288
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:290
 msgid "Saved the Embedly settings."
 msgstr "Sparade inställningarna för Bädda in."
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:290
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:292
 msgid "You don't have permission to change the Embedly settings."
 msgstr "Du har inte behörighet att ändra inställningarna för Bädda in."
 
@@ -7269,7 +7281,7 @@ msgstr "Fortsätta"
 msgid "Country select"
 msgstr "Välj land"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:839
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:841
 msgid "Created"
 msgstr "Skapad"
 
@@ -7542,11 +7554,11 @@ msgstr "Sidbrytning"
 msgid "Page jump condition"
 msgstr "Sidhoppningsvillkor"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:540
+#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:542
 msgid "Passed"
 msgstr "passerade"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:542
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:544
 msgid "Percent"
 msgstr "Procent"
 
@@ -7642,7 +7654,7 @@ msgstr "Resultat från respondenten"
 msgid "Saved"
 msgstr "Sparad"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:541
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Score"
 msgstr "Göra"
 

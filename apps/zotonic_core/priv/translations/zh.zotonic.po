@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-02 12:40\n"
+"PO-Revision-Date: 2021-03-10 12:49\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -102,7 +102,7 @@ msgstr "ACL 用户群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:104
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:105
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "访问控制"
@@ -162,7 +162,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "你确定你要恢复所有的ACL规则到他们的最新发布版本"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:54./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:226./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:64./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:247./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -185,7 +185,7 @@ msgid "Cancel"
 msgstr "取消"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:2./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: apps/zotonic_mod_survey/src/mod_survey.erl:151
 msgid "Category"
@@ -236,7 +236,7 @@ msgstr "合作团队亦是用户群，所有的内容都属于那个团队"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:62
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:63
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
 msgid "Content"
 msgstr "内容"
@@ -274,7 +274,7 @@ msgstr "定义页面可以被谁看到或者编辑。"
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:51./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:73./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:94
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:156
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:159
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "删除"
@@ -401,12 +401,12 @@ msgstr "模块"
 msgid "Move all users within these user groups to:"
 msgstr "将这些用户组内的所有用户移至："
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:19./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:26
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:19./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:27
 msgid "Move to another"
 msgstr "移到另一个地方"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar.person.tpl:8
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
@@ -482,7 +482,7 @@ msgstr "逆向规则"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:66
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:122./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
@@ -499,7 +499,7 @@ msgid "Saved collaboration group settings"
 msgstr "保存的协作组设置"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:178./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:199
 msgid "Select category"
 msgstr "选择类别"
 
@@ -523,7 +523,7 @@ msgstr "先显示这个ACL用户组。"
 msgid "Sorry, you are not allowed to delete this."
 msgstr "对不起，你不能删除这个。"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:40
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
 msgstr "抱歉，您不能将该分类的页面插入到所选内容组中。"
 
@@ -582,7 +582,7 @@ msgstr "该规则由模块管理"
 msgid "Try ACL rules"
 msgstr "试试ACL规则"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:42
 msgid "Try a different combination of category and content group."
 msgstr "试试类别和内容组的不同组合。"
 
@@ -734,11 +734,11 @@ msgstr "<strong>名字</strong>对应英文的 First Name。<br/><strong>中名<
 msgid "About categories"
 msgstr "关于类别"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
 msgid "Add a connection:"
 msgstr "增加一个连接。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:59
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:63
 msgid "Add a new media file"
 msgstr "添加新媒体文件"
 
@@ -746,7 +746,7 @@ msgstr "添加新媒体文件"
 msgid "Add a new media item"
 msgstr "添加新媒体条目"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:101
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:102
 msgid "Add media item"
 msgstr "添加媒体项目"
 
@@ -754,7 +754,7 @@ msgstr "添加媒体项目"
 msgid "Add media to body"
 msgstr "添加媒体到正文"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:476./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:477./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "将连接添加到"
 
@@ -808,14 +808,10 @@ msgstr "其他电话"
 msgid "And media can also be viewed on their own page."
 msgstr "所有媒体也可以通过它们自己的页面来查看。"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:272
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:20
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "任意分类"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:266
-msgid "Any valid for:"
-msgstr "任何有效的："
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:44
 msgid "Anybody’s"
@@ -837,7 +833,7 @@ msgstr "旁边"
 msgid "Ask google to not index this page"
 msgstr "使 Google 不要索引这个页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "附加媒体"
 
@@ -904,7 +900,7 @@ msgstr "点击这里获取更多信息"
 msgid "Click the image to set the cropping center."
 msgstr "点击图片，设置裁剪中心。"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:11
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:275
 msgid "Click to preview."
 msgstr "点击预览。"
 
@@ -937,7 +933,7 @@ msgstr "确认删除"
 msgid "Confirm logoff"
 msgstr "确认登出"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:229./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:250./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
 msgstr "连接"
 
@@ -957,7 +953,7 @@ msgstr "将下载链接复制到剪贴板"
 msgid "Copy download link"
 msgstr "复制下载链接"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:129
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:130
 msgid "Could not connect to the website."
 msgstr "无法连接到网站。"
 
@@ -974,19 +970,15 @@ msgstr "计数"
 msgid "Country"
 msgstr "国家"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:43./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:228
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:57./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:249
 msgid "Create"
 msgstr "创建"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:55./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:10
-msgid "Create or find"
-msgstr "创建或查找"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 msgid "Created by"
 msgstr "创建者"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:291
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:288
 msgid "Created by me"
 msgstr "由我创建"
 
@@ -1011,7 +1003,7 @@ msgstr "控制台"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:529./apps/zotonic_mod_survey/src/models/m_survey.erl:532
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:531./apps/zotonic_mod_survey/src/models/m_survey.erl:534
 msgid "Date"
 msgstr "日期"
 
@@ -1023,19 +1015,19 @@ msgstr "日期范围"
 msgid "Date ranges"
 msgstr "日期范围"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:211./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
-msgid "Delete after disconnecting from"
-msgstr "断开连接后删除"
-
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:46
 msgid "Delete if no other page is connected to this page."
 msgstr "如果没有其他页面连接到这个页面，则删除。"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:46./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:232./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
+msgid "Delete if not connected anymore"
+msgstr "如果不再连接，则删除"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
 msgid "Delete this page."
 msgstr "删除这个页面。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
 msgid "Deleted."
 msgstr "删掉了。"
 
@@ -1051,7 +1043,7 @@ msgstr "依赖性"
 msgid "Disconnect"
 msgstr "取消连接"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
 msgstr "发现媒体"
 
@@ -1084,12 +1076,12 @@ msgstr "复制这个页面。"
 msgid "E-mail address"
 msgstr "电子邮件地址"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:20./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_base_site/priv/templates/_meta.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:21
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:27
 msgid "Edit"
 msgstr "编辑"
@@ -1110,7 +1102,7 @@ msgstr "用于公开展示的电子邮件地址"
 msgid "Embed"
 msgstr "嵌入"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "嵌入代码将被允许的网站和html消毒。"
 
@@ -1118,7 +1110,7 @@ msgstr "嵌入代码将被允许的网站和html消毒。"
 msgid "Embed page"
 msgstr "嵌入页面"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:179
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:180
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:228
 msgid "Embedded Content"
 msgstr "嵌入内容"
@@ -1127,7 +1119,7 @@ msgstr "嵌入内容"
 msgid "Emergency telephone"
 msgstr "紧急联系电话"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "输入网址或嵌入代码。它将被分析，你可以选择如何导入数据。"
 
@@ -1143,16 +1135,16 @@ msgstr "Erlang安装根"
 msgid "Erlang Version"
 msgstr "埃尔兰版本"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:146
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
 msgid "Error checking the website."
 msgstr "检查网站时出错。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:89
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "Error creating the page."
 msgstr "创建页面时出错。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:169
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:170
 msgid "Error uploading the file."
 msgstr "上传文件出错。"
 
@@ -1164,12 +1156,12 @@ msgstr "每个页面都可以有一个日期范围。例如当页面表示一个
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
 msgstr "每个页面只属于一个分类。分类定义了页面代表了什么。例如事件、产品或是人。分类是树状的，也就是说你可以有一个“交通工具”分类，然后其下有子分类“汽车”和“自行车”。"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:252
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:275
 msgid "Existing pages"
 msgstr "现有网页"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:160./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:137
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:161./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:138
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Failed to download the file."
 msgstr "下载文件出错。"
 
@@ -1193,12 +1185,16 @@ msgstr "通过分类过滤"
 msgid "Filter on content group"
 msgstr "筛选内容组"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:60
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:68
+msgid "Find Media"
+msgstr "查找媒体"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:69
 msgid "Find Page"
 msgstr "查找页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:106
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:207
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:108
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:208
 msgid "Find page"
 msgstr "查找页面"
 
@@ -1285,7 +1281,7 @@ msgstr "最近修改人"
 msgid "Latest modified texts"
 msgstr "最近修改文本"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:229./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
 msgid "Link"
 msgstr "鏈接"
@@ -1340,7 +1336,7 @@ msgstr "匹配"
 msgid "Media"
 msgstr "媒体"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:23
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
 msgid "Media URL or HTML"
 msgstr "媒体URL或HTML"
 
@@ -1348,11 +1344,11 @@ msgstr "媒体URL或HTML"
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "媒体包括所有上传的图片，视频以及文档。媒体可以被附加到页面上。"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:26./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:42
 msgid "Media file"
 msgstr "媒体文件"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:146./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:121
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:140./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:119
 msgid "Media item created."
 msgstr "媒体条目已创建。"
 
@@ -1360,7 +1356,7 @@ msgstr "媒体条目已创建。"
 msgid "Media on this page"
 msgstr "该页面上的媒体"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:19./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:26./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
 msgid "Media title"
 msgstr "媒体标题"
 
@@ -1393,18 +1389,22 @@ msgstr "修改时间"
 msgid "Modified:"
 msgstr "已修改。"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:200./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:202
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:534
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:536
 msgid "Name"
 msgstr "名字"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:39
 msgid "Network Connections"
 msgstr "网络连接"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+msgid "New Page"
+msgstr "新一页"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
 msgid "Next &gt;"
@@ -1463,6 +1463,10 @@ msgstr "页面关键字"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:21
 msgid "Page path"
 msgstr "页面路径"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
+msgid "Page referrers"
+msgstr "页面引荐来源"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
@@ -1542,8 +1546,8 @@ msgstr "发布时间范围"
 msgid "Publish this page"
 msgstr "发布本页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:47./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:219./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:57./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:240./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:45
 msgid "Published"
 msgstr "发布"
 
@@ -1570,6 +1574,10 @@ msgstr "重建检索索引"
 msgid "Recalculate the numbering of the category tree. This can take a long time."
 msgstr "重新计算分类树。这可能会耗费一定的时间。"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:6
+msgid "Recent referrers"
+msgstr "最近的推荐人"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
 msgstr "重定向到上述网站的页面浏览"
@@ -1594,7 +1602,7 @@ msgstr "附注"
 msgid "Remove crop center"
 msgstr "移除作物中心"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:480
+#: apps/zotonic_mod_admin/src/mod_admin.erl:481
 msgid "Removed the connection to"
 msgstr "取消了与"
 
@@ -1606,11 +1614,11 @@ msgstr "重计数分类树"
 msgid "Replace"
 msgstr "替换"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:59
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:63
 msgid "Replace current medium"
 msgstr "替换这个媒体条目"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:101
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:102
 msgid "Replace this media item"
 msgstr "替换这个媒体条目"
 
@@ -1639,12 +1647,12 @@ msgid "Save and View"
 msgstr "保存并查看"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:125./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save and view the page."
 msgstr "保存并查看本页面。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:122./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 msgid "Save this page."
 msgstr "保存本页面。"
 
@@ -1672,6 +1680,10 @@ msgstr "安全目录"
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:6
 msgid "See also: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
 msgstr "也请参见。 <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">erlang.config文件</a>。"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
+msgid "Select"
+msgstr "选择"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
@@ -1713,21 +1725,17 @@ msgstr "出错了。"
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "对不起，你没有添加连接的权限。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:462
+#: apps/zotonic_mod_admin/src/mod_admin.erl:463
 msgid "Sorry, you have no permission to add the connection."
 msgstr "对不起，你没有权限添加连接。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:464
+#: apps/zotonic_mod_admin/src/mod_admin.erl:465
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "抱歉，你没有删除连接的权限。"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:171
 msgid "Standard"
 msgstr "标准"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:22
-msgid "Start typing a title to create a new page or find existing pages"
-msgstr "开始输入标题以创建新页面或查找现有页面"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
@@ -1822,7 +1830,7 @@ msgid "There are no pages with a connection to the page"
 msgstr "没有连接到本页面的页面"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:74
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:80
 msgid "There is already a page with this name."
 msgstr "已经有一个页面用这个名字。"
 
@@ -1834,30 +1842,30 @@ msgstr "操作不可以撤销，页面会永远丢失。"
 msgid "This connection already exists."
 msgstr "这个连接已经存在。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:164./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:141
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:165./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:142
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
 msgid "This file contains links to other files or locations."
 msgstr "本文件包含其他文件或位置的链接。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:85
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:86
 msgid "This file has been scanned for viruses."
 msgstr "此文件已被扫描为病毒。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:82
 msgid "This file has not been scanned for viruses because it is too large."
 msgstr "这个文件因为太大，没有进行病毒扫描。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:89
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:90
 msgid "This file has not been scanned for viruses."
 msgstr "这个文件没有经过病毒扫描。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:162./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:139
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:163./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:140
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
 msgid "This file is infected with a virus."
 msgstr "这个文件被病毒感染了。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:166./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:143
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:167./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:144
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
 msgid "This file is too large."
 msgstr "这个文件太大。"
 
@@ -1869,7 +1877,11 @@ msgstr "这是系统内容。"
 msgid "This name is in use by another page."
 msgstr "这个名字被另一个页面使用。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
+msgid "This page can be connected from other pages. For example it could be an author of an article."
+msgstr "该页面可以与其他页面连接。例如，它可能是文章的作者。"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
 msgid "This page has been deleted."
 msgstr "本页已被删除。"
 
@@ -1889,11 +1901,11 @@ msgstr "这个资源的创建模块是"
 msgid "Till"
 msgstr "终止"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:131
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:132
 msgid "Timeout while trying to fetch data from the website."
 msgstr "试图从网站获取数据时超时。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:11./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:84./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
@@ -1917,10 +1929,6 @@ msgstr "连接太多，仅显示第一个和最后一个。"
 msgid "Type text to search"
 msgstr "输入文本进行检索"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:25
-msgid "Type title or filter existing content"
-msgstr "输入标题或过滤现有内容"
-
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:32./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "Unique name"
 msgstr "唯一标识"
@@ -1929,7 +1937,7 @@ msgstr "唯一标识"
 msgid "Unique uri"
 msgstr "唯一 URL"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:470./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
+#: apps/zotonic_mod_admin/src/mod_admin.erl:471./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "Untitled"
 msgstr "未命名"
@@ -1938,7 +1946,11 @@ msgstr "未命名"
 msgid "Unused"
 msgstr "未使用"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
+msgid "Upload"
+msgstr "上载"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
 msgstr "上传文件"
 
@@ -1946,7 +1958,7 @@ msgstr "上传文件"
 msgid "Upload a file from your computer."
 msgstr "从电脑上传一个文件。"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:55
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:65
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "Upload file"
 msgstr "上传文件"
@@ -1960,7 +1972,7 @@ msgstr "上传时间"
 msgid "Usage"
 msgstr "使用方法"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:37
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
 msgstr "使用自动完成来搜索本站点的媒体。"
 
@@ -1981,13 +1993,13 @@ msgid "Valid for:"
 msgstr "有效期为："
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "View"
 msgstr "查看"
 
-#: apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:44./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "查看所有连接"
 
@@ -1995,12 +2007,12 @@ msgstr "查看所有连接"
 msgid "View all pages from this category"
 msgstr "查看此类别的所有页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:44
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:34
 msgid "View all referrers"
 msgstr "查看所有引用"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128
 msgid "View this page."
 msgstr "查看该页面。"
 
@@ -2012,7 +2024,7 @@ msgstr "可见起始时间"
 msgid "Visible till"
 msgstr "可见结束时间"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:73./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:73./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:38
 msgid "Visit full edit page"
 msgstr "访问完整编辑页面"
 
@@ -2029,7 +2041,7 @@ msgstr "警告！"
 msgid "Website for clicks on image"
 msgstr "点击图片的网站"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:15./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:16
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "网站或嵌入"
 
@@ -2068,17 +2080,17 @@ msgstr "没有权限删除这个页面。 "
 msgid "You are not allowed to edit this page."
 msgstr "您不能编辑本页面。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:156./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:133
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:157./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "You don't have permission to change this media item."
 msgstr "没有权限修改这个媒体条目。"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:76
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:82
 msgid "You don't have permission to create this page."
 msgstr "你没有权限创建这个页面。"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:158./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:135
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:78
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:159./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:136
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "没有上传这个文件类型的权限。"
 
@@ -2186,7 +2198,7 @@ msgstr "撤销"
 msgid "untitled"
 msgstr "未命名"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:97
 msgid "uploaded on"
 msgstr "上传时间"
 
@@ -2524,7 +2536,7 @@ msgstr "test@example.com"
 msgid "Add pages or click on a page in the menu."
 msgstr "添加页面或点击菜单中的页面。"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:65./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:94
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:95
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
@@ -2535,7 +2547,7 @@ msgstr "语言"
 msgid "Loading ..."
 msgstr "正在加载..."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:125./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
 msgstr "保存 &amp; 视图"
 
@@ -2551,7 +2563,7 @@ msgstr "本页"
 msgid "Yes, discard changes"
 msgstr "是，丢弃更改"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:49
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:50
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "耕种"
@@ -3186,7 +3198,7 @@ msgid "All page connections"
 msgstr "所有页面连接"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:153
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:156
 msgid "Are you sure you want to delete"
 msgstr "你确定要删除吗？"
 
@@ -3625,7 +3637,7 @@ msgstr "输入您的电子邮件地址，以接收有关如何重设密码的说
 msgid "Error"
 msgstr "错误"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:198
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
 msgid "External Services"
 msgstr "外部服务"
 
@@ -4014,7 +4026,7 @@ msgstr "站点内容的备份和恢复选项。"
 msgid "Backups"
 msgstr "备份"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:96
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:102
 msgid "Changed configuration."
 msgstr "改变了配置。"
 
@@ -4078,31 +4090,31 @@ msgstr " 选择您要上传的备份文件。文件必须是 .bert 文件。"
 msgid "Show import/export panel in the admin."
 msgstr "在控制台显示导入/导出面板。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:60
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:66
 msgid "Sorry, there is no mudule that can import this."
 msgstr "对不起，没有mudule可以导入这个。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:67./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:92
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
 msgid "Sorry, there was an error replacing your page."
 msgstr "对不起，您的页面更换时出现了错误。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:98
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:104
 msgid "Sorry, this backup has been deleted."
 msgstr "对不起，这个备份已经被删除了。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:95
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:101
 msgid "Sorry, this backup is not valid."
 msgstr "对不起，这个备份无效。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:62
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:68
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "对不起，这不是备份文件，或者是损坏了。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:70
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:76
 msgid "Sorry, you don't have permission to change this page."
 msgstr "对不起，你没有权限改变这个页面。"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:98
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:104
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "对不起，你没有权限更改配置。"
 
@@ -4148,7 +4160,7 @@ msgstr "警告"
 msgid "Warning:"
 msgstr "警告："
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:66./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:69./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:78
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:84
 msgid "You are not allowed to see the revisions"
 msgstr "您不允许查看修改的内容"
 
@@ -4448,7 +4460,7 @@ msgstr "保存评论表单设置"
 msgid "Settings"
 msgstr "设置"
 
-#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:44
+#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:50
 msgid "The comment has been deleted."
 msgstr "该评论已被删除。"
 
@@ -4456,11 +4468,11 @@ msgstr "该评论已被删除。"
 msgid "There are no comments."
 msgstr "没有评论。"
 
-#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:47
+#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:53
 msgid "You are not allowed to delete the comment."
 msgstr "你不能删除评论。"
 
-#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:79
+#: apps/zotonic_mod_comment/src/controllers/controller_admin_comments.erl:85
 msgid "You are not allowed to toggle the comment."
 msgstr "你不允许切换评论。"
 
@@ -4808,7 +4820,7 @@ msgstr "通知，检查第一回"
 msgid "redirects"
 msgstr "重定向"
 
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:28
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:31
 msgid "Add link"
 msgstr "添加链接"
 
@@ -4848,7 +4860,7 @@ msgstr "默认为媒体的摘要。输入一个\"-\"就不显示标题。"
 msgid "Editor version"
 msgstr "编辑版本"
 
-#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:12
+#: apps/zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:13
 msgid "Insert image"
 msgstr "插入图片"
 
@@ -5719,7 +5731,7 @@ msgid "User"
 msgstr "用户"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:533
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:535
 msgid "User Id"
 msgstr "用户ID"
 
@@ -5751,7 +5763,7 @@ msgstr "启用"
 msgid "Add a new recipient."
 msgstr "添加新收件人"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:45
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
 msgid "Add recipient"
 msgstr "添加收件人"
 
@@ -5839,7 +5851,7 @@ msgstr "确认订阅"
 msgid "Could not add the recipient."
 msgstr "无法添加收件人。"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:57
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:63
 msgid "Could not delete the mailing list."
 msgstr "无法删除邮件列表。"
 
@@ -5856,7 +5868,7 @@ msgstr "添加文件前删除所有当前收件人。"
 msgid "Delete all recipients from this list?"
 msgstr "从列表中删除所有收件人？"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:50
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:56
 msgid "Deleted the mailing list."
 msgstr "删除了邮件列表。"
 
@@ -5882,7 +5894,7 @@ msgstr "下载活动收件人列表。请检查下载窗口。"
 msgid "Dropbox filename (optional)"
 msgstr "Dropbox 文件名（可选）"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:63
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:69
 msgid "E-mail address updated"
 msgstr "电子邮件地址更新"
 
@@ -5894,7 +5906,7 @@ msgstr "电子邮件页面"
 msgid "E-mail this page"
 msgstr "通过电子邮件发送此页面"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:52
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
 msgid "Edit recipient"
 msgstr "编辑接收人"
 
@@ -6068,7 +6080,7 @@ msgstr "预览邮件"
 msgid "Read this page on the web."
 msgstr "在网页上阅读本页面。"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:67
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
 msgid "Recipient deleted."
 msgstr "收件人被删除。"
 
@@ -6328,7 +6340,7 @@ msgstr "不允许添加或启用收件人。"
 msgid "You are not allowed to cancel this mailing."
 msgstr "您不能取消此邮件。"
 
-#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:54
+#: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:60
 msgid "You are not allowed to delete the mailing list."
 msgstr "您不能删除邮件列表。"
 
@@ -6468,15 +6480,15 @@ msgstr "当你不想再收到列表的其他邮件时。"
 msgid "with your e-mail address"
 msgstr "使用你的 e-mail 地址"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:28
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:30
 msgid "Add after"
 msgstr "添加到之前"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:26
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:28
 msgid "Add before"
 msgstr "添加到之后"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:27
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:29
 msgid "Add below"
 msgstr "添加到下面"
 
@@ -6484,15 +6496,15 @@ msgstr "添加到下面"
 msgid "Add bottom"
 msgstr "添加到底部"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:7
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:8
 msgid "Add category"
 msgstr "添加分类"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:23
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:25
 msgid "Add item"
 msgstr "添加项目"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:10./apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:40
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:10./apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:43
 msgid "Add menu item"
 msgstr "添加菜单条目"
 
@@ -6508,7 +6520,7 @@ msgstr "复制"
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "点击 <strong>添加菜单条目</strong> 或 <strong>菜单条目</strong> 来添加页面。"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:31
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr "复制"
@@ -6545,7 +6557,7 @@ msgstr "层次结构"
 msgid "Menu"
 msgstr "菜单"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:44
 msgid "Remove"
 msgstr "删除"
@@ -6554,11 +6566,11 @@ msgstr "删除"
 msgid "Sorry, can’t copy that page."
 msgstr "对不起，不能复制那一页。"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:155
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
 msgid "THIS CAN NOT BE UNDONE!"
 msgstr "这不能被撤消！"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:203
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:207
 msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr "这个项目已经在层次结构中。每个项目只能出现一次。"
 
@@ -6567,7 +6579,7 @@ msgstr "这个项目已经在层次结构中。每个项目只能出现一次。
 msgid "Unknown category"
 msgstr "不明类别"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:155
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
 msgid "and all indented items below it?"
 msgstr "以及下面的所有缩进项目？"
 
@@ -6587,7 +6599,7 @@ msgstr "API密钥可以在"
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "试图修复之前OEmbed嵌入失败的嵌入视频。"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:279
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:281
 msgid "Attempting to fix ~p videos."
 msgstr "试图修复~p视频。"
 
@@ -6599,7 +6611,7 @@ msgstr "嵌入媒体项目失败，使用HTTP代码"
 msgid "Fix embedded videos"
 msgstr "修复嵌入视频"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:276
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:278
 msgid "No embedded videos found which need fixing."
 msgstr "没有找到需要修复的嵌入式视频。"
 
@@ -6607,11 +6619,11 @@ msgstr "没有找到需要修复的嵌入式视频。"
 msgid "Save Embedly Key"
 msgstr "保存 Embedly 键"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:288
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:290
 msgid "Saved the Embedly settings."
 msgstr "保存了Embedly的设置。"
 
-#: apps/zotonic_mod_oembed/src/mod_oembed.erl:290
+#: apps/zotonic_mod_oembed/src/mod_oembed.erl:292
 msgid "You don't have permission to change the Embedly settings."
 msgstr "你没有权限更改Embedly的设置。"
 
@@ -7265,7 +7277,7 @@ msgstr "继续"
 msgid "Country select"
 msgstr "国家选择"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:839
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:841
 msgid "Created"
 msgstr "创建"
 
@@ -7538,11 +7550,11 @@ msgstr "页面中断"
 msgid "Page jump condition"
 msgstr "页面跳转条件"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:540
+#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:542
 msgid "Passed"
 msgstr "通过"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:542
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:544
 msgid "Percent"
 msgstr "百分比"
 
@@ -7638,7 +7650,7 @@ msgstr "答辩人的结果"
 msgid "Saved"
 msgstr "已保存"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:541
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Score"
 msgstr "分数"
 
