@@ -43,7 +43,7 @@
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
-                                {_ Delete after disconnecting from _} {{ subject_id.title }}
+                                {_ Delete if not connected anymore _}
                             </label>
                         </div>
                     </div>
