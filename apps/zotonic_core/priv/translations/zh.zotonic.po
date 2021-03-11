@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-10 12:49\n"
+"PO-Revision-Date: 2021-03-11 16:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -4221,10 +4221,6 @@ msgstr "函数/模版"
 msgid "Gone"
 msgstr "前进"
 
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:4
-msgid "Hello from Zotonic"
-msgstr "来自 Zotonic 的问候"
-
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
 msgstr "索引"
@@ -4236,10 +4232,6 @@ msgstr "JSON"
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:21
 msgid "JSON-LD"
 msgstr "JSON-LD"
-
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:22
-msgid "Kind regards,"
-msgstr "问候。"
 
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
 msgid "No connection with server"
@@ -4254,6 +4246,10 @@ msgstr "成功"
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
 msgstr "页码"
+
+#: apps/zotonic_mod_base/priv/templates/email_base.tpl:334
+msgid "Read this page on the web"
+msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -4284,10 +4280,6 @@ msgstr "堆栈跟踪"
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
 msgstr "该页不存在"
-
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:19
-msgid "This is the base message. When you receive this text then the template builder did not overrule the <tt>body</tt> block."
-msgstr "这个是原始信息。当你看到这个信息的时候表示模版作者没有覆盖 <tt>body</tt> 块。"
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
@@ -5815,10 +5807,6 @@ msgstr "清除"
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
 msgstr "点击<strong>取消订阅</strong>将你从邮件列表中删除。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:40
-msgid "Click here when you can’t read the message below."
-msgstr "如果你不能看到下面的信息，请点击这里。"
-
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid " Click the button below to confirm your subscription to this mailing list."
 msgstr " 点击下面的按钮，确认您对这个邮件列表的订阅。"
@@ -6063,7 +6051,7 @@ msgstr "请按照"
 msgid "Please note:"
 msgstr "请注意："
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:19
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "Please unsubscribe"
 msgstr "请取消订阅"
 
@@ -6076,9 +6064,9 @@ msgstr "称呼"
 msgid "Preview mailing"
 msgstr "预览邮件"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:43./apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:28
-msgid "Read this page on the web."
-msgstr "在网页上阅读本页面。"
+#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:24
+msgid "Read more on the web"
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
 msgid "Recipient deleted."
@@ -6384,7 +6372,7 @@ msgstr "你可以尝试在侧边栏重新订阅我们的邮件列表。"
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
 msgstr "你收到本邮件是因为有人给你发送了本信息。我们不会保存你的 e-mail 地址，也不会由此发送给你其他邮件。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:4
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:5
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "你收到本邮件是因为你订阅了邮件列表"
 
@@ -6423,6 +6411,10 @@ msgstr "已被发送到下列列表："
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
 msgid "has never been sent yet."
 msgstr "没有被发送。"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
+msgid "if you don't want to receive any further mail from this list."
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
@@ -6471,10 +6463,6 @@ msgstr "这个链接来确认"
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:3
 msgid "to the list"
 msgstr "到列表"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:19
-msgid "when you don't want to receive any further mail from this list."
-msgstr "当你不想再收到列表的其他邮件时。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
