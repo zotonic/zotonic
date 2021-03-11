@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-10 12:28\n"
+"PO-Revision-Date: 2021-03-11 16:59\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -4219,10 +4219,6 @@ msgstr ""
 msgid "Gone"
 msgstr ""
 
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:4
-msgid "Hello from Zotonic"
-msgstr ""
-
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
 msgstr ""
@@ -4233,10 +4229,6 @@ msgstr ""
 
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:21
 msgid "JSON-LD"
-msgstr ""
-
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:22
-msgid "Kind regards,"
 msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
@@ -4251,6 +4243,10 @@ msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
+msgstr ""
+
+#: apps/zotonic_mod_base/priv/templates/email_base.tpl:334
+msgid "Read this page on the web"
 msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
@@ -4281,10 +4277,6 @@ msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
-msgstr ""
-
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:19
-msgid "This is the base message. When you receive this text then the template builder did not overrule the <tt>body</tt> block."
 msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
@@ -5813,10 +5805,6 @@ msgstr ""
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:40
-msgid "Click here when you can’t read the message below."
-msgstr ""
-
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid " Click the button below to confirm your subscription to this mailing list."
 msgstr ""
@@ -6061,7 +6049,7 @@ msgstr ""
 msgid "Please note:"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:19
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "Please unsubscribe"
 msgstr ""
 
@@ -6074,8 +6062,8 @@ msgstr ""
 msgid "Preview mailing"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:43./apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:28
-msgid "Read this page on the web."
+#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:24
+msgid "Read more on the web"
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
@@ -6382,7 +6370,7 @@ msgstr ""
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:4
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:5
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr ""
 
@@ -6420,6 +6408,10 @@ msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
 msgid "has never been sent yet."
+msgstr ""
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
+msgid "if you don't want to receive any further mail from this list."
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
@@ -6468,10 +6460,6 @@ msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:3
 msgid "to the list"
-msgstr ""
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:19
-msgid "when you don't want to receive any further mail from this list."
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
