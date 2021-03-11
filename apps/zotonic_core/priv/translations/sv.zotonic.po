@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-10 12:49\n"
+"PO-Revision-Date: 2021-03-11 16:59\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -4221,10 +4221,6 @@ msgstr "Funktion / mall"
 msgid "Gone"
 msgstr "Borta"
 
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:4
-msgid "Hello from Zotonic"
-msgstr "Hej från Zotonic"
-
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
 msgstr "Index för"
@@ -4236,10 +4232,6 @@ msgstr "JSON"
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:21
 msgid "JSON-LD"
 msgstr "JSON-LD"
-
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:22
-msgid "Kind regards,"
-msgstr "Vänliga Hälsningar,"
 
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
 msgid "No connection with server"
@@ -4254,6 +4246,10 @@ msgstr "OK"
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
 msgstr "Sid-id"
+
+#: apps/zotonic_mod_base/priv/templates/email_base.tpl:334
+msgid "Read this page on the web"
+msgstr ""
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -4284,10 +4280,6 @@ msgstr "Stackspår"
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
 msgstr "Den sidan finns inte"
-
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:19
-msgid "This is the base message. When you receive this text then the template builder did not overrule the <tt>body</tt> block."
-msgstr "Detta är basen meddelande. När du har fått det här sms: a då den mall som byggare inte åsidosätta den <tt>kroppen</tt> blocket."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
@@ -5815,10 +5807,6 @@ msgstr "Klar"
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
 msgstr "Klicka på <strong>avbeställ</strong> att ta bort dig själv från e-postlistan."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:40
-msgid "Click here when you can’t read the message below."
-msgstr "Klicka här när du inte kan läsa meddelandet nedan."
-
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid " Click the button below to confirm your subscription to this mailing list."
 msgstr " Klicka på knappen nedan för att bekräfta din prenumeration på denna e-postlista."
@@ -6067,7 +6055,7 @@ msgstr "Var vänlig följ"
 msgid "Please note:"
 msgstr "Vänligen notera:"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:19
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "Please unsubscribe"
 msgstr "Avsluta prenumerationen"
 
@@ -6080,9 +6068,9 @@ msgstr "Prefix"
 msgid "Preview mailing"
 msgstr "Förhandsgranska utskick"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:43./apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:28
-msgid "Read this page on the web."
-msgstr "Läs den här sidan på webben."
+#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:24
+msgid "Read more on the web"
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
 msgid "Recipient deleted."
@@ -6388,7 +6376,7 @@ msgstr "Du kan försöka prenumerera på en av våra e-postlistor i sidokolumnen
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
 msgstr "Du fick detta meddelande eftersom någon ville skicka denna information till dig. Vi lagrade inte din e-postadress och kommer inte att skicka dig någon annan e-post på grund av detta e-postmeddelande."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:4
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:5
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "Du fick detta meddelande eftersom du prenumererar på e-postlistan"
 
@@ -6427,6 +6415,10 @@ msgstr "har skickats till följande listor:"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
 msgid "has never been sent yet."
 msgstr "har aldrig skickats ännu."
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
+msgid "if you don't want to receive any further mail from this list."
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
@@ -6475,10 +6467,6 @@ msgstr "den här länken för att bekräfta"
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:3
 msgid "to the list"
 msgstr "till listan"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:19
-msgid "when you don't want to receive any further mail from this list."
-msgstr "när du inte vill få ytterligare e-post från den här listan."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"

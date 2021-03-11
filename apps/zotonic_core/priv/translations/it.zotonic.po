@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-10 12:29\n"
+"PO-Revision-Date: 2021-03-11 16:59\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -4221,10 +4221,6 @@ msgstr "Funzione/ modello"
 msgid "Gone"
 msgstr "Gone"
 
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:4
-msgid "Hello from Zotonic"
-msgstr "Ciao da Zotonic"
-
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:4./apps/zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
 msgstr "Indice di"
@@ -4236,10 +4232,6 @@ msgstr "JSON"
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:21
 msgid "JSON-LD"
 msgstr "JSON-LD"
-
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:22
-msgid "Kind regards,"
-msgstr "Cordiali saluti,"
 
 #: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
 msgid "No connection with server"
@@ -4254,6 +4246,10 @@ msgstr "OK"
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
 msgstr "Pagina Id"
+
+#: apps/zotonic_mod_base/priv/templates/email_base.tpl:334
+msgid "Read this page on the web"
+msgstr "Leggi questa pagina sul web"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -4284,10 +4280,6 @@ msgstr "Traccia dello stack"
 #: apps/zotonic_mod_base/priv/templates/error.tpl:13
 msgid "That page does not exist"
 msgstr "Quella pagina non esiste"
-
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:19
-msgid "This is the base message. When you receive this text then the template builder did not overrule the <tt>body</tt> block."
-msgstr "Questo è il messaggio di base. Quando si riceve questo testo, allora il costruttore del template non ha annullato il blocco <tt>del corpo</tt> ."
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
@@ -5815,10 +5807,6 @@ msgstr "Chiaro"
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
 msgstr "Clicca <strong>per cancellarti</strong> dalla mailing list."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:40
-msgid "Click here when you can’t read the message below."
-msgstr "Clicca qui se non riesci a leggere il messaggio qui sotto."
-
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid " Click the button below to confirm your subscription to this mailing list."
 msgstr " Clicca il pulsante qui sotto per confermare la tua iscrizione a questa mailing list."
@@ -6067,7 +6055,7 @@ msgstr "Si prega di seguire"
 msgid "Please note:"
 msgstr "Si prega di notare:"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:19
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "Please unsubscribe"
 msgstr "Si prega di annullare l'iscrizione"
 
@@ -6080,9 +6068,9 @@ msgstr "Prefisso (es. Van, Der)"
 msgid "Preview mailing"
 msgstr "Anteprima mailing"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:43./apps/zotonic_mod_mailinglist/priv/templates/mailing_page.tpl:28
-msgid "Read this page on the web."
-msgstr "Leggi questa pagina sul web."
+#: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:24
+msgid "Read more on the web"
+msgstr "Leggi di più sul web"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
 msgid "Recipient deleted."
@@ -6388,7 +6376,7 @@ msgstr "Puoi provare a iscriverti di nuovo a una delle nostre mailing list nella
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
 msgstr "Hai ricevuto questa mail perché qualcuno voleva inviarti queste informazioni. Non abbiamo memorizzato il tuo indirizzo e-mail e non ti invieremo altre mail a causa di questa mail."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:4
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:5
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "Hai ricevuto questa mail perché sei iscritto alla mailing list"
 
@@ -6427,6 +6415,10 @@ msgstr "è stato inviato alle seguenti liste:"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
 msgid "has never been sent yet."
 msgstr "non è ancora stato inviato."
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
+msgid "if you don't want to receive any further mail from this list."
+msgstr "se non desideri ricevere ulteriori messaggi da questo elenco."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
@@ -6475,10 +6467,6 @@ msgstr "questo link per confermare"
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:3
 msgid "to the list"
 msgstr "alla lista"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:19
-msgid "when you don't want to receive any further mail from this list."
-msgstr "quando non vuoi più ricevere posta da questa lista."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
