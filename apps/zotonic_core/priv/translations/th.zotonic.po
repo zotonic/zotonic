@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-11 16:59\n"
+"PO-Revision-Date: 2021-03-11 17:14\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -4249,7 +4249,7 @@ msgstr "รหัสหน้า"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:334
 msgid "Read this page on the web"
-msgstr ""
+msgstr "อ่านหน้านี้บนเว็บ"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -6070,7 +6070,7 @@ msgstr "ดูตัวอย่างการส่งจดหมาย"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:24
 msgid "Read more on the web"
-msgstr ""
+msgstr "อ่านเพิ่มเติมได้ที่เว็บ"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
 msgid "Recipient deleted."
@@ -6418,7 +6418,7 @@ msgstr "ยังไม่เคยส่ง"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "if you don't want to receive any further mail from this list."
-msgstr ""
+msgstr "หากคุณไม่ต้องการรับจดหมายเพิ่มเติมจากรายการนี้"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
