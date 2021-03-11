@@ -21,7 +21,7 @@
 			    <td style="background-color: #ffffff;">
 			        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 			            <tr>
-			                <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
+			                <td style="padding: 20px 20px 10px 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
 			                	<h2><a href="{{ id.page_url }}" style="color: #555555; text-decoration: none;">{{ id.title }}</a></h2>
 			                	<p>{{ id|summary:500 }}</p>
 
