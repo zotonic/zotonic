@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-11 16:59\n"
+"PO-Revision-Date: 2021-03-11 17:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -4249,7 +4249,7 @@ msgstr "页码"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:334
 msgid "Read this page on the web"
-msgstr ""
+msgstr "在網絡上閱讀此頁面"
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -6066,7 +6066,7 @@ msgstr "预览邮件"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:24
 msgid "Read more on the web"
-msgstr ""
+msgstr "在網絡上閱讀更多內容"
 
 #: apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:73
 msgid "Recipient deleted."
@@ -6414,7 +6414,7 @@ msgstr "没有被发送。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "if you don't want to receive any further mail from this list."
-msgstr ""
+msgstr "如果您不想再收到此列表中的任何郵件。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
