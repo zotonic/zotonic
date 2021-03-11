@@ -675,6 +675,8 @@ check_templates_1([], _Context) ->
     ok;
 check_templates_1([ undefined | Ts ], Context) ->
     check_templates_1(Ts, Context);
+check_templates_1([ {cat, T} | Ts ], Context) ->
+    check_templates_1([ T | Ts ], Context);
 check_templates_1([ T | Ts ], Context) ->
     case z_module_indexer:find(template, T, Context) of
         {ok, _} -> check_templates_1(Ts, Context);
