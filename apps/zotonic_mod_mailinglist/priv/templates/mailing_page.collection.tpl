@@ -1,7 +1,11 @@
 {% extends "mailing_page.tpl" %}
 
 {% block below_body %}
-	{% for id in id.o.haspart|default:m.search[{query query_id=id pagelen=pagelen|default:20}] %}
+	{% for id in
+		id.is_a.query|if
+			:m.search[{query query_id=id pagelen=pagelen|default:20}]
+			:id.o.haspart
+	%}
 		{% if id.is_visible %}
 			{% include "email/_spacer.tpl" %}
 			{% if id.depiction as depiction %}
