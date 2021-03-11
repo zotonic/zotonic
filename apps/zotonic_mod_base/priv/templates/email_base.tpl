@@ -239,6 +239,9 @@
             <!-- Email Body : BEGIN -->
             <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 20px auto;">
 
+                {% block above_body %}
+                {% endblock %}
+
                 {% comment %}
                 <!-- Email Header : BEGIN -->
                 <tr>
