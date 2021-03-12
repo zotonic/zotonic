@@ -99,7 +99,7 @@ get_admin_email(Context) ->
             z_convert:to_binary(Email)
 	end.
 
-%% @doc Fetch the default From e-mail address. Defaults to noreply@<hostname>
+%% @doc Fetch the default From e-mail address. Defaults to noreply@hostname
 -spec get_email_from(z:context()) -> binary().
 get_email_from(Context) ->
     z_email_server:get_email_from(Context).
