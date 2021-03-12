@@ -30,7 +30,7 @@ If you have done some work with Zotonic, you will be familiar with this syntax w
 
 This expression contains 4 parts (separated by dots).
 
-At the very start, the template parser resolves ``m.rsc`` to module ``m_rsc``. The parser then calls ``m_rsc:m_get(Keys, Context)`` to fetch the value (where Keys in our expression has the value of ``[ 1, is_cat, person ]``).
+At the very start, the template parser resolves ``m.rsc`` to module ``m_rsc``. The parser then calls ``m_rsc:m_get(Keys, Context)`` to fetch the value (where Keys in our expression has the value of ``[ 1, <<"is_cat">>, <<"person">> ]``).
 
 This is the function specification of ``m_get``::
 
@@ -43,7 +43,7 @@ It takes the dotted expression list and returns the looked up value and the unpr
 
 In this example, the `m_get` is called as::
 
-    m_get([ 1, is_cat, person ], Context)
+    m_get([ 1, <<"is_cat">>, <<"person">> ], Context)
 
 And will return:
 
@@ -163,7 +163,7 @@ To illustrate the simplest ``m_get`` function, we add one to get the API url::
     -define(API_URL, "http://www.omdbapi.com/?").
 
     % Syntax: m.omdb.api_url
-    m_get([ api_url | Rest ], _Msg, _Context) ->
+    m_get([ <<"api_url">> | Rest ], _Msg, _Context) ->
         {ok, {?API_URL, Rest}};
 
 The functions that will deliver our template interface are a bit more involved. From the template expressions we can discern 2 different patterns:
@@ -183,17 +183,17 @@ When an expression is parsed from left to right, each parsed part needs to be pa
 To parse the type, we add these functions to our module::
 
     % Syntax: m.omdb.movie[QueryString]
-    m_get([ movie, QueryString | Rest ], _Msg, Context) when is_binary(QueryString) ->
+    m_get([ <<"movie">>, QueryString | Rest ], _Msg, Context) when is_binary(QueryString) ->
         Query = [ {type, movie}, {title, QueryString} ],
         {ok, {fetch_data(Query), []}};
 
     % Syntax: m.omdb.series[QueryString]
-    m_get([ series, QueryString | Rest ], _Msg, Context) when is_binary(QueryString) ->
+    m_get([ <<"series">>, QueryString | Rest ], _Msg, Context) when is_binary(QueryString) ->
         Query = [ {type, series}, {title, QueryString} ],
         {ok, {fetch_data(Query), []}};
 
     % Syntax: m.omdb.episode[QueryString]
-    m_get([ episode, QueryString | Rest ], _Msg, Context) when is_binary(QueryString) ->
+    m_get([ <<"episode">>, QueryString | Rest ], _Msg, Context) when is_binary(QueryString) ->
         Query = [ {type, episode}, {title, QueryString} ],
         {ok, {fetch_data(Query), []}};
 
@@ -204,7 +204,7 @@ Notice the ``| Rest`` in the patterns. This is needed for expressions like::
 
 Which calls our ``m_get`` function as::
 
-    m_get([ series, <<"Dollhouse">>, title ], _Msg, Context)
+    m_get([ <<"series">>, <<"Dollhouse">>, <<"title">> ], _Msg, Context)
 
 
 We can also pass:
@@ -223,7 +223,7 @@ For the ID we recognize 2 situations - with or without a previously found value:
         {ok, {fetch_data(Query), []}};
 
     % Syntax: m.omdb.sometype["tt1135300"]
-    m_get([ sometype, <<"tt", _/binary>> = Id | Rest ], _Context) ->
+    m_get([ <<"sometype">>, <<"tt", _/binary>> = Id | Rest ], _Context) ->
         Query = [ {type, sometype}, {id, Id} ],
         {ok, {fetch_data(Query), []}}.
 
@@ -253,7 +253,7 @@ To parse the search expression, we can simply use the readymade property list::
     % Syntax: m.omdb.sometype[{query QueryParams}]
     % For m.omdb.series[{query title="Dollhouse"}],
     % Query is: [{title,"Dollhouse"}] and Q is: [{type,"series"}]
-    m_get([ series, {query, Query} | Rest ], _Context) ->
+    m_get([ <<"series">>, {query, Query} | Rest ], _Context) ->
         {fetch_data([{type, series} | Query), []};
 
 If we want to fetch the year of the first result we use::
