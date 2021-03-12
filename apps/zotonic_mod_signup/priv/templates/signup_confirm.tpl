@@ -22,10 +22,14 @@
 		<button class="btn btn-primary">{_ Confirm my account _}</button>
 	</form>
 
-{#
-	{% if q.key %}
-		{% wire action={submit target="signup_confirm_form"} %}
-	{% endif %}
-#}
+    {% if q.key %}
+        {% wire
+                action={mask target="signup_confirm_form"}
+                action={postback
+                    postback={confirm key=q.key}
+                    delegate=`controller_signup_confirm`
+                }
+        %}
+    {% endif %}
 
 {% endblock %}

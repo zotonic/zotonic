@@ -161,7 +161,7 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
             maybe_add_depiction(NewUserId, Props, Context),
             {ok, NewUserId};
         {error, Reason} ->
-            throw({error, Reason})
+            {error, Reason}
     end.
 
 %% @doc Optionally add a depiction using the 'depiction_url' in the user's props

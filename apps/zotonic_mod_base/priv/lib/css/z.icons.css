@@ -122,16 +122,10 @@ button.close > em {
 .z-btn-social .fa-icon,
 .z-btn-social .md-icon,
 .z-btn-social .zotonic-logo {
-  position: absolute;
-  display: block;
   font-size: 16px;
   line-height: 16px;
   height: 16px;
   width: 16px;
-  text-align: center;
-  top: 50%;
-  left: .5em;
-  margin-top: -7.5px;
 }
 @font-face {
   font-family: 'FontAwesome';

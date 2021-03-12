@@ -35,7 +35,11 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 %% @doc Handle the submit of the signup form.
 event(#submit{}, Context) ->
-    Key = z_context:get_q(<<"key">>, Context, <<>>),
+    event_confirm(z_context:get_q(<<"key">>, Context, <<>>), Context);
+event(#postback{ message={confirm, [ {key, Key} ]}}, Context) ->
+    event_confirm(Key, Context).
+
+event_confirm(Key, Context) ->
     case confirm(Key, Context) of
         {ok, UserId} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
@@ -49,9 +53,15 @@ event(#submit{}, Context) ->
                 url => z_convert:to_binary( Location )
             },
             z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
-            z_render:wire({mask, []}, Context);
+            z_render:wire([
+                    {unmask, [{target, "signup_confirm_form"}]},
+                    {mask, []}
+                ], Context);
         {error, _Reason} ->
-            z_render:wire({show, [{target,"confirm_error"}]}, Context)
+            z_render:wire([
+                    {unmask, [{target, "signup_confirm_form"}]},
+                    {show, [{target,"confirm_error"}]}
+                ], Context)
     end.
 
 
