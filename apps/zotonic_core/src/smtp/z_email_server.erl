@@ -42,7 +42,9 @@
 
     is_sender_enabled/2,
     is_sender_enabled/3,
-    is_recipient_blocked/2
+    is_recipient_blocked/2,
+
+    get_email_from/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -598,6 +600,7 @@ get_email_from(EmailFrom, VERP, State, Context) ->
     end.
 
 % When the 'From' is not the VERP then the 'From' is derived from the site
+-spec get_email_from( z:context() ) -> binary().
 get_email_from(Context) ->
     %% Let the default be overruled by the config setting
     case z_convert:to_binary( m_config:get_value(site, email_from, Context) ) of

@@ -57,6 +57,9 @@ m_get([ <<"title">> | Rest ], _Msg, Context) ->
 m_get([ <<"subtitle">> | Rest ], _Msg, Context) ->
     SubTitle = m_config:get_value(site, subtitle, Context),
     {ok, {SubTitle, Rest}};
+m_get([ <<"email_from">> | Rest ], _Msg, Context) ->
+    EmailFrom = z_email:get_email_from(Context),
+    {ok, {EmailFrom, Rest}};
 m_get([ <<"pagelen">> | Rest ], _Msg, Context) ->
     PageLen = case m_config:get_value(site, pagelen, Context) of
         undefined -> ?SEARCH_PAGELEN;

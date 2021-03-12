@@ -80,7 +80,7 @@
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" id="{{ #published.index }}" name="is_published" value="1"
-                                    {% if args.subject_id or m.config.mod_admin.rsc_dialog_is_published.value %}
+                                    {% if args.subject_id or m.admin.rsc_dialog_is_published %}
                                         checked
                                     {% endif %}>
                                 {_ Published _}

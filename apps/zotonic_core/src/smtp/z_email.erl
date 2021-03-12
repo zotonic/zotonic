@@ -27,6 +27,7 @@
     bounce_domain/1,
 
 	get_admin_email/1,
+    get_email_from/1,
 	send_admin/3,
 
 	send_page/3,
@@ -97,6 +98,12 @@ get_admin_email(Context) ->
 		Email ->
             z_convert:to_binary(Email)
 	end.
+
+%% @doc Fetch the default From e-mail address. Defaults to noreply@hostname
+-spec get_email_from(z:context()) -> binary().
+get_email_from(Context) ->
+    z_email_server:get_email_from(Context).
+
 
 wwwadmin_email(Context) ->
     <<"wwwadmin@", (z_context:hostname(Context))/binary>>.
