@@ -69,6 +69,8 @@ main([ Command | T ]) ->
     case Command of
         "-v" ->
             zotonic_release:run();
+        "-j" ->
+            main(T ++ [json]);
         _ ->
             CommandMod = list_to_atom( "zotonic_cmd_" ++ Command ),
             case code:ensure_loaded(CommandMod) of

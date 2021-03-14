@@ -23,18 +23,60 @@
 -export([run/1]).
 -export([pretty_print_value/2]).
 
+run(["all", json]) ->
+    show(all, json);
 run([ "all" ]) ->
     show(all);
+run([ "zotonic", json ]) ->
+    show(zotonic, json);
 run([ "zotonic" ]) ->
     show(zotonic);
+run([ "erlang", json ]) ->
+    show(erlang, json);
 run([ "erlang" ]) ->
     show(erlang);
+run([json]) ->
+    show(zotonic, json);
 run([]) ->
     show(zotonic);
 run(_) ->
-    io:format("USAGE: config [all | zotonic | erlang]~n"),
+    io:format("USAGE: [-j] config [all | zotonic | erlang]~n"),
+    io:format("  -j : Prints terms as JSON instead YAML~n~n"),
     halt(1).
 
+show(What, json) ->
+    case zotonic_command:get_target_node() of
+        {ok, Target} ->
+            ZCfg = 
+            if
+                What =:= all; What =:= zotonic ->
+                    ZotonicConfigFiles = zotonic_launcher_config:zotonic_config_files(Target),
+                    case zotonic_launcher_config:read_configs(ZotonicConfigFiles) of
+                        {ok, X} ->
+                            X;
+                        {error, _} = ZError ->
+                            zotonic_command:format_error(ZError)
+                    end;
+                true ->
+                    []
+            end,
+            ECfg = 
+            if
+                What =:= all; What =:= erlang ->
+                    ErlangConfigFiles = zotonic_launcher_config:erlang_config_files(Target),
+                    case zotonic_launcher_config:read_configs(ErlangConfigFiles) of
+                        {ok, Y} ->
+                            Y;
+                        {error, _} = EError ->
+                            zotonic_command:format_error(EError)
+                    end;
+                true ->
+                    []
+            end,
+            io:format("~ts~n",[mochijson:encode(z_convert:to_json(map2list(lists:flatten([ECfg, ZCfg]))))]);
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end.
 show(What) ->
     case zotonic_command:get_target_node() of
         {ok, Target} ->
@@ -165,3 +207,12 @@ pretty_print_value(_Key, Value) ->
 is_utf8(<<>>) -> true;
 is_utf8(<<_/utf8, R/binary>>) -> is_utf8(R);
 is_utf8(_) -> false.
+
+% Maybe move this into z_convert at z_stdlib
+map2list(X) when is_map(X) ->
+    map2list(maps:to_list(X));
+map2list([X | Y]) ->
+    [map2list(X) | map2list(Y)];
+map2list({X, Y}) when is_map(Y) ->
+    {X, map2list(Y)};
+map2list(X) -> X.
