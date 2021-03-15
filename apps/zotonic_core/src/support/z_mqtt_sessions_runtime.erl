@@ -269,10 +269,11 @@ is_allowed_acl(Action, Topic, Packet, Context) ->
 is_allowed(_Action,   [ <<"test">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"public">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"reply">>, <<"call-", _/binary>>, _ ], _Context) -> true;
-% Models MUST implement their own access control
+% Models MUST implement their own access control for get/ post/ delete
 is_allowed(publish,   [ <<"model">>, _Model, <<"get">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"model">>, _Model, <<"post">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"model">>, _Model, <<"delete">> | _ ], _Context) -> true;
+% End generic models ACL
 is_allowed(publish,   [ <<"model">>, Model,  <<"event">>, Id | _ ], Context)
     when Model =:= <<"rsc">>;
          Model =:= <<"media">>;
