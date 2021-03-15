@@ -269,12 +269,38 @@ is_allowed_acl(Action, Topic, Packet, Context) ->
 is_allowed(_Action,   [ <<"test">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"public">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"reply">>, <<"call-", _/binary>>, _ ], _Context) -> true;
-%% TODO: change the model access to NOT allowed per default (ACL should allow/disallow access)
+% Models MUST implement their own access control
 is_allowed(publish,   [ <<"model">>, _Model, <<"get">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"model">>, _Model, <<"post">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"model">>, _Model, <<"delete">> | _ ], _Context) -> true;
-is_allowed(subscribe, [ <<"model">>, _Model, <<"event">> | _ ], _Context) -> true;
-%% End todo.
+is_allowed(publish,   [ <<"model">>, Model,  <<"event">>, Id | _ ], Context)
+    when Model =:= <<"rsc">>;
+         Model =:= <<"media">>;
+         Model =:= <<"identity">> ->
+    z_acl:rsc_editable( m_rsc:rid(Id, Context), Context );
+is_allowed(subscribe, [ <<"model">>, Model,  <<"event">>, Id | _ ], Context)
+    when Model =:= <<"rsc">>;
+         Model =:= <<"media">>;
+         Model =:= <<"identity">> ->
+    case is_wildcard(Id) of
+        true -> false;
+        false -> z_acl:rsc_visible( m_rsc:rid(Id, Context), Context )
+    end;
+% Model events can be view iff the user has use permission on the module
+is_allowed(subscribe, [ <<"model">>, Model, <<"event">> | _ ], Context) ->
+    try
+        case z_module_indexer:find(model, Model, Context) of
+            {ok, #module_index{ module = zotonic_core }} ->
+                true;
+            {ok, #module_index{ module = Module }} ->
+                z_acl:is_allowed(use, Module, Context);
+            {error, enoent} ->
+                false
+        end
+    catch
+        _:_ ->
+            false
+    end;
 is_allowed(publish,   [ <<"bridge">>, _Remote, <<"reply">> | _ ], _Context) -> true;
 is_allowed(publish,   [ <<"bridge">>, _Remote, <<"public">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"bridge">>, Remote | _ ], Context) when is_binary(Remote) ->
