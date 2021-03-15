@@ -225,7 +225,7 @@ delete_username(RscId, Context) when is_integer(RscId) ->
                     id => RscId,
                     type => <<"username_pw">>
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok;
         false ->
             {error, eacces}
@@ -324,7 +324,7 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                                     id => Id,
                                     type => <<"username_pw">>
                                 },
-                                Context),
+                                z_acl:sudo(Context)),
                             z_depcache:flush(Id, Context),
                             ok;
                         {rollback, {error, _} = Error, _Trace} ->
@@ -398,7 +398,7 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
                     id => Id,
                     type => <<"username_pw">>
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok;
         {rollback, {{error, _} = Error, _Trace} = ErrTrace} ->
             lager:error("set_username_pw error for ~p, setting username. ~p: ~p",
@@ -889,7 +889,7 @@ insert_1(Rsc, Type, Key, Props, Context) ->
                     id => RscId,
                     type => Type
                 },
-                Context),
+                z_acl:sudo(Context)),
             Result;
         IdnId ->
             case proplists:get_value(is_verified, Props, false) of
@@ -902,7 +902,7 @@ insert_1(Rsc, Type, Key, Props, Context) ->
                             id => RscId,
                             type => Type
                         },
-                        Context);
+                        z_acl:sudo(Context));
                 false ->
                     nop
             end,
@@ -982,7 +982,7 @@ set_verified(Id, Context) ->
                             id => RscId,
                             type => Type
                         },
-                        Context),
+                        z_acl:sudo(Context)),
                     ok;
                 0 ->
                     {error, notfound}
@@ -1007,7 +1007,7 @@ set_verified(RscId, Type, Key, Context)
             id => RscId,
             type => Type
         },
-        Context),
+        z_acl:sudo(Context)),
     Result;
 set_verified(_RscId, _Type, _Key, _Context) ->
     {error, badarg}.
@@ -1086,7 +1086,7 @@ delete(IdnId, Context) ->
                                     id => RscId,
                                     type => Type
                                 },
-                                Context),
+                                z_acl:sudo(Context)),
                             maybe_reset_email_property(RscId, Type, Key, Context),
                             {ok, 1};
                         Other ->
@@ -1142,14 +1142,14 @@ merge(WinnerId, LoserId, Context) ->
                     id => LoserId,
                     type => all
                 },
-                Context),
+                z_acl:sudo(Context)),
             z_mqtt:publish(
                 [ <<"model">>, <<"identity">>, <<"event">>, WinnerId ],
                 #{
                     id => WinnerId,
                     type => all
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok;
         false ->
             {error, eacces}
@@ -1194,7 +1194,7 @@ delete_by_type(Rsc, Type, Context) ->
                     id => RscId,
                     type => Type
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok
     end.
 
@@ -1213,7 +1213,7 @@ delete_by_type_and_key(Rsc, Type, Key, Context) ->
                     id => RscId,
                     type => Type
                 },
-                Context),
+                z_acl:sudo(Context)),
             ok
     end.
 
