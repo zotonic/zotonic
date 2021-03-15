@@ -2,6 +2,8 @@
 
 {# editing rsc username and password #}
 
+{% block widget_id %}merge-pages{% endblock %}
+
 {% block widget_title %}
     {_ Merge pages _}
 {% endblock %}
