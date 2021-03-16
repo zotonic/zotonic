@@ -278,12 +278,12 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) when is_integer(
 publish(_SurveyId, undefined, _Persistent, _Context) ->
     ok;
 publish(SurveyId, UserId, _Persistent, Context) ->
-    Topic = iolist_to_binary([
-            <<"user/">>,
-            z_convert:to_binary(UserId),
-            <<"/survey-submission/">>,
-            z_convert:to_binary(SurveyId)
-        ]),
+    Topic = [
+        <<"user">>,
+        z_convert:to_binary(UserId),
+        <<"survey-submission">>,
+        z_convert:to_binary(SurveyId)
+    ],
     z_mqtt:publish(
         Topic,
         [
