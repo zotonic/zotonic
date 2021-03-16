@@ -116,6 +116,6 @@ prep_answer1(Item, Answers) ->
 
 prep_block(Block, Context) ->
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
-    maps:merge(Props, Block).
+    maps:merge(Block, Props).
 
 

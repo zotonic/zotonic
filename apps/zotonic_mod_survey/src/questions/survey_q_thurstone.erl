@@ -166,7 +166,7 @@ is_multiple(Q) ->
 
 prep_block(Block, Context) ->
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
-    maps:merge(Props, Block).
+    maps:merge(Block, Props).
 
 
 to_block(Q) ->
