@@ -31,106 +31,113 @@
 			</div>
 		</div>
 
-		<div class="form-group">
-        	<label class="control-label">{_ Fill in _}</label>
-        	<div class="controls">
-				<select class="form-control" name="survey_multiple" id="survey_multiple">
-					<option value="0">{_ Once only per user/browser _}</option>
-					<option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
-						{_ Multiple entries per user/browser _}
-					</option>
-					<option value="2" {% if id.survey_multiple == 2 %}selected{% endif %}>
-						{_ Once and allow editing afterwards _}
-					</option>
-				</select>
-			</div>
-		</div>
-
-		{% if not id.is_a.poll %}
-			<div class="form-group">
-				<label class="control-label">{_ When finished show _}</label>
-				<div class="controls">
-					<select class="form-control" name="survey_show_results" id="survey_show_results">
-						<option value="">{_ Thank you text only _}</option>
-						<option value="1" {% if id.survey_show_results == 1 %}selected{% endif %}>
-							{_ Aggregated results from all respondents (only results for multiple choice questions are shown) _}
+		<div class="row">
+			<div class="form-group col-sm-6">
+	        	<label class="control-label">{_ Fill in _}</label>
+	        	<div class="controls">
+					<select class="form-control" name="survey_multiple" id="survey_multiple">
+						<option value="0">{_ Once only per user/browser _}</option>
+						<option value="1" {% if id.survey_multiple == 1 %}selected{% endif %}>
+							{_ Multiple entries per user/browser _}
 						</option>
-						<option value="2" {% if id.survey_show_results == 2 %}selected{% endif %}>
-							{_ Results from the respondent _}
+						<option value="2" {% if id.survey_multiple == 2 %}selected{% endif %}>
+							{_ Once and allow editing afterwards _}
 						</option>
 					</select>
 				</div>
 			</div>
-			<div class="control-group label-floating">
-		        <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}" 
-		               class="input-small" value="{{ id.survey_test_percentage }}" placeholder="{_ Test pass percentage _}" /> %
-			    <label class="control-label">{_ Test pass percentage _}</label>
-		        {% validate id=#survey_test_percentage name="survey_test_percentage"
-		        			type={numericality minimum=0 maximum=100}
-		        %}
-		        <p class="help-block muted">{_ Leave empty if there are no test questions. _}</p>
-			</div>
-		{% else %}
-			<input type="hidden" name="survey_show_results" id="survey_show_results" value="1" />
-		{% endif %}
+
+			{% if not id.is_a.poll %}
+				<div class="form-group col-sm-6">
+					<label class="control-label">{_ When finished show _}</label>
+					<div class="controls">
+						<select class="form-control" name="survey_show_results" id="survey_show_results">
+							<option value="">{_ Thank you text only _}</option>
+							<option value="1" {% if id.survey_show_results == 1 %}selected{% endif %}>
+								{_ Aggregated results from all respondents (only results for multiple choice questions are shown) _}
+							</option>
+							<option value="2" {% if id.survey_show_results == 2 %}selected{% endif %}>
+								{_ Results from the respondent _}
+							</option>
+						</select>
+					</div>
+
+					<div class="control-group label-floating">
+				        <input type="text" name="survey_test_percentage" id="{{ #survey_test_percentage }}" 
+				               class="input-small" value="{{ id.survey_test_percentage }}" placeholder="{_ Test pass percentage _}" /> %
+					    <label class="control-label">{_ Test pass percentage _}</label>
+				        {% validate id=#survey_test_percentage name="survey_test_percentage"
+				        			type={numericality minimum=0 maximum=100}
+				        %}
+				        <p class="help-block muted">{_ Leave empty if there are no test questions. _}</p>
+					</div>
+				</div>
+			{% else %}
+				<input type="hidden" name="survey_show_results" id="survey_show_results" value="1" />
+			{% endif %}
+		</div>
+
 	</fieldset>
 
-	<fieldset>
-		<legend style="margin-bottom: 0">{_ Progress _}</legend>
-		<div class="form-group">
-			<div class="radio">
-				<label>
-					<input type="radio" name="survey_progress" id="survey_progress_none" value="" {% if not id.survey_progress %}checked="checked"{% endif %} />
-					{_ Hide progress information _}
-				</label>
-			</div>
-			<div class="radio">
-				<label>
-					<input type="radio" name="survey_progress" id="survey_progres_nr" value="nr" {% if id.survey_progress == 'nr' %}checked="checked"{% endif %} />
-					{_ Show progress information as “<em>Question 3/10</em>” _}
-				</label>
-			</div>
-			<div class="radio">
-				<label>
-					<input type="radio" name="survey_progress" id="survey_progress_bar" value="bar" {% if id.survey_progress == 'bar' %}checked="checked"{% endif %} />
-					{_ Show progress bar _}
-				</label>
-			</div>
-		</div>
-	</fieldset>
 
-	<fieldset>
-		<legend style="margin-bottom: 0">{_ Handling _}</legend>
-
-		<div class="form-group label-floating">
-			<input type="text" class="form-control" name="survey_email" id="survey_email" value="{{ id.survey_email }}" placeholder="{_ Mail results to _}" />
-			<label class="control-label">{_ Mail results to _}</label>
-			<p class="help-block">
-				{_ Separate multiple email addresses with a comma. _}
-			</p>
-		</div>
-
-		<div class="form-group">
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent  %}checked{% endif %} />
-					{_ Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”). _}
-				</label>
+	<div class="row">
+		<fieldset class="col-sm-6">
+			<legend style="margin-bottom: 0">{_ Progress _}</legend>
+			<div class="form-group">
+				<div class="radio">
+					<label>
+						<input type="radio" name="survey_progress" id="survey_progress_none" value="" {% if not id.survey_progress %}checked="checked"{% endif %} />
+						{_ Hide progress information _}
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="survey_progress" id="survey_progres_nr" value="nr" {% if id.survey_progress == 'nr' %}checked="checked"{% endif %} />
+						{_ Show progress information as “<em>Question 3/10</em>” _}
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="survey_progress" id="survey_progress_bar" value="bar" {% if id.survey_progress == 'bar' %}checked="checked"{% endif %} />
+						{_ Show progress bar _}
+					</label>
+				</div>
 			</div>
-		</div>
+		</fieldset>
 
-		{% if m.survey.handlers|length %}
-		<div class="form-group">
-			<label class="control-label">{_ Handle this survey with _}</label>
-			<div>
-				<select class="form-control" name="survey_handler" id="survey_handler">
-					<option value=""></option>
-					{% for val,desc in m.survey.handlers %}
-						<option value="{{ val }}" {% if id.survey_handler == val %}selected{% endif %}>{{ desc }}</option>
-					{% endfor %}
-				</select>
+		<fieldset class="col-sm-6">
+			<legend style="margin-bottom: 0">{_ Handling _}</legend>
+
+			<div class="form-group label-floating">
+				<input type="email" multiple class="form-control" name="survey_email" id="survey_email" value="{{ id.survey_email }}" placeholder="{_ Mail results to _}" />
+				<label class="control-label">{_ Mail results to _}</label>
+				<p class="help-block">
+					{_ Separate multiple email addresses with a comma. _}
+				</p>
 			</div>
-		</div>
-		{% endif %}
-	</fieldset>
+
+			<div class="form-group">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent  %}checked{% endif %} />
+						{_ Send confirmation with the results to the email address entered in this form (you must include a question labeled “email”). _}
+					</label>
+				</div>
+			</div>
+
+			{% if m.survey.handlers|length %}
+			<div class="form-group">
+				<label class="control-label">{_ Handle this survey with _}</label>
+				<div>
+					<select class="form-control" name="survey_handler" id="survey_handler">
+						<option value=""></option>
+						{% for val,desc in m.survey.handlers %}
+							<option value="{{ val }}" {% if id.survey_handler == val %}selected{% endif %}>{{ desc }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			{% endif %}
+		</fieldset>
+	</div>
 {% endblock %}
