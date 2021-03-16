@@ -1,5 +1,5 @@
 
-<div class="well">
+<div class="well z-button-row">
 
     {% button text=_"Publish"
         class="btn btn-primary pull-right"
