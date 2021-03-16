@@ -15,7 +15,7 @@ Params:
 Config key:
 - mod_admin.edge_list_max_length -- max number of items shown per predicate
 #}
-{% with m.mod_admin.edge_list_max_length|default:100 as edge_list_max_length %}
+{% with m.admin.edge_list_max_length|default:100 as edge_list_max_length %}
 {% with list_id|default:#list_id as list_id %}
 <div class="unlink-wrapper">
     {% with m.edge.o[id][predicate] as edges %}
