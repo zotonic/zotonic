@@ -14,18 +14,14 @@
 
 {% block widget_content %}
 <fieldset>
-    <div class="form-group row">
-        <div class="col-md-12">
-            <label class="control-label">{_ Remarks _} {{ lang_code_with_brackets }}</label>
-            <div>
-                <input type="text" id="{{ #remarks }}{{ lang_code_for_id }}" name="date_remarks{{ lang_code_with_dollar }}"
-                    value="{{ is_i18n|if : id.translation[lang_code].date_remarks : id.date_remarks }}"
-                    {% if not id.is_editable %}disabled="disabled"{% endif %}
-                    {% include "_language_attrs.tpl" language=lang_code class="field-title form-control" %}
-                    placeholder="{_ e.g. might change _}"
-                />
-            </div>
-        </div>
+    <div class="form-group label-floating">
+        <input type="text" id="{{ #remarks }}{{ lang_code_for_id }}" name="date_remarks{{ lang_code_with_dollar }}"
+            value="{{ is_i18n|if : id.translation[lang_code].date_remarks : id.date_remarks }}"
+            {% if not id.is_editable %}disabled="disabled"{% endif %}
+            {% include "_language_attrs.tpl" language=lang_code class="form-control" %}
+            placeholder="{_ Remarks _} {_ e.g. might change _} {{ lang_code_with_brackets }}"
+        />
+        <label class="control-label">{_ Remarks _} {{ lang_code_with_brackets }}</label>
     </div>
 </fieldset>
 {% endblock %}
@@ -33,15 +29,12 @@
 {% block widget_content_nolang_before %}
 <div class="date-range">
     <fieldset>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="checkbox">
-                    <label>
-                        <input name="date_is_all_day" id="{{ #all_day }}" type="checkbox" {% if id.date_is_all_day %}checked{% endif %} /> {_ All day _}
-                    </label>
-                </div>
-            </div>
+        <div class="checkbox">
+            <label>
+                <input name="date_is_all_day" id="{{ #all_day }}" type="checkbox" {% if id.date_is_all_day %}checked{% endif %} /> {_ All day _}
+            </label>
         </div>
+
         {% javascript %}
             $("#{{ #all_day }}").on('change', function() {
                 var $times = $(this).closest('.date-range').find('.do_timepicker');
@@ -51,22 +44,17 @@
                     $times.fadeIn("fast");
             });
         {% endjavascript %}
-        <hr />
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-sm-6">
+                <label class="control-label">{_ From _}</label>
                 <div>
-                    <label class="control-label">{_ From _}</label>
-                    <div>
-                        {% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable %}
-                    </div>
+                    {% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable %}
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-sm-6">
+                <label class="control-label">{_ Till _}</label>
                 <div>
-                    <label class="control-label">{_ Till _}</label>
-                    <div>
-                        {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable %}
-                    </div>
+                    {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable %}
                 </div>
             </div>
         </div>
