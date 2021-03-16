@@ -126,7 +126,7 @@ callback(Model, Verb, Path, Msg, Context) ->
         {ok, Mod} ->
             maybe_resolve(Verb, model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
         {error, _} = Error ->
-            lager:info("Publish to unknown model ~p", [Model]),
+            lager:info("Publish to unknown model ~p: ~p ~p ~p", [Model, Verb, Path, Msg]),
             Error
     end.
 
