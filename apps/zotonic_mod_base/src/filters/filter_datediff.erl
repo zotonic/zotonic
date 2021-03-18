@@ -36,6 +36,12 @@ datediff( [ {{_Y,_M,_D},{_H,_I,_S}} = DateTimeA, {_YB,_MB,_DB} = DateB ], DatePa
 datediff( [ {{_YA,_MA,_DA},{_HA,_IA,_SA}} = DateTimeA, {{_YB,_MB,_DB},{_HB,_IB,_SB}} = DateTimeB ], DatePart, _Context ) ->
     {{Y,M,D},{H,I,S}} = z_datetime:diff( DateTimeA, DateTimeB ),
     case DatePart of
+        <<"Y">> -> Y;
+        <<"M">> -> M;
+        <<"D">> -> D;
+        <<"H">> -> H;
+        <<"I">> -> I;
+        <<"S">> -> S;
         "Y" -> Y;
         "M" -> M;
         "D" -> D;
