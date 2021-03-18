@@ -701,13 +701,10 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
             PropsM
     end,
 
-    IsImport = proplists:is_defined(is_import, Opts),
-    NoTouch = proplists:is_defined(no_touch, Opts),
-
     F = fun(Ctx) ->
         %% If the resource is in the media category, then move it to the correct sub-category depending
         %% on the mime type of the uploaded file.
-        Props1 = case maps:is_key(<<"category">>, PropsM1)
+        PropsCat = case maps:is_key(<<"category">>, PropsM1)
             orelse maps:is_key(<<"category_id">>, PropsM1)
         of
             true ->
@@ -719,16 +716,15 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
         end,
         {ok, Id} = case RscId of
             insert_rsc ->
-                m_rsc_update:insert(Props1, Opts, Ctx);
+                m_rsc_update:insert(PropsCat, Opts, Ctx);
             _ ->
                 case rsc_is_media_cat(RscId, Context) of
                     true ->
-                        {ok, RscId} = m_rsc_update:update(RscId, Props1, Opts, Ctx);
+                        {ok, RscId} = m_rsc_update:update(RscId, PropsCat, Opts, Ctx);
+                    false when map_size(Props) > 0 ->
+                        {ok, RscId} = m_rsc_update:update(RscId, Props, Opts, Ctx);
                     false ->
-                        case IsImport orelse NoTouch of
-                            true -> nop;
-                            false -> {ok, RscId} = m_rsc:touch(RscId, Ctx)
-                        end
+                        ok
                 end,
                 medium_delete(RscId, Ctx),
                 {ok, RscId}

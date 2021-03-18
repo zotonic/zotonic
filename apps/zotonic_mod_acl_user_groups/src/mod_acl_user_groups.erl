@@ -449,7 +449,7 @@ signal_user_changed(UserId, Context) ->
 
 %% @doc Ensure that the privacy property is set.
 observe_rsc_get(#rsc_get{}, #{ <<"category_id">> := CatId } = Map, Context) ->
-    case maps:get(privacy, Map, undefined) of
+    case maps:get(<<"privacy">>, Map, undefined) of
         undefined ->
             Map#{
                 <<"privacy">> =>
