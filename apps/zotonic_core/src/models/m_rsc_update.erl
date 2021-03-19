@@ -55,7 +55,7 @@
 %% @doc Insert a new resource. Crashes when insertion is not allowed.
 -spec insert(m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(Props, Context) ->
-    insert(Props, [{escape_texts, true}], Context).
+    insert(Props, [{is_escape_texts, true}], Context).
 
 -spec insert(m_rsc:props_all(), list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(Props, Options, Context) when is_list(Props) ->
@@ -429,9 +429,9 @@ update(Id, Props, Context) ->
     ) ->
     {ok, m_rsc:resource_id()} | {error, term()}.
 update(Id, Props, false, Context) ->
-    update(Id, Props, [{escape_texts, false}], Context);
+    update(Id, Props, [{is_escape_texts, false}], Context);
 update(Id, Props, true, Context) ->
-    update(Id, Props, [{escape_texts, true}], Context);
+    update(Id, Props, [{is_escape_texts, true}], Context);
 update(Id, Props, Options, Context) when is_list(Props) ->
     {ok, Props1} = z_props:from_list(Props),
     OptionsTz = case proplists:lookup(tz, Options) of

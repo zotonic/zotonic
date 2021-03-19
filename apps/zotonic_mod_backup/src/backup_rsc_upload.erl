@@ -37,9 +37,9 @@ rsc_upload(#rsc_upload{id=Id, format=bert, data=Data}, Context) ->
     end.
 
 rsc_upload(undefined, Props, Context) ->
-    m_rsc_update:insert(update_props(Props, Context), [{escape_texts, false}, is_import], Context);
+    m_rsc_update:insert(update_props(Props, Context), [{is_escape_texts, false}, is_import], Context);
 rsc_upload(Id, Props, Context) when is_integer(Id) ->
-    m_rsc_update:update(Id, update_props(Props, Context), [{escape_texts, false}, is_import], Context).
+    m_rsc_update:update(Id, update_props(Props, Context), [{is_escape_texts, false}, is_import], Context).
 
 update_props(Props, Context) when is_map(Props) ->
     UpdateProps = maps:filter(
