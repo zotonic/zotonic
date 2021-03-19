@@ -378,7 +378,7 @@ duplicate(Id, DupProps, Context) when is_integer(Id) ->
                             <<"is_authoritative">> => true,
                             <<"is_protected">> => false
                         }),
-                    case insert(InsProps, [{escape_texts, false}], Context) of
+                    case insert(InsProps, [{is_escape_texts, false}], Context) of
                         {ok, NewId} ->
                             m_edge:duplicate(Id, NewId, Context),
                             m_media:duplicate(Id, NewId, Context),
@@ -409,8 +409,8 @@ update(Id, Props, Context) ->
 
 %% @doc Update a resource.
 %% Options flags:
-%%      escape_texts    (default: true}
-%%      acl_check       (default: true)
+%%      is_escape_texts (default: true}
+%%      is_acl_check    (default: true)
 %%      no_touch        (default: false)
 %%      is_import       (default: false)
 %% Other options:
@@ -419,7 +419,7 @@ update(Id, Props, Context) ->
 %%                 are expected, fail if the properties
 %%                 are different.
 %%
-%% {escape_texts, false} checks if the texts are escaped, and if not then it
+%% {is_escape_texts, false} checks if the texts are escaped, and if not then it
 %% will escape. This prevents "double-escaping" of texts.
 -spec update(
         m_rsc:resource() | insert_rsc,
@@ -474,10 +474,13 @@ update(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc 
         <<>> -> <<"UTC">>;
         _ -> Tz0
     end,
+    % Also accept the old non "is_.." options
     RscUpd = #rscupd{
         id = Id,
-        is_escape_texts = proplists:get_value(is_escape_texts, Options, proplists:get_value(escape_texts, Options, true)),
-        is_acl_check = proplists:get_value(is_acl_check, Options, proplists:get_value(acl_check, Options, true)),
+        is_escape_texts = proplists:get_value(is_escape_texts, Options,
+                                proplists:get_value(escape_texts, Options, true)),
+        is_acl_check = proplists:get_value(is_acl_check, Options,
+                                proplists:get_value(acl_check, Options, true)),
         is_import = proplists:get_value(is_import, Options, false),
         is_no_touch = proplists:get_value(no_touch, Options, false)
                       andalso z_acl:is_admin(Context),
