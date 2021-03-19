@@ -476,8 +476,8 @@ update(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc 
     end,
     RscUpd = #rscupd{
         id = Id,
-        is_escape_texts = proplists:get_value(escape_texts, Options, true),
-        is_acl_check = proplists:get_value(acl_check, Options, true),
+        is_escape_texts = proplists:get_value(is_escape_texts, Options, proplists:get_value(escape_texts, Options, true)),
+        is_acl_check = proplists:get_value(is_acl_check, Options, proplists:get_value(acl_check, Options, true)),
         is_import = proplists:get_value(is_import, Options, false),
         is_no_touch = proplists:get_value(no_touch, Options, false)
                       andalso z_acl:is_admin(Context),
