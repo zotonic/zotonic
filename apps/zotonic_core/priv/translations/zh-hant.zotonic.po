@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-22 15:58\n"
+"PO-Revision-Date: 2021-03-22 16:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -5117,7 +5117,6 @@ msgid "Scope"
 msgstr "范围"
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:31
-#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
 msgid "Use Facebook authentication"
 msgstr "使用臉書权鉴"
 
@@ -6647,6 +6646,10 @@ msgstr "您希望用戶同意的範圍用空格分隔的列表。實例是： <t
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
 msgstr "租戶"
+
+#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
+msgid "Use Microsoft authentication"
+msgstr ""
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:62
 msgid "You don't have permission to change the Microsoft settings."
