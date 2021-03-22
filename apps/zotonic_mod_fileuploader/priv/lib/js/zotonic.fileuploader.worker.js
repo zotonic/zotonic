@@ -415,7 +415,7 @@ actions.newUpload = function(msg) {
 // Worker Startup
 //
 
-self.worker_init = function(args) {
+self.on_init = function(args) {
     actions.init(args);
 }
 

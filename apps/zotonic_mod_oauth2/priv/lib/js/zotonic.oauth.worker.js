@@ -298,7 +298,7 @@ actions.authServiceConfirm = function(payload) {
 // Worker Startup
 //
 
-self.worker_init = function(args) {
+self.on_init = function(args) {
     console.log("WORKER_INIT", args);
     actions.init(args);
 }
