@@ -73,21 +73,28 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, Context) ->
                 Args,
                 Context);
         2 ->
-            case maps:get(<<"state">>, QArgs) of
-                StateId ->
-                    case maps:get(<<"code">>, QArgs) of
-                        Code when is_binary(Code), Code =/= <<>> ->
-                            access_token(
-                                ServiceMod:fetch_access_token(Code, ServiceData, Args, QArgs, Context),
-                                ServiceMod,
-                                Args,
-                                Context);
-                        undefined ->
-                            {error, code}
+            case maps:get(<<"error">>, QArgs, undefined) of
+                undefined ->
+                    case maps:get(<<"state">>, QArgs, undefined) of
+                        StateId ->
+                            case maps:get(<<"code">>, QArgs, undefined) of
+                                Code when is_binary(Code), Code =/= <<>> ->
+                                    access_token(
+                                        ServiceMod:fetch_access_token(Code, ServiceData, Args, QArgs, Context),
+                                        ServiceMod,
+                                        Args,
+                                        Context);
+                                _ ->
+                                    lager:error("OAuth redirect error when fetching code: ~p", [ QArgs ]),
+                                    {error, code}
+                            end;
+                        _ ->
+                            lager:warning("OAuth redirect with missing or illegal state argument"),
+                            {error, missing_secret}
                     end;
-                _ ->
-                    lager:warning("OAuth redirect with missing or illegal state argument"),
-                    {error, missing_secret}
+                _Error ->
+                    lager:error("OAuth redirect error: ~p", [ QArgs ]),
+                    {error, code}
             end
     end.
 
