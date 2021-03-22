@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="form-group label-floating">
-                        <input type="text" id="microsoft_scope" name="scope" value="{{ m.config.mod_microsoft.scope.value|default:'email'|escape }}" class="form-control" placeholder="{_ Scope _}">
+                        <input type="text" id="microsoft_scope" name="scope" value="{{ m.config.mod_microsoft.scope.value|default:'email profile'|escape }}" class="form-control" placeholder="{_ Scope _}">
                         <label class="control-label" for="microsoft_scope">{_ Scope _}</label>
                         <p class="help-block">
                             {_ Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically. _}

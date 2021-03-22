@@ -38,7 +38,7 @@
 % You have to add your Microsoft appid and secret to the config.
 % By default, we only request access to the Microsoft user's e-mail address.
 % The 'openid' scope is always added when requesting the access token.
--define(MICROSOFT_SCOPE, <<"email">>).
+-define(MICROSOFT_SCOPE, <<"email profile">>).
 
 % The tenant: common, organizations, consumers or Microsot tenant id's
 -define(MICROSOFT_TENANT, <<"common">>).
