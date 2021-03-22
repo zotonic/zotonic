@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-22 15:51\n"
+"PO-Revision-Date: 2021-03-22 15:59\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -3601,7 +3601,7 @@ msgstr "Potwierdzenie nie powiodło się"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:51
 msgid "Duplicate email"
-msgstr ""
+msgstr "Zduplikowany e-mail"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Either the email or the password you entered is incorrect. Please try again."
@@ -3820,7 +3820,7 @@ msgstr "Ktoś inny jest już powiązany z tym kontem na"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "Somebody with your email address has already an account on"
-msgstr ""
+msgstr "Ktoś z Twoim adresem e-mail ma już konto"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:27
 #: apps/zotonic_mod_survey/priv/templates/_survey_error.tpl:1
@@ -6590,75 +6590,75 @@ msgstr "i wszystkie elementy z wcięciem poniżej?"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:14./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:15
 msgid "Application ID"
-msgstr ""
+msgstr "Identyfikator aplikacji"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:9
 msgid "Azure Portal App registrations"
-msgstr ""
+msgstr "Rejestracje aplikacji w witrynie Azure Portal"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:20
 msgid "Client Secret"
-msgstr ""
+msgstr "Sekret klienta"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:17
 msgid "Connect with Microsoft"
-msgstr ""
+msgstr "Połącz się z firmą Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr ""
+msgstr "Kontroluj, kto może się zalogować. Dozwolone wartości to: <tt>wspólnych</tt>, <tt>organizacje</tt>, <tt>konsumentów</tt>i identyfikatory dzierżawców."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:2./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:4
 msgid "Disconnect from Microsoft"
-msgstr ""
+msgstr "Odłącz od firmy Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:5
 msgid "Do you want to disconnect your Microsoft account?"
-msgstr ""
+msgstr "Czy chcesz odłączyć swoje konto Microsoft?"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:18
 msgid "Log in with Microsoft"
-msgstr ""
+msgstr "Zaloguj się przez Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "Log on with Microsoft"
-msgstr ""
+msgstr "Zaloguj się przez Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:28
 msgid "More information about scopes"
-msgstr ""
+msgstr "Więcej informacji o zakresach"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:37
 msgid "More information about tenant identifiers"
-msgstr ""
+msgstr "Więcej informacji o identyfikatorach dzierżawców"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_service.microsoft.tpl:2
 msgid "Redirecting to Microsoft."
-msgstr ""
+msgstr "Przekierowanie do Microsoft."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:49
 msgid "Save Microsoft Settings"
-msgstr ""
+msgstr "Zapisz ustawienia Microsoft"
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:60
 msgid "Saved the Microsoft settings."
-msgstr ""
+msgstr "Zapisano ustawienia Microsoft."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr ""
+msgstr "Rozdzielana spacjami lista zakresów, na które użytkownik ma wyrazić zgodę. Przykłady: <tt>e-mail</tt>, <tt>offline_access</tt> i <tt>profil</tt>. Zakres <tt>openid</tt> jest zawsze dodawany automatycznie."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
-msgstr ""
+msgstr "Najemca"
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:62
 msgid "You don't have permission to change the Microsoft settings."
-msgstr ""
+msgstr "Nie masz uprawnień do zmiany ustawień Microsoft."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "You have coupled your <strong>Microsoft</strong> account."
-msgstr ""
+msgstr "Połączyłeś swoje <strong>konto Microsoft</strong>"
 
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
