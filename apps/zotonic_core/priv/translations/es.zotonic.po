@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-22 15:58\n"
+"PO-Revision-Date: 2021-03-22 16:43\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -5117,7 +5117,6 @@ msgid "Scope"
 msgstr "Ámbito"
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:31
-#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
 msgid "Use Facebook authentication"
 msgstr "Usar autenticación de Facebook"
 
@@ -6651,6 +6650,10 @@ msgstr "Lista de ámbitos separados por espacios a los que desea que el usuario 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
 msgstr "Inquilino"
+
+#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
+msgid "Use Microsoft authentication"
+msgstr ""
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:62
 msgid "You don't have permission to change the Microsoft settings."
