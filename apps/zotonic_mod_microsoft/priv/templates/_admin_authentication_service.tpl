@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <label class="checkbox">
                             <input type="checkbox" id="microsoft_useauth" name="useauth" {% if m.config.mod_microsoft.useauth.value %}checked="checked"{% endif %} value="1" />
-                            {_ Use Facebook authentication _}
+                            {_ Use Microsoft authentication _}
                         </label>
                     </div>
 
