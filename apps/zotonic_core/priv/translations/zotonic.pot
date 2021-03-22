@@ -5357,7 +5357,6 @@ msgid "Scope"
 msgstr ""
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:31
-#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
 msgid "Use Facebook authentication"
 msgstr ""
 
@@ -6978,6 +6977,10 @@ msgstr ""
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
+msgstr ""
+
+#: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
+msgid "Use Microsoft authentication"
 msgstr ""
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:62
