@@ -1,0 +1,6 @@
+%% -*- mode: erlang -*-
+[
+    {microsoft_authorize, [ "oauth-service", "authorize", "microsoft" ],
+                         controller_oauth2_service_authorize,
+                         [ {service_module, z_microsoft_oauth_service} ]}
+].

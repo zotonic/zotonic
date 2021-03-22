@@ -27,7 +27,7 @@ var model = {
     state_data: undefined,
     state_id: undefined,
     status: 'start',
-    is_connected: false
+    is_depends_provided: false
 };
 
 model.present = function(data) {
@@ -46,7 +46,11 @@ model.present = function(data) {
                 break;
         }
         model.oauth_step = data.oauth_step;
-        model.is_connected = true;
+        model.status = 'waiting';
+    }
+
+    if (data.is_depends_provided && state.waiting(model)) {
+        model.status = 'active';
 
         self.subscribe('model/auth/event/auth-user-id',
                        function(msg) {
@@ -147,7 +151,7 @@ model.present = function(data) {
             self.publish(
                 "model/ui/render-template/oauth-status",
                 {
-                    topic: "bridge/origin/model/template/get/render/_logon_service_done.tpl",
+                    topic: "bridge/origin/model/template/get/render/_logon_service_error.tpl",
                     dedup: true,
                     data: {
                         error: data.payload.message
@@ -204,6 +208,10 @@ state.start = function(model) {
     return model.status === 'start';
 };
 
+state.waiting = function(model) {
+    return model.status === 'waiting';
+};
+
 state.active = function(model) {
     return model.status === 'active';
 };
@@ -249,6 +257,12 @@ actions.init = function(data) {
     model.present(data);
 };
 
+actions.depends_provided = function() {
+    let data = {};
+    data.is_depends_provided = true;
+    model.present(data);
+};
+
 actions.redirect = function() {
     let data = {};
     data.is_redirect = true;
@@ -284,12 +298,17 @@ actions.authServiceConfirm = function(payload) {
 // Worker Startup
 //
 
+self.worker_init = function(args) {
+    console.log("WORKER_INIT", args);
+    actions.init(args);
+}
+
 self.connect({
     depends: [ "bridge/origin", "model/auth", "model/location", "model/sessionStorage" ],
-    provides: [ ]
+    provides: [ "model/oauth"]
 }).then(
-    function(args) {
-        actions.init(args);
+    function() {
+        console.log("DEPENDS_PROVIDED");
+        actions.depends_provided();
     }
 );
-

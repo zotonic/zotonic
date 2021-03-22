@@ -44,7 +44,13 @@
             <div class="container">
                 <h1>{_ Already connected _}</h1>
 
-                <p class="alert">{_ Somebody else is already connected with this account on _} {{ service|default:_"the service" }}</p>
+                <p class="alert alert-warning">{_ Somebody else is already connected with this account on _} {{ service|default:_"the service" }}</p>
+            </div>
+        {% elseif qerror == "duplicate_email" %}
+            <div class="container">
+                <h1>{_ Duplicate email _}</h1>
+
+                <p class="alert alert-warning">{_ Somebody with your email address has already an account on _} {{ m.site.title }}</p>
             </div>
         {% else %}
             <div class="container">
@@ -56,8 +62,8 @@
             </div>
         {% endif %}
 
-        <p>
-            <a class="btn" href="#" data-onclick-topic="model/window/post/close">{_ Close window _}</a>
+        <p style="text-align: center">
+            <a class="btn btn-primary" href="#" data-onclick-topic="model/window/post/close">{_ Close window _}</a>
         </p>
     {% endif %}
 
