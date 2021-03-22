@@ -24,7 +24,7 @@
                         <input type="text" id="microsoft_scope" name="scope" value="{{ m.config.mod_microsoft.scope.value|default:'email'|escape }}" class="form-control" placeholder="{_ Scope _}">
                         <label class="control-label" for="microsoft_scope">{_ Scope _}</label>
                         <p class="help-block">
-                            {_ Space separeted list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically. _}
+                            {_ Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically. _}
                             <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent" target="_blank" rel="noopener noreferrer">{_ More information about scopes _}</a>
                         </p>
                     </div>

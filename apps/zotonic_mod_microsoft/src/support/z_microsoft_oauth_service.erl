@@ -27,10 +27,13 @@
     authorize_url/3,
     fetch_access_token/5,
     auth_validated/3
+]).
 
-    , fetch_user_data/1
-    , fetch_user_photo/1
-    , decode_jwt/1
+% For testing
+-export([
+    fetch_user_data/1,
+    fetch_user_photo/1,
+    decode_jwt/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
