@@ -290,7 +290,6 @@ maybe_update_identity(_Ps, NewProps, IdnPs, Context) ->
     {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
     m_identity:set_by_type(UserId, Key, Type, NewProps, Context).
 
-
 update_identity(Auth, IdnPs, Context) ->
     {propb, IdnPropb} = proplists:lookup(propb, IdnPs),
     {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
@@ -300,9 +299,6 @@ update_identity(Auth, IdnPs, Context) ->
         IdnPs,
         Context),
     {ok, UserId}.
-    % Context1 = z_acl:logon_prefs(UserId, Context),
-    % z_authentication_tokens:set_auth_cookie(UserId, #{}, Context1).
-
 
 maybe_signup(Auth, Context) ->
     Email = maps:get(<<"email">>, Auth#auth_validated.props, undefined),
@@ -356,7 +352,12 @@ is_user_email_exists(Email, Context) ->
 maybe_email_identity(Props) ->
     case maps:get(<<"email">>, Props, undefined) of
         undefined -> [];
-        Email -> [ {identity, {email, Email, false, false}} ]
+        Email ->
+            IsVerified = true,
+            IsUnique = false,
+            [
+                {identity, {email, Email, IsUnique, IsVerified}}
+            ]
     end.
 
 insert_identity(UserId, Auth, Context) ->
