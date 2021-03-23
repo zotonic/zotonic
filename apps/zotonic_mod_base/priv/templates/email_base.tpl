@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+{% block email %}
 <head>
     {% comment %} Email template from https://tedgoas.github.io/Cerberus/ {% endcomment %}
     <meta charset="utf-8">
@@ -176,10 +177,11 @@
     2. center tag: for Gmail and Inbox mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero, Comcast, freenet, Mail.ru, Orange.fr
     3. mso conditional: For Windows 10 Mail
 {% endcomment %}
-<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #222222;">
-    <center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: #222222;">
+{% with bgcolor|default:"#222222" as bgcolor %}
+<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: {{ bgcolor }};">
+    <center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: {{ bgcolor }};">
     <!--[if mso | IE]>
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #222222;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: {{ bgcolor }};">
     <tr>
     <td>
     <![endif]-->
@@ -395,5 +397,6 @@
     <![endif]-->
     </center>
 </body>
+{% endwith %}
+{% endblock %}
 </html>
-
