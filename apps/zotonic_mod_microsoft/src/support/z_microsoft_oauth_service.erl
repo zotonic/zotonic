@@ -140,7 +140,7 @@ auth_validated(#{
 
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
-    GraphUrl = "https://graph.microsoft.com/v1.0/users/me",
+    GraphUrl = "https://graph.microsoft.com/v1.0/me",
     Hs = [
         {"Authorization", "Bearer " ++ z_convert:to_list(AccessToken)}
     ],
