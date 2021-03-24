@@ -256,7 +256,7 @@ Templates
 
 * The ``use_absolute_url`` argument of the ``url``, ``image`` and ``lib`` tags
   was renamed to ``absolute_url``.
-* Templates are now stored in :file:`yoursite/templates/priv/` instead of
+* Templates are now stored in :file:`yoursite/priv/templates/` instead of
   :file:`yoursite/templates/`.
 * The ``maxage`` caching argument was renamed to ``max_age``.
 * The models have now extra ACL checks.
