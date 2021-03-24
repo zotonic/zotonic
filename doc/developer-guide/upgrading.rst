@@ -13,7 +13,7 @@ Upgrading from 0.x to 1.0
 Erlang/OTP
 ^^^^^^^^^^
 
-* Support for Erlang 18 was dropped.
+* Support for Erlang versions before 21.3 was dropped.
 * Zotonic modules are now separately published as packages to `Hex.pm`_, which
   allows you to build your own Zotonic distribution and to have each of your
   sites depend on the Zotonic modules (and other Erlang packages) it needs.
