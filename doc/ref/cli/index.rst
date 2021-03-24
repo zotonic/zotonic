@@ -92,7 +92,7 @@ Currently, the following subcommands are implemented:
 
 ``zotonic dispatch <url>``
   Dispatch an URL. Finds the site matching the hostname and shows the dispatch information for the path.
-  Example:
+  Example::
 
     bin/zotonic dispatch https://mysite.test:8443/en/page/1/foobar
 
