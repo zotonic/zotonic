@@ -748,7 +748,7 @@ ul.media > li .bottom .caption a {
   width: 161px;
   vertical-align: text-top;
   color: white;
-  mtext-shadow: 2px 2px black;
+  text-shadow: 2px 2px black;
 }
 .edit-page .admin-container {
   margin-top: 50px;
