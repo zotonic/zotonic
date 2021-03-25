@@ -290,7 +290,13 @@ find_value(_, undefined, _TplVars, _Context) ->
 find_value(Key, [N|_], _TplVars, Context) when ?is_property_key(Key), is_integer(N) ->
     % Assume a predicate/property lookup in a list of ids, map to lookup of first entry
     m_rsc:p(N, Key, Context);
+find_value(Key, [{N}|_], _TplVars, Context) when ?is_property_key(Key), is_integer(N) ->
+    % Assume a predicate/property lookup in a list of ids, map to lookup of first entry
+    m_rsc:p(N, Key, Context);
 find_value(Key, Id, _TplVars, Context) when ?is_property_key(Key), ?is_resource(Id) ->
+    % Property of a resource, just assume an integer is a rsc id
+    m_rsc:p(Id, Key, Context);
+find_value(Key, {Id}, _TplVars, Context) when ?is_property_key(Key), ?is_resource(Id) ->
     % Property of a resource, just assume an integer is a rsc id
     m_rsc:p(Id, Key, Context);
 find_value(Name, [[{A,_}|_]|_] = Blocks, _TplVars, _Context ) when is_atom(A), not is_integer(Name) ->
