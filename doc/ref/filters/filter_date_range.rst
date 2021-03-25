@@ -16,7 +16,7 @@ be as if the following were written::
 
   {{ fromdate|date:format_ne }}{{ sep }}{{ todate|date:format_eq }}
 
-However, if the dates are equal then the output will be as if the
+However, if the dates are not equal then the output will be as if the
 following were written::
 
   {{ fromdate|date:format_ne }}{{ sep }}{{ todate|date:format_ne }}
