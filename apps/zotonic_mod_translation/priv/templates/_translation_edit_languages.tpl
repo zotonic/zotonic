@@ -7,7 +7,7 @@
             <label class="checkbox-inline">
     	    <input type="checkbox" id="{{ #language.code }}" name="language[]" value="{{ code }}"
     	           {% if code|member:r_lang or (not r_lang and z_language == code) %}checked="checked"{% endif %} />
-    	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.name_en }}</span>
+    	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.name }}</span>
             </label>
             {% endif %}
         {% empty %}

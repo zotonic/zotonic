@@ -4472,7 +4472,7 @@ msgstr ""
 msgid "Page Id"
 msgstr ""
 
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:336
+#: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr ""
 
