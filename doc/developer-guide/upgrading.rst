@@ -320,7 +320,7 @@ The following changes are made:
 Binaries for request variables
 ..............................
 
-If you request an argument with ``z_context:get_q/2`` and related functions then you might need to adapt some code. If the you request the query argument using an *atom* or *binary* then the argument will be returned as a *binary*. If you request using a *string* then the result will be a string, this is for backwards compatibility. The function ``get_q_all`` will return all arguments as binaries.
+If you request an argument with ``z_context:get_q/2`` and related functions then you might need to adapt some code. Requesting a query argument using an *atom* or *binary* will return a *binary*. Requesting with a *string* returns a string, this is for backwards compatibility. The function ``get_q_all`` will return all arguments as binaries.
 
 In short:
 
