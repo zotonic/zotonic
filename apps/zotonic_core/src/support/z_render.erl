@@ -1,14 +1,14 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Rusty Klophaus
-%% @copyright 2009-2018 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %%
-%% @doc Deprecated render routines using wires and actions.
+%% @doc Render routines using wires and actions.
 %%      Based on Nitrogen, which is copyright (c) 2008-2009 Rusty Klophaus
 
 %% This is the MIT license.
 %%
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009-2018 Marc Worrell
+%% Copyright (c) 2009-2021 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -127,7 +127,7 @@
 ]).
 
 
--include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("../../include/zotonic.hrl").
 
 %% The state below is the render state, can be cached and/or merged
 %% State of the current rendered template/scomp/page
@@ -194,7 +194,7 @@ output1([undefined|Rest], RenderState, Context, Acc) ->
     output1(Rest, RenderState, Context, Acc);
 output1([C|Rest], RenderState, Context, Acc) when is_atom(C) ->
     output1(Rest, RenderState, Context, [list_to_binary(atom_to_list(C))|Acc]);
-output1([{trans, _} = Trans|Rest], RenderState, Context, Acc) ->
+output1([#trans{} = Trans|Rest], RenderState, Context, Acc) ->
     output1(Rest, RenderState, Context, [z_trans:lookup_fallback(Trans, Context)|Acc]);
 output1([{{_,_,_},{_,_,_}} = D|Rest], RenderState, Context, Acc) ->
     output1([filter_date:date(D, "Y-m-d H:i:s", Context)|Rest], RenderState, Context, Acc);
@@ -204,7 +204,11 @@ output1([{javascript, Script}|Rest], RenderState, Context, Acc) ->
     },
     output1(Rest, RS1, Context, Acc);
 output1([T|Rest], RenderState, Context, Acc) when is_tuple(T) ->
-    output1([iolist_to_binary(io_lib:format("~p", [T]))|Rest], RenderState, Context, Acc);
+    Printed = iolist_to_binary(io_lib:format("~p", [T])),
+    output1(Rest, RenderState, Context, [Printed|Acc]);
+output1([M|Rest], RenderState, Context, Acc) when is_map(M) ->
+    JSON = z_json:encode(M),
+    output1(Rest, RenderState, Context, [JSON|Acc]);
 output1([C|Rest], RenderState, Context, Acc) ->
     output1(Rest, RenderState, Context, [C|Acc]).
 
