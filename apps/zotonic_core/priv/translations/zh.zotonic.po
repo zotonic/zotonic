@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-26 16:27\n"
+"PO-Revision-Date: 2021-03-26 16:37\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -5314,7 +5314,7 @@ msgstr "Zotonic可以在云端存储上传和调整大小的文件。在这里�
 
 #: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:77
 msgid "Could not upload"
-msgstr ""
+msgstr "无法上传"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
