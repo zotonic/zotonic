@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="{{ z_language }}" class="zotonic-admin environment-{{ m.site.environment }}">
     <head>
-        <meta charset="utf-8" />
+        <meta charset="utf-8">
         <title>{% block title %}{_ Admin _}{% endblock %} &mdash; {{ m.site.title|default:"Zotonic" }} Admin</title>
 
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
 
         {% lib
             "css/admin-bootstrap3.css"
@@ -39,7 +39,7 @@
         {% block head_extra %}
         {% endblock %}
     </head>
-    <body class="{% block bodyclass %}{% endblock %}">
+    <body id="body" class="{% block bodyclass %}{% endblock %}"{% block bodyattr %}{% endblock %}>
 
     {% block navigation %}
         {% include "_admin_menu.tpl" %}
