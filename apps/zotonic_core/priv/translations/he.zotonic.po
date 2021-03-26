@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-25 15:49\n"
+"PO-Revision-Date: 2021-03-26 16:28\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1966,6 +1966,7 @@ msgstr "העלה קובץ"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:74
 msgid "Uploaded"
 msgstr "הועלה"
 
@@ -2075,7 +2076,7 @@ msgstr "אינך רשאי למחוק מדיה זו."
 msgid "You are not allowed to delete this page."
 msgstr "אינך רשאי למחוק דף זה."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
 msgid "You are not allowed to edit this page."
@@ -5310,6 +5311,10 @@ msgstr "אינך רשאי לשנות הגדרות אלה."
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic יכולה לאחסן קבצים שהועלו ושינוי גודל בענן. כאן תוכלו להגדיר את מפתחות המיקום והגישה לשירות הענן."
+
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:77
+msgid "Could not upload"
+msgstr ""
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
