@@ -188,7 +188,7 @@ model.present = function(data) {
             }
             is_next = true;
         } else {
-            console.warning("Fileuploader request without files ", data.upload);
+            console.log("Fileuploader request without files ", data.upload);
             self.publish(msg.properties.response_topic, { status: "error", error: "No files" });
         }
     }

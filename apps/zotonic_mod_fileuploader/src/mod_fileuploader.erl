@@ -37,10 +37,70 @@
 %% Supervisor callbacks
 -export([init/1]).
 
+-export([event/2]).
+
 
 %% ===================================================================
 %% API functions
 %% ===================================================================
+
+
+%% @doc Upload event from the UI.
+event(#z_msg_v1{ data = Data }, Context) ->
+    ExtraData = proplists:get_value(<<"data">>, Data),
+    Context1 = lists:foldl(
+        fun(#{ <<"upload">> := Upload }, Ctx) ->
+            do_upload(z_fileuploader:status(Upload), ExtraData, Ctx)
+        end,
+        Context,
+        proplists:get_value(<<"fileuploader">>, Data)),
+    z_render:wire({unmask, [ {target, "body"} ]}, Context1).
+
+do_upload({ok, #{ is_complete := true } = Status}, Data, Context) ->
+    #{
+        name := Name,
+        filename := Filename,
+        uploaded_file := TmpFile
+    } = Status,
+    RscProps = #{
+        <<"is_published">> => true,
+        <<"original_filename">> => Filename
+    },
+    RscProps1 = rsc_props_from_data(RscProps, Data, Context),
+    Context1 = case m_media:insert_file(TmpFile, RscProps1, [], Context) of
+        {ok, RscId} ->
+            maybe_edge(RscId, Data, Context),
+            F = z_html:escape(Filename),
+            z_render:growl([ ?__("Uploaded", Context), " ", F ], Context);
+        {error, _} ->
+            F = z_html:escape(Filename),
+            z_render:growl_error([ ?__("Could not upload", Context), " ", F ], Context)
+    end,
+    z_fileuploader:stop(Name),
+    Context1;
+do_upload({error, _}, _Data, Context) ->
+    Context.
+
+rsc_props_from_data(RscProps, #{ <<"subject_id">> := Id }, Context) ->
+    RscProps#{
+        <<"content_group_id">> => m_rsc:p(Id, content_group_id, Context)
+    };
+rsc_props_from_data(RscProps, #{ <<"object_id">> := Id }, Context) ->
+    RscProps#{
+        <<"content_group_id">> => m_rsc:p(Id, content_group_id, Context)
+    };
+rsc_props_from_data(RscProps, _Data, _Context) ->
+    RscProps.
+
+maybe_edge(RscId, #{ <<"subject_id">> := Id } = Data, Context) ->
+    Predicate = maps:get(<<"predicate">>, Data, <<"relation">>),
+    m_edge:insert(Id, Predicate, RscId, Context);
+maybe_edge(RscId, #{ <<"object_id">> := Id } = Data, Context) ->
+    Predicate = maps:get(<<"predicate">>, Data, <<"relation">>),
+    m_edge:insert(RscId, Predicate, Id, Context);
+maybe_edge(_RscId, _Data, _Context) ->
+    ok.
+
 
 %% @doc Start the simple_one_for_one supervisor for the file upload processes.
 start_link(Args) ->
