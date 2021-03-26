@@ -187,6 +187,9 @@ output1([#render_state{}=RS0|Rest], RenderState, Context, Acc) ->
 output1([{script, Args}|Rest], RenderState, Context, Acc) ->
     Context1 = set_render_state(RenderState, Context),
     output1(Rest, #render_state{}, Context, [render_script(Args, Context1)|Acc]);
+output1([ [ {_, _} | _ ] = List | Rest ], RenderState, Context, Acc) ->
+    JSON = z_json:encode(List),
+    output1(Rest, RenderState, Context, [JSON|Acc]);
 output1([List|Rest], RenderState, Context, Acc) when is_list(List) ->
     {Rendered, RS1, Context1} = output1(List, RenderState, Context, []),
     output1(Rest, RS1, Context1, [Rendered|Acc]);

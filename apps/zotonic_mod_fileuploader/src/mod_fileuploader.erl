@@ -54,10 +54,7 @@ event(#z_msg_v1{ data = Data }, Context) ->
         end,
         Context,
         proplists:get_value(<<"fileuploader">>, Data)),
-    z_render:wire([
-            {unmask, [ {target, "body"} ]},
-            {alert, [ {text, ?__("All files are uploaded.", Context)} ]}
-        ], Context1).
+    z_render:wire({unmask, [ {target, "body"} ]}, Context1).
 
 do_upload({ok, #{ is_complete := true } = Status}, Data, Context) ->
     #{
