@@ -4,7 +4,7 @@
 
 {% block content %}
 {% with q.idn_id|to_integer as idn_id %}
-{% with m.identity.get[idn_id] as idn %}
+{% with m.identity.verify[idn_id][q.verify_key] as idn %}
 <div class="padding">
 	{% if idn.is_verified or (idn.verify_key != '' and q.verify_key == idn.verify_key) %}
 

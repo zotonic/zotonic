@@ -152,6 +152,17 @@ m_get([ <<"get">>, IdnId | Rest ], _Msg, Context) ->
             end
     end,
     {ok, {Idn1, Rest}};
+m_get([ <<"verify">>, IdnId, VerifyKey | Rest ], _Msg, Context) ->
+    Idn1 = case get(IdnId, Context) of
+        Idn when is_list(Idn), is_binary(VerifyKey), VerifyKey =/= <<>> ->
+            case proplists:get_value(verify_key, Idn) of
+                VerifyKey -> Idn;
+                _ -> undefined
+            end;
+        _ ->
+            undefined
+    end,
+    {ok, {Idn1, Rest}};
 m_get([ Id, Type | Rest ], _Msg, Context) ->
     Idn = case z_acl:rsc_editable(Id, Context) of
         true -> get_rsc(Id, Type, Context);
