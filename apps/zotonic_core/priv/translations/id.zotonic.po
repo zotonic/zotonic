@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-22 17:04\n"
+"PO-Revision-Date: 2021-03-26 16:37\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -1966,6 +1966,7 @@ msgstr "Unggah Berkas"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:74
 msgid "Uploaded"
 msgstr "Unggahan"
 
@@ -2075,7 +2076,7 @@ msgstr "Anda tidak diizinkan untuk menghapus media ini."
 msgid "You are not allowed to delete this page."
 msgstr "Anda tidak diizinkan untuk menghapus halaman ini."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
 msgid "You are not allowed to edit this page."
@@ -4256,7 +4257,7 @@ msgstr "BAIK"
 msgid "Page Id"
 msgstr "Id halaman"
 
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:336
+#: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr "Baca halaman ini di web"
 
@@ -5309,6 +5310,10 @@ msgstr "Anda tidak diizinkan untuk mengubah pengaturan ini."
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic dapat menyimpan berkas yang diunggah dan diubah ukurannya dalam awan. Di sini anda dapat mengkonfigurasi lokasi dan tombol akses untuk layanan awan."
+
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:77
+msgid "Could not upload"
+msgstr "Tidak dapat mengupload"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"

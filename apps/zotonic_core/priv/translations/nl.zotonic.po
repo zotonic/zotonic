@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-22 17:03\n"
+"PO-Revision-Date: 2021-03-29 10:05\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1024,7 +1024,7 @@ msgstr "Verwijder als geen andere pagina’s een connectie met deze pagina hebbe
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:46./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:232./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
 msgid "Delete if not connected anymore"
-msgstr "Verwijder als u niet meer verbonden bent"
+msgstr "Verwijder indien niet meer verbonden"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
 msgid "Delete this page."
@@ -1970,6 +1970,7 @@ msgstr "Upload bestand"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:74
 msgid "Uploaded"
 msgstr "Geüpload"
 
@@ -2079,7 +2080,7 @@ msgstr "Je mag dit media-item niet verwijderen."
 msgid "You are not allowed to delete this page."
 msgstr "Je mag deze pagina niet verwijderen."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
 msgid "You are not allowed to edit this page."
@@ -4259,7 +4260,7 @@ msgstr "OK"
 msgid "Page Id"
 msgstr "Pagina Id"
 
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:336
+#: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr "Lees deze pagina op internet"
 
@@ -5312,6 +5313,10 @@ msgstr "Je hebt geen rechten om de instellingen te veranderen."
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic kun geüploade en bewerkte bestanden opslaan in de cloud. Hier kan je de locatie en toegangssleutels voor de cloud-dienst instellen."
+
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:77
+msgid "Could not upload"
+msgstr "Kan niet uploaden"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"

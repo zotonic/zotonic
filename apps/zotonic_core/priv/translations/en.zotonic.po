@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-22 16:43\n"
+"PO-Revision-Date: 2021-03-26 18:27\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "All normal content groups"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr ""
+msgstr "允許的文件以及 mime 種類，用 '，' 分開 . 輸入'無'，如果沒有附加的輸入允許，如果是默許的則留下空白"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
@@ -312,7 +312,7 @@ msgstr "Edit the collaboration group"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr ""
+msgstr "輸入擴展名單 (例如 <tt>.png</tt>), mime types (例如 <tt>image/png</tt>) 或是以下之一:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
@@ -1966,6 +1966,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:74
 msgid "Uploaded"
 msgstr ""
 
@@ -2075,7 +2076,7 @@ msgstr ""
 msgid "You are not allowed to delete this page."
 msgstr ""
 
-#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
 msgid "You are not allowed to edit this page."
@@ -4255,7 +4256,7 @@ msgstr ""
 msgid "Page Id"
 msgstr ""
 
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:336
+#: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr ""
 
@@ -5307,6 +5308,10 @@ msgstr ""
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
+msgstr ""
+
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:77
+msgid "Could not upload"
 msgstr ""
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4

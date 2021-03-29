@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-22 17:03\n"
+"PO-Revision-Date: 2021-03-26 16:37\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -1966,6 +1966,7 @@ msgstr "Lae fail"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:74
 msgid "Uploaded"
 msgstr "√úles laetud"
 
@@ -2075,7 +2076,7 @@ msgstr "Teil pole lubatud seda meediumit kustutada."
 msgid "You are not allowed to delete this page."
 msgstr "Teil pole lubatud seda lehte kustutada."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:143
 msgid "You are not allowed to edit this page."
@@ -4257,7 +4258,7 @@ msgstr "Okei"
 msgid "Page Id"
 msgstr "Lehe ID"
 
-#: apps/zotonic_mod_base/priv/templates/email_base.tpl:336
+#: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
 msgstr "Lugege seda lehte veebis"
 
@@ -5310,6 +5311,10 @@ msgstr "Teil pole lubatud neid seadeid muuta."
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic saab pilve salvestada üleslaaditud ja suurusega faile. Siin saate konfigureerida pilveteenuse asukoha ja juurdepääsuvõtmed."
+
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:77
+msgid "Could not upload"
+msgstr "Üleslaadimine nurjus"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
