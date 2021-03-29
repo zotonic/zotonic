@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-26 16:36\n"
+"PO-Revision-Date: 2021-03-29 10:33\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -312,7 +312,7 @@ msgstr "修改合作夥伴群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "輸入擴展名單 (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) 或是以下之一:"
+msgstr "輸入擴展名單 (例如 <tt>.png</tt>), mime types (例如 <tt>image/png</tt>) 或是以下之一:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
