@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Server for matching the request path to correct site and dispatch rule.
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -363,16 +363,25 @@ send_static_response(RespCode, Req) ->
 
 %% Always redirect to https
 -spec dispatch_1( #dispatch{}, undefined | cowboy_req:req(), undefined | cowboy_middleware:env() ) -> dispatch().
-dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, _OptReq, _OptEnv) when Hostname =/= undefined ->
-    #dispatch{ tracer_pid = TracerPid } = DispReq,
-    redirect_protocol(Hostname, TracerPid, []);
+dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, OptReq, OptEnv) when Hostname =/= undefined ->
+    % If we redirect to https, then first check if we also have to change the hostname.
+    % Otherwise we might have a mismatch between the certs and the requested hostname.
+    case ets:lookup(?MODULE, DispReq#dispatch.host) of
+        [] ->
+            case find_no_host_match(DispReq, OptReq, OptEnv) of
+                {fallback, _Site} ->
+                    redirect_protocol(Hostname, DispReq#dispatch.tracer_pid, []);
+                Other ->
+                    Other
+            end;
+        _ ->
+            redirect_protocol(Hostname, DispReq#dispatch.tracer_pid, [])
+    end;
 dispatch_1(DispReq, OptReq, OptEnv) ->
     case ets:lookup(?MODULE, DispReq#dispatch.host) of
         [] ->
             % Check for fallback sites or other site handling this hostname
             case find_no_host_match(DispReq, OptReq, OptEnv) of
-                {ok, Site} ->
-                    dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, []);
                 {fallback, Site} ->
                     dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, [{http_status_code, 400}]);
                 Other ->
