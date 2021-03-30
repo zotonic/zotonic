@@ -15,7 +15,7 @@ PROXY_PORT=$(shell echo ${https_proxy} | awk -F ":" '{print $$3}')
 SET_HTTPS_PROXY=ok = httpc:set_options([{https_proxy, {{"${PROXY_HOSTNAME}", ${PROXY_PORT}}, []}}]),
 endif
 
-.PHONY: all upgrade-deps compile dev test
+.PHONY: all upgrade-deps compile dev test update-cotonic update
 
 # Default target - update sources and call all compile rules in succession
 all: compile
@@ -41,6 +41,19 @@ dev:
 test: compile
 	bin/zotonic runtests
 
+update:
+	@echo "Updating Zotonic from branch: " `git rev-parse --abbrev-ref HEAD`
+	@git pull
+	@(cd apps/zotonic_mod_base/priv/lib-src/cotonic; \
+		echo "Updating Cotonic. Branch: " `git rev-parse --abbrev-ref HEAD`; \
+		git checkout -- .; \
+		git pull)
+
+update-cotonic:
+	@(cd apps/zotonic_mod_base/priv/lib-src/cotonic; \
+		echo "Updating Cotonic from branch: " `git rev-parse --abbrev-ref HEAD`; \
+		git checkout -- .; \
+		git pull)
 
 .PHONY: xref dialyzer
 
