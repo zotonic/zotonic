@@ -20,12 +20,20 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    service_available/1,
     content_types_provided/1,
     is_authorized/1,
     process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+service_available(Context) ->
+    Context1 = case z_convert:to_bool(z_context:get(nocache, Context)) of
+        true -> z_context:set_nocache_headers(Context);
+        false -> Context
+    end,
+    {true, Context1}.
 
 content_types_provided(Context) ->
     case z_context:get(content_type, Context) of
