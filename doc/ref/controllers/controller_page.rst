@@ -71,7 +71,7 @@ The following options can be given to the dispatch rule:
 |                     |sc's page path if set. Defaults to   |                        |
 |                     |true.                                |                        |
 +---------------------+-------------------------------------+------------------------+
-|seo_noindex          |Ask crawlers not to index this page. |seo_noindex             |
+|seo_noindex          |Ask crawlers to not index this page. |seo_noindex             |
 +---------------------+-------------------------------------+------------------------+
 |nocache              |Prevent browser caching this page.   |nocache                 |
 +---------------------+-------------------------------------+------------------------+
