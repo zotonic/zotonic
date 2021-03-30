@@ -258,8 +258,9 @@ actions.init = function(data) {
 };
 
 actions.depends_provided = function() {
-    let data = {};
-    data.is_depends_provided = true;
+    let data = {
+        is_depends_provided: true
+    };
     model.present(data);
 };
 
@@ -270,7 +271,7 @@ actions.redirect = function() {
 };
 
 actions.oauth_data = function( msg ) {
-    model.present(msg.payload);
+    model.present(msg.payload || {});
 };
 
 actions.qargs = function( msg ) {
@@ -299,7 +300,6 @@ actions.authServiceConfirm = function(payload) {
 //
 
 self.on_init = function(args) {
-    console.log("WORKER_INIT", args);
     actions.init(args);
 }
 
@@ -308,7 +308,6 @@ self.connect({
     provides: [ "model/oauth"]
 }).then(
     function() {
-        console.log("DEPENDS_PROVIDED");
         actions.depends_provided();
     }
 );

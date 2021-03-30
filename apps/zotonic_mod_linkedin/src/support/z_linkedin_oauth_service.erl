@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2020 Marc Worrell
+%% @copyright 2014-2021 Marc Worrell
 %% @doc Support routines for using LinkedIn as an external identity provider.
 
-%% Copyright 2014-2020 Marc Worrell
+%% Copyright 2014-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -109,7 +109,8 @@ auth_user(#{<<"id">> := LinkedInUserId} = Profile, Email, AccessTokenData, Args,
         <<"name_first">> => get_localized_value(<<"firstName">>, Profile),
         <<"name_surname">> => get_localized_value(<<"lastName">>, Profile),
         <<"summary">> => get_localized_value(<<"headline">>, Profile),
-        <<"email">> => Email
+        <<"email">> => Email,
+        <<"depiction_url">> => get_user_photo(Profile)
     },
     {ok, #auth_validated{
         service = linkedin,
@@ -140,7 +141,8 @@ get_localized_value(Prop, JSON) ->
 % Given the access token, fetch data about the user
 fetch_user_data(AccessToken) ->
     LinkedInUrl = "https://api.linkedin.com/v2/me"
-                ++ "?oauth2_access_token=" ++ z_convert:to_list(AccessToken),
+                ++ "?oauth2_access_token=" ++ z_convert:to_list(AccessToken)
+                ++ "&projection=(id,firstName,lastName,headline,profilePicture(displayImage~digitalmediaAsset:playableStreams))",
     case httpc:request(get, {LinkedInUrl, []}, httpc_http_options(), httpc_options()) of
         {ok, {{_, 200, _}, _Headers, Payload}} ->
             {ok, z_json:decode(Payload)};
@@ -150,6 +152,45 @@ fetch_user_data(AccessToken) ->
         Other ->
             lager:error("[linkedin] error fetching user data [token ~p] ~p", [AccessToken, Other]),
             {error, {http_error, LinkedInUrl, Other}}
+    end.
+
+% Dig up the largest still image from the returned profile pictures
+get_user_photo(#{
+        <<"profilePicture">> := #{
+            <<"displayImage~">> := #{
+                <<"elements">> := Elements
+            }
+        }
+    }) ->
+    largest_picture(Elements, {0, undefined});
+get_user_photo(_) ->
+    undefined.
+
+largest_picture([], {_, Url}) ->
+    Url;
+largest_picture([ #{ <<"data">> := Data, <<"identifiers">> := Idns } | Elts ], {Sz, Url}) ->
+    case Data of
+        #{
+            <<"com.linkedin.digitalmedia.mediaartifact.StillImage">> := #{
+                <<"storageSize">> := #{ <<"height">> := H, <<"width">> := W }
+            }
+        } when W * H > Sz ->
+            case lists:filtermap(
+                fun
+                    (#{ <<"identifierType">> := <<"EXTERNAL_URL">>, <<"identifier">> := ExtUrl}) ->
+                        {true, ExtUrl};
+                    (_) ->
+                        false
+                end,
+                Idns)
+            of
+                [ NewUrl | _ ] ->
+                    largest_picture(Elts, {W*H, NewUrl});
+                [] ->
+                    largest_picture(Elts, {Sz, Url})
+            end;
+        _ ->
+            largest_picture(Elts, {Sz, Url})
     end.
 
 

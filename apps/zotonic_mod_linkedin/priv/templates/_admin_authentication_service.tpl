@@ -7,7 +7,7 @@
                 <div class="widget-content">
 
                     <p class="help-block">
-                        {_ You can find the application keys in _} <a href="https://www.linkedin.com/secure/developer" title="Developer Network" target="_blank">{_ Your LinkedIn Developer Network _}</a>
+                        {_ You can find the application keys in _} <a href="https://www.linkedin.com/secure/developer" title="Developer Network" target="_blank" rel="noopener noreferrer">{_ Your LinkedIn Developer Network _}</a>
                     </p>
 
                     <div class="form-group label-floating">
