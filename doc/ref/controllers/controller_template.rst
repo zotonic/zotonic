@@ -68,7 +68,10 @@ The following options can be given to the dispatch rule:
 |                     |template. This overrules and id from  |                        |
 |                     |the query arguments.                  |                        |
 +---------------------+--------------------------------------+------------------------+
-
+|seo_noindex          |Ask crawlers not to index this page. |seo_noindex             |
++---------------------+-------------------------------------+------------------------+
+|nocache              |Prevent browser caching this page.   |nocache                 |
++---------------------+-------------------------------------+------------------------+
 
 .. include:: acl_options.rst
 
