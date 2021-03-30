@@ -408,8 +408,12 @@ function z_transport_queue_add( delegate, content_type, data, options )
 
 function z_transport_queue_check()
 {
-    if (z_transport_queue.length > 0 && $('html').hasClass('ui-state-bridge-connected')) {
-        var trans = z_transport_queue.shift();
+    let authState = $('html').attr('data-ui-state-auth-auth');
+
+    if (    z_transport_queue.length > 0
+        &&  $('html').hasClass('ui-state-bridge-connected')
+        &&  (authState === 'anonymous' || authState === 'user')) {
+        let trans = z_transport_queue.shift();
         z_transport(trans.delegate, trans.content_type, trans.data, trans.options);
     }
 }

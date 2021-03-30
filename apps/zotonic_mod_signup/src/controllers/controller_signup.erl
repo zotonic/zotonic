@@ -197,7 +197,12 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
                 ok ->
                     % Show feedback that we sent a confirmation message
                     Context1 = show_errors([], Context),
-                    z_render:update("signup_logon_box", z_template:render("_signup_stage.tpl", [], Context1), Context1)
+                    z_render:update(
+                        "signup_logon_box",
+                        z_template:render("_signup_stage.tpl",
+                                          [ {email, m_rsc:p_no_acl(UserId, email, Context1)}],
+                                          Context1),
+                        Context1)
             end
     end.
 

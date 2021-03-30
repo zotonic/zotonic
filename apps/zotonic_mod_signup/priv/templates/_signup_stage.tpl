@@ -2,4 +2,8 @@
 
 <p>{_ Please follow the instructions in the email we've sent you. _}</p>
 
+{% if email %}
+    <p>{_ We sent the email to _}: <strong>{{ email }}</strong></p>
+{% endif %}
+
 <p>{_ If you do not receive the e-mail within a few minutes, please check your spam folder. _}</p>

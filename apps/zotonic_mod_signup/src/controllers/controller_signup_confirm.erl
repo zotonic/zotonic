@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2020 Marc Worrell
+%% @copyright 2010-2021 Marc Worrell
 %% @doc Handle the signup confirmation link
 
-%% Copyright 2010-2020 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,32 +34,16 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 
 %% @doc Handle the submit of the signup form.
-event(#submit{}, Context) ->
-    event_confirm(z_context:get_q(<<"key">>, Context, <<>>), Context);
 event(#postback{ message={confirm, [ {key, Key} ]}}, Context) ->
-    event_confirm(Key, Context).
-
-event_confirm(Key, Context) ->
     case confirm(Key, Context) of
         {ok, UserId} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
-            Location = confirm_location(UserId, ContextUser),
-            % Post a onetime-token to the auth worker on the page
-            % The auth worker will exchange it for a valid cookie and then perform
-            % the redirect to the url.
-            Token = z_authentication_tokens:encode_onetime_token(UserId, ContextUser),
-            AuthMsg = #{
-                token => Token,
-                url => z_convert:to_binary( Location )
-            },
-            z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
-            z_render:wire([
-                    {unmask, [{target, "signup_confirm_form"}]},
-                    {mask, []}
-                ], Context);
+            Url = z_convert:to_binary( confirm_location(UserId, ContextUser) ),
+            z_auth:logon_redirect(UserId, Url, ContextUser),
+            z_render:growl(?__("Redirecting...", Context), Context);
         {error, _Reason} ->
             z_render:wire([
-                    {unmask, [{target, "signup_confirm_form"}]},
+                    {hide, [{target,"confirm_wait"}]},
                     {show, [{target,"confirm_error"}]}
                 ], Context)
     end.
