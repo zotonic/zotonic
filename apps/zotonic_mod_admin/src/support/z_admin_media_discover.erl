@@ -122,7 +122,7 @@ handle_media_upload_args(<<"update">>, Id, {ok, _}, EventProps, Context) when is
 handle_media_upload_args(_Intent, _Id, {ok, NewId}, EventProps, Context) ->
     %% Create a new media page - connect and perform post actions
     action_admin_dialog_new_rsc:do_new_page_actions(NewId, EventProps, Context);
-handle_media_upload_args(_Intent, Id, {error, R}, _EventProps, Context) when is_integer(Id) ->
+handle_media_upload_args(_Intent, _Id, {error, R}, _EventProps, Context) ->
     z_render:growl_error(error_message(R, Context), Context).
 
 %% @doc Return a sane upload error message

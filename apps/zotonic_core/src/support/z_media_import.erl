@@ -40,13 +40,22 @@ insert(MI, Context) ->
 insert(#media_import_props{medium_props = MI} = MIPs, RscProps, Context) ->
     insert_1(maps:size(MI), MIPs, RscProps, Context).
 
-insert_1(0, #media_import_props{} = MI, RscProps, Context) ->
+insert_1(0, #media_import_props{ category = Cat } = MI, RscProps, Context) ->
     RscProps1 = maps:merge(
                     default_rsc_props(MI, RscProps),
                     MI#media_import_props.rsc_props),
     case MI#media_import_props.preview_url of
-        undefined ->  m_rsc:insert(RscProps1, Context);
-        PreviewUrl -> m_media:insert_url(PreviewUrl, RscProps1, Context)
+        undefined ->
+            m_rsc:insert(RscProps1, Context);
+        PreviewUrl ->
+            case m_media:insert_url(PreviewUrl, RscProps1, Context) of
+                {ok, _} = OK ->
+                    OK;
+                {error, file_not_allowed} when Cat =:= website ->
+                    m_rsc:insert(RscProps1, Context);
+                {error, _} = Error ->
+                    Error
+            end
     end;
 insert_1(_, #media_import_props{medium_url=MediumUrl, medium_props=MediumProps} = MI, RscProps, Context)
     when ?EMPTY(MediumUrl) ->
