@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-31 15:36\n"
+"PO-Revision-Date: 2021-03-31 16:09\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -2551,7 +2551,7 @@ msgstr "正在加载..."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:151
 msgid "No page"
-msgstr ""
+msgstr "沒有頁面"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
@@ -2559,7 +2559,7 @@ msgstr "保存 &amp; 视图"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:153
 msgid "The page might have been deleted."
-msgstr ""
+msgstr "該頁面可能已被刪除。"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
@@ -6888,7 +6888,7 @@ msgstr "通过电子邮件确认您的账户"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:7
 msgid "Confirming..."
-msgstr ""
+msgstr "確認中..."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:22./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:44
 msgid "Enter a name"
@@ -6920,7 +6920,7 @@ msgstr "如果链接无法使用，那么你可以"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you already have an account,"
-msgstr ""
+msgstr "如果您已經有一個帳戶，"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:9
 msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
@@ -6988,7 +6988,7 @@ msgstr "确认密码"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:6
 msgid "We sent the email to"
-msgstr ""
+msgstr "我們已將電子郵件發送到"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:13
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
@@ -6996,7 +6996,7 @@ msgstr "我们会非常谨慎地处理所有提供给我们的信息，未经您
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
 msgid "When you signed up, you received an email with a link but it looks like something went wrong."
-msgstr ""
+msgstr "註冊後，您收到了一封包含鏈接的電子郵件，但看起來好像出了點問題。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
@@ -7004,7 +7004,7 @@ msgstr "你也可以"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr ""
+msgstr "您可能已經兩次確認您的帳戶，以便該帳戶已經被確認。如果是這樣，請嘗試登錄</br>如果不起作用，請確保您正確複製了鏈接，然後重試。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
