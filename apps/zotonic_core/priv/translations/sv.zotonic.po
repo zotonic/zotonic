@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-31 15:37\n"
+"PO-Revision-Date: 2021-03-31 16:10\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -2551,7 +2551,7 @@ msgstr "Läser in ..."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:151
 msgid "No page"
-msgstr ""
+msgstr "Ingen sida"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
@@ -2559,7 +2559,7 @@ msgstr "Spara &amp; vy"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:153
 msgid "The page might have been deleted."
-msgstr ""
+msgstr "Sidan kan ha tagits bort."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
@@ -6892,7 +6892,7 @@ msgstr "Bekräfta ditt konto via e-post"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:7
 msgid "Confirming..."
-msgstr ""
+msgstr "Bekräftande..."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:22./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:44
 msgid "Enter a name"
@@ -6924,7 +6924,7 @@ msgstr "Om länken inte fungerar kan du gå till"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you already have an account,"
-msgstr ""
+msgstr "Om du redan har ett konto,"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:9
 msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
@@ -6992,7 +6992,7 @@ msgstr "Verifiera lösenord"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:6
 msgid "We sent the email to"
-msgstr ""
+msgstr "Vi skickade e-postmeddelandet till"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:13
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
@@ -7000,7 +7000,7 @@ msgstr "Vi kommer att vara mycket försiktiga med all information som ges till o
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
 msgid "When you signed up, you received an email with a link but it looks like something went wrong."
-msgstr ""
+msgstr "När du registrerade dig fick du ett e-postmeddelande med en länk men det verkar som om något gick fel."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
@@ -7008,7 +7008,7 @@ msgstr "Du kan också"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr ""
+msgstr "Du kanske har bekräftat ditt konto två gånger så att kontot redan är bekräftat. Om så är fallet, försök logga in.</br>Om det inte fungerar, se till att du har kopierat länken korrekt och försök igen."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
