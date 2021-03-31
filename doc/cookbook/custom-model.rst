@@ -49,7 +49,7 @@ And will return:
 
     {true, []}
 
-Where `true` is returned because rescource id 1 is indeed a person, and `[]` is returned because the call consumed all
+Where ``true`` is returned because rescource id 1 is indeed a person, and ``[]`` is returned because the call consumed all
 parts of the dotted expression.
 
 

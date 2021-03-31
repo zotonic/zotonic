@@ -60,7 +60,10 @@ event(#postback{message={media_upload_dialog, Title, Intent, Id, SubjectId, Pred
         {stay, Stay},
         {center, Center}
     ],
-    DTitle = case Id of undefined -> ?__("Add a new media file", Context); _ -> ?__("Replace current medium", Context) end,
+    DTitle = case Id of
+        undefined -> ?__("Add a new media file", Context);
+        _ -> ?__("Replace current medium", Context)
+    end,
     z_render:dialog(DTitle, "_action_dialog_media_upload.tpl", Vars, Context);
 
 
@@ -70,7 +73,9 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
             Intent = proplists:get_value(intent, EventProps),
             Props = case Intent of
                 <<"update">> ->
-                    [{original_filename, OriginalFilename}];
+                    #{
+                        <<"original_filename">> => OriginalFilename
+                    };
                 _ ->
                     Lang = z_context:language(Context),
                     Title = z_context:get_q(<<"new_media_title">>, Context),
@@ -78,7 +83,11 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                                    true -> OriginalFilename;
                                    false -> Title
                                end,
+                    IsDependent = z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) ),
+                    IsPublished = z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
                     Props0 = #{
+                        <<"is_published">> => IsPublished,
+                        <<"is_dependent">> => IsDependent,
                         <<"title">> =>  #trans{ tr = [{Lang,NewTitle}] },
                         <<"language">> => [Lang],
                         <<"original_filename">> => OriginalFilename
@@ -91,7 +100,7 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                                 %% replace fun
                                 fun(Id, Ctx) -> m_media:replace_file(Upload, Id, Props, Ctx) end);
         _ ->
-            z_render:growl("No file specified.", Context)
+            z_render:growl(?__("Add a new media file", Context), Context)
     end;
 
 event(#submit{message={media_url, EventProps}}, Context) ->
@@ -101,7 +110,11 @@ event(#submit{message={media_url, EventProps}}, Context) ->
         <<"update">> ->
             #{};
         _ ->
+            IsDependent = z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) ),
+            IsPublished = z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
             Props0 = #{
+                <<"is_published">> => IsPublished,
+                <<"is_dependent">> => IsDependent,
                 <<"title">> => z_context:get_q_validated(<<"new_media_title_url">>, Context)
             },
             add_content_group(EventProps, Props0, Context)
