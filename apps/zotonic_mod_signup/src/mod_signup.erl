@@ -173,7 +173,8 @@ maybe_add_depiction(Id, Props, Context) ->
                 Url when Url =/= <<>>, Url =/= [], Url =/= undefined ->
                     MediaProps = #{
                         <<"is_dependent">> => true,
-                        <<"is_published">> => true
+                        <<"is_published">> => true,
+                        <<"content_group_id">> => m_rsc:p_no_acl(Id, content_group_id, Context)
                     },
                     case m_media:insert_url(Url, MediaProps, z_acl:logon(Id, Context)) of
                         {ok, MediaId} ->

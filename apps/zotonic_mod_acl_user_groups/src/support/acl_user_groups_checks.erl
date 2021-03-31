@@ -219,6 +219,16 @@ acl_is_allowed(#acl_is_allowed{
     % (Pre-)check if user is allowed to insert the category in the content group
     can_insert_category(CGId, Cat, Context);
 acl_is_allowed(#acl_is_allowed{
+        action = insert,
+        object = #acl_rsc{
+            id = undefined,
+            category = Cat
+        }
+    }, Context) when Cat =/= undefined ->
+    % (Pre-)check if user is allowed to insert the category in the content group
+    % Check with default content group of the user.
+    can_insert(Cat, Context);
+acl_is_allowed(#acl_is_allowed{
         action = Action,
         object = #acl_rsc{
             id = Id,
@@ -227,13 +237,6 @@ acl_is_allowed(#acl_is_allowed{
     }, Context) when Action =:= insert; Action =:= update ->
     % Final check just before db update, after sanitizer etc.
     acl_update_check(Action, Id, Props, Context);
-acl_is_allowed(#acl_is_allowed{
-        action = insert,
-        object = #acl_rsc{ category = Cat }
-    }, Context) ->
-    % (Pre-)check if user is allowed to insert the category in the content group
-    % Check with default content group of the user.
-    can_insert(Cat, Context);
 acl_is_allowed(#acl_is_allowed{action=insert, object=Cat}, Context) when is_atom(Cat) ->
     can_insert(Cat, Context);
 acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) ->
