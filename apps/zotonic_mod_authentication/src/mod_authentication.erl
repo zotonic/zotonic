@@ -288,7 +288,7 @@ maybe_update_identity(_Ps, NewProps, IdnPs, Context) ->
     {key, Key} = proplists:lookup(key, IdnPs),
     {type, Type} = proplists:lookup(type, IdnPs),
     {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
-    m_identity:set_by_type(UserId, Key, Type, NewProps, Context).
+    m_identity:set_by_type(UserId, Type, Key, NewProps, Context).
 
 update_identity(Auth, IdnPs, Context) ->
     {propb, IdnPropb} = proplists:lookup(propb, IdnPs),
