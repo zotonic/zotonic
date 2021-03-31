@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-31 15:36\n"
+"PO-Revision-Date: 2021-03-31 16:10\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -2551,7 +2551,7 @@ msgstr "กำลังโหลด ..."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:151
 msgid "No page"
-msgstr ""
+msgstr "ไม่มีหน้า"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
@@ -2559,7 +2559,7 @@ msgstr "บันทึก &amp; มุมมอง"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:153
 msgid "The page might have been deleted."
-msgstr ""
+msgstr "เพจอาจถูกลบไปแล้ว"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
@@ -6892,7 +6892,7 @@ msgstr "ยืนยันบัญชีของคุณทางอีเม
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:7
 msgid "Confirming..."
-msgstr ""
+msgstr "กำลังยืนยัน ..."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:22./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:44
 msgid "Enter a name"
@@ -6924,7 +6924,7 @@ msgstr "หากลิงก์ไม่ทำงานคุณสามาร
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you already have an account,"
-msgstr ""
+msgstr "หากคุณมีบัญชีอยู่แล้ว"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:9
 msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
@@ -6992,7 +6992,7 @@ msgstr "ยืนยันรหัสผ่าน"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:6
 msgid "We sent the email to"
-msgstr ""
+msgstr "เราส่งอีเมลไปที่"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:13
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
@@ -7000,7 +7000,7 @@ msgstr "เราจะระมัดระวังอย่างยิ่ง
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
 msgid "When you signed up, you received an email with a link but it looks like something went wrong."
-msgstr ""
+msgstr "เมื่อคุณสมัครคุณได้รับอีเมลพร้อมลิงก์ แต่ดูเหมือนว่ามีบางอย่างผิดพลาด"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
@@ -7008,7 +7008,7 @@ msgstr "นอกจากนี้คุณยังสามารถ"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr ""
+msgstr "คุณอาจยืนยันบัญชีของคุณสองครั้งเพื่อให้บัญชีได้รับการยืนยันแล้ว ในกรณีนี้ให้ลองเข้าสู่ระบบ</br>หากไม่ได้ผลตรวจสอบให้แน่ใจว่าคุณได้คัดลอกลิงก์อย่างถูกต้องแล้วลองอีกครั้ง"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
