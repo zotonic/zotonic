@@ -28,6 +28,10 @@ m_get([ <<"pivot_queue_count">> | Rest ], _Msg, Context) ->
     end;
 m_get([ <<"rsc_dialog_is_published">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_admin, rsc_dialog_is_published, Context), Rest}};
+m_get([ <<"rsc_dialog_is_dependent">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_admin, rsc_dialog_is_dependent, Context), Rest}};
+m_get([ <<"rsc_dialog_hide_dependent">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_admin, rsc_dialog_hide_dependent, Context), Rest}};
 m_get([ <<"edge_list_max_length">> | Rest ], _Msg, Context) ->
     Len = case m_config:get_value(mod_admin, edge_list_max_length, Context) of
         <<>> -> undefined;

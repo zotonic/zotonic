@@ -13,7 +13,7 @@ This can be used for setting values which default to true if they are never set.
 
 For example::
 
-  {% if value|if_undefined:`true` %}The value is true or undefined{% endif %}
+  {% if value|if_undefined:true %}The value is true or undefined{% endif %}
 
 If the value is ``undefined``, the output will be “The value is true or undefined”.
 

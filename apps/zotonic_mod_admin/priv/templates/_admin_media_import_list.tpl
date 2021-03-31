@@ -69,12 +69,16 @@
 
                     {% if args.intent != 'update' %}
                         {% if args.subject_id %}
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
-                                    {_ Delete if not connected anymore _}
-                                </label>
-                            </div>
+                            {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
+                                <input type="hidden" name="is_dependent" value="{% if args.dependent %}1{% endif %}">
+                            {% else %}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
+                                        {_ Delete if not connected anymore _}
+                                    </label>
+                                </div>
+                            {% endif %}
                         {% endif %}
 
                         <div class="checkbox">
