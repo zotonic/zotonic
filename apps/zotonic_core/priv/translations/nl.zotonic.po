@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-31 16:10\n"
+"PO-Revision-Date: 2021-04-01 15:12\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: nl_NL\n"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:148
+#: apps/zotonic_core/src/support/z_media_import.erl:157
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Website"
@@ -6533,10 +6533,6 @@ msgstr "Voeg menu-item toe"
 msgid "Add top"
 msgstr "Bovenaan toevoegen"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:140
-msgid "COPY"
-msgstr "KOPIEER"
-
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:20
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Klik <strong>Menu-item toevoegen</strong> of <strong>Menu-item</strong> om pagina’s toe te voegen."
@@ -6545,6 +6541,10 @@ msgstr "Klik <strong>Menu-item toevoegen</strong> of <strong>Menu-item</strong> 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr "Kopieer"
+
+#: apps/zotonic_mod_menu/src/mod_menu.erl:141
+msgid "Copy of:"
+msgstr "Kopie van:"
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:48
 msgid "Create an (optionally) nested navigation menu for this site."
@@ -6574,7 +6574,7 @@ msgstr "Een hiërarchie kan worden bepaald voor elke bestaande categorie."
 msgid "Hierarchy for"
 msgstr "Hiërarchie voor"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:478
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:479
 msgid "Menu"
 msgstr "Menu"
 
