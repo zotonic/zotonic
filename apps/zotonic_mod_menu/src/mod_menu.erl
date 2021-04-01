@@ -135,10 +135,11 @@ handle_cmd(<<"delete">>, Data, Context) ->
     end.
 
 
-
+make_copy_title(undefined, _Context) ->
+    undefined;
 make_copy_title(Title, Context) when is_binary(Title) ->
     iolist_to_binary([?__("COPY", Context), " ", Title]);
-make_copy_title({trans, Ts}, Context) ->
+make_copy_title(#trans{ tr = Ts }}, Context) ->
     {trans, [
         {Lang, make_copy_title(Title, z_context:set_language(Lang, Context))}
         || {Lang,Title} <- Ts
