@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-01 15:11\n"
+"PO-Revision-Date: 2021-04-01 15:25\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -6542,7 +6542,7 @@ msgstr "Cópia"
 
 #: apps/zotonic_mod_menu/src/mod_menu.erl:141
 msgid "Copy of:"
-msgstr ""
+msgstr "Cópia de:"
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:48
 msgid "Create an (optionally) nested navigation menu for this site."
