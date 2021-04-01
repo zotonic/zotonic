@@ -139,8 +139,8 @@ make_copy_title(undefined, _Context) ->
     undefined;
 make_copy_title(Title, Context) when is_binary(Title) ->
     iolist_to_binary([?__("COPY", Context), " ", Title]);
-make_copy_title(#trans{ tr = Ts }}, Context) ->
-    {trans, [
+make_copy_title(#trans{ tr = Ts }, Context) ->
+    #trans{ tr = [
         {Lang, make_copy_title(Title, z_context:set_language(Lang, Context))}
         || {Lang,Title} <- Ts
     ]}.
