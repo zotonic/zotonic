@@ -1228,10 +1228,8 @@ filter_languages([L | _] = Langs) when is_list(L); is_binary(L); is_atom(L) ->
 
 %% @doc If title is updating, check the rsc 'custom_slug' field to see if we need to update the slug or not.
 generate_slug(Id, Props, Context) ->
-    case maps:get(<<"title">>, Props, undefined) of
-         undefined ->
-            Props;
-         Title ->
+    case maps:find(<<"title">>, Props) of
+         {ok, Title} ->
             case {maps:get(<<"custom_slug">>, Props, false), m_rsc:p(Id, <<"custom_slug">>, Context)} of
                  {true, _} -> Props;
                  {_, true} -> Props;
@@ -1243,27 +1241,33 @@ generate_slug(Id, Props, Context) ->
                         <<"slug">> => SlugNoTr,
                         <<"title_slug">> => Slug
                     }
-            end
+            end;
+         error ->
+            Props
     end.
 
 
 %% @doc Fill in some defaults for empty props on insert.
 props_defaults(Props, Context) ->
     % Generate slug from the title (when there is a title)
-    Props1 = case maps:get(<<"title_slug">>, Props, undefined) of
-        undefined ->
-            case maps:get(<<"title">>, Props, undefined) of
-                undefined ->
-                    Props;
-                Title ->
+    Props1 = case maps:find(<<"title_slug">>, Props) of
+        error ->
+            case maps:find(<<"title">>, Props) of
+                {ok, Title} ->
                     Slug = to_slug(Title),
                     SlugNoTr = z_trans:lookup_fallback(Slug, en, Context),
                     Props#{
                         <<"slug">> => SlugNoTr,
                         <<"title_slug">> => Slug
-                    }
+                    };
+                error ->
+                    Props
             end;
-        _ ->
+        {ok, undefined} ->
+            Props#{
+                <<"title_slug">> => <<"-">>
+            };
+        {ok, _} ->
             Props
     end,
     % Assume content is authoritative, unless stated otherwise
@@ -1302,7 +1306,7 @@ props_filter_protected(Props, RscUpd) ->
 
 
 to_slug(undefined) ->
-    undefined;
+    <<>>;
 to_slug(#trans{ tr = Tr }) ->
     Tr1 = lists:map(
         fun({Lang, V}) -> {Lang, to_slug(V)} end,
