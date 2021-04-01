@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-26 16:37\n"
+"PO-Revision-Date: 2021-04-01 15:11\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: tr_TR\n"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:148
+#: apps/zotonic_core/src/support/z_media_import.erl:157
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Web sitesi"
@@ -102,7 +102,7 @@ msgstr "ACL kullanıcı grubu"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:105
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:69./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:106
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "Erişim kontrolü"
@@ -162,7 +162,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Tüm ACL kurallarını mevcut yayınlanmış sürülerine geri yüklemek istediğinizden emin misiniz?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:64./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:247./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -236,7 +236,7 @@ msgstr "İşbirliği grupları tüm içeriğin kullanıcılara ait olduğu kulla
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:63
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:64
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
 msgid "Content"
 msgstr "İçerik"
@@ -482,7 +482,7 @@ msgstr "Geri alının kurallar"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:100
@@ -706,7 +706,7 @@ msgstr "başka bir tarayıcı kullanın (örn. Firefox kullanıyorsunuz Chrome'u
 msgid "view (acl action)"
 msgstr "incele (acl eylemi)"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:105./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:107
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:109./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111
 msgid "&lt; Prev"
 msgstr "&lt; Önceki"
 
@@ -738,7 +738,7 @@ msgstr "Kategoriler hakkında"
 msgid "Add a connection:"
 msgstr "Bir bağlantı ekleyin:"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:63
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:64./apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:103
 msgid "Add a new media file"
 msgstr "Yeni bir medya dosyası ekleyin"
 
@@ -833,7 +833,7 @@ msgstr "Yana"
 msgid "Ask google to not index this page"
 msgstr "Google'a bu sayfayı indekslememesini söyleyin"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Ekli medya"
 
@@ -841,7 +841,7 @@ msgstr "Ekli medya"
 msgid "Auth"
 msgstr "Yetki"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:93
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:97
 #: apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:8./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:42
 msgid "Back"
 msgstr "Geri"
@@ -900,7 +900,7 @@ msgstr "Daha fazla bilgi için buraya tıklayın"
 msgid "Click the image to set the cropping center."
 msgstr "Kırpma merkezini ayarlamak için resmi tıklayın."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:275
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:279
 msgid "Click to preview."
 msgstr "Önizleme için tıklayın."
 
@@ -933,7 +933,7 @@ msgstr "Silmeyi onayla"
 msgid "Confirm logoff"
 msgstr "Çıkışı onayla"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:250./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:254./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
 msgstr "Bağlan"
 
@@ -970,7 +970,7 @@ msgstr "Miktar"
 msgid "Country"
 msgstr "Ülke"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:57./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:249
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
 msgid "Create"
 msgstr "Oluşturmak"
 
@@ -978,7 +978,7 @@ msgstr "Oluşturmak"
 msgid "Created by"
 msgstr "Tarafından yaratıldı"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:288
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:292
 msgid "Created by me"
 msgstr "Benim tarafımdan oluşturuldu"
 
@@ -1019,7 +1019,7 @@ msgstr "Tarih aralıkları"
 msgid "Delete if no other page is connected to this page."
 msgstr "Eğer başka bir sayfa bu sayfa ile bağlantılı değilse sil."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:46./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:232./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:49./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:235./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:78
 msgid "Delete if not connected anymore"
 msgstr "Artık bağlı değilse silin"
 
@@ -1145,7 +1145,7 @@ msgstr "Web sitesini kontrol etme hatası."
 msgid "Error creating the page."
 msgstr "Sayfa oluşturulurken hata meydana geldi."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:170
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:183
 msgid "Error uploading the file."
 msgstr "Dosyayı yükleme hatası."
 
@@ -1157,11 +1157,11 @@ msgstr "Her sayfanın tarih aralığı vardır. Örnek olarak eğer sayfa bir et
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
 msgstr "Her sayfa sadece bir kategoride yer alabilir. Kategori sayfanın temsil ettiği özellikleri belirtir. Örneğin; bir etkinlik, bir ürün, bir kişi gibi. Kategoriler hiyerarşik olarak tanımlanırlar. Bu şekilde, araçlar, araba ve bisiklet gibi birbirine bağlı alt kategoriler oluşturabilirsiniz."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:275
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:279
 msgid "Existing pages"
 msgstr "Mevcut sayfalar"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:161./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:138
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:174./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:138
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Failed to download the file."
 msgstr "Dosyayı indirme hatası."
@@ -1186,11 +1186,11 @@ msgstr "Kategori filtresi"
 msgid "Filter on content group"
 msgstr "İçerik gurubunda filtre"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:72
 msgid "Find Media"
 msgstr "Medya Bul"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:69
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
 msgid "Find Page"
 msgstr "Sayfa Bul"
 
@@ -1309,7 +1309,7 @@ msgstr "Posta adresi"
 msgid "Main"
 msgstr "Ana"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:118
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:122
 msgid "Make"
 msgstr "Oluştur"
 
@@ -1349,7 +1349,7 @@ msgstr "Medya, yüklenen tüm resimleri, videoları ve belgeleri kapsar. Medya s
 msgid "Media file"
 msgstr "Medya dosyası"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:140./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:119
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:153./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:119
 msgid "Media item created."
 msgstr "Medya öğesi oluşturuldu."
 
@@ -1403,11 +1403,11 @@ msgstr "İsim"
 msgid "Network Connections"
 msgstr "Ağ bağlantıları"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:76./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:80./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
 msgstr "Yeni sayfa"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:113
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:117
 msgid "Next &gt;"
 msgstr "Sıradaki &gt;"
 
@@ -1547,8 +1547,8 @@ msgstr "Yayın periyodu"
 msgid "Publish this page"
 msgstr "Sayfayı yayınla"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:57./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:240./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:86
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:18./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:52./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:244./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:46
 msgid "Published"
 msgstr "Yayınlandı"
 
@@ -1611,11 +1611,11 @@ msgstr "Şuna olan bağlantıyı kaldır"
 msgid "Renumber category tree"
 msgstr "Kategori ağacını tekrar numaralandır"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:118
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:122
 msgid "Replace"
 msgstr "Değiştir"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:63
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:65
 msgid "Replace current medium"
 msgstr "Geçerli ortamı değiştir"
 
@@ -1648,12 +1648,12 @@ msgid "Save and View"
 msgstr "Kaydet ve Görüntüle"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save and view the page."
 msgstr "Kaydet ve sayfayı gör"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:123./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:124./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 msgid "Save this page."
 msgstr "Sayfayı kaydet"
 
@@ -1682,7 +1682,7 @@ msgstr "Güvenlik Rehberi"
 msgid "See also: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
 msgstr "Ayrıca bkz .: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">erlang.config dosyası</a>"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:255./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
 msgid "Select"
 msgstr "Seçiniz"
 
@@ -1843,7 +1843,7 @@ msgstr "Geri alınamaz. Sayfa tamamen silinecek."
 msgid "This connection already exists."
 msgstr "Bu bağlantı zaten mevcut."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:165./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:142
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:178./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:142
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:90
 msgid "This file contains links to other files or locations."
 msgstr "Bu dosya, diğer dosyalara veya konumlara bağlantılar içerir."
@@ -1860,12 +1860,12 @@ msgstr "Bu dosya çok büyük olduğu için virüs taramasından geçirilmedi."
 msgid "This file has not been scanned for viruses."
 msgstr "Bu dosya virüslere karşı taranmadı."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:163./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:140
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:176./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:140
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88
 msgid "This file is infected with a virus."
 msgstr "Bu dosyaya bir virüs bulaşmış."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:167./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:144
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:180./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:144
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:92
 msgid "This file is too large."
 msgstr "Bu dosya çok büyük."
@@ -1947,7 +1947,7 @@ msgstr "Başlıksız"
 msgid "Unused"
 msgstr "Kullanılmayan"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:85./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
 msgstr "Yükle"
 
@@ -1959,7 +1959,7 @@ msgstr "Dosya Yükle"
 msgid "Upload a file from your computer."
 msgstr "Bilgisayarınızdan bir dosya yükleyin."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:65
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "Upload file"
 msgstr "Dosya yükle"
@@ -1995,7 +1995,7 @@ msgid "Valid for:"
 msgstr "Geçerli:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "View"
@@ -2014,7 +2014,7 @@ msgid "View all referrers"
 msgstr "Tüm referansları göster"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:129
 msgid "View this page."
 msgstr "Bu sayfayı görüntüle."
 
@@ -2043,7 +2043,7 @@ msgstr "Uyarı!"
 msgid "Website for clicks on image"
 msgstr "Resme tıklandığında gidilecek website"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:90./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "Web sitesi veya Embed"
 
@@ -2082,7 +2082,7 @@ msgstr "Bu sayfayı silmeye yetkiniz yok."
 msgid "You are not allowed to edit this page."
 msgstr "Bu sayfayı düzenleme yetkiniz yok."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:157./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:170./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:134
 msgid "You don't have permission to change this media item."
 msgstr "Bu medya öğesini değiştirme yetkiniz yok."
 
@@ -2091,7 +2091,7 @@ msgstr "Bu medya öğesini değiştirme yetkiniz yok."
 msgid "You don't have permission to create this page."
 msgstr "Bu sayfayı oluşturma izniniz yok."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:159./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:136
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:172./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:136
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Bu dosya tipini yükleme yetkiniz yok."
@@ -2538,7 +2538,7 @@ msgstr "test@example.com"
 msgid "Add pages or click on a page in the menu."
 msgstr "Menüden sayfalar ekleyin ya da bir sayfaya tıklayın."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:95
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:96
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_person_live.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:56./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:28
@@ -2549,9 +2549,17 @@ msgstr "Dil"
 msgid "Loading ..."
 msgstr "Yükleniyor ..."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:126./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:151
+msgid "No page"
+msgstr "Sayfa yok"
+
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:127./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
 msgstr "&amp; görüntüyü kaydet"
+
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:153
+msgid "The page might have been deleted."
+msgstr "Sayfa silinmiş olabilir."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
@@ -2565,7 +2573,7 @@ msgstr "Bu sayfa"
 msgid "Yes, discard changes"
 msgstr "Evet, değişiklikleri sil"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:50
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:51
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "kadar"
@@ -2729,6 +2737,7 @@ msgid "No verified e-mail addresses. Please add one below."
 msgstr "Doğrulanmış e-posta adresi yok. Lütfen aşağıya bir tane ekleyin."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:14
+#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
 msgid "One moment, please..."
 msgstr "Bir dakika, lütfen..."
 
@@ -3774,6 +3783,7 @@ msgid "Redirecting to"
 msgstr "Adresine yönlendiriliyorsunuz"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:15
+#: apps/zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:43
 msgid "Redirecting..."
 msgstr "Yönlendiriliyor ..."
 
@@ -6521,10 +6531,6 @@ msgstr "Menü öğesi ekle"
 msgid "Add top"
 msgstr "En üste ekle"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:140
-msgid "COPY"
-msgstr "KOPYALA"
-
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:20
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Sayfa eklemek için <strong>Menü öğesi ekle</strong> yada <strong>Menü öğesi</strong>'ne tıklayın."
@@ -6533,6 +6539,10 @@ msgstr "Sayfa eklemek için <strong>Menü öğesi ekle</strong> yada <strong>Men
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr "Kopyala"
+
+#: apps/zotonic_mod_menu/src/mod_menu.erl:141
+msgid "Copy of:"
+msgstr ""
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:48
 msgid "Create an (optionally) nested navigation menu for this site."
@@ -6562,7 +6572,7 @@ msgstr "Hiyerarşiler, mevcut herhangi bir kategori için tanımlanabilir."
 msgid "Hierarchy for"
 msgstr "Şunun için hiyerarşi"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:478
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:479
 msgid "Menu"
 msgstr "Menü"
 
@@ -6868,11 +6878,7 @@ msgstr "Hizmet Şartlarımızı ve Gizlilik Politikamızı kontrol edin"
 msgid "Choose a username and password"
 msgstr "Bir kullanıcı adı ve şifre seçin"
 
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:21
-msgid "Confirm key"
-msgstr "Anahtarı onayla"
-
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:3./apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:7./apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:22
+#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:3./apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:21
 msgid "Confirm my account"
 msgstr "Hesabımı onayla"
 
@@ -6883,6 +6889,10 @@ msgstr "Hesabımı onayla."
 #: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:1
 msgid "Confirm your account by email"
 msgstr "Hesabınızı e-postayla onaylayın"
+
+#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:7
+msgid "Confirming..."
+msgstr "Onaylanıyor ..."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:22./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:44
 msgid "Enter a name"
@@ -6912,17 +6922,13 @@ msgstr "Kabul ediyorum"
 msgid "If the link does not work then you can go to"
 msgstr "Eğer link çalışmazsa şuraya gidebilirsiniz"
 
-#: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:5
-msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
-msgstr "Eğer bir kaç dakika içerisinde e-posta almazsanız, lütfen spam klasörünüzü kontrol edin."
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
-msgid "If you have already an account,"
+msgid "If you already have an account,"
 msgstr "Zaten bir hesabınız varsa,"
 
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
-msgid "In your e-mail you received a confirmation key. Please copy it in the input field below."
-msgstr "E-postanıza bir doğrulama anahtarı gönderildi. Lütfen aşağıdaki girdi alanına kopyalayın."
+#: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:9
+msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
+msgstr "Eğer bir kaç dakika içerisinde e-posta almazsanız, lütfen spam klasörünüzü kontrol edin."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:38
 msgid "Last name"
@@ -6960,10 +6966,6 @@ msgstr "Kaydol"
 msgid "Sign up with your e-mail address"
 msgstr "E-posta adresinizle kayıt olun"
 
-#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
-msgid "Sorry, I don't know that confirmation code. Did you copy it correctly?"
-msgstr "Üzgünüm, bu doğrulama kodunu bilmiyorum. Doğru şekilde kopyaladınız mı?"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:24
 msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
 msgstr "Maalesef, servis sağlayıcınızda hesabınıza bağlı bir hesap zaten var. Belki bu hesabınız askıya alınmıştır."
@@ -6988,13 +6990,25 @@ msgstr " Kayıt olmak için Hizmet Şartları ve Gizlilik Politikalarını kabul
 msgid "Verify password"
 msgstr "Şifre doğrulama"
 
+#: apps/zotonic_mod_signup/priv/templates/_signup_stage.tpl:6
+msgid "We sent the email to"
+msgstr "E-postayı şu adrese gönderdik"
+
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:13
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "Bize verilen bütün bilgilerle çok dikkatli olacağız ve izniniz olmadan isminizi veya adresinizi asla vermeyeceğiz. Anlaşmamız gereken bazı kurallarımız var."
 
+#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
+msgid "When you signed up, you received an email with a link but it looks like something went wrong."
+msgstr "Kaydolduğunuzda, bağlantı içeren bir e-posta aldınız, ancak bir şeyler ters gitti gibi görünüyor."
+
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "You can also"
 msgstr "Ayrıca yapabilirsin"
+
+#: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
+msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
+msgstr "Hesabınızın zaten onaylanmış olması için hesabınızı iki kez onaylamış olabilirsiniz. Öyleyse, oturum açmayı deneyin.</br>Bu işe yaramazsa, bağlantıyı doğru kopyaladığınızdan emin olun ve tekrar deneyin."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
