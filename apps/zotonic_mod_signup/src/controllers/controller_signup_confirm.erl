@@ -39,7 +39,7 @@ event(#postback{ message={confirm, [ {key, Key} ]}}, Context) ->
         {ok, UserId} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
             Url = z_convert:to_binary( confirm_location(UserId, ContextUser) ),
-            z_auth:logon_redirect(UserId, Url, ContextUser),
+            ok = z_auth:logon_redirect(UserId, Url, ContextUser),
             z_render:growl(?__("Redirecting...", Context), Context);
         {error, _Reason} ->
             z_render:wire([

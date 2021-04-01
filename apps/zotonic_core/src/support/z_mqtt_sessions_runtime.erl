@@ -119,7 +119,8 @@ set_connect_context_options(Options, Context) ->
         Tz -> z_context:set_tz(Tz, Context2)
     end,
     Context4 = z_context:set(auth_options, maps:get(auth_options, Prefs, #{}), Context3),
-    z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context4).
+    Context5 = z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context4),
+    z_acl:logon_refresh(Context5).
 
 -spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_session:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
 connect(#{ type := connect, username := U, password := P }, false,

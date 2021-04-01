@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2017 Marc Worrell
+%% @copyright 2010-2021 Marc Worrell
 %% @doc Access control for Zotonic.  Interfaces to modules implementing the ACL events.
 
-%% Copyright 2010-2017 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@
          logon/3,
          logon_prefs/2,
          logon_prefs/3,
+         logon_refresh/1,
          logoff/1
         ]).
 
@@ -335,6 +336,14 @@ logon(Id, Options, Context) ->
         #context{} = NewContext ->
             NewContext
     end.
+
+%% @doc Refresh the authentication of the current user
+-spec logon_refresh(z:context()) -> z:context().
+logon_refresh(#context{ user_id = Id } = Context) when is_integer(Id) ->
+    logon(Id, #{}, Context);
+logon_refresh(Context) ->
+    Context.
+
 
 %% @doc Log the user with the id on, fill acl and set all user preferences (like timezone and language)
 -spec logon_prefs(m_rsc:resource_id(), z:context()) -> z:context().
