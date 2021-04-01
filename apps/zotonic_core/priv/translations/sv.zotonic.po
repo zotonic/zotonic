@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-03-31 16:10\n"
+"PO-Revision-Date: 2021-04-01 15:11\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: sv_SE\n"
 
-#: apps/zotonic_core/src/support/z_media_import.erl:148
+#: apps/zotonic_core/src/support/z_media_import.erl:157
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 msgid "Website"
 msgstr "Hemsida"
@@ -6531,10 +6531,6 @@ msgstr "Lägg till menyalternativ"
 msgid "Add top"
 msgstr "Lägg till topp"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:140
-msgid "COPY"
-msgstr "KOPIERA"
-
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:20
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Klicka på <strong>Lägg till menyalternativ</strong> eller <strong>Menyalternativ</strong> att lägga till sidor."
@@ -6543,6 +6539,10 @@ msgstr "Klicka på <strong>Lägg till menyalternativ</strong> eller <strong>Meny
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr "Kopiera"
+
+#: apps/zotonic_mod_menu/src/mod_menu.erl:141
+msgid "Copy of:"
+msgstr ""
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:48
 msgid "Create an (optionally) nested navigation menu for this site."
@@ -6572,7 +6572,7 @@ msgstr "Hierarkier kan definieras för alla befintliga kategorier."
 msgid "Hierarchy for"
 msgstr "Hierarki för"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:478
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:479
 msgid "Menu"
 msgstr "Meny"
 
