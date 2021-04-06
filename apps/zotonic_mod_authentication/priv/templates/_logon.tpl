@@ -10,7 +10,11 @@ style_boxed: creates a background around the form
 #}
 
 {% javascript %}
-    sessionStorage.setItem('logonFormPage', '{{ page|escapejs }}');
+    {% if page == '#reload' %}
+        sessionStorage.setItem('logonFormPage', window.location.href);
+    {% else %}
+        sessionStorage.setItem('logonFormPage', '{{ page|escapejs }}');
+    {% endif %}
 {% endjavascript %}
 
 <div id="signup_logon_box" class="z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}">

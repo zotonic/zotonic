@@ -136,10 +136,6 @@ observe_logon_options(#logon_options{
         <<>> ->
             Acc;
         UsernameOrEmail ->
-            % UserExternal = find_user_external(UsernameOrEmail, Page, Context),
-            % IsUserExternal = length(UserExternal) > 0,
-            % Pretend user exists if it is not an external user
-            % This prevents fishing for usernames
             IsUserLocal = is_user_local(UsernameOrEmail, Context)
                    orelse is_user_local_email(UsernameOrEmail, Context)
                    orelse maps:get(is_user_local, Acc, false),
@@ -147,8 +143,6 @@ observe_logon_options(#logon_options{
                 is_username_checked => true,
                 is_user_local => IsUserLocal,
                 username => UsernameOrEmail
-                % {is_user_external, IsUserExternal},
-                % {user_external, UserExternal},
             }
     end;
 observe_logon_options(#logon_options{}, Acc, _Context) ->
@@ -199,14 +193,6 @@ observe_auth_client_switch_user(#auth_client_switch_user{ user_id = UserId }, Co
                     {error, eacces}
             end
     end.
-
-
-% %% Check if an LTI user or some other user by this handle is known.
-% find_user_external(Handle, Page, Context) ->
-%     z_notifier:foldl(
-%         {maxclass_auth_external, Handle, Page},
-%         [],
-%         Context).
 
 is_user_local(<<"admin">>, _Context) ->
     true;
