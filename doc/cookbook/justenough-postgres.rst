@@ -82,11 +82,11 @@ In the shell::
 
 You should see something like::
 
-    ● postgresql.service - PostgreSQL RDBMS
-       Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
-       Active: active (exited) since Fri 2021-04-02 10:24:08 CEST; 4 days ago
-      Process: 871 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
-      Main PID: 871 (code=exited, status=0/SUCCESS)
+    postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: active (exited) since Fri 2021-04-02 10:24:08 CEST; 4 days ago
+    Process: 871 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+    Main PID: 871 (code=exited, status=0/SUCCESS)
  
 **How can I stop the PostgreSQ server?**
 

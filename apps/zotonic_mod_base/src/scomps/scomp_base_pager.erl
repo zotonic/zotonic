@@ -133,7 +133,6 @@ build_html(Template, Page, Pages, _HideSinglePage, Dispatch, DispatchArgs, Conte
 url_for(page, Args, Context) ->
     case proplists:get_value(id, Args) of
         undefined ->
-            ?DEBUG(id),
             z_dispatcher:url_for(page, Args, Context);
         Id ->
             Url = m_rsc:p(Id, page_url, Context),
