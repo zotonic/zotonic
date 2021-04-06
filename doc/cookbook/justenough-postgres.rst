@@ -87,7 +87,7 @@ You should see something like::
      Active: active (exited) since Fri 2021-04-02 10:24:08 CEST; 4 days ago
     Process: 871 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
     Main PID: 871 (code=exited, status=0/SUCCESS)
- 
+
 **How can I stop the PostgreSQ server?**
 
 In the shell::
@@ -509,7 +509,7 @@ http://www.postgresql.org/docs/10/static/reference-client.html
 Howto Backup PostgreSQL Databases Server With pg_dump command
 http://www.cyberciti.biz/tips/howto-backup-postgresql-databases.html
 
-How To Use pg_dump and pg_restore with Postgres Plus® Tutorial for Linux®
+How To Use pg_dump and pg_restore with Postgres Plus Tutorial for Linux
 http://www.enterprisedb.com/resources-community/tutorials-quickstarts/linux/how-use-pgdump-and-pgrestore-postgres-plus-tutorial-
 
 An almost idiot’s guide to Install and Upgrade to PostgreSQL 8.4 with Yum
