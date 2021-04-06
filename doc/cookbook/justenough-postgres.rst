@@ -307,7 +307,7 @@ How to create a database user:
 
 .. code-block:: none
 
-  postgres=# CREATE USER myuser WITH PASSWORD ‘userpassword’;
+  postgres=# CREATE USER myuser WITH PASSWORD ‘userpassword’ LOGIN;
   CREATE ROLE
 
 How to create a database:
