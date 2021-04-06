@@ -21,7 +21,7 @@ organized as one might hope.
 Assumptions
 -----------
 
-These commands have been tested on Debian Squeeze and Ubuntu 11.04.
+These commands have been tested on Ubuntu 16.04.
 
 Familiarity with SQL and relational databases advised.
 
@@ -82,8 +82,12 @@ In the shell::
 
 You should see something like::
 
-  Running clusters: 9.4/main
-
+    ● postgresql.service - PostgreSQL RDBMS
+       Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+       Active: active (exited) since Fri 2021-04-02 10:24:08 CEST; 4 days ago
+      Process: 871 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+      Main PID: 871 (code=exited, status=0/SUCCESS)
+ 
 **How can I stop the PostgreSQ server?**
 
 In the shell::
@@ -92,7 +96,7 @@ In the shell::
 
 You should see something like::
 
-  * Stopping PostgreSQL 9.4 database server     [ OK  ]
+  * Stopping PostgreSQL 10.16 database server     [ OK  ]
 
 **How can I start the Postgres server?**
 
@@ -102,7 +106,7 @@ In the shell::
 
 You should see something like::
 
-  * Starting PostgreSQL 9.4 database server      [ OK ]
+  * Starting PostgreSQL 10.16 database server      [ OK ]
 
 **How can I restart the PostgreSQL server?**
 
@@ -112,7 +116,7 @@ In the shell::
 
 You should see something like::
 
-  * Restarting PostgreSQL 9.4 database server
+  * Restarting PostgreSQL 10.16 database server
 
 **How can I switch to database ‘zotonic_blog’ in psql?**
 
@@ -433,7 +437,7 @@ In postgres, you get the following:
 
 .. code-block:: none
 
-  testdb=> CREATE USER testdb WITH PASSWORD ‘testdb’;
+  testdb=> CREATE USER testdb WITH PASSWORD ‘testdb’ LOGIN;
   ERROR:  permission denied to create role
 
 **Solution:**
@@ -446,7 +450,7 @@ And it will work:
 
 .. code-block:: none
 
-  postgres=# CREATE USER testdb  WITH PASSWORD ‘testb’;
+  postgres=# CREATE USER testdb  WITH PASSWORD ‘testb’ LOGIN;
   CREATE ROLE
 
 **Problem:**
