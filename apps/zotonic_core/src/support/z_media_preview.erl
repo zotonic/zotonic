@@ -83,10 +83,12 @@ convert_1(false, _InFile, _OutFile, _Mime, _FileProps, _Filters) ->
 convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     case cmd_args(FileProps, Filters, OutMime) of
-        {EndWidth, EndHeight, _CmdArgs} when EndWidth > ?MAX_PIXSIZE; EndHeight > ?MAX_PIXSIZE ->
+        {ok, {EndWidth, EndHeight, _CmdArgs}} when EndWidth > ?MAX_PIXSIZE; EndHeight > ?MAX_PIXSIZE ->
             {error, image_too_big};
-        {_, _, CmdArgs} ->
-            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps)
+        {ok, {_, _, CmdArgs}} ->
+            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps);
+        {error, _} = Error ->
+            Error
     end.
 
 convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
@@ -254,7 +256,9 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
                                             end,
                                             {ImageWidth,ImageHeight,[]},
                                             Filters7),
-    {EndWidth, EndHeight, lists:reverse(Args)}.
+    {ok, {EndWidth, EndHeight, lists:reverse(Args)}};
+cmd_args(_, _Filters, _OutMime) ->
+    {error, no_size}.
 
 
 default_background(<<"image/gif">>) -> [coalesce];

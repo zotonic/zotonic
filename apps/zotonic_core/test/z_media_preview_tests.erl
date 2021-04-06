@@ -18,7 +18,7 @@ cmd_args_jpeg_test() ->
         {width, 80},
         {height, 80}
     ],
-    {_W,_H,Args} = z_media_preview:cmd_args(MediaProps, Filters, <<"image/jpeg">>),
+    {ok, {_W,_H,Args}} = z_media_preview:cmd_args(MediaProps, Filters, <<"image/jpeg">>),
     CmdArgs = lists:flatten(lists:join(32, Args)),
     ?assertEqual("-background \"white\" -layers \"flatten\"    -gravity NorthWest -crop 80x80+21+0 -extent 80x80 +repage -colorspace \"sRGB\" -set units PixelsPerInch -density 72   -unsharp 0.3x0.7  -quality 97", CmdArgs).
 
@@ -35,7 +35,7 @@ cmd_args_gif_test() ->
         {width, 80},
         {height, 80}
     ],
-    {_W,_H,Args} = z_media_preview:cmd_args(MediaProps, Filters, <<"image/gif">>),
+    {ok, {_W,_H,Args}} = z_media_preview:cmd_args(MediaProps, Filters, <<"image/gif">>),
     CmdArgs = lists:flatten(lists:join(32, Args)),
     ?assertEqual("-coalesce    -gravity NorthWest -crop 80x80+21+0 -extent 80x80 +repage -colorspace \"sRGB\" -set units PixelsPerInch -density 72  ", CmdArgs).
 
