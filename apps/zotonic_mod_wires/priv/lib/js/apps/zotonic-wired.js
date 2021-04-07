@@ -80,6 +80,11 @@ function zotonic_startup() {
             }
         }, { wid: 'zotonicprogress'});
 
+    cotonic.broker.subscribe(
+        "model/alert/post",
+        function(msg) {
+            z_dialog_alert(msg.payload);
+        }, { wid: 'zotonicalert'});
 
     // Register the client-id to reuse on subsequent pages
     cotonic.broker.subscribe(
@@ -367,7 +372,9 @@ function z_transport(delegate, content_type, data, options)
             ready_msg: data,
             ready_topic: "$promised/bridge/origin/zotonic-transport/" + delegate,
             progress_topic: "zotonic-transport/progress",
-            progress_msg: { form_id: data.trigger }
+            progress_msg: { form_id: data.trigger },
+            failure_topic: "model/alert/post",
+            failure_msg: { text: "Error during upload" }
         }
         cotonic.broker.publish("model/fileuploader/post/new", msg);
     } else if (options.transport == 'form' || options.transport == 'fileuploader') {

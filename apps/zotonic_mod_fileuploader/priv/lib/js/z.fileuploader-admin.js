@@ -45,7 +45,9 @@
                 ready_msg: ready_msg,
                 ready_topic: "bridge/origin/zotonic-transport/mod_fileuploader",
                 progress_topic: "zotonic-transport/progress",
-                progress_msg: { form_id: 'body' }
+                progress_msg: { form_id: 'body' },
+                failure_topic: "model/alert/post",
+                failure_msg: { text: "Error during upload" }
             }
             cotonic.broker.publish("model/fileuploader/post/new", msg);
         }

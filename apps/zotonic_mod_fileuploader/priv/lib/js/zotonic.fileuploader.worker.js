@@ -265,7 +265,7 @@ model.present = function(data) {
                     msg.fileuploader = r.uploads;
                 }
                 self.publish(r.ready_topic, msg);
-                
+
                 if (r.progress_topic) {
                     let msg = r.progress_msg;
                     msg.percentage = 100;
