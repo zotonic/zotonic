@@ -24,7 +24,7 @@
 const MAX_UPLOADERS = 5;            // Number of parallel XHR uploaders
 const UPLOAD_BLOCKSIZE = 128*1024;  // 128KB for each uploaded block
 const MAX_ERROR_COUNT = 10;         // Base number of errors
-const MAX_ERROR_RATE = 0.5;         // Allow 50% failure rate during block uploads
+const MAX_ERROR_RATE = 2.0;         // Allow 200% failure rate during block uploads
 const PROGRESS_INTERVAL = 500;      // Every 500msec progress for a request
 
 var model = {
@@ -67,6 +67,7 @@ var startUploader = function(fileIndex) {
                     f.status = response.result;
                     f.req.uploaded_size += end - offset;
                 } else {
+                    console.log("Fileuploader status error", response, f);
                     if (f.failed.indexOf(offset) == -1) {
                         f.failed.push(offset);
                     }
@@ -76,6 +77,7 @@ var startUploader = function(fileIndex) {
                     f.failed.push(offset);
                 }
                 f.error_count++;
+                console.log("Fileuploader xhr error", f);
             }
         }
     };
