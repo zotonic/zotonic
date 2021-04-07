@@ -10,11 +10,9 @@
 		<img src="/lib/images/processing.gif" />
 		<span>{_ Converting _} …</span>
 	</div>
-    {% javascript %}
-        {% wire type={mqtt topic=[ "bridge", "origin", "model", "media", "event", props.id, 'update']}
-                action={replace template="_video_viewer.tpl" target=#video options=options id=props.id}
-        %}
-    {% endjavascript %}
+    {% wire type={mqtt topic=[ "bridge", "origin", "model", "media", "event", props.id, "update" ]}
+            action={replace template="_video_viewer.tpl" target=#video options=options id=props.id}
+    %}
 {% elseif props.is_video_broken %}
 	{% image props.preview_filename width=options.width height=options.height class=options.class %}
 {% elseif props.filename %}

@@ -118,7 +118,8 @@ do_media_upload_preprocess(Upload, Context) ->
                     <<"height">> => maps:get(<<"height">>, MInfo, undefined),
                     <<"is_deletable_preview">> => false,
                     <<"is_video_processing">> => true,
-                    <<"video_processing_nr">> => ProcessNr
+                    <<"video_processing_nr">> => ProcessNr,
+                    <<"original_filename">> => Upload#media_upload_preprocess.original_filename
                 }
             };
         {error, enoent} ->
