@@ -24,7 +24,7 @@
 const MAX_UPLOADERS = 5;            // Number of parallel XHR uploaders
 const UPLOAD_BLOCKSIZE = 128*1024;  // 128KB for each uploaded block
 const MAX_ERROR_COUNT = 10;         // Base number of errors
-const MAX_ERROR_RATE = 0.1;         // Allow 10% failure rate during block uploads
+const MAX_ERROR_RATE = 0.5;         // Allow 50% failure rate during block uploads
 const PROGRESS_INTERVAL = 500;      // Every 500msec progress for a request
 
 var model = {
