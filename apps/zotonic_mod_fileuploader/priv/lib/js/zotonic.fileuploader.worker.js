@@ -67,10 +67,10 @@ var startUploader = function(fileIndex) {
                     f.status = response.result;
                     f.req.uploaded_size += end - offset;
                 } else {
-                    console.log("Fileuploader status error", response, f);
                     if (f.failed.indexOf(offset) == -1) {
                         f.failed.push(offset);
                     }
+                    console.log("Fileuploader status error", response, f);
                 }
             } else if (xhr.status != 0) {
                 if (f.failed.indexOf(offset) == -1) {
@@ -90,6 +90,7 @@ var startUploader = function(fileIndex) {
             f.failed.push(offset);
         }
         f.error_count++;
+        console.log("Fileuploader xhr error", f);
     });
     xhr.addEventListener("loadend", function() {
         let upl = [];
