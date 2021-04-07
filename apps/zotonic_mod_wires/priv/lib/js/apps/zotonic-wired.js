@@ -533,7 +533,7 @@ function z_progress(id, value)
     {
         var trigger = $('#'+id).get(0);
 
-        if (trigger.nodeName.toLowerCase() == 'form')
+        if (trigger && trigger.nodeName.toLowerCase() == 'form')
         {
             try { $(trigger).maskProgress(value); } catch (e) {}
         }
