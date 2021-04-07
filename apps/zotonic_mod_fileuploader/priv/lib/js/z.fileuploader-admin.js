@@ -27,7 +27,7 @@
         }
 
         if (uploads.length > 0) {
-            try { $('body').mask("", 0); } catch (e) {}
+            z_mask('body');
 
             let dataFileuploader = dropZone.getAttribute("data-fileuploader");
 

@@ -495,13 +495,27 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
 // }
 
 
+function z_mask(id)
+{
+    if (id && typeof id == "string")
+    {
+        var trigger;
+        if (id.charAt(0) == ' ') {
+            trigger = $(id);
+        } else {
+            trigger = $('#'+id);
+        }
+        trigger.each(function() { try { $(this).mask(); } catch (e) {}});
+    }
+}
+
 
 function z_unmask(id)
 {
     if (id && typeof id == "string")
     {
         var trigger;
-        if (id.charAt(0) == ' ') {
+        if (id == "body" || id.charAt(0) == ' ') {
             trigger = $(id);
         } else {
             trigger = $('#'+id);
@@ -516,7 +530,7 @@ function z_unmask_error(id)
     if (id && typeof id == "string")
     {
         var trigger;
-        if (id.charAt(0) == ' ') {
+        if (id == "body" || id.charAt(0) == ' ') {
             trigger = $(id);
         } else {
             trigger = $('#'+id);
@@ -531,11 +545,27 @@ function z_progress(id, value)
 {
     if (id)
     {
-        var trigger = $('#'+id).get(0);
+        var trigger;
+        if (id == "body" || id.charAt(0) == ' ') {
+            trigger = $(id);
+        } else {
+            trigger = $('#'+id);
+        }
+        trigger = trigger.get(0);
 
-        if (trigger && trigger.nodeName.toLowerCase() == 'form')
-        {
-            try { $(trigger).maskProgress(value); } catch (e) {}
+        if (trigger) {
+            switch (trigger.nodeName.toLowerCase()) {
+                case 'input':
+                case 'button':
+                    break;
+                case 'form':
+                case 'body':
+                case 'div':
+                    try { $(trigger).maskProgress(value); } catch (e) {};
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
