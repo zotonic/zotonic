@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-01 15:12\n"
+"PO-Revision-Date: 2021-04-08 15:36\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2602,7 +2602,7 @@ msgstr "Nieuwe gebruiker toevoegen"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:10
 msgid "Add e-mail address"
-msgstr "Naam en e-mailadres toevoegen"
+msgstr "E-mailadres toevoegen"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:70
 msgid "Add user"
