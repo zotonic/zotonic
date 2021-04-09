@@ -132,7 +132,7 @@ event(#postback{message={identity_verify_check, Args}}, Context) ->
     {verify_key, VerifyKey} = proplists:lookup(verify_key, Args),
     Context1 = z_render:wire({hide, [{target, "verify-checking"}]}, Context),
     case verify(IdnId, VerifyKey, Context1) of
-        {error, notfound} ->
+        {error, _} ->
             z_render:wire({fade_in, [{target, "verify-error"}]}, Context1);
         ok ->
             z_render:wire({fade_in, [{target, "verify-ok"}]}, Context1)
