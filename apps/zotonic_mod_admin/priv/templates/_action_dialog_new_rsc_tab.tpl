@@ -229,7 +229,7 @@
                     {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
                         <input type="hidden" name="is_dependent" value="{% if dependent %}1{% endif %}">
                     {% else %}
-		                <div class="form-group">
+		                <div class="form-group form__is_dependent">
 	                        <label class="checkbox">
 	                            <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
 	                            {_ Delete if not connected anymore _}
@@ -237,7 +237,7 @@
 		                </div>
 		            {% endif %}
 	            {% endif %}
-				<div class="form-group">
+				<div class="form-group form__is_published">
 					<label class="checkbox">
 						<input type="checkbox" id="{{ #published }}" name="is_published" value="1"
 							{% if subject_id or m.admin.rsc_dialog_is_published %}checked{% endif %}>

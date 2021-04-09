@@ -72,7 +72,7 @@
                             {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
                                 <input type="hidden" name="is_dependent" value="{% if args.dependent %}1{% endif %}">
                             {% else %}
-                                <div class="checkbox">
+                                <div class="checkbox form__is_dependent">
                                     <label>
                                         <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
                                         {_ Delete if not connected anymore _}
@@ -81,7 +81,7 @@
                             {% endif %}
                         {% endif %}
 
-                        <div class="checkbox">
+                        <div class="checkbox form__is_published">
                             <label>
                                 <input type="checkbox" id="{{ #published.index }}" name="is_published" value="1"
                                     {% if args.subject_id or m.admin.rsc_dialog_is_published %}
