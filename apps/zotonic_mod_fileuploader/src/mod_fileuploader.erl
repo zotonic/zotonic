@@ -64,7 +64,8 @@ do_upload({ok, #{ is_complete := true } = Status}, Data, Context) ->
     } = Status,
     RscProps = #{
         <<"is_published">> => true,
-        <<"original_filename">> => Filename
+        <<"original_filename">> => Filename,
+        <<"is_dependent">> => z_convert:to_bool( maps:get(<<"is_dependent">>, Data, false) )
     },
     RscProps1 = rsc_props_from_data(RscProps, Data, Context),
     Context1 = case m_media:insert_file(TmpFile, RscProps1, [], Context) of
