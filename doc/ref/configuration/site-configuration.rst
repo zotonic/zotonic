@@ -89,6 +89,26 @@ to create any schema other than “public” first:
 
 And restart Zotonic.
 
+
+db_max_connections
+""""""""""""""""""
+
+Maximum number of database connections used by the site. Unused connections are
+closed after some time.
+
+This parameter should be enlarged if the following error occures frequently::
+
+    Database pool usage is close to exhaustion, please increase the pool size.
+
+And definitely increase the pool size if this error occurs frequently::
+
+    Database pool is exhausted, please increase the pool size.
+
+The default is 20 connections::
+
+    {db_max_connections, 20},
+
+
 depcache_memory_max
 """""""""""""""""""
 
