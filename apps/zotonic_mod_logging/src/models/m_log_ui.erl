@@ -83,9 +83,10 @@ is_event_loggable(Props) ->
 is_ignored_bot(undefined) ->
     false;
 is_ignored_bot(UserAgent) ->
-    % The Yandex bot has errors with the WebSocket connection
     binary:match(UserAgent, <<"YandexMobileBot">>) /= nomatch
-    orelse binary:match(UserAgent, <<"YandexBot">>) /= nomatch.
+    orelse binary:match(UserAgent, <<"YandexBot">>) /= nomatch
+    orelse binary:match(UserAgent, <<"pingbot">>) /= nomatch
+    orelse binary:match(UserAgent, <<"BingPreview">>) /= nomatch.
 
 maybe_add_user_props(Props, Context) ->
     case proplists:get_value(user_id, Props) of

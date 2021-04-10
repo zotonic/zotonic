@@ -82,7 +82,7 @@ do_upload({ok, #{ is_complete := true } = Status}, Data, Context) ->
 do_upload({error, _}, _Data, Context) ->
     Context.
 
-maybe_get(K, M, D) when is_map(K) -> maps:get(K, M, D);
+maybe_get(K, M, D) when is_map(M) -> maps:get(K, M, D);
 maybe_get(_, _, D) -> D.
 
 rsc_props_from_data(RscProps, #{ <<"subject_id">> := Id }, Context) ->
