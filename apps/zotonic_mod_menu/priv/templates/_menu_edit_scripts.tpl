@@ -65,6 +65,108 @@
 
 {% javascript %}
 
+var menu_insert_queue = [];
+var menu_is_busy = false;
+
+
+function menu_dequeue()
+{
+    if (!menu_is_busy && menu_insert_queue.length > 0) {
+        var msg = menu_insert_queue.shift();
+
+        switch (msg.cmd) {
+            case "insert-below":
+                let parent_id = msg.payload.parent_id;
+                let sub_id = msg.payload.sub_id;
+
+                var $menu_item = $('#{{ menu_id }} ul.tree-list li [data-page-id='+parent_id+']').closest(".menu-item");
+                var $sorter = $('#{{ in_sorter }}');
+                var options = $sorter.data().uiMenuedit.options;
+
+                window.zMenuNewItem = function(rsc_id, html) {
+                    $submenu = $(">ul", $menu_item);
+                    if ($submenu.length > 0) {
+                        $submenu.append(html);
+                    } else {
+                        $menu_item.append("<ul>"+html+"</ul>");
+                    }
+                    $menu_item
+                        .addClass("has-submenu")
+                        .addClass("submenu-open");
+                    $sorter.trigger('sortupdate');
+
+                    menu_is_busy = false;
+                    menu_dequeue();
+                };
+
+                menu_is_busy = true;
+                z_transport("mod_menu", "ubf", {
+                        cmd: "menu-item-render",
+                        id: sub_id,
+                        callback: "window.zMenuNewItem",
+                        template: options.item_template || ""
+                    });
+                break;
+            case "menu-edit-done":
+                let where = msg.payload.where;
+                let object_id = msg.payload.object_id;
+
+                window.zMenuNewItem = function(rsc_id, html) {
+                    if (where == 'top') {
+                        msg.payload.sorter.prepend(html);
+                    } else if (where == 'bottom') {
+                        msg.payload.sorter.append(html);
+                    } else if (where == 'before') {
+                        $(html).insertBefore(msg.payload.menu_item);
+                    } else if (where == 'below') {
+                        $submenu = $(">ul", msg.payload.menu_item);
+                        if ($submenu.length > 0) {
+                            $submenu.append(html);
+                        } else {
+                            $menu_item.append("<ul>"+html+"</ul>");
+                        }
+                        msg.payload.menu_item
+                            .addClass("has-submenu")
+                            .addClass("submenu-open");
+                    } else if (where == 'after') {
+                        $(html).insertAfter(msg.payload.menu_item);
+                    }
+                    msg.payload.sorter.trigger('sortupdate');
+                    cotonic.broker.publish("menu/insert", {
+                        menu_id: '{{ menu_id }}',
+                        id: rsc_id
+                    });
+
+                    menu_is_busy = false;
+                    menu_dequeue();
+                };
+
+                {% if is_hierarchy or in_sorter == 'category' %}
+                    var $duplicate = msg.payload.sorter.find('[data-page-id='+object_id+']');
+                    if ($duplicate.length > 0) {
+                        z_dialog_alert({text: "{_ This item is already in the hierarchy. Every item can only occur once. _}"});
+                        $duplicate.fadeTo(500, 0.5, function() { $duplicate.fadeTo(500, 1); });
+                        return;
+                    }
+                {% endif %}
+
+                menu_is_busy = true;
+                z_transport("mod_menu", "ubf", {
+                        cmd: "menu-item-render",
+                        id: object_id,
+                        callback: "window.zMenuNewItem",
+                        template: msg.payload.options.item_template || ""
+                    });
+
+                break;
+            default:
+                console.log("Unknown menu queue command");
+                break;
+        }
+    }
+}
+
+
 cotonic.ready.then(
     function() {
     	var sortupdater = undefined;
@@ -88,30 +190,12 @@ cotonic.ready.then(
         });
 
         cotonic.broker.subscribe("menu/edit/insert-below", function(msg, bindings) {
-            var parent_id = msg.payload.parent_id;
-            var sub_id = msg.payload.sub_id;
-            var $menu_item = $('#{{ menu_id }} ul.tree-list li [data-page-id='+parent_id+']').closest(".menu-item");
-            var $sorter = $('#{{ in_sorter }}');
-            var options = $sorter.data().uiMenuedit.options;
-
-            window.zMenuNewItem = function(rsc_id, html) {
-                $submenu = $(">ul", $menu_item);
-                if ($submenu.length > 0) {
-                    $submenu.append(html);
-                } else {
-                    $menu_item.append("<ul>"+html+"</ul>");
-                }
-                $menu_item
-                    .addClass("has-submenu")
-                    .addClass("submenu-open");
-                $sorter.trigger('sortupdate');
-            };
-            z_transport("mod_menu", "ubf", {
-                    cmd: "menu-item-render",
-                    id: sub_id,
-                    callback: "window.zMenuNewItem",
-                    template: options.item_template || ""
-                });
+            let m = {
+                cmd: "insert-below",
+                payload: msg.payload
+            }
+            menu_insert_queue.push(m);
+            menu_dequeue();
         });
     });
 
@@ -174,48 +258,18 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 		});
 	} else {
 		window.zMenuEditDone = function(v) {
-			window.zMenuNewItem = function(rsc_id, html) {
-				if (where == 'top') {
-					$sorter.prepend(html);
-				} else if (where == 'bottom') {
-					$sorter.append(html);
-				} else if (where == 'before') {
-					$(html).insertBefore($menu_item);
-				} else if (where == 'below') {
-					$submenu = $(">ul", $menu_item);
-					if ($submenu.length > 0) {
-						$submenu.append(html);
-					} else {
-						$menu_item.append("<ul>"+html+"</ul>");
-					}
-					$menu_item
-						.addClass("has-submenu")
-						.addClass("submenu-open");
-				} else if (where == 'after') {
-					$(html).insertAfter($menu_item);
-				}
-				$sorter.trigger('sortupdate');
-                cotonic.broker.publish("menu/insert", {
-                    menu_id: '{{ menu_id }}',
-                    id: rsc_id
-                });
-			};
-
-			{% if is_hierarchy or in_sorter == 'category' %}
-				var $duplicate = $sorter.find('[data-page-id='+v.object_id+']');
-				if ($duplicate.length > 0) {
-					z_dialog_alert({text: "{_ This item is already in the hierarchy. Every item can only occur once. _}"});
-					$duplicate.fadeTo(500, 0.5, function() { $duplicate.fadeTo(500, 1); });
-					return;
-				}
-			{% endif %}
-
-			z_transport("mod_menu", "ubf", {
-					cmd: "menu-item-render",
-					id: v.object_id,
-					callback: "window.zMenuNewItem",
-                    template: options.item_template || ""
-				});
+            var m = {
+                cmd: "menu-edit-done",
+                payload: {
+                    where: where,
+                    object_id: v.object_id,
+                    sorter: $sorter,
+                    menuedit: $menuedit,
+                    options: options
+                }
+            }
+            menu_insert_queue.push(m);
+            menu_dequeue();
 		};
 		z_event("admin-menu-select", {tab: "{{ connect_tab|default:"find" }}"});
 	}
