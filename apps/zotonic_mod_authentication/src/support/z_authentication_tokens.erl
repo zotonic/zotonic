@@ -146,7 +146,8 @@ ensure_auth_cookie(Context) ->
     case z_context:get_cookie(?AUTH_COOKIE, Context) of
         undefined ->
             AuthOptions = z_context:get(auth_options, Context, #{}),
-            set_auth_cookie(undefined, AuthOptions, Context);
+            AuthOptions1 = ensure_sid(AuthOptions),
+            set_auth_cookie(undefined, AuthOptions1, Context);
         _Cookie ->
             Context
     end.

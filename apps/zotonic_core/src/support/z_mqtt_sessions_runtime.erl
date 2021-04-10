@@ -23,12 +23,11 @@
     pool_default/0,
 
     new_user_context/3,
+    control_message/3,
     connect/4,
     reauth/2,
     is_allowed/4,
-    is_valid_message/3,
-
-    context_updates/3
+    is_valid_message/3
     ]).
 
 -behaviour(mqtt_sessions_runtime).
@@ -73,24 +72,21 @@ new_user_context( Site, ClientId, SessionOptions ) ->
         client_id = ClientId,
         routing_id = maps:get(routing_id, SessionOptions)
     },
-    mqtt_sessions:subscribe(
-        Site,
-        [ <<"client">>, ClientId, <<"config">> ],
-        {?MODULE, context_updates, [Site, ClientId]},
-        z_acl:sudo(Context1)),
     Context1.
 
-context_updates(Site, ClientId, #{ message := #{ payload := Payload} }) ->
-    mqtt_sessions:update_user_context(Site, ClientId, fun(Ctx) -> update_context_fun(Payload, Ctx) end).
-
-update_context_fun(Payload, Context) ->
+-spec control_message( list(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, z:context()}.
+control_message([ <<"auth">> ], #{ payload := Payload }, Context) ->
     Context1 = maybe_set_language(Payload, Context),
     Context2 = maybe_set_timezone(Payload, Context1),
-    z_notifier:foldl(#request_context{ phase = refresh }, Context2, Context2).
+    Context3 = maybe_set_sid(Payload, Context2),
+    Context4 = z_notifier:foldl(#request_context{ phase = refresh }, Context3, Context3),
+    {ok, Context4};
+control_message(_Topic, _Packet, Context) ->
+    {ok, Context}.
 
-maybe_set_language(#{ <<"language">> := <<>> }, Context) ->
+maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := <<>> } }, Context) ->
     Context;
-maybe_set_language(#{ <<"language">> := Lang }, Context) when is_binary(Lang) ->
+maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := Lang } }, Context) when is_binary(Lang) ->
     try
         mod_translation:set_language(Lang, Context)
     catch
@@ -100,11 +96,19 @@ maybe_set_language(#{ <<"language">> := Lang }, Context) when is_binary(Lang) ->
 maybe_set_language(_Payload, Context) ->
     Context.
 
-maybe_set_timezone(#{ <<"timezone">> := <<>> }, Context) ->
+maybe_set_timezone(#{ <<"preferences">> := #{ <<"timezone">> := <<>> } }, Context) ->
     Context;
-maybe_set_timezone(#{ <<"timezone">> := Timezone }, Context) when is_binary(Timezone) ->
+maybe_set_timezone(#{ <<"preferences">> := #{ <<"timezone">> := Timezone } }, Context) when is_binary(Timezone) ->
     z_context:set_tz(Timezone, Context);
 maybe_set_timezone(_Payload, Context) ->
+    Context.
+
+maybe_set_sid(#{ <<"options">> := #{ <<"sid">> := <<>> } }, Context) ->
+    Context;
+maybe_set_sid(#{ <<"options">> := #{ <<"sid">> := Sid } }, Context) when is_binary(Sid) ->
+    AuthOptions = z_context:get(auth_options, Context, #{}),
+    z_context:set(auth_options, AuthOptions#{ sid => Sid }, Context);
+maybe_set_sid(_Payload, Context) ->
     Context.
 
 
