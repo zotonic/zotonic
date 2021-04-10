@@ -565,7 +565,7 @@ update_transaction(RscUpd, Func, Context) ->
 
 update_result({ok, NewId, notchanged}, _RscUpd, _Context) ->
     {ok, NewId};
-update_result({ok, NewId, OldProps, NewProps, OldCatList, IsCatInsert}, #rscupd{id = Id}, Context) ->
+update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscupd{id = Id}, Context) ->
     % Flush some low level caches
     case maps:get(<<"name">>, NewProps, undefined) of
         undefined -> nop;
@@ -640,7 +640,8 @@ update_transaction_fun_props_1(#rscupd{id = Id} = RscUpd, Raw, Func, Context) ->
     end.
 
 update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Context) ->
-    EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps), Context), RscUpd),
+    {Edges, UpdateProps1} = split_edges(UpdateProps),
+    EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps1), Context), RscUpd),
     SafeProps = escape_props(RscUpd#rscupd.is_escape_texts, EditableProps, Context),
     SafeSlugProps = generate_slug(Id, SafeProps, Context),
     DefaultProps = props_defaults(Id, SafeSlugProps, Context),
@@ -648,13 +649,50 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
         ok ->
             try
                 throw_if_category_not_allowed(Id, DefaultProps, RscUpd#rscupd.is_acl_check, Context),
-                update_transaction_fun_insert(RscUpd, DefaultProps, Raw, UpdateProps, Context)
+                Result = update_transaction_fun_insert(RscUpd, DefaultProps, Raw, UpdateProps, Context),
+                insert_edges(Result, Edges, Context)
             catch
                 throw:{error, _} = Error -> {rollback, Error}
             end;
         {error, _} = Error ->
             {rollback, Error}
     end.
+
+split_edges(Props) ->
+    maps:fold(
+        fun
+            (<<"s.", Pred/binary>>, E, {Es, Ps}) ->
+                Es1 = [ {subject, Pred, E}  | Es ],
+                {Es1, Ps};
+            (<<"o.", Pred/binary>>, E, {Es, Ps}) ->
+                Es1 = [ {object, Pred, E}  | Es ],
+                {Es1, Ps};
+            (K, V, {Es, Ps}) ->
+                {Es, Ps#{ K => V }}
+        end,
+        {[], #{}},
+        Props).
+
+insert_edges({ok, Id, Res}, Edges, Context) ->
+    lists:map(
+        fun
+            ({object, Pred, Es}) when is_list(Es) ->
+                lists:map(
+                    fun(E) -> m_edge:insert(Id, Pred, E, Context) end,
+                    Es);
+            ({object, Pred, E}) ->
+                m_edge:insert(Id, Pred, E, Context);
+            ({subject, Pred, Es}) when is_list(Es) ->
+                lists:map(
+                    fun(E) -> m_edge:insert(E, Pred, Id, Context) end,
+                    Es);
+            ({subject, Pred, E}) ->
+                m_edge:insert(E, Pred, Id, Context)
+        end,
+        Edges),
+    {ok, Id, Res};
+insert_edges({error, _} = Error , _, _Context) ->
+    Error.
 
 escape_props(true, Props, Context) ->
     z_sanitize:escape_props(Props, Context);
@@ -858,7 +896,7 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
                     {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
                     ok = update_page_path_log(Id, Raw, NewPropsDiffTz, Context),
                     NewPropsFinal = maps:merge(NewPropsLangPruned, UpdatePropsPrePivoted),
-                    {ok, Id, Raw, NewPropsFinal, IsABefore, IsCatInsert};
+                    {ok, Id, {Raw, NewPropsFinal, IsABefore, IsCatInsert}};
                 false ->
                     {ok, Id, notchanged}
             end;
