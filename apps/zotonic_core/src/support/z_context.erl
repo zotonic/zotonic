@@ -958,6 +958,8 @@ set_tz(true, Context) ->
     Context#context{ tz = <<"UTC">> };
 set_tz(1, Context) ->
     Context#context{ tz = <<"UTC">> };
+set_tz(0, Context) ->
+    Context;
 set_tz(Tz, Context) ->
     lager:error("Unknown timezone ~p", [Tz]),
     Context.
