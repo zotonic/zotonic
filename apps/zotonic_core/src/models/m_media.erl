@@ -250,7 +250,7 @@ replace(Id, Props, Context) ->
             Depicts = depicts(Id, Context),
             F = fun(Ctx) ->
                 {ok, _} = medium_delete(Id, Ctx),
-                {ok, Id} = medium_insert(Id, Props#{ id => Id }, Ctx)
+                {ok, Id} = medium_insert(Id, Props#{ <<"id">> => Id }, Ctx)
             end,
             case z_db:transaction(F, Context) of
                 {ok, _} ->
