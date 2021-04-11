@@ -265,6 +265,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
                     object_id: v.object_id,
                     sorter: $sorter,
                     menuedit: $menuedit,
+                    menu_item: $menu_item,
                     options: options
                 }
             }
