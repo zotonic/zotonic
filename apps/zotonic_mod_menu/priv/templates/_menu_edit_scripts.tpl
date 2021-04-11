@@ -65,23 +65,31 @@
 
 {% javascript %}
 
-var menu_insert_queue = [];
-var menu_is_busy = false;
+window.menu_insert_queue = [];
+window.menu_is_busy = false;
 
 
 function menu_dequeue()
 {
     if (!menu_is_busy && menu_insert_queue.length > 0) {
-        var msg = menu_insert_queue.shift();
+        let msg = menu_insert_queue.shift();
+        let $menu_item;
+        let parent_id = msg.payload.parent_id;
+        let sub_id = msg.payload.sub_id;
+
+
+        if (msg.payload.menu_item) {
+            $menu_item = msg.payload.menu_item;
+        } else {
+            $menu_item = $('#{{ menu_id }} ul.tree-list li [data-page-id='+parent_id+']').closest(".menu-item");
+        }
+
+        console.log(msg);
 
         switch (msg.cmd) {
             case "insert-below":
-                let parent_id = msg.payload.parent_id;
-                let sub_id = msg.payload.sub_id;
-
-                var $menu_item = $('#{{ menu_id }} ul.tree-list li [data-page-id='+parent_id+']').closest(".menu-item");
-                var $sorter = $('#{{ in_sorter }}');
-                var options = $sorter.data().uiMenuedit.options;
+                let $sorter = $('#{{ in_sorter }}');
+                let options = $sorter.data().uiMenuedit.options;
 
                 window.zMenuNewItem = function(rsc_id, html) {
                     $submenu = $(">ul", $menu_item);
@@ -117,9 +125,9 @@ function menu_dequeue()
                     } else if (where == 'bottom') {
                         msg.payload.sorter.append(html);
                     } else if (where == 'before') {
-                        $(html).insertBefore(msg.payload.menu_item);
+                        $(html).insertBefore($menu_item);
                     } else if (where == 'below') {
-                        $submenu = $(">ul", msg.payload.menu_item);
+                        $submenu = $(">ul", $menu_item);
                         if ($submenu.length > 0) {
                             $submenu.append(html);
                         } else {
@@ -129,7 +137,7 @@ function menu_dequeue()
                             .addClass("has-submenu")
                             .addClass("submenu-open");
                     } else if (where == 'after') {
-                        $(html).insertAfter(msg.payload.menu_item);
+                        $(html).insertAfter($menu_item);
                     }
                     msg.payload.sorter.trigger('sortupdate');
                     cotonic.broker.publish("menu/insert", {
