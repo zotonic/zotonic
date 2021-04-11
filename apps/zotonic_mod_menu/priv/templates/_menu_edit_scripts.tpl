@@ -84,8 +84,6 @@ function menu_dequeue()
             $menu_item = $('#{{ menu_id }} ul.tree-list li [data-page-id='+parent_id+']').closest(".menu-item");
         }
 
-        console.log(msg);
-
         switch (msg.cmd) {
             case "insert-below":
                 let $sorter = $('#{{ in_sorter }}');
