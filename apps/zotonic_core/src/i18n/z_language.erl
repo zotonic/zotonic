@@ -41,6 +41,7 @@
     fallback_language/1,
     fallback_language/2,
     english_name/1,
+    local_name/1,
     is_rtl/1,
     properties/1,
     all_languages/0,
@@ -112,6 +113,10 @@ fallback_language(Code, Context) ->
 english_name(Code) ->
     get_property(Code, name_en).
 
+%% @doc Returns the local language name.
+-spec local_name( language() ) -> binary() | undefined.
+local_name(Code) ->
+    get_property(Code, name).
 
 %% @doc Check if the given language is a rtl language.
 -spec is_rtl( language() ) -> boolean().
