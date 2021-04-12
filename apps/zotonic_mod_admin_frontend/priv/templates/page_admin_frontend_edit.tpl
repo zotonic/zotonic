@@ -121,6 +121,8 @@
 	{% all include "_admin_lib_js.tpl" %}
 	{% include "_editor.tpl" is_editor_include %}
 
+	{% optional include "_fileuploader_worker.tpl" %}
+
 	{% javascript %}
 		window.z_translations = window.z_translations || {};
 	    window.z_translations["Yes, discard changes"] = "{_ Yes, discard changes _}";
