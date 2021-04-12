@@ -164,10 +164,9 @@ m_get([ <<"did_survey_answers">>, SurveyId | Rest ], _Msg, Context) ->
         Result ->
             Answers = proplists:get_value(answers, Result, []),
             lists:map(
-                fun({_QName, Ans}) ->
-                    Block = proplists:get_value(block, Ans),
+                fun({QName, Ans}) ->
                     Answer = proplists:get_value(answer, Ans),
-                    {Block, Answer}
+                    {QName, Answer}
                 end,
                 Answers)
     end,
