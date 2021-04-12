@@ -92,7 +92,7 @@
                     <span class="glyphicon glyphicon-ok-sign"></span> {_ This file has been scanned for viruses. _}
                 </p>
             {% elseif m.modules.active.mod_clamav %}
-                <p class="text-danger text-right">
+                <p class="text-muted text-right">
                     <span class="glyphicon glyphicon-alert"></span> {_ This file has not been scanned for viruses. _}
                 </p>
             {% endif %}
