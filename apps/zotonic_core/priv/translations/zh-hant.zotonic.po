@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-13 16:37\n"
+"PO-Revision-Date: 2021-04-13 16:47\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -456,28 +456,28 @@ msgstr "私人的"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:50
 msgid "Private properties are email, phone, visiting address, and date range."
-msgstr "私人属性是电子邮件、电话、访问地址和日期范围。"
+msgstr "電子郵件，電話號碼，流覽器的地址，以及日期範圍 是私人的屬性"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:4
 msgid "Publish"
-msgstr "发布"
+msgstr "發布"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:106
 msgid "Publish successful"
-msgstr "发布成功"
+msgstr "發布成功"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
 msgid "Revert"
-msgstr "恢复"
+msgstr "恢復"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:35./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:39
 msgid "Revert back to published version"
-msgstr "恢复到已公布的版本"
+msgstr "恢復為已發布的版本"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:100
 msgid "Reverted rules"
-msgstr "逆向规则"
+msgstr "還原規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
@@ -492,16 +492,16 @@ msgstr "保存"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
 msgid "Save Upload Permissions"
-msgstr "保存上传权限"
+msgstr "保存上傳權限"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:143
 msgid "Saved collaboration group settings"
-msgstr "保存的协作组设置"
+msgstr "保存的協作組設置"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:199
 msgid "Select category"
-msgstr "选择类别"
+msgstr "選擇類別"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:84
 msgid "Show"
