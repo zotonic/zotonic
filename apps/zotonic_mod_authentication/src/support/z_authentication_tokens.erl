@@ -266,7 +266,9 @@ encode_onetime_token(UserId, Context) ->
             Error
     end.
 
--spec encode_onetime_token( m_rsc:resource_id(), binary(), z:context() ) -> {ok, binary()}.
+-spec encode_onetime_token( m_rsc:resource_id(), binary() | undefined, z:context() ) -> {ok, binary()}.
+encode_onetime_token(_UserId, undefined, _Context) ->
+    {error, no_session};
 encode_onetime_token(UserId, SId, Context) ->
     Term = {onetime, UserId, user_secret(UserId, Context), user_autologon_secret(UserId, Context), SId},
     ExpTerm = termit:expiring(Term, ?ONETIME_TOKEN_EXPIRE),
