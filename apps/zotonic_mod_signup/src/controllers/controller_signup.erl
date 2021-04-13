@@ -180,14 +180,19 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
             end,
             % Post a onetime-token to the auth worker on the page
             % The auth worker will exchange it for a valid cookie and then perform
-            % the redirect to the url. 
-            Token = z_authentication_tokens:encode_onetime_token(UserId, ContextUser),
-            AuthMsg = #{
-                token => Token,
-                url => z_convert:to_binary( Location )
-            },
-            z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
-            z_render:wire({mask, []}, Context);
+            % the redirect to the url.
+            case z_authentication_tokens:encode_onetime_token(UserId, ContextUser) of
+                {ok, Token} ->
+                    AuthMsg = #{
+                        token => Token,
+                        url => z_convert:to_binary( Location )
+                    },
+                    z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
+                    z_render:wire({mask, []}, Context);
+                {error, _} = Error ->
+                    lager:error("Error making onetime token: ~p", [ Error ]),
+                    show_errors([internal], Context)
+            end;
         false ->
             % User is not yet verified, send a verification message to the user's external identities
             case mod_signup:request_verification(UserId, Context) of

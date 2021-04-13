@@ -27,7 +27,8 @@ var model = {
     state_data: undefined,
     state_id: undefined,
     status: 'start',
-    is_depends_provided: false
+    is_depends_provided: false,
+    sid: undefined
 };
 
 model.present = function(data) {
@@ -42,7 +43,7 @@ model.present = function(data) {
             case "redirect":
                 break;
             default:
-                console.log("OAuth: unknown oauth_step, must be 'authorize' or 'include'");
+                console.log("OAuth: unknown oauth_step, must be 'authorize' or 'redirect'");
                 break;
         }
         model.oauth_step = data.oauth_step;
@@ -50,6 +51,22 @@ model.present = function(data) {
     }
 
     if (data.is_depends_provided && state.waiting(model)) {
+        model.is_depends_provided = true;
+        model.status = 'authsync';
+
+        self.subscribe('model/auth/event/auth',
+                       function(msg) {
+                            if (msg.payload.status == 'ok'
+                                && msg.payload.options.sid
+                                && state.authsync(model))
+                            {
+                                model.sid = msg.payload.options.sid;
+                                actions.auth_stable();
+                            }
+                       });
+    }
+
+    if (data.is_auth_stable && state.authsync(model)) {
         model.status = 'active';
 
         self.subscribe('model/auth/event/auth-user-id',
@@ -100,7 +117,8 @@ model.present = function(data) {
                   {
                     state_id: model.state_id,
                     state_data: model.state_data,
-                    qargs: model.qargs
+                    qargs: model.qargs,
+                    sid: model.sid
                   },
                   {
                     qos: 2
@@ -212,6 +230,10 @@ state.waiting = function(model) {
     return model.status === 'waiting';
 };
 
+state.authsync = function(model) {
+    return model.status === 'authsync';
+};
+
 state.active = function(model) {
     return model.status === 'active';
 };
@@ -261,6 +283,13 @@ actions.depends_provided = function() {
     let data = {
         is_depends_provided: true
     };
+    model.present(data);
+};
+
+actions.auth_stable = function() {
+    let data = {
+        is_auth_stable: true
+    }
     model.present(data);
 };
 

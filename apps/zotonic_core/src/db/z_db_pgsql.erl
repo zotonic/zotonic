@@ -47,8 +47,9 @@
 -define(IDLE_TIMEOUT, 60000).
 
 -define(CONNECT_RETRIES, 50).
+-define(CONNECT_RETRY_SHORT,   100).
+-define(CONNECT_RETRY_MIDDLE, 1000).
 -define(CONNECT_RETRY_SLEEP, 10000).
--define(CONNECT_RETRY_SHORT, 10).
 
 %% @doc Threshold above which we do an automatic explain of traced queries.
  -define(DBTRACE_EXPLAIN_MSEC, 100).
@@ -437,7 +438,7 @@ maybe_close_connections(_) ->
 retry_delay(_, RetryCount) when RetryCount < 2 ->
     ?CONNECT_RETRY_SHORT;
 retry_delay(too_many_connections, _) ->
-    ?CONNECT_RETRY_SHORT;
+    ?CONNECT_RETRY_MIDDLE;
 retry_delay(_, _RetryCount)  ->
     ?CONNECT_RETRY_SLEEP.
 

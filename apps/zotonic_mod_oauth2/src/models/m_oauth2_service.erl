@@ -42,12 +42,13 @@ m_post([ <<"oauth-redirect">> ], #{ payload := Payload }, Context) ->
     StateId = maps:get(<<"state_id">>, Payload),
     StateData = maps:get(<<"state_data">>, Payload),
     QArgs = maps:get(<<"qargs">>, Payload),
+    SId = maps:get(<<"sid">>, Payload),
     Secret = z_context:state_cookie_secret(Context),
     case termit:decode_base64(StateData, Secret) of
         {ok, Expires} ->
             case termit:check_expired(Expires) of
                 {ok, {StateId, ServiceMod, ServiceData, Data}} when is_atom(ServiceMod) ->
-                    handle_redirect(StateId, ServiceMod, ServiceData, Data, QArgs, Context);
+                    handle_redirect(StateId, ServiceMod, ServiceData, Data, QArgs, SId, Context);
                 {ok, _} ->
                     {error, state};
                 {error, _} = Error ->
@@ -64,13 +65,14 @@ redirect_url(Context) ->
         z_dispatcher:url_for(oauth2_service_redirect, Context1),
         Context1).
 
-handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, Context) ->
+handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, SId, Context) ->
     case ServiceMod:oauth_version() of
         1 ->
             access_token(
                 ServiceMod:fetch_access_token(<<>>, ServiceData, Args, QArgs, Context),
                 ServiceMod,
                 Args,
+                SId,
                 Context);
         2 ->
             case maps:get(<<"error">>, QArgs, undefined) of
@@ -83,6 +85,7 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, Context) ->
                                         ServiceMod:fetch_access_token(Code, ServiceData, Args, QArgs, Context),
                                         ServiceMod,
                                         Args,
+                                        SId,
                                         Context);
                                 _ ->
                                     lager:error("OAuth redirect error when fetching code: ~p", [ QArgs ]),
@@ -98,16 +101,17 @@ handle_redirect(StateId, ServiceMod, ServiceData, Args, QArgs, Context) ->
             end
     end.
 
-access_token({ok, #{ <<"access_token">> := _ } = AccessData}, ServiceMod, Args, Context) ->
+access_token({ok, #{ <<"access_token">> := _ } = AccessData}, ServiceMod, Args, SId, Context) ->
     user_data(
         ServiceMod:auth_validated(AccessData, Args, Context),
+        SId,
         Context);
-access_token({error, denied}, _ServiceMod, _Args, _Context) ->
+access_token({error, denied}, _ServiceMod, _Args, _SId, _Context) ->
     {error, denied};
-access_token({error, _Reason}, _ServiceMod, _Args, _Context) ->
+access_token({error, _Reason}, _ServiceMod, _Args, _SId, _Context) ->
     {error, access_token}.
 
-user_data({ok, Auth}, Context) ->
+user_data({ok, Auth}, SId, Context) ->
     case z_notifier:first(Auth, Context) of
         undefined ->
             % No handler for auth, signups, or signup not accepted
@@ -115,11 +119,16 @@ user_data({ok, Auth}, Context) ->
             {error, auth_user_undefined};
         {ok, UserId} ->
             % Generate one time token to login for this user
-            Token = z_authentication_tokens:encode_onetime_token(UserId, Context),
-            {ok, #{
-                result => token,
-                token => Token
-            }};
+            case z_authentication_tokens:encode_onetime_token(UserId, SId, Context) of
+                {ok, Token} ->
+                    {ok, #{
+                        result => token,
+                        token => Token
+                    }};
+                {error, _} = Err ->
+                    lager:warning("Error return ~p for user with props ~p", [Err, Auth]),
+                    Err
+            end;
         {error, signup_confirm} ->
             % We need a confirmation from the user before we add a new account
             % html_error(signup_confirm, {auth, Auth}, Context);
@@ -139,6 +148,6 @@ user_data({ok, Auth}, Context) ->
             lager:warning("Error return ~p for user with props ~p", [Err, Auth]),
             {error, auth_user_error}
     end;
-user_data(_UserError, _Context) ->
+user_data(_UserError, _SId, _Context) ->
     {error, service_user_data}.
 

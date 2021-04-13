@@ -366,7 +366,7 @@ model.state = state ;
 
 // Derive the state representation as a function of the system control state
 state.representation = function(model) {
-    self.publish('model/auth/event/auth', model.auth);
+    self.publish('model/auth/event/auth', model.auth, { retain: true });
 
     // Publish the model's UI status
     let ui = {

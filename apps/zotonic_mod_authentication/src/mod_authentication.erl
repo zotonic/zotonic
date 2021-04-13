@@ -155,15 +155,19 @@ observe_logon_options(#logon_options{}, Acc, _Context) ->
 observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url }, Context) ->
     case z_context:client_topic(Context) of
         {ok, ClientTopic} ->
-            Token = z_authentication_tokens:encode_onetime_token(UserId, Context),
-            z_mqtt:publish(
-                ClientTopic ++ [ <<"model">>, <<"auth">>, <<"post">>, <<"onetime-token">> ],
-                #{
-                    token => Token,
-                    url => Url
-                },
-                Context),
-            ok;
+            case z_authentication_tokens:encode_onetime_token(UserId, Context) of
+                {ok, Token} ->
+                    z_mqtt:publish(
+                        ClientTopic ++ [ <<"model">>, <<"auth">>, <<"post">>, <<"onetime-token">> ],
+                        #{
+                            token => Token,
+                            url => Url
+                        },
+                        Context),
+                    ok;
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.
