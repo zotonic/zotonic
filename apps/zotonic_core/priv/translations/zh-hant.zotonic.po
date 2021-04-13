@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-13 16:47\n"
+"PO-Revision-Date: 2021-04-13 17:09\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -505,15 +505,15 @@ msgstr "選擇類別"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:84
 msgid "Show"
-msgstr "显示"
+msgstr "顯示"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:35
 msgid "Show private properties to"
-msgstr "显示私人物业到"
+msgstr "显示私人的屬性於"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:96
 msgid "Show this ACL user group first:"
-msgstr "先显示这个ACL用户组。"
+msgstr "先显示這個 ACL 用戶組:"
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:110./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:126
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
@@ -521,11 +521,11 @@ msgstr "先显示这个ACL用户组。"
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
 #: apps/zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, you are not allowed to delete this."
-msgstr "对不起，你不能删除这个。"
+msgstr "对不起，你不允許删除这个。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:41
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
-msgstr "抱歉，您不能将该分类的页面插入到所选内容组中。"
+msgstr "抱歉，您不允許将该分類的页面插入到所选内容组中。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
@@ -533,11 +533,11 @@ msgstr "系统内容组"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:26
 msgid "Test ACL rules"
-msgstr "测试ACL规则"
+msgstr "測試 ACL 規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:3./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:6
 msgid "Test Access Control Rules"
-msgstr "测试访问控制规则"
+msgstr "测试流覽的控制規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:44
 msgid "The URL is only valid for one day."
@@ -549,7 +549,7 @@ msgstr "该网址的有效期为一天。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:7
 msgid "The default upload size is:"
-msgstr "默认上传大小为。"
+msgstr "默許的上傳文件大小是:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:47
 msgid "There are no users within these user groups."
@@ -557,34 +557,34 @@ msgstr "这些用户组内没有用户。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:15
 msgid "These settings come into effect immediately, no publish of rules is needed,"
-msgstr "这些设置立即生效，无需发布规则。"
+msgstr "這些設定立即生效, 無須发布這些規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:31
 msgid "They are managed by their own manager and use the access rules below."
-msgstr "它们由自己的经理管理，并使用下面的访问规则。"
+msgstr "這些是由他們自己的經理來管理並依據以下的流覽規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:33
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:35
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:27
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:33
 msgid "This can not be undone."
-msgstr "这是无法挽回的。"
+msgstr "操作无法撤销"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:19
 msgid "This page is a"
-msgstr "本页为"
+msgstr "這個頁面是一個"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
-msgstr "该规则由模块管理"
+msgstr "该规则由組件管理"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:17
 msgid "Try ACL rules"
-msgstr "试试ACL规则"
+msgstr "嘗試ACL规则"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:42
 msgid "Try a different combination of category and content group."
-msgstr "试试类别和内容组的不同组合。"
+msgstr "嘗試一個不同的種類與內容組的組合"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:14
 msgid "Try rules..."
@@ -592,11 +592,11 @@ msgstr "试试规则..."
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:126
 msgid "Upload settings saved"
-msgstr "上传保存的设置"
+msgstr "上傳存檔的設定"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "上传之前导出的ACL规则文件。注意：所有当前规则将被上传的规则定义文件 <b>替换</b> 。"
+msgstr "上傳這個你原先輸出的 ACL 規則的文件。注意: 所有現行規則將被 上傳的規則定義文件<b>取代</b>。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
 msgid "Use published rules"
