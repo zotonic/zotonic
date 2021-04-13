@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-13 17:23\n"
+"PO-Revision-Date: 2021-04-13 17:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -636,19 +636,19 @@ msgstr "您正在使用 <b>测试</b> 版本的访问控制规则。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
 msgid "You can switch back to the published access control rules by:"
-msgstr "您可以通过以下方式切换回已发布的访问控制规则： 1:"
+msgstr "您可以通過以下方法切換回已發布的訪問控制規則："
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
-msgstr "你可以。"
+msgstr "你可以:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
 msgid "You have to use a special URL, as provided by the an editor or administrator."
-msgstr "你必须使用一个特殊的URL，由编辑或管理员提供。"
+msgstr "你必須用編輯或行政管理者供應的特別的 URL。 "
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 msgid "all"
-msgstr "都"
+msgstr "全部都"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:20
 msgid "clicking on <b>Use published rules</b> below"
