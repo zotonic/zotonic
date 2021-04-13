@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-13 17:45\n"
+"PO-Revision-Date: 2021-04-13 18:21\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -652,11 +652,11 @@ msgstr "全部都"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:20
 msgid "clicking on <b>Use published rules</b> below"
-msgstr "点击 <b>使用下面的</b> 发布规则。"
+msgstr "點擊以下 <b>使用已發布規則</b>"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
 msgid "closing this browser tab"
-msgstr "关闭该浏览器标签"
+msgstr "關閉這個流覽器空間 (tab)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "delete (acl action)"
@@ -664,47 +664,47 @@ msgstr "删除"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "deny"
-msgstr "否定"
+msgstr "不允許"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "edit (acl action)"
-msgstr "编辑"
+msgstr "修改 (acl 應用)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:21
 msgid "in the group"
-msgstr "同行"
+msgstr "在這群組"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "insert (acl action)"
-msgstr "加插"
+msgstr "揷入 (acl 應用)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
 msgid "link (acl action)"
-msgstr "联动"
+msgstr "聯結 (acl 應用)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:127
 msgid "manage own"
-msgstr "自理"
+msgstr "管理自己的"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
-msgstr "把这个网址发给别人测试"
+msgstr "送這個 URL 給別人做測試"
 
 #: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
 msgid "use (acl action)"
-msgstr "采用"
+msgstr "釆用 (acl 應用)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "使用 <b>新建私人窗口</b> （查看浏览器的 <b>文件</b> 菜单）。"
+msgstr "用 <b>新的私人視窗</b> (檢査 <b>文件</b> 你流覽器的操作功能目錄)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
-msgstr "使用其他浏览器（如：Chrome，如果你现在使用Firefox）。"
+msgstr "用另一種流覽器 (例如，改用 Chrome 如果你現在是用 Firefox)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
 msgid "view (acl action)"
-msgstr "视图"
+msgstr "流覽 (acl 应用)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:109./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:111
 msgid "&lt; Prev"
@@ -712,7 +712,7 @@ msgstr "&lt; 上一页"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
 msgid "(private)"
-msgstr "(私人)"
+msgstr "(私人的 )"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
 msgid "(public)"
@@ -720,7 +720,7 @@ msgstr "(公开)"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:44
 msgid "+ add"
-msgstr "增加"
+msgstr "+ 添加"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_addblock.tpl:5
 msgid "+ add block"
