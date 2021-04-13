@@ -97,11 +97,16 @@ handle_auth_confirm(Auth, Context) ->
             lager:warning("mod_authentication: 'undefined' return for auth of ~p", [Auth]),
             {error, nohandler};
         {ok, UserId} ->
-            Token = z_authentication_tokens:encode_onetime_token(UserId, Context),
-            {ok, #{
-                result => token,
-                token => Token
-            }};
+            case z_authentication_tokens:encode_onetime_token(UserId, Context) of
+                {ok, Token} ->
+                    {ok, #{
+                        result => token,
+                        token => Token
+                    }};
+                {error, _} = Err ->
+                    lager:warning("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
+                    Err
+            end;
         {error, _} = Err ->
             lager:warning("mod_authentication: Error return of ~p for auth of ~p", [Err, Auth]),
             {error, signup}

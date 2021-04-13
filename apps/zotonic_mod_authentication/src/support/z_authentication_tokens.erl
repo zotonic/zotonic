@@ -40,6 +40,7 @@
     decode_autologon_token/2,
 
     encode_onetime_token/2,
+    encode_onetime_token/3,
     decode_onetime_token/2,
 
     session_expires/1,
@@ -256,20 +257,30 @@ decode_autologon_token(AutoLogonCookie, Context) ->
     end.
 
 
--spec encode_onetime_token( m_rsc:resource_id(), z:context() ) -> binary().
+-spec encode_onetime_token( m_rsc:resource_id(), z:context() ) -> {ok, binary()} | {error, no_session}.
 encode_onetime_token(UserId, Context) ->
-    Peer = m_req:get(peer_ip, Context),
-    Term = {onetime, UserId, user_secret(UserId, Context), user_autologon_secret(UserId, Context), Peer},
+    case z_context:session_id(Context) of
+        {ok, SId} ->
+            encode_onetime_token(UserId, SId, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+-spec encode_onetime_token( m_rsc:resource_id(), binary() | undefined, z:context() ) -> {ok, binary()} | {error, no_session}.
+encode_onetime_token(_UserId, undefined, _Context) ->
+    {error, no_session};
+encode_onetime_token(UserId, SId, Context) ->
+    Term = {onetime, UserId, user_secret(UserId, Context), user_autologon_secret(UserId, Context), SId},
     ExpTerm = termit:expiring(Term, ?ONETIME_TOKEN_EXPIRE),
-    termit:encode_base64(ExpTerm, autologon_secret(Context)).
+    {ok, termit:encode_base64(ExpTerm, autologon_secret(Context))}.
 
 -spec decode_onetime_token( binary(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
 decode_onetime_token(OnetimeToken, Context) ->
     case termit:decode_base64(OnetimeToken, autologon_secret(Context)) of
         {ok, ExpTerm} ->
-            Peer = m_req:get(peer_ip, Context),
+            {ok, SId} = z_context:session_id(Context),
             case termit:check_expired(ExpTerm) of
-                {ok, {onetime, UserId, UserSecret, AutoLogonSecret, Peer}} ->
+                {ok, {onetime, UserId, UserSecret, AutoLogonSecret, SId}} ->
                     US = user_secret(UserId, Context),
                     AS = user_autologon_secret(UserId, Context),
                     case {US, AS} of
@@ -279,7 +290,7 @@ decode_onetime_token(OnetimeToken, Context) ->
                             {error, user_secret}
                     end;
                 {ok, Unexpected} ->
-                    lager:error("authentication: token from peer ~p mismatch ~p", [ Peer, Unexpected ]),
+                    lager:error("authentication: token from sid ~p mismatch ~p", [ SId, Unexpected ]),
                     {error, mismatch};
                 {error, _} = Error ->
                     lager:error("authentication: token expired error ~p", [ Error ]),
