@@ -266,7 +266,7 @@ encode_onetime_token(UserId, Context) ->
             Error
     end.
 
--spec encode_onetime_token( m_rsc:resource_id(), binary() | undefined, z:context() ) -> {ok, binary()}.
+-spec encode_onetime_token( m_rsc:resource_id(), binary() | undefined, z:context() ) -> {ok, binary()} | {error, no_session}.
 encode_onetime_token(_UserId, undefined, _Context) ->
     {error, no_session};
 encode_onetime_token(UserId, SId, Context) ->
