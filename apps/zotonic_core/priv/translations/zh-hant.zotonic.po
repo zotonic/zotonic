@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-13 17:09\n"
+"PO-Revision-Date: 2021-04-13 17:23\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -600,11 +600,11 @@ msgstr "上傳這個你原先輸出的 ACL 規則的文件。注意: 所有現�
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
 msgid "Use published rules"
-msgstr "使用公布的规则"
+msgstr "沿用已發布的規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
-msgstr "在发布访问控制规则之前，请使用以下URL测试这些规则。"
+msgstr "發布規則前，請用以下的聯結 (URL) 來測試允許進入流覽的用戶的控制規則"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:537
 msgid "User groups"
@@ -612,11 +612,11 @@ msgstr "用户组"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
 msgid "Which version of the ACL rules do you want to use?"
-msgstr "你想使用哪个版本的ACL规则？"
+msgstr "那個版本的 ACL 規則你要使用?"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:40
 msgid "You are not allowed to move to this collaboration group."
-msgstr "你不允许移动到这个协作组。"
+msgstr "您無權移至該協作組。"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:57
 msgid "You are not allowed to perform this action"
@@ -624,11 +624,11 @@ msgstr "你不允许执行这个动作"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:48
 msgid "You are not allowed to view this page."
-msgstr "您不能浏览此页面。"
+msgstr "您不允許浏览此页面。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
 msgid "You are using the <b>published</b> version of the access control rules."
-msgstr "您正在使用 <b>发布的</b> 版本的访问控制规则。"
+msgstr "您正在使用 <b>已發行</b> 版本的訪問流覽控制規則。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:10
 msgid "You are using the <b>test</b> version of the access control rules."
