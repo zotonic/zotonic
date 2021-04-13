@@ -278,12 +278,15 @@ decode_onetime_token(OnetimeToken, Context) ->
                         _ ->
                             {error, user_secret}
                     end;
-                {ok, _} ->
+                {ok, Unexpected} ->
+                    lager:error("authentication: token from peer ~p mismatch ~p", [ Peer, Unexpected ]),
                     {error, mismatch};
                 {error, _} = Error ->
+                    lager:error("authentication: token expired error ~p", [ Error ]),
                     Error
             end;
         {error, _}  = Error ->
+            lager:warning("authentication: token decode error ~p", [ Error ]),
             Error
     end.
 
