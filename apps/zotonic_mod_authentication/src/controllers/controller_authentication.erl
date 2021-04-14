@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2020 Marc Worrell
+%% @copyright 2019-2021 Marc Worrell
 %% @doc Handle HTTP authentication of users.
 
-%% Copyright 2019-2020 Marc Worrell
+%% Copyright 2019-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -117,9 +117,7 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
             log_logon(UserId, Payload, Context),
             % - (set cookie in handlers - like device-id) --> needs notification
             Options = z_context:get(auth_options, Context, #{}),
-            % Force reset of sid on logon
-            Options1 = maps:remove(sid, Options),
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options1, Context1),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
             Context3 = maybe_setautologon(Payload, Context2),
             return_status(Payload, Context3);
         {error, user_not_enabled} ->
@@ -237,8 +235,7 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
                     {module, ?MODULE}, {line, ?LINE}, {auth_user_id, UserId}
                 ],
                 Context),
-            Options1 = maps:remove(sid,AuthOptions),
-            Options2 = Options1#{
+            Options2 = AuthOptions#{
                 sudo_user_id => SudoUserId
             },
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, Context1),

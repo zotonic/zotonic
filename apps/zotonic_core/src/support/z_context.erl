@@ -92,6 +92,7 @@
     set_client_context/2,
 
     session_id/1,
+    set_session_id/2,
 
     set/3,
     set/2,
@@ -818,12 +819,18 @@ set_client_context(ClientContext, RequestContext) ->
 %%      changes.
 -spec session_id( z:context() ) -> {ok, binary()} | {error, no_session}.
 session_id(Context) ->
-    case get(auth_options, Context) of
-        #{ sid := Sid } ->
+    case get(session_id, Context) of
+        Sid when is_binary(Sid), Sid =/= <<>> ->
             {ok, Sid};
         _ ->
             {error, no_session}
     end.
+
+%% @doc Set the cotonic session id. Mostly used when on a request with
+%%      a cotonic session id in the cookie.
+-spec set_session_id( binary(), z:context() ) -> z:context().
+set_session_id(Sid, Context) ->
+    set(session_id, Sid, Context).
 
 %% @doc Set the value of the context variable Key to Value
 -spec set( atom(), term(), z:context() ) -> z:context().

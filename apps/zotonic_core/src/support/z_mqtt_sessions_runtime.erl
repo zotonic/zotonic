@@ -78,9 +78,12 @@ new_user_context( Site, ClientId, SessionOptions ) ->
 control_message([ <<"auth">> ], #{ payload := Payload }, Context) ->
     Context1 = maybe_set_language(Payload, Context),
     Context2 = maybe_set_timezone(Payload, Context1),
-    Context3 = maybe_set_sid(Payload, Context2),
-    Context4 = z_notifier:foldl(#request_context{ phase = refresh }, Context3, Context3),
-    {ok, Context4};
+    Context3 = z_notifier:foldl(#request_context{ phase = refresh }, Context2, Context2),
+    {ok, Context3};
+control_message([ <<"sid">> ], #{ payload := Payload }, Context) ->
+    Context1 = maybe_set_sid(Payload, Context),
+    Context2 = z_notifier:foldl(#request_context{ phase = refresh }, Context1, Context1),
+    {ok, Context2};
 control_message(_Topic, _Packet, Context) ->
     {ok, Context}.
 
@@ -124,24 +127,32 @@ set_connect_context_options(Options, Context) ->
     end,
     Context4 = z_context:set(auth_options, maps:get(auth_options, Prefs, #{}), Context3),
     Context5 = z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context4),
-    z_acl:logon_refresh(Context5).
+    Context6 = case maps:get(cotonic_sid, Options, undefined) of
+        undefined -> Context5;
+        Sid -> z_context:set_session_id(Sid, Context5)
+    end,
+    z_acl:logon_refresh(Context6).
 
 -spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_session:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
-connect(#{ type := connect, username := U, password := P }, false,
+connect(#{ type := connect, username := U, password := P, properties := Props }, false,
         #{ context_prefs := #{ user_id := UserId } = Prefs } = Options,
         Context) when ?none(U), ?none(P) ->
     % No session, accept user from the mqtt controller
     AuthOptions = maps:get(auth_options, Prefs, #{}),
     Context1 = set_connect_context_options(Options, Context),
-    Context2 = case UserId of
+    Context2 = case maps:get(<<"cotonic_sid">>, Props, undefined) of
         undefined -> Context1;
-        _ -> z_acl:logon_prefs(UserId, AuthOptions, Context1)
+        Sid when Sid =/= <<>> -> z_context:set_session_id(Sid, Context1)
+    end,
+    Context3 = case UserId of
+        undefined -> Context2;
+        _ -> z_acl:logon_prefs(UserId, AuthOptions, Context2)
     end,
     ConnAck = #{
         type => connack,
         reason_code => ?MQTT_RC_SUCCESS
     },
-    {ok, ConnAck, Context2};
+    {ok, ConnAck, Context3};
 connect(#{ type := connect, username := U, password := P }, true,
         #{ context_prefs := #{ user_id := UserId } } = Options,
         Context) when ?none(U), ?none(P) ->
@@ -178,7 +189,7 @@ connect(#{ type := connect, username := U, password := P }, _IsSessionPresent, O
             },
             {ok, ConnAck, Context}
     end;
-connect(#{ type := connect, username := U, password := P }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
+connect(#{ type := connect, username := U, password := P, properties := Props }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
     % User login, and no user from the MQTT controller
     % The username might be something like: "example.com:localuser"
     Username = case binary:split(U, <<":">>) of
@@ -198,7 +209,11 @@ connect(#{ type := connect, username := U, password := P }, IsSessionPresent, Op
             case IsAuthOk of
                 true ->
                     Context1 = set_connect_context_options(Options, Context),
-                    Context2 = z_acl:logon(UserId, Context1),
+                    Context2 = case maps:get(<<"cotonic_sid">>, Props, undefined) of
+                        undefined -> Context1;
+                        Sid when Sid =/= <<>> -> z_context:set_session_id(Sid, Context1)
+                    end,
+                    Context3 = z_acl:logon(UserId, Context2),
                     ConnAck = #{
                         type => connack,
                         reason_code => ?MQTT_RC_SUCCESS,
@@ -207,7 +222,7 @@ connect(#{ type := connect, username := U, password := P }, IsSessionPresent, Op
                             % ... token ...
                         }
                     },
-                    {ok, ConnAck, Context2};
+                    {ok, ConnAck, Context3};
                 false ->
                     ConnAck = #{
                         type => connack,

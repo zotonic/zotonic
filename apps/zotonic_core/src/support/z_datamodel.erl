@@ -156,7 +156,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                         <<"name">> => Name,
                         <<"category_id">> => CatId,
                         <<"installed_by">> => ModuleB,
-                        <<"managed_prop">> => z_html:escape_props(Props)
+                        <<"managed_props">> => z_html:escape_props(Props)
                     },
                     Props2 = case maps:get(<<"is_published">>, Props1, undefined) of
                                  undefined -> Props1#{ <<"is_published">> => true };

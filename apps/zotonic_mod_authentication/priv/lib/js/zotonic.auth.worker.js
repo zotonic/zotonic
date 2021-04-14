@@ -24,18 +24,23 @@ var AUTH_CHECK_PERIOD = 30;
 //   this could be due to browser wakeup or server down time.
 
 function fetchWithUA( body ) {
-    return self.call("model/document/get/all")
-        .then( function(msg) {
-            body.document = msg.payload
-            return fetch( self.abs_url("/zotonic-auth"), {
-                method: "POST",
-                cache: "no-cache",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(body)
-            })
+    return self.call("model/sessionId/get")
+        .then( function(sid) {
+            return self.call("model/document/get/all")
+                .then( function(msg) {
+                    body.document = msg.payload;
+                    body.cotonic_sid = sid.payload;
+                    console.log(body);
+                    return fetch( self.abs_url("/zotonic-auth"), {
+                        method: "POST",
+                        cache: "no-cache",
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    })
+                })
         });
 }
 
@@ -227,6 +232,7 @@ model.present = function(data) {
                     url: data.auth_response.url
                 });
             }
+
             if (model.auth.user_id == previous_auth_user_id) {
                 model.state_change('auth_known');
             } else {
@@ -313,6 +319,7 @@ model.state_change = function(status) {
     if (status != model.status) {
         switch (status) {
             case 'auth_changing':
+                self.publish("model/sessionId/post/reset");
                 self.call('model/sessionStorage/post/auth-user-id', model.auth.user_id)
                     .then(function() {
                         self.publish('model/auth/event/auth-changing', {
@@ -620,7 +627,7 @@ actions.resetPassword = function(msg) {
 //
 
 self.connect({
-    depends: [ "model/sessionStorage" ],
+    depends: [ "model/sessionStorage", "model/localStorage", "model/sessionId" ],
     provides: [ "model/auth" ]
 }).then( function() {
     actions.start();
