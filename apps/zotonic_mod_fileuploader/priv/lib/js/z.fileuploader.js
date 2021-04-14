@@ -28,7 +28,7 @@ function fileUploader( f ) {
         if (reader.blocks.length == 0) {
             reader.resolve();
         } else {
-            const b = reader.bocks.pop();
+            const b = reader.blocks.pop();
             const blob = reader.slice(b.start, b.bytes);
 
             cotonic.broker.mqtt
@@ -57,15 +57,15 @@ function fileUploader( f ) {
             reader.reject = reject;
 
             cotonic.broker
-                .call("$promise/bridge/origin/model/fileuploader/post/new", {
+                .call("$promised/bridge/origin/model/fileuploader/post/new", {
                     filename: reader.filename,
                     size: reader.size,
                     mime: reader.mime
                 })
                 .then(
                     function(msg) {
-                        if (msg.status == "ok") {
-                            reader.name = msg.result.name;
+                        if (msg.payload.status == "ok") {
+                            reader.name = msg.payload.result.name;
                             upload(resolve, reject)
                         } else {
                             reject(new Error(msg));
