@@ -81,8 +81,6 @@ req_auth_cookie(Context) ->
                     Context1 = z_acl:logon(UserId, AuthOptions, Context),
                     Context2 = z_context:set(auth_expires, Expires, Context1),
                     z_context:set(auth_options, AuthOptions, Context2);
-                {ok, _} ->
-                    reset_auth_cookie(Context);
                 {error, _} ->
                     reset_auth_cookie(Context)
             end
