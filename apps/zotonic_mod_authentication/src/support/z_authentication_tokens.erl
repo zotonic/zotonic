@@ -112,7 +112,7 @@ refresh_auth_cookie(RequestOptions, Context) ->
         AuthCookie ->
             UserId = z_acl:user(Context),
             case decode_auth_token(AuthCookie, Context) of
-                {ok, {UserId, _Sid, AuthOptions, _Expires}} ->
+                {ok, {UserId, AuthOptions, _Expires}} ->
                     NewAuthOptions = merge_options(RequestOptions, AuthOptions, Context),
                     set_auth_cookie(UserId, NewAuthOptions, Context);
                 {error, _} ->
@@ -152,10 +152,7 @@ encode_auth_token(UserId, Options, Context) ->
     termit:encode_base64(ExpTerm, auth_secret(Context)).
 
 -spec decode_auth_token( binary(), z:context() ) ->
-      {ok, {m_rsc:resource_id() | undefined,
-            binary() | undefined,
-            map(),
-            integer()}}
+     {ok, {m_rsc:resource_id() | undefined, map(), integer()}}
    | {error, term()}.
 decode_auth_token(AuthCookie, Context) ->
     case termit:decode_base64(AuthCookie, auth_secret(Context)) of
