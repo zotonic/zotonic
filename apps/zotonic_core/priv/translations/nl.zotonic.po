@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-08 15:36\n"
+"PO-Revision-Date: 2021-04-14 20:38\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -6998,7 +6998,7 @@ msgstr "We hebben de e-mail gestuurd naar"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:13
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
-msgstr "We zijn erg zorgvuldig met alle persoonlijk informatie die ons wordt verstrekt en zullen nooit je naam of adres weggeven zonder je toestemming.\n"
+msgstr "We zijn erg zorgvuldig met alle persoonlijke informatie die ons wordt verstrekt en zullen nooit je naam of adres weggeven zonder je toestemming.\n"
 "We hebben wel een aantal regels waarmee je moet instemmen."
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
