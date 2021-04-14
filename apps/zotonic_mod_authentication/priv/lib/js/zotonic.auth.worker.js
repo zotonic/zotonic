@@ -525,9 +525,16 @@ actions.logon = function(data) {
 }
 
 actions.logonForm = function(data) {
+    let username;
+
+    if (data.message && data.message.username && data.message.username !== "") {
+        username = data.message.username;
+    } else {
+        username = data.value.username;
+    }
     let dataLogon = {
         logon: true,
-        username: data.value.username,
+        username: username,
         password: data.value.password || null,
         passcode: data.value.passcode || null,
         setautologon: data.value.rememberme ? true : false,
