@@ -48,24 +48,35 @@
 {% endif %}
 {% if not m.acl.is_admin and not notrack %}
     {% if m.seo.google.analytics as ga %}
-        <script>
-            var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
-            var ga_options = {% include '_ga_params.tpl' %};
-            window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-            if (window.localStorage) {
-              ga_options.storage = 'none';
-              ga_options.clientId = localStorage.getItem(GA_LOCAL_STORAGE_KEY);
-              ga('create', '{{ ga|escapejs }}', ga_options);
-              ga(function(tracker) {
-                localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
-              });
-            }
-            else {
-              ga('create', '{{ ga|escapejs }}', 'auto', ga_options);
-            }
-            ga('set', 'anonymizeIp', true);
-            ga('send', 'pageview');
-        </script>
-        <script async src='https://www.google-analytics.com/analytics.js'></script>
+        {% if ga|match:"^G-" %}
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga|urlencode }}"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', '{{ ga|escapejs }}', { 'anonymize_ip': true });
+            </script>
+        {% else %}
+            <script>
+                var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
+                var ga_options = {% include '_ga_params.tpl' %};
+                window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+                if (window.localStorage) {
+                  ga_options.storage = 'none';
+                  ga_options.clientId = localStorage.getItem(GA_LOCAL_STORAGE_KEY);
+                  ga('create', '{{ ga|escapejs }}', ga_options);
+                  ga(function(tracker) {
+                    localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
+                  });
+                }
+                else {
+                  ga('create', '{{ ga|escapejs }}', 'auto', ga_options);
+                }
+                ga('set', 'anonymizeIp', true);
+                ga('send', 'pageview');
+            </script>
+            <script async src='https://www.google-analytics.com/analytics.js'></script>
+        {% endif %}
     {% endif %}
 {% endif %}

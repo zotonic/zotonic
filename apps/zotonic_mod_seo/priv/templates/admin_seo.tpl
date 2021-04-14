@@ -63,7 +63,7 @@
                             <input type="text" id="seo_google-analytics" name="seo_google-analytics" value="{{ m.config.seo_google.analytics.value|escape }}" class="form-control" placeholder="{_ Google Analytics tracking id _}">
                             <label class="control-label" for="seo_google-analytics">{_ Google Analytics tracking id _}</label>
                             <p class="help-block">
-                                {_ You find this id in the tracking script, it has the format _} <strong>UA-123456-1</strong>.
+                                {_ You find this id in the tracking script, it has the format _} <strong>G-..........</strong> {_ or _} <strong>UA-123456-1</strong>.
                                 <a href="https://support.google.com/analytics/bin/answer.py?hl=en&amp;answer=1008080" title="Google Analytics Help">{_ Where can I find my tracking script? _}</a>
                             </p>
                         </div>
