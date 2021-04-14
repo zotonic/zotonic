@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018 Marc Worrell
+%% @copyright 2018-2021 Marc Worrell
 %% @doc MQTT WebSocket connections
 
-%% Copyright 2018 Marc Worrell
+%% Copyright 2018-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -244,7 +244,11 @@ handle_connect_data_1(NewData, Context) ->
             user_id => z_acl:user(Context),
             language => z_context:language(Context),
             timezone => z_context:tz(Context),
-            auth_options => z_context:get(auth_options, Context, #{})
+            auth_options => z_context:get(auth_options, Context, #{}),
+            cotonic_sid => case z_context:session_id(Context) of
+                {ok, Sid} -> Sid;
+                {error, _} -> undefined
+            end
         }
     },
     case mqtt_sessions:incoming_connect(MqttPool, NewData, Options) of

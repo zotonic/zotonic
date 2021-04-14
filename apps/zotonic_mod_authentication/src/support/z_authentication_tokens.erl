@@ -81,6 +81,8 @@ req_auth_cookie(Context) ->
                     Context1 = z_acl:logon(UserId, AuthOptions, Context),
                     Context2 = z_context:set(auth_expires, Expires, Context1),
                     z_context:set(auth_options, AuthOptions, Context2);
+                {ok, _} ->
+                    reset_auth_cookie(Context);
                 {error, _} ->
                     reset_auth_cookie(Context)
             end
@@ -88,8 +90,7 @@ req_auth_cookie(Context) ->
 
 -spec set_auth_cookie( m_rsc:resource_id() | undefined, map(), z:context() ) -> z:context().
 set_auth_cookie(UserId, AuthOptions, Context) ->
-    AuthOptions1 = ensure_sid(AuthOptions),
-    Cookie = encode_auth_token(UserId, AuthOptions1, Context),
+    Cookie = encode_auth_token(UserId, AuthOptions, Context),
     CookieOptions = [
         {path, <<"/">>},
         {http_only, true},
@@ -98,15 +99,7 @@ set_auth_cookie(UserId, AuthOptions, Context) ->
     ],
     Context1 = z_context:set_cookie(?AUTH_COOKIE, Cookie, CookieOptions, Context),
     Context2 = z_context:set(auth_expires, session_expires(Context1), Context1),
-    z_context:set(auth_options, AuthOptions1, Context2).
-
-%% @doc Always ensure that there is a sid in the auth options
-ensure_sid(#{ sid := Sid } = AuthOptions) when is_binary(Sid) ->
-    AuthOptions;
-ensure_sid(AuthOptions) ->
-    AuthOptions#{
-        sid => z_ids:id(20)
-    }.
+    z_context:set(auth_options, AuthOptions, Context2).
 
 -spec refresh_auth_cookie( map(), z:context() ) -> z:context().
 refresh_auth_cookie(RequestOptions, Context) ->
@@ -119,7 +112,7 @@ refresh_auth_cookie(RequestOptions, Context) ->
         AuthCookie ->
             UserId = z_acl:user(Context),
             case decode_auth_token(AuthCookie, Context) of
-                {ok, {UserId, AuthOptions, _Expires}} ->
+                {ok, {UserId, _Sid, AuthOptions, _Expires}} ->
                     NewAuthOptions = merge_options(RequestOptions, AuthOptions, Context),
                     set_auth_cookie(UserId, NewAuthOptions, Context);
                 {error, _} ->
@@ -147,8 +140,7 @@ ensure_auth_cookie(Context) ->
     case z_context:get_cookie(?AUTH_COOKIE, Context) of
         undefined ->
             AuthOptions = z_context:get(auth_options, Context, #{}),
-            AuthOptions1 = ensure_sid(AuthOptions),
-            set_auth_cookie(undefined, AuthOptions1, Context);
+            set_auth_cookie(undefined, AuthOptions, Context);
         _Cookie ->
             Context
     end.
@@ -159,7 +151,12 @@ encode_auth_token(UserId, Options, Context) ->
     ExpTerm = termit:expiring(Term, session_expires(Context)),
     termit:encode_base64(ExpTerm, auth_secret(Context)).
 
--spec decode_auth_token( binary(), z:context() ) -> {ok, {m_rsc:resource_id() | undefined, map(), integer()}} | {error, term()}.
+-spec decode_auth_token( binary(), z:context() ) ->
+      {ok, {m_rsc:resource_id() | undefined,
+            binary() | undefined,
+            map(),
+            integer()}}
+   | {error, term()}.
 decode_auth_token(AuthCookie, Context) ->
     case termit:decode_base64(AuthCookie, auth_secret(Context)) of
         {ok, ExpTerm} ->
@@ -171,6 +168,9 @@ decode_auth_token(AuthCookie, Context) ->
                         _ ->
                             {error, user_secret}
                     end;
+                {ok, _} ->
+                    % Illegal token - skip
+                    {error, token};
                 {error, _} = Error ->
                     Error
             end;

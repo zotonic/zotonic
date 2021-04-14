@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2018 Marc Worrell
+%% @copyright 2016-2021 Marc Worrell
 %%
 %% @doc Middleware for cowmachine, extra Context based initializations.
 %% This starts the https request processing after the site and dispatch rule
 %% have been selected by the z_sites_dispatcher middleware.
 
-%% Copyright 2016-2018 Marc Worrell
+%% Copyright 2016-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,9 +46,14 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
         on_welformed => fun(Ctx) ->
             z_context:lager_md(Ctx),
             Ctx1 = z_context:ensure_qs(Ctx),
-            case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
+            Ctx2 = case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
                 undefined -> Ctx1;
                 HttpAccept -> set_accept_context(HttpAccept, Ctx1)
+            end,
+            case z_context:get_cookie(<<"cotonic-sid">>, Ctx2) of
+                undefined -> Ctx2;
+                Sid ->
+                    z_context:set_session_id(Sid, Ctx2)
             end
         end
     },
