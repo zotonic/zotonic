@@ -114,6 +114,7 @@ logon(Payload, Context) ->
 logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
     case z_auth:logon(UserId, Context) of
         {ok, Context1} ->
+            log_logon(UserId, Payload, Context),
             % - (set cookie in handlers - like device-id) --> needs notification
             Options = z_context:get(auth_options, Context, #{}),
             % Force reset of sid on logon
@@ -155,6 +156,24 @@ logon_1({error, _Reason}, _Payload, Context) ->
     { #{ status => error, error => pw }, Context };
 logon_1(undefined, _Payload, Context) ->
     { #{ status => error, error => pw }, Context }.
+
+
+log_logon(UserId, #{ <<"username">> := Username }, Context) when is_binary(Username) ->
+    lager:info("~p: Logon of user ~p (~s) using username '~s'",
+                [ z_context:site(Context), UserId, username(UserId, Context), Username ]);
+log_logon(UserId, #{ <<"token">> := Token }, Context) when is_binary(Token) ->
+    lager:info("~p: Logon of user ~p (~s) using token",
+                [ z_context:site(Context), UserId, username(UserId, Context) ]);
+log_logon(UserId, #{}, Context) ->
+    lager:info("~p: Logon of user ~p (~s)",
+                [ z_context:site(Context), UserId, username(UserId, Context) ]).
+
+username(UserId, Context) ->
+    case m_identity:get_username(UserId, Context) of
+        Username when is_binary(Username) -> Username;
+        undefined -> <<>>
+    end.
+
 
 -spec maybe_add_logon_options( map(), map(), z:context() ) -> { map(), z:context() }.
 maybe_add_logon_options(#{ error := ratelimit } = Result, _Payload, Context) ->
