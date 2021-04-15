@@ -30,7 +30,6 @@ function fetchWithUA( body ) {
                 .then( function(msg) {
                     body.document = msg.payload;
                     body.cotonic_sid = sid.payload;
-                    console.log(body);
                     return fetch( self.abs_url("/zotonic-auth"), {
                         method: "POST",
                         cache: "no-cache",

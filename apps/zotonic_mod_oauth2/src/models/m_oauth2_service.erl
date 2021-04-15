@@ -42,7 +42,7 @@ m_post([ <<"oauth-redirect">> ], #{ payload := Payload }, Context) ->
     StateId = maps:get(<<"state_id">>, Payload),
     StateData = maps:get(<<"state_data">>, Payload),
     QArgs = maps:get(<<"qargs">>, Payload),
-    SId = maps:get(<<"sid">>, Payload),
+    SId = maps:get(<<"cotonic_sid">>, Payload),
     Secret = z_context:state_cookie_secret(Context),
     case termit:decode_base64(StateData, Secret) of
         {ok, Expires} ->

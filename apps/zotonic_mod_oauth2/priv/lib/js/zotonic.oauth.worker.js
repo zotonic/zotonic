@@ -28,7 +28,7 @@ var model = {
     state_id: undefined,
     status: 'start',
     is_depends_provided: false,
-    sid: undefined
+    cotonic_sid: undefined
 };
 
 model.present = function(data) {
@@ -54,16 +54,18 @@ model.present = function(data) {
         model.is_depends_provided = true;
         model.status = 'authsync';
 
-        self.subscribe('model/auth/event/auth',
-                       function(msg) {
-                            if (msg.payload.status == 'ok'
-                                && msg.payload.options.sid
-                                && state.authsync(model))
-                            {
-                                model.sid = msg.payload.options.sid;
-                                actions.auth_stable();
-                            }
-                       });
+        self.call("model/sessionId/get")
+            .then(function(msg) {
+                model.cotonic_sid = msg.payload;
+                self.subscribe('model/auth/event/auth',
+                               function(msg) {
+                                    if (msg.payload.status == 'ok'
+                                        && state.authsync(model))
+                                    {
+                                        actions.auth_stable();
+                                    }
+                              });
+            });
     }
 
     if (data.is_auth_stable && state.authsync(model)) {
@@ -118,7 +120,7 @@ model.present = function(data) {
                     state_id: model.state_id,
                     state_data: model.state_data,
                     qargs: model.qargs,
-                    sid: model.sid
+                    cotonic_sid: model.cotonic_sid
                   },
                   {
                     qos: 2
@@ -333,7 +335,7 @@ self.on_init = function(args) {
 }
 
 self.connect({
-    depends: [ "bridge/origin", "model/auth", "model/location", "model/sessionStorage" ],
+    depends: [ "bridge/origin", "model/auth", "model/sessionId", "model/location", "model/sessionStorage" ],
     provides: [ "model/oauth"]
 }).then(
     function() {
