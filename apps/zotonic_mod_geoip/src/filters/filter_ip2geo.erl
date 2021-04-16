@@ -18,12 +18,12 @@
 -module(filter_ip2geo).
 
 -export([
-    ip2info/2
+    ip2geo/2
     ]).
 
-ip2info(undefined, _Context) ->
+ip2geo(undefined, _Context) ->
     undefined;
-ip2info(IP, _Context) when is_binary(IP); is_list(IP); is_tuple(IP) ->
+ip2geo(IP, _Context) when is_binary(IP); is_list(IP); is_tuple(IP) ->
     case mod_geoip:lookup(IP) of
         {ok, Info} ->
             Info;
