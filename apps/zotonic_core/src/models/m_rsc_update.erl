@@ -698,9 +698,15 @@ insert_edges({ok, Id, Res}, Edges, Context) ->
             ({_ ,_, undefined}) ->
                 ok;
             ({object, Pred, Es}) when is_list(Es) ->
-                lists:map(
-                    fun(E) -> m_edge:insert(Id, Pred, E, Context) end,
-                    Es);
+                Es1 = lists:filtermap(
+                    fun(EId) ->
+                        case m_rsc:rid(EId, Context) of
+                            undefined -> false;
+                            Rid -> {true, Rid}
+                        end
+                    end,
+                    Es),
+                m_edge:replace(Id, Pred, Es1, Context);
             ({object, Pred, E}) ->
                 m_edge:insert(Id, Pred, E, Context);
             ({subject, Pred, Es}) when is_list(Es) ->
