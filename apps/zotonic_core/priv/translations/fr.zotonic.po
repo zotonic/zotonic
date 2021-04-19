@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-01 15:12\n"
+"PO-Revision-Date: 2021-04-19 08:53\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -274,7 +274,7 @@ msgstr "Definir qui peut voir et éditer cette page"
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:51./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:73./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:94
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:159
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "Effacer"
@@ -1003,7 +1003,7 @@ msgstr "Tableau de bord"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:531./apps/zotonic_mod_survey/src/models/m_survey.erl:534
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:530./apps/zotonic_mod_survey/src/models/m_survey.erl:533
 msgid "Date"
 msgstr "Date"
 
@@ -1395,7 +1395,7 @@ msgstr "Modifié:"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:536
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:535
 msgid "Name"
 msgstr "Nom"
 
@@ -1966,7 +1966,7 @@ msgstr "Télécharger un fichier"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
-#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:74
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:75
 msgid "Uploaded"
 msgstr "Téléchargé"
 
@@ -2001,7 +2001,7 @@ msgstr "Valable:"
 msgid "View"
 msgstr "Voir"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:44./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:48./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Voir toutes les connexions"
 
@@ -2561,7 +2561,7 @@ msgstr "Sauver &amp; Visualiser"
 msgid "The page might have been deleted."
 msgstr "La page a peut-être été supprimée."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr " Il y a des changements non sauvegardés. Êtes-vous sûr de vouloir partir sans sauvegarder ?"
 
@@ -2569,7 +2569,7 @@ msgstr " Il y a des changements non sauvegardés. Êtes-vous sûr de vouloir par
 msgid "This page"
 msgstr "Cette page"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:126
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
 msgid "Yes, discard changes"
 msgstr "Oui, rejeter les changements"
 
@@ -2695,7 +2695,7 @@ msgstr "Aide à propos des accès utilisateur"
 msgid "Hi"
 msgstr "Salut"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:23./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:34
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:32
 msgid "Home"
 msgstr "Accueil"
 
@@ -2715,7 +2715,7 @@ msgstr "Se connecter sous cet utilisateur"
 msgid "Make a new user"
 msgstr "Créer un nouvel utilisateur"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:24
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:22
 msgid "My page"
 msgstr "Ma page"
 
@@ -2736,7 +2736,7 @@ msgstr "Aucun utilisateur trouvé."
 msgid "No verified e-mail addresses. Please add one below."
 msgstr "Aucune adresse de messagerie vérifiée. Veuillez en ajouter une ci-dessous."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:14
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
 msgid "One moment, please..."
 msgstr "Veuillez patienter SVP..."
@@ -2785,7 +2785,7 @@ msgstr "E-mail de vérification envoyé."
 msgid "Set username / password"
 msgstr "Affecter un identifiant / mot de passe"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:41
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:57
 msgid "Sorry"
 msgstr "Désolé"
@@ -2799,7 +2799,7 @@ msgstr "Désolé, cet identifiant est déjà utilisé. Veuillez en essayer un au
 msgid "Sorry, you can not remove your own username."
 msgstr "Désolé, vous ne pouvez pas supprimer votre propre nom d'utilisateur."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
@@ -2854,7 +2854,7 @@ msgstr "Cette personne est également un utilisateur."
 msgid "This person is not yet a user."
 msgstr "Cette personne n'est pas actuellement un utilisateur."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:31./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:43
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:29
 msgid "This verification key is unknown."
 msgstr "Cette clef de vérification est inconnue."
 
@@ -2919,7 +2919,7 @@ msgstr "Vérifier"
 msgid "Verify Address |"
 msgstr "Vérifié l'adresse"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:10
 msgid "Verifying..."
 msgstr "Vérification..."
 
@@ -2964,11 +2964,11 @@ msgstr "Vous avez reçu cet e-mail, car vous avez vérifié votre adresse e-mail
 msgid "Your account name is"
 msgstr "Votre nom relié à votre compte est"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 msgid "Your address is now verified."
 msgstr "Votre adresse est maintenant vérifiée."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 msgid "Your e-mail address is now verified."
 msgstr "Votre adresse e-mail est maintenant vérifiée."
 
@@ -3209,7 +3209,7 @@ msgid "All page connections"
 msgstr "Toutes les connexions entre pages"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:156
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:246
 msgid "Are you sure you want to delete"
 msgstr "Êtes vous sûr de vouloir effacer"
 
@@ -3652,7 +3652,7 @@ msgstr "Saisissez votre adresse e-mail pour recevoir des instructions sur la ré
 msgid "Error"
 msgstr "Erreur"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:237
 msgid "External Services"
 msgstr "Services Externes"
 
@@ -3999,6 +3999,7 @@ msgid "external service"
 msgstr "service externe"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "ou"
@@ -4217,6 +4218,10 @@ msgstr "Arguments"
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
+msgid "Connecting..."
+msgstr ""
+
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
 msgstr "Fichier Excel"
@@ -4253,10 +4258,6 @@ msgstr "JSON"
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:21
 msgid "JSON-LD"
 msgstr "JSON-LD"
-
-#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
-msgid "No connection with server"
-msgstr "Pas de connexion avec le serveur"
 
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
@@ -5322,7 +5323,7 @@ msgstr "Vous n’êtes pas autorisé à changer ces paramètres."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic peut stocker les fichiers téléchargés et redimensionnés dans le cloud. Ici, vous pouvez configurer l'emplacement et les clefs d'accès du service cloud"
 
-#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:77
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:78
 msgid "Could not upload"
 msgstr "Impossible de télécharger"
 
@@ -5750,7 +5751,7 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:535
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:534
 msgid "User Id"
 msgstr "Id utilisateur"
 
@@ -6585,11 +6586,11 @@ msgstr "Supprimer"
 msgid "Sorry, can’t copy that page."
 msgstr "Désolé, copie de cette page échouée."
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:248
 msgid "THIS CAN NOT BE UNDONE!"
 msgstr "ÇA NE PEUT PAS ÊTRE ANNULÉ!"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:207
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:153
 msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr "Cet élément est déjà dans la hiérarchie. Chaque élément ne peut exister qu'une seule fois."
 
@@ -6598,7 +6599,7 @@ msgstr "Cet élément est déjà dans la hiérarchie. Chaque élément ne peut e
 msgid "Unknown category"
 msgstr "Catégorie inconnue"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:248
 msgid "and all indented items below it?"
 msgstr "et tous les éléments en retrait en dessous?"
 
@@ -7376,7 +7377,7 @@ msgstr "Continuer"
 msgid "Country select"
 msgstr "Sélection du pays"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:841
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:840
 msgid "Created"
 msgstr "Créé"
 
@@ -7649,11 +7650,11 @@ msgstr "Saut de page"
 msgid "Page jump condition"
 msgstr "Condition de saut de page"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:542
+#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:541
 msgid "Passed"
 msgstr "Réussi"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:544
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Percent"
 msgstr "Pourcent"
 
@@ -7749,7 +7750,7 @@ msgstr "Résultats du répondant"
 msgid "Saved"
 msgstr "Sauvé"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:543
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:542
 msgid "Score"
 msgstr "Score"
 
