@@ -317,12 +317,9 @@ force_copy_prop(P, PrevProps, NewProps) ->
 
 
 observe_rsc_update_done(#rsc_update_done{
-            id = Id,
             pre_is_a = PreIsA,
-            post_is_a = PostIsA,
-            post_props = PostProps
+            post_is_a = PostIsA
         }, Context) ->
-    check_hasusergroup(Id, PostProps, Context),
     case lists:member('acl_user_group', PreIsA)
         orelse lists:member('acl_user_group', PostIsA)
     of
@@ -803,27 +800,4 @@ manage_data(_Version, _Context) ->
 
 page_actions(Actions, Context) ->
     z_notifier:first(#page_actions{ actions = Actions }, Context).
-
-check_hasusergroup(UserId, RscProps, Context) ->
-    HasUserGroup = to_list( maps:get(<<"hasusergroup_list">>, RscProps, []) ),
-    case length(HasUserGroup) of
-        0 ->
-            %% not submitted, do nothing
-            ok;
-        _ ->
-            GroupIds = lists:map(
-                fun z_convert:to_integer/1,
-                lists:filter(
-                    fun
-                        (<<>>) -> false;
-                        (_) -> true
-                    end,
-                    HasUserGroup)),
-            {ok, PredId} = m_predicate:name_to_id(hasusergroup, Context),
-            m_edge:replace(UserId, PredId, GroupIds, Context)
-    end.
-
-to_list(undefined) -> [];
-to_list(L) when is_list(L) -> L;
-to_list(V) -> [ V ].
 

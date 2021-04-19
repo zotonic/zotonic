@@ -202,11 +202,15 @@ insert(SubjectId, Pred, ObjectId, Opts, Context)
     {ok, PredId} = m_predicate:name_to_id(Pred, Context),
     insert1(SubjectId, PredId, ObjectId, Opts, Context);
 insert(SubjectId, Pred, Object, Opts, Context) when is_integer(SubjectId) ->
-    {ok, ObjectId} = m_rsc:name_to_id(Object, Context),
-    insert(SubjectId, Pred, ObjectId, Opts, Context);
+    case m_rsc:rid(Object, Context) of
+        undefined -> {error, object};
+        Id -> insert(SubjectId, Pred, Id, Opts, Context)
+    end;
 insert(Subject, Pred, Object, Opts, Context) ->
-    {ok, SubjectId} = m_rsc:name_to_id(Subject, Context),
-    insert(SubjectId, Pred, Object, Opts, Context).
+    case m_rsc:rid(Subject, Context) of
+        undefined -> {error, subject};
+        Id -> insert(Id, Pred, Object, Opts, Context)
+    end.
 
 insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
     case z_db:q1("select id

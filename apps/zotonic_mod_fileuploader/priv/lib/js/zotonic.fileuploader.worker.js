@@ -212,7 +212,7 @@ model.present = function(data) {
         let f = model.files[i];
         if (f.req.error_count == 0) {
             fs.push(f);
-        } else if (f.status.name) {
+        } else if (f.status && f.status.name) {
             // Tell server to remove this upload
             self.publish("bridge/origin/model/fileuploader/post/delete/"+f.status.name, {});
         }

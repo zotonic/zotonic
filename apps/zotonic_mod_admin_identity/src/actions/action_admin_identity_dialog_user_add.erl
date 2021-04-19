@@ -102,6 +102,7 @@ event(#submit{message={user_add, Args}}, Context) ->
                         {error, eacces} ->
                             z_render:growl_error(?__("You are not allowed to create the person page.", Context), Context);
                         _OtherError ->
+                            io:format("~p", [ _CallStack ]),
                             z_render:growl_error(?__("Could not create the user. Sorry.", Context), Context)
                     end
             end;

@@ -667,15 +667,36 @@ split_edges(Props) ->
             (<<"o.", Pred/binary>>, E, {Es, Ps}) ->
                 Es1 = [ {object, Pred, E}  | Es ],
                 {Es1, Ps};
+            (<<"o">>, Map, {Es, Ps}) when is_map(Map) ->
+                Es1 = split_edges_map(object, Map, Es),
+                {Es1, Ps};
+            (<<"s">>, Map, {Es, Ps}) when is_map(Map) ->
+                Es1 = split_edges_map(subject, Map, Es),
+                {Es1, Ps};
             (K, V, {Es, Ps}) ->
                 {Es, Ps#{ K => V }}
         end,
         {[], #{}},
         Props).
 
-insert_edges({ok, Id, Res}, Edges, Context) ->
-    lists:map(
+split_edges_map(What, Map, Acc) ->
+    maps:fold(
         fun
+            (Pred, IdOrIds, PAcc) ->
+                [ {What, Pred, IdOrIds} | PAcc ]
+        end,
+        Acc,
+        Map).
+
+insert_edges({ok, Id, Res}, Edges, Context) ->
+    lists:foreach(
+        fun
+            ({_ ,<<>>, _}) ->
+                ok;
+            ({_ ,undefined, _}) ->
+                ok;
+            ({_ ,_, undefined}) ->
+                ok;
             ({object, Pred, Es}) when is_list(Es) ->
                 lists:map(
                     fun(E) -> m_edge:insert(Id, Pred, E, Context) end,
