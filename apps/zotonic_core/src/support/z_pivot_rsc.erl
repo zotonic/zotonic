@@ -212,7 +212,7 @@ insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) 
                 Ctx),
             New = case OldTask of
                 {OldProps, OldDue} ->
-                    OldArgs = maps:get(<<"args">>, OldProps),
+                    OldArgs = get_args(OldProps),
                     ArgsFun(OldDue, OldArgs, Due, Ctx);
                 undefined ->
                     ArgsFun(undefined, undefined, Due, Ctx)
