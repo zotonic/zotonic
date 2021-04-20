@@ -86,6 +86,13 @@ model.present = function(data) {
                         model.auth.user_id = msg.payload;
                     });
             }
+        } else {
+            model.state_change('auth_unknown');
+
+            self.call("model/sessionStorage/get/auth-user-id")
+                .then((msg) => {
+                    model.auth.user_id = msg.payload;
+                });
         }
 
         // Handle auth changes forced by changes of the session storage
