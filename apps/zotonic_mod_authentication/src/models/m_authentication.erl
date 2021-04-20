@@ -60,6 +60,20 @@ m_get([ <<"is_one_step_logon">> | Rest ], _Msg, Context) ->
 m_get([ <<"is_supported">>, <<"rememberme">> | Rest ], _Msg, Context) ->
     IsSupported = z_db:has_connection(Context),
     {ok, {IsSupported, Rest}};
+m_get([ <<"status">> | Rest ], _Msg, Context) ->
+    % Status similar to the one returned by controller_authentication
+    Status = #{
+        <<"status">> => <<"ok">>,
+        <<"is_authenticated">> => z_auth:is_auth(Context),
+        <<"user_id">> => z_acl:user(Context),
+        <<"username">> => m_identity:get_username(Context),
+        <<"preferences">> => #{
+            <<"language">> => z_context:language(Context),
+            <<"timezone">> => z_context:tz(Context)
+        },
+        <<"options">> => z_context:get(auth_options, Context, #{})
+    },
+    {ok, {Status, Rest}};
 m_get(Vs, _Msg, _Context) ->
     lager:debug("Unknown ~p lookup: ~p", [?MODULE, Vs]),
     {error, unknown_path}.

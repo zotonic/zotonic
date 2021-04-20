@@ -68,7 +68,26 @@ var model = {
 model.present = function(data) {
     let previous_auth_user_id = model.auth.user_id;
 
-    if (state.start(model)) {
+    if (data.is_start && state.start(model)) {
+        if (data.auth) {
+            model.auth = data.auth;
+
+            if (model.auth.user_id) {
+                // User is known - broadcast this user
+                model.state_change('auth_known');
+            } else {
+                // User might be known after a refresh
+                // This because on initial load the SameSite=Strict session
+                // cookie is not passed to the page controller.
+                model.state_change('auth_unknown');
+
+                self.call("model/sessionStorage/get/auth-user-id")
+                    .then((msg) => {
+                        model.auth.user_id = msg.payload;
+                    });
+            }
+        }
+
         // Handle auth changes forced by changes of the session storage
         self.subscribe("model/sessionStorage/event/auth-user-id", function(msg) {
             actions.setUserId({ user_id: msg.payload });
@@ -126,6 +145,12 @@ model.present = function(data) {
         });
 
         self.publish("model/auth/event/ping", "pong", { retain: true });
+
+        // Initial check on user status
+        fetchWithUA({ cmd: "status" })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authResponse(body); })
+        .catch((e) => { actions.fetchError(); });
     }
 
     if ("is_fetch_error" in data) {
@@ -133,7 +158,7 @@ model.present = function(data) {
         model.next_check = Math.floor(Math.random() * AUTH_CHECK_PERIOD);
     }
 
-    if (state.start(model) || ("user_id" in data && data.user_id !== model.auth.user_id)) {
+    if ("user_id" in data && data.user_id !== model.auth.user_id) {
         model.state_change('auth_unknown');
 
         // Refresh the current auth status by probing the server
@@ -457,12 +482,12 @@ var actions = {} ;
 // On startup we continue with the previous page user-id
 // todo: check the returned html for any included user-id (from the cookie
 //       when generating the page, should be data attribute in html tag).
-actions.start = function() {
-    self.call("model/sessionStorage/get/auth-user-id")
-        .then((msg) => {
-            model.auth.user_id = msg.payload;
-            model.present({});
-        });
+actions.start = function(init_args) {
+    let data = init_args || {};
+    model.present({
+        is_start: true,
+        auth: data.auth
+    });
 }
 
 actions.setUserId = function(data) {
@@ -628,6 +653,6 @@ actions.resetPassword = function(msg) {
 self.connect({
     depends: [ "model/sessionStorage", "model/localStorage", "model/sessionId" ],
     provides: [ "model/auth" ]
-}).then( function() {
-    actions.start();
+}).then( function(args) {
+    actions.start(args[0]);
 });

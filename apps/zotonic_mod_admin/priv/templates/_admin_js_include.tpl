@@ -40,7 +40,7 @@
 
 {% all include "_admin_lib_js.tpl" %}
 
-{% worker name="auth" src="js/zotonic.auth.worker.js" %}
+{% worker name="auth" src="js/zotonic.auth.worker.js" args=%{  auth: m.authentication.status  } %}
 
 <script type="text/javascript">
 $(function()

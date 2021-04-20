@@ -38,8 +38,8 @@ render(Params, _Vars, Context) ->
             BaseUrl = z_lib_include:url([ Base ], Context1),
             Name = proplists:get_value(name, Params, <<>>),
             ArgsJSON = case proplists:get_value(args, Params) of
-                undefined -> <<"[]">>;
-                Args -> z_json:encode([ Args ])
+                undefined -> <<"{}">>;
+                Args -> z_json:encode(Args)
             end,
             Spawn = [
                 <<"cotonic.spawn_named(\"">>,

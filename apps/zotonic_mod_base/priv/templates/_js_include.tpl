@@ -23,5 +23,5 @@
 	});
 </script>
 
-{% worker name="auth" src="js/zotonic.auth.worker.js" %}
+{% worker name="auth" src="js/zotonic.auth.worker.js" args=%{  auth: m.authentication.status  } %}
 
