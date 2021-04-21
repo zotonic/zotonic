@@ -85,7 +85,7 @@
                             <input type="text" id="seo_bing-webmaster_verify" name="seo_bing-webmaster_verify" value="{{ m.config.seo_bing.webmaster_verify.value|escape }}" class="form-control" placeholder="{_ Bing Webmaster validation id _}">
                             <label class="control-label" for="seo_bing-webmaster_verify">{_ Bing Webmaster validation id _}</label>
                             <p class="help-block">
-                                {_ Enter here the verification code for _} <a href="https://ssl.bing.com/webmaster/home/mysites">{_ Bing Webmaster _}</a>.<br/>
+                                {_ Enter here the verification code for _} <a href="https://www.bing.com/webmasters">{_ Bing Webmaster _}</a>.<br/>
                                 {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>8103A84C247E45185F39A97C50D40731</strong>.
                             </p>
                         </div>
