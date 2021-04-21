@@ -16,10 +16,12 @@
 #}
 {% with
     "<span class='arrow up'></span>",
-    "<span class='arrow down'></span>"
+    "<span class='arrow down'></span>",
+    qsort|default:q.qsort
     as
     up_arrow,
-    down_arrow
+    down_arrow,
+    qsort
 %}
 {% with
     (qsort == field)|if
