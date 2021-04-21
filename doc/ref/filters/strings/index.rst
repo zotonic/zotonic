@@ -25,6 +25,7 @@ Strings
    ../filter_split
    ../filter_stringify
    ../filter_to_name
+   ../filter_toc
    ../filter_tokens
    ../filter_trim
    ../filter_truncate
