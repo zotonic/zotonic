@@ -23,7 +23,7 @@
                     {% else %}
                         <meta name="keywords" content="{% for oid in id.o.subject %}{{ oid.title }}, {% endfor %}{{ keywords|escape }}">
                     {% endif %}
-                    <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:(description|escape) }}">
+                    <meta name="description" content="{{ id.seo_desc|default:(id|summary)|default:(description|escape)|truncate:150 }}">
                 {% endwith %}
             {% endif %}
         {% else %}
@@ -31,7 +31,7 @@
                 <meta name="keywords" content="{{ keywords|escape }}">
             {% endif %}
             {% if description %}
-                <meta name="description" content="{{ description|escape }}">
+                <meta name="description" content="{{ description|escape|truncate:150 }}">
             {% endif %}
         {% endif %}
     {% endwith %}
