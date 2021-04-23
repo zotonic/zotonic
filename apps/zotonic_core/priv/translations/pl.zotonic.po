@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 08:16\n"
+"PO-Revision-Date: 2021-04-23 20:12\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -4642,6 +4642,10 @@ msgstr "Narzędzia programisty - Obserwatorzy"
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "Wyłącz buforowanie za pomocą tagu <tt>{% cache %}</tt>."
 
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+msgid "Disabled database query tracing"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
 msgstr "Wyślij reguły debugowania"
@@ -4661,6 +4665,10 @@ msgstr "Włącz <tt>mod_server_storage</tt> aby używać śledzenia zapytań do 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Włącz interfejs API, aby ponownie skompilować i zbudować Zotonic"
+
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+msgid "Enabled database query tracing"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5935,8 +5943,8 @@ msgid "Enter the e-mail address of the recipient. The name of the recipient is o
 msgstr "Wprowadź adres e-mail odbiorcy. Nazwa odbiorcy jest opcjonalna."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
-msgid "Externally managed list &mdash; no (un)subscribe links"
-msgstr "Lista zarządzana zewnętrznie &mdash; brak linków anulowania subskrypcji"
+msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
