@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-19 08:58\n"
+"PO-Revision-Date: 2021-04-23 08:16\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -107,7 +107,7 @@ msgstr "Grupo de usuarios ACL"
 msgid "Access control"
 msgstr "Control de acceso"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
 msgid "Access control rules"
 msgstr "Reglas de acceso de control"
 
@@ -221,7 +221,7 @@ msgstr "Administradores del grupo de colaboración"
 msgid "Collaboration group members"
 msgstr "Miembros del grupo de colaboración"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:542
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:539
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "Grupos de colaboración"
@@ -606,7 +606,7 @@ msgstr "Usar las reglas publicadas"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Usar la siguiente URL para probar las reglas de control de acceso antes de publicar."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:537
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:534
 msgid "User groups"
 msgstr "Grupos de usuarios"
 
@@ -2641,7 +2641,7 @@ msgstr "Has click en \"eliminar\" para remover algún nombre de usuario/contrase
 msgid "Confirm user deletion"
 msgstr "Confirmar la eliminación del usuario"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:105
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:106
 msgid "Could not create the user. Sorry."
 msgstr "No se pudo crear el usuario. Lo sentimos."
 
@@ -2741,7 +2741,7 @@ msgstr "No hay direcciones de correo electrónico verificadas. Por favor, añada
 msgid "One moment, please..."
 msgstr "Un momento por favor..."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:110
 msgid "Only administrators can add users."
 msgstr "Solo los administradores pueden añadir usuarios."
 
