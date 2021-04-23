@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 08:16\n"
+"PO-Revision-Date: 2021-04-23 20:12\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -4642,6 +4642,10 @@ msgstr "发展-观察员"
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "通过 <tt>{% cache %}</tt> 标签禁用缓存。"
 
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+msgid "Disabled database query tracing"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
 msgstr "调度规则调试"
@@ -4661,6 +4665,10 @@ msgstr "启用 <tt>mod_server_storage</tt> 来使用数据库查询跟踪。"
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
 msgstr "启用API来重新编译和构建Zotonic。"
+
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+msgid "Enabled database query tracing"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5935,8 +5943,8 @@ msgid "Enter the e-mail address of the recipient. The name of the recipient is o
 msgstr "输入收件人的 e-mail 地址，收件人姓名是可选的。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
-msgid "Externally managed list &mdash; no (un)subscribe links"
-msgstr "外部管理的列表 &mdash; 没有订阅（取消订阅）链接"
+msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
