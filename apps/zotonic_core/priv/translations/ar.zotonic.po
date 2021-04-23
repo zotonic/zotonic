@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 08:16\n"
+"PO-Revision-Date: 2021-04-23 20:12\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -4642,6 +4642,10 @@ msgstr "التنمية - مراقبون"
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "تعطيل التخزين المؤقت بواسطة علامة <tt>{% cache %}</tt>."
 
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+msgid "Disabled database query tracing"
+msgstr "تعطيل تتبع استعلام قاعدة البيانات"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
 msgstr "تصحيح أخطاء قاعدة الإرسال"
@@ -4661,6 +4665,10 @@ msgstr "قم بتمكين <tt>mod_server_storage</tt> لاستخدام تتبع 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
 msgstr "تمكين API لإعادة ترجمة وبناء Zotonic"
+
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+msgid "Enabled database query tracing"
+msgstr "تمكين تتبع استعلام قاعدة البيانات"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5935,8 +5943,8 @@ msgid "Enter the e-mail address of the recipient. The name of the recipient is o
 msgstr "أدخل عنوان البريد الإلكتروني للمستلم. اسم المستلم اختياري."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
-msgid "Externally managed list &mdash; no (un)subscribe links"
-msgstr "القائمة المدارة خارجيًا &mdash; لا (un) روابط الاشتراك"
+msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
+msgstr "قائمة مُدارة خارجيًا &mdash; لا توجد روابط لإلغاء الاشتراك / الاشتراك"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
