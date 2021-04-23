@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 08:16\n"
+"PO-Revision-Date: 2021-04-23 20:12\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -4642,6 +4642,10 @@ msgstr "การพัฒนา - ผู้สังเกตการณ์"
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "ปิดใช้งานการแคชโดยแท็ก <tt>{% cache %}</tt>"
 
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+msgid "Disabled database query tracing"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
 msgstr "ส่งการแก้ไขข้อบกพร่องของกฎ"
@@ -4661,6 +4665,10 @@ msgstr "เปิดใช้งาน <tt>mod_server_storage</tt> เพื่�
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
 msgstr "เปิดใช้งาน API เพื่อคอมไพล์ใหม่และสร้าง Zotonic"
+
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+msgid "Enabled database query tracing"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5935,8 +5943,8 @@ msgid "Enter the e-mail address of the recipient. The name of the recipient is o
 msgstr "ป้อนที่อยู่อีเมลของผู้รับ ชื่อของผู้รับเป็นทางเลือก"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
-msgid "Externally managed list &mdash; no (un)subscribe links"
-msgstr "รายการที่จัดการภายนอก &mdash; ไม่มี (ยกเลิก) ลิงก์สมัครสมาชิก"
+msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
