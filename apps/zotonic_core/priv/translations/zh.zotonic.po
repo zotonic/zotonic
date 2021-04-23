@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-19 08:59\n"
+"PO-Revision-Date: 2021-04-23 08:16\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -107,7 +107,7 @@ msgstr "ACL 用户群"
 msgid "Access control"
 msgstr "访问控制"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
 msgid "Access control rules"
 msgstr "通过规则控制"
 
@@ -221,7 +221,7 @@ msgstr "合作团队经理"
 msgid "Collaboration group members"
 msgstr "合作团队成员"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:542
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:539
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "合作团队"
@@ -606,7 +606,7 @@ msgstr "使用公布的规则"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "在发布访问控制规则之前，请使用以下URL测试这些规则。"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:537
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:534
 msgid "User groups"
 msgstr "用户组"
 
@@ -2641,7 +2641,7 @@ msgstr "使用“删除”来删除人员的用户名/密码，这样人员就�
 msgid "Confirm user deletion"
 msgstr "确认用户删除"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:105
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:106
 msgid "Could not create the user. Sorry."
 msgstr "无法创建用户。"
 
@@ -2741,7 +2741,7 @@ msgstr "没有经过验证的电子邮件地址。请在下面添加一个。"
 msgid "One moment, please..."
 msgstr "请等一下..."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:110
 msgid "Only administrators can add users."
 msgstr "只有管理员可以添加用户。"
 
