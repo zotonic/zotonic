@@ -2029,7 +2029,7 @@ msgid "Upload a file from your computer."
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload file"
 msgstr ""
 
@@ -2205,7 +2205,7 @@ msgstr ""
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:111
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "delete"
 msgstr ""
 
@@ -4633,7 +4633,7 @@ msgid "Comments"
 msgstr ""
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:72
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
 msgid "Email"
 msgstr ""
 
@@ -6054,15 +6054,15 @@ msgid ""
 "mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24
 msgid "Add a new recipient."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
 msgid "Add recipient"
 msgstr ""
 
@@ -6111,11 +6111,11 @@ msgstr ""
 msgid "Cancel mailing"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:76
 msgid "Check to activate the e-mail address."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Clear"
 msgstr ""
 
@@ -6133,11 +6133,11 @@ msgstr ""
 msgid "Click to view log entries"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine mailing list"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine…"
 msgstr ""
 
@@ -6170,7 +6170,7 @@ msgstr ""
 msgid "Delete all current recipients before adding the file."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Delete all recipients from this list?"
 msgstr ""
 
@@ -6184,15 +6184,15 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download all"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download list of all active recipients."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Downloading active recipients list. Check your download window."
 msgstr ""
 
@@ -6212,7 +6212,7 @@ msgstr ""
 msgid "E-mail this page"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
 msgid "Edit recipient"
 msgstr ""
 
@@ -6300,7 +6300,7 @@ msgstr ""
 msgid "Mailings are sent to:"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:38
 msgid "Matched via Query"
 msgstr ""
 
@@ -6312,11 +6312,7 @@ msgstr ""
 msgid "No items found"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:95
-msgid "No recipients"
-msgstr ""
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:33
 msgid "Number of recipients on this list:"
 msgstr ""
 
@@ -6393,7 +6389,7 @@ msgstr ""
 msgid "Recipient deleted."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Recipients"
 msgstr ""
 
@@ -6407,16 +6403,12 @@ msgstr ""
 msgid "Recipients for"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Remove this recipient. No undo possible."
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23
 msgid "Scheduled"
-msgstr ""
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "See the"
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
@@ -6528,7 +6520,7 @@ msgstr ""
 msgid "Subscribe to"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:40
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Subscriber Edges"
 msgstr ""
 
@@ -6650,7 +6642,7 @@ msgid ""
 "per line. The file’s character set must be utf-8."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload a list of recipients."
 msgstr ""
 
@@ -6788,7 +6780,7 @@ msgstr ""
 msgid "or copy and paste the address below in your browser."
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:54
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
 msgid "pages"
 msgstr ""
 
@@ -6800,7 +6792,7 @@ msgstr ""
 msgid "scheduled"
 msgstr ""
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:45
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:42
 msgid "see below"
 msgstr ""
 
@@ -6810,10 +6802,6 @@ msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
 msgid "send to"
-msgstr ""
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "subscribing persons &raquo;"
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
