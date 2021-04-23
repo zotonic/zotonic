@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-01 15:11\n"
+"PO-Revision-Date: 2021-04-23 20:18\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -107,7 +107,7 @@ msgstr "ACL-användargrupp"
 msgid "Access control"
 msgstr "Åtkomstkontroll"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
 msgid "Access control rules"
 msgstr "Regler för åtkomstkontroll"
 
@@ -221,7 +221,7 @@ msgstr "Samarbetsgruppschefer"
 msgid "Collaboration group members"
 msgstr "Samarbetsgruppsmedlemmar"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:542
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:539
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "Samarbetsgrupper"
@@ -274,7 +274,7 @@ msgstr "Ange vem som kan se eller redigera den här sidan."
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:51./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:73./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:94
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:159
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "Ta bort"
@@ -606,7 +606,7 @@ msgstr "Använd publicerade regler"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Använd följande URL för att testa åtkomst regler för kontroll innan du publicerar dem."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:537
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:534
 msgid "User groups"
 msgstr "Användargrupper"
 
@@ -1003,7 +1003,7 @@ msgstr "Instrumentpanel"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:531./apps/zotonic_mod_survey/src/models/m_survey.erl:534
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:530./apps/zotonic_mod_survey/src/models/m_survey.erl:533
 msgid "Date"
 msgstr "Datum"
 
@@ -1395,7 +1395,7 @@ msgstr "Ändrad:"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:536
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:535
 msgid "Name"
 msgstr "namn"
 
@@ -1966,7 +1966,7 @@ msgstr "Ladda upp fil"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
-#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:74
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:75
 msgid "Uploaded"
 msgstr "Uppladdad"
 
@@ -2001,7 +2001,7 @@ msgstr "Giltig för:"
 msgid "View"
 msgstr "Se"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:44./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:48./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Visa alla anslutningar"
 
@@ -2561,7 +2561,7 @@ msgstr "Spara &amp; vy"
 msgid "The page might have been deleted."
 msgstr "Sidan kan ha tagits bort."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr " Det finns ändringar som inte har sparats. Är du säker på att du vill åka utan att spara?"
 
@@ -2569,7 +2569,7 @@ msgstr " Det finns ändringar som inte har sparats. Är du säker på att du vil
 msgid "This page"
 msgstr "Denna sida"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:126
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
 msgid "Yes, discard changes"
 msgstr "Ja, kassera ändringar"
 
@@ -2641,7 +2641,7 @@ msgstr "Klicka på \"ta bort\" för att ta bort alla befintliga användarnamn/l�
 msgid "Confirm user deletion"
 msgstr "Bekräfta borttagning av användare"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:105
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:106
 msgid "Could not create the user. Sorry."
 msgstr "Det gick inte att skapa användaren. Förlåt."
 
@@ -2695,7 +2695,7 @@ msgstr "Hjälp om användaruppgifter"
 msgid "Hi"
 msgstr "Hej"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:23./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:34
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:32
 msgid "Home"
 msgstr "Hem"
 
@@ -2715,7 +2715,7 @@ msgstr "Logga in som den här användaren"
 msgid "Make a new user"
 msgstr "Skapa en ny användare"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:24
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:22
 msgid "My page"
 msgstr "Min sida"
 
@@ -2736,12 +2736,12 @@ msgstr "Inga användare hittades."
 msgid "No verified e-mail addresses. Please add one below."
 msgstr "Inga verifierade e-post adresser. Vänligen lägg till en nedan."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:14
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
 msgid "One moment, please..."
 msgstr "Ett ögonblick tack..."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:110
 msgid "Only administrators can add users."
 msgstr "Endast administratörer kan lägga till användare."
 
@@ -2785,7 +2785,7 @@ msgstr "Skickat verifierings-e-post."
 msgid "Set username / password"
 msgstr "Ange användarnamn / lösenord"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:41
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:57
 msgid "Sorry"
 msgstr "Förlåt"
@@ -2799,7 +2799,7 @@ msgstr "Ledsen, det önskade användarnamnet är redan i användning. Vänligen 
 msgid "Sorry, you can not remove your own username."
 msgstr "Du kan tyvärr inte ta bort ditt eget användarnamn."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
@@ -2854,7 +2854,7 @@ msgstr "Denna person är också en användare."
 msgid "This person is not yet a user."
 msgstr "Denna person är ännu inte användare."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:31./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:43
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:29
 msgid "This verification key is unknown."
 msgstr "Denna verifieringsnyckel är okänd."
 
@@ -2919,7 +2919,7 @@ msgstr "Kontrollera"
 msgid "Verify Address |"
 msgstr "Verifiera adress |"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:10
 msgid "Verifying..."
 msgstr "Verifierar ..."
 
@@ -2964,11 +2964,11 @@ msgstr "Du fick det här e-postmeddelandet eftersom du verifierade din e-postadr
 msgid "Your account name is"
 msgstr "Ditt kontonamn är"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 msgid "Your address is now verified."
 msgstr "Din adress har nu verifierats."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 msgid "Your e-mail address is now verified."
 msgstr "Din e-postadress har nu verifierats."
 
@@ -3209,7 +3209,7 @@ msgid "All page connections"
 msgstr "Alla sidanslutningar"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:156
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:246
 msgid "Are you sure you want to delete"
 msgstr "Är du säker att du vill radera"
 
@@ -3652,7 +3652,7 @@ msgstr "Ange din e-postadress för att få instruktioner om hur du återställer
 msgid "Error"
 msgstr "Fel"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:237
 msgid "External Services"
 msgstr "Externa tjänster"
 
@@ -3999,6 +3999,7 @@ msgid "external service"
 msgstr "extern tjänst"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "eller"
@@ -4217,6 +4218,10 @@ msgstr "Argument"
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
+msgid "Connecting..."
+msgstr "Ansluter..."
+
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
 msgstr "Excel-arbetsbok"
@@ -4253,10 +4258,6 @@ msgstr "JSON"
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:21
 msgid "JSON-LD"
 msgstr "JSON-LD"
-
-#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
-msgid "No connection with server"
-msgstr "Ingen anslutning till servern"
 
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
@@ -4641,6 +4642,10 @@ msgstr "Utveckling - observatörer"
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "Inaktivera cachning med <tt>{% cache %}</tt> taggen."
 
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+msgid "Disabled database query tracing"
+msgstr "Inaktiverad spårning av databasfrågor"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
 msgstr "Felsökning av sändningsregler"
@@ -4660,6 +4665,10 @@ msgstr "Aktivera <tt>mod_server_storage</tt> att använda spårning av databasfr
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Aktivera API för att kompilera om och bygga Zotonic"
+
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+msgid "Enabled database query tracing"
+msgstr "Aktiverad spårning av databasfrågor"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5322,7 +5331,7 @@ msgstr "Du får inte ändra dessa inställningar."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic kan lagra uppladdade och storleksändrade filer i molnet. Här kan du konfigurera plats- och åtkomstnycklar för molntjänsten."
 
-#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:77
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:78
 msgid "Could not upload"
 msgstr "Det gick inte att ladda upp"
 
@@ -5750,7 +5759,7 @@ msgid "User"
 msgstr "Användare"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:535
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:534
 msgid "User Id"
 msgstr "Användar ID"
 
@@ -5934,8 +5943,8 @@ msgid "Enter the e-mail address of the recipient. The name of the recipient is o
 msgstr "Ange mottagarens e-postadress. Mottagarens namn är valfritt."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
-msgid "Externally managed list &mdash; no (un)subscribe links"
-msgstr "Externt hanterad lista &mdash; inga (av) prenumerationslänkar"
+msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
+msgstr "Extern hanterad lista &mdash; inga avanmälnings- / prenumerationslänkar"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
@@ -6542,7 +6551,7 @@ msgstr "Kopiera"
 
 #: apps/zotonic_mod_menu/src/mod_menu.erl:141
 msgid "Copy of:"
-msgstr ""
+msgstr "Kopia av:"
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:48
 msgid "Create an (optionally) nested navigation menu for this site."
@@ -6585,11 +6594,11 @@ msgstr "Avlägsna"
 msgid "Sorry, can’t copy that page."
 msgstr "Jag kan tyvärr inte kopiera den sidan."
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:248
 msgid "THIS CAN NOT BE UNDONE!"
 msgstr "DETTA KAN INTE GÖRAS OGJORT!"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:207
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:153
 msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr "Det här objektet finns redan i hierarkin. Varje artikel kan bara förekomma en gång."
 
@@ -6598,7 +6607,7 @@ msgstr "Det här objektet finns redan i hierarkin. Varje artikel kan bara förek
 msgid "Unknown category"
 msgstr "Okänd kategori"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:248
 msgid "and all indented items below it?"
 msgstr "och alla indragna föremål under det?"
 
@@ -7376,7 +7385,7 @@ msgstr "Fortsätta"
 msgid "Country select"
 msgstr "Välj land"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:841
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:840
 msgid "Created"
 msgstr "Skapad"
 
@@ -7649,11 +7658,11 @@ msgstr "Sidbrytning"
 msgid "Page jump condition"
 msgstr "Sidhoppningsvillkor"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:542
+#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:541
 msgid "Passed"
 msgstr "passerade"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:544
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Percent"
 msgstr "Procent"
 
@@ -7749,7 +7758,7 @@ msgstr "Resultat från respondenten"
 msgid "Saved"
 msgstr "Sparad"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:543
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:542
 msgid "Score"
 msgstr "Göra"
 

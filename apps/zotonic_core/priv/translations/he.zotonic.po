@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-01 15:12\n"
+"PO-Revision-Date: 2021-04-23 20:12\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -107,7 +107,7 @@ msgstr "קבוצת משתמשים של ACL"
 msgid "Access control"
 msgstr "בקרת גישה"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
 msgid "Access control rules"
 msgstr "כללי בקרת גישה"
 
@@ -221,7 +221,7 @@ msgstr "מנהלי קבוצות שיתוף פעולה"
 msgid "Collaboration group members"
 msgstr "חברי קבוצת שיתוף פעולה"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:542
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:539
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:47
 msgid "Collaboration groups"
 msgstr "קבוצות שיתוף פעולה"
@@ -274,7 +274,7 @@ msgstr "הגדר מי יכול לראות או לערוך דף זה."
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:51./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:73./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:94
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:159
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:30./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/src/mod_survey.erl:102
 msgid "Delete"
 msgstr "לִמְחוֹק"
@@ -606,7 +606,7 @@ msgstr "השתמש בכללים שפורסמו"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "השתמש בכתובת האתר הבאה כדי לבדוק את כללי בקרת הגישה לפני פרסום אותם."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:537
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:534
 msgid "User groups"
 msgstr "קבוצות משתמש"
 
@@ -1003,7 +1003,7 @@ msgstr "לוּחַ מַחווָנִים"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:531./apps/zotonic_mod_survey/src/models/m_survey.erl:534
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:530./apps/zotonic_mod_survey/src/models/m_survey.erl:533
 msgid "Date"
 msgstr "תַאֲרִיך"
 
@@ -1395,7 +1395,7 @@ msgstr "שונה:"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:536
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:535
 msgid "Name"
 msgstr "שֵׁם"
 
@@ -1966,7 +1966,7 @@ msgstr "העלה קובץ"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: apps/zotonic_mod_base_site/priv/templates/_media_info.tpl:20
-#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:74
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:75
 msgid "Uploaded"
 msgstr "הועלה"
 
@@ -2001,7 +2001,7 @@ msgstr "תקף ל:"
 msgid "View"
 msgstr "נוף"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:44./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:48./apps/zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "צפה בכל החיבורים"
 
@@ -2561,7 +2561,7 @@ msgstr "שמור &amp; תצוגה"
 msgid "The page might have been deleted."
 msgstr "ייתכן שהדף נמחק."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
 msgid " There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr " יש שינויים שלא נשמרו. האם אתה בטוח שאתה רוצה לעזוב בלי לשמור?"
 
@@ -2569,7 +2569,7 @@ msgstr " יש שינויים שלא נשמרו. האם אתה בטוח שאתה 
 msgid "This page"
 msgstr "הדף הזה"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:126
+#: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:128
 msgid "Yes, discard changes"
 msgstr "כן, מחק שינויים"
 
@@ -2641,7 +2641,7 @@ msgstr "לחץ על \"מחק\" כדי להסיר כל שם משתמש / סיסמ
 msgid "Confirm user deletion"
 msgstr "אשר את מחיקת המשתמש"
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:105
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:106
 msgid "Could not create the user. Sorry."
 msgstr "לא ניתן היה ליצור את המשתמש. מצטער."
 
@@ -2695,7 +2695,7 @@ msgstr "עזרה בנושא אישורי משתמש"
 msgid "Hi"
 msgstr "היי"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:23./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:34
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:21./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:32
 msgid "Home"
 msgstr "בית"
 
@@ -2715,7 +2715,7 @@ msgstr "התחבר כמשתמש זה"
 msgid "Make a new user"
 msgstr "הפוך משתמש חדש"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:24
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:22
 msgid "My page"
 msgstr "העמוד שלי"
 
@@ -2736,12 +2736,12 @@ msgstr "לא נמצאו משתמשים."
 msgid "No verified e-mail addresses. Please add one below."
 msgstr "אין כתובות דואר אלקטרוני מאומתות. אנא הוסף אחד למטה."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:14
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
 msgid "One moment, please..."
 msgstr "רגע אחד בבקשה..."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:46./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:110
 msgid "Only administrators can add users."
 msgstr "רק מנהלי מערכת יכולים להוסיף משתמשים."
 
@@ -2785,7 +2785,7 @@ msgstr "נשלח דואר אלקטרוני לאימות."
 msgid "Set username / password"
 msgstr "הגדר שם משתמש / סיסמה"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:29./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:41
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:57
 msgid "Sorry"
 msgstr "מצטער"
@@ -2799,7 +2799,7 @@ msgstr "מצטערים, שם משתמש זה כבר בשימוש. אנא נסה 
 msgid "Sorry, you can not remove your own username."
 msgstr "מצטערים, אינך יכול להסיר את שם המשתמש שלך."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:20
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
@@ -2854,7 +2854,7 @@ msgstr "אדם זה הוא גם משתמש."
 msgid "This person is not yet a user."
 msgstr "אדם זה עדיין לא משתמש."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:31./apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:43
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:29
 msgid "This verification key is unknown."
 msgstr "מפתח אימות זה אינו ידוע."
 
@@ -2919,7 +2919,7 @@ msgstr "תאשר"
 msgid "Verify Address |"
 msgstr "אמת כתובת |"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:10
 msgid "Verifying..."
 msgstr "מאמת ..."
 
@@ -2964,11 +2964,11 @@ msgstr "קיבלת דוא\"ל זה כי אימתת את כתובת הדוא\"ל 
 msgid "Your account name is"
 msgstr "שם החשבון שלך הוא"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 msgid "Your address is now verified."
 msgstr "כתובתך אומתה כעת."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 msgid "Your e-mail address is now verified."
 msgstr "כתובת הדואר האלקטרוני שלך אומתה כעת."
 
@@ -3209,7 +3209,7 @@ msgid "All page connections"
 msgstr "כל חיבורי העמודים"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:156
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:246
 msgid "Are you sure you want to delete"
 msgstr "אתה בטוח שאתה רוצה למחוק"
 
@@ -3652,7 +3652,7 @@ msgstr "הזן את כתובת הדוא\"ל שלך כדי לקבל הוראות 
 msgid "Error"
 msgstr "שְׁגִיאָה"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:247
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:237
 msgid "External Services"
 msgstr "שירותים חיצוניים"
 
@@ -3999,6 +3999,7 @@ msgid "external service"
 msgstr "שירות חיצוני"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "אוֹ"
@@ -4217,6 +4218,10 @@ msgstr "ויכוחים"
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
+msgid "Connecting..."
+msgstr "מְקַשֵׁר..."
+
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
 msgid "Excel Workbook"
 msgstr "חוברת עבודה של Excel"
@@ -4253,10 +4258,6 @@ msgstr "ג'סון"
 #: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:21
 msgid "JSON-LD"
 msgstr "JSON-LD"
-
-#: apps/zotonic_mod_base/priv/templates/_bridge_warning.tpl:3
-msgid "No connection with server"
-msgstr "אין קשר עם השרת"
 
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
@@ -4641,6 +4642,10 @@ msgstr "פיתוח - צופים"
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "השבת מטמון באמצעות התג <tt>{% cache %}</tt>."
 
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+msgid "Disabled database query tracing"
+msgstr "מעקב אחר שאילתת מסד נתונים מושבת"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
 msgstr "ניפוי ניפוי כלל"
@@ -4660,6 +4665,10 @@ msgstr "אפשר <tt>mod_server_storage</tt> כדי להשתמש במעקב אח
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
 msgstr "אפשר ממשק API להרכיב מחדש ולבנות את Zotonic"
+
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+msgid "Enabled database query tracing"
+msgstr "מעקב אחר שאילתת מסד נתונים מופעל"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5322,7 +5331,7 @@ msgstr "אינך רשאי לשנות הגדרות אלה."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic יכולה לאחסן קבצים שהועלו ושינוי גודל בענן. כאן תוכלו להגדיר את מפתחות המיקום והגישה לשירות הענן."
 
-#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:77
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:78
 msgid "Could not upload"
 msgstr "לא ניתן היה להעלות"
 
@@ -5750,7 +5759,7 @@ msgid "User"
 msgstr "מִשׁתַמֵשׁ"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:41./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:535
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:534
 msgid "User Id"
 msgstr "תעודת זהות של משתמש"
 
@@ -5934,8 +5943,8 @@ msgid "Enter the e-mail address of the recipient. The name of the recipient is o
 msgstr "הזן את כתובת הדואר האלקטרוני של הנמען. שם הנמען הוא אופציונלי."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
-msgid "Externally managed list &mdash; no (un)subscribe links"
-msgstr "רשימה מנוהלת חיצונית &mdash; ללא קישורי מנוי (ללא)"
+msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
+msgstr "רשימה מנוהלת חיצונית &mdash; ללא קישורי ביטול מנוי / מנוי"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
@@ -6585,11 +6594,11 @@ msgstr "לְהַסִיר"
 msgid "Sorry, can’t copy that page."
 msgstr "מצטער, לא יכול להעתיק את העמוד הזה."
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:248
 msgid "THIS CAN NOT BE UNDONE!"
 msgstr "אי אפשר לבטל את זה!"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:207
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:153
 msgid "This item is already in the hierarchy. Every item can only occur once."
 msgstr "פריט זה כבר נמצא בהיררכיה. כל פריט יכול להתרחש רק פעם אחת."
 
@@ -6598,7 +6607,7 @@ msgstr "פריט זה כבר נמצא בהיררכיה. כל פריט יכול �
 msgid "Unknown category"
 msgstr "קטגוריה לא ידועה"
 
-#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:158
+#: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:248
 msgid "and all indented items below it?"
 msgstr "וכל הפריטים המוטעים מתחתיה?"
 
@@ -7376,7 +7385,7 @@ msgstr "לְהַמשִׁיך"
 msgid "Country select"
 msgstr "בחר מדינה"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:841
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:840
 msgid "Created"
 msgstr "נוצר"
 
@@ -7649,11 +7658,11 @@ msgstr "מעבר דף"
 msgid "Page jump condition"
 msgstr "מצב קפיצה לדף"
 
-#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:542
+#: apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:15./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:541
 msgid "Passed"
 msgstr "עבר"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:544
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:543
 msgid "Percent"
 msgstr "אָחוּז"
 
@@ -7749,7 +7758,7 @@ msgstr "תוצאות מהמשיבה"
 msgid "Saved"
 msgstr "שמור"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:543
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:542
 msgid "Score"
 msgstr "ציון"
 
