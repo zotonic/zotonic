@@ -65,7 +65,7 @@ email_domain(Context) ->
 ensure_domain(Email, Context) when is_binary(Email) ->
     case binary:match(Email, <<"@">>) of
         {_,_} -> Email;
-        nomatch -> <<Email/binary, "$@", (email_domain(Context))/binary>>
+        nomatch -> <<Email/binary, $@, (email_domain(Context))/binary>>
     end;
 ensure_domain(Email, Context) ->
     ensure_domain(z_convert:to_binary(Email), Context).
