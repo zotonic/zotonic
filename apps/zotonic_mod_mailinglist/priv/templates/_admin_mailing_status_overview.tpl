@@ -10,7 +10,7 @@
 <p>{{ m.rsc[id].title }} {_ has never been sent yet. _}</p>
 {% endif %}
 
-<table class="table table-striped">
+<table class="table table-striped admin-table">
     <thead>
         <tr>
 	    <th width="30%">{_ Title _}</th>

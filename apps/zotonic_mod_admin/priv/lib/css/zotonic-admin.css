@@ -103,7 +103,8 @@ ul.media > li.ui-sortable-placeholder {
   margin-top: 76px;
 }
 .admin-container > table,
-.admin-container > form > table {
+.admin-container > form > table,
+.admin-container .admin-table {
   background-color: white;
   border-radius: 10px;
   border-bottom: 0;
