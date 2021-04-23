@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 20:12\n"
+"PO-Revision-Date: 2021-04-23 20:45\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1960,7 +1960,7 @@ msgid "Upload a file from your computer."
 msgstr "העלה קובץ מהמחשב שלך."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload file"
 msgstr "העלה קובץ"
 
@@ -2134,7 +2134,7 @@ msgstr "d MY, H: i"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:111
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "delete"
 msgstr "לִמְחוֹק"
 
@@ -4418,7 +4418,7 @@ msgid "Comments"
 msgstr "הערות"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:72
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
 msgid "Email"
 msgstr "אימייל"
 
@@ -5783,15 +5783,15 @@ msgstr " <em>הסר</em> כל הנמענים מרשימה זו שנמצאים ב
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr "<h3>נמענים</h3><p>כדי להוסיף, להסיר או להציג את מקבלי רשימת התפוצה, לחץ על הקישור \"הצג את כל הנמענים\".</p><h3>שם השולח וכתובת הדואר האלקטרוני</h3><p>ניתן להגדיר את שם השולח וכתובת הדואר האלקטרוני לכל רשימת תפוצה. ברירת מחדל זו היא מקש התצורה <tt>site.email_from</tt>. <i>מתוך</i> הודעות הדואר האלקטרוני שנשלחו יוגדרו לשם וכתובת השולח.</p><h3>העלאה אוטומטית של רשימות נמענים</h3><p>שם הקובץ של dropbox משמש להעלאה אוטומטית של רשימת הנמענים המלאה. שם הקובץ חייב להתאים לשם הקובץ של רשימת הנמענים שהועלה. רשימת הנמענים המלאה תוחלף בנמענים בקובץ dropbox.</p><h3>בקרת גישה</h3><p>כל מי שיכול לערוך רשימת תפוצה רשאי גם לשלוח דף לרשימת התפוצה. כל מי שיכול להציג את רשימת התפוצה רשאי להוסיף כתובת דואר אלקטרוני לרשימת התפוצה.</p>"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
 msgstr "פעולה"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24
 msgid "Add a new recipient."
 msgstr "הוסף נמען חדש."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
 msgid "Add recipient"
 msgstr "הוסף נמען"
 
@@ -5831,11 +5831,11 @@ msgstr "לפני שתקבל דואר נוסף עליך לאשר את המנוי 
 msgid "Cancel mailing"
 msgstr "בטל דיוור"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:76
 msgid "Check to activate the e-mail address."
 msgstr "סמן כדי להפעיל את כתובת הדואר האלקטרוני."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Clear"
 msgstr "ברור"
 
@@ -5851,11 +5851,11 @@ msgstr " לחץ על הלחצן למטה כדי לאשר את מנויך לרש�
 msgid "Click to view log entries"
 msgstr "לחץ לצפייה בערכי יומן"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine mailing list"
 msgstr "שלב רשימת תפוצה"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine…"
 msgstr "שלב…"
 
@@ -5888,7 +5888,7 @@ msgstr "יָקָר"
 msgid "Delete all current recipients before adding the file."
 msgstr "מחק את כל הנמענים הנוכחיים לפני הוספת הקובץ."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Delete all recipients from this list?"
 msgstr "למחוק את כל הנמענים מהרשימה הזו?"
 
@@ -5902,15 +5902,15 @@ msgstr "נמחקה מרשימת התפוצה."
 msgid "Description"
 msgstr "תיאור"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download all"
 msgstr "הורד הכל"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download list of all active recipients."
 msgstr "הורדת רשימת כל הנמענים הפעילים."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Downloading active recipients list. Check your download window."
 msgstr "מוריד את רשימת הנמענים הפעילים. בדוק את חלון ההורדה שלך."
 
@@ -5930,7 +5930,7 @@ msgstr "דף דואר אלקטרוני"
 msgid "E-mail this page"
 msgstr "שלח דף זה בדוא\"ל"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
 msgid "Edit recipient"
 msgstr "ערוך את הנמען"
 
@@ -6019,7 +6019,7 @@ msgstr "סטטוס דיוור"
 msgid "Mailings are sent to:"
 msgstr "דיוור נשלח אל:"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:38
 msgid "Matched via Query"
 msgstr "תואם באמצעות שאילתה"
 
@@ -6031,11 +6031,7 @@ msgstr "רשימת תפוצה חדשה"
 msgid "No items found"
 msgstr "לא נמצאו פריטים"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:95
-msgid "No recipients"
-msgstr "אין נמענים"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:33
 msgid "Number of recipients on this list:"
 msgstr "מספר הנמענים ברשימה זו:"
 
@@ -6112,7 +6108,7 @@ msgstr "קרא עוד באינטרנט"
 msgid "Recipient deleted."
 msgstr "הנמען נמחק."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Recipients"
 msgstr "מקבלי"
 
@@ -6124,17 +6120,13 @@ msgstr "הנמענים רשומים כמייל בלבד (באמצעות טופס
 msgid "Recipients for"
 msgstr "מקבלי"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Remove this recipient. No undo possible."
 msgstr "הסר נמען זה. לא ניתן לבטל."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23
 msgid "Scheduled"
 msgstr "מתוזמן"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "See the"
-msgstr "ראה את"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
 msgid "Select..."
@@ -6240,7 +6232,7 @@ msgstr "הירשם כמנוי"
 msgid "Subscribe to"
 msgstr "הרשם ל"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:40
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Subscriber Edges"
 msgstr "קצוות מנויים"
 
@@ -6340,7 +6332,7 @@ msgstr "עודכן את הנמען."
 msgid "Upload a file with recipients. The file must contain a single e-mail address per line. The file’s character set must be utf-8."
 msgstr "העלה קובץ עם נמענים. על הקובץ להכיל כתובת דואר אלקטרוני אחת בכל שורה. ערכת התווים של הקובץ חייבת להיות utf-8."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload a list of recipients."
 msgstr "העלה רשימת נמענים."
 
@@ -6468,7 +6460,7 @@ msgstr "דף הסטטוס של רשימת התפוצה"
 msgid "or copy and paste the address below in your browser."
 msgstr "או העתק והדבק את הכתובת למטה בדפדפן שלך."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:54
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
 msgid "pages"
 msgstr "עמודים"
 
@@ -6480,7 +6472,7 @@ msgstr "מעובד"
 msgid "scheduled"
 msgstr "מתוזמן"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:45
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:42
 msgid "see below"
 msgstr "ראה למטה"
 
@@ -6491,10 +6483,6 @@ msgstr "שלח דיוור"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
 msgid "send to"
 msgstr "לשלוח ל"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "subscribing persons &raquo;"
-msgstr "אנשים מנויים &raquo;"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "this link to confirm"
