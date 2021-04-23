@@ -6219,7 +6219,7 @@ msgid ""
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
-msgid "Externally managed list &mdash; no (un)subscribe links"
+msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
