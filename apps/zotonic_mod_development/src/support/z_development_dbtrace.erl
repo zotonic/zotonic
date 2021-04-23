@@ -29,9 +29,14 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 event(#postback{ message=dbtrace_toggle }, Context) ->
-    IsTracing = not storage_lookup(Context),
+    IsTracing = z_convert:to_bool( z_context:get_q(<<"triggervalue">>, Context) ),
     set_tracing(IsTracing, Context),
-    Context.
+    case IsTracing of
+        true ->
+            z_render:growl(?__("Enabled database query tracing", Context), Context);
+        false ->
+            z_render:growl(?__("Disabled database query tracing", Context), Context)
+    end.
 
 set_tracing(IsTracing, Context) ->
     storage_store(IsTracing, Context),

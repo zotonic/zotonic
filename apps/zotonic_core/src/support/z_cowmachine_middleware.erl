@@ -44,16 +44,17 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
     Context4 = z_context:set_security_headers(Context3),
     Options = #{
         on_welformed => fun(Ctx) ->
-            z_context:lager_md(Ctx),
-            Ctx1 = z_context:ensure_qs(Ctx),
-            Ctx2 = case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
+            erlang:erase(is_dbtrace),
+            Ctx0 = case z_context:get_cookie(<<"cotonic-sid">>, Ctx) of
+                undefined -> Ctx;
+                Sid ->
+                    z_context:set_session_id(Sid, Ctx)
+            end,
+            z_context:lager_md(Ctx0),
+            Ctx1 = z_context:ensure_qs(Ctx0),
+            case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
                 undefined -> Ctx1;
                 HttpAccept -> set_accept_context(HttpAccept, Ctx1)
-            end,
-            case z_context:get_cookie(<<"cotonic-sid">>, Ctx2) of
-                undefined -> Ctx2;
-                Sid ->
-                    z_context:set_session_id(Sid, Ctx2)
             end
         end
     },
