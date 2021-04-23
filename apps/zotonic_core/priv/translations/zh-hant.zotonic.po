@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 20:17\n"
+"PO-Revision-Date: 2021-04-23 20:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -1960,7 +1960,7 @@ msgid "Upload a file from your computer."
 msgstr "从你的电脑上传一个文件。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload file"
 msgstr "上传文件"
 
@@ -2134,7 +2134,7 @@ msgstr "年 月 日, H:i"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:111
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "delete"
 msgstr "删除"
 
@@ -4418,7 +4418,7 @@ msgid "Comments"
 msgstr "评论"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:72
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
 msgid "Email"
 msgstr "E-mail"
 
@@ -5783,15 +5783,15 @@ msgstr " <em>从这个列表中删除</em> 目标列表中的所有收件人。"
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr "<h3>收件人</h3><p>添加，删除或查看收件人列表，请点击“显示所有收件人”链接。</p><h3>发送者名字及 e-mail 地址</h3><p>发送者名字可以针对每个邮件列表设置，默认是配置 key <tt>site.email_from</tt>。E-mail 的<i>发送者</i>将被设置为发送者名字和地址。</p><h3>自动上传收件人列表</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>访问控制</h3><p>任何可以编辑邮件列表的人可以给邮件列表发送页面。任何可以查看邮件列表的人可以添加地址到邮件列表。</p>"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
 msgstr "启用"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24
 msgid "Add a new recipient."
 msgstr "添加新收件人"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
 msgid "Add recipient"
 msgstr "添加收件人"
 
@@ -5831,11 +5831,11 @@ msgstr "你在收到邮件之前需要确认订阅。"
 msgid "Cancel mailing"
 msgstr "取消邮寄"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:76
 msgid "Check to activate the e-mail address."
 msgstr "选取以激活 e-mail 地址。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Clear"
 msgstr "清除"
 
@@ -5851,11 +5851,11 @@ msgstr " 点击下面的按钮，确认您对这个邮件列表的订阅。"
 msgid "Click to view log entries"
 msgstr "点击查看日志条目"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine mailing list"
 msgstr "合并邮件列表"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine…"
 msgstr "合并…。"
 
@@ -5888,7 +5888,7 @@ msgstr "亲爱的"
 msgid "Delete all current recipients before adding the file."
 msgstr "添加文件前删除所有当前收件人。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Delete all recipients from this list?"
 msgstr "从列表中删除所有收件人？"
 
@@ -5902,15 +5902,15 @@ msgstr "删除了邮件列表。"
 msgid "Description"
 msgstr "描述"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download all"
 msgstr "全部下载"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download list of all active recipients."
 msgstr "下载所有活动收件人列表。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Downloading active recipients list. Check your download window."
 msgstr "下载活动收件人列表。请检查下载窗口。"
 
@@ -5930,7 +5930,7 @@ msgstr "电子邮件页面"
 msgid "E-mail this page"
 msgstr "通过电子邮件发送此页面"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
 msgid "Edit recipient"
 msgstr "编辑接收人"
 
@@ -6015,7 +6015,7 @@ msgstr "邮寄状态"
 msgid "Mailings are sent to:"
 msgstr "邮寄地址："
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:38
 msgid "Matched via Query"
 msgstr "通过查询匹配"
 
@@ -6027,11 +6027,7 @@ msgstr "新建邮件列表"
 msgid "No items found"
 msgstr "没有找到"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:95
-msgid "No recipients"
-msgstr "没有收件人"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:33
 msgid "Number of recipients on this list:"
 msgstr "该名单上的接受者人数："
 
@@ -6108,7 +6104,7 @@ msgstr "在網絡上閱讀更多內容"
 msgid "Recipient deleted."
 msgstr "收件人被删除。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Recipients"
 msgstr "收件人"
 
@@ -6120,17 +6116,13 @@ msgstr "收件人可以通过 email 方式（简单的注册表单），或者�
 msgid "Recipients for"
 msgstr "收件人位于"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Remove this recipient. No undo possible."
 msgstr "删除这个收件人，无法撤销。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23
 msgid "Scheduled"
 msgstr "计划中"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "See the"
-msgstr "查看"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
 msgid "Select..."
@@ -6236,7 +6228,7 @@ msgstr "订阅"
 msgid "Subscribe to"
 msgstr "订阅到"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:40
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Subscriber Edges"
 msgstr "用户边缘"
 
@@ -6336,7 +6328,7 @@ msgstr "更新收件人。"
 msgid "Upload a file with recipients. The file must contain a single e-mail address per line. The file’s character set must be utf-8."
 msgstr "上传一个收件人文件。文件必须每行包含一个 e-mail 地址。文件编码必须是 utf-8。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload a list of recipients."
 msgstr "上传收件人列表。"
 
@@ -6464,7 +6456,7 @@ msgstr "邮件列表状态页"
 msgid "or copy and paste the address below in your browser."
 msgstr "或拷贝并粘贴地址到下面。"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:54
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
 msgid "pages"
 msgstr "页面"
 
@@ -6476,7 +6468,7 @@ msgstr "已处理"
 msgid "scheduled"
 msgstr "已排期"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:45
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:42
 msgid "see below"
 msgstr "见下文"
 
@@ -6487,10 +6479,6 @@ msgstr "发送邮件"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
 msgid "send to"
 msgstr "送去"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "subscribing persons &raquo;"
-msgstr "订阅人 &raquo;"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "this link to confirm"
