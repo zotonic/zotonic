@@ -1,10 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-10-07
-%%
+%% @copyright 2010-2021 Marc Worrell
 %% @doc Simple store for key/value pairs
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,6 +28,7 @@
     get/3,
     put/4,
     delete/3,
+    delete/2,
     init/1
 ]).
 
@@ -70,6 +69,10 @@ delete(Type, Key, Context) ->
     z_db:q("delete from tkvstore where type = $1 and key = $2", [Type, Key], Context),
     ok.
 
+%% @doc Delete a value from the store
+delete(Type, Context) ->
+    z_db:q("delete from tkvstore where type = $1", [Type], Context),
+    ok.
 
 
 %% @doc Ensure that the persistent table is present
