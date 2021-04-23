@@ -70,9 +70,11 @@ new_user_context( Site, ClientId, SessionOptions ) ->
     Context1 = Context#context{
         client_topic = [ <<"bridge">>, ClientId ],
         client_id = ClientId,
-        routing_id = maps:get(routing_id, SessionOptions)
+        routing_id = maps:get(routing_id, SessionOptions, <<>>)
     },
-    Context1.
+    Prefs = maps:get(context_prefs, SessionOptions, #{}),
+    SessionId = maps:get(cotonic_sid, Prefs, undefined),
+    z_context:set_session_id(SessionId, Context1).
 
 -spec control_message( list(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, z:context()}.
 control_message([ <<"auth">> ], #{ payload := Payload }, Context) ->
@@ -109,8 +111,7 @@ maybe_set_timezone(_Payload, Context) ->
 maybe_set_sid(#{ <<"options">> := #{ <<"sid">> := <<>> } }, Context) ->
     Context;
 maybe_set_sid(#{ <<"options">> := #{ <<"sid">> := Sid } }, Context) when is_binary(Sid) ->
-    AuthOptions = z_context:get(auth_options, Context, #{}),
-    z_context:set(auth_options, AuthOptions#{ sid => Sid }, Context);
+    z_context:set_session_id(Sid, Context);
 maybe_set_sid(_Payload, Context) ->
     Context.
 
@@ -127,7 +128,7 @@ set_connect_context_options(Options, Context) ->
     end,
     Context4 = z_context:set(auth_options, maps:get(auth_options, Prefs, #{}), Context3),
     Context5 = z_context:set(peer_ip, maps:get(peer_ip, Options, undefined), Context4),
-    Context6 = case maps:get(cotonic_sid, Options, undefined) of
+    Context6 = case maps:get(cotonic_sid, Prefs, undefined) of
         undefined -> Context5;
         Sid -> z_context:set_session_id(Sid, Context5)
     end,
