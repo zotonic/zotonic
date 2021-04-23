@@ -4866,6 +4866,10 @@ msgstr ""
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr ""
 
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+msgid "Disabled database query tracing"
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
 msgstr ""
@@ -4886,6 +4890,10 @@ msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
+msgstr ""
+
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+msgid "Enabled database query tracing"
 msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
