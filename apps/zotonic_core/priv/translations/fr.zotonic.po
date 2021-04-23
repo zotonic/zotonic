@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 08:16\n"
+"PO-Revision-Date: 2021-04-23 20:12\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -4642,6 +4642,10 @@ msgstr "Développement - Observateurs"
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "Désactiver la mise en cache par le biais de la balise <tt>{% cache %}</tt>."
 
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
+msgid "Disabled database query tracing"
+msgstr "Suivi des requêtes de base de données désactivé"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
 msgstr "Débogage des règles de distribution"
@@ -4661,6 +4665,10 @@ msgstr "Activer <tt>mod_server_storage</tt> pour la traçage des requêtes base 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:58
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Activer l'API pour recompiler et construire Zotonic"
+
+#: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
+msgid "Enabled database query tracing"
+msgstr "Suivi des requêtes de base de données activé"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5935,8 +5943,8 @@ msgid "Enter the e-mail address of the recipient. The name of the recipient is o
 msgstr "Entrez l'adresse e-mail du destinataire. Le nom du destinataire est facultatif."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
-msgid "Externally managed list &mdash; no (un)subscribe links"
-msgstr "Liste gérée de manière externe &mdash; aucun lien pour (dés)abonnement"
+msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
+msgstr "Liste gérée en externe &mdash; pas de liens de désinscription / d'abonnement"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
