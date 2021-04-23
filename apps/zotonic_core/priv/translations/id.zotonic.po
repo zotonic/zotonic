@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 20:12\n"
+"PO-Revision-Date: 2021-04-23 20:18\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -4643,7 +4643,7 @@ msgstr "Nonaktifkan caching dengan tag <tt>{% cache %}</tt>."
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
 msgid "Disabled database query tracing"
-msgstr ""
+msgstr "Pelacakan kueri database dinonaktifkan"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
@@ -4667,7 +4667,7 @@ msgstr "Aktifkan API untuk mengkompilasi ulang dan membangun Zotonic"
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
 msgid "Enabled database query tracing"
-msgstr ""
+msgstr "Pelacakan kueri database yang diaktifkan"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5943,7 +5943,7 @@ msgstr "Masukkan alamat e-mail penerima. Nama dari penerima adalah opsional."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:29
 msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
-msgstr ""
+msgstr "Daftar yang dikelola secara eksternal &mdash; tidak ada tautan berhenti berlangganan / berlangganan"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
