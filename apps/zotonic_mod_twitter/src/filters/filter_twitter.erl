@@ -93,9 +93,13 @@ twitter1_url_html(Pre, Url, Opts) ->
                 true ->
                     [];
                 false ->
-                    Url2 = z_url:location(<<Pre/binary,Url/binary>>),
-                    Text = z_string:truncate(z_url:remove_protocol(Url2), ?URL_TRUNCATE),
-                    ["<a href=\"", Url2, "\">", Text, "</a>"]
+                    try
+                        Url2 = z_url:location(<<Pre/binary,Url/binary>>),
+                        Text = z_string:truncate(z_url:remove_protocol(Url2), ?URL_TRUNCATE),
+                        ["<a href=\"", Url2, "\">", Text, "</a>"]
+                    catch
+                        _:_ -> []
+                    end
             end;
         false ->
             ["<a href=\"", Pre, Url, "\">", Url, "</a>"]
