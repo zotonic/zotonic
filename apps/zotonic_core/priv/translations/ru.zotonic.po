@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-25 10:45\n"
+"PO-Revision-Date: 2021-04-25 11:58\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -312,7 +312,7 @@ msgstr "Редактирование группы сотрудничества"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "Введите расширения (например, <tt>.png</tt>), типы MIME (например, <tt>изображение/png</tt>) или одно из следующего:"
+msgstr "Введите расширения (например, <tt>.png</tt>), типы MIME (например, <tt>image/png</tt>) или одно из следующего:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
