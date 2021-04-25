@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-25 16:00\n"
+"PO-Revision-Date: 2021-04-25 16:17\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -336,7 +336,7 @@ msgstr "Менеджеры группы могут редактировать"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:58
 msgid "Group managers can link"
-msgstr "Менеджеры группы могут установить связь"
+msgstr "Менеджеры группы могут добавлять связи"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:51
 msgid "Group members and managers can edit"
@@ -344,7 +344,7 @@ msgstr "Члены и менеджеры группы могут редакти�
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:59
 msgid "Group members and managers can link"
-msgstr "Члены и менеджеры группы могут устанавливать связь"
+msgstr "Члены и менеджеры группы могут добавлять связи"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 msgid "Import"
@@ -352,7 +352,7 @@ msgstr "Импорт"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "Правила импорта редактирования..."
+msgstr " Импортировать правила для редактирования..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
