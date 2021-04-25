@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-25 11:58\n"
+"PO-Revision-Date: 2021-04-25 16:00\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -117,7 +117,7 @@ msgstr "Добавить правило"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:55
 msgid "Add links to the collaboration group"
-msgstr "Добавить ссылки на группу сотрудничества"
+msgstr "Добавлять связи в группу сотрудничества"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
