@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 20:18\n"
+"PO-Revision-Date: 2021-04-25 11:58\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -312,11 +312,11 @@ msgstr "Редактирование группы сотрудничества"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "Введите расширения (например, <tt>.png</tt>), типы MIME (например, <tt>изображение/png</tt>) или одно из следующего:"
+msgstr "Введите расширения (например, <tt>.png</tt>), типы MIME (например, <tt>image/png</tt>) или одно из следующего:"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "Правила экспорта"
+msgstr "Экспорт изменённых правил"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
@@ -340,11 +340,11 @@ msgstr "Менеджеры группы могут установить связ
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:51
 msgid "Group members and managers can edit"
-msgstr "Члены группы и менеджеры могут редактировать"
+msgstr "Члены и менеджеры группы могут редактировать"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:59
 msgid "Group members and managers can link"
-msgstr "Члены группы и менеджеры могут устанавливать связь"
+msgstr "Члены и менеджеры группы могут устанавливать связь"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 msgid "Import"
@@ -1960,7 +1960,7 @@ msgid "Upload a file from your computer."
 msgstr "Закачать файл с вашего компьютера."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload file"
 msgstr "Закачать файл"
 
@@ -2134,7 +2134,7 @@ msgstr "d M Y, H:i"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:111
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "delete"
 msgstr "удалить"
 
@@ -4418,7 +4418,7 @@ msgid "Comments"
 msgstr "Комментарии"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:72
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
 msgid "Email"
 msgstr "E-mail"
 
@@ -5783,15 +5783,15 @@ msgstr " <em>Удалить</em> всех получателей из этого
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr "<h3>Получатели</h3><p>Чтобы добавить, удалить или просмотреть получателей списка рассылки, нажмите на ссылку \"Показать всех получателей\".</p><h3>Имя отправителя и адрес электронной почты</h3><p>Имя отправителя и адрес электронной почты могут быть установлены для каждого списка рассылки. По умолчанию используется конфигурационный ключ <tt>site.email_from</tt>. <i>из</i> отправленных писем будет установлено имя и адрес отправителя.</p><h3>Автоматическая загрузка списков получателей</h3><p>Имя файла в выпадающем списке используется для автоматической загрузки полного списка получателей. Имя файла должно совпадать с именем файла загруженного списка получателей. Полный список получателей будет заменен на список получателей в выпадающем файле.</p><h3>Управление доступом</h3><p>Всем, кто может редактировать список рассылки, также разрешено отправлять страницу в список рассылки. Всем, кто может просматривать список рассылки, разрешено добавить электронный адрес в список рассылки.</p>"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
 msgstr "Закон"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24
 msgid "Add a new recipient."
 msgstr "Добавьте нового получателя."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
 msgid "Add recipient"
 msgstr "Добавить получателя"
 
@@ -5831,11 +5831,11 @@ msgstr "Перед тем, как вы получите дальнейшую к�
 msgid "Cancel mailing"
 msgstr "Отмена рассылки"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:76
 msgid "Check to activate the e-mail address."
 msgstr "Проверьте, чтобы активировать адрес электронной почты."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Clear"
 msgstr "Чисто"
 
@@ -5851,11 +5851,11 @@ msgstr " Нажмите на кнопку ниже, чтобы подтверд�
 msgid "Click to view log entries"
 msgstr "Нажмите, чтобы просмотреть записи журнала"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine mailing list"
 msgstr "Комбинированный список рассылки"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine…"
 msgstr "Комбинация…"
 
@@ -5888,7 +5888,7 @@ msgstr "Уважаемый"
 msgid "Delete all current recipients before adding the file."
 msgstr "Удалите всех текущих получателей перед добавлением файла."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Delete all recipients from this list?"
 msgstr "Удалить всех получателей из этого списка?"
 
@@ -5902,15 +5902,15 @@ msgstr "Удален список рассылки."
 msgid "Description"
 msgstr "Описание"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download all"
 msgstr "Скачать все"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download list of all active recipients."
 msgstr "Скачать список всех активных получателей."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Downloading active recipients list. Check your download window."
 msgstr "Загрузка списка активных получателей. Проверьте окно загрузки."
 
@@ -5930,7 +5930,7 @@ msgstr "страница электронной почты"
 msgid "E-mail this page"
 msgstr "E-mail эта страница"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
 msgid "Edit recipient"
 msgstr "Редактировать получателя"
 
@@ -6019,7 +6019,7 @@ msgstr "Почтовый статус"
 msgid "Mailings are sent to:"
 msgstr "Почта отправляется:"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:38
 msgid "Matched via Query"
 msgstr "Соответствует через Запрос"
 
@@ -6031,11 +6031,7 @@ msgstr "Список рассылки"
 msgid "No items found"
 msgstr "Предметы не найдены"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:95
-msgid "No recipients"
-msgstr "Получателей нет"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:33
 msgid "Number of recipients on this list:"
 msgstr "Количество получателей в этом списке:"
 
@@ -6112,7 +6108,7 @@ msgstr "Узнать больше в сети"
 msgid "Recipient deleted."
 msgstr "Получатель удален."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Recipients"
 msgstr "Получатели"
 
@@ -6124,17 +6120,13 @@ msgstr "Получатели подписываются либо только п
 msgid "Recipients for"
 msgstr "Получатели для"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Remove this recipient. No undo possible."
 msgstr "Удалите этого получателя. Отмена невозможна."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23
 msgid "Scheduled"
 msgstr "Запланировано"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "See the"
-msgstr "Посмотреть"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
 msgid "Select..."
@@ -6240,7 +6232,7 @@ msgstr "Подписаться на"
 msgid "Subscribe to"
 msgstr "Подписаться на"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:40
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Subscriber Edges"
 msgstr "Края подписчика"
 
@@ -6340,7 +6332,7 @@ msgstr "Обновление получателя."
 msgid "Upload a file with recipients. The file must contain a single e-mail address per line. The file’s character set must be utf-8."
 msgstr "Загрузите файл с получателями. Файл должен содержать один адрес электронной почты на строку. Набор символов файла должен быть utf-8."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload a list of recipients."
 msgstr "Загрузите список получателей."
 
@@ -6468,7 +6460,7 @@ msgstr "страница статуса почтового списка"
 msgid "or copy and paste the address below in your browser."
 msgstr "или скопируйте и вставьте адрес, указанный ниже в вашем браузере."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:54
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
 msgid "pages"
 msgstr "страницы"
 
@@ -6480,7 +6472,7 @@ msgstr "обработанный"
 msgid "scheduled"
 msgstr "запланированный"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:45
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:42
 msgid "see below"
 msgstr "смотри ниже"
 
@@ -6491,10 +6483,6 @@ msgstr "рассылка"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
 msgid "send to"
 msgstr "отправляться"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "subscribing persons &raquo;"
-msgstr "подписчики &raquo;"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "this link to confirm"

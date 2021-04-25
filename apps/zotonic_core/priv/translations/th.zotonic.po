@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 20:18\n"
+"PO-Revision-Date: 2021-04-23 20:46\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1960,7 +1960,7 @@ msgid "Upload a file from your computer."
 msgstr "อัปโหลดไฟล์จากคอมพิวเตอร์ของคุณ"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload file"
 msgstr "อัปโหลดไฟล์"
 
@@ -2134,7 +2134,7 @@ msgstr "d ของฉัน H: i"
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:111
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "delete"
 msgstr "ลบ"
 
@@ -4418,7 +4418,7 @@ msgid "Comments"
 msgstr "ความคิดเห็น"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:72
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
 msgid "Email"
 msgstr "อีเมล์"
 
@@ -5783,15 +5783,15 @@ msgstr " <em>ลบผู้รับทั้งหมด</em> ออกจา�
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr "<h3>ผู้รับ</h3><p>ในการเพิ่มลบหรือดูรายชื่อผู้รับจดหมายคลิกที่ลิงค์ \"แสดงผู้รับทั้งหมด\"</p><h3>ชื่อผู้ส่งและที่อยู่อีเมล</h3><p>กำหนดชื่อผู้ส่งและที่อยู่อีเมลได้ตามรายชื่อผู้รับจดหมาย ค่านี้เป็นค่าเริ่มต้นของคีย์การกำหนดค่า <tt>site.email_from</tt>อีเมลที่ส่ง <i>จาก</i> ฉบับจะถูกกำหนดเป็นชื่อผู้ส่งและที่อยู่</p><h3>อัปโหลดรายชื่อผู้รับอัตโนมัติ</h3><p>ชื่อไฟล์ดรอปบ็อกซ์ใช้สำหรับการอัปโหลดรายชื่อผู้รับทั้งหมดโดยอัตโนมัติ ชื่อไฟล์ต้องตรงกับชื่อไฟล์ของรายชื่อผู้รับที่อัปโหลด รายชื่อผู้รับทั้งหมดจะถูกแทนที่ด้วยผู้รับในไฟล์ดรอปบ็อกซ์</p><h3>การควบคุมการเข้าถึง</h3><p>ทุกคนที่สามารถแก้ไขรายชื่ออีเมลได้รับอนุญาตให้ส่งหน้าไปยังรายชื่ออีเมล ทุกคนที่สามารถดูรายชื่อส่งเมลได้รับอนุญาตให้เพิ่มที่อยู่อีเมลในรายชื่ออีเมล</p>"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:71
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
 msgid "Act"
 msgstr "พระราชบัญญัติ"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24
 msgid "Add a new recipient."
 msgstr "เพิ่มผู้รับใหม่"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:51
 msgid "Add recipient"
 msgstr "เพิ่มผู้รับ"
 
@@ -5831,11 +5831,11 @@ msgstr "ก่อนที่คุณจะได้รับอีเมลเ
 msgid "Cancel mailing"
 msgstr "ยกเลิกการส่งจดหมาย"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:76
 msgid "Check to activate the e-mail address."
 msgstr "เลือกเพื่อเปิดใช้งานที่อยู่อีเมล"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Clear"
 msgstr "ชัดเจน"
 
@@ -5851,11 +5851,11 @@ msgstr " คลิกปุ่มด้านล่างเพื่อยื�
 msgid "Click to view log entries"
 msgstr "คลิกเพื่อดูรายการบันทึก"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine mailing list"
 msgstr "รวมรายชื่ออีเมล"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
 msgid "Combine…"
 msgstr "รวม…"
 
@@ -5888,7 +5888,7 @@ msgstr "ที่รัก"
 msgid "Delete all current recipients before adding the file."
 msgstr "ลบผู้รับปัจจุบันทั้งหมดก่อนเพิ่มไฟล์"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
 msgid "Delete all recipients from this list?"
 msgstr "ลบผู้รับทั้งหมดจากรายการนี้ไหม"
 
@@ -5902,15 +5902,15 @@ msgstr "ลบรายชื่อผู้รับจดหมาย"
 msgid "Description"
 msgstr "คำอธิบาย"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download all"
 msgstr "ดาวน์โหลดทั้งหมด"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Download list of all active recipients."
 msgstr "ดาวน์โหลดรายชื่อผู้รับที่ใช้งานอยู่ทั้งหมด"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid "Downloading active recipients list. Check your download window."
 msgstr "กำลังดาวน์โหลดรายชื่อผู้รับที่ใช้งานอยู่ ตรวจสอบหน้าต่างดาวน์โหลดของคุณ"
 
@@ -5930,7 +5930,7 @@ msgstr "หน้าอีเมล"
 msgid "E-mail this page"
 msgstr "ส่งอีเมลหน้านี้"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:80./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77./apps/zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:58
 msgid "Edit recipient"
 msgstr "แก้ไขผู้รับ"
 
@@ -6019,7 +6019,7 @@ msgstr "สถานะการส่งจดหมาย"
 msgid "Mailings are sent to:"
 msgstr "ส่งจดหมายไปที่:"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:38
 msgid "Matched via Query"
 msgstr "จับคู่ผ่านแบบสอบถาม"
 
@@ -6031,11 +6031,7 @@ msgstr "รายชื่อผู้รับจดหมายใหม่"
 msgid "No items found"
 msgstr "ไม่พบรายการ"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:95
-msgid "No recipients"
-msgstr "ไม่มีผู้รับ"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:33
 msgid "Number of recipients on this list:"
 msgstr "จำนวนผู้รับในรายการนี้:"
 
@@ -6112,7 +6108,7 @@ msgstr "อ่านเพิ่มเติมได้ที่เว็บ"
 msgid "Recipient deleted."
 msgstr "ลบผู้รับแล้ว"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Recipients"
 msgstr "ผู้รับ"
 
@@ -6124,17 +6120,13 @@ msgstr "ผู้รับสมัครเป็นสมาชิกแบบ
 msgid "Recipients for"
 msgstr "ผู้รับสำหรับ"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Remove this recipient. No undo possible."
 msgstr "ลบผู้รับนี้ ไม่สามารถยกเลิกได้"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23
 msgid "Scheduled"
 msgstr "กำหนดเวลา"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "See the"
-msgstr "ดูไฟล์"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
 msgid "Select..."
@@ -6240,7 +6232,7 @@ msgstr "ติดตาม"
 msgid "Subscribe to"
 msgstr "ติดตาม"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:40
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Subscriber Edges"
 msgstr "ขอบสมาชิก"
 
@@ -6340,7 +6332,7 @@ msgstr "อัปเดตผู้รับ"
 msgid "Upload a file with recipients. The file must contain a single e-mail address per line. The file’s character set must be utf-8."
 msgstr "อัปโหลดไฟล์กับผู้รับ ไฟล์ต้องมีที่อยู่อีเมลเดียวต่อบรรทัด ชุดอักขระของไฟล์ต้องเป็น utf-8"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload a list of recipients."
 msgstr "อัปโหลดรายชื่อผู้รับ"
 
@@ -6468,7 +6460,7 @@ msgstr "หน้าสถานะรายชื่อผู้รับจด
 msgid "or copy and paste the address below in your browser."
 msgstr "หรือคัดลอกและวางที่อยู่ด้านล่างในเบราว์เซอร์ของคุณ"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:54
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
 msgid "pages"
 msgstr "หน้า"
 
@@ -6480,7 +6472,7 @@ msgstr "ประมวลผล"
 msgid "scheduled"
 msgstr "กำหนดเวลา"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:45
+#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:42
 msgid "see below"
 msgstr "ดูด้านล่าง"
 
@@ -6491,10 +6483,6 @@ msgstr "ส่งไปรษณีย์"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
 msgid "send to"
 msgstr "ส่งถึง"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:22
-msgid "subscribing persons &raquo;"
-msgstr "สมัครสมาชิก &raquo;"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "this link to confirm"
