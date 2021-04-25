@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-25 10:24\n"
+"PO-Revision-Date: 2021-04-25 10:45\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -344,7 +344,7 @@ msgstr "Члены и менеджеры группы могут редакти�
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:59
 msgid "Group members and managers can link"
-msgstr "Члены группы и менеджеры могут устанавливать связь"
+msgstr "Члены и менеджеры группы могут устанавливать связь"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 msgid "Import"
