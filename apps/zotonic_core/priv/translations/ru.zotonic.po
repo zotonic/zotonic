@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-25 16:48\n"
+"PO-Revision-Date: 2021-04-26 20:40\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -356,7 +356,7 @@ msgstr " Импортировать правила для редактирова
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
-msgstr "Импорт редактирования версии ACL правил"
+msgstr "Импорт редактируемой версии правил ACL"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:136
 msgid "Importing, the list of rules will refresh after importing."
