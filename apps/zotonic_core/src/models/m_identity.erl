@@ -1005,12 +1005,13 @@ set_verified(Id, Context) ->
 
 %% @doc Set the verified flag on a record by rescource id, identity type and
 %% value (eg an user's email address).
--spec set_verified( m_rsc:resource_id(), string() | binary(), string() | binary(), z:context()) -> ok | {error, badarg}.
+-spec set_verified( m_rsc:resource_id(), string() | binary() | atom(), string() | binary(), z:context()) -> ok | {error, badarg}.
 set_verified(RscId, Type, Key, Context)
     when is_integer(RscId),
          Type =/= undefined,
          Key =/= undefined, Key =/= <<>>, Key =/= "" ->
-    Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, Key, Ctx) end, Context),
+    KeyNorm = normalize_key(Type, Key),
+    Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, KeyNorm, Ctx) end, Context),
     flush(RscId, Context),
     z_mqtt:publish(
         [ <<"model">>, <<"identity">>, <<"event">>, RscId, z_convert:to_binary(Type) ],
