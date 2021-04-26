@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-26 20:40\n"
+"PO-Revision-Date: 2021-04-26 21:04\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -360,11 +360,11 @@ msgstr "Импорт редактируемой версии правил ACL"
 
 #: apps/zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:136
 msgid "Importing, the list of rules will refresh after importing."
-msgstr "При импорте список правил будет обновляться после импорта."
+msgstr "Выполняется импорт, список правил обновится после импорта"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:40./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:17
 msgid "Keep"
-msgstr "Хранить"
+msgstr "Оставить"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:6
 msgid "Maximum file upload size per user group. This restricts file uploads for users."
