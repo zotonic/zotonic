@@ -141,7 +141,7 @@
                 {#
                     {% javascript %}
                         if (isStandalone) {
-                            $('#logon_form_form input[name=rememberme]').attr('checked', true);
+                            $('#logon_form_form input[name=rememberme]').prop('checked', true);
                         }
                     {% endjavascript %}
                 #}

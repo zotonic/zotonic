@@ -295,10 +295,10 @@
         	{% javascript %}
         		switch (window.sessionStorage.getItem('dialog_connect_created_me')) {
         			case "true":
-        				$("#{{ #find_me }}").attr('checked', true);
+        				$("#{{ #find_me }}").prop('checked', true);
         				break;
         			case "false":
-        				$("#{{ #find_me }}").removeAttr('checked');
+        				$("#{{ #find_me }}").prop('checked', false);
         				break;
         			default:
         				break;

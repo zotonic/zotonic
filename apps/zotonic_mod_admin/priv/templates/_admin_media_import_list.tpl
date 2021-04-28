@@ -134,11 +134,7 @@
             $('#media-import-wrapper').find('input[type=checkbox]').each(
                 function() {
                     if ($(this).attr('id') != id && $(this).attr('name') == name) {
-                        if (is_checked) {
-                            $(this).attr('checked', 'checked');
-                        } else {
-                            $(this).removeAttr('checked');
-                        }
+                        $(this).prop('checked', is_checked);
                     }
                 });
         });
