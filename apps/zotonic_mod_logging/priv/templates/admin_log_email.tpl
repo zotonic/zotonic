@@ -10,7 +10,7 @@
 
 {#
     -record(log_email, {
-    severity = ?LOG_ERROR,
+    severity = ?LOG_LEVEL_ERROR,
     message_nr,
     mailer_status,      % sending, sent, error, retry, warning, bounce, received
     mailer_message,     % any text, to clarify the mailer_status

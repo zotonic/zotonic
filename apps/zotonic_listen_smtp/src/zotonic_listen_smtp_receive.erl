@@ -61,7 +61,7 @@ received(Recipient, ParsedEmail,
             z_notifier:notify(
                 #zlog{
                     props=#log_email{
-                        severity = ?LOG_INFO,
+                        severity = ?LOG_LEVEL_INFO,
                         mailer_status = received,
                         mailer_host = z_convert:ip_to_list(Peer),
                         message_nr = Reference,

@@ -272,9 +272,9 @@ handle_other_log(Record, State) ->
             Log = record_to_log_message(Record, Fields, LogType, Id),
             Severity = proplists:get_value(severity, Fields),
             case Severity of
-                ?LOG_FATAL ->
+                ?LOG_LEVEL_FATAL ->
                     handle_simple_log(Log#log_message{type=fatal}, State);
-                ?LOG_ERROR ->
+                ?LOG_LEVEL_ERROR ->
                     handle_simple_log(Log#log_message{type=error}, State);
                 _Other ->
                     nop
