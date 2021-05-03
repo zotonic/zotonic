@@ -369,11 +369,16 @@ generate_autologon_secret(Context) ->
     m_config:set_value(mod_authentication, auth_autologon_secret, Secret, Context),
     Secret.
 
--spec user_autologon_secret( m_rsc:resource_id(), z:context() ) -> binary().
+-spec user_autologon_secret( m_rsc:resource_id(), z:context() ) -> binary() | error.
 user_autologon_secret(UserId, Context) ->
-    case m_identity:get_rsc(UserId, auth_autologon_secret, Context) of
-        undefined -> generate_user_autologon_secret(UserId, Context);
-        Idn -> proplists:get_value(prop1, Idn)
+    case m_rsc:exists(UserId, Context) of
+        true ->
+            case m_identity:get_rsc(UserId, auth_autologon_secret, Context) of
+                undefined -> generate_user_autologon_secret(UserId, Context);
+                Idn -> proplists:get_value(prop1, Idn)
+            end;
+        false ->
+            error
     end.
 
 -spec generate_user_autologon_secret( m_rsc:resource_id(), z:context() ) -> binary().
