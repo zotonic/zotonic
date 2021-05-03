@@ -33,7 +33,7 @@
             </div>
 
             <div class="form-group label-floating">
-                <input type="file" class="form-control" id="{{ #upload_file }}" name="upload_file" placeholder="{_ Media file _}" required>
+                <input type="file" class="form-control" id="{{ #upload_file }}" name="upload_file" placeholder="{_ Media file _}" required {% if accept %}accept="{{ accept }}"{% endif %}>
                 <label class="control-label" for="{{ #upload_file }}">{_ Media file _}</label>
             </div>
 

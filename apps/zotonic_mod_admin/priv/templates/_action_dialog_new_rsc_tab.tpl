@@ -25,7 +25,7 @@
 			 	    <input type="text" id="new_rsc_title" name="title"
 			 	    	   value="{{ title|escape }}" class="form-control do_autofocus"
 			 	    	   placeholder="{_ Title _}"
-			 	    	   autofocus>
+			 	    	   autofocus {% if accept %}accept="{{ accept }}"{% endif %}>
 			 	    <label for="new_rsc_title">{_ Title _}</label>
 			 	</div>
 			{% endblock %}
@@ -44,7 +44,7 @@
 						<div id="upload_file_preview" style="display: none;">
 							<img src="" class="thumbnail" style="max-height:200px">
 						</div>
-		                <input type="file" class="form-control" id="upload_file" name="upload_file">
+		                <input type="file" class="form-control" id="upload_file" name="upload_file" >
 		                <p class="help-block text-muted">
 		                	<span class="glyphicon glyphicon-info-sign"></span>
 		                	{_ Selecting a file will make the page a media item. _}

@@ -14,6 +14,7 @@ params:
 - nocatselect (optional - defaults to false)
 - is_zlink (optional) set by the tinyMCE 'zlink' plugin
 - is_zmedia (optional) set by the tinyMCE 'zmedia' plugin
+- accept (optional) - string with comma separated mime types acceptable for file uploads
 
 find params:
 - predicate (optional) (atom)
