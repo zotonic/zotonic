@@ -313,7 +313,7 @@ generate_auth_secret(Context) ->
     m_config:set_value(mod_authentication, auth_secret, Secret, Context),
     Secret.
 
--spec user_secret( m_rsc:resource_id() | undefined, z:context() ) -> binary().
+-spec user_secret( m_rsc:resource_id() | undefined, z:context() ) -> binary() | error.
 user_secret(undefined, Context) ->
     case m_config:get_value(mod_authentication, auth_anon_secret, Context) of
         <<>> -> generate_auth_anon_secret(Context);
@@ -333,9 +333,14 @@ user_secret_1(false, 1, Context) ->
             Secret
     end;
 user_secret_1(true, UserId, Context) ->
-    case m_identity:get_rsc(UserId, auth_secret, Context) of
-        undefined -> generate_user_secret(UserId, Context);
-        Idn -> proplists:get_value(prop1, Idn)
+    case m_rsc:exists(UserId, Context) of
+        true ->
+            case m_identity:get_rsc(UserId, auth_secret, Context) of
+                undefined -> generate_user_secret(UserId, Context);
+                Idn -> proplists:get_value(prop1, Idn)
+            end;
+        false ->
+            error
     end.
 
 -spec generate_auth_anon_secret( z:context() ) -> binary().
