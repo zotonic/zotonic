@@ -37,7 +37,7 @@ toc(V, Context) ->
 
 parse_toc(<<>>, _Level, _Path, Toc, Html) ->
     {Toc, Html};
-parse_toc(<<"<h", N, ">", Rest/binary>>, Lvl, Path, Toc, Html) when N >= $2, N =< $6 ->
+parse_toc(<<"<h", N, Rest/binary>>, Lvl, Path, Toc, Html) when N >= $2, N =< $6 ->
     if
         N =< Lvl ->
             % Pop Lvl - N items from prefix
@@ -45,13 +45,13 @@ parse_toc(<<"<h", N, ">", Rest/binary>>, Lvl, Path, Toc, Html) when N >= $2, N =
             [ Count | Path1 ] = pop(Lvl - N, Path),
             Count1 = Count+1,
             Path2 = [ Count1 | Path1 ],
-            Html1 = <<Html/binary, "</div><div><h", N, " id=\"", (prefix_id(Path2))/binary, "\">">>,
+            Html1 = <<Html/binary, "</div><div id=\"", (prefix_id(Path2))/binary, "\"><h", N>>,
             Toc1 = [ {Path2, header_text(Rest)} | Toc ],
             parse_toc(Rest, N, Path2, Toc1, Html1);
         N > Lvl ->
             % Push items to prefix
             Path1 = push(N - Lvl, Path),
-            Html1 = <<Html/binary, "</div><div><h", N, " id=\"", (prefix_id(Path1))/binary, "\">">>,
+            Html1 = <<Html/binary, "</div><div id=\"", (prefix_id(Path1))/binary, "\"><h", N>>,
             Toc1 = [ {Path1, header_text(Rest)} | Toc ],
             parse_toc(Rest, N, Path1, Toc1, Html1)
     end;
@@ -72,8 +72,7 @@ prefix_id(L) ->
 
 
 nested(Toc) ->
-    Toc1 = lists:map(fun({P,Text}) -> {lists:reverse(P), Text} end, Toc),
-    {Nested, _} = nested(Toc1, 1, []),
+    {Nested, _} = nested(Toc, 1, []),
     Nested.
 
 nested([], _Depth, Acc) ->
