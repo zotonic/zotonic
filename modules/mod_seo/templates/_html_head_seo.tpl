@@ -46,24 +46,44 @@
 {% endif %}
 {% if not m.acl.is_admin and not notrack %}
     {% if m.config.seo_google.analytics.value as ga %}
+        {% if ga|match:"^G-" %}
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga|urlencode }}"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', '{{ ga|escapejs }}', { 'anonymize_ip': true });
+            </script>
+        {% else %}
+            <script>
+                var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
+                var ga_options = {% include '_ga_params.tpl' %};
+                window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+                if (window.localStorage) {
+                  ga_options.storage = 'none';
+                  ga_options.clientId = localStorage.getItem(GA_LOCAL_STORAGE_KEY);
+                  ga('create', '{{ ga|escapejs }}', ga_options);
+                  ga(function(tracker) {
+                    localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
+                  });
+                }
+                else {
+                  ga('create', '{{ ga|escapejs }}', 'auto', ga_options);
+                }
+                ga('set', 'anonymizeIp', true);
+                ga('send', 'pageview');
+            </script>
+            <script async src='https://www.google-analytics.com/analytics.js'></script>
+        {% endif %}
+    {% endif %}
+    {% if m.config.seo_google.gtm.value as gtm %}
         <script>
-            var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
-            var ga_options = {% include '_ga_params.tpl' %};
-            window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-            if (window.localStorage) {
-              ga_options.storage = 'none';
-              ga_options.clientId = localStorage.getItem(GA_LOCAL_STORAGE_KEY);
-              ga('create', '{{ ga|escapejs }}', ga_options);
-              ga(function(tracker) {
-                localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
-              });
-            }
-            else {
-              ga('create', '{{ ga|escapejs }}', 'auto', ga_options);
-            }
-            ga('set', 'anonymizeIp', true);
-            ga('send', 'pageview');
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','{{ gtm|escapejs }}');
         </script>
-        <script async src='https://www.google-analytics.com/analytics.js'></script>
     {% endif %}
 {% endif %}
