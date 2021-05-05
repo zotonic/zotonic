@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 20:45\n"
+"PO-Revision-Date: 2021-05-05 09:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -833,7 +833,7 @@ msgstr "旁边"
 msgid "Ask google to not index this page"
 msgstr "使 Google 不要索引这个页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "附加媒体"
 
@@ -970,7 +970,7 @@ msgstr "计数"
 msgid "Country"
 msgstr "国家"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
 msgid "Create"
 msgstr "创建"
 
@@ -1186,11 +1186,11 @@ msgstr "基于分类來过滤"
 msgid "Filter on content group"
 msgstr "筛选内容组"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
 msgid "Find Media"
 msgstr "查找媒體"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:74
 msgid "Find Page"
 msgstr "查找页面"
 
@@ -1403,7 +1403,7 @@ msgstr "名字"
 msgid "Network Connections"
 msgstr "网络连接"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:80./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
 msgstr "新一頁"
 
@@ -1947,7 +1947,7 @@ msgstr "未命名"
 msgid "Unused"
 msgstr "未使用"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:85./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
 msgstr "上載"
 
@@ -2043,7 +2043,7 @@ msgstr "警告！"
 msgid "Website for clicks on image"
 msgstr "点击图片的网站"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:90./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:91./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "网站或嵌入"
 
@@ -6911,10 +6911,6 @@ msgstr "希望很快见到你。"
 msgid "I agree to the"
 msgstr "我同意"
 
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "If the link does not work then you can go to"
-msgstr "如果链接无法使用，那么你可以"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you already have an account,"
 msgstr "如果您已經有一個帳戶，"
@@ -7007,17 +7003,9 @@ msgstr "您可能已經兩次確認您的帳戶，以便該帳戶已經被確認
 msgid "You must agree to the Terms in order to sign up."
 msgstr "您必须同意这些条款才能注册。"
 
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "and enter the key"
-msgstr "并输入 key"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
 msgstr "以及"
-
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "in the input field."
-msgstr "在输入框中。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "sign in"
