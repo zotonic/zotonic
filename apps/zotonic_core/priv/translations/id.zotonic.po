@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-05 09:45\n"
+"PO-Revision-Date: 2021-05-05 14:51\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -6735,15 +6735,15 @@ msgstr "bukan sebuah kategori"
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Tambahkan noindex, elemen untuk semua halaman nofollow."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:86
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "Bing Webmaster validation id"
 msgstr "Bing Webmaster validasi id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Salin nilai dari atribut isi dalam meta tag yang diberikan oleh Google."
 
@@ -6751,7 +6751,7 @@ msgstr "Salin nilai dari atribut isi dalam meta tag yang diberikan oleh Google."
 msgid "Description to include on every page"
 msgstr "Deskripsi untuk memasukkan pada setiap halaman"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
 msgid "Enter here the verification code for"
 msgstr "Masukkan di sini kode verifikasi untuk"
 
@@ -6767,9 +6767,17 @@ msgstr "Optimasi SEO Umum"
 msgid "Google Analytics tracking id"
 msgstr "Id pelacakan Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
-msgid "Google Webmaster Tools"
-msgstr "Alat Webmaster Google"
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+msgid "Google Search Console"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "Google Tag Manager account page"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+msgid "Google Tag Manager id"
+msgstr ""
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
@@ -6787,7 +6795,7 @@ msgstr "Kata kunci untuk disertakan di setiap halaman. Pisahkan kata kunci denga
 msgid "SEO"
 msgstr "SEO"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
 msgid "Save SEO settings"
 msgstr "Simpan pengaturan SEO"
 
@@ -6807,21 +6815,29 @@ msgstr "File konfigurasi situs mengecualikan situs ini dari mesin pencari."
 msgid "Where can I find my tracking script?"
 msgstr "Di mana saya dapat menemukan tracking script?"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:99./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:107./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108
 msgid "Yandex Webmaster validation id"
 msgstr "ID validasi Webmaster Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Anda menemukan id ini di isi atribut dari tag meta, memiliki format"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 msgid "You find this id in the tracking script, it has the format"
 msgstr "Anda menemukan id ini dalam skrip pelacakan, memiliki format"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "You find this on your"
+msgstr ""
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "it has the format"
+msgstr ""
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:34
 msgid "Always"
