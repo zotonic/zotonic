@@ -85,11 +85,11 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="control-label col-md-4" for="seo_google-webmaster">{_ Google Webmaster Tools _}</label>
+                            <label class="control-label col-md-4" for="seo_google-webmaster">{_ Google Search Console _}</label>
                             <div class="col-md-8">
                                 <input type="text" id="seo_google-webmaster_verify" name="seo_google-webmaster_verify" value="{{ m.config.seo_google.webmaster_verify.value|escape }}" class="form-control" />
                                 <p class="help-block">
-                                    {_ Enter here the verification code for _} <a href="https://www.google.com/webmasters/tools">{_ Google Webmaster Tools _}</a>. {_ Copy the value of the content attribute in the meta tag provided by Google. _}
+                                    {_ Enter here the verification code for _} <a href="https://search.google.com/search-console">{_ Google Search Console _}</a>. {_ Copy the value of the content attribute in the meta tag provided by Google. _}
                                 </p>
                             </div>
                         </div>
