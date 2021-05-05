@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 20:46\n"
+"PO-Revision-Date: 2021-05-05 09:45\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -833,7 +833,7 @@ msgstr "Kõrvale"
 msgid "Ask google to not index this page"
 msgstr "Keela Googlil lehe indekseerimine"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Lisatud meediafail"
 
@@ -970,7 +970,7 @@ msgstr "Krahv"
 msgid "Country"
 msgstr "Riik"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
 msgid "Create"
 msgstr "Loo"
 
@@ -1186,11 +1186,11 @@ msgstr "Filtreeri kategooria järgi"
 msgid "Filter on content group"
 msgstr "Filtreeri sisurühma järgi"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
 msgid "Find Media"
 msgstr "Leidke meedia"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:74
 msgid "Find Page"
 msgstr "Leidke leht"
 
@@ -1403,7 +1403,7 @@ msgstr "Nimi"
 msgid "Network Connections"
 msgstr "Võrguühendused"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:80./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
 msgstr "Uus leht"
 
@@ -1947,7 +1947,7 @@ msgstr "Pealkirjata"
 msgid "Unused"
 msgstr "Kasutamata"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:85./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
 msgstr "Laadi üles"
 
@@ -2043,7 +2043,7 @@ msgstr "Hoiatus!"
 msgid "Website for clicks on image"
 msgstr "Veebileht pildil klikkimiseks"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:90./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:91./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "Veebisait või Embed"
 
@@ -6915,10 +6915,6 @@ msgstr "Loodan sind varsti näha."
 msgid "I agree to the"
 msgstr "ma nõustun"
 
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "If the link does not work then you can go to"
-msgstr "Kui link ei tööta, võite minna"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you already have an account,"
 msgstr "Kui teil on juba konto,"
@@ -7011,17 +7007,9 @@ msgstr "Võib-olla olete oma konto kaks korda kinnitanud, nii et konto on juba k
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Registreerumiseks peate nõustuma tingimustega."
 
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "and enter the key"
-msgstr "ja sisestage võti"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
 msgstr "ja"
-
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "in the input field."
-msgstr "sisendväljal."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "sign in"
