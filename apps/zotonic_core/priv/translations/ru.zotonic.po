@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-05 14:51\n"
+"PO-Revision-Date: 2021-05-05 14:59\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -6769,15 +6769,15 @@ msgstr "Код отслеживания Google Analytics"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Google Search Console"
-msgstr ""
+msgstr "Консоль поиска Google"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "Google Tag Manager account page"
-msgstr ""
+msgstr "Страница аккаунта Диспетчера тегов Google"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
 msgid "Google Tag Manager id"
-msgstr ""
+msgstr "Идентификатор Google Tag Manager"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
@@ -6833,11 +6833,11 @@ msgstr "Если вы найдете этот идентификатор в сц
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "You find this on your"
-msgstr ""
+msgstr "Вы найдете это на своем"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "it has the format"
-msgstr ""
+msgstr "он имеет формат"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:34
 msgid "Always"
