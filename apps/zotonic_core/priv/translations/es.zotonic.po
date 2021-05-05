@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-05 09:45\n"
+"PO-Revision-Date: 2021-05-05 14:52\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -6735,15 +6735,15 @@ msgstr "no es una categoría"
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Agregar un elemento \"noindex, nofollow\" a todas las páginas."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:86
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "Bing Webmaster validation id"
 msgstr "Identificador de validación del Webmaster de Bing"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Copiar el valor del atributo de contenido en la etiqueta meta proporcionada por Google."
 
@@ -6751,7 +6751,7 @@ msgstr "Copiar el valor del atributo de contenido en la etiqueta meta proporcion
 msgid "Description to include on every page"
 msgstr "Descripción a incluir en cada página"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
 msgid "Enter here the verification code for"
 msgstr "Ingrese aquí el código de verificación para"
 
@@ -6767,9 +6767,17 @@ msgstr "Optimización General de SEO"
 msgid "Google Analytics tracking id"
 msgstr "Identificador de seguimiento de Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
-msgid "Google Webmaster Tools"
-msgstr "Herramientas de Google Webmaster"
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+msgid "Google Search Console"
+msgstr "Consola de búsqueda de Google"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "Google Tag Manager account page"
+msgstr "Página de la cuenta de Google Tag Manager"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+msgid "Google Tag Manager id"
+msgstr "ID de Google Tag Manager"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
@@ -6787,7 +6795,7 @@ msgstr "Palabras clave para incluir en cada página. Separe las palabras clave c
 msgid "SEO"
 msgstr "SEO"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
 msgid "Save SEO settings"
 msgstr "Guardar configuración de SEO"
 
@@ -6807,21 +6815,29 @@ msgstr "El archivo de configuración del sitio excluye este sitio de los motores
 msgid "Where can I find my tracking script?"
 msgstr "Donde puedo encontrar mi script de seguimiento?"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:99./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:107./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108
 msgid "Yandex Webmaster validation id"
 msgstr "Identificador de validación de Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Puede encontrar este id en el atributo de contenido de la etiqueta meta, tiene el formato"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 msgid "You find this id in the tracking script, it has the format"
 msgstr "Puede encontrar este en el script de seguimiento, tiene el formato"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "You find this on your"
+msgstr "Encuentra esto en tu"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "it has the format"
+msgstr "tiene el formato"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:34
 msgid "Always"
