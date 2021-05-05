@@ -69,7 +69,7 @@
                                 <input type="text" id="seo_google-analytics" name="seo_google-analytics" value="{{ m.config.seo_google.analytics.value|escape }}" class="form-control" placeholder="G-..........">
                                 <p class="help-block">
                                     {_ You find this id in the tracking script, it has the format _} <strong>G-..........</strong> {_ or _} <strong>UA-123456-1</strong>.
-                                    <a href="https://support.google.com/analytics/bin/answer.py?hl=en&amp;answer=1008080" title="Google Analytics Help">{_ Where can I find my tracking script? _}</a>
+                                    <a rel="noopener noreferrer" target="_blank" href="https://support.google.com/analytics/bin/answer.py?hl=en&amp;answer=1008080" title="Google Analytics Help">{_ Where can I find my tracking script? _}</a>
                                 </p>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                             <div class="col-md-8">
                                 <input type="text" id="seo_google-gtm" name="seo_google-gtm" value="{{ m.config.seo_google.gtm.value|escape }}" class="form-control" placeholder="{_ GTM-...... _}">
                                 <p class="help-block">
-                                    {_ You find this on your _} <a href="https://tagmanager.google.com/" title="Google Tag Manager">{_ Google Tag Manager account page _}</a>, {_ it has the format _} <strong>GTM-......</strong>.
+                                    {_ You find this on your _} <a rel="noopener noreferrer" target="_blank" href="https://tagmanager.google.com/" title="Google Tag Manager">{_ Google Tag Manager account page _}</a>, {_ it has the format _} <strong>GTM-......</strong>.
                                 </p>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                             <div class="col-md-8">
                                 <input type="text" id="seo_google-webmaster_verify" name="seo_google-webmaster_verify" value="{{ m.config.seo_google.webmaster_verify.value|escape }}" class="form-control" />
                                 <p class="help-block">
-                                    {_ Enter here the verification code for _} <a href="https://search.google.com/search-console">{_ Google Search Console _}</a>. {_ Copy the value of the content attribute in the meta tag provided by Google. _}
+                                    {_ Enter here the verification code for _} <a rel="noopener noreferrer" target="_blank" href="https://search.google.com/search-console">{_ Google Search Console _}</a>. {_ Copy the value of the content attribute in the meta tag provided by Google. _}
                                 </p>
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                             <div class="col-md-8">
                                 <input type="text" id="seo_bing-webmaster_verify" name="seo_bing-webmaster_verify" value="{{ m.config.seo_bing.webmaster_verify.value|escape }}" class="form-control" />
                                 <p class="help-block">
-                                    {_ Enter here the verification code for _} <a href="https://www.bing.com/webmasters">{_ Bing Webmaster _}</a>.<br/>
+                                    {_ Enter here the verification code for _} <a rel="noopener noreferrer" target="_blank" href="https://www.bing.com/webmasters">{_ Bing Webmaster _}</a>.<br/>
                                     {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>8103A84C247E45185F39A97C50D40731</strong>.
                                 </p>
                             </div>
@@ -120,7 +120,7 @@
                             <div class="col-md-8">
                                 <input type="text" id="seo_yandex-webmaster_verify" name="seo_yandex-webmaster_verify" value="{{ m.config.seo_yandex.webmaster_verify.value|escape }}" class="form-control" />
                                 <p class="help-block">
-                                    {_ Enter here the verification code for _} <a href="https://webmaster.yandex.com/sites/?noRedirect=yes&hostnameFilter=">{_ Yandex Webmaster _}</a>.<br/>
+                                    {_ Enter here the verification code for _} <a rel="noopener noreferrer" target="_blank" href="https://webmaster.yandex.com/sites/?noRedirect=yes&hostnameFilter=">{_ Yandex Webmaster _}</a>.<br/>
                                     {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>937800ae8c5a6cbf</strong>.
                                 </p>
                             </div>
