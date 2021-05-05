@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2020 Marc Worrell
+%% @copyright 2017-2021 Marc Worrell
 %% @doc Model for mod_seo
 
-%% Copyright 2017-2020 Marc Worrell
+%% Copyright 2017-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ m_get([ <<"google">>, <<"webmaster_verify">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_google, webmaster_verify, Context), Rest}};
 m_get([ <<"google">>, <<"analytics">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_google, analytics, Context), Rest}};
+m_get([ <<"google">>, <<"gtm">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(seo_google, gtm, Context), Rest}};
 m_get([ <<"yandex">>, <<"webmaster_verify">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_yandex, webmaster_verify, Context), Rest}};
 m_get(Vs, _Msg, _Context) ->
