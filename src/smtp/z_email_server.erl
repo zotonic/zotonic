@@ -745,7 +745,7 @@ to_binary(Error) when is_list(Error) ->
             iolist_to_binary(io_lib:format("~p", [Error]))
     end;
 to_binary(Error) ->
-     iolist_to_binary(io:format("~p", [Error])).
+     iolist_to_binary(io_lib:format("~p", [Error])).
 
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
