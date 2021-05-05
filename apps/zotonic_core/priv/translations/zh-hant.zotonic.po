@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-05 14:51\n"
+"PO-Revision-Date: 2021-05-05 14:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -6765,15 +6765,15 @@ msgstr "Google Analytics 跟踪 id"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Google Search Console"
-msgstr ""
+msgstr "Google Search Console"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "Google Tag Manager account page"
-msgstr ""
+msgstr "Google跟踪代碼管理器帳戶頁面"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
 msgid "Google Tag Manager id"
-msgstr ""
+msgstr "Google跟踪代碼管理器ID"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
@@ -6829,11 +6829,11 @@ msgstr "你可以在跟踪脚本中找到这个ID，它的格式是"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "You find this on your"
-msgstr ""
+msgstr "你在你的身上找到這個"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "it has the format"
-msgstr ""
+msgstr "它具有格式"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:34
 msgid "Always"
