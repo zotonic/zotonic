@@ -245,8 +245,10 @@ handle_info(disconnect, #state{ busy_pid = undefined } = State) ->
     {noreply, cancel(State)};
 
 handle_info(disconnect, State) ->
+    Database = get_arg(dbdatabase, State#state.conn_args),
+    Schema = get_arg(dbschema, State#state.conn_args),
     lager:error("SQL disconnect from ~s/~s whilst busy with \"~s\"  ~p",
-                [ State#state.busy_sql, State#state.busy_params ]),
+                [ Database, Schema, State#state.busy_sql, State#state.busy_params ]),
     {noreply, State, cancel(State)};
 
 handle_info(timeout, #state{ busy_pid = undefined } = State) ->
