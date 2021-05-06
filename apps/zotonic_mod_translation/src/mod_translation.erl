@@ -109,7 +109,7 @@ init_config_languages(Context) ->
 %% @doc Return the list of available languages, enable the default language.
 default_languages(Context) ->
     Codes = available_translations(Context),
-    List = [ {C, false} || C <- Codes ],
+    List = [ {C, editable} || C <- Codes ],
     EnabledLang = case m_config:get_value(i18n, language, Context) of
         undefined -> en;
         <<>> -> en;
