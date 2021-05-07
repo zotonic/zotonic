@@ -15,7 +15,7 @@ style_width: width of box
     as
     logon_context
 %}
-{% if zotonic_dispatch == `logon_reminder` %}
+{% if zotonic_dispatch == `logon_reminder` or (zotonic_dispatch == `logon_change` and not m.acl.user) %}
     {% include "_logon_box.tpl"
         form_title_tpl="_logon_reminder_title.tpl"
         form_form_tpl="_logon_reminder_form.tpl"
