@@ -59,6 +59,10 @@ model.present = function(data) {
             "model/auth-ui/post/form/reset",
             function(msg) { actions.resetForm(msg.payload); });
 
+        self.subscribe(
+            "model/auth-ui/post/form/change",
+            function(msg) { actions.changeForm(msg.payload); });
+
         model.status = "waiting";
 
         self.call("model/location/get/q")
@@ -175,6 +179,33 @@ model.present = function(data) {
     if (data.auth_user_id && model.status == 'reset_wait') {
         model.is_expired = false;
         model.logon_view = 'reset_done';
+        model.status = 'updated';
+    }
+
+    if (data.change) {
+        if (data.is_password_equal) {
+            let change = {
+                passcode: data.passcode,
+                password: data.password,
+                password_reset: data.password_reset,
+                onauth: "#"
+            };
+            self.publish("model/auth/post/change", change);
+            model.status = 'change_wait';
+            // The error response comes async via the auth-error topic
+            //
+            // If change was done ok then we should show a 'success' screen with
+            // a link to the home page and/or the user's page.
+        } else {
+            model.is_error = true;
+            model.error = 'unequal';
+            model.logon_view = 'change';
+        }
+    }
+
+    if (data.auth_user_id && model.status == 'change_wait') {
+        model.is_expired = false;
+        model.logon_view = 'change_done';
         model.status = 'updated';
     }
 
@@ -325,6 +356,17 @@ actions.resetForm = function(data) {
         setautologon: data.value.rememberme ? true : false
     }
     model.present(dataReset);
+};
+
+actions.changeForm = function(data) {
+    let dataChange = {
+        change: true,
+        password: data.value.password,
+        password_reset: data.value.password_reset1,
+        is_password_equal: data.value.password_reset1 === data.value.password_reset2,
+        passcode: data.value.passcode || ""
+    }
+    model.present(dataChange);
 };
 
 actions.reminderResponse = function(data) {

@@ -61,7 +61,7 @@
                    tabindex="-1"
             >
         </div>
-        <p class="clearfix hidden">
+        <p class="clearfix">
             <b>{{ q.options.username|escape }}</b>
             <a class="pull-right" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Other username or email _}</a>
         </p>
@@ -125,6 +125,14 @@
                        placeholder="{_ Two-factor passcode _}" />
             </div>
         {% endif %}
+    {% elseif not q.options.is_username_checked %}
+        <div class="form-group hidden">
+            <label for="password" class="control-label">{_ Password _}</label>
+            <input class="form-control" type="password" id="password" name="password" value=""
+                   autocomplete="current-password"
+                   placeholder="{_ Password _}"
+            >
+        </div>
     {% endif %}
 
     {% if q.options.is_username_checked %}
