@@ -6,10 +6,13 @@
  % Handles the redirect after a logon from the logon page
  {logon_done,       ["logon", "done"],                    controller_logon_done, []},
 
+ {logon_change,     ["logon", {logon_view, "change"}],    controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
+
  {logon_reminder,   ["logon", {logon_view, "reminder"}],  controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
  {logon_reset,      ["logon", {logon_view, "reset"}],     controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
 
  % For simple dispatching in the templates (without the "logon_view")
+ {logon_change,     ["logon", "change"],                  controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
  {logon_reset,      ["logon", "reset"],                   controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
  {logon_reminder,   ["logon", "reminder"],                controller_template, [ {template, "logon.tpl"}, noindex, is_logon ]},
 

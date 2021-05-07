@@ -88,6 +88,8 @@ handle_cmd(<<"refresh">>, Payload, Context) ->
     refresh(Payload, Context);
 handle_cmd(<<"setautologon">>, Payload, Context) ->
     setautologon(Payload, Context);
+handle_cmd(<<"change">>, Payload, Context) ->
+    change(Payload, Context);
 handle_cmd(<<"reset_check">>, Payload, Context) ->
     { check_reminder_secret(Payload, Context), Context };
 handle_cmd(<<"reset">>, Payload, Context) ->
@@ -101,7 +103,7 @@ handle_cmd(Cmd, _Payload, Context) ->
             status => error,
             error => <<"unknown_cmd">>,
             message => <<"Unknown cmd, use one of 'logon', 'logoff', 'refresh', 'setautologon', "
-                         "'reset_check', 'reset', 'switch_user' or 'status'">>
+                         "'reset_check', 'reset', 'change', switch_user' or 'status'">>
         },
         Context
     }.
@@ -287,6 +289,72 @@ maybe_setautologon(#{ <<"setautologon">> := SetAutoLogon }, Context) ->
 maybe_setautologon(_Payload, Context) ->
     z_authentication_tokens:reset_autologon_cookie(Context).
 
+
+%% @doc Change the password for the current user, use the (optional) 2FA code
+-spec change( map(), z:context() ) -> { map(), z:context() }.
+change(#{
+        <<"password">> := Password,
+        <<"password_reset">> := NewPassword,
+        <<"passcode">> := Passcode
+    }, Context) when is_binary(NewPassword), is_binary(Password), is_binary(Passcode) ->
+    case z_acl:user(Context) of
+        undefined ->
+            { #{ status => error, error => no_user }, Context };
+        UserId ->
+            case m_identity:get_username(UserId, Context) of
+                undefined ->
+                    lager:error("Password change: User ~p does not have an username defined.", [ UserId ]),
+                    { #{ status => error, error => username }, Context };
+                Username ->
+                    case auth_precheck(Username, Context) of
+                        ok ->
+                            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 6, Context)),
+
+                            case size(Password) of
+                                N when N < PasswordMinLength ->
+                                    { #{ status => error, error => tooshort }, Context };
+                                _ ->
+                                    change_1(UserId, Username, Password, NewPassword, Passcode, Context)
+                            end;
+                        {error, ratelimit} ->
+                            { #{ status => error, error => ratelimit }, Context };
+                        _ ->
+                            { #{ status => error, error => error }, Context }
+                    end
+            end
+    end;
+change(_Payload, Context) ->
+    { #{
+        status => error,
+        error => args,
+        message => <<"Missing one of: password, password_reset, passcode">>
+    }, Context }.
+
+
+change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
+    Payload = #{
+        <<"username">> => Username,
+        <<"password">> => Password,
+        <<"passcode">> => Passcode
+    },
+    case z_notifier:first(#logon_submit{ payload = Payload }, Context) of
+        {ok, UserId} ->
+            case reset_1(UserId, Username, NewPassword, Passcode, Context) of
+                ok ->
+                    logon_1({ok, UserId}, Payload, Context);
+                {error, Reason} ->
+                    { #{ status => error, error => Reason }, Context }
+            end;
+        {error, ratelimit} ->
+            { #{ status => error, error => ratelimit }, Context };
+        {error, need_passcode} ->
+            { #{ status => error, error => need_passcode }, Context };
+        {error, passcode} ->
+            { #{ status => error, error => passcode }, Context };
+        {ok, _} ->
+            { #{ status => error, error => pw }, Context }
+    end.
+
 %% @doc Reset the password for an user, using the mailed reset secret and (optional) 2FA code.
 -spec reset( map(), z:context() ) -> { map(), z:context() }.
 reset(#{
@@ -310,7 +378,7 @@ reset(#{
                                     lager:error("Password reset: User ~p does not have an username defined.", [ UserId ]),
                                     { #{ status => error, error => username }, Context };
                                 Username ->
-                                    case reset_1(UserId, Username, Password, Context) of
+                                    case reset_1(UserId, Username, Password, Passcode, Context) of
                                         ok ->
                                             logon_1({ok, UserId}, Payload, Context);
                                         {error, Reason} ->
@@ -334,8 +402,12 @@ reset(_Payload, Context) ->
     }, Context }.
 
 
-reset_1(UserId, Username, Password, Context) ->
-    case auth_postcheck(UserId, z_context:get_q_all(Context), Context) of
+reset_1(UserId, Username, Password, Passcode, Context) ->
+    QArgs = [
+        {<<"username">>, Username},
+        {<<"passcode">>, Passcode}
+    ],
+    case auth_postcheck(UserId, QArgs, Context) of
         ok ->
             case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
                 ok ->

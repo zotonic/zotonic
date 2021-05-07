@@ -144,6 +144,10 @@ model.present = function(data) {
             actions.resetPassword(msg);
         });
 
+        self.subscribe("model/auth/post/change", function(msg) {
+            actions.changePassword(msg);
+        });
+
         // Keep-alive ping for token refresh
         self.subscribe("model/ui/event/recent-activity", function(msg) {
             if (msg.payload.is_active) {
@@ -322,6 +326,21 @@ model.present = function(data) {
             username: data.username,
             password: data.password,
             secret: data.secret,
+            passcode: data.passcode
+        })
+        .then(function(resp) { return resp.json(); })
+        .then(function(body) { actions.authLogonResponse(body); })
+        .catch((e) => { actions.fetchError(); });
+    }
+
+    if (data.is_change) {
+        model.state_change('authenticating');
+        model.onauth = data.onauth || null;
+
+        fetchWithUA({
+            cmd: "change",
+            password: data.password,
+            password_reset: data.password_reset,
             passcode: data.passcode
         })
         .then(function(resp) { return resp.json(); })
@@ -648,6 +667,17 @@ actions.resetPassword = function(msg) {
         secret: msg.payload.secret,
         passcode: msg.payload.passcode,
         setautologon: msg.payload.rememberme ? true : false,
+        onauth: msg.payload.onauth || null
+    };
+    model.present(data);
+}
+
+actions.changePassword = function(msg) {
+    let data = {
+        is_change: true,
+        password: msg.payload.password,
+        password_reset: msg.payload.password_reset,
+        passcode: msg.payload.passcode,
         onauth: msg.payload.onauth || null
     };
     model.present(data);
