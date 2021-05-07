@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-07 13:17\n"
+"PO-Revision-Date: 2021-05-07 13:28\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -3573,7 +3573,7 @@ msgstr "في الأسفل يوجد تفاصيل حسابك و رابط لتعي�
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
-msgstr ""
+msgstr "تغيير كلمة المرور"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
@@ -3581,7 +3581,7 @@ msgstr "قم بتغيير كلمة المرور و تسجيل الدخول"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
 msgid "Change your password"
-msgstr ""
+msgstr "غير كلمة المرور الخاصة بك"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:40
 msgid "Change your permissions"
@@ -3619,7 +3619,7 @@ msgstr "فشل التأكيد"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:2
 msgid "Current password"
-msgstr ""
+msgstr "كلمة السر الحالية"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:51
 msgid "Duplicate email"
@@ -3946,7 +3946,7 @@ msgstr "انت الآن مسجل دخولك."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
 msgid "You are signed in"
-msgstr ""
+msgstr "لقد قمت بتسجيل الدخول"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:90
 msgid "You can log in using the following external service"
@@ -3995,7 +3995,7 @@ msgstr "كلمة مرورك الجديدة قصيرة جدًا."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:30
 msgid "Your password has been changed"
-msgstr ""
+msgstr "تم تغيير كلمة السر الخاصة بك"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
 msgid "Your password has been reset"
@@ -4012,7 +4012,7 @@ msgstr "كلمة المرور الخاصة بك قصيرة جدا."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
 msgid "Your username is"
-msgstr ""
+msgstr "اسم المستخدم الخاص بك هو"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:11./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "an hour"
