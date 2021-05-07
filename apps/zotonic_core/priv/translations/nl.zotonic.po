@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-07 13:17\n"
+"PO-Revision-Date: 2021-05-07 13:28\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3575,7 +3575,7 @@ msgstr "Hieronder staan je account details en een link om je wachtwoord te reset
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
-msgstr ""
+msgstr "Wachtwoord wijzigen"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
@@ -3583,7 +3583,7 @@ msgstr "Verander wachtwoord en login"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
 msgid "Change your password"
-msgstr ""
+msgstr "Verander uw wachtwoord"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:40
 msgid "Change your permissions"
@@ -3621,7 +3621,7 @@ msgstr "Fout bij bevestiging"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:2
 msgid "Current password"
-msgstr ""
+msgstr "Huidig wachtwoord"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:51
 msgid "Duplicate email"
@@ -3948,7 +3948,7 @@ msgstr "Je bent nu ingelogd."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
 msgid "You are signed in"
-msgstr ""
+msgstr "U bent aangemeld"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:90
 msgid "You can log in using the following external service"
@@ -3997,7 +3997,7 @@ msgstr "Je nieuwe wachtwoord is te kort."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:30
 msgid "Your password has been changed"
-msgstr ""
+msgstr "Uw wachtwoord is gewijzigd"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
 msgid "Your password has been reset"
@@ -4014,7 +4014,7 @@ msgstr "Je wachtwoord is te kort."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
 msgid "Your username is"
-msgstr ""
+msgstr "jouw gebruikersnaam is"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:11./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "an hour"
