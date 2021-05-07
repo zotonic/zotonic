@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-05 14:58\n"
+"PO-Revision-Date: 2021-05-07 13:16\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgid "hour"
 msgstr "小時"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "小時"
 
@@ -52,7 +52,7 @@ msgid "minute"
 msgstr "分鐘"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "分鐘"
 
@@ -170,7 +170,7 @@ msgstr "您確定要將所有ACL規則還原到其當前發布的版本嗎？"
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:87./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -2390,7 +2390,7 @@ msgstr "只有管理员可以创建配置 Key。"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:116./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:116./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
 msgid "Password"
@@ -2724,7 +2724,7 @@ msgid "Name and e-mail address"
 msgstr "名字和 e-mail 地址"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:20
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:10./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:10./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "新密码"
 
@@ -3563,7 +3563,7 @@ msgstr "认证已通过"
 msgid "Authorizing..."
 msgstr "授权..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:63./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
 msgstr "回到登入表单"
 
@@ -3571,19 +3571,27 @@ msgstr "回到登入表单"
 msgid "Below are your account details and a link to set a new password."
 msgstr "下面是你的账户资料以及设置新密码的链接。"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
+msgid "Change password"
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
 msgstr "修改密码并登入"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
+msgid "Change your password"
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:40
 msgid "Change your permissions"
 msgstr "更改您的权限"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:60./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:76
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:90./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:106
 msgid "Check your email"
 msgstr "检查你的 e-mail"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53
 msgid "Checking the reset code…"
 msgstr "检查复位代码…。"
 
@@ -3608,6 +3616,10 @@ msgstr "确认"
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
 msgid "Confirmation failure"
 msgstr "验证失败"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:2
+msgid "Current password"
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:51
 msgid "Duplicate email"
@@ -3660,7 +3672,7 @@ msgstr "外部服务"
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "为了确保安全，密码重设码只在有限时间内可用，而且只能被使用一次。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:8./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
 msgid "Forgot your password?"
 msgstr "忘记密码？"
 
@@ -3673,15 +3685,15 @@ msgstr "回去吧"
 msgid "Go to Modules"
 msgstr "进入模块"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:45
 msgid "Go to the admin"
 msgstr "进入管理界面"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:44
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:36
 msgid "Go to the home page"
 msgstr "进入主页"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:48
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the your profile page"
 msgstr "进入您的个人资料页面"
 
@@ -3709,7 +3721,7 @@ msgstr "我想创建一个新的账户"
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
 msgstr "如果你没有要求重置密码，你可以放心地忽略这封邮件。也许有人在输入他或她的电子邮件地址时出错。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:92./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "如果您在几分钟内没有收到邮件，请检查您的垃圾邮件文件夹。"
 
@@ -3717,11 +3729,11 @@ msgstr "如果您在几分钟内没有收到邮件，请检查您的垃圾邮件
 msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when signing up."
 msgstr "如果您认为您已经有了一个账户，并希望收到这封电子邮件，请使用您注册时提供的电子邮件地址再次尝试。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:107
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "在电子邮件中，你会发现如何确认你的帐户的说明。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "让我签到"
 
@@ -3738,7 +3750,7 @@ msgstr "最少字符："
 msgid "Need help signing in?"
 msgstr "需要帮助登录？"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:158
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
 msgstr "下一页"
@@ -3758,7 +3770,7 @@ msgstr "请等一下"
 msgid "Other username or email"
 msgstr "其他用户名或电子邮件"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "密码"
 
@@ -3770,7 +3782,7 @@ msgstr "请确认你的"
 msgid "Please enter the two-factor authentication passcode."
 msgstr "请输入双因素验证密码。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
 msgid "Please try again in"
 msgstr "请再试一次"
 
@@ -3787,7 +3799,7 @@ msgstr "转向"
 msgid "Redirecting..."
 msgstr "重定向..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
 msgid "Repeat password"
 msgstr "重复密码"
 
@@ -3800,15 +3812,15 @@ msgstr "重复您的密码"
 msgid "Reset password and Sign in"
 msgstr "重设密码并登入"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
 msgid "Reset your password"
 msgstr "重设你的密码"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Send Verification Message"
 msgstr "发送验证信息"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:152./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:160./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "登入"
@@ -3817,7 +3829,7 @@ msgstr "登入"
 msgid "Sign in to"
 msgstr "登入到"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2
+#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:33
 msgid "Sign out"
 msgstr "登出"
 
@@ -3842,11 +3854,11 @@ msgstr "出错"
 msgid "Something went wrong, please try again later."
 msgstr "出了点问题，请稍后再试。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:82
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:112
 msgid "Sorry, could not send the verification message."
 msgstr "对不起，无法发送验证信息。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:13
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:6./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:13
 msgid "Sorry, too many retries"
 msgstr "对不起，重试太多"
 
@@ -3854,7 +3866,7 @@ msgstr "对不起，重试太多"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "对不起，你的密码重设码未知或過期。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:135
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
 msgid "Stay logged on unless I log off."
 msgstr "除非我注销，否则请保持登录状态。"
 
@@ -3900,7 +3912,7 @@ msgstr "要查看本页面，您需要有其他访问权限。"
 msgid "Too many retries."
 msgstr "太多的重试。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:125./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:125./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "双因素密码"
 
@@ -3912,15 +3924,15 @@ msgstr "请不要使用纯字母或者纯数字的密码。"
 msgid "Username or email"
 msgstr "用户名或电子邮件"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
 msgstr "验证您的账户"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
 msgstr "没有找到任何关于你的可用 e-mail 地址信息或是其他电子联系方式。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:61
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:91
 msgid "We have sent an email with a link to reset your password to"
 msgstr "我们已经发送了一封电子邮件，其中有一个链接来重置您的密码到"
 
@@ -3928,9 +3940,13 @@ msgstr "我们已经发送了一封电子邮件，其中有一个链接来重置
 msgid "You are about to create a new account."
 msgstr "您正准备创建一个新的账户。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
 msgstr "你现在已经登录了。"
+
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
+msgid "You are signed in"
+msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:90
 msgid "You can log in using the following external service"
@@ -3957,7 +3973,7 @@ msgstr "您收到此电子邮件是因为您通过输入用户名或电子邮件
 msgid "You'll need to create a new one."
 msgstr "你需要创建一个新的。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:98
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "你几乎完成了!为了确保你是真正的你，我们要求你从你的电子邮件地址确认你的帐户。"
 
@@ -3977,7 +3993,11 @@ msgstr "您的电子邮件或用户名"
 msgid "Your new password is too short."
 msgstr "你的新密码太短。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:30
+msgid "Your password has been changed"
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
 msgid "Your password has been reset"
 msgstr "您的密码已被重置"
 
@@ -3990,7 +4010,11 @@ msgstr "您的密码已经过期"
 msgid "Your password is too short."
 msgstr "你的密码太短了。"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
+msgid "Your username is"
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:11./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "an hour"
 msgstr "一小时"
 
