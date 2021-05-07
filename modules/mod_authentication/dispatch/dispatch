@@ -4,6 +4,7 @@
  {logoff, ["logoff"], controller_logoff, [{ssl, true}]},
  {logon_reminder, ["logon", "reminder"], controller_logon, [{ssl, true}]},
  {logon_reset, ["logon", "reset"], controller_logon, [{ssl, true}]},
+ {logon_change, ["logon", "change"], controller_logon, [{ssl, true}]},
 
  {logon_service, ["logon", "service", service ], controller_template, [{ssl, true}, {template, "logon_service.tpl"}]},
 
