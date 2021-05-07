@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-07 13:17\n"
+"PO-Revision-Date: 2021-05-07 13:28\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -3573,7 +3573,7 @@ msgstr "Qui sotto ci sono i dettagli del tuo account e un link per impostare una
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
-msgstr ""
+msgstr "Cambia la password"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
@@ -3581,7 +3581,7 @@ msgstr "Cambia la password e accedi"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
 msgid "Change your password"
-msgstr ""
+msgstr "Cambia la tua password"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:40
 msgid "Change your permissions"
@@ -3619,7 +3619,7 @@ msgstr "Fallimento della conferma"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:2
 msgid "Current password"
-msgstr ""
+msgstr "Password attuale"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:51
 msgid "Duplicate email"
@@ -3946,7 +3946,7 @@ msgstr "Ora hai effettuato l'accesso."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
 msgid "You are signed in"
-msgstr ""
+msgstr "Hai effettuato l'accesso"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:90
 msgid "You can log in using the following external service"
@@ -3995,7 +3995,7 @@ msgstr "La tua nuova password è troppo corta."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:30
 msgid "Your password has been changed"
-msgstr ""
+msgstr "La tua password è stata modificata"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
 msgid "Your password has been reset"
@@ -4012,7 +4012,7 @@ msgstr "La tua password è troppo corta."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
 msgid "Your username is"
-msgstr ""
+msgstr "Il tuo nome utente è"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:11./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "an hour"
