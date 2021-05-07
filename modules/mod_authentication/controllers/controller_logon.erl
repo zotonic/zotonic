@@ -107,7 +107,8 @@ provide_content(ReqData, Context) ->
     Secret = z_context:get_q("secret", Context2),
     Username = z_context:get_q("u", Context2),
     {SecretVars, Context3} = reminder_secrets(Secret, Username, Context2),
-    Vars1 = SecretVars ++ Vars,
+    ResetVars = reset_vars(Context3),
+    Vars1 = ResetVars ++ SecretVars ++ Vars,
     ErrorUId = z_context:get_q("error_uid", Context3),
     ContextVerify = case ErrorUId /= undefined andalso z_utils:only_digits(ErrorUId) of
                         false -> Context3;
@@ -157,6 +158,25 @@ reminder_secrets(Secret, Username, Context) ->
                 {error, Reason}
             ],
             {Vs, Context}
+    end.
+
+reset_vars(Context) ->
+    case z_context:get(zotonic_dispatch, Context) of
+        logon_change ->
+            case z_acl:user(Context) of
+                undefined ->
+                    [];
+                UserId ->
+                    NeedPasscode = case auth_postcheck(UserId, [], Context) of
+                        {error, need_passcode} -> true;
+                        _ -> false
+                    end,
+                    [
+                        {need_passcode, NeedPasscode}
+                    ]
+            end;
+        _ ->
+            []
     end.
 
 
@@ -213,6 +233,11 @@ event(#submit{message={reset, Args}, form="password_reset"}, Context) ->
     {secret, Secret} = proplists:lookup(secret, Args),
     {username, Username} = proplists:lookup(username, Args),
     reset(Secret, Username, Context);
+
+event(#submit{message={change, Args}, form="password_reset"}, Context) ->
+    {user_id, UserId} = proplists:lookup(user_id, Args),
+    UserId = z_acl:user(Context),
+    change(UserId, Context);
 
 event(#submit{message={reminder, _Args}, form="password_reminder"}, Context) ->
     reminder(z_context:get_q_validated("reminder_address", Context), Context);
@@ -325,6 +350,66 @@ reminder(Email, Context) ->
             logon_stage("reminder_sent", [{email, EmailNorm}], Context);
         {error, Reason} ->
             logon_stage("reminder_sent", [{error, Reason}, {email, EmailNorm}], Context)
+    end.
+
+change(UserId, Context) ->
+    case m_identity:get_username(Context) of
+        undefined ->
+            logon_error("pw", Context);
+        Username ->
+            case auth_precheck(Username, Context) of
+                ok ->
+                    change_1(UserId, Username, Context);
+                {error, ratelimit} ->
+                    logon_error("ratelimit", Context);
+                _ ->
+                    logon_error("error", Context)
+            end
+    end.
+
+change_1(UserId, Username, Context) ->
+    LogonArgs = [
+        {"username", binary_to_list(Username)},
+        {"password", z_context:get_q("password", Context)},
+        {"passcode", z_context:get_q("passcode", Context)}
+    ],
+    case z_notifier:first(#logon_submit{query_args=LogonArgs}, Context) of
+        {ok, UserId} when is_integer(UserId) ->
+            Password1 = z_string:trim(z_context:get_q("password_reset1", Context)),
+            Password2 = z_string:trim(z_context:get_q("password_reset2", Context)),
+            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, "6", Context)),
+
+            case {Password1,Password2} of
+                {A,_} when length(A) < PasswordMinLength ->
+                    logon_error("tooshort", Context);
+                {P,P} ->
+                    reset_1(UserId, Username, Password1, Context);
+                {_,_} ->
+                    logon_error("unequal", Context)
+            end;
+        {error, ratelimit} ->
+            logon_error("ratelimit", Context);
+        {error, need_passcode} ->
+            logon_error("need_passcode", Context);
+        {error, passcode} ->
+            logon_error("passcode", Context);
+        {error, _Reason} ->
+            logon_error("pw", Context);
+        {expired, UserId} when is_integer(UserId) ->
+            case m_identity:get_username(UserId, Context) of
+                undefined ->
+                    logon_error("pw", Context);
+                Username ->
+                    Vars = [
+                        {user_id, UserId},
+                        {secret, set_reminder_secret(UserId, Context)},
+                        {username, Username},
+                        {need_passcode, has_passcode(Context)}
+                    ],
+                    logon_stage("password_expired", Vars, Context)
+            end;
+        undefined ->
+            logon_error("error", Context)
     end.
 
 reset(Secret, Username, Context) when is_binary(Username) ->
