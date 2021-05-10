@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 20:45\n"
+"PO-Revision-Date: 2021-05-07 13:28\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgid "hour"
 msgstr "Stunde"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "Stunden"
 
@@ -52,7 +52,7 @@ msgid "minute"
 msgstr "Minute"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "Minuten"
 
@@ -170,7 +170,7 @@ msgstr "Sind Sie sicher, dass Sie alle ACL-Regeln in ihrer aktuell veröffentlic
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:87./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -833,7 +833,7 @@ msgstr "Beiseite"
 msgid "Ask google to not index this page"
 msgstr "Google bitten, diese Seite nicht zu indizieren"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "Benutzte Mediendateien"
 
@@ -970,7 +970,7 @@ msgstr "Anzahl"
 msgid "Country"
 msgstr "Land"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
 msgid "Create"
 msgstr "Erstellen"
 
@@ -1186,11 +1186,11 @@ msgstr "Nach Kategorie filtern"
 msgid "Filter on content group"
 msgstr "Nach Inhaltsgruppe filtern"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
 msgid "Find Media"
 msgstr "Medien finden"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:74
 msgid "Find Page"
 msgstr "Seite finden"
 
@@ -1403,7 +1403,7 @@ msgstr "Name"
 msgid "Network Connections"
 msgstr "Netzwerk-Verbindungen"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:80./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
 msgstr "Neue Seite"
 
@@ -1947,7 +1947,7 @@ msgstr "Unbenannt"
 msgid "Unused"
 msgstr "Unbenutzt"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:85./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
 msgstr "Hochladen"
 
@@ -2043,7 +2043,7 @@ msgstr "Warnung!"
 msgid "Website for clicks on image"
 msgstr "Webseite, die bei Clicks auf das Bild aufgerufen werden soll"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:90./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:91./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "Website oder Einbetten"
 
@@ -2390,7 +2390,7 @@ msgstr "Nur ein Administrator kann Konfigurationsschlüssel hinzufügen."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:116./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:116./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
 msgid "Password"
@@ -2724,7 +2724,7 @@ msgid "Name and e-mail address"
 msgstr "Name und E-Mail-Adresse"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:20
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:10./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:10./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "Neues Passwort"
 
@@ -3563,7 +3563,7 @@ msgstr "Die Authentifizierung erfolgte mit"
 msgid "Authorizing..."
 msgstr "Autorisierend..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:63./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
 msgstr "Zurück zur Anmeldung"
 
@@ -3571,19 +3571,27 @@ msgstr "Zurück zur Anmeldung"
 msgid "Below are your account details and a link to set a new password."
 msgstr "Nachfolgend finden Sie Ihre Kontodaten und einen Link zum Festlegen eines neuen Passworts."
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
+msgid "Change password"
+msgstr "Kennwort ändern"
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
 msgstr "Passwort ändern und anmelden"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
+msgid "Change your password"
+msgstr "Ändern Sie Ihr Passwort"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:40
 msgid "Change your permissions"
 msgstr "Ändern Sie Ihre Berechtigungen"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:60./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:76
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:90./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:106
 msgid "Check your email"
 msgstr "Prüfen Sie Ihre E-Mail"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53
 msgid "Checking the reset code…"
 msgstr "Prüfen des Reset-Codes…"
 
@@ -3608,6 +3616,10 @@ msgstr "Bestätigen"
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
 msgid "Confirmation failure"
 msgstr "Ausfall der Quittierung"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:2
+msgid "Current password"
+msgstr "Jetziges Passwort"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:51
 msgid "Duplicate email"
@@ -3660,7 +3672,7 @@ msgstr "Externe Dienste"
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "Aus Sicherheitsgründen werden Codes zum Zurücksetzen des Passworts nur für eine begrenzte Zeit aufbewahrt und können nur einmal verwendet werden."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:8./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
 msgid "Forgot your password?"
 msgstr "Haben Sie Ihr Passwort vergessen?"
 
@@ -3673,15 +3685,15 @@ msgstr "Zurückgehen"
 msgid "Go to Modules"
 msgstr "Zu den Modulen gehen"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:45
 msgid "Go to the admin"
 msgstr "Gehen Sie zum Admin"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:44
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:36
 msgid "Go to the home page"
 msgstr "Zur Startseite"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:48
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the your profile page"
 msgstr "Gehen Sie auf die Seite Ihres Profils"
 
@@ -3709,7 +3721,7 @@ msgstr "Ich möchte ein neues Konto erstellen"
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
 msgstr "Wenn Sie keine Passwortrücksetzung angefordert haben, können Sie diese E-Mail getrost ignorieren. Vielleicht hat jemand einen Fehler bei der Eingabe seiner E-Mail-Adresse gemacht."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:92./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "Wenn Sie die E-Mail nicht innerhalb weniger Minuten erhalten, überprüfen Sie bitte Ihren Spam-Ordner."
 
@@ -3717,11 +3729,11 @@ msgstr "Wenn Sie die E-Mail nicht innerhalb weniger Minuten erhalten, überprüf
 msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when signing up."
 msgstr "Wenn Sie glauben, dass Sie ein Konto haben und diese E-Mail erwartet haben, versuchen Sie es bitte erneut mit der E-Mail-Adresse, die Sie bei der Anmeldung angegeben haben."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:107
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "In der E-Mail finden Sie Anweisungen, wie Sie Ihr Konto bestätigen können."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "Angemeldet bleiben"
 
@@ -3738,7 +3750,7 @@ msgstr "Minimale Zeichen:"
 msgid "Need help signing in?"
 msgstr "Brauchen Sie Hilfe bei der Anmeldung?"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:158
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
 msgstr "Weiter"
@@ -3758,7 +3770,7 @@ msgstr "Einen Augenblick bitte..."
 msgid "Other username or email"
 msgstr "Anderer Benutzername oder E-Mail"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "Passcode"
 
@@ -3770,7 +3782,7 @@ msgstr "Bitte bestätigen Sie Ihr"
 msgid "Please enter the two-factor authentication passcode."
 msgstr "Bitte geben Sie den Passcode für die Zwei-Faktor-Authentifizierung ein."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
 msgid "Please try again in"
 msgstr "Bitte versuchen Sie es erneut in"
 
@@ -3787,7 +3799,7 @@ msgstr "Umleitung zu"
 msgid "Redirecting..."
 msgstr "Umleiten..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
 msgid "Repeat password"
 msgstr "Passwort wiederholen"
 
@@ -3800,15 +3812,15 @@ msgstr "Wiederholen Sie Ihr Passwort"
 msgid "Reset password and Sign in"
 msgstr "Passwort zurücksetzen und anmelden"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
 msgid "Reset your password"
 msgstr "Ihr Passwort zurücksetzen"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Send Verification Message"
 msgstr "Verifizierungsnachricht senden"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:152./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:160./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "Anmelden"
@@ -3817,7 +3829,7 @@ msgstr "Anmelden"
 msgid "Sign in to"
 msgstr "Anmelden bei"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2
+#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:33
 msgid "Sign out"
 msgstr "Abmelden"
 
@@ -3842,11 +3854,11 @@ msgstr "Entschuldigen Sie, irgendwas ging schief."
 msgid "Something went wrong, please try again later."
 msgstr "Da ist wohl etwas schiefgegangen!. Bitte versuchen Sie es später erneut."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:82
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:112
 msgid "Sorry, could not send the verification message."
 msgstr "Sorry, konnte die Bestätigungsnachricht nicht senden."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:13
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:6./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:13
 msgid "Sorry, too many retries"
 msgstr "Sorry, zu viele Wiederholungen"
 
@@ -3854,7 +3866,7 @@ msgstr "Sorry, zu viele Wiederholungen"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Ihr Passwort-Reset-Code ist leider unbekannt oder abgelaufen"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:135
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
 msgid "Stay logged on unless I log off."
 msgstr "Bleiben Sie angemeldet, es sei denn, ich melde mich ab."
 
@@ -3900,7 +3912,7 @@ msgstr "Um diese Seite anzuzeigen, müssen Sie über andere Zugriffsrechte verf�
 msgid "Too many retries."
 msgstr "Zu viele Wiederholungsversuche."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:125./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:125./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "Zwei-Faktor-Passcode"
 
@@ -3912,15 +3924,15 @@ msgstr "Verwenden Sie einige nicht alphabetische Zeichen oder Ziffern, um das Er
 msgid "Username or email"
 msgstr "Benutzername oder E-Mail-Adresse"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
 msgstr "Bestätigen Sie Ihr Konto"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
 msgstr "Wir scheinen keine gültige E-Mail Adresse oder andere elektronische Kommunikationsadresse von Ihnen zu haben."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:61
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:91
 msgid "We have sent an email with a link to reset your password to"
 msgstr "Wir haben eine E-Mail mit einem Link zum Zurücksetzen Ihres Kennworts gesendet an"
 
@@ -3928,9 +3940,13 @@ msgstr "Wir haben eine E-Mail mit einem Link zum Zurücksetzen Ihres Kennworts g
 msgid "You are about to create a new account."
 msgstr "Sie sind dabei, ein neues Konto zu erstellen."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
 msgstr "Du bist jetzt angemeldet."
+
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
+msgid "You are signed in"
+msgstr "Sie sind angemeldet"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:90
 msgid "You can log in using the following external service"
@@ -3957,7 +3973,7 @@ msgstr "Sie haben diese E-Mail erhalten, weil Sie durch Zurückgeben Ihres Benut
 msgid "You'll need to create a new one."
 msgstr "Sie müssen eine neue erstellen."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:98
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "Sie sind fast fertig! Um sicherzustellen, dass Sie wirklich Sie sind, bitten wir Sie, Ihr Konto von Ihrer E-Mail-Adresse zu bestätigen."
 
@@ -3977,7 +3993,11 @@ msgstr "Ihre E-Mail oder Ihr Benutzername"
 msgid "Your new password is too short."
 msgstr "Ihr neues Passwort ist zu kurz."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:30
+msgid "Your password has been changed"
+msgstr "Ihr Passwort wurde geändert"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
 msgid "Your password has been reset"
 msgstr "Ihr Passwort wurde zurückgesetzt"
 
@@ -3990,7 +4010,11 @@ msgstr "Ihr Passwort ist abgelaufen"
 msgid "Your password is too short."
 msgstr "Ihr Passwort ist zu kurz."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
+msgid "Your username is"
+msgstr "Dein Benutzername ist"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:11./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "an hour"
 msgstr "eine Stunde"
 
@@ -6735,15 +6759,15 @@ msgstr "ist keine Kategorie"
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Ein noindex, nofollow-Element in alle Seiten einfügen."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:86
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "Bing Webmaster validation id"
 msgstr "Bing Webmaster-Validierungs-ID"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Kopieren Sie den Wert des Content-Attributs in den von Google bereitgestellten Meta-Tag."
 
@@ -6751,7 +6775,7 @@ msgstr "Kopieren Sie den Wert des Content-Attributs in den von Google bereitgest
 msgid "Description to include on every page"
 msgstr "Beschreibung, die jeder Seite hinzugefügt wird"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
 msgid "Enter here the verification code for"
 msgstr "Geben Sie hier den Verifizierungscode für"
 
@@ -6767,9 +6791,17 @@ msgstr "Allgemeine SEO-Optimierung"
 msgid "Google Analytics tracking id"
 msgstr "Google Analytics Tracking-ID"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
-msgid "Google Webmaster Tools"
-msgstr "Google Webmaster-Tools"
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+msgid "Google Search Console"
+msgstr "Google Search Console"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "Google Tag Manager account page"
+msgstr "Google Tag Manager-Kontoseite"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+msgid "Google Tag Manager id"
+msgstr "Google Tag Manager-ID"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
@@ -6787,7 +6819,7 @@ msgstr "Keywords, die für jede Seite angegeben werden sollen. Mit \",\" voneina
 msgid "SEO"
 msgstr "SEO"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
 msgid "Save SEO settings"
 msgstr "SEO-Einstellungen speichern"
 
@@ -6807,21 +6839,29 @@ msgstr "Die Konfigurationsdatei der Website schließt diese Website von den Such
 msgid "Where can I find my tracking script?"
 msgstr "Wo kann ich mein Tracking-Skript finden?"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
 msgid "Yandex Webmaster"
 msgstr "Yandex-Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:99./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:107./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108
 msgid "Yandex Webmaster validation id"
 msgstr "Yandex Webmaster-Validierungs-ID"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Sie finden diese ID im Content-Attribut des Meta-Tags, sie hat das Format"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 msgid "You find this id in the tracking script, it has the format"
 msgstr "Sie finden diese ID im Tracking-Skript, sie hat das Format"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "You find this on your"
+msgstr "Sie finden dies auf Ihrem"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "it has the format"
+msgstr "es hat das Format"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:34
 msgid "Always"
@@ -6915,10 +6955,6 @@ msgstr "Bis bald."
 msgid "I agree to the"
 msgstr "Ich stimme den"
 
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "If the link does not work then you can go to"
-msgstr "Wenn der Link nicht funktioniert, dann kannst du zu folgendem Link gehen"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you already have an account,"
 msgstr "Wenn Sie bereits ein Konto haben,"
@@ -7011,17 +7047,9 @@ msgstr "Möglicherweise haben Sie Ihr Konto zweimal bestätigt, sodass das Konto
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Sie müssen den Bedingungen zustimmen, um sich zu registrieren."
 
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "and enter the key"
-msgstr "und geben Sie die Taste"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
 msgstr "und die"
-
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "in the input field."
-msgstr "in das Eingabefeld ein."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "sign in"

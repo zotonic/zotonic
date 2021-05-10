@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-04-23 20:46\n"
+"PO-Revision-Date: 2021-05-07 13:28\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgid "hour"
 msgstr "ชั่วโมง"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:328./apps/zotonic_core/src/support/z_datetime.erl:331
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "ชั่วโมง"
 
@@ -52,7 +52,7 @@ msgid "minute"
 msgstr "นาที"
 
 #: apps/zotonic_core/src/support/z_datetime.erl:326./apps/zotonic_core/src/support/z_datetime.erl:329
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "นาที"
 
@@ -170,7 +170,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:87./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:117./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -833,7 +833,7 @@ msgstr "นอกจากนี้"
 msgid "Ask google to not index this page"
 msgstr "ขอให้ Google อย่าจัดทำดัชนีหน้านี้"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
 msgid "Attached media"
 msgstr "สื่อที่แนบมา"
 
@@ -970,7 +970,7 @@ msgstr "นับ"
 msgid "Country"
 msgstr "ประเทศ"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253
 msgid "Create"
 msgstr "สร้าง"
 
@@ -1186,11 +1186,11 @@ msgstr "กรองหมวดหมู่"
 msgid "Filter on content group"
 msgstr "กรองกลุ่มเนื้อหา"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
 msgid "Find Media"
 msgstr "ค้นหาสื่อ"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:73
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:74
 msgid "Find Page"
 msgstr "ค้นหาหน้า"
 
@@ -1403,7 +1403,7 @@ msgstr "ชื่อ"
 msgid "Network Connections"
 msgstr "เชื่อมต่อเครือข่าย"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:80./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:81./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
 msgstr "หน้าใหม่"
 
@@ -1947,7 +1947,7 @@ msgstr "ไม่มีชื่อ"
 msgid "Unused"
 msgstr "ไม่ได้ใช้"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:85./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
 msgstr "ที่อัพโหลด"
 
@@ -2043,7 +2043,7 @@ msgstr "คำเตือน!"
 msgid "Website for clicks on image"
 msgstr "เว็บไซต์สำหรับคลิกที่ภาพ"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:90./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:91./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
 msgstr "เว็บไซต์หรือฝัง"
 
@@ -2390,7 +2390,7 @@ msgstr "มีเพียงผู้ดูแลระบบเท่านั
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:116./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:17./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:116./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:133./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:28
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:176
 msgid "Password"
@@ -2724,7 +2724,7 @@ msgid "Name and e-mail address"
 msgstr "ชื่อและที่อยู่อีเมล"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:20
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:10./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:10./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "รหัสผ่านใหม่"
 
@@ -3563,7 +3563,7 @@ msgstr "ได้ทำการตรวจสอบความถูกต้
 msgid "Authorizing..."
 msgstr "กำลังอนุญาต ..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:63./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to sign in"
 msgstr "กลับไปลงชื่อเข้าใช้"
 
@@ -3571,19 +3571,27 @@ msgstr "กลับไปลงชื่อเข้าใช้"
 msgid "Below are your account details and a link to set a new password."
 msgstr "ด้านล่างนี้คือรายละเอียดบัญชีของคุณและลิงก์สำหรับตั้งรหัสผ่านใหม่"
 
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
+msgid "Change password"
+msgstr "เปลี่ยนรหัสผ่าน"
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
 msgstr "เปลี่ยนรหัสผ่านและลงชื่อเข้าใช้"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
+msgid "Change your password"
+msgstr "เปลี่ยนรหัสผ่านของคุณ"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:40
 msgid "Change your permissions"
 msgstr "เปลี่ยนสิทธิ์ของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:60./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:76
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:90./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:106
 msgid "Check your email"
 msgstr "ตรวจสอบอีเมลของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53
 msgid "Checking the reset code…"
 msgstr "ตรวจสอบรหัสรีเซ็ต…"
 
@@ -3608,6 +3616,10 @@ msgstr "ยืนยัน"
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
 msgid "Confirmation failure"
 msgstr "การยืนยันล้มเหลว"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:2
+msgid "Current password"
+msgstr "รหัสผ่านปัจจุบัน"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:51
 msgid "Duplicate email"
@@ -3660,7 +3672,7 @@ msgstr "บริการภายนอก"
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "ด้วยเหตุผลด้านความปลอดภัยรหัสรีเซ็ตรหัสผ่านจะถูกเก็บไว้ในระยะเวลาที่ จำกัด และสามารถใช้ได้เพียงครั้งเดียว"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:8./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
 msgid "Forgot your password?"
 msgstr "ลืมรหัสผ่านหรือไม่?"
 
@@ -3673,15 +3685,15 @@ msgstr "กลับไป"
 msgid "Go to Modules"
 msgstr "ไปที่โมดูล"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:43./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83./apps/zotonic_mod_authentication/priv/templates/logon.tpl:45
 msgid "Go to the admin"
 msgstr "ไปที่ผู้ดูแลระบบ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:44
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:74./apps/zotonic_mod_authentication/priv/templates/logon.tpl:36
 msgid "Go to the home page"
 msgstr "ไปที่โฮมเพจ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:48
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the your profile page"
 msgstr "ไปที่หน้าโปรไฟล์ของคุณ"
 
@@ -3709,7 +3721,7 @@ msgstr "ฉันต้องการสร้างบัญชีใหม่
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
 msgstr "หากคุณไม่ได้ขอรีเซ็ตรหัสผ่านคุณสามารถเพิกเฉยต่ออีเมลนี้ได้ อาจมีบางคนพิมพ์ที่อยู่อีเมลผิดพลาด"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:62./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:78
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:92./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "หากคุณไม่ได้รับอีเมลภายในสองสามนาทีโปรดตรวจสอบโฟลเดอร์สแปมของคุณ"
 
@@ -3717,11 +3729,11 @@ msgstr "หากคุณไม่ได้รับอีเมลภายใ
 msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when signing up."
 msgstr "หากคุณคิดว่าคุณมีบัญชีและคาดหวังว่าจะได้รับอีเมลนี้โปรดลองอีกครั้งโดยใช้ที่อยู่อีเมลที่คุณให้ไว้เมื่อลงชื่อสมัครใช้"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:107
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "ในอีเมลคุณจะพบคำแนะนำเกี่ยวกับวิธียืนยันบัญชีของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
+#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:40./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
 msgid "Keep me signed in"
 msgstr "ให้ฉันลงชื่อเข้าใช้"
 
@@ -3738,7 +3750,7 @@ msgstr "อักขระขั้นต่ำ:"
 msgid "Need help signing in?"
 msgstr "ต้องการความช่วยเหลือในการลงชื่อเข้าใช้?"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:158
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:60./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:67
 msgid "Next"
 msgstr "ต่อไป"
@@ -3758,7 +3770,7 @@ msgstr "กรุณารอซักครู่"
 msgid "Other username or email"
 msgstr "ชื่อผู้ใช้หรืออีเมลอื่น ๆ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:31./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:27./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
 msgid "Passcode"
 msgstr "รหัสผ่าน"
 
@@ -3770,7 +3782,7 @@ msgstr "โปรดยืนยันไฟล์"
 msgid "Please enter the two-factor authentication passcode."
 msgstr "โปรดป้อนรหัสผ่านการรับรองความถูกต้องด้วยสองปัจจัย"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
 msgid "Please try again in"
 msgstr "โปรดลองอีกครั้งใน"
 
@@ -3787,7 +3799,7 @@ msgstr "กำลังเปลี่ยนเส้นทางไปที่
 msgid "Redirecting..."
 msgstr "กำลังเปลี่ยนเส้นทาง ..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:24./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
 msgid "Repeat password"
 msgstr "ใส่รหัสผ่านซ้ำ"
 
@@ -3800,15 +3812,15 @@ msgstr "ใส่รหัสผ่านของคุณซ้ำ"
 msgid "Reset password and Sign in"
 msgstr "รีเซ็ตรหัสผ่านและลงชื่อเข้าใช้"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
 msgid "Reset your password"
 msgstr "รีเซ็ตรหัสผ่านของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Send Verification Message"
 msgstr "ส่งข้อความยืนยัน"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:152./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:47./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:160./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Sign in"
 msgstr "เข้าสู่ระบบ"
@@ -3817,7 +3829,7 @@ msgstr "เข้าสู่ระบบ"
 msgid "Sign in to"
 msgstr "ลงชื่อเข้าใช้"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2
+#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:33
 msgid "Sign out"
 msgstr "ออกจากระบบ"
 
@@ -3842,11 +3854,11 @@ msgstr "อะไรบางอย่างผิดปกติ"
 msgid "Something went wrong, please try again later."
 msgstr "เกิดข้อผิดพลาดโปรดลองอีกครั้งในภายหลัง"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:82
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:112
 msgid "Sorry, could not send the verification message."
 msgstr "ขออภัยไม่สามารถส่งข้อความยืนยันได้"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:13
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:6./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:13
 msgid "Sorry, too many retries"
 msgstr "ขออภัยมีการลองซ้ำมากเกินไป"
 
@@ -3854,7 +3866,7 @@ msgstr "ขออภัยมีการลองซ้ำมากเกิน
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "ขออภัยรหัสรีเซ็ตรหัสผ่านของคุณไม่เป็นที่รู้จักหรือหมดอายุ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:135
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
 msgid "Stay logged on unless I log off."
 msgstr "อยู่ในระบบต่อไปจนกว่าฉันจะออกจากระบบ"
 
@@ -3900,7 +3912,7 @@ msgstr "หากต้องการดูหน้านี้คุณต้
 msgid "Too many retries."
 msgstr "ลองซ้ำมากเกินไป"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:125./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:30./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:125./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
 msgid "Two-factor passcode"
 msgstr "รหัสผ่านสองปัจจัย"
 
@@ -3912,15 +3924,15 @@ msgstr "ใช้อักขระหรือตัวเลขที่ไม
 msgid "Username or email"
 msgstr "ชื่อผู้ใช้หรืออีเมล"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:67
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:97
 msgid "Verify your account"
 msgstr "ตรวจสอบบัญชีของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:83
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
 msgstr "ดูเหมือนว่าเราจะไม่มีที่อยู่อีเมลที่ถูกต้องหรือที่อยู่การสื่อสารทางอิเล็กทรอนิกส์อื่น ๆ ของคุณ"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:61
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:91
 msgid "We have sent an email with a link to reset your password to"
 msgstr "เราได้ส่งอีเมลพร้อมลิงก์สำหรับรีเซ็ตรหัสผ่านของคุณไปที่"
 
@@ -3928,9 +3940,13 @@ msgstr "เราได้ส่งอีเมลพร้อมลิงก์
 msgid "You are about to create a new account."
 msgstr "คุณกำลังจะสร้างบัญชีใหม่"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
 msgid "You are now signed in."
 msgstr "คุณลงชื่อเข้าใช้แล้ว"
+
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:28
+msgid "You are signed in"
+msgstr "คุณลงชื่อเข้าใช้"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:90
 msgid "You can log in using the following external service"
@@ -3957,7 +3973,7 @@ msgstr "คุณได้รับอีเมลนี้เนื่องจ
 msgid "You'll need to create a new one."
 msgstr "คุณจะต้องสร้างใหม่"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:98
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "เกือบเสร็จแล้ว! เพื่อให้แน่ใจว่าคุณเป็นคุณจริงๆเราขอให้คุณยืนยันบัญชีของคุณจากที่อยู่อีเมลของคุณ"
 
@@ -3977,7 +3993,11 @@ msgstr "อีเมลหรือชื่อผู้ใช้ของคุ
 msgid "Your new password is too short."
 msgstr "รหัสผ่านใหม่ของคุณสั้นเกินไป"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:38
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:30
+msgid "Your password has been changed"
+msgstr "รหัสผ่านของคุณถูกเปลี่ยน"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:68
 msgid "Your password has been reset"
 msgstr "รีเซ็ตรหัสผ่านของคุณแล้ว"
 
@@ -3990,7 +4010,11 @@ msgstr "รหัสผ่านของคุณหมดอายุ"
 msgid "Your password is too short."
 msgstr "รหัสผ่านของคุณสั้นเกินไป"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
+#: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
+msgid "Your username is"
+msgstr "ชื่อผู้ใช้ของคุณคือ"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:11./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "an hour"
 msgstr "หนึ่งชั่วโมง"
 
@@ -6735,15 +6759,15 @@ msgstr "ไม่ใช่หมวดหมู่"
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "เพิ่ม noindex องค์ประกอบ nofollow ในทุกหน้า"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:86
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:93./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:94
 msgid "Bing Webmaster validation id"
 msgstr "รหัสการตรวจสอบผู้ดูแลเว็บ Bing"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "คัดลอกค่าของแอตทริบิวต์เนื้อหาในเมตาแท็กที่ Google มีให้"
 
@@ -6751,7 +6775,7 @@ msgstr "คัดลอกค่าของแอตทริบิวต์เ
 msgid "Description to include on every page"
 msgstr "คำอธิบายที่จะรวมไว้ในทุกหน้า"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
 msgid "Enter here the verification code for"
 msgstr "ป้อนรหัสยืนยันที่นี่สำหรับ"
 
@@ -6767,9 +6791,17 @@ msgstr "การเพิ่มประสิทธิภาพ SEO ทั่�
 msgid "Google Analytics tracking id"
 msgstr "รหัสติดตามของ Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
-msgid "Google Webmaster Tools"
-msgstr "Google Webmaster Tools"
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+msgid "Google Search Console"
+msgstr "Google Search Console"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "Google Tag Manager account page"
+msgstr "หน้าบัญชี Google Tag Manager"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:72./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:73
+msgid "Google Tag Manager id"
+msgstr "รหัส Google Tag Manager"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
@@ -6787,7 +6819,7 @@ msgstr "คำหลักที่จะรวมไว้ในทุกหน
 msgid "SEO"
 msgstr "SEO"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:115
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
 msgid "Save SEO settings"
 msgstr "บันทึกการตั้งค่า SEO"
 
@@ -6807,21 +6839,29 @@ msgstr "ไฟล์การกำหนดค่าไซต์ไม่รว
 msgid "Where can I find my tracking script?"
 msgstr "ฉันจะหาสคริปต์ติดตามของฉันได้ที่ไหน"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:102
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:99./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:107./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108
 msgid "Yandex Webmaster validation id"
 msgstr "รหัสการตรวจสอบผู้ดูแลเว็บ Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:103
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "คุณพบรหัสนี้ในแอตทริบิวต์เนื้อหาของเมตาแท็กซึ่งมีรูปแบบ"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 msgid "You find this id in the tracking script, it has the format"
 msgstr "คุณพบรหัสนี้ในสคริปต์ติดตามซึ่งมีรูปแบบ"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "You find this on your"
+msgstr "คุณพบสิ่งนี้ในไฟล์"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
+msgid "it has the format"
+msgstr "มันมีรูปแบบ"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.category.tpl:34
 msgid "Always"
@@ -6915,10 +6955,6 @@ msgstr "หวังว่าจะได้พบคุณเร็ว ๆ น�
 msgid "I agree to the"
 msgstr "ฉันเห็นด้วยกับ"
 
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "If the link does not work then you can go to"
-msgstr "หากลิงก์ไม่ทำงานคุณสามารถไปที่"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "If you already have an account,"
 msgstr "หากคุณมีบัญชีอยู่แล้ว"
@@ -7011,17 +7047,9 @@ msgstr "คุณอาจยืนยันบัญชีของคุณส
 msgid "You must agree to the Terms in order to sign up."
 msgstr "คุณต้องยอมรับข้อกำหนดจึงจะลงทะเบียนได้"
 
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "and enter the key"
-msgstr "และป้อนรหัส"
-
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
 msgstr "และ"
-
-#: apps/zotonic_mod_signup/priv/templates/email_verify.tpl:14
-msgid "in the input field."
-msgstr "ในช่องป้อนข้อมูล"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "sign in"
