@@ -36,8 +36,8 @@ answer(Block, Answers, _Context) ->
             {error, missing};
         Value ->
             case z_string:trim(Value) of
-                [] -> {error, missing};
-                 V -> {ok, [{Name, z_convert:to_binary(V)}]}
+                <<>> -> {error, missing};
+                V -> {ok, [{Name, V}]}
             end
     end.
 

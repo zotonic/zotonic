@@ -53,10 +53,9 @@ answer_inputs([{_IsSelect,Name}|Rest], Answers, Acc) ->
         undefined -> {error, missing};
         Value ->
             case z_string:trim(Value) of
-                [] -> {error, missing};
                 <<>> -> {error, missing};
                 V ->
-                    answer_inputs(Rest, Answers, [{NameB,z_convert:to_binary(V)}|Acc])
+                    answer_inputs(Rest, Answers, [{NameB,V}|Acc])
             end
     end.
 

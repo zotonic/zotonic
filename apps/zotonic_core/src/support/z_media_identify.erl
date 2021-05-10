@@ -183,7 +183,7 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
         nomatch ->
             case Mime of
-                "CDF V2 Document, corrupt:" ++ _ ->
+                <<"CDF V2 Document, corrupt:", _/binary>> ->
                     % Probably just a semi-illegal variation on a MS Office file, use the extension
                     case guess_mime(OriginalFilename) of
                         <<"application/msword">> -> {ok, #{ <<"mime">> => <<"application/msword">>}};

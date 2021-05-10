@@ -78,8 +78,6 @@ terminate(_Reason, _State) ->
 
 terminal_notifier(_OS, <<>>) ->
     ok;
-terminal_notifier(_OS, "") ->
-    ok;
 terminal_notifier({unix, darwin}, Msg) ->
     exec:run("which terminal-notifier && terminal-notifier -group zotonic -title Zotonic -message " ++ z_utils:os_escape(Msg), []);
 terminal_notifier({unix, _Arch}, Msg) ->
