@@ -73,8 +73,6 @@ split_markers(Qs) ->
 
 split_markers([], _N, Acc) ->
     lists:reverse(Acc);
-split_markers([[]|Qs], N, Acc) ->
-    split_markers(Qs, N, Acc);
 split_markers([Opt|Qs], N, Acc) ->
     split_markers(Qs, N+1, [split_marker(Opt, N)|Acc]).
 

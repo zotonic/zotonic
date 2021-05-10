@@ -28,7 +28,12 @@ render_validator(date, TriggerId, _TargetId, Args, _Context)  ->
     {[Format, Separator], Script}.
 
 is_valid(Day, Month, Year) ->
-    calendar:valid_date(list_to_integer(Year), list_to_integer(Month), list_to_integer(Day)).
+    try
+        calendar:valid_date(z_convert:to_integer(Year), z_convert:to_integer(Month), z_convert:to_integer(Day))
+    catch
+        _:_ -> false
+    end.
+
 is_valid(Day, Month, Year, <<"l">>) ->
     is_valid(Day, Month, Year);
 is_valid(Month, Day, Year, <<"m">>) ->
@@ -45,10 +50,11 @@ validate(date, Id, Value, [Format, Separator], Context) ->
     case lists:member(Format, [<<"l">>, <<"m">>, <<"b">>]) of
         true ->
             case z_string:trim(Value) of
-                [] -> {{ok, []}, Context};
+                <<>> -> {{ok, <<>>}, Context};
                 Trimmed ->
-                    case list_to_tuple(string:tokens(Trimmed, Separator)) of
-                        {Part1, Part2, Part3} ->
+                    SepB = z_convert:to_binary(Separator),
+                    case binary:split(Trimmed, SepB, [ global ]) of
+                        [ Part1, Part2, Part3 ] ->
                             case is_valid(Part1, Part2, Part3, Format) of
                                 true ->
                                     {{ok, Trimmed}, Context};

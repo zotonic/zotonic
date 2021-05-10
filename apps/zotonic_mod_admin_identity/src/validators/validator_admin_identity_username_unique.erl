@@ -35,7 +35,6 @@ render_validator(username_unique, TriggerId, TargetId, Args, Context)  ->
 validate(username_unique, Id, Value, Args, Context) ->
     UserId = z_convert:to_integer(proplists:get_value(id, Args)),
     case z_string:trim(Value) of
-        [] -> {{ok, <<>>}, Context};
         <<>> -> {{ok, <<>>}, Context};
         Username ->
             case m_identity:is_reserved_name(Username) of

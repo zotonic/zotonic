@@ -100,7 +100,6 @@ split_arg(B) ->
 
 
 % Convert known request arguments to atoms.
-request_arg(Arg) when is_list(Arg) -> request_arg(list_to_binary(Arg));
 request_arg(<<"content_group">>)       -> content_group;
 request_arg(<<"cat">>)                 -> cat;
 request_arg(<<"cat_exact">>)           -> cat_exact;
