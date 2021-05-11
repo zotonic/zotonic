@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 16:01\n"
+"PO-Revision-Date: 2021-05-11 16:20\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -3355,7 +3355,7 @@ msgstr "soggetto"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/broker.tpl:3
 msgid "Broker"
-msgstr ""
+msgstr "Broker"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:121
@@ -3364,15 +3364,15 @@ msgstr "Database"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/dispatch.tpl:3
 msgid "Dispatch"
-msgstr ""
+msgstr "Spedizione"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:4
 msgid "Erlang VM"
-msgstr ""
+msgstr "Erlang VM"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/memory_usage.tpl:3
 msgid "Memory Usage"
-msgstr ""
+msgstr "Utilizzo della memoria"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
@@ -3382,7 +3382,7 @@ msgstr "Statistiche"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/system_usage.tpl:3
 msgid "System Usage"
-msgstr ""
+msgstr "Utilizzo del sistema"
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
