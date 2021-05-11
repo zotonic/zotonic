@@ -7391,7 +7391,7 @@ msgstr ""
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid ""
 "You might have confirmed your account twice so that the account is already "
-"confirmed. If so, try logging in.</br>If that doesn’t work, make sure you "
+"confirmed. If so, try logging in.<br>If that doesn’t work, make sure you "
 "copied the link correctly and try again."
 msgstr ""
 
@@ -8403,7 +8403,7 @@ msgstr ""
 msgid "You already filled this in."
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:751
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr ""
 
