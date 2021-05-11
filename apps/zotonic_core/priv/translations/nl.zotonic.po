@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 08:50\n"
+"PO-Revision-Date: 2021-05-11 13:50\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1470,7 +1470,7 @@ msgstr "Paginapad"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "Page referrers"
-msgstr "Pagina-verwijzingen"
+msgstr "Pagina-verwijzers"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
@@ -1884,7 +1884,7 @@ msgstr "Deze naam wordt door een andere pagina gebruikt."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
-msgstr "Deze pagina kan worden verbonden vanaf andere pagina's. Het kan bijvoorbeeld een auteur van een artikel zijn."
+msgstr "Deze pagina kan verbonden zijn met andere pagina's. Het zou bijvoorbeeld een auteur van een artikel kunnen zijn."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
 msgid "This page has been deleted."
@@ -1953,7 +1953,7 @@ msgstr "Ongebruikt"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
-msgstr "Uploaden"
+msgstr "Upload"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
@@ -2563,11 +2563,11 @@ msgstr "Bewaar en bekijk"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:153
 msgid "The page might have been deleted."
-msgstr "De pagina is mogelijk verwijderd."
+msgstr "De pagina is misschien verwijderd."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
-msgstr "Er zijn niet-opgeslagen wijzigingen. Weet u zeker dat u wilt vertrekken zonder op te slaan?"
+msgstr "Er zijn nog niet opgeslagen wijzigingen. Weet je zeker dat je wilt vertrekken zonder op te slaan?"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 msgid "This page"
@@ -3575,7 +3575,7 @@ msgstr "Hieronder staan je account details en een link om je wachtwoord te reset
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
-msgstr "Wachtwoord wijzigen"
+msgstr "Wijzig wachtwoord"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
@@ -3583,7 +3583,7 @@ msgstr "Verander wachtwoord en login"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
 msgid "Change your password"
-msgstr "Verander uw wachtwoord"
+msgstr "Wijzig uw wachtwoord"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:40
 msgid "Change your permissions"
@@ -4014,7 +4014,7 @@ msgstr "Je wachtwoord is te kort."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
 msgid "Your username is"
-msgstr "jouw gebruikersnaam is"
+msgstr "Jouw gebruikersnaam is"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:11./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "an hour"
@@ -5359,7 +5359,7 @@ msgstr "Zotonic kun geüploade en bewerkte bestanden opslaan in de cloud. Hier k
 
 #: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:78
 msgid "Could not upload"
-msgstr "Kan niet uploaden"
+msgstr "Kon niet uploaden"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
@@ -6683,7 +6683,7 @@ msgstr "De Microsoft-instellingen opgeslagen."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Door spaties gescheiden lijst met bereiken waarvoor u wilt dat de gebruiker instemt. Voorbeelden zijn: <tt>email</tt>, <tt>offline_access</tt> en <tt>profiel</tt>. De <tt>openid</tt> scope wordt altijd automatisch toegevoegd."
+msgstr "Spatie gescheiden lijst van scopes waarvoor je de gebruiker toestemming wilt geven. Voorbeelden zijn: <tt>email</tt>, <tt>offline_access</tt> en <tt>profile</tt>. De <tt>openid</tt> scope wordt altijd automatisch toegevoegd."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
@@ -6691,15 +6691,15 @@ msgstr "Huurder"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
 msgid "Use Microsoft authentication"
-msgstr "Gebruik Microsoft-verificatie"
+msgstr "Gebruik Microsoft-authenticatie"
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:62
 msgid "You don't have permission to change the Microsoft settings."
-msgstr "U bent niet gemachtigd om de Microsoft-instellingen te wijzigen."
+msgstr "Je hebt geen toestemming om de Microsoft instellingen te veranderen."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "You have coupled your <strong>Microsoft</strong> account."
-msgstr "U hebt uw <strong>Microsoft</strong> account gekoppeld."
+msgstr "Je hebt je <strong>Microsoft</strong> account gekoppeld."
 
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
@@ -6859,7 +6859,7 @@ msgstr "Je vindt dit id in het tracking script. Het heeft het formaat"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "You find this on your"
-msgstr "U vindt dit op uw"
+msgstr "Je vindt dit op je"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "it has the format"
