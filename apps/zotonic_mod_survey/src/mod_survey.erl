@@ -613,7 +613,6 @@ mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
         <<>> -> skip;
         Email ->
             Es = z_email_utils:extract_emails(Email),
-            ContextLang = z_context:set_language(z_language:default_language(Context), Context),
             lists:foreach(
                 fun(E) ->
                     case z_email_utils:is_email(E) of
@@ -630,7 +629,7 @@ mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
                                 vars=Vars,
                                 attachments=Attachments
                             },
-                            z_email:send(EmailRec, ContextLang);
+                            z_email:send(EmailRec, Context);
                         false ->
                             ok
                     end
