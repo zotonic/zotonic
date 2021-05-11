@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 14:03\n"
+"PO-Revision-Date: 2021-05-11 14:37\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -7041,7 +7041,7 @@ msgstr "Вы также можете"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr ""
+msgstr "Вы могли подтвердить свою учетную запись дважды, так что учетная запись уже подтверждена. Если это так, попробуйте войти в систему.<br>Если это не сработает, убедитесь, что вы правильно скопировали ссылку, и повторите попытку."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
