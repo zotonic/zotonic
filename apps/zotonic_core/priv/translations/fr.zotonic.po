@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 08:50\n"
+"PO-Revision-Date: 2021-05-11 14:04\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -7040,8 +7040,8 @@ msgid "You can also"
 msgstr "Vous pouvez aussi"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
-msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr "Vous avez peut-être confirmé votre compte deux fois afin que le compte soit déjà confirmé. Si tel est le cas, essayez de vous connecter.</br>Si cela ne fonctionne pas, assurez-vous d'avoir correctement copié le lien et réessayez."
+msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
+msgstr "Vous avez peut-être confirmé votre compte deux fois afin que le compte soit déjà confirmé. Si tel est le cas, essayez de vous connecter.<br>Si cela ne fonctionne pas, assurez-vous d'avoir correctement copié le lien et réessayez."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
@@ -8006,7 +8006,7 @@ msgstr "Vous l'avez déjà rempli, mais vous pouvez modifier vos réponses préc
 msgid "You already filled this in."
 msgstr "Vous l'avez déjà rempli."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:751
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr "Vous n’êtes pas autorisé à changer ces résultats."
 
