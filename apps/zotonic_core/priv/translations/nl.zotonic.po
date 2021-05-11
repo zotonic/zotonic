@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 13:50\n"
+"PO-Revision-Date: 2021-05-11 14:04\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -4132,7 +4132,7 @@ msgstr "Versies voor"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
 msgid "Select the backup file you want to upload. The file must be a .bert file."
-msgstr "Selecteer het back-upbestand dat u wilt uploaden. Het bestand moet een .bert-bestand zijn."
+msgstr "Selecteer de backup die je wilt terugzetten. Het bestand moet extensie .bert hebben."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
 msgid "Show import/export panel in the admin."
@@ -4297,7 +4297,7 @@ msgstr "Pagina Id"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
-msgstr "Lees deze pagina op internet"
+msgstr "Lees deze pagina op het web."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -4670,7 +4670,7 @@ msgstr "Schakel caching met de <tt>{% cache %}</tt>  tag uit."
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
 msgid "Disabled database query tracing"
-msgstr "Tracering van databasequery's uitgeschakeld"
+msgstr "Database query tracering uitgeschakeld"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
@@ -4694,7 +4694,7 @@ msgstr "Activeer API om Zotonic te hercompileren"
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
 msgid "Enabled database query tracing"
-msgstr "Ingeschakelde tracering van databasequery's"
+msgstr "Database query tracing ingeschakeld"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5871,7 +5871,7 @@ msgstr "Klik op <strong>uitschrijven</strong> om jezelf van de mailinglijst te v
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid "Click the button below to confirm your subscription to this mailing list."
-msgstr "Klik op de onderstaande knop om uw inschrijving op deze mailinglijst te bevestigen."
+msgstr " Klik op de onderstaande knop om je inschrijving op deze mailinglijst te bevestigen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
 msgid "Click to view log entries"
@@ -6472,7 +6472,7 @@ msgstr "is nog nooit verstuurd."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "if you don't want to receive any further mail from this list."
-msgstr "als u geen post meer van deze lijst wilt ontvangen."
+msgstr "als je voortaan geen berichten van deze lijst wilt ontvangen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
@@ -6643,7 +6643,7 @@ msgstr "Maak verbinding met Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Bepaal wie zich kan aanmelden. Toegestane waarden zijn: <tt>algemene</tt>, <tt>organisaties</tt>, <tt>consumenten</tt>en tenant-ID's."
+msgstr "Bepaal wie zich kan aanmelden. Toegestane waarden zijn: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>en tenant-ID's."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:2./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:4
 msgid "Disconnect from Microsoft"
@@ -6671,7 +6671,7 @@ msgstr "Meer informatie over tenant-ID's"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_service.microsoft.tpl:2
 msgid "Redirecting to Microsoft."
-msgstr "Omleiden naar Microsoft."
+msgstr "Doorverwijzen naar Microsoft."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:49
 msgid "Save Microsoft Settings"
@@ -6679,7 +6679,7 @@ msgstr "Sla Microsoft-instellingen op"
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:60
 msgid "Saved the Microsoft settings."
-msgstr "De Microsoft-instellingen opgeslagen."
+msgstr "Microsoft-instellingen opgeslagen."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
@@ -7043,8 +7043,8 @@ msgid "You can also"
 msgstr "Je kunt ook"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
-msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr "Mogelijk heeft u uw account twee keer bevestigd, zodat het account al is bevestigd. Als dit het geval is, probeer dan in te loggen.</br>Als dat niet werkt, zorg er dan voor dat u de link correct heeft gekopieerd en probeer het opnieuw."
+msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
+msgstr "Mogelijk heeft u uw account twee keer bevestigd, zodat het account al is bevestigd. Als dit het geval is, probeer dan in te loggen.<br>Als dat niet werkt, zorg er dan voor dat u de link correct heeft gekopieerd en probeer het opnieuw."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
@@ -7447,7 +7447,7 @@ msgstr "Houd je van erwtensoep?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid "Download will start in the background. Please check your download window."
-msgstr "Het downloaden begint op de achtergrond. Controleer uw downloadvenster."
+msgstr "Het downloaden begint op de achtergrond. Controleer je downloadvenster."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
 msgid "Drop-down menu"
@@ -8013,7 +8013,7 @@ msgstr "Je hebt dit al ingevuld, maar je kan je vorige antwoorden wijzigen."
 msgid "You already filled this in."
 msgstr "Je hebt dit al ingevuld."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:751
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr "Je hebt geen rechten om de resultaten te veranderen."
 
