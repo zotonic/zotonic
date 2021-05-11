@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 14:03\n"
+"PO-Revision-Date: 2021-05-11 14:37\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -7037,7 +7037,7 @@ msgstr "你也可以"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr ""
+msgstr "您可能已經兩次確認了您的帳戶，以便該帳戶已經被確認。如果是這樣，請嘗試登錄<br>如果不起作用，請確保您正確複製了鏈接，然後重試。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
