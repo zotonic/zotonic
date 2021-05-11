@@ -2655,7 +2655,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
 msgid ""
-" There are unsaved changes. Are you sure you want to leave without saving?"
+"There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr ""
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
@@ -2898,7 +2898,7 @@ msgstr ""
 msgid "Sorry"
 msgstr ""
 
-#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:43./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:51
+#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:28
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr ""
@@ -3457,7 +3457,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:15
 msgid ""
-" This predicate can be used between two pages of the following categories."
+"This predicate can be used between two pages of the following categories."
 msgstr ""
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:35
@@ -4335,7 +4335,7 @@ msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
 msgid ""
-" Select the backup file you want to upload. The file must be a .bert file."
+"Select the backup file you want to upload. The file must be a .bert file."
 msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
@@ -6059,7 +6059,7 @@ msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:20
 msgid ""
-" <em>Remove</em> all recipients from this list that are on the target list"
+"<em>Remove</em> all recipients from this list that are on the target list"
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
@@ -6150,7 +6150,7 @@ msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid ""
-" Click the button below to confirm your subscription to this mailing list."
+"Click the button below to confirm your subscription to this mailing list."
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -7360,7 +7360,7 @@ msgstr ""
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:14
 msgid ""
-" To sign up you must agree with the Terms of Service and Privacy policies."
+"To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr ""
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
@@ -7821,7 +7821,7 @@ msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid ""
-" Download will start in the background. Please check your download window."
+"Download will start in the background. Please check your download window."
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
