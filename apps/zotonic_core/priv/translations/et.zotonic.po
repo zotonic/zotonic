@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 08:35\n"
+"PO-Revision-Date: 2021-05-11 08:50\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -2563,7 +2563,7 @@ msgstr "Lehe võib olla kustutatud."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
-msgstr ""
+msgstr "On salvestamata muudatusi. Kas soovite kindlasti lahkuda ilma salvestamata?"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 msgid "This page"
@@ -3323,7 +3323,7 @@ msgstr "Selle nimega predikaat on juba olemas."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:15
 msgid "This predicate can be used between two pages of the following categories."
-msgstr ""
+msgstr "Seda predikaati saab kasutada järgmiste kategooriate kahe lehe vahel."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:35
 msgid "To category"
@@ -4130,7 +4130,7 @@ msgstr "Muudatused"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
 msgid "Select the backup file you want to upload. The file must be a .bert file."
-msgstr ""
+msgstr "Valige varukoopia, mille soovite üles laadida. Fail peab olema .bert-fail."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
 msgid "Show import/export panel in the admin."
@@ -5801,7 +5801,7 @@ msgstr "<em>Lisage sellesse loendisse</em> kõik adressaadid, kes on sihtloendis
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:20
 msgid "<em>Remove</em> all recipients from this list that are on the target list"
-msgstr ""
+msgstr "<em>Eemaldage</em> kõik adressaadid, kes on sihtloendis"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
@@ -5869,7 +5869,7 @@ msgstr "Enda postiloendist eemaldamiseks klõpsake nupul <strong>tellimuse tühi
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid "Click the button below to confirm your subscription to this mailing list."
-msgstr ""
+msgstr "Selle meililoendi tellimuse kinnitamiseks klõpsake allolevat nuppu."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
 msgid "Click to view log entries"
@@ -7017,7 +7017,7 @@ msgstr "See ei ühti esimese parooliga"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:14
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
-msgstr ""
+msgstr "Registreerumiseks peate nõustuma teenusetingimuste ja privaatsuseeskirjadega."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
 msgid "Verify password"
@@ -7444,7 +7444,7 @@ msgstr "Kas teile meeldib hernesupp?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
 msgid "Download will start in the background. Please check your download window."
-msgstr ""
+msgstr "Allalaadimine algab taustal. Kontrollige allalaadimisakent."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
 msgid "Drop-down menu"
