@@ -4,7 +4,7 @@
 {% if is_password_change %}
     <div class="form-group">
         <label class="control-label" for="password">{_ Current password _}</label>
-        <input class="form-control" type="password" id="password" name="password" value="" autocomplete="current-password" autofocus />
+        <input class="do_autofocus form-control" type="password" id="password" name="password" value="" autocomplete="current-password" autofocus placeholder="{_ Current password _}" />
         {% validate id="password"
             type={presence failure_message=_"Enter your current password"}
             only_on_submit
@@ -20,7 +20,7 @@
 %}
 <div class="form-group">
     <label class="control-label" for="password_reset1">{_ New password _}</label>
-    <input class="do_autofocus form-control" type="password" id="password_reset1" name="password_reset1" value="" autocomplete="new-password" />
+    <input class="form-control" type="password" id="password_reset1" name="password_reset1" value="" autocomplete="new-password" placeholder="{_ New password _}" />
     {% block validate_password_reset1 %}
         {% validate id="password_reset1"
             type={presence failure_message=_"Enter a password"}
@@ -36,7 +36,7 @@
 
 <div class="form-group">
     <label class="control-label" for="password_reset2">{_ Repeat password _}</label>
-    <input class="form-control" type="password" id="password_reset2" name="password_reset2" value="" autocomplete="new-password" />
+    <input class="form-control" type="password" id="password_reset2" name="password_reset2" value="" autocomplete="new-password" placeholder="{_ Repeat password _}" />
     {% block validate_password_reset2 %}
         {% validate id="password_reset2"
             type={presence failure_message=_"Repeat your password"}
