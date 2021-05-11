@@ -60,21 +60,28 @@
 %% The server calls Handler:init(pid(), Args) -> {ok, Timeout, HandlerState} when it is started.
 %% Timeout will be used as flush interval.
 %%
+-spec start_link( atom(), module(), term() ) -> {ok, pid()} | {error, term()}.
 start_link(Name, Handler, Args) ->
     gen_server:start_link({local, Name}, ?MODULE, [Name, Handler, Args], []).
 
 %% @doc Stop the worker, all pending work will be lost.
+-spec stop( atom() ) -> ok.
 stop(Name) ->
     gen_server:call(Name, stop).
 
 %% @doc Push a message to the named worker, when the worker is flushed the pushed messages
 %% are handled in-order.
+-spec push( atom(), term() ) -> true.
 push(Name, Msg) ->
     ets:insert(Name, #entry{count=get_next(Name), value=Msg}).
 
 %% @doc Flush the worker,
+-spec flush( atom() ) -> ok | {error, badarg}.
 flush(Name) ->
-    whereis(Name) ! flush.
+    case whereis(Name) of
+        undefined -> {error, badarg};
+        Pid when is_pid(Pid) -> Pid ! flush
+    end.
 
 %%
 %% gen_server callbacks
@@ -85,10 +92,8 @@ init([Name, Handler, Args]) ->
             {keypos, 2},
             {write_concurrency, true}]),
     ets:insert(Name, #counter{name=next}),
-
     {ok, Timeout, HandlerState} = Handler:init(self(), Args),
     erlang:send_after(Timeout, self(), flush),
-
     {ok, #state{name=Name, handler=Handler, timeout=Timeout, handler_state=HandlerState}}.
 
 handle_call(stop, _From, State) ->
@@ -119,6 +124,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 % @doc Return a sequence number for the next element
 %
+-spec get_next(atom()) -> integer().
 get_next(Name) ->
     ets:update_counter(Name, next, 1).
 

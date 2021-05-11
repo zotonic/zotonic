@@ -267,6 +267,7 @@ default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;
 default(syslog_level) -> info;
+default(log_http_metrics_buffer_size) -> 10000;
 default(zotonic_apps) -> filename:join([ z_path:get_path(), "apps_user" ]);
 default(proxy_allowlist) -> local;
 default(ip_allowlist) -> local;
@@ -352,6 +353,7 @@ all() ->
             ip_allowlist_system_management,
             sessionjobs_limit,
             sidejobs_limit,
+            log_http_metrics_buffer_size,
             server_header,
             html_error_path
         ]).

@@ -155,6 +155,14 @@ execute(Req, Env) ->
         #dispatch_controller{} = Match ->
             Context = Match#dispatch_controller.context,
             BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
+            Metrics = #{
+                site => z_context:site(Context),
+                peer_ip => m_req:get(peer_ip, Context),
+                controller => Match#dispatch_controller.controller,
+                controller_options => Match#dispatch_controller.controller_options,
+                dispatch_rule => Match#dispatch_controller.dispatch_rule
+            },
+            cast_metrics_data(Metrics, Req),
             {ok, Req#{
                 bindings => BindingsMap
             }, Env#{
@@ -168,8 +176,16 @@ execute(Req, Env) ->
                 bindings => BindingsMap
             }};
         #dispatch_nomatch{site = Site, bindings = Bindings, context = Context} ->
+            Metrics = #{
+                site => z_context:site(Context)
+            },
+            cast_metrics_data(Metrics, Req),
             handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
         {redirect, Site, undefined, IsPermanent} ->
+            Metrics = #{
+                site => Site
+            },
+            cast_metrics_data(Metrics, Req),
             case z_sites_manager:wait_for_running(Site) of
                 ok ->
                     Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
@@ -178,6 +194,11 @@ execute(Req, Env) ->
                     {stop_request, 503}
             end;
         {redirect, Site, NewPathOrURI, IsPermanent} ->
+            Metrics = #{
+                site => Site,
+                peer_ip => cowmachine_req:peer_ip(Req)
+            },
+            cast_metrics_data(Metrics, Req),
             case z_sites_manager:wait_for_running(Site) of
                 ok ->
                     Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
@@ -195,6 +216,9 @@ execute(Req, Env) ->
         {stop_request, RespCode} ->
             stop_request(RespCode, Req, Env)
     end.
+
+cast_metrics_data(Metrics, Req) ->
+    cowboy_req:cast({set_options, #{ metrics_user_data => Metrics }}, Req).
 
 %% @doc Match the host and path to a dispatch rule.
 -spec dispatch(cowboy_req:req(), cowboy_middleware:env()) -> dispatch().
@@ -970,3 +994,4 @@ add_port(https, Hostname, 443) ->
 add_port(_, Hostname, Port) ->
     PortBin = z_convert:to_binary(Port),
     <<Hostname/binary, $:, PortBin/binary>>.
+

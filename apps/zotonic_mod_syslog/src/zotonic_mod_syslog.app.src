@@ -1,8 +1,9 @@
-{application, zotonic_mod_zotonic_statistics, [
-    {description, "Registers system wide zotonic metrics. Used by zotonic_site_status."},
+{application, zotonic_mod_syslog, [
+    {description, "Log http requests to the syslog."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
-    {applications, [kernel, stdlib, zotonic_core]},
+    {applications, [kernel, stdlib, syslog, zotonic_core]},
+    {mod, {z_syslog_app, []}},
     {env, []},
     {modules, []},
     {maintainers, []},

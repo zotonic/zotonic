@@ -283,10 +283,10 @@ with_connection(F, {error, nodatabase}, _Context) ->
 with_connection(_F, {error, _} = Error, _Context) ->
     Error;
 with_connection(F, {ok, Connection}, Context) when is_pid(Connection) ->
-    exometer:update([zotonic, z_context:site(Context), db, requests], 1),
+    z_stats:record_event(db, requests, Context),
     try
         {Time, Result} = timer:tc(F, [Connection]),
-        exometer:update([zotonic, z_context:site(Context), db, duration], Time),
+        z_stats:record_duration(db, request, Time, Context),
         Result
     after
         return_connection(Connection, Context)

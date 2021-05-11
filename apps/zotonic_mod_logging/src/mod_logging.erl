@@ -217,7 +217,7 @@ code_change(_OldVsn, State, _Extra) ->
 check_db_pool_health(Context) ->
     Site = z_context:site(Context),
     Advice = "please increase the pool size.",
-    case exometer:get_value([zotonic, Site, db, pool_full], one) of
+    case exometer:get_value([site, Site, db, pool_full], one) of
         {ok, [{one, FullCounts}]} when FullCounts > 0 ->
             z:error("Database pool is exhausted, ~s",
                     [Advice],
@@ -228,7 +228,7 @@ check_db_pool_health(Context) ->
         {error, not_found} ->
             ok
     end,
-    case exometer:get_value([zotonic, Site, db, pool_high_usage], one) of
+    case exometer:get_value([site, Site, db, pool_high_usage], one) of
         {ok, [{one, HighCounts}]} when HighCounts > 0 ->
             z:info("Database pool usage is close to exhaustion, ~s", [Advice],
                    [{module, ?MODULE}, {line, ?LINE}],

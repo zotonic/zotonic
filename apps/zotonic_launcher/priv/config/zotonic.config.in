@@ -226,6 +226,11 @@
 %% code will take longer to be detected.
    %% {filewatcher_scanner_interval, 10000},
 
+%%% Maximum number of entries in the metrics log buffer. There are two buffers, one for 1/2/3xx
+%%% results and one for 4/5xx results. All metrics are buffered so that the loggers can easily
+%%% handle spikes.
+   %% {log_http_metrics_buffer_size, 10000},
+
 %%% Maximum number of concurrent sidejob processes. Every client request sent over
 %%% Websocket is executed in a sidejob process. Default is 10% of the process_limit
    %% {sessionjobs_limit, 20000},
