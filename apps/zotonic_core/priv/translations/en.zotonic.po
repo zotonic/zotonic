@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-07 13:16\n"
+"PO-Revision-Date: 2021-05-11 14:04\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -2562,7 +2562,7 @@ msgid "The page might have been deleted."
 msgstr ""
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
-msgid " There are unsaved changes. Are you sure you want to leave without saving?"
+msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr ""
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
@@ -2790,7 +2790,7 @@ msgstr ""
 msgid "Sorry"
 msgstr ""
 
-#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:43./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:51
+#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:28
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr ""
@@ -3320,7 +3320,7 @@ msgid "There is already a predicate with this name."
 msgstr ""
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:15
-msgid " This predicate can be used between two pages of the following categories."
+msgid "This predicate can be used between two pages of the following categories."
 msgstr ""
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:35
@@ -4127,7 +4127,7 @@ msgid "Revisions for"
 msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
-msgid " Select the backup file you want to upload. The file must be a .bert file."
+msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
@@ -5798,7 +5798,7 @@ msgid "<em>Add</em> all recipients to this list that are on the target list"
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:20
-msgid " <em>Remove</em> all recipients from this list that are on the target list"
+msgid "<em>Remove</em> all recipients from this list that are on the target list"
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
@@ -5866,7 +5866,7 @@ msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing li
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
-msgid " Click the button below to confirm your subscription to this mailing list."
+msgid "Click the button below to confirm your subscription to this mailing list."
 msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -7010,7 +7010,7 @@ msgid "This does not match the first password"
 msgstr ""
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:14
-msgid " To sign up you must agree with the Terms of Service and Privacy policies."
+msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr ""
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
@@ -7034,7 +7034,7 @@ msgid "You can also"
 msgstr ""
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
-msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
+msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr ""
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
@@ -7437,7 +7437,7 @@ msgid "Do you like pea soup?"
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
-msgid " Download will start in the background. Please check your download window."
+msgid "Download will start in the background. Please check your download window."
 msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
@@ -8000,7 +8000,7 @@ msgstr ""
 msgid "You already filled this in."
 msgstr ""
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:751
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr ""
 

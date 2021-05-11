@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-07 13:28\n"
+"PO-Revision-Date: 2021-05-11 14:37\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -2562,8 +2562,8 @@ msgid "The page might have been deleted."
 msgstr "เพจอาจถูกลบไปแล้ว"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
-msgid " There are unsaved changes. Are you sure you want to leave without saving?"
-msgstr " มีการเปลี่ยนแปลงที่ไม่ได้บันทึก แน่ใจไหมว่าต้องการออกโดยไม่บันทึก"
+msgid "There are unsaved changes. Are you sure you want to leave without saving?"
+msgstr "มีการเปลี่ยนแปลงที่ไม่ได้บันทึก แน่ใจไหมว่าต้องการออกโดยไม่บันทึก"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 msgid "This page"
@@ -2790,7 +2790,7 @@ msgstr "ตั้งชื่อผู้ใช้ / รหัสผ่าน"
 msgid "Sorry"
 msgstr "ขออภัย"
 
-#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:43./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:51
+#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:28
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "ขออภัยชื่อผู้ใช้นี้ถูกใช้งานแล้ว โปรดลองอีกอัน"
@@ -3322,8 +3322,8 @@ msgid "There is already a predicate with this name."
 msgstr "มีเพรดิเคตที่มีชื่อนี้อยู่แล้ว"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:15
-msgid " This predicate can be used between two pages of the following categories."
-msgstr " เพรดิเคตนี้สามารถใช้ระหว่างสองหน้าของหมวดหมู่ต่อไปนี้"
+msgid "This predicate can be used between two pages of the following categories."
+msgstr "เพรดิเคตนี้สามารถใช้ระหว่างสองหน้าของหมวดหมู่ต่อไปนี้"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:35
 msgid "To category"
@@ -4129,8 +4129,8 @@ msgid "Revisions for"
 msgstr "การแก้ไขสำหรับ"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
-msgid " Select the backup file you want to upload. The file must be a .bert file."
-msgstr " เลือกไฟล์สำรองที่คุณต้องการอัปโหลด ไฟล์นั้นต้องเป็นไฟล์ .bert"
+msgid "Select the backup file you want to upload. The file must be a .bert file."
+msgstr "เลือกไฟล์สำรองที่คุณต้องการอัปโหลด ไฟล์นั้นต้องเป็นไฟล์ .bert"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
 msgid "Show import/export panel in the admin."
@@ -5800,8 +5800,8 @@ msgid "<em>Add</em> all recipients to this list that are on the target list"
 msgstr "<em>เพิ่มผู้รับทั้งหมด</em> รายในรายชื่อที่อยู่ในรายชื่อเป้าหมาย"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:20
-msgid " <em>Remove</em> all recipients from this list that are on the target list"
-msgstr " <em>ลบผู้รับทั้งหมด</em> ออกจากรายชื่อที่อยู่ในรายชื่อเป้าหมาย"
+msgid "<em>Remove</em> all recipients from this list that are on the target list"
+msgstr "<em>ลบ</em> ออกจากรายชื่อที่อยู่ในรายชื่อเป้าหมาย"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
@@ -5868,8 +5868,8 @@ msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing li
 msgstr "คลิก <strong>ยกเลิกการสมัคร</strong> เพื่อลบตัวเองออกจากรายชื่อรับเมล"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
-msgid " Click the button below to confirm your subscription to this mailing list."
-msgstr " คลิกปุ่มด้านล่างเพื่อยืนยันการสมัครรับข้อมูลรายชื่ออีเมลนี้"
+msgid "Click the button below to confirm your subscription to this mailing list."
+msgstr "คลิกปุ่มด้านล่างเพื่อยืนยันการสมัครรับรายชื่ออีเมลนี้"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
 msgid "Click to view log entries"
@@ -7016,8 +7016,8 @@ msgid "This does not match the first password"
 msgstr "รหัสนี้ไม่ตรงกับรหัสผ่านแรก"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:14
-msgid " To sign up you must agree with the Terms of Service and Privacy policies."
-msgstr " ในการสมัครคุณต้องยอมรับข้อกำหนดในการให้บริการและนโยบายความเป็นส่วนตัว"
+msgid "To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr "ในการลงทะเบียนคุณต้องยอมรับข้อกำหนดในการให้บริการและนโยบายความเป็นส่วนตัว"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
 msgid "Verify password"
@@ -7040,8 +7040,8 @@ msgid "You can also"
 msgstr "นอกจากนี้คุณยังสามารถ"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
-msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr "คุณอาจยืนยันบัญชีของคุณสองครั้งเพื่อให้บัญชีได้รับการยืนยันแล้ว ในกรณีนี้ให้ลองเข้าสู่ระบบ</br>หากไม่ได้ผลตรวจสอบให้แน่ใจว่าคุณได้คัดลอกลิงก์อย่างถูกต้องแล้วลองอีกครั้ง"
+msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
+msgstr "คุณอาจยืนยันบัญชีของคุณสองครั้งเพื่อให้บัญชีได้รับการยืนยันแล้ว ในกรณีนี้ให้ลองเข้าสู่ระบบ<br>หากไม่ได้ผลตรวจสอบให้แน่ใจว่าคุณได้คัดลอกลิงก์อย่างถูกต้องแล้วลองอีกครั้ง"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
@@ -7443,8 +7443,8 @@ msgid "Do you like pea soup?"
 msgstr "คุณชอบซุปถั่วไหม?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
-msgid " Download will start in the background. Please check your download window."
-msgstr " การดาวน์โหลดจะเริ่มในพื้นหลัง โปรดตรวจสอบหน้าต่างดาวน์โหลดของคุณ"
+msgid "Download will start in the background. Please check your download window."
+msgstr "การดาวน์โหลดจะเริ่มในพื้นหลัง โปรดตรวจสอบหน้าต่างดาวน์โหลดของคุณ"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
 msgid "Drop-down menu"
@@ -8006,7 +8006,7 @@ msgstr "คุณกรอกข้อมูลนี้แล้ว แต่�
 msgid "You already filled this in."
 msgstr "คุณกรอกข้อมูลนี้แล้ว"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:751
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนแปลงผลลัพธ์เหล่านี้"
 

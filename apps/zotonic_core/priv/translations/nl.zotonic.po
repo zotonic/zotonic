@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-07 13:28\n"
+"PO-Revision-Date: 2021-05-11 14:04\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1470,7 +1470,7 @@ msgstr "Paginapad"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "Page referrers"
-msgstr "Pagina-verwijzingen"
+msgstr "Pagina-verwijzers"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
@@ -1884,7 +1884,7 @@ msgstr "Deze naam wordt door een andere pagina gebruikt."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8
 msgid "This page can be connected from other pages. For example it could be an author of an article."
-msgstr "Deze pagina kan worden verbonden vanaf andere pagina's. Het kan bijvoorbeeld een auteur van een artikel zijn."
+msgstr "Deze pagina kan verbonden zijn met andere pagina's. Het zou bijvoorbeeld een auteur van een artikel kunnen zijn."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:13
 msgid "This page has been deleted."
@@ -1953,7 +1953,7 @@ msgstr "Ongebruikt"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:86./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 msgid "Upload"
-msgstr "Uploaden"
+msgstr "Upload"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
@@ -2563,11 +2563,11 @@ msgstr "Bewaar en bekijk"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:153
 msgid "The page might have been deleted."
-msgstr "De pagina is mogelijk verwijderd."
+msgstr "De pagina is misschien verwijderd."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
-msgid " There are unsaved changes. Are you sure you want to leave without saving?"
-msgstr " Er zijn nog niet opgeslagen veranderingen. Weet je zeker dat je wilt vertrekken zonder te bewaren?"
+msgid "There are unsaved changes. Are you sure you want to leave without saving?"
+msgstr "Er zijn nog niet opgeslagen wijzigingen. Weet je zeker dat je wilt vertrekken zonder op te slaan?"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 msgid "This page"
@@ -2794,7 +2794,7 @@ msgstr "Stel gebruikersnaam / wachtwoord in"
 msgid "Sorry"
 msgstr "Excuses"
 
-#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:43./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:51
+#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:28
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Sorry, deze gebruikersnaam is al in gebruik. Probeer een andere."
@@ -3324,8 +3324,8 @@ msgid "There is already a predicate with this name."
 msgstr "Er bestaat al een predicaat met deze naam."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:15
-msgid " This predicate can be used between two pages of the following categories."
-msgstr "Dit predicaat wordt gebruikt tussen twee pagina’s van de volgende categorieën."
+msgid "This predicate can be used between two pages of the following categories."
+msgstr "Dit predikaat kan worden gebruikt tussen twee pagina's van de volgende categorieën."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:35
 msgid "To category"
@@ -3575,7 +3575,7 @@ msgstr "Hieronder staan je account details en een link om je wachtwoord te reset
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:41
 msgid "Change password"
-msgstr "Wachtwoord wijzigen"
+msgstr "Wijzig wachtwoord"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
 msgid "Change password and Sign in"
@@ -3583,7 +3583,7 @@ msgstr "Verander wachtwoord en login"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
 msgid "Change your password"
-msgstr "Verander uw wachtwoord"
+msgstr "Wijzig uw wachtwoord"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:40
 msgid "Change your permissions"
@@ -4014,7 +4014,7 @@ msgstr "Je wachtwoord is te kort."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:30
 msgid "Your username is"
-msgstr "jouw gebruikersnaam is"
+msgstr "Jouw gebruikersnaam is"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:11./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "an hour"
@@ -4131,7 +4131,7 @@ msgid "Revisions for"
 msgstr "Versies voor"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
-msgid " Select the backup file you want to upload. The file must be a .bert file."
+msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Selecteer de backup die je wilt terugzetten. Het bestand moet extensie .bert hebben."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
@@ -4297,7 +4297,7 @@ msgstr "Pagina Id"
 
 #: apps/zotonic_mod_base/priv/templates/email_base.tpl:338
 msgid "Read this page on the web"
-msgstr "Lees deze pagina op internet"
+msgstr "Lees deze pagina op het web."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -4670,7 +4670,7 @@ msgstr "Schakel caching met de <tt>{% cache %}</tt>  tag uit."
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:38
 msgid "Disabled database query tracing"
-msgstr "Tracering van databasequery's uitgeschakeld"
+msgstr "Database query tracering uitgeschakeld"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:126
 msgid "Dispatch rule debugging"
@@ -4694,7 +4694,7 @@ msgstr "Activeer API om Zotonic te hercompileren"
 
 #: apps/zotonic_mod_development/src/support/z_development_dbtrace.erl:36
 msgid "Enabled database query tracing"
-msgstr "Ingeschakelde tracering van databasequery's"
+msgstr "Database query tracing ingeschakeld"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -5359,7 +5359,7 @@ msgstr "Zotonic kun geüploade en bewerkte bestanden opslaan in de cloud. Hier k
 
 #: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:78
 msgid "Could not upload"
-msgstr "Kan niet uploaden"
+msgstr "Kon niet uploaden"
 
 #: apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3./apps/zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 msgid "Import CSV file"
@@ -5802,8 +5802,8 @@ msgid "<em>Add</em> all recipients to this list that are on the target list"
 msgstr "<em>Voeg</em> alle ontvangers toe aan deze lijst die op de doellijst staan"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:20
-msgid " <em>Remove</em> all recipients from this list that are on the target list"
-msgstr " <em>Verwijder</em> alle ontvangers van deze lijst die op de doellijst staan"
+msgid "<em>Remove</em> all recipients from this list that are on the target list"
+msgstr "<em>Verwijder</em> alle ontvangers van deze lijst die op de doellijst staan"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
@@ -5870,7 +5870,7 @@ msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing li
 msgstr "Klik op <strong>uitschrijven</strong> om jezelf van de mailinglijst te verwijderen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
-msgid " Click the button below to confirm your subscription to this mailing list."
+msgid "Click the button below to confirm your subscription to this mailing list."
 msgstr " Klik op de onderstaande knop om je inschrijving op deze mailinglijst te bevestigen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -6472,7 +6472,7 @@ msgstr "is nog nooit verstuurd."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 msgid "if you don't want to receive any further mail from this list."
-msgstr "als u geen post meer van deze lijst wilt ontvangen."
+msgstr "als je voortaan geen berichten van deze lijst wilt ontvangen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
@@ -6643,7 +6643,7 @@ msgstr "Maak verbinding met Microsoft"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Bepaal wie zich kan aanmelden. Toegestane waarden zijn: <tt>algemene</tt>, <tt>organisaties</tt>, <tt>consumenten</tt>en tenant-ID's."
+msgstr "Bepaal wie zich kan aanmelden. Toegestane waarden zijn: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>en tenant-ID's."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:2./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:4
 msgid "Disconnect from Microsoft"
@@ -6671,7 +6671,7 @@ msgstr "Meer informatie over tenant-ID's"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_service.microsoft.tpl:2
 msgid "Redirecting to Microsoft."
-msgstr "Omleiden naar Microsoft."
+msgstr "Doorverwijzen naar Microsoft."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:49
 msgid "Save Microsoft Settings"
@@ -6679,11 +6679,11 @@ msgstr "Sla Microsoft-instellingen op"
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:60
 msgid "Saved the Microsoft settings."
-msgstr "De Microsoft-instellingen opgeslagen."
+msgstr "Microsoft-instellingen opgeslagen."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Door spaties gescheiden lijst met bereiken waarvoor u wilt dat de gebruiker instemt. Voorbeelden zijn: <tt>email</tt>, <tt>offline_access</tt> en <tt>profiel</tt>. De <tt>openid</tt> scope wordt altijd automatisch toegevoegd."
+msgstr "Spatie gescheiden lijst van scopes waarvoor je de gebruiker toestemming wilt geven. Voorbeelden zijn: <tt>email</tt>, <tt>offline_access</tt> en <tt>profile</tt>. De <tt>openid</tt> scope wordt altijd automatisch toegevoegd."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33./apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
 msgid "Tenant"
@@ -6691,15 +6691,15 @@ msgstr "Huurder"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:44
 msgid "Use Microsoft authentication"
-msgstr "Gebruik Microsoft-verificatie"
+msgstr "Gebruik Microsoft-authenticatie"
 
 #: apps/zotonic_mod_microsoft/src/mod_microsoft.erl:62
 msgid "You don't have permission to change the Microsoft settings."
-msgstr "U bent niet gemachtigd om de Microsoft-instellingen te wijzigen."
+msgstr "Je hebt geen toestemming om de Microsoft instellingen te veranderen."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "You have coupled your <strong>Microsoft</strong> account."
-msgstr "U hebt uw <strong>Microsoft</strong> account gekoppeld."
+msgstr "Je hebt je <strong>Microsoft</strong> account gekoppeld."
 
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
@@ -6859,7 +6859,7 @@ msgstr "Je vindt dit id in het tracking script. Het heeft het formaat"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "You find this on your"
-msgstr "U vindt dit op uw"
+msgstr "Je vindt dit op je"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:75
 msgid "it has the format"
@@ -7018,8 +7018,8 @@ msgid "This does not match the first password"
 msgstr "Dit komt niet overeen met het eerste wachtwoord"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:14
-msgid " To sign up you must agree with the Terms of Service and Privacy policies."
-msgstr "Om te registreren moet je akkoord gaan met de gebruiksvoorwaarden en het privacy reglement."
+msgid "To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr "Om u aan te melden, moet u akkoord gaan met de Servicevoorwaarden en het privacybeleid."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
 msgid "Verify password"
@@ -7043,8 +7043,8 @@ msgid "You can also"
 msgstr "Je kunt ook"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
-msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr "Mogelijk heeft u uw account twee keer bevestigd, zodat het account al is bevestigd. Als dit het geval is, probeer dan in te loggen.</br>Als dat niet werkt, zorg er dan voor dat u de link correct heeft gekopieerd en probeer het opnieuw."
+msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
+msgstr "Mogelijk heeft u uw account twee keer bevestigd, zodat het account al is bevestigd. Als dit het geval is, probeer dan in te loggen.<br>Als dat niet werkt, zorg er dan voor dat u de link correct heeft gekopieerd en probeer het opnieuw."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
@@ -7446,8 +7446,8 @@ msgid "Do you like pea soup?"
 msgstr "Houd je van erwtensoep?"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
-msgid " Download will start in the background. Please check your download window."
-msgstr "De download start op de achtergrond, controleer je downloadvenster."
+msgid "Download will start in the background. Please check your download window."
+msgstr "Het downloaden begint op de achtergrond. Controleer je downloadvenster."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
 msgid "Drop-down menu"
@@ -8013,7 +8013,7 @@ msgstr "Je hebt dit al ingevuld, maar je kan je vorige antwoorden wijzigen."
 msgid "You already filled this in."
 msgstr "Je hebt dit al ingevuld."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:751
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr "Je hebt geen rechten om de resultaten te veranderen."
 

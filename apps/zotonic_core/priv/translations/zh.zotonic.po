@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-07 13:28\n"
+"PO-Revision-Date: 2021-05-11 14:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -2562,8 +2562,8 @@ msgid "The page might have been deleted."
 msgstr "该页面可能已被删除。"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:130
-msgid " There are unsaved changes. Are you sure you want to leave without saving?"
-msgstr " 有未保存的变化。你确定要不保存就离开吗？"
+msgid "There are unsaved changes. Are you sure you want to leave without saving?"
+msgstr "有未保存的更改。你确定未保存就退出吗？"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
 msgid "This page"
@@ -2790,7 +2790,7 @@ msgstr "设置用户名/密码"
 msgid "Sorry"
 msgstr "对不起"
 
-#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:43./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:51
+#: apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:42./apps/zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:50
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:28
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "对不起，用户名已被使用。请尝试其他用户名。"
@@ -3322,8 +3322,8 @@ msgid "There is already a predicate with this name."
 msgstr "已经有了这个名字的谓词。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:15
-msgid " This predicate can be used between two pages of the following categories."
-msgstr " 该谓词可用于以下类别的两页之间。"
+msgid "This predicate can be used between two pages of the following categories."
+msgstr "可以在以下类别的两页之间使用此谓词。"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:35
 msgid "To category"
@@ -4129,8 +4129,8 @@ msgid "Revisions for"
 msgstr "订正"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
-msgid " Select the backup file you want to upload. The file must be a .bert file."
-msgstr " 选择您要上传的备份文件。文件必须是 .bert 文件。"
+msgid "Select the backup file you want to upload. The file must be a .bert file."
+msgstr "选择您要上传的备份文件。该文件必须是.bert文件。"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:31
 msgid "Show import/export panel in the admin."
@@ -5800,8 +5800,8 @@ msgid "<em>Add</em> all recipients to this list that are on the target list"
 msgstr "<em>将目标列表中的所有收件人添加到此列表中</em> 。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:20
-msgid " <em>Remove</em> all recipients from this list that are on the target list"
-msgstr " <em>从这个列表中删除</em> 目标列表中的所有收件人。"
+msgid "<em>Remove</em> all recipients from this list that are on the target list"
+msgstr "<em>从此列表中删除</em> 所有目标列表中的收件人"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The dropbox filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the dropbox file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
@@ -5868,8 +5868,8 @@ msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing li
 msgstr "点击<strong>取消订阅</strong>将你从邮件列表中删除。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
-msgid " Click the button below to confirm your subscription to this mailing list."
-msgstr " 点击下面的按钮，确认您对这个邮件列表的订阅。"
+msgid "Click the button below to confirm your subscription to this mailing list."
+msgstr "单击下面的按钮以确认您对此邮件列表的订阅。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73./apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
 msgid "Click to view log entries"
@@ -7012,8 +7012,8 @@ msgid "This does not match the first password"
 msgstr "这不符合第一个密码"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:14
-msgid " To sign up you must agree with the Terms of Service and Privacy policies."
-msgstr " 要注册，您必须同意服务条款和隐私政策。"
+msgid "To sign up you must agree with the Terms of Service and Privacy policies."
+msgstr "要注册，您必须同意服务条款和隐私政策。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
 msgid "Verify password"
@@ -7036,8 +7036,8 @@ msgid "You can also"
 msgstr "你也可以"
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
-msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.</br>If that doesn’t work, make sure you copied the link correctly and try again."
-msgstr "您可能已经两次确认您的帐户，以便该帐户已经被确认。如果是这样，请尝试登录</br>如果不起作用，请确保您正确复制了链接，然后重试。"
+msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
+msgstr "您可能已经两次确认您的帐户，以便该帐户已经被确认。如果是这样，请尝试登录<br>如果不起作用，请确保您正确复制了链接，然后重试。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
@@ -7439,8 +7439,8 @@ msgid "Do you like pea soup?"
 msgstr "你喜欢喝紫菜汤么？"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:130./apps/zotonic_mod_survey/priv/templates/_admin_edit_content_survey_settings.tpl:134./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:39./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:43
-msgid " Download will start in the background. Please check your download window."
-msgstr " 下载将在后台开始。请检查您的下载窗口。"
+msgid "Download will start in the background. Please check your download window."
+msgstr "下载将在后台开始。请检查您的下载窗口。"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:48
 msgid "Drop-down menu"
@@ -8002,7 +8002,7 @@ msgstr "你已经填好了，但你可以改变你之前的答案。"
 msgid "You already filled this in."
 msgstr "你已经填好了"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:751
+#: apps/zotonic_mod_survey/src/mod_survey.erl:108./apps/zotonic_mod_survey/src/mod_survey.erl:123./apps/zotonic_mod_survey/src/mod_survey.erl:750
 msgid "You are not allowed to change these results."
 msgstr "你不允许改变这些结果。"
 
