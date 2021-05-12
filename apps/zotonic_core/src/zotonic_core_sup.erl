@@ -64,7 +64,7 @@ init([]) ->
 
         % Http request metrics handling. Accepts priority list of buffers to consume.
         {z_stats,
-            {z_stats, start_link, [ [ zotonic_http_metrics_prio, zotonic_http_metrics_prio ] ]},
+            {z_stats, start_link, [ [ zotonic_http_metrics_prio, zotonic_http_metrics_normal ] ]},
             permanent, 5000, worker, [z_stats]},
 
         % SMTP gen_server for sending emails

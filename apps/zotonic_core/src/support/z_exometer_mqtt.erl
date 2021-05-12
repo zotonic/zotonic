@@ -91,6 +91,7 @@ exometer_terminate(_, _State) ->
 
 
 make_topic(Metric, Prefix) ->
+    % io:format("~p~n", [ Metric ]),
     Topic = [ Prefix, [z_convert:to_binary(M) || M <- Metric]],
     join_topic(Topic).
 

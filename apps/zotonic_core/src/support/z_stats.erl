@@ -235,7 +235,7 @@ handle_cowmachine_stats(#{
         resp_bytes := DataOut,
         metrics := Metrics
     }) ->
-    DispatchRule = maps:get(dispatch_rule, Metrics, undefined),
+    DispatchRule = maps:get(dispatch_rule, Metrics, unknown),
     PathPrefix = [site, Site, cowmachine, DispatchRule],
     exometer:update_or_create(PathPrefix ++ [StatusCategory], 1, spiral, []),
     if DurationUSec > 0 ->
