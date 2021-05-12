@@ -1,8 +1,8 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2015 Maas-Maarten Zeeman
+%% @copyright 2015-2021 Maas-Maarten Zeeman
 %% @doc View zotonic system statistics
 
-%% Copyright 2015 Maas-Maarten Zeeman
+%% Copyright 2015-2021 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

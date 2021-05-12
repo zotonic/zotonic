@@ -1,8 +1,6 @@
 {% extends "_stats_panel.tpl" %}
 
-
 {% block panel_title %}{_ Erlang VM _}{% endblock %}
-
 
 {% block panel_body %}
 <table class="table table-condensed">
@@ -10,16 +8,13 @@
     <tbody>
         {% for title, id in [
                 ["System", ""],
-                ["Run Queue", "run-queue"],
-                ["IO", ""],
-                ["Input", "io-in"],
-                ["Output", "io-out"],
+                ["Run Queue", "statistics-run_queue"],
                 ["Garbage Collection", ""],
-                ["GC", "gc-r"] ] %}
+                ["Total GCs", "gc-total_coll"],
+                ["Words Reclaimed", "gc-rec_wrd"]
+            ] %}
             {% include "_stat_row.tpl" %}
         {% endfor %}
     </tbody>
 </table>
-
-
 {% endblock %}

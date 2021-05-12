@@ -155,6 +155,31 @@ cotonic.broker.subscribe("bridge/origin/$SYS/erlang/+entry",
             let item = $(itemId);
             if(item.length > 0) {
                 // console.log(itemId, msg.payload[datapoints[i]]);
+                item.text(msg.payload[datapoints[i]] + '');
+                // item.html(item.data('render')(msg.payload[datapoints[i]]));
+            } else {
+                console.log("No place for", itemId, msg.payload[datapoints[i]]);
+            }
+        }
+});
+
+cotonic.broker.subscribe("bridge/origin/$SYS/site/{{ m.site.site }}/+entry",
+     function(msg, args) {
+        console.log(msg);
+        if(args.entry === "usage") {
+            update_usage(msg.payload);
+            return;
+        }
+
+        const datapoints = Object.keys(msg.payload);
+
+        for(let i=0; i < datapoints.length; i++) {
+            const itemId = "#" + args.entry + "-" + datapoints[i];
+
+            let item = $(itemId);
+            if(item.length > 0) {
+                // console.log(itemId, msg.payload[datapoints[i]]);
+                item.text(msg.payload[datapoints[i]] + '');
                 // item.html(item.data('render')(msg.payload[datapoints[i]]));
             } else {
                 console.log("No place for", itemId, msg.payload[datapoints[i]]);

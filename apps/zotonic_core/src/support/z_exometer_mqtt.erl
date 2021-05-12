@@ -35,7 +35,7 @@
 -include("zotonic.hrl").
 -include_lib("exometer_core/include/exometer.hrl").
 
--record(state, { 
+-record(state, {
     topic_prefix = [],
     context % The context
 }).
@@ -59,7 +59,7 @@ exometer_report(Metric, DataPoint, _Extra, Value, State) ->
 exometer_report_bulk(Found, _Extra, State) ->
     [ begin
           Topic = make_topic(Metric, State#state.topic_prefix),
-          z_mqtt:publish(Topic, DataPoint, State#state.context)
+          z_mqtt:publish(Topic, DataPoint, #{ retain => true, qos => 0 }, State#state.context)
       end || {Metric, DataPoint} <- Found],
 
     {ok, State}.
