@@ -21,7 +21,10 @@
 </table>
 
 {% javascript %}
+
+
 cotonic.broker.subscribe("bridge/origin/$SYS/site/{{ m.site.site }}/broker/+what",
+
     function(msg, args) {
         switch(args.what) {
         case "subscribe":

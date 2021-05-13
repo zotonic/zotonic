@@ -12,56 +12,12 @@
 </style>
 
 <div class="row">
-
 <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
     {% include "stat_panel/erlang.tpl" %}
 </div>
 
-{#
-<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-  <div class="panel panel-default">
-    <div class="panel-heading">Run Queue</div>
-
-    <div class="panel-body">
-        <table class="table table-condensed">
-            <thead></thead>
-            <tbody>
-                {% for title, id in [ ["Run Queue", "statistics-run_queue"] ] %}
-                    {% include "_stat_row.tpl" %}
-                {% endfor %}
-            </tbody>
-            {% javascript %}
-                // $("#statistics-run_queue").data("render", render_value);
-            {% endjavascript %}
-        </table>
-    </div>
-  </div>
-</div>
-#}
-
-<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-    <div class="panel panel-default">
-        <div class="panel-heading">Broker</div>
-        <div class="panel-body">
-            <table class="table table-condensed">
-                <thead></thead>
-                <tbody>
-                    {% for title, id in [ ["Sessions", "broker-session_count"],
-                                          ["Subscribes/min", "broker-subscribe_one"],
-                                          ["Publishes/min", "broker-publish_one"],
-                                          ["Subscribers", "broker-destinations"],
-                                          ["Nodes", "broker-nodes"],
-                                          ["Edges", "broker-edges"],
-                                          ["Wildcards", "broker-wildcards"],
-                                          ["Paths", "broker-paths"] ] %}
-                        {% include "_stat_row.tpl" %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    {% include "stat_panel/database.tpl" %}
+<div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
+    {% include "stat_panel/system_usage.tpl" %}
 </div>
 
 <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
@@ -76,27 +32,34 @@
                         {% include "_stat_row.tpl" %}
                     {% endfor %}
                 </tbody>
-                {% javascript %}
-                    // $("#io-input").data("render", to_human);
-                    // $("#io-output").data("render", to_human);
-                {% endjavascript %}
             </table>
         </div>
     </div>
 </div>
 
+
+</div>
+<div class="row">
+
 <div class="col-md-5 col-lg-4 col-sm-6 col-xs-8">
     {% include "stat_panel/memory_usage.tpl" %}
 </div>
 
-<div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
-    {% include "stat_panel/system_usage.tpl" %}
+<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+    {% include "stat_panel/broker.tpl" %}
 </div>
 
-<div class="col-md-6 col-lg-6 col-sm-12">
+<div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
+    {% include "stat_panel/database.tpl" %}
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-10 col-lg-8 col-sm-12">
     {% include "stat_panel/dispatch.tpl" %}
 </div>
-
 
 </div>
 
@@ -154,31 +117,6 @@ cotonic.broker.subscribe("bridge/origin/$SYS/erlang/+entry",
 
             let item = $(itemId);
             if(item.length > 0) {
-                // console.log(itemId, msg.payload[datapoints[i]]);
-                item.text(msg.payload[datapoints[i]] + '');
-                // item.html(item.data('render')(msg.payload[datapoints[i]]));
-            } else {
-                console.log("No place for", itemId, msg.payload[datapoints[i]]);
-            }
-        }
-});
-
-cotonic.broker.subscribe("bridge/origin/$SYS/site/{{ m.site.site }}/+entry",
-     function(msg, args) {
-        console.log(msg);
-        if(args.entry === "usage") {
-            update_usage(msg.payload);
-            return;
-        }
-
-        const datapoints = Object.keys(msg.payload);
-
-        for(let i=0; i < datapoints.length; i++) {
-            const itemId = "#" + args.entry + "-" + datapoints[i];
-
-            let item = $(itemId);
-            if(item.length > 0) {
-                // console.log(itemId, msg.payload[datapoints[i]]);
                 item.text(msg.payload[datapoints[i]] + '');
                 // item.html(item.data('render')(msg.payload[datapoints[i]]));
             } else {
