@@ -33,7 +33,7 @@ a release that can be copied and run on a suitable host system.
 Assumptions
 -----------
 
-You have Erlang 21.3 or later installed on your system. You have
+You have Erlang/OTP 22 or later installed on your system. You have
 Internet access and basic Bash command line skills. File editing tasks
 refer to vim. But you can use your code editor of choice.
 
