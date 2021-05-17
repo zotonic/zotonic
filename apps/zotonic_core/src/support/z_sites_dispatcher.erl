@@ -196,7 +196,7 @@ execute(Req, Env) ->
         {redirect, Site, NewPathOrURI, IsPermanent} ->
             Metrics = #{
                 site => Site,
-                peer_ip => cowmachine_req:peer_ip(Req)
+                peer_ip => maps:get(cowmachine_remote_ip, Env)
             },
             cast_metrics_data(Metrics, Req),
             case z_sites_manager:wait_for_running(Site) of
