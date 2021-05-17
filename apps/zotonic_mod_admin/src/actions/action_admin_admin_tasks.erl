@@ -27,7 +27,10 @@ event(#postback{message={admin_tasks, [{task, <<"flush_all_sites">>}]}}, Context
 
 %% @doc Flush the caches of the site referred to in the supplied context.
 event(#postback{message={admin_tasks, [{task, <<"flush">>}]}}, Context) ->
-    do(fun() -> z:flush(Context) end,
+    do(fun() ->
+          zotonic_fileindexer:flush(),
+          z:flush(Context)
+       end,
        ?__(<<"Caches have been flushed.">>, Context),
        Context);
 

@@ -99,11 +99,13 @@ update_vcs(false, _Context) ->
 update_vcs({hg, Path}, Context) ->
     Command = lists:flatten(["(cd ", z_utils:os_filename(Path), "; hg pull -u)"]),
     Result = os:cmd(Command),
+    zotonic_fileindexer:flush(),
     ?zInfo("hg pull: ~s", [ Result ], Context),
     {ok, Result};
 update_vcs({git, Path}, Context) ->
     Command = lists:flatten(["(cd ", z_utils:os_filename(Path), "; git pull)"]),
     Result = os:cmd(Command),
+    zotonic_fileindexer:flush(),
     ?zInfo("git pull: ~s", [ Result ], Context),
     {ok, Result}.
 

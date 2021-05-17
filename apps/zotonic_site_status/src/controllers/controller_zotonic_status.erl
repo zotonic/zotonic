@@ -127,6 +127,7 @@ event(#postback{message={site_stop, [{site, Site}]}}, Context) when is_atom(Site
     render_notice(Site, "Successfully stopped.", Context);
 event(#postback{message={site_flush, [{site, Site}]}}, Context) when is_atom(Site) ->
     true = z_auth:is_auth(Context),
+    zotonic_fileindexer:flush(),
     z:flush(z_context:new(Site)),
     render_notice(Site, "The cache is flushed and all dispatch rules are reloaded.", Context);
 event(#postback{message={site_admin, [{site,Site}]}}, Context) when is_atom(Site) ->
