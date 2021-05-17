@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block html_attr %}
-    {% with page|default:q.p as page %}
+    {% with page|default:q.p|sanitize_url as page %}
         {% if page == "#reload" or error_code == 401 %}
             data-onauth="#reload"
         {% elseif {logon_done p=page}|url as logon_done_url %}
