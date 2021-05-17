@@ -477,7 +477,9 @@ url_strip_language(<<"/", Path/binary>> = Url) ->
             end;
         _ ->
             Url
-    end.
+    end;
+url_strip_language(Path) when is_binary(Path) ->
+    Path.
 
 %% @doc Set the language, as selected by the user. Persist this choice.
 -spec set_user_language(atom(), z:context()) -> z:context().
