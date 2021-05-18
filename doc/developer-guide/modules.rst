@@ -158,6 +158,26 @@ and javascript files. These files will be served with via the
 priv/lib-src/
 """""""""""""
 
+This directory contains the source files for the :file:`lib` directory.
+Examples are Less, Scss, and other files.
+
+If a file in the lib-src directory changes then the system will search
+for a :file:`Makefile` in the directory of the changed file or one of its
+parent directories. If a Makefile is found then it is executed.
+
+Scss files starting with a ``_`` (like :file:`_home.scss`) are known to be
+include files. If no Makefile is found then a Scss file without underscore
+is searched and used to generate the corresponding css.
+
+If no Makefile is found then any input file is converted to a similar sub-directory
+in the :file:`lib` directory. For example :file:`lib-src/foo/bar.scss` is used
+to generated :file:`lib/foo/bar.css`
+
+The standard file handlers know about the following extensions/formats:
+
+ * :file:`.less`
+ * :file:`.scss`
+ * :file:`.coffee`
 
 priv/templates/
 """""""""""""""
