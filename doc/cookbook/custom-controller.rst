@@ -22,7 +22,7 @@ a module in your site’s :file:`src/controllers/` directory and prefix it with
     ]).
 
     %% This function renders some HTML when the controller is called
-    process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    process(_Method, _AcceptedContentType, _ProvidedContentType, Context) ->
         {<<"Hello world and all the people in it!">>, Context}.
 
 To be able to handle HTTP requests with this controller, you need to
@@ -77,9 +77,9 @@ The ``process/4`` function will be called with the POST data, so define it:
     allowed_methods(Context) ->
         {[<<"GET">>, <<"POST">>], Context}.
 
-    process(<<"GET">>, _AcceptedCT, _ProvidedCT, Context) ->
+    process(<<"GET">>, _AcceptedContentType, _ProvidedContentType, Context) ->
         {<<"Hello world and all the people in it!">>, Context};
-    process(<<"POST">>, _AcceptedCT, _ProvidedCT, Context) ->
+    process(<<"POST">>, _AcceptedContentType, _ProvidedContentType, Context) ->
         % Process the POST data
         Name = z_html:escape( z_context:get_q(<<"name">>, Context, <<>>) ),
         {<<"Thank you posting, ", Name/binary>>, Context}.
