@@ -181,8 +181,8 @@ is_sender_enabled(Id, RecipientEmail, Context) when is_integer(Id) ->
 
 recipient_is_user_or_admin(Id, RecipientEmail, Context) ->
     m_config:get_value(zotonic, admin_email, Context) =:= RecipientEmail
-    orelse m_rsc:p_no_acl(1, email, Context) =:= RecipientEmail
-    orelse m_rsc:p_no_acl(Id, email, Context) =:= RecipientEmail
+    orelse m_rsc:p_no_acl(1, email_raw, Context) =:= RecipientEmail
+    orelse m_rsc:p_no_acl(Id, email_raw, Context) =:= RecipientEmail
     orelse lists:any(fun(Idn) ->
                         proplists:get_value(key, Idn) =:= RecipientEmail
                      end,
@@ -860,7 +860,11 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                        [RecipientEmail, Id, Relay]),
 
             %% use the unique id as 'envelope sender' (VERP)
-            case send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+            SendResult = case z_config:get(smtp_is_blackhole, false) of
+                true -> <<"Blackhole - zotonic config smtp_is_blackhole is set.">>;
+                false -> send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts)
+            end,
+            case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
                     case is_retry_possible(Reason, FailureType) of
                         true ->
