@@ -173,11 +173,12 @@ If no Makefile is found then any input file is converted to a similar sub-direct
 in the :file:`lib` directory. For example :file:`lib-src/foo/bar.scss` is used
 to generated :file:`lib/foo/bar.css`
 
-The standard file handlers know about the following extensions/formats:
+There are standard file handlers for the following extensions/formats:
 
- * :file:`.less`
- * :file:`.scss`
- * :file:`.coffee`
+ * :file:`.scss`  (:file:`Makefile`, :file:`sassc`, or :file:`sass`)
+ * :file:`.less` (:file:`Makefile` or :file:`lessc`)
+ * :file:`.coffee` (:file:`Makefile` or :file:`coffee`)
+
 
 priv/templates/
 """""""""""""""
