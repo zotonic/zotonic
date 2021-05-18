@@ -243,6 +243,7 @@ default(smtp_spamd_port) -> 783;
 default(smtp_dns_blocklist) -> z_email_dnsbl:dns_blocklist();
 default(smtp_dns_allowlist) -> z_email_dnsbl:dns_allowlist();
 default(smtp_delete_sent_after) -> 240;
+default(smpt_is_blackhole) -> false;
 default(mqtt_listen_ip) -> ?MODULE:get(listen_ip);
 default(mqtt_listen_ip6) -> ?MODULE:get(listen_ip6);
 default(mqtt_listen_port) -> 1883;

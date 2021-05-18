@@ -122,6 +122,9 @@
    %% {smtp_username, undefined},
    %% {smtp_password, undefined},
 
+%%% SMTP send all email into a blackhole, ideal for testing large mailings
+   %% {smtp_is_blackhole, false},
+
 %%% SMTP extra relay options:
 %%% some picky/buggy/misconfigured relays might need one of these to be enabled.
    %% {smtp_no_mx_lookups, false},

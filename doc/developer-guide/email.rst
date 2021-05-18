@@ -99,6 +99,10 @@ Zotonic-wide settings for sending email
 |                          |Only use if all else fails (see       |
 |                          |the paragraphs after the next one).   |
 +--------------------------+--------------------------------------+
+|smtp_is_blackhole         |Drop all outgoing email, the mail is  |
+|                          |still logged. Good for testing large  |
+|                          |mailings.                             |
++--------------------------+--------------------------------------+
 
 Zotonic-wide settings for receiving email
 """""""""""""""""""""""""""""""""""""""""
