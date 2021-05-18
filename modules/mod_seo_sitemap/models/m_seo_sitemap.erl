@@ -1,3 +1,21 @@
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2021 Marc Worrell
+%% @doc Model for tracking all URLs to be included in the sitemap.
+
+%% Copyright 2021 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(m_seo_sitemap).
 
 -export([
@@ -143,7 +161,8 @@ maybe_add_category_attrs(#{ category_id := CatId } = Map, Context) ->
 
 %% @doc Insert or update a location for the sitemap. The entry must have a key to be uniquely
 %% identified. The loc may be a path or a complete url with hostname. If the hostname is omitted
-%% then the default hostname for the site will be used.
+%% then the default hostname for the site will be used. The source 'rsc' is reserved for
+%% resources (pages), suggested is to use a site or module name as source.
 -spec update( map(), z:context() ) -> ok | {error, term()}.
 update(#{ loc := Loc, source := Source, key := Key } = Url, Context) ->
     case is_loc_acceptable(Loc) of
@@ -181,7 +200,7 @@ is_loc_acceptable(<<"http:", _/binary>>) -> true;
 is_loc_acceptable(_) -> false.
 
 
-%% @doc Delete a complete source or a specific source key from the sitemap.
+%% @doc Delete a complete source (key 'all') or a specific source key from the sitemap.
 -spec delete_key( binary(), binary() | all, z:context() ) -> ok | {error, term()}.
 delete_key(Source, all, Context) ->
     case z_db:q("

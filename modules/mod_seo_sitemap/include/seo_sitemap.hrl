@@ -1,6 +1,7 @@
 % Notifications for sitemap generation.
 % See for additional documentation https://www.sitemaps.org/protocol.html
 
+% Number of URLs per urlset, used for paging the sitemap source queries.
 -define(URLSET_SIZE, 5000).
 
 %% @doc Fetch the sitemaps to be included
