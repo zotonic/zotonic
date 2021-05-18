@@ -860,11 +860,11 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                        [RecipientEmail, Id, Relay]),
 
             %% use the unique id as 'envelope sender' (VERP)
-            Result = case z_config:get(smtp_is_blackhole, false) of
+            SendResult = case z_config:get(smtp_is_blackhole, false) of
                 true -> <<"Blackhole - zotonic config smtp_is_blackhole is set.">>;
-                false -> send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) 
+                false -> send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts)
             end,
-            case Result of
+            case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
                     case is_retry_possible(Reason, FailureType) of
                         true ->
