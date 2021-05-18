@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-11 14:37\n"
+"PO-Revision-Date: 2021-05-11 16:20\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -3353,11 +3353,36 @@ msgstr "объект"
 msgid "subject"
 msgstr "тема"
 
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/broker.tpl:3
+msgid "Broker"
+msgstr "Маклер"
+
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:121
+msgid "Database"
+msgstr "База данных"
+
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/dispatch.tpl:3
+msgid "Dispatch"
+msgstr "Отправлять"
+
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/erlang.tpl:4
+msgid "Erlang VM"
+msgstr "Эрланг ВМ"
+
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/memory_usage.tpl:3
+msgid "Memory Usage"
+msgstr "Использование памяти"
+
 #: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:53
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
 msgstr "Статистика"
+
+#: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/system_usage.tpl:3
+msgid "System Usage"
+msgstr "Использование системы"
 
 #: apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13./apps/zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
@@ -8553,10 +8578,6 @@ msgstr "Не удалось создать каталог сайта"
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:146
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "Не смог удалить грязь с сайта для проверки Git'а:"
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:121
-msgid "Database"
-msgstr "База данных"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:473
 msgid "Disk full creating:"
