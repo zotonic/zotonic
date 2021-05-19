@@ -26,7 +26,7 @@ a module in your site’s :file:`src/controllers/` directory and prefix it with
         {<<"Hello world and all the people in it!">>, Context}.
 
 To be able to handle HTTP requests with this controller, you need to
-:ref:`define a dispatch rule <defining-dispatch-rules>` that maps some request
+:ref:`define a dispatch rule <guide-dispatch>` that maps some request
 URL to this controller:
 
 .. code-block:: erlang
