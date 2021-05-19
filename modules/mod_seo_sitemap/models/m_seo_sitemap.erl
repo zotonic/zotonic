@@ -83,8 +83,8 @@ max_id( Context ) ->
 %% give duplicate entries in sitemaps, as the ids might change during
 %% sitemap discovery and consumption by the crawler.
 %% All locations are made into absolute urls with the correct hostname.
-%% As entries are filtered on publication_end, this might return less entries
-%% than the Limit amount requested.
+%% As entries are filtered on publication_end, their language and resource
+%% visibility, this might return less entries than the Limit amount requested.
 -spec slice( pos_integer(), pos_integer(), z:context() ) -> {ok, list( map() )} | {error, empty}.
 slice( Offset, Limit, Context ) ->
     Rows = z_db:assoc("
@@ -100,12 +100,14 @@ slice( Offset, Limit, Context ) ->
         _ ->
             Now = calendar:universal_time(),
             AnonContext = z_context:new( z_context:site(Context) ),
+            Langs = enabled_languages(AnonContext),
+            LangsB = lists:map( fun z_convert:to_binary/1, Langs ),
             Rows1 = lists:filtermap(
                 fun
                     (#{ publication_end := PubEnd }) when is_tuple(PubEnd), PubEnd < Now ->
                         false;
                     (Url) ->
-                        case is_visible(Url, AnonContext) of
+                        case is_visible(Url, LangsB, AnonContext) of
                             true ->
                                 Map = #{ loc := Loc } = maps:from_list(Url),
                                 Map1 = Map#{
@@ -121,10 +123,14 @@ slice( Offset, Limit, Context ) ->
             {ok, Rows1}
     end.
 
-%% @doc Filter resources that are not visible
-is_visible(#{ rsc_id := RscId }, Context) ->
+%% @doc Filter resources and urls that are not visible
+is_visible(#{ rsc_id := RscId, language := undefined }, _Languages, Context) when is_integer(RscId) ->
     z_acl:rsc_visible(RscId, Context);
-is_visible(_, _Context) ->
+is_visible(#{ rsc_id := RscId, language := Lang }, Languages, Context) when is_integer(RscId) ->
+    lists:member(Lang, Languages) andalso z_acl:rsc_visible(RscId, Context);
+is_visible(#{ language := Lang }, Languages, _Context) when is_binary(Lang) ->
+    lists:member(Lang, Languages);
+is_visible(_, _, _Context) ->
     true.
 
 %% @doc Optionally add priority and changefreq from the category definition
@@ -283,17 +289,14 @@ update_rsc(Id, Context) ->
                 [] -> [ z_context:language(AnonContext) ];
                 Ls -> Ls
             end,
-            Enabled = case get_enabled_languages(AnonContext) of
-                [] -> [ z_context:language(AnonContext) ];
-                LangProps -> [ Lang || {Lang, _} <- LangProps ]
-            end,
+            Enabled = editable_languages(AnonContext),
             Locs = lists:filtermap(
                 fun(Lang) ->
                     case lists:member(Lang, Enabled) of
                         true ->
                             CLang = z_context:set_language(Lang, AnonContext),
                             Url = iolist_to_binary( m_rsc:p(Id, page_url, CLang) ),
-                            {true, Url};
+                            {true, {z_convert:to_binary(Lang), Url}};
                         false ->
                             false
                     end
@@ -301,19 +304,18 @@ update_rsc(Id, Context) ->
                 Langs),
             Locs1 = lists:usort(Locs),
             Current = z_db:q("
-                        select loc
+                        select language, loc
                         from seo_sitemap
                         where rsc_id = $1
                           and source = 'rsc'",
                         [ Id ],
                         Context),
-            Current1 = [ Loc || {Loc} <- Current ],
-            New = Locs1 -- Current1,
-            Del = Current1 -- Locs1,
+            New = Locs1 -- Current,
+            Del = Current -- Locs1,
             z_db:transaction(
                 fun(Ctx) ->
                     lists:foreach(
-                        fun(Loc) ->
+                        fun({_Lang, Loc}) ->
                             z_db:q(
                                 "delete from seo_sitemap
                                  where rsc_id = $1
@@ -333,17 +335,17 @@ update_rsc(Id, Context) ->
                         _ -> 0.8
                     end,
                     lists:foreach(
-                        fun(Loc) ->
+                        fun({Lang, Loc}) ->
                             z_db:q(
                                 "insert into seo_sitemap
-                                    (source, rsc_id, category_id, loc, lastmod, priority, publication_end)
+                                    (source, rsc_id, category_id, loc, lastmod, priority, publication_end, language)
                                 values
-                                    ('rsc', $1, $2, $3, $4, $5, $6)",
-                                [ Id, CatId, Loc, LastMod, Prio, PubEnd ],
+                                    ('rsc', $1, $2, $3, $4, $5, $6, $7)",
+                                [ Id, CatId, Loc, LastMod, Prio, PubEnd, Lang ],
                                 Ctx)
                         end,
                         New),
-                    case Current1 -- Del of
+                    case Current -- Del of
                         [] ->
                             ok;
                         _ ->
@@ -402,6 +404,7 @@ install(Context) ->
                     loc character varying(500) not null,
                     lastmod timestamp with time zone,
                     changefreq character varying(10),
+                    language character varying(32),
                     priority float,
                     publication_end timestamp with time zone NOT NULL DEFAULT '9999-06-01 00:00:00'::timestamp with time zone,
                     modified timestamp with time zone NOT NULL DEFAULT now(),
@@ -422,6 +425,7 @@ install(Context) ->
                 {"fki_seo_sitemap_category_id", "category_id"}
             ],
             [ z_db:q("create index "++Name++" on seo_sitemap ("++Cols++")", Context) || {Name, Cols} <- Indices ],
+            z_db:flush(Context),
             % Insert the rebuild task
             rebuild_rsc(Context),
             ok;
@@ -430,14 +434,38 @@ install(Context) ->
     end.
 
 
-%% Copied from mod_translation - in the 1.x we can use the z_language routines.
+enabled_languages(Context) ->
+    case get_enabled_languages(Context) of
+        [] -> [ z_context:language(Context) ];
+        LangProps -> [ Lang || {Lang, _} <- LangProps ]
+    end.
 
+editable_languages(Context) ->
+    case get_editable_languages(Context) of
+        [] -> [ z_context:language(Context) ];
+        LangProps -> [ Lang || {Lang, _} <- LangProps ]
+    end.
+
+%% Copied from mod_translation - in the 1.x we can use the z_language routines.
 get_enabled_languages(Context) ->
     case z_memo:get('mod_translation$enabled_languages') of
         V when is_list(V) ->
             V;
         _ ->
             Languages = lists:filter(fun({_,Props}) -> proplists:get_value(is_enabled, Props) =:= true end,
+                                     get_language_config(Context)),
+            z_memo:set('mod_translation$enabled_languages', Languages)
+    end.
+
+get_editable_languages(Context) ->
+    case z_memo:get('mod_translation$enabled_languages') of
+        V when is_list(V) ->
+            V;
+        _ ->
+            Languages = lists:filter(fun({_,Props}) ->
+                                        proplists:get_value(is_editable, Props) =:= true
+                                        orelse proplists:get_value(is_enabled, Props) =:= true
+                                     end,
                                      get_language_config(Context)),
             z_memo:set('mod_translation$enabled_languages', Languages)
     end.
