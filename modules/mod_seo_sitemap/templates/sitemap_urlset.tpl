@@ -4,8 +4,8 @@
    <url>
       <loc>{{ url.loc|escapexml }}</loc>
       {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"c" }}</lastmod>{% endif %}
-      {% if url.changefreq %}<lastmod>{{ url.changefreq|escapexml }}</changefreq>{% endif %}
-      {% if url.priority|is_defined %}<lastmod>{{ url.priority|to_binary|escapexml }}</priority>{% endif %}
+      {% if url.changefreq %}<changefreq>{{ url.changefreq|escapexml }}</changefreq>{% endif %}
+      {% if url.priority|is_defined %}<priority>{{ url.priority|to_binary|escapexml }}</priority>{% endif %}
    </url>
 {% endfor %}
 </urlset>
