@@ -9,6 +9,7 @@ Cookbooks
    custom-action
    custom-filter
    custom-model
+   custom-controller
    custom-pivot
    custom-tag
    custom-search
