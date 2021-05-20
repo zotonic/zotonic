@@ -10,12 +10,12 @@
             </label>
             <div>
                 <select class="form-control" id="seo_sitemap_priority" name="seo_sitemap_priority">
-                    <option value="0.0" {% if id.seo_sitemap_priority == '0.0' %}selected{% endif %}>0.0</option>
+                    <option value="0.0" {% if id.seo_sitemap_priority == '0.0' %}selected{% endif %}>0.0 &ndash; {_ not in sitemap _}</option>
                     <option value="0.1" {% if id.seo_sitemap_priority == '0.1' %}selected{% endif %}>0.1</option>
                     <option value="0.2" {% if id.seo_sitemap_priority == '0.2' %}selected{% endif %}>0.2</option>
                     <option value="0.3" {% if id.seo_sitemap_priority == '0.3' %}selected{% endif %}>0.3</option>
                     <option value="0.4" {% if id.seo_sitemap_priority == '0.4' %}selected{% endif %}>0.4</option>
-                    <option value="" {% if not id.seo_sitemap_priority %}selected{% endif %}>0.5 ({_ default_})</option>
+                    <option value="" {% if not id.seo_sitemap_priority %}selected{% endif %}>0.5 &ndash; {_ default_}</option>
                     <option value="0.6" {% if id.seo_sitemap_priority == '0.6' %}selected{% endif %}>0.6</option>
                     <option value="0.7" {% if id.seo_sitemap_priority == '0.7' %}selected{% endif %}>0.7</option>
                     <option value="0.8" {% if id.seo_sitemap_priority == '0.8' %}selected{% endif %}>0.8</option>

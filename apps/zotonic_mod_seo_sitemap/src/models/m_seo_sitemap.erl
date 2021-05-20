@@ -109,8 +109,7 @@ slice( Offset, Limit, Context ) ->
                                 Map1 = Map#{
                                     loc => z_context:abs_url(Loc, AnonContext)
                                 },
-                                Map2 = maybe_add_category_attrs(Map1, AnonContext),
-                                {true, Map2};
+                                maybe_add_category_attrs(Map1, AnonContext);
                             false ->
                                 false
                         end
@@ -130,35 +129,39 @@ is_visible(_, _, _Context) ->
     true.
 
 %% @doc Optionally add priority and changefreq from the category definition
+-spec maybe_add_category_attrs( map(), z:context() ) -> {true, map()} | false.
 maybe_add_category_attrs(#{ category_id := undefined } = Map, _Context) ->
-    Map;
+    {true, Map};
 maybe_add_category_attrs(#{ category_id := CatId } = Map, Context) ->
-    Map1 = case Map of
-        #{ priority := undefined } ->
-            case m_rsc:p_no_acl(CatId, seo_sitemap_priority, Context) of
-                undefined -> Map#{ priority := 0.5 };
-                Prio ->
-                    try
-                        Map#{ priority := z_convert:to_float(Prio) }
-                    catch
-                        _:_ -> Map
-                    end
-            end;
-        _ ->
-            Map
-    end,
-    Map2 = case Map1 of
+    Map2 = case Map of
         #{ changefreq := undefined } ->
             Freq = case m_rsc:p_no_acl(CatId, seo_sitemap_changefreq, Context) of
                 <<>> -> <<"weekly">>;
                 undefined -> <<"weekly">>;
                 CF -> CF
             end,
-            Map1#{ changefreq := Freq };
+            Map#{ changefreq := Freq };
         _ ->
-            Map1
+            Map
     end,
-    Map2.
+    case Map2 of
+        #{ priority := undefined } ->
+            case m_rsc:p_no_acl(CatId, seo_sitemap_priority, Context) of
+                <<"0.0">> ->
+                    ?DEBUG({hide, Map}),
+                    false;
+                undefined ->
+                    {true, Map2#{ priority := 0.5 }};
+                Prio ->
+                    try
+                        {true, Map2#{ priority := z_convert:to_float(Prio) }}
+                    catch
+                        _:_ -> {true, Map2}
+                    end
+            end;
+        _ ->
+            {true, Map2}
+    end.
 
 
 %% @doc Insert or update a location for the sitemap. The entry must have a key to be uniquely
