@@ -501,7 +501,7 @@ is_enabled_language(Lang, Context) ->
 
 get_enabled_languages(Context) ->
     case z_memo:get('mod_translation$enabled_languages') of
-        V when is_boolean(V) ->
+        V when is_list(V) ->
             V;
         _ ->
             Languages = lists:filter(fun({_,Props}) -> proplists:get_value(is_enabled, Props) =:= true end,

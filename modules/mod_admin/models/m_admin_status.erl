@@ -68,7 +68,7 @@ m_find_value(init_arguments, #m{value=undefined} = M, _Context) ->
     Args = init:get_arguments(),
     M#m{value={init_arguments, Args}};
 m_find_value(config, #m{value={init_arguments, Args}}, _Context) ->
-    ?DEBUG(proplists:get_all_values(config, Args));
+    proplists:get_all_values(config, Args);
 m_find_value(Key, #m{value={init_arguments, Args}}, _Context) ->
     proplists:get_value(Key, Args);
 
