@@ -112,9 +112,17 @@
                    | binary()
                    | integer()
                    | boolean()
-                   | float().
+                   | float()
+                   | list().
+
+-type qmap_options() :: list( qmap_option() ).
+-type qmap_option() :: {keys, binary|atom}
+                     | {timeout, non_neg_integer()}.
+
 -type props() :: proplists:proplist() | props_map().
--type props_map() :: #{ binary() => term() }.
+-type props_map() :: #{ prop_key() => term() }.
+-type prop_key() :: binary() | atom().
+
 -type id() :: pos_integer().
 
 -type query_result() :: {ok, Columns :: list(), Rows :: list()}
@@ -126,13 +134,20 @@
     sql/0,
     query_error/0,
     query_timeout/0,
+    query_result/0,
     transaction_fun/0,
     parameters/0,
     parameter/0,
     table_name/0,
     schema_name/0,
     props/0,
-    id/0
+    props_map/0,
+    prop_key/0,
+
+    id/0,
+
+    qmap_options/0,
+    qmap_option/0
 ]).
 
 
@@ -380,7 +395,7 @@ qmap_row(Sql, Context) ->
 qmap_row(Sql, Args, Context) ->
     qmap_row(Sql, Args, [], Context).
 
--spec qmap_row( sql(), parameters(), list(), z:context()) -> {ok, map()} | {error, query_error()}.
+-spec qmap_row( sql(), parameters(), qmap_options(), z:context()) -> {ok, map()} | {error, query_error()}.
 qmap_row(Sql, Args, Options, Context) ->
     case qmap(Sql, Args, Options, Context) of
         {ok, [ M | _ ]} when is_map(M) ->
@@ -399,7 +414,7 @@ qmap_props_row(Sql, Context) ->
 qmap_props_row(Sql, Args, Context) ->
     qmap_props_row(Sql, Args, [], Context).
 
--spec qmap_props_row( sql(), parameters(), list(), z:context()) -> {ok, map()} | {error, query_error()}.
+-spec qmap_props_row( sql(), parameters(), qmap_options(), z:context()) -> {ok, map()} | {error, query_error()}.
 qmap_props_row(Sql, Args, Options, Context) ->
     case qmap_props(Sql, Args, Options, Context) of
         {ok, [ M | _ ]} when is_map(M) ->
@@ -418,7 +433,7 @@ qmap(Sql, Context) ->
 qmap(Sql, Args, Context) ->
     qmap(Sql, Args, [], Context).
 
--spec qmap( sql(), parameters(), list(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
+-spec qmap( sql(), parameters(), qmap_options(), z:context() ) -> {ok, [ map() ]} | {error, query_error()}.
 qmap(Sql, Args, Options, Context) ->
     DbDriver = z_context:db_driver(Context),
     F = fun
@@ -801,7 +816,7 @@ select(Table, Id, Context) ->
     select(Table, Id, [], Context).
 
 
--spec select(table_name(), any(), list(), z:context()) -> {ok, Row :: map()} | {error, term()}.
+-spec select(table_name(), any(), qmap_options(), z:context()) -> {ok, Row :: map()} | {error, term()}.
 select(Table, Id, Options, Context) ->
     {_Schema, _Tab, QTab} = quoted_table_name(Table),
     Sql = "select * from "++QTab++" where id = $1 limit 1",

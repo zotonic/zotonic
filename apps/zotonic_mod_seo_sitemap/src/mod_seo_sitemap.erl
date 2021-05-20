@@ -1,9 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-08-14
+%% @copyright 2009-2021 Marc Worrell
 %% @doc Generates a sitemap.  For now rather crude version that will only work with smaller sites.
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2021 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,3 +24,53 @@
 -mod_prio(600).
 -mod_depends([seo]).
 -mod_provides([seo_sitemap]).
+-mod_schema(2).
+
+-include_lib("zotonic_core/include/zotonic.hrl").
+-include("../include/seo_sitemap.hrl").
+
+-export([
+    observe_seo_sitemap_index/2,
+    observe_seo_sitemap_urlset/2,
+    observe_rsc_update_done/2,
+
+    event/2,
+
+    manage_schema/2
+]).
+
+
+%% @doc Return the number of entries in the mod_seo_sitemap managed sitemaps.
+%% All sources in the seo_sitemap indices are grouped together.
+observe_seo_sitemap_index(#seo_sitemap_index{}, Context) ->
+    #{
+        source => <<"seo_sitemap">>,
+        count => m_seo_sitemap:count(Context)
+    }.
+
+%% @doc Return the urlset belonging to the slice given.
+observe_seo_sitemap_urlset(#seo_sitemap_urlset{ source = <<"seo_sitemap">>, offset = Offset, limit = Limit }, Context) ->
+    case m_seo_sitemap:slice(Offset, Limit, Context) of
+        {ok, UrlSet} -> UrlSet;
+        {error, _} -> []
+    end;
+observe_seo_sitemap_urlset(#seo_sitemap_urlset{}, _Context) ->
+    undefined.
+
+observe_rsc_update_done(#rsc_update_done{ id = Id }, Context) ->
+    m_seo_sitemap:update_rsc(Id, Context).
+
+
+event(#postback{ message = sitemap_rebuild }, Context) ->
+    case z_acl:is_admin(Context)
+        orelse z_acl:is_allowed(use, mod_seo_sitemap, Context)
+    of
+        true ->
+            m_seo_sitemap:rebuild_rsc(Context),
+            z_render:growl(?__("Rebuilding the sitemap in the background.", Context), Context);
+        false ->
+            z_render:growl(?__("You are not allowed to do this", Context), Context)
+    end.
+
+manage_schema(_, Context) ->
+    m_seo_sitemap:install(Context).
