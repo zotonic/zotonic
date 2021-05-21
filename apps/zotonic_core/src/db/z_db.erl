@@ -732,33 +732,7 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
     case prepare_cols(Cols, BinParams) of
         {ok, UpdateProps} ->
             F = fun(C) ->
-                HasProps = maps:is_key(<<"props">>, UpdateProps),
-                HasPropsJSON = maps:is_key(<<"props_json">>, UpdateProps),
-
-                UpdateProps1 = if HasPropsJSON ->
-                                      #{<<"props_json">> := NewProps} = UpdateProps,
-                                      P = case get_current_props(DbDriver, C, Table, Id, Context) of
-                                              {ok, OldProps} ->
-                                                  UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( maps:merge(OldProps, NewProps) ) };
-                                              _ ->
-                                                  UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( NewProps )}
-                                          end,
-                                      %% Clear the existing props column
-                                      case lists:member(<<"props">>, Cols) of
-                                          true -> P#{ <<"props">> => null };
-                                          false -> P
-                                      end;
-                                  HasProps ->
-                                      #{<<"props">> := NewProps} = UpdateProps,
-                                      case get_current_props(DbDriver, C, Table, Id, Context) of
-                                          {ok, OldProps} ->
-                                              UpdateProps#{ <<"props">> => ?DB_PROPS( maps:merge(OldProps, NewProps) )};
-                                          _ ->
-                                              UpdateProps#{ <<"props">> => ?DB_PROPS( NewProps )}
-                                      end;
-                                  not HasPropsJSON and not HasProps ->
-                                      UpdateProps
-                               end,
+                UpdateProps1 = update_merge_props(DbDriver, C, QTab, Cols, Id, UpdateProps, Context),
                 UpdateProps2 = update_map_atom_arrays(UpdateProps1),
                 {ColNames, Params} = lists:unzip( maps:to_list(UpdateProps2) ),
                 ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
@@ -853,20 +827,32 @@ update_map_atom_arrays(Props) ->
         end,
         Props).
 
-update_merge_props(DbDriver, C, QTab, Id, NewProps) when is_map(NewProps) ->
-    QTab1 = z_convert:to_list(QTab),
-    Merged = case equery1(DbDriver, C, "select props from "++QTab1++" where id = $1", [Id]) of
-        {ok, OldProps} when is_list(OldProps) ->
-            maps:merge(z_props:from_props(OldProps), NewProps);
-        {ok, OldProps} when is_map(OldProps) ->
-            maps:merge(OldProps, NewProps);
+update_merge_props(DbDriver, Connection, Table, Cols, Id, #{ <<"props_json">> := NewProps }=UpdateProps, Context) ->
+    P = case get_current_props(DbDriver, Connection, Table, Id, Context) of
+            {ok, OldProps} ->
+                UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( maps:merge(OldProps, NewProps) ) };
+            _ ->
+                UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( NewProps )}
+        end,
+
+    %% Clear the existing props column
+    case lists:member(<<"props">>, Cols) of
+        true -> P#{ <<"props">> => null };
+        false -> P
+    end;
+update_merge_props(DbDriver, Connection, Table, _Cols, Id, #{ <<"props">> := NewProps }=UpdateProps, Context) ->
+    case get_current_props(DbDriver, Connection, Table, Id, Context) of
+        {ok, OldProps} ->
+            UpdateProps#{ <<"props">> => ?DB_PROPS( maps:merge(OldProps, NewProps) )};
         _ ->
-            NewProps
-    end,
-    filter_empty_props(Merged);
-update_merge_props(DbDriver, C, Table, Id, NewProps) when is_list(NewProps) ->
+            UpdateProps#{ <<"props">> => ?DB_PROPS( NewProps )}
+    end;
+update_merge_props(_DbDriver, _Connection, _Table, _Cols, _Id, #{}=UpdateProps, _Context) ->
+    UpdateProps;
+update_merge_props(DbDriver, Connection, Table, Cols, Id, NewProps, Context) when is_list(NewProps) ->
     Props1 = z_props:from_props(NewProps),
-    update_merge_props(DbDriver, C, Table, Id, Props1).
+    update_merge_props(DbDriver, Connection, Table, Cols, Id, Props1, Context).
+
 
 ensure_binary_keys(Ps) ->
     maps:fold(
