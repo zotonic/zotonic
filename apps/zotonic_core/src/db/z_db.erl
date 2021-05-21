@@ -759,9 +759,8 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
                                   not HasPropsJSON and not HasProps ->
                                       UpdateProps
                                end,
-
-                {ColNames,Params} = lists:unzip( maps:to_list(UpdateProps1) ),
-
+                UpdateProps2 = update_map_atom_arrays(UpdateProps1),
+                {ColNames, Params} = lists:unzip( maps:to_list(UpdateProps2) ),
                 ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
                 ColAssigns = [
                     ["\"", ColName, "\" = $", integer_to_list(Nr)]
