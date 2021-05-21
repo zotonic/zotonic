@@ -533,9 +533,18 @@ update_normalize_props(#rscupd{id = Id, tz = Tz} = RscUpd, Props, Context) when 
     % The 'blocks' must be a list (of maps), if anything else then
     % the blocks are set to 'undefined' and removed from the rsc
     PropsBlocks = case maps:find(<<"blocks">>, PropsDates) of
-        {ok, L} when is_list(L) -> PropsDates;
-        {ok, _} -> PropsDates#{ <<"blocks">> => undefined };
-        error -> PropsDates
+        {ok, L} when is_list(L) ->
+            L1 = lists:filter(
+                fun
+                    (B) when is_map(B) -> maps:is_key(<<"type">>, B);
+                    (_) -> false
+                end,
+                L),
+            PropsDates#{ <<"blocks">> => L1 };
+        {ok, _} ->
+            PropsDates#{ <<"blocks">> => undefined };
+        error ->
+            PropsDates
     end,
     update_transaction(RscUpd, fun(_, _, _) -> {ok, PropsBlocks} end, Context);
 update_normalize_props(RscUpd, Func, Context) when is_function(Func) ->
